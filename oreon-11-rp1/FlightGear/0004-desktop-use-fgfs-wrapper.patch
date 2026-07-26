@@ -1,0 +1,25 @@
+From 55a807fa552d7da9c4cb400e019f697a00c38d21 Mon Sep 17 00:00:00 2001
+From: Fabrice Bellet <fabrice@bellet.info>
+Date: Thu, 14 Dec 2017 16:56:09 +0100
+Subject: [PATCH] desktop: use fgfs-wrapper
+
+---
+ package/org.flightgear.FlightGear.desktop.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/org.flightgear.FlightGear.desktop.in b/package/org.flightgear.FlightGear.desktop.in
+index ca1652f04..e7c025bde 100644
+--- a/package/org.flightgear.FlightGear.desktop.in
++++ b/package/org.flightgear.FlightGear.desktop.in
+@@ -29,7 +29,7 @@ Comment[ro]=Exersarea pilotajului (avioane, elicoptere...)
+ Comment[sk]=Praktikuje letový tréning (lietadlá, helikoptéry...)
+ Comment[tr]=Uçuş eğitimi alıştırması yapın (uçaklar, helikopterler...)
+ Comment[zh]=飞行训练 (固定翼飞机、直升飞机......)
+-Exec=fgfs @DESKTOP_FILE_RUN_ARGS@
++Exec=fgfs-wrapper @DESKTOP_FILE_RUN_ARGS@
+ Icon=flightgear
+ Terminal=false
+ Type=Application
+-- 
+2.48.1
+

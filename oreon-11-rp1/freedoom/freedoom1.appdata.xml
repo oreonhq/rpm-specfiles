@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>freedoom1.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>BSD-3-Clause</project_license>
+  <name>Freedoom: Phase 1</name>
+  <summary>Doom styled first person shooter game</summary>
+  <description>
+    <p>
+      Freedoom: Phase 1 is a Doom styled first person shooter game using the
+      Doom engine, featuring Four chapters, nine levels each, totalling 36
+      levels.
+    </p>
+    <p>
+      There is a massive back catalog, spanning over two decades, containing
+      thousands of Doom levels and other modifications (“mods”) made by fans
+      of the original Doom game. Freedoom aims to be compatible with these and
+      allows most to be played without the original Doom datafiles.
+      Freedoom: Phase 1 aims for compatibility with The Ultimate Doom,
+      also known as plain Doom or Doom 1. 
+    </p>
+  </description>
+  <url type="homepage">http://freedoom.github.io/</url>
+  <screenshots>
+    <screenshot type="default">https://freedoom.github.io/img/screenshots/phase1-0.10_01.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/phase1-0.10_02.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/phase1-0.10_03.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/phase1-0.10_04.png</screenshot>
+    <screenshot>https://freedoom.github.io/img/screenshots/phase1-0.10_05.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

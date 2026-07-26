@@ -1,0 +1,59 @@
+--- CMakeModules/FindQWT.orig.cmake	2015-06-17 07:55:18.000000000 +0200
++++ CMakeModules/FindQWT.cmake	2015-06-22 11:34:42.750303512 +0200
+@@ -24,7 +24,7 @@
+           /opt/local/include # MacPorts
+           /opt/csw/include   # Blastwave
+           /opt/include
+-          /usr/freeware/include
++          /usr/include
+     PATH_SUFFIXES qt5/qwt6 qwt qwt-qt4 qwt-qt5 qwt6
+     NO_DEFAULT_PATH)
+ 
+@@ -35,7 +35,7 @@
+ 
+ find_library(QWT_LIBRARY
+     NAMES qwt-qt5
+-          qwt-qt4
++          qwt5-qt4
+           qwt-static
+           qwt
+     PATHS $ENV{QWT_DIR}/lib
+--- CMakeModules/FindMML.orig.cmake	2015-06-17 07:55:18.000000000 +0200
++++ CMakeModules/FindMML.cmake	2015-06-22 20:53:18.388194667 +0200
+@@ -20,6 +20,7 @@
+           /opt/csw/include   # Blastwave
+           /opt/include
+           /usr/freeware/include
++          @@_libmml_includedir@@
+     NO_DEFAULT_PATH)
+ 
+ if (NOT MML_INCLUDE_DIR)
+@@ -29,7 +30,8 @@
+ find_library(MML_LIBRARY
+     NAMES mml-static 
+           mml 
+-          QtSolutions_MMLWidget-2.4
++          QtSolutions_MMLWidget-2.4 
++          mml-qt4
+     PATHS $ENV{MML_DIR}/lib
+           $ENV{MML_DIR}
+           ~/Library/Frameworks
+@@ -39,13 +41,15 @@
+           /opt/csw/lib   # Blastwave
+           /opt/lib
+           /usr/freeware/lib64
++          @@_libmml_libdir@@
+      NO_DEFAULT_PATH)
+ 
+ if (NOT MML_LIBRARY)
+ find_library(MML_LIBRARY
+     NAMES mml-static 
+           mml 
+-          QtSolutions_MMLWidget-2.4)
++          QtSolutions_MMLWidget-2.4 
++          mml-qt4)
+ endif()
+ 
+ if (NOT MML_INCLUDE_DIR)
+
+

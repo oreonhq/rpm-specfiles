@@ -1,0 +1,11 @@
+diff -ruN -x build libevdevPlus-0.1.1-orig/evdevPlus.pc.in libevdevPlus-0.1.1/evdevPlus.pc.in
+--- libevdevPlus-0.1.1-orig/evdevPlus.pc.in	2020-02-12 02:02:44.000000000 +1000
++++ libevdevPlus-0.1.1/evdevPlus.pc.in	2020-03-29 12:22:36.035841274 +1000
+@@ -5,6 +5,6 @@
+ 
+ Name: evdevPlus
+ Description: Easy-to-use event device library in C++
+-Version: 0.1.0
++Version: 0.1.1
+ Cflags: -I${includedir}/evdevPlus
+ Libs: -L${libdir} -levdevPlus

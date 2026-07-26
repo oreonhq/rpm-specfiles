@@ -1,0 +1,38 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs.prefix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs.prefix	2017-07-12 10:02:06.418551544 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs	2017-07-12 10:02:34.224852362 -0400
+@@ -63,13 +63,13 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             Register(true);
+         }
+     
+-        public void Register(bool async)
++        public void Register(bool @async)
+         {
+             if(thread != null) {
+                 throw new InvalidOperationException("RegisterService registration already in process");
+             }
+             
+-            if(async) {
++            if(@async) {
+                 thread = new Thread(new ThreadStart(ThreadedRegister));
+                 thread.IsBackground = true;
+                 thread.Start();
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs.prefix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs.prefix	2017-07-12 10:02:49.601465734 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs	2017-07-12 10:03:07.128025049 -0400
+@@ -87,13 +87,13 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             }
+         }
+         
+-        private void Start(bool async)
++        private void Start(bool @async)
+         {
+             if(thread != null) {
+                 throw new InvalidOperationException("ServiceBrowser is already started");
+             }
+             
+-            if(async) {
++            if(@async) {
+                 thread = new Thread(new ThreadStart(ThreadedStart));
+                 thread.IsBackground = true;
+                 thread.Start();

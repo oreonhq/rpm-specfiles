@@ -1,0 +1,82 @@
+--- ./main.cpp.gege	2002-10-11 23:21:02.000000000 +0200
++++ ./main.cpp	2003-04-25 12:42:28.000000000 +0200
+@@ -228,9 +228,11 @@
+                 if (game==1 && GLvar->delay>100) {
+                     game=0;
+ #ifdef HAVE_LIBSDL_MIXER
++		    if (mixerok) {
+                     Mix_FreeMusic(GLvar->module1);
+                     GLvar->module2 = Mix_LoadMUS(GLvar->getFullPath("samples/glax3.xm"));
+                     Mix_PlayMusic(GLvar->module2,-1);
++		    }
+ #endif
+                 } else if (game==0) {
+                     glEnable(GL_BLEND);
+@@ -258,9 +260,11 @@
+ 		                scene->globalList->Add(GLvar->mySpaceShip);
+ 						cheatCode=0;
+ 	#ifdef HAVE_LIBSDL_MIXER
++		    if (mixerok) {
+ 				        Mix_FreeMusic(GLvar->module2);
+ 					    GLvar->module1 = Mix_LoadMUS(GLvar->getFullPath("samples/glax.xm"));
+ 						Mix_PlayMusic(GLvar->module1,-1);
++		    }
+     #endif
+ 					}
+                 }
+--- ./sprite.cpp.gege	2002-10-04 20:05:22.000000000 +0200
++++ ./sprite.cpp	2003-04-25 12:42:55.000000000 +0200
+@@ -58,17 +58,21 @@
+     
+ #ifdef HAVE_LIBSDL_MIXER
+ void Sprite::SpritePlaySample(type_samples sampleToPlay,int volume) {
++  if (mixerok) {
+   if (z_<63) {
+     int v=Mix_PlayChannel(-1,GLvar->samples[sampleToPlay], 0);
+     Mix_Volume(v, (int)((63-z_)*2)*volume/128);
+   }
++  }
+ }
+ void Sprite::PlaySample(type_samples sampleToPlay,int volume) {
++  if (mixerok) {
+   if (GLvar->samples[sampleToPlay])
+     {
+       int v=Mix_PlayChannel(-1,GLvar->samples[sampleToPlay], 0);
+       Mix_Volume(v, volume);
+     }
++  }
+ }
+ #else
+   /* must exist because it has one or two parameters... 
+--- ./variables.cpp.gege	2002-10-17 23:53:00.000000000 +0200
++++ ./variables.cpp	2003-04-25 12:44:16.000000000 +0200
+@@ -330,6 +330,7 @@
+ }
+ 
+ 
++int mixerok;
+ 
+ #ifdef HAVE_LIBSDL_MIXER
+ void GlaxiumVariables::initSound()
+@@ -347,8 +348,10 @@
+     /* Open the audio device */
+     if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) < 0) {
+         fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
+-        exit(2);
++	mixerok = 0;
++	return;
+     } else {
++	mixerok = 1;
+         Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
+         printf("Opened audio at %d Hz %d bit %s, %d bytes audio buffer\n", audio_rate,
+             (audio_format&0xFF),
+--- ./variables.hpp.gege	2002-10-10 17:15:16.000000000 +0200
++++ ./variables.hpp	2003-04-25 12:44:05.000000000 +0200
+@@ -42,6 +42,7 @@
+ #include "mikmod.h"
+ #endif
+ 
++extern int mixerok;
+ 
+ #define SCALE .12
+ 

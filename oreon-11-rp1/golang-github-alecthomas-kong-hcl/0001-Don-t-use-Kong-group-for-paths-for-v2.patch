@@ -1,0 +1,68 @@
+From 21fd8a87926a53d02e83c9e793258127f49f61cd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Sun, 30 May 2021 16:32:49 +0200
+Subject: [PATCH] Don't use Kong group for paths for v2.
+
+---
+ v2/go.mod    | 3 +--
+ v2/go.sum    | 6 ++----
+ v2/loader.go | 6 ------
+ 3 files changed, 3 insertions(+), 12 deletions(-)
+
+diff --git a/v2/go.mod b/v2/go.mod
+index b1e5581..60af9ff 100644
+--- a/v2/go.mod
++++ b/v2/go.mod
+@@ -1,8 +1,7 @@
+ module github.com/alecthomas/kong-hcl/v2
+ 
+ require (
+-	github.com/alecthomas/kong v0.2.5
+-	github.com/alecthomas/repr v0.0.0-20200325044227-4184120f674c
++	github.com/alecthomas/kong v0.2.16
+ 	github.com/hashicorp/hcl/v2 v2.0.0
+ 	github.com/pkg/errors v0.8.1
+ 	github.com/stretchr/testify v1.2.2
+diff --git a/v2/go.sum b/v2/go.sum
+index 7b0830f..89dd7d7 100644
+--- a/v2/go.sum
++++ b/v2/go.sum
+@@ -1,9 +1,7 @@
+ github.com/agext/levenshtein v1.2.1 h1:QmvMAjj2aEICytGiWzmxoE0x2KZvE0fvmqMOfy2tjT8=
+ github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
+-github.com/alecthomas/kong v0.2.5 h1:ebhzNAWR9tLmqkdnzaVCvtj65aGmM1xiEZPgM5vYWJM=
+-github.com/alecthomas/kong v0.2.5/go.mod h1:kQOmtJgV+Lb4aj+I2LEn40cbtawdWJ9Y8QLq+lElKxE=
+-github.com/alecthomas/repr v0.0.0-20200325044227-4184120f674c h1:MVVbswUlqicyj8P/JljoocA7AyCo62gzD0O7jfvrhtE=
+-github.com/alecthomas/repr v0.0.0-20200325044227-4184120f674c/go.mod h1:xTS7Pm1pD1mvyM075QCDSRqH6qRLXylzS24ZTpRiSzQ=
++github.com/alecthomas/kong v0.2.16 h1:F232CiYSn54Tnl1sJGTeHmx4vJDNLVP2b9yCVMOQwHQ=
++github.com/alecthomas/kong v0.2.16/go.mod h1:kQOmtJgV+Lb4aj+I2LEn40cbtawdWJ9Y8QLq+lElKxE=
+ github.com/apparentlymart/go-dump v0.0.0-20180507223929-23540a00eaa3/go.mod h1:oL81AME2rN47vu18xqj1S1jPIPuN7afo62yKTNn3XMM=
+ github.com/apparentlymart/go-textseg v1.0.0 h1:rRmlIsPEEhUTIKQb7T++Nz/A5Q6C9IuX2wFoYVvnCs0=
+ github.com/apparentlymart/go-textseg v1.0.0/go.mod h1:z96Txxhf3xSFMPmb5X/1W05FF/Nj9VFpLOpjS5yuumk=
+diff --git a/v2/loader.go b/v2/loader.go
+index e55456e..5b5732f 100644
+--- a/v2/loader.go
++++ b/v2/loader.go
+@@ -214,9 +214,6 @@ func (r *Resolver) Validate(app *kong.Application) error { // nolint: golint
+ 
+ 		case *kong.Flag:
+ 			flagPath := append([]string{}, path...)
+-			if node.Group != "" {
+-				flagPath = append(flagPath, node.Group)
+-			}
+ 			key := strings.Join(append(flagPath, node.Name), "-")
+ 			if _, ok := node.Target.Interface().(kong.MapperValue); ok {
+ 				rawPrefixes = append(rawPrefixes, key)
+@@ -255,9 +252,6 @@ func (r *Resolver) pathForFlag(parent *kong.Path, flag *kong.Flag) []string {
+ 	for n := parent.Node(); n != nil && n.Type != kong.ApplicationNode; n = n.Parent {
+ 		path = append([]string{n.Name}, path...)
+ 	}
+-	if flag.Group != "" {
+-		path = append([]string{flag.Group}, path...)
+-	}
+ 	path = append(path, flag.Name)
+ 	return path
+ }
+-- 
+2.31.1
+

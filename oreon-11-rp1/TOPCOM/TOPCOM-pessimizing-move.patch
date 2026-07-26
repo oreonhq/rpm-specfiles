@@ -1,0 +1,17 @@
+lib-src/SymmetricFlipGraph.cc: In member function ‘void topcom::SymmetricFlipGraph::SymmetryWorker::build_orbit_with_searchpred() const’:
+lib-src/SymmetricFlipGraph.cc:122:81: warning: moving a temporary object prevents copy elision [-Wpessimizing-move]
+  122 |       const TriangNode equivalent_tnode(std::move(_callerptr->_map(g_pair, _tn)));
+      |                                                                                 ^
+lib-src/SymmetricFlipGraph.cc:122:81: note: remove ‘std::move’ call
+
+--- topcom-1.1.2/lib-src/SymmetricFlipGraph.cc.orig	2022-10-05 00:52:12.000000000 -0600
++++ topcom-1.1.2/lib-src/SymmetricFlipGraph.cc	2023-10-23 13:02:57.358375688 -0600
+@@ -119,7 +119,7 @@ namespace topcom {
+       }
+ 
+       // generic map (via index set if present, via set if not):
+-      const TriangNode equivalent_tnode(std::move(_callerptr->_map(g_pair, _tn)));
++      const TriangNode equivalent_tnode(_callerptr->_map(g_pair, _tn));
+ 
+       // deprecated:
+       // const TriangNode& equivalent_tnode = g.map(tnode);

@@ -1,0 +1,339 @@
+--- api/ssl/src/Makefile.orig	2022-12-29 23:55:22.000000000 -0700
++++ api/ssl/src/Makefile	2023-01-10 10:25:46.169478107 -0700
+@@ -208,19 +208,8 @@ jvm-extra: $(JAVA_CLASSES_SRC) $(BOOTLIB
+ #*---------------------------------------------------------------------*/
+ #*    Java auconfiguration                                             */
+ #*---------------------------------------------------------------------*/
+-ifeq ($(JAVA_VERSION), 1.7)
+-  JDK=15
+-else
+- ifeq ($(JAVA_VERSION), 1.6)
+-   JDK=15
+- else
+-  ifeq ($(JAVA_VERSION), 1.5)
+-    JDK=15
+-  else
+-    JDK=13
+-  endif
+- endif
+-endif
++
++JDK=15
+ 
+ $(JAVA_SRC_DIR)/ssl_client_socket.java: \
+     $(JAVA_SRC_DIR)/ssl_client_socket$(JDK).java
+--- bde/jas/produce.scm.orig	2022-12-29 23:56:59.000000000 -0700
++++ bde/jas/produce.scm	2023-01-10 10:25:46.169478107 -0700
+@@ -24,8 +24,8 @@
+ 					   fields methods attributes )
+       (outshort outchan #xCAFE)
+       (outshort outchan #xBABE)
+-      (outshort outchan 3)
+-      (outshort outchan 45)
++      (outshort outchan 0)
++      (outshort outchan 52)
+       (produce-pool outchan pool-size (reverse pool))
+       (outshort outchan flags)
+       (outshort outchan me)
+--- comptime/Jas/produce.scm.orig	2022-12-29 23:55:22.000000000 -0700
++++ comptime/Jas/produce.scm	2023-01-10 10:25:46.170478089 -0700
+@@ -24,8 +24,8 @@
+ 					   fields methods attributes )
+       (outshort outchan #xCAFE)
+       (outshort outchan #xBABE)
+-      (outshort outchan 3)
+-      (outshort outchan 45)
++      (outshort outchan 0)
++      (outshort outchan 52)
+       (produce-pool outchan pool-size (reverse pool))
+       (outshort outchan flags)
+       (outshort outchan me)
+--- configure.orig	2022-12-29 23:55:22.000000000 -0700
++++ configure	2023-01-10 10:25:46.171478070 -0700
+@@ -114,7 +114,7 @@ zip=zip
+ jar="jar cmf"
+ zflags=
+ javac=javac
+-jcflags=-O
++jcflags="-deprecation -source 1.8 -target 1.8"
+ java=java
+ jflags=
+ jvflags=-noverify
+@@ -3517,7 +3517,7 @@ if [ $action = "all" -o $action = "biglo
+                               --jflags=$jflags \
+                               --jvflags=$jvflags \
+                               --javac=$javac \
+-                              --jcflags=$jcflags \
++                              --jcflags="$jcflags" \
+                               --cpsep="$cpsep"` || exit 1
+ 
+     if [ $jtest != 0 ]; then
+@@ -5001,7 +5001,7 @@ if [ $action = "all" -o $action = "Makef
+ 
+       if [ "$java_configured" = "no" ]; then
+         $autoconfdir/javatest --java=$java --jflags=$jflags --jvflags=$jvflags \
+-                              --javac=$javac --jcflags=$jcflags --user=$user --tmp=$buildtmp
++                              --javac=$javac --jcflags="$jcflags" --user=$user --tmp=$buildtmp
+ 
+         if [ $? != 0 ]; then
+           $echo "*** ERROR:configure:Can't configure JVM back-end"
+--- jigloo/jigloo.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ jigloo/jigloo.java	2023-01-10 10:25:46.171478070 -0700
+@@ -21,7 +21,7 @@ public abstract class jigloo {
+    static PrintStream out = System.out;
+    static int verbose = 0;
+    static boolean directives = true;
+-   static Hashtable arrays = new Hashtable();
++   static Hashtable<String, Class> arrays = new Hashtable<String, Class>();
+    
+    static boolean isInterface = false;
+ 
+@@ -121,17 +121,17 @@ public abstract class jigloo {
+       emit( " \"" + field.getName() + "\")\n" );
+    }
+ 
+-   static void jigloo_method( Class owner, Method method, Hashtable overrides ) {
++   static void jigloo_method( Class owner, Method method, Hashtable<String, Integer> overrides ) {
+       int mod = method.getModifiers();
+       if( ! Modifier.isNative( mod ) ) {
+-	 Integer override_index= (Integer)overrides.get( method.getName() );
++	 Integer override_index= overrides.get( method.getName() );
+ 	 emit( "     (method " );
+ 	 jigloo_modifiers( mod );
+ 	 emit( method.getName() );
+ 	 if( override_index.intValue() != 0 ) {
+ 	    emit( override_index.toString() );
+ 	    overrides.put( method.getName(),
+-			   new Integer( override_index.intValue() + 1 ) );
++			   Integer.valueOf( override_index.intValue() + 1 ) );
+ 	 }
+ 	 jigloo_type( method.getReturnType() );
+ 	 emit( " " );
+@@ -208,14 +208,14 @@ public abstract class jigloo {
+ 	 Constructor[] all_constructors = a_class.getConstructors();
+ 	 Field[] all_fields = a_class.getFields();
+ 	 Method[] all_methods = a_class.getMethods();
+-	 Hashtable overrides = new Hashtable();
++	 Hashtable<String, Integer> overrides = new Hashtable<String, Integer>();
+ 
+ 	 // handling overrides
+ 	 for( int i = 0; i < all_methods.length; i++ ) {
+-	    Integer override_count = (Integer)overrides.get( all_methods[i].getName() );
++	    Integer override_count = overrides.get( all_methods[i].getName() );
+ 
+ 	    overrides.put( all_methods[i].getName(),
+-			   new Integer( (override_count == null) ? 0 : 1 ) );
++			   Integer.valueOf( (override_count == null) ? 0 : 1 ) );
+ 	 }
+ 
+ 
+--- jigloo/Makefile.orig	2022-12-29 23:55:22.000000000 -0700
++++ jigloo/Makefile	2023-01-10 10:25:46.171478070 -0700
+@@ -133,4 +133,4 @@ pop:
+ #*     .java --> .class                                                */
+ #*---------------------------------------------------------------------*/
+ .java.class:
+-	@ $(JAVAC) $*.java
++	@ $(JAVAC) $(JCFLAGS) $*.java
+--- runtime/Jlib/cnst.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ runtime/Jlib/cnst.java	2023-01-10 10:29:09.077675668 -0700
+@@ -6,7 +6,7 @@ public class cnst extends obj
+ {
+   public final int value;
+ 
+-  private static final Hashtable table = new Hashtable();
++  private static final Hashtable<Integer, cnst> table = new Hashtable<Integer, cnst>();
+ 
+   public cnst( final int  value )
+   {
+@@ -15,11 +15,11 @@ public class cnst extends obj
+ 
+   public static cnst make_cnst( final int value )
+   {
+-    final Integer key = value;
+-    final Object r = table.get( key );
++    final Integer key = Integer.valueOf( value );
++    final cnst r = table.get( key );
+ 
+     if (r != null)
+-      return (cnst)r;
++      return r;
+ 
+     final cnst result = new cnst( value );
+ 
+--- runtime/Jlib/dlopen.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ runtime/Jlib/dlopen.java	2023-01-10 10:30:06.348602910 -0700
+@@ -22,7 +22,7 @@ import java.lang.reflect.*;
+ public abstract class dlopen {
+    private static final String NO_ERROR_YET = "No error (yet)";
+    private static String bgl_dload_error = NO_ERROR_YET;
+-   private static final Hashtable dlopen_table = new Hashtable();
++   private static final Hashtable<byte[], Boolean> dlopen_table = new Hashtable<byte[], Boolean>();
+ 
+    static String prefix( final byte[] filename ) {
+       final int len = filename.length;
+@@ -190,7 +190,7 @@ public abstract class dlopen {
+       synchronized( dlopen_table ) {
+ 	 if( !(dlopen_table.contains( filename )) ) {
+ 	    Object res = dload_inner( filename, init_sym, mod_sym );
+-	    dlopen_table.put( filename, true );
++	    dlopen_table.put( filename, Boolean.TRUE );
+ 	    return res;
+ 	 } else {
+ 	    return foreign.BUNSPEC;
+--- runtime/Jlib/JDK16.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ runtime/Jlib/JDK16.java	2023-01-10 10:25:46.173478032 -0700
+@@ -19,7 +19,7 @@ import java.lang.reflect.*;
+ 
+ public class JDK16 extends JDK {
+    // JDK1.6 methods
+-   public Method getDeclaredMethodImpl( Class c, byte[] m ) throws Exception {
++   public Method getDeclaredMethodImpl( Class<?> c, byte[] m ) throws Exception {
+       return c.getDeclaredMethod( new String( m ) );
+    }
+    
+--- runtime/Jlib/JDK.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ runtime/Jlib/JDK.java	2023-01-10 10:25:46.173478032 -0700
+@@ -49,8 +49,8 @@ public abstract class JDK {
+ 
+    private static JDK getImpl(String classname) {
+       try {
+-	 Class c = Class.forName(classname);
+-	 return (JDK)c.newInstance();
++	 Class<?> c = Class.forName(classname);
++	 return JDK.class.cast(c.getDeclaredConstructor().newInstance());
+       } catch (Exception x) {
+ 	 return null;
+       }
+@@ -58,7 +58,7 @@ public abstract class JDK {
+ 
+    // Static methods
+ 
+-   public static Method getDeclaredMethod(Class c, byte[] m)
++   public static Method getDeclaredMethod(Class<?> c, byte[] m)
+       throws Exception {
+       return impl.getDeclaredMethodImpl(c, m);
+    }
+@@ -90,7 +90,7 @@ public abstract class JDK {
+       return impl.passwordImpl( prompt );
+    }
+ 
+-   public abstract Method getDeclaredMethodImpl(Class c, byte[] m)
++   public abstract Method getDeclaredMethodImpl(Class<?> c, byte[] m)
+       throws Exception;
+    
+    public abstract Object invokeImpl(Method m) throws Exception;
+--- runtime/Jlib/output_pipe_port.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ runtime/Jlib/output_pipe_port.java	2023-01-10 10:25:46.173478032 -0700
+@@ -42,7 +42,7 @@ public class output_pipe_port extends ou
+ 
+    static String[] tokenizer( byte[] s ) {
+       int len = s.length;
+-      Vector v = new Vector();
++      ArrayList<String> v = new ArrayList<String>();
+       // if | then offset = 2, otherwise, if pipe: offset = 5
+       int offset =  (s[0] == (byte)'|') ? 2 : 5;
+       int i = skip_whitespace( s, offset );
+@@ -69,7 +69,7 @@ public class output_pipe_port extends ou
+ 	 i = skip_whitespace( s, j + 1 );
+       }
+ 
+-      return (String[])(v.toArray( new String[ v.size() ] ));
++      return v.toArray( new String[ v.size() ] );
+    }
+ 
+    static String[] make_cmd( byte[] s ) {
+--- runtime/Jlib/process.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ runtime/Jlib/process.java	2023-01-10 10:25:46.173478032 -0700
+@@ -12,6 +12,7 @@ package bigloo;
+ 
+ import java.io.IOException;
+ import java.lang.Process;
++import java.util.ArrayList;
+ import java.util.Vector;
+ 
+ /*---------------------------------------------------------------------*/
+@@ -27,7 +28,7 @@ public class process extends obj
+ /*--- non static fields -----------------------------------------------*/
+   private final Process process;
+   private final int index;
+-  private final Vector flushers;
++  private final Vector<flusher> flushers;
+   public obj input_port;
+   public obj output_port;
+   public obj error_port;
+@@ -101,7 +102,7 @@ public class process extends obj
+ 		: "NUL:" ).getBytes();
+ 
+     // building the command arguments
+-    final Vector cmd_vector = new Vector();
++    final ArrayList<String> cmd_vector = new ArrayList<String>();
+ 
+     if (host != null)
+     {
+@@ -165,9 +166,7 @@ public class process extends obj
+        cmd_vector.add( cmd );
+     }
+ 
+-    final String[] argv = new String[cmd_vector.size()];
+-
+-    cmd_vector.copyInto( argv );
++    final String[] argv = cmd_vector.toArray( new String[cmd_vector.size()] );
+ 
+     // Construct the process environment variable list
+     aux = benv;
+@@ -214,7 +213,7 @@ public class process extends obj
+     if ((boutput == bigloo.foreign.BUNSPEC) ||
+ 	(berror == bigloo.foreign.BUNSPEC))
+     {
+-       flushers = new Vector();
++       flushers = new Vector<flusher>();
+        if (boutput == bigloo.foreign.BUNSPEC)
+ 	  flushers.add( new flusher( process.getInputStream(), System.out ) );
+        if (berror == bigloo.foreign.BUNSPEC)
+@@ -312,7 +311,7 @@ public class process extends obj
+       process.waitFor();
+       if (flushers != null)
+         while (!flushers.isEmpty())
+-          ((flusher)flushers.remove( 0 )).join();
++          flushers.remove( 0 ).join();
+     }
+     catch (InterruptedException _i)
+     {
+--- runtime/Jlib/weakptr.java.orig	2022-12-29 23:55:22.000000000 -0700
++++ runtime/Jlib/weakptr.java	2023-01-10 10:25:46.174478014 -0700
+@@ -4,12 +4,12 @@ import java.lang.ref.WeakReference;
+ 
+ 
+ public class weakptr extends obj {
+-  public WeakReference data;
+-  public WeakReference ref;
++  public WeakReference<Object> data;
++  public WeakReference<Object> ref;
+ 
+   public weakptr(final Object d, final Object r){
+-     data = new WeakReference(d);
+-     ref = new WeakReference(r);
++     data = new WeakReference<Object>(d);
++     ref = new WeakReference<Object>(r);
+   }
+ 
+   public Object getData(){
+@@ -18,7 +18,7 @@ public class weakptr extends obj {
+   }
+ 
+   public void setData(Object o){
+-    data = new WeakReference(o);
++    data = new WeakReference<Object>(o);
+   }
+ 
+   public Object getRef(){
+@@ -27,7 +27,7 @@ public class weakptr extends obj {
+   }
+ 
+   public void setRef(Object o){
+-    ref = new WeakReference(o);
++    ref = new WeakReference<Object>(o);
+   }
+ 
+   public void write( final output_port p ) {

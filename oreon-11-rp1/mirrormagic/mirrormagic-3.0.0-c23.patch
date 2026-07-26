@@ -1,0 +1,12 @@
+diff -up mirrormagic-3.0.0/src/game_mm/mm_game.c~ mirrormagic-3.0.0/src/game_mm/mm_game.c
+--- mirrormagic-3.0.0/src/game_mm/mm_game.c~	2018-04-10 21:44:08.000000000 +0200
++++ mirrormagic-3.0.0/src/game_mm/mm_game.c	2026-01-24 13:12:44.540133749 +0100
+@@ -4323,7 +4323,7 @@ void LoadEngineSnapshotValues_MM()
+   energy_delay   = engine_snapshot_mm.energy_delay;
+   overload_delay = engine_snapshot_mm.overload_delay;
+ 
+-  RedrawPlayfield_MM(TRUE);
++  RedrawPlayfield_MM();
+ }
+ 
+ static int getAngleFromTouchDelta(int dx, int dy,  int base)

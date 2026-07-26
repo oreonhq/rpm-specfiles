@@ -1,0 +1,12 @@
+Index: OpenIGTLink-2.0/Source/CMakeLists.txt
+===================================================================
+--- OpenIGTLink-2.0.orig/Source/CMakeLists.txt
++++ OpenIGTLink-2.0/Source/CMakeLists.txt
+@@ -76,6 +76,7 @@ SET(OpenIGTLink_INCLUDE_FILES
+   igtlutil/igtl_header.h
+   igtlutil/igtl_image.h
+   igtlutil/igtl_position.h
++  igtlutil/igtl_status.h
+   igtlutil/igtl_transform.h
+   igtlutil/igtl_types.h
+   igtlutil/igtl_util.h

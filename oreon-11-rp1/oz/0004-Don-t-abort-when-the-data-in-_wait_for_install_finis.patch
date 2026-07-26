@@ -1,0 +1,32 @@
+From aac29e679b7c336537e93ce7b07c59e6b1a534ff Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Sun, 24 Apr 2022 15:47:21 +0200
+Subject: [PATCH 04/26] Don't abort when the data in _wait_for_install_finish
+ isn't valid utf-8
+
+See https://www.scrye.com/wordpress/nirik/2022/04/21/another-tale-of-a-rawhide-compose-bug/ for context
+
+Decoding arbitrary data that happens to be valid utf-8 almost all the time
+for logging purposes sounds like a good idea, until it isn't.
+This way, the debug log will contain the data even if it's not valid utf-8,
+instead of aborting the process with a UnicodeDecodeError.
+---
+ oz/Guest.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/oz/Guest.py b/oz/Guest.py
+index 9cc80a6..ae954b8 100644
+--- a/oz/Guest.py
++++ b/oz/Guest.py
+@@ -848,7 +848,7 @@ class Guest(object):
+                     # is no guarantee that we will get the whole write in one go
+                     data = self.sock.recv(65536)
+                     if data:
+-                        self.log.debug(data.decode('utf-8'))
++                        self.log.debug(data.decode('utf-8', errors='surrogateescape'))
+                 except socket.timeout:
+                     # the socket times out after 1 second.  We can just fall
+                     # through to the below code because it is a noop.
+-- 
+2.46.2
+

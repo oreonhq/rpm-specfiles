@@ -1,0 +1,28 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "vendor/github.com/spdx/tools-golang/LICENSE.code"
+sha256sum = "e914fb1f3927226e04b0438e0b541b3c6e3c65de4d64aa8f5cdaa803f05448fd"
+expression = "Apache-2.0"
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/kernel.org/pub/linux/libs/security/libcap/psx/License"
+sha256sum = "279fa656c62857d42952b86a0789b98669ca1cb4b324a8d9e91397c174af4c14"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/kernel.org/pub/linux/libs/security/libcap/cap/License"
+sha256sum = "18eb30b662ed0abeef6ad6ded90a99b30332418d2f71e63dcb4646bbb23b9acc"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/cloudflare/circl/LICENSE"
+sha256sum = "b0da1764fe4d13d610b695536fc3f2ebc362482d053a1cd258e36975bc6b97a7"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/go.yaml.in/yaml/v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT"

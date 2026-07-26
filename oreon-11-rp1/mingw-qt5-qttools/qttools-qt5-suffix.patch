@@ -1,0 +1,45 @@
+diff -rupN --no-dereference qttools-everywhere-src-5.15.18/src/linguist/lprodump/main.cpp qttools-everywhere-src-5.15.18-new/src/linguist/lprodump/main.cpp
+--- qttools-everywhere-src-5.15.18/src/linguist/lprodump/main.cpp	2025-03-30 13:49:56.000000000 +0200
++++ qttools-everywhere-src-5.15.18-new/src/linguist/lprodump/main.cpp	2025-11-09 21:36:15.520386968 +0100
+@@ -456,7 +456,7 @@ int main(int argc, char **argv)
+     ProFileGlobals option;
+     option.qmake_abslocation = QString::fromLocal8Bit(qgetenv("QMAKE"));
+     if (option.qmake_abslocation.isEmpty())
+-        option.qmake_abslocation = app.applicationDirPath() + QLatin1String("/qmake");
++        option.qmake_abslocation = app.applicationDirPath() + QLatin1String("/qmake-qt5");
+     option.debugLevel = proDebug;
+     option.initProperties();
+     option.setCommandLineArguments(QDir::currentPath(),
+diff -rupN --no-dereference qttools-everywhere-src-5.15.18/src/linguist/lrelease-pro/main.cpp qttools-everywhere-src-5.15.18-new/src/linguist/lrelease-pro/main.cpp
+--- qttools-everywhere-src-5.15.18/src/linguist/lrelease-pro/main.cpp	2025-03-30 13:49:56.000000000 +0200
++++ qttools-everywhere-src-5.15.18-new/src/linguist/lrelease-pro/main.cpp	2025-11-09 21:36:15.520687416 +0100
+@@ -148,6 +148,6 @@ int main(int argc, char **argv)
+         projectDescription->setAutoRemove(false);
+     lreleaseOptions << QStringLiteral("-project") << projectDescription->fileName();
+ 
+-    runQtTool(QStringLiteral("lrelease"), lreleaseOptions);
++    runQtTool(QStringLiteral("lrelease-qt5"), lreleaseOptions);
+     return 0;
+ }
+diff -rupN --no-dereference qttools-everywhere-src-5.15.18/src/linguist/lupdate-pro/main.cpp qttools-everywhere-src-5.15.18-new/src/linguist/lupdate-pro/main.cpp
+--- qttools-everywhere-src-5.15.18/src/linguist/lupdate-pro/main.cpp	2025-03-30 13:49:56.000000000 +0200
++++ qttools-everywhere-src-5.15.18-new/src/linguist/lupdate-pro/main.cpp	2025-11-09 21:36:15.520883130 +0100
+@@ -154,6 +154,6 @@ int main(int argc, char **argv)
+         projectDescription->setAutoRemove(false);
+     lupdateOptions << QStringLiteral("-project") << projectDescription->fileName();
+ 
+-    runQtTool(QStringLiteral("lupdate"), lupdateOptions);
++    runQtTool(QStringLiteral("lupdate-qt5"), lupdateOptions);
+     return 0;
+ }
+diff -rupN --no-dereference qttools-everywhere-src-5.15.18/src/linguist/shared/runqttool.cpp qttools-everywhere-src-5.15.18-new/src/linguist/shared/runqttool.cpp
+--- qttools-everywhere-src-5.15.18/src/linguist/shared/runqttool.cpp	2025-03-30 13:49:56.000000000 +0200
++++ qttools-everywhere-src-5.15.18-new/src/linguist/shared/runqttool.cpp	2025-11-09 21:36:15.521084218 +0100
+@@ -114,6 +114,6 @@ std::unique_ptr<QTemporaryFile> createPr
+     }
+     file->close();
+     args << QStringLiteral("-out") << file->fileName();
+-    runQtTool(QStringLiteral("lprodump"), args);
++    runQtTool(QStringLiteral("lprodump-qt5"), args);
+     return file;
+ }

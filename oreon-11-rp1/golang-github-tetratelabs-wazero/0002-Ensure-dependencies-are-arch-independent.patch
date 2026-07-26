@@ -1,0 +1,24 @@
+From cbf9426cb26bbca8340a22268c40db8ae5be74e2 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 11 Jan 2026 19:50:38 -0500
+Subject: [PATCH 2/2] Ensure dependencies are arch-independent
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ internal/platform/cpuid_unsupported.go | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/internal/platform/cpuid_unsupported.go b/internal/platform/cpuid_unsupported.go
+index 8f748ff8..8432230d 100644
+--- a/internal/platform/cpuid_unsupported.go
++++ b/internal/platform/cpuid_unsupported.go
+@@ -2,4 +2,6 @@
+ 
+ package platform
+ 
++import _ "golang.org/x/sys/cpu"
++
+ const CpuFeatures CpuFeatureFlags = 0
+-- 
+2.52.0
+

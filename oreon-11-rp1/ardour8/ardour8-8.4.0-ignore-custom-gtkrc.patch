@@ -1,0 +1,14 @@
+diff -up Ardour-8.4.0/gtk2_ardour/ardour.sh.in.ignore-custom-gtkrc Ardour-8.4.0/gtk2_ardour/ardour.sh.in
+--- Ardour-8.4.0/gtk2_ardour/ardour.sh.in.ignore-custom-gtkrc	2024-02-21 01:37:38.000000000 +0100
++++ Ardour-8.4.0/gtk2_ardour/ardour.sh.in	2024-03-06 12:54:43.432054470 +0100
+@@ -5,6 +5,10 @@
+ # and does a few checks before exec'ing the real executable.
+ # 
+ 
++# Ignore custom gtkrc files.
++unset GTK2_RC_FILES
++export -n GTK2_RC_FILES
++
+ export GTK_PATH=@CONFDIR@:@LIBDIR@${GTK_PATH:+:$GTK_PATH}
+ 
+ export LD_LIBRARY_PATH=@LIBDIR@${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}

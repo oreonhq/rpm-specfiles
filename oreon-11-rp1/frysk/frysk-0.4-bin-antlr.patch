@@ -1,0 +1,14 @@
+diff -up frysk-0.4/frysk-common/Makefile.rules.bin-antlr frysk-0.4/frysk-common/Makefile.rules
+--- frysk-0.4/frysk-common/Makefile.rules.bin-antlr	2012-01-23 20:47:12.479000002 -0500
++++ frysk-0.4/frysk-common/Makefile.rules	2012-01-23 20:48:29.693998397 -0500
+@@ -567,9 +567,7 @@ endif
+ # running the generated files through the compiler and then "fix" the
+ # warnings.  Reuse the tmp directory for successive runs on related .g files.
+ 
+-ANTLR = $(JAVA) \
+-	-classpath @abs_builddir@/../frysk-imports/antlr.jar \
+-	antlr.Tool
++ANTLR = antlr
+ 
+ SUFFIXES += .antlred .g
+ .g.antlred:

@@ -1,0 +1,11 @@
+diff -up gxmms2-0.7.1/xmms2ctrl/xmms2ctrl.c.stdio gxmms2-0.7.1/xmms2ctrl/xmms2ctrl.c
+--- gxmms2-0.7.1/xmms2ctrl/xmms2ctrl.c.stdio	2023-09-12 11:02:47.741210093 -0400
++++ gxmms2-0.7.1/xmms2ctrl/xmms2ctrl.c	2023-09-12 11:02:59.526379461 -0400
+@@ -9,6 +9,7 @@
+  * Released under the GNU General Public License v2
+  */
+ 
++#include <stdio.h>
+ #include <xmmsclient/xmmsclient.h>
+ #include <xmmsclient/xmmsclient-glib.h>
+ #include "xmms2ctrl.h"

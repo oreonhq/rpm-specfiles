@@ -1,0 +1,439 @@
+diff -ur gkrellm-wifi-0.9.12.orig/ChangeLog gkrellm-wifi-0.9.12/ChangeLog
+--- gkrellm-wifi-0.9.12.orig/ChangeLog	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/ChangeLog	2004-01-03 18:01:18.000000000 +0100
+@@ -1,5 +1,36 @@
++2004-01-03  Henrik Brix Andersen  <brix@gimp.org>
++
++	* Released version 0.9.12.
++
++2004-01-02  Henrik Brix Andersen  <brix@gimp.org>
++
++	* gkrellm-wifi-preferences.c (gkrellm_wifi_preferences_show):
++	added a new format string to the combo box.
++
++	* gkrellm-wifi-linux.c: changed a couple of g_message() calls to
++	g_warning() calls.
++
++2003-12-31  Henrik Brix Andersen  <brix@gimp.org>
++
++	* gkrellm-wifi.h
++	* gkrellm-wifi-chart.c
++	* gkrellm-wifi-linux.c
++	* gkrellm-wifi-preferences.c: added ability to show the ESSID
++	in a chart label.
++
+ 2003-12-31  Henrik Brix Andersen  <brix@gimp.org>
+ 
++	* gkrellm-wifi-linux.c (get_quality_max): code clean-up.
++
++	* Makefile (CFLAGS): added -DG_LOG_DOMAIN
++
++	* gkrellm-wifi-linux.c: use it.
++
++2003-12-31  Henrik Brix Andersen  <brix@gimp.org>
++
++	* gkrellm-wifi-linux.c (gkrellm_wifi_wireless_info_read): handle
++	drivers which report quality in dBm.
++
+ 	* INSTALL: removed note about re-compiling again.
+ 
+ 	* gkrellm-wifi.h (struct GkrellmWifiMonitor): use guint8 for
+diff -ur gkrellm-wifi-0.9.12.orig/INSTALL gkrellm-wifi-0.9.12/INSTALL
+--- gkrellm-wifi-0.9.12.orig/INSTALL	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/INSTALL	2004-01-03 18:01:18.000000000 +0100
+@@ -2,9 +2,9 @@
+ ===================================
+ 
+ This plug-in requires GKrellM version 2.1.12 or above and GTK+-2.0 or
+-above. The plug-in alos requires the kernel to have support for the
++above. The plug-in also requires the kernel to have support for the
+ Linux Wireless Extensions (CONFIG_NET_RADIO).
+ 
+-You can compile this plug-in by running 'make' and copying the the
++You can compile this plug-in by running 'make' and copying the
+ resulting gkrellm-wifi.so file to one of the GKrellM plug-in
+ directories (or to ~/.gkrellm2/plugins/).
+diff -ur gkrellm-wifi-0.9.12.orig/Makefile gkrellm-wifi-0.9.12/Makefile
+--- gkrellm-wifi-0.9.12.orig/Makefile	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/Makefile	2004-01-03 18:01:18.000000000 +0100
+@@ -2,7 +2,7 @@
+ GKRELLM_LIBS   = $(shell pkg-config gkrellm --libs)
+ 
+ 
+-CFLAGS  += -Wall -O2 -fPIC $(GKRELLM_CFLAGS)
++CFLAGS  += -Wall -O2 -fPIC $(GKRELLM_CFLAGS) -DG_LOG_DOMAIN=\"gkrellm-wifi\"
+ LDFLAGS  = -shared
+ LIBS     = $(GKRELLM_LIBS) -lm
+ 
+diff -ur gkrellm-wifi-0.9.12.orig/NEWS gkrellm-wifi-0.9.12/NEWS
+--- gkrellm-wifi-0.9.12.orig/NEWS	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/NEWS	2004-01-03 18:01:18.000000000 +0100
+@@ -1,9 +1,11 @@
+ Overview of Changes in gkrellm-wifi 0.9.12
+ ==========================================
+ - added bit rate chart label
++- added ESSID chart label
+ - much improved check for wireless extension version - the plug-in
+-  should work with WE versions < 16 now as well.
+-- no need to recompile the plug-in when changing kernel versions
++  should now work with WE versions < 16 as well.
++- no longer need to recompile the plug-in when changing kernel
++  versions
+ - code clean-up
+ 
+ 
+diff -ur gkrellm-wifi-0.9.12.orig/TODO gkrellm-wifi-0.9.12/TODO
+--- gkrellm-wifi-0.9.12.orig/TODO	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/TODO	2004-01-03 18:01:18.000000000 +0100
+@@ -1,11 +1,11 @@
+ Ideas for gkrellm-wifi
+ ======================
+-- add optional debug output
+ - substitution in alert and launcher commands
+ - optimize create_chart_text()
+ - average quality label
++- add optional debug output using log handler
+ - get /proc/net/wireless programmatically
+-- ability to display ESSID, channel, frequency etc.
++- ability to display channel, frequency etc.
+ - add install target to Makefile
+ - full i18n support
+ - switch to using autoconf, automake etc.
+diff -ur gkrellm-wifi-0.9.12.orig/gkrellm-wifi-chart.c gkrellm-wifi-0.9.12/gkrellm-wifi-chart.c
+--- gkrellm-wifi-0.9.12.orig/gkrellm-wifi-chart.c	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/gkrellm-wifi-chart.c	2004-01-03 18:01:18.000000000 +0100
+@@ -23,8 +23,8 @@
+ #include "gkrellm-wifi-chart.h"
+ 
+ 
+-#define GRID_RESOLUTION_MIN   0.0
+-#define GRID_RESOLUTION_MAX 100.0
++#define GRID_RESOLUTION_MIN 0
++#define GRID_RESOLUTION_MAX 100
+ 
+ #define GRID_STEP0          5
+ #define GRID_STEP1          10
+@@ -394,7 +394,9 @@
+     {
+       bitrate = wifimon->bitrate;
+ 
+-      if (bitrate >= GIGA)
++      if (bitrate == 0)
++        value = g_strdup ("0");
++      else if (bitrate >= GIGA)
+         value = g_strdup_printf ("%gG", bitrate / GIGA);
+       else if (bitrate >= MEGA)
+         value = g_strdup_printf ("%gM", bitrate / MEGA);
+@@ -409,6 +411,15 @@
+       g_free (tmp);
+     }
+ 
++  if (wifimon->essid != NULL && strstr (ret, "$E"))
++    {
++      tmp = strreplace (ret, "$E", wifimon->essid);
++
++      g_free (ret);
++      ret = g_strdup (tmp);
++      g_free (tmp);
++    }
++
+   return ret;
+ }
+ 
+diff -ur gkrellm-wifi-0.9.12.orig/gkrellm-wifi-linux.c gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c
+--- gkrellm-wifi-0.9.12.orig/gkrellm-wifi-linux.c	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/gkrellm-wifi-linux.c	2004-01-03 18:01:18.000000000 +0100
+@@ -36,12 +36,10 @@
+ #include "gkrellm-wifi-linux.h"
+ 
+ 
+-#define MAX_LINE_LENGTH   128
+-#define PROC_NET_WIRELESS "/proc/net/wireless"
+-#define DEFAULT_RANGE     96
+-#define DEFAULT_BITRATE   0
+-
+-#define MAGIC_10_LENGTH   300
++#define MAX_LINE_LENGTH     128
++#define PROC_NET_WIRELESS   "/proc/net/wireless"
++#define DEFAULT_QUALITY_MAX 96
++#define DEFAULT_BITRATE     0
+ 
+ 
+ /*  the following is needed for backwards compatibility with older
+@@ -49,6 +47,8 @@
+     iwlib.c from wireless_tools.27 copyright (C) Jean Tourrilhes
+     <jt@hpl.hp.com>  */
+ 
++#define MAGIC_10_LENGTH          300
++
+ #define IW_MAX_FREQUENCIES_15    16
+ #define IW_MAX_BITRATES_15       8
+ #define IW_MAX_ENCODING_SIZES_15 8
+@@ -183,8 +183,9 @@
+ 
+ /*  prototypes  */
+ 
+-static guint8 get_quality_max (const gchar *interface);
+-static gint32 get_bitrate     (const gchar *interface);
++static guint8  get_quality_max (const gchar *interface);
++static gint32  get_bitrate     (const gchar *interface);
++static gchar * get_essid       (const gchar *interface);
+ 
+ 
+ /*  public functions  */
+@@ -231,14 +232,30 @@
+               wifimon->signal      = signal - 0x100;
+               wifimon->noise       = noise  - 0x100;
+               wifimon->bitrate     = get_bitrate (wifimon->interface);
+-              wifimon->percent     = rint (100 * (log (wifimon->quality) / log (wifimon->quality_max)));
+-              wifimon->percent     = CLAMP (wifimon->percent, 0, 100);
+-              wifimon->updated     = TRUE;
++
++              if (wifimon->essid)
++                g_free (wifimon->essid);
++
++              wifimon->essid = get_essid (wifimon->interface);
++
++              if (wifimon->quality > wifimon->quality_max)
++                {
++                  /*  quality is in dBm  */
++                  wifimon->percent = rint (100 * (wifimon->quality / wifimon->quality_max));
++                }
++              else
++                {
++                  /*  quality is relative  */
++                  wifimon->percent = rint (100 * (log (wifimon->quality) / log (wifimon->quality_max)));
++                }
++
++              wifimon->percent = CLAMP (wifimon->percent, 0, 100);
++              wifimon->updated = TRUE;
+             }
+           else
+             {
+-              g_message (_("%s: Parse error in %s line %d, skipping line...\n"),
+-                         GKRELLM_WIFI_PLUGIN_NAME, PROC_NET_WIRELESS, lineno);
++              g_message (_("Parse error in %s line %d, skipping line..."),
++                         PROC_NET_WIRELESS, lineno);
+ 
+               continue;
+             }
+@@ -248,8 +265,8 @@
+     }
+   else if (warn)
+     {
+-      g_message (_("%s: Could not open %s for reading, no wireless extensions found...\n"),
+-                 GKRELLM_WIFI_PLUGIN_NAME, PROC_NET_WIRELESS);
++      g_warning (_("Could not open %s for reading, no wireless extensions found..."),
++                 PROC_NET_WIRELESS);
+ 
+       warn = FALSE;
+     }
+@@ -266,14 +283,9 @@
+   gchar           buffer[sizeof (range) * 2] = { 0 };
+   gint            fd;
+   guint8          ret;
++  gint            offset;
+ 
+   g_assert (interface != NULL);
+-  g_assert (sizeof (buffer) >=
+-            G_STRUCT_OFFSET (struct iw_range_15, max_qual) +
+-            G_STRUCT_OFFSET (struct iw_quality_15, qual));
+-  g_assert (sizeof (buffer) >=
+-            G_STRUCT_OFFSET (struct iw_range_16, max_qual) +
+-            G_STRUCT_OFFSET (struct iw_quality_16, qual));
+ 
+   fd = socket (AF_INET, SOCK_DGRAM, 0);
+ 
+@@ -294,37 +306,33 @@
+ 
+           if (range.we_version_compiled <= 15)
+             {
+-              memcpy (&ret,
+-                      buffer +
+-                      G_STRUCT_OFFSET (struct iw_range_15, max_qual) +
+-                      G_STRUCT_OFFSET (struct iw_quality_15, qual),
+-                      sizeof (ret));
++              offset = G_STRUCT_OFFSET (struct iw_range_15, max_qual) +
++                       G_STRUCT_OFFSET (struct iw_quality_15, qual);
+             }
+           else
+             {
+-              memcpy (&ret,
+-                      buffer +
+-                      G_STRUCT_OFFSET (struct iw_range_16, max_qual) +
+-                      G_STRUCT_OFFSET (struct iw_quality_16, qual),
+-                      sizeof (ret));
++              offset = G_STRUCT_OFFSET (struct iw_range_16, max_qual) +
++                       G_STRUCT_OFFSET (struct iw_quality_16, qual);
+             }
++
++          memcpy (&ret, buffer + offset, sizeof (ret));
+         }
+       else
+         {
+-          g_message (_("%s: Could not get range for %s: %s\n"),
+-                     GKRELLM_WIFI_PLUGIN_NAME, interface, g_strerror (errno));
++          g_message (_("Could not get range for %s: %s"),
++                     interface, g_strerror (errno));
+ 
+-          ret = DEFAULT_RANGE;
++          ret = DEFAULT_QUALITY_MAX;
+         }
+ 
+       close (fd);
+     }
+   else
+     {
+-      g_message (_("%s: Could not open socket: %s\n"),
+-                 GKRELLM_WIFI_PLUGIN_NAME, g_strerror (errno));
++      g_warning (_("Could not open socket: %s"),
++                 g_strerror (errno));
+ 
+-      ret = DEFAULT_RANGE;
++      ret = DEFAULT_QUALITY_MAX;
+     }
+ 
+   return ret;
+@@ -346,25 +354,63 @@
+       strncpy (request.ifr_name, interface, IFNAMSIZ);
+ 
+       if (ioctl (fd, SIOCGIWRATE, &request) >= 0)
++        ret = request.u.bitrate.value;
++      else
++        ret = DEFAULT_BITRATE;
++
++      close (fd);
++    }
++  else
++    {
++      g_warning (_("Could not open socket: %s"),
++                 g_strerror (errno));
++
++      ret = DEFAULT_BITRATE;
++    }
++
++  return ret;
++}
++
++static gchar *
++get_essid (const gchar *interface)
++{
++  struct iwreq  request;
++  gchar         buffer[IW_ESSID_MAX_SIZE + 1] = { 0 };
++  gint          fd;
++  gchar        *ret;
++
++  g_assert (interface != NULL);
++
++  fd = socket (AF_INET, SOCK_DGRAM, 0);
++
++  if (fd >= 0)
++    {
++      request.u.essid.pointer = (caddr_t) &buffer;
++      request.u.essid.length  = sizeof (buffer);
++      request.u.essid.flags   = 0;
++
++      strncpy (request.ifr_name, interface, IFNAMSIZ);
++
++      if (ioctl (fd, SIOCGIWESSID, &request) >= 0)
+         {
+-          ret = request.u.bitrate.value;
++          if (request.u.data.flags)
++            ret = g_strdup (buffer);
++          else
++            ret = g_strdup (_("off/any"));
+         }
+       else
+         {
+-          g_message (_("%s: Could not get bitrate for %s: %s\n"),
+-                     GKRELLM_WIFI_PLUGIN_NAME, interface, g_strerror (errno));
+-
+-          ret = DEFAULT_BITRATE;
++          ret = g_strdup (_("n/a"));
+         }
+ 
+       close (fd);
+     }
+   else
+     {
+-      g_message (_("%s: Could not open socket: %s\n"),
+-                 GKRELLM_WIFI_PLUGIN_NAME, g_strerror (errno));
++      g_warning (_("Could not open socket: %s"),
++                 g_strerror (errno));
+ 
+-      ret = DEFAULT_BITRATE;
++      ret = g_strdup (_("n/a"));
+     }
+ 
+   return ret;
+diff -ur gkrellm-wifi-0.9.12.orig/gkrellm-wifi-preferences.c gkrellm-wifi-0.9.12/gkrellm-wifi-preferences.c
+--- gkrellm-wifi-0.9.12.orig/gkrellm-wifi-preferences.c	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/gkrellm-wifi-preferences.c	2004-01-03 18:01:18.000000000 +0100
+@@ -81,6 +81,7 @@
+     N_("\t$n\tnoise level in dBm\n"),
+     N_("\t$R\tsignal to noise ratio in dB\n"),
+     N_("\t$B\tbit rate in bps\n"),
++    N_("\t$E\textended network name (ESSID)\n"),
+   };
+ 
+   g_assert (tabs_vbox != NULL);
+@@ -164,6 +165,7 @@
+   format_list = g_list_append (format_list, "\\t$q/$m\\b$s/$n\\fdBm");
+   format_list = g_list_append (format_list, "\\t$Q%\\b$n\\fdBm\\p$s\\fdBm");
+   format_list = g_list_append (format_list, "\\t$Q%\\r$B\\b$n\\fdBm\\p$s\\fdBm");
++  format_list = g_list_append (format_list, "\\t$Q%\\r$B\\b$E: $R\\fdB");
+ 
+   gtk_combo_set_popdown_strings (GTK_COMBO (format_combo), format_list);
+ 
+diff -ur gkrellm-wifi-0.9.12.orig/gkrellm-wifi.c gkrellm-wifi-0.9.12/gkrellm-wifi.c
+--- gkrellm-wifi-0.9.12.orig/gkrellm-wifi.c	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/gkrellm-wifi.c	2004-01-03 18:01:18.000000000 +0100
+@@ -27,7 +27,6 @@
+ #define PLUGIN_PLACEMENT MON_NET | MON_INSERT_AFTER
+ #define STYLE_NAME       GKRELLM_WIFI_PLUGIN_NAME
+ 
+-
+ /*  prototypes  */
+ 
+ static void gkrellm_wifi_create (GtkWidget *vbox,
+@@ -138,6 +137,11 @@
+                   wifimon->noise       = 0;
+                   wifimon->bitrate     = 0;
+                   wifimon->percent     = 0;
++
++                  if (wifimon->essid)
++                    g_free (wifimon->essid);
++
++                  wifimon->essid = g_strdup (_("n/a"));;
+                 }
+ 
+               gkrellm_store_chartdata (wifimon->chart, 0, wifimon->percent);
+@@ -148,13 +152,10 @@
+ 
+               wifimon->updated = FALSE;
+             }
+-          else
++          else if (wifimon->chart)
+             {
+-              if (wifimon->chart)
+-                {
+-                  gkrellm_chart_destroy (wifimon->chart);
+-                  wifimon->chart = NULL;
+-                }
++              gkrellm_chart_destroy (wifimon->chart);
++              wifimon->chart = NULL;
+             }
+         }
+     }
+diff -ur gkrellm-wifi-0.9.12.orig/gkrellm-wifi.h gkrellm-wifi-0.9.12/gkrellm-wifi.h
+--- gkrellm-wifi-0.9.12.orig/gkrellm-wifi.h	2003-12-31 12:34:49.000000000 +0100
++++ gkrellm-wifi-0.9.12/gkrellm-wifi.h	2004-01-03 18:01:18.000000000 +0100
+@@ -65,6 +65,8 @@
+ 
+   gint32              bitrate;
+ 
++  gchar              *essid;
++
+   gint                percent;
+ } GkrellmWifiMonitor;
+ 

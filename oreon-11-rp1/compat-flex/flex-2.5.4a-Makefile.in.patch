@@ -1,0 +1,28 @@
+--- flex-2.5.4/Makefile.in	2006-03-09 19:28:41.000000000 +0100
++++ flex-2.5.4/Makefile.in_new	2006-03-09 19:29:48.000000000 +0100
+@@ -114,6 +114,7 @@ scan.c: scan.l
+ 	$(FLEX_EXEC) $(FLEX_FLAGS) $(COMPRESSION) $(srcdir)/scan.l >scan.c
+ 	@sed s,\"$(srcdir)/scan.l\",\"scan.l\", <scan.c >scan.tmp
+ 	@mv scan.tmp scan.c
++	-rm $(FLEX)
+ 
+ scan.o: scan.c parse.h flexdef.h config.h
+ yylex.o: yylex.c parse.h flexdef.h config.h
+@@ -146,7 +147,7 @@ alloca.c: $(srcdir)/MISC/alloca.c
+ 	cp $(srcdir)/MISC/alloca.c .
+ 
+ test: check
+-check: $(FLEX)
++check: scan.c $(FLEX)
+ 	$(FLEX_EXEC) $(FLEX_FLAGS) $(COMPRESSION) $(srcdir)/scan.l \
+ 	| sed s,\"$(srcdir)/scan.l\",\"scan.l\", \
+ 	| diff scan.c -
+@@ -160,7 +161,7 @@ bigcheck:
+ 	rm -f scan.c ; $(MAKE) COMPRESSION="-Cfea" check
+ 	rm -f scan.c ; $(MAKE) COMPRESSION="-CFer" check
+ 	rm -f scan.c ; $(MAKE) COMPRESSION="-l" PERF_REPORT="" check
+-	rm -f scan.c ; $(MAKE)
++	rm -f scan.c ; $(MAKE) check
+ 	@echo "All checks successful"
+ 
+ $(FLEXLIB): $(LIBOBJS)

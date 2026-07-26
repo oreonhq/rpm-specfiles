@@ -1,0 +1,107 @@
+From 7cf900a047f0e84d9fb01b0bcd756ecbe5925e21 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 16:06:04 -0800
+Subject: [PATCH 16/26] Update oz.spec.in to match current Fedora
+
+This won't work for EL 7, but should work for anything newer than
+that. The current version doesn't work at all.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ oz.spec.in | 41 +++++++++++++++++++----------------------
+ 1 file changed, 19 insertions(+), 22 deletions(-)
+
+diff --git a/oz.spec.in b/oz.spec.in
+index 37716b1..b83ccf1 100644
+--- a/oz.spec.in
++++ b/oz.spec.in
+@@ -1,45 +1,41 @@
+-Summary: Library and utilities for automated guest OS installs
+-Name: oz
++Name:    oz
+ Version: @VERSION@
+ Release: @RELEASE@%{?dist}
++Summary: Library and utilities for automated guest OS installs
+ License: LGPLv2
+-Group: Development/Libraries
+-URL: http://github.com/clalancette/oz
+-Source0: http://github.com/clalancette/%{name}/archive/%{name}-%{version}.tar.gz
++URL:     http://github.com/clalancette/oz
++
++Source0: https://github.com/clalancette/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
++
+ BuildArch: noarch
++
++BuildRequires: python3
++BuildRequires: python3-devel
++BuildRequires: python3-setuptools
+ Requires: python3
+-Requires: python3-libguestfs >= 1.18
+ Requires: python3-lxml
++Requires: python3-libguestfs >= 1.18
+ Requires: python3-libvirt
++Requires: python3-m2crypto
++Requires: python3-monotonic
++Requires: python3-requests
+ # in theory, oz doesn't really require libvirtd to be local to operate
+ # properly.  However, because of the libguestfs manipulations, in practice
+ # it really does.  Make it depend on libvirt (so we get libvirtd) for now,
+ # unless/until we are able to make it really be remote.
+-%if 0%{?fedora} >= 17
+ Requires: libvirt-daemon-kvm
+ Requires: libvirt-daemon-qemu
+ Requires: libvirt-daemon-config-network
+-%else
+-Requires: libvirt >= 0.9.7
+-%endif
+-Requires: python3-requests
+ Requires: genisoimage
+ Requires: mtools
+-%if 0%{?fedora} < 26 or 0%{?rhel} < 8
+-Requires: python-uuid
+-%endif
+ Requires: openssh-clients
+-Requires: python3-m2crypto
+-Requires: python3-monotonic
+-
+-BuildRequires: python3
+ 
+ %description
+ Oz is a set of libraries and utilities for doing automated guest OS
+ installations, with minimal input from the user.
+ 
+ %prep
+-%setup -q
++%autosetup -p1
+ 
+ %build
+ %py3_build
+@@ -66,7 +62,8 @@ if [ ! -f %{_sysconfdir}/oz/id_rsa-icicle-gen ]; then
+ fi
+ 
+ %files
+-%doc README COPYING examples
++%license COPYING
++%doc README examples
+ %dir %attr(0755, root, root) %{_sysconfdir}/oz/
+ %config(noreplace) %{_sysconfdir}/oz/oz.cfg
+ %dir %attr(0755, root, root) %{_localstatedir}/lib/oz/
+@@ -78,13 +75,13 @@ fi
+ %dir %attr(0755, root, root) %{_localstatedir}/lib/oz/jeos/
+ %dir %attr(0755, root, root) %{_localstatedir}/lib/oz/kernels/
+ %dir %attr(0755, root, root) %{_localstatedir}/lib/oz/screenshots/
+-%{python3_sitelib}/oz
+ %{_bindir}/oz-install
+ %{_bindir}/oz-generate-icicle
+ %{_bindir}/oz-customize
+ %{_bindir}/oz-cleanup-cache
+-%{python3_sitelib}/%{name}-%{version}-py%{python3_version}.egg-info
+ %{_mandir}/man1/*
++%{python3_sitelib}/oz
++%{python3_sitelib}/%{name}*.egg-info
+ 
+ %changelog
+ * Sat Feb  5 2022 Peter Robinson <pbrobinson@gmail.com> - 0.18.0-1
+-- 
+2.46.2
+

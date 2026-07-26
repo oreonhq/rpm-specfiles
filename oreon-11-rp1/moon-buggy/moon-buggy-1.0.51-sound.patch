@@ -1,0 +1,261 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for moon-buggy >= 1.0.51, basing
+on the original, but experimental, esound-based moon-buggy sound add-on patch of
+the upstream maintainer Jochen Voss <voss@seehuhn.de>. Main differences are, that
+the use of autoreconf is needed, because no direct patching of configure/Makefile
+is done.
+
+I also ensured, that moon-buggy still can be played without any sound, which isn't
+possible with the upstream version of the patch. Upstream enforces, once the patch
+is used, that a sound card is available on the machine moon-buggy is run. If you
+would like to use moon-buggy with the esd sound add-on, add the parameter '-w' or
+the long form '--with-sound' when calling the moon-buggy binary.
+
+My suggestion was sent upstream - but I think, the esd sound add-on for moon-buggy
+first needs to get implemented better before such an enhancement can be done on the
+upstream side.
+
+--- moon-buggy-1.0.51/Makefile.am		2004-12-27 16:34:32.000000000 +0100
++++ moon-buggy-1.0.51/Makefile.am.sound		2009-01-03 18:44:46.000000000 +0100
+@@ -2,7 +2,9 @@
+ # Copyright 1999, 2000, 2001  Jochen Voss
+ # $Id: Makefile.am 6092 2004-12-27 15:34:32Z voss $
+ 
+-EXTRA_DIST = manpage.in car.img \
++SOUND_FILES = jump.wav laser.wav crash.wav
++
++EXTRA_DIST = manpage.in car.img $(SOUND_FILES) README.sound \
+ 	text2c.sed img.sed ANNOUNCE moon-buggy.lsm \
+ 	moon-buggy.png moon-buggy.xpm title.eps
+ DISTCLEANFILES = moon-buggy.6
+@@ -14,8 +16,8 @@
+ 	game.c level.c ground.c buggy.c buggy.h laser.c meteor.c highscore.c \
+ 	realname.c queue.c vclock.c date.c persona.c signal.c keyboard.c \
+ 	terminal.c cursor.c random.c error.c xmalloc.c xstrdup.c darray.h \
+-	hpath.c
+-moon_buggy_LDADD = @CURSES_LIBS@
++	hpath.c sound.c
++moon_buggy_LDADD = @CURSES_LIBS@ @ESD_LIBS@
+ 
+ info_TEXINFOS = moon-buggy.texi
+ man_MANS = moon-buggy.6
+@@ -24,6 +26,11 @@
+ hpath.o: hpath.c moon-buggy.h Makefile
+ 	$(COMPILE) -DSCORE_DIR=\"$(scoredir)\" -c $<
+ 
++sounddir = @SOUND_DIR@
++sound_DATA = $(SOUND_FILES)
++sound.o: sound.c moon-buggy.h
++	$(COMPILE) -DSOUND_DIR=\"$(sounddir)\" @ESD_CFLAGS@ -c $<
++
+ BUILT_SOURCES = copying.h buggy.h
+ copying.h: COPYING text2c.sed
+ 	cd $(srcdir) && sed -f text2c.sed $(srcdir)/COPYING >$@
+--- moon-buggy-1.0.51/buggy.c			2004-12-27 16:58:57.000000000 +0100
++++ moon-buggy-1.0.51/buggy.c.sound		2009-01-03 19:11:21.000000000 +0100
+@@ -179,6 +179,9 @@
+       state = sz_sit;
+       start_wheel ();
+       crash_detected = 1;
++      if (sound_flag == 1) {
++        play_sound (mev_CRASH);
++      }
+     }
+   }
+   print_buggy ();
+@@ -193,6 +196,9 @@
+   assert (state->has_ground);
+   remove_event (jump_handler);	/* only one jump at a time */
+   add_event (t, jump_handler, sz_jump);
++  if (sound_flag == 1) {
++    play_sound (mev_JUMP);
++  }
+ }
+ 
+ int
+@@ -215,6 +221,9 @@
+     state = sz_crash;
+     print_buggy ();
+     start_wheel ();
++    if (sound_flag == 1) {
++      play_sound (mev_CRASH);
++    }
+     return 1;
+   }
+   
+@@ -232,6 +241,9 @@
+     print_buggy ();
+     start_wheel ();
+     crash_detected = 1;
++    if (sound_flag == 1) {
++      play_sound (mev_CRASH);
++    }
+     return 1;
+   }
+ 
+--- moon-buggy-1.0.51/configure.ac		2005-01-07 15:55:57.000000000 +0100
++++ moon-buggy-1.0.51/configure.ac.sound	2009-01-03 19:19:07.000000000 +0100
+@@ -1,7 +1,7 @@
+ dnl Process this file with autoconf to produce a configure script.
+ AC_REVISION($Revision: 1.4 $)
+ 
+-AC_INIT(moon-buggy, 1.0.51, voss@seehuhn.de)
++AC_INIT(moon-buggy, 1.0.51+esd, voss@seehuhn.de)
+ AC_CONFIG_SRCDIR([moon-buggy.h])
+ AM_INIT_AUTOMAKE
+ AM_CONFIG_HEADER(config.h)
+@@ -28,6 +28,9 @@
+ 
+ dnl Checks for libraries.
+ AC_CHECK_LIB(m, modf)
++PKG_CHECK_MODULES(ESD, esound)
++AC_SUBST(ESD_CFLAGS)
++AC_SUBST(ESD_LIBS)
+ JV_CHECK_CURSES
+ 
+ dnl Checks for header files.
+@@ -63,5 +66,8 @@
+ 
+ AM_CONDITIONAL(short_getopt, test "x$ac_cv_func_getopt_long" != xyes)
+ 
++SOUND_DIR='$(datadir)/moon-buggy/sounds/'
++AC_SUBST(SOUND_DIR)
++
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT
+--- moon-buggy-1.0.51/laser.c			2003-04-13 21:06:31.000000000 +0200
++++ moon-buggy-1.0.51/laser.c.sound		2009-01-03 19:13:33.000000000 +0100
+@@ -108,6 +108,9 @@
+   DA_ADD (beam_table, struct beam *, b);
+   add_event (t+TICK(0.25), beam_handler, b);
+   adjust_score (-1);
++  if (sound_flag == 1) {
++    play_sound (mev_LASER);
++  }
+ }
+ 
+ void
+--- moon-buggy-1.0.51/moon-buggy.h		2003-04-13 21:07:04.000000000 +0200
++++ moon-buggy-1.0.51/moon-buggy.h.sound	2009-01-03 19:14:25.000000000 +0100
+@@ -28,6 +28,7 @@
+ extern  WINDOW *moon, *status, *message;
+ 
+ extern int  car_base;
++extern int  sound_flag;
+ 
+ extern  void  print_message (const char *str);
+ extern  void  print_hint (const char *str);
+@@ -217,4 +218,8 @@
+ /* from "hpath.c" */
+ extern  const char *score_dir;
+ 
++/* from "sound.c" */
++enum event_type { mev_JUMP, mev_LASER, mev_CRASH };
++extern  void  play_sound (enum event_type type);
++
+ #endif /* FILE_MOON_BUGGY_H_SEEN */
+--- moon-buggy-1.0.51/moon-buggy.info		2005-01-07 15:59:15.000000000 +0100
++++ moon-buggy-1.0.51/moon-buggy.info.sound	2009-01-03 19:15:37.000000000 +0100
+@@ -32,7 +32,7 @@
+ dangerous craters there.  Fortunately your car can jump over them!
+ 
+    This edition (last updated 27 December 2004) of the manual applies to
+-version 1.0.51 of the program.
++version 1.0.51+esd of the program.
+ 
+ * Menu:
+ 
+--- moon-buggy-1.0.51/stamp-vti			2006-03-19 20:25:18.000000000 +0100
++++ moon-buggy-1.0.51/stamp-vti.sound		2009-01-03 19:15:52.000000000 +0100
+@@ -1,4 +1,4 @@
+ @set UPDATED 27 December 2004
+ @set UPDATED-MONTH December 2004
+-@set EDITION 1.0.51
+-@set VERSION 1.0.51
++@set EDITION 1.0.51+esd
++@set VERSION 1.0.51+esd
+--- moon-buggy-1.0.51/version.texi		2005-01-07 15:57:00.000000000 +0100
++++ moon-buggy-1.0.51/version.texi.sound	2009-01-03 19:16:07.000000000 +0100
+@@ -1,4 +1,4 @@
+ @set UPDATED 27 December 2004
+ @set UPDATED-MONTH December 2004
+-@set EDITION 1.0.51
+-@set VERSION 1.0.51
++@set EDITION 1.0.51+esd
++@set VERSION 1.0.51+esd
+--- moon-buggy-1.0.51/main.c			2006-03-19 20:24:14.000000000 +0100
++++ moon-buggy-1.0.51/main.c.sound.c		2009-01-03 19:06:56.000000000 +0100
+@@ -30,6 +30,7 @@
+ WINDOW *moon, *status, *message;
+ 
+ int  car_base;
++int  sound_flag = 0;
+ 
+ 
+ void
+@@ -135,11 +136,12 @@
+     { "mesg", no_argument, 0, 'm' },
+     { "no-title", no_argument, 0, 'n' },
+     { "show-scores", no_argument, 0, 's' },
++    { "with-sound", no_argument, 0, 'w' },
+     { "version", no_argument, 0, 'V' },
+     { NULL, 0, NULL, 0}
+   };
+ #endif
+-#define MB_SHORT_OPTIONS "chmnsV"
++#define MB_SHORT_OPTIONS "chmnswV"
+   int  help_flag = 0;
+   int  highscore_flag = 0;
+   int  title_flag = 1;
+@@ -182,6 +184,9 @@
+     case 's':
+       highscore_flag = 1;
+       break;
++    case 'w':
++      sound_flag = 1;
++      break;
+     case 'V':
+       version_flag = 1;
+       break;
+@@ -221,6 +226,8 @@
+ 	   out);
+     fputs (OPT("-n","--no-title     ") "omit the title screen\n", out);
+     fputs (OPT("-s","--show-scores  ") "only show the highscore list\n", out);
++    fputs (OPT("-w","--with-sound   ") "enable sound using esd feature\n",
++           out);
+     fputs (OPT("-V","--version      ") "show the version number and exit\n\n",
+ 	   out);
+     fputs ("Please report bugs to <voss@seehuhn.de>.\n", out);
+--- moon-buggy-1.0.51/README			2004-12-27 16:51:24.000000000 +0100
++++ moon-buggy-1.0.51/README.sound		2009-01-03 20:02:52.000000000 +0100
+@@ -18,6 +18,19 @@
+ by the command 'moon-buggy -V'.
+ 
+ 
++SOUND FEATURE:
++
++   This version of moon-buggy includes the very experimental sound add-
++on using esd.  It can only be used in conjunction with moon-buggy in
++version 1.0.51.  As moon-buggy should be able to run on a simple VT100
++terminal, this add-on is not part of the main moon-buggy distribution.
++
++   In Fedora, the experimental sound add-on was added more lightweight
++than upstream wrote the original patch.  The parameter '-w' or the long
++form '--with-sound' can be appended when calling the moon-buggy binary.
++If no parameter is given, moon-buggy will run without any sounds.
++
++
+ INSTALLATION:
+ 
+    Moon-buggy requires the curses library as a prerequisite.  If
+--- moon-buggy-1.0.51/manpage.in		2004-12-27 16:58:57.000000000 +0100
++++ moon-buggy-1.0.51/manpage.in.sound		2009-01-03 21:20:43.000000000 +0100
+@@ -32,6 +32,9 @@
+ .Op s show\-scores
+ shows the current highscore list and exits.
+ .TP
++.Op w with\-sound
++enables experimental sound add-on using esd.
++.TP
+ .Op V version
+ prints the program\'s version to standard output and exits.
+ .SH KEYS

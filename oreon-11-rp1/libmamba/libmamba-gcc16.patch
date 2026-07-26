@@ -1,0 +1,12 @@
+diff --git a/libmamba/include/mamba/util/random.hpp b/libmamba/include/mamba/util/random.hpp
+index 327b2864..046c05da 100644
+--- a/libmamba/include/mamba/util/random.hpp
++++ b/libmamba/include/mamba/util/random.hpp
+@@ -10,6 +10,7 @@
+ #include <algorithm>
+ #include <array>
+ #include <cstring>
++#include <functional>
+ #include <limits>
+ #include <random>
+ #include <string>

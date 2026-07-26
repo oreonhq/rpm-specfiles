@@ -1,0 +1,17 @@
+policy_module(mlmmj, 1.0)
+
+require {
+    type postfix_pipe_t;
+}
+
+type mlmmj_spool_t;
+files_type(mlmmj_spool_t);
+
+# mlmmj_manage_spool_dirs(type)
+define(`mlmmj_manage_spool_dirs', `
+allow $1 mlmmj_spool_t:dir { open read getattr lock search ioctl add_name remove_name write };
+allow $1 mlmmj_spool_t:file { create open getattr setattr read write append rename map link unlink ioctl lock };
+')
+
+# postfix pipe for mlmmj-receive
+mlmmj_manage_spool_dirs(postfix_pipe_t)

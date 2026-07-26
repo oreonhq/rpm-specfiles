@@ -1,0 +1,22 @@
+diff -ruN guile-reader-0.6.3/configure.ac guile-reader-0.6.3-config/configure.ac
+--- guile-reader-0.6.3/configure.ac	2020-07-27 01:44:34.000000000 +0300
++++ guile-reader-0.6.3-config/configure.ac	2024-09-30 14:39:31.214316951 +0300
+@@ -5,6 +5,9 @@
+ AC_INIT([Guile-Reader], [0.6.3], [guile-reader-devel@nongnu.org],
+   [guile-reader], [https://nongnu.org/guile-reader/])
+ AC_CONFIG_AUX_DIR(build-aux)
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.22.5])
++AC_CONFIG_MACRO_DIRS([m4])
+ 
+ AM_INIT_AUTOMAKE([1.11 color-tests parallel-tests silent-rules \
+   gnu no-define check-news -Wno-portability -Werror])
+@@ -107,7 +110,7 @@
+ GUILE_PKG([3.0 2.2 2.0 1.8])
+ GUILE_PROGS
+ GUILE_FLAGS
+-AC_PATH_PROG([guile_snarf], [guile-snarf], [not-found])
++AC_PATH_PROG([guile_snarf], [guile-snarf3.0], [not-found])
+ if test "x$guile_snarf" = "xnot-found"; then
+    AC_MSG_ERROR([`guile-snarf' not found.  Please install Guile 1.8.x or later.])
+ fi

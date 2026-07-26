@@ -1,0 +1,26 @@
+diff --git a/src/layer.h b/src/layer.h
+index ced4022..60ce7b8 100644
+--- a/src/layer.h
++++ b/src/layer.h
+@@ -72,7 +72,7 @@ int load_to_layers(char *file_name, int ftype, int ani_mode);
+ void layers_notify_changed();
+ void layer_copy_from_main( int l );	// Copy info from main image to layer
+ void layer_copy_to_main( int l );	// Copy info from layer to main image
+-void layer_refresh_list();
++void layer_refresh_list( int slot );
+ void layer_press_remove_all();
+ int check_layers_for_changes();
+ int check_layers_all_saved();
+diff --git a/src/mainwindow.c b/src/mainwindow.c
+index 95eab76..3b0a486 100644
+--- a/src/mainwindow.c
++++ b/src/mainwindow.c
+@@ -3616,7 +3616,7 @@ static void parse_drag(main_dd *dt, void **wdata, int what, void **where,
+ 	}
+ 	if (!nlayer) layer_delete(layers_total);
+ 
+-	layer_refresh_list();
++	layer_refresh_list(0);
+ 	layer_choose(layers_total);
+ 	layers_notify_changed();
+ 	if (layers_total) view_show();

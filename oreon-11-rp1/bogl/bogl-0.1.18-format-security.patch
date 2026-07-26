@@ -1,0 +1,13 @@
+diff --git a/reduce-font.c b/reduce-font.c
+index f1a7d4b..bd6439d 100644
+--- a/reduce-font.c
++++ b/reduce-font.c
+@@ -165,7 +165,7 @@ main (int argc, char **argv)
+                     else if (strncmp (buf, "STARTCHAR ", 10) == 0)
+                         header = 0;
+                     else
+-                        fprintf (stdout, buf);
++                        fprintf (stdout, "%s", buf);
+                 }
+                 
+                 if (!header)

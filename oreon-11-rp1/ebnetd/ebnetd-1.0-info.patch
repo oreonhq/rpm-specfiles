@@ -1,0 +1,30 @@
+diff -ruN ebnetd-1.0.orig/doc/ebnetd.info ebnetd-1.0/doc/ebnetd.info
+--- ebnetd-1.0.orig/doc/ebnetd.info	2003-12-28 17:54:46.000000000 +0900
++++ ebnetd-1.0/doc/ebnetd.info	2007-12-20 10:56:39.000000000 +0900
+@@ -4,8 +4,8 @@
+ INFO-DIR-SECTION CD-ROM Book Utilities
+ START-INFO-DIR-ENTRY
+ * EBNETD: (ebnetd).             Network EB Library server.
+-* NDTPD: (ndtpd).               Server for accessing CD-ROM books with NDTP.
+-* ebHTTPD: (ebhttpd).           Server for accessing CD-ROM books with HTTP.
++* NDTPD: (ebnetd).              Server for accessing CD-ROM books with NDTP.
++* ebHTTPD: (ebnetd).            Server for accessing CD-ROM books with HTTP.
+ END-INFO-DIR-ENTRY
+ 
+    EBNETD/NDTPD/ebHTTPD: CD-ROM Book Servers, by Motoyuki Kasahara.
+diff -ruN ebnetd-1.0.orig/doc-ja/ebnetd-ja.info ebnetd-1.0/doc-ja/ebnetd-ja.info
+--- ebnetd-1.0.orig/doc-ja/ebnetd-ja.info	2003-12-28 17:54:46.000000000 +0900
++++ ebnetd-1.0/doc-ja/ebnetd-ja.info	2007-12-20 10:57:33.000000000 +0900
+@@ -3,9 +3,9 @@
+ 
+ INFO-DIR-SECTION CD-ROM Book Utilities
+ START-INFO-DIR-ENTRY
+-* EBNETD: (ebnetd).             Network EB Library server.
+-* NDTPD: (ndtpd).               Server for accessing CD-ROM books with NDTP.
+-* ebHTTPD: (ebhttpd).           Server for accessing CD-ROM books with HTTP.
++* EBNETD-ja: (ebnetd-ja).             Network EB Library server.
++* NDTPD-ja: (ebnetd-ja).              Server for accessing CD-ROM books with NDTP.
++* ebHTTPD-ja: (ebnetd-ja).            Server for accessing CD-ROM books with HTTP.
+ END-INFO-DIR-ENTRY
+ 
+    EBNETD: CD-ROM ΩÒ¿“•µ°º•–∑≤°¢≥ﬁ∏∂¥«∑

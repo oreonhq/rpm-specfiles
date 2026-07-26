@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-musica</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Musica</name>
+	<summary>A font for musical symbols</summary>
+	<description>
+		<p>
+			Musica is a work-font for Ancient Greek, Byzantine and Western musical symbols.
+			The font also covers basic Latin, along with a few common symbols. Besides
+			musical notation glyphs supported by the Unicode Standard 7.0, Musica provides
+			extra symbols in Plane 15.
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

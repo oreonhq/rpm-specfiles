@@ -1,0 +1,153 @@
+diff -up kdebase-3.5.10/admin/acinclude.m4.in.me kdebase-3.5.10/admin/acinclude.m4.in
+--- kdebase-3.5.10/admin/acinclude.m4.in.me	2024-04-22 16:33:28.286459023 +0200
++++ kdebase-3.5.10/admin/acinclude.m4.in	2024-04-22 23:11:19.667504254 +0200
+@@ -2629,8 +2629,8 @@ AC_TRY_LINK(
+ LIBS="$ac_save_LIBS"
+ CXXFLAGS="$ac_save_CXXFLAGS"
+ AC_LANG_RESTORE
+-fi
+ ])
++fi
+ 
+ if eval "test ! \"`echo $kde_cv_qt_jpeg`\" = no"; then
+   AC_MSG_RESULT(yes)
+@@ -2744,68 +2744,69 @@ KDE_TRY_TIFFLIB(tiff, [],
+ AC_SUBST(LIBTIFF)
+ ])
+ 
+-AC_DEFUN([KDE_FIND_LIBEXR],
+-[
++AC_DEFUN([KDE_FIND_LIBEXR],   
++[   
+ AC_REQUIRE([KDE_CHECK_EXTRA_LIBS])
+-AC_REQUIRE([AC_FIND_ZLIB])
+-AC_CACHE_VAL(ac_cv_libexr,
+-[
++AC_REQUIRE([AC_FIND_ZLIB])    
++AC_CACHE_VAL(ac_cv_libexr,    
++[   
+   if test -z "$PKG_CONFIG"; then
+     AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+-  fi
+-
++  fi                          
++    
+   AC_MSG_CHECKING([for OpenEXR libraries])
+-
++    
+   if test "$PKG_CONFIG" = "no" ; then
+-     AC_MSG_RESULT(no)
++     AC_MSG_RESULT(no)        
+      echo "*** The pkg-config script could not be found. Make sure it is"
+      echo "*** in your path, or set the PKG_CONFIG environment variable"
+      echo "*** to the full path to pkg-config."
+      echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+-  else
++  else                        
+      if ! $PKG_CONFIG --exists OpenEXR ; then
+-        AC_MSG_RESULT(no)
++        AC_MSG_RESULT(no)     
+         EXRSTATUS=no
+-     else
++     else                     
+         if ! $PKG_CONFIG --atleast-version="1.1.1" OpenEXR ; then
+-           AC_MSG_RESULT(no)
++           AC_MSG_RESULT(no)  
+            EXRSTATUS=old
+         else
+            kde_save_LIBS="$LIBS"
+            LIBS="$LIBS $all_libraries $USER_LDFLAGS `pkg-config --libs OpenEXR` $LIBZ"
+-           AC_LANG_SAVE
+-           AC_LANG_CPLUSPLUS
++           AC_LANG_SAVE       
++           AC_LANG_CPLUSPLUS  
+            kde_save_CXXFLAGS="$CXXFLAGS"
+            EXR_FLAGS=`$PKG_CONFIG --cflags OpenEXR`
+            CXXFLAGS="$CXXFLAGS $all_includes $USER_INCLUDES $EXR_FLAGS"
++         fi
++     fi 
++  fi
++  AC_TRY_LINK(
++    [
++    #include <ImfRgbaFile.h>
++    ],
++    [
++    using namespace Imf;
++    RgbaInputFile file ("dummy");
++    return 0;
++    ],
++    eval "ac_cv_libexr='`pkg-config --libs OpenEXR`'",
++    eval "ac_cv_libexr=no"
++  )
++  LIBS="$kde_save_LIBS"
++  CXXFLAGS="$kde_save_CXXFLAGS"
++  AC_LANG_RESTORE
++  ])
+ 
+-           AC_TRY_LINK(dnl
+-               [
+-               #include <ImfRgbaFile.h>
+-               ],
+-               [
+-               using namespace Imf;
+-               RgbaInputFile file ("dummy");
+-               return 0;
+-               ],
+-               eval "ac_cv_libexr='`pkg-config --libs OpenEXR`'",
+-               eval "ac_cv_libexr=no"
+-           )
+-           LIBS="$kde_save_LIBS"
+-           CXXFLAGS="$kde_save_CXXFLAGS"
+-           AC_LANG_RESTORE
+-           ])dnl
+-           if eval "test ! \"`echo $ac_cv_libexr`\" = no"; then
+-               AC_DEFINE_UNQUOTED(HAVE_EXR, 1, [Define if you have OpenEXR])
+-               LIB_EXR="$ac_cv_libexr"
+-               AC_MSG_RESULT($ac_cv_libexr)
+-           else
+-               AC_MSG_RESULT(no)
+-               LIB_EXR=""
+-           fi
+-        fi
+-     fi
++  if eval "test ! \"`echo $ac_cv_libexr`\" = no"; then
++     AC_DEFINE_UNQUOTED(HAVE_EXR, 1, [Define if you have OpenEXR])
++     LIB_EXR="$ac_cv_libexr"
++     AC_MSG_RESULT($ac_cv_libexr)
++  else
++     AC_MSG_RESULT(no)
++     LIB_EXR=""
+   fi
++
+   AC_SUBST(LIB_EXR)
+   AC_SUBST(EXR_FLAGS)
+ ])
+@@ -2828,7 +2829,7 @@ fi
+ kde_save_CFLAGS="$CFLAGS"
+ CFLAGS="$CFLAGS $all_includes $USER_INCLUDES"
+ 
+-AC_TRY_LINK(dnl
++AC_TRY_LINK(
+     [
+     #include<png.h>
+     ],
+@@ -2842,7 +2843,7 @@ AC_TRY_LINK(dnl
+ )
+ LIBS="$kde_save_LIBS"
+ CFLAGS="$kde_save_CFLAGS"
+-])dnl
++])
+ if eval "test ! \"`echo $ac_cv_lib_png`\" = no"; then
+   AC_DEFINE_UNQUOTED(HAVE_LIBPNG, 1, [Define if you have libpng])
+   LIBPNG="$ac_cv_lib_png"
+@@ -5926,10 +5927,6 @@ We need perl to generate some code.])
+ AC_DEFUN([KDE_CHECK_LARGEFILE],
+ [
+ AC_SYS_LARGEFILE
+-if test "$ac_cv_sys_file_offset_bits" != no; then
+-  CPPFLAGS="$CPPFLAGS -D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+-fi
+-
+ if test "x$ac_cv_sys_large_files" != "xno"; then
+   CPPFLAGS="$CPPFLAGS -D_LARGE_FILES=1"
+ fi

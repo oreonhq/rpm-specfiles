@@ -1,0 +1,19 @@
+--- products/ap_pkgrid.c.orig	2009-12-22 06:33:27.000000000 -0700
++++ products/ap_pkgrid.c	2011-07-06 15:42:49.268454682 -0600
+@@ -20,6 +20,16 @@
+ #include "pk_user.h"
+ #include "ppl_grid.h"
+ 
++#pragma weak lincons0_of_vector
++#pragma weak pk_approximate
++#pragma weak pk_bottom
++#pragma weak pk_bound_linexpr
++#pragma weak pk_canonicalize
++#pragma weak pk_dimension
++#pragma weak pk_free
++#pragma weak pk_is_bottom
++#pragma weak pk_meet_lincons_array
++
+ void ap_pkgrid_reduce(ap_manager_t* manager,
+ 		      ap_reducedproduct_t* a)
+ {

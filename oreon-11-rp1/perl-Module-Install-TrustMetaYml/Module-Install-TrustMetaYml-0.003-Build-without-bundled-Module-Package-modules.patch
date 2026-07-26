@@ -1,0 +1,30 @@
+From 513e5235e94cf7bdb4bd5a51587d1a09c1ef911e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 27 May 2016 08:31:29 +0200
+Subject: [PATCH] Build without bundled Module::Package modules
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This Module-Install-TrustMetaYml distribution bundles
+inc/Module/Package/Dist/RDF.pm and reflexive
+inc/Module/Install/TrustMetaYml.pm Module::Package plugins. Current
+Module::Package framework cannot bootstrap this distribution because
+the admin mode expects to-be-bundled-plugins in a different name space.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9be3edc..cc87e47 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1 +1,2 @@
+-use inc::Module::Package 'RDF:tobyink 0.012';
++use inc::Module::Package;
++__END__
+-- 
+2.5.5
+

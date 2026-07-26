@@ -1,0 +1,22 @@
+diff -up aime-8.20150211/src/Makefile.am~ aime-8.20150211/src/Makefile.am
+--- aime-8.20150211/src/Makefile.am~	2014-10-13 16:49:21.000000000 +0300
++++ aime-8.20150211/src/Makefile.am	2015-04-04 11:32:55.869434199 +0300
+@@ -1,7 +1,6 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ AM_CFLAGS = -Wall @GCCWFLAGS@ -O2 @GCCOFLAGS@
+-AM_LDFLAGS = -s
+ PM_CFLAGS = @GCCDFLAGS@
+ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) \
+ 	$(CFLAGS) $(PM_CFLAGS)
+diff -up aime-8.20150211/src/Makefile.in~ aime-8.20150211/src/Makefile.in
+--- aime-8.20150211/src/Makefile.in~	2015-02-12 10:17:26.000000000 +0200
++++ aime-8.20150211/src/Makefile.in	2015-04-04 11:33:05.317641851 +0300
+@@ -378,7 +378,6 @@ top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ AM_CFLAGS = -Wall @GCCWFLAGS@ -O2 @GCCOFLAGS@
+-AM_LDFLAGS = -s
+ PM_CFLAGS = @GCCDFLAGS@
+ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) \
+ 	$(CFLAGS) $(PM_CFLAGS)

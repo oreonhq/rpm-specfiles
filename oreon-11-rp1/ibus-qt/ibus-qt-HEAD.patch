@@ -1,0 +1,63 @@
+From 5e26f23745f0ab2f72907aab430b9ee0b953066d Mon Sep 17 00:00:00 2001
+From: fujiwarat <takao.fujiwara1@gmail.com>
+Date: Fri, 18 Jul 2025 15:33:39 +0900
+Subject: [PATCH] Fix CMake files with CMake 4.0
+
+---
+ CMakeLists.txt      |  2 +-
+ cmake/FindICU.cmake | 19 +++++++++++++------
+ 2 files changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index edc4b09..c3b4b32 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.4)
++cmake_minimum_required(VERSION 3.5)
+ if(COMMAND cmake_policy)
+     cmake_policy(SET CMP0003 NEW)
+ endif(COMMAND cmake_policy)
+diff --git a/cmake/FindICU.cmake b/cmake/FindICU.cmake
+index 89bb46d..eb4e50a 100644
+--- a/cmake/FindICU.cmake
++++ b/cmake/FindICU.cmake
+@@ -12,22 +12,29 @@ endif(ICU_CONFIG_EXECUTABLE)
+ 
+ if(ICU_FOUND)
+   # get include dirs
+-  exec_program("${ICU_CONFIG_EXECUTABLE} --cppflags-searchpath|sed s/^-I//"
++  execute_process(
++    COMMAND ${ICU_CONFIG_EXECUTABLE} --cppflags-searchpath
++    COMMAND sed s/^-I//
+     OUTPUT_VARIABLE ICU_INCLUDE_DIRS
+-    RETURN_VALUE ERROR_CODE
++    OUTPUT_STRIP_TRAILING_WHITESPACE
++    COMMAND_ERROR_IS_FATAL ANY
+   )
+   separate_arguments(ICU_INCLUDE_DIRS)
+ 
+   # get libraries
+-  exec_program("${ICU_CONFIG_EXECUTABLE} --ldflags-searchpath"
++  execute_process(
++    COMMAND ${ICU_CONFIG_EXECUTABLE} --ldflags-searchpath
+     OUTPUT_VARIABLE ICU_LIBRARY_DIRS
+-    RETURN_VALUE ERROR_CODE
++    OUTPUT_STRIP_TRAILING_WHITESPACE
++    COMMAND_ERROR_IS_FATAL ANY
+   )
+   separate_arguments(ICU_LIBRARY_DIRS)
+ 
+-  exec_program("${ICU_CONFIG_EXECUTABLE} --ldflags-libsonly"
++  execute_process(
++    COMMAND ${ICU_CONFIG_EXECUTABLE} --ldflags-libsonly
+     OUTPUT_VARIABLE ICU_LIBRARIES
+-    RETURN_VALUE ERROR_CODE
++    OUTPUT_STRIP_TRAILING_WHITESPACE
++    COMMAND_ERROR_IS_FATAL ANY
+   )
+   separate_arguments(ICU_LIBRARIES)
+ 
+-- 
+2.49.0
+

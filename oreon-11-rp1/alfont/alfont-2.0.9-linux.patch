@@ -1,0 +1,58 @@
+diff -up alfont-2.0.9/include/alfont.h.linux alfont-2.0.9/include/alfont.h
+--- alfont-2.0.9/include/alfont.h.linux	2009-02-01 23:52:34.000000000 +0100
++++ alfont-2.0.9/include/alfont.h	2012-07-04 17:54:36.934125374 +0200
+@@ -10,9 +10,9 @@
+ /* See FTL.txt (FreeType Project License) for license */
+ 
+ 
+-#define ALFONT_WINDOWS   //When compiling in WINDOWS,please uncomment this line.
++//#define ALFONT_WINDOWS   //When compiling in WINDOWS,please uncomment this line.
+ //#define ALFONT_DOS 	 //When compiling in DOS,please uncomment this line. 
+-//#define ALFONT_LINUX 	 //When compiling in LINUX,please uncomment this line.
++#define ALFONT_LINUX 	 //When compiling in LINUX,please uncomment this line.
+ 
+ 
+ #ifndef ALFONT_H
+@@ -468,4 +468,4 @@ TDS565
+ 
+ Platform specifics 
+ RISCOS-LATIN1 
+-*/
+\ No newline at end of file
++*/
+diff -up alfont-2.0.9/src/alfont.c.linux alfont-2.0.9/src/alfont.c
+--- alfont-2.0.9/src/alfont.c.linux	2009-02-04 22:40:24.000000000 +0100
++++ alfont-2.0.9/src/alfont.c	2012-07-05 12:09:47.299021581 +0200
+@@ -468,7 +468,7 @@ ALFONT_FONT *alfont_load_font(const char
+   alfont_set_char_extra_spacing(font, 0);
+ 
+   //Initial Font attribute
+-  font->language="";		   /* Initial Language */
++  font->language=NULL;		   /* Initial Language */
+   font->type=0;				   /* Initial Code Convert */
+   font->outline_top=0;		   /* Initial Font top outline width */
+   font->outline_bottom=0;	   /* Initial Font bottom outline width */
+@@ -548,7 +548,7 @@ ALFONT_FONT *alfont_load_font_from_mem(c
+   alfont_set_char_extra_spacing(font, 0);
+ 
+   //Initial Font attribute
+-  font->language="";		   /* Initial Language */
++  font->language=NULL;		   /* Initial Language */
+   font->type=0;				   /* Initial Code Convert */
+   font->outline_top=0;		   /* Initial Font top outline width */
+   font->outline_bottom=0;	   /* Initial Font bottom outline width */
+@@ -4823,12 +4823,13 @@ void alfont_set_char_extra_spacing(ALFON
+ 
+ 
+ void alfont_set_language(ALFONT_FONT *f, const char *language) {
++  free(f->language);
+   if (language == NULL) {
+ 	f->language = NULL;
+   }
+   else
+   {
+-	f->language=(char *)malloc(strlen(language)*sizeof(char));
++	f->language=(char *)malloc((strlen(language)+1)*sizeof(char));
+ 	strcpy(f->language,language);
+   }
+ }

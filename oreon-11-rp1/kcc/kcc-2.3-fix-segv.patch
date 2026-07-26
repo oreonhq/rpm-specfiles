@@ -1,0 +1,12 @@
+diff -ruN kcc.orig/kcc.c kcc/kcc.c
+--- kcc.orig/kcc.c	2004-06-22 18:27:04.487460000 +0900
++++ kcc/kcc.c	2004-06-22 18:27:25.665660357 +0900
+@@ -372,7 +372,7 @@
+ 
+     va_start(args, va_alist);
+     fprintf(stderr, "%s: ", progname);
+-    vfprintf(stderr, va_arg(args, char *), args);
++    vfprintf(stderr, va_alist, args);
+     putc('\n', stderr);
+     va_end(args);
+     exit(1);

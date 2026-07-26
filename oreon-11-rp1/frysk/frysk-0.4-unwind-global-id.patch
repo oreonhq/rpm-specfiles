@@ -1,0 +1,51 @@
+diff --git a/frysk-sys/lib/unwind/jni/UnwindH.hxx b/frysk-sys/lib/unwind/jni/UnwindH.hxx
+index 76e57b7..5efc541 100644
+--- a/frysk-sys/lib/unwind/jni/UnwindH.hxx
++++ b/frysk-sys/lib/unwind/jni/UnwindH.hxx
+@@ -63,9 +63,14 @@
+ using namespace java::lang;
+ using namespace lib::unwind;
+ 
++struct jni_cursor {
++  unw_cursor_t cursor;
++  jobject addressSpace;
++};
++
+ #define UNW_PROC_INFO ((unw_proc_info_t*)unwProcInfo)
+ #define UNW_ADDRESS_SPACE ((unw_addr_space_t)unwAddressSpace)
+-#define UNW_CURSOR ((unw_cursor_t*)unwCursor)
++#define UNW_CURSOR (&((jni_cursor*)unwCursor)->cursor)
+ #define FINE env, (GetFine(env))
+ 
+ #ifndef MAX_VDSO_SIZE
+@@ -232,19 +237,23 @@ TARGET::createCursor(jnixx::env env,
+ 		     AddressSpace addressSpace,
+ 		     jlong unwAddressSpace) {
+   logf(FINE, "createCursor from address-space %lx", (long) UNW_ADDRESS_SPACE);
+-  jlong unwCursor = (jlong)::malloc(sizeof(::unw_cursor_t));
++  jni_cursor *cursor = new(jni_cursor);
+   // XXX: Need to zero out the cursor, as unw_init_remote doesn't seem
+   // to do it.
+-  memset(UNW_CURSOR, 0, sizeof(*UNW_CURSOR));
+-  unw_init_remote(UNW_CURSOR, UNW_ADDRESS_SPACE, addressSpace._object);
+-  logf(FINE, "createCursor at %lx", (long) UNW_CURSOR);
+-  return (jlong) UNW_CURSOR;
++  memset(cursor, 0, sizeof(jni_cursor));
++  // Make global as object is used across JNI calls
++  cursor->addressSpace = env.NewGlobalRef(addressSpace._object);
++  unw_init_remote(&cursor->cursor, UNW_ADDRESS_SPACE, cursor->addressSpace);
++  logf(FINE, "createCursor at %p", cursor);
++  return (jlong)cursor;
+ }
+ 
+ void
+ TARGET::destroyCursor(jnixx::env env, jlong unwCursor) {
+-  logf(FINE, "destroyCursor at %lx", (long) UNW_CURSOR);
+-  ::free(UNW_CURSOR);
++  jni_cursor *cursor = (jni_cursor*)unwCursor;
++  logf(FINE, "destroyCursor at %p", cursor);
++  env.DeleteGlobalRef(cursor->addressSpace);
++  ::free(cursor);
+ }
+ 
+ jlong

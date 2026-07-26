@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+​ <id>org.gnome.gimp-luminosity-masks</id>
+ <extends>org.gnome.gimp.desktop</extends>
+ <name>Luminosity Masks</name>
+ <summary>Generates luminosity masks as channels for image</summary>
+ <url type="homepage">http://registry.gimp.org/node/28644</url>
+ <url type="bugtracker">http://registry.gimp.org/node/28644</url> 
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-2.0+</project_license>
+</component>

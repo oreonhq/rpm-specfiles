@@ -1,0 +1,24 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 7 Apr 2022 23:49:24 +0200
+Subject: [PATCH] Disable rebar3 plugins for now
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 0e60bd1..0b51672 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -13,13 +13,10 @@
+   {eleveldb, {git, "git://github.com/basho/eleveldb.git", {tag, "riak_kv-3.0.10"}}}
+ ]}.
+ 
+-{plugins, [{eqc_rebar, {git, "https://github.com/Quviq/eqc-rebar", {branch, "master"}}}, pc]}.
+ {provider_hooks,
+  [
+   {pre,
+    [
+-    {compile, {pc, compile}},
+-    {clean, {pc, clean}}
+    ]
+   }
+  ]

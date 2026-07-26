@@ -1,0 +1,74 @@
+--- a/Makefile	2019-08-04 22:03:10.468706316 +0200
++++ b/Makefile	2019-08-04 22:03:45.837309967 +0200
+@@ -5,7 +5,7 @@
+ TARGET=mono-2.0
+ 
+ # Contains a list of acceptable targets used to build NAnt
+-VALID_TARGETS := mono-2.0 mono-3.5 mono-4.0 net-2.0 net-3.5 net-4.0
++VALID_TARGETS := mono-2.0 mono-3.5 mono-4.0 mono-4.5 net-2.0 net-3.5 net-4.0 net-4.5
+ 
+ ifndef DIRSEP
+ ifeq ($(OS),Windows_NT)
+@@ -55,6 +55,11 @@
+ DEFINE := $(DEFINE),NET_1_0,NET_1_1,NET_2_0,NET_3_5,NET_4_0,ONLY_4_0
+ endif
+ 
++# Loads (net,mono)-4.5 DEFINE vars
++ifeq ($(findstring 4.5,$(SELECTED_TARGET)),4.5)
++DEFINE := $(DEFINE),NET_1_0,NET_1_1,NET_2_0,NET_3_5,NET_4_0,NET_4_5,ONLY_4_5
++endif
++
+ # If TARGET var is invalid, throw an error
+ else
+ $(error Specified target "$(TARGET)" is not valid)
+--- a/Makefile.nmake
++++ b/Makefile.nmake
+@@ -17,6 +17,8 @@
+ DEFINE = $(DEFINE),NET_1_0,NET_1_1,NET_2_0,NET_3_5,ONLY_3_5
+ !else if "$(TARGET)" == "net-4.0" || "$(TARGET)" == "mono-4.0"
+ DEFINE = $(DEFINE),NET_1_0,NET_1_1,NET_2_0,NET_3_5,NET_4_0,ONLY_4_0
++!else if "$(TARGET)" == "net-4.5" || "$(TARGET)" == "mono-4.5"
++DEFINE = $(DEFINE),NET_1_0,NET_1_1,NET_2_0,NET_3_5,NET_4_0,NET_4_5,ONLY_4_5
+ !else
+ !error Specified target "$(TARGET)" is not valid
+ !endif
+--- a/NAnt.build
++++ b/NAnt.build
+@@ -755,6 +755,12 @@
+         <property name="link.sdkdoc.version" value="SDK_v1_1" />
+         <property name="link.sdkdoc.web" value="true" />
+     </target>
++    <target name="set-net-4.5-framework-configuration">
++        <property name="nant.settings.currentframework" value="net-4.5" />
++        <property name="current.build.defines" value="${build.defines}NET,NET_1_0,NET_1_1,NET_2_0,NET_3_5,NET_4_0,NET_4_5,ONLY_4_5" dynamic="true" />
++        <property name="link.sdkdoc.version" value="SDK_v1_1" />
++        <property name="link.sdkdoc.web" value="true" />
++    </target>
+     <target name="set-mono-2.0-framework-configuration">
+         <property name="nant.settings.currentframework" value="mono-2.0" />
+         <property name="current.build.defines" value="${build.defines}MONO,NET_1_0,NET_1_1,NET_2_0,ONLY_2_0" dynamic="true" />
+@@ -773,6 +779,12 @@
+         <property name="link.sdkdoc.version" value="SDK_v1_1" />
+         <property name="link.sdkdoc.web" value="true" />
+     </target>
++    <target name="set-mono-4.5-framework-configuration">
++        <property name="nant.settings.currentframework" value="mono-4.5" />
++        <property name="current.build.defines" value="${build.defines}MONO,NET_1_0,NET_1_1,NET_2_0,NET_3_5,NET_4_0,NET_4_5,ONLY_4_5" dynamic="true" />
++        <property name="link.sdkdoc.version" value="SDK_v1_1" />
++        <property name="link.sdkdoc.web" value="true" />
++    </target>
+ 
+     <!-- install targets -->
+
+--- a/src/NAnt.Core/FrameworkInfo.cs
++++ b/src/NAnt.Core/FrameworkInfo.cs
+@@ -315,6 +315,8 @@
+                         return new Version(8, 0);
+                     case "4.0":
+                         return new Version(10, 0);
++                    case "4.5":
++                        return new Version(11, 0);
+                     default:
+                         throw new BuildException(string.Format(CultureInfo.InvariantCulture,
+                             ResourceUtils.GetString("NA1055"),
+

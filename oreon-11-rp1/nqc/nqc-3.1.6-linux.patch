@@ -1,0 +1,100 @@
+diff -rN -U 5 nqc-3.1.r6.orig/Makefile nqc-3.1.r6/Makefile
+--- nqc-3.1.r6.orig/Makefile	2005-03-16 10:49:40.000000000 -0700
++++ nqc-3.1.r6/Makefile	2007-07-20 23:44:41.000000000 -0600
+@@ -64,10 +64,11 @@
+ MKDIR?=mkdir
+ MV?=mv -f
+ RM?=rm -f
+ 
+ # CFLAGS
++CFLAGS = $(RPM_OPT_FLAGS)
+ #CFLAGS = -pipe -Iplatform -Ircxlib -Inqc -Icompiler -Wall -Wstrict-prototypes -Wmissing-prototypes
+ CFLAGS += -Iplatform -Ircxlib -Inqc -Icompiler -Wall
+ 
+ USBOBJ = rcxlib/RCX_USBTowerPipe_none.o
+ 
+@@ -84,11 +85,11 @@
+   CXX = c++
+ else
+ ifneq (,$(strip $(findstring $(OSTYPE), Linux)))
+   # Linux
+ # uncomment this next line if you have the USB tower library installed
+-#  USBOBJ = rcxlib/RCX_USBTowerPipe_linux.o
++  USBOBJ = rcxlib/RCX_USBTowerPipe_linux.o
+   CFLAGS += -I/usr/local/include/LegoUSB -Wno-deprecated
+ else
+ ifneq (,$(findstring $(OSTYPE), SunOS))
+   # Solaris
+   CFLAGS += -DSOLARIS
+diff -rN -U 5 nqc-3.1.r6.orig/rcxlib/LegoUSB/legousbtower.h nqc-3.1.r6/rcxlib/LegoUSB/legousbtower.h
+--- nqc-3.1.r6.orig/rcxlib/LegoUSB/legousbtower.h	1969-12-31 17:00:00.000000000 -0700
++++ nqc-3.1.r6/rcxlib/LegoUSB/legousbtower.h	2007-07-20 23:46:38.000000000 -0600
+@@ -0,0 +1,52 @@
++/*
++ * legousbtower Lego USB IR Tower Linux Driver 
++ *
++ *      Copyright (c) 2001-2002 The LegoUSB DevTeam <legousb-devteam@lists.sourceforge.net>
++ * 
++ *
++ *	This program is free software; you can redistribute it and/or
++ *	modify it under the terms of the GNU General Public License as
++ *	published by the Free Software Foundation; either version 2 of
++ *	the License, or (at your option) any later version.
++ *
++ */
++
++#ifndef __LEGOUSBTOWER_H
++#define __LEGOUSBTOWER_H
++
++#define LEGO_TOWER_SET_PARAM _IOW('u', 0xb0, int)
++#define LEGO_TOWER_GET_PARAM _IOW('u', 0xb1, int)
++#define LEGO_TOWER_RESET _IO('u', 0xb3)
++
++
++#define LEGO_TOWER_SET_READ_TIMEOUT _IOW('u', 0xc8, int)
++#define LEGO_TOWER_SET_WRITE_TIMEOUT _IOW('u', 0xc9, int)
++
++
++#define LEGO_USB_TOWER_REQUEST_GET		1
++#define LEGO_USB_TOWER_REQUEST_SET		2
++#define LEGO_USB_TOWER_REQUEST_RESET		4 
++
++
++#define LEGO_USB_TOWER_ADDRESS_MODE		1
++#define LEGO_USB_TOWER_ADDRESS_POWER_LEVEL	2
++
++#define LEGO_USB_TOWER_POWER_LEVEL_LOW		1
++#define LEGO_USB_TOWER_POWER_LEVEL_MEDIUM	2
++#define LEGO_USB_TOWER_POWER_LEVEL_HIGH		3
++
++#define LEGO_USB_TOWER_MODE_VLL			1
++#define LEGO_USB_TOWER_MODE_RCX			2
++
++
++
++struct request_reply
++{
++	unsigned short length;
++	unsigned char  error_code;
++	unsigned char  value;
++	unsigned char  buffer[16];   // variable replies from the tower
++	                   // at this stage we aren't interested in the data
++};
++
++#endif
+diff -rN -U 5 nqc-3.1.r6.orig/rcxlib/RCX_USBTowerPipe_linux.cpp nqc-3.1.r6/rcxlib/RCX_USBTowerPipe_linux.cpp
+--- nqc-3.1.r6.orig/rcxlib/RCX_USBTowerPipe_linux.cpp	2005-10-14 13:51:10.000000000 -0600
++++ nqc-3.1.r6/rcxlib/RCX_USBTowerPipe_linux.cpp	2007-07-20 23:47:57.000000000 -0600
+@@ -57,11 +57,11 @@
+ RCX_Pipe* RCX_NewUSBTowerPipe()
+ {
+ 	return new RCX_USBTowerPipe_linux();
+ }
+ 
+-#define DEFAULT_TOWER_NAME "/dev/usb/lego0"
++#define DEFAULT_TOWER_NAME "/dev/legousbtower0"
+ 
+ RCX_Result RCX_USBTowerPipe_linux::Open(const char *name, int mode)
+ {
+ 	// if (name == 0 || *name==0)
+ 	{

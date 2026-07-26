@@ -1,0 +1,11 @@
+--- a/src/node.cpp
++++ b/src/node.cpp
+@@ -16,6 +16,7 @@
+  *
+  */
+ 
++#include <stdexcept>
+ #include <set>
+ #include <utility>
+ #include <ipcgull/server.h>
+

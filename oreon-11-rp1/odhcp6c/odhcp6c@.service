@@ -1,0 +1,31 @@
+[Unit]
+Description=DHCPv6 and RA client on %I
+Wants=network.target
+Before=network.target
+BindsTo=sys-subsystem-net-devices-%i.device
+After=network-pre.target
+After=sys-subsystem-net-devices-%i.device
+
+[Service]
+Type=exec
+EnvironmentFile=-/etc/odhcp6c/odhcp6c-%I
+ExecStart=/usr/bin/odhcp6c -N try -P 0 -t 120 -v $CMD_OPTIONS %I
+Restart=on-failure
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_BROADCAST CAP_NET_RAW
+ProtectHome=yes
+ProtectSystem=full
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+RestrictAddressFamilies=AF_UNIX AF_NETLINK AF_INET AF_INET6 AF_PACKET AF_ALG
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+
+[Install]
+WantedBy=multi-user.target

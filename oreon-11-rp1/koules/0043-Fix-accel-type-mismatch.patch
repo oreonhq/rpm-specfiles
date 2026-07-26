@@ -1,0 +1,21 @@
+diff -up koules1.4/objectsio.c~ koules1.4/objectsio.c
+--- koules1.4/objectsio.c~	1998-03-04 13:59:19.000000000 -0500
++++ koules1.4/objectsio.c	2024-04-21 14:43:43.983362743 -0400
+@@ -47,7 +47,7 @@ unsigned char  *buffer;
+ #define Debug(text,num)
+ #define Debug1(text)
+ #endif
+-extern void     accel (int);
++extern void     accel (int, double);
+ 
+ /*bit counter */
+ static int      c = 1;
+@@ -206,7 +206,7 @@ read_object (int i, unsigned char *buffe
+     {
+       int             n;
+       for (n = 0; n < nodata; n++)
+-	accel (i);
++	accel (i, 1.0);
+     }
+   Debug1 ("\n");
+   return (buffer);

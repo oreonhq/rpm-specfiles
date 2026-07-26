@@ -1,0 +1,32 @@
+--- a/CMakeLists.txt~	2025-05-31 14:24:07.000000000 -0500
++++ b/CMakeLists.txt	2025-06-02 13:43:10.496539999 -0500
+@@ -318,12 +318,12 @@
+ 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/endless-sky.6.gz DESTINATION share/man/man6)
+ 
+ 	# Install the resource files.
+-	install(DIRECTORY data DESTINATION share/games/endless-sky)
+-	install(DIRECTORY images DESTINATION share/games/endless-sky)
+-	install(DIRECTORY shaders DESTINATION share/games/endless-sky)
+-	install(DIRECTORY sounds DESTINATION share/games/endless-sky)
+-	install(FILES credits.txt DESTINATION share/games/endless-sky)
+-	install(FILES keys.txt DESTINATION share/games/endless-sky)
++	install(DIRECTORY data DESTINATION share/endless-sky)
++	install(DIRECTORY images DESTINATION share/endless-sky)
++	install(DIRECTORY shaders DESTINATION share/endless-sky)
++	install(DIRECTORY sounds DESTINATION share/endless-sky)
++	install(FILES credits.txt DESTINATION share/endless-sky)
++	install(FILES keys.txt DESTINATION share/endless-sky)
+ 	install(FILES copyright DESTINATION share/doc/endless-sky)
+ 	install(FILES changelog DESTINATION share/doc/endless-sky)
+ 	install(FILES license.txt DESTINATION share/doc/endless-sky)
+--- a/source/Files.cpp~	2025-05-31 14:24:07.000000000 -0500
++++ b/source/Files.cpp	2025-06-02 14:50:55.468669156 -0500
+@@ -128,7 +128,7 @@
+ 		// the end, so parent paths do not include it.
+ 		static const filesystem::path LOCAL_PATH = "/usr/local";
+ 		static const filesystem::path STANDARD_PATH = "/usr";
+-		static const filesystem::path RESOURCE_PATH = "share/games/endless-sky/";
++		static const filesystem::path RESOURCE_PATH = "share/endless-sky/";
+ 
+ 		if(IsParent(LOCAL_PATH, resources))
+ 			resources = LOCAL_PATH / RESOURCE_PATH;

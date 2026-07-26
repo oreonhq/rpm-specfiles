@@ -1,0 +1,93 @@
+From 9a920e8c5ba5e2b598d6eab3348b1a0ebbc77b68 Mon Sep 17 00:00:00 2001
+From: Tyler Cromwell <tyler@csh.rit.edu>
+Date: Sun, 11 Jan 2015 10:10:04 -0500
+Subject: [PATCH] Converted spaces to tabs, and changed to setting a delay
+ instead of a speed up amount
+
+---
+ nyancat.1     |  6 ++++--
+ src/nyancat.c | 20 ++++++++++----------
+ 2 files changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/nyancat.1 b/nyancat.1
+index e9ef839..33771fd 100644
+--- a/nyancat.1
++++ b/nyancat.1
+@@ -30,8 +30,10 @@ Do not set the titlebar text.
+ .B \-e, \-\-no\-clear
+ Do not clear the display between frames.
+ .TP
+-.B \-u, \-\-usleep
+-Set how frequently the image refreshes (1 <= t <= 10).
++.B \-d, \-\-delay
++Delay image rendering by anywhere between 10ms and 1000ms.
++.br
++Default (90ms) is used if amount is out of range.
+ .TP
+ .B \-f, \-\-frames
+ Display the requested number of frames, then quit.
+diff --git a/src/nyancat.c b/src/nyancat.c
+index 5b59824..537225c 100644
+--- a/src/nyancat.c
++++ b/src/nyancat.c
+@@ -335,7 +335,7 @@ void usage(char * argv[]) {
+ 			" -n --no-counter \033[3mDo not display the timer\033[0m\n"
+ 			" -s --no-title   \033[3mDo not set the titlebar text\033[0m\n"
+ 			" -e --no-clear   \033[3mDo not clear the display between frames\033[0m\n"
+-			" -u --usleep     \033[3mSet how frequently the image refreshes (1 <= t <= 10)\033[0m\n"
++			" -d --delay      \033[3mDelay image rendering by anywhere between 10ms and 1000ms\n"
+ 			" -f --frames     \033[3mDisplay the requested number of frames, then quit\033[0m\n"
+ 			" -r --min-rows   \033[3mCrop the animation from the top\033[0m\n"
+ 			" -R --max-rows   \033[3mCrop the animation from the bottom\033[0m\n"
+@@ -370,7 +370,7 @@ int main(int argc, char ** argv) {
+ 		{"no-counter", no_argument,       0, 'n'},
+ 		{"no-title",   no_argument,       0, 's'},
+ 		{"no-clear",   no_argument,       0, 'e'},
+-		{"usleep",     required_argument, 0, 'u'},
++		{"delay",      required_argument, 0, 'd'},
+ 		{"frames",     required_argument, 0, 'f'},
+ 		{"min-rows",   required_argument, 0, 'r'},
+ 		{"max-rows",   required_argument, 0, 'R'},
+@@ -381,12 +381,12 @@ int main(int argc, char ** argv) {
+ 		{0,0,0,0}
+ 	};
+ 
+-    /* Determine the usleep time  */
+-    useconds_t speed_divisor = 1;
++	/* Time delay in milliseconds */
++	int delay_ms = 90; // Default to original value
+ 
+ 	/* Process arguments */
+ 	int index, c;
+-	while ((c = getopt_long(argc, argv, "eshiItnu:f:r:R:c:C:W:H:", long_opts, &index)) != -1) {
++	while ((c = getopt_long(argc, argv, "eshiItnd:f:r:R:c:C:W:H:", long_opts, &index)) != -1) {
+ 		if (!c) {
+ 			if (long_opts[index].flag == 0) {
+ 				c = long_opts[index].val;
+@@ -415,10 +415,10 @@ int main(int argc, char ** argv) {
+ 			case 'n':
+ 				show_counter = 0;
+ 				break;
+-            case 'u':
+-                if (1 <= atoi(optarg) && atoi(optarg) <= 10)
+-                    speed_divisor = atoi(optarg);
+-                break;
++			case 'd':
++				if (10 <= atoi(optarg) && atoi(optarg) <= 1000)
++					delay_ms = atoi(optarg);
++				break;
+ 			case 'f':
+ 				frame_count = atoi(optarg);
+ 				break;
+@@ -916,7 +916,7 @@ int main(int argc, char ** argv) {
+ 			i = 0;
+ 		}
+ 		/* Wait */
+-		usleep(90000 / speed_divisor);
++		usleep(1000 * delay_ms);
+ 	}
+ 	return 0;
+ }
+-- 
+2.25.1
+

@@ -1,0 +1,9 @@
+Under MIT license:
+lib/avpair.c, lib/buildreq.c, lib/clientid.c, lib/config.c, lib/dict.c,
+lib/env.c, lib/ip_util.c, lib/log.c, lib/sendserver.c, lib/util.c,
+src/local.c, src/radacct.c, src/radexample.c, src/radius.c, src/radlogin.c,
+src/radstatus.c
+
+under BSD license:
+lib/util.c, src/radiusclient.c, lib/rc-md5.c
+

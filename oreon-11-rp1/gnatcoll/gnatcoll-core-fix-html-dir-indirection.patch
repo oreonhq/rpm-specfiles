@@ -1,0 +1,11 @@
+--- a/core/gnatcoll_core.gpr
++++ b/core/gnatcoll_core.gpr
+@@ -398,7 +398,7 @@
+ 
+    package Install is
+       for Artifacts ("share/examples/gnatcoll") use ("../examples/*");
+-      for Artifacts ("share/doc/gnatcoll/html") use ("../docs/_build/html");
++      for Artifacts ("share/doc/gnatcoll/html") use ("../docs/_build/html/*");
+       for Artifacts ("share/doc/gnatcoll")
+         use ("../docs/_build/latex/GNATColl.pdf");
+    end Install;

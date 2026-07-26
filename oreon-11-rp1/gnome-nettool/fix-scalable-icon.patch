@@ -1,0 +1,25 @@
+From 314526f4362cd4d10fbe51316dabce5e088fa922 Mon Sep 17 00:00:00 2001
+From: AsciiWolf <mail@asciiwolf.com>
+Date: Sun, 17 May 2020 21:18:06 +0200
+Subject: [PATCH] Fix scalable icon
+
+---
+ pixmaps/icons/scalable/apps/gnome-nettool.svg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pixmaps/icons/scalable/apps/gnome-nettool.svg b/pixmaps/icons/scalable/apps/gnome-nettool.svg
+index 06de271..efaa25c 100644
+--- a/pixmaps/icons/scalable/apps/gnome-nettool.svg
++++ b/pixmaps/icons/scalable/apps/gnome-nettool.svg
+@@ -7,7 +7,7 @@
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/s odipodi-0.dtd"
++   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    width="48px"
+    height="48px"
+-- 
+2.26.2
+

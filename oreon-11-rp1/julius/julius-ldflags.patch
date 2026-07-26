@@ -1,0 +1,24 @@
+diff --git julius-4.5/libjulius/julius.pc.in~ julius-4.5/libjulius/julius.pc.in
+index f32ed7a200..d9c21a865f 100644
+--- julius-4.5/libjulius/julius.pc.in~
++++ julius-4.5/libjulius/julius.pc.in
+@@ -6,6 +6,6 @@ includedir=${exec_prefix}/include
+ Name: @JULIUS_PRODUCTNAME@
+ Description: @JULIUS_PRODUCTNAME@ is the C library for Julius speech recognition suite
+ Version: @JULIUS_VERSION@
+-Libs: -ljulius @LDFLAGS@ @LIBS@
++Libs: -ljulius @LIBS@
+ Cflags: -I@includedir@ @CPPFLAGS@
+ Depends: sent-4
+diff --git julius-4.5/libsent/sent.pc.in~ julius-4.5/libsent/sent.pc.in
+index 9ab92ed0b4..9c04fe680d 100644
+--- julius-4.5/libsent/sent.pc.in~
++++ julius-4.5/libsent/sent.pc.in
+@@ -6,5 +6,5 @@ includedir=${exec_prefix}/include
+ Name: Libsent
+ Description: Libsent is the auxiliary C library for Julius speech recognition suite
+ Version: @LIBSENT_VERSION@
+-Libs: -lsent @SOUNDLIB@ @EXTRALIB@ @LDFLAGS@ @LIBS@
+-Cflags: -I@includedir@ @CFLAGS@ @CPPFLAGS@
++Libs: -lsent @SOUNDLIB@ @EXTRALIB@ @LIBS@
++Cflags: -I@includedir@ @CPPFLAGS@

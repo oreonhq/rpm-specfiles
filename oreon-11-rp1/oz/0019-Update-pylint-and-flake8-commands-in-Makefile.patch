@@ -1,0 +1,32 @@
+From 6d2efbcf33e1b6ba64df496b09e4d5820b0320d7 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Wed, 24 Jan 2024 19:07:52 -0800
+Subject: [PATCH 19/26] Update pylint and flake8 commands in Makefile
+
+These -3 versions haven't existed for years, AFAICT.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index fa81313..c8d94dd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -52,10 +52,10 @@ test-coverage:
+ 	xdg-open htmlcov/index.html
+ 
+ pylint:
+-	pylint-3 --rcfile=pylint.conf oz oz-install oz-customize oz-cleanup-cache oz-generate-icicle
++	pylint --rcfile=pylint.conf oz oz-install oz-customize oz-cleanup-cache oz-generate-icicle
+ 
+ flake8:
+-	flake8-3 --ignore=E501 oz
++	flake8 --ignore=E501 oz
+ 
+ clean:
+ 	rm -rf MANIFEST build dist usr *~ oz.spec *.pyc oz/*~ oz/*.pyc examples/*~ oz/auto/*~ man/*~ docs/*~ man/*.html $(VENV_DIR) tests/tdl/*~ tests/factory/*~ tests/results.xml htmlcov
+-- 
+2.46.2
+

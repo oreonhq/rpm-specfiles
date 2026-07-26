@@ -1,0 +1,5 @@
+# SPELLING ERRORS
+addFilter(r" no-manual-page-for-binary choqok")
+addFilter(r" incoherent-version-in-changelog")
+addFilter(r" no-documentation")
+addFilter(r" gzipped-svg-icon*")

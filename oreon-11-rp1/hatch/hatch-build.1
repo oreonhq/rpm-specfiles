@@ -1,0 +1,86 @@
+.TH HATCH\-BUILD "1" "August 2024" "" "User Commands"
+.SH NAME
+.B hatch\ build
+\(en Build a project
+.SH SYNOPSIS
+.B hatch\ build
+.RI [ OPTIONS ]
+.RI [ LOCATION ]
+.SH OPTIONS
+.TP
+.B \-t\fR, \fB\-\-target\ \fITEXT
+The target to build,
+overriding project defaults.
+This may be selected multiple times
+e.g. \fB\-t\ sdist \-t\ wheel\fR
+.TP
+.B \-\-hooks\-only
+Whether or not to only execute build hooks
+[env var:
+.BR HATCH_BUILD_HOOKS_ONLY ]
+.TP
+.B \-\-no\-hooks
+Whether or not to disable build hooks
+[env var:
+.BR HATCH_BUILD_NO_HOOKS ]
+.TP
+.B \-\-ext
+Whether or not to only execute build hooks for
+distributing binary Python packages, such as compiling extensions.
+Equivalent to
+.B \-\-hooks\-only\ \-t\ wheel
+.TP
+.B \-c\fR, \fB\-\-clean
+Whether or not existing artifacts should first be removed
+[env var:
+.BR HATCH_BUILD_CLEAN ]
+.TP
+.B \-\-clean\-hooks\-after
+Whether or not build hook artifacts should be removed
+after each build
+[env var:
+.BR HATCH_BUILD_CLEAN_HOOKS_AFTER ]
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH ENVIRONMENT
+.TP
+.B HATCH_BUILD_HOOKS_ONLY
+Whether or not to only execute build hooks
+[option:
+.BR \-\-hooks\-only ]
+.TP
+.B HATCH_BUILD_NO_HOOKS
+Whether or not to disable build hooks
+[option:
+.BR \-\-no\-hooks ]
+.TP
+.B HATCH_BUILD_CLEAN
+Whether or not existing artifacts should first be removed
+[option:
+.BR \-c ,
+.BR \-\-clean ]
+.TP
+.B HATCH_BUILD_CLEAN_HOOKS_AFTER
+Whether or not build hook artifacts should be removed
+after each build
+[option:
+.BR \-\-clean\-hooks\-after ]
+.SH "SEE ALSO"
+.BR hatch\-clean (1),
+.BR hatch\-config (1),
+.BR hatch\-dep (1),
+.BR hatch\-env (1),
+.BR hatch\-fmt (1),
+.BR hatch\-new (1),
+.BR hatch\-project (1),
+.BR hatch\-publish (1),
+.BR hatch\-python (1),
+.BR hatch\-run (1),
+.BR hatch\-self (1),
+.BR hatch\-shell (1),
+.BR hatch\-status (1),
+.BR hatch\-test (1),
+.BR hatch\-version (1)
+.P
+.BR hatch (1)

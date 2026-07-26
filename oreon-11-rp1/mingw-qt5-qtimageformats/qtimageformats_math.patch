@@ -1,0 +1,20 @@
+diff -rupN --no-dereference qtimageformats-everywhere-src-5.15.18/src/plugins/imageformats/jp2/qjp2handler.cpp qtimageformats-everywhere-src-5.15.18-new/src/plugins/imageformats/jp2/qjp2handler.cpp
+--- qtimageformats-everywhere-src-5.15.18/src/plugins/imageformats/jp2/qjp2handler.cpp	2025-03-30 13:49:40.000000000 +0200
++++ qtimageformats-everywhere-src-5.15.18-new/src/plugins/imageformats/jp2/qjp2handler.cpp	2025-11-08 23:29:44.165957564 +0100
+@@ -45,6 +45,7 @@
+ #include "qcolor.h"
+ #include "qimagereader.h"
+ 
++#include <cmath>
+ #include <jasper/jasper.h>
+ #include <math.h> // for pow
+ 
+@@ -873,7 +874,7 @@ bool Jpeg2000JasperReader::write(const Q
+ 
+     // Set jasperRate to a value in the range minRate..maxRate. Distribute the
+     // quality steps more densely at the lower end if the rate scale.
+-    const double jasperRate = minRate + pow((double(quality) / double(maxQuality)), 2) * maxRate;
++    const double jasperRate = minRate + std::pow((double(quality) / double(maxQuality)), 2) * maxRate;
+ 
+     // The Jasper format string contains two options:
+     // rate: rate=x

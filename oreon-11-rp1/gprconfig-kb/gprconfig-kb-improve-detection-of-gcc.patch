@@ -1,0 +1,84 @@
+--- a/db/compilers.xml
++++ b/db/compilers.xml
+@@ -22,11 +22,14 @@
+     <name>GCC</name>
+     <executable prefix="1">(.*-wrs-.*|.*-sysgo.*|.*-elf-.*|.*-eabi-.*|.*-eabispe-.*|avr-.*|.*-elinos-linux.*|.*-linux-gnu-|.*mingw32.*|.*-xcoff-.*|.*linux-android.*|arm-linux-gnueabi-|arm-linux-gnueabihf-|e500v2-gnu-linux-|powerpc-.*-linux.*-|.*-darwin.*-|.*-freebsd.*)?gcc(-\d+)?</executable>
+     <version>
+-      <external>$EXEC -v</external>
+-      <nogrep regexp="for GNAT Pro"></nogrep>
+-      <grep regexp="^gcc \S+ (\S+)" group="1"></grep>
++      <external>$EXEC -dumpfullversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>C</languages>
++    <variable name="not_for_GNAT_Pro">
++      <external>$EXEC -v</external>
++      <nogrep regexp="for GNAT Pro"></nogrep>
++    </variable>
+     <target>
+       <external>$EXEC -dumpmachine</external>
+       <grep regexp="[^\r\n]+"></grep>
+@@ -107,11 +110,14 @@
+     <name>G++</name>
+     <executable>g\+\+(-\d+)?</executable>
+     <version>
+-      <external>$EXEC -v</external>
+-      <nogrep regexp="for GNAT Pro"></nogrep>
+-      <grep regexp="^gcc \S+ (\S+)" group="1"></grep>
++      <external>$EXEC -dumpfullversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>C++</languages>
++    <variable name="not_for_GNAT_Pro">
++      <external>$EXEC -v</external>
++      <nogrep regexp="for GNAT Pro"></nogrep>
++    </variable>
+     <target>
+       <external>$EXEC -dumpmachine</external>
+       <grep regexp="[^\r\n]+"></grep>
+@@ -140,11 +146,14 @@
+     <name>GCC-ASM</name>
+     <executable prefix="1">(.*-wrs-.*|.*-sysgo.*|.*-elf-.*|.*-eabi-.*|.*-eabispe-.*|avr-.*|.*-elinos-linux.*|.*-linux-gnu-|.*mingw32.*|.*-xcoff-.*|.*linux-android.*|arm-linux-gnueabi-|arm-linux-gnueabihf-|e500v2-gnu-linux-|powerpc-.*-linux.*-|.*-darwin.*-|.*-fastos.*|.*-freebsd.*|.*-qnx.*|.*-rtems.*|.*-lynxos178.*)?gcc(-\d+)?</executable>
+     <version>
+-      <external>$EXEC -v</external>
+-      <nogrep regexp="for GNAT Pro"></nogrep>
+-      <grep regexp="^gcc \S+ (\S+)" group="1"></grep>
++      <external>$EXEC -dumpfullversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>Asm,Asm_Cpp,Asm2</languages>
++    <variable name="not_for_GNAT_Pro">
++      <external>$EXEC -v</external>
++      <nogrep regexp="for GNAT Pro"></nogrep>
++    </variable>
+     <target>
+       <external>$EXEC -dumpmachine</external>
+       <grep regexp="[^\r\n]+"></grep>
+@@ -196,12 +205,12 @@
+     </version>
+     <languages>Ada</languages>
+     <variable name="gcc_version">
+-      <external>${PREFIX}gcc -v</external>
+-      <grep regexp="^[-\w]*gcc \S+ (\S+)" group="1"></grep>
++      <external>${PREFIX}gcc -dumpfullversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </variable>
+     <variable name="gcc_version_major">
+-      <external>${PREFIX}gcc -v</external>
+-      <grep regexp="^[-\w]*gcc \S+ (\d+)\.\d+\.\d+" group="1"></grep>
++      <external>${PREFIX}gcc -dumpversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </variable>
+     <runtimes default="default,kernel,native">
+        <directory group="default" >\.\./lib(32|64)?/gcc(-lib)?/$TARGET/($gcc_version|$gcc_version_major)/adalib/</directory>
+@@ -449,8 +458,8 @@
+     <name>GFORTRAN</name>
+     <executable>gfortran(-\d+)?</executable>
+     <version>
+-      <external>$EXEC -v</external>
+-      <grep regexp="^gcc \S+ (\S+)" group="1"></grep>
++      <external>$EXEC -dumpfullversion</external>
++      <grep regexp="[^\r\n]+"></grep>
+     </version>
+     <languages>Fortran</languages>
+     <target>

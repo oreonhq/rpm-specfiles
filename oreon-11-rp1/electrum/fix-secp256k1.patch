@@ -1,0 +1,11 @@
+--- electrum/ecc_fast.py.orig	2025-03-31 01:35:31.576545738 +0200
++++ electrum/ecc_fast.py	2025-03-31 01:35:48.261097162 +0200
+@@ -39,7 +39,7 @@
+ def load_library():
+     # note: for a mapping between bitcoin-core/secp256k1 git tags and .so.V libtool version numbers,
+     #       see https://github.com/bitcoin-core/secp256k1/pull/1055#issuecomment-1227505189
+-    tested_libversions = [2, 1, 0, ]  # try latest version first
++    tested_libversions = [5, 2, 1, 0, ]  # try latest version first
+     libnames = []
+     if sys.platform == 'darwin':
+         for v in tested_libversions:

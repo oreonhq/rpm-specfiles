@@ -1,0 +1,59 @@
+From 049093646f48d23edb1a350b6b2df6cfbaea2896 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 29 Sep 2025 09:51:27 +0200
+Subject: [PATCH] tests: Use File::Temp for creating temporary directories
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Current tests write into a fixed-name path in a working directory.
+That prevents from running the tests from a read-only location.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Build.PL | 3 +++
+ test.pl  | 5 +++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Build.PL b/Build.PL
+index b53a0b8..ccee7a6 100644
+--- a/Build.PL
++++ b/Build.PL
+@@ -24,6 +24,9 @@ my $build = new Module::Build (
+ 		'File::Basename' => 0,
+ 		'File::Spec' => 0,
+ 	},
++    test_requires => {
++        'File::Temp' => 0.19,
++    },
+ 	extra_compiler_flags => $api_version.scalar `pkg-config rpm --cflags`,
+ 	extra_linker_flags => scalar `pkg-config rpm --libs`,
+ 	build_requires => {
+diff --git a/test.pl b/test.pl
+index 5982f97..07c0150 100644
+--- a/test.pl
++++ b/test.pl
+@@ -14,6 +14,7 @@ use strict;
+ BEGIN { plan tests => 62 };
+ use RPM2;
+ use POSIX;
++use File::Temp 0.19;
+ ok(1); # If we made it this far, we're ok.
+ 
+ #########################
+@@ -116,10 +117,10 @@ ok(($pkg <=> $pkg2) == 0);
+ ok(!($pkg < $pkg2));
+ ok(!($pkg > $pkg2));
+ 
+-my $other_rpm_dir = getcwd() . '/rpmdb';
++my $other_rpm_dir = File::Temp->newdir();
+ # another rpm, handily provided by the rpmdb-redhat package
+ # ... is no longer shipped. Create a new one:
+-system( "rm -rf rpmdb; mkdir rpmdb; /usr/bin/rpmdb --dbpath $other_rpm_dir --initdb" );
++system( "/usr/bin/rpmdb --dbpath $other_rpm_dir --initdb" );
+ my $db2 = RPM2->open_rpm_db(-path => $other_rpm_dir);
+ ok(defined $db2);
+ $db2 = undef;
+-- 
+2.51.0
+

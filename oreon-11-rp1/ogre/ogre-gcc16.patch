@@ -1,0 +1,11 @@
+--- ogre-1.9.0/OgreMain/include/OgreMemorySTLAllocator.h~	2013-12-01 17:28:12.000000000 +0000
++++ ogre-1.9.0/OgreMain/include/OgreMemorySTLAllocator.h	2026-01-15 15:02:26.658307837 +0000
+@@ -123,7 +123,7 @@
+ 
+ 		/// memory allocation (elements, used by STL)
+ 		inline pointer allocate( size_type count,
+-			typename std::allocator<void>::const_pointer ptr = 0 )
++			const void* ptr = 0 )
+ 		{
+                         (void)ptr;
+ 			// convert request to bytes

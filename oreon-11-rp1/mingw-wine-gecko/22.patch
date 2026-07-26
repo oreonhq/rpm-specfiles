@@ -1,0 +1,36 @@
+From 5522534e94f98d24a359d029b6d046640bbb371b Mon Sep 17 00:00:00 2001
+From: Jacek Caban <jacek@codeweavers.com>
+Date: Sun, 17 Sep 2023 12:57:14 +0200
+Subject: [PATCH] wmf: Use a different name for static CLSID_VideoProcessorMFT
+ definition.
+
+mingw-w64 provides a public declaration of that, which conflicts with the local one.
+---
+ dom/media/platforms/wmf/DXVA2Manager.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dom/media/platforms/wmf/DXVA2Manager.cpp b/dom/media/platforms/wmf/DXVA2Manager.cpp
+index 2244d6a8f6fb..0ae727e3dbb9 100644
+--- a/dom/media/platforms/wmf/DXVA2Manager.cpp
++++ b/dom/media/platforms/wmf/DXVA2Manager.cpp
+@@ -18,7 +18,7 @@
+ #include "DriverCrashGuard.h"
+ #include "nsPrintfCString.h"
+ 
+-const CLSID CLSID_VideoProcessorMFT =
++static const CLSID static_CLSID_VideoProcessorMFT =
+ {
+   0x88753b26,
+   0x5b24,
+@@ -626,7 +626,7 @@ D3D11DXVA2Manager::Init(nsACString& aFailureReason)
+   }
+ 
+   mTransform = new MFTDecoder();
+-  hr = mTransform->Create(CLSID_VideoProcessorMFT);
++  hr = mTransform->Create(static_CLSID_VideoProcessorMFT);
+   if (!SUCCEEDED(hr)) {
+     aFailureReason = nsPrintfCString("MFTDecoder::Create(CLSID_VideoProcessorMFT) failed with code %X", hr);
+     return hr;
+-- 
+GitLab
+

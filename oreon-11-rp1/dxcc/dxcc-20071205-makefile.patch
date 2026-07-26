@@ -1,0 +1,27 @@
+diff -up dxcc-20071205/Makefile.orig dxcc-20071205/Makefile
+--- dxcc-20071205/Makefile.orig	2007-12-10 11:08:07.000000000 +0100
++++ dxcc-20071205/Makefile	2007-12-10 11:11:12.000000000 +0100
+@@ -1,17 +1,17 @@
+ # dxcc Makefile -- Fabian Kurz, DJ1YFK -- http://fkurz.net/ham/dxcc.html
+ 
+ VERSION = `date +%Y%m%d`
+-DESTDIR ?= /usr
++DESTDIR=
+ 
+ all:
+ 	@echo -e "dxcc - make [install|uninstall|clean|dist] \nCheck README for help."
+ 
+ install:
+-	install -d -v				$(DESTDIR)/share/man/man1/
+-	install -d -v				$(DESTDIR)/share/dxcc/
+-	install -m 0644 dxcc.1		$(DESTDIR)/share/man/man1/
+-	install -m 0644 earth.gif	$(DESTDIR)/share/dxcc/
+-	install -m 0755 dxcc		$(DESTDIR)/bin/
++	install -D -d -v		$(DESTDIR)/usr/share/man/man1/
++	install -D -d -v		$(DESTDIR)/usr/share/dxcc/
++	install -D -m 0644 dxcc.1	$(DESTDIR)/usr/share/man/man1/
++	install -D -m 0644 earth.gif	$(DESTDIR)/usr/share/dxcc/
++	install -D -m 0755 dxcc		$(DESTDIR)/usr/bin/dxcc
+ 	
+ uninstall:
+ 	rm -f $(DESTDIR)/bin/dxcc

@@ -1,0 +1,38 @@
+From 83d29a233221fa046c1b0c86aa44ca8daa1f51c1 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:50 +0200
+Subject: [PATCH 27/41] Get rid of unused variables if building with both MOUSE
+ and JOYSTICK
+
+---
+ rcfiles.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/rcfiles.c b/rcfiles.c
+index 7d525c1..f3bc03d 100644
+--- a/rcfiles.c
++++ b/rcfiles.c
+@@ -52,8 +52,10 @@ void
+ save_rc ()
+ {
+   FILE           *controls, *levels;
++#if !defined(MOUSE) || !defined(JOYSTICK)
+   int             zeros[] =
+   {0, 0, 0, 0, 0, 0, 0, 0};
++#endif /* !defined(MOUSE) || !defined(JOYSTICK) */
+   char            fullname[256];
+ #ifdef NETSUPPORT
+   if (client || server)
+@@ -126,7 +128,9 @@ void
+ load_rc ()
+ {
+   FILE           *controls, *levels;
++#if !defined(MOUSE) || !defined(JOYSTICK)
+   int             dummy[8];
++#endif /* !defined(MOUSE) || !defined(JOYSTICK) */
+   char            fullname[256];
+ #ifdef NETSUPPORT
+   if (client || server)
+-- 
+2.5.0
+

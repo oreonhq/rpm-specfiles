@@ -1,0 +1,35 @@
+From 4f4c5a07ba82ecc21c864d9b528b2a2af5364e06 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 18 Mar 2016 10:11:18 +0100
+Subject: [PATCH] Disable author tests
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index b8fbf45..374da2f 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -2,6 +2,7 @@ use strict;
+ use warnings;
+ use inc::Module::Install;
+ use ExtUtils::Depends;
++$Module::Install::AUTHOR = 0;
+ 
+ name 'B-Hooks-OP-Check-EntersubForCV';
+ all_from 'lib/B/Hooks/OP/Check/EntersubForCV.pm';
+@@ -34,6 +35,4 @@ makemaker_args(
+ repository 'git://lake.fysh.org/zefram/B-Hooks-OP-Check-EntersubForCV.git';
+ bugtracker 'http://rt.cpan.org/Public/Dist/Display.html?Name=B-Hooks-OP-Check-EntersubForCV';
+ 
+-extra_tests;
+-
+ WriteAll;
+-- 
+2.5.0
+

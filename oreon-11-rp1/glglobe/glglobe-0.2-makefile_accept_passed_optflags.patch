@@ -1,0 +1,18 @@
+--- glglobe/makefile	2001-09-02 18:11:48.000000000 +1000
++++ glglobe-patched/makefile	2007-07-29 22:06:18.000000000 +1000
+@@ -5,7 +5,7 @@
+ #LIBS   = -L$(LIBDIR) -lglut -lGLU -lGL -lXext -lXaw -lm -lXi -lpng -lz
+ LIBS   = -L$(LIBDIR) -lglut -lGLU -lGL -lXext -lXaw -lm -lXi -lpng -lz -ljpeg
+ #CFLAGS = -DXMESA -Wall -O3 -I$(INCDIR)
+-CFLAGS = -Wall -O3 -I$(INCDIR)
++CFLAGS ?= -Wall -O3 -I$(INCDIR)
+ 
+ 
+ OBJS = glglobe.o \
+@@ -32,4 +32,4 @@
+ 
+ clean:
+ 	rm *.o $(NAME) *~
+-        
+\ No newline at end of file
++        

@@ -1,0 +1,950 @@
+diff -up frysk-0.4/frysk-common/frysk-common.ac.jni frysk-0.4/frysk-common/frysk-common.ac
+--- frysk-0.4/frysk-common/frysk-common.ac.jni	2016-04-13 10:57:04.450272141 -0400
++++ frysk-0.4/frysk-common/frysk-common.ac	2016-04-13 10:57:04.468272119 -0400
+@@ -43,9 +43,6 @@
+ 
+ AC_CANONICAL_HOST
+ 
+-
+-AC_ARG_VAR([GCJFLAGS], [GCJ compiler flags])
+-
+ dnl This test is used by `elfutils' and as we share its interface we need
+ dnl to have consistent ABI of any structures possibly containing `off_t'.
+ dnl This test must come as early as possible after the compiler configuration
+@@ -76,34 +73,7 @@ if test "x$ac_env_CFLAGS_set" != xset; t
+ fi
+ 
+ AM_PROG_AS
+-
+-# XXX: AM_PROG_GCJ doesn't take arguments, hack around it by first
+-# explictly searching for the GCJ program pushing it into the
+-# environment where AM_PROG_GCJ will find it.
+-
+-AC_CHECK_PROGS([GCJ], [gcj4 gcj], [gcj])
+ AM_PROG_GCJ
+-if test "x$ac_env_GCJFLAGS_set" != xset; then
+-  test x"$GCJFLAGS" = "x-g -O2" && GCJFLAGS="-g -O"
+-fi
+-
+-# Find all the GCJ utilities.  Prefer gcc4.
+-
+-AC_CHECK_PROGS([GCJH], [gcjh4 gcjh gjavah])
+-# gjavah defaults to jni, while gcjh defaults to cni.
+-# gcjh doesn't support -cni, only -jni.
+-GCJHFLAGS=""
+-test x"${GCJH}" = xgjavah && GCJHFLAGS="-cni"
+-AC_SUBST([GCJHFLAGS])
+-AC_CHECK_PROGS([JAR], [fastjar4 fastjar jar], [fastjar])
+-AC_CHECK_PROGS([GCJ_DBTOOL], [gcj-dbtool4 gcj-dbtool], [gcj-dbtool])
+-AC_CHECK_PROGS([GIJ], [gij4 gij], [gij])
+-
+-# GCJ for Java 1.5 does not include jv-scan.  If it wasn't found, mark
+-# it as such.
+-AC_CHECK_PROGS([JV_SCAN], [jv-scan4 jv-scan], [no])
+-AM_CONDITIONAL([HAVE_JV_SCAN], test x"${JV_SCAN}" != xno)
+-
+ 
+ # Check for the ECJ compiler.
+ 
+@@ -125,63 +95,15 @@ AC_DEFUN([AC_LANG_COMPILER(Java)], [])
+ AU_DEFUN([AC_LANG_JAVAC], [AC_LANG(Java)])
+ AC_LANG(Java)
+ 
+-
+-# Two possible compilers: either GCJ (wrapper round ECJ); or ECJ.  In
+-# the latter case, need to explicitly run compiler from within the GIJ
+-# runtime so that ECJ sees the classpath environment, in particular
+-# things like gnu.gcj.RawDataManaged.  Start out assuming GCJ (with
+-# the -fsource=1.4 flag), if that fails, fall back to ECJ.
+-
+-# See gcj accepts -fsource=1.4, if not only use the warning flags.  If
+-# it is available also use it for the GCJFLAGS.
+-
+-AC_MSG_CHECKING([for working java compiler])
+-JAVAC=${JAVAC:-${GCJ} -C -fsource=1.4}
+-JAVACFLAGS=${JAVACFLAGS:-${GCJFLAGS} -g -classpath \$(SOURCEPATH):\$(CLASSPATH)}
+-AC_COMPILE_IFELSE([public class conftest{}],
+-	[JAVAC_IS=gcj
+-	if test "x$ac_env_GCJFLAGS_set" != xset; then
+-	   GCJFLAGS="$GCJFLAGS -fsource=1.4"
+-	fi],
+-	[JAVAC_IS=ecj
+-         JAVAC='$(GIJ) --classpath $(ECJ_JAR):$(CLASSPATH) org.eclipse.jdt.internal.compiler.batch.Main -1.4'
+-	 JAVACFLAGS='-warn:+semicolon -sourcepath $(SOURCEPATH) -classpath $(CLASSPATH)'])
++JAVAC='$(JAVA) -cp $(ECJ_JAR):$(CLASSPATH) org.eclipse.jdt.internal.compiler.batch.Main -1.4'
++JAVACFLAGS='-warn:+semicolon -sourcepath $(SOURCEPATH) -classpath $(CLASSPATH)'
+ AC_SUBST([JAVAC])
+ AC_SUBST([JAVACFLAGS])
+-AC_SUBST([JAVAC_IS])
+-AC_MSG_RESULT([${JAVAC_IS} ($JAVAC)])
+-
+-# Some versions of gcj don't support -Wall.  Some versions generate
+-# good warnings without it.  So explictily test for it.
+-
+-AC_MSG_CHECKING([whether GCJ needs -Wall])
+-if test "x$ac_env_GCJFLAGS_set" == xset ; then
+-	GCJ_WALL="not needed"
+-elif test x"${JAVAC_IS}" = xgcj ; then
+-	# A newer GCJ (using it for JAVAC) which has a good
+-	# default set of warnings so do not need -Wall.  However,
+-	# older GCJs barf on stray semicolons so always check for them
+-	# to help with compatibility.
+-	GCJ_WALL=-Wextraneous-semicolon
+-	JAVACFLAGS="$JAVACFLAGS ${GCJ_WALL}"
+-	GCJFLAGS="$GCJFLAGS ${GCJ_WALL}"
+-else	
+-	# Older GCJ (not using it for JAVAC) need the full gamit.
+-	GCJ_WALL="-Wextraneous-semicolon -Wall"
+-	GCJFLAGS="$GCJFLAGS ${GCJ_WALL}"
+-fi
+-AC_MSG_RESULT([${GCJ_WALL}])
+-
+ 
+-# Always use GIJ as the byte code interpreter.  java programs, run
+-# during the build, need to see the GNU Java environment.  That
+-# environment contains classes such as gnu.gcj.RawData which can be
+-# found using reflection.
+-
+-JAVA="${JAVA:-$GIJ}"
++JAVA="${JAVA:-java}"
+ AC_SUBST([JAVA])
+ 
+-
++AC_CHECK_PROGS([JAR], [fastjar4 fastjar jar], [fastjar])
+ # Check for the availablity of fig2dev
+ 
+ AC_PATH_PROG(FIG2DEV, fig2dev)
+@@ -247,15 +169,3 @@ AC_SUBST([lib64dir])
+ FRYSK_DO_ARCH32_TEST
+ FRYSK_WERROR
+ FRYSK_COVERAGE
+-
+-AC_MSG_CHECKING([direct .jar to .o compilation (--enable-jar-compile)])
+-AC_ARG_ENABLE([jar-compile],
+-	[  --enable-jar-compile	Enable direct compilation of jars],
+-	[case "${enableval}" in
+-	   yes) jar_compile=yes ;;
+- 	   no) jar_compile=no;;
+-           *) AC_MSG_ERROR([bad value ${enableval} for --enable-jar-compile]) ;;
+-	esac],
+-	[jar_compile=yes])
+-AC_MSG_RESULT([$jar_compile])
+-AM_CONDITIONAL([JAR_COMPILE], [test x$jar_compile = xyes])
+diff -up frysk-0.4/frysk-common/Makefile.gen.sh.jni frysk-0.4/frysk-common/Makefile.gen.sh
+--- frysk-0.4/frysk-common/Makefile.gen.sh.jni	2016-04-13 10:57:04.452272139 -0400
++++ frysk-0.4/frysk-common/Makefile.gen.sh	2016-04-13 10:57:04.468272119 -0400
+@@ -40,10 +40,7 @@
+ 
+ if test $# -eq 0 ; then
+     cat <<EOF 1>&2
+-Usage: $0 [ --cni | --jni ] <source-dir>... <.jar-file>... <_JAR-macro>...
+-
+---cni: Include CNI directories in build.
+---jni: Include JNI directories in build and build with JNI abi.
++Usage: $0 <source-dir>... <.jar-file>... <_JAR-macro>...
+ 
+ <source-dir>:
+ 
+@@ -66,8 +63,6 @@ EOF
+     exit 1
+ fi
+ 
+-cni=false
+-jni=false
+ dirs=
+ jars=
+ JARS=
+@@ -75,8 +70,6 @@ GEN_ARGS="$@"
+ while test $# -gt 0
+ do
+   case "$1" in
+-      --cni ) cni=true ;;
+-      --jni ) jni=true ;;
+       *.jar ) jars="${jars} $1" ;;
+       *_JAR ) JARS="${JARS} $1" ;;
+       * ) dirs="${dirs} $1" ;;
+@@ -121,13 +114,10 @@ JARS=`echo ${JARS}`
+     -o -path '[A-Za-z]*\.cxx-in' -print \
+     -o -path '[A-Za-z]*\.c-in' -print \
+     -o -path '[A-Za-z]*\.cxx' -print \
+-    -o -path '*/cni/[A-Za-z]*\.[sS]' -print \
+     -o -path '*/jni/[A-Za-z]*\.[sS]' -print \
+     -o -type f -name 'test*' -print
+     ) \
+-| if $cni ; then cat ; else grep -v '/cni/' ; fi \
+-| if $jni ; then cat ; else grep -v '/jni/' ; fi \
+-| sort -f > files.tmp
++| grep -v -e '\/cni\/' | sort -f > files.tmp
+ 
+ if cmp files.tmp files.list > /dev/null 2>&1
+ then
+@@ -404,19 +394,11 @@ print_jar_rule ()
+ # print_jar_rule $1 $2
+ $1.jar: \$($2_JAR)
+ 	cp \$($2_JAR) $1.jar
+-BUILT_SOURCES += $1.jar
++#BUILT_SOURCES += $1.jar
++# For moment bundle these into frysk's private java directory
++java_DATA += $1.jar
+ GEN_JARS += $1.jar
+-noinst_LIBRARIES += libfrysk-$1.a
+-libfrysk_$1_a_LIBADD = $1.o
+-$1.o: $1.jar
+-libfrysk_$1_a_SOURCES = 
+-libfrysk_$1_so_SOURCES =
+-frysk_$1_db_SOURCES =
+-CLEANFILES += $1.jar $1.o libfrysk-$1.a libfrysk-$1.so
+-libfrysk-$1.so: libfrysk-$1.a
+-noinst_PROGRAMS += frysk-$1.db
+-solib_PROGRAMS += libfrysk-$1.so
+-frysk-$1.db: libfrysk-$1.so $1.jar
++CLEANFILES += $1.jar
+ EOF
+ }
+ 
+@@ -458,32 +440,8 @@ done
+ 
+ test x"${dirs}" = x && exit 0
+ 
+-
+-print_header "... the lib${GEN_DIRNAME}.a skeleton"
+-
+-sources=lib${GEN_MAKENAME}_a_SOURCES
+-
+-# Most of the directory's sources will be built into a single archive
+-# (.a).  Start with a skeleton for that archive and then accumulate
+-# the relevant files.
+-automake_variable ${sources} =
+-
+ cat <<EOF
+ 
+-noinst_LIBRARIES += lib${GEN_DIRNAME}.a
+-if JAR_COMPILE
+-${sources} += ${GEN_DIRNAME}.jar
+-endif
+-GEN_GCJ_LDADD_LIST += lib${GEN_DIRNAME}.a
+-
+-# Compile the .a into a .so; Makefile.rules contains the rule and does
+-# not use libtool.
+-
+-solib_PROGRAMS += lib${GEN_DIRNAME}.so
+-lib${GEN_MAKENAME}_so_SOURCES = 
+-lib${GEN_DIRNAME}.so: lib${GEN_DIRNAME}.a
+-
+-
+ # Using that list, convert to .class files and from there to a .jar.
+ # Since java compilers don't abort on a warning, fake the behavior by
+ # checking for any output.
+@@ -491,14 +449,6 @@ lib${GEN_DIRNAME}.so: lib${GEN_DIRNAME}.
+ java_DATA += ${GEN_DIRNAME}.jar
+ CLEANFILES += ${GEN_DIRNAME}.jar
+ 
+-# Finally, merge the .so and .jar files into the java .db file.
+-
+-noinst_PROGRAMS += ${GEN_DIRNAME}.db
+-${GEN_MAKENAME}_db_SOURCES = 
+-${GEN_DIRNAME}.db: lib${GEN_DIRNAME}.so ${GEN_DIRNAME}.jar
+-	\$(GCJ_DBTOOL) -n \$@.tmp
+-	\$(GCJ_DBTOOL) -a \$@.tmp ${GEN_DIRNAME}.jar lib${GEN_DIRNAME}.so
+-	mv \$@.tmp \$@
+ EOF
+ 
+ 
+@@ -506,18 +456,13 @@ EOF
+ # Test runner program.
+ 
+ cat <<EOF
+-TestRunner_SOURCES = TestRunner.java
+ CLEANFILES += TestRunner.java
+-if !JAR_COMPILE
+-${sources} += ${GEN_SOURCENAME}/JUnitTests.java
+-endif
+ BUILT_SOURCES += ${GEN_SOURCENAME}/JUnitTests.java
+ SCRIPT_BUILT += ${GEN_SOURCENAME}/JUnitTests.java
+ TESTS += TestRunner
+-noinst_PROGRAMS += TestRunner Runner JniRunner
++noinst_PROGRAMS += Runner TestRunner
+ noinst_DATA += TestRunner.jar
+ EOF
+-echo_LDFLAGS TestRunner
+ 
+ 
+ # Generate SOURCES list for all files.
+@@ -537,19 +482,37 @@ for suffix in .java .java-sh .mkenum .sh
+ 		test "${b}" = JUnitTests && continue # hack
+ 		test -r "${d}/${b}.g" && continue
+ 		test -r "${d}/${b}.sed" && continue
+-		echo "if !JAR_COMPILE"
+-		echo "${sources} += ${file}"
+-		echo "endif"
+ 		;;
+ 	esac
+ 	echo "${GEN_DIRNAME}.jar: ${name}.java"
+ 	if has_main ${file} ; then
+ 	    name_=`echo_name_ ${name}`
+-	    echo_PROGRAMS ${name}
+ 	    check_MANS ${name}
+-	    echo "${name_}_SOURCES ="
+-	    echo "${name_}_LINK = \$(GCJLINK) \$(${name_}_LDFLAGS)"
+-	    echo_LDFLAGS ${name}
++	    dir=`echo /"${name}" | sed -e 's,.*/\([a-z]*\)dir/.*,\1,'`
++	    case "${name}" in
++		*.java-in )
++		    # .java-in programs are never installed.
++		    echo "noinst_SCRIPTS += ${name}"
++		    ;;
++		*pkglibdir/* )
++		    echo "noinst_SCRIPTS += ${name}"
++		    ;;
++		*dir/* )
++		    # extract the directory prefix
++		    echo "${dir}_SCRIPTS += ${name}"
++		    ;;
++		* )
++		    echo "noinst_SCRIPTS += ${name}"
++		    ;;
++	    esac
++	    cat <<EOF
++${name}: Makefile
++	mkdir -p ${d}
++	echo "#!/bin/sh" >> ${name}.tmp
++	echo exec /usr/bin/java -cp \"\$(javadir)/*\" ${name} \"\\\$\$@\" >> ${name}.tmp
++	chmod a+x ${name}.tmp
++	mv ${name}.tmp ${name}
++EOF
+ 	fi
+     done || exit 1
+ done
+@@ -566,9 +529,6 @@ for suffix in .java-in .java-sh .mkenum
+ 	d=`dirname ${file}`
+ 	b=`basename ${file} ${suffix}`
+ 	name="${d}/${b}${s}"
+-	echo "if !JAR_COMPILE"
+-	echo "${sources} += ${file}"
+-	echo "endif"
+ 	echo "BUILT_SOURCES += ${name}"
+ 	echo "SCRIPT_BUILT += ${name}"
+         case "${suffix}" in
+@@ -598,7 +558,7 @@ generate_compile ()
+ 	fi
+         # Generate the rules for 32-bit compile
+ 	echo_arch32_PROGRAMS ${name} ${name}.${suffix}
+-    else
++    elif test x"${sources}" != x- ; then
+ 	automake_variable ${sources} += ${file}
+     fi
+     case "${file}" in
+@@ -618,60 +578,6 @@ generate_compile ()
+     esac
+ }
+ 
+-# What type of build?
+-if $cni ; then
+-    : default
+-elif $jni ; then
+-    echo "AM_GCJFLAGS += -fjni"
+-else
+-    : default
+-fi
+-
+-# Grep the *.cxx and *.hxx files forming a list of included files.
+-# Assume these are all generated from .class files found in the master
+-# .jar.
+-
+-generate_cni_header () {
+-    local file=$1
+-    local d=$2
+-    local b=$3
+-    local suffix=$4
+-    local _file=`echo $file | tr '[/.]' '[__]'`
+-    sed -n \
+-	-e 's,#include "\(.*\)\.h".*,include - \1,p' \
+-	-e 's,#include \([A-Z][A-Z0-9_]*\).*,minclude \1 -,p' \
+-	-e 's,#define \([A-Z0-9_]*\) "\(.*\)\.h".*,define \1 \2,p' \
+-	< $file > $$.tmp
+-    while read action m h j; do
+-	echo "# file=$file action=$action m=$m h=$h"
+-	if test "$action" = "minclude" ; then
+-            # Assume file defining macro depends on this file
+-	    automake_variable $m = \$\($_file\)
+-	elif has_java_source ${h} ; then
+-	    echo "JAVAH_CNI_BUILT += ${h}.h"
+-	    echo "CLEANFILES += ${h}.h"
+-	    echo "CLEANFILES += ${h}\\\$\$*.h"
+-	    j=`echo ${h} | tr '[_]' '[/]'`
+-	    echo "${h}.h: $j.java | ${GEN_DIRNAME}.jar"
+-	    case $action in
+-		include)
+-		    case "$suffix" in
+-			cxx) echo "$d/$b.o: ${h}.h" ;;
+-			hxx) # remember what this file includes
+-			    automake_variable $_file += ${h}.h ;;
+-		    esac
+-		    ;;
+-		define)
+-		    echo "$d/$b.o: ${h}.h"
+-		    # Assume file using this macro is a dependency.
+-		    echo "$d/$b.o: \$($m)"
+-		    ;;
+-	    esac
+-	fi
+-    done < $$.tmp
+-    rm -f $$.tmp
+-}
+-
+ # Grep the *.cxx and *.hxx files forming a list of classes that are
+ # native.
+ 
+@@ -785,9 +691,6 @@ BEGIN { FS = "=" }
+     echo "$d/$c: $d/$b.antlred"
+     echo "BUILT_SOURCES += $d/$c"
+     echo "ANTLR_BUILT += $d/$c"
+-    echo "if !JAR_COMPILE"
+-    echo "${sources} += $d/$c"
+-    echo "endif"
+   done
+ done
+ 
+@@ -884,10 +787,6 @@ while read file dir base suffix ; do
+     echo ""
+ 
+     case $file in
+-	*/cni/*.cxx | */cni/*.cxx-in | */cni/*.cxx-sh | */cni/*.hxx)
+-	    generate_cni_header $file $dir $base $suffix
+-	    generate_compile $file $dir $base $suffix ${sources}
+-	    ;;
+ 	*/jni/*.cxx | */jni/*.cxx-in | */jni/*.cxx-sh | jnixx/*.cxx )
+ 	    generate_jnixx_class $file $dir $base $suffix
+ 	    generate_compile $file $dir $base $suffix \
+@@ -897,8 +796,8 @@ while read file dir base suffix ; do
+ 	    ;;
+ 	*.cxx | *.c | *.S | *.cxx-in | *.c-in | *.S-in \
+ 	    | *.cxx-sh | *.c-sh | *.S-sh )
+-	    # Non-cni/jni source.
+-	    generate_compile $file $dir $base $suffix ${sources}
++	    # Non-jni source (presumably with main).
++	    generate_compile $file $dir $base $suffix -
+ 	    ;;
+     esac
+ 
+diff -up frysk-0.4/frysk-common/Makefile.rules.jni frysk-0.4/frysk-common/Makefile.rules
+--- frysk-0.4/frysk-common/Makefile.rules.jni	2016-04-13 10:57:04.461272128 -0400
++++ frysk-0.4/frysk-common/Makefile.rules	2016-04-13 10:57:04.468272119 -0400
+@@ -77,7 +77,6 @@ man_MANS =
+ LDADD = 
+ ANTLR_BUILT =
+ SCRIPT_BUILT =
+-JAVAH_CNI_BUILT =
+ root_srcdir = $(dir $(top_srcdir))
+ abs_root_srcdir = $(dir $(abs_top_srcdir))
+ 
+@@ -140,21 +139,6 @@ ACLOCAL_AMFLAGS = -I common/m4
+ 
+ SOURCEPATH = $(subst $(space),:,$(strip $(GEN_SOURCEPATH)))
+ CLASSPATH = $(subst $(space),:,$(strip $(GEN_CLASSPATH)))
+-DBPATH = $(subst $(space),:,$(strip \
+-	$(patsubst %.jar,%.db,$(filter %.jar,$(GEN_CLASSPATH))) \
+-	$(foreach dir,$(patsubst %/$(JAVAROOT),%,$(filter-out %.jar,$(GEN_CLASSPATH))),$(dir)/$(notdir $(dir)).db) \
+-	))
+-
+-# XXX: GCJ: I think there should be a -Wextraneous-throws; I think
+-# -Wno-deprecated is backward; I think -Wredundant-modifiers is broken
+-# with gcc4.  It appears to complain about abstract methods in a
+-# non-abstract class when the class actually is abstract.
+-
+-AM_GCJFLAGS = \
+-	$(patsubst %,-I%,$(GEN_SOURCEPATH) $(GEN_CLASSPATH)) \
+-	-fPIC \
+-	$(ZZZ)
+-
+ 
+ AM_CXXFLAGS = \
+ 	-I$(srcdir) \
+@@ -163,6 +147,7 @@ AM_CXXFLAGS = \
+ 	-I/usr/include/elfutils \
+ 	-I$(srcdir)/../frysk-imports/libunwind/include \
+ 	-I$(top_builddir)/../frysk-imports/libunwind/include \
++	-I/usr/lib/jvm/java/include -I/usr/lib/jvm/java/include/linux \
+ 	-fPIC \
+ 	$(ZZZ)
+ 
+@@ -192,7 +177,6 @@ jni: ${GEN_DIRNAME}.jar
+ .PHONY: built-sources
+ built-sources: $(BUILT_SOURCES)
+ $(ANTLR_BUILT): | $(SCRIPT_BUILT)
+-$(JAVAH_CNI_BUILT): | $(SCRIPT_BUILT) $(ANTLR_BUILT)
+ 
+ 
+ # Rules for building a .java file from any of a .mkclass file, a
+@@ -345,8 +329,6 @@ TestRunner.jar: TestRunner.java
+ # Make gets confused about which root to build TestRunner.o from -
+ # .jar or .java, spell it out.
+ 
+-TestRunner.o: TestRunner.java
+-	$(GCJCOMPILE) -c $<
+ TestRunner.java: common/TestRunner.java-in
+ 	$(SUBST)
+ 
+@@ -404,37 +386,13 @@ Runner:
+ 	chmod a+x $@.tmp
+ 	mv $@.tmp $@
+ 
+-JniRunner:
++TestRunner:
+ 	rm -f $@
+ 	echo "#!/bin/sh"					>> $@.tmp
+ 	echo "exec ./Runner TestRunner \"\$$@\""		>> $@.tmp
+ 	chmod a+x $@.tmp
+ 	mv $@.tmp $@
+ 
+-# Generate one or more .h files, one per named class, and using CNI,
+-# from the corresponding .java file.  Anonymous classes are pruned.
+-
+-# This assumes that the directories .jar file has already been built.
+-
+-.java.h:
+-	b=`basename $*` ; \
+-	d=`dirname $*` ; \
+-	classes=`$(JAR) tf $(GEN_DIRNAME).jar | grep \
+-			-e $$d/$$b'\.class' \
+-			-e $$d/$$b'$$[^0-9]*\.class' \
+-		    | sed -e 's,.class$$,,'`; \
+-	echo $$classes ; \
+-	for class in $$classes ; do \
+-		outputdir=`dirname $$class`; \
+-		outputfile=`basename $$class`.h; \
+-		echo "$$class => $$outputdir/$$outputfile"; \
+-		rm -f $$outputdir/$$outputfile ; \
+-		$(GCJH) -I $(GEN_DIRNAME).jar \
+-			-o $$outputdir/$$outputfile \
+-			$(GCJHFLAGS) $$class ; \
+-	done
+-
+-
+ # Shared library rule (for moment assume that .a contains PIC code).
+ SUFFIXES += .so
+ .a.so:
+@@ -463,6 +421,7 @@ JNI_OBJECT_LIST =
+ lib$(GEN_DIRNAME)-jni.so: $(JNI_ARCHIVE_LIST) $(JNI_OBJECT_LIST)
+ lib$(GEN_DIRNAME)-jni.so: lib$(GEN_DIRNAME)-jni.a
+ 	soname=`basename $@` ; \
++	echo soname=$$soname ; \
+ 	$(CC) -shared -o $@.tmp \
+ 		-Wl,--whole-archive \
+ 		-Wl,$< \
+@@ -485,9 +444,11 @@ solibdir = $(libdir)
+ solib_PROGRAMS =
+ 
+ # The shared java directory (typically /usr/share/java/; contains
+-# things like .jar files.
++# things like .jar files) but here is architecture specific as frsyk,
++# it turns out, has some 32vs64 java code - see bug 211824 in
++# fedoraproject.org
+ 
+-javadir = $(datadir)/java
++javadir = $(pkglibdir)/java
+ java_DATA =
+ 
+ # Assembler rule.
+@@ -505,57 +466,7 @@ $(srcdir)/Makefile.gen: $(srcdir)/common
+ autogen: clean
+ 	$(SHELL) $(srcdir)/autogen.sh
+ 
+-# Given a .jar, just convert it into a .o, and a .db
+-
+ SUFFIXES += .jar
+-.jar.o:
+-	$(GCJCOMPILE) -c $<
+-
+-# Since automake only adds GCJCOMPILE to Makefile.in when its seen
+-# .java source, provide our own definition.
+-GCJCOMPILE ?= $(GCJ) $(AM_GCJFLAGS) $(GCJFLAGS)
+-
+-SUFFIXES += .db
+-.jar.db:
+-	$(GCJ_DBTOOL) -n $@.tmp
+-	$(GCJ_DBTOOL) -a $@.tmp $*.jar lib$*.so
+-	mv $@.tmp $@
+-
+-# Given a .java file convert it to a .o file.
+-
+-# XXX: GCJ has a bug where it totally scrambles nested classes with
+-# identical names.  Reject any code with duplicate class names.
+-
+-# XXX: GCJ has a bug where, when given a -Werror fail, it still exits
+-# with success.  Hack around this by, when -Werror was specified,
+-# saving the message in a log file and then checking that it is empty.
+-
+-.java.o:
+-if HAVE_JV_SCAN
+-	dups=`$(JV_SCAN) --list-class $< \
+-		| tr '[ ]' '[\n]' \
+-		| sed -n -e 's,^.*$$\([A-Z]\),\1,p' \
+-		| sort | uniq -d` ; \
+-	if test x"$$dups" != x ; then \
+-		echo "Duplicate class names tickle a GCJ bug: $$dups" ; \
+-		exit 1 ; \
+-	fi
+-endif
+-	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`; \
+-	if $(GCJCOMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ $< 2>&1 \
+-	   | tee $*.log ; then : ; else \
+-		rm $*.log ; \
+-		exit 1 ; \
+-	fi ; \
+-	if test -s $*.log \
+-	   && expr " $(GCJCOMPILE) " : '.* -Werror ' > /dev/null ; then \
+-		rm -f "$$depbase.Tpo"; \
+-		rm -f $*.log ; \
+-		rm -f $@ ; \
+-		exit 1 ; \
+-	fi ; \
+-	mv -f "$$depbase.Tpo" "$$depbase.Po"; \
+-	rm -f $*.log
+ 
+ # Rule for generating ANTLR output that compiles cleanly using the
+ # current compiler.  The problem here is that raw ANTLR output
+@@ -609,20 +520,13 @@ SUFFIXES += .antlred .g
+ 		echo "Parsing compiler warnings from $$b..." ; \
+ 		rm -f $$t/*.antlr-fixes ; \
+ 	        rm -rf $$t/classes ; mkdir -p $$t/classes ; \
+-		case "$(JAVAC_IS)" in \
+-		    gcj) $(JAVAC) $(JAVACFLAGS) \
+-			-d $$t/classes \
+-			-I $$t \
+-			$$t/$$d/$$b.java \
+-			2>&1 || true ;; \
+-		    ecj) $(JAVAC) \
++		( $(JAVAC) \
+                         -d $$t/classes \
+ 			-warn:+semicolon \
+ 			-sourcepath  $$t:$(SOURCEPATH) \
+ 			-classpath $(CLASSPATH) \
+ 			$$t/$$d/$$b.java \
+-			2>&1 || true ;; \
+-		esac | ( \
++			2>&1 || true ) | ( \
+ 		    cd $$t ; \
+ 		    $(AWK) -f @abs_srcdir@/common/antlr-warnings.awk \
+ 		) ; \
+@@ -742,17 +646,10 @@ ${GEN_DIRNAME}.jar: files-java.list $(GE
+ 	rm -rf $(JAVAROOT)
+ 	mkdir -p $(JAVAROOT)
+ 	$(JAVAC) -d $(JAVAROOT) $(JAVACFLAGS) \
+-		@$(top_builddir)/files-java.list \
+-		2>&1 | tee $*.log
+-	if test -s $*.log \
+-	   && expr " $(GCJCOMPILE) " : '.* -Werror ' > /dev/null ; \
+-	then rm $*.log ; false ; \
+-	fi
+-	rm -f $*.log
++		@$(top_builddir)/files-java.list
+ 	cd $(JAVAROOT) ; \
+-		find * -name '*.class' -print \
+-		| sort \
+-		| $(JAR) -@ -cf $@
++		find * -name '*.class' -print | sort > classes.list ; \
++		$(JAR) cf $@ @classes.list
+ 	mv $(JAVAROOT)/$@ $@
+ 
+ # Check that everything, well except for a few exceptions, is using
+diff -up frysk-0.4/frysk-core/Makefile.am.jni frysk-0.4/frysk-core/Makefile.am
+--- frysk-0.4/frysk-core/Makefile.am.jni	2016-04-13 10:57:04.464272124 -0400
++++ frysk-0.4/frysk-core/Makefile.am	2016-04-13 10:57:04.468272119 -0400
+@@ -46,22 +46,6 @@ GEN_CLASSPATH += ../frysk-imports/jline.
+ GEN_CLASSPATH += ../frysk-imports/antlr.jar
+ GEN_CLASSPATH += ../frysk-imports/junit.jar
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
+-GEN_GCJ_LDADD_LIST += ../frysk-sys/libfrysk-sys.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jline.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-antlr.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a
+-if USE_LIBUNWIND
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+-                 ../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \
+-                 ../frysk-imports/libunwind-ppc32/src/.libs/libunwind-ppc32.a \
+-                 ../frysk-imports/libunwind-ppc64/src/.libs/libunwind-ppc64.a
+-endif
+-GEN_GCJ_LDADD_LIST += -lstdc++
+-# Stub bfd_getb32 and bfd_getl32 for PPC64.  Unconditionally
+-# link -lbfd_get just for simplification.
+-GEN_GCJ_LDADD_LIST += -laudit
+-GEN_GCJ_LDADD_LIST += -lasm -ldw -lebl -lelf
+ 
+ # For TestExec.java
+ noinst_PROGRAMS += frysk/pkglibdir/funit-exec-alias
+@@ -251,8 +235,10 @@ install-exec-local: install-sysroot-loca
+ uninstall-local: uninstall-sysroot-local
+ .PHONY: install-sysroot-local uninstall-sysroot-local
+ install-sysroot-local:
++	mkdir -p $(DESTDIR)$(pkglibdir)
+ 	cp -r $(TEST_SYSROOT) $(DESTDIR)$(pkglibdir)
+ if DO_ARCH32_TEST
++	mkdir -p $(DESTDIR)$(pkglib32dir)
+ 	cp -r $(TEST32_SYSROOT) $(DESTDIR)$(pkglib32dir)
+ endif
+ # we don't want this installed, but noinst_SCRIPTS has no effect
+diff -up frysk-0.4/frysk-gtk/Makefile.am.jni frysk-0.4/frysk-gtk/Makefile.am
+--- frysk-0.4/frysk-gtk/Makefile.am.jni	2016-04-13 10:57:04.461272128 -0400
++++ frysk-0.4/frysk-gtk/Makefile.am	2016-04-13 10:57:04.468272119 -0400
+@@ -62,7 +62,6 @@ GEN_GCJ_LDADD_LIST += -laudit
+ GEN_GCJ_LDADD_LIST += -lasm -ldw -lebl -lelf
+ 
+ # Hack, need to compile this entire sub-tree with JNI.
+-AM_GCJFLAGS += -fjni 
+ AM_CFLAGS += $(GTK_CFLAGS) $(FRYSK_GTK_CFLAGS)
+ 
+ solib_PROGRAMS += EggTrayIcon/libEggTrayIcon.so
+diff -up frysk-0.4/frysk-imports/configure.ac.jni frysk-0.4/frysk-imports/configure.ac
+--- frysk-0.4/frysk-imports/configure.ac.jni	2016-04-13 10:57:04.464272124 -0400
++++ frysk-0.4/frysk-imports/configure.ac	2016-04-13 10:57:04.469272118 -0400
+@@ -53,7 +53,6 @@ AC_CONFIG_FILES([
+ 	Makefile
+ 	jline/Makefile
+ 	getopt/Makefile
+-	tests/Makefile
+ 	junit/Makefile])
+ 
+ # Even though "libunwind" is not built, it is still included in the
+diff -up frysk-0.4/frysk-imports/junit/Makefile.am.jni frysk-0.4/frysk-imports/junit/Makefile.am
+--- frysk-0.4/frysk-imports/junit/Makefile.am.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-imports/junit/Makefile.am	2016-04-13 10:57:04.469272118 -0400
+@@ -43,7 +43,9 @@ noinst_DATA = junit.jar
+ # Make a jar file.
+ junit.jar: classdir
+ 	cd classdir ; \
+-	find * -name '*.class' -print | $(JAR) -@ -cf $@.tmp
++	rm -f classes.list ; \
++	find * -name '*.class' -print > classes.list ; \
++	$(JAR) cf $@.tmp @classes.list
+ 	mv classdir/$@.tmp $@
+ 
+ classdir:
+diff -up frysk-0.4/frysk-imports/Makefile.am.jni frysk-0.4/frysk-imports/Makefile.am
+--- frysk-0.4/frysk-imports/Makefile.am.jni	2016-04-13 10:57:04.462272126 -0400
++++ frysk-0.4/frysk-imports/Makefile.am	2016-04-13 10:57:04.469272118 -0400
+@@ -59,7 +59,6 @@ CHECK_SUBDIRS = \
+ 	jline \
+ 	junit \
+ 	getopt \
+-	tests \
+ 	$(LIBUNWIND_DIR)
+ 
+ check-recursive: SUBDIRS = $(CHECK_SUBDIRS)
+@@ -79,7 +78,7 @@ install-recursive \
+ installcheck-recursive \
+ installdirs-recursive \
+ uninstall-info-recursive \
+-uninstall-recursive: SUBDIRS = tests
++uninstall-recursive: SUBDIRS =
+ 
+ GEN_CLASSPATH += getopt.jar
+ GEN_CLASSPATH += junit.jar
+diff -up frysk-0.4/frysk-sys/bootstrap.sh.jni frysk-0.4/frysk-sys/bootstrap.sh
+--- frysk-0.4/frysk-sys/bootstrap.sh.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/bootstrap.sh	2016-04-13 10:57:04.469272118 -0400
+@@ -45,7 +45,7 @@ FILE_LIST="frysk \
+     inua \
+     lib"
+ 
+-./common/Makefile.gen.sh --jni --cni $FILE_LIST
++./common/Makefile.gen.sh $FILE_LIST
+ 
+ # Generate everything (always run with --add-missing).
+ 
+diff -up frysk-0.4/frysk-sys/frysk/sys/proc/jni/Exe.cxx.jni frysk-0.4/frysk-sys/frysk/sys/proc/jni/Exe.cxx
+--- frysk-0.4/frysk-sys/frysk/sys/proc/jni/Exe.cxx.jni	2016-04-13 10:57:04.411272189 -0400
++++ frysk-0.4/frysk-sys/frysk/sys/proc/jni/Exe.cxx	2016-04-13 10:57:04.469272118 -0400
+@@ -87,7 +87,7 @@ frysk::sys::proc::Exe::getName(jnixx::en
+   }
+ 
+   if (access(link, F_OK) != 0) {
+-    errnoException(env, errno, "file %s", link);
++    errnoException(env, errno, "access", "file %s", link);
+   }
+ 
+   // Note that some kernels have a "feature" where the link can become
+diff -up frysk-0.4/frysk-sys/jnixx/ClassWalker.java.jni frysk-0.4/frysk-sys/jnixx/ClassWalker.java
+--- frysk-0.4/frysk-sys/jnixx/ClassWalker.java.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/jnixx/ClassWalker.java	2016-04-13 10:57:04.469272118 -0400
+@@ -73,10 +73,10 @@ abstract class ClassWalker {
+     void walk(Class klass) {
+ 	if (klass == null)
+ 	    return;
++	walk(klass.getSuperclass());
+ 	if (visited.contains(klass))
+ 	    return;
+ 	visited.add(klass);
+-	walk(klass.getSuperclass());
+ 	if (klass.isArray()) {
+ 	    walk(klass.getComponentType());
+ 	    acceptArray(klass);
+diff -up frysk-0.4/frysk-sys/jnixx/Main.java.jni frysk-0.4/frysk-sys/jnixx/Main.java
+--- frysk-0.4/frysk-sys/jnixx/Main.java.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/jnixx/Main.java	2016-04-13 10:57:04.469272118 -0400
+@@ -163,7 +163,6 @@ class Main {
+ 	p.println("JNIEXPORT jint");
+ 	p.println("JNI_OnLoad(JavaVM* javaVM, void* reserved)");
+ 	while (p.dent(0, "{", "}")) {
+-	    p.println("fprintf(stderr, \"vm loaded\\n\");");
+ 	    p.println("::jnixx::vm = javaVM;");
+ 	    p.println("return JNI_VERSION_1_2;");
+ 	}
+diff -up frysk-0.4/frysk-sys/jnixx/PrintCxxDefinitions.java.jni frysk-0.4/frysk-sys/jnixx/PrintCxxDefinitions.java
+--- frysk-0.4/frysk-sys/jnixx/PrintCxxDefinitions.java.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/jnixx/PrintCxxDefinitions.java	2016-04-13 10:57:04.469272118 -0400
+@@ -159,10 +159,6 @@ class PrintCxxDefinitions extends ClassW
+ 	    return;
+ 	if (klass.isArray())
+ 	    return;
+-	p.println();
+-	p.print("jclass ");
+-	p.printQualifiedCxxName(klass);
+-	p.println("::_class;");
+ 	printer.visit(klass);
+     }
+     void acceptInterface(Class klass) {
+diff -up frysk-0.4/frysk-sys/jnixx/PrintDeclarations.java.jni frysk-0.4/frysk-sys/jnixx/PrintDeclarations.java
+--- frysk-0.4/frysk-sys/jnixx/PrintDeclarations.java.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/jnixx/PrintDeclarations.java	2016-04-13 10:57:04.469272118 -0400
+@@ -143,8 +143,9 @@ class PrintDeclarations extends ClassWal
+ 	    p.printGlobalCxxName(parent);
+ 	    p.println("() { }");
+ 	}
++	// cached per-instance copy - a local-ref
++	p.println("private: jclass _class = NULL;");
+ 	// Static get-class method - a class knows its own class.
+-	p.println("private: static jclass _class;");
+ 	p.println("public: static inline jclass _class_(::jnixx::env _env);");
+ 	JniBindings.printDeclarations(p, klass);
+     }
+diff -up frysk-0.4/frysk-sys/jnixx/Printer.java.jni frysk-0.4/frysk-sys/jnixx/Printer.java
+--- frysk-0.4/frysk-sys/jnixx/Printer.java.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/jnixx/Printer.java	2016-04-13 10:57:04.469272118 -0400
+@@ -318,6 +318,7 @@ class Printer {
+ 	    || name.equals("or")
+ 	    || name.equals("xor")
+ 	    || name.equals("not")
++	    || name.equals("register")
+ 	    ) {
+ 	    return name + "$";
+ 	} else {
+diff -up frysk-0.4/frysk-sys/jnixx/PrintHxxDefinitions.java.jni frysk-0.4/frysk-sys/jnixx/PrintHxxDefinitions.java
+--- frysk-0.4/frysk-sys/jnixx/PrintHxxDefinitions.java.jni	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/jnixx/PrintHxxDefinitions.java	2016-04-13 10:57:04.470272116 -0400
+@@ -72,6 +72,14 @@ class PrintHxxDefinitions extends ClassW
+ 	}
+ 	p.print(")");
+ 	while (p.dent(0, "{", "}")) {
++	    if (isStatic) {
++		p.println("jclass _class = _class_(_env);");
++	    } else {
++		p.print("if (_class == NULL)");
++		while (p.dent(1, "{", "}")) {
++		    p.println("_class = _class_(_env);");
++		}
++	    }
+ 	    p.print("if (");
+ 	    p.printID(field);
+ 	    p.print(" == NULL)");
+@@ -81,7 +89,7 @@ class PrintHxxDefinitions extends ClassW
+ 		if (isStatic) {
+ 		    p.print("Static");
+ 		}
+-		p.print("FieldID(_class_(_env), \"");
++		p.print("FieldID(_class, \"");
+ 		p.print(field.getName());
+ 		p.print("\", \"");
+ 		p.printJniSignature(type);
+@@ -130,16 +138,25 @@ class PrintHxxDefinitions extends ClassW
+ 	    p.print("static jmethodID ");
+ 	    p.printID(method);
+ 	    p.println(";");
++	    if (isStatic) {
++		p.println("jclass _class = _class_(_env);");
++	    }
+ 	    p.print("if (");
+ 	    p.printID(method);
+ 	    p.print(" == NULL)");
+ 	    while (p.dent(1, "{", "}")) {
++		if (!isStatic) {
++		    p.print("if (_class == NULL)");
++		    while (p.dent(2, "{", "}")) {
++			p.println("_class = _class_(_env);");
++		    }
++		}
+ 		p.printID(method);
+ 		p.print(" = _env.Get");
+ 		if (isStatic) {
+ 		    p.print("Static");
+ 		}
+-		p.print("MethodID(_class_(_env), \"");
++		p.print("MethodID(_class, \"");
+ 		p.print(method.getName());
+ 		p.print("\", \"");
+ 		p.printJniSignature(method);
+@@ -183,6 +200,7 @@ class PrintHxxDefinitions extends ClassW
+ 		p.printFormalCxxParameters(constructor, true);
+ 		p.print(")");
+ 		while (p.dent(0, "{", "}")) {
++		    p.println("jclass _class = _class_(_env);");
+ 		    p.print("static jmethodID ");
+ 		    p.printID(constructor);
+ 		    p.println(";");
+@@ -191,7 +209,7 @@ class PrintHxxDefinitions extends ClassW
+ 		    p.print(" == NULL)");
+ 		    while (p.dent(1, "{", "}")) {
+ 			p.printID(constructor);
+-			p.print(" = _env.GetMethodID(_class_(_env), \"<init>\", \"(");
++			p.print(" = _env.GetMethodID(_class, \"<init>\", \"(");
+ 			p.printJniSignature(constructor.getParameterTypes());
+ 			p.println(")V\");");
+ 		    }
+@@ -237,12 +255,9 @@ class PrintHxxDefinitions extends ClassW
+ 	p.printQualifiedCxxName(klass);
+ 	p.print("::_class_(::jnixx::env _env)");
+ 	while (p.dent(0, "{", "}")) {
+-	    while (p.dent(1, "if (_class == NULL) {", "}")) {
+-		p.print("_class = _env.FindClass(\"");
+-		p.print(klass.getName());
+-		p.println("\");");
+-	    }
+-	    p.println("return _class;");
++	    p.print("return _env.FindClass(\"");
++	    p.print(klass.getName().replace('.', '/'));
++	    p.println("\");");
+ 	}
+ 	JniBindings.printDefinitions(p, klass);
+ 	printer.visit(klass);
+diff -up frysk-0.4/frysk-sys/Makefile.am.jni frysk-0.4/frysk-sys/Makefile.am
+--- frysk-0.4/frysk-sys/Makefile.am.jni	2016-04-13 10:57:04.467272120 -0400
++++ frysk-0.4/frysk-sys/Makefile.am	2016-04-13 10:57:26.720244636 -0400
+@@ -47,19 +47,6 @@ GEN_CLASSPATH += ../frysk-imports/jline.
+ GEN_CLASSPATH += ../frysk-imports/antlr.jar
+ GEN_CLASSPATH += ../frysk-imports/junit.jar
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jline.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-antlr.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a
+-if USE_LIBUNWIND
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+-                 ../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \
+-		 ../frysk-imports/libunwind-ppc32/src/.libs/libunwind-ppc32.a \
+-                 ../frysk-imports/libunwind-ppc64/src/.libs/libunwind-ppc64.a
+-endif
+-GEN_GCJ_LDADD_LIST += -lstdc++ -laudit
+-GEN_GCJ_LDADD_LIST += -lasm -ldw -lebl -lelf
+-
+ 
+ # Force a few dependencies
+ lib/unwind/cni/Unwind%.cxx: lib/unwind/Unwind%.java lib/unwind/cni/UnwindH.hxx
+@@ -69,6 +56,7 @@ lib/unwind/Unwind%.java: lib/unwind/Unwi
+ # Depend on these runtimes.
+ JNI_LIBRARY_LIST += -lstdc++
+ JNI_LIBRARY_LIST += -laudit
++JNI_LIBRARY_LIST += -ldw
+ # Bundle in the local libunwind code.
+ JNI_OBJECT_LIST += ../frysk-imports/libunwind-i386/src/{,dwarf/,mi/,x86/}.libs/*.o
+ JNI_OBJECT_LIST += ../frysk-imports/libunwind-x86_64/src/{,dwarf/,mi/,x86_64/}.libs/*.o

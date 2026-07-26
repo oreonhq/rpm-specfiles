@@ -1,0 +1,74 @@
+diff --git a/src/lib/math/isosurf/implicit.c b/src/lib/math/isosurf/implicit.c
+index c02a0e1..bf37f5c 100644
+--- a/src/lib/math/isosurf/implicit.c
++++ b/src/lib/math/isosurf/implicit.c
+@@ -124,8 +124,8 @@ typedef struct intlists {	   /* list of list of integers */
+ } INTLISTS;
+ 
+ typedef struct process {	   /* parameters, function, storage */
+-    double (*function)();	   /* implicit surface function */
+-    int (*triproc)();		   /* triangle output function */
++    double (*function)(double, double, double);	   /* implicit surface function */
++    int (*triproc)(int, int, int, VERTICES);		   /* triangle output function */
+     double size, delta;		   /* cube size, normal delta */
+     int bounds;			   /* cube range within lattice */
+     POINT start;		   /* start point on surface */
+@@ -136,14 +136,12 @@ typedef struct process {	   /* parameters, function, storage */
+     EDGELIST **edges;		   /* edge and vertex id hash table */
+ } PROCESS;
+ 
+-void *calloc();
+-
+ #define mycalloc(n,nbyte) _mycalloc(n,nbyte,__LINE__)
+ #define myfree(ptr) _myfree(ptr,__LINE__)
+ 
+ static void makecubetable ();
+ static void free_cubetable();
+-static void converge(POINT*,POINT*,double,double(*f)(),POINT*);
++static void converge(POINT*,POINT*,double,double(*f)(double, double, double),POINT*);
+ static CORNER *setcorner (PROCESS*, int, int, int);
+ static int setcenter(CENTERLIST *table[], int, int, int);
+ static int dotet (CUBE*, int, int, int, int, PROCESS*);
+@@ -231,7 +229,7 @@ VERTICES vertices;
+ 
+ main ()
+ {
+-    char *err, *polygonize();
++    char *err;
+ 
+     keepaspect(1, 1);
+     winopen("implicit");
+@@ -346,13 +344,12 @@ main ()
+  */
+ 
+ char *polygonize (function, size, bounds, x, y, z, triproc, mode)
+-double (*function)(), size, x, y, z;
+-int bounds, (*triproc)(), mode;
++double (*function)(double, double, double), size, x, y, z;
++int bounds, (*triproc)(int, int, int, VERTICES), mode;
+ {
+     PROCESS p;
+     int n, noabort;
+-    CORNER *setcorner();
+-    TEST in, out, find();
++    TEST in, out;
+ 
+     p.function = function;
+     p.triproc = triproc;
+@@ -499,7 +496,6 @@ int i, j, k, face, c1, c2, c3, c4;
+ {
+     CUBE new;
+     CUBES *oldcubes = p->cubes;
+-    CORNER *setcorner();
+     int n, pos = old->corners[c1]->value > 0.0 ? 1 : 0;
+     /* static int facebit[6] = {2, 2, 1, 1, 0, 0}; */
+     /* int bit = facebit[face]; */
+@@ -1015,7 +1011,7 @@ PROCESS *p;
+ 
+ static void converge (p1, p2, v, function, p)
+ double v;
+-double (*function)();
++double (*function)(double, double, double);
+ POINT *p1, *p2, *p;
+ {
+     int i = 0;

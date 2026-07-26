@@ -1,0 +1,15 @@
+diff -up martian-3.0.0/cmd/proxy/main_test.go.orig martian-3.0.0/cmd/proxy/main_test.go
+--- martian-3.0.0/cmd/proxy/main_test.go.orig	2019-07-09 03:38:53.000000000 +0200
++++ martian-3.0.0/cmd/proxy/main_test.go	2020-01-31 16:21:26.888748470 +0100
+@@ -33,6 +33,11 @@ import (
+ 	"github.com/google/martian/v3/mitm"
+ )
+ 
++var _ = func() bool {
++	testing.Init()
++	return true
++}()
++
+ func waitForProxy(t *testing.T, c *http.Client, apiURL string) {
+ 	timeout := 5 * time.Second
+ 	deadline := time.Now().Add(timeout)

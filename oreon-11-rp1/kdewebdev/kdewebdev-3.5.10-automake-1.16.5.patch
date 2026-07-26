@@ -1,0 +1,13 @@
+diff -up kdewebdev-3.5.10/aclocal.m4.me kdewebdev-3.5.10/aclocal.m4
+diff -up kdewebdev-3.5.10/admin/acinclude.m4.in.me kdewebdev-3.5.10/admin/acinclude.m4.in
+diff -up kdewebdev-3.5.10/configure.in.in.me kdewebdev-3.5.10/configure.in.in
+--- kdewebdev-3.5.10/configure.in.in.me	2022-01-31 11:51:21.160072338 +0100
++++ kdewebdev-3.5.10/configure.in.in	2022-01-31 11:51:40.471307148 +0100
+@@ -10,7 +10,6 @@ dnl    (kdelnk_DATA = quanta.desktop lin
+ dnl  - change the bin_PROGRAMS and the _SOURCES, _LDADD, _METASOURCES, _LDFLAGS
+ dnl    below it in the quanta/src/Makefile.am, so it reflects the new executable name
+ 
+-AM_INIT_AUTOMAKE(@MODULENAME@, @VERSION@)
+ KDE_ENABLE_HIDDEN_VISIBILITY
+ 
+ quanta_datadir='${kde_datadir}/quanta'

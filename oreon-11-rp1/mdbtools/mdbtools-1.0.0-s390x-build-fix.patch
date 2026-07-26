@@ -1,0 +1,12 @@
+diff -up mdbtools-1.0.0/src/odbc/odbc.c~ mdbtools-1.0.0/src/odbc/odbc.c
+--- mdbtools-1.0.0/src/odbc/odbc.c~	2021-09-29 15:12:55.000000000 +0200
++++ mdbtools-1.0.0/src/odbc/odbc.c	2024-06-21 20:34:12.048447730 +0200
+@@ -1987,7 +1987,7 @@ static int _odbc_fix_literals(struct _hs
+ 	char tmp[4096];
+ 	char *s, *d, *p;
+ 	int i, quoted = 0, find_end = 0;
+-	char quote_char;
++	char quote_char = 0; /* Initialize to fix -Werror=maybe-uninitialized on s390x */
+ 
+ 	s=stmt->query;
+ 	d=tmp;

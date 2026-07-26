@@ -1,0 +1,38 @@
+From be0048238b2f3bcdd77a0c01cb7a52c895693d79 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 16 Apr 2025 12:46:13 -0400
+Subject: [PATCH] Downstream-only: Patch all cmake_minimum_required from 3.1 to
+ 3.5
+
+This fixes compatibility with CMake 4. It does not make sense to offer
+this upstream because a larger CMake modernization effort was already
+implemented for the upcoming 3.0.0 release.
+---
+ CMakeLists.txt                              | 2 +-
+ tests/test_dependent_library/CMakeLists.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 384fb02..3832cd3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ if(${CMAKE_VERSION} VERSION_LESS 3.13)
+   cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
+ else()
+diff --git a/tests/test_dependent_library/CMakeLists.txt b/tests/test_dependent_library/CMakeLists.txt
+index 570dba2..aaf10e9 100644
+--- a/tests/test_dependent_library/CMakeLists.txt
++++ b/tests/test_dependent_library/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ # This is a sample library to test integration via add_subdirectory and CMakeConfig
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(test_project VERSION 0.1)
+ 
+-- 
+2.49.0
+

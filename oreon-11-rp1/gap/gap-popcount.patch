@@ -1,0 +1,39 @@
+--- src/blister.c.orig	2022-12-17 19:18:59.000000000 -0700
++++ src/blister.c	2023-08-10 20:07:09.650671153 -0600
+@@ -840,6 +840,28 @@ void ConvBlist (
+ **
+ *F  COUNT_TRUES_BLOCK( <block> ) . . . . . . . . . . .  count number of trues
+ */
++#ifdef __x86_64__
++static UInt __attribute__((target ("popcnt"))) fast_COUNT_TRUES_BLOCK(UInt block)
++{
++    return __builtin_popcountl(block);
++}
++
++static UInt slow_COUNT_TRUES_BLOCK(UInt block)
++{
++    return __builtin_popcountl(block);
++}
++
++static UInt (*resolve_COUNT_TRUES_BLOCK(void))(UInt block)
++{
++    __builtin_cpu_init();
++    return __builtin_cpu_supports("popcnt")
++        ? &fast_COUNT_TRUES_BLOCK
++        : &slow_COUNT_TRUES_BLOCK;
++}
++
++UInt __attribute__((ifunc ("resolve_COUNT_TRUES_BLOCK")))
++COUNT_TRUES_BLOCK(UInt block);
++#else
+ UInt COUNT_TRUES_BLOCK(UInt block)
+ {
+ #if USE_POPCNT && defined(HAVE___BUILTIN_POPCOUNTL)
+@@ -864,6 +886,7 @@ UInt COUNT_TRUES_BLOCK(UInt block)
+     return block;
+ #endif
+ }
++#endif
+ 
+ /****************************************************************************
+ **

@@ -1,0 +1,89 @@
+From 980a8626767e99b285391d63e854b411e063a383 Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Fri, 31 Oct 2025 17:59:19 -0700
+Subject: [PATCH] hip tests build on fedora
+
+---
+ catch/CMakeLists.txt                  | 13 +++++++------
+ catch/hipTestMain/hip_test_context.cc |  2 +-
+ catch/unit/CMakeLists.txt             |  4 ++--
+ 3 files changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/catch/CMakeLists.txt b/catch/CMakeLists.txt
+index 04959dd385fd..1de1e38beee9 100644
+--- a/catch/CMakeLists.txt
++++ b/catch/CMakeLists.txt
+@@ -94,14 +94,15 @@ if(NOT WIN32)
+ endif() # end win32
+ 
+ # enforce c++17
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -fPIC")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+ 
+ # Address sanitizer options
+ if(ENABLE_ADDRESS_SANITIZER)
+     message(STATUS "Building catch tests with Address Sanitizer options")
+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -shared-libasan -g -gz")
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -shared-libasan -g -gz")
+-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-new-dtags -fuse-ld=lld -fsanitize=address -shared-libasan -g -gz -Wl,--build-id=sha1 -L${ROCM_PATH}/lib/asan")
++    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-new-dtags -fsanitize=address -shared-libasan -g -gz -Wl,--build-id=sha1 -L${ROCM_PATH}/lib/asan")
+ endif()
+ 
+ string(REPLACE "." ";" VERSION_LIST ${HIP_VERSION})
+@@ -197,13 +198,13 @@ if (WIN32)
+ endif()
+ 
+ if(HIP_PLATFORM STREQUAL "amd")
+-    add_compile_options(-Wall -Wextra -Wvla -Werror -Wno-deprecated -Wno-option-ignored)
++    add_compile_options(-Wall -Wextra -Wvla -Wno-deprecated -Wno-option-ignored)
+ endif()
+ 
+ cmake_policy(PUSH)
+-if(POLICY CMP0037)
+-    cmake_policy(SET CMP0037 OLD)
+-endif()
++#if(POLICY CMP0037)
++#    cmake_policy(SET CMP0037 OLD)
++#endif()
+ 
+ # Turn off CMAKE_HIP_ARCHITECTURES Feature if cmake version is 3.21+
+ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.21.0)
+diff --git a/catch/hipTestMain/hip_test_context.cc b/catch/hipTestMain/hip_test_context.cc
+index 840a08e450d5..69519efe0727 100644
+--- a/catch/hipTestMain/hip_test_context.cc
++++ b/catch/hipTestMain/hip_test_context.cc
+@@ -59,7 +59,7 @@ std::string TestContext::substringFound(std::vector<std::string> list, std::stri
+ std::string TestContext::getCurrentArch() {
+ #if HT_LINUX
+   const char* cmd =
+-      "/opt/rocm/bin/rocm_agent_enumerator | awk '$0 != \"gfx000\"' | xargs | sed -e 's/ /;/g' | "
++      "/usr/bin/rocm_agent_enumerator | awk '$0 != \"gfx000\"' | xargs | sed -e 's/ /;/g' | "
+       "tr -d '\n'";
+   std::array<char, 1024> buffer;
+   std::string result;
+diff --git a/catch/unit/CMakeLists.txt b/catch/unit/CMakeLists.txt
+index 74393ace36a1..2506eb3d2d8c 100644
+--- a/catch/unit/CMakeLists.txt
++++ b/catch/unit/CMakeLists.txt
+@@ -39,7 +39,7 @@ add_subdirectory(context)
+ add_subdirectory(device_memory)
+ add_subdirectory(warp)
+ add_subdirectory(dynamicLoading)
+-add_subdirectory(g++)
++#add_subdirectory(g++)
+ add_subdirectory(module)
+ add_subdirectory(channelDescriptor)
+ add_subdirectory(executionControl)
+@@ -48,7 +48,7 @@ add_subdirectory(vector_types)
+ add_subdirectory(atomics)
+ add_subdirectory(complex)
+ add_subdirectory(p2p)
+-add_subdirectory(gcc)
++#add_subdirectory(gcc)
+ add_subdirectory(syncthreads)
+ add_subdirectory(threadfence)
+ add_subdirectory(virtualMemoryManagement)
+-- 
+2.51.0
+

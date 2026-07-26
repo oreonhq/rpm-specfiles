@@ -1,0 +1,24 @@
+From: Thomas Moschny <thomas.moschny@gmx.de>
+Subject: [PATCH] t/libexecdir
+
+Use libexecdir.
+
+---
+ IkiWiki.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/IkiWiki.pm b/IkiWiki.pm
+index 0f27ac4..90eabf9 100644
+--- a/IkiWiki.pm
++++ b/IkiWiki.pm
+@@ -792,7 +792,7 @@ sub loadplugin ($;$) {
+ 
+ 	return if ! $force && grep { $_ eq $plugin} @{$config{disable_plugins}};
+ 
+-	foreach my $possiblytainteddir (getlibdirs(), "$installdir/lib/ikiwiki") {
++	foreach my $possiblytainteddir (getlibdirs(), "$installdir/libexec/ikiwiki") {
+ 		my $dir = possibly_foolish_untaint($possiblytainteddir);
+ 		if (defined $dir && -x "$dir/plugins/$plugin") {
+ 			eval { require IkiWiki::Plugin::external };
+-- 
+tg: (53b10a6..) t/libexecdir (depends on: master)

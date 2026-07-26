@@ -1,0 +1,41 @@
+From 8880ff435f69b515a57e60e8b7434dad9e47847e Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 16 Jan 2025 09:49:20 -0500
+Subject: [PATCH] Fix a few typos that cause failure to compile with GCC 15
+
+These were eventually included in
+76120d16c00ae67128c3c69421ab712f985f3445, along with many other changes.
+---
+ arbor/include/arbor/util/expected.hpp | 2 +-
+ python/strprintf.hpp                  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arbor/include/arbor/util/expected.hpp b/arbor/include/arbor/util/expected.hpp
+index 9d860f65..1af88eb4 100644
+--- a/arbor/include/arbor/util/expected.hpp
++++ b/arbor/include/arbor/util/expected.hpp
+@@ -486,7 +486,7 @@ struct expected<void, E> {
+     // Swap ops.
+ 
+     void swap(expected& other) {
+-        data_.swap(other.data);
++        data_.swap(other.data_);
+     }
+ 
+     // Accessors.
+diff --git a/python/strprintf.hpp b/python/strprintf.hpp
+index 63801677..2ccf12c1 100644
+--- a/python/strprintf.hpp
++++ b/python/strprintf.hpp
+@@ -168,7 +168,7 @@ namespace impl {
+             for (auto& x: s.seq_) {
+                 if (!first) o << s.sep_;
+                 first = false;
+-                o << s.f(x);
++                o << s.f_(x);
+             }
+             return o;
+         }
+-- 
+2.47.1
+

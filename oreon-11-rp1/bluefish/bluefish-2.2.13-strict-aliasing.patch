@@ -1,0 +1,72 @@
+--- src/plugin_zencoding/Makefile.am
++++ src/plugin_zencoding/Makefile.am
+@@ -56,6 +56,7 @@ zencoding_la_SOURCES = \
+ 	zeneditor-interface.c \
+ 	zeneditor-interface.h
+ 
++zencoding_la_CFLAGS = -fno-strict-aliasing
+ zencoding_la_LDFLAGS = -module -avoid-version
+ 
+ if OS_WIN32
+--- src/plugin_zencoding/Makefile.in
++++ src/plugin_zencoding/Makefile.in
+@@ -132,15 +132,16 @@ am__uninstall_files_from_dir = { \
+ am__installdirs = "$(DESTDIR)$(zencodingdir)" "$(DESTDIR)$(plugindir)"
+ LTLIBRARIES = $(zencoding_LTLIBRARIES)
+ zencoding_la_LIBADD =
+-am_zencoding_la_OBJECTS = zencoding.lo zeneditor-interface.lo
++am_zencoding_la_OBJECTS = zencoding_la-zencoding.lo \
++	zencoding_la-zeneditor-interface.lo
+ zencoding_la_OBJECTS = $(am_zencoding_la_OBJECTS)
+ AM_V_lt = $(am__v_lt_@AM_V@)
+ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
+ zencoding_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+-	$(zencoding_la_LDFLAGS) $(LDFLAGS) -o $@
++	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(zencoding_la_CFLAGS) \
++	$(CFLAGS) $(zencoding_la_LDFLAGS) $(LDFLAGS) -o $@
+ @ENABLE_ZENCODING_PLUGIN_TRUE@am_zencoding_la_rpath = -rpath \
+ @ENABLE_ZENCODING_PLUGIN_TRUE@	$(zencodingdir)
+ AM_V_P = $(am__v_P_@AM_V@)
+@@ -500,6 +501,7 @@ zencoding_la_SOURCES = \
+ 	zeneditor-interface.c \
+ 	zeneditor-interface.h
+ 
++zencoding_la_CFLAGS = -fno-strict-aliasing
+ zencoding_la_LDFLAGS = -module -avoid-version $(am__append_1)
+ all: all-recursive
+ 
+@@ -579,8 +581,8 @@ mostlyclean-compile:
+ distclean-compile:
+ 	-rm -f *.tab.c
+ 
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zencoding.Plo@am__quote@ # am--include-marker
+-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zeneditor-interface.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zencoding_la-zencoding.Plo@am__quote@ # am--include-marker
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zencoding_la-zeneditor-interface.Plo@am__quote@ # am--include-marker
+ 
+ $(am__depfiles_remade):
+ 	@$(MKDIR_P) $(@D)
+@@ -609,6 +611,20 @@ am--depfiles: $(am__depfiles_remade)
+ @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
+ 
++zencoding_la-zencoding.lo: zencoding.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(zencoding_la_CFLAGS) $(CFLAGS) -MT zencoding_la-zencoding.lo -MD -MP -MF $(DEPDIR)/zencoding_la-zencoding.Tpo -c -o zencoding_la-zencoding.lo `test -f 'zencoding.c' || echo '$(srcdir)/'`zencoding.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zencoding_la-zencoding.Tpo $(DEPDIR)/zencoding_la-zencoding.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='zencoding.c' object='zencoding_la-zencoding.lo' libtool=yes @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(zencoding_la_CFLAGS) $(CFLAGS) -c -o zencoding_la-zencoding.lo `test -f 'zencoding.c' || echo '$(srcdir)/'`zencoding.c
++
++zencoding_la-zeneditor-interface.lo: zeneditor-interface.c
++@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(zencoding_la_CFLAGS) $(CFLAGS) -MT zencoding_la-zeneditor-interface.lo -MD -MP -MF $(DEPDIR)/zencoding_la-zeneditor-interface.Tpo -c -o zencoding_la-zeneditor-interface.lo `test -f 'zeneditor-interface.c' || echo '$(srcdir)/'`zeneditor-interface.c
++@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/zencoding_la-zeneditor-interface.Tpo $(DEPDIR)/zencoding_la-zeneditor-interface.Plo
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='zeneditor-interface.c' object='zencoding_la-zeneditor-interface.lo' libtool=yes @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(zencoding_la_CFLAGS) $(CFLAGS) -c -o zencoding_la-zeneditor-interface.lo `test -f 'zeneditor-interface.c' || echo '$(srcdir)/'`zeneditor-interface.c
++
+ mostlyclean-libtool:
+ 	-rm -f *.lo
+ 

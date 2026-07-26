@@ -1,0 +1,534 @@
+From 0be29755dcea7e19bc347b273fa38787ecb57252 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Mon, 14 Oct 2024 20:27:57 +0200
+Subject: [PATCH 3/3] Ruff pass
+
+---
+ .../apache_status/apache_status.py            |  5 +--
+ gmond/python_modules/cpu/cpu_stats.py         |  3 --
+ gmond/python_modules/db/DBUtil.py             |  6 ++--
+ gmond/python_modules/db/mysql.py              |  2 +-
+ gmond/python_modules/db/redis.py              |  4 +--
+ gmond/python_modules/db/riak.py               |  9 +++---
+ gmond/python_modules/disk/diskstat.py         |  4 +--
+ gmond/python_modules/disk/multidisk.py        |  4 +--
+ gmond/python_modules/memcached/memcached.py   |  6 ++--
+ gmond/python_modules/memory/mem_stats.py      |  3 --
+ .../python_modules/network/multi_interface.py |  2 +-
+ gmond/python_modules/network/netstats.py      |  4 +--
+ gmond/python_modules/network/tcpconn.py       |  6 ++--
+ gmond/python_modules/network/traffic1.py      |  4 +--
+ gmond/python_modules/nfs/nfsstats.py          |  6 ++--
+ gmond/python_modules/process/procstat.py      | 32 +++++++++----------
+ gmond/python_modules/ssl/entropy.py           |  5 ++-
+ gmond/python_modules/varnish/varnish.py       |  2 +-
+ gmond/python_modules/vm_stats/vm_stats.py     |  1 -
+ gmond/python_modules/xen/xenstats.py          |  2 --
+ 20 files changed, 50 insertions(+), 60 deletions(-)
+
+diff --git a/gmond/python_modules/apache_status/apache_status.py b/gmond/python_modules/apache_status/apache_status.py
+index fba14ee..d375d74 100755
+--- a/gmond/python_modules/apache_status/apache_status.py
++++ b/gmond/python_modules/apache_status/apache_status.py
+@@ -2,9 +2,10 @@
+ # -*- coding: utf-8 -*-
+ 
+ import os
+-import threading
+ import time
+-import urllib.request, urllib.error, urllib.parse
++import urllib.request
++import urllib.error
++import urllib.parse
+ import traceback
+ import re
+ import copy
+diff --git a/gmond/python_modules/cpu/cpu_stats.py b/gmond/python_modules/cpu/cpu_stats.py
+index 16d6165..ab518cc 100644
+--- a/gmond/python_modules/cpu/cpu_stats.py
++++ b/gmond/python_modules/cpu/cpu_stats.py
+@@ -1,6 +1,3 @@
+-import sys
+-import traceback
+-import os
+ import re
+ import time
+ import copy
+diff --git a/gmond/python_modules/db/DBUtil.py b/gmond/python_modules/db/DBUtil.py
+index 66f8a78..c7e7473 100644
+--- a/gmond/python_modules/db/DBUtil.py
++++ b/gmond/python_modules/db/DBUtil.py
+@@ -28,7 +28,7 @@ pure python collections.defaultdict substitute
+ #from collections import defaultdict
+ try:
+     from collections import defaultdict
+-except:
++except ImportError:
+     class defaultdict(dict):
+         def __init__(self, default_factory=None, *a, **kw):
+             if (default_factory is not None and
+@@ -79,9 +79,9 @@ def longish(x):
+                 try:
+                         return int(x)
+                 except ValueError:
+-                        if(x.endswith(',')):
++                        if x.endswith(','):
+                            return longish(x[:-1])
+-                        if(is_hex(x.lower()) == True):
++                        if is_hex(x.lower()):
+                            return hexlongish(x)
+                         #print "X==(%s)(%s)(%s)" %(x, x[:-1],hexlongish(x)), sys.exc_info()[0]
+                         return longish(x[:-1])
+diff --git a/gmond/python_modules/db/mysql.py b/gmond/python_modules/db/mysql.py
+index 065a6cd..5aae1cf 100644
+--- a/gmond/python_modules/db/mysql.py
++++ b/gmond/python_modules/db/mysql.py
+@@ -354,7 +354,7 @@ def get_stat(name):
+         logging.debug("fetching %s" % name)
+         try:
+             return mysql_stats[label]
+-        except:
++        except KeyError:
+             logging.error("failed to fetch %s" % name)
+             return 0
+     else:
+diff --git a/gmond/python_modules/db/redis.py b/gmond/python_modules/db/redis.py
+index 9101b49..285a625 100755
+--- a/gmond/python_modules/db/redis.py
++++ b/gmond/python_modules/db/redis.py
+@@ -34,7 +34,7 @@ def metric_handler(name):
+         if metric_handler.auth is not None:
+             s.send("*2\r\n$4\r\nAUTH\r\n$%d\r\n%s\r\n" % (len(metric_handler.auth), metric_handler.auth))
+             result = s.recv(100)
+-            if not 'OK' in result:
++            if 'OK' not in result:
+                 return 0
+         s.send("*1\r\n$4\r\nINFO\r\n")
+         #logging.debug("sent INFO")
+@@ -83,7 +83,7 @@ def metric_handler(name):
+                           v = cps
+                   #logging.debug("submittincg metric %s is %s" % (n, int(v)))
+                   metric_handler.info[n] = int(v)  # TODO Use value_type.
+-        except Exception as e:
++        except Exception:
+             #logging.debug("caught exception %s" % e)
+             pass
+         s.close()
+diff --git a/gmond/python_modules/db/riak.py b/gmond/python_modules/db/riak.py
+index 499a04f..a399931 100755
+--- a/gmond/python_modules/db/riak.py
++++ b/gmond/python_modules/db/riak.py
+@@ -24,7 +24,9 @@ import os
+ import sys
+ import threading
+ import time
+-import urllib.request, urllib.error, urllib.parse
++import urllib.request
++import urllib.error
++import urllib.parse
+ import traceback
+ import json
+ 
+@@ -44,7 +46,7 @@ def floatable(str):
+     try:
+         float(str)
+         return True
+-    except:
++    except ValueError:
+         return False
+ 
+ 
+@@ -102,7 +104,6 @@ class UpdateMetricThread(threading.Thread):
+ 
+     def metric_of(self, name):
+         val = 0
+-        mp = name.split("_")[0]
+         if name in self.metric:
+             _Lock.acquire()
+             val = self.metric[name]
+@@ -1062,6 +1063,6 @@ if __name__ == '__main__':
+     except KeyboardInterrupt:
+         time.sleep(0.2)
+         os._exit(1)
+-    except:
++    except Exception:
+         traceback.print_exc()
+         os._exit(1)
+diff --git a/gmond/python_modules/disk/diskstat.py b/gmond/python_modules/disk/diskstat.py
+index 79962ca..aea335f 100644
+--- a/gmond/python_modules/disk/diskstat.py
++++ b/gmond/python_modules/disk/diskstat.py
+@@ -386,7 +386,7 @@ def get_stat(name):
+ 
+             try:
+                 return stats[dev][label]
+-            except:
++            except Exception:
+                 logging.warning('failed to fetch [' + dev + '] ' + name)
+                 return 0
+         else:
+@@ -394,7 +394,7 @@ def get_stat(name):
+ 
+             try:
+                 return stats[label]
+-            except:
++            except Exception:
+                 logging.warning('failed to fetch ' + name)
+                 return 0
+ 
+diff --git a/gmond/python_modules/disk/multidisk.py b/gmond/python_modules/disk/multidisk.py
+index b26bf59..5ad59b5 100644
+--- a/gmond/python_modules/disk/multidisk.py
++++ b/gmond/python_modules/disk/multidisk.py
+@@ -108,8 +108,8 @@ def metric_init(params):
+     global descriptors
+     f = open('/proc/mounts', 'r')
+ 
+-    for l in f:
+-        line = l.split()
++    for buff in f:
++        line = buff.split()
+         if line[3].startswith('ro'):
+             continue
+         elif Remote_Mount(line[0], line[2]):
+diff --git a/gmond/python_modules/memcached/memcached.py b/gmond/python_modules/memcached/memcached.py
+index 8bdb57c..b5c3df4 100644
+--- a/gmond/python_modules/memcached/memcached.py
++++ b/gmond/python_modules/memcached/memcached.py
+@@ -26,7 +26,7 @@ def floatable(str):
+     try:
+         float(str)
+         return True
+-    except:
++    except ValueError:
+         return False
+ 
+ 
+@@ -58,7 +58,7 @@ class UpdateMetricThread(threading.Thread):
+             return
+         try:
+             self.join()
+-        except:
++        except Exception:
+             pass
+ 
+     def run(self):
+@@ -396,6 +396,6 @@ if __name__ == '__main__':
+     except KeyboardInterrupt:
+         time.sleep(0.2)
+         os._exit(1)
+-    except:
++    except Exception:
+         traceback.print_exc()
+         os._exit(1)
+diff --git a/gmond/python_modules/memory/mem_stats.py b/gmond/python_modules/memory/mem_stats.py
+index b0cdc16..0a6dd6a 100644
+--- a/gmond/python_modules/memory/mem_stats.py
++++ b/gmond/python_modules/memory/mem_stats.py
+@@ -1,6 +1,3 @@
+-import sys
+-import traceback
+-import os
+ import re
+ 
+ 
+diff --git a/gmond/python_modules/network/multi_interface.py b/gmond/python_modules/network/multi_interface.py
+index e4b1b04..c9f898f 100644
+--- a/gmond/python_modules/network/multi_interface.py
++++ b/gmond/python_modules/network/multi_interface.py
+@@ -94,7 +94,7 @@ def metric_init(params):
+     Desc_Skel = {
+         'name'        : 'XXX',
+         'call_back'   : get_delta,
+-        'time_max'    : 60,
++        'time_max'    : time_max,
+         'value_type'  : 'float',
+         'format'      : '%.0f',
+         'units'       : '/s',
+diff --git a/gmond/python_modules/network/netstats.py b/gmond/python_modules/network/netstats.py
+index ba0c56f..ec65d1e 100644
+--- a/gmond/python_modules/network/netstats.py
++++ b/gmond/python_modules/network/netstats.py
+@@ -2,11 +2,11 @@
+ #
+ # /proc/net/netstat
+ 
+-import sys
+ import re
+ import time
+ import copy
+-import string
++
++NAME_PREFIX = 'netstat_'
+ 
+ PARAMS = {}
+ 
+diff --git a/gmond/python_modules/network/tcpconn.py b/gmond/python_modules/network/tcpconn.py
+index b97d0ed..cf55a6d 100644
+--- a/gmond/python_modules/network/tcpconn.py
++++ b/gmond/python_modules/network/tcpconn.py
+@@ -31,6 +31,8 @@
+ #******************************************************************************/
+ 
+ import os
++import threading
++import time
+ 
+ OBSOLETE_POPEN = False
+ try:
+@@ -39,8 +41,6 @@ except ImportError:
+     import popen2
+     OBSOLETE_POPEN = True
+ 
+-import threading
+-import time
+ 
+ _WorkerThread = None  # Worker thread object
+ _glock = threading.Lock()   # Synchronization lock
+@@ -230,7 +230,7 @@ class NetstatThread(threading.Thread):
+ 
+     def shutdown(self):
+         self.shuttingdown = True
+-        if self.popenChild != None:
++        if self.popenChild is not None:
+             try:
+                 self.popenChild.wait()
+             except OSError as e:
+diff --git a/gmond/python_modules/network/traffic1.py b/gmond/python_modules/network/traffic1.py
+index 9f1078f..c5fdcba 100644
+--- a/gmond/python_modules/network/traffic1.py
++++ b/gmond/python_modules/network/traffic1.py
+@@ -67,8 +67,8 @@ class UpdateTrafficThread(threading.Thread):
+ 
+     def update_metric(self):
+         f = open(self.proc_file, "r")
+-        for l in f:
+-            a = l.split(":")
++        for buff in f:
++            a = buff.split(":")
+             dev = a[0].lstrip()
+             if dev != self.target_device:
+                 continue
+diff --git a/gmond/python_modules/nfs/nfsstats.py b/gmond/python_modules/nfs/nfsstats.py
+index 618b1be..2d3d279 100644
+--- a/gmond/python_modules/nfs/nfsstats.py
++++ b/gmond/python_modules/nfs/nfsstats.py
+@@ -10,8 +10,6 @@
+ # 2) the code is structured in a way intended to make it easy to repurpose
+ #   the code for extracting other information out of /proc
+ 
+-import os
+-import stat
+ import re
+ import time
+ import syslog
+@@ -262,7 +260,7 @@ def metric_init(params):
+                 else:
+                     tests_passed = False
+                     break
+-            except:
++            except Exception:
+                 tests_passed = False
+                 break
+         if not tests_passed:
+@@ -362,7 +360,7 @@ def get_value(name):
+     for i in range(0, len(descriptors)):
+         if descriptors[i]['name'] == name:
+             break
+-    contents = file(descriptors[i]['file']).read()
++    contents = open(descriptors[i]['file']).read()
+     m = re.search(descriptors[i]['re'], contents, flags=re.MULTILINE)
+ 
+     m_value = m.group(1)
+diff --git a/gmond/python_modules/process/procstat.py b/gmond/python_modules/process/procstat.py
+index aad5229..e5c3f9a 100644
+--- a/gmond/python_modules/process/procstat.py
++++ b/gmond/python_modules/process/procstat.py
+@@ -128,14 +128,14 @@ PROCESSES = {}
+ 
+ def readCpu(pid):
+     try:
+-        stat = file('/proc/' + pid + '/stat', 'rt').readline().split()
++        stat = open('/proc/' + pid + '/stat', 'rt').readline().split()
+         #logging.debug(' stat (' + pid + '): ' + str(stat))
+         utime = int(stat[13])
+         stime = int(stat[14])
+         cutime = int(stat[15])
+         cstime = int(stat[16])
+         return (utime + stime + cutime + cstime)
+-    except:
++    except Exception:
+         logging.warning('failed to get (' + str(pid) + ') stats')
+         return 0
+ 
+@@ -152,8 +152,8 @@ def get_pgid(proc):
+     if '.pid' in val[-4:]:
+         if os.path.exists(val):
+             logging.debug(' pidfile found')
+-            ppid = file(val, 'rt').readline().strip()
+-            pgid = file('/proc/' + ppid + '/stat', 'rt').readline().split()[4]
++            ppid = open(val, 'rt').readline().strip()
++            pgid = open('/proc/' + ppid + '/stat', 'rt').readline().split()[4]
+         else:
+             raise Exception('pidfile (' + val + ') does not exist')
+ 
+@@ -195,10 +195,10 @@ def get_pgroup(ppid, pgid):
+     p_list = []
+     for stat_file in glob.glob('/proc/[1-9]*/stat'):
+         try:
+-            stat = file(stat_file, 'rt').readline().split()
++            stat = open(stat_file, 'rt').readline().split()
+             if stat[4] == pgid:
+                 p_list.append(stat[0])
+-        except:
++        except Exception:
+             # likely the pid has exited. this is normal.
+             pass
+ 
+@@ -225,7 +225,7 @@ def get_rss(pids):
+         try:
+             statm = open('/proc/' + p + '/statm', 'rt').readline().split()
+             #logging.debug(' statm (' + p + '): ' + str(statm))
+-        except:
++        except Exception:
+             # Process finished, ignore this mem usage
+             logging.warning(' failed getting statm for pid: ' + p)
+             continue
+@@ -261,7 +261,7 @@ def test(params):
+         print(' PID, ARGS')
+         for pid in pids:
+             # Read from binary file containing command line arguments
+-            args = file('/proc/' + pid + '/cmdline', 'rt').readline().replace('\0', ' ')
++            args = open('/proc/' + pid + '/cmdline', 'rt').readline().replace('\0', ' ')
+             print((' ' + pid + ' ' + args))
+ 
+     logging.debug('success testing')
+@@ -283,9 +283,9 @@ def update_stats():
+         logging.debug(' updating for ' + proc)
+ 
+         # setup storage lists
+-        if not proc in stats:
++        if proc not in stats:
+             stats[proc] = {}
+-        if not proc in last_val:
++        if proc not in last_val:
+             last_val[proc] = {}
+ 
+         #####
+@@ -347,7 +347,7 @@ def get_stat(name):
+ 
+             try:
+                 return stats[proc][label]
+-            except:
++            except Exception:
+                 logging.warning('failed to fetch [' + proc + '] ' + name)
+                 return 0
+         else:
+@@ -355,7 +355,7 @@ def get_stat(name):
+ 
+         try:
+             return stats[label]
+-        except:
++        except Exception:
+             logging.warning('failed to fetch ' + name)
+             return 0
+     else:
+@@ -420,7 +420,7 @@ def metric_init(params):
+ 
+ def display_proc_stat(pid):
+     try:
+-        stat = file('/proc/' + pid + '/stat', 'rt').readline().split()
++        stat = open('/proc/' + pid + '/stat', 'rt').readline().split()
+ 
+         fields = [
+             'pid', 'comm', 'state', 'ppid', 'pgrp', 'session',
+@@ -438,14 +438,14 @@ def display_proc_stat(pid):
+             print('%15s: %s' % (f, stat[i]))
+             i += 1
+ 
+-    except:
++    except Exception:
+         print(('failed to get /proc/' + pid + '/stat'))
+         print((traceback.print_exc(file=sys.stdout)))
+ 
+ 
+ def display_proc_statm(pid):
+     try:
+-        statm = file('/proc/' + pid + '/statm', 'rt').readline().split()
++        statm = open('/proc/' + pid + '/statm', 'rt').readline().split()
+ 
+         fields = [
+             'size', 'rss', 'share', 'trs', 'drs', 'lrs', 'dt'
+@@ -457,7 +457,7 @@ def display_proc_statm(pid):
+             print('%15s: %s' % (f, statm[i]))
+             i += 1
+ 
+-    except:
++    except Exception:
+         print(('failed to get /proc/' + pid + '/statm'))
+         print((traceback.print_exc(file=sys.stdout)))
+ 
+diff --git a/gmond/python_modules/ssl/entropy.py b/gmond/python_modules/ssl/entropy.py
+index 71193c6..bb9f67c 100644
+--- a/gmond/python_modules/ssl/entropy.py
++++ b/gmond/python_modules/ssl/entropy.py
+@@ -7,7 +7,6 @@
+ #   (it can reuse the pool of bits).
+ # Therefore if you are running SSL on the box you want to know this.
+ 
+-import sys
+ 
+ 
+ entropy_file = "/proc/sys/kernel/random/entropy_avail"
+@@ -20,8 +19,8 @@ def metrics_handler(name):
+     except IOError:
+         return 0
+ 
+-    for l in f:
+-        line = l
++    for buff in f:
++        line = buff
+ 
+     return int(line)
+ 
+diff --git a/gmond/python_modules/varnish/varnish.py b/gmond/python_modules/varnish/varnish.py
+index b1a8573..e5c1b75 100755
+--- a/gmond/python_modules/varnish/varnish.py
++++ b/gmond/python_modules/varnish/varnish.py
+@@ -143,7 +143,7 @@ def metric_init(lparams):
+     Desc_Skel = {
+         'name'        : 'XXX',
+         'call_back'   : 'XXX',
+-        'time_max'    : 60,
++        'time_max'    : time_max,
+         'value_type'  : 'float',
+         'format'      : '%f',
+         'units'       : 'XXX',
+diff --git a/gmond/python_modules/vm_stats/vm_stats.py b/gmond/python_modules/vm_stats/vm_stats.py
+index 2e1e8b8..8eb9c11 100644
+--- a/gmond/python_modules/vm_stats/vm_stats.py
++++ b/gmond/python_modules/vm_stats/vm_stats.py
+@@ -3,7 +3,6 @@
+ #
+ # /proc/vmstat
+ 
+-import sys
+ import re
+ import time
+ import copy
+diff --git a/gmond/python_modules/xen/xenstats.py b/gmond/python_modules/xen/xenstats.py
+index bdb3750..1c328e4 100755
+--- a/gmond/python_modules/xen/xenstats.py
++++ b/gmond/python_modules/xen/xenstats.py
+@@ -18,8 +18,6 @@
+ #       MA 02110-1301, USA.
+ 
+ import libvirt
+-import os
+-import time
+ 
+ descriptors = list()
+ conn        = libvirt.openReadOnly("xen:///")
+-- 
+2.47.0
+

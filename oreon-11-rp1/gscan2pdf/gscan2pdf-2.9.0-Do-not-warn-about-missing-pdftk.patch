@@ -1,0 +1,35 @@
+From d7aca940f68886dad3623fd2c416266fc27c94ea Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 9 May 2019 09:54:46 +0200
+Subject: [PATCH] Do not warn about missing pdftk
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+pdftk is not available in Fedora, do not warn about its absense.
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=1708054>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/gscan2pdf | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/bin/gscan2pdf b/bin/gscan2pdf
+index 1855542..d74055b 100755
+--- a/bin/gscan2pdf
++++ b/bin/gscan2pdf
+@@ -1552,10 +1552,6 @@ EOS
+         }
+     }
+ 
+-    if ( not $dependencies{pdftk} ) {
+-        $msg .= __("PDF encryption requires pdftk\n");
+-    }
+-
+     # Put up warning if needed
+     if ( $msg ne $EMPTY ) {
+         $msg = __('Warning: missing packages') . "\n$msg";
+-- 
+2.25.4
+

@@ -1,0 +1,8 @@
+diff -up HTML-TreeBuilderX-ASP_NET-0.09/Makefile.PL.orig HTML-TreeBuilderX-ASP_NET-0.09/Makefile.PL
+--- HTML-TreeBuilderX-ASP_NET-0.09/Makefile.PL.orig	2017-05-23 16:14:12.884769537 +0200
++++ HTML-TreeBuilderX-ASP_NET-0.09/Makefile.PL	2017-05-23 16:14:51.635542322 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name     'HTML-TreeBuilderX-ASP_NET';

@@ -1,0 +1,95 @@
+--- src/main.cpp	2015-03-15 22:37:48.000000000 +0100
++++ src/main.cpp	2015-07-15 12:53:52.564757150 +0200
+@@ -62,7 +62,9 @@
+ 
+ // Libraries headers
+ #include "SDL_image.h"
++#ifndef WITHOUT_BINRELOC
+ #include "binreloc.h"			// BinReloc routines from AutoPackage
++#endif
+ #include "tinyxml.h"
+ #include "SimpleOpt.h"			// Simple command line argument parser
+ 
+@@ -943,7 +945,6 @@
+ 	return ret;
+ }
+ 
+-
+    /*=====================================================================*/
+ /** Try to detect and set the datadir, the confdir and the savedir using
+ BinReloc library and win32 standard function
+@@ -951,6 +952,8 @@
+ static void detectProgramPath()
+ {
+ 	char* pTemp = NULL;
++
++#ifndef WITHOUT_BINRELOC
+ 	BrInitError brError;
+ 
+ // IF the datadir is not set THEN try to get it from BinReloc routines
+@@ -996,6 +999,11 @@
+ 		sConfigDir = formatPath( sConfigDir );
+ 		free(pTemp);
+ 	}
++#else
++if (sDataDir == "") {OPENCITY_INFO("Can't detect the data directory, please set it manually or compile without the -DWITHOUT_BINRELOC flag");}
++if (sConfigDir == "") {OPENCITY_INFO("Can't detect the config directory, please set it manually or compile without the -DWITHOUT_BINRELOC flag");}
++
++#endif
+ 
+ // IF the save directory is not set the find it
+ 	if (sSaveDir == "") {
+@@ -1023,7 +1031,6 @@
+ 	OPENCITY_INFO( "Detected save directory   : " << sSaveDir );
+ }
+ 
+-
+    /*=====================================================================*/
+ /** Read the OpenCity's main settings file "opencity.xml"
+ 	\return "" if OK, otherwise the error description
+--- src/zen.cpp	2015-03-15 22:37:48.000000000 +0100
++++ src/zen.cpp	2015-07-15 13:05:39.463501206 +0200
+@@ -36,7 +36,9 @@
+ 
+ // Libraries headers
+ #include "SDL_image.h"
++#ifndef WITHOUT_BINRELOC
+ #include "binreloc.h"			// BinReloc routines from AutoPackage
++#endif
+ #include "tinyxml/tinyxml.h"
+ #include "SimpleOpt.h"			// Simple command line argument parser
+ 
+@@ -422,9 +424,11 @@
+ /** Try to detect and set the datadir, the confdir and the savedir using
+ BinReloc library and win32 standard function
+ */
+-void detectProgramPath()
++static void detectProgramPath()
+ {
+ 	char* pTemp = NULL;
++
++#ifndef WITHOUT_BINRELOC
+ 	BrInitError brError;
+ 
+ // IF the datadir is not set THEN try to get it from BinReloc routines
+@@ -470,6 +474,11 @@
+ 		sConfigDir = formatPath( sConfigDir );
+ 		free(pTemp);
+ 	}
++#else
++if (sDataDir == "") {OPENCITY_INFO("Can't detect the data directory, please set it manually or compile without the -DWITHOUT_BINRELOC flag");}
++if (sConfigDir == "") {OPENCITY_INFO("Can't detect the config directory, please set it manually or compile without the -DWITHOUT_BINRELOC flag");}
++
++#endif
+ 
+ // IF the save directory is not set the find it
+ 	if (sSaveDir == "") {
+@@ -482,7 +491,7 @@
+ #else
+ 	// Win32 uses \ as directory separtor
+ 		sSaveDir += "\\opencity\\";
+-        CreateDirectory( sSaveDir.c_str(), NULL );		
++        CreateDirectory( sSaveDir.c_str(), NULL );
+     // Replace \ by /
+ 	    string::size_type pos;
+ 	    while ( (pos = sSaveDir.find( '\\' )) != sSaveDir.npos ) {

@@ -1,0 +1,32 @@
+From 883d6961971ad796baff029d91c7ad622302d014 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 8 Nov 2016 18:11:07 +0100
+Subject: [PATCH] Disable author tests
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+inc::Module::Install cannot disable author test when buidling without
+bundled Module::install.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index f76ae15..5db1e9a 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -40,8 +40,6 @@ resources(
+ 	'IRC'			=> "irc://irc.perl.org/#perlrdf",
+ );
+ 
+-author_tests('xt');
+-
+ install_script 'bin/rqsh';
+ 
+ sign;
+-- 
+2.7.4
+

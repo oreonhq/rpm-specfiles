@@ -1,0 +1,18 @@
+The memcmp can fail because of implicit function declarations.  The
+core issue seems to be that HAVE_STRING_H is not defined.  This is
+likely because AC_CHECK_HEADERS is used in a shell conditional branch.
+Fixing this properly requires rewriting configure.in and re-running
+autoconf, which does not seem worth it.
+
+diff --git a/configure b/configure
+index d2ba794b2ede48b4..fb24db5ccf85891c 100755
+--- a/configure
++++ b/configure
+@@ -4570,6 +4570,7 @@ else $as_nop
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ $ac_includes_default
++#include <string.h>
+ int
+ main (void)
+ {

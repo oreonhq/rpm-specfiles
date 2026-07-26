@@ -1,0 +1,127 @@
+--- cryptominisat-release-5.13.0/CMakeLists.txt.orig	2025-04-24 16:16:59.342920705 -0600
++++ cryptominisat-release-5.13.0/CMakeLists.txt	2025-04-24 16:23:28.090781385 -0600
+@@ -447,15 +447,13 @@ option(NOZLIB "Don't use zlib" OFF)
+ 
+ # cannot currently compile static zlib under Windows
+ if (NOT NOZLIB AND NOT ((NOT BUILD_SHARED_LIBS) AND WIN32))
+-    find_package(ZLIB)
+-    IF (ZLIB_FOUND)
++    find_package(ZLIB-NG)
++    IF (ZLIB-NG_FOUND)
+         MESSAGE(STATUS "OK, Found ZLIB!")
+-        include_directories(${ZLIB_INCLUDE_DIR})
+-        link_directories(${ZLIB_LIB_DIR})
+         add_definitions( -DUSE_ZLIB )
+-    ELSE (ZLIB_FOUND)
++    ELSE (ZLIB-NG_FOUND)
+         MESSAGE(STATUS "WARNING: Did not find ZLIB, gzipped file support will be disabled")
+-    ENDIF (ZLIB_FOUND)
++    ENDIF (ZLIB-NG_FOUND)
+ endif()
+ 
+ 
+--- cryptominisat-release-5.13.0/src/CMakeLists.txt.orig	2025-04-25 08:41:20.197200800 -0600
++++ cryptominisat-release-5.13.0/src/CMakeLists.txt	2025-04-25 08:42:33.141926914 -0600
+@@ -376,8 +376,8 @@ set(cryptoms_exec_link_libs
+     cryptominisat5
+ )
+ 
+-IF (ZLIB_FOUND)
+-    SET(cryptoms_exec_link_libs ${cryptoms_exec_link_libs} ${ZLIB_LIBRARY})
++IF (ZLIB-NG_FOUND)
++    SET(cryptoms_exec_link_libs ${cryptoms_exec_link_libs} -lz-ng)
+ ENDIF()
+ 
+ 
+--- cryptominisat-release-5.13.0/src/main.cpp.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/src/main.cpp	2025-04-24 16:24:45.977240574 -0600
+@@ -72,7 +72,7 @@ void Main::readInAFile(SATSolver* solver
+     FILE * in = fopen(filename.c_str(), "rb");
+     DimacsParser<StreamBuffer<FILE*, FN>, SATSolver> parser(solver2, &debugLib, conf.verbosity, fg);
+     #else
+-    gzFile in = gzopen(filename.c_str(), "rb");
++    gzFile in = zng_gzopen(filename.c_str(), "rb");
+     DimacsParser<StreamBuffer<gzFile, GZ>, SATSolver> parser(solver2, &debugLib, conf.verbosity, fg);
+     #endif
+ 
+@@ -93,7 +93,7 @@ void Main::readInAFile(SATSolver* solver
+     #ifndef USE_ZLIB
+         fclose(in);
+     #else
+-        gzclose(in);
++        zng_gzclose(in);
+     #endif
+ }
+ 
+@@ -105,7 +105,7 @@ void Main::readInStandardInput(SATSolver
+     #ifndef USE_ZLIB
+     FILE * in = stdin;
+     #else
+-    gzFile in = gzdopen(0, "rb"); //opens stdin, which is 0
++    gzFile in = zng_gzdopen(0, "rb"); //opens stdin, which is 0
+     #endif
+ 
+     if (in == nullptr) {
+@@ -121,7 +121,7 @@ void Main::readInStandardInput(SATSolver
+ 
+     if (!parser.parse_DIMACS(in, false)) exit(-1);
+     #ifdef USE_ZLIB
+-        gzclose(in);
++        zng_gzclose(in);
+     #endif
+ }
+ 
+--- cryptominisat-release-5.13.0/src/main_mpi.cpp.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/src/main_mpi.cpp	2025-04-24 16:23:28.091907543 -0600
+@@ -20,13 +20,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWAR
+ THE SOFTWARE.
+ ***********************************************/
+ 
++#define WITH_GZFILEOP
+ #include <iostream>
+ #include <unistd.h>
+ #include <mpi.h>
+ #include "datasyncserver.h"
+ #include "cryptominisat.h"
+ #include "solverconf.h"
+-#include "zlib.h"
++#include <zlib-ng.h>
+ #include "dimacsparser.h"
+ 
+ 
+@@ -163,7 +164,7 @@ int main(int argc, char** argv)
+         cout << "c num threads used: " << num_threads << endl;
+ 
+         CMSat::DataSyncServer server;
+-        gzFile in = gzopen(filename.c_str(), "rb");
++        gzFile in = zng_gzopen(filename.c_str(), "rb");
+         DimacsParser<StreamBuffer<gzFile, GZ>, CMSat::DataSyncServer> parser(&server, nullptr, 0);
+         if (in == nullptr) {
+             std::cerr
+@@ -178,7 +179,7 @@ int main(int argc, char** argv)
+         if (!parser.parse_DIMACS(in, strict_header)) {
+             exit(-1);
+         }
+-        gzclose(in);
++        zng_gzclose(in);
+ 
+         cout << "c read in file" << endl;;
+ 
+--- cryptominisat-release-5.13.0/src/streambuffer.h.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/src/streambuffer.h	2025-04-24 16:25:32.072298417 -0600
+@@ -31,12 +31,13 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR
+ using std::numeric_limits;
+ 
+ #ifdef USE_ZLIB
+-#include <zlib.h>
++#define WITH_GZFILEOP
++#include <zlib-ng.h>
+ namespace CMSat {
+ struct GZ {
+     static inline int read(void* buf, size_t num, size_t count, gzFile f)
+     {
+-        return gzread(f, buf, num*count);
++        return zng_gzread(f, buf, num*count);
+     }
+ };
+ }

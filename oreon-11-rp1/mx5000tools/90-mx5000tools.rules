@@ -1,0 +1,13 @@
+# mx5000tools udev rules, sync system time to supported keyboards
+
+ACTION!="add", GOTO="end"
+
+# Logitech MX5000 keyboard Bluetooth and USB (BT receiver as HID-proxy) modes
+DEVPATH=="*/0003:046D:B305.*/hidraw/hidraw*", RUN+="/usr/bin/mx5000-tool -t"
+DEVPATH=="*/0005:046D:B305.*/hidraw/hidraw*", RUN+="/usr/bin/mx5000-tool -t"
+
+# Logitech MX5500 keyboard Bluetooth and USB (BT receiver as HID-proxy) modes
+DEVPATH=="*/0003:046D:B30B.*/hidraw/hidraw*", RUN+="/usr/bin/mx5000-tool -t"
+DEVPATH=="*/0005:046D:B30B.*/hidraw/hidraw*", RUN+="/usr/bin/mx5000-tool -t"
+
+LABEL="end"

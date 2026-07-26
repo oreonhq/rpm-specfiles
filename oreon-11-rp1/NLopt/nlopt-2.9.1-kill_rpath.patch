@@ -1,0 +1,22 @@
+diff -ruN nlopt-2.9.1/CMakeLists.txt nlopt-2.9.1-mod/CMakeLists.txt
+--- nlopt-2.9.1/CMakeLists.txt	2024-11-25 19:43:26.000000000 +0300
++++ nlopt-2.9.1-mod/CMakeLists.txt	2024-11-27 06:36:40.561025352 +0300
+@@ -60,13 +60,13 @@
+ set (NLOPT_INSTALL_MANDIR     ${CMAKE_INSTALL_MANDIR}        CACHE STRING "Installation directory for man documentation")
+ set (NLOPT_INSTALL_CMAKEDIR   ${CMAKE_INSTALL_LIBDIR}/cmake/nlopt CACHE STRING "Installation directory for cmake config files")
+ 
+-set (CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${NLOPT_INSTALL_LIBDIR} CACHE PATH "rpath")
+-set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "use link path")
++#set (CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${NLOPT_INSTALL_LIBDIR} CACHE PATH "rpath")
++#set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "use link path")
+ 
+-if(POLICY CMP0042)
++#if(POLICY CMP0042)
+   # Set MACOSX_RPATH to ON
+-  cmake_policy(SET CMP0042 NEW)
+-endif()
++#  cmake_policy(SET CMP0042 NEW)
++#endif()
+ 
+ if (POLICY CMP0086)
+   # UseSWIG honors SWIG_MODULE_NAME via -module flag

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <id type="desktop">GoldenCheetah.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+  <name>GoldenCheetah</name>
+  <summary>Cycling Performance Software</summary>
+  <description>
+    <p>
+      Golden Cheetah is a program for cyclists:
+      - download and import activities from most popular bike computers from CycleOps,
+        SRM, Polar, Garmin and others;
+      - analyze, track and review performance data and metrics;
+      - train indoors with realtime monitoring supporting trainers from Racermate,
+        Tacx and any ANT+ device;
+      - Golden Cheetah is free software and distributed under the GPL.
+    </p>
+  </description>
+  <kudos>
+    <kudo>HiDpiIcon</kudo>
+    <kudo>ModernToolkit</kudo>
+  </kudos>
+  <screenshots>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/Wprime.png</image>
+      <caption>W'bal Stress Chart</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/CPchart.png</image>
+      <caption>Critical Power Chart</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/RidePlot.png</image>
+      <caption>Ride Plot</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/RideSummary.png</image>
+      <caption>Ride Summary</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/TISS.png</image>
+      <caption>An/Ae TISS Stress Chart</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/CPdelta.png</image>
+      <caption>Critical Power Delta Compare</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/ModelEstimate.png</image>
+      <caption>Model Estimates</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.goldencheetah.org/img/PeakPower.png</image>
+      <caption>Peak Power</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">http://www.goldencheetah.org/</url>
+  <url type="bugtracker">https://github.com/GoldenCheetah/GoldenCheetah/issues/</url>
+  <url type="faq">https://github.com/GoldenCheetah/GoldenCheetah/wiki/FAQ-MOST-COMMON-QUESTIONS-OF-ALL/</url>
+  <url type="help">http://www.goldencheetah.org/#section-tutorials/</url>
+  <url type="translate">https://www.transifex.com/key/GoldenCheetah/</url>
+</application>

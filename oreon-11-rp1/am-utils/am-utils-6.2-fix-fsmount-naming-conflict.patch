@@ -1,0 +1,307 @@
+am-utils-6.2 - fix fsmount naming conflict
+
+From: Ian Kent <raven@themaw.net>
+
+The mount API's new fsmount() system call conflicts with am-utils
+struct fsmount so rename it and realted program variables from
+fsmount to fs_mount.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ fsinfo/fsi_analyze.c |   14 +++++++-------
+ fsinfo/fsi_data.h    |    6 +++---
+ fsinfo/fsi_gram.y    |   16 ++++++++--------
+ fsinfo/fsi_util.c    |   10 +++++-----
+ fsinfo/fsinfo.h      |    4 ++--
+ fsinfo/wr_bparam.c   |    2 +-
+ fsinfo/wr_fstab.c    |   26 +++++++++++++-------------
+ 7 files changed, 39 insertions(+), 39 deletions(-)
+
+diff --git a/fsinfo/fsi_analyze.c b/fsinfo/fsi_analyze.c
+index 78598b85..0b92cfd7 100644
+--- a/fsinfo/fsi_analyze.c
++++ b/fsinfo/fsi_analyze.c
+@@ -404,7 +404,7 @@ fixup_required_disk_info(disk_fs *dp)
+ 
+ 
+ static void
+-fixup_required_mount_info(fsmount *fp, dict_ent *de)
++fixup_required_mount_info(fs_mount *fp, dict_ent *de)
+ {
+   if (!ISSET(fp->f_mask, FM_FROM)) {
+     if (de->de_count != 1) {
+@@ -417,24 +417,24 @@ fixup_required_mount_info(fsmount *fp, dict_ent *de)
+       if (!mp)
+ 	abort();
+       fp->f_ref = mp;
+-      set_fsmount(fp, FM_FROM, mp->m_dk->d_host->h_hostname);
++      set_fs_mount(fp, FM_FROM, mp->m_dk->d_host->h_hostname);
+       fsi_log("set: %s comes from %s", fp->f_volname, fp->f_from);
+     }
+   }
+ 
+   if (!ISSET(fp->f_mask, FM_FSTYPE)) {
+-    set_fsmount(fp, FM_FSTYPE, xstrdup("nfs"));
++    set_fs_mount(fp, FM_FSTYPE, xstrdup("nfs"));
+     fsi_log("set: fstype is %s", fp->f_fstype);
+   }
+ 
+   if (!ISSET(fp->f_mask, FM_OPTS)) {
+-    set_fsmount(fp, FM_OPTS, xstrdup("rw,nosuid,grpid,defaults"));
++    set_fs_mount(fp, FM_OPTS, xstrdup("rw,nosuid,grpid,defaults"));
+     fsi_log("set: opts are %s", fp->f_opts);
+   }
+ 
+   if (!ISSET(fp->f_mask, FM_LOCALNAME)) {
+     if (fp->f_ref) {
+-      set_fsmount(fp, FM_LOCALNAME, xstrdup(fp->f_volname));
++      set_fs_mount(fp, FM_LOCALNAME, xstrdup(fp->f_volname));
+       fsi_log("set: localname is %s", fp->f_localname);
+     } else {
+       lerror(fp->f_ioloc, "cannot determine localname since volname %s is not uniquely defined", fp->f_volname);
+@@ -476,10 +476,10 @@ static void
+ analyze_mounts(host *hp)
+ {
+   qelem *q = hp->h_mount;
+-  fsmount *fp;
++  fs_mount *fp;
+   int netbootp = 0;
+ 
+-  ITER(fp, fsmount, q) {
++  ITER(fp, fs_mount, q) {
+     char *p;
+     char *nn = xstrdup(fp->f_volname);
+     int req;
+diff --git a/fsinfo/fsi_data.h b/fsinfo/fsi_data.h
+index 4cc341d8..3a190626 100644
+--- a/fsinfo/fsi_data.h
++++ b/fsinfo/fsi_data.h
+@@ -47,7 +47,7 @@ typedef struct dict_data dict_data;
+ typedef struct dict_ent dict_ent;
+ typedef struct disk_fs disk_fs;
+ typedef struct ether_if ether_if;
+-typedef struct fsmount fsmount;
++typedef struct fs_mount fs_mount;
+ typedef struct host host;
+ typedef struct ioloc ioloc;
+ typedef struct fsi_mount fsi_mount;
+@@ -85,7 +85,7 @@ struct host {
+   qelem q;
+   int h_mask;
+   ioloc *h_ioloc;
+-  fsmount *h_netroot, *h_netswap;
++  fs_mount *h_netroot, *h_netswap;
+ #define HF_HOST	0
+   char *h_hostname;	/* The full name of the host */
+   char *h_lochost;	/* The name of the host with local domains stripped */
+@@ -181,7 +181,7 @@ struct fsi_mount {
+  * disk_fs_strings in analyze.c will
+  * need updating.
+  */
+-struct fsmount {
++struct fs_mount {
+   qelem f_q;
+   fsi_mount *f_ref;
+   ioloc *f_ioloc;
+diff --git a/fsinfo/fsi_gram.y b/fsinfo/fsi_gram.y
+index 85d19aa5..17d32401 100644
+--- a/fsinfo/fsi_gram.y
++++ b/fsinfo/fsi_gram.y
+@@ -56,7 +56,7 @@ extern qelem *list_of_hosts, *list_of_automounts;
+ 	qelem *q;
+ 	char *s;
+ 	fsi_mount *m;
+-	fsmount *f;
++	fs_mount *f;
+ }
+ 
+ %token	tARCH
+@@ -372,7 +372,7 @@ list_of_mounts :
+ 	  { $$ = 0; }
+ 
+ 	| list_of_mounts tMOUNT tSTR localinfo_list
+-	  { set_fsmount($4, FM_VOLNAME, $3);
++	  { set_fs_mount($4, FM_VOLNAME, $3);
+ 	    if ($1)
+ 		$$ = $1;
+ 	    else
+@@ -392,22 +392,22 @@ list_of_mounts :
+  */
+ localinfo_list :
+ 	  /* empty */
+-	  { $$ = new_fsmount(); }
++	  { $$ = new_fs_mount(); }
+ 
+         | localinfo_list tDIRECT
+-          { $$ = $1; set_fsmount($$, FM_DIRECT, ""); }
++          { $$ = $1; set_fs_mount($$, FM_DIRECT, ""); }
+ 
+ 	| localinfo_list tAS tSTR
+-	  { $$ = $1; set_fsmount($$, FM_LOCALNAME, $3); }
++	  { $$ = $1; set_fs_mount($$, FM_LOCALNAME, $3); }
+ 
+ 	| localinfo_list tFROM tSTR
+-	  { $$ = $1; set_fsmount($$, FM_FROM, $3); }
++	  { $$ = $1; set_fs_mount($$, FM_FROM, $3); }
+ 
+ 	| localinfo_list tFSTYPE tSTR
+-	  { $$ = $1; set_fsmount($$, FM_FSTYPE, $3); }
++	  { $$ = $1; set_fs_mount($$, FM_FSTYPE, $3); }
+ 
+ 	| localinfo_list tOPTS tSTR
+-	  { $$ = $1; set_fsmount($$, FM_OPTS, $3); }
++	  { $$ = $1; set_fs_mount($$, FM_OPTS, $3); }
+ 
+ 	| localinfo_list error '=' tSTR
+ 	  { yyerror("unknown mount attribute"); }
+diff --git a/fsinfo/fsi_util.c b/fsinfo/fsi_util.c
+index f8ff313c..d53ff0df 100644
+--- a/fsinfo/fsi_util.c
++++ b/fsinfo/fsi_util.c
+@@ -581,7 +581,7 @@ new_mount(void)
+ 
+ 
+ void
+-set_fsmount(fsmount *fp, int k, char *v)
++set_fs_mount(fs_mount *fp, int k, char *v)
+ {
+   int m = 1 << k;
+ 
+@@ -623,13 +623,13 @@ set_fsmount(fsmount *fp, int k, char *v)
+ }
+ 
+ 
+-fsmount *
+-new_fsmount(void)
++fs_mount *
++new_fs_mount(void)
+ {
+-  fsmount *fp = CALLOC(struct fsmount);
++  fs_mount *fp = CALLOC(struct fs_mount);
+ 
+   fp->f_ioloc = current_location();
+-  show_new("fsmount");
++  show_new("fs_mount");
+   return fp;
+ }
+ 
+diff --git a/fsinfo/fsinfo.h b/fsinfo/fsinfo.h
+index 7a871631..896f8bec 100644
+--- a/fsinfo/fsinfo.h
++++ b/fsinfo/fsinfo.h
+@@ -63,7 +63,7 @@ extern dict *new_dict(void);
+ extern dict_ent *dict_locate(dict *, char *);
+ extern disk_fs *new_disk_fs(void);
+ extern ether_if *new_ether_if(void);
+-extern fsmount *new_fsmount(void);
++extern fs_mount *new_fs_mount(void);
+ extern host *new_host(void);
+ extern int dict_iter(dict *, int (*)(qelem *));
+ extern int errors;
+@@ -94,7 +94,7 @@ extern void lwarning(ioloc *l, char *fmt, ...)
+ 	__attribute__((__format__(__printf__, 2, 3)));
+ extern void rem_que(qelem *);
+ extern void set_disk_fs(disk_fs *, int, char *);
+-extern void set_fsmount(fsmount *, int, char *);
++extern void set_fs_mount(fs_mount *, int, char *);
+ extern void set_mount(fsi_mount *, int, char *);
+ extern void show_area_being_processed(char *area, int n);
+ extern void show_new(char *msg);
+diff --git a/fsinfo/wr_bparam.c b/fsinfo/wr_bparam.c
+index 00befa9c..b318d5d3 100644
+--- a/fsinfo/wr_bparam.c
++++ b/fsinfo/wr_bparam.c
+@@ -49,7 +49,7 @@
+  * Write a host/path in NFS format
+  */
+ static int
+-write_nfsname(FILE *ef, fsmount *fp, char *hn)
++write_nfsname(FILE *ef, fs_mount *fp, char *hn)
+ {
+   int errors = 0;
+   char *h = xstrdup(fp->f_ref->m_dk->d_host->h_hostname);
+diff --git a/fsinfo/wr_fstab.c b/fsinfo/wr_fstab.c
+index 166353eb..4daf161d 100644
+--- a/fsinfo/wr_fstab.c
++++ b/fsinfo/wr_fstab.c
+@@ -48,22 +48,22 @@
+ 
+ /* forward definitions */
+ static void write_aix1_dkfstab(FILE *ef, disk_fs *dp);
+-static void write_aix1_dkrmount(FILE *ef, char *hn, fsmount *fp);
++static void write_aix1_dkrmount(FILE *ef, char *hn, fs_mount *fp);
+ static void write_aix3_dkfstab(FILE *ef, disk_fs *dp);
+-static void write_aix3_dkrmount(FILE *ef, char *hn, fsmount *fp);
++static void write_aix3_dkrmount(FILE *ef, char *hn, fs_mount *fp);
+ static int  write_dkfstab(FILE *ef, qelem *q, void (*output) (FILE *, disk_fs *));
+-static int write_dkrmount(FILE *ef, qelem *q, char *hn, void (*output) (FILE *, char *, fsmount *));
++static int write_dkrmount(FILE *ef, qelem *q, char *hn, void (*output) (FILE *, char *, fs_mount *));
+ static void write_generic_dkfstab(FILE *ef, disk_fs *dp);
+-static void write_generic_dkrmount(FILE *ef, char *hn, fsmount *fp);
++static void write_generic_dkrmount(FILE *ef, char *hn, fs_mount *fp);
+ static void write_ultrix_dkfstab(FILE *ef, disk_fs *dp);
+-static void write_ultrix_dkrmount(FILE *ef, char *hn, fsmount *fp);
++static void write_ultrix_dkrmount(FILE *ef, char *hn, fs_mount *fp);
+ 
+ /* ----------------------------------------------- */
+ 
+ static struct os_fstab_type {
+   char *os_name;
+   void (*op_fstab) (FILE *ef, disk_fs *dp);
+-  void (*op_mount) (FILE *ef, char *hn, fsmount *fp);
++  void (*op_mount) (FILE *ef, char *hn, fs_mount *fp);
+ } os_tabs[] = {
+ 
+   {
+@@ -117,7 +117,7 @@ write_aix1_dkfstab(FILE *ef, disk_fs *dp)
+ 
+ 
+ static void
+-write_aix1_dkrmount(FILE *ef, char *hn, fsmount *fp)
++write_aix1_dkrmount(FILE *ef, char *hn, fs_mount *fp)
+ {
+   char *h = xstrdup(fp->f_ref->m_dk->d_host->h_hostname);
+   char *hp = xstrdup(h);
+@@ -166,7 +166,7 @@ write_aix3_dkfstab(FILE *ef, disk_fs *dp)
+ 
+ 
+ static void
+-write_aix3_dkrmount(FILE *ef, char *hn, fsmount *fp)
++write_aix3_dkrmount(FILE *ef, char *hn, fs_mount *fp)
+ {
+   char *h = xstrdup(fp->f_ref->m_dk->d_host->h_hostname);
+ 
+@@ -200,7 +200,7 @@ write_ultrix_dkfstab(FILE *ef, disk_fs *dp)
+ 
+ 
+ static void
+-write_ultrix_dkrmount(FILE *ef, char *hn, fsmount *fp)
++write_ultrix_dkrmount(FILE *ef, char *hn, fs_mount *fp)
+ {
+   char *h = xstrdup(fp->f_ref->m_dk->d_host->h_hostname);
+ 
+@@ -234,7 +234,7 @@ write_generic_dkfstab(FILE *ef, disk_fs *dp)
+ 
+ 
+ static void
+-write_generic_dkrmount(FILE *ef, char *hn, fsmount *fp)
++write_generic_dkrmount(FILE *ef, char *hn, fs_mount *fp)
+ {
+   char *h;
+ 
+@@ -291,12 +291,12 @@ write_dkfstab(FILE *ef, qelem *q, void (*output) (FILE *, disk_fs *))
+ 
+ 
+ static int
+-write_dkrmount(FILE *ef, qelem *q, char *hn, void (*output) (FILE *, char *, fsmount *))
++write_dkrmount(FILE *ef, qelem *q, char *hn, void (*output) (FILE *, char *, fs_mount *))
+ {
+   int errors = 0;
+-  fsmount *fp;
++  fs_mount *fp;
+ 
+-  ITER(fp, fsmount, q)
++  ITER(fp, fs_mount, q)
+     (*output) (ef, hn, fp);
+ 
+   return errors;

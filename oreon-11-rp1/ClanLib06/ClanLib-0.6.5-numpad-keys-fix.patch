@@ -1,0 +1,37 @@
+diff -up ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp~ ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp
+--- ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp~	2019-11-05 17:41:03.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp	2019-11-05 17:57:07.026831796 +0100
+@@ -211,6 +211,7 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ 	case XK_Print: return CL_KEY_PRINT;
+ 	case XK_Insert: return CL_KEY_INSERT;
+ 	case XK_Num_Lock: return CL_KEY_NUMLOCK;
++	/* Keypad 0-9 + . numlock on */
+ 	case XK_KP_0: return CL_KEY_KP_0;
+ 	case XK_KP_1: return CL_KEY_KP_1;
+ 	case XK_KP_2: return CL_KEY_KP_2;
+@@ -221,6 +222,25 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ 	case XK_KP_7: return CL_KEY_KP_7;
+ 	case XK_KP_8: return CL_KEY_KP_8;
+ 	case XK_KP_9: return CL_KEY_KP_9;
++	case XK_KP_Decimal: return CL_KEY_KP_DECIMAL;
++	/* Keypad 0-9 + . numlock off */
++	case XK_KP_Insert: return CL_KEY_KP_0;
++	case XK_KP_End: return CL_KEY_KP_1;
++	case XK_KP_Down: return CL_KEY_KP_2;
++	case XK_KP_Page_Down: return CL_KEY_KP_3;
++	case XK_KP_Left: return CL_KEY_KP_4;
++	case XK_KP_Begin: return CL_KEY_KP_5;
++	case XK_KP_Right: return CL_KEY_KP_6;
++	case XK_KP_Home: return CL_KEY_KP_7;
++	case XK_KP_Up: return CL_KEY_KP_8;
++	case XK_KP_Page_Up: return CL_KEY_KP_9;
++	case XK_KP_Delete: return CL_KEY_KP_DECIMAL;
++	/* Keypad keys not influenced by numlock */
++	case XK_KP_Divide: return CL_KEY_KP_DIV;
++	case XK_KP_Multiply: return CL_KEY_KP_MULT;
++	case XK_KP_Subtract: return CL_KEY_KP_MINUS;
++	case XK_KP_Add: return CL_KEY_KP_PLUS;
++	case XK_KP_Enter: return CL_KEY_KP_ENTER;
+ 	case XK_F1: return CL_KEY_F1;
+ 	case XK_F2: return CL_KEY_F2;
+ 	case XK_F3: return CL_KEY_F3;

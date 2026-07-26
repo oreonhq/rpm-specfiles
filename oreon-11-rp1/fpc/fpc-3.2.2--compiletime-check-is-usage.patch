@@ -1,0 +1,69 @@
+--- a/fpcsrc/compiler/scanner.pas	2020-12-17 23:08:25.000000000 +0100
++++ b/fpcsrc/compiler/scanner.pas	2025-05-10 14:58:21.880282570 +0200
+@@ -1676,8 +1676,16 @@
+                 result:=texprvalue.create_str(searchstr);
+             end;
+         end;
+ 
++        procedure MarkSymbolAsUsed(sym: tsym);
++          begin
++           tabstractvarsym(sym).IncRefCount;
++           { do we know an owner? }
++           if Assigned(current_module) and Assigned(current_module.unitmap) and Assigned(sym.owner) then
++             inc(current_module.unitmap[sym.owner.moduleid].refs);
++          end;
++
+         function preproc_factor(eval: Boolean):texprvalue;
+         var
+            hs,countstr,storedpattern: string;
+            mac: tmacro;
+@@ -1814,11 +1822,17 @@
+                             case srsym.typ of
+                               staticvarsym,
+                               localvarsym,
+                               paravarsym :
+-                                l:=tabstractvarsym(srsym).getsize;
++                                begin
++                                  l:=tabstractvarsym(srsym).getsize;
++                                  MarkSymbolAsUsed(srsym);
++                                end;
+                               typesym:
+-                                l:=ttypesym(srsym).typedef.size;
++                                begin
++                                  l:=ttypesym(srsym).typedef.size;
++                                  MarkSymbolAsUsed(srsym);
++                                end;
+                               else
+                                 Message(scan_e_error_in_preproc_expr);
+                             end;
+                           result:=texprvalue.create_int(l);
+@@ -1859,11 +1873,17 @@
+                             case srsym.typ of
+                               staticvarsym,
+                               localvarsym,
+                               paravarsym :
+-                                hdef:=tabstractvarsym(srsym).vardef;
++                                begin
++                                  hdef:=tabstractvarsym(srsym).vardef;
++                                  MarkSymbolAsUsed(srsym);
++                                end;
+                               typesym:
+-                                hdef:=ttypesym(srsym).typedef;
++                                begin
++                                  hdef:=ttypesym(srsym).typedef;
++                                  MarkSymbolAsUsed(srsym);
++                                end;
+                               else
+                                 Message(scan_e_error_in_preproc_expr);
+                             end;
+                           if assigned(hdef) then
+@@ -1958,8 +1978,9 @@
+                                 ) then
+                               result:=texprvalue.create_bool(false)
+                             else
+                               result:=texprvalue.create_bool(true);
++                            MarkSymbolAsUsed(srsym);
+                           end
+                         else
+                           result:=texprvalue.create_bool(false);
+                       end

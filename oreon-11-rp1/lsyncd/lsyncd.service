@@ -1,0 +1,16 @@
+[Unit]
+Description=Live Syncing (Mirror) Daemon
+Documentation=man:lsyncd(1) file://usr/share/doc/lsyncd/README.md https://axkibe.github.io/lsyncd/
+After=network.target
+
+[Service]
+Type=simple
+Nice=19
+EnvironmentFile=-/etc/sysconfig/lsyncd
+ExecStart=/usr/bin/lsyncd -nodaemon $LSYNCD_OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,30 @@
+From e61d9e169b05fcab4971ed8b05e6d94c85cb9c6d Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Fri, 26 Apr 2019 11:39:41 +0200
+Subject: [PATCH] etna.h: include other headers from the same directory
+
+Allows us to do #include <etnaviv/etna.h> instad of
+-I/usr/include/etnaviv + #include <etna.h> when installed.
+---
+ src/etna.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/etna.h b/src/etna.h
+index 16c12e7..78c66c7 100644
+--- a/src/etna.h
++++ b/src/etna.h
+@@ -27,10 +27,10 @@
+ #ifndef H_ETNA
+ #define H_ETNA
+ 
+-#include <common.xml.h>
+-#include <cmdstream.xml.h>
+-#include <etna_util.h>
+-#include <viv.h>
++#include "common.xml.h"
++#include "cmdstream.xml.h"
++#include "etna_util.h"
++#include "viv.h"
+ 
+ #include <stdint.h>
+ #include <stdlib.h>

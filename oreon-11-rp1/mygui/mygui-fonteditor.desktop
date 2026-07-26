@@ -1,0 +1,11 @@
+# Created with jdDesktopEntryEdit 1.6
+[Desktop Entry]
+Type=Application
+Name=MyGUI Font Editor
+GenericName=MyGUI Font Editor
+Comment=Design Fonts using MyGUI library
+Icon=mygui_fe
+Exec=MyGUI-Tools FontEditor
+Categories=Development;
+StartupNotify=true
+StartupWMClass=FontEditor

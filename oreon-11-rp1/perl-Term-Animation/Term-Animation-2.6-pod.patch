@@ -1,0 +1,32 @@
+From: niklas [...] ytvwld.de
+
+I'm generate manpages from the documentation in your module.
+
+This works, but pod2man notices a few errors.
+
+I think the attached patch fixes this (at least according to pod2man).
+
+CPAN RT#115456
+
+--- lib/Term/Animation.old.pm
++++ lib/Term/Animation.pm
+@@ -176,7 +176,7 @@ animation. This is identical to:
+   my $entity = Term::Animation::Entity->new(...);
+   $anim->add_entity($entity);
+
+-See L<Term::Animation::Entity/PARAMETERS|PARAMETERS> and L<Term::Animation::Entity/new|new>
++See L<PARAMETERS|Term::Animation::Entity/PARAMETERS> and L<new|Term::Animation::Entity/new>
+ in L<Term::Animation::Entity> for details on calling this method.
+
+ =cut
+--- lib/Term/Animation/Entity.old.pm
++++ lib/Term/Animation/Entity.pm
+@@ -619,7 +619,7 @@ sub default_color {
+
+   $entity->color_mask( $mask );
+
+-Set the color mask for the entity. See the L<Term::Animation/COLOR|COLOR> section of
++Set the color mask for the entity. See the L<COLOR|Term::Animation/COLOR> section of
+ L<Term::Animation> for details.
+
+ =cut

@@ -1,0 +1,32 @@
+diff -rU4 cqrlog-2.5.2--orig/src/lnet/lib/lcommon.pp cqrlog-2.5.2--patched/src/lnet/lib/lcommon.pp
+--- cqrlog-2.5.2--orig/src/lnet/lib/lcommon.pp	2021-02-12 17:24:42.000000000 +0100
++++ cqrlog-2.5.2--patched/src/lnet/lib/lcommon.pp	2025-08-15 10:51:59.313858609 +0200
+@@ -460,9 +460,13 @@
+ end;
+ 
+ function TZSeconds: Integer; inline;
+ begin
++{$IF FPC_FULLVERSION > 30202}
++  Result := unix.TZSeconds;
++{$ELSE}
+   Result := unixutil.TZSeconds;
++{$ENDIF}
+ end;
+ 
+ {$ENDIF}
+ 
+diff -rU4 cqrlog-2.5.2--orig/src/lnet/lib/sys/osunits.inc cqrlog-2.5.2--patched/src/lnet/lib/sys/osunits.inc
+--- cqrlog-2.5.2--orig/src/lnet/lib/sys/osunits.inc	2021-02-12 17:24:42.000000000 +0100
++++ cqrlog-2.5.2--patched/src/lnet/lib/sys/osunits.inc	2025-08-15 11:00:17.226112454 +0200
+@@ -3,8 +3,11 @@
+ {$endif}
+ 
+ {$ifdef UNIX}
+   BaseUnix, NetDB,
++  {$IF FPC_FULLVERSION > 30202}
++    Unix,
++  {$ENDIF}
+ {$endif}
+ 
+ {$ifdef NETWARE}
+   WinSock,

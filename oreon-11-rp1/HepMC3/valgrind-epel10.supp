@@ -1,0 +1,6 @@
+{
+   Ignore dlopen momory leak.
+   Memcheck:Leak
+   ...
+   fun:_dl_open
+}

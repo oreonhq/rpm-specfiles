@@ -1,0 +1,73 @@
+From 18b59faddb61869c372062811f251606feabc0d4 Mon Sep 17 00:00:00 2001
+From: Thomas Moschny <thomas.moschny@gmx.de>
+Date: Sat, 30 Aug 2025 15:46:05 +0200
+Subject: [PATCH] Autoupdate configure.ac, remove unused/obsolete commands.
+
+---
+ configure.ac | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
+ mode change 100755 => 100644 configure.ac
+
+diff --git a/configure.ac b/configure.ac
+old mode 100755
+new mode 100644
+index 8e4ac99..047a1ad
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,24 +1,23 @@
+ #                                               -*- Autoconf -*-
+ # Process this file with autoconf to produce a configure script.
+ 
+-AC_PREREQ(2.60)
+-AC_INIT(httperf, 0.9.1, httperf@linux.hpl.hp.com)
++AC_PREREQ([2.72])
++AC_INIT([httperf],[0.9.1],[httperf@linux.hpl.hp.com])
+ AC_CONFIG_SRCDIR([src/httperf.c])
+-AC_CONFIG_HEADER([config.h])
++AC_CONFIG_HEADERS([config.h])
+ 
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+ AC_CANONICAL_TARGET
+ 
+-AM_INIT_AUTOMAKE(httperf, 0.9.1)
++AM_INIT_AUTOMAKE
+ 
+ # Checks for programs.
+-AC_GNU_SOURCE
++AC_USE_SYSTEM_EXTENSIONS
+ AC_PROG_CC([cc gcc])
+-AC_PROG_CC_C99
+ 
+ AC_PROG_INSTALL
+-AC_PROG_LIBTOOL
++LT_INIT
+ 
+ # Are we building the idleconn program?
+ AC_ARG_ENABLE([idleconn],
+@@ -50,7 +49,6 @@ AC_SEARCH_LIBS([inet_aton], [resolv])
+ 
+ # Checks for header files.
+ AC_FUNC_ALLOCA
+-AC_HEADER_TIME
+ AC_CHECK_HEADERS([openssl/ssl.h getopt.h])
+ 
+ if test "$ac_cv_header_openssl_ssl_h" = "yes" \
+@@ -80,7 +78,6 @@ fi
+ # Checks for library functions.
+ AC_FUNC_MMAP
+ AC_FUNC_SELECT_ARGTYPES
+-AC_TYPE_SIGNAL
+ AC_FUNC_STRTOD
+ AC_FUNC_VPRINTF
+ AC_CHECK_FUNCS([getopt_long])
+@@ -98,4 +95,5 @@ AS_IF([test "$with_epoll" != "no"],
+ 	AC_CHECK_FUNC(epoll_create,
+ 		AC_DEFINE([HAVE_EPOLL], 1, [#undef HAVE_EPOLL])))
+ 
+-AC_OUTPUT(Makefile man/Makefile src/stat/Makefile src/lib/Makefile src/gen/Makefile src/Makefile)
++AC_CONFIG_FILES([Makefile man/Makefile src/stat/Makefile src/lib/Makefile src/gen/Makefile src/Makefile])
++AC_OUTPUT
+-- 
+2.51.0
+

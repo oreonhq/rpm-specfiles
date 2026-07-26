@@ -1,0 +1,108 @@
+policy_module(crossfire,1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+gen_require(`
+    type port_t;
+    type games_data_t;
+    attribute port_type;
+')
+
+type crossfire_port_t, port_type;
+
+type crossfire_t;
+type crossfire_exec_t;
+domain_type(crossfire_t)
+# To disable the transition to the protected domain (which
+# effectively disables the policy), use:
+# setsebool crossfire_disable_trans 1
+init_daemon_domain(crossfire_t, crossfire_exec_t)
+
+
+
+# pid files
+type crossfire_var_run_t;
+files_pid_file(crossfire_var_run_t)
+
+# log files
+type crossfire_var_log_t;
+logging_log_file(crossfire_var_log_t)
+
+# Game data files
+type crossfire_variable_data_t;
+files_type(crossfire_variable_data_t);
+
+########################################
+#
+# crossfire local policy
+#
+# Check in /etc/selinux/refpolicy/include for macros to use instead of allow rules.
+# Note: /usr/share/selinux/devel/include/support/obj_perm_sets.spt contains
+# the definitions of many permissions, such as 'rw_dir_perms'
+
+# Some common macros (you might be able to remove some)
+files_read_usr_files(crossfire_t)
+files_read_etc_files(crossfire_t)
+libs_use_ld_so(crossfire_t)
+libs_use_shared_libs(crossfire_t)
+miscfiles_read_localization(crossfire_t)
+## internal communication is often done using fifo and unix sockets.
+allow crossfire_t self:fifo_file { read write };
+allow crossfire_t self:unix_stream_socket create_stream_socket_perms;
+
+# pid file
+allow crossfire_t crossfire_var_run_t:file manage_file_perms;
+allow crossfire_t crossfire_var_run_t:sock_file manage_sock_file_perms;
+allow crossfire_t crossfire_var_run_t:dir rw_dir_perms;
+files_pid_filetrans(crossfire_t,crossfire_var_run_t, { file sock_file })
+
+# log files
+allow crossfire_t crossfire_var_log_t:file create_file_perms;
+allow crossfire_t crossfire_var_log_t:file append;
+allow crossfire_t crossfire_var_log_t:sock_file create_sock_file_perms;
+allow crossfire_t crossfire_var_log_t:dir { rw_dir_perms setattr };
+logging_log_filetrans(crossfire_t,crossfire_var_log_t,{ sock_file file dir })
+
+## Networking basics (adjust to your needs!)
+sysnet_dns_name_resolve(crossfire_t)
+corenet_tcp_sendrecv_all_if(crossfire_t)
+corenet_tcp_sendrecv_all_nodes(crossfire_t)
+corenet_all_recvfrom_unlabeled(crossfire_t)
+corenet_tcp_bind_all_nodes(crossfire_t)
+allow crossfire_t self:tcp_socket { listen accept };
+# The application expects crossfire_port_t to be port 13327.
+# The port is defined using semanage:
+# semanage port -a -t crossfire_port_t -p tcp 13327
+allow crossfire_t crossfire_port_t:tcp_socket { name_bind };
+corenet_tcp_sendrecv_all_ports(crossfire_t)
+
+# TODO: What does the application use UDP for?  And which ports
+# need to be allowed?
+allow crossfire_t port_t:udp_socket send_msg;
+
+# Init script handling
+init_use_fds(crossfire_t)
+init_use_script_ptys(crossfire_t)
+domain_use_interactive_fds(crossfire_t)
+
+
+# Game data files
+allow crossfire_t crossfire_variable_data_t:file { manage_file_perms };
+allow crossfire_t crossfire_variable_data_t:dir { manage_dir_perms };
+allow crossfire_t games_data_t:dir search;
+allow crossfire_t games_data_t:dir getattr;
+
+
+# Misc rules that are needed.  I don't understand the meaning of some
+# of these, and for others I don't yet understand why the game needs
+# them
+
+corecmd_getattr_bin_files(crossfire_t)
+corecmd_search_bin(crossfire_t)
+kernel_read_kernel_sysctls(crossfire_t)
+term_dontaudit_use_generic_ptys(crossfire_t)
+kernel_read_system_state(crossfire_t)
+allow crossfire_t tmp_t:dir getattr;

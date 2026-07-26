@@ -1,0 +1,70 @@
+--- Makefile.orig	2017-01-16 21:39:36.642820093 +0100
++++ Makefile	2017-01-16 22:42:59.530371162 +0100
+@@ -1,27 +1,49 @@
+ OBJS = ebtree.o eb32tree.o eb64tree.o ebmbtree.o ebsttree.o ebimtree.o ebistree.o
+-CFLAGS = -O3
++CFLAGS += -O3
++SOREL = 0.1
+ EXAMPLES = $(basename $(wildcard examples/*.c))
++VERSION = 6.0.8
++# Red Hat and derivates (still) use lib[64]
++ifeq ($(shell getconf LONG_BIT), 64)
++	LIBD := lib64
++else
++	LIBD := lib
++endif
++
++PREFIX     ?= /usr/local
++INSTALL    ?= /usr/bin/install
++LIBDIR     ?= $(PREFIX)/$(LIBD)
++INCLUDEDIR ?= $(PREFIX)/include
++DATADIR    ?= $(PREFIX)/share
++PKGCONFDIR ?= $(DATADIR)/pkgconfig
+ 
+-all: libebtree.a
++all: libebtree.a libebtree.so ebtree.pc
+ 
+ examples: ${EXAMPLES}
+ 
+ libebtree.a: $(OBJS)
+ 	$(AR) rv $@ $^
+ 
++libebtree.so: $(OBJS)
++	$(CC) $(LDFLAGS) -shared -Wl,-soname,libebtree.so.$(SOREL) -o libebtree.so.$(SOREL) $(OBJS)
++	ln -sf libebtree.so.$(SOREL) libebtree.so
++
+ %.o: %.c
+ 	$(CC) $(CFLAGS) -o $@ -c $^
+ 
+-examples/%: examples/%.c libebtree.a
+-	$(CC) $(CFLAGS) -I. -o $@ $< -L. -lebtree
++examples/%: examples/%.c
++	$(CC) $(CFLAGS) $(LDFLAGS) -I. -o $@ $< -L. -lebtree
+ 
+ test: test32 test64 testst
+ 
+-test%: test%.c libebtree.a
+-	$(CC) $(CFLAGS) -o $@ $< -L. -lebtree
++ebtree.pc:
++	-echo -e 'prefix=$(PREFIX)\nexec_prefix=$(PREFIX)\nlibdir=$(LIBDIR)\nincludedir=$(INCLUDEDIR)\n\nName: ebtree\nDescription: Elastic Binary Trees\nVersion: $(VERSION)\nCflags: -I$${includedir}\nLibs: -L$${libdir} -lebtree' > ebtree.pc
++
++test%: test%.c
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -L. -lebtree
+ 
+ clean:
+-	-rm -fv libebtree.a $(OBJS) *~ *.rej core test32 test64 testst ${EXAMPLES}
++	-rm -fv libebtree.a $(OBJS) *~ *.rej core test32 test64 testst ${EXAMPLES} *.so *.so.* ebtree.pc
+ 
+ ifeq ($(wildcard .git),.git)
+ VERSION := $(shell [ -d .git/. ] && ref=`(git describe --tags --match 'v*') 2>/dev/null` && ref=$${ref%-g*} && echo "$${ref\#v}")
+@@ -31,4 +53,10 @@
+ git-tar: .git
+ 	git archive --format=tar --prefix="ebtree-$(VERSION)/" HEAD | gzip -9 > ebtree-$(VERSION)$(SUBVERS).tar.gz
+ 
++install:
++	$(INSTALL) -D -p -m 0644 -t $(DESTDIR)$(INCLUDEDIR)/ebtree *.h
++	$(INSTALL) -D -p -m 0755 -t $(DESTDIR)$(LIBDIR) libebtree.so.$(SOREL)
++	$(INSTALL) -D -p -m 0644 -t $(DESTDIR)$(PKGCONFDIR) ebtree.pc
++	cp -P *.so $(DESTDIR)$(LIBDIR)
++
+ .PHONY: examples tests

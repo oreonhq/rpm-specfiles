@@ -1,0 +1,25 @@
+From 79239282c67a78ab5f207741c24230c00f32343b Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Fri, 28 Mar 2025 18:05:13 -0500
+Subject: [PATCH] Makefile: install manpage to DESTDIR
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index de7696d..3511802 100644
+--- a/Makefile
++++ b/Makefile
+@@ -12,7 +12,7 @@ $(TARGET): $(OBJS)
+ install:
+ 	install -d $(DESTDIR)$(BINDIR)
+ 	install -m 0755 $(TARGET) $(DESTDIR)$(BINDIR)
+-	install -m 0744 $(MANUAL) $(MANDIR)/man1/
++	install -m 0744 $(MANUAL) $(DESTDIR)$(MANDIR)/man1/
+ 
+ clean:
+ 	rm -f $(OBJS) $(TARGET)
+-- 
+2.49.0
+

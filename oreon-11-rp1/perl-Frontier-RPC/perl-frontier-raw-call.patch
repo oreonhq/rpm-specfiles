@@ -1,0 +1,68 @@
+From aa8833ac7d92fa9d9903a849420dcffc33a00974 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 7 Apr 2014 13:42:03 +0200
+Subject: [PATCH] Add Frontier::Client::raw_call subroutine
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Frontier/Client.pm | 34 +++++++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
+
+diff --git a/lib/Frontier/Client.pm b/lib/Frontier/Client.pm
+index 800acab..6ea7b60 100644
+--- a/lib/Frontier/Client.pm
++++ b/lib/Frontier/Client.pm
+@@ -55,6 +55,26 @@ sub new {
+ sub call {
+     my $self = shift;
+ 
++    my $content = $self->raw_call(@_);
++
++    if ($self->{'debug'}) {
++	print "---- response ----\n";
++	print $content;
++    }
++
++    my $result = $self->{'enc'}->decode($content);
++
++    if ($result->{'type'} eq 'fault') {
++	die "Fault returned from XML RPC Server, fault code " . $result->{'value'}[0]{'faultCode'} . ": "
++	    . $result->{'value'}[0]{'faultString'} . "\n";
++    }
++
++    return $result->{'value'}[0];
++}
++
++sub raw_call {
++    my $self = shift;
++
+     my $text = $self->{'enc'}->encode_call(@_);
+ 
+     if ($self->{'debug'}) {
+@@ -72,19 +92,7 @@ sub call {
+ 
+     my $content = $response->content;
+ 
+-    if ($self->{'debug'}) {
+-	print "---- response ----\n";
+-	print $content;
+-    }
+-
+-    my $result = $self->{'enc'}->decode($content);
+-
+-    if ($result->{'type'} eq 'fault') {
+-	die "Fault returned from XML RPC Server, fault code " . $result->{'value'}[0]{'faultCode'} . ": "
+-	    . $result->{'value'}[0]{'faultString'} . "\n";
+-    }
+-
+-    return $result->{'value'}[0];
++    return $content;
+ }
+ 
+ # shortcuts
+-- 
+1.9.0
+

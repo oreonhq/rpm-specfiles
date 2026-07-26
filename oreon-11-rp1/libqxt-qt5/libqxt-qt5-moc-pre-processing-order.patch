@@ -1,0 +1,16 @@
+--- a/src/widgets/widgets.pri.orig	2017-11-30 08:31:04.069021373 +0100
++++ b/src/widgets/widgets.pri	2017-11-30 08:31:31.692021595 +0100
+@@ -122,12 +122,12 @@
+     # Native event filter support is implemented in QCoreApplication for Qt5
+     # and QxtApplication is not required anymore
+ lessThan(QT_MAJOR_VERSION, 5) {
+-    HEADERS  += qxtapplication.h
+     HEADERS  += qxtapplication_p.h
+     unix:!macx:SOURCES += x11/qxtapplication_x11.cpp
+     macx:SOURCES += mac/qxtapplication_mac.cpp
+     win32:SOURCES += win/qxtapplication_win.cpp
+ }
++    HEADERS  += qxtapplication.h
+     HEADERS  += qxtglobalshortcut.h
+     HEADERS  += qxtglobalshortcut_p.h
+     HEADERS  += qxtscreen.h

@@ -1,0 +1,130 @@
+--- src/callbacks.c~	2006-11-17 06:35:59.000000000 -0600
++++ src/callbacks.c	2024-02-05 15:19:21.395280306 -0600
+@@ -347,63 +347,63 @@
+ 
+ 	/*get params from the dialog*/
+ 	par_w=gtk_entry_get_text(
+-		lookup_widget(
++		(GtkEntry *)lookup_widget(
+ 			dialog,
+ 			"widthspinbutton"
+ 		)
+ 	);
+ 	par_h=gtk_entry_get_text(
+-		lookup_widget(
++		(GtkEntry *)lookup_widget(
+ 			dialog,
+ 			"heightspinbutton"
+ 		)
+ 	);
+ 	par_m_set=gtk_toggle_button_get_active(
+-		lookup_widget(
++		(GtkToggleButton *)lookup_widget(
+ 			dialog,
+ 			"maxshapescheckbutton"
+ 		)
+ 	);
+ 	par_m=gtk_entry_get_text(
+-		lookup_widget(
++		(GtkEntry *)lookup_widget(
+ 			dialog,
+ 			"maxshapesspinbutton"
+ 		)
+ 	);
+ 	par_x=gtk_spin_button_get_value(
+-		lookup_widget(
++		(GtkSpinButton *)lookup_widget(
+ 			dialog,
+ 			"minshapesizespinbutton"
+ 		)
+ 	);
+ 	par_b=gtk_combo_box_get_active(
+-		lookup_widget(
++		(GtkComboBox *)lookup_widget(
+ 			dialog,
+ 			"bordercombobox"
+ 		)
+ 	)-1;
+ 	par_b_set=(par_b>-2);
+ 	par_a=gtk_entry_get_text(
+-		lookup_widget(
++		(GtkEntry *)lookup_widget(
+ 			dialog,
+ 			"numframesspinbutton"
+ 		)
+ 	);
+ 	par_a_set=(atoi(par_a)>1);
+ 	par_z=gtk_toggle_button_get_active(
+-		lookup_widget(
++		(GtkToggleButton *)lookup_widget(
+ 			dialog,
+ 			"maxshapescheckbutton"
+ 		)
+ 	)?" -z":"";
+ 	par_V=(gtk_combo_box_get_active(
+-		lookup_widget(
++		(GtkComboBox *)lookup_widget(
+ 			dialog,
+ 			"formatcombobox"
+ 		)
+ 	)==1?" -V":"");
+ 	par_c=(gtk_toggle_button_get_active(
+-		lookup_widget(
++		(GtkToggleButton *)lookup_widget(
+ 			dialog,
+ 			"cropcheckbutton"
+ 		)
+@@ -493,7 +493,7 @@
+ 			snprintf(frm,1024,"/tmp/cfdg-fe-preview-%d_%d.png",getpid(),maxframe);
+ 			gtk_image_set_from_file(renderimage,frm);
+ 			free(frm);
+-			GtkWidget*framescale=lookup_widget(window1,"framescale");
++			GtkWidget*framescale=lookup_widget((GtkWidget *)window1,"framescale");
+ 			gtk_range_set_range(
+ 				GTK_RANGE(framescale),
+ 				0,
+@@ -506,7 +506,7 @@
+ 			gtk_widget_show(framescale);
+ 		}else{
+ 			gtk_image_set_from_file(renderimage,png);
+-			gtk_widget_hide(lookup_widget(window1,"framescale"));
++			gtk_widget_hide(lookup_widget((GtkWidget *)window1,"framescale"));
+ 		}
+ 	}else{ //open failed
+ 		perror("cannot write to temp file when rendering");
+@@ -704,7 +704,7 @@
+ 	}
+ 	free(png);
+ 	free(cmd);
+-	gtk_widget_hide(lookup_widget(window1,"framescale"));
++	gtk_widget_hide(lookup_widget((GtkWidget *)window1,"framescale"));
+ }
+ 
+ 
+@@ -828,7 +828,7 @@
+ 
+ /*display copyright details*/
+ void on_copyrightdetails_activate(GtkMenuItem*menuitem,gpointer user_data){
+-	GtkDialog*dialog=gtk_message_dialog_new(
++	GtkDialog*dialog=(GtkDialog *)gtk_message_dialog_new(
+ 		GTK_WINDOW(
+ 			gtk_widget_get_toplevel(
+ 				GTK_WIDGET(menuitem)
+@@ -848,7 +848,7 @@
+ 	GtkMenuItem*menuitem,
+ 	gpointer user_data
+ ){
+-	GtkDialog*dialog=gtk_message_dialog_new(
++	GtkDialog*dialog=(GtkDialog *)gtk_message_dialog_new(
+ 		GTK_WINDOW(
+ 			gtk_widget_get_toplevel(
+ 				GTK_WIDGET(menuitem)
+@@ -912,7 +912,7 @@
+ 	gtk_image_set_from_file(
+ 		GTK_IMAGE(
+ 			lookup_widget(
+-				gtk_widget_get_toplevel(range),
++				gtk_widget_get_toplevel((GtkWidget *)range),
+ 				"renderimage"
+ 			)
+ 		),

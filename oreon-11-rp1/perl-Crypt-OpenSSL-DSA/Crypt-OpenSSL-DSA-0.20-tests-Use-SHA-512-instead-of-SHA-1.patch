@@ -1,0 +1,89 @@
+From 38f0c06e9b9fbc1acb8d36520062138a52e04e9b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 22 Jul 2024 10:16:02 +0200
+Subject: [PATCH] tests: Use SHA-512 instead of SHA-1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fedora 41 disabled a support for SHA-1 in OpenSSL and
+t/90-openssl-compat.t started to fail because of that.
+
+    Error setting context
+    80A2E438C27F0000:error:03000098:digital envelope routines:do_sigver_init:invalid digest:crypto/evp/m_si
+    gver.c:342:
+    # Test 6 got: "0" (t/90-openssl-compat.t at line 59)
+
+This patch moves from SHA-1 to SHA-512.
+
+https://github.com/kmx/perl-Crypt-OpenSSL-DSA/issues/12
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL           |  4 +++-
+ t/90-openssl-compat.t | 12 ++++++------
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 10ec756..fcfbdbe 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -29,7 +29,9 @@ WriteMakefile(
+     'VERSION_FROM'      => 'lib/Crypt/OpenSSL/DSA.pm', # finds $VERSION
+     'LICENSE'           => 'perl_5',
+     'MIN_PERL_VERSION'  => '5.006',
+-    'PREREQ_PM'         => {}, # e.g., Module::Name => 1.1
++    'PREREQ_PM'         => {
++        'Digest::SHA'   => '5.60',
++     },
+     'AUTHOR'            => 'T.J. Mather',
+     'LIBS'              => [ $lib ],
+     'INC'               => $inc,
+diff --git a/t/90-openssl-compat.t b/t/90-openssl-compat.t
+index 449a770..2410185 100644
+--- a/t/90-openssl-compat.t
++++ b/t/90-openssl-compat.t
+@@ -12,19 +12,19 @@ use File::Temp 0.14;
+ 
+ BEGIN { plan tests => 84 }
+ 
+-my $HAS_SHA1 = eval "use Digest::SHA; 1;";
++my $HAS_SHA = eval "use Digest::SHA; 1;";
+ my ($OPEN_SSL, $testable);
+ if($^O !~ /mswin32/i) {
+   $OPEN_SSL = `which openssl` || "/usr/bin/openssl";
+   chomp $OPEN_SSL;
+-  $testable = -x $OPEN_SSL && $HAS_SHA1;
++  $testable = -x $OPEN_SSL && $HAS_SHA;
+   }
+ else {
+   $OPEN_SSL = "openssl";
+   eval{`openssl version`};
+-  if(!$@) {$testable = 1 && $HAS_SHA1}
++  if(!$@) {$testable = 1 && $HAS_SHA}
+   }
+-my $why_skip = $HAS_SHA1 ? "Need openssl binary in path" : "Need Digest::SHA to test";
++my $why_skip = $HAS_SHA ? "Need openssl binary in path" : "Need Digest::SHA to test";
+ 
+ my $dsa = Crypt::OpenSSL::DSA->generate_parameters( 512, "fooooooooooooooooooo" );
+ $dsa->generate_key;
+@@ -46,7 +46,7 @@ if ($testable) {
+     my %done;  # { zero => $ct, nonzero => $ct }
+     for (1..$to_do) {
+         my $plain = "This is test number $_";
+-        my $msg = Digest::SHA::sha1($plain);
++        my $msg = Digest::SHA::sha512($plain);
+         my $type = ($msg =~ /\x00/) ? "zero" : "nonzero";
+         next if $done{$type}++ >= $of_each;
+ 
+@@ -73,7 +73,7 @@ sub openssl_verify {
+     # FIXME: shutup openssl from spewing to STDOUT the "Verification
+     # OK".  can we depend on reading "Verification OK" from the
+     # open("-|", "openssl") open mode due to portability?
+-    my $rv = system("openssl", "dgst", "-sha1", "-verify", $public_pem_file, "-signature", "$sig_temp", "$msg_temp");
++    my $rv = system("openssl", "dgst", "-sha512", "-verify", $public_pem_file, "-signature", "$sig_temp", "$msg_temp");
+     return 0 if $rv;
+     return 1;
+ }
+-- 
+2.45.2
+

@@ -1,0 +1,99 @@
+diff -pruN ebnetd-1.0.orig/ebhttpd/config.c ebnetd-1.0/ebhttpd/config.c
+--- ebnetd-1.0.orig/ebhttpd/config.c	2003-06-15 20:39:25.000000000 +0900
++++ ebnetd-1.0/ebhttpd/config.c	2018-02-19 17:07:00.605419641 +0900
+@@ -213,7 +213,7 @@ because the configuration file has no `h
+      * Set the pid file_name.
+      */
+     sprintf(pid_file_name, "%s/%s", work_path, PID_BASE_NAME);
+-    if (canonicalize_file_name(pid_file_name) < 0)
++    if (canonicalize_file_name_(pid_file_name) < 0)
+ 	return -1;
+ 
+     /*
+diff -pruN ebnetd-1.0.orig/ebhttpd/ebhttpd.c ebnetd-1.0/ebhttpd/ebhttpd.c
+--- ebnetd-1.0.orig/ebhttpd/ebhttpd.c	2003-06-15 20:39:24.000000000 +0900
++++ ebnetd-1.0/ebhttpd/ebhttpd.c	2018-02-19 17:06:51.988255828 +0900
+@@ -285,7 +285,7 @@ main(argc, argv)
+ 		goto die;
+ 	    }
+ 	    strcpy(configuration_file_name, optarg);
+-	    if (canonicalize_file_name(configuration_file_name) < 0)
++	    if (canonicalize_file_name_(configuration_file_name) < 0)
+ 		goto die;
+ 	    break;
+ 
+diff -pruN ebnetd-1.0.orig/ebnetd/config.c ebnetd-1.0/ebnetd/config.c
+--- ebnetd-1.0.orig/ebnetd/config.c	2003-06-15 20:39:25.000000000 +0900
++++ ebnetd-1.0/ebnetd/config.c	2018-02-19 17:07:08.664572846 +0900
+@@ -213,7 +213,7 @@ because the configuration file has no `h
+      * Set the pid file_name.
+      */
+     sprintf(pid_file_name, "%s/%s", work_path, PID_BASE_NAME);
+-    if (canonicalize_file_name(pid_file_name) < 0)
++    if (canonicalize_file_name_(pid_file_name) < 0)
+ 	return -1;
+ 
+     /*
+diff -pruN ebnetd-1.0.orig/ebnetd/ebnetd.c ebnetd-1.0/ebnetd/ebnetd.c
+--- ebnetd-1.0.orig/ebnetd/ebnetd.c	2003-06-15 20:39:24.000000000 +0900
++++ ebnetd-1.0/ebnetd/ebnetd.c	2018-02-19 17:07:17.043732134 +0900
+@@ -285,7 +285,7 @@ main(argc, argv)
+ 		goto die;
+ 	    }
+ 	    strcpy(configuration_file_name, optarg);
+-	    if (canonicalize_file_name(configuration_file_name) < 0)
++	    if (canonicalize_file_name_(configuration_file_name) < 0)
+ 		goto die;
+ 	    break;
+ 
+diff -pruN ebnetd-1.0.orig/lib/filename.c ebnetd-1.0/lib/filename.c
+--- ebnetd-1.0.orig/lib/filename.c	2003-06-15 20:39:46.000000000 +0900
++++ ebnetd-1.0/lib/filename.c	2018-02-19 17:05:04.320209056 +0900
+@@ -93,7 +93,7 @@ char *memset();
+  * Return 0 upon success, -1 otherwise.
+  */
+ int
+-canonicalize_file_name(path_name)
++canonicalize_file_name_(path_name)
+     char *path_name;
+ {
+     char cwd[PATH_MAX + 1];
+diff -pruN ebnetd-1.0.orig/lib/filename.h ebnetd-1.0/lib/filename.h
+--- ebnetd-1.0.orig/lib/filename.h	2003-06-15 20:39:47.000000000 +0900
++++ ebnetd-1.0/lib/filename.h	2018-02-19 17:05:22.020545540 +0900
+@@ -25,9 +25,9 @@
+  * Function declarations.
+  */
+ #ifdef __STDC__
+-int canonicalize_file_name(char *);
++int canonicalize_file_name_(char *);
+ #else
+-int canonicalize_file_name();
++int canonicalize_file_name_();
+ #endif
+ 
+ #endif /* not FILENAME_H */
+diff -pruN ebnetd-1.0.orig/ndtpd/config.c ebnetd-1.0/ndtpd/config.c
+--- ebnetd-1.0.orig/ndtpd/config.c	2003-06-15 20:39:25.000000000 +0900
++++ ebnetd-1.0/ndtpd/config.c	2018-02-19 17:06:32.832891685 +0900
+@@ -213,7 +213,7 @@ because the configuration file has no `h
+      * Set the pid file_name.
+      */
+     sprintf(pid_file_name, "%s/%s", work_path, PID_BASE_NAME);
+-    if (canonicalize_file_name(pid_file_name) < 0)
++    if (canonicalize_file_name_(pid_file_name) < 0)
+ 	return -1;
+ 
+     /*
+diff -pruN ebnetd-1.0.orig/ndtpd/ndtpd.c ebnetd-1.0/ndtpd/ndtpd.c
+--- ebnetd-1.0.orig/ndtpd/ndtpd.c	2003-06-15 20:39:24.000000000 +0900
++++ ebnetd-1.0/ndtpd/ndtpd.c	2018-02-19 17:06:44.266109031 +0900
+@@ -285,7 +285,7 @@ main(argc, argv)
+ 		goto die;
+ 	    }
+ 	    strcpy(configuration_file_name, optarg);
+-	    if (canonicalize_file_name(configuration_file_name) < 0)
++	    if (canonicalize_file_name_(configuration_file_name) < 0)
+ 		goto die;
+ 	    break;
+ 

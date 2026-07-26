@@ -1,0 +1,47 @@
+From b480b7dde83ade3a0f572ce646b675bafc9181d0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 22 Mar 2018 09:27:19 +0100
+Subject: [PATCH] Remove shebangs from examples
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Each is different and they could not match where perl is installed.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ examples/hello.pl   | 1 -
+ examples/rpi_pic.pl | 1 -
+ examples/symdump.pl | 1 -
+ 3 files changed, 3 deletions(-)
+
+diff --git a/examples/hello.pl b/examples/hello.pl
+index 1482343..83d4ef3 100644
+--- a/examples/hello.pl
++++ b/examples/hello.pl
+@@ -1,4 +1,3 @@
+-#!perl
+ use v5.12;
+ use warnings;
+ use GStreamer1;
+diff --git a/examples/rpi_pic.pl b/examples/rpi_pic.pl
+index 31f7c26..a4864ad 100644
+--- a/examples/rpi_pic.pl
++++ b/examples/rpi_pic.pl
+@@ -1,4 +1,3 @@
+-#!/usr/bin/perl
+ use v5.12;
+ use warnings;
+ use GStreamer1;
+diff --git a/examples/symdump.pl b/examples/symdump.pl
+index 764fb12..969330b 100644
+--- a/examples/symdump.pl
++++ b/examples/symdump.pl
+@@ -1,4 +1,3 @@
+-#!perl
+ use v5.12;
+ use warnings;
+ use GStreamer1;
+-- 
+2.14.3
+

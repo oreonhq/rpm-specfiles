@@ -1,0 +1,64 @@
+Test::Exception::LessClever is an alternative to Test::Exception. It is
+simple, but it create loop dependency. To break the dependency use directly
+Test::Exception. 
+
+diff -up Devel-Declare-Parser-0.020/Build.PL.orig Devel-Declare-Parser-0.020/Build.PL
+--- Devel-Declare-Parser-0.020/Build.PL.orig	2015-06-09 15:34:38.522170714 +0200
++++ Devel-Declare-Parser-0.020/Build.PL	2015-06-09 15:35:12.676602153 +0200
+@@ -12,7 +12,7 @@ my $build = Module::Build->new(
+         'B::Compiling' => 0.02,
+         'B::Hooks::EndOfScope' => 0.08,
+         'Devel::Declare' => 0.006000,
+-        'Test::Exception::LessClever' => 0.005,
++        'Test::Exception' => 0,
+         'Test::Simple' => 0.88,
+         'Scalar::Util' => 0,
+         'Carp' => 0,
+diff -up Devel-Declare-Parser-0.020/t/Codeblock.t.orig Devel-Declare-Parser-0.020/t/Codeblock.t
+--- Devel-Declare-Parser-0.020/t/Codeblock.t.orig	2015-06-09 15:24:48.007705162 +0200
++++ Devel-Declare-Parser-0.020/t/Codeblock.t	2015-06-09 15:25:06.916944484 +0200
+@@ -2,7 +2,7 @@
+ use strict;
+ use warnings;
+ use Test::More;
+-use Test::Exception::LessClever;
++use Test::Exception;
+ 
+ sub line {
+     ( undef, undef, my $line ) = caller;
+diff -up Devel-Declare-Parser-0.020/t/Method.t.orig Devel-Declare-Parser-0.020/t/Method.t
+--- Devel-Declare-Parser-0.020/t/Method.t.orig	2015-06-09 15:23:18.296569742 +0200
++++ Devel-Declare-Parser-0.020/t/Method.t	2015-06-09 15:23:40.514850946 +0200
+@@ -2,7 +2,7 @@
+ use strict;
+ use warnings;
+ use Test::More;
+-use Test::Exception::LessClever;
++use Test::Exception;
+ 
+ sub test { $_[-1]->( @_ ) }
+ 
+diff -up Devel-Declare-Parser-0.020/t/Parser.t.orig Devel-Declare-Parser-0.020/t/Parser.t
+--- Devel-Declare-Parser-0.020/t/Parser.t.orig	2015-06-09 15:23:57.327063728 +0200
++++ Devel-Declare-Parser-0.020/t/Parser.t	2015-06-09 15:24:08.107200165 +0200
+@@ -3,7 +3,7 @@ use strict;
+ use warnings;
+ 
+ use Test::More;
+-use Test::Exception::LessClever;
++use Test::Exception;
+ use Data::Dumper;
+ use Carp;
+ 
+diff -up Devel-Declare-Parser-0.020/t/Sublike.t.orig Devel-Declare-Parser-0.020/t/Sublike.t
+--- Devel-Declare-Parser-0.020/t/Sublike.t.orig	2015-06-09 15:24:24.846412023 +0200
++++ Devel-Declare-Parser-0.020/t/Sublike.t	2015-06-09 15:24:34.580535222 +0200
+@@ -2,7 +2,7 @@
+ use strict;
+ use warnings;
+ use Test::More;
+-use Test::Exception::LessClever;
++use Test::Exception;
+ 
+ sub test { $_[-1]->( @_ ) }
+ 

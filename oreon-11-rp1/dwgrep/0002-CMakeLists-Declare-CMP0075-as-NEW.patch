@@ -1,0 +1,31 @@
+From 63f3bfc0c9139717df4fc944347b9fc6fcbe08d4 Mon Sep 17 00:00:00 2001
+From: Petr Machata <me@pmachata.org>
+Date: Mon, 17 Feb 2020 00:44:59 +0100
+Subject: [PATCH 02/10] CMakeLists: Declare CMP0075 as NEW
+
+This CMake policy decides whether the suite of check_include_file macros now
+link the test executable to the libraries listed in CMAKE_REQUIRED_LIBRARIES.
+It's immaterial in our case, and thus opt in to the new behavior to hopefully
+avoid having to redeclare when the old one is obsoleted at some point in future.
+
+Signed-off-by: Petr Machata <me@pmachata.org>
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1cee91a..24be3cf 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,8 @@
+ CMAKE_MINIMUM_REQUIRED (VERSION 2.8.8)
+ PROJECT (dwgrep C CXX)
+ 
++CMAKE_POLICY(SET CMP0075 NEW)
++
+ INCLUDE (${CMAKE_SOURCE_DIR}/VERSION.cmake)
+ SET (VERSION ${DWGREP_MAJOR}.${DWGREP_MINOR})
+ 
+-- 
+2.51.0
+

@@ -1,0 +1,23 @@
+Fixes this warning:
+
+File "utils.ml", line 70, characters 23-73:
+70 |            try let _ = List.find (fun n -> Filesystem.exists (n p)) names in true
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning 5 [ignored-partial-application]: this function application is partial,
+maybe some arguments are missing.
+
+--- a/obuild/utils.ml	2023-01-15 04:16:15.000000000 -0700
++++ b/obuild/utils.ml	2023-06-27 16:39:28.041858508 -0600
+@@ -67,10 +67,10 @@ let find_in_paths paths name =
+ 
+ let find_choice_in_paths paths names =
+     try List.find (fun p ->
+-           try let _ = List.find (fun n -> Filesystem.exists (n p)) names in true
++           try let _ = List.find (fun n -> Filesystem.exists (p </> n)) names in true
+            with Not_found -> false
+         ) paths
+-    with Not_found -> raise (FilesNotFoundInPaths (paths, (List.map (fun n -> n (List.hd paths)) names)))
++    with Not_found -> raise (FilesNotFoundInPaths (paths, (List.map (fun n -> (List.hd paths) </> n) names)))
+ 
+ let exist_choice_in_paths paths names =
+     try let _ = find_choice_in_paths paths names in true

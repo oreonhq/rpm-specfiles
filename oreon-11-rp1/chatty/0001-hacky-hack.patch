@@ -1,0 +1,25 @@
+diff --git a/src/meson.build b/src/meson.build
+index 4e954e0e..84e9abd2 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -175,7 +176,6 @@ libchatty_dep = declare_dependency(
+ 
+ executable('chatty', chatty_sources,
+   install: true,
+-  install_rpath: purple_plugdir,
+   dependencies: libchatty_dep,
+ )
+ 
+diff --git a/src/purple/meson.build b/src/purple/meson.build
+index 642c77d6..c3c935b5 100644
+--- a/src/purple/meson.build
++++ b/src/purple/meson.build
+@@ -4,7 +4,7 @@ if (not purple_dep.found())
+   subdir_done()
+ endif
+ 
+-purple_plugdir = purple_dep.get_variable(pkgconfig: 'plugindir')
++purple_plugdir = '/tmp'
+ jabber = meson.get_compiler('c').find_library('jabber', dirs: purple_plugdir)
+ jabber_incdir = include_directories('xeps/prpl/jabber')
+ src_inc += jabber_incdir

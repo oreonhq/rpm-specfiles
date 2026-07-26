@@ -1,0 +1,18 @@
+[Unit]
+Description=Globus Scheduler Event Generator for %I
+Documentation=man:globus-scheduler-event-generator(8) man:globus-scheduler-event-generator-admin(8)
+After=remote_fs.target
+ConditionPathExists=/etc/globus/scheduler-event-generator/%i
+
+[Service]
+Type=forking
+PIDFile=/run/globus-scheduler-event-generator-%i.pid
+ExecStartPre=/bin/sh -c "[ -d /var/lib/globus/globus-seg-%i ] || (umask 022; mkdir /var/lib/globus/globus-seg-%i)"
+ExecStart=/usr/sbin/globus-scheduler-event-generator \
+  -s %i \
+  -p /run/globus-scheduler-event-generator-%i.pid \
+  -d /var/lib/globus/globus-seg-%i \
+  -b
+
+[Install]
+RequiredBy=multi-user.target

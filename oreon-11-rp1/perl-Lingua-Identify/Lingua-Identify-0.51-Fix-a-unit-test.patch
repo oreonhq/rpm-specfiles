@@ -1,0 +1,26 @@
+From f15c2cf51da313b289673d9053ed20046284da7d Mon Sep 17 00:00:00 2001
+From: Mathieu Bridon <bochecha@fedoraproject.org>
+Date: Mon, 4 Feb 2013 10:46:49 +0800
+Subject: [PATCH] Fix a unit test
+
+https://rt.cpan.org/Public/Bug/Display.html?id=83071
+---
+ t/04-compile-make-lingua-identify-language.t |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/t/04-compile-make-lingua-identify-language.t b/t/04-compile-make-lingua-identify-language.t
+index 7ce9b6e..009d5a8 100644
+--- a/t/04-compile-make-lingua-identify-language.t
++++ b/t/04-compile-make-lingua-identify-language.t
+@@ -3,7 +3,7 @@
+ 
+ use Test::More tests => 1;
+ 
+-my $file = "langident";
++my $file = "make-lingua-identify-language";
+ 
+ print "bail out! Script file is missing!" unless -e $file;
+ 
+-- 
+1.7.1
+

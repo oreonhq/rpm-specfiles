@@ -1,0 +1,80 @@
+From 11f3c0486fbca266c1e232403c7e42a532c1db4c Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 20 Sep 2024 23:04:55 +0200
+Subject: [PATCH 3/7] generator: port from clap v2 to v3
+
+---
+ generator/Cargo.toml                   | 4 +++-
+ generator/src/main.rs                  | 2 +-
+ generator/src/subcommands/gen_cmake.rs | 8 ++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/generator/Cargo.toml b/generator/Cargo.toml
+index 255b273..fbb53a1 100644
+--- a/generator/Cargo.toml
++++ b/generator/Cargo.toml
+@@ -10,8 +10,10 @@ cargo_metadata = "0.18"
+ serde = { version = " 1.0.186", features = ["derive"] }
+ 
+ [dependencies.clap]
+-version = "2.34"
++version = "3"
+ default-features = false
++features = ["std"]
++
+ # Make sure this crate still compiles while it is checked out
+ # in a sub-directory of a repository that has a Cargo.toml.
+ [workspace]
+diff --git a/generator/src/main.rs b/generator/src/main.rs
+index df21133..553582e 100644
+--- a/generator/src/main.rs
++++ b/generator/src/main.rs
+@@ -86,7 +86,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+     };
+ 
+     match matches.subcommand() {
+-        (gen_cmake::GEN_CMAKE, Some(matches)) => gen_cmake::invoke(&shared_args, matches)?,
++        Some((gen_cmake::GEN_CMAKE, matches)) => gen_cmake::invoke(&shared_args, matches)?,
+         _ => unreachable!(),
+     };
+ 
+diff --git a/generator/src/subcommands/gen_cmake.rs b/generator/src/subcommands/gen_cmake.rs
+index 416d522..d975786 100644
+--- a/generator/src/subcommands/gen_cmake.rs
++++ b/generator/src/subcommands/gen_cmake.rs
+@@ -20,7 +20,7 @@ const IMPORTED_CRATES: &str = "imported-crates";
+ const CRATE_TYPE: &str = "crate-type";
+ const PASSTHROUGH_ADD_CARGO_BUILD: &str = "passthrough-acb";
+ 
+-pub fn subcommand() -> App<'static, 'static> {
++pub fn subcommand() -> App<'static> {
+     SubCommand::with_name(GEN_CMAKE)
+         .arg(
+             Arg::with_name(CONFIGURATION_ROOT)
+@@ -47,12 +47,12 @@ pub fn subcommand() -> App<'static, 'static> {
+                 .value_name("kind")
+                 .possible_values(&["staticlib", "cdylib", "bin"])
+                 .multiple(true)
+-                .value_delimiter(";")
++                .value_delimiter(';')
+                 .help("Only import the specified crate types")
+         )
+         .arg(
+             Arg::with_name(OUT_FILE)
+-                .short("o")
++                .short('o')
+                 .long("out-file")
+                 .value_name("FILE")
+                 .help("Output CMake file name. Defaults to stdout."),
+@@ -69,7 +69,7 @@ pub fn subcommand() -> App<'static, 'static> {
+                 .long(PASSTHROUGH_ADD_CARGO_BUILD)
+                 .takes_value(true)
+                 .multiple(true)
+-                .value_delimiter(std::char::from_u32(0x1f).unwrap().to_string().as_str())
++                .value_delimiter(std::char::from_u32(0x1f).unwrap())
+                 .help("Passthrough arguments to the _add_cargo_build invocation(s) in CMake")
+         )
+ }
+-- 
+2.46.0
+

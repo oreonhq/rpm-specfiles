@@ -1,0 +1,85 @@
+diff -up alure-1.2/include/main.h.unique_ptr alure-1.2/include/main.h
+--- alure-1.2/include/main.h.unique_ptr	2024-10-22 09:03:09.652946816 -0400
++++ alure-1.2/include/main.h	2024-10-22 09:03:28.493213559 -0400
+@@ -312,7 +312,7 @@ T1 SearchSecond(T1 start, T1 end, T2 val
+ }
+ 
+ struct Decoder {
+-    typedef std::auto_ptr<alureStream>(*FactoryType)(std::istream*);
++    typedef std::unique_ptr<alureStream>(*FactoryType)(std::istream*);
+     typedef std::multimap<ALint,FactoryType> ListType;
+ 
+     static const ListType& GetList();
+@@ -336,11 +336,11 @@ struct DecoderDecl : public Decoder {
+     }
+ 
+ private:
+-    static std::auto_ptr<alureStream> Factory(std::istream *file)
++    static std::unique_ptr<alureStream> Factory(std::istream *file)
+     {
+-        std::auto_ptr<alureStream> ret(new T(file));
++        std::unique_ptr<alureStream> ret(new T(file));
+         if(ret->IsValid()) return ret;
+-        return std::auto_ptr<alureStream>();
++        return std::unique_ptr<alureStream>();
+     }
+ };
+ 
+diff -up alure-1.2/src/buffer.cpp.unique_ptr alure-1.2/src/buffer.cpp
+--- alure-1.2/src/buffer.cpp.unique_ptr	2024-10-22 09:03:37.423339989 -0400
++++ alure-1.2/src/buffer.cpp	2024-10-22 09:03:52.266550135 -0400
+@@ -38,8 +38,8 @@ static bool load_stream(alureStream *_st
+     if(!_stream)
+         return false;
+ 
+-    std::auto_ptr<std::istream> fstream(_stream->fstream);
+-    std::auto_ptr<alureStream> stream(_stream);
++    std::unique_ptr<std::istream> fstream(_stream->fstream);
++    std::unique_ptr<alureStream> stream(_stream);
+ 
+     ALenum format;
+     ALuint freq, blockAlign;
+diff -up alure-1.2/src/stream.cpp.unique_ptr alure-1.2/src/stream.cpp
+--- alure-1.2/src/stream.cpp.unique_ptr	2024-10-22 09:04:00.044660257 -0400
++++ alure-1.2/src/stream.cpp	2024-10-22 09:04:17.381905734 -0400
+@@ -35,8 +35,8 @@ static bool SizeIsUS = false;
+ 
+ static alureStream *InitStream(alureStream *instream, ALsizei chunkLength, ALsizei numBufs, ALuint *bufs)
+ {
+-    std::auto_ptr<std::istream> fstream(instream->fstream);
+-    std::auto_ptr<alureStream> stream(instream);
++    std::unique_ptr<std::istream> fstream(instream->fstream);
++    std::unique_ptr<alureStream> stream(instream);
+     ALenum format;
+     ALuint freq, blockAlign;
+ 
+diff -up alure-1.2/src/streamdec.cpp.unique_ptr alure-1.2/src/streamdec.cpp
+--- alure-1.2/src/streamdec.cpp.unique_ptr	2024-10-22 09:04:24.078000540 -0400
++++ alure-1.2/src/streamdec.cpp	2024-10-22 09:04:38.803209018 -0400
+@@ -124,7 +124,7 @@ static alureStream *get_stream_decoder(c
+     std::map<ALint,UserCallbacks>::iterator i = InstalledCallbacks.begin();
+     while(i != InstalledCallbacks.end() && i->first < 0)
+     {
+-        std::auto_ptr<alureStream> stream(new customStream(fdata, i->second));
++        std::unique_ptr<alureStream> stream(new customStream(fdata, i->second));
+         if(stream->IsValid()) return stream.release();
+         i++;
+     }
+@@ -140,7 +140,7 @@ static alureStream *get_stream_decoder(c
+             file->clear();
+             file->seekg(0, std::ios_base::beg);
+ 
+-            std::auto_ptr<alureStream> stream(factory->second(file));
++            std::unique_ptr<alureStream> stream(factory->second(file));
+             if(stream.get() != NULL) return stream.release();
+ 
+             factory++;
+@@ -157,7 +157,7 @@ static alureStream *get_stream_decoder(c
+ 
+     while(i != InstalledCallbacks.end())
+     {
+-        std::auto_ptr<alureStream> stream(new customStream(fdata, i->second));
++        std::unique_ptr<alureStream> stream(new customStream(fdata, i->second));
+         if(stream->IsValid()) return stream.release();
+         i++;
+     }

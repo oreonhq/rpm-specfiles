@@ -1,0 +1,15 @@
+diff -up ElectricFence-2.2.2/page.c\~ ElectricFence-2.2.2/page.c
+--- ElectricFence-2.2.2/page.c~	2012-04-27 16:20:04.316398124 +0200
++++ ElectricFence-2.2.2/page.c	2014-06-17 23:51:11.906847835 +0200
+@@ -29,7 +29,8 @@
+ 
+ static caddr_t	startAddr = (caddr_t) 0;
+ 
+-#if ( !defined(sgi) && !defined(_AIX) &&!defined(__USE_BSD))
++#if (!defined(sgi) && !defined(_AIX) \
++     && !defined(__USE_BSD) && !defined(__USE_MISC))
+ extern int	sys_nerr;
+ extern char *	sys_errlist[];
+ #endif
+
+Diff finished.  Tue Jun 17 23:51:40 2014

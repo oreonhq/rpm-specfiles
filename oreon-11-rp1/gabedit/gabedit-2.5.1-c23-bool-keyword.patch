@@ -1,0 +1,103 @@
+commit 9819d6d51586b3008dd9eeb9fd94537797c10bb9
+Author: gabedit maint <gabedit-maintainer@fedoraproject.org>
+Date:   Fri Jan 17 23:01:44 2025 +0900
+
+    falsey
+
+diff --git a/src/Geometry/GeomZmatrix.c b/src/Geometry/GeomZmatrix.c
+index d118c0d..184f9ff 100644
+--- a/src/Geometry/GeomZmatrix.c
++++ b/src/Geometry/GeomZmatrix.c
+@@ -3084,9 +3084,9 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+   gchar *texts[NUMBER_LIST_ZMATRIX];
+   gchar *message;
+   gint i;
+-  gboolean false;
++  gboolean falsey;
+ 
+-  false = FALSE;
++  falsey = FALSE;
+   DestroyDialog=TRUE;
+   
+   for (i=0;i<NUMBER_LIST_ZMATRIX;i++)
+@@ -3134,7 +3134,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+         	{
+ 			MessageGeom(_("Sorry a Entry text is void !\n"),_("Warning"),TRUE);
+   			DestroyDialog=FALSE;
+-			false = TRUE;
++			falsey = TRUE;
+         	}
+ 		i=testav(texts[E_R]);
+         	if(i>-1)Variables[i].Used=TRUE;
+@@ -3147,7 +3147,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+ 			MessageGeom(message,_("Warning"),TRUE);
+ 			g_free(message);
+   			DestroyDialog=FALSE;
+-			false = TRUE;
++			falsey = TRUE;
+ 		}
+ 	
+ 		Geom[NcentersZmat-1].Nentry = NUMBER_ENTRY_R;
+@@ -3157,7 +3157,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+ 		Geom[NcentersZmat-1].R=g_strdup(texts[E_R]);
+ 		Geom[NcentersZmat-1].NR=g_strdup(texts[E_NUMBER_R]);
+   	}
+-	if ( (NcentersZmat>2) && (!false) )
++	if ( (NcentersZmat>2) && (!falsey) )
+ 	{
+ 		for (i=E_ANGLE;i<=E_NUMBER_ANGLE;i++)
+ 			texts[i] = g_strdup(gtk_entry_get_text(GTK_ENTRY(Entry[i])));	  
+@@ -3166,7 +3166,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+         	{
+ 			MessageGeom(_("Sorry a Entry text is void !\n"),_("Warning"),TRUE);
+   			DestroyDialog=FALSE;
+-			false = TRUE;
++			falsey = TRUE;
+         	}
+ 		i=testav(texts[E_ANGLE]);
+         	if(i>-1)Variables[i].Used=TRUE;
+@@ -3179,7 +3179,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+ 			MessageGeom(message,_("Warning"),TRUE);
+ 			g_free(message);
+   			DestroyDialog=FALSE;
+-			false = TRUE;
++			falsey = TRUE;
+ 		}
+ 
+ 		Geom[NcentersZmat-1].Nentry = NUMBER_ENTRY_ANGLE;
+@@ -3189,7 +3189,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+ 		Geom[NcentersZmat-1].Angle=g_strdup(texts[E_ANGLE]);
+ 		Geom[NcentersZmat-1].NAngle=g_strdup(texts[E_NUMBER_ANGLE]);
+ 	}
+-  	if( (NcentersZmat>3) && (!false) )
++  	if( (NcentersZmat>3) && (!falsey) )
+   	{
+ 		for (i=E_DIHEDRAL;i<=E_NUMBER_DIHEDRAL;i++)
+ 			texts[i] = g_strdup(gtk_entry_get_text(GTK_ENTRY(Entry[i])));
+@@ -3198,7 +3198,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+         	{
+ 			MessageGeom(_("Sorry a Entry text is void !\n"),_("Warning"),TRUE);
+   			DestroyDialog=FALSE;
+-			false = TRUE;
++			falsey = TRUE;
+         	}
+ 
+ 		i=testav(texts[E_DIHEDRAL]);
+@@ -3212,7 +3212,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+ 			MessageGeom(message,_("Warning"),TRUE);
+ 			g_free(message);
+   			DestroyDialog=FALSE;
+-			false = TRUE;
++			falsey = TRUE;
+ 		}
+ 
+ 		Geom[NcentersZmat-1].Nentry = NUMBER_ENTRY_DIHEDRAL;
+@@ -3231,7 +3231,7 @@ static void addAtom(GtkWidget *w,gpointer Entree)
+   		texts[E_LAYER] = g_strdup(" ");
+ 
+ 	Geom[NcentersZmat-1].Layer=g_strdup(texts[E_LAYER]);
+-  	if(!false)
++  	if(!falsey)
+         {
+    	appendToList(list, texts, NUMBER_LIST_ZMATRIX);
+   	if(GeomDrawingArea != NULL)

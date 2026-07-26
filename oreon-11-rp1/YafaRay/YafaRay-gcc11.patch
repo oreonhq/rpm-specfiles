@@ -1,0 +1,12 @@
+diff --git a/include/core_api/surface.h b/include/core_api/surface.h
+index af17687..9ff2d4b 100644
+--- a/include/core_api/surface.h
++++ b/include/core_api/surface.h
+@@ -23,6 +23,7 @@
+ #ifndef Y_SURFACE_H
+ #define Y_SURFACE_H
+ 
++#include <limits>
+ #include <yafray_constants.h>
+ #include "vector3d.h"
+ #include "color.h"

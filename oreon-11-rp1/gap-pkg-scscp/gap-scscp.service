@@ -1,0 +1,16 @@
+[Unit]
+Description=SCSCP server for the GAP Computer Algebraic System
+Documentation=man:gapd(8) http://www.gap-system.org/Manuals/pkg/scscp/doc/chap0.html
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=gapd
+Group=gapd
+WorkingDirectory=/var/lib/gapd
+EnvironmentFile=/etc/gapd.conf
+ExecStart=/usr/lib/gap/pkg/scscp/gapd.sh $GAPD_OPTIONS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

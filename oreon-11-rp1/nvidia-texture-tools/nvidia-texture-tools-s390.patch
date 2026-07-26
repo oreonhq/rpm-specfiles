@@ -1,0 +1,72 @@
+diff -up src/nvcore/nvcore.h.orig src/nvcore/nvcore.h
+--- src/nvcore/nvcore.h.orig	2021-02-22 17:43:36.159964579 -0300
++++ src/nvcore/nvcore.h	2021-02-22 17:43:56.917077055 -0300
+@@ -119,6 +119,8 @@
+ #	define NV_CPU_MIPS 1
+ #elif defined POSH_CPU_MIPS64
+ #	define NV_CPU_MIPS64 1
++#elif defined POSH_CPU_S390
++#	define NV_CPU_S390 1
+ #else
+ #   error "Unsupported CPU"
+ #endif
+diff -up extern/poshlib/posh.h.orig extern/poshlib/posh.h
+--- extern/poshlib/posh.h.orig	2021-02-24 14:04:24.455712030 -0300
++++ extern/poshlib/posh.h	2021-02-24 14:06:16.557482153 -0300
+@@ -560,6 +560,11 @@ LCC predefines the following:
+ #  define POSH_CPU_STRING "MCST Elbrus 2000"
+ #endif
+ 
++#if defined __s390x__
++#  define POSH_CPU_S390 1
++#  define POSH_CPU_STRING "S390"
++#endif
++
+ #if !defined POSH_CPU_STRING
+ #  error POSH cannot determine target CPU
+ #  define POSH_CPU_STRING "Unknown" /* this is here for Doxygen's benefit */
+diff -up src/nvcore/Debug.h.orig src/nvcore/Debug.h
+--- src/nvcore/Debug.h.orig	2021-02-25 10:17:35.200199481 -0300
++++ src/nvcore/Debug.h	2021-02-25 10:17:56.318328346 -0300
+@@ -166,7 +166,7 @@ NVCORE_API void NV_CDECL nvDebugPrint( c
+ namespace nv
+ {
+     inline bool isValidPtr(const void * ptr) {
+-    #if NV_CPU_X86_64 || POSH_CPU_PPC64 || NV_CPU_AARCH64
++    #if NV_CPU_X86_64 || POSH_CPU_PPC64 || NV_CPU_AARCH64 || NV_CPU_S390
+         if (ptr == NULL) return true;
+         if (reinterpret_cast<uint64>(ptr) < 0x10000ULL) return false;
+         if (reinterpret_cast<uint64>(ptr) >= 0x000007FFFFFEFFFFULL) return false;
+diff -up src/nvcore/Debug.h.orig src/nvcore/Debug.h
+diff -up src/nvthread/Atomic.h.orig src/nvthread/Atomic.h
+--- src/nvthread/Atomic.h.orig	2021-02-25 11:42:21.289380524 -0300
++++ src/nvthread/Atomic.h	2021-02-25 11:43:17.214706223 -0300
+@@ -78,6 +78,16 @@ namespace nv {
+ 		uint32 ret = *ptr; // replace with ldrex?
+         nvCompilerReadWriteBarrier();
+         return ret;
++#elif POSH_CPU_S390
++        // need more specific cpu type for ppc64?
++        // also utilizes a full barrier
++        // currently treating load like x86 - this could be wrong
++
++        // this is the easiest but slowest way to do this
++        nvCompilerReadWriteBarrier();
++		uint32 ret = *ptr; // replace with ldrex?
++        nvCompilerReadWriteBarrier();
++        return ret;
+ #elif POSH_CPU_E2K
+         // need more specific cpu type for e2k?
+         // also utilizes a full barrier
+@@ -112,6 +122,11 @@ namespace nv {
+         nvCompilerReadWriteBarrier();
+ 		*ptr = value; //strex?
+ 		nvCompilerReadWriteBarrier();
++#elif POSH_CPU_S390
++        // this is the easiest but slowest way to do this
++        nvCompilerReadWriteBarrier();
++		*ptr = value; //strex?
++		nvCompilerReadWriteBarrier();
+ #elif POSH_CPU_E2K
+         // this is the easiest but slowest way to do this
+         nvCompilerReadWriteBarrier();

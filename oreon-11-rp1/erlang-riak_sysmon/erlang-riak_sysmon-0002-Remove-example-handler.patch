@@ -1,0 +1,10 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 16 Mar 2016 15:39:32 +0300
+Subject: [PATCH] Remove example handler
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/riak_sysmon_example_handler.erl b/example/riak_sysmon_example_handler.erl
+similarity index 100%
+rename from src/riak_sysmon_example_handler.erl
+rename to example/riak_sysmon_example_handler.erl

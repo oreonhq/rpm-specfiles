@@ -1,0 +1,24 @@
+Index: butt-1.42.0/src/butt.cpp
+===================================================================
+--- butt-1.42.0.orig/src/butt.cpp
++++ butt-1.42.0/src/butt.cpp
+@@ -17,6 +17,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <locale.h>
+ 
+ #include <signal.h>
+ #include <limits.h>
+Index: butt-1.42.0/src/FLTK/FL/Fl_My_Native_File_Chooser.H
+===================================================================
+--- butt-1.42.0.orig/src/FLTK/FL/Fl_My_Native_File_Chooser.H
++++ butt-1.42.0/src/FLTK/FL/Fl_My_Native_File_Chooser.H
+@@ -46,6 +46,7 @@ typedef void fl_BROWSEINFOW;
+ // All else falls back to FLTK's own chooser
+ #if !defined(__APPLE__) && !defined(WIN32)
+ #include <FL/Fl_File_Chooser.H>
++#include <cstdlib>
+ #else
+ #include <FL/filename.H> // FL_EXPORT
+ #endif

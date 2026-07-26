@@ -1,0 +1,12 @@
+diff -rupN --no-dereference cfitsio-4.6.3/CMakeLists.txt cfitsio-4.6.3-new/CMakeLists.txt
+--- cfitsio-4.6.3/CMakeLists.txt	2025-09-29 04:59:25.000000000 +0200
++++ cfitsio-4.6.3-new/CMakeLists.txt	2025-10-22 18:27:48.702552331 +0200
+@@ -299,7 +299,7 @@ install(TARGETS cfitsio EXPORT cfitsioTa
+ )
+ 
+ install(FILES ${H_FILES} "${CMAKE_CURRENT_BINARY_DIR}/cfitsio_export.h"
+-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT Devel)
++  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cfitsio COMPONENT Devel)
+ 
+ include(CMakePackageConfigHelpers)
+ write_basic_package_version_file(

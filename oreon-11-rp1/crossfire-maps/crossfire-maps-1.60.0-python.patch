@@ -1,0 +1,11 @@
+--- maps/test/newmaps/madness_maze/scripts/madnessmaze1.py~	2011-01-28 00:07:33.000000000 -0600
++++ maps/test/newmaps/madness_maze/scripts/madnessmaze1.py	2012-01-12 07:40:34.235264190 -0600
+@@ -33,7 +33,7 @@
+     if text[0]=='5':
+         message="If you go in there, you won't come back."
+         whoami.Say(message)
+-    if text[0]=="6"
++    if text[0]=="6":
+         message="They cut them off, seemed to think I might be tempted by the maze, like I woulda been.  Figured I could warn people without arms, but I couldn't disarm the traps without arms."
+         whoami.Say(message)
+     if text[0]=="7":

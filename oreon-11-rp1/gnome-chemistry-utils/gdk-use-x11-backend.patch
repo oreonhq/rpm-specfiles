@@ -1,0 +1,37 @@
+From: Daniel Leidert <dleidert@debian.org>
+Date: Thu, 29 Oct 2020 02:52:02 +0100
+Subject: Use x11 backend
+
+gchem3d and gcrystal crash with wayland. Set the allowed backends and try
+x11 first.
+
+Bug-Debian: https://bugs.debian.org/887117
+---
+ programs/3d/main.cc      | 1 +
+ programs/crystal/main.cc | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/programs/3d/main.cc b/programs/3d/main.cc
+index 9bd59a4..aa18e3e 100644
+--- a/programs/3d/main.cc
++++ b/programs/3d/main.cc
+@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
+ 	GError *error = NULL;
+ 	GOptionContext *context;
+ 
++	gdk_set_allowed_backends ("x11,*");
+ 	gtk_init (&argc, &argv);
+ 	gcu::Element::LoadBODR ();
+ 
+diff --git a/programs/crystal/main.cc b/programs/crystal/main.cc
+index e688c3d..55fd8b9 100644
+--- a/programs/crystal/main.cc
++++ b/programs/crystal/main.cc
+@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
+ 	GOptionContext *context;
+ 	GError *error = NULL;
+ 
++	gdk_set_allowed_backends ("x11,*");
+ 	gtk_init (&argc, &argv);
+ 	Element::LoadRadii ();
+ 	if (argc > 1 && argv[1][0] == '-') {

@@ -1,0 +1,31 @@
+From 1c1b2677b80e08aac6183bf567bc34509008fe65 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20Men=C5=A1=C3=ADk?= <pemensik@redhat.com>
+Date: Sat, 8 Jul 2023 08:48:40 +0200
+Subject: [PATCH] Detect few functions presence in libresolv
+
+Explicitly check presence of few functions from glibc. If they are not
+present in base library, use -lresolv to link them.
+
+Resolves: #39
+---
+ configure.ac | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 81bbcb6..c5e371a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -10,6 +10,10 @@ AC_CHECK_FUNCS(strlcpy strlcat)
+ AC_SEARCH_LIBS([res_mkquery],[resolv bind])
+ AC_SEARCH_LIBS([res_9_mkquery],[resolv bind])
+ AC_SEARCH_LIBS([__res_mkquery],[resolv bind])
++AC_SEARCH_LIBS([ns_makecanon],[c resolv])
++AC_SEARCH_LIBS([ns_put16],[c resolv])
++AC_SEARCH_LIBS([ns_put32],[c resolv])
++AC_SEARCH_LIBS([ns_samedomain],[c resolv])
+ AC_CHECK_HEADERS(sys/types.h netinet/in.h arpa/nameser.h resolv.h)
+ AX_CHECK_OPENSSL
+ CFLAGS="$CFLAGS $OPENSSL_INCLUDES"
+-- 
+2.41.0
+

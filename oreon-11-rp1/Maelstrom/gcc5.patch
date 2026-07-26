@@ -1,0 +1,12 @@
+diff -up Maelstrom-3.0.6/netlogic/protocol.h~ Maelstrom-3.0.6/netlogic/protocol.h
+--- Maelstrom-3.0.6/netlogic/protocol.h~	2000-09-24 19:55:39.000000000 +0200
++++ Maelstrom-3.0.6/netlogic/protocol.h	2016-02-02 16:16:29.141844543 +0100
+@@ -11,7 +11,7 @@
+ 	This stuff is shared between netplay.cc and netplayd
+ */
+ /* The default port for Maelstrom games.  What is 0xAEAE?? *shrug* :) */
+-#define NETPLAY_PORT	0xAEAE			/* port 44718 */
++#define NETPLAY_PORT	(0xAEAE)		/* port 44718 */
+ 
+ /* The minimum length of a new packet buffer */
+ #define NEW_PACKETLEN	(3+3*4)

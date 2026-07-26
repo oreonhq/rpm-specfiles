@@ -1,0 +1,45 @@
+From 36a7df39b0f89c467fc6d9c957a7a30f20d96994 Mon Sep 17 00:00:00 2001
+From: Timothy Pearson <kb9vqf@pearsoncomputing.net>
+Date: Sat, 20 Sep 2014 17:38:38 +0000
+Subject: Fix accidental double-free in KJS garbage collector This resolves Bug
+ 2116
+
+---
+ kjs/collector.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/kjs/collector.cpp b/kjs/collector.cpp
+index 2ddd635..2f7e0fa 100644
+--- a/kjs/collector.cpp
++++ b/kjs/collector.cpp
+@@ -24,6 +24,7 @@
+ #include "value.h"
+ #include "internal.h"
+ #include <limits.h>
++#include <typeinfo>
+ 
+ #ifndef MAX
+ #define MAX(a,b) ((a) > (b) ? (a) : (b))
+@@ -121,7 +122,7 @@ void* Collector::allocate(size_t s)
+ 
+     if (heap.usedBlocks == heap.numBlocks) {
+       static const size_t maxNumBlocks = ULONG_MAX / sizeof(CollectorBlock*) / GROWTH_FACTOR;
+-      if (heap.numBlocks > maxNumBlocks)
++      if ((size_t)heap.numBlocks > maxNumBlocks)
+           return 0L;
+       heap.numBlocks = MAX(MIN_ARRAY_SIZE, heap.numBlocks * GROWTH_FACTOR);
+       heap.blocks = (CollectorBlock **)realloc(heap.blocks, heap.numBlocks * sizeof(CollectorBlock *));
+@@ -222,6 +223,10 @@ bool Collector::collect()
+       if (!(imp->_flags & ValueImp::VI_DESTRUCTED)) {
+ 	if (!imp->refcount && imp->_flags == (ValueImp::VI_GCALLOWED | ValueImp::VI_CREATED)) {
+ 	  //fprintf( stderr, "Collector::deleting ValueImp %p (%s)\n", (void*)imp, typeid(*imp).name());
++
++	  // prevent double free
++	  imp->_flags |= ValueImp::VI_DESTRUCTED;
++
+ 	  // emulate destructing part of 'operator delete()'
+ 	  imp->~ValueImp();
+ 	  curBlock->usedCells--;
+-- 
+cgit v1.1
+

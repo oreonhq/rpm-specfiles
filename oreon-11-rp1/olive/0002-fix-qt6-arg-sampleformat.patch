@@ -1,0 +1,11 @@
+--- olive-8ac191ceb64476b50cd8e16dce7c971fb791af95/app/ui/humanstrings.cpp.orig	2025-12-08 14:48:00.504986423 +0100
++++ olive-8ac191ceb64476b50cd8e16dce7c971fb791af95/app/ui/humanstrings.cpp	2025-12-08 14:50:47.241096578 +0100
+@@ -60,7 +60,7 @@
+     break;
+   }
+ 
+-  return QCoreApplication::translate("AudioParams", "Unknown (0x%1)").arg(f, 1, 16);
++  return QCoreApplication::translate("AudioParams", "Unknown (0x%1)").arg(static_cast<int>(f), 1, 16);
+ }
+ 
+ }

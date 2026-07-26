@@ -1,0 +1,37 @@
+diff -up frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java.taskstoperr frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java
+--- frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java.taskstoperr	2010-03-29 19:28:34.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/util/TaskStopUtil.java	2010-03-29 19:40:05.000000000 -0400
+@@ -113,6 +113,11 @@ public class TaskStopUtil {
+ 	parser.setHeader(usage);
+     }
+     
++    /**
++     * The final result, assume ok, set to +ve if thigns go wrong.
++     */
++    private static int status = 0;
++
+     public void execute () {
+ 	parser.parse(args);
+ 
+@@ -121,6 +126,7 @@ public class TaskStopUtil {
+ 	    System.err.println("ERROR: No argument provided.");
+ 	    parser.printHelp();
+ 	}
++	System.exit(status);
+     }
+     
+     private static class TasksBlocked implements ProcBlockObserver, Event {
+@@ -136,7 +142,12 @@ public class TaskStopUtil {
+ 
+ 	public void allExistingTasksCompleted() {
+ 	    fine.log("allExistingTasksCompleted proc", proc);
+-	    procEvent.executeLive(proc);
++	    try {
++		procEvent.executeLive(proc);
++	    } catch (frysk.UserException e) {
++		System.err.println("error: " + e.getMessage());
++		status = 1;
++	    }
+ 	    // Now ask for it to be detached.
+ 	    proc.requestAbandonAndRunEvent(this);
+ 	}

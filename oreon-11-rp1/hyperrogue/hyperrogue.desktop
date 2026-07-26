@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=HyperRogue
+GenericName=Roguelike
+Comment=An SDL rogue-like in a non-euclidean world
+Keywords=rogue;hyper;hyperrogue;
+Exec=hyperrogue
+Icon=hyperrogue
+Categories=Game;RolePlaying;

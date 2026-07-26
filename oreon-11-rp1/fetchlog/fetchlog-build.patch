@@ -1,0 +1,11 @@
+--- Makefile~	2004-03-26 21:47:58.000000000 +0200
++++ Makefile	2006-02-05 23:06:15.000000000 +0200
+@@ -24,7 +24,7 @@
+ 
+ ### gcc
+ CC=gcc
+-CFLAGS= -O -Werror -Wall -Wcast-qual -Wstrict-prototypes \
++CFLAGS= $(RPM_OPT_FLAGS) -Wall -Wcast-qual -Wstrict-prototypes  \
+ 	-Wmissing-prototypes -Wmissing-declarations -Winline -Wcast-align 
+ ### cc
+ #CC=cc

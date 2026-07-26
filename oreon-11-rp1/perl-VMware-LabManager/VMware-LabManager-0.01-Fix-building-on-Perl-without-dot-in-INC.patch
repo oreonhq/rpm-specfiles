@@ -1,0 +1,8 @@
+diff -up VMware-LabManager-0.01/Makefile.PL.orig VMware-LabManager-0.01/Makefile.PL
+--- VMware-LabManager-0.01/Makefile.PL.orig	2017-05-18 15:44:54.450138955 +0200
++++ VMware-LabManager-0.01/Makefile.PL	2017-05-18 15:45:11.046074656 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name     'VMware-LabManager';

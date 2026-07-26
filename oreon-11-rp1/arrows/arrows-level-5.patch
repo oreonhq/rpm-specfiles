@@ -1,0 +1,41 @@
+diff -ur arrows-0.6/game.c arrows-0.6.new/game.c
+--- arrows-0.6/game.c	2004-01-12 16:00:46.000000000 +0100
++++ arrows-0.6.new/game.c	2007-06-30 23:08:05.000000000 +0200
+@@ -31,6 +31,8 @@
+ #include <string.h>
+ #include <time.h>
+ #include <ctype.h>
++#include <endian.h>
++#include <byteswap.h>
+ #include "arrows.h"
+ #include "xpm.h"
+ 
+@@ -487,13 +489,24 @@
+ 	int i,j;
+ 	if (!(levno%5)) {
+ 		FILE *stream;
+-		char nm[9];
+-		strcpy(nm, "arrfl.");
+-		nm[6] = ((char) ((levno/5)+48));
+-		nm[7] = '\0';
++		char nm[256];
++		int no = levno/5;
++		if (no > 5) no = 5;
++		snprintf(nm, sizeof(nm), "/usr/share/arrows/arrfl.%d", no);
+ 		if ((stream = fopen(nm, "rb")) != NULL) {
+ 			fread(&initlevel, sizeof(initlevel), 1, stream);
+ 			fclose(stream);
++#if __BYTE_ORDER != __LITTLE_ENDIAN
++			for (i=0; i<33; i++) for (j=0; j<21; j++)
++				initlevel.arrows[i][j] = 
++					 bswap_32(initlevel.arrows[i][j]);
++			
++			initlevel.s_dotx = bswap_32(initlevel.s_dotx);
++			initlevel.s_doty = bswap_32(initlevel.s_doty);
++			initlevel.objx = bswap_32(initlevel.objx);
++			initlevel.objy = bswap_32(initlevel.objy);
++			initlevel.levdelay = bswap_32(initlevel.levdelay);
++#endif
+ 			clearviewport();
+ 			level = initlevel;
+ 			display_field();

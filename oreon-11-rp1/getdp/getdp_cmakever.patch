@@ -1,0 +1,12 @@
+diff -rupN getdp-3.6.0-source/CMakeLists.txt getdp-3.6.0-source-new/CMakeLists.txt
+--- getdp-3.6.0-source/CMakeLists.txt	2024-03-03 11:16:55.000000000 +0100
++++ getdp-3.6.0-source-new/CMakeLists.txt	2025-07-16 20:09:15.814943298 +0200
+@@ -3,7 +3,7 @@
+ # See the LICENSE.txt file for license information. Please report all
+ # issues on https://gitlab.onelab.info/getdp/getdp/issues.
+ 
+-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ 
+ # if CMAKE_BUILD_TYPE is specified use it; otherwise set the default
+ # build type to "RelWithDebInfo" ("-O2 -g" with gcc) prior to calling

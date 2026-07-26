@@ -1,0 +1,187 @@
+diff -rupN --no-dereference apitrace-13.0/cli/CMakeLists.txt apitrace-13.0-new/cli/CMakeLists.txt
+--- apitrace-13.0/cli/CMakeLists.txt	2025-06-26 14:43:44.000000000 +0200
++++ apitrace-13.0-new/cli/CMakeLists.txt	2025-07-18 10:35:58.138746864 +0200
+@@ -58,5 +58,5 @@ if (NOT CMAKE_CROSSCOMPILING)
+     )
+ endif ()
+ 
+-install (TARGETS apitrace RUNTIME DESTINATION bin)
+-install_pdb (apitrace RUNTIME DESTINATION bin)
++install (TARGETS apitrace)
++install_pdb (apitrace TYPE BIN)
+diff -rupN --no-dereference apitrace-13.0/CMakeLists.txt apitrace-13.0-new/CMakeLists.txt
+--- apitrace-13.0/CMakeLists.txt	2025-06-26 14:43:44.000000000 +0200
++++ apitrace-13.0-new/CMakeLists.txt	2025-07-18 10:35:58.139107760 +0200
+@@ -16,6 +16,7 @@ endif ()
+ 
+ project (apitrace)
+ 
++include(GNUInstallDirs)
+ 
+ ##############################################################################
+ # Options
+@@ -499,12 +500,16 @@ endif ()
+ ##############################################################################
+ # Installation directories
+ 
+-if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-    # Debian multiarch support
+-    execute_process(COMMAND dpkg-architecture -qDEB_HOST_MULTIARCH
+-        OUTPUT_VARIABLE ARCH_SUBDIR
+-        ERROR_QUIET
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
++if(DEFINED LIB_SUFFIX)
++    message(WARNING
++        "LIB_SUFFIX is no longer recognized, "
++        "use the standard CMAKE_INSTALL_LIBDIR instead"
++    )
++endif()
++if(DEFINED ARCH_SUBDIR)
++    message(WARNING
++        "ARCH_SUBDIR is no longer recognized, "
++        "use the standard CMAKE_INSTALL_LIBDIR instead"
+     )
+ endif()
+ 
+@@ -512,24 +517,20 @@ if (WIN32 OR APPLE)
+     # On Windows/MacOSX, applications are usually installed on a directory of
+     # their own
+     set (DOC_DEFAULT_INSTALL_DIR doc)
+-    set (LIB_INSTALL_DIR lib)
+-    set (LIB_ARCH_INSTALL_DIR lib)
++    set (LIB_INSTALL_DIR lib CACHE PATH "")
++    set (LIB_ARCH_INSTALL_DIR lib CACHE PATH "")
+ else ()
+-    set (DOC_DEFAULT_INSTALL_DIR share/doc/${CMAKE_PROJECT_NAME})
+-    set (LIB_INSTALL_DIR lib${LIB_SUFFIX}/${CMAKE_PROJECT_NAME})
+-    if (ARCH_SUBDIR)
+-        set (LIB_ARCH_INSTALL_DIR lib/${ARCH_SUBDIR}/${CMAKE_PROJECT_NAME})
+-    else ()
+-        set (LIB_ARCH_INSTALL_DIR lib${LIB_SUFFIX}/${CMAKE_PROJECT_NAME})
+-    endif ()
++    set (DOC_DEFAULT_INSTALL_DIR ${CMAKE_INSTALL_DOCDIR})
++    set (LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME} CACHE PATH "")
++    set (LIB_ARCH_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME} CACHE PATH "")
+ endif ()
+ 
+ # Allow customization of the doc installation dir (Slackware uses different
+ # location)
+-set (DOC_INSTALL_DIR "${DOC_DEFAULT_INSTALL_DIR}" CACHE STRING "Documentation installation directory")
++set (DOC_INSTALL_DIR "${DOC_DEFAULT_INSTALL_DIR}" CACHE PATH "Documentation installation directory")
+ 
+-set (SCRIPTS_INSTALL_DIR ${LIB_INSTALL_DIR}/scripts)
+-set (WRAPPER_INSTALL_DIR ${LIB_ARCH_INSTALL_DIR}/wrappers)
++set (SCRIPTS_INSTALL_DIR ${LIB_INSTALL_DIR}/scripts CACHE PATH "")
++set (WRAPPER_INSTALL_DIR ${LIB_ARCH_INSTALL_DIR}/wrappers CACHE PATH "")
+ 
+ 
+ ##############################################################################
+diff -rupN --no-dereference apitrace-13.0/frametrim/CMakeLists.txt apitrace-13.0-new/frametrim/CMakeLists.txt
+--- apitrace-13.0/frametrim/CMakeLists.txt	2025-06-26 14:43:44.000000000 +0200
++++ apitrace-13.0-new/frametrim/CMakeLists.txt	2025-07-18 10:35:58.139434635 +0200
+@@ -25,7 +25,7 @@ target_link_libraries (gltrim
+     glretrace_common
+     )
+ 
+-install (TARGETS gltrim RUNTIME DESTINATION bin)
++install (TARGETS gltrim)
+ 
+ option (ENABLE_GLTRIM_TESTS "Enable running the gltrim tests." OFF)
+ 
+diff -rupN --no-dereference apitrace-13.0/gui/CMakeLists.txt apitrace-13.0-new/gui/CMakeLists.txt
+--- apitrace-13.0/gui/CMakeLists.txt	2025-06-26 14:43:44.000000000 +0200
++++ apitrace-13.0-new/gui/CMakeLists.txt	2025-07-18 10:35:58.139652080 +0200
+@@ -118,8 +118,8 @@ endif ()
+ 
+ ########### install files ###############
+ 
+-install (TARGETS qapitrace RUNTIME DESTINATION bin)
+-install_pdb (qapitrace RUNTIME DESTINATION bin)
++install (TARGETS qapitrace)
++install_pdb (qapitrace TYPE BIN)
+ #install (FILES qapitrace.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+ 
+ # Deployt Qt dependencies
+@@ -168,7 +168,7 @@ if (WIN32 AND NOT CMAKE_CROSSCOMPILING)
+                 \"VCINSTALLDIR=${VCINSTALLDIR}\"
+                 \"${QT_WINDEPLOYQT_EXECUTABLE}\"
+                 \${QT_WINDEPLOYQT_FLAGS}
+-                \"\${CMAKE_INSTALL_PREFIX}/bin/qapitrace.exe\"
++                \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/qapitrace.exe\"
+             )
+         ")
+     endif ()
+diff -rupN --no-dereference apitrace-13.0/inject/CMakeLists.txt apitrace-13.0-new/inject/CMakeLists.txt
+--- apitrace-13.0/inject/CMakeLists.txt	2025-06-26 14:43:44.000000000 +0200
++++ apitrace-13.0-new/inject/CMakeLists.txt	2025-07-18 10:35:58.139847147 +0200
+@@ -23,8 +23,8 @@ else ()
+         set_target_properties (injectee_iat PROPERTIES LINK_FLAGS "-Wl,--entry=DllMainStartup")
+     endif ()
+ endif ()
+-install (TARGETS injectee_iat LIBRARY DESTINATION bin)
+-install_pdb (injectee_iat DESTINATION bin)
++install (TARGETS injectee_iat LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR})
++install_pdb (injectee_iat TYPE BIN)
+ 
+ if (HAVE_X86)
+     add_library (injectee_mhook MODULE
+@@ -46,8 +46,8 @@ if (HAVE_X86)
+         advapi32
+         mhook
+     )
+-    install (TARGETS injectee_mhook LIBRARY DESTINATION bin)
+-    install_pdb (injectee_mhook DESTINATION bin)
++    install (TARGETS injectee_mhook LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR})
++    install_pdb (injectee_mhook TYPE BIN)
+ endif ()
+ 
+ add_executable (injector
+@@ -62,5 +62,5 @@ target_link_libraries (injector
+     psapi
+     advapi32
+ )
+-install (TARGETS injector RUNTIME DESTINATION bin)
+-install_pdb (injector DESTINATION bin)
++install (TARGETS injector)
++install_pdb (injector TYPE BIN)
+diff -rupN --no-dereference apitrace-13.0/retrace/CMakeLists.txt apitrace-13.0-new/retrace/CMakeLists.txt
+--- apitrace-13.0/retrace/CMakeLists.txt	2025-06-26 14:43:44.000000000 +0200
++++ apitrace-13.0-new/retrace/CMakeLists.txt	2025-07-18 10:35:58.140026336 +0200
+@@ -160,8 +160,8 @@ if (WIN32 OR APPLE OR X11_FOUND)
+         )
+     endif ()
+ 
+-    install (TARGETS glretrace RUNTIME DESTINATION bin) 
+-    install_pdb (glretrace DESTINATION bin)
++    install (TARGETS glretrace)
++    install_pdb (glretrace TYPE BIN)
+ endif ()
+ 
+ if (ENABLE_EGL AND X11_FOUND AND NOT WIN32 AND NOT APPLE AND NOT ENABLE_WAFFLE)
+@@ -182,7 +182,7 @@ if (ENABLE_EGL AND X11_FOUND AND NOT WIN
+         ${CMAKE_THREAD_LIBS_INIT}
+         ${CMAKE_DL_LIBS}
+     )
+-    install (TARGETS eglretrace RUNTIME DESTINATION bin)
++    install (TARGETS eglretrace)
+ endif ()
+ 
+ if (ENABLE_EGL AND ENABLE_WAFFLE)
+@@ -205,7 +205,7 @@ if (ENABLE_EGL AND ENABLE_WAFFLE)
+         ${CMAKE_THREAD_LIBS_INIT}
+         ${CMAKE_DL_LIBS}
+     )
+-    install (TARGETS eglretrace RUNTIME DESTINATION bin)
++    install (TARGETS eglretrace)
+ endif ()
+ 
+ if (WIN32)
+@@ -351,6 +351,6 @@ if (WIN32)
+         target_link_libraries (d3dretrace directxtex)
+     endif ()
+ 
+-    install (TARGETS d3dretrace RUNTIME DESTINATION bin)
+-    install_pdb (d3dretrace DESTINATION bin)
++    install (TARGETS d3dretrace)
++    install_pdb (d3dretrace TYPE BIN)
+ endif ()

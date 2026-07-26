@@ -1,0 +1,43 @@
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 15 Sep 2015 16:35:03 +0200
+Subject: [PATCH] Use fake home directory to define git user
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Without configured git, t/git.t test fails because git tool bails out:
+
+*** Please tell me who you are.
+Run
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+
+---
+ t/git.t | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/t/git.t b/t/git.t
+index 71195fd..4e11ac6 100755
+--- a/t/git.t
++++ b/t/git.t
+@@ -15,6 +15,14 @@ BEGIN {
+ 	if (! mkdir($dir)) {
+ 		die $@;
+ 	}
++	$ENV{HOME} = $dir;
++	if (
++	    system("$git config --global user.email 'you\@example.com'")
++	    || system("$git config --global user.name 'Your Name'")
++	) {
++	    system("cat $dir/.gitconfig");
++	    die "Could not configure git user";
++	}
+ }
+ use Test::More tests => 26;
+ 
+-- 
+tg: (53b10a6..) t/fakehome (depends on: master)

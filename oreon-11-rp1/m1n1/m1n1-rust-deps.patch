@@ -1,0 +1,18 @@
+diff -Naur a/rust/Cargo.toml b/rust/Cargo.toml
+--- a/rust/Cargo.toml	2024-04-29 00:46:20.000000000 -0700
++++ b/rust/Cargo.toml	2024-05-13 08:43:28.387201165 -0700
+@@ -12,10 +12,7 @@
+ # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+ [dependencies]
+ fatfs = { path = "vendor/rust-fatfs", default-features = false, features = ["lfn", "alloc"] }
+-uuid = { version = "1.7.0", default-features = false }
+-
+-[patch.crates-io]
+-uuid = { path = "vendor/uuid" }
+-log = { path = "vendor/log" }
+-bitflags = { path = "vendor/bitflags" }
+-cfg-if = { path = "vendor/cfg-if" }
++uuid = { version = "1.8", default-features = false }
++log = "0.4"
++bitflags = "1"
++cfg-if = "1.0"

@@ -1,0 +1,34 @@
+From 4020bbe45bc26c5710470e1717bc3f147f4051f6 Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Sun, 22 Sep 2024 10:48:42 -0700
+Subject: [PATCH] hiprt soversion
+
+---
+ CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5dd3008b1dd3..2509d55b8515 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -294,7 +294,8 @@ write_version_info("${CMAKE_CURRENT_SOURCE_DIR}/hiprt/hiprt.h.in" "${CMAKE_CURRE
+ write_version_info("${CMAKE_CURRENT_SOURCE_DIR}/hiprt/hiprtew.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/hiprt/hiprtew.h" "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" version_str_)
+ 
+ 
+-set(HIPRT_NAME "hiprt${version_str_}")
++# set(HIPRT_NAME "hiprt${version_str_}")
++set(HIPRT_NAME "hiprt")
+ 
+ # Project: HIPRT
+ add_library(${HIPRT_NAME} SHARED)
+@@ -308,6 +309,7 @@ else()
+ 	set_target_properties(${HIPRT_NAME} PROPERTIES OUTPUT_NAME "${HIPRT_NAME}64")
+ endif()
+ 
++set_target_properties(${HIPRT_NAME} PROPERTIES SOVERSION "HIPRT_SO_VERSION")
+ 
+ if(BITCODE)
+ 	target_compile_definitions(${HIPRT_NAME} PRIVATE HIPRT_BITCODE_LINKING ORO_PRECOMPILED)
+-- 
+2.46.1
+

@@ -1,0 +1,13 @@
+diff --git a/src/MushRuby/lex.c b/src/MushRuby/lex.c
+index a851447..f2f8396 100644
+--- a/src/MushRuby/lex.c
++++ b/src/MushRuby/lex.c
+@@ -93,7 +93,7 @@ hash (str, len)
+ }
+ 
+ #ifdef __GNUC__
+-__inline
++extern __inline
+ #endif
+ struct kwtable *
+ rb_reserved_word (str, len)

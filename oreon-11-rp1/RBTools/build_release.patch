@@ -1,0 +1,14 @@
+diff -uNr rbtools-release-4.0.orig/setup.cfg rbtools-release-4.0/setup.cfg
+--- rbtools-release-4.0.orig/setup.cfg	2023-01-02 11:53:09.793890761 -0600
++++ rbtools-release-4.0/setup.cfg	2023-01-02 11:54:01.373524817 -0600
+@@ -10,10 +10,6 @@
+ release = egg_info -Db ''
+ 
+ 
+-[egg_info]
+-tag_build = .dev
+-
+-
+ [flake8]
+ ignore = E121,E125,E129,E241,W504
+ exclude = appdirs.py, lib, docs, bin

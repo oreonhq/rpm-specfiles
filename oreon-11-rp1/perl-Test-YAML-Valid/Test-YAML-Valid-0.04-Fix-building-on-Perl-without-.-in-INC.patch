@@ -1,0 +1,27 @@
+From 7f2fff100ecf0734e967378ce12882de123883e7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 16 May 2017 13:29:54 +0200
+Subject: [PATCH] Fix building on Perl without "." in @INC
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9a362fa..b11a6f7 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,5 +1,6 @@
+ use strict;
+ use warnings;
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name('Test-YAML-Valid');
+-- 
+2.9.4
+

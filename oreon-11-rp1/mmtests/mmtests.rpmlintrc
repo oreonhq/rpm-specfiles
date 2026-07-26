@@ -1,0 +1,16 @@
+# these are sources so it's OK that they are not executable
+addFilter("E: non-executable-script /usr/libexec/MMTests/shellpack_src/src/")
+addFilter("E: script-without-shebang /usr/libexec/MMTests/shellpack_src/src/")
+
+# not sure why, but nothing we can do here
+addFilter("E: zero-length /usr/libexec/MMTests/shellpack_src/src/")
+addFilter("E: zero-length /usr/share/doc/mmtests/docs/example_html_report/")
+
+# this is kind of a devel package, so it's fine
+addFilter("E: explicit-lib-dependency libtool")
+addFilter("E: devel-dependency binutils-devel")
+addFilter("W: devel-file-in-non-devel-package .*")
+
+# known duplicates
+addFilter("W: files-duplicate /usr/libexec/MMTests/configs/config-docs/")
+addFilter("W: files-duplicate /usr/libexec/MMTests/shellpack_src/src/")

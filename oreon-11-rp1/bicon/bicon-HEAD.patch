@@ -1,0 +1,166 @@
+From 5fa1352d986c463a51a548645f964a59c8dfa3ab Mon Sep 17 00:00:00 2001
+From: Naheel-Azawy <naheelazawy@gmail.com>
+Date: Sat, 25 Aug 2018 01:10:43 +0300
+Subject: [PATCH] added option to reshape only
+
+---
+ bicon/bicon.c                | 14 +++++++++++---
+ bicon/bicon_read.h           |  2 ++
+ bjoining/bjoining.h          |  1 +
+ bjoining/bjoining_log2cuni.c |  2 +-
+ 4 files changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/bicon/bicon.c b/bicon/bicon.c
+index 80e57e1..d1a4586 100644
+--- a/bicon/bicon.c
++++ b/bicon/bicon.c
+@@ -1,6 +1,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <bjoining.h>
+ #include "pty_spawn.h"
+ #include "bicon_read.h"
+ 
+@@ -22,9 +23,16 @@ main (
+     }
+   else
+     {
+-      for (i = 1; i < argc; i++)
+-	args[i - 1] = argv[i];
+-      args[argc - 1] = NULL;
++      int args_start;
++      if (strcmp(argv[1], "--reshape-only") == 0) {
++        bicon_options = B_LOGICAL_OUTPUT_LOG2CUNI | B_NO_LA_LIGATURE;
++        args_start = 2;
++      } else {
++        args_start = 1;
++      }
++      for (i = args_start; i < argc; i++)
++        args[i - args_start] = argv[i];
++      args[argc - args_start] = NULL;
+     }
+   if (!bicon_read_init ())
+     {
+diff --git a/bicon/bicon_read.h b/bicon/bicon_read.h
+index c828a3f..1956364 100644
+--- a/bicon/bicon_read.h
++++ b/bicon/bicon_read.h
+@@ -1,6 +1,8 @@
+ #ifndef __BICON_READ_H
+ #define __BICON_READ_H
+ 
++int bicon_options;
++
+ ssize_t bicon_read (
+   int fd,
+   void *buf,
+diff --git a/bjoining/bjoining.h b/bjoining/bjoining.h
+index 78b0774..be30676 100644
+--- a/bjoining/bjoining.h
++++ b/bjoining/bjoining.h
+@@ -16,6 +16,7 @@ typedef FriBidiChar unichar;
+ /* Options that bjoining functions handle. */
+ #define B_KEEP_BIDI_MARKS	0x00000001	/* Do not remove bidi marks (LRM, RLM, ...). */
+ #define B_LOGICAL_OUTPUT	0x00000002	/* Do not perform bidi, just joining stuff. */
++#define B_LOGICAL_OUTPUT_LOG2CUNI 0x00000004	/* Do not perform bidi, just joining stuff. In log2cuni */
+ #define B_KEEP_JOINING_MARKS	0x00000010	/* Do not remove joining marks (ZWJ, ZWNJ). */
+ #define B_NO_LA_LIGATURE	0x00000020	/* Do not make LAM-ALEF ligature. */
+ #define B_NO_ZWJZWNJZWJ		0x00000040	/* Do not interpret ZWJ+ZWNJ+ZWJ sequences. */
+diff --git a/bjoining/bjoining_log2cuni.c b/bjoining/bjoining_log2cuni.c
+index 61148fb..7c2f54c 100644
+--- a/bjoining/bjoining_log2cuni.c
++++ b/bjoining/bjoining_log2cuni.c
+@@ -18,7 +18,7 @@ bjoining_log2cuni (
+   unichar *vis = malloc ((len + 1) * sizeof (unichar));
+ 
+   f = f && bjoining_compose (str, &len);
+-  if (0 == (options & B_LOGICAL_OUTPUT))
++  if (0 == (options & (B_LOGICAL_OUTPUT | B_LOGICAL_OUTPUT_LOG2CUNI)))
+     {
+       f = f
+ 	&& fribidi_log2vis ((FriBidiChar *) str, len, &ptype,
+-- 
+2.35.1
+
+From 00e43e164a047bb5298038f89fe6e33e27cb90c1 Mon Sep 17 00:00:00 2001
+From: Amir Zolfaghari <amirezolfaghari@gmail.com>
+Date: Thu, 4 Jun 2020 14:38:23 +0430
+Subject: [PATCH] fix multiple variable definition problem
+
+---
+ bicon/bicon_read.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bicon/bicon_read.h b/bicon/bicon_read.h
+index 1956364..66bbe3c 100644
+--- a/bicon/bicon_read.h
++++ b/bicon/bicon_read.h
+@@ -1,7 +1,7 @@
+ #ifndef __BICON_READ_H
+ #define __BICON_READ_H
+ 
+-int bicon_options;
++extern int bicon_options;
+ 
+ ssize_t bicon_read (
+   int fd,
+-- 
+2.35.1
+
+From 0364c0e025cc18f424238211056a7be77ee2a52c Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Sat, 7 May 2022 08:43:33 +0100
+Subject: [PATCH] pty_spawn.c: fix '_copy' build on clang
+
+Without the change build on clang-13 fails as:
+
+      pty_spawn.c:160:6: error: non-void function '_copy' should return a value [-Wreturn-type]
+                  return;
+                  ^
+---
+ bicon/pty_spawn.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bicon/pty_spawn.c b/bicon/pty_spawn.c
+index 21ab737..220e632 100644
+--- a/bicon/pty_spawn.c
++++ b/bicon/pty_spawn.c
+@@ -93,7 +93,7 @@ _xwrite (
+   }
+ }
+ 
+-static int
++static void
+ _copy (
+   int master_fd,
+   reader master_read,
+-- 
+2.35.1
+
+From 48720c0f22197d4d5f7b0f5162a3d8f071e6e8a8 Mon Sep 17 00:00:00 2001
+From: Takao Fujiwara <tfujiwar@redhat.com>
+Date: Wed, 31 Jan 2024 14:05:20 +0900
+Subject: [PATCH] bjoining_log2cuni.c: Fix arg in fribidi_log2vis()
+
+fribidi_log2vis() asks FriBidiParType.
+---
+ bjoining/bjoining_log2cuni.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bjoining/bjoining_log2cuni.c b/bjoining/bjoining_log2cuni.c
+index 7c2f54c..ec1e893 100644
+--- a/bjoining/bjoining_log2cuni.c
++++ b/bjoining/bjoining_log2cuni.c
+@@ -21,7 +21,7 @@ bjoining_log2cuni (
+   if (0 == (options & (B_LOGICAL_OUTPUT | B_LOGICAL_OUTPUT_LOG2CUNI)))
+     {
+       f = f
+-	&& fribidi_log2vis ((FriBidiChar *) str, len, &ptype,
++	&& fribidi_log2vis ((FriBidiChar *) str, len, (FriBidiParType * )&ptype,
+ 			    (FriBidiChar *) vis, NULL, NULL, NULL);
+     }
+   else
+-- 
+2.45.0
+

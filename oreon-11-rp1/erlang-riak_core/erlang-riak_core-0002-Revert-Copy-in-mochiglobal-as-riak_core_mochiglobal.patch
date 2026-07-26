@@ -1,0 +1,232 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 23 Apr 2016 12:02:49 +0300
+Subject: [PATCH] Revert "Copy in mochiglobal as riak_core_mochiglobal."
+
+This reverts commit 13f894a05ad2b8e4a461e4685e8f9f044e58ae9b.
+
+diff --git a/src/riak_core_dtrace.erl b/src/riak_core_dtrace.erl
+index 3b7208f..faaef31 100644
+--- a/src/riak_core_dtrace.erl
++++ b/src/riak_core_dtrace.erl
+@@ -146,26 +146,26 @@ timeit0(ArgList) ->
+     end.
+ 
+ timeit_mg(ArgList) ->
+-    case riak_core_mochiglobal:get(?MAGIC) of
++    case mochiglobal:get(?MAGIC) of
+         undefined ->
+             case application:get_env(riak_core, dtrace_support) of
+                 {ok, true} ->
+                     case string:to_float(erlang:system_info(version)) of
+                         {5.8, _} ->
+                             %% R14B04
+-                            riak_core_mochiglobal:put(?MAGIC, dtrace),
++                            mochiglobal:put(?MAGIC, dtrace),
+                             timeit_mg(ArgList);
+                         {Num, _} when Num > 5.8 ->
+                             %% R15B or higher, though dyntrace option
+                             %% was first available in R15B01.
+-                            riak_core_mochiglobal:put(?MAGIC, dyntrace),
++                            mochiglobal:put(?MAGIC, dyntrace),
+                             timeit_mg(ArgList);
+                         _ ->
+-                            riak_core_mochiglobal:put(?MAGIC, unsupported),
++                            mochiglobal:put(?MAGIC, unsupported),
+                             false
+                     end;
+                 _ ->
+-                    riak_core_mochiglobal:put(?MAGIC, unsupported),
++                    mochiglobal:put(?MAGIC, unsupported),
+                     false
+             end;
+         dyntrace ->
+@@ -192,7 +192,7 @@ timeit_naive_test() ->
+ -define(REPS, 225000).
+ 
+ timeit_mochiglobal_test() ->
+-    riak_core_mochiglobal:delete(?MAGIC),
++    mochiglobal:delete(?MAGIC),
+     Reps = lists:seq(1, ?REPS),
+     test_common("timeit_mochiglobal",
+                 fun() ->
+@@ -201,7 +201,7 @@ timeit_mochiglobal_test() ->
+                         [unused, {timer:now_diff(os:timestamp(), Start), unused}]
+                 end,
+                 ?REPS),
+-    riak_core_mochiglobal:delete(?MAGIC).
++    mochiglobal:delete(?MAGIC).
+ 
+ timeit_best_off_test() ->
+     timeit_best_common("timeit_best OFF (fastest)", false).
+diff --git a/src/riak_core_mochiglobal.erl b/src/riak_core_mochiglobal.erl
+deleted file mode 100644
+index c7fde00..0000000
+--- a/src/riak_core_mochiglobal.erl
++++ /dev/null
+@@ -1,107 +0,0 @@
+-%% @author Bob Ippolito <bob@mochimedia.com>
+-%% @copyright 2010 Mochi Media, Inc.
+-%% @doc Abuse module constant pools as a "read-only shared heap" (since erts 5.6)
+-%%      <a href="http://www.erlang.org/pipermail/erlang-questions/2009-March/042503.html">[1]</a>.
+--module(riak_core_mochiglobal).
+--author("Bob Ippolito <bob@mochimedia.com>").
+--export([get/1, get/2, put/2, delete/1]).
+-
+--spec get(atom()) -> any() | undefined.
+-%% @equiv get(K, undefined)
+-get(K) ->
+-    get(K, undefined).
+-
+--spec get(atom(), T) -> any() | T.
+-%% @doc Get the term for K or return Default.
+-get(K, Default) ->
+-    get(K, Default, key_to_module(K)).
+-
+-get(_K, Default, Mod) ->
+-    try Mod:term()
+-    catch error:undef ->
+-            Default
+-    end.
+-
+--spec put(atom(), any()) -> ok.
+-%% @doc Store term V at K, replaces an existing term if present.
+-put(K, V) ->
+-    put(K, V, key_to_module(K)).
+-
+-put(_K, V, Mod) ->
+-    Bin = compile(Mod, V),
+-    code:purge(Mod),
+-    {module, Mod} = code:load_binary(Mod, atom_to_list(Mod) ++ ".erl", Bin),
+-    ok.
+-
+--spec delete(atom()) -> boolean().
+-%% @doc Delete term stored at K, no-op if non-existent.
+-delete(K) ->
+-    delete(K, key_to_module(K)).
+-
+-delete(_K, Mod) ->
+-    code:purge(Mod),
+-    code:delete(Mod).
+-
+--spec key_to_module(atom()) -> atom().
+-key_to_module(K) ->
+-    list_to_atom("mochiglobal:" ++ atom_to_list(K)).
+-
+--spec compile(atom(), any()) -> binary().
+-compile(Module, T) ->
+-    {ok, Module, Bin} = compile:forms(forms(Module, T),
+-                                      [verbose, report_errors]),
+-    Bin.
+-
+--spec forms(atom(), any()) -> [erl_syntax:syntaxTree()].
+-forms(Module, T) ->
+-    [erl_syntax:revert(X) || X <- term_to_abstract(Module, term, T)].
+-
+--spec term_to_abstract(atom(), atom(), any()) -> [erl_syntax:syntaxTree()].
+-term_to_abstract(Module, Getter, T) ->
+-    [%% -module(Module).
+-     erl_syntax:attribute(
+-       erl_syntax:atom(module),
+-       [erl_syntax:atom(Module)]),
+-     %% -export([Getter/0]).
+-     erl_syntax:attribute(
+-       erl_syntax:atom(export),
+-       [erl_syntax:list(
+-         [erl_syntax:arity_qualifier(
+-            erl_syntax:atom(Getter),
+-            erl_syntax:integer(0))])]),
+-     %% Getter() -> T.
+-     erl_syntax:function(
+-       erl_syntax:atom(Getter),
+-       [erl_syntax:clause([], none, [erl_syntax:abstract(T)])])].
+-
+-%%
+-%% Tests
+-%%
+--ifdef(TEST).
+--include_lib("eunit/include/eunit.hrl").
+-get_put_delete_test() ->
+-    K = '$$test$$mochiglobal',
+-    delete(K),
+-    ?assertEqual(
+-       bar,
+-       get(K, bar)),
+-    try
+-        ?MODULE:put(K, baz),
+-        ?assertEqual(
+-           baz,
+-           get(K, bar)),
+-        ?MODULE:put(K, wibble),
+-        ?assertEqual(
+-           wibble,
+-           ?MODULE:get(K))
+-    after
+-        delete(K)
+-    end,
+-    ?assertEqual(
+-       bar,
+-       get(K, bar)),
+-    ?assertEqual(
+-       undefined,
+-       ?MODULE:get(K)),
+-    ok.
+--endif.
+diff --git a/src/riak_core_ring_manager.erl b/src/riak_core_ring_manager.erl
+index b957e36..1b90ad5 100644
+--- a/src/riak_core_ring_manager.erl
++++ b/src/riak_core_ring_manager.erl
+@@ -125,7 +125,7 @@ start_link(test) ->
+ 
+ %% @spec get_my_ring() -> {ok, riak_core_ring:riak_core_ring()} | {error, Reason}
+ get_my_ring() ->
+-    Ring = case riak_core_mochiglobal:get(?RING_KEY) of
++    Ring = case mochiglobal:get(?RING_KEY) of
+                ets ->
+                    case ets:lookup(?ETS, ring) of
+                        [{_, RingETS}] ->
+@@ -582,13 +582,13 @@ cleanup_ets(test) ->
+ reset_ring_id() ->
+     %% Maintain ring id epoch using mochiglobal to ensure ring id remains
+     %% monotonic even if the riak_core_ring_manager crashes and restarts
+-    Epoch = case riak_core_mochiglobal:get(riak_ring_id_epoch) of
++    Epoch = case mochiglobal:get(riak_ring_id_epoch) of
+                 undefined ->
+                     0;
+                 Value ->
+                     Value
+             end,
+-    riak_core_mochiglobal:put(riak_ring_id_epoch, Epoch + 1),
++    mochiglobal:put(riak_ring_id_epoch, Epoch + 1),
+     {Epoch + 1, 0}.
+ 
+ %% Set the ring in mochiglobal/ETS.  Exported during unit testing
+@@ -650,17 +650,17 @@ set_ring_global(Ring) ->
+                {chashbin, CHBin} | BucketMeta2],
+     ets:insert(?ETS, Actions),
+     ets:match_delete(?ETS, {{bucket, '_'}, undefined}),
+-    case riak_core_mochiglobal:get(?RING_KEY) of
++    case mochiglobal:get(?RING_KEY) of
+         ets ->
+             ok;
+         _ ->
+-            riak_core_mochiglobal:put(?RING_KEY, ets)
++            mochiglobal:put(?RING_KEY, ets)
+     end,
+     ok.
+ 
+ promote_ring() ->
+     {ok, Ring} = get_my_ring(),
+-    riak_core_mochiglobal:put(?RING_KEY, Ring).
++    mochiglobal:put(?RING_KEY, Ring).
+ 
+ %% Persist a new ring file, set the global value and notify any listeners
+ prune_write_notify_ring(Ring, State) ->
+@@ -711,7 +711,7 @@ set_ring_global_test() ->
+     Ring = riak_core_ring:fresh(),
+     set_ring_global(Ring),
+     promote_ring(),
+-    ?assert(riak_core_ring:nearly_equal(Ring, riak_core_mochiglobal:get(?RING_KEY))),
++    ?assert(riak_core_ring:nearly_equal(Ring, mochiglobal:get(?RING_KEY))),
+     cleanup_ets(test).
+ 
+ set_my_ring_test() ->

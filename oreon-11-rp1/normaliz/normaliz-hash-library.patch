@@ -1,0 +1,72 @@
+--- configure.ac.orig	2022-04-19 10:12:31.000000000 -0600
++++ configure.ac	2022-04-21 09:54:10.771865031 -0600
+@@ -268,15 +268,15 @@ AS_CASE([$with_hashlibrary],
+ 
+ AS_IF([test "x$with_hashlibrary" != xno],
+     [AC_MSG_CHECKING([whether hash-library headers and library are available])
+-     HASHLIBRARY_LIBS="-lsha256"
++     HASHLIBRARY_LIBS="-lcrypto"
+      #save_CPPFLAGS="$CPPFLAGS"
+      #save_LDFLAGS="$LDFLAGS"
+      save_LIBS="$LIBS"
+      LIBS="$LIBS $HASHLIBRARY_LIBS"
+      AC_LINK_IFELSE(
+-       [AC_LANG_PROGRAM([[#include "hash-library/sha256.h"
++       [AC_LANG_PROGRAM([[#include <openssl/sha.h>
+                         ]],
+-                        [[SHA256 dummy;
++                        [[SHA256_CTX dummy;
+                         ]])],
+        [[have_hashlibrary=yes]
+         [CPPFLAGS="$CPPFLAGS $HASHLIBRARY_CPPFLAGS"]
+--- source/libnormaliz/nmz_hash.cpp.orig	2022-04-19 10:12:31.000000000 -0600
++++ source/libnormaliz/nmz_hash.cpp	2022-04-21 09:55:38.095919789 -0600
+@@ -22,7 +22,7 @@
+  * terms of service.
+  */
+ #ifdef NMZ_HASHLIBRARY
+-#include <hash-library/sha256.h>
++#include <openssl/sha.h>
+ #endif
+ 
+ #include <iostream>
+@@ -41,8 +41,13 @@ using namespace std;
+ // return string of 32 zeros as default if hash-library is not present
+ string sha256str(const string& text, bool verbose) {
+ #ifdef NMZ_HASHLIBRARY
+-    SHA256 sha256;
+-    return sha256(text);
++    unsigned char rawHash[SHA256_DIGEST_LENGTH];
++    char hashstr[SHA256_DIGEST_LENGTH * 2 + 1];
++    SHA256(reinterpret_cast<const unsigned char *>(text.c_str()), text.size(), rawHash);
++    for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i)
++        sprintf(&hashstr[i * 2], "%02x", rawHash[i]);
++    hashstr[SHA256_DIGEST_LENGTH * 2] = '\0';
++    return hashstr;
+ #else
+     if (verbose)
+         verboseOutput() << "sha256str called but hash-library not present; "
+@@ -58,10 +63,8 @@ string sha256str(const string& text, boo
+ // Return as vector<unsigned char> of size sha256.HashBytes (== 32)
+ vector<unsigned char> sha256hexvec(const string& text, bool verbose) {
+ #ifdef NMZ_HASHLIBRARY
+-    SHA256 sha256;
+-    sha256.add(text.c_str(), text.size());
+-    unsigned char rawHash[sha256.HashBytes];
+-    sha256.getHash(rawHash);
++    unsigned char rawHash[SHA256_DIGEST_LENGTH];
++    SHA256(reinterpret_cast<const unsigned char *>(text.c_str()), text.size(), rawHash);
+     int s = sizeof(rawHash) / sizeof(rawHash[0]);
+     // assuming sizeof(unsigned char) == 1, then s == sha256.HashBytes == 32
+     vector<unsigned char> v(rawHash, rawHash + s);
+--- source/Makefile.configuration.orig	2022-04-21 09:54:10.772865031 -0600
++++ source/Makefile.configuration	2022-04-21 09:56:21.512947012 -0600
+@@ -92,7 +92,7 @@ else
+   ifeq ($(HASHLIBRARY),no)
+   else
+     CXXFLAGS += -DNMZ_HASHLIBRARY
+-    HASHLIBRARYFLAGS = -lsha256
++    HASHLIBRARYFLAGS = -lcrypto
+   endif
+ 
+   ##use COCOA?

@@ -1,0 +1,20 @@
+--- monero/contrib/epee/src/abstract_http_client.cpp.orig	2026-02-09 12:10:27.562557995 +0100
++++ monero/contrib/epee/src/abstract_http_client.cpp	2026-02-09 12:11:29.630396079 +0100
+@@ -3,6 +3,8 @@
+ #include "net/net_parse_helpers.h"
+ #include "misc_log_ex.h"
+ 
++#include <cmath>
++
+ #undef MONERO_DEFAULT_LOG_CATEGORY
+ #define MONERO_DEFAULT_LOG_CATEGORY "net.http"
+ 
+@@ -38,7 +40,7 @@
+     while (num_char >= radix)
+     {
+       temp = num_char % radix;
+-      num_char = (int)floor((float)num_char / (float)radix);
++      num_char = (int)std::floor((float)num_char / (float)radix);
+       csTmp = get_hex_vals()[temp];
+     }
+ 

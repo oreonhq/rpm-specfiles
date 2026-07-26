@@ -1,0 +1,108 @@
+From b29844cc163297bed6dd239545363a0cebcccc20 Mon Sep 17 00:00:00 2001
+From: serge-sans-paille <serge.guelton@telecom-bretagne.eu>
+Date: Wed, 29 Oct 2025 00:07:14 +0100
+Subject: [PATCH 1/4] [PATCH] Vendor imaplib2
+
+---
+ offlineimap/folder/IMAP.py | 2 +-
+ offlineimap/imaplibutil.py | 2 +-
+ offlineimap/init.py        | 2 +-
+ pyproject.toml             | 1 -
+ requirements.txt           | 1 -
+ setup.py                   | 3 +--
+ test/OLItest/TestRunner.py | 2 +-
+ 7 files changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/offlineimap/folder/IMAP.py b/offlineimap/folder/IMAP.py
+index 608fb5f..2323508 100644
+--- a/offlineimap/folder/IMAP.py
++++ b/offlineimap/folder/IMAP.py
+@@ -22,7 +22,7 @@ import time
+ from sys import exc_info
+ from offlineimap import imaputil, imaplibutil, OfflineImapError
+ from offlineimap import globals
+-from imaplib2 import MonthNames
++from offlineimap.imaplib2 import MonthNames
+ from .Base import BaseFolder
+ from email.errors import HeaderParseError, NoBoundaryInMultipartDefect
+ 
+diff --git a/offlineimap/imaplibutil.py b/offlineimap/imaplibutil.py
+index d777c1a..a519aa2 100644
+--- a/offlineimap/imaplibutil.py
++++ b/offlineimap/imaplibutil.py
+@@ -26,7 +26,7 @@ from hashlib import sha512, sha384, sha256, sha224, sha1
+ import rfc6555
+ from offlineimap import OfflineImapError
+ from offlineimap.ui import getglobalui
+-from imaplib2 import IMAP4, IMAP4_SSL, InternalDate
++from offlineimap.imaplib2 import IMAP4, IMAP4_SSL, InternalDate
+ 
+ try:
+     import fcntl
+diff --git a/offlineimap/init.py b/offlineimap/init.py
+index 4dc255b..c219252 100644
+--- a/offlineimap/init.py
++++ b/offlineimap/init.py
+@@ -27,7 +27,7 @@ from optparse import OptionParser
+ 
+ import offlineimap
+ from offlineimap.utils.distro_utils import get_os_name
+-import imaplib2 as imaplib
++import offlineimap.imaplib2 as imaplib
+ 
+ # Ensure that `ui` gets loaded before `threadutil` in order to
+ # break the circular dependency between `threadutil` and `Curses`.
+diff --git a/pyproject.toml b/pyproject.toml
+index 9fefd55..22807be 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,6 @@
+ [project]
+ dependencies = [
+     "distro",
+-    "imaplib2>=3.5",
+     "rfc6555",
+     "urllib3~=1.25.9"
+ ]
+diff --git a/requirements.txt b/requirements.txt
+index 9070773..5ab7ee9 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,5 +1,4 @@
+ # Requirements
+ rfc6555
+ distro; python_version > "3.6"
+-imaplib2>=3.5
+ urllib3~=1.25.9
+diff --git a/setup.py b/setup.py
+index 9bf3be1..6e4f54f 100644
+--- a/setup.py
++++ b/setup.py
+@@ -82,10 +82,9 @@ setup(name="offlineimap",
+                 'offlineimap.repository', 'offlineimap.ui',
+                 'offlineimap.utils'],
+       scripts=['bin/offlineimap'],
+-      setup_requires=['setuptools>=18.5', 'wheel', 'imaplib2'],
++      setup_requires=['setuptools>=18.5', 'wheel'],
+       license=copyright + ", Licensed under the GPL version 2",
+       install_requires=['distro',
+-                        'imaplib2>=3.5',
+                         'rfc6555',
+                         'urllib3~=1.25.9'],
+       extras_require={'kerberos':'gssapi[kerberos]',
+diff --git a/test/OLItest/TestRunner.py b/test/OLItest/TestRunner.py
+index 75f3db8..015f977 100644
+--- a/test/OLItest/TestRunner.py
++++ b/test/OLItest/TestRunner.py
+@@ -19,7 +19,7 @@ import shutil
+ import subprocess
+ import tempfile
+ import random
+-import imaplib2 as imaplib
++import offlineimap.imaplib2 as imaplib
+ from offlineimap.CustomConfig import CustomConfigParser
+ from . import default_conf
+ 
+-- 
+2.51.0
+

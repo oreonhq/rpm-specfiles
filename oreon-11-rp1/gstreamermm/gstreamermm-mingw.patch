@@ -1,0 +1,24 @@
+diff -up gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.cc.mingw gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.cc
+--- gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.cc.mingw	2017-10-20 14:01:23.000000000 +0200
++++ gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.cc	2022-10-20 11:18:16.956081260 +0200
+@@ -138,7 +138,7 @@ void PlayerWindow::on_video_area_realize
+   window_handler = GDK_WINDOW_XID (m_video_area.get_window()->gobj());
+ #endif
+ #ifdef GDK_WINDOWING_WIN32
+-  window_handler = GDK_WINDOW_HWND ((m_video_area.get_window()->gobj());
++  window_handler = (guintptr) GDK_WINDOW_HWND (m_video_area.get_window()->gobj());
+ #endif
+ }
+ 
+diff -up gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.h.mingw gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.h
+--- gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.h.mingw	2017-10-20 14:01:23.000000000 +0200
++++ gstreamermm-1.10.0/examples/media_player_gtkmm/player_window.h	2022-10-20 11:18:03.247133566 +0200
+@@ -75,7 +75,7 @@ protected:
+   sigc::connection m_timeout_connection;
+   guint m_watch_id;
+   gint64 m_duration;
+-  gulong window_handler;
++  guintptr window_handler;
+   gulong m_pad_probe_id;
+ 
+   const gint64 rewind_skip_amount = Gst::SECOND * 2;

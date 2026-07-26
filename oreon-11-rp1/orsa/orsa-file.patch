@@ -1,0 +1,91 @@
+--- a/src/liborsa/orsa_file.cc.orig	2009-04-07 16:27:28.000000000 +0200
++++ b/src/liborsa/orsa_file.cc	2009-04-07 17:33:23.000000000 +0200
+@@ -1399,6 +1399,32 @@
+     list_enum.push_back(TEXTURE_NEPTUNE);
+   }
+   
++  void OrsaConfigFile::Open(const FILE_STATUS st) {
++    
++    // already in the right status
++    if (status == st) return;
++    
++    // anomalous...
++    if (st == CLOSE) {
++      Close();
++      return;
++    }
++    
++    Close();
++    
++    if ((st == OPEN_R) && ((file = OPEN_FILE(filename.c_str(),OPEN_READ)) != 0)) {
++      status = OPEN_R;
++      return;
++    }
++    
++    if ((st == OPEN_W) && ((file = OPEN_FILE(filename.c_str(),OPEN_WRITE)) != 0)) {
++      status = OPEN_W;
++      return;
++    }
++    
++    status = CLOSE;
++  }
++  
+   void OrsaConfigFile::Read() {
+     
+     // if (file == 0) Open();
+@@ -1406,13 +1436,7 @@
+     
+     Open(OPEN_R);
+     
+-    // should improve this check
+-    // if (status != OPEN_R) return;
+-    
+-    if (status != OPEN_R) {
+-      ORSA_ERROR("Status error!");
+-      return;
+-    }
++    if (status != OPEN_R) return;
+     
+     char line[1024];    
+     string stag, svalue;
+--- a/src/liborsa/orsa_file.h.orig	2009-04-07 17:22:52.000000000 +0200
++++ b/src/liborsa/orsa_file.h	2009-04-07 17:35:59.000000000 +0200
+@@ -491,6 +491,7 @@
+     OrsaConfigFile();
+     // OrsaConfigFile(Config*);
+     
++    void Open(const FILE_STATUS st = OPEN_R);
+     void Read();
+     void Write();
+     
+--- a/src/liborsa/orsa_universe.cc.orig	2009-04-07 08:49:49.000000000 +0200
++++ b/src/liborsa/orsa_universe.cc	2009-04-07 17:45:02.000000000 +0200
+@@ -79,7 +79,7 @@
+     //
+     units->SetSystem(tu,lu,mu);
+     //
+-    if (!jpl_file) {
++    if (!jpl_file && !config->paths[JPL_EPHEM_FILE]->GetValue().empty()) {
+       jpl_file = new JPLFile(config->paths[JPL_EPHEM_FILE]->GetValue().c_str());
+     }
+     //
+@@ -87,7 +87,7 @@
+       jpl_cache = new JPLCache;
+     }
+     //
+-    if (!location_file) {
++    if (!location_file && !config->paths[OBSCODE]->GetValue().empty()) {
+       location_file = new LocationFile; 
+       location_file->SetFileName(config->paths[OBSCODE]->GetValue().c_str());
+       location_file->Open();
+--- a/src/libxorsa/xorsa_all_objects_popup.cc.orig	2009-04-08 01:49:01.000000000 +0200
++++ b/src/libxorsa/xorsa_all_objects_popup.cc	2009-04-08 01:49:15.000000000 +0200
+@@ -60,7 +60,7 @@
+     id_import_JPL = import_pm->insertItem("JPL",listview,SLOT(slot_import_JPL()));
+     // enabled only if a JPL file is available from the config file
+     {
+-      if (!(jpl_file->GoodFile())) {
++      if (jpl_file && !(jpl_file->GoodFile())) {
+ 	import_pm->setItemEnabled(id_import_JPL,false);
+       }
+     }

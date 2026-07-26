@@ -1,0 +1,51 @@
+diff -up hmmer-3.3.2/easel/esl_regexp.h.orig hmmer-3.3.2/easel/esl_regexp.h
+--- hmmer-3.3.2/easel/esl_regexp.h.orig	2023-01-23 15:18:19.404315866 +0100
++++ hmmer-3.3.2/easel/esl_regexp.h	2023-01-23 15:14:25.505246247 +0100
+@@ -30,7 +30,7 @@ typedef struct {
+   char reganch;		         /* Internal use only. */
+   char *regmust;		 /* Internal use only. */
+   int regmlen;		         /* Internal use only. */
+-  char program[1];	         /* Unwarranted chumminess with compiler. */  
++  char program[];	         /* Unwarranted chumminess with compiler. */  
+ } esl__regexp;
+ 
+ 
+diff -up hmmer-3.3.2/src/hmmpgmd.h.orig hmmer-3.3.2/src/hmmpgmd.h
+--- hmmer-3.3.2/src/hmmpgmd.h.orig	2023-01-23 15:18:37.307856995 +0100
++++ hmmer-3.3.2/src/hmmpgmd.h	2023-01-23 15:16:21.151741667 +0100
+@@ -56,7 +56,7 @@ typedef struct {
+   uint32_t    query_type;           /* sequence / hmm                           */
+   uint32_t    query_length;         /* length of the query data                 */
+   uint32_t    opts_length;          /* length of the options string             */
+-  char        data[1];              /* search data                              */
++  char        data[];               /* search data                              */
+ } HMMD_SEARCH_CMD;
+ 
+ /* HMMD_CMD_INIT */
+@@ -69,12 +69,12 @@ typedef struct {
+   uint32_t    seq_cnt;              /* sequences in database                    */
+   uint32_t    hmm_cnt;              /* total number hmm databases               */
+   uint32_t    model_cnt;            /* models in hmm database                   */
+-  char        data[1];              /* string data                              */
++  char        data[];               /* string data                              */
+ } HMMD_INIT_CMD;
+ 
+ /* HMMD_CMD_RESET */
+ typedef struct {
+-  char        ip_addr[1];           /* ip address                               */
++  char        ip_addr[64];          /* ip address                               */
+ } HMMD_INIT_RESET;
+ 
+ /* HMMD_HEADER */
+diff -up hmmer-3.3.2/src/hmmpgmd_shard.h.orig hmmer-3.3.2/src/hmmpgmd_shard.h
+--- hmmer-3.3.2/src/hmmpgmd_shard.h.orig	2023-01-23 15:18:58.603500656 +0100
++++ hmmer-3.3.2/src/hmmpgmd_shard.h	2023-01-23 15:15:37.588424964 +0100
+@@ -16,7 +16,7 @@ typedef struct {
+   uint32_t    model_cnt;            /* models in hmm database                   */
+   uint32_t    num_shards;			/* Number of shards the DB will be divided into */
+   uint32_t	  my_shard;				/* which shard is this thread responsible for? */
+-  char        data[1];              /* string data                              */
++  char        data[];               /* string data                              */
+ } HMMD_INIT_CMD_SHARD;
+ 
+ typedef struct {

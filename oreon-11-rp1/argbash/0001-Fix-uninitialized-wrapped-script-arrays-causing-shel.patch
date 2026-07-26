@@ -1,0 +1,85 @@
+From 0c49286abcc1907eacfb7ffd434f11979cf2736b Mon Sep 17 00:00:00 2001
+From: Stephen Gallagher <sgallagh@redhat.com>
+Date: Tue, 20 Jan 2026 15:49:33 -0500
+Subject: [PATCH] Fix uninitialized wrapped script arrays causing shellcheck
+ failures
+
+When ARGBASH_WRAP is used, the code generator creates combined arrays
+that reference both _opt and _pos suffixed arrays for each wrapped
+script group:
+
+    _args_test_onlyopt=("${_args_test_onlyopt_opt[@]}" "${_args_test_onlyopt_pos[@]}")
+
+However, if a wrapped script only had positional arguments OR only
+optional arguments, one of these arrays would never be initialized,
+causing shellcheck SC2154 warnings ('variable referenced but not
+assigned') and test failures.
+
+This commit fixes the issue by:
+
+1. Initializing both _opt and _pos arrays as empty arrays for ALL
+   wrapped script groups during the defaults initialization phase.
+   This is done in both _MAKE_DEFAULTS_POSITIONAL and
+   _MAKE_DEFAULTS_OPTIONAL to ensure coverage regardless of which
+   argument types the script has.
+
+2. Adding a shellcheck disable directive (SC2154) in the generated
+   assign_positional_args function where wrapped positional arrays
+   reference variables like $_arg_pos_arg. These variables ARE
+   assigned via eval, but shellcheck cannot trace dynamic assignments:
+
+       eval "$_positional_name=\${1}"
+
+   The disable directive prevents false positive warnings while
+   keeping shellcheck validation for the rest of the generated code.
+
+Fixes shellcheck errors in scripts using ARGBASH_WRAP such as:
+- test-wrapping-second_level.sh
+- test-wrapping-excl.sh
+
+Signed-off-by: Stephen Gallagher <sgallagh@redhat.com>
+---
+ src/function_generators.m4 | 2 ++
+ src/stuff.m4               | 6 ++++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/src/function_generators.m4 b/src/function_generators.m4
+index 117e27cc089aff2a8b6fe371f5da5dfce3751260..187cde89059a9ee43fea2c5944bf1ad027e71c43 100644
+--- a/src/function_generators.m4
++++ b/src/function_generators.m4
+@@ -154,6 +154,8 @@ m4_define([_MAKE_ASSIGN_POSITIONAL_ARGS_FUNCTION], [MAKE_FUNCTION(
+ 	)],
+ 	[m4_list_ifempty([_WRAPPED_ADD_SINGLE], [], [m4_do(
+ 		[m4_set_foreach([_POS_VARNAMES], [varname], [m4_n([_INDENT_()varname=()])])],
++		[_INDENT_()# shellcheck disable=SC2154  # the _arg_* variables are assigned via eval
++],
+ 		[_INDENT_()m4_list_join([_WRAPPED_ADD_SINGLE], m4_newline([_INDENT_()]))],
+ 		[
+ ],
+diff --git a/src/stuff.m4 b/src/stuff.m4
+index 68dbc0c4a6f279bf38f15560b9ea4389a34a4162..f609a1721bd375423f3a128ce999337a45a63f5c 100644
+--- a/src/stuff.m4
++++ b/src/stuff.m4
+@@ -1225,6 +1225,9 @@ m4_define([_MAKE_DEFAULTS_POSITIONAL], [m4_do(
+ 	[[_positionals=()]_ENDL_],
+ 	[m4_lists_foreach_positional([_ARGS_LONG,_POSITIONALS_MINS,_POSITIONALS_DEFAULTS,_ARGS_CATH], [_argname,_min_argn,_defaults,_arg_type],
+ 		[_MAKE_DEFAULTS_POSITIONALS_LOOP(_argname, _arg_type, _min_argn, _defaults)])],
++	[dnl Initialize wrapped argument arrays (both _opt and _pos) for all groups to ensure they exist
++],
++	[m4_set_foreach([_ARGS_GROUPS], [agroup], [agroup[]_opt_suffix=()_ENDL_[]agroup[]_pos_suffix=()_ENDL_])],
+ )])
+ 
+ 
+@@ -1250,6 +1253,9 @@ m4_define([_MAKE_DEFAULTS_OPTIONAL], [m4_do(
+ 			[_arg_varname=_sh_quote(_default)_ENDL_])],
+ 		[m4_set_contains([HAVE_SUPPLIED], _argname, [[_supplied]_arg_varname=0]_ENDL_, [])],
+ 	)])],
++	[dnl Initialize wrapped argument arrays (both _opt and _pos) for all groups to ensure they exist
++],
++	[m4_set_foreach([_ARGS_GROUPS], [agroup], [agroup[]_opt_suffix=()_ENDL_[]agroup[]_pos_suffix=()_ENDL_])],
+ )])
+ 
+ 
+-- 
+2.52.0
+

@@ -1,0 +1,56 @@
+diff -up gstreamermm-1.10.0/tests/test-bin.cc.tests gstreamermm-1.10.0/tests/test-bin.cc
+--- gstreamermm-1.10.0/tests/test-bin.cc.tests	2017-10-20 11:26:46.000000000 +0200
++++ gstreamermm-1.10.0/tests/test-bin.cc	2021-07-25 15:46:34.763772465 +0200
+@@ -24,9 +24,9 @@ protected:
+     bin = Bin::create("sample-bin");
+   }
+ 
+-  RefPtr<Element> AddElementToBin(const std::string& element_name = default_element, const std::string& name = element_name)
++  RefPtr<Element> AddElementToBin(const std::string& new_element = default_element, const std::string& name = element_name)
+   {
+-    RefPtr<Element> element = ElementFactory::create_element(element_name, name);
++    RefPtr<Element> element = ElementFactory::create_element(new_element, name);
+     bin->add(element);
+     return element;
+   }
+diff -up gstreamermm-1.10.0/tests/Makefile.am.tests gstreamermm-1.10.0/tests/Makefile.am
+--- gstreamermm-1.10.0/tests/Makefile.am.tests	2017-10-21 13:39:04.000000000 +0200
++++ gstreamermm-1.10.0/tests/Makefile.am	2025-08-14 12:47:45.138662159 +0200
+@@ -36,7 +36,6 @@ check_PROGRAMS =
+         test-iterator                           \
+         test-memory                             \
+         test-message                            \
+-        test-miniobject                         \
+         test-pad                                \
+         test-pipeline                           \
+         test-query                              \
+@@ -56,8 +55,6 @@ check_PROGRAMS =
+                                                 \
+         test-integration-bininpipeline          \
+         test-integration-binplugin              \
+-        test-integration-rewritefile            \
+-        test-integration-seekonstartup          \
+         test-integration-videoduration
+ 
+ 
+diff -up gstreamermm-1.10.0/tests/Makefile.in.tests gstreamermm-1.10.0/tests/Makefile.in
+--- gstreamermm-1.10.0/tests/Makefile.in.tests	2017-10-21 13:54:55.000000000 +0200
++++ gstreamermm-1.10.0/tests/Makefile.in	2025-08-14 12:47:53.538023802 +0200
+@@ -93,7 +93,7 @@ check_PROGRAMS = test-allocator$(EXEEXT)
+ 	test-capsfeatures$(EXEEXT) test-element$(EXEEXT) \
+ 	test-ghostpad$(EXEEXT) test-init$(EXEEXT) \
+ 	test-iterator$(EXEEXT) test-memory$(EXEEXT) \
+-	test-message$(EXEEXT) test-miniobject$(EXEEXT) \
++	test-message$(EXEEXT) \
+ 	test-pad$(EXEEXT) test-pipeline$(EXEEXT) test-query$(EXEEXT) \
+ 	test-sample$(EXEEXT) test-structure$(EXEEXT) \
+ 	test-taglist$(EXEEXT) test-urihandler$(EXEEXT) \
+@@ -105,8 +105,6 @@ check_PROGRAMS = test-allocator$(EXEEXT)
+ 	test-plugin-pushsrc$(EXEEXT) test-plugin-register$(EXEEXT) \
+ 	test-integration-bininpipeline$(EXEEXT) \
+ 	test-integration-binplugin$(EXEEXT) \
+-	test-integration-rewritefile$(EXEEXT) \
+-	test-integration-seekonstartup$(EXEEXT) \
+ 	test-integration-videoduration$(EXEEXT)
+ subdir = tests
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4

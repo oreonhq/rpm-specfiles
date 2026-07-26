@@ -1,0 +1,52 @@
+From 50c6015a6918ce4993f78d8094115dc4269f35bd Mon Sep 17 00:00:00 2001
+From: Gerd Behrmann <behrmann@gmail.com>
+Date: Wed, 3 Jun 2015 00:11:48 +0200
+Subject: [PATCH] Remove synchronization on CRL in CRLChecker
+
+Motivation:
+
+Versions of BouncyCastle prior to 1.46 had a race in LazyDERSequence. To
+avoid that race, CRLChecker synchronized on the CRL. This leads to lock
+contention. After upgrading to BouncyCastle 1.46 this workaround is no
+longer needed.
+
+Modification:
+
+Remove the synchronization on the CRL.
+
+Result:
+
+Reduced lock contention leads to higher request throughput.
+---
+ .../org/globus/gsi/trustmanager/CRLChecker.java   | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/CRLChecker.java b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/CRLChecker.java
+index 43b4886..1d7b39a 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/CRLChecker.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/CRLChecker.java
+@@ -146,18 +146,9 @@ public class CRLChecker implements CertificateChecker {
+             // validate CRL
+             verifyCRL(caCert, crl);
+ 
+-            /* One would have thought that a CRL is immutable and thus
+-             * thread safe, however inside the ASN1 parse tree we find
+-             * LazyDERSequence. LazyDERSequence is parsed lazily and
+-             * does so in a non-thread safe manner. One may very well
+-             * classify this as a bouncy castle bug, but as a
+-             * workaround synchronizing on the CRL solves the problem.
+-             */
+-            synchronized (crl) {
+-                if (crl.isRevoked(cert)) {
+-                    throw new CertPathValidatorException(
+-                        "Certificate " + cert.getSubjectDN() + " has been revoked");
+-                }
++            if (crl.isRevoked(cert)) {
++                throw new CertPathValidatorException(
++                    "Certificate " + cert.getSubjectDN() + " has been revoked");
+             }
+         }
+     }
+-- 
+2.17.2
+

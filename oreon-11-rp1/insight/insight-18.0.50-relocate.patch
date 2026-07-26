@@ -1,0 +1,228 @@
+diff -Naurp insight-18.0.50.20251017.orig/gdb/gdbtk/generic/gdbtk.c insight-18.0.50.20251017.new/gdb/gdbtk/generic/gdbtk.c
+--- insight-18.0.50.20251017.orig/gdb/gdbtk/generic/gdbtk.c	2025-10-10 14:02:28.000000000 +0200
++++ insight-18.0.50.20251017.new/gdb/gdbtk/generic/gdbtk.c	2025-10-18 23:25:07.683235424 +0200
+@@ -765,7 +765,7 @@ gdbtk_init (gdbtk_interp *interp)
+     {
+       static char set_gdbtk_library_script[] = "\
+ 	  if {![info exists env(GDBTK_LIBRARY)]} {\n\
+-	      set env(GDBTK_LIBRARY) [file join [file dirname [file dirname $Paths(guidir)]] insight1.0]\n\
++	      set env(GDBTK_LIBRARY) [file join [file dirname [file dirname $Paths(guidir)]] insight]\n\
+ 	  }\n";
+ 
+       gdbtk_hold_tcl_obj command_obj (Tcl_NewStringObj (set_gdbtk_library_script, -1));
+@@ -850,7 +850,7 @@ gdbtk_source_start_file (gdbtk_interp *i
+ proc gdbtk_find_main {} {\n\
+     global Paths GDBTK_LIBRARY\n\
+     rename gdbtk_find_main {}\n\
+-    tcl_findLibrary insight 1.0 {} main.tcl GDBTK_LIBRARY GDBTKLIBRARY\n\
++    tcl_findLibrary insight {} {} main.tcl GDBTK_LIBRARY GDBTKLIBRARY\n\
+     set Paths(appdir) $GDBTK_LIBRARY\n\
+ }\n\
+ gdbtk_find_main";
+@@ -866,7 +866,7 @@ proc gdbtk_find_main {} {\n\
+     } else {\n\
+         set debug_startup 0\n\
+     }\n\
+-    tcl_findLibrary insight 1.0 {} main.tcl GDBTK_LIBRARY GDBTK_LIBRARY\n\
++    tcl_findLibrary insight {} {} main.tcl GDBTK_LIBRARY GDBTK_LIBRARY\n\
+     set Paths(appdir) $GDBTK_LIBRARY\n\
+ }\n\
+ gdbtk_find_main";
+diff -Naurp insight-18.0.50.20251017.orig/gdb/gdbtk/library/main.tcl insight-18.0.50.20251017.new/gdb/gdbtk/library/main.tcl
+--- insight-18.0.50.20251017.orig/gdb/gdbtk/library/main.tcl	2025-05-01 16:55:06.000000000 +0200
++++ insight-18.0.50.20251017.new/gdb/gdbtk/library/main.tcl	2025-10-18 23:25:07.683573353 +0200
+@@ -38,9 +38,15 @@ if {[info exists auto_path]} {
+     lappend auto_path $GDBTK_LIBRARY
+   }
+ 
+-  # Add default plugins directory, which will be [name of exe]/../../lib/insight1.0
++  # Add default plugins directory, which will be [name of exe]/../../lib/insight
+   set exename [info nameofexecutable]
+-  set dir [file join [file dirname [file dirname $exename]] lib insight1.0]
++  set dir [file join [file dirname [file dirname $exename]] lib insight]
++  if {[file exists $dir]} {
++    lappend gdb_plugins $dir
++    lappend auto_path $dir
++  }
++  # Add extra plugins directory, which will be [name of exe]/../../share/insight
++  set dir [file join [file dirname [file dirname $exename]] share insight]
+   if {[file exists $dir]} {
+     lappend gdb_plugins $dir
+     lappend auto_path $dir
+diff -Naurp insight-18.0.50.20251017.orig/gdb/gdbtk/plugins/HOW-TO insight-18.0.50.20251017.new/gdb/gdbtk/plugins/HOW-TO
+--- insight-18.0.50.20251017.orig/gdb/gdbtk/plugins/HOW-TO	2017-04-30 18:06:42.000000000 +0200
++++ insight-18.0.50.20251017.new/gdb/gdbtk/plugins/HOW-TO	2025-10-18 23:25:07.683809736 +0200
+@@ -81,7 +81,7 @@ Custom plug-ins are provided as "package
+ be loaded. 
+ 
+ ** FIXME: don't need to create the directory -- install will do it **
+-i) First, locate the $(EXEC-PREFIX)/lib/insight1.0 directory.  This is the
++i) First, locate the $(EXEC-PREFIX)/lib/insight directory.  This is the
+ directory which contains the plug-in code used by Insight.  Create a
+ this directory if it does not exist yet (i.e., if your plug-in
+ is the first to be installed).
+@@ -92,7 +92,7 @@ to that directory.  Make sure you have a
+ auto_mkindex to create it.  For instance, in the sample case we would
+ have:
+ 
+-   $(EXEC-PREFIX)/lib/insight1.0/rhabout
++   $(EXEC-PREFIX)/lib/insight/rhabout
+ 
+ ** FIXME: this shows unix. show cygwin, too. **
+ and it would contain:
+@@ -133,7 +133,7 @@ command with the "-direct" option.
+ ** FIXME: install will do this, too. ALL plugins should be mentioned
+    in the global plugins.tcl file **
+ v) Create/append the file "plugins.tcl" in the plugins directory
+-($(EXEC-PREFIX/lib/insight1.0) if it does not yet exist.  This is a file
++($(EXEC-PREFIX/lib/insight) if it does not yet exist.  This is a file
+ shared by all plug-ins so make sure your install script does not overwrite,
+ but append to it.
+ 
+diff -Naurp insight-18.0.50.20251017.orig/gdb/gdbtk/plugins/Make-rules insight-18.0.50.20251017.new/gdb/gdbtk/plugins/Make-rules
+--- insight-18.0.50.20251017.orig/gdb/gdbtk/plugins/Make-rules	2017-04-30 18:06:42.000000000 +0200
++++ insight-18.0.50.20251017.new/gdb/gdbtk/plugins/Make-rules	2025-10-18 23:25:07.684055868 +0200
+@@ -104,12 +104,12 @@ all: $(ALL_TARGETS)
+ install: $(INSTALL_TARGET)
+ 
+ install-generic:
+-	$(mkinstalldirs) $(libdir)/insight1.0/$(PLUGIN)
++	$(mkinstalldirs) $(libdir)/insight/$(PLUGIN)
+ 	for i in $(ALL_INSTALL); do \
+-            $(INSTALL_DATA) $$i $(libdir)/insight1.0/$(PLUGIN)/$$i ; \
++            $(INSTALL_DATA) $$i $(libdir)/insight/$(PLUGIN)/$$i ; \
+         done ;
+ 	for i in pkgIndex.tcl tclIndex $(PLUGIN_INSTALL_SRCDIR) ; do \
+-	    $(INSTALL_DATA) $(srcdir)/$$i $(libdir)/insight1.0/$(PLUGIN)/$$i ; \
++	    $(INSTALL_DATA) $(srcdir)/$$i $(libdir)/insight/$(PLUGIN)/$$i ; \
+ 	done ;
+ 
+ html:
+diff -Naurp insight-18.0.50.20251017.orig/gdb/gdbtk/README insight-18.0.50.20251017.new/gdb/gdbtk/README
+--- insight-18.0.50.20251017.orig/gdb/gdbtk/README	2017-04-30 18:06:42.000000000 +0200
++++ insight-18.0.50.20251017.new/gdb/gdbtk/README	2025-10-18 23:25:07.684273315 +0200
+@@ -132,7 +132,7 @@ without recompiling.
+ To make more serious changes to the interface, such as adding a new window or
+ changing the framework, you will have to hack the tcl code (and probably the C
+ code as well).  The tcl library install directory is $(libdir) (probably
+-/usr/local/lib/insight1.0).  But, you will probably want to hack on your own
++/usr/local/lib/insight).  But, you will probably want to hack on your own
+ private copy before putting it up for the rest of the users.  To find the GDB tcl
+ code, GDB first checks for the environment variable GDBTK_LIBRARY.  GDB will check
+ this directory for the file "main.tcl".  If GDBTK_LIBRARY is not set, GDB will
+diff -Naurp insight-18.0.50.20251017.orig/gdb/Makefile.in insight-18.0.50.20251017.new/gdb/Makefile.in
+--- insight-18.0.50.20251017.orig/gdb/Makefile.in	2025-10-18 22:11:42.000000000 +0200
++++ insight-18.0.50.20251017.new/gdb/Makefile.in	2025-10-18 23:25:07.684645587 +0200
+@@ -551,7 +551,7 @@ ALL_TCL_CFLAGS = $(TCL_CFLAGS) $(TK_CFLA
+ # The version of gdbtk we're building. This should be kept
+ # in sync with GDBTK_VERSION and friends in gdbtk.h.
+ GDBTK_VERSION = 1.0
+-GDBTK_LIBRARY = $(datadir)/insight$(GDBTK_VERSION)
++GDBTK_LIBRARY = $(datadir)/insight
+ 
+ # Gdbtk requires an absolute path to the source directory or
+ # the testsuite won't run properly.
+@@ -2783,10 +2783,11 @@ install-gdbtk:
+ 		$(DESTDIR)$(bindir)/$$transformed_name$(EXEEXT) ; \
+ 	$(SHELL) $(srcdir)/../mkinstalldirs \
+ 		$(DESTDIR)$(GDBTK_LIBRARY) ; \
++	#	Use alternate directory.
+ 	$(SHELL) $(srcdir)/../mkinstalldirs \
+-		$(DESTDIR)$(libdir)/insight$(GDBTK_VERSION) ; \
++		$(DESTDIR)$(datadir)/insight ; \
+ 	$(INSTALL_DATA) $(srcdir)/gdbtk/plugins/plugins.tcl \
+-		$(DESTDIR)$(libdir)/insight$(GDBTK_VERSION)/plugins.tcl ; \
++		$(DESTDIR)$(datadir)/insight/plugins.tcl ; \
+ 	$(SHELL) $(srcdir)/../mkinstalldirs \
+ 		$(DESTDIR)$(GDBTK_LIBRARY)/images \
+ 		$(DESTDIR)$(GDBTK_LIBRARY)/images2 ; \
+diff -Naurp insight-18.0.50.20251017.orig/libgui/library/Makefile.am insight-18.0.50.20251017.new/libgui/library/Makefile.am
+--- insight-18.0.50.20251017.orig/libgui/library/Makefile.am	2020-07-24 13:01:04.000000000 +0200
++++ insight-18.0.50.20251017.new/libgui/library/Makefile.am	2025-10-18 23:25:07.685400911 +0200
+@@ -12,7 +12,7 @@ ulset.tcl wframe.tcl wingrab.tcl ventry.
+ pane.tcl panedwindow.tcl
+ 
+ ## This directory is also referenced in paths.c, which see.
+-guidir = $(datadir)/redhat/gui
++guidir = $(datadir)/insight/gui
+ gui_DATA = tclIndex pkgIndex.tcl $(TCL) $(PACKAGES)
+ 
+ 
+diff -Naurp insight-18.0.50.20251017.orig/libgui/src/Makefile.am insight-18.0.50.20251017.new/libgui/src/Makefile.am
+--- insight-18.0.50.20251017.orig/libgui/src/Makefile.am	2025-05-03 23:28:34.000000000 +0200
++++ insight-18.0.50.20251017.new/libgui/src/Makefile.am	2025-10-18 23:25:07.685576369 +0200
+@@ -12,7 +12,7 @@ include_HEADERS = \
+ endif
+ 
+ datadir = @datadir@
+-guidir  = $(datadir)/redhat/gui
++guidir  = $(datadir)/insight/gui
+ 
+ # tkTable version info
+ include $(srcdir)/tkTable_version.in
+diff -Naurp insight-18.0.50.20251017.orig/libgui/src/paths.c insight-18.0.50.20251017.new/libgui/src/paths.c
+--- insight-18.0.50.20251017.orig/libgui/src/paths.c	2017-04-30 18:06:42.000000000 +0200
++++ insight-18.0.50.20251017.new/libgui/src/paths.c	2025-10-18 23:25:07.685811187 +0200
+@@ -13,13 +13,13 @@
+ 
+    We first look for the gui library.  This can be set by the
+    REDHAT_GUI_LIBRARY environment variable.  Otherwise, it is named
+-   gui, and is found in $prefix/share/redhat, where $prefix is
++   gui, and is found in $prefix/share/insight, where $prefix is
+    determined by looking at the directory where the running executable
+    is installed.
+ 
+    We then look for the ide library.  This can be set by the
+    REDHAT_IDE_LIBRARY environment variable.  Otherwise, it is named
+-   ide, and is also found in $prefix/share/redhat.
++   ide, and is also found in $prefix/share/insight.
+ 
+    It is OK if only one of these libraries exist.  If neither exists,
+    we report an error.
+@@ -36,7 +36,7 @@
+    bitmapdir      -- see below
+ 
+    Paths(appdir) is set based on the ide_initialize_paths APPNAME
+-   parameter.  If a directory $prefix/share/redhat/APPNAME exists, we
++   parameter.  If a directory $prefix/share/insight/APPNAME exists, we
+    set Paths(appdir) to it.  More precisely, we set Paths(appdir) if
+    an APPNAME directory exists which is a sibling directory of the gui
+    or ide directory.  For convenience of some tools, we also check for
+@@ -69,13 +69,13 @@ proc initialize_paths {} {\n\
+   # Handle build with --exec-prefix and build without.\n\
+   set d [file join [file dirname [pwd]] usr share]\n\
+   lappend prefdirs $d\n\
+-  lappend guidirs [file join $d redhat gui]\n\
++  lappend guidirs [file join $d insight gui]\n\
+   set d [file join [file dirname [pwd]] share]\n\
+   lappend prefdirs $d\n\
+-  lappend guidirs [file join $d redhat gui]\n\
++  lappend guidirs [file join $d insight gui]\n\
+   set d [file join [file dirname [file dirname [pwd]]] share]\n\
+   lappend prefdirs $d\n\
+-  lappend guidirs [file join $d redhat gui]\n\
++  lappend guidirs [file join $d insight gui]\n\
+   set Paths(bindir) [pwd]\n\
+  	# Base `prefix' on where the `share' dir is found\n\
+  	foreach sd $prefdirs {\n\
+@@ -110,7 +110,7 @@ proc initialize_paths {} {\n\
+     lappend idedirs $env(REDHAT_IDE_LIBRARY)\n\
+   }\n\
+   foreach d $prefdirs {\n\
+-    lappend idedirs [file join $d redhat ide]\n\
++    lappend idedirs [file join $d insight ide]\n\
+   }\n\
+   # Try to handle running from the build tree:\n\
+   lappend idedirs [file join [file dirname [file dirname $::tcl_library]] libide library]\n\
+@@ -180,9 +180,9 @@ proc initialize_paths {} {\n\
+   set here [pwd]\n\
+   cd [file dirname [info nameofexecutable]]\n\
+   set d [file join [file dirname [pwd]] share]\n\
+-  lappend guidirs [file join $d redhat gui]\n\
++  lappend guidirs [file join $d insight gui]\n\
+   set d [file join [file dirname [file dirname [pwd]]] share]\n\
+-  lappend guidirs [file join $d redhat gui]\n\
++  lappend guidirs [file join $d insight gui]\n\
+   lappend guidirs [file join [file dirname [file dirname $tcl_library]] libgui library]\n\
+   foreach sd $guidirs {\n\
+     if {[file exists [file join $sd tclIndex]]} {\n\

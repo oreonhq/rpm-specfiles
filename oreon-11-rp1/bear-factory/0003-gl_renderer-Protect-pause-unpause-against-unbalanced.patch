@@ -1,0 +1,74 @@
+From 83cc5eac26fdfbc3f1ddaea2eee3edb836a0838b Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 11 Aug 2022 23:15:33 +0200
+Subject: [PATCH 3/5] gl_renderer: Protect pause/unpause against unbalanced
+ calls
+
+plee-the-bear calls unpause without calling pause first,
+leading to an unbalanced mutex unlock.
+
+This unbalanced mutex unlock triggers an assert when the mutex
+gets destroyed when exiting plee-the-bear.
+
+Protect pause/unpause against unbalanced calls to fix this.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ bear-engine/core/src/visual/code/gl_renderer.cpp | 13 +++++++++++++
+ bear-engine/core/src/visual/gl_renderer.hpp      |  3 +++
+ 2 files changed, 16 insertions(+)
+
+diff --git a/bear-engine/core/src/visual/code/gl_renderer.cpp b/bear-engine/core/src/visual/code/gl_renderer.cpp
+index 4733f25..1b21bf9 100644
+--- a/bear-engine/core/src/visual/code/gl_renderer.cpp
++++ b/bear-engine/core/src/visual/code/gl_renderer.cpp
+@@ -503,12 +503,24 @@ void bear::visual::gl_renderer::set_background_color( const color_type& c )
+ 
+ void bear::visual::gl_renderer::pause()
+ {
++  boost::mutex::scoped_lock states_lock( m_mutex.loop_state );
++
++  if ( m_paused )
++    return;
++
+   m_mutex.gl_access.lock();
++  m_paused = true;
+ }
+ 
+ void bear::visual::gl_renderer::unpause()
+ {
++  boost::mutex::scoped_lock states_lock( m_mutex.loop_state );
++
++  if ( !m_paused )
++    return;
++
+   m_mutex.gl_access.unlock();
++  m_paused = false;
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+@@ -972,6 +984,7 @@ bear::visual::gl_renderer::gl_renderer()
+     m_viewport_size( m_view_size ),
+     m_fullscreen( false ),
+     m_video_mode_is_set( false ),
++    m_paused( false ),
+     m_render_ready( false ),
+     m_draw( nullptr ),
+     m_capture_queue( nullptr )
+diff --git a/bear-engine/core/src/visual/gl_renderer.hpp b/bear-engine/core/src/visual/gl_renderer.hpp
+index 72cfe13..a9ee2d5 100644
+--- a/bear-engine/core/src/visual/gl_renderer.hpp
++++ b/bear-engine/core/src/visual/gl_renderer.hpp
+@@ -175,6 +175,9 @@ namespace bear
+       /** \brief Tells if the window has been initialized. */
+       bool m_video_mode_is_set;
+ 
++      /** \brief Tells if rendering is paused. */
++      bool m_paused;
++
+       /** \brief The next elements to render. */
+       state_list m_states;
+       state_list m_previous_states;
+-- 
+2.37.1
+

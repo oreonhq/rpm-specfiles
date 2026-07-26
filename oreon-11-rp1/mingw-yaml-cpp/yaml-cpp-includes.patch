@@ -1,0 +1,9 @@
+diff -rupN yaml-cpp-0.8.0/src/emitterutils.cpp yaml-cpp-0.8.0-new/src/emitterutils.cpp
+--- yaml-cpp-0.8.0/src/emitterutils.cpp	2023-08-10 21:27:56.000000000 +0200
++++ yaml-cpp-0.8.0-new/src/emitterutils.cpp	2026-01-04 12:12:03.525700225 +0100
+@@ -1,4 +1,5 @@
+ #include <algorithm>
++#include <cstdint>
+ #include <iomanip>
+ #include <sstream>
+ 

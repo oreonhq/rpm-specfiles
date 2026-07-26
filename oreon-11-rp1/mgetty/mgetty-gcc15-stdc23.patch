@@ -1,0 +1,77 @@
+diff --git a/frontends/X11/viewfax/viewfax.c b/frontends/X11/viewfax/viewfax.c
+index eeb7489..0e363f8 100644
+--- a/frontends/X11/viewfax/viewfax.c
++++ b/frontends/X11/viewfax/viewfax.c
+@@ -46,7 +46,7 @@ struct pagenode defaultpage;
+ #define Pimage(p)	((XImage *)(p)->extra)
+ 
+ /* getopt declarations */
+-extern int getopt();
++extern int getopt(int, char *const *, const char *);
+ extern char *optarg;
+ extern int optind, opterr, optopt;
+ 
+diff --git a/hyla_nsf.c b/hyla_nsf.c
+index b731e6e..cf275a1 100644
+--- a/hyla_nsf.c
++++ b/hyla_nsf.c
+@@ -39,9 +39,11 @@
+ 
+ #ifdef FAX_NSF_PARSER
+ 
++#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L
+ typedef char bool;
+ #define true 1
+ #define false 0
++#endif /* GCC < 15 */
+ 
+ struct ModelData 
+ {
+diff --git a/login.c b/login.c
+index f0d1da4..ac9da72 100644
+--- a/login.c
++++ b/login.c
+@@ -117,7 +117,7 @@ void login_dispatch _P3( (user, is_callback, cfg_file ),
+     int file_version = 1;		/* login.config format changed! */
+     char * line, * key, *p;
+     struct passwd * pw;
+-    extern struct passwd * getpwnam();
++    extern struct passwd * getpwnam(const char*);
+ 
+     struct stat st;
+ 
+diff --git a/mgetty.h b/mgetty.h
+index c6ddd58..ec920a9 100644
+--- a/mgetty.h
++++ b/mgetty.h
+@@ -148,7 +148,7 @@ int lprintf _PROTO((int level, const char *format, ...));
+  */
+ typedef	void	RETSIGTYPE;
+ 
+-#if defined(_SCO_DS) || defined(AIX5)		/* SCO OSR 5.0 */
++#if defined(_SCO_DS) || defined(AIX5) || defined(linux)		/* SCO OSR 5.0 */
+ # define SIG_HDLR_ARGS	int signo
+ #else
+ # define SIG_HDLR_ARGS
+diff --git a/voice/libpvf/wav.c b/voice/libpvf/wav.c
+index 31ab297..75ebbc4 100644
+--- a/voice/libpvf/wav.c
++++ b/voice/libpvf/wav.c
+@@ -43,7 +43,7 @@ unsigned short wBitsPerSample;          /* bits per sample */
+ unsigned long  data_length;             /* length of sound data in bytes */
+ unsigned long  bytespersample;          /* bytes per sample (per channel) */
+ 
+-static char *wav_format_str();
++static char *wav_format_str(unsigned short);
+ 
+ /* Read short, little-endian: little end first. VAX/386 style. */
+ 
+@@ -371,7 +371,7 @@ int wavstartwrite(ft_t ft,long data_size)
+  * Return a string corresponding to the wave format type.
+  */
+ 
+-static char * wav_format_str(unsigned wFormatTag)
++static char * wav_format_str(unsigned short wFormatTag)
+      {
+ 
+      switch (wFormatTag)

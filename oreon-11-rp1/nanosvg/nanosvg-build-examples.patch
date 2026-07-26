@@ -1,0 +1,34 @@
+diff -up nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt.build-examples nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt
+--- nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt.build-examples	2023-08-11 10:03:06.972793927 -0400
++++ nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt	2023-08-11 10:03:19.945975143 -0400
+@@ -25,6 +25,9 @@ target_compile_definitions(nanosvgrast P
+ # Add soversion
+ set_target_properties(nanosvg nanosvgrast PROPERTIES SOVERSION 0)
+ 
++# examples
++add_subdirectory(example)
++
+ # Installation and export:
+ 
+ include(CMakePackageConfigHelpers)
+diff -up nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/example/CMakeLists.txt.build-examples nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/example/CMakeLists.txt
+--- nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/example/CMakeLists.txt.build-examples	2023-08-11 10:00:16.865417808 -0400
++++ nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/example/CMakeLists.txt	2023-08-11 10:03:45.624333822 -0400
+@@ -0,0 +1,17 @@
++cmake_minimum_required(VERSION 3.10)
++
++project(NanoSVG-examples C)
++
++# find_package(NanoSVG REQUIRED)
++find_package(OpenGL REQUIRED)
++find_package(glfw3)
++
++add_executable(example1 example1.c)
++add_dependencies(example1 nanosvg)
++target_include_directories(example1 PRIVATE ../src)
++target_link_libraries(example1 OpenGL::GL glfw nanosvg)
++
++add_executable(example2 example2.c)
++add_dependencies(example2 nanosvgrast)
++target_include_directories(example2 PRIVATE ../src)
++target_link_libraries(example2 nanosvgrast)

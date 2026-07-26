@@ -1,0 +1,31 @@
+Description: Avoid crashing in oggjoin on bogus input
+Author: Petter Reinholdtsen <pere@hungry.com>
+Bug-Debian: http://bugs.debian.org/716188
+Forwarded: no
+Reviewed-By: Petter Reinholdtsen <pere@hungry.com>
+Last-Update: 2014-10-22
+
+diff --git a/src/main/oggBOSExtractorFactory.cpp b/src/main/oggBOSExtractorFactory.cpp
+index 8bee556..7929e8e 100644
+--- a/src/main/oggBOSExtractorFactory.cpp
++++ b/src/main/oggBOSExtractorFactory.cpp
+@@ -116,6 +116,9 @@ OggType OggBOSExtractorFactory::getStreamType(OggPage& page)
+ {
+   uint8* type = &(page->data())[0]+page->getHeaderLength();
+ 
++  if (NULL == OggTypeMap || NULL == type)
++    return (OggType::unknown);
++
+   uint8 i=1;
+   for (; i< to_integral(OggType::maxOggType); ++i) {
+     if (memcmp(type, OggTypeMap[i], MAXIDCHARS) == 0)
+@@ -131,6 +134,9 @@ OggType OggBOSExtractorFactory::getStreamType(OggPacket& packet)
+ {
+   uint8* type = packet->data();
+ 
++  if (NULL == OggTypeMap || NULL == type)
++    return (OggType::unknown);
++
+   uint8 i=1;
+   for (; i< to_integral(OggType::maxOggType); ++i) {
+     if (memcmp(type, OggTypeMap[i], MAXIDCHARS) == 0)

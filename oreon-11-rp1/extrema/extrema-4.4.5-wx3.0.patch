@@ -1,0 +1,177 @@
+Description: Fix to build with wxwidgets3.0
+ Based on patch originally proposed to fix FTBFS with clang and wx2.8.
+Author: Alexander Ovchinnikov <sanek23994@gmail.com>
+Origin: debian
+Forwarded: no
+Last-Update: 2014-05-14
+
+--- a/src/Commands/CMD_grid.cpp
++++ b/src/Commands/CMD_grid.cpp
+@@ -167,7 +167,7 @@
+     if( dup.size() > 0 )
+     {
+       if( qualifiers[wxT("MESSAGES")] )
+-        ExGlobals::WarningMessage( wxString(wxT("GRID: "))+dup.size()+wxT(" duplicate points found") );
++        ExGlobals::WarningMessage( wxString(wxT("GRID: "))+wxString::Format(wxT("%lu"),dup.size())+wxT(" duplicate points found") );
+       for( std::size_t i=0; i<dup.size(); ++i )
+       {
+         std::size_t j = dup.size()-i-1;
+--- a/src/Commands/CMD_set.cpp
++++ b/src/Commands/CMD_set.cpp
+@@ -3290,7 +3290,7 @@
+   {
+     wxString tmp( wxT("unknown keyword: ") );
+     tmp += keyword;
+-    throw ECommandError( command+tmp.c_str() );
++    throw ECommandError( command+tmp );
+   }
+   if( multipleEntries )goto TOP;
+ }
+--- a/src/Graphics/GRA_axis.cpp
++++ b/src/Graphics/GRA_axis.cpp
+@@ -1103,7 +1103,8 @@
+   //
+   if( nPos <= 0 )return wxString(wxT(" "));
+   wxChar digit[] = wxT("0123456789");
+-  wxChar minus=wxT('-'), dec=wxT('.'), blank=wxT(' '), star=wxT('*');
++  wxChar minus=wxT('-'), dec=wxT('.'), star=wxT('*'); 
++  wxUniChar blank=wxT(' ');
+   //
+   // determine nint, the number of digits to the left of the
+   // decimal point, and ndec2, the number of decimal places,
+--- a/src/Graphics/GRA_setOfCharacteristics.cpp
++++ b/src/Graphics/GRA_setOfCharacteristics.cpp
+@@ -193,7 +193,7 @@
+ }
+ 
+ GRA_characteristic *GRA_setOfCharacteristics::Get( wxString const &name ) const
+-{ return Get( name.c_str() ); }
++{ return Get( static_cast<wxChar const*>( name.c_str() ) ); }
+ 
+ GRA_characteristic *GRA_setOfCharacteristics::Get( wxChar const *name ) const
+ {
+--- a/src/Graphics/GRA_stringCharacteristic.cpp
++++ b/src/Graphics/GRA_stringCharacteristic.cpp
+@@ -48,7 +48,7 @@
+   std::size_t length = s.size();
+   for( std::size_t i=0; i<length; ++i )
+   {
+-    switch ( s[i] )
++    switch ( static_cast<wxChar>(s[i]) )
+     {
+       case wxT('<'):
+         result += wxT("&lt;");
+--- a/src/Variables/Variable.cpp
++++ b/src/Variables/Variable.cpp
+@@ -100,7 +100,7 @@
+     else if( newState == -20 )
+       throw EVariableError( wxT("no variable name was given") );
+     else if( newState == -30 )
+-      throw EVariableError( uName[i]+wxT(" is an invalid character in ")+name );
++      throw EVariableError( uName[i]+wxString(wxT(" is an invalid character in "))+name );
+     ++i;
+   }
+   if( start == -1 )throw EVariableError(wxT("no variable name was given"));
+--- a/src/wxForms/AnalysisMessagePanel.cpp
++++ b/src/wxForms/AnalysisMessagePanel.cpp
+@@ -83,7 +83,7 @@
+   std::ios_base::openmode mode;
+   fd = new wxFileDialog( this, wxT("Save command history"), wxT(""), wxT(""),
+                          wxT("Text files (*.txt)|*.txt|Any file (*.*)|*.*"),
+-                         wxSAVE|wxOVERWRITE_PROMPT|wxCHANGE_DIR );
++                         wxFD_SAVE|wxFD_OVERWRITE_PROMPT|wxFD_CHANGE_DIR );
+   mode = std::ios_base::out;
+   wxString filename;
+   if( fd->ShowModal() == wxID_OK )filename = fd->GetPath();
+--- a/src/wxForms/AnalysisSpeedButtonPanel.cpp
++++ b/src/wxForms/AnalysisSpeedButtonPanel.cpp
+@@ -163,7 +163,7 @@
+   wxFileDialog *fd;
+   fd = new wxFileDialog( this, wxT("Save session"), wxT(""), wxT(""),
+                          wxT("xml files (*.xml)|*.xml"),
+-                         wxSAVE|wxOVERWRITE_PROMPT|wxCHANGE_DIR );
++                         wxFD_SAVE|wxFD_OVERWRITE_PROMPT|wxFD_CHANGE_DIR );
+   wxString filename;
+   if( fd->ShowModal() == wxID_OK )filename = fd->GetPath();
+   if( filename.empty() )return;
+@@ -195,7 +195,7 @@
+   wxFileDialog *fd;
+   fd = new wxFileDialog( this, wxT("Save session"), wxT(""), wxT(""),
+                          wxT("xml files (*.xml)|*.xml"),
+-                         wxOPEN|wxFILE_MUST_EXIST|wxCHANGE_DIR );
++                         wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_CHANGE_DIR );
+   wxString filename;
+   if( fd->ShowModal() == wxID_OK )filename = fd->GetPath();
+   if( filename.empty() )return;
+--- a/src/wxForms/ChooseFilePanel.cpp
++++ b/src/wxForms/ChooseFilePanel.cpp
+@@ -96,13 +96,13 @@
+   if( read_ )
+   {
+     fd = new wxFileDialog( this, message_, wxT(""), wxT(""), fileType_,
+-                           wxOPEN|wxFILE_MUST_EXIST|wxCHANGE_DIR );
++                           wxFD_OPEN|wxFD_FILE_MUST_EXIST|wxFD_CHANGE_DIR );
+     mode = std::ios_base::in;
+   }
+   else
+   {
+     fd = new wxFileDialog( this, message_, wxT(""), wxT(""), fileType_,
+-                           wxSAVE|wxOVERWRITE_PROMPT|wxCHANGE_DIR );
++                           wxFD_SAVE|wxFD_OVERWRITE_PROMPT|wxFD_CHANGE_DIR );
+     mode = std::ios_base::out;
+   }
+   wxString filename;
+@@ -147,11 +147,11 @@
+ 
+ void ChooseFilePanel::RemoveFilename()
+ {
+-  if( filenameComboBox_->IsEmpty() )return;
++  if( filenameComboBox_->wxChoice::IsEmpty() )return;
+   int i = filenameComboBox_->GetSelection();
+   filenameComboBox_->Delete( i );
+   i > 0 ? filenameComboBox_->SetSelection(i-1) : filenameComboBox_->SetSelection(0);
+-  if( filenameComboBox_->IsEmpty() )filenameComboBox_->SetValue( wxT("") );
++  if( filenameComboBox_->wxChoice::IsEmpty() )filenameComboBox_->SetValue( wxT("") );
+ }
+ 
+ wxString ChooseFilePanel::GetSelection()
+--- a/src/wxForms/VisualizationSpeedButtonPanel.cpp
++++ b/src/wxForms/VisualizationSpeedButtonPanel.cpp
+@@ -163,7 +163,7 @@
+   wxString wildcard( wxT("Encapsulated PostScript (*.eps)|*.eps|PNG file (*.png)|*.png|JPEG file (*.jpeg)|*.jpeg") );
+ #endif
+   wxFileDialog *fd = new wxFileDialog( this, wxT("Choose an output file"), wxT(""), wxT(""),
+-                                       wildcard, wxSAVE|wxOVERWRITE_PROMPT|wxCHANGE_DIR );
++                                       wildcard, wxFD_SAVE|wxFD_OVERWRITE_PROMPT|wxFD_CHANGE_DIR );
+   if( fd->ShowModal() != wxID_OK )return;
+   wxString filename( fd->GetFilename() );
+   if( filename.empty() )return;
+--- a/src/wxForms/VisualizationWindow.cpp
++++ b/src/wxForms/VisualizationWindow.cpp
+@@ -501,7 +501,7 @@
+ {
+   wxString wildcard( wxT("PostScript (*.eps)|*.eps") );
+   wxFileDialog *fd = new wxFileDialog( this, wxT("Choose an output file"), wxT(""), wxT(""),
+-                                       wildcard, wxSAVE|wxOVERWRITE_PROMPT|wxCHANGE_DIR );
++                                       wildcard, wxFD_SAVE|wxFD_OVERWRITE_PROMPT|wxFD_CHANGE_DIR );
+   if( fd->ShowModal() != wxID_OK )return;
+   wxString filename( fd->GetFilename() );
+   if( filename.empty() )return;
+@@ -530,7 +530,7 @@
+ {
+   wxString wildcard( wxT("PNG (*.png)|*.png") );
+   wxFileDialog *fd = new wxFileDialog( this, wxT("Choose an output file"), wxT(""), wxT(""),
+-                                       wildcard, wxSAVE|wxOVERWRITE_PROMPT|wxCHANGE_DIR );
++                                       wildcard, wxFD_SAVE|wxFD_OVERWRITE_PROMPT|wxFD_CHANGE_DIR );
+   if( fd->ShowModal() != wxID_OK )return;
+   wxString filename( fd->GetFilename() );
+   if( filename.empty() )return;
+@@ -561,7 +561,7 @@
+ {
+   wxString wildcard( wxT("JPEG (*.jpeg)|*.jpeg") );
+   wxFileDialog *fd = new wxFileDialog( this, wxT("Choose an output file"), wxT(""), wxT(""),
+-                                       wildcard, wxSAVE|wxOVERWRITE_PROMPT|wxCHANGE_DIR );
++                                       wildcard, wxFD_SAVE|wxFD_OVERWRITE_PROMPT|wxFD_CHANGE_DIR );
+   if( fd->ShowModal() != wxID_OK )return;
+   wxString filename( fd->GetFilename() );
+   if( filename.empty() )return;

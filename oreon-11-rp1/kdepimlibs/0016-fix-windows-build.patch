@@ -1,0 +1,25 @@
+From 2e7d344a4d710ee011780f5f24f89ab4bb514f1b Mon Sep 17 00:00:00 2001
+From: Patrick Spendrin <ps_ml@gmx.de>
+Date: Wed, 19 Aug 2015 12:34:31 +0200
+Subject: [PATCH 16/31] fix windows build
+
+---
+ akonadi/entitytreemodel.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/akonadi/entitytreemodel.cpp b/akonadi/entitytreemodel.cpp
+index 591a441..a2e8f2d 100644
+--- a/akonadi/entitytreemodel.cpp
++++ b/akonadi/entitytreemodel.cpp
+@@ -773,7 +773,7 @@ QMimeData *EntityTreeModel::mimeData(const QModelIndexList &indexes) const
+         if (Node::Collection == node->type) {
+             urls << d->m_collections.value(node->id).url(Collection::UrlWithName);
+         } else if (Node::Item == node->type) {
+-            KUrl url = d->m_items.value(node->id).url(Item::Item::UrlWithMimeType);
++            KUrl url = d->m_items.value(node->id).url(Item::UrlWithMimeType);
+             // Encode the "virtual" parent
+             url.addQueryItem(QLatin1String("parent"), QString::number(node->parent));
+             urls << url;
+-- 
+2.5.0
+

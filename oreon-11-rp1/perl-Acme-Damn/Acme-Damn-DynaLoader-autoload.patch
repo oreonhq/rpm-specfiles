@@ -1,0 +1,24 @@
+commit 2d180ad37b1ac9caa15261b13bd236e0c9372f82
+Author: Yves Orton <demerphq@gmail.com>
+Date:   Fri Jul 21 21:04:13 2023 +0200
+
+    Damn.pm - remove symbol import from DynaLoader use statement
+    
+    DynaLoader doesn't export anything. This causes errors in 5.39.1:
+    
+        Attempt to call undefined import method with arguments via
+        package "DynaLoader" (Perhaps you forgot to load the package?)
+
+diff --git a/Damn.pm b/Damn.pm
+index 2240c01..ee03ac6 100644
+--- a/Damn.pm
++++ b/Damn.pm
+@@ -5,7 +5,7 @@ use strict;
+ use warnings;
+ 
+ use Exporter;
+-use DynaLoader  qw( AUTOLOAD );
++use DynaLoader;
+ 
+ use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK );
+ 

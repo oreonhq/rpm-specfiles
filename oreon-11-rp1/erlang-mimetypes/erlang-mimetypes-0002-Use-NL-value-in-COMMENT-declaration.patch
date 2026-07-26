@@ -1,0 +1,32 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 1 Jun 2016 15:15:51 +0300
+Subject: [PATCH] Use NL value in COMMENT declaration
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/mimetypes_scan.xrl b/src/mimetypes_scan.xrl
+index c562a5a..357b9c9 100644
+--- a/src/mimetypes_scan.xrl
++++ b/src/mimetypes_scan.xrl
+@@ -1,9 +1,9 @@
+ Definitions.
+ 
+-WS     = ([\s\t])
+-NL     = (\r?[\n])
++WS     = ([\s\t])+
++NL     = (\r?[\n])+
+ 
+-COMMENT = (#.*\n)
++COMMENT = (#.*{NL})
+ STR = ([a-zA-Z_/\-0-9\+\.]+)
+ 
+ Rules.
+@@ -12,7 +12,7 @@ Rules.
+ {NL}  : {token, {'newline', TokenLine}}.
+  
+ {COMMENT} : skip_token.
+-{WS}+  : skip_token.
++{WS} : skip_token.
+ 
+ 
+ Erlang code.

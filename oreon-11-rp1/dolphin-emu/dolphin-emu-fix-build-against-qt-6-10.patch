@@ -1,0 +1,34 @@
+diff --git a/Source/Core/DolphinQt/CMakeLists.txt b/Source/Core/DolphinQt/CMakeLists.txt
+index 38d481c..fb31190 100644
+--- a/Source/Core/DolphinQt/CMakeLists.txt
++++ b/Source/Core/DolphinQt/CMakeLists.txt
+@@ -14,7 +14,7 @@ endif()
+ set(CMAKE_AUTOMOC ON)
+ set(CMAKE_AUTORCC ON)
+ 
+-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Svg)
++find_package(Qt6 REQUIRED COMPONENTS Core GuiPrivate Widgets Svg)
+ message(STATUS "Found Qt version ${Qt6_VERSION}")
+ 
+ set_property(TARGET Qt6::Core PROPERTY INTERFACE_COMPILE_FEATURES "")
+@@ -426,6 +426,7 @@ PRIVATE
+ target_link_libraries(dolphin-emu
+ PRIVATE
+   core
++  Qt6::GuiPrivate
+   Qt6::Widgets
+   uicommon
+   imgui
+diff --git a/Source/Core/DolphinQt/MainWindow.cpp b/Source/Core/DolphinQt/MainWindow.cpp
+index 93ad16a..78ae7c9 100644
+--- a/Source/Core/DolphinQt/MainWindow.cpp
++++ b/Source/Core/DolphinQt/MainWindow.cpp
+@@ -31,7 +31,7 @@
+ #endif
+ 
+ #ifndef _WIN32
+-#include <qpa/qplatformnativeinterface.h>
++#include <QtGui/qpa/qplatformnativeinterface.h>
+ #endif
+ 
+ #include "Common/ScopeGuard.h"

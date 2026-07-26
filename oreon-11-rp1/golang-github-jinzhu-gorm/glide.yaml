@@ -1,0 +1,7 @@
+import:
+- package: github.com/lib/pq
+  subpackages:
+  - hstore
+  version: dc50b6ad2d3ee836442cf3389009c7cd1e64bb43
+package: github.com/jinzhu/gorm
+

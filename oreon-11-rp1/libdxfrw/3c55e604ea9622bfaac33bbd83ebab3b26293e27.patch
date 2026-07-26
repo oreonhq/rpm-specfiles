@@ -1,0 +1,22 @@
+From 3c55e604ea9622bfaac33bbd83ebab3b26293e27 Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Thu, 2 Jan 2025 00:07:18 -0500
+Subject: [PATCH] dxfrw: fixed a compiler warning
+
+---
+ libraries/libdxfrw/src/drw_objects.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libraries/libdxfrw/src/drw_objects.cpp b/libraries/libdxfrw/src/drw_objects.cpp
+index 7cbf5794cb..b534ef6c41 100644
+--- a/src/drw_objects.cpp
++++ b/src/drw_objects.cpp
+@@ -1431,7 +1431,7 @@ bool DRW_View::parseCode(int code, dxfReader *reader) {
+     return true;
+ }
+ 
+-bool DRW_View::parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs) {
++bool DRW_View::parseDwg(DRW::Version /*version*/, dwgBuffer* buf, duint32 /*bs*/) {
+     // fixme - sand - complete reading VIEW from DWG
+     DRW_DBG("\n********************** parsing VIEW Settings from DWG is not yet implemented **************************\n");
+     return buf->isGood();

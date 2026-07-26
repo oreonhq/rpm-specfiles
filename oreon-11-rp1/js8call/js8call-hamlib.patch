@@ -1,0 +1,49 @@
+Index: js8call-2.3.1/CMakeLists.txt
+===================================================================
+--- js8call-2.3.1.orig/CMakeLists.txt
++++ js8call-2.3.1/CMakeLists.txt
+@@ -409,8 +409,6 @@ find_package (FFTW3 REQUIRED COMPONENTS
+ # hamlib setup
+ #
+ find_package (Hamlib REQUIRED)
+-find_program (RIGCTL_EXE rigctl)
+-find_program (RIGCTLD_EXE rigctld)
+ 
+ check_type_size (CACHE_ALL HAMLIB_OLD_CACHING)
+ check_symbol_exists (rig_set_cache_timeout_ms "hamlib/rig.h" HAVE_HAMLIB_CACHING)
+@@ -677,20 +675,6 @@ install (TARGETS js8call
+   BUNDLE DESTINATION . COMPONENT runtime
+   )
+ 
+-install (PROGRAMS
+-  ${RIGCTL_EXE}
+-  DESTINATION ${CMAKE_INSTALL_BINDIR}
+-  #COMPONENT runtime
+-  RENAME rigctl-local${CMAKE_EXECUTABLE_SUFFIX}
+-  )
+-
+-install (PROGRAMS
+-  ${RIGCTLD_EXE}
+-  DESTINATION ${CMAKE_INSTALL_BINDIR}
+-  #COMPONENT runtime
+-  RENAME rigctld-local${CMAKE_EXECUTABLE_SUFFIX}
+-  )
+-
+ install (FILES
+   README
+   COPYING
+@@ -756,14 +740,6 @@ if (NOT WIN32 AND NOT APPLE)
+     #COMPONENT runtime
+     )
+ 
+-    IF("${CMAKE_INSTALL_PREFIX}" STREQUAL "/opt/js8call")
+-        execute_process(COMMAND ln -s /opt/js8call/bin/js8call ljs8call)
+-
+-        install(FILES
+-            ${CMAKE_BINARY_DIR}/ljs8call DESTINATION /usr/bin/ RENAME js8call
+-            #COMPONENT runtime
+-        )
+-    endif()
+ endif (NOT WIN32 AND NOT APPLE)
+ 
+ 

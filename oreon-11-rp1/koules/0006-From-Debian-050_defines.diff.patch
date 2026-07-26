@@ -1,0 +1,123 @@
+From e159f23dda3f212c140ae7860a915cfe5e1d92d3 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:46 +0200
+Subject: [PATCH 06/41] From Debian: 050_defines.diff
+
+---
+ Iconfig     | 14 +++++++-------
+ xlib/init.c | 49 +++++++++++++++++++++++++++++--------------------
+ 2 files changed, 36 insertions(+), 27 deletions(-)
+
+diff --git a/Iconfig b/Iconfig
+index 3260a0b..075fa46 100644
+--- a/Iconfig
++++ b/Iconfig
+@@ -18,7 +18,7 @@
+    use my emulation
+    If you are unsure try to leave it commented out. My emulation
+    works on most unixes*/
+-/*#define HAVEUSLEEP*/
++#define HAVEUSLEEP
+ /* for network audio server(supported by most unixes)*/
+ /* It does not sound as well as built in driver ... koules uses too 
+    much sounds*/
+@@ -29,14 +29,14 @@
+ /* linux joystick support
+    Now compiles w/o joystick toolkit. For using joystick support is
+    joystick toolikit required...of course */
+-/*#define JOYSTICK*/
++#define JOYSTICK
+ /*for fast 386 based assembler routines
+   recomended for linux*/
+-/*#define I386ASSEMBLY*/
++#define I386ASSEMBLY
+ /* directories*/
+-KOULESDIR		=/usr/bin/X11
+-SOUNDDIR		=/usr/local/lib/koules
+-MANDIR			=/usr/local/man/man6
++KOULESDIR		=/usr/games
++SOUNDDIR		=/usr/games/lib/koules
++MANDIR			=/usr/man/man6
+ 
+ /*You need some extra libraryes for BSD sockets compatibility?*/
+ /* TOP_INCLUDES =                       /* Sun users with GCC need this */
+@@ -61,7 +61,7 @@ SUBDIRS = xlib
+ #endif
+ 
+ 
+-#if defined(HPArchitecture)
++#if defined(HPArchitecture) && !defined(LinuxArchitecture)
+     SYSDEFS = +O3 -Ae 
+ #if !defined(NAS_SOUND)&&!defined(RSOUND)
+ #define SOUND
+diff --git a/xlib/init.c b/xlib/init.c
+index e9684fc..c29b845 100644
+--- a/xlib/init.c
++++ b/xlib/init.c
+@@ -770,6 +770,32 @@ main (int argc, char **argv)
+ #endif
+ 	  break;
+ 	default:
++#ifdef NETSUPPORT
++#define USAGE_NETSUPPORT " -S run koules as network server\n \
++-C<host> run koules as network client\n \
++-P<port> select port. Default is:%i\n \
++-W run server in width mode-support for 320x200 svgalib and OS/2 clients\n \
++-L<level> select level for server\n \
++-D<number> select dificulty for server:\n \
++    0: nightmare\n \
++    1: hard\n \
++    2: medium(default and recomended)\n \
++    3: easy\n \
++    4: very easy\n \
++-K run server in deathmatch mode\n "
++#else
++#define USAGE_NETSUPPORT ""
++#endif
++#ifdef SOUND
++#define USAGE_SOUND " -d Disable sound support\n"
++#else
++#define USAGE_SOUND ""
++#endif
++#ifdef MITSHM
++#define USAGE_MITSHM " -M DISABLE shared memory support\n"
++#else
++#define USAGE_MITSHM ""
++#endif
+ 	  printf ("USAGE:"
+ 		  " -h for help\n"
+ 		  " -b for blackandwhite displays\n"
+@@ -779,27 +805,10 @@ main (int argc, char **argv)
+ 		  " -p use private colormap\n"
+ 		  " -y Synchronize with X(for debugging)\n"
+ 		  " -f nofade(for debugging)\n"
+-#ifdef SOUND
+-		  " -d Disable sound support\n"
+-#endif
++		  USAGE_SOUND
+ 		  " -x Disable X11 pointer\n"
+-#ifdef MITSHM
+-		  " -M DISABLE shared memory support\n"
+-#endif
+-#ifdef NETSUPPORT
+-		  " -S run koules as network server\n"
+-		  " -C<host> run koules as network client\n"
+-		  " -P<port> select port. Default is:%i\n"
+-		  " -W run server in width mode-support for 320x200 svgalib and OS/2 clients\n"
+-		  " -L<level> select level for server\n"
+-		  " -D<number> select dificulty for server:\n"
+-		  "     0: nightmare\n"
+-		  "     1: hard\n"
+-		  "     2: medium(default and recomended)\n"
+-		  "     3: easy\n"
+-		  "     4: very easy\n"
+-		  " -K run server in deathmatch mode\n", DEFAULTINITPORT
+-#endif
++		  USAGE_MITSHM
++		  USAGE_NETSUPPORT, DEFAULTINITPORT
+ 	    );
+ 	  exit (2);
+ 	}
+-- 
+2.5.0
+

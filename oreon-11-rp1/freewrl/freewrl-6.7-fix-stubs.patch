@@ -1,0 +1,57 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c.fix-stubs freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c.fix-stubs	2025-03-27 16:17:07.267905631 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c	2025-03-27 16:22:19.156863098 -0400
+@@ -25,15 +25,15 @@
+ //#define USE_SNAPSHOT_TESTING 1
+ #ifndef USE_SNAPSHOT_TESTING
+ //stubs for options
+-void fwl_set_modeRecord()
+-{
+-}
++//void fwl_set_modeRecord()
++//{
++//}
+ void fwl_set_modeFixture()
+ {
+ }
+-void fwl_set_modePlayback()
+-{
+-}
++//void fwl_set_modePlayback()
++//{
++//}
+ void fwl_set_nameTest(char *nameTest)
+ {
+ }
+@@ -345,6 +345,7 @@ int fwl_handle_aqua_TESTING(const int me
+ 	return fwl_handle_mouse0(mev, button, x, y, windex);
+ }
+ 
++/*
+ void fwl_set_modeRecord()
+ {
+ 	ppSnapshotTesting p;
+@@ -353,6 +354,7 @@ void fwl_set_modeRecord()
+ 	p = get_ppSnapshotTesting();
+     p->modeRecord = TRUE;
+ }
++*/
+ void fwl_set_modeFixture()
+ {
+ 	ppSnapshotTesting p;
+@@ -361,6 +363,7 @@ void fwl_set_modeFixture()
+ 	p = get_ppSnapshotTesting();
+     p->modeFixture = TRUE;
+ }
++/*
+ void fwl_set_modePlayback()
+ {
+ 	ppSnapshotTesting p;
+@@ -369,6 +372,7 @@ void fwl_set_modePlayback()
+ 	p = get_ppSnapshotTesting();
+     p->modePlayback = TRUE;
+ }
++*/
+ void fwl_set_nameTest(char *nameTest)
+ {
+ 	ppSnapshotTesting p;

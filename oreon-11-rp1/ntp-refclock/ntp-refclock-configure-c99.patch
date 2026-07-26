@@ -1,0 +1,41 @@
+Add the missing return type for getsockname probing.
+
+Submitted upstream: <https://github.com/ntp-project/ntp/pull/13>
+
+diff -up ntp-4.2.8p16/configure.ac.c99 ntp-4.2.8p16/configure.ac
+diff -up ntp-4.2.8p16/configure.c99 ntp-4.2.8p16/configure
+--- ntp-4.2.8p16/configure.c99	2023-06-01 09:50:58.089454103 +0200
++++ ntp-4.2.8p16/configure	2023-06-01 09:58:00.775959076 +0200
+@@ -33672,7 +33672,7 @@ int
+ main (void)
+ {
+ 
+-			extern
++			extern int
+ 			getsockname(int, $getsockname_arg2,
+ 				$ntp_cv_getsockname_socklen_type *);
+ 
+diff -up ntp-4.2.8p16/sntp/configure.c99 ntp-4.2.8p16/sntp/configure
+--- ntp-4.2.8p16/sntp/configure.c99	2023-06-01 09:50:58.091454100 +0200
++++ ntp-4.2.8p16/sntp/configure	2023-06-01 09:59:04.084884908 +0200
+@@ -26866,7 +26866,7 @@ int
+ main (void)
+ {
+ 
+-			extern
++			extern int
+ 			getsockname(int, $getsockname_arg2,
+ 				$ntp_cv_getsockname_socklen_type *);
+ 
+diff -up ntp-4.2.8p16/sntp/m4/ntp_ipv6.m4.c99 ntp-4.2.8p16/sntp/m4/ntp_ipv6.m4
+--- ntp-4.2.8p16/sntp/m4/ntp_ipv6.m4.c99	2023-05-31 12:31:39.000000000 +0200
++++ ntp-4.2.8p16/sntp/m4/ntp_ipv6.m4	2023-06-01 09:50:58.091454100 +0200
+@@ -116,7 +116,7 @@ AC_CACHE_CHECK(
+ 			# include <sys/socket.h>
+ 			#endif
+ 		    ]], [[
+-			extern
++			extern int
+ 			getsockname(int, $getsockname_arg2, 
+ 				$ntp_cv_getsockname_socklen_type *);
+ 		    ]]

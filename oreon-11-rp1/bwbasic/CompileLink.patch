@@ -1,0 +1,38 @@
+diff -ruN bwbasic/Makefile bwbasic-mod/Makefile
+--- bwbasic/Makefile	2022-02-11 03:02:53.000000000 +0300
++++ bwbasic-mod/Makefile	2024-05-25 18:15:35.760709630 +0300
+@@ -20,20 +20,27 @@
+ # CFLAGS=-s -ansi  with  CFLAGS=-Os -ansi
+ # to have a smaller runtime size
+ CFLAGS=-s -ansi
++LDFLAGS=
+ LIB=-lm
+ DEST=/usr/local/bin
+ # HOME=$HOME
+ 
+ .PHONY: all
+-all: bwbasic renum
+-	ls -l bwbasic renum
++all: renum bwbasic
++	ls -l renum bwbasic
+ 
+-bwbasic: bw*.c bw*.h
+-	$(CC) $(CFLAGS) -o bwbasic bw*.c $(LIB)
++bwbasic: bw*.o
++	$(CC) $(LDFLAGS) -o bwbasic bw*.o $(LIB)
++
++renum: renum.o
++	$(CC) $(LDFLAGS) -o renum renum.o $(LIB) 
++
++bw*.o: bw*.c bw*.h
++	$(CC) $(CFLAGS) -c bw*.c
++
++renum.o: renum.c
++	$(CC) $(CFLAGS) -c renum.c -o renum.o
+ 
+-renum: renum.c
+-	$(CC) $(CFLAGS) -o renum renum.c $(LIB) 
+-	
+ 
+ # bwbasic and renum runtime. editfl.bas temp file created by renum
+ clean:

@@ -1,0 +1,31 @@
+From 49a6b70c987eef901d62f2ba51bd6c1b333abfe7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Wed, 5 Aug 2020 18:03:19 +0200
+Subject: [PATCH] Convert int to string using rune()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+See https://github.com/golang/go/issues/32479
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ packet_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packet_test.go b/packet_test.go
+index 7ac9067..969774a 100644
+--- a/packet_test.go
++++ b/packet_test.go
+@@ -154,7 +154,7 @@ func truncate(d string) string {
+ 
+ func (*packetSuite) TestAsciiHex(c *gc.C) {
+ 	for b := 0; b < 256; b++ {
+-		n, err := strconv.ParseInt(string(b), 16, 8)
++		n, err := strconv.ParseInt(string(rune(b)), 16, 8)
+ 		value, ok := asciiHex(byte(b))
+ 		if err != nil || unicode.IsUpper(rune(b)) {
+ 			c.Assert(ok, gc.Equals, false)
+-- 
+2.26.2
+

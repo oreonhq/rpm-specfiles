@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-asea</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Asea</name>
+	<summary>A Greek typeface inspired by Alexander Wilson</summary>
+	<description>
+		<p>
+			Asea is an etude on the dominant typeface of Greek typography. Upright Greek
+			letters were designed in 1805 by Firmin Didot (1764-1836) and cut by Walfard
+			and Vibert. The typeface, together with a complete printing house, was donated
+			in 1821 to the new Greek state by Didot's son, Ambroise Firmin Didot (1790-
+			1876).
+		</p>
+		<p>
+			The font covers the Windows Glyph List, IPA Extensions, Greek Extended, Ancient
+			Greek Numbers, Byzantine and Ancient Greek Musical Notation, various
+			typographic extras and several Open Type features (Case-Sensitive Forms, Small
+			Capitals, Subscript, Superscript, Numerators, Denominators, Fractions, Old
+			Style Figures, Historical Forms, Stylistic Alternates, Ligatures).
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/Textfonts.htm</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

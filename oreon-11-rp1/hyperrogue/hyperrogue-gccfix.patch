@@ -1,0 +1,30 @@
+diff --git a/complex.cpp b/complex.cpp
+index 6790f910..c7178ac0 100644
+--- a/complex.cpp
++++ b/complex.cpp
+@@ -8,6 +8,12 @@
+  */
+ 
+ #include "hyper.h"
++#if HDR
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
++#pragma GCC diagnostic ignored "-Wstringop-overread"
++#endif
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
++#pragma GCC diagnostic ignored "-Wstringop-overread"
+ namespace hr {
+ 
+ EX namespace whirlwind {
+diff --git a/pattern2.cpp b/pattern2.cpp
+index 9bd113f8..5f07cabd 100644
+--- a/pattern2.cpp
++++ b/pattern2.cpp
+@@ -9,6 +9,8 @@
+  */
+ 
+ #include "hyper.h"
++#pragma GCC diagnostic ignored "-Warray-bounds"
++
+ namespace hr {
+ 
+ #if HDR

@@ -1,0 +1,9 @@
+#
+# liquidwar-server(6) options. Pick a custom port here if needed, for example.
+#
+
+# The default options call for a 2 player game that is not advertised to
+# the public metaserver.  The default port that the game uses is tcp/8035.  Be
+# sure to open up this port in your firewall, or change the port in the
+# options below.
+LIQUIDWAR_OPTIONS="-2 -private"

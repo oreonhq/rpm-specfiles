@@ -1,0 +1,35 @@
+diff -up extrema-4.4.5/src/Utilities/ExXML.cpp.wx32 extrema-4.4.5/src/Utilities/ExXML.cpp
+--- extrema-4.4.5/src/Utilities/ExXML.cpp.wx32	2022-08-04 17:09:42.023483197 -0400
++++ extrema-4.4.5/src/Utilities/ExXML.cpp	2022-08-04 17:10:23.914820117 -0400
+@@ -128,7 +128,7 @@ wxString ExXML::GetPropertyValue( wxStri
+ {
+   if( !currentNode_ )throw std::runtime_error( "current node is NULL" );
+   wxString value;
+-  if( !currentNode_->GetPropVal(name,&value) )
++  if( !currentNode_->GetAttribute(name,&value) )
+     throw std::runtime_error( std::string( (wxString()<<wxT("node ")<<currentNode_->GetName()
+                                            <<wxT(" should have a property named ")<<name).mb_str(wxConvUTF8) ) );
+   return value;
+diff -up extrema-4.4.5/src/wxForms/GraphicsPage.cpp.wx32 extrema-4.4.5/src/wxForms/GraphicsPage.cpp
+--- extrema-4.4.5/src/wxForms/GraphicsPage.cpp.wx32	2010-09-05 13:08:08.000000000 -0400
++++ extrema-4.4.5/src/wxForms/GraphicsPage.cpp	2022-08-04 17:24:54.642081411 -0400
+@@ -875,6 +875,6 @@ void GraphicsPage::SaveBitmap( wxString
+   }
+   dc.EndDoc();
+   wxImage image( tempBM.ConvertToImage() );
+-  image.SaveFile( filename, type );
++  image.SaveFile( filename, (wxBitmapType)type );
+ }
+ 
+diff -up extrema-4.4.5/src/wxForms/VisualizationWindow.cpp.wx32 extrema-4.4.5/src/wxForms/VisualizationWindow.cpp
+--- extrema-4.4.5/src/wxForms/VisualizationWindow.cpp.wx32	2022-08-04 17:06:12.755800124 -0400
++++ extrema-4.4.5/src/wxForms/VisualizationWindow.cpp	2022-08-04 17:48:51.935402872 -0400
+@@ -285,7 +285,7 @@ void VisualizationWindow::SaveBitmap( in
+   }
+   dc.EndDoc();
+   wxImage image( tempBM.ConvertToImage() );
+-  image.SaveFile( filename, type );
++  image.SaveFile( filename, (wxBitmapType)type );
+ }
+ 
+ void VisualizationWindow::SavePS( wxString const &filename )

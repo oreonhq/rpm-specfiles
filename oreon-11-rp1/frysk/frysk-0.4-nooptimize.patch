@@ -1,0 +1,56 @@
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/funit-long-stack.c.nooptimize frysk-0.4/frysk-core/frysk/pkglibdir/funit-long-stack.c
+--- frysk-0.4/frysk-core/frysk/pkglibdir/funit-long-stack.c.nooptimize	2010-03-30 11:36:32.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/funit-long-stack.c	2010-03-30 11:41:25.000000000 -0400
+@@ -1,4 +1,5 @@
+ #include <stdlib.h>
++#pragma GCC optimize "O1"
+ 
+ void crash(){
+   char* c = 0;
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/funit-stack-outlined.c.nooptimize frysk-0.4/frysk-core/frysk/pkglibdir/funit-stack-outlined.c
+--- frysk-0.4/frysk-core/frysk/pkglibdir/funit-stack-outlined.c.nooptimize	2010-03-30 11:24:03.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/funit-stack-outlined.c	2010-03-30 11:41:31.000000000 -0400
+@@ -38,6 +38,7 @@
+ // exception.
+ 
+ #include <stdlib.h>
++#pragma GCC optimize "O1"
+ 
+ // See also funit-stack-inlined.c
+ 
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks.c.nooptimize frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks.c
+--- frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks.c.nooptimize	2010-03-30 11:41:52.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks.c	2010-03-30 11:44:10.000000000 -0400
+@@ -1,4 +1,5 @@
+ #include <stdlib.h>
++#pragma GCC optimize "O1"
+ 
+ void fourth(int param1, int param2, int param3, char* param4){
+   char* c = 0;
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-exit.c.nooptimize frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-exit.c
+--- frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-exit.c.nooptimize	2010-03-30 11:42:00.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-exit.c	2010-03-30 11:42:55.000000000 -0400
+@@ -1,4 +1,5 @@
+ #include <stdlib.h>
++#pragma GCC optimize "O1"
+ 
+ void fourth(){
+   exit(1);
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-linenum.c.nooptimize frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-linenum.c
+--- frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-linenum.c.nooptimize	2010-03-30 11:42:05.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-linenum.c	2010-03-30 11:43:10.000000000 -0400
+@@ -1,4 +1,5 @@
+ #include <stdlib.h>
++#pragma GCC optimize "O1"
+ 
+ void first(int param1, int param2){
+   char* a = 0;
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-values.c.nooptimize frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-values.c
+--- frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-values.c.nooptimize	2010-03-30 11:42:08.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/funit-stacks-values.c	2010-03-30 11:59:03.000000000 -0400
+@@ -1,4 +1,5 @@
+ #include <stdlib.h>
++#pragma GCC optimize "O1"
+ 
+ void third(volatile int param3){
+   int var4 = 4;asm volatile ("" : "+m" (var4));

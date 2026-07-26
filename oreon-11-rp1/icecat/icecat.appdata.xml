@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id type="desktop">icecat.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <summary>GNU version of Firefox browser</summary>
+  <name>GNU IceCat</name>
+  <project_license>(MPL-1.1 or GPL-2.0+ or LGPL-2.0+) and GPL-3.0+ and MIT and BSD and ISC and ASL-2.0 and MPL-2.0</project_license>
+  <categories>
+   <category>Internet</category>
+   <category>Web Browser</category>
+  </categories>
+  <description>
+    <p>
+      GNU IceCat is the GNU version of the Firefox ESR browser.
+    </p>  
+    <p>
+       Its main advantage is an ethical one: it is entirely free software:
+       while the Firefox source code from the Mozilla project is free software,
+       they distribute and recommend non-free software as plug-ins and addons.
+       Also their trademark license restricts distribution in several ways incompatible with freedom 0.
+    </p>
+    <p>
+       Extensions included to this version of IceCat:
+    </p>
+     <ul>
+       <li>
+       LibreJS
+          GNU LibreJS aims to address the JavaScript problem described in Richard
+          Stallman's article The JavaScript Trap
+       </li>
+       <li>
+       HTTPS Everywhere
+          HTTPS Everywhere is an extension that encrypts your communications with many major websites, making your browsing more secure
+       </li>
+       <li>
+       A set of companion extensions for LibreJS by Nathan Nichols (https://addons.mozilla.org/en-US/firefox/user/NateN1222/)
+       are pre-installed, and provide workarounds to use some services at USPS, RSF.org, SumOfUs.org, pay.gov, McDonald's, goteo.org
+       and Google Docs without using nonfree JavaScript.
+       </li>
+       <li>
+       A series of configuration changes and tweaks were applied to ensure that IceCat does not initiate network connections
+       that the user has not explicitly requested. This implies not downloading feeds, updates, blacklists or any other similar
+       data needed during startup.
+       </li>
+      </ul>
+  </description>
+  <url type="homepage">http://www.gnu.org/software/gnuzilla/</url>
+  <screenshots>
+    <screenshot type="default">
+     <image>https://sagitter.fedorapeople.org/icecat/icecat-screenshots/icecat1021.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/icecat/icecat-screenshots/icecat1022.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/icecat/icecat-screenshots/icecat1023.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/icecat/icecat-screenshots/icecat1024.png</image>
+    </screenshot>
+  </screenshots>
+  <updatecontact>sagitter_at_fedoraproject.org</updatecontact>
+</component>

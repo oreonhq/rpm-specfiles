@@ -1,0 +1,12 @@
+diff -rup a/src/hf/craters.h b/src/hf/craters.h
+--- a/src/hf/craters.h	2008-08-06 04:17:17.000000000 +0200
++++ b/src/hf/craters.h	2025-01-23 18:15:05.741095397 +0100
+@@ -81,7 +81,7 @@ extern gfloat irregular_crater[], peak_c
+ //	Prototypes
+ 
+ draw_crater_struct *crater_struct_new();
+-void crater_struct_free();
++void crater_struct_free(draw_crater_struct *);
+ 
+ void draw_crater (draw_crater_struct *dcs, hf_struct_type *hf, 
+ 	gint x, gint y, gdouble** gauss_list);

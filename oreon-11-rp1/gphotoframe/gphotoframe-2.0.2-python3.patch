@@ -1,0 +1,2535 @@
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/gphotoframe gphotoframe-2.0.2-hg2084299dffb6.py3/gphotoframe
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/gphotoframe	2019-08-23 13:29:04.277804580 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/gphotoframe	2019-08-21 15:13:41.250757252 +0900
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ #
+ # gphotoframe - Photo Frame for the GNOME Desktop.
+ #
+@@ -18,11 +18,7 @@ try:
+ except ImportError:
+     pass
+ 
+-try:
+-    from lib.utils import gtk3reactor
+-except ImportError:
+-    from gphotoframe.utils import gtk3reactor
+-
++from twisted.internet import gtk3reactor
+ gtk3reactor.install()
+ 
+ from twisted.internet import reactor
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/__init__.py	2019-08-21 15:21:45.003870897 +0900
+@@ -1,6 +1,6 @@
+ import gettext
+ import locale
+-from constants import APP_NAME
++from .constants import APP_NAME
+ 
+ LOCALE_DIR = '/usr/share/locale'
+ 
+@@ -8,4 +8,5 @@ for module in (gettext, locale):
+     module.bindtextdomain(APP_NAME, LOCALE_DIR)
+     module.textdomain(APP_NAME)
+ 
+-gettext.install(APP_NAME, LOCALE_DIR, unicode=True)
++# FIXME
++gettext.install(APP_NAME, LOCALE_DIR)
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/constants.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/constants.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/constants.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/constants.py	2019-08-20 23:40:08.000000000 +0900
+@@ -21,9 +21,9 @@ PLUGIN_HOME = os.path.join(DATA_HOME, 'p
+ 
+ for dir in [CACHE_DIR, DATA_HOME, CACHE_HOME, CONFIG_HOME, PLUGIN_HOME]:
+     if not os.path.isdir(dir):
+-        os.makedirs(dir, 0700)
+-    elif S_IMODE(os.stat(dir).st_mode) != 0700:
+-        os.chmod(dir, 0700)
++        os.makedirs(dir, 0o700)
++    elif S_IMODE(os.stat(dir).st_mode) != 0o700:
++        os.chmod(dir, 0o700)
+ 
+ def SHARED_DATA_FILE(file):
+     return os.path.join(SHARED_DATA_DIR, file)
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/dbus/idlecheck.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/dbus/idlecheck.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/dbus/idlecheck.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/dbus/idlecheck.py	2019-08-21 01:34:09.000000000 +0900
+@@ -18,7 +18,7 @@ class SessionIdle(object):
+                 '/org/gnome/ScreenSaver', 
+                 'org.gnome.ScreenSaver', None)
+         except:
+-            print "Exception: %s" % sys.exc_info()[1]
++            print ("Exception: %s" % sys.exc_info()[1])
+ 
+     def check(self):
+         status = False
+@@ -28,7 +28,7 @@ class SessionIdle(object):
+         except AttributeError:
+             pass
+         except:
+-            print "Exception: %s" % sys.exc_info()[1]
++            print ("Exception: %s" % sys.exc_info()[1])
+ 
+         # print status
+         return status
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/dbus/networkstate.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/dbus/networkstate.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/dbus/networkstate.py	2019-08-23 13:29:04.258804337 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/dbus/networkstate.py	2019-08-21 00:06:14.000000000 +0900
+@@ -45,7 +45,7 @@ class NetworkState(object):
+                 '/org/freedesktop/NetworkManager', 
+                 'org.freedesktop.DBus.Properties', None)
+         except:
+-            print "Exception: %s" % sys.exc_info()[1]
++            print ("Exception: %s" % sys.exc_info()[1])
+ 
+     def check(self):
+         state = bool(self.get_state() == 70)
+@@ -60,11 +60,11 @@ class NetworkState(object):
+         except AttributeError:
+             pass
+         except:
+-            print "Exception: %s" % sys.exc_info()[1]
++            print ("Exception: %s" % sys.exc_info()[1])
+ 
+         #print status
+         return status
+ 
+ if __name__ == '__main__':
+     nm_state = NetworkState()
+-    print nm_state.check()
++    print (nm_state.check())
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/dbus/networkstatecustom.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/dbus/networkstatecustom.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/dbus/networkstatecustom.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/dbus/networkstatecustom.py	2019-08-21 00:07:22.000000000 +0900
+@@ -1,4 +1,4 @@
+-from networkstate import NetworkState
++from .networkstate import NetworkState
+ from ..settings import SETTINGS
+ 
+ class NetworkStateCustom(NetworkState):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/defaultsource.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/defaultsource.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/defaultsource.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/defaultsource.py	2019-08-21 01:34:22.000000000 +0900
+@@ -3,8 +3,8 @@ import os
+ 
+ from gi.repository import Gdk, GLib
+ 
+-from settings import SETTINGS_GEOMETRY
+-from liststore import SaveListStore
++from .settings import SETTINGS_GEOMETRY
++from .liststore import SaveListStore
+ 
+ 
+ def set_default_photo_source():
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/frame.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/frame.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/frame.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/frame.py	2019-08-21 17:15:02.748648347 +0900
+@@ -2,15 +2,15 @@ from __future__ import division
+ 
+ from gi.repository import Gtk, Gdk, GObject, GLib
+ 
+-import constants
+-from image import *
+-from settings import SETTINGS, SETTINGS_GEOMETRY
+-from menu import PopUpMenu, PopUpMenuFullScreen
+-from utils.gnomescreensaver import GsThemeWindow, is_screensaver_mode
++from . import constants
++from .image import *
++from .settings import SETTINGS, SETTINGS_GEOMETRY
++from .menu import PopUpMenu, PopUpMenuFullScreen
++from .utils.gnomescreensaver import GsThemeWindow, is_screensaver_mode
+ 
+ SETTINGS.set_boolean('fullscreen', False)
+ 
+-from utils.iconimage import IconImage
++from .utils.iconimage import IconImage
+ # FIXME
+ # Gtk.window_set_default_icon(IconImage('gphotoframe').get_pixbuf())
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/history/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/history/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/history/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/history/__init__.py	2019-08-21 00:16:46.000000000 +0900
+@@ -1,5 +1,5 @@
+ from ..utils.gnomescreensaver import is_screensaver_mode
+-from history import History
++from .history import History
+ 
+ class HistoryFactory(object):
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/history/history.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/history/history.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/history/history.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/history/history.py	2019-08-21 14:50:38.132069585 +0900
+@@ -27,8 +27,9 @@ class History(object):
+                        else target[0] )
+ 
+         date = photo.get('date_taken') or 0
+-        if isinstance(date, unicode):
+-            date = 0
++        # FIXME
++        #if isinstance(date, unicode):
++            #date = 0
+ 
+         # add new entry
+         sql = "INSERT INTO %s VALUES (%s, '%s', '%s', '%s', '%s', %s, '%s', '%s');" % (
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/history/html.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/history/html.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/history/html.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/history/html.py	2019-08-21 01:32:43.000000000 +0900
+@@ -6,7 +6,7 @@ from gi.repository import Gtk, Gdk
+ from ..constants import SHARED_DATA_DIR, CACHE_DIR
+ from ..plugins import ICON_LIST
+ from ..utils.datetimeformat import get_formatted_datatime
+-from history import History
++from .history import History
+ 
+ 
+ class HistoryHTML(object):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/__init__.py	2019-08-21 00:33:12.000000000 +0900
+@@ -1,4 +1,4 @@
+-from clutterimage import *
++from .clutterimage import *
+ from ..settings import SETTINGS_UI
+ 
+ class PhotoImageFactoryBase(object):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/favicon.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/favicon.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/favicon.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/favicon.py	2019-08-21 02:07:40.000000000 +0900
+@@ -3,14 +3,14 @@ from __future__ import division
+ 
+ from ...utils.iconimage import IconImage
+ from ...settings import SETTINGS_UI_FAV
+-from base import ActorIcon, IconTexture
++from .base import ActorIcon, IconTexture
+ 
+ class ActorFavIcon(ActorIcon):
+ 
+     def __init__(self, stage, tooltip, num=5):
+         super(ActorFavIcon, self).__init__()
+         self._sub_icons = [ActorSubFavIcon(i, stage, self, tooltip) 
+-                           for i in xrange(num)]
++                           for i in range(num)]
+ 
+     def show(self, is_force=False):
+         if self._is_hidden():
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/info.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/info.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/info.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/info.py	2019-08-21 00:35:46.000000000 +0900
+@@ -7,7 +7,7 @@ from gi.repository import Gtk
+ from ...utils.iconimage import IconImage
+ from ...settings import SETTINGS_UI_GEO, SETTINGS_UI_INFO
+ from ..geocoding import GeoCoderFactory
+-from source import ActorSourceIcon
++from .source import ActorSourceIcon
+ 
+ 
+ class ActorGeoIcon(ActorSourceIcon):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/map.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/map.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/map.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/map.py	2019-08-21 01:00:12.000000000 +0900
+@@ -5,7 +5,7 @@ except ImportError:
+     Champlain = Null()
+     Clutter = Null()
+ 
+-from base import Texture
++from .base import Texture
+ from ..animation import FadeAnimationTimeline
+ from ...settings import SETTINGS_UI_MAP
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/share.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/share.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/share.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/share.py	2019-08-21 00:59:41.000000000 +0900
+@@ -1,7 +1,7 @@
+ from ...utils.iconimage import IconImage
+ from ...settings import SETTINGS_UI_SHARE
+ from ...plugins.tumblr.api import TumblrShareFactory
+-from trash import ActorTrashIcon, TrashDialog
++from .trash import ActorTrashIcon, TrashDialog
+ 
+ class ActorShareIcon(ActorTrashIcon):
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/source.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/source.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/source.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/source.py	2019-08-21 00:36:00.000000000 +0900
+@@ -1,7 +1,7 @@
+ from __future__ import division
+ # from gettext import gettext as _
+ 
+-from base import ActorIcon, IconTexture
++from .base import ActorIcon, IconTexture
+ from ...settings import SETTINGS_UI_SOURCE
+ 
+ class ActorSourceIcon(ActorIcon):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/trash.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/trash.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/actor/trash.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/actor/trash.py	2019-08-21 00:59:55.000000000 +0900
+@@ -3,7 +3,7 @@ from gi.repository import Gtk
+ 
+ from ...utils.iconimage import IconImage
+ from ...settings import SETTINGS_UI_TRASH
+-from info import ActorGeoIcon, ActorInfoIcon
++from .info import ActorGeoIcon, ActorInfoIcon
+ 
+ class ActorTrashIcon(ActorGeoIcon):
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/clutterimage.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/clutterimage.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/clutterimage.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/clutterimage.py	2019-08-21 00:33:34.000000000 +0900
+@@ -8,8 +8,8 @@ except ImportError:
+ 
+ from gi.repository import Gtk
+ 
+-from actor import *
+-from gtkimage import *
++from .actor import *
++from .gtkimage import *
+ from ..settings import SETTINGS, SETTINGS_UI
+ 
+ class PhotoImageClutter(PhotoImage):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/geocoding.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/geocoding.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/geocoding.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/geocoding.py	2019-08-21 00:35:07.000000000 +0900
+@@ -96,7 +96,7 @@ class GeoNamesGeoCoder(GeoCoderBase):
+     def get_location(self, obj):
+         geonames = obj.get('geonames')
+         if not geonames: 
+-            print obj
++            print (obj)
+             return None
+ 
+         entry = geonames[0]
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/gtkimage.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/gtkimage.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/gtkimage.py	2019-08-23 13:29:04.245804171 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/gtkimage.py	2019-08-21 01:01:42.000000000 +0900
+@@ -5,7 +5,7 @@ from xml.sax.saxutils import escape
+ 
+ from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
+ 
+-from tooltip import ToolTip
++from .tooltip import ToolTip
+ from ..constants import CACHE_DIR
+ from ..settings import SETTINGS, SETTINGS_FILTER, SETTINGS_GEOMETRY
+ 
+@@ -106,8 +106,8 @@ class PhotoImagePixbuf(object):
+             else:
+                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(filename)
+ 
+-        except (GObject.GError, OSError), err_info:
+-            print err_info
++        except (GObject.GError, OSError) as err_info:
++            print (err_info)
+             return False
+ 
+         rotation = self._get_orientation(pixbuf.get_option('orientation') or 1)
+@@ -157,7 +157,7 @@ class PhotoImagePixbuf(object):
+ 
+     def get_scale(self, src_w, src_h, max_w, max_h, rotation=0):
+         if src_w == 0 or src_h == 0:
+-            print "Error: Original picture size is 0x0."
++            print ("Error: Original picture size is 0x0.")
+             self.max_src_size = src_w
+             return max_w, max_h
+ 
+@@ -184,10 +184,10 @@ class PhotoImagePixbuf(object):
+         url = photo.get('url')
+ 
+         if min > 0 and size < min:
+-            print "Skip a small image (%.2f KB): %s" % (size / 1024, url)
++            print ("Skip a small image (%.2f KB): %s" % (size / 1024, url))
+             return False
+         elif max > 0 and size > max:
+-            print "Skip a large image (%.2f MB): %s" % (size / 1024**2, url)
++            print ("Skip a large image (%.2f MB): %s" % (size / 1024**2, url))
+             return False
+         elif url.find('static.flickr.com') > 0 and size < 4000:
+             # ad-hoc for avoiding flickr no image.
+@@ -205,21 +205,21 @@ class PhotoImagePixbuf(object):
+         # print aspect, max, min
+ 
+         if min < 0 or max < 0:
+-            print "Error: aspect_max or aspect_min is less than 0."
++            print ("Error: aspect_max or aspect_min is less than 0.")
+             return True
+         elif min > 0 and max > 0 and min >= max:
+-            print "Error: aspect_max is not greater than aspect_min."
++            print ("Error: aspect_max is not greater than aspect_min.")
+             return True
+ 
+         if (min > 0 and aspect < min ) or (max > 0 and max < aspect):
+-            print "Skip a tall or wide image (aspect ratio: %s)." % aspect
++            print ("Skip a tall or wide image (aspect ratio: %s)." % aspect)
+             return False
+         else:
+             return True
+ 
+     def _image_size_is_ok(self, w, h):
+         if w is None or h is None:
+-            print "no size!"
++            print ("no size!")
+             return True
+ 
+         min_width = SETTINGS_FILTER.get_int('min-width') or 0
+@@ -227,7 +227,7 @@ class PhotoImagePixbuf(object):
+         if min_width <= 0 or min_height <= 0: return True
+ 
+         if w < min_width or h < min_height:
+-            print "Skip a small size image (%sx%s)." % (w, h)
++            print ("Skip a small size image (%sx%s)." % (w, h))
+             return False
+         else:
+             return True
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/tooltip.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/tooltip.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/image/tooltip.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/image/tooltip.py	2019-08-21 01:02:00.000000000 +0900
+@@ -71,7 +71,7 @@ class ToolTip(object):
+         try:
+             self.widget.set_tooltip_markup(tip)
+         except:
+-            print "%s: %s" % (sys.exc_info()[1], tip)
++            print ("%s: %s" % (sys.exc_info()[1], tip))
+ 
+     def set_exif(self, photo=None):
+         exif = photo.get('exif')
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/liststore.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/liststore.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/liststore.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/liststore.py	2019-08-21 17:14:38.934366894 +0900
+@@ -1,18 +1,19 @@
+ import os
+ import glob
+ import json
++from functools import cmp_to_key
+ 
+ from gi.repository import Gtk, GdkPixbuf, GObject, GLib
+ 
+-import plugins
+-from constants import CACHE_DIR, CONFIG_HOME
+-from settings import SETTINGS, SETTINGS_RECENTS
+-from frame import PhotoFrameFactory
+-from history import HistoryFactory
+-from history.history import History
+-from history.history import HistoryDB
+-from utils.wrandom import WeightedRandom
+-from dbus.idlecheck import SessionIdle
++from . import plugins
++from .constants import CACHE_DIR, CONFIG_HOME
++from .settings import SETTINGS, SETTINGS_RECENTS
++from .frame import PhotoFrameFactory
++from .history import HistoryFactory
++from .history.history import History
++from .history.history import HistoryDB
++from .utils.wrandom import WeightedRandom
++from .dbus.idlecheck import SessionIdle
+ 
+ 
+ class PhotoListStore(Gtk.ListStore):
+@@ -42,7 +43,9 @@ class PhotoListStore(Gtk.ListStore):
+         # check for type of source names
+         source_name = d['source']
+         if isinstance(source_name, str):
+-            source_name = source_name.decode('utf-8')
++            #source_name = source_name.decode('utf-8')
++            # FIXME
++            source_name = source_name
+ 
+         if 'source' not in d or source_name not in plugins.MAKE_PHOTO_TOKEN:
+             return None
+@@ -127,7 +130,7 @@ class PhotoListStore(Gtk.ListStore):
+         elif self.photoframe.set_photo(photo):
+             self.queue.append(photo)
+         elif self.recursion_depth < 10: # check recursion depth
+-            print "oops!: %s" % photo
++            print ("oops!: %s" % photo)
+             self.recursion_depth += 1
+             self._change_photo()
+ 
+@@ -137,6 +140,13 @@ class SaveListStore(object):
+ 
+         self.save_file = os.path.join(CONFIG_HOME, 'photo_sources.json')
+ 
++    def cmp_func(self, x, y):
++         weight_x = x['weight']
++         weight_y = y['weight']
++         if (weight_x == weight_y) : return 0
++         if (weight_y < weight_x) : return -1
++         return 1
++
+     def load(self):
+         weight = SETTINGS.get_int('default-weight')
+         source_list = []
+@@ -159,7 +169,8 @@ class SaveListStore(object):
+ 
+             source_list.append(data)
+ 
+-        source_list.sort(cmp=lambda x,y: cmp(y['weight'], x['weight']))
++        #source_list.sort(cmp=lambda x,y: cmp(y['weight'], x['weight']))
++        sorted(source_list, key=cmp_to_key(self.cmp_func))
+         return source_list
+ 
+     def save(self, liststore):
+@@ -174,7 +185,7 @@ class SaveListStore(object):
+                     save_data[i][key] = value
+ 
+             if row[5]: # liststore options
+-                for key, value in row[5].iteritems():
++                for key, value in row[5].items():
+                     save_data[i][key] = value
+                     # print key, value
+         
+@@ -237,7 +248,9 @@ class RecentQueue(list):
+         all_caches = cache_files + ['thumb_' + file for file in cache_files]
+ 
+         for fullpath in glob.iglob(os.path.join(CACHE_DIR, '*')):
+-            filename = os.path.basename(fullpath).decode('utf-8')
++            #filename = os.path.basename(fullpath).decode('utf-8')
++            # FIXME
++            filename = os.path.basename(fullpath)
+             if filename not in all_caches:
+                 os.remove(fullpath)
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/menu.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/menu.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/menu.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/menu.py	2019-08-21 15:15:01.213767816 +0900
+@@ -4,11 +4,11 @@ import os
+ from gi.repository import Gtk, Gdk, Pango
+ from twisted.internet import reactor
+ 
+-import constants
+-from preferences import Preferences
+-from history.html import HistoryHTML
+-from settings import SETTINGS
+-from utils.iconimage import IconImage
++from . import constants
++from .preferences import Preferences
++from .history.html import HistoryHTML
++from .settings import SETTINGS
++from .utils.iconimage import IconImage
+ 
+ class PopUpMenu(object):
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/__init__.py	2019-08-23 14:28:35.822637057 +0900
+@@ -6,7 +6,7 @@ from os.path import join, abspath, dirna
+ 
+ from gi.repository import Gtk, GdkPixbuf
+ 
+-from base import *
++from .base import *
+ from ..constants import PLUGIN_HOME
+ from ..settings import SETTINGS_PLUGINS
+ 
+@@ -23,12 +23,18 @@ for item in os.listdir(plugin_dir) + os.
+         continue
+ 
+     module_name = inspect.getmodulename(item) if item.endswith('.py') else item
++    module_name_dot = "lib.plugins." + module_name
+ 
++    import_succeeded_p = 1
+     try:
+-        module = __import__(module_name, globals(), locals(), [])
+-    except ImportError, value:
+-        print _("Can't import %s plugin: %s.") % (module_name, value)
+-    else:
++        module = __import__(module_name, globals(), locals(), ["*"], 1)
++    except ImportError as error_1:
++        try:
++            module = __import__(module_name_dot, globals(), locals(), ["*"])
++        except ImportError as error_2:
++            print (_("Can't import %s plugin: %s.") % (module_name_dot, error_2))
++            import_succeeded_p = 0
++    if import_succeeded_p:
+         for function in inspect.getmembers(module, inspect.isfunction):
+             if 'info' in function and module.info():
+                 token_base.append(module.info())
+@@ -39,7 +45,9 @@ PHOTO_TARGET_TOKEN={}
+ DIALOG_TOKEN={}
+ ICON_LIST={}
+ 
+-for k in sorted(token_base):
++# FIXME
++#for k in sorted(token_base):
++for k in token_base:
+     plugin = k[0]()
+ 
+     PLUGIN_INFO_TOKEN[plugin.name] = k[0]
+@@ -66,7 +74,8 @@ class PluginListStore(Gtk.ListStore):
+             self.append(list)
+ 
+     def available_list(self):
+-        list = [p[2].decode('utf-8') for p in self 
++        # FIXME
++        list = [p[2] for p in self 
+                 if p[0] and p[4].is_available()]
+         return sorted(list)
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/base/base.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/base/base.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/base/base.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/base/base.py	2019-08-21 00:07:03.000000000 +0900
+@@ -1,6 +1,6 @@
+ import os
+ import re
+-from urlparse import urlparse
++from urllib.parse import urlparse
+ # from gettext import gettext as _
+ 
+ from gi.repository import Gtk, Gdk, GLib
+@@ -11,7 +11,7 @@ from ...utils.urlgetautoproxy import Url
+ from ...utils.gnomescreensaver import is_screensaver_mode
+ from ...dbus.networkstatecustom import NetworkStateCustom
+ from ...settings import SETTINGS, SETTINGS_FORMAT, SETTINGS_TUMBLR
+-from parseexif import ParseEXIF
++from .parseexif import ParseEXIF
+ 
+ 
+ class PluginBase(object):
+@@ -104,7 +104,7 @@ class PhotoList(object):
+ 
+     def _start_timer(self, min=60):
+         if min < 10:
+-            print "Interval for API access should be greater than 10 minutes."
++            print ("Interval for API access should be greater than 10 minutes.")
+             min = 10
+ 
+         delay = min * 60 / 20 # 5%
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/base/parseexif.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/base/parseexif.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/base/parseexif.py	2019-08-23 13:29:04.243804145 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/base/parseexif.py	2019-08-21 03:29:35.000000000 +0900
+@@ -22,7 +22,7 @@ class ParseEXIF(object):
+                'flashbias': 'MakerNote FlashBias',}
+         exif = {}
+ 
+-        for key, tag in tag.iteritems():
++        for key, tag in tag.items():
+             value = self.tags.get(tag)
+             if value:
+                 value = str(value)
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/facebook/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/facebook/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/facebook/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/facebook/__init__.py	2019-08-21 02:18:52.000000000 +0900
+@@ -14,8 +14,8 @@ from ..picasa import PhotoSourcePicasaUI
+ from ...utils.urlgetautoproxy import urlget_with_autoproxy
+ from ...utils.iconimage import WebIconImage
+ from ...settings import SETTINGS_FACEBOOK
+-from api import FacebookAPIfactory
+-from authdialog import PluginFacebookDialog
++from .api import FacebookAPIfactory
++from .authdialog import PluginFacebookDialog
+ 
+ def info():
+     return [FacebookPlugin, FacebookPhotoList, PhotoSourceFacebookUI, 
+@@ -59,13 +59,13 @@ class FacebookPhotoList(base.PhotoList):
+         d.addErrback(self._ecb)
+ 
+     def _ecb(self,data):
+-        print data
++        print (data)
+ 
+     def _set_photo_cb(self, data, album_name):
+         try:
+             d = json.loads(data)
+         except:
+-            print "error", data, album_name
++            print ("error", data, album_name)
+             return
+ 
+         for entry in d.get('data') or []:
+@@ -91,7 +91,7 @@ class FacebookPhotoList(base.PhotoList):
+                 format = '%Y-%m-%dT%H:%M:%S+0000'
+                 date = time.mktime(time.strptime(entry['created_time'], format))
+             except:
+-                print sys.exc_info()[1]
++                print (sys.exc_info()[1])
+             finally:
+                 data['date_taken'] = int(date)
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/__init__.py	2019-08-23 12:46:53.377618676 +0900
+@@ -12,9 +12,9 @@ from ..base import *
+ from ...settings import SETTINGS_FLICKR
+ from ...utils.iconimage import WebIconImage
+ from ...utils.urlgetautoproxy import urlget_with_autoproxy
+-from api import *
+-from authdialog import *
+-from ui import PhotoSourceFlickrUI
++from .api import *
++from .authdialog import *
++from .ui import PhotoSourceFlickrUI
+ 
+ def info():
+     return [FlickrPlugin, FlickrPhotoList, PhotoSourceFlickrUI, PluginFlickrDialog]
+@@ -64,8 +64,8 @@ class FlickrPhotoList(base.PhotoList):
+         factory = FlickrFactoryAPI()
+         api_list = factory.api
+         if not self.target in api_list:
+-            print ( _("%(source)s: %(target)s is invalid target.") % 
+-                    {'source': 'Flickr', 'target': self.target} )
++            print (( _("%(source)s: %(target)s is invalid target.") % 
++                    {'source': 'Flickr', 'target': self.target} ))
+             return
+ 
+         self.api = factory.create(self.target, self.argument)
+@@ -75,7 +75,7 @@ class FlickrPhotoList(base.PhotoList):
+             nsid_url = self.api.get_url_for_nsid_lookup(self.argument)
+ 
+             if nsid_url is None:
+-                print _("Flickr: invalid nsid API url.")
++                print (_("Flickr: invalid nsid API url."))
+                 return
+             self._get_url_with_twisted(nsid_url, self._nsid_cb)
+         else:
+@@ -85,7 +85,7 @@ class FlickrPhotoList(base.PhotoList):
+         d = json.loads(data)
+         self.nsid_argument, self.argument_group_name = self.api.parse_nsid(d)
+         if self.nsid_argument is None:
+-            print _("flickr: can not find, "), self.argument
++            print (_("flickr: can not find, "), self.argument)
+             return
+ 
+         self._get_url_for(self.nsid_argument)
+@@ -103,7 +103,7 @@ class FlickrPhotoList(base.PhotoList):
+         d = json.loads(data)
+ 
+         if d.get('stat') == 'fail':
+-            print _("Flickr API Error (%s): %s") % (d['code'], d['message'])
++            print (_("Flickr API Error (%s): %s") % (d['code'], d['message']))
+             return
+ 
+         self.total = len(d['photos']['photo'])
+@@ -126,7 +126,7 @@ class FlickrPhotoList(base.PhotoList):
+             try:
+                 format = '%Y-%m-%d %H:%M:%S'
+                 date = time.mktime(time.strptime(s['datetaken'], format))
+-            except (ValueError, OverflowError), info:
++            except (ValueError, OverflowError) as info:
+                 date = s['datetaken']
+ 
+             data = {'info'       : FlickrPlugin,
+@@ -226,6 +226,7 @@ class FlickrAPIPages(object):
+ 
+         if not self.page_list and self.pages:
+             self.page_list = range(1, self.pages+1)
++            self.page_list = list(self.page_list)
+ 
+         if self.page in self.page_list:
+             self.page_list.remove(self.page)
+@@ -245,7 +246,7 @@ class FlickrEXIF(object):
+         self.photo['exif'] = {'checkd': True}
+ 
+         if d['stat'] != 'ok':
+-            print d
++            print (d)
+             return
+ 
+         target = {'Make': 'make', 'Model': 'model', 'FNumber': 'fstop', 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/api.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/api.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/api.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/api.py	2019-08-21 17:57:59.884178407 +0900
+@@ -3,7 +3,7 @@ import random
+ # from gettext import gettext as _
+ 
+ from ...settings import SETTINGS_FLICKR
+-from auth import add_api_sig
++from .auth import add_api_sig
+ 
+ API_KEY = '343677ff5aa31f37042513d533293062'
+ SECRET = '74fcfc5cd13dab2d'
+@@ -55,7 +55,7 @@ class FlickrAPI(object):
+                    'nojsoncallback' : '1' }
+ 
+         values.update(self._url_argument(argument, values))
+-        url = url + urllib.urlencode(values)
++        url = url + urllib.parse.urlencode(values)
+ 
+         return url
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/auth.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/auth.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/auth.py	2019-08-23 13:29:04.258804337 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/auth.py	2019-08-21 00:58:56.000000000 +0900
+@@ -38,8 +38,8 @@ class FlickrAuth(object):
+         values = add_api_sig(values, self.secret)
+         url = base_url + urllib.urlencode(values)
+ 
+-        print "_"*80
+-        print url
++        print ("_"*80)
++        print (url)
+ 
+         urlget_with_autoproxy(url, cb=self._get_token)
+ 
+@@ -91,7 +91,7 @@ class FlickrAuth(object):
+     def check_token(self, auth_token):
+ 
+         def _check_cb(data):
+-            print data
++            print (data)
+ 
+         base_url = 'https://api.flickr.com/services/rest/?'
+         values = { 'method' : 'flickr.auth.checkToken',
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/authdialog.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/authdialog.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/authdialog.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/authdialog.py	2019-08-21 00:59:13.000000000 +0900
+@@ -3,8 +3,8 @@ from gi.repository import Gtk
+ 
+ from ...settings import SETTINGS_FLICKR
+ from ..base.ui import PluginDialog
+-from auth import FlickrAuth
+-from api import API_KEY, SECRET
++from .auth import FlickrAuth
++from .api import API_KEY, SECRET
+ 
+ class PluginFlickrDialog(PluginDialog):
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/ui.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/ui.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/flickr/ui.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/flickr/ui.py	2019-08-21 00:59:26.000000000 +0900
+@@ -2,7 +2,7 @@
+ 
+ from ..base.ui import PhotoSourceUI, PhotoSourceOptionsUI
+ from ...settings import SETTINGS_FLICKR
+-from api import FlickrFactoryAPI
++from .api import FlickrFactoryAPI
+ 
+ 
+ class PhotoSourceFlickrUI(PhotoSourceUI):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/folder.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/folder.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/folder.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/folder.py	2019-08-23 13:06:17.784721448 +0900
+@@ -7,11 +7,12 @@
+ import os
+ import re
+ import random
++import urllib.parse
+ 
+ from twisted.internet import threads
+ from gi.repository import Gtk, GLib
+ 
+-from base import *
++from .base import *
+ from ..utils.inotify import Inotify
+ from ..utils.iconimage import IconImage
+ 
+@@ -106,6 +107,8 @@ class DirPhotoList(base.LocalPhotoList):
+ class PhotoSourceDirUI(ui.PhotoSourceUI):
+     def get(self):
+         folder = self.target_widget.get_uri().replace('file://', '')
++        # FIXME
++        folder = urllib.parse.unquote(folder)
+         return folder
+ 
+     def get_options(self):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/fspot/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/fspot/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/fspot/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/fspot/__init__.py	2019-08-21 01:23:50.000000000 +0900
+@@ -12,8 +12,8 @@ from string import Template
+ from ..base import *
+ from ...utils.iconimage import IconImage
+ from ...utils.checkinstalled import check_installed_in_path
+-from sqldb import FSpotDB, FSpotPhotoSQL, FSpotPhotoTags
+-from rating import RateList
++from .sqldb import FSpotDB, FSpotPhotoSQL, FSpotPhotoTags
++from .rating import RateList
+ 
+ def info():
+     class_obj = [FSpotPlugin, FSpotPhotoList, PhotoSourceFspotUI]
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/haikyo.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/haikyo.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/haikyo.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/haikyo.py	2019-08-21 01:30:22.000000000 +0900
+@@ -18,7 +18,7 @@ import re
+ 
+ from xml.etree import ElementTree as etree
+ 
+-from base import *
++from .base import *
+ from ..utils.iconimage import WebIconImage
+ 
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/picasa.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/picasa.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/picasa.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/picasa.py	2019-08-21 00:38:42.000000000 +0900
+@@ -9,7 +9,7 @@ import json
+ 
+ from gi.repository import Gtk
+ 
+-from base import *
++from .base import *
+ from ..constants import APP_NAME, VERSION
+ from ..settings import SETTINGS_PICASA
+ from ..utils.urlgetautoproxy import urlget_with_autoproxy, urlpost_with_autoproxy
+@@ -52,7 +52,7 @@ class PicasaPhotoList(base.PhotoList):
+         "Get Google Auth Token (ClientLogin)."
+ 
+         if not identity:
+-            print _("Certification Error")
++            print (_("Certification Error"))
+             return
+ 
+         url = 'https://www.google.com/accounts/ClientLogin'
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/rss.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/rss.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/rss.py	2021-03-13 14:42:18.447712877 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/rss.py	2021-03-13 15:04:27.819025431 +0900
+@@ -17,7 +17,7 @@ except ImportError:
+ from gi.repository import Gtk
+ import feedparser
+ 
+-from base import *
++from .base import *
+ from ..settings import SETTINGS_RSS
+ from ..utils.iconimage import LocalIconImage
+ from ..utils.wrandom import WeightedRandom
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/shotwell.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/shotwell.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/shotwell.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/shotwell.py	2019-08-21 01:22:30.000000000 +0900
+@@ -25,10 +25,10 @@ from ..settings import SETTINGS_SHOTWELL
+ from ..utils.sqldb import SqliteDB
+ from ..utils.iconimage import LocalIconImage
+ from ..utils.checkinstalled import check_installed_in_path
+-from base import *
+-from fspot.__init__ import *
+-from fspot.rating import RateList
+-from fspot.sqldb import FSpotPhotoSQL
++from .base import *
++from .fspot.__init__ import *
++from .fspot.rating import RateList
++from .fspot.sqldb import FSpotPhotoSQL
+ 
+ def info():
+     class_obj = [ShotwellPlugin, ShotwellPhotoList, PhotoSourceShotwellUI]
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/__init__.py	2019-08-21 00:37:14.000000000 +0900
+@@ -11,8 +11,8 @@ import re
+ import urllib
+ import json
+ 
+-from api import TumblrAccessBase, TumblrDelete, TumblrAuthenticate
+-from ui import PhotoSourceTumblrUI, PluginTumblrDialog
++from .api import TumblrAccessBase, TumblrDelete, TumblrAuthenticate
++from .ui import PhotoSourceTumblrUI, PluginTumblrDialog
+ from ..base import *
+ from ..picasa import PhotoSourcePicasaUI, PluginPicasaDialog
+ from ..flickr import FlickrFav
+@@ -74,7 +74,7 @@ class TumblrPhotoList(base.PhotoList, Tu
+         if identity:
+             self.email, self.password = identity
+         elif self.target != _('User'):
+-            print _("Certification Error")
++            print (_("Certification Error"))
+             return
+ 
+         # values = {'type': 'photo', 'filter': 'text', 'num': 50}
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/account.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/account.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/account.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/account.py	2021-03-13 14:03:58.424097489 +0900
+@@ -1,9 +1,9 @@
+ import urllib
+ 
+-from oauth import oauth
++from ...utils.oauth import oauth
+ 
+ #from api import TumblrAPIDict
+-from getauthtoken import CONSUMER
++from .getauthtoken import CONSUMER
+ from ...utils.getauthtoken import AuthorizedAccount
+ #from ...utils.settings import SETTINGS_TUMBLR
+ from ...utils.iconimage import WebIconImage
+@@ -99,7 +99,7 @@ class Tumblr(object):
+         urlget_with_autoproxy(url, cb=cb, headers=headers)
+ 
+     def _cb(self, *args):
+-        print "!",args
++        print ("!",args)
+ 
+     def make_oauth_header(self, method, url, parameters={}, headers={}):
+         oauth_request = oauth.OAuthRequest.from_consumer_and_token(
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/assistant.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/assistant.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/assistant.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/assistant.py	2019-08-21 00:39:51.000000000 +0900
+@@ -9,12 +9,12 @@ import json
+ 
+ from gi.repository import Gtk, Gdk
+ 
+-from getauthtoken import TumblrAuthorization
++from .getauthtoken import TumblrAuthorization
+ from ...constants import SHARED_DATA_FILE
+ from ...utils.urlgetautoproxy import urlget_with_autoproxy
+ 
+ from ...utils.authwebkit import AuthWebKitScrolledWindow
+-from account import AuthorizedTumblrAccount
++from .account import AuthorizedTumblrAccount
+ 
+ 
+ class TumblrAuthAssistant(Gtk.Assistant):
+@@ -77,8 +77,8 @@ class TumblrAuthAssistant(Gtk.Assistant)
+         try:
+             token, params = TumblrAuthorization().get_access_token(
+                 verifier, self.token)
+-        except IOError, e:
+-            print "Warning: ", e
++        except IOError as e:
++            print ("Warning: ", e)
+             return
+ 
+         self.result = {'access-token': token.key,
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/getauthtoken.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/getauthtoken.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/getauthtoken.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/getauthtoken.py	2021-03-13 14:31:10.847952333 +0900
+@@ -1,4 +1,5 @@
+-from oauth import oauth
++from urllib.parse import urlparse
++from ...utils.oauth import oauth
+ 
+ from ...utils.getauthtoken import Authorization
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/ui.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/ui.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/plugins/tumblr/ui.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/plugins/tumblr/ui.py	2019-08-21 00:39:03.000000000 +0900
+@@ -6,11 +6,11 @@
+ 
+ # from gettext import gettext as _
+ 
+-from api import TumblrAuthenticate
++from .api import TumblrAuthenticate
+ from ..picasa import PhotoSourcePicasaUI, PluginPicasaDialog
+ from ...settings import SETTINGS_TUMBLR
+ 
+-from assistant import TumblrAuthAssistant
++from .assistant import TumblrAuthAssistant
+ 
+ class PhotoSourceTumblrUI(PhotoSourcePicasaUI):
+ 
+@@ -34,10 +34,10 @@ class PluginTumblrDialog(object):
+         TumblrAuthAssistant(parent=None, cb=self.assistant_cb)
+ 
+     def run(self):
+-        print "run!"
++        print ("run!")
+ 
+     def assistant_cb(self, data):
+-        print "CB!", data
++        print ("CB!", data)
+ 
+ 
+ #    def __init__(self, parent, model_iter=None):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/preferences/__init__.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/preferences/__init__.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/preferences/__init__.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/preferences/__init__.py	2019-08-21 01:05:34.000000000 +0900
+@@ -6,8 +6,8 @@ from ..settings import SETTINGS, SETTING
+ from ..plugins import PluginListStore
+ from ..utils.autostart import AutoStart
+ 
+-from plugin import PluginTreeView
+-from photosource import PhotoSourceTreeView
++from .plugin import PluginTreeView
++from .photosource import PhotoSourceTreeView
+ 
+ 
+ class Preferences(object):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/preferences/photosource.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/preferences/photosource.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/preferences/photosource.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/preferences/photosource.py	2019-08-23 12:51:24.630033483 +0900
+@@ -4,7 +4,7 @@ from gi.repository import Gtk, Gdk
+ from ..constants import UI_FILE
+ from ..settings import SETTINGS, SETTINGS_RECENTS
+ from ..plugins import PHOTO_TARGET_TOKEN, PLUGIN_INFO_TOKEN
+-from treeview import PreferencesTreeView
++from .treeview import PreferencesTreeView
+ 
+ 
+ class PhotoSourceTreeView(PreferencesTreeView):
+@@ -141,10 +141,12 @@ class SourceComboBox(object):
+         widget.pack_start(renderer, False)
+         widget.add_attribute(renderer, 'text', 1)
+ 
+-        recent = SETTINGS_RECENTS.get_string('source').decode('utf-8') #FIXME
++        #recent = SETTINGS_RECENTS.get_string('source').decode('utf-8') #FIXME
++        recent = SETTINGS_RECENTS.get_string('source') #FIXME
+         # liststore source
++        # FIXME
+         source_num = source_list.index(
+-            photoliststore[1].decode('utf-8')) if photoliststore \
++            photoliststore[1]) if photoliststore \
+             else source_list.index(recent) if recent in source_list \
+             else 0
+         widget.set_active(source_num)
+@@ -161,12 +163,14 @@ class SourceComboBox(object):
+         return text
+ 
+     def get_target(self):
+-        return self.ui.get().decode('utf-8') #FIXME
++        #return self.ui.get().decode('utf-8') #FIXME
++        return self.ui.get() #FIXME
+ 
+     def _change_combobox(self, widget, gui, data=None):
+         self.button.set_sensitive(True)
+ 
+-        text = self.get_active_text().decode('utf-8')
++        #text = self.get_active_text().decode('utf-8')
++        text = self.get_active_text()
+         token = PHOTO_TARGET_TOKEN
+ 
+         self.ui = token[text](gui, data)
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/preferences/plugin.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/preferences/plugin.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/preferences/plugin.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/preferences/plugin.py	2019-08-21 01:32:17.000000000 +0900
+@@ -4,7 +4,7 @@ from gi.repository import Gtk
+ 
+ from ..plugins import DIALOG_TOKEN, PLUGIN_INFO_TOKEN, PHOTO_TARGET_TOKEN
+ from ..utils.iconimage import IconImage, LocalIconImage
+-from treeview import PreferencesTreeView
++from .treeview import PreferencesTreeView
+ 
+ 
+ class PluginTreeView(PreferencesTreeView):
+@@ -92,7 +92,7 @@ class PluginAboutDialog(object):
+             try:
+                 about.set_property(key, value)
+             except:
+-                print "Error:", key, value
++                print ("Error:", key, value)
+ 
+         icon_file = '/usr/share/eog/icons/hicolor/32x32/actions/eog-plugin.png'
+         if os.access(icon_file, os.R_OK):
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/EXIF.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/EXIF.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/EXIF.py	2019-08-23 13:29:04.263804401 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/EXIF.py	2019-08-21 00:15:32.000000000 +0900
+@@ -1183,7 +1183,7 @@ def s2n_motorola(str):
+ # extract multibyte integer in Intel format (big endian)
+ def s2n_intel(str):
+     x = 0
+-    y = 0L
++    y = 0
+     for c in str:
+         x = x | (ord(c) << y)
+         y = y + 8
+@@ -1264,7 +1264,7 @@ class EXIF_header:
+             val=s2n_motorola(slice)
+         # Sign extension ?
+         if signed:
+-            msb=1L << (8*length-1)
++            msb=1 << (8*length-1)
+             if val & msb:
+                 val=val-(msb << 1)
+         return val
+@@ -1413,8 +1413,8 @@ class EXIF_header:
+                                                           values, field_offset,
+                                                           count * typelen)
+                 if self.debug:
+-                    print ' debug:   %s: %s' % (tag_name,
+-                                                repr(self.tags[ifd_name + ' ' + tag_name]))
++                    print (' debug:   %s: %s' % (tag_name,
++                                                repr(self.tags[ifd_name + ' ' + tag_name])))
+ 
+             if tag_name == stop_tag:
+                 break
+@@ -1514,13 +1514,13 @@ class EXIF_header:
+         if 'NIKON' in make:
+             if note.values[0:7] == [78, 105, 107, 111, 110, 0, 1]:
+                 if self.debug:
+-                    print "Looks like a type 1 Nikon MakerNote."
++                    print ("Looks like a type 1 Nikon MakerNote.")
+                 self.dump_IFD(note.field_offset+8, 'MakerNote',
+                               dict=MAKERNOTE_NIKON_OLDER_TAGS)
+             elif note.values[0:7] == [78, 105, 107, 111, 110, 0, 2]:
+                 if self.debug:
+-                    print "Looks like a labeled type 2 Nikon MakerNote"
+-                if note.values[12:14] != [0, 42] and note.values[12:14] != [42L, 0L]:
++                    print ("Looks like a labeled type 2 Nikon MakerNote")
++                if note.values[12:14] != [0, 42] and note.values[12:14] != [42, 0]:
+                     raise ValueError("Missing marker tag '42' in MakerNote.")
+                 # skip the Makernote label and the TIFF header
+                 self.dump_IFD(note.field_offset+10+8, 'MakerNote',
+@@ -1528,7 +1528,7 @@ class EXIF_header:
+             else:
+                 # E99x or D1
+                 if self.debug:
+-                    print "Looks like an unlabeled type 2 Nikon MakerNote"
++                    print ("Looks like an unlabeled type 2 Nikon MakerNote")
+                 self.dump_IFD(note.field_offset, 'MakerNote',
+                               dict=MAKERNOTE_NIKON_NEWER_TAGS)
+             return
+@@ -1587,7 +1587,7 @@ class EXIF_header:
+         for i in range(1, len(value)):
+             x=dict.get(i, ('Unknown', ))
+             if self.debug:
+-                print i, x
++                print (i, x)
+             name=x[0]
+             if len(x) > 1:
+                 val=x[1].get(value[i], 'Unknown')
+@@ -1638,7 +1638,7 @@ def process_file(f, stop_tag='UNDEF', de
+ 
+     # deal with the EXIF info we found
+     if debug:
+-        print {'I': 'Intel', 'M': 'Motorola'}[endian], 'format'
++        print ({'I': 'Intel', 'M': 'Motorola'}[endian], 'format')
+     hdr = EXIF_header(f, endian, offset, fake_exif, strict, debug)
+     ifd_list = hdr.list_IFDs()
+     ctr = 0
+@@ -1651,27 +1651,27 @@ def process_file(f, stop_tag='UNDEF', de
+         else:
+             IFD_name = 'IFD %d' % ctr
+         if debug:
+-            print ' IFD %d (%s) at offset %d:' % (ctr, IFD_name, i)
++            print (' IFD %d (%s) at offset %d:' % (ctr, IFD_name, i))
+         hdr.dump_IFD(i, IFD_name, stop_tag=stop_tag)
+         # EXIF IFD
+         exif_off = hdr.tags.get(IFD_name+' ExifOffset')
+         if exif_off:
+             if debug:
+-                print ' EXIF SubIFD at offset %d:' % exif_off.values[0]
++                print (' EXIF SubIFD at offset %d:' % exif_off.values[0])
+             hdr.dump_IFD(exif_off.values[0], 'EXIF', stop_tag=stop_tag)
+             # Interoperability IFD contained in EXIF IFD
+             intr_off = hdr.tags.get('EXIF SubIFD InteroperabilityOffset')
+             if intr_off:
+                 if debug:
+-                    print ' EXIF Interoperability SubSubIFD at offset %d:' \
+-                          % intr_off.values[0]
++                    print (' EXIF Interoperability SubSubIFD at offset %d:' \
++                          % intr_off.values[0])
+                 hdr.dump_IFD(intr_off.values[0], 'EXIF Interoperability',
+                              dict=INTR_TAGS, stop_tag=stop_tag)
+         # GPS IFD
+         gps_off = hdr.tags.get(IFD_name+' GPSInfo')
+         if gps_off:
+             if debug:
+-                print ' GPS SubIFD at offset %d:' % gps_off.values[0]
++                print (' GPS SubIFD at offset %d:' % gps_off.values[0])
+             hdr.dump_IFD(gps_off.values[0], 'GPS', dict=GPS_TAGS, stop_tag=stop_tag)
+         ctr += 1
+ 
+@@ -1712,7 +1712,7 @@ def usage(exit_status):
+     msg += '-t TAG --stop-tag TAG   Stop processing when this tag is retrieved.\n'
+     msg += '-s --strict   Run in strict mode (stop on errors).\n'
+     msg += '-d --debug   Run in debug mode (display extra info).\n'
+-    print msg
++    print (msg)
+     sys.exit(exit_status)
+ 
+ # library test/debug function (dump given files)
+@@ -1748,13 +1748,13 @@ if __name__ == '__main__':
+         try:
+             file=open(filename, 'rb')
+         except:
+-            print "'%s' is unreadable\n"%filename
++            print ("'%s' is unreadable\n"%filename)
+             continue
+-        print filename + ':'
++        print (filename + ':')
+         # get the tags
+         data = process_file(file, stop_tag=stop_tag, details=detailed, strict=strict, debug=debug)
+         if not data:
+-            print 'No EXIF information found'
++            print ('No EXIF information found')
+             continue
+ 
+         x=data.keys()
+@@ -1763,11 +1763,11 @@ if __name__ == '__main__':
+             if i in ('JPEGThumbnail', 'TIFFThumbnail'):
+                 continue
+             try:
+-                print '   %s (%s): %s' % \
+-                      (i, FIELD_TYPES[data[i].field_type][2], data[i].printable)
++                print ('   %s (%s): %s' % \
++                      (i, FIELD_TYPES[data[i].field_type][2], data[i].printable))
+             except:
+-                print 'error', i, '"', data[i], '"'
++                print ('error', i, '"', data[i], '"')
+         if 'JPEGThumbnail' in data:
+-            print 'File has JPEG thumbnail'
++            print ('File has JPEG thumbnail')
+         print
+ 
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/autostart.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/autostart.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/autostart.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/autostart.py	2019-08-21 01:03:17.000000000 +0900
+@@ -26,7 +26,7 @@ class AutoStart(object):
+         if self.load_file:
+             self.entry.parse(self.load_file)
+         else:
+-            print "Warning: the desktop entry of %s is not found." % app_name
++            print ("Warning: the desktop entry of %s is not found." % app_name)
+ 
+     def check_enable(self):
+         state = bool(self.load_file)
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/datetimeformat.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/datetimeformat.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/datetimeformat.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/datetimeformat.py	2019-08-23 12:51:56.343432725 +0900
+@@ -5,6 +5,7 @@ def get_formatted_datatime(date):
+ 
+     format = SETTINGS_FORMAT.get_string('date-format') or "%x"
+ 
+-    result = date if isinstance(date, unicode) else \
++    # FIXME
++    result = date if isinstance(date, str) else \
+         time.strftime(format, time.gmtime(date))
+-    return result.decode('utf_8')
++    return result
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/getauthtoken.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/getauthtoken.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/getauthtoken.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/getauthtoken.py	2021-03-13 14:12:15.228648509 +0900
+@@ -1,7 +1,7 @@
+ import urllib
+ import cgi
+ 
+-from oauth import oauth
++from .oauth import oauth
+ from gi.repository import GObject
+ 
+ #from ...constants import Column
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/gtk3reactor.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/gtk3reactor.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/gtk3reactor.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/gtk3reactor.py	1970-01-01 09:00:00.000000000 +0900
+@@ -1,365 +0,0 @@
+-# -*- test-case-name: twisted.internet.test.test_gtk3reactor -*-
+-# Copyright (c) 2001-2010 Twisted Matrix Laboratories.
+-# See LICENSE for details.
+-
+-
+-"""
+-This module provides support for Twisted to interact with the glib/gtk3
+-mainloop.
+-
+-In order to use this support, simply do the following::
+-
+-    |  from twisted.internet import gtk3reactor
+-    |  gtk3reactor.install()
+-
+-Then use twisted.internet APIs as usual.  The other methods here are not
+-intended to be called directly.
+-
+-When installing the reactor, you can choose whether to use the glib
+-event loop or the GTK+ event loop which is based on it but adds GUI
+-integration.
+-"""
+-
+-# System Imports
+-import sys
+-from zope.interface import implements
+-try:
+-    if not hasattr(sys, 'frozen'):
+-        # Don't want to check this for py2exe
+-        from gi.repository import Gtk as gtk
+-except (ImportError, AttributeError):
+-    pass # maybe we're using pygtk before this hack existed.
+-from gi.repository import GObject as gobject
+-if hasattr(gobject, "threads_init"):
+-    gobject.threads_init()
+-
+-# Twisted Imports
+-from twisted.python import log, runtime, failure
+-from twisted.python.compat import set
+-from twisted.internet.interfaces import IReactorFDSet
+-from twisted.internet import main, posixbase, error, selectreactor
+-
+-POLL_DISCONNECTED = gobject.IO_HUP | gobject.IO_ERR | gobject.IO_NVAL
+-
+-# glib's iochannel sources won't tell us about any events that we haven't
+-# asked for, even if those events aren't sensible inputs to the poll()
+-# call.
+-INFLAGS = gobject.IO_IN | POLL_DISCONNECTED
+-OUTFLAGS = gobject.IO_OUT | POLL_DISCONNECTED
+-
+-
+-
+-def _our_mainquit():
+-    # XXX: gtk.main_quit() (which is used for crash()) raises an exception if
+-    # gtk.main_level() == 0; however, all the tests freeze if we use this
+-    # function to stop the reactor.  what gives?  (I believe this may have been
+-    # a stupid mistake where I forgot to import gtk here... I will remove this
+-    # comment if the tests pass)
+-    from gi.repository import Gtk as gtk
+-    if gtk.main_level():
+-        gtk.main_quit()
+-
+-
+-
+-class Gtk3Reactor(posixbase.PosixReactorBase):
+-    """
+-    GTK+-3 event loop reactor.
+-
+-    @ivar _sources: A dictionary mapping L{FileDescriptor} instances to gtk
+-        watch handles.
+-
+-    @ivar _reads: A set of L{FileDescriptor} instances currently monitored for
+-        reading.
+-
+-    @ivar _writes: A set of L{FileDescriptor} instances currently monitored for
+-        writing.
+-
+-    @ivar _simtag: A gtk timeout handle for the next L{simulate} call.
+-    """
+-    implements(IReactorFDSet)
+-
+-    def __init__(self, useGtk=True):
+-        self._simtag = None
+-        self._reads = set()
+-        self._writes = set()
+-        self._sources = {}
+-        posixbase.PosixReactorBase.__init__(self)
+-
+-        self.context = gobject.main_context_default()
+-        self.__pending = self.context.pending
+-        self.__iteration = self.context.iteration
+-        self.loop = gobject.MainLoop()
+-        self.__crash = self.loop.quit
+-        self.__run = self.loop.run
+-
+-    # The input_add function in pygtk1 checks for objects with a
+-    # 'fileno' method and, if present, uses the result of that method
+-    # as the input source. The gobject-instrospected GTK3 input_add does not do this. The
+-    # function below replicates the pygtk1 functionality.
+-
+-    # In addition, pygtk maps gtk.input_add to _gobject.io_add_watch, and
+-    # g_io_add_watch() takes different condition bitfields than
+-    # gtk_input_add(). We use g_io_add_watch() here in case pygtk fixes this
+-    # bug.
+-    def input_add(self, source, condition, callback):
+-        if hasattr(source, 'fileno'):
+-            # handle python objects
+-            def wrapper(source, condition, real_s=source, real_cb=callback):
+-                return real_cb(real_s, condition)
+-            return gobject.io_add_watch(source.fileno(), condition, wrapper)
+-        else:
+-            return gobject.io_add_watch(source, condition, callback)
+-
+-
+-    def _add(self, source, primary, other, primaryFlag, otherFlag):
+-        """
+-        Add the given L{FileDescriptor} for monitoring either for reading or
+-        writing. If the file is already monitored for the other operation, we
+-        delete the previous registration and re-register it for both reading
+-        and writing.
+-        """
+-        if source in primary:
+-            return
+-        flags = primaryFlag
+-        if source in other:
+-            gobject.source_remove(self._sources[source])
+-            flags |= otherFlag
+-        self._sources[source] = self.input_add(source, flags, self.callback)
+-        primary.add(source)
+-
+-
+-    def addReader(self, reader):
+-        """
+-        Add a L{FileDescriptor} for monitoring of data available to read.
+-        """
+-        self._add(reader, self._reads, self._writes, INFLAGS, OUTFLAGS)
+-
+-
+-    def addWriter(self, writer):
+-        """
+-        Add a L{FileDescriptor} for monitoring ability to write data.
+-        """
+-        self._add(writer, self._writes, self._reads, OUTFLAGS, INFLAGS)
+-
+-
+-    def getReaders(self):
+-        """
+-        Retrieve the list of current L{FileDescriptor} monitored for reading.
+-        """
+-        return list(self._reads)
+-
+-
+-    def getWriters(self):
+-        """
+-        Retrieve the list of current L{FileDescriptor} monitored for writing.
+-        """
+-        return list(self._writes)
+-
+-
+-    def removeAll(self):
+-        """
+-        Remove monitoring for all registered L{FileDescriptor}s.
+-        """
+-        return self._removeAll(self._reads, self._writes)
+-
+-
+-    def _remove(self, source, primary, other, flags):
+-        """
+-        Remove monitoring the given L{FileDescriptor} for either reading or
+-        writing. If it's still monitored for the other operation, we
+-        re-register the L{FileDescriptor} for only that operation.
+-        """
+-        if source not in primary:
+-            return
+-        gobject.source_remove(self._sources[source])
+-        primary.remove(source)
+-        if source in other:
+-            self._sources[source] = self.input_add(
+-                source, flags, self.callback)
+-        else:
+-            self._sources.pop(source)
+-
+-
+-    def removeReader(self, reader):
+-        """
+-        Stop monitoring the given L{FileDescriptor} for reading.
+-        """
+-        self._remove(reader, self._reads, self._writes, OUTFLAGS)
+-
+-
+-    def removeWriter(self, writer):
+-        """
+-        Stop monitoring the given L{FileDescriptor} for writing.
+-        """
+-        self._remove(writer, self._writes, self._reads, INFLAGS)
+-
+-
+-    doIterationTimer = None
+-
+-    def doIterationTimeout(self, *args):
+-        self.doIterationTimer = None
+-        return 0 # auto-remove
+-
+-
+-    def doIteration(self, delay):
+-        # flush some pending events, return if there was something to do
+-        # don't use the usual "while self.context.pending(): self.context.iteration()"
+-        # idiom because lots of IO (in particular test_tcp's
+-        # ProperlyCloseFilesTestCase) can keep us from ever exiting.
+-        log.msg(channel='system', event='iteration', reactor=self)
+-        if self.__pending():
+-            self.__iteration(0)
+-            return
+-        # nothing to do, must delay
+-        if delay == 0:
+-            return # shouldn't delay, so just return
+-        self.doIterationTimer = gobject.timeout_add(int(delay * 1000),
+-                                                self.doIterationTimeout)
+-        # This will either wake up from IO or from a timeout.
+-        self.__iteration(1) # block
+-        # note: with the .simulate timer below, delays > 0.1 will always be
+-        # woken up by the .simulate timer
+-        if self.doIterationTimer:
+-            # if woken by IO, need to cancel the timer
+-            gobject.source_remove(self.doIterationTimer)
+-            self.doIterationTimer = None
+-
+-
+-    def crash(self):
+-        posixbase.PosixReactorBase.crash(self)
+-        self.__crash()
+-
+-
+-    def run(self, installSignalHandlers=1):
+-        self.startRunning(installSignalHandlers=installSignalHandlers)
+-        gobject.timeout_add(0, self.simulate)
+-        if self._started:
+-            self.__run()
+-
+-
+-    def _doReadOrWrite(self, source, condition, faildict={
+-        error.ConnectionDone: failure.Failure(error.ConnectionDone()),
+-        error.ConnectionLost: failure.Failure(error.ConnectionLost()),
+-        }):
+-        why = None
+-        didRead = None
+-        if condition & POLL_DISCONNECTED and \
+-               not (condition & gobject.IO_IN):
+-            why = main.CONNECTION_LOST
+-        else:
+-            try:
+-                if condition & gobject.IO_IN:
+-                    why = source.doRead()
+-                    didRead = source.doRead
+-                if not why and condition & gobject.IO_OUT:
+-                    # if doRead caused connectionLost, don't call doWrite
+-                    # if doRead is doWrite, don't call it again.
+-                    if not source.disconnected and source.doWrite != didRead:
+-                        why = source.doWrite()
+-                        didRead = source.doWrite # if failed it was in write
+-            except:
+-                why = sys.exc_info()[1]
+-                log.msg('Error In %s' % source)
+-                log.deferr()
+-
+-        if why:
+-            self._disconnectSelectable(source, why, didRead == source.doRead)
+-
+-
+-    def callback(self, source, condition):
+-        log.callWithLogger(source, self._doReadOrWrite, source, condition)
+-        self.simulate() # fire Twisted timers
+-        return 1 # 1=don't auto-remove the source
+-
+-
+-    def simulate(self):
+-        """
+-        Run simulation loops and reschedule callbacks.
+-        """
+-        if self._simtag is not None:
+-            gobject.source_remove(self._simtag)
+-        self.runUntilCurrent()
+-        timeout = min(self.timeout(), 0.1)
+-        if timeout is None:
+-            timeout = 0.1
+-        # grumble
+-        self._simtag = gobject.timeout_add(int(timeout * 1010), self.simulate)
+-
+-
+-
+-class PortableGtkReactor(selectreactor.SelectReactor):
+-    """
+-    Reactor that works on Windows.
+-
+-    Sockets aren't supported by GTK+'s input_add on Win32.
+-    """
+-    _simtag = None
+-
+-    def crash(self):
+-        selectreactor.SelectReactor.crash(self)
+-        from gi.repository import Gtk as gtk
+-        # mainquit is deprecated in newer versions
+-        if gtk.main_level():
+-            if hasattr(gtk, 'main_quit'):
+-                gtk.main_quit()
+-            else:
+-                gtk.mainquit()
+-
+-
+-    def run(self, installSignalHandlers=1):
+-        from gi.repository import Gtk as gtk
+-        self.startRunning(installSignalHandlers=installSignalHandlers)
+-        gobject.timeout_add(0, self.simulate)
+-        # mainloop is deprecated in newer versions
+-        if hasattr(gtk, 'main'):
+-            gtk.main()
+-        else:
+-            gtk.mainloop()
+-
+-
+-    def simulate(self):
+-        """
+-        Run simulation loops and reschedule callbacks.
+-        """
+-        if self._simtag is not None:
+-            gobject.source_remove(self._simtag)
+-        self.iterate()
+-        timeout = min(self.timeout(), 0.1)
+-        if timeout is None:
+-            timeout = 0.1
+-        # grumble
+-        self._simtag = gobject.timeout_add(int(timeout * 1010), self.simulate)
+-
+-
+-
+-def install(useGtk=True):
+-    """
+-    Configure the twisted mainloop to be run inside the gtk mainloop.
+-
+-    @param useGtk: should glib rather than GTK+ event loop be
+-        used (this will be slightly faster but does not support GUI).
+-    """
+-    reactor = Gtk3Reactor(useGtk)
+-    from twisted.internet.main import installReactor
+-    installReactor(reactor)
+-    return reactor
+-
+-
+-
+-def portableInstall(useGtk=True):
+-    """
+-    Configure the twisted mainloop to be run inside the gtk mainloop.
+-    """
+-    reactor = PortableGtkReactor()
+-    from twisted.internet.main import installReactor
+-    installReactor(reactor)
+-    return reactor
+-
+-
+-
+-if runtime.platform.getType() != 'posix':
+-    install = portableInstall
+-
+-
+-
+-__all__ = ['install']
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/inotify.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/inotify.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/inotify.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/inotify.py	2019-08-21 01:31:58.000000000 +0900
+@@ -71,19 +71,19 @@ class Inotify(object):
+         elif target == 'del_dir':
+             self._cb_del_dir = cb
+         else:
+-            print "Error: Invalid Callback."
++            print ("Error: Invalid Callback.")
+ 
+     def _cb_add_file(self, file_name):
+-        print file_name, "add file"
++        print (file_name, "add file")
+ 
+     def _cb_del_file(self, file_name):
+-        print file_name, "del file"
++        print (file_name, "del file")
+ 
+     def _cb_add_dir(self, file_name):
+-        print file_name, "add dir"
++        print (file_name, "add dir")
+ 
+     def _cb_del_dir(self, file_name):
+-        print file_name, "del dir"
++        print (file_name, "del dir")
+ 
+ if __name__ == "__main__":
+     from gi.repository import Gtk
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/keyring.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/keyring.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/keyring.py	2019-08-23 13:29:04.259804350 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/keyring.py	2019-08-21 00:37:34.000000000 +0900
+@@ -78,4 +78,4 @@ if __name__ == '__main__':
+ 
+     secret = Keyring('tsurukawa.org', 'http')
+     secret.set_passwd('yendo1', 'dokkoi', 'FUJISAN')
+-    print secret.get_passwd('yendo1')
++    print (secret.get_passwd('yendo1'))
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/oauth/oauth.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/oauth/oauth.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/oauth/oauth.py	1970-01-01 09:00:00.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/oauth/oauth.py	2019-08-21 00:47:48.000000000 +0900
+@@ -0,0 +1,655 @@
++"""
++The MIT License
++
++Copyright (c) 2007 Leah Culver
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in
++all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
++THE SOFTWARE.
++"""
++
++import cgi
++import urllib
++import time
++import random
++from urllib.parse import urlparse
++import hmac
++import binascii
++
++
++VERSION = '1.0' # Hi Blaine!
++HTTP_METHOD = 'GET'
++SIGNATURE_METHOD = 'PLAINTEXT'
++
++
++class OAuthError(RuntimeError):
++    """Generic exception class."""
++    def __init__(self, message='OAuth error occured.'):
++        self.message = message
++
++def build_authenticate_header(realm=''):
++    """Optional WWW-Authenticate header (401 error)"""
++    return {'WWW-Authenticate': 'OAuth realm="%s"' % realm}
++
++def escape(s):
++    """Escape a URL including any /."""
++    return urllib.quote(s, safe='~')
++
++def _utf8_str(s):
++    """Convert unicode to utf-8."""
++    if isinstance(s, unicode):
++        return s.encode("utf-8")
++    else:
++        return str(s)
++
++def generate_timestamp():
++    """Get seconds since epoch (UTC)."""
++    return int(time.time())
++
++def generate_nonce(length=8):
++    """Generate pseudorandom number."""
++    return ''.join([str(random.randint(0, 9)) for i in range(length)])
++
++def generate_verifier(length=8):
++    """Generate pseudorandom number."""
++    return ''.join([str(random.randint(0, 9)) for i in range(length)])
++
++
++class OAuthConsumer(object):
++    """Consumer of OAuth authentication.
++
++    OAuthConsumer is a data type that represents the identity of the Consumer
++    via its shared secret with the Service Provider.
++
++    """
++    key = None
++    secret = None
++
++    def __init__(self, key, secret):
++        self.key = key
++        self.secret = secret
++
++
++class OAuthToken(object):
++    """OAuthToken is a data type that represents an End User via either an access
++    or request token.
++    
++    key -- the token
++    secret -- the token secret
++
++    """
++    key = None
++    secret = None
++    callback = None
++    callback_confirmed = None
++    verifier = None
++
++    def __init__(self, key, secret):
++        self.key = key
++        self.secret = secret
++
++    def set_callback(self, callback):
++        self.callback = callback
++        self.callback_confirmed = 'true'
++
++    def set_verifier(self, verifier=None):
++        if verifier is not None:
++            self.verifier = verifier
++        else:
++            self.verifier = generate_verifier()
++
++    def get_callback_url(self):
++        if self.callback and self.verifier:
++            # Append the oauth_verifier.
++            parts = urlparse.urlparse(self.callback)
++            scheme, netloc, path, params, query, fragment = parts[:6]
++            if query:
++                query = '%s&oauth_verifier=%s' % (query, self.verifier)
++            else:
++                query = 'oauth_verifier=%s' % self.verifier
++            return urlparse.urlunparse((scheme, netloc, path, params,
++                query, fragment))
++        return self.callback
++
++    def to_string(self):
++        data = {
++            'oauth_token': self.key,
++            'oauth_token_secret': self.secret,
++        }
++        if self.callback_confirmed is not None:
++            data['oauth_callback_confirmed'] = self.callback_confirmed
++        return urllib.urlencode(data)
++ 
++    def from_string(s):
++        """ Returns a token from something like:
++        oauth_token_secret=xxx&oauth_token=xxx
++        """
++        params = cgi.parse_qs(s, keep_blank_values=False)
++        key = params['oauth_token'][0]
++        secret = params['oauth_token_secret'][0]
++        token = OAuthToken(key, secret)
++        try:
++            token.callback_confirmed = params['oauth_callback_confirmed'][0]
++        except KeyError:
++            pass # 1.0, no callback confirmed.
++        return token
++    from_string = staticmethod(from_string)
++
++    def __str__(self):
++        return self.to_string()
++
++
++class OAuthRequest(object):
++    """OAuthRequest represents the request and can be serialized.
++
++    OAuth parameters:
++        - oauth_consumer_key 
++        - oauth_token
++        - oauth_signature_method
++        - oauth_signature 
++        - oauth_timestamp 
++        - oauth_nonce
++        - oauth_version
++        - oauth_verifier
++        ... any additional parameters, as defined by the Service Provider.
++    """
++    parameters = None # OAuth parameters.
++    http_method = HTTP_METHOD
++    http_url = None
++    version = VERSION
++
++    def __init__(self, http_method=HTTP_METHOD, http_url=None, parameters=None):
++        self.http_method = http_method
++        self.http_url = http_url
++        self.parameters = parameters or {}
++
++    def set_parameter(self, parameter, value):
++        self.parameters[parameter] = value
++
++    def get_parameter(self, parameter):
++        try:
++            return self.parameters[parameter]
++        except:
++            raise OAuthError('Parameter not found: %s' % parameter)
++
++    def _get_timestamp_nonce(self):
++        return self.get_parameter('oauth_timestamp'), self.get_parameter(
++            'oauth_nonce')
++
++    def get_nonoauth_parameters(self):
++        """Get any non-OAuth parameters."""
++        parameters = {}
++        for k, v in self.parameters.iteritems():
++            # Ignore oauth parameters.
++            if k.find('oauth_') < 0:
++                parameters[k] = v
++        return parameters
++
++    def to_header(self, realm=''):
++        """Serialize as a header for an HTTPAuth request."""
++        auth_header = 'OAuth realm="%s"' % realm
++        # Add the oauth parameters.
++        if self.parameters:
++            for k, v in self.parameters.iteritems():
++                if k[:6] == 'oauth_':
++                    auth_header += ', %s="%s"' % (k, escape(str(v)))
++        return {'Authorization': auth_header}
++
++    def to_postdata(self):
++        """Serialize as post data for a POST request."""
++        return '&'.join(['%s=%s' % (escape(str(k)), escape(str(v))) \
++            for k, v in self.parameters.iteritems()])
++
++    def to_url(self):
++        """Serialize as a URL for a GET request."""
++        return '%s?%s' % (self.get_normalized_http_url(), self.to_postdata())
++
++    def get_normalized_parameters(self):
++        """Return a string that contains the parameters that must be signed."""
++        params = self.parameters
++        try:
++            # Exclude the signature if it exists.
++            del params['oauth_signature']
++        except:
++            pass
++        # Escape key values before sorting.
++        key_values = [(escape(_utf8_str(k)), escape(_utf8_str(v))) \
++            for k,v in params.items()]
++        # Sort lexicographically, first after key, then after value.
++        key_values.sort()
++        # Combine key value pairs into a string.
++        return '&'.join(['%s=%s' % (k, v) for k, v in key_values])
++
++    def get_normalized_http_method(self):
++        """Uppercases the http method."""
++        return self.http_method.upper()
++
++    def get_normalized_http_url(self):
++        """Parses the URL and rebuilds it to be scheme://host/path."""
++        parts = urlparse.urlparse(self.http_url)
++        scheme, netloc, path = parts[:3]
++        # Exclude default port numbers.
++        if scheme == 'http' and netloc[-3:] == ':80':
++            netloc = netloc[:-3]
++        elif scheme == 'https' and netloc[-4:] == ':443':
++            netloc = netloc[:-4]
++        return '%s://%s%s' % (scheme, netloc, path)
++
++    def sign_request(self, signature_method, consumer, token):
++        """Set the signature parameter to the result of build_signature."""
++        # Set the signature method.
++        self.set_parameter('oauth_signature_method',
++            signature_method.get_name())
++        # Set the signature.
++        self.set_parameter('oauth_signature',
++            self.build_signature(signature_method, consumer, token))
++
++    def build_signature(self, signature_method, consumer, token):
++        """Calls the build signature method within the signature method."""
++        return signature_method.build_signature(self, consumer, token)
++
++    def from_request(http_method, http_url, headers=None, parameters=None,
++            query_string=None):
++        """Combines multiple parameter sources."""
++        if parameters is None:
++            parameters = {}
++
++        # Headers
++        if headers and 'Authorization' in headers:
++            auth_header = headers['Authorization']
++            # Check that the authorization header is OAuth.
++            if auth_header[:6] == 'OAuth ':
++                auth_header = auth_header[6:]
++                try:
++                    # Get the parameters from the header.
++                    header_params = OAuthRequest._split_header(auth_header)
++                    parameters.update(header_params)
++                except:
++                    raise OAuthError('Unable to parse OAuth parameters from '
++                        'Authorization header.')
++
++        # GET or POST query string.
++        if query_string:
++            query_params = OAuthRequest._split_url_string(query_string)
++            parameters.update(query_params)
++
++        # URL parameters.
++        param_str = urlparse.urlparse(http_url)[4] # query
++        url_params = OAuthRequest._split_url_string(param_str)
++        parameters.update(url_params)
++
++        if parameters:
++            return OAuthRequest(http_method, http_url, parameters)
++
++        return None
++    from_request = staticmethod(from_request)
++
++    def from_consumer_and_token(oauth_consumer, token=None,
++            callback=None, verifier=None, http_method=HTTP_METHOD,
++            http_url=None, parameters=None):
++        if not parameters:
++            parameters = {}
++
++        defaults = {
++            'oauth_consumer_key': oauth_consumer.key,
++            'oauth_timestamp': generate_timestamp(),
++            'oauth_nonce': generate_nonce(),
++            'oauth_version': OAuthRequest.version,
++        }
++
++        defaults.update(parameters)
++        parameters = defaults
++
++        if token:
++            parameters['oauth_token'] = token.key
++            if token.callback:
++                parameters['oauth_callback'] = token.callback
++            # 1.0a support for verifier.
++            if verifier:
++                parameters['oauth_verifier'] = verifier
++        elif callback:
++            # 1.0a support for callback in the request token request.
++            parameters['oauth_callback'] = callback
++
++        return OAuthRequest(http_method, http_url, parameters)
++    from_consumer_and_token = staticmethod(from_consumer_and_token)
++
++    def from_token_and_callback(token, callback=None, http_method=HTTP_METHOD,
++            http_url=None, parameters=None):
++        if not parameters:
++            parameters = {}
++
++        parameters['oauth_token'] = token.key
++
++        if callback:
++            parameters['oauth_callback'] = callback
++
++        return OAuthRequest(http_method, http_url, parameters)
++    from_token_and_callback = staticmethod(from_token_and_callback)
++
++    def _split_header(header):
++        """Turn Authorization: header into parameters."""
++        params = {}
++        parts = header.split(',')
++        for param in parts:
++            # Ignore realm parameter.
++            if param.find('realm') > -1:
++                continue
++            # Remove whitespace.
++            param = param.strip()
++            # Split key-value.
++            param_parts = param.split('=', 1)
++            # Remove quotes and unescape the value.
++            params[param_parts[0]] = urllib.unquote(param_parts[1].strip('\"'))
++        return params
++    _split_header = staticmethod(_split_header)
++
++    def _split_url_string(param_str):
++        """Turn URL string into parameters."""
++        parameters = cgi.parse_qs(param_str, keep_blank_values=False)
++        for k, v in parameters.iteritems():
++            parameters[k] = urllib.unquote(v[0])
++        return parameters
++    _split_url_string = staticmethod(_split_url_string)
++
++class OAuthServer(object):
++    """A worker to check the validity of a request against a data store."""
++    timestamp_threshold = 300 # In seconds, five minutes.
++    version = VERSION
++    signature_methods = None
++    data_store = None
++
++    def __init__(self, data_store=None, signature_methods=None):
++        self.data_store = data_store
++        self.signature_methods = signature_methods or {}
++
++    def set_data_store(self, data_store):
++        self.data_store = data_store
++
++    def get_data_store(self):
++        return self.data_store
++
++    def add_signature_method(self, signature_method):
++        self.signature_methods[signature_method.get_name()] = signature_method
++        return self.signature_methods
++
++    def fetch_request_token(self, oauth_request):
++        """Processes a request_token request and returns the
++        request token on success.
++        """
++        try:
++            # Get the request token for authorization.
++            token = self._get_token(oauth_request, 'request')
++        except OAuthError:
++            # No token required for the initial token request.
++            version = self._get_version(oauth_request)
++            consumer = self._get_consumer(oauth_request)
++            try:
++                callback = self.get_callback(oauth_request)
++            except OAuthError:
++                callback = None # 1.0, no callback specified.
++            self._check_signature(oauth_request, consumer, None)
++            # Fetch a new token.
++            token = self.data_store.fetch_request_token(consumer, callback)
++        return token
++
++    def fetch_access_token(self, oauth_request):
++        """Processes an access_token request and returns the
++        access token on success.
++        """
++        version = self._get_version(oauth_request)
++        consumer = self._get_consumer(oauth_request)
++        try:
++            verifier = self._get_verifier(oauth_request)
++        except OAuthError:
++            verifier = None
++        # Get the request token.
++        token = self._get_token(oauth_request, 'request')
++        self._check_signature(oauth_request, consumer, token)
++        new_token = self.data_store.fetch_access_token(consumer, token, verifier)
++        return new_token
++
++    def verify_request(self, oauth_request):
++        """Verifies an api call and checks all the parameters."""
++        # -> consumer and token
++        version = self._get_version(oauth_request)
++        consumer = self._get_consumer(oauth_request)
++        # Get the access token.
++        token = self._get_token(oauth_request, 'access')
++        self._check_signature(oauth_request, consumer, token)
++        parameters = oauth_request.get_nonoauth_parameters()
++        return consumer, token, parameters
++
++    def authorize_token(self, token, user):
++        """Authorize a request token."""
++        return self.data_store.authorize_request_token(token, user)
++
++    def get_callback(self, oauth_request):
++        """Get the callback URL."""
++        return oauth_request.get_parameter('oauth_callback')
++ 
++    def build_authenticate_header(self, realm=''):
++        """Optional support for the authenticate header."""
++        return {'WWW-Authenticate': 'OAuth realm="%s"' % realm}
++
++    def _get_version(self, oauth_request):
++        """Verify the correct version request for this server."""
++        try:
++            version = oauth_request.get_parameter('oauth_version')
++        except:
++            version = VERSION
++        if version and version != self.version:
++            raise OAuthError('OAuth version %s not supported.' % str(version))
++        return version
++
++    def _get_signature_method(self, oauth_request):
++        """Figure out the signature with some defaults."""
++        try:
++            signature_method = oauth_request.get_parameter(
++                'oauth_signature_method')
++        except:
++            signature_method = SIGNATURE_METHOD
++        try:
++            # Get the signature method object.
++            signature_method = self.signature_methods[signature_method]
++        except:
++            signature_method_names = ', '.join(self.signature_methods.keys())
++            raise OAuthError('Signature method %s not supported try one of the '
++                'following: %s' % (signature_method, signature_method_names))
++
++        return signature_method
++
++    def _get_consumer(self, oauth_request):
++        consumer_key = oauth_request.get_parameter('oauth_consumer_key')
++        consumer = self.data_store.lookup_consumer(consumer_key)
++        if not consumer:
++            raise OAuthError('Invalid consumer.')
++        return consumer
++
++    def _get_token(self, oauth_request, token_type='access'):
++        """Try to find the token for the provided request token key."""
++        token_field = oauth_request.get_parameter('oauth_token')
++        token = self.data_store.lookup_token(token_type, token_field)
++        if not token:
++            raise OAuthError('Invalid %s token: %s' % (token_type, token_field))
++        return token
++    
++    def _get_verifier(self, oauth_request):
++        return oauth_request.get_parameter('oauth_verifier')
++
++    def _check_signature(self, oauth_request, consumer, token):
++        timestamp, nonce = oauth_request._get_timestamp_nonce()
++        self._check_timestamp(timestamp)
++        self._check_nonce(consumer, token, nonce)
++        signature_method = self._get_signature_method(oauth_request)
++        try:
++            signature = oauth_request.get_parameter('oauth_signature')
++        except:
++            raise OAuthError('Missing signature.')
++        # Validate the signature.
++        valid_sig = signature_method.check_signature(oauth_request, consumer,
++            token, signature)
++        if not valid_sig:
++            key, base = signature_method.build_signature_base_string(
++                oauth_request, consumer, token)
++            raise OAuthError('Invalid signature. Expected signature base '
++                'string: %s' % base)
++        built = signature_method.build_signature(oauth_request, consumer, token)
++
++    def _check_timestamp(self, timestamp):
++        """Verify that timestamp is recentish."""
++        timestamp = int(timestamp)
++        now = int(time.time())
++        lapsed = now - timestamp
++        if lapsed > self.timestamp_threshold:
++            raise OAuthError('Expired timestamp: given %d and now %s has a '
++                'greater difference than threshold %d' %
++                (timestamp, now, self.timestamp_threshold))
++
++    def _check_nonce(self, consumer, token, nonce):
++        """Verify that the nonce is uniqueish."""
++        nonce = self.data_store.lookup_nonce(consumer, token, nonce)
++        if nonce:
++            raise OAuthError('Nonce already used: %s' % str(nonce))
++
++
++class OAuthClient(object):
++    """OAuthClient is a worker to attempt to execute a request."""
++    consumer = None
++    token = None
++
++    def __init__(self, oauth_consumer, oauth_token):
++        self.consumer = oauth_consumer
++        self.token = oauth_token
++
++    def get_consumer(self):
++        return self.consumer
++
++    def get_token(self):
++        return self.token
++
++    def fetch_request_token(self, oauth_request):
++        """-> OAuthToken."""
++        raise NotImplementedError
++
++    def fetch_access_token(self, oauth_request):
++        """-> OAuthToken."""
++        raise NotImplementedError
++
++    def access_resource(self, oauth_request):
++        """-> Some protected resource."""
++        raise NotImplementedError
++
++
++class OAuthDataStore(object):
++    """A database abstraction used to lookup consumers and tokens."""
++
++    def lookup_consumer(self, key):
++        """-> OAuthConsumer."""
++        raise NotImplementedError
++
++    def lookup_token(self, oauth_consumer, token_type, token_token):
++        """-> OAuthToken."""
++        raise NotImplementedError
++
++    def lookup_nonce(self, oauth_consumer, oauth_token, nonce):
++        """-> OAuthToken."""
++        raise NotImplementedError
++
++    def fetch_request_token(self, oauth_consumer, oauth_callback):
++        """-> OAuthToken."""
++        raise NotImplementedError
++
++    def fetch_access_token(self, oauth_consumer, oauth_token, oauth_verifier):
++        """-> OAuthToken."""
++        raise NotImplementedError
++
++    def authorize_request_token(self, oauth_token, user):
++        """-> OAuthToken."""
++        raise NotImplementedError
++
++
++class OAuthSignatureMethod(object):
++    """A strategy class that implements a signature method."""
++    def get_name(self):
++        """-> str."""
++        raise NotImplementedError
++
++    def build_signature_base_string(self, oauth_request, oauth_consumer, oauth_token):
++        """-> str key, str raw."""
++        raise NotImplementedError
++
++    def build_signature(self, oauth_request, oauth_consumer, oauth_token):
++        """-> str."""
++        raise NotImplementedError
++
++    def check_signature(self, oauth_request, consumer, token, signature):
++        built = self.build_signature(oauth_request, consumer, token)
++        return built == signature
++
++
++class OAuthSignatureMethod_HMAC_SHA1(OAuthSignatureMethod):
++
++    def get_name(self):
++        return 'HMAC-SHA1'
++        
++    def build_signature_base_string(self, oauth_request, consumer, token):
++        sig = (
++            escape(oauth_request.get_normalized_http_method()),
++            escape(oauth_request.get_normalized_http_url()),
++            escape(oauth_request.get_normalized_parameters()),
++        )
++
++        key = '%s&' % escape(consumer.secret)
++        if token:
++            key += escape(token.secret)
++        raw = '&'.join(sig)
++        return key, raw
++
++    def build_signature(self, oauth_request, consumer, token):
++        """Builds the base signature string."""
++        key, raw = self.build_signature_base_string(oauth_request, consumer,
++            token)
++
++        # HMAC object.
++        try:
++            import hashlib # 2.5
++            hashed = hmac.new(key, raw, hashlib.sha1)
++        except:
++            import sha # Deprecated
++            hashed = hmac.new(key, raw, sha)
++
++        # Calculate the digest base 64.
++        return binascii.b2a_base64(hashed.digest())[:-1]
++
++
++class OAuthSignatureMethod_PLAINTEXT(OAuthSignatureMethod):
++
++    def get_name(self):
++        return 'PLAINTEXT'
++
++    def build_signature_base_string(self, oauth_request, consumer, token):
++        """Concatenates the consumer key and secret."""
++        sig = '%s&' % escape(consumer.secret)
++        if token:
++            sig = sig + escape(token.secret)
++        return sig, sig
++
++    def build_signature(self, oauth_request, consumer, token):
++        key, raw = self.build_signature_base_string(oauth_request, consumer,
++            token)
++        return key
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/sqldb.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/sqldb.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/sqldb.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/sqldb.py	2019-08-21 00:17:26.000000000 +0900
+@@ -8,7 +8,7 @@ class SqliteDB(object):
+     def __init__(self):
+         db_file = self._get_db_file()
+         if not os.access(db_file, os.R_OK):
+-            print "Not found: ", db_file
++            print ("Not found: ", db_file)
+             db_file = None
+ 
+         self.is_accessible = bool(db_file)
+@@ -20,21 +20,21 @@ class SqliteDB(object):
+             data = self.db.execute(sql).fetchall()
+             return data
+         except:
+-            print "%s: %s" % (sys.exc_info()[1], sql)
++            print ("%s: %s" % (sys.exc_info()[1], sql))
+ 
+     def fetchone_raw(self, sql):
+         try:
+             data = self.db.execute(sql).fetchone()
+             return data
+         except:
+-            print "%s: %s" % (sys.exc_info()[1], sql)
++            print ("%s: %s" % (sys.exc_info()[1], sql))
+ 
+     def fetchone(self, sql):
+         try:
+             data = self.db.execute(sql).fetchone()[0]
+             return data
+         except:
+-            print "%s: %s" % (sys.exc_info()[1], sql)
++            print ("%s: %s" % (sys.exc_info()[1], sql))
+ 
+     def execute(self, sql):
+         data = self.db.execute(sql)
+@@ -51,7 +51,7 @@ class SqliteDB(object):
+             self.execute(sql)
+             self.commit()
+         except:
+-            print "%s: %s" % (sys.exc_info()[1], sql)
++            print ("%s: %s" % (sys.exc_info()[1], sql))
+ 
+     def _get_db_file(self):
+         pass
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/trash.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/trash.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/trash.py	2019-08-23 13:29:04.265804426 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/trash.py	2019-08-21 00:16:31.000000000 +0900
+@@ -11,7 +11,7 @@ class GioTrash(object):
+         self.filename = filename
+ 
+         if not os.access(filename, os.F_OK):
+-            print "Not Found!"
++            print ("Not Found!")
+             self.filename = None
+ 
+     def move(self):
+@@ -24,18 +24,18 @@ class GioTrash(object):
+         try:
+             if can_trash:
+                 self.is_trashed = file.trash()
+-        except Gio.Error, error:
+-            print error
++        except (Gio.Error, error):
++            print (error)
+             if error.code == Gio.ERROR_NOT_SUPPORTED:
+-                print "not supported."
++                print ("not supported.")
+         except:
+-            print sys.exc_info()[1]
++            print (sys.exc_info()[1])
+ 
+         return self.is_trashed
+ 
+     def remove(self):
+         if not self.is_trashed:
+-            print "sys.remove!"
++            print ("sys.remove!")
+ 
+ if __name__ == "__main__":
+     #filename = '/home/master/yendo/Documents/abc'
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/urlget.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/urlget.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/urlget.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/urlget.py	2019-08-21 17:15:57.289292947 +0900
+@@ -27,7 +27,7 @@ HTTP Client with proxy support.
+ """
+ 
+ import os
+-from urlparse import urlunparse
++from urllib.parse import urlunparse
+ 
+ from twisted.web import client
+ from twisted.internet import reactor
+@@ -42,12 +42,14 @@ class UrlGetWithProxy(object):
+         self.use_proxy = bool(self.proxy_host and self.proxy_port)
+ 
+     def getPage(self, url, contextFactory=None, *args, **kwargs):
+-        factory = client.HTTPClientFactory(url, *args, **kwargs)
++       # FIXME
++        factory = client.HTTPClientFactory(url.encode('utf-8'), *args, **kwargs)
+         d = self._urlget(factory, url, contextFactory)
+         return d
+ 
+     def downloadPage(self, url, file, contextFactory=None, *args, **kwargs):
+-        factory = client.HTTPDownloader(url, file, *args, **kwargs)
++        # FIXME
++        factory = client.HTTPDownloader(url.encode('utf-8'), file, *args, **kwargs)
+         d = self._urlget(factory, url, contextFactory)
+         return d
+ 
+@@ -80,7 +82,8 @@ class UrlGetWithProxy(object):
+         of these are C{str} instances except for port, which is an C{int}.
+         """
+         url = url.strip()
+-        parsed = http.urlparse(url)
++        # FIXME
++        parsed = http.urlparse(url.encode('utf-8')).decode('utf-8')
+         scheme = parsed[0]
+         path = urlunparse(('', '') + parsed[2:])
+     
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/urlgetautoproxy.py gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/urlgetautoproxy.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/lib/utils/urlgetautoproxy.py	2019-08-23 13:29:04.248804209 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/lib/utils/urlgetautoproxy.py	2019-08-21 00:09:32.000000000 +0900
+@@ -5,7 +5,7 @@ try:
+ except ImportError:
+     libproxy = False
+ 
+-from urlget import UrlGetWithProxy
++from .urlget import UrlGetWithProxy
+ 
+ 
+ class AutoProxy(object):
+@@ -29,8 +29,8 @@ class UrlGetWithAutoProxy(UrlGetWithProx
+ 
+     def catch_error(self, error):
+         # print "Failure: %s: %s" % (error.getErrorMessage(), self.url)
+-        print error
+-        print self.url
++        print ("%s" % error)
++        print ("%s" % self.url)
+ 
+ def urlget_with_autoproxy(url, arg=None, cb=None, **kargs):
+     if arg:
+@@ -59,5 +59,5 @@ def urlpost_with_autoproxy(url, arg, cb=
+ 
+ if __name__ == "__main__":
+     pac = ParseProxyPac()
+-    print pac.get_proxy("http://master/")
+-    print pac.get_proxy("http://master.edu/")
++    print (pac.get_proxy("http://master/"))
++    print (pac.get_proxy("http://master.edu/"))
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/setup.py gphotoframe-2.0.2-hg2084299dffb6.py3/setup.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/setup.py	2021-03-13 14:42:18.445712875 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/setup.py	2021-03-13 15:27:48.150281140 +0900
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python
+ 
+ import os
+ import glob
+@@ -10,7 +10,7 @@ import lib.extra.build_help
+ from lib.extra.makedoc import MakeDocument
+ 
+ for file in glob.glob('share/*.*'):
+-    os.chmod(file, 0644)
++    os.chmod(file, 0o644)
+ 
+ makedoc = MakeDocument('./help')
+ makedoc.run()
+@@ -25,6 +25,7 @@ setup(name = 'gphotoframe',
+       license = 'GPL3',
+       package_dir = {'gphotoframe' : 'lib'},
+       packages = ['gphotoframe', 'gphotoframe.utils', 'gphotoframe.dbus',
++                  'gphotoframe.utils.oauth',
+                   'gphotoframe.image', 'gphotoframe.image.actor',
+                   'gphotoframe.preferences', 'gphotoframe.history',
+                   'gphotoframe.plugins', 'gphotoframe.plugins.base',
+diff -urpN gphotoframe-2.0.2-hg2084299dffb6.py2/share/extra/flickrfavlist.py gphotoframe-2.0.2-hg2084299dffb6.py3/share/extra/flickrfavlist.py
+--- gphotoframe-2.0.2-hg2084299dffb6.py2/share/extra/flickrfavlist.py	2019-08-23 13:29:04.277804580 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6.py3/share/extra/flickrfavlist.py	2019-08-21 15:14:37.210464457 +0900
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2
++#!/usr/bin/python3
+ #
+ # flickrfavlist.py - Get Flickr all fav.
+ #

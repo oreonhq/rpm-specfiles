@@ -1,0 +1,18 @@
+Add a missing #include <stdio.h> for the printf function.  Otherwise,
+it's undeclared, causing the check to fail due to an implicit function
+declaration using a compiler in strict(er) C99 mode.
+
+Submitted upstream: <https://rt.cpan.org/Ticket/Display.html?id=145461>
+
+diff --git a/Makefile.PL b/Makefile.PL
+index c7a7c43c4a3f8b31..d247fa2b13dcd8f2 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -6,6 +6,7 @@ use ExtUtils::MakeMaker;
+ 
+ ($stdint = <<"TEST") =~ s/^\| {0,3}//gm;
+ |   #include <stdint.h>
++|   #include <stdio.h>
+ |   int main(void) {
+ |       printf("%d%d", sizeof(uint16_t), sizeof(uint32_t));
+ |       return 0;

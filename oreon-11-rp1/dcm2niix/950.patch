@@ -1,0 +1,20 @@
+From 355d410a539f120474da86ec5770fbae80c89579 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 23 Jun 2025 16:43:14 -0400
+Subject: [PATCH] Update scikit-build-core to 0.11, without pyproject extra
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 74f6a7b6..9aa5fd65 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools_scm>=7", "scikit-build-core[pyproject]>=0.5"]
++requires = ["setuptools_scm>=7", "scikit-build-core>=0.11"]
+ build-backend = "scikit_build_core.build"
+ 
+ [tool.scikit-build]

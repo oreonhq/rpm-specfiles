@@ -1,0 +1,11 @@
+diff -up diskscan-0.20/CMakeLists.txt.v diskscan-0.20/CMakeLists.txt
+--- diskscan-0.20/CMakeLists.txt.v	2017-08-25 21:24:14.000000000 +0200
++++ diskscan-0.20/CMakeLists.txt	2022-03-18 15:56:25.118076717 +0100
+@@ -1,6 +1,6 @@
+ cmake_minimum_required(VERSION 3.0.2)
+ project(diskscan
+-        VERSION 0.19)
++        VERSION 0.21)
+ 
+ export(PACKAGE diskscan)
+ 

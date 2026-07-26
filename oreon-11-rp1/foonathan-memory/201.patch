@@ -1,0 +1,75 @@
+From 8f9e08354de1149388a688bb5d51c7b64c88c180 Mon Sep 17 00:00:00 2001
+From: topazus <topazus@outlook.com>
+Date: Sun, 14 Dec 2025 16:02:44 +0800
+Subject: [PATCH] CMake improvements
+
+Fix install location of CMake config files
+Add FOONATHAN_MEMORY_USE_SYSTEM_DOCTEST option to use system doctest package
+Add soversion to shared library
+---
+ CMakeLists.txt      |  4 +++-
+ src/CMakeLists.txt  |  3 ++-
+ test/CMakeLists.txt | 14 +++++++++-----
+ 3 files changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 89e3e90..3249f3f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,7 +30,7 @@ if(UNIX OR VXWORKS)
+     set(FOONATHAN_MEMORY_ARCHIVE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
+     set(FOONATHAN_MEMORY_FRAMEWORK_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
+ 
+-    set(FOONATHAN_MEMORY_CMAKE_CONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/foonathan_memory/cmake")
++    set(FOONATHAN_MEMORY_CMAKE_CONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/foonathan_memory")
+     set(FOONATHAN_MEMORY_ADDITIONAL_FILES_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/foonathan_memory")
+ elseif(WIN32)
+     set(FOONATHAN_MEMORY_INC_INSTALL_DIR "include")
+@@ -51,6 +51,8 @@ include(cmake/configuration.cmake)
+ include(cmake/atomic.cmake)
+ include(cmake/get_container_node_sizes.cmake)
+ 
++option(FOONATHAN_MEMORY_USE_SYSTEM_DOCTEST "Use the system doctest library" OFF)
++
+ # subdirectories
+ add_subdirectory(src)
+ if(FOONATHAN_MEMORY_BUILD_EXAMPLES)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index e736ae5..31b4ff9 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -107,7 +107,8 @@ elseif(MSVC)
+ endif()
+ 
+ set_target_properties(foonathan_memory PROPERTIES
+-                                       OUTPUT_NAME "foonathan_memory-$CACHE{FOONATHAN_MEMORY_VERSION}"
++                                       VERSION ${FOONATHAN_MEMORY_VERSION}
++                                       SOVERSION ${FOONATHAN_MEMORY_VERSION_MAJOR}
+                                        POSITION_INDEPENDENT_CODE ON)
+ 
+ if(NEED_LIBRARY_FOR_CXX_ATOMIC)
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 787dc61..0faa2ce 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -8,11 +8,15 @@ target_link_libraries(foonathan_memory_profiling foonathan_memory)
+ target_include_directories(foonathan_memory_profiling PRIVATE
+                             ${FOONATHAN_MEMORY_SOURCE_DIR}/include/foonathan/memory)
+ 
+-# Fetch doctest.
+-message(STATUS "Fetching doctest")
+-include(FetchContent)
+-FetchContent_Declare(doctest URL https://github.com/doctest/doctest/archive/refs/tags/v2.4.12.zip)
+-FetchContent_MakeAvailable(doctest)
++if(FOONATHAN_MEMORY_USE_SYSTEM_DOCTEST)
++    find_package(doctest REQUIRED)
++else()
++    # Fetch doctest.
++    message(STATUS "Fetching doctest")
++    include(FetchContent)
++    FetchContent_Declare(doctest URL https://github.com/doctest/doctest/archive/refs/tags/v2.4.12.zip)
++    FetchContent_MakeAvailable(doctest)
++endif()
+ 
+ set(tests
+     test_allocator.hpp

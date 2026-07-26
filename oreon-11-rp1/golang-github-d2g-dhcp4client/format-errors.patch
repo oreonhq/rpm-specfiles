@@ -1,0 +1,25 @@
+From 27f7334f596f18a235fe3033bc43fcdbcaefd482 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alejandro=20S=C3=A1ez?= <asm@redhat.com>
+Date: Fri, 14 Mar 2025 14:45:45 +0100
+Subject: [PATCH] Format-errors
+
+---
+ client_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/client_test.go b/client_test.go
+index b696501..6560da4 100644
+--- a/client_test.go
++++ b/client_test.go
+@@ -57,7 +57,7 @@ func Test_ExampleClient(test *testing.T) {
+ 		networkError, ok := err.(*net.OpError)
+ 		if ok && networkError.Timeout() {
+ 			test.Log("Renewal Failed! Because it didn't find the DHCP server very Strange")
+-			test.Errorf("Error" + err.Error())
++			test.Errorf("Error %s", err.Error())
+ 		}
+ 		test.Fatalf("Error:%v\n", err)
+ 	}
+-- 
+2.48.1
+

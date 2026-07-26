@@ -1,0 +1,27 @@
+diff -Naur cdsclient-3.78.orig/Makefile.in cdsclient-3.78.new/Makefile.in
+--- cdsclient-3.78.orig/Makefile.in	2015-01-14 11:19:12.000000000 +0100
++++ cdsclient-3.78.new/Makefile.in	2015-01-19 16:23:06.598129160 +0100
+@@ -59,10 +59,7 @@
+ AWK    = @AWK@
+ 
+ # C options	--------------------------------
+-DEBUG = 
+-C_OPT = -O
+-SYS = 
+-CFLAGS = $(C_OPT) $(DEBUG) $(SYS) -I.
++CFLAGS = @CFLAGS@ -I.
+ 
+ # FILES		--------------------------------
+ VERFILE = $(PREFIX)/versions
+@@ -122,11 +119,9 @@
+ 
+ aclient: aclient.o $(OBJ)
+ 	$(CC) $@.o $(OBJ) $(LIBSYS) -o $@
+-	$(STRIP) $@
+ 
+ wwwget: wwwget.c
+ 	$(CC) wwwget.c $(LIBSYS) -o $@
+-	$(STRIP) $@
+ 
+ doc: sk.tex man.tex aclient.tex
+ 	latex man.tex

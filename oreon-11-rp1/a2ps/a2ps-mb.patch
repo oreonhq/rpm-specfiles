@@ -1,0 +1,14 @@
+diff -up a2ps-4.15.5/liba2ps/psgen.c.mb a2ps-4.15.5/liba2ps/psgen.c
+--- a2ps-4.15.5/liba2ps/psgen.c.mb	2023-07-25 18:01:44.062963119 +0200
++++ a2ps-4.15.5/liba2ps/psgen.c	2023-07-25 18:03:37.883726559 +0200
+@@ -854,8 +854,8 @@ ps_print_char (a2ps_job * job, char c, e
+       if ((unsigned char) c > 127 && encoding_get_composite_flag (job->encoding) &&
+           job->status->face != Symbol) {
+         if (mb_flag) {
+-          nchars = ps_escape_char (job, mb_flag, buf) + 
+-            ps_escape_char (job, (unsigned char) c, buf);
++          nchars = ps_escape_char (job, mb_flag, buf);
++          nchars += ps_escape_char (job, (unsigned char)c, buf);
+           job->status->wx += char_composite_WX(job);
+           job->status->column += nchars;
+           if (line_full) {

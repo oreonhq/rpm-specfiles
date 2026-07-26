@@ -1,0 +1,49 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c.c23 freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c.c23	2025-03-26 11:59:30.451134136 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/iglobal.c	2025-03-26 11:59:30.454747178 -0400
+@@ -507,7 +507,7 @@ void __iglobal_destructor(ttglobal tg)
+ 	free(tg);
+ #endif
+ 	//remove_iglobal_from_table(tg);
+-	fwl_clearCurrentHandle(__FILE__,__LINE__);
++	fwl_clearCurrentHandle();
+ 
+ }
+ 
+@@ -515,7 +515,6 @@ void __iglobal_destructor(ttglobal tg)
+ 
+ void *fwl_getCurrentHandle(char *fi, int li){
+ 	ttglobal currentHandle = (ttglobal)pthread_getspecific(threadSpecificKey); 
+-    //printf ("fwl_getCurrentHandle returning %p at %s:%d\n",currentHandle,fi,li);
+ 	return (void*)currentHandle;
+ }
+ int fwl_setCurrentHandle(void *handle, char *fi, int li)
+@@ -525,14 +524,13 @@ int fwl_setCurrentHandle(void *handle, c
+ 	pthread_setspecific(threadSpecificKey,handle);
+ 	return 1; /* let caller know its not in the table yet */
+ }
+-void fwl_clearCurrentHandle(char *fi, int li)
++void fwl_clearCurrentHandle()
+ {
+ 	void *currentHandle = NULL;
+-    //printf ("fwl_clearCurrentHandle at %s:%d\n",fi,li);
+ 	pthread_setspecific(threadSpecificKey,currentHandle);
+ 
+ }
+-ttglobal gglobal(char *fi, int *li){
++ttglobal gglobal(){
+ 	ttglobal tg = NULL;
+ #ifdef DISABLER	
+     if (done_main_UI_thread_once)
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.h.c23 freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.h.c23	2025-03-26 12:00:45.466120633 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/ui/common.h	2025-03-26 12:00:59.931728291 -0400
+@@ -39,7 +39,7 @@ void setMessageBar();
+ int getJsEngine();
+ int getJsEngineVariant();
+ void loadCursors();
+-void setCursor();
++void setCursor(int);
+ void setArrowCursor();
+ void setSensorCursor();
+ void setLookatCursor();

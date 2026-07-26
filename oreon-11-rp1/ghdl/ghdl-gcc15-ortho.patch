@@ -1,0 +1,16 @@
+diff -up ghdl/src/ortho/gcc/ortho-lang-9.c.gcc15 ghdl/src/ortho/gcc/ortho-lang9.c
+--- ghdl/src/ortho/gcc/ortho-lang-9.c.gcc15	2025-08-10 23:15:29.896466744 +0200
++++ ghdl/src/ortho/gcc/ortho-lang-9.c	2025-08-10 23:15:58.635150333 +0200
+@@ -1265,7 +1265,11 @@ new_float_type (void)
+   tree res;
+ 
+   res = make_node (REAL_TYPE);
+-  TYPE_PRECISION (res) = DOUBLE_TYPE_SIZE;
++  machine_mode double_type_mode
++    = targetm.c.mode_for_floating_type (TI_DOUBLE_TYPE);
++  SET_TYPE_MODE (res, double_type_mode);
++  TYPE_PRECISION (res)
++    = GET_MODE_PRECISION (double_type_mode).to_constant ();
+   layout_type (res);
+   return res;
+ }

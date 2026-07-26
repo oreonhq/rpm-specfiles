@@ -1,0 +1,39 @@
+--- Makefile.in.orig	2025-07-11 16:21:15.635520885 -0600
++++ Makefile.in	2025-07-11 16:23:18.553457244 -0600
+@@ -208,28 +208,28 @@ repin:
+ 
+ local-tests: all
+ ##	minimal example with solve: byte and opt >> lib is local
+-	$(OCAMLC) -o standalone_minimal_local.byte -I src -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal.ml
++	$(OCAMLC) -o standalone_minimal_local.byte -I +num -I src -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal.ml
+ 	./standalone_minimal_local.byte 2> /dev/null
+-	$(OCAMLOPT) -o standalone_minimal_local.opt -I src -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal.ml
++	$(OCAMLOPT) -o standalone_minimal_local.opt -I +num -I src -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal.ml
+ 	./standalone_minimal_local.opt 2> /dev/null
+ 
+ ##	minimal example with maximization: byte and opt >> lib is local
+-	$(OCAMLC) -o standalone_minimal_maximization_local.byte -I src  -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal_maximization.ml
++	$(OCAMLC) -o standalone_minimal_maximization_local.byte -I +num -I src  -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal_maximization.ml
+ 	./standalone_minimal_maximization_local.byte 2> /dev/null
+-	$(OCAMLOPT) -o standalone_minimal_maximization_local.opt -I src  -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal_maximization.ml
++	$(OCAMLOPT) -o standalone_minimal_maximization_local.opt -I +num -I src  -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal_maximization.ml
+ 	./standalone_minimal_maximization_local.opt 2> /dev/null
+ 
+ opam-installed-tests: repin
+ ##	minimal example with solve: byte and opt >> lib is pinned with OPAM
+-	$(OCAMLC) -o standalone_minimal_opam.byte -I `ocamlfind query ocplib-simplex`  -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal.ml
++	$(OCAMLC) -o standalone_minimal_opam.byte -I +num -I `ocamlfind query ocplib-simplex`  -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal.ml
+ 	./standalone_minimal_opam.byte 2> /dev/null
+-	$(OCAMLOPT) -o standalone_minimal_opam.opt -I `ocamlfind query ocplib-simplex`  -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal.ml
++	$(OCAMLOPT) -o standalone_minimal_opam.opt -I +num -I `ocamlfind query ocplib-simplex`  -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal.ml
+ 	./standalone_minimal_opam.opt 2> /dev/null
+ 
+ ##	minimal example with maximization: byte and opt >> lib is pinned with OPAM
+-	$(OCAMLC) -o standalone_minimal_maximization_opam.byte -I `ocamlfind query ocplib-simplex` -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal_maximization.ml
++	$(OCAMLC) -o standalone_minimal_maximization_opam.byte -I +num -I `ocamlfind query ocplib-simplex` -I tests ocplibSimplex.cma nums.cma tests/standalone_minimal_maximization.ml
+ 	./standalone_minimal_maximization_opam.byte 2> /dev/null
+-	$(OCAMLOPT) -o standalone_minimal_maximization_opam.opt -I `ocamlfind query ocplib-simplex` -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal_maximization.ml
++	$(OCAMLOPT) -o standalone_minimal_maximization_opam.opt -I +num -I `ocamlfind query ocplib-simplex` -I tests ocplibSimplex.cmxa nums.cmxa tests/standalone_minimal_maximization.ml
+ 	./standalone_minimal_maximization_opam.opt 2> /dev/null
+ 
+ tests: local-tests opam-installed-tests

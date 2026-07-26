@@ -1,0 +1,28 @@
+--- psmt2-frontend-0.4.0/sphinx/conf.py.orig	2021-03-26 03:19:59.000000000 -0600
++++ psmt2-frontend-0.4.0/sphinx/conf.py	2023-03-21 11:51:12.723465678 -0600
+@@ -72,7 +72,7 @@ release = version + datetime.datetime.no
+ #
+ # This is also used if you do content translation via gettext catalogs.
+ # Usually you set "language" from the command line for these cases.
+-language = None
++language = 'en'
+ 
+ # List of patterns, relative to source directory, that match files and
+ # directories to ignore when looking for source files.
+@@ -221,4 +221,4 @@ epub_exclude_files = ['search.html']
+ 
+ # entry point for setup
+ def setup(app):
+-    app.add_stylesheet('css/fixes.css')
++    app.add_css_file('css/fixes.css')
+--- psmt2-frontend-0.4.0/sphinx/index.rst.orig	2021-03-26 03:19:59.000000000 -0600
++++ psmt2-frontend-0.4.0/sphinx/index.rst	2023-03-21 11:52:30.690032859 -0600
+@@ -5,7 +5,7 @@
+    contain the root `toctree` directive.
+ 
+ Welcome to psmt2-frontend
+-================
++=========================
+ 
+ .. toctree::
+    :maxdepth: 2

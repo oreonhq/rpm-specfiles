@@ -1,0 +1,21 @@
+--- colobot-0.2.0--orig/src/ui/controls/list.cpp	2021-08-21 22:57:34.000000000 +0200
++++ colobot-0.2.0--patched/src/ui/controls/list.cpp	2022-02-20 02:25:45.319049328 +0100
+@@ -660,11 +660,17 @@
+         m_totalLine = i+1;  // expands the list
+ 
+     m_items.resize(m_totalLine);
+     if ( name.empty() )
++    {
++#pragma GCC diagnostic ignored "-Wrestrict"
+         m_items[i].text =  " ";
+-    else
++#pragma GCC diagnostic pop
++    } 
++    else 
++    {
+         m_items[i].text = name;
++    }
+ 
+     UpdateButton();
+     UpdateScroll();
+ }

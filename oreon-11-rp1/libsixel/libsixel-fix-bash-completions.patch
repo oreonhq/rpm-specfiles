@@ -1,0 +1,38 @@
+From 0614b54ffb3d1c66965f05d5865db80c44dd6b97 Mon Sep 17 00:00:00 2001
+From: Yao Zi <ziyao@disroot.org>
+Date: Mon, 27 Jan 2025 17:17:11 +0000
+Subject: [PATCH] Make completion file compatible with newer bash-completion
+
+Function _have was renamed as _comp_have_command in bash-completion
+commit 6381fd1f ("refactor: `_have => _comp_have_command`") in 2022.
+Since it's relatively recent, let's provide a wrapper to handle the
+API change.
+
+This fixes error message like "bash: have: command not found" when
+completing img2sixel command with bash-completion 2.16.0.
+
+Signed-off-by: Yao Zi <ziyao@disroot.org>
+---
+ converters/shell-completion/bash/img2sixel | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/converters/shell-completion/bash/img2sixel b/converters/shell-completion/bash/img2sixel
+index 028651bd..306cf895 100644
+--- a/converters/shell-completion/bash/img2sixel
++++ b/converters/shell-completion/bash/img2sixel
+@@ -1,6 +1,14 @@
+ # bash completion for img2sixel
+ 
+-have img2sixel &&
++_libsixel_command_exist() {
++    if declare -F _comp_have_command > /dev/null; then
++        _comp_have_command "$1"
++    else
++        have "$1"
++    fi
++}
++
++_libsixel_command_exist img2sixel &&
+ _img2sixel()
+ {
+     local cur prev

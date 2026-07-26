@@ -1,0 +1,11 @@
+--- chicken-4.8.0.3/defaults.make.orig	2013-05-11 04:16:06.514865925 -0400
++++ chicken-4.8.0.3/defaults.make	2013-05-11 04:16:06.513865921 -0400
+@@ -154,6 +154,8 @@
+ C_COMPILER_OPTIONS += -DC_ENABLE_PTABLES
+ endif
+ 
++C_COMPILER_OPTIONS += $(CFLAGS)
++
+ ifdef DEBUGBUILD
+ ifeq ($(C_COMPILER),gcc)
+ C_COMPILER_OPTIMIZATION_OPTIONS ?= -g -Wall -Wno-unused

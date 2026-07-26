@@ -1,0 +1,15 @@
+--- aspell6-sr-0.02/Makefile.pre.time	2005-11-09 18:01:22.000000000 +0100
++++ aspell6-sr-0.02/Makefile.pre	2007-02-07 11:28:31.000000000 +0100
+@@ -16,10 +16,10 @@
+ 
+ install: all
+ 	mkdir -p ${DESTDIR}${dictdir}/
+-	cp ${rws_files} ${multi_files} ${DESTDIR}${dictdir}/
++	cp -p ${rws_files} ${multi_files} ${DESTDIR}${dictdir}/
+ 	cd ${DESTDIR}${dictdir}/ && chmod 644 ${rws_files} ${multi_files}
+ 	mkdir -p ${DESTDIR}${datadir}/
+-	cp ${data_files} ${DESTDIR}${datadir}/
++	cp -p ${data_files} ${DESTDIR}${datadir}/
+ 	cd ${DESTDIR}${datadir}/ && chmod 644 ${data_files}
+ 
+ clean:

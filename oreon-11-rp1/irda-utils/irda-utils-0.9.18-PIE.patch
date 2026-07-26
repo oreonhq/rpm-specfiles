@@ -1,0 +1,113 @@
+diff --git a/findchip/Makefile b/findchip/Makefile
+index 7428617..0937827 100644
+--- a/findchip/Makefile
++++ b/findchip/Makefile
+@@ -47,7 +47,7 @@ all: findchip
+ 
+ findchip: $(OBJS)
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(OBJS) $(CFLAGS) -o $@
++	$(ECMD)$(CC) $(OBJS) $(CFLAGS) $(LDFLAGS) -o $@
+ 
+ 
+ clean:
+diff --git a/irattach/Makefile b/irattach/Makefile
+index e70de61..76383c2 100644
+--- a/irattach/Makefile
++++ b/irattach/Makefile
+@@ -28,7 +28,7 @@ include ../output.mak
+ CC           = gcc
+ LD           = ld
+ RM           = rm -f
+-CFLAGS       = -O2 -W -Wall -Wstrict-prototypes -Wshadow $(SYS_INCLUDES)
++CFLAGS       = -O2 -W -Wall -Wstrict-prototypes -Wshadow $(SYS_INCLUDES) $(RPM_OPT_FLAGS)
+ 
+ SYS_INCLUDES = -I/usr/include
+ SYS_LIBPATH  = -L/usr/lib -L/usr/local/lib 
+@@ -49,13 +49,13 @@ all: $(TARGETS)
+ 
+ irattach: irattach.o util.o
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(CFLAGS) irattach.o util.o -o $@
++	$(ECMD)$(CC) $(CFLAGS) $(LDFLAGS) irattach.o util.o -o $@
+ 
+ 
+ 
+ dongle_attach: dongle_attach.o
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(CFLAGS) dongle_attach.o -o $@
++	$(ECMD)$(CC) $(CFLAGS) $(LDFLAGS) dongle_attach.o -o $@
+ 
+ 
+ install: $(TARGETS)
+diff --git a/irdadump/Makefile b/irdadump/Makefile
+index bd21abb..e7d8929 100644
+--- a/irdadump/Makefile
++++ b/irdadump/Makefile
+@@ -19,7 +19,7 @@ SYS_INCLUDES = -I/usr/include
+ SYS_LIBRARIES = 
+ SYS_LIBPATH = -L/usr/lib -L/usr/local/lib 
+ 
+-CFLAGS= -O2 -W -Wall -I. `pkg-config --cflags glib-2.0`
++CFLAGS= -O2 -W -Wall -I. `pkg-config --cflags glib-2.0` $(RPM_OPT_FLAGS)
+ 
+ LIBIRDADUMP_OBJS = irdadump.o irlap.o irlmp.o obex.o ircomm.o netbuf.o capture.o
+ IRDADUMP_OBJS = main.o
+@@ -40,7 +40,7 @@ lib_irdadump.a: $(LIBIRDADUMP_OBJS)
+ 
+ irdadump: $(IRDADUMP_OBJS) $(LIBIRDADUMP_TARGET)
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(CFLAGS) $(LIBRARIES) -o  $(IRDADUMP_TARGET) $< $(LIBIRDADUMP_TARGET)
++	$(ECMD)$(CC) $(CFLAGS) $(LDFLAGS) $(LIBRARIES) -o  $(IRDADUMP_TARGET) $< $(LIBIRDADUMP_TARGET)
+ 	#$(ECMD)$(CC) $(CFLAGS) `pkg-config --cflags --libs glib-2.0` -o  $(IRDADUMP_TARGET) $< $(LIBIRDADUMP_TARGET)
+ 
+ 
+diff --git a/irdaping/Makefile b/irdaping/Makefile
+index ef84acd..cd64c90 100644
+--- a/irdaping/Makefile
++++ b/irdaping/Makefile
+@@ -56,7 +56,7 @@ all: $(TARGETS)
+ 
+ irdaping: $(OBJS)
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(CFLAGS) $(OBJS) -o $@
++	$(ECMD)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
+ 
+ 
+ .c.o:
+diff --git a/irnetd/Makefile b/irnetd/Makefile
+index 1fb1571..5efbc4a 100644
+--- a/irnetd/Makefile
++++ b/irnetd/Makefile
+@@ -50,7 +50,7 @@ all: $(TARGETS)
+ 
+ irnetd: $(OBJS)
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(CFLAGS) $(OBJS) -o $@
++	$(ECMD)$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
+ 
+ 
+ install: irnetd
+diff --git a/psion/Makefile b/psion/Makefile
+index 001926c..5d7cd7f 100644
+--- a/psion/Makefile
++++ b/psion/Makefile
+@@ -25,4 +25,4 @@ install: $(PSION_TARGETS)
+ 
+ irpsion5: 
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(CFLAGS) -g -I/usr/include/glib-2.0 -I../include -Wall -Wstrict-prototypes $(RPM_OPT_FLAGS) $(PSION_SRC) -o $@
++	$(ECMD)$(CC) $(CFLAGS) $(LDFLAGS) -g -I/usr/include/glib-2.0 -I../include -Wall -Wstrict-prototypes $(RPM_OPT_FLAGS) $(PSION_SRC) -o $@
+diff --git a/tekram/Makefile b/tekram/Makefile
+index e10d116..65996e6 100644
+--- a/tekram/Makefile
++++ b/tekram/Makefile
+@@ -55,7 +55,7 @@ all: irkbd
+ 
+ irkbd: $(OBJS)
+ 	$(prn_cc_o)
+-	$(ECMD)$(CC) $(OBJS) -o $@
++	$(ECMD)$(CC) $(LDFLAGS) $(OBJS) -o $@
+ 
+ 
+ .c.o:

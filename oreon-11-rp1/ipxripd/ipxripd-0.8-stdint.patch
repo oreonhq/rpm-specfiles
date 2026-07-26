@@ -1,0 +1,28 @@
+diff -Nrbu ipxripd-0.8/ipxutil.h ipxripd-0.8-OK/ipxutil.h
+--- ipxripd-0.8/ipxutil.h	2016-08-18 19:03:12.984841963 +0300
++++ ipxripd-0.8-OK/ipxutil.h	2016-08-18 19:02:35.036842017 +0300
+@@ -26,6 +26,7 @@
+ 
+ #include <stdio.h>
+ #include <netipx/ipx.h>
++#include <stdint.h>
+ 
+ #define IPX_MAX_ERROR	(255)
+ #define IPX_THIS_NET 	(0)
+@@ -35,11 +36,11 @@
+ #define IPX_USER_PTYPE	(0)
+ #define IPX_IS_INTERNAL (1)
+ 
+-typedef unsigned char IPXNode[6];
+-typedef unsigned long int IPXNet;
+-typedef unsigned short int IPXPort;
+-typedef unsigned short int hop_t;
+-typedef unsigned short int tick_t;
++typedef uint8_t  IPXNode[6];
++typedef uint32_t IPXNet;
++typedef uint16_t IPXPort;
++typedef uint16_t hop_t;
++typedef uint16_t tick_t;
+ 
+ void ipx_print_node(IPXNode node);
+ void ipx_print_network(IPXNet net);

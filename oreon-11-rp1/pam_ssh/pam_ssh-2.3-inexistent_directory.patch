@@ -1,0 +1,13 @@
+--- pam_ssh-2.3.orig/pam_ssh.c	2019-05-07 15:42:27.691774974 +1000
++++ pam_ssh-2.3/pam_ssh.c	2019-05-07 16:55:32.287644016 +1000
+@@ -974,8 +974,8 @@
+ 		openpam_restore_cred(pamh);
+ 		return PAM_SERVICE_ERR;
+ 	}
+-	if ((access(dotdir,F_OK)) == -1) {
+-		pam_ssh_log(LOG_DEBUG, "inexistent configuration directory");
++	if ((access(dotdir,F_OK)) == -1 && errno != EACCES) {
++		pam_ssh_log(LOG_DEBUG, "inexistent configuration directory '%s': %m", dotdir);
+ 		free(dotdir);
+ 		openpam_restore_cred(pamh);
+ 		return PAM_SUCCESS;

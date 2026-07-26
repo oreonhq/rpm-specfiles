@@ -1,0 +1,59 @@
+From 0197c7173a5ad1470060862a0be96b9a976bdf49 Mon Sep 17 00:00:00 2001
+From: Frank Liang <xiliang@redhat.com>
+Date: Thu, 2 Jan 2025 22:28:12 +0800
+Subject: [PATCH] rhel: fix swapoff breaks hibernate process
+
+hibernate() always calling swapoff breaks hibernation process.
+The hibernation wont continue if call swapoff too fast in rhel or amazon
+linux.
+
+"swapon --priority=32767 /swap && systemctl hibernate ;echo $?; swapoff /swap"
+
+Signed-off-by: Frank Liang <xiliang@redhat.com>
+---
+ packaging/rhel/acpid.sleep.sh | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
+
+diff --git a/packaging/rhel/acpid.sleep.sh b/packaging/rhel/acpid.sleep.sh
+index 9b381f9..1e55b51 100755
+--- a/packaging/rhel/acpid.sleep.sh
++++ b/packaging/rhel/acpid.sleep.sh
+@@ -11,29 +11,24 @@ swap_priority=32767
+ hibernate()
+ {
+         swapon --priority=$swap_priority /swap && systemctl hibernate
+-        if [ $? -ne 0 ]
+-        then
++        if [ $? -ne 0 ]; then
+             logger "Hibernation failed, Sleeping 2 mins before retry"
+             failed='true'
++            swapoff /swap
++            sleep 2m
+         else
+             failed='false'
+         fi
+-        swapoff /swap
+ }
+ 
+ case "$2" in
+     SBTN)
+         # The iteration had been placed here to add retry logic to hibernation 
+         # in case of failures and to avoid force stop of instances after 20min
+-        for i in 1 2 3
+-        do
++        for i in 1 2 3; do
+           hibernate
+-          if [ $failed == 'true' ];
+-          then
+-            swapoff /swap
+-            sleep 2m
+-          else
+-           break
++          if [ $failed == 'false' ]; then
++            break
+           fi
+        done
+        ;;
+-- 
+2.48.1
+

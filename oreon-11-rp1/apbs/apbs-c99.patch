@@ -1,0 +1,23 @@
+Partial backport of this commit, to avoid an implicit declaration of
+getpid and future build failures:
+
+Author: Noah Oblath <nsoblath@gmail.com>
+Date:   Mon Jan 24 15:33:56 2022 -0800
+
+    Nsoblath/issue 163 (#171)
+
+diff -ur apbs-3.0.0.orig/contrib/iapbs/src/apbs_driver.c apbs-3.0.0/contrib/iapbs/src/apbs_driver.c
+--- apbs-3.0.0.orig/contrib/iapbs/src/apbs_driver.c	2020-05-30 03:47:30.000000000 +0200
++++ apbs-3.0.0/contrib/iapbs/src/apbs_driver.c	2023-02-06 07:58:46.215007012 +0100
+@@ -18,6 +18,11 @@
+ 
+ #include "apbs_driver.h"
+ 
++#ifdef WIN32
++#include <process.h>
++#else
++#include <unistd.h>
++#endif
+ 
+ /*! \def MAX_BUF_SIZE
+     \brief Buffer size for internal APBS string input.

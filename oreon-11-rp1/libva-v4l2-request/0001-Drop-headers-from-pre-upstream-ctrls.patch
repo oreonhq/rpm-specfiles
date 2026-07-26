@@ -1,0 +1,54 @@
+From 99f331193edcc4ac8910c968bb16563e185d81bb Mon Sep 17 00:00:00 2001
+From: Nicolas Chauvet <kwizart@gmail.com>
+Date: Thu, 1 Feb 2024 12:48:03 +0100
+Subject: [PATCH] Drop headers from pre-upstream ctrls
+
+---
+ src/config.c  | 3 ---
+ src/context.c | 3 ---
+ src/h265.c    | 1 -
+ 3 files changed, 7 deletions(-)
+
+diff --git a/src/config.c b/src/config.c
+index 2d5e202d5066..e2e7e0b97a40 100644
+--- a/src/config.c
++++ b/src/config.c
+@@ -34,9 +34,6 @@
+ 
+ #include <linux/videodev2.h>
+ 
+-#include <mpeg2-ctrls.h>
+-#include <hevc-ctrls.h>
+-
+ #include "utils.h"
+ #include "v4l2.h"
+ 
+diff --git a/src/context.c b/src/context.c
+index d07cea657c84..11dec94fa73f 100644
+--- a/src/context.c
++++ b/src/context.c
+@@ -39,9 +39,6 @@
+ 
+ #include <linux/videodev2.h>
+ 
+-#include <mpeg2-ctrls.h>
+-#include <hevc-ctrls.h>
+-
+ #include "utils.h"
+ #include "v4l2.h"
+ 
+diff --git a/src/h265.c b/src/h265.c
+index 4650a51e495a..45a5712a88c6 100644
+--- a/src/h265.c
++++ b/src/h265.c
+@@ -36,7 +36,6 @@
+ #include <sys/mman.h>
+ 
+ #include <linux/videodev2.h>
+-#include <hevc-ctrls.h>
+ 
+ #include "v4l2.h"
+ 
+-- 
+2.42.0
+

@@ -1,0 +1,21 @@
+--- autogen.sh~	2022-02-15 00:31:19.000000000 -0600
++++ autogen.sh	2025-08-05 09:42:56.498641616 -0500
+@@ -57,6 +57,8 @@
+ 	$LIBTOOLIZE --copy --force || exit 1
+ fi
+ 
++autopoint --force
++
+ echo "- Running $ACLOCAL"
+ $ACLOCAL || exit 1
+ 
+--- configure.ac~	2022-02-15 00:31:19.000000000 -0600
++++ configure.ac	2025-08-05 11:02:09.791809988 -0500
+@@ -8,6 +8,7 @@
+ 
+ m4_ifdef([AC_CONFIG_HEADERS], [AC_CONFIG_HEADERS([config.h])], [AC_CONFIG_HEADER([config.h])])
+ AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION(0.25.1)
+ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+ m4_ifdef([AM_MAINTAINER_MODE], [AM_MAINTAINER_MODE])
+ 

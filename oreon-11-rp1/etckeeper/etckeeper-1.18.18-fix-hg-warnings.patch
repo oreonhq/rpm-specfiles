@@ -1,0 +1,34 @@
+diff --git a/pre-commit.d/20warn-problem-files b/pre-commit.d/20warn-problem-files
+index 43320e4..7899268 100755
+--- a/pre-commit.d/20warn-problem-files
++++ b/pre-commit.d/20warn-problem-files
+@@ -1,19 +1,20 @@
+ #!/bin/sh
+ set -e
+ 
+-exclude_internal () {
+-	grep -E -v '(^|/)(\.git|\.hg|\.bzr|_darcs)/'
+-}
++# (Note that when using this, the find expression must end with
++# -print or -exec, else the excluded directories will actually be
++# printed!)
++NOVCS='. -path ./.git -prune -o -path ./.bzr -prune -o -path ./.hg -prune -o -path ./_darcs -prune -o'
+ 
+ if [ "$VCS" = bzr ] || [ "$VCS" = darcs ]; then
+-	special=$(find . ! -type d ! -type f ! -type l | exclude_internal) || true
+-	hardlinks=$(find . -type f ! -links 1 | exclude_internal ) || true
++	special=$(find $NOVCS ! -type d ! -type f ! -type l -print) || true
++	hardlinks=$(find $NOVCS -type f ! -links 1 -print) || true
+ elif [ "$VCS" = hg ]; then
+-	special=$(find . ! -type d ! -type f ! -type l | exclude_internal) || true
+-	hardlinks=$(find . -type f ! -links 1 -exec hg status {} \; | exclude_internal ) || true
++	special=$(find $NOVCS ! -type d ! -type f ! -type l -print) || true
++	hardlinks=$(find $NOVCS -type f ! -links 1 -exec hg status {} \; -print) || true
+ elif [ "$VCS" = git ]; then
+-	special=$(find . ! -type d ! -type f ! -type l -exec git ls-files --exclude-standard --cached --others {} + | exclude_internal) || true
+-	hardlinks=$(find . -type f ! -links 1 -exec git ls-files --exclude-standard --cached --others {} + | exclude_internal) || true
++	special=$(find $NOVCS ! -type d ! -type f ! -type l -exec git ls-files --exclude-standard --cached --others {} + -print) || true
++	hardlinks=$(find $NOVCS -type f ! -links 1 -exec git ls-files --exclude-standard --cached --others {} + -print) || true
+ else
+ 	special=""
+ fi

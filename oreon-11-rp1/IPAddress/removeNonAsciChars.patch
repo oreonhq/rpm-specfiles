@@ -1,0 +1,62 @@
+diff -Naur "IPAddress-5 (copy).2.1/IPAddress/build.xml" IPAddress-5.2.1/IPAddress/build.xml
+--- "IPAddress-5 (copy).2.1/IPAddress/build.xml"	2020-01-05 20:37:56.000000000 +0100
++++ IPAddress-5.2.1/IPAddress/build.xml	2020-05-09 12:15:11.862632738 +0200
+@@ -66,7 +66,7 @@
+ 		<!-- first compile entirely as java 9 to ensure compliance with module configuration -->
+ 		<echo message="compiling as Java 9"/>
+ 		<javac srcdir="${src_location}" destdir="${bin_location}" debug="on"
+-				source="9" target="9" failonerror="false" verbose="false" createMissingPackageInfoClass="false">
++				source="9" target="9" failonerror="true" verbose="false" createMissingPackageInfoClass="false">
+ 			<include name="${rootPackagePath}/**/*.java"/>
+ 		</javac>
+ 		<!-- compile as java 8, excluding module-info.java, and leave the existing java 9 module-info -->
+@@ -78,7 +78,7 @@
+     	</delete>
+ 		<echo message="compiling as Java 8"/>
+ 		<javac srcdir="${src_location}" destdir="${bin_location}" debug="on"
+-				source="1.8" target="1.8" failonerror="false" verbose="false" createMissingPackageInfoClass="false"
++				source="1.8" target="1.8" failonerror="true" verbose="false" createMissingPackageInfoClass="false"
+ 				deprecation="true">
+ 			<include name="${rootPackagePath}/**/*.java"/>
+ 			<exclude name="${rootPackagePath}/module-info.java"/>
+diff -Naur "IPAddress-5 (copy).2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/Address.java" IPAddress-5.2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/Address.java
+--- "IPAddress-5 (copy).2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/Address.java"	2020-01-05 20:37:56.000000000 +0100
++++ IPAddress-5.2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/Address.java	2020-05-09 12:09:18.862920529 +0200
+@@ -65,11 +65,11 @@
+ 	public static final String OCTAL_PREFIX = "0";
+ 	public static final char RANGE_SEPARATOR = '-';
+ 	public static final String RANGE_SEPARATOR_STR = String.valueOf(RANGE_SEPARATOR);
+-	public static final char ALTERNATIVE_RANGE_SEPARATOR = '\u00bb'; //'»'; javadoc whines about this char
++	public static final char ALTERNATIVE_RANGE_SEPARATOR = '\u00bb';
+ 	public static final String ALTERNATIVE_RANGE_SEPARATOR_STR = String.valueOf(ALTERNATIVE_RANGE_SEPARATOR);
+ 	public static final char SEGMENT_WILDCARD = '*';
+ 	public static final String SEGMENT_WILDCARD_STR = String.valueOf(SEGMENT_WILDCARD);
+-	public static final String ALTERNATIVE_SEGMENT_WILDCARD_STR = "¿";
++	public static final String ALTERNATIVE_SEGMENT_WILDCARD_STR = "\u00bf";
+ 	public static final char SEGMENT_SQL_WILDCARD = '%';
+ 	public static final String SEGMENT_SQL_WILDCARD_STR = String.valueOf(SEGMENT_SQL_WILDCARD);
+ 	public static final char SEGMENT_SQL_SINGLE_WILDCARD = '_';
+diff -Naur "IPAddress-5 (copy).2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv4/IPv4Address.java" IPAddress-5.2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv4/IPv4Address.java
+--- "IPAddress-5 (copy).2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv4/IPv4Address.java"	2020-01-05 20:37:56.000000000 +0100
++++ IPAddress-5.2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv4/IPv4Address.java	2020-05-09 12:10:21.052566750 +0200
+@@ -1080,7 +1080,7 @@
+ 	public boolean isPrivate() {
+ 		// refer to RFC 1918
+         // 10/8 prefix
+-        // 172.16/12 prefix (172.16.0.0 – 172.31.255.255)
++        // 172.16/12 prefix (172.16.0.0 - 172.31.255.255)
+         // 192.168/16 prefix
+ 		IPv4AddressSegment seg0 = getSegment(0);
+ 		IPv4AddressSegment seg1 = getSegment(1);
+diff -Naur "IPAddress-5 (copy).2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv6/IPv6Address.java" IPAddress-5.2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv6/IPv6Address.java
+--- "IPAddress-5 (copy).2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv6/IPv6Address.java"	2020-01-05 20:37:56.000000000 +0100
++++ IPAddress-5.2.1/IPAddress/src/inet.ipaddr/inet/ipaddr/ipv6/IPv6Address.java	2020-05-09 12:10:55.087925589 +0200
+@@ -94,7 +94,7 @@
+ 
+ 	public static final char SEGMENT_SEPARATOR = ':';
+ 	public static final char ZONE_SEPARATOR = '%';
+-	public static final char ALTERNATIVE_ZONE_SEPARATOR = '\u00a7';//'§'; javadoc whines about this char 
++	public static final char ALTERNATIVE_ZONE_SEPARATOR = '\u00a7';
+ 
+ 	public static final char UNC_SEGMENT_SEPARATOR = '-';
+ 	public static final char UNC_ZONE_SEPARATOR = 's';

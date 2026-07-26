@@ -1,0 +1,38 @@
+diff -up libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libderiv/emit_deriv12_managers.c.maxnode libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libderiv/emit_deriv12_managers.c
+diff -up libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libderiv/emit_deriv1_managers.c.maxnode libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libderiv/emit_deriv1_managers.c
+diff -up libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libint/emit_order.c.maxnode libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libint/emit_order.c
+--- libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libint/emit_order.c.maxnode	2017-05-18 06:06:26.319867960 +0200
++++ libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libint/emit_order.c	2017-05-18 06:10:02.416131830 +0200
+@@ -29,7 +29,7 @@
+ #include <libint/build_libint.h>
+ #include <constants.h>
+ #include <copyright.h>
+-#define MAXNODE 20000
++#define MAXNODE 200000
+ #define NONODE -1000000
+ #define SSSSNODE -1111
+ 
+diff -up libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_gr_order.c.maxnode libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_gr_order.c
+--- libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_gr_order.c.maxnode	2017-05-18 06:06:26.321867926 +0200
++++ libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_gr_order.c	2017-05-18 06:07:57.189296922 +0200
+@@ -29,7 +29,7 @@
+ #include <copyright.h>
+ #include <libint_config.h>
+ #include <libr12/build_libr12.h>
+-#define MAXNODE 3000
++#define MAXNODE 30000
+ #define NONODE -1000000
+ #define SSR12SSNODE -1111 /* This is a special node - (ss||ss) */
+ #define NUMPARENTS 21
+diff -up libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_grt_order.c.maxnode libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_grt_order.c
+--- libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_grt_order.c.maxnode	2017-05-17 16:52:07.000000000 +0200
++++ libint-29a6a6df4cd1242c54b5651fc0ac6dd563edf7c0/src/bin/libr12/emit_grt_order.c	2017-05-18 06:06:26.323867891 +0200
+@@ -30,7 +30,7 @@
+ #include <libint_config.h>
+ #include <libr12/build_libr12.h>
+ #include <constants.h>
+-#define MAXNODE 20000
++#define MAXNODE 200000
+ #define NONODE -1000000
+ #define SSR12SSNODE -1111 /* This is a special node - (ss||ss) */
+ #define NUMPARENTS 21

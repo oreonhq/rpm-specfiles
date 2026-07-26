@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>levien-inconsolata</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <project_license>OFL</project_license>
+  <name>Inconsolata</name>
+  <summary>Inconsolata fonts</summary>
+  <description>
+    <p>
+      A monospace font, designed for code listings and the like, in print.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.levien.com/type/myfonts/inconsolata.html</url>
+</component>
+

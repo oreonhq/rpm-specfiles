@@ -1,0 +1,377 @@
+--- src/leon/src/ccent.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/ccent.c	2025-02-01 11:09:23.873058349 -0700
+@@ -80,7 +80,7 @@ static UnsignedS nextBasePointEltCent(
+    const UnsignedS   *const cellNumber = UpsilonStack->cellNumber,
+                      *const cellSize = UpsilonStack->cellSize;
+    Unsigned alpha, pt, cSize, shortPriority;
+-   unsigned long priority, minPriority;
++   unsigned long priority, minPriority = ULONG_MAX;
+ 
+    alpha = 0;
+    for ( pt = 1 ; pt <= degree ; ++pt )
+--- src/leon/src/cent.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/cent.c	2025-02-01 11:09:57.545568559 -0700
+@@ -169,9 +169,9 @@ int main( int argc, char *argv[])
+         knownSubgroup_R_LibraryName[MAX_NAME_LENGTH+1] = "",
+         prefix[MAX_FILE_NAME_LENGTH],
+         suffix[MAX_NAME_LENGTH];
+-   PermGroup *G, *G_pP, *L = NULL, *L_L = NULL, *L_R = NULL, *E;
+-   Permutation *y;
+-   Permutation *e, *f;
++   PermGroup *G, *G_pP, *L = NULL, *L_L = NULL, *L_R = NULL, *E = NULL;
++   Permutation *y = NULL;
++   Permutation *e = NULL, *f = NULL;
+    BOOLEAN imageFlag = FALSE, imageFormatFlag = FALSE, noPartn = FALSE,
+            longCycleOption, stdRBaseOption;
+    Unsigned symmetricDegree = 0;
+--- src/leon/src/cjrndper.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/cjrndper.c	2025-02-01 11:09:23.874058335 -0700
+@@ -91,15 +91,15 @@ int main(
+         originalInputName[MAX_NAME_LENGTH+1],
+         prefix[60] = "",
+         suffix[MAX_NAME_LENGTH] = "";
+-   Unsigned i, j, k, degree, temp, optionCountPlus1, nRows, nCols, m, lambda, 
+-            mu, tau, fSize;
++   Unsigned i, j, k, degree, temp, optionCountPlus1, nRows = 0, nCols = 0, m,
++            lambda, mu, tau, fSize;
+    unsigned long seed;
+-   PermGroup *G, *H, *HConjugated;
+-   PointSet *Lambda;
+-   Permutation *s, *t, *conjugatingPerm, *gen, *genConj;
+-   Partition *partn;
+-   Matrix_01 *matrix, *matrixConjugated;
+-   Code *C, *CConjugated;
++   PermGroup *G = NULL, *H = NULL, *HConjugated;
++   PointSet *Lambda = NULL;
++   Permutation *s = NULL, *t, *conjugatingPerm, *gen, *genConj;
++   Partition *partn = NULL;
++   Matrix_01 *matrix = NULL, *matrixConjugated;
++   Code *C = NULL, *CConjugated;
+    char comment[1024];
+    BOOLEAN baseSgsFlag = FALSE, imageFormatFlag = FALSE, cjperFlag = FALSE,
+            monomialFlag = FALSE;
+--- src/leon/src/compgrp.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/compgrp.c	2025-02-01 11:09:23.874058335 -0700
+@@ -73,7 +73,7 @@ int main( int argc, char *argv[])
+    PointSet *set1, *set2 = NULL;
+    Unsigned optionCountPlus1, i, j;
+    Unsigned normalizeFlag = FALSE, centralizeFlag = FALSE,
+-            skipNormalize = FALSE, returnCode, degree;
++            skipNormalize = FALSE, returnCode, degree = 0;
+    BOOLEAN comparePermFlag = FALSE, comparePointSetFlag = FALSE,
+            comparePartitionFlag = FALSE;
+ 
+--- src/leon/src/compsg.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/compsg.c	2025-02-01 11:09:23.874058335 -0700
+@@ -151,7 +151,7 @@ PermGroup *computeSubgroup(
+    UnsignedS      *pp;
+    UnsignedS      **p;
+    Unsigned       maxBaseChangeLevel;
+-   SplitSize      split, xSplit;
++   SplitSize      split, xSplit = { 0 , 0 };
+    UnsignedS      **minPointOfOrbit = (UnsignedS **) allocPtrArrayBaseSize();
+    UnsignedS      **minPointKnown = (UnsignedS **) allocPtrArrayBaseSize();
+    UnsignedS      *minPointKnownCount = allocIntArrayBaseSize();
+--- src/leon/src/desauto.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/desauto.c	2025-02-01 11:10:13.488336667 -0700
+@@ -191,11 +191,11 @@ int main( int argc, char *argv[])
+         prefix[MAX_FILE_NAME_LENGTH],
+         suffix[MAX_NAME_LENGTH],
+         outputObjectName[MAX_NAME_LENGTH+1] = "";
+-   Matrix_01 *matrix, *matrix_L, *matrix_R, *originalMatrix, *originalMatrix_L,
+-             *originalMatrix_R;
++   Matrix_01 *matrix = NULL, *matrix_L = NULL, *matrix_R = NULL,
++             *originalMatrix, *originalMatrix_L, *originalMatrix_R;
+    PermGroup *A, *L = NULL, *L_L = NULL, *L_R = NULL;
+    Code *C = NULL, *C_L = NULL, *C_R = NULL;
+-   Permutation *y;
++   Permutation *y = NULL;
+    BOOLEAN imageFlag = FALSE, imageFormatFlag = FALSE,
+            codeFlag = FALSE, transposeFlag = FALSE, pbFlag = FALSE,
+            monomialFlag = FALSE;
+--- src/leon/src/errmesg.h.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/errmesg.h	2025-02-01 11:09:23.875058320 -0700
+@@ -5,7 +5,7 @@ extern BOOLEAN isValidName(
+    const char *name)         /* The name to be checked for validity. */
+ ;
+ 
+-extern void errorMessage(
++extern void _Noreturn errorMessage(
+    const char *file,         /* The file in which the error occured. */
+    int  line,                /* The line before which the error occured. */
+    const char *function,     /* The function in which the error occured. */
+@@ -13,7 +13,7 @@ extern void errorMessage(
+                                 prefixed by "Error: ". */
+ ;
+ 
+-extern void errorMessage1i(
++extern void _Noreturn errorMessage1i(
+    const char *file,         /* The file in which the error occured. */
+    int  line,                /* The line before which the error occured. */
+    const char *function,     /* The function in which the error occured. */
+@@ -22,7 +22,7 @@ extern void errorMessage1i(
+    const char *message2)     /* The second part of the error message. */
+ ;
+ 
+-extern void errorMessage1s(
++extern void _Noreturn errorMessage1s(
+    const char *file,         /* The file in which the error occured. */
+    int  line,                /* The line before which the error occured. */
+    const char *function,     /* The function in which the error occured. */
+--- src/leon/src/field.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/field.c	2025-02-01 11:09:23.875058320 -0700
+@@ -41,14 +41,14 @@ Field *buildField(
+    Unsigned size)
+ {
+    FieldElement lambda, mu;
+-   const FieldElement gf4Sum[4][4] =  {0,1,2,3,
+-                          1,0,3,2,
+-                          2,3,0,1,
+-                          3,2,1,0};
+-   const FieldElement gf4Prod[4][4] = {0,0,0,0,
+-                          0,1,2,3,
+-                          0,2,3,1,
+-                          0,3,1,2};
++   const FieldElement gf4Sum[4][4] =  {{0,1,2,3},
++                          {1,0,3,2},
++                          {2,3,0,1},
++                          {3,2,1,0}};
++   const FieldElement gf4Prod[4][4] = {{0,0,0,0},
++                          {0,1,2,3},
++                          {0,2,3,1},
++                          {0,3,1,2}};
+    Field *F;
+ 
+    /* Check for valid field size. */
+--- src/leon/src/orblist.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/orblist.c	2025-02-01 11:09:23.875058320 -0700
+@@ -90,7 +90,7 @@ int main( int argc, char *argv[])
+         altGroupLibName[MAX_NAME_LENGTH+1], pointSetLibName[MAX_NAME_LENGTH+1];
+    char prefix[MAX_FILE_NAME_LENGTH] = "";
+    Unsigned i, j, optionCountPlus1, found, processed, pt, img, orbitCount, orbRep,
+-       column, temp, cumLen, len, numOrbitsToWrite;
++       column, temp, cumLen, len, numOrbitsToWrite = 0;
+    BOOLEAN lengthOnlyOption, randomOption, writePartn, writeGroup, writePtStab,
+            writeOrbit, writeMultipleOrbits, pointListOption, quietOption, 
+            imageFormatFlag, printOrbits, trimStrGenSet, writePS, changeBaseOnly,
+@@ -98,8 +98,8 @@ int main( int argc, char *argv[])
+    unsigned long seed;
+    PermGroup *G;
+    Permutation *gen, *nextGen;
+-   Partition *Theta;
+-   PointSet *Lambda;
++   Partition *Theta = NULL;
++   PointSet *Lambda = NULL;
+    UnsignedS *completeOrbit, *startOfOrbitNo, *orbNumberOfPt, *orbOrder;
+    char comment[128], tempStr[12];
+    UnsignedS *pointList = allocIntArrayBaseSize();
+--- src/leon/src/randobj.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/randobj.c	2025-02-01 11:09:23.876058306 -0700
+@@ -51,8 +51,8 @@ int main(
+    char outputFileName[MAX_FILE_NAME_LENGTH+1] = "";
+    char outputLibraryName[MAX_NAME_LENGTH+1] = "";
+    char outputObjectName[MAX_NAME_LENGTH+1] = "";
+-   Unsigned i, j, degree, setSize, equalCellSize, temp, optionCountPlus1,
+-            cellSizeSum, numberOfEqualCells, extraPoints;
++   Unsigned i, j, degree, setSize = 0, equalCellSize, temp, optionCountPlus1,
++            cellSizeSum, numberOfEqualCells = 0, extraPoints;
+    Unsigned designatedCellSize[102];
+    UnsignedS *randOrder;
+    unsigned long seed;
+@@ -110,7 +110,7 @@ int main(
+    seed = 47;
+    for ( i = 1 ; i < optionCountPlus1 ; ++i )
+       if ( strcmp(argv[i],"-a") == 0 )
+-         strcmp( options.outputFileMode, "a");
++         strcat( options.outputFileMode, "a");
+       else if ( strcmp(argv[i],"-e") == 0 )
+          equalSizeFlag = TRUE;
+       else if ( strncmp( argv[i], "-n:", 3) == 0 )
+--- src/leon/src/randschr.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/randschr.c	2025-02-01 11:09:23.876058306 -0700
+@@ -86,7 +86,7 @@ void adjoinGenInverses(
+ void initializeBase(
+    PermGroup *const G)              /* The group G mentioned above. */
+ {
+-   Unsigned pt, count, maxCount, newBasePt;
++   Unsigned pt, count, maxCount, newBasePt = 0;
+    BOOLEAN ok;
+    Permutation *gensFixingBase, *perm, *lastPerm;
+ 
+@@ -235,9 +235,10 @@ void replaceByPower(
+          d < |h|. */
+       hOrder = permOrder( h);
+       for ( i = 0 ; primeList[i] != 0 ; ++i ) {
+-         if ( hOrder % primeList[i] == 0 )
++         if ( hOrder % primeList[i] == 0 ) {
+             raisePermToPower( h, hOrder / primeList[i]);
+             break;
++	 }
+       }
+    }
+ 
+@@ -264,8 +265,8 @@ BOOLEAN randomSchreier(
+    RandomSchreierOptions rOptions)
+ {
+    Unsigned  noOfOriginalGens, successCount, level, finalLevel,
+-        nonInvolRejectCount, levelLowestOrder;
+-   unsigned long curOrder, lowestOrder;
++        nonInvolRejectCount, levelLowestOrder = MAX_INT;
++   unsigned long curOrder, lowestOrder = ULONG_MAX;
+    Permutation  **originalGen;
+    FactoredInt  trueGroupOrder, factoredOrbLen;
+    Permutation  *gen;
+@@ -389,7 +390,7 @@ BOOLEAN randomSchreier(
+                                                  isInvolution( h) ) {
+             if ( nonInvolRejectCount > 0 &&
+                  (lowestOrder < (curOrder = permOrder(h)) ||
+-                  lowestOrder == curOrder && levelLowestOrder > finalLevel) ) {
++                  (lowestOrder == curOrder && levelLowestOrder > finalLevel) ) ) {
+                tempPerm = h;  h = lowestOrderH;  lowestOrderH = tempPerm;
+                finalLevel = levelLowestOrder;
+             }
+--- src/leon/src/readdes.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/readdes.c	2025-02-01 11:09:23.876058306 -0700
+@@ -40,7 +40,7 @@ Matrix_01 *readDesign(
+    Unsigned requiredPointCount,       /* 0 = any */
+    Unsigned requiredBlockCount)       /* 0 = any */
+ {
+-   Unsigned pt, nRows, nCols;
++   Unsigned pt, nRows = 0, nCols = 0;
+    Matrix_01 *matrix;
+    Token token, saveToken;
+    char inputBuffer[81];
+@@ -63,7 +63,7 @@ Matrix_01 *readDesign(
+    rewind( libFile);
+    for (;;) {
+       rv = fgets( inputBuffer, 80, libFile);
+-      if ( feof(libFile) )
++      if ( rv == NULL )
+          ERROR1s( "readDesign", "Library block ", libName,
+                   " not found in specified library.")
+       if ( inputBuffer[0] == 'l' || inputBuffer[0] == 'L' ) {
+@@ -204,7 +204,7 @@ Matrix_01 *read01Matrix(
+    Unsigned requiredNumberOfRows,        /* 0 = any */
+    Unsigned requiredNumberOfCols)        /* 0 = any */
+ {
+-   Unsigned  nRows, nCols, setSize;
++   Unsigned  nRows, nCols = 0, setSize = 0;
+    Matrix_01 *matrix;
+    Token token, saveToken;
+    char inputBuffer[81];
+@@ -229,7 +229,7 @@ Matrix_01 *read01Matrix(
+    firstIdent = TRUE;
+    for (;;) {
+       rv = fgets( inputBuffer, 80, libFile);
+-      if ( feof(libFile) )
++      if ( rv == NULL )
+          ERROR1s( "read01Matrix", "Library block ", libName,
+                   " not found in specified library.")
+       if ( firstIdent && sscanf( inputBuffer, "%s", str) == 1 &&
+--- src/leon/src/readgrp.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/readgrp.c	2025-02-01 11:09:23.876058306 -0700
+@@ -96,10 +96,10 @@ void writeFactoredInt(
+ TokenType readCyclePerm(
+    Permutation *perm)
+ {
+-   Unsigned     pt, previousPt, firstPtOfCycle, parenLevel = 0;
++   Unsigned     pt, previousPt = 0, firstPtOfCycle = 0, parenLevel = 0;
+    Unsigned     degree = perm->degree;
+    Token   token;
+-   BOOLEAN newCycle;
++   BOOLEAN newCycle = FALSE;
+ 
+    /* Read the cycles and fill in the image array. */
+    while ( token = readToken() , (parenLevel > 0 || token.type != comma) &&
+@@ -295,7 +295,7 @@ PermGroup *readPermGroup(
+ {
+    FILE *libFile;
+    Unsigned level;
+-   Permutation *perm, *oldPerm;
++   Permutation *perm, *oldPerm = NULL;
+    PermGroup *G = allocPermGroup();
+    BOOLEAN generateFlag = FALSE, completeOrbitFlag = FALSE;
+    BOOLEAN genSetFlag = FALSE, strGenSetFlag = FALSE;
+@@ -337,7 +337,7 @@ PermGroup *readPermGroup(
+    rewind( libFile);
+    for (;;) {
+       rv = fgets( inputBuffer, 80, libFile);
+-      if ( feof(libFile) )
++      if ( rv == NULL )
+          ERROR1s( "readPermGroup", "Library block ", libName,
+                   " not found in specified library.")
+       if ( inputBuffer[0] == 'l' || inputBuffer[0] == 'L' ) {
+--- src/leon/src/readpar.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/readpar.c	2025-02-01 11:09:23.877058291 -0700
+@@ -49,7 +49,7 @@ Partition *readPartition(
+    rewind( libFile);
+    for (;;) {
+       rv = fgets( inputBuffer, 80, libFile);
+-      if ( feof(libFile) )
++      if ( rv == NULL )
+          ERROR1s( "readPartition", "Library block ", libName,
+                   " not found in specified library.")
+       if ( inputBuffer[0] == 'l' || inputBuffer[0] == 'L' ) {
+--- src/leon/src/readper.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/readper.c	2025-02-01 11:09:23.877058291 -0700
+@@ -52,7 +52,7 @@ Permutation *readPermutation(
+    rewind( libFile);
+    for (;;) {
+       rv = fgets( inputBuffer, 80, libFile);
+-      if ( feof(libFile) )
++      if ( rv == NULL )
+          ERROR1s( "readPermutation", "Library block ", libName,
+                   " not found in specified library.")
+       if ( inputBuffer[0] == 'l' || inputBuffer[0] == 'L' ) {
+--- src/leon/src/readpts.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/readpts.c	2025-02-01 11:09:23.877058291 -0700
+@@ -50,7 +50,7 @@ PointSet *readPointSet(
+    rewind( libFile);
+    for (;;) {
+       rv = fgets( inputBuffer, 80, libFile);
+-      if ( feof(libFile) )
++      if ( rv == NULL )
+          ERROR1s( "readPointSet", "Library block ", libName,
+                   " not found in specified library.")
+       if ( inputBuffer[0] == 'l' || inputBuffer[0] == 'L' ) {
+--- src/leon/src/relator.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/relator.c	2025-02-01 11:09:23.877058291 -0700
+@@ -681,8 +681,8 @@ Unsigned forceCollapse(
+    Permutation **hPtr,
+    Word **wPtr)
+ {
+-   Unsigned coset, image, oldImage, j, newTableEntries;
+-   Permutation *gen, *gen1;
++   Unsigned coset = 0, image, oldImage, j, newTableEntries;
++   Permutation *gen = NULL, *gen1;
+    WordImagePair wh;
+    Unsigned basicOrbLen = G->basicOrbLen[level];
+    UnsignedS *basicOrbit = G->basicOrbit[level];
+--- src/leon/src/setstab.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/setstab.c	2025-02-01 11:09:23.878058277 -0700
+@@ -178,10 +178,10 @@ int main( int argc, char *argv[])
+         knownSubgroup_R_LibraryName[MAX_NAME_LENGTH+1] = "",
+         prefix[MAX_FILE_NAME_LENGTH],
+         suffix[MAX_NAME_LENGTH];
+-   PermGroup *G, *G_pP, *L = NULL, *L_L = NULL, *L_R = NULL;
+-   Permutation *y;
+-   PointSet *Lambda, *Xi;
+-   Partition *PLambda, *PXi;
++   PermGroup *G, *G_pP = NULL, *L = NULL, *L_L = NULL, *L_R = NULL;
++   Permutation *y = NULL;
++   PointSet *Lambda = NULL, *Xi = NULL;
++   Partition *PLambda = NULL, *PXi = NULL;
+    BOOLEAN imageFlag = FALSE, imageFormatFlag = FALSE;
+    char ordUnord[10] = "Ordered\0\0";
+    char tempArg[8];
+--- src/leon/src/wtdist.c.orig	2025-02-01 10:30:20.000000000 -0700
++++ src/leon/src/wtdist.c	2025-02-01 11:09:23.878058277 -0700
+@@ -145,7 +145,7 @@ int main( int argc, char *argv[])
+         prefix[MAX_FILE_NAME_LENGTH],
+         suffix[MAX_NAME_LENGTH];
+    Code *C;
+-   Matrix_01 *matrix;
++   Matrix_01 *matrix = NULL;
+    BOOLEAN saveCodeWords, oneCodeWordOnly, defaultForBinaryProcedure,
+            useBinaryProcedure = FALSE, cWtDistFlag;
+    char comment[1024];

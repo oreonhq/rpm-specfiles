@@ -1,0 +1,36 @@
+From dc89b147dee780634d952230c3e9d3683b2971a5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Wed, 21 Aug 2024 17:50:10 +0200
+Subject: [PATCH 5/5] cmake: do not skip building of static libs
+
+Hopefully fixes a build failure:
+[ 54%] Linking CXX executable test_comp_extensions
+cd /home/zbyszek/fedora/libsbml/libsbml-5.20.4/build/src/sbml/packages/comp/extension/test && /usr/bin/cmake -E cmake_link_script CMakeFiles/test_comp_extensions.dir/link.txt --verbose=1
+/usr/lib64/ccache/g++ -O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer  -Wno-overloaded-virtual -Wno-unused-variable -Wno-unused-but-set-variable -Wno-switch -fno-strict-aliasing -fPIC -DNDEBUG -Wl,-z,relro -Wl,--as-needed  -Wl,-z,pack-relative-relocs -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -Wl,--build-id=sha1 -specs=/usr/lib/rpm/redhat/redhat-package-notes CMakeFiles/test_comp_extensions.dir/TestCheckConsistency.cpp.o CMakeFiles/test_comp_extensions.dir/TestExtensionObjects.cpp.o CMakeFiles/test_comp_extensions.dir/TestMultipleNamespaces.cpp.o CMakeFiles/test_comp_extensions.dir/TestRunner.c.o -o test_comp_extensions  -lsbml-static /usr/lib64/libcheck.so
+/usr/bin/ld: cannot find -lsbml-static: No such file or directory
+collect2: error: ld returned 1 exit status
+---
+ src/CMakeLists.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 10f0d42490..b78a98e6c1 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -507,7 +507,6 @@ endif()
+ endif()
+ 
+ 
+-if (NOT LIBSBML_SKIP_STATIC_LIBRARY)
+ add_library (${LIBSBML_LIBRARY}-static STATIC ${LIBSBML_SOURCES} )
+ 
+ # When we included the 'maddy' library, we needed features added in c++11.
+@@ -553,8 +552,6 @@ INSTALL(FILES
+ )
+ endif()
+ 
+-endif (NOT LIBSBML_SKIP_STATIC_LIBRARY)
+-
+ ##############################################################################
+ #
+ # add native tests

@@ -1,0 +1,40 @@
+diff --git a/ampr-ripd.c b/ampr-ripd.c
+index 99609d1..fe75e9f 100644
+--- a/ampr-ripd.c
++++ b/ampr-ripd.c
+@@ -148,6 +148,8 @@
+ 
+ #define RTAB_FILE	"/etc/iproute2/rt_tables"	/* route tables */
+ 
++#define PID_FILE	"/var/run/ampr-ripd.pid"	/* pid file */
++
+ #define	BUFFERSIZE	8192
+ #define MYIPSIZE	25	/* max number of local interface IPs */
+ #define MAXIGNORE	10	/* max number of hosts in the ignore list */
+@@ -1724,6 +1726,7 @@ static void on_term(int sig)
+ #endif
+ 	if (homedata) callhome(FALSE);
+ 	if_freenameindex(ifnames);
++	unlink(PID_FILE);
+ 	close(fwsd);
+ 	close(tunsd);
+ 	route_delete_all();
+@@ -1887,6 +1890,7 @@ int main(int argc, char **argv)
+ 	char *pload;
+ 	int len, plen;
+ 	int lval;
++	FILE *pidfile;
+ 
+ 	while ((p = getopt(argc, argv, "dvsrh?i:a:p:t:m:w:f:e:F:E:x:g:L:")) != -1)
+ 	{
+@@ -2206,6 +2210,10 @@ int main(int argc, char **argv)
+ 		callhome(TRUE);
+ 	}
+ 
++	pidfile = fopen(PID_FILE, "w");
++	fprintf(pidfile, "%d\n", (int)getpid());
++	fclose(pidfile);
++
+ 	alarm(30);
+ 
+ 	/* daemon or debug */

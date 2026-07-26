@@ -1,0 +1,42 @@
+--- a/Makefile
++++ b/Makefile
+@@ -213,34 +213,32 @@
+ 	-$(GPRINSTALL) $(GPROPTS) --uninstall --prefix=$(TPREFIX) aws
+ endif
+ 
+-GPRINST_OPTS=-p -f --prefix=$(TPREFIX) \
+-	--build-var=LIBRARY_TYPE --build-var=AWS_BUILD
++GPRINST_OPTS=-p -f --prefix=$(TPREFIX)
+ 
+ install-libs-%:
+ 	$(GPRINSTALL) $(GPROPTS) $(GPRINST_OPTS) \
+ 		-XLIBRARY_TYPE=$* -XXMLADA_BUILD=$* \
+-		--build-name=$* aws.gpr
++		aws.gpr
+ 
+ install-lib-native: ${LIBAWS_TYPES:%=install-libs-%}
+ 
+ install-tools-native:
+ 	$(GPRINSTALL) $(GPROPTS) $(GPRINST_OPTS) $(GPR_SHARED) --mode=usage \
+-		--build-name=relocatable \
+-		--install-name=aws tools/tools.gpr
++		tools/tools.gpr
+ 
+ install-native: install-clean install-lib-native install-tools-native
+ 
+ install-libs-cross-%:
+ 	$(GPRINSTALL) $(GPROPTS) $(GPRINST_OPTS) \
+ 		--target=$(TARGET) -XLIBRARY_TYPE=$* -XXMLADA_BUILD=$* \
+-		--build-name=$* aws.gpr
++		aws.gpr
+ 
+ install-lib-cross: ${LIBAWS_TYPES:%=install-libs-cross-%}
+ 
+ install-tools-cross:
+ 	$(GPRINSTALL) $(GPROPTS)  $(GPRINST_OPTS) --mode=usage \
+ 		--target=$(TARGET) $(GPROPTS) \
+-		--install-name=aws tools/tools.gpr
++		tools/tools.gpr
+ 
+ install-cross: install-clean install-libs-cross install-tools-cross
+ 

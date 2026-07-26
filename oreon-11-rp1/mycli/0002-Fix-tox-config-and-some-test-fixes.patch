@@ -1,0 +1,68 @@
+From afd306b1c2ec19f24b802341f73cb417f4ef8d28 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Thu, 29 Jan 2026 18:40:04 +0100
+Subject: [PATCH 2/5] Fix tox config and some test fixes
+
+---
+ test/test_main.py | 8 ++++----
+ tox.ini           | 4 +---
+ 2 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/test/test_main.py b/test/test_main.py
+index 6b27dce..ca9103c 100644
+--- a/test/test_main.py
++++ b/test/test_main.py
+@@ -574,7 +574,7 @@ def test_reserved_space_is_integer(monkeypatch):
+         mycli = MyCli()
+         assert isinstance(mycli.get_reserved_space(), int)
+ 
+-
++@dbtest
+ def test_list_dsn(monkeypatch):
+     monkeypatch.setattr(MyCli, "system_config_files", [])
+     monkeypatch.setattr(MyCli, "pwd_config_file", os.path.join(test_dir, "does_not_exist.myclirc"))
+@@ -615,7 +615,7 @@ def test_unprettify_statement():
+     unpretty_statement = m.handle_unprettify_binding(statement)
+     assert unpretty_statement == "SELECT 1;"
+ 
+-
++@dbtest
+ def test_list_ssh_config():
+     runner = CliRunner()
+     # keep Windows from locking the file with delete=False
+@@ -643,7 +643,7 @@ def test_list_ssh_config():
+     except Exception as e:
+         print(f"An error occurred while attempting to delete the file: {e}")
+ 
+-
++@dbtest
+ def test_dsn(monkeypatch):
+     # Setup classes to mock mycli.main.MyCli
+     class Formatter:
+@@ -818,7 +818,7 @@ def test_dsn(monkeypatch):
+         and MockMyCli.connect_args["ssl"]["enable"] is True
+     )
+ 
+-
++@dbtest
+ def test_ssh_config(monkeypatch):
+     # Setup classes to mock mycli.main.MyCli
+     class Formatter:
+diff --git a/tox.ini b/tox.ini
+index e1dee79..e85aee0 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -10,9 +10,7 @@ passenv = PYTEST_HOST
+     PYTEST_PORT
+     PYTEST_CHARSET
+ commands = uv pip install -e .[dev,ssh,llm]
+-        coverage run -m pytest -v test
+-        coverage report -m
+-        behave test/features
++        coverage run -m pytest -v test {posargs}
+ 
+ [testenv:style]
+ skip_install = true
+-- 
+2.52.0
+

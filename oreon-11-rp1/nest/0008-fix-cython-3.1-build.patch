@@ -1,0 +1,47 @@
+From cb7e1dadf8a8566b7340ad3a7ed13c173d35e6d0 Mon Sep 17 00:00:00 2001
+From: Steffen Graber <s.graber@fz-juelich.de>
+Date: Thu, 22 May 2025 12:43:32 +0000
+Subject: [PATCH 1/2] Remove 'long' type check from python_object_to_datum
+ function for integer handling
+
+---
+ pynest/pynestkernel.pyx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pynest/pynestkernel.pyx b/pynest/pynestkernel.pyx
+index 1fdf7fa537..505a08e37b 100644
+--- a/pynest/pynestkernel.pyx
++++ b/pynest/pynestkernel.pyx
+@@ -361,7 +361,7 @@ cdef inline Datum* python_object_to_datum(obj) except NULL:
+ 
+     if isinstance(obj, bool):
+         ret = <Datum*> new BoolDatum(obj)
+-    elif isinstance(obj, (int, long)):
++    elif isinstance(obj, int):  # removed 'long'
+         ret = <Datum*> new IntegerDatum(obj)
+     elif isinstance(obj, float):
+         ret = <Datum*> new DoubleDatum(obj)
+
+From 0e041df678810b68de4f3bf6d8cc53d6dc10f270 Mon Sep 17 00:00:00 2001
+From: Steffen Graber <s.graber@fz-juelich.de>
+Date: Fri, 23 May 2025 08:26:45 +0200
+Subject: [PATCH 2/2] Update pynest/pynestkernel.pyx
+
+Co-authored-by: Hans Ekkehard Plesser <hans.ekkehard.plesser@nmbu.no>
+---
+ pynest/pynestkernel.pyx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pynest/pynestkernel.pyx b/pynest/pynestkernel.pyx
+index 505a08e37b..c3b673882e 100644
+--- a/pynest/pynestkernel.pyx
++++ b/pynest/pynestkernel.pyx
+@@ -361,7 +361,7 @@ cdef inline Datum* python_object_to_datum(obj) except NULL:
+ 
+     if isinstance(obj, bool):
+         ret = <Datum*> new BoolDatum(obj)
+-    elif isinstance(obj, int):  # removed 'long'
++    elif isinstance(obj, int):
+         ret = <Datum*> new IntegerDatum(obj)
+     elif isinstance(obj, float):
+         ret = <Datum*> new DoubleDatum(obj)

@@ -1,0 +1,26 @@
+From 954f70453358a6cd7c5ba3e9339a64d4cbdd3f1f Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Fri, 12 Dec 2025 11:20:35 +0100
+Subject: [PATCH] Drop obsolete work-around for ppc64le on EPEL 7 It causes
+ breakage due to new library path detection in ROOT 6.38
+
+---
+ python/src/rootIO/__init__.py | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/python/src/rootIO/__init__.py b/python/src/rootIO/__init__.py
+index b05805d7..709d8bd8 100644
+--- a/python/src/rootIO/__init__.py
++++ b/python/src/rootIO/__init__.py
+@@ -1,8 +1 @@
+-try:
+- import platform
+- if platform.system() != 'Darwin':
+-   from ctypes import cdll
+-   libCore = cdll.LoadLibrary("libCore.so")
+-except:
+-  print("An exception occurred while loading libCore.so with ctypes")
+ from .pyHepMC3rootIO import *
+-- 
+2.52.0
+

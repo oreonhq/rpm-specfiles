@@ -1,0 +1,27 @@
+diff -rupN --no-dereference ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c/database/builder/makedb.sh ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c-new/database/builder/makedb.sh
+--- ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c/database/builder/makedb.sh	2024-09-13 22:38:34.000000000 +0200
++++ ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c-new/database/builder/makedb.sh	2025-07-28 16:08:27.870909555 +0200
+@@ -4,16 +4,18 @@ set -e
+ 
+ g++ builder.cpp --std=c++11 -o builder -lshp
+ 
+-rm -rf out naturalearth timezone db.zip
++rm -rf out db.zip
+ mkdir -p out
+ mkdir -p out_v1
+ mkdir -p naturalearth
+ mkdir -p timezone
+ 
+-(
+-echo https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries_lakes.zip -o /dev/null -O naturalearth/ne.zip
+-echo https://github.com/evansiroky/timezone-boundary-builder/releases/download/2024b/timezones-with-oceans.shapefile.zip -o /dev/null -O timezone/tz.zip
+-) | xargs -n5 -P2 wget
++if [ ! -e naturalearth/ne.zip ]; then
++    wget https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries_lakes.zip -o /dev/null -O naturalearth/ne.zip
++fi
++if [ ! -e timezone/tz.zip ]; then
++    wget https://github.com/evansiroky/timezone-boundary-builder/releases/download/2024b/timezones-with-oceans.shapefile.zip -o /dev/null -O timezone/tz.zip
++fi
+ 
+ cd naturalearth
+ unzip ne.zip

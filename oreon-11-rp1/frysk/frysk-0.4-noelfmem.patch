@@ -1,0 +1,418 @@
+diff -up frysk-0.4/frysk-sys/lib/dwfl/cni/Dwfl.cxx.noelfmem frysk-0.4/frysk-sys/lib/dwfl/cni/Dwfl.cxx
+--- frysk-0.4/frysk-sys/lib/dwfl/cni/Dwfl.cxx.noelfmem	2010-03-25 11:41:04.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/cni/Dwfl.cxx	2010-03-25 12:26:09.000000000 -0400
+@@ -57,38 +57,26 @@
+ #include "inua/eio/ByteBuffer.h"
+ 
+ using namespace java::lang;
+-
+-// Suck in elf_from_remote_memory from elfutils
+-
+-extern "C"
+-{
+-  extern ::Elf *elf_from_remote_memory (GElf_Addr ehdr_vma,
+-					GElf_Addr *loadbasep,
+-					ssize_t (*read_memory) (void *arg,
+-								void *data,
+-								GElf_Addr address,
+-								size_t minread,
+-								size_t maxread),
+-					void *arg);
+-}
+ #define DWFL_POINTER ((::Dwfl *) pointer)
+ #define DWFL_CALLBACKS ((::Dwfl_Callbacks *) callbacks)
+ 
+-static ssize_t
+-read_proc_memory (void *arg, void *data, GElf_Addr address,
+-		  size_t minread, size_t maxread)
+-{
+-  inua::eio::ByteBuffer* memory = (inua::eio::ByteBuffer *) arg;
+-  jbyteArray bytes = JvNewByteArray(maxread);
+-  ssize_t nread = memory->safeGet((off64_t) address, bytes, 0, maxread);
+-  memcpy(data, elements(bytes), nread);
+-  if (nread > 0 && (size_t) nread < minread)
+-    nread = 0;
+-  return nread;
++jlong
++lib::dwfl::Dwfl::dwfl_slap_module_memory(jlong module, inua::eio::ByteBuffer* memory,
++					 jlong address, jlong length) {
++  jbyteArray bounceBuffer = JvNewByteArray(length);
++  ssize_t nread = memory->safeGet((off64_t) address, bounceBuffer, 0, length);
++  if (nread < length) {
++    return 0; // what ever
++  }
++  void **userdatap;
++  ::dwfl_module_info((Dwfl_Module*)module, &userdatap, NULL, NULL, NULL, NULL, NULL, NULL);
++  (*userdatap) = ::malloc(length);
++  memcpy((*userdatap), elements(bounceBuffer), length);
++  return (jlong)(*userdatap);
+ }
+ 
+ int
+-dwfl_frysk_proc_find_elf (Dwfl_Module *mod,
++dwfl_frysk_proc_find_elf (Dwfl_Module *module,
+ 			  void **userdata,
+ 			  const char *module_name, Dwarf_Addr base,
+ 			  char **file_name, Elf **elfp)
+@@ -105,21 +93,29 @@ dwfl_frysk_proc_find_elf (Dwfl_Module *m
+     *file_name = strdup (module_name);
+     return -1;
+   } else {
+-      *elfp = elf_from_remote_memory (base, NULL, &read_proc_memory, *userdata);
+-      if (*elfp != NULL) {
+-	*file_name = ::strdup(module_name);
+-      }
++    // During module creation the Dwfl_Module USERDATA point was set
++    // to a raw buffer that contains the entire in-memory section
++    // contents.  Create an elf from that.  DwflModule is responsible
++    // for freeing the memory.
++    char *memory = (char*)(*userdata);
++    // Compute the size of the memory using the module's bound.
++    ::Dwarf_Addr bound;
++    ::dwfl_module_info(module, NULL, NULL, &bound, NULL, NULL, NULL, NULL);
++    ssize_t memory_size = bound - base;
++    // Turn that memory into an ELF.  The obvious thing to do here is
++    // to tell elfutils that it is responsible for the memory - by
++    // calling elf_flagelf(ELF_F_MALLOCED) - except all the flags
++    // including ELF_F_MALLOCED are not public and setting that
++    // particular flag is prohibited.
++    *elfp = elf_memory((char*)memory, memory_size);
++    if (*elfp == NULL) {
+       return -1;
+     }
+-}
+-
+-jlong
+-lib::dwfl::Dwfl::dwfl_userdata_begin(inua::eio::ByteBuffer *memory) {
+-  return (jlong)memory;
+-}
+-
+-void
+-lib::dwfl::Dwfl::dwfl_userdata_end(jlong userdata) {
++    // Poke something into FILE_NAME so that the caller notices that
++    // we've done something to ELF.
++    *file_name = ::strdup(module_name);
++    return -1;
++  }
+ }
+ 
+ jlong
+@@ -169,7 +165,7 @@ lib::dwfl::Dwfl::dwfl_report_end(jlong p
+ 
+ jlong
+ lib::dwfl::Dwfl::dwfl_report_module(jlong pointer, jstring moduleName,
+-				    jlong low, jlong high, jlong userdata) {
++				    jlong low, jlong high) {
+   jsize len = JvGetStringUTFLength(moduleName);
+   char modName[len+1]; 
+ 	
+@@ -179,14 +175,6 @@ lib::dwfl::Dwfl::dwfl_report_module(jlon
+   Dwfl_Module* module = ::dwfl_report_module(DWFL_POINTER, modName,
+ 					     (::Dwarf_Addr) low, 
+ 					     (::Dwarf_Addr) high);
+-  if (userdata != 0) {
+-    // Get the address of the module's userdata, and store a global
+-    // reference to memory in there.  The global ref is detroyed along
+-    // with the Dwfl.
+-    void **userdatap;
+-    ::dwfl_module_info(module, &userdatap, NULL, NULL, NULL, NULL, NULL, NULL);
+-    *userdatap = (void*)userdata;
+-  }
+   return (jlong) module;
+ }
+ 
+diff -up frysk-0.4/frysk-sys/lib/dwfl/cni/DwflModule.cxx.noelfmem frysk-0.4/frysk-sys/lib/dwfl/cni/DwflModule.cxx
+--- frysk-0.4/frysk-sys/lib/dwfl/cni/DwflModule.cxx.noelfmem	2010-03-25 11:41:04.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/cni/DwflModule.cxx	2010-03-25 11:41:04.000000000 -0400
+@@ -478,3 +478,8 @@ jlong
+ lib::dwfl::DwflModule::dwfl_module_getsrc(jlong pointer, jlong addr) {
+   return (jlong) ::dwfl_module_getsrc(DWFL_MODULE_POINTER, (Dwarf_Addr)addr);
+ }
++
++void
++lib::dwfl::DwflModule::dwfl_module_free_memory(jlong memory) {
++  ::free((void*)memory);
++}
+diff -up frysk-0.4/frysk-sys/lib/dwfl/Dwfl.java.noelfmem frysk-0.4/frysk-sys/lib/dwfl/Dwfl.java
+--- frysk-0.4/frysk-sys/lib/dwfl/Dwfl.java.noelfmem	2010-03-25 11:41:04.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/Dwfl.java	2010-03-25 12:19:08.000000000 -0400
+@@ -49,7 +49,7 @@ public class Dwfl {
+     private static final Log fine = Log.fine(Dwfl.class);
+     private static final Log finest = Log.finest(Dwfl.class);
+ 
+-    private long userdata;
++    private ByteBuffer memory;
+     private long pointer;
+     private long callbacks;
+ 
+@@ -61,11 +61,10 @@ public class Dwfl {
+      */
+     public Dwfl(String debugInfoPath, ByteBuffer memory) {
+ 	callbacks = dwfl_callbacks_begin(debugInfoPath);
+-	userdata = dwfl_userdata_begin(memory);
+ 	pointer = dwfl_begin(callbacks);
++	this.memory = memory;
+     }
+     private static native long dwfl_callbacks_begin(String debugInfoSearchPath);
+-    private static native long dwfl_userdata_begin(ByteBuffer memory);
+     private static native long dwfl_begin(long callbacks);
+     /**
+      * Create a dwfl with the specified debug-info search path and
+@@ -85,13 +84,11 @@ public class Dwfl {
+ 	if (this.pointer != 0) {
+ 	    dwfl_end(pointer);
+ 	    this.pointer = 0;
+-	    dwfl_userdata_end(userdata);
+ 	    dwfl_callbacks_end(callbacks);
+ 	    this.callbacks = 0;
+ 	}
+     }
+     private static native void dwfl_end(long pointer);
+-    private static native void dwfl_userdata_end(long userdata);
+     private static native void dwfl_callbacks_end(long callbacks);
+     
+     public DwflLine getSourceLine (long addr) {
+@@ -197,8 +194,7 @@ public class Dwfl {
+      */
+     public void reportModule(String moduleName, long low, long high) {
+ 	fine.log(this, "reportModule", moduleName, "low", low, "high", high);
+-	long modulePointer = dwfl_report_module(pointer, moduleName, low, high,
+-						userdata);
++	long modulePointer = dwfl_report_module(pointer, moduleName, low, high);
+ 	for (int i = 0; i < modulesArray.length; i++) {
+ 	    DwflModule module = modulesArray[i];
+ 	    if (module.getName().equals(moduleName)
+@@ -212,15 +208,26 @@ public class Dwfl {
+ 		return;
+ 	    }
+ 	}
++	long bytes;
++	if (moduleName.startsWith("[")
++	    && ULong.GT(high, low) && ULong.LT(high - low, 0x10000)) {
++	    // If it looks like a mapped elf region and is small (like
++	    // only a page or so) just suck it in.
++	    bytes = dwfl_slap_module_memory(modulePointer, memory, low, high - low);
++	    fine.log(this, "slapped module memory at", bytes, "count", high - low);
++	} else {
++	    bytes = 0;
++	}
+ 	DwflModule module = new DwflModule(modulePointer, this, moduleName,
+-					   low, high);
++					   low, high, bytes);
+ 	finest.log(this, "reportModule creating", module);
+ 	modules.put(new Long(modulePointer), module);
+     }
+     private static native long dwfl_report_module(long pointer,
+ 						  String moduleName,
+-						  long low, long high,
+-						  long userdata);
++						  long low, long high);
++    private static native long dwfl_slap_module_memory(long modulePointer, ByteBuffer memory,
++						       long low, long high);
+ 
+     private String name;
+     private long low;
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwflModule.java.noelfmem frysk-0.4/frysk-sys/lib/dwfl/DwflModule.java
+--- frysk-0.4/frysk-sys/lib/dwfl/DwflModule.java.noelfmem	2010-03-25 11:41:04.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwflModule.java	2010-03-25 11:41:04.000000000 -0400
+@@ -50,26 +50,39 @@ public class DwflModule {
+     protected LinkedList pubNames;
+     protected LinkedList symbolTable;
+     
++    private final long memory;
+     private final long pointer;
+     private final Dwfl parent;
+     private final String name;
+     private final long low;
+     private final long high;
+ 
+-    DwflModule(long val, Dwfl parent, String name, long low, long high) {
+-	this.pointer = val;
++    DwflModule(long pointer, Dwfl parent, String name, long low, long high, long memory) {
++	this.pointer = pointer;
+ 	this.parent = parent;
+ 	this.name = name;
+ 	this.low = low;
+ 	this.high = high;
++	this.memory = memory;
+     }
+ 
++    /**
++     * If a raw memory buffer was allocated, delete it when this is
++     * deleted; note that elfutils takes care of deleting the pointer.
++     */
++    public void finalize() {
++	if (memory != 0) {
++	    dwfl_module_free_memory(memory);
++	}
++    }
++    private static native void dwfl_module_free_memory(long memory);
+   
+     public String toString() {
+ 	return name
+ 	    + " 0x" + Long.toHexString(low)
+ 	    + "..0x" + Long.toHexString(high)
+-	    + " pointer=0x" + Long.toHexString(pointer);
++	    + " pointer=0x" + Long.toHexString(pointer)
++	    + " memory=0x" + Long.toHexString(memory);
+     }
+ 
+     public long lowAddress() {
+diff -up frysk-0.4/frysk-sys/lib/dwfl/jni/Dwfl.cxx.noelfmem frysk-0.4/frysk-sys/lib/dwfl/jni/Dwfl.cxx
+--- frysk-0.4/frysk-sys/lib/dwfl/jni/Dwfl.cxx.noelfmem	2010-03-25 11:41:04.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/jni/Dwfl.cxx	2010-03-25 11:41:04.000000000 -0400
+@@ -51,52 +51,31 @@
+ 
+ using namespace java::lang;
+ 
+-// Suck in elf_from_remote_memory from elfutils
+-
+-extern "C" {
+-  extern ::Elf *elf_from_remote_memory(GElf_Addr ehdr_vma,
+-				       GElf_Addr *loadbasep,
+-				       ssize_t (*read_memory) (void *arg,
+-							       void *data,
+-							       GElf_Addr address,
+-							       size_t minread,
+-							       size_t maxread),
+-				       void *arg);
+-}
+-
+-// Grub the pointer out of the object; replace this with ...
+-#define DWFL_POINTER_FIXME ((::Dwfl *)GetPointer(env))
+-
+ // Assume the method was parameterised with POINTER.
+ #define DWFL_POINTER ((::Dwfl *)pointer)
+ 
+ 
+ 
+-// Our data associated with the dwfl (well actually the Dwfl_Module).
+-// Need to make memory available so that, in the case of the vdso, it
+-// can be slurped from memory.
+-
+-static ssize_t
+-read_proc_memory(void *userdata, void *data, GElf_Addr address,
+-		 size_t minread, size_t maxread) {
+-  // Get the current thread's ENV; can't save it in dwfl_userdata
+-  // since can't determine, ahead of time, which thread will call this
+-  // code.
+-  ::jnixx::env env = Object::_env_();
+-  ::inua::eio::ByteBuffer memory
+-      = ::inua::eio::ByteBuffer(env, (jobject)userdata);
+-  jnixx::jbyteArray bytes = jnixx::jbyteArray::NewByteArray(env, maxread);
+-  ssize_t nread = memory.safeGet(env, (off64_t) address, bytes, 0, maxread);
+-  jbyteArrayElements bytesp = jbyteArrayElements(env, bytes);
+-  memcpy(data, bytesp.elements(), nread);
+-  if (nread > 0 && (size_t) nread < minread)
+-    nread = 0;
+-  bytes.DeleteLocalRef(env);
+-  return nread;
++jlong
++lib::dwfl::Dwfl::dwfl_slap_module_memory(jnixx::env env, jlong module,
++					 inua::eio::ByteBuffer memory,
++					 jlong address, jlong length) {
++  jnixx::jbyteArray bounceBuffer = jnixx::jbyteArray::NewByteArray(env, length);
++  ssize_t nread = memory.safeGet(env, (off64_t) address, bounceBuffer, 0, length);
++  if (nread < length) {
++    bounceBuffer.DeleteLocalRef(env);
++    return 0; // what ever
++  }
++  void **userdatap;
++  ::dwfl_module_info((Dwfl_Module*)module, &userdatap, NULL, NULL, NULL, NULL, NULL, NULL);
++  (*userdatap) = ::malloc(length);
++  memcpy((*userdatap), jbyteArrayElements(env, bounceBuffer).elements(), length);
++  bounceBuffer.DeleteLocalRef(env);
++  return (jlong)(*userdatap);
+ }
+ 
+ static int
+-dwfl_frysk_proc_find_elf(Dwfl_Module *mod,
++dwfl_frysk_proc_find_elf(Dwfl_Module *module,
+ 			 void **userdata,
+ 			 const char *module_name, Dwarf_Addr base,
+ 			 char **file_name, Elf **elfp) {	
+@@ -111,30 +90,31 @@ dwfl_frysk_proc_find_elf(Dwfl_Module *mo
+     *file_name = ::strdup(module_name);
+     return -1;
+   } else {
+-    // dwfl passes in the address of the Dwfl_Module user pointer
+-    // contained within.  That pointer has been previously stuffed
+-    // with our "userdata".
+-    *elfp = elf_from_remote_memory (base, NULL, &read_proc_memory, *userdata);
+-    if (*elfp != NULL) {
+-      // Poke something into FILE_NAME so that the caller notices that
+-      // we've done something to ELF.
+-      *file_name = ::strdup(module_name);
++    // During module creation the Dwfl_Module USERDATA point was set
++    // to a raw buffer that contains the entire in-memory section
++    // contents.  Create an elf from that.  DwflModule is responsible
++    // for freeing the memory.
++    char *memory = (char*)(*userdata);
++    // Compute the size of the memory using the module's bound.
++    ::Dwarf_Addr bound;
++    ::dwfl_module_info(module, NULL, NULL, &bound, NULL, NULL, NULL, NULL);
++    ssize_t memory_size = bound - base;
++    // Turn that memory into an ELF.  The obvious thing to do here is
++    // to tell elfutils that it is responsible for the memory - by
++    // calling elf_flagelf(ELF_F_MALLOCED) - except all the flags
++    // including ELF_F_MALLOCED are not public and setting that
++    // particular flag is prohibited.
++    *elfp = elf_memory((char*)memory, memory_size);
++    if (*elfp == NULL) {
++      return -1;
+     }
++    // Poke something into FILE_NAME so that the caller notices that
++    // we've done something to ELF.
++    *file_name = ::strdup(module_name);
+     return -1;
+   }
+ }
+ 
+-jlong
+-lib::dwfl::Dwfl::dwfl_userdata_begin(jnixx::env env,
+-				     inua::eio::ByteBuffer memory) {
+-  return (jlong) env.NewGlobalRef(memory._object);
+-}
+-
+-void
+-lib::dwfl::Dwfl::dwfl_userdata_end(jnixx::env env, jlong userdata) {
+-  env.DeleteGlobalRef((jobject)userdata);
+-}
+-
+ 
+ 
+ #define DWFL_CALLBACKS ((::Dwfl_Callbacks*)callbacks)
+@@ -185,20 +165,11 @@ lib::dwfl::Dwfl::dwfl_report_end(jnixx::
+ 
+ jlong
+ lib::dwfl::Dwfl::dwfl_report_module(jnixx::env env, jlong pointer,
+-				    String jmoduleName, jlong low, jlong high,
+-				    jlong userdata) {
++				    String jmoduleName, jlong low, jlong high) {
+   jstringUTFChars moduleName = jstringUTFChars(env, jmoduleName);
+   Dwfl_Module *module = ::dwfl_report_module(DWFL_POINTER,
+ 					     moduleName.elements(),
+ 					     (::Dwarf_Addr) low,
+ 					     (::Dwarf_Addr) high);
+-  if (userdata != 0) {
+-    // Get the address of the module's userdata, and store a global
+-    // reference to memory in there.  The global ref is detroyed along
+-    // with the Dwfl.
+-    void **userdatap;
+-    ::dwfl_module_info(module, &userdatap, NULL, NULL, NULL, NULL, NULL, NULL);
+-    *userdatap = (void*)userdata;
+-  }
+   return (jlong)module;
+ }
+diff -up frysk-0.4/frysk-sys/lib/dwfl/jni/DwflModule.cxx.noelfmem frysk-0.4/frysk-sys/lib/dwfl/jni/DwflModule.cxx
+--- frysk-0.4/frysk-sys/lib/dwfl/jni/DwflModule.cxx.noelfmem	2010-03-25 11:41:04.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/jni/DwflModule.cxx	2010-03-25 11:41:04.000000000 -0400
+@@ -436,3 +436,8 @@ lib::dwfl::DwflModule::dwfl_module_getsr
+ 					  jlong addr) {
+   return (jlong) ::dwfl_module_getsrc(DWFL_MODULE_POINTER, (Dwarf_Addr)addr);
+ }
++
++void
++lib::dwfl::DwflModule::dwfl_module_free_memory(jnixx::env env, jlong memory) {
++  ::free((void*)memory);
++}

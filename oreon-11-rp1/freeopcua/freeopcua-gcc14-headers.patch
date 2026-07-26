@@ -1,0 +1,23 @@
+diff --git a/debian.soft b/debian.soft
+index d41a4f87..bc754a60 100755
+--- a/debian.soft
++++ b/debian.soft
+@@ -4,5 +4,5 @@ libboost-system-dev libboost-filesystem-dev \
+ libcppunit-dev pkg-config git python-dev libboost-python-dev \
+ gsoap libxml2-dev build-essential autotools-dev dh-make \
+ debhelper devscripts fakeroot xutils lintian pbuilder \
+-reprepro
++reprepro libmbedtls-dev
+ 
+diff --git a/src/server/endpoints_parameters.cpp b/src/server/endpoints_parameters.cpp
+index 64da757d..dffa2c82 100644
+--- a/src/server/endpoints_parameters.cpp
++++ b/src/server/endpoints_parameters.cpp
+@@ -13,6 +13,7 @@
+ 
+ #include <iostream>
+ #include <stdexcept>
++#include <algorithm>
+ 
+ namespace
+ {

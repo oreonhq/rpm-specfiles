@@ -1,0 +1,11 @@
+--- Changes
++++ Changes
+@@ -654,7 +654,7 @@ Revision history for Perl module Spreads
+     ! Changed handling of undefs in write() method. Thanks Hanc Pavel.
+ 
+     ! Changed new() to return undef for file creation errors
+-      Thanks Felipe Pérez Galiana.
++      Thanks Felipe PÃ©rez Galiana.
+ 
+     ! Added check for header/footer length. Thanks Peter Dintelmann.
+ 

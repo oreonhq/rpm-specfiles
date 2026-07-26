@@ -1,0 +1,14 @@
+--- fritzing-app-a8c6ef7cf66f7a42b9b233d6137f1b70a9573a25--orig/phoenix.pro	2024-10-07 11:50:11.000000000 +0200
++++ fritzing-app-a8c6ef7cf66f7a42b9b233d6137f1b70a9573a25--patched/phoenix.pro	2024-11-06 21:02:15.396756654 +0100
+@@ -18,11 +18,9 @@
+ #
+ # ********************************************************************
+ 
+ QT_LEAST=6.5.3
+-QT_MOST=6.5.10
+ !versionAtLeast(QT_VERSION, $${QT_LEAST}):error("Use at least Qt version $${QT_LEAST}")
+-!versionAtMost(QT_VERSION, $${QT_MOST}):error("Use at most Qt version $${QT_MOST}")
+ 
+ CONFIG += debug_and_release
+ CONFIG += c++17
+ 

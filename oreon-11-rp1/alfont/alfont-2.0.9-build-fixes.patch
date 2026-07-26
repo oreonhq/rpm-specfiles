@@ -1,0 +1,309 @@
+diff -up alfont-2.0.9/src/alfont.c~ alfont-2.0.9/src/alfont.c
+--- alfont-2.0.9/src/alfont.c~	2024-06-15 13:56:38.455325588 +0200
++++ alfont-2.0.9/src/alfont.c	2024-06-15 13:56:43.799293099 +0200
+@@ -515,7 +515,7 @@ ALFONT_FONT *alfont_load_font_from_mem(c
+   memcpy((void *)font->data, (void *)data, data_len);
+ 
+   /* load the font */
+-  error = FT_New_Memory_Face(ft_library, font->data, font->data_size, 0, &font->face);
++  error = FT_New_Memory_Face(ft_library, (const FT_Byte *)font->data, font->data_size, 0, &font->face);
+ 
+   if (error) {
+     free(font->data);
+@@ -609,7 +609,7 @@ void alfont_textout_aa_ex(BITMAP *bmp, A
+   char *lpszW;
+   char *lpszW_tmp;
+   int x_tmp;
+-  int max_advancex;
++  int max_advancex=0;
+   char *lpszW_pointer=NULL; //used for freeing string
+   char *s_pointer=NULL; //used for original string fixed by autofix
+   char *s_pointer_temp=NULL; //temporary used for autofix string
+@@ -618,11 +618,10 @@ void alfont_textout_aa_ex(BITMAP *bmp, A
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+   int character;
+   int alpha_table[256];
+-  int last_glyph_index;
+   int first_x=0, final_x=0, final_y=0;
+-  int curr_uformat;
++  int curr_uformat=0;
+   int first_flag=TRUE; //First Char flag
+-  BITMAP *masked_bmp; //the masked bmp used by Font hollow
++  BITMAP *masked_bmp=NULL; //the masked bmp used by Font hollow
+   
+   #ifdef ALFONT_DOS
+   iconv_t c_pt;
+@@ -889,7 +888,6 @@ void alfont_textout_aa_ex(BITMAP *bmp, A
+ 
+   /* draw char by char (using allegro unicode funcs) */
+   acquire_bitmap(bmp);
+-  last_glyph_index = 0;
+ 
+   if (f->fixed_width == TRUE)
+   {
+@@ -978,7 +976,6 @@ void alfont_textout_aa_ex(BITMAP *bmp, A
+ 		real_x += v.x >> 6;
+ 		real_y += v.y >> 6;
+ 	}*/
+-	last_glyph_index = glyph_index;
+ 
+ 	/* draw only if exists */
+ 	if ((cglyph.aa_available) && (cglyph.aabmp)) {
+@@ -1774,18 +1771,18 @@ void alfont_textout_ex(BITMAP *bmp, ALFO
+   char *lpszW;
+   char *lpszW_tmp;
+   int x_tmp;
+-  int max_advancex;
++  int max_advancex=0;
+   char *lpszW_pointer=NULL; //used for freeing string
+   char *s_pointer=NULL; //used for original string fixed by autofix
+   char *s_pointer_temp=NULL; //temporary used for autofix string
+   char *precedingchar_pointer=NULL; //used for precedingchar character
+   int nLen;
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+-  int character, last_glyph_index;
++  int character;
+   int first_x=0, final_x=0, final_y=0;
+-  int curr_uformat;
++  int curr_uformat=0;
+   int first_flag=TRUE; //First Char flag
+-  BITMAP *masked_bmp; //the masked bmp used by Font hollow
++  BITMAP *masked_bmp=NULL; //the masked bmp used by Font hollow
+   #ifdef ALFONT_DOS
+   iconv_t c_pt;
+   size_t fromlen, tolen;
+@@ -2026,8 +2023,6 @@ void alfont_textout_ex(BITMAP *bmp, ALFO
+ 
+   /* draw char by char (using allegro unicode funcs) */
+   acquire_bitmap(bmp);
+-  last_glyph_index = 0;
+-
+   
+   if (f->fixed_width == TRUE)
+   {
+@@ -2115,7 +2110,6 @@ void alfont_textout_ex(BITMAP *bmp, ALFO
+ 		real_x += v.x >> 6;
+ 		real_y += v.y >> 6;
+ 	}*/
+-	last_glyph_index = glyph_index;
+ 
+ 	/* draw only if exists */
+ 	if ((cglyph.mono_available) && (cglyph.bmp)) {
+@@ -2628,14 +2622,14 @@ int alfont_text_height(ALFONT_FONT *f) {
+ int alfont_text_length(ALFONT_FONT *f, const char *str) {
+   char *lpszW;
+   char *lpszW_tmp;
+-  int max_advancex;
++  int max_advancex=0;
+   char *lpszW_pointer=NULL; //used for freeing string
+   char *str_pointer=NULL; //used for original string fixed by autofix
+   char *str_pointer_temp=NULL; //temporary used for autofix string
+   char *precedingchar_pointer=NULL; //used for precedingchar character
+   int nLen;
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+-  int curr_uformat;
++  int curr_uformat=0;
+   int total_length = 0, character, last_glyph_index;
+   int glyph_index;
+   int glyph_index_tmp;
+@@ -2953,7 +2947,7 @@ int alfont_text_length(ALFONT_FONT *f, c
+ }
+ 
+ int alfont_char_length(ALFONT_FONT *f, int character) {
+-  int curr_uformat;
++  int curr_uformat=0;
+   int total_length = 0, last_glyph_index;
+   int glyph_index;
+ 
+@@ -3034,7 +3028,7 @@ int alfont_text_count(ALFONT_FONT *f, co
+   char *precedingchar_pointer=NULL; //used for precedingchar character
+   int nLen;
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+-  int curr_uformat;
++  int curr_uformat=0;
+   int string_count=0;
+   #ifdef ALFONT_DOS
+   iconv_t c_pt;
+@@ -3282,14 +3276,13 @@ int alfont_text_count(ALFONT_FONT *f, co
+ 
+ int alfont_ugetc(ALFONT_FONT *f, const char *s) {
+   char *lpszW;
+-  char *lpszW_pointer=NULL; //used for freeing string
+   char *s_pointer=NULL; //used for original string fixed by autofix
+   char *s_pointer_temp=NULL; //temporary used for autofix string
+   char *precedingchar_pointer=NULL; //used for precedingchar character
+   int nLen;
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+   int character;
+-  int curr_uformat;
++  int curr_uformat=0;
+   #ifdef ALFONT_DOS
+   iconv_t c_pt;
+   size_t fromlen, tolen;
+@@ -3526,20 +3519,16 @@ int alfont_ugetc(ALFONT_FONT *f, const c
+ 
+ int alfont_ugetx(ALFONT_FONT *f, char **s) {
+   char *lpszW;
+-  char *lpszW_pointer=NULL; //used for freeing string
+   char *s_pointer=NULL; //used for original string fixed by autofix
+   char *s_pointer_temp=NULL; //temporary used for autofix string
+   char *precedingchar_pointer=NULL; //used for precedingchar character
+   int nLen;
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+   int character;
+-  int curr_uformat;
++  int curr_uformat=0;
+ 
+-  char *lpszWS;
++  const char *lpszWS;
+   char *lpszWA;
+-  int sLen; //length before advances the *s pointer to the next character
+-  int aLen; //length after advances the *s pointer to the next character
+-  int lIndex;
+ 
+   #ifdef ALFONT_DOS
+   iconv_t c_pt;
+@@ -3551,8 +3540,6 @@ int alfont_ugetx(ALFONT_FONT *f, char **
+ 	return 0;
+   }
+   
+-  sLen = strlen(*s);
+-
+   nLen = strlen(*s) + 1;
+   s_pointer = (char *)malloc(nLen*sizeof(char));
+   memset(s_pointer, 0, nLen);
+@@ -3761,9 +3748,9 @@ int alfont_ugetx(ALFONT_FONT *f, char **
+   //advances the *s pointer to the next character
+ 
+   if (f->type==1) {
+-  	ugetxc((char**)s);
++  	ugetxc((const char**)s);
+ 	#ifdef ALFONT_LINUX
+-	ugetxc((char**)s);
++	ugetxc((const char**)s);
+ 	#endif
+   }
+   else if(f->type==2) {
+@@ -3772,10 +3759,7 @@ int alfont_ugetx(ALFONT_FONT *f, char **
+ 	ugetxc(&lpszWS);
+ 	#endif
+   	#ifdef ALFONT_DOS
+-	if ((c_pt = iconv_open(f->language, "UTF-16LE")) == (iconv_t)-1) {
+-		aLen = strlen(lpszWS);
+-  	}
+-  	else {
++	if ((c_pt = iconv_open(f->language, "UTF-16LE")) != (iconv_t)-1) {
+ 		iconv(c_pt, NULL, NULL, NULL, NULL);
+   		fromlen  = strlen(lpszWS) + 1;
+ 		tolen = MB_CUR_MAX * fromlen * (sizeof(wchar_t) + 1);
+@@ -3790,7 +3774,6 @@ int alfont_ugetx(ALFONT_FONT *f, char **
+ 			free(lpszWA);
+ 			lpszWA = lpszWS
+         }
+-		aLen = strlen(lpszWA);
+ 	}
+ 	#else
+ 	setlocale(LC_CTYPE,f->language);
+@@ -3798,14 +3781,8 @@ int alfont_ugetx(ALFONT_FONT *f, char **
+ 	lpszWA = (char *)malloc(nLen*sizeof(char));
+ 	memset(lpszWA, 0, nLen);
+ 	wcstombs(lpszWA, (const wchar_t *)lpszWS, nLen);
+-	aLen = strlen(lpszWA);
+ 	#endif
+  
+-	for (lIndex = 0; lIndex < sLen - aLen; lIndex++)
+-	{
+-		(*(*s)++);
+-	}
+-
+ 	if (lpszWA) {
+ 		free(lpszWA);
+ 	}
+@@ -3814,9 +3791,9 @@ int alfont_ugetx(ALFONT_FONT *f, char **
+     #ifdef ALFONT_LINUX
+ 	set_uformat(U_UTF8);
+     #endif
+-	ugetxc((char**)s);
++	ugetxc((const char**)s);
+ 	#ifdef ALFONT_LINUX
+-	ugetxc((char**)s);
++	ugetxc((const char**)s);
+ 	#endif
+   }
+ 
+@@ -3842,20 +3819,16 @@ int alfont_ugetx(ALFONT_FONT *f, char **
+ 
+ int alfont_ugetxc(ALFONT_FONT *f, const char **s) {
+   char *lpszW;
+-  char *lpszW_pointer=NULL; //used for freeing string
+   char *s_pointer=NULL; //used for original string fixed by autofix
+   char *s_pointer_temp=NULL; //temporary used for autofix string
+   char *precedingchar_pointer=NULL; //used for precedingchar character
+   int nLen;
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+   int character;
+-  int curr_uformat;
++  int curr_uformat=0;
+ 
+-  char *lpszWS;
++  const char *lpszWS;
+   char *lpszWA;
+-  int sLen; //length before advances the *s pointer to the next character
+-  int aLen; //length after advances the *s pointer to the next character
+-  int lIndex;
+ 
+   #ifdef ALFONT_DOS
+   iconv_t c_pt;
+@@ -3867,8 +3840,6 @@ int alfont_ugetxc(ALFONT_FONT *f, const
+ 	return 0;
+   }
+   
+-  sLen = strlen(*s);
+-
+   nLen = strlen(*s) + 1;
+   s_pointer = (char *)malloc(nLen*sizeof(char));
+   memset(s_pointer, 0, nLen);
+@@ -4088,10 +4059,7 @@ int alfont_ugetxc(ALFONT_FONT *f, const
+ 	ugetxc(&lpszWS);
+ 	#endif
+   	#ifdef ALFONT_DOS
+-	if ((c_pt = iconv_open(f->language, "UTF-16LE")) == (iconv_t)-1) {
+-		aLen = strlen(lpszWS);
+-  	}
+-  	else {
++	if ((c_pt = iconv_open(f->language, "UTF-16LE")) != (iconv_t)-1) {
+ 		iconv(c_pt, NULL, NULL, NULL, NULL);
+   		fromlen  = strlen(lpszWS) + 1;
+ 		tolen = MB_CUR_MAX * fromlen * (sizeof(wchar_t) + 1);
+@@ -4106,7 +4074,6 @@ int alfont_ugetxc(ALFONT_FONT *f, const
+ 			free(lpszWA);
+ 			lpszWA = lpszWS
+         }
+-		aLen = strlen(lpszWA);
+ 	}
+ 	#else
+ 	setlocale(LC_CTYPE,f->language);
+@@ -4114,14 +4081,8 @@ int alfont_ugetxc(ALFONT_FONT *f, const
+ 	lpszWA = (char *)malloc(nLen*sizeof(char));
+ 	memset(lpszWA, 0, nLen);
+ 	wcstombs(lpszWA, (const wchar_t *)lpszWS, nLen);
+-	aLen = strlen(lpszWA);
+ 	#endif
+  
+-	for (lIndex = 0; lIndex < sLen - aLen; lIndex++)
+-	{
+-		(*(*s)++);
+-	}
+-
+ 	if (lpszWA) {
+ 		free(lpszWA);
+ 	}
+@@ -4164,7 +4125,7 @@ int alfont_need_uconvert(ALFONT_FONT *f,
+   int need_unicode_convert=TRUE;
+   int nLen;
+   int ret; //decide that if the ASCII Code convert to Unicode Code is all OK when used for autofix string or used for general convert.
+-  int curr_uformat;
++  int curr_uformat=0;
+   #ifdef ALFONT_DOS
+   iconv_t c_pt;
+   size_t fromlen, tolen;

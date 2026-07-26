@@ -1,0 +1,14 @@
+Submitted upstream: <https://sourceforge.net/p/beecrypt/patches/13/>
+
+diff --git a/blockmode.c b/blockmode.c
+index 46d1fde..9998c23 100644
+--- a/blockmode.c
++++ b/blockmode.c
+@@ -29,6 +29,7 @@
+ # include "config.h"
+ #endif
+ 
++#include "beecrypt/endianness.h"
+ #include "beecrypt/blockmode.h"
+ 
+ int blockEncryptECB(const blockCipher* bc, blockCipherParam* bp, uint32_t* dst, const uint32_t* src, unsigned int nblocks)

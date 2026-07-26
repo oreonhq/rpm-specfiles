@@ -1,0 +1,149 @@
+%global source0_hash 0f024be8d409a6e614c3199f547d1fac016c43378cc8bb1f19c2e91ba8891b6a
+
+# Run optional test
+%bcond_without perl_Dist_Zilla_Plugin_Git_Contributors_enables_optional_test
+
+Name:           perl-Dist-Zilla-Plugin-Git-Contributors
+Version:        0.039
+Release:        1%{?dist}
+Summary:        Add contributor names from git to your distribution
+License:        GPL-1.0-or-later OR Artistic-1.0-Perl
+URL:            https://metacpan.org/release/Dist-Zilla-Plugin-Git-Contributors
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Git-Contributors-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  coreutils
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  perl(:VERSION) >= 5.13.10
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Module::Build::Tiny) >= 0.034
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+# Run-time:
+BuildRequires:  perl(Data::Dumper)
+# This is a Dist::Zilla plugin
+BuildRequires:  perl(Dist::Zilla) >= 4.300039
+BuildRequires:  perl(Dist::Zilla::Role::MetaProvider)
+BuildRequires:  perl(Dist::Zilla::Role::PrereqSource)
+BuildRequires:  perl(Git::Wrapper) >= 0.038
+BuildRequires:  perl(List::Util) >= 1.33
+BuildRequires:  perl(List::UtilsBy) >= 0.04
+BuildRequires:  perl(Moose)
+BuildRequires:  perl(Moose::Util::TypeConstraints)
+BuildRequires:  perl(namespace::autoclean)
+BuildRequires:  perl(Path::Tiny) >= 0.048
+BuildRequires:  perl(Try::Tiny)
+BuildRequires:  perl(Unicode::Collate) >= 0.53
+BuildRequires:  perl(version)
+# Tests:
+BuildRequires:  perl(Exporter) >= 5.57
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(if)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(Module::Metadata)
+BuildRequires:  perl(open)
+BuildRequires:  perl(parent)
+BuildRequires:  perl(Sort::Versions)
+BuildRequires:  perl(Test::Deep)
+BuildRequires:  perl(Test::DZil)
+BuildRequires:  perl(Test::Fatal)
+BuildRequires:  perl(Test::More) >= 0.88
+# Test::Warnings not used
+BuildRequires:  perl(utf8)
+%if %{with perl_Dist_Zilla_Plugin_Git_Contributors_enables_optional_test}
+# Optional tests:
+BuildRequires:  perl(Term::ANSIColor)
+BuildRequires:  perl(Test::Needs)
+BuildRequires:  perl(Dist::Zilla::Plugin::PodWeaver)
+BuildRequires:  perl(Module::Runtime::Conflicts)
+BuildRequires:  perl(Moose::Conflicts)
+BuildRequires:  perl(Pod::Weaver::Section::Contributors)
+%endif
+Requires:       perl(Data::Dumper)
+# This is a Dist::Zilla plugin
+Requires:       perl(Dist::Zilla) >= 4.300039
+Requires:       perl(Dist::Zilla::Role::MetaProvider)
+Requires:       perl(Dist::Zilla::Role::PrereqSource)
+# Git::Wrapper 0.038 from META, CPAN RT#127045
+Requires:       perl(Git::Wrapper) >= 0.038
+
+# Remove under-specified dependencies
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Git::Wrapper\\)(| >= 0\\.035)$
+
+# Hide private modules
+%global __requires_exclude %{__requires_exclude}|^perl\\(GitSetup\\)
+%global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\((GitSetup|My::Git::Wrapper)\\)
+
+%description
+This is a Dist::Zilla plugin that extracts all names and email addresses
+from git commits in your repository and adds them to the distribution
+metadata under the x_contributors key.
+
+%package tests
+Summary:        Tests for %{name}
+Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       perl-Test-Harness
+%if %{with perl_Dist_Zilla_Plugin_Git_Contributors_enables_optional_test}
+Requires:       perl(Dist::Zilla::Plugin::PodWeaver)
+Requires:       perl(Module::Runtime::Conflicts)
+Requires:       perl(Moose::Conflicts)
+Requires:       perl(Pod::Weaver::Section::Contributors)
+%endif
+
+%description tests
+Tests from %{name}. Execute them
+with "%{_libexecdir}/%{name}/test".
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -q -n Dist-Zilla-Plugin-Git-Contributors-%{version}
+%if !%{with perl_Dist_Zilla_Plugin_Git_Contributors_enables_optional_test}
+for T in t/04-podweaver-warning.t t/zzz-check-breaks.t; do
+    rm -- "$T"
+    perl -i -ne 'print $_ unless m{^\Q'"$T"'\E}' MANIFEST
+done
+%endif
+# Help generators to recognize Perl scripts
+for F in t/*.t; do
+    perl -i -MConfig -ple 'print $Config{startperl} if $. == 1 && !s{\A#!\s*perl}{$Config{startperl}}' "$F"
+    chmod +x "$F"
+done
+
+%build
+perl Build.PL --installdir=vendor
+./Build
+
+%install
+./Build install --destdir=%{buildroot} --create_packlist=0
+%{_fixperms} %{buildroot}
+# Install tests
+mkdir -p %{buildroot}%{_libexecdir}/%{name}
+cp -a t %{buildroot}%{_libexecdir}/%{name}
+cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
+#!/bin/sh
+unset AUTHOR_TESTING
+cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
+EOF
+chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+
+%check
+unset AUTHOR_TESTING
+export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
+./Build test
+
+%files
+%license LICENCE
+%doc Changes README
+%dir %{perl_vendorlib}/Dist
+%dir %{perl_vendorlib}/Dist/Zilla
+%dir %{perl_vendorlib}/Dist/Zilla/Plugin
+%dir %{perl_vendorlib}/Dist/Zilla/Plugin/Git
+%{perl_vendorlib}/Dist/Zilla/Plugin/Git/Contributors.pm
+%{_mandir}/man3/Dist::Zilla::Plugin::Git::Contributors.*
+
+%files tests
+%{_libexecdir}/%{name}
+
+%changelog
+%autochangelog

@@ -1,0 +1,32 @@
+diff -ruN DisplayCAL-3.9.3/DisplayCAL/setup.py DisplayCAL-3.9.3-new/DisplayCAL/setup.py
+--- DisplayCAL-3.9.3/DisplayCAL/setup.py	2022-04-30 13:17:33.000000000 +0200
++++ DisplayCAL-3.9.3-new/DisplayCAL/setup.py	2022-05-13 13:14:54.617154160 +0200
+@@ -748,13 +748,13 @@
+                     )
+                 else:
+                     devconf_files = []
+-                    if os.path.isdir("/etc/udev/rules.d"):
++                    if os.path.isdir("/usr/lib/udev/rules.d"):
+                         if safe_glob("/dev/bus/usb/*/*"):
+                             # USB and serial instruments using udev, where udev
+                             # already creates /dev/bus/usb/00X/00X devices
+                             devconf_files.append(
+                                 (
+-                                    "/etc/udev/rules.d",
++                                    "/usr/lib/udev/rules.d",
+                                     [
+                                         os.path.join(
+                                             pydir, "..", "misc", "55-Argyll.rules"
+@@ -767,10 +767,10 @@
+                             # devices
+                             devconf_files.append(
+                                 (
+-                                    "/etc/udev/rules.d",
++                                    "/usr/lib/udev/rules.d",
+                                     [
+                                         os.path.join(
+-                                            pydir, "..", "misc", "45-Argyll.rules"
++                                            pydir, "..", "misc", "55-Argyll.rules"
+                                         )
+                                     ],
+                                 )

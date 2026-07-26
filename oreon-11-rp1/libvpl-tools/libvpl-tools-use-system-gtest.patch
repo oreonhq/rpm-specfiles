@@ -1,0 +1,39 @@
+--- a/CMakeLists.txt	2024-05-17 17:10:54.138495853 +0300
++++ b/CMakeLists.txt	2024-05-17 17:56:29.236364854 +0300
+@@ -119,23 +119,24 @@
+       OFF
+       CACHE BOOL "" FORCE)
+ 
+-  add_subdirectory(ext/googletest)
+-  add_library(GTest::gtest ALIAS gtest)
+-  add_library(GTest::gtest_main ALIAS gtest_main)
++#  add_subdirectory(ext/googletest)
++#  add_library(GTest::gtest ALIAS gtest)
++#  add_library(GTest::gtest_main ALIAS gtest_main)
++  find_package(GTest REQUIRED)
+ endif()
+ 
+ add_subdirectory(tools)
+ 
+-install(
+-  FILES third-party-programs.txt
+-  DESTINATION ${VPL_INSTALL_LICENSEDIR}
+-  COMPONENT ${VPL_COMPONENT_LIB})
++#install(
++#  FILES third-party-programs.txt
++#  DESTINATION ${VPL_INSTALL_LICENSEDIR}
++#  COMPONENT ${VPL_COMPONENT_LIB})
+ 
+-install(
+-  FILES LICENSE
+-  RENAME license.txt
+-  DESTINATION ${VPL_INSTALL_LICENSEDIR}
+-  COMPONENT ${VPL_COMPONENT_LIB})
++#install(
++#  FILES LICENSE
++#  RENAME license.txt
++#  DESTINATION ${VPL_INSTALL_LICENSEDIR}
++#  COMPONENT ${VPL_COMPONENT_LIB})
+ 
+ set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT ${VPL_COMPONENT_LIB})
+ include(InstallRequiredSystemLibraries)

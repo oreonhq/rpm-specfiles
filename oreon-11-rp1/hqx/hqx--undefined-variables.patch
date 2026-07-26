@@ -1,0 +1,31 @@
+From 535e449569709c7c5113e94d469dc06cc8da285e Mon Sep 17 00:00:00 2001
+From: suve <veg@svgames.pl>
+Date: Sun, 21 Nov 2021 16:15:00 +0100
+Subject: [PATCH] Fix undefined variables in big endian code
+
+---
+ src/hqx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/hqx.c b/src/hqx.c
+index 15b1b0d..513a547 100644
+--- a/src/hqx.c
++++ b/src/hqx.c
+@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
+     // If big endian we have to swap the byte order to get RGB values
+     #ifdef WORDS_BIGENDIAN
+     uint32_t *spTemp = sp;
+-    for (i = 0; i < srcSize >> 2; i++) {
++    for (size_t i = 0; i < srcSize >> 2; i++) {
+         spTemp[i] = swapByteOrder(spTemp[i]);
+     }
+     #endif
+@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
+     // If big endian we have to swap byte order of destData to get BGRA format
+     #ifdef WORDS_BIGENDIAN
+     uint32_t *dpTemp = dp;
+-    for (i = 0; i < destSize >> 2; i++) {
++    for (size_t i = 0; i < destSize >> 2; i++) {
+         dpTemp[i] = swapByteOrder(dpTemp[i]);
+     }
+     #endif

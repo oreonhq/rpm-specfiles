@@ -1,0 +1,28 @@
+commit ed717dad0fee421744a24e6fb43e09d62b3f898d
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Sat Jan 17 12:45:22 2015 -0500
+
+    remove set but not used variable
+
+diff --git a/amd/amfs_generic.c b/amd/amfs_generic.c
+index 25d734b..c352a32 100644
+--- a/amd/amfs_generic.c
++++ b/amd/amfs_generic.c
+@@ -1153,7 +1153,6 @@ amfs_generic_lookup_child(am_node *mp, char *fname, int *error_return, int op)
+ {
+   am_node *new_mp;
+   am_loc **al_array;
+-  int mp_error;
+ 
+   dlog("in amfs_generic_lookup_child");
+ 
+@@ -1178,9 +1177,6 @@ amfs_generic_lookup_child(am_node *mp, char *fname, int *error_return, int op)
+     return new_mp;
+   }
+ 
+-  /* save error_return */
+-  mp_error = *error_return;
+-
+   al_array = amfs_lookup_loc(new_mp, error_return);
+   if (!al_array) {
+     new_mp->am_error = new_mp->am_al->al_mnt->mf_error = *error_return;

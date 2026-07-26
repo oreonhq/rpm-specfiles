@@ -1,0 +1,26 @@
+From cd49ea9f21c4b9c08d04bdfad8a69fa7f85c6567 Mon Sep 17 00:00:00 2001
+From: Sergey Avseyev <sergey.avseyev@gmail.com>
+Date: Fri, 18 Jul 2025 16:33:31 -0700
+Subject: [PATCH] Update CMake version requirement
+
+https://fedoraproject.org/wiki/Changes/CMake4.0
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2958905..fde00b4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -20,7 +20,7 @@
+ #
+ #top level cmake project for libbtbb lib + tools
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.12...4.0)
+ project(libbtbb_all)
+ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+ 
+-- 
+2.50.1
+

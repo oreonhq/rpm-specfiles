@@ -1,0 +1,13 @@
+diff --git a/frysk-imports/libunwind/Makefile.am b/frysk-imports/libunwind/Makefile.am
+index 6a3ed9e78..d0a23a569 100644
+--- frysk-0.4/frysk-imports/libunwind/Makefile.am.orig
++++ frysk-0.4/frysk-imports/libunwind/Makefile.am
+@@ -42,7 +42,7 @@ endif
+ 
+ nodist_include_HEADERS = include/libunwind-common.h
+ 
+-SUBDIRS = src tests
++SUBDIRS = src
+ 
+ if CONFIG_DOCS
+ SUBDIRS += doc

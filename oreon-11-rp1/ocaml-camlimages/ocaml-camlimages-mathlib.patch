@@ -1,0 +1,10 @@
+--- camlimages-5.0.4/core/dune.orig	2020-10-18 19:07:34.000000000 -0600
++++ camlimages-5.0.4/core/dune	2023-06-22 15:52:28.549055975 -0600
+@@ -3,6 +3,7 @@
+  (public_name camlimages.core)
+  (wrapped false)
+  (flags -w -3)
++ (c_library_flags -lm)
+  (library_flags -linkall))
+ 
+ (rule

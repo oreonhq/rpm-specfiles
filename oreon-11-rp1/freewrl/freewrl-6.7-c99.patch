@@ -1,0 +1,100 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/bin/options.c.c99 freewrl-6.7-20240420gitb3254b1/src/bin/options.c
+--- freewrl-6.7-20240420gitb3254b1/src/bin/options.c.c99	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/bin/options.c	2025-03-26 11:07:55.285994513 -0400
+@@ -34,6 +34,7 @@
+ 
+ #include "main.h"
+ #include "options.h"
++#include "../sound/internal.h"
+ 
+ #if HAVE_GETOPT_H
+ #include <getopt.h>
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main.c.c99 freewrl-6.7-20240420gitb3254b1/src/lib/main.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main.c.c99	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main.c	2025-03-26 11:07:55.286110065 -0400
+@@ -43,6 +43,7 @@
+ #include "input/InputFunctions.h"
+ 
+ #include "ui/common.h"
++#include "main.h"
+ 
+ char consoleBuffer[200];
+ 
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main.h.c99 freewrl-6.7-20240420gitb3254b1/src/lib/main.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main.h.c99	2025-03-26 10:45:27.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main.h	2025-03-26 11:07:55.286173200 -0400
+@@ -28,4 +28,6 @@
+ #ifndef __LIBFREEWRL_SRC_MAIN_H__
+ #define __LIBFREEWRL_SRC_MAIN_H__
+ 
++void splitpath_local_suffix(const char *url, char **local_name, char **suff);
++
+ #endif /* __LIBFREEWRL_SRC_MAIN_H__ */
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h.c99 freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h.c99	2025-03-26 10:45:27.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.h	2025-03-26 11:07:55.286252123 -0400
+@@ -38,4 +38,6 @@ void fwl_replaceWorldNeededRes(resource_
+ 
+ void fwl_gotoCurrentViewPoint();
+ 
++char *nameLogFileFolderNORMAL(char *logfilename, int size);
++
+ #endif /* __FREEWRL_MAINLOOP_MAIN_H__ */
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c.c99 freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c.c99	2025-03-26 10:45:27.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main/SnapshotTesting.c	2025-03-26 11:07:55.286334924 -0400
+@@ -17,6 +17,11 @@
+     along with FreeWRL/FreeX3D.  If not, see <http://www.gnu.org/licenses/>.
+ ****************************************************************************/
+ 
++#include <internal.h>
++#include "MainLoop.h"
++#include "../main.h"
++#include "../scenegraph/Viewer.h"
++
+ //#define USE_SNAPSHOT_TESTING 1
+ #ifndef USE_SNAPSHOT_TESTING
+ //stubs for options
+@@ -383,7 +388,7 @@ void fwl_set_testPath(char *testPath)
+ 	ierr = chdir(p->testPath);
+ 	if (ierr == -1) {
+ 		//folder may not exist yet. Try and create it.
+-		mkdir(p->testPath);
++		mkdir(p->testPath, 0755);
+ 		ierr = chdir(p->testPath);
+ 	}
+ 	if (1) {
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h.c99 freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h.c99	2025-03-26 11:07:55.286447956 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Shape.h	2025-03-26 11:08:21.940513539 -0400
+@@ -69,6 +69,8 @@ int debug;
+ } shaderflagsstruct;
+ 
+ shaderflagsstruct getShaderFlags();
++void popShaderFlags(void);
++void pushShaderFlags(shaderflagsstruct);
+ s_shader_capabilities_t *getMyShaders(shaderflagsstruct);
+ enum {
+ 	MAT_NONE = 0,
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h.c99 freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h.c99	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Viewer.h	2025-03-26 11:07:55.286568964 -0400
+@@ -319,4 +319,6 @@ void setAnaglyphPrimarySide(int primary,
+ int viewer_getKeyChord();
+ void viewer_setKeyChord(int chord);
+ 
++void handle0(const int mev, const unsigned int button, const float x, const float yup);
++
+ #endif /* __FREEWRL_VIEWER_H__ */
+diff -up freewrl-6.7-20240420gitb3254b1/src/sound/internal.h.c99 freewrl-6.7-20240420gitb3254b1/src/sound/internal.h
+--- freewrl-6.7-20240420gitb3254b1/src/sound/internal.h.c99	2025-03-26 10:45:28.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/sound/internal.h	2025-03-26 11:07:55.286652951 -0400
+@@ -113,4 +113,8 @@ void *freewrlStrdup(int line, char *file
+                          }
+ 
+ 
++void fwl_set_modeRecord(void);
++void fwl_set_modeFixture(void);
++void fwl_set_modePlayback(void);
++
+ #endif /* __FREEWRL_SND_INTERNAL_H__ */

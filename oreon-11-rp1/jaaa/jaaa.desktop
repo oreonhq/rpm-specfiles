@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Jaaa
+Comment=JACK and ALSA Audio Analyser
+Icon=jaaa
+Type=Application
+Categories=Application;AudioVideo;Audio;X-Jack;X-Audio_Tools
+Exec=jaaa -J
+Terminal=false
+Encoding=UTF-8

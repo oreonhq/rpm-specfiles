@@ -1,0 +1,51 @@
+diff -urp '--exclude=*~' '--exclude=__pycache__' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/iconimage.py gphotoframe-2.0.2-hg2084299dffb6/lib/utils/iconimage.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/utils/iconimage.py	2015-03-27 10:40:55.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/utils/iconimage.py	2024-04-22 16:46:42.042821469 +0900
+@@ -22,7 +22,10 @@ class IconImage(object):
+     def get_pixbuf(self, grayscale=False, size=16):
+         self.size = size
+         file = self._get_icon_file()
+-        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(file, size, size, True)
++        try:
++            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(file, size, size, True)
++        except:
++            return None
+ 
+         if grayscale:
+             pixbuf = self._set_grayscale(pixbuf)
+diff -urp '--exclude=*~' '--exclude=__pycache__' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/image/actor/base.py gphotoframe-2.0.2-hg2084299dffb6/lib/image/actor/base.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/image/actor/base.py	2015-01-01 12:04:45.984341399 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/image/actor/base.py	2024-05-07 17:05:50.875944185 +0900
+@@ -105,15 +105,18 @@ class ActorIcon(object):
+         offset = int(side / 60)
+         offset = 10 if offset < 10 else offset
+ 
++        icon_width  = icon_pixbuf.get_width()  if icon_pixbuf else 0
++        icon_height = icon_pixbuf.get_height() if icon_pixbuf else 0
++
+         if position == 0 or position == 3:
+             x = image_x + offset
+         else:
+-            x = image_x + photoimage.w - icon_pixbuf.get_width() - offset
++            x = image_x + photoimage.w - icon_width - offset
+ 
+         if position == 0 or position == 1:
+             y = image_y + offset
+         else:
+-            y = image_y + photoimage.h - icon_pixbuf.get_height() - offset
++            y = image_y + photoimage.h - icon_height - offset
+ 
+         # print x, y, offset
+         return x, y
+diff -urp '--exclude=*~' '--exclude=__pycache__' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/image/actor/source.py gphotoframe-2.0.2-hg2084299dffb6/lib/image/actor/source.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/image/actor/source.py	2019-08-21 00:36:00.000000000 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/image/actor/source.py	2024-05-07 17:14:57.047922155 +0900
+@@ -24,6 +24,8 @@ class ActorSourceIcon(ActorIcon):
+ 
+         self.is_small = photoimage.w < 120 or photoimage.h < 60
+         icon_pixbuf = self.icon_image.get_pixbuf()
++        if not icon_pixbuf:
++            return
+         self.texture.change(icon_pixbuf, self.x, self.y)
+         self.show()
+ 

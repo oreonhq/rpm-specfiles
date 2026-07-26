@@ -1,0 +1,25 @@
+From 071f7b805405651c6ac75fcc46179e7f2d6c40f6 Mon Sep 17 00:00:00 2001
+From: spike <spike@fedoraproject.org>
+Date: Mon, 1 Nov 2021 10:03:54 +0100
+Subject: [PATCH] Remove name prefix to shared library is named pam_mysql.so
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index f35dbf6..2a1f440 100644
+--- a/meson.build
++++ b/meson.build
+@@ -267,7 +267,7 @@ buildtarget = shared_library('pam_mysql', [
+   'src/password.c',
+   'src/md5.c',
+   'src/pam_calls.c',
+-], dependencies: deps, install: true, include_directories: configuration_inc, install_dir: join_paths(get_option('libdir'), 'security'))
++], dependencies: deps, install: true, include_directories: configuration_inc, install_dir: join_paths(get_option('libdir'), 'security'), name_prefix: '')
+ 
+ test_acct_mgmt = executable('test_acct_mgmt',
+   sources: [
+-- 
+2.31.1
+

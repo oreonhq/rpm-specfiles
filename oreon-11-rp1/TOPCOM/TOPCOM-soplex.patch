@@ -1,0 +1,11 @@
+--- topcom-1.1.2/lib-src-reg/SPXinterface.cc.orig	2022-10-05 00:52:12.000000000 -0600
++++ topcom-1.1.2/lib-src-reg/SPXinterface.cc	2025-11-25 20:06:57.674261171 -0700
+@@ -23,7 +23,7 @@ namespace topcom {
+       std::cerr << "building soplex LP ..." << std::endl;
+     }
+ 
+-    _soplex_obj.spxout.setVerbosity( soplex::SPxOut::ERROR );
++    _soplex_obj.spxout.setVerbosity( soplex::SPxOut::Verbosity::VERB_ERROR );
+ 
+     _soplex_obj.setRealParam(_soplex_obj.FEASTOL, 0);
+     _soplex_obj.setRealParam(_soplex_obj.OPTTOL, 0);

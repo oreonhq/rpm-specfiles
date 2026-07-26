@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>flmsg.desktop</id>
+  <name>flmsg</name>
+  <summary>Amateur Radio Communications</summary>
+  <developer_name>Dave Freese, W1HKJ</developer_name>
+  <description>
+  <p>
+flmsg is a editor / file management tool for ics213 forms which form the basis for emergency communications data transfers.
+  </p>
+</description>
+  <metadata_license>CC0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <url type="homepage">http://www.w1hkj.com/</url>
+  <project_group>none</project_group>
+  <screenshots>
+    <screenshot type="default">
+      <image height="492" width="578">http://www.w1hkj.com/flmsg-help/flmsg-expert.png</image>
+    </screenshot>
+    <screenshot>
+      <image height="157" width="308">http://www.w1hkj.com/flmsg-help/flmsg-tyro.png</image>
+    </screenshot>
+  </screenshots>
+  <update_contact>hobbes1069@gmail.com</update_contact>
+</component>

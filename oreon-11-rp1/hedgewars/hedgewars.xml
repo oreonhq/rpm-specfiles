@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service version="1.0">
+<short>hedgewars</short>
+<description>Hedgewars server</description>
+  <port port="46631" protocol="udp"/>
+  <port port="46631" protocol="tcp"/>
+</service>

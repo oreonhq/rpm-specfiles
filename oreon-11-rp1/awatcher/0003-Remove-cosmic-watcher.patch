@@ -1,0 +1,373 @@
+From 2117ab4c3b75733238b80cfb9e504feb43d7cbf0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Sun, 17 Aug 2025 15:38:01 +0200
+Subject: [PATCH 3/3] Remove cosmic watcher
+
+---
+ watchers/Cargo.toml                           |   1 -
+ watchers/src/watchers.rs                      |   7 -
+ watchers/src/watchers/wl_connection.rs        |  14 -
+ .../watchers/wl_cosmic_toplevel_management.rs | 283 ------------------
+ 4 files changed, 305 deletions(-)
+ delete mode 100644 watchers/src/watchers/wl_cosmic_toplevel_management.rs
+
+diff --git a/watchers/Cargo.toml b/watchers/Cargo.toml
+index 5fe667a..f09a62f 100644
+--- a/watchers/Cargo.toml
++++ b/watchers/Cargo.toml
+@@ -19,7 +19,6 @@ wayland-client = "0.31.7"
+ wayland-protocols = { version = "0.32.6", features = ["staging", "client" ]}
+ wayland-protocols-plasma = { version = "0.3.5", features = ["client"] }
+ wayland-protocols-wlr = { version = "0.3.5", features = ["client"] }
+-cctk = { git = "https://github.com/pop-os/cosmic-protocols", package = "cosmic-client-toolkit", rev = "8e84152" }
+ x11rb = { version = "0.13.1", features = ["screensaver"] }
+ zbus = {version = "5.1.0", optional = true}
+ chrono = "0.4.38"
+diff --git a/watchers/src/watchers.rs b/watchers/src/watchers.rs
+index 1add035..0f47ec8 100644
+--- a/watchers/src/watchers.rs
++++ b/watchers/src/watchers.rs
+@@ -8,7 +8,6 @@ pub mod idle;
+ #[cfg(feature = "kwin_window")]
+ mod kwin_window;
+ mod wl_connection;
+-mod wl_cosmic_toplevel_management;
+ mod wl_ext_idle_notify;
+ mod wl_foreign_toplevel_management;
+ mod wl_kwin_idle;
+@@ -106,12 +105,6 @@ async fn filter_first_supported(
+                 client,
+                 "Wayland window (wlr-foreign-toplevel-management-unstable-v1)"
+             ));
+-            watch!(
+-                create_watcher::<wl_cosmic_toplevel_management::WindowWatcher>(
+-                    client,
+-                    "Cosmic Wayland window (cosmic-toplevel-info-unstable-v1)"
+-                )
+-            );
+             // XWayland gives _NET_WM_NAME on some windows in KDE, but not on others
+             #[cfg(feature = "kwin_window")]
+             watch!(create_watcher::<kwin_window::WindowWatcher>(
+diff --git a/watchers/src/watchers/wl_connection.rs b/watchers/src/watchers/wl_connection.rs
+index 8d81ebc..a02d676 100644
+--- a/watchers/src/watchers/wl_connection.rs
++++ b/watchers/src/watchers/wl_connection.rs
+@@ -5,7 +5,6 @@ use wayland_client::{
+     Connection, Dispatch, EventQueue, Proxy, QueueHandle,
+ };
+ 
+-use cctk::cosmic_protocols::toplevel_info::v1::client::zcosmic_toplevel_info_v1::ZcosmicToplevelInfoV1;
+ use wayland_protocols::ext::foreign_toplevel_list::v1::client::ext_foreign_toplevel_list_v1::ExtForeignToplevelListV1;
+ use wayland_protocols::ext::idle_notify::v1::client::{
+     ext_idle_notification_v1::ExtIdleNotificationV1, ext_idle_notifier_v1::ExtIdleNotifierV1,
+@@ -147,17 +146,4 @@ where
+             )
+             .map_err(std::convert::Into::into)
+     }
+-
+-    pub fn get_cosmic_toplevel_info_v2(&self) -> anyhow::Result<ZcosmicToplevelInfoV1>
+-    where
+-        T: Dispatch<ZcosmicToplevelInfoV1, ()>,
+-    {
+-        self.globals
+-            .bind::<ZcosmicToplevelInfoV1, T, ()>(
+-                &self.queue_handle,
+-                2..=ZcosmicToplevelInfoV1::interface().version,
+-                (),
+-            )
+-            .map_err(std::convert::Into::into)
+-    }
+ }
+diff --git a/watchers/src/watchers/wl_cosmic_toplevel_management.rs b/watchers/src/watchers/wl_cosmic_toplevel_management.rs
+deleted file mode 100644
+index 17a8060..0000000
+--- a/watchers/src/watchers/wl_cosmic_toplevel_management.rs
++++ /dev/null
+@@ -1,283 +0,0 @@
+-// This protocol extends ext_foreign_toplevel_v1
+-use super::wl_connection::WlEventConnection;
+-use super::{wl_connection::subscribe_state, Watcher};
+-use crate::report_client::ReportClient;
+-use anyhow::{anyhow, Context};
+-use async_trait::async_trait;
+-use cctk::cosmic_protocols::toplevel_info::v1::client::zcosmic_toplevel_handle_v1::{
+-    Event as CosmicHandleEvent, State as CosmicHandleState, ZcosmicToplevelHandleV1,
+-};
+-use cctk::cosmic_protocols::toplevel_info::v1::client::zcosmic_toplevel_info_v1::{
+-    Event as CosmicInfoEvent, ZcosmicToplevelInfoV1,
+-};
+-use std::collections::HashMap;
+-use std::sync::Arc;
+-use wayland_client::{
+-    event_created_child, globals::GlobalListContents, protocol::wl_registry, Connection, Dispatch,
+-    Proxy, QueueHandle,
+-};
+-use wayland_protocols::ext::foreign_toplevel_list::v1::client::ext_foreign_toplevel_handle_v1::{
+-    Event as ForeignHandleEvent, ExtForeignToplevelHandleV1,
+-};
+-use wayland_protocols::ext::foreign_toplevel_list::v1::client::ext_foreign_toplevel_list_v1::{
+-    Event as ForeignListEvent, ExtForeignToplevelListV1, EVT_TOPLEVEL_OPCODE,
+-};
+-
+-struct WindowData {
+-    app_id: String,
+-    title: String,
+-    cosmic_handle: ZcosmicToplevelHandleV1,
+-    activated: bool,
+-}
+-
+-struct ToplevelState {
+-    cosmic_info: ZcosmicToplevelInfoV1,
+-    windows: HashMap<String, WindowData>,
+-    current_window_id: Option<String>,
+-    initialized: bool,
+-}
+-
+-impl ToplevelState {
+-    fn new(cosmic_info: ZcosmicToplevelInfoV1) -> Self {
+-        Self {
+-            cosmic_info,
+-            windows: HashMap::new(),
+-            current_window_id: None,
+-            initialized: false,
+-        }
+-    }
+-
+-    fn get_active_window(&self) -> Option<&WindowData> {
+-        let active_window_id = self.current_window_id.as_ref()?;
+-
+-        self.windows.get(active_window_id)
+-    }
+-}
+-
+-impl Dispatch<ExtForeignToplevelListV1, ()> for ToplevelState {
+-    fn event(
+-        state: &mut Self,
+-        _: &ExtForeignToplevelListV1,
+-        event: <ExtForeignToplevelListV1 as Proxy>::Event,
+-        _: &(),
+-        _: &Connection,
+-        qh: &QueueHandle<Self>,
+-    ) {
+-        match event {
+-            ForeignListEvent::Toplevel { toplevel } => {
+-                let id = toplevel.id().to_string();
+-                debug!("Foreign toplevel handle is received: {id}");
+-
+-                let cosmic_handle = state.cosmic_info.get_cosmic_toplevel(&toplevel, qh, ());
+-
+-                state.windows.insert(
+-                    id,
+-                    WindowData {
+-                        app_id: "unknown".into(),
+-                        title: "unknown".into(),
+-                        cosmic_handle,
+-                        activated: false,
+-                    },
+-                );
+-            }
+-            ForeignListEvent::Finished => {
+-                error!("Foreign toplevel list is finished");
+-            }
+-            _ => (),
+-        };
+-    }
+-
+-    event_created_child!(ToplevelState, ExtForeignToplevelListV1, [
+-        EVT_TOPLEVEL_OPCODE => (ExtForeignToplevelHandleV1, ()),
+-    ]);
+-}
+-
+-impl Dispatch<ExtForeignToplevelHandleV1, ()> for ToplevelState {
+-    fn event(
+-        toplevel_state: &mut Self,
+-        handle: &ExtForeignToplevelHandleV1,
+-        event: <ExtForeignToplevelHandleV1 as Proxy>::Event,
+-        _: &(),
+-        _: &Connection,
+-        _: &QueueHandle<Self>,
+-    ) {
+-        let id = handle.id().to_string();
+-        let window = toplevel_state.windows.get_mut(&id);
+-        if let Some(window) = window {
+-            match event {
+-                ForeignHandleEvent::Title { title } => {
+-                    trace!("Title is changed for {id}: {title}");
+-                    window.title = title;
+-                }
+-                ForeignHandleEvent::AppId { app_id } => {
+-                    trace!("App ID is changed for {id}: {app_id}");
+-                    window.app_id = app_id;
+-                }
+-                ForeignHandleEvent::Closed => {
+-                    trace!("Window is closed: {id}");
+-                    if toplevel_state.windows.remove(&id).is_none() {
+-                        warn!("Window is already removed: {id}");
+-                    }
+-                    if toplevel_state.current_window_id.as_deref() == Some(&id) {
+-                        toplevel_state.current_window_id = None;
+-                    }
+-                }
+-                _ => (),
+-            };
+-        } else {
+-            error!("Window is not found: {id}");
+-        }
+-    }
+-}
+-
+-impl Dispatch<ZcosmicToplevelInfoV1, ()> for ToplevelState {
+-    fn event(
+-        toplevel_state: &mut Self,
+-        _: &ZcosmicToplevelInfoV1,
+-        event: <ZcosmicToplevelInfoV1 as Proxy>::Event,
+-        _: &(),
+-        _: &Connection,
+-        _: &QueueHandle<Self>,
+-    ) {
+-        match event {
+-            CosmicInfoEvent::Toplevel { toplevel } => {
+-                debug!("Cosmic toplevel handle is received: {}", toplevel.id());
+-            }
+-            CosmicInfoEvent::Done => {
+-                let current_is_still_active = toplevel_state
+-                    .current_window_id
+-                    .as_ref()
+-                    .and_then(|id| toplevel_state.windows.get(id))
+-                    .map(|w| w.activated)
+-                    .unwrap_or(false);
+-
+-                if !current_is_still_active {
+-                    toplevel_state.current_window_id = toplevel_state
+-                        .windows
+-                        .iter()
+-                        .find_map(|(id, window)| window.activated.then(|| id.clone()));
+-                    if let Some(window) = toplevel_state.get_active_window() {
+-                        debug!(
+-                            "Active window is changed: {} - {}",
+-                            window.app_id, window.title
+-                        );
+-                    }
+-                }
+-                trace!(
+-                    "Cosmic toplevel info is done, \
+-                    current active window is still active = {}, \
+-                    current active window id = {:?}",
+-                    current_is_still_active,
+-                    toplevel_state.current_window_id,
+-                );
+-            }
+-            CosmicInfoEvent::Finished => {
+-                error!("Cosmic toplevel info is finished, the application may crash");
+-            }
+-            _ => (),
+-        };
+-    }
+-}
+-
+-impl Dispatch<ZcosmicToplevelHandleV1, ()> for ToplevelState {
+-    fn event(
+-        toplevel_state: &mut Self,
+-        handle: &ZcosmicToplevelHandleV1,
+-        event: <ZcosmicToplevelHandleV1 as Proxy>::Event,
+-        _: &(),
+-        _: &Connection,
+-        _: &QueueHandle<Self>,
+-    ) {
+-        let entry = toplevel_state
+-            .windows
+-            .iter_mut()
+-            .find(|(_, w)| w.cosmic_handle == *handle);
+-
+-        if let Some((id, window)) = entry {
+-            let id = id.clone();
+-            if let CosmicHandleEvent::State { state } = event {
+-                // State is encoded as an array of u32 values (4 bytes each)
+-                let activated = state.chunks_exact(4).any(|chunk| {
+-                    let value = u32::from_ne_bytes(chunk[0..4].try_into().unwrap());
+-                    value == CosmicHandleState::Activated as u32
+-                });
+-
+-                window.activated = activated;
+-
+-                if activated {
+-                    debug!("Window is marked activated: {id}");
+-                    if !toplevel_state.initialized {
+-                        toplevel_state.initialized = true;
+-                        toplevel_state.current_window_id = Some(id);
+-                    }
+-                } else if toplevel_state.current_window_id.as_deref() == Some(&id) {
+-                    debug!("Window is marked deactivated: {id}");
+-                }
+-            }
+-        } else {
+-            debug!("Cosmic handle event for unknown handle: {}", handle.id());
+-        }
+-    }
+-}
+-
+-subscribe_state!(wl_registry::WlRegistry, GlobalListContents, ToplevelState);
+-subscribe_state!(wl_registry::WlRegistry, (), ToplevelState);
+-
+-pub struct WindowWatcher {
+-    connection: WlEventConnection<ToplevelState>,
+-    toplevel_state: ToplevelState,
+-}
+-
+-impl WindowWatcher {
+-    async fn send_active_window(&self, client: &Arc<ReportClient>) -> anyhow::Result<()> {
+-        let active_window_id = self.toplevel_state.current_window_id.as_ref();
+-
+-        if let Some(active_window_id) = active_window_id {
+-            let active_window =
+-                self.toplevel_state
+-                    .windows
+-                    .get(active_window_id)
+-                    .ok_or(anyhow!(
+-                        "Current window is not found by ID {active_window_id}"
+-                    ))?;
+-
+-            client
+-                .send_active_window(&active_window.app_id, &active_window.title)
+-                .await
+-                .with_context(|| "Failed to send heartbeat for active window")
+-        } else {
+-            // This happens when a toplevel handle for the new window is received but the window is not marked as activated yet
+-            info!("Current active window is unknown, skipping sending heartbeat");
+-            Ok(())
+-        }
+-    }
+-}
+-
+-#[async_trait]
+-impl Watcher for WindowWatcher {
+-    async fn new(_: &Arc<ReportClient>) -> anyhow::Result<Self> {
+-        let mut connection: WlEventConnection<ToplevelState> = WlEventConnection::connect()?;
+-
+-        let _foreign_list = connection.get_ext_foreign_toplevel_list()?;
+-        let cosmic_info = connection.get_cosmic_toplevel_info_v2()?;
+-
+-        let mut toplevel_state = ToplevelState::new(cosmic_info);
+-
+-        connection
+-            .roundtrip(&mut toplevel_state)
+-            .map_err(|e| anyhow!("Event queue is not processed: {e}"))?;
+-
+-        Ok(Self {
+-            connection,
+-            toplevel_state,
+-        })
+-    }
+-
+-    async fn run_iteration(&mut self, client: &Arc<ReportClient>) -> anyhow::Result<()> {
+-        self.connection
+-            .roundtrip(&mut self.toplevel_state)
+-            .map_err(|e| anyhow!("Event queue is not processed: {e}"))?;
+-
+-        self.send_active_window(client).await
+-    }
+-}
+-- 
+2.51.1
+

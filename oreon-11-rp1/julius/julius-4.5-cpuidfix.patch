@@ -1,0 +1,12 @@
+diff -up julius-4.5/libsent/src/phmm/calc_dnn.c.cpuidfix julius-4.5/libsent/src/phmm/calc_dnn.c
+--- julius-4.5/libsent/src/phmm/calc_dnn.c.cpuidfix	2019-05-30 13:35:11.818245734 -0400
++++ julius-4.5/libsent/src/phmm/calc_dnn.c	2019-05-30 13:36:36.887427128 -0400
+@@ -12,7 +12,7 @@
+ #ifdef _WIN32
+ #include <intrin.h>
+ #else
+-#if defined(__arm__) || TARGET_OS_IPHONE || defined(__aarch64__)
++#if defined(__arm__) || TARGET_OS_IPHONE || defined(__aarch64__) || defined(__s390__) || defined(__powerpc__) || defined(__powerpc64__)
+ #else
+ #include <cpuid.h>
+ #endif

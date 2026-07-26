@@ -1,0 +1,41 @@
+From 1052ae3f560cfb31a540fbf3ab1fe5d3343094a8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20=C5=A0abata?= <contyk@redhat.com>
+Date: Thu, 6 Nov 2014 16:51:47 +0100
+Subject: [PATCH] Escape slashes in filters
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Simply escape slashes in --filter-requires and --filter-provides
+options, resolving a five year old bug [0].
+
+[0] https://bugzilla.redhat.com/show_bug.cgi?id=544738
+
+Signed-off-by: Petr Šabata <contyk@redhat.com>
+---
+ cpanspec | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/cpanspec b/cpanspec
+index d972d1c..398e0de 100755
+--- a/cpanspec
++++ b/cpanspec
+@@ -823,6 +823,7 @@ for my $file (@args) {
+         }
+         die "Failed to create $script: $!\n" if (!$sh);
+ 
++        map { s/\//\\\//g } @filter_requires;
+         print $sh "#!/bin/sh\n\n"
+             . "\@\@PERL_REQ\@\@ \"\$\@\" | sed -e '/^$filter_requires[0]\$/d'";
+         if (@filter_requires > 1) {
+@@ -845,6 +846,7 @@ for my $file (@args) {
+         }
+         die "Failed to create $script: $!\n" if (!$sh);
+ 
++        map { s/\//\\\//g } @filter_provides;
+         print $sh "#!/bin/sh\n\n"
+             . "\@\@PERL_PROV\@\@ \"\$\@\" | sed -e '/^$filter_provides[0]\$/d'";
+         if (@filter_provides > 1) {
+-- 
+1.9.3
+

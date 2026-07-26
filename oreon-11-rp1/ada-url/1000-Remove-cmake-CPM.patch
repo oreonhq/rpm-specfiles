@@ -1,0 +1,73 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f13601d1..fdbf5813 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,32 +26,17 @@ option(ADA_USE_SIMDUTF "Whether to use SIMDUTF for IDNA" OFF)
+ # errors due to CPM, so this is here to support disabling all the testing
+ # and tooling for ada if one only wishes to use the ada library.
+ if(ADA_TESTING OR ADA_BENCHMARKS OR ADA_TOOLS)
+-  include(cmake/CPM.cmake)
+-  # CPM requires git as an implicit dependency
+   # We use googletest in the tests
+   if(ADA_TESTING)
+-    CPMAddPackage(
+-      NAME GTest
+-      GITHUB_REPOSITORY google/googletest
+-      VERSION 1.15.2
+-      OPTIONS  "BUILD_GMOCK OFF" "INSTALL_GTEST OFF"
+-    )
++    find_package(GTest REQUIRED)
+   endif()
+   # We use simdjson in both the benchmarks and tests
+   if(ADA_TESTING OR ADA_BENCHMARKS)
+-    CPMAddPackage("gh:simdjson/simdjson@3.10.1")
++    find_package(simdjson REQUIRED)
+   endif()
+   # We use Google Benchmark, but it does not build under several 32-bit systems.
+   if(ADA_BENCHMARKS AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+-    CPMAddPackage(
+-      NAME benchmark
+-      GITHUB_REPOSITORY google/benchmark
+-      VERSION 1.9.0
+-      OPTIONS "BENCHMARK_ENABLE_TESTING OFF"
+-              "BENCHMARK_ENABLE_INSTALL OFF"
+-              "BENCHMARK_ENABLE_WERROR OFF"
+-
+-    )
++    find_package(benchmark REQUIRED)
+   endif()
+ 
+   if (ADA_TESTING AND NOT EMSCRIPTEN)
+@@ -80,12 +65,7 @@ if(ADA_TESTING OR ADA_BENCHMARKS OR ADA_TOOLS)
+ endif()
+ 
+ if(ADA_USE_SIMDUTF)
+-  CPMAddPackage(
+-    NAME simdutf
+-    GITHUB_REPOSITORY simdutf/simdutf
+-    VERSION 7.3.2
+-    OPTIONS "SIMDUTF_TESTS OFF" "SIMDUTF_TOOLS OFF"
+-  )
++  find_package(simdutf REQUIRED)
+ endif()
+ 
+ add_library(ada::ada ALIAS ada)
+diff --git a/tools/cli/CMakeLists.txt b/tools/cli/CMakeLists.txt
+index 5e7ffe01..bcf606e7 100644
+--- a/tools/cli/CMakeLists.txt
++++ b/tools/cli/CMakeLists.txt
+@@ -37,12 +37,8 @@ if(MSVC AND BUILD_SHARED_LIBS)
+         "$<TARGET_FILE:ada>"      # <--this is in-file
+         "$<TARGET_FILE_DIR:adaparse>")                 # <--this is out-file path
+ endif()
+-CPMAddPackage("gh:fmtlib/fmt#11.0.2")
+-CPMAddPackage(
+-  GITHUB_REPOSITORY jarro2783/cxxopts
+-  VERSION 3.2.0
+-  OPTIONS "CXXOPTS_BUILD_EXAMPLES NO" "CXXOPTS_BUILD_TESTS NO" "CXXOPTS_ENABLE_INSTALL YES"
+-)
++find_package(fmt REQUIRED)
++find_package(cxxopts REQUIRED)
+ target_link_libraries(adaparse PRIVATE cxxopts::cxxopts fmt::fmt)
+ 
+ if(MSVC OR MINGW)

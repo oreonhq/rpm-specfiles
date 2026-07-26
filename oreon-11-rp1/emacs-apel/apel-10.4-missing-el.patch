@@ -1,0 +1,12 @@
+diff -ruN apel-10.4.orig/APEL-ELS apel-10.4/APEL-ELS
+--- apel-10.4.orig/APEL-ELS	2003-05-14 16:36:24.000000000 +0900
++++ apel-10.4/APEL-ELS	2003-05-14 16:36:53.000000000 +0900
+@@ -13,7 +13,7 @@
+ 
+ 			     ;; [obsoleted modules] If you would like to
+ 			     ;; install following, please activate them.
+-			     ;; atype file-detect
++			     atype file-detect
+ 			     ))
+ 
+ ;;; APEL-ELS ends here

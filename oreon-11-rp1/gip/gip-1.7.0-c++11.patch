@@ -1,0 +1,12 @@
+--- a/build.sh
++++ b/build.sh
+@@ -249,7 +249,7 @@ fi
+ # Build.
+ ###############################################################################
+ # Compiler/Linker options.
+-CFLAGS="-DHAVE_CONFIG_H -I. -I.. `pkg-config $REQUIRED_LIBS --cflags`"
++CFLAGS="-std=c++11 -DHAVE_CONFIG_H -I. -I.. `pkg-config $REQUIRED_LIBS --cflags`"
+ LFLAGS=`pkg-config $REQUIRED_LIBS --libs`
+ 
+ if [ "$PLUGINDIRS" != "" ]; then
+

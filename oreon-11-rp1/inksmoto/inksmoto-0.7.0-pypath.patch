@@ -1,0 +1,15 @@
+--- inksmoto/xmExtGtk.py	2009-09-29 14:56:51.000000000 -0500
++++ inksmoto/xmExtGtk.py	2010-01-12 08:37:31.000000000 -0600
+@@ -1 +1 @@
+-#!/bin/python
++#!/usr/bin/python
+--- inksmoto/xmGuiGtk.py	2009-09-30 09:48:04.000000000 -0500
++++ inksmoto/xmGuiGtk.py	2010-01-12 08:37:14.000000000 -0600
+@@ -1 +1 @@
+-#!/bin/python
++#!/usr/bin/python
+--- changeBlockGtk.py~  2009-09-29 14:56:51.000000000 -0500
++++ changeBlockGtk.py   2010-01-12 08:58:56.000000000 -0600
+@@ -1 +1 @@
+-#!/bin/python
++#!/usr/bin/python

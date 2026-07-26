@@ -1,0 +1,7 @@
+This game runs with improved graphics when the Ogre Cg plugin is installed.
+Since Cg has a non-free licence the game has been patched by Fedora to be
+able to run without it. The game will have worse graphics but no extra warning
+will be shown.
+
+No option exists to enable/disable the use of Cg. It will be automatically used
+if available.

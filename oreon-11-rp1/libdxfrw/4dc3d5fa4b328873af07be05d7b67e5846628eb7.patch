@@ -1,0 +1,21 @@
+From 4dc3d5fa4b328873af07be05d7b67e5846628eb7 Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Mon, 25 Mar 2024 22:54:15 -0400
+Subject: [PATCH] Fixed two compiler warnings
+
+---
+ libraries/libdxfrw/src/intern/dwgbuffer.cpp |  2 +-
+
+diff --git a/libraries/libdxfrw/src/intern/dwgbuffer.cpp b/libraries/libdxfrw/src/intern/dwgbuffer.cpp
+index b8fadb74ec..9e4d6faaac 100644
+--- a/src/intern/dwgbuffer.cpp
++++ b/src/intern/dwgbuffer.cpp
+@@ -549,7 +549,7 @@ dwgHandle dwgBuffer::getOffsetHandle(duint32 href){ //H
+         else if (hl.code == 0x06)
+             hl.ref = href + 1;
+ //all are soft pointer reference change to 7 (without offset)
+-            hl.code = 7;
++        hl.code = 7;
+     }
+     return hl;
+ }

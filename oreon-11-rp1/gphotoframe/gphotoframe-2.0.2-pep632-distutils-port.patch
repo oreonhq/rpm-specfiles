@@ -1,0 +1,11 @@
+--- gphotoframe-2.0.2-hg2084299dffb6/setup.py.pep632	2023-07-05 19:10:04.209103421 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/setup.py	2023-07-05 19:10:49.283122761 +0900
+@@ -2,7 +2,7 @@
+ 
+ import os
+ import glob
+-from distutils.core import setup
++from setuptools import setup
+ from DistUtilsExtra.command import *
+ 
+ import lib.constants as constants

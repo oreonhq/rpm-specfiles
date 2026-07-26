@@ -1,0 +1,29 @@
+diff -up ./config.tests/xrandr/xrandr.pro.0000 ./config.tests/xrandr/xrandr.pro
+--- ./config.tests/xrandr/xrandr.pro.0000	2011-11-25 00:10:32.000000000 +0200
++++ ./config.tests/xrandr/xrandr.pro	2014-02-22 14:01:17.648726370 +0200
+@@ -5,3 +5,4 @@ DEPENDPATH += .
+ INCLUDEPATH += .
+ SOURCES += main.cpp
+ !win32:LIBS+=-lXrandr
++LIBS+=-lX11
+diff -up ./src/network/network.pro.0000 ./src/network/network.pro
+--- ./src/network/network.pro.0000	2014-02-22 14:01:37.991932357 +0200
++++ ./src/network/network.pro	2014-02-22 14:01:50.734434980 +0200
+@@ -3,6 +3,7 @@ DEFINES         += BUILD_QXT_NETWORK
+ QT               = core network
+ QXT              = core
+ CONVENIENCE     += $$CLEAN_TARGET
++LIBS            += -lc -lssh2
+ 
+ include(network.pri)
+ include(../qxtbase.pri)
+--- ./src/widgets/widgets.pro.orig	2016-01-02 15:47:45.822581669 -0500
++++ ./src/widgets/widgets.pro	2016-01-02 15:48:16.772511228 -0500
+@@ -22,6 +22,6 @@
+ # means that each library must explicitly link to all dependencies 
+ # than assuming that the application or another library will bring
+ # in the necessary symbols at run time.
+-contains(QMAKE_LFLAGS, "-Wl,--no-undefined"):LIBS += $${QMAKE_LIBS_X11}
++LIBS += $${QMAKE_LIBS_X11} -lX11 -lQt5X11Extras
+ 
+ unix|win32-g++*:QMAKE_PKGCONFIG_REQUIRES += QxtCore QtGui

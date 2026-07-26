@@ -1,0 +1,69 @@
+diff -U3 -r bastet-0.43.1/BastetBlockChooser.cpp /home/limb/fedora/bastet/BastetBlockChooser.cpp
+--- bastet-0.43.1/BastetBlockChooser.cpp	2014-05-29 13:47:50.000000000 -0500
++++ bastet/BastetBlockChooser.cpp	2017-02-22 08:16:54.551988209 -0600
+@@ -19,7 +19,9 @@
+ #include "BastetBlockChooser.hpp"
+ #include "Block.hpp"
+ 
++#include <boost/functional/hash.hpp>
+ #include <boost/foreach.hpp>
++#include <unordered_set>
+ #include <cstdlib>
+ #include <algorithm>
+ 
+diff -U3 -r bastet-0.43.1/BastetBlockChooser.hpp /home/limb/fedora/bastet/BastetBlockChooser.hpp
+--- bastet-0.43.1/BastetBlockChooser.hpp	2014-05-29 13:47:50.000000000 -0500
++++ bastet/BastetBlockChooser.hpp	2017-02-22 08:16:54.549988291 -0600
+@@ -75,7 +85,7 @@
+   public:
+     Searcher(BlockType b, const Well *well, Vertex v, WellVisitor *visitor);
+   private:
+-    std::tr1::unordered_set<Vertex> _visited;
++    std::unordered_set<Vertex> _visited;
+     //std::set<Vertex> _visited; ^^ the above is more efficient, we need to do many inserts
+     BlockType _block;
+     const Well *_well;
+Only in /home/limb/fedora/bastet/: bastet.png
+Only in /home/limb/fedora/bastet/: bastet.svg
+Only in /home/limb/fedora/bastet/: depend
+Only in /home/limb/fedora/bastet/: .git
+diff -U3 -r bastet-0.43.1/Makefile /home/limb/fedora/bastet/Makefile
+--- bastet-0.43.1/Makefile	2014-05-29 13:47:50.000000000 -0500
++++ bastet/Makefile	2017-02-22 08:16:54.546988413 -0600
+@@ -3,9 +3,9 @@
+ TESTS=Test.cpp
+ PROGNAME=bastet
+ BOOST_PO?=-lboost_program_options
+-LDFLAGS+=-lncurses $(BOOST_PO)
++LDFLAGS+=-lncurses $(BOOST_PO) -std=c++11
+ #CXXFLAGS+=-ggdb -Wall
+-CXXFLAGS+=-DNDEBUG -Wall
++CXXFLAGS+=-DNDEBUG -Wall -std=c++11
+ #CXXFLAGS+=-pg
+ #LDFLAGS+=-pg
+ 
+--- bastet-0.43.2/BastetBlockChooser.hpp~	2022-06-03 10:38:37.473244214 -0500
++++ bastet-0.43.2/BastetBlockChooser.hpp	2022-06-03 10:41:11.948938690 -0500
+@@ -23,10 +23,21 @@
+ 
+ #include "Well.hpp"
+ 
+-#include <boost/tr1/tr1/unordered_set>
++#include <unordered_set>
+ #include <set>
+ #include <boost/functional/hash.hpp>
+ 
++//boilerplate to use boost::hash as std::hash
++namespace std{
++    template<> struct hash<Bastet::BlockPosition>{
++      size_t operator()(const Bastet::BlockPosition &fb) const{
++       static boost::hash<Bastet::BlockPosition> h;
++       return h(fb);
++      }
++    };
++  }
++
++
+ namespace Bastet{
+ 
+   static const long GameOverScore=-1000; //bogus score assigned to combinations which cause game over

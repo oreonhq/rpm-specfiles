@@ -1,0 +1,71 @@
+##########################################################################
+##########################################################################
+
+use strict;
+
+my ($junk, $Msg, $total);
+my %Action = ();
+my %Start = ();
+my %Login = ();
+my %TakeChar = ();
+my %DropChar = ();
+my %Logout = ();
+
+my $Detail = $ENV{'LOGWATCH_DETAIL_LEVEL'} || 0;
+
+# Interesting events:
+# 05/22/07 20:46:47 [Info]    LOGIN: New player named wart from ip 192.168.1.7
+# 05/22/07 21:01:12 [Info]    LOGIN: Player named wart from ip 192.168.1.7
+# 05/22/07 21:00:34 [Info]    LOGOUT: Player named wart from ip 192.168.1.7
+
+
+while (defined(my $ThisLine = <STDIN>)) {
+   chomp($ThisLine);
+   if ( ($Msg) = ($ThisLine =~ /LOGIN: (.*)$/)) {
+      $Login{$Msg}++;
+   }
+   if ( ($Msg) = ($ThisLine =~ /LOGOUT: (.*)$/)) {
+      $Logout{$Msg}++;
+   }
+}
+
+if (keys %Login) {
+   if ($Detail >= 5) {
+      foreach my $Msg (sort keys %Login) {
+         if ($Login{$Msg} > 1) {
+            print "$Msg ($Login{$Msg} times)\n"
+         } else {
+            print "$Msg\n"
+         }
+      }
+   } else {
+      my $total;
+      foreach my $Msg (sort keys %Login) {
+         $total += $Login{$Msg};
+      }
+      print "$total Users logged in\n";
+   }
+}
+
+if (keys %Logout) {
+   if ($Detail >= 5) {
+      foreach my $Msg (sort keys %Logout) {
+         if ($Logout{$Msg} > 1) {
+            print "$Msg ($Logout{$Msg} times)\n"
+         } else {
+            print "$Msg\n"
+         }
+      }
+   } else {
+      my $total;
+      foreach my $Msg (sort keys %Logout) {
+         $total += $Logout{$Msg};
+      }
+      print "$total players logged out\n";
+   }
+}
+
+exit(0);
+
+# vi: shiftwidth=3 tabstop=3 syntax=perl et
+

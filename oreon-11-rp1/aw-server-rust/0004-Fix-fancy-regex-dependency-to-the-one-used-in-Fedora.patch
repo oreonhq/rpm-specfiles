@@ -1,0 +1,40 @@
+From 55d42666581f407b8e87478b6f847eebda3fe598 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Mon, 9 Dec 2024 17:44:27 +0100
+Subject: [PATCH 4/8] Fix fancy-regex dependency to the one used in Fedora
+
+---
+ aw-query/Cargo.toml     | 2 +-
+ aw-transform/Cargo.toml | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/aw-query/Cargo.toml b/aw-query/Cargo.toml
+index 37b025b..d25d3c4 100644
+--- a/aw-query/Cargo.toml
++++ b/aw-query/Cargo.toml
+@@ -12,7 +12,7 @@ serde_json = "1.0"
+ chrono = { version = "0.4", features = ["serde"] }
+ plex = "0.3.0"
+ log = "0.4"
+-fancy-regex = "0.12.0"
++fancy-regex = "0.13.0"
+ aw-datastore = { path = "../aw-datastore" }
+ aw-models = { path = "../aw-models" }
+ aw-transform = { path = "../aw-transform" }
+diff --git a/aw-transform/Cargo.toml b/aw-transform/Cargo.toml
+index c61735e..ac31135 100644
+--- a/aw-transform/Cargo.toml
++++ b/aw-transform/Cargo.toml
+@@ -10,7 +10,7 @@ edition = "2021"
+ serde = "1.0"
+ url = ">=2.2"
+ serde_json = "1.0"
+-fancy-regex = "0.12.0"
++fancy-regex = "0.13.0"
+ log = "0.4"
+ chrono = { version = "0.4", features = ["serde"] }
+ aw-models = { path = "../aw-models" }
+-- 
+2.51.1
+

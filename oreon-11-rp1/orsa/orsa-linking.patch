@@ -1,0 +1,16 @@
+diff --git ./orsa-0.7.0/src/orsa/Makefile.am~ ./orsa-0.7.0/src/orsa/Makefile.am
+index 7d158bab76..ed4c5eed55 100644
+--- orsa-0.7.0/src/orsa/Makefile.am
++++ orsa-0.7.0/src/orsa/Makefile.am
+@@ -19,8 +19,9 @@ AM_LDFLAGS  = -L$(libdir) -L$(libdir)/lib
+ 
+ xorsa_SOURCES        = xorsa_main.cc xorsa.cc xorsa.h
+ nodist_xorsa_SOURCES = moc_xorsa.cc
+-xorsa_LDADD          = ../liborsa/liborsa.la ../libxorsa/libxorsa.la
+-xorsa_LDFLAGS        = -L$(libdir) -L$(libdir)/lib -L$(srcdir)/../liborsa/ -L$(srcdir)/../libxorsa/ $(QT_LDFLAGS) $(LIB_QT) $(X_LDFLAGS) $(GLLIB) $(GSL_LIBS) $(CLN_LIBS) $(GINACLIB_LIBS) $(FFTW_LIBS)
++xorsa_LDADD          = ../liborsa/liborsa.la ../libxorsa/libxorsa.la \
++	$(LIB_QT) $(GLLIB) $(GSL_LIBS) $(CLN_LIBS) $(GINACLIB_LIBS) $(FFTW_LIBS)
++xorsa_LDFLAGS        = -L$(libdir) -L$(libdir)/lib -L$(srcdir)/../liborsa/ -L$(srcdir)/../libxorsa/ $(QT_LDFLAGS) $(X_LDFLAGS)
+ 
+ moc_%.cc: %.h
+ 	$(MOC) $< -o $@

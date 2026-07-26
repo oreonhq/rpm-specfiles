@@ -1,0 +1,11 @@
+--- ballbuster-1.0/Highscores.cpp	2008-01-04 23:02:57.000000000 +0100
++++ ballbuster-1.0.new/Highscores.cpp	2008-01-04 23:02:32.000000000 +0100
+@@ -1,5 +1,8 @@
+ 
+ #include <string>
++#include <cstring>
++#include <cstdlib>
++#include <cstdio>
+ #include "Highscores.h"
+ 
+ using namespace std;

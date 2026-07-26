@@ -1,0 +1,26 @@
+From 840db07c39d95415c493170bf6513db4cd46490b Mon Sep 17 00:00:00 2001
+From: Akos Somfai <akos.somfai@gmail.com>
+Date: Fri, 23 Oct 2020 19:15:08 +0200
+Subject: [PATCH] Adding exception handler for MtpErrorCantOpenDevice
+
+---
+ src/jmtpfs.cpp | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/jmtpfs.cpp b/src/jmtpfs.cpp
+index 39c9a54..e64dd1d 100644
+--- a/src/jmtpfs.cpp
++++ b/src/jmtpfs.cpp
+@@ -453,7 +453,11 @@ int main(int argc, char *argv[])
+ 			std::cerr << "Requested device not found" << std::endl;
+ 			return -1;
+ 		}
+-
++		catch(MtpErrorCantOpenDevice&)
++		{
++			std::cerr << "Cannot open requested device" << std::endl;
++			return -1;
++		}
+ 		context = std::unique_ptr<MtpFuseContext>(new MtpFuseContext(std::move(device), getuid(), getgid()));
+ 
+ 	}

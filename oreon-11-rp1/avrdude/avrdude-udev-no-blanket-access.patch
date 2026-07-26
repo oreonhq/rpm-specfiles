@@ -1,0 +1,21 @@
+--- debian/avrdude.udev	2022-04-20 01:55:35.767101948 +0200
++++ fedora/avrdude.udev	2022-04-20 01:59:38.828449388 +0200
+@@ -1,10 +1,13 @@
+ ACTION!="add|change", GOTO="avrdude_end"
+ 
+-# /dev/ttyUSB
+-SUBSYSTEMS=="usb-serial", TAG+="uaccess"
+-
+-# /dev/ttyACM
+-SUBSYSTEMS=="usb", DRIVERS=="cdc_acm", TAG+="uaccess"
++# The avrdude package is not supposed to grant blanket access to any
++# and all /dev/ttyACM* and /dev/ttyUSB* devices for the console user.
++#
++# # /dev/ttyUSB
++# SUBSYSTEMS=="usb-serial", TAG+="uaccess"
++#
++# # /dev/ttyACM
++# SUBSYSTEMS=="usb", DRIVERS=="cdc_acm", TAG+="uaccess"
+ 
+ SUBSYSTEM!="usb", GOTO="avrdude_end"
+ 

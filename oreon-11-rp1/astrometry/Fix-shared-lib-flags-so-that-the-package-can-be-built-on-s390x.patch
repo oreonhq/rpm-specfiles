@@ -1,0 +1,24 @@
+From: Ole Streicher <olebole@debian.org>
+Date: Thu, 1 Dec 2016 21:18:56 +0100
+Subject: Fix shared lib flags so that the package can be built on s390x
+
+---
+ util/makefile.common | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/util/makefile.common b/util/makefile.common
+index 1d40053..315e78f 100644
+--- a/util/makefile.common
++++ b/util/makefile.common
+@@ -172,9 +172,8 @@ FLAGS_DEF += $(shell $(CCTEST))
+ ## environment variable in your shell.
+ ## With gcc 4.2 and later, gcc should be able to make the optimal choice on its own.
+ ## See the README section "I wanna go fast!" for more details.
+-ifneq ($(origin ARCH_FLAGS),undefined)
+-  FLAGS_DEF += $(ARCH_FLAGS)
+-else
++ARCH_FLAGS := "system"
++ifndef ARCH_FLAGS
+   # Try to guess some good compiler flags for this CPU.
+ 
+   # Use -march=native if it's available (gcc 4.2 and above)

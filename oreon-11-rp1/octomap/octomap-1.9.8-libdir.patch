@@ -1,0 +1,316 @@
+diff -up ./dynamicEDT3D/CMakeLists.txt.libdir ./dynamicEDT3D/CMakeLists.txt
+--- ./dynamicEDT3D/CMakeLists.txt.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./dynamicEDT3D/CMakeLists.txt	2023-02-21 15:10:14.795662926 -0500
+@@ -46,9 +46,9 @@ LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_
+ # Installation
+ 
+ set(INSTALL_TARGETS_DEFAULT_ARGS
+-	RUNTIME DESTINATION bin
+-	LIBRARY DESTINATION lib
+-	ARCHIVE DESTINATION lib
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+ )
+ 
+ find_package(octomap REQUIRED
+@@ -111,7 +111,7 @@ CONFIGURE_PACKAGE_CONFIG_FILE(
+   dynamicEDT3DConfig.cmake.in
+   "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/dynamicEDT3D/dynamicEDT3DConfig.cmake"
+   PATH_VARS DYNAMICEDT3D_INCLUDE_DIRS DYNAMICEDT3D_LIB_DIR
+-  INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/dynamicEDT3D")
++  INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dynamicEDT3D")
+ 
+ WRITE_BASIC_PACKAGE_VERSION_FILE(
+   "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/dynamicEDT3D/dynamicEDT3DConfig-version.cmake"
+@@ -136,7 +136,7 @@ CONFIGURE_PACKAGE_CONFIG_FILE(
+   dynamicEDT3DConfig.cmake.in
+   "${PROJECT_BINARY_DIR}/InstallFiles/dynamicEDT3DConfig.cmake"
+   PATH_VARS DYNAMICEDT3D_INCLUDE_DIRS DYNAMICEDT3D_LIB_DIR
+-  INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/dynamicEDT3D")
++  INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dynamicEDT3D")
+ 
+ WRITE_BASIC_PACKAGE_VERSION_FILE(
+   "${PROJECT_BINARY_DIR}/InstallFiles/dynamicEDT3DConfig-version.cmake"
+@@ -146,7 +146,7 @@ WRITE_BASIC_PACKAGE_VERSION_FILE(
+ install(FILES
+   "${PROJECT_BINARY_DIR}/InstallFiles/dynamicEDT3DConfig.cmake"
+   "${PROJECT_BINARY_DIR}/InstallFiles/dynamicEDT3DConfig-version.cmake" 
+-  DESTINATION "${CMAKE_INSTALL_DATADIR}/dynamicEDT3D")
++  DESTINATION "${CMAKE_INSTALL_LIBDIR}/dynamicEDT3D")
+ 
+ # Write pkgconfig-file:
+ include(InstallPkgConfigFile)
+diff -up ./dynamicEDT3D/CMakeModules/CompilerSettings.cmake.libdir ./dynamicEDT3D/CMakeModules/CompilerSettings.cmake
+--- ./dynamicEDT3D/CMakeModules/CompilerSettings.cmake.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./dynamicEDT3D/CMakeModules/CompilerSettings.cmake	2023-02-21 15:10:14.795662926 -0500
+@@ -18,7 +18,6 @@ MESSAGE (STATUS "${PROJECT_NAME} buildin
+ IF (CMAKE_COMPILER_IS_GNUCC)
+   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-error ")
+   SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-error ")
+-  SET (CMAKE_CXX_FLAGS_RELEASE "-O3 -funroll-loops -DNDEBUG")
+   SET (CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+   # Shared object compilation under 64bit (vtable)
+   ADD_DEFINITIONS(-fPIC)  
+@@ -28,13 +27,5 @@ IF (CMAKE_COMPILER_IS_GNUCC)
+   # ENDIF(OCTOMAP_OMP)
+ ENDIF()
+ 
+-
+-# Set full rpath http://www.paraview.org/Wiki/CMake_RPATH_handling
+-# (good to have and required with ROS)
+-set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+-
+ # no prefix needed for python modules
+ set(CMAKE_SHARED_MODULE_PREFIX "")
+diff -up ./dynamicEDT3D/src/CMakeLists.txt.libdir ./dynamicEDT3D/src/CMakeLists.txt
+--- ./dynamicEDT3D/src/CMakeLists.txt.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./dynamicEDT3D/src/CMakeLists.txt	2023-02-21 15:10:14.796662929 -0500
+@@ -9,30 +9,24 @@ set_target_properties(dynamicedt3d PROPE
+ )
+ target_link_libraries(dynamicedt3d ${OCTOMAP_LIBRARIES})
+ 
+-add_library(dynamicedt3d-static STATIC ${dynamicEDT3D_SRCS})
+-target_link_libraries(dynamicedt3d-static ${OCTOMAP_LIBRARIES})
+-
+-SET_TARGET_PROPERTIES(dynamicedt3d-static PROPERTIES OUTPUT_NAME "dynamicedt3d") 
+-
+ if(NOT EXISTS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/dynamicEDT3D")
+   file(MAKE_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/dynamicEDT3D")
+ endif()
+ 
+-export(TARGETS dynamicedt3d dynamicedt3d-static
++export(TARGETS dynamicedt3d 
+   FILE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/dynamicEDT3D/dynamicEDT3DTargets.cmake")
+ 
+ # directly depend on the octomap library target when building the
+ # complete distribution, so it it recompiled as needed
+ if (CMAKE_PROJECT_NAME STREQUAL "octomap-distribution")
+-  ADD_DEPENDENCIES(dynamicedt3d-static octomap-static)
+   ADD_DEPENDENCIES(dynamicedt3d octomap)
+ endif()
+ 
+ ADD_SUBDIRECTORY(examples)
+ 
+-install(TARGETS dynamicedt3d dynamicedt3d-static
++install(TARGETS dynamicedt3d 
+   EXPORT dynamicEDT3DTargets
+   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+   ${INSTALL_TARGETS_DEFAULT_ARGS}
+ )
+-install(EXPORT dynamicEDT3DTargets DESTINATION "${CMAKE_INSTALL_DATADIR}/dynamicEDT3D")
++install(EXPORT dynamicEDT3DTargets DESTINATION "${CMAKE_INSTALL_LIBDIR}/dynamicEDT3D")
+diff -up ./octomap/CMakeLists.txt.libdir ./octomap/CMakeLists.txt
+--- ./octomap/CMakeLists.txt.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./octomap/CMakeLists.txt	2023-02-21 15:10:14.797662932 -0500
+@@ -138,7 +138,7 @@ CONFIGURE_PACKAGE_CONFIG_FILE(
+   octomap-config.cmake.in
+   "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config.cmake"
+   PATH_VARS OCTOMAP_INCLUDE_DIRS OCTOMAP_LIB_DIR
+-  INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/octomap")
++  INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/octomap")
+ 
+ WRITE_BASIC_PACKAGE_VERSION_FILE(
+   ${PROJECT_BINARY_DIR}/InstallFiles/octomap-config-version.cmake
+@@ -148,7 +148,7 @@ WRITE_BASIC_PACKAGE_VERSION_FILE(
+ install(FILES
+   "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config.cmake"
+   "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config-version.cmake" 
+-  DESTINATION "${CMAKE_INSTALL_DATADIR}/octomap")
++  DESTINATION "${CMAKE_INSTALL_LIBDIR}/octomap")
+ 
+ # Write pkgconfig-file:
+ include(InstallPkgConfigFile)
+diff -up ./octomap/CMakeModules/CompilerSettings.cmake.libdir ./octomap/CMakeModules/CompilerSettings.cmake
+--- ./octomap/CMakeModules/CompilerSettings.cmake.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./octomap/CMakeModules/CompilerSettings.cmake	2023-02-21 15:10:14.797662932 -0500
+@@ -10,20 +10,13 @@ MESSAGE (STATUS "${PROJECT_NAME} buildin
+ # COMPILER FLAGS
+ IF (CMAKE_COMPILER_IS_GNUCC)
+   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-error ")
+-  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -Wpedantic")
+-  SET (CMAKE_CXX_FLAGS_RELEASE "-O3 -funroll-loops -DNDEBUG")
++  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+   SET (CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+   # Shared object compilation under 64bit (vtable)
+   ADD_DEFINITIONS(-fPIC)
+ ENDIF()
+ 
+ 
+-# Set full rpath http://www.paraview.org/Wiki/CMake_RPATH_handling
+-# (good to have and required with ROS)
+-set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ 
+ # no prefix needed for python modules
+ set(CMAKE_SHARED_MODULE_PREFIX "")
+diff -up ./octomap/src/CMakeLists.txt.libdir ./octomap/src/CMakeLists.txt
+--- ./octomap/src/CMakeLists.txt.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./octomap/src/CMakeLists.txt	2023-02-21 15:10:14.798662935 -0500
+@@ -10,23 +10,19 @@ SET (octomap_SRCS
+   ColorOcTree.cpp
+   )
+ 
+-# dynamic and static libs, see CMake FAQ:
+-ADD_LIBRARY( octomap SHARED ${octomap_SRCS})
+-set_target_properties( octomap PROPERTIES
+-  VERSION ${OCTOMAP_VERSION}
+-  SOVERSION ${OCTOMAP_SOVERSION}
+-)
+-ADD_LIBRARY( octomap-static STATIC ${octomap_SRCS})
+-SET_TARGET_PROPERTIES(octomap-static PROPERTIES OUTPUT_NAME "octomap") 
+-add_dependencies(octomap-static octomath-static)
+-
++# dynamic and static libs, see CMake FAQ: 
++ADD_LIBRARY( octomap SHARED ${octomap_SRCS}) 
++set_target_properties( octomap PROPERTIES 
++  VERSION ${OCTOMAP_VERSION} 
++  SOVERSION ${OCTOMAP_SOVERSION} 
++) 
+ TARGET_LINK_LIBRARIES(octomap octomath)
+ 
+ if(NOT EXISTS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octomap")
+   file(MAKE_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octomap")
+ endif()
+ 
+-export(TARGETS octomap octomap-static
++export(TARGETS octomap 
+   APPEND FILE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octomap/octomap-targets.cmake")
+ 
+ ADD_SUBDIRECTORY( testing )
+@@ -67,12 +63,12 @@ TARGET_LINK_LIBRARIES(intersection_examp
+ ADD_EXECUTABLE(octree2pointcloud octree2pointcloud.cpp)
+ TARGET_LINK_LIBRARIES(octree2pointcloud octomap)
+ 
+-install(TARGETS octomap octomap-static
++install(TARGETS octomap 
+   EXPORT octomap-targets
+   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+   ${INSTALL_TARGETS_DEFAULT_ARGS}
+ )
+-install(EXPORT octomap-targets DESTINATION "${CMAKE_INSTALL_DATADIR}/octomap")
++install(EXPORT octomap-targets DESTINATION "${CMAKE_INSTALL_LIBDIR}/octomap")
+ 
+ install(TARGETS
+ 	graph2tree
+diff -up ./octomap/src/math/CMakeLists.txt.libdir ./octomap/src/math/CMakeLists.txt
+--- ./octomap/src/math/CMakeLists.txt.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./octomap/src/math/CMakeLists.txt	2023-02-21 15:10:14.798662935 -0500
+@@ -12,17 +12,14 @@ SET_TARGET_PROPERTIES( octomath PROPERTI
+   SOVERSION ${OCTOMAP_SOVERSION}
+ )
+ 
+-ADD_LIBRARY( octomath-static STATIC ${octomath_SRCS})
+-SET_TARGET_PROPERTIES(octomath-static PROPERTIES OUTPUT_NAME "octomath")
+-
+ if(NOT EXISTS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octomap")
+   file(MAKE_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octomap")
+ endif()
+ 
+-export(TARGETS octomath octomath-static
++export(TARGETS octomath 
+   APPEND FILE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octomap/octomap-targets.cmake")
+ 
+-install(TARGETS octomath octomath-static
++install(TARGETS octomath
+   EXPORT octomap-targets
+   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+   ${INSTALL_TARGETS_DEFAULT_ARGS}
+diff -up ./octovis/CMakeLists_src.txt.libdir ./octovis/CMakeLists_src.txt
+--- ./octovis/CMakeLists_src.txt.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./octovis/CMakeLists_src.txt	2023-02-21 15:10:56.670777965 -0500
+@@ -99,15 +99,6 @@ include_directories(${CMAKE_CURRENT_BINA
+ 
+ 
+ # Library target 
+-add_library(octovis-static STATIC ${viewerlib_SRCS})
+-target_link_libraries(octovis-static
+-  ${OPENGL_gl_LIBRARY} 
+-  ${OPENGL_glu_LIBRARY} 
+-  ${OCTOMAP_LIBRARIES}
+-  ${QGLViewer_LIBRARIES}
+-)
+-set_target_properties(octovis-static PROPERTIES OUTPUT_NAME octovis)
+-
+ add_library(octovis-shared SHARED ${viewerlib_SRCS})
+ target_link_libraries(octovis-shared 
+   ${OPENGL_gl_LIBRARY} 
+@@ -124,7 +115,6 @@ set_target_properties(octovis-shared PRO
+ # directly depend on the octomap library target when building the
+ # complete distribution, so it is recompiled as needed
+ if (CMAKE_PROJECT_NAME STREQUAL "octomap-distribution")
+-  ADD_DEPENDENCIES(octovis-static octomap-static)
+   ADD_DEPENDENCIES(octovis-shared octomap)
+ endif()
+ 
+@@ -151,15 +141,15 @@ if(NOT EXISTS "${CMAKE_LIBRARY_OUTPUT_DI
+   file(MAKE_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octovis")
+ endif()
+ 
+-export(TARGETS octovis octovis-static octovis-shared
++export(TARGETS octovis octovis-shared
+   FILE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/octovis/octovis-targets.cmake")
+ 
+-install(TARGETS octovis octovis-static octovis-shared
++install(TARGETS octovis octovis-shared
+   EXPORT octovis-targets
+   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+   ${INSTALL_TARGETS_DEFAULT_ARGS}
+ )
+-install(EXPORT octovis-targets DESTINATION "${CMAKE_INSTALL_DATADIR}/octovis")
++install(EXPORT octovis-targets DESTINATION "${CMAKE_INSTALL_LIBDIR}/octovis")
+ 
+ file(GLOB octovis_HDRS ${PROJECT_SOURCE_DIR}/include/octovis/*.h)
+ # filter generated headers for GUI:
+diff -up ./octovis/CMakeLists.txt.libdir ./octovis/CMakeLists.txt
+--- ./octovis/CMakeLists.txt.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./octovis/CMakeLists.txt	2023-02-21 15:10:14.800662940 -0500
+@@ -139,7 +139,7 @@ IF(BUILD_VIEWER)
+     octovis-config.cmake.in
+     "${PROJECT_BINARY_DIR}/InstallFiles/octovis-config.cmake"
+     PATH_VARS OCTOVIS_INCLUDE_DIRS OCTOVIS_LIB_DIR
+-    INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_DATADIR}/octovis")
++    INSTALL_DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/octovis")
+ 
+   WRITE_BASIC_PACKAGE_VERSION_FILE(
+     "${PROJECT_BINARY_DIR}/InstallFiles/octovis-config-version.cmake"
+@@ -149,7 +149,7 @@ IF(BUILD_VIEWER)
+   install(FILES
+     "${PROJECT_BINARY_DIR}/InstallFiles/octovis-config.cmake"
+     "${PROJECT_BINARY_DIR}/InstallFiles/octovis-config-version.cmake" 
+-    DESTINATION "${CMAKE_INSTALL_DATADIR}/octovis")
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/octovis")
+ 
+   # #installation:
+   # # store all header files to install:
+diff -up ./octovis/CMakeModules/CompilerSettings.cmake.libdir ./octovis/CMakeModules/CompilerSettings.cmake
+--- ./octovis/CMakeModules/CompilerSettings.cmake.libdir	2022-05-12 16:49:09.000000000 -0400
++++ ./octovis/CMakeModules/CompilerSettings.cmake	2023-02-21 15:10:14.800662940 -0500
+@@ -18,22 +18,13 @@ MESSAGE (STATUS "${PROJECT_NAME} buildin
+ IF (CMAKE_COMPILER_IS_GNUCC)
+   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-error ")
+   SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-error ")
+-  SET (CMAKE_CXX_FLAGS_RELEASE "-O3 -funroll-loops -DNDEBUG") #sse3 disabled for compatibility
+ #  SET (CMAKE_CXX_FLAGS_RELEASE "-O3 -funroll-loops -DNDEBUG -msse3 -mssse3")
+-  SET (CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+   # IF(OCTOMAP_OMP)
+   #   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fopenmp")
+   #   SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -fopenmp")
+   # ENDIF(OCTOMAP_OMP)
+ ENDIF()
+ 
+-# Set full rpath http://www.paraview.org/Wiki/CMake_RPATH_handling
+-# (good to have and required with ROS)
+-set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+-
+ # enables -fPIC in applicable compilers
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 

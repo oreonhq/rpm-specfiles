@@ -1,0 +1,13 @@
+diff -up Devel-Profiler-0.04/lib/Devel/Profiler.pm.orig Devel-Profiler-0.04/lib/Devel/Profiler.pm
+--- Devel-Profiler-0.04/lib/Devel/Profiler.pm.orig	2015-05-04 14:21:19.656372129 +0200
++++ Devel-Profiler-0.04/lib/Devel/Profiler.pm	2015-05-04 15:46:34.250607264 +0200
+@@ -137,7 +137,8 @@ sub scan {
+           if DEBUG;
+         
+         no strict 'refs'; # need symbolic references to diddle symbol tables
+-        while (($sym, $glob) = each %{$pkg}) {
++        foreach $sym (keys %{${pkg}}) {
++            $glob = ${${pkg}}{$sym};
+             next if $sym eq $pkg; # self ref?  (%main::main::main::...)
+             
+             # found a subpackage?

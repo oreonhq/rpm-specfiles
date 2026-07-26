@@ -1,0 +1,12 @@
+diff -up MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.taropt MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm
+--- MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm.taropt	2017-06-15 09:54:21.071607352 -0600
++++ MySQL-zrm-3.0/usr/lib/mysql-zrm/ZRM/Common.pm	2017-06-15 10:05:31.932141944 -0600
+@@ -91,7 +91,7 @@ our $INDEX_FILENAME="index";
+ our $MYSQL_ZRM_CONFIG_FILE=catfile( $MYSQL_ZRM_BASEDIR, "mysql-zrm.conf");
+ #Compress & Encrypt progs
+ our $TAR="tar";
+-our $TAR_COMPRESS_OPTIONS=" --same-owner -cpsC ";
++our $TAR_COMPRESS_OPTIONS=" --same-owner -cpC ";
+ our $TAR_UNCOMPRESS_OPTIONS=" --same-owner -xpsC ";
+ our $TAR_EXCLUDE_OPTION=" --exclude";
+ our $COMPRESS_FILENAME="backup-data";

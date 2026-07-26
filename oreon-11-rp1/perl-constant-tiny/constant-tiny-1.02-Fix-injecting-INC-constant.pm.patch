@@ -1,0 +1,46 @@
+From e4c31b052f9014875ee873bcb7959b343590fb11 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 26 Jun 2020 11:15:23 +0200
+Subject: [PATCH] Fix injecting $INC{'constant.pm'}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Perl 5.32 revealed that "use constant::tiny" injected an undefined
+value to $INC{'constant.pm'}.
+
+$ perl -Ilib -e 'use constant::tiny; use constant;'
+Attempt to reload constant.pm aborted.
+Compilation failed in require at -e line 1.
+BEGIN failed--compilation aborted at -e line 1.
+
+That's becaue Perl 5.32 started treat an undef value differently and refuses
+reloaded once failed module. A diagnostics explanation:
+
+    (F) You tried to load a file with use or require that failed to
+    compile once already.  Perl will not try to compile this file again
+    unless you delete its entry from %INC.  See "require" in perlfunc and
+    "%INC" in perlvar.
+
+This patch fixes setting the $INC{'constant.pm'} value.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/constant/tiny.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/constant/tiny.pm b/lib/constant/tiny.pm
+index e8937b4..d5519d6 100644
+--- a/lib/constant/tiny.pm
++++ b/lib/constant/tiny.pm
+@@ -1,6 +1,6 @@
+ package constant::tiny;
+ return 1 if $INC{"constant.pm"};
+-$INC{"constant.pm"} = $INC{+__FILE__};
++$INC{"constant.pm"} = $INC{'constant/tiny.pm'};
+ $VERSION = "1.02";
+ 
+ package # hide from PAUSE
+-- 
+2.25.4
+

@@ -1,0 +1,58 @@
+From ba33af496559a6594bf7b96eec182389d433a0b6 Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Sat, 9 Mar 2024 02:08:22 -0600
+Subject: [PATCH] Adjust makefile for Fedora
+
+---
+ Makefile | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f9ecee2..bb280e9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,10 +1,10 @@
+ UUID = "forge@jmmaranan.com"
+-INSTALL_PATH = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
++INSTALL_PATH = $(DESTDIR)/usr/share/gnome-shell/extensions/$(UUID)
+ MSGSRC = $(wildcard po/*.po)
+ 
+ .PHONY: all clean install schemas uninstall enable disable log debug patchcss
+ 
+-all: build install enable restart
++all: build
+ 
+ dev: build debug install
+ 
+@@ -21,25 +21,20 @@ patchcss:
+ 
+ metadata:
+ 	echo "export const developers = Object.entries([" > lib/prefs/metadata.js
+-	git shortlog -sne || echo "" >> lib/prefs/metadata.js
+-	awk -i inplace '!/dependabot|noreply/' lib/prefs/metadata.js
+-	sed -i 's/^[[:space:]]*[0-9]*[[:space:]]*\(.*\) <\(.*\)>/  {name:"\1", email:"\2"},/g' lib/prefs/metadata.js
+ 	echo "].reduce((acc, x) => ({ ...acc, [x.email]: acc[x.email] ?? x.name }), {})).map(([email, name]) => name + ' <' + email + '>')" >> lib/prefs/metadata.js
+ 
+-build: clean metadata.json schemas compilemsgs metadata
++build: metadata.json compilemsgs metadata
+ 	rm -rf temp
+ 	mkdir -p temp
+ 	cp metadata.json temp
+ 	cp -r resources temp
+-	cp -r schemas temp
+ 	cp -r config temp
+ 	cp -r lib temp
+ 	cp *.js temp
+ 	cp *.css temp
+-	cp LICENSE temp
+-	mkdir -p temp/locale
++	mkdir -p locale
+ 	for msg in $(MSGSRC:.po=.mo); do \
+-		msgf=temp/locale/`basename $$msg .mo`; \
++		msgf=locale/`basename $$msg .mo`; \
+ 		mkdir -p $$msgf; \
+ 		mkdir -p $$msgf/LC_MESSAGES; \
+ 		cp $$msg $$msgf/LC_MESSAGES/forge.mo; \
+-- 
+2.52.0
+

@@ -1,0 +1,22 @@
+diff -rupN --no-dereference ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c/demo.c ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c-new/demo.c
+--- ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c/demo.c	2024-09-13 22:38:34.000000000 +0200
++++ ZoneDetect-082fa6b14815340d0f0d9e23b1ded318ba77c82c-new/demo.c	2025-07-28 16:08:27.887178600 +0200
+@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
+ {
+     if(argc != 4) {
+         printf("Usage: %s dbname lat lon\n", argv[0]);
++        printf(" dbname: path to one of the files below /usr/share/ZoneDetect\n");
+         return 1;
+     }
+ 
+@@ -83,7 +84,9 @@ int main(int argc, char *argv[])
+     ZoneDetectResult *results = ZDLookup(cd, lat, lon, &safezone);
+     printResults(cd, results, safezone);
+ 
+-    printf("The simple string is [%s]\n", ZDHelperSimpleLookupString(cd, lat, lon));
++    char* result = ZDHelperSimpleLookupString(cd, lat, lon);
++    printf("The simple string is [%s]\n", result);
++    free(result);
+ 
+     ZDCloseDatabase(cd);
+ 

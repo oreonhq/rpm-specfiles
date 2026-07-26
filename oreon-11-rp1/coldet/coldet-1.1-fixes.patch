@@ -1,0 +1,82 @@
+diff -ur coldet.orig/src/box.cpp coldet/src/box.cpp
+--- coldet.orig/src/box.cpp	2001-02-23 21:21:20.000000000 +0100
++++ coldet/src/box.cpp	2006-06-26 09:11:12.000000000 +0200
+@@ -228,7 +228,7 @@
+ extern "C" { 
+ int tri_tri_intersect(float V0[3],float V1[3],float V2[3],
+                       float U0[3],float U1[3],float U2[3]);
+-};
++}
+ 
+ Triangle::Triangle(const Vector3D& _1, const Vector3D& _2, const Vector3D& _3)
+ : v1(_1), v2(_2), v3(_3), center((1.0f/3.0f)*(_1+_2+_3)) 
+diff -ur coldet.orig/src/coldetimpl.h coldet/src/coldetimpl.h
+--- coldet.orig/src/coldetimpl.h	2001-02-23 21:21:20.000000000 +0100
++++ coldet/src/coldetimpl.h	2006-06-26 09:11:12.000000000 +0200
+@@ -73,7 +73,7 @@
+ 
+   int getTriangleIndex(BoxedTriangle* bt)
+   {
+-    return int(bt-&(*m_Triangles.begin()));
++    return (int)(bt-&(m_Triangles[0]));
+   }
+ 
+   /** Stores all the actual triangles.  Other objects will use
+diff -ur coldet.orig/src/makefile.g++ coldet/src/makefile.g++
+--- coldet.orig/src/makefile.g++	2001-02-23 21:21:20.000000000 +0100
++++ coldet/src/makefile.g++	2006-06-26 09:21:22.000000000 +0200
+@@ -1,8 +1,8 @@
+ PROJECT=coldet
+-LIB=libcoldet.a
++LIB=libcoldet.so.0
+ CC=g++
+ OPT=-O2
+-CFLAGS=-c $(OPT) -DGCC
++CFLAGS=-c $(OPT) -fPIC -DPIC -DGCC
+ OBJS= \
+ coldet.o \
+ coldet_bld.o \
+@@ -16,9 +16,7 @@
+ all: $(LIB)
+ 
+ $(LIB): $(OBJS)
+-	rm -f $(LIB)
+-	ar cr $(LIB) $(OBJS)
+-	ranlib $(LIB)
++	$(CC) -g -shared -o $(LIB) -Wl,-soname,$(LIB) $(OBJS)
+ 
+ coldet.o: coldet.cpp
+ 	$(CC) $(CFLAGS) coldet.cpp
+@@ -33,7 +31,7 @@
+ 	$(CC) $(CFLAGS) box_bld.cpp
+ 
+ tritri.o: tritri.c
+-	$(CC) $(CFLAGS) tritri.c
++	gcc $(CFLAGS) tritri.c
+ 
+ mytritri.o: mytritri.cpp
+ 	$(CC) $(CFLAGS) mytritri.cpp
+diff -ur coldet.orig/src/math3d.h coldet/src/math3d.h
+--- coldet.orig/src/math3d.h	2001-02-23 21:21:20.000000000 +0100
++++ coldet/src/math3d.h	2006-06-26 09:18:39.000000000 +0200
+@@ -99,6 +99,10 @@
+   float& operator() (int i, int j)       { return m[i][j]; }
+ };
+ 
++Matrix3D PitchMatrix3D(const float theta);
++Matrix3D YawMatrix3D(const float theta);
++Matrix3D RollMatrix3D(const float theta);
++
+ /** 4x4 matrix, used for transformations. */
+ struct Matrix3D
+ {
+diff -ur coldet.orig/src/mytritri.h coldet/src/mytritri.h
+--- coldet.orig/src/mytritri.h	2001-02-23 21:21:20.000000000 +0100
++++ coldet/src/mytritri.h	2006-06-26 09:21:07.000000000 +0200
+@@ -93,4 +93,4 @@
+ 
+ 
+ 
+-#endif // H_MYTRITRI
+\ No newline at end of file
++#endif // H_MYTRITRI

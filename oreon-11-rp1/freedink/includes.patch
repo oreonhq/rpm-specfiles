@@ -1,0 +1,40 @@
+--- src/input.cpp~	2025-02-03 13:37:51.480141786 -0600
++++ src/input.cpp	2025-02-03 13:38:09.481036656 -0600
+@@ -26,6 +26,7 @@
+ #endif
+ 
+ #include <string.h>
++#include <ctype.h>
+ 
+ #include "SDL.h"
+ #include "game_engine.h"
+--- src/ImageLoader.h~	2019-01-18 17:32:13.000000000 -0600
++++ src/ImageLoader.h	2025-02-03 13:42:28.040526582 -0600
+@@ -2,6 +2,7 @@
+ #define SPRITELOADER_H
+ 
+ #include "SDL.h"
++#include <cstdio>
+ 
+ extern SDL_Color GFX_ref_pal[256];
+ 
+--- src/dinkc_console_renderer.cpp~	2019-01-18 17:32:13.000000000 -0600
++++ src/dinkc_console_renderer.cpp	2025-02-03 13:46:34.170089101 -0600
+@@ -1,6 +1,7 @@
+ #include "dinkc_console_renderer.h"
+ #include "dinkc_console.h"
+ #include "gfx_fonts.h"
++#include <cstdio>
+ 
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+--- src/dinkc_console.cpp~	2019-01-18 17:32:13.000000000 -0600
++++ src/dinkc_console.cpp	2025-02-03 13:51:02.399587506 -0600
+@@ -30,6 +30,7 @@
+ #include <string.h>
+ #include "str_util.h"
+ #include "dinkc.h"
++#include <ctype.h>
+ 
+ #define NB_LINES 20
+ #define MAX_LINE_LEN 254

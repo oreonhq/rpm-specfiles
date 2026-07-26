@@ -1,0 +1,57 @@
+am-utils-6.2 - fix compiler assignment warning due to libtirpc
+
+From: Ian Kent <raven@themaw.net>
+
+When using libtirpc there is a compiler warning on an assignment in
+the amq_program_1() function.
+
+This warning was due to libtirpc using struct sockaddr_in6 for some
+address fields in the transport structure as it is backward compatible
+with struct sockaddr_in when IPv4 is in use.
+
+But if TLI is in use svc_getcaller() may not be defined or, if it is,
+doesn't work as expected.
+
+So change to using amu_svc_getcaller(), which deals with the needed
+cast for libtirpc, and handle the NULL return if TLI is being used.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/amq_svc.c |   24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/amd/amq_svc.c b/amd/amq_svc.c
+index 1f2b3d6..40f79fa 100644
+--- a/amd/amq_svc.c
++++ b/amd/amq_svc.c
+@@ -162,15 +162,21 @@ amq_program_1(struct svc_req *rqstp, SVCXPRT *transp)
+ 
+ #if defined(HAVE_TCPD_H) && defined(HAVE_LIBWRAP)
+   if (gopt.flags & CFM_USE_TCPWRAPPERS) {
+-    struct sockaddr_in *remote_addr = svc_getcaller(rqstp->rq_xprt);
+-    char *remote_hostname = inet_ntoa(remote_addr->sin_addr);
+-
+-    if (!amqsvc_is_client_allowed(remote_addr)) {
+-      plog(XLOG_WARNING, "Amd denied remote amq service to %s", remote_hostname);
+-      svcerr_auth(transp, AUTH_FAILED);
+-      return;
+-    } else {
+-      dlog("Amd allowed remote amq service to %s", remote_hostname);
++    struct sockaddr_in *remote_addr = amu_svc_getcaller(rqstp->rq_xprt);
++    char *remote_hostname;
++
++    /* Check the return from amu_svc_getcaller() becuase it's always NULL
++     * if TLI is in use.
++     */
++    if (remote_addr) {
++      remote_hostname = inet_ntoa(remote_addr->sin_addr);
++      if (!amqsvc_is_client_allowed(remote_addr)) {
++        plog(XLOG_WARNING, "Amd denied remote amq service to %s", remote_hostname);
++        svcerr_auth(transp, AUTH_FAILED);
++        return;
++      } else {
++        dlog("Amd allowed remote amq service to %s", remote_hostname);
++      }
+     }
+   }
+ #endif /* defined(HAVE_TCPD_H) && defined(HAVE_LIBWRAP) */

@@ -1,0 +1,11 @@
+diff -ruN libuInputPlus-0.1.4-orig/uInputPlus.pc.in libuInputPlus-0.1.4/uInputPlus.pc.in
+--- libuInputPlus-0.1.4-orig/uInputPlus.pc.in	2020-02-12 02:07:57.000000000 +1000
++++ libuInputPlus-0.1.4/uInputPlus.pc.in	2020-03-29 12:30:26.532165521 +1000
+@@ -5,6 +5,6 @@
+ 
+ Name: uInputPlus
+ Description: Easy-to-use uinput library in C++
+-Version: 0.1.3
++Version: 0.1.4
+ Cflags: -I${includedir}/uInputPlus
+ Libs: -L${libdir} -luInputPlus

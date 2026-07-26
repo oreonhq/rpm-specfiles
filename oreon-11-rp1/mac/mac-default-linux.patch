@@ -1,0 +1,28 @@
+diff -up mac-12.35/Shared/All.h.orig mac-12.35/Shared/All.h
+--- mac-12.35/Shared/All.h.orig	2026-02-20 19:52:42.000000000 +0100
++++ mac-12.35/Shared/All.h	2026-02-24 11:57:10.633224372 +0100
+@@ -10,8 +10,8 @@ PLATFORM_LINUX
+ PLATFORM_ANDROID
+ **************************************************************************************************/
+ #if !defined(PLATFORM_WINDOWS) && !defined(PLATFORM_APPLE) && !defined(PLATFORM_LINUX) && !defined(PLATFORM_ANDROID)
+-    #pragma message("No platform set for MACLib, defaulting to Windows")
+-    #define PLATFORM_WINDOWS
++    #pragma message("No platform set for MACLib, defaulting to Linux")
++    #define PLATFORM_LINUX
+ #endif
+ 
+ #ifdef PLATFORM_ANDROID
+diff -up mac-12.35/Source/Shared/All.h.orig mac-12.35/Source/Shared/All.h
+--- mac-12.35/Source/Shared/All.h.orig	2026-02-20 19:52:42.000000000 +0100
++++ mac-12.35/Source/Shared/All.h	2026-02-24 11:57:40.411966271 +0100
+@@ -10,8 +10,8 @@ PLATFORM_LINUX
+ PLATFORM_ANDROID
+ **************************************************************************************************/
+ #if !defined(PLATFORM_WINDOWS) && !defined(PLATFORM_APPLE) && !defined(PLATFORM_LINUX) && !defined(PLATFORM_ANDROID)
+-    #pragma message("No platform set for MACLib, defaulting to Windows")
+-    #define PLATFORM_WINDOWS
++    #pragma message("No platform set for MACLib, defaulting to Linux")
++    #define PLATFORM_LINUX
+ #endif
+ 
+ #ifdef PLATFORM_ANDROID

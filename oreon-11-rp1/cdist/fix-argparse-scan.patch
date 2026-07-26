@@ -1,0 +1,16 @@
+diff --git a/cdist/argparse.py b/cdist/argparse.py
+index f17315e7..28c42fb0 100644
+--- a/cdist/argparse.py
++++ b/cdist/argparse.py
+@@ -471,10 +471,7 @@ def get_parsers():
+             'pattern', nargs='?', help='Glob pattern.')
+     parser['info'].set_defaults(func=cdist.info.Info.commandline)
+ 
+-    # Scan = config + further
+-    parser['scan'] = parser['sub'].add_parser('scan', add_help=False,
+-                                              parents=[parser['config']])
+-
++    # Scan
+     parser['scan'] = parser['sub'].add_parser(
+             'scan', parents=[parser['loglevel'],
+                              parser['beta'],

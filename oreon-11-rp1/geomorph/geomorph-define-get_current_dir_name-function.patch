@@ -1,0 +1,28 @@
+diff -rup a/src/hf/erode_dialog.c b/src/hf/erode_dialog.c
+--- a/src/hf/erode_dialog.c	2016-05-13 09:44:35.309483086 +0200
++++ b/src/hf/erode_dialog.c	2016-05-13 09:46:12.589801455 +0200
+@@ -36,6 +36,10 @@
+ #include "../icons/east.xpm"
+ #include "../icons/west.xpm"
+ 
++#ifndef _GNU_SOURCE
++#define get_current_dir_name() getcwd(NULL,0)
++#endif
++
+ static gint frame_counter;
+ 
+ extern gchar *HF_OUTPUT_FOR_RENDERING, *OUTPUT_PREFIX, *TMP_DIR;
+diff -rup a/src/hf/render.c b/src/hf/render.c
+--- a/src/hf/render.c	2016-05-13 09:44:35.307483100 +0200
++++ b/src/hf/render.c	2016-05-13 09:47:00.781463782 +0200
+@@ -45,6 +45,10 @@ extern gchar *HF_OUTPUT_FOR_RENDERING, *
+ 	#define NBRENDERCOM 2
+ #endif
+ 
++#ifndef _GNU_SOURCE
++#define get_current_dir_name() getcwd(NULL,0)
++#endif
++
+ command_item_struct render_commands[NBRENDERCOM] = {
+   {"Render",  "Choose & Run", "Choose a scene (.pov) and render it", 0, (gchar **) run2_with_choice_xpm, GDK_LEFT_PTR, run_with_choice_callb,NULL, NULL, FALSE},
+  {"Render",  "Run", "Render the current scene (.pov)", 0, (gchar **) run2_xpm, GDK_LEFT_PTR, run_callb,NULL, NULL, FALSE}

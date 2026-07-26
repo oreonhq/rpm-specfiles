@@ -1,0 +1,23 @@
+--- taylor1plus/Makefile.orig	2023-07-09 03:58:59.000000000 -0600
++++ taylor1plus/Makefile	2023-07-27 09:07:33.315882622 -0600
+@@ -58,8 +58,8 @@ CAML_TO_INSTALL_DEBUG += dllt1pMPQ_caml_
+ endif
+ endif
+ 
+-LIBS = -lapron -lgmpxx -lmpfr -lgmp -lm
+-LIBS_DEBUG = -lapron_debug -lgmpxx -lmpfr -lgmp -lm
++LIBS = -Wl,--as-needed -lapron -lsdp -lgmpxx -lmpfr -lgmp -lm
++LIBS_DEBUG = -Wl,--as-needed -lapron_debug -lsdp -lgmpxx -lmpfr -lgmp -lm
+ 
+ #---------------------------------------
+ # Rules
+--- taylor1plus/t1p_fun.c.orig	2023-07-09 03:58:59.000000000 -0600
++++ taylor1plus/t1p_fun.c	2023-07-27 08:45:57.813003179 -0600
+@@ -14,7 +14,6 @@
+ 
+ #ifdef _USE_SDP
+ #include "declarations.h"
+-#include "vSDP.h"
+ #endif
+ 
+ #include "ap_texpr0.h"

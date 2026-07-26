@@ -1,0 +1,66 @@
+diff --git a/t/10_resolver.t b/t/10_resolver.t
+index 5c5e734..ea2d769 100644
+--- a/t/10_resolver.t
++++ b/t/10_resolver.t
+@@ -19,6 +19,9 @@ use Socket qw(AF_INET);
+ use TestServer;
+ my $server_port = TestServer->spawn(0);
+ 
++my $timeout = 120;
++my $start;
++
+ my $test_server_use_count = 0;
+ 
+ POE::Session->create(
+@@ -41,6 +44,7 @@ POE::Session->create(
+ 
+ sub start_with {
+   my $heap = $_[HEAP];
++  $start = time;
+ 
+   $_[KERNEL]->alias_set ('WITH');
+   $heap->{cm} = POE::Component::Client::Keepalive->new(
+@@ -53,6 +57,7 @@ sub start_with {
+     port    => $server_port,
+     event   => "got_conn",
+     context => "first",
++    timeout => $timeout,
+   );
+ 
+   ++$test_server_use_count;
+@@ -72,6 +77,7 @@ sub start_without {
+     port    => $server_port,
+     event   => "got_conn",
+     context => "second",
++    timeout => $timeout,
+   );
+ 
+   ++$test_server_use_count;
+@@ -88,14 +94,19 @@ sub got_conn{
+   my $connection = delete $response->{connection};
+   my $which = $response->{context};
+ 
+-  if (defined $connection) {
+-    pass "$which request honored asynchronously";
+-  }
+-  else {
+-    fail(
+-      "$which request $response->{function} error $response->{error_num}: " .
+-      $response->{error_str}
+-    );
++  SKIP: {
++    if ($which eq 'second' and time - $start >= $timeout) {
++      skip "Test run time exceded keepalive timeout $timeout s", 1;
++    }
++    if (defined $connection) {
++      pass "$which request honored asynchronously";
++    }
++    else {
++      fail(
++        "$which request $response->{function} error $response->{error_num}: " .
++        $response->{error_str}
++      );
++    }
+   }
+ 
+   ok(

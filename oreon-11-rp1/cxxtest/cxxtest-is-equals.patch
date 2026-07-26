@@ -1,0 +1,31 @@
+--- cxxtest-4.4/python/python3/cxxtest/cxx_parser.py.orig	2014-06-03 21:57:07.000000000 -0600
++++ cxxtest-4.4/python/python3/cxxtest/cxx_parser.py	2023-07-05 14:10:06.760676320 -0600
+@@ -2087,7 +2087,7 @@ def p_error(p):
+         tmp = "Syntax error at end of file."
+     else:
+         tmp = "Syntax error at token "
+-        if p.type is "":
++        if p.type == "":
+             tmp = tmp + "''"
+         else:
+             tmp = tmp + str(p.type)
+--- cxxtest-4.4/python/python3/cxxtest/cxxtest_parser.py.orig	2014-06-03 21:57:07.000000000 -0600
++++ cxxtest-4.4/python/python3/cxxtest/cxxtest_parser.py	2023-07-05 14:10:36.289238265 -0600
+@@ -36,7 +36,7 @@ def scanInputFiles(files, _options):
+     #
+     for file in files:
+         scanInputFile(file)
+-    if len(suites) is 0 and not options.root:
++    if len(suites) == 0 and not options.root:
+         abort( 'No tests defined' )
+     return [options,suites]
+ 
+@@ -233,7 +233,7 @@ def closeSuite():
+     '''Close current suite and add it to the list if valid'''
+     global suite
+     if suite is not None:
+-        if len(suite['tests']) is not 0:
++        if len(suite['tests']) != 0:
+             verifySuite(suite)
+             rememberSuite(suite)
+         suite = None

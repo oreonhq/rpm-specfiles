@@ -1,0 +1,36 @@
+diff -up Linux-Inotify2-2.3/t/01_inotify.t.orig Linux-Inotify2-2.3/t/01_inotify.t
+--- Linux-Inotify2-2.3/t/01_inotify.t.orig	2021-08-02 14:31:07.426157370 +0200
++++ Linux-Inotify2-2.3/t/01_inotify.t	2021-08-02 14:31:59.138080965 +0200
+@@ -5,10 +5,12 @@ my $in = Linux::Inotify2->new;
+ ok ($in, "inotify handle created");
+ 
+ # create directory for watch
+-mkdir $$;
++use File::Temp qw/ tempdir /;
++my $dir = tempdir();
++mkdir $dir;
+ 
+-my $watch = $in->watch ($$, IN_ALL_EVENTS);
+-ok ($watch, "watch created for directory $$");
++my $watch = $in->watch ($dir, IN_ALL_EVENTS);
++ok ($watch, "watch created for directory $dir");
+ 
+ $in->blocking (0);
+ 
+@@ -17,7 +19,7 @@ $in->blocking (0);
+   ok (@list==0, "non blocking: $!");
+ }
+ 
+-rmdir $$;
++rmdir $dir;
+ 
+ {
+   my @list = $in->poll;
+@@ -27,6 +29,6 @@ rmdir $$;
+ ok ($watch->cancel, "watch canceled");
+ 
+ END {
+-  rmdir $$;
++  rmdir $dir;
+ }
+ 

@@ -1,0 +1,40 @@
+diff -up libopenshot-0.5.0/src/FFmpegWriter.cpp.ffmpeg8 libopenshot-0.5.0/src/FFmpegWriter.cpp
+--- libopenshot-0.5.0/src/FFmpegWriter.cpp.ffmpeg8	2025-12-19 15:17:22.913806415 +0100
++++ libopenshot-0.5.0/src/FFmpegWriter.cpp	2025-12-19 21:52:52.367096338 +0100
+@@ -1511,7 +1511,7 @@ void FFmpegWriter::open_video(AVFormatCo
+ 		switch (video_codec_ctx->codec_id) {
+ 			case AV_CODEC_ID_H264:
+ 				video_codec_ctx->max_b_frames = 0;  // At least this GPU doesn't support b-frames
+-				video_codec_ctx->profile = FF_PROFILE_H264_BASELINE | FF_PROFILE_H264_CONSTRAINED;
++				video_codec_ctx->profile = AV_PROFILE_H264_BASELINE | AV_PROFILE_H264_CONSTRAINED;
+ 				av_opt_set(video_codec_ctx->priv_data, "preset", "slow", 0);
+ 				av_opt_set(video_codec_ctx->priv_data, "tune", "zerolatency", 0);
+ 				av_opt_set(video_codec_ctx->priv_data, "vprofile", "baseline", AV_OPT_SEARCH_CHILDREN);
+@@ -2390,6 +2390,10 @@ void FFmpegWriter::AddSphericalMetadata(
+ 	map->pitch = static_cast<int32_t>(pitch_deg * (1 << 16));
+ 	map->roll  = static_cast<int32_t>(roll_deg  * (1 << 16));
+ 
++#if (LIBAVFORMAT_VERSION_MAJOR < 62)
+ 	av_stream_add_side_data(video_st, AV_PKT_DATA_SPHERICAL, reinterpret_cast<uint8_t*>(map), sd_size);
++#else
++	av_packet_side_data_add(&video_st->codecpar->coded_side_data, &video_st->codecpar->nb_coded_side_data, AV_PKT_DATA_SPHERICAL, reinterpret_cast<uint8_t *>(map), sd_size, 0);
++#endif
+ #endif
+ }
+diff -up libopenshot-0.5.0/src/FFmpegReader.cpp.ffmpeg8 libopenshot-0.5.0/src/FFmpegReader.cpp
+--- libopenshot-0.5.0/src/FFmpegReader.cpp.ffmpeg8	2025-12-16 06:34:48.000000000 +0100
++++ libopenshot-0.5.0/src/FFmpegReader.cpp	2025-12-19 21:57:59.508905965 +0100
+@@ -567,8 +567,13 @@ void FFmpegReader::Open() {
+ 			AVStream* st = pFormatCtx->streams[i];
+ 			if (st->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+ 				// Only inspect the first video stream
++#if (LIBAVFORMAT_VERSION_MAJOR < 62)
+ 				for (int j = 0; j < st->nb_side_data; j++) {
+ 					AVPacketSideData *sd = &st->side_data[j];
++#else
++				for (int j = 0; j < st->codecpar->nb_coded_side_data; j++) {
++					AVPacketSideData *sd = &st->codecpar->coded_side_data[j];
++#endif
+ 
+ 					// Handle rotation metadata (unchanged)
+ 					if (sd->type == AV_PKT_DATA_DISPLAYMATRIX &&

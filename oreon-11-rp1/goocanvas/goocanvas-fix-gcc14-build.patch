@@ -1,0 +1,11 @@
+--- a/src/goocanvasitemsimple.c.orig	2024-11-27 11:46:56.272616015 +0100
++++ b/src/goocanvasitemsimple.c	2024-11-27 11:47:48.484974782 +0100
+@@ -1480,7 +1480,7 @@
+   goo_canvas_item_simple_free_data (item->simple_data);
+   g_slice_free (GooCanvasItemSimpleData, item->simple_data);
+ 
+-  item->model = g_object_ref (model);
++  item->model = (GooCanvasItemModelSimple *) g_object_ref (model);
+   item->simple_data = &item->model->simple_data;
+ 
+   if (accessibility_enabled)

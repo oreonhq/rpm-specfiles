@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="font">
+  <id>gargi</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Gargi</name>
+  <summary>A Devanagari script font</summary>
+  <description>
+    <p>
+      This package provides a Free Unicode OpenType Font.
+    </p>
+  </description>
+  <updatecontact>psatpute_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://savannah.nongnu.org/projects/gargi/</url>
+</component>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>GFS Didot Display</target>
+    <match>
+      <family>GFS Didot Display</family>
+      <prepend-keyword>Black</prepend-keyword>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>Black</name>
+        <value>210</value>
+      </step>
+    </axis>
+  </group>
+</fontconfig>
+

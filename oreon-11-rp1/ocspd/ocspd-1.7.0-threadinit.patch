@@ -1,0 +1,60 @@
+diff -Naurp openca-ocspd-1.7.0.orig/src/core.c openca-ocspd-1.7.0.new/src/core.c
+--- openca-ocspd-1.7.0.orig/src/core.c	2013-10-29 18:37:12.628234602 +0100
++++ openca-ocspd-1.7.0.new/src/core.c	2013-10-29 18:38:21.917819430 +0100
+@@ -98,15 +98,15 @@ int start_threaded_server ( char * bind_
+ 	ocspd_conf->iget = ocspd_conf->iput = 0;
+ 
+ 	for( i = 0; i < nthreads; i++ ) {
++		/* Initialize the values of clifd[] to -1 */
++		ocspd_conf->clifd[i] = -1;
++
+ 		if(thread_make(i) != 0 ) {
+ 			syslog(LOG_ERR,
+ 				"ERROR::FATAL::Can not create "
+ 				"thread (%d)\n", i );
+ 			exit(80);
+ 		}
+-
+-		/* Initialize the values of clifd[] to -1 */
+-		ocspd_conf->clifd[i] = -1;
+ 	}
+ 
+ 	/* Register the alarm handler */
+diff -Naurp openca-ocspd-1.7.0.orig/src/threads.c openca-ocspd-1.7.0.new/src/threads.c
+--- openca-ocspd-1.7.0.orig/src/threads.c	2013-10-29 18:37:12.636234669 +0100
++++ openca-ocspd-1.7.0.new/src/threads.c	2013-10-29 19:02:07.337239828 +0100
+@@ -28,8 +28,8 @@ int thread_make ( int i ) {
+ 	int ret;
+ 
+ 	th_ptr = &(ocspd_conf->threads_list[i]);
+-	if( (ret=pthread_create( &ocspd_conf->threads_list[i].thread_tid, 
+-			NULL, thread_main, (void *) &i )) ) {
++	if ((ret = pthread_create(&ocspd_conf->threads_list[i].thread_tid, 
++			NULL, thread_main, (void *) (ocspd_conf->clifd + i)))) {
+ 
+ 		syslog(LOG_ERR,"ERROR::OPENCA_SRV_ERR_THREAD_CREATE");
+ 		return(ret);
+@@ -45,12 +45,11 @@ void * thread_main ( void *arg ) {
+ 	OCSP_RESPONSE *resp = NULL;
+ 	EVP_PKEY *pkey;
+ 	ENGINE *engine;
+-
+-	int thread_nr = -1;
++	int thread_nr;
+ 
+ 	struct sigaction sa;
+ 
+-	thread_nr = *(int *) arg;
++	thread_nr = (int *) arg - ocspd_conf->clifd;
+ 
+ 	if ( ocspd_conf->verbose ) {
+ 		syslog(LOG_INFO, "INFO::OPENCA_SRV_INFO_TREAD::new thread "
+@@ -163,7 +162,7 @@ void * thread_main ( void *arg ) {
+ 		connfd = ocspd_conf->clifd[thread_nr];
+ 		// pthread_mutex_unlock( &clifd_mutex );
+ 
+-		if( connfd <= 0 ) {
++		if( connfd < 0 ) {
+ 			/* If its own spot is not a valid fd, go from the
+  			 * beginning */
+ 			if( ocspd_conf->verbose == 1 ) {

@@ -1,0 +1,13 @@
+[Unit]
+Description=RFC 1413 compliant ident daemon
+Documentation=man:oidentd(8) man:oidentd.conf(5) man:oidentd_masq.conf(5)
+
+[Service]
+Type=simple
+PrivateDevices=true
+EnvironmentFile=/etc/sysconfig/oidentd
+ExecStart=/usr/sbin/oidentd --foreground --nosyslog $OIDENTD_OPTIONS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

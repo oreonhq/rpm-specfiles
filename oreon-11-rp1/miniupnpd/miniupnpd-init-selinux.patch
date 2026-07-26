@@ -1,0 +1,10 @@
+--- a/netfilter_nft/scripts/nft_init.sh	2025-02-23 10:39:49.000000000 -0600
++++ b/netfilter_nft/scripts/nft_init.sh	2025-04-22 08:14:30.436695569 -0500
+@@ -74,6 +74,7 @@
+ }
+ EOF
+ 
++chcon system_u:object_r:iptables_tmp_t:s0 ${TMPFILE}
+ $NFT -f ${TMPFILE}
+ 
+ rm ${TMPFILE}

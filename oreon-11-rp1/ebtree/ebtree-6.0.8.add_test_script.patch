@@ -1,0 +1,63 @@
+diff -Naur ../ebtree-6.0.8.orig/tests.sh ./tests.sh
+--- ../ebtree-6.0.8.orig/tests.sh	1970-01-01 01:00:00.000000000 +0100
++++ ./tests.sh	2016-12-06 15:31:05.653157135 +0100
+@@ -0,0 +1,59 @@
++#!/bin/bash
++
++export LD_LIBRARY_PATH=.
++iterations=100
++for b in test32 test64; do
++	echo "Running $b $iterations times with random values:"
++	for i in `seq 1 $iterations`; do
++		echo -n "."
++		rv=$RANDOM
++		while read n; do
++			if [[ $n =~ ^node\ ([^[:space:]]+)\ =\ (.+) ]]; then
++				on="${BASH_REMATCH[1]}"
++				ov="${BASH_REMATCH[2]}"
++			fi
++			if [[ $n =~ ^eq:\ node=(.+),\ val=(.+)$ ]]; then
++				en="${BASH_REMATCH[1]}"
++				ev="${BASH_REMATCH[2]}"
++			fi
++		done < <(echo $rv | ./$b $rv)
++
++		if [ "$rv" = "$ov" -a "$rv" = "$ev" -a "$on" = "$en" ]; then
++			true
++		else
++			echo "failed, random input was $rv, stored value was $ov, generated node was $ov, output node was $ev, output was $ev"
++			exit 1
++		fi
++	done
++	echo
++done
++
++echo "Running testst $iterations times with random values:"
++for i in `seq 1 $iterations`; do
++	echo -n "."
++	s=$(uuidgen)
++	while read n; do
++		if [[ $n =~ ^node\ ([^[:space:]]+)\ =\ (.+) ]]; then
++			on="${BASH_REMATCH[1]}"
++			ov="${BASH_REMATCH[2]}"
++		fi
++		if [[ $n =~ ^lookup:\ st:node=([^[:space:]]+)\ \<([^\>]+) ]]; then
++			en="${BASH_REMATCH[1]}"
++			ev="${BASH_REMATCH[2]}"
++		fi
++	done < <(echo "$s" | ./testst "$s")
++
++	if [ "$on" = "$en" -a "$ov" = "$ev" ]; then
++		true
++	else
++		echo "Failed, "
++		echo \"$on\" != 
++		echo \"$en\" or 
++		echo \"$ov\" != i
++		echo \"$ev\"
++		exit 1
++	fi
++done
++echo
++
++exit 0

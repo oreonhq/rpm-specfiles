@@ -1,0 +1,42 @@
+diff --git a/test/test_dict_server.rb b/test/test_dict_server.rb
+index 08024f7..f7a1ee3 100644
+--- a/test/test_dict_server.rb
++++ b/test/test_dict_server.rb
+@@ -44,13 +44,13 @@ class TestDictServerSource < Test::Unit::TestCase
+     end
+ 
+     def test_define
+-        defs = @source.define("eng-fra", "dictionary")
++        defs = @source.define("fd-eng-fra", "dictionary")
+         assert_equal(defs.length, 1)
+         assert_equal(defs.first.body.include?("dictionnaire"), true)
+     end
+ 
+     def test_prefix
+-        matches = @source.match("eng-fra", "prefix", "test")
++        matches = @source.match("fd-eng-fra", "prefix", "test")
+         matches.each_value do |results|
+             results.each do |word|
+                 assert_equal(word =~ /^test/, 0)
+diff --git a/data/fantasdic/config/default.yaml b/data/fantasdic/config/default.yaml
+index a1845b0..265173d 100644
+--- a/data/fantasdic/config/default.yaml
++++ b/data/fantasdic/config/default.yaml
+@@ -62,8 +62,8 @@ dictionaries_infos:
+     :server: dict.org
+     :selected: 1
+     :sel_dbs:
+-    - eng-fra
+-    - fra-eng
++    - fd-eng-fra
++    - fd-fra-eng
+     :login: ""
+     :avail_strats:
+     - prefix
+@@ -89,4 +89,4 @@ dont_show_at_startup: false
+ dictionaries:
+ - English
+ - English <-> French
+-- Japanese
+\ No newline at end of file
++- Japanese

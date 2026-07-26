@@ -1,0 +1,12 @@
+diff -uNr gitweb/gitweb/gitweb_defaults.perl gitweb.orig/gitweb/gitweb_defaults.perl
+--- gitweb/gitweb/gitweb_defaults.perl	2010-02-04 15:49:27.000000000 -0800
++++ gitweb.orig/gitweb/gitweb_defaults.perl	2010-02-04 15:47:08.000000000 -0800
+@@ -217,7 +217,7 @@
+ 
+ # If you need to change the location of the caching directory, override this
+ # otherwise this will probably do fine for you
+-$cachedir = 'cache';
++$cachedir = '/var/cache/gitweb-caching';
+ 
+ # If this is set (to 1) cache will do it's best to always display something instead
+ # of making someone wait for the cache to update.  This will launch the cacheUpdate

@@ -1,0 +1,29 @@
+From 11ed7ef70c2ff8678dd2cea731e607e76d1cef3d Mon Sep 17 00:00:00 2001
+From: Quipyowert2 <38995150+Quipyowert2@users.noreply.github.com>
+Date: Tue, 7 Jul 2020 21:55:23 -0700
+Subject: [PATCH 5/5] world: Fix assertion failure in physical_item::set_owner
+
+Fix assertion failure in physical_item::set_owner.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ bear-engine/core/src/universe/code/world.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/bear-engine/core/src/universe/code/world.cpp b/bear-engine/core/src/universe/code/world.cpp
+index 5e05177..d9e1510 100644
+--- a/bear-engine/core/src/universe/code/world.cpp
++++ b/bear-engine/core/src/universe/code/world.cpp
+@@ -1301,7 +1301,8 @@ bool bear::universe::world::item_in_regions
+  */
+ void bear::universe::world::add(physical_item* const& who)
+ {
+-  who->set_owner(*this);
++  if (!who->has_owner())
++    who->set_owner(*this);
+   m_entities.push_back( who );
+ } // world::add()
+ 
+-- 
+2.37.1
+

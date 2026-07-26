@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Jon Disnard <jdisnard@gmail.com> -->
+<application>
+ <id type="desktop">glmark2.desktop</id>
+ <licence>CC-BY-SA</licence>
+ <name>Glmark2</name>
+ <summary>OpenGL and ES 2.0 benchmark tool</summary>
+ <description>
+  <p>
+   Glmark2 is an OpenGL 2.0 benchmark, that coveres a number of GL capabilities.
+  </p>
+  <p>
+   One of the nice features is the ability to benchmark OpenGL ES 2.0 capable hardware.
+   This makes GLmark2 especially useful to ARM or other mobile platforms that make use of OpenGL ES 2.0.
+   GLmark2 is based on the the original GLmark tool, enhanced for mobile benchmarking.
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default" width="802" height="638">http://parasense.fedorapeople.org/appdata/glmark2/glmark2-cat.png</screenshot>
+  <screenshot width="802" height="638">http://parasense.fedorapeople.org/appdata/glmark2/glmark2-sgi.png</screenshot>
+  <screenshot width="802" height="638">http://parasense.fedorapeople.org/appdata/glmark2/glmark2-stallion.png</screenshot>
+  <screenshot width="802" height="638">http://parasense.fedorapeople.org/appdata/glmark2/glmark2-terrain.png</screenshot>
+  <screenshot width="802" height="638">http://parasense.fedorapeople.org/appdata/glmark2/glmark2-waveform.png</screenshot>
+ </screenshots>
+ <url type="homepage">https://launchpad.net/glmark2</url>
+ <updatecontact>parasense@fedoraproject.org</updatecontact>
+ <project_group>Linaro</project_group>
+</application>

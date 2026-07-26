@@ -1,0 +1,5404 @@
+From 48b8dba0948ddb0e2f65487efa4b91c988e669c9 Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Fri, 15 Aug 2025 16:28:02 -0600
+Subject: [PATCH] C23 compatibility
+
+---
+ src/bin/animate/glob.c                        | 103 ++++-------
+ src/bin/geomutil/clip/Clip.h                  |   2 +-
+ src/bin/geomutil/clip/clipmain.c              |   6 +-
+ src/bin/geomutil/plutil/polymerge.c           |  10 +-
+ src/bin/geomutil/ucd/anytoucd.c               |   8 +-
+ src/bin/geomutil/ucd/make_frame.c             |   4 +-
+ src/bin/geomutil/ucd/stack.c                  |   3 +-
+ src/bin/geomutil/ucd/ucdtooff.c               |  13 +-
+ .../geomutil/vrml2oogl/lib/QvToWebOOGL.c++    |  11 +-
+ .../geomutil/vrml2oogl/lib/QvWWWInline.c++    |   4 +-
+ src/bin/geomview/common/comm.c                |   4 +-
+ src/bin/geomview/common/common.h              |   4 +-
+ src/bin/geomview/common/drawer.c              |  13 +-
+ src/bin/geomview/common/lang.c                |   2 +-
+ src/bin/geomview/common/lights.c              |  12 +-
+ src/bin/geomview/common/lispext.c             | 174 ++++++++++++------
+ src/bin/geomview/common/transform.h           |   2 +-
+ src/bin/geomview/common/ui.c                  |  12 +-
+ src/bin/geomview/common/ui.h                  |   2 +-
+ src/bin/geomview/x11/gvappear.c               |  12 +-
+ src/bin/geomview/x11/gvcamui.c                |   2 +-
+ src/bin/geomview/x11/gvmain.c                 |   2 +-
+ src/bin/geomview/x11/gvmnpanel.c              |  29 +--
+ src/bin/geomview/x11/gvui.c                   |   4 +-
+ src/bin/geomview/x11/gvui.h                   |   2 +-
+ src/lib/camera/camera.h                       |   2 +-
+ src/lib/camera/cameraP.h                      |   2 +-
+ src/lib/camera/camstream.c                    |  16 +-
+ src/lib/color/mergeout.c                      |   7 +-
+ src/lib/color/mergeover.c                     |   7 +-
+ src/lib/color/mergeunder.c                    |   7 +-
+ src/lib/color/paintcopy.c                     |   9 +-
+ src/lib/color/paintover.c                     |   9 +-
+ src/lib/geometry/hpoint3/hpoint3.h            |   4 +-
+ src/lib/geometry/ntransobj/ntransobj.c        |   9 +-
+ src/lib/geometry/transform3/ctm3tetrad.c      |   4 +-
+ src/lib/geometry/transform3/tm3adjoint.c      |   3 +-
+ src/lib/geometry/transform3/tm3concat.c       |   9 +-
+ src/lib/geometry/transform3/tm3conjugate.c    |   3 +-
+ src/lib/geometry/transform3/tm3copy.c         |   5 +-
+ src/lib/geometry/transform3/tm3identity.c     |   3 +-
+ src/lib/geometry/transform3/tm3stack.c        |   6 +-
+ src/lib/geometry/transform3/tm3transpose.c    |   3 +-
+ src/lib/geometry/transobj/transobj.c          |  12 +-
+ src/lib/geometry/transobj/transobj.h          |   2 +-
+ src/lib/geomutil/bdy/bdy.c                    |   6 +-
+ src/lib/gprim/bbox/bboxcreate.c               |   6 +-
+ src/lib/gprim/bezier/bezcreate.c              |   6 +-
+ src/lib/gprim/bezier/bezdice.c                |   2 +-
+ src/lib/gprim/bezier/bezevert.c               |   3 +-
+ src/lib/gprim/bezier/bezier.h                 |  10 +-
+ src/lib/gprim/bezier/bezsave.c                |   8 +-
+ src/lib/gprim/comment/commentcreate.c         |   6 +-
+ src/lib/gprim/comment/commentsave.c           |   4 +-
+ src/lib/gprim/discgrp/colormap.c              |   6 +-
+ src/lib/gprim/discgrp/complex.c               |  41 ++---
+ src/lib/gprim/discgrp/dgcopy.c                |   3 +-
+ src/lib/gprim/discgrp/dgcreate.c              |   8 +-
+ src/lib/gprim/discgrp/dgdelete.c              |   3 +-
+ src/lib/gprim/discgrp/dgdirdom.c              |   7 +-
+ src/lib/gprim/discgrp/dgenum.c                |  11 +-
+ src/lib/gprim/discgrp/dgevert.c               |   3 +-
+ src/lib/gprim/discgrp/dgmisc.c                |   8 +-
+ src/lib/gprim/discgrp/dgstream.c              |   2 +-
+ src/lib/gprim/discgrp/dgtransform.c           |   4 +-
+ src/lib/gprim/discgrp/discgrpP.h              |  19 +-
+ src/lib/gprim/discgrp/extern.h                |  15 +-
+ src/lib/gprim/discgrp/matlist.c               |  24 +--
+ src/lib/gprim/discgrp/outstack.c              |   3 +-
+ src/lib/gprim/discgrp/polyhedron.c            |   3 +-
+ src/lib/gprim/discgrp/projective.c            |  21 +--
+ src/lib/gprim/discgrp/projective.h            |  11 +-
+ src/lib/gprim/discgrp/stack.c                 |   3 +-
+ src/lib/gprim/discgrp/weeks_dirdom.c          |  74 +++-----
+ src/lib/gprim/discgrp/xform.c                 |  12 +-
+ src/lib/gprim/geom/bsptree.c                  |   4 +-
+ src/lib/gprim/geom/bsptree.h                  |   2 +-
+ src/lib/gprim/geom/class.c                    |  19 +-
+ src/lib/gprim/geom/evert.c                    |   3 +-
+ src/lib/gprim/geom/geom.h                     |   8 +-
+ src/lib/gprim/geom/geomclass.h                |   8 +-
+ src/lib/gprim/geom/geomstream.c               |   9 +-
+ src/lib/gprim/geom/handlescan.c               |   2 +-
+ src/lib/gprim/geom/iterate.c                  |   3 +-
+ src/lib/gprim/geom/knownclass.c               |   3 +-
+ src/lib/gprim/geom/message.c                  |   5 +-
+ src/lib/gprim/geom/name.c                     |   3 +-
+ src/lib/gprim/inst/instclass.c                |   2 +-
+ src/lib/gprim/inst/instcreate.c               |   6 +-
+ src/lib/gprim/inst/instmisc.c                 |   6 +-
+ src/lib/gprim/lincoln/lincolndefs.h           |   2 +-
+ src/lib/gprim/lincoln/lincolnload.c           |   2 +-
+ src/lib/gprim/list/listclass.c                |   2 +-
+ src/lib/gprim/list/listcreate.c               |  12 +-
+ src/lib/gprim/list/listmisc.c                 |   4 +-
+ src/lib/gprim/mesh/mesh.h                     |   2 +-
+ src/lib/gprim/mesh/meshclass.c                |   2 +-
+ src/lib/gprim/mesh/meshcreate.c               |   4 +-
+ src/lib/gprim/mesh/meshdice.c                 |   4 +-
+ src/lib/gprim/ndmesh/ndmeshclass.c            |   2 +-
+ src/lib/gprim/ndmesh/ndmeshcreate.c           |   4 +-
+ src/lib/gprim/npolylist/nplcreate.c           |   4 +-
+ src/lib/gprim/npolylist/nplload.c             |   2 +-
+ src/lib/gprim/polylist/plcreate.c             |   4 +-
+ src/lib/gprim/polylist/plload.c               |   2 +-
+ src/lib/gprim/quad/quadclass.c                |   2 +-
+ src/lib/gprim/quad/quadcopy.c                 |   3 +-
+ src/lib/gprim/quad/quadcreate.c               |   4 +-
+ src/lib/gprim/quad/quadevert.c                |   3 +-
+ src/lib/gprim/skel/skelcreate.c               |   4 +-
+ src/lib/gprim/skel/skelload.c                 |   2 +-
+ src/lib/gprim/sphere/spherecreate.c           |   4 +-
+ src/lib/gprim/stub/stub.c                     |   6 +-
+ src/lib/gprim/stub/stub.h                     |   4 +-
+ src/lib/gprim/tlist/tlcreate.c                |   6 +-
+ src/lib/gprim/vect/vect.h                     |  10 +-
+ src/lib/gprim/vect/vectcreate.c               |   7 +-
+ src/lib/gprim/vect/vectdraw.c                 |   3 +-
+ src/lib/gprim/vect/vectload.c                 |   2 +-
+ src/lib/gprim/vect/vectsave.c                 |   4 +-
+ src/lib/gprim/vect/vecttransform.c            |   8 +-
+ src/lib/mg/buf/mgbuf.c                        |  17 +-
+ src/lib/mg/buf/mgbufdraw.c                    |   4 +-
+ src/lib/mg/common/mg.c                        |   4 +-
+ src/lib/mg/common/mg.h                        |   6 +-
+ src/lib/mg/opengl/mgopengl.c                  |  16 +-
+ src/lib/mg/opengl/mgopenglP.h                 |  13 +-
+ src/lib/mg/opengl/mgopengldraw.c              |  42 ++---
+ src/lib/mg/opengl/mgopenglmesh.c              |  38 ++--
+ src/lib/mg/ps/mgps.c                          |  17 +-
+ src/lib/mg/ps/mgpsdraw.c                      |   4 +-
+ src/lib/mg/rib/mgrib.c                        |  19 +-
+ src/lib/mg/rib/mgribdraw.c                    |   5 +-
+ src/lib/mg/x11/mgx11.c                        |  17 +-
+ src/lib/mg/x11/mgx11dither.c                  |   6 +-
+ src/lib/mg/x11/mgx11draw.c                    |   4 +-
+ src/lib/mg/x11/mgx11render8.c                 |   2 +-
+ src/lib/mib/mibload.c                         |  17 +-
+ src/lib/mib/mibload.h                         |   4 +-
+ src/lib/mib/mibwidgets.h                      |   8 +-
+ src/lib/oogl/lisp/lisp.c                      | 124 ++++++-------
+ src/lib/oogl/lisp/lisp.h                      |  18 +-
+ src/lib/oogl/lisp/lisp2.h                     |  14 +-
+ src/lib/oogl/refcomm/handle.c                 |   3 +-
+ src/lib/oogl/refcomm/handle.h                 |   8 +-
+ src/lib/oogl/util/glob.c                      |   5 +-
+ src/lib/oogl/wa/fsaparse.l                    |   2 +
+ src/lib/oogl/wa/fsaparse.y                    |  12 +-
+ src/lib/shade/apstream.c                      |   1 +
+ src/lib/shade/image.c                         |   1 +
+ src/lib/shade/light.c                         |   2 +-
+ src/lib/shade/texture.c                       |   9 +-
+ src/lib/window/winstream.c                    |   9 +-
+ 153 files changed, 722 insertions(+), 830 deletions(-)
+
+diff --git a/src/bin/animate/glob.c b/src/bin/animate/glob.c
+index ba179c2..c20bd57 100644
+--- a/src/bin/animate/glob.c
++++ b/src/bin/animate/glob.c
+@@ -59,9 +59,9 @@ static	char **gargv;		/* Pointer to the (stack) arglist */
+ static	int gargc;		/* Number args in gargv */
+ static	int gnleft;
+ static	short gflag;
+-static	int tglob();
+-char	**glob();
+-static  void rscan(char **, int ());
++static	int tglob(char);
++char	**glob(char *);
++static  void rscan(char **, int (*)(char));
+ static  void ginit(char **);
+ static  void collect(char *);
+ static  void acollect(char *);
+@@ -80,11 +80,9 @@ static  void fatal(char *);
+ /*static  void scan(char **, int ());*/
+ char	*globerr;
+ char	*home;
+-struct	passwd *getpwnam();
+-extern	int errno;
+-static	char *strspl(), *strend();
++static	char *strspl(char *, char *), *strend(char *);
+ /*char	*malloc(), *strcpy(), *strcat(); */
+-char	**copyblk();
++char	**copyblk(char **);
+ 
+ static	int globcnt;
+ 
+@@ -95,16 +93,15 @@ static	int globbed;
+ static	char *entp;
+ static	char **sortbas;
+ 
+-void blkfree();
+-int letter();
+-int digit();
+-int gethdir();
+-int any();
++void blkfree(char **);
++int letter(char);
++int digit(char);
++int gethdir(char *);
++int any(int, char *);
+ 
+ 
+ char **
+-glob(v)
+-	char *v;
++glob(char *v)
+ {
+ 	char agpath[BUFSIZ];
+ 	char *agargv[GAVSIZ];
+@@ -129,8 +126,7 @@ glob(v)
+ }
+ 
+ static void
+-ginit(agargv)
+-	char **agargv;
++ginit(char **agargv)
+ {
+ 
+ 	agargv[0] = 0; gargv = agargv; sortbas = agargv; gargc = 0;
+@@ -138,8 +134,7 @@ ginit(agargv)
+ }
+ 
+ static void
+-collect(as)
+-	char *as;
++collect(char *as)
+ {
+ 	if (eq(as, "{") || eq(as, "{}")) {
+ 		Gcat(as, "");
+@@ -149,8 +144,7 @@ collect(as)
+ }
+ 
+ static void
+-acollect(as)
+-	char *as;
++acollect(char *as)
+ {
+ 	int ogargc = gargc;
+ 
+@@ -178,8 +172,7 @@ sort()
+ }
+ 
+ static void
+-expand(as)
+-	char *as;
++expand(char *as)
+ {
+ 	char *cs;
+ 	char *sgpathp, *oldcs;
+@@ -200,8 +193,6 @@ expand(as)
+ 			} else {
+ 				if(home == NULL) {
+ 				    struct passwd *pp;
+-				    extern char *getenv();
+-
+ 				    home = getenv("HOME");
+ 				    if(home == NULL) {
+ 					pp = getpwuid(getuid());
+@@ -248,8 +239,7 @@ expand(as)
+ }
+ 
+ static void
+-matchdir(pattern)
+-	char *pattern;
++matchdir(char *pattern)
+ {
+ 	struct stat stb;
+ 	struct dirent *dp;
+@@ -285,8 +275,7 @@ matchdir(pattern)
+ }
+ 
+ static int
+-execbrc(p, s)
+-	char *p, *s;
++execbrc(char *p, char *s)
+ {
+ 	char restbuf[BUFSIZ + 2];
+ 	char *pe, *pm, *pl;
+@@ -365,8 +354,7 @@ execbrc(p, s)
+ }
+ 
+ static int
+-match(s, p)
+-	char *s, *p;
++match(char *s, char *p)
+ {
+ 	int c;
+ 	char *sentp;
+@@ -383,8 +371,7 @@ match(s, p)
+ }
+ 
+ static int
+-amatch(s, p)
+-	char *s, *p;
++amatch(char *s, char *p)
+ {
+ 	int scc;
+ 	int ok, lc;
+@@ -478,8 +465,7 @@ amatch(s, p)
+ 
+ #if 0
+ static int
+-Gmatch(s, p)
+-	char *s, *p;
++Gmatch(char *s, char *p)
+ {
+ 	int scc;
+ 	int ok, lc;
+@@ -541,8 +527,7 @@ Gmatch(s, p)
+ #endif
+ 
+ static void
+-Gcat(s1, s2)
+-	char *s1, *s2;
++Gcat(char *s1, char *s2)
+ {
+ 	int len = strlen(s1) + strlen(s2) + 1;
+ 
+@@ -569,9 +554,7 @@ addpath(char c)
+ }
+ 
+ static void
+-rscan(t, f)
+-	char **t;
+-	int (*f)();
++rscan(char **t, int (*f)(char))
+ {
+ 	char *p, c;
+ 
+@@ -589,9 +572,7 @@ rscan(t, f)
+ }
+ /*
+ static void
+-scan(t, f)
+-	char **t;
+-	int (*f)();
++scan(char **t, int (*f)(char))
+ {
+ 	char *p, c;
+ 
+@@ -601,8 +582,7 @@ scan(t, f)
+ } */
+ 
+ static int
+-tglob(c)
+-	char c;
++tglob(char c)
+ {
+ 
+ 	if (any(c, globchars))
+@@ -620,25 +600,21 @@ trim(c)
+ 
+ 
+ int
+-letter(c)
+-	char c;
++letter(char c)
+ {
+ 
+ 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
+ }
+ 
+ int
+-digit(c)
+-	char c;
++digit(char c)
+ {
+ 
+ 	return (c >= '0' && c <= '9');
+ }
+ 
+ int
+-any(c, s)
+-	int c;
+-	char *s;
++any(int c, char *s)
+ {
+ 
+ 	while (*s)
+@@ -648,8 +624,7 @@ any(c, s)
+ }
+ 
+ int
+-blklen(av)
+-	char **av;
++blklen(char **av)
+ {
+ 	int i = 0;
+ 
+@@ -659,9 +634,7 @@ blklen(av)
+ }
+ 
+ char **
+-blkcpy(oav, bv)
+-	char **oav;
+-	char **bv;
++blkcpy(char **oav, char **bv)
+ {
+ 	char **av = oav;
+ 
+@@ -671,8 +644,7 @@ blkcpy(oav, bv)
+ }
+ 
+ void
+-blkfree(av0)
+-	char **av0;
++blkfree(char **av0)
+ {
+ 	char **av = av0;
+ 
+@@ -682,8 +654,7 @@ blkfree(av0)
+ 
+ static
+ char *
+-strspl(cp, dp)
+-	char *cp, *dp;
++strspl(char *cp, char *dp)
+ {
+ 	char *ep = malloc((unsigned)(strlen(cp) + strlen(dp) + 1));
+ 
+@@ -695,8 +666,7 @@ strspl(cp, dp)
+ }
+ 
+ char **
+-copyblk(v)
+-	char **v;
++copyblk(char **v)
+ {
+ 	char **nv = (char **)malloc((unsigned)((blklen(v) + 1) *
+ 						sizeof(char **)));
+@@ -708,8 +678,7 @@ copyblk(v)
+ 
+ static
+ char *
+-strend(cp)
+-	char *cp;
++strend(char *cp)
+ {
+ 
+ 	while (*cp)
+@@ -723,8 +692,7 @@ strend(cp)
+  * We write the home directory of the user back there.
+  */
+ int
+-gethdir(home)
+-	char *home;
++gethdir(char *home)
+ {
+ 	struct passwd *pp = getpwnam(home);
+ 
+@@ -735,8 +703,7 @@ gethdir(home)
+ }
+ 
+ static void
+-fatal(s)
+-char *s;
++fatal(char *s)
+ {
+     fprintf( stderr, "glob: %s\n", s );
+     exit(1);
+diff --git a/src/bin/geomutil/clip/Clip.h b/src/bin/geomutil/clip/Clip.h
+index 4f96a2e..a28b715 100644
+--- a/src/bin/geomutil/clip/Clip.h
++++ b/src/bin/geomutil/clip/Clip.h
+@@ -112,7 +112,7 @@ typedef struct clip {
+ 				/* For a plane, the plane normal vector */
+ 				/* (or, other parameters for non-planar clip) */
+ 
+-    float	(*clipfunc)();	/* Clipping function, whose value is zero
++    float	(*clipfunc)(struct clip *, float *);	/* Clipping function, whose value is zero
+ 				 * along the surface where we should clip.
+ 				 */
+     int		nonlinear;	/* Is clipfunc an affine function of position?*/
+diff --git a/src/bin/geomutil/clip/clipmain.c b/src/bin/geomutil/clip/clipmain.c
+index 7aa0719..6f8d0ef 100644
+--- a/src/bin/geomutil/clip/clipmain.c
++++ b/src/bin/geomutil/clip/clipmain.c
+@@ -69,7 +69,7 @@ static int parsevector(char *str, float data[], int maxdata)
+ }
+ 
+ void
+-setclipat(Clip *clip, char *pstr, int dim, float *surf, void (*prepfunc)())
++setclipat(Clip *clip, char *pstr, int dim, float *surf, void (*prepfunc)(Clip *))
+ {
+     float point[MAXDIM];
+     float level;
+@@ -192,8 +192,8 @@ int main(int argc, char *argv[])
+ {
+     Geom *g, *clipped;
+     float surf[MAXDIM];
+-    float (*func)() = NULL;
+-    void (*prepfunc)() = NULL;
++    float (*func)(Clip *, float *) = NULL;
++    void (*prepfunc)(Clip *) = NULL;
+     char *lestr = NULL, *gestr = NULL;
+     char *type;
+     int slices = 0;
+diff --git a/src/bin/geomutil/plutil/polymerge.c b/src/bin/geomutil/plutil/polymerge.c
+index 26d5b07..0f89af7 100644
+--- a/src/bin/geomutil/plutil/polymerge.c
++++ b/src/bin/geomutil/plutil/polymerge.c
+@@ -132,7 +132,7 @@ static E *advance_geodesic(Geod *g, E *avoid);
+ static void add_geodesic(Geod *g, char *str);
+ static void reflectline(P *axis, P *vector, P *result);
+ static void rotation(P *va, P *vb, float T[3][3]);
+-static int vcmp(V **p, V **q);
++static int vcmp(const void *a, const void *b);
+ static void deface(F *f);
+ static void normal_ize(F *f);
+ /*static E *echeck(int v0, int v1);*/
+@@ -831,9 +831,11 @@ static void deface(F *f)
+     tossedf++;
+ }
+ 
+-static int vcmp(V **p, V **q)
++static int vcmp(const void *a, const void *b)
+ {
+-    V *vp, *vq;
++    const V **p = (const V **)a;
++    const V **q = (const V **)b;
++    const V *vp, *vq;
+     float d;
+ 
+     vp = *p;
+@@ -863,7 +865,7 @@ static void vmerge(void)
+ 	a->ref = 0;
+ 	vp[i] = a++;
+     }
+-    qsort(vp, nv, sizeof(V *), (int (*)())vcmp);
++    qsort(vp, nv, sizeof(V *), vcmp);
+ 
+     /*
+      * Now all matches will occur within X-runs
+diff --git a/src/bin/geomutil/ucd/anytoucd.c b/src/bin/geomutil/ucd/anytoucd.c
+index 1faf8ed..4856c52 100644
+--- a/src/bin/geomutil/ucd/anytoucd.c
++++ b/src/bin/geomutil/ucd/anytoucd.c
+@@ -75,9 +75,7 @@ typedef struct polygon polygon;
+ typedef struct line line;
+ 
+ void
+-myconvert(CP, cp)
+-Poly *CP;
+-polygon *cp;
++myconvert(Poly *CP, polygon *cp)
+ {
+     int i;
+     cp->nv = CP->n_vertices;
+@@ -87,9 +85,7 @@ polygon *cp;
+ }
+ 
+ polygon *
+-chopup (pp, PP)
+-polygon *pp;
+-Poly *PP;
++chopup (polygon *pp, Poly *PP)
+ {
+     int n, i ;
+     int convex, orient;
+diff --git a/src/bin/geomutil/ucd/make_frame.c b/src/bin/geomutil/ucd/make_frame.c
+index 721c1a9..b301ace 100644
+--- a/src/bin/geomutil/ucd/make_frame.c
++++ b/src/bin/geomutil/ucd/make_frame.c
+@@ -66,9 +66,7 @@ int make_tform(HPoint3 *p1, HPoint3 *p2, HPoint3 *p3, Transform m)
+ /* make rotation that takes (1,0,0) to v1; and (0,1,0) to the orthog. proj of v2 onto
+    the perpendicular subspace of v1.  Return (0) if v1 and v2 are collinear. 
+ */
+-int make_rotation(v1, v2, m)
+-HPoint3 *v1, *v2;
+-Transform m;
++int make_rotation(HPoint3 *v1, HPoint3 *v2, Transform m)
+ {
+     double a;
+     HPoint3  t1, t2;
+diff --git a/src/bin/geomutil/ucd/stack.c b/src/bin/geomutil/ucd/stack.c
+index f6a98ab..54e276f 100644
+--- a/src/bin/geomutil/ucd/stack.c
++++ b/src/bin/geomutil/ucd/stack.c
+@@ -40,8 +40,7 @@ int initstack(void)
+ }
+ 	
+ int
+-push(pp)
+-Poly *pp;
++push(Poly *pp)
+ {
+     int i;
+     if (stackptr >= &mystack[BlockSize*array_size])	{ 
+diff --git a/src/bin/geomutil/ucd/ucdtooff.c b/src/bin/geomutil/ucd/ucdtooff.c
+index ae17c35..b39f06a 100644
+--- a/src/bin/geomutil/ucd/ucdtooff.c
++++ b/src/bin/geomutil/ucd/ucdtooff.c
+@@ -91,8 +91,7 @@ static int ign_fscanf(FILE *file, const char *format, ...)
+ #endif
+ 
+ int 
+-gettype(str)
+-     char *str;
++gettype(char *str)
+ {
+     if (strcmp(str, "normal") == 0) return UCD_NORMAL; 
+     else if (strcmp(str, "rgba") == 0) return UCD_RGBA; 
+@@ -101,10 +100,7 @@ gettype(str)
+ }
+ 
+ int
+-nodeidtoindex(id, v, num_nodes)
+-     int id;
+-     ucdvert *v;
+-     int num_nodes;
++nodeidtoindex(int id, ucdvert *v, int num_nodes)
+ {
+     int i;
+     for (i=0; i<num_nodes; ++i)	
+@@ -113,10 +109,7 @@ nodeidtoindex(id, v, num_nodes)
+ }
+ 
+ int
+-cellidtoindex(id, p, num_cells)
+-     int id;
+-     ucdpoly *p;
+-     int num_cells;
++cellidtoindex(int id, ucdpoly *p, int num_cells)
+ {
+     int i, index;
+     for (i=0, index=0; i<num_cells; index += p[i].faces, ++i)	
+diff --git a/src/bin/geomutil/vrml2oogl/lib/QvToWebOOGL.c++ b/src/bin/geomutil/vrml2oogl/lib/QvToWebOOGL.c++
+index 1ae4c8a..6a83a8f 100644
+--- a/src/bin/geomutil/vrml2oogl/lib/QvToWebOOGL.c++
++++ b/src/bin/geomutil/vrml2oogl/lib/QvToWebOOGL.c++
+@@ -1297,15 +1297,16 @@ QvPointSet::ToWebOOGL(QvState *state)
+ 
+ }
+ 
+-static int knowngsfont(char *str)
++static int knowngsfont(const char *str)
+ {
+   if(str == NULL)
+     return 0;
+   if(access(str, 0) >= 0)
+     return 1;
+ 
+-  char buf[2048], *p, *tail;
+-  char *gsfontpath = getenv("GS_FONTPATH");
++  char buf[2048];
++  const char *p, *tail;
++  const char *gsfontpath = getenv("GS_FONTPATH");
+ 
+   if(gsfontpath == NULL)
+     gsfontpath = "/usr/local/lib/ghostscript/fonts";
+@@ -1327,7 +1328,7 @@ void QvAsciiText::ToWebOOGL(QvState *state)
+   
+   float fontsize = 1.0;
+   // float linespace = 1.0;
+-  char *font = NULL;
++  const char *font = NULL;
+   // int bold = 0, italic = 0;
+ 
+   QvElement *elt = state->getTopElement(QvState::FontStyleIndex);
+@@ -1346,7 +1347,7 @@ void QvAsciiText::ToWebOOGL(QvState *state)
+   float y = 0;
+   char buf[2048], *q;
+   const char *p;
+-  char *just = "sw";
++  const char *just = "sw";
+   FILE *f;
+ 
+   switch(justification.value) {
+diff --git a/src/bin/geomutil/vrml2oogl/lib/QvWWWInline.c++ b/src/bin/geomutil/vrml2oogl/lib/QvWWWInline.c++
+index 3ed75ac..f494278 100644
+--- a/src/bin/geomutil/vrml2oogl/lib/QvWWWInline.c++
++++ b/src/bin/geomutil/vrml2oogl/lib/QvWWWInline.c++
+@@ -12,8 +12,8 @@ QvWWWInline::QvWWWInline()
+     QV_NODE_ADD_FIELD(bboxCenter);
+ 
+     name.value = "";
+-    bboxSize.value[0] = bboxSize.value[0] = bboxSize.value[0] = 0.0;
+-    bboxCenter.value[0] = bboxCenter.value[0] = bboxCenter.value[0] = 0.0;
++    bboxSize.value[0] = bboxSize.value[1] = bboxSize.value[2] = 0.0;
++    bboxCenter.value[0] = bboxCenter.value[1] = bboxCenter.value[2] = 0.0;
+ }
+ 
+ QvWWWInline::~QvWWWInline()
+diff --git a/src/bin/geomview/common/comm.c b/src/bin/geomview/common/comm.c
+index 49c7b8b..b11f3e4 100644
+--- a/src/bin/geomview/common/comm.c
++++ b/src/bin/geomview/common/comm.c
+@@ -439,7 +439,7 @@ fatalsig(int sig)
+   signal(sig, SIG_DFL);
+ }
+ 
+-typedef void (*mysigfunc_t)();
++typedef void (*mysigfunc_t)(int);
+ 
+ static void
+ catchsig(int sig, mysigfunc_t func)
+@@ -742,7 +742,7 @@ emodule_run(emodule *em)
+   i = em - VVEC(uistate.emod, emodule);
+   if (i < 0 || i > VVCOUNT(uistate.emod))
+     i = 0;
+-  newem = ui_emodule_install(i, seqname, emodule_kill);
++  newem = ui_emodule_install(i, seqname, (PFI)emodule_kill);
+ 
+   newem->link = PoolStreamOpen( seqname, fdopen(pfrom.r, "rb"), 0, &emoduleCommandOps );
+   if (newem->link) {
+diff --git a/src/bin/geomview/common/common.h b/src/bin/geomview/common/common.h
+index 1eea145..39c6bf7 100644
+--- a/src/bin/geomview/common/common.h
++++ b/src/bin/geomview/common/common.h
+@@ -31,8 +31,8 @@
+ #include "lispext.h"
+ #include "clang.h"
+ 
+-typedef int (*PFI)();
+-typedef void (*PFV)();
++typedef int (*PFI)(void *);
++typedef void (*PFV)(void *);
+ 
+ typedef struct Event {
+   int dev;
+diff --git a/src/bin/geomview/common/drawer.c b/src/bin/geomview/common/drawer.c
+index 466aec1..9046758 100644
+--- a/src/bin/geomview/common/drawer.c
++++ b/src/bin/geomview/common/drawer.c
+@@ -111,7 +111,7 @@ static void	draw_view(DView *dv);
+ static void	really_draw_view(DView *dv);
+ static void	reconfigure_view(DView *dv);
+ static char *	new_object_name(int type);
+-static void	object_changed(Handle **hp, DObject *obj, void *seqno);
++static void	object_changed(Handle **hp, Ref *obj, void *seqno);
+ static int	object_register(Handle **hp, Ref *ignored, DObject *obj);
+ static void	update_dgeom(DGeom *);
+ static void	update_view(DView *);
+@@ -3026,11 +3026,12 @@ new_object_name(int type)
+ */
+ 
+ static void
+-object_changed(Handle **hp, DObject *obj, void *seqno)
++object_changed(Handle **hp, Ref *parent, void *seqno)
+ {
++  DObject *obj = (DObject *)parent;
+   if(obj->seqno != (long)seqno) {
+     /* Obsolete reference -- remove this Handle callback */
+-    HandleUnregisterJust(hp, (Ref*)obj, seqno, object_changed);
++    HandleUnregisterJust(hp, parent, seqno, object_changed);
+   } else {
+     obj->changed = CH_GEOMETRY;
+   }
+@@ -3061,7 +3062,7 @@ update_dgeom(DGeom *dg)
+     /*
+      * Find all Handles in this DGeom, and a callback for each.
+      */
+-    GeomHandleScan(dg->Item, object_register, dg);
++    GeomHandleScan(dg->Item, (int (*)(Handle **, Geom *, void *))object_register, dg);
+   }
+   if(dg->bboxdraw || dg->normalization != NONE) {
+     drawer_make_bbox(dg, dg->normalization == ALL);
+@@ -3077,8 +3078,8 @@ update_view(DView *v)
+ {
+   v->seqno++;
+   if(v->Item != drawerstate.universe)
+-    GeomHandleScan(v->Item, object_register, v);
+-  CamHandleScan(v->cam, object_register, v);
++    GeomHandleScan(v->Item, (int (*)(Handle **, Geom *, void *))object_register, v);
++  CamHandleScan(v->cam, (int (*)(Handle **, Camera *, void *))object_register, v);
+ }
+ 
+ static void
+diff --git a/src/bin/geomview/common/lang.c b/src/bin/geomview/common/lang.c
+index 4be567b..d93c4a2 100644
+--- a/src/bin/geomview/common/lang.c
++++ b/src/bin/geomview/common/lang.c
+@@ -271,7 +271,7 @@ LDEFINE(shell, LVOID,
+ {
+   char *cmd;
+   int status;
+-  void (*oldsigchld)();
++  void (*oldsigchld)(int);
+   LDECLARE(("shell", LBEGIN,
+ 	    LSTRINGS, &cmd,
+ 	    LEND));
+diff --git a/src/bin/geomview/common/lights.c b/src/bin/geomview/common/lights.c
+index 55bd877..59c3333 100644
+--- a/src/bin/geomview/common/lights.c
++++ b/src/bin/geomview/common/lights.c
+@@ -126,9 +126,7 @@ void clight_init()
+ }
+ 
+ 
+-void colmult( c, scalar)
+-     Color *c;
+-     float scalar;
++void colmult( Color *c, float scalar)
+ {
+   c->r = c->r * scalar;
+   c->g = c->g * scalar;
+@@ -252,7 +250,7 @@ void show_lights()
+   gs.geom = lr.list;
+   gs.h = NULL;
+   lr_id = gv_new_alien( name, &gs );
+-  ui_add_mode(LIGHTEDIT, lightedit, T_NONE);
++  ui_add_mode(LIGHTEDIT, (PFI)lightedit, T_NONE);
+   uistate.lights_shown = 1;
+   gv_event_mode( LIGHTEDIT );
+ }
+@@ -305,9 +303,7 @@ static void build_light_rack(LmLighting *lgt)
+ #define max(a,b) (a)>(b)?(a):(b)
+ 
+ static void
+-normalize_color( color, coeff )
+-    Color *color;
+-    float *coeff;
++normalize_color( Color *color, float *coeff )
+ {
+     *coeff = max(color->r, color->g);
+     *coeff = max(color->b, *coeff);
+@@ -434,7 +430,7 @@ printf("light moved to %s\n", Point3String(&(lr.lights[uistate.current_light]->p
+       mousedisp(event, &dx, &dy, &dt, &drawerstate.winpos);
+       if ( (dx != 0) || (dy != 0) ) {
+ 	Rotation(dx, dy, Tincr, &target);
+-	drawer_updateproc( lr_id, updateproc );
++	drawer_updateproc( lr_id, (PFI)updateproc );
+       }
+       else
+ 	drawer_updateproc( lr_id, NULL );
+diff --git a/src/bin/geomview/common/lispext.c b/src/bin/geomview/common/lispext.c
+index e55a5e8..b07bf0c 100644
+--- a/src/bin/geomview/common/lispext.c
++++ b/src/bin/geomview/common/lispext.c
+@@ -95,21 +95,24 @@ static CameraStruct *camcopy(CameraStruct *old)
+   return newc;
+ }
+ 
+-static bool camfromobj(LObject *obj, CameraStruct **x)
++static bool camfromobj(LObject *obj, void *cam)
+ {
++  CameraStruct **x = (CameraStruct **)cam;
+   if (obj->type != LCAMERA) return 0;
+   *x = LCAMERAVAL(obj);
+   return 1;
+ }
+ 
+-static LObject *cam2obj(CameraStruct **x)
++static LObject *cam2obj(void *cam)
+ {
++  CameraStruct **x = (CameraStruct **)cam;
+   CameraStruct *copy = camcopy(*x);
+   return LNew( LCAMERA, &copy );
+ }
+ 
+-static void camfree(CameraStruct **x)
++static void camfree(void *cam)
+ {
++  CameraStruct **x = (CameraStruct **)cam;
+   if (*x) {
+     if ((*x)->cam) CamDelete( (*x)->cam );
+     if ((*x)->h) HandleDelete( (*x)->h );
+@@ -117,20 +120,24 @@ static void camfree(CameraStruct **x)
+   }
+ }
+ 
+-static bool cammatch(CameraStruct **a, CameraStruct **b)
++static bool cammatch(void *cam1, void *cam2)
+ { 
++  CameraStruct **a = (CameraStruct **)cam1;
++  CameraStruct **b = (CameraStruct **)cam2;
+   if ((*a)->h && ((*a)->h == (*b)->h)) return 1;
+   if ((*a)->cam && ((*a)->cam == (*b)->cam)) return 1;
+   return 0;
+ }
+ 
+-static void camwrite(FILE *fp, CameraStruct **x)
++static void camwrite(FILE *fp, void *cam)
+ {
++  CameraStruct **x = (CameraStruct **)cam;
+   CamFSave( (*x)->cam, fp, "lisp output stream" );
+ }
+ 
+-static void campull(va_list *a_list, CameraStruct **x)
++static void campull(va_list *a_list, void *cam)
+ {
++  CameraStruct **x = (CameraStruct **)cam;
+   *x = va_arg(*a_list, CameraStruct*);
+ }
+ 
+@@ -182,21 +189,24 @@ static WindowStruct *wncopy(WindowStruct *old)
+   return neww;
+ }
+ 
+-static bool wnfromobj(LObject *obj, WindowStruct **x)
++static bool wnfromobj(LObject *obj, void *win)
+ {
++  WindowStruct **x = (WindowStruct **)win;
+   if (obj->type != LWINDOW) return 0;
+   *x = LWINDOWVAL(obj);
+   return 1;
+ }
+ 
+-static LObject *wn2obj(WindowStruct **x)
++static LObject *wn2obj(void *win)
+ {
++  WindowStruct **x = (WindowStruct **)win;
+   WindowStruct *copy = wncopy(*x);
+   return LNew( LWINDOW, &copy );
+ }
+ 
+-static void wnfree(WindowStruct **x)
++static void wnfree(void *win)
+ {
++  WindowStruct **x = (WindowStruct **)win;
+   if (*x) {
+     if ((*x)->wn) WnDelete( (*x)->wn );
+     if ((*x)->h) HandleDelete( (*x)->h );
+@@ -204,15 +214,18 @@ static void wnfree(WindowStruct **x)
+   }
+ }
+ 
+-static bool wnmatch(WindowStruct **a, WindowStruct **b)
++static bool wnmatch(void *win1, void *win2)
+ { 
++  WindowStruct **a = (WindowStruct **)win1;
++  WindowStruct **b = (WindowStruct **)win2;
+   if ((*a)->h && ((*a)->h == (*b)->h)) return 1;
+   if ((*a)->wn && ((*a)->wn == (*b)->wn)) return 1;
+   return 0;
+ }
+ 
+-static void wnwrite(FILE *fp, WindowStruct * *x)
++static void wnwrite(FILE *fp, void *win)
+ {
++  WindowStruct **x = (WindowStruct **)win;
+   Pool *p = PoolStreamTemp("", NULL, fp, 1, &WindowOps);
+   if(p == NULL)
+     return;
+@@ -220,8 +233,9 @@ static void wnwrite(FILE *fp, WindowStruct * *x)
+   PoolDelete(p);
+ }
+ 
+-static void wnpull(va_list *a_list, WindowStruct **x)
++static void wnpull(va_list *a_list, void *win)
+ {
++  WindowStruct **x = (WindowStruct **)win;
+   *x = va_arg(*a_list, WindowStruct*);
+ }
+ 
+@@ -272,21 +286,24 @@ static GeomStruct *geomcopy(GeomStruct *old)
+   return newg;
+ }
+ 
+-static bool geomfromobj(LObject *obj, GeomStruct **x)
++static bool geomfromobj(LObject *obj, void *geom)
+ {
++  GeomStruct **x = (GeomStruct **)geom;
+   if (obj->type != LGEOM) return 0;
+   *x = LGEOMVAL(obj);
+   return 1;
+ }
+ 
+-static LObject *geom2obj(GeomStruct **x)
++static LObject *geom2obj(void *geom)
+ {
++  GeomStruct **x = (GeomStruct **)geom;
+   GeomStruct *copy = geomcopy(*x);
+   return LNew( LGEOM, &copy );
+ }
+ 
+-static void geomfree(GeomStruct **x)
++static void geomfree(void *geom)
+ {
++  GeomStruct **x = (GeomStruct **)geom;
+   if (*x) {
+     if ((*x)->geom) GeomDelete( (*x)->geom );
+     if ((*x)->h) HandleDelete( (*x)->h );
+@@ -294,20 +311,24 @@ static void geomfree(GeomStruct **x)
+   }
+ }
+ 
+-static bool geommatch(GeomStruct **a, GeomStruct **b)
++static bool geommatch(void *geom1, void *geom2)
+ { 
++  GeomStruct **a = (GeomStruct **)geom1;
++  GeomStruct **b = (GeomStruct **)geom2;
+   if ((*a)->h && ((*a)->h == (*b)->h)) return 1;
+   if ((*a)->geom && ((*a)->geom == (*b)->geom)) return 1;
+   return 0;
+ }
+ 
+-static void geomwrite(FILE *fp, GeomStruct **x)
++static void geomwrite(FILE *fp, void *geom)
+ {
++  GeomStruct **x = (GeomStruct **)geom;
+   GeomFSave( (*x)->geom, fp, "lisp output stream" );
+ }
+ 
+-static void geompull(va_list *a_list, GeomStruct **x)
++static void geompull(va_list *a_list, void *geom)
+ {
++  GeomStruct **x = (GeomStruct **)geom;
+   *x = va_arg(*a_list, GeomStruct*);
+ }
+ 
+@@ -359,21 +380,24 @@ static ApStruct *apcopy(ApStruct *old)
+   return newap;
+ }
+ 
+-static bool apfromobj(LObject *obj, ApStruct **x)
++static bool apfromobj(LObject *obj, void *ap)
+ {
++  ApStruct **x = (ApStruct **)ap;
+   if (obj->type != LAP) return 0;
+   *x = LAPVAL(obj);
+   return 1;
+ }
+ 
+-static LObject *ap2obj(ApStruct **x)
++static LObject *ap2obj(void *ap)
+ {
++  ApStruct **x = (ApStruct **)ap;
+   ApStruct *copy = apcopy(*x);
+   return LNew( LAP, &copy );
+ }
+ 
+-static void apfree(ApStruct **x)
++static void apfree(void *ap)
+ {
++  ApStruct **x = (ApStruct **)ap;
+   if (*x) {
+     if ((*x)->ap) ApDelete( (*x)->ap );
+     if ((*x)->h) HandleDelete( (*x)->h );
+@@ -381,20 +405,24 @@ static void apfree(ApStruct **x)
+   }
+ }
+ 
+-static bool apmatch(ApStruct **a, ApStruct **b)
++static bool apmatch(void *ap1, void *ap2)
+ { 
++  ApStruct **a = (ApStruct **)ap1;
++  ApStruct **b = (ApStruct **)ap2;
+   if ((*a)->h && ((*a)->h == (*b)->h)) return 1;
+   if ((*a)->ap && ((*a)->ap == (*b)->ap)) return 1;
+   return 0;
+ }
+ 
+-static void apwrite(FILE *fp, ApStruct * *x)
++static void apwrite(FILE *fp, void *ap)
+ {
++  ApStruct **x = (ApStruct **)ap;
+   ApFSave((*x)->ap, fp, "lisp output stream");
+ }
+ 
+-static void appull(va_list *a_list, ApStruct **x)
++static void appull(va_list *a_list, void *ap)
+ {
++  ApStruct **x = (ApStruct **)ap;
+   *x = va_arg(*a_list, ApStruct*);
+ }
+ 
+@@ -445,41 +473,48 @@ static TransformStruct *tmcopy(TransformStruct *old)
+   return newt;
+ }
+ 
+-static bool tmfromobj(LObject *obj, TransformStruct **x)
++static bool tmfromobj(LObject *obj, void *transform)
+ {
++  TransformStruct **x = (TransformStruct **)transform;
+   if (obj->type != LTRANSFORM) return 0;
+   *x = LTRANSFORMVAL(obj);
+   return 1;
+ }
+ 
+-static LObject *tm2obj(TransformStruct **x)
++static LObject *tm2obj(void *transform)
+ {
++  TransformStruct **x = (TransformStruct **)transform;
+   TransformStruct *copy = tmcopy(*x);
+   return LNew(LTRANSFORM, &copy);
+ }
+ 
+-static void tmfree(TransformStruct **x)
++static void tmfree(void *transform)
+ {
++  TransformStruct **x = (TransformStruct **)transform;
+   if (*x) {
+     if ((*x)->h) HandleDelete((*x)->h);
+     FREELIST_FREE(TransformStruct, *x);
+   }
+ }
+ 
+-static bool tmmatch(TransformStruct **a, TransformStruct **b)
++static bool tmmatch(void *transform1, void *transform2)
+ { 
++  TransformStruct **a = (TransformStruct **)transform1;
++  TransformStruct **b = (TransformStruct **)transform2;
+   if ((*a)->h && ((*a)->h == (*b)->h)) return 1;
+   if ((*a)->tm && ((*a)->tm == (*b)->tm)) return 1;
+   return TmCompare((*a)->tm, (*b)->tm, (float)0.0);
+ }
+ 
+-static void tmwrite(FILE *fp, TransformStruct **x)
++static void tmwrite(FILE *fp, void *transform)
+ {
++  TransformStruct **x = (TransformStruct **)transform;
+   TransFSave((*x)->tm, fp, "lisp output stream");
+ }
+ 
+-static void tmpull(va_list *a_list, TransformStruct **x)
++static void tmpull(va_list *a_list, void *transform)
+ {
++  TransformStruct **x = (TransformStruct **)transform;
+   *x = va_arg(*a_list, TransformStruct*);
+ }
+ 
+@@ -530,21 +565,24 @@ static TmNStruct *tmncopy(TmNStruct *old)
+   return newt;
+ }
+ 
+-static bool tmnfromobj(LObject *obj, TmNStruct **x)
++static bool tmnfromobj(LObject *obj, void *tmn)
+ {
++  TmNStruct **x = (TmNStruct **)tmn;
+   if (obj->type != LTRANSFORMN) return 0;
+   *x = LTRANSFORMNVAL(obj);
+   return 1;
+ }
+ 
+-static LObject *tmn2obj( TmNStruct **x )
++static LObject *tmn2obj( void *tmn )
+ {
++  TmNStruct **x = (TmNStruct **)tmn;
+   TmNStruct *copy = tmncopy(*x);
+   return LNew( LTRANSFORMN, &copy );
+ }
+ 
+-static void tmnfree(TmNStruct **x)
++static void tmnfree(void *tmn)
+ {
++  TmNStruct **x = (TmNStruct **)tmn;
+   if (*x) {
+     if ((*x)->tm) TmNDelete( (*x)->tm );
+     if ((*x)->h) HandleDelete( (*x)->h );
+@@ -552,20 +590,24 @@ static void tmnfree(TmNStruct **x)
+   }
+ }
+ 
+-static bool tmnmatch(TmNStruct **a, TmNStruct **b)
++static bool tmnmatch(void *tmn1, void *tmn2)
+ { 
++  TmNStruct **a = (TmNStruct **)tmn1;
++  TmNStruct **b = (TmNStruct **)tmn2;
+   if ((*a)->h && ((*a)->h == (*b)->h)) return 1;
+   if ((*a)->tm && ((*a)->tm == (*b)->tm)) return 1;
+   return 0;
+ }
+ 
+-static void tmnwrite(FILE *fp, TmNStruct **x)
++static void tmnwrite(FILE *fp, void *tmn)
+ {
++  TmNStruct **x = (TmNStruct **)tmn;
+   TmNPrint( fp, (*x)->tm );
+ }
+ 
+-static void tmnpull(va_list *a_list, TmNStruct **x)
++static void tmnpull(va_list *a_list, void *tmn)
+ {
++  TmNStruct **x = (TmNStruct **)tmn;
+   *x = va_arg(*a_list, TmNStruct*);
+ }
+ 
+@@ -619,21 +661,24 @@ static ImgStruct *imgcopy(ImgStruct *old)
+   return newi;
+ }
+ 
+-static bool imgfromobj(LObject *obj, ImgStruct **x)
++static bool imgfromobj(LObject *obj, void *img)
+ {
++  ImgStruct **x = (ImgStruct **)img;
+   if (obj->type != LIMAGE) return 0;
+   *x = LIMAGEVAL(obj);
+   return 1;
+ }
+ 
+-static LObject *img2obj( ImgStruct **x )
++static LObject *img2obj( void *img )
+ {
++  ImgStruct **x = (ImgStruct **)img;
+   ImgStruct *copy = imgcopy(*x);
+   return LNew( LIMAGE, &copy );
+ }
+ 
+-static void imgfree(ImgStruct **x)
++static void imgfree(void *img)
+ {
++  ImgStruct **x = (ImgStruct **)img;
+   if (*x) {
+     if ((*x)->img) ImgDelete( (*x)->img );
+     if ((*x)->h) HandleDelete( (*x)->h );
+@@ -641,20 +686,24 @@ static void imgfree(ImgStruct **x)
+   }
+ }
+ 
+-static bool imgmatch(ImgStruct **a, ImgStruct **b)
++static bool imgmatch(void *img1, void *img2)
+ { 
++  ImgStruct **a = (ImgStruct **)img1;
++  ImgStruct **b = (ImgStruct **)img2;
+   if ((*a)->h && ((*a)->h == (*b)->h)) return true;
+   if ((*a)->img && ((*a)->img == (*b)->img)) return true;
+   return false;
+ }
+ 
+-static void imgwrite(FILE *fp, ImgStruct **x)
++static void imgwrite(FILE *fp, void *img)
+ {
++  ImgStruct **x = (ImgStruct **)img;
+   ImgFSave((*x)->img, fp, "lisp output stream");
+ }
+ 
+-static void imgpull(va_list *a_list, ImgStruct **x)
++static void imgpull(va_list *a_list, void *img)
+ {
++  ImgStruct **x = (ImgStruct **)img;
+   *x = va_arg(*a_list, ImgStruct*);
+ }
+ 
+@@ -695,10 +744,11 @@ LType LImagep = {
+  * ID LISP OBJECT							*
+  ************************************************************************/
+ 
+-static bool idfromobj(LObject *obj, int *x)
++static bool idfromobj(LObject *obj, void *i)
+ {
+   char *tmp;
+   
++  int *x = (int *)i;
+   if (LSTRINGFROMOBJ(obj, &tmp)) {
+     *x = drawer_idbyname(tmp);
+     if (*x == NOID) return 0;
+@@ -708,21 +758,25 @@ static bool idfromobj(LObject *obj, int *x)
+   return 1;
+ }
+ 
+-static LObject *id2obj(int *x)
++static LObject *id2obj(void *i)
+ {
++  int *x = (int *)i;
+   return LNew( LID, x );
+ }
+ 
+-static void idfree(int *x)
++static void idfree(void *x)
+ {}
+ 
+-static bool idmatch(int *a, int *b)
++static bool idmatch(void *i, void *j)
+ {
++  int *a = (int *)i;
++  int *b = (int *)j;
+   return drawer_idmatch(*a,*b);
+ }
+ 
+-static void idwrite(FILE *fp, int *x)
++static void idwrite(FILE *fp, void *i)
+ {
++  int *x = (int *)i;
+   fprintf(fp, "\"%s\"", drawer_id2name(*x));
+ }
+ 
+@@ -745,10 +799,9 @@ static LObject *idparse(Lake *lake)
+ }
+ #endif
+     
+-static void idpull(a_list, x)
+-    va_list *a_list;
+-    int *x;
++static void idpull(va_list *a_list, void *i)
+ {
++  int *x = (int *)i;
+   *x = va_arg(*a_list, int);
+ }
+ 
+@@ -770,10 +823,11 @@ LType LIdp = {
+  * KEYWORD LISP OBJECT							*
+  ************************************************************************/
+ 
+-static bool keywordfromobj(LObject *obj, int *x)
++static bool keywordfromobj(LObject *obj, void *kwd)
+ {
+   char *tmp;
+   
++  int *x = (int *)kwd;
+   if (LSTRINGFROMOBJ(obj, &tmp)) {
+     *x = (int)(long)fsa_parse(lang_fsa, tmp);
+     if (*x == REJECT) {
+@@ -787,28 +841,31 @@ static bool keywordfromobj(LObject *obj, int *x)
+   return true;
+ }
+ 
+-static LObject *keyword2obj(int *x)
++static LObject *keyword2obj(void *kwd)
+ {
++  int *x = (int *)kwd;
+   return LNew( LKEYWORD, x );
+ }
+ 
+-static bool keywordmatch(int *a, int *b)
++static bool keywordmatch(void *kwd1, void *kwd2)
+ {
++  int *a = (int *)kwd1;
++  int *b = (int *)kwd2;
+   return *a == *b;
+ }
+ 
+-static void keywordwrite(FILE *fp, Keyword *x)
++static void keywordwrite(FILE *fp, void *kwd)
+ {
++  Keyword *x = (Keyword *)kwd;
+   fprintf(fp, "%s", keywordname(*x));
+ }
+ 
+ static void keywordfree(void *value)
+ {}
+ 
+-static void keywordpull(a_list, x)
+-    va_list *a_list;
+-    int *x;
++static void keywordpull(va_list *a_list, void *kwd)
+ {
++  int *x = (int *)kwd;
+   *x = va_arg(*a_list, int);
+ }
+ 
+@@ -853,8 +910,9 @@ LType LKeywordp = {
+  * paren is found. We now also take care of quoting and embedded parens *
+  ************************************************************************/
+ 
+-static bool stringsfromobj(LObject *obj, char * *x)
++static bool stringsfromobj(LObject *obj, void *str)
+ {
++  char **x = (char **)str;
+   if (LSTRINGFROMOBJ(obj, x)) {
+     return true;
+   } else if (obj->type == LSTRINGS) {
+diff --git a/src/bin/geomview/common/transform.h b/src/bin/geomview/common/transform.h
+index 7d56eaf..fc7bc57 100644
+--- a/src/bin/geomview/common/transform.h
++++ b/src/bin/geomview/common/transform.h
+@@ -29,7 +29,7 @@ typedef struct Motion {
+   int moving_id;
+   int center_id;
+   int frame_id;
+-  void (*transform)();
++  void (*transform)(float amount[3], Point *pt, Transform T, int space, int frame);
+   float amount[3];
+   float timeunit;
+   float timeleft;	/* Nonzero if bounded animation */
+diff --git a/src/bin/geomview/common/ui.c b/src/bin/geomview/common/ui.c
+index b7f2bc4..e1892fa 100644
+--- a/src/bin/geomview/common/ui.c
++++ b/src/bin/geomview/common/ui.c
+@@ -116,12 +116,12 @@ void cui_init()
+    * The order of these calls must be the same as the declared integers
+    * in ui.h!! 
+    */
+-  ui_install_mode(OBJROTATE,	minterp_rotate,		T_NONE);
+-  ui_install_mode(OBJZOOM,	minterp_zoom, 		T_CAM);
+-  ui_install_mode(OBJTRANSLATE,	minterp_translate,	T_NONE);
+-  ui_install_mode(OBJFLY,	minterp_fly,		T_CAM);
+-  ui_install_mode(OBJORBIT,	minterp_orbit,		T_CAM);
+-  ui_install_mode(OBJSCALE,	minterp_scale, 		T_GEOM);
++  ui_install_mode(OBJROTATE,	(PFI)minterp_rotate,		T_NONE);
++  ui_install_mode(OBJZOOM,	(PFI)minterp_zoom, 		T_CAM);
++  ui_install_mode(OBJTRANSLATE,	(PFI)minterp_translate,		T_NONE);
++  ui_install_mode(OBJFLY,	(PFI)minterp_fly,		T_CAM);
++  ui_install_mode(OBJORBIT,	(PFI)minterp_orbit,		T_CAM);
++  ui_install_mode(OBJSCALE,	(PFI)minterp_scale, 		T_GEOM);
+   VVINIT(uistate.emod, emodule, 10);
+   vvzero(&uistate.emod);
+   uistate.savewhat = NOID;
+diff --git a/src/bin/geomview/common/ui.h b/src/bin/geomview/common/ui.h
+index 04a1526..af4e17b 100644
+--- a/src/bin/geomview/common/ui.h
++++ b/src/bin/geomview/common/ui.h
+@@ -35,7 +35,7 @@
+ 
+ typedef struct _emodule {
+ 	char *name;
+-	void (*func)();
++	void (*func)(void *);
+ 	char *text;
+ 	int pid;
+ 	Pool *link;
+diff --git a/src/bin/geomview/x11/gvappear.c b/src/bin/geomview/x11/gvappear.c
+index cf62fc0..a511e7d 100644
+--- a/src/bin/geomview/x11/gvappear.c
++++ b/src/bin/geomview/x11/gvappear.c
+@@ -43,9 +43,9 @@ extern Pixmap   geomicon;
+ /*****************************************************************************/
+ 
+ static void revert_appearance(Widget, XtPointer, XmAnyCallbackStruct *);
+-void ap_toggle(Widget, XtPointer, XmToggleButtonCallbackStruct *);
++void ap_toggle(Widget, XtPointer, XmAnyCallbackStruct *);
+ static void ap_color(Widget, XtPointer, XmAnyCallbackStruct *);
+-static void list_callbacks(Widget, XtPointer, XmListCallbackStruct *);
++static void list_callbacks(Widget, XtPointer, XmAnyCallbackStruct *);
+ static void text_callbacks(Widget, XtPointer, XmAnyCallbackStruct *);
+ static Widget NormalList,
+   ShadeList,
+@@ -76,7 +76,7 @@ static struct awid {
+   enum what { TOG, BTN, TXT, LST } type; 
+   char *name;
+   Widget *widp;
+-  void (*callback)();
++  void (*callback)(Widget, XtPointer, XmAnyCallbackStruct *);
+   XtPointer cbdata;
+ } awidgets[] = {
+   {BTN, "HideButton", NULL, ui_hide, AppearancE },
+@@ -180,8 +180,9 @@ static void ap_color(Widget w, XtPointer data, XmAnyCallbackStruct *cbs)
+ /*****************************************************************************/
+ 
+ void ap_toggle(Widget w, XtPointer data,
+-	       XmToggleButtonCallbackStruct *cbs)
++	       XmAnyCallbackStruct *cb)
+ {
++  XmToggleButtonCallbackStruct *cbs = (XmToggleButtonCallbackStruct *)cb;
+   drawer_int(GEOMID(uistate.targetgeom), (DrawerKeyword)(long)data, cbs->set);
+ }
+ 
+@@ -250,8 +251,9 @@ void ui_target_appearancepanel(int id)
+ 
+ /*****************************************************************************/
+ 
+-static void list_callbacks(Widget w, XtPointer data, XmListCallbackStruct *cbs)
++static void list_callbacks(Widget w, XtPointer data, XmAnyCallbackStruct *cb)
+ {
++  XmListCallbackStruct *cbs = (XmListCallbackStruct *)cb;
+   DrawerKeyword val = (DrawerKeyword)(long)data;
+   int offset = 0;
+ 
+diff --git a/src/bin/geomview/x11/gvcamui.c b/src/bin/geomview/x11/gvcamui.c
+index 39206bc..389347e 100644
+--- a/src/bin/geomview/x11/gvcamui.c
++++ b/src/bin/geomview/x11/gvcamui.c
+@@ -1090,7 +1090,7 @@ int ui_sgisnapshot(char *fname, int id, DView *dv, WnWindow *wn, WnPosition *wp)
+ {
+   int pid, wpid, unset;
+   char x0[12], x1[12], y0[12], y1[12];
+-  void (*oldchld)();
++  void (*oldchld)(int);
+   int failed = 1;
+   int status;
+ 
+diff --git a/src/bin/geomview/x11/gvmain.c b/src/bin/geomview/x11/gvmain.c
+index 957263e..8296002 100644
+--- a/src/bin/geomview/x11/gvmain.c
++++ b/src/bin/geomview/x11/gvmain.c
+@@ -53,6 +53,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #endif
+ 
+ #include <signal.h>
++#include <stdlib.h>
+ 
+ /* xgv main - global variables */
+ /*****************************************************************************/
+@@ -117,7 +118,6 @@ int main(int argc, char **argv)
+ 
+ void env_init()
+ {
+-  extern char *getenv();
+   extern void set_load_path(char **);
+   extern void set_emodule_path(char **);
+ #define MAXDIRS 100
+diff --git a/src/bin/geomview/x11/gvmnpanel.c b/src/bin/geomview/x11/gvmnpanel.c
+index 407a637..e5c0040 100644
+--- a/src/bin/geomview/x11/gvmnpanel.c
++++ b/src/bin/geomview/x11/gvmnpanel.c
+@@ -46,11 +46,11 @@ extern UIState uistate;
+ 
+ static void select_object(Widget, XtPointer, XmListCallbackStruct *);
+ static void select_module(Widget, XtPointer, XmListCallbackStruct *);
+-static void file_menu_callbacks(Widget, char *);
+-static void edit_menu_callbacks(Widget, char *);
+-static void inspect_menu_callbacks(Widget, XtPointer);
+-static void motion_menu_callbacks(Widget, char *);
+-static void help_menu_callbacks(Widget, XtPointer);
++static void file_menu_callbacks(Widget, XtPointer, XtPointer);
++static void edit_menu_callbacks(Widget, XtPointer, XtPointer);
++static void inspect_menu_callbacks(Widget, XtPointer, XtPointer);
++static void motion_menu_callbacks(Widget, XtPointer, XtPointer);
++static void help_menu_callbacks(Widget, XtPointer, XtPointer);
+ static void choose_space(Widget, int);
+ static void BuildBrowserMenu();
+ static int id2menuindex(int);
+@@ -73,7 +73,7 @@ static MenuItem file_menu[] = {
+   { "Save               ", &xmPushButtonGadgetClass, 'S', "Ctrl<Key>S","[ > ]",
+         file_menu_callbacks, "S", (MenuItem *)NULL},
+   { "_sepr", &xmSeparatorGadgetClass, (char)0, (char*)NULL, (char*)NULL,
+-        (void (*)())NULL, (XtPointer)NULL, (MenuItem *)NULL },
++    (XtCallbackProc)NULL, (XtPointer)NULL, (MenuItem *)NULL },
+   { "Exit                   ", &xmPushButtonGadgetClass, 'E', "Ctrl<Key>X","[ Q ]",
+         file_menu_callbacks, "X", (MenuItem *)NULL},
+   { NULL, NULL }
+@@ -119,7 +119,7 @@ static MenuItem motion_menu[] = {
+   { "Tools", &xmPushButtonGadgetClass, 'T', "Ctrl<Key>T", "[Pt]",
+         motion_menu_callbacks, "T", (MenuItem *)NULL},
+   { "_sepr", &xmSeparatorGadgetClass, (char)0, (char*)NULL, (char*)NULL,
+-        (void (*)())NULL, (XtPointer)NULL, (MenuItem *)NULL },
++        (XtCallbackProc)NULL, (XtPointer)NULL, (MenuItem *)NULL },
+   { "Inertia", &xmToggleButtonGadgetClass, 'I', "Alt<Key>I", "[ui]",
+         motion_menu_callbacks, "1", (MenuItem *)NULL},
+   { "Constrain motion", &xmToggleButtonGadgetClass, 'C', "Alt<Key>M", "[uc]",
+@@ -170,8 +170,9 @@ void ui_refresh_mainpanel(int id)
+ 			NULL);
+ }
+ 
+-static void motion_menu_callbacks(Widget widget, char *text)
++static void motion_menu_callbacks(Widget widget, XtPointer client_data, XtPointer call_data)
+ {
++  char *text = (char *)client_data;
+   DrawerKeyword val = DRAWER_NOKEYWORD;
+ 
+   switch (text[0])
+@@ -293,7 +294,7 @@ LDEFINE(ui_motion, LVOID,
+ 
+ char htmlbrowser[PATH_MAX] = { '\0', }, pdfviewer[PATH_MAX] = { '\0', };
+ 
+-static void help_menu_callbacks(Widget widget, XtPointer ptr)
++static void help_menu_callbacks(Widget widget, XtPointer ptr, XtPointer call_data)
+ {
+   if ((int)(long)ptr == P_CREDITS) {
+     ui_showpanel(P_CREDITS, 1);
+@@ -495,10 +496,11 @@ void ui_load_mainpanel()
+ 
+ /*****************************************************************************/
+ 
+-static void file_menu_callbacks(Widget widget, char *text)
++static void file_menu_callbacks(Widget widget, XtPointer client_data, XtPointer call_data)
+ {
+   CameraStruct cs;
+   DView *dv;
++  char *text = (char *)client_data;
+ 
+   switch (text[0])
+   {
+@@ -527,8 +529,9 @@ static void file_menu_callbacks(Widget widget, char *text)
+ 
+ /*****************************************************************************/
+ 
+-static void edit_menu_callbacks(Widget widget, char *text)
++static void edit_menu_callbacks(Widget widget, XtPointer client_data, XtPointer call_data)
+ {
++  char *text = (char *)client_data;
+   switch (text[0])
+   {
+     case 'U':
+@@ -548,7 +551,7 @@ static void edit_menu_callbacks(Widget widget, char *text)
+ 
+ /*****************************************************************************/
+ 
+-static void inspect_menu_callbacks(Widget widget, XtPointer code)
++static void inspect_menu_callbacks(Widget widget, XtPointer code, XtPointer call_data)
+ {
+   ui_showpanel((int)(long)code, 1);
+ }
+@@ -630,7 +633,7 @@ ui_keyboard(int ch)
+     ui_keyboard('^'); ui_keyboard('?');
+   } else {
+     if(nextc >= (int)sizeof(kybd)-1) {
+-	memcpy(kybd, kybd+1, sizeof(kybd)-2);
++	memmove(kybd, kybd+1, sizeof(kybd)-2);
+ 	nextc = sizeof(kybd)-2;
+     } else if(nextc == 0) {
+ 	kybd[nextc++] = '[';
+diff --git a/src/bin/geomview/x11/gvui.c b/src/bin/geomview/x11/gvui.c
+index 50b6525..ae42a79 100644
+--- a/src/bin/geomview/x11/gvui.c
++++ b/src/bin/geomview/x11/gvui.c
+@@ -142,9 +142,7 @@ static void set_x_application_name()
+ 
+ static int panelsready = 0;
+ 	
+-void load_interface(argc, argv)
+-unsigned int argc;
+-char **argv;
++void load_interface(unsigned int argc, char **argv)
+ {
+   String fallbacks[] = {
+     "gv*fontList:        -adobe-helvetica-medium-r-normal--14-*-*-*-p-*-iso8859-1",
+diff --git a/src/bin/geomview/x11/gvui.h b/src/bin/geomview/x11/gvui.h
+index c49d8e4..3429343 100644
+--- a/src/bin/geomview/x11/gvui.h
++++ b/src/bin/geomview/x11/gvui.h
+@@ -92,7 +92,7 @@ void ui_raise_window( int camid );
+ 
+ void   ui_load_mainpanel();
+ 
+-void   ui_refresh_mainpanel();
++void   ui_refresh_mainpanel(int);
+ void   ui_adjustpicklist(int);
+ void   ui_adjustemodulelist(int);
+ 
+diff --git a/src/lib/camera/camera.h b/src/lib/camera/camera.h
+index 4937436..3753b45 100644
+--- a/src/lib/camera/camera.h
++++ b/src/lib/camera/camera.h
+@@ -204,6 +204,6 @@ void CamDefault(Camera *cam);
+ int CamStreamIn(Pool *p, Handle **hp, Camera **camp);
+ int CamStreamOut(Pool *p, Handle *hp, Camera *cam);
+ 
+-void CamHandleScan( Camera *cam, int (*func)(), void *arg );
++void CamHandleScan( Camera *cam, int (*func)(Handle **, Camera *, void *), void *arg );
+ 
+ #endif /* !CAMERA_H */
+diff --git a/src/lib/camera/cameraP.h b/src/lib/camera/cameraP.h
+index 99ed9e9..a0af5fc 100644
+--- a/src/lib/camera/cameraP.h
++++ b/src/lib/camera/cameraP.h
+@@ -90,7 +90,7 @@ struct Camera {
+ /*
+  * routine for updating transforms
+  */
+-void CamTransUpdate(Handle **, Camera *, Transform);
++void CamTransUpdate(Handle **, Ref *, void *);
+ 
+ #endif /* !CAMERAP_H */
+ 
+diff --git a/src/lib/camera/camstream.c b/src/lib/camera/camstream.c
+index 6dadec9..3cb6f9f 100644
+--- a/src/lib/camera/camstream.c
++++ b/src/lib/camera/camstream.c
+@@ -38,11 +38,12 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ 
+ HandleOps CamOps = {
+   "cam",
+-  (int ((*)()))CamStreamIn,
+-  (int ((*)()))CamStreamOut,
+-  (void ((*)()))CamDelete,
++  (int ((*)(Pool *, Handle **, Ref **)))CamStreamIn,
++  (int ((*)(Pool *, Handle *, Ref *)))CamStreamOut,
++  (void ((*)(Ref *)))CamDelete,
+   NULL,		/* Resync */
+-  NULL		/* close pool */
++  NULL,		/* close pool */
++  {NULL, NULL}, {NULL, NULL}
+ };
+ 
+ 
+@@ -369,7 +370,7 @@ CamStreamOut(Pool *p, Handle *h, Camera *cam)
+ }
+  
+ void
+-CamHandleScan( Camera *cam, int (*func)(), void *arg )
++CamHandleScan( Camera *cam, int (*func)(Handle **, Camera *, void *), void *arg )
+ {
+   if (cam) {
+     if (cam->c2whandle)
+@@ -379,9 +380,10 @@ CamHandleScan( Camera *cam, int (*func)(), void *arg )
+   }
+ }
+ 
+-void CamTransUpdate(Handle **hp, Camera *cam, Transform T)
++void CamTransUpdate(Handle **hp, Ref *parent, void *T)
+ {
+-  TransUpdate(hp, (Ref *)cam, T);
++  Camera *cam = (Camera *)parent;
++  TransUpdate(hp, parent, T);
+ 
+   if (hp == &cam->c2whandle) {
+     TmInvert(cam->camtoworld, cam->worldtocam);
+diff --git a/src/lib/color/mergeout.c b/src/lib/color/mergeout.c
+index 6ff4ece..c1d88b2 100644
+--- a/src/lib/color/mergeout.c
++++ b/src/lib/color/mergeout.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "color.h"
+ 
+ void
+-MergeOut( f, b, t )
+-    ColorA *f, *b, *t;
++MergeOut( ColorA *f, ColorA *b, ColorA *t )
+ {
+     float a = 1.0 - b->a;
+ 
+@@ -46,9 +45,7 @@ MergeOut( f, b, t )
+ }
+ 
+ void
+-MergeOutN( f, b, t, n )
+-    ColorA *f, *b, *t;
+-    int n;
++MergeOutN( ColorA *f, ColorA *b, ColorA *t, int n )
+ {
+     float a;
+     
+diff --git a/src/lib/color/mergeover.c b/src/lib/color/mergeover.c
+index 4a55357..ea85ba0 100644
+--- a/src/lib/color/mergeover.c
++++ b/src/lib/color/mergeover.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "color.h"
+ 
+ void
+-MergeOver( f, b, t )
+-    ColorA *f, *b, *t;
++MergeOver( ColorA *f, ColorA *b, ColorA *t )
+ {
+     float a = 1.0 - f->a;
+ 
+@@ -46,9 +45,7 @@ MergeOver( f, b, t )
+ }
+ 
+ void
+-MergeOverN( f, b, t, n )
+-    ColorA *f, *b, *t;
+-    int n;
++MergeOverN( ColorA *f, ColorA *b, ColorA *t, int n )
+ {
+     float a;
+     
+diff --git a/src/lib/color/mergeunder.c b/src/lib/color/mergeunder.c
+index 3a45eaf..905b35c 100644
+--- a/src/lib/color/mergeunder.c
++++ b/src/lib/color/mergeunder.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "color.h"
+ 
+ void
+-MergeUnder( f, b, t )
+-    ColorA *f, *b, *t;
++MergeUnder( ColorA *f, ColorA *b, ColorA *t )
+ {
+     float a = 1.0 - b->a;
+ 
+@@ -46,9 +45,7 @@ MergeUnder( f, b, t )
+ }
+ 
+ void
+-MergeUnderN( f, b, t, n )
+-    ColorA *f, *b, *t;
+-    int n;
++MergeUnderN( ColorA *f, ColorA *b, ColorA *t, int n )
+ {
+     float a;
+     
+diff --git a/src/lib/color/paintcopy.c b/src/lib/color/paintcopy.c
+index da22ab8..516bf14 100644
+--- a/src/lib/color/paintcopy.c
++++ b/src/lib/color/paintcopy.c
+@@ -34,9 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "color.h"
+ 
+ void
+-PaintCopy( f, b, t, m )
+-    ColorA *f, *b, *t;
+-    float *m;
++PaintCopy( ColorA *f, ColorA *b, ColorA *t, float *m )
+ {
+     float a = 1.0 - *m;
+ 
+@@ -47,10 +45,7 @@ PaintCopy( f, b, t, m )
+ }
+ 
+ void
+-PaintCopyN( f, b, t, m, n )
+-    ColorA *f, *b, *t;
+-    float *m;
+-    int n;
++PaintCopyN( ColorA *f, ColorA *b, ColorA *t, float *m, int n )
+ {
+     float a;
+     
+diff --git a/src/lib/color/paintover.c b/src/lib/color/paintover.c
+index 0be4144..016a10f 100644
+--- a/src/lib/color/paintover.c
++++ b/src/lib/color/paintover.c
+@@ -34,9 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "color.h"
+ 
+ void
+-PaintOver( f, b, t, m )
+-    ColorA *f, *b, *t;
+-    float *m;
++PaintOver( ColorA *f, ColorA *b, ColorA *t, float *m )
+ {
+     float a = 1.0 - *m * f->a;
+ 
+@@ -47,10 +45,7 @@ PaintOver( f, b, t, m )
+ }
+ 
+ void
+-PaintOverN( f, b, t, m, n )
+-    ColorA *f, *b, *t;
+-    float *m;
+-    int n;
++PaintOverN( ColorA *f, ColorA *b, ColorA *t, float *m, int n )
+ {
+     float a;
+     
+diff --git a/src/lib/geometry/hpoint3/hpoint3.h b/src/lib/geometry/hpoint3/hpoint3.h
+index 38d3450..7cd989f 100644
+--- a/src/lib/geometry/hpoint3/hpoint3.h
++++ b/src/lib/geometry/hpoint3/hpoint3.h
+@@ -96,7 +96,7 @@ static inline void HPt3R31Normalize(HPoint3 *a);
+ static inline void HPt3R30Normalize(HPoint3 *a);
+ static inline void HPt3SpaceNormalize(HPoint3 *a, int space);
+ static inline HPt3Coord HPt3HypDistance(HPoint3 *a, HPoint3 *b);
+-static inline HPt3Coord HPt3Distance(HPoint3 *a, HPoint3 *b);
++static inline HPt3Coord HPt3Distance(const HPoint3 *a, const HPoint3 *b);
+ static inline HPt3Coord HPt3SphDistance(HPoint3 *a, HPoint3 *b);
+ static inline HPt3Coord HPt3SpaceDistance(HPoint3 *a, HPoint3 *b, int space);
+ static inline void HPt3Sub(HPoint3 *a, HPoint3 *b, HPoint3 *aminusb);
+@@ -548,7 +548,7 @@ HPt3HypDistance(HPoint3 *a, HPoint3 *b)
+ }
+ 
+ static inline HPt3Coord
+-HPt3Distance(HPoint3 *a, HPoint3 *b)
++HPt3Distance(const HPoint3 *a, const HPoint3 *b)
+ {
+   float dx, dy, dz;
+   float w1w2;
+diff --git a/src/lib/geometry/ntransobj/ntransobj.c b/src/lib/geometry/ntransobj/ntransobj.c
+index a37d825..161ea4c 100644
+--- a/src/lib/geometry/ntransobj/ntransobj.c
++++ b/src/lib/geometry/ntransobj/ntransobj.c
+@@ -84,11 +84,12 @@ NTransCreate(TransformN *T)
+ 
+ HandleOps NTransOps = {
+ 	"ntrans",
+-	(int ((*)()))NTransStreamIn,
+-	(int ((*)()))NTransStreamOut,
+-	(void ((*)()))NTransDelete,
++	(int ((*)(Pool *, Handle **, Ref **)))NTransStreamIn,
++	(int ((*)(Pool *, Handle *, Ref *)))NTransStreamOut,
++	(void ((*)(Ref *)))NTransDelete,
+ 	NULL,
+-	NULL
++	NULL,
++	{NULL, NULL}, {NULL, NULL}
+ };
+ 
+ int
+diff --git a/src/lib/geometry/transform3/ctm3tetrad.c b/src/lib/geometry/transform3/ctm3tetrad.c
+index de8b9e3..6ea7bac 100644
+--- a/src/lib/geometry/transform3/ctm3tetrad.c
++++ b/src/lib/geometry/transform3/ctm3tetrad.c
+@@ -49,9 +49,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+  *		  columns x, y, z, w.
+  */
+ void
+-Ctm3Tetrad( T, x, y, z, w )
+-    Transform3 T;
+-    HPoint3 *x, *y, *z, *w;
++Ctm3Tetrad( Transform3 T, HPoint3 *x, HPoint3 *y, HPoint3 *z, HPoint3 *w )
+ {
+     Transform3 Ta;
+ 
+diff --git a/src/lib/geometry/transform3/tm3adjoint.c b/src/lib/geometry/transform3/tm3adjoint.c
+index 363be74..35266a8 100644
+--- a/src/lib/geometry/transform3/tm3adjoint.c
++++ b/src/lib/geometry/transform3/tm3adjoint.c
+@@ -105,8 +105,7 @@ Tm3Adjoint(Transform3 T, Transform3 Tadj)
+  */
+ static
+ float
+-determinant( T, Tadj )
+-    Transform3 T, Tadj;
++determinant( Transform3 T, Transform3 Tadj )
+ {
+     return T[0][0]*Tadj[0][0] 
+         + T[0][1]*Tadj[1][0] 
+diff --git a/src/lib/geometry/transform3/tm3concat.c b/src/lib/geometry/transform3/tm3concat.c
+index 1ceb48f..70e8ae4 100644
+--- a/src/lib/geometry/transform3/tm3concat.c
++++ b/src/lib/geometry/transform3/tm3concat.c
+@@ -51,8 +51,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+  * Notes:	Sets Ta to Ta * Tb.
+  */
+ void
+-Tm3PostConcat( Ta, Tb )
+-     Transform3 Ta, Tb;
++Tm3PostConcat( Transform3 Ta, Transform3 Tb )
+ {
+   fprintf(stderr, "WARNING: obsolete function Tm3PostConcat called.  Use\n\
+ Tm3Concat instead.\n");
+@@ -70,8 +69,7 @@ Tm3Concat instead.\n");
+  * Notes:	Sets Tb to Ta * Tb.
+  */
+ void
+-Tm3PreConcat( Ta, Tb )
+-    Transform3 Ta, Tb;
++Tm3PreConcat( Transform3 Ta, Transform3 Tb )
+ {
+   fprintf(stderr, "WARNING: obsolete function Tm3PreConcat called.  Use\n\
+ Tm3Concat instead.\n");
+@@ -94,8 +92,7 @@ Tm3Concat instead.\n");
+  *		product is allowed.
+  */
+ void
+-Tm3Concat( Ta, Tb, Tprod )
+-  Transform3 Ta, Tb, Tprod;
++Tm3Concat( Transform3 Ta, Transform3 Tb, Transform3 Tprod )
+ {
+   int i;
+   
+diff --git a/src/lib/geometry/transform3/tm3conjugate.c b/src/lib/geometry/transform3/tm3conjugate.c
+index cdd25ec..8a2ec63 100644
+--- a/src/lib/geometry/transform3/tm3conjugate.c
++++ b/src/lib/geometry/transform3/tm3conjugate.c
+@@ -45,8 +45,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+  * Notes:	Sets Tres = Inverse[Tcon} * T * Tcon
+  */
+ void
+-Tm3Conjugate( T, Tcon, Tres )
+-    Transform3 T, Tcon, Tres;
++Tm3Conjugate( Transform3 T, Transform3 Tcon, Transform3 Tres )
+ {
+     Transform3 Tconinv;
+ 
+diff --git a/src/lib/geometry/transform3/tm3copy.c b/src/lib/geometry/transform3/tm3copy.c
+index 7034303..b34c8f1 100644
+--- a/src/lib/geometry/transform3/tm3copy.c
++++ b/src/lib/geometry/transform3/tm3copy.c
+@@ -46,10 +46,9 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+  * Notes:	
+  */
+ void
+-Tm3Copy( Tsrc, Tdst )
+-    Transform3 Tsrc, Tdst;
++Tm3Copy( Transform3 Tsrc, Transform3 Tdst )
+ {
+-    memcpy( (char *)Tdst, (char *)Tsrc, sizeof(Transform3) );
++    memcpy( Tdst, Tsrc, sizeof(Transform3) );
+ }
+ 
+ /*-----------------------------------------------------------------------
+diff --git a/src/lib/geometry/transform3/tm3identity.c b/src/lib/geometry/transform3/tm3identity.c
+index 248aae3..9b09fd5 100644
+--- a/src/lib/geometry/transform3/tm3identity.c
++++ b/src/lib/geometry/transform3/tm3identity.c
+@@ -51,8 +51,7 @@ Transform3 TM3_IDENTITY = {
+  *       ( 0 0 0 1 )
+  */
+ void
+-Tm3Identity( T )
+-    Transform3 T;
++Tm3Identity( Transform3 T )
+ {
+     Tm3Copy( TM3_IDENTITY, T );
+ }
+diff --git a/src/lib/geometry/transform3/tm3stack.c b/src/lib/geometry/transform3/tm3stack.c
+index 204b2fe..0598ed8 100644
+--- a/src/lib/geometry/transform3/tm3stack.c
++++ b/src/lib/geometry/transform3/tm3stack.c
+@@ -39,8 +39,7 @@ static int maxstack = 0;
+ static Transform3 stack[MAXSTACK];
+ 
+ void
+-Tm3Push( T )
+-    Transform3 T;
++Tm3Push( Transform3 T )
+ {
+     if( maxstack < MAXSTACK )
+         Tm3Copy( T, stack[maxstack++] );
+@@ -49,8 +48,7 @@ Tm3Push( T )
+ }
+ 
+ void
+-Tm3Pop( T )
+-    Transform3 T;
++Tm3Pop( Transform3 T )
+ {
+     if( maxstack > 0 ) 
+         Tm3Copy( stack[--maxstack], T );
+diff --git a/src/lib/geometry/transform3/tm3transpose.c b/src/lib/geometry/transform3/tm3transpose.c
+index 8254249..631b418 100644
+--- a/src/lib/geometry/transform3/tm3transpose.c
++++ b/src/lib/geometry/transform3/tm3transpose.c
+@@ -44,8 +44,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+  * Notes:	
+  */
+ void
+-Tm3Transpose( T, Ttrans )
+-    Transform3 T, Ttrans;
++Tm3Transpose( Transform3 T, Transform3 Ttrans )
+ {
+     int i, j;
+     double t;
+diff --git a/src/lib/geometry/transobj/transobj.c b/src/lib/geometry/transobj/transobj.c
+index f22980a..fff381f 100644
+--- a/src/lib/geometry/transobj/transobj.c
++++ b/src/lib/geometry/transobj/transobj.c
+@@ -90,17 +90,17 @@ TransCreate(Transform T)
+ 
+ HandleOps TransOps = {
+ 	"trans",
+-	(int ((*)()))TransObjStreamIn,
+-	(int ((*)()))TransObjStreamOut,
+-	(void ((*)()))TransDelete,
+-	NULL,
++	(int ((*)(Pool *, Handle **, Ref **)))TransObjStreamIn,
++	(int ((*)(Pool *, Handle *, Ref *)))TransObjStreamOut,
++	(void ((*)(Ref *)))TransDelete,
++	NULL, NULL, {NULL, NULL}, {NULL, NULL}
+ };
+ 
+-void TransUpdate(Handle **hp, Ref *ignored, Transform Tfixme)
++void TransUpdate(Handle **hp, Ref *ignored, void *info)
+ {
++    TransformPtr Tfixme = (TransformPtr)info;
+     Handle *h = *hp;
+ 
+-    (void)ignored;
+     if (h != NULL && h->object != NULL) {
+ 	TmCopy(((TransObj *)(h->object))->T, Tfixme);
+     }
+diff --git a/src/lib/geometry/transobj/transobj.h b/src/lib/geometry/transobj/transobj.h
+index e8b5ce4..50b7f53 100644
+--- a/src/lib/geometry/transobj/transobj.h
++++ b/src/lib/geometry/transobj/transobj.h
+@@ -46,7 +46,7 @@ extern TransformPtr TransFSave(Transform T, FILE *outf, char *fname);
+ extern int TransObjStreamIn(Pool *p, Handle **hp, TransObj **tobjp);
+ extern int TransObjStreamOut(Pool *, Handle *, TransObj *tobj);
+ extern TransObj *TransObjFSave(TransObj *t, FILE *outf, char *fname);
+-extern void TransUpdate(Handle **hp, Ref *ignored, Transform Tfixme);
++extern void TransUpdate(Handle **hp, Ref *ignored, void *Tfixme);
+ 
+ extern TransObj *TransCreate(Transform);
+ 
+diff --git a/src/lib/geomutil/bdy/bdy.c b/src/lib/geomutil/bdy/bdy.c
+index a456fae..4dd6ba7 100644
+--- a/src/lib/geomutil/bdy/bdy.c
++++ b/src/lib/geomutil/bdy/bdy.c
+@@ -55,8 +55,10 @@ static char msg[] = "bdy.c";
+  * qsort. */
+ static float precision;
+ 
+-int EdgeCmp(HPoint3 **a, HPoint3 **b)
++int EdgeCmp(const void *p, const void *q)
+ {
++  const HPoint3 **a = (const HPoint3 **)p;
++  const HPoint3 **b = (const HPoint3 **)q;
+   int d;
+   float dist00, dist01, dist11, dist10;
+ 
+@@ -119,7 +121,7 @@ Geom *Bdy(Geom *g, float prec) {
+   }
+   n_edges = k;
+   precision = 0.0;
+-  qsort(edges, n_edges, 2 * sizeof(HPoint3 *), (int (*)())EdgeCmp);
++  qsort(edges, n_edges, 2 * sizeof(HPoint3 *), EdgeCmp);
+   precision = prec;
+ 
+   /* Eliminate everything mentioned more than once */
+diff --git a/src/lib/gprim/bbox/bboxcreate.c b/src/lib/gprim/bbox/bboxcreate.c
+index 4319ae5..dfaf347 100644
+--- a/src/lib/gprim/bbox/bboxcreate.c
++++ b/src/lib/gprim/bbox/bboxcreate.c
+@@ -100,7 +100,7 @@ int BBoxGet(BBox *bbox, int attr, void *attrp)
+ 
+ BBox *BBoxCreate (BBox *exist, GeomClass *classp, va_list *a_list)
+ {
+-  HPoint3 min3, max3;
++  HPoint3 min3 = {0.0f, 0.0f, 0.0f, 0.0f}, max3 = {0.0f, 0.0f, 0.0f, 0.0f};
+   int min3p = 0, max3p = 0;
+   HPointN *minN = NULL, *maxN = NULL;
+   int minNp = 0, maxNp = 0;
+@@ -109,7 +109,7 @@ BBox *BBoxCreate (BBox *exist, GeomClass *classp, va_list *a_list)
+ 
+   if (exist == NULL) {
+     FREELIST_NEW(BBox, bbox);
+-    GGeomInit(bbox, classp, BBOXMAGIC, NULL);
++    GGeomInit((Geom *)bbox, classp, BBOXMAGIC, NULL);
+     bbox->freelisthead = &BBoxFreeList;
+     bbox->min = HPtNCreate(4, NULL);
+     bbox->max = HPtNCreate(4, NULL);
+@@ -172,7 +172,7 @@ BBox *BBoxCreate (BBox *exist, GeomClass *classp, va_list *a_list)
+       maxNp = need_update = 1;
+       break;
+     default:
+-      if (GeomDecorate (bbox, &copy, attr, a_list) && exist == NULL) {
++      if (GeomDecorate ((Geom *)bbox, &copy, attr, a_list) && exist == NULL) {
+ 	OOGLError(0, "BBoxCreate: Undefined attribute: %d", attr);
+ 	HPtNDelete(bbox->min);
+ 	HPtNDelete(bbox->max);
+diff --git a/src/lib/gprim/bezier/bezcreate.c b/src/lib/gprim/bezier/bezcreate.c
+index 7d8e965..fcaf3e5 100644
+--- a/src/lib/gprim/bezier/bezcreate.c
++++ b/src/lib/gprim/bezier/bezcreate.c
+@@ -60,7 +60,7 @@ BezierCopy(Bezier *ob)
+     b = OOGLNewE(Bezier, "new Bezier");
+ 
+     *b = *ob;	/* Copy all fields */
+-    GGeomInit(b, BezierMethods(), BEZIERMAGIC, NULL);
++    GGeomInit((Geom *)b, BezierMethods(), BEZIERMAGIC, NULL);
+ 
+     if (ob->CtrlPnts != NULL) {
+ 	n = (b->degree_u + 1) * (b->degree_v + 1) * b->dimn;
+@@ -109,7 +109,7 @@ BezierCreate( Bezier *exist, GeomClass *classp, va_list *a_list )
+     if (exist == NULL) {
+ 	bezier = OOGLNewE(Bezier, "BezierCreate Bezier");
+ 	memset(bezier, 0, sizeof(Bezier));
+-        GGeomInit (bezier, classp, BEZIERMAGIC, NULL);
++        GGeomInit ((Geom *)bezier, classp, BEZIERMAGIC, NULL);
+ 	bezier->CtrlPnts = NULL;
+ 	bezier->nu = bezier->nv = 0;	/* no mesh yet */
+ 	bezier->mesh = NULL;
+@@ -157,7 +157,7 @@ BezierCreate( Bezier *exist, GeomClass *classp, va_list *a_list )
+ 	if (color != NULL) for (i=0; i<4; i++) bezier->c[i] = color[i];
+ 	break;
+     default:
+-	if (GeomDecorate (bezier, &copy, attr, a_list)) {
++	if (GeomDecorate ((Geom *)bezier, &copy, attr, a_list)) {
+ 	    OOGLError (0, "BezierCreate: undefined option: %d", attr);
+ 	    OOGLFree (bezier);
+ 	    return NULL;
+diff --git a/src/lib/gprim/bezier/bezdice.c b/src/lib/gprim/bezier/bezdice.c
+index b545a31..d43d431 100644
+--- a/src/lib/gprim/bezier/bezdice.c
++++ b/src/lib/gprim/bezier/bezdice.c
+@@ -37,7 +37,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "bezierP.h"
+ #include "bsptreeP.h"
+ 
+-void bezier_interp();
++void bezier_interp(float *in, float *out, int deg, int n, int dimn);
+ 
+ Bezier *
+ BezierDice(Bezier *bezier, int nu, int nv)
+diff --git a/src/lib/gprim/bezier/bezevert.c b/src/lib/gprim/bezier/bezevert.c
+index 167d3a6..067f538 100644
+--- a/src/lib/gprim/bezier/bezevert.c
++++ b/src/lib/gprim/bezier/bezevert.c
+@@ -39,8 +39,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+  * Next time mesh is computed, its normals will be correct.
+  */
+ Bezier *
+-BezierEvert( bezier )
+-Bezier *bezier;
++BezierEvert( Bezier *bezier )
+ {
+ #ifdef FOO
+     int index0, index1, i,j,k;
+diff --git a/src/lib/gprim/bezier/bezier.h b/src/lib/gprim/bezier/bezier.h
+index 15ceb80..758a38d 100644
+--- a/src/lib/gprim/bezier/bezier.h
++++ b/src/lib/gprim/bezier/bezier.h
+@@ -48,15 +48,15 @@ Mesh 		*BezierReDice( Bezier * );
+ Bezier		*BezierDice( Bezier *, int nu, int nv );
+ char           	*BezierListName();
+ List 		*BezierListLoad();
+-List		*BezierListFLoad();
+-List 		*BezierListSave();
+-List		*BezierListFSave();
++List		*BezierListFLoad(IOBFILE *file, char *fname);
++List 		*BezierListSave(List *bezierlist, char *fname);
++List		*BezierListFSave(List *bezierlist, FILE *f);
+ char           	*BezierName();
+-BBox           	*BezierBound();
++BBox           	*BezierBound(Bezier *bezier, Transform T, TransformN *TN);
+ Geom 		*BezierBoundSphere( Bezier *,
+ 				    Transform T, TransformN *TN, int *axes,
+ 				    int );
+-Bezier      	*BezierEvert();
++Bezier      	*BezierEvert(Bezier *bezier);
+ Bezier      	*BezierDraw( Bezier *bezier );
+ Bezier      	*BezierBSPTree(Bezier *bezier, BSPTree *tree, int action);
+ Geom      	*BezierPick( Bezier *, Pick *, Appearance *, Transform, TransformN *, int *axes );
+diff --git a/src/lib/gprim/bezier/bezsave.c b/src/lib/gprim/bezier/bezsave.c
+index 624cec7..8cf591e 100644
+--- a/src/lib/gprim/bezier/bezsave.c
++++ b/src/lib/gprim/bezier/bezsave.c
+@@ -35,9 +35,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "listP.h"
+ 
+ List *
+-BezierListSave(bezierlist, fname)
+-    List *bezierlist;
+-    char *fname;
++BezierListSave(List *bezierlist, char *fname)
+ {
+     List *q;
+     FILE *f;
+@@ -50,9 +48,7 @@ BezierListSave(bezierlist, fname)
+ }
+ 
+ List *
+-BezierListFSave(bezierlist, f)
+-    List *bezierlist;
+-    FILE *f;
++BezierListFSave(List *bezierlist, FILE *f)
+ {
+     List *bl;
+     Bezier *bez;
+diff --git a/src/lib/gprim/comment/commentcreate.c b/src/lib/gprim/comment/commentcreate.c
+index ef91b97..4c6c563 100644
+--- a/src/lib/gprim/comment/commentcreate.c
++++ b/src/lib/gprim/comment/commentcreate.c
+@@ -58,7 +58,7 @@ CommentCopy(Comment *comment)
+ 
+   if (datalength == 0) datalength = strlen(comment->data)+1;
+   nc = OOGLNewE(Comment, "CommentCopy: Comment");
+-  GGeomInit(nc, comment->Class, comment->magic, NULL);
++  GGeomInit((Geom *)nc, comment->Class, comment->magic, NULL);
+   nc->name = OOGLNewNE(char, strlen(comment->name)+1, "Comment name");
+   nc->type = OOGLNewNE(char, strlen(comment->type)+1, "Comment type");
+   nc->data = OOGLNewNE(char, datalength, "Comment data");
+@@ -78,7 +78,7 @@ CommentCreate (Comment *exist, GeomClass *classp, va_list *a_list)
+ 
+     if (exist == NULL) {
+ 	comment = OOGLNewE(Comment, "CommentCreate comment");
+-	GGeomInit (comment, classp, COMMENTMAGIC, NULL);
++	GGeomInit ((Geom *)comment, classp, COMMENTMAGIC, NULL);
+ 	comment->name = NULL;
+ 	comment->type = NULL;
+ 	comment->length = 0;
+@@ -91,7 +91,7 @@ CommentCreate (Comment *exist, GeomClass *classp, va_list *a_list)
+     while ((attr = va_arg (*a_list, int))) {
+ 	switch(attr) {
+ 	default:
+-	    if (GeomDecorate(comment, &copy, attr, a_list)) {
++	    if (GeomDecorate((Geom *)comment, &copy, attr, a_list)) {
+ 		OOGLError (0, "CommentCreate: Undefined option: %d", attr);
+ 		if (exist == NULL) GeomDelete ((Geom *)comment);
+ 		return NULL;
+diff --git a/src/lib/gprim/comment/commentsave.c b/src/lib/gprim/comment/commentsave.c
+index f3cf052..54ecfd8 100644
+--- a/src/lib/gprim/comment/commentsave.c
++++ b/src/lib/gprim/comment/commentsave.c
+@@ -66,9 +66,7 @@ Comment *CommentFSave(Comment *comment, FILE *file, char *fname)
+ }
+ 
+ Comment *
+-CommentSave( comment, name )
+-    Comment *comment;
+-    char *name;
++CommentSave( Comment *comment, char *name )
+ {
+     FILE *file;
+ 
+diff --git a/src/lib/gprim/discgrp/colormap.c b/src/lib/gprim/discgrp/colormap.c
+index 41566d1..3087c31 100644
+--- a/src/lib/gprim/discgrp/colormap.c
++++ b/src/lib/gprim/discgrp/colormap.c
+@@ -69,8 +69,7 @@ static int doneread = 0;
+ static char default_name[] = "sample.cmap";
+ 
+ int
+-readcmap(cmapfname)
+-char *cmapfname;
++readcmap(char *cmapfname)
+ {
+ 	FILE *fp;
+ 	int size = 256;
+@@ -107,8 +106,7 @@ char *cmapfname;
+ }
+ 
+ ColorA
+-GetCmapEntry(n)
+-int n;
++GetCmapEntry(int n)
+ {
+  	if (!doneread)	{
+ 	    char *cmapfile; 
+diff --git a/src/lib/gprim/discgrp/complex.c b/src/lib/gprim/discgrp/complex.c
+index 79fbd1d..2ed8c1f 100644
+--- a/src/lib/gprim/discgrp/complex.c
++++ b/src/lib/gprim/discgrp/complex.c
+@@ -35,8 +35,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ complex one		= {1.0, 0.0};
+ complex zero	= {0.0, 0.0};
+ 
+-complex cplx_plus(z0, z1)
+-complex z0, z1;
++complex cplx_plus(complex z0, complex z1)
+ {
+ 	complex sum;
+ 	
+@@ -46,8 +45,7 @@ complex z0, z1;
+ }
+ 
+ 
+-complex cplx_minus(z0, z1)
+-complex z0, z1;
++complex cplx_minus(complex z0, complex z1)
+ {
+ 	complex diff;
+ 	
+@@ -57,8 +55,7 @@ complex z0, z1;
+ }
+ 
+ 
+-complex cplx_div(z0, z1)
+-complex z0, z1;
++complex cplx_div(complex z0, complex z1)
+ {
+ 	double	mod_sq;
+ 	complex	quotient;
+@@ -70,8 +67,7 @@ complex z0, z1;
+ }
+ 
+ 
+-complex cplx_mult(z0, z1)
+-complex z0, z1;
++complex cplx_mult(complex z0, complex z1)
+ {
+ 	complex product;
+ 
+@@ -81,15 +77,13 @@ complex z0, z1;
+ }
+ 
+ 
+-double modulus(z0)
+-complex z0;
++double modulus(complex z0)
+ {
+ 	return( sqrt(z0.real * z0.real  +  z0.imag * z0.imag) );
+ }
+ 
+ 
+-complex cplx_sqrt(z)
+-complex z;
++complex cplx_sqrt(complex z)
+ {
+ 	double	mod,
+ 			arg;
+@@ -106,10 +100,7 @@ complex z;
+ 
+ 
+ 
+-void sl2c_mult(a, b, product)
+-sl2c_matrix	a,
+-			b,
+-			product;
++void sl2c_mult(sl2c_matrix a, sl2c_matrix b, sl2c_matrix product)
+ {
+ 	sl2c_matrix	temp;
+ 
+@@ -125,9 +116,7 @@ sl2c_matrix	a,
+ }
+ 
+ 
+-void sl2c_copy(a, b)
+-sl2c_matrix	a,
+-			b;
++void sl2c_copy(sl2c_matrix a, sl2c_matrix b)
+ {
+ 	a[0][0] = b[0][0];
+ 	a[0][1] = b[0][1];
+@@ -138,8 +127,7 @@ sl2c_matrix	a,
+ 
+ 
+ /* normalizes a matrix to have determinant one */
+-void sl2c_normalize(a)
+-sl2c_matrix a;
++void sl2c_normalize(sl2c_matrix a)
+ {
+ 	complex det,
+ 			factor;
+@@ -180,9 +168,7 @@ sl2c_matrix a;
+ 
+ 
+ /* inverts a matrix;  assumes determinant is already one */
+-void sl2c_invert(a, a_inv)
+-sl2c_matrix a,
+-			a_inv;
++void sl2c_invert(sl2c_matrix a, sl2c_matrix a_inv)
+ {
+ 	complex	temp;
+ 
+@@ -203,8 +189,7 @@ sl2c_matrix a,
+ /* computes the square of the norm of a matrix */
+ /* relies on the assumption that the sl2c matrix is stored in memory as 8 consecutive doubles */
+ /* IS THIS RELIABLE? */
+-double sl2c_norm_squared(a)
+-sl2c_matrix a;
++double sl2c_norm_squared(sl2c_matrix a)
+ {
+ 	int	i;
+ 	double	*p;
+@@ -220,9 +205,7 @@ sl2c_matrix a;
+ }
+ 
+ 
+-void sl2c_adjoint(a, ad_a)
+-sl2c_matrix	a,
+-			ad_a;
++void sl2c_adjoint(sl2c_matrix a, sl2c_matrix ad_a)
+ {
+ 	complex	temp;
+ 
+diff --git a/src/lib/gprim/discgrp/dgcopy.c b/src/lib/gprim/discgrp/dgcopy.c
+index f100efb..326282c 100644
+--- a/src/lib/gprim/discgrp/dgcopy.c
++++ b/src/lib/gprim/discgrp/dgcopy.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "discgrpP.h"
+ 
+ DiscGrp *
+-DiscGrpCopy(obj)
+-    DiscGrp *obj;
++DiscGrpCopy(DiscGrp *obj)
+ {
+ 	DiscGrp  *m;
+ 	DiscGrp  *om = obj;
+diff --git a/src/lib/gprim/discgrp/dgcreate.c b/src/lib/gprim/discgrp/dgcreate.c
+index af560cb..067a42e 100644
+--- a/src/lib/gprim/discgrp/dgcreate.c
++++ b/src/lib/gprim/discgrp/dgcreate.c
+@@ -34,7 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "discgrpP.h"
+ 
+ DiscGrp *
+-DiscGrpSetPreDraw( DiscGrp *dg, void (*predraw)() )
++DiscGrpSetPreDraw( DiscGrp *dg, void (*predraw)(DiscGrp *) )
+ {
+     dg->predraw = predraw;
+     return (dg);
+@@ -115,7 +115,7 @@ DiscGrpElListCreate (DiscGrpElList *exist, ...)
+ 	    break;
+ 
+ 	default:
+-	    if (GeomDecorate (dgellist, &copy, attr, &a_list)) {
++	    if (GeomDecorate ((Geom *)dgellist, &copy, attr, &a_list)) {
+ 		GeomError (0, "DiscGrpElListCreate: Undefined option: %d", attr);
+ 		OOGLFree (dgellist);
+ 		return NULL;
+@@ -163,7 +163,7 @@ DiscGrpCreate (DiscGrp *exist, GeomClass *classp, va_list *a_list)
+     if (exist == NULL) {
+ 	discgrp = OOGLNewE(DiscGrp, "DiscGrpCreate discgrp");
+ 	memset(discgrp, 0, sizeof(DiscGrp));
+-	GGeomInit (discgrp, classp, DISCGRPMAGIC, NULL);
++	GGeomInit ((Geom *)discgrp, classp, DISCGRPMAGIC, NULL);
+ 	discgrp->flag = DG_DDSLICE;  /* default is to slice off cusps */
+ 	discgrp->name = NULL;
+ 	discgrp->comment = NULL;
+@@ -388,7 +388,7 @@ DiscGrpCreate (DiscGrp *exist, GeomClass *classp, va_list *a_list)
+ 
+ 
+     default:
+-	if (GeomDecorate (discgrp, &copy, attr, a_list)) {
++	if (GeomDecorate ((Geom *)discgrp, &copy, attr, a_list)) {
+ 	    GeomError (0, "DiscGrpCreate: Undefined option: %d", attr);
+ 	    OOGLFree (discgrp);
+ 	    return NULL;
+diff --git a/src/lib/gprim/discgrp/dgdelete.c b/src/lib/gprim/discgrp/dgdelete.c
+index 97e135d..2c63a15 100644
+--- a/src/lib/gprim/discgrp/dgdelete.c
++++ b/src/lib/gprim/discgrp/dgdelete.c
+@@ -44,8 +44,7 @@ DiscGrpElListDelete (DiscGrpElList *exist)
+ }
+ 
+ DiscGrp *
+-DiscGrpDelete(dg)
+-DiscGrp           *dg;
++DiscGrpDelete(DiscGrp *dg)
+ {
+ 	if (dg)
+ 	{
+diff --git a/src/lib/gprim/discgrp/dgdirdom.c b/src/lib/gprim/discgrp/dgdirdom.c
+index c9d1a7f..707be9f 100644
+--- a/src/lib/gprim/discgrp/dgdirdom.c
++++ b/src/lib/gprim/discgrp/dgdirdom.c
+@@ -40,7 +40,8 @@ static WEpolyhedron	*wepoly1, **wepoly2;
+ HPoint3 DGorigin = {0,0,0,1};
+ HPoint3 DGrandom = {.1,.2,.3,.4};
+ 
+-extern void do_weeks_code();
++extern void do_weeks_code(WEpolyhedron **wepolyhedron, point oo, proj_matrix *gen_list,
++                          int n, int met, int slice);
+ 
+ static int
+ is_id(Transform t)
+@@ -245,7 +246,7 @@ DiscGrpExtractNhbrs( WEpolyhedron *wepoly )
+     int 	i,j,k;
+     WEface 		*fptr;	
+     DiscGrpElList	*mylist;
+-    ColorA		GetCmapEntry();
++    ColorA		GetCmapEntry(int n);
+     
+     if (!wepoly)	return(NULL);
+ 
+@@ -320,7 +321,7 @@ DiscGrpDirDom(DiscGrp *dg)
+ {
+     Geom *oogldirdom;
+     WEpolyhedron *dd;
+-    extern Geom             *WEPolyhedronToPolyList();
++    extern Geom             *WEPolyhedronToPolyList(WEpolyhedron *poly);
+     Geom *mylist, *smlist;
+ 
+       if (dg->flag & DG_DDBEAM)	{
+diff --git a/src/lib/gprim/discgrp/dgenum.c b/src/lib/gprim/discgrp/dgenum.c
+index 1378c57..0e66403 100644
+--- a/src/lib/gprim/discgrp/dgenum.c
++++ b/src/lib/gprim/discgrp/dgenum.c
+@@ -44,7 +44,7 @@ static DiscGrp *mydg;
+ static ColorA white = {1,1,1,.75};
+ /*static DiscGrpEl grpel;*/
+ static Transform mlist[128];
+-static int (*constraintfn)();
++static int (*constraintfn)(DiscGrpEl *);
+ int check_big = 1, 	/* this is currently never non-zero */
+ 	check_new = 1, 	/* ditto */
+ 	have_matrices = 1,
+@@ -63,8 +63,7 @@ static char symbollist[64];
+ static void get_matrices();
+ 
+ int
+-getindex(c)
+-char c;
++getindex(char c)
+ {
+     int i;
+     for (i=0; i<ngens; ++i)
+@@ -73,9 +72,7 @@ char c;
+ }
+ 
+ static void
+-word_to_mat(word, mat1)
+-char *word;
+-Transform mat1;
++word_to_mat(char *word, Transform mat1)
+ {
+     int i, index;
+     /*printf("# %s\n",word); */
+@@ -192,7 +189,7 @@ dumb_enumerate(int depth, DiscGrpEl *dgel)
+  */
+ 
+ DiscGrpElList *
+-DiscGrpEnum(DiscGrp *discgrp, int (* constraint)(void) )
++DiscGrpEnum(DiscGrp *discgrp, int (* constraint)(DiscGrpEl *) )
+ {
+     DiscGrpElList *enum_list = OOGLNewE(DiscGrpElList, "DiscGrpEnum");
+     extern DiscGrpEl *enumgetstack();
+diff --git a/src/lib/gprim/discgrp/dgevert.c b/src/lib/gprim/discgrp/dgevert.c
+index bedf60e..0f9322a 100644
+--- a/src/lib/gprim/discgrp/dgevert.c
++++ b/src/lib/gprim/discgrp/dgevert.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "discgrpP.h"
+ 
+ DiscGrp           *
+-DiscGrpEvert(dg)
+-DiscGrp           *dg;
++DiscGrpEvert(DiscGrp *dg)
+ {
+ 	return dg;
+ }
+diff --git a/src/lib/gprim/discgrp/dgmisc.c b/src/lib/gprim/discgrp/dgmisc.c
+index 1164389..cb59eaa 100644
+--- a/src/lib/gprim/discgrp/dgmisc.c
++++ b/src/lib/gprim/discgrp/dgmisc.c
+@@ -31,7 +31,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "discgrpP.h"
+ 
+ void
+-DiscGrpHandleScan( DiscGrp *dg, int (*func)(), void *arg )
++DiscGrpHandleScan( DiscGrp *dg, int (*func)(Handle **, DiscGrp *, void *), void *arg )
+ {
+     if(dg == NULL)
+ 	return;
+@@ -44,11 +44,11 @@ DiscGrpHandleScan( DiscGrp *dg, int (*func)(), void *arg )
+ 	(*func)(&dg->camgeomhandle, dg, arg);
+ 
+     if(dg->geom)
+-	GeomHandleScan(dg->geom, func, arg);
++	GeomHandleScan(dg->geom, (int (*)(Handle **, Geom *, void *))func, arg);
+     if(dg->ddgeom)
+-	GeomHandleScan(dg->ddgeom, func, arg);
++	GeomHandleScan(dg->ddgeom, (int (*)(Handle **, Geom *, void *))func, arg);
+     if(dg->camgeom)
+-	GeomHandleScan(dg->camgeom, func, arg);
++	GeomHandleScan(dg->camgeom, (int (*)(Handle **, Geom *, void *))func, arg);
+ }
+ 
+ 
+diff --git a/src/lib/gprim/discgrp/dgstream.c b/src/lib/gprim/discgrp/dgstream.c
+index f79c6db..56db526 100644
+--- a/src/lib/gprim/discgrp/dgstream.c
++++ b/src/lib/gprim/discgrp/dgstream.c
+@@ -42,7 +42,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "handleP.h"
+ #include "projective.h"
+ 
+-int fsaparse();
++int fsaparse(FILE *fp, wa *fsa);
+ 
+ #define DG_GROUPNAME	1
+ #define DG_COMMENT	2
+diff --git a/src/lib/gprim/discgrp/dgtransform.c b/src/lib/gprim/discgrp/dgtransform.c
+index 7a61581..6a131ef 100644
+--- a/src/lib/gprim/discgrp/dgtransform.c
++++ b/src/lib/gprim/discgrp/dgtransform.c
+@@ -43,9 +43,7 @@ DiscGrpTransform(DiscGrp *dg, Transform T)
+ }
+ 
+ DiscGrp *
+-DiscGrpTransformTo( dg, T )
+-     DiscGrp *dg;
+-     Transform T;
++DiscGrpTransformTo( DiscGrp *dg, Transform T )
+ {
+   return(DiscGrpTransform(dg, T));
+ }
+diff --git a/src/lib/gprim/discgrp/discgrpP.h b/src/lib/gprim/discgrp/discgrpP.h
+index a9faeed..15b2beb 100644
+--- a/src/lib/gprim/discgrp/discgrpP.h
++++ b/src/lib/gprim/discgrp/discgrpP.h
+@@ -104,7 +104,7 @@ struct DiscGrp {
+ 	int		enumdepth;	/* max word length for big_list */
+ 	float 		enumdist;	/* max distance grp el moves cpoint */
+ 	float 		drawdist;	/* max distance grp el moves cpoint for drawing purposes (generally less than enumdist)_ */
+-	void		(*predraw)();
++	void		(*predraw)(struct DiscGrp *);
+ 	dgviewinfo	viewinfo;	/* camera position, etc */
+ 	} ;
+ 
+@@ -119,20 +119,21 @@ extern DiscGrpElList *DiscGrpExtractNhbrs( WEpolyhedron *wepoly );
+ extern Geom *DiscGrpDirDom( DiscGrp *dg);
+ extern Geom *WEPolyhedronToBeams( WEpolyhedron *poly, float alpha);
+ extern WEpolyhedron *DiscGrpMakeDirdom( DiscGrp *dg, HPoint3 *pt0, int slice);
+-extern DiscGrpElList *DiscGrpEnum( DiscGrp *dg, int (*constraintfn)());
++extern DiscGrpElList *DiscGrpEnum( DiscGrp *dg, int (*constraintfn)(DiscGrpEl *));
+ extern void DiscGrpInitStandardConstraint( int depth, float d0, float d1);
+ extern int DiscGrpStandardConstraint( DiscGrpEl *dgel);
+ extern DiscGrpElList *DiscGrpElListDelete (DiscGrpElList *exist);
+ extern void DiscGrpAddInverses(DiscGrp *discgrp);
+ 
+-void DHPt3PerpBisect(/*point4 p0, point4 p1, point4 result, int metric*/);
++typedef	double point4[4];
++void DHPt3PerpBisect(point4 p0, point4 p1, point4 result, int metric);
+ 
+-extern int needstuneup();
+-extern void tuneup();
+-extern int is_new();
+-extern int insert_or_match_mat();
+-extern int push_new_stack();
+-extern int enumpush();
++extern int needstuneup(Transform m1);
++extern void tuneup(Transform m1, int metric);
++extern int is_new(Transform t);
++extern int insert_or_match_mat(Transform mat, int mode);
++extern int push_new_stack(char *word);
++extern int enumpush(DiscGrpEl *pp);
+ extern void init_stack();
+ extern void make_new_old();
+ extern int init_out_stack();
+diff --git a/src/lib/gprim/discgrp/extern.h b/src/lib/gprim/discgrp/extern.h
+index cf93544..39bedac 100644
+--- a/src/lib/gprim/discgrp/extern.h
++++ b/src/lib/gprim/discgrp/extern.h
+@@ -20,13 +20,14 @@
+  */
+ #include <geom.h>
+ #include "color.h"
++#include "vec4.h"
+ 
+ typedef double vec4[4];
+ 
+ /* in xform.c */
+-extern proj_matrix	*matmatmul4 ();
+-extern vec4		*vecmatmul4 ();
+-extern vec4		*matvecmul4 ();
++extern proj_matrix	*matmatmul4 (matrix4 mat1, matrix4 mat2, matrix4 mat3);
++extern vec4		*vecmatmul4 (point4 v1, matrix4 m, point4 v2);
++extern vec4		*matvecmul4 (matrix4 m, point4 v1, point4 v2);
+ 
+ /* in projective.c */
+ extern vec4		*conf2proj ();
+@@ -35,9 +36,9 @@ extern vec4		*hs2ball ();
+ extern proj_matrix	*sl2c2proj ();
+ 
+ /* in polyhedron.c */
+-extern Geom		*WEPolyhedronToPolyList();
+-extern Geom		*WEPolyhedronToVect();
++extern Geom		*WEPolyhedronToPolyList(WEpolyhedron *poly);
++extern Geom		*WEPolyhedronToVect(WEpolyhedron *poly, HPoint3 origin);
+ 
+ /* colormap.c */
+-extern int			readcmap();
+-extern ColorA		GetCmapEntry();
++extern int		readcmap(char *cmapfname);
++extern ColorA		GetCmapEntry(int n);
+diff --git a/src/lib/gprim/discgrp/matlist.c b/src/lib/gprim/discgrp/matlist.c
+index 4e164a6..f2007e9 100644
+--- a/src/lib/gprim/discgrp/matlist.c
++++ b/src/lib/gprim/discgrp/matlist.c
+@@ -40,10 +40,6 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ 	extern int debug, stringent, metric;
+ 	static float epsilon = .005;
+ 
+-void traverse_list();
+-int is_same();
+-
+-
+ struct node {
+ 	Transform t;
+ 	struct node *l,*r, *p;	/* left, right, parent */
+@@ -56,6 +52,9 @@ struct node {
+ 
+ static struct node *head;
+ 
++void traverse_list(struct node *n);
++int is_same(Transform t0, Transform t1);
++
+ double
+ getnorm(int metric, Transform t)
+ {
+@@ -94,14 +93,11 @@ alloc_node()
+ }
+ 
+ int
+-insert_or_match_mat(mat, mode)
+-Transform mat;
+-int mode;	/* insert or match? */
++insert_or_match_mat(Transform mat, int mode /* insert or match? */)
+ {
+ 	struct node *n = NULL, *p; 
+ 	float d;
+ 	struct node tnode;
+-	double getnorm();
+ 
+ 	if (debug == 4)	traverse_list(head);
+ 
+@@ -173,8 +169,7 @@ int mode;	/* insert or match? */
+ }
+ 
+ int
+-is_same(t0, t1)
+-Transform t0, t1;
++is_same(Transform t0, Transform t1)
+ {
+     int i, j, same = 1;
+ 
+@@ -213,8 +208,7 @@ Transform t0, t1;
+ }
+ 
+ int
+-is_new(t)
+-Transform t;
++is_new(Transform t)
+ {
+     if ( insert_or_match_mat(t, MATCH) )
+ 	    {
+@@ -225,8 +219,7 @@ Transform t;
+ 
+ 
+ void
+-traverse_list(n)
+-struct node *n;
++traverse_list(struct node *n)
+ {
+ 	if (n == NULL)	return;
+ 	traverse_list(n->l);
+@@ -235,8 +228,7 @@ struct node *n;
+ }
+ 
+ static void
+-_delete_list(n)
+-struct node *n;
++_delete_list(struct node *n)
+ {
+  	struct node *nt, *ot;
+ 	if (n == NULL) return;
+diff --git a/src/lib/gprim/discgrp/outstack.c b/src/lib/gprim/discgrp/outstack.c
+index 2895c39..636e38f 100644
+--- a/src/lib/gprim/discgrp/outstack.c
++++ b/src/lib/gprim/discgrp/outstack.c
+@@ -48,8 +48,7 @@ init_out_stack()
+ }
+ 	
+ int
+-enumpush(pp)
+-DiscGrpEl *pp;
++enumpush(DiscGrpEl *pp)
+ {
+     if (stackptr >= &mystack[BlockSize*array_size])	{ 
+ 	if (debug) 
+diff --git a/src/lib/gprim/discgrp/polyhedron.c b/src/lib/gprim/discgrp/polyhedron.c
+index e83b2a7..1cc3a21 100644
+--- a/src/lib/gprim/discgrp/polyhedron.c
++++ b/src/lib/gprim/discgrp/polyhedron.c
+@@ -92,8 +92,7 @@ WEPolyhedronToVect(WEpolyhedron *poly, HPoint3 origin)
+ /*static ColorA white = {1,1,1,1};*/
+ 
+ Geom *
+-  WEPolyhedronToPolyList(poly)
+-WEpolyhedron *poly;
++  WEPolyhedronToPolyList(WEpolyhedron *poly)
+ {
+   ColorA *colors = NULL;
+   HPoint3 *points = NULL;
+diff --git a/src/lib/gprim/discgrp/projective.c b/src/lib/gprim/discgrp/projective.c
+index a4a6786..42beb2a 100644
+--- a/src/lib/gprim/discgrp/projective.c
++++ b/src/lib/gprim/discgrp/projective.c
+@@ -37,9 +37,7 @@ an explanation provided by Craig Hodgson of a program written by
+ Diane Hoffoss which in turn was based on an algorithm explained to her
+ by Bill Thurston.  */
+ 
+-void sl2c_to_proj(s, p)
+-sl2c_matrix	s;
+-proj_matrix	p;
++void sl2c_to_proj(sl2c_matrix s, proj_matrix p)
+ {
+ 	int			j;		/* which column of p	*/
+ 	sl2c_matrix	ad_s,	/* s* = adjoint of s	*/
+@@ -71,9 +69,7 @@ proj_matrix	p;
+ }
+ 
+ 
+-void proj_to_sl2c(p, s)
+-proj_matrix	p;
+-sl2c_matrix	s;
++void proj_to_sl2c(proj_matrix p, sl2c_matrix s)
+ {
+ 	double	t2,
+ 			t3,
+@@ -128,10 +124,7 @@ sl2c_matrix	s;
+ }
+ 
+ 
+-void proj_mult(a, b, product)
+-proj_matrix	a,
+-			b,
+-			product;
++void proj_mult(proj_matrix a, proj_matrix b, proj_matrix product)
+ {
+ 	int	i,
+ 					j,
+@@ -155,9 +148,7 @@ proj_matrix	a,
+ }
+ 
+ 
+-void proj_copy(a, b)
+-proj_matrix	a,
+-			b;
++void proj_copy(proj_matrix a, proj_matrix b)
+ {
+ 	int	i,
+ 					j;
+@@ -173,9 +164,7 @@ proj_matrix	a,
+ /* proj_invert() assumes the matrix a is nonsingular, as will always	*/
+ /* be the case for matrices representing isometries of H^3.				*/
+ 
+-void proj_invert(m, m_inv)
+-proj_matrix	m,
+-			m_inv;
++void proj_invert(proj_matrix m, proj_matrix m_inv)
+ {
+ 	int			i, j, k;
+ 	double		scratch[4][8],
+diff --git a/src/lib/gprim/discgrp/projective.h b/src/lib/gprim/discgrp/projective.h
+index 982a383..090812a 100644
+--- a/src/lib/gprim/discgrp/projective.h
++++ b/src/lib/gprim/discgrp/projective.h
+@@ -26,16 +26,17 @@
+ 
+ typedef double proj_matrix[4][4];
+ typedef double point[4];
++#include "complex.h"
+ 
+ #endif
+ 
+ #if PROTOTYPES
+ /* in sl2c_to_proj.c */
+-extern void		sl2c_to_proj(/*sl2c_matrix, proj_matrix*/);
+-extern void		proj_to_sl2c(/*proj_matrix, sl2c_matrix*/);
+-extern void		proj_mult(/*proj_matrix, proj_matrix, proj_matrix*/);
+-extern void		proj_copy(/*proj_matrix, proj_matrix*/);
+-extern void		proj_invert(/*proj_matrix, proj_matrix*/);
++extern void		sl2c_to_proj(sl2c_matrix, proj_matrix);
++extern void		proj_to_sl2c(proj_matrix, sl2c_matrix);
++extern void		proj_mult(proj_matrix, proj_matrix, proj_matrix);
++extern void		proj_copy(proj_matrix, proj_matrix);
++extern void		proj_invert(proj_matrix, proj_matrix);
+ #endif
+ 
+ #endif
+diff --git a/src/lib/gprim/discgrp/stack.c b/src/lib/gprim/discgrp/stack.c
+index 3a5c4a1..cf815c0 100644
+--- a/src/lib/gprim/discgrp/stack.c
++++ b/src/lib/gprim/discgrp/stack.c
+@@ -67,8 +67,7 @@ pop_old_stack()
+ }
+ 
+ int
+-push_new_stack(word)
+-char *word;
++push_new_stack(char *word)
+ {
+ 	entry * oldstack;
+ 	if (new >= stack + numchunks * CHUNKSIZE)	
+diff --git a/src/lib/gprim/discgrp/weeks_dirdom.c b/src/lib/gprim/discgrp/weeks_dirdom.c
+index 50255a0..538550e 100644
+--- a/src/lib/gprim/discgrp/weeks_dirdom.c
++++ b/src/lib/gprim/discgrp/weeks_dirdom.c
+@@ -161,13 +161,13 @@ static int metric, debug;
+ static WEpolyhedron the_polyhedron;
+ 
+ /* we'd use the geometry library routines here if they were double precision */
+-extern double		DHPt3Dot3();
+-extern double		DHPt3Dot();
++extern double		DHPt3Dot3(point4 v0, point4 v1, int metric);
++extern double		DHPt3Dot(point4 v0, point4 v1, int metric);
+ 
+ static WEedge edgeheap[1024];
+ static int heapcount = 0;
+ 
+-int proj_same_matrix();
++int proj_same_matrix(proj_matrix m0, proj_matrix m1);
+ 
+ void
+ do_weeks_code(WEpolyhedron **wepolyhedron, point oo, proj_matrix *gen_list,
+@@ -195,8 +195,7 @@ do_weeks_code(WEpolyhedron **wepolyhedron, point oo, proj_matrix *gen_list,
+ 
+ #define MAGIC_SCALE .99
+ static void
+-slice_off_cusps(poly)
+-WEpolyhedron *poly;
++slice_off_cusps(WEpolyhedron *poly)
+ {
+   WEvertex *vptr, *vlist;
+   Transform tlate;
+@@ -372,8 +371,7 @@ WEpolyhedron	*polyhedron;
+ }
+ #endif
+ 
+-static void make_cube(polyhedron)
+-WEpolyhedron	*polyhedron;
++static void make_cube(WEpolyhedron *polyhedron)
+ {
+ 	int			i;
+ 	WEvertex	*initial_vertices[8];
+@@ -468,10 +466,7 @@ WEpolyhedron	*polyhedron;
+ }
+ 
+ 
+-static void initialize_polyhedron(polyhedron, proj_generators, num_generators)
+-WEpolyhedron	*polyhedron;
+-proj_matrix		*proj_generators;
+-int				num_generators;
++static void initialize_polyhedron(WEpolyhedron *polyhedron, proj_matrix *proj_generators, int num_generators)
+ {
+ 	int		i;
+ 	WEface	*face;
+@@ -497,9 +492,7 @@ int				num_generators;
+ 	return;
+ }
+ 
+-static int check_face(polyhedron, face)
+-WEpolyhedron	*polyhedron;
+-WEface			*face;
++static int check_face(WEpolyhedron *polyhedron, WEface *face)
+ {
+ 	/* We want to see whether the image of the matching face	*/
+ 	/* is entirely contained within the given face.  To do this	*/
+@@ -681,8 +674,7 @@ WEface			*face;
+ 	return(1);
+ }
+ 
+-static int find_Dirichlet_domain(polyhedron)
+-WEpolyhedron	*polyhedron;
++static int find_Dirichlet_domain(WEpolyhedron *polyhedron)
+ {
+ 	/* By the time this routine is called the faces			*/
+ 	/* corresponding to the initial generators should all	*/
+@@ -732,8 +724,7 @@ WEpolyhedron	*polyhedron;
+ 
+ 
+ 
+-static int all_dirty_faces_unmatched(polyhedron)
+-WEpolyhedron *polyhedron;
++static int all_dirty_faces_unmatched(WEpolyhedron *polyhedron)
+ {
+ 	WEface	*face;
+ 	int realdirty = 0;
+@@ -762,8 +753,7 @@ WEpolyhedron *polyhedron;
+ /* unsophisticated_search() returns 1 if it		*/
+ /* manages to add a new face, 0 if it doesn't.	*/					
+ 
+-static int unsophisticated_search(polyhedron)
+-WEpolyhedron *polyhedron;
++static int unsophisticated_search(WEpolyhedron *polyhedron)
+ {
+ 	/* This routine serves as a backup for the more efficient	*/
+ 	/* algorithm which is normally used.  On rare occasions		*/
+@@ -795,9 +785,7 @@ WEpolyhedron *polyhedron;
+ 
+ /* add_element() returns 1 if it adds a face, 0 if it doesn't */
+ 
+-static int add_element(polyhedron, m0)
+-WEpolyhedron	*polyhedron;
+-proj_matrix		m0;
++static int add_element(WEpolyhedron *polyhedron, proj_matrix m0)
+ {
+ 	proj_matrix	m1;
+ 	WEface		*new_face0,
+@@ -840,10 +828,7 @@ proj_matrix		m0;
+ 
+ /* add_face() returns 1 if it adds a face, 0 if it doesn't */
+ 
+-static int add_face(polyhedron, matrix, new_face)
+-WEpolyhedron	*polyhedron;
+-proj_matrix		matrix;
+-WEface			*new_face;
++static int add_face(WEpolyhedron *polyhedron, proj_matrix matrix, WEface *new_face)
+ {
+ 	vector		planne, gorigin;
+ 	WEvertex	*vertex;
+@@ -909,8 +894,7 @@ WEface			*new_face;
+ }
+ 
+ 
+-static void cut_edges(polyhedron)
+-WEpolyhedron	*polyhedron;
++static void cut_edges(WEpolyhedron *polyhedron)
+ {
+ 	int			i;
+ 	double		d0,
+@@ -976,8 +960,7 @@ WEpolyhedron	*polyhedron;
+ }
+ 
+ 
+-static void adjust_f_e_ptrs(polyhedron)
+-WEpolyhedron *polyhedron;
++static void adjust_f_e_ptrs(WEpolyhedron *polyhedron)
+ {
+ 	WEedge	*edge;
+ 
+@@ -1007,9 +990,7 @@ WEpolyhedron *polyhedron;
+ /*	   make sure the new edge "sees" the new new face	*/
+ /*	   and the old face "sees" a valid edge				*/
+ 
+-static void cut_faces(polyhedron, new_face)
+-WEpolyhedron	*polyhedron;
+-WEface			*new_face;
++static void cut_faces(WEpolyhedron *polyhedron, WEface *new_face)
+ {
+ 	int			zero_count,
+ 				count,
+@@ -1181,8 +1162,7 @@ WEface			*new_face;
+ }
+ 
+ 
+-static void remove_dead_edges(polyhedron)
+-WEpolyhedron *polyhedron;
++static void remove_dead_edges(WEpolyhedron *polyhedron)
+ {
+ 	WEedge	*e_list,
+ 			*edge;
+@@ -1238,8 +1218,7 @@ WEpolyhedron *polyhedron;
+ }
+ 
+ 
+-static void remove_dead_vertices(polyhedron)
+-WEpolyhedron *polyhedron;
++static void remove_dead_vertices(WEpolyhedron *polyhedron)
+ {
+ 	WEvertex	*v_list,
+ 				*vertex;
+@@ -1269,8 +1248,7 @@ WEpolyhedron *polyhedron;
+ }
+ 
+ 
+-static void number_faces(polyhedron)
+-WEpolyhedron *polyhedron;
++static void number_faces(WEpolyhedron *polyhedron)
+ {
+ 	int			count;
+ 	WEface		*face;
+@@ -1328,8 +1306,7 @@ double	(*v)[3];
+ }
+ #endif
+ 
+-static void print_poly(polyhedron)
+-WEpolyhedron *polyhedron;
++static void print_poly(WEpolyhedron *polyhedron)
+ {
+ 	print_vef(polyhedron);	
+ 	print_vertices(polyhedron);
+@@ -1347,8 +1324,7 @@ WEpolyhedron *polyhedron;
+ }
+ #endif
+ 
+-static void print_vef(polyhedron)
+-WEpolyhedron *polyhedron;
++static void print_vef(WEpolyhedron *polyhedron)
+ {
+ 	if (debug) fprintf(stderr, "%d vertices, %d edges, %d faces\n",
+ 		polyhedron->num_vertices,
+@@ -1373,8 +1349,7 @@ WEpolyhedron *polyhedron;
+ }
+ #endif
+ 
+-static void print_vertices(polyhedron)
+-WEpolyhedron *polyhedron;
++static void print_vertices(WEpolyhedron *polyhedron)
+ {
+ 	WEvertex	*vertex;
+ 	fprintf(stderr, "Vertices:\n");
+@@ -1545,8 +1520,7 @@ WEpolyhedron *polyhedron;
+ }
+ #endif
+ 
+-static void roundoff_message(epsilon_name)
+-char *epsilon_name;
++static void roundoff_message(char *epsilon_name)
+ {
+ #if PRECISE_GENERATORS
+ 	fprintf(stderr,"\nWARNING:  roundoff error is getting a bit large.  (%s)\n", epsilon_name);
+@@ -1563,9 +1537,7 @@ char *epsilon_name;
+ 	return;
+ }
+ 
+-int proj_same_matrix(m0, m1)
+-proj_matrix	m0,
+-			m1;
++int proj_same_matrix(proj_matrix m0, proj_matrix m1)
+ {
+ 	int		i, j;
+ 	double	diff;
+diff --git a/src/lib/gprim/discgrp/xform.c b/src/lib/gprim/discgrp/xform.c
+index 1828409..b26ad5b 100644
+--- a/src/lib/gprim/discgrp/xform.c
++++ b/src/lib/gprim/discgrp/xform.c
+@@ -33,9 +33,7 @@ typedef	double  plane4[4];
+ typedef	double  matrix4[4][4];
+ 
+ void
+-matvecmul4(m,v1,v2)
+-matrix4 m;
+-point4 v1,v2;
++matvecmul4(matrix4 m, point4 v1, point4 v2)
+ {
+     int i,j;
+     double tmp[4], *tv1, *tv2;
+@@ -50,9 +48,7 @@ point4 v1,v2;
+ }
+ 
+ void
+-vecmatmul4(v1,m,v2)
+-matrix4 m;
+-point4 v1,v2;
++vecmatmul4(point4 v1, matrix4 m, point4 v2)
+ {
+     int i,j;
+     double tmp[4], *tv1, *tv2;
+@@ -67,9 +63,7 @@ point4 v1,v2;
+ }
+ 
+ void
+-matmatmul4 (mat1, mat2, mat3)
+-matrix4 mat1, mat2, mat3;
+-
++matmatmul4 (matrix4 mat1, matrix4 mat2, matrix4 mat3)
+ {
+     int i, j, k;
+     double tmp[4];
+diff --git a/src/lib/gprim/geom/bsptree.c b/src/lib/gprim/geom/bsptree.c
+index 74fa5fc..360eb83 100644
+--- a/src/lib/gprim/geom/bsptree.c
++++ b/src/lib/gprim/geom/bsptree.c
+@@ -983,10 +983,10 @@ void BSPTreeFreeTree(const BSPTree *_tree)
+  * BSP-tree; so INSTs and LISTs must register a callback with their
+  * handles.
+  */
+-void BSPTreeInvalidate(Handle **chp, Ref *unused, BSPTree *self)
++void BSPTreeInvalidate(Handle **chp, Ref *unused, void *self)
+ {
+   (void)unused;
+-  BSPTreeFreeTree(self);
++  BSPTreeFreeTree((BSPTree *)self);
+ }
+ 
+ /* This is really easy, 'cause we are using an obstack. */
+diff --git a/src/lib/gprim/geom/bsptree.h b/src/lib/gprim/geom/bsptree.h
+index c82c38f..978b9ce 100644
+--- a/src/lib/gprim/geom/bsptree.h
++++ b/src/lib/gprim/geom/bsptree.h
+@@ -36,7 +36,7 @@ extern BSPTree *BSPTreeSet(BSPTree *tree, int attr1, ...);
+  * BSP-tree; so INSTs and LISTs must register a callback with their
+  * handles.
+  */
+-extern void BSPTreeInvalidate(Handle **chp, Ref *unused, BSPTree *tree);
++extern void BSPTreeInvalidate(Handle **chp, Ref *unused, void *tree);
+ 
+ /* Attributes for BSPTreeSet */
+ #define BSPTREE_ONESHOT 42001
+diff --git a/src/lib/gprim/geom/class.c b/src/lib/gprim/geom/class.c
+index 9daf319..514a9bd 100644
+--- a/src/lib/gprim/geom/class.c
++++ b/src/lib/gprim/geom/class.c
+@@ -41,8 +41,7 @@ static struct classtable {
+ } *table = NULL;
+ 
+ GeomClass *
+-GeomClassLookup( name )
+-    char *name;
++GeomClassLookup( char *name )
+ {
+     static char done = 0;
+     struct classtable *cp;
+@@ -58,9 +57,7 @@ GeomClassLookup( name )
+ }
+ 
+ static void
+-GeomClassInstall( name, Class )
+-    char *name;
+-    GeomClass *Class;
++GeomClassInstall( char *name, GeomClass *Class )
+ {
+     struct classtable *cp;
+ 
+@@ -72,8 +69,7 @@ GeomClassInstall( name, Class )
+ }
+ 
+ GeomClass *
+-GeomSubClassCreate( classname, subclassname )
+-    char *classname, *subclassname;
++GeomSubClassCreate( char *classname, char *subclassname )
+ {
+     GeomClass *Class, *subclass;
+ 
+@@ -92,15 +88,13 @@ GeomSubClassCreate( classname, subclassname )
+ }
+ 
+ GeomClass *
+-GeomClassCreate( name )
+-    char *name;
++GeomClassCreate( char *name )
+ {
+     return GeomSubClassCreate( "geom", name );
+ }
+ 
+ GeomClass *
+-GeomMethods( object )
+-Geom *object;
++GeomMethods( Geom *object )
+ {
+     return object ? object->Class : NULL;
+ }
+@@ -115,8 +109,7 @@ GeomClassIterate( )
+ }
+ 
+ GeomClass *
+-GeomNextClass( it )
+-    void *it;
++GeomNextClass( void *it )
+ {
+     GeomClass *c;
+ #define  iter  ((struct classtable **)it)
+diff --git a/src/lib/gprim/geom/evert.c b/src/lib/gprim/geom/evert.c
+index b3fd8e8..ed36a2f 100644
+--- a/src/lib/gprim/geom/evert.c
++++ b/src/lib/gprim/geom/evert.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "geomclass.h"
+ 
+ Geom *
+-GeomEvert( object )
+-    Geom *object;
++GeomEvert( Geom *object )
+ {
+     if( object && object->Class->evert )
+ 	(*object->Class->evert)(object);
+diff --git a/src/lib/gprim/geom/geom.h b/src/lib/gprim/geom/geom.h
+index d8be30a..a95c7a4 100644
+--- a/src/lib/gprim/geom/geom.h
++++ b/src/lib/gprim/geom/geom.h
+@@ -74,7 +74,7 @@ extern Geom    *GeomTransformTo( Geom *obj, Transform T, TransformN *TN );
+ extern int	GeomSet( Geom *g, /* int attr, */ ... /* , CR_END */ );
+ extern int	GeomGet( Geom *g, int attr, void *attrp );
+ 
+-extern void	GeomHandleScan( Geom *g, int (*func)(), void *arg );
++extern void	GeomHandleScan( Geom *g, int (*func)(Handle **, Geom *, void *), void *arg );
+ 
+ extern Geom    *GeomDraw( Geom *obj );	/* Using current mg context */
+ extern struct BSPTree *
+@@ -166,10 +166,12 @@ extern int	 GeomUpdate( Geom *obj, int doImport );	/* Recursive bind */
+ 	Tm3Rotate(t, aa, axis);			\
+ 	GeomTransform(ggg, t); 	}
+ 
++struct Appearance;
++
+ extern Geom *GeomCCreate(Geom *g, GeomClass *c, ...);
+-extern int  GeomDecorate(/* Geom *g, int *copyp, int feature, va_list *ap */);
++extern int  GeomDecorate(Geom *g, int *copyp, int feature, va_list *ap);
+ extern void GeomAcceptToken();
+-extern void GGeomInit(/*Geom *g, GeomClass *Class, int magic, Appearance *ap*/);
++extern void GGeomInit(Geom *g, GeomClass *Class, int magic, struct Appearance *ap);
+ 
+ extern void GeomKnownClassInit();
+ extern void GeomAddTranslator(char *prefix, char *cmd);
+diff --git a/src/lib/gprim/geom/geomclass.h b/src/lib/gprim/geom/geomclass.h
+index 99573ac..87995c8 100644
+--- a/src/lib/gprim/geom/geomclass.h
++++ b/src/lib/gprim/geom/geomclass.h
+@@ -64,7 +64,7 @@ typedef Geom *GeomBoundSphereFunc( Geom *object, Transform T,
+                                    TransformN *TN, int * axes, int space );
+ typedef Geom *GeomEvalFunc(  Geom *object, float u, float v );
+ typedef Geom *GeomDiceFunc( Geom *object, int nu, int nv );
+-typedef Geom *GeomSubdivideFunc( /* Geom *object */ );
++typedef Geom *GeomSubdivideFunc( Geom *object );
+ 
+ typedef Geom *
+ GeomPickFunc(Geom *, Pick *, Appearance *, Transform, TransformN *, int *axes);
+@@ -83,7 +83,7 @@ enum {
+ typedef int GeomExportFunc( Geom *object, Pool *p );
+ typedef Geom *GeomImportFunc( Pool *p );
+ typedef Geom *GeomUnexportFunc( Handle *h );
+-typedef Geom *GeomScanFunc( Geom *g, int (*func)(/*Geom*,Handle**,void *arg*/), void *arg );
++typedef Geom *GeomScanFunc( Geom *g, int (*func)(Handle**,Geom*,void *arg), void *arg );
+ typedef Geom *GeomAppendFunc( Geom *g, Handle *h, Geom *newitem );
+ 
+ struct GeomClass
+@@ -134,8 +134,8 @@ struct GeomClass
+   GeomUnexportFunc *unexport;
+ };
+ 
+-extern GeomClass *GeomClassCreate();
+-extern GeomClass *GeomSubClassCreate();
++extern GeomClass *GeomClassCreate(char *);
++extern GeomClass *GeomSubClassCreate(char *, char *);
+ extern GeomClass *GeomClassLookup(char *classname);
+ extern void      *GeomClassIterate();
+ extern GeomClass *GeomNextClass( void *iter );
+diff --git a/src/lib/gprim/geom/geomstream.c b/src/lib/gprim/geom/geomstream.c
+index fb69bf6..08b3e0b 100644
+--- a/src/lib/gprim/geom/geomstream.c
++++ b/src/lib/gprim/geom/geomstream.c
+@@ -54,11 +54,12 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ 
+ HandleOps GeomOps = {
+ 	"geom",
+-	(int ((*)()))GeomStreamIn,
+-	(int ((*)()))GeomStreamOut,
+-	(void ((*)()))GeomDelete,
++	(int ((*)(Pool *, Handle **, Ref **)))GeomStreamIn,
++	(int ((*)(Pool *, Handle *, Ref *)))GeomStreamOut,
++	(void ((*)(Ref *)))GeomDelete,
+ 	NULL,		/* resync */
+ 	NULL,		/* close pool */
++	{NULL, NULL}, {NULL, NULL}
+ };
+ 
+ Geom *
+@@ -211,7 +212,7 @@ GeomInvokeTranslator(Pool *p, char *prefix, char *cmd, Handle **hp, Geom **gp)
+     long pos = iobftell(pf) - strlen(prefix);
+     int ok, oldstdin;
+     Pool *tp;
+-    void (*oldchld)();
++    void (*oldchld)(int);
+ 
+ #if defined(unix) || defined(__unix)
+     /* Rewind file descriptor to previous position */
+diff --git a/src/lib/gprim/geom/handlescan.c b/src/lib/gprim/geom/handlescan.c
+index ee1a40f..7be6242 100644
+--- a/src/lib/gprim/geom/handlescan.c
++++ b/src/lib/gprim/geom/handlescan.c
+@@ -34,7 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "geomclass.h"
+ 
+ void
+-GeomHandleScan(Geom *g, int (*func)(), void *arg)
++GeomHandleScan(Geom *g, int (*func)(Handle **, Geom *, void *), void *arg)
+ {
+     if(g == NULL)
+ 	return;
+diff --git a/src/lib/gprim/geom/iterate.c b/src/lib/gprim/geom/iterate.c
+index 3a4a2b3..f446302 100644
+--- a/src/lib/gprim/geom/iterate.c
++++ b/src/lib/gprim/geom/iterate.c
+@@ -305,8 +305,7 @@ int _NextTransform(GeomIter *it, Transform T)
+ }
+ 
+ void
+-DestroyIter(it)
+-    GeomIter *it;
++DestroyIter(GeomIter *it)
+ {
+     if((it->flags & 0xfffffff0) == VALID) {
+ 	it->flags = 0;
+diff --git a/src/lib/gprim/geom/knownclass.c b/src/lib/gprim/geom/knownclass.c
+index 346f2a2..9f345b6 100644
+--- a/src/lib/gprim/geom/knownclass.c
++++ b/src/lib/gprim/geom/knownclass.c
+@@ -153,8 +153,7 @@ GeomKnownClassInit()
+  * centralized table, but there's no mechanism for that yet.
+  */
+ GeomClass *
+-GeomFName2Class(str)
+-	char *str;
++GeomFName2Class(char *str)
+ {
+ 	char *p;
+ 	struct knownclass *k;
+diff --git a/src/lib/gprim/geom/message.c b/src/lib/gprim/geom/message.c
+index 37a7bf9..86e3fd8 100644
+--- a/src/lib/gprim/geom/message.c
++++ b/src/lib/gprim/geom/message.c
+@@ -34,10 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "geomclass.h"
+ 
+ Geom *
+-GeomMessage( object, ac, av )
+-    Geom *object;
+-    int ac;
+-    char *av[];
++GeomMessage( Geom *object, int ac, char *av[] )
+ {
+     if( object && object->Class->message )
+ 	(*object->Class->message)(object,ac,av);
+diff --git a/src/lib/gprim/geom/name.c b/src/lib/gprim/geom/name.c
+index 88f6864..a4f1339 100644
+--- a/src/lib/gprim/geom/name.c
++++ b/src/lib/gprim/geom/name.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "geomclass.h"
+ 
+ char *
+-GeomName( object ) 
+-    Geom *object;
++GeomName( Geom *object ) 
+ {
+     if( object && object->Class->name ) {
+ 	return (*object->Class->name)();
+diff --git a/src/lib/gprim/inst/instclass.c b/src/lib/gprim/inst/instclass.c
+index 57c245b..c9cb27c 100644
+--- a/src/lib/gprim/inst/instclass.c
++++ b/src/lib/gprim/inst/instclass.c
+@@ -47,7 +47,7 @@ InstName()
+ 	return instName;
+ }
+ 
+-extern Geom *InstPick( Geom *, Pick *, Appearance *, Transform );
++extern Geom *InstPick( Geom *, Pick *, Appearance *, Transform, TransformN *, int * );
+ extern GeomScanFunc InstHandleScan;
+ 
+ GeomClass *
+diff --git a/src/lib/gprim/inst/instcreate.c b/src/lib/gprim/inst/instcreate.c
+index 1a22fc3..03be7fc 100644
+--- a/src/lib/gprim/inst/instcreate.c
++++ b/src/lib/gprim/inst/instcreate.c
+@@ -61,7 +61,7 @@ Inst *InstCopy(Inst *inst)
+   Inst *ni;
+ 
+   ni = OOGLNewE(Inst, "InstCopy: Inst");
+-  GGeomInit(ni, inst->Class, inst->magic, NULL);
++  GGeomInit((Geom *)ni, inst->Class, inst->magic, NULL);
+   TmCopy(inst->axis, ni->axis);
+   if (inst->NDaxis) {
+     ni->NDaxis = NTransCreate(inst->NDaxis);
+@@ -131,7 +131,7 @@ Inst *InstCreate(Inst *exist, GeomClass *classp, va_list *a_list)
+ 
+   if (exist == NULL) {
+     inst = OOGLNewE(Inst, "InstCreate inst");
+-    GGeomInit (inst, classp, INSTMAGIC, NULL);
++    GGeomInit ((Geom *)inst, classp, INSTMAGIC, NULL);
+     TmIdentity(inst->axis);
+     inst->NDaxis = NULL;
+     inst->geomhandle = NULL;
+@@ -286,7 +286,7 @@ Inst *InstCreate(Inst *exist, GeomClass *classp, va_list *a_list)
+       inst->location = va_arg(*a_list, int);
+       break;
+     default:
+-      if(GeomDecorate(inst, &copy, attr, a_list)) {
++      if(GeomDecorate((Geom *)inst, &copy, attr, a_list)) {
+ 	OOGLError (0, "InstCreate: Undefined option: %d", attr);
+ 	if(exist == NULL) {
+ 	  GeomDelete ((Geom *)inst);
+diff --git a/src/lib/gprim/inst/instmisc.c b/src/lib/gprim/inst/instmisc.c
+index 2bde238..97dd2d5 100644
+--- a/src/lib/gprim/inst/instmisc.c
++++ b/src/lib/gprim/inst/instmisc.c
+@@ -50,7 +50,7 @@ InstEvert( Inst *inst )
+ }
+ 
+ void
+-InstHandleScan( Inst *inst, int (*func)(), void *arg )
++InstHandleScan( Inst *inst, int (*func)(Handle **, Inst *, void *), void *arg )
+ {
+     if(inst == NULL)
+ 	return;
+@@ -63,9 +63,9 @@ InstHandleScan( Inst *inst, int (*func)(), void *arg )
+ 	(*func)(&inst->geomhandle, inst, arg);
+ 
+     if(inst->geom)
+-	GeomHandleScan(inst->geom, func, arg);
++	GeomHandleScan(inst->geom, (int (*)(Handle **, Geom *, void *))func, arg);
+     if(inst->tlist)
+-	GeomHandleScan(inst->tlist, func, arg);
++	GeomHandleScan(inst->tlist, (int (*)(Handle **, Geom *, void *))func, arg);
+ }
+ 
+ 
+diff --git a/src/lib/gprim/lincoln/lincolndefs.h b/src/lib/gprim/lincoln/lincolndefs.h
+index eed634b..363098a 100644
+--- a/src/lib/gprim/lincoln/lincolndefs.h
++++ b/src/lib/gprim/lincoln/lincolndefs.h
+@@ -37,5 +37,5 @@
+ 
+ /* FUNCTION DECLARATIONS */
+ extern	GeomClass *LincolnMethods();
+-extern	PolyList  *LincolnFLoad();
++extern	PolyList  *LincolnFLoad(IOBFILE *inf);
+ #endif	/*LINCOLNDEFS*/
+diff --git a/src/lib/gprim/lincoln/lincolnload.c b/src/lib/gprim/lincoln/lincolnload.c
+index f960282..36c7599 100644
+--- a/src/lib/gprim/lincoln/lincolnload.c
++++ b/src/lib/gprim/lincoln/lincolnload.c
+@@ -89,7 +89,7 @@ LincolnFLoad(IOBFILE *inf)
+ 
+ 	new = OOGLNewE(PolyList, "Lincoln");
+ 	/* should do a PolyListCreate here but time's short...*/
+-	GGeomInit(new, PolyListMethods(), PLMAGIC, NULL);
++	GGeomInit((Geom *)new, PolyListMethods(), PLMAGIC, NULL);
+ 	v_list = new->vl = OOGLNewNE(Vertex, header.nvertices, "Lincoln verts");
+ 	new->p = OOGLNewNE(Poly, header.nfaces, "Lincoln faces");
+ 
+diff --git a/src/lib/gprim/list/listclass.c b/src/lib/gprim/list/listclass.c
+index 808d892..6de7e56 100644
+--- a/src/lib/gprim/list/listclass.c
++++ b/src/lib/gprim/list/listclass.c
+@@ -44,7 +44,7 @@ char *ListName(void)
+     return listName;
+ }
+ 
+-extern void ListHandleScan( List *, int (*func)(), void *arg );
++extern void ListHandleScan( List *, int (*func)(Handle **, List *, void *), void *arg );
+ 
+ GeomClass *ListMethods(void)
+ {
+diff --git a/src/lib/gprim/list/listcreate.c b/src/lib/gprim/list/listcreate.c
+index 4216421..1618294 100644
+--- a/src/lib/gprim/list/listcreate.c
++++ b/src/lib/gprim/list/listcreate.c
+@@ -100,7 +100,7 @@ List *ListCopy(List *list)
+ 	if (newcar == NULL)
+ 	    continue;
+ 	nl = OOGLNewE(List, "ListCopy: List");
+-	GGeomInit(nl, list->Class, list->magic, NULL);
++	GGeomInit((Geom *)nl, list->Class, list->magic, NULL);
+ 	*tailp = nl;
+ 	tailp = &nl->cdr;
+ 	nl->car = newcar;
+@@ -138,10 +138,10 @@ Geom *ListAppend(Geom *lg, Geom *g)
+     if (l) {
+ 	while (l->cdr) l = l->cdr;
+ 	l->cdr = new;
+-	GGeomInit(new, lg->Class, lg->magic, NULL);
++	GGeomInit((Geom *)new, lg->Class, lg->magic, NULL);
+     } else {
+ 	l = new;
+-	GGeomInit(new, ListClass, LISTMAGIC, NULL);
++	GGeomInit((Geom *)new, ListClass, LISTMAGIC, NULL);
+     }
+     new->carhandle = NULL;
+ 
+@@ -158,7 +158,7 @@ List *ListCreate (List *exist, GeomClass *Classp, va_list *a_list )
+ 
+     if (exist == NULL) {
+ 	list = OOGLNewE( List, "ListCreate: new List" );
+-	GGeomInit(list, Classp, LISTMAGIC, NULL);
++	GGeomInit((Geom *)list, Classp, LISTMAGIC, NULL);
+ 	list->cdr = NULL;
+ 	list->carhandle = NULL;
+ 	list->car = NULL;
+@@ -198,7 +198,7 @@ List *ListCreate (List *exist, GeomClass *Classp, va_list *a_list )
+ 	case CR_GEOM:	/* == CR_CAR */
+ 	    if (list->car != NULL || list->carhandle != NULL) {
+ 		l = OOGLNewE(List, "ListCreate: List");
+-		GGeomInit(l, Classp, LISTMAGIC, NULL);
++		GGeomInit((Geom *)l, Classp, LISTMAGIC, NULL);
+ 		l->car = list->car;
+ 		l->carhandle = list->carhandle;
+ 		RefIncr((Ref *)list->carhandle);
+@@ -245,7 +245,7 @@ List *ListCreate (List *exist, GeomClass *Classp, va_list *a_list )
+ 	    tree_changed = true;
+ 	    break;
+ 	default:
+-	    if (GeomDecorate (list, &copy, attr, a_list)) {
++	    if (GeomDecorate ((Geom *)list, &copy, attr, a_list)) {
+ 		OOGLError (0, "ListCreate: Undefined attribute: %d", attr);
+ 
+ 	      fail:
+diff --git a/src/lib/gprim/list/listmisc.c b/src/lib/gprim/list/listmisc.c
+index 7664dee..e3dfd4f 100644
+--- a/src/lib/gprim/list/listmisc.c
++++ b/src/lib/gprim/list/listmisc.c
+@@ -35,12 +35,12 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "listP.h"
+ 
+ void
+-ListHandleScan( List *list, int (*func)(), void *arg )
++ListHandleScan( List *list, int (*func)(Handle **, List *, void *), void *arg )
+ {
+     while(list) {
+ 	if(list->carhandle)
+ 	    (*func)(&list->carhandle, list, arg);
+-	GeomHandleScan( list->car, func, arg );
++	GeomHandleScan( list->car, (int (*)(Handle **, Geom *, void *))func, arg );
+ 	list = list->cdr;
+     }
+ }
+diff --git a/src/lib/gprim/mesh/mesh.h b/src/lib/gprim/mesh/mesh.h
+index 4536c7a..31c70b1 100644
+--- a/src/lib/gprim/mesh/mesh.h
++++ b/src/lib/gprim/mesh/mesh.h
+@@ -51,7 +51,7 @@ extern Mesh	*MeshFSave( Mesh *, FILE * );
+ extern BBox	*MeshBound( Mesh *, Transform T, TransformN *TN);
+ extern Geom	*MeshBoundSphere( Mesh *,
+ 				  Transform T, TransformN *TN, int *axes, int );
+-extern Mesh	*MeshDice( Mesh *, int (*proc)() );
++extern Mesh	*MeshDice( Mesh *, int (*proc)(float, float, HPoint3 *, Point3 *) );
+ extern Mesh	*MeshEvert( Mesh * );
+ extern Mesh	*MeshDraw( Mesh * );
+ extern Mesh     *MeshBSPTree(Mesh *mesh, BSPTree *bsptree, int action);
+diff --git a/src/lib/gprim/mesh/meshclass.c b/src/lib/gprim/mesh/meshclass.c
+index 05a9a6f..b799992 100644
+--- a/src/lib/gprim/mesh/meshclass.c
++++ b/src/lib/gprim/mesh/meshclass.c
+@@ -39,7 +39,7 @@ int MeshPresent = 1;
+ 
+ static char meshName[] = "mesh";
+ 
+-extern Mesh      *MeshCreate( va_list );
++extern Mesh      *MeshCreate( Mesh *, GeomClass *, va_list * );
+ extern Mesh      *MeshDelete( Mesh * );
+ extern Mesh      *MeshCopy( Mesh * );
+ 
+diff --git a/src/lib/gprim/mesh/meshcreate.c b/src/lib/gprim/mesh/meshcreate.c
+index 04f58ae..a05b1fa 100644
+--- a/src/lib/gprim/mesh/meshcreate.c
++++ b/src/lib/gprim/mesh/meshcreate.c
+@@ -51,7 +51,7 @@ MeshCreate (Mesh *exist, GeomClass *classp, va_list *a_list)
+   if (exist == NULL) {
+     mesh = OOGLNewE(Mesh, "MeshCreate mesh");
+     memset(mesh, 0, sizeof(Mesh));
+-    GGeomInit (mesh, classp, MESHMAGIC, NULL);
++    GGeomInit ((Geom *)mesh, classp, MESHMAGIC, NULL);
+     mesh->bsptree = NULL;
+     mesh->nu = 1;
+     mesh->nv = 1;
+@@ -135,7 +135,7 @@ MeshCreate (Mesh *exist, GeomClass *classp, va_list *a_list)
+     break;
+ 
+   default:
+-    if (GeomDecorate (mesh, &copy, attr, a_list)) {
++    if (GeomDecorate ((Geom *)mesh, &copy, attr, a_list)) {
+       GeomError (0, "MeshCreate: Undefined option: %d", attr);
+       OOGLFree (mesh);
+       return NULL;
+diff --git a/src/lib/gprim/mesh/meshdice.c b/src/lib/gprim/mesh/meshdice.c
+index e3d18e8..bf0b9d9 100644
+--- a/src/lib/gprim/mesh/meshdice.c
++++ b/src/lib/gprim/mesh/meshdice.c
+@@ -34,9 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "meshP.h"
+ 
+ Mesh *
+-MeshDice(m, proc)
+-    Mesh           *m;
+-    int             (*proc) ();
++MeshDice(Mesh *m, int (*proc)(float, float, HPoint3 *, Point3 *))
+ {
+ 	int             u, v;
+ 	int             nu, nv;
+diff --git a/src/lib/gprim/ndmesh/ndmeshclass.c b/src/lib/gprim/ndmesh/ndmeshclass.c
+index d81e043..89bb48c 100644
+--- a/src/lib/gprim/ndmesh/ndmeshclass.c
++++ b/src/lib/gprim/ndmesh/ndmeshclass.c
+@@ -39,7 +39,7 @@ int NDMeshPresent = 1;
+ 
+ static char ndmeshName[] = "ndmesh";
+ 
+-extern NDMesh *NDMeshCreate( va_list );
++extern NDMesh *NDMeshCreate( NDMesh *, GeomClass *, va_list * );
+ extern NDMesh *NDMeshDelete( NDMesh * );
+ extern NDMesh *NDMeshCopy( NDMesh * );
+ extern NDMesh *NDMeshBSPTree(NDMesh *mesh, BSPTree *tree, int action);
+diff --git a/src/lib/gprim/ndmesh/ndmeshcreate.c b/src/lib/gprim/ndmesh/ndmeshcreate.c
+index f99550a..1994b19 100644
+--- a/src/lib/gprim/ndmesh/ndmeshcreate.c
++++ b/src/lib/gprim/ndmesh/ndmeshcreate.c
+@@ -80,7 +80,7 @@ NDMeshCreate (NDMesh *exist, GeomClass *classp, va_list *a_list)
+     if (exist == NULL) {
+ 	m = OOGLNewE(NDMesh, "NDMeshCreate mesh");
+ 	memset(m, 0, sizeof(NDMesh));
+-	GGeomInit (m, classp, NDMESHMAGIC, NULL);
++	GGeomInit ((Geom *)m, classp, NDMESHMAGIC, NULL);
+ 	m->geomflags = 0;
+ 	m->meshd = 2;
+ 	m->mdim = OOGLNewNE(int, m->meshd, "NDMesh dim");
+@@ -151,7 +151,7 @@ NDMeshCreate (NDMesh *exist, GeomClass *classp, va_list *a_list)
+ 	    break;
+ 
+ 	default:
+-	    if (GeomDecorate (m, &copy, attr, a_list)) {
++	    if (GeomDecorate ((Geom *)m, &copy, attr, a_list)) {
+ 		GeomError (0, "NDMeshCreate: Undefined option: %d", attr);
+ 		OOGLFree (m);
+ 		return NULL;
+diff --git a/src/lib/gprim/npolylist/nplcreate.c b/src/lib/gprim/npolylist/nplcreate.c
+index 4623638..eb5cf37 100644
+--- a/src/lib/gprim/npolylist/nplcreate.c
++++ b/src/lib/gprim/npolylist/nplcreate.c
+@@ -82,7 +82,7 @@ NPolyListCreate(NPolyList *exist, GeomClass *classp, va_list *a_list)
+   if (exist == NULL) {
+     pl = OOGLNewE(NPolyList,"NPolyListCreate npolylist");
+     memset(pl, 0, sizeof(NPolyList));
+-    GGeomInit(pl, classp, NPLMAGIC, NULL);
++    GGeomInit((Geom *)pl, classp, NPLMAGIC, NULL);
+     pl->pdim = 4;	/* 3-D plus homogeneous component */
+   } else {
+     pl = exist;
+@@ -146,7 +146,7 @@ NPolyListCreate(NPolyList *exist, GeomClass *classp, va_list *a_list)
+       break;
+ 
+     default:
+-      if (GeomDecorate(pl, &copy, attr, a_list)) {
++      if (GeomDecorate((Geom *)pl, &copy, attr, a_list)) {
+ 	OOGLError(0,"Undefined PolyList option: %d", attr);
+ 	if (!exist) GeomDelete((Geom *)pl);
+ 	return NULL;
+diff --git a/src/lib/gprim/npolylist/nplload.c b/src/lib/gprim/npolylist/nplload.c
+index 34b2fbd..6d656e8 100644
+--- a/src/lib/gprim/npolylist/nplload.c
++++ b/src/lib/gprim/npolylist/nplload.c
+@@ -113,7 +113,7 @@ NPolyListFLoad(IOBFILE *file, char *fname)
+ 
+   pl = OOGLNewE(NPolyList, "NPolyListFLoad NPolyList");
+   memset(pl, 0, sizeof(NPolyList));
+-  GGeomInit(pl, NPolyListMethods(), NPLMAGIC, NULL);
++  GGeomInit((Geom *)pl, NPolyListMethods(), NPLMAGIC, NULL);
+ 
+   pl->geomflags = flags | ((dimn == 4) ? VERT_4D : 0);
+ 
+diff --git a/src/lib/gprim/polylist/plcreate.c b/src/lib/gprim/polylist/plcreate.c
+index 5fb6d9d..7065da2 100644
+--- a/src/lib/gprim/polylist/plcreate.c
++++ b/src/lib/gprim/polylist/plcreate.c
+@@ -86,7 +86,7 @@ PolyListCreate(PolyList *exist, GeomClass *classp, va_list *a_list)
+ 
+   if (exist == NULL) {
+     pl = OOGLNewE(PolyList,"PolyListCreate polylist");
+-    GGeomInit(pl, classp, PLMAGIC, NULL);
++    GGeomInit((Geom *)pl, classp, PLMAGIC, NULL);
+     pl->geomflags = pl->n_polys = pl->n_verts = 0;
+     pl->pdim = 4;
+     pl->p = (Poly *)NULL; pl->vl = (Vertex *)NULL;
+@@ -174,7 +174,7 @@ PolyListCreate(PolyList *exist, GeomClass *classp, va_list *a_list)
+       break;
+ 
+     default:
+-      if (GeomDecorate(pl, &copy, attr, a_list)) {
++      if (GeomDecorate((Geom *)pl, &copy, attr, a_list)) {
+ 	OOGLError(0,"Undefined PolyList option: %d", attr);
+ 	if (!exist) GeomDelete((Geom *)pl);
+ 	return NULL;
+diff --git a/src/lib/gprim/polylist/plload.c b/src/lib/gprim/polylist/plload.c
+index 797b727..d4a406a 100644
+--- a/src/lib/gprim/polylist/plload.c
++++ b/src/lib/gprim/polylist/plload.c
+@@ -118,7 +118,7 @@ PolyListFLoad(IOBFILE *file, char *fname)
+   }
+ 
+   pl = OOGLNewE(PolyList, "PolyListFLoad PolyList");
+-  GGeomInit(pl, PolyListMethods(), PLMAGIC, NULL);
++  GGeomInit((Geom *)pl, PolyListMethods(), PLMAGIC, NULL);
+   pl->p = NULL;
+   pl->vl = NULL;
+   pl->n_verts = preread;  /* In case prefetched token was our vert count */
+diff --git a/src/lib/gprim/quad/quadclass.c b/src/lib/gprim/quad/quadclass.c
+index 077a9dc..ac93f5a 100644
+--- a/src/lib/gprim/quad/quadclass.c
++++ b/src/lib/gprim/quad/quadclass.c
+@@ -38,7 +38,7 @@ static GeomClass *aQuadMethods = NULL;
+ /* these are known only to the library, not the user */
+ extern Quad *QuadCopy( Quad * );
+ extern Quad *QuadDelete( Quad * );
+-extern Geom *QuadCreate ( va_list);
++extern Geom *QuadCreate ( Quad *, GeomClass *, va_list * );
+ 
+ int QuadPresent = 1;
+ 
+diff --git a/src/lib/gprim/quad/quadcopy.c b/src/lib/gprim/quad/quadcopy.c
+index 81c96f2..9a6eb9e 100644
+--- a/src/lib/gprim/quad/quadcopy.c
++++ b/src/lib/gprim/quad/quadcopy.c
+@@ -34,8 +34,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "quadP.h"
+ 
+ Quad *
+-QuadCopy(oq)
+-	Quad *oq;
++QuadCopy(Quad *oq)
+ {
+ 	Quad *q;
+ 
+diff --git a/src/lib/gprim/quad/quadcreate.c b/src/lib/gprim/quad/quadcreate.c
+index 90fb282..b536322 100644
+--- a/src/lib/gprim/quad/quadcreate.c
++++ b/src/lib/gprim/quad/quadcreate.c
+@@ -45,7 +45,7 @@ QuadCreate (Quad *exist, GeomClass *classp, va_list *a_list)
+ 
+     if (exist == NULL) {
+ 	q = OOGLNewE(Quad, "QuadCreate: new Quad");
+-        GGeomInit (q, classp, QUADMAGIC, NULL);
++        GGeomInit ((Geom *)q, classp, QUADMAGIC, NULL);
+ 	q->geomflags = q->maxquad = 0;
+         q->p = (QuadP *)NULL;
+         q->n = (QuadN *)NULL;
+@@ -143,7 +143,7 @@ QuadCreate (Quad *exist, GeomClass *classp, va_list *a_list)
+ 	    break;
+ 
+ 	default:
+-            if (GeomDecorate(q, &copy, attr, a_list)) {
++            if (GeomDecorate((Geom *)q, &copy, attr, a_list)) {
+ 	       OOGLError (0, "QuadCreate: Undefined option: %d",attr);
+ 	       if (!exist) GeomDelete((Geom *)q);
+ 	       return NULL;
+diff --git a/src/lib/gprim/quad/quadevert.c b/src/lib/gprim/quad/quadevert.c
+index 1f8c36c..bd225ec 100644
+--- a/src/lib/gprim/quad/quadevert.c
++++ b/src/lib/gprim/quad/quadevert.c
+@@ -37,8 +37,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+  * Note: Calling QuadNormal will undo this!
+  */
+ Quad *
+-QuadEvert( q )
+-    Quad *q;
++QuadEvert( Quad *q )
+ {
+     int i;
+     Point3 *np;
+diff --git a/src/lib/gprim/skel/skelcreate.c b/src/lib/gprim/skel/skelcreate.c
+index a0e09d0..95fbfd9 100644
+--- a/src/lib/gprim/skel/skelcreate.c
++++ b/src/lib/gprim/skel/skelcreate.c
+@@ -80,7 +80,7 @@ Skel *SkelCreate(Skel *exist, GeomClass *classp, va_list *a_list)
+ 
+   if (exist == NULL) {
+     s = OOGLNewE(Skel, "new skel");
+-    GGeomInit (s, classp, SKELMAGIC, NULL);
++    GGeomInit ((Geom *)s, classp, SKELMAGIC, NULL);
+     s->nlines = 0;
+     s->nvert = 0;
+     s->nvi = 0;
+@@ -178,7 +178,7 @@ Skel *SkelCreate(Skel *exist, GeomClass *classp, va_list *a_list)
+       break;
+ 
+     default:
+-      if (GeomDecorate (s, &copy, attr, a_list)) {
++      if (GeomDecorate ((Geom *)s, &copy, attr, a_list)) {
+ 	OOGLError (0, "VectCreate: Undefined option: %d\n", attr);
+ 	OOGLFree (vect);
+ 	return NULL;
+diff --git a/src/lib/gprim/skel/skelload.c b/src/lib/gprim/skel/skelload.c
+index 846c312..0d0c659 100644
+--- a/src/lib/gprim/skel/skelload.c
++++ b/src/lib/gprim/skel/skelload.c
+@@ -99,7 +99,7 @@ Skel *SkelFLoad(IOBFILE *file, char *fname)
+ 
+   s = OOGLNewE(Skel, "SkelFLoad: skel");
+ 
+-  GGeomInit(s, SkelMethods(), SKELMAGIC, NULL);
++  GGeomInit((Geom *)s, SkelMethods(), SKELMAGIC, NULL);
+   s->geomflags = (dimn == 4) ? VERT_4D : 0;
+   if (vc) {
+     s->geomflags |= VERT_C;
+diff --git a/src/lib/gprim/sphere/spherecreate.c b/src/lib/gprim/sphere/spherecreate.c
+index 40226c5..ab2eecf 100644
+--- a/src/lib/gprim/sphere/spherecreate.c
++++ b/src/lib/gprim/sphere/spherecreate.c
+@@ -217,7 +217,7 @@ Sphere *SphereCreate(Geom *exist, GeomClass *classp, va_list *a_list)
+ 
+   if (exist == NULL) {
+     FREELIST_NEW(Sphere, sphere);
+-    GGeomInit(sphere, classp, SPHEREMAGIC, NULL);
++    GGeomInit((Geom *)sphere, classp, SPHEREMAGIC, NULL);
+     sphere->freelisthead = &SphereFreeList;
+     TmIdentity(sphere->axis);
+     sphere->NDaxis = NULL;
+@@ -278,7 +278,7 @@ Sphere *SphereCreate(Geom *exist, GeomClass *classp, va_list *a_list)
+     axis = va_arg(*a_list, Transform *);
+     break;
+   default:
+-    if (GeomDecorate(sphere, &copy, attr, a_list)) {
++    if (GeomDecorate((Geom *)sphere, &copy, attr, a_list)) {
+       OOGLError (0, "ListCreate: Undefined attribute: %d", attr);
+ 
+       if(exist == NULL)
+diff --git a/src/lib/gprim/stub/stub.c b/src/lib/gprim/stub/stub.c
+index 11c3638..5758020 100644
+--- a/src/lib/gprim/stub/stub.c
++++ b/src/lib/gprim/stub/stub.c
+@@ -36,16 +36,14 @@ static GeomClass *aStubMethods;
+ 
+ 
+ void
+-StubRoutine(prefix, rest, lib)
+-    char *prefix, *rest, *lib;
++StubRoutine(char *prefix, char *rest, char *lib)
+ {
+     OOGLError(1, "Trying to use stub %s%s() routine!  Relink with lib%s.a",
+ 	prefix, rest, lib);
+ }
+ 
+ GeomClass *
+-StubMethods(prefix, lib)
+-    char *prefix, *lib;
++StubMethods(char *prefix, char *lib)
+ {
+     StubRoutine(prefix, "Methods", lib);
+     if(aStubMethods == NULL) aStubMethods = GeomClassCreate("stub");
+diff --git a/src/lib/gprim/stub/stub.h b/src/lib/gprim/stub/stub.h
+index 9017e00..9a25d89 100644
+--- a/src/lib/gprim/stub/stub.h
++++ b/src/lib/gprim/stub/stub.h
+@@ -27,8 +27,8 @@
+ 
+ #include "geomclass.h"
+ 
+-extern GeomClass *StubMethods();
+-void StubRoutine();
++extern GeomClass *StubMethods(char *prefix, char *lib);
++void StubRoutine(char *prefix, char *rest, char *lib);
+ 
+ 
+ /*
+diff --git a/src/lib/gprim/tlist/tlcreate.c b/src/lib/gprim/tlist/tlcreate.c
+index a0b1783..2aa4d7d 100644
+--- a/src/lib/gprim/tlist/tlcreate.c
++++ b/src/lib/gprim/tlist/tlcreate.c
+@@ -76,7 +76,7 @@ Tlist *TlistCopy(Tlist *t)
+   int i;
+ 
+   FREELIST_NEW(Tlist, nt);
+-  GGeomInit(nt, t->Class, t->magic, NULL);
++  GGeomInit((Geom *)nt, t->Class, t->magic, NULL);
+   nt->freelisthead = &TlistFreeList;
+   nt->nelements = t->nelements;
+   if (nt->nallocated < nt->nelements) {
+@@ -131,7 +131,7 @@ TlistCreate(Tlist *exist, GeomClass *Classp, va_list *a_list)
+ 
+     if (exist == NULL) {
+ 	FREELIST_NEW(Tlist, tlist);
+-	GGeomInit (tlist, Classp, TLISTMAGIC, NULL);
++	GGeomInit ((Geom *)tlist, Classp, TLISTMAGIC, NULL);
+ 	tlist->freelisthead = &TlistFreeList;
+ 	tlist->tlisthandle = NULL;
+ 	tlist->tlist = NULL;
+@@ -186,7 +186,7 @@ TlistCreate(Tlist *exist, GeomClass *Classp, va_list *a_list)
+ 	    doinit = true;
+ 	    break;
+ 	default:
+-	    if(GeomDecorate(tlist, &copy, attr, a_list)) {
++	    if(GeomDecorate((Geom *)tlist, &copy, attr, a_list)) {
+ 		OOGLError (0, "TlistCreate: undefined option: %d", attr);
+ 		if (exist == NULL) {
+ 		    GeomDelete ((Geom *) tlist);
+diff --git a/src/lib/gprim/vect/vect.h b/src/lib/gprim/vect/vect.h
+index db105d0..19bdf0a 100644
+--- a/src/lib/gprim/vect/vect.h
++++ b/src/lib/gprim/vect/vect.h
+@@ -48,12 +48,12 @@ typedef struct Vect Vect;
+ GeomClass	*VectMethods();
+ char	*VectName();
+ Vect	*VectLoad();
+-Vect	*VectFLoad();
++Vect	*VectFLoad(IOBFILE *file, char *fname);
+ Vect	*VectSave();
+-Vect	*VectFSave();
+-BBox	*VectBound();
+-Geom	*VectBoundSphere();
+-Vect	*VectDraw();
++Vect	*VectFSave(Vect *v, FILE *f);
++BBox	*VectBound(Vect *v, Transform T, TransformN *TN);
++Geom	*VectBoundSphere(Vect *vect, Transform T, TransformN *TN, int *axes, int space);
++Vect	*VectDraw(Vect *v);
+ int	VectShare();
+ int	VectPrivate();
+ void	RendLine();
+diff --git a/src/lib/gprim/vect/vectcreate.c b/src/lib/gprim/vect/vectcreate.c
+index 5990e1b..dda303b 100644
+--- a/src/lib/gprim/vect/vectcreate.c
++++ b/src/lib/gprim/vect/vectcreate.c
+@@ -84,7 +84,7 @@ VectCreate ( Vect *exist, GeomClass *classp, va_list *a_list )
+ 
+     if (exist == NULL) {
+ 	vect = OOGLNewE(Vect, "new vect");
+-        GGeomInit (vect, classp, VECTMAGIC, NULL);
++        GGeomInit ((Geom *)vect, classp, VECTMAGIC, NULL);
+ 	vect->nvec = 0;
+ 	vect->nvert = 0;
+ 	vect->ncolor = 0;
+@@ -193,7 +193,7 @@ VectCreate ( Vect *exist, GeomClass *classp, va_list *a_list )
+ 	    break;
+ 
+ 	default:
+-	    if (GeomDecorate (vect, &copy, attr, a_list)) {
++	    if (GeomDecorate ((Geom *)vect, &copy, attr, a_list)) {
+ 		OOGLError (0, "VectCreate: Undefined option: %d\n", attr);
+ 		OOGLFree (vect);
+ 		return NULL;
+@@ -224,8 +224,7 @@ VectCreate ( Vect *exist, GeomClass *classp, va_list *a_list )
+ }
+ 
+ int
+-VectSane(vect)
+-	Vect *vect;
++VectSane(Vect *vect)
+ {
+ 	int i;
+ 	int vleft, cleft;
+diff --git a/src/lib/gprim/vect/vectdraw.c b/src/lib/gprim/vect/vectdraw.c
+index 5043e16..5130c7c 100644
+--- a/src/lib/gprim/vect/vectdraw.c
++++ b/src/lib/gprim/vect/vectdraw.c
+@@ -112,8 +112,7 @@ draw_projected_vect(mgNDctx *NDctx,
+ }
+ 
+ Vect *
+-VectDraw(v)
+-     Vect *v;
++VectDraw(Vect *v)
+ {
+   HPoint3 *p;
+   ColorA *c;
+diff --git a/src/lib/gprim/vect/vectload.c b/src/lib/gprim/vect/vectload.c
+index 437f3d9..85ac2a8 100644
+--- a/src/lib/gprim/vect/vectload.c
++++ b/src/lib/gprim/vect/vectload.c
+@@ -72,7 +72,7 @@ VectFLoad(IOBFILE *file, char *fname)
+ 
+     v = OOGLNewE(Vect, "VectFLoad: Vect");
+ 
+-    GGeomInit(v, VectMethods(), VECTMAGIC, NULL);
++    GGeomInit((Geom *)v, VectMethods(), VECTMAGIC, NULL);
+     v->geomflags = (dimn == 4) ? VERT_4D : 0;
+     v->geomflags = 0;
+     v->vnvert = NULL;
+diff --git a/src/lib/gprim/vect/vectsave.c b/src/lib/gprim/vect/vectsave.c
+index 27b6bec..92633f6 100644
+--- a/src/lib/gprim/vect/vectsave.c
++++ b/src/lib/gprim/vect/vectsave.c
+@@ -43,9 +43,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "vectP.h"
+ 
+ Vect *
+-VectFSave(v, f)
+-	Vect *v;
+-	FILE *f;
++VectFSave(Vect *v, FILE *f)
+ {
+ 	int i;
+ 	HPoint3 *p;
+diff --git a/src/lib/gprim/vect/vecttransform.c b/src/lib/gprim/vect/vecttransform.c
+index e78e9e5..3ab82e1 100644
+--- a/src/lib/gprim/vect/vecttransform.c
++++ b/src/lib/gprim/vect/vecttransform.c
+@@ -36,9 +36,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ #include "vectP.h"
+ 
+ Vect *
+-VectTransform( v, T )
+-     Vect *v;
+-     Transform T;
++VectTransform( Vect *v, Transform T )
+ {
+   HPt3TransformN(T, v->p, v->p, v->nvert);
+   return(v);
+@@ -46,9 +44,7 @@ VectTransform( v, T )
+ 
+ 
+ Vect *
+-VectTransformTo( v, T )
+-     Vect *v;
+-     Transform T;
++VectTransformTo( Vect *v, Transform T )
+ {
+   return(VectTransform(v, T));
+ }
+diff --git a/src/lib/mg/buf/mgbuf.c b/src/lib/mg/buf/mgbuf.c
+index 0ca1f9d..b377871 100644
+--- a/src/lib/mg/buf/mgbuf.c
++++ b/src/lib/mg/buf/mgbuf.c
+@@ -65,11 +65,14 @@ static unsigned char *createRGB( void );
+ /* probably not here */
+ int         mgdevice_BUF();
+ 
+-extern void mgbuf_polygon();
+-extern void mgbuf_mesh();
+-extern void mgbuf_line();
+-extern void mgbuf_polyline();
+-extern void mgbuf_polylist();
++struct Poly;
++struct Vertex;
++
++extern void mgbuf_polygon(int nv, HPoint3 *V, int nn, Point3 *N, int nc, ColorA *C);
++extern void mgbuf_mesh(int wrap, int nu, int nv, HPoint3 *p, Point3 *n, Point3 *nq, ColorA *c, TxST *ST, int mflags);
++extern void mgbuf_line(HPoint3 *p1, HPoint3 *p2);
++extern void mgbuf_polyline(int nv, HPoint3 *v, int nc, ColorA *c, int wrapped);
++extern void mgbuf_polylist(int np, struct Poly *_p, int nv, struct Vertex *V, int pl_flags);
+ extern void mgbuf_quads();
+ 
+ int _mgbuf_ctxset(int a1, va_list *alist);
+@@ -80,9 +83,9 @@ struct mgfuncs mgbuffuncs = {
+   MGD_BUF,
+   mgdevice_BUF,
+   mgbuf_feature,
+-  (mgcontext *(*)())mgbuf_ctxcreate,
++  mgbuf_ctxcreate,
+   mgbuf_ctxdelete,
+-  (int (*)())mgbuf_ctxset,
++  mgbuf_ctxset,
+   mgbuf_ctxget,
+   mgbuf_ctxselect,
+   mgbuf_sync,
+diff --git a/src/lib/mg/buf/mgbufdraw.c b/src/lib/mg/buf/mgbufdraw.c
+index f5aa720..c01a426 100644
+--- a/src/lib/mg/buf/mgbufdraw.c
++++ b/src/lib/mg/buf/mgbufdraw.c
+@@ -39,7 +39,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ void	mgbuf_polygon( int nv, HPoint3 *v, int nn, Point3 *n,
+ 	      	          int nc, ColorA *c );
+ void	mgbuf_mesh( int wrap, int nu, int nv, HPoint3 *p, Point3 *n, Point3 *nq,
+-			ColorA *c );
++			ColorA *c, TxST *ST, int mflags );
+ void	mgbuf_line( HPoint3 *p1, HPoint3 *p2 );
+ void	mgbuf_polyline( int nv, HPoint3 *verts, int nc, ColorA *colors,
+ 			int wrap );
+@@ -676,7 +676,7 @@ void mgbufsubmesh(int wrap, int nu, int nv, int umin, int umax, int vmin,
+  *
+  */
+ void mgbuf_mesh(int wrap, int nu, int nv, HPoint3 *P, Point3 *N, Point3 *NQ,
+-		ColorA *C )
++		ColorA *C, TxST *ST, int mflags )
+ {
+   mgbufsubmesh( wrap, nu, nv, 0, nu-1, 0, nv-1, P, N, C);
+ }
+diff --git a/src/lib/mg/common/mg.c b/src/lib/mg/common/mg.c
+index 435f99c..59767b2 100644
+--- a/src/lib/mg/common/mg.c
++++ b/src/lib/mg/common/mg.c
+@@ -1100,9 +1100,9 @@ mg_bsptree(struct BSPTree *bsptree)
+     MGD_NODEV,								\
+       mgdevice_NULL,          /* mg_setdevice        */			\
+       mg_feature,             /* mg_feature          */			\
+-      (mgcontext *(*)(void))mg_ctxcreate,         /* mg_ctxcreate        */ \
++      mg_ctxcreate,           /* mg_ctxcreate        */			\
+       mg_ctxdelete,           /* mg_ctxdelete        */			\
+-      (int (*)(void))mg_ctxset,          /* mg_ctxset           */	\
++      mg_ctxset,              /* mg_ctxset           */			\
+       mg_ctxget,              /* mg_ctxget           */			\
+       mg_ctxselect,           /* mg_ctxselect        */			\
+       mg_sync,                /* mg_sync             */			\
+diff --git a/src/lib/mg/common/mg.h b/src/lib/mg/common/mg.h
+index d9985e0..9d1b05c 100644
+--- a/src/lib/mg/common/mg.h
++++ b/src/lib/mg/common/mg.h
+@@ -49,7 +49,7 @@ typedef struct mgcontext mgcontext;     /* Opaque typedef */
+ 
+ typedef int (*mgshadefunc)( int npoints, HPoint3 *points, Point3 *normals,
+ 			    ColorA *colors, ColorA *newcolors );
+-typedef void (*mgwinchfunc)( /*mgcontext *mgc, void *data, int win_why, ...*/ );
++typedef void (*mgwinchfunc)( mgcontext *mgc, void *data, int win_why, ... );
+ 
+ typedef struct mgNDctx mgNDctx;
+ typedef int (*mgNDmapfunc)(mgNDctx *NDctx,
+@@ -71,9 +71,9 @@ struct mgfuncs {  /* mg member functions; potentially changed per device */
+ 
+   int           (*mg_setdevice)(void);
+   int           (*mg_feature)(int feature);
+-  mgcontext *   (*mg_ctxcreate)(/* int a1, ... */);
++  mgcontext *   (*mg_ctxcreate)(int a1, ... );
+   void          (*mg_ctxdelete)(mgcontext *ctx);
+-  int           (*mg_ctxset)(/* a1, ...  */);
++  int           (*mg_ctxset)(int a1, ... );
+   int           (*mg_ctxget)(int attr, void* valueptr);
+   int           (*mg_ctxselect)(mgcontext *ctx);
+   void          (*mg_sync)(void);
+diff --git a/src/lib/mg/opengl/mgopengl.c b/src/lib/mg/opengl/mgopengl.c
+index 111c138..160f7fc 100644
+--- a/src/lib/mg/opengl/mgopengl.c
++++ b/src/lib/mg/opengl/mgopengl.c
+@@ -76,9 +76,9 @@ int	    mgopengl_setwindow( WnWindow *win, int final );
+ mgopenglcontext *mgopengl_newcontext( mgopenglcontext *ctx );
+ void mgopengl_taggedappearance(const void *tag);
+ 
+-extern void mgopengl_polygon();
+-extern void mgopengl_line();
+-extern void mgopengl_polyline();
++extern void mgopengl_polygon(int nv, HPoint3 *V, int nn, Point3 *N, int nc, ColorA *C);
++extern void mgopengl_line(HPoint3 *p1, HPoint3 *p2);
++extern void mgopengl_polyline(int nv, HPoint3 *verts, int nc, ColorA *colors, int wrap);
+ extern void mgopengl_polylist(int np, Poly *p, int nv, Vertex *v, int plflags);
+ extern void mgopengl_mesh(int wrap, int nu, int nv,
+ 			  HPoint3 *meshP, Point3 *meshN, Point3 *meshNQ,
+@@ -102,9 +102,9 @@ struct mgfuncs mgopenglfuncs = {
+   MGD_OPENGL,
+   mgdevice_OPENGL,
+   mgopengl_feature,
+-  (mgcontext *(*)())mgopengl_ctxcreate,
++  mgopengl_ctxcreate,
+   mgopengl_ctxdelete,
+-  (int (*)())mgopengl_ctxset,
++  mgopengl_ctxset,
+   mgopengl_ctxget,
+   mgopengl_ctxselect,
+   mgopengl_sync,
+@@ -154,6 +154,12 @@ mgdevice_OPENGL()
+   return(0);
+ }
+ 
++void
++mgopengl_glNormal3fv(Point3 *n, HPoint3 *p)
++{
++  glNormal3fv(&n->x);
++}
++
+ /*-----------------------------------------------------------------------
+  * Function:	mgopengl_ctxcreate
+  * Date:	Thu Jul 18 18:55:18 1991
+diff --git a/src/lib/mg/opengl/mgopenglP.h b/src/lib/mg/opengl/mgopenglP.h
+index 3c1e631..f7cbd8c 100644
+--- a/src/lib/mg/opengl/mgopenglP.h
++++ b/src/lib/mg/opengl/mgopenglP.h
+@@ -62,13 +62,13 @@ typedef struct mgopenglcontext {
+ #  define N3F_NOEVERT()	_mgopenglc->useevn3f = 0
+ #  define N3F_EVERT()	_mgopenglc->useevn3f = 1
+ #  define N3F(n,p) {	if(_mgopenglc->useevn3f) mgopengl_n3fevert(n,p); \
+-			else glNormal3fv(n); \
++			else mgopengl_glNormal3fv(n); \
+ 		   }
+ 
+ #else /* use function pointers if the compiler permits */
+ 
+-  void (*d4f)();		/* For shaded colors: apply mat.kd or no? */
+-  void (*n3f)();		/* Evert normals to face viewer? */
++  void (*d4f)(float c[4]);		/* For shaded colors: apply mat.kd or no? */
++  void (*n3f)(Point3 *n, HPoint3 *p);	/* Evert normals to face viewer? */
+ #  define D4F_ON()					\
+   if (_mgc->astk->mat.valid & MTF_ALPHA &&		\
+       _mgc->astk->mat.override & MTF_ALPHA) {		\
+@@ -81,11 +81,11 @@ typedef struct mgopenglcontext {
+       _mgc->astk->mat.override & MTF_ALPHA) {		\
+     _mgopenglc->d4f = mgopengl_d4f_constant_alpha;	\
+   } else {						\
+-    _mgopenglc->d4f = glColor4fv;			\
++    _mgopenglc->d4f = (void (*)(float *))glColor4fv;	\
+   }
+ #  define D4F(c)	(*_mgopenglc->d4f)(c)
+ #  define N3F_EVERT()	_mgopenglc->n3f = mgopengl_n3fevert
+-#  define N3F_NOEVERT()	_mgopenglc->n3f = glNormal3fv
++#  define N3F_NOEVERT()	_mgopenglc->n3f = mgopengl_glNormal3fv
+ #  define N3F(n,p)	(*_mgopenglc->n3f)(n,p)
+ 
+ #endif
+@@ -140,6 +140,7 @@ extern void mgopengl_d4f_shaded_alpha(float c[4]);
+ extern void mgopengl_d4f_constant_alpha(float c[4]);
+ #endif
+ extern void mgopengl_n3fevert( Point3 *n, HPoint3 *p );
++extern void mgopengl_glNormal3fv(Point3 *n, HPoint3 *p);
+ 
+ extern void mgopengl_notexture(void);
+ extern void mgopengl_needtexture(void);
+@@ -164,7 +165,7 @@ extern void mgopengl_c4f(float *);
+ extern void mgopengl_n3f(float *);
+ #else
+ #define mgopengl_c4f glColor4fv
+-#define mgopengl_n3f glNormal3fv
++#define mgopengl_n3f mglopengl_glNormal3fv
+ #endif
+ 
+ #define	MAY_LIGHT()  { \
+diff --git a/src/lib/mg/opengl/mgopengldraw.c b/src/lib/mg/opengl/mgopengldraw.c
+index e86b30a..24cb0e2 100644
+--- a/src/lib/mg/opengl/mgopengldraw.c
++++ b/src/lib/mg/opengl/mgopengldraw.c
+@@ -106,10 +106,10 @@ mgopengl_polygon(int nv,  HPoint3 *V,
+     glEnable(GL_COLOR_MATERIAL);
+     glBegin(GL_POLYGON);
+     if (nc <= 1) {
+-      D4F(&(_mgc->astk->ap.mat->diffuse));
++      D4F(&(_mgc->astk->ap.mat->diffuse.r));
+     }
+     for (n = N, c = C, v = V, i = 0; i < nv; ++i, ++v) {
+-      if (nc-- > 0) { D4F(c); c++; }
++      if (nc-- > 0) { D4F(&c->r); c++; }
+       if (nn-- > 0) { N3F(n, v); n++; }
+       glVertex4fv((float *)v);
+     }
+@@ -196,10 +196,10 @@ mgopengl_quads(int count, HPoint3 *V, Point3 *N, ColorA *C, int qflags)
+ 	  }
+ 	  glBegin(GL_QUADS);
+ 	  if (n) {
+-	    QUAD( (D4F(c++), N3F(n++,v), glVertex4fv((float*)v++)) );
++	    QUAD( (D4F(&(c++)->r), N3F(n++,v), glVertex4fv((float*)v++)) );
+ 	  } else {
+ 	    /* Colors, no normals */
+-	    QUAD( (D4F(c++), glVertex4fv((float*)v++)) );
++	    QUAD( (D4F(&(c++)->r), glVertex4fv((float*)v++)) );
+ 	  }
+ 	  glEnd();
+ 	} while(--i > 0);
+@@ -207,12 +207,12 @@ mgopengl_quads(int count, HPoint3 *V, Point3 *N, ColorA *C, int qflags)
+ 	glBegin(GL_QUADS);
+ 	if (n) {
+ 	  do {
+-	    QUAD( (D4F(c++), N3F(n++,v), glVertex4fv((float*)v++)) );
++	    QUAD( (D4F(&(c++)->r), N3F(n++,v), glVertex4fv((float*)v++)) );
+ 	  } while(--i > 0);
+ 	} else {
+ 	  /* Colors, no normals */
+ 	  do {
+-	    QUAD( (D4F(c++), glVertex4fv((float*)v++)) );
++	    QUAD( (D4F(&(c++)->r), glVertex4fv((float*)v++)) );
+ 	  } while(--i > 0);
+ 	}
+ 	glEnd();
+@@ -230,12 +230,12 @@ mgopengl_quads(int count, HPoint3 *V, Point3 *N, ColorA *C, int qflags)
+       }
+       glBegin(GL_QUADS);
+       if (n) {
+-	D4F(c);
++	D4F(&c->r);
+ 	do {
+ 	  QUAD( (N3F(n++, v), glVertex4fv((float*)v++)) );
+ 	} while(--i > 0);
+       } else {
+-	D4F(c);
++	D4F(&c->r);
+ 	do {
+ 	  QUAD( (glVertex4fv((float*)v++)) );
+ 	} while(--i > 0);
+@@ -382,7 +382,7 @@ struct tess_data
+ 
+ static void tess_vertex_data(Vertex *vp, struct tess_data *data)
+ {
+-  if (data->plflags & PL_HASVCOL) D4F(&vp->vcol);
++  if (data->plflags & PL_HASVCOL) D4F(&vp->vcol.r);
+   if (data->plflags & PL_HASVN) N3F(&vp->vn, &vp->pt);
+   if (data->plflags & PL_HASST) glTexCoord2fv((GLfloat *)&vp->st);
+   glVertex4fv(&vp->pt.x);
+@@ -734,11 +734,11 @@ static void mgopengl_bsptree_recursive(BSPTreeNode *tree,
+ 
+     /* reestablish correct drawing color if necessary*/
+     if (!(plflags & (PL_HASPCOL|PL_HASVCOL))) {
+-      D4F(&(mat->diffuse));
++      D4F(&(mat->diffuse.r));
+     }
+ 
+     if (plflags & PL_HASPCOL) {
+-      D4F(&p->pcol);
++      D4F(&p->pcol.r);
+     }
+     if (plflags & PL_HASPN) {
+       N3F(&p->pn, &(*p->v)->pt);
+@@ -756,7 +756,7 @@ static void mgopengl_bsptree_recursive(BSPTreeNode *tree,
+       break;
+     case PL_HASVCOL:
+       do {
+-	D4F(&(*v)->vcol);
++	D4F(&(*v)->vcol.r);
+ 	glVertex4fv((float *)&(*v)->pt);
+ 	v++;
+       } while(--j > 0);
+@@ -770,7 +770,7 @@ static void mgopengl_bsptree_recursive(BSPTreeNode *tree,
+       break;
+     case PL_HASVCOL|PL_HASVN:
+       do {
+-	D4F(&(*v)->vcol);
++	D4F(&(*v)->vcol.r);
+ 	N3F(&(*v)->vn, &(*v)->pt);
+ 	glVertex4fv((float *)&(*v)->pt);
+ 	v++;
+@@ -778,7 +778,7 @@ static void mgopengl_bsptree_recursive(BSPTreeNode *tree,
+       break;
+     default:
+       do {
+-	if (plflags & PL_HASVCOL) D4F(&(*v)->vcol);
++	if (plflags & PL_HASVCOL) D4F(&(*v)->vcol.r);
+ 	if (plflags & PL_HASVN) N3F(&(*v)->vn, &(*v)->pt);
+ 	if (plflags & PL_HASST) glTexCoord2fv((GLfloat *)&(*v)->st);
+ 	glVertex4fv((float *)&(*v)->pt);
+@@ -910,7 +910,7 @@ void mgopengl_polylist(int np, Poly *_p, int nv, Vertex *V, int plflags)
+     MAY_LIGHT();
+     /* reestablish correct drawing color if necessary*/
+     if (!(plflags & (PL_HASPCOL | PL_HASVCOL))) {
+-      D4F(&(ma->ap.mat->diffuse));
++      D4F(&(ma->ap.mat->diffuse.r));
+     }
+     if (!(plflags & COLOR_ALPHA) && stippled) {
+       alpha = ma->ap.mat->diffuse.a;
+@@ -932,7 +932,7 @@ void mgopengl_polylist(int np, Poly *_p, int nv, Vertex *V, int plflags)
+ 
+     for (p = _p, i = 0; i < np; i++, p++) {
+       if (plflags & PL_HASPCOL) {
+-	D4F(&p->pcol);
++	D4F(&p->pcol.r);
+       }
+       if (change_stipple) {
+ 	glPolygonStipple(mgopengl_get_polygon_stipple(alpha));
+@@ -1015,7 +1015,7 @@ void mgopengl_polylist(int np, Poly *_p, int nv, Vertex *V, int plflags)
+ 	  break;
+ 	case PL_HASVCOL:
+ 	  do {
+-	    D4F(&(*v)->vcol);
++	    D4F(&(*v)->vcol.r);
+ 	    glVertex4fv((float *)&(*v)->pt);
+ 	    v++;
+ 	  } while(--j > 0);
+@@ -1029,7 +1029,7 @@ void mgopengl_polylist(int np, Poly *_p, int nv, Vertex *V, int plflags)
+ 	  break;
+ 	case PL_HASVCOL|PL_HASVN:
+ 	  do {
+-	    D4F(&(*v)->vcol);
++	    D4F(&(*v)->vcol.r);
+ 	    N3F(&(*v)->vn, &(*v)->pt);
+ 	    glVertex4fv((float *)&(*v)->pt);
+ 	    v++;
+@@ -1037,7 +1037,7 @@ void mgopengl_polylist(int np, Poly *_p, int nv, Vertex *V, int plflags)
+ 	  break;
+ 	default:
+ 	  do {
+-	    if (plflags & PL_HASVCOL) D4F(&(*v)->vcol);
++	    if (plflags & PL_HASVCOL) D4F(&(*v)->vcol.r);
+ 	    if (plflags & PL_HASVN) N3F(&(*v)->vn, &(*v)->pt);
+ 	    if (plflags & PL_HASST) glTexCoord2fv((GLfloat *)&(*v)->st);
+ 	    glVertex4fv((float *)&(*v)->pt);
+@@ -1091,11 +1091,11 @@ void mgopengl_polylist(int np, Poly *_p, int nv, Vertex *V, int plflags)
+     if (nonsurf >= 0) {
+       /* reestablish correct drawing color if necessary*/
+       if (!(plflags & (PL_HASPCOL | PL_HASVCOL)))
+-	D4F(&(ma->ap.mat->diffuse));
++	D4F(&(ma->ap.mat->diffuse.r));
+       
+       for (p = _p, i = 0; i <= nonsurf; p++, i++) {
+ 	if (plflags & PL_HASPCOL)
+-	  D4F(&p->pcol);
++	  D4F(&p->pcol.r);
+ 	v = p->v;
+ 	switch(j = p->n_vertices) {
+ 	case 1:
+diff --git a/src/lib/mg/opengl/mgopenglmesh.c b/src/lib/mg/opengl/mgopenglmesh.c
+index d65d293..b430346 100644
+--- a/src/lib/mg/opengl/mgopenglmesh.c
++++ b/src/lib/mg/opengl/mgopenglmesh.c
+@@ -138,7 +138,7 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+     MAY_LIGHT();
+ 
+     if (!(has & HAS_C)) {
+-      D4F(&ap->mat->diffuse);
++      D4F(&ap->mat->diffuse.r);
+     }
+     if (stippled) {
+       if (!(mflags & COLOR_ALPHA)) {
+@@ -205,7 +205,7 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+ 	case HAS_C:
+ 	  do {
+-	    D4F(C+prev); glVertex4fv((float *)(P+prev));
++	    D4F(&C[prev].r); glVertex4fv((float *)(P+prev));
+ 	    glVertex4fv((float *)P);
+ 	    C++; P++;
+ 	  } while(--u);
+@@ -213,8 +213,8 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+ 	case HAS_C|HAS_SMOOTH:
+ 	  do {
+-	    D4F(C+prev); glVertex4fv((float *)(P+prev));
+-	    D4F(C); glVertex4fv((float *)P);
++	    D4F(&C[prev].r); glVertex4fv((float *)(P+prev));
++	    D4F(&C->r); glVertex4fv((float *)P);
+ 	    C++; P++;
+ 	  } while(--u);
+ 	  break;
+@@ -256,7 +256,7 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+ 	case HAS_C|HAS_NQ:
+ 	  do {
+-	    D4F(C+prev); N3F(NQ+prev,P+prev); glVertex4fv((float *)(P+prev));
++	    D4F(&C[prev].r); N3F(NQ+prev,P+prev); glVertex4fv((float *)(P+prev));
+ 	    glVertex4fv((float *)P);
+ 	    C++; NQ++; P++;
+ 	  } while(--u);
+@@ -264,7 +264,7 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+ 	case HAS_C|HAS_N:
+ 	  do {
+-	    D4F(C+prev); N3F(N+prev,P+prev); glVertex4fv((float *)(P+prev));
++	    D4F(&C[prev].r); N3F(N+prev,P+prev); glVertex4fv((float *)(P+prev));
+ 	    glVertex4fv((float *)P);
+ 	    C++; N++; P++;
+ 	  } while(--u);
+@@ -272,16 +272,16 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+ 	case HAS_C|HAS_NQ|HAS_SMOOTH:
+ 	  do {
+-	    D4F(C+prev); N3F(NQ+prev,P+prev); glVertex4fv((float *)(P+prev));
+-	    D4F(C); glVertex4fv((float *)P);
++	    D4F(&C[prev].r); N3F(NQ+prev,P+prev); glVertex4fv((float *)(P+prev));
++	    D4F(&C->r); glVertex4fv((float *)P);
+ 	    C++; NQ++; P++;
+ 	  } while(--u);
+ 	  break;
+ 
+ 	case HAS_C|HAS_N|HAS_SMOOTH:
+ 	  do {
+-	    D4F(C+prev);	N3F(N+prev,P+prev);	glVertex4fv((float *)(P+prev));
+-	    D4F(C);		N3F(N,P);	glVertex4fv((float *)P);
++	    D4F(&C[prev].r);	N3F(N+prev,P+prev);	glVertex4fv((float *)(P+prev));
++	    D4F(&C->r);		N3F(N,P);	glVertex4fv((float *)P);
+ 	    C++; N++; P++;
+ 	  } while(--u);
+ 	  break;
+@@ -298,7 +298,7 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+         case HAS_C|HAS_ST:
+           do {
+-            D4F(C+prev);
++            D4F(&C[prev].r);
+ 	    glTexCoord2fv((float *)(ST+prev));
+ 	    glVertex4fv((float *)(P+prev));
+             glTexCoord2fv((float *)ST);
+@@ -309,10 +309,10 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+         case HAS_C|HAS_SMOOTH|HAS_ST:
+           do {
+-            D4F(C+prev);
++            D4F(&C[prev].r);
+ 	    glTexCoord2fv((float *)(ST+prev));
+ 	    glVertex4fv((float *)(P+prev));
+-            D4F(C);
++            D4F(&C->r);
+ 	    glTexCoord2fv((float *)ST);
+ 	    glVertex4fv((float *)P);
+             C++; P++; ST++;
+@@ -367,7 +367,7 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+         case HAS_C|HAS_NQ|HAS_ST:
+ 	  do {
+ 	    N3F(NQ+prev,P+prev);
+-            D4F(C+prev);
++            D4F(&C[prev].r);
+ 	    glTexCoord2fv((float *)(ST+prev));
+ 	    glVertex4fv((float *)(P+prev));
+             glTexCoord2fv((float *)ST);
+@@ -378,7 +378,7 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+         case HAS_C|HAS_N|HAS_ST:
+           do {
+-            D4F(C+prev); N3F(N+prev,P+prev);
++            D4F(&C[prev].r); N3F(N+prev,P+prev);
+ 	    glTexCoord2fv((float *)(ST+prev));
+ 	    glVertex4fv((float *)(P+prev));
+             glTexCoord2fv((float *)ST);
+@@ -389,10 +389,10 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+         case HAS_C|HAS_NQ|HAS_SMOOTH|HAS_ST:
+           do {
+-            D4F(C+prev); N3F(NQ+prev,P);
++            D4F(&C[prev].r); N3F(NQ+prev,P);
+ 	    glTexCoord2fv((float *)(ST+prev));
+ 	    glVertex4fv((float *)(P+prev));
+-            D4F(C);
++            D4F(&C->r);
+ 	    glTexCoord2fv((float *)ST);
+ 	    glVertex4fv((float *)P);
+             C++; NQ++; P++; ST++;
+@@ -401,10 +401,10 @@ mgopenglsubmesh(int wrap, int nu, int nv,
+ 
+         case HAS_C|HAS_N|HAS_SMOOTH|HAS_ST:
+           do {
+-            D4F(C+prev); N3F(N+prev,P+prev);
++            D4F(&C[prev].r); N3F(N+prev,P+prev);
+ 	    glTexCoord2fv((float *)(ST+prev));
+ 	    glVertex4fv((float *)(P+prev));
+-            D4F(C); N3F(N,P);
++            D4F(&C->r); N3F(N,P);
+ 	    glTexCoord2fv((float *)ST);
+ 	    glVertex4fv((float *)P);
+             C++; N++; P++; ST++;
+diff --git a/src/lib/mg/ps/mgps.c b/src/lib/mg/ps/mgps.c
+index 9f07fa3..9ecc78d 100644
+--- a/src/lib/mg/ps/mgps.c
++++ b/src/lib/mg/ps/mgps.c
+@@ -63,11 +63,14 @@ mgpscontext *mgps_newcontext( mgpscontext *ctx );
+ /* probably not here */
+ int         mgdevice_PS();
+ 
+-extern void mgps_polygon();
+-extern void mgps_mesh();
+-extern void mgps_line();
+-extern void mgps_polyline();
+-extern void mgps_polylist();
++struct Poly;
++struct Vertex;
++
++extern void mgps_polygon(int nv, HPoint3 *V, int nn, Point3 *N, int nc, ColorA *C);
++extern void mgps_mesh(int wrap, int nu, int nv, HPoint3 *p, Point3 *n, Point3 *nq, ColorA *c, TxST *ST, int mflags);
++extern void mgps_line(HPoint3 *p1, HPoint3 *p2);
++extern void mgps_polyline(int nv, HPoint3 *verts, int nc, ColorA *colors, int wrap);
++extern void mgps_polylist(int np, struct Poly *p, int nv, struct Vertex *v, int pl_flags);
+ extern void mgps_quads();
+ 
+ int _mgps_ctxset(int a1, va_list *alist);
+@@ -78,9 +81,9 @@ struct mgfuncs mgpsfuncs = {
+   MGD_PS,
+   mgdevice_PS,
+   mgps_feature,
+-  (mgcontext *(*)())mgps_ctxcreate,
++  mgps_ctxcreate,
+   mgps_ctxdelete,
+-  (int (*)())mgps_ctxset,
++  mgps_ctxset,
+   mgps_ctxget,
+   mgps_ctxselect,
+   mgps_sync,
+diff --git a/src/lib/mg/ps/mgpsdraw.c b/src/lib/mg/ps/mgpsdraw.c
+index 733035c..c9ba85c 100644
+--- a/src/lib/mg/ps/mgpsdraw.c
++++ b/src/lib/mg/ps/mgpsdraw.c
+@@ -39,7 +39,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ void	mgps_polygon( int nv, HPoint3 *v, int nn, Point3 *n,
+ 	      	          int nc, ColorA *c );
+ void	mgps_mesh(int wrap, int nu, int nv, HPoint3 *p, Point3 *n, Point3 *nq,
+-		  ColorA *c );
++		  ColorA *c, TxST *ST, int mflags);
+ void	mgps_line( HPoint3 *p1, HPoint3 *p2 );
+ void	mgps_polyline( int nv, HPoint3 *verts, int nc, ColorA *colors,
+ 			int wrap );
+@@ -676,7 +676,7 @@ void mgpssubmesh(int wrap, int nu, int nv, int umin, int umax, int vmin,
+  *
+  */
+ void mgps_mesh(int wrap, int nu, int nv, HPoint3 *P, Point3 *N, Point3 *NQ,
+-	       ColorA *C )
++	       ColorA *C, TxST *ST, int mflags )
+ {
+   mgpssubmesh( wrap, nu, nv, 0, nu-1, 0, nv-1, P, N, C);
+ }
+diff --git a/src/lib/mg/rib/mgrib.c b/src/lib/mg/rib/mgrib.c
+index 638fd75..f9f8989 100644
+--- a/src/lib/mg/rib/mgrib.c
++++ b/src/lib/mg/rib/mgrib.c
+@@ -68,12 +68,15 @@ const Appearance *mgrib_setappearance(const Appearance* app, int merge);
+ int	    mgrib_setcamera( Camera* cam );
+ mgribcontext *mgrib_newcontext( mgribcontext *ctx );
+ 
+-extern void  mgrib_polygon();
+-extern void  mgrib_mesh();
+-extern void  mgrib_line();
+-extern void  mgrib_polyline();
+-extern void  mgrib_polylist();
+-extern void  mgrib_bezier();
++struct Poly;
++struct Vertex;
++
++extern void  mgrib_polygon(int nv, HPoint3 *v, int nn, Point3 *n, int nc, ColorA *c);
++extern void  mgrib_mesh(int wrap,int nu,int nv,HPoint3 *p, Point3 *n, Point3 *nq, ColorA *c, TxST *ST, int mflags);
++extern void  mgrib_line(HPoint3 *p1, HPoint3 *p2);
++extern void  mgrib_polyline(int nv, HPoint3 *verts, int nc, ColorA *colors, int wrapped);
++extern void  mgrib_polylist(int np, struct Poly *p, int nv, struct Vertex *v, int plflags);
++extern void  mgrib_bezier(int du, int dv, int dimn, float *CtrlPnts, TxST *txmapst, ColorA *c);
+ 
+ int _mgrib_ctxset(int a1, va_list *alist);
+ 
+@@ -83,9 +86,9 @@ struct mgfuncs mgribfuncs = {
+   MGD_RIB,
+   mgdevice_RIB,
+   mgrib_feature,
+-  (mgcontext *(*)())mgrib_ctxcreate,
++  mgrib_ctxcreate,
+   mgrib_ctxdelete,
+-  (int (*)())mgrib_ctxset,
++  mgrib_ctxset,
+   mgrib_ctxget,
+   mgrib_ctxselect,
+   mgrib_sync,
+diff --git a/src/lib/mg/rib/mgribdraw.c b/src/lib/mg/rib/mgribdraw.c
+index cb38a32..d739d4e 100644
+--- a/src/lib/mg/rib/mgribdraw.c
++++ b/src/lib/mg/rib/mgribdraw.c
+@@ -40,7 +40,7 @@ void mgrib_drawCline(HPoint3 *p1, HPoint3 *p2);
+ void	mgrib_polygon( int nv, HPoint3 *v, int nn, Point3 *n,
+ 		       int nc,ColorA *c );
+ void	mgrib_mesh(int wrap,int nu,int nv,HPoint3 *p, Point3 *n, Point3 *nq,
+-		   ColorA *c );
++		   ColorA *c, TxST *ST, int mflags);
+ void	mgrib_line( HPoint3 *p1, HPoint3 *p2 );
+ void	mgrib_polyline( int nv, HPoint3 *verts, int nc, ColorA *colors,
+ 			int wrapped );
+@@ -289,8 +289,7 @@ mgrib_drawCline(HPoint3 *p1, HPoint3 *p2)
+ }
+ 
+ int 
+-bounded(p)
+-     Point3 *p;
++bounded(Point3 *p)
+ {
+   if (! Pt3Equal(p,&Pt3Origin)) {
+     if (p->x < MAXCLINE && p->y < MAXCLINE && p->z < MAXCLINE) 
+diff --git a/src/lib/mg/x11/mgx11.c b/src/lib/mg/x11/mgx11.c
+index e6dd00f..572c4b8 100644
+--- a/src/lib/mg/x11/mgx11.c
++++ b/src/lib/mg/x11/mgx11.c
+@@ -58,11 +58,14 @@ int         mgx11_setcamera( Camera* cam );
+ int         mgx11_setwindow( WnWindow *win, int final );
+ mgx11context *mgx11_newcontext( mgx11context *ctx );
+ 
+-extern void mgx11_polygon();
+-extern void mgx11_mesh();
+-extern void mgx11_line();
+-extern void mgx11_polyline();
+-extern void mgx11_polylist();
++struct Poly;
++struct Vertex;
++
++extern void mgx11_polygon(int nv, HPoint3 *v, int nn, Point3 *n, int nc, ColorA *c);
++extern void mgx11_mesh(int wrap, int nu, int nv, HPoint3 *P, Point3 *N, Point3 *NQ, ColorA *C, TxST *ST, int mflags);
++extern void mgx11_line(HPoint3 *p1, HPoint3 *p2);
++extern void mgx11_polyline(int nv, HPoint3 *verts, int nc, ColorA *colors, int wrap);
++extern void mgx11_polylist(int np, struct Poly *p, int nv, struct Vertex *v, int pl_flags);
+ extern void mgx11_quads();
+ extern void mgx11_setshader(mgshadefunc shader);
+ extern void mgx11_appearance( struct mgastk *ma, int mask );
+@@ -76,9 +79,9 @@ struct mgfuncs mgx11funcs = {
+   MGD_X11,
+   mgdevice_X11,
+   mgx11_feature,
+-  (mgcontext *(*)())mgx11_ctxcreate,
++  mgx11_ctxcreate,
+   mgx11_ctxdelete,
+-  (int (*)())mgx11_ctxset,
++  mgx11_ctxset,
+   mgx11_ctxget,
+   mgx11_ctxselect,
+   mgx11_sync,
+diff --git a/src/lib/mg/x11/mgx11dither.c b/src/lib/mg/x11/mgx11dither.c
+index 14f3569..62cfb90 100644
+--- a/src/lib/mg/x11/mgx11dither.c
++++ b/src/lib/mg/x11/mgx11dither.c
+@@ -34,13 +34,9 @@
+ 
+ #include <math.h>
+ 
+-#ifdef USE_PROTOTYPES
+ void	make_square( double );
+-#else
+-void	make_square();
+-#endif
+ 
+-extern unsigned long mgx11colors[216];
++extern unsigned long mgx11colors[217];
+ int mgx11divN[256];
+ int mgx11modN[256];
+ int mgx11magic[16][16];
+diff --git a/src/lib/mg/x11/mgx11draw.c b/src/lib/mg/x11/mgx11draw.c
+index 79e9968..654c74a 100644
+--- a/src/lib/mg/x11/mgx11draw.c
++++ b/src/lib/mg/x11/mgx11draw.c
+@@ -39,7 +39,7 @@ Copyright (C) 1998-2000 Stuart Levy, Tamara Munzner, Mark Phillips";
+ void	mgx11_polygon( int nv, HPoint3 *v, int nn, Point3 *n,
+ 	      	          int nc, ColorA *c );
+ void	mgx11_mesh(int wrap, int nu, int nv, HPoint3 *p, Point3 *n, Point3 *nq,
+-		   ColorA *c );
++		   ColorA *c, TxST *ST, int mflags );
+ void	mgx11_line( HPoint3 *p1, HPoint3 *p2 );
+ void	mgx11_polyline( int nv, HPoint3 *verts, int nc, ColorA *colors,
+ 			int wrap );
+@@ -673,7 +673,7 @@ void mgx11submesh(int wrap, int nu, int nv, int umin, int umax, int vmin,
+  *
+  */
+ void mgx11_mesh(int wrap, int nu, int nv, HPoint3 *P, Point3 *N, Point3 *NQ,
+-		ColorA *C )
++		ColorA *C, TxST *ST, int mflags)
+ {
+   mgx11submesh( wrap, nu, nv, 0, nu-1, 0, nv-1, P, N, C);
+ }
+diff --git a/src/lib/mg/x11/mgx11render8.c b/src/lib/mg/x11/mgx11render8.c
+index 552b83b..5893ba7 100644
+--- a/src/lib/mg/x11/mgx11render8.c
++++ b/src/lib/mg/x11/mgx11render8.c
+@@ -49,7 +49,7 @@ extern int colorlevels;
+ extern int mgx11divN[256];
+ extern int mgx11modN[256];
+ extern int mgx11magic[16][16];
+-extern unsigned long mgx11colors[216];
++extern unsigned long mgx11colors[217];
+ extern int mgx11multab[256];
+ 
+ #define DMAP(v,x,y)  (mgx11modN[v]>mgx11magic[x][y] ? mgx11divN[v] + 1 : mgx11divN[v])
+diff --git a/src/lib/mib/mibload.c b/src/lib/mib/mibload.c
+index 2d05d31..a90788f 100644
+--- a/src/lib/mib/mibload.c
++++ b/src/lib/mib/mibload.c
+@@ -36,12 +36,9 @@ mib_Widget	*mib_root_Widget;
+ Display		*dpy;
+ GC		 mib_gc;
+ static struct _mib_event_handle_funcs {
+-  void		(*mib_pick_mib_Widget)(/* Widget, XtPointer,
+-					  XButtonPressedEvent *, Boolean * */);
+-  void		(*mib_move_mib_Widget)(/* Widget, XtPointer,
+-					  XPointerMovedEvent *, Boolean * */);
+-  void		(*mib_unpick_mib_Widget)(/* Widget, XtPointer,
+-					    XButtonReleasedEvent *, Boolean * */);
++  XtEventHandler	mib_pick_mib_Widget;
++  XtEventHandler	mib_move_mib_Widget;
++  XtEventHandler	mib_unpick_mib_Widget;
+ } mib_events;
+ 
+ mib_widget_funcs mwfuncs[] =
+@@ -822,11 +819,11 @@ void mib_reset_size(mib_Widget *temp)
+ 
+ /*****************************************************************************/
+ 
+-void mib_set_eventhandlers(void (*a)(), void (*b)(), void (*c)())
++void mib_set_eventhandlers(XtEventHandler a, XtEventHandler b, XtEventHandler c)
+ {
+-  mib_events.mib_pick_mib_Widget = (void (*)())a;
+-  mib_events.mib_move_mib_Widget = (void (*)())b;
+-  mib_events.mib_unpick_mib_Widget = (void (*)())c;
++  mib_events.mib_pick_mib_Widget = a;
++  mib_events.mib_move_mib_Widget = b;
++  mib_events.mib_unpick_mib_Widget = c;
+ }
+ 
+ /*****************************************************************************/
+diff --git a/src/lib/mib/mibload.h b/src/lib/mib/mibload.h
+index 0f3c838..f906674 100644
+--- a/src/lib/mib/mibload.h
++++ b/src/lib/mib/mibload.h
+@@ -107,7 +107,7 @@ int mib_load_mib_class(mib_Widget **, mib_Widget *, char *, char *,
+ int mib_load_private(mib_Widget *, mib_Buffer *);
+ void mib_reset_size(mib_Widget *);
+ int mib_read_line(mib_Buffer *, char *, char *);
+-void mib_set_eventhandlers(void (*a)(), void (*b)(), void (*c)());
++void mib_set_eventhandlers(XtEventHandler a, XtEventHandler b, XtEventHandler c);
+ void mib_apply_eventhandlers(Widget, mib_Widget *);
+ 
+ void mib_add_backward(mib_Widget *this, mib_Widget *parent);
+@@ -121,7 +121,7 @@ typedef struct _menu_item {
+   char         mnemonic;
+   char        *accelerator;
+   char        *accel_text;
+-  void        (*callback)();
++  XtCallbackProc callback;
+   XtPointer   callback_data;
+   struct _menu_item *subitems;
+ } MenuItem;
+diff --git a/src/lib/mib/mibwidgets.h b/src/lib/mib/mibwidgets.h
+index 76499be..846a60f 100644
+--- a/src/lib/mib/mibwidgets.h
++++ b/src/lib/mib/mibwidgets.h
+@@ -219,8 +219,8 @@ int mib_load_Menu(mib_Widget *, mib_Buffer *);
+ 
+ typedef struct _mib_widget_funcs {
+   char		*name;
+-  mib_Widget	*(*mib_create)();
+-  void		 (*mib_delete)();
+-  void		 (*mib_save)();
+-  int		 (*mib_load)();
++  mib_Widget	*(*mib_create)(mib_Widget *, char *, char *, int, int, int, int, int);
++  void		 (*mib_delete)(mib_Widget *);
++  void		 (*mib_save)(mib_Widget *, FILE *);
++  int		 (*mib_load)(mib_Widget *, mib_Buffer *);
+ } mib_widget_funcs;
+diff --git a/src/lib/oogl/lisp/lisp.c b/src/lib/oogl/lisp/lisp.c
+index 0417b36..a1bf902 100644
+--- a/src/lib/oogl/lisp/lisp.c
++++ b/src/lib/oogl/lisp/lisp.c
+@@ -304,12 +304,12 @@ static LObject *intparse(Lake *lake)
+ LType LIntp = {
+   "int",
+   sizeof(int),
+-  intfromobj,
+-  int2obj,
+-  intfree,
+-  intwrite,
+-  intmatch,
+-  intpull,
++  (bool (*)(LObject *, void *))intfromobj,
++  (LObject *(*)(void *))int2obj,
++  (void (*)(void *))intfree,
++  (void (*)(FILE *, void *))intwrite,
++  (bool (*)(void *, void *))intmatch,
++  (void (*)(va_list *, void *))intpull,
+   intparse,
+   LTypeMagic
+ };
+@@ -414,12 +414,12 @@ static LObject *longparse(Lake *lake)
+ LType LLongp = {
+   "long",
+   sizeof(long),
+-  longfromobj,
+-  long2obj,
+-  longfree,
+-  longwrite,
+-  longmatch,
+-  longpull,
++  (bool (*)(LObject *, void *))longfromobj,
++  (LObject *(*)(void *))long2obj,
++  (void (*)(void *))longfree,
++  (void (*)(FILE *, void *))longwrite,
++  (bool (*)(void *, void *))longmatch,
++  (void (*)(va_list *, void *))longpull,
+   longparse,
+   LTypeMagic
+ };
+@@ -515,12 +515,12 @@ static LObject *floatparse(Lake *lake)
+ LType LFloatp = {
+   "float",
+   sizeof(float),
+-  floatfromobj,
+-  float2obj,
+-  floatfree,
+-  floatwrite,
+-  floatmatch,
+-  floatpull,
++  (bool (*)(LObject *, void *))floatfromobj,
++  (LObject *(*)(void *))float2obj,
++  (void (*)(void *))floatfree,
++  (void (*)(FILE *, void *))floatwrite,
++  (bool (*)(void *, void *))floatmatch,
++  (void (*)(va_list *, void *))floatpull,
+   floatparse,
+   LTypeMagic
+ };
+@@ -617,12 +617,12 @@ static LObject *doubleparse(Lake *lake)
+ LType LDoublep = {
+   "double",
+   sizeof(double),
+-  doublefromobj,
+-  double2obj,
+-  doublefree,
+-  doublewrite,
+-  doublematch,
+-  doublepull,
++  (bool (*)(LObject *, void *))doublefromobj,
++  (LObject *(*)(void *))double2obj,
++  (void (*)(void *))doublefree,
++  (void (*)(FILE *, void *))doublewrite,
++  (bool (*)(void *, void *))doublematch,
++  (void (*)(va_list *, void *))doublepull,
+   doubleparse,
+   LTypeMagic
+ };
+@@ -688,12 +688,12 @@ static LObject *stringparse(Lake *lake)
+ LType LStringp = {
+   "string",
+   sizeof(char *),
+-  stringfromobj,
+-  string2obj,
+-  stringfree,
+-  stringwrite,
+-  stringmatch,
+-  stringpull,
++  (bool (*)(LObject *, void *))stringfromobj,
++  (LObject *(*)(void *))string2obj,
++  (void (*)(void *))stringfree,
++  (void (*)(FILE *, void *))stringwrite,
++  (bool (*)(void *, void *))stringmatch,
++  (void (*)(va_list *, void *))stringpull,
+   stringparse,
+   LTypeMagic
+ };
+@@ -744,12 +744,12 @@ static LObject *symbolparse(Lake *lake)
+ LType LSymbolp = {
+   "symbol",
+   sizeof(char *),
+-  symbolfromobj,
+-  symbol2obj,
+-  stringfree,
+-  symbolwrite,
+-  stringmatch,
+-  stringpull,
++  (bool (*)(LObject *, void *))symbolfromobj,
++  (LObject *(*)(void *))symbol2obj,
++  (void (*)(void *))stringfree,
++  (void (*)(FILE *, void *))symbolwrite,
++  (bool (*)(void *, void *))stringmatch,
++  (void (*)(va_list *, void *))stringpull,
+   symbolparse,
+   LTypeMagic
+ };
+@@ -875,12 +875,12 @@ void listpull(va_list *a_list, LList **x)
+ LType LListp = {
+   "list",
+   sizeof(LList *),
+-  listfromobj,
+-  list2obj,
+-  listfree,
+-  listwrite,
+-  listmatch,
+-  listpull,
++  (bool (*)(LObject *, void *))listfromobj,
++  (LObject *(*)(void *))list2obj,
++  (void (*)(void *))listfree,
++  (void (*)(FILE *, void *))listwrite,
++  (bool (*)(void *, void *))listmatch,
++  (void (*)(va_list *, void *))listpull,
+   LSexpr,
+   LTypeMagic
+ };
+@@ -910,12 +910,12 @@ bool objmatch(LObject **a, LObject **b)
+ LType LObjectp = {
+   "lisp object",
+   sizeof(LObject *),
+-  objfromobj,
+-  obj2obj,
++  (bool (*)(LObject *, void *))objfromobj,
++  (LObject *(*)(void *))obj2obj,
+   NULL,
+   NULL,
+-  objmatch,
+-  objpull,
++  (bool (*)(void *, void *))objmatch,
++  (void (*)(va_list *, void *))objpull,
+   LSexpr,
+   LTypeMagic
+ };
+@@ -976,10 +976,10 @@ static void lakewrite(FILE *fp, Lake **x)
+ LType LLakep = {
+   "lake",
+   sizeof(Lake *),
+-  lakefromobj,
+-  lake2obj,
+-  lakefree,
+-  lakewrite,
++  (bool (*)(LObject *, void *))lakefromobj,
++  (LObject *(*)(void *))lake2obj,
++  (void (*)(void *))lakefree,
++  (void (*)(FILE *, void *))lakewrite,
+   NULL,
+   NULL,
+   NULL,
+@@ -1035,12 +1035,12 @@ void funcpull(va_list *a_list, int *x)
+ LType LFuncp = {
+   "lisp function",
+   sizeof(int),
+-  funcfromobj,
+-  func2obj,
+-  funcfree,
+-  funcwrite,
+-  funcmatch,
+-  funcpull,
++  (bool (*)(LObject *, void *))funcfromobj,
++  (LObject *(*)(void *))func2obj,
++  (void (*)(void *))funcfree,
++  (void (*)(FILE *, void *))funcwrite,
++  (bool (*)(void *, void *))funcmatch,
++  (void (*)(va_list *, void *))funcpull,
+   LSexpr,
+   LTypeMagic
+ };
+@@ -2405,7 +2405,7 @@ static inline LObject *LSexpr0(Lake *lake, int listhow)
+ 	  LLISTVAL(obj)->car = head = LNew(LFUNC, &i);
+ 	}
+ 
+-	if ( (*functable[i].fptr)(lake, LLISTVAL(obj)) == Lnil ) {
++	if ( ((LObject *(*)(Lake *, LList *))(functable[i].fptr))(lake, LLISTVAL(obj)) == Lnil ) {
+ 	  LFree(obj);
+ 	  obj = Lnil;
+ 	}
+@@ -2489,7 +2489,7 @@ LObject *LEval(LObject *obj)
+ #endif
+ 
+     /* then call the function */
+-    ans = fentry->fptr(NULL, list);
++    ans = ((LObject *(*)(void *, LList *))fentry->fptr)(NULL, list);
+ 
+     /* deal with any interests in the function after calling the
+      * function; otherwise the arguments are in an unevaluated state.
+@@ -3136,10 +3136,10 @@ static void filterwrite(FILE *fp, LFilter **x)
+ LType LFilterp = {
+   "filter",
+   sizeof(LFilter *),
+-  filterfromobj,
+-  filter2obj,
+-  filterfree,
+-  filterwrite,
++  (bool (*)(LObject *, void *))filterfromobj,
++  (LObject *(*)(void *))filter2obj,
++  (void (*)(void *))filterfree,
++  (void (*)(FILE *, void *))filterwrite,
+   NULL,
+   NULL,
+   LSexpr,
+diff --git a/src/lib/oogl/lisp/lisp.h b/src/lib/oogl/lisp/lisp.h
+index 413e83d..eb56d84 100644
+--- a/src/lib/oogl/lisp/lisp.h
++++ b/src/lib/oogl/lisp/lisp.h
+@@ -43,6 +43,8 @@ typedef union {
+   double d;
+ } LCell;
+ 
++struct Lake;
++
+ struct LType
+ {
+   /* name of type */
+@@ -52,25 +54,25 @@ struct LType
+   int size;
+ 
+   /* extract cell value from obj */
+-  bool (*fromobj)(/* LObject *obj, void *x */);
++  bool (*fromobj)(LObject *obj, void *x);
+ 
+   /* create a new LObject of this type */
+-  LObject *(*toobj)(/* void *x */);
++  LObject *(*toobj)(void *x);
+ 
+   /* free a cell of this type */
+-  void (*free)(/* void *x */);
++  void (*free)(void *x);
+ 
+   /* write a cell value to a stream */
+-  void (*write)(/* FILE *fp, void *x */);
++  void (*write)(FILE *fp, void *x);
+ 
+   /* test equality of two cells of this type */
+-  bool (*match)(/* void *a, void *b */);
++  bool (*match)(void *a, void *b);
+ 
+   /* pull a cell value from a va_list */
+-  void (*pull)(/* va_list *a_list, void *x */);
++  void (*pull)(va_list *a_list, void *x);
+ 
+   /* parse an object of this type */
+-  LObject *(*parse)(/* Lake *lake */);
++  LObject *(*parse)(struct Lake *lake);
+ 
+   /* magic number; always set to LTypeMagic */
+   int magic;
+@@ -137,7 +139,7 @@ typedef struct LList {
+   struct LList *cdr;
+ } LList;
+ 
+-typedef LObject *(*LObjectFunc)();
++typedef void *LObjectFunc;
+ 
+ typedef struct LInterest {
+   Lake *lake;
+diff --git a/src/lib/oogl/lisp/lisp2.h b/src/lib/oogl/lisp/lisp2.h
+index 2a7b02b..f661f88 100644
+--- a/src/lib/oogl/lisp/lisp2.h
++++ b/src/lib/oogl/lisp/lisp2.h
+@@ -50,25 +50,25 @@ struct LType {
+   int size;
+ 
+   /* extract cell value from obj */
+-  int (*fromobj)(/* LObject *obj, void *x */);
++  int (*fromobj)(LObject *obj, void *x);
+ 
+   /* create a new LObject of this type */
+-  LObject *(*toobj)(/* void *x */);
++  LObject *(*toobj)(void *x);
+ 
+   /* free a cell of this type */
+-  void (*free)(/* void *x */);
++  void (*free)(void *x);
+ 
+   /* write a cell value to a stream */
+-  void (*write)(/* FILE *fp, void *x */);
++  void (*write)(FILE *fp, void *x);
+ 
+   /* test equality of two cells of this type */
+-  int (*match)(/* void *a, void *b */);
++  int (*match)(void *a, void *b);
+ 
+   /* pull a cell value from a va_list */
+-  void (*pull)(/* va_list *a_list, void *x */);
++  void (*pull)(va_list *a_list, void *x);
+ 
+   /* parse an object of this type */
+-  LObject *(*parse)(/* Lake *lake */);
++  LObject *(*parse)(Lake *lake);
+ 
+   /* magic number; always set to LTypeMagic */
+   int magic;
+diff --git a/src/lib/oogl/refcomm/handle.c b/src/lib/oogl/refcomm/handle.c
+index 0446bc6..2436377 100644
+--- a/src/lib/oogl/refcomm/handle.c
++++ b/src/lib/oogl/refcomm/handle.c
+@@ -130,8 +130,9 @@ Handle *HandlePoolIterate(Pool *pool, Handle *pos)
+ }
+ 
+ void
+-HandleUpdRef(Handle **hp, Ref *parent, Ref **objp)
++HandleUpdRef(Handle **hp, Ref *parent, void *info)
+ {
++  Ref **objp = (Ref **)info;
+   Handle *h;
+ 
+   (void)parent;
+diff --git a/src/lib/oogl/refcomm/handle.h b/src/lib/oogl/refcomm/handle.h
+index 00a6ddf..dd120bd 100644
+--- a/src/lib/oogl/refcomm/handle.h
++++ b/src/lib/oogl/refcomm/handle.h
+@@ -146,7 +146,7 @@ extern Handle *HandleAssign( char *name, HandleOps *ops, Ref *obj );
+ 	 * The update procedure is automatically called once when
+ 	 * registration is done.
+ 	 */
+-extern int HandleRegister( Handle **hp, Ref *parent, void *info, void (*update)());
++extern int HandleRegister( Handle **hp, Ref *parent, void *info, void (*update)(Handle **, Ref *, void *));
+ 
+ 	/*
+ 	 * Un(all callbacks on) a reference to a Handle's value.
+@@ -161,20 +161,20 @@ extern void HandleUnregister(Handle **hp);
+ 	 * The viewer needs this to keep track of callbacks it plants
+ 	 * throughout Geom trees, which trigger e.g. BBox recomputation.
+ 	 */
+-extern void HandleUnregisterJust(Handle **hp, Ref *par, void *info, void (*upd)());
++extern void HandleUnregisterJust(Handle **hp, Ref *par, void *info, void (*upd)(Handle **, Ref *, void *));
+ 
+ 	/*
+ 	 * Unall callbacks matching a given pattern, no matter
+ 	 * which Handle they're associated with.  Another routine needed
+ 	 * for the viewer, called whenever a Geom tree is replaced.
+ 	 */
+-extern void HandleUnregisterAll(Ref *par, void *info, void (*upd)());
++extern void HandleUnregisterAll(Ref *par, void *info, void (*upd)(Handle **, Ref *, void *));
+ 
+ 	/*
+ 	 * Suitable update() func for HandleRegister in many cases.
+ 	 * Just deletes *objp then assigns *objp = (*hp)->object when called.
+ 	 */
+-extern void HandleUpdRef(Handle **hp, Ref *parent, Ref **objp);
++extern void HandleUpdRef(Handle **hp, Ref *parent, void *objp);
+ 
+ #endif /*_HANDLE_*/
+ 
+diff --git a/src/lib/oogl/util/glob.c b/src/lib/oogl/util/glob.c
+index 8bb77d5..f148adf 100644
+--- a/src/lib/oogl/util/glob.c
++++ b/src/lib/oogl/util/glob.c
+@@ -71,7 +71,7 @@ char **ooglglob(char *s)
+   char *c;
+ #ifdef SIGCHLD
+ 	/* Avoid NeXT pclose() bug: don't catch subprocess' SIGCHLD */
+-  void (*oldsigchld)() = signal(SIGCHLD, SIG_DFL);
++  void (*oldsigchld)(int) = signal(SIGCHLD, SIG_DFL);
+ #endif
+ 
+   sprintf(cmd, GLOB_SHELL"\"echo %s\" 2>&1", s);
+@@ -96,8 +96,7 @@ char **ooglglob(char *s)
+ }
+ 
+ void
+-ooglblkfree(av0)
+-     char **av0;
++ooglblkfree(char **av0)
+ {
+   char **av = av0;
+   while (*av)
+diff --git a/src/lib/oogl/wa/fsaparse.l b/src/lib/oogl/wa/fsaparse.l
+index 2e85529..8428898 100644
+--- a/src/lib/oogl/wa/fsaparse.l
++++ b/src/lib/oogl/wa/fsaparse.l
+@@ -29,6 +29,8 @@ YYSTYPE yylval;
+ 
+ %}
+ 
++%option nounput noinput
++
+ DIGIT	[0-9]
+ WS	[ \t\n,]
+ LETTER	[A-Za-z]
+diff --git a/src/lib/oogl/wa/fsaparse.y b/src/lib/oogl/wa/fsaparse.y
+index 5e2e47d..54916c2 100644
+--- a/src/lib/oogl/wa/fsaparse.y
++++ b/src/lib/oogl/wa/fsaparse.y
+@@ -36,7 +36,7 @@ static char copyright[] =
+ 
+ static int adj[MAXSTATES];
+ static int adj_index = 0;
+-static void install_adjacency();
++static void install_adjacency(int);
+ static void yyerror(char *s);
+ extern int yylex(void);
+ 
+@@ -176,8 +176,7 @@ static void yyerror(char *s)
+ }
+ 
+ static void
+-  install_adjacency(n)
+-int n;
++  install_adjacency(int n)
+ {
+   int i;
+ 
+@@ -186,8 +185,7 @@ int n;
+ }
+ 
+ void
+-parse_init(f)
+-     wa *f;
++parse_init(wa *f)
+ {
+   fsa = f;
+ 
+@@ -210,9 +208,7 @@ parse_init(f)
+  *		automata.
+  */
+ int
+-  fsaparse(fp, fsa)
+-FILE *fp;
+-wa *fsa;
++  fsaparse(FILE *fp, wa *fsa)
+ {
+   extern FILE *yyin;
+   int ret;
+diff --git a/src/lib/shade/apstream.c b/src/lib/shade/apstream.c
+index 9411e6a..d771f80 100644
+--- a/src/lib/shade/apstream.c
++++ b/src/lib/shade/apstream.c
+@@ -41,6 +41,7 @@ HandleOps AppearanceOps = {
+   (void ((*)(Ref *rp)))ApDelete,
+   NULL,
+   NULL,
++  {NULL, NULL}, {NULL, NULL}
+ };
+ 
+ static struct {
+diff --git a/src/lib/shade/image.c b/src/lib/shade/image.c
+index 5b04fe8..0d8ba13 100644
+--- a/src/lib/shade/image.c
++++ b/src/lib/shade/image.c
+@@ -59,6 +59,7 @@ HandleOps ImageOps = {
+   (void ((*)(Ref *rp)))ImgDelete,
+   NULL,
+   NULL,
++  {NULL, NULL}, {NULL, NULL}
+ };
+ 
+ struct imgheader {
+diff --git a/src/lib/shade/light.c b/src/lib/shade/light.c
+index b05b4d4..0aa1cf9 100644
+--- a/src/lib/shade/light.c
++++ b/src/lib/shade/light.c
+@@ -492,7 +492,7 @@ LmMerge(LmLighting *src, LmLighting *dst, int mergeflags)
+ 		src->valid : src->valid & ~(dst->override &~ src->override)
+ 	: 0;
+ 
+-    if(src == NULL || (mask == 0 && src->lights == NULL)) {
++    if(src == NULL || (mask == 0 && src->lights[0] == NULL)) {
+ 	RefIncr((Ref *)dst);
+ 	return dst;
+     }
+diff --git a/src/lib/shade/texture.c b/src/lib/shade/texture.c
+index 3eddd5e..8956f22 100644
+--- a/src/lib/shade/texture.c
++++ b/src/lib/shade/texture.c
+@@ -59,7 +59,7 @@ TxFSave(Texture *tx, FILE *outf, char *fname)
+   return ok ? tx : NULL;
+ }
+ 
+-void TxUpdateImage(Handle **hp, Ref *parentobj, Image **imgp)
++void TxUpdateImage(Handle **hp, Ref *parentobj, void *imgp)
+ {
+   Texture *tx = (Texture *)parentobj;
+     
+@@ -351,11 +351,12 @@ TxDelete(Texture *tx)
+ 
+ HandleOps TextureOps = {
+   "texture",
+-  (int ((*)()))TxStreamIn,
+-  (int ((*)()))TxStreamOut,
+-  (void ((*)()))TxDelete,
++  (int ((*)(Pool *, Handle **, Ref **)))TxStreamIn,
++  (int ((*)(Pool *, Handle *, Ref *)))TxStreamOut,
++  (void ((*)(Ref *)))TxDelete,
+   NULL,
+   NULL,
++  {NULL, NULL}, {NULL, NULL}
+ };
+ 
+ static struct txkw {
+diff --git a/src/lib/window/winstream.c b/src/lib/window/winstream.c
+index daf6d17..e08036d 100644
+--- a/src/lib/window/winstream.c
++++ b/src/lib/window/winstream.c
+@@ -38,11 +38,12 @@ int WnStreamOut( Pool *, Handle *, WnWindow * );
+ 
+ HandleOps WindowOps = {
+ 	"window",
+-	(int ((*)()))WnStreamIn,
+-	(int ((*)()))WnStreamOut,
+-	(void ((*)()))WnDelete,
++	(int ((*)(Pool *, Handle **, Ref **)))WnStreamIn,
++	(int ((*)(Pool *, Handle *, Ref *)))WnStreamOut,
++	(void ((*)(Ref *)))WnDelete,
+ 	NULL,
+-	NULL
++	NULL,
++	{NULL, NULL}, {NULL, NULL}
+ };
+ 
+ static struct winkeyword {

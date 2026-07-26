@@ -1,0 +1,12 @@
+diff -up azure-sdk-for-go-66.0.0/eng/tools/generator/cmd/issue/link/commitLink.go.orig azure-sdk-for-go-66.0.0/eng/tools/generator/cmd/issue/link/commitLink.go
+--- azure-sdk-for-go-66.0.0/eng/tools/generator/cmd/issue/link/commitLink.go.orig	2022-10-16 10:49:41.865150555 +0200
++++ azure-sdk-for-go-66.0.0/eng/tools/generator/cmd/issue/link/commitLink.go	2022-10-16 10:50:07.373955741 +0200
+@@ -47,7 +47,7 @@ func (l commitLink) Resolve() (ResolveRe
+ 	if err != nil {
+ 		return nil, err
+ 	}
+-	commit, _, err := l.client.Repositories.GetCommit(l.ctx, SpecOwner, SpecRepo, hash)
++	commit, _, err := l.client.Repositories.GetCommit(l.ctx, SpecOwner, SpecRepo, hash, nil)
+ 	if err != nil {
+ 		return nil, err
+ 	}

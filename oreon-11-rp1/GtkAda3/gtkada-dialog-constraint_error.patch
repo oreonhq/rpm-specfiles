@@ -1,0 +1,13 @@
+--- a/src/gtkada-dialogs.adb
++++ b/src/gtkada-dialogs.adb
+@@ -255,7 +255,9 @@
+             --  Unref the pixmap since the Gtk_Image now holds its
+             --  own reference to it.
+ 
+-            Pixmap.Unref;
++            if Pixmap /= null then
++               Pixmap.Unref;
++            end if;
+          end if;
+       end Create_Dialog_Icon;
+ 

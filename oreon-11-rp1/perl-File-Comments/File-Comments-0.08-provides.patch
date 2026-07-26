@@ -1,0 +1,12 @@
+--- lib/File/Comments/Plugin/Perl.pm
++++ lib/File/Comments/Plugin/Perl.pm
+@@ -146,7 +146,8 @@ sub comments_parse_simple {
+ }
+ 
+ ###########################################
+-package PodExtractor;
++package # Hide from rpm
++    PodExtractor;
+ use Log::Log4perl qw(:easy);
+ our @ISA = qw(Pod::Parser);
+ ###########################################

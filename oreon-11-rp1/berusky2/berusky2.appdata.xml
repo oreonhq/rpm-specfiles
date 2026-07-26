@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Ryan Lerch <rlerch@redhat.com> -->
+
+<!-- HOUSEKEEPING, REMOVE THIS COMMENT WHEN THIS GOES UPSTREAM
+-->
+
+<application>
+  <id type="desktop">berusky2.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <summary>3D puzzle game</summary>
+  <description>
+    <p>
+      Berusky 2 is a 3D puzzle game where you control up to 5 bugs that have to
+      work together to solve puzzles by moving boxes, using keys and blowing up
+      explosives.
+    </p>
+  </description>
+  <url type="homepage">http://www.anakreon.cz/?q=node/2</url>
+  <screenshots>
+    <screenshot type="default">http://anakreon.cz/images/b2screens/scr5.jpg</screenshot>
+    <screenshot>http://anakreon.cz/images/b2screens/scr2.jpg</screenshot>
+    <screenshot>http://anakreon.cz/images/b2screens/scr1.jpg</screenshot>
+  </screenshots>
+  <updatecontact>stransky@anakreon.cz</updatecontact>
+</application>

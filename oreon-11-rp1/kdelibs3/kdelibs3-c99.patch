@@ -1,0 +1,84 @@
+Avoid implicit function declarations for increased C99 compatibility.
+
+The PCRE POSIX interfaces are actually in <pcreposix.h>, not <pcre.h>
+these days.  Without <pcreposix.h>, you link against the glibc
+implementation.
+
+diff -ur kdelibs-3.5.10.orig/admin/libtool.m4.in kdelibs-3.5.10/admin/libtool.m4.in
+--- kdelibs-3.5.10.orig/admin/libtool.m4.in	2022-12-13 18:41:33.019971275 +0100
++++ kdelibs-3.5.10/admin/libtool.m4.in	2022-12-13 18:49:43.008763735 +0100
+@@ -760,10 +760,6 @@
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -777,7 +773,7 @@
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }]
+ EOF
+   if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} 2>/dev/null; then
+diff -ur kdelibs-3.5.10.orig/kdecore/fakes.c kdelibs-3.5.10/kdecore/fakes.c
+--- kdelibs-3.5.10.orig/kdecore/fakes.c	2006-07-22 10:16:41.000000000 +0200
++++ kdelibs-3.5.10/kdecore/fakes.c	2022-12-13 19:10:28.504547863 +0100
+@@ -22,6 +22,7 @@
+ #include "kdelibs_export.h"
+ 
+ #include <config.h>
++#include <string.h>
+ 
+ #ifdef _WIN32
+ #include <kde_file_win.h>
+@@ -38,7 +39,6 @@
+ #include <alloca.h>
+ #endif
+ 
+-#include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ 
+diff -ur kdelibs-3.5.10.orig/kinit/start_kdeinit.c kdelibs-3.5.10/kinit/start_kdeinit.c
+--- kdelibs-3.5.10.orig/kinit/start_kdeinit.c	2008-08-19 20:18:12.000000000 +0200
++++ kdelibs-3.5.10/kinit/start_kdeinit.c	2022-12-13 19:30:22.674120114 +0100
+@@ -25,6 +25,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <sys/stat.h>
+ #include <unistd.h>
+ 
+ #ifdef KDEINIT_OOM_PROTECT
+diff -ur kdelibs-3.5.10.orig/kio/misc/kpac/configure.in.in kdelibs-3.5.10/kio/misc/kpac/configure.in.in
+--- kdelibs-3.5.10.orig/kio/misc/kpac/configure.in.in	2005-09-10 10:26:47.000000000 +0200
++++ kdelibs-3.5.10/kio/misc/kpac/configure.in.in	2022-12-13 19:11:41.002789619 +0100
+@@ -3,6 +3,9 @@
+ AC_MSG_CHECKING([for setgroups with short argument])
+ AC_CACHE_VAL([kde_cv_shortsetgroups],[
+     AC_TRY_RUN([
++	#include <grp.h>
++	#include <stdlib.h>
++	#include <unistd.h>
+         int main()
+         {
+             short x[4];
+diff -ur kdelibs-3.5.10.orig/kjs/configure.in.in kdelibs-3.5.10/kjs/configure.in.in
+--- kdelibs-3.5.10.orig/kjs/configure.in.in	2007-10-08 11:52:09.000000000 +0200
++++ kdelibs-3.5.10/kjs/configure.in.in	2022-12-13 19:00:51.627479229 +0100
+@@ -66,7 +66,7 @@
+       ac_LDFLAGS_save="$LDFLAGS"
+       LDFLAGS="$LDFLAGS $all_libraries"
+       AC_TRY_LINK(
+-         [#include <pcre.h>],
++         [#include <pcreposix.h>],
+          [regfree(0);],
+          [ac_cv_have_pcreposix="yes"],
+          [ac_cv_have_pcreposix="no"]

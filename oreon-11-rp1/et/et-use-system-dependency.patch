@@ -1,0 +1,36 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7d57438e..d27bc173 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -93,26 +93,11 @@ find_package(sodium REQUIRED)
+ find_package(Protobuf REQUIRED)
+ find_package(Unwind)
+ 
+-if(DISABLE_VCPKG)
+-  add_subdirectory(${EXTERNAL_DIR}/Catch2)
+-  add_subdirectory(${EXTERNAL_DIR}/cxxopts)
+-  add_subdirectory(${EXTERNAL_DIR}/cpp-httplib)
+-  add_subdirectory(${EXTERNAL_DIR}/json)
+-  include_directories(
+-    SYSTEM ${EXTERNAL_DIR}/cpp-httplib
+-  )
+-  include_directories(
+-    ${EXTERNAL_DIR}/simpleini
+-    ${EXTERNAL_DIR}/json/include
+-    ${EXTERNAL_DIR}/cxxopts/include
+-  )
+-else()
+-  find_package(Catch2 CONFIG REQUIRED)
+-  find_package(httplib CONFIG REQUIRED)
+-  find_package(cxxopts CONFIG REQUIRED)
+-  find_package(nlohmann_json CONFIG REQUIRED)
+-  find_path(SIMPLEINI_INCLUDE_DIRS "ConvertUTF.c")
+-endif()
++find_package(Catch2 CONFIG REQUIRED)
++find_package(httplib CONFIG REQUIRED)
++find_package(cxxopts CONFIG REQUIRED)
++find_package(nlohmann_json CONFIG REQUIRED)
++find_path(SIMPLEINI_INCLUDE_DIRS "ConvertUTF.c")
+ 
+ # Optional packages
+ find_package(UTempter)

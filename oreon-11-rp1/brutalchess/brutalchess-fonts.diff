@@ -1,0 +1,22 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,4 +1,4 @@
+ AUTOMAKE_OPTIONS = foreign
+-SUBDIRS = src art fonts models
++SUBDIRS = src art models
+ doc_DATA = README AUTHORS COPYING INSTALL NEWS ChangeLog
+ 
+--- a/configure.ac
++++ b/configure.ac
+@@ -73,11 +73,9 @@
+ AC_SUBST(bcdatadir, "${datadir}/brutalchess/", "Prefix")
+ AC_SUBST(modelsdir, "${bcdatadir}/models/", "Models")
+ AC_SUBST(artdir, "${bcdatadir}/art/", "Art")
+-AC_SUBST(fontsdir, "${bcdatadir}/fonts/", "Fonts")
+ 
+ AC_CONFIG_FILES([Makefile 
+ 			src/Makefile
+ 			art/Makefile
+-			fonts/Makefile
+ 			models/Makefile])
+ AC_OUTPUT

@@ -1,0 +1,45 @@
+diff -up asymptote-3.05/configure.ac.orig asymptote-3.05/configure.ac
+--- asymptote-3.05/configure.ac.orig	2026-01-20 16:38:18.394270454 -0700
++++ asymptote-3.05/configure.ac	2026-01-20 16:38:41.129893318 -0700
+@@ -665,7 +665,7 @@ case "$OSTYPE" in
+                                  [AC_DEFINE(HAVE_LIBGL,1,
+                              DEFINE_LIB([GL]))
+                              LIBS=$LIBS"-lGL "
+-                             GLEW="glew.o "
++                             GLEW="-lGLEW "
+                              INCL=$INCL" -Ibackports/glew/include"],
+                                    AC_MSG_NOTICE([*** Could not find libGL: will compile without OpenGL support ***]))
+ esac
+diff -up asymptote-3.05/glrender.h.orig asymptote-3.05/glrender.h
+--- asymptote-3.05/glrender.h.orig	2025-07-03 14:47:01.000000000 -0600
++++ asymptote-3.05/glrender.h	2026-01-20 16:38:41.130212973 -0700
+@@ -25,6 +25,7 @@
+ #define GL_SILENCE_DEPRECATION
+ #endif
+ #include <GL/glew.h>
++#define APIENTRY
+ 
+ #ifdef __APPLE__
+ #include <OpenGL/gl.h>
+diff -up asymptote-3.05/Makefile.in.orig asymptote-3.05/Makefile.in
+--- asymptote-3.05/Makefile.in.orig	2025-07-03 14:47:01.000000000 -0600
++++ asymptote-3.05/Makefile.in	2026-01-20 16:38:41.130446889 -0700
+@@ -165,7 +165,7 @@ doc/version.texi: version.txt
+ 	echo @set Datadir @datadir@ >> $@
+ 	echo @set Docdir @docdir@ >> $@
+ 
+-asymptote.so: $(COREFILES:=.pic.o) glew.o
++asymptote.so: $(COREFILES:=.pic.o)
+ 	$(CXX) $(OPTS) -shared -o asymptote.so revision.o $(COREFILES:=.pic.o) $(SHAREDLIBS)
+ 
+ $(LSP_ROOT)/liblspcpp.a:
+@@ -415,9 +415,6 @@ check-all: asy FORCE
+ 	./wce
+ 	$(MAKE) -C tests all
+ 
+-glew.o: glew.c config.h
+-	$(CC) $(GLEWOPTS) -o $@ -c $<
+-
+ .SUFFIXES: .c .cc .o .d .ui .py
+ %.o: %.cc $(GENERATEDENUMS:=.h) $(RUNTIME_FILES:=.cc)
+ 	$(CXX) $(OPTS) -o $@ -c $<

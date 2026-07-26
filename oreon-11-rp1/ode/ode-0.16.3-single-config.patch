@@ -1,0 +1,19 @@
+--- ode/ode-config
++++ ode/ode-config
+@@ -39,7 +39,7 @@ while test $# -gt 0; do
+       echo 0.14
+       ;;
+     --cflags)
+-      echo
++      echo -DdIDESINGLE
+       ;;
+     --libs)
+       echo -lode
+--- ode/ode.pc
++++ ode/ode.pc
+@@ -5,4 +5,4 @@ precision=dDOUBLE
+ Version: 0.16.3
+ Libs: -L${libdir} -lode
+ Libs.private: -lstdc++ -lm
+-Cflags: -I${includedir}
++Cflags: -I${includedir} -DdIDESINGLE

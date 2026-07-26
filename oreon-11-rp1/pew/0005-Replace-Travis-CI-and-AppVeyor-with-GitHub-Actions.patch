@@ -1,0 +1,208 @@
+From 487970614a469895da3ec3c67663e7c69fe1de2d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Thu, 26 Aug 2021 11:11:09 +0200
+Subject: [PATCH 05/15] Replace Travis CI and AppVeyor with GitHub Actions
+
+---
+ .github/workflows/ci-tests.yml | 39 +++++++++++++++++++
+ .travis.yml                    | 70 ----------------------------------
+ README.md                      |  8 ++--
+ appveyor.yml                   |  7 ----
+ tox.ini                        | 17 ++++++++-
+ 5 files changed, 60 insertions(+), 81 deletions(-)
+ create mode 100644 .github/workflows/ci-tests.yml
+ delete mode 100644 .travis.yml
+ delete mode 100644 appveyor.yml
+
+diff --git a/.github/workflows/ci-tests.yml b/.github/workflows/ci-tests.yml
+new file mode 100644
+index 0000000..51b5623
+--- /dev/null
++++ b/.github/workflows/ci-tests.yml
+@@ -0,0 +1,39 @@
++# NOTE: This name appears in GitHub's Checks API and in workflow's status badge.
++name: ci-tests
++
++# Trigger the workflow when:
++on:
++  # A push occurs to one of the matched branches.
++  push:
++    branches:
++      - master
++  # Or when a pull request event occurs for a pull request against one of the
++  # matched branches.
++  pull_request:
++    branches:
++      - master
++
++jobs:
++  tests:
++    # NOTE: This name appears in GitHub's Checks API.
++    name: tests
++    runs-on: ${{ matrix.platform }}
++    strategy:
++      matrix:
++        platform: [ubuntu-latest, windows-latest]
++        python-version: [2.7, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9]
++    steps:
++      - name: Checkout code
++        uses: actions/checkout@v2
++      - name: Set up Python ${{ matrix.python-version }}
++        uses: actions/setup-python@v2
++        with:
++          python-version: ${{ matrix.python-version }}
++      - name: Install dependencies
++        run: |
++          python -m pip install --upgrade pip
++          pip install tox tox-gh-actions
++      - name: Test with Tox
++        run: tox
++        env:
++          PLATFORM: ${{ matrix.platform }}
+diff --git a/.travis.yml b/.travis.yml
+deleted file mode 100644
+index 98dbcf9..0000000
+--- a/.travis.yml
++++ /dev/null
+@@ -1,70 +0,0 @@
+-matrix:
+-  fast_finish: true
+-  include:
+-    - language: python
+-      sudo: false
+-      python: "2.7"
+-      install:
+-        - pip install -e .[pythonz] --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/
+-    - language: python
+-      sudo: false
+-      python: "3.4"
+-      install:
+-        - pip install -e . --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/ --ignore=tests/test_install.py
+-    - language: python
+-      sudo: false
+-      python: "3.5"
+-      install:
+-        - pip install -e . --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/ --ignore=tests/test_install.py
+-    - language: python
+-      sudo: false
+-      python: "3.6"
+-      install:
+-        - pip install -e .[pythonz] --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/
+-    - language: python
+-      dist: xenial
+-      sudo: required
+-      python: "3.7"
+-      install:
+-        - pip install -e . --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/ --ignore=tests/test_install.py
+-    - language: python
+-      dist: xenial
+-      sudo: required
+-      python: "3.8"
+-      install:
+-        - pip install -e . --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/ --ignore=tests/test_install.py
+-    - language: python
+-      dist: xenial
+-      sudo: required
+-      python: "3.9"
+-      install:
+-        - pip install -e . --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/ --ignore=tests/test_install.p
+-    - language: python
+-      sudo: false
+-      python: "pypy"
+-      install:
+-        - pip install -e .[pythonz] --upgrade
+-        - pip install pytest
+-      script: py.test -rws tests/
+-    - language: nix
+-      script: nix build -v --arg nixpkgs "import (fetchTarball ''https://github.com/NixOS/nixpkgs-channels/archive/$CHANNEL_HASH.tar.gz'') {}"
+-      env: CHANNEL_HASH=07b42ccf2de451342982b550657636d891c4ba35
+-    - language: nix
+-      script: nix build -v --arg nixpkgs "import (fetchTarball ''https://github.com/NixOS/nixpkgs-channels/archive/$CHANNEL_HASH.tar.gz'') {}"
+-      env: CHANNEL_HASH=nixos-unstable
+-  allow_failures:
+-    - env: CHANNEL_HASH=nixos-unstable
+diff --git a/README.md b/README.md
+index 35368f6..cce7064 100644
+--- a/README.md
++++ b/README.md
+@@ -2,10 +2,12 @@ Pew - Python Env Wrapper
+ ========================
+ 
+ [![PyPi version](http://img.shields.io/pypi/v/pew.svg)](https://pypi.python.org/pypi/pew)
+-[![Build Status](https://travis-ci.org/berdario/pew.svg)](https://travis-ci.org/berdario/pew)
+-[![Build status](https://ci.appveyor.com/api/projects/status/xxe096txh1fuqfag/branch/master?svg=true)](https://ci.appveyor.com/project/berdario/pew/branch/master)
++[![CI test status][github-ci-tests-badge]][github-ci-tests-link]
+ [![PyPi](https://img.shields.io/pypi/format/pew.svg)](https://pypi.python.org/pypi/pew/)
+ 
++[github-ci-tests-badge]: https://github.com/berdario/pew/workflows/ci-tests/badge.svg
++[github-ci-tests-link]: https://github.com/berdario/pew/actions?query=workflow:ci-tests+branch:master
++
+ Python Env Wrapper is a set of commands to manage multiple [virtual environments](http://pypi.python.org/pypi/virtualenv). Pew can create, delete and copy your environments, using a single command to switch to them wherever you are, while keeping them in a single (configurable) location.
+ 
+ Virtualenvs makes it easier to work on more than one project at a time without introducing conflicts in their dependencies.
+@@ -370,7 +372,7 @@ Running Tests
+ 
+ The test suite for `pew` uses [tox](http://codespeak.net/tox). Most tests are actually integration tests that will fork shells, create virtualenvs and in some cases even download python packages from Pypi. The whole test suite takes around 1 minute to run on a single interpreter.
+ 
+-With every commit and pull request, the test suite is run over all supported interpreters on travis-ci (for unix-like) and appveyor (for windows).
++With every commit and pull request, the test suite is run over all supported interpreters on GitHub Actions (which runs tests on Linux and Windows).
+ 
+ To run individual test scripts, run from the top level directory of the repository a command like:
+ 
+diff --git a/appveyor.yml b/appveyor.yml
+deleted file mode 100644
+index 95f0f63..0000000
+--- a/appveyor.yml
++++ /dev/null
+@@ -1,7 +0,0 @@
+-install:
+-  - SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%
+-  - pip install tox
+-
+-build: false
+-
+-test_script: tox -e "py27,py37"
+diff --git a/tox.ini b/tox.ini
+index 192215a..7420f08 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,6 +1,21 @@
+ [tox]
+ skip_missing_interpreters=True
+-envlist = py27, py34, py35, py36, py37, py38, py39, pypy
++envlist = py{27,34,35,36,37,38,39}-{linux,windows}, pypy
++
++[gh-actions]
++python =
++    2.7: py27
++    3.4: py34
++    3.5: py35
++    3.6: py36
++    3.7: py37
++    3.8: py38
++    3.9: py39
++
++[gh-actions:env]
++PLATFORM =
++    ubuntu-latest: linux
++    windows-latest: windows
+ 
+ [testenv]
+ passenv = CI HOME
+-- 
+2.31.1
+

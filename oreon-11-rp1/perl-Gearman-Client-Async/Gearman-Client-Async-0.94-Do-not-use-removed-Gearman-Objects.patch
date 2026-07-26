@@ -1,0 +1,32 @@
+From 2edb9207284b34db4ce6476570db7150e86f107e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 3 Jun 2016 12:22:50 +0200
+Subject: [PATCH] Do not use removed Gearman::Objects
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Gearman-1.12.007 removed dummy Gearman::Objects module.
+
+CPAN RT#115026
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Gearman/Client/Async.pm | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/Gearman/Client/Async.pm b/lib/Gearman/Client/Async.pm
+index ff73253..ea2036f 100644
+--- a/lib/Gearman/Client/Async.pm
++++ b/lib/Gearman/Client/Async.pm
+@@ -52,7 +52,6 @@ use fields (
+             );
+ 
+ use Danga::Socket 1.52;
+-use Gearman::Objects;
+ use Gearman::Task;
+ use Gearman::JobStatus;
+ use Gearman::Client::Async::Connection;
+-- 
+2.5.5
+

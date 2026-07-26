@@ -1,0 +1,41 @@
+--- papilo-3.0.0/CMakeLists.txt.orig	2025-11-25 12:05:25.998673315 -0700
++++ papilo-3.0.0/CMakeLists.txt	2025-11-25 12:21:46.932239544 -0700
+@@ -37,10 +37,6 @@ include(GNUInstallDirs)
+ # Location for storing CMake files.
+ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules/)
+ 
+-# Functions without PAPILOLIB_EXPORT will not be accessible from outside.
+-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+-set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+-
+ # Even static libs have position-independent code by default, and can be linked into shared libs.
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 
+@@ -285,7 +281,7 @@ endif()
+ set(PAPILO_USE_STANDARD_HASHMAP 1)
+ 
+ # Create target `papilo-core` which is the static library.
+-add_library(papilo-core STATIC
++add_library(papilo-core SHARED
+    src/papilo/core/VariableDomains.cpp
+    src/papilo/core/SparseStorage.cpp
+    src/papilo/core/ConstraintMatrix.cpp
+@@ -321,7 +317,8 @@ add_library(papilo-core STATIC
+ # TODO: Simplify with a generator expression.
+ function(setLibProperties targetname outputname)
+     set_target_properties(${targetname} PROPERTIES
+-        OUTPUT_NAME ${outputname})
++        OUTPUT_NAME ${outputname}
++        POSITION_INDEPENDENT_CODE ON VERSION 0.0.0 SOVERSION 0)
+ endfunction(setLibProperties)
+ if(MSVC)
+     setLibProperties(papilo-core "libpapilo-core")
+@@ -331,7 +328,7 @@ endif()
+ 
+ 
+ # Add dependency-target `papilo` to static library-target `papilo-core`.
+-target_link_libraries(papilo-core papilo)
++target_link_libraries(papilo-core papilo clusol)
+ target_compile_definitions(papilo-core PRIVATE PAPILO_USE_EXTERN_TEMPLATES)
+ 
+ # When including from scipoptsuite, this is set to postpone generation of binaries until SCIP is built.

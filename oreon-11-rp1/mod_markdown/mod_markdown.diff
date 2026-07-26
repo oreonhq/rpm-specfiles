@@ -1,0 +1,18 @@
+--- configure.ac.orig	2021-03-30 12:57:09.300925711 +0300
++++ configure.ac	2021-03-30 12:59:32.557492061 +0300
+@@ -1,13 +1,12 @@
+ # Required initializer
+-AC_INIT(apache-mod-markdown, 1.0.2)
++AC_INIT(apache-mod-markdown, 1.0.4)
+ 
+ # Automake initialization
+ AM_INIT_AUTOMAKE([dist-bzip2 foreign])
+-AM_CONFIG_HEADER(config.h)
+ 
+ # Add a test for a compiler.
+ AC_PROG_CC
+-AM_PROG_LIBTOOL
++LT_INIT
+ 
+ AC_CONFIG_MACRO_DIR([m4])
+ AX_CHECK_COMPILE_FLAG([-Wall], [CFLAGS="$CFLAGS -Wall"], [], [])

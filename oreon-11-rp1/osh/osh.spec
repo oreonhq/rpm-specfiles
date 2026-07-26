@@ -1,0 +1,339 @@
+%global source0_hash f2fa96bb5bf934156b329d03f5df9cef2376c2121b73c6ed9fc0fa0d4bbb4b36
+
+%global version 1.1.1
+%global min_required_version_django 3.2
+
+%if 0%{?fedora} < 41
+%global psycopg_pkg python3-psycopg2
+%else
+%global psycopg_pkg python3-psycopg3
+%endif
+
+Name:           osh
+Version:        %{version}
+Release:        6%{?dist}
+License:        GPL-3.0-or-later
+Summary:        Static and Dynamic Analysis as a Service
+URL:            https://github.com/openscanhub/openscanhub/
+Source:         https://github.com/openscanhub/openscanhub/archive/refs/tags/%{name}-%{version}.tar.gz
+BuildArch:      noarch
+
+BuildRequires:  koji
+BuildRequires:  python3dist(django) >= %{min_required_version_django}
+BuildRequires:  python3-csdiff
+BuildRequires:  python3-devel
+BuildRequires:  python3-kobo-client
+BuildRequires:  python3-kobo-django
+BuildRequires:  python3-kobo-hub
+BuildRequires:  python3-kobo-rpmlib
+BuildRequires:  %{psycopg_pkg}
+BuildRequires:  python3-qpid-proton
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-setuptools_scm
+BuildRequires:  systemd-rpm-macros
+
+# make sure that shell completion dir macros are defined in the buildroot
+%{!?bash_completions_dir: %global bash_completions_dir %{_datadir}/bash-completion/completions}
+%{!?zsh_completions_dir: %global zsh_completions_dir %{_datadir}/zsh/site-functions}
+
+%description
+OpenScanHub is a service for static and dynamic analysis of RPM packages.
+It consists of central hub, workers and cli client.
+
+%package client
+Summary: OpenScanHub CLI client
+Requires: koji
+Requires: python3-kobo-client >= 0.15.1-100
+Requires: %{name}-common = %{version}-%{release}
+
+# Although the package is named `osh-client`, users know it as `osh-cli`
+# because of how the executable is named.  This makes it easier for them
+# to install it.
+Provides: osh-cli = %{version}-%{release}
+
+# This is kept here for backward compatibility with old package name
+Provides: covscan-client = %{version}
+Obsoletes: covscan-client < %{version}
+
+%description client
+OpenScanHub CLI client.
+It is used to submit, query and download scans.
+
+%package common
+Summary: OpenScanHub shared files for client, hub and worker
+Obsoletes: covscan-common < %{version}
+
+%description common
+OpenScanHub shared files for client, hub and worker.
+
+%package worker
+Summary: OpenScanHub worker
+Requires: csmock
+Requires: file
+Requires: koji
+Requires: python3-kobo-client
+Requires: python3-kobo-rpmlib
+Requires: python3-kobo-worker >= 0.36.1
+Requires: %{name}-common = %{version}-%{release}
+Recommends: osh-worker-conf
+
+Obsoletes: covscan-worker < %{version}
+
+%description worker
+OpenScanHub worker.
+It is used to process tasks submitted to the hub.
+
+%package hub
+Summary: OpenScanHub xml-rpc interface and web application
+Requires: httpd
+Requires: mod_auth_gssapi
+Requires: mod_ssl
+Requires: python3dist(django) >= %{min_required_version_django}
+Requires: python3-kobo-client
+Requires: python3-kobo-django >= 0.35.0
+Requires: python3-kobo-hub >= 0.35.0
+Requires: python3-kobo-rpmlib
+Requires: python3-mod_wsgi
+# PostgreSQL adapter for python
+Requires: %{psycopg_pkg}
+Requires: gzip
+# inform ET about progress using UMB (Unified Message Bus)
+Requires: python3-qpid-proton
+# hub is interacting with brew
+Requires: koji
+# extract tarballs created by csmock
+Requires: xz
+
+Requires: csdiff
+Requires: python3-bugzilla
+Requires: python3-csdiff
+Requires: python3-jira
+
+# Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=2255013
+%if 0%{?fedora} < 40 && 0%{?rhel} < 10
+Requires(post): postgresql < 16
+%else
+Requires(post): postgresql
+%endif
+
+Requires: %{name}-common = %{version}-%{release}
+Recommends: osh-hub-conf
+
+Obsoletes: covscan-hub < %{version}
+
+%description hub
+OpenScanHub xml-rpc interface and web application.
+
+%package worker-manager
+Summary: OpenScanHub worker manager
+Requires: %{name}-hub = %{version}-%{release}
+Requires: openssh-clients
+
+%description worker-manager
+OpenScanHub worker manager to dynamically create and destroy workers.
+
+%package hub-conf-devel
+Summary: OpenScanHub hub devel configuration
+Provides: osh-hub-conf = %{version}-%{release}
+Conflicts: osh-hub-conf
+Requires: httpd-filesystem
+Requires: osh-hub
+
+%description hub-conf-devel
+OpenScanHub hub devel configurations.
+
+%package worker-conf-devel
+Summary: OpenScanHub worker devel configuration
+Provides: osh-worker-conf = %{version}-%{release}
+Conflicts: osh-worker-conf
+
+%description worker-conf-devel
+OpenScanHub worker devel configurations.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n openscanhub-%{name}-%{version}
+
+%build
+
+# Add -s to the shebang in osh/client/osh-cli:
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_shebang_macros
+# TODO: Remove this when we migrate to newer Python packaging macros which
+# do this automatically.
+%py3_shebang_fix osh/client/osh-cli
+
+# collect static files from Django itself
+PYTHONPATH=. osh/hub/manage.py collectstatic --noinput
+
+# set path to python sitelib in the example httpd config
+sed 's|@PYTHON3_SITELIB@|%{python3_sitelib}|' osh/hub/osh-hub-httpd.conf.in > osh/hub/osh-hub-httpd.conf
+
+%py3_build
+
+%install
+%py3_install
+
+# install the files collected by `manage.py collectstatic`
+cp -a {,%{buildroot}%{python3_sitelib}/}osh/hub/static/
+
+# Temporarily provide /usr/bin/covscan for backward compatibility
+ln -s osh-cli %{buildroot}%{_bindir}/covscan
+
+%if "%{_bindir}" != "%{_sbindir}"
+# Temporarily provide /usr/sbin/osh-worker to support reexec upon upgrade
+mkdir -p %{buildroot}%{_sbindir}
+ln -s ../bin/osh-worker %{buildroot}%{_sbindir}/osh-worker
+%endif
+
+# create /etc/osh/hub/secrets directory
+mkdir -p %{buildroot}%{_sysconfdir}/osh/hub/secrets
+
+# create /etc/osh/worker-manager directory
+mkdir -p %{buildroot}%{_sysconfdir}/osh/worker-manager
+
+# create /var/lib dirs
+mkdir -p %{buildroot}%{_sharedstatedir}/osh/hub/{tasks,upload,worker}
+
+# create log file
+mkdir -p %{buildroot}%{_localstatedir}/log/osh/hub
+touch %{buildroot}%{_localstatedir}/log/osh/hub/hub.log
+
+# copy checker_groups.txt
+cp -a osh/hub/scripts/checker_groups.txt %{buildroot}%{python3_sitelib}/osh/hub/scripts/
+
+# make manage.py executable
+chmod 0755 %{buildroot}%{python3_sitelib}/osh/hub/manage.py
+
+# scripts are needed for setup.py, no longer needed
+rm -rf %{buildroot}%{python3_sitelib}/scripts
+
+# install example httpd config
+install -D {osh/hub,%{buildroot}%{_sysconfdir}/httpd/conf.d}/osh-hub-httpd.conf
+
+# keep configuration in `/etc` so that it can be overridden if /usr is read-only
+mv %{buildroot}%{python3_sitelib}/osh/hub/settings_local.py %{buildroot}%{_sysconfdir}/osh/hub
+ln -s %{_sysconfdir}/osh/hub/settings_local.py %{buildroot}%{python3_sitelib}/osh/hub/settings_local.py
+
+%files client
+%{_bindir}/osh-cli
+%{_bindir}/covscan
+%config(noreplace) %{_sysconfdir}/osh/client.conf
+%{bash_completions_dir}
+%{zsh_completions_dir}
+%{python3_sitelib}/osh/client
+%{python3_sitelib}/osh-*-py%{python3_version}.egg-info
+
+%files common
+%dir %{_sysconfdir}/osh
+%{python3_sitelib}/osh/common
+%{python3_sitelib}/osh/__init__.py*
+%{python3_sitelib}/osh/__pycache__
+%dir %{python3_sitelib}/osh
+%dir %{_sharedstatedir}/osh
+%license LICENSE
+
+%files worker
+%{python3_sitelib}/osh/worker
+%{_unitdir}/osh-worker.service
+%{_bindir}/osh-worker
+%if "%{_bindir}" != "%{_sbindir}"
+# Temporarily provide /usr/sbin/osh-worker to support reexec upon upgrade
+%{_sbindir}/osh-worker
+%endif
+%dir %{_localstatedir}/log/osh
+
+%post client
+if test -f %{_sysconfdir}/covscan/covscan.conf; then
+    mv %{_sysconfdir}/covscan/covscan.conf %{_sysconfdir}/osh/client.conf
+fi
+
+%post worker
+%systemd_post osh-worker.service
+
+%preun worker
+%systemd_preun osh-worker.service
+
+%postun worker
+%if 0%{?fedora} || 0%{?rhel} > 9
+%systemd_postun_with_reload osh-worker.service
+%else
+# Reload service on package upgrade.
+if [ $1 -ge 1 ]; then
+    # Service reloads using systemd-update-helper are broken on RHEL 9.
+    systemctl reload osh-worker.service || :
+fi
+%endif
+
+%files worker-conf-devel
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/osh/worker.conf
+
+%files hub
+%{_bindir}/osh-retention
+%{_bindir}/osh-stats
+%{_sysconfdir}/osh/hub
+%{python3_sitelib}/osh/hub
+%{_unitdir}/osh-retention.*
+%{_unitdir}/osh-stats.*
+%exclude %{python3_sitelib}/osh/hub/scripts/osh-xmlrpc-client.py*
+%exclude %{python3_sitelib}/osh/hub/scripts/umb-emit.py*
+%exclude %{python3_sitelib}/osh/hub/settings_local.py*
+%exclude %{python3_sitelib}/osh/hub/settings_local.ci.py*
+%exclude %{python3_sitelib}/osh/hub/__pycache__/settings_local.*
+%exclude %{_sysconfdir}/osh/hub/settings_local.py*
+%dir %{_localstatedir}/log/osh
+# These files should be readable and writable by respective groups.
+%dir %attr(775,root,apache) %{_localstatedir}/log/osh/hub
+%attr(775,root,apache) %{_sharedstatedir}/osh/hub
+%ghost %attr(644,apache,apache) %{_localstatedir}/log/osh/hub/hub.log
+# These files contain secrets and should not be readable by others.
+%defattr(640,root,apache)
+%ghost %{_sharedstatedir}/osh/hub/secret_key
+%ghost %{_sysconfdir}/osh/hub/secrets/bugzilla_secret
+%ghost %{_sysconfdir}/osh/hub/secrets/jira_secret
+
+%post hub
+exec &>> %{_localstatedir}/log/osh/hub/post-install-%{name}-%{version}-%{release}.log
+
+# record timestamp
+echo -n '>>> '
+date -R
+
+set -x
+umask 0026
+
+if ! test -e %{_sharedstatedir}/osh/hub/secret_key; then
+    # generate Django secret key for a fresh installation
+    %{__python3} -c "from django.core.management.utils import get_random_secret_key
+print(get_random_secret_key())" > %{_sharedstatedir}/osh/hub/secret_key
+    chgrp apache %{_sharedstatedir}/osh/hub/secret_key
+fi
+
+# this only takes an effect if PostgreSQL is running and the database exists
+if pg_isready -h localhost; then
+    # run `manage.py` as the `apache` user to improve security and to prevent
+    # the Python interpreter from creating an unowned byte-compiled module for
+    # `settings_local.py`
+    runuser -u apache -- %{python3_sitelib}/osh/hub/manage.py migrate
+fi
+
+%systemd_post osh-{retention,stats}.{service,timer}
+
+%preun hub
+%systemd_preun osh-{retention,stats}.{service,timer}
+
+%postun hub
+%systemd_postun osh-{retention,stats}.{service,timer}
+
+%files worker-manager
+%{_bindir}/osh-worker-manager
+%{_sysconfdir}/osh/worker-manager
+
+%files hub-conf-devel
+%{python3_sitelib}/osh/hub/settings_local.py
+%config(noreplace) %{_sysconfdir}/osh/hub/settings_local.py
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/osh-hub-httpd.conf
+%ghost %attr(640,root,apache) %{_sysconfdir}/osh/hub/secrets/db_password
+
+%changelog
+%autochangelog

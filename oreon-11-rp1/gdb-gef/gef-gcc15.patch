@@ -1,0 +1,26 @@
+diff --git a/tests/binaries/heap-multiple-heaps.c b/tests/binaries/heap-multiple-heaps.c
+index 3a9d1dd..cdeec68 100644
+--- a/tests/binaries/heap-multiple-heaps.c
++++ b/tests/binaries/heap-multiple-heaps.c
+@@ -21,7 +21,7 @@
+ /* The expected distance is the chunk size plus room for the metadata. */
+ #define EXPECTED_CHUNK_DISTANCE     LESS_THAN_MMAP_THRESHOLD + 24
+ 
+-void *thread()
++void *thread(void *arg)
+ {
+         void *pointers[NUM_ALLOCS];
+         for (int i = 0; i < NUM_ALLOCS; i++) {
+diff --git a/tests/binaries/heap-non-main.c b/tests/binaries/heap-non-main.c
+index 3a2369f..28d4959 100644
+--- a/tests/binaries/heap-non-main.c
++++ b/tests/binaries/heap-non-main.c
+@@ -8,7 +8,7 @@
+ #include <pthread.h>
+ #include "utils.h"
+ 
+-void *thread()
++void *thread(void *arg)
+ {
+         void* p1 = malloc(0x18);
+         void* p2 = malloc(0x18);

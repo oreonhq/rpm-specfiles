@@ -1,0 +1,17 @@
+Define GL_GLEXT_PROTOTYPES to obtain a declaration of the
+glColorTableEXT function.  This avoids a build failure with future
+compilers due to an implicit function declaration.
+
+diff --git a/src/glpng.c b/src/glpng.c
+index ef3c236b5a158bfd..ac8ab13c76198409 100644
+--- a/src/glpng.c
++++ b/src/glpng.c
+@@ -25,6 +25,8 @@
+ 	#include <windows.h>
+ #endif
+ 
++#define GL_GLEXT_PROTOTYPES
++
+ #include <GL/glpng.h>
+ #include <GL/gl.h>
+ #include <stdlib.h>

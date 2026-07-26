@@ -1,0 +1,12 @@
+diff -up Devel-NYTProf-6.13/Makefile.PL.orig Devel-NYTProf-6.13/Makefile.PL
+--- Devel-NYTProf-6.13/Makefile.PL.orig	2023-10-16 16:56:49.007383905 +0200
++++ Devel-NYTProf-6.13/Makefile.PL	2023-10-16 16:57:14.219583573 +0200
+@@ -182,7 +182,7 @@ WriteMakefile(
+     LIBS      => [join ' ', @libs],
+     OBJECT    => q/$(O_FILES)/,
+     FUNCLIST => ['boot_Devel__NYTProf', 'boot_Devel__NYTProf__FileHandle'],
+-    EXE_FILES => ['bin/nytprofhtml', 'bin/flamegraph.pl', 'bin/nytprofcsv', 'bin/nytprofcalls', 'bin/nytprofcg', 'bin/nytprofmerge'],
++    EXE_FILES => ['bin/nytprofhtml', 'bin/nytprofcsv', 'bin/nytprofcalls', 'bin/nytprofcg', 'bin/nytprofmerge'],
+     @man,
+     INC   => $INCLUDE,
+     clean => {

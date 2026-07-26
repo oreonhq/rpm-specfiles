@@ -1,0 +1,12 @@
+diff --git a/Sources/API/Core/System/cl_assert.h b/Sources/API/Core/System/cl_assert.h
+index ce4b07c..9d8b8b3 100644
+--- a/Sources/API/Core/System/cl_assert.h
++++ b/Sources/API/Core/System/cl_assert.h
+@@ -20,6 +20,7 @@
+ #define header_cl_assert
+ 
+ #include <list>
++#include <cstddef>
+ 
+ //: Error Channels Enum
+ enum ErrorChannels

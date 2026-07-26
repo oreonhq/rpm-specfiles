@@ -1,0 +1,12 @@
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/funit-exit.xml-in.fix-duplicates frysk-0.4/frysk-core/frysk/pkglibdir/funit-exit.xml-in
+--- frysk-0.4/frysk-core/frysk/pkglibdir/funit-exit.xml-in.fix-duplicates	2009-06-19 15:49:54.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/funit-exit.xml-in	2009-06-19 15:50:12.000000000 -0400
+@@ -47,7 +47,7 @@
+  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"
+  [
+  <!ENTITY version SYSTEM "@abs_root_srcdir@/common/version.in">
+- <!ENTITY command "funit-threads">
++ <!ENTITY command "funit-exit">
+  <!ENTITY volume "8">
+  ]
+ >

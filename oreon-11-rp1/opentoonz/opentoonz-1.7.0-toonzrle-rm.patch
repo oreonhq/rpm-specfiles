@@ -1,0 +1,14 @@
+diff --git a/toonz/sources/image/CMakeLists.txt b/toonz/sources/image/CMakeLists.txt
+index 87953ced..ccda91de 100644
+--- a/toonz/sources/image/CMakeLists.txt
++++ b/toonz/sources/image/CMakeLists.txt
+@@ -72,7 +72,8 @@ if(NOT BUILD_TARGET_BSD)
+         tif/tiio_tif.cpp
+         tzp/tiio_plt.cpp
+         tzp/tiio_tzp.cpp
+-        tzp/toonzrle.cpp
++        # Removed since it requires libtiff internal API access.
++        # tzp/toonzrle.cpp
+         tzp/avl.c
+     )
+ endif()

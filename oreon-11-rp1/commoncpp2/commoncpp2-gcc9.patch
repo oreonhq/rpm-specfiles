@@ -1,0 +1,22 @@
+diff -rupN --no-dereference commoncpp2-1.8.1/inc/cc++/string.h commoncpp2-1.8.1-new/inc/cc++/string.h
+--- commoncpp2-1.8.1/inc/cc++/string.h	2010-10-31 23:49:18.000000000 +0100
++++ commoncpp2-1.8.1-new/inc/cc++/string.h	2020-02-04 23:56:43.215896768 +0100
+@@ -58,6 +58,9 @@ namespace ost {
+ 
+ class MemPager;
+ 
++class String;
++__EXPORT std::istream &getline(std::istream &is, String &str, char delim = '\n', size_t size = 0);
++
+ /**
+  * This is a generic and portable string class.  It uses optimized
+  * memory allocation strategies to efficiently handle smaller string
+@@ -731,7 +734,7 @@ public:
+      * @param delim deliminator to use.
+      * @param size optional size limitor.
+      */
+-    friend __EXPORT std::istream &getline(std::istream &is, String &str, char delim = '\n', size_t size = 0);
++    friend std::istream &getline(std::istream &is, String &str, char delim, size_t size);
+ 
+     /**
+      * Stream the content of our string variable directly to a C++

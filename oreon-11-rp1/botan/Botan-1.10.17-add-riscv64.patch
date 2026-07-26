@@ -1,0 +1,7 @@
+diff --git a/src/build-data/arch/riscv64.txt b/src/build-data/arch/riscv64.txt
+new file mode 100644
+index 0000000..6e5e0ff
+--- /dev/null
++++ b/src/build-data/arch/riscv64.txt
+@@ -0,0 +1 @@
++endian little

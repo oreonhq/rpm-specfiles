@@ -1,0 +1,42 @@
+From 9efc171a0b8a998ce9324ddb8562f01ae177d76a Mon Sep 17 00:00:00 2001
+From: William Wilson <william.wilson@canonical.com>
+Date: Wed, 16 Mar 2022 13:54:16 -0500
+Subject: [PATCH] Remove unused variables to enable build with Go 1.18
+
+---
+ try_test.go | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/try_test.go b/try_test.go
+index 4b00ac1..1842958 100644
+--- a/try_test.go
++++ b/try_test.go
+@@ -15,10 +15,9 @@ func TestTryExample(t *testing.T) {
+ 	SomeFunction := func() (string, error) {
+ 		return "", nil
+ 	}
+-	var value string
+ 	err := try.Do(func(attempt int) (bool, error) {
+ 		var err error
+-		value, err = SomeFunction()
++		_, err = SomeFunction()
+ 		return attempt < 5, err // try 5 times
+ 	})
+ 	if err != nil {
+@@ -30,7 +29,6 @@ func TestTryExamplePanic(t *testing.T) {
+ 	SomeFunction := func() (string, error) {
+ 		panic("something went badly wrong")
+ 	}
+-	var value string
+ 	err := try.Do(func(attempt int) (retry bool, err error) {
+ 		retry = attempt < 5 // try 5 times
+ 		defer func() {
+@@ -38,7 +36,7 @@ func TestTryExamplePanic(t *testing.T) {
+ 				err = errors.New(fmt.Sprintf("panic: %v", r))
+ 			}
+ 		}()
+-		value, err = SomeFunction()
++		_, err = SomeFunction()
+ 		return
+ 	})
+ 	if err != nil {

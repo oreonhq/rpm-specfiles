@@ -1,0 +1,26 @@
+diff --git 1/impressive.py-orig 2/impressive.py
+index edde236..86d83e3 100644
+--- 1/impressive.py-orig
++++ 2/impressive.py
+@@ -1008,10 +1008,10 @@ def mutoolParse(f, page_offset=0):
+     pages = 0
+     for line in f:
+         line = line.decode()
+-        m = re.match("pages:\s*(\d+)", line, re.I)
++        m = re.match(r'pages:\s*(\d+)', line, re.I)
+         if m and not(pages):
+             pages = int(m.group(1))
+-        m = re.search("/title\s*\(", line, re.I)
++        m = re.search(r'/title\s*\(', line, re.I)
+         if m and not(title):
+             title = line[m.end():].replace(')', '\0').replace('\\(', '(').replace('\\\0', ')').split('\0', 1)[0].strip()
+     return (title, pages)
+@@ -3938,7 +3938,7 @@ def SaveInfoScript(filename):
+ 
+     # replace the PageProps of the old info script with the current ones
+     try:
+-        m = re.search("^.*(PageProps)\s*=\s*(\{).*$", script,re.MULTILINE)
++        m = re.search(r'^.*(PageProps)\s*=\s*(\{).*$', script,re.MULTILINE)
+         if m:
+             script = script[:m.start(1)] + PagePropRepr() + \
+                      script[CountDictChars(script, m.end(2)) + 1 :]

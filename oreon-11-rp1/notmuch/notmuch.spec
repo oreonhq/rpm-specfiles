@@ -1,0 +1,422 @@
+%global source0_hash 4b4314bbf1c2029fdf793637e6c7bb15c1b1730d22be9aa04803c98c5bbc446f
+
+# Do we build in/for the distro or in copr?
+%bcond distrobuild 1
+
+# We used to set these based on fedora/rhel versions. Keep them in case for now.
+%bcond tests 1
+%bcond sfsexp 1
+
+# *el 10 missing some runtime requirements
+%if 0%{?rhel} >= 10
+%bcond mutt 0
+%bcond vim 0
+%else
+%bcond mutt 1
+%bcond vim 1
+%endif
+
+# comparing {_emacs_version} in macros does not work well
+# so we catch the major version bumps ;)
+# read "with emacs at least"
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%global with_emacs28 1
+%endif
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10
+%global with_emacs29 1
+%endif
+
+Name:		notmuch
+Version:	0.40
+Release:	%autorelease
+Summary:	System for indexing, searching, and tagging email
+License:	GPL-3.0-or-later
+URL:		https://notmuchmail.org/
+Source0:	https://notmuchmail.org/releases/notmuch-%{version}.tar.xz
+Source1:	https://notmuchmail.org/releases/notmuch-%{version}.tar.xz.asc
+# imported from `gpg --locate-external-key david@tethera.net`
+# cross checked with `gpg --keyserver keyring.debian.org --recv-key 7E4E65C8720B706B`
+# as per author's instructions on the mailing-list
+# `gpg --export --export-options export-minimal 7A18807F100A4570C59684207E4E65C8720B706B > gpgkey-7A18807F100A4570C59684207E4E65C8720B706B.gpg`
+Source2:	gpgkey-7A18807F100A4570C59684207E4E65C8720B706B.gpg
+Patch:		0001-test-allow-to-use-full-scan.patch
+Patch:		0002-test-use-NOTMUCH_NEW-consistently.patch
+Patch:		0003-test-use-NOTMUCH_NEW_OPTIONS-in-atomicity.py.patch
+Patch:		0004-test-correct-comparison-order-in-T380.patch
+Patch:		0005-test-do-not-pass-T380.1-for-the-wrong-reasons.patch
+Patch:		0006-test-reword-T380.2-to-be-clearer.patch
+Patch:		0007-test-set-up-the-outcount-for-T380.1.patch
+
+BuildRequires:	make
+
+%if 0%{?fedora} >= 41
+BuildRequires:	bash-completion-devel
+%else
+BuildRequires:	bash-completion
+%endif
+
+BuildRequires:	desktop-file-utils
+BuildRequires:	emacs
+BuildRequires:	emacs-el
+BuildRequires:	emacs-nox
+Buildrequires:	gcc gcc-c++
+BuildRequires:	libtool
+BuildRequires:	doxygen
+BuildRequires:	texinfo
+BuildRequires:	gnupg2
+BuildRequires:	gnupg2-smime
+BuildRequires:	gmime30-devel
+BuildRequires:	libtalloc-devel
+BuildRequires:	perl-interpreter
+BuildRequires:	perl-generators
+BuildRequires:	perl-podlators
+BuildRequires:	ruby-devel
+
+%if %{with sfsexp}
+BuildRequires:	pkgconfig(sfsexp)
+%endif
+
+BuildRequires:	xapian-core-devel
+BuildRequires:	zlib-devel
+BuildRequires:	python3-devel
+BuildRequires:	python3-cffi
+BuildRequires:	python3-docutils
+BuildRequires:	python3-sphinx
+
+%if %{with tests}
+BuildRequires:	python3-pytest
+
+# Not available on *EL, skip some tests there:
+%if 0%{?fedora}
+BuildRequires:	python3-pytest-shutil
+%endif
+
+# dtach not available on *EL, skip some tests there;
+# copr only: use mjg/dtach-epel
+%if 0%{?fedora} || %{without distrobuild}
+BuildRequires:	dtach
+%endif
+
+BuildRequires:	gdb
+
+%if %{with sfsexp}
+BuildRequires:	git-core
+%endif
+
+%endif
+
+BuildRequires:	man
+BuildRequires:	openssl
+# You might also want to rebuild with valgrind-devel libasan libasan-static.
+
+Requires(post): /sbin/install-info
+Requires(postun): /sbin/install-info
+
+%description
+Fast system for indexing, searching, and tagging email. Even if you
+receive 12000 messages per month or have on the order of millions of
+messages that you've been saving for decades, Notmuch will be able to
+quickly search all of it.
+
+Notmuch is not much of an email program. It doesn't receive messages
+(no POP or IMAP support). It doesn't send messages (no mail composer,
+no network code at all). And for what it does do (email search) that
+work is provided by an external library, Xapian. So if Notmuch
+provides no user interface and Xapian does all the heavy lifting, then
+what's left here? Not much.
+
+%package	devel
+Summary:	Development libraries and header files for the Notmuch library
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Notmuch-devel contains the development libraries and header files for
+Notmuch email program. These libraries and header files are
+necessary if you plan to do development using Notmuch.
+
+Install notmuch-devel if you are developing C programs which will use the
+Notmuch library. You'll also need to install the notmuch package.
+
+%if %{with sfsexp}
+%package	git
+Summary:	Manage notmuch tags with git
+Requires:	%{name} = %{version}-%{release}
+Requires:	git-core
+Recommends:	python3-notmuch2
+
+%description git
+This package contains a simple tool to save, restore, and synchronize
+notmuch tags via git repositories.
+%endif
+
+%package -n emacs-notmuch
+Summary:	Not much support for Emacs
+BuildArch:	noarch
+Requires:	%{name} = %{version}-%{release}
+Requires:	emacs(bin) >= %{_emacs_version}
+
+%description -n emacs-notmuch
+%{summary}.
+
+%package -n python3-notmuch2
+Summary:	Python3 bindings for notmuch (cffi)
+Requires:	%{name} = %{version}-%{release}
+%{?python_provide:%python_provide python3-notmuch2}
+
+Requires:	python3
+# Keep these as long as we need to provide an upgrade path:
+Obsoletes:	python-notmuch < 0.39~rc2-1
+Obsoletes:	python3-notmuch < 0.39~rc2-1
+
+%description -n python3-notmuch2
+%{summary}.
+
+%package -n ruby-notmuch
+Summary:	Ruby bindings for notmuch
+Requires:	%{name} = %{version}-%{release}
+
+%description -n ruby-notmuch
+%{summary}.
+
+%if %{with mutt}
+%package	mutt
+Summary:	Notmuch (of a) helper for Mutt
+BuildArch:	noarch
+Requires:	%{name} = %{version}-%{release}
+Requires:	perl(Digest::SHA)
+Requires:	perl(Mail::Box)
+Requires:	perl(Mail::Header)
+Requires:	perl(Term::ReadLine::Gnu)
+
+%description mutt
+notmuch-mutt provide integration among the Mutt mail user agent and
+the Notmuch mail indexer.
+%endif
+
+%if %{with vim}
+%package	vim
+Summary:	A Vim plugin for notmuch
+Requires:	ruby-%{name} = %{version}-%{release}
+Requires:	rubygem-mail
+Requires:	vim-enhanced
+# Required for updating helptags in scriptlets.
+Requires(post): vim-enhanced
+Requires(postun): vim-enhanced
+
+%description vim
+notmuch-vim is a Vim plugin that provides a fully usable mail client
+interface, utilizing the notmuch framework.
+%endif
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%if %{with distrobuild}
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%autosetup -p1
+%else
+# unversioned dir for git build, no check
+%autosetup -n notmuch -p1
+%endif
+# we build the wheel using pyproject macros instead
+sed -i -e '/setup.py build/ d' bindings/Makefile.local
+
+%generate_buildrequires
+# Generate _notmuch_config.py needed by setup.py:
+cat > bindings/python-cffi/_notmuch_config.py <<EOF
+# _notmuch_config.py was automatically generated by the configure
+# script in the root of the notmuch source tree.
+NOTMUCH_VERSION_FILE='%{_builddir}/%{?buildsubdir}/version.txt'
+NOTMUCH_INCLUDE_DIR='%{_builddir}/%{?buildsubdir}/lib'
+NOTMUCH_LIB_DIR='%{_builddir}/%{?buildsubdir}/lib'
+EOF
+pushd bindings/python-cffi > /dev/null
+%pyproject_buildrequires
+popd > /dev/null
+
+%build
+%configure --emacslispdir=%{_emacs_sitelispdir}
+# Build python cffi wheel using pyproject macros
+%make_build CFLAGS="$RPM_OPT_FLAGS -fPIC" notmuch-shared
+pushd bindings/python-cffi
+%pyproject_wheel
+popd
+# Build the rest
+%make_build CFLAGS="$RPM_OPT_FLAGS -fPIC"
+
+# Build notmuch-mutt
+pushd contrib/notmuch-mutt
+make
+popd
+
+%install
+%make_install
+
+# Enable dynamic library stripping.
+find %{buildroot}%{_libdir} -name *.so* -exec chmod 755 {} \;
+
+%if %{with sfsexp}
+install -m0755 notmuch-git nmbug %{buildroot}%{_bindir}/
+%endif
+
+# Install the python cffi bindings and documentation
+pushd bindings/python-cffi
+%pyproject_install
+%pyproject_save_files notmuch2
+popd
+
+# Install the ruby bindings
+pushd bindings/ruby
+make install DESTDIR=%{buildroot}
+popd
+
+# Install notmuch-mutt
+%if %{with mutt}
+install -m0755 contrib/notmuch-mutt/notmuch-mutt \
+	%{buildroot}%{_bindir}/notmuch-mutt
+install -m0644 contrib/notmuch-mutt/notmuch-mutt.1 \
+	%{buildroot}%{_mandir}/man1/notmuch-mutt.1
+%endif
+
+# Install notmuch-vim
+%if %{with vim}
+pushd vim
+make install DESTDIR=%{buildroot} prefix="%{_datadir}/vim/vimfiles"
+popd
+%endif
+
+# Do not install notmuch-git which requires sfsexp
+%if %{without sfsexp}
+rm -f %{buildroot}%{_mandir}/man1/nmbug.1*
+rm -f %{buildroot}%{_mandir}/man1/notmuch-git.1*
+rm -f %{buildroot}%{_infodir}/nmbug.info*
+rm -f %{buildroot}%{_infodir}/notmuch-git.info*
+%endif
+
+rm -f %{buildroot}/%{_datadir}/applications/mimeinfo.cache
+rm -f %{buildroot}%{_infodir}/dir
+
+%if %{with tests}
+%check
+# armv7hl pulls in libasan but we build without, and should test without it.
+NOTMUCH_SKIP_TESTS="asan"
+# notmuch-git and its tests require sfsexp.
+NOTMUCH_SKIP_TESTS="$NOTMUCH_SKIP_TESTS%{!?with_sfsexp: git}"
+# T460-emacs-tree.14 leads to sporadic failures with emacs 29
+NOTMUCH_SKIP_TESTS="$NOTMUCH_SKIP_TESTS%{?with_emacs29: emacs-tree.14}"
+# T460-emacs-tree.23 uses outline-cycle-buffer which requires emacs 28
+NOTMUCH_SKIP_TESTS="$NOTMUCH_SKIP_TESTS%{!?with_emacs28: emacs-tree.23}"
+# At least on koji/copr, test suite suffers from race conditions when parallelised.
+# At least some rhel builds show mtime/stat related Heisenbugs when
+# notmuch new takes shortcuts, so enforce --full-scan there.
+NOTMUCH_SKIP_TESTS="$NOTMUCH_SKIP_TESTS" \
+NOTMUCH_TEST_SERIALIZE="yesplease" \
+NOTMUCH_TEST_TIMEOUT="10m" \
+%{py3_test_envvars} make test V=1 %{?rhel:NOTMUCH_TEST_FULLSCAN=1}
+%endif
+
+%if %{with vim}
+%post vim
+cd %{_datadir}/vim/vimfiles/doc
+vim -u NONE -esX -c "helptags ." -c quit
+
+%postun vim
+cd %{_datadir}/vim/vimfiles/doc
+vim -u NONE -esX -c "helptags ." -c quit
+%endif
+
+%files
+%doc AUTHORS COPYING COPYING-GPL-3 README
+%{_datadir}/zsh/site-functions/_notmuch
+%{_datadir}/zsh/site-functions/_email-notmuch
+%{_datadir}/bash-completion/completions/notmuch
+%{_bindir}/notmuch
+%{_libdir}/libnotmuch.so.5*
+%{_mandir}/man1/notmuch.1*
+%{_mandir}/man1/notmuch-address.1*
+%{_mandir}/man1/notmuch-compact.1*
+%{_mandir}/man1/notmuch-config.1*
+%{_mandir}/man1/notmuch-count.1*
+%{_mandir}/man1/notmuch-dump.1*
+%{_mandir}/man1/notmuch-insert.1*
+%{_mandir}/man1/notmuch-new.1*
+%{_mandir}/man1/notmuch-reindex.1*
+%{_mandir}/man1/notmuch-reply.1*
+%{_mandir}/man1/notmuch-restore.1*
+%{_mandir}/man1/notmuch-search.1*
+%{_mandir}/man1/notmuch-setup.1*
+%{_mandir}/man1/notmuch-show.1*
+%{_mandir}/man1/notmuch-tag.1*
+%{_mandir}/man5/notmuch-hooks.5*
+%{_mandir}/man7/notmuch-properties.7*
+%{_mandir}/man7/notmuch-search-terms.7*
+%{_mandir}/man7/notmuch-sexp-queries.7*
+%{_infodir}/notmuch.info*
+%{_infodir}/notmuch-address.info*
+%{_infodir}/notmuch-compact.info*
+%{_infodir}/notmuch-config.info*
+%{_infodir}/notmuch-count.info*
+%{_infodir}/notmuch-dump.info*
+%{_infodir}/notmuch-hooks.info*
+%{_infodir}/notmuch-insert.info*
+%{_infodir}/notmuch-new.info*
+%{_infodir}/notmuch-properties.info*
+%{_infodir}/notmuch-reindex.info*
+%{_infodir}/notmuch-reply.info*
+%{_infodir}/notmuch-restore.info*
+%{_infodir}/notmuch-search-terms.info*
+%{_infodir}/notmuch-search.info*
+%{_infodir}/notmuch-setup.info*
+%{_infodir}/notmuch-sexp-queries.info*
+%{_infodir}/notmuch-show.info*
+%{_infodir}/notmuch-tag.info*
+
+%files devel
+%{_libdir}/libnotmuch.so
+%{_includedir}/*
+%{_mandir}/man3/notmuch*.3*
+
+%if %{with sfsexp}
+%files git
+%{_bindir}/nmbug
+%{_bindir}/notmuch-git
+%{_mandir}/man1/nmbug.1*
+%{_mandir}/man1/notmuch-git.1*
+%{_infodir}/nmbug.info*
+%{_infodir}/notmuch-git.info*
+%endif
+
+%files -n emacs-notmuch
+%{_emacs_sitelispdir}/*.el
+%{_emacs_sitelispdir}/*.elc
+%{_emacs_sitelispdir}/notmuch-logo.svg
+%{_datadir}/applications/notmuch-emacs-mua.desktop
+%{_bindir}/notmuch-emacs-mua
+%{_mandir}/man1/notmuch-emacs-mua.1*
+%{_infodir}/notmuch-emacs-mua.info*
+%{_infodir}/notmuch-emacs.info*
+
+%files -n python3-notmuch2 -f %{pyproject_files}
+
+%files -n ruby-notmuch
+%{ruby_vendorarchdir}/*
+
+%if %{with mutt}
+%files mutt
+%{_bindir}/notmuch-mutt
+%{_mandir}/man1/notmuch-mutt.1*
+%endif
+
+%if %{with vim}
+%files vim
+%{_datadir}/vim/vimfiles/doc/notmuch.txt
+%{_datadir}/vim/vimfiles/plugin/notmuch.vim
+%{_datadir}/vim/vimfiles/syntax/notmuch-compose.vim
+%{_datadir}/vim/vimfiles/syntax/notmuch-folders.vim
+%{_datadir}/vim/vimfiles/syntax/notmuch-git-diff.vim
+%{_datadir}/vim/vimfiles/syntax/notmuch-search.vim
+%{_datadir}/vim/vimfiles/syntax/notmuch-show.vim
+%endif
+
+%changelog
+%autochangelog

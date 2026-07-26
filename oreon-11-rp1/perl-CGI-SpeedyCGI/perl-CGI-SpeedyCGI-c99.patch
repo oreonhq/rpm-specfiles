@@ -1,0 +1,17 @@
+Include <perliol.h> for the PerlIO_reopen function.  This avoids an
+implicit function declaration and future build failures with strict
+C99 compilers.
+
+Submitted upstream: <https://rt.cpan.org/Ticket/Display.html?id=145852>
+
+diff -ur CGI-SpeedyCGI-2.22.orig/src/speedy_perl.c CGI-SpeedyCGI-2.22/src/speedy_perl.c
+--- CGI-SpeedyCGI-2.22.orig/src/speedy_perl.c	2003-10-12 03:01:59.000000000 +0200
++++ CGI-SpeedyCGI-2.22/src/speedy_perl.c	2023-01-10 12:17:06.699339159 +0100
+@@ -18,6 +18,7 @@
+  */
+ 
+ #include "speedy.h"
++#include <perliol.h>
+ 
+ /*
+  * Accomodate 5.004

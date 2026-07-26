@@ -1,0 +1,35 @@
+From 217b06c005623646f5d40bd5e3e872fbde464b8f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 15 Jul 2025 12:19:52 +0200
+Subject: [PATCH] Fix an operator preference
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Perl 5.42.0 started to warn:
+
+    Possible precedence problem between ! and string eq at /home/test/fedora/perl-BSON/perl-BSON-1.12.2-build/BSON-v1.12.2/blib/lib/BSON.pm line 99.
+
+That was indeed a bug in the expression.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/BSON.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/BSON.pm b/lib/BSON.pm
+index 4820b97..cdf7c91 100644
+--- a/lib/BSON.pm
++++ b/lib/BSON.pm
+@@ -96,7 +96,7 @@ use BSON::Types (); # loads types for extjson inflation
+ 
+ has error_callback => (
+     is      => 'ro',
+-    isa     => sub { die "not a code reference" if defined $_[0] && ! ref $_[0] eq 'CODE' },
++    isa     => sub { die "not a code reference" if defined $_[0] && ref $_[0] ne 'CODE' },
+ );
+ 
+ #pod =attr invalid_chars
+-- 
+2.50.1
+

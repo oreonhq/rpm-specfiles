@@ -1,0 +1,319 @@
+diff -up ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.cpp~ ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.cpp
+--- ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.cpp~	2019-11-05 18:58:20.417208298 +0100
++++ ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.cpp	2019-11-05 18:57:56.616025616 +0100
+@@ -304,7 +304,7 @@ int CL_InputSource_Datafile::size() cons
+ 
+ void CL_InputSource_Datafile::push_position()
+ {
+-	CL_Zipped_Position indexpos;
++	CL_Zipped_Position indexpos = {};
+ 
+ 	indexpos.gzfile = gzfile;
+ //	indexpos.datafile_pos = lseek(datafile_handle, 0, SEEK_CUR);
+diff -up ClanLib-0.6.5/Sources/Core/IOData/Generic/inputsource_memory_generic.cpp~ ClanLib-0.6.5/Sources/Core/IOData/Generic/inputsource_memory_generic.cpp
+--- ClanLib-0.6.5/Sources/Core/IOData/Generic/inputsource_memory_generic.cpp~	2001-12-11 21:44:21.000000000 +0100
++++ ClanLib-0.6.5/Sources/Core/IOData/Generic/inputsource_memory_generic.cpp	2019-11-05 18:56:35.535403281 +0100
+@@ -113,7 +113,7 @@ void CL_InputSource_MemoryGeneric::pop_p
+ 
+ void CL_InputSource_MemoryGeneric::purge()
+ {
+-	memcpy(data, 0, length);
++	memset(data, 0, length);
+ }
+ 
+ CL_InputSourceProvider_Memory::CL_InputSourceProvider_Memory(unsigned char *_data, unsigned int _size, bool _delete_data)
+diff -up ClanLib-0.6.5/Sources/Core/IOData/Generic/outputsource_memory_generic.cpp~ ClanLib-0.6.5/Sources/Core/IOData/Generic/outputsource_memory_generic.cpp
+--- ClanLib-0.6.5/Sources/Core/IOData/Generic/outputsource_memory_generic.cpp~	2001-04-29 19:04:28.000000000 +0200
++++ ClanLib-0.6.5/Sources/Core/IOData/Generic/outputsource_memory_generic.cpp	2019-11-05 18:58:49.664432780 +0100
+@@ -82,5 +82,5 @@ int CL_OutputSource_MemoryGeneric::size(
+ 
+ void CL_OutputSource_MemoryGeneric::purge()
+ {
+-	memcpy(m_data,0,m_size);
++	memset(m_data,0,m_size);
+ }
+diff -up ClanLib-0.6.5/Sources/Core/Math/vector2.cpp~ ClanLib-0.6.5/Sources/Core/Math/vector2.cpp
+--- ClanLib-0.6.5/Sources/Core/Math/vector2.cpp~	2001-09-15 16:54:51.000000000 +0200
++++ ClanLib-0.6.5/Sources/Core/Math/vector2.cpp	2019-11-05 19:06:40.781048814 +0100
+@@ -66,9 +66,16 @@ bool CL_Vector2::operator!=(const CL_Vec
+         return fabs(x-rkVector.x) > FUZZ || fabs(y-rkVector.y) > FUZZ;
+ }
+ 
++union float_uint {
++    float f;
++    unsigned int u;
++};
++
+ bool CL_Vector2::operator<(const CL_Vector2& rkVector) const
+ {
+     float fXTmp = rkVector.x, fYTmp = rkVector.y;
++    union float_uint uiTest0, uiTest1;
++
+     if ( FUZZ > 0.0f )
+     {
+         if ( fabs(x - fXTmp) <= FUZZ )
+@@ -78,22 +85,24 @@ bool CL_Vector2::operator<(const CL_Vect
+     }
+ 
+     // compare y values
+-    unsigned int uiTest0 = *(unsigned int*)&y;
+-    unsigned int uiTest1 = *(unsigned int*)&fYTmp;
+-    if ( uiTest0 < uiTest1 )
++    uiTest0.f = y;
++    uiTest1.f = fYTmp;
++    if ( uiTest0.u < uiTest1.u )
+         return true;
+-    if ( uiTest0 > uiTest1 )
++    if ( uiTest0.u > uiTest1.u )
+         return false;
+ 
+     // compare x values
+-    uiTest0 = *(unsigned int*)&x;
+-    uiTest1 = *(unsigned int*)&fXTmp;
+-    return uiTest0 < uiTest1;
++    uiTest0.f = x;
++    uiTest1.f = fXTmp;
++    return uiTest0.u < uiTest1.u;
+ }
+ 
+ bool CL_Vector2::operator<=(const CL_Vector2& rkVector) const
+ {
+     float fXTmp = rkVector.x, fYTmp = rkVector.y;
++    union float_uint uiTest0, uiTest1;
++
+     if ( FUZZ > 0.0f )
+     {
+         if ( fabs(x - fXTmp) <= FUZZ )
+@@ -103,22 +112,24 @@ bool CL_Vector2::operator<=(const CL_Vec
+     }
+ 
+     // compare y values
+-    unsigned int uiTest0 = *(unsigned int*)&y;
+-    unsigned int uiTest1 = *(unsigned int*)&fYTmp;
+-    if ( uiTest0 < uiTest1 )
++    uiTest0.f = y;
++    uiTest1.f = fYTmp;
++    if ( uiTest0.u < uiTest1.u )
+         return true;
+-    if ( uiTest0 > uiTest1 )
++    if ( uiTest0.u > uiTest1.u )
+         return false;
+ 
+     // compare x values
+-    uiTest0 = *(unsigned int*)&x;
+-    uiTest1 = *(unsigned int*)&fXTmp;
+-    return uiTest0 <= uiTest1;
++    uiTest0.f = x;
++    uiTest1.f = fXTmp;
++    return uiTest0.u <= uiTest1.u;
+ }
+ 
+ bool CL_Vector2::operator>(const CL_Vector2& rkVector) const
+ {
+     float fXTmp = rkVector.x, fYTmp = rkVector.y;
++    union float_uint uiTest0, uiTest1;
++
+     if ( FUZZ > 0.0f )
+     {
+         if ( fabs(x - fXTmp) <= FUZZ )
+@@ -128,22 +139,24 @@ bool CL_Vector2::operator>(const CL_Vect
+     }
+ 
+     // compare y values
+-    unsigned int uiTest0 = *(unsigned int*)&y;
+-    unsigned int uiTest1 = *(unsigned int*)&fYTmp;
+-    if ( uiTest0 > uiTest1 )
++    uiTest0.f = y;
++    uiTest1.f = fYTmp;
++    if ( uiTest0.u > uiTest1.u )
+         return true;
+-    if ( uiTest0 < uiTest1 )
++    if ( uiTest0.u < uiTest1.u )
+         return false;
+ 
+     // compare x values
+-    uiTest0 = *(unsigned int*)&x;
+-    uiTest1 = *(unsigned int*)&fXTmp;
+-    return uiTest0 > uiTest1;
++    uiTest0.f = x;
++    uiTest1.f = fXTmp;
++    return uiTest0.u > uiTest1.u;
+ }
+ 
+ bool CL_Vector2::operator>=(const CL_Vector2& rkVector) const
+ {
+     float fXTmp = rkVector.x, fYTmp = rkVector.y;
++    union float_uint uiTest0, uiTest1;
++
+     if ( FUZZ > 0.0f )
+     {
+         if ( fabs(x - fXTmp) <= FUZZ )
+@@ -153,17 +166,17 @@ bool CL_Vector2::operator>=(const CL_Vec
+     }
+ 
+     // compare y values
+-    unsigned int uiTest0 = *(unsigned int*)&y;
+-    unsigned int uiTest1 = *(unsigned int*)&fYTmp;
+-    if ( uiTest0 > uiTest1 )
++    uiTest0.f = y;
++    uiTest1.f = fYTmp;
++    if ( uiTest0.u > uiTest1.u )
+         return true;
+-    if ( uiTest0 < uiTest1 )
++    if ( uiTest0.u < uiTest1.u )
+         return false;
+ 
+     // compare x values
+-    uiTest0 = *(unsigned int*)&x;
+-    uiTest1 = *(unsigned int*)&fXTmp;
+-    return uiTest0 >= uiTest1;
++    uiTest0.f = x;
++    uiTest1.f = fXTmp;
++    return uiTest0.u >= uiTest1.u;
+ }
+ 
+ CL_Vector2 CL_Vector2::operator+(const CL_Vector2& rkVector) const
+diff -up ClanLib-0.6.5/Sources/Display/Display/Generic/colormap.h~ ClanLib-0.6.5/Sources/Display/Display/Generic/colormap.h
+--- ClanLib-0.6.5/Sources/Display/Display/Generic/colormap.h~	2001-09-08 21:12:48.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/Display/Generic/colormap.h	2019-11-05 19:09:31.942362545 +0100
+@@ -41,10 +41,14 @@ public:
+ 	unsigned int calc_color(float r, float g, float b, float a)
+ 	{
+ 		// paranoia:
+-		if (r>1) r=1; if (g>1) g=1;
+-		if (b>1) b=1; if (a>1) a=1;
+-		if (r<0) r=0; if (g<0) g=0;
+-		if (b<0) b=0; if (a<0) a=0;
++		if (r>1) r=1;
++		if (g>1) g=1;
++		if (b>1) b=1;
++		if (a>1) a=1;
++		if (r<0) r=0;
++		if (g<0) g=0;
++		if (b<0) b=0;
++		if (a<0) a=0;
+ 
+ 		unsigned int red = (unsigned int) (r*((1<<m_red_length)-1)+0.5);
+ 		unsigned int green = (unsigned int) (g*((1<<m_green_length)-1)+0.5);
+diff -up ClanLib-0.6.5/Sources/Display/Display/Generic/surfaceprovider.cpp~ ClanLib-0.6.5/Sources/Display/Display/Generic/surfaceprovider.cpp
+--- ClanLib-0.6.5/Sources/Display/Display/Generic/surfaceprovider.cpp~	2002-06-26 13:54:19.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/Display/Generic/surfaceprovider.cpp	2019-11-05 19:10:50.438965045 +0100
+@@ -84,7 +84,7 @@ void CL_SurfaceProvider::get_pixel(int x
+ 
+ 		lock();
+ 		unsigned char* data = (unsigned char*) get_data();
+-		int color = 0;
++		unsigned int color = 0;
+ 	
+ 		switch (get_bytes_per_pixel())
+ 		{
+diff -up ClanLib-0.6.5/Sources/Display/SurfaceProviders/provider_targa.cpp~ ClanLib-0.6.5/Sources/Display/SurfaceProviders/provider_targa.cpp
+--- ClanLib-0.6.5/Sources/Display/SurfaceProviders/provider_targa.cpp~	2019-11-05 18:03:29.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/SurfaceProviders/provider_targa.cpp	2019-11-05 19:10:10.647659631 +0100
+@@ -781,7 +781,7 @@ void CL_TargaProvider::read_runlength_en
+ 		// RUNLENGTH ENCODED PACKET
+ 		case 1:
+ 			{
+-				unsigned char r, g, b, a;
++				unsigned char r = 0, g = 0, b = 0, a = 0;
+ 				bool v = read_rgb(&r, &g, &b, &a);
+ 				
+ 				for (;repcount>0;repcount--)
+diff -up ClanLib-0.6.5/Sources/GUI/popupmenu_default.cpp~ ClanLib-0.6.5/Sources/GUI/popupmenu_default.cpp
+--- ClanLib-0.6.5/Sources/GUI/popupmenu_default.cpp~	2002-03-01 23:19:09.000000000 +0100
++++ ClanLib-0.6.5/Sources/GUI/popupmenu_default.cpp	2019-11-05 19:22:27.540262347 +0100
+@@ -34,8 +34,6 @@ CL_PopupMenu_Default::CL_PopupMenu_Defau
+ 
+ void CL_PopupMenu_Default::on_paint()
+ {
+-	bool focus = popupmenu->has_child(popupmenu->get_focus());
+-
+ 	int width = popupmenu->get_width();
+ 	int height = popupmenu->get_height();
+ 		
+@@ -49,7 +47,6 @@ void CL_PopupMenu_Default::on_paint_node
+ 	CL_Component *component = node->get_component();
+ 	
+ 	int height = component->get_height();
+-	int mid = (height) / 2;
+ 
+ 	// Draw arrow showing this item has a submenu
+ 	if(node->has_children())
+diff -up ClanLib-0.6.5/Sources/SmallJPEG/jpgd/idct.cpp~ ClanLib-0.6.5/Sources/SmallJPEG/jpgd/idct.cpp
+--- ClanLib-0.6.5/Sources/SmallJPEG/jpgd/idct.cpp~	2001-04-20 14:54:18.000000000 +0200
++++ ClanLib-0.6.5/Sources/SmallJPEG/jpgd/idct.cpp	2019-11-05 19:22:38.574346144 +0100
+@@ -58,7 +58,7 @@
+ #define FIX_2_562915447  ((int32)  20995)       /* FIX(2.562915447) */
+ #define FIX_3_072711026  ((int32)  25172)       /* FIX(3.072711026) */
+ /*----------------------------------------------------------------------------*/
+-#define DESCALE(x,n)  (((x) + (SCALEDONE << ((n)-1))) >> n)
++#define DESCALE(x,n)  (((x) + (SCALEDONE << ((n)-1))) >> (n))
+ /*----------------------------------------------------------------------------*/
+ #define MULTIPLY(var,cnst)  ((var) * (cnst))
+ /*----------------------------------------------------------------------------*/
+diff -up ClanLib-0.6.5/Sources/Sound/Sound/ClanSound/cdaudio_linux.cpp~ ClanLib-0.6.5/Sources/Sound/Sound/ClanSound/cdaudio_linux.cpp
+--- ClanLib-0.6.5/Sources/Sound/Sound/ClanSound/cdaudio_linux.cpp~	2002-06-22 14:58:11.000000000 +0200
++++ ClanLib-0.6.5/Sources/Sound/Sound/ClanSound/cdaudio_linux.cpp	2019-11-05 19:17:01.993790133 +0100
+@@ -208,7 +208,6 @@ CL_CDDrive_Linux::CL_CDDrive_Linux(const
+ 	}
+ 	
+ 	file_handle = open(filename.c_str(),O_RDONLY);//|O_NONBLOCK);
+-	int error = errno;
+ 	if (file_handle <= 0)
+ 	{
+ //		cout << "File handle: " << file_handle << endl;
+@@ -235,7 +234,6 @@ CL_CDDrive_Linux::CL_CDDrive_Linux(const
+ 	}
+ 	else
+ 	{
+-		error = errno;
+ //		cout << "Error Number: " << error << endl;
+ 		close(file_handle);
+ 	
+@@ -377,10 +375,12 @@ int CL_CDDrive_Linux::get_cur_frame()
+ 
+ bool CL_CDDrive_Linux::play_tracks(int track, int end_track)
+ {
+-    if((track < first_track) || (track > last_track))
++    if ((track < first_track) || (track > last_track))
+         return false;
+-	if((end_track < track) || (end_track > last_track))
+-	    return false;
++
++    if ((end_track < track) || (end_track > last_track))
++        return false;
++
+ 	  #ifdef __FreeBSD__
+ 		ioc_play_msf msf;
+ 	#else  
+@@ -574,13 +574,12 @@ bool CL_CDDrive_Linux::readtoc()
+ 
+ 			cur_track_info.entry.addr.lba = next_track_info.entry.addr.lba;
+ #else
+-	    if(cur_track_info.cdte_ctrl == CDROM_DATA_TRACK)
++	if(cur_track_info.cdte_ctrl == CDROM_DATA_TRACK)
+ 	        track.is_audio = false;
+-			
+-		
+-		tracks.push_back(track);
+-		cur_track_info.cdte_addr.lba = next_track_info.cdte_addr.lba;
+-		cur_track_info.cdte_ctrl     = next_track_info.cdte_ctrl;
++
++	tracks.push_back(track);
++	cur_track_info.cdte_addr.lba = next_track_info.cdte_addr.lba;
++	cur_track_info.cdte_ctrl     = next_track_info.cdte_ctrl;
+ #endif
+     }
+     return true;
+diff -up ClanLib-0.6.5/Sources/TTF/font_ttf.cpp~ ClanLib-0.6.5/Sources/TTF/font_ttf.cpp
+--- ClanLib-0.6.5/Sources/TTF/font_ttf.cpp~	2019-11-05 18:03:29.000000000 +0100
++++ ClanLib-0.6.5/Sources/TTF/font_ttf.cpp	2019-11-05 19:23:45.533854635 +0100
+@@ -133,7 +133,7 @@ void CL_Font_TTF::generate_font()
+ 		unsigned char *buffer =(unsigned char*) canvas->get_data();
+ 		unsigned char *bmp = (unsigned char*)face->glyph->bitmap.buffer;
+ 
+-		for(int j=0;j<(face->glyph->bitmap.rows*face->glyph->bitmap.width);j++)
++		for(unsigned int j=0;j<(face->glyph->bitmap.rows*face->glyph->bitmap.width);j++)
+ 		{
+ 			*buffer = (*bmp) & a;
+ 			*(buffer+1) = (*bmp) & b;

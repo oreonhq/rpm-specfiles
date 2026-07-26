@@ -1,0 +1,19 @@
+diff --git a/src/Makefile b/src/Makefile
+index 71b5b0910..c033ad80d 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -118,12 +118,8 @@ post-install:
+ 	# For a shared installation, set appropriate owner for executable
+ 	# and mark it as setgid.
+ 	if [ "x$(SETEGID)" != "x" ]; then \
+-		${INSTALL_STATUS}; \
+-		if chown root:${SETEGID} ${DESTDIR}${bindir}/${PROG} && chmod g+s ${DESTDIR}${bindir}/${PROG} ; then \
+-			${INSTALL_OK}; \
+-		else \
+-			${INSTALL_FAILED}; \
+-		fi \
++		chown root:${SETEGID} ${DESTDIR}${bindir}/${PROG}; \
++		chmod g+s ${DESTDIR}${bindir}/${PROG}; \
+ 	fi
+ 
+ FORCE :

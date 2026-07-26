@@ -1,0 +1,210 @@
+diff -up lacewing-1.10/display.c~ lacewing-1.10/display.c
+--- lacewing-1.10/display.c~	2014-06-14 10:39:45.000000000 +0200
++++ lacewing-1.10/display.c	2014-06-14 10:44:37.565727698 +0200
+@@ -912,8 +912,8 @@ void draw_status2(BITMAP *bmp, int max_x
+    }
+    targets_left_string [i] = '\0';
+ 
+-   textprintf(bmp, small_font, 20, 70, COLOUR_GREY4, targets_left_string);
+-   textprintf(bmp, small_font, 19, 69, COLOUR_GREY6, targets_left_string);
++   textprintf(bmp, small_font, 20, 70, COLOUR_GREY4, "%s", targets_left_string);
++   textprintf(bmp, small_font, 19, 69, COLOUR_GREY6, "%s", targets_left_string);
+ //  textprintf_centre(bmp, small_font, max_x / 2, 60, COLOUR_GREY4, targets_left_string);
+ //  textprintf_centre(bmp, small_font, max_x / 2 - 1, 59, COLOUR_GREY6, targets_left_string);
+ //    rectfill(bmp, x + i * 10 - 3, y - 30, x + i * 10 + 3, y - 24, COLOUR_RED8);
+@@ -1029,14 +1029,14 @@ void draw_ship_status(BITMAP *bmp, int x
+   }
+ 
+   itoa(actor[a].armour / 10, numbers, 10);
+-  textprintf(bmp, font, x + 48, y + 15, armour_colour, numbers);
+-  textprintf(bmp, font2, x + 48, y + 15, armour_colour2, numbers);
++  textprintf(bmp, font, x + 48, y + 15, armour_colour, "%s", numbers);
++  textprintf(bmp, font2, x + 48, y + 15, armour_colour2, "%s", numbers);
+ 
+   if (actor[a].upgraded_system [UPG_SHIELD] > 0)
+   {
+    itoa(actor[a].shield / 10, numbers, 10);
+-   textprintf(bmp, font, x + 55, y - 20, COLOUR_BLUE3 + grand(4), numbers);
+-   textprintf(bmp, font2, x + 55, y - 20, COLOUR_BLUE6 + grand(3), numbers);
++   textprintf(bmp, font, x + 55, y - 20, COLOUR_BLUE3 + grand(4), "%s", numbers);
++   textprintf(bmp, font2, x + 55, y - 20, COLOUR_BLUE6 + grand(3), "%s", numbers);
+   }
+ 
+ // }
+@@ -1130,8 +1130,8 @@ void draw_ship_status(BITMAP *bmp, int x
+   armour_colour2 = COLOUR_ORANGE1 + (actor[a].repairing / 4) % 8;
+ 
+   itoa(actor[a].repairing / 2, numbers, 10);
+-  textprintf(bmp, font, x + 48, y + 45, armour_colour, numbers);
+-  textprintf(bmp, font2, x + 48, y + 45, armour_colour2, numbers);
++  textprintf(bmp, font, x + 48, y + 45, armour_colour, "%s", numbers);
++  textprintf(bmp, font2, x + 48, y + 45, armour_colour2, "%s", numbers);
+ 
+   armour_colour = COLOUR_YELLOW2 + (counter / 3) % 6;
+ 
+@@ -1157,7 +1157,7 @@ void draw_upgrades(BITMAP *bmp, int x, i
+   if (actor[player[play].actor_controlled].upgrade_slot == i)
+   {
+     rectfill(bmp, x + i * 35 - 15, y - 2, x + i * 35 + 15, y + 10, COLOUR_YELLOW2);
+-    textprintf_centre(bmp, small_font, x + i * 35, y, COLOUR_YELLOW4, upgrade_name(actor[player[play].actor_controlled].upgrade_structure [i]));
++    textprintf_centre(bmp, small_font, x + i * 35, y, COLOUR_YELLOW4, "%s", upgrade_name(actor[player[play].actor_controlled].upgrade_structure [i]));
+     rect(bmp, x + i * 35 - 15, y - 2, x + i * 35 + 15, y + 10, COLOUR_YELLOW7);
+   }
+    else
+@@ -1176,7 +1176,7 @@ void draw_upgrades(BITMAP *bmp, int x, i
+            tcol = COLOUR_WHITE;
+           }
+         }
+-    textprintf_centre(bmp, small_font, x + i * 35, y, tcol, upgrade_name(actor[player[play].actor_controlled].upgrade_structure [i]));
++    textprintf_centre(bmp, small_font, x + i * 35, y, tcol, "%s", upgrade_name(actor[player[play].actor_controlled].upgrade_structure [i]));
+     rect(bmp, x + i * 35 - 15, y - 2, x + i * 35 + 15, y + 10, tcol);
+   }
+   if (actor[player[play].actor_controlled].upgrades [i] == 5)
+@@ -3278,8 +3278,8 @@ void display_messages(BITMAP *bmp, int p
+ //      col2 += (count / 3) % 4;
+ //      textprintf_centre(bmp, msgfont1, x_offset + 351, y_loc, col1, messages [play] [i]);
+ //      textprintf_centre(bmp, msgfont2, x_offset + 351, y_loc, col2, messages [play] [i]);
+-      textprintf_centre(bmp, msgfont1, x_offset + max_x / 2 + 31, y_loc, col1, messages [play] [i]);
+-      textprintf_centre(bmp, msgfont2, x_offset + max_x / 2 + 31, y_loc, col2, messages [play] [i]);
++      textprintf_centre(bmp, msgfont1, x_offset + max_x / 2 + 31, y_loc, col1, "%s", messages [play] [i]);
++      textprintf_centre(bmp, msgfont2, x_offset + max_x / 2 + 31, y_loc, col2, "%s", messages [play] [i]);
+     }
+      else
+      {
+@@ -3289,8 +3289,8 @@ void display_messages(BITMAP *bmp, int p
+ //      col2 += 2;
+ //      textprintf_centre(bmp, msgfont1, x_offset + count_x, y_loc, col1, messages [play] [i]);
+ //      textprintf_centre(bmp, msgfont2, x_offset + 2 + k - count_x, y_loc, col2, messages [play] [i]);
+-      textprintf_centre(bmp, msgfont1, x_offset + count_x + max_x / 2 - 320, y_loc, col1, messages [play] [i]);
+-      textprintf_centre(bmp, msgfont2, x_offset + 2 + k - count_x + max_x / 2 - 320, y_loc, col2, messages [play] [i]);
++      textprintf_centre(bmp, msgfont1, x_offset + count_x + max_x / 2 - 320, y_loc, col1, "%s", messages [play] [i]);
++      textprintf_centre(bmp, msgfont2, x_offset + 2 + k - count_x + max_x / 2 - 320, y_loc, col2, "%s", messages [play] [i]);
+      }
+     break;
+ /*   case STYLE_HURRY:
+diff -up lacewing-1.10/displ_in.c~ lacewing-1.10/displ_in.c
+--- lacewing-1.10/displ_in.c~	2014-06-14 10:47:42.000000000 +0200
++++ lacewing-1.10/displ_in.c	2014-06-14 10:49:14.196933979 +0200
+@@ -499,7 +499,7 @@ void bitmap_error(const char errtxt [])
+  set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+  allegro_message("Bitmap creation error  \n%s\n", allegro_error);
+  allegro_message("\n\r");
+- allegro_message(errtxt);
++ allegro_message("%s", errtxt);
+  exit(1);
+ 
+ }
+diff -up lacewing-1.10/menu.c~ lacewing-1.10/menu.c
+--- lacewing-1.10/menu.c~	2014-06-14 10:47:42.000000000 +0200
++++ lacewing-1.10/menu.c	2014-06-14 10:52:54.974460362 +0200
+@@ -787,7 +787,7 @@ void menu_display_options(void)
+ 
+    }
+ 
+-   textprintf_right(menu_bmp, small_font, ox, oys + oy * i, col, ostr);
++   textprintf_right(menu_bmp, small_font, ox, oys + oy * i, col, "%s", ostr);
+ 
+   }
+ 
+@@ -939,7 +939,7 @@ void menu_display_duel(void)
+ 
+    }
+ 
+-   textprintf_centre(menu_bmp, small_font, ox, oys + oy * i, col, ostr);
++   textprintf_centre(menu_bmp, small_font, ox, oys + oy * i, col, "%s", ostr);
+ 
+   }
+ 
+@@ -1725,18 +1725,18 @@ void display_ship_choice2(int ship, int
+ 
+  if (chosen)
+  {
+-  textprintf_centre(menu_bmp, font, 436, y + 20, COLOUR_YELLOW8 - (menu_counter / 2) % 4, ship_name_long(ship));
+-  textprintf_centre(menu_bmp, font2, 436, y + 20, COLOUR_ORANGE4 + (menu_counter / 4) % 4, ship_name_long(ship));
++  textprintf_centre(menu_bmp, font, 436, y + 20, COLOUR_YELLOW8 - (menu_counter / 2) % 4, "%s", ship_name_long(ship));
++  textprintf_centre(menu_bmp, font2, 436, y + 20, COLOUR_ORANGE4 + (menu_counter / 4) % 4, "%s", ship_name_long(ship));
+  }
+   else
+   {
+-   textprintf_centre(menu_bmp, font, 436, y + 20, COLOUR_GREEN8 - (menu_counter / 2) % 4, ship_name_long(ship));
+-   textprintf_centre(menu_bmp, font2, 436, y + 20, COLOUR_BLUE4 + (menu_counter / 4) % 4, ship_name_long(ship));
++   textprintf_centre(menu_bmp, font, 436, y + 20, COLOUR_GREEN8 - (menu_counter / 2) % 4, "%s", ship_name_long(ship));
++   textprintf_centre(menu_bmp, font2, 436, y + 20, COLOUR_BLUE4 + (menu_counter / 4) % 4, "%s", ship_name_long(ship));
+   }
+ // textprintf(menu_bmp, font2, 280, y + 20, COLOUR_WHITE, "%i", ship);
+ 
+-   textprintf_centre(menu_bmp, small_font, 436, y + 60, COLOUR_YELLOW7, ship_description1(ship));
+-   textprintf_centre(menu_bmp, small_font, 436, y + 70, COLOUR_YELLOW7, ship_description2(ship));
++   textprintf_centre(menu_bmp, small_font, 436, y + 60, COLOUR_YELLOW7, "%s", ship_description1(ship));
++   textprintf_centre(menu_bmp, small_font, 436, y + 70, COLOUR_YELLOW7, "%s", ship_description2(ship));
+ 
+  int line_colour = 255;
+  int box_colour = 255;
+@@ -1795,8 +1795,8 @@ void display_ship_choice2(int ship, int
+ 
+   for (i = 0; i < 4; i ++)
+   {
+-   textprintf_centre(menu_bmp, small_font, 300 + i * 90, y + 155, COLOUR_YELLOW7, upgrade_name_long(upgrades [ship] [i + 1]));
+-   textprintf_centre(menu_bmp, small_font, 300 + i * 90, y + 205, COLOUR_YELLOW7, upgrade_name_long(upgrades [ship] [i + 5]));
++   textprintf_centre(menu_bmp, small_font, 300 + i * 90, y + 155, COLOUR_YELLOW7, "%s", upgrade_name_long(upgrades [ship] [i + 1]));
++   textprintf_centre(menu_bmp, small_font, 300 + i * 90, y + 205, COLOUR_YELLOW7, "%s", upgrade_name_long(upgrades [ship] [i + 5]));
+   }
+ /*  line(menu_bmp, 396, y + 110, 396, y + 125, line_colour);
+   line(menu_bmp, 404, y + 110, 404, y + 125, line_colour);
+@@ -1895,19 +1895,19 @@ void menu_display_scores(void)
+     col = COLOUR_YELLOW4 + (menu_counter / 4) % 4;
+ 
+    strcpy(sstr, hs_single[i].name);
+-   textprintf(menu_bmp, small_font, ox, oys + oy * i, col, sstr);
++   textprintf(menu_bmp, small_font, ox, oys + oy * i, col, "%s", sstr);
+ 
+    if (hs_single[i].level == 17)
+     strcpy(sstr, "<V>");
+      else
+       strcpy(sstr, itoa(hs_single[i].level, istr, 10));
+-   textprintf_right(menu_bmp, small_font, ox + 90, oys + oy * i, col, sstr);
++   textprintf_right(menu_bmp, small_font, ox + 90, oys + oy * i, col, "%s", sstr);
+ 
+    strcpy(sstr, ship_name_short(hs_single[i].ship));
+-   textprintf_right(menu_bmp, small_font, ox + 190, oys + oy * i, col, sstr);
++   textprintf_right(menu_bmp, small_font, ox + 190, oys + oy * i, col, "%s", sstr);
+ 
+    strcpy(sstr, itoa(hs_single[i].score, istr, 10));
+-   textprintf_right(menu_bmp, small_font, ox + 240, oys + oy * i, col, sstr);
++   textprintf_right(menu_bmp, small_font, ox + 240, oys + oy * i, col, "%s", sstr);
+ 
+   }
+ 
+@@ -1932,19 +1932,19 @@ void menu_display_scores(void)
+     col = COLOUR_YELLOW4 + (menu_counter / 2) % 4;
+ 
+    strcpy(sstr, hs_coop[i].name);
+-   textprintf(menu_bmp, small_font, ox, oys + oy * i, col, sstr);
++   textprintf(menu_bmp, small_font, ox, oys + oy * i, col, "%s", sstr);
+ 
+    if (hs_coop[i].level == 17)
+     strcpy(sstr, "<V>");
+      else
+       strcpy(sstr, itoa(hs_coop[i].level, istr, 10));
+-   textprintf_right(menu_bmp, small_font, ox + 90, oys + oy * i, col, sstr);
++   textprintf_right(menu_bmp, small_font, ox + 90, oys + oy * i, col, "%s", sstr);
+ 
+    strcpy(sstr, ship_name_short(hs_coop[i].ship));
+-   textprintf_right(menu_bmp, small_font, ox + 190, oys + oy * i, col, sstr);
++   textprintf_right(menu_bmp, small_font, ox + 190, oys + oy * i, col, "%s", sstr);
+ 
+    strcpy(sstr, itoa(hs_coop[i].score, istr, 10));
+-   textprintf_right(menu_bmp, small_font, ox + 240, oys + oy * i, col, sstr);
++   textprintf_right(menu_bmp, small_font, ox + 240, oys + oy * i, col, "%s", sstr);
+ 
+   }
+ 
+@@ -2537,7 +2537,7 @@ void jam_keys(void)
+   {
+    if (key [i] != 0)
+    {
+-    textprintf(menu_bmp, small_font, 200, 250 + row * 10, COLOUR_ORANGE8, scancode_to_keyname(i));
++    textprintf(menu_bmp, small_font, 200, 250 + row * 10, COLOUR_ORANGE8, "%s", scancode_to_keyname(i));
+     row ++;
+    }
+   }

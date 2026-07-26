@@ -1,0 +1,48 @@
+Return-Path: <thuromail@thuro.at>
+Received: from smtp02.world4you.com (smtp02.world4you.com [81.19.149.104])
+	by smtp.ertel.com.pl (8.13.8/8.13.8) with ESMTP id r5QGte33000906
+	for <dwrobel@ertelnet.rybnik.pl>; Wed, 26 Jun 2013 18:55:40 +0200
+Received: from [188.23.230.137] (helo=[192.168.1.221])
+	by smtp02.world4you.com with esmtpsa (TLSv1:AES256-SHA:256)
+	(Exim 4.72)
+	(envelope-from <thuromail@thuro.at>)
+	id 1Urspw-00067f-4G
+	for dwrobel@ertelnet.rybnik.pl; Wed, 26 Jun 2013 18:44:52 +0200
+Message-ID: <51CB1A83.6020608@thuro.at>
+Date: Wed, 26 Jun 2013 18:44:51 +0200
+From: Arthur Frenslich <thuromail@thuro.at>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20130509 Thunderbird/17.0.6
+MIME-Version: 1.0
+To: Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
+Subject: Re: Thuro's Werkstatt: crrcsim models license question
+References: <541426b485942d6ea644d3c76bcf6ab7@www.thuro.at> <51C2D9D4.1000600@thuro.at> <51CB10E2.9030901@ertelnet.rybnik.pl>
+In-Reply-To: <51CB10E2.9030901@ertelnet.rybnik.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=6.0 tests=BAYES_00,UNPARSEABLE_RELAY
+	autolearn=ham version=3.2.5
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on smtp.ertel.com.pl
+X-Virus-Scanned: clamav-milter 0.97 at smtp
+X-Virus-Status: Clean
+X-Greylist: IP, sender and recipient auto-whitelisted, not delayed by milter-greylist-4.1.1 (smtp.ertel.com.pl [62.182.231.178]); Wed, 26 Jun 2013 18:55:41 +0200 (CEST)
+
+CC-BY is o.k for me to. As I mentioned its for fun and not for business :).
+
+Cheers
+Thuro
+
+Am 26.06.2013 18:03, schrieb Damian Wrobel:
+> Arthur and Jan,
+>
+> Sorry for bothering you again.
+>
+> The last question about the crrcsim-addon-models file is the license type
+> we can assume it is released on.
+>
+> I'd appreciate if I can receive a confirmation from both of you in 
+> that matter.
+> In case you don't have any preference, please consider to choose the 
+> CC-BY[3] license.
+>
+> [3] http://creativecommons.org/licenses/by/3.0/
+>

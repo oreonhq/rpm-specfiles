@@ -1,0 +1,34 @@
+From 06c5f1f5e5d1386bd9f2c9eeff2f11c1fb814ed5 Mon Sep 17 00:00:00 2001
+From: Allen Winter <winter@kde.org>
+Date: Sun, 18 Oct 2015 11:37:36 -0400
+Subject: [PATCH 27/31] icalformat_p.cpp - Fix heap-use-after-free in
+ readICalDateTime
+
+backport from
+Git commit 702b55ac4a855fe2a5f7a06915ff2ae8a77a2b04 by Albert Astals Cid.
+Committed on 23/09/2015 at 19:36.
+Pushed by aacid into branch 'Applications/15.08'.
+
+MERGE: no
+---
+ kcalcore/icalformat_p.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kcalcore/icalformat_p.cpp b/kcalcore/icalformat_p.cpp
+index a0e2813..55823c4 100644
+--- a/kcalcore/icalformat_p.cpp
++++ b/kcalcore/icalformat_p.cpp
+@@ -2440,8 +2440,8 @@ KDateTime ICalFormatImpl::readICalDateTime(icalproperty *p,
+         }
+         icalparameter *param =
+             p ? icalproperty_get_first_parameter(p, ICAL_TZID_PARAMETER) : 0;
+-        const char *tzid = param ? icalparameter_get_tzid(param) : 0;
+-        if (!tzid) {
++        QByteArray tzid = param ? QByteArray(icalparameter_get_tzid(param)) : QByteArray();
++        if (tzid.isNull()) {
+             timeSpec = KDateTime::ClockTime;
+         } else {
+             QString tzidStr = QString::fromUtf8(tzid);
+-- 
+2.5.0
+

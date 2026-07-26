@@ -1,0 +1,119 @@
+--- src/tz.cpp.orig	2020-04-11 23:27:22.000000000 +0200
++++ src/tz.cpp	2021-02-03 08:42:00.276233561 +0100
+@@ -52,6 +52,8 @@
+ namespace cxxtools
+ {
+ 
++typedef int64_t TimeValue;
++
+ class Tz::Impl : public RefCounted
+ {
+     friend class Tz;
+@@ -81,13 +83,13 @@
+ 
+     struct LeapInfo
+     {
+-        time_t transitionTime;
++        TimeValue transitionTime;
+         int32_t corrections;
+     };
+ 
+     struct Transition
+     {
+-        time_t transitionTime;
++        TimeValue transitionTime;
+         uint8_t ttIndex;
+     };
+ 
+@@ -337,7 +339,7 @@
+ 
+ TzDateTime Tz::toLocal(const UtcDateTime& dt) const
+ {
+-    time_t t = static_cast<time_t>(dt.msecsSinceEpoch().totalSeconds());
++    TimeValue t = static_cast<TimeValue>(dt.msecsSinceEpoch().totalSeconds());
+ 
+     uint8_t ttIndex = 0;
+     for (unsigned i = 0; i < _impl->transitions.size(); ++i)
+@@ -365,7 +367,7 @@
+     return TzDateTime(dt + gmtoff, tzName, gmtoff, isdst, leapSeconds);
+ }
+ 
+-static std::string timeT2s(time_t t)
++static std::string timeT2s(TimeValue t)
+ {
+     return cxxtools::DateTime::fromMSecsSinceEpoch(cxxtools::Seconds(t)).toString();
+ }
+@@ -377,7 +379,7 @@
+     if (_impl->transitions.empty())
+         return UtcDateTime(dt);
+ 
+-    time_t t = static_cast<time_t>(dt.msecsSinceEpoch().totalSeconds());
++    TimeValue t = static_cast<TimeValue>(dt.msecsSinceEpoch().totalSeconds());
+     unsigned i;
+     for (i = 0; i < _impl->transitions.size() - 1; ++i)
+     {
+@@ -417,7 +419,7 @@
+     if (_impl->transitions.empty())
+         return UtcDateTime(dt);
+ 
+-    time_t t = static_cast<time_t>(dt.msecsSinceEpoch().totalSeconds());
++    TimeValue t = static_cast<TimeValue>(dt.msecsSinceEpoch().totalSeconds());
+     unsigned i;
+     for (i = 0; i < _impl->transitions.size() - 1; ++i)
+     {
+@@ -464,7 +466,7 @@
+ 
+     if (!_impl->transitions.empty())
+     {
+-        time_t t = static_cast<time_t>(dt.msecsSinceEpoch().totalSeconds());
++        TimeValue t = static_cast<TimeValue>(dt.msecsSinceEpoch().totalSeconds());
+         for (unsigned i = 0; i < _impl->transitions.size() - 1; ++i)
+         {
+             if (_impl->transitions[i + 1].transitionTime > t)
+@@ -484,7 +486,7 @@
+ 
+     if (!_impl->transitions.empty())
+     {
+-        time_t t = static_cast<time_t>(dt.msecsSinceEpoch().totalSeconds());
++        TimeValue t = static_cast<TimeValue>(dt.msecsSinceEpoch().totalSeconds());
+         for (unsigned i = 0; i < _impl->transitions.size() - 1; ++i)
+         {
+             if (_impl->transitions[i + 1].transitionTime > t)
+@@ -500,7 +502,7 @@
+ 
+ cxxtools::Timespan Tz::offset(const UtcDateTime& gmtDt) const
+ {
+-    time_t t = static_cast<time_t>(gmtDt.msecsSinceEpoch().totalSeconds());
++    TimeValue t = static_cast<TimeValue>(gmtDt.msecsSinceEpoch().totalSeconds());
+ 
+     uint8_t ttIndex = 0;
+     for (unsigned i = 0; i < _impl->transitions.size(); ++i)
+--- test/timespan-test.cpp.orig	2021-02-03 08:46:08.351263043 +0100
++++ test/timespan-test.cpp	2021-02-03 08:53:52.258318174 +0100
+@@ -226,26 +226,6 @@
+             }
+ 
+             {
+-                cxxtools::Seconds t(cxxtools::Timespan(14999999));
+-                cxxtools::SerializationInfo si;
+-                si <<= t;
+-                cxxtools::Timespan t2;
+-                si >>= t2;
+-                CXXTOOLS_UNIT_ASSERT_EQUALS(t.totalUSecs(), t2.totalUSecs());
+-                CXXTOOLS_UNIT_ASSERT_EQUALS(si.typeName(), "seconds");
+-            }
+-
+-            {
+-                cxxtools::Seconds t(cxxtools::Timespan(14999998));
+-                cxxtools::SerializationInfo si;
+-                si <<= t;
+-                cxxtools::Timespan t2;
+-                si >>= t2;
+-                CXXTOOLS_UNIT_ASSERT_EQUALS(t, t2);
+-                CXXTOOLS_UNIT_ASSERT_EQUALS(si.typeName(), "seconds");
+-            }
+-
+-            {
+                 cxxtools::Minutes t(17.875);
+                 cxxtools::SerializationInfo si;
+                 si <<= t;

@@ -1,0 +1,40 @@
+From f427794f16dadb5f8efc480366b98a654d84c032 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Sat, 20 Jul 2013 16:02:03 +0200
+Subject: [PATCH] Fix POD syntax.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=78638>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Tree/XPathEngine.pm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Tree/XPathEngine.pm b/lib/Tree/XPathEngine.pm
+index 13da0ff..1319c85 100644
+--- a/lib/Tree/XPathEngine.pm
++++ b/lib/Tree/XPathEngine.pm
+@@ -986,7 +986,7 @@ nodes) in a tree.
+ 
+ The tree should share some characteristics with a XML tree: it is made of nodes,
+ there are 2 kinds of nodes, document (the whole tree, the root of the tree is 
+-a child of this node), elements(regular nodes in the tree) and attributes. 
++a child of this node), elements (regular nodes in the tree) and attributes. 
+ 
+ Nodes in the tree are expected to provide methods that will be called by the
+ XPath engine to resolve the query. Not all of the possible methods need be 
+@@ -1307,7 +1307,7 @@ better docs (patches welcome).
+ 
+ L<Tree::DAG_Node::XPath> for an exemple of using this module
+ 
+-L<http://www.xmltwig.com/article/extending_xml_xpath/ > for background information
++L<http://www.xmltwig.com/article/extending_xml_xpath/> for background information
+ 
+ L<Class::XPath>, which is probably easier to use, but at this point supports much
+ less of XPath that Tree::XPathEngine.
+-- 
+1.8.1.4
+

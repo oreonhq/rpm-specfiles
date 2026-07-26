@@ -1,0 +1,64 @@
+diff --git a/FreeSOLID.pc b/FreeSOLID.pc
+new file mode 100644
+index 0000000..357f04e
+--- /dev/null
++++ b/FreeSOLID.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=/usr
++libdir=/usr/lib
++includedir=/usr/include
++
++Name: FreeSolid
++Description: 3D collision detection C++ library
++Version: 2.1.2
++Libs: -L${libdir} -lFreeSOLID
++Cflags: -I${includedir} -I/usr/include/FreeSOLID
+diff --git a/FreeSOLID.pc.in b/FreeSOLID.pc.in
+new file mode 100644
+index 0000000..c354f05
+--- /dev/null
++++ b/FreeSOLID.pc.in
+@@ -0,0 +1,11 @@
++prefix=@prefix@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: FreeSolid
++Description: 3D collision detection C++ library
++Version: @VERSION@
++
++Libs: -L${libdir} -lFreeSOLID @QHULL_LIBS@
++Cflags: -I${includedir} -I/usr/include/FreeSOLID
++
+diff --git a/Makefile.am b/Makefile.am
+index 77b157a..27a736c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,5 +1,8 @@
+ ACLOCAL_AMFLAGS = -I m4
+ SUBDIRS = libmoto libbroad libsolid sample doc
+ 
+-EXTRA_DIST = include
++EXTRA_DIST = include FreeSOLID.pc.in
+ bin_SCRIPTS = freesolid-config
++
++pkgconfigdir         = $(libdir)/pkgconfig
++dist_pkgconfig_DATA  = FreeSOLID.pc
+diff --git a/configure.in b/configure.in
+index 41a761c..a4bc7d4 100644
+--- a/configure.in
++++ b/configure.in
+@@ -52,4 +52,11 @@ dnl Checks for library functions.
+ AC_CHECK_FUNCS(sqrt)
+ AC_CHECK_FUNCS(fabs)
+ 
+-AC_OUTPUT(doc/Makefile sample/Makefile Makefile libbroad/Makefile libmoto/Makefile libsolid/Makefile freesolid-config)
++AC_OUTPUT([ doc/Makefile 
++            sample/Makefile 
++            Makefile 
++            libbroad/Makefile 
++            libmoto/Makefile 
++            libsolid/Makefile 
++            freesolid-config
++            FreeSOLID.pc])

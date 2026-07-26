@@ -1,0 +1,106 @@
+diff -up ZipArchive-4.1.1/ZipArchive/autogen.sh.autotools ZipArchive-4.1.1/ZipArchive/autogen.sh
+--- ZipArchive-4.1.1/ZipArchive/autogen.sh.autotools	2011-12-23 11:10:11.000000000 +0100
++++ ZipArchive-4.1.1/ZipArchive/autogen.sh	2011-12-23 11:10:11.000000000 +0100
+@@ -0,0 +1,12 @@
++#! /bin/sh
++
++if [ "$USER" = "root" ]; then
++  echo "You cannot do this as "$USER" please use a normal user account"
++  exit
++fi
++
++libtoolize --copy
++aclocal
++autoheader
++automake --add-missing --copy --foreign
++autoconf
+diff -up ZipArchive-4.1.1/ZipArchive/configure.ac.autotools ZipArchive-4.1.1/ZipArchive/configure.ac
+--- ZipArchive-4.1.1/ZipArchive/configure.ac.autotools	2011-12-23 11:10:11.000000000 +0100
++++ ZipArchive-4.1.1/ZipArchive/configure.ac	2011-12-23 14:50:00.000000000 +0100
+@@ -0,0 +1,21 @@
++## Bootstrap autoconf/automake
++AC_PREREQ(2.59)
++AC_INIT([ZipArchive], [4.1.2], [])
++AC_CANONICAL_TARGET
++AC_CONFIG_SRCDIR([configure.ac])
++AM_INIT_AUTOMAKE
++AM_CONFIG_HEADER([config.h])
++
++## Checks for programs.
++AC_PROG_CC
++AC_PROG_CXX
++AM_PROG_CC_STDC
++AC_PROG_INSTALL
++AC_PROG_MAKE_SET
++AC_PROG_LIBTOOL
++
++# Produce output
++AC_CONFIG_FILES([Makefile ZipArchive.pc])
++AC_OUTPUT
++
++echo "Type 'make' to compile"
+diff -up ZipArchive-4.1.1/ZipArchive/Makefile.am.autotools ZipArchive-4.1.1/ZipArchive/Makefile.am
+--- ZipArchive-4.1.1/ZipArchive/Makefile.am.autotools	2011-12-23 11:10:11.000000000 +0100
++++ ZipArchive-4.1.1/ZipArchive/Makefile.am	2011-12-23 11:10:11.000000000 +0100
+@@ -0,0 +1,45 @@
++MAINTAINERCLEANFILES = INSTALL \
++			Makefile.in \
++			aclocal.m4 \
++			config.guess \
++			config.h.in \
++			config.h.in~ \
++			stamp-h.in \
++			config.sub \
++			configure \
++			install-sh \
++			missing \
++			mkinstalldirs \
++			ltmain.sh \
++			ltconfig \
++			compile \
++			depcomp
++
++AM_CXXFLAGS = -Wall
++
++lib_LTLIBRARIES = libziparch.la
++
++libziparch_la_LDFLAGS = -release $(VERSION)
++libziparch_la_LIBADD = -lz
++
++libziparch_la_SOURCES = \
++ZipArchive.cpp ZipAutoBuffer.cpp ZipCentralDir.cpp \
++ZipCompressor.cpp BaseLibCompressor.cpp Bzip2Compressor.cpp \
++DeflateCompressor.cpp ZipCompatibility.cpp ZipException.cpp ZipFile_stl.cpp ZipFileHeader.cpp \
++ZipMemFile.cpp ZipPathComponent_lnx.cpp ZipPlatformComm.cpp ZipPlatform_lnx.cpp \
++ZipStorage.cpp ZipString.cpp ZipExtraData.cpp ZipExtraField.cpp \
++DirEnumerator.cpp FileFilter.cpp Wildcard.cpp \
++ZipCryptograph.cpp ZipCrc32Cryptograph.cpp \
++Aes.cpp Hmac.cpp RandomPool.cpp ZipAesCryptograph.cpp Sha1.cpp
++
++libziparchdir = $(includedir)/ZipArchive
++
++libziparch_HEADERS = \
++BitFlag.h DirEnumerator.h _features.h FileFilter.h FileInfo.h _platform.h \
++stdafx.h std_stl.h Wildcard.h ZipAbstractFile.h ZipArchive.h ZipAutoBuffer.h \
++ZipBaseException.h ZipCallback.h ZipCallbackProvider.h ZipCentralDir.h \
++ZipCollections.h ZipCollections_stl.h ZipCompatibility.h ZipCompressor.h \
++ZipCryptograph.h ZipException.h ZipExport.h ZipExtraData.h ZipExtraField.h \
++ZipFile.h ZipFileHeader.h ZipFile_stl.h ZipMemFile.h ZipMutex.h ZipMutex_lnx.h \
++ZipPathComponent.h ZipPlatform.h ZipSplitNamesHandler.h ZipStorage.h \
++ZipString.h ZipString_stl.h ZipStringStoreSettings.h
+diff -up ZipArchive-4.1.1/ZipArchive/ZipArchive.pc.in.autotools ZipArchive-4.1.1/ZipArchive/ZipArchive.pc.in
+--- ZipArchive-4.1.1/ZipArchive/ZipArchive.pc.in.autotools	2011-12-23 14:49:38.000000000 +0100
++++ ZipArchive-4.1.1/ZipArchive/ZipArchive.pc.in	2011-12-23 14:48:57.000000000 +0100
+@@ -0,0 +1,12 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@/ZipArchive
++
++Name: ZipArchive
++Description: ZipArchive library
++Version: @VERSION@
++
++Requires:
++Libs: -L${libdir} -lziparch
++Cflags: -I${includedir}

@@ -1,0 +1,46 @@
+diff -up Mail-Procmail-1.08/lib/Mail/Procmail.pm.pm_report Mail-Procmail-1.08/lib/Mail/Procmail.pm
+--- Mail-Procmail-1.08/lib/Mail/Procmail.pm.pm_report	5 Feb 2013 07:44:29 -0000
++++ Mail-Procmail-1.08/lib/Mail/Procmail.pm	5 Feb 2013 07:52:05 -0000
+@@ -872,7 +872,7 @@
+ 	$msgs++, next if /^\d+\.\d+ Mail from/;
+ 
+ 	# Skip non-deliveries.
+-	next unless /^\d+\.\d+ (\w+\[[^\]]+\]):\s+(.+)/;
++	next unless /^\d+\.\d+ (deliver\[[^\]]+\]):\s+(.+?)(?:\s+(\d+))?$/;
+ 	$dlvr++;
+ 
+ 	# Update stats and keep track of max values.
+@@ -880,6 +880,7 @@
+ 	$max1 = $t if ($t = ++$tally{$2}->[0]) > $max1;
+ 	$max2 = $t if ($t = ++$tally{$2}->[1]->{$1}) > $max2;
+ 	$max3 = $t if ($t = length($1)) > $max3;
++	$tally{$2}->[2] += $3;
+     }
+ 
+     print STDOUT ("$recs records, $msgs messages, $dlvr deliveries.\n\n");
+@@ -887,11 +888,11 @@
+     # Construct format for report.
+     $max1 = length($max1);
+     $max2 = length($max2);
+-    my $fmt = "%${max1}s  %${max2}s  %-${max3}s  %s\n";
++    my $fmt = "%${max1}s  %${max2}s  %-${max3}s  %s  %s\n";
+ 
+     # Sort on number of deliveries per target.
+     foreach my $dest ( sort { $b->[1] <=> $a->[1] }
+-		          map { [ $_, $tally{$_}->[0], $tally{$_}->[1] ] }
++			  map { [ $_, $tally{$_}->[0], $tally{$_}->[1], $tally{$_}->[2] ] }
+ 			     keys %tally ) {
+ 	my $first = 1;
+ 	# Sort on deliveries per rule.
+@@ -902,7 +903,10 @@
+ 			   ($first ? $dest->[1] : ""),
+ 			   $rule->[1],
+ 			   $rule->[0],
+-			   ($first ? $dest->[0] : ""));
++			   ($first ? $dest->[0] : ""),
++			   ($atts{sizes} && $first ? $dest->[3] : ""),
++			   #$rule->[2],
++			  );
+ 	    $first = 0;
+ 	}
+     }

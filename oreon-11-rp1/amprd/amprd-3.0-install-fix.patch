@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index 5ba1f27..9525629 100644
+--- a/Makefile
++++ b/Makefile
+@@ -34,8 +34,8 @@ module_clean:
+ 
+ install:	amprd
+ 	install -m 755 -p -d -D                      $(SCACHEDIR)
+-	install -m 644 -p -b -D amprd.conf.example   $(CONFDIR)/amprd.conf.example
+-	install -m 755 -p -s -D amprd                $(SBINDIR)/amprd
++	install -m 644 -p -D amprd.conf.example      $(CONFDIR)/amprd.conf
++	install -m 755 -p -D amprd                   $(SBINDIR)/amprd
+ 
+ uninstall:
+ 	rm -fr $(SCACHEDIR)

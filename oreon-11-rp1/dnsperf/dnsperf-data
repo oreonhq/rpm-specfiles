@@ -1,0 +1,129 @@
+#!/bin/sh
+#
+# dnsperf data downloader
+#
+# Replacement utility for original dnsperf-data package, provides easy way to install sample
+
+# Copyright 2021 Red Hat
+# All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+PART=${1:-01}
+SITE="https://github.com/DNS-OARC/sample-query-data"
+DATAURL="${SITE}/raw/refs/heads/main/queryfile-example-10million-201202_part${PART}.xz"
+LOCAL="queryfile-example-10million-201202_part${PART}.xz"
+TARGET="/usr/share/dnsperf/$(basename -- "$LOCAL" .xz)"
+UNPACKED_SIZE=24
+CURL="$(type -p curl 2>/dev/null)"
+WGET="$(type -p wget 2>/dev/null)"
+
+INSTALL_MODE=ask
+DOWNLOAD_MODE=ask
+FORCE_MODE=no
+
+do_check()
+{
+	test -s "$TARGET"
+}
+
+do_install()
+{
+	local SUDO=sudo
+	[ "$(id -u)" -eq 0 ] && SUDO=
+	$SUDO install -d /usr/share/dnsperf
+	$SUDO install "$LOCAL" "$TARGET.xz"
+	$SUDO unxz -v "$TARGET.xz"
+}
+
+do_uninstall()
+{
+	local SUDO=sudo
+	[ "$(id -u)" -eq 0 ] && SUDO=
+	$SUDO rm -f "$TARGET"
+	$SUDO rmdir /usr/share/dnsperf
+}
+
+do_download()
+{
+	if [ -x "$CURL" ]; then
+		$CURL -fLC - "$DATAURL" -o "$LOCAL"
+	elif [ -x "$WGET" ]; then
+		$WGET -c "$DATAURL" -O "$LOCAL"
+	else
+		echo "No curl or wget detected, cannot download!"
+		echo "Visit ${SITE} for manual download."
+	fi
+}
+
+do_help()
+{
+	cat <<EOF
+Usage: ${0} [download] [install] [uninstall]
+
+If no command were given, it would ask to download and install data file.
+EOF
+}
+
+for P in "$@"; do
+	case "$P" in
+		install|--install|-i) INSTALL_MODE=yes;;
+		download|--download|-d) DOWNLOAD_MODE=yes;;
+		uninstall|--uninstall|-u|-r) UNINSTALL_MODE=yes;;
+		force|--force|-f) FORCE_MODE=yes;;
+		help|--help|-h|-?) do_help; exit 0;;
+	esac
+done
+
+if do_check && [ "$FORCE_MODE" != yes ]; then
+	echo "Data file is already installed at $TARGET; ending."
+	exit 0
+fi
+
+if [ "$DOWNLOAD_MODE" = ask ]; then
+cat << EOF
+This is helper script to download and install sample data for dnsperf package.
+Originally it was shipped in dnsperf-data package. Those data are not updated, inaccurate and old.
+It is better to use "tcpdump -w <file.pcap> port domain" to capture your own read data and use queryparse from
+dnsperf-queryparse package to convert it into queries list.
+
+It would download it into current directory, it would have size ${UNPACKED_SIZE}MB after unpacking.
+
+EOF
+
+	read -p "Would you like to download $LOCAL? [y/N]" CONFIRM
+	[ "$CONFIRM" = y ] && do_download
+else
+	do_download
+fi
+
+if ! [ -s "$LOCAL" ]; then
+	echo "ERROR: Not downloaded, cannot install!"
+	exit 1
+fi
+
+if [ "$INSTALL_MODE" = ask ]; then
+	read -p "Would you like to install it to system [y/N]?" CONFIRM
+	if [ "$CONFIRM" = y ]; then
+		do_install
+	else
+		echo "Unpacking $LOCAL"
+		unxz -v "$LOCAL"
+	fi
+else
+	do_install
+fi
+
+if [ "$UNINSTALL_MODE" = yes ]; then
+	do_uninstall
+fi

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="font">
+  <id>org.openmoji.black</id>
+  <metadata_license>CC-BY-SA-3.0</metadata_license>
+  <project_license>OFL-1.1 and Apache-2.0 and CC-BY-4.0 and LGPL-3.0-only</project_license>
+  <name>OpenMoji Black</name>
+  <summary>Open source emojis for designers, developers and everyone else!</summary>
+  <description>
+    <p>
+      A project of students and professors of the HfG Schwäbisch Gmünd.
+    </p>
+    <p>
+      OpenMoji uses visual guidelines that are not linked to a specific
+      branding.  The emojis are designed to integrate well in combination with
+      text.
+    </p>
+  </description>
+
+  <url type="homepage">https://openmoji.org/</url>
+  <url type="bugtracker">https://github.com/hfg-gmuend/openmoji/issues</url>
+  <url type="faq">https://github.com/hfg-gmuend/openmoji/blob/master/FAQ.md#openmoji-faq</url>
+  <url type="contact">https://openmoji.org/about/#contact</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <image width="1100" height="618">
+        https://src.fedoraproject.org/rpms/hfg-gmuend-openmoji-fonts/raw/master/f/openmoji-black.gnome-characters.png
+      </image>
+    </screenshot>
+  </screenshots>
+
+  <provides>
+    <font>OpenMoji Black</font>
+  </provides>
+  <languages>
+    <lang>und-zsye</lang>
+  </languages>
+</component>

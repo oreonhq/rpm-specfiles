@@ -1,0 +1,12 @@
+diff -ruN audiofile-0.3.6.orig/test/Sign.cpp audiofile-0.3.6/test/Sign.cpp
+--- audiofile-0.3.6.orig/test/Sign.cpp	2021-01-04 12:50:58.563336280 +0100
++++ audiofile-0.3.6/test/Sign.cpp	2021-01-04 13:00:55.536214264 +0100
+@@ -157,7 +157,7 @@
+ 	AFframecount framesRead = afReadFrames(file, AF_DEFAULT_TRACK, readData, frameCount);
+ 	ASSERT_EQ(framesRead, frameCount);
+ 	afCloseFile(file);
+-	const uint32_t expectedData[] = { 0, -kMinInt32, kMaxUInt32 };
++	const uint32_t expectedData[] = { 0, static_cast<uint32_t>(-kMinInt32), kMaxUInt32 };
+ 	for (int i=0; i<frameCount; i++)
+ 		EXPECT_EQ(readData[i], expectedData[i]);
+ }

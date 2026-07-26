@@ -1,0 +1,28 @@
+Index: src/SubProcess.cc
+===================================================================
+diff --git a/anyterm/trunk/src/SubProcess.cc b/anyterm/trunk/src/SubProcess.cc
+--- a/anyterm/trunk/src/SubProcess.cc	(revision 13873)
++++ b/anyterm/trunk/src/SubProcess.cc	(revision 18810)
+@@ -141,7 +141,7 @@
+       onOutput(s);
+     }
+   } RETHROW_MISC_EXCEPTIONS }
+-  catch (pbe::IOError) {
++  catch (pbe::IOError&) {
+     onError("Subprocess terminated");
+     return;
+   }
+Index: common.mk
+===================================================================
+diff --git a/anyterm/trunk/common.mk b/anyterm/trunk/common.mk
+--- a/anyterm/trunk/common.mk	(revision 13873)
++++ b/anyterm/trunk/common.mk	(revision 18810)
+@@ -42,7 +42,7 @@
+ 
+ # If you need to add additional include directories, e.g. if your Boost libraries 
+ # are somewhere unexpected, add them to CPP_FLAGS below e.g. CPP_FLAGS=-I/path/to/boost
+-CPP_FLAGS=--std=c++14
++CPP_FLAGS=--std=c++17
+ 
+ ifeq (${UNAME_S},SunOS)
+ GCC_FLAGS=-D_REENTRANT

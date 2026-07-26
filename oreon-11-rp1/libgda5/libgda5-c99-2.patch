@@ -1,0 +1,22 @@
+Add an explicit cast to avoid an incompatible-pointer-types error.
+This is probably not correct.  Upstream fixed this differently in:
+
+commit d39a7c1d45e81dc32e5ccb42abff0655c44580c9
+Author: Vivien Malerba <malerba@gnome-db.org>
+Date:   Wed Nov 19 18:22:24 2014 +0100
+
+    GdaLdapConnection: fixed self-referencing issue
+
+diff --git a/libgda/sqlite/virtual/gda-ldap-connection.c b/libgda/sqlite/virtual/gda-ldap-connection.c
+index cf205b08b4feb27f..59f9f0a58d428292 100644
+--- a/libgda/sqlite/virtual/gda-ldap-connection.c
++++ b/libgda/sqlite/virtual/gda-ldap-connection.c
+@@ -726,7 +726,7 @@ gda_ldap_connection_declare_table (GdaLdapConnection *cnc, const gchar *table_na
+         GDA_VCONNECTION_DATA_MODEL_SPEC (map)->create_model_func = NULL;
+         GDA_VCONNECTION_DATA_MODEL_SPEC (map)->create_filter_func = _ldap_table_create_filter;
+         GDA_VCONNECTION_DATA_MODEL_SPEC (map)->create_filtered_model_func = _ldap_table_create_model_func;
+-	map->ldap_cnc = g_object_ref (cnc);
++	map->ldap_cnc = (GdaConnection *) g_object_ref (cnc);
+ 	map->table_name = gda_sql_identifier_quote (table_name, GDA_CONNECTION (cnc), NULL, TRUE, FALSE);
+ 	map->filters_hash = NULL;
+ 	if (base_dn)

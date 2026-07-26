@@ -1,0 +1,176 @@
+From 627afc01a80c2da22e7ddc729c22084270399189 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Mon, 8 May 2017 08:50:45 +0200
+Subject: [PATCH 03/18] Wsign-compare
+
+---
+ src/fflib/AFunction.hpp  | 18 +++++++++---------
+ src/fflib/AddNewFE.h     |  2 +-
+ src/fflib/PlotStream.hpp |  2 +-
+ src/fflib/global.cpp     |  2 +-
+ src/fflib/lgmesh.cpp     | 16 ++++++++--------
+ src/fflib/lgmesh3.cpp    |  2 +-
+ 6 files changed, 21 insertions(+), 21 deletions(-)
+
+diff --git a/src/fflib/AFunction.hpp b/src/fflib/AFunction.hpp
+index e57c8a992..db833412b 100644
+--- a/src/fflib/AFunction.hpp
++++ b/src/fflib/AFunction.hpp
+@@ -1546,7 +1546,7 @@ class basicAC_F0 {
+   friend class E_FEarray; // for mapping fonction 
+   protected:
+   typedef const C_F0 const_C_F0;
+- int nb;
++ size_t nb;
+  C_F0 *a;
+  public:
+   typedef map<const char *,C_F0,Keyless> maptype ;
+@@ -1557,7 +1557,7 @@ class basicAC_F0 {
+  basicAC_F0 & operator=(C_F0 & c) {named_parameter=0;nb=1;a=&c;return *this;}
+  basicAC_F0 & operator=(pair<int,C_F0*> p)  {named_parameter=0;nb=p.first;a=p.second;return *this;} 
+  const C_F0 & operator [] (int i) const {throwassert(a && i<nb);return a[i];}
+- int size() const {return nb;}
++ size_t size() const {return nb;}
+  C_F0 * ptr() const  {return a;}
+  C_F0  find(const char * k) const  { 
+     assert(k);  
+@@ -1579,7 +1579,7 @@ class basicAC_F0 {
+ class AC_F0: public basicAC_F0 { //  a Array of [[C_F0]]
+ //    tableau d'un parametres  max 1024 parametres 
+ //    avec allocation  
+- const static  int MaxSize;
++ const static  size_t MaxSize;
+  //  no constructor in this class (this class is in a union )
+   public:
+   AC_F0 & operator=(pair<const char *,const C_F0> p) {
+@@ -1614,8 +1614,8 @@ class AC_F0: public basicAC_F0 { //  a Array of [[C_F0]]
+     if(i==named_parameter->end()) named_parameter->insert(make_pair(nm,c));
+     else {cerr << " the named in the list already exists "<< nm <<endl; CompileError();}
+     return *this;}
+-  int size() const {return nb;}
+-  const C_F0 & operator [] (int i) const {
++  size_t size() const {return nb;}
++  const C_F0 & operator [] (size_t i) const {
+       if( !(a && i<nb))
+       { cout << " AC_F0 bug " << a << " " <<i<<endl;
+           ffassert(a && i<nb);}      
+@@ -1652,7 +1652,7 @@ class  basicAC_F0_wa : public basicAC_F0 { public:
+    nb=1+b.size();
+    a= new C_F0[nb];
+    a[0]=e;
+-   for (int i=1;i<nb;i++) a[i]=b[i-1];}
++   for (size_t i=1;i<nb;i++) a[i]=b[i-1];}
+     ~basicAC_F0_wa(){delete [] a;
+         a=0;
+         delete named_parameter;
+@@ -1664,7 +1664,7 @@ class  basicAC_F0_wa : public basicAC_F0 { public:
+    if (b.named_parameter) named_parameter = new maptype(*b.named_parameter);
+    nb=b.size();
+    a= new C_F0[nb];
+-   for (int i=0;i<nb;i++) a[i]=b[i];}
++   for (size_t i=0;i<nb;i++) a[i]=b[i];}
+    
+   private: 
+    void operator=(const basicAC_F0 & b);
+@@ -1683,10 +1683,10 @@ class E_Array  :public E_F0 {  public:
+  int size() const {return v->size();}
+  size_t nbitem() const {return v->size();}
+  void map(C_F0 (*mapping)(const C_F0 & )) const 
+-   { for (int i=0;i<v->size();i++) 
++   { for (size_t i=0;i<v->size();i++) 
+       v->a[i]=(*mapping)(v->a[i]);}
+   virtual bool MeshIndependent() const {
+-    for (int i=0;i<v->size();i++) 
++    for (size_t i=0;i<v->size();i++) 
+       if (v->a[i].MeshIndependent()) return false;
+      return false;
+    
+diff --git a/src/fflib/AddNewFE.h b/src/fflib/AddNewFE.h
+index 8a882f858..365b6876a 100644
+--- a/src/fflib/AddNewFE.h
++++ b/src/fflib/AddNewFE.h
+@@ -30,7 +30,7 @@ class EConstantTypeOfFE :public E_F0
+ { 
+ //  using namespace   Fem2D;
+   Fem2D::TypeOfFE * v;
+-  size_t N;
++  int N;
+   bool isconst;
+ public:
+   AnyType operator()(Stack ) const { /*cout << " ()" << v << endl*/;return SetAny<Fem2D::TypeOfFE*>(v);}
+diff --git a/src/fflib/PlotStream.hpp b/src/fflib/PlotStream.hpp
+index e441f5b79..9a8201d73 100644
+--- a/src/fflib/PlotStream.hpp
++++ b/src/fflib/PlotStream.hpp
+@@ -118,7 +118,7 @@ public:
+     
+   void read( void *data,size_t l) {
+ 	char * p= (char*)data;
+-	for(int i=0;i<l;++i)	
++	for(size_t i=0;i<l;++i)	
+ 	  *p++ = (char) getc(TheStream);
+ 	//	fread(  p++,1,1,TheStream);
+ 	//       read(data,l);
+diff --git a/src/fflib/global.cpp b/src/fflib/global.cpp
+index 6c78c0927..2ab2a29f5 100644
+--- a/src/fflib/global.cpp
++++ b/src/fflib/global.cpp
+@@ -166,7 +166,7 @@ TableOfIdentifier Global;
+ typedef list<TableOfIdentifier *> ListOfTOfId;
+ ListOfTOfId tables_of_identifier;
+ 
+-const int AC_F0::MaxSize=1024; // maximal number of parameters
++const size_t AC_F0::MaxSize=1024; // maximal number of parameters
+ 
+ 
+ 
+diff --git a/src/fflib/lgmesh.cpp b/src/fflib/lgmesh.cpp
+index c9790ad49..219bbf7a0 100644
+--- a/src/fflib/lgmesh.cpp
++++ b/src/fflib/lgmesh.cpp
+@@ -232,10 +232,10 @@ class MoveMesh :  public E_F0mps { public:
+       if (a->size() !=2) CompileError("movemesh(Th,[u,v],...) need 2 componate in array ",atype<pmesh>());
+       U=to<double>( (*a)[0]);
+       V=to<double>( (*a)[1]);
+-
+-      for (int i=2;i<args.size();i++)
+-        sol[i-2]=to<double>(args[i]);
+-    }
++      
++      for (size_t i=2;i<args.size();i++)
++        sol[i-2]=to<double>(args[i]);      
++    }   
+     static ArrayOfaType  typeargs() { return  ArrayOfaType(atype<pmesh>(),atype<E_Array>(),true);}
+     static  E_F0 * f(const basicAC_F0 & args){ return new MoveMesh(args);}
+     AnyType operator()(Stack s) const ;
+@@ -1523,10 +1523,10 @@ class CheckMoveMesh :  public E_F0mps { public:
+       if (a->size() !=2) CompileError("CheckMoveMesh(Th,[u,v]) need 2 componate in array ",atype<pmesh>());
+       U=to<double>( (*a)[0]);
+       V=to<double>( (*a)[1]);
+-
+-      for (int i=2;i<args.size();i++)
+-        sol[i-2]=to<double>(args[i]);
+-    }
++      
++      for (size_t i=2;i<args.size();i++)
++        sol[i-2]=to<double>(args[i]);      
++    }   
+     static ArrayOfaType  typeargs() { return  ArrayOfaType(atype<pmesh>(),atype<E_Array>(),false);}
+     static  E_F0 * f(const basicAC_F0 & args){ return new CheckMoveMesh(args);}
+     AnyType operator()(Stack s) const ;
+diff --git a/src/fflib/lgmesh3.cpp b/src/fflib/lgmesh3.cpp
+index 754876f3b..d697786a9 100644
+--- a/src/fflib/lgmesh3.cpp
++++ b/src/fflib/lgmesh3.cpp
+@@ -900,7 +900,7 @@ class MoveMesh3 :  public E_F0mps { public:
+       U=to<double>( (*a)[0]);
+       V=to<double>( (*a)[1]);
+       
+-      for (int i=2;i<args.size();i++)
++      for (size_t i=2;i<args.size();i++)
+         sol[i-2]=to<double>(args[i]);      
+     }   
+     static ArrayOfaType  typeargs() { return  ArrayOfaType(atype<pmesh>(),atype<E_Array>(),true);}
+-- 
+2.47.1
+

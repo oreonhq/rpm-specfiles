@@ -1,0 +1,55 @@
+From 32f714c4226538957b9738ee61b9933614d09d81 Mon Sep 17 00:00:00 2001
+From: Daiki Ueno <dueno@redhat.com>
+Date: Wed, 8 Nov 2023 16:17:48 +0900
+Subject: [PATCH] Don't split sending CommitText when auto-start conversion
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When a candidate is selected as a result of typing an auto-start
+conversion character (e.g., "、"), CommitText signal is sent twice:
+one for the candidate and the other for the trigger character, which
+may confuse IBus and the former CommitText may be ignored.  To work
+around the behavior, this patch coalesce those CommitText signals,
+while still sending it separately when the candidate is clicked by
+mouse.
+
+Signed-off-by: Daiki Ueno <dueno@redhat.com>
+---
+ src/engine.vala | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/src/engine.vala b/src/engine.vala
+index a55d4ca..fe2d7c5 100644
+--- a/src/engine.vala
++++ b/src/engine.vala
+@@ -140,11 +140,6 @@ class SkkEngine : IBus.Engine {
+                 set_lookup_table_cursor_pos ();
+             });
+         context.candidates.selected.connect (() => {
+-                var output = context.poll_output ();
+-                if (output.length > 0) {
+-                    var text = new IBus.Text.from_string (output);
+-                    commit_text (text);
+-                }
+                 if (lookup_table_visible) {
+                     hide_lookup_table ();
+                     hide_auxiliary_text ();
+@@ -502,7 +497,13 @@ class SkkEngine : IBus.Engine {
+     }
+ 
+     public override void candidate_clicked (uint index, uint button, uint state) {
+-        context.candidates.select_at (index);
++        if (context.candidates.select_at (index)) {
++                var output = context.poll_output ();
++                if (output.length > 0) {
++                    var text = new IBus.Text.from_string (output);
++                    commit_text (text);
++                }
++        }
+     }
+ 
+     public override void cursor_up () {
+-- 
+2.41.0
+

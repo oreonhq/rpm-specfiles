@@ -1,0 +1,26 @@
+From f0e5406c5805424194e3da63e3a5d3defe02b72f Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Mon, 23 Mar 2026 00:10:48 -0400
+Subject: [PATCH] Fix go vet error on example name
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ httphead_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/httphead_test.go b/httphead_test.go
+index dd88bc6..f0ac74a 100644
+--- a/httphead_test.go
++++ b/httphead_test.go
+@@ -37,7 +37,7 @@ func ExampleParseOptions() {
+ 	// Output: [{foo [bar:1]} {baz []}] true
+ }
+ 
+-func ExampleParseOptionsLifetime() {
++func ExampleParseOptions_lifetime() {
+ 	data := []byte(`foo;bar=1,baz`)
+ 	options, ok := ParseOptions(data, nil)
+ 	copy(data, []byte(`xxx;yyy=0,zzz`))
+-- 
+2.52.0
+

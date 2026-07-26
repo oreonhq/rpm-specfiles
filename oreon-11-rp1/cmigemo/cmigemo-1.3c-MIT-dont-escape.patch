@@ -1,0 +1,19 @@
+--- cmigemo-1.3c-MIT/src/rxgen.c.escape	2004-06-19 03:28:52.000000000 +0900
++++ cmigemo-1.3c-MIT/src/rxgen.c	2007-05-27 21:12:03.000000000 +0900
+@@ -93,6 +93,8 @@
+     /* outは最低でも16バイトはある、という仮定を置く */
+     switch (in)
+     {
++    /* エスケープしない　*/
++#if 0
+ 	case '\\':
+ 	case '.': case '*': case '^': case '$': case '/':
+ #ifdef RXGEN_OP_VIM
+@@ -101,6 +103,7 @@
+ 	    if (out)
+ 		out[len] = '\\';
+ 	    ++len;
++#endif
+ 	default:
+ 	    if (out)
+ 		out[len] = (unsigned char)(in & 0xFF);

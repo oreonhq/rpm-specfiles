@@ -1,0 +1,32 @@
+Avoid implicit function declarations in the configure tests, to
+prevent build failures with future compilers.
+
+Submitted upstream: <https://github.com/heimdal/heimdal/pull/1085>
+
+diff --git a/cf/find-func-no-libs2.m4 b/cf/find-func-no-libs2.m4
+index 5e5ed0e69ba60f7b..a6b3ad6d347adc94 100644
+--- a/cf/find-func-no-libs2.m4
++++ b/cf/find-func-no-libs2.m4
+@@ -21,7 +21,7 @@ if eval "test \"\$ac_cv_func_$1\" != yes" ; then
+ 		*) ac_lib="-l$ac_lib" ;;
+ 		esac
+ 		LIBS="$6 $ac_lib $5 $ac_save_LIBS"
+-		AC_LINK_IFELSE([AC_LANG_PROGRAM([[$3]],[[$1($4)]])],[eval "if test -n \"$ac_lib\";then ac_cv_funclib_$1=$ac_lib; else ac_cv_funclib_$1=yes; fi";break])
++		AC_LINK_IFELSE([AC_LANG_PROGRAM([[char $1 (void);]],[[$1()]])],[eval "if test -n \"$ac_lib\";then ac_cv_funclib_$1=$ac_lib; else ac_cv_funclib_$1=yes; fi";break])
+ 	done
+ 	eval "ac_cv_funclib_$1=\${ac_cv_funclib_$1-no}"
+ 	LIBS="$ac_save_LIBS"
+diff --git a/cf/have-struct-field.m4 b/cf/have-struct-field.m4
+index bb7bcefbcc68a08c..3962d850645f88e4 100644
+--- a/cf/have-struct-field.m4
++++ b/cf/have-struct-field.m4
+@@ -7,7 +7,8 @@ dnl AC_HAVE_STRUCT_FIELD(struct, field, headers)
+ AC_DEFUN([AC_HAVE_STRUCT_FIELD], [
+ define(cache_val, translit(ac_cv_type_$1_$2, [A-Z ], [a-z_]))
+ AC_CACHE_CHECK([for $2 in $1], cache_val,[
+-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$3]],
++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <string.h>
++$3]],
+ 	[[$1 x; memset(&x, 0, sizeof(x)); x.$2]])],
+ 	[cache_val=yes],
+ 	[cache_val=no])

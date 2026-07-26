@@ -1,0 +1,30 @@
+diff -Naur aprsd-2.2.5-15/src/aprsd.cpp aprsd-home/src/aprsd.cpp
+--- aprsd-2.2.5-15/src/aprsd.cpp	2003-05-29 06:09:39.000000000 +0300
++++ aprsd-home/src/aprsd.cpp	2008-03-08 15:42:46.000000000 +0200
+@@ -97,17 +97,17 @@
+ string szAprsPath;
+ int msgsn;
+ 
+-const string HOMEDIR("/home/aprsd2");
++const string HOMEDIR("/etc/aprsd");
+ const string CONFPATH("");
+ const string CONFFILE("aprsd.conf");
+-const string MAINLOG("aprsd.log");
+-const string STSMLOG("thirdparty.log");
+-const string RFLOG("rf.log");
+-const string UDPLOG("udp.log");
+-const string ERRORLOG("error.log");
+-const string DEBUGLOG("debug.log");
+-const string REJECTLOG("reject.log");
+-const string LOOPLOG("loop.log");
++const string MAINLOG("/var/log/aprsd/aprsd.log");
++const string STSMLOG("/var/log/aprsd/thirdparty.log");
++const string RFLOG("/var/log/aprsd/rf.log");
++const string UDPLOG("/var/log/aprsd/udp.log");
++const string ERRORLOG("/var/log/aprsd/error.log");
++const string DEBUGLOG("/var/log/aprsd/debug.log");
++const string REJECTLOG("/var/log/aprsd/reject.log");
++const string LOOPLOG("/var/log/aprsd/loop.log");
+ const string WELCOME("welcome.txt");
+ const string TNC_INIT("INIT.TNC");
+ const string TNC_RESTORE("RESTORE.TNC");

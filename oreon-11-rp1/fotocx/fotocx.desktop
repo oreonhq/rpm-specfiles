@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=fotocx
+GenericName=Fotocx Photo Editor
+Comment=Program for edit photos and manage collections
+Exec=fotocx
+Icon=fotocx
+Terminal=false
+Type=Application
+Categories=Application;Graphics;
+MimeType=image/bmp;image/gif;image/tiff;image/jpeg;image/png;

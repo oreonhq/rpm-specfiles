@@ -1,0 +1,20 @@
+From 5abf92a84416d82978a1bff94736ec7cdc709ad4 Mon Sep 17 00:00:00 2001
+From: dongxuli-concord-design
+ <102729580+dongxuli-concord-design@users.noreply.github.com>
+Date: Thu, 10 Jul 2025 16:50:08 -0400
+Subject: [PATCH] MText: fixed a division by zero
+
+---
+ libraries/libdxfrw/src/drw_base.h                          | 2 +-
+
+diff --git a/libraries/libdxfrw/src/drw_base.h b/libraries/libdxfrw/src/drw_base.h
+index 399b73ba24..ba6a69bfa0 100644
+--- a/src/drw_base.h
++++ b/src/drw_base.h
+@@ -507,4 +507,4 @@ class DRW_LW_Conv{
+     }
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif

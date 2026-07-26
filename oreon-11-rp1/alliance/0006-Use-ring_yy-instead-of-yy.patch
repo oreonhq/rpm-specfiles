@@ -1,0 +1,77 @@
+From b689820c62058c0e3b205efc0d604e15a128a5d4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 28 Feb 2016 09:31:44 +0100
+Subject: [PATCH 06/10] Use ring_yy instead of yy.
+
+---
+ alliance/src/ring/src/lireplace.c | 2 +-
+ alliance/src/ring/src/ringram.y   | 9 +++++++++
+ alliance/src/ring/src/rinscan.l   | 4 ++--
+ alliance/src/ring/src/struct.h    | 4 ++--
+ 4 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/alliance/src/ring/src/lireplace.c b/alliance/src/ring/src/lireplace.c
+index 296bb03..b057784 100644
+--- a/alliance/src/ring/src/lireplace.c
++++ b/alliance/src/ring/src/lireplace.c
+@@ -100,7 +100,7 @@ void lecture_fic(char *nomfic, lofig_list *circuit_lo,
+ 	if (mode_debug) 
+ 		printf("Avant analyse lex et yacc \n");
+ 
+-	yyin = mbkfopen(nomfic, NULL, READ_TEXT);
++	ring_yyin = mbkfopen(nomfic, NULL, READ_TEXT);
+ 
+ 	/* ------------------------------------------------------------------ */
+ 	/* lancement de lex et yacc pour interpreter le fichier de parametres */
+diff --git a/alliance/src/ring/src/ringram.y b/alliance/src/ring/src/ringram.y
+index 1bb548c..677bd52 100644
+--- a/alliance/src/ring/src/ringram.y
++++ b/alliance/src/ring/src/ringram.y
+@@ -51,3 +51,12 @@ lnomchiffre: lnomchiffre IDENT NOMBRE { declaration_width($2,$3);if (mode_debug)
+ 	| IDENT NOMBRE { declaration_width($1,$2);if (mode_debug) printf("yacc lnomchiffre \n");}
+ 	;
+ 
++%%
++
++
++void
++yyerror (char const *s)
++{
++
++  fprintf (stderr, "%s\n", s);
++}
+diff --git a/alliance/src/ring/src/rinscan.l b/alliance/src/ring/src/rinscan.l
+index 2c74c9e..a98e354 100644
+--- a/alliance/src/ring/src/rinscan.l
++++ b/alliance/src/ring/src/rinscan.l
+@@ -24,10 +24,10 @@ comment [#]({lettre}*{chiffre}*{esp}*{pct}*)*{rc}
+ "west"  {if (mode_debug) ECHO; return(M_WEST) ;}
+ "east"  {if (mode_debug) ECHO; return(M_EAST) ;}
+ "width" {if (mode_debug) ECHO; return(M_WIDTH);}
+-{nombre} {if (mode_debug) ECHO; sscanf(yytext,"%ld",&yylval.i);
++{nombre} {if (mode_debug) ECHO; sscanf(yytext,"%ld",&ring_yylval.i);
+ 					 return(NOMBRE);
+ 					} 				 
+-{ident} {if (mode_debug) ECHO; yylval.s = namealloc(yytext);
++{ident} {if (mode_debug) ECHO; ring_yylval.s = namealloc(yytext);
+ 				return(IDENT);
+ 				}
+ {comment} {if (mode_debug) {ECHO; printf("commentaire\n");}}
+diff --git a/alliance/src/ring/src/struct.h b/alliance/src/ring/src/struct.h
+index 0d54a94..1cb5b7a 100644
+--- a/alliance/src/ring/src/struct.h
++++ b/alliance/src/ring/src/struct.h
+@@ -321,8 +321,8 @@ extern char	*pvssi_p;
+ 
+ extern char	*nom_fic_param;              /* nom du fichier parametre            */
+ 
+-extern FILE *yyin;                       /* pointeur sur fichier lex */
+-extern int	yylineno;                     /* no de la ligne traitee par lex */
++extern FILE *ring_yyin;                       /* pointeur sur fichier lex */
++extern int	ring_yylineno;                     /* no de la ligne traitee par lex */
+ extern chain_list *nom_plot[NB_FACES];   /* liste pour l'analyseur des noms de 
+                                             plots */
+ extern chain_list *liste_width;          /* liste pour l'analyseur des noms
+-- 
+2.5.0
+

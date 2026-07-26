@@ -1,0 +1,31 @@
+diff --git a/frysk-common/frysk-common.ac b/frysk-common/frysk-common.ac
+index 8d7f83780..c9a2be863 100644
+--- a/frysk-common/frysk-common.ac
++++ b/frysk-common/frysk-common.ac
+@@ -151,10 +151,10 @@ AC_DEFUN([AC_LANG_COMPILER(Java)], [])
+ AU_DEFUN([AC_LANG_JAVAC], [AC_LANG(Java)])
+ AC_LANG(Java)
+ 
+-JAVAC='javac -source 1.4'
+-AS_IF([test x"$enable_werror" = xyes],
+-      [WERROR_JAVACFLAGS='-Werror -Xlint:all -Xlint:-options -Xlint:-cast'],
+-      [WERROR_JAVACFLAGS=])
++JAVAC='javac'
++# AS_IF([test x"$enable_werror" = xyes],
++#       [WERROR_JAVACFLAGS='-Werror -Xlint:all -Xlint:-options -Xlint:-cast'],
++#       [WERROR_JAVACFLAGS=])
+ AC_SUBST([JAVAC])
+ AC_SUBST([JAVACFLAGS])
+ AC_SUBST([WERROR_JAVACFLAGS])
+diff --git a/frysk-common/javadocs.sh b/frysk-common/javadocs.sh
+index fa9b33fd4..01f4f3e1d 100644
+--- a/frysk-common/javadocs.sh
++++ b/frysk-common/javadocs.sh
+@@ -93,7 +93,6 @@ for scope in public private ; do
+ 	-link ${jg}/libgconf-java-2.12.5/api/ \
+ 	-link ${jg}/libvte-java-0.12.2/api/ \
+ 	-overview ${overview} \
+-	-source 1.4 \
+ 	-d javadoc/$scope \
+ 	-use \
+ 	-linksource \

@@ -1,0 +1,26 @@
+--- p0rn-comfort-0.0.4/P0rn/Static.pm.modules	2004-11-20 22:08:11.000000000 +0100
++++ p0rn-comfort-0.0.4/P0rn/Static.pm	2006-05-23 15:26:30.000000000 +0200
+@@ -7,7 +7,7 @@
+ 
+ use strict;
+ 
+-package Static;
++package P0rn::Static;
+ 
+ our $PROXY_ADMIN = 'admin';
+ our $PROXY_CTRL_BASE = 'http://www.cgarbs.de/PROXYCONTROL';
+--- p0rn-comfort-0.0.4/P0rn/DB.pm.modules	2004-11-20 22:08:11.000000000 +0100
++++ p0rn-comfort-0.0.4/P0rn/DB.pm	2006-05-23 15:27:02.000000000 +0200
+@@ -5,9 +5,11 @@
+ # 2004 (C) by Christian Garbs <mitch@cgarbs.de>
+ # Licensed under GNU GPL.  See COPYING for details.
+ 
++package P0rn::DB;
++
+ use DBM::Deep;
+ 
+-my $dblocation = './p0rn.db';
++my $dblocation = $ENV{HOME}.'/.p0rn.db';
+ $dblocation = $ENV{P0RNDBLOCATION} if exists $ENV{P0RNDBLOCATION};
+ 
+ my $db = new DBM::Deep(

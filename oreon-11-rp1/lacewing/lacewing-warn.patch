@@ -1,0 +1,111 @@
+--- lacewing-1.10/actor.c.warn	2003-11-25 03:28:14.000000000 +0100
++++ lacewing-1.10/actor.c	2006-03-22 20:11:29.000000000 +0100
+@@ -536,7 +536,7 @@
+ //  ysin2 = sin(angle_to_radians(actor[a].angle)) * GRAIN;
+ // }
+  
+- int target_x, target_y;
++ int target_x = 0, target_y = 0;
+  float speed_mult;
+  int accel = 0;
+ 
+--- lacewing-1.10/cmds.c.warn	2003-11-25 12:25:16.000000000 +0100
++++ lacewing-1.10/cmds.c	2006-03-22 20:11:29.000000000 +0100
+@@ -1183,7 +1183,7 @@
+ {
+ 
+  int special1;
+- int special2;
++ int special2 = 0;
+  int special3;
+  int special4;
+  special5 *= 2;
+@@ -1354,9 +1354,9 @@
+ {
+  int special1;
+  int special2;
+- int special3;
+- int special4;
+- int special5;
++ int special3 = 0;
++ int special4 = 0;
++ int special5 = 0;
+ 
+  timer += grand(4);
+ 
+--- lacewing-1.10/displ_in.c.warn	2006-03-22 20:11:29.000000000 +0100
++++ lacewing-1.10/displ_in.c	2006-03-22 20:11:29.000000000 +0100
+@@ -85,9 +85,7 @@
+ void init_display(void)
+ {
+ 
+- RGB temp_palette2 [1024];
+  RGB temp_palette [256];
+- RGB temp_palette3 [1024];
+ 
+  DATAFILE *datf = load_datafile(DATADIR "gfx/data.dat");
+  if (datf == NULL)
+@@ -426,7 +424,7 @@
+ //  else
+    blit(source_bmp, temp_bmp, which_ship * 51 + 1, 1, 0, 0, 49, 49);
+ 
+- int i, x, y, px, base_col;
++ int i, x, y, px, base_col = 0;
+ 
+  for (i = 0; i < 5; i ++)
+  {
+--- lacewing-1.10/display.c.warn	2006-03-22 20:11:29.000000000 +0100
++++ lacewing-1.10/display.c	2006-03-22 20:11:30.000000000 +0100
+@@ -3181,7 +3181,7 @@
+ // return;
+ 
+  int i;
+- int col1, col2;
++ int col1 = 0, col2 = 0;
+  int count;
+  int count_x;
+  int k;
+--- lacewing-1.10/enemy.c.warn	2003-11-25 01:51:16.000000000 +0100
++++ lacewing-1.10/enemy.c	2006-03-22 20:11:30.000000000 +0100
+@@ -4440,8 +4440,6 @@
+  int speed = 0;
+  int speed_div = 5;
+  int mass;
+- int seed;
+- int status;
+  int displaced = 0;
+  int colours [4] = {COLOUR_GREEN8, COLOUR_GREEN6, COLOUR_GREEN4, COLOUR_GREEN2};
+  int colours_for_cloud [5] = {COLOUR_GREEN8, COLOUR_GREEN6, COLOUR_GREEN4, COLOUR_GREEN2, COLOUR_GREEN1};
+@@ -5685,7 +5683,7 @@
+   create_bullet(btype, x, y,
+    xs, ys, OWNER_ENEMY,
+    damage, timer + grand(timer_rand), mass, firing_angle,
+-   status, seed, colours, speed_div, special1,special2,special3,special4,special5);
++   0, grand(256), colours, speed_div, special1,special2,special3,special4,special5);
+ 
+  }
+ 
+@@ -5737,7 +5735,7 @@
+  int subtype = enemy[e].subtype;
+  int carrying_pickup = enemy[e].carrying_pickup;
+  int special [10];
+- int change_to;
++ int change_to = 0;
+ 
+  switch(enemy[e].type)
+  {
+--- lacewing-1.10/palette.c.warn	2006-03-22 20:11:59.000000000 +0100
++++ lacewing-1.10/palette.c	2006-03-22 20:11:59.000000000 +0100
+@@ -79,12 +79,7 @@
+ int limit_colour(int colour_input);
+ int average_colours(int colour1, int colour2);
+ 
+-RGB other_palet [1324];
+ RGB palet [256];
+-RGB other_palet2 [2048];
+-// what seems to be a weird bug in Allegro forces me to put padding around
+-//  the palet array, or it becomes corrupted. The same thing happened in
+-//  World of Violence and I have no idea why.
+ 
+ int adjust_lit_colour(int col, int lit);
+ int add_light_to_colour(int col, int lit);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>chisholm-letterslaughing</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Letters Laughing</name>
+  <summary>Letters Laughing is a decorative/LED sans-serif font</summary>
+  <description>
+    <p>
+      Letters Laughing is a decorative/LED sans-serif font.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://glyphobet.net/fonts/free/?font=lleqcdd</url>
+</component>
+

@@ -1,0 +1,11 @@
+# Created with jdDesktopEntryEdit 1.6
+[Desktop Entry]
+Type=Application
+Name=MyGUI Image Editor
+GenericName=MyGUI Image Editor
+Comment=Edit Images using MyGUI library
+Icon=mygui_ie
+Exec=MyGUI-Tools ImageEditor
+Categories=Development;
+StartupNotify=true
+StartupWMClass=ImageEditor

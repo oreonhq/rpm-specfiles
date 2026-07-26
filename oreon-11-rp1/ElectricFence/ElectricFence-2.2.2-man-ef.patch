@@ -1,0 +1,49 @@
+diff -up ./ef.1~ ./ef.1
+--- ./ef.1~	2012-04-27 16:10:01.748386440 +0200
++++ ./ef.1	2012-04-27 16:09:26.722375696 +0200
+@@ -0,0 +1,21 @@
++.TH ef 1
++.SH NAME
++ef \- Utility to run a program under the Electric Fence memory debugger
++
++.SH SYNOPSIS
++\fBef\fR PROGRAM [ARGS...]
++
++.SH DESCRIPTION
++The \fIef\fR command is used to launch another program under the
++Electric Fence memory debugger.  It sets up appropriate environment
++variables and then launches the specified program with the specified
++arguments.  See efence (3) manual page for more details about Electric
++Fence.
++
++.SH SEE ALSO
++.BR efence (3)
++
++.SH AUTHORS
++Electric Fence was written by Bruce Perens
++.br
++This manual page was written by Petr Machata <pmachata@redhat.com>
+diff -up ElectricFence-2.2.2/Makefile\~ ElectricFence-2.2.2/Makefile
+--- ElectricFence-2.2.2/Makefile~	2012-04-27 16:11:00.715385720 +0200
++++ ElectricFence-2.2.2/Makefile	2012-04-27 16:11:46.483384748 +0200
+@@ -5,7 +5,7 @@ LIBS=
+ prefix=/usr
+ BIN_INSTALL_DIR= $(prefix)/bin
+ LIB_INSTALL_DIR= $(prefix)/lib
+-MAN_INSTALL_DIR= $(prefix)/man/man3
++MAN_INSTALL_DIR= $(prefix)/man
+ 
+ CC= cc
+ AR= ar
+@@ -37,7 +37,8 @@ install: libefence.a efence.3 libefence.
+ 	ln -s libefence.so.0.0 $(LIB_INSTALL_DIR)/libefence.so.0
+ 	- rm -f $(LIB_INSTALL_DIR)/libefence.so
+ 	ln -s libefence.so.0.0 $(LIB_INSTALL_DIR)/libefence.so
+-	$(INSTALL) -m 644 efence.3 $(MAN_INSTALL_DIR)/efence.3
++	$(INSTALL) -m 644 efence.3 $(MAN_INSTALL_DIR)/man3/efence.3
++	$(INSTALL) -m 644 ef.1 $(MAN_INSTALL_DIR)/man1/ef.1
+ 
+ clean:
+ 	- rm -f $(OBJECTS) tstheap.o eftest.o tstheap eftest \
+
+Diff finished.  Fri Apr 27 16:11:58 2012

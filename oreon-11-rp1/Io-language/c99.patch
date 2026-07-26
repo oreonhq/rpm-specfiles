@@ -1,0 +1,63 @@
+diff -up io-2017.09.06/addons/Cairo/source/_IoCairoPDFSurface.c.c99 io-2017.09.06/addons/Cairo/source/_IoCairoPDFSurface.c
+--- io-2017.09.06/addons/Cairo/source/_IoCairoPDFSurface.c.c99	2023-01-27 13:07:57.274333854 +0100
++++ io-2017.09.06/addons/Cairo/source/_IoCairoPDFSurface.c	2023-01-27 14:32:07.591242790 +0100
+@@ -64,7 +64,7 @@ IoObject *IoCairoPDFSurface_setSize(IoCa
+ 	double w = IoMessage_locals_doubleArgAt_(m, locals, 0);
+ 	double h = IoMessage_locals_doubleArgAt_(m, locals, 1);
+ 
+-	cairo_ps_surface_set_size(SURFACE(self), w, h);
++	cairo_pdf_surface_set_size(SURFACE(self), w, h);
+ 	CHECK_STATUS(self);
+ 	return self;
+ }
+diff -up io-2017.09.06/addons/Image/source/Image.h.c99 io-2017.09.06/addons/Image/source/Image.h
+--- io-2017.09.06/addons/Image/source/Image.h.c99	2023-01-27 14:18:11.889202828 +0100
++++ io-2017.09.06/addons/Image/source/Image.h	2023-01-27 14:18:36.235363843 +0100
+@@ -145,6 +145,11 @@ IOIMAGE_API Image* Image_applyMinFilter(
+ IOIMAGE_API Image* Image_applyWeightedMedianFilter(Image* self, int filterWidth, int filterHeight, UArray* filter);
+ IOIMAGE_API Image* Image_applyNonlinearGradientsFilter(Image* self);
+ 
++IOIMAGE_API void Image_bitMask(Image *self, int component, int bitMask);
++
++// internals
++
++int Image_isL8(Image *self);
+ 
+ #endif
+ 
+diff -up io-2017.09.06/addons/SHA1/source/IoSHA1.h.c99 io-2017.09.06/addons/SHA1/source/IoSHA1.h
+--- io-2017.09.06/addons/SHA1/source/IoSHA1.h.c99	2023-01-27 14:28:59.242857698 +0100
++++ io-2017.09.06/addons/SHA1/source/IoSHA1.h	2023-01-27 14:29:09.722934762 +0100
+@@ -8,6 +8,7 @@
+ #include "IoObject.h"
+ #include "IoNumber.h"
+ #include "sha1.h"
++#include "hmac.h"
+ 
+ #define ISSHA1(self) IoObject_hasCloneFunc_(self, (IoTagCloneFunc *)IoSHA1_rawClone)
+ 
+diff -up io-2017.09.06/libs/coroutine/source/taskimpl.h.c99 io-2017.09.06/libs/coroutine/source/taskimpl.h
+--- io-2017.09.06/libs/coroutine/source/taskimpl.h.c99	2023-01-27 14:36:01.131960260 +0100
++++ io-2017.09.06/libs/coroutine/source/taskimpl.h	2023-01-27 14:36:27.685155522 +0100
+@@ -52,6 +52,10 @@
+ #	include <inttypes.h>
+ #endif
+ 
++#if defined(__linux__)
++#	include <ucontext.h>
++#endif
++
+ //#include "task.h"
+ 
+ #ifndef nil
+diff -up io-2017.09.06/libs/iovm/source/IoState.h.c99 io-2017.09.06/libs/iovm/source/IoState.h
+--- io-2017.09.06/libs/iovm/source/IoState.h.c99	2023-01-27 14:07:18.958884673 +0100
++++ io-2017.09.06/libs/iovm/source/IoState.h	2023-01-27 14:07:30.726962503 +0100
+@@ -175,6 +175,7 @@ IOVM_API void IoState_init(IoState *self
+ void IoState_setupQuickAccessSymbols(IoState *self);
+ void IoState_setupCachedMessages(IoState *self);
+ void IoState_setupSingletons(IoState *self);
++void IoState_registerProtoWithFunc_(IoState *self, IoObject *proto, const char *v);
+ 
+ // setup tags
+ 

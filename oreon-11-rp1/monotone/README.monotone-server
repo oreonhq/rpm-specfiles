@@ -1,0 +1,38 @@
+The Fedora build of monotone provides an extra RPM "monotone-server".  This
+package is intended to make it easy to set up an unattended server
+installation for Monotone's Netsync protocol (i.e. "monotone serve").
+
+The package contains a systemd service unit for running the server, installed
+as /usr/sbin/monotone-server.  (This is just a symlink to monotone that the
+systemd runs instead.  This enables matching "monotone-server" processes with
+ps to distinguish server instances from people using monotone.)
+
+The /etc/monotone directory serves as ~/.monotone for the server.  This
+directory and its contents are not writable by the "monotone" user ID under
+which the network server runs.  The database lives in /var/lib/monotone, which
+the "monotone" user ID must write to.
+
+On startup, the systemd service will generate a private key for the
+server to use, if none exists yet, using
+/usr/libexec/monotone-server-genkey.  The key identification will
+contain the host's FQDN (from /bin/hostname -f).
+
+Before starting the server, the script will migrate an old database
+format if you had a previous version of the monotone-server installation.
+
+Access to the server is controlled by the /etc/monotone/read-permissions and
+/etc/monotone/write-permissions files, unless you write your own Lua hooks in
+/etc/monotone/monotonerc.  These files are not created or edited by the RPM
+scripts, you must create them.  These files refer to key identification
+strings for keys already the database.  Anyone allowed write access by the
+network server can put new keys in the database with "monotone push" using the
+--key-to-push option.  To bootstrap this, /etc/monotone/write-permission must
+allow some key and that key must be in the database already.  You can put a
+key in the server's database easily with /usr/libexec/monotone-server-import,
+e.g. to import the public key for a private key in ~/.monotone/keys:
+
+  mtn pubkey me@my.com | sudo /usr/libexec/monotone-server-import
+
+For problems with this package or its scripts, please file bugs at
+http://bugzilla.redhat.com/ for the "monotone" component in the "Fedora"
+product.

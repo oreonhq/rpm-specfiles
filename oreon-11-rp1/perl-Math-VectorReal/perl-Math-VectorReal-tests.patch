@@ -1,0 +1,49 @@
+diff -up Math-VectorReal-1.02/matrix_test.pl.orig Math-VectorReal-1.02/matrix_test.pl
+--- Math-VectorReal-1.02/matrix_test.pl.orig	2001-07-12 08:04:04.000000000 +0200
++++ Math-VectorReal-1.02/matrix_test.pl	2025-11-25 18:33:54.403598920 +0100
+@@ -39,7 +39,8 @@ sub rotation_matrix {  # create rotation
+   # Math::VectorReal has a vector_matrix() is MUCH easier and more exact.
+   my $Q = vector_matrix( $v, $m, $n );
+ 
+-  print "Matrix to rotate Z axis to n => Q\n$Q\n";
++  print "Matrix to rotate Z axis to n => Q\n";
++  print "$Q\n";
+ 
+   # Transfrom  $w  to the new coordinate system
+   # Note ~$Q is the transpose of $Q which is also its inverse
+@@ -48,7 +49,8 @@ sub rotation_matrix {  # create rotation
+ 
+   # Rotate around Z axis so   v' ($x)  -->  w' ($wx)
+   my $T = vector_matrix( $wx, $wy, Z );
+-  print "Rotate around Z axis => T\n$T\n";
++  print "Rotate around Z axis => T\n";
++  print "$T\n";
+ 
+   # multiply together the three resulting rotation matrix
+   # to produce the general rotation matrix to map $v to $w
+@@ -65,7 +67,8 @@ print "Generate a rotation matix to rota
+ 
+ $Math::VectorReal::FORMAT = "[ %5f %5f %5f ]";
+ my $R = rotation_matrix( $v, Y ); # generate the general rotation matrix
+-print "Resultant Rotation Matrix => R = transpose(Q) * T * Q\n$R\n";
++print "Resultant Rotation Matrix => R = transpose(Q) * T * Q\n";
++print "$R\n";
+ 
+ my( $nx, $ny, $nz );
+ 
+diff -up Math-VectorReal-1.02/vector_test.out.orig Math-VectorReal-1.02/vector_test.out
+--- Math-VectorReal-1.02/vector_test.out.orig	2001-06-20 10:33:21.000000000 +0200
++++ Math-VectorReal-1.02/vector_test.out	2025-11-25 18:16:01.623088473 +0100
+@@ -41,9 +41,9 @@ $a = $b / 2 => [ 0 0.5 -0.5 ]
+ $a /= 3e14  => [ 0 1.66667e-15 -1.66667e-15 ]
+ 
+ Unary - and more subtraction
+-$b = -$b       => [ -0 -1 1 ]
+-$b -= Z        => [ -0 -1 0 ]
+-$b -= $z - -$y => [ -0 -2 -1 ]
++$b = -$b       => [ 0 -1 1 ]
++$b -= Z        => [ 0 -1 0 ]
++$b -= $z - -$y => [ 0 -2 -1 ]
+ $b = $o - $b   => [ 0 2 1 ]
+ 
+ Cross Product

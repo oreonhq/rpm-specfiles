@@ -1,0 +1,33 @@
+From 3b8b8b887636e966f570c91d6f9b8fef2f659702 Mon Sep 17 00:00:00 2001
+From: Matthias Krack <matthias.krack@psi.ch>
+Date: Tue, 11 Feb 2025 21:37:20 +0100
+Subject: [PATCH] Try to fix #3959
+
+---
+ src/nnp_force.F | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/nnp_force.F b/src/nnp_force.F
+index 1648d2d47b..790a14230f 100644
+--- a/src/nnp_force.F
++++ b/src/nnp_force.F
+@@ -386,7 +386,7 @@ SUBROUTINE nnp_print_energies(nnp, unit_nr, file_is_new)
+       INTEGER, INTENT(IN)                                :: unit_nr
+       LOGICAL, INTENT(IN)                                :: file_is_new
+ 
+-      CHARACTER(len=default_path_length)                 :: fmt_string
++      CHARACTER(LEN=12)                                  :: fmt_string
+       INTEGER                                            :: i
+       REAL(KIND=dp)                                      :: std
+ 
+@@ -399,8 +399,8 @@ SUBROUTINE nnp_print_energies(nnp, unit_nr, file_is_new)
+          WRITE (unit_nr, "(A)") ""
+       END IF
+ 
+-      fmt_string = "(2X,2(F20.9))"
+-      WRITE (fmt_string, "(A,I3,A)") "(2X", nnp%n_committee + 2, "(F20.9))"
++      fmt_string = "(2X,  F20.9)"
++      WRITE (UNIT=fmt_string(5:6), FMT="(I2)") nnp%n_committee + 2
+       std = SUM((SUM(nnp%atomic_energy, 1) - nnp%nnp_potential_energy)**2)
+       std = std/REAL(nnp%n_committee, dp)
+       std = SQRT(std)

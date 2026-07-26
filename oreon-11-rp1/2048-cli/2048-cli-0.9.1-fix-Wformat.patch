@@ -1,0 +1,19 @@
+Index: 2048-cli-0.9.1/src/gfx_curses.c
+===================================================================
+--- 2048-cli-0.9.1.orig/src/gfx_curses.c
++++ 2048-cli-0.9.1/src/gfx_curses.c
+@@ -59,11 +59,11 @@ struct gfx_state* gfx_init(struct gamest
+ void gfx_draw(struct gfx_state *s, struct gamestate *g)
+ {
+     if (g->score_last)
+-        mvwprintw(s->window, 0, 0, "Score: %d (+%d)\n", g->score, g->score_last);
++        mvwprintw(s->window, 0, 0, "Score: %ld (+%ld)\n", g->score, g->score_last);
+     else
+-        mvwprintw(s->window, 0, 0, "Score: %d\n", g->score);
++        mvwprintw(s->window, 0, 0, "Score: %ld\n", g->score);
+ 
+-    mvwprintw(s->window, 1, 0, "   Hi: %d\n", g->score_high);
++    mvwprintw(s->window, 1, 0, "   Hi: %ld\n", g->score_high);
+ 
+     wattron(s->window, A_DIM);
+     iterate(g->opts->grid_width * (g->print_width + 2) + 1, waddch(s->window, '-'));

@@ -1,0 +1,52 @@
+From 461c7007be7c1693f9a7b96580f94526f213d78d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 25 Jul 2017 08:47:15 +0200
+Subject: [PATCH] Port to webkitgtk4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+webkitgtk3 (WebKit1 with Gtk3) is not supported any more and contains
+many security bugs. This patch moves to webkitgtk4 (WebKit2 with
+Gtk3). It still uses Gtk3::WebKit name space.
+
+get_default_session() does not exist.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Gtk3/WebKit.pm | 4 ++--
+ t/webkit.t         | 3 ---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/lib/Gtk3/WebKit.pm b/lib/Gtk3/WebKit.pm
+index fa07935..7c5e12f 100644
+--- a/lib/Gtk3/WebKit.pm
++++ b/lib/Gtk3/WebKit.pm
+@@ -382,8 +382,8 @@ $EXPORT_TAGS{all} = \@EXPORT_OK;
+ 
+ sub import {
+     my %setup = (
+-        basename  => 'WebKit',
+-        version   => '3.0',
++        basename  => 'WebKit2',
++        version   => '4.1',
+         package   => __PACKAGE__,
+     );
+ 
+diff --git a/t/webkit.t b/t/webkit.t
+index 7fe76e9..4729c81 100644
+--- a/t/webkit.t
++++ b/t/webkit.t
+@@ -17,9 +17,6 @@ BEGIN {
+ 
+ 
+ sub main {
+-    # Grab the session so that headless unit test don't crash, see RT 93421
+-    my $session = Gtk3::WebKit::get_default_session();
+-
+     my $view = Gtk3::WebKit::WebView->new();
+     isa_ok($view, 'Gtk3::WebKit::WebView');
+     return 0;
+-- 
+2.9.4
+

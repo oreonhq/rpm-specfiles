@@ -1,0 +1,14 @@
+diff -up ElectricFence-2.2.2/efence.c\~ ElectricFence-2.2.2/efence.c
+--- ElectricFence-2.2.2/efence.c~	2010-09-10 13:37:58.000000000 +0200
++++ ElectricFence-2.2.2/efence.c	2011-01-19 15:00:16.000000000 +0100
+@@ -327,7 +327,7 @@ initialize(void)
+ 		if ( (string = getenv("EF_ALIGNMENT")) != 0 )
+ 			EF_ALIGNMENT = (size_t)atoi(string);
+ 		else
+-			EF_ALIGNMENT = sizeof(int);
++			EF_ALIGNMENT = 2 * sizeof (size_t);
+ 	}
+ 
+ 	/*
+
+Diff finished.  Wed Jan 19 15:00:26 2011

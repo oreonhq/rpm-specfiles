@@ -1,0 +1,844 @@
+From 15063c2e081ff64e31a8a3e4414e84d7579d3c2a Mon Sep 17 00:00:00 2001
+From: "H. Peter Anvin" <hpa@zytor.com>
+Date: Sat, 1 Nov 2025 21:28:26 -0700
+Subject: [PATCH 1/3] i18n.h: fix header guard
+
+Fix broken header guard in i18n.h
+
+Signed-off-by: H. Peter Anvin <hpa@zytor.com>
+---
+ src/i18n.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/i18n.h b/src/i18n.h
+index 0d09c9d..4796f7e 100644
+--- a/src/i18n.h
++++ b/src/i18n.h
+@@ -13,7 +13,7 @@
+ /***********************************************************************/
+ 
+ #ifndef I18N_H_
+-#define I18N_H
++#define I18N_H_
+ 
+ #include <stdio.h>
+ 
+
+From 4d1018ae554e2994d7682878e49fb88fca2244d4 Mon Sep 17 00:00:00 2001
+From: "H. Peter Anvin" <hpa@zytor.com>
+Date: Sat, 1 Nov 2025 21:37:38 -0700
+Subject: [PATCH 2/3] Fix baud rate settings
+
+Fix numerous settings with the baud rate setting code.
+
+- It is not valid to assume the baud rate is part of c_cflag.
+  Among other things, this breaks on Hurd, many BSDs, and Linux
+  with glibc 2.42+.
+- Don't use TIOCSSERIAL on Linux. It breaks other applications which
+  expect to have the serial port set to 38400.  Use cfsetobaud() if
+  it exists (glibc 2.42+) otherwise the termios2 interface (TCSETS2).
+- <linux/termios.h> and <termios.h> are mutually exclusive.
+- Prove a mechanism for probing new Bxxx constants if necessary.
+- For platforms where speed_t is "sane", use it directly.
+- Some platforms need _GNU_SOURCE and/or _XOPEN_SOURCE for all
+  <termios.h> features to be enabled.
+
+Signed-off-by: H. Peter Anvin <hpa@zytor.com>
+---
+ meson.build          |  20 +++++--
+ src/baud.c           | 124 +++++++++++++++++++++++++++++++++++++++++++
+ src/baudrates.c      |  75 ++++++++++++++++++++++++++
+ src/baudrates.sh     |  39 ++++++++++++++
+ src/device_monitor.c |   2 +-
+ src/interface.c      |  14 +++--
+ src/meson.build      |  10 ++++
+ src/serial.c         | 113 ++++++++++-----------------------------
+ src/serial.h         |  20 +++++--
+ src/term_config.c    | 124 ++++++++++---------------------------------
+ src/term_config.h    |   2 +-
+ 11 files changed, 343 insertions(+), 200 deletions(-)
+ create mode 100644 src/baud.c
+ create mode 100644 src/baudrates.c
+ create mode 100755 src/baudrates.sh
+
+diff --git a/meson.build b/meson.build
+index 2194b19..c228a77 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2,7 +2,7 @@ project(
+ 	'gtkterm',
+ 	'c',
+ 	version: '1.3.1',
+-	meson_version : '>= 0.46.0'
++	meson_version : '>= 1.0.0'
+ )
+ 
+ # Find dependencies
+@@ -15,6 +15,11 @@ prefix = get_option('prefix')
+ datadir = join_paths(prefix, get_option('datadir'))
+ localedir = join_paths(prefix, get_option('localedir'))
+ 
++# Needed on some platforms for <termios.h>
++add_project_arguments('-D_GNU_SOURCE=1',
++		      '-D_XOPEN_SOURCE=700',
++                      language : ['c'])
++
+ # Configure GTKTerm
+ conf = configuration_data()
+ conf.set_quoted('VERSION', meson.project_version())
+@@ -23,9 +28,16 @@ conf.set_quoted('RELEASE_DATE', 'May 2024')
+ conf.set_quoted('LOCALEDIR', localedir)
+ 
+ cc = meson.get_compiler('c')
+-have_serial_h = cc.has_header('linux/serial.h')
+-if have_serial_h
+-  conf.set('HAVE_LINUX_SERIAL_H', '1')
++if cc.has_function('cfsetobaud', prefix : [ '#define _GNU_SOURCE 1',
++					    '#define _XOPEN_SOURCE 700',
++					    '#include <termios.h>'])
++  conf.set('HAVE_CFSETOBAUD', '1')
++endif
++if cc.has_header('linux/termios.h')
++  conf.set('HAVE_LINUX_TERMIOS_H', '1')
++endif
++if cc.has_header('sys/ttycom.h')
++  conf.set('HAVE_SYS_TTYCOM_H', '1')
+ endif
+ 
+ configure_file(output : 'config.h', configuration : conf)
+diff --git a/src/baud.c b/src/baud.c
+new file mode 100644
+index 0000000..64ec20d
+--- /dev/null
++++ b/src/baud.c
+@@ -0,0 +1,124 @@
++/***********************************************************************/
++/* baud.c                                                              */
++/* -------                                                             */
++/*           GTKTerm Software                                          */
++/*                      (c) Julien Schmitt                             */
++/*                                                                     */
++/* ------------------------------------------------------------------- */
++/*                                                                     */
++/*   Purpose                                                           */
++/*      Serial port baud rate setting                                  */
++/*      In a separate file as <linux/termios.h> conflicts with	       */
++/*	<termios.h>. A struct termios is not valid across a call to    */
++/*      set_port_baudrate().                                           */
++/*                                                                     */
++/*      Returns 0 on error, otherwise the updated baud rate if the     */
++/*      kernel reports it.                                             */
++/*                                                                     */
++/***********************************************************************/
++
++#include <stddef.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <errno.h>
++#include <glib.h>
++
++#include <config.h>
++
++#define CHK(x) do { if (x) return 0; } while (0)
++
++#ifdef HAVE_CFSETOBAUD
++
++#include "serial.h"
++
++unsigned int set_port_baudrate(unsigned int baud, int port_fd)
++{
++	struct termios tio;
++
++	CHK(tcgetattr(port_fd, &tio));
++	CHK(cfsetobaud(&tio, baud));
++	CHK(cfsetibaud(&tio, baud));
++	CHK(tcsetattr(port_fd, TCSANOW, &tio));
++	CHK(tcgetattr(port_fd, &tio));
++	return cfgetobaud(&tio);
++}
++
++#elif defined(HAVE_LINUX_TERMIOS_H)
++
++#include <linux/termios.h>
++#include <sys/ioctl.h>
++#include <sys/types.h>
++
++/* <termios.h> cannot be included here */
++#define NO_TERMIOS
++#include "serial.h"
++
++#ifndef TCSETS2
++# define termios2 termios
++# ifdef __powerpc__
++#  define TCGETS2 _IOR('t', 19, struct termios2)
++#  define TCSETS2 _IOW('t', 20, struct termios2)
++# else
++#  define TCSETS2 TCSETS
++#  define TCGETS2 TCGETS
++# endif
++#endif
++#ifdef __BOTHER
++# undef  BOTHER
++# define BOTHER __BOTHER
++#endif
++#ifndef CIBAUD
++# define CIBAUD (CBAUD << 16)
++#endif
++
++unsigned int set_port_baudrate(unsigned int baud, int port_fd)
++{
++	struct termios2 tio;
++	CHK(ioctl(port_fd, TCGETS2, &tio));
++
++	tio.c_ispeed = tio.c_ospeed = baud;
++	tio.c_cflag &= ~(CBAUD | CIBAUD);
++	tio.c_cflag |= BOTHER;
++
++	CHK(ioctl(port_fd, TCSETS2, &tio));
++	CHK(ioctl(port_fd, TCGETS2, &tio));
++
++	CHK((tio.c_cflag & CBAUD) ==  BOTHER);
++	return tio.c_ospeed;
++}
++
++#else  /* No baud_t interface, not Linux */
++
++#include "serial.h"
++
++int set_port_baudrate(unsigned int baud, int port_fd)
++{
++	struct termios tio;
++	speed_t speed;
++
++	if (speed_t_is_sane)
++	{
++		speed = baud;
++
++		/* Check for type conversion errors */
++		if (speed != baud)
++			speed = B0;
++	} else {
++		speed = find_standard_baudrate(baud);
++	}
++
++	if (speed == B0)
++	{
++		errno = EINVAL;
++		return -1;
++	}
++
++	CHK(tcgetattr(port_fd, &tio));
++	CHK(cfsetospeed(&tio, speed));
++	CHK(cfsetispeed(&tio, speed));
++	CHK(tcsetattr(port_fd, TCSANOW, &tio));
++	CHK(tcgetattr(port_fd, &tio));
++	return speed_t_to_baud(cfgetospeed(&tio));
++}
++
++#endif
+diff --git a/src/baudrates.c b/src/baudrates.c
+new file mode 100644
+index 0000000..b1e9593
+--- /dev/null
++++ b/src/baudrates.c
+@@ -0,0 +1,75 @@
++/***********************************************************************/
++/* baudrates.c                                                         */
++/* -------                                                             */
++/*           GTKTerm Software                                          */
++/*                      (c) Julien Schmitt                             */
++/*                                                                     */
++/* ------------------------------------------------------------------- */
++/*                                                                     */
++/*   Purpose                                                           */
++/*      Sorted list of "standard" baud rates defined in <termios.h>    */
++/*      for any particular system.  The last entry will be { 0, B0 }.  */
++/*                                                                     */
++/***********************************************************************/
++
++#include <stddef.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <errno.h>
++#include <termios.h>
++#include <glib.h>
++
++#include <config.h>
++
++#include "serial.h"
++
++const struct baudrate baudrate_list[] = {
++#include "baudrates.h"
++	{ 0, B0 }
++};
++
++const int baudrate_count =
++	sizeof(baudrate_list) / sizeof(baudrate_list[0]) - 1;
++
++const gboolean speed_t_is_sane = SPEED_T_IS_SANE;
++
++speed_t find_standard_baudrate(unsigned int baud)
++{
++	size_t l = 0;
++	size_t r = baudrate_count;
++
++	while (l < r)
++	{
++		size_t i = (l+r) >> 1;
++		if (baudrate_list[i].baud < baud)
++			l = i+1;
++		else if (baudrate_list[i].baud > baud)
++			r = i;
++		else
++			return baudrate_list[i].speed;
++	}
++
++	return B0;
++}
++
++unsigned int speed_t_to_baud(speed_t speed)
++{
++	if (speed_t_is_sane)
++	{
++		unsigned int baud = speed;
++		if (baud != speed)
++			baud = 0;
++		return baud;
++	}
++	else
++	{
++		size_t i;
++
++		for (i = 0; i < baudrate_count; i++)
++		{
++			if (baudrate_list[i].speed == speed)
++				break;
++		}
++		return baudrate_list[i].baud; /* 0 if end of list */
++	}
++}
+diff --git a/src/baudrates.sh b/src/baudrates.sh
+new file mode 100755
+index 0000000..43e5e8a
+--- /dev/null
++++ b/src/baudrates.sh
+@@ -0,0 +1,39 @@
++#!/bin/sh -
++#
++# Usage: baudrates.sh output [macro_def_files]
++#
++#  macro_def_files are optional lists of macros defined by <termios.h>,
++#  obtained e.g. by using the -dM option to gcc -E.
++#
++
++out="$1"
++if [ x"$out" != x ]; then
++	shift
++	exec >"$out"		# Redirect remaining output
++fi
++
++s='[[:space:]]'
++baudrates=`(
++    for b in 50 75 110 134 150 200 300 600 1200 1800 2400 4800 \
++		7200 9600 14400 19200 28800 33600 38400 57600 76800 \
++		115200 153600 230400 307200 460800 500000 576000 \
++		614400 921600 1000000 1152000 1500000 2000000 2500000 \
++		3000000 3500000 4000000 5000000 10000000
++    do
++	echo "#define B$b -"
++    done
++    cat -- "$@" < /dev/null
++) |
++    sed -E -n -e "s/^$s*#$s*define$s$s*B([1-9][0-9]*)$s.*\$/\\1/p" |
++    sort -n | uniq`
++
++printf '#if\tB0 == 0'
++for b in $baudrates; do
++	printf ' \\\n\t&& (!defined(B%u) || (B%u == %u))' $b $b $b
++done
++printf '\n#define SPEED_T_IS_SANE 1\n#else\n#define SPEED_T_IS_SANE 0\n#endif\n\n'
++
++# Baudrate table
++for b in $baudrates; do
++	printf '#ifdef B%u\n\t{ %u, B%u },\n#endif\n' $b $b $b
++done
+diff --git a/src/device_monitor.c b/src/device_monitor.c
+index d0c3b75..4cd2160 100644
+--- a/src/device_monitor.c
++++ b/src/device_monitor.c
+@@ -22,11 +22,11 @@
+ #include <string.h>
+ #include <gtk/gtk.h>
+ #include <glib.h>
+-#include <serial.h>
+ #include <interface.h>
+ #include <term_config.h>
+ #include <gudev/gudev.h>
+ 
++#include "serial.h"
+ #include "interface.h"
+ 
+ extern struct configuration_port config;
+diff --git a/src/interface.c b/src/interface.c
+index 9584eb0..7d2d1b8 100644
+--- a/src/interface.c
++++ b/src/interface.c
+@@ -54,14 +54,13 @@
+ /*                                                                     */
+ /***********************************************************************/
+ 
++#include "config.h"
++
+ #include <gtk/gtk.h>
+-#if defined (__linux__)
+-#  include <asm/termios.h>       /* For control signals */
+-#endif
+-#if defined (__FreeBSD__) || defined (__FreeBSD_kernel__) \
+-     || defined (__NetBSD__) || defined (__NetBSD_kernel__) \
+-     || defined (__OpenBSD__) || defined (__OpenBSD_kernel__)
+-#  include <sys/ttycom.h>        /* For control signals */
++#ifdef HAVE_LINUX_TERMIOS_H
++# include <linux/termios.h>	/* For control signals */
++# define NO_TERMIOS		/* Conflicts with <termios.h> */
++#elif defined (HAVE_SYS_TTYCOM_H)
+ #endif
+ #include <vte/vte.h>
+ #include <stdlib.h>
+@@ -79,7 +78,6 @@
+ #include "logging.h"
+ #include "device_monitor.h"
+ 
+-#include <config.h>
+ #include <glib/gprintf.h>
+ #include <glib/gi18n.h>
+ 
+diff --git a/src/meson.build b/src/meson.build
+index 6786eb5..bf47d48 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -1,4 +1,14 @@
++prog_sh = find_program('sh')
++baudrates_h = custom_target(
++	    'baudrates.h',
++	    output : 'baudrates.h',
++	    input : 'baudrates.sh',
++	    command : [prog_sh, '@INPUT@', '@OUTPUT@'])
++
+ sources = [
++	'baud.c',
++	'baudrates.c',
++	baudrates_h,
+ 	'buffer.c',
+ 	'buffer.h',
+ 	'cmdline.c',
+diff --git a/src/serial.c b/src/serial.c
+index d6ca68b..c83138e 100644
+--- a/src/serial.c
++++ b/src/serial.c
+@@ -52,6 +52,7 @@
+ 
+ struct termios termios_save;
+ int serial_port_fd = -1;
++static unsigned int serial_port_speed;
+ 
+ guint callback_handler_in, callback_handler_err;
+ gboolean callback_activated = FALSE;
+@@ -144,6 +145,7 @@ gboolean Config_port(void)
+ {
+ 	struct termios termios_p;
+ 	gchar *msg = NULL;
++	unsigned int speed_margin;
+ 
+ 	Close_port();
+ 
+@@ -159,6 +161,17 @@ gboolean Config_port(void)
+ 		return FALSE;
+ 	}
+ 
++	if (!isatty(serial_port_fd))
++	{
++		Close_port();
++		msg = g_strdup_printf(_("%s is not a valid serial port\n"),
++				      config.port);
++		show_message(msg, MSG_ERR);
++		g_free(msg);
++
++		return FALSE;
++	}
++
+ 	if(! config.disable_port_lock)
+ 	{
+ 	    if(flock(serial_port_fd, LOCK_EX | LOCK_NB) == -1)
+@@ -172,76 +185,26 @@ gboolean Config_port(void)
+ 		}
+ 	}
+ 
+-	tcgetattr(serial_port_fd, &termios_p);
+-	memcpy(&termios_save, &termios_p, sizeof(struct termios));
++	/* Allow 1/3 bit times wrong by the end of the first stop bit
++	   to avoid failing due to rounding. */
++	speed_margin = config.vitesse/(3*(2U+config.bits+!!config.parite));
++	serial_port_speed = set_port_baudrate(config.vitesse, serial_port_fd);
+ 
+-	switch(config.vitesse)
++	/* These comparisons handle integer wraparound correctly. */
++	if (serial_port_speed < config.vitesse - speed_margin ||
++	    serial_port_speed - speed_margin > config.vitesse)
+ 	{
+-	case 300:
+-		termios_p.c_cflag = B300;
+-		break;
+-	case 600:
+-		termios_p.c_cflag = B600;
+-		break;
+-	case 1200:
+-		termios_p.c_cflag = B1200;
+-		break;
+-	case 2400:
+-		termios_p.c_cflag = B2400;
+-		break;
+-	case 4800:
+-		termios_p.c_cflag = B4800;
+-		break;
+-	case 9600:
+-		termios_p.c_cflag = B9600;
+-		break;
+-	case 19200:
+-		termios_p.c_cflag = B19200;
+-		break;
+-	case 38400:
+-		termios_p.c_cflag = B38400;
+-		break;
+-	case 57600:
+-		termios_p.c_cflag = B57600;
+-		break;
+-	case 115200:
+-		termios_p.c_cflag = B115200;
+-		break;
+-	case 230400:
+-		termios_p.c_cflag = B230400;
+-		break;
+-	case 460800:
+-		termios_p.c_cflag = B460800;
+-		break;
+-	case 576000:
+-		termios_p.c_cflag = B576000;
+-		break;
+-	case 921600:
+-		termios_p.c_cflag = B921600;
+-		break;
+-	case 1000000:
+-		termios_p.c_cflag = B1000000;
+-		break;
+-	case 1500000:
+-		termios_p.c_cflag = B1500000;
+-		break;
+-	case 2000000:
+-		termios_p.c_cflag = B2000000;
+-		break;
+-
+-	default:
+-#ifdef HAVE_LINUX_SERIAL_H
+-		set_custom_speed(config.vitesse, serial_port_fd);
+-		termios_p.c_cflag |= B38400;
+-#else
+ 		Close_port();
+-		msg = g_strdup_printf(_("Arbitrary baud rates not supported"));
++		msg = g_strdup_printf(_("Unable to set baud rate %u"),
++					config.vitesse);
+ 		show_message(msg, MSG_ERR);
+ 		g_free(msg);
+ 		return FALSE;
+-#endif
+ 	}
+ 
++	tcgetattr(serial_port_fd, &termios_p);
++	memcpy(&termios_save, &termios_p, sizeof(struct termios));
++
+ 	switch(config.bits)
+ 	{
+ 	case 5:
+@@ -433,28 +396,6 @@ void sendbreak(void)
+ 		tcsendbreak(serial_port_fd, 0);
+ }
+ 
+-#ifdef HAVE_LINUX_SERIAL_H
+-gint set_custom_speed(int speed, int port_fd)
+-{
+-
+-	struct serial_struct ser;
+-	int arby;
+-
+-	ioctl(port_fd, TIOCGSERIAL, &ser);
+-	ser.custom_divisor = ser.baud_base / speed;
+-	if(!(ser.custom_divisor))
+-		ser.custom_divisor = 1;
+-
+-	arby = ser.baud_base / ser.custom_divisor;
+-	ser.flags &= ~ASYNC_SPD_MASK;
+-	ser.flags |= ASYNC_SPD_CUST;
+-
+-	ioctl(port_fd, TIOCSSERIAL, &ser);
+-
+-	return 0;
+-}
+-#endif
+-
+ gchar* get_port_string(void)
+ {
+ 	gchar* msg;
+@@ -483,9 +424,9 @@ gchar* get_port_string(void)
+ 		}
+ 
+ 		/* "GtkTerm: device  baud-bits-parity-stops"  */
+-		msg = g_strdup_printf("%.15s  %d-%d-%c-%d",
++		msg = g_strdup_printf("%.15s  %u-%d-%c-%d",
+ 		                      config.port,
+-		                      config.vitesse,
++		                      serial_port_speed,
+ 		                      config.bits,
+ 		                      parity,
+ 		                      config.stops
+diff --git a/src/serial.h b/src/serial.h
+index 91fa0a8..6f4cfc5 100644
+--- a/src/serial.h
++++ b/src/serial.h
+@@ -12,8 +12,12 @@
+ /*                                                                     */
+ /***********************************************************************/
+ 
+-#ifndef SERIE_H_
+-#define SERIE_H_
++#ifndef SERIAL_H_
++#define SERIAL_H_
++
++#ifndef NO_TERMIOS
++#include <termios.h>
++#endif
+ 
+ extern int serial_port_fd;
+ 
+@@ -27,9 +31,19 @@ void configure_crlfauto(gboolean);
+ void configure_autoreconnect_enable(gboolean);
+ void configure_esc_clear_screen(gboolean);
+ void sendbreak(void);
+-gint set_custom_speed(int, int);
++unsigned int set_port_baudrate(unsigned int, int);
+ gchar* get_port_string(void);
+ 
++struct baudrate {
++	unsigned int baud;
++	speed_t speed;
++};
++extern const struct baudrate baudrate_list[];
++extern const int baudrate_count;
++extern const gboolean speed_t_is_sane;
++speed_t find_standard_baudrate(unsigned int);
++unsigned int speed_t_to_baud(speed_t);
++
+ #define BUFFER_RECEPTION 8192
+ #define BUFFER_EMISSION 4096
+ #define LINE_FEED 0x0A
+diff --git a/src/term_config.c b/src/term_config.c
+index 21b8982..640376b 100644
+--- a/src/term_config.c
++++ b/src/term_config.c
+@@ -200,6 +200,7 @@ void Config_Port_Fenetre(GtkAction *action, gpointer data)
+ 	struct stat my_stat;
+ 	gchar *string;
+ 	int i;
++	int speed_index;
+ 
+ 	for(dev = devices_to_check; *dev != NULL; dev++)
+ 	{
+@@ -277,89 +278,35 @@ void Config_Port_Fenetre(GtkAction *action, gpointer data)
+ 
+ 	Combo = gtk_combo_box_text_new_with_entry();
+ 	gtk_entry_set_max_length(GTK_ENTRY(gtk_bin_get_child (GTK_BIN (Combo))), 10);
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "300");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "600");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "1200");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "2400");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "4800");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "9600");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "19200");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "38400");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "57600");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "115200");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "230400");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "460800");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "576000");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "921600");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "1000000");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "1500000");
+-	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), "2000000");
+-
+-	/* set the current choice to the previous setting */
+-	switch(config.vitesse)
++
++	speed_index = -1;
++	if (!config.vitesse)
++		config.vitesse = DEFAULT_SPEED;
++
++	for(i = 0; i < baudrate_count; i++)
+ 	{
+-	case 300:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 0);
+-		break;
+-	case 600:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 1);
+-		break;
+-	case 1200:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 2);
+-		break;
+-	case 2400:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 3);
+-		break;
+-	case 4800:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 4);
+-		break;
+-	case 9600:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 5);
+-		break;
+-	case 19200:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 6);
+-		break;
+-	case 38400:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 7);
+-		break;
+-	case 57600:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 8);
+-		break;
+-	case 115200:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 9);
+-		break;
+-	case 230400:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 10);
+-		break;
+-	case 460800:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 11);
+-		break;
+-	case 576000:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 12);
+-		break;
+-	case 921600:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 13);
+-		break;
+-	case 1000000:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 14);
+-		break;
+-	case 2000000:
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 15);
+-		break;
+-	case 0:
+-		/* no previous setting, use a default */
+-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), 5);
+-	default:
+-		/* custom baudrate */
+-		string = g_strdup_printf("%d", config.vitesse);
++		if (baudrate_list[i].baud == config.vitesse)
++			speed_index = i;
++
++		string = g_strdup_printf("%u", baudrate_list[i].baud);
++		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(Combo), string);
++		g_free(string);
++	}
++
++	if (speed_index < 0)
++	{
++		/* Custom baud rate */
++		string = g_strdup_printf("%u", config.vitesse);
+ 		gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child (GTK_BIN (Combo))), string);
+ 		g_free(string);
++	} else {
++		gtk_combo_box_set_active(GTK_COMBO_BOX(Combo), speed_index);
+ 	}
+ 
+ 	//validate input text (digits only)
+ 	g_signal_connect(GTK_ENTRY(gtk_bin_get_child (GTK_BIN (Combo))),
+-	                 "insert-text",
+-	                 G_CALLBACK(check_text_input), isdigit);
++			 "insert-text",
++			 G_CALLBACK(check_text_input), isdigit);
+ 
+ 	gtk_table_attach(GTK_TABLE(Table), Combo, 1, 2, 1, 2, GTK_FILL | GTK_EXPAND, GTK_FILL | GTK_EXPAND, 5, 5);
+ 	Combos[1] = Combo;
+@@ -1116,28 +1063,11 @@ void Verify_configuration(void)
+ {
+ 	gchar *string = NULL;
+ 
+-	switch(config.vitesse)
++	if (find_standard_baudrate(config.vitesse) == B0)
+ 	{
+-	case 300:
+-	case 600:
+-	case 1200:
+-	case 2400:
+-	case 4800:
+-	case 9600:
+-	case 19200:
+-	case 38400:
+-	case 57600:
+-	case 115200:
+-	case 230400:
+-	case 460800:
+-	case 576000:
+-	case 921600:
+-	case 1000000:
+-	case 2000000:
+-		break;
+-
+-	default:
+-		string = g_strdup_printf(_("Baudrate %d may not be supported by all hardware"), config.vitesse);
++		/* Is this really meaningful? Plenty of the whitelisted
++		   rates are not supported on standard hardware... */
++		string = g_strdup_printf(_("Baud rate %u may not be supported by all hardware"), config.vitesse);
+ 		show_message(string, MSG_ERR);
+ 		g_free(string);
+ 	}
+diff --git a/src/term_config.h b/src/term_config.h
+index faf3b96..178e7a0 100644
+--- a/src/term_config.h
++++ b/src/term_config.h
+@@ -36,7 +36,7 @@ void clear_scrollback(void);
+ struct configuration_port
+ {
+ 	gchar port[1024];
+-	gint vitesse;                // 300 - 600 - 1200 - ... - 2000000
++	guint vitesse;               // baud rate
+ 	gint bits;                   // 5 - 6 - 7 - 8
+ 	gint stops;                  // 1 - 2
+ 	gint parite;                 // 0 : None, 1 : Odd, 2 : Even
+
+From ec92a286d239fd42a322cdd4bf0cbab072e1f977 Mon Sep 17 00:00:00 2001
+From: "H. Peter Anvin" <hpa@zytor.com>
+Date: Sat, 1 Nov 2025 21:47:13 -0700
+Subject: [PATCH 3/3] Handle RTS/CTS on platforms with CRTS_IFLOW | CCTS_OFLOW
+
+Some platforms have CRTS_IFLOW | CCTS_OFLOW rather than CRTSCTS.
+
+Signed-off-by: H. Peter Anvin <hpa@zytor.com>
+---
+ src/serial.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/serial.c b/src/serial.c
+index c83138e..f36f8c5 100644
+--- a/src/serial.c
++++ b/src/serial.c
+@@ -241,7 +241,15 @@ gboolean Config_port(void)
+ 		termios_p.c_iflag |= IXON | IXOFF;
+ 		break;
+ 	case 2:
++#ifdef CRTSCTS
+ 		termios_p.c_cflag |= CRTSCTS;
++#endif
++#ifdef CRTS_IFLOW
++		termios_p.c_cflag |= CRTS_IFLOW;
++#endif
++#ifdef CCTS_OFLOW
++		termios_p.c_cflag |= CCTS_OFLOW;
++#endif
+ 		break;
+ 	default:
+ 		termios_p.c_cflag |= CLOCAL;

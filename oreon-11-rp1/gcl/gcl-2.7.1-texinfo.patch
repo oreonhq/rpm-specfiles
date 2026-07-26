@@ -1,0 +1,11 @@
+--- gcl-2.7.1/info/gcl-tk.texi.orig	2025-04-01 17:21:17.342525456 -0600
++++ gcl-2.7.1/info/gcl-tk.texi	2025-04-11 14:44:04.429556114 -0600
+@@ -17,7 +17,7 @@ Copyright 1994 William F. Schelter
+ @format
+ INFO-DIR-SECTION GNU Common Lisp
+ START-INFO-DIR-ENTRY
+-* gcl-tk: (gcl-tk.info). GNU Common Lisp Tk Manual
++* gcl-tk: (gcl-tk). GNU Common Lisp Tk Manual
+ END-INFO-DIR-ENTRY
+ @end format
+ @end ifinfo

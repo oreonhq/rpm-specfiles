@@ -1,0 +1,452 @@
+.TH OSMCONVERT "1" "September 2013" 
+.SH NAME
+osmconvert \- Converter of OSM files
+.SH "SYNOPSIS"
+\&\fBosmconvert\fR \fIoptions\fR [\fIinput file\fR]
+.SH DESCRIPTION
+.PP
+This program reads different file formats of the OpenStreetMap
+project and converts the data to the selected output file format.
+.SS These formats can be read:
+.TP
+\&.osm .osc .osc.gz .osh .o5m .o5c .pbf
+.SS "These formats can be written:"
+.TP
+\&.osm (default) .osc .osh .o5m .o5c .pbf
+.PP
+Names of input files must be specified as command line parameters.
+Use \- to read from standard input. You do not need to specify the
+input formats, osmconvert will recognize them by itself.
+The output format is .osm by default. If you want a different format,
+please specify it using the appropriate command line parameter.
+.PP
+.SH OPTIONS
+\fB\-b=\fR<x1>,<y1>,<x2>,<y2>
+.IP
+If you want to limit the geographical region, you can define
+a bounding box. To do this, enter the southwestern and the
+northeastern corners of that area. For example:
+\fB\-b\fR=-0.5,51,0.5,52
+.PP
+\fB\-B=\fR<border_polygon>
+.IP
+Alternatively to a bounding box you can use a border polygon
+to limit the geographical region.
+The format of a border polygon file can be found in the OSM
+Wiki: https://wiki.openstreetmap.org/wiki/Osmosis/Polygon_Filter_File_Format
+.br
+You do not need to strictly follow the format description,
+you must ensure that every line of coordinates starts with
+blanks.
+.PP
+\fB\-\-complete\-ways\fR
+.IP
+If applying a border box or a border polygon, all nodes
+the borders are excluded; even then if they belong to a way
+which is not entirely excluded because it has some nodes
+inside the borders.
+This option will ensure that every way stays complete, even
+it it intersects the borders. This will result in slower
+processing, and the program will loose its ability to read
+from standard input. It is recommended to use .o5m format as
+input format to compensate most of the speed disadvantage.
+.PP
+\fB\-\-complex\-multipolygons\fR,
+\fB\-\-complex\-boundaries\fR
+.IP
+Same as before, but multipolygons resp. boundaries will not be
+cut at the borders too.
+.PP
+\fB\-\-all\-to\-nodes\fR
+.IP
+Some applications do not have the ability to process ways or
+relations, they just accept nodes as input. However, more and
+more complex object are mapped as ways or even relations in
+order to get all their details into the database.
+Apply this option if you want to convert ways and relations
+to nodes and thereby make them available to applications
+which can only deal with nodes.
+For each way a node is created. The way's id is increased by
+10^15 and taken as id for the new node. The node's longitude
+and latitude are set to the way's geographical center. Same
+applies to relations, however they get 2*10^15 as id offset.
+.PP
+\fB\-\-add\-bbox\-tags\fR
+.IP
+This option adds a tag with a bounding box to each object.
+The tag will contain the border coordinates in this order:
+min Longitude, min Latitude, max Longitude , max Latitude.
+e.g.:  <tag k="bBox" v="\-0.5000,51.0000,0.5000,52.0000"/>
+.PP
+\fB\-\-add\-bboxarea\-tags\fR
+.IP
+A tag for an estimated area value for the bbox is added to
+each way and each relation. The unit is square meters.
+For example:  <tag k="bBoxArea" v="33828002"/>
+.PP
+\fB\-\-add\-bboxweight\-tags\fR
+.IP
+This option will add the binary logarithm of the bbox area
+of each way and each relation.
+For example:  <tag k="bBoxWeight" v="20"/>
+.PP
+\fB\-\-add\-bboxwidth\-tags\fR
+.IP
+A tag for an estimated width value for the bbox is added to
+each way and each relation. The unit is meters.
+For example:  <tag k="bBoxWidth" v="825"/>
+.PP
+\fB\-\-add\-bboxwidthweight\-tags\fR
+.IP
+This option will add the binary logarithm of the bbox width
+of each way and each relation.
+For example:  <tag k="bBoxWidthWeight" v="10"/>
+.PP
+\fB\-\-object\-type\-offset=\fR<id offset>
+.IP
+If applying the \fB\-\-all\-to\-nodes\fR option as explained above, you
+may adjust the id offset. For example:
+\fB\-\-object\-type\-offset\fR=4000000000\fR
+.br
+By appending "+1" to the offset, the program will create
+ids in a sequence with step 1. This might be useful if the
+there is a subsequently running application which cannot
+process large id numbers. Example:
+.br
+\fB\-\-object\-type\-offset\fR=1900000000+1
+.PP
+\fB\-\-drop\-broken\-refs\fR
+.IP
+Use this option if you need to delete references to nodes
+which have been excluded because lying outside the borders
+(mandatory for some applications, e.g. Map Composer, JOSM).
+.PP
+\fB\-\-drop\-author\fR
+.IP
+For most applications the author tags are not needed. If you
+specify this option, no author information will be written:
+no changeset, user or timestamp.
+.PP
+\fB\-\-drop\-version\fR
+.IP
+If you want to exclude not only the author information but
+also the version number, specify this option.
+.PP
+\fB\-\-drop\-nodes\fR
+\fB\-\-drop\-ways\fR
+\fB\-\-drop\-relations\fR
+.IP
+According to the combination of these parameters, no members
+of the referred section will be written.
+.PP
+\fB\-\-modify\-tags=<tag_modification_list>\fR
+.IP
+The tag modification list determines which tags will be
+modified. The example
+\fB--modify-tags="highway=primary to =secondary"\fR
+will change every "primary" highway into "secondary".
+You can also use comparisons or add additional tags:
+\fB--modify-way-tags="maxspeed>200 add highspeed=yes"\fR
+.PP
+\fB\-\-modify\-node\-tags=TAG_MODIFICATION_LIST\fR
+\fB\-\-modify\-way\-tags=TAG_MODIFICATION_LIST\fR
+\fB\-\-modify\-relation\-tags=TAG_MODIFICATION_LIST\fR
+\fB\-\-modify\-node\-way\-tags=TAG_MODIFICATION_LIST\fR
+\fB\-\-modify\-node\-relation\-tags=TAG_MODIFICATION_LIST\fR
+\fB\-\-modify\-way\-relation\-tags=TAG_MODIFICATION_LIST\fR
+.IP
+Same as above, but just for the specified object types.
+.PP
+\fB\-\-diff\fR
+.IP
+Calculate difference between two files and create a new .osc
+or .o5c file.
+There must be TWO input files and borders cannot be applied.
+Both files must be sorted by object type and id. Created
+objects will appear in the output file as "modified", unless
+having version number 1.
+.PP
+\fB\-\-diff\-contents\fR
+.IP
+Similar to \fB\-\-diff\fR, this option calculates differences between
+two OSM files. Here, to determine the differences complete
+OSM objects are consulted, not only the version numbers.
+Unfortunately, this option strictly requires both input files
+to have .o5m format.
+.PP
+\fB\-\-subtract\fR
+.IP
+The output file will not contain any object which exists in
+one of the input files following this directive. For example:
+osmconvert input.o5m \fB\-\-subtract\fR minus.o5m \fB\-o\fR=output.o5m
+.PP
+\fB\-\-pbf\-granularity=\fR<val>
+.IP
+Rarely .pbf files come with non-standard granularity.
+osmconvert will recognize this and suggest to specify the
+abnormal lon/lat granularity using this command line option.
+Allowed values are: 100 (default), 1000, 10000, ..., 10000000.
+.PP
+\fB\-\-emulate\-osmosis\fR
+\fB\-\-emulate\-pbf2osm\fR
+.IP
+In case of .osm output format, the program will try to use
+the same data syntax as Osmosis, resp. pbf2osm.
+.PP
+\fB\-\-fake\-author\fR
+.IP
+If you have dropped author information (\fB\-\-drop\-author\fR) that
+data will be lost, of course. Some programs however require
+author information on input although they do not need that
+data. For this purpose, you can fake the author information.
+osmconvert will write changeset 1, timestamp 1970.
+.PP
+\fB\-\-fake\-version\fR
+.IP
+Same as \fB\-\-fake\-author\fR, but \- if .osm xml is used as output
+format \- only the version number will be written (version 1).
+This is useful if you want to inspect the data with JOSM.
+.PP
+\fB\-\-fake\-lonlat\fR
+.IP
+Some programs depend on getting longitude/latitude values,
+even when the object in question shall be deleted. With this
+option you can have osmconvert to fake these values:
+.br
+\&... lat="0" lon="0" ...
+.br
+Note that this is for XML files only (.osc and .osh).
+.PP
+\fB\-h\fR
+.IP
+Display a short parameter overview.
+.PP
+\fB\-\-help\fR
+.IP
+Display this help.
+.PP
+\fB\-\-merge\-versions\fR
+.IP
+Some .osc files contain different versions of one object.
+Use this option to accept such duplicates on input.
+.PP
+\fB\-\-out\-osm\fR
+.IP
+Data will be written in .osm format. This is the default
+output format.
+.PP
+\fB\-\-out\-osc\fR
+.IP
+The OSM Change format will be used for output. Please note
+that OSM objects which are to be deleted will be represented
+by their ids only.
+.PP
+\fB\-\-out\-osh\fR
+.IP
+For every OSM object, the appropriate 'visible' tag will be
+added to meet 'full planet history' specification.
+.PP
+\fB\-\-out\-o5m\fR
+.IP
+The .o5m format will be used. This format has the same
+structure as the conventional .osm format, but the data are
+stored as binary numbers and are therefore much more compact
+than in .osm format. No packing is used, so you can pack .o5m
+files using every file packer you want, e.g. lzo, bz2, etc.
+.PP
+\fB\-\-out\-o5c\fR
+.IP
+This is the change file format of .o5m data format. All
+<delete> tags will not be performed as delete actions but
+converted into .o5c data format.
+.PP
+\fB\-\-out\-pbf\fR
+.IP
+For output, PBF format will be used.
+.PP
+\fB\-\-out\-csv\fR
+.IP
+A character separated list will be written to output.
+The default separator is Tab, the default columns are:
+type, id, name. You can change both by using the options
+\fB\-\-csv\-separator=\fR and \fB\-\-csv=\fR
+.PP
+\fB\-\-csv\-headline\fR
+.IP
+Choose this option to print a headline to csv output.
+.PP
+\fB\-\-csv\-separator=\fR<sep>
+.IP
+You may change the default separator (Tab) to a different
+character or character sequence. For example:
+\fB\-\-csv\-separator=\fR"; "
+.PP
+\fB\-\-csv=\fR<columns>
+.IP
+If you want to have certain columns in your csv list, please
+specify their names as shown in this example:
+\fB\-\-csv=\fR"@id name ref description"
+There are a few special column names for header data:
+@otype (object type 0..2), @oname (object type name), @id
+@lon, @lat, @version, @timestamp, @changeset, @uid, @user
+.PP
+\fB\-\-out\-none\fR
+.IP
+This will be no standard output. This option is for testing
+purposes only.
+.PP
+\fB\-\-timestamp=\fR<date_and_time>
+\fB\-\-timestamp\fR=NOW\fR<seconds_relative_to_now>
+.IP
+If you want to set the OSM timestamp of your output file,
+supply it with this option. Date and time must be formatted
+according OSM date/time specifications. For example:
+\fB\-\-timestamp=2011\-01\-31T23:59:30Z
+You also can supply a relative time in seconds, e.g. 24h ago:
+\fB\-\-timestamp=NOW\-86400
+.PP
+\fB\-\-out\-timestamp\fR
+.IP
+With this option set, osmconvert prints just the time stamp
+of the input file, nothing else.
+.PP
+\fB\-\-statistics\fR
+.IP
+This option activates a statistics counter. The program will
+print statistical data to stderr.
+.PP
+\fB\-\-out\-statistics\fR
+.IP
+Same as \fB\-\-statistics\fR, but the statistical data will be
+written to standard output.
+.PP
+\fB\-o=\fR<outfile>
+.IP
+Standard output will be rerouted to the specified file.
+If no output format has been specified, the program will
+rely on the file name extension.
+.PP
+\fB\-t=\fR<tempfile>
+.IP
+If borders are to be applied or broken references to be
+eliminated, osmconvert creates and uses two temporary files.
+This parameter defines their name prefix. The default value
+is "osmconvert_tempfile".
+.PP
+\fB\-\-parameter\-file\fR=\fIFILE\fR
+.IP
+If you want to supply one ore more command line arguments
+by a parameter file, please use this option and specify the
+file name. Within the parameter file, parameters must be
+separated by empty lines. Line feeds inside a parameter will
+be converted to spaces.
+Lines starting with "// " will be treated as comments.
+.PP
+\fB\-v\fR
+\fB\-\-verbose\fR
+.IP
+With activated 'verbose' mode, some statistical data and
+diagnosis data will be displayed.
+If \fB\-v\fR resp. \fB\-\-verbose\fR is the first parameter in the line,
+osmconvert will display all input parameters.
+.PP
+.SH TUNING
+.PP
+To speed\-up the process, the program uses some main memory for a
+hash table. By default, it uses 1200 MB for storing a flag for every
+possible node, 150 for the way flags, and 10 relation flags.
+Every byte holds the flags for 8 ID numbers, i.e., in 1200 MB the
+program can store 9600 million flags. As there are less than 5700
+million IDs for nodes at present (May 2018), 720 MB would suffice.
+So, for example, you can decrease the hash sizes to e.g. 720, 80 and
+2 MB using this option:
+.HP
+\fB\-\-hash\-memory\fR=\fI720\-80\-2\fR
+.PP
+But keep in mind that the OSM database is continuously expanding. For
+this reason the program\-own default value is higher than shown in the
+example, and it may be appropriate to increase it in the future.
+If you do not want to bother with the details, you can enter the
+amount of memory as a sum, and the program will divide it by itself.
+For example:
+.HP
+\fB\-\-hash\-memory\fR=\fI1000\fR
+.PP
+These 1000 MiB will be split in three parts: 800 for nodes, 150 for
+ways, and 50 for relations.
+.PP
+Because we are taking hashes, it is not necessary to provide all the
+suggested memory; the program will operate with less hash memory too.
+But, in this case, the border filter will be less effective, i.e.,
+some ways and some relations will be left in the output file although
+they should have been excluded.
+The maximum value the program accepts for the hash size is 4000 MiB;
+If you exceed the maximum amount of memory available on your system,
+the program will try to reduce this amount and display a warning
+message.
+.PP
+There is another temporary memory space which is used only for the
+conversion of ways and relations to nodes (option \fB\-\-all\-to\-nodes\fR).
+This space is sufficient for up to 25 Mio. OSM objects, 400 MB of
+main memory are needed for this purpose, 800 MB if extended option
+\fB\-\-add\-bbox\-tags\fR has been invoked. If this is not sufficient or
+if you want to save memory, you can configure the maximum number of
+OSM objects by yourself. For example:
+.HP
+\fB\-\-max\-objects\fR=\fI35000000\fR
+.PP
+The number of references per object is limited to 100,000. This will
+be sufficient for all OSM files. If you are going to create your own
+OSM files by converting shapefiles or other files to OSM format, this
+might result in way objects with more than 100,000 nodes. For this
+reason you will need to increase the maximum accordingly. Example:
+.HP
+\fB\-\-max\-refs\fR=\fI400000\fR
+.PP
+.SH LIMITATIONS
+.PP
+When extracting a geographical region (using \fB\-b\fR or \fB\-B\fR), the input
+file must contain the objects ordered by their type: first, all
+nodes, next, all ways, followed by all relations. Within each of
+these sections, the objects section must be sorted by their id in
+ascending order.
+.PP
+Usual .osm, .osc, .o5m, o5c and .pbf files adhere to this condition.
+This means that you do not have to worry about this limitation.
+osmconvert will display an error message if this sequence is broken.
+.PP
+If a polygon file for borders is supplied, the maximum number of
+polygon points is about 40,000.
+.SH NOTES
+.PP
+This program is for experimental use. Expect malfunctions and data
+loss. Do not use the program in productive or commercial systems.
+.PP
+There is NO WARRANTY, to the extent permitted by law.
+Please send any bug reports to marqqs@gmx.eu
+.PP
+.SH EXAMPLE
+.PP
+\tosmconvert europe.pbf \fB\-\-drop\-author\fR >europe.osm
+.br
+\tosmconvert europe.pbf |gzip >europe.osm.gz
+.br
+\tbzcat europe.osm.bz2 |./osmconvert \fB\-\-out\-pbf\fR >europe.pbf
+.br
+\tosmconvert europe.pbf \fB\-B\fR=\fIch\fR.poly >switzerland.osm
+.br
+\tosmconvert switzerland.osm \fB\-\-out\-o5m\fR >switzerland.o5m
+.br
+\tosmconvert june_july.osc \fB\-\-out\-o5c\fR >june_july.o5c
+.br
+\tosmconvert june.o5m june_july.o5c.gz \fB\-\-out\-o5m\fR >july.o5m
+.br
+\tosmconvert sep.osm sep_oct.osc oct_nov.osc >nov.osm
+.br
+\tosmconvert northamerica.osm southamerica.osm >americas.osm
+.SH "SEE ALSO"
+osmfilter(1), osmupdate(1)
+.SH AUTHORS
+.B osmconvert
+was written by Markus Weber
+

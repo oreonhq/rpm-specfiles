@@ -1,0 +1,92 @@
+#!/usr/bin/bash
+
+# java runtime decompiler launch script
+
+# JPackage Project <http://www.jpackage.org/>
+# Source functions library
+
+. /usr/share/java-utils/java-functions
+
+echo $@ | grep -q -e "-verbose"
+verbose=$?
+
+function warning() {
+  if [ $verbose -eq 0 ] ; then
+    echo ${1} >&2
+  fi
+}
+
+# the launcher is reused uder different name, hardcoding name
+JRD=java-runtime-decompiler
+CONF_HOME=$XDG_CONFIG_HOME
+
+
+if  [ "$CONF_HOME" = "" ] ; then 
+  CONF_HOME=$HOME/.config/$JRD
+else
+  CONF_HOME=$CONF_HOME/$JRD
+fi
+
+LOG_DIR=$CONF_HOME/logs
+CONF_DIR=$CONF_HOME/conf
+PLUGIN_HOME=$CONF_HOME/plugins
+PLUGIN_HOME_LEGACY=$CONF_HOME/plugins-legacy
+
+mkdir -p $LOG_DIR
+mkdir -p $CONF_DIR
+mkdir -p $PLUGIN_HOME
+
+: ${MAIN_CLASS:=org.jrd.backend.data.Main}
+
+# set java and jvm arguments
+export _prefer_jre=false #although java moved compiler classes to jre, PREFERING jdk should not hurt
+_set_java_home
+set_jvm
+
+# all dependencies must be on classpath
+set_classpath java-runtime-decompiler rsyntaxtextarea byteman google-gson classpathless-compiler objectweb-asm java-diff-utils
+CLASSPATH=$CLASSPATH:${JAVA_HOME}/lib/tools.jar
+
+# set path to agent automatically
+AGENT="/usr/share/java/java-runtime-decompiler/decompiler-agent.jar"
+CONFIG_FILE=$CONF_DIR/config.cfg
+AGENT_PREFIX="AGENT_PATH==="
+AGENT_STRING=$AGENT_PREFIX$AGENT
+
+# copy json wrappers information to home so the users can edit
+if [ ! -e "$PLUGIN_HOME_LEGACY" -a -e "$PLUGIN_HOME" ] ; then
+  mv "$PLUGIN_HOME" "$PLUGIN_HOME_LEGACY"
+  echo "jrd no longer handles custom plugins for you. Your's "
+  echo "$PLUGIN_HOME was moved to $PLUGIN_HOME_LEGACY"
+  echo "You can play with custom plugins in $PLUGIN_HOME"
+  echo "but keep $PLUGIN_HOME_LEGACY created, so it is not renamed again"
+fi
+mkdir -p $PLUGIN_HOME_LEGACY
+
+warning "jrd no longer handles custom plugins for you. Your's "
+warning  echo "$PLUGIN_HOME was moved to $PLUGIN_HOME_LEGACY"
+warning "You can play with custom plugins in $PLUGIN_HOME"
+warning "but keep $PLUGIN_HOME_LEGACY created, so it is not renamed again"
+
+# create config file and add agent default path
+touch $CONFIG_FILE
+
+if [ -e $AGENT ]
+then
+	if grep -Fxq $AGENT_STRING $CONFIG_FILE
+	then
+		warning "Default agent path is already set in $CONFIG_FILE. Skipping agent path setting."
+	elif grep -rq $AGENT_PREFIX $CONFIG_FILE
+	then
+		RESULT_OF_GREP="$(grep -rq $AGENT_PREFIX $CONFIG_FILE)"
+		warning "Agent path is already set in $CONFIG_FILE as ${RESULT_OF_GREP}. Skipping agent path setting."
+	else
+		echo  $AGENT_STRING >> $CONFIG_FILE
+
+	fi
+else
+	echo "Agent was not found and agent path was not set correctly. This has to be done manually in the decompiler GUI, or set AGENT_PATH===path_to_agent_jar in the configuration file: $CONFIG_FILE" >&2
+fi
+
+export FLAGS="$FLAGS -Djdk.attach.allowAttachSelf=true --add-exports jdk.jdeps/com.sun.tools.javap=ALL-UNNAMED  --add-opens java.base/java.io=ALL-UNNAMED" # jdk11+ do not allow attach by default; jdk17 is hiding javap api
+run "$@"

@@ -1,0 +1,24 @@
+From 149ce47b01f1009cdae0963877c454e1b44c7f12 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:48 +0200
+Subject: [PATCH 15/41] io.h no longer needed
+
+---
+ svgalib/init.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/svgalib/init.c b/svgalib/init.c
+index 8ee02db..458324a 100644
+--- a/svgalib/init.c
++++ b/svgalib/init.c
+@@ -44,7 +44,6 @@ int flipping=0,page=0;
+ #include <sys/stat.h>
+ #include <sys/vt.h>
+ #include <unistd.h>
+-#include <asm/io.h>		/*for waiting for retrace */
+ #include <sys/ioctl.h>		/*for waiting for retrace */
+ extern void     fadein1 ();
+ extern GraphicsContext *starbackground;
+-- 
+2.5.0
+

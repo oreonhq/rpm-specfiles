@@ -1,0 +1,19 @@
+Add a fake pthread_create prototype to avoid an implicit function
+declaration.  Otherwise the configure check result will change with
+future compilers.
+
+Submitted upstream: <https://github.com/dinhvh/libetpan/pull/423>
+
+diff --git a/configure.ac b/configure.ac
+index 542f3bb0d12afca9..39bbc8b641897afb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -482,7 +482,7 @@ elif test "x$enable_threads" = "xyes"; then
+   checkpthread=yes
+ 
+   AC_MSG_CHECKING([for pthread_create with libc])
+-  AC_TRY_LINK([], [pthread_create();], 
++  AC_TRY_LINK([char pthread_create(void);], [pthread_create();],
+                   [pthflag=yes; checkpthread=no], 
+                   [pthflag=no])
+   AC_MSG_RESULT($pthflag)

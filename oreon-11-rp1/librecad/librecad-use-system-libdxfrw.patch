@@ -1,0 +1,33 @@
+diff -up LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/libraries/libraries.pro.system LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/libraries/libraries.pro
+--- LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/libraries/libraries.pro.system	2025-07-13 19:02:36.000000000 -0400
++++ LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/libraries/libraries.pro	2025-08-04 12:50:28.959582858 -0400
+@@ -9,7 +9,6 @@ TEMPLATE = subdirs
+ TARGET = libraries
+ 
+ SUBDIRS     = \
+-        libdxfrw \
+         jwwlib
+ 
+ macx|win32|equals(build_muparser, "true")|!packagesExist(muparser){
+diff -up LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/src.pro.system LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/src.pro
+--- LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/src.pro.system	2025-07-13 19:02:36.000000000 -0400
++++ LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/src.pro	2025-08-04 12:54:16.845610665 -0400
+@@ -37,8 +37,7 @@ msvc {
+ 	PRE_TARGETDEPS += $$GEN_LIB_DIR/dxfrw.lib \
+ 			$$GEN_LIB_DIR/jwwlib.lib
+ } else {
+-	PRE_TARGETDEPS += $$GEN_LIB_DIR/libdxfrw.a \
+-			$$GEN_LIB_DIR/libjwwlib.a
++	PRE_TARGETDEPS += $$GEN_LIB_DIR/libjwwlib.a
+ }
+ 
+ DESTDIR = $${INSTALLDIR}
+@@ -90,7 +89,7 @@ LIBS += -L../../generated/lib  \
+     -ljwwlib
+ 
+ INCLUDEPATH += \
+-    ../../libraries/libdxfrw/src \
++    $${DXFRW_INCLUDEDIR} \
+     ../../libraries/jwwlib/src \
+     cmd \
+     lib/actions \

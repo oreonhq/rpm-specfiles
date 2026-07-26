@@ -1,0 +1,132 @@
+From 7ef327f6f269c7a49357e001cd41d7aaf5807749 Mon Sep 17 00:00:00 2001
+From: Colomban Wendling <cwendling@hypra.fr>
+Date: Tue, 3 Sep 2024 16:32:35 +0200
+Subject: [PATCH 2/2] Fix invalid memory access with invalid powers
+
+The ParseNode's value must be valid to pass to `free()`, as it's done
+unconditionally if the expression is invalid.  However, for some
+functions a shortuct was taken avoiding duplicating memory.  This was
+OK in case the expression is valid because the evaluation function
+would convert it and set the pointer back to NULL; but it's not OK if
+the expression is invalid as the evaluation doesn't happen and the
+pointer is not reset before being freed.
+
+Fixes #226.
+---
+ src/parser.c     | 14 +++++---------
+ src/parserfunc.c | 13 ++++++++-----
+ 2 files changed, 13 insertions(+), 14 deletions(-)
+
+diff --git a/src/parser.c b/src/parser.c
+index 8ab4c3c..d60c142 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -82,7 +82,7 @@ p_make_precedence_t(ParserState* state, LexerTokenType type)
+     return (p_get_precedence(type) + (state->depth_level * P_Depth));
+ }
+ 
+-/* Allocate and create a new node. */
++/* Allocate and create a new node.  `value` must be free()able */
+ static ParseNode*
+ p_create_node(ParserState* state, LexerToken* token, guint precedence, Associativity associativity, void* value, void* (*function)(ParseNode*))
+ {
+@@ -1055,9 +1055,8 @@ variable(ParserState* state)
+         if(token->token_type == T_SUP_NUMBER)
+         {
+             /* FUNCTION SUP_NUMBER expression */
+-            /* Pass power as void * value. That will be taken care in pf_apply_func_with_powre. */
+ 
+-            node = p_create_node(state, token_old, p_make_precedence_t(state, token_old->token_type), p_get_associativity(token_old), token, pf_apply_func_with_power);
++            node = p_create_node(state, token_old, p_make_precedence_t(state, token_old->token_type), p_get_associativity(token_old), g_strdup(token->string), pf_apply_func_with_power);
+             p_insert_into_tree_unary(state, node);
+ 
+             if(!expression(state))
+@@ -1067,9 +1066,8 @@ variable(ParserState* state)
+         else if(token->token_type == T_NSUP_NUMBER)
+         {
+             /* FUNCTION NSUP_NUMBER expression */
+-            /* Pass power as void * value. That will be taken care in pf_apply_func_with_npowre. */
+ 
+-            node = p_create_node(state, token_old, p_make_precedence_t(state, token_old->token_type), p_get_associativity(token_old), token, pf_apply_func_with_npower);
++            node = p_create_node(state, token_old, p_make_precedence_t(state, token_old->token_type), p_get_associativity(token_old), g_strdup(token->string), pf_apply_func_with_npower);
+             p_insert_into_tree_unary(state, node);
+ 
+             if(!expression(state))
+@@ -1096,9 +1094,8 @@ variable(ParserState* state)
+         if(token->token_type == T_ROOT)
+         {
+             /* SUB_NUM ROOT expression */
+-            /* Pass SUB_NUM as void* value in node. pf_do_nth_root will take care of it. */
+ 
+-            node = p_create_node(state, token, p_make_precedence_t(state, token->token_type), p_get_associativity(token), token_old, pf_do_nth_root);
++            node = p_create_node(state, token, p_make_precedence_t(state, token->token_type), p_get_associativity(token), g_strdup(token_old->string), pf_do_nth_root);
+             p_insert_into_tree_unary(state, node);
+ 
+             if(!expression (state))
+@@ -1177,9 +1174,8 @@ term(ParserState* state)
+         if(token->token_type == T_SUP_NUMBER)
+         {
+             /* VARIABLE SUP_NUMBER */
+-            /* Pass power as void* value. pf_get_variable_with_power will take care of it. */
+ 
+-            node = p_create_node(state, token_old, p_make_precedence_t(state, token_old->token_type), p_get_associativity(token_old), token, pf_get_variable_with_power);
++            node = p_create_node(state, token_old, p_make_precedence_t(state, token_old->token_type), p_get_associativity(token_old), g_strdup(token->string), pf_get_variable_with_power);
+             p_insert_into_tree(state, node);
+ 
+         }
+diff --git a/src/parserfunc.c b/src/parserfunc.c
+index 6f27daf..dc28e7e 100644
+--- a/src/parserfunc.c
++++ b/src/parserfunc.c
+@@ -230,9 +230,9 @@ pf_get_variable_with_power(ParseNode* self)
+ 
+     MPNumber t = mp_new();
+     MPNumber* ans = mp_new_ptr();
+-    pow = super_atoi(((LexerToken*) self->value)->string);
++    pow = super_atoi(self->value);
+ 
+-    /* No need to free the memory. It is allocated and freed somewhere else. */
++    free(self->value);
+     self->value = NULL;
+ 
+     if(!(self->state->get_variable))
+@@ -344,10 +344,11 @@ pf_apply_func_with_power(ParseNode* self)
+         set_error(self->state, PARSER_ERR_UNKNOWN_FUNCTION, self->token->string);
+         return NULL;
+     }
+-    pow = super_atoi(((LexerToken*) self->value)->string);
++    pow = super_atoi(self->value);
+     mp_xpowy_integer(tmp, pow, ans);
+     mp_free(val);
+     mp_free(tmp);
++    free(self->value);
+     self->value = NULL;
+     return ans;
+ }
+@@ -391,11 +392,12 @@ pf_apply_func_with_npower(ParseNode* self)
+         set_error(self->state, PARSER_ERR_UNKNOWN_FUNCTION, self->token->string);
+         return NULL;
+     }
+-    pow = super_atoi(((LexerToken*) self->value)->string);
++    pow = super_atoi(self->value);
+     mp_xpowy_integer(tmp, -pow, ans);
+     mp_free(val);
+     mp_free(tmp);
+     free(inv_name);
++    free(self->value);
+     self->value = NULL;
+     return ans;
+ }
+@@ -407,7 +409,8 @@ pf_do_nth_root(ParseNode* self)
+     MPNumber* val;
+     gint pow;
+     MPNumber* ans = mp_new_ptr();
+-    pow = sub_atoi(((LexerToken*) self->value)->string);
++    pow = sub_atoi(self->value);
++    free(self->value);
+     self->value = NULL;
+     val = (MPNumber*) (*(self->right->evaluate))(self->right);
+     if(!val)
+-- 
+2.48.1
+

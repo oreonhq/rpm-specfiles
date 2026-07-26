@@ -1,0 +1,27 @@
+diff -up ./src/rspam.c.evo324 ./src/rspam.c
+--- ./src/rspam.c.evo324	2016-11-04 09:29:15.927976306 +0100
++++ ./src/rspam.c	2016-11-04 09:31:11.259971340 +0100
+@@ -418,7 +418,6 @@ spamcop_report(CamelMimeMessage *msg, gc
+ 	gchar *descr;
+ 	CamelFolder *mail_folder;
+ 	CamelMessageInfo *info;
+-	struct _camel_header_raw *xev;
+ 	CamelMimePart *part;
+ 	CamelMimeMessage *new = camel_mime_message_new();
+ 	gchar *text, *tmsg;
+@@ -637,8 +636,15 @@ spamcop_report(CamelMimeMessage *msg, gc
+ 		camel_object_unref(addr);
+ #endif
+ 
++#if (DATASERVER_VERSION >= 3023001)
++		camel_name_value_array_free (mail_tool_remove_xevolution_headers (msg));
++#else
++		{
++		struct _camel_header_raw *xev;
+ 		xev = mail_tool_remove_xevolution_headers (msg);
+ 		camel_header_raw_clear(&xev);
++		}
++#endif
+ 
+ 		camel_medium_remove_header (
+ 			CAMEL_MEDIUM (msg),

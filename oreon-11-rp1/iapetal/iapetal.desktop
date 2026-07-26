@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Iapetal
+Exec=iapetal-launcher
+Comment=2D space rescue game
+Icon=habitat
+Terminal=false
+Categories=Game;ActionGame;
+StartupNotify=false
+Version=1.0

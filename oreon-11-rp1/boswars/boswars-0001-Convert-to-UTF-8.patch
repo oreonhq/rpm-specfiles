@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Mon, 27 May 2024 18:16:44 +0200
+Subject: [PATCH] Convert to UTF-8
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/doc/guichan-copyright.txt b/doc/guichan-copyright.txt
+index 42847137..318740f7 100644
+--- a/doc/guichan-copyright.txt
++++ b/doc/guichan-copyright.txt
+@@ -8,7 +8,7 @@
+  *
+  * Copyright (c) 2004, 2005 darkbits                        Js_./
+  * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
+- * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
++ * Olof NaessÃ©n a.k.a jansem/yakslem                _asww7!uY`>  )\a//
+  *                                                 _Qhm`] _f "'c  1!5m
+  * Visit: http://guichan.darkbits.org             )Qk<P ` _: :+' .'  "{[
+  *                                               .)j(] .d_/ '-(  P .   S

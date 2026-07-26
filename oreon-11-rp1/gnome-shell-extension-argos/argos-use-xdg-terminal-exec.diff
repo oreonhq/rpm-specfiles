@@ -1,0 +1,47 @@
+From be2686122fa205a5dbf9205a7a19d4c1f92f6d70 Mon Sep 17 00:00:00 2001
+From: Michel Lind <salimma@fedoraproject.org>
+Date: Wed, 28 May 2025 19:54:41 -0500
+Subject: [PATCH] Switch from hardcoding `gnome-terminal` to using
+ `xdg-terminal-exec`
+
+This is packaged in various Linux distros already: https://repology.org/project/xdg-terminal-exec/versions
+
+and we can't assume that gnome-terminal is preinstalled anymore (CentOS Stream 10, RHEL 10 and derivatives, Fedora 47+ and Ubuntu have switched to ptyxis by default)
+
+(not sure why the openSUSE version number is weird)
+
+Signed-off-by: Michel Lind <salimma@fedoraproject.org>
+---
+ README.md                               | 5 +++++
+ argos@pew.worldwidemann.com/menuitem.js | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index 5dded73..4f94eb3 100644
+--- a/README.md
++++ b/README.md
+@@ -22,6 +22,11 @@ More precisely, Argos is a GNOME Shell extension that turns executables' standar
+ 
+ ## Installation
+ 
++### Dependencies
++
++For GNOME 45 and newer, you need `xdg-terminal-exec` since on newer GNOME
++releases we cannot assume `gnome-terminal` is preinstalled.
++
+ ### Manually using git (all recent GNOME shell versions)
+ 
+ Clone the repository:
+diff --git a/argos@pew.worldwidemann.com/menuitem.js b/argos@pew.worldwidemann.com/menuitem.js
+index 0ca7df7..d97cd65 100644
+--- a/argos@pew.worldwidemann.com/menuitem.js
++++ b/argos@pew.worldwidemann.com/menuitem.js
+@@ -64,7 +64,7 @@ const cArgosMenuItem = GObject.registerClass(
+ 	    } else {
+ 	      // Run shell immediately after executing the command to keep the terminal window open
+ 	      // (see http://stackoverflow.com/q/3512055)
+-	      argv = ["gnome-terminal", "--", "bash", "-c", activeLine.bash + "; exec ${SHELL:=bash}"];
++	      argv = ["xdg-terminal-exec", "--", "bash", "-c", activeLine.bash + "; exec ${SHELL:=bash}"];
+ 	    }
+ 
+ 	    let [success, pid] = GLib.spawn_async(

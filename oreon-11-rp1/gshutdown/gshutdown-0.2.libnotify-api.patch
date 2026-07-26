@@ -1,0 +1,19 @@
+--- gshutdown-0.2/src/gui.c	2011-04-07 10:28:47.586163596 +0100
++++ gshutdown-0.2/src/gui.c	2011-04-07 10:29:06.927394636 +0100
+@@ -154,15 +154,11 @@
+     gint delay;
+     gchar *path;
+     GdkPixbuf *pixbuf;
+-    GtkWidget *widget = NULL;
+ 
+     if(values.show_notifications == FALSE)
+         return;
+ 
+-    if(gui_systray_icon_is_showed())
+-        widget = GTK_WIDGET(tray_icon);
+-
+-    notify = notify_notification_new("GShutdown", message, NULL, GTK_WIDGET(widget));
++    notify = notify_notification_new("GShutdown", message, NULL);
+ 
+     if(show_icon == NOTIFICATION_ICON_TIME) {
+         path = data_path("clock.png");

@@ -1,0 +1,28 @@
+From fc155711420fd305e5b6570b61ef605a99ba30c7 Mon Sep 17 00:00:00 2001
+From: Kevin Fenzi <kevin@scrye.com>
+Date: Sat, 17 Nov 2012 10:53:33 -0700
+Subject: [PATCH] use highlight-3 by default
+
+All Fedora and EL releases have highlight-3.x except for EL-5.  Make it
+the default.
+---
+ filters/syntax-highlighting.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/filters/syntax-highlighting.sh b/filters/syntax-highlighting.sh
+index 840bc34..5033f58 100755
+--- a/filters/syntax-highlighting.sh
++++ b/filters/syntax-highlighting.sh
+@@ -115,7 +115,7 @@ EXTENSION="${BASENAME##*.}"
+ # found (for example) on EPEL 6.
+ #
+ # This is for version 2
+-exec highlight --force -f -I -X -S "$EXTENSION" 2>/dev/null
++#exec highlight --force -f -I -X -S "$EXTENSION" 2>/dev/null
+ 
+ # This is for version 3
+-#exec highlight --force -f -I -O xhtml -S "$EXTENSION" 2>/dev/null
++exec highlight --force -f -I -O xhtml -S "$EXTENSION" 2>/dev/null
+-- 
+2.32.0
+

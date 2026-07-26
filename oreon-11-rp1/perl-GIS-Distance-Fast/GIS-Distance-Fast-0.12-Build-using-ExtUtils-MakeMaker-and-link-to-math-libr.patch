@@ -1,0 +1,83 @@
+From cc3057e898b9c530cdaddae0da2a319aab3a1be9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 8 Mar 2019 13:26:57 +0100
+Subject: [PATCH] Build using ExtUtils::MakeMaker and link to math library
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Module::Build::Tiny does not link XS modules properly:
+
+It ignores Build.Pl --optimize flag.
+
+Fast.xs uses atan2() function from a mathematical library but does not
+link it to Fast.so. As a result Fast.so has unresolved symbols.
+
+This should be fixed by adding -lm to Build.PL, but there is another
+bug in Module::Build::Tiny. It places object files after linker flags.
+If the linker flags contain -Wl,--as-needed flag, no libraries
+specified before the fast.o object will be actually used:
+
+./Build
+[...]
+gcc -lpthread -shared -Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -L/usr/local/lib -fstack-protector-strong -lperl -o blib/arch/auto/GIS/Distance/Fast/Fast.so temp/Fast.o
+
+$ scanelf -n blib/arch/auto/GIS/Distance/Fast/Fast.so
+ TYPE   NEEDED FILE
+ET_DYN libpthread.so.0 blib/arch/auto/GIS/Distance/Fast/Fast.so
+
+Altogether there are so many bugs that it's easier to switch to
+ExtUtils::MakeMaker.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ MANIFEST    |  3 ++-
+ Makefile.PL | 24 ++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+ create mode 100644 Makefile.PL
+
+diff --git a/MANIFEST b/MANIFEST
+index 4047982..3de0efb 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -18,4 +18,5 @@ ppport.h
+ t/accuracy.t
+ t/null.t
+ META.yml
+-MANIFEST
+\ No newline at end of file
++MANIFEST
++Makefile.PL
+diff --git a/Makefile.PL b/Makefile.PL
+new file mode 100644
+index 0000000..1a660b2
+--- /dev/null
++++ b/Makefile.PL
+@@ -0,0 +1,24 @@
++use ExtUtils::MakeMaker 7.12;
++WriteMakefile(
++    'NAME' => 'GIS::Distance::Fast',
++    'VERSION_FROM' => 'lib/GIS/Distance/Fast.pm',
++    'ABSTRACT_FROM' => 'lib/GIS/Distance/Fast.pm',
++    'AUTHOR' => 'Aran Clary Deltac <bluefeet@gmail.com>',
++    'LICENSE' => 'perl_5',
++    'INC' => '-I.',
++    'LIBS' => ['-lm'],
++    'XSMULTI' => 1,
++    'CONFIGURE_REQUIRES' => {
++        'ExtUtils::MakeMaker' => '7.12',
++    },
++    'PREREQ_PM' => {
++        'namespace::clean' => '0.24',
++        'perl' => '5.008001',
++        'strictures' => '2.000000',
++        'XSLoader' => '0',
++    },
++    'TEST_REQUIRES' => {
++        'GIS::Distance' => '0.14',
++        'Test2::V0' => '0.000094',
++    },
++);
+-- 
+2.20.1
+

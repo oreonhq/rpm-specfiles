@@ -1,0 +1,39 @@
+From f54be89661bf62682f500facaa2e814940914072 Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 16:50:40 +0200
+Subject: [PATCH 08/15] Added cPack
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ CMakeLists.txt | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 88e5f5e..9c95a61 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,19 @@
++
++cmake_minimum_required(VERSION 2.6)
++
+ project(expatpp)
+ 
++
+ find_package(EXPAT REQUIRED)
+ 
+ add_subdirectory(lib)
+-add_subdirectory(test)
+\ No newline at end of file
++add_subdirectory(test)
++
++SET(CPACK_GENERATOR "RPM")
++SET(CPACK_RPM_PACKAGE_SUMMARY "A tiniy object oriented wrapper around expat library")
++SET(CPACK_RPM_PACKAGE_NAME "expatpp")
++SET(CPACK_RPM_PACKAGE_VERSION 0.6)
++SET(CPACK_RPM_PACKAGE_RELEASE 1)
++SET(CPACK_RPM_PACKAGE_LICENSE "Mozilla")
++
++INCLUDE(CPack)
+-- 
+1.7.11.7
+

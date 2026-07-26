@@ -1,0 +1,16 @@
+# Options for the Monotone DVCS Server
+#
+# options can be changed here, or (better) within override files in
+# /etc/systemd/system/monotone.service.d
+
+# --confdir: location of the configuration directory
+#MONOTONE_CONFDIR=/etc/monotone
+
+# --keydir: location of the key store
+#MONOTONE_KEYDIR=/etc/monotone/private-keys
+
+# --db: name of the database file
+#MONOTONE_DBFILE=/var/lib/monotone/server.mtn
+
+# --rcfile: used to pass the passphrase of the server's private key
+#MONOTONE_PPFILE=/etc/monotone/passphrase.lua

@@ -1,0 +1,39 @@
+From c4124d94d6eead6962aa4d29339149b70144b399 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 18 Jul 2025 16:59:13 +0200
+Subject: [PATCH] Port to CMake 4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CMake 4.0 removed support for CMake script < 3.5:
+
+    CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
+      Compatibility with CMake < 3.5 has been removed from CMake.
+
+This patch raises the minimal CMake version of the script to 3.5 and
+adjusts it accordingly. Unfortuntelly, there is no way to have one
+script working with CMake 3 and CMake 4. The upper limit 4.0.2 sets
+maximal tested CMake version and instructs CMake to enable the most
+modern policies rather then being stuck on 3.5 which produces many
+deprecation warning.
+
+Resolves: <https://bugzilla.redhat.com/show_bug.cgi?id=2381354>
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fd692bf..16f9b2c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.6)
++cmake_minimum_required (VERSION 3.5.0...4.0.2)
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+ 
+ project(pam-abl)
+-- 
+2.50.1
+

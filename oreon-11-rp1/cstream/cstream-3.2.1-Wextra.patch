@@ -1,0 +1,24 @@
+Silence a few -Wextra warnings
+
+Silence a few -Wextra warnings by #include-ing a missing header file,
+and by properly terminating an array of structs.
+
+--- cstream-2.7.6/cstream.c	2008-12-19 22:38:37.000000000 +0100
++++ cstream-2.7.6-Wextra/cstream.c	2008-12-20 11:21:12.000000000 +0100
+@@ -97,6 +97,7 @@
+ #else
+ #ifdef HAVE_SYS_SOUNDCARD_H
+ #include <sys/soundcard.h>
++#include <sys/ioctl.h>
+ #define WANT_SOUND 1
+ #else
+ #ifdef HAVE_LINUX_SOUNDCARD_H
+@@ -525,7 +529,7 @@
+     } *it, funcs[3] = {
+       {getsockname, "getsockname", "Local binding"},
+       {getpeername, "getpeername", "Remote binding"},
+-      {NULL}
++      {NULL, NULL, NULL}
+     };
+     union {
+       struct sockaddr sa;

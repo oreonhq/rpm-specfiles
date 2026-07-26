@@ -1,0 +1,441 @@
+diff --git a/Makefile.PL b/Makefile.PL
+index 48269c8..153b161 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -112,12 +112,12 @@ if  (eval {require ExtUtils::Constant; 1}) {
+ 		{ name => "CUPS_GET_DEVICES", macro => "1" },
+ 		{ name => "CUPS_GET_PPDS", macro => "1" },
+ 		{ name => "CUPS_GET_PRINTERS", macro => "1" },
+-		{ name => "CUPS_IMAGE_BLACK", macro => "1" },
+-		{ name => "CUPS_IMAGE_CMY", macro => "1" },
+-		{ name => "CUPS_IMAGE_CMYK", macro => "1" },
+-		{ name => "CUPS_IMAGE_RGB", macro => "1" },
+-		{ name => "CUPS_IMAGE_RGB_CMYK", macro => "1" },
+-		{ name => "CUPS_IMAGE_WHITE", macro => "1" },
++		{ name => "CF_IMAGE_BLACK", macro => "1" },
++		{ name => "CF_IMAGE_CMY", macro => "1" },
++		{ name => "CF_IMAGE_CMYK", macro => "1" },
++		{ name => "CF_IMAGE_RGB", macro => "1" },
++		{ name => "CF_IMAGE_RGB_CMYK", macro => "1" },
++		{ name => "CF_IMAGE_WHITE", macro => "1" },
+ 		{ name => "CUPS_ISO8859_1", macro => "1" },
+ 		{ name => "CUPS_ISO8859_10", macro => "1" },
+ 		{ name => "CUPS_ISO8859_11", macro => "1" },
+diff --git a/const-c.inc b/const-c.inc
+index 5a8097c..fa29b53 100644
+--- a/const-c.inc
++++ b/const-c.inc
+@@ -651,7 +651,7 @@ static int
+ constant_14 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+-     CUPS_ADD_CLASS CUPS_FILE_GZIP CUPS_FILE_NONE CUPS_IMAGE_CMY CUPS_IMAGE_RGB
++     CUPS_ADD_CLASS CUPS_FILE_GZIP CUPS_FILE_NONE CF_IMAGE_CMY CF_IMAGE_RGB
+      CUPS_ISO8859_1 CUPS_ISO8859_2 CUPS_ISO8859_3 CUPS_ISO8859_4 CUPS_ISO8859_5
+      CUPS_ISO8859_6 CUPS_ISO8859_7 CUPS_ISO8859_8 CUPS_ISO8859_9 CUPS_MAC_ROMAN
+      HTTP_AUTH_NONE HTTP_FIELD_MAX HTTP_FORBIDDEN HTTP_MAX_VALUE HTTP_NOT_FOUND
+@@ -727,7 +727,7 @@ constant_14 (pTHX_ const char *name, IV *iv_return) {
+   case 'B':
+     if (memEQ(name, "CUPS_IMAGE_RG", 13)) {
+     /*                            B      */
+-      *iv_return = CUPS_IMAGE_RGB;
++      *iv_return = CF_IMAGE_RGB;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "IPP_CANCEL_JO", 13)) {
+@@ -886,7 +886,7 @@ constant_14 (pTHX_ const char *name, IV *iv_return) {
+   case 'Y':
+     if (memEQ(name, "CUPS_IMAGE_CM", 13)) {
+     /*                            Y      */
+-      *iv_return = CUPS_IMAGE_CMY;
++      *iv_return = CF_IMAGE_CMY;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "HTTP_USE_PROX", 13)) {
+@@ -903,7 +903,7 @@ static int
+ constant_15 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+-     CUPS_IMAGE_CMYK CUPS_ISO8859_10 CUPS_ISO8859_11 CUPS_ISO8859_13
++     CF_IMAGE_CMYK CUPS_ISO8859_10 CUPS_ISO8859_11 CUPS_ISO8859_13
+      CUPS_ISO8859_14 CUPS_ISO8859_15 CUPS_ISO8859_16 CUPS_PRINTER_BW
+      HTTP_AUTH_BASIC HTTP_FIELD_DATE HTTP_FIELD_HOST HTTP_FIELD_LINK
+      HTTP_MAX_BUFFER HTTP_NO_CONTENT IPP_BAD_REQUEST IPP_JOB_ABORTED
+@@ -1024,9 +1024,9 @@ constant_15 (pTHX_ const char *name, IV *iv_return) {
+     }
+     break;
+   case 'K':
+-    if (memEQ(name, "CUPS_IMAGE_CMY", 14)) {
++    if (memEQ(name, "CF_IMAGE_CMY", 14)) {
+     /*                             K      */
+-      *iv_return = CUPS_IMAGE_CMYK;
++      *iv_return = CF_IMAGE_CMYK;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "HTTP_FIELD_LIN", 14)) {
+@@ -1131,7 +1131,7 @@ constant_16 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+      CUPS_ACCEPT_JOBS CUPS_ADD_PRINTER CUPS_GET_CLASSES CUPS_GET_DEFAULT
+-     CUPS_GET_DEVICES CUPS_IMAGE_BLACK CUPS_IMAGE_WHITE CUPS_MAX_USTRING
++     CUPS_GET_DEVICES CF_IMAGE_BLACK CF_IMAGE_WHITE CUPS_MAX_USTRING
+      CUPS_PRINTER_FAX CUPS_REJECT_JOBS CUPS_SET_DEFAULT CUPS_WINDOWS_874
+      CUPS_WINDOWS_932 CUPS_WINDOWS_936 CUPS_WINDOWS_949 CUPS_WINDOWS_950
+      HTTP_BAD_GATEWAY HTTP_BAD_REQUEST HTTP_FIELD_RANGE HTTP_URI_BAD_URI
+@@ -1171,9 +1171,9 @@ constant_16 (pTHX_ const char *name, IV *iv_return) {
+     }
+     break;
+   case 'A':
+-    if (memEQ(name, "CUPS_IMAGE_BLACK", 16)) {
++    if (memEQ(name, "CF_IMAGE_BLACK", 16)) {
+     /*                            ^         */
+-      *iv_return = CUPS_IMAGE_BLACK;
++      *iv_return = CF_IMAGE_BLACK;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "IPP_TAG_LANGUAGE", 16)) {
+@@ -1228,9 +1228,9 @@ constant_16 (pTHX_ const char *name, IV *iv_return) {
+     }
+     break;
+   case 'I':
+-    if (memEQ(name, "CUPS_IMAGE_WHITE", 16)) {
++    if (memEQ(name, "CF_IMAGE_WHITE", 16)) {
+     /*                            ^         */
+-      *iv_return = CUPS_IMAGE_WHITE;
++      *iv_return = CF_IMAGE_WHITE;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "CUPS_MAX_USTRING", 16)) {
+@@ -1827,7 +1827,7 @@ static int
+ constant_19 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+-     CUPS_DELETE_PRINTER CUPS_IMAGE_RGB_CMYK CUPS_PRINTER_COPIES
++     CUPS_DELETE_PRINTER CF_IMAGE_RGB_CMYK CUPS_PRINTER_COPIES
+      CUPS_PRINTER_DELETE CUPS_PRINTER_DUPLEX CUPS_PRINTER_MEDIUM
+      CUPS_PRINTER_REMOTE CUPS_PRINTER_STAPLE HTTP_ENCODE_CHUNKED
+      HTTP_ENCRYPT_ALWAYS HTTP_FIELD_LOCATION HTTP_NOT_ACCEPTABLE
+@@ -1875,9 +1875,9 @@ constant_19 (pTHX_ const char *name, IV *iv_return) {
+     }
+     break;
+   case 'C':
+-    if (memEQ(name, "CUPS_IMAGE_RGB_CMYK", 19)) {
++    if (memEQ(name, "CF_IMAGE_RGB_CMYK", 19)) {
+     /*                              ^          */
+-      *iv_return = CUPS_IMAGE_RGB_CMYK;
++      *iv_return = CF_IMAGE_RGB_CMYK;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "PPD_CUSTOM_PASSCODE", 19)) {
+@@ -3291,12 +3291,12 @@ my @names = (qw(INET6),
+             {name=>"CUPS_GET_DEVICES", type=>"IV", macro=>"1"},
+             {name=>"CUPS_GET_PPDS", type=>"IV", macro=>"1"},
+             {name=>"CUPS_GET_PRINTERS", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_BLACK", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_CMY", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_CMYK", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_RGB", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_RGB_CMYK", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_WHITE", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_BLACK", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_CMY", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_CMYK", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_RGB", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_RGB_CMYK", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_WHITE", type=>"IV", macro=>"1"},
+             {name=>"CUPS_ISO8859_1", type=>"IV", macro=>"1"},
+             {name=>"CUPS_ISO8859_10", type=>"IV", macro=>"1"},
+             {name=>"CUPS_ISO8859_11", type=>"IV", macro=>"1"},
+diff --git a/fallback/const-c.inc b/fallback/const-c.inc
+index e43a39f..91ef055 100644
+--- a/fallback/const-c.inc
++++ b/fallback/const-c.inc
+@@ -651,7 +651,7 @@ static int
+ constant_14 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+-     CUPS_ADD_CLASS CUPS_FILE_GZIP CUPS_FILE_NONE CUPS_IMAGE_CMY CUPS_IMAGE_RGB
++     CUPS_ADD_CLASS CUPS_FILE_GZIP CUPS_FILE_NONE CF_IMAGE_CMY CF_IMAGE_RGB
+      CUPS_ISO8859_1 CUPS_ISO8859_2 CUPS_ISO8859_3 CUPS_ISO8859_4 CUPS_ISO8859_5
+      CUPS_ISO8859_6 CUPS_ISO8859_7 CUPS_ISO8859_8 CUPS_ISO8859_9 CUPS_MAC_ROMAN
+      HTTP_AUTH_NONE HTTP_FIELD_MAX HTTP_FORBIDDEN HTTP_MAX_VALUE HTTP_NOT_FOUND
+@@ -727,7 +727,7 @@ constant_14 (pTHX_ const char *name, IV *iv_return) {
+   case 'B':
+     if (memEQ(name, "CUPS_IMAGE_RG", 13)) {
+     /*                            B      */
+-      *iv_return = CUPS_IMAGE_RGB;
++      *iv_return = CF_IMAGE_RGB;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "IPP_CANCEL_JO", 13)) {
+@@ -886,7 +886,7 @@ constant_14 (pTHX_ const char *name, IV *iv_return) {
+   case 'Y':
+     if (memEQ(name, "CUPS_IMAGE_CM", 13)) {
+     /*                            Y      */
+-      *iv_return = CUPS_IMAGE_CMY;
++      *iv_return = CF_IMAGE_CMY;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "HTTP_USE_PROX", 13)) {
+@@ -903,7 +903,7 @@ static int
+ constant_15 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+-     CUPS_BACKEND_OK CUPS_IMAGE_CMYK CUPS_ISO8859_10 CUPS_ISO8859_11
++     CUPS_BACKEND_OK CF_IMAGE_CMYK CUPS_ISO8859_10 CUPS_ISO8859_11
+      CUPS_ISO8859_13 CUPS_ISO8859_14 CUPS_ISO8859_15 CUPS_ISO8859_16
+      CUPS_PRINTER_BW HTTP_AUTH_BASIC HTTP_FIELD_DATE HTTP_FIELD_HOST
+      HTTP_FIELD_LINK HTTP_MAX_BUFFER HTTP_NO_CONTENT IPP_BAD_REQUEST
+@@ -1029,9 +1029,9 @@ constant_15 (pTHX_ const char *name, IV *iv_return) {
+       *iv_return = CUPS_BACKEND_OK;
+       return PERL_constant_ISIV;
+     }
+-    if (memEQ(name, "CUPS_IMAGE_CMY", 14)) {
++    if (memEQ(name, "CF_IMAGE_CMY", 14)) {
+     /*                             K      */
+-      *iv_return = CUPS_IMAGE_CMYK;
++      *iv_return = CF_IMAGE_CMYK;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "HTTP_FIELD_LIN", 14)) {
+@@ -1136,7 +1136,7 @@ constant_16 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+      CUPS_ACCEPT_JOBS CUPS_ADD_PRINTER CUPS_GET_CLASSES CUPS_GET_DEFAULT
+-     CUPS_GET_DEVICES CUPS_IMAGE_BLACK CUPS_IMAGE_WHITE CUPS_MAX_USTRING
++     CUPS_GET_DEVICES CF_IMAGE_BLACK CF_IMAGE_WHITE CUPS_MAX_USTRING
+      CUPS_PRINTER_FAX CUPS_REJECT_JOBS CUPS_SET_DEFAULT CUPS_WINDOWS_874
+      CUPS_WINDOWS_932 CUPS_WINDOWS_936 CUPS_WINDOWS_949 CUPS_WINDOWS_950
+      HTTP_BAD_GATEWAY HTTP_BAD_REQUEST HTTP_FIELD_RANGE HTTP_URI_BAD_URI
+@@ -1176,9 +1176,9 @@ constant_16 (pTHX_ const char *name, IV *iv_return) {
+     }
+     break;
+   case 'A':
+-    if (memEQ(name, "CUPS_IMAGE_BLACK", 16)) {
++    if (memEQ(name, "CF_IMAGE_BLACK", 16)) {
+     /*                            ^         */
+-      *iv_return = CUPS_IMAGE_BLACK;
++      *iv_return = CF_IMAGE_BLACK;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "IPP_TAG_LANGUAGE", 16)) {
+@@ -1233,9 +1233,9 @@ constant_16 (pTHX_ const char *name, IV *iv_return) {
+     }
+     break;
+   case 'I':
+-    if (memEQ(name, "CUPS_IMAGE_WHITE", 16)) {
++    if (memEQ(name, "CF_IMAGE_WHITE", 16)) {
+     /*                            ^         */
+-      *iv_return = CUPS_IMAGE_WHITE;
++      *iv_return = CF_IMAGE_WHITE;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "CUPS_MAX_USTRING", 16)) {
+@@ -1855,7 +1855,7 @@ constant_19 (pTHX_ const char *name, IV *iv_return) {
+   /* When generated this function returned values for the list of names given
+      here.  However, subsequent manual editing may have added or removed some.
+      CUPS_BACKEND_CANCEL CUPS_BACKEND_FAILED CUPS_DELETE_PRINTER
+-     CUPS_IMAGE_RGB_CMYK CUPS_PRINTER_COPIES CUPS_PRINTER_DELETE
++     CF_IMAGE_RGB_CMYK CUPS_PRINTER_COPIES CUPS_PRINTER_DELETE
+      CUPS_PRINTER_DUPLEX CUPS_PRINTER_MEDIUM CUPS_PRINTER_REMOTE
+      CUPS_PRINTER_STAPLE HTTP_ENCODE_CHUNKED HTTP_ENCRYPT_ALWAYS
+      HTTP_FIELD_LOCATION HTTP_NOT_ACCEPTABLE HTTP_URI_BAD_SCHEME
+@@ -1903,9 +1903,9 @@ constant_19 (pTHX_ const char *name, IV *iv_return) {
+     }
+     break;
+   case 'C':
+-    if (memEQ(name, "CUPS_IMAGE_RGB_CMYK", 19)) {
++    if (memEQ(name, "CF_IMAGE_RGB_CMYK", 19)) {
+     /*                              ^          */
+-      *iv_return = CUPS_IMAGE_RGB_CMYK;
++      *iv_return = CF_IMAGE_RGB_CMYK;
+       return PERL_constant_ISIV;
+     }
+     if (memEQ(name, "PPD_CUSTOM_PASSCODE", 19)) {
+@@ -3349,12 +3349,12 @@ my @names = (qw(INET6),
+             {name=>"CUPS_GET_DEVICES", type=>"IV", macro=>"1"},
+             {name=>"CUPS_GET_PPDS", type=>"IV", macro=>"1"},
+             {name=>"CUPS_GET_PRINTERS", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_BLACK", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_CMY", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_CMYK", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_RGB", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_RGB_CMYK", type=>"IV", macro=>"1"},
+-            {name=>"CUPS_IMAGE_WHITE", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_BLACK", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_CMY", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_CMYK", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_RGB", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_RGB_CMYK", type=>"IV", macro=>"1"},
++            {name=>"CF_IMAGE_WHITE", type=>"IV", macro=>"1"},
+             {name=>"CUPS_ISO8859_1", type=>"IV", macro=>"1"},
+             {name=>"CUPS_ISO8859_10", type=>"IV", macro=>"1"},
+             {name=>"CUPS_ISO8859_11", type=>"IV", macro=>"1"},
+diff --git a/lib/Net/CUPS.pm b/lib/Net/CUPS.pm
+index 10f1145..5ac1183 100644
+--- a/lib/Net/CUPS.pm
++++ b/lib/Net/CUPS.pm
+@@ -53,12 +53,12 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11
+@@ -523,12 +523,12 @@ our @EXPORT = qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11
+diff --git a/lib/Net/CUPS/Destination.pm b/lib/Net/CUPS/Destination.pm
+index 9f9c9c5..2c3f020 100644
+--- a/lib/Net/CUPS/Destination.pm
++++ b/lib/Net/CUPS/Destination.pm
+@@ -55,12 +55,12 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11
+@@ -525,12 +525,12 @@ our @EXPORT = qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11
+diff --git a/lib/Net/CUPS/IPP.pm b/lib/Net/CUPS/IPP.pm
+index 518970a..0c5e175 100644
+--- a/lib/Net/CUPS/IPP.pm
++++ b/lib/Net/CUPS/IPP.pm
+@@ -55,12 +55,12 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11
+@@ -525,12 +525,12 @@ our @EXPORT = qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11
+diff --git a/lib/Net/CUPS/PPD.pm b/lib/Net/CUPS/PPD.pm
+index 57d1114..20df02c 100644
+--- a/lib/Net/CUPS/PPD.pm
++++ b/lib/Net/CUPS/PPD.pm
+@@ -55,12 +55,12 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11
+@@ -528,12 +528,12 @@ our @EXPORT = qw(
+ 	CUPS_GET_DEVICES
+ 	CUPS_GET_PPDS
+ 	CUPS_GET_PRINTERS
+-	CUPS_IMAGE_BLACK
+-	CUPS_IMAGE_CMY
+-	CUPS_IMAGE_CMYK
+-	CUPS_IMAGE_RGB
+-	CUPS_IMAGE_RGB_CMYK
+-	CUPS_IMAGE_WHITE
++	CF_IMAGE_BLACK
++	CF_IMAGE_CMY
++	CF_IMAGE_CMYK
++	CF_IMAGE_RGB
++	CF_IMAGE_RGB_CMYK
++	CF_IMAGE_WHITE
+ 	CUPS_ISO8859_1
+ 	CUPS_ISO8859_10
+ 	CUPS_ISO8859_11

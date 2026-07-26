@@ -1,0 +1,61 @@
+From a98c1fa1e6d39fa659fb6f7de8d6a32fbedaea06 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cl=C3=A9ment=20Pernet?= <clement.pernet@gmail.com>
+Date: Fri, 7 Oct 2022 21:00:56 +0200
+Subject: [PATCH] fix perf publisher
+
+---
+ configure.ac        | 5 +++--
+ macros/omp-check.m4 | 8 ++++----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 5390bcff..682c1800 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -115,10 +115,11 @@ AC_C_BIGENDIAN(
+ AS_ECHO([---------------------------------------])
+ 
+ # Looking for OpenMP
++AC_OPENMP
+ FF_CHECK_OMP
+ 
+-PARFLAGS="${OMPFLAGS}"
+-PARLIBS="${OMPFLAGS}"
++PARFLAGS="${OPENMP_CXXFLAGS}"
++PARLIBS="${OPENMP_CXXFLAGS}"
+ AC_SUBST(PARFLAGS)
+ AC_SUBST(PARLIBS)
+ 
+diff --git a/macros/omp-check.m4 b/macros/omp-check.m4
+index 0d407e1c..0a422797 100644
+--- a/macros/omp-check.m4
++++ b/macros/omp-check.m4
+@@ -36,7 +36,7 @@ AC_DEFUN([FF_CHECK_OMP],
+ 	  AS_IF([ test "x$avec_omp" != "xno" ],
+ 		[
+ 		BACKUP_CXXFLAGS=${CXXFLAGS}
+-		CXXFLAGS="${BACKUP_CXXFLAGS} ${OMPFLAGS}"
++		CXXFLAGS="${BACKUP_CXXFLAGS} ${OPENMP_CXXFLAGS}"
+ 		AC_TRY_RUN([
+ #include <omp.h>
+ 			int main() {
+@@ -53,13 +53,13 @@ AC_DEFUN([FF_CHECK_OMP],
+ 		AS_IF(	[ test "x$omp_found" = "xyes" ],
+ 			[
+ 				AC_DEFINE(USE_OPENMP,1,[Define if OMP is available])
+-				AC_SUBST(OMPFLAGS)
++				AC_SUBST(OPENMP_CXXFLAGS)
+ 				AC_MSG_RESULT(yes)
+ 				HAVE_OMP=yes
+ 			],
+ 			[
+-				OMPFLAGS=
+-				AC_SUBST(OMPFLAGS)
++				OPENMP_CXXFLAGS=
++				AC_SUBST(OPENMP_CXXFLAGS)
+ 				AC_MSG_RESULT(no)
+ 			]
+ 		)
+-- 
+2.41.0
+

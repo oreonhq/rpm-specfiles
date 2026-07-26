@@ -1,0 +1,14 @@
+diff -rup a/src/app/thisappinit.c b/src/app/thisappinit.c
+--- a/src/app/thisappinit.c	2010-12-06 05:51:01.000000000 +0100
++++ b/src/app/thisappinit.c	2014-05-29 13:46:49.894195170 +0200
+@@ -660,8 +660,8 @@ types_wrapper* instantiate_types(GtkWidg
+ 
+ 	doc_type_list[0].def_dir = (gchar *) x_malloc(strlen(HF_DIR)+1, "gchar (def_dir - HF_DIR)");
+ 	strcpy(doc_type_list[0].def_dir,HF_DIR);
+-	doc_type_list[1].def_dir = (gchar *) x_malloc(strlen(POV_DIR)+1, "gchar (def_dir - POV_DIR)");
+-	strcpy(doc_type_list[1].def_dir,POV_DIR);
++	/*doc_type_list[1].def_dir = (gchar *) x_malloc(strlen(POV_DIR)+1, "gchar (def_dir - POV_DIR)");
++	strcpy(doc_type_list[1].def_dir,POV_DIR);*/
+ 	return types_wrapper_new(main_window, doc_type_list, doc_type_item, NBDOCTYPES);
+ 
+ }

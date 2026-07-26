@@ -1,0 +1,288 @@
+From 075bedcadb16411a8549642844a925592c46972c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Thu, 26 Aug 2021 11:44:56 +0200
+Subject: [PATCH 06/15] Drop support for Python 2, Python 3.4 and 3.5
+
+Python 2 has been EOL for since Jan 1, 2020, Python 3.4 has been EOL
+since Mar 18, 2019 and Python 3.5 has been EOL since Sep 13, 2020.
+
+Drop obsolete 'from __future__' imports, drop obsolete conditionals due
+to Python 2 vs. 3 differences.
+---
+ .github/workflows/ci-tests.yml |  2 +-
+ README.md                      | 10 +++++-----
+ pew/__init__.py                |  2 --
+ pew/_print_utils.py            | 12 ++----------
+ pew/_utils.py                  | 21 +++------------------
+ pew/pew.py                     | 14 +++-----------
+ setup.py                       |  4 ----
+ tests/test_print_utils.py      |  5 +----
+ tests/utils.py                 | 23 ++++-------------------
+ tox.ini                        |  9 +--------
+ 10 files changed, 20 insertions(+), 82 deletions(-)
+
+diff --git a/.github/workflows/ci-tests.yml b/.github/workflows/ci-tests.yml
+index 51b5623..9725e39 100644
+--- a/.github/workflows/ci-tests.yml
++++ b/.github/workflows/ci-tests.yml
+@@ -21,7 +21,7 @@ jobs:
+     strategy:
+       matrix:
+         platform: [ubuntu-latest, windows-latest]
+-        python-version: [2.7, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9]
++        python-version: [3.6, 3.7, 3.8, 3.9]
+     steps:
+       - name: Checkout code
+         uses: actions/checkout@v2
+diff --git a/README.md b/README.md
+index cce7064..b976741 100644
+--- a/README.md
++++ b/README.md
+@@ -216,9 +216,9 @@ Use Pythonz to download and build a Python vm
+ 
+ `usage: pew install [options] version`
+ 
+-To install Python3.5.0
++To install Python3.8.0
+ 
+-`pew install 3.5.0`
++`pew install 3.8.0`
+ 
+ To install Pypy:
+ 
+@@ -380,15 +380,15 @@ To run individual test scripts, run from the top level directory of the reposito
+ 
+ To run tests under a single version of Python, specify the appropriate environment when running `tox`:
+ 
+-`tox -e py27`
++`tox -e py38`
+ 
+ Combine the two modes to run specific tests with a single version of Python:
+ 
+-`tox -e py27 tests/test_setproject.py`
++`tox -e py38 tests/test_setproject.py`
+ 
+ You can also filter them:
+ 
+-`tox -e py34 -- -k workon`
++`tox -e py38 -- -k workon`
+ 
+ Add new tests by modifying an existing file or creating new script in the tests directory.
+ 
+diff --git a/pew/__init__.py b/pew/__init__.py
+index 90fe7cf..de3be3b 100644
+--- a/pew/__init__.py
++++ b/pew/__init__.py
+@@ -1,4 +1,2 @@
+-from __future__ import absolute_import
+-
+ from . import pew
+ __all__ = ['pew']
+diff --git a/pew/_print_utils.py b/pew/_print_utils.py
+index 0b18c1d..9073b00 100644
+--- a/pew/_print_utils.py
++++ b/pew/_print_utils.py
+@@ -1,16 +1,8 @@
+-from __future__ import division, print_function
+-
+ import os
+ from functools import partial
+ from math import ceil
+-try:
+-    from itertools import zip_longest
+-except ImportError:
+-    from itertools import izip_longest as zip_longest
+-try:
+-    from shutil import get_terminal_size
+-except ImportError:
+-    from backports.shutil_get_terminal_size import get_terminal_size
++from itertools import zip_longest
++from shutil import get_terminal_size
+ 
+ SEP = '  '
+ L = len(SEP)
+diff --git a/pew/_utils.py b/pew/_utils.py
+index d1d8e0a..cd51b1b 100644
+--- a/pew/_utils.py
++++ b/pew/_utils.py
+@@ -7,31 +7,16 @@ from subprocess import check_call, Popen, PIPE
+ from collections import namedtuple
+ from functools import partial, wraps
+ from pathlib import Path
+-from tempfile import NamedTemporaryFile as _ntf
+-try:
+-    from shutil import which
+-except ImportError:
+-    from shutilwhich import which
++from tempfile import NamedTemporaryFile
++from shutil import which
+ 
+-py2 = sys.version_info[0] == 2
+ windows = sys.platform == 'win32'
+ 
+-if py2 or windows:
++if windows:
+     locale.setlocale(locale.LC_CTYPE, '')
+ 
+ encoding = locale.getlocale()[1] or 'ascii'
+ 
+-if py2:
+-    @wraps(_ntf)
+-    def NamedTemporaryFile(mode):
+-        return getwriter(encoding)(_ntf(mode))
+-
+-    def to_unicode(x):
+-        return x.decode(encoding)
+-else:
+-    NamedTemporaryFile = _ntf
+-    to_unicode = str
+-
+ def check_path():
+     parent = os.path.dirname
+     return parent(parent(which('python'))) == os.environ['VIRTUAL_ENV']
+diff --git a/pew/pew.py b/pew/pew.py
+index 2ffea2f..42e7a79 100644
+--- a/pew/pew.py
++++ b/pew/pew.py
+@@ -1,5 +1,3 @@
+-from __future__ import print_function, absolute_import, unicode_literals
+-
+ import os
+ import sys
+ import argparse
+@@ -10,10 +8,7 @@ from functools import partial
+ from subprocess import CalledProcessError
+ from pathlib import Path
+ 
+-try:
+-    from shutil import get_terminal_size
+-except ImportError:
+-    from backports.shutil_get_terminal_size import get_terminal_size
++from shutil import get_terminal_size
+ 
+ windows = sys.platform == 'win32'
+ 
+@@ -30,12 +25,9 @@ else:
+     import shellingham
+ 
+ from pew._utils import (check_call, invoke, expandpath, own, env_bin_dir,
+-                        check_path, temp_environ, NamedTemporaryFile, to_unicode)
++                        check_path, temp_environ, NamedTemporaryFile)
+ from pew._print_utils import print_virtualenvs
+ 
+-if sys.version_info[0] == 2:
+-    input = raw_input
+-
+ err = partial(print, file=sys.stderr)
+ 
+ if windows:
+@@ -154,7 +146,7 @@ def fork_bash(env, cwd):
+         with NamedTemporaryFile('w+') as rcfile:
+             with bashrcpath.open() as bashrc:
+                 rcfile.write(bashrc.read())
+-            rcfile.write('\nexport PATH="' + to_unicode(compute_path(env)) + '"')
++            rcfile.write('\nexport PATH="' + compute_path(env) + '"')
+             rcfile.flush()
+             return fork_shell(env, ['bash', '--rcfile', rcfile.name], cwd)
+     else:
+diff --git a/setup.py b/setup.py
+index b91a9c7..db57b9b 100644
+--- a/setup.py
++++ b/setup.py
+@@ -65,9 +65,6 @@ setup(
+         'virtualenv>=1.11', 'virtualenv-clone>=0.2.5', 'setuptools>=17.1'
+     ],
+     extras_require={
+-        ':python_version=="2.7"': [
+-            'pathlib', 'backports.shutil_get_terminal_size', 'shutilwhich'
+-        ],
+         ':sys_platform=="win32"': [
+             'shellingham'
+         ],
+@@ -83,7 +80,6 @@ setup(
+     entry_points={
+         'console_scripts': ['pew = pew.pew:pew']},
+     classifiers=[
+-        'Programming Language :: Python :: 2',
+         'Programming Language :: Python :: 3',
+         'Intended Audience :: Developers',
+         'Environment :: Console']
+diff --git a/tests/test_print_utils.py b/tests/test_print_utils.py
+index df4cdf7..1fc5cf5 100644
+--- a/tests/test_print_utils.py
++++ b/tests/test_print_utils.py
+@@ -3,10 +3,7 @@ from pew._print_utils import (
+     get_best_columns_number,
+     columnize,
+ )
+-try:
+-    from unittest.mock import patch
+-except ImportError:
+-    from mock import patch
++from unittest.mock import patch
+ 
+ 
+ def test_get_rows():
+diff --git a/tests/utils.py b/tests/utils.py
+index 01550db..952832a 100644
+--- a/tests/utils.py
++++ b/tests/utils.py
+@@ -1,22 +1,7 @@
+-try:
+-    from tempfile import TemporaryDirectory
+-except ImportError:
+-    from shutil import rmtree
+-    from contextlib import contextmanager
+-    from tempfile import mkdtemp
+-
+-    @contextmanager
+-    def TemporaryDirectory():
+-        tmpdir = mkdtemp()
+-        yield tmpdir
+-        rmtree(tmpdir)
+-
+-try:
+-    from urllib.request import urlopen
+-    from urllib.error import URLError
+-except ImportError:
+-    from urllib import urlopen
+-    URLError = IOError
++from tempfile import TemporaryDirectory
++
++from urllib.request import urlopen
++from urllib.error import URLError
+ 
+ 
+ import functools
+diff --git a/tox.ini b/tox.ini
+index 7420f08..c0e5599 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,12 +1,9 @@
+ [tox]
+ skip_missing_interpreters=True
+-envlist = py{27,34,35,36,37,38,39}-{linux,windows}, pypy
++envlist = py{36,37,38,39}-{linux,windows}, pypy
+ 
+ [gh-actions]
+ python =
+-    2.7: py27
+-    3.4: py34
+-    3.5: py35
+     3.6: py36
+     3.7: py37
+     3.8: py38
+@@ -23,10 +20,6 @@ passenv = CI HOME
+ commands = py.test -rw []
+ deps =
+     -r{toxinidir}/requirements.txt
+-    py27: pathlib>=1.0.1
+-    py27: mock
+-    py27: backports.shutil_get_terminal_size
+-    py27: shutilwhich
+     pypy: shutilwhich
+     pypy: pathlib>=1.0.1
+     pypy: mock
+-- 
+2.31.1
+

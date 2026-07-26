@@ -1,0 +1,28 @@
+From 27518c9b5817c1c54f782083db9957260666575d Mon Sep 17 00:00:00 2001
+From: LuK1337 <priv.luk@gmail.com>
+Date: Wed, 3 Sep 2025 20:41:03 +0200
+Subject: [PATCH] Migrate from ast.Num to ast.Constant
+
+ast.Num has been removed from Python 3.14.
+---
+ src/binwalk/core/common.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/binwalk/core/common.py b/src/binwalk/core/common.py
+index bff7481..5f34f61 100644
+--- a/src/binwalk/core/common.py
++++ b/src/binwalk/core/common.py
+@@ -238,8 +238,8 @@ class MathExpression(object):
+         return self._eval(ast.parse(expr).body[0].value)
+ 
+     def _eval(self, node):
+-        if isinstance(node, ast.Num):  # <number>
+-            return node.n
++        if isinstance(node, ast.Constant):  # <number>
++            return node.value
+         elif isinstance(node, ast.operator):  # <operator>
+             return self.OPERATORS[type(node.op)]
+         elif isinstance(node, ast.UnaryOp):
+-- 
+2.51.0
+

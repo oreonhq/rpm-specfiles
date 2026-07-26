@@ -1,0 +1,25 @@
+From 9c598b851ec64aa25be90ddd1f50c1f621727b06 Mon Sep 17 00:00:00 2001
+From: ssfdust <ssfdust@gmail.com>
+Date: Fri, 27 Oct 2017 12:46:06 +0800
+Subject: [PATCH] Fix typeerror in python3.6
+
+---
+ FusionIcon/util.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/FusionIcon/util.py b/FusionIcon/util.py
+index 8d4c8ff..bfedf72 100644
+--- a/FusionIcon/util.py
++++ b/FusionIcon/util.py
+@@ -76,7 +76,7 @@ class CompizOption(object):
+ 		return self.config.getboolean('compiz options', self.name)
+ 
+ 	def __set(self, value):
+-		print(' * Setting option ' + self.label + ' to ' + value)
++		print(' * Setting option ' + self.label + ' to ' + str(value))
+ 		self.config.set('compiz options', self.name, str(bool(value)).lower())
+ 		self.config.write(open(self.config.config_file, 'w'))
+ 
+-- 
+2.13.6
+

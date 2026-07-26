@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Didier Fabert <didier.fabert@gmail.com> -->
+<component type="desktop">
+ <id>geomorph.desktop</id>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-2.0</project_license>
+ <name>geomorph</name>
+ <summary>A height field editor for Linux</summary>
+ <description>
+  <p>
+   Geomorph is a height field generator and editor for the Linux operating
+   system. A height field is a kind of topographic map. It is a 2D projection
+   of a 3D landscape.
+  </p>
+  <p>
+   Geomorph generates square images and shows a 3D preview of the resulting
+   landscape.  The resulting 2D image can be processed with a tool like Povray
+   for rendering the landscape.
+  </p>
+ </description>
+ <screenshots>
+  <screenshot type="default">
+   <image>https://raw.githubusercontent.com/didier13150/geomorph/cmake/screenshot-main.png</image>
+   <caption>The main window showing the application in action</caption>
+  </screenshot>
+  <screenshot>
+   <image>https://raw.githubusercontent.com/didier13150/geomorph/cmake/screenshot-rendering.png</image>
+   <caption>The povray preview window</caption>
+  </screenshot>
+ </screenshots>
+ <url type="homepage">http://geomorph.sourceforge.net/</url>
+ <updatecontact>didier.fabert_at_gmail.com</updatecontact>
+</component>

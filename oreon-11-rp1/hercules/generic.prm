@@ -1,0 +1,11 @@
+root=/dev/ram0 ro ip=off ramdisk_size=40000
+DASD=0120
+NETTYPE=ctc
+SUBCHANNELS=0.0.0600,0.0.0601
+IPADDR=192.168.200.3
+NETWORK=192.168.200.0
+GATEWAY=192.168.200.4
+#DNS=ip.of.dns.1:ip.of.dns.2
+#SEARCHDNS=example.com:sample.com
+#HOSTNAME=s390.localdomain
+#vnc

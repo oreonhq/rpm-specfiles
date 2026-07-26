@@ -1,0 +1,39 @@
+[archive]
+
+exclude_files = [
+    # This can be removed in go-vendor-tools v0.7.0 where license of docs for
+    # vendored deps will no longer be considered
+    "vendor/github.com/opencontainers/go-digest/LICENSE.docs",
+]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "logo/LICENSE"
+sha256sum = "a979135bca699eac1e7417b0deda5023c484c490fa12b85751b1580cc0b16031"
+expression = "Apache-2.0"
+
+[[licensing.licenses]]
+path = "vendor/github.com/cloudflare/circl/LICENSE"
+sha256sum = "b0da1764fe4d13d610b695536fc3f2ebc362482d053a1cd258e36975bc6b97a7"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/emirpasic/gods/LICENSE"
+sha256sum = "871b440e9b348d6b2485c72e15f1d18f4cf8ee7bb424cbcd854b6a4a772b61d8"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/go-openapi/spec/license.go"
+sha256sum = "9ba36f66fba6f2e3b7dce95d9413a738688abcfce8c3d38c581b276f9437d1c6"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/kevinburke/ssh_config/LICENSE"
+sha256sum = "a15a6f732df3a033a71853ce1d255bd671f00fbc537fa629b78d71baecda0ace"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT"

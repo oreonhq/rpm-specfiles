@@ -1,0 +1,56 @@
+From de91899f3f3f49c2f6f08bd3ee1dacd18c8d791b Mon Sep 17 00:00:00 2001
+From: Tom Rix <trix@redhat.com>
+Date: Fri, 22 Sep 2023 13:27:00 -0700
+Subject: [PATCH] gloo fedora cmake changes
+
+Fedora requires a versioned *.so
+libdir is wrong
+cmake install location is wrong
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ CMakeLists.txt      | 4 ++--
+ gloo/CMakeLists.txt | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b0db65e..150be72 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -138,9 +138,9 @@ if(GLOO_INSTALL)
+     install(FILES
+       ${PROJECT_BINARY_DIR}/cmake/GlooConfig.cmake
+       ${PROJECT_BINARY_DIR}/cmake/GlooConfigVersion.cmake
+-      DESTINATION share/cmake/Gloo
++      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Gloo
+       COMPONENT dev)
+-    install(EXPORT GlooTargets DESTINATION share/cmake/Gloo
++    install(EXPORT GlooTargets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Gloo
+       FILE GlooTargets.cmake
+       COMPONENT dev)
+   else()
+diff --git a/gloo/CMakeLists.txt b/gloo/CMakeLists.txt
+index d5e6a1a..a95cdf7 100644
+--- a/gloo/CMakeLists.txt
++++ b/gloo/CMakeLists.txt
+@@ -176,12 +176,16 @@ if(USE_ROCM)
+   target_include_directories(gloo_hip INTERFACE $<INSTALL_INTERFACE:include>)
+ endif()
+ 
++# YY.M.D of last upstream commit to main
++set(gloo_VERSION 0.0.230824)
++set_target_properties(gloo PROPERTIES VERSION ${gloo_VERSION} SOVERSION ${gloo_VERSION})
++
+ # Install if necessary.
+ # If the Gloo build is included from another project's build, it may
+ # want to statically link with Gloo and not install any artifacts.
+ if(GLOO_INSTALL)
+   install(TARGETS gloo EXPORT GlooTargets
+-      DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
++      DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+   if(USE_CUDA)
+     install(TARGETS gloo_cuda EXPORT GlooTargets
+         DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+-- 
+2.41.0
+

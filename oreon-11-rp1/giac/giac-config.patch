@@ -1,0 +1,19 @@
+diff --git a/m4/intdiv0.m4 b/m4/intdiv0.m4
+index b8d7817..23fdc1d 100644
+--- a/m4/intdiv0.m4
++++ b/m4/intdiv0.m4
+@@ -29,10 +29,10 @@ sigfpe_handler (sig) int sig;
+   exit (sig != SIGFPE);
+ }
+ 
+-int x = 1;
+-int y = 0;
+-int z;
+-int nan;
++volatile int x = 1;
++volatile int y = 0;
++volatile int z;
++volatile int nan;
+ 
+ int main ()
+ {

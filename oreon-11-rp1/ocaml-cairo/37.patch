@@ -1,0 +1,139 @@
+From 7cf347901b4a39b3931a4136a1cdbc92482cec34 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Beno=C3=AEt=20Vaugon?= <benoit.vaugon@gmail.com>
+Date: Fri, 22 Sep 2023 14:17:26 +0200
+Subject: [PATCH] Complete cairo status list.
+
+---
+ src/cairo.ml            | 80 +++++++++++++++++++++++------------------
+ src/cairo.mli           |  5 +++
+ src/cairo_ocaml_types.h |  3 ++
+ 3 files changed, 53 insertions(+), 35 deletions(-)
+
+diff --git a/src/cairo.ml b/src/cairo.ml
+index 688bb31..a09696c 100644
+--- a/src/cairo.ml
++++ b/src/cairo.ml
+@@ -57,48 +57,58 @@ type status =
+   | INVALID_MESH_CONSTRUCTION
+   | DEVICE_FINISHED
+   | JBIG2_GLOBAL_MISSING
++  | PNG_ERROR
++  | FREETYPE_ERROR
++  | WIN32_GDI_ERROR
++  | TAG_ERROR
++  | UNKNOWN_ERROR
+ 
+ exception Error of status
+ let () = Callback.register_exception "Cairo.Error" (Error INVALID_RESTORE)
+ 
+ let error_of_status = function
+-  | INVALID_RESTORE        -> "Cairo.Error(INVALID_RESTORE)"
+-  | INVALID_POP_GROUP      -> "Cairo.Error(INVALID_POP_GROUP)"
+-  | NO_CURRENT_POINT       -> "Cairo.Error(NO_CURRENT_POINT)"
+-  | INVALID_MATRIX         -> "Cairo.Error(INVALID_MATRIX)"
+-  | INVALID_STATUS         -> "Cairo.Error(INVALID_STATUS)"
+-  | NULL_POINTER           -> "Cairo.Error(NULL_POINTER)"
+-  | INVALID_STRING         -> "Cairo.Error(INVALID_STRING)"
+-  | INVALID_PATH_DATA      -> "Cairo.Error(INVALID_PATH_DATA)"
+-  | READ_ERROR             -> "Cairo.Error(READ_ERROR)"
+-  | WRITE_ERROR            -> "Cairo.Error(WRITE_ERROR)"
+-  | SURFACE_FINISHED       -> "Cairo.Error(SURFACE_FINISHED)"
+-  | SURFACE_TYPE_MISMATCH  -> "Cairo.Error(SURFACE_TYPE_MISMATCH)"
+-  | PATTERN_TYPE_MISMATCH  -> "Cairo.Error(PATTERN_TYPE_MISMATCH)"
+-  | INVALID_CONTENT        -> "Cairo.Error(INVALID_CONTENT)"
+-  | INVALID_FORMAT         -> "Cairo.Error(INVALID_FORMAT)"
+-  | INVALID_VISUAL         -> "Cairo.Error(INVALID_VISUAL)"
+-  | FILE_NOT_FOUND         -> "Cairo.Error(FILE_NOT_FOUND)"
+-  | INVALID_DASH           -> "Cairo.Error(INVALID_DASH)"
+-  | INVALID_DSC_COMMENT    -> "Cairo.Error(INVALID_DSC_COMMENT)"
+-  | INVALID_INDEX          -> "Cairo.Error(INVALID_INDEX)"
+-  | CLIP_NOT_REPRESENTABLE -> "Cairo.Error(CLIP_NOT_REPRESENTABLE)"
+-  | TEMP_FILE_ERROR        -> "Cairo.Error(TEMP_FILE_ERROR)"
+-  | INVALID_STRIDE         -> "Cairo.Error(INVALID_STRIDE)"
+-  | FONT_TYPE_MISMATCH     -> "Cairo.Error(FONT_TYPE_MISMATCH)"
+-  | USER_FONT_IMMUTABLE    -> "Cairo.Error(USER_FONT_IMMUTABLE)"
+-  | USER_FONT_ERROR        -> "Cairo.Error(USER_FONT_ERROR)"
+-  | NEGATIVE_COUNT         -> "Cairo.Error(NEGATIVE_COUNT)"
+-  | INVALID_CLUSTERS       -> "Cairo.Error(INVALID_CLUSTERS)"
+-  | INVALID_SLANT          -> "Cairo.Error(INVALID_SLANT)"
+-  | INVALID_WEIGHT         -> "Cairo.Error(INVALID_WEIGHT)"
+-  | INVALID_SIZE           -> "Cairo.Error(INVALID_SIZE)"
++  | INVALID_RESTORE           -> "Cairo.Error(INVALID_RESTORE)"
++  | INVALID_POP_GROUP         -> "Cairo.Error(INVALID_POP_GROUP)"
++  | NO_CURRENT_POINT          -> "Cairo.Error(NO_CURRENT_POINT)"
++  | INVALID_MATRIX            -> "Cairo.Error(INVALID_MATRIX)"
++  | INVALID_STATUS            -> "Cairo.Error(INVALID_STATUS)"
++  | NULL_POINTER              -> "Cairo.Error(NULL_POINTER)"
++  | INVALID_STRING            -> "Cairo.Error(INVALID_STRING)"
++  | INVALID_PATH_DATA         -> "Cairo.Error(INVALID_PATH_DATA)"
++  | READ_ERROR                -> "Cairo.Error(READ_ERROR)"
++  | WRITE_ERROR               -> "Cairo.Error(WRITE_ERROR)"
++  | SURFACE_FINISHED          -> "Cairo.Error(SURFACE_FINISHED)"
++  | SURFACE_TYPE_MISMATCH     -> "Cairo.Error(SURFACE_TYPE_MISMATCH)"
++  | PATTERN_TYPE_MISMATCH     -> "Cairo.Error(PATTERN_TYPE_MISMATCH)"
++  | INVALID_CONTENT           -> "Cairo.Error(INVALID_CONTENT)"
++  | INVALID_FORMAT            -> "Cairo.Error(INVALID_FORMAT)"
++  | INVALID_VISUAL            -> "Cairo.Error(INVALID_VISUAL)"
++  | FILE_NOT_FOUND            -> "Cairo.Error(FILE_NOT_FOUND)"
++  | INVALID_DASH              -> "Cairo.Error(INVALID_DASH)"
++  | INVALID_DSC_COMMENT       -> "Cairo.Error(INVALID_DSC_COMMENT)"
++  | INVALID_INDEX             -> "Cairo.Error(INVALID_INDEX)"
++  | CLIP_NOT_REPRESENTABLE    -> "Cairo.Error(CLIP_NOT_REPRESENTABLE)"
++  | TEMP_FILE_ERROR           -> "Cairo.Error(TEMP_FILE_ERROR)"
++  | INVALID_STRIDE            -> "Cairo.Error(INVALID_STRIDE)"
++  | FONT_TYPE_MISMATCH        -> "Cairo.Error(FONT_TYPE_MISMATCH)"
++  | USER_FONT_IMMUTABLE       -> "Cairo.Error(USER_FONT_IMMUTABLE)"
++  | USER_FONT_ERROR           -> "Cairo.Error(USER_FONT_ERROR)"
++  | NEGATIVE_COUNT            -> "Cairo.Error(NEGATIVE_COUNT)"
++  | INVALID_CLUSTERS          -> "Cairo.Error(INVALID_CLUSTERS)"
++  | INVALID_SLANT             -> "Cairo.Error(INVALID_SLANT)"
++  | INVALID_WEIGHT            -> "Cairo.Error(INVALID_WEIGHT)"
++  | INVALID_SIZE              -> "Cairo.Error(INVALID_SIZE)"
+   | USER_FONT_NOT_IMPLEMENTED -> "Cairo.Error(USER_FONT_NOT_IMPLEMENTED)"
+-  | DEVICE_TYPE_MISMATCH   -> "Cairo.Error(DEVICE_TYPE_MISMATCH)"
+-  | DEVICE_ERROR           -> "Cairo.Error(DEVICE_ERROR)"
++  | DEVICE_TYPE_MISMATCH      -> "Cairo.Error(DEVICE_TYPE_MISMATCH)"
++  | DEVICE_ERROR              -> "Cairo.Error(DEVICE_ERROR)"
+   | INVALID_MESH_CONSTRUCTION -> "Cairo.Error(INVALID_MESH_CONSTRUCTION)"
+-  | DEVICE_FINISHED        -> "Cairo.Error(DEVICE_FINISHED)"
+-  | JBIG2_GLOBAL_MISSING   -> "Cairo.Error(JBIG2_GLOBAL_MISSING)"
++  | DEVICE_FINISHED           -> "Cairo.Error(DEVICE_FINISHED)"
++  | JBIG2_GLOBAL_MISSING      -> "Cairo.Error(JBIG2_GLOBAL_MISSING)"
++  | PNG_ERROR                 -> "Cairo.Error(PNG_ERROR)"
++  | FREETYPE_ERROR            -> "Cairo.Error(FREETYPE_ERROR)"
++  | WIN32_GDI_ERROR           -> "Cairo.Error(WIN32_GDI_ERROR)"
++  | TAG_ERROR                 -> "Cairo.Error(TAG_ERROR)"
++  | UNKNOWN_ERROR             -> "Cairo.Error(UNKNOWN_ERROR)"
+ 
+ let () =
+   Printexc.register_printer (function
+diff --git a/src/cairo.mli b/src/cairo.mli
+index c399d98..7778075 100644
+--- a/src/cairo.mli
++++ b/src/cairo.mli
+@@ -98,6 +98,11 @@ type status =
+   | INVALID_MESH_CONSTRUCTION
+   | DEVICE_FINISHED
+   | JBIG2_GLOBAL_MISSING
++  | PNG_ERROR
++  | FREETYPE_ERROR
++  | WIN32_GDI_ERROR
++  | TAG_ERROR
++  | UNKNOWN_ERROR
+ 
+ exception Error of status
+ (** [Error status]: raised by functions of this module to indicate a
+diff --git a/src/cairo_ocaml_types.h b/src/cairo_ocaml_types.h
+index 24e7639..757b662 100644
+--- a/src/cairo_ocaml_types.h
++++ b/src/cairo_ocaml_types.h
+@@ -58,6 +58,9 @@ void caml_cairo_raise_Error(cairo_status_t status)
+       /* Keep in sync with the OCaml def of [status]; variant without
+          arguments == int.  The first 2 values of cairo_status_t are
+          deleted. */
++      /* TAG_ERROR is currently the last known status of the OCaml
++         type Cairo.status */
++      if (status > CAIRO_STATUS_TAG_ERROR) status = CAIRO_STATUS_TAG_ERROR + 1;
+       caml_raise_with_arg(*exn, Val_int(status - 2));
+   }
+ }

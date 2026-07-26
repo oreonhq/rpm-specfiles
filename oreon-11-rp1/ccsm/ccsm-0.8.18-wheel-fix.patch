@@ -1,0 +1,26 @@
+diff --git a/setup.py b/setup.py
+index 8c875e1..e660e77 100755
+--- a/setup.py
++++ b/setup.py
+@@ -69,12 +69,6 @@ class uninstall (_install):
+             except:
+                 self.warn ("Could not remove file %s" % file)
+ 
+-ops = ("install", "build", "sdist", "uninstall", "clean")
+-
+-if len (sys.argv) < 2 or sys.argv[1] not in ops:
+-    print("Please specify operation : %s" % " | ".join (ops))
+-    raise SystemExit(1)
+-
+ prefix = None
+ gtkver = "3.0"
+ if len (sys.argv) > 2:
+@@ -183,7 +177,7 @@ if os.path.isdir (podir):
+         if name[-2:] == "po":
+             name = name[:-3]
+             if sys.argv[1] == "build" \
+-               or (sys.argv[1] == "install" and \
++               or (sys.argv[1] in ["install", "bdist_wheel"] and \
+                    not os.path.exists (mopath % name)):
+                 if not os.path.isdir ("build/locale/" + name):
+                     os.makedirs ("build/locale/" + name)

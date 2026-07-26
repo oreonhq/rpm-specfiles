@@ -1,0 +1,23 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 13 Jan 2017 18:12:38 +0300
+Subject: [PATCH] Skip install-data-hook for default configs
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/default-config/Makefile.am b/default-config/Makefile.am
+index f9665784..02e5be6f 100644
+--- a/default-config/Makefile.am
++++ b/default-config/Makefile.am
+@@ -15,12 +15,6 @@ EXTRA_DIST  = images \
+ 	      FvwmScript-ConfirmQuit \
+ 	      FvwmScript-ConfirmCopyConfig
+ 
+-install-data-hook:
+-	cp -r $(srcdir)/images $(inst_location)/default-config
+-	ln -sf default-config/FvwmScript-DateTime $(inst_location)
+-	ln -sf default-config/FvwmScript-ConfirmQuit $(inst_location)
+-	ln -sf default-config/FvwmScript-ConfirmCopyConfig $(inst_location)
+-
+ uninstall-hook:
+ 	rm -fr $(DESTDIR)/$(configdir)
+ 	rm -f $(inst_location)/FvwmScript-DateTime

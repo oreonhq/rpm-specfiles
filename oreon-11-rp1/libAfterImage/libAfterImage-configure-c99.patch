@@ -1,0 +1,15 @@
+diff --git a/configure b/configure
+index 334ba26..d5b8c2c 100755
+--- a/configure
++++ b/configure
+@@ -5464,8 +5464,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

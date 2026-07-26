@@ -1,0 +1,12 @@
+diff -up libfreenect-0.6.1/OpenNI2-FreenectDriver/CMakeLists.txt.openni2 libfreenect-0.6.1/OpenNI2-FreenectDriver/CMakeLists.txt
+--- libfreenect-0.6.1/OpenNI2-FreenectDriver/CMakeLists.txt.openni2	2020-05-25 11:14:11.573900769 +0200
++++ libfreenect-0.6.1/OpenNI2-FreenectDriver/CMakeLists.txt	2020-05-25 11:22:13.057933733 +0200
+@@ -12,8 +12,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}
+ 
+ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/OpenNI2-FreenectDriver)
+ set_target_properties(FreenectDriver PROPERTIES
+-  VERSION ${PROJECT_VER}
+-  SOVERSION ${PROJECT_APIVER}
+   OUTPUT_NAME FreenectDriver)
+ 
+ add_definitions(-DPROJECT_VER="${PROJECT_VER}")

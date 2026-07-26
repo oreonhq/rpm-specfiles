@@ -1,0 +1,8 @@
+This package contains the wxWidgets (GUI) version for ChordPro.
+
+For best results you are advised to install an updated version of
+the perl Wx module. See https://github.com/sciurius/wxPerl for
+instructions.
+
+The Windows and macOS installers for ChordPro include everything
+necessary for the ChordPro GUI.

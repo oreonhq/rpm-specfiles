@@ -1,0 +1,12 @@
+%grantlee5 @@NAME@@
+%grantlee5_epoch @@EPOCH@@
+%grantlee5_version @@VERSION@@
+%grantlee5_evr @@EVR@@
+
+%grantlee5_plugins @@GRANTLEE5_PLUGINS@@ 
+%grantlee5_plugindir @@GRANTLEE5_PLUGINDIR@@
+
+%grantlee5_requires \
+Requires: %{grantlee5}(%{grantlee5_plugins}) \
+%{nil}
+

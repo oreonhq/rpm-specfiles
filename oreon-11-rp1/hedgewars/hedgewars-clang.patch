@@ -1,0 +1,12 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -180,6 +180,9 @@ if(BUILD_ENGINE_C AND NOT BUILD_ENGINE_J
+ 
+     set(CMAKE_C_COMPILER ${CLANG_EXECUTABLE})
+     set(CMAKE_CXX_COMPILER ${CLANG_EXECUTABLE})
++    # Remove flags known to cause issues for clang.
++    string(REPLACE "-fstack-clash-protection" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
++    string(REPLACE "-fstack-clash-protection" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+ endif()
+ 
+ 

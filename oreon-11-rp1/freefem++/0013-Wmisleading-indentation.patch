@@ -1,0 +1,25 @@
+From 7d29898e0f1ff9a7c5df003ff03fbe4206579bfa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 3 May 2020 10:04:20 +0200
+Subject: [PATCH 13/18] Wmisleading-indentation
+
+---
+ src/femlib/RNM_op.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/femlib/RNM_op.hpp b/src/femlib/RNM_op.hpp
+index b6c1f9e5f..14f02f7a8 100644
+--- a/src/femlib/RNM_op.hpp
++++ b/src/femlib/RNM_op.hpp
+@@ -64,7 +64,7 @@ KNM_<R> & KNM_<R>::operator oper (const ConjKNM_<R> & u)
+   for(int i=0;i<N();++i)
+     for(int j=0;j<M();++j)
+         KNM_<R>::operator () (i,j) oper RNM::conj( u(i,j));
+-    return *this;
++  return *this;
+ }
+ 
+ 
+-- 
+2.47.1
+

@@ -1,0 +1,24 @@
+Index: gtkextra/gtkcolorcombo.c
+===================================================================
+RCS file: /cvsroot/gtkextra/gtkextra-2/gtkextra/gtkcolorcombo.c,v
+retrieving revision 1.6
+diff -c -r1.6 gtkcolorcombo.c
+*** gtkextra/gtkcolorcombo.c	19 Sep 2010 04:24:41 -0000	1.6
+--- gtkextra/gtkcolorcombo.c	7 Dec 2011 05:15:50 -0000
+***************
+*** 354,360 ****
+    GdkPixmap *color_pixmap;
+    GtkWidget *pixmap;
+    GtkWidget *box;
+!   gchar color_string[21];
+    gint i,j,n;
+  
+    g_return_if_fail (widget != NULL);
+--- 354,360 ----
+    GdkPixmap *color_pixmap;
+    GtkWidget *pixmap;
+    GtkWidget *box;
+!   gchar color_string[22];
+    gint i,j,n;
+  
+    g_return_if_fail (widget != NULL);

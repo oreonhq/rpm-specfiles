@@ -1,0 +1,22 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 9 Aug 2024 11:57:59 +0200
+Subject: [PATCH] Ignore completely reply value
+
+Based on patches 1c776ea29104dd56c09eeaae7bb4d5da918a95ea and
+fbcc2a499e85ccc6c4e16cb9772aedc8667c973d.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/riak_core_vnode_proxy.erl b/src/riak_core_vnode_proxy.erl
+index 2516aec..222a71b 100644
+--- a/src/riak_core_vnode_proxy.erl
++++ b/src/riak_core_vnode_proxy.erl
+@@ -146,7 +146,7 @@ loop(Parent, State) ->
+     receive
+         {'$vnode_proxy_call', From, Msg} ->
+             {reply, Reply, NewState} = handle_call(Msg, From, State),
+-            {_, Reply} = gen:reply(From, Reply),
++            _ = gen:reply(From, Reply),
+             loop(Parent, NewState);
+         {'$vnode_proxy_cast', Msg} ->
+             {noreply, NewState} = handle_cast(Msg, State),

@@ -1,0 +1,48 @@
+From 84f6d59b3ed159686f396465e9d81438a8819e53 Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Thu, 19 Feb 2026 19:50:16 -0500
+Subject: [PATCH] KoStreamedMath: fix build on XSIMD_NO_SUPPORTED_ARCHITECTURE
+
+OptiRound is used by KoClipMaskApplicatorBase::fallbackLuminanceMask which
+is needed on all architectures; the rest of the header is only used where
+xsimd is fully supported.  This fixes the build on ppc64le and s390x.
+---
+ libs/pigment/compositeops/KoStreamedMath.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/libs/pigment/compositeops/KoStreamedMath.h b/libs/pigment/compositeops/KoStreamedMath.h
+index 89dbe26854..000530bb2b 100644
+--- a/libs/pigment/compositeops/KoStreamedMath.h
++++ b/libs/pigment/compositeops/KoStreamedMath.h
+@@ -9,10 +9,6 @@
+ #ifndef __KOSTREAMED_MATH_H
+ #define __KOSTREAMED_MATH_H
+ 
+-#if defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+-#error "Trying to use SIMD with an unknown architecture!"
+-#endif
+-
+ #include <cstdint>
+ #include <cstring>
+ #include <iostream>
+@@ -116,6 +112,8 @@ struct OptiRound {
+     }
+ };
+ 
++#if !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
++
+ template<typename _impl>
+ struct OptiDiv {
+     using float_v = xsimd::batch<float, _impl>;
+@@ -842,6 +840,8 @@ struct PixelWrapper<float, _impl> {
+     }
+ };
+ 
++#endif /* !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) */
++
+ namespace KoStreamedMathFunctions
+ {
+ template<int pixelSize>
+-- 
+2.53.0
+

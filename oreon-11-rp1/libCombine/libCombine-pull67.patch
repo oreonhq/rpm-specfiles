@@ -1,0 +1,24 @@
+From 93cca9b133d957c761715f8029a4ec34c979704e Mon Sep 17 00:00:00 2001
+From: Jitka Plesnikova <jplesnik@redhat.com>
+Date: Fri, 5 Sep 2025 11:39:00 +0200
+Subject: [PATCH] Replace deprecated $function by new $action
+
+The long-deprecated $function was removed from future SWIG 4.4.0.
+It can be safely replaced by $action.
+---
+ src/bindings/swig/libcombine.i | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/bindings/swig/libcombine.i b/src/bindings/swig/libcombine.i
+index 10c0c9a..99a5772 100644
+--- a/src/bindings/swig/libcombine.i
++++ b/src/bindings/swig/libcombine.i
+@@ -40,7 +40,7 @@
+ 
+ %exception {
+ 	try {
+-		$function
++		$action
+ 	} catch(const std::exception& ex) {
+ 		SWIG_exception(SWIG_RuntimeError, ex.what());
+ 	} catch(...) {

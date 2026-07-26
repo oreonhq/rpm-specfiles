@@ -1,0 +1,59 @@
+--- src/gfx.c.orig
++++ src/gfx.c
+@@ -16,7 +16,7 @@
+ /*
+     LoadT carga un grafico en formato .T de 24 bits en una superficie SDL
+ */
+-void LoadT(SDL_Surface **Tsurface, char *str)
++void LoadT(SDL_Surface **Tsurface, const char *str)
+ {
+     FILE *Tsrc;
+ 
+@@ -69,7 +69,7 @@ void LoadT(SDL_Surface **Tsurface, char *str)
+     fclose(Tsrc);
+ }
+ 
+-SDL_Surface * LoadT8(char *str)
++SDL_Surface * LoadT8(const char *str)
+ {
+     SDL_Surface *Tsurface;
+     FILE *Tsrc;
+--- src/output.c.orig
++++ src/output.c
+@@ -210,7 +210,7 @@ void print_room()
+     SDL_Flip(screen);
+ }
+ 
+-void showcode(char *str)
++void showcode(const char *str)
+ {
+     SDL_Rect code;
+ 	code.x=280; code.y=220;code.w=240;code.h=50;
+--- src/structs.h.orig
++++ src/structs.h
+@@ -39,11 +39,11 @@ struct Cplayer
+ 
+ struct Cstages
+ {
+-    char * title;
+-    char * music;
++    const char * title;
++    const char * music;
+     int  objects;
+     int  time;
+-    char * code;
++    const char * code;
+ };
+ 
+ struct Croom
+--- src/fx.c.orig
++++ src/fx.c
+@@ -58,7 +58,7 @@ void initfade_object(int x, int y, int object)
+     alphade=255;
+     object-=200;
+     fadeobject=SDL_CreateRGBSurface(SDL_SWSURFACE,R_tileside,R_tileside,16,0,0,0,0);
+-    SDL_SetColorKey(fadeobject,SDL_SRCCOLORKEY,(fadeobject->format,0,255,0));
++    SDL_SetColorKey(fadeobject,SDL_SRCCOLORKEY,SDL_MapRGB(fadeobject->format,0,255,0));
+     SDL_Rect objectsrc;
+ 	objectsrc.w=R_tileside;objectsrc.h=R_tileside;
+ 	objectsrc.y=R_tileside*10;objectsrc.x=R_tileside*object;

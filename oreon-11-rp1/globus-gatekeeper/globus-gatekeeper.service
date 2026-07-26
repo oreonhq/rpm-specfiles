@@ -1,0 +1,31 @@
+[Unit]
+Description=Globus gatekeeper server daemon
+Documentation=man:globus-gatekeeper(8) man:globus-gatekeeper-admin(8)
+After=remote-fs.target network.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/globus-gatekeeper
+PIDFile=/run/globus-gatekeeper.pid
+ExecStart=/bin/sh -c ' \
+  if [ "$${GLOBUS_GATEKEEPER_KERBEROS_ENABLED:-false}" = "true" ]; then \
+    kflag="-k" ; \
+  else \
+    kflag="" ; \
+  fi ; \
+  exec /usr/sbin/globus-gatekeeper \
+    -pidfile /run/globus-gatekeeper.pid \
+    -p "$${GLOBUS_GATEKEEPER_PORT:-2119}" \
+    $${GLOBUS_GATEKEEPER_LOG_FACILITY:+-lf "$${GLOBUS_GATEKEEPER_LOG_FACILITY}"} \
+    $${GLOBUS_GATEKEEPER_LOG:+-l "$${GLOBUS_GATEKEEPER_LOG}"} \
+    $${GLOBUS_GATEKEEPER_GRID_SERVICES:+-grid_services "$${GLOBUS_GATEKEEPER_GRID_SERVICES}"} \
+    $${GLOBUS_GATEKEEPER_GRIDMAP:+-gridmap "$${GLOBUS_GATEKEEPER_GRIDMAP}"} \
+    $${GLOBUS_GATEKEEPER_CERT_DIR:+-x509_cert_dir "$${GLOBUS_GATEKEEPER_CERT_DIR}"} \
+    $${GLOBUS_GATEKEEPER_CERT_FILE:+-x509_user_cert "$${GLOBUS_GATEKEEPER_CERT_FILE}"} \
+    $${GLOBUS_GATEKEEPER_KEY_FILE:+-x509_user_key "$${GLOBUS_GATEKEEPER_KEY_FILE}"} \
+    $$kflag \
+    $${GLOBUS_GATEKEEPER_KMAP:+-globuskmap "$${GLOBUS_GATEKEEPER_KMAP}"} \
+'
+
+[Install]
+WantedBy=multi-user.target

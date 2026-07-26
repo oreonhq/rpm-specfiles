@@ -1,0 +1,1578 @@
+diff --git a/src/3rdparty/pdfium/pdfium/constants/access_permissions.h b/src/3rdparty/pdfium/pdfium/constants/access_permissions.h
+index cac187a..a5b80d6 100644
+--- a/src/3rdparty/pdfium/pdfium/constants/access_permissions.h
++++ b/src/3rdparty/pdfium/pdfium/constants/access_permissions.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2020 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/constants/annotation_flags.h b/src/3rdparty/pdfium/pdfium/constants/annotation_flags.h
+index d2731da..e55e0d2 100644
+--- a/src/3rdparty/pdfium/pdfium/constants/annotation_flags.h
++++ b/src/3rdparty/pdfium/pdfium/constants/annotation_flags.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2019 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/constants/form_flags.h b/src/3rdparty/pdfium/pdfium/constants/form_flags.h
+index 148bb4c..a11f54a 100644
+--- a/src/3rdparty/pdfium/pdfium/constants/form_flags.h
++++ b/src/3rdparty/pdfium/pdfium/constants/form_flags.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2018 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fdrm/fx_crypt.h b/src/3rdparty/pdfium/pdfium/core/fdrm/fx_crypt.h
+index f3a91f4..e159d35 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fdrm/fx_crypt.h
++++ b/src/3rdparty/pdfium/pdfium/core/fdrm/fx_crypt.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/cmaps/fpdf_cmaps.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/cmaps/fpdf_cmaps.h
+index 2c7548a..251a066 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/cmaps/fpdf_cmaps.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/cmaps/fpdf_cmaps.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_creator.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_creator.h
+index d85d8cf..8995b77 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_creator.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_creator.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_stringarchivestream.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_stringarchivestream.h
+index 59d168f..566283e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_stringarchivestream.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/edit/cpdf_stringarchivestream.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2018 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h
+index 8155b6c..470be8e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cfx_cttgsubtable.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cidfont.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cidfont.h
+index 5a51e40..fb22b14 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cidfont.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cidfont.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmap.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmap.h
+index 5c0efa6..08e299b 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmap.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmap.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmapparser.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmapparser.h
+index b2454af..e6ced59 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmapparser.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_cmapparser.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_font.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_font.h
+index 0bf5053..bd91d09 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_font.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_font.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_fontencoding.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_fontencoding.h
+index ea96f4d..7af9845 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_fontencoding.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_fontencoding.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_simplefont.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_simplefont.h
+index 0e7e9e0..06e7fd6 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_simplefont.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_simplefont.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_tounicodemap.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_tounicodemap.h
+index 9eaf625..b2e508e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_tounicodemap.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_tounicodemap.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type1font.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type1font.h
+index 51c09ba..5e3150f 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type1font.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type1font.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type3font.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type3font.h
+index 0db2f9f..8b5b8ba 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type3font.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/font/cpdf_type3font.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_color.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_color.h
+index b533d08..00c2655 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_color.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_color.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_colorspace.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_colorspace.h
+index 75928d2..59b1677 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_colorspace.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_colorspace.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_contentparser.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_contentparser.h
+index 2f9a44b..b5875fe 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_contentparser.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_contentparser.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_devicecs.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_devicecs.h
+index 933a881..900f268 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_devicecs.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_devicecs.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_dib.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_dib.h
+index 94db0e7..a99c3ca 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_dib.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_dib.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_docpagedata.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_docpagedata.h
+index 307f17e..dc1a120 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_docpagedata.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_docpagedata.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_expintfunc.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_expintfunc.h
+index 95bdab6..1500f75 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_expintfunc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_expintfunc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_function.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_function.h
+index fd68b6b..948fb45 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_function.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_function.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_iccprofile.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_iccprofile.h
+index a8ee297..a4e86dc 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_iccprofile.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_iccprofile.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_image.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_image.h
+index 36e9954..71a777f 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_image.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_image.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_meshstream.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_meshstream.h
+index a152ecb..fc38550 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_meshstream.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_meshstream.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_patterncs.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_patterncs.h
+index 69e0754..b83caad 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_patterncs.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_patterncs.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_psengine.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_psengine.h
+index faf8d94..644d37a 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_psengine.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_psengine.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_sampledfunc.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_sampledfunc.h
+index fa129ac..8ef96f0 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_sampledfunc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_sampledfunc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_shadingpattern.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_shadingpattern.h
+index da45fc1..56aba7b 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_shadingpattern.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_shadingpattern.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamcontentparser.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamcontentparser.h
+index 4f43e12..26671bc 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamcontentparser.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamcontentparser.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamparser.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamparser.h
+index 445b3b7..e7c70bf 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamparser.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_streamparser.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_textobject.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_textobject.h
+index cc8f64a..32d262e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_textobject.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/page/cpdf_textobject.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_array.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_array.h
+index c3b3795..b443ff8 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_array.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_array.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_cross_ref_table.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_cross_ref_table.h
+index 66a51de..b1b7ef7 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_cross_ref_table.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_cross_ref_table.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2018 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_crypto_handler.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_crypto_handler.h
+index edfba97..a9338bf 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_crypto_handler.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_crypto_handler.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_data_avail.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_data_avail.h
+index f9cd981..590f1b2 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_data_avail.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_data_avail.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_dictionary.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_dictionary.h
+index 8cf00e0..14a2066 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_dictionary.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_dictionary.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_document.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_document.h
+index 56168e9..93d6358 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_document.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_document.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_flateencoder.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_flateencoder.h
+index 328fce7..3a1dc4c 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_flateencoder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_flateencoder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_hint_tables.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_hint_tables.h
+index e3f280f..cbb8549 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_hint_tables.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_hint_tables.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_indirect_object_holder.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_indirect_object_holder.h
+index 49a2051..f5bfb63 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_indirect_object_holder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_indirect_object_holder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_linearized_header.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_linearized_header.h
+index 44e0422..b1e2fde 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_linearized_header.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_linearized_header.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object.h
+index 93dbbaa..1204aa9 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_avail.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_avail.h
+index 901fb17..781886e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_avail.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_avail.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_stream.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_stream.h
+index 2fa1634..c3ee422 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_stream.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_object_stream.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2018 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_parser.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_parser.h
+index 1df3711..aa242ed 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_parser.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_parser.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_reference.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_reference.h
+index 25b8008..7032ea6 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_reference.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_reference.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_security_handler.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_security_handler.h
+index 3e84099..481c4fd 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_security_handler.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_security_handler.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_simple_parser.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_simple_parser.h
+index f9461b6..806fc6e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_simple_parser.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_simple_parser.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream.h
+index d1d98d3..7bb7450 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream_acc.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream_acc.h
+index 870b9bc..69f3803 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream_acc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_stream_acc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_syntax_parser.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_syntax_parser.h
+index 7d78dcf..060343a 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_syntax_parser.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/cpdf_syntax_parser.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/fpdf_parser_decode.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/fpdf_parser_decode.h
+index fba89c2..1aa47e9 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/fpdf_parser_decode.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/parser/fpdf_parser_decode.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/charposlist.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/charposlist.h
+index f964ea7..9d95de7 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/charposlist.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/charposlist.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imagecacheentry.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imagecacheentry.h
+index c48554e..70a2c77 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imagecacheentry.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imagecacheentry.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imageloader.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imageloader.h
+index d3de6c3..f9156d0 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imageloader.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_imageloader.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_pagerendercache.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_pagerendercache.h
+index efc245b..25db103 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_pagerendercache.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_pagerendercache.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_progressiverenderer.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_progressiverenderer.h
+index 403a577..cacde6e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_progressiverenderer.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_progressiverenderer.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_rendercontext.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_rendercontext.h
+index d9efbc4..d2f15a6 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_rendercontext.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_rendercontext.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderoptions.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderoptions.h
+index 12f3958..1655ff3 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderoptions.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderoptions.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderstatus.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderstatus.h
+index dc2c61e..5af029d 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderstatus.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_renderstatus.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_textrenderer.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_textrenderer.h
+index 799a526..a0f1b00 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_textrenderer.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_textrenderer.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3cache.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3cache.h
+index 7096a5d..33de08b 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3cache.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3cache.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3glyphmap.h b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3glyphmap.h
+index fced0ee..62aa344 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3glyphmap.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfapi/render/cpdf_type3glyphmap.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_action.h b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_action.h
+index c7cc2d8..5f0824c 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_action.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_action.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annot.h b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annot.h
+index 64ab69d..5987660 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annot.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annot.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annotlist.h b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annotlist.h
+index 85075cf..21275b9 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annotlist.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_annotlist.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_formfield.h b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_formfield.h
+index 826f8ec..ecd0d3e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_formfield.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_formfield.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_interactiveform.h b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_interactiveform.h
+index c299f52..f3bac0a 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_interactiveform.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_interactiveform.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_linklist.h b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_linklist.h
+index 442f66c..64d550f 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_linklist.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_linklist.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_structelement.h b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_structelement.h
+index eecaeaa..fb7780f 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_structelement.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdfdoc/cpdf_structelement.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fpdftext/cpdf_textpage.h b/src/3rdparty/pdfium/pdfium/core/fpdftext/cpdf_textpage.h
+index 2e0314e..60f9219 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fpdftext/cpdf_textpage.h
++++ b/src/3rdparty/pdfium/pdfium/core/fpdftext/cpdf_textpage.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/basic/basicmodule.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/basic/basicmodule.h
+index 5de4da9..f7dc7f0 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/basic/basicmodule.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/basic/basicmodule.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/fax/faxmodule.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/fax/faxmodule.h
+index 0e1d7b2..f695fd6 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/fax/faxmodule.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/fax/faxmodule.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/flate/flatemodule.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/flate/flatemodule.h
+index 8ce5aa5..b723790 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/flate/flatemodule.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/flate/flatemodule.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/fx_codec.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/fx_codec.h
+index f84e752..8df89c9 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/fx_codec.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/fx_codec.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/icc/iccmodule.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/icc/iccmodule.h
+index f1fd28b..3c756eb 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/icc/iccmodule.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/icc/iccmodule.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_ArithIntDecoder.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_ArithIntDecoder.h
+index 2221767..796e767 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_ArithIntDecoder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_ArithIntDecoder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_BitStream.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_BitStream.h
+index 8032090..c539174 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_BitStream.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_BitStream.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Context.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Context.h
+index 49669ed..76f4974 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Context.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Context.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_DocumentContext.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_DocumentContext.h
+index 9bcdd37..609b1d1 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_DocumentContext.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_DocumentContext.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrdProc.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrdProc.h
+index af6f223..b34e0e8 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrdProc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrdProc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2015 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrrdProc.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrrdProc.h
+index c7e3bf9..cae2fdc 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrrdProc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_GrrdProc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2015 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HtrdProc.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HtrdProc.h
+index cd90aae..b38a30d 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HtrdProc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HtrdProc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2015 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable.h
+index 351eb9d..fb00845 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_HuffmanTable.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Page.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Page.h
+index 064b9b3..76f71cc 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Page.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Page.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PatternDict.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PatternDict.h
+index ca566d0..b47ab0b 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PatternDict.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PatternDict.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PddProc.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PddProc.h
+index be5fadf..868d83f 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PddProc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_PddProc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2015 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_SddProc.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_SddProc.h
+index abef010..8e2a9ab 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_SddProc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_SddProc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2015 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Segment.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Segment.h
+index 45e2a3d..ea7f70c 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Segment.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_Segment.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_TrdProc.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_TrdProc.h
+index 8f4e42d..21935be 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_TrdProc.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/JBig2_TrdProc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2015 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/jbig2_decoder.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/jbig2_decoder.h
+index 97867ca..0abe92b 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/jbig2_decoder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jbig2/jbig2_decoder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/jpx/cjpx_decoder.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/jpx/cjpx_decoder.h
+index fbbc3ac..42d9e2e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/jpx/cjpx_decoder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/jpx/cjpx_decoder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcodec/scanlinedecoder.h b/src/3rdparty/pdfium/pdfium/core/fxcodec/scanlinedecoder.h
+index e0014cf..352d09b 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcodec/scanlinedecoder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcodec/scanlinedecoder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/byteorder.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/byteorder.h
+index 283ac4e..f9bc914 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/byteorder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/byteorder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2019 The PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+index ec927b1..63e41e3 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/bytestring.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_bitstream.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_bitstream.h
+index baa2a9f..6718773 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_bitstream.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_bitstream.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_fileaccess_posix.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_fileaccess_posix.h
+index 9a8c95a..da0a91c 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_fileaccess_posix.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_fileaccess_posix.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_utf8decoder.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_utf8decoder.h
+index a236aac..d6b4d82 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_utf8decoder.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/cfx_utf8decoder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fileaccess_iface.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fileaccess_iface.h
+index 8493ecb..391108c 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fileaccess_iface.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fileaccess_iface.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_extension.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_extension.h
+index f747ee4..39a79c4 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_extension.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_extension.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_number.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_number.h
+index 0449631..71a4b65 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_number.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_number.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2018 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_random.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_random.h
+index 52d514b..83fb102 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_random.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_random.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_safe_types.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_safe_types.h
+index 6f5b967..bf99bd9 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_safe_types.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_safe_types.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h
+index ef58660..830626d 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_stream.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_string.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_string.h
+index e27f43a..65fb3d1 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_string.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_string.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_system.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_system.h
+index b71c88e..65ece3f 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_system.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/fx_system.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/string_view_template.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/string_view_template.h
+index d8b15f2..6004ec9 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/string_view_template.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/string_view_template.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h b/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+index b455184..070b73a 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxcrt/widestring.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/agg/fx_agg_driver.h b/src/3rdparty/pdfium/pdfium/core/fxge/agg/fx_agg_driver.h
+index 35acf0c..5c37a54 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/agg/fx_agg_driver.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/agg/fx_agg_driver.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_defaultrenderdevice.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_defaultrenderdevice.h
+index 4e1e051..28904ef 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_defaultrenderdevice.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_defaultrenderdevice.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_folderfontinfo.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_folderfontinfo.h
+index a8da990..69b6a39 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_folderfontinfo.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_folderfontinfo.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_font.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_font.h
+index 31e5c7e..e75bb91 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_font.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_font.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmapper.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmapper.h
+index 67be9da..3ba0344 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmapper.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmapper.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmgr.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmgr.h
+index 1c4f68c..8445a8e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmgr.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_fontmgr.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_glyphcache.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_glyphcache.h
+index 565cc6e..3845433 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_glyphcache.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_glyphcache.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_renderdevice.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_renderdevice.h
+index 65a5cac..aa17670 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_renderdevice.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_renderdevice.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencoding.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencoding.h
+index a730dc9..a7d5564 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencoding.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencoding.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencodingex.h b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencodingex.h
+index a9c1f58..47b24ab 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencodingex.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/cfx_unicodeencodingex.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapcomposer.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapcomposer.h
+index 8d0202d..7989334 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapcomposer.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapcomposer.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapstorer.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapstorer.h
+index c8158a3..519b5f2 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapstorer.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_bitmapstorer.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibbase.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibbase.h
+index a24e846..ab6e287 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibbase.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibbase.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibitmap.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibitmap.h
+index 4e78f4a..c72538d 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibitmap.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_dibitmap.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagerenderer.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagerenderer.h
+index a64fd4a..1b1736f 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagerenderer.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagerenderer.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagetransformer.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagetransformer.h
+index 3372003..00a2393 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagetransformer.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_imagetransformer.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_scanlinecompositor.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_scanlinecompositor.h
+index 0ec842d..6e024e5 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_scanlinecompositor.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cfx_scanlinecompositor.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cstretchengine.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cstretchengine.h
+index 9575157..a55603e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/cstretchengine.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/cstretchengine.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/dib/scanlinecomposer_iface.h b/src/3rdparty/pdfium/pdfium/core/fxge/dib/scanlinecomposer_iface.h
+index 316736f..8d79e07 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/dib/scanlinecomposer_iface.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/dib/scanlinecomposer_iface.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/fx_dib.h b/src/3rdparty/pdfium/pdfium/core/fxge/fx_dib.h
+index c0329fb..47ddbac 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/fx_dib.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/fx_dib.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/fx_font.h b/src/3rdparty/pdfium/pdfium/core/fxge/fx_font.h
+index df59db3..85dace2 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/fx_font.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/fx_font.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/renderdevicedriver_iface.h b/src/3rdparty/pdfium/pdfium/core/fxge/renderdevicedriver_iface.h
+index 5c4a453..544cd31 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/renderdevicedriver_iface.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/renderdevicedriver_iface.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/systemfontinfo_iface.h b/src/3rdparty/pdfium/pdfium/core/fxge/systemfontinfo_iface.h
+index 0aaff5e..7b4024e 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/systemfontinfo_iface.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/systemfontinfo_iface.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/core/fxge/text_char_pos.h b/src/3rdparty/pdfium/pdfium/core/fxge/text_char_pos.h
+index ee4e670..0b53408 100644
+--- a/src/3rdparty/pdfium/pdfium/core/fxge/text_char_pos.h
++++ b/src/3rdparty/pdfium/pdfium/core/fxge/text_char_pos.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2019 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_annothandlermgr.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_annothandlermgr.h
+index c7dea78..e148635 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_annothandlermgr.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_annothandlermgr.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannot.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannot.h
+index f119b28..df9d970 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannot.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannot.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannothandler.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannothandler.h
+index 90e0f73..4051575 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannothandler.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_baannothandler.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_formfillenvironment.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_formfillenvironment.h
+index 3528168..2061335 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_formfillenvironment.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_formfillenvironment.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_pageview.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_pageview.h
+index 50680f3..fc3177b 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_pageview.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_pageview.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widget.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widget.h
+index 56ce8c8..31213b2 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widget.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widget.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widgethandler.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widgethandler.h
+index 5e2236e..3fe5f75 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widgethandler.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/cpdfsdk_widgethandler.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_button.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_button.h
+index 768c144..7a750dc 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_button.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_button.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_checkbox.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_checkbox.h
+index aff2762..21c1ddb 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_checkbox.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_checkbox.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_combobox.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_combobox.h
+index 250dba7..1b6a451 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_combobox.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_combobox.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_formfiller.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_formfiller.h
+index 31860f7..935900e 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_formfiller.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_formfiller.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_interactiveformfiller.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_interactiveformfiller.h
+index d663100..a62cced 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_interactiveformfiller.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_interactiveformfiller.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_listbox.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_listbox.h
+index 7f39f5a..ff45bbd 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_listbox.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_listbox.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_radiobutton.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_radiobutton.h
+index 8ba2f28..6e77633 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_radiobutton.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_radiobutton.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_textfield.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_textfield.h
+index 5941b42..9fcaddb 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_textfield.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/formfiller/cffl_textfield.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/ipdfsdk_annothandler.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/ipdfsdk_annothandler.h
+index 6150bdc..7b1833f 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/ipdfsdk_annothandler.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/ipdfsdk_annothandler.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2016 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_button.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_button.h
+index 89187a1..709aaf3 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_button.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_button.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_combo_box.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_combo_box.h
+index cf1a875..5215949 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_combo_box.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_combo_box.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit.h
+index 8315527..997a07e 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_ctrl.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_ctrl.h
+index f5ccf3c..d63c552 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_ctrl.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_edit_ctrl.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_list_box.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_list_box.h
+index 48b53e5..3207c40 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_list_box.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_list_box.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_scroll_bar.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_scroll_bar.h
+index f04c12b..e557d7e 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_scroll_bar.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_scroll_bar.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_special_button.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_special_button.h
+index ac3db7e..35cbb31 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_special_button.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_special_button.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_wnd.h b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_wnd.h
+index b3730a0..4471cee 100644
+--- a/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_wnd.h
++++ b/src/3rdparty/pdfium/pdfium/fpdfsdk/pwl/cpwl_wnd.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fxjs/cjs_delaydata.h b/src/3rdparty/pdfium/pdfium/fxjs/cjs_delaydata.h
+index f4c7820..8293aa3 100644
+--- a/src/3rdparty/pdfium/pdfium/fxjs/cjs_delaydata.h
++++ b/src/3rdparty/pdfium/pdfium/fxjs/cjs_delaydata.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fxjs/cjs_field.h b/src/3rdparty/pdfium/pdfium/fxjs/cjs_field.h
+index d772e66..261736d 100644
+--- a/src/3rdparty/pdfium/pdfium/fxjs/cjs_field.h
++++ b/src/3rdparty/pdfium/pdfium/fxjs/cjs_field.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/fxjs/global_timer.h b/src/3rdparty/pdfium/pdfium/fxjs/global_timer.h
+index ef6bbb6..c5898aa 100644
+--- a/src/3rdparty/pdfium/pdfium/fxjs/global_timer.h
++++ b/src/3rdparty/pdfium/pdfium/fxjs/global_timer.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/public/fpdf_edit.h b/src/3rdparty/pdfium/pdfium/public/fpdf_edit.h
+index d415460..9c4fab9 100644
+--- a/src/3rdparty/pdfium/pdfium/public/fpdf_edit.h
++++ b/src/3rdparty/pdfium/pdfium/public/fpdf_edit.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 PDFium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator.h b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator.h
+index c50b908..b4f16ba 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright (c) 2013 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator_internals_win.h b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator_internals_win.h
+index 9174ee8..1062057 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator_internals_win.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/page_allocator_internals_win.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright (c) 2018 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_alloc.h b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_alloc.h
+index 2dc62b6..3e5e47d 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_alloc.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_alloc.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright (c) 2013 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_bucket.h b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_bucket.h
+index a89099b..ab67c36 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_bucket.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/partition_bucket.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright (c) 2018 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/random.h b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/random.h
+index e485d6d..20150c4 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/random.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/allocator/partition_allocator/random.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2019 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/bits.h b/src/3rdparty/pdfium/pdfium/third_party/base/bits.h
+index 1253683..a3a085a 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/bits.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/bits.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright (c) 2013 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_arm_impl.h b/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_arm_impl.h
+index f5e4c4e..113151e 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_arm_impl.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_arm_impl.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_impl.h b/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_impl.h
+index 116190d..d3cce1c 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_impl.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_conversions_impl.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2014 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_math_arm_impl.h b/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_math_arm_impl.h
+index 3291e74..85e2d8e 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_math_arm_impl.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/numerics/safe_math_arm_impl.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright 2017 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/span.h b/src/3rdparty/pdfium/pdfium/third_party/base/span.h
+index bb07f43..c06dfb8 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/span.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/span.h
+@@ -5,6 +5,7 @@
+ #ifndef THIRD_PARTY_BASE_SPAN_H_
+ #define THIRD_PARTY_BASE_SPAN_H_
+ 
++#include <cstdint>
+ #include <stddef.h>
+ 
+ #include <algorithm>
+diff --git a/src/3rdparty/pdfium/pdfium/third_party/base/sys_byteorder.h b/src/3rdparty/pdfium/pdfium/third_party/base/sys_byteorder.h
+index 8b252f1..f10b2ea 100644
+--- a/src/3rdparty/pdfium/pdfium/third_party/base/sys_byteorder.h
++++ b/src/3rdparty/pdfium/pdfium/third_party/base/sys_byteorder.h
+@@ -1,3 +1,4 @@
++#include <cstdint>
+ // Copyright (c) 2012 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.

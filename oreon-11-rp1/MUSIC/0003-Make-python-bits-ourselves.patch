@@ -1,0 +1,50 @@
+From e317607bac4e364721421fef200b58f101774c7c Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Fri, 2 Oct 2020 23:33:32 +0100
+Subject: [PATCH 3/5] Make python bits ourselves
+
+---
+ pymusic/Makefile.am | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
+
+diff --git a/pymusic/Makefile.am b/pymusic/Makefile.am
+index 607c28a..5774a5b 100644
+--- a/pymusic/Makefile.am
++++ b/pymusic/Makefile.am
+@@ -4,8 +4,7 @@ SUBDIRS = examples
+ 
+ EXTRA_DIST = setup.py.in tests.py pymusic.pyx pymusic.pxd pybuffer.pyx pybuffer.pxd \
+              music/__init__.py music/music_c.h music/pybuffer.pxd music/pymusic.pxd \
+-             music/pymusic_c.h mpi_compat.h \
+-             looseversion/__init__.py looseversion/LICENSE
++             music/pymusic_c.h mpi_compat.h
+ 
+ BUILT_SOURCES = pymusic.cpp pybuffer.cpp
+ 
+@@ -51,23 +50,5 @@ pybuffer_la_CXXFLAGS = \
+ 	$(PYBUFFER_CXXFLAGS) \
+ 	$(MPI_CXXFLAGS)
+ 
+-if DEB_PACKAGE
+-install-exec-hook:
+-	$(PYTHON) setup.py build \
+-	  --build-base=$(abs_builddir)/build install \
+-	  --old-and-unmanageable \
+-	  --install-layout=deb \
+-	  --prefix=$(DESTDIR)$(prefix)
+-else
+-install-exec-hook:
+-	$(PYTHON) setup.py build \
+-	  --build-base=$(abs_builddir)/build install \
+-	  --old-and-unmanageable \
+-	  --prefix=$(DESTDIR)$(prefix) \
+-	  --install-lib=$(DESTDIR)$(PYTHON_EXECDIR) \
+-	  --install-scripts=$(DESTDIR)$(bindir) \
+-	  --install-data=$(DESTDIR)$(pkgdatadir)
+-endif
+-
+ clean-local:
+ 	-rm -rf $(abs_builddir)/build
+-- 
+2.43.0
+

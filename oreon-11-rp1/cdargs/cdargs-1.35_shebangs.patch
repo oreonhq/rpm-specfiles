@@ -1,0 +1,39 @@
+diff -Naur cdargs-1.35/contrib/cdargs-bash.sh cdargs-1.35_patched/contrib/cdargs-bash.sh
+--- cdargs-1.35/contrib/cdargs-bash.sh	2006-03-03 00:28:17.000000000 +0100
++++ cdargs-1.35_patched/contrib/cdargs-bash.sh	2008-03-08 11:02:21.000000000 +0100
+@@ -1,5 +1,3 @@
+-#!/bin/sh
+-
+ # (C) 2002-2003 Dan Allen and Stefan Kamphausen
+ 
+ # Written by Dan Allen <dan@mojavelinux.com>
+@@ -166,7 +164,7 @@
+     local tmpfile
+
+     # first clear any bookmarks with this same alias, if file exists
+-    if [[ "$CDARGS_NODUPS" && -e "$HOME/.cdargs" ]]; then
++    if [ "$CDARGS_NODUPS" -a -e "$HOME/.cdargs" ]; then
+         tmpfile=`echo ${TEMP:-${TMPDIR:-/tmp}} | sed -e "s/\\/$//"`
+         tmpfile=$tmpfile/cdargs.$USER.$$.$RANDOM
+         grep -v "^$1 " "$HOME/.cdargs" > $tmpfile && 'mv' -f $tmpfile "$HOME/.cdargs";
+@@ -256,4 +254,11 @@
+   complete $nospace -S / -X '*/' -F _cdargs_aliases cv cb cdb
+ }
+
++# we do not support anything besides bash completion
++# (however patches to support other shells are very welcome)
++
++if [ -z "${BASH_VERSION}" ]; then
++    return 100
++fi
++
+ _cdargs_complete
+diff -Naur cdargs-1.35/contrib/cdargs-tcsh.csh cdargs-1.35_patched/contrib/cdargs-tcsh.csh
+--- cdargs-1.35/contrib/cdargs-tcsh.csh	2005-11-06 11:58:13.000000000 +0100
++++ cdargs-1.35_patched/contrib/cdargs-tcsh.csh	2008-03-08 11:02:29.000000000 +0100
+@@ -1,5 +1,3 @@
+-#!/bin/csh
+-
+ # (C) 2002-2005 Stefan Kamphausen
+ 
+ # (T)CShell extensions written by

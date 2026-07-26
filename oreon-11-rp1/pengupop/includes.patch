@@ -1,0 +1,10 @@
+--- a/sound.c~	2006-08-08 18:07:23.000000000 -0500
++++ b/sound.c	2024-02-05 16:36:36.656293620 -0600
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include <SDL/SDL.h>
++#include <unistd.h>
+ 
+ #include "destroy_group.h"
+ #include "launch.h"

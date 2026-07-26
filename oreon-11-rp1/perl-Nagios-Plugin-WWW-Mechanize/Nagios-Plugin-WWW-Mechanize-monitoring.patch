@@ -1,0 +1,72 @@
+diff -up ./lib/Nagios/Plugin/WWW/Mechanize.pm.orig ./lib/Nagios/Plugin/WWW/Mechanize.pm
+--- ./lib/Nagios/Plugin/WWW/Mechanize.pm.orig	2021-10-31 15:27:58.611987039 +0100
++++ ./lib/Nagios/Plugin/WWW/Mechanize.pm	2021-10-31 15:29:19.566507350 +0100
+@@ -2,12 +2,12 @@ package Nagios::Plugin::WWW::Mechanize;
+ use 5.006;
+ use warnings;
+ use strict;
+-use Nagios::Plugin::Functions qw(:codes %ERRORS %STATUS_TEXT @STATUS_CODES);
+-use Nagios::Plugin;
++use Monitoring::Plugin::Functions qw(:codes %ERRORS %STATUS_TEXT @STATUS_CODES);
++use Monitoring::Plugin;
+ use WWW::Mechanize;
+ use Time::HiRes qw(gettimeofday tv_interval);
+ use Exporter;
+-use base qw(Exporter Nagios::Plugin);
++use base qw(Exporter Monitoring::Plugin);
+ 
+ our @EXPORT = (@STATUS_CODES);
+ 
+@@ -42,7 +42,7 @@ Nagios::Plugin::WWW::Mechanize - Login t
+ 
+ =head1 DESCRIPTION
+ 
+-This module ties Nagios::Plugin with WWW::Mechanize so that there's less
++This module ties Monitoring::Plugin with WWW::Mechanize so that there's less
+ code in your perl script and the most common work is done for you.
+ 
+ For example, the plugin will automatically call nagios_exit(CRITICAL, ...) if
+@@ -62,7 +62,7 @@ with autocheck => 0, otherwise any failu
+ 
+ Also looks for $opts{include_time}. Defaults to 1 which means that performance data for time will be returned.
+ 
+-All other options are passed to Nagios::Plugin.
++All other options are passed to Monitoring::Plugin.
+ 
+ =cut
+ 
+diff -up ./Makefile.PL.orig ./Makefile.PL
+--- ./Makefile.PL.orig	2021-10-31 15:32:28.439055132 +0100
++++ ./Makefile.PL	2021-10-31 15:32:43.515779559 +0100
+@@ -3,7 +3,7 @@ use inc::Module::Install;
+ name	"Nagios-Plugin-WWW-Mechanize";
+ all_from	"lib/Nagios/Plugin/WWW/Mechanize.pm";
+ 
+-requires	"Nagios::Plugin";
++requires	"Monitoring::Plugin";
+ requires	"WWW::Mechanize";
+ requires	"Time::HiRes";
+ 
+diff -up ./t/lib/Monitoring/Plugin.pm.orig ./t/lib/Monitoring/Plugin.pm
+--- ./t/lib/Monitoring/Plugin.pm.orig	2021-10-31 15:30:12.055547954 +0100
++++ ./t/lib/Monitoring/Plugin.pm	2021-10-31 15:29:36.376200102 +0100
+@@ -1,4 +1,4 @@
+-package Nagios::Plugin;
++package Monitoring::Plugin;
+ # Dummy package to find out what is being called
+ 
+ sub new {
+diff -up ./t/new.t.orig ./t/new.t
+--- ./t/new.t.orig	2021-10-31 15:30:22.914349476 +0100
++++ ./t/new.t	2021-10-31 15:33:32.754879566 +0100
+@@ -23,8 +23,8 @@ is( $np->mech, $fake_mech );
+ eval { $np = Nagios::Plugin::WWW::Mechanize->new( mech => [qw(invalid array ref)] ) };
+ like( $@, "/Can't call method \"isa\" on unblessed reference/", "Compile error if wrong type for mech option given" );
+ 
+-# Use Nagios::Plugin, only because already here
+-my $fake_non_mech_object = Nagios::Plugin->new();
++# Use Monitoring::Plugin, only because already here
++my $fake_non_mech_object = Monitoring::Plugin->new();
+ eval { $np = Nagios::Plugin::WWW::Mechanize->new( mech => $fake_non_mech_object ) };
+ like( $@, "/Invalid object passed into mech option/", "Invalid object passed into mech option" );
+ 

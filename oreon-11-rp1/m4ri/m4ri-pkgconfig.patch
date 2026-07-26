@@ -1,0 +1,27 @@
+From 3392a2a4b11f1bf0b4f4b38f8dcb931eee6900fb Mon Sep 17 00:00:00 2001
+From: Jeremy Linton <jlinton@redhat.com>
+Date: Thu, 23 Jan 2025 13:42:30 -0600
+Subject: [PATCH] Update pkgconfig patch
+
+Signed-off-by: Jeremy Linton <jlinton@redhat.com>
+---
+ m4ri.pc.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/m4ri.pc.in b/m4ri.pc.in
+index b881cc8..10b801a 100644
+--- a/m4ri.pc.in
++++ b/m4ri.pc.in
+@@ -7,6 +7,6 @@ Name: M4RI
+ Description: Dense linear algebra over GF(2).
+ Version: @PACKAGE_VERSION@
+ Requires.private: @M4RI_USE_PNG_PC@
+-Libs: -L${libdir} -lm4ri @LIBM@
+-Libs.private: @OPENMP_CFLAGS@ @RAW_LIBPNG@ @LIBPNG_LIBADD@
+-Cflags: -I${includedir} @LIBPNG_CFLAGS@
++Libs: -L${libdir} -lm4ri
++Libs.private: @OPENMP_CFLAGS@ @RAW_LIBPNG@ @LIBPNG_LIBADD@ @LIBM@
++Cflags: -I${includedir}
+-- 
+2.47.1
+

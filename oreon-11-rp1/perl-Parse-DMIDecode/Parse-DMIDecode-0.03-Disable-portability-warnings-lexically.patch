@@ -1,0 +1,50 @@
+From 221363e84b6e5a4ca94700ee8c645d768f7cf2a7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 13 Jun 2022 16:16:49 +0200
+Subject: [PATCH] Disable portability warnings lexically
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If perl is started with -w option, the local $^W takes no effect and
+plenty of warnigs like this are printed:
+
+    Hexadecimal number > 0xffffffff non-portable at lib/Parse/DMIDecode/Handle.pm line 115.
+
+Use lexical warning pargma to fix it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Parse/DMIDecode.pm        | 2 +-
+ lib/Parse/DMIDecode/Handle.pm | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Parse/DMIDecode.pm b/lib/Parse/DMIDecode.pm
+index fdc14a6..1daf524 100644
+--- a/lib/Parse/DMIDecode.pm
++++ b/lib/Parse/DMIDecode.pm
+@@ -287,7 +287,7 @@ sub _refaddr($) {
+ 		$pkg = undef;
+ 	}
+ 	"$_[0]" =~ /0x(\w+)/;
+-	my $i = do { local $^W; hex $1 };
++	my $i = do { no warnings 'portable'; hex $1 };
+ 	bless $_[0], $pkg if defined $pkg;
+ 	return $i;
+ }
+diff --git a/lib/Parse/DMIDecode/Handle.pm b/lib/Parse/DMIDecode/Handle.pm
+index 227ddbb..6c66577 100644
+--- a/lib/Parse/DMIDecode/Handle.pm
++++ b/lib/Parse/DMIDecode/Handle.pm
+@@ -112,7 +112,7 @@ sub _refaddr($) {
+ 		$pkg = undef;
+ 	}
+ 	"$_[0]" =~ /0x(\w+)/;
+-	my $i = do { local $^W; hex $1 };
++	my $i = do { no warnings 'portable'; hex $1 };
+ 	bless $_[0], $pkg if defined $pkg;
+ 	return $i;
+ }
+-- 
+2.35.3
+

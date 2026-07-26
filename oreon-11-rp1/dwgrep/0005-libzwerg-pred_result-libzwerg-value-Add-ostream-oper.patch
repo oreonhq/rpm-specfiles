@@ -1,0 +1,147 @@
+From bc361bb11010eecc177f6decf87c1b23c302e341 Mon Sep 17 00:00:00 2001
+From: Petr Machata <petrm@nvidia.com>
+Date: Sun, 8 May 2022 22:36:58 +0200
+Subject: [PATCH 05/10] libzwerg/pred_result, libzwerg/value: Add ostream
+ operators
+
+GTest attempts to serialize the values entering comparison, and pred_result
+and cmp_result are missing the required operator<<. This breaks the build.
+
+Signed-off-by: Petr Machata <me@pmachata.org>
+---
+ libzwerg/CMakeLists.txt |  1 +
+ libzwerg/pred_result.cc | 46 +++++++++++++++++++++++++++++++++++++++++
+ libzwerg/pred_result.hh |  4 ++++
+ libzwerg/value.cc       | 17 +++++++++++++++
+ libzwerg/value.hh       |  1 +
+ 5 files changed, 69 insertions(+)
+ create mode 100644 libzwerg/pred_result.cc
+
+diff --git a/libzwerg/CMakeLists.txt b/libzwerg/CMakeLists.txt
+index e3c128b..896d5e4 100644
+--- a/libzwerg/CMakeLists.txt
++++ b/libzwerg/CMakeLists.txt
+@@ -44,6 +44,7 @@ ADD_LIBRARY (LibzwergCore OBJECT
+   libzwerg.cc
+   op.cc
+   overload.cc
++  pred_result.cc
+   scon.cc
+   selector.cc
+   stack.cc
+diff --git a/libzwerg/pred_result.cc b/libzwerg/pred_result.cc
+new file mode 100644
+index 0000000..ce475cf
+--- /dev/null
++++ b/libzwerg/pred_result.cc
+@@ -0,0 +1,46 @@
++/*
++   Copyright (C) 2022 Petr Machata
++   This file is part of dwgrep.
++
++   This file is free software; you can redistribute it and/or modify
++   it under the terms of either
++
++     * the GNU Lesser General Public License as published by the Free
++       Software Foundation; either version 3 of the License, or (at
++       your option) any later version
++
++   or
++
++     * the GNU General Public License as published by the Free
++       Software Foundation; either version 2 of the License, or (at
++       your option) any later version
++
++   or both in parallel, as here.
++
++   dwgrep is distributed in the hope that it will be useful, but
++   WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   General Public License for more details.
++
++   You should have received copies of the GNU General Public License and
++   the GNU Lesser General Public License along with this program.  If
++   not, see <http://www.gnu.org/licenses/>.  */
++
++#include <iostream>
++
++#include "pred_result.hh"
++
++std::ostream &
++operator<< (std::ostream &o, pred_result result)
++{
++  switch (result)
++    {
++    case pred_result::yes:
++      return o << "yes";
++    case pred_result::no:
++      return o << "no";
++    case pred_result::fail:
++      return o << "fail";
++    }
++  return o;
++}
+diff --git a/libzwerg/pred_result.hh b/libzwerg/pred_result.hh
+index dfd9779..00572cc 100644
+--- a/libzwerg/pred_result.hh
++++ b/libzwerg/pred_result.hh
+@@ -29,12 +29,16 @@
+ #ifndef _PRED_RESULT_H_
+ #define _PRED_RESULT_H_
+ 
++#include <cstdlib>
++#include <iosfwd>
++
+ enum class pred_result
+   {
+     no = false,
+     yes = true,
+     fail,
+   };
++std::ostream &operator<< (std::ostream &o, pred_result result);
+ 
+ inline pred_result
+ operator! (pred_result other)
+diff --git a/libzwerg/value.cc b/libzwerg/value.cc
+index c8e5420..faf7f2e 100644
+--- a/libzwerg/value.cc
++++ b/libzwerg/value.cc
+@@ -34,6 +34,23 @@
+ #include "tree.hh"
+ #include "value.hh"
+ 
++std::ostream &
++operator<< (std::ostream &o, cmp_result result)
++{
++  switch (result)
++    {
++    case cmp_result::less:
++      return o << "less";
++    case cmp_result::equal:
++      return o << "equal";
++    case cmp_result::greater:
++      return o << "greater";
++    case cmp_result::fail:
++      return o << "fail";
++    }
++  return o;
++}
++
+ value_type
+ value_type::alloc (char const *name, char const *docstring)
+ {
+diff --git a/libzwerg/value.hh b/libzwerg/value.hh
+index abc786f..fe02c20 100644
+--- a/libzwerg/value.hh
++++ b/libzwerg/value.hh
+@@ -41,6 +41,7 @@ enum class cmp_result
+     greater,
+     fail,
+   };
++std::ostream &operator<< (std::ostream &o, cmp_result result);
+ 
+ template <class T>
+ cmp_result
+-- 
+2.51.0
+

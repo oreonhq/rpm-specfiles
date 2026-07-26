@@ -1,0 +1,11 @@
+--- a/configure	2025-10-24 23:03:27.000000000 +0200
++++ b/configure	2026-01-31 19:01:21.332880797 +0100
+@@ -17664,6 +17664,8 @@
+   CFLAGS_werror=" -Werror"
+   CFLAGS="$CFLAGS_nowerror"
+ fi
++# This check fails in Fedora 44, and we do not use -Werror
++CFLAGS_werror=
+ 
+ # Checks for libraries.
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for library containing recvfrom" >&5

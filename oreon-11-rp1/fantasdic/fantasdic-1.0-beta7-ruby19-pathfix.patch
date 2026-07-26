@@ -1,0 +1,26 @@
+--- fantasdic-1.0-beta7/fantasdic.desktop.path	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/fantasdic.desktop	2012-05-03 00:34:11.000000000 +0900
+@@ -3,7 +3,7 @@
+ Name=Fantasdic dictionary
+ GenericName=Dictionary application
+ Comment=Look up words in various dictionary sources
+-Exec=/usr/bin/fantasdic
++Exec=fantasdic
+ Terminal=false
+ Type=Application
+ Categories=Utility;
+--- fantasdic-1.0-beta7/lib/fantasdic/net/dict.rb.path	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/lib/fantasdic/net/dict.rb	2012-05-03 00:38:11.000000000 +0900
+@@ -18,7 +18,11 @@
+ # Highly modified version of Ruby/DICT, by Ian Macdonald <ian@caliban.org>
+ 
+ require 'socket'
+-require 'md5'
++begin
++ require 'md5'
++rescue LoadError
++ require 'digest/md5'
++end
+ 
+ class DICTClient
+ 

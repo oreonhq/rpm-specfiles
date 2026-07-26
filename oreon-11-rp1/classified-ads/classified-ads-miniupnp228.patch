@@ -1,0 +1,15 @@
+diff -Naur classified-ads-0.16.old/net/networklistener.cpp classified-ads-0.16/net/networklistener.cpp
+--- classified-ads-0.16.old/net/networklistener.cpp	2024-10-09 08:16:01.395333925 +0200
++++ classified-ads-0.16/net/networklistener.cpp	2024-10-09 08:19:03.054552889 +0200
+@@ -291,7 +291,11 @@
+                 char lan_address[64];
+                 struct UPNPUrls upnp_urls;
+                 struct IGDdatas upnp_data;
++#if (MINIUPNPC_API_VERSION >= 18)
++                int status = UPNP_GetValidIGD(upnp_dev, &upnp_urls, &upnp_data, lan_address, sizeof(lan_address), nullptr, 0);
++#else
+                 int status = UPNP_GetValidIGD(upnp_dev, &upnp_urls, &upnp_data, lan_address, sizeof(lan_address));
++#endif
+                 // look up possible "status" values, the number "1" indicates a valid IGD was found
+                 QLOG_STR("UPNP_GetValidIGD = " + QString::number(status)) ;
+                 if ( status > 0 ) {

@@ -1,0 +1,99 @@
+From 57531fe9839547bc4f02dee5cfcf2d82e262ded8 Mon Sep 17 00:00:00 2001
+From: jthiltges <john@thiltges.com>
+Date: Fri, 3 Jun 2016 02:10:11 -0500
+Subject: [PATCH] Do not accumulate matches in
+ GlobusPathMatchingResourcePatternResolver (#157)
+
+* Do not accumulate matches in GlobusPathMatchingResourcePatternResolver
+
+Multiple calls to getResources() in GlobusPathMatchingResourcePatternResolver
+are not expected to accumulate results. Allocate a new
+pathsMatchingLocationPattern Vector for each call.
+
+* Remove private class variable pathsMatchingLocationPattern from GlobusPathMatchingResourcePatternResolver
+
+Pass the variable as a function argument instead
+---
+ ...obusPathMatchingResourcePatternResolver.java | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/util/GlobusPathMatchingResourcePatternResolver.java b/ssl-proxies/src/main/java/org/globus/util/GlobusPathMatchingResourcePatternResolver.java
+index 6161c7b..cbdc5b2 100644
+--- a/ssl-proxies/src/main/java/org/globus/util/GlobusPathMatchingResourcePatternResolver.java
++++ b/ssl-proxies/src/main/java/org/globus/util/GlobusPathMatchingResourcePatternResolver.java
+@@ -31,8 +31,6 @@ public class GlobusPathMatchingResourcePatternResolver {
+      * the mainClassPath would be /user/userName/project/resources/
+       */
+     private String mainClassPath = "";
+-    //Holds GlobusResource instances of all the paths which matched the locationPattern
+-    private Vector<GlobusResource> pathsMatchingLocationPattern = new Vector<GlobusResource>();
+ 
+     public GlobusPathMatchingResourcePatternResolver() {
+     }
+@@ -64,13 +62,14 @@ public class GlobusPathMatchingResourcePatternResolver {
+      * @return An array of GlobusResource containing all resources whose locaiton match the locationPattern
+      */
+     public GlobusResource[] getResources(String locationPattern) {
++        Vector<GlobusResource> pathsMatchingLocationPattern = new Vector<GlobusResource>();
+         String mainPath = "";
+         if (locationPattern.startsWith("classpath:")) {
+             String pathUntilWildcard = getPathUntilWildcard(locationPattern.replaceFirst("classpath:/", ""), false);
+             URL resourceURL = getClass().getClassLoader().getResource(pathUntilWildcard);
+             this.mainClassPath = resourceURL.getPath();
+             this.locationPattern = Pattern.compile(antToRegexConverter(locationPattern.replaceFirst("classpath:/", "").replaceFirst(pathUntilWildcard, "")));
+-            parseDirectoryStructure(new File(this.mainClassPath));
++            parseDirectoryStructure(new File(this.mainClassPath), pathsMatchingLocationPattern);
+         } else if (locationPattern.startsWith("file:")) {
+             if ((locationPattern.replaceFirst("file:", "").compareTo(getPathUntilWildcard(locationPattern.replaceFirst("file:", ""), true))) == 0) {//Check to see if the pattern is not a pattern
+                 pathsMatchingLocationPattern.add(new GlobusResource(locationPattern.replaceFirst("file:", "")));
+@@ -80,14 +79,14 @@ public class GlobusPathMatchingResourcePatternResolver {
+                     URL resourceURL = new File(getPathUntilWildcard(locationPattern.replaceFirst("file:", ""), true)).toURL();
+                     mainPath = resourceURL.getPath();
+                     this.locationPattern = Pattern.compile(antToRegexConverter(locationPattern.replaceFirst("file:", "")));
+-                    parseDirectoryStructure(new File(mainPath));
++                    parseDirectoryStructure(new File(mainPath), pathsMatchingLocationPattern);
+                 } catch (MalformedURLException ex) {
+                 }
+             }
+         } else {
+             mainPath = getPathUntilWildcard(locationPattern, true);
+             this.locationPattern = Pattern.compile(antToRegexConverter(locationPattern));
+-            parseDirectoryStructure(new File(mainPath));
++            parseDirectoryStructure(new File(mainPath), pathsMatchingLocationPattern);
+         }
+ 
+         return pathsMatchingLocationPattern.toArray(new GlobusResource[0]);
+@@ -139,8 +138,9 @@ public class GlobusPathMatchingResourcePatternResolver {
+     /**
+      * Recursive variant of parseFilesInDirectory.
+      * @param currentDirectory The currentDirectory to explore.
++     * @param pathsMatchingLocationPattern Holds GlobusResource instances of all the paths which matched the locationPattern
+      */
+-    private void parseDirectoryStructure(File currentDirectory) {
++    private void parseDirectoryStructure(File currentDirectory, Vector<GlobusResource> pathsMatchingLocationPattern) {
+         File[] directoryContents;
+         if (currentDirectory.isDirectory()) {
+             directoryContents = currentDirectory.listFiles();    //Get a list of the files and directories
+@@ -156,7 +156,7 @@ public class GlobusPathMatchingResourcePatternResolver {
+                         pathsMatchingLocationPattern.add(new GlobusResource(absolutePath));
+                     }
+                 } else if (currentFile.isDirectory()) {
+-                    parseDirectoryStructure(currentFile);
++                    parseDirectoryStructure(currentFile, pathsMatchingLocationPattern);
+                 }
+             }
+         }
+@@ -166,8 +166,9 @@ public class GlobusPathMatchingResourcePatternResolver {
+      * Compares every file's Absolute Path against the locationPattern, if they match
+      * a GlobusResource is created with the file's Absolute Path and added to pathsMatchingLocationPattern.
+      * @param currentDirectory  The directory whose files to parse.
++     * @param pathsMatchingLocationPattern Holds GlobusResource instances of all the paths which matched the locationPattern
+      */
+-    private void parseFilesInDirectory(File currentDirectory) {
++    private void parseFilesInDirectory(File currentDirectory, Vector<GlobusResource> pathsMatchingLocationPattern) {
+         File[] directoryContents = null;
+         if (currentDirectory.isDirectory()) {
+             directoryContents = currentDirectory.listFiles();    //Get a list of the files and directories
+-- 
+2.17.2
+

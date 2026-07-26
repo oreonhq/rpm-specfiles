@@ -1,0 +1,45 @@
+From: Ian Campbell <ijc@debian.org>
+Date: Fri, 1 May 2020 12:37:38 +0800
+Subject: Disable tests which don't make sense for packaging
+
+TestContribution and TestContributorAgreements are todo with managing upstream
+PRs and the like.
+
+TestCommandDatabase only makes sense at development time as a sanity check when
+the version of cmake is fixed.
+
+Forwarded: not-needed
+---
+ cmakelang/tests.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/cmakelang/tests.py b/cmakelang/tests.py
+index ec5d7a4..b2da25e 100644
+--- a/cmakelang/tests.py
++++ b/cmakelang/tests.py
+@@ -35,10 +35,10 @@ from cmakelang.command_tests.add_library_tests \
+     import TestAddLibraryCommand
+ from cmakelang.command_tests.misc_tests \
+     import TestMiscFormatting
+-from cmakelang.contrib.validate_database \
+-    import TestContributorAgreements
+-from cmakelang.contrib.validate_pullrequest \
+-    import TestContribution
++#from cmakelang.contrib.validate_database \
++#    import TestContributorAgreements
++#from cmakelang.contrib.validate_pullrequest \
++#    import TestContribution
+ from cmakelang.lint.test.expect_tests import (
+     ConfigTestCase,
+     LintTests)
+@@ -46,8 +46,8 @@ from cmakelang.lint.test.execution_tests import (
+     TestFormatFiles)
+ from cmakelang.test.version_number_test \
+     import TestVersionNumber
+-from cmakelang.test.command_db_test \
+-    import TestCommandDatabase
++#from cmakelang.test.command_db_test \
++#    import TestCommandDatabase
+ from cmakelang.test.config_include_test \
+     import TestConfigInclude
+ 

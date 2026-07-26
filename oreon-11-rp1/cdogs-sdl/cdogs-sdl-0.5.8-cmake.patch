@@ -1,0 +1,12 @@
+diff -up cdogs-sdl-0.6.3/CMakeLists.txt.cmake cdogs-sdl-0.6.3/CMakeLists.txt
+--- cdogs-sdl-0.6.3/CMakeLists.txt.cmake	2016-11-14 14:30:05.000000000 +0100
++++ cdogs-sdl-0.6.3/CMakeLists.txt	2016-12-14 11:49:41.199409251 +0100
+@@ -107,7 +107,7 @@ else()
+ 		endif()
+ 	endif()
+ 	if(NOT BEOS AND NOT HAIKU)
+-		add_definitions(-Winline -Werror)
++		add_definitions(-Winline)
+ 		set(EXTRA_LIBRARIES "m")
+ 	endif()
+ endif()

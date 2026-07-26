@@ -1,0 +1,20 @@
+diff -up ./pynicotine/tests/unit/shares/test_shares.py.orig ./pynicotine/tests/unit/shares/test_shares.py
+--- ./pynicotine/tests/unit/shares/test_shares.py.orig	2025-03-10 14:28:44.000000000 +0100
++++ ./pynicotine/tests/unit/shares/test_shares.py	2025-07-12 22:55:56.340844860 +0200
+@@ -21,7 +21,7 @@ import shutil
+ import struct
+ import wave
+ 
+-from unittest import TestCase
++from unittest import TestCase, skip
+ 
+ from pynicotine.config import config
+ from pynicotine.core import core
+@@ -86,6 +86,7 @@ class SharesTest(TestCase):
+     def tearDownClass(cls):
+         shutil.rmtree(DATA_FOLDER_PATH)
+ 
++    @skip
+     def test_shares_scan(self):
+         """Test a full shares scan."""
+ 

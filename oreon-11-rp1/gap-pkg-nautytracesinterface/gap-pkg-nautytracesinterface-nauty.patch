@@ -1,0 +1,11 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -5,7 +5,7 @@ KEXT_NAME = NautyTracesInterface
+ KEXT_SOURCES = src/NautyTracesInterface.c
+ 
+ KEXT_CFLAGS = @NAUTY_CPPFLAGS@
+-KEXT_LDFLAGS = @NAUTY_PATH@/nauty.a
++KEXT_LDFLAGS = -lnauty
+ 
+ KEXT_USE_AUTOCONF = 1
+ 

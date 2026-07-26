@@ -1,0 +1,588 @@
+diff -Naurp openca-ocspd-1.9.0.orig/src/configuration.c openca-ocspd-1.9.0.new/src/configuration.c
+--- openca-ocspd-1.9.0.orig/src/configuration.c	2009-06-08 19:24:05.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/configuration.c	2017-03-23 01:47:40.140806949 +0100
+@@ -373,12 +373,24 @@ int ocspd_load_ca_section ( OCSPD_CONFIG
+ 				}
+ 
+ 				/* Now we copy the lastUpdate and nextUpdate fields */
+-				if( ca->crl ) {
+-					ca->lastUpdate = M_ASN1_TIME_dup (
+-						X509_CRL_get_lastUpdate(ca->crl));
++				if (ca->crl) {
++					const ASN1_TIME *lastup;
++					const ASN1_TIME *nextup;
+ 
+-					ca->nextUpdate = M_ASN1_TIME_dup (
+-						X509_CRL_get_nextUpdate(ca->crl));
++#if OPENSSL_VERSION_NUMBER < 0x10100005L
++					lastup = X509_CRL_get_lastUpdate(ca->crl);
++					nextup = X509_CRL_get_nextUpdate(ca->crl);
++#else
++					lastup = X509_CRL_get0_lastUpdate(ca->crl);
++					nextup = X509_CRL_get0_nextUpdate(ca->crl);
++#endif
++
++					ca->lastUpdate =
++					    (ASN1_TIME *) ASN1_STRING_dup(
++					    (ASN1_STRING *) lastup);
++					ca->nextUpdate =
++					    (ASN1_TIME *) ASN1_STRING_dup(
++					    (ASN1_STRING *) nextup);
+ 				}
+ 
+ 				ca->crl_status = check_crl_validity ( ca );
+diff -Naurp openca-ocspd-1.9.0.orig/src/crl.c openca-ocspd-1.9.0.new/src/crl.c
+--- openca-ocspd-1.9.0.orig/src/crl.c	2009-06-08 19:24:05.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/crl.c	2017-03-23 01:51:40.487947854 +0100
+@@ -28,25 +28,32 @@ extern OCSPD_CONFIG * ocspd_conf;
+ extern pthread_rwlock_t crl_lock;
+ extern pthread_cond_t crl_cond;
+ 
+-int ocspd_load_ca_crl ( CA_LIST_ENTRY *a ) {
++int
++ocspd_load_ca_crl(CA_LIST_ENTRY *a)
++{
+ 
+-	if(!a) return(-1);
++	const ASN1_TIME *lastup;
++	const ASN1_TIME *nextup;
+ 
+-	if( ocspd_conf->debug )
++	if (!a)
++		return -1;
++
++	if (ocspd_conf->debug)
+ 		fprintf(stderr, 
+ 			"INFO::ACQUIRING WRITE LOCK -- BEGIN CRL RELOAD");
+-	pthread_rwlock_wrlock( &crl_lock );
+-	if( ocspd_conf->debug )
++	pthread_rwlock_wrlock(&crl_lock);
++	if (ocspd_conf->debug)
+ 		fprintf(stderr, "INFO::LOCK ACQUIRED (CRL RELOAD)");
+ 
+-	if( a->crl ) X509_CRL_free ( a->crl );
++	if (a->crl)
++		X509_CRL_free(a->crl);
++
+ 	a->crl = NULL;
+ 	a->crl_list = NULL;
+ 
+-	if( a->crl_url == NULL ) {
+-		syslog( LOG_ERR, 
+-			"ERROR::Missing CRL URL for CA %s", a->ca_id );
+-		return(-1);
++	if (a->crl_url == NULL) {
++		syslog(LOG_ERR, "ERROR::Missing CRL URL for CA %s", a->ca_id);
++		return -1;
+ 	}
+ 
+ 	/* We now re-load the CRL */
+@@ -76,15 +83,21 @@ int ocspd_load_ca_crl ( CA_LIST_ENTRY *a
+ 	if ( a->nextUpdate ) ASN1_TIME_free(a->nextUpdate);
+ 
+ 	/* Get new values from the recently loaded CRL */
+-	a->lastUpdate = M_ASN1_TIME_dup (
+-		X509_CRL_get_lastUpdate(a->crl));
+-	a->nextUpdate = M_ASN1_TIME_dup (
+-		X509_CRL_get_nextUpdate(a->crl));
++#if OPENSSL_VERSION_NUMBER < 0x10100005L
++	lastup = X509_CRL_get_lastUpdate(a->crl);
++	nextup = X509_CRL_get_nextUpdate(a->crl);
++#else
++	lastup = X509_CRL_get0_lastUpdate(a->crl);
++	nextup = X509_CRL_get0_nextUpdate(a->crl);
++#endif
++
++	a->lastUpdate = (ASN1_TIME *) ASN1_STRING_dup((ASN1_STRING *) lastup);
++	a->nextUpdate = (ASN1_TIME *) ASN1_STRING_dup((ASN1_STRING *) nextup);
+ 
+-	if(ocspd_conf->debug)
++	if (ocspd_conf->debug)
+ 		fprintf(stderr, "INFO::RELEASING LOCK (CRL RELOAD)");
+-	pthread_rwlock_unlock ( &crl_lock );
+-	if(ocspd_conf->debug)
++	pthread_rwlock_unlock(&crl_lock);
++	if (ocspd_conf->debug)
+ 		fprintf(stderr, "INFO::LOCK RELEASED --END--");
+ 
+ 	/* Now check the CRL validity */
+diff -Naurp openca-ocspd-1.9.0.orig/src/general.h openca-ocspd-1.9.0.new/src/general.h
+--- openca-ocspd-1.9.0.orig/src/general.h	2016-12-16 12:26:38.714780234 +0100
++++ openca-ocspd-1.9.0.new/src/general.h	2016-12-18 19:11:22.060361308 +0100
+@@ -238,13 +238,25 @@ typedef struct ca_entry_certid
+ 
+ 	} CA_ENTRY_CERTID;
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100005L
+ #define sk_CA_ENTRY_CERTID_new_null() SKM_sk_new_null(CA_ENTRY_CERTID)
+ #define sk_CA_ENTRY_CERTID_push(st, val) SKM_sk_push(CA_ENTRY_CERTID, (st), (val))
+ #define sk_CA_ENTRY_CERTID_pop(st) SKM_sk_pop(CA_ENTRY_CERTID, (st))
+ #define sk_CA_ENTRY_CERTID_value(st, i) SKM_sk_value(CA_ENTRY_CERTID, (st), (i))
+ #define sk_CA_ENTRY_CERTID_num(st) SKM_sk_num(CA_ENTRY_CERTID, (st))
+ #define sk_CA_ENTRY_CERTID_sort(st) SKM_sk_sort(CA_ENTRY_CERTID, (st))
+-#define sk_CA_ENTRY_CERTID_find(st) SKM_sk_find(CA_ENTRY_CERTID, (st))
++#else
++#define sk_CA_ENTRY_CERTID_new_null()					\
++		(STACK_OF(CA_ENTRY_CERTID) *) OPENSSL_sk_new_null()
++#define sk_CA_ENTRY_CERTID_push(st, val)				\
++		OPENSSL_sk_push((OPENSSL_STACK *) (st), (val))
++#define sk_CA_ENTRY_CERTID_pop(st)					\
++		(CA_ENTRY_CERTID *) OPENSSL_sk_pop((OPENSSL_STACK *) st)
++#define sk_CA_ENTRY_CERTID_value(st, i)					\
++		(CA_ENTRY_CERTID *) OPENSSL_sk_value((OPENSSL_STACK *) st, (i))
++#define sk_CA_ENTRY_CERTID_num(st) OPENSSL_sk_num((OPENSSL_STACK *) st)
++#define sk_CA_ENTRY_CERTID_sort(st) OPENSSL_sk_sort((OPENSSL_STACK*) st)
++#endif
+ 
+ /* List of available CAs */
+ typedef struct ca_list_st
+diff -Naurp openca-ocspd-1.9.0.orig/src/hash-db.c openca-ocspd-1.9.0.new/src/hash-db.c
+--- openca-ocspd-1.9.0.orig/src/hash-db.c	2016-12-16 12:26:38.719780253 +0100
++++ openca-ocspd-1.9.0.new/src/hash-db.c	2016-12-18 19:33:03.106950275 +0100
+@@ -256,9 +256,7 @@ STACK_OF(X509) *ocspd_load_ca_ldap( URL
+ 		        /* Try PEM format */
+ 		        if((x=PEM_read_bio_X509(membio,NULL,NULL,NULL)) 
+ 								== NULL ) {
+-				int tmp_ret = 0;
+-
+-				tmp_ret = BIO_reset( membio );
++				BIO_reset(membio);
+ 				ERR_clear_error();
+ 
+                 		/* Is it DER encoded (???) */
+@@ -365,13 +363,11 @@ X509_CRL *ocspd_load_crl_ldap( URL *url
+ 							vals[0]->bv_len );
+ 
+ 			/* Load CRL from the membio */
+-			if( (crl = ocspd_X509_CRL_bio( membio, FORMAT_ASN1 ))
+-						== NULL ) {
+-				int tmp_ret = 0;
+-
+-				tmp_ret = BIO_reset( membio );
++			if ((crl = ocspd_X509_CRL_bio(membio, FORMAT_ASN1))
++						== NULL) {
++				BIO_reset(membio);
+ 				ERR_clear_error();
+-				crl = ocspd_X509_CRL_bio( membio, FORMAT_PEM );
++				crl = ocspd_X509_CRL_bio(membio, FORMAT_PEM);
+ 			}
+ 
+ 			if( crl ) {
+@@ -447,14 +443,14 @@ STACK_OF(X509) *ocspd_load_ca_http( URL
+ 	}
+ 
+ 	/* Try PEM format */
+-	if ( (ret=PEM_read_bio_X509(mem,NULL,NULL,NULL)) == NULL ) {
+-		int tmp_ret = 0;
+-
+-		tmp_ret = BIO_reset(mem);
++	if ((ret = PEM_read_bio_X509(mem, NULL, NULL, NULL)) == NULL) {
++		BIO_reset(mem);
+ 		ERR_clear_error();
+-		if ( ocspd_parse_http_headers ( mem ) == 0 ) {
+-			if( mem ) BIO_free_all(mem);
+-			if( buf ) BUF_MEM_free ( buf );
++		if (ocspd_parse_http_headers(mem) == 0) {
++			if (mem)
++				BIO_free_all(mem);
++			if (buf)
++				BUF_MEM_free(buf);
+ 			return NULL;
+ 		}
+ 
+@@ -525,18 +521,17 @@ X509_CRL *ocspd_load_crl_http( URL *url
+ 	}
+ 
+ 	/* Try and load CRL - ASN1 first, PEM second */
+-	if( (crl = ocspd_X509_CRL_bio( mem, FORMAT_ASN1 )) == NULL ) {
+-
+-		int tmp_ret = 0;
+-
++	if ((crl = ocspd_X509_CRL_bio(mem, FORMAT_ASN1)) == NULL) {
+ 		/* If it is not in DER format, let's try the PEM one */
+-		tmp_ret = BIO_reset(mem);
++		BIO_reset(mem);
+ 		ERR_clear_error();
+ 
+ 		/* Parse the headers again... */
+-		if( ocspd_parse_http_headers( mem ) == 0 ) {
+-			if( mem ) BIO_free_all (mem);
+-			if( buf ) BUF_MEM_free (buf);
++		if (ocspd_parse_http_headers(mem) == 0) {
++			if (mem)
++				BIO_free_all(mem);
++			if (buf)
++				BUF_MEM_free(buf);
+ 			return NULL;
+ 		}
+ 
+@@ -661,8 +656,11 @@ X509_CRL *ocspd_X509_CRL_bio ( BIO *in,
+ 	return crl;
+ }
+ 
+-int ocspd_verify_cert ( X509_CRL *crl, ASN1_INTEGER *serial ) {
++int
++ocspd_verify_cert(X509_CRL *crl, ASN1_INTEGER *serial)
++{
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100005L
+ 	int ok;
+ 	X509_REVOKED rtmp;
+ 
+@@ -676,6 +674,11 @@ int ocspd_verify_cert ( X509_CRL *crl, A
+ 	/* Returns 0 if it does not find the certificate within the
+ 	 * provided CRL */
+ 	return 0;
++#else
++	X509_REVOKED *revoked;
++
++	return !X509_CRL_get0_by_serial(crl, &revoked, serial);
++#endif
+ }
+ 
+ size_t my_min ( size_t a, size_t b ) {
+@@ -833,40 +836,50 @@ CA_LIST_ENTRY *ocspd_CA_ENTRY_find ( OCS
+ 
+ 		for( j = 0; j < sk_CA_ENTRY_CERTID_num(a); j++ ) {
+ 
++			ASN1_OCTET_STRING *namehash = NULL;
++			ASN1_OCTET_STRING *keyhash = NULL;
++
+ 			if((tmp = sk_CA_ENTRY_CERTID_value(a,j))==NULL )
+ 				break;
+ 
+ 			/* Check for hashes */
+-			if((ret = ASN1_OCTET_STRING_cmp(tmp->nameHash, 
+-							b->issuerNameHash)) != 0 ){
+-				if( ocspd_conf->debug ) {
+-					syslog( LOG_ERR, "ERROR::CRL::CA "
+-					"[%s] nameHash mismatch (%d)", 
+-					conf->ca_list[i]->ca_id, ret);
+-				};
++
++#if OPENSSL_VERSION_NUMBER < 0x10100005L
++			namehash = b->issuerNameHash;
++			keyhash = b->issuerKeyHash;
++#else
++			OCSP_id_get0_info(&namehash, NULL, &keyhash, NULL, b);
++#endif 
++			if ((ret = ASN1_OCTET_STRING_cmp(tmp->nameHash, 
++							 namehash)) != 0) {
++				if (ocspd_conf->debug) {
++					syslog(LOG_ERR, "ERROR::CRL::CA "
++						"[%s] nameHash mismatch (%d)", 
++						conf->ca_list[i]->ca_id, ret);
++				}
+ 
+ 				continue;
+ 			}
+ 
+-			if((ret = ASN1_OCTET_STRING_cmp(tmp->keyHash,
+-						b->issuerKeyHash)) != 0 ) {
+-
+-				if( ocspd_conf->debug ) {
+-					syslog( LOG_ERR, "ERROR::CRL::CA "
+-					"[%s] issuerKeyHash mismatch (%d)",
+-				 	conf->ca_list[i]->ca_id, ret);
+-				};
++			if ((ret = ASN1_OCTET_STRING_cmp(tmp->keyHash,
++							 keyhash)) != 0) {
++				if (ocspd_conf->debug) {
++					syslog(LOG_ERR, "ERROR::CRL::CA [%s} "
++						"issuerKeyHash mismatch (%d)",
++						conf->ca_list[i]->ca_id, ret);
++				}
+ 
+ 				continue;
+ 			}
+ 
+ 			/* If here we have found it! */
+-			if (!ret) return( conf->ca_list[i] );
++			if (!ret)
++				return conf->ca_list[i];
+ 		}
+ 	}
+ 
+ 	/* Here we have not found any suitable CA */
+-	return(NULL);
++	return NULL;
+ }
+ 
+ X509_REVOKED *ocspd_X509_REVOKED_find (CA_LIST_ENTRY *ca, ASN1_INTEGER *serial){
+@@ -888,11 +901,15 @@ X509_REVOKED *ocspd_X509_REVOKED_find (C
+  
+ 	/* Set the end point to the last one */
+ 	end = sk_X509_REVOKED_num(ca->crl_list) - 1;
+-	if( end < 0 ) return (r);
++	if (end < 0)
++		return r;
++
++	while (cont == 1) {
++		const ASN1_INTEGER *serialnumber;
+ 
+-	while( cont == 1 ) {
+ 		/* We have not found the entry */
+-		if( end < start ) break;
++		if (end < start)
++			break;
+ 
+ 		/* Calculate the middle between start and end */
+ 		curr = (int) ((end - start) / 2) + start;
+@@ -901,12 +918,18 @@ X509_REVOKED *ocspd_X509_REVOKED_find (C
+ 		r = sk_X509_REVOKED_value(ca->crl_list, curr);
+ 
+ 		/* Compare the two serials */
+-		cmp_val = ASN1_INTEGER_cmp(r->serialNumber, serial);
++#if OPENSSL_VERSION_NUMBER < 0x10100005L
++		serialnumber = r->serialNumber;
++#else
++		serialnumber = X509_REVOKED_get0_serialNumber(r);
++#endif
+ 
+-		if( cmp_val > 0 ) {
++		cmp_val = ASN1_INTEGER_cmp(serialnumber, serial);
++
++		if (cmp_val > 0) {
+ 			end = curr - 1;
+ 			continue;
+-		} else if ( cmp_val < 0 ) {
++		} else if (cmp_val < 0) {
+ 			start = curr + 1;
+ 			continue;
+ 		} else {
+@@ -916,10 +939,9 @@ X509_REVOKED *ocspd_X509_REVOKED_find (C
+ 			break;
+ 		}
+ 	}
+-	if( found )
+-		return (r);
+-	else
+-		return(NULL);
+ 
++	if (found)
++		return r;
++	else
++		return NULL;
+ }
+-
+diff -Naurp openca-ocspd-1.9.0.orig/src/ocspd.c openca-ocspd-1.9.0.new/src/ocspd.c
+--- openca-ocspd-1.9.0.orig/src/ocspd.c	2016-12-16 12:26:38.726780280 +0100
++++ openca-ocspd-1.9.0.new/src/ocspd.c	2016-12-16 12:45:18.084260689 +0100
+@@ -82,7 +82,6 @@ OCSPD_CONFIG *ocspd_conf = NULL;
+ /* Local functions prototypes */
+ int writePid ( int pid, char *pidfile );
+ void my_exit(int cod, char *txt);
+-void OPENSSL_dylock_test ( void );
+ 
+ /* Main */
+ int main ( int argc, char *argv[] ) {
+@@ -439,11 +438,6 @@ bad:
+ 	}
+ 	*/
+ 
+-	/* Test the dynamic lock subsystem of OpenSSL */
+-	if( ocspd_conf->debug ) {
+-		OPENSSL_dylock_test();
+-	}
+-
+ 	/*****************************************************************/
+         /* Let's get the digest */
+         if ((ocsp_digest_name == NULL) &&
+@@ -761,22 +755,3 @@ void my_exit(int cod, char *txt) {
+ 		"%s - %s (exit with %d)\n\n", prgname, txt, cod );
+ 	exit(cod);
+ }
+-
+-void OPENSSL_dylock_test ( void ) {
+-
+-	unsigned long lock, lock2 = 0;
+-
+-	printf("\nTesting OpenSSL Dynamic Locking System:\n");
+-        lock = CRYPTO_get_new_dynlockid();
+-        lock2 = CRYPTO_get_new_dynlockid();
+-        printf("Got new locks %lu, %lu\n", lock, lock2);
+-        CRYPTO_w_lock(lock);
+-        printf("Locked the lock\n");
+-        CRYPTO_w_unlock(lock);
+-        printf("Unlocked the lock\n");
+-        CRYPTO_destroy_dynlockid(lock);
+-        CRYPTO_destroy_dynlockid(lock2);
+-        printf("Destroyed the locks, DONE\n\n");
+-
+-	return;
+-}
+diff -Naurp openca-ocspd-1.9.0.orig/src/ocsp_response.c openca-ocspd-1.9.0.new/src/ocsp_response.c
+--- openca-ocspd-1.9.0.orig/src/ocsp_response.c	2016-12-16 12:26:38.708780211 +0100
++++ openca-ocspd-1.9.0.new/src/ocsp_response.c	2016-12-16 15:15:38.996326811 +0100
+@@ -103,65 +103,51 @@ OCSP_RESPONSE *make_ocsp_response( OCSP_
+ 		entry = ocspd_X509_REVOKED_find( ca, serial );
+ 
+ 		/* Sets thisUpdate field to the value of the loaded CRL */
+-		thisupd = M_ASN1_TIME_dup(ca->lastUpdate);
++		thisupd = ca->lastUpdate;
+ 
+-		if( entry ) {
++		if (entry) {
+ 			OCSP_SINGLERESP *single = NULL;
+-
+ 			int reason = -1;
+-
+-			/* If extensions are found, process them */
+-			if( entry->extensions ) {
+-				ASN1_ENUMERATED *asn = NULL;
+-
+-				if( (asn = X509_REVOKED_get_ext_d2i( entry, 
+-						NID_crl_reason,NULL,NULL )) != NULL ) {
+-					reason = ASN1_ENUMERATED_get( asn );
+-					ASN1_ENUMERATED_free( asn );
+-				}
++			ASN1_ENUMERATED *asn;
++			const ASN1_TIME *rdate;
++			void *ext;
++
++			/* If reason is given, get it. */
++			if ((asn = X509_REVOKED_get_ext_d2i(entry, 
++					NID_crl_reason,NULL,NULL))) {
++				reason = ASN1_ENUMERATED_get(asn);
++				ASN1_ENUMERATED_free(asn);
+ 			}
+ 
++#if OPENSSL_VERSION_NUMBER < 0x10100005L
++			rdate = entry->revocationDate;
++#else
++			rdate = X509_REVOKED_get0_revocationDate(entry);
++#endif
++
+ 			single = OCSP_basic_add1_status(bs, cid,
+ 						V_OCSP_CERTSTATUS_REVOKED,
+-						reason, 
+-						entry->revocationDate,
++						reason,  (ASN1_TIME *) rdate,
+ 						thisupd, nextupd);
+ 
+-			if( !single ) {
+-				syslog( LOG_ERR, "ERROR::Can not generate"
+-					" basic response");
+-			}
++			if (!single)
++				syslog(LOG_ERR, "ERROR::Can not generate"
++				       " basic response");
+ 
+ 			/* Check and add the invalidity date */
+-			if ( entry->extensions ) {
+-				void *ext = NULL;
+-
+-				ext = X509_REVOKED_get_ext_d2i( entry, 
+-					NID_invalidity_date, NULL, NULL );
+-				if ( ext != NULL ) {
+-					OCSP_SINGLERESP_add1_ext_i2d(single, 
+-						NID_invalidity_date, ext, 0, 0);
+-				}
+-			}
+-
+-			if( conf->verbose )
+-				syslog( LOG_INFO, "Status for %ld is REVOKED",
+-						ASN1_INTEGER_get(serial) );
+-		} else if (ca == NULL ) {
+-			if( conf->verbose ) {
+-				syslog( LOG_INFO, 
+-					"status unknown for %ld (unknown CA)",
+-					ASN1_INTEGER_get(serial) );
+-			}
+-			OCSP_basic_add1_status(bs, cid,
+-				V_OCSP_CERTSTATUS_UNKNOWN,0,NULL,
+-				thisupd,nextupd);
+-
++			ext = X509_REVOKED_get_ext_d2i(entry, 
++				NID_invalidity_date, NULL, NULL);
++			if (ext)
++				OCSP_SINGLERESP_add1_ext_i2d(single, 
++					NID_invalidity_date, ext, 0, 0);
++
++			if (conf->verbose)
++				syslog(LOG_INFO, "Status for %ld is REVOKED",
++						ASN1_INTEGER_get(serial));
+ 		} else {
+-			if( conf->verbose ) {
+-				syslog( LOG_INFO, "status VALID for %ld",
+-					ASN1_INTEGER_get(serial) );
+-			}
++			if (conf->verbose)
++				syslog(LOG_INFO, "status VALID for %ld",
++				       ASN1_INTEGER_get(serial));
+ 			
+ 			OCSP_basic_add1_status(bs, cid,
+ 				V_OCSP_CERTSTATUS_GOOD, 0, NULL, 
+@@ -216,7 +202,6 @@ OCSP_RESPONSE *make_ocsp_response( OCSP_
+ 
+ 	end:
+ 
+-	if(thisupd) ASN1_GENERALIZEDTIME_free(thisupd);
+ 	if(nextupd) ASN1_GENERALIZEDTIME_free(nextupd);
+ 
+ 	if( bs ) OCSP_BASICRESP_free( bs );
+@@ -230,13 +215,8 @@ int ocspd_resp_send_socket(int connfd, O
+ 	BIO *mem = NULL;
+ 	char * cp;
+ 	int len;
+-	int  bio_ret = 0;
+ 	ASN1_GENERALIZEDTIME *date = NULL;
+         ASN1_GENERALIZEDTIME *expire = NULL;
+-	/*
+-        ASN1_GENERALIZEDTIME *thisupd = NULL;
+-        ASN1_GENERALIZEDTIME *nextupd = NULL;
+-	*/
+ 
+ 	char http_resp[] =
+ 		"HTTP/1.0 200 OK\r\n"
+@@ -267,7 +247,6 @@ int ocspd_resp_send_socket(int connfd, O
+ 		return(0);
+ 	}
+ 
+-	// thisupd = thisupd = M_ASN1_TIME_dup(ca->lastUpdate);
+ 	date = ASN1_GENERALIZEDTIME_new();
+ 	expire = ASN1_GENERALIZEDTIME_new();
+ 
+@@ -293,7 +272,7 @@ int ocspd_resp_send_socket(int connfd, O
+ 	else
+ 		BIO_write(out, cp, len);
+ 
+-	bio_ret = BIO_flush(out);
++	BIO_flush(out);
+ 	BIO_free(mem);
+ 	BIO_free(out);
+ 
+diff -Naurp openca-ocspd-1.9.0.orig/src/support.c openca-ocspd-1.9.0.new/src/support.c
+--- openca-ocspd-1.9.0.orig/src/support.c	2016-12-16 12:26:38.723780268 +0100
++++ openca-ocspd-1.9.0.new/src/support.c	2016-12-16 15:20:00.970762712 +0100
+@@ -70,14 +70,10 @@ char * strstr_nocase ( char *buf, char *
+ 	j = 0; match = 0;
+ 	while( j < buf_len ) {
+ 		unsigned char a, b;
+-		unsigned char *pnt_a, *pnt_b;
+-
+-		pnt_a = (unsigned char *) (buf+j);
+-		pnt_b = (unsigned char *) (string);
+ 
+ 		for( k = 0; k < string_len; k++ ) {
+-			a = (unsigned char) tolower(*(buf+j+k));
+-			b = (unsigned char) tolower(*(string+k));
++			a = (unsigned char) tolower(buf[j + k]);
++			b = (unsigned char) tolower(string[k]);
+ 			if( b != a ) {
+ 				match=0;
+ 				break;
+diff -Naurp openca-ocspd-1.9.0.orig/src/threads.c openca-ocspd-1.9.0.new/src/threads.c
+--- openca-ocspd-1.9.0.orig/src/threads.c	2016-12-16 12:26:38.720780257 +0100
++++ openca-ocspd-1.9.0.new/src/threads.c	2016-12-16 15:22:02.918896615 +0100
+@@ -24,10 +24,8 @@ extern pthread_mutex_t crl_mutex;
+ pthread_mutex_t resp_mutex = PTHREAD_MUTEX_INITIALIZER;
+ 
+ int thread_make ( int i ) {
+-	Thread *th_ptr = NULL;
+ 	int ret;
+ 
+-	th_ptr = &(ocspd_conf->threads_list[i]);
+ 	if ((ret = pthread_create(&ocspd_conf->threads_list[i].thread_tid, 
+ 			NULL, thread_main, (void *) (ocspd_conf->clifd + i)))) {
+ 

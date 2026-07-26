@@ -1,0 +1,214 @@
+Fix various autoconf helper macros not to require support for implicit
+ints and implicit function declarations in the compiler.  These C
+language features have been removed from C99, and future compilers
+will not accept them by default.
+
+diff --git a/m4/macros/check_fs_mntent.m4 b/m4/macros/check_fs_mntent.m4
+index de3d9a918283bb1d..7800d3eff0f59e71 100644
+--- a/m4/macros/check_fs_mntent.m4
++++ b/m4/macros/check_fs_mntent.m4
+@@ -165,15 +165,15 @@ do
+   [[
+ #include <sys/param.h>
+ #include <sys/mount.h>
+-main()
++int main(void)
+ {
+   int i;
+   struct vfsconf vf;
+   i = getvfsbyname("$ac_fs_tmp", &vf);
+   if (i < 0)
+-    exit(1);
++    return 1;
+   else
+-    exit(0);
++    return 0;
+ }
+   ]])], [eval "ac_cv_fs_$ac_fs_name=yes"
+       break
+diff --git a/m4/macros/check_gnu_getopt.m4 b/m4/macros/check_gnu_getopt.m4
+index 6ac6440c47e8edd8..daa61cbaef3b09e9 100644
+--- a/m4/macros/check_gnu_getopt.m4
++++ b/m4/macros/check_gnu_getopt.m4
+@@ -17,7 +17,7 @@ int main()
+    int isGNU = 0;
+ 
+    rf = fopen("conftestresult", "w");
+-   if (rf == NULL) exit(1);
++   if (rf == NULL) return 1;
+ 
+    while ( (c = getopt(argc, argv, "x")) != -1 ) {
+        switch ( c ) {
+@@ -25,11 +25,11 @@ int main()
+ 	     isGNU=1;
+              break;
+           default:
+-             exit(1);
++             return 1;
+        }
+    }
+    fprintf(rf, isGNU ? "yes" : "no");
+-   exit(0);
++   return 0;
+ }
+ ]])],[
+ ac_cv_sys_gnu_getopt="`cat conftestresult`"
+diff --git a/m4/macros/check_mnttab_type.m4 b/m4/macros/check_mnttab_type.m4
+index a840991e95e3ba81..398314910d80337a 100644
+--- a/m4/macros/check_mnttab_type.m4
++++ b/m4/macros/check_mnttab_type.m4
+@@ -121,15 +121,15 @@ do
+   [[
+ #include <sys/param.h>
+ #include <sys/mount.h>
+-main()
++int main(void)
+ {
+   int i;
+   struct vfsconf vf;
+   i = getvfsbyname("$ac_fs_tmp", &vf);
+   if (i < 0)
+-    exit(1);
++    return 1;
+   else
+-    exit(0);
++    return 0;
+ }
+   ]])], [eval "ac_cv_mnttab_type_$ac_fs_name=\\\"$ac_fs_tmp\\\""
+       break
+diff --git a/m4/macros/check_mount_type.m4 b/m4/macros/check_mount_type.m4
+index 693542219f7aee90..1b0de6ccb0b7cafd 100644
+--- a/m4/macros/check_mount_type.m4
++++ b/m4/macros/check_mount_type.m4
+@@ -179,15 +179,15 @@ do
+   [[
+ #include <sys/param.h>
+ #include <sys/mount.h>
+-main()
++int main(void)
+ {
+   int i;
+   struct vfsconf vf;
+   i = getvfsbyname("$ac_fs_tmp", &vf);
+   if (i < 0)
+-    exit(1);
++    return 1;
+   else
+-    exit(0);
++    return 0;
+ }
+   ]])], [eval "ac_cv_mount_type_$ac_fs_name=\\\"$ac_fs_tmp\\\""
+       break
+diff --git a/m4/macros/check_varargs_macros.m4 b/m4/macros/check_varargs_macros.m4
+index 93c26ffced82fdcc..1dbd4fb59e3d1c88 100644
+--- a/m4/macros/check_varargs_macros.m4
++++ b/m4/macros/check_varargs_macros.m4
+@@ -9,6 +9,7 @@ ac_cv_varargs_macros,
+ AC_COMPILE_IFELSE(
+ [AC_LANG_PROGRAM(
+ [[
++void bar(const char *, ...);
+ #define foo(str,size,fmt,...)  bar(__FILE__,__LINE__,(str),(size),(fmt),__VA_ARGS__)
+ ]],
+ [[
+@@ -20,6 +21,7 @@ foo(a, sizeof(a), "%d,%d", 1, 2);
+ AC_COMPILE_IFELSE(
+ [AC_LANG_PROGRAM(
+ [[
++void bar(const char *, ...);
+ #define foo(str,size,args...)  bar(__FILE__,__LINE__,(str),(size),(fmt),args)
+ ]],
+ [[
+diff --git a/m4/macros/expand_cpp_hex.m4 b/m4/macros/expand_cpp_hex.m4
+index 13c7c832b0d764fb..7b915d0431b8f688 100644
+--- a/m4/macros/expand_cpp_hex.m4
++++ b/m4/macros/expand_cpp_hex.m4
+@@ -14,17 +14,16 @@ AC_RUN_IFELSE(
+ [AC_LANG_SOURCE(
+ [[
+ [$1]
+-main(argc)
+-int argc;
++int main(int argc)
+ {
+ #ifdef $2
+ if (argc > 1)
+   printf("0x%x", $2);
+-exit(0);
++return 0;
+ #else
+ # error no such option $2
+ #endif
+-exit(1);
++return 1;
+ }]])], value=`./conftest dummy 2>>config.log`, value="notfound", value="notfound")
+ ,
+ value="notfound"
+diff --git a/m4/macros/expand_cpp_int.m4 b/m4/macros/expand_cpp_int.m4
+index e58649e83013265e..798e7fd7590f4ca7 100644
+--- a/m4/macros/expand_cpp_int.m4
++++ b/m4/macros/expand_cpp_int.m4
+@@ -16,17 +16,16 @@ AC_RUN_IFELSE(
+ [AC_LANG_SOURCE(
+ [[
+ [$1]
+-main(argc)
+-int argc;
++int main(int argc)
+ {
+ #ifdef $2
+ if (argc > 1)
+   printf("%d", $2);
+-exit(0);
++return 0;
+ #else
+ # error no such option $2
+ #endif
+-exit(1);
++return 1;
+ }]])], value=`./conftest dummy 2>>config.log`, value="notfound", value="notfound")
+ ,
+ value="notfound"
+diff --git a/m4/macros/expand_cpp_string.m4 b/m4/macros/expand_cpp_string.m4
+index e014b7e4fc9d8030..256ddee09303fde4 100644
+--- a/m4/macros/expand_cpp_string.m4
++++ b/m4/macros/expand_cpp_string.m4
+@@ -14,17 +14,16 @@ AC_RUN_IFELSE(
+ [AC_LANG_SOURCE(
+ [[
+ [$1]
+-main(argc)
+-int argc;
++int main(int argc)
+ {
+ #ifdef $2
+ if (argc > 1)
+   printf("%s", $2);
+-exit(0);
++return 0;
+ #else
+ # error no such option $2
+ #endif
+-exit(1);
++return 1;
+ }]])], value=`./conftest dummy 2>>config.log`, value="notfound", value="notfound")
+ ,
+ value="notfound"
+diff --git a/m4/macros/expand_run_string.m4 b/m4/macros/expand_run_string.m4
+index f9390020aa934c3e..c8c350f533f80a82 100644
+--- a/m4/macros/expand_run_string.m4
++++ b/m4/macros/expand_run_string.m4
+@@ -8,11 +8,10 @@ AC_RUN_IFELSE(
+ [AC_LANG_SOURCE(
+ [[
+ $1
+-main(argc)
+-int argc;
++int main(int argc)
+ {
+ $2
+-exit(0);
++return 0;
+ }]])],
+ [
+ value=`./conftest dummy 2>>config.log`

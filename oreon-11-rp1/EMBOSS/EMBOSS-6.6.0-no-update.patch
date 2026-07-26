@@ -1,0 +1,9 @@
+diff -up EMBOSS-6.6.0/Makefile.am.noupdate EMBOSS-6.6.0/Makefile.am
+--- EMBOSS-6.6.0/Makefile.am.noupdate	2015-10-30 09:59:36.183032495 -0400
++++ EMBOSS-6.6.0/Makefile.am	2015-10-30 09:59:45.889975922 -0400
+@@ -34,4 +34,4 @@ dist-hook:
+ 	tar cBf - jemboss | ( cd $(distdir); tar xBf - ; find jemboss -name CVS | xargs rm -rf; find jemboss -name Makefile | xargs rm -rf; find jemboss -name .cvsignore | xargs rm -rf )
+ 
+ install-exec-hook:
+-	$(bindir)/embossupdate
++###	$(bindir)/embossupdate

@@ -1,0 +1,16 @@
+diff -up lhnb-1.9.19/src/ui.c.gcc10 lhnb-1.9.19/src/ui.c
+--- lhnb-1.9.19/src/ui.c.gcc10	2007-09-07 12:20:11.000000000 +0200
++++ lhnb-1.9.19/src/ui.c	2020-02-21 13:54:44.049842822 +0100
+@@ -32,9 +32,9 @@
+ #define UI_C
+ #include "ui.h"
+ 
+-int nodes_above;
+-int active_line;
+-int nodes_below;
++extern int nodes_above;
++extern int active_line;
++extern int nodes_below;
+ int ui_inited = 0;
+ 
+ void ui_init ()

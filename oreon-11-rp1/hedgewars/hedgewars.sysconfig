@@ -1,0 +1,10 @@
+#
+# Hedgewars Server settings
+#
+# If you change the default port you will need to copy the firewalld config
+# from: /usr/lib/firewalld/services/hedgewars.xml 
+#   to: /etc/firewalld/services/
+# edit the port assignments and perform a "firewall-cmd --reload"
+# or modify your firewall settings manually.
+#
+PORT=46631

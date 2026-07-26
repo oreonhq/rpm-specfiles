@@ -1,0 +1,12 @@
+diff -rup --exclude '*.o' --exclude '*.a' --exclude Makefile --exclude colmap --exclude geomorph --exclude 'config.*' --exclude POTFILES --exclude Makefile.in a/src/hf/render.c b/src/hf/render.c
+--- a/src/hf/render.c	2016-05-18 18:19:46.045746534 +0200
++++ b/src/hf/render.c	2016-05-18 18:20:58.324305141 +0200
+@@ -217,7 +217,7 @@ void run_callb(GtkWidget *wdg, gpointer
+ //	printf("if_creation: %d; if_modified: %d; (x,y): (%d,%d)\n",*rs->if_creation, *rs->if_modified, rs->max_x, rs->max_y);
+ 	if (*rs->if_creation || *rs->if_modified)  {
+ //		printf("\n*************\n\nSAVING in %s%s\n\n*************\n",TMP_DIR, HF_OUTPUT_FOR_RENDERING);
+-		write_png (HF_OUTPUT_FOR_RENDERING, 16, (gchar *) rs->grid, rs->max_x, rs->max_y);
++		write_png (HF_OUTPUT_FOR_RENDERING, 16, (unsigned char *) rs->grid, rs->max_x, rs->max_y);
+ 	}
+ 		
+ 	// Patch 2005-05 - Deduce aspect ratio from image size,

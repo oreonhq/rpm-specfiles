@@ -1,0 +1,12 @@
+diff -up klamav-0.46/src/dbviewer.cpp.clamav-1.0 klamav-0.46/src/dbviewer.cpp
+--- klamav-0.46/src/dbviewer.cpp.clamav-1.0	2023-01-16 08:56:31.910857401 -0700
++++ klamav-0.46/src/dbviewer.cpp	2023-01-16 09:11:43.399743054 -0700
+@@ -785,7 +785,7 @@ void KlamDB::addVirusName(char *start)
+ unsigned int  KlamDB::getSigNos()
+ {
+         
+-    unsigned int ret= 0;
++    cl_error_t ret = CL_SUCCESS;
+     unsigned int no = 0;
+     struct cl_engine *engine = NULL;
+     QStringList lastDownloadPaths;

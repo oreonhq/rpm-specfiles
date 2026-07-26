@@ -1,0 +1,12 @@
+diff -up EMBOSS-6.6.0/ajax/core/ajindex.c.nkeys-right-type EMBOSS-6.6.0/ajax/core/ajindex.c
+--- EMBOSS-6.6.0/ajax/core/ajindex.c.nkeys-right-type	2024-02-10 08:33:36.628082866 -0500
++++ EMBOSS-6.6.0/ajax/core/ajindex.c	2024-02-10 08:34:12.536636935 -0500
+@@ -12742,7 +12742,7 @@ AjBool ajBtreeKeyIndex(AjPBtcache cache,
+     ajulong blockno  = 0UL;
+     ajulong shift    = 0UL;
+ 
+-    ajulong nkeys = 0U;
++    ajuint nkeys = 0U;
+ 
+     ajuint nodetype = 0U;
+     ajulong right   = 0UL;

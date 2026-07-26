@@ -1,0 +1,46 @@
+diff -Naur c-icap-server-5b8fcd9435648eb60fe7c31095e52073aa4ba4c8.old/c-icap.conf.in c-icap-server-5b8fcd9435648eb60fe7c31095e52073aa4ba4c8/c-icap.conf.in
+--- c-icap-server-5b8fcd9435648eb60fe7c31095e52073aa4ba4c8.old/c-icap.conf.in	2023-02-10 13:39:07.434228291 +0100
++++ c-icap-server-5b8fcd9435648eb60fe7c31095e52073aa4ba4c8/c-icap.conf.in	2023-02-10 13:39:19.689451227 +0100
+@@ -10,7 +10,7 @@
+ #	The file to store the pid of the main process of the c-icap server.
+ # Default:
+ #	PidFile /var/run/c-icap/c-icap.pid
+-PidFile /var/run/c-icap/c-icap.pid
++PidFile /run/c-icap/c-icap.pid
+ 
+ # TAG: CommandsSocket
+ # Format: CommandsSocket socket_file
+@@ -18,7 +18,7 @@
+ #	The path of file to use as control socket for c-icap
+ # Default:
+ #	CommandsSocket /var/run/c-icap/c-icap.ctl
+-CommandsSocket /var/run/c-icap/c-icap.ctl
++CommandsSocket /run/c-icap/c-icap.ctl
+ 
+ # TAG: Timeout
+ # Format: Timeout seconds
+@@ -703,8 +703,8 @@
+ #	store debugging information, errors and other
+ #	information about the c-icap server.
+ # Default:
+-#	ServerLog @prefix@/var/log/server.log
+-ServerLog @prefix@/var/log/server.log
++#	ServerLog /var/log/cicap-server.log
++ServerLog /var/log/c-icap/server.log
+ 
+ # TAG: AccessLog
+ # Format: AccessLog LogFile [LogFormat] [[!]acl1] [[!]acl2] [...]
+@@ -716,10 +716,10 @@
+ #	This directive can be used more than once to specify more than
+ #	one access log files
+ # Default:
+-#	AccessLog @prefix@/var/log/access.log
++#	None set
+ # Example:
+-#	AccessLog @prefix@/var/log/access.log MyFormat all
+-AccessLog @prefix@/var/log/access.log
++#	AccessLog /var/log/access.log MyFormat all
++AccessLog /var/log/c-icap/access.log
+ 
+ # TAG: Logger
+ # Format: Logger LoggerName ...

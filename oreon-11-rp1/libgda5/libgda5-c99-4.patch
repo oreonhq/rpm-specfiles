@@ -1,0 +1,25 @@
+commit 7d9229b60215ebc48d696ce686319ffc7ca146a0
+Author: Pavlo Solntsev <p.sun.fun@gmail.com>
+Date:   Tue Nov 12 22:59:11 2019 -0600
+
+    libgda-xslt: Fixing API change
+    
+    CI environment uses libxslt-1.33 but code uses API for version 1.32. It
+    was an API break between 1.32 and 1.33. This commit fixes this
+    transition.
+
+diff --git a/libgda-xslt/sql_backend.c b/libgda-xslt/sql_backend.c
+index 39602cec5c1ad249..f3dda85b8da6eac8 100644
+--- a/libgda-xslt/sql_backend.c
++++ b/libgda-xslt/sql_backend.c
+@@ -146,8 +146,8 @@ _gda_xslt_bk_section (GdaXsltExCont * exec, GdaXsltIntCont * pdata,
+ 		     cur_node = cur_node->next) {
+ 			if (IS_XSLT_ELEM (cur_node)) {
+ 				if (IS_XSLT_NAME (cur_node, "call-template")) {
+-					xsltStylePreCompPtr info =
+-						(xsltStylePreCompPtr)
++					xsltElemPreCompPtr info =
++						(xsltElemPreCompPtr)
+ 						cur_node->psvi;
+ 					if (info != NULL) {
+ 						xsltCallTemplate

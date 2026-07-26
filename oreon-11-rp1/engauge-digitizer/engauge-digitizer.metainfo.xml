@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> -->
+<component type="desktop">
+  <id>engauge-digitizer.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Engauge Digitizer 10</name>
+  <summary>Convert an image file showing a graph or map into numbers</summary>
+  <description>
+    <p>
+     The Engauge Digitizer tool accepts image files
+     (like PNG, JPEG and TIFF) containing graphs,
+     and recovers the data points from those graphs.
+     The resulting data points are usually used as input
+     to other software applications.
+     Conceptually, Engauge Digitizer is the opposite of
+     a graphing tool that converts data points to graphs.
+     The process is shown below - an image file is imported,
+     digitized within Engauge, and exported as a table of
+     numeric data to a text file.
+     Work can be saved into an Engauge DIG file.
+    </p>
+    <p>
+    New features already added to Engauge:
+    </p>
+    <p>
+    -  Grid lines are displayed for fine adjustments of the axis points that define the coordinate systems
+    -  Automated line and point extraction rapidly digitizes data
+    -  Image processing for separating important details from background information
+    -  Undo/redo of all operations means recovering from mistakes and experimenting with options is painless
+    -  Installers for Windows and OSX operating systems, and repository packages for Linux make installation easy
+    -  Wizard provides an interactive tutorial to explain the basic steps
+    -  Wizard creates a checklist guide to interactively leads user through steps from file import to file export
+    -  Cubic spline interpolation between points gives more accurate curves with fewer points
+    -  Axes Checker briefly highlights the axes when they are defined or modified, to reveal entry mistakes
+    -  Graph coordinates can be specified as date and time values, or as degrees, minutes and seconds
+    -  File import and data export by drag-and-drop and copy/paste
+    -  Test suite for regression testing minimizes code breakage as new features are added
+    -  Multiple coordinate systems in the same image can be digitized in advanced mode
+    -  Axes with only one known coordinate (floating axes) can be digitized in advanced mode
+    -  Geometry Window displays geometric information about the selected curve
+    -  Curve Fitting Window fits a polynomial function to the selected curve
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+     <image>https://sagitter.fedorapeople.org/engauge-screenshots/engauge-screenshot1.png</image>
+    </screenshot>
+    <screenshot>
+     <image>https://sagitter.fedorapeople.org/engauge-screenshots/engauge-screenshot2.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://github.com/markummitchell/engauge-digitizer</url>
+  <updatecontact>sagitter_at_fedoraproject.org</updatecontact>
+</component>

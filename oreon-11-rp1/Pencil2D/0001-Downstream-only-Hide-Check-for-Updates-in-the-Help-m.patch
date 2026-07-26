@@ -1,0 +1,31 @@
+From 9d88542c3e362836eb3fb6c3d35edcbcf55c769c Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 10 Mar 2026 07:12:07 +0000
+Subject: [PATCH] =?UTF-8?q?Downstream-only:=20Hide=20=E2=80=9CCheck=20for?=
+ =?UTF-8?q?=20Updates=E2=80=9D=20in=20the=20Help=20menu?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Package users will update through the appropriate package manager.
+---
+ app/ui/mainwindow2.ui | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/app/ui/mainwindow2.ui b/app/ui/mainwindow2.ui
+index 337b6f42..2be6c450 100644
+--- a/app/ui/mainwindow2.ui
++++ b/app/ui/mainwindow2.ui
+@@ -923,6 +923,9 @@
+    <property name="text">
+     <string>Check for Updates</string>
+    </property>
++   <property name="visible">
++    <bool>false</bool>
++   </property>
+   </action>
+   <action name="actionForum">
+    <property name="text">
+-- 
+2.53.0
+

@@ -1,0 +1,9 @@
+--- qcheck-0.21.3/src/core/dune.orig	2023-12-07 06:45:19.222956804 -0700
++++ qcheck-0.21.3/src/core/dune	2023-12-07 06:45:51.508518531 -0700
+@@ -4,5 +4,6 @@
+   (public_name qcheck-core)
+   (wrapped false)
+   (libraries unix)
++  (c_library_flags -lm)
+   (flags :standard -w +a-4-42-44-48-50-58-32-60@8 -safe-string)
+   )

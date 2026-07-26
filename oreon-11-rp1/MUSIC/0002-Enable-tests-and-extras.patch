@@ -1,0 +1,25 @@
+From c37f845a1db40503e1c3d045f771044b33fc9d3c Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Fri, 2 Oct 2020 23:48:43 +0100
+Subject: [PATCH 2/5] Enable tests and extras
+
+---
+ configure.ac | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index 1a66763..cb8d7c7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -11,6 +11,8 @@ fi
+ AC_PROG_CXX([mpiCC mpixlcxx mpixlcxx_r mpicxx CC])
+ MPI_CXX="$CXX"
+ 
++TESTDIR=testsuite
++EXTRAS=extras
+ echo "SYSGUESS=$SYSGUESS"
+ 
+ AC_MSG_CHECKING(MPI_CXXFLAGS)
+-- 
+2.43.0
+

@@ -1,0 +1,25 @@
+diff --git a/examples/ampr-run.sh b/examples/ampr-run.sh
+index 105ee04..1b7e8ef 100755
+--- a/examples/ampr-run.sh
++++ b/examples/ampr-run.sh
+@@ -1,5 +1,3 @@
+-#!/bin/sh
+-
+ #
+ # Example of how to run ampr-ripd
+ #
+diff --git a/examples/find_pass.sh b/examples/find_pass.sh
+index 6d585b8..5c9c3a1 100755
+--- a/examples/find_pass.sh
++++ b/examples/find_pass.sh
+@@ -1,9 +1,7 @@
+-#!/bin/sh
+-
+ #
+ # Running ampr-ripd without any options except debug and the interface name
+ # allows you to find your RIPv2 password if it ever changes from the default.
+ # You need to adapt the interface name to your setup.
+ #
+ 
+-./ampr-ripd -d -v -i ampr0
++ampr-ripd -d -v -i ampr0

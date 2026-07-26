@@ -1,0 +1,120 @@
+diff -durN flobopuyo-0.20.orig/PuyoGame.cpp flobopuyo-0.20/PuyoGame.cpp
+--- flobopuyo-0.20.orig/PuyoGame.cpp	2004-10-09 00:41:13.000000000 +0200
++++ flobopuyo-0.20/PuyoGame.cpp	2016-11-13 19:10:23.857748524 +0100
+@@ -637,7 +637,7 @@
+                     for (int u = 0 ; u < PUYODIMX ; u++) {
+                         for (int v = 0 ; v <= PUYODIMY ; v++) {
+                             PuyoPuyo *markedPuyo = getPuyoAt(u, v);
+-                            if (markedPuyo->getPuyoState() == PUYO_MARKED) {
++                            if (markedPuyo && markedPuyo->getPuyoState() == PUYO_MARKED) {
+                                 // mark the puyo so we wont'do the job twice
+                                 markedPuyo->setFlag();
+                                 removedPuyos.addElement(markedPuyo);
+diff -durN flobopuyo-0.20.orig/PuyoGame.h flobopuyo-0.20/PuyoGame.h
+--- flobopuyo-0.20.orig/PuyoGame.h	2006-03-14 22:24:10.000000000 +0100
++++ flobopuyo-0.20/PuyoGame.h	2016-11-13 19:12:16.535147719 +0100
+@@ -110,10 +110,28 @@
+   PuyoState getNextFalling();
+   PuyoState getNextCompanion();
+   PuyoState getCompanionState() const { return companionPuyo->getPuyoState(); }
+-  PuyoState getFallingState() const { return fallingPuyo->getPuyoState(); }
++  PuyoState getFallingState() const
++  {
++    if (fallingPuyo)
++      return fallingPuyo->getPuyoState();
+ 
+-  int getFallingX() const { return fallingPuyo->getPuyoX(); }
+-  int getFallingY() const { return fallingPuyo->getPuyoY(); }
++    return PUYO_EMPTY;
++  }
++
++  int getFallingX() const
++  {
++    if (fallingPuyo)
++      return fallingPuyo->getPuyoX();
++
++    return 0;
++  }
++  int getFallingY() const
++  {
++    if (fallingPuyo)
++      return fallingPuyo->getPuyoY();
++
++    return 0;   
++  }
+   int getCompanionX() const { return companionPuyo->getPuyoX(); }
+   int getCompanionY() const { return companionPuyo->getPuyoY(); }
+   int getFallingCompanionX() const;
+diff -durN flobopuyo-0.20.orig/PuyoIA.cpp flobopuyo-0.20/PuyoIA.cpp
+--- flobopuyo-0.20.orig/PuyoIA.cpp	2004-10-09 00:41:13.000000000 +0200
++++ flobopuyo-0.20/PuyoIA.cpp	2016-11-13 19:10:23.884748692 +0100
+@@ -109,19 +109,19 @@
+     /* Puyo companion */
+     if (c_y < PUYODIMY-1) /* Si on est pas completement en bas */
+     {
+-      if ((c_x<(PUYODIMX - 1)) && (c_color == (game->getPuyoAt(c_x+1,c_y))->getPuyoState())) /* Test du pattern a droite */
++      if ((c_x<(PUYODIMX - 1)) && (c_color == (game->getPuyoCellAt(c_x+1,c_y)))) /* Test du pattern a droite */
+       {
+-        PuyoState cColorA = (game->getPuyoAt(c_x+1,c_y+1))->getPuyoState();
+-        if ((c_color!=cColorA) && (cColorA>5) && (cColorA<11) && (cColorA == (game->getPuyoAt(c_x+1,c_y-1))->getPuyoState()))
++        PuyoState cColorA = (game->getPuyoCellAt(c_x+1,c_y+1));
++        if ((c_color!=cColorA) && (cColorA>5) && (cColorA<11) && (cColorA == (game->getPuyoCellAt(c_x+1,c_y-1))))
+         {
+           score += game->getSamePuyoAround(c_x+1, c_y, cColorA)*IASecondLevelPuyoValue;
+         }
+       }
+                     
+-      if ((c_x>0) && (c_color == (game->getPuyoAt(c_x-1,c_y))->getPuyoState())) /* Test du pattern a gauche */
++      if ((c_x>0) && (c_color == (game->getPuyoCellAt(c_x-1,c_y)))) /* Test du pattern a gauche */
+       {
+-        PuyoState cColorB = (game->getPuyoAt(c_x-1,c_y+1))->getPuyoState();
+-        if ((c_color!=cColorB) && (cColorB>5) && (cColorB<11) && (cColorB == (game->getPuyoAt(c_x-1,c_y-1))->getPuyoState()))
++        PuyoState cColorB = (game->getPuyoCellAt(c_x-1,c_y+1));
++        if ((c_color!=cColorB) && (cColorB>5) && (cColorB<11) && (cColorB == (game->getPuyoCellAt(c_x-1,c_y-1))))
+         {
+           score += game->getSamePuyoAround(c_x-1, c_y, cColorB)*IASecondLevelPuyoValue;
+         }
+@@ -129,7 +129,7 @@
+     }
+     if (c_y < PUYODIMY-2) /* Si on est pas trop en bas */
+     {
+-      if (c_color == (game->getPuyoAt(c_x,c_y+2))->getPuyoState())
++      if (c_color == (game->getPuyoCellAt(c_x,c_y+2)))
+       {
+         score += game->getSamePuyoAround(c_x, c_y+2, c_color)*IASecondLevelPuyoValue;
+       }
+@@ -138,19 +138,19 @@
+     /* Puyo principal */
+     if (f_y < PUYODIMY-1)  /* Si on est pas completement en bas */
+     {
+-      if ((f_x<(PUYODIMX - 1)) && (f_color == (game->getPuyoAt(f_x+1,f_y))->getPuyoState())) /* Test du pattern a droite */
++      if ((f_x<(PUYODIMX - 1)) && (f_color == (game->getPuyoCellAt(f_x+1,f_y)))) /* Test du pattern a droite */
+       {
+-        PuyoState fColorA = (game->getPuyoAt(f_x+1,f_y+1))->getPuyoState();
+-        if ((f_color!=fColorA) && (fColorA>5) && (fColorA<11) && (fColorA == (game->getPuyoAt(f_x+1,f_y-1))->getPuyoState()))
++        PuyoState fColorA = (game->getPuyoCellAt(f_x+1,f_y+1));
++        if ((f_color!=fColorA) && (fColorA>5) && (fColorA<11) && (fColorA == (game->getPuyoCellAt(f_x+1,f_y-1))))
+         {
+           score += game->getSamePuyoAround(f_x+1, f_y, fColorA)*IASecondLevelPuyoValue;
+         }
+       }
+-                                  
+-      if ((f_x>0) && (f_color == (game->getPuyoAt(f_x-1,f_y))->getPuyoState())) /* Test du pattern a gauche */
++
++      if ((f_x>0) && (f_color == (game->getPuyoCellAt(f_x-1,f_y)))) /* Test du pattern a gauche */
+       {
+         PuyoState fColorB = (game->getPuyoAt(f_x-1,f_y+1))->getPuyoState();
+-        if ((f_color!=fColorB) && (fColorB>5) && (fColorB<11) && (fColorB == (game->getPuyoAt(f_x-1,f_y-1))->getPuyoState()))
++        if ((f_color!=fColorB) && (fColorB>5) && (fColorB<11) && (fColorB == (game->getPuyoCellAt(f_x-1,f_y-1))))
+         {
+           score += game->getSamePuyoAround(f_x-1, f_y, fColorB)*IASecondLevelPuyoValue;
+         }
+@@ -158,7 +158,7 @@
+     }
+     if (f_y < PUYODIMY-2) /* Si on est pas trop en bas */
+     {
+-      if (f_color == (game->getPuyoAt(f_x,f_y+2))->getPuyoState())
++      if (f_color == (game->getPuyoCellAt(f_x,f_y+2)))
+       {
+         score += game->getSamePuyoAround(f_x, f_y+2, f_color)*IASecondLevelPuyoValue;
+       }

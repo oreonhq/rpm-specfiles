@@ -1,0 +1,29 @@
+From 4be0111d879aa95fdc0d9f24fe529f8c664d4093 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Thu, 23 Feb 2017 15:33:50 -0500
+Subject: [PATCH] runtests: drop -Xss param
+
+With -Xss515m, java will not start on 32 bit platforms (i686, arm7hl):
+$ java -Xss515m -jar out.jar a.a
+Error occurred during initialization of VM
+java.lang.OutOfMemoryError: unable to create new native thread
+---
+ enjarify/runtests.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/enjarify/runtests.py b/enjarify/runtests.py
+index f3d50b8fb3..6cac91bc4d 100644
+--- a/enjarify/runtests.py
++++ b/enjarify/runtests.py
+@@ -32,7 +32,7 @@ def executeTest(name, opts):
+     classes.update(STUB_FILES)
+     writeToJar('out.jar', classes)
+ 
+-    result = subprocess.check_output("java -Xss515m -jar out.jar a.a".split(),
++    result = subprocess.check_output("java -jar out.jar a.a".split(),
+         stderr=subprocess.STDOUT,
+         universal_newlines=True)
+     expected = read(os.path.join(dir, 'expected.txt'), 'r')
+-- 
+2.9.0
+

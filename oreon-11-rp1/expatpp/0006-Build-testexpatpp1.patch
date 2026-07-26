@@ -1,0 +1,28 @@
+From 04b532e0b1969f932e48db0b374fb73de74fc480 Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 16:31:18 +0200
+Subject: [PATCH 06/15] Build testexpatpp1
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ test/CMakeLists.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 test/CMakeLists.txt
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+new file mode 100644
+index 0000000..9d12cc6
+--- /dev/null
++++ b/test/CMakeLists.txt
+@@ -0,0 +1,7 @@
++
++include_directories (${expatpp_SOURCE_DIR}/lib)
++link_directories (${expatpp_BINARY_DIR}/lib ${EXPAT_INCLUDE_DIR})
++
++add_executable (testexpatpp1 testexpatpp.cpp)
++
++target_link_libraries (testexpatpp1 expatpp) 
+\ No newline at end of file
+-- 
+1.7.11.7
+

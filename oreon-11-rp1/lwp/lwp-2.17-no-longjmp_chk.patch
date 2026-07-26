@@ -1,0 +1,35 @@
+diff -up lwp-2.17/src/lwp_ucontext.c.nolongjmpchk lwp-2.17/src/lwp_ucontext.c
+--- lwp-2.17/src/lwp_ucontext.c.nolongjmpchk	2025-03-12 17:16:51.329761391 -0400
++++ lwp-2.17/src/lwp_ucontext.c	2025-03-12 17:17:37.779850783 -0400
+@@ -14,10 +14,6 @@ Coda are listed in the file CREDITS.
+ 		    Additional copyrights
+ #*/
+ 
+-/* avoid breaking longjmp stack switching */
+-#undef _FORTIFY_SOURCE
+-#define _FORTIFY_SOURCE 0
+-
+ #include <sys/types.h>
+ #include <stdlib.h>
+ #include <assert.h>
+diff -up lwp-2.17/src/lwp_ucontext.h.nolongjmpchk lwp-2.17/src/lwp_ucontext.h
+--- lwp-2.17/src/lwp_ucontext.h.nolongjmpchk	2025-03-12 17:10:53.000000000 -0400
++++ lwp-2.17/src/lwp_ucontext.h	2025-03-12 17:16:51.329873193 -0400
+@@ -21,7 +21,17 @@ Coda are listed in the file CREDITS.
+ #include <config.h>
+ #endif
+ 
++/* work around longjmp_chk */
++#ifdef __USE_FORTIFY_LEVEL
++#define LWP_SAVE_USE_FORTIFY_LEVEL __USE_FORTIFY_LEVEL
++#undef __USE_FORTIFY_LEVEL
+ #include <setjmp.h>
++#define __USE_FORTIFY_LEVEL LWP_SAVE_USE_FORTIFY_LEVEL
++#undef LWP_SAVE_USE_FORTIFY_LEVEL
++#else
++#include <setjmp.h>
++#endif
++
+ #include <signal.h>
+ #include "lwp_stacktrace.h"
+ 

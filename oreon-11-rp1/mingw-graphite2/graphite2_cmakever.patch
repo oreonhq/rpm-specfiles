@@ -1,0 +1,66 @@
+diff -rupN graphite2-1.3.14/CMakeLists.txt graphite2-1.3.14-new/CMakeLists.txt
+--- graphite2-1.3.14/CMakeLists.txt	2025-07-17 17:31:12.115418075 +0200
++++ graphite2-1.3.14-new/CMakeLists.txt	2025-07-17 17:31:54.848174770 +0200
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
+ cmake_policy(SET CMP0012 NEW)
+ include(TestBigEndian)
+ find_package(PythonInterp 3.6)
+diff -rupN graphite2-1.3.14/gr2fonttest/CMakeLists.txt graphite2-1.3.14-new/gr2fonttest/CMakeLists.txt
+--- graphite2-1.3.14/gr2fonttest/CMakeLists.txt	2020-04-01 04:53:13.000000000 +0200
++++ graphite2-1.3.14-new/gr2fonttest/CMakeLists.txt	2025-07-17 17:31:59.480148259 +0200
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
+ 
+ project(gr2fonttest)
+ 
+diff -rupN graphite2-1.3.14/src/CMakeLists.txt graphite2-1.3.14-new/src/CMakeLists.txt
+--- graphite2-1.3.14/src/CMakeLists.txt	2025-07-17 17:31:12.163834566 +0200
++++ graphite2-1.3.14-new/src/CMakeLists.txt	2025-07-17 17:31:48.808271619 +0200
+@@ -19,7 +19,7 @@
+ #    Suite 500, Boston, MA 02110-1335, USA or visit their web page on the
+ #    internet at http://www.fsf.org/licenses/lgpl.html.
+ 
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
+ project(graphite2_core)
+ cmake_policy(SET CMP0012 NEW)
+ INCLUDE(CheckCXXSourceCompiles)
+diff -rupN graphite2-1.3.14/tests/bittwiddling/CMakeLists.txt graphite2-1.3.14-new/tests/bittwiddling/CMakeLists.txt
+--- graphite2-1.3.14/tests/bittwiddling/CMakeLists.txt	2020-04-01 04:53:13.000000000 +0200
++++ graphite2-1.3.14-new/tests/bittwiddling/CMakeLists.txt	2025-07-17 17:32:03.998697261 +0200
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
+ project(bits)
+ include(Graphite)
+ include_directories(${graphite2_core_SOURCE_DIR})
+diff -rupN graphite2-1.3.14/tests/json/CMakeLists.txt graphite2-1.3.14-new/tests/json/CMakeLists.txt
+--- graphite2-1.3.14/tests/json/CMakeLists.txt	2020-04-01 04:53:13.000000000 +0200
++++ graphite2-1.3.14-new/tests/json/CMakeLists.txt	2025-07-17 17:32:12.821882783 +0200
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
+ project(jsontest)
+ include(Graphite)
+ include_directories(${graphite2_core_SOURCE_DIR})
+diff -rupN graphite2-1.3.14/tests/sparsetest/CMakeLists.txt graphite2-1.3.14-new/tests/sparsetest/CMakeLists.txt
+--- graphite2-1.3.14/tests/sparsetest/CMakeLists.txt	2020-04-01 04:53:13.000000000 +0200
++++ graphite2-1.3.14-new/tests/sparsetest/CMakeLists.txt	2025-07-17 17:32:17.143588516 +0200
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
+ project(sparsetest)
+ include(Graphite)
+ include_directories(${graphite2_core_SOURCE_DIR})
+diff -rupN graphite2-1.3.14/tests/utftest/CMakeLists.txt graphite2-1.3.14-new/tests/utftest/CMakeLists.txt
+--- graphite2-1.3.14/tests/utftest/CMakeLists.txt	2020-04-01 04:53:13.000000000 +0200
++++ graphite2-1.3.14-new/tests/utftest/CMakeLists.txt	2025-07-17 17:32:08.538699371 +0200
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
+ project(utftest)
+ include(Graphite)
+ include_directories(${graphite2_core_SOURCE_DIR})

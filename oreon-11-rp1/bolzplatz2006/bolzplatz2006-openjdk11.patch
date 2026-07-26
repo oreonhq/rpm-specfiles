@@ -1,0 +1,114 @@
+diff -up bolzplatz2006-1.0.3/libsrc/lwjgl/build.xml.jdk11 bolzplatz2006-1.0.3/libsrc/lwjgl/build.xml
+--- bolzplatz2006-1.0.3/libsrc/lwjgl/build.xml.jdk11	2021-12-02 12:17:38.588412431 +0100
++++ bolzplatz2006-1.0.3/libsrc/lwjgl/build.xml	2021-12-02 12:18:19.332606914 +0100
+@@ -292,78 +292,25 @@
+ 	
+ 	<!-- Compiles the Java source code -->
+ 	<target name="compile" description="Compiles the java source code">
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/*.java" source="1.4" target="1.4" taskname="lwjgl" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/input/**" source="1.4" target="1.4" taskname="input" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/openal/**" source="1.4" target="1.4" taskname="openal" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/audio/*.java" source="1.5" target="1.5" taskname="audio" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/audio/vorbis/*.java" source="1.5" target="1.5" taskname="audio-vorbis" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/opengl/**" source="1.4" target="1.4" taskname="opengl" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/test/**" source="1.4" target="1.4" taskname="test" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/examples/**" source="1.4" target="1.4" taskname="examples" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/util/**" excludes="org/lwjgl/util/generator/**" source="1.4" target="1.4" taskname="util" />
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/devil/**" source="1.4" target="1.4" taskname="devil"/>
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}" includes="org/lwjgl/*.java" source="1.8" target="1.8" taskname="lwjgl" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}" includes="org/lwjgl/input/**" source="1.8" target="1.8" taskname="input" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}" includes="org/lwjgl/openal/**" source="1.8" target="1.8" taskname="openal" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}/ov" includes="org/lwjgl/audio/*.java" source="1.8" target="1.8" taskname="audio" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}/ov" includes="org/lwjgl/audio/vorbis/*.java" source="1.8" target="1.8" taskname="audio-vorbis" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}" includes="org/lwjgl/opengl/**" source="1.8" target="1.8" taskname="opengl" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}" includes="org/lwjgl/test/**" source="1.8" target="1.8" taskname="test" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}" includes="org/lwjgl/examples/**" source="1.8" target="1.8" taskname="examples" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}" includes="org/lwjgl/util/**" excludes="org/lwjgl/util/generator/**" source="1.8" target="1.8" taskname="util" />
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" nativeHeaderDir="${lwjgl.src.headers}/devil" includes="org/lwjgl/devil/**" source="1.8" target="1.8" taskname="devil"/>
+ 	</target>
+ 	
+ 	<!-- Generates the native headers from source files -->
+ 	<target name="headers" description="invokes javah on java classes" depends="compile">
+-		<!-- platform specific classes -->
+-		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.native}/linux" force="yes">
+-			<class name="org.lwjgl.opengl.LinuxDisplay" />
+-			<class name="org.lwjgl.opengl.LinuxPeerInfo" />
+-			<class name="org.lwjgl.opengl.LinuxPbufferPeerInfo" />
+-			<class name="org.lwjgl.opengl.LinuxDisplayPeerInfo" />
+-			<class name="org.lwjgl.opengl.LinuxAWTGLCanvasPeerInfo" />
+-			<class name="org.lwjgl.opengl.LinuxContextImplementation" />
+-			<class name="org.lwjgl.opengl.LinuxCanvasImplementation" />
+-		</javah>
+-		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.native}/win32" force="yes">
+-			<class name="org.lwjgl.opengl.Win32PbufferPeerInfo" />
+-			<class name="org.lwjgl.opengl.Win32Display" />
+-			<class name="org.lwjgl.NativeSysImplementation" />
+-			<class name="org.lwjgl.opengl.Win32AWTGLCanvasPeerInfo" />
+-			<class name="org.lwjgl.opengl.Win32PeerInfo" />
+-			<class name="org.lwjgl.opengl.Win32DisplayPeerInfo" />
+-			<class name="org.lwjgl.opengl.Win32ContextImplementation" />
+-		</javah>
+-		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.native}/macosx" force="yes">
+-			<class name="org.lwjgl.opengl.MacOSXCanvasPeerInfo" />
+-			<class name="org.lwjgl.opengl.MacOSXPeerInfo" />
+-			<class name="org.lwjgl.opengl.MacOSXPbufferPeerInfo" />
+-			<class name="org.lwjgl.opengl.MacOSXDisplay" />
+-			<class name="org.lwjgl.opengl.MacOSXContextImplementation" />
+-		</javah>
+-		<!-- lwjgl -->
+-		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.headers}" force="yes">
+-			<class name="org.lwjgl.opengl.AWTSurfaceLock" />
+-			<class name="org.lwjgl.DefaultSysImplementation" />
+-			<class name="org.lwjgl.input.Cursor" />
+-			<class name="org.lwjgl.input.Keyboard" />
+-			<class name="org.lwjgl.input.Mouse" />
+-
+-			<class name="org.lwjgl.openal.ALC" />
+-			<class name="org.lwjgl.openal.AL" />
+-
+-			<class name="org.lwjgl.opengl.GLContext" />
+-			<class name="org.lwjgl.opengl.Pbuffer" />
+-		</javah>
+-		<!-- ogg vorbis, streaming -->
+-		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.headers}/ov" force="yes">
+-			<class name="org.lwjgl.audio.StreamPlaylist" />
+-			<class name="org.lwjgl.audio.vorbis.DataStream" />
+-			<class name="org.lwjgl.audio.vorbis.Util" />
+-		</javah>
+-
+-		<!-- devil -->
+-		<javah classpath="${lwjgl.bin}" destdir="${lwjgl.src.headers}/devil" force="yes">
+-			<class name="org.lwjgl.devil.IL"/>
+-			<class name="org.lwjgl.devil.ILU"/>
+-			<class name="org.lwjgl.devil.ILUT"/>
+-		</javah>
+ 	</target>	
+ 	
+ 	<!-- Creates the Javadoc -->
+ 	<target name="javadoc" description="Creates javadoc from java source code">
+-		<javadoc destdir="${lwjgl.docs}/javadoc" author="true" version="true" use="true" source="1.4" windowtitle="LWJGL API">
++		<javadoc destdir="${lwjgl.docs}/javadoc" author="true" version="true" use="true" source="1.8" windowtitle="LWJGL API">
+ 			<fileset refid="lwjgl.javadoc.fileset" />
+ 			<doctitle><![CDATA[<h1>Lightweight Java Game Toolkit</h1>]]></doctitle>
+ 			<bottom><![CDATA[<i>Copyright &#169; 2002-2005 lwjgl.org. All Rights Reserved.</i>]]></bottom>
+@@ -372,7 +319,7 @@
+ 
+ 	<!-- Compiles the Java source code -->
+ 	<target name="generators" description="Compiles the native method generators">
+-		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/util/generator/**.java" source="1.4" target="1.4" taskname="generator">
++		<javac debug="yes" srcdir="${lwjgl.src}/java/" destdir="${lwjgl.bin}" includes="org/lwjgl/util/generator/**.java" source="1.8" target="1.8" taskname="generator">
+ 			<compilerarg value="-Xlint:all"/>
+ 		</javac>
+ 	</target>
+diff -up bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/Makefile.jdk11 bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/Makefile
+--- bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/Makefile.jdk11	2021-12-02 12:18:11.801570965 +0100
++++ bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/Makefile	2021-12-02 12:18:19.332606914 +0100
+@@ -4,7 +4,7 @@ CC=gcc
+ LINKER=gcc
+ STRIP=
+ CFLAGS_LINK=-shared -Wall
+-LIBS=-lX11 -lXext -lpthread -L$(JAVA_HOME)/jre/lib/$(JAVA_ARCH) -ljawt -lvorbisfile -lXxf86vm -lXcursor -lXrender -lXrandr
++LIBS=-lX11 -lXext -lpthread -L$(JAVA_HOME)/lib -ljawt -lvorbisfile -lXxf86vm -lXcursor -lXrender -lXrandr
+ CFLAGS_O=-fPIC $(RPM_OPT_FLAGS) -D_X11 -pthread -c -I../common -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux
+ SRC=$(wildcard *.c) $(wildcard ../common/*.c) $(wildcard ../common/arb/*.c) $(wildcard ../common/ati/*.c) $(wildcard ../common/ext/*.c) $(wildcard ../common/nv/*.c) $(wildcard ../common/ov/*.c)
+ OBJECTS=$(subst .c,.o,$(SRC))

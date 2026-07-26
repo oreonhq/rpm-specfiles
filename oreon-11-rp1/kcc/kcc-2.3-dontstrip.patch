@@ -1,0 +1,12 @@
+diff -ruN kcc.orig/Makefile kcc/Makefile
+--- kcc.orig/Makefile	2002-06-18 14:24:25.000000000 +0900
++++ kcc/Makefile	2002-06-18 14:24:38.000000000 +0900
+@@ -34,7 +34,7 @@
+ 
+ $(BINPATH)/kcc: kcc.c
+ 	$(MAKE) kcc
+-	$(INSTALL) -s kcc $(BINPATH)
++	$(INSTALL) kcc $(BINPATH)
+ 
+ $(MANPATH)/$(JMANDIR)/man1/kcc.1: kcc.jman
+ 	$(INSTALL) -m 644 kcc.jman $@

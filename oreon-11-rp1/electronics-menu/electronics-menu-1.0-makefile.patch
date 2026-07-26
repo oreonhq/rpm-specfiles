@@ -1,0 +1,21 @@
+--- Makefile	2009-07-08 20:07:35.735572739 +0200
++++ Makefile.submenus	2009-07-08 21:22:43.133572159 +0200
+@@ -14,5 +14,18 @@
+ 	install -m 0644 -D applications-electronics-22.png $(DESTDIR)$(themedir)/22x22/categories/applications-electronics.png
+ 	install -m 0644 -D applications-electronics-24.png $(DESTDIR)$(themedir)/24x24/categories/applications-electronics.png
+ 	install -m 0644 -D applications-electronics-48.png $(DESTDIR)$(themedir)/48x48/categories/applications-electronics.png
++	pushd electronics-menu-1.0-submenu;\
++	for SUBMENU in Automation Analog Digital Embedded SchematicPCB Spice ; do \
++		echo "Submenu $${SUBMENU}";\
++		install -m 0644 electronics-$${SUBMENU}.directory $(DESTDIR)/usr/share/desktop-directories;\
++		install -m 0644 -D applications-electronics-$${SUBMENU}.svg \
++			$(DESTDIR)$(themedir)/scalable/categories/applications-electronics-$${SUBMENU}.svg;\
++		for SIZE in 48 32 22 16; do\
++			install -m 0644 -D applications-electronics-$${SUBMENU}-$${SIZE}.png \
++				$(DESTDIR)$(themedir)/$${SIZE}x$${SIZE}/categories/applications-electronics-$${SUBMENU}.png;\
++		done;\
++	done;\
++	popd
++
+ 
+ .PHONY: all clean install

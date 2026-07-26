@@ -1,0 +1,58 @@
+diff -up MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.mysqldump-warnings MySQL-zrm-3.0/usr/bin/mysql-zrm-backup
+--- MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.mysqldump-warnings	2014-07-25 10:41:36.938823874 -0600
++++ MySQL-zrm-3.0/usr/bin/mysql-zrm-backup	2014-07-25 10:45:45.897755336 -0600
+@@ -1833,51 +1833,18 @@ sub doMySqlDump()
+         if( $abort_flag ){
+                 &abortAndDie( );
+         }
+- 	if(( $r > 0 ) || (-s $CMDERR)) {
++ 	if( $r > 0 ) {
+         	&printLog("Command exit status is : $r \n" );
+-        	if( $r eq 0 && -s $CMDERR){
+-                	if(&checkCmdWarning($CMDERR)){
+-                        	&printCommandOutputToLog( "INFO", "mysqldump output for command : $command", $CMDERR );
+-                        	return;
+-                	}
+-        	}
+         	&printCommandOutputToLog( "ERROR", "command is : $command", $CMDERR );
+         	&printCommandOutputToLog( "ERROR", "pipe exit status", $pipestatus );
+         	&printAndDie("mysqldump did not succeed.\n");
+-    	}else {
+-        	if( $verbose ) {
+-         	&printCommandOutputToLog( "INFO", "mysqldump output for command : $command", $CMDERR );
+-         	&printCommandOutputToLog( "INFO", "mysqldump output for command : $command", $pipestatus );
+-        	}
++        }elsif ( -s $CMDERR ) {
++                &printCommandOutputToLog( ($CMDERR =~ /warning/i) ? "INFO" : "WARNING", "mysqldump output for command : $command", $CMDERR );
+     	}
+         unlink($CMDERR);
+         unlink($pipestatus);
+ }
+ 
+-sub checkCmdWarning()
+-{
+-        my $CMDERR = $_[0];
+-        if(-s $CMDERR) {
+-                unless(open(CMD_ERR, $CMDERR)) {
+-                        &printLog( "Could not open $CMDERR for reading ,$!\n" );
+-                        return(0);
+-                }
+-                my $found = 0;
+-                while (<CMD_ERR>) {
+-                        my $err_output = $_;
+-                        chomp($err_output);
+-                        if($err_output =~ /Using a password on the command line interface can be insecure/i) {
+-                        $found = 1;
+-                        last;
+-                        }
+-                }
+-                if($found){
+-                return 1;
+-                }
+-        }
+-        return 0;
+-}
+-
+ sub checkAndBackupReplicationData()
+ {
+         if( !$inputs{replication} || $inputs{replication} eq "0" ) {

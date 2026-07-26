@@ -1,0 +1,49 @@
+From: Pau Espin Pedrol <pespin@sysmocom.de>
+Date: Thu, 29 Aug 2024 19:28:23 +0200
+Subject: [PATCH] exometer_report: Fix static subscriber spec with Extra param
+
+As per documentation in [1], it is possible to pass an Extra param:
+"{select, {MatchPattern, DataPoint, Interval [, Retry [, Extra] ]}}"
+Example:
+"""
+{select, {[{ {['_' | '_'],'_','_'}, [], ['$_']}],
+          exometer_report_statsd,
+          value,
+          1000,
+	  true,
+          [{report_type, counter}]
+	 }
+}
+"""
+
+Without this patch, exometer_report.erl was failing with log warning
+"Incorrect static subscriber spec".
+
+[1] https://github.com/Feuerlabs/exometer_core/tree/master#configuring-static-subscriptions
+
+diff --git a/src/exometer_report.erl b/src/exometer_report.erl
+index e2d2f18..d97c064 100644
+--- a/src/exometer_report.erl
++++ b/src/exometer_report.erl
+@@ -1731,9 +1731,9 @@ init_subscriber({apply, {M, F, A}}) ->
+     lists:foreach(fun(Sub) ->
+                           init_subscriber(Sub)
+                   end, apply(M, F, A));
+-init_subscriber({select, Expr}) when tuple_size(Expr)==3;
+-                                     tuple_size(Expr)==4;
+-                                     tuple_size(Expr)==5 ->
++init_subscriber({select, Expr}) when tuple_size(Expr)==4;
++                                     tuple_size(Expr)==5;
++                                     tuple_size(Expr)==6 ->
+     {Pattern, Reporter, DataPoint, Interval, Retry, Extra} =
+         case Expr of
+             {P, R, D, I} -> {P, R, D, I, true, undefined};
+@@ -1750,7 +1750,7 @@ init_subscriber({select, Expr}) when tuple_size(Expr)==3;
+ 
+ init_subscriber(Other) ->
+     ?log(warning, "Incorrect static subscriber spec ~p. "
+-             "Use { Reporter, Metric, DataPoint, Interval [, Extra ]}~n",
++             "Use { Reporter, Metric, DataPoint [, Interval [, Extra ] ]}~n",
+              [ Other ]).
+ 
+ get_reporter_status(R) ->

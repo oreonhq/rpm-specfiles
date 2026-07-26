@@ -1,0 +1,17 @@
+Fix C99 compatibility issue (implicit declaration of XtMalloc).
+Upstream orsa has switched to CMake.
+
+diff --git a/macros/acinclude.m4 b/macros/acinclude.m4
+index 465845dc9e38f918..e512e4cbd998ae0c 100644
+--- a/macros/acinclude.m4
++++ b/macros/acinclude.m4
+@@ -105,7 +105,8 @@ if test "$ac_x_libraries" = NO; then
+   # Don't add to $LIBS permanently.
+   ac_save_LIBS="$LIBS"
+   LIBS="-l$x_direct_test_library $LIBS"
+-AC_TRY_LINK(, [${x_direct_test_function}()],
++AC_TRY_LINK([char ${x_direct_test_function} (void);],
++            [${x_direct_test_function}()],
+ [LIBS="$ac_save_LIBS"
+ # We can link X programs with no special library path.
+ ac_x_libraries=],

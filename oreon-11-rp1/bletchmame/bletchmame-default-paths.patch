@@ -1,0 +1,45 @@
+diff -Naur a/src/prefs.cpp b/src/prefs.cpp
+--- a/src/prefs.cpp	2022-02-26 05:33:37.000000000 -0800
++++ b/src/prefs.cpp	2022-02-26 08:22:14.739017140 -0800
+@@ -1332,8 +1332,10 @@
+ Preferences::GlobalPathsInfo::GlobalPathsInfo(const std::optional<QDir> &configDirectory)
+ {
+ 	// set up default paths - some of these require a config directory
+-	m_paths[(size_t)global_path_type::PLUGINS]		= joinPathList(QStringList() << "$(BLETCHMAMEPATH)/plugins/" << "$(MAMEPATH)/plugins/");
+-	m_paths[(size_t)global_path_type::HASH]			= "$(MAMEPATH)/hash/";
++	m_paths[(size_t)global_path_type::PLUGINS]		= joinPathList(QStringList() << "/usr/share/bletchmame/plugins/" << "/usr/share/mame/plugins/");
++	m_paths[(size_t)global_path_type::HASH]			= "/usr/share/mame/hash/";
++	m_paths[(size_t)global_path_type::ARTWORK]		= "/usr/share/mame/artwork/";
++	m_paths[(size_t)global_path_type::EMU_EXECUTABLE]	= "/usr/bin/mame";
+ 	if (configDirectory)
+ 	{
+ 		m_paths[(size_t)global_path_type::CONFIG]	= configDirectory->absolutePath();
+diff -Naur a/src/tests/prefs_test.cpp b/src/tests/prefs_test.cpp
+--- a/src/tests/prefs_test.cpp	2022-02-26 05:33:37.000000000 -0800
++++ b/src/tests/prefs_test.cpp	2022-02-26 08:20:12.597699979 -0800
+@@ -197,7 +197,7 @@
+ 	QVERIFY(prefs.getWindowState()										== WindowState::Normal);
+ 	QVERIFY(prefs.getSelectedTab()										== list_view_type::MACHINE);
+ 	QVERIFY(prefs.getAuditingState()									== AuditingState::Default);
+-	QVERIFY(prefs.getGlobalPath(global_path_type::EMU_EXECUTABLE)		== "");
++	QVERIFY(prefs.getGlobalPath(global_path_type::EMU_EXECUTABLE)		== "/usr/bin/mame");
+ 	QVERIFY(prefs.getGlobalPath(global_path_type::ROMS)					== "");
+ 	QVERIFY(prefs.getGlobalPath(global_path_type::SAMPLES)				== "");
+ 	QVERIFY(prefs.getGlobalPath(global_path_type::CONFIG)				== tempDir.path());
+@@ -223,13 +223,13 @@
+ 	// validate the "plugins" dir is set up
+ 	QStringList pluginsPath = prefs.getSplitPaths(global_path_type::PLUGINS);
+ 	QVERIFY(pluginsPath.size() == 2);
+-	QVERIFY(pluginsPath[0] == QDir(QCoreApplication::applicationDirPath()).filePath("plugins/"));
+-	QVERIFY(pluginsPath[1] == QDir(tempDir.path()).filePath("mame_dir/plugins/"));
++	QVERIFY(pluginsPath[0] == QDir("/usr/share/bletchmame/plugins/"));
++	QVERIFY(pluginsPath[1] == QDir("/usr/share/mame/plugins/"));
+ 
+ 	// validate the "hash" dir is set up
+ 	QStringList hashPath = prefs.getSplitPaths(global_path_type::HASH);
+ 	QVERIFY(hashPath.size() == 1);
+-	QVERIFY(hashPath[0] == QDir(tempDir.path()).filePath("mame_dir/hash/"));
++	QVERIFY(hashPath[0] == QDir("/usr/share/mame/hash/"));
+ }
+ 
+ 

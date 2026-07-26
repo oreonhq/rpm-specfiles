@@ -1,0 +1,33 @@
+From fb26ca961e48ec4bbfa9377073b97c543e90c134 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 17:26:08 -0800
+Subject: [PATCH 18/26] tests: handle guest image path being the system one
+
+This seems to happen when testing in a container as root.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ tests/guest/test_guest.py | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/tests/guest/test_guest.py b/tests/guest/test_guest.py
+index a9383f2..625eb67 100644
+--- a/tests/guest/test_guest.py
++++ b/tests/guest/test_guest.py
+@@ -354,7 +354,12 @@ def test_init_guest():
+ 
+     assert guest.disksize == 20
+     assert guest.image_name() == 'tester'
+-    assert guest.output_image_path() == '%s/.oz/images/tester.dsk' % os.getenv('HOME')
++    assert guest.output_image_path() in (
++        # user's image storage
++        '%s/.oz/images/tester.dsk' % os.getenv('HOME'),
++        # system image storage (when testing as root, I think)
++        '/var/lib/libvirt/images/tester.dsk'
++    )
+     assert guest.default_auto_file() == True
+ 
+ def test_init_guest_bad_arch():
+-- 
+2.46.2
+

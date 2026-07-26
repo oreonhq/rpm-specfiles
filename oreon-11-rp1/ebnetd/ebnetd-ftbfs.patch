@@ -1,0 +1,11 @@
+diff -pruN -x '*defs*' ebnetd-1.0.orig/lib/getopt.c ebnetd-1.0/lib/getopt.c
+--- ebnetd-1.0.orig/lib/getopt.c	2003-09-21 12:10:14.000000000 +0900
++++ ebnetd-1.0/lib/getopt.c	2025-01-28 18:30:50.054471966 +0900
+@@ -110,7 +110,6 @@ char *optarg;		/* argument associated wi
+ 
+ #define	EMSG	""
+ 
+-extern char *getenv();
+ 
+ #ifdef __STDC__
+ static int getopt_internal(int, char * const *, const char *);

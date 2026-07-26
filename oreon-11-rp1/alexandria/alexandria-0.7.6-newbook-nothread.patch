@@ -1,0 +1,22 @@
+--- alexandria-book-collection-manager-0.7.6/lib/alexandria/ui/new_book_dialog.rb.nothread	2020-11-03 00:29:34.194485720 +0900
++++ alexandria-book-collection-manager-0.7.6/lib/alexandria/ui/new_book_dialog.rb	2020-11-03 00:34:01.426386821 +0900
+@@ -281,15 +281,17 @@ module Alexandria
+                          get_images_async
+                          false # continue == false if you get to here. Stop timeout.
+                        end
+-                     else
++                     elsif @find_thread
+                        # Stop if the book find thread has stopped.
+                        @find_thread.alive?
++                     else
++                       true
+                      end
+           # continue == false if @find_error OR if results are returned
+           # timeout ends if continue is false!
+ 
+           # @find_thread.alive? happens after find_thread is done
+-          unless continue || @find_thread.alive? || @destroyed
++          unless continue || (@find_thread && @find_thread.alive?) || @destroyed
+             notify_end_add_by_isbn
+             @button_add.sensitive = false
+           end

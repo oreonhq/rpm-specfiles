@@ -1,0 +1,22 @@
+From 01cce4d08f808f77b821173ed041096d3a30fa99 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Tue, 28 Jun 2022 11:08:08 -0400
+Subject: [PATCH] Allow jsonschema 4.x
+
+---
+ setup.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.cfg b/setup.cfg
+index 6374fe73..28bfe887 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -52,7 +52,7 @@ install_requires =
+     requests >=2.20, <3
+     ruamel.yaml >=0.16.0
+     pykwalify >=1.6
+-    jsonschema >=3.0, <4
++    jsonschema >=3.0, <5
+ 
+ [options.data_files]
+ # This section requires setuptools>=40.6.0

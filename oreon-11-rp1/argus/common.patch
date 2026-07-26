@@ -1,0 +1,11 @@
+--- argus/ArgusUdt.c~	2015-06-29 15:17:25.000000000 -0500
++++ argus/ArgusUdt.c	2020-02-19 10:45:00.768211138 -0600
+@@ -41,7 +41,7 @@
+ #include <ArgusModeler.h>
+ 
+ #include <argus/bootp.h>
+-struct bootp *bp;
++extern struct bootp *bp;
+ 
+ struct ArgusSystemFlow *
+ ArgusCreateUDTFlow (struct ArgusModelerStruct *model, struct udt_header *udt)

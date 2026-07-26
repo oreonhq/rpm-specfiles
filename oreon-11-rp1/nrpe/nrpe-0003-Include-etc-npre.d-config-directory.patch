@@ -1,0 +1,11 @@
+--- ./sample-config/nrpe.cfg.in	2020-04-23 15:33:18.000000000 -0500
++++ ./sample-config/nrpe.cfg.in.include_nrpe_d	2020-04-26 20:01:03.747481509 -0500
+@@ -362,6 +362,8 @@ command[check_total_procs]=@pluginsdir@/
+ #include_dir=<somedirectory>
+ #include_dir=<someotherdirectory>
+ 
++include_dir=/etc/nrpe.d/
++
+ # KEEP ENVIRONMENT VARIABLES
+ # This directive allows you to retain specific variables from the environment
+ # when starting the NRPE daemon. 

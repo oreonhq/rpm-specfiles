@@ -1,0 +1,97 @@
+From 8313b079302a1cec021def2f25baed1d835709d9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ondrej=20Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>
+Date: Thu, 2 Feb 2023 13:15:05 +0100
+Subject: [PATCH] Fix install path of icons on Linux
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The current hack with explicit "install" invocation is broken because it
+doesn't respect the $(INSTALL_ROOT) variable. Avoid manual installation
+of the icons by naming all of them "chessx.png" and placing them into
+individual subdirectories according to the size.
+
+Unfortunately the native Qt install targets do not provide a way to
+rename the files when installing, so this is the only way to avoid
+running unix commands by hand.
+
+Additionally also fix the destination path of the main icon, which is
+now 256 pixels instead of 128.
+
+Signed-off-by: Ondrej Mosnáček <omosnacek@gmail.com>
+---
+ INSTALL.md                                         |   2 +-
+ chessx.pro                                         |  12 +++++++-----
+ data/images/{ => icons-256}/chessx.png             | Bin
+ data/images/{chessx-32.png => icons-32/chessx.png} | Bin
+ data/images/{chessx-64.png => icons-64/chessx.png} | Bin
+ resources.qrc                                      |   2 +-
+ 6 files changed, 9 insertions(+), 7 deletions(-)
+ rename data/images/{ => icons-256}/chessx.png (100%)
+ rename data/images/{chessx-32.png => icons-32/chessx.png} (100%)
+ rename data/images/{chessx-64.png => icons-64/chessx.png} (100%)
+
+diff --git a/INSTALL.md b/INSTALL.md
+index 1d092404..15345336 100644
+--- a/INSTALL.md
++++ b/INSTALL.md
+@@ -1,4 +1,4 @@
+-![Icon](https://github.com/Isarhamster/chessx/raw/master/data/images/chessx-64.png)ChessX
++![Icon](https://github.com/Isarhamster/chessx/raw/master/data/images/icons-64/chessx.png)ChessX
+ =================================================================
+ 
+ # 1. Description
+diff --git a/chessx.pro b/chessx.pro
+index 0ad592cb..e9d5dfa3 100644
+--- a/chessx.pro
++++ b/chessx.pro
+@@ -55,17 +55,19 @@ unix|!macx {
+     BINDIR = $$PREFIX/bin
+     DATADIR = $$PREFIX/share
+ 
+-    INSTALLS += appdata desktop icons binfiles
++    INSTALLS += appdata desktop icons256 icons64 icons32 binfiles
+ 
+     appdata.files = unix/io.sourceforge.ChessX.metainfo.xml
+     appdata.path = $$DATADIR/metainfo
+     desktop.files = unix/chessx.desktop
+     desktop.path = $$DATADIR/applications
+ 
+-    icons.path = $$DATADIR/icons/hicolor
+-    icons.commands = install -Dm644 data/images/chessx.png    $${icons.path}/128x128/apps/chessx.png; \
+-                     install -Dm644 data/images/chessx-32.png $${icons.path}/32x32/apps/chessx.png; \
+-                     install -Dm644 data/images/chessx-64.png $${icons.path}/64x64/apps/chessx.png;
++    icons256.path = $$DATADIR/icons/hicolor/256x256/apps
++    icons256.files = data/images/icons-256/chessx.png
++    icons64.path = $$DATADIR/icons/hicolor/64x64/apps
++    icons64.files = data/images/icons-64/chessx.png
++    icons32.path = $$DATADIR/icons/hicolor/32x32/apps
++    icons32.files = data/images/icons-32/chessx.png
+ 
+     binfiles.files = release/chessx
+     binfiles.path = $$BINDIR
+diff --git a/data/images/chessx.png b/data/images/icons-256/chessx.png
+similarity index 100%
+rename from data/images/chessx.png
+rename to data/images/icons-256/chessx.png
+diff --git a/data/images/chessx-32.png b/data/images/icons-32/chessx.png
+similarity index 100%
+rename from data/images/chessx-32.png
+rename to data/images/icons-32/chessx.png
+diff --git a/data/images/chessx-64.png b/data/images/icons-64/chessx.png
+similarity index 100%
+rename from data/images/chessx-64.png
+rename to data/images/icons-64/chessx.png
+diff --git a/resources.qrc b/resources.qrc
+index e475e1a5..44f4501e 100644
+--- a/resources.qrc
++++ b/resources.qrc
+@@ -21,7 +21,7 @@
+         <file alias="images/black_chess.png">data/images/black_chess.png</file>
+         <file alias="images/bug.png">data/images/bug_add.png</file>
+         <file alias="images/camera.png">data/images/camera.png</file>
+-        <file alias="images/chessx.png">data/images/chessx.png</file>
++        <file alias="images/chessx.png">data/images/icons-256/chessx.png</file>
+         <file alias="images/chip.png">data/images/chip.png</file>
+         <file alias="images/circle_black.svg">data/images/circle_black.svg</file>
+         <file alias="images/circle_blue.svg">data/images/circle_blue.svg</file>

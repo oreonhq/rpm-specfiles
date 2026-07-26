@@ -1,0 +1,7 @@
+# -c configfile -u user -p fifo_file
+#  Defaults
+#  configfile: /etc/mail/milter-regex.conf
+#  user:       mregex
+#  fifo:       /var/spool/milter-regex/sock
+
+OPTIONS=

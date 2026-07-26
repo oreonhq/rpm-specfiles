@@ -1,0 +1,19 @@
+--- a/bng2/Network3/CMakeLists.orig.txt	2009-05-10 02:02:59.000000000 +0200
++++ b/bng2/Network3/CMakeLists.txt	2022-09-09 22:00:45.549059163 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.4)
++cmake_minimum_required(VERSION 3.22)
+ 
+ project(Network3)
+ 
+--- a/bng2/Network3/cvode-2.6.0/CMakeLists.orig.txt	2009-05-10 02:02:59.000000000 +0200
++++ a/bng2/Network3/cvode-2.6.0/CMakeLists.txt	2022-09-09 22:13:25.192773026 +0200
+@@ -18,7 +18,7 @@
+ 
+ # Require a fairly recent cmake version
+ 
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.2)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.22)
+ 
+ # Project SUNDIALS (initially only C supported)
+ 

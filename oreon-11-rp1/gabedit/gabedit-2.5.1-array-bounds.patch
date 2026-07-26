@@ -1,0 +1,11 @@
+--- GabeditSrc251/src/Geometry/SelectionDlg.c.bounds	2021-07-27 16:54:23.000000000 +0900
++++ GabeditSrc251/src/Geometry/SelectionDlg.c	2021-12-27 13:09:55.923830261 +0900
+@@ -1712,7 +1712,7 @@ void selectAtomsBySphereDlg()
+ 	vboxframe = create_vbox(frame);
+ 	hbox=create_hbox_false(vboxframe);
+ 	n=1;
+-	t = g_malloc(2*sizeof(gchar));
++	t = g_malloc(2*sizeof(gchar *));
+ 	t[0] = g_strdup_printf("2.0");
+ 	t[1] = NULL;
+ 	entry = create_label_combo(hbox,_(" Radius(Ang) : "),t,n, TRUE,-1,-1);

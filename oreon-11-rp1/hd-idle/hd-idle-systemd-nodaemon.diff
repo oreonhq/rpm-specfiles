@@ -1,0 +1,109 @@
+diff --git a/hd-idle.1 b/hd-idle.1
+index a77e863..f8828ee 100644
+--- a/hd-idle.1
++++ b/hd-idle.1
+@@ -68,6 +68,10 @@ Spin-down the specfified disk immediately and exit.
+ Debug mode. This will prevent hd-idle from becoming a daemon and print
+ debugging info to stdout/stderr
+ .TP
++.B \-n
++No-daemon mode. This will prevent hd-idle from becoming a daemon and print
++logging informatin to stdout. Most useful if hd-idle is started by systemd.
++.TP
+ .B \-h
+ Print usage information.
+ .SH "DISK SELECTION"
+diff --git a/hd-idle.c b/hd-idle.c
+index 82356f7..66abe48 100644
+--- a/hd-idle.c
++++ b/hd-idle.c
+@@ -125,6 +125,7 @@
+ #define DEFAULT_IDLE_TIME 600
+
+ #define dprintf if (debug) printf
++#define nprintf if (debug || nodaemon) printf
+
+ /* typedefs and structures */
+ typedef struct IDLE_TIME {
+@@ -159,6 +160,7 @@ IDLE_TIME *it_root;
+ DISKSTATS *ds_root;
+ char *logfile = "/dev/null";
+ int debug;
++int nodaemon = 0;
+
+ /* main function */
+ int main(int argc, char *argv[])
+@@ -180,7 +182,7 @@ int main(int argc, char *argv[])
+   it_root = it;
+
+   /* process command line options */
+-  while ((opt = getopt(argc, argv, "t:a:i:l:dh")) != -1) {
++  while ((opt = getopt(argc, argv, "t:a:i:l:dhn")) != -1) {
+     switch (opt) {
+
+     case 't':
+@@ -215,9 +217,15 @@ int main(int argc, char *argv[])
+       break;
+
+     case 'h':
+-      printf("usage: hd-idle [-t <disk>] [-a <name>] [-i <idle_time>] [-l <logfile>] [-d] [-h]\n");
++      printf("usage: hd-idle [-t <disk>] [-a <name>] [-i <idle_time>] [-l <logfile>] [-d] [-n] [-h]\n");
+       return(0);
+
++    case 'n':
++      nodaemon = 1;
++      /* unbuffered stdout, so it goes to systemd without delay */
++      setvbuf(stdout, NULL, _IOLBF, 0);
++      break;
++
+     case ':':
+       fprintf(stderr, "error: option -%c requires an argument\n", optopt);
+       return(1);
+@@ -228,19 +236,28 @@ int main(int argc, char *argv[])
+     }
+   }
+
++  if (nodaemon)
++    printf("hd-idle starting in nodaemon mode\n");
++
+   /* set sleep time to 1/10th of the shortest idle time */
+   min_idle_time = 1 << 30;
+   for (it = it_root; it != NULL; it = it->next) {
+     if (it->idle_time != 0 && it->idle_time < min_idle_time) {
+       min_idle_time = it->idle_time;
+     }
++    if (!nodaemon)
++      continue;
++    if (it->name)
++      printf("  disk: %s timeout: %d\n", it->name, it->idle_time);
++    else
++      printf("  default timeout: %d\n", it->idle_time);
+   }
+   if ((sleep_time = min_idle_time / 10) == 0) {
+     sleep_time = 1;
+   }
+
+   /* daemonize unless we're running in debug mode */
+-  if (!debug) {
++  if (!debug && !nodaemon) {
+     daemonize();
+   }
+
+@@ -317,6 +334,8 @@ int main(int argc, char *argv[])
+             if (have_logfile) {
+               log_spinup(ds);
+             }
++            if (nodaemon)
++              printf("spinup: %s\n", ds->name);
+             ds->spinup = now;
+           }
+           ds->reads = tmp.reads;
+@@ -393,7 +412,7 @@ static void spindown_disk(const char *name)
+   char dev_name[100];
+   int fd;
+
+-  dprintf("spindown: %s\n", name);
++  nprintf("spindown: %s\n", name);
+
+   /* fabricate SCSI IO request */
+   memset(&io_hdr, 0x00, sizeof(io_hdr));

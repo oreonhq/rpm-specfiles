@@ -1,0 +1,27 @@
+From 579b24b0673eb1b837b24b6206690bc5c1ab8b81 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Luukas=20P=C3=B6rtfors?= <lajp@iki.fi>
+Date: Sat, 16 Apr 2022 19:31:35 +0300
+Subject: [PATCH 2/8] Remove `inline` keyword from header.
+
+AFAIK This is a C++/non-standard thing and causes the code not to
+compile on gcc
+---
+ database.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/database.h b/database.h
+index 655cce6..47eb4bd 100644
+--- a/database.h
++++ b/database.h
+@@ -61,7 +61,7 @@ struct db_enumerator {
+ /*
+  * Field operations
+  */
+-inline int field_id(int i);
++int field_id(int i);
+ abook_field *find_standard_field(char *key, int do_declare);
+ abook_field *real_find_field(char *key, abook_field_list *list, int *nb);
+ #define find_field(key, list)		real_find_field(key, list, NULL)
+-- 
+2.53.0
+

@@ -1,0 +1,560 @@
+From 83a89f76ddb7658c8cfdbe079de2781b252b1299 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@fedoraproject.org>
+Date: Fri, 13 Dec 2024 21:52:19 -0500
+Subject: [PATCH] Adjust Calamares default settings to align with Fedora
+ defaults
+
+This aligns Calamares closer to what Anaconda is configured to do
+for Fedora Linux installations.
+---
+ CMakeLists.txt                         |  2 +-
+ settings.conf                          | 17 +++++++++--------
+ src/branding/default/branding.desc     | 16 ++++++++--------
+ src/modules/bootloader/bootloader.conf | 14 ++++++++------
+ src/modules/keyboard/keyboard.conf     |  2 +-
+ src/modules/license/license.conf       | 20 ++++----------------
+ src/modules/locale/locale.conf         |  4 ++--
+ src/modules/mount/mount.conf           | 15 +++++----------
+ src/modules/netinstall/netinstall.conf |  4 +++-
+ src/modules/packages/packages.conf     | 15 ++++-----------
+ src/modules/partition/partition.conf   |  6 +++---
+ src/modules/plasmalnf/plasmalnf.conf   | 18 +++++++++---------
+ src/modules/tracking/tracking.conf     |  4 ++--
+ src/modules/unpackfs/unpackfs.conf     | 13 +++----------
+ src/modules/users/users.conf           | 23 +++++++++--------------
+ src/modules/welcome/welcome.conf       | 16 ++++++++--------
+ 16 files changed, 79 insertions(+), 110 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b86b993c..9d9e3afd7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -80,7 +80,7 @@ set(CALAMARES_SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+ #
+ option(INSTALL_POLKIT "Install Polkit configuration" ON)
+ option(INSTALL_COMPLETION "Install shell completions" OFF)
+-option(INSTALL_CONFIG "Install configuration files" OFF)
++option(INSTALL_CONFIG "Install configuration files" ON)
+ # When adding WITH_* that affects the ABI offered by libcalamares,
+ # also update libcalamares/CalamaresConfig.h.in
+ option(WITH_PYBIND11 "Use bundled pybind11 instead of Boost::Python" ON)
+diff --git a/settings.conf b/settings.conf
+index d0e086000..09a9c8056 100644
+--- a/settings.conf
++++ b/settings.conf
+@@ -135,23 +135,24 @@ sequence:
+   - locale
+   - keyboard
+   - localecfg
+-#  - luksbootkeyfile
++  - luksbootkeyfile
+ #  - luksopenswaphookcfg
+-#  - dracutlukscfg
++  - dracutlukscfg
+   - fstab
+ #  - plymouthcfg
+ #  - zfshostid
+-  - initcpiocfg
+-  - initcpio
++#  - initcpiocfg
++#  - initcpio
+   - users
+   - displaymanager
+   - networkcfg
+   - hwclock
+   - services-systemd
+-#  - dracut
+-  - initramfs
+-#  - grubcfg
++  - dracut
++#  - initramfs
++  - grubcfg
+   - bootloader
++  - packages
+   - umount
+ - show:
+   - finished
+@@ -168,7 +169,7 @@ sequence:
+ # here, Calamares then takes care of finding it and loading the contents.
+ #
+ # YAML: string.
+-branding: default
++branding: auto
+ 
+ # If this is set to true, Calamares will show an "Are you sure?" prompt right
+ # before each execution phase, i.e. at points of no return. If this is set to
+diff --git a/src/branding/default/branding.desc b/src/branding/default/branding.desc
+index 729b958e8..a5dab4c01 100644
+--- a/src/branding/default/branding.desc
++++ b/src/branding/default/branding.desc
+@@ -122,14 +122,14 @@ navigation: widget
+ # are set to "true" (they can also be overridden).
+ strings:
+     productName:         "${NAME}"
+-    shortProductName:    Generic
+-    version:             2023.3 LTS
+-    shortVersion:        2023.3
+-    versionedName:       Fancy GNU/Linux 2023.3 LTS "Venomous Vole"
+-    shortVersionedName:  FancyGL 2023.3
+-    bootloaderEntryName: FancyGL
+-    productUrl:          https://calamares.io/
+-    supportUrl:          https://github.com/calamares/calamares/wiki
++    shortProductName:    "${NAME}"
++    version:             "${VERSION}"
++    shortVersion:        "${VERSION_ID}"
++    versionedName:       "${NAME} ${VERSION}"
++    shortVersionedName:  "${NAME} ${VERSION_ID}"
++    bootloaderEntryName: "${NAME}"
++    productUrl:          "${HOME_URL}"
++    supportUrl:          "${SUPPORT_URL}"
+     knownIssuesUrl:      https://github.com/calamares/calamares/issues
+     releaseNotesUrl:     https://calamares.io/news/
+     donateUrl:           https://kde.org/community/donations/index.php
+diff --git a/src/modules/bootloader/bootloader.conf b/src/modules/bootloader/bootloader.conf
+index 9679f6696..215cfad59 100644
+--- a/src/modules/bootloader/bootloader.conf
++++ b/src/modules/bootloader/bootloader.conf
+@@ -14,7 +14,7 @@
+ 
+ # Define which bootloader you want to use for EFI installations
+ # Possible options are 'grub', 'sb-shim', 'refind` and 'systemd-boot'.
+-efiBootLoader: "grub"
++efiBootLoader: "sb-shim"
+ 
+ # systemd-boot configuration files settings
+ 
+@@ -41,10 +41,10 @@ kernelParams: [ "quiet" ]
+ # GRUB functionality (notably grub-probe) to work. As needed, you may use
+ # complete paths like `/usr/bin/efibootmgr` for the executables.
+ #
+-grubInstall: "grub-install"
+-grubMkconfig: "grub-mkconfig"
+-grubCfg: "/boot/grub/grub.cfg"
+-grubProbe: "grub-probe"
++grubInstall: "grub2-install"
++grubMkconfig: "grub2-mkconfig"
++grubCfg: "/boot/grub2/grub.cfg"
++grubProbe: "grub2-probe"
+ efiBootMgr: "efibootmgr"
+ 
+ # Optionally set the bootloader ID to use for EFI. This is passed to
+@@ -72,7 +72,9 @@ efiBootMgr: "efibootmgr"
+ #       packages may need to set this to "debian" because that is
+ #       hard-coded in `grubx64.efi`.
+ #
+-# efiBootloaderId: "dirname"
++# PACKAGER NOTE: If you really want to change this value, you will also have to
++#                change the hardcoded directory name in the grub2(-efi) package.
++efiBootloaderId: "fedora"
+ 
+ # Optionally install a copy of the GRUB EFI bootloader as the EFI
+ # fallback loader (either bootia32.efi or bootx64.efi depending on
+diff --git a/src/modules/keyboard/keyboard.conf b/src/modules/keyboard/keyboard.conf
+index fe82a9b61..4184c5986 100644
+--- a/src/modules/keyboard/keyboard.conf
++++ b/src/modules/keyboard/keyboard.conf
+@@ -20,7 +20,7 @@ convertedKeymapPath: "/lib/kbd/keymaps/xkb"
+ # Write keymap configuration to /etc/default/keyboard, usually
+ # found on Debian-related systems.
+ # Defaults to true if nothing is set.
+-#writeEtcDefaultKeyboard:   true
++writeEtcDefaultKeyboard: false
+ 
+ # Use the Locale1 service instead of directly managing configuration files.
+ # This is the modern mechanism for configuring the systemwide keyboard layout,
+diff --git a/src/modules/license/license.conf b/src/modules/license/license.conf
+index e32d49984..be95158ee 100644
+--- a/src/modules/license/license.conf
++++ b/src/modules/license/license.conf
+@@ -22,24 +22,12 @@
+ #               default, rather than requiring the user to first open it up.
+ #               YAML: boolean, optional, default is false.
+ entries:
+-- id:       nvidia
+-  name:     Nvidia
+-  vendor:   Nvidia Corporation
++- id:       evil
++  name:     Evil
++  vendor:   Evil Corporation
+   type:     driver
+-  url:      http://developer.download.nvidia.com/cg/Cg_3.0/license.pdf
++  url:      http://www.example.com/evil_666.0/license.pdf
+   required: false
+-- id:       amd
+-  name:     Catalyst
+-  vendor:   "Advanced Micro Devices, Inc."
+-  type:     gpudriver
+-  url:      http://support.amd.com/en-us/download/eula
+-  required: false
+-- id:       flashplugin
+-  name:     Adobe Flash
+-  vendor:   Adobe Systems Incorporated
+-  type:     browserplugin
+-  url:      http://www.adobe.com/products/eulas/pdfs/PlatformClients_PC_WWEULA_Combined_20100108_1657.pdf
+-  required: true
+ # This example uses a file: link. This example uses a relative link, which
+ # is relative to where you run Calamares. Assuming you run it from build/
+ # as part of your testing, you'll get the LICENSE text for Calamares
+diff --git a/src/modules/locale/locale.conf b/src/modules/locale/locale.conf
+index 4463f7a94..bb022c1d0 100644
+--- a/src/modules/locale/locale.conf
++++ b/src/modules/locale/locale.conf
+@@ -118,8 +118,8 @@ zone:                       "New_York"
+ #
+ geoip:
+     style:    "json"
+-    url:      "https://geoip.kde.org/v1/calamares"
+-    selector: ""  # leave blank for the default
++    url:      "https://geoip.fedoraproject.org/city"
++    selector: "time_zone"
+ 
+ # For testing purposes, you could use *fixed* style, to see how Calamares
+ # behaves in a particular zone:
+diff --git a/src/modules/mount/mount.conf b/src/modules/mount/mount.conf
+index da9539569..c1010114f 100644
+--- a/src/modules/mount/mount.conf
++++ b/src/modules/mount/mount.conf
+@@ -49,16 +49,11 @@ extraMounts:
+ #
+ btrfsSubvolumes:
+     - mountPoint: /
+-      subvolume: /@
+-      # As an alternative:
+-      #
+-      # subvolume: ""
++      subvolume: /@root
++    - mountPoint: /boot
++      subvolume: /@boot
+     - mountPoint: /home
+       subvolume: /@home
+-    - mountPoint: /var/cache
+-      subvolume: /@cache
+-    - mountPoint: /var/log
+-      subvolume: /@log
+ 
+ # The name of the btrfs subvolume holding the swapfile.  This only used when
+ # a swapfile is selected and the root filesystem is btrfs
+@@ -101,7 +96,7 @@ btrfsSwapSubvol: /@swap
+ #      ssdOptions: [ discard=async ]
+ #      hddOptions: [ autodefrag ]
+ #    - filesystem: btrfs_swap
+-#      options: [ defaults, noatime ]
++#      options: [ defaults ]
+ #
+ # Example 2
+ # In this example there is a single default used by all filesystems
+@@ -118,7 +113,7 @@ mountOptions:
+     - filesystem: btrfs
+       options: [ defaults, compress=zstd:1 ]
+     - filesystem: btrfs_swap
+-      options: [ defaults, noatime ]
++      options: [ defaults ]
+ 
+ 
+ 
+diff --git a/src/modules/netinstall/netinstall.conf b/src/modules/netinstall/netinstall.conf
+index f185fc1b0..1526f4317 100644
+--- a/src/modules/netinstall/netinstall.conf
++++ b/src/modules/netinstall/netinstall.conf
+@@ -69,7 +69,9 @@
+ # they are interpreted like the *groups* key below. The special case
+ # `local` loads the data directly from **this** file.
+ #
+-groupsUrl: local
++# Packager note: If you want to enable the netinstall module, you will also have
++#                to create such a file (see the example in the source code).
++groupsUrl: file:///etc/calamares/modules/netinstall.yaml
+ 
+ # Alternate form:
+ # groupsUrl: [ local ]
+diff --git a/src/modules/packages/packages.conf b/src/modules/packages/packages.conf
+index b9777f606..ca2ce8b81 100644
+--- a/src/modules/packages/packages.conf
++++ b/src/modules/packages/packages.conf
+@@ -36,7 +36,7 @@
+ # Not actually a package manager, but suitable for testing:
+ #  - dummy       - Dummy manager, only logs
+ #
+-backend: dummy
++backend: dnf
+ 
+ #
+ # Often package installation needs an internet connection.
+@@ -60,7 +60,7 @@ backend: dummy
+ # Therefore set also "update_system" to 'true'.
+ #
+ skip_if_no_internet: false
+-update_db: true
++update_db: false
+ update_system: false
+ 
+ # pacman specific options
+@@ -203,12 +203,5 @@ pacman:
+ # of packages, this can lead to a considerable time savings.
+ #
+ operations:
+-  - install:
+-    - vi
+-    - vi-${LOCALE}
+-    - wget
+-    - binutils
+-  - remove:
+-    - vi
+-    - wget
+-    - binutils
++  - try_remove:
++    - calamares
+diff --git a/src/modules/partition/partition.conf b/src/modules/partition/partition.conf
+index 4c78f5814..332d0e778 100644
+--- a/src/modules/partition/partition.conf
++++ b/src/modules/partition/partition.conf
+@@ -112,7 +112,7 @@ luksGeneration: luks1
+ # allowZfsEncryption: true
+ 
+ # Correctly draw nested (e.g. logical) partitions as such.
+-drawNestedPartitions:   false
++drawNestedPartitions:   true
+ 
+ # Show/hide partition labels on manual partitioning page.
+ alwaysShowPartitionLabels: true
+@@ -176,7 +176,7 @@ initialSwapChoice: none
+ # If nothing is specified, Calamares defaults to "gpt" if system is
+ # efi or "msdos" otherwise.
+ #
+-# defaultPartitionTableType: msdos
++defaultPartitionTableType: gpt
+ 
+ # Requirement for partition table type
+ #
+@@ -207,7 +207,7 @@ initialSwapChoice: none
+ # If nothing is specified, Calamares defaults to "ext4".
+ #
+ # Names are case-sensitive and defined by KPMCore.
+-defaultFileSystemType:  "ext4"
++defaultFileSystemType:  "btrfs"
+ 
+ # Selectable filesystem type, used when "erase" is done.
+ #
+diff --git a/src/modules/plasmalnf/plasmalnf.conf b/src/modules/plasmalnf/plasmalnf.conf
+index 105f247ef..b9105d145 100644
+--- a/src/modules/plasmalnf/plasmalnf.conf
++++ b/src/modules/plasmalnf/plasmalnf.conf
+@@ -22,7 +22,7 @@ lnftool:	"/usr/bin/lookandfeeltool"
+ # to the originating username; the lnftool will be run through
+ # "sudo -H -u <liveuser>" instead of directly.
+ #
+-# liveuser:	"live"
++liveuser:	"liveuser"
+ 
+ # If *showAll* is true, then all installed themes are shown in the
+ # UI for selection, even if they are not listed in *themes* (below).
+@@ -30,7 +30,7 @@ lnftool:	"/usr/bin/lookandfeeltool"
+ # listed in *themes* -- which is useful to show screenshots for those
+ # you do have a screenshot for. If *themes* is empty or missing,
+ # the value of *showAll* is treated as `true`.
+-showAll: false
++showAll: true
+ 
+ # You can limit the list of Plasma look-and-feel themes by listing ids
+ # here. If this key is not present, all of the installed themes are listed.
+@@ -58,13 +58,13 @@ showAll: false
+ # The image screenshot is resized to 12x8 the current font size, with
+ # a minimum of 120x80 pixels. This allows the screenshot to scale up
+ # on HiDPI displays where the fonts are larger (in pixels).
+-themes:
+-    - org.kde.fuzzy-pig.desktop
+-    - theme: org.kde.breeze.desktop
+-      image: "breeze.png"
+-    - theme: org.kde.breezedark.desktop
+-      image: "breeze-dark.png"
+-    - org.kde.fluffy-bunny.desktop
++#themes:
++#    - org.kde.fuzzy-pig.desktop
++#    - theme: org.kde.breeze.desktop
++#      image: "breeze.png"
++#    - theme: org.kde.breezedark.desktop
++#      image: "breeze-dark.png"
++#    - org.kde.fluffy-bunny.desktop
+ 
+ # You can pre-select one of the themes; it is not applied
+ # immediately, but its radio-button is switched on to indicate
+diff --git a/src/modules/tracking/tracking.conf b/src/modules/tracking/tracking.conf
+index 6f726226d..2777a67a3 100644
+--- a/src/modules/tracking/tracking.conf
++++ b/src/modules/tracking/tracking.conf
+@@ -54,13 +54,13 @@
+ # This is the global policy; it is displayed as a link on the page.
+ # If blank or commented out, no link is displayed on the tracking
+ # page. You **must** provide policy links per-area as well.
+-policy:  "https://github.com/calamares/calamares/wiki/Use-Guide#installation-tracking"
++#policy:  "https://github.com/calamares/calamares/wiki/Use-Guide#installation-tracking"
+ 
+ # This is the default area to enable for tracking. If commented out,
+ # empty, or otherwise invalid, "none" is used, so no tracking by default.
+ # Setting an area here also checks the areas before it (install, machine,
+ # then user) by default -- subject to those areas being enabled at all.
+-# default:    user
++default:    none
+ 
+ # The install area has one specific configuration key:
+ #   url:    this URL (remember to include the protocol, and prefer https)
+diff --git a/src/modules/unpackfs/unpackfs.conf b/src/modules/unpackfs/unpackfs.conf
+index 1576fa7f3..b3f9f6e81 100644
+--- a/src/modules/unpackfs/unpackfs.conf
++++ b/src/modules/unpackfs/unpackfs.conf
+@@ -116,13 +116,6 @@
+ #        optional: true
+ 
+ unpack:
+-    -   source: ../CHANGES
+-        sourcefs: file
+-        destination: "/tmp/changes.txt"
+-        weight: 1  # Single file
+-    -   source: src/qml/calamares/slideshow
+-        sourcefs: file
+-        destination: "/tmp/slideshow/"
+-        exclude: [ "*.qmlc", "qmldir" ]
+-        weight: 5  # Lots of files
+-        # excludeFile: /etc/calamares/modules/unpackfs/exclude-list.txt
++    -   source: "/run/rootfsbase"
++        sourcefs: "ext4"
++        destination: ""
+diff --git a/src/modules/users/users.conf b/src/modules/users/users.conf
+index d2624bf4d..e24fda3a6 100644
+--- a/src/modules/users/users.conf
++++ b/src/modules/users/users.conf
+@@ -38,14 +38,9 @@ defaultGroups:
+     - name: users
+       must_exist: true
+       system: true
+-    - lp
+-    - video
+-    - network
+-    - storage
+     - name: wheel
+       must_exist: false
+       system: true
+-    - audio
+ 
+ # When *sudoersGroup* is set to a non-empty string, Calamares creates a
+ # sudoers file for the user. This file is located at:
+@@ -56,13 +51,13 @@ defaultGroups:
+ # remove this setting (delete or comment out the line below). Otherwise,
+ # the setting will be duplicated in the `/etc/sudoers.d/10-installer` file,
+ # potentially confusing users.
+-sudoersGroup:    wheel
++#sudoersGroup:    wheel
+ 
+ # Some Distributions require a 'autologin' group for the user.
+ # Autologin causes a user to become automatically logged in to
+ # the desktop environment on boot.
+ # Disable when your Distribution does not require such a group.
+-autologinGroup:  autologin
++#autologinGroup:  autologin
+ 
+ 
+ ### ROOT AND SUDO
+@@ -88,7 +83,7 @@ setRootPassword: true
+ # When checked, the user password is used for the root account too.
+ #
+ # NOTE: *doReusePassword* requires *setRootPassword* to be enabled.
+-doReusePassword: true
++doReusePassword: false
+ 
+ 
+ ### PASSWORDS AND LOGIN
+@@ -106,7 +101,7 @@ doReusePassword: true
+ #  - true to check or
+ #  - false to uncheck
+ # These set the **initial** state of the checkbox.
+-doAutologin:     true
++doAutologin:     false
+ 
+ # These are optional password-requirements that a distro can enforce
+ # on the user. The values given in this sample file set only very weak
+@@ -149,10 +144,10 @@ doAutologin:     true
+ 
+ # These are very weak -- actually, none at all -- requirements
+ passwordRequirements:
+-    minLength: -1  # Password at least this many characters
+-    maxLength: -1  # Password at most this many characters
++    minLength: 6  # Password at least this many characters
++#    maxLength: -1  # Password at most this many characters
+     libpwquality:
+-        - minlen=0
++        - minlen=6
+         - minclass=0
+ 
+ # These are "you must have a password, any password" -- requirements
+@@ -226,7 +221,7 @@ allowWeakPasswordsDefault: false
+ #   - write "rwxrwxrwx" (like the output of ls, with a - for unset bits)
+ #   The following permissions mean the same thing: "o750", "rwxr-x---" .
+ user:
+-  shell: /bin/bash
++  shell: ""
+   forbidden_names: [ root ]
+   home_permissions: "o700"
+ 
+@@ -274,7 +269,7 @@ user:
+ hostname:
+   location: EtcFile
+   writeHostsFile: true
+-  template: "derp-${cpu}"
++  template: "${login}-${product}"
+   forbidden_names: [ localhost ]
+ 
+ # Enable Active Directory enrollment support (opt-in)
+diff --git a/src/modules/welcome/welcome.conf b/src/modules/welcome/welcome.conf
+index b988eb2ff..2b34f2eae 100644
+--- a/src/modules/welcome/welcome.conf
++++ b/src/modules/welcome/welcome.conf
+@@ -21,10 +21,10 @@
+ # The setting can also be a full URL which will then be used
+ # instead of the one from the branding file.
+ showSupportUrl:         true
+-showKnownIssuesUrl:     true
++showKnownIssuesUrl:     false
+ showReleaseNotesUrl:    false
+ # TODO:3.3 Move to branding, keep only a bool here
+-showDonateUrl:          https://kde.org/community/donations/
++showDonateUrl:          false
+ 
+ # Requirements checking. These are general, generic, things
+ # that are checked. They may not match with the actual requirements
+@@ -43,7 +43,7 @@ requirements:
+     # Use a privacy-respecting URL here, preferably in your distro's domain.
+     #
+     # The URL is only used if "internet" is in the *check* list below.
+-    internetCheckUrl:   http://example.com
++    internetCheckUrl:   https://fedoraproject.org/static/hotspot.txt
+     #
+     # This may be a single URL, or a list or URLs, in which case the
+     # URLs will be checked one-by-one; if any of them returns data,
+@@ -94,9 +94,9 @@ requirements:
+     # If any of these conditions are not met, the user cannot
+     # continue past the welcome page.
+     required:
+-        # - storage
++        - storage
+         - ram
+-        # - root
++        - root
+ 
+ # GeoIP checking
+ #
+@@ -120,9 +120,9 @@ requirements:
+ #       data. Timezone, city, or other data will not be recognized.
+ #
+ geoip:
+-    style:    "none"
+-    url:      "https://geoip.kde.org/v1/ubiquity"  # extended XML format
+-    selector: "CountryCode"  # blank uses default, which is wrong
++    style:    "json"
++    url:      "https://geoip.fedoraproject.org/city"
++    selector: "country_code"
+ 
+ # User interface
+ #
+-- 
+2.49.0
+

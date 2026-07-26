@@ -1,0 +1,18 @@
+[Unit]
+Description=Globus GridFTP Server
+Documentation=man:globus-gridftp-server(8)
+After=remote_fs.target network.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/globus-gridftp-server
+PIDFile=/run/globus-gridftp-server.pid
+ExecStartPre=/bin/sh -c "[ -f /etc/gridftp.conf ] || touch /etc/gridftp.conf"
+ExecStartPre=/bin/sh -c "[ -d /etc/gridftp.d ] || mkdir /etc/gridftp.d"
+ExecStart=/usr/sbin/globus-gridftp-server -S \
+  -c /etc/gridftp.conf -C /etc/gridftp.d \
+  -pidfile /run/globus-gridftp-server.pid
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,194 @@
+From 47b818e155556988fbc5850fe1ecb3790d1195c2 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon, 9 Nov 2015 09:23:11 +0100
+Subject: [PATCH 35/41] Don't do extern inline
+
+It doesn't make much sense and recent compilers interpret is just as
+extern, resulting in duplicate symbol names.
+---
+ font.c              |  2 +-
+ koules.h            |  2 +-
+ os2dive/interface.h | 14 +++++++-------
+ svgalib/input.h     |  4 ++--
+ svgalib/interface.h | 14 +++++++-------
+ 5 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/font.c b/font.c
+index 5949bec..4c37a9b 100644
+--- a/font.c
++++ b/font.c
+@@ -428,7 +428,7 @@ static int      stop_after_this_x = NO_CLIP_FONT;
+ 
+ /* never mind. Character building, wasn't it? (groan) */
+ #if 0
+-#define BEST extern inline
++#define BEST static inline
+ #else
+ #define BEST static
+ #endif
+diff --git a/koules.h b/koules.h
+index d188141..0940fa1 100644
+--- a/koules.h
++++ b/koules.h
+@@ -290,7 +290,7 @@ extern unsigned char rocketcolor[5];
+ #endif
+ 
+ #if defined(__GNUC__)&&!defined(ONLYANSI)
+-extern inline void
++static inline void
+ normalize (float *x, float *y, CONST float size)
+ {
+   float           length = sqrt ((*x) * (*x) + (*y) * (*y));
+diff --git a/os2dive/interface.h b/os2dive/interface.h
+index 557850a..f5e25bd 100644
+--- a/os2dive/interface.h
++++ b/os2dive/interface.h
+@@ -71,21 +71,21 @@ gl_putboxmaskcompiled((x),(y),(xsize),(ysize),(bitmap))
+ #define EnableClipping() gl_enableclipping()
+ #define DisableClipping() gl_disableclipping()
+ 
+-extern inline void
++static inline void
+ DrawBlackMaskedText (int x, int y, char *text)
+ {
+   gl_setwritemode (WRITEMODE_MASKED);
+   gl_setfont (8, 8, fontblack);
+   gl_write (x, y, text);
+ }
+-extern inline void
++static inline void
+ DrawWhiteMaskedText (int x, int y, char *text)
+ {
+   gl_setwritemode (WRITEMODE_MASKED);
+   gl_setfont (8, 8, fontwhite);
+   gl_write (x, y, text);
+ }
+-extern inline void
++static inline void
+ DrawText (int x, int y, char *text)
+ {
+   gl_setwritemode (WRITEMODE_OVERWRITE);
+@@ -93,7 +93,7 @@ DrawText (int x, int y, char *text)
+   gl_write (x, y, text);
+ }
+ 
+-extern inline void  DrawRectangle(int x1, int y1, int x2, int y2, int color)
++static inline void  DrawRectangle(int x1, int y1, int x2, int y2, int color)
+ {
+   gl_line ((int) x1, (int) y1, (int) x1, (int) y2, color);
+   gl_line ((int) x1, (int) y2, (int) x2, (int) y2, color);
+@@ -101,7 +101,7 @@ extern inline void  DrawRectangle(int x1, int y1, int x2, int y2, int color)
+   gl_line ((int) x2, (int) y1, (int) x1, (int) y1, color);
+ }
+ 
+-extern inline BYTE*CompileBitmap(int x, int y, BYTE *bitmap)
++static inline BYTE*CompileBitmap(int x, int y, BYTE *bitmap)
+ {
+     int size1;
+     BYTE *cbitmap;
+@@ -117,13 +117,13 @@ extern inline BYTE*CompileBitmap(int x, int y, BYTE *bitmap)
+ #define FillRectangle(x,y,x1,y1,color) gl_fillbox((x),(y),(x1),(y1),(color))
+ 
+ #define ClearScreen() gl_clearscreen (0)
+-extern inline void
++static inline void
+ CopyVSToVS (VScreenType source, VScreenType destination)
+ {
+   SetScreen (source);
+   gl_copyscreen (destination);
+ }
+-extern inline void
++static inline void
+ CopyToScreen (VScreenType source)
+ {
+ /*  O.K. we are cheating. It saves us for 1 screen copy. */
+diff --git a/svgalib/input.h b/svgalib/input.h
+index abebb7d..0c781e0 100644
+--- a/svgalib/input.h
++++ b/svgalib/input.h
+@@ -44,7 +44,7 @@ extern int      joystickdevice[2];
+ /*here is probably bug....
+    some users reported that these functions not work...
+    probably sometimes some keys are reported as pressed */
+-extern inline int
++static inline int
+ Pressed ()
+ {
+   int             z;
+@@ -68,7 +68,7 @@ Pressed ()
+       }
+   return (0);
+ }
+-extern inline int
++static inline int
+ GetKey ()
+ {
+   int             z, k = 0;
+diff --git a/svgalib/interface.h b/svgalib/interface.h
+index 766cfe5..c17dd95 100644
+--- a/svgalib/interface.h
++++ b/svgalib/interface.h
+@@ -76,21 +76,21 @@ extern VScreenType starbackground;
+ #endif
+ #define SetScreen(screen) gl_setcontext (screen)
+ 
+-extern inline void
++static inline void
+ DrawBlackMaskedText (int x, int y, char *text)
+ {
+   gl_setwritemode (WRITEMODE_MASKED);
+   gl_setfont (8, 8, fontblack);
+   gl_write (x, y, text);
+ }
+-extern inline void
++static inline void
+ DrawWhiteMaskedText (int x, int y, char *text)
+ {
+   gl_setwritemode (WRITEMODE_MASKED);
+   gl_setfont (8, 8, fontwhite);
+   gl_write (x, y, text);
+ }
+-extern inline void
++static inline void
+ DrawText (int x, int y, char *text)
+ {
+   gl_setwritemode (WRITEMODE_OVERWRITE);
+@@ -98,7 +98,7 @@ DrawText (int x, int y, char *text)
+   gl_write (x, y, text);
+ }
+ 
+-extern inline void
++static inline void
+ DrawRectangle (int x1, int y1, int x2, int y2, int color)
+ {
+   gl_line ((int) x1, (int) y1, (int) x1, (int) y2, color);
+@@ -107,7 +107,7 @@ DrawRectangle (int x1, int y1, int x2, int y2, int color)
+   gl_line ((int) x2, (int) y1, (int) x1, (int) y1, color);
+ }
+ 
+-extern inline char *
++static inline char *
+ CompileBitmap (int x, int y, char *bitmap)
+ {
+   int             size1;
+@@ -127,7 +127,7 @@ CompileBitmap (int x, int y, char *bitmap)
+ #define DisableClipping() gl_disableclipping()
+ #define ClearScreen() gl_clearscreen (0)
+ extern void flippage(void);
+-extern inline void
++static inline void
+ CopyVSToVS (VScreenType source, VScreenType destination)
+ {
+   SetScreen (source);
+@@ -136,7 +136,7 @@ CopyVSToVS (VScreenType source, VScreenType destination)
+     gl_copyboxtocontext(0,0,MAPWIDTH,MAPHEIGHT+20,destination,0,0);
+   }
+ }
+-extern inline void
++static inline void
+ CopyToScreen (VScreenType source)
+ {
+   SetScreen (source);
+-- 
+2.5.0
+

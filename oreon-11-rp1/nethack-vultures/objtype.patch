@@ -1,0 +1,11 @@
+--- slashem/src/potion.c.orig	2024-02-27 17:53:52.057525376 -0600
++++ slashem/src/potion.c	2024-02-27 17:54:27.701072094 -0600
+@@ -2177,7 +2177,7 @@
+  * returns -1 if object exploded (potion should be used up) 
+  */
+ {
+-	int chg, otyp = obj->otyp, otyp2;
++	short int chg, otyp = obj->otyp, otyp2;
+ 	xchar ox, oy;
+ 	long owornmask;
+ 	struct obj *otmp;

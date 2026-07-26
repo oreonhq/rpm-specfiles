@@ -1,0 +1,9 @@
+diff -up fmtools-2.0.7/fmcontrol/fmcontrol.py3 fmtools-2.0.7/fmcontrol/fmcontrol
+--- fmtools-2.0.7/fmcontrol/fmcontrol.py3	2011-02-27 01:21:05.000000000 +0100
++++ fmtools-2.0.7/fmcontrol/fmcontrol	2019-09-11 16:07:03.597928297 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/env python
++#!/usr/bin/python3
+ #
+ # Script to control presets for radio cards.
+ # Requires fmtools.

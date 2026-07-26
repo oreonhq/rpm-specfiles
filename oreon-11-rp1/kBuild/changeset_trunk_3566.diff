@@ -1,0 +1,761 @@
+Index: trunk/kBuild/header.kmk
+===================================================================
+--- trunk/kBuild/header.kmk	(revision 3565)
++++ trunk/kBuild/header.kmk	(revision 3566)
+@@ -1714,5 +1714,5 @@
+ ##
+ # An internal define used by subheader.kmk, subfooter.kmk, and
+-# KB_FN_PASS_0_ON_TARGET.
++# KB_FN_DO_PASS0_ON_TARGET.
+ #
+ # @param target    The target to process.
+Index: trunk/kBuild/tools/GCC.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC.kmk	(revision 3566)
+@@ -106,5 +106,5 @@
+ define TOOL_GCC_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) \
+ 		-o $(obj)\
+@@ -132,5 +132,5 @@
+ define TOOL_GCC_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) \
+ 		-o $(obj)\
+@@ -158,5 +158,5 @@
+ define TOOL_GCC_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) \
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GCC3.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC3.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC3.kmk	(revision 3566)
+@@ -138,5 +138,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GCC3_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -152,5 +152,5 @@
+ define TOOL_GCC3_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC3_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -182,5 +182,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC3_CXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -196,5 +196,5 @@
+ define TOOL_GCC3_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC3_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -223,5 +223,5 @@
+ define TOOL_GCC3_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC3_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GCC32.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC32.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC32.kmk	(revision 3566)
+@@ -138,5 +138,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GCC32_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -152,5 +152,5 @@
+ define TOOL_GCC32_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC32_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -182,5 +182,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC32_CXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -197,5 +197,5 @@
+ define TOOL_GCC32_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC32_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -224,5 +224,5 @@
+ define TOOL_GCC32_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC32_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GCC3OMF.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC3OMF.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC3OMF.kmk	(revision 3566)
+@@ -122,5 +122,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GCC3OMF_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -136,5 +136,5 @@
+ define TOOL_GCC3OMF_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC3OMF_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP \
+ 		-o $(obj)\
+@@ -167,5 +167,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC3OMF_CXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -181,5 +181,5 @@
+ define TOOL_GCC3OMF_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC3OMF_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP \
+ 		-o $(obj)\
+@@ -208,5 +208,5 @@
+ define TOOL_GCC3OMF_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC3OMF_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GCC3PLAIN.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC3PLAIN.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC3PLAIN.kmk	(revision 3566)
+@@ -123,5 +123,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GCC3PLAIN_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -137,5 +137,5 @@
+ define TOOL_GCC3PLAIN_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC3PLAIN_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -167,5 +167,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC3PLAIN_CXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -181,5 +181,5 @@
+ define TOOL_GCC3PLAIN_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC3PLAIN_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -208,5 +208,5 @@
+ define TOOL_GCC3PLAIN_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC3PLAIN_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GCC42MACHO.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC42MACHO.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC42MACHO.kmk	(revision 3566)
+@@ -165,5 +165,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GCC42MACHO_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -179,5 +179,5 @@
+ define TOOL_GCC42MACHO_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC42MACHO_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -209,5 +209,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC42MACHO_CXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -223,5 +223,5 @@
+ define TOOL_GCC42MACHO_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC42MACHO_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -253,5 +253,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC42MACHO_OBJC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -267,5 +267,5 @@
+ define TOOL_GCC42MACHO_COMPILE_OBJC_CMDS
+ 	$(QUIET)$(TOOL_GCC42MACHO_OBJC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -297,5 +297,5 @@
+ 		--kObjCache-cpp $(outbase).mii\
+ 		$(TOOL_GCC42MACHO_OBJCXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -311,5 +311,5 @@
+ define TOOL_GCC42MACHO_COMPILE_OBJCXX_CMDS
+ 	$(QUIET)$(TOOL_GCC42MACHO_OBJCXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -338,5 +338,5 @@
+ define TOOL_GCC42MACHO_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC42MACHO_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GCC4MACHO.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC4MACHO.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC4MACHO.kmk	(revision 3566)
+@@ -165,5 +165,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GCC4MACHO_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -179,5 +179,5 @@
+ define TOOL_GCC4MACHO_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC4MACHO_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -209,5 +209,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC4MACHO_CXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -223,5 +223,5 @@
+ define TOOL_GCC4MACHO_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC4MACHO_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -253,5 +253,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC4MACHO_OBJC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -267,5 +267,5 @@
+ define TOOL_GCC4MACHO_COMPILE_OBJC_CMDS
+ 	$(QUIET)$(TOOL_GCC4MACHO_OBJC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -297,5 +297,5 @@
+ 		--kObjCache-cpp $(outbase).mii\
+ 		$(TOOL_GCC4MACHO_OBJCXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -311,5 +311,5 @@
+ define TOOL_GCC4MACHO_COMPILE_OBJCXX_CMDS
+ 	$(QUIET)$(TOOL_GCC4MACHO_OBJCXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -338,5 +338,5 @@
+ define TOOL_GCC4MACHO_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC4MACHO_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GCC64.kmk
+===================================================================
+--- trunk/kBuild/tools/GCC64.kmk	(revision 3565)
++++ trunk/kBuild/tools/GCC64.kmk	(revision 3566)
+@@ -137,5 +137,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GCC64_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -151,5 +151,5 @@
+ define TOOL_GCC64_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GCC64_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -181,5 +181,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GCC64_CXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -195,5 +195,5 @@
+ define TOOL_GCC64_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GCC64_CXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -222,5 +222,5 @@
+ define TOOL_GCC64_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GCC64_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX.kmk	(revision 3566)
+@@ -121,5 +121,5 @@
+ define TOOL_GXX_COMPILE_C_CMDS
+ 	$(QUIET)$(TOOL_GXX_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) \
+ 		-o $(obj)\
+@@ -147,5 +147,5 @@
+ define TOOL_GXX_COMPILE_CXX_CMDS
+ 	$(QUIET)$(TOOL_GXX_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -173,5 +173,5 @@
+ define TOOL_GXX_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -200,5 +200,5 @@
+ define TOOL_GXX_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) \
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX3.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX3.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX3.kmk	(revision 3566)
+@@ -148,5 +148,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GXX3_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -158,5 +158,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX3_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -189,5 +189,5 @@
+ 		$(TOOL_GXX3_CXX) -E -o - $(if-expr defined($(target)_PCH_HDR)\
+ 		,-fpch-preprocess -Winvalid-pch -I$($(target)_1_GCC_PCH_DIR) -include $(basename $($(target)_1_GCC_PCH_FILE)),)\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -199,5 +199,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX3_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -226,5 +226,5 @@
+ define TOOL_GXX3_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX3_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -253,5 +253,5 @@
+ define TOOL_GXX3_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX3_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX32.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX32.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX32.kmk	(revision 3566)
+@@ -145,5 +145,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GXX32_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -155,5 +155,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX32_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -186,5 +186,5 @@
+ 		$(TOOL_GXX32_CXX) -E -o - $(if-expr defined($(target)_PCH_HDR)\
+ 		,-fpch-preprocess -Winvalid-pch -I$($(target)_1_GCC_PCH_DIR) -include $(basename $($(target)_1_GCC_PCH_FILE)),)\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -196,5 +196,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX32_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -223,5 +223,5 @@
+ define TOOL_GXX32_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX32_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -250,5 +250,5 @@
+ define TOOL_GXX32_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX32_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX3OMF.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX3OMF.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX3OMF.kmk	(revision 3566)
+@@ -134,5 +134,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GXX3OMF_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -144,5 +144,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX3OMF_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -175,5 +175,5 @@
+ 		$(TOOL_GXX3OMF_CXX) -E -o - $(if-expr defined($(target)_PCH_HDR)\
+ 		,-fpch-preprocess -Winvalid-pch -I$($(target)_1_GCC_PCH_DIR) -include $(basename $($(target)_1_GCC_PCH_FILE)),)\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -185,5 +185,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX3OMF_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -212,5 +212,5 @@
+ define TOOL_GXX3OMF_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX3OMF_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -239,5 +239,5 @@
+ define TOOL_GXX3OMF_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX3OMF_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX3PLAIN.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX3PLAIN.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX3PLAIN.kmk	(revision 3566)
+@@ -131,5 +131,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GXX3PLAIN_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -141,5 +141,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX3PLAIN_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -172,5 +172,5 @@
+ 		$(TOOL_GXX3PLAIN_CXX) -E -o - $(if-expr defined($(target)_PCH_HDR)\
+ 		,-fpch-preprocess -Winvalid-pch -I$($(target)_1_GCC_PCH_DIR) -include $(basename $($(target)_1_GCC_PCH_FILE)),)\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -182,5 +182,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX3PLAIN_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -209,5 +209,5 @@
+ define TOOL_GXX3PLAIN_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX3PLAIN_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -236,5 +236,5 @@
+ define TOOL_GXX3PLAIN_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX3PLAIN_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX42MACHO.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX42MACHO.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX42MACHO.kmk	(revision 3566)
+@@ -174,5 +174,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GXX42MACHO_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -184,5 +184,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX42MACHO_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -215,5 +215,5 @@
+ 		$(TOOL_GXX42MACHO_CXX) -E -o - $(if-expr defined($(target)_PCH_HDR)\
+ 		,-fpch-preprocess -Winvalid-pch -I$($(target)_1_GCC_PCH_DIR) -include $(basename $($(target)_1_GCC_PCH_FILE)),)\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -225,5 +225,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX42MACHO_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -252,5 +252,5 @@
+ define TOOL_GXX42MACHO_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX42MACHO_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -282,5 +282,5 @@
+ 		--kObjCache-cpp $(outbase).ii\
+ 		$(TOOL_GXX42MACHO_OBJC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -296,5 +296,5 @@
+ define TOOL_GXX42MACHO_COMPILE_OBJC_CMDS
+ 	$(QUIET)$(TOOL_GXX42MACHO_OBJC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -326,5 +326,5 @@
+ 		--kObjCache-cpp $(outbase).mii\
+ 		$(TOOL_GXX42MACHO_OBJCXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -340,5 +340,5 @@
+ define TOOL_GXX42MACHO_COMPILE_OBJCXX_CMDS
+ 	$(QUIET)$(TOOL_GXX42MACHO_OBJCXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -367,5 +367,5 @@
+ define TOOL_GXX42MACHO_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX42MACHO_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX4MACHO.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX4MACHO.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX4MACHO.kmk	(revision 3566)
+@@ -174,5 +174,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GXX4MACHO_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -184,5 +184,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX4MACHO_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -215,5 +215,5 @@
+ 		$(TOOL_GXX4MACHO_CXX) -E -o - $(if-expr defined($(target)_PCH_HDR)\
+ 		,-fpch-preprocess -Winvalid-pch -I$($(target)_1_GCC_PCH_DIR) -include $(basename $($(target)_1_GCC_PCH_FILE)),)\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -225,5 +225,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX4MACHO_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -252,5 +252,5 @@
+ define TOOL_GXX4MACHO_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX4MACHO_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -282,5 +282,5 @@
+ 		--kObjCache-cpp $(outbase).mii\
+ 		$(TOOL_GXX4MACHO_OBJCXX) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -296,5 +296,5 @@
+ define TOOL_GXX4MACHO_COMPILE_OBJCXX_CMDS
+ 	$(QUIET)$(TOOL_GXX4MACHO_OBJCXX) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -323,5 +323,5 @@
+ define TOOL_GXX4MACHO_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX4MACHO_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+Index: trunk/kBuild/tools/GXX64.kmk
+===================================================================
+--- trunk/kBuild/tools/GXX64.kmk	(revision 3565)
++++ trunk/kBuild/tools/GXX64.kmk	(revision 3566)
+@@ -145,5 +145,5 @@
+ 		--kObjCache-cpp $(outbase).i\
+ 		$(TOOL_GXX64_CC) -E -o -\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -155,5 +155,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX64_CC) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -186,5 +186,5 @@
+ 		$(TOOL_GXX64_CXX) -E -o - $(if-expr defined($(target)_PCH_HDR)\
+ 		,-fpch-preprocess -Winvalid-pch -I$($(target)_1_GCC_PCH_DIR) -include $(basename $($(target)_1_GCC_PCH_FILE)),)\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		$(abspath $(source))\
+@@ -196,5 +196,5 @@
+ else
+ 	$(QUIET)$(TOOL_GXX64_CXX) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj) $(if-expr defined($(target)_PCH_HDR) \
+@@ -223,5 +223,5 @@
+ define TOOL_GXX64_COMPILE_PCH_CMDS
+ 	$(QUIET)$(TOOL_GXX64_PCH) -c\
+-		$(flags) $(addprefix -I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $($(target)_1_GCC_PCH_DIR) $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\
+@@ -250,5 +250,5 @@
+ define TOOL_GXX64_COMPILE_AS_CMDS
+ 	$(QUIET)$(TOOL_GXX64_AS) -c\
+-		$(flags) $(addprefix -I, $(incs)) $(addprefix -D, $(defs))\
++		$(flags) $(qaddprefix sh,-I, $(incs)) $(qaddprefix sh,-D, $(defs))\
+ 		-Wp,-MD,$(dep) -Wp,-MT,$(obj) -Wp,-MP\
+ 		-o $(obj)\

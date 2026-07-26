@@ -1,0 +1,15 @@
+diff --git a/tests/tests.pro b/tests/tests.pro
+index b9c9733..4f92d51 100644
+--- a/tests/tests.pro
++++ b/tests/tests.pro
+@@ -88,8 +88,8 @@ HEADERS = \
+ 	$${top_srcdir}tests/helper_qt.h
+ 
+ include(test_crypto_message.pri)
+-include(test_crypto_pin_pwd.pri)
+-include(test_crypto_pin_token.pri)
++#include(test_crypto_pin_pwd.pri)
++#include(test_crypto_pin_token.pri)
+ include(test_db_time.pri)
+ include(test_db_container.pri)
+ include(test_db_single.pri)

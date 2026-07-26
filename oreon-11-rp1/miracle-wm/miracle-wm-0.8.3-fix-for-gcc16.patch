@@ -1,0 +1,46 @@
+From 4ce43f13fb1a26296b27c19ad45cfc91082f632c Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@fedoraproject.org>
+Date: Sun, 15 Feb 2026 10:44:05 -0500
+Subject: [PATCH] src/observer_registrar: Add missing include for mutex
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Otherwise you get variations of this error:
+
+[ 31%] Building CXX object CMakeFiles/miracle-wm-implementation.dir/src/ipc_message_handler.cpp.o
+/usr/bin/g++ -DCOMPILING_AGAINST_DEV=0 -I/builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/SYSTEM -I/usr/include/miral -I/usr/include/mircore -I/usr/include/mircommon -I/usr/include/mirplatform -I/usr/include/mircommon-internal -I/usr/include/mirserver-internal -I/usr/include/mirserver -I/usr/include/uu
+id -I/usr/include/mirwayland -I/builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/include -I/builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/miracle-wm-config/include -I/builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/miracle-wm-config/SYSTEM -isystem /usr/include/glib-2.0 -isys
+tem /usr/lib64/glib-2.0/include -isystem /usr/include/sysprof-6 -isystem /usr/include/libevdev-1.0 -O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened
+-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -w -std=c++23 -pthread -Winvalid-pch -include /builddir/build/B
+UILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/redhat-linux-build/CMakeFiles/miracle-wm-implementation.dir/cmake_pch.hxx -MD -MT CMakeFiles/miracle-wm-implementation.dir/src/ipc_message_handler.cpp.o -MF CMakeFiles/miracle-wm-implementation.dir/src/ipc_message_handler.cpp.o.d -o CMakeFiles/miracle-wm-implementation.d
+ir/src/ipc_message_handler.cpp.o -c /builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/src/ipc_message_handler.cpp
+In file included from /builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/src/container.h:22,
+                 from /builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/src/window_helpers.h:21,
+                 from /builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/src/window_helpers.cpp:20:
+/builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/src/observer_registrar.h:66:10: error: ‘mutex’ in namespace ‘std’ does not name a type [-Wtemplate-body]
+   66 |     std::mutex mutex;
+      |          ^~~~~
+/builddir/build/BUILD/miracle-wm-0.8.3-build/miracle-wm-0.8.3/src/observer_registrar.h:25:1: note: ‘std::mutex’ is defined in header ‘<mutex>’; this is probably fixable by adding ‘#include <mutex>’
+   24 | #include <vector>
+  +++ |+#include <mutex>
+   25 |
+---
+ src/observer_registrar.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/observer_registrar.h b/src/observer_registrar.h
+index 408c0f3..7ee89a0 100644
+--- a/src/observer_registrar.h
++++ b/src/observer_registrar.h
+@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #include <algorithm>
+ #include <functional>
+ #include <memory>
++#include <mutex>
+ #include <vector>
+ 
+ namespace miracle
+-- 
+2.52.0
+

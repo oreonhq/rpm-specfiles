@@ -1,0 +1,139 @@
+--- a/Makefile
++++ b/Makefile
+@@ -91,7 +91,6 @@
+ 	echo ""
+ 	echo "=== Build doc"
+ 	${MAKE} -C docs html latexpdf
+-	${MAKE} -C templates_parser/docs html latexpdf
+ 
+ run_regtests:
+ 	echo ""
+@@ -106,7 +105,7 @@
+ 
+ MODULES = config include ssl src gps regtests demos
+ 
+-MODULES_SETUP = ${MODULES:%=%_setup} templates_parser_setup
++MODULES_SETUP = ${MODULES:%=%_setup}
+ 
+ MODULES_INSTALL = ${MODULES:%=%_install}
+ 
+@@ -337,7 +336,7 @@
+ 	echo "SERVER_HTTP2=$(SERVER_HTTP2)" >> $(MSETUP)
+ 	echo "CLIENT_HTTP2=$(CLIENT_HTTP2)" >> $(MSETUP)
+ 
+-setup: gen_setup setup_modules setup_config setup_tp $(GEXT_MODULE)
++setup: gen_setup setup_modules setup_config $(GEXT_MODULE)
+ 
+ setup_tp:
+ 	$(MAKE) -C templates_parser setup $(GALL_OPTIONS)
+--- a/aws.gpr
++++ b/aws.gpr
+@@ -18,6 +18,7 @@
+ 
+ with "shared";
+ with "include/zlib/zlib.gpr";
++with "templates_parser";
+ 
+ aggregate library project AWS is
+ 
+@@ -34,6 +35,7 @@
+    for Library_Name use "aws";
+    for Library_Kind use Shared.Library_Type;
+    for Library_Dir use Shared'Library_Dir & "/aws";
++   for Library_Options use ("-L", "-ltemplates_parser");
+ 
+    case Shared.Library_Type is
+       when "static" | "static-pic" =>
+@@ -86,8 +88,6 @@
+ 
+       --  Support files (templates)
+ 
+-      for Artifacts ("share/examples/aws/templates")
+-        use ("templates_parser/tools/templates.tads");
+       for Artifacts ("share/examples/aws/web_elements")
+         use ("web_elements/menu_css", "web_elements/notebook",
+              "web_elements/rounded_boxes", "web_elements/icons",
+@@ -106,10 +106,6 @@
+ 
+       for Artifacts ("share/doc/aws") use ("docs/build/html");
+       for Artifacts ("share/doc/aws/pdf") use ("docs/build/latex/*.pdf");
+-      for Artifacts ("share/doc/aws/templates_parser")
+-        use ("templates_parser/docs/build/html");
+-      for Artifacts ("share/doc/aws/templates_parser/pdf")
+-        use ("templates_parser/docs/build/latex/*.pdf");
+ 
+       --  SOAP/WSDL templates
+ 
+--- a/src/src.gpr
++++ b/src/src.gpr
+@@ -21,6 +21,7 @@
+ with "../shared";
+ with "../include/include";
+ with "../ssl/ssl";
++with "templates_parser";
+ 
+ with "gnatcoll_core";
+ 
+@@ -29,7 +30,7 @@
+    for Languages use ("Ada", "Project file", "Makefile");
+ 
+    for Source_Dirs use
+-     ("core", "extended", "http2", "../templates_parser/src", "../config/src",
++     ("core", "extended", "http2", "../config/src",
+       "../config/ssl", ".");
+ 
+    --  XMLAda Installed, add xsrc and soap directories
+@@ -37,7 +38,7 @@
+    case Shared.XMLAda is
+       when "Installed" =>
+          for Source_Dirs use project'Source_Dirs &
+-           ("xsrc", "soap", "../templates_parser/xsrc");
++           ("xsrc", "soap");
+       when "Disabled" =>
+          null;
+    end case;
+@@ -129,17 +130,6 @@
+       for Implementation_Suffix ("Makefile") use ".txt";
+       for Implementation_Exceptions ("Makefile") use ("Makefile");
+ 
+-      -- Templates Parser
+-
+-      for Specification ("Templates_Parser.Configuration")
+-        use "templates_parser-configuration__aws.ads";
+-
+-      for Implementation ("Templates_Parser.Input")
+-        use "templates_parser-input__aws.adb";
+-
+-      for Implementation ("Templates_Parser_Tasking")
+-        use "templates_parser_tasking__standard_tasking.adb";
+-
+       --  SOCKLIB
+ 
+       for Implementation ("AWS.Net.Std")
+--- a/tools/tools.gpr
++++ b/tools/tools.gpr
+@@ -20,6 +20,7 @@
+ with "../shared";
+ with "../aws";
+ with "../win32/win32";
++with "templates_parser";
+ 
+ project Tools is
+ 
+@@ -27,13 +28,12 @@
+ 
+    for Languages use ("Ada", "Project file");
+ 
+-   for Source_Dirs use (".", "../templates_parser/tools",
+-                        Shared.Build_Target_Dir & "/common/src");
++   for Source_Dirs use (".", Shared.Build_Target_Dir & "/common/src");
+ 
+    case TO_BUILD is
+       when "ALL" =>
+-         for Main use ("awsres.adb", "aws_password.adb", "templates2ada.adb",
+-                       "webxref.adb", "templatespp.adb");
++         for Main use ("awsres.adb", "aws_password.adb",
++                       "webxref.adb");
+ 
+          case Shared.XMLAda is
+             when "Installed" =>

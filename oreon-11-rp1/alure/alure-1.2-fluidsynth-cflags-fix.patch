@@ -1,0 +1,14 @@
+diff -up alure-1.2/CMakeLists.txt.fluidsynth-cflags-fix alure-1.2/CMakeLists.txt
+--- alure-1.2/CMakeLists.txt.fluidsynth-cflags-fix	2011-07-29 04:37:48.000000000 -0400
++++ alure-1.2/CMakeLists.txt	2023-01-11 15:40:29.823041640 -0500
+@@ -375,8 +375,8 @@ IF(FLUIDSYNTH)
+     ELSE(NOT FLUIDSYNTH_FOUND)
+         SET(HAS_FLUIDSYNTH 1)
+         LINK_DIRECTORIES(${FLUIDSYNTH_LIBRARY_DIRS})
+-        SET_SOURCE_FILES_PROPERTIES(src/codec_fluidsynth.cpp PROPERTIES
+-                                    COMPILE_FLAGS "${FLUIDSYNTH_CFLAGS}")
++        STRING(REPLACE ";" " " FLUIDSYNTH_PROPER_CFLAGS "${FLUIDSYNTH_CFLAGS}")
++        SET_PROPERTY(SOURCE src/codec_fluidsynth.cpp PROPERTY COMPILE_FLAGS ${FLUIDSYNTH_PROPER_CFLAGS})
+     ENDIF(NOT FLUIDSYNTH_FOUND)
+     IF(HAS_FLUIDSYNTH)
+         SET(ALURE_OBJS ${ALURE_OBJS} src/codec_fluidsynth.cpp)

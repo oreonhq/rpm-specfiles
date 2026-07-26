@@ -1,0 +1,12 @@
+diff -rupN --no-dereference netgen-6.2.2601/ng/CMakeLists.txt netgen-6.2.2601-new/ng/CMakeLists.txt
+--- netgen-6.2.2601/ng/CMakeLists.txt	2026-01-14 10:54:29.000000000 +0100
++++ netgen-6.2.2601-new/ng/CMakeLists.txt	2026-01-18 10:30:32.225962157 +0100
+@@ -31,6 +31,8 @@ if(USE_GUI)
+     target_link_libraries( netgen ${Python3_LIBRARIES} ${TCL_LIBRARY} ${TK_LIBRARY})
+     endif(NOT BUILD_FOR_CONDA)
+ 
++    set_target_properties(netgen PROPERTIES OUTPUT_NAME netgen-mesher)
++
+     install(TARGETS nggui ${NG_INSTALL_DIR})
+ endif(USE_GUI)
+ 

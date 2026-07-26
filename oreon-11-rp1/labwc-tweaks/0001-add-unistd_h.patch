@@ -1,0 +1,26 @@
+From ee3199bdd80b27cd5e178e4a47b7b1c5d884c9f7 Mon Sep 17 00:00:00 2001
+From: Shawn W Dunn <sfalken@opensuse.org>
+Date: Wed, 28 Jan 2026 16:51:41 -0800
+Subject: [PATCH] add unistd.h
+
+Fixes FTBFS with Fedora Rawhide
+https://github.com/labwc/labwc-tweaks/pull/218
+---
+ src/environment.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/environment.cpp b/src/environment.cpp
+index 75803cb..f83a3ec 100644
+--- a/src/environment.cpp
++++ b/src/environment.cpp
+@@ -8,6 +8,7 @@
+ #include <cstring>
+ #include <vector>
+ #include <memory>
++#include <unistd.h>
+ #include "log.h"
+ 
+ class Line
+-- 
+2.52.0
+

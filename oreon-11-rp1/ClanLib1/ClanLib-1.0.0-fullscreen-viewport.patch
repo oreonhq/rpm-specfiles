@@ -1,0 +1,17 @@
+diff -up ClanLib-1.0.0/Sources/GL/GLX/display_window_opengl.cpp~ ClanLib-1.0.0/Sources/GL/GLX/display_window_opengl.cpp
+--- ClanLib-1.0.0/Sources/GL/GLX/display_window_opengl.cpp~	2008-11-13 17:09:02.000000000 +0100
++++ ClanLib-1.0.0/Sources/GL/GLX/display_window_opengl.cpp	2009-09-10 22:58:10.000000000 +0200
+@@ -612,6 +612,13 @@ void CL_DisplayWindow_OpenGL::set_resolu
+ 				XF86VidModeGetViewPort(disp, vi->screen,
+ 					&old_x, &old_y);
+ 			}
++			/* Warp the pointer to the upper left corner, this is
++			   necessary as the: XF86VidModeSetViewPort() call
++			   below does not seem to do anything on newer Xorg
++			   servers, instead the viewport appears to be always
++			   centered at the last mouse position */
++			XWarpPointer(disp, None, XDefaultRootWindow(disp),
++				     0, 0, 0, 0, 0, 0);
+ 			XF86VidModeSwitchToMode(disp, vi->screen,
+ 				modes[i]);
+ 		}

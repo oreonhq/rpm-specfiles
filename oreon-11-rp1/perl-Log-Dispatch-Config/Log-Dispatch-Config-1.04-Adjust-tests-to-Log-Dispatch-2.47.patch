@@ -1,0 +1,173 @@
+From e6b25b4fcacd10f6832a8fa6686817f905d0deec Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 2 Sep 2015 13:52:04 +0200
+Subject: [PATCH] Adjust tests to Log-Dispatch-2.47
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Since Log-Dispatch-2.47, Log::Dispatch::Screen logs into file
+handle associated with STDERR. This overloading STDERR's I/O methods
+by tying to IO::Scalar does not work anymore.
+
+This patch replaces the IO::Scalar capturing by regular forked process
+using IPC::Run3.
+
+CPAN RT#106746
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL      |  2 +-
+ t/02_log.t       | 21 ++++++++++++---------
+ t/03_reload.t    |  1 -
+ t/04_nolog.t     |  1 -
+ t/08_datetime.t  | 16 +++++++++++-----
+ t/11_no_watch.t  |  1 -
+ t/13_do_reload.t |  1 -
+ 7 files changed, 24 insertions(+), 19 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 3074d07..1044eb7 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -20,7 +20,7 @@ WriteMakefile(
+ 	Test::More => 0.32,
+ 	Log::Dispatch => 2.00,
+ 	AppConfig => 1.52,
+-	IO::Scalar => 0,
++	IPC::Run3 => 0,
+ 	File::Temp => 0.12,
+     },
+ );
+diff --git a/t/02_log.t b/t/02_log.t
+index 857bb31..0e1bd6c 100644
+--- a/t/02_log.t
++++ b/t/02_log.t
+@@ -1,9 +1,8 @@
+ use strict;
+-use Test::More tests => 4;
++use Test::More tests => 5;
+ 
+-use Log::Dispatch::Config;
+ use FileHandle;
+-use IO::Scalar;
++use IPC::Run3 ();
+ use File::Spec;
+ 
+ sub slurp {
+@@ -16,18 +15,22 @@ my $log;
+ BEGIN { $log = 't/log.out'; unlink $log if -e $log }
+ END   { unlink $log if -e $log }
+ 
++my $code =<<'CODE';
++use Log::Dispatch::Config;
+ Log::Dispatch::Config->configure('t/log.cfg');
+ 
++my $disp = Log::Dispatch::Config->instance;
++$disp->debug('debug');
++$disp->alert('alert');
++CODE
++
+ my $err;
+ {
+-    tie *STDERR, 'IO::Scalar', \$err;
+-
+-    my $disp = Log::Dispatch::Config->instance;
+-    $disp->debug('debug');
+-    $disp->alert('alert');
++    my $retval = IPC::Run3::run3([$^X, '-e' , $code], \undef, \undef, \$err);
++    ok (($retval and $? == 0), 'Code executed successfully');
+ }
+ 
+-my $filename = __FILE__;
++my $filename = '-e line ';
+ my $file = slurp $log;
+ like $file, qr(debug at \Q$filename\E), 'debug';
+ like $file, qr(alert at \Q$filename\E), 'alert';
+diff --git a/t/03_reload.t b/t/03_reload.t
+index 62fc906..60b778d 100644
+--- a/t/03_reload.t
++++ b/t/03_reload.t
+@@ -5,7 +5,6 @@ use Log::Dispatch::Config;
+ use FileHandle;
+ use File::Copy;
+ use File::Temp qw(tempfile);
+-use IO::Scalar;
+ 
+ if( $^O eq 'MSWin32' ) {
+     plan skip_all => 'These tests fail in Win32 for silly reasons';
+diff --git a/t/04_nolog.t b/t/04_nolog.t
+index 4cf7f20..5162618 100644
+--- a/t/04_nolog.t
++++ b/t/04_nolog.t
+@@ -4,7 +4,6 @@ use Test::More tests => 1;
+ use Log::Dispatch::Config;
+ use FileHandle;
+ use File::Temp qw(tempfile);
+-use IO::Scalar;
+ 
+ sub writefile {
+     my $fh = FileHandle->new(">" . shift) or die $!;
+diff --git a/t/08_datetime.t b/t/08_datetime.t
+index 21e1165..98f64d9 100644
+--- a/t/08_datetime.t
++++ b/t/08_datetime.t
+@@ -1,20 +1,26 @@
+ use strict;
+-use Test::More tests => 3;
++use Test::More tests => 4;
+ 
+-use IO::Scalar;
++use IPC::Run3 ();
+ 
++my $code=<<'CODE';
+ use Log::Dispatch::Config;
+ Log::Dispatch::Config->configure('t/date.cfg');
+ 
+ my $disp = Log::Dispatch::Config->instance;
+-isa_ok $disp->{outputs}->{screen}, 'Log::Dispatch::Screen';
++print $disp->{outputs}->{screen}->isa('Log::Dispatch::Screen');
++
++$disp->debug('debug');
++CODE
+ 
+ {
+     my($mday, $mon, $year) = (localtime(time))[3..5];
+     my $today = sprintf '%04s%02d%02d', $year + 1900, $mon + 1, $mday;
+ 
+-    tie *STDERR, 'IO::Scalar', \my $err;
+-    $disp->debug('debug');
++    my ($out, $err);
++    my $retval = IPC::Run3::run3([$^X, '-e' , $code], \undef, \$out, \$err);
++    ok (($retval and $? == 0), 'Code executed successfully');
++    is ($out, '1', q{dispatcher's class matched});
+ 
+     like $err, qr/$today/, $err;
+     like $err, qr/debug/, $err;
+diff --git a/t/11_no_watch.t b/t/11_no_watch.t
+index 041378d..b3f2009 100644
+--- a/t/11_no_watch.t
++++ b/t/11_no_watch.t
+@@ -5,7 +5,6 @@ use Log::Dispatch::Config;
+ use FileHandle;
+ use File::Copy;
+ use File::Temp qw(tempfile);
+-use IO::Scalar;
+ 
+ my($fh, $file) = tempfile;
+ copy("t/foo.cfg", $file);
+diff --git a/t/13_do_reload.t b/t/13_do_reload.t
+index 340e193..62125ee 100644
+--- a/t/13_do_reload.t
++++ b/t/13_do_reload.t
+@@ -5,7 +5,6 @@ use Log::Dispatch::Config;
+ use FileHandle;
+ use File::Copy;
+ use File::Temp qw(tempfile);
+-use IO::Scalar;
+ 
+ my($fh, $file) = tempfile;
+ copy("t/foo.cfg", $file);
+-- 
+2.4.3
+

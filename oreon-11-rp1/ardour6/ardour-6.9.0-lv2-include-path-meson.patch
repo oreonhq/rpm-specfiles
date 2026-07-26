@@ -1,0 +1,224 @@
+diff -urp Ardour-6.9.0.orig/gtk2_ardour/lv2_plugin_ui.cc Ardour-6.9.0.new/gtk2_ardour/lv2_plugin_ui.cc
+--- Ardour-6.9.0.orig/gtk2_ardour/lv2_plugin_ui.cc	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/gtk2_ardour/lv2_plugin_ui.cc	2022-09-15 11:43:48.868810305 +0900
+@@ -35,7 +35,7 @@
+ 
+ #include "gtkmm2ext/utils.h"
+ 
+-#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
++#include "lv2/ui/ui.h"
+ 
+ #include <lilv/lilv.h>
+ #include <suil/suil.h>
+diff -urp Ardour-6.9.0.orig/gtk2_ardour/lv2_plugin_ui.h Ardour-6.9.0.new/gtk2_ardour/lv2_plugin_ui.h
+--- Ardour-6.9.0.orig/gtk2_ardour/lv2_plugin_ui.h	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/gtk2_ardour/lv2_plugin_ui.h	2022-09-15 11:43:48.869810303 +0900
+@@ -42,7 +42,7 @@
+ 
+ #include "lv2_external_ui.h"
+ 
+-#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
++#include "lv2/ui/ui.h"
+ 
+ namespace ARDOUR {
+ 	class PluginInsert;
+diff -urp Ardour-6.9.0.orig/libs/ardour/ardour/lv2_extensions.h Ardour-6.9.0.new/libs/ardour/ardour/lv2_extensions.h
+--- Ardour-6.9.0.orig/libs/ardour/ardour/lv2_extensions.h	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/ardour/ardour/lv2_extensions.h	2022-09-15 11:43:52.271801172 +0900
+@@ -17,7 +17,7 @@
+ #ifndef _ardour_lv2_extensions_h_
+ #define _ardour_lv2_extensions_h_
+ 
+-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
++#include "lv2/core/lv2.h"
+ 
+ /**
+    @defgroup lv2inlinedisplay Inline-Display
+diff -urp Ardour-6.9.0.orig/libs/ardour/ardour/uri_map.h Ardour-6.9.0.new/libs/ardour/ardour/uri_map.h
+--- Ardour-6.9.0.orig/libs/ardour/ardour/uri_map.h	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/ardour/ardour/uri_map.h	2022-09-15 12:02:45.831515944 +0900
+@@ -27,8 +27,8 @@
+ 
+ #include <glibmm/threads.h>
+ 
+-#include "lv2.h"
+-#include "lv2/lv2plug.in/ns/ext/urid/urid.h"
++#include "lv2/core/lv2.h"
++#include "lv2/urid/urid.h"
+ 
+ #include "ardour/libardour_visibility.h"
+ 
+diff -urp Ardour-6.9.0.orig/libs/ardour/lv2_evbuf.c Ardour-6.9.0.new/libs/ardour/lv2_evbuf.c
+--- Ardour-6.9.0.orig/libs/ardour/lv2_evbuf.c	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/ardour/lv2_evbuf.c	2022-09-15 11:43:44.012823339 +0900
+@@ -18,8 +18,8 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
+-#include "lv2/lv2plug.in/ns/ext/atom/atom.h"
+-#include "lv2/lv2plug.in/ns/ext/event/event.h"
++#include "lv2/atom/atom.h"
++#include "lv2/event/event.h"
+ 
+ #include "lv2_evbuf.h"
+ 
+diff -urp Ardour-6.9.0.orig/libs/ardour/lv2_plugin.cc Ardour-6.9.0.new/libs/ardour/lv2_plugin.cc
+--- Ardour-6.9.0.orig/libs/ardour/lv2_plugin.cc	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/ardour/lv2_plugin.cc	2022-09-15 11:43:48.870810300 +0900
+@@ -76,23 +76,23 @@
+ 
+ #include <lilv/lilv.h>
+ 
+-#include "lv2/lv2plug.in/ns/ext/atom/atom.h"
+-#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+-#include "lv2/lv2plug.in/ns/ext/log/log.h"
+-#include "lv2/lv2plug.in/ns/ext/midi/midi.h"
+-#include "lv2/lv2plug.in/ns/ext/port-props/port-props.h"
+-#include "lv2/lv2plug.in/ns/ext/presets/presets.h"
+-#include "lv2/lv2plug.in/ns/ext/state/state.h"
+-#include "lv2/lv2plug.in/ns/ext/time/time.h"
+-#include "lv2/lv2plug.in/ns/ext/worker/worker.h"
+-#include "lv2/lv2plug.in/ns/ext/resize-port/resize-port.h"
+-#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+-#include "lv2/lv2plug.in/ns/extensions/units/units.h"
+-#include "lv2/lv2plug.in/ns/ext/patch/patch.h"
+-#include "lv2/lv2plug.in/ns/ext/port-groups/port-groups.h"
+-#include "lv2/lv2plug.in/ns/ext/parameters/parameters.h"
+-#include "lv2/lv2plug.in/ns/ext/buf-size/buf-size.h"
+-#include "lv2/lv2plug.in/ns/ext/options/options.h"
++#include "lv2/atom/atom.h"
++#include "lv2/atom/forge.h"
++#include "lv2/log/log.h"
++#include "lv2/midi/midi.h"
++#include "lv2/port-props/port-props.h"
++#include "lv2/presets/presets.h"
++#include "lv2/state/state.h"
++#include "lv2/time/time.h"
++#include "lv2/worker/worker.h"
++#include "lv2/resize-port/resize-port.h"
++#include "lv2/ui/ui.h"
++#include "lv2/units/units.h"
++#include "lv2/patch/patch.h"
++#include "lv2/port-groups/port-groups.h"
++#include "lv2/parameters/parameters.h"
++#include "lv2/buf-size/buf-size.h"
++#include "lv2/options/options.h"
+ 
+ #include "lv2_evbuf.h"
+ 
+diff -urp Ardour-6.9.0.orig/libs/plugins/a-comp.lv2/a-comp.c Ardour-6.9.0.new/libs/plugins/a-comp.lv2/a-comp.c
+--- Ardour-6.9.0.orig/libs/plugins/a-comp.lv2/a-comp.c	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/plugins/a-comp.lv2/a-comp.c	2022-09-15 11:43:52.269801177 +0900
+@@ -28,7 +28,7 @@
+ #include "ardour/lv2_extensions.h"
+ #endif
+ 
+-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
++#include "lv2/core/lv2.h"
+ 
+ #define ACOMP_URI		"urn:ardour:a-comp"
+ #define ACOMP_STEREO_URI	"urn:ardour:a-comp#stereo"
+diff -urp Ardour-6.9.0.orig/libs/plugins/a-delay.lv2/a-delay.c Ardour-6.9.0.new/libs/plugins/a-delay.lv2/a-delay.c
+--- Ardour-6.9.0.orig/libs/plugins/a-delay.lv2/a-delay.c	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/plugins/a-delay.lv2/a-delay.c	2022-09-15 11:43:52.269801177 +0900
+@@ -21,11 +21,11 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ 
+-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
+-#include "lv2/lv2plug.in/ns/ext/atom/atom.h"
+-#include "lv2/lv2plug.in/ns/ext/time/time.h"
+-#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+-#include "lv2/lv2plug.in/ns/ext/urid/urid.h"
++#include "lv2/core/lv2.h"
++#include "lv2/atom/atom.h"
++#include "lv2/time/time.h"
++#include "lv2/atom/forge.h"
++#include "lv2/urid/urid.h"
+ 
+ #define ADELAY_URI "urn:ardour:a-delay"
+ 
+diff -urp Ardour-6.9.0.orig/libs/plugins/a-eq.lv2/a-eq.c Ardour-6.9.0.new/libs/plugins/a-eq.lv2/a-eq.c
+--- Ardour-6.9.0.orig/libs/plugins/a-eq.lv2/a-eq.c	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/plugins/a-eq.lv2/a-eq.c	2022-09-15 11:43:52.267801182 +0900
+@@ -35,7 +35,7 @@
+ #define isfinite_local isfinite
+ #endif
+ 
+-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
++#include "lv2/core/lv2.h"
+ 
+ #ifdef LV2_EXTENDED
+ #include <cairo/cairo.h>
+diff -urp Ardour-6.9.0.orig/libs/plugins/a-exp.lv2/a-exp.c Ardour-6.9.0.new/libs/plugins/a-exp.lv2/a-exp.c
+--- Ardour-6.9.0.orig/libs/plugins/a-exp.lv2/a-exp.c	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/plugins/a-exp.lv2/a-exp.c	2022-09-15 11:43:52.268801180 +0900
+@@ -29,7 +29,7 @@
+ #include "ardour/lv2_extensions.h"
+ #endif
+ 
+-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
++#include "lv2/core/lv2.h"
+ 
+ #define AEXP_URI "urn:ardour:a-exp"
+ #define AEXP_STEREO_URI "urn:ardour:a-exp#stereo"
+diff -urp Ardour-6.9.0.orig/libs/plugins/a-fluidsynth.lv2/a-fluidsynth.cc Ardour-6.9.0.new/libs/plugins/a-fluidsynth.lv2/a-fluidsynth.cc
+--- Ardour-6.9.0.orig/libs/plugins/a-fluidsynth.lv2/a-fluidsynth.cc	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/plugins/a-fluidsynth.lv2/a-fluidsynth.cc	2022-09-15 11:43:52.271801172 +0900
+@@ -44,16 +44,16 @@
+ 
+ #include "fluidsynth.h"
+ 
+-#include <lv2/lv2plug.in/ns/ext/atom/atom.h>
+-#include <lv2/lv2plug.in/ns/ext/atom/forge.h>
+-#include <lv2/lv2plug.in/ns/ext/atom/util.h>
+-#include <lv2/lv2plug.in/ns/ext/log/logger.h>
+-#include <lv2/lv2plug.in/ns/ext/midi/midi.h>
+-#include <lv2/lv2plug.in/ns/ext/patch/patch.h>
+-#include <lv2/lv2plug.in/ns/ext/state/state.h>
+-#include <lv2/lv2plug.in/ns/ext/urid/urid.h>
+-#include <lv2/lv2plug.in/ns/ext/worker/worker.h>
+-#include <lv2/lv2plug.in/ns/lv2core/lv2.h>
++#include <lv2/atom/atom.h>
++#include <lv2/atom/forge.h>
++#include <lv2/atom/util.h>
++#include <lv2/log/logger.h>
++#include <lv2/midi/midi.h>
++#include <lv2/patch/patch.h>
++#include <lv2/state/state.h>
++#include <lv2/urid/urid.h>
++#include <lv2/worker/worker.h>
++#include <lv2/core/lv2.h>
+ 
+ enum {
+ 	FS_PORT_CONTROL = 0,
+diff -urp Ardour-6.9.0.orig/libs/plugins/a-reverb.lv2/a-reverb.c Ardour-6.9.0.new/libs/plugins/a-reverb.lv2/a-reverb.c
+--- Ardour-6.9.0.orig/libs/plugins/a-reverb.lv2/a-reverb.c	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/plugins/a-reverb.lv2/a-reverb.c	2022-09-15 11:43:52.270801174 +0900
+@@ -249,7 +249,7 @@ reverb (b_reverb* r,
+  * LV2 wrapper
+  */
+ 
+-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
++#include "lv2/core/lv2.h"
+ 
+ typedef enum {
+ 	AR_INPUT0     = 0,
+diff -urp Ardour-6.9.0.orig/libs/plugins/reasonablesynth.lv2/lv2.c Ardour-6.9.0.new/libs/plugins/reasonablesynth.lv2/lv2.c
+--- Ardour-6.9.0.orig/libs/plugins/reasonablesynth.lv2/lv2.c	2021-08-14 01:20:07.000000000 +0900
++++ Ardour-6.9.0.new/libs/plugins/reasonablesynth.lv2/lv2.c	2022-09-15 11:43:52.268801180 +0900
+@@ -24,10 +24,10 @@
+ #include <time.h>
+ 
+ /* LV2 */
+-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
+-#include "lv2/lv2plug.in/ns/ext/atom/atom.h"
+-#include "lv2/lv2plug.in/ns/ext/urid/urid.h"
+-#include "lv2/lv2plug.in/ns/ext/midi/midi.h"
++#include "lv2/core/lv2.h"
++#include "lv2/atom/atom.h"
++#include "lv2/urid/urid.h"
++#include "lv2/midi/midi.h"
+ 
+ #define RSY_URI "https://community.ardour.org/node/7596"
+ 

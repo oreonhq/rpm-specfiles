@@ -1,0 +1,12 @@
+diff -up SDL_sound-5c769634b5b8d9fb643f198f3f6ea49abdf305fd/CMakeLists.txt.orig SDL_sound-5c769634b5b8d9fb643f198f3f6ea49abdf305fd/CMakeLists.txt
+--- SDL_sound-5c769634b5b8d9fb643f198f3f6ea49abdf305fd/CMakeLists.txt.orig	2025-07-24 23:21:50.000000000 +0200
++++ SDL_sound-5c769634b5b8d9fb643f198f3f6ea49abdf305fd/CMakeLists.txt	2025-08-02 22:01:38.914340668 +0200
+@@ -159,8 +159,6 @@ set(SDLSOUND_SRCS
+     src/SDL_sound_wav.c
+ )
+ set(SDLSOUND_HDRS
+-    src/dr_flac.h
+-    src/dr_mp3.h
+     "include/SDL3_sound/SDL_sound.h"
+     src/SDL_sound_internal.h
+     src/stb_vorbis.h

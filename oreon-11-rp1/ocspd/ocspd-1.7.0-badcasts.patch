@@ -1,0 +1,141 @@
+diff -Naur openca-ocspd-1.7.0.orig/src/hash-db.c openca-ocspd-1.7.0.new/src/hash-db.c
+--- openca-ocspd-1.7.0.orig/src/hash-db.c	2013-02-20 13:36:09.057265341 +0100
++++ openca-ocspd-1.7.0.new/src/hash-db.c	2013-02-20 14:02:28.590528713 +0100
+@@ -403,8 +403,8 @@
+ 	}
+ 
+ 	if( ocspd_conf->verbose ) {
+-		syslog( LOG_INFO, "INFO::HTTP::Successfully got CA cert [%d]",
+-			buf->length);
++		syslog( LOG_INFO, "INFO::HTTP::Successfully got CA cert [%lu]",
++			(unsigned long) buf->length);
+ 	}
+ 
+ 	/* Build a memory bio from the MEM_BUF data */
+@@ -487,8 +487,8 @@
+ 	}
+ 
+ 	if( ocspd_conf->verbose ) {
+-		syslog( LOG_INFO, "INFO::HTTP::Successfully got CRL [%d]",
+-			buf->length);
++		syslog( LOG_INFO, "INFO::HTTP::Successfully got CRL [%lu]",
++			(unsigned long) buf->length);
+ 	}
+ 
+ 	/* Build a memory bio from the MEM_BUF data */
+diff -Naur openca-ocspd-1.7.0.orig/src/http_client.c openca-ocspd-1.7.0.new/src/http_client.c
+--- openca-ocspd-1.7.0.orig/src/http_client.c	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.7.0.new/src/http_client.c	2013-02-20 13:47:44.224871928 +0100
+@@ -77,7 +77,7 @@
+ 			/* Max Reading size exceeded */
+ 			syslog( LOG_ERR, 
+ 				"ERROR::HTTP::Read::Max read size exceeded "
+-				" [ %d ]", max_size );
++				" [ %ld ]", (long) max_size );
+ 			BUF_MEM_free( buf );
+ 			return NULL;
+ 		}
+diff -Naur openca-ocspd-1.7.0.orig/src/ocsp_request.c openca-ocspd-1.7.0.new/src/ocsp_request.c
+--- openca-ocspd-1.7.0.orig/src/ocsp_request.c	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.7.0.new/src/ocsp_request.c	2013-02-20 13:46:42.288254074 +0100
+@@ -42,6 +42,7 @@
+ 
+ 	struct  timeval   time_out;
+ 	fd_set  readset;
++	long ltemp;
+ 
+ 	if( !ocspd_conf ) {
+ 		return (NULL);
+@@ -142,7 +143,7 @@
+ 
+ 			if( ocspd_conf->debug ) {
+ 				syslog(LOG_ERR, "DEBUG::NETWORK::recv "
+-					"received %d (conn = %d)!", newsize, connfd);
++					"received %ld (conn = %d)!", (long) newsize, connfd);
+ 			}
+ 	
+ 		/*
+@@ -164,11 +165,16 @@
+ 			/* Check for headers */
+ 			if( (!cont_len) && 
+ 				((pnt = strstr_nocase(buf, "Content-Length: " )) != NULL) ) {
++				ltemp = 0;
++
+ 				if((pnt_end = strstr(pnt, "\r\n")) != NULL )
+-					sscanf((char *) (pnt+16), "%d", &cont_len );
++					sscanf((char *) (pnt+16), "%ld", &ltemp);
++
++				cont_len = ltemp;
++
+ 				if(ocspd_conf->debug) {
+-					syslog(LOG_ERR, "DEBUG::Got Content Len [%d]",
+-						cont_len);
++					syslog(LOG_ERR, "DEBUG::Got Content Len [%ld]",
++						ltemp);
+ 				}
+ 			}
+ 
+@@ -217,8 +223,8 @@
+ 			if( fullsize >= maxsize ) {
+ 				/* Max Reading size exceeded */
+ 				syslog( LOG_ERR, 
+-					"ERROR::Max REQUEST size exceeded [ %d ]",
+-						maxsize );
++					"ERROR::Max REQUEST size exceeded [ %ld ]",
++						(long) maxsize );
+ 				free( buf );
+ 				return(NULL);
+ 			}
+@@ -250,21 +256,22 @@
+ 
+                 syslog( LOG_ERR, "ERROR: Internal memory allocation error!");
+ 		if(ocspd_conf->debug) {
+-			fprintf(stderr, "ERROR::req_st=%p [len %d]\n",
+-				req_st, cont_len);
++			fprintf(stderr, "ERROR::req_st=%p [len %ld]\n",
++				req_st, (long) cont_len);
+ 		}
+         } else {
+ 		if((req = d2i_OCSP_REQUEST_bio(mem, NULL)) == NULL ) {
+ 			if(ocspd_conf->debug) {
+ 				syslog(LOG_ERR, "ERROR::Parsing in d2i_ function\n");
+ 
+-				fprintf(stderr, "[len %d] buf=%p -- req_st=%p "
+-						"(fullsize %d - hd_size = %d - "
+-						"rq_size = %d)\n", 
+-						cont_len, buf, 
+-						req_st, fullsize,
+-						req_st - buf,
+-						fullsize - (req_st - buf) );
++				fprintf(stderr, "[len %ld] buf=%p -- req_st=%p "
++						"(fullsize %ld - "
++						"hd_size = %ld - "
++						"rq_size = %ld)\n", 
++						(long) cont_len, buf, 
++						req_st, (long) fullsize,
++						(long) (req_st - buf),
++						(long) (fullsize - (req_st - buf)));
+ 			}
+ 		}
+ 		if(mem) BIO_free (mem);
+diff -Naur openca-ocspd-1.7.0.orig/src/threads.c openca-ocspd-1.7.0.new/src/threads.c
+--- openca-ocspd-1.7.0.orig/src/threads.c	2008-11-21 20:13:17.000000000 +0100
++++ openca-ocspd-1.7.0.new/src/threads.c	2013-02-20 13:51:18.635395840 +0100
+@@ -29,7 +29,7 @@
+ 
+ 	th_ptr = &(ocspd_conf->threads_list[i]);
+ 	if( (ret=pthread_create( &ocspd_conf->threads_list[i].thread_tid, 
+-			NULL, thread_main, (void *) i )) ) {
++			NULL, thread_main, (void *) &i )) ) {
+ 
+ 		syslog(LOG_ERR,"ERROR::OPENCA_SRV_ERR_THREAD_CREATE");
+ 		return(ret);
+@@ -50,7 +50,7 @@
+ 
+ 	struct sigaction sa;
+ 
+-	thread_nr = (int) arg;
++	thread_nr = *(int *) arg;
+ 
+ 	if ( ocspd_conf->verbose ) {
+ 		syslog(LOG_INFO, "INFO::OPENCA_SRV_INFO_TREAD::new thread "

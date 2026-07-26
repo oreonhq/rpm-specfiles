@@ -1,0 +1,36 @@
+commit 227ce116a307a7f38967639c94ad74970ee83700
+Author: zoulasc <christos@zoulas.com>
+Date:   Tue Mar 8 23:30:38 2016 -0500
+
+    Improve debugging for unmounting.
+
+diff --git a/amd/map.c b/amd/map.c
+index bcb2156..a6df44b 100644
+--- a/amd/map.c
++++ b/amd/map.c
+@@ -904,10 +904,8 @@ unmount_mp(am_node *mp)
+   int was_backgrounded = 0;
+   mntfs *mf = mp->am_al->al_mnt;
+ 
+-#ifdef notdef
+   plog(XLOG_INFO, "\"%s\" on %s timed out (flags 0x%x)",
+-       mp->am_path, mf->mf_mount, (int) mf->mf_flags);
+-#endif /* notdef */
++     mp->am_path, mf->mf_mount, (int) mf->mf_flags);
+ 
+ #ifndef MNT2_NFS_OPT_SYMTTL
+     /*
+@@ -938,11 +936,12 @@ unmount_mp(am_node *mp)
+       plog(XLOG_STATS, "file server %s is down - timeout of \"%s\" ignored", mf->mf_server->fs_host, mp->am_path);
+       mf->mf_flags |= MFF_LOGDOWN;
+     }
++    dlog("\"%s\" on %s server is down, deferred", mp->am_path, mf->mf_mount);
+     notify_child(mp, AMQ_UMNT_SERVER, 0, 0);
+     return 0;
+   }
+ 
+-  dlog("\"%s\" on %s timed out", mp->am_path, mf->mf_mount);
++  dlog("\"%s\" on %s timed out, unmounting", mp->am_path, mf->mf_mount);
+   mf->mf_flags |= MFF_UNMOUNTING;
+ 
+ #ifdef HAVE_FS_AUTOFS

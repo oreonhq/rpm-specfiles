@@ -1,0 +1,44 @@
+From 36df80fca5a0bb54470650512a86b8c3a926b8a1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 22 Mar 2018 09:23:49 +0100
+Subject: [PATCH] Remove a useless check for gstreamer1 library
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Not checking for libgstreamer1.so saves from depending on
+gstreamer1-devel. They are not needed for GObject binding.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 1f1694a..a1b5f29 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -3,12 +3,6 @@
+ use strict;
+ use warnings;
+ 
+-# inserted by Dist::Zilla::Plugin::CheckLib 0.006
+-use Devel::CheckLib;
+-check_lib_or_exit(
+-    lib => 'gstreamer-1.0',
+-);
+-
+ 
+ 
+ use ExtUtils::MakeMaker 6.30;
+@@ -19,7 +13,6 @@ my %WriteMakefileArgs = (
+   "ABSTRACT" => "Bindings for GStreamer 1.0, the open source multimedia framework",
+   "AUTHOR" => "Timm Murray <tmurray\@wumpus-cave.net>",
+   "CONFIGURE_REQUIRES" => {
+-    "Devel::CheckLib" => "0.9",
+     "ExtUtils::MakeMaker" => "6.30"
+   },
+   "DISTNAME" => "GStreamer1",
+-- 
+2.14.3
+

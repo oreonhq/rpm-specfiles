@@ -1,0 +1,143 @@
+diff --git a/Makefile.am b/Makefile.am
+index a9b5c69..f743ed4 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -3,7 +3,7 @@ bin_SCRIPTS = msg
+ dist_man_MANS = msort.1
+ docs = Doc/msort.pdf Doc/InitializationFiles
+ msort_SOURCES = conversions.c dstr.c info.c input.c misc.c msort.c sorts.c strs.c uniio.c ExplicateBadUTF8.c binfmt.c iso8601.c
+-noinst_HEADERS = comparisons.h compdefs.h dstr.h ex_codes.h exitcode.h input.h key.h limits.h record.h retcodes.h unicode.h  unorm.h utf8error.h
++noinst_HEADERS = comparisons.h compdefs.h dstr.h ex_codes.h exitcode.h input.h key.h mlimits.h record.h retcodes.h unicode.h  unorm.h utf8error.h
+ LOCALEDIR=/usr/local/share/locale
+ EXTRA_DIST = $(docs) msg.tcl CREDITS msort-${VERSION}.lsm RegressionTests SortOrders
+ AUTOMAKE_OPTIONS = dist-zip dist-bzip2
+diff --git a/Makefile.in b/Makefile.in
+index 3cb8b67..1c62d1c 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -181,7 +181,7 @@ bin_SCRIPTS = msg
+ dist_man_MANS = msort.1
+ docs = Doc/msort.pdf Doc/InitializationFiles
+ msort_SOURCES = conversions.c dstr.c info.c input.c misc.c msort.c sorts.c strs.c uniio.c ExplicateBadUTF8.c binfmt.c iso8601.c
+-noinst_HEADERS = comparisons.h compdefs.h dstr.h ex_codes.h exitcode.h input.h key.h limits.h record.h retcodes.h unicode.h  unorm.h utf8error.h
++noinst_HEADERS = comparisons.h compdefs.h dstr.h ex_codes.h exitcode.h input.h key.h mlimits.h record.h retcodes.h unicode.h  unorm.h utf8error.h
+ LOCALEDIR = /usr/local/share/locale
+ EXTRA_DIST = $(docs) msg.tcl CREDITS msort-${VERSION}.lsm RegressionTests SortOrders
+ AUTOMAKE_OPTIONS = dist-zip dist-bzip2
+diff --git a/info.c b/info.c
+index f6a8bb0..42285b8 100644
+--- a/info.c
++++ b/info.c
+@@ -28,7 +28,7 @@
+ #else
+ #define _(x) (x)
+ #endif
+-#include "limits.h"
++#include "mlimits.h"
+ #ifdef HAVE_UNINUM_UNINUM_H
+ #include <uninum/unicode.h>
+ #include <uninum/uninum.h>
+diff --git a/input.c b/input.c
+index fc3804f..dd8be10 100644
+--- a/input.c
++++ b/input.c
+@@ -38,7 +38,7 @@
+ #include "unicode.h"
+ #endif
+ #include "input.h"
+-#include "limits.h"
++#include "mlimits.h"
+ #include "utf8error.h"
+ 
+ #define MSGSIZE 128
+diff --git a/limits.h b/limits.h
+deleted file mode 100644
+index 04432ab..0000000
+--- a/limits.h
++++ /dev/null
+@@ -1,33 +0,0 @@
+-
+-/*
+- * This first section contains constants which can be changed at will.
+- */
+-
+-/* Default initial maximum records to sort */
+-#define DEFMAXRECORDS	10240
+-
+-/* Initial size of input text buffer */
+-#define INPUTTEXTSIZEINIT 8192
+-
+-/* Initial maximum fields in a record */
+-#define DEFMAXFIELDS 32
+-
+-/* Maximum length of numeric string */
+-#define MAXDOUBLELEN 256
+-
+-
+-/* The following can't be changed freely since they reflect the Unicode standard */
+-#define MAXUNICODE 0x1FFFFF
+-#define MAXBMP     0x00FFFF
+-
+-#define NPU_FIRSTMULTIGRAPHCODE 0xD800
+-#define NPU_MAXMULTIGRAPHCODE 0xDFFF
+-#define NPU_MAXMULTIGRAPHS (NPU_MAXMULTIGRAPHCODE - NPU_FIRSTMULTIGRAPHCODE + 1)
+-
+-#define BMP_FIRSTMULTIGRAPHCODE 0xE000
+-#define BMP_MAXMULTIGRAPHCODE 0xF8FF
+-#define BMP_MAXMULTIGRAPHS (BMP_MAXMULTIGRAPHCODE - BMP_FIRSTMULTIGRAPHCODE + 1)
+-
+-#define FUL_FIRSTMULTIGRAPHCODE 0xF0000
+-#define FUL_MAXMULTIGRAPHCODE 0x10FFFD
+-#define FUL_MAXMULTIGRAPHS (FUL_MAXMULTIGRAPHCODE - FUL_FIRSTMULTIGRAPHCODE + 1)
+diff --git a/mlimits.h b/mlimits.h
+new file mode 100644
+index 0000000..04432ab
+--- /dev/null
++++ b/mlimits.h
+@@ -0,0 +1,33 @@
++
++/*
++ * This first section contains constants which can be changed at will.
++ */
++
++/* Default initial maximum records to sort */
++#define DEFMAXRECORDS	10240
++
++/* Initial size of input text buffer */
++#define INPUTTEXTSIZEINIT 8192
++
++/* Initial maximum fields in a record */
++#define DEFMAXFIELDS 32
++
++/* Maximum length of numeric string */
++#define MAXDOUBLELEN 256
++
++
++/* The following can't be changed freely since they reflect the Unicode standard */
++#define MAXUNICODE 0x1FFFFF
++#define MAXBMP     0x00FFFF
++
++#define NPU_FIRSTMULTIGRAPHCODE 0xD800
++#define NPU_MAXMULTIGRAPHCODE 0xDFFF
++#define NPU_MAXMULTIGRAPHS (NPU_MAXMULTIGRAPHCODE - NPU_FIRSTMULTIGRAPHCODE + 1)
++
++#define BMP_FIRSTMULTIGRAPHCODE 0xE000
++#define BMP_MAXMULTIGRAPHCODE 0xF8FF
++#define BMP_MAXMULTIGRAPHS (BMP_MAXMULTIGRAPHCODE - BMP_FIRSTMULTIGRAPHCODE + 1)
++
++#define FUL_FIRSTMULTIGRAPHCODE 0xF0000
++#define FUL_MAXMULTIGRAPHCODE 0x10FFFD
++#define FUL_MAXMULTIGRAPHS (FUL_MAXMULTIGRAPHCODE - FUL_FIRSTMULTIGRAPHCODE + 1)
+diff --git a/msort.c b/msort.c
+index 7187ed4..c5b0c6b 100644
+--- a/msort.c
++++ b/msort.c
+@@ -81,7 +81,7 @@ typedef unsigned long ULongLong;
+ #include "exitcode.h"
+ #include "retcodes.h"
+ #include "input.h"
+-#include "limits.h"
++#include "mlimits.h"
+ #include "key.h"
+ #include "record.h"
+ #include "ex_codes.h"

@@ -1,0 +1,26 @@
+From 1bbb503cd654fa28ef396e06bab0880fb9d9f856 Mon Sep 17 00:00:00 2001
+From: Aaron Conole <aconole@redhat.com>
+Date: Fri, 17 Feb 2017 09:40:04 -0500
+Subject: [PATCH] configure: Use -r for sed
+
+Signed-off-by: Aaron Conole <aconole@redhat.com>
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 9f23823..36da13a 100755
+--- a/configure
++++ b/configure
+@@ -472,7 +472,7 @@ $CAT ./Makefile.in >> Makefile
+ 
+ echo "Writing spec file"
+ 
+-SFUZZ_MAINVERSION=`echo $SFUZZ_VERSION | $SED -e 's/"//g' | $SED -e 's/^([0-9]+)\.([0-9]+)\.[0-9]+$/\1.\2/g'`
++SFUZZ_MAINVERSION=`echo $SFUZZ_VERSION | $SED -e 's/"//g' | $SED -re 's/^([0-9]+)\.([0-9]+)\.[0-9]+$/\1.\2/g'`
+ SFUZZ_RELEASE=`echo $SFUZZ_VERSION | $CUT -d"." -f3`
+ 
+ echo "Wrote $SFUZZ_MAINVERSION : $SFUZZ_RELEASE"
+-- 
+2.9.3
+

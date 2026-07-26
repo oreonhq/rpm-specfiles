@@ -1,0 +1,27 @@
+From 118da7a0495c7871a652ce159a5cbd08aab18fec Mon Sep 17 00:00:00 2001
+From: Allen Winter <winter@kde.org>
+Date: Wed, 26 Aug 2015 18:45:11 -0400
+Subject: [PATCH 17/31] subscriptiondialog.cpp - make default size a little
+ larger 300x200 is pretty small => increase to 400x300
+
+MERGE: safe for newer versions
+---
+ akonadi/subscriptiondialog.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/akonadi/subscriptiondialog.cpp b/akonadi/subscriptiondialog.cpp
+index 071d785..d61fed3 100644
+--- a/akonadi/subscriptiondialog.cpp
++++ b/akonadi/subscriptiondialog.cpp
+@@ -125,7 +125,7 @@ public:
+     void readConfig()
+     {
+         KConfigGroup group(KGlobal::config(), "SubscriptionDialog");
+-        const QSize sizeDialog = group.readEntry("Size", QSize(300, 200));
++        const QSize sizeDialog = group.readEntry("Size", QSize(400, 300));
+         if (sizeDialog.isValid()) {
+             q->resize(sizeDialog);
+         }
+-- 
+2.5.0
+

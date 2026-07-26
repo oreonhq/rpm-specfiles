@@ -1,0 +1,45 @@
+From e36a62fbffa61a6046c435655e65775d66fa067f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 31 Mar 2020 10:39:15 +0200
+Subject: [PATCH] Fix a Use of uninitialized value in lc warning
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CPAN RT#132271
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ ApacheFormat.pm | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/ApacheFormat.pm b/ApacheFormat.pm
+index 6ed500f..0430435 100644
+--- a/ApacheFormat.pm
++++ b/ApacheFormat.pm
+@@ -582,13 +582,15 @@ sub _read {
+                 for my $f (reverse @val) {
+                     # if they specified a root_directive (ServerRoot) and
+                     # it is defined, prefix that to relative paths
+-                    my $root = $self->{case_sensitive} ? $self->{root_directive}
+-                                                       : lc $self->{root_directive};
+-                    if (! File::Spec->file_name_is_absolute($f) && exists $data->{$root}) {
+-                        # looks odd; but only reliable method is construct UNIX-style
+-                        # then deconstruct
+-                        my @parts = File::Spec->splitpath("$data->{$root}[0]/$f");
+-                        $f = File::Spec->catpath(@parts);
++                    if (defined $self->{root_directive}) {
++                        my $root = $self->{case_sensitive} ? $self->{root_directive} :
++                                                             lc $self->{root_directive};
++                        if (! File::Spec->file_name_is_absolute($f) && exists $data->{$root}) {
++                            # looks odd; but only reliable method is construct UNIX-style
++                            # then deconstruct
++                            my @parts = File::Spec->splitpath("$data->{$root}[0]/$f");
++                            $f = File::Spec->catpath(@parts);
++                        }
+                     }
+ 
+                     # this handles directory includes (i.e. will include all files in a directory)
+-- 
+2.21.1
+

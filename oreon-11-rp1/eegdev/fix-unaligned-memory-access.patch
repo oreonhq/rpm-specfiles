@@ -1,0 +1,46 @@
+From: Dejan Latinovic <Dejan.Latinovic@imgtec.com>
+Date: Tue, 11 Mar 2014 18:16:39 +0100
+Description: Fix unaligned memory access errors on MIPS systems
+ This patch fixes unaligned memory access errors on MIPS systems.
+Debian-Bug: 
+
+--- a/src/core/typecast.c	2014-03-17 17:03:03.868239764 +0000
++++ b/src/core/typecast.c	2014-03-17 17:07:18.253726412 +0000
+@@ -37,6 +37,28 @@ static void cast_##tsrc##_##tdst (void*
+ 	}								\
+ }						
+ 
++// Prototype of a generic type scale and cast function for unaligned memory access
++#define DEFINE_CASTUNALIGNED_FN(tsrc, tdst)				\
++static void cast_##tsrc##_##tdst (void* restrict d, const void* restrict s, union gval sc, size_t len)  \
++{									\
++	union dstdata							\
++	{								\
++		tdst Data;						\
++		unsigned int intData[2];				\
++	};								\
++	const tsrc* src = s;						\
++	union dstdata *dst = d;						\
++	tdst scale = sc.val##tdst;					\
++	while(len)							\
++	{								\
++		union dstdata dst_tmp;					\
++		dst_tmp.Data = scale * ((tdst)(*src));			\
++		dst->intData[0] = dst_tmp.intData[0];			\
++		dst->intData[1] = dst_tmp.intData[1];			\
++		src++; dst++;						\
++		len -= sizeof(*src);					\
++	}								\
++}
+ // Prototype of a generic type cast function
+ #define DEFINE_CASTNOSC_FN(tsrc, tdst)				\
+ static void castnosc_##tsrc##_##tdst (void* restrict d, const void* restrict s, union gval sc, size_t len)	\
+@@ -60,7 +82,7 @@ static void identity(void* restrict d, c
+ 
+ // Declaration/definition of type cast and scale functions
+ DEFINE_CAST_FN(int32_t, int32_t)
+-DEFINE_CAST_FN(int32_t, double)
++DEFINE_CASTUNALIGNED_FN(int32_t, double)
+ DEFINE_CAST_FN(double, int32_t)
+ DEFINE_CAST_FN(int32_t, float)
+ DEFINE_CAST_FN(float, int32_t)

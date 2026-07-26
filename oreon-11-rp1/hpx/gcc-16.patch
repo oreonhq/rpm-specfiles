@@ -1,0 +1,58 @@
+diff --git a/libs/core/iterator_support/include/hpx/iterator_support/zip_iterator.hpp b/libs/core/iterator_support/include/hpx/iterator_support/zip_iterator.hpp
+index 2e68520635b..3c06cd79145 100644
+--- a/libs/core/iterator_support/include/hpx/iterator_support/zip_iterator.hpp
++++ b/libs/core/iterator_support/include/hpx/iterator_support/zip_iterator.hpp
+@@ -361,10 +373,10 @@ namespace hpx::util {
+             detail::zip_iterator_base<hpx::tuple<Ts...>, zip_iterator<Ts...>>;
+ 
+     public:
+-        HPX_HOST_DEVICE constexpr zip_iterator() noexcept
+-          : base_type()
+-        {
+-        }
++        // prevent the operator_brackets_proxy from being used
++        using use_brackets_proxy = std::false_type;
++
++        HPX_HOST_DEVICE zip_iterator() = default;
+ 
+         HPX_HOST_DEVICE explicit constexpr zip_iterator(
+             Ts const&... vs) noexcept
+@@ -442,10 +456,10 @@ namespace hpx::util {
+             zip_iterator<hpx::tuple<Ts...>>>;
+ 
+     public:
+-        HPX_HOST_DEVICE constexpr zip_iterator() noexcept
+-          : base_type()
+-        {
+-        }
++        // prevent the operator_brackets_proxy from being used
++        using use_brackets_proxy = std::false_type;
++
++        HPX_HOST_DEVICE zip_iterator() = default;
+ 
+         HPX_HOST_DEVICE explicit constexpr zip_iterator(
+             Ts const&... vs) noexcept
+diff --git a/libs/core/iterator_support/include/hpx/iterator_support/iterator_facade.hpp b/libs/core/iterator_support/include/hpx/iterator_support/iterator_facade.hpp
+index 94bf8fb36ba..2f791997c36 100644
+--- a/libs/core/iterator_support/include/hpx/iterator_support/iterator_facade.hpp
++++ b/libs/core/iterator_support/include/hpx/iterator_support/iterator_facade.hpp
+@@ -307,8 +308,8 @@ namespace hpx::util {
+         }
+ 
+         template <typename Iterator>
+-        HPX_HOST_DEVICE typename Iterator::value_type
+-        make_operator_brackets_result(Iterator const& iter, std::false_type)
++        HPX_HOST_DEVICE decltype(auto) make_operator_brackets_result(
++            Iterator const& iter, std::false_type)
+         {
+             return *iter;
+         }
+@@ -333,7 +334,8 @@ namespace hpx::util {
+ 
+             HPX_HOST_DEVICE iterator_facade_base() = default;
+ 
+-            HPX_HOST_DEVICE constexpr auto operator[](difference_type n) const
++            HPX_HOST_DEVICE constexpr decltype(auto) operator[](
++                difference_type n) const
+             {
+                 using use_proxy = use_operator_brackets_proxy<Derived, T>;

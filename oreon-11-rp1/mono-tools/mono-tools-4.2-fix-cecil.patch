@@ -1,0 +1,502 @@
+--- mono-tools-4.2/gendarme/console/ConsoleRunner.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/console/ConsoleRunner.cs	2019-08-08 21:47:25.326029403 +0200
+@@ -524,7 +524,7 @@
+ 				}
+ 			
+ 				// next assembly
+-				Console.Write (Path.GetFileName (e.CurrentAssembly.MainModule.FullyQualifiedName));
++				Console.Write (Path.GetFileName (e.CurrentAssembly.MainModule.FileName));
+ 				local.Start ();
+ 			}
+ 			
+--- mono-tools-4.2/gendarme/console/XmlResultWriter.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/console/XmlResultWriter.cs	2019-08-08 21:47:36.862226672 +0200
+@@ -87,7 +87,7 @@
+ 			foreach (AssemblyDefinition assembly in Runner.Assemblies) {
+ 				writer.WriteStartElement ("file");
+ 				writer.WriteAttributeString ("Name", assembly.FullName);
+-				writer.WriteString (assembly.MainModule.FullyQualifiedName);
++				writer.WriteString (assembly.MainModule.FileName);
+ 				writer.WriteEndElement ();
+ 			}
+ 			writer.WriteEndElement ();
+--- mono-tools-4.2/gendarme/framework/Gendarme.Framework/AssemblyResolver.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/framework/Gendarme.Framework/AssemblyResolver.cs	2019-08-08 21:06:10.943734890 +0200
+@@ -76,7 +76,7 @@
+ 				throw new ArgumentNullException ("assembly");
+ 
+ 			assemblies.Add (assembly.Name.Name, assembly);
+-			string location = Path.GetDirectoryName (assembly.MainModule.FullyQualifiedName);
++			string location = Path.GetDirectoryName (assembly.MainModule.FileName);
+ 			AddSearchDirectory (location);
+ 		}
+ 
+--- mono-tools-4.2/gendarme/framework/Gendarme.Framework/Symbols.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/framework/Gendarme.Framework/Symbols.cs	2019-08-08 21:19:54.341800278 +0200
+@@ -58,11 +58,12 @@
+ 			if ((method == null) || !method.HasBody || method.Body.Instructions.Count == 0)
+ 				return null;
+ 			Instruction ins = method.Body.Instructions [0];
++			SequencePoint seqPoint = method.DebugInformation.GetSequencePoint(ins);
+ 			// note that the first instruction often does not have a sequence point
+-			while (ins != null && ins.SequencePoint == null)
++			while (ins != null && seqPoint == null)
+ 				ins = ins.Next;
+ 				
+-			return (ins != null && ins.SequencePoint != null) ? ins : null;
++			return (ins != null && seqPoint != null) ? ins : null;
+ 		}
+ 
+ 		private static TypeDefinition FindTypeFromLocation (IMetadataTokenProvider location)
+@@ -123,17 +124,18 @@
+ 				exact ? String.Empty : AlmostEqualTo);
+ 		}
+ 
+-		private static string GetSource (Instruction ins)
++		private static string GetSource (MethodDefinition method, Instruction ins)
+ 		{
+ 			// try to find the closed sequence point for this instruction
+ 			Instruction search = ins;
+ 			bool feefee = false;
+ 			while (search != null) {
+ 				// find the first entry, going backward, with a SequencePoint
+-				if (search.SequencePoint != null) {
++				SequencePoint seqPoint = method.DebugInformation.GetSequencePoint(search);
++				if (seqPoint != null) {
+ 					// skip entries that are hidden (0xFEEFEE)
+-					if (search.SequencePoint.StartLine != PdbHiddenLine)
+-						return FormatSequencePoint (search.SequencePoint, feefee);
++					if (seqPoint.StartLine != PdbHiddenLine)
++						return FormatSequencePoint (seqPoint, feefee);
+ 					// but from here on we're not 100% sure about line numbers
+ 					feefee = true;
+ 				}
+@@ -144,14 +146,14 @@
+ 			return String.Format (CultureInfo.InvariantCulture, "debugging symbols unavailable, IL offset 0x{0:x4}", ins.Offset);
+ 		}
+ 		
+-		static private string FormatSource (Instruction candidate)
++		static private string FormatSource (SequencePoint seqPoint)
+ 		{
+-			int line = candidate.SequencePoint.StartLine;
++			int line = seqPoint.StartLine;
+ 			// we approximate (line - 1, no column) to get (closer) to the definition
+ 			// unless we have the special 0xFEEFEE value (used in PDB for hidden source code)
+ 			if (line != PdbHiddenLine)
+ 				line--;
+-			return FormatSequencePoint (candidate.SequencePoint.Document.Url, line, 0, false);
++			return FormatSequencePoint (seqPoint.Document.Url, line, 0, false);
+ 		}
+ 
+ 		static public string GetSource (Defect defect)
+@@ -159,8 +161,9 @@
+ 			if (defect == null)
+ 				return String.Empty;
+ 
+-			if (defect.Instruction != null)
+-				return GetSource (defect.Instruction);
++			MethodDefinition method = FindMethodFromLocation (defect.Location);
++			if ((defect.Instruction != null) && (method != null))
++				return GetSource (method, defect.Instruction);
+ 
+ 			// rule didn't provide an Instruction but we do our best to
+ 			// find something since this is our only link to the source code
+@@ -170,11 +173,12 @@
+ 
+ 			// MethodDefinition, ParameterDefinition
+ 			//	return the method source file with (approximate) line number
+-			MethodDefinition method = FindMethodFromLocation (defect.Location);
+ 			if (method != null) {
+ 				candidate = ExtractFirst (method);
+-				if (candidate != null) 
+-					return FormatSource (candidate);
++				if (candidate != null) {
++					SequencePoint seqPoint = method.DebugInformation.GetSequencePoint(candidate);
++					return FormatSource (seqPoint);
++				}
+ 
+ 				// we may still be lucky to find the (a) source file for the type itself
+ 				type = method.DeclaringType;
+@@ -185,8 +189,10 @@
+ 			if (type == null)
+ 				type = FindTypeFromLocation (defect.Location);
+ 			candidate = ExtractFirst (type);
+-			if (candidate != null)
+-				return FormatSource (candidate);
++			if (candidate != null) {
++				//SequencePoint seqPoint = type.DebugInformation.GetSequencePoint(candidate);
++				//return FormatSource (seqPoint);
++			}
+ 
+ 			return String.Empty;
+ 		}
+--- mono-tools-4.2/gendarme/framework/Gendarme.Framework.Helpers/PrimitiveReferences.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/framework/Gendarme.Framework.Helpers/PrimitiveReferences.cs	2019-08-08 20:01:05.929310846 +0200
+@@ -50,7 +50,7 @@
+ 			ModuleDefinition module = metadata.GetAssembly ().MainModule;
+ 			TypeReference tr;
+ 			if (!module.TryGetTypeReference (type.FullName, out tr))
+-				tr = module.Import (type);
++				tr = module.ImportReference (type);
+ 			return tr;
+ 		}
+ 
+--- mono-tools-4.2/gendarme/framework/Gendarme.Framework.Rocks/ModuleRocks.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/framework/Gendarme.Framework.Rocks/ModuleRocks.cs	2019-08-08 20:01:36.029831827 +0200
+@@ -77,7 +77,7 @@
+ 			if (self.HasSymbols)
+ 				return;
+ 
+-			string image_name = self.FullyQualifiedName;
++			string image_name = self.FileName;
+ 			string symbol_name = image_name + ".mdb";
+ 			Type reader_type = null;
+ 
+--- mono-tools-4.2/gendarme/framework/Gendarme.Framework.Rocks/TypeRocks.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/framework/Gendarme.Framework.Rocks/TypeRocks.cs	2019-08-08 20:59:01.836421840 +0200
+@@ -73,8 +73,8 @@
+ 				if (type != null) {
+ 					yield return type;
+ 					
+-					foreach (TypeReference super in type.Interfaces) {
+-						types.AddIfNew (super);
++					foreach (InterfaceImplementation super in type.Interfaces) {
++						types.AddIfNew (super.InterfaceType);
+ 					}
+ 					
+ 					if (type.BaseType != null)
+@@ -268,11 +268,11 @@
+ 			while (type != null) {
+ 				// does the type implements it itself
+ 				if (type.HasInterfaces) {
+-					foreach (TypeReference iface in type.Interfaces) {
+-						if (iface.IsNamed (nameSpace, iname))
++					foreach (InterfaceImplementation iface in type.Interfaces) {
++						if (iface.InterfaceType.IsNamed (nameSpace, iname))
+ 							return true;
+ 						//if not, then maybe one of its parent interfaces does
+-						if (Implements (iface.Resolve (), nameSpace, iname))
++						if (Implements (iface.InterfaceType.Resolve (), nameSpace, iname))
+ 							return true;
+ 					}
+ 				}
+--- mono-tools-4.2/gendarme/framework/Gendarme.Framework.Rocks/VariableDefinitionRocks.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/framework/Gendarme.Framework.Rocks/VariableDefinitionRocks.cs	2019-08-08 21:05:27.082986543 +0200
+@@ -43,7 +43,7 @@
+ 			if (self == null)
+ 				return false;
+ 
+-			string name = self.Name;
++			string name = String.Empty; // self.Name is not valid anymore since Mono.Cecil 0.10
+ 			if (String.IsNullOrEmpty (name))
+ 				return true;
+ 
+@@ -54,7 +54,8 @@
+ 		{
+ 			if (self == null)
+ 				return String.Empty;
+-			return !string.IsNullOrEmpty (self.Name) ? self.Name : "V_" + self.Index.ToString (CultureInfo.InvariantCulture);
++			string name = String.Empty; // self.Name is not valid anymore since Mono.Cecil 0.10
++			return !string.IsNullOrEmpty (name) ? name : "V_" + self.Index.ToString (CultureInfo.InvariantCulture);
+ 		}
+ 	}
+ }
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Concurrency/ProtectCallToEventDelegatesRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Concurrency/ProtectCallToEventDelegatesRule.cs	2019-08-08 21:22:23.788354940 +0200
+@@ -171,7 +171,8 @@
+ 					// look for the variable, if it's not then stop analysis
+ 					VariableDefinition load = caller.GetVariable (method);
+ 					if ((load != null) && !CheckVariable (method, caller, load)) {
+-						string msg = String.Format (CultureInfo.InvariantCulture, "Variable '{0}' does not seems to be checked against null.", load.Name);
++						string name = String.Empty; // load.Name is not valid since Cecil 0.10
++						string msg = String.Format (CultureInfo.InvariantCulture, "Variable '{0}' does not seems to be checked against null.", name);
+ 						Runner.Report (method, ins, Severity.High, Confidence.Normal, msg);
+ 					}
+ 				}
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Correctness/AvoidCodeWithSideEffectsInConditionalCodeRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Correctness/AvoidCodeWithSideEffectsInConditionalCodeRule.cs	2019-08-08 21:23:36.205592943 +0200
+@@ -145,8 +145,10 @@
+ 					
+ 					} else if (ins.IsStoreLocal ()) {
+ 						VariableDefinition vd = ins.GetVariable (method);
+-						if (!vd.IsGeneratedName ())
+-							name = "local " + vd.Name;
++						if (!vd.IsGeneratedName ()) {
++							string variableName = String.Empty; // vd.Name is not valid since Cecil 0.10
++							name = "local " + variableName;
++						}
+ 					
+ 					} else if (ins.OpCode.Code == Code.Stfld || ins.OpCode.Code == Code.Stsfld) {
+ 						FieldReference fr = ins.Operand as FieldReference;
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Correctness/EnsureLocalDisposalRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Correctness/EnsureLocalDisposalRule.cs	2019-08-08 21:24:20.862356390 +0200
+@@ -344,7 +344,8 @@
+ 			string tname = variable.VariableType.Name;
+ 			if (variable.IsGeneratedName ())
+ 				return String.Format (CultureInfo.InvariantCulture, "of type '{0}' ", tname);
+-			return String.Format (CultureInfo.InvariantCulture, "'{0}' of type '{1}' ", variable.Name, tname);
++			string variableName = String.Empty; // variable.Name is not valid anymore since Cecil 0.10
++			return String.Format (CultureInfo.InvariantCulture, "'{0}' of type '{1}' ", variableName, tname);
+ 		}
+ 
+ 		static OpCodeBitmask BuildCallsAndNewobjOpCodeBitmask ()
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Correctness/ReviewDoubleAssignmentRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Correctness/ReviewDoubleAssignmentRule.cs	2019-08-08 21:27:05.141165034 +0200
+@@ -114,7 +114,8 @@
+ 			if (stfld.TraceBack (method).GetOperand (method) != next.TraceBack (method).GetOperand (method))
+ 				return String.Empty;
+ 
+-			return String.Format (CultureInfo.InvariantCulture, "Instance field '{0}' on same variable '{1}'.", fd1.Name, vd1.Name);
++			string vd1Name = String.Empty; // vd1.Name is not valid anymore since Cecil 0.10
++			return String.Format (CultureInfo.InvariantCulture, "Instance field '{0}' on same variable '{1}'.", fd1.Name, vd1Name);
+ 		}
+ 
+ 		static string CheckDoubleAssignement (MethodDefinition method, Instruction ins, Instruction next)
+@@ -142,7 +143,8 @@
+ 					if (vd1.Index != vd2.Index)
+ 						return String.Empty;
+ 
+-					return String.Format (CultureInfo.InvariantCulture, "Local variable '{0}'.", vd1.Name);
++					string vd1Name = String.Empty; // vd1.Name is not valid since Cecil 0.10
++					return String.Format (CultureInfo.InvariantCulture, "Local variable '{0}'.", vd1Name);
+ 				} else if (next.OpCode.Code == Code.Stfld) {
+ 					// instance fields are a bit more complex...
+ 					return CheckDoubleAssignementOnInstanceFields (method, ins, next);
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Design/AvoidRefAndOutParametersRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Design/AvoidRefAndOutParametersRule.cs	2019-08-08 21:28:15.238363522 +0200
+@@ -96,8 +96,8 @@
+ 			if (td == null)
+ 				return false;
+ 
+-			foreach (TypeReference intf_ref in td.Interfaces) {
+-				TypeDefinition intr = intf_ref.Resolve ();
++			foreach (InterfaceImplementation intf_ref in td.Interfaces) {
++				TypeDefinition intr = intf_ref.InterfaceType.Resolve ();
+ 				if (intr == null)
+ 					continue;
+ 
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Design/ConsiderAddingInterfaceRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Design/ConsiderAddingInterfaceRule.cs	2019-08-08 21:29:20.359476962 +0200
+@@ -190,8 +190,8 @@
+ 			}
+ 
+ 			if (iface.HasInterfaces) {
+-				foreach (TypeReference tr in iface.Interfaces) {
+-					TypeDefinition td = tr.Resolve ();
++				foreach (InterfaceImplementation tr in iface.Interfaces) {
++					TypeDefinition td = tr.InterfaceType.Resolve ();
+ 					if (td == null)
+ 						continue;
+ 					if (!DoesTypeStealthilyImplementInterface (type, td))
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Design/ImplementIComparableCorreclyRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Design/ImplementIComparableCorreclyRule.cs	2019-08-08 21:31:55.054122001 +0200
+@@ -109,11 +109,11 @@
+ 			// rule only applies if the type implements IComparable or IComparable<T>
+ 			// Note: we do not use Implements rock because we do not want a recursive answer
+ 			bool icomparable = false;
+-			foreach (TypeReference iface in type.Interfaces) {
+-				if (iface.Namespace != "System")
++			foreach (InterfaceImplementation iface in type.Interfaces) {
++				if (iface.InterfaceType.Namespace != "System")
+ 					continue;
+ 				// catch both System.IComparable and System.IComparable`1<X>
+-				if (iface.Name.StartsWith ("IComparable", StringComparison.Ordinal)) {
++				if (iface.InterfaceType.Name.StartsWith ("IComparable", StringComparison.Ordinal)) {
+ 					icomparable = true;
+ 					break;
+ 				}
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Design/UseCorrectDisposeSignaturesRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Design/UseCorrectDisposeSignaturesRule.cs	2019-08-08 21:32:36.174825118 +0200
+@@ -235,8 +235,8 @@
+ 		static bool DirectlyImplementsIDisposable (TypeDefinition type)
+ 		{
+ 			if (type.HasInterfaces) {
+-				foreach (TypeReference candidate in type.Interfaces) {
+-					if (candidate.IsNamed ("System", "IDisposable"))
++				foreach (InterfaceImplementation candidate in type.Interfaces) {
++					if (candidate.InterfaceType.IsNamed ("System", "IDisposable"))
+ 						return true;
+ 				}
+ 			}
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Globalization/SatelliteResourceMismatchRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Globalization/SatelliteResourceMismatchRule.cs	2019-08-08 21:33:15.375495411 +0200
+@@ -185,7 +185,7 @@
+ 			string satellitesName = mainAssembly.Name.Name + ".resources.dll";
+ 
+ 			DirectoryInfo directory = new DirectoryInfo (Path.GetDirectoryName (
+-				mainAssembly.MainModule.FullyQualifiedName));
++				mainAssembly.MainModule.FileName));
+ 			DirectoryInfo [] subDirectories = directory.GetDirectories ();
+ 			foreach (DirectoryInfo dir in subDirectories) {
+ 				FileInfo [] files;
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Maintainability/AvoidUnnecessarySpecializationRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Maintainability/AvoidUnnecessarySpecializationRule.cs	2019-08-08 21:38:35.100962525 +0200
+@@ -159,12 +159,12 @@
+ 		{
+ 			TypeDefinition ifaceDef = null;
+ 
+-			foreach (TypeReference iface in type.Interfaces) {
++			foreach (InterfaceImplementation iface in type.Interfaces) {
+ 				// ignore non-cls-compliant interfaces
+-				if (iface.Name.StartsWith ("_", StringComparison.Ordinal))
++				if (iface.InterfaceType.Name.StartsWith ("_", StringComparison.Ordinal))
+ 					continue;
+ 
+-				TypeDefinition candidate = iface.Resolve ();
++				TypeDefinition candidate = iface.InterfaceType.Resolve ();
+ 				if ((candidate == null) || !candidate.IsVisible ())
+ 					continue; 
+ 
+@@ -428,8 +428,8 @@
+ 
+ 		static bool IsSignatureDictatedByInterface (IMemberDefinition method, MethodSignature sig)
+ 		{
+-			foreach (TypeReference intf_ref in method.DeclaringType.Interfaces) {
+-				TypeDefinition intr = intf_ref.Resolve ();
++			foreach (InterfaceImplementation intf_ref in method.DeclaringType.Interfaces) {
++				TypeDefinition intr = intf_ref.InterfaceType.Resolve ();
+ 				if (intr == null)
+ 					continue;
+ 				foreach (MethodDefinition md in intr.Methods) {
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Maintainability/PreferStringIsNullOrEmptyRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Maintainability/PreferStringIsNullOrEmptyRule.cs	2019-08-08 21:37:13.063559714 +0200
+@@ -111,10 +111,15 @@
+ 			case Code.Ldloc_2:
+ 			case Code.Ldloc_3:
+ 				int vindex = ins.OpCode.Code - Code.Ldloc_0;
+-				return method.Body.Variables [vindex].Name;
++				string name;
++				if (method.DebugInformation.TryGetName(method.Body.Variables [vindex], out name)) {
++					return name;
++				}
++				return String.Empty;
+ 			case Code.Ldloc:
+ 			case Code.Ldloc_S:
+-				return (ins.Operand as VariableDefinition).Name;
++				//return (ins.Operand as VariableDefinition).Name; not valid since Cecil 0.10
++				return String.Empty;
+ 			default:
+ 				object o = ins.Operand;
+ 				MemberReference mr = (o as MemberReference);
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Maintainability/RemoveDependenceOnObsoleteCodeRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Maintainability/RemoveDependenceOnObsoleteCodeRule.cs	2019-08-08 21:38:02.844410944 +0200
+@@ -159,9 +159,9 @@
+ 
+ 		void CheckInterfaces (TypeDefinition type)
+ 		{
+-			foreach (TypeReference intf in type.Interfaces) {
+-				if (IsObsolete (intf)) {
+-					string msg = String.Format (CultureInfo.InvariantCulture, "Implement obsolete interface '{0}'.", intf);
++			foreach (InterfaceImplementation intf in type.Interfaces) {
++				if (IsObsolete (intf.InterfaceType)) {
++					string msg = String.Format (CultureInfo.InvariantCulture, "Implement obsolete interface '{0}'.", intf.InterfaceType);
+ 					Runner.Report (type, type.IsVisible () ? Severity.Medium : Severity.Low, Confidence.Total, msg);
+ 				}
+ 			}
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Maintainability/VariableNamesShouldNotMatchFieldNamesRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Maintainability/VariableNamesShouldNotMatchFieldNamesRule.cs	2019-08-08 21:40:10.542594559 +0200
+@@ -113,8 +113,9 @@
+ 						// if the name is compiler generated or if we do not have debugging symbols...
+ 						if (var.IsGeneratedName ())
+ 							continue;
+-						if (fields.Contains (var.Name))
+-							Runner.Report (method, Severity.Medium, Confidence.Normal, var.Name);
++						// var.Name is not valid anymore since Cecil 0.10
++						//if (fields.Contains (var.Name))
++						//	Runner.Report (method, Severity.Medium, Confidence.Normal, var.Name);
+ 					}
+ 				}
+ 			}
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Naming/ParameterNamesShouldMatchOverridenMethodRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Naming/ParameterNamesShouldMatchOverridenMethodRule.cs	2019-08-08 21:41:43.152178181 +0200
+@@ -148,8 +148,8 @@
+ 			if (!type.HasInterfaces)
+ 				return null;
+ 
+-			foreach (TypeReference interfaceReference in type.Interfaces) {
+-				TypeDefinition interfaceCandidate = interfaceReference.Resolve ();
++			foreach (InterfaceImplementation interfaceReference in type.Interfaces) {
++				TypeDefinition interfaceCandidate = interfaceReference.InterfaceType.Resolve ();
+ 				if ((interfaceCandidate == null) || !interfaceCandidate.HasMethods)
+ 					continue;
+ 
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Naming/UseCorrectSuffixRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Naming/UseCorrectSuffixRule.cs	2019-08-08 21:42:10.084638725 +0200
+@@ -210,8 +210,8 @@
+ 						currentTypeSuffix = true;
+ 				} else {
+ 					// if no suffix for base type is found, we start looking through interfaces
+-					foreach (TypeReference iface in current.Interfaces) {
+-						if (TryGetCandidates (iface, out candidates)) {
++					foreach (InterfaceImplementation iface in current.Interfaces) {
++						if (TryGetCandidates (iface.InterfaceType, out candidates)) {
+ 							suffixes.AddRangeIfNew (candidates);
+ 							if (current == type)
+ 								currentTypeSuffix = true;
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Performance/AvoidUncalledPrivateCodeRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Performance/AvoidUncalledPrivateCodeRule.cs	2019-08-08 21:42:57.217444697 +0200
+@@ -233,8 +233,8 @@
+ 			// check if this method is needed to satisfy an interface
+ 			TypeDefinition type = (method.DeclaringType as TypeDefinition);
+ 			if (type.HasInterfaces) {
+-				foreach (TypeReference tr in type.Interfaces) {
+-					TypeDefinition intf = tr.Resolve ();
++				foreach (InterfaceImplementation tr in type.Interfaces) {
++					TypeDefinition intf = tr.InterfaceType.Resolve ();
+ 					if (intf != null) {
+ 						foreach (MethodReference member in intf.Methods) {
+ 							if (name == member.Name)
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Performance/RemoveUnusedLocalVariablesRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Performance/RemoveUnusedLocalVariablesRule.cs	2019-08-08 21:43:43.110229468 +0200
+@@ -133,8 +133,9 @@
+ 					if (variable.IsGeneratedName ())
+ 						continue;
+ 
++					string variableName = String.Empty; // variable.Name is not valid anymore since Cecil 0.10
+ 					string s = String.Format (CultureInfo.InvariantCulture, "Variable '{0}' of type '{1}'", 
+-						variable.Name, variable.VariableType.GetFullName ());
++						variableName, variable.VariableType.GetFullName ());
+ 					Runner.Report (method, Severity.Low, Confidence.Normal, s);
+ 				}
+ 			}
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Portability/DoNotHardcodePathsRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Portability/DoNotHardcodePathsRule.cs	2019-08-08 21:45:40.440235829 +0200
+@@ -337,8 +337,12 @@
+ 				CheckIdentifier ((afterLdstr.Operand as FieldReference).Name);
+ 				break;
+ 			default:
+-				if (afterLdstr.IsStoreLocal ())
+-					CheckIdentifier (afterLdstr.GetVariable (method_body.Method).Name);
++				if (afterLdstr.IsStoreLocal ()) {
++					string name;
++					if (method_body.Method.DebugInformation.TryGetName(afterLdstr.GetVariable (method_body.Method), out name)) {
++						CheckIdentifier (name);
++					}
++				}
+ 				else
+ 					return false;
+ 				break;
+--- mono-tools-4.2/gendarme/rules/Gendarme.Rules.Smells/AvoidLongMethodsRule.cs	2014-10-04 11:56:08.000000000 +0200
++++ mono-tools-4.2b/gendarme/rules/Gendarme.Rules.Smells/AvoidLongMethodsRule.cs	2019-08-08 21:46:51.401449282 +0200
+@@ -277,7 +277,7 @@
+ 			int sloc = 0;
+ 			int current_line = -1;
+ 			foreach (Instruction ins in method.Body.Instructions) {
+-				SequencePoint sp = ins.SequencePoint;
++				SequencePoint sp = method.DebugInformation.GetSequencePoint(ins);
+ 				if (sp == null)
+ 					continue;
+ 
+--- a/gui-compare/CecilMetadata.cs	2019-08-08 07:22:35.312189164 +0200
++++ b/gui-compare/CecilMetadata.cs	2019-08-08 07:25:24.999118826 +0200
+@@ -239,8 +239,8 @@
+ 			var cache = new Dictionary<string, TypeReference> ();
+ 
+ 			foreach (var definition in WalkHierarchy (type))
+-				foreach (TypeReference iface in definition.Interfaces)
+-					cache [iface.FullName] = iface;
++				foreach (InterfaceImplementation iface in definition.Interfaces)
++					cache [iface.InterfaceType.FullName] = iface.InterfaceType;
+ 
+ 			return cache.Values;
+ 		}

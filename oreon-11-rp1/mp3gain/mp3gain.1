@@ -1,0 +1,171 @@
+.TH "MP3GAIN" "1" 
+.SH "NAME" 
+mp3gain \(em lossless mp3 normalizer 
+.SH "SYNOPSIS" 
+.PP 
+\fBmp3gain\fR [\fBoptions\fP]  [\fIinfile\fR]  [\fB\fIinfile 2\fR ...\fP]  
+.SH "DESCRIPTION" 
+.PP 
+This manual page documents briefly the 
+\fBmp3gain\fR command. 
+.PP 
+This manual page was written for the \fBDebian\fP distribution 
+because the original program does not have a manual page. 
+ 
+.PP 
+\fBmp3gain\fR can analyze and adjust mp3 files 
+so that they have the same volume. 
+.PP 
+\fBmp3gain\fR does not just do peak normalization, 
+as many normalizers do. Instead, it does some statistical analysis to 
+determine how loud the file actually sounds to the human ear. Also, the 
+changes \fBmp3gain\fR makes are completely lossless. There 
+is no quality lost in the change because the program adjusts the mp3 file 
+directly, without decoding and re-encoding. Also, this works with all mp3 
+players, i.e. no support for a special tag or something similar is 
+required. 
+.PP 
+\fBmp3gain\fR actually changes your file's gain only 
+when you use one of the options \fB-r\fP,  \fB-a\fP, 
+\fB-g\fP, or \fB-l\fP. If none of these options is 
+given, only a tag denoting the recommended gain change is written to the 
+file. If you only want to print the recommended gain change (and not modify 
+the file at all) you have to use the \fB-s s\fP (skip tag) 
+option.  
+.PP 
+The method mp3gain uses to determine the desired volume 
+is described at 
+\fIwww.replaygain.org (link to URL http://www.replaygain.org/) \fR. 
+See also \fB/usr/share/doc/mp3gain-1.4.6/README.method\fP . 
+.SH "OPTIONS" 
+.IP "\fB-?\fP           \fB-h\fP         " 10 
+Show summary of options. 
+.IP "\fB-g \fIi\fR\fP         " 10 
+apply gain \fIi\fR to mp3 without 
+doing any analysis 
+.IP "\fB-l 0 \fIi\fR\fP         " 10 
+apply gain \fIi\fR to channel 0  
+(left channel) of mp3 
+without doing any analysis (ONLY works for STEREO mp3s, 
+not Joint Stereo mp3s) 
+.IP "\fB-l 1 \fIi\fR\fP         " 10 
+apply gain \fIi\fR to channel 1 
+(right channel) of mp3 
+without doing any analysis (ONLY works for STEREO mp3s, 
+not Joint Stereo mp3s) 
+.IP "\fB-r\fP         " 10 
+apply Track gain automatically (all files set to equal loudness) 
+.IP "\fB-k\fP         " 10 
+automatically lower Track gain to not clip audio 
+.IP "\fB-a\fP         " 10 
+apply Album gain automatically (files are all from the same 
+album: a single gain change is applied to all files, so 
+their loudness relative to each other remains unchanged, 
+but the average album loudness is normalized) 
+.IP "\fB-m \fIi\fR\fP         " 10 
+modify suggested MP3 gain by integer \fIi\fR 
+.IP "\fB-d \fIn\fR\fP         " 10 
+modify suggested dB gain by floating-point 
+\fIn\fR 
+.IP "\fB-c\fP         " 10 
+ignore clipping warning when applying gain 
+.IP "\fB-o\fP         " 10 
+output is a database-friendly tab-delimited list 
+.IP "\fB-t\fP         " 10 
+mp3gain writes modified mp3 to temp file, then deletes original 
+instead of modifying bytes in original file (This is the default in 
+Debian) 
+.IP "\fB-T\fP         " 10 
+mp3gain modifys bytes in original file instead of 
+writing to temp file. 
+.IP "\fB-q\fP         " 10 
+Quiet mode: no status messages 
+.IP "\fB-p\fP         " 10 
+Preserve original file timestamp 
+.IP "\fB-x\fP         " 10 
+Only find max. amplitude of mp3 
+.IP "\fB-f\fP         " 10 
+Force \fBmp3gain\fR to assume input file 
+is an MPEG 2 Layer III file 
+(i.e. don't check for mis-named Layer I or Layer II files) 
+.IP "\fB-s c\fP         " 10 
+only check stored tag info (no other processing) 
+.IP "\fB-s d\fP         " 10 
+delete stored tag info (no other processing) 
+.IP "\fB-s s\fP         " 10 
+skip (ignore) stored tag info (do not read or write tags) 
+.IP "\fB-s r\fP         " 10 
+force re-calculation (do not read tag info) 
+.IP "\fB-u\fP         " 10 
+undo changes made by mp3gain (based on stored tag info) 
+.IP "\fB-w\fP         " 10 
+"wrap" gain change if gain+change > 255 or gain+change < 0 
+(see below or use \fB-? wrap\fP switch for a complete 
+explanation) 
+.IP "\fB-v\fP         " 10 
+Show version of program. 
+.PP 
+If you specify \fB-r\fP and \fB-a\fP, 
+only the second one will work. 
+.PP 
+If you do not specify \fB-c\fP, the program will 
+stop and ask before 
+applying gain change to a file that might clip 
+.SS "The WRAP option" 
+.PP 
+Here's the problem: 
+The "global gain" field that mp3gain adjusts is an 8-bit unsigned integer, so 
+the possible values are 0 to 255. 
+ 
+.PP 
+MOST mp3 files (in fact, ALL the mp3 files I've examined so far) don't go 
+over 230. So there's plenty of headroom on top\-\- you can increase the gain 
+by 37dB (multiplying the amplitude by 76) without a problem. 
+ 
+.PP 
+The problem is at the bottom of the range. Some encoders create frames with 
+0 as the global gain for silent frames. 
+What happens when you _lower_ the global gain by 1? 
+Well, in the past, mp3gain always simply wrapped the result up to 255. 
+That way, if you lowered the gain by any amount and then raised it by the 
+same amount, the mp3 would always be _exactly_ the same. 
+ 
+.PP 
+There are a few encoders out there, unfortunately, that create 0-gain frames 
+with other audio data in the frame. 
+As long as the global gain is 0, you'll never hear the data. 
+But if you lower the gain on such a file, the global gain is suddenly _huge_. 
+If you play this modified file, there might be a brief, very loud blip. 
+ 
+.PP 
+So now the default behavior of mp3gain is to _not_ wrap gain changes. 
+In other words, 
+ 
+.IP "   1." 6 
+If the gain change would make a frame's global gain drop below 0, 
+then the global gain is set to 0. 
+ 
+.IP "   2." 6 
+If the gain change would make a frame's global gain grow above 255, 
+then the global gain is set to 255. 
+ 
+.IP "   3." 6 
+ 
+If a frame's global gain field is already 0, it is not changed, even if 
+the gain change is a positive number. 
+ 
+.PP 
+To use the original "wrapping" behavior, use the \fB-w\fP switch. 
+ 
+.SH "SEE ALSO" 
+.PP 
+The homepage of mp3gain is located at 
+\fIhttp://mp3gain.sourceforge.net/ (link to URL http://mp3gain.sourceforge.net/) \fR . 
+ 
+.SH "AUTHOR" 
+.PP 
+This manual page was written by Stefan Fritsch sf@sfritsch.de for 
+the \fBDebian\fP system (but may be used by others).  Permission is 
+granted to copy, distribute and/or modify this document under 
+the terms of the GNU Lesser General Public License, Version 2.1 or  
+any later version published by the Free Software Foundation. 

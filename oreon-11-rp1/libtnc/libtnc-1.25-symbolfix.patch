@@ -1,0 +1,59 @@
+diff -up libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMC/IMC.xs.symbolfix libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMC/IMC.xs
+--- libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMC/IMC.xs.symbolfix	2006-05-16 19:45:50.000000000 -0400
++++ libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMC/IMC.xs	2023-01-11 14:44:08.456038230 -0500
+@@ -169,6 +169,4 @@ libtnc_imc *
+ libtnc_imc_new(filename)
+ 	char *	filename
+ 
+-TNC_Result
+-libtnc_imc_unload()
+ 
+diff -up libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMV/IMV.xs.symbolfix libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMV/IMV.xs
+--- libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMV/IMV.xs.symbolfix	2023-01-11 14:44:41.300408846 -0500
++++ libtnc-1.25/Interface-TNC/Interface-TNC-1.0/IMV/IMV.xs	2023-01-11 14:44:48.762493051 -0500
+@@ -184,6 +184,3 @@ libtnc_imv *
+ libtnc_imv_new(filename)
+ 	char *	filename
+ 
+-TNC_Result
+-libtnc_imv_unload()
+-
+diff -up libtnc-1.25/src/libtnc/libtnctncc.c.symbolfix libtnc-1.25/src/libtnc/libtnctncc.c
+--- libtnc-1.25/src/libtnc/libtnctncc.c.symbolfix	2011-02-08 15:52:41.000000000 -0500
++++ libtnc-1.25/src/libtnc/libtnctncc.c	2023-01-11 14:44:08.456038230 -0500
+@@ -71,6 +71,16 @@ TNC_Result libtnc_tncc_add_imc_imv_messa
+ }
+ 
+ ///////////////////////////////////////////////////////////
++// Called by TNCC when a finished batch is ready to send
++__attribute__((weak)) TNC_Result TNC_TNCC_SendBatch(
++    /*in*/ libtnc_tncc_connection* conn,
++    /*in*/ const char* messageBuffer,
++    /*in*/ size_t messageLength)
++{
++    return libtnc_tncs_ReceiveBatch(conn, messageBuffer, messageLength);
++}
++
++///////////////////////////////////////////////////////////
+ static
+ TNC_Result libtnc_tncc_EndBatch(
+     /*in*/ libtnc_tncc_connection* conn)
+diff -up libtnc-1.25/src/libtnc/libtnctncs.c.symbolfix libtnc-1.25/src/libtnc/libtnctncs.c
+--- libtnc-1.25/src/libtnc/libtnctncs.c.symbolfix	2011-02-08 15:55:11.000000000 -0500
++++ libtnc-1.25/src/libtnc/libtnctncs.c	2023-01-11 14:44:08.456038230 -0500
+@@ -144,6 +144,15 @@ TNC_Result libtnc_tncs_recommend(
+     return TNC_RESULT_SUCCESS;
+ }
+ 
++///////////////////////////////////////////////////////////
++// Called by TNCS when a finished batch is ready to send
++__attribute__((weak)) TNC_Result TNC_TNCS_SendBatch(
++    /*in*/ libtnc_tncs_connection* conn,
++    /*in*/ const char* messageBuffer,
++    /*in*/ size_t messageLength)
++{
++    return libtnc_tncc_ReceiveBatch(conn, messageBuffer, messageLength);
++}
+ 
+ ///////////////////////////////////////////////////////////
+ static

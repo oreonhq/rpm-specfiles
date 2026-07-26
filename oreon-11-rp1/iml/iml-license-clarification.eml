@@ -1,0 +1,169 @@
+Return-Path: <astorjohann@uwaterloo.ca>
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	 by sloti45n20 (Cyrus 3.5.0-alpha0-4514-g2bdc19e04f-fm-20211209.002-g2bdc19e0) with LMTPA;
+	 Fri, 10 Dec 2021 13:32:56 -0500
+X-Cyrus-Session-Id: sloti45n20-1639161176-2471130-2-1565310190839861075
+X-Sieve: CMU Sieve 3.0
+X-Spam-known-sender: no
+X-Spam-sender-reputation: 500 (none)
+X-Spam-score: 0.0
+X-Spam-hits: ME_SENDERREP_NEUTRAL 0.001, RCVD_IN_DNSWL_MED -2.3,
+  RCVD_IN_MSPIKE_H2 -0.001, SPF_HELO_PASS -0.001, SPF_PASS -0.001,
+  LANGUAGES en, BAYES_USED none, SA_VERSION 3.4.2
+X-Spam-source: IP='216.71.131.47', Host='esa.hc503-62.ca.iphmx.com', Country='US',
+  FromHeader='ca', MailFrom='ca', XOriginatingCountry='UNK'
+X-Spam-charsets: plain='utf-8'
+X-Resolved-to: ben@musicinmybrain.net
+X-Delivered-to: code@musicinmybrain.net
+X-Mail-from: astorjohann@uwaterloo.ca
+Received: from mx3 ([10.202.2.202])
+  by compute1.internal (LMTPProxy); Fri, 10 Dec 2021 13:32:56 -0500
+Received: from mx3.messagingengine.com (localhost [127.0.0.1])
+	by mailmx.nyi.internal (Postfix) with ESMTP id C7C9B1F40086
+	for <code@musicinmybrain.net>; Fri, 10 Dec 2021 13:32:55 -0500 (EST)
+Received: from mx3.messagingengine.com (localhost [127.0.0.1])
+    by mx3.messagingengine.com (Authentication Milter) with ESMTP
+    id 53C39438680;
+    Fri, 10 Dec 2021 13:32:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; cv=none; d=messagingengine.com; s=fm1; t=
+    1639161175; b=T28Mw/yGHLxoAmim45puJ8KUNuzWXzXa/3WQNry/ap6pQ+wNzB
+    GfLUtK0RDDac9k5Z+V3E0/VhqQpDWWItIWHRTefYH0usPIsNrT9ZZlmBE7VbmmJ9
+    5pCaoKpk+WxP9db8EWvyZgc29TWFmoD6xKbXndzw2A2E98UvefA5WQr0YMZBDYEa
+    4NdXMN1DXaLf8imkEiE0JCGjOduAhfkrOxRtwC9y28y7fdq8wX5EbooMF/c3ovEE
+    llkxYYT86lP6bXb4sLEPMgJBGy7XNzkGI3rPPPVIvS4E8vuMkY8JfP+zsT7WmdM1
+    /P3zzDsFIU+xhbGD7B3OfAJEEz3C793gf3yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=
+    messagingengine.com; h=from:to:subject:date:message-id
+    :references:in-reply-to:content-type:content-id
+    :content-transfer-encoding:mime-version; s=fm1; t=1639161175;
+    bh=aFclI9nkzazQC+PivdKV6+EY2d9H2sH6dT1mn3RWmJE=; b=cuRjJ2z2hYHT
+    ZGDMZlDSjbrBKqA5YVIiR8J5e1ZApQLHKhF+f9/JhDUHU8psBWMBChhHr4SYAS1b
+    +xBldwjhMnH16kSWsZqzeABLPkxrRI0cQu2rJ0y4cDuwEleM88NcAmF4sW5JNoHg
+    7kKGiapakL69UR391+Kwc/+5Wjs/2+ZuVYJ/lTyph4k6AsEQcXWNNw72ICR5RqZH
+    5evqXk/Oxi1YLUndZD0eQxRLV6SFK99YYxQOD+WgMhjts87BAZW8TUhwYuPAerar
+    dy7O6nToOqUAkkIL+zS97dkwKdRH+Mu8+GAi6y70uJc5UoExzGUtDtbcgTM1iI90
+    4+N3t2gobA==
+ARC-Authentication-Results: i=1; mx3.messagingengine.com;
+    x-csa=none;
+    x-me-sender=none;
+    x-ptr=pass smtp.helo=esa.hc503-62.ca.iphmx.com
+    policy.ptr=esa.hc503-62.ca.iphmx.com;
+    bimi=skipped (DMARC Policy is not at enforcement);
+    arc=none (no signatures found);
+    dkim=pass (1024-bit rsa key sha256) header.d=uwaterloo.ca
+    header.i=@uwaterloo.ca header.b=Yfymt6j/ header.a=rsa-sha256
+    header.s=default x-bits=1024;
+    dmarc=pass policy.published-domain-policy=none
+    policy.applied-disposition=none policy.evaluated-disposition=none
+    (p=none,d=none,d.eval=none) policy.policy-from=p
+    header.from=uwaterloo.ca;
+    iprev=pass smtp.remote-ip=216.71.131.47 (esa.hc503-62.ca.iphmx.com);
+    spf=pass smtp.mailfrom=astorjohann@uwaterloo.ca
+    smtp.helo=esa.hc503-62.ca.iphmx.com
+X-ME-Authentication-Results: mx3.messagingengine.com;
+    x-aligned-from=pass (Address match);
+    x-return-mx=pass header.domain=uwaterloo.ca policy.is_org=yes
+      (MX Records found: mx2.hc503-62.ca.iphmx.com,mx1.hc503-62.ca.iphmx.com);
+    x-return-mx=pass smtp.domain=uwaterloo.ca policy.is_org=yes
+      (MX Records found: mx1.hc503-62.ca.iphmx.com,mx2.hc503-62.ca.iphmx.com);
+    x-tls=pass smtp.version=TLSv1.2 smtp.cipher=ECDHE-RSA-AES256-GCM-SHA384
+      smtp.bits=256/256;
+    x-vs=clean score=0 state=0
+Authentication-Results: mx3.messagingengine.com;
+    x-csa=none;
+    x-me-sender=none;
+    x-ptr=pass smtp.helo=esa.hc503-62.ca.iphmx.com
+      policy.ptr=esa.hc503-62.ca.iphmx.com
+Authentication-Results: mx3.messagingengine.com;
+    bimi=skipped (DMARC Policy is not at enforcement)
+Authentication-Results: mx3.messagingengine.com;
+    arc=none (no signatures found)
+Authentication-Results: mx3.messagingengine.com;
+    dkim=pass (1024-bit rsa key sha256) header.d=uwaterloo.ca
+      header.i=@uwaterloo.ca header.b=Yfymt6j/ header.a=rsa-sha256
+      header.s=default x-bits=1024;
+    dmarc=pass policy.published-domain-policy=none
+      policy.applied-disposition=none policy.evaluated-disposition=none
+      (p=none,d=none,d.eval=none) policy.policy-from=p
+      header.from=uwaterloo.ca;
+    iprev=pass smtp.remote-ip=216.71.131.47 (esa.hc503-62.ca.iphmx.com);
+    spf=pass smtp.mailfrom=astorjohann@uwaterloo.ca
+      smtp.helo=esa.hc503-62.ca.iphmx.com
+X-ME-VSCause: gggruggvucftvghtrhhoucdtuddrgedvuddrkedvgdduudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpefhvffuth
+    ffkfhfjghitgfgggesthgsmhdttddtjeenucfhrhhomheptehrnhgvucfuthhorhhjohhh
+    rghnnhcuoegrshhtohhrjhhohhgrnhhnsehufigrthgvrhhlohhordgtrgeqnecuggftrf
+    grthhtvghrnheptddvgfeigeelteeiuefgteettdekteehkedvtedufeeiheejfeekueev
+    lefhtefhnecukfhppedvudeirdejuddrudefuddrgeejpddutddrgedtrdduvddurdehfe
+    dpuddvledrleejrddvtdekrdegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
+    mhepihhnvghtpedvudeirdejuddrudefuddrgeejpdhhvghlohepvghsrgdrhhgthedtfe
+    dqiedvrdgtrgdrihhphhhmgidrtghomhdpmhgrihhlfhhrohhmpeeorghsthhorhhjohhh
+    rghnnhesuhifrghtvghrlhhoohdrtggrqe
+X-ME-VSScore: 0
+X-ME-VSCategory: clean
+X-ME-CSA: none
+Received-SPF: pass
+    (uwaterloo.ca: Sender is authorized to use 'astorjohann@uwaterloo.ca' in 'mfrom' identity (mechanism 'exists:%{i}.spf.hc503-62.ca.iphmx.com' matched))
+    receiver=mx3.messagingengine.com;
+    identity=mailfrom;
+    envelope-from="astorjohann@uwaterloo.ca";
+    helo=esa.hc503-62.ca.iphmx.com;
+    client-ip=216.71.131.47
+Received: from esa.hc503-62.ca.iphmx.com (esa.hc503-62.ca.iphmx.com [216.71.131.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx3.messagingengine.com (Postfix) with ESMTPS
+	for <code@musicinmybrain.net>; Fri, 10 Dec 2021 13:32:54 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=uwaterloo.ca; i=@uwaterloo.ca; q=dns/txt; s=default;
+  t=1639161174; x=1670697174;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version;
+  bh=aFclI9nkzazQC+PivdKV6+EY2d9H2sH6dT1mn3RWmJE=;
+  b=Yfymt6j/swtmzQLVOBj2ub/w48VgFV6uGXi7vzGzsoUzsiROh5IHG9Ny
+   bBhv9+yAiu6xelzX6mAti0Jl+Ho8KaZ5apovcLTBGDoptfT0FbFlABeAe
+   4iABqHysknXCKj1DwmQBz0ijfLU9xgjmvGEBUZNCbIuVCI+YDn+2sT0nT
+   M=;
+Received: from connect.uwaterloo.ca (HELO connhm01.connect.uwaterloo.ca) ([129.97.208.43])
+  by ob1.hc503-62.ca.iphmx.com with ESMTP/TLS/AES256-GCM-SHA384; 10 Dec 2021 13:32:52 -0500
+Received: from connhm02.connect.uwaterloo.ca (172.16.137.66) by
+ connhm01.connect.uwaterloo.ca (172.16.137.65) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Fri, 10 Dec 2021 13:32:51 -0500
+Received: from connhm02.connect.uwaterloo.ca ([172.16.137.66]) by
+ connhm02.connect.uwaterloo.ca ([172.16.137.66]) with mapi id 15.01.2375.017;
+ Fri, 10 Dec 2021 13:32:51 -0500
+From: Arne Storjohann <astorjohann@uwaterloo.ca>
+To: Ben Beasley <code@musicinmybrain.net>
+Subject: Re: IML license clarification
+Thread-Topic: IML license clarification
+Thread-Index: AQHX7dyf3E4xxiod40Kl/VIsdT7nV6wsDPIA
+Date: Fri, 10 Dec 2021 18:32:51 +0000
+Message-ID: <E64168BD-6FA0-40E6-88C1-DE9FF6A1772B@uwaterloo.ca>
+References: <73be0ec5-41b5-1a97-90c9-a2c54816ecda@musicinmybrain.net>
+In-Reply-To: <73be0ec5-41b5-1a97-90c9-a2c54816ecda@musicinmybrain.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-originating-ip: [10.40.121.53]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6CF8A7A775C14042B885FD018374367F@connect.uwaterloo.ca>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+SGkgQmVuLA0KDQpPdXIgaW50ZW50aW9uIHdhcyB0byBnbyB3aXRoIGEgQlNELXN0eWxlIGxpY2Vu
+c2UsIHRoZSBvbmUgaW4gdGhlIHNvdXJjZSBjb2RlIGZpbGVzLg0KDQpEbyB5b3UgbWluZCBzaGFy
+aW5nIHdoYXQgeW91IHdhbnQgdG8gdXNlIElNTCBmb3I/DQpJdCBhbHdheXMgaW50ZXJlc3Rpbmcg
+dG8gaGVhciB3aGVyZSBjb21wdXRhdGlvbmFsIGV4YWN0DQpsaW5lYXIgYWxnZWJyYSBjb21lcyBp
+biBvdGhlciBwZW9wbGVzJyB3b3JrLg0KDQpCZXN0IHJlZ2FyZHMsDQoNCi1Bcm5lIFN0b3Jqb2hh
+bm4NCg0K77u/T24gMjAyMS0xMi0xMCwgMTA6NDMgQU0sICJCZW4gQmVhc2xleSIgPGNvZGVAbXVz
+aWNpbm15YnJhaW4ubmV0PiB3cm90ZToNCg0KICAgIEkgbm90aWNlZCB0aGF0IHRoZSBJTUwgMS4w
+LjUgc291cmNlIGFyY2hpdmUgY29udGFpbnMgYSBDT1BZSU5HIGZpbGUgd2l0aCANCiAgICBHUEx2
+MiBsaWNlbnNlIHRleHQsIGJ1dCB0aGUgc291cmNlIGZpbGVzIGhhdmUgY29tbWVudCBoZWFkZXJz
+IHdpdGggd2hhdCANCiAgICBzZWVtcyB0byBiZSBCU0Qtc3R5bGUgbGljZW5zZSB0ZXh0LiBPbmx5
+IGNlcnRhaW4gZmlsZXMgYmVsb25naW5nIHRvIHRoZSANCiAgICBBdXRvdG9vbHMgYnVpbGQgc3lz
+dGVtIGhhdmUgY29tbWVudHMgbWVudGlvbmluZyB0aGUgR1BMLg0KDQogICAgQ291bGQgeW91IHBs
+ZWFzZSBjbGFyaWZ5IHRoZSBpbnRlbmRlZCBsaWNlbnNlIGZvciBJTUw/IFRoYW5rcyENCg0KICAg
+IOKAkyBCZW4gQmVhc2xleQ0KDQo=

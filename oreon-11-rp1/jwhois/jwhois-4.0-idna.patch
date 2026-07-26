@@ -1,0 +1,39 @@
+diff -up jwhois-4.0/src/jwhois.c.orig jwhois-4.0/src/jwhois.c
+--- jwhois-4.0/src/jwhois.c.orig	2014-06-10 15:03:14.242929412 +0200
++++ jwhois-4.0/src/jwhois.c	2014-06-10 15:08:15.056033249 +0200
+@@ -98,7 +98,7 @@ main(int argc, char **argv)
+ 
+   /* Parse remaining arguments and place them into the wq
+      structure. */
+-  while (optind < argc)
++  while (optind < argc-1)
+     {
+       count += strlen(argv[optind])+1;
+       if (!qstring)
+@@ -116,19 +116,21 @@ main(int argc, char **argv)
+       strcat(qstring, " ");
+       optind++;
+     }
+-  qstring[strlen(qstring)-1] = '\0';
+ #ifdef LIBIDN2
+-  rc = idn2_lookup_ul(qstring, &idn, 0);
++  rc = idn2_lookup_ul(argv[optind], &idn, 0);
+   if (rc != IDN2_OK)
+     {
+-      printf("[IDN encoding of '%s' failed: %s)]\n", qstring, idn2_strerror(rc));
++      printf("[IDN encoding of '%s' failed: %s)]\n", argv[optind], idn2_strerror(rc));
+       exit(1);
+     }
+-  wq.query = strdup(idn);
++  qstring = realloc(qstring, count+strlen(idn)+1);
++  memcpy(qstring+count, idn, strlen(idn)+1);
+   free(idn);
+ #else
+-  wq.query = qstring;
++  qstring = realloc(qstring, count+strlen(argv[optind])+1);
++  memcpy(qstring+count, argv[optind], strlen(argv[optind])+1);
+ #endif
++  wq.query = qstring;
+ 
+   if (ghost)
+     {

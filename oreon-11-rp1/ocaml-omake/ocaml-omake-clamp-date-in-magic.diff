@@ -1,0 +1,33 @@
+From fe13c5db980d9ef77a6b1962356c86b0b0487cc9 Mon Sep 17 00:00:00 2001
+From: Michel Lind <salimma@fedoraproject.org>
+Date: Fri, 21 Feb 2025 13:34:59 -0600
+Subject: [PATCH] Make build more reproducible by clamping the build date
+
+See https://reproducible-builds.org/docs/source-date-epoch/#tool-support
+
+for documentation on `SOURCE_DATE_EPOCH`.
+
+The current behavior is preserved if this is unset.
+
+Signed-off-by: Michel Lind <salimma@fedoraproject.org>
+---
+ src/magic/omake_gen_magic.ml | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/magic/omake_gen_magic.ml b/src/magic/omake_gen_magic.ml
+index f200153..4285a7b 100644
+--- a/src/magic/omake_gen_magic.ml
++++ b/src/magic/omake_gen_magic.ml
+@@ -140,7 +140,11 @@ let omake_magic (buf : out_channel)
+       in
+       String.escaped (code ^ digest) in
+   let version = read_version version_txt in
+-  let tm =  Unix.(localtime (time ())) in
++  let tm =
++  try
++    Unix.(localtime (float_of_string (Sys.getenv "SOURCE_DATE_EPOCH")))
++  with
++    Not_found -> Unix.(localtime (Unix.time ())) in
+   Printf.fprintf buf {|
+ let default_save_interval = %F
+ let input_magic inx = let s = Bytes.make %d ' ' in really_input inx s 0 %d; Bytes.to_string s

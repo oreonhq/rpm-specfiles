@@ -1,0 +1,90 @@
+From b04d1a06d19feea68577d10d3040d52b206cac55 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenko@redhat.com>
+Date: Sat, 9 Apr 2016 19:32:59 +0200
+Subject: [PATCH 5/5] unbundle libresample
+
+Signed-off-by: Igor Gnatenko <ignatenko@redhat.com>
+---
+ CMakeLists.txt              |  7 +++++++
+ src/CMakeLists.txt          | 11 ++++++++---
+ src/main/audioConverter.cpp |  2 +-
+ 3 files changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 13bde53..16d805a 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,6 +42,7 @@ ELSE ( $ENV{MAKE_PACKAGE} )
+   pkg_check_modules ( VORBIS    vorbis>=1.2.3 )
+   pkg_check_modules ( VORBISENC vorbisenc>=1.2.3 )
+   pkg_check_modules ( OGG       ogg>=1.1.0 )
++  pkg_check_modules ( RESAMPLE  libresample>=0.1.3 )
+   find_library ( GD_LIBRARY NAMES gd )
+ ENDIF ( $ENV{MAKE_PACKAGE} )
+ 
+@@ -99,6 +100,12 @@ ELSE ( OGG_FOUND )
+   SET ( STOP_CONFIGURATION true )
+ ENDIF ( OGG_FOUND )
+ 
++IF ( RESAMPLE_FOUND )
++  MESSAGE ( STATUS "libresample library found" )
++ELSE ( RESAMPLE_FOUND )
++  MESSAGE ( STATUS "WARNING: libresample library NOT found, using bundled" )
++ENDIF ( RESAMPLE_FOUND )
++
+ IF ( NOT ${GD_LIBRARY} MATCHES GD_LIBRARY-NOTFOUND )
+   MESSAGE ( STATUS "GD library and header found" )
+   SET ( HAVE_LIBGD 1 CACHE INTERNAL "" )
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index f0fcbad..4eec818 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,9 +1,14 @@
++IF ( NOT RESAMPLE_FOUND )
++  SET ( RESAMPLE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/libresample )
++ENDIF ( NOT RESAMPLE_FOUND )
++
+ INCLUDE_DIRECTORIES ( ${THEORADEC_INCLUDE_DIRS}
+                       ${THEORAENC_INCLUDE_DIRS}
+                       ${VORBIS_INCLUDE_DIRS}
+                       ${VORBISENC_INCLUDE_DIRS}
+                       ${OGG_INCLUDE_DIRS}
+                       ${GD_INCLUDE_DIRS}
++                      ${RESAMPLE_INCLUDE_DIRS}
+                       ${CMAKE_CURRENT_LIST_DIR}
+                       ${CMAKE_CURRENT_LIST_DIR}/base
+                       ${CMAKE_CURRENT_LIST_DIR}/effect
+@@ -12,7 +17,6 @@ INCLUDE_DIRECTORIES ( ${THEORADEC_INCLUDE_DIRS}
+                       ${CMAKE_CURRENT_LIST_DIR}/ovt_vorbis
+                       ${CMAKE_CURRENT_LIST_DIR}/ovt_theora
+                       ${CMAKE_CURRENT_LIST_DIR}/main
+-                      ${CMAKE_CURRENT_LIST_DIR}/libresample
+ )
+ 
+ ADD_SUBDIRECTORY ( base )
+@@ -23,6 +27,7 @@ ADD_SUBDIRECTORY ( ovt_kate )
+ ADD_SUBDIRECTORY ( ovt_vorbis )
+ ADD_SUBDIRECTORY ( ovt_theora )
+ ADD_SUBDIRECTORY ( main )
+-ADD_SUBDIRECTORY ( libresample )
+-
++IF ( NOT RESAMPLE_FOUND )
++  ADD_SUBDIRECTORY ( libresample )
++ENDIF ( NOT RESAMPLE_FOUND )
+ 
+diff --git a/src/main/audioConverter.cpp b/src/main/audioConverter.cpp
+index 7ff279e..184e135 100644
+--- a/src/main/audioConverter.cpp
++++ b/src/main/audioConverter.cpp
+@@ -3,7 +3,7 @@
+ #include <cmath>
+ #include <iostream>
+ 
+-#include "libresample/libresample.h"
++#include <libresample.h>
+ #include "log.h"
+ 
+ AudioConverter::AudioConverter()
+-- 
+2.7.3
+

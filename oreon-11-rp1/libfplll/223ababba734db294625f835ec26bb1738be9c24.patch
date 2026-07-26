@@ -1,0 +1,124 @@
+From 8b4d8425f0a299903be7fcb98142e96703d832d4 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 28 Apr 2025 11:07:49 -0400
+Subject: [PATCH 1/2] Update LGPL 2.1 license text
+
+The FSF no longer has a physical address.
+
+From https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
+---
+ COPYING | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
+
+diff --git a/COPYING b/COPYING
+index 5ab7695ab..f6683e74e 100644
+--- a/COPYING
++++ b/COPYING
+@@ -1,8 +1,8 @@
+-		  GNU LESSER GENERAL PUBLIC LICENSE
+-		       Version 2.1, February 1999
++                  GNU LESSER GENERAL PUBLIC LICENSE
++                       Version 2.1, February 1999
+ 
+  Copyright (C) 1991, 1999 Free Software Foundation, Inc.
+- 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++ <https://fsf.org/>
+  Everyone is permitted to copy and distribute verbatim copies
+  of this license document, but changing it is not allowed.
+ 
+@@ -10,7 +10,7 @@
+  as the successor of the GNU Library Public License, version 2, hence
+  the version number 2.1.]
+ 
+-			    Preamble
++                            Preamble
+ 
+   The licenses for most software are designed to take away your
+ freedom to share and change it.  By contrast, the GNU General Public
+@@ -112,7 +112,7 @@ modification follow.  Pay close attention to the difference between a
+ former contains code derived from the library, whereas the latter must
+ be combined with the library in order to run.
+ 
+-		  GNU LESSER GENERAL PUBLIC LICENSE
++                  GNU LESSER GENERAL PUBLIC LICENSE
+    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ 
+   0. This License Agreement applies to any software library or other
+@@ -146,7 +146,7 @@ such a program is covered only if its contents constitute a work based
+ on the Library (independent of the use of the Library in a tool for
+ writing it).  Whether that is true depends on what the Library does
+ and what the program that uses the Library does.
+-  
++
+   1. You may copy and distribute verbatim copies of the Library's
+ complete source code as you receive it, in any medium, provided that
+ you conspicuously and appropriately publish on each copy an
+@@ -432,7 +432,7 @@ decision will be guided by the two goals of preserving the free status
+ of all derivatives of our free software and of promoting the sharing
+ and reuse of software generally.
+ 
+-			    NO WARRANTY
++                            NO WARRANTY
+ 
+   15. BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
+ WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
+@@ -455,7 +455,7 @@ FAILURE OF THE LIBRARY TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+ SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+ DAMAGES.
+ 
+-		     END OF TERMS AND CONDITIONS
++                     END OF TERMS AND CONDITIONS
+ 
+            How to Apply These Terms to Your New Libraries
+ 
+@@ -484,8 +484,7 @@ convey the exclusion of warranty; and each file should have at least the
+     Lesser General Public License for more details.
+ 
+     You should have received a copy of the GNU Lesser General Public
+-    License along with this library; if not, write to the Free Software
+-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
++    License along with this library; if not, see <https://www.gnu.org/licenses/>.
+ 
+ Also add information on how to contact you by electronic and paper mail.
+ 
+@@ -496,9 +495,7 @@ necessary.  Here is a sample; alter the names:
+   Yoyodyne, Inc., hereby disclaims all copyright interest in the
+   library `Frob' (a library for tweaking knobs) written by James Random Hacker.
+ 
+-  <signature of Ty Coon>, 1 April 1990
+-  Ty Coon, President of Vice
++  <signature of Moe Ghoul>, 1 April 1990
++  Moe Ghoul, President of Vice
+ 
+ That's all there is to it!
+-
+-
+
+From 9ced36f2ffac445af79603df31bcfbe5226cf55e Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 28 Apr 2025 11:05:35 -0400
+Subject: [PATCH 2/2] Update LGPL-2.1-or-later license notice
+
+The FSF is now remote-only and no longer has a physical address.
+
+See https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html#SEC4.
+---
+ fplll/nr/dpe.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/fplll/nr/dpe.h b/fplll/nr/dpe.h
+index 9bc953d49..61f4fb23c 100644
+--- a/fplll/nr/dpe.h
++++ b/fplll/nr/dpe.h
+@@ -14,9 +14,8 @@
+    License for more details.
+ 
+    You should have received a copy of the GNU Lesser General Public License
+-   along with the DPE Library; see the file COPYING.LIB.  If not, write to
+-   the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+-   MA 02110-1301, USA. */
++   along with the DPE Library; see the file COPYING.LIB.  If not, see
++   <https://www.gnu.org/licenses/>. */
+ 
+ /* WARNING: Patched version */
+ 

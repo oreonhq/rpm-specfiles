@@ -1,0 +1,105 @@
+From 1c6a4aaa01633ba09b05959c19e213b80bb071a2 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 11 Apr 2012 16:45:52 +0200
+Subject: [PATCH 2/2] rlx32: Stop using MaxExtentableObjet
+
+MaxExtentableObjet was only used in a few places, and there its usage was
+wrong, since sometimes not enough elements were allocated, and we actually
+know how much we need to allocate!
+
+This fixes the crash reported here:
+https://bugzilla.redhat.com/show_bug.cgi?id=768754
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ rlx32/include/v3xdefs.h |    2 +-
+ rlx32/src/v3x_2.c       |    1 -
+ rlx32/src/v3xscen2.c    |   25 ++++++++++++-------------
+ src/lithium.c           |    1 -
+ 4 files changed, 13 insertions(+), 16 deletions(-)
+
+diff --git a/rlx32/include/v3xdefs.h b/rlx32/include/v3xdefs.h
+index 5e9c33d..e4d423c 100644
+--- a/rlx32/include/v3xdefs.h
++++ b/rlx32/include/v3xdefs.h
+@@ -491,7 +491,7 @@ typedef struct _v3x_sceneSetup {
+     u_int32_t       flags;                  // flags
+     char        texturePath[256];
+     unsigned    MaxStartObjet;          // object of objects by default in a scene
+-    unsigned    MaxExtentableObjet;     // object maximum per scene
++    unsigned    Unused_but_do_not_remove;
+     void      (*add_poly)(void);        // callback before object processing
+ 	void      (*add_lights)(void);      // callback after processing lights
+     void      (*pre_render)(void);      // callback before polygons processing
+diff --git a/rlx32/src/v3x_2.c b/rlx32/src/v3x_2.c
+index 87f161c..428784e 100644
+--- a/rlx32/src/v3x_2.c
++++ b/rlx32/src/v3x_2.c
+@@ -281,7 +281,6 @@ int V3XKernel_Alloc(void)
+     V3X.ViewPort.minVisibleRadius =  2.f/600;
+     V3X.ViewPort.minTextureVisibleRadius = 4.f/600;
+     V3X.Setup.MaxStartObjet =  32;
+-    V3X.Setup.MaxExtentableObjet =  32;
+     V3X.Setup.pre_render =  v3x_NothingToAdd;
+     V3X.Setup.post_render =  v3x_NothingToAdd;
+     V3X.Setup.add_poly =  v3x_NothingToAdd;
+diff --git a/rlx32/src/v3xscen2.c b/rlx32/src/v3xscen2.c
+index 01ae513..439c61f 100644
+--- a/rlx32/src/v3xscen2.c
++++ b/rlx32/src/v3xscen2.c
+@@ -1627,28 +1627,27 @@ static void ReadSceneNodes(V3XSCENE *pScene, SYS_FILEHANDLE in, int bFormat97)
+     layer->tm.numFrames = 0;
+     layer->tm.firstFrame = 0;
+ 
+-    if (bFormat97)
+-		v3xORI_Convert97(pScene, in);
+-    else
+-                /* Note: not fixed for 64 bits, currently bFormat97 always is true */
+-		pScene->ORI = (V3XORI*)v3x_read_alloc(sizeof(V3XORI), pScene->numORI, V3X.Setup.MaxExtentableObjet, in);
+-    for (i=0;i<V3X.Setup.MaxExtentableObjet;i++)
++    if (!bFormat97) {
++        fprintf(stderr, "Fatal error non Format97 is NOT supported\n");
++        abort();
++    }
++
++    v3xORI_Convert97(pScene, in);
++
++    for (i=0;i<pScene->numORI;i++)
+     {
+         if (pScene->ORI[i].type == 0) 
+ 		pScene->ORI[i].type = V3XOBJ_NONE;
+     }
+-    if (bFormat97)
+-		v3xOVI_Convert97(pScene, in);
+-    else
+-                /* Note: not fixed for 64 bits, currently bFormat97 always is true */
+-		pScene->OVI = (V3XOVI*) v3x_read_alloc(sizeof(V3XOVI), pScene->numOVI, V3X.Setup.MaxExtentableObjet, in);
++
++    v3xOVI_Convert97(pScene, in);
+ 
+     /* Unfortunately we cannot directly read the structs from disk as
+        tkey contain (not used on disk) pointers, which on disk are 32 bit, but
+        may in reality be different (64 bits) */
+-    pScene->TRI = (V3XTRI*)MM_heap.malloc(V3X.Setup.MaxExtentableObjet * sizeof(V3XTRI));
++    pScene->TRI = (V3XTRI*)MM_heap.malloc(pScene->numTRI * sizeof(V3XTRI));
+     rawTRIs = (u_int32_t *)v3x_read_alloc(sizeof(u_int32_t), pScene->numTRI * 8, -1, in);
+-    pScene->TVI = (V3XTVI*)MM_heap.malloc(V3X.Setup.MaxExtentableObjet * sizeof(V3XTVI));
++    pScene->TVI = (V3XTVI*)MM_heap.malloc(pScene->numTVI * sizeof(V3XTVI));
+     rawTVIs = (u_int32_t *)v3x_read_alloc(sizeof(u_int32_t), pScene->numTVI * 4, -1, in);
+     /* copy the raw data to the in memory structs */
+     for (i = 0; i < pScene->numTVI; i++)
+diff --git a/src/lithium.c b/src/lithium.c
+index adb6a56..3027678 100644
+--- a/src/lithium.c
++++ b/src/lithium.c
+@@ -537,7 +537,6 @@ void STUB_ReadyToRun(void)
+ 	NG_SetGameInfo();
+ 	
+     V3X.Setup.flags|=V3XOPTION_COLLISION;
+-    V3X.Setup.MaxExtentableObjet = 200;
+     return;
+ }
+ /*------------------------------------------------------------------------
+-- 
+1.7.9.3
+

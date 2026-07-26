@@ -1,0 +1,142 @@
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/net/code/client.cpp.orig bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/net/code/client.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/net/code/client.cpp.orig     2020-06-23 19:23:58.659455407 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/net/code/client.cpp  2020-06-23 19:22:57.673552354 +0200
+@@ -16,6 +16,8 @@
+ #include "net/connection_task.hpp"
+ #include "net/message/message.hpp"
+
++using namespace boost::placeholders;
++
+ /*----------------------------------------------------------------------------*/
+ /**
+  * \brief Constructor.
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/code/game_network.cpp.orig bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/code/game_network.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/code/game_network.cpp.orig        2020-06-23 21:13:42.109742092 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/code/game_network.cpp     2020-06-23 21:14:13.517750116 +0200
+@@ -16,6 +16,8 @@
+ #include "engine/network/client_connection.hpp"
+ #include "engine/network/message/sync.hpp"
+
++using namespace boost::placeholders;
++
+ /*----------------------------------------------------------------------------*/
+ /**
+  * \brief Constructor.
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/impl/model.tpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/impl/model.tpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/impl/model.tpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/impl/model.tpp	2020-06-23 17:38:09.265269345 +0200
+@@ -21,7 +21,9 @@
+ 
+ #include "universe/forced_movement/forced_tracking.hpp"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
++
++using namespace boost::placeholders;
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/layer/code/transition_layer.cpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/layer/code/transition_layer.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/layer/code/transition_layer.cpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/layer/code/transition_layer.cpp	2020-06-23 17:34:36.199659489 +0200
+@@ -17,7 +17,9 @@
+ #include "engine/level_globals.hpp"
+ #include "engine/transition_effect/transition_effect.hpp"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
++
++using namespace boost::placeholders;
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/model/code/model_snapshot_tweener.cpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/model/code/model_snapshot_tweener.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/model/code/model_snapshot_tweener.cpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/model/code/model_snapshot_tweener.cpp	2020-06-23 17:36:03.574045038 +0200
+@@ -17,7 +17,10 @@
+ #include "engine/model/model_mark_placement.hpp"
+ #include "engine/model/model_snapshot.hpp"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
++
++using namespace boost::placeholders;
++
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/variable/code/variable_list_reader.cpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/variable/code/variable_list_reader.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/engine/variable/code/variable_list_reader.cpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/engine/variable/code/variable_list_reader.cpp	2020-06-23 17:37:04.422302170 +0200
+@@ -15,10 +15,12 @@
+ 
+ #include "engine/variable/type_to_string.hpp"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/spirit/include/classic.hpp>
+ #include <claw/logger.hpp>
+ 
++using namespace boost::placeholders;
++
+ /*----------------------------------------------------------------------------*/
+ /**
+  * \brief Read a set of variable assignment from a stream.
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/gui/code/radio_group.cpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/gui/code/radio_group.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/core/src/gui/code/radio_group.cpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/core/src/gui/code/radio_group.cpp	2020-06-23 17:38:57.990231198 +0200
+@@ -16,7 +16,9 @@
+ #include "gui/callback_function.hpp"
+ #include "gui/radio_button.hpp"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
++
++using namespace boost::placeholders;
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/lib/src/generic_items/layer/code/runtime_settings_layer.cpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/lib/src/generic_items/layer/code/runtime_settings_layer.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-engine/lib/src/generic_items/layer/code/runtime_settings_layer.cpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-engine/lib/src/generic_items/layer/code/runtime_settings_layer.cpp	2020-06-23 17:39:48.155248938 +0200
+@@ -23,9 +23,11 @@
+ #include <claw/multi_type_map_visitor.hpp>
+ #include <claw/string_algorithm.hpp>
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
+ #include <boost/function.hpp>
+ 
++using namespace boost::placeholders;
++
+ /*----------------------------------------------------------------------------*/
+ /**
+  * \brief 
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-factory/model-editor/src/bf/code/model_snapshot_tweener.cpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-factory/model-editor/src/bf/code/model_snapshot_tweener.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-factory/model-editor/src/bf/code/model_snapshot_tweener.cpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-factory/model-editor/src/bf/code/model_snapshot_tweener.cpp	2020-06-23 17:41:22.619357230 +0200
+@@ -18,7 +18,9 @@
+ #include "bf/mark_placement.hpp"
+ #include "bf/snapshot.hpp"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
++
++using namespace boost::placeholders;
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff -Naur bear-2a785228d85997dc1682ee71899841528fa09c33/bear-factory/model-editor/src/bf/history/code/action_modify_placement.cpp bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-factory/model-editor/src/bf/history/code/action_modify_placement.cpp
+--- bear-2a785228d85997dc1682ee71899841528fa09c33/bear-factory/model-editor/src/bf/history/code/action_modify_placement.cpp	2018-08-25 22:19:47.000000000 +0200
++++ bear-2a785228d85997dc1682ee71899841528fa09c33.new/bear-factory/model-editor/src/bf/history/code/action_modify_placement.cpp	2020-06-23 17:40:34.078301577 +0200
+@@ -15,7 +15,9 @@
+ 
+ #include "bf/mark_placement.hpp"
+ 
+-#include <boost/bind.hpp>
++#include <boost/bind/bind.hpp>
++
++using namespace boost::placeholders;
+ 
+ /*----------------------------------------------------------------------------*/
+ /**

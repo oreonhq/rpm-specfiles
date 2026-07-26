@@ -1,0 +1,18 @@
+[Unit]
+Description=MIMEDefang
+After=syslog.target network.target mimedefang-multiplexor.service
+Before=postfix.service sendmail.service
+Requires=mimedefang-multiplexor.service
+Documentation=man:mimedefang(8)
+Documentation=man:mimedefang-multiplexor(8)
+
+[Service]
+Type=forking
+PIDFile=/run/mimedefang.pid
+EnvironmentFile=-/etc/sysconfig/mimedefang
+ExecStart=/usr/libexec/mimedefang-wrapper start
+ExecReload=/usr/libexec/mimedefang-wrapper reload
+
+[Install]
+WantedBy=multi-user.target
+Also=mimedefang-multiplexor.service

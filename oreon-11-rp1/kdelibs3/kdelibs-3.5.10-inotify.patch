@@ -1,0 +1,31 @@
+diff -up kdelibs-3.5.10/kio/kio/kdirwatch.cpp.flock-redefinition kdelibs-3.5.10/kio/kio/kdirwatch.cpp
+--- kdelibs-3.5.10/kio/kio/kdirwatch.cpp.flock-redefinition	2006-07-22 08:16:37.000000000 +0000
++++ kdelibs-3.5.10/kio/kio/kdirwatch.cpp	2011-05-11 14:48:07.000000000 +0000
+@@ -67,26 +67,7 @@
+ #ifdef HAVE_INOTIFY
+ #include <unistd.h>
+ #include <fcntl.h>
+-#include <sys/syscall.h>
+-#include <linux/types.h>
+-// Linux kernel headers are documented to not compile
+-#define _S390_BITOPS_H
+-#include <linux/inotify.h>
+-
+-static inline int inotify_init (void)
+-{
+-  return syscall (__NR_inotify_init);
+-}
+-
+-static inline int inotify_add_watch (int fd, const char *name, __u32 mask)
+-{
+-  return syscall (__NR_inotify_add_watch, fd, name, mask);
+-}
+-
+-static inline int inotify_rm_watch (int fd, __u32 wd)
+-{
+-  return syscall (__NR_inotify_rm_watch, fd, wd);
+-}
++#include <sys/inotify.h>
+ 
+ #ifndef  IN_ONLYDIR
+ #define  IN_ONLYDIR 0x01000000 

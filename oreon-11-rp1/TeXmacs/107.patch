@@ -1,0 +1,33 @@
+From 57c3a8ecb7e593ddd72cf47d1efa88a132d8dfb9 Mon Sep 17 00:00:00 2001
+From: Reno Dakota <paparodeo@proton.me>
+Date: Mon, 13 Jan 2025 04:45:10 +0000
+Subject: [PATCH] hashtree: fix build with clang-19
+
+```
+hashtree.cpp:97:14: error: no member named 'contains' in 'hashtree<K, V>'
+   97 |   if (*this->contains (key)) return *this->children (key);
+      |        ~~~~  ^
+hashtree.cpp:97:44: error: no member named 'children' in 'hashtree<K, V>'
+   97 |   if (*this->contains (key)) return *this->children (key);
+      |                                      ~~~~  ^
+2 errors generated.
+```
+
+add parentheses around (*this) to fix build failure.
+---
+ src/Kernel/Containers/hashtree.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Kernel/Containers/hashtree.cpp b/src/Kernel/Containers/hashtree.cpp
+index 300b175fb7..a36ffb40e1 100644
+--- a/src/Kernel/Containers/hashtree.cpp
++++ b/src/Kernel/Containers/hashtree.cpp
+@@ -94,7 +94,7 @@ hashtree<K,V>::operator-> (void) {
+ 
+ template<class K, class V> inline hashtree<K,V> 
+ hashtree<K,V>::operator[] (K key) {
+-  if (*this->contains (key)) return *this->children (key);
++  if ((*this)->contains (key)) return (*this)->children (key);
+   else FAILED ("read-access to non-existent node requested");
+ }
+   

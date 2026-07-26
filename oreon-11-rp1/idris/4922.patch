@@ -1,0 +1,23 @@
+From b0e8c80f8e2eeb4167212654c4de4d03cac92131 Mon Sep 17 00:00:00 2001
+From: Felix Yan <felixonmars@archlinux.org>
+Date: Mon, 6 Feb 2023 06:31:56 +0800
+Subject: [PATCH] Allow fsnotify 0.4
+
+Tested to build fine with the new release.
+---
+ idris.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/idris.cabal b/idris.cabal
+index 887107853..97eed74e6 100644
+--- a/idris.cabal
++++ b/idris.cabal
+@@ -358,7 +358,7 @@ Library
+                 , vector < 0.14
+                 , vector-binary-instances < 0.3
+                 , zip-archive > 0.2.3.5 && < 0.5
+-                , fsnotify >= 0.2 && < 0.4
++                , fsnotify >= 0.2 && < 0.5
+                 , async < 2.3
+ 
+   if !impl(ghc >= 8.0)

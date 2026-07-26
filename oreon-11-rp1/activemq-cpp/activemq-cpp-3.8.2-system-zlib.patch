@@ -1,0 +1,177 @@
+diff --git a/src/main/Makefile.am b/src/main/Makefile.am
+index 5d117aa..9e71d92 100644
+--- a/src/main/Makefile.am
++++ b/src/main/Makefile.am
+@@ -385,20 +385,6 @@ cc_sources = \
+     decaf/internal/util/concurrent/Threading.cpp \
+     decaf/internal/util/concurrent/unix/Atomics.cpp \
+     decaf/internal/util/concurrent/unix/PlatformThread.cpp \
+-    decaf/internal/util/zip/adler32.c \
+-    decaf/internal/util/zip/crc32.c \
+-    decaf/internal/util/zip/deflate.c \
+-    decaf/internal/util/zip/gzclose.c \
+-    decaf/internal/util/zip/gzlib.c \
+-    decaf/internal/util/zip/gzread.c \
+-    decaf/internal/util/zip/gzwrite.c \
+-    decaf/internal/util/zip/infback.c \
+-    decaf/internal/util/zip/inffast.c \
+-    decaf/internal/util/zip/inflate.c \
+-    decaf/internal/util/zip/inftrees.c \
+-    decaf/internal/util/zip/trees.c \
+-    decaf/internal/util/zip/uncompr.c \
+-    decaf/internal/util/zip/zutil.c \
+     decaf/io/BlockingByteArrayInputStream.cpp \
+     decaf/io/BufferedInputStream.cpp \
+     decaf/io/BufferedOutputStream.cpp \
+@@ -1042,17 +1028,6 @@ h_sources = \
+     decaf/internal/util/concurrent/Transferer.h \
+     decaf/internal/util/concurrent/unix/PlatformDefs.h \
+     decaf/internal/util/concurrent/windows/PlatformDefs.h \
+-    decaf/internal/util/zip/crc32.h \
+-    decaf/internal/util/zip/deflate.h \
+-    decaf/internal/util/zip/gzguts.h \
+-    decaf/internal/util/zip/inffast.h \
+-    decaf/internal/util/zip/inffixed.h \
+-    decaf/internal/util/zip/inflate.h \
+-    decaf/internal/util/zip/inftrees.h \
+-    decaf/internal/util/zip/trees.h \
+-    decaf/internal/util/zip/zconf.h \
+-    decaf/internal/util/zip/zlib.h \
+-    decaf/internal/util/zip/zutil.h \
+     decaf/io/BlockingByteArrayInputStream.h \
+     decaf/io/BufferedInputStream.h \
+     decaf/io/BufferedOutputStream.h \
+@@ -1327,7 +1302,7 @@ libactivemq_cpp_la_SOURCES= $(h_sources) $(cc_sources)
+ libactivemq_cpp_la_CXXFLAGS= $(AMQ_CXXFLAGS)
+ libactivemq_cpp_la_CFLAGS= $(AMQ_CFLAGS)
+ libactivemq_cpp_la_LDFLAGS= -version-info $(ACTIVEMQ_LIBRARY_VERSION)
+-libactivemq_cpp_la_LIBADD= $(AMQ_LIBS)
++libactivemq_cpp_la_LIBADD= $(AMQ_LIBS) -lz
+ 
+ ##
+ ## Packaging Info
+diff --git a/src/main/Makefile.in b/src/main/Makefile.in
+index a53e327..53e79c1 100644
+--- a/src/main/Makefile.in
++++ b/src/main/Makefile.in
+@@ -493,20 +493,6 @@ am__objects_2 = activemq/cmsutil/libactivemq_cpp_la-CachedConsumer.lo \
+ 	decaf/internal/util/concurrent/libactivemq_cpp_la-Threading.lo \
+ 	decaf/internal/util/concurrent/unix/libactivemq_cpp_la-Atomics.lo \
+ 	decaf/internal/util/concurrent/unix/libactivemq_cpp_la-PlatformThread.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-adler32.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-crc32.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-deflate.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-gzclose.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-gzlib.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-gzread.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-gzwrite.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-infback.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-inffast.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-inflate.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-inftrees.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-trees.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-uncompr.lo \
+-	decaf/internal/util/zip/libactivemq_cpp_la-zutil.lo \
+ 	decaf/io/libactivemq_cpp_la-BlockingByteArrayInputStream.lo \
+ 	decaf/io/libactivemq_cpp_la-BufferedInputStream.lo \
+ 	decaf/io/libactivemq_cpp_la-BufferedOutputStream.lo \
+@@ -1346,20 +1332,6 @@ cc_sources = \
+     decaf/internal/util/concurrent/Threading.cpp \
+     decaf/internal/util/concurrent/unix/Atomics.cpp \
+     decaf/internal/util/concurrent/unix/PlatformThread.cpp \
+-    decaf/internal/util/zip/adler32.c \
+-    decaf/internal/util/zip/crc32.c \
+-    decaf/internal/util/zip/deflate.c \
+-    decaf/internal/util/zip/gzclose.c \
+-    decaf/internal/util/zip/gzlib.c \
+-    decaf/internal/util/zip/gzread.c \
+-    decaf/internal/util/zip/gzwrite.c \
+-    decaf/internal/util/zip/infback.c \
+-    decaf/internal/util/zip/inffast.c \
+-    decaf/internal/util/zip/inflate.c \
+-    decaf/internal/util/zip/inftrees.c \
+-    decaf/internal/util/zip/trees.c \
+-    decaf/internal/util/zip/uncompr.c \
+-    decaf/internal/util/zip/zutil.c \
+     decaf/io/BlockingByteArrayInputStream.cpp \
+     decaf/io/BufferedInputStream.cpp \
+     decaf/io/BufferedOutputStream.cpp \
+@@ -2002,17 +1974,6 @@ h_sources = \
+     decaf/internal/util/concurrent/Transferer.h \
+     decaf/internal/util/concurrent/unix/PlatformDefs.h \
+     decaf/internal/util/concurrent/windows/PlatformDefs.h \
+-    decaf/internal/util/zip/crc32.h \
+-    decaf/internal/util/zip/deflate.h \
+-    decaf/internal/util/zip/gzguts.h \
+-    decaf/internal/util/zip/inffast.h \
+-    decaf/internal/util/zip/inffixed.h \
+-    decaf/internal/util/zip/inflate.h \
+-    decaf/internal/util/zip/inftrees.h \
+-    decaf/internal/util/zip/trees.h \
+-    decaf/internal/util/zip/zconf.h \
+-    decaf/internal/util/zip/zlib.h \
+-    decaf/internal/util/zip/zutil.h \
+     decaf/io/BlockingByteArrayInputStream.h \
+     decaf/io/BufferedInputStream.h \
+     decaf/io/BufferedOutputStream.h \
+@@ -2282,7 +2243,7 @@ libactivemq_cpp_la_SOURCES = $(h_sources) $(cc_sources)
+ libactivemq_cpp_la_CXXFLAGS = $(AMQ_CXXFLAGS)
+ libactivemq_cpp_la_CFLAGS = $(AMQ_CFLAGS)
+ libactivemq_cpp_la_LDFLAGS = -version-info $(ACTIVEMQ_LIBRARY_VERSION)
+-libactivemq_cpp_la_LIBADD = $(AMQ_LIBS)
++libactivemq_cpp_la_LIBADD = $(AMQ_LIBS) -lz
+ library_includedir = $(includedir)/$(ACTIVEMQ_LIBRARY_NAME)-$(ACTIVEMQ_VERSION)
+ nobase_library_include_HEADERS = $(h_sources)
+ all: all-am
+diff --git a/src/main/decaf/util/zip/Adler32.cpp b/src/main/decaf/util/zip/Adler32.cpp
+index 517fbb4..f1fcd3c 100644
+--- a/src/main/decaf/util/zip/Adler32.cpp
++++ b/src/main/decaf/util/zip/Adler32.cpp
+@@ -17,7 +17,7 @@
+ 
+ #include "Adler32.h"
+ 
+-#include <decaf/internal/util/zip/zlib.h>
++#include <zlib.h>
+ 
+ using namespace decaf;
+ using namespace decaf::lang;
+diff --git a/src/main/decaf/util/zip/CRC32.cpp b/src/main/decaf/util/zip/CRC32.cpp
+index 5d3b308..8b100bc 100644
+--- a/src/main/decaf/util/zip/CRC32.cpp
++++ b/src/main/decaf/util/zip/CRC32.cpp
+@@ -17,7 +17,7 @@
+ 
+ #include "CRC32.h"
+ 
+-#include <decaf/internal/util/zip/zlib.h>
++#include <zlib.h>
+ 
+ using namespace decaf;
+ using namespace decaf::lang;
+diff --git a/src/main/decaf/util/zip/Deflater.cpp b/src/main/decaf/util/zip/Deflater.cpp
+index 12f4184..be21808 100644
+--- a/src/main/decaf/util/zip/Deflater.cpp
++++ b/src/main/decaf/util/zip/Deflater.cpp
+@@ -20,7 +20,7 @@
+ #include <stdio.h>
+ #include <assert.h>
+ 
+-#include <decaf/internal/util/zip/zlib.h>
++#include <zlib.h>
+ #include <decaf/lang/exceptions/RuntimeException.h>
+ 
+ using namespace decaf;
+diff --git a/src/main/decaf/util/zip/Inflater.cpp b/src/main/decaf/util/zip/Inflater.cpp
+index bb0923f..e0dde29 100644
+--- a/src/main/decaf/util/zip/Inflater.cpp
++++ b/src/main/decaf/util/zip/Inflater.cpp
+@@ -20,7 +20,7 @@
+ #include <stdio.h>
+ #include <assert.h>
+ 
+-#include <decaf/internal/util/zip/zlib.h>
++#include <zlib.h>
+ 
+ #include <decaf/lang/exceptions/RuntimeException.h>
+ 

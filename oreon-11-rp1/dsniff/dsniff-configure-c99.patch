@@ -1,0 +1,53 @@
+Fix implicit ints and implicit function declarations in the configure
+script, for C99 compatibility.  These incompatibilities come from
+autoconf and have already been fixed there.  No need to upstream this
+for dnsiff.
+
+diff --git a/configure b/configure
+index 20908c08ef60ed0c..5c508ce81feba026 100755
+--- a/configure
++++ b/configure
+@@ -670,7 +670,7 @@ cat > conftest.$ac_ext << EOF
+ #line 671 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:676: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+@@ -1100,6 +1100,8 @@ cat > conftest.$ac_ext <<EOF
+ #line 1101 "configure"
+ #include "confdefs.h"
+ 
++char ${x_direct_test_function}(void);
++
+ int main() {
+ ${x_direct_test_function}()
+ ; return 0; }
+@@ -1867,8 +1869,8 @@ else
+ #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+ #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
+ int main () { int i; for (i = 0; i < 256; i++)
+-if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
+-exit (0); }
++if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) return 2;
++return 0; }
+ 
+ EOF
+ if { (eval echo configure:1875: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -2262,11 +2264,12 @@ else
+   cat > conftest.$ac_ext <<EOF
+ #line 2264 "configure"
+ #include "confdefs.h"
++#include <string.h>
+ 
+-main()
++int main(void)
+ {
+   char c0 = 0x40, c1 = 0x80, c2 = 0x81;
+-  exit(memcmp(&c0, &c2, 1) < 0 && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
++  return memcmp(&c0, &c2, 1) < 0 && memcmp(&c1, &c2, 1) < 0 ? 0 : 1;
+ }
+ 
+ EOF

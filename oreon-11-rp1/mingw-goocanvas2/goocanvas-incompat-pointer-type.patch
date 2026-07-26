@@ -1,0 +1,12 @@
+diff -rupN goocanvas-2.0.4/src/goocanvasitemsimple.c goocanvas-2.0.4-new/src/goocanvasitemsimple.c
+--- goocanvas-2.0.4/src/goocanvasitemsimple.c	2016-12-16 15:58:31.000000000 +0100
++++ goocanvas-2.0.4-new/src/goocanvasitemsimple.c	2024-07-24 10:28:29.034042230 +0200
+@@ -1536,7 +1536,7 @@ goo_canvas_item_simple_set_model (GooCan
+   goo_canvas_item_simple_free_data (item->simple_data);
+   g_slice_free (GooCanvasItemSimpleData, item->simple_data);
+ 
+-  item->model = g_object_ref (model);
++  item->model = g_object_ref ((GooCanvasItemModelSimple*)model);
+   item->simple_data = &item->model->simple_data;
+ 
+   if (accessibility_enabled)

@@ -1,0 +1,30 @@
+Add a prototype for timeout_init, so that it can be called from the
+main function.
+
+Submitted upstream: <https://github.com/jonasob/jwhois/pull/35>
+
+diff --git a/include/utils.h b/include/utils.h
+index 754ddffe08531ebb..cd98b293f2e2183c 100644
+--- a/include/utils.h
++++ b/include/utils.h
+@@ -28,6 +28,7 @@ char *create_string(const char *fmt, ...);
+ int split_host_from_query(struct s_whois_query *wq);
+ int make_connect(const char *, int);
+ int add_text_to_buffer(char **, const char *);
++void timeout_init(void);
+ 
+ 
+ #endif
+diff --git a/src/utils.c b/src/utils.c
+index e5a84a44fbe93e86..2e5fd2219e922a6b 100644
+--- a/src/utils.c
++++ b/src/utils.c
+@@ -335,7 +335,7 @@ split_host_from_query(struct s_whois_query *wq)
+  *  file.
+  */
+ void
+-timeout_init()
++timeout_init(void)
+ {
+   int iret;
+   char *ret = "75", *ret2;

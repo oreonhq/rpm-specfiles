@@ -1,0 +1,13 @@
+diff --git a/lib/util/hex.c b/lib/util/hex.c
+index 653e733..2292bd7 100644
+--- a/lib/util/hex.c
++++ b/lib/util/hex.c
+@@ -84,7 +84,7 @@ hidrd_hex_buf_from_str(void        *buf,
+ char *
+ hidrd_hex_buf_to_str(const void *buf, size_t size)
+ {
+-    static const char   map[16] = "0123456789ABCDEF";
++    static const char   map[17] = "0123456789ABCDEF";
+     const uint8_t      *bbuf    = (const uint8_t *)buf;
+     char               *str;
+     char               *p;

@@ -1,0 +1,40 @@
+From 7b8b69a73c791ede6a7c038a83430e13e5baa797 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 11 Sep 2015 13:15:08 +0200
+Subject: [PATCH] POD encoding
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Recode to UTF-8. ISO-8859-1 POD is from uknown reason misinterpreted.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Class/Std.pm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Class/Std.pm b/lib/Class/Std.pm
+index f2027f0..06c73f9 100644
+--- a/lib/Class/Std.pm
++++ b/lib/Class/Std.pm
+@@ -615,7 +615,7 @@ use overload (
+ 1; # Magic true value required at end of module
+ __END__
+ 
+-=encoding ISO-8859-1
++=encoding utf8
+ 
+ =head1 NAME
+ 
+@@ -1513,7 +1513,7 @@ other attribute-related behaviours. Each of these options consists of a
+ key/value pair, which may be specified in either Perl 5 "fat comma" syntax
+ ( C<< S<< key => 'value' >> >> ) or in one of the Perl 6 option syntaxes
+ ( C<< S<< :key<value> >> >> or C<< S<< :key('value') >> >> or 
+-C<< S<< :key�value� >> >>).
++C<< S<< :key«value» >> >>).
+ 
+ Note that, due to a limitation in Perl itself, the complete C<:ATTR> marker,
+ including its options must appear on a single line.
+-- 
+2.4.3
+

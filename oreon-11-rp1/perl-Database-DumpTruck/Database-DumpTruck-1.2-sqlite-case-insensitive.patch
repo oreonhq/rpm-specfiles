@@ -1,0 +1,72 @@
+Description: Fix test failures with SQLite 3.37.0
+	#   Failed test 'Could retrieve table structure'
+	#   at t/dumptruck.t line 141.
+	#     Structures begin differing at:
+	#          $got->[0]{type} = 'TEXT'
+	#     $expected->[0]{type} = 'text'
+	#   Failed test 'Proper table structure creates'
+	#   at t/dumptruck.t line 173.
+	#     Structures begin differing at:
+	#          $got->[0]{type} = 'INTEGER'
+	#     $expected->[0]{type} = 'integer'
+ .
+ Use Test::Deep's regexp functionality.
+Origin: vendor
+Author: gregor herrmann <gregoa@debian.org>
+Last-Update: 2022-01-17
+
+--- a/t/dumptruck.t
++++ b/t/dumptruck.t
+@@ -2,6 +2,7 @@
+ 
+ use Test::More tests => 43;
+ use Test::Exception;
++use Test::Deep;
+ use File::Temp;
+ 
+ use strict;
+@@ -138,10 +139,10 @@
+ 	'Undefined variable retrieved');
+ 
+ # And some low-level stuff
+-is_deeply ($dt3->column_names ('table2'), [
+-	{ notnull => 0, pk => 0, name => 'goodbye', type => 'text',
++cmp_deeply ($dt3->column_names ('table2'), [
++	{ notnull => 0, pk => 0, name => 'goodbye', type => re(qr/^text$/i),
+ 		cid => 0, dflt_value => undef },
+-	{ notnull => 0, pk => 0, name => 'hello', type => 'text',
++	{ notnull => 0, pk => 0, name => 'hello', type => re(qr/^text$/i),
+ 		cid => 1, dflt_value => undef }
+ ], 'Could retrieve table structure');
+ 
+@@ -170,16 +171,16 @@
+ 	}
+ })], [1], 'Insert of structured data successful');
+ 
+-is_deeply ($dt3->column_names, [
+-	{ notnull => 0, pk => 0, name => 'age', type => 'integer',
++cmp_deeply ($dt3->column_names, [
++	{ notnull => 0, pk => 0, name => 'age', type => re(qr/^integer$/i),
+ 		cid => 0, dflt_value => undef },
+ 	{ notnull => 0, pk => 0, name => 'foo', type => '',
+ 		cid => 1, dflt_value => undef },
+-	{ notnull => 0, pk => 0, name => 'name', type => 'text',
++	{ notnull => 0, pk => 0, name => 'name', type => re(qr/^text$/i),
+ 		cid => 2, dflt_value => undef },
+ 	{ notnull => 0, pk => 0, name => 'random', type => 'json text',
+ 		cid => 3, dflt_value => undef },
+-	{ notnull => 0, pk => 0, name => 'wide', type => 'text',
++	{ notnull => 0, pk => 0, name => 'wide', type => re(qr/^text$/i),
+ 		cid => 4, dflt_value => undef },
+ 	{ notnull => 0, pk => 0, name => 'yes', type => 'bool',
+ 		cid => 5, dflt_value => undef }
+--- a/Build.PL
++++ b/Build.PL
+@@ -26,6 +26,7 @@
+ 		'Test::Pod' => '1.00',
+ 		'Test::More' => 0,
+ 		'Test::Exception' => 0,
++		'Test::Deep' => 0,
+ 		'File::Temp' => 0,
+ 	},
+ );

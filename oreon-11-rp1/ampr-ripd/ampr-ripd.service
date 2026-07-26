@@ -1,0 +1,12 @@
+[Unit]
+Description = AMPR Routing Daemon
+After = network.target
+
+[Service]
+Type = forking
+PIDFile = /run/ampr-ripd.pid
+ExecStart = /usr/sbin/ampr-ripd
+ExecReload = /bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy = multi-user.target

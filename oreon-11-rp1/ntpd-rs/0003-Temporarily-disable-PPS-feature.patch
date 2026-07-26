@@ -1,0 +1,27 @@
+From b62ebba9335c928255c1a4871fe1ce6c9d4515ef Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Mon, 22 Sep 2025 16:08:25 +0200
+Subject: [PATCH 3/4] Temporarily disable PPS feature
+
+The pps-time crate has some potential correctness issues:
+https://github.com/pendulum-project/pps-time/issues/1
+---
+ ntpd/Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ntpd/Cargo.toml b/ntpd/Cargo.toml
+index 9c79291..3d857e7 100644
+--- a/ntpd/Cargo.toml
++++ b/ntpd/Cargo.toml
+@@ -35,7 +35,7 @@ ntp-proto = { workspace = true, features = ["__internal-test",] }
+ tokio-rustls.workspace = true
+ 
+ [features]
+-default = [ "pps" ]
++default = []
+ hardware-timestamping = []
+ pps = [ "dep:pps-time" ]
+ 
+-- 
+2.51.0
+

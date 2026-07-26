@@ -1,0 +1,10 @@
+--- a/kpilot/CMakeLists.txt
++++ b/kpilot/CMakeLists.txt
+@@ -50,6 +50,7 @@ include_directories(
+     ${CMAKE_CURRENT_BINARY_DIR}
+     ${QT_INCLUDE_DIR}
+     ${QT_QTDBUS_INCLUDE_DIR}
++    ${QT_QTCORE_INCLUDE_DIR}
+     ${KDE4_INCLUDE_DIR}
+ )
+ 

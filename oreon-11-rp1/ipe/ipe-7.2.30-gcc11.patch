@@ -1,0 +1,10 @@
+--- ipe-7.2.24-orig/src/include/ipebase.h	2021-04-10 15:54:57.538796742 -0400
++++ ipe-7.2.24/src/include/ipebase.h	2021-04-10 15:56:06.025937312 -0400
+@@ -36,6 +36,7 @@
+ #include <vector>
+ #include <algorithm>
+ #include <memory>
++#include <cstdint>
+ 
+ // --------------------------------------------------------------------
+ 

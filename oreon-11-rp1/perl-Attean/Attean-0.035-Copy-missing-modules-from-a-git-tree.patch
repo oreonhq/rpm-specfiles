@@ -1,0 +1,214 @@
+From 256cbd52ff80a9e3cd04348e0b2e55b9fd14fb32 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 3 Feb 2025 13:13:34 +0100
+Subject: [PATCH] Copy missing modules from a git tree
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Attean-0.035 uses Test::Attean::TestSimpleQueryEvaluator and
+Test::Attean::TestIDPQueryPlanner modules which exist in upstream git
+tree but are missing from the release tar ball.
+
+This patch fixes it.
+
+Resolves: https://github.com/kasei/attean/issues/174
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ MANIFEST                                    |  2 +
+ lib/Test/Attean/TestIDPQueryPlanner.pm      | 98 +++++++++++++++++++++
+ lib/Test/Attean/TestSimpleQueryEvaluator.pm | 64 ++++++++++++++
+ 3 files changed, 164 insertions(+)
+ create mode 100644 lib/Test/Attean/TestIDPQueryPlanner.pm
+ create mode 100644 lib/Test/Attean/TestSimpleQueryEvaluator.pm
+
+diff --git a/MANIFEST b/MANIFEST
+index ec5440f..970f3f2 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -131,6 +131,8 @@ lib/Test/Attean/QuadStore.pm
+ lib/Test/Attean/SPARQLStarSuite.pm
+ lib/Test/Attean/SPARQLSuite.pm
+ lib/Test/Attean/StoreCleanup.pm
++lib/Test/Attean/TestIDPQueryPlanner.pm
++lib/Test/Attean/TestSimpleQueryEvaluator.pm
+ lib/Test/Attean/TimeCacheableQuadStore.pm
+ lib/Test/Attean/TripleStore.pm
+ lib/Test/Attean/W3CManifestTestSuite.pm
+diff --git a/lib/Test/Attean/TestIDPQueryPlanner.pm b/lib/Test/Attean/TestIDPQueryPlanner.pm
+new file mode 100644
+index 0000000..bec92ce
+--- /dev/null
++++ b/lib/Test/Attean/TestIDPQueryPlanner.pm
+@@ -0,0 +1,98 @@
++use v5.14;
++use warnings;
++
++use Attean::Algebra;
++use Attean::Expression;
++use Attean::IDPQueryPlanner;
++
++package Test::Attean::Plan::TestService 0.033 {
++	use Moo;
++	use Types::Standard qw(ConsumerOf Bool Str InstanceOf);
++	use Encode qw(encode encode_utf8 decode_utf8);
++	use Scalar::Util qw(blessed);
++	use URI::Escape;
++	use Attean::SPARQLClient;
++	use namespace::clean;
++
++	with 'Attean::API::Plan', 'Attean::API::UnaryQueryTree';
++
++	has 'plan' => (is => 'rw');
++	has 'model' => (is => 'rw');
++	has 'silent' => (is => 'ro', isa => Bool, default => 0);
++
++	sub plan_as_string {
++		my $self	= shift;
++		my $s		= $self->plan->as_string;
++		$s			=~ s/\n/ /g;
++		return sprintf('TestService { ' . $s . ' }');
++	}
++	
++	sub tree_attributes { return qw() };
++	sub impl {
++		my $self	= shift;
++		shift; # model
++		my $model	= $self->model;
++		my $plan	= $self->plan;
++		my $result	= eval { $plan->impl($model, @_) };
++		if ($@ and not $self->silent) {
++			die $@;
++		}
++		return $result;
++	}
++}
++
++
++package Test::Attean::TestIDPQueryPlanner 0.033 {
++	use Moo;
++	use Data::Dumper;
++	use Types::Standard qw(HashRef);
++	use namespace::clean;
++	
++	extends 'Attean::IDPQueryPlanner';
++	has 'endpoints' => (is => 'rw', isa => HashRef, default => sub { +{} });
++	
++	sub register_test_endpoint {
++		my $self		= shift;
++		my $endpoint	= shift;
++		my $data		= shift;
++		$self->endpoints->{$endpoint}	= $data;
++	}
++	
++	sub plans_for_algebra {
++		my $self			= shift;
++		my $algebra			= shift;
++		my $model			= shift;
++		my $active_graphs	= shift;
++		my $default_graphs	= shift;
++		my %args			= @_;
++		my @children	= @{ $algebra->children };
++		my ($child)		= $children[0];
++
++		if ($algebra->isa('Attean::Algebra::Service')) {
++			my $endpoint	= $algebra->endpoint->value;
++# 			warn "Looking for endpoint $endpoint ...\n";
++			if (my $data = $self->endpoints->{$endpoint}) {
++# 				warn "... found.\n";
++				my ($mock_model, $dg)	= @$data;
++				my @plans	= $self->plans_for_algebra($child, $mock_model, $active_graphs, $default_graphs, %args);
++				my @vars		= $child->in_scope_variables;
++				my $silent		= $algebra->silent;
++				my $sparql		= sprintf('SELECT * WHERE { %s }', $child->as_sparql);
++				my $plan		= Test::Attean::Plan::TestService->new(
++					in_scope_variables => \@vars,
++					plan	=> shift(@plans),
++					model	=> $mock_model,
++					silent	=> $silent,
++				);
++				return $plan;
++			} else {
++# 				warn "... not found.\n";
++			}
++		}
++		
++		return $self->SUPER::plans_for_algebra($algebra, $model, $active_graphs, $default_graphs, %args);
++	}
++}
++
++1;
++
+diff --git a/lib/Test/Attean/TestSimpleQueryEvaluator.pm b/lib/Test/Attean/TestSimpleQueryEvaluator.pm
+new file mode 100644
+index 0000000..27b3037
+--- /dev/null
++++ b/lib/Test/Attean/TestSimpleQueryEvaluator.pm
+@@ -0,0 +1,64 @@
++use v5.14;
++use warnings;
++
++use Attean::Algebra;
++use Attean::Expression;
++use Attean::SimpleQueryEvaluator;
++
++package Test::Attean::MockClient 0.033 {
++	use Moo;
++	use Data::Dumper;
++	use Types::Standard qw(ConsumerOf InstanceOf Bool Object);
++	use Encode qw(encode encode_utf8 decode_utf8);
++	use namespace::clean;
++
++	has 'endpoint' => (is => 'rw');
++	has 'default_graph'	=> (is => 'ro', isa => ConsumerOf['Attean::API::IRI'], required => 1);
++	has 'model' => (is => 'ro', isa => ConsumerOf['Attean::API::Model'], required => 1);
++	has 'silent' => (is => 'ro', isa => Bool, default => 0);
++	
++	sub query {
++		my $self		= shift;
++		my $sparql		= shift;
++		my $model		= $self->model;
++		my $silent		= $self->silent;
++		my $bytes		= encode_utf8($sparql);
++		my $s 			= AtteanX::Parser::SPARQL->new();
++		my ($algebra)	= $s->parse_list_from_bytes($bytes);
++		my $e			= Attean::SimpleQueryEvaluator->new( model => $model, default_graph => $self->default_graph );
++		my $results		= eval { $e->evaluate($algebra, $self->default_graph) };
++		if ($@ and not $silent) {
++			die $@;
++		}
++		return $results;
++	}
++}
++
++package Test::Attean::TestSimpleQueryEvaluator 0.033 {
++	use Moo;
++	use Types::Standard qw(HashRef);
++
++	extends 'Attean::SimpleQueryEvaluator';
++	has 'endpoints' => (is => 'rw', isa => HashRef, default => sub { +{} });
++	
++	sub register_test_endpoint {
++		my $self		= shift;
++		my $endpoint	= shift;
++		my $data		= shift;
++		$self->endpoints->{$endpoint}	= $data;
++	}
++	
++	sub new_service_client {
++		my $self		= shift;
++		my $endpoint	= shift;
++		my $silent		= shift;
++		if (my $data = $self->endpoints->{$endpoint}) {
++			my ($model, $dg)	= @$data;
++			return Test::Attean::MockClient->new(endpoint => $endpoint, model => $model, default_graph => $dg, silent => $silent);
++		}
++		return $self->SUPER::new_service_client($endpoint, $silent, @_);
++	}
++}
++
++1;
++
+-- 
+2.48.1
+

@@ -1,0 +1,83 @@
+diff -rup a/config.h.in b/config.h.in
+--- a/config.h.in	2019-02-01 18:37:54.000000000 -0500
++++ b/config.h.in	2023-01-27 16:41:46.268471003 -0500
+@@ -156,6 +156,9 @@
+ /* Define to 1 if you have the <GL/glu.h> header file. */
+ #undef HAVE_GL_GLU_H
+ 
++/* Define to 1 if you have the <GL/glx.h> header file. */
++#undef HAVE_GL_GLX_H
++
+ /* Define to 1 if you have the <GL/gl.h> header file. */
+ #undef HAVE_GL_GL_H
+ 
+@@ -265,6 +268,9 @@
+ /* Define to 1 if you have the <OpenGL/glu.h> header file. */
+ #undef HAVE_OPENGL_GLU_H
+ 
++/* Define to 1 if you have the <OpenGL/glx.h> header file. */
++#undef HAVE_OPENGL_GLX_H
++
+ /* Define to 1 if you have the <OpenGL/gl.h> header file. */
+ #undef HAVE_OPENGL_GL_H
+ 
+diff -rup a/configure b/configure
+--- a/configure	2019-02-01 18:37:18.000000000 -0500
++++ b/configure	2023-01-27 16:41:49.570595034 -0500
+@@ -14686,7 +14686,7 @@ done
+ 
+ ax_save_CPPFLAGS=$CPPFLAGS
+ CPPFLAGS="$GL_CFLAGS $CPPFLAGS"
+-for ac_header in GL/gl.h OpenGL/gl.h
++for ac_header in GL/gl.h OpenGL/gl.h GL/glx.h OpenGL/glx.h
+ do :
+   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ ac_fn_c_check_header_compile "$LINENO" "$ac_header" "$as_ac_Header" "
+@@ -14838,12 +14838,12 @@ if test "X$ax_cv_check_gl_libgl" != Xno;
+ # if defined(HAVE_WINDOWS_H) && defined(_WIN32)
+ #   include <windows.h>
+ # endif
+-# ifdef HAVE_GL_GL_H
+-#   include <GL/gl.h>
+-# elif defined(HAVE_OPENGL_GL_H)
+-#   include <OpenGL/gl.h>
++# ifdef HAVE_GL_GLX_H
++#   include <GL/glx.h>
++# elif defined(HAVE_OPENGL_GLX_H)
++#   include <OpenGL/glx.h>
+ # else
+-#   error no gl.h
++#   error no glx.h
+ # endif
+ int
+ main ()
+diff -rup a/m4/ax_check_gl.m4 b/m4/ax_check_gl.m4
+--- a/m4/ax_check_gl.m4	2019-01-10 15:06:22.000000000 -0500
++++ b/m4/ax_check_gl.m4	2023-01-27 15:51:01.163828820 -0500
+@@ -56,7 +56,7 @@ AC_CHECK_HEADERS([windows.h])
+ 
+ ax_save_CPPFLAGS=$CPPFLAGS
+ CPPFLAGS="$GL_CFLAGS $CPPFLAGS"
+-AC_CHECK_HEADERS([GL/gl.h OpenGL/gl.h], , , [
++AC_CHECK_HEADERS([GL/gl.h OpenGL/gl.h GL/glx.h OpenGL/glx.h], , , [
+ # if defined(HAVE_WINDOWS_H) && defined(_WIN32)
+ #   include <windows.h>
+ # endif
+@@ -82,12 +82,12 @@ m4_define([AX_CHECK_GL_GLX_PROGRAM],
+ # if defined(HAVE_WINDOWS_H) && defined(_WIN32)
+ #   include <windows.h>
+ # endif
+-# ifdef HAVE_GL_GL_H
+-#   include <GL/gl.h>
+-# elif defined(HAVE_OPENGL_GL_H)
+-#   include <OpenGL/gl.h>
++# ifdef HAVE_GL_GLX_H
++#   include <GL/glx.h>
++# elif defined(HAVE_OPENGL_GLX_H)
++#   include <OpenGL/glx.h>
+ # else
+-#   error no gl.h
++#   error no glx.h
+ # endif]],
+                            [[glXQueryVersion(0, 0, 0)]])])
+ 

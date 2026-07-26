@@ -1,0 +1,30 @@
+From fbaf94e47ab54446a52e7929a32e5125805fe195 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 12 Oct 2025 22:17:35 +0100
+Subject: [PATCH 09/10] Make deref_less::operator() const
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+For C++17 compatibility. Originally suggested by Terje Røsten in
+https://src.fedoraproject.org/rpms/dwgrep/pull-request/2.
+---
+ libzwerg/op.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libzwerg/op.cc b/libzwerg/op.cc
+index 9fc2d23..8881b86 100644
+--- a/libzwerg/op.cc
++++ b/libzwerg/op.cc
+@@ -587,7 +587,7 @@ namespace
+   {
+     template <class T>
+     bool
+-    operator() (T const &a, T const &b)
++    operator() (T const &a, T const &b) const
+     {
+       return *a < *b;
+     }
+-- 
+2.51.0
+

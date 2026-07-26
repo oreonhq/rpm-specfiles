@@ -1,0 +1,135 @@
+diff --git a/frysk-core/frysk/pkglibdir/funit-2threads.c b/frysk-core/frysk/pkglibdir/funit-2threads.c
+index 970c90c37..e4b969046 100644
+--- a/frysk-core/frysk/pkglibdir/funit-2threads.c
++++ b/frysk-core/frysk/pkglibdir/funit-2threads.c
+@@ -46,7 +46,7 @@
+ 
+ pthread_t thread;
+ 
+-void* thread_func ()
++void* thread_func (void*)
+ {
+   int count1 = 0;
+ 
+diff --git a/frysk-core/frysk/pkglibdir/funit-rt-goto.c b/frysk-core/frysk/pkglibdir/funit-rt-goto.c
+index 928096bd7..f79197509 100644
+--- a/frysk-core/frysk/pkglibdir/funit-rt-goto.c
++++ b/frysk-core/frysk/pkglibdir/funit-rt-goto.c
+@@ -52,7 +52,7 @@ volatile int sig;
+ volatile int j = 0;
+ 
+ void 
+-*signal_parent ()
++*signal_parent (void*)
+ {
+   while (lock);
+ 
+diff --git a/frysk-core/frysk/pkglibdir/funit-rt-siglongjmp.c b/frysk-core/frysk/pkglibdir/funit-rt-siglongjmp.c
+index 3ad4368aa..c65358d27 100644
+--- a/frysk-core/frysk/pkglibdir/funit-rt-siglongjmp.c
++++ b/frysk-core/frysk/pkglibdir/funit-rt-siglongjmp.c
+@@ -54,7 +54,7 @@ volatile int sig;
+ static sigjmp_buf *env;
+ 
+ void 
+-*signal_parent ()
++*signal_parent (void*)
+ {
+   while (lock);
+ 
+diff --git a/frysk-core/frysk/pkglibdir/funit-rt-sigraise.c b/frysk-core/frysk/pkglibdir/funit-rt-sigraise.c
+index 4270edf07..1f9c26151 100644
+--- a/frysk-core/frysk/pkglibdir/funit-rt-sigraise.c
++++ b/frysk-core/frysk/pkglibdir/funit-rt-sigraise.c
+@@ -53,7 +53,7 @@ volatile int sig;
+ volatile int j = 0;
+ 
+ void 
+-*signal_parent ()
++*signal_parent (void*)
+ {
+   while (lock);
+ 
+diff --git a/frysk-core/frysk/pkglibdir/funit-rt-steptester.c b/frysk-core/frysk/pkglibdir/funit-rt-steptester.c
+index 0effca488..2b0392013 100644
+--- a/frysk-core/frysk/pkglibdir/funit-rt-steptester.c
++++ b/frysk-core/frysk/pkglibdir/funit-rt-steptester.c
+@@ -56,7 +56,7 @@ volatile int kill_bool = 1;
+ volatile int sig_rec = 0;
+ 
+ void 
+-*signal_parent ()
++*signal_parent (void*)
+ {
+   while (lock);
+ 
+diff --git a/frysk-core/frysk/pkglibdir/funit-rt-threader.c b/frysk-core/frysk/pkglibdir/funit-rt-threader.c
+index 73d0aa427..fe34a5041 100644
+--- a/frysk-core/frysk/pkglibdir/funit-rt-threader.c
++++ b/frysk-core/frysk/pkglibdir/funit-rt-threader.c
+@@ -56,7 +56,7 @@ volatile pid_t pid;
+ volatile int sig;
+ 
+ void 
+-*signal_parent ()
++*signal_parent (void*)
+ {
+   while (lock_one || lock_two);
+   kill (pid, sig);
+@@ -124,7 +124,7 @@ foo_two ()
+ 
+ /* tester_thread_one: a = 1 */
+ void
+-*foo ()
++*foo (void*)
+ {
+   bar ();
+   return NULL;
+diff --git a/frysk-core/frysk/pkglibdir/funit-rt-threadstepper.c b/frysk-core/frysk/pkglibdir/funit-rt-threadstepper.c
+index b69736ce9..c634dc659 100644
+--- a/frysk-core/frysk/pkglibdir/funit-rt-threadstepper.c
++++ b/frysk-core/frysk/pkglibdir/funit-rt-threadstepper.c
+@@ -184,7 +184,7 @@ bar ()
+ 
+ /* tester_thread_two: a = 0 */
+ void
+-*foo_two ()
++*foo_two (void*)
+ {
+   bar_two (); 
+   return NULL;
+@@ -192,7 +192,7 @@ void
+ 
+ /* tester_thread_one: a = 1 */
+ void
+-*foo ()
++*foo (void*)
+ {
+   bar ();
+   return NULL;
+diff --git a/frysk-core/frysk/pkglibdir/funit-threads-looper.c b/frysk-core/frysk/pkglibdir/funit-threads-looper.c
+index bc2931a5d..557be4089 100644
+--- a/frysk-core/frysk/pkglibdir/funit-threads-looper.c
++++ b/frysk-core/frysk/pkglibdir/funit-threads-looper.c
+@@ -64,7 +64,7 @@ pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+ static char * myname;
+ 
+ void
+-*do_it ()
++*do_it (void*)
+ {  
+   int t = 34543;
+   while (t > 0)
+diff --git a/frysk-core/prog/kill/detach.c b/frysk-core/prog/kill/detach.c
+index 78f759194..e536f9e9c 100644
+--- a/frysk-core/prog/kill/detach.c
++++ b/frysk-core/prog/kill/detach.c
+@@ -53,7 +53,7 @@
+ // Simple sleep for roughly SECONDS and then exit.
+ 
+ static void
+-sigalrm ()
++sigalrm (int)
+ {
+   exit (0);
+ }

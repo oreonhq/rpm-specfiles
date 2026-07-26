@@ -1,0 +1,28 @@
+From 4036656e3d0015fce8e88dff77a4511c71263592 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marc-Andr=C3=A9=20Lureau?= <marcandre.lureau@redhat.com>
+Date: Tue, 12 Mar 2024 11:22:20 +0400
+Subject: [PATCH] meson: add -DGLM_ENABLE_EXPERIMENTAL
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+---
+ meson.build | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/meson.build b/meson.build
+index 8a84f43..5c80391 100644
+--- a/meson.build
++++ b/meson.build
+@@ -162,6 +162,7 @@ if cc.has_header('glm/glm.hpp')
+ else
+   inc_glm = include_directories('third-party/glm/include')
+ endif
++add_global_arguments('-DGLM_ENABLE_EXPERIMENTAL', language: 'cpp')
+ 
+ #================#
+ # Subdirectories #
+-- 
+2.44.0
+

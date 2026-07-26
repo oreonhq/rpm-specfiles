@@ -1,0 +1,11 @@
+--- atomic-reactor-4.11.1/atomic_reactor/plugins/rpmqa.py~	2024-08-22 22:04:30.877843860 -0400
++++ atomic-reactor-4.11.1/atomic_reactor/plugins/rpmqa.py	2024-08-22 22:04:59.142470951 -0400
+@@ -18,7 +18,7 @@
+ from atomic_reactor.utils.rpm import parse_rpm_output
+ from atomic_reactor.utils.rpm import rpm_qf_args
+ 
+-RPMDB_PATH = '/var/lib/rpm'
++RPMDB_PATH = '/usr/lib/sysimage/rpm'
+ RPMDB_DIR_NAME = 'rpm'
+ 
+ __all__ = ('RPMqaPlugin',)

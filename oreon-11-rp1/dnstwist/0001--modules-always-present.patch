@@ -1,0 +1,115 @@
+diff -r -U4 dnstwist-20240116--orig/dnstwist.py dnstwist-20240116--patched/dnstwist.py
+--- dnstwist-20240116--orig/dnstwist.py	2024-01-16 21:45:37.000000000 +0100
++++ dnstwist-20240116--patched/dnstwist.py	2024-01-23 18:01:14.884712485 +0100
+@@ -66,18 +66,13 @@
+ except ImportError as e:
+ 	_debug(e)
+ 	MODULE_SELENIUM = False
+ 
+-try:
+-	from dns.resolver import Resolver, NXDOMAIN, NoNameservers
+-	import dns.rdatatype
+-	from dns.exception import DNSException
+-	MODULE_DNSPYTHON = True
+-except ImportError as e:
+-	_debug(e)
+-	MODULE_DNSPYTHON = False
++from dns.resolver import Resolver, NXDOMAIN, NoNameservers
++import dns.rdatatype
++from dns.exception import DNSException
+ 
+-GEOLITE2_MMDB = os.environ.get('GEOLITE2_MMDB' , os.path.join(os.path.dirname(__file__), 'GeoLite2-Country.mmdb'))
++GEOLITE2_MMDB = os.environ.get('GEOLITE2_MMDB' , __GEOIP__COUNTRY__PATH__)
+ try:
+ 	import geoip2.database
+ 	_ = geoip2.database.Reader(GEOLITE2_MMDB)
+ except Exception as e:
+@@ -102,38 +97,11 @@
+ 			self.reader = geoip2.database.Reader(GEOLITE2_MMDB)
+ 		def country_by_addr(self, ipaddr):
+ 			return self.reader.country(ipaddr).country.name
+ 
+-try:
+-	import ssdeep
+-	MODULE_SSDEEP = True
+-except ImportError as e:
+-	_debug(e)
+-	try:
+-		import ppdeep as ssdeep
+-		MODULE_SSDEEP = True
+-	except ImportError as e:
+-		_debug(e)
+-		MODULE_SSDEEP = False
+-
+-try:
+-	import tlsh
+-	MODULE_TLSH = True
+-except ImportError as e:
+-	_debug(e)
+-	MODULE_TLSH = False
+-
+-try:
+-	import idna
+-except ImportError as e:
+-	_debug(e)
+-	class idna:
+-		@staticmethod
+-		def decode(domain):
+-			return domain.encode().decode('idna')
+-		@staticmethod
+-		def encode(domain):
+-			return domain.encode('idna')
++import ssdeep
++import tlsh
++import idna
+ 
+ 
+ VALID_FQDN_REGEX = re.compile(r'(?=^.{4,253}$)(^((?!-)[a-z0-9-]{1,63}(?<!-)\.)+[a-z0-9-]{2,63}$)', re.IGNORECASE)
+ USER_AGENT_STRING = 'Mozilla/5.0 ({} {}-bit) dnstwist/{}'.format(sys.platform, sys.maxsize.bit_length() + 1, __version__)
+@@ -1309,10 +1277,8 @@
+ 			del all_fuzzers
+ 
+ 	nameservers = []
+ 	if args.nameservers:
+-		if not MODULE_DNSPYTHON:
+-			parser.error('missing DNSPython library')
+ 		nameservers = args.nameservers.split(',')
+ 		for addr in nameservers:
+ 			if re.match(r'^https://[a-z0-9.-]{4,253}/dns-query$', addr):
+ 				try:
+@@ -1357,12 +1323,8 @@
+ 
+ 
+ 	lsh_url = None
+ 	if args.lsh:
+-		if args.lsh == 'ssdeep' and not MODULE_SSDEEP:
+-			parser.error('missing ssdeep library')
+-		if args.lsh == 'tlsh' and not MODULE_TLSH:
+-			parser.error('missing py-tlsh library')
+ 		if args.lsh_url:
+ 			try:
+ 				lsh_url = UrlParser(args.lsh_url)
+ 			except ValueError:
+@@ -1412,11 +1374,8 @@
+ 		if hasattr(sys, '_stdout'):
+ 			sys.stdout = sys._stdout
+ 		return list(map(dict, domains)) if kwargs else None
+ 
+-	if not MODULE_DNSPYTHON:
+-		p_err('WARNING: DNS features are limited due to lack of DNSPython library')
+-
+ 	p_cli(FG_RND + ST_BRI +
+ r'''     _           _            _     _
+   __| |_ __  ___| |___      _(_)___| |_
+  / _` | '_ \/ __| __\ \ /\ / / / __| __|
+@@ -1479,9 +1438,9 @@
+ 	for _ in range(args.threads):
+ 		worker = Scanner(jobs)
+ 		worker.id = sid
+ 		worker.url = url
+-		worker.option_extdns = MODULE_DNSPYTHON
++		worker.option_extdns = True
+ 		if args.geoip:
+ 			worker.option_geoip = True
+ 		if args.banners:
+ 			worker.option_banners = True

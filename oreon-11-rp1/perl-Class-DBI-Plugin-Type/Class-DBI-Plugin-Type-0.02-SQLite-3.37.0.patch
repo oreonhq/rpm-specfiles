@@ -1,0 +1,27 @@
+Description: Fix test failures with SQLite 3.37.0
+ #   Failed test 'notes is text'
+ #   at t/1.t line 28.
+ #                   'TEXT'
+ #     doesn't match '(?^:text|blob)'
+ #   Failed test 'id is integer'
+ #   at t/1.t line 31.
+ #                   'INT'
+ #     doesn't match '(?^:^int)'
+Origin: vendor
+Author: gregor herrmann <gregoa@debian.org>
+Last-Update: 2022-01-18
+Bug-Debian: https://bugs.debian.org/1003896
+
+--- a/t/1.t
++++ b/t/1.t
+@@ -25,8 +25,8 @@
+ )");
+ DBI::Test->table("test");
+ use_ok('Class::DBI::Plugin::Type');
+-like(DBI::Test->column_type("notes"), qr/text|blob/, "notes is text");
++like(DBI::Test->column_type("notes"), qr/text|blob/i, "notes is text");
+ is(DBI::Test->column_type("tasted"), "date", "tasted is a date");
+ like(DBI::Test->column_type("price"), qr/^decimal/, "price is decimal");
+-like(DBI::Test->column_type("id"), qr/^int/, "id is integer");
++like(DBI::Test->column_type("id"), qr/^int/i, "id is integer");
+ like(DBI::Test->column_type("name"), qr/^varchar/, "name is varchar");

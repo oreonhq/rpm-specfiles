@@ -1,0 +1,90 @@
+Index: portaudio/bindings/cpp/example/devs.cxx
+===================================================================
+--- portaudio.orig/bindings/cpp/example/devs.cxx
++++ portaudio/bindings/cpp/example/devs.cxx
+@@ -1,7 +1,7 @@
+ #include <iostream>
+ #include "portaudiocpp/PortAudioCpp.hxx"
+ 
+-#ifdef WIN32
++#if PA_USE_ASIO
+ #include "portaudiocpp/AsioDeviceAdapter.hxx"
+ #endif
+ 
+@@ -109,7 +109,7 @@ int main(int, char*[])
+ 			std::cout << "Default high input latency  = " << (*i).defaultHighInputLatency() << std::endl; // 8.3
+ 			std::cout << "Default high output latency = " << (*i).defaultHighOutputLatency() << std::endl; // 8.3
+ 
+-#ifdef WIN32
++#if PA_USE_ASIO
+ 			// ASIO specific latency information:
+ 			if ((*i).hostApi().typeId() == paASIO)
+ 			{
+@@ -124,7 +124,7 @@ int main(int, char*[])
+ 				else
+ 					std::cout << "ASIO buffer granularity     = " << asioDevice.granularity() << std::endl;
+ 			}
+-#endif // WIN32
++#endif // PA_USE_ASIO
+ 
+ 			std::cout << "Default sample rate         = " << (*i).defaultSampleRate() << std::endl; // 8.2
+ 
+Index: portaudio/configure.in
+===================================================================
+--- portaudio.orig/configure.in
++++ portaudio/configure.in
+@@ -107,14 +107,12 @@ dnl Checks for programs.
+ 
+ AC_PROG_CC
+ dnl ASIO and CXX bindings need a C++ compiler
+-if [[ "$with_asio" = "yes" ] || [ "$enable_cxx" = "yes" ]] ; then
+        AC_PROG_CXX
+-fi
+ AC_LIBTOOL_WIN32_DLL
+ AC_PROG_LIBTOOL
+ AC_PROG_INSTALL
+ AC_PROG_LN_S
+-AC_PATH_PROG(AR, ar, no)
++AC_PATH_TOOL(AR, ar, no)
+ if [[ $AR = "no" ]] ; then
+     AC_MSG_ERROR("Could not find ar - needed to create a library")
+ fi
+@@ -286,7 +284,6 @@ case "${host_os}" in
+ 
+         PADLL="portaudio.dll"
+         THREAD_CFLAGS="-mthreads"
+-        SHARED_FLAGS="-shared"
+         CFLAGS="$CFLAGS -I\$(top_srcdir)/src/os/win -DPA_USE_WMME=0 -DPA_USE_ASIO=0 -DPA_USE_WDMKS=0 -DPA_USE_DS=0 -DPA_USE_WASAPI=0"
+ 
+         if [[ "x$with_directx" = "xyes" ]]; then
+@@ -304,7 +301,7 @@ case "${host_os}" in
+             ASIODIR="$with_asiodir"
+             add_objects src/hostapi/asio/pa_asio.o src/common/pa_ringbuffer.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o src/os/win/pa_win_coinitialize.o src/hostapi/asio/iasiothiscallresolver.o $ASIODIR/common/asio.o $ASIODIR/host/asiodrivers.o $ASIODIR/host/pc/asiolist.o
+             LIBS="${LIBS} -lwinmm -lm -lole32 -luuid"
+-            DLL_LIBS="${DLL_LIBS} -lwinmm -lm -lole32 -luuid"
++            DLL_LIBS="${DLL_LIBS} -lwinmm -lm -lole32 -Wl,-luuid"
+             CFLAGS="$CFLAGS -ffast-math -fomit-frame-pointer -I\$(top_srcdir)/src/hostapi/asio -I$ASIODIR/host/pc -I$ASIODIR/common -I$ASIODIR/host -UPA_USE_ASIO -DPA_USE_ASIO=1 -DWINDOWS"
+             INCLUDES="$INCLUDES pa_asio.h"
+ 
+@@ -321,7 +318,7 @@ case "${host_os}" in
+             DXDIR="$with_dxdir"
+             add_objects src/hostapi/wdmks/pa_win_wdmks.o src/common/pa_ringbuffer.o src/os/win/pa_win_hostapis.o src/os/win/pa_win_util.o src/os/win/pa_win_wdmks_utils.o src/os/win/pa_win_waveformat.o
+             LIBS="${LIBS} -lwinmm -lm -luuid -lsetupapi -lole32"
+-            DLL_LIBS="${DLL_LIBS} -lwinmm -lm -L$DXDIR/lib -luuid -lsetupapi -lole32"
++            DLL_LIBS="${DLL_LIBS} -lwinmm -lm -L$DXDIR/lib -Wl,-luuid -lsetupapi -lole32"
+             #VC98="\"/c/Program Files/Microsoft Visual Studio/VC98/Include\""
+             #CFLAGS="$CFLAGS -I$VC98 -DPA_NO_WMME -DPA_NO_ASIO"
+             CFLAGS="$CFLAGS -I$DXDIR/include -UPA_USE_WDMKS -DPA_USE_WDMKS=1"
+Index: portaudio/src/hostapi/wasapi/pa_win_wasapi.c
+===================================================================
+--- portaudio.orig/src/hostapi/wasapi/pa_win_wasapi.c
++++ portaudio/src/hostapi/wasapi/pa_win_wasapi.c
+@@ -74,7 +74,7 @@
+ // using adjustments for MinGW build from @mgeier/MXE
+ // https://github.com/mxe/mxe/commit/f4bbc45682f021948bdaefd9fd476e2a04c4740f
+ #include <mmreg.h>  // must be before other Wasapi headers
+-#if defined(_MSC_VER) && (_MSC_VER >= 1400) || defined(__MINGW64_VERSION_MAJOR)
++#if defined(_MSC_VER) && (_MSC_VER >= 1400) || defined(__MINGW64_VERSION_MAJOR) || defined(__MINGW32__)
+     #include <avrt.h>
+     #define COBJMACROS
+     #include <audioclient.h>

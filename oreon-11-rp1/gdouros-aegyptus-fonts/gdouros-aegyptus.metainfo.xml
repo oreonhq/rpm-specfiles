@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-aegyptus</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Aegyptus</name>
+	<summary>A font for Egyptian hieroglyphs</summary>
+	<description>
+		<p>
+			Aegyptus contains an Extended List of 7062 Egyptian Hieroglyphs, in regular and
+			bold font weights.
+		</p>
+		<p>
+			There is no standard for Egyptian Hieroglyphs or Meroitic, so they are
+			allocated in the Supplementary Private Use Plane 15. The fonts also cover Basic
+			Latin and some Punctuation and other Symbols.
+		</p>
+		<p>
+			They were created by George Douros, mainly based on the book Hieroglyphica,
+			PIREI I², 2000 and the work of Alan Gardiner.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

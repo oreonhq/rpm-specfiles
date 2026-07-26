@@ -1,0 +1,69 @@
+From af670a3af632ea67e1fb1c40bc02c8a5eecfe187 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 24 Feb 2021 17:10:17 +0100
+Subject: [PATCH] Remove t/02_pod.t
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Test::Pod tests are optional. If we build without Test::Pod available,
+the test passes. But if we rerun the tests later when the Test::Pod is
+installed, they could fail. This causes a nonreproducibility.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/02_pod.t                         | 5 -----
+ t/04_all_perl_files.t              | 1 -
+ t/06_all_files_no_breakpoints_ok.t | 7 +------
+
+diff --git a/t/02_pod.t b/t/02_pod.t
+deleted file mode 100644
+index 437887a..0000000
+--- a/t/02_pod.t
++++ /dev/null
+@@ -1,5 +0,0 @@
+-#!/usr/bin/perl
+-use Test::More;
+-eval "use Test::Pod 1.00";
+-plan skip_all => "Test::Pod 1.00 required for testing POD" if $@;
+-all_pod_files_ok();
+diff --git a/t/04_all_perl_files.t b/t/04_all_perl_files.t
+index cb756d7..47fcde6 100644
+--- a/t/04_all_perl_files.t
++++ b/t/04_all_perl_files.t
+@@ -14,7 +14,6 @@ use Test::NoBreakpoints 'all_perl_files';
+ my @tests = qw|
+    ./00-load.t
+    ./01_use.t
+-   ./02_pod.t
+    ./04_all_perl_files.t
+    ./05_no_breakpoints_ok.t
+    ./06_all_files_no_breakpoints_ok.t
+diff --git a/t/06_all_files_no_breakpoints_ok.t b/t/06_all_files_no_breakpoints_ok.t
+index c6b1e32..e6f0d26 100644
+--- a/t/06_all_files_no_breakpoints_ok.t
++++ b/t/06_all_files_no_breakpoints_ok.t
+@@ -1,7 +1,7 @@
+ BEGIN {
+     use Test::Tester 0.09;
+     use Test::More;
+-    our $tests = 46;
++    our $tests = 43;
+     eval "use Test::NoWarnings";
+     $tests++ unless( $@ );
+     plan tests => $tests;
+@@ -22,11 +22,6 @@ my $checklist = [
+         depth => 2,
+         name => 'no breakpoint test of ./01_use.t',
+     },
+-    {
+-        ok   => 1,
+-        depth => 2,
+-        name => 'no breakpoint test of ./02_pod.t',
+-    },
+     {
+         ok   => 1,
+         depth => 2,
+-- 
+2.26.2
+

@@ -1,0 +1,25 @@
+From 4c6b49a2378e5cae6e58f441f73efb510cccf987 Mon Sep 17 00:00:00 2001
+From: Pat Riehecky <riehecky@fnal.gov>
+Date: Wed, 22 Jan 2025 15:21:48 -0600
+Subject: [PATCH] Use /usr/bin for sbin files per F42
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 1722709..4d823e0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,7 +19,7 @@ endif
+ 
+ DESTDIR=
+ bindir=/usr/bin
+-sbindir=/usr/sbin
++sbindir=/usr/bin
+ 
+ TARGETS =
+ ifdef HAS_VBE
+-- 
+2.48.1
+

@@ -1,0 +1,14 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for OpenBGPD >= 6.7p0, to adjust
+the path of the Validated ROA Payloads (VRP) from rpki-client accordingly.
+
+--- openbgpd-6.7p0/bgpd.conf			2020-05-09 01:15:04.000000000 +0200
++++ openbgpd-6.7p0/bgpd.conf.rpki-client	2020-05-11 14:00:31.906232479 +0200
+@@ -14,7 +14,7 @@
+ 	2001:db8:abcd::/48
+ }
+ 
+-include "/var/db/rpki-client/openbgpd"
++include "/var/lib/rpki-client/openbgpd"
+ 
+ # define bogon prefixes which should not be part of the DFZ
+ prefix-set bogons {

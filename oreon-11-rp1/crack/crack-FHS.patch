@@ -1,0 +1,111 @@
+diff -up c50a/Crack.FHS c50a/Crack
+--- c50a/Crack.FHS	2010-03-31 10:07:08.233610673 -0400
++++ c50a/Crack	2010-03-31 10:07:08.236608122 -0400
+@@ -36,7 +36,9 @@ node=`uname -n`                         
+ 
+ old_wd=`pwd`
+ 
+-CRACK_HOME=${CRACK_HOME:-"/var/lib/crack"}
++CRACK_HOME=${CRACK_HOME:-"/usr/share/crack"}
++CRACK_BIN_HOME=${CRACK_BIN_HOME:-"/usr/libexec/crack/"}
++CRACK_STATE_DIR=${CRACK_STATE_DIR:-"/var/lib/crack"}
+ 
+ if cd $CRACK_HOME
+ then
+@@ -47,6 +49,7 @@ else
+ fi
+ 
+ export CRACK_HOME
++export CRACK_BIN_HOME
+ 
+ ###
+ # Flagwaving
+@@ -56,6 +59,7 @@ echo "Crack $version: The Password Crack
+ echo "(c) Alec Muffett, 1991, 1992, 1993, 1994, 1995, 1996"
+ echo "System:" `uname -a 2>/dev/null`
+ echo "Home: $CRACK_HOME"
++echo "Script Home: $CRACK_BIN_HOME"
+ echo "Invoked: $0 $*"
+ 
+ ###
+@@ -205,7 +209,7 @@ fi
+ # Reset PATH in advance
+ ###
+ 
+-PATH=$CRACK_HOME/scripts:$CRACK_HOME/$bindir:$PATH
++PATH=$CRACK_HOME/scripts:$CRACK_BIN_HOME/$bindir:$PATH
+ export PATH
+ 
+ ###
+@@ -222,7 +226,7 @@ fi
+ # Make the dictionary passes
+ ###
+ 
+-dp=run/dict
++dp=$CRACK_STATE_DIR/run/dict
+ dplf=$dp/.dictmade
+ 
+ if [ ! -f $dplf ]
+@@ -253,21 +257,21 @@ fi
+ ###
+ 
+ # F-files are feedback
+-crackin=run/I$node.$$           # I-files are input to the cracker
+-crackfb=run/D.boot.$$           # D-files are data from the cracker/fb
+-crackout=run/D$node.$$
+-crackerr=run/E$node.$$          # E-files are errors from the cracker
++crackin=$CRACK_STATE_DIR/run/I$node.$$           # I-files are input to the cracker
++crackfb=$CRACK_STATE_DIR/run/D.boot.$$           # D-files are data from the cracker/fb
++crackout=$CRACK_STATE_DIR/run/D$node.$$
++crackerr=$CRACK_STATE_DIR/run/E$node.$$          # E-files are errors from the cracker
+ 
+ if [ "x$killflag" = "x" ]
+ then
+-	crackkf=run/K$node.$$   # K-files are kill file for 'plaster'
++	crackkf=$CRACK_STATE_DIR/run/K$node.$$   # K-files are kill file for 'plaster'
+ else
+ 	crackkf=$killflag
+ fi
+ 
+ if [ "x$mailflag" != "x" ]
+ then
+-	crackmf=run/M$node.$$   # M-files are for mail commands
++	crackmf=$CRACK_STATE_DIR/run/M$node.$$   # M-files are for mail commands
+ fi
+ 
+ 
+@@ -302,7 +306,7 @@ then
+ 	echo "Crack: Merging password files..."
+ 
+ 	(
+-		cat run/F-merged        # first the feedback
++		cat $CRACK_STATE_DIR/run/F-merged        # first the feedback
+ 
+ 		while [ "x$1" != "x" ]
+ 		do
+diff -up c50a/Reporter.FHS c50a/Reporter
+--- c50a/Reporter.FHS	2010-03-31 10:07:08.233610673 -0400
++++ c50a/Reporter	2010-03-31 10:07:08.236608122 -0400
+@@ -10,8 +10,8 @@
+ # document which accompanies distributions of Crack v5.0 and upwards.
+ ###
+ 
+-CRACK_HOME=${CRACK_HOME:-"/var/lib/crack"}
+-cd $CRACK_HOME
++CRACK_STATE_DIR=${CRACK_STATE_DIR:-"/var/lib/crack/"}
++cd $CRACK_STATE_DIR
+ 
+ tfile=run/T$$
+ date=`date`
+diff -up c50a/src/util/kickdict.c.FHS c50a/src/util/kickdict.c
+--- c50a/src/util/kickdict.c.FHS	2010-03-31 10:12:34.665486313 -0400
++++ c50a/src/util/kickdict.c	2010-03-31 10:12:44.187480349 -0400
+@@ -15,7 +15,7 @@
+ #undef DEBUG2
+ 
+ static char dictconf[] = "conf/dictrun.conf";
+-static char dictgrps[] = "run/dict";
++static char dictgrps[] = "/var/lib/crack/run/dict";
+ static char xprogram[] = "dictfilt | crack-sort | uniq";
+ 
+ int

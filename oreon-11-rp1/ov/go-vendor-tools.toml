@@ -1,0 +1,26 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "vendor/github.com/google/shlex/COPYING"
+sha256sum = "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+expression = "Apache-2.0"
+
+[[licensing.licenses]]
+path = "vendor/github.com/jwalton/gchalk/LICENSE-chalk"
+sha256sum = "44e453533edb9f1c037cb260c58f66f1d9b2e7823a07407cd6d04320e3925fea"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/jwalton/gchalk/pkg/ansistyles/LICENSE-ansi-styles"
+sha256sum = "310f4b4de77142b34acc5a58de93558fde5dea75891c7822b4086f71372ec983"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/github.com/jwalton/go-supportscolor/LICENSE"
+sha256sum = "892282511d65ac08025fbabcd8af330d0aa94e459d81a818251ff5a934383816"
+expression = "MIT"
+[[licensing.licenses]]
+path = "vendor/go.yaml.in/yaml/v3/LICENSE"
+sha256sum = "d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b"
+expression = "MIT AND (MIT AND Apache-2.0)"

@@ -1,0 +1,11 @@
+diff -Nrup a/libzwerg/stack.hh b/libzwerg/stack.hh
+--- a/libzwerg/stack.hh	2018-04-07 09:42:44.000000000 -0600
++++ b/libzwerg/stack.hh	2019-09-23 19:50:16.008621516 -0600
+@@ -32,6 +32,7 @@
+ 
+ #include <memory>
+ #include <vector>
++#include <stdexcept>
+ 
+ #include "value.hh"
+ #include "selector.hh"

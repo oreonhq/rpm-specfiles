@@ -1,0 +1,41 @@
+diff -up auriferous-1.0.1/auriferous/submenu.cpp~ auriferous-1.0.1/auriferous/submenu.cpp
+--- auriferous-1.0.1/auriferous/submenu.cpp~	2009-11-29 11:58:15.000000000 +0100
++++ auriferous-1.0.1/auriferous/submenu.cpp	2009-11-29 21:07:24.000000000 +0100
+@@ -434,6 +434,7 @@ CL_String Submenu::key_name(int k)
+ 	case CL_KEY_TAB: str = "Tab"; break;
+ 	case CL_KEY_ENTER: str = "Enter"; break;
+ 	case CL_KEY_SPACE: str = "Space"; break;
++	case CL_KEY_BACKSPACE: str = "Backspace"; break;
+ 	case CL_KEY_INSERT: str = "Insert"; break;
+ 	case CL_KEY_DELETE: str = "Delete"; break;
+ 	case CL_KEY_HOME: str = "Home"; break;
+@@ -445,6 +446,7 @@ CL_String Submenu::key_name(int k)
+ 	case CL_KEY_SCRLOCK: str = "Scroll Lock"; break;
+ 	case CL_KEY_PRINT: str = "Print Screen"; break;
+ 	case CL_KEY_PAUSE: str = "Pause"; break;
++	case CL_KEY_KP_DECIMAL: str = "KP Period"; break;
+ 	case CL_KEY_KP_0: str = "KP 0"; break;
+ 	case CL_KEY_KP_1: str = "KP 1"; break;
+ 	case CL_KEY_KP_2: str = "KP 2"; break;
+@@ -460,6 +462,21 @@ CL_String Submenu::key_name(int k)
+ 	case CL_KEY_KP_MINUS: str = "KP Minus"; break;
+ 	case CL_KEY_KP_PLUS: str = "KP Plus"; break;
+ 	case CL_KEY_KP_ENTER: str = "KP Enter"; break;
++	case CL_KEY_GRAVE: str = "Grave"; break;
++	case CL_KEY_SUBTRACT: str = "Minus"; break;
++	case CL_KEY_EQUALS: str = "Equals"; break;
++	case CL_KEY_LEFT_BRACKET: str = "Left Bracket"; break;
++	case CL_KEY_RIGHT_BRACKET: str = "Right Bracket"; break;
++	case CL_KEY_SEMICOLON: str = "Semicolon"; break;
++	case CL_KEY_QUOTE: str = "Quote"; break;
++	case CL_KEY_COMMA: str = "Comma"; break;
++	case CL_KEY_PERIOD: str = "Period"; break;
++	case CL_KEY_DIVIDE: str = "Divide"; break;
++	case CL_KEY_BACKSLASH: str = "Backslash"; break;
++	case CL_KEY_LWIN: str = "Left Win"; break;
++	case CL_KEY_RWIN: str = "Right Win"; break;
++	case CL_KEY_APPS: str = "Menu"; break;
++	case CL_KEY_COMPOSE: str = "Compose"; break;
+ 	case CL_NUM_KEYS: str = "CL_NUM_KEYS"; break;
+ 	case CL_KEY_NONE_OF_THE_ABOVE: str = "unknown"; break;
+ 	}

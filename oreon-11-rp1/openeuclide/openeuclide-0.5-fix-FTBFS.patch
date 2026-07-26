@@ -1,0 +1,22 @@
+diff -up ./src/euclideConf.h.orig ./src/euclideConf.h
+--- ./src/euclideConf.h.orig	2010-10-16 14:30:20.303794857 +0530
++++ ./src/euclideConf.h	2010-10-16 14:31:30.766544669 +0530
+@@ -22,6 +22,7 @@
+ 
+ #include <string>
+ #include <fstream>
++#include <cstdlib>
+ using namespace std;
+ 
+ class config {
+diff -up ./src/Vect.h.orig ./src/Vect.h
+--- ./src/Vect.h.orig	2010-10-16 14:30:40.877795431 +0530
++++ ./src/Vect.h	2010-10-16 14:31:44.281550711 +0530
+@@ -24,6 +24,7 @@
+ #include <cmath>
+ #include <fstream>
+ #include <iostream>
++#include <cstring>
+ using namespace std;
+ 
+ #ifndef M_PI

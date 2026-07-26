@@ -1,0 +1,341 @@
+From 5bbfd6426e8c8d0da73931b0f13a027128495ea0 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@fysast.uu.se>
+Date: Wed, 17 Jun 2015 23:39:19 +0200
+Subject: [PATCH] DERObjectIdentifier is obsolete
+
+---
+ .../org/globus/gsi/bc/BouncyCastleOpenSSLKey.java  |  4 ++--
+ .../java/org/globus/gsi/bc/BouncyCastleUtil.java   |  4 ++--
+ .../java/org/globus/gsi/bc/X509NameHelper.java     |  6 +++---
+ .../org/globus/gsi/proxy/ext/ProxyCertInfo.java    | 11 +++++------
+ .../java/org/globus/gsi/proxy/ext/ProxyPolicy.java | 22 +++++++++++-----------
+ .../trustmanager/X509ProxyCertPathValidator.java   | 10 +++++-----
+ .../java/org/globus/gsi/util/CertificateUtil.java  |  4 ++--
+ .../globus/gsi/proxy/ext/ProxyCertInfoTest.java    |  9 ++++-----
+ 8 files changed, 34 insertions(+), 36 deletions(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java
+index 867291a..e7a7ede 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleOpenSSLKey.java
+@@ -28,9 +28,9 @@ import java.security.Security;
+ import java.security.interfaces.RSAPrivateCrtKey;
+ import java.security.spec.PKCS8EncodedKeySpec;
+ import org.bouncycastle.asn1.ASN1InputStream;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1Primitive;
+ import org.bouncycastle.asn1.ASN1Sequence;
+-import org.bouncycastle.asn1.DERObjectIdentifier;
+ import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
+ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+ import org.bouncycastle.asn1.pkcs.RSAPrivateKeyStructure;
+@@ -123,7 +123,7 @@ public class BouncyCastleOpenSSLKey extends OpenSSLKey {
+ 				ASN1InputStream derin = new ASN1InputStream(bis);
+ 				ASN1Primitive keyInfo = derin.readObject();
+ 
+-				DERObjectIdentifier rsaOid = PKCSObjectIdentifiers.rsaEncryption;
++				ASN1ObjectIdentifier rsaOid = PKCSObjectIdentifiers.rsaEncryption;
+ 				AlgorithmIdentifier rsa = new AlgorithmIdentifier(rsaOid);
+ 				PrivateKeyInfo pkeyinfo = new PrivateKeyInfo(rsa, keyInfo);
+ 				ASN1Primitive derkey = pkeyinfo.toASN1Primitive();
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
+index 30d9659..57d82b7 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/bc/BouncyCastleUtil.java
+@@ -29,13 +29,13 @@ import javax.naming.ldap.LdapName;
+ import javax.security.auth.x500.X500Principal;
+ 
+ import org.bouncycastle.asn1.ASN1InputStream;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1OctetString;
+ import org.bouncycastle.asn1.ASN1Primitive;
+ import org.bouncycastle.asn1.ASN1Sequence;
+ import org.bouncycastle.asn1.ASN1Set;
+ import org.bouncycastle.asn1.ASN1String;
+ import org.bouncycastle.asn1.DERBitString;
+-import org.bouncycastle.asn1.DERObjectIdentifier;
+ import org.bouncycastle.asn1.DEROutputStream;
+ import org.bouncycastle.asn1.x500.X500Name;
+ import org.bouncycastle.asn1.x500.style.BCStyle;
+@@ -330,7 +330,7 @@ public class BouncyCastleUtil {
+ 			ProxyCertInfo proxyCertExt = getProxyCertInfo(ext);
+                         ProxyPolicy proxyPolicy =
+                             proxyCertExt.getProxyPolicy();
+-                        DERObjectIdentifier oid =
++                        ASN1ObjectIdentifier oid =
+                             proxyPolicy.getPolicyLanguage();
+ 			if (ProxyPolicy.IMPERSONATION.equals(oid)) {
+                             if (gsi4) {
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/bc/X509NameHelper.java b/ssl-proxies/src/main/java/org/globus/gsi/bc/X509NameHelper.java
+index 582d05b..05e0856 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/bc/X509NameHelper.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/bc/X509NameHelper.java
+@@ -19,10 +19,10 @@ import java.io.IOException;
+ import java.util.Enumeration;
+ 
+ import org.bouncycastle.asn1.ASN1EncodableVector;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1Sequence;
+ import org.bouncycastle.asn1.ASN1Set;
+ import org.bouncycastle.asn1.ASN1String;
+-import org.bouncycastle.asn1.DERObjectIdentifier;
+ import org.bouncycastle.asn1.DERPrintableString;
+ import org.bouncycastle.asn1.DERSequence;
+ import org.bouncycastle.asn1.DERSet;
+@@ -94,7 +94,7 @@ public class X509NameHelper {
+      * @param value the value (e.g. "proxy")
+      */
+     public void add(
+-            DERObjectIdentifier oid,
++            ASN1ObjectIdentifier oid,
+             String value) {
+         ASN1EncodableVector v = new ASN1EncodableVector();
+         v.add(oid);
+@@ -175,7 +175,7 @@ public class X509NameHelper {
+             buf.append('/');
+             while (ee.hasMoreElements()) {
+                 ASN1Sequence s = (ASN1Sequence)ee.nextElement();
+-                DERObjectIdentifier oid = (DERObjectIdentifier)s.getObjectAt(0);
++                ASN1ObjectIdentifier oid = (ASN1ObjectIdentifier)s.getObjectAt(0);
+                 String sym = (String)X509Name.DefaultSymbols.get(oid);
+                 if (sym == null) {
+                     buf.append(oid.getId());
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java
+index 9ee849e..9821afe 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java
+@@ -16,12 +16,11 @@ package org.globus.gsi.proxy.ext;
+ 
+ import org.globus.gsi.util.CertificateUtil;
+ 
+-import org.bouncycastle.asn1.DERObjectIdentifier;
+-
+ import java.io.IOException;
+ 
+ import org.bouncycastle.asn1.ASN1Encodable;
+ import org.bouncycastle.asn1.ASN1EncodableVector;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1Primitive;
+ import org.bouncycastle.asn1.ASN1Sequence;
+ import org.bouncycastle.asn1.DERInteger;
+@@ -37,10 +36,10 @@ import org.bouncycastle.asn1.DERSequence;
+ public class ProxyCertInfo implements ASN1Encodable {
+ 
+     /** ProxyCertInfo extension OID */
+-    public static final DERObjectIdentifier OID
+-    = new DERObjectIdentifier("1.3.6.1.5.5.7.1.14");
+-    public static final DERObjectIdentifier OLD_OID
+-        = new DERObjectIdentifier("1.3.6.1.4.1.3536.1.222");
++    public static final ASN1ObjectIdentifier OID
++        = new ASN1ObjectIdentifier("1.3.6.1.5.5.7.1.14");
++    public static final ASN1ObjectIdentifier OLD_OID
++        = new ASN1ObjectIdentifier("1.3.6.1.4.1.3536.1.222");
+ 
+     private DERInteger pathLenConstraint;
+     private ProxyPolicy proxyPolicy;
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java
+index 24a298f..d1d9bce 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java
+@@ -16,9 +16,9 @@ package org.globus.gsi.proxy.ext;
+ 
+ import org.bouncycastle.asn1.ASN1Encodable;
+ import org.bouncycastle.asn1.ASN1EncodableVector;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1Primitive;
+ import org.bouncycastle.asn1.ASN1Sequence;
+-import org.bouncycastle.asn1.DERObjectIdentifier;
+ import org.bouncycastle.asn1.DEROctetString;
+ import org.bouncycastle.asn1.DERSequence;
+ import org.bouncycastle.asn1.DERTaggedObject;
+@@ -32,19 +32,19 @@ public class ProxyPolicy implements ASN1Encodable {
+     /**
+      * Impersonation proxy OID
+      */
+-    public static final DERObjectIdentifier IMPERSONATION = new DERObjectIdentifier("1.3.6.1.5.5.7.21.1");
++    public static final ASN1ObjectIdentifier IMPERSONATION = new ASN1ObjectIdentifier("1.3.6.1.5.5.7.21.1");
+ 
+     /**
+      * Independent proxy OID
+      */
+-    public static final DERObjectIdentifier INDEPENDENT = new DERObjectIdentifier("1.3.6.1.5.5.7.21.2");
++    public static final ASN1ObjectIdentifier INDEPENDENT = new ASN1ObjectIdentifier("1.3.6.1.5.5.7.21.2");
+ 
+     /**
+      * Limited proxy OID
+      */
+-    public static final DERObjectIdentifier LIMITED = new DERObjectIdentifier("1.3.6.1.4.1.3536.1.1.1.9");
++    public static final ASN1ObjectIdentifier LIMITED = new ASN1ObjectIdentifier("1.3.6.1.4.1.3536.1.1.1.9");
+ 
+-    private DERObjectIdentifier policyLanguage;
++    private ASN1ObjectIdentifier policyLanguage;
+     private DEROctetString policy;
+ 
+     /**
+@@ -56,7 +56,7 @@ public class ProxyPolicy implements ASN1Encodable {
+         if (seq.size() < 1) {
+             throw new IllegalArgumentException();
+         }
+-        this.policyLanguage = (DERObjectIdentifier) seq.getObjectAt(0);
++        this.policyLanguage = (ASN1ObjectIdentifier) seq.getObjectAt(0);
+         if (seq.size() > 1) {
+             ASN1Encodable obj = seq.getObjectAt(1);
+             if (obj instanceof DERTaggedObject) {
+@@ -75,7 +75,7 @@ public class ProxyPolicy implements ASN1Encodable {
+      * @param policy         the policy.
+      */
+     public ProxyPolicy(
+-            DERObjectIdentifier policyLanguage,
++            ASN1ObjectIdentifier policyLanguage,
+             byte[] policy) {
+         if (policyLanguage == null) {
+             throw new IllegalArgumentException();
+@@ -99,7 +99,7 @@ public class ProxyPolicy implements ASN1Encodable {
+         if (policyLanguageOid == null) {
+             throw new IllegalArgumentException();
+         }
+-        this.policyLanguage = new DERObjectIdentifier(policyLanguageOid);
++        this.policyLanguage = new ASN1ObjectIdentifier(policyLanguageOid);
+         if (policy != null) {
+             this.policy = new DEROctetString(policy);
+         }
+@@ -113,7 +113,7 @@ public class ProxyPolicy implements ASN1Encodable {
+      * @param policy         the policy.
+      */
+     public ProxyPolicy(
+-            DERObjectIdentifier policyLanguage,
++            ASN1ObjectIdentifier policyLanguage,
+             String policy) {
+         this(policyLanguage, (policy != null) ? policy.getBytes() : null);
+     }
+@@ -123,7 +123,7 @@ public class ProxyPolicy implements ASN1Encodable {
+      *
+      * @param policyLanguage the language policy Oid.
+      */
+-    public ProxyPolicy(DERObjectIdentifier policyLanguage) {
++    public ProxyPolicy(ASN1ObjectIdentifier policyLanguage) {
+         this(policyLanguage, (byte[]) null);
+     }
+ 
+@@ -178,7 +178,7 @@ public class ProxyPolicy implements ASN1Encodable {
+      *
+      * @return the policy language Oid.
+      */
+-    public DERObjectIdentifier getPolicyLanguage() {
++    public ASN1ObjectIdentifier getPolicyLanguage() {
+         return this.policyLanguage;
+     }
+ 
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
+index 8f24102..f390019 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
+@@ -14,7 +14,7 @@
+  */
+ package org.globus.gsi.trustmanager;
+ 
+-import org.bouncycastle.asn1.DERObjectIdentifier;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.x509.BasicConstraints;
+ import org.bouncycastle.asn1.x509.TBSCertificateStructure;
+ import org.bouncycastle.asn1.x509.X509Extension;
+@@ -489,7 +489,7 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+             throws CertPathValidatorException, IOException {
+ 
+         X509Extensions extensions;
+-        DERObjectIdentifier oid;
++        ASN1ObjectIdentifier oid;
+         X509Extension proxyExtension;
+ 
+         X509Extension proxyKeyUsage = null;
+@@ -498,7 +498,7 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+         if (extensions != null) {
+             Enumeration e = extensions.oids();
+             while (e.hasMoreElements()) {
+-                oid = (DERObjectIdentifier) e.nextElement();
++                oid = (ASN1ObjectIdentifier) e.nextElement();
+                 proxyExtension = extensions.getExtension(oid);
+                 if (oid.equals(X509Extension.subjectAlternativeName)
+                         || oid.equals(X509Extension.issuerAlternativeName)) {
+@@ -526,7 +526,7 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+         if (extensions != null) {
+             Enumeration e = extensions.oids();
+             while (e.hasMoreElements()) {
+-                oid = (DERObjectIdentifier) e.nextElement();
++                oid = (ASN1ObjectIdentifier) e.nextElement();
+                 proxyExtension = extensions.getExtension(oid);
+                 checkExtension(oid, proxyExtension, proxyKeyUsage);
+             }
+@@ -542,7 +542,7 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+         }
+     }
+ 
+-    private void checkExtension(DERObjectIdentifier oid, X509Extension proxyExtension, X509Extension proxyKeyUsage) throws CertPathValidatorException {
++    private void checkExtension(ASN1ObjectIdentifier oid, X509Extension proxyExtension, X509Extension proxyKeyUsage) throws CertPathValidatorException {
+         if (oid.equals(X509Extension.keyUsage)) {
+             // If issuer has it then proxy must have it also
+             if (proxyKeyUsage == null) {
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateUtil.java b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateUtil.java
+index dda3a17..f33548f 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateUtil.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateUtil.java
+@@ -18,12 +18,12 @@ import org.apache.commons.logging.Log;
+ import org.apache.commons.logging.LogFactory;
+ import org.bouncycastle.asn1.ASN1InputStream;
+ import org.bouncycastle.asn1.ASN1Object;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1Primitive;
+ import org.bouncycastle.asn1.ASN1Sequence;
+ import org.bouncycastle.asn1.ASN1Set;
+ import org.bouncycastle.asn1.ASN1String;
+ import org.bouncycastle.asn1.DERBitString;
+-import org.bouncycastle.asn1.DERObjectIdentifier;
+ import org.bouncycastle.asn1.x500.X500Name;
+ import org.bouncycastle.asn1.x500.style.BCStyle;
+ import org.bouncycastle.asn1.x509.BasicConstraints;
+@@ -345,7 +345,7 @@ public final class CertificateUtil {
+                 ProxyCertificateUtil.getProxyCertInfo(ext);
+         ProxyPolicy proxyPolicy =
+                 proxyCertExt.getProxyPolicy();
+-        DERObjectIdentifier oid =
++        ASN1ObjectIdentifier oid =
+                 proxyPolicy.getPolicyLanguage();
+         if (ProxyPolicy.IMPERSONATION.equals(oid)) {
+             if (gsi4) {
+diff --git a/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java b/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
+index 55e22bc..4665235 100644
+--- a/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
++++ b/ssl-proxies/src/test/java/org/globus/gsi/proxy/ext/ProxyCertInfoTest.java
+@@ -14,25 +14,24 @@
+  */
+ package org.globus.gsi.proxy.ext;
+ 
+-import org.bouncycastle.asn1.ASN1InputStream;
+-
+ import java.io.ByteArrayOutputStream;
+ import java.io.ByteArrayInputStream;
+ 
+ import org.globus.gsi.proxy.ext.ProxyPolicy;
+ import org.globus.gsi.proxy.ext.ProxyCertInfo;
+ 
+-import org.bouncycastle.asn1.DERObjectIdentifier;
+-import org.bouncycastle.asn1.DEROutputStream;
++import org.bouncycastle.asn1.ASN1InputStream;
++import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+ import org.bouncycastle.asn1.ASN1Primitive;
+ import org.bouncycastle.asn1.ASN1Sequence;
++import org.bouncycastle.asn1.DEROutputStream;
+ 
+ import junit.framework.TestCase;
+ 
+ public class ProxyCertInfoTest extends TestCase {
+ 
+     String testPolicy = "blahblah";
+-    DERObjectIdentifier testOid = new DERObjectIdentifier("1.2.3.4.5");
++    ASN1ObjectIdentifier testOid = new ASN1ObjectIdentifier("1.2.3.4.5");
+ 
+     public void testCreateProxyCertInfo() throws Exception {
+ 
+-- 
+2.4.3
+

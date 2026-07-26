@@ -1,0 +1,29 @@
+.TH HATCH\-DEP\-SHOW\-TABLE "1" "October 2022" "" "User Commands"
+.SH NAME
+.B hatch\ dep\ show\ table
+\(en Enumerate dependencies in a tabular format
+.SH SYNOPSIS
+.B hatch\ dep\ show\ table
+.RI [ OPTIONS ]
+.SH OPTIONS
+.TP
+.B \-p\fR, \fB\-\-project\-only
+Whether or not to exclude environment dependencies
+.TP
+.B \-e\fR, \fB\-\-env\-only
+Whether or not to exclude project dependencies
+.TP
+.B \-l\fR, \fB\-\-lines
+Whether or not to show lines between table rows
+.TP
+.B \-\-ascii
+Whether or not to only use ASCII characters
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH "SEE ALSO"
+.BR hatch\-dep\-show\-requirements (1)
+.P
+.BR hatch\-dep\-show (1),
+.BR hatch\-dep (1),
+.BR hatch (1)

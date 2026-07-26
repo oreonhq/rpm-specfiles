@@ -1,0 +1,13 @@
+Index: glogg-1.0.2/glogg.pro
+===================================================================
+--- glogg-1.0.2.orig/glogg.pro	2015-01-16 19:22:27.176817040 +0100
++++ glogg-1.0.2/glogg.pro	2015-01-16 19:23:27.188240322 +0100
+@@ -212,7 +212,7 @@ else {
+ }
+ 
+ # Optional features (e.g. CONFIG+=no-dbus)
+-system(pkg-config --exists QtDBus):!no-dbus {
++system(pkg-config --exists Qt5DBus):!no-dbus {
+     message("Support for D-BUS will be included")
+     QT += dbus
+     QMAKE_CXXFLAGS += -DGLOGG_SUPPORTS_DBUS

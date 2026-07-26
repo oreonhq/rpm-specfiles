@@ -1,0 +1,26 @@
+am-utils-6.2 - dont prevent autoconf 2.7 build
+
+From: Ian Kent <raven@themaw.net>
+
+Fedora is updating to autoconf 2.71, stop bootstrap from preventing
+the build.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ bootstrap |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/bootstrap b/bootstrap
+index 000b0167..d454c631 100755
+--- a/bootstrap
++++ b/bootstrap
+@@ -9,7 +9,8 @@ validateversion() {
+     local v="$(autoreconf --version 2>&1 | head -1)"
+     case "$v" in
+     *2.69)	;;
+-    *)		echo "am-utils requires autoconf 2.69, you have:"
++    *2.71)	;;
++    *)		echo "am-utils requires autoconf 2.69 or 2.71, you have:"
+ 		echo "	$v"
+ 		exit 1;;
+     esac

@@ -1,0 +1,77 @@
+From bd1cacdca296866296ec504914884b2ab62e542b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 10 Jan 2025 13:07:59 +0100
+Subject: [PATCH] Do not call MMDB_free_entry_data_list() on libmaxminddb
+ failures
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+After upgrading libmaxminddb from 1.11.0 to 1.12.0,
+t/MaxMind/DB/Reader-broken-databases.t started to segfault. A minimal
+reproducer is:
+
+    use MaxMind::DB::Reader;
+    # Test broken doubles
+    my $reader = MaxMind::DB::Reader->new( file => 'maxmind-db/test-data/GeoIP2-City-Test-Broken-Double-Format.mmdb');
+    $reader->record_for_address('2001:220::');
+
+The cause was that MaxMind-DB-Reader-XS called
+MMDB_free_entry_data_list(entry_data_list) when handling
+a MMDB_get_entry_data_list(, &entry_data_list) failure. But
+MMDB_get_entry_data_list() did not initialize the pointer in case of
+error.
+
+That was not true even before libmaxminddb 1.12.0, but because
+previous libmaxminddb versions did not free the memory itself, the
+erroneous MMDB_free_entry_data_list() call actually operated on valid
+data and no crash occured. When libmaxminddb 1.12.0 started correctly
+to clean up on the error, MaxMind-DB-Reader-XS started to double-free
+entry_data_list leading to a crash.
+
+This bug was introduced with e5322e51dde2954566702fcac2c6827bc0017323
+commit ("free entry data list before croaking on failed calls to get
+entry data list").
+
+This patch removes all MMDB_free_entry_data_list() calls when handling
+libmaxminddb failures as the pointer is supposed to be undefined in
+that case. This patch does not conditionalize this change on
+libmaxminddb version because it's better to leak a memory than to
+crash after updating libmaxminddb.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/MaxMind/DB/Reader/XS.xs | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/lib/MaxMind/DB/Reader/XS.xs b/lib/MaxMind/DB/Reader/XS.xs
+index c698885..798aa09 100644
+--- a/lib/MaxMind/DB/Reader/XS.xs
++++ b/lib/MaxMind/DB/Reader/XS.xs
+@@ -170,7 +170,6 @@ static void call_data_callback(MMDB_s *mmdb, SV *data_callback,
+     int status = MMDB_get_entry_data_list(record_entry, &entry_data_list);
+     if (MMDB_SUCCESS != status) {
+         const char *error = MMDB_strerror(status);
+-        MMDB_free_entry_data_list(entry_data_list);
+         croak(
+             "MaxMind::DB::Reader::XS - Entry data error looking at offset %i: %s",
+             record_entry->offset, error
+@@ -312,7 +311,6 @@ _raw_metadata(self, mmdb)
+         int status = MMDB_get_metadata_as_entry_data_list(mmdb, &entry_data_list);
+         if (MMDB_SUCCESS != status) {
+             const char *error = MMDB_strerror(status);
+-            MMDB_free_entry_data_list(entry_data_list);
+             croak(
+                 "MaxMind::DB::Reader::XS - Error getting metadata: %s",
+                 error
+@@ -355,7 +353,6 @@ __data_for_address(self, mmdb, ip_address)
+             get_status = MMDB_get_entry_data_list(&result.entry, &entry_data_list);
+             if (MMDB_SUCCESS != get_status) {
+                 const char *get_error = MMDB_strerror(get_status);
+-                MMDB_free_entry_data_list(entry_data_list);
+                 croak(
+                     "MaxMind::DB::Reader::XS - Entry data error looking up \"%s\": %s",
+                     ip_address, get_error
+-- 
+2.47.1
+

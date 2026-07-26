@@ -1,0 +1,29 @@
+--- camlbz2-0.8.0/bz2.opam.orig	2024-02-21 10:20:18.000000000 -0700
++++ camlbz2-0.8.0/bz2.opam	2024-05-02 21:24:41.505376934 -0600
+@@ -15,7 +15,6 @@ bug-reports: "https://gitlab.com/irill/c
+ depends: [
+   "dune" {>= "2.8"}
+   "conf-libbz2"
+-  "stdlib-shims"
+   "odoc" {with-doc}
+ ]
+ build: [
+--- camlbz2-0.8.0/dune-project.orig	2024-02-21 10:20:18.000000000 -0700
++++ camlbz2-0.8.0/dune-project	2024-05-02 21:24:55.137191992 -0600
+@@ -15,5 +15,5 @@
+  (name bz2)
+  (synopsis "CamlBZ2 OCaml bindings for the libbz2")
+  (description "This is CamlBZ2, OCaml bindings for the libbz2 (AKA, bzip2)(de)compression library.")
+- (depends "conf-libbz2" "stdlib-shims")
++ (depends "conf-libbz2")
+ )
+--- camlbz2-0.8.0/src/dune.orig	2024-02-21 10:20:18.000000000 -0700
++++ camlbz2-0.8.0/src/dune	2024-05-02 21:25:07.816019999 -0600
+@@ -2,7 +2,6 @@
+  (public_name bz2)
+  (synopsis
+   "This is CamlBZ2, OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library.")
+- (libraries stdlib-shims)
+  (c_library_flags -lbz2)
+  (foreign_stubs
+   (language c)

@@ -1,0 +1,335 @@
+.\"-- << kanji code converter >> ----
+.\"
+.\" kcc.jman
+.\"                                                 Aug 24 1992
+.\"                                     mod:        Nov 19 1992
+.\"				translated:	    Oct 15 1999
+.\"------------------------------------------------ tonooka ------------
+.\" @(#)kcc.jman 2.1 (Y.Tonooka) 9/6/93
+.TH KCC L "November 19, 1992" "Y. Tonooka"
+.SH NAME
+kcc \- Kanji code coverter with encoding auto detection
+.SH SYNOPSIS
+.B kcc
+[
+.BI \- IO chnvxz
+] [
+.BI \-b " bufsize"
+]
+.RI [ " file " "] .\|.\|."
+.SH DESCRIPTION
+.B kcc
+is a filter that reads
+.I file
+sequencially, converts kanji encodings and output to stdou.
+If no file is specified, or specified
+.B \-
+as filename, it read from stdin.
+You can specify kanji encodings for input/output. However, 
+.B kcc
+detect input encodig automatically, if you don't specify input encoding.
+.LP
+Available kanji encodings are
+.SM JIS (7 bit and/or 8 bit), Shift
+.SM JIS\s0\s-1EUC\s0\s-1DEC\s0.
+For input encoding, you can mix when these are pair of one of \s-1EUC\s0
+\s-1DEC\s0 or Shift
+.SM JIS
+and 7 bit
+.SM JIS.
+.BR \s-1SI\s0 / \s-1SO\s0 \s-1ESC\s0(I
+are recognized as halfwidth of \s-1JIS\s0.
+.SH OPTIONS
+.TP
+.BI \- O
+.PD 0
+.TP
+.BI \- IO
+.IR I " for input kanji encoding¡¤" O
+for output kanji encoding.  When no input encoding specified, 
+it will be detected automatically, and if both of input/output
+aren't specified, output encoding is 7 bit
+.SM JIS.
+.PD
+.IP
+You can specify one of the followings for the input encoding option, 
+.I I.
+.LP
+.RS 10
+.PD 0
+.TP
+.B e
+.SM EUC\s0(available with 7 bit
+.SM JIS
+)
+.TP
+.B d
+.SM DEC\s0(available with 7 bit
+.SM JIS
+)
+.TP
+.B s
+Shift
+.SM JIS\s0(available with 7 bit
+.SM JIS
+)
+.TP
+.BR j 7 " or " k
+7 bit
+.SM JIS
+.TP
+.B 8
+8 bit
+.SM JIS
+.PD
+.RE
+.IP
+You can specify one of the followings for output encoding option, 
+.I O.
+.LP
+.RS 10
+.PD 0
+.TP
+.B e
+.SM EUC
+.TP
+.B d
+.SM DEC
+.TP
+.B s
+Shift
+.SM JIS
+.TP
+.BR j\fIXY " or " 7\fIXY
+7 bit
+.RB \s-1JIS\s0(using \s-1SI\s0 / \s-1SO\s0
+for 
+.SM JIS
+kana designation)
+.TP
+.BI k XY
+7 bit
+.RB \s-1JIS\s0(using \s-1ESC\s0(I
+for
+.SM JIS
+kana designation)
+.TP
+.BI 8 XY
+8 bit
+.SM JIS
+.PD
+.RE
+.IP
+By
+.I XY
+in
+.I O
+option, 
+You can specify which escape sequence used in \s-1JIS\s0 encoding.
+.B BJ
+is default.   Supplimental kanji designation is fixed to
+.B \s-1ESC\s0$(D
+.LP
+.RS 10
+.PD 0
+.TP
+.I X
+Kanji is designated by:
+.RS 5
+.TP
+.B B
+.BR \s-1ESC\s0$B "(JIS X0208-1983)
+.TP
+.B @
+.BR \s-1ESC\s0$@ "(JIS X0208-1978)
+.TP
+.B +
+.BR \s-1ESC\s0&@\s-1ESC\s0$B "(JIS X0212-1990)
+.RE
+.TP
+.I Y
+Alpha Numerical is designated by:
+.RS 5
+.TP
+.B B
+.BR \s-1ESC\s0(B "(ASCII)
+.TP
+.B J
+.BR \s-1ESC\s0(J "(JIS Roman; JIS X0201)
+.TP
+.B H
+.BR \s-1ESC\s0(H "(Swedish; strongly deprecated)
+.PD
+.RE
+.RE
+.TP
+.B \-v
+outputs result of input encoding detection to stderr.
+.TP
+.B \-x
+Extension mode.  By auto detection of input encodings, recognize
+user-defined characters and extended character region (
+out of range of \s-1EUC\s0, undefined halfwidth kana, control character,
+.SM C1
+area and/or extended character region Shift
+.SM C1
+.SM JIS
+). Distinguish between \s-1DEC\s0 and
+.SM EUC
+is done in this mode.
+.TP
+.B \-z
+Shrink mode. Don't recognize halfwidth kana (except 7 bit
+.SM JIS
+) with input encoding detection.
+With this option, accuracy of auto detection of input encodings becomes
+much better for file without halfwidth kana.
+.TP
+.B \-h
+Normally, When converted halfwidth kana to 
+.SM DEC
+, it becomes fullwidth Katakana.  With this option, it becomes Hiragana.
+.TP
+.B \-n
+user-defined characters, extended characters and supplimental kanji 
+characters areconverted to fullwidth white box, and undefined region of 
+halfwidth kana are converted to halfwidth centered dot.
+.TP
+.BI \-b " bufsize"
+specify buffer size.  8kbytes is default.
+.TP
+.B \-c
+don't convert but check input encoding and print result to stdout.
+Different with normal auto-detection,  whole contents of file is checked.
+However, when inconsistency of encodings is found, abort reading and print
+"data".  Options except \fB\-x\fR¡¤\fB\-z\fR are ignored.
+.SH EXAMPLES
+.IP "\fB% kcc \-e \fIfile"
+Input encoding are detect automatically, and output is in
+.SM EUC
+encoding.
+.IP "\fB% kcc \-sj \fIfile1 file2"
+Two files in Shift
+.SM JIS
+concatinated with converting to 
+.SM JIS.
+.IP "\fB% \fIcommand\fB | kcc \-k+J"
+output of 
+.I command are converted to 
+.SM JIS\s0(\s-1JIS\s0 JIS X0208
+\s-1JIS\s0 JIS Roman¡¤\fB\s-1ESC\s0(I\fR Halfwidth Kana
+.SM JIS
+)
+.IP "\fB% kcc \-c \fIfile"
+Encoding of contents of
+.I file
+is detected(no conversion)
+.SH BUG
+Auto detection of input encoding is well done for normal case, however,
+it has the following problems.
+.LP
+7 bit
+.SM JIS
+is recognized by escape sequence in certain.
+\s-1EUC\s0 and
+.SM DEC
+are the same (refered as
+.SM EUC
+series).  Halfwidth kana of 8 bit
+.SM JIS
+is the same as halfwidth kana of Shift
+.SM JIS
+(refered as Shift
+.SM JIS
+series).  However, 
+.SM EUC
+series and
+.SM JIS
+, which are both 8 bit encoding, are sharing the same regions widely. 
+So, the problem in auto detection is detection of these 2 encodings.
+.LP
+Detection of 
+.SM EUC
+series/Shift
+.SM JIS
+series is done in line by line, When it is found that it's not Shift
+.SM JIS
+series, or it's not \s-1EUC\s0 series, encoding is determined.
+When inconsistensy found, it will be treated as "data" and 
+contents of output is not guaranteed.
+.LP
+While determined between 
+.SM EUC
+series/Shift
+.SM JIS
+series after 8bit code found,  conversions are pending and put input
+data in buffer,  however, buffer is fulled, it assumes it's
+.SM EUC
+series and forces to start conversion. Rationale. Usually, we can 
+assume that documents with kanji include
+.SM JIS
+non-kanji or
+.SM JIS
+first standard, it can be detected in certain if it is Shift
+.SM JIS
+, which does not share region with 
+.SM EUC.
+So if it can't be determined, it's very likely to be 
+.SM EUC.
+.LP
+8 bit
+.SM JIS
+and it has always even number of halfwidth kana sequences, then
+it will be wrongly detected as \s-1EUC\s0 kanji. Be ceraful.
+.LP
+If input encoding doesn't have halfwidth kana, use 
+.B \-z
+and accuracy of detection become much better. 
+This is because shared region are restricted to area of 
+.SM JIS
+second standards.
+.LP
+Extended region of
+Shift
+.SM JIS
+user-defined area of \s-1EUC\s0, control characters 
+.SM C1
+of \s-1EUC\s0, undefined region of halfwidth kana of \s-1EUC\s0 
+are out of range of auto detection, so it will fails to detect
+encodings if input has these characters.  Use 
+.B \-x
+option to specify extended mode, or specify input code.
+.SH "SEE ALSO"
+.BR cat (1)
+.SH NOTES
+Usually, user-defined characters, extended characters, supplimental kanji
+characters are mapped respectively. However characters that is
+out of range of extended characters become FCFC in hexadecimal when
+converted to Shift
+.SM JIS.
+Although control character region
+.SM C1
+of 
+\s-1EUC\s0 and
+.SM DEC
+remains when converted to 
+.SM JIS
+, these will be deleted when converted to Shift
+.SM JIS
+Undefined area of halfwidth kana become halfwidth centered dot
+when convered to Shift
+.SM JIS
+Halfwidth kana become fullwidth kana when converted to 
+.SM DEC.
+.LP
+When output is 
+.SM JIS
+encoding, control characters such as newline, TAB, DEL and white space
+(halfwidth) will be output in ASCII mode.
+.LP
+When encoding of input is detected wrongly, or input undefined
+character for expected character sets, output is indefined.
+.LP
+This manual are translated by Fumitoshi UKAI <ukai@debian.or.jp>
+for Debian system, but you can use it for any purpose.
+

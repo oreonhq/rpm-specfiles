@@ -1,0 +1,24 @@
+diff -up Ardour-6.9.0/libs/ardour/plugin_manager.cc.vst-lib64 Ardour-6.9.0/libs/ardour/plugin_manager.cc
+--- Ardour-6.9.0/libs/ardour/plugin_manager.cc.vst-lib64	2021-08-13 18:20:07.000000000 +0200
++++ Ardour-6.9.0/libs/ardour/plugin_manager.cc	2022-05-18 13:55:47.384989100 +0200
+@@ -2052,7 +2052,7 @@ PluginManager::vst3_refresh (bool cache_
+ 	std::string prog = PBD::get_win_special_folder_path (CSIDL_PROGRAM_FILES);
+ 	vst3_discover_from_path (Glib::build_filename (prog, "Common Files", "VST3"), cache_only);
+ #else
+-	vst3_discover_from_path ("~/.vst3:/usr/local/lib/vst3:/usr/lib/vst3", cache_only);
++	vst3_discover_from_path ("~/.vst3:/usr/local/lib64/vst3:/usr/local/lib/vst3:/usr/lib64/vst3:/usr/lib/vst3", cache_only);
+ #endif
+ }
+ 
+diff -up Ardour-6.9.0/libs/ardour/search_paths.cc.vst-lib64 Ardour-6.9.0/libs/ardour/search_paths.cc
+--- Ardour-6.9.0/libs/ardour/search_paths.cc.vst-lib64	2021-08-13 18:20:07.000000000 +0200
++++ Ardour-6.9.0/libs/ardour/search_paths.cc	2022-05-18 13:53:38.300190255 +0200
+@@ -293,7 +293,7 @@ vst_search_path ()
+ const char *
+ vst_search_path ()
+ {
+-	return "/usr/local/lib/vst:/usr/lib/vst";
++	return "/usr/local/lib64/vst:/usr/local/lib/vst:/usr/lib64/vst:/usr/lib/vst";
+ }
+ 
+ #endif // PLATFORM_WINDOWS

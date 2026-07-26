@@ -1,0 +1,22 @@
+diff -up ftnchek-3.3.1/Makefile.in.bison26 ftnchek-3.3.1/Makefile.in
+--- ftnchek-3.3.1/Makefile.in.bison26	2012-11-02 12:13:05.323152582 -0600
++++ ftnchek-3.3.1/Makefile.in	2012-11-02 12:17:08.191192310 -0600
+@@ -346,17 +346,7 @@ ftnchek$(EXE): $(OBJS)
+ # since dependencies may have changed.
+ fortran.c: fortran.y
+ 	$(YACC) $(YFLAGS) fortran.y
+-	@if test "$(YACC_NAME)" = "bison$(EXE)" ; \
+-	then \
+-	  $(SED) -e '/yytname\[] =/,/^};/s/tok_//g' \
+-	         -e '/yytname\[] =/,/^};/s/_/ /g' \
+-	         -e '/yytname\[] =/,/^};/s/EOS/end of statement/g' \
+-		 -e  ':CAT'  -e '/^# *if.*\\$$/N' -e 's/\\\n//' -e tCAT \
+-		y.tab.c > fortran.c ; \
+-	  $(RM) y.tab.c ; \
+-	else \
+-	  $(MV) y.tab.c fortran.c ; \
+-	fi
++	@$(MV) y.tab.c fortran.c
+ 	@if $(CMP) -s y.tab.h tokdefs.h ; then true ; else \
+ 		echo; echo tokdefs.h changed -- repeat make ; \
+ 		$(CP) y.tab.h tokdefs.h; \

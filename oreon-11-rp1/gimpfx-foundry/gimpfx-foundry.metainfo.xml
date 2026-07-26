@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+​ <id>gimpfx-foundry</id>
+ <extends>gimp.desktop</extends>
+ <name>FX Foundry</name>
+ <summary>Collection of GIMP scripts</summary>
+ <url type="homepage">http://gimpfx-foundry.sourceforge.net/</url>
+ <url type="bugtracker">https://sourceforge.net/p/gimpfx-foundry/bugs/?source=navbar</url> <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-2.0+</project_license>
+</component>

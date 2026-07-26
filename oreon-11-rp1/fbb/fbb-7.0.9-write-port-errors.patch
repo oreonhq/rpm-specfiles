@@ -1,0 +1,24 @@
+diff --git a/src/initport.c b/src/initport.c
+index 1fd7058..2645cc7 100644
+--- a/src/initport.c
++++ b/src/initport.c
+@@ -961,6 +961,9 @@ static void errport (int lig, char *texte)
+ 	sprintf (msg, "Erreur fichier PORT.SYS ligne %d : \n< %s >", lig, texte);
+ #endif
+ 	WinMessage (5, msg);
++#endif
++#ifdef __linux__
++	fprintf (stderr, "%s\n", texte);
+ #endif
+ 	fbb_error (ERR_SYNTAX, c_disque ("PORT.SYS"), lig);
+ }
+@@ -977,6 +980,9 @@ static void err_fic (char *nomfic, int ligne, char *texte)
+ 
+ 	sprintf (msg, "%s (%d) :\n%s", nomfic, ligne, texte);
+ 	WinMessage (0, msg);
++#endif
++#ifdef __linux__
++	fprintf (stderr, "%s\n", texte);
+ #endif
+ 	fbb_error (ERR_SYNTAX, nomfic, ligne);
+ }

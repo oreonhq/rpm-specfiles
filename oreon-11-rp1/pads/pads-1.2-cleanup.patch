@@ -1,0 +1,931 @@
+diff -urp pads-1.2.orig/src/configuration.c pads-1.2/src/configuration.c
+--- pads-1.2.orig/src/configuration.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/configuration.c	2008-06-30 13:28:28.000000000 -0400
+@@ -26,6 +26,9 @@
+  *
+  **************************************************************************/
+ #include "configuration.h"
++#include "util.h"
++#include "bstring/util.h"
++#include "monnet.h"
+ 
+ /* Variable Declarations */
+ 
+@@ -44,7 +47,7 @@ void init_configuration (bstring filenam
+ 
+     verbose_message("config - Processing '%s'.", bdata(filename));
+ 
+-    if ((fp = fopen(bdata(filename), "r")) == NULL) {
++    if ((fp = fopen((char *)bdata(filename), "r")) == NULL) {
+         err_message("Unable to open configuration file - %s", bdata(filename));
+     }
+ 
+@@ -59,7 +62,7 @@ void init_configuration (bstring filenam
+     /* Clean Up */
+     bdestroy(filedata);
+     bstrListDestroy(lines);
+-    close(fp);
++    fclose(fp);
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -147,7 +150,7 @@ void parse_line (bstring line)
+ 
+     } else if ((biseqcstr(param, "network")) == 1) {
+         /* NETWORK */
+-        parse_networks(bdata(value));
++        parse_networks((char *)bdata(value));
+ 
+     }
+ 
+diff -urp pads-1.2.orig/src/global.h pads-1.2/src/global.h
+--- pads-1.2.orig/src/global.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/global.h	2008-06-30 13:28:28.000000000 -0400
+@@ -25,6 +25,9 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#ifndef GLOBAL_HEADER
++#define GLOBAL_HEADER
++
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"
+ #endif
+@@ -68,6 +71,7 @@
+ #include <netinet/if_ether.h>
+ #include <pcap.h>
+ #include <pcre.h>
++#include <time.h>
+ 
+ #include "bstring/bstrlib.h"
+ 
+@@ -160,3 +164,6 @@ extern GC gc;
+ 
+ /* vim:expandtab:cindent:smartindent:ts=4:tw=0:sw=4:
+  */
++
++#endif
++
+diff -urp pads-1.2.orig/src/identification.c pads-1.2/src/identification.c
+--- pads-1.2.orig/src/identification.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/identification.c	2008-06-30 13:28:28.000000000 -0400
+@@ -26,6 +26,9 @@
+  *
+  **************************************************************************/
+ #include "identification.h"
++#include "util.h"
++#include "storage.h"
++#include "output/output.h"
+ 
+ Signature *signature_list;
+ 
+@@ -57,7 +60,7 @@ int init_identification()
+     }
+ 
+     /* Open Signature File */
+-    if ((fp = fopen(bdata(filename), "r")) == NULL) {
++    if ((fp = fopen((char *)bdata(filename), "r")) == NULL) {
+         err_message("Unable to open signature file - %s", bdata(filename));
+     }
+ 
+@@ -73,7 +76,7 @@ int init_identification()
+     bdestroy(filename);
+     bdestroy(filedata);
+     bstrListDestroy(lines);
+-    close(fp);
++    fclose(fp);
+ 
+     return 0;
+ }
+@@ -91,7 +94,7 @@ int init_identification()
+ int parse_raw_signature (bstring line, int lineno)
+ {
+     struct bstrList *raw_sig;
+-    struct bstrList *title;
++    struct bstrList *title = NULL;
+     Signature *sig;
+     bstring pcre_string;
+     const char *err;            /* PCRE */
+@@ -101,7 +104,7 @@ int parse_raw_signature (bstring line, i
+ 
+     /* Check to see if this line has something to read. */
+     if (line->data[0] == '\0' || line->data[0] == '#')
+-        return;
++        return -1;
+ 
+     /* Split Line */
+     if ((raw_sig = bsplit(line, ',')) == NULL)
+@@ -125,8 +128,10 @@ int parse_raw_signature (bstring line, i
+ 
+     /* Split Title */
+     if (raw_sig->entry[1] != NULL && ret != -1)
+-        if ((title = bsplit(raw_sig->entry[1], '/')) == NULL)
+-            ret = -1;
++        title = bsplit(raw_sig->entry[1], '/');
++    if (title == NULL)
++            return -1;
++
+     if (title->qty < 3)
+         ret = -1;
+ 
+@@ -145,7 +150,7 @@ int parse_raw_signature (bstring line, i
+ 
+         /* PCRE */
+         if (pcre_string != NULL) {
+-            if ((sig->regex = pcre_compile (bdata(pcre_string), 0, &err, &erroffset, NULL)) == NULL) {
++            if ((sig->regex = pcre_compile ((char *)bdata(pcre_string), 0, &err, &erroffset, NULL)) == NULL) {
+                 err_message("Unable to compile signature:  %s at line %d (%s)",
+                 err, lineno, bdata(line));
+             ret = -1;
+@@ -265,7 +270,6 @@ int pcre_identify (struct in_addr ip_add
+     Signature *list = signature_list;
+     int rc;
+     int ovector[15];
+-    int i;
+     bstring app;
+ 
+     while (list != NULL) {
+@@ -312,18 +316,18 @@ bstring get_app_name (Signature *sig,
+ 
+     /* Create Application string using the values in signature[i].title.  */
+     if (sig->title.app != NULL) {
+-        strlcpy(app, bdata(sig->title.app), MAX_APP);
++        strlcpy(app, (char *)bdata(sig->title.app), MAX_APP);
+     }
+     if (sig->title.ver != NULL) {
+         if (sig->title.ver->slen > 0) {
+             strcat(app, " ");
+-            strlcat(app, bdata(sig->title.ver), MAX_VER);
++            strlcat(app, (char *)bdata(sig->title.ver), MAX_VER);
+         }
+     }
+     if (sig->title.misc != NULL) {
+         if (sig->title.misc->slen > 0) {
+             strcat(app, " (");
+-            strlcat(app, bdata(sig->title.misc), MAX_MISC);
++            strlcat(app, (char *)bdata(sig->title.misc), MAX_MISC);
+             strcat(app, ")");
+         }
+     }
+@@ -416,7 +420,8 @@ void print_signature()
+         printf("2a: %s\n", bdata(list->title.app));
+         printf("2b: %s\n", bdata(list->title.ver));
+         printf("2c: %s\n", bdata(list->title.misc));
+-        printf("3:  %s\n", list->regex);
++        // FIXME: This is a compiled expression
++        // printf("3:  %s\n", list->regex);
+         printf("\n");
+ 
+         i++;
+diff -urp pads-1.2.orig/src/mac-resolution.c pads-1.2/src/mac-resolution.c
+--- pads-1.2.orig/src/mac-resolution.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/mac-resolution.c	2008-06-30 13:28:28.000000000 -0400
+@@ -32,6 +32,7 @@
+ #ifndef DISABLE_VENDOR
+ 
+ #include "mac-resolution.h"
++#include "util.h"
+ 
+ Vendor *vendor_list = NULL;
+ 
+@@ -60,7 +61,7 @@ int init_mac_resolution (void) {
+     }
+ 
+     /* Open Signature File */
+-    if ((fp = fopen(bdata(filename), "r")) == NULL) {
++    if ((fp = fopen((char *)bdata(filename), "r")) == NULL) {
+         err_message("Unable to open MAC resolution file - %s", bdata(filename));
+     }
+ 
+@@ -79,7 +80,7 @@ int init_mac_resolution (void) {
+         bdestroy(filedata);
+     if (lines != NULL)
+         bstrListDestroy(lines);
+-    close(fp);
++    fclose(fp);
+ 
+     return 0;
+ }
+@@ -99,10 +100,8 @@ int parse_raw_mac (bstring line)
+     char vendor[80];
+     int m1, m2, m3;
+ 
+-    int pos;
+-
+     /* Parse out the contents of the line. */
+-    if (sscanf(bdata(line), "%02X:%02X:%02X %80[^,\n],\n", &m1, &m2, &m3, vendor) != 4)
++    if (sscanf((char *)bdata(line), "%02X:%02X:%02X %80[^,\n],\n", &m1, &m2, &m3, vendor) != 4)
+         return -1;
+ 
+     mac[0] = (char) (m1);
+@@ -215,7 +214,7 @@ void show_vendor (void){
+     list = vendor_list;
+ 
+     while(list != NULL) {
+-        printf("Mac: %s\nVendor: %s\n\n", list->mac, bdata(list->vendor));
++        printf("Mac: %u\nVendor: %s\n\n", list->mac, bdata(list->vendor));
+         list = list->next;
+     }
+ }
+diff -urp pads-1.2.orig/src/monnet.c pads-1.2/src/monnet.c
+--- pads-1.2.orig/src/monnet.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/monnet.c	2008-06-30 13:28:28.000000000 -0400
+@@ -27,7 +27,10 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#include <stdlib.h>
++#include <arpa/inet.h>
+ #include "monnet.h"
++#include "util.h"
+ 
+ struct mon_net *mn;
+ 
+@@ -45,7 +48,6 @@ void parse_networks (char *cmdline)
+ {
+     int i = 0;
+     char network[16], netmask[3], tmp[16];
+-    struct in_addr in_net;
+ 
+     /* Make sure something was defined. */
+     if (cmdline == NULL)
+@@ -81,7 +83,7 @@ void parse_networks (char *cmdline)
+ 	    i++;
+ 	}
+ 
+-	*cmdline++;
++	cmdline++;
+     }
+ }
+ 
+diff -urp pads-1.2.orig/src/output/output.c pads-1.2/src/output/output.c
+--- pads-1.2.orig/src/output/output.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output.c	2008-06-30 13:28:28.000000000 -0400
+@@ -26,6 +26,10 @@
+  *
+  **************************************************************************/
+ #include "output.h"
++#include "output-screen.h"
++#include "output-csv.h"
++#include "output-fifo.h"
++#include "storage.h"
+ 
+ /* Global Variables */
+ OutputPluginList *output_plugin_list;
+@@ -149,7 +153,7 @@ int print_asset (struct in_addr ip_addr,
+ 
+     /* Make sure that a record was found. */
+     if (rec == NULL)
+-	return;
++	return -1;
+ 
+     /* Cycle through output plugins and print to those that are active. */
+     head = output_plugin_list;
+@@ -182,7 +186,7 @@ int print_arp_asset (struct in_addr ip_a
+ 
+     /* Find Asset */
+     ArpAsset *list;
+-    ArpAsset *rec;
++    ArpAsset *rec = NULL;
+ 
+     list = (ArpAsset *)get_arp_pointer();
+     while (list != NULL) {
+@@ -199,7 +203,7 @@ int print_arp_asset (struct in_addr ip_a
+ 
+     /* Make sure that a record was found. */
+     if (rec == NULL)
+-	return;
++	return -1;
+ 
+     /* Cycle through output plugins and print to those that are active. */
+     head = output_plugin_list;
+@@ -298,8 +302,8 @@ void end_output (void)
+ #ifdef DEBUG
+ int debug_output_list (void)
+ {
+-    OutputPluginList *head, *head2;
+-    OutputPlugin *tmp, *tmp2;
++    OutputPluginList *head;
++    OutputPlugin *tmp;
+     int i = 1;
+ 
+     printf("output_plugin_list:\n");
+diff -urp pads-1.2.orig/src/output/output-csv.c pads-1.2/src/output/output-csv.c
+--- pads-1.2.orig/src/output/output-csv.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output-csv.c	2008-06-30 13:28:28.000000000 -0400
+@@ -24,7 +24,10 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#include <arpa/inet.h>
+ #include "output-csv.h"
++#include "util.h"
++#include "storage.h"
+ 
+ OutputCSVConf output_csv_conf;
+ 
+@@ -40,7 +43,6 @@ int
+ setup_output_csv (void)
+ {
+     OutputPlugin *plugin;
+-    bstring name;
+ 
+     /* Allocate and setup plugin data record. */
+     plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
+@@ -68,7 +70,7 @@ setup_output_csv (void)
+  *		: will read in the file and add each asset
+  *		: to the asset data structure.
+  * INPUT	: 0 - CSV filename
+- * RETURN	: None!
++ * RETURN	: 0 success, -1 fail
+  * --------------------------------------------------------- */
+ int
+ init_output_csv (bstring filename)
+@@ -84,14 +86,15 @@ init_output_csv (bstring filename)
+ 	output_csv_conf.filename = bstrcpy(bfromcstr("assets.csv"));
+ 
+     /* Check to see if *filename exists. */
+-    if ((fp = fopen(bdata(output_csv_conf.filename), "r")) == NULL) {
++    if ((fp = fopen((char *)bdata(output_csv_conf.filename), "r")) == NULL) {
+ 
+ 	/* File does not exist, create new.. */
+-	if ((output_csv_conf.file = fopen(bdata(output_csv_conf.filename), "w")) != NULL) {
++	if ((output_csv_conf.file = fopen((char *)bdata(output_csv_conf.filename), "w")) != NULL) {
+ 	    fprintf(output_csv_conf.file, "asset,port,proto,service,application,discovered\n");
+ 
+ 	} else {
+ 	    err_message("Cannot open file %s!", bdata(output_csv_conf.filename));
++	    return -1;
+ 	}
+ 
+     } else {
+@@ -101,12 +104,13 @@ init_output_csv (bstring filename)
+ 	read_report_file();
+ 
+ 	/* Open file and assign it to the global FILE pointer.  */
+-	if ((output_csv_conf.file = fopen(bdata(output_csv_conf.filename), "a")) == NULL) {
++	if ((output_csv_conf.file = fopen((char *)bdata(output_csv_conf.filename), "a")) == NULL) {
+ 	    err_message("Cannot open file %s!", bdata(output_csv_conf.filename));
++	    return -1;
+ 	}
+     }
+ 
+-    return;
++    return 0;
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -129,7 +133,7 @@ read_report_file (void)
+     printf("[-] Processing Existing %s\n", bdata(output_csv_conf.filename));
+ 
+     /* Open Signature File */
+-    if ((fp = fopen(bdata(output_csv_conf.filename), "r")) == NULL) {
++    if ((fp = fopen((char *)bdata(output_csv_conf.filename), "r")) == NULL) {
+ 	err_message("Unable to open CSV file - %s", bdata(output_csv_conf.filename));
+     }
+ 
+@@ -144,7 +148,7 @@ read_report_file (void)
+     /* Clean Up */
+     bdestroy(filedata);
+     bstrListDestroy(lines);
+-    close(fp);
++    fclose(fp);
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -172,7 +176,7 @@ parse_raw_report (bstring line)
+ 
+     /* Check to see if this line has something to read. */
+     if (line->data[0] == '\0' || line->data[0] == '#')
+-	return;
++	return -1;
+ 
+     /* Break line apart. */
+     if ((list = bsplit(line, ',')) == NULL)
+@@ -186,13 +190,13 @@ parse_raw_report (bstring line)
+     }
+ 
+     /* Place data from 'list' into temporary data storage. */
+-    if ((inet_aton(bdata(list->entry[0]), &ip_addr)) == -1)
++    if ((inet_aton((char *)bdata(list->entry[0]), &ip_addr)) == -1)
+ 	ret = -1;
+ 
+-    if ((port = htons(atoi(bdata(list->entry[1])))) == -1)
++    if ((port = htons(atoi((char *)bdata(list->entry[1])))) == -1)
+ 	ret = -1;
+ 
+-    if ((proto = atoi(bdata(list->entry[2]))) == -1)
++    if ((proto = atoi((char *)bdata(list->entry[2]))) == -1)
+ 	ret = -1;
+ 
+     if ((service = bstrcpy(list->entry[3])) == NULL)
+@@ -201,7 +205,7 @@ parse_raw_report (bstring line)
+     if ((application = bstrcpy(list->entry[4])) == NULL)
+         ret = -1;
+ 
+-    if ((discovered = atol(bdata(list->entry[5]))) == -1)
++    if ((discovered = atol((char *)bdata(list->entry[5]))) == -1)
+ 	ret = -1;
+ 
+     /* Make sure that this line contains 'good' data. */
+@@ -211,7 +215,7 @@ parse_raw_report (bstring line)
+     /* Add Asset to Data Structure */
+     if (proto == 0 && ret != -1) {
+ 	/* ARP */
+-	mac2hex(bdata(application), mac_addr, MAC_LEN);
++	mac2hex((char *)bdata(application), mac_addr, MAC_LEN);
+ 	add_arp_asset(ip_addr, mac_addr, discovered);
+     } else {
+ 	/* Everything Else */
+@@ -249,8 +253,9 @@ print_asset_csv (Asset *rec)
+ 	if (gc.hide_unknowns == 0 || ((biseqcstr(rec->service, "unknown") != 0) &&
+ 		    (biseqcstr(rec->application, "unknown") != 0))) {
+ 	    fprintf(output_csv_conf.file, "%s,%d,%d,%s,%s,%d\n",
+-		    inet_ntoa(rec->ip_addr), ntohs(rec->port), rec->proto, bdata(rec->service),
+-		    bdata(rec->application), rec->discovered);
++		    inet_ntoa(rec->ip_addr), ntohs(rec->port), rec->proto,
++		     bdata(rec->service), bdata(rec->application),
++		     (int)rec->discovered);
+ 	    fflush(output_csv_conf.file);
+ 	}
+     } else {
+@@ -277,11 +282,13 @@ print_arp_asset_csv (ArpAsset *rec)
+     /* Print to File */
+     if (output_csv_conf.file != NULL) {
+ 	if (rec->mac_resolved != NULL) {
+-	    fprintf(output_csv_conf.file, "%s,0,0,ARP (%s),%s,%d\n", inet_ntoa(rec->ip_addr),
+-		    bdata(rec->mac_resolved), hex2mac(rec->mac_addr), rec->discovered);
++	    fprintf(output_csv_conf.file, "%s,0,0,ARP (%s),%s,%d\n",
++		inet_ntoa(rec->ip_addr), bdata(rec->mac_resolved),
++		hex2mac(rec->mac_addr), (int)rec->discovered);
+ 	} else {
+-	    fprintf(output_csv_conf.file, "%s,0,0,ARP,%s,%d\n", inet_ntoa(rec->ip_addr),
+-		    hex2mac(rec->mac_addr), rec->discovered);
++	    fprintf(output_csv_conf.file, "%s,0,0,ARP,%s,%d\n",
++			inet_ntoa(rec->ip_addr), hex2mac(rec->mac_addr),
++			(int)rec->discovered);
+ 	}
+ 
+ 	fflush(output_csv_conf.file);
+@@ -311,5 +318,7 @@ end_output_csv ()
+ 
+     if (output_csv_conf.filename != NULL)
+ 	bdestroy(output_csv_conf.filename);
++
++    return 0;
+ }
+ 
+diff -urp pads-1.2.orig/src/output/output-csv.h pads-1.2/src/output/output-csv.h
+--- pads-1.2.orig/src/output/output-csv.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output-csv.h	2008-06-30 13:28:28.000000000 -0400
+@@ -25,6 +25,8 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#ifndef OUTPUT_CSV_HEADER
++#define OUTPUT_CSV_HEADER
+ 
+ /* DEFINES ----------------------------------------- */
+ #ifdef LINUX
+@@ -64,3 +66,5 @@ int print_asset_csv (Asset *rec);
+ int print_arp_asset_csv (ArpAsset *rec);
+ int end_output_csv (void);
+ 
++#endif
++
+diff -urp pads-1.2.orig/src/output/output-fifo.c pads-1.2/src/output/output-fifo.c
+--- pads-1.2.orig/src/output/output-fifo.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output-fifo.c	2008-06-30 13:28:45.000000000 -0400
+@@ -25,7 +25,9 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#include <arpa/inet.h>
+ #include "output-fifo.h"
++#include "util.h"
+ 
+ /*
+  * MODULE NOTES
+@@ -66,7 +68,6 @@ int
+ setup_output_fifo (void)
+ {
+     OutputPlugin *plugin;
+-    bstring name;
+ 
+     /* Allocate and setup plugin data record. */
+     plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
+@@ -92,15 +93,11 @@ setup_output_fifo (void)
+  * DESCRIPTION	: This function will initialize the FIFO
+  *		: file.
+  * INPUT	: 0 - FIFO filename
+- * RETURN	: None!
++ * RETURN	: 0 success, -1 failure
+  * --------------------------------------------------------- */
+ int
+ init_output_fifo (bstring fifo_file)
+ {
+-    FILE *fp;
+-    register u_int len = 0;
+-    char *filename;
+-
+     verbose_message("Initializing FIFO output plugin.");
+ 
+     /* Make sure report_file isn't NULL. */
+@@ -109,13 +106,13 @@ init_output_fifo (bstring fifo_file)
+ 
+     output_fifo_conf.filename = bstrcpy(fifo_file);
+ 
+-    mkfifo (bdata(fifo_file), S_IFIFO | 0755);
++    mkfifo ((char *)bdata(fifo_file), 0755);
+ 
+     verbose_message("Open FIFO File\n");
+-    if ((output_fifo_conf.file = fopen(bdata(fifo_file), "w+")) == NULL)
++    if ((output_fifo_conf.file = fopen((char*)bdata(fifo_file), "w+")) == NULL)
+ 	err_message("Unable to open FIFO file (%s)!\n", bdata(fifo_file));
+ 
+-    return;
++    return 0;
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -138,8 +135,9 @@ print_asset_fifo (Asset *rec)
+ 	if (gc.hide_unknowns == 0 || ((biseq(rec->service, bfromcstr("unknown")) != 0) &&
+ 		    (biseq(rec->application, bfromcstr("unknown")) != 0))) {
+ 	    fprintf(output_fifo_conf.file, "01,%s,%d,%d,%s,%s,%d\n",
+-		    inet_ntoa(rec->ip_addr), ntohs(rec->port), rec->proto, bdata(rec->service),
+-		    bdata(rec->application), rec->discovered);
++			inet_ntoa(rec->ip_addr), ntohs(rec->port), rec->proto,
++			bdata(rec->service), bdata(rec->application),
++			(int)rec->discovered);
+ 	    fflush(output_fifo_conf.file);
+ 	}
+     } else {
+@@ -165,11 +163,13 @@ print_arp_asset_fifo (ArpAsset *rec)
+     /* Print to File */
+     if (output_fifo_conf.file != NULL) {
+ 	if (rec->mac_resolved != NULL) {
+-	    fprintf(output_fifo_conf.file, "02,%s,%s,%s,%d\n", inet_ntoa(rec->ip_addr),
+-		    rec->mac_resolved, hex2mac(&rec->mac_addr), rec->discovered);
++	    fprintf(output_fifo_conf.file, "02,%s,%s,%s,%d\n",
++		inet_ntoa(rec->ip_addr), bdata(rec->mac_resolved),
++		 hex2mac(rec->mac_addr), (int)rec->discovered);
+ 	} else {
+-	    fprintf(output_fifo_conf.file, "02,%s,unknown,%s,%d\n", inet_ntoa(rec->ip_addr),
+-		    hex2mac(&rec->mac_addr), rec->discovered);
++	    fprintf(output_fifo_conf.file, "02,%s,unknown,%s,%d\n",
++			inet_ntoa(rec->ip_addr), hex2mac(rec->mac_addr),
++			(int)rec->discovered);
+ 	}
+ 
+ 	fflush(output_fifo_conf.file);
+@@ -196,7 +196,8 @@ print_stat_fifo (Asset *rec)
+ {
+     if (output_fifo_conf.file != NULL) {
+ 	fprintf(output_fifo_conf.file, "03,%s,%d,%d,%d\n",
+-		inet_ntoa(rec->ip_addr), ntohs(rec->port), rec->proto, time(NULL));
++		inet_ntoa(rec->ip_addr), ntohs(rec->port), rec->proto,
++		(int)time(NULL));
+ 	fflush(output_fifo_conf.file);
+ 
+     } else {
+diff -urp pads-1.2.orig/src/output/output-fifo.h pads-1.2/src/output/output-fifo.h
+--- pads-1.2.orig/src/output/output-fifo.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output-fifo.h	2008-06-30 13:28:28.000000000 -0400
+@@ -25,6 +25,8 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#ifndef OUTPUT_FIFO_HEADER
++#define OUTPUT_FIFO_HEADER
+ 
+ /* DEFINES ----------------------------------------- */
+ #ifdef LINUX
+@@ -56,9 +58,11 @@ typedef struct _OutputFIFOConf
+ 
+ 
+ /* PROTOTYPES -------------------------------------- */
++int setup_output_fifo (void);
+ int init_output_fifo (bstring fifo_file);
+ int print_asset_fifo (Asset *rec);
+ int print_arp_asset_fifo (ArpAsset *rec);
+ int print_stat_fifo (Asset *rec);
+ int end_output_fifo (void);
+ 
++#endif
+diff -urp pads-1.2.orig/src/output/output.h pads-1.2/src/output/output.h
+--- pads-1.2.orig/src/output/output.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output.h	2008-06-30 13:28:28.000000000 -0400
+@@ -25,6 +25,8 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#ifndef OUTPUT_HEADER
++#define OUTPUT_HEADER
+ 
+ /* DEFINES ----------------------------------------- */
+ #ifdef LINUX
+@@ -77,3 +79,4 @@ int print_arp_asset (struct in_addr ip_a
+ int print_stat(struct in_addr ip_addr, u_int16_t port, unsigned short proto);
+ void end_output (void);
+ 
++#endif
+diff -urp pads-1.2.orig/src/output/output-screen.c pads-1.2/src/output/output-screen.c
+--- pads-1.2.orig/src/output/output-screen.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output-screen.c	2008-06-30 13:28:28.000000000 -0400
+@@ -24,7 +24,9 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#include <arpa/inet.h>
+ #include "output-screen.h"
++#include "util.h"
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: setup_output_screen
+@@ -38,7 +40,6 @@ int
+ setup_output_screen (void)
+ {
+     OutputPlugin *plugin;
+-    bstring name;
+ 
+     /* Allocate and setup plugin data record. */
+     plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
+diff -urp pads-1.2.orig/src/output/output-screen.h pads-1.2/src/output/output-screen.h
+--- pads-1.2.orig/src/output/output-screen.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/output-screen.h	2008-06-30 13:28:28.000000000 -0400
+@@ -25,6 +25,8 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#ifndef OUTPUT_SCREEN_HEADER
++#define OUTPUT_SCREEN_HEADER
+ 
+ /* DEFINES ----------------------------------------- */
+ #ifdef LINUX
+@@ -43,16 +45,12 @@
+ #include "output.h"
+ 
+ 
+-/* TYPEDEFS ---------------------------------------- */
+-typedef struct _OutputCSVConf
+-{
+-    FILE *file;
+-} OutputCSVConf;
+-
+-
+ /* PROTOTYPES -------------------------------------- */
+ int setup_output_screen (void);
+ int init_output_screen (bstring args);
+ int print_asset_screen (Asset *rec);
+ int print_arp_asset_screen (ArpAsset *rec);
+ int end_output_screen (void);
++
++#endif
++
+diff -urp pads-1.2.orig/src/packet.c pads-1.2/src/packet.c
+--- pads-1.2.orig/src/packet.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/packet.c	2008-06-30 13:28:28.000000000 -0400
+@@ -26,6 +26,10 @@
+  *
+  **************************************************************************/
+ #include "packet.h"
++#include "output/output.h"
++#include "storage.h"
++#include "monnet.h"
++#include "identification.h"
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: process_eth
+@@ -157,9 +161,9 @@ void process_arp (const struct pcap_pkth
+ 	case ARPOP_REPLY:
+ 	    memcpy(&ip_addr.s_addr, arph->arp_spa, sizeof(u_int8_t) * 4);
+ 
+-	    if (check_arp_asset(ip_addr, arph->arp_sha) == 1) {
+-		add_arp_asset(ip_addr, arph->arp_sha, 0);
+-		print_arp_asset (ip_addr, arph->arp_sha);
++	    if (check_arp_asset(ip_addr, (char *)arph->arp_sha) == 1) {
++		add_arp_asset(ip_addr, (char *)arph->arp_sha, 0);
++		print_arp_asset (ip_addr, (char *)arph->arp_sha);
+ 	    }
+ 
+ 	    break;
+@@ -222,7 +226,7 @@ void process_tcp (const struct pcap_pkth
+ 		 * Check to see if this ACK packet needs to be
+ 		 * identified.
+ 		 */
+-		payload = (u_char *)(packet + sizeof(struct tcphdr) + len);
++		payload = (char *)(packet + sizeof(struct tcphdr) + len);
+ 
+ 		/* Attempt to identify this asset.  */
+ 		if(tcp_identify(ip_src, tcph->th_sport, payload,
+diff -urp pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/pads.c	2008-06-30 13:28:28.000000000 -0400
+@@ -26,6 +26,13 @@
+  *
+  **************************************************************************/
+ #include "pads.h"
++#include "util.h"
++#include "storage.h"
++#include "output/output.h"
++#include "identification.h"
++#include "mac-resolution.h"
++#include "monnet.h"
++#include "configuration.h"
+ 
+ /* Variable Declarations */
+ GC gc;                                  /* Global Configuration */
+@@ -34,6 +41,9 @@ proc_t processor;
+ char **prog_argv;
+ int prog_argc;
+ 
++/* Function Declarations */
++static int process_cmdline (int argc, char *argv[]);
++
+ /* ----------------------------------------------------------
+  * FUNCTION     : process_pkt
+  * DESCRIPTION  : This function takes data from libpcap and
+@@ -210,7 +220,7 @@ main_pads (void)
+     if (gc.pcap_file) {
+         /* Read from PCAP file specified by '-r' switch. */
+         log_message("Reading from file %s\n", bdata(gc.pcap_file));
+-        if (!(gc.handle = pcap_open_offline(bdata(gc.pcap_file), errbuf))) {
++        if (!(gc.handle = pcap_open_offline((char *)bdata(gc.pcap_file), errbuf))) {
+             err_message("Unable to open %s.  (%s)", bdata(gc.pcap_file), errbuf);
+         }
+ 
+@@ -268,7 +278,7 @@ main_pads (void)
+     /* Open banner dump file if specified (-d). */
+     if (gc.dump_file) {
+         verbose_message("Opening Banner Dump File");
+-        if (!(gc.dumper = pcap_dump_open(gc.handle, bdata(gc.dump_file))))
++        if (!(gc.dumper = pcap_dump_open(gc.handle, (char *)bdata(gc.dump_file))))
+             err_message("Cannot open dump file - %s\n", pcap_geterr(gc.handle));
+     }
+ 
+@@ -323,7 +333,7 @@ end_pads(void)
+ 
+     /* Remove PID File */
+     if (gc.daemon_mode == 1)
+-        if ((unlink(bdata(gc.pid_file))) != 0)
++        if ((unlink((char *)bdata(gc.pid_file))) != 0)
+             log_message("WARNING:  Unable to remove PID file - %s\n", bdata(gc.pid_file));
+ 
+     /* End Modules */
+@@ -370,7 +380,7 @@ end_pads(void)
+  * RETURN       : 0 - Success
+  *              : -1 - Error
+  * ---------------------------------------------------------- */
+-int
++static int
+ process_cmdline (int argc, char *argv[])
+ {
+     int ch;
+@@ -477,11 +487,6 @@ sig_hup_handler(int signal)
+ int
+ main(int argc, char *argv[])
+ {
+-    /* Variables */
+-    int i;
+-    struct pcap_pkthdr header;      /* The header that pcap gives us */
+-    const u_char *packet;           /* The actual packet */
+-
+     /* Copy Command Line Args */
+     prog_argc = argc;
+     prog_argv = argv;
+diff -urp pads-1.2.orig/src/storage.c pads-1.2/src/storage.c
+--- pads-1.2.orig/src/storage.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/storage.c	2008-06-30 13:28:28.000000000 -0400
+@@ -24,7 +24,10 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#include <arpa/inet.h>
++#include <netinet/ether.h>
+ #include "storage.h"
++#include "mac-resolution.h"
+ 
+ Asset *asset_list;
+ ArpAsset *arp_asset_list;
+@@ -400,7 +403,7 @@ inline Asset *
+ find_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto)
+ {
+     Asset *list;
+-    Asset *rec;
++    Asset *rec = NULL;
+ 
+     list = asset_list;
+ 
+@@ -469,7 +472,7 @@ void print_database ()
+     while (rec != NULL) {
+ 	printf("%d:  %s,%d,%d,%d,%s,%s,%d\n",
+ 		id, inet_ntoa(rec->ip_addr), ntohs(rec->port),
+-		rec->proto, rec->discovered,
++		rec->proto, (int)rec->discovered,
+ 		bdata(rec->service), bdata(rec->application),
+ 		rec->i_attempts);
+ 	rec = rec->next;
+@@ -482,7 +485,7 @@ void print_database ()
+     arp = arp_asset_list;
+     while (arp != NULL) {
+ 	printf("%d:  %s,%s,%d\n", id, inet_ntoa(arp->ip_addr),
+-		ether_ntoa(&arp->mac_addr), arp->discovered);
++		ether_ntoa((struct ether_addr *)arp->mac_addr), (int)arp->discovered);
+ 	arp = arp->next;
+ 	id++;
+     }
+diff -urp pads-1.2.orig/src/util.c pads-1.2/src/util.c
+--- pads-1.2.orig/src/util.c	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/util.c	2008-06-30 13:28:28.000000000 -0400
+@@ -25,8 +25,10 @@
+  * $Id: pads-1.2-cleanup.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#include <unistd.h>
++#include <ctype.h>
+ #include "util.h"
+-
++#include "pads.h"
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION     : strip_comment
+@@ -60,11 +62,12 @@ strip_comment (char *string)
+ int
+ chomp (char *string, int size)
+ {
+-    for (size; size >= 0; size--) {
++    while (size >= 0) {
+         if (string[size] == '\n') {
+             string[size] = '\0';
+             return 1;
+         }
++        size--;
+     }
+ 
+     return 0;
+@@ -121,7 +124,7 @@ init_pid_file (bstring pid_file, bstring
+         gc.pid_file = bfromcstr("/var/run/pads.pid");
+ 
+     /* Create PID File */
+-    if ((fp = fopen(bdata(gc.pid_file), "w")) != NULL) {
++    if ((fp = fopen((char *)bdata(gc.pid_file), "w")) != NULL) {
+         pid = (int) getpid();
+         fprintf(fp, "%d\n", pid);
+         fclose(fp);
+@@ -133,11 +136,11 @@ init_pid_file (bstring pid_file, bstring
+     if (user == NULL || group == NULL)
+         return;
+ 
+-    if ((this_group = getgrnam(bdata(group))) == NULL)
++    if ((this_group = getgrnam((char *)bdata(group))) == NULL)
+         err_message("'%s' group does not appear to exist.", bdata(group));
+-    if ((this_user = getpwnam(bdata(user))) == NULL)
++    if ((this_user = getpwnam((char *)bdata(user))) == NULL)
+         err_message("'%s' user does not appear to exist.", bdata(user));
+-    if ((chown(pid_file, this_user->pw_uid, this_group->gr_gid)) != 0)
++    if ((chown((char *)bdata(pid_file), this_user->pw_uid, this_group->gr_gid)) != 0)
+         err_message("Unable to change PID file's ownership.");
+ 
+ }
+@@ -343,7 +346,7 @@ strlcpy(char *dst, const char *src, size
+ size_t
+ strlcat(char *dst, const char *src, size_t len) {
+   char       *dstptr = dst;
+-  size_t     dstlen, tocopy;
++  size_t     dstlen, tocopy = len;
+   const char *srcptr = src;
+ 
+   while (tocopy-- && *dstptr) dstptr++;
+@@ -384,10 +387,10 @@ drop_privs (bstring newuser, bstring new
+     if (newuser == NULL || newgroup == NULL)
+         return;
+ 
+-    if ((this_group = getgrnam(bdata(newgroup))) == NULL)
++    if ((this_group = getgrnam((char *)bdata(newgroup))) == NULL)
+         err_message("'%s' group does not appear to exist.", bdata(newgroup));
+ 
+-    if ((this_user = getpwnam(bdata(newuser))) == NULL)
++    if ((this_user = getpwnam((char *)bdata(newuser))) == NULL)
+         err_message("'%s' user does not appear to exist.", bdata(newuser));
+ 
+     /* Set Group */
+@@ -458,7 +461,7 @@ mac2hex(const char *mac, char *dst, int 
+  * RETURN       : 0 - MAC Address String
+  * ---------------------------------------------------------- */
+ char *
+-hex2mac(unsigned const char *mac)
++hex2mac(const char *mac)
+ {
+     static char buf[18];
+ 
+diff -urp pads-1.2.orig/src/util.h pads-1.2/src/util.h
+--- pads-1.2.orig/src/util.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/util.h	2008-06-30 13:28:28.000000000 -0400
+@@ -53,6 +53,6 @@ size_t strlcat(char *dst, const char *sr
+ #endif
+ void drop_privs (bstring newuser, bstring newgroup);
+ void mac2hex(const char *mac, char *dst, int len);
+-char *hex2mac(unsigned const char *mac);
++char *hex2mac(const char *mac);
+ 
+ /* GLOBALS ----------------------------------------- */

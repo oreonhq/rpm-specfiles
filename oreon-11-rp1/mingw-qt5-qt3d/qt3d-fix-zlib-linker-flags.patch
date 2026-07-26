@@ -1,0 +1,14 @@
+diff -rupN --no-dereference qt3d-everywhere-src-5.15.18/src/3rdparty/assimp/assimp.pri qt3d-everywhere-src-5.15.18-new/src/3rdparty/assimp/assimp.pri
+--- qt3d-everywhere-src-5.15.18/src/3rdparty/assimp/assimp.pri	2025-03-30 13:49:26.000000000 +0200
++++ qt3d-everywhere-src-5.15.18-new/src/3rdparty/assimp/assimp.pri	2025-11-09 21:16:22.306423428 +0100
+@@ -6,7 +6,9 @@ CONFIG -= precompile_header
+ 
+ win32:DEFINES+=_CRT_SECURE_NO_WARNINGS
+ 
+-qtConfig(system-zlib):!if(cross_compile:host_build): \
++cross_compile {
++    LIBS += -lz
++} else: qtConfig(system-zlib):!if(cross_compile:host_build): \
+     QMAKE_USE_PRIVATE += zlib
+ else: \
+     QT_PRIVATE += zlib-private

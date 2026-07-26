@@ -1,0 +1,463 @@
+--- MuseScore-4.6.0-beta/buildscripts/cmake/DeclareModuleSetup.cmake.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/buildscripts/cmake/DeclareModuleSetup.cmake	2025-09-19 10:54:26.958791846 -0600
+@@ -182,13 +182,11 @@ macro(setup_module)
+         ${MUSE_FRAMEWORK_PATH}
+         ${MUSE_FRAMEWORK_PATH}/framework
+         ${MUSE_FRAMEWORK_PATH}/framework/global
+-        ${MUSE_FRAMEWORK_PATH}/framework/testing/thirdparty/googletest/googletest/include
+ 
+         # compat
+         ${MUSE_FRAMEWORK_PATH}/src
+         ${MUSE_FRAMEWORK_PATH}/src/framework
+         ${MUSE_FRAMEWORK_PATH}/src/framework/global
+-        ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
+         # end compat
+ 
+         ${MODULE_INCLUDE_PRIVATE}
+@@ -210,7 +208,7 @@ macro(setup_module)
+     endif()
+ 
+     target_link_libraries(${MODULE}
+-        PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS}
++        PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS} -lgmock -lgtest
+         PUBLIC ${MODULE_LINK_PUBLIC}
+     )
+ endmacro()
+--- MuseScore-4.6.0-beta/src/braille/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/braille/CMakeLists.txt	2025-09-19 10:54:26.959020873 -0600
+@@ -1,7 +1,6 @@
+ declare_module(braille)
+ 
+ add_subdirectory(tables)
+-add_subdirectory(thirdparty/liblouis)
+ 
+ set(MODULE_QRC ${CMAKE_CURRENT_LIST_DIR}/braille.qrc)
+ 
+@@ -37,7 +36,7 @@ set(MODULE_SRC
+ 
+ set(MODULE_LINK
+     engraving
+-    liblouis
++    -llouis
+     )
+ 
+ if (QT_SUPPORT)
+--- MuseScore-4.6.0-beta/src/braille/internal/louis.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/braille/internal/louis.cpp	2025-09-19 10:54:26.959180640 -0600
+@@ -29,8 +29,8 @@
+ 
+ #include <QString>
+ 
+-#include "braille/thirdparty/liblouis/liblouis/internal.h"
+-#include "braille/thirdparty/liblouis/liblouis/liblouis.h"
++#include <liblouis/internal.h>
++#include <liblouis/liblouis.h>
+ 
+ #define WIDECHARS_ARE_UCS4
+ 
+--- MuseScore-4.6.0-beta/src/braille/internal/notationbraille.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/braille/internal/notationbraille.cpp	2025-09-19 10:54:26.959357620 -0600
+@@ -901,7 +901,7 @@ void NotationBraille::setCursorColor(con
+ 
+ path_t NotationBraille::tablesDefaultDirPath() const
+ {
+-    return globalConfiguration()->appDataPath() + "tables";
++    return "/usr/share/liblouis/tables";
+ }
+ 
+ void NotationBraille::setCurrentEngravingItem(EngravingItem* e, bool select)
+--- MuseScore-4.6.0-beta/src/braille/tables/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/braille/tables/CMakeLists.txt	2025-09-19 10:54:26.959548235 -0600
+@@ -26,5 +26,5 @@ install(FILES
+     it.mus
+     smufl-symbols.mus
+     unicode-to-ascii.dis
+-    DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}tables
++    DESTINATION /usr/share/liblouis/tables
+ )
+--- MuseScore-4.6.0-beta/src/framework/audio/worker/audio_worker.cmake.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/worker/audio_worker.cmake	2025-09-19 10:54:26.959692855 -0600
+@@ -159,8 +159,7 @@ if (MUSE_MODULE_AUDIO_EXPORT)
+         ${CMAKE_CURRENT_LIST_DIR}/internal/export/wavencoder.h
+     )
+ 
+-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/lame lame EXCLUDE_FROM_ALL)
+-    list(APPEND AUDIO_WORKER_LINK lame)
++    list(APPEND AUDIO_WORKER_LINK mp3lame)
+ 
+     include(${CMAKE_CURRENT_LIST_DIR}/../cmake/SetupOpusEnc.cmake)
+     list(APPEND AUDIO_WORKER_LINK ${LIBOPUSENC_TARGETS})
+--- MuseScore-4.6.0-beta/src/framework/audio/worker/internal/audiostream.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/audio/worker/internal/audiostream.cpp	2025-09-19 10:54:26.959853764 -0600
+@@ -25,19 +25,17 @@
+ #define DR_WAV_IMPLEMENTATION
+ #define DR_MP3_IMPLEMENTATION
+ #define DR_MP3_FLOAT_OUTPUT
+-#include "thirdparty/dr_libs/dr_wav.h"
+-#include "thirdparty/dr_libs/dr_mp3.h"
++#include <dr_wav.h>
++#include <dr_mp3.h>
+ 
+-/* open if you want to add flac
+ #define DR_FLAC_IMPLEMENTATION
+-#include "thirdparty/dr_libs/dr_flac.h"
+-*/
++#include <dr_flac.h>
+ 
+ #if (defined (_MSCVER) || defined (_MSC_VER))
+ #pragma warning(push)
+ #pragma warning(disable: 4456) // declaration hides previous local declaration
+ #endif
+-#include "thirdparty/stb/stb_vorbis.c"
++#include <stb/stb_vorbis.c>
+ #if (defined (_MSCVER) || defined (_MSC_VER))
+ #pragma warning(pop)
+ #endif
+--- MuseScore-4.6.0-beta/src/framework/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/CMakeLists.txt	2025-09-19 10:54:26.960010036 -0600
+@@ -124,7 +124,6 @@ if (MUSE_ENABLE_UNIT_TESTS)
+     )
+ 
+     set(INSTALL_GTEST OFF)
+-    add_subdirectory(testing/thirdparty/googletest)
+ endif()
+ 
+ # Stubs
+--- MuseScore-4.6.0-beta/src/framework/global/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/global/CMakeLists.txt	2025-09-19 11:08:30.788411514 -0600
+@@ -25,7 +25,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/async/
+ include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
+ include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler/profiler.cmake)
+ include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_modularity/modularity/modularity.cmake)
+-include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/utfcpp/utfcpp.cmake)
+ 
+ find_package(TinyXml REQUIRED)
+ set(MODULE_SRC
+@@ -151,9 +150,6 @@ set(MODULE_SRC
+     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack.h
+     ${CMAKE_CURRENT_LIST_DIR}/serialization/msgpack_forward.h
+     
+-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.hpp
+-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml/pugixml.cpp
+-
+     ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
+     ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
+ )
+@@ -258,9 +254,7 @@ else ()
+     set(Z_LIB z)
+ endif ()
+ 
+-list(APPEND MODULE_INCLUDE_PRIVATE
+-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/pugixml
+-)
++list(APPEND MODULE_LINK -lpugixml)
+ 
+ list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
+ list(APPEND MODULE_LINK ${Z_LIB})
+--- MuseScore-4.6.0-beta/src/framework/global/serialization/xmldom.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/global/serialization/xmldom.cpp	2025-09-19 10:56:58.908314160 -0600
+@@ -25,7 +25,7 @@
+ #include <cstring>
+ #include <type_traits>
+ 
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ #include "log.h"
+ 
+--- MuseScore-4.6.0-beta/src/framework/global/serialization/xmlstreamreader.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/global/serialization/xmlstreamreader.cpp	2025-09-19 10:57:33.307150141 -0600
+@@ -24,7 +24,7 @@
+ #include <cstring>
+ #include <sstream>
+ 
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ #include "log.h"
+ 
+--- MuseScore-4.6.0-beta/src/framework/global/serialization/xmlstreamwriter.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/global/serialization/xmlstreamwriter.cpp	2025-09-19 10:54:26.960327347 -0600
+@@ -23,7 +23,7 @@
+ 
+ #include <list>
+ 
+-#include <global/thirdparty/utfcpp/utf8.h>
++#include <utf8.h>
+ 
+ #include "global/containers.h"
+ #include "textstream.h"
+--- MuseScore-4.6.0-beta/src/framework/global/types/string.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/framework/global/types/string.cpp	2025-09-19 10:54:26.960502724 -0600
+@@ -32,7 +32,7 @@
+ #include <sstream>
+ #include <utility>
+ 
+-#include "global/thirdparty/utfcpp/utf8.h"
++#include <utf8.h>
+ 
+ #include "bytearray.h"
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/CMakeLists.txt.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/CMakeLists.txt	2025-09-19 11:17:56.037848628 -0600
+@@ -24,7 +24,6 @@ set(MODULE_INCLUDE_PRIVATE
+     ${CMAKE_CURRENT_LIST_DIR}/internal/
+     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/
+     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/
+-    ${CMAKE_SOURCE_DIR}/src/framework/global/thirdparty/pugixml
+ )
+ 
+ set(MODULE_SRC
+--- MuseScore-4.6.0-beta/src/importexport/mei/internal/meiexporter.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/internal/meiexporter.h	2025-09-19 11:18:22.365864817 -0600
+@@ -33,7 +33,7 @@
+ #include "thirdparty/libmei/element.h"
+ #include "thirdparty/libmei/shared.h"
+ 
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ namespace mu::engraving {
+ class Articulation;
+--- MuseScore-4.6.0-beta/src/importexport/mei/internal/meiimporter.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/internal/meiimporter.cpp	2025-09-19 11:18:47.733534477 -0600
+@@ -78,7 +78,7 @@
+ #include "thirdparty/libmei/shared.h"
+ #include "thirdparty/libmei/midi.h"
+ 
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ using namespace muse;
+ using namespace mu;
+--- MuseScore-4.6.0-beta/src/importexport/mei/internal/meiimporter.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/internal/meiimporter.h	2025-09-19 11:19:02.629422171 -0600
+@@ -35,7 +35,7 @@
+ #include "thirdparty/libmei/element.h"
+ #include "thirdparty/libmei/shared.h"
+ 
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ namespace mu::engraving {
+ class Chord;
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_cmn.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_cmn.h	2025-09-19 11:21:24.021919179 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_cmnornaments.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_cmnornaments.h	2025-09-19 11:21:24.022194602 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_externalsymbols.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_externalsymbols.h	2025-09-19 11:21:24.022338481 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_fingering.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_fingering.h	2025-09-19 11:21:24.022481497 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_gestural.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_gestural.h	2025-09-19 11:21:24.022598836 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_harmony.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_harmony.h	2025-09-19 11:21:24.022735290 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_midi.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_midi.h	2025-09-19 11:21:24.022868969 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_shared.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_shared.h	2025-09-19 11:21:24.023040399 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_stringtab.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_stringtab.h	2025-09-19 11:21:24.023513220 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_visual.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/atts_visual.h	2025-09-19 11:21:24.023640217 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/cmn.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/cmn.h	2025-09-19 11:21:24.023830632 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/cmnornaments.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/cmnornaments.h	2025-09-19 11:21:24.024006470 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/fingering.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/fingering.h	2025-09-19 11:21:24.024122105 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/harmony.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/harmony.h	2025-09-19 11:21:24.024235537 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/header.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/header.h	2025-09-19 11:21:24.024353917 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/lyrics.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/lyrics.h	2025-09-19 11:21:24.024473991 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/midi.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/midi.h	2025-09-19 11:21:24.024590168 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/namesdates.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/namesdates.h	2025-09-19 11:21:24.024704882 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/shared.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/shared.h	2025-09-19 11:21:24.024816580 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 
+--- MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/stringtab.h.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/importexport/mei/thirdparty/libmei/stringtab.h	2025-09-19 11:21:24.024868110 -0600
+@@ -17,7 +17,7 @@
+ 
+ #include "att.h"
+ #include "attdef.h"
+-#include "pugixml.hpp"
++#include <pugixml.hpp>
+ 
+ //----------------------------------------------------------------------------
+ 

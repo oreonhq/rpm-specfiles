@@ -1,0 +1,106 @@
+From 56f5ab417064283cc76276828cc3c4e95adfc076 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 17 Sep 2019 12:23:59 +0200
+Subject: [PATCH] pgpring: port to OpenSSL
+
+This patch is not suitable for upstream, because it removes the libmd
+support. It should either be made to play nice with libmd, or libmd
+added to Fedora and the patch dropped altogether.
+---
+ keyanalyze/pgpring/configure.ac |  2 +-
+ keyanalyze/pgpring/pgppacket.c  |  1 -
+ keyanalyze/pgpring/pgppubring.c | 22 +++++++++++-----------
+ 3 files changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/keyanalyze/pgpring/configure.ac b/keyanalyze/pgpring/configure.ac
+index 0e44a99..6321ab5 100644
+--- a/keyanalyze/pgpring/configure.ac
++++ b/keyanalyze/pgpring/configure.ac
+@@ -12,7 +12,7 @@ AC_PROG_INSTALL
+ AC_C_INLINE
+ AC_C_CONST
+ 
+-AC_SEARCH_LIBS([SHA1Update], [md])
++AC_SEARCH_LIBS([SHA1_Update], [crypto])
+ 
+ AC_DEFINE([HAVE_PGP], [1], [Do you want PGP support (--enable-pgp)?])
+ 
+diff --git a/keyanalyze/pgpring/pgppacket.c b/keyanalyze/pgpring/pgppacket.c
+index 1e6b857..c9c226c 100644
+--- a/keyanalyze/pgpring/pgppacket.c
++++ b/keyanalyze/pgpring/pgppacket.c
+@@ -24,7 +24,6 @@
+ #include <unistd.h>
+ #include <time.h>
+ 
+-#include "sha1.h"
+ #include "lib.h"
+ #include "pgplib.h"
+ #include "pgppacket.h"
+diff --git a/keyanalyze/pgpring/pgppubring.c b/keyanalyze/pgpring/pgppubring.c
+index 4249f42..8b06ec8 100644
+--- a/keyanalyze/pgpring/pgppubring.c
++++ b/keyanalyze/pgpring/pgppubring.c
+@@ -45,7 +45,7 @@
+ #ifdef HAVE_GETOPT_H
+ # include <getopt.h>
+ #endif
+-#include <sha1.h>
++#include <openssl/sha.h>
+ 
+ extern char *optarg;
+ extern int optind;
+@@ -232,9 +232,9 @@ static void pgp_make_pgp3_fingerprint (unsigned char *buff, size_t l,
+ 				       unsigned char *digest)
+ {
+   unsigned char dummy;
+-  SHA1_CTX context;
++  SHA_CTX context;
+ 
+-  SHA1Init (&context);
++  SHA1_Init (&context);
+ 
+   dummy = buff[0] & 0x3f;
+ 
+@@ -242,13 +242,13 @@ static void pgp_make_pgp3_fingerprint (unsigned char *buff, size_t l,
+     dummy = PT_PUBKEY;
+ 
+   dummy = (dummy << 2) | 0x81;
+-  SHA1Update (&context, &dummy, 1);
++  SHA1_Update (&context, &dummy, 1);
+   dummy = ((l - 1) >> 8) & 0xff;
+-  SHA1Update (&context, &dummy, 1);
++  SHA1_Update (&context, &dummy, 1);
+   dummy = (l - 1) & 0xff;
+-  SHA1Update (&context, &dummy, 1);
+-  SHA1Update (&context, buff + 1, l - 1);
+-  SHA1Final (digest, &context);
++  SHA1_Update (&context, &dummy, 1);
++  SHA1_Update (&context, buff + 1, l - 1);
++  SHA1_Final (digest, &context);
+ 
+ }
+ 
+@@ -273,7 +273,7 @@ static pgp_key_t *pgp_parse_pgp3_key (unsigned char *buff, size_t l)
+ {
+   pgp_key_t *p;
+   unsigned char alg;
+-  unsigned char digest[SHA1_DIGEST_LENGTH];
++  unsigned char digest[SHA_DIGEST_LENGTH];
+   unsigned char scratch[LONG_STRING];
+   time_t gen_time = 0;
+   unsigned long id;
+@@ -309,8 +309,8 @@ static pgp_key_t *pgp_parse_pgp3_key (unsigned char *buff, size_t l)
+ 
+   for (k = 0; k < 2; k++)
+   {
+-    for (id = 0, i = SHA1_DIGEST_LENGTH - 8 + k * 4;
+-	 i < SHA1_DIGEST_LENGTH + (k - 1) * 4; i++)
++    for (id = 0, i = SHA_DIGEST_LENGTH - 8 + k * 4;
++	 i < SHA_DIGEST_LENGTH + (k - 1) * 4; i++)
+       id = (id << 8) + digest[i];
+ 
+     snprintf ((char *) scratch + k * 8, sizeof (scratch) - k * 8, "%08lX", id);
+-- 
+2.21.0
+

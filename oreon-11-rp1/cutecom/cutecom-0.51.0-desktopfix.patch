@@ -1,0 +1,11 @@
+diff -up ./com.gitlab.cutecom.cutecom.appdata.xml.desktopfix ./com.gitlab.cutecom.cutecom.appdata.xml
+--- ./com.gitlab.cutecom.cutecom.appdata.xml.desktopfix	2020-08-09 09:58:40.136687935 -0400
++++ ./com.gitlab.cutecom.cutecom.appdata.xml	2020-08-09 09:59:00.617507803 -0400
+@@ -5,6 +5,7 @@
+     <metadata_license>CC0-1.0</metadata_license>
+     <project_license>GPL-3.0</project_license>
+     <summary>Graphical serial terminal</summary>
++    <launchable type="desktop-id">cutecom.desktop</launchable>
+     <description>
+         <p>CuteCom is a graphical serial terminal, like minicom.
+         </p>

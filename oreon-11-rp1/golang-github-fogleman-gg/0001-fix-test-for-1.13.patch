@@ -1,0 +1,28 @@
+From 62694a05017dc0ffb1e08e7918659103ad7a04ee Mon Sep 17 00:00:00 2001
+From: Robin Lee <cheeselee@fedoraproject.org>
+Date: Sat, 30 Nov 2019 12:50:28 +0800
+Subject: [PATCH] fix test for 1.13+
+
+---
+ context_test.go | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/context_test.go b/context_test.go
+index 206816e..0c59851 100644
+--- a/context_test.go
++++ b/context_test.go
+@@ -11,6 +11,11 @@ import (
+ 
+ var save bool
+ 
++var _ = func() bool {
++	testing.Init()
++	return true
++}()
++
+ func init() {
+ 	flag.BoolVar(&save, "save", false, "save PNG output for each test case")
+ 	flag.Parse()
+-- 
+2.23.0
+

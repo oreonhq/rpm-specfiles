@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Double Commander QT6
+Comment=Double Commander QT6 is a cross platform open source file manager with two panels side by side.
+Terminal=false
+Icon=doublecmd
+Exec=doublecmd-qt6
+Type=Application
+Categories=Utility;FileManager;
+Keywords=folder;manager;explore;disk;filesystem;orthodox;copy;queue;queuing;operations;

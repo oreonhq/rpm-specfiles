@@ -1,0 +1,86 @@
+diff -ur POE-Component-Server-Bayeux-0.04/lib/POE/Component/Server/Bayeux/Message/Meta.pm POE-Component-Server-Bayeux-0.04.switch/lib/POE/Component/Server/Bayeux/Message/Meta.pm
+--- POE-Component-Server-Bayeux-0.04/lib/POE/Component/Server/Bayeux/Message/Meta.pm	2009-12-16 17:11:45.000000000 +0200
++++ POE-Component-Server-Bayeux-0.04.switch/lib/POE/Component/Server/Bayeux/Message/Meta.pm	2011-07-20 10:07:37.570400958 +0300
+@@ -13,7 +13,7 @@
+ use strict;
+ use warnings;
+ use JSON::Any qw(XS);
+-use Switch;
++use feature "switch";
+ use Params::Validate qw(:types);
+ use base qw(POE::Component::Server::Bayeux::Message);
+ 
+@@ -101,8 +101,8 @@
+ 
+     my @responses;
+ 
+-    switch ($self->type) {
+-        case 'handshake' {
++    given ($self->type) {
++        when ("handshake") {
+             # Must ignore any other messages sent in this request
+             $self->request->clear_stack();
+ 
+@@ -121,7 +121,7 @@
+                     successful => JSON::XS::false,
+                     error => $self->is_error,
+                 };
+-                last;
++                break;
+             }
+ 
+             # TODO: Find a common connectionType 
+@@ -150,7 +150,7 @@
+ 
+             push @responses, \%response;
+         }
+-        case 'connect' {
++        when ("connect") {
+             my $client;
+             if (! $self->is_error) {
+                 $client = $self->request->client($self->clientId);
+@@ -171,7 +171,7 @@
+                         reconnect => 'handshake',
+                     },
+                 };
+-                last;
++                break;
+             }
+ 
+             $client->flags->{is_polling} = $self->request->id;
+@@ -205,7 +205,7 @@
+ 
+             $self->request->delay(120) unless $no_delay;
+         }
+-        case 'disconnect' {
++        when ("disconnect") {
+             my $client;
+             if (! $self->is_error) {
+                 $client = $self->request->client($self->clientId);
+@@ -219,7 +219,7 @@
+                 ($self->is_error ? ( error => $self->is_error ) : () ),
+             };
+         }
+-        case 'subscribe' {
++        when ("subscribe") {
+             my $client;
+             if (! $self->is_error) {
+                 $client = $self->request->client($self->clientId);
+@@ -233,7 +233,7 @@
+                     clientId   => $self->clientId,
+                     subscription => $self->subscription,
+                 };
+-                last;
++                break;
+             }
+ 
+             push @responses, {
+@@ -247,7 +247,7 @@
+                 $self->request->subscribe($client->id, $self->subscription);
+             }
+         }
+-        case 'unsubscribe' {
++        when ("unsubscribe") {
+             my $client;
+             if (! $self->is_error) {
+                 $client = $self->request->client($self->clientId);

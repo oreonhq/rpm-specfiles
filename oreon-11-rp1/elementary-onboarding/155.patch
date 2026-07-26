@@ -1,0 +1,46 @@
+From 112da16f3fb64d2616f692e545242899bac107e1 Mon Sep 17 00:00:00 2001
+From: Christopher Crouse <mail@amz-x.com>
+Date: Tue, 21 Dec 2021 13:19:15 +0200
+Subject: [PATCH 1/2] fix custom not show in installer entry
+
+---
+ data/autostart.desktop | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/autostart.desktop b/data/autostart.desktop
+index 146dbbb6..41f7a7de 100644
+--- a/data/autostart.desktop
++++ b/data/autostart.desktop
+@@ -3,7 +3,7 @@ Name=Welcome
+ Comment=Change common settings on first-run
+ Exec=io.elementary.onboarding
+ Icon=io.elementary.onboarding
+-NotShowIn=Installer;
++NotShowIn=X-Installer;
+ Terminal=false
+ Type=Application
+ StartupNotify=true
+
+From f7fa7df527379c81d754c4c3011bcdb0e15b2ba1 Mon Sep 17 00:00:00 2001
+From: Christopher Crouse <mail@amz-x.com>
+Date: Mon, 3 Jan 2022 11:08:12 +0200
+Subject: [PATCH 2/2] updated autostart.desktop to be more generic
+
+Ref: https://github.com/elementary/onboarding/issues/154#issuecomment-1003128974
+---
+ data/autostart.desktop | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/autostart.desktop b/data/autostart.desktop
+index 41f7a7de..d59058bb 100644
+--- a/data/autostart.desktop
++++ b/data/autostart.desktop
+@@ -3,7 +3,7 @@ Name=Welcome
+ Comment=Change common settings on first-run
+ Exec=io.elementary.onboarding
+ Icon=io.elementary.onboarding
+-NotShowIn=X-Installer;
++OnlyShowIn=Pantheon;
+ Terminal=false
+ Type=Application
+ StartupNotify=true

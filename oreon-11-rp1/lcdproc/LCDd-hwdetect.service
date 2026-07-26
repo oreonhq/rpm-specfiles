@@ -1,0 +1,9 @@
+[Unit]
+Description=LCDd hardware detection Service
+After=syslog.target
+Before=LCDd.service
+ConditionPathExists=!/etc/lcdproc/LCDd.conf
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/LCDd-hwdetect

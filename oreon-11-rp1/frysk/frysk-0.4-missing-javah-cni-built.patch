@@ -1,0 +1,11 @@
+diff -up frysk-0.4/frysk-sys/Makefile.am.missing-javah-cni-built frysk-0.4/frysk-sys/Makefile.am
+--- frysk-0.4/frysk-sys/Makefile.am.missing-javah-cni-built	2013-02-14 21:33:35.397666535 -0500
++++ frysk-0.4/frysk-sys/Makefile.am	2013-02-14 21:59:36.968325166 -0500
+@@ -87,3 +87,7 @@ JNIXX_CLASSES += lib.unwind.UnwindRegist
+ JNIXX_CLASSES += lib.unwind.UnwindRegistersPPC64
+ JNIXX_CLASSES += lib.unwind.UnwindRegistersX86
+ JNIXX_CLASSES += lib.unwind.UnwindRegistersX8664
++# Some JAVAH files don't get generated as they are hidden includes
++lib/dwfl/cni/ElfSymbol.o: lib/dwfl/ElfSymbolVersion.h
++frysk/testbed/cni/ForkFactory.o: frysk/sys/UnhandledWaitBuilder.h
++lib/dwfl/cni/DwflModule.o: lib/dwfl/ElfSymbolVersion.h

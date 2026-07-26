@@ -1,0 +1,71 @@
+diff --git a/Makefile b/Makefile
+index d47ecdb..7ee224d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,7 @@
+ all: axmail
+ 
+-MAN_DIR = /usr/local/share/man
++SBINDIR = /usr/sbin
++MANDIR = /usr/local/share/man
+ CC = gcc
+ LD = gcc
+ CFLAGS = -O2 -Wstrict-prototypes -g -I../lib
+@@ -15,20 +16,20 @@ upgrade: installbin installhelp installman installconf
+ install: installbin installconf installhelp installman
+ 
+ installbin: all
+-	install -m 0755 -s -o root -g root axmail	 /usr/local/sbin
++	install -m 0755 -p -D axmail	 $(DESTDIR)$(SBINDIR)/axmail
+ 
+ installconf:
+-	install -m 755    -o root -g root -d		/usr/local/etc/ax25
+-	install -b -m 644 -o root -g root etc/axmail.conf /usr/local/etc/ax25
+-	install -m 644    -o root -g root etc/welcome.txt /usr/local/etc/ax25
++	install -m 755    -D -d		  $(DESTDIR)/etc/ax25
++	install -m 644    -p etc/axmail.conf $(DESTDIR)/etc/ax25
++	install -m 644    -p etc/axmail-welcome.txt $(DESTDIR)/etc/ax25
+ 
+ installhelp:
+-	install -m 755    -o root -g root -d		  /usr/local/var/ax25/axmail/help
+-	install -m 644    -o root -g root etc/help/*.hlp  /usr/local/var/ax25/axmail/help
++	install -m 755    -D -d		  $(DESTDIR)/usr/share/axmail/help
++	install -m 644    -p etc/help/*.hlp  $(DESTDIR)/usr/share/axmail/help
+ 
+ installman:
+-	install -m 644    -p man/axmail.8	$(MAN_DIR)/man8
+-	install -m 644    -p man/axmail.conf.5	$(MAN_DIR)/man5
++	install -m 644    -p -D man/axmail.8	$(DESTDIR)$(MANDIR)/man8/axmail.8
++	install -m 644    -p -D man/axmail.conf.5	$(DESTDIR)$(MANDIR)/man5/axmail.conf.5
+ back:
+ 	rm -f ../mail.tar.gz
+ 	tar cvf ../mail.tar *
+diff --git a/defines.h b/defines.h
+index 584a1ba..bef1096 100644
+--- a/defines.h
++++ b/defines.h
+@@ -7,11 +7,11 @@
+ #define COPYRIGHT "(c) 1996-1998 Heikki Hannikainen (OH7LZB) <hessu@hes.iki.fi>\nMailbox save support (c) 2003 Marius Petrescu (YO2LOJ) <mpetrescu@online.ro>\nOther modifications (c) 2005-2018 by Brian Rogers (N1URO) <n1uro@n1uro.net> "
+ #define PROMPT "=> "
+ 
+-#define CONF_AXMAIL_FILE "/usr/local/etc/ax25/axmail.conf"
+-#define CONF_AXMAIL_PROF_FILE "/usr/local/etc/ax25/ax25.profile"
++#define CONF_AXMAIL_FILE "/etc/ax25/axmail.conf"
++#define CONF_AXMAIL_PROF_FILE "/etc/ax25/ax25.profile"
+ // #define CONF_AXMAIL_USER_FILE ".axmailrc"
+-#define DATA_AXMAIL_HELP_DIR "/usr/local/var/ax25/axmail/help/"
+-#define DATA_AXMAIL_MAIL_DIR "/usr/local/var/spool/mail/"
++#define DATA_AXMAIL_HELP_DIR "/usr/share/axmail/help/"
++#define DATA_AXMAIL_MAIL_DIR "/var/spool/mail/"
+ #define LOCK_AXMAIL_FILE "/var/lock/axmail"
+ #define BIN_AXMAIL_SENDMAIL "/usr/sbin/sendmail"
+ 
+@@ -21,7 +21,7 @@
+ #define USERPROFILE ".profile"
+ #define PASSWDFILE "/etc/passwd"
+ 
+-#define WELCOME "/usr/local/etc/ax25/welcome.txt"
++#define WELCOME "/etc/ax25/axmail-welcome.txt"
+ 
+ #define PATHSIZE 1024
+ #define LINESIZE 1024	/* Maximum length of a line in a message */

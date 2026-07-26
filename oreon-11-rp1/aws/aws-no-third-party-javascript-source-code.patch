@@ -1,0 +1,32 @@
+--- a/aws.gpr
++++ b/aws.gpr
+@@ -83,10 +83,10 @@
+       --  Support files (templates)
+ 
+       for Artifacts ("share/examples/aws/web_elements")
+-        use ("web_elements/menu_css", "web_elements/notebook",
+-             "web_elements/rounded_boxes", "web_elements/icons",
+-             "web_elements/javascripts",
+-             "web_elements/mime.types", "web_elements/readme.txt");
++        use ("web_elements/menu_css",
++             "web_elements/rounded_boxes",
++             "web_elements/icons",
++             "web_elements/mime.types");
+ 
+       case Shared.S_Target is
+          when "Windows_NT" =>
+--- a/docs/source/high_level_services.rst
++++ b/docs/source/high_level_services.rst
+@@ -441,6 +441,12 @@
+ 
+ .. index:: Web Elements
+ 
++.. admonition:: A note from the Fedora package maintainers
++
++   The bundled third-party Javascript files are not included in the package,
++   because they are seemingly unmaintained and their licensing is unclear. Many
++   Javascript libraries of varying complexity can be found on the Web.
++
+ `AWS` provides some components to help in creating nice looking Web
+ interfaces. It is possible to browse these Web Elements using the
+ `web_elements` demo. Just launch this Web application from the

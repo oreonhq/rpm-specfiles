@@ -1,0 +1,82 @@
+From 4a6721f3625113fe5c37ca171393de308062485a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 3 Oct 2016 14:55:19 +0200
+Subject: [PATCH] Use system lemon
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ buildlib/Lucy/Build.pm |  1 -
+ charmonizer.c          | 18 +-----------------
+ 2 files changed, 1 insertion(+), 18 deletions(-)
+
+diff --git a/buildlib/Lucy/Build.pm b/buildlib/Lucy/Build.pm
+index 87047ba..0afaf2b 100644
+--- a/buildlib/Lucy/Build.pm
++++ b/buildlib/Lucy/Build.pm
+@@ -246,7 +246,6 @@ sub ACTION_dist {
+         '../test'                          => 'cftest',
+         '../modules'                       => 'modules',
+         '../devel'                         => 'devel',
+-        '../lemon'                         => 'lemon',
+         '../common/sample/us_constitution' => 'sample/us_constitution',
+         '../CHANGES'                       => 'CHANGES',
+         '../CONTRIBUTING'                  => 'CONTRIBUTING',
+diff --git a/charmonizer.c b/charmonizer.c
+index 652f3f3..78bbc02 100644
+--- a/charmonizer.c
++++ b/charmonizer.c
+@@ -764,13 +764,6 @@ chaz_MakeBinary*
+ chaz_MakeFile_add_static_lib(chaz_MakeFile *self, const char *dir,
+                              const char *basename);
+ 
+-/** Add a rule to build the lemon parser generator.
+- *
+- * @param dir The lemon directory.
+- */
+-chaz_MakeBinary*
+-chaz_MakeFile_add_lemon_exe(chaz_MakeFile *self, const char *dir);
+-
+ /** Add a rule for a lemon grammar.
+  *
+  * @param base_name The filename of the grammar without extension.
+@@ -5076,25 +5069,17 @@ S_chaz_MakeFile_add_binary(chaz_MakeFile *self, int type, const char *dir,
+     return binary;
+ }
+ 
+-chaz_MakeBinary*
+-chaz_MakeFile_add_lemon_exe(chaz_MakeFile *self, const char *dir) {
+-    chaz_MakeBinary *exe = chaz_MakeFile_add_exe(self, dir, "lemon");
+-    chaz_MakeBinary_add_src_file(exe, dir, "lemon.c");
+-    return exe;
+-}
+-
+ chaz_MakeRule*
+ chaz_MakeFile_add_lemon_grammar(chaz_MakeFile *self,
+                                 const char *base_name) {
+     char *c_file  = chaz_Util_join(".", base_name, "c", NULL);
+     char *h_file  = chaz_Util_join(".", base_name, "h", NULL);
+     char *y_file  = chaz_Util_join(".", base_name, "y", NULL);
+-    char *command = chaz_Util_join(" ", "$(LEMON_EXE) -q", y_file, NULL);
++    char *command = chaz_Util_join(" ", "lemon -q", y_file, NULL);
+ 
+     chaz_MakeRule *rule = chaz_MakeFile_add_rule(self, c_file, y_file);
+     chaz_MakeRule *clean_rule = chaz_MakeFile_clean_rule(self);
+ 
+-    chaz_MakeRule_add_prereq(rule, "$(LEMON_EXE)");
+     chaz_MakeRule_add_command(rule, command);
+ 
+     chaz_MakeRule_add_rm_command(clean_rule, h_file);
+@@ -9082,7 +9067,6 @@ lucy_MakeFile_write(lucy_MakeFile *self) {
+ 
+     /* Additional rules. */
+ 
+-    chaz_MakeFile_add_lemon_exe(self->makefile, self->lemon_dir);
+     scratch = chaz_Util_join(dir_sep, self->json_dir, "JsonParser", NULL);
+     chaz_MakeFile_add_lemon_grammar(self->makefile, scratch);
+     free(scratch);
+-- 
+2.7.4
+

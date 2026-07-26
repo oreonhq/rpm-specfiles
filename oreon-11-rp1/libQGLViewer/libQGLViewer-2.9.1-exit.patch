@@ -1,0 +1,12 @@
+diff -up libQGLViewer-2.9.1/QGLViewer/VRender/gpc.cpp.exit libQGLViewer-2.9.1/QGLViewer/VRender/gpc.cpp
+--- libQGLViewer-2.9.1/QGLViewer/VRender/gpc.cpp.exit	2023-01-26 10:26:55.315899363 +0000
++++ libQGLViewer-2.9.1/QGLViewer/VRender/gpc.cpp	2023-01-26 10:27:39.642119598 +0000
+@@ -150,7 +150,7 @@ using namespace std ;
+ #define MALLOC(p, b, s, t) {if ((b) > 0) { \
+ 							p= (t*)malloc(b); if (!(p)) { \
+ 							fprintf(stderr, "gpc malloc failure: %s\n", s); \
+-							exit(0);}} else p= nullptr;}
++							abort();}} else p= nullptr;}
+ 
+ #define FREE(p)            {if (p) {free(p); (p)= nullptr;}}
+ 

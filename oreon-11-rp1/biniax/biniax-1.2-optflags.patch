@@ -1,0 +1,12 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for biniax <= 1.2
+to get the $RPM_OPT_FLAGS correctly honored during package build.
+
+--- makefile			2005-08-24 08:26:04.000000000 +0200
++++ makefile.optflags		2008-10-18 22:44:55.000000000 +0200
+@@ -12,4 +12,4 @@
+ TARGET=biniax
+ 
+ biniax:
+-	$(CC) $(AUTO) $(FILES) $(INCLUDES) -o $(TARGET) $(LINKTO)
+\ No newline at end of file
++	$(CC) $(AUTO) $(RPM_OPT_FLAGS) -fcommon $(FILES) $(INCLUDES) -o $(TARGET) $(LINKTO)

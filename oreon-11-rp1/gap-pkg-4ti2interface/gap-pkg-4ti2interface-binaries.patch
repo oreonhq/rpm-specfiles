@@ -1,0 +1,27 @@
+The Fedora 4ti2 package uses environment modules to hide binaries with
+generic names.  Point this package to the correct directory.
+
+--- 4ti2Interface/gap/4ti2Interface.gi.orig	2023-02-28 02:56:25.000000000 -0700
++++ 4ti2Interface/gap/4ti2Interface.gi	2024-07-01 11:36:23.492310215 -0600
+@@ -10,7 +10,7 @@ BindGlobal( "4ti2Interface_BINARIES",
+             ) );
+ 
+ for name in 4ti2Interface_BINARIES.required_binaries do
+-    path := Filename( DirectoriesSystemPrograms(), name );
++    path := Filename( Concatenation(DirectoriesSystemPrograms(),[Directory("/usr/lib64/4ti2/bin")]), name );
+     if IsStringRep( path ) then
+         4ti2Interface_BINARIES.(name) := path;
+         continue;
+--- 4ti2Interface/PackageInfo.g.orig	2023-02-28 02:56:25.000000000 -0700
++++ 4ti2Interface/PackageInfo.g	2024-07-01 11:39:41.504723418 -0600
+@@ -80,8 +80,8 @@ AvailabilityTest := function()
+     bool :=
+       ForAll( 4ti2_binaries,
+               name ->
+-              ( not Filename(DirectoriesSystemPrograms(), name ) = fail ) or
+-              ( not Filename(DirectoriesSystemPrograms(), Concatenation( "4ti2-", name ) ) = fail ) );
++              ( not Filename(Concatenation(DirectoriesSystemPrograms(),[Directory("/usr/lib64/4ti2/bin")]), name ) = fail ) or
++              ( not Filename(Concatenation(DirectoriesSystemPrograms(),[Directory("/usr/lib64/4ti2/bin")]), Concatenation( "4ti2-", name ) ) = fail ) );
+     
+     if not bool then
+         LogPackageLoadingMessage( PACKAGE_WARNING,

@@ -1,0 +1,22 @@
+--- a/src/lcalc/Lcommandline_twist.cc	2021-12-19 10:13:03.000000000 -0700
++++ b/src/lcalc/Lcommandline_twist.cc	2022-03-02 17:34:17.113703089 -0700
+@@ -950,7 +950,7 @@ if(is_fresh&&(is_primitive || !only_do_p
+                delete [] v;
+                delete [] sum;
+                for(k=0;k<=29;k++) delete(factors[k]);
+-               delete (factors);
++               delete [] factors;
+ 
+                delete [] tmp_g;
+                delete [] tmp_l;
+--- a/src/libLfunction/Lnumbertheory.cc	2021-12-19 10:13:03.000000000 -0700
++++ b/src/libLfunction/Lnumbertheory.cc	2022-03-02 17:33:34.137666932 -0700
+@@ -922,7 +922,7 @@ int characters()
+     //cout << "total = " << total << endl;
+ 
+     for(k=0;k<=29;k++) delete(factors[k]);
+-    delete (factors);
++    delete [] factors;
+ 
+     delete [] chi;
+     delete [] chi_1;

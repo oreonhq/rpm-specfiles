@@ -1,0 +1,53 @@
+Include <stdlib.h> for the labs function.  Also add missing int
+types to function prototypes.
+
+These changes increase compatibility with future compilers which
+do not support implicit function declarations nor implicit ints.
+Both language features are no longer part of C as of C99.
+
+Fixed upstream via:
+
+commit edeb5682d5b046bc48abf1773eb99799c7962aa4
+Author: Robert Jongbloed <robertj@voxlucida.com.au>
+Date:   Sat Sep 21 10:58:13 2013 +0000
+
+    Fixed a raft of issues with XCode 5 and Mountain Lion.
+
+diff --git a/plugins/audio/G.722.2/AMR-WB/dec_lpc.c b/plugins/audio/G.722.2/AMR-WB/dec_lpc.c
+index b52e23ff2746f76a..96b4f7e494bb312b 100644
+--- a/plugins/audio/G.722.2/AMR-WB/dec_lpc.c
++++ b/plugins/audio/G.722.2/AMR-WB/dec_lpc.c
+@@ -4,6 +4,7 @@
+  *===================================================================
+  */
+ #include <math.h>
++#include <stdlib.h>
+ #include "typedef.h"
+ #include "dec_util.h"
+ 
+diff --git a/plugins/audio/LPC_10/src/analys.c b/plugins/audio/LPC_10/src/analys.c
+index 787ab8db665eabf1..8ac85f90d6221122 100644
+--- a/plugins/audio/LPC_10/src/analys.c
++++ b/plugins/audio/LPC_10/src/analys.c
+@@ -246,7 +246,7 @@ static integer c__1 = 1;
+     extern /* Subroutine */ int onset_(real *, integer *, integer *, integer *
+ 	    , integer *, integer *, integer *, struct lpc10_encoder_state *);
+     integer *osptr;
+-    extern /* Subroutine */ placea_(integer *, integer *
++    extern /* Subroutine */ int placea_(integer *, integer *
+ 	    , integer *, integer *, integer *, integer *, integer *, integer *
+ 	    , integer *), dcbias_(integer *, real *, real *), placev_(integer 
+ 	    *, integer *, integer *, integer *, integer *, integer *, integer 
+diff --git a/plugins/audio/LPC_10/src/synths.c b/plugins/audio/LPC_10/src/synths.c
+index d56b1e91e986f677..8dcb0ee01877f7bb 100644
+--- a/plugins/audio/LPC_10/src/synths.c
++++ b/plugins/audio/LPC_10/src/synths.c
+@@ -185,7 +185,7 @@ static real c_b2 = .7f;
+     extern /* Subroutine */ int deemp_(real *, integer *, struct lpc10_decoder_state *);
+     real ratio;
+     integer ipiti[16];
+-    extern /* Subroutine */ bsynz_(real *, integer *, 
++    extern /* Subroutine */ int bsynz_(real *, integer *,
+ 	    integer *, real *, real *, real *, real *, struct lpc10_decoder_state *), irc2pc_(real *, real *
+ 	    , integer *, real *, real *);
+     real g2pass;

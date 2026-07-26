@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 Artem Polishchuk <ego.cordatus@gmail.com> -->
+<component type="addon">
+  <id>awesome-vim-colorschemes</id>
+  <extends>gvim.desktop</extends>
+  <name>awesome-vim-colorschemes</name>
+  <summary>Collection of color schemes for Neo/vim, merged for quick use</summary>
+  <url type="homepage">https://github.com/rafi/awesome-vim-colorschemes</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Vim and MIT and CC-BY</project_license>
+  <updatecontact>ego.cordatus@gmail.com</updatecontact>
+</component>

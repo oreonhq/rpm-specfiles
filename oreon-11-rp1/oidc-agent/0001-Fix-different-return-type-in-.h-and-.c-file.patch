@@ -1,0 +1,35 @@
+From 821e638548d9cb5156a0b18c54a227d35d4974a3 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 15 Dec 2025 17:02:01 +0100
+Subject: [PATCH 1/2] Fix different return type in .h and .c file
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+src/ipc/ipc.c:176:14: warning: conflicting types for ‘ipc_connect’ due to enum/integer mismatch; have ‘oidc_error_t(struct connection)’ {aka ‘enum _oidc_error(struct connection)’} [-Wenum-int-mismatch]
+  176 | oidc_error_t ipc_connect(struct connection con) {
+      |              ^~~~~~~~~~~
+In file included from src/ipc/ipc.c:2:
+src/ipc/ipc.h:24:5: note: previous declaration of ‘ipc_connect’ with type ‘int(struct connection)’
+   24 | int ipc_connect(struct connection con);
+      |     ^~~~~~~~~~~
+---
+ src/ipc/ipc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/ipc/ipc.h b/src/ipc/ipc.h
+index 1c4af070..c6fa7cfc 100644
+--- a/src/ipc/ipc.h
++++ b/src/ipc/ipc.h
+@@ -21,7 +21,7 @@ oidc_error_t initConnectionWithPath(struct connection*, const char*);
+ #endif
+ oidc_error_t ipc_client_init(struct connection*, unsigned char);
+ 
+-int ipc_connect(struct connection con);
++oidc_error_t ipc_connect(struct connection con);
+ 
+ char* ipc_read(const SOCKET _sock);
+ #ifndef MINGW
+-- 
+2.52.0
+

@@ -1,0 +1,11 @@
+--- bbdb/lisp/bbdb-mua.el~	2020-10-13 13:46:31.000000000 +0200
++++ bbdb/lisp/bbdb-mua.el	2020-10-13 14:20:18.000000000 +0200
+@@ -66,7 +66,7 @@
+   '((vm vm-mode vm-virtual-mode vm-summary-mode vm-presentation-mode)
+     (gnus gnus-summary-mode gnus-article-mode gnus-tree-mode)
+     (rmail rmail-mode rmail-summary-mode)
+-    (mh mhe-mode mhe-summary-mode mh-folder-mode)
++    (mh mhe-mode mhe-summary-mode mh-folder-mode mh-show-mode)
+     (mu4e mu4e-view-mode)  ; Tackle `mu4e-headers-mode' later
+     (wl wl-summary-mode wl-draft-mode mime-view-mode)
+     (message message-mode mu4e-compose-mode notmuch-message-mode)

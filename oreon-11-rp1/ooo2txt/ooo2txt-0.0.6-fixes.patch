@@ -1,0 +1,153 @@
+diff -up ooo2txt-0.0.6/ooo2txt.006.pl.fixes ooo2txt-0.0.6/ooo2txt.006.pl
+--- ooo2txt-0.0.6/ooo2txt.006.pl.fixes	2007-12-27 17:27:43.000000000 +0100
++++ ooo2txt-0.0.6/ooo2txt.006.pl	2007-12-27 17:35:59.000000000 +0100
+@@ -1,3 +1,4 @@
++#! /usr/bin/perl -w
+ # -----------------------------------------------------------------
+ # Autor          : F. Labbe
+ # privat         : fred@frederic-labbe.com
+@@ -26,29 +27,25 @@ my $ooo2txt_version = "0.0.6";
+ # XML::Twig 
+ # -----------------------------------------------------------------
+ 
++use strict;
+ use Getopt::Std;
+ use XML::Twig;
+ use Archive::Zip qw(:ERROR_CODES);
+ use File::Temp qw/ tempfile/;
+ 
++my $usage_error = "=>  ooo2txt $ooo2txt_version
++=>  usage (source) : perl ooo2txt [-f all] ooo_file
++=>  usage (binary) :      ooo2txt [-f all] ooo_file
++
++=>  see http://ooo2txt.fr.st/
++";
++
+ # test si un parametre saisie
+ if (@ARGV < 1)
+ {
+-	die <<EOF
+-=>  ooo2txt $ooo2txt_version
+-=>  usage (source) : perl ooo2txt [-f all] ooo_file 
+-=>  usage (binary) :      ooo2txt [-f all] ooo_file 
+-
+-=>  see http://ooo2txt.fr.st/
+-EOF
++	die $usage_error;
+ }
+ 
+-
+-
+-
+-
+-
+-
+ my $USAGE= "USAGE: $0 [-f all] ooo_file 
+ see http://ooo2txt.fr.st/";
+ 
+@@ -59,6 +56,7 @@ my %opt;
+ getopts('nvhe:f:', \%opt);
+ die "$0 version $ooo2txt_version\n" if( $opt{v});
+ die $USAGE, "\n" if( $opt{h});
++my $FIELD_NAME = '';
+ $FIELD_NAME=$opt{f} if( $opt{f});
+ 
+ my $zip  = Archive::Zip->new();
+@@ -66,8 +64,16 @@ my $zip  = Archive::Zip->new();
+ #nom du fichier OOo
+ my $zip_name = shift(@ARGV);
+ 
++if (@ARGV)
++{
++	print STDERR "Warning: ignored args @ARGV\n";
++}
++
++my $conv;
++my $state={}; # various state information used during parsing;
++
+ # test si fichier existe
+-if (open(CONTROL, $zip_name))
++if (-r $zip_name)
+ {
+         my $status = $zip->read( $zip_name );
+         die "Read of $zip_name failed\n" 
+@@ -77,17 +83,17 @@ if (open(CONTROL, $zip_name))
+ 	my $file = $zip->memberNamed($OOO_XML_CONTENT) or  die "Can't access data file $OOO_XML_CONTENT in zip.\n";
+ 
+ 	my $xml  = tempfile();
+-	my $status= $file->extractToFileHandle($xml)  and die "Extracting $OOO_XML_CONTENT from $zip_name failed\n";
++	my $extract_status= $file->extractToFileHandle($xml)  and die "Extracting $OOO_XML_CONTENT from $zip_name failed\n";
+ 	seek( $xml, 0, 0);
+ 
+ 
+ 	my %option;
+ 	$option{output_encoding}= $opt{e} if( $opt{e});
+ 
+-	my $state={}; # various state information used during parsing;
+ 
+-	my $conv= $opt{e} ? XML::Twig::encoding_filter( $opt{e}) : sub { return @_; };
++	#$conv= $opt{e} ? XML::Twig::encoding_filter( $opt{e}) : sub { return @_; };
+ 
++	my $t;
+ 	# test
+ 	# EXTRACT FIELD_NAME ?
+ 	if (length($FIELD_NAME) > 0)
+@@ -115,27 +121,29 @@ if (open(CONTROL, $zip_name))
+ 	                       twig_roots => {  
+ 					     'text:h' => \&h,
+ 	                                     'text:p' => sub { print $conv->( $_->text), "\n"; },
++	                                     #'text:p' => sub { print $_->text, "\n"; },
+ 	                                     },
+         	             );
+ 	}
++	if( $opt{e})
++	{
++#		$t->set_output_encoding($opt{e});
++		$conv = $t->output_filter;
++	}
++	else
++	{
++		$conv = sub { return @_; };
++	}
+ 
+-
+-
+-	# Affichage du texte
++	# Affichage du texte	
+ 	$t->parse( $xml);  
+ }
+ else
+ {
+-print ("
++print "
+ File $zip_name not found.
+ 
+-=>  ooo2txt v$ooo2txt_version
+-=>  usage (source) : perl ooo2txt [-f all] ooo_file 
+-=>  usage (binary) :      ooo2txt [-f all] ooo_file 
+-
+-=>  see http://ooo2txt.fr.st/
+-");
+-
++$usage_error";
+ }
+ 
+ 
+@@ -144,6 +152,7 @@ sub h
+     my $text= $h->text;
+     if( $opt{n})
+       { my $text_level= $h->att( "text:level");
++        if (! $text_level) { $text_level= $h->att( "text:outline-level");}
+         if( $text_level)
+           { print "\n";
+ 	    my $number= current_number( $text_level, $state);
+@@ -157,7 +166,8 @@ sub current_number
+   { my( $text_level, $state)= @_;
+     $state->{text_numbering}||= [];
+     my $nb= $state->{text_numbering};
+-    foreach ( $text_level..@$nb) { pop @$nb; }
++    foreach ( $text_level+1..@$nb) { pop @$nb; }
+     $nb->[$text_level-1]++;
++    foreach (0..@$nb-1) { $nb->[$_] = 0 if (!defined($nb->[$_])) };
+     return join( '.', @$nb) . " "; 
+   }

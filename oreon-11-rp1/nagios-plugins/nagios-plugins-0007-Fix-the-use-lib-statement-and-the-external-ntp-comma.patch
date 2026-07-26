@@ -1,0 +1,13 @@
+diff -up ./plugins-scripts/utils.pm.in.ext_ntp_cmds ./plugins-scripts/utils.pm.in
+--- ./plugins-scripts/utils.pm.in.ext_ntp_cmds	2017-01-16 12:24:03.000000000 -0500
++++ ./plugins-scripts/utils.pm.in	2017-07-12 15:31:06.154120875 -0400
+@@ -23,6 +23,9 @@ $PATH_TO_LMSTAT  = "@PATH_TO_LMSTAT@" ;
+ $PATH_TO_SMBCLIENT = "@PATH_TO_SMBCLIENT@" ;
+ $PATH_TO_MAILQ   = "@PATH_TO_MAILQ@";
+ $PATH_TO_QMAIL_QSTAT = "@PATH_TO_QMAIL_QSTAT@";
++# Hardcoded values (autotools patch will be provided to the uptream project)
++$PATH_TO_NTPDATE = "/usr/sbin/ntpdate";
++$PATH_TO_NTPQ =  "/usr/sbin/ntpq";
+ 
+ ## common variables
+ $TIMEOUT = 15;

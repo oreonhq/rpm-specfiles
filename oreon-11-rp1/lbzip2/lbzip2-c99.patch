@@ -1,0 +1,25 @@
+Define GNULIB_XALLOC_DIE to obtain a declaration of xalloc_die in
+gnulib's xmalloc.c.  This is required to avoid an implicit function
+declaration and a C99 compatibility issue.
+
+Bruno Haible proposed this approach here:
+
+  Re: xmalloc calling undeclared xalloc_die function
+  <https://lists.gnu.org/archive/html/bug-gnulib/2022-12/msg00038.html>
+
+Submitted upstream: <https://github.com/kjn/lbzip2/pull/33>
+
+diff --git a/configure.ac b/configure.ac
+index 65731037788731f2..58f68fd861b9b86b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -31,6 +31,9 @@ AC_PROG_LN_S
+ AC_PROG_RANLIB
+ AC_PROG_CC_C89
+ 
++AC_DEFINE(GNULIB_XALLOC_DIE, 1,
++  [This package is providing its own definition of the xalloc_die function.])
++
+ gl_ASSERT_NO_GNULIB_TESTS
+ gl_ASSERT_NO_GNULIB_POSIXCHECK
+ gl_EARLY

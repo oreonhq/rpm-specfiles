@@ -1,0 +1,160 @@
+From a763fbbdfd6486e372965b4009eb3fe5db346718 Mon Sep 17 00:00:00 2001
+From: Branch Vincent <branchevincent@gmail.com>
+Date: Sat, 27 Apr 2024 10:24:01 -0700
+Subject: [PATCH 1/3] replace distutils for python 3.12
+
+---
+ doc/conf.py                        | 5 +----
+ fail2ban/server/filterpyinotify.py | 3 +--
+ fail2ban/server/filtersystemd.py   | 3 +--
+ 3 files changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/doc/conf.py b/doc/conf.py
+index 20845a5a0e..48d27f7062 100644
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -47,12 +47,9 @@
+ #
+ 
+ from fail2ban.version import version as fail2ban_version
+-from distutils.version import LooseVersion
+-
+-fail2ban_loose_version = LooseVersion(fail2ban_version)
+ 
+ # The short X.Y version.
+-version = ".".join(str(_) for _ in fail2ban_loose_version.version[:2])
++version = ".".join(str(_) for _ in fail2ban_version.split(".")[:2])
+ # The full version, including alpha/beta/rc tags.
+ release = fail2ban_version
+ 
+diff --git a/fail2ban/server/filterpyinotify.py b/fail2ban/server/filterpyinotify.py
+index 81bc7de393..c6972ced3f 100644
+--- a/fail2ban/server/filterpyinotify.py
++++ b/fail2ban/server/filterpyinotify.py
+@@ -24,7 +24,6 @@
+ __license__ = "GPL"
+ 
+ import logging
+-from distutils.version import LooseVersion
+ import os
+ from os.path import dirname, sep as pathsep
+ 
+@@ -38,7 +37,7 @@
+ 
+ 
+ if not hasattr(pyinotify, '__version__') \
+-  or LooseVersion(pyinotify.__version__) < '0.8.3': # pragma: no cover
++  or pyinotify.__version__.split(".") < '0.8.3'.split("."): # pragma: no cover
+   raise ImportError("Fail2Ban requires pyinotify >= 0.8.3")
+ 
+ # Verify that pyinotify is functional on this system
+diff --git a/fail2ban/server/filtersystemd.py b/fail2ban/server/filtersystemd.py
+index 5aea9fdadc..2d4f862b97 100644
+--- a/fail2ban/server/filtersystemd.py
++++ b/fail2ban/server/filtersystemd.py
+@@ -24,10 +24,9 @@
+ 
+ import os
+ import time
+-from distutils.version import LooseVersion
+ 
+ from systemd import journal
+-if LooseVersion(getattr(journal, '__version__', "0")) < '204':
++if getattr(journal, "__version__", "0").split(".") < "204".split("."):
+ 	raise ImportError("Fail2Ban requires systemd >= 204")
+ 
+ from .failmanager import FailManagerEmpty
+
+From ed20a9a5b9039319dd8913dfecf640e6eafee28b Mon Sep 17 00:00:00 2001
+From: sebres <info@sebres.de>
+Date: Tue, 7 May 2024 12:51:14 +0200
+Subject: [PATCH 2/3] there is no systemd < 204 and pyinotify < 0.8.3 for
+ supported python3 versions anymore
+
+---
+ fail2ban/server/filterpyinotify.py | 4 ----
+ fail2ban/server/filtersystemd.py   | 2 --
+ 2 files changed, 6 deletions(-)
+
+diff --git a/fail2ban/server/filterpyinotify.py b/fail2ban/server/filterpyinotify.py
+index c6972ced3f..f2f31e6fb5 100644
+--- a/fail2ban/server/filterpyinotify.py
++++ b/fail2ban/server/filterpyinotify.py
+@@ -36,10 +36,6 @@
+ from ..helpers import getLogger
+ 
+ 
+-if not hasattr(pyinotify, '__version__') \
+-  or pyinotify.__version__.split(".") < '0.8.3'.split("."): # pragma: no cover
+-  raise ImportError("Fail2Ban requires pyinotify >= 0.8.3")
+-
+ # Verify that pyinotify is functional on this system
+ # Even though imports -- might be dysfunctional, e.g. as on kfreebsd
+ try:
+diff --git a/fail2ban/server/filtersystemd.py b/fail2ban/server/filtersystemd.py
+index 2d4f862b97..abd66e1f76 100644
+--- a/fail2ban/server/filtersystemd.py
++++ b/fail2ban/server/filtersystemd.py
+@@ -26,8 +26,6 @@
+ import time
+ 
+ from systemd import journal
+-if getattr(journal, "__version__", "0").split(".") < "204".split("."):
+-	raise ImportError("Fail2Ban requires systemd >= 204")
+ 
+ from .failmanager import FailManagerEmpty
+ from .filter import JournalFilter, Filter
+
+From 0185e1c7d5e6534ab212462dd2aeab6f89e2fb50 Mon Sep 17 00:00:00 2001
+From: sebres <info@sebres.de>
+Date: Tue, 7 May 2024 13:06:50 +0200
+Subject: [PATCH 3/3] setup.py: no distutils anymore
+
+---
+ setup.py | 25 ++++++-------------------
+ 1 file changed, 6 insertions(+), 19 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 9f7bd8fb59..ee9ea4df82 100755
+--- a/setup.py
++++ b/setup.py
+@@ -24,23 +24,10 @@
+ 
+ import platform
+ 
+-try:
+-	import setuptools
+-	from setuptools import setup
+-	from setuptools.command.install import install
+-	from setuptools.command.install_scripts import install_scripts
+-	from setuptools.command.build_py import build_py
+-	build_scripts = None
+-except ImportError:
+-	setuptools = None
+-	from distutils.core import setup
+-
+-# older versions
+-if setuptools is None:
+-	from distutils.command.build_py import build_py
+-	from distutils.command.build_scripts import build_scripts
+-	from distutils.command.install import install
+-	from distutils.command.install_scripts import install_scripts
++import setuptools
++from setuptools import setup
++from setuptools.command.install import install
++from setuptools.command.install_scripts import install_scripts
+ 
+ import os
+ from os.path import isfile, join, isdir, realpath
+@@ -207,9 +194,9 @@ def run(self):
+ 	url = "http://www.fail2ban.org",
+ 	license = "GPL",
+ 	platforms = "Posix",
+-	cmdclass = dict({'build_py': build_py, 'build_scripts': build_scripts} if build_scripts else {}, **{
++	cmdclass = {
+ 		'install_scripts': install_scripts_f2b, 'install': install_command_f2b
+-	}),
++	},
+ 	scripts = [
+ 		'bin/fail2ban-client',
+ 		'bin/fail2ban-server',

@@ -1,0 +1,11 @@
+diff -up ./docs/en/rst/conf.py.orig ./docs/en/rst/conf.py
+--- ./docs/en/rst/conf.py.orig	2023-04-17 12:51:46.689758866 +0200
++++ ./docs/en/rst/conf.py	2023-04-17 22:43:10.003583492 +0200
+@@ -391,5 +391,5 @@ if on_rtd:
+ else:
+     base_api_url = '../integrating/api/'
+ 
+-extlinks = {'bug': ('https://bugzilla.mozilla.org/show_bug.cgi?id=%s', 'bug  '),
+-            'api': (base_api_url + '%s', '')}
++extlinks = {'bug': ('https://bugzilla.mozilla.org/show_bug.cgi?id=%s', 'bug  %s'),
++            'api': (base_api_url + '%s', '%s')}

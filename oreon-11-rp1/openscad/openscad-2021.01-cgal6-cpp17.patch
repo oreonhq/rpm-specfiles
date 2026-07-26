@@ -1,0 +1,41 @@
+From 4cdb4d8cc418d4cdb15d2e91d705e2ecc7ec417b Mon Sep 17 00:00:00 2001
+From: Hans Loeblich <thehans@gmail.com>
+Date: Wed, 2 Nov 2022 13:14:11 -0500
+Subject: [PATCH] Update build to C++17
+
+---
+ CMakeLists.txt | 2 +-
+ c++std.pri     | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5455594..d3f3244 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -68,7 +68,7 @@ file(MAKE_DIRECTORY ${AUTOGEN_BUILD_DIR})
+ 
+ add_compile_options("$<$<CONFIG:DEBUG>:-DDEBUG>")
+ 
+-set(CMAKE_CXX_STANDARD 14)
++set(CMAKE_CXX_STANDARD 17)
+ add_definitions(-D_REENTRANT -DUNICODE -D_UNICODE)
+ # Stack size 8MB; github issue 116
+ add_definitions(-DSTACKSIZE=8388608)
+diff --git a/c++std.pri b/c++std.pri
+index 6d3744c..338dbf4 100644
+--- a/c++std.pri
++++ b/c++std.pri
+@@ -26,8 +26,8 @@ macx {
+ }
+ 
+ c++std {
+-  CONFIG += c++14 strict_c++
+-  message("Using C++14")
++  CONFIG += c++17 strict_c++
++  message("Using C++17")
+ 
+   *clang*: {
+       # 3rd party libraries will probably violate this for a long time
+-- 
+2.46.2
+

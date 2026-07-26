@@ -1,0 +1,62 @@
+diff --git a/lib/compare.hh b/lib/compare.hh
+index addb5da..3a5946d 100644
+--- a/lib/compare.hh
++++ b/lib/compare.hh
+@@ -19,7 +19,7 @@ namespace std {
+ template<>
+ struct less<xmlNsPtr>
+ {
+-    bool operator()(const xmlNsPtr &a, const xmlNsPtr &b)
++    bool operator()(const xmlNsPtr &a, const xmlNsPtr &b) const
+     {
+ 	return compareimpl::compare_ns(a, b) < 0;
+     }
+@@ -28,7 +28,7 @@ struct less<xmlNsPtr>
+ template<>
+ struct equal_to<xmlNsPtr>
+ {
+-    bool operator()(const xmlNsPtr &a, const xmlNsPtr &b)
++    bool operator()(const xmlNsPtr &a, const xmlNsPtr &b) const
+     {
+ 	return compareimpl::compare_ns(a, b) == 0;
+     }
+@@ -37,7 +37,7 @@ struct equal_to<xmlNsPtr>
+ template<>
+ struct less<xmlAttrPtr>
+ {
+-    bool operator()(const xmlAttrPtr &a, const xmlAttrPtr &b)
++    bool operator()(const xmlAttrPtr &a, const xmlAttrPtr &b) const
+     {
+ 	return compareimpl::compare_attr(a, b) < 0;
+     }
+@@ -46,7 +46,7 @@ struct less<xmlAttrPtr>
+ template<>
+ struct equal_to<xmlAttrPtr>
+ {
+-    bool operator()(const xmlAttrPtr &a, const xmlAttrPtr &b)
++    bool operator()(const xmlAttrPtr &a, const xmlAttrPtr &b) const
+     {
+ 	return compareimpl::compare_attr(a, b) == 0;
+     }
+diff --git a/lib/diff.hh b/lib/diff.hh
+index df79c6b..2db357f 100644
+--- a/lib/diff.hh
++++ b/lib/diff.hh
+@@ -13,7 +13,7 @@ namespace std {
+ template<>
+ struct less<xmlNodePtr>
+ {
+-    bool operator()(xmlNodePtr m, xmlNodePtr n)
++    bool operator()(xmlNodePtr m, xmlNodePtr n) const
+     {
+ 	return compare(m, n, true) < 0;
+     }
+@@ -22,7 +22,7 @@ struct less<xmlNodePtr>
+ template<>
+ struct equal_to<xmlNodePtr>
+ {
+-    bool operator()(xmlNodePtr m, xmlNodePtr n)
++    bool operator()(xmlNodePtr m, xmlNodePtr n) const
+     {
+ 	return compare(m, n, true) == 0;
+     }

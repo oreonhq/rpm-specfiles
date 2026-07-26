@@ -1,0 +1,205 @@
+From 1bb50b34cdf35749cd62f49c33b4913ee36edde9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wyatt=20O=CA=BCDay?= <wyatt@wyday.com>
+Date: Tue, 5 Sep 2023 06:21:22 -0700
+Subject: [PATCH 1/5] Fix config file to no longer depend on a sources.lst
+ file.
+
+---
+ filter/config | 21 +++------------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
+
+diff --git a/filter/config b/filter/config
+index 9c27fc7..3818314 100644
+--- a/filter/config
++++ b/filter/config
+@@ -63,32 +63,17 @@ END
+     exit 1
+ fi
+ 
+-BROTLI_LISTS_FILE="$brotli/../scripts/sources.lst"
+-
+-if [ -f "$BROTLI_LISTS_FILE" ]; then
+-
+-BROTLI_LISTS=`cat "$BROTLI_LISTS_FILE" | grep -v "#" | tr '\n' '#' | \
+-              sed 's/\\\\#//g' | tr -s ' ' '+' | tr -s '#' ' ' | \
+-              sed 's/+c/+$brotli/g' | sed 's/+=+/=/g'`
+-for ITEM in ${BROTLI_LISTS}; do
+-  VAR=`echo $ITEM | sed 's/=.*//'`
+-  VAL=`echo $ITEM | sed 's/.*=//' | tr '+' ' '`
+-  eval ${VAR}=\"$VAL\"
+-done
+-
+-else  # BROTLI_LISTS_FILE
+-
++BROTLI_OUTPUT_DIRECTORY="$brotli/../out"
+ BROTLI_ENC_H="$brotli/include/brotli/encode.h \
+               $brotli/include/brotli/port.h \
+               $brotli/include/brotli/types.h"
+ BROTLI_ENC_LIB="-lbrotlienc"
++BROTLI_ENC_LIB="-L$BROTLI_OUTPUT_DIRECTORY -lbrotlienc -lbrotlicommon"
+ 
+-fi
+ 
+ ngx_module_incs="$brotli/include"
+ ngx_module_deps="$BROTLI_COMMON_H $BROTLI_ENC_H"
+-ngx_module_srcs="$BROTLI_COMMON_C $BROTLI_ENC_C \
+-                 $BROTLI_MODULE_SRC_DIR/ngx_http_brotli_filter_module.c"
++ngx_module_srcs="$BROTLI_MODULE_SRC_DIR/ngx_http_brotli_filter_module.c"
+ ngx_module_libs="$BROTLI_ENC_LIB -lm"
+ ngx_module_order="$ngx_module_name \
+                   ngx_pagespeed \
+
+From 75ebd768e8c24133cc08f51d4614de29b81b2acb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wyatt=20O=CA=BCDay?= <wyatt@wyday.com>
+Date: Tue, 5 Sep 2023 06:27:43 -0700
+Subject: [PATCH 2/5] Fix readme to show how to build with latest brotli.
+
+Also make the build files real-life with optimizations (so everyone doesn't have to search for the best way to compile things).
+---
+ README.md | 30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
+
+diff --git a/README.md b/README.md
+index 80428e9..d6592a8 100644
+--- a/README.md
++++ b/README.md
+@@ -11,7 +11,6 @@ ngx_brotli is a set of two nginx modules:
+ - ngx_brotli filter module - used to compress responses on-the-fly,
+ - ngx_brotli static module - used to serve pre-compressed files.
+ 
+-[![TravisCI Build Status](https://travis-ci.org/google/ngx_brotli.svg?branch=master)](https://travis-ci.org/google/ngx_brotli)
+ 
+ ## Table of Contents
+ 
+@@ -37,6 +36,29 @@ Both Brotli library and nginx module are under active development.
+ 
+ ## Installation
+ 
++### Statically compiled
++
++Chechout the latest `ngx_brotli` and build the dependencies
++
++```
++git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
++cd ngx_brotli/deps/brotli
++mkdir out && cd out
++cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections" -DCMAKE_CXX_FLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections" -DCMAKE_INSTALL_PREFIX=./installed ..
++cmake --build . --config Release --target brotlienc
++cd ../../../..
++```
++
++
++    $ cd nginx-1.x.x
++    $ export CFLAGS="-m64 -march=native -mtune=native -Ofast -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
++    $ export LDFLAGS="-m64 -Wl,-s -Wl,-Bsymbolic -Wl,--gc-sections"
++    $ ./configure --add-module=/path/to/ngx_brotli
++    $ make && make install
++  
++This will compile the module directly into Nginx.
++
++
+ ### Dynamically loaded
+ 
+     $ cd nginx-1.x.x
+@@ -51,13 +73,7 @@ load_module modules/ngx_http_brotli_filter_module.so;
+ load_module modules/ngx_http_brotli_static_module.so;
+ ```
+ 
+-### Statically compiled
+ 
+-    $ cd nginx-1.x.x
+-    $ ./configure --add-module=/path/to/ngx_brotli
+-    $ make && make install
+-  
+-This will compile the module directly into Nginx.
+ 
+ ## Configuration directives
+ 
+
+From afb2e8b47437aad8756a2c05faa1cc20f1bce31a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wyatt=20O=CA=BCDay?= <wyatt@wyday.com>
+Date: Tue, 5 Sep 2023 07:15:52 -0700
+Subject: [PATCH 3/5] Fix typo
+
+---
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index d6592a8..a618b18 100644
+--- a/README.md
++++ b/README.md
+@@ -38,7 +38,7 @@ Both Brotli library and nginx module are under active development.
+ 
+ ### Statically compiled
+ 
+-Chechout the latest `ngx_brotli` and build the dependencies
++Checkout the latest `ngx_brotli` and build the dependencies:
+ 
+ ```
+ git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
+
+From e4ce26791e10745f96e197cdbb7fccc17cdd35f3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wyatt=20O=CA=BCDay?= <wyatt@wyday.com>
+Date: Tue, 5 Sep 2023 07:17:33 -0700
+Subject: [PATCH 4/5] Cleanup config file to not depend on out-of-date libs
+
+---
+ filter/config | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/filter/config b/filter/config
+index 3818314..85a2971 100644
+--- a/filter/config
++++ b/filter/config
+@@ -43,12 +43,6 @@ ngx_module_type=HTTP_FILTER
+ ngx_module_name=ngx_http_brotli_filter_module
+ 
+ brotli="$ngx_addon_dir/deps/brotli/c"
+-if [ ! -f "$brotli/include/brotli/encode.h" ]; then
+-  brotli="/usr/local"
+-fi
+-if [ ! -f "$brotli/include/brotli/encode.h" ]; then
+-  brotli="/usr"
+-fi
+ if [ ! -f "$brotli/include/brotli/encode.h" ]; then
+ cat << END
+ 
+@@ -67,7 +61,6 @@ BROTLI_OUTPUT_DIRECTORY="$brotli/../out"
+ BROTLI_ENC_H="$brotli/include/brotli/encode.h \
+               $brotli/include/brotli/port.h \
+               $brotli/include/brotli/types.h"
+-BROTLI_ENC_LIB="-lbrotlienc"
+ BROTLI_ENC_LIB="-L$BROTLI_OUTPUT_DIRECTORY -lbrotlienc -lbrotlicommon"
+ 
+ 
+
+From af20dd7036bec01c3ad0ae92918f15bd239c393d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wyatt=20O=CA=BCDay?= <wyatt@wyday.com>
+Date: Tue, 5 Sep 2023 10:35:45 -0700
+Subject: [PATCH 5/5] Remove unused variables.
+
+---
+ filter/config | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/filter/config b/filter/config
+index 85a2971..5f2eb39 100644
+--- a/filter/config
++++ b/filter/config
+@@ -61,13 +61,12 @@ BROTLI_OUTPUT_DIRECTORY="$brotli/../out"
+ BROTLI_ENC_H="$brotli/include/brotli/encode.h \
+               $brotli/include/brotli/port.h \
+               $brotli/include/brotli/types.h"
+-BROTLI_ENC_LIB="-L$BROTLI_OUTPUT_DIRECTORY -lbrotlienc -lbrotlicommon"
+ 
+ 
+ ngx_module_incs="$brotli/include"
+-ngx_module_deps="$BROTLI_COMMON_H $BROTLI_ENC_H"
++ngx_module_deps="$BROTLI_ENC_H"
+ ngx_module_srcs="$BROTLI_MODULE_SRC_DIR/ngx_http_brotli_filter_module.c"
+-ngx_module_libs="$BROTLI_ENC_LIB -lm"
++ngx_module_libs="-L$BROTLI_OUTPUT_DIRECTORY -lbrotlienc -lbrotlicommon -lm"
+ ngx_module_order="$ngx_module_name \
+                   ngx_pagespeed \
+                   ngx_http_postpone_filter_module \

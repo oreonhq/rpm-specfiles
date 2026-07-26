@@ -1,0 +1,25 @@
+diff --git a/cpanspec b/cpanspec
+index a15765a..0af4e85 100755
+--- a/cpanspec
++++ b/cpanspec
+@@ -490,11 +490,17 @@ sub check_rpm($) {
+ sub check_repo($) {
+     my $dep=shift;
+ 
+-    my $repoquery="/usr/bin/repoquery";
+-    return undef if (!-x $repoquery);
++    my ($repoquery, $repoqueryopts);
++    if (-x ($repoquery = '/usr/bin/dnf')) {
++        $repoqueryopts = "repoquery --whatprovides '${dep}'"
++    } elsif (-x ($repoquery = '/usr/bin/repoquery')) {
++        $repoqueryopts = "--whatprovides '${dep}'"
++    } else {
++        return undef
++    }
+ 
+     verbose("Running $repoquery to check for $dep.  This may take a while...");
+-    my @out=`$repoquery --whatprovides "$dep"`;
++    my @out=`$repoquery $repoqueryopts 2>/dev/null`;
+ 
+     if ($? != 0) {
+         #warn "backtick (repoquery) failed with return value $?";

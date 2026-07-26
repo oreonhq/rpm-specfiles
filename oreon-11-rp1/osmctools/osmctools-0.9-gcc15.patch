@@ -1,0 +1,56 @@
+diff -durN osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3.orig/src/osmconvert.c osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3/src/osmconvert.c
+--- osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3.orig/src/osmconvert.c	2018-05-30 10:34:51.000000000 +0200
++++ osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3/src/osmconvert.c	2025-02-14 18:54:19.703761356 +0100
+@@ -464,6 +464,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <stdbool.h>
+ #include <locale.h>
+ #include <time.h>
+ #include <ctype.h>
+@@ -471,7 +472,6 @@
+ #include <fcntl.h>
+ #include <signal.h>
+ 
+-typedef enum {false= 0,true= 1} bool;
+ typedef uint8_t byte;
+ typedef unsigned int uint;
+ #define isdig(x) isdigit((unsigned char)(x))
+diff -durN osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3.orig/src/osmfilter.c osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3/src/osmfilter.c
+--- osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3.orig/src/osmfilter.c	2018-05-30 10:34:51.000000000 +0200
++++ osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3/src/osmfilter.c	2025-02-14 18:54:47.697487636 +0100
+@@ -377,13 +377,13 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <stdbool.h>
+ #include <time.h>
+ #include <ctype.h>
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <signal.h>
+ 
+-typedef enum {false= 0,true= 1} bool;
+ typedef uint8_t byte;
+ typedef unsigned int uint;
+ #define isdig(x) isdigit((unsigned char)(x))
+diff -durN osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3.orig/src/osmupdate.c osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3/src/osmupdate.c
+--- osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3.orig/src/osmupdate.c	2018-05-30 10:34:51.000000000 +0200
++++ osmctools-0.9-f341f5f237737594c1b024338f0a2fc04fabdff3/src/osmupdate.c	2025-02-14 18:55:08.229286877 +0100
+@@ -172,6 +172,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <stdbool.h>
+ #include <errno.h>
+ #include <time.h>
+ #include <ctype.h>
+@@ -180,7 +181,6 @@
+ #include <signal.h>
+ #include <sys/stat.h>
+ 
+-typedef enum {false= 0,true= 1} bool;
+ typedef uint8_t byte;
+ typedef unsigned int uint;
+ #define isdig(x) isdigit((unsigned char)(x))

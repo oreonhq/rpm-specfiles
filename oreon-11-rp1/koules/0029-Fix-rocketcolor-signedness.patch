@@ -1,0 +1,53 @@
+From e799db116e5e692c4fb7d741f6e6737caff2bfca Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon, 9 Sep 2013 19:17:42 +0200
+Subject: [PATCH 29/41] Fix rocketcolor signedness
+
+---
+ os2dive/init.c | 2 +-
+ svgalib/init.c | 2 +-
+ xlib/init.c    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/os2dive/init.c b/os2dive/init.c
+index 34d8067..b5b0329 100644
+--- a/os2dive/init.c
++++ b/os2dive/init.c
+@@ -56,7 +56,7 @@ extern void     points ();
+ extern void     points1 ();
+ char            hole_data[HOLE_RADIUS * 2][HOLE_RADIUS * 2];
+ char            ehole_data[HOLE_RADIUS * 2][HOLE_RADIUS * 2];
+-extern char     rocketcolor[5];
++extern unsigned char rocketcolor[5];
+ extern void     setcustompalette (int, float);
+ extern void     starwars ();
+ extern void     game ();
+diff --git a/svgalib/init.c b/svgalib/init.c
+index 458324a..e9f6a59 100644
+--- a/svgalib/init.c
++++ b/svgalib/init.c
+@@ -51,7 +51,7 @@ extern void     points ();
+ extern void     points1 ();
+ char            hole_data[HOLE_RADIUS * 2][HOLE_RADIUS * 2];
+ char            ehole_data[HOLE_RADIUS * 2][HOLE_RADIUS * 2];
+-extern char     rocketcolor[5];
++extern unsigned char rocketcolor[5];
+ extern void     setcustompalette (int, float);
+ extern void     starwars ();
+ extern void     game ();
+diff --git a/xlib/init.c b/xlib/init.c
+index d9b3d91..2787965 100644
+--- a/xlib/init.c
++++ b/xlib/init.c
+@@ -38,7 +38,7 @@ extern char    *Font8x8;
+ extern void     fadein1 ();
+ extern void     points ();
+ extern void     points1 ();
+-extern char     rocketcolor[5];
++extern unsigned char rocketcolor[5];
+ extern void     setcustompalette (int, float);
+ extern void     starwars ();
+ extern void     game ();
+-- 
+2.5.0
+

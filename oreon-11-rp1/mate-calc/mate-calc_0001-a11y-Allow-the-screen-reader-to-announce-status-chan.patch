@@ -1,0 +1,33 @@
+From fe495df3ec39c155eacecbfbfbdd3d6ad45c46ec Mon Sep 17 00:00:00 2001
+From: Colomban Wendling <cwendling@hypra.fr>
+Date: Wed, 26 Jun 2024 12:00:34 +0200
+Subject: [PATCH 1/2] a11y: Allow the screen reader to announce status changes
+
+Make the equation status the description of the equation entry as
+well so the screen reader can notify the user when it changes while
+the entry has focus.
+
+Fixes #223.
+---
+ src/math-display.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/math-display.c b/src/math-display.c
+index b0f3e0e..6422247 100644
+--- a/src/math-display.c
++++ b/src/math-display.c
+@@ -302,7 +302,10 @@ key_press_cb(MathDisplay *display, GdkEventKey *event)
+ static void
+ status_changed_cb(MathEquation *equation, GParamSpec *spec, MathDisplay *display)
+ {
+-    gtk_text_buffer_set_text(display->priv->info_buffer, math_equation_get_status(equation), -1);
++    const gchar *status = math_equation_get_status(equation);
++
++    gtk_text_buffer_set_text(display->priv->info_buffer, status, -1);
++    atk_object_set_description(gtk_widget_get_accessible(display->priv->text_view), status);
+     if (math_equation_in_solve(equation) && !gtk_widget_get_visible(display->priv->spinner)) {
+         gtk_widget_show(display->priv->spinner);
+         gtk_spinner_start(GTK_SPINNER(display->priv->spinner));
+-- 
+2.48.1
+

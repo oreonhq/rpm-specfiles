@@ -1,0 +1,12 @@
+diff --git a/src/readers/NeurolucidaLexer.inc b/src/readers/NeurolucidaLexer.inc
+index 118ad214..b6d3ed35 100644
+--- a/src/readers/NeurolucidaLexer.inc
++++ b/src/readers/NeurolucidaLexer.inc
+@@ -149,7 +149,6 @@ public:
+         rules_.push("Splat[0-9]*", +Token::MARKER);
+         rules_.push("Flower[0-9]*", +Token::MARKER);
+         rules_.push("Circle[0-9]*", +Token::MARKER);
+-        rules_.push("Flower[0-9]*", +Token::MARKER);
+         rules_.push("TriStar[0-9]*", +Token::MARKER);
+         rules_.push("OpenStar[0-9]*", +Token::MARKER);
+         rules_.push("Asterisk[0-9]*", +Token::MARKER);

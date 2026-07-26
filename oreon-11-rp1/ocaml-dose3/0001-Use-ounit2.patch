@@ -1,0 +1,126 @@
+From ede121d5b1e22622585aae66d7020e9c9c2c0579 Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Mon, 26 Jun 2023 12:39:58 -0600
+Subject: [PATCH 1/4] Use ounit2
+
+---
+ dose3.opam                | 2 +-
+ dune-project              | 2 +-
+ src/algo/tests/dune       | 2 +-
+ src/deb/tests/dune        | 2 +-
+ src/extra/tests/dune      | 2 +-
+ src/npm/tests/dune        | 2 +-
+ src/opam2/tests/dune      | 2 +-
+ src/pef/tests/dune        | 2 +-
+ src/versioning/tests/dune | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/dose3.opam b/dose3.opam
+index 061944b..33c4f8a 100644
+--- a/dose3.opam
++++ b/dose3.opam
+@@ -49,7 +49,7 @@ depends: [
+   "ocamlgraph" {>= "2.0.0"}
+   "re" {>= "1.2.2"}
+   "stdlib-shims"
+-  "ounit" {with-test}
++  "ounit2" {with-test}
+   "conf-python-3" {with-test}
+   "conf-python3-yaml" {with-test}
+   "conf-dpkg" {with-test}
+diff --git a/dune-project b/dune-project
+index dd6558a..3c1c97a 100644
+--- a/dune-project
++++ b/dune-project
+@@ -41,7 +41,7 @@
+   (ocamlgraph (>= 2.0.0))
+   (re (>= 1.2.2))
+   stdlib-shims
+-  (ounit :with-test)
++  (ounit2 :with-test)
+   (conf-python-3 :with-test)
+   (conf-python3-yaml :with-test)
+   (conf-dpkg :with-test)
+diff --git a/src/algo/tests/dune b/src/algo/tests/dune
+index e42ab4d..de00d97 100644
+--- a/src/algo/tests/dune
++++ b/src/algo/tests/dune
+@@ -1,5 +1,5 @@
+ (executable
+  (name tests)
+- (libraries extlib dose3.common dose3.algo oUnit)
++ (libraries extlib dose3.common dose3.algo ounit2)
+  (modules tests)
+  (flags (:standard)))
+diff --git a/src/deb/tests/dune b/src/deb/tests/dune
+index cfb701c..7f960c0 100644
+--- a/src/deb/tests/dune
++++ b/src/deb/tests/dune
+@@ -1,5 +1,5 @@
+ (executable
+  (name tests)
+- (libraries extlib dose3.common dose3.algo dose3-extra.debian oUnit)
++ (libraries extlib dose3.common dose3.algo dose3-extra.debian ounit2)
+  (modules tests)
+  (flags (:standard)))
+diff --git a/src/extra/tests/dune b/src/extra/tests/dune
+index b216f2a..93ab265 100644
+--- a/src/extra/tests/dune
++++ b/src/extra/tests/dune
+@@ -1,5 +1,5 @@
+ (executable
+  (name tests)
+- (libraries extlib dose3-extra dose3.common dose3.algo oUnit)
++ (libraries extlib dose3-extra dose3.common dose3.algo ounit2)
+  (modules tests)
+  (flags (:standard)))
+diff --git a/src/npm/tests/dune b/src/npm/tests/dune
+index 3fc0c92..be9466b 100644
+--- a/src/npm/tests/dune
++++ b/src/npm/tests/dune
+@@ -1,6 +1,6 @@
+ (executable
+  (name tests)
+  (libraries extlib dose3.common dose3.algo dose3-extra.pef dose3-extra.npm
+-   oUnit)
++   ounit2)
+  (modules tests)
+  (flags (:standard)))
+diff --git a/src/opam2/tests/dune b/src/opam2/tests/dune
+index 96fb591..426a8f4 100644
+--- a/src/opam2/tests/dune
++++ b/src/opam2/tests/dune
+@@ -1,6 +1,6 @@
+ (executable
+  (name tests)
+  (libraries extlib dose3.common dose3.algo dose3.versioning dose3-extra.pef
+-   dose3-extra.opam2 oUnit)
++   dose3-extra.opam2 ounit2)
+  (modules tests)
+  (flags (:standard)))
+diff --git a/src/pef/tests/dune b/src/pef/tests/dune
+index d82a9df..ef0443a 100644
+--- a/src/pef/tests/dune
++++ b/src/pef/tests/dune
+@@ -1,6 +1,6 @@
+ (executable
+  (name tests)
+  (libraries extlib dose3.common dose3.algo dose3.versioning dose3-extra.pef
+-   oUnit)
++   ounit2)
+  (modules tests)
+  (flags (:standard)))
+diff --git a/src/versioning/tests/dune b/src/versioning/tests/dune
+index cc59e52..4fc29f6 100644
+--- a/src/versioning/tests/dune
++++ b/src/versioning/tests/dune
+@@ -1,5 +1,5 @@
+ (executable
+  (name tests)
+- (libraries extlib dose3.common dose3.algo dose3.versioning oUnit)
++ (libraries extlib dose3.common dose3.algo dose3.versioning ounit2)
+  (modules tests)
+  (flags (:standard)))
+-- 
+2.41.0
+

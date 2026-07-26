@@ -1,0 +1,10 @@
+--- nagelfar.tcl.orig	2022-07-10 09:09:48.978917294 +0200
++++ nagelfar.tcl	2022-07-10 09:10:18.710221909 +0200
+@@ -1,6 +1,4 @@
+-#!/bin/sh
+-# the next line restarts using tclsh \
+-exec tclsh "$0" "$@"
++#!/usr/bin/tclsh
+ 
+ #----------------------------------------------------------------------
+ #  Nagelfar, a syntax checker for Tcl.

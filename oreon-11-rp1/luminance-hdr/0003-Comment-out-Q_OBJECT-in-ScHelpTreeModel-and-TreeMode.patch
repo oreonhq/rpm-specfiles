@@ -1,0 +1,41 @@
+From 1563e1f129643b6165c48cfacc8629f500179831 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sun, 14 Nov 2021 08:22:06 -0500
+Subject: [PATCH 3/3] Comment out Q_OBJECT in ScHelpTreeModel and TreeModel
+
+Adapt to LuminanceHDR after copying updated versions of these files from
+Scribus.
+---
+ src/HelpBrowser/schelptreemodel.h | 2 +-
+ src/HelpBrowser/treemodel.h       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/HelpBrowser/schelptreemodel.h b/src/HelpBrowser/schelptreemodel.h
+index 78d3929c..558f01f1 100644
+--- a/src/HelpBrowser/schelptreemodel.h
++++ b/src/HelpBrowser/schelptreemodel.h
+@@ -53,7 +53,7 @@
+ 
+ class ScHelpTreeModel : public TreeModel
+ {
+-	Q_OBJECT
++	// Q_OBJECT
+ 
+ public:
+ 	ScHelpTreeModel(const QString &dataFile, const QString &col1name, const QString &col2name, QMap<QString, QString>* indexToBuild, QObject* parent = nullptr);
+diff --git a/src/HelpBrowser/treemodel.h b/src/HelpBrowser/treemodel.h
+index 2b03765e..a9180435 100644
+--- a/src/HelpBrowser/treemodel.h
++++ b/src/HelpBrowser/treemodel.h
+@@ -51,7 +51,7 @@
+ //! [0]
+ class TreeModel : public QAbstractItemModel
+ {
+-    Q_OBJECT
++    // Q_OBJECT
+ 
+ public:
+     TreeModel(const QString &data, QObject* parent = nullptr);
+-- 
+2.33.1
+

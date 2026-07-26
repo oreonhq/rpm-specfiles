@@ -1,0 +1,113 @@
+From ae186449fb791c38a63e6f8cb28c0e4b6d5af654 Mon Sep 17 00:00:00 2001
+From: Alan Griffiths <alan@octopull.co.uk>
+Date: Wed, 7 Jan 2026 12:12:07 +0000
+Subject: [PATCH 1/2] Missing headers
+
+---
+ include/common/mir/dispatch/dispatchable.h   | 1 +
+ include/wayland/mir/wayland/client.h         | 1 +
+ src/include/server/mir/input/seat_observer.h | 1 +
+ src/include/server/mir/scene/data_exchange.h | 1 +
+ src/miral/config_file.cpp                    | 1 +
+ src/miral/input_configuration.cpp            | 1 +
+ src/miral/live_config_ini_file.cpp           | 1 +
+ src/miroil/gesture_ender.cpp                 | 2 ++
+ 8 files changed, 9 insertions(+)
+
+diff --git a/include/common/mir/dispatch/dispatchable.h b/include/common/mir/dispatch/dispatchable.h
+index 419c83a510d..18a1da2ff51 100644
+--- a/include/common/mir/dispatch/dispatchable.h
++++ b/include/common/mir/dispatch/dispatchable.h
+@@ -18,6 +18,7 @@
+ #define MIR_DISPATCH_DISPATCHABLE_H_
+ 
+ #include <mir/fd.h>
++#include <cstdint>
+ 
+ namespace mir
+ {
+diff --git a/include/wayland/mir/wayland/client.h b/include/wayland/mir/wayland/client.h
+index 4b3cd55ee5f..679024e4dd0 100644
+--- a/include/wayland/mir/wayland/client.h
++++ b/include/wayland/mir/wayland/client.h
+@@ -19,6 +19,7 @@
+ 
+ struct wl_client;
+ 
++#include <cstdint>
+ #include <memory>
+ #include <optional>
+ 
+diff --git a/src/include/server/mir/input/seat_observer.h b/src/include/server/mir/input/seat_observer.h
+index 74a73a462aa..19d0bd46b70 100644
+--- a/src/include/server/mir/input/seat_observer.h
++++ b/src/include/server/mir/input/seat_observer.h
+@@ -18,6 +18,7 @@
+ #ifndef MIR_INPUT_SEAT_OBSERVER_H_
+ #define MIR_INPUT_SEAT_OBSERVER_H_
+ 
++#include <cstdint>
+ #include <string>
+ #include <vector>
+ #include <memory>
+diff --git a/src/include/server/mir/scene/data_exchange.h b/src/include/server/mir/scene/data_exchange.h
+index 7b3b70699c5..82d36aae534 100644
+--- a/src/include/server/mir/scene/data_exchange.h
++++ b/src/include/server/mir/scene/data_exchange.h
+@@ -19,6 +19,7 @@
+ 
+ #include <mir/fd.h>
+ 
++#include <cstdint>
+ #include <optional>
+ #include <string>
+ #include <vector>
+diff --git a/src/miral/config_file.cpp b/src/miral/config_file.cpp
+index 8e8240a81be..554b22a421f 100644
+--- a/src/miral/config_file.cpp
++++ b/src/miral/config_file.cpp
+@@ -23,6 +23,7 @@
+ 
+ #include <boost/throw_exception.hpp>
+ 
++#include <limits.h>
+ #include <sys/inotify.h>
+ #include <unistd.h>
+ 
+diff --git a/src/miral/input_configuration.cpp b/src/miral/input_configuration.cpp
+index 8439d82572c..b4739f42c1f 100644
+--- a/src/miral/input_configuration.cpp
++++ b/src/miral/input_configuration.cpp
+@@ -27,6 +27,7 @@
+ #include <algorithm>
+ #include <format>
+ #include <memory>
++#include <mutex>
+ 
+ class miral::InputConfiguration::Mouse::Self : public MouseInputConfiguration
+ {
+diff --git a/src/miral/live_config_ini_file.cpp b/src/miral/live_config_ini_file.cpp
+index 5da9e23281a..9a3d0b16b3d 100644
+--- a/src/miral/live_config_ini_file.cpp
++++ b/src/miral/live_config_ini_file.cpp
+@@ -22,6 +22,7 @@
+ #include <format>
+ #include <list>
+ #include <map>
++#include <mutex>
+ 
+ namespace mlc = miral::live_config;
+ 
+diff --git a/src/miroil/gesture_ender.cpp b/src/miroil/gesture_ender.cpp
+index 2667fb3d3ab..b778d37766b 100644
+--- a/src/miroil/gesture_ender.cpp
++++ b/src/miroil/gesture_ender.cpp
+@@ -18,6 +18,8 @@
+ 
+ #include <mir/frontend/pointer_input_dispatcher.h>
+ 
++#include <mutex>
++
+ namespace
+ {
+ struct PointerGestureEnder : mir::frontend::PointerInputDispatcher

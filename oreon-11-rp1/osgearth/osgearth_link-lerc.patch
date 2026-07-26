@@ -1,0 +1,9 @@
+diff -rupN --no-dereference osgearth-osgearth-3.7.2/src/osgEarthDrivers/lerc/CMakeLists.txt osgearth-osgearth-3.7.2-new/src/osgEarthDrivers/lerc/CMakeLists.txt
+--- osgearth-osgearth-3.7.2/src/osgEarthDrivers/lerc/CMakeLists.txt	2025-11-27 05:52:44.754022923 +0100
++++ osgearth-osgearth-3.7.2-new/src/osgEarthDrivers/lerc/CMakeLists.txt	2025-11-27 05:52:44.757624782 +0100
+@@ -5,3 +5,5 @@ add_osgearth_plugin(
+     SOURCES
+         ReaderWriterLERC.cpp
+     )
++
++target_link_libraries(osgdb_lerc PRIVATE Lerc)

@@ -1,0 +1,13 @@
+diff -ur k3guitune-1.01.orig/k3guitune/soundinput.h k3guitune-1.01/k3guitune/soundinput.h
+--- k3guitune-1.01.orig/k3guitune/soundinput.h	2005-08-10 19:42:59.000000000 +1000
++++ k3guitune-1.01/k3guitune/soundinput.h	2009-01-31 00:25:15.000000000 +1100
+@@ -41,7 +41,7 @@
+   */
+  class SoundInput {
+   public:
+-    static SoundInput *autodetect( const char *alsa_devicename, const char *dsp_devicename, int &blksize, int &sampfreq, double &sampfreq );
++    static SoundInput *autodetect( const char *alsa_devicename, const char *dsp_devicename, int &blksize, int &sampfreq, double &sampfreq_exact );
+     virtual ~SoundInput();
+     virtual int getData( short int *buf, int blksize ) = 0;
+  };
+Only in k3guitune-1.01/k3guitune: soundinput.h~

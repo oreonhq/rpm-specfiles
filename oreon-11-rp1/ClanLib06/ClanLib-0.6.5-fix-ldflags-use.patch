@@ -1,0 +1,12 @@
+diff -up ClanLib-0.6.5/Setup/Unix/Makefile.conf.in~ ClanLib-0.6.5/Setup/Unix/Makefile.conf.in
+--- ClanLib-0.6.5/Setup/Unix/Makefile.conf.in~	2022-03-06 22:17:42.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.conf.in	2022-03-06 22:18:42.170954773 +0100
+@@ -22,7 +22,7 @@ LINK_CORE     = @libs@
+ 
+ OBJF_NONDYN   = @objf_nondyn@
+ 
+-LINK_COMMAND  = @link_command@ @extra_libraries@
++LINK_COMMAND  = @link_command@ @LDFLAGS@ @extra_libraries@
+ 
+ CXX_COMMAND = @CXX@ @CXXFLAGS@ $(COMP_OPTIONS) -c 
+ 

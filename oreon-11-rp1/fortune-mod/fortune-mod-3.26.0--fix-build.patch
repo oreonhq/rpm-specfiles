@@ -1,0 +1,2235 @@
+diff --color -u -r -N fortune-mod-3.26.0/datfiles/rules-of-acquisition fortune-mod-3.26.0-new/datfiles/rules-of-acquisition
+--- fortune-mod-3.26.0/datfiles/rules-of-acquisition	1970-01-01 02:00:00.000000000 +0200
++++ fortune-mod-3.26.0-new/datfiles/rules-of-acquisition	2026-01-19 09:18:09.000000000 +0200
+@@ -0,0 +1,651 @@
++Ferengi Rule of Acquisition #0:
++What the Nagus wants, we acquire.
++-- Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #1:
++Once you have their money, you never give it back.
++-- The Nagus (DS9 episode)
++%
++Ferengi Rule of Acquisition #2:
++The best deal is the one that brings the most profit.
++-- The 34th Rule (DS9 novel)
++%
++Ferengi Rule of Acquisition #2:
++Money is everything.
++-- The Last Tree on Ferenginar: A Ferengi Fable From the Future (DS9 short
++story)
++%
++Ferengi Rule of Acquisition #3:
++Never spend more for an acquisition than you have to.
++-- The Maquis, Part II (DS9 episode)
++%
++Ferengi Rule of Acquisition #4:
++Sedition and treason are always profitable.
++-- Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #5:
++Always exaggerate your estimates.
++-- Cold Fusion (SCE novel)
++%
++Ferengi Rule of Acquisition #6:
++Never allow family to stand in the way of opportunity.
++-- The Nagus (DS9 episode)
++%
++Ferengi Rule of Acquisition #7:
++Keep your ears open.
++-- In the Hands of the Prophets (DS9 episode)
++%
++Ferengi Rule of Acquisition #8:
++Small print leads to large risk.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #9:
++Opportunity plus instinct equals profit.
++-- The Storyteller (DS9 episode)
++%
++Ferengi Rule of Acquisition #10:
++Greed is eternal.
++-- Prophet Motive (DS9 episode)
++%
++Ferengi Rule of Acquisition #13:
++Anything worth doing is worth doing for money.
++-- Legends of the Ferengi (DS9 novel)
++%
++Ferengi Rule of Acquisition #14:
++Sometimes the quickest way to find profits is to let them find you.
++-- Fortune of War (TTN novel)
++%
++Ferengi Rule of Acquisition #15:
++Dead men close no deals.
++-- Demons of Air and Darkness (DS9 novel)
++%
++Ferengi Rule of Acquisition #16:
++A deal is a deal - until a better one comes along.
++-- Melora (DS9 episode), The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #17:
++A contract is a contract is a contract - but only between Ferengi.
++-- Body Parts (DS9 episode)
++%
++Ferengi Rule of Acquisition #18:
++A Ferengi without profit is no Ferengi at all.
++-- Heart of Stone (DS9 episode), Ferengi Love Songs (DS9 episode)
++%
++Ferengi Rule of Acquisition #19:
++Satisfaction is not guaranteed.
++-- Legends of the Ferengi (DS9 novel), The Ferengi Rules of Acquisition (DS9
++reference book)
++%
++Ferengi Rule of Acquisition #20:
++He who dives under the table today lives to profit tomorrow.
++-- Ferenginar: Satisfaction is Not Guaranteed (DS9 novella)
++%
++Ferengi Rule of Acquisition #21:
++Never place friendship above profit.
++-- Rules of Acquisition (DS9 episode)
++%
++Ferengi Rule of Acquisition #22:
++A wise man can hear profit in the wind.
++-- Rules of Acquisition (DS9 episode), False Profits (VOY episode)
++%
++Ferengi Rule of Acquisition #23:
++Nothing is more important than your health - except for your money.
++-- Acquisition (ENT episode)
++%
++Ferengi Rule of Acquisition #25:
++You pay for it, it’s your idea.
++-- Ferenginar: Satisfaction is Not Guaranteed (DS9 novella)
++%
++Ferengi Rule of Acquisition #27:
++There's nothing more dangerous than an honest businessman.
++-- Legends of the Ferengi (DS9 novel)
++%
++Ferengi Rule of Acquisition #29:
++What's in it for me?
++-- Highest Score (DS9 novel)
++%
++Ferengi Rule of Acquisition #30:
++Confidentiality equals profit.
++-- The Badlands, Part IV (DS9 novel)
++%
++Ferengi Rule of Acquisition #31:
++Never make fun of a Ferengi's mother - insult something he cares about
++instead.
++-- The Siege (DS9 episode), Elite Force II (video game), The Ferengi Rules of
++Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #33:
++It never hurts to suck up to the boss.
++-- Rules of Acquisition (DS9 episode)
++%
++Ferengi Rule of Acquisition #34:
++War is good for business.
++-- Destiny (DS9 episode), The 34th Rule (DS9 novel)
++%
++Ferengi Rule of Acquisition #35:
++Peace is good for business.
++-- Destiny (DS9 episode), The 34th Rule (DS9 novel)
++%
++Ferengi Rule of Acquisition #37:
++The early investor reaps the most interest.
++-- Reservoir Ferengi (DS9 novella)
++%
++Ferengi Rule of Acquisition #39:
++Don't tell customers more than they need to know.
++-- Ascendance (DS9 novel)
++%
++Ferengi Rule of Acquisition #40:
++She can touch your lobes, but never your latinum.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #41:
++Profit is its own reward.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #43:
++Feed your greed, but not enough to choke it.
++-- The Buried Age (TNG novel)
++%
++Ferengi Rule of Acquisition #44:
++Never confuse wisdom with luck.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #45:
++Expand or die.
++-- Acquisition (ENT episode)
++%
++Ferengi Rule of Acquisition #47:
++Don't trust a man wearing a better suit than your own.
++-- Rivals (DS9 episode)
++%
++Ferengi Rule of Acquisition #48:
++The bigger the smile, the sharper the knife.
++-- Rules of Acquisition (DS9 episode)
++%
++Ferengi Rule of Acquisition #52:
++Never ask when you can take.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #53:
++Never trust anybody taller than you.
++-- Mission Gamma: Twilight (DS9 novel)
++%
++Ferengi Rule of Acquisition #54:
++Rate divided by time equals profit (also known as "The Velocity of Wealth").
++-- Typhon Pact: Raise the Dawn (DS9/TNG novel)
++%
++Ferengi Rule of Acquisition #55:
++Take joy from profit, and profit from joy.
++-- Worlds of Deep Space Nine: Bajor: Fragments and Omens (DS9 novel)
++%
++Ferengi Rule of Acquisition #57:
++Good customers are as rare as latinum - treasure them.
++-- Armageddon Game (DS9 episode)
++%
++Ferengi Rule of Acquisition #58:
++There is no substitute for success.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #59:
++Free advice is seldom cheap.
++-- Rules of Acquisition (DS9 episode)
++%
++Ferengi Rule of Acquisition #60:
++Keep your lies consistent.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #62:
++The riskier the road, the greater the profit.
++-- Rules of Acquisition (DS9 episode), Little Green Men (DS9 episode),
++Business As Usual (DS9 episode)
++%
++Ferengi Rule of Acquisition #63:
++Work is the best therapy - at least for your employees.
++-- Over a Torrent Sea (TTN novel)
++%
++Ferengi Rule of Acquisition #65:
++Win or lose, there's always Hupyrian beetle snuff.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #66:
++Someone's always got bigger ears.
++-- The Last Generation #3: What Happens Now (TNG comic)
++%
++Ferengi Rule of Acquisition #68:
++Risk doesn't always equal reward.
++-- Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #69:
++Ferengi are not responsible for the stupidity of other races.
++-- Balance of Power (TNG novel)
++%
++Ferengi Rule of Acquisition #74:
++Knowledge equals profit.
++-- Inside Man (VOY episode)
++%
++Ferengi Rule of Acquisition #75:
++Home is where the heart is - but the stars are made of latinum.
++-- Civil Defense (DS9 episode)
++%
++Ferengi Rule of Acquisition #76:
++Every once in a while, declare peace. It confuses the hell out of your
++enemies.
++-- The Homecoming (DS9 episode)
++%
++Ferengi Rule of Acquisition #77:
++If you break it, I'll charge you for it.
++-- Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #79:
++Beware of the Vulcan greed for knowledge.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #82:
++The flimsier the product, the higher the price.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #85:
++Never let the competition know what you're thinking.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #87:
++Learn the customer's weaknesses, so that you can better take advantage of him.
++-- Highest Score (DS9 novel)
++%
++Ferengi Rule of Acquisition #88:
++It ain't over till it’s over.
++-- Ferenginar: Satisfaction is Not Guaranteed (DS9 novella)
++%
++Ferengi Rule of Acquisition #88:
++Vengeance will cost you everything.
++-- The Poisoned Chalice (DS9 novel)
++%
++Ferengi Rule of Acquisition #89:
++Ask not what your profits can do for you, but what you can do for your
++profits.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #89:
++[It is] better to lose some profit and live than lose all profit and die.
++-- Strange New Worlds VI: Best Tools Available (DS9 short story)
++%
++Ferengi Rule of Acquisition #92:
++There are many paths to profit.
++-- Highest Score (DS9 novel)
++%
++Ferengi Rule of Acquisition #94:
++Females and finances don't mix.
++-- Ferengi Love Songs (DS9 episode), Profit and Lace (DS9 episode), The
++Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #95:
++Expand or die.
++-- False Profits (VOY episode)
++%
++Ferengi Rule of Acquisition #97:
++Enough is never enough.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #98:
++Every man has his price.
++-- In the Pale Moonlight (DS9 episode)
++%
++Ferengi Rule of Acquisition #98:
++If you can't take it with you, don't go.
++-- I, Q (DS9 novel)
++%
++Ferengi Rule of Acquisition #99:
++Trust is the biggest liability of all.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #100:
++When it's good for business, tell the truth.
++-- Ascendance (DS9 novel)
++%
++Ferengi Rule of Acquisition #101:
++Profit trumps emotion.
++-- The Long Mirage (DS9 novel)
++%
++Ferengi Rule of Acquisition #102:
++Nature decays, but latinum lasts forever.
++-- The Jem'Hadar (DS9 episode)
++%
++Ferengi Rule of Acquisition #103:
++Sleep can interfere with opportunity.
++-- Rules of Acquisition (DS9 episode)
++%
++Ferengi Rule of Acquisition #104:
++Faith moves mountains - of inventory.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #106:
++There is no honor in poverty.
++-- Sacraments of Fire (DS9 novel)
++%
++Ferengi Rule of Acquisition #108:
++Hope doesn't keep the lights on.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #109:
++Dignity and an empty sack is worth the sack.
++-- Rivals (DS9 episode)
++%
++Ferengi Rule of Acquisition #111:
++Treat people in your debt like family - exploit them.
++-- Past Tense, Part I (DS9 episode)
++%
++Ferengi Rule of Acquisition #112:
++Never have sex with the boss' sister.
++-- Playing God (DS9 episode)
++%
++Ferengi Rule of Acquisition #113:
++Always have sex with the boss.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #117:
++You can't free a fish from water.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #121:
++Everything is for sale, even friendship.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #122:
++Never sleep with the bosses sister.
++-- Playing God (DS9 episode)
++%
++Ferengi Rule of Acquisition #123:
++Even a blind man can recognize the glow of latinum.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #125:
++You can't make a deal if you're dead.
++-- The Siege of AR-558 (DS9 episode)
++%
++Ferengi Rule of Acquisition #135:
++Listen to secrets, but never repeat them.
++-- Ascendance (DS9 novel)
++%
++Ferengi Rule of Acquisition #139:
++Wives serve, brothers inherit.
++-- Necessary Evil (DS9 episode)
++%
++Ferengi Rule of Acquisition #141:
++Only fools pay retail.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #144:
++There's nothing wrong with charity - as long as it winds up in your pocket.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #147:
++People love the bartender.
++-- Fearful Symmetry (DS9 novel)
++%
++Ferengi Rule of Acquisition #151:
++Even when you're a customer, sell yourself.
++-- The Long Mirage (DS9 novel)
++%
++Ferengi Rule of Acquisition #153:
++Sell the sizzle, not the steak.
++-- Deep Space Mine (DS9 comic)
++%
++Ferengi Rule of Acquisition #162:
++Even in the worst of times, someone turns a profit.
++-- The Ferengi Rules of Acquisition (DS9 reference book), Harbinger (DS9
++video game)
++%
++Ferengi Rule of Acquisition #168:
++Whisper your way to success.
++-- Treachery, Faith, and the Great River (DS9 episode)
++%
++Ferengi Rule of Acquisition #177:
++Know your enemies, but do business with them always.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #181:
++Not even dishonesty can tarnish the shine of profit.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #183:
++When life hands you ungaberries, make detergent.
++-- Hollow Men (DS9 novel)
++%
++Ferengi Rule of Acquisition #184:
++A Ferengi waits to bid until his opponents have exhausted themselves.
++-- Balance of Power (TNG novel)
++%
++Ferengi Rule of Acquisition #188:
++Not even dishonesty can tarnish the shine of profit.
++-- Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #189:
++Let others keep their reputation. You keep their money.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #190:
++Hear all, trust nothing.
++-- Call to Arms (DS9 episode)
++%
++Ferengi Rule of Acquisition #192:
++Never cheat a Klingon - unless you're sure you can get away with it.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #193:
++Trouble comes in threes.
++-- Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #193:
++It's never too late to fire the staff.
++-- Cathedral (DS9 novel)
++%
++Ferengi Rule of Acquisition #194:
++It's always good business to know about new customers before they walk in
++your door.
++-- Whispers (DS9 episode)
++%
++Ferengi Rule of Acquisition #199:
++Location, location, location.
++-- The Soul Key (DS9 novel)
++%
++Ferengi Rule of Acquisition #200:
++A Ferengi chooses no side but his own.
++-- Ferenginar: Satisfaction is Not Guaranteed (DS9 novella)
++%
++Ferengi Rule of Acquisition #202:
++The justification for profit is profit.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #203:
++New customers are like razor-toothed gree worms. They can be succulent, but
++sometimes they bite back.
++-- Little Green Men (DS9 episode)
++%
++Ferengi Rule of Acquisition #208:
++Sometimes the only thing more dangerous than a question is an answer.
++-- Ferengi Love Songs (DS9 episode)
++%
++Ferengi Rule of Acquisition #211:
++Employees are the rungs on the ladder of success. Don't hesitate to step on
++them.
++-- Bar Association (DS9 episode)
++%
++Ferengi Rule of Acquisition #212:
++A good lie is easier to believe than the truth.
++-- Shattered (VOY episode), Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #214:
++Never begin a business negotiation on an empty stomach.
++-- The Maquis, Part I (DS9 episode)
++%
++Ferengi Rule of Acquisition #216:
++Never gamble with a telepath.
++-- The Laertian Gamble (DS9 novel)
++%
++Ferengi Rule of Acquisition #217:
++You can't free a fish from water.
++-- Past Tense, Part I (DS9 episode)
++%
++Ferengi Rule of Acquisition #218:
++Always know what you're buying.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #218:
++Sometimes what you get free costs entirely too much.
++-- Baby on Board (DS9 comic)
++%
++Ferengi Rule of Acquisition #219:
++Possession is eleven-tenths of the law.
++-- Balance of Power (TNG novel)
++%
++Ferengi Rule of Acquisition #223:
++Beware the man who doesn't take time for oo-mox.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #227:
++If that's what's written, then that's what's written.
++-- Favor the Bold (DS9 episode), Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #229:
++Latinum lasts longer than lust.
++-- Ferengi Love Songs (DS9 episode)
++%
++Ferengi Rule of Acquisition #235:
++Duck - death is tall.
++-- Mission Gamma: Twilight (DS9 novel)
++%
++Ferengi Rule of Acquisition #236:
++You can't buy fate.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #239:
++Never be afraid to mislabel a product.
++-- Body Parts (DS9 episode)
++%
++Ferengi Rule of Acquisition #240:
++Time, like latinum, is a highly limited commodity.
++-- Bar Association (DS9 episode), Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #242:
++More is good, all is better.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #243:
++Always leave yourself an out.
++-- Sacraments of Fire (DS9 novel)
++%
++Ferengi Rule of Acquisition #248:
++The definition of insanity is trying the same failed scheme and expecting
++different results.
++-- Department of Temporal Investigations: Shield of the Gods (DS9 novella)
++%
++Ferengi Rule of Acquisition #255:
++A wife is luxury, a smart accountant a necessity.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #261:
++A wealthy man can afford anything except a conscience.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #263:
++Never allow doubt to tarnish your lust for latinum.
++-- Bar Association (DS9 episode)
++%
++Ferengi Rule of Acquisition #266:
++When in doubt, lie.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #267:
++If you believe it, they believe it.
++-- Taking Wing (DS9 novel)
++%
++Ferengi Rule of Acquisition #272:
++Always inspect the merchandise before making a deal.
++-- The Abandoned (DS9 episode), Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition #280:
++If it ain't broke, don't fix it.
++-- Ferenginar: Satisfaction is Not Guaranteed (DS9 novella)
++%
++Ferengi Rule of Acquisition #284:
++Deep down, everyone's a Ferengi.
++-- The Ferengi Rules of Acquisition (DS9 reference book)
++%
++Ferengi Rule of Acquisition #285:
++No good deed ever goes unpunished.
++-- The Collaborator (DS9 episode), The Sound of Her Voice (DS9 episode)
++%
++Ferengi Rule of Acquisition #286 (inofficial):
++When Morn leaves, it's all over.
++-- The House of Quark (DS9 Episode)
++%
++Ferengi Rule of Acquisition #287:
++Always get somebody else to do the lifting.
++-- N-Vector (DS9 comic)
++%
++Ferengi Rule of Acquisition #288:
++Never get into anything that you can't get out of.
++-- N-Vector (DS9 comic)
++%
++Ferengi Rule of Acquisition #289:
++A man is only worth the sum of his possessions.
++-- Acquisition (ENT episode)
++%
++Ferengi Rule of Acquisition #290:
++An angry man is an enemy, and a satisfied man is an ally.
++-- Antimatter (DS9 novel)
++%
++Ferengi Rule of Acquisition #291:
++The less employees know about the cash flow, the smaller the share they can
++demand.
++-- Betrayal (DS9 novel)
++%
++Ferengi Rule of Acquisition #292:
++Only a fool passes up a business opportunity.
++-- Elite Force II (video game)
++%
++Ferengi Rule of Acquisition #293:
++The more time they take deciding, the more money they will spend.
++-- Stowaways (DS9 novel)
++%
++Ferengi Rule of Acquisition #294:
++A bargain usually isn't.
++-- The Pet (DS9 novel)
++%
++Ferengi Rule of Acquisition #299:
++Whenever you exploit someone, it never hurts to thank them. That way, it's
++easier to exploit them the next time.
++-- False Profits (VOY episode)
++%
++Ferengi Rule of Acquisition #431:
++When the shooting starts, let the mercenaries handle it.
++-- Star Trek Online (video game)
++%
++Ferengi Rule of Acquisition (inofficial):
++Exploitation begins at home.
++-- False Profits (VOY episode)
++%
++Ferengi Rule of Acquisition (inofficial, aka "The Unwritten Rule"):
++When no appropriate rule applies, make one up.
++-- False Profits (VOY episode)
++%
++Ferengi Rule of Acquisition (inofficial):
++When the messenger comes to appropriate your profits, kill the messenger.
++-- False Profits (VOY episode)
++%
++Ferengi Rule of Acquisition (inofficial):
++Money is money, but females are better.
++-- Life Support (DS9 episode)
++%
++Ferengi Rule of Acquisition (inofficial):
++Why ask, when you can take?
++-- Babel (DS9 episode)
++%
++Ferengi Rule of Acquisition (inofficial):
++Good things come in small packages.
++-- Move Along Home (DS9)
++%
++Ferengi Rule of Acquisition (inofficial):
++A distracted policeman is an opportunity.
++-- The Sound of Her Voice (DS9 episode)
++%
+diff --color -u -r -N fortune-mod-3.26.0/fortune/fortune_with_offensive.docbook5.xml fortune-mod-3.26.0-new/fortune/fortune_with_offensive.docbook5.xml
+--- fortune-mod-3.26.0/fortune/fortune_with_offensive.docbook5.xml	1970-01-01 02:00:00.000000000 +0200
++++ fortune-mod-3.26.0-new/fortune/fortune_with_offensive.docbook5.xml	2026-01-19 09:18:08.000000000 +0200
+@@ -0,0 +1,392 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!-- lifted from man+troff by doclifter -->
++<refentry xmlns='http://docbook.org/ns/docbook' version='5.0' xml:lang='en' xml:id='fortune'>
++<!-- $NetBSD: fortune.6,v 1.4 1995/03/23 08:28:37 cgd Exp $ -->
++
++<!-- Copyright (c) 1985, 1991, 1993
++The Regents of the University of California.  All rights reserved. -->
++
++<!-- This code is derived from software contributed to Berkeley by
++Ken Arnold. -->
++
++<!-- Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions
++are met:
++1. Redistributions of source code must retain the above copyright
++notice, this list of conditions and the following disclaimer.
++2. Redistributions in binary form must reproduce the above copyright
++notice, this list of conditions and the following disclaimer in the
++documentation and/or other materials provided with the distribution.
++3. All advertising materials mentioning features or use of this software
++must display the following acknowledgement:
++This product includes software developed by the University of
++California, Berkeley and its contributors.
++4. Neither the name of the University nor the names of its contributors
++may be used to endorse or promote products derived from this software
++without specific prior written permission. -->
++
++<!-- THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++SUCH DAMAGE. -->
++
++<!-- @(#)fortune.6	8.3 (Berkeley) 4/19/94 -->
++
++<!-- This version of the man page has been modified heavily, like the
++program it documents.  Some of the changes may be exclusive to
++Linux.  Amy A. Lewis, September, 1995. -->
++
++<!-- Changes Copyright (c) 1997 Dennis L. Clark.  All rights reserved. -->
++
++<!-- The changes in this file may be freely redistributed, modified or
++included in other software, as long as both the above copyright
++notice and these conditions appear intact. -->
++
++<refentryinfo><date>19 April 94 [May. 97]</date></refentryinfo>
++<refmeta>
++<refentrytitle>FORTUNE</refentrytitle>
++<manvolnum>6</manvolnum>
++<refmiscinfo class='date'>19 April 94 [May. 97]</refmiscinfo>
++<refmiscinfo class='source'>BSD Experimental</refmiscinfo>
++<refmiscinfo class='manual'>UNIX Reference Manual</refmiscinfo>
++</refmeta>
++<refnamediv>
++<refname>fortune</refname>
++<refpurpose>print a random, hopefully interesting, adage</refpurpose>
++</refnamediv>
++<!-- body begins here -->
++<refsynopsisdiv xml:id='synopsis'>
++<cmdsynopsis>
++  <command>fortune</command>    <arg choice='opt'>-acefilosw </arg>
++    <arg choice='opt'><arg choice='plain'>-n </arg><arg choice='plain'><replaceable>length</replaceable></arg></arg>
++    <arg choice='opt'><arg choice='plain'>-m </arg><arg choice='plain'><replaceable>pattern</replaceable></arg></arg>
++    <arg choice='opt'><arg choice='opt'><replaceable>n%</replaceable></arg><arg choice='plain'><replaceable>file/dir/all</replaceable></arg></arg>
++</cmdsynopsis>
++</refsynopsisdiv>
++
++
++<refsect1 xml:id='description'><title>DESCRIPTION</title>
++<para>When
++<emphasis role='strong' remap='B'>fortune</emphasis>
++is run with no arguments it prints out a random epigram. Epigrams are
++divided into several categories, where each category is sub-divided
++into those which are potentially offensive and those which are not.</para>
++
++<refsect2 xml:id='options'><title>Options</title>
++<para>The options are as follows:</para>
++<variablelist remap='TP'>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-a</emphasis></term>
++  <listitem>
++
++<para>Choose from all lists of maxims, both offensive and not.  (See the
++<emphasis role='strong' remap='B'>-o</emphasis>
++option for more information on offensive fortunes.)</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-c</emphasis></term>
++  <listitem>
++<para>Show the cookie file from which the fortune came.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-e</emphasis></term>
++  <listitem>
++<para>Consider all fortune files to be of equal size (see discussion below
++on multiple files).</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-f</emphasis></term>
++  <listitem>
++<para>Print out the list of files which would be searched, but don't
++print a fortune.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-l</emphasis></term>
++  <listitem>
++<para>Long dictums only.  See
++<emphasis role='strong' remap='B'>-n</emphasis>
++on how “long” is defined in this sense.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-m </emphasis><emphasis remap='I'>pattern</emphasis></term>
++  <listitem>
++<para>Print out all fortunes which match the basic regular expression
++<emphasis remap='I'>pattern</emphasis>.
++The syntax of these expressions depends on how your system defines
++<citerefentry><refentrytitle>re_comp</refentrytitle><manvolnum>3</manvolnum></citerefentry> or <citerefentry><refentrytitle>regcomp</refentrytitle><manvolnum>3</manvolnum></citerefentry>,
++but it should nevertheless be similar to the syntax used in
++<citerefentry><refentrytitle>grep</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
++
++  <blockquote remap='RS'>
++<para>The fortunes are output to standard output, while the names of the file
++from which each fortune comes are printed to standard error.  Either or
++both can be redirected; if standard output is redirected to a file, the
++result is a valid fortunes database file.  If standard error is
++<emphasis remap='I'>also</emphasis>
++redirected to this file, the result is
++<emphasis remap='I'>still valid</emphasis>,
++<emphasis role='strong' remap='B'>but there will be “bogus”</emphasis>
++<emphasis role='strong' remap='B'>fortunes</emphasis>,
++i.e. the filenames themselves, in parentheses.  This can be useful if you
++wish to remove the gathered matches from their original files, since each
++filename-record will precede the records from the file it names.
++    </para></blockquote> <!-- remap='RE' -->
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-n </emphasis><emphasis remap='I'>length</emphasis></term>
++  <listitem>
++<para>Set the longest fortune length (in characters) considered to be
++“short” (the default is 160).  All fortunes longer than this are
++considered “long”.  Be careful!  If you set the length too short and
++ask for short fortunes, or too long and ask for long ones, fortune goes
++into a never-ending thrash loop.</para>
++  </listitem>
++  </varlistentry>
++
++
++
++  <varlistentry>
++  <term>
++<emphasis role='strong' remap='B'>-o</emphasis>
++Choose only from potentially offensive aphorisms.  The -o option is
++ignored if a fortune directory is specified.
++  </term>
++
++
++  <listitem>
++<para><emphasis role='strong' remap='B'>Please, please, please request a potentially</emphasis>
++<emphasis role='strong' remap='B'>offensive fortune if and only if</emphasis>
++<emphasis role='strong' remap='B'>you believe, deep in your heart,</emphasis>
++<emphasis role='strong' remap='B'>that you are willing to be</emphasis>
++<emphasis role='strong' remap='B'>offended. (And that you'll just quit</emphasis>
++<emphasis role='strong' remap='B'>using</emphasis> -o <emphasis role='strong' remap='B'>rather</emphasis>
++<emphasis role='strong' remap='B'>than give us grief about it,</emphasis>
++<emphasis role='strong' remap='B'>okay?)</emphasis></para>
++
++  <blockquote remap='RS'>
++<para>... let us keep in mind the basic governing philosophy of The
++Brotherhood, as handsomely summarized in these words: we believe in
++healthy, hearty laughter -- at the expense of the whole human race, if
++needs be.  Needs be.</para>
++    <blockquote remap='RS'>
++<para>--H. Allen Smith, "Rude Jokes"
++      </para></blockquote> <!-- remap='RE' -->
++    </blockquote> <!-- remap='RE' -->
++  </listitem>
++  </varlistentry>
++
++  <varlistentry>
++  <term>
++  <emphasis role='strong' remap='B'>-s</emphasis>
++  </term>
++  <listitem>
++<para>
++Short apothegms only.  See
++<emphasis role='strong' remap='B'>-n</emphasis>
++on which fortunes are considered “short”.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-i</emphasis></term>
++  <listitem>
++<para>Ignore case for
++<option>-m</option>
++patterns.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-w</emphasis></term>
++  <listitem>
++<para>Wait before termination for an amount of time calculated from the
++number of characters in the message.  This is useful if it is executed
++as part of the logout procedure to guarantee that the message can be
++read before the screen is cleared.</para>
++  </listitem>
++  </varlistentry>
++</variablelist>
++
++<para>The user may specify alternate sayings.  You can specify a specific
++file, a directory which contains one or more files, or the special word
++<emphasis remap='I'>all</emphasis>
++which says to use all the standard databases.  Any of these may be
++preceded by a percentage, which is a number
++<emphasis remap='I'>n</emphasis>
++between 0 and 100 inclusive, followed by a
++<emphasis remap='I'>%</emphasis>.
++If it is, there will be a
++<emphasis remap='I'>n</emphasis>
++percent probability that an adage will be picked from that file or
++directory. If the percentages do not sum to 100, and there are
++specifications without percentages, the remaining percent will apply
++to those files and/or directories, in which case the probability of
++selecting from one of them will be based on their relative sizes.</para>
++
++<para>As an example, given two databases
++<emphasis remap='I'>funny</emphasis> and <emphasis remap='I'>not-funny</emphasis>, with <emphasis remap='I'>funny</emphasis>
++twice as big (in number of fortunes, not raw file size), saying</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune</emphasis>
++<emphasis remap='I'>funny not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++<para>will get you fortunes out of
++<emphasis remap='I'>funny</emphasis>
++two-thirds of the time.  The command</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune</emphasis>
++90% <emphasis remap='I'>funny</emphasis> 10% <emphasis remap='I'>not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++<para>will pick out 90% of its fortunes from
++<emphasis remap='I'>funny</emphasis>
++(the “10% not-funny” is unnecessary, since 10% is all that's left).</para>
++
++<para>The
++<emphasis role='strong' remap='B'>-e</emphasis>
++option says to consider all files equal; thus</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune -e</emphasis>
++<emphasis remap='I'>funny not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++<para>is equivalent to</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune</emphasis>
++50% <emphasis remap='I'>funny</emphasis> 50% <emphasis remap='I'>not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++
++
++<para>This fortune also supports the BSD method of appending “-o” to
++database names to specify offensive fortunes.  However this is
++<emphasis role='strong' remap='B'>not</emphasis>
++how fortune stores them: offensive fortunes are stored in a separate
++directory without the “-o” infix.  A plain name (i.e., not a path to a
++file or directory) that ends in “-o” will be assumed to be an
++offensive database, and will have its suffix stripped off and be
++searched in the offensive directory (even if the neither of the
++<option>-a</option> or <option>-o</option>
++options were specified).  This feature is not only for
++backwards-compatibility, but also to allow users to distinguish between
++inoffensive and offensive databases of the same name.</para>
++
++<para>For example, assuming there is a database named
++<emphasis remap='I'>definitions</emphasis>
++in both the inoffensive and potentially offensive collections, then the
++following command will select an inoffensive definition 90% of the time,
++and a potentially offensive definition for the remaining 10%:</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune</emphasis>
++90%
++<emphasis remap='I'>definitions definitions-o</emphasis>
++  </para></blockquote> <!-- remap='RE' -->
++
++
++</refsect2>
++</refsect1>
++
++<refsect1 xml:id='files'><title>FILES</title>
++<para>Note: these are the defaults as defined at compile time.</para>
++
++<!-- PD 0 -->
++
++<para><emphasis remap='I'>[[cookiedir_placeholder]]</emphasis>
++Directory for innoffensive fortunes.</para>
++
++
++<para><emphasis remap='I'>[[ocookiedir_placeholder]]</emphasis>
++Directory for offensive fortunes.</para>
++<!-- PD -->
++
++<para>If a particular set of fortunes is particularly unwanted, there is an
++easy solution: delete the associated
++<markup>.dat</markup>
++file.  This leaves the data intact, should the file later be wanted, but
++since
++<emphasis role='strong' remap='B'>fortune</emphasis>
++no longer finds the pointers file, it ignores the text file.</para>
++</refsect1>
++
++<refsect1 xml:id='bugs'><title>BUGS</title>
++<para>The division of fortunes into offensive and non-offensive by directory,
++rather than via the `-o' file infix, is not 100% compatible with
++original BSD fortune. Although the `-o' infix is recognised as referring
++to an offensive database, the offensive database files still need to be
++in a separate directory.  The workaround, of course, is to move the `-o'
++files into the offensive directory (with or without renaming), and to
++use the
++<emphasis role='strong' remap='B'>-a</emphasis>
++option.</para>
++
++<para>The supplied fortune databases have been attacked, in order to correct
++orthographical and grammatical errors, and particularly to reduce
++redundancy and repetition and redundancy.  But especially to avoid
++repetitiousness.  This has not been a complete success.  In the process,
++some fortunes may also have been lost.</para>
++
++<para>The fortune databases are now divided into a larger number of smaller
++files, some organized by format (poetry, definitions), and some by
++content (religion, politics).  There are parallel files in the main
++directory and in the offensive files directory (e.g., fortunes/definitions and
++fortunes/off/definitions).  Not all the potentially offensive fortunes are in
++the offensive fortunes files, nor are all the fortunes in the offensive
++files potentially offensive, probably, though a strong attempt has been
++made to achieve greater consistency.  Also, a better division might be
++made.
++
++</para>
++
++</refsect1>
++
++<refsect1 xml:id='history'><title>HISTORY</title>
++<para>This version of fortune is based on the NetBSD fortune 1.4, but with a
++number of bug fixes and enhancements.</para>
++
++<para>The original fortune/strfile format used a single file; strfile read the
++text file and converted it to null-delimited strings, which were stored
++after the table of pointers in the .dat file.  By NetBSD fortune 1.4,
++this had changed to two separate files: the .dat file was only the header
++(the table of pointers, plus flags; see
++<emphasis remap='I'>strfile.h</emphasis>),
++and the text strings were left in their own file.  The potential problem
++with this is that text file and header file may get out of synch, but the
++advantage is that the text files can be easily edited without resorting
++to unstr, and there is a potential savings in disk space (on the
++assumption that the sysadmin kept both .dat file with strings and the
++text file).</para>
++
++<para>Many of the enhancements made over the NetBSD version assumed a Linux
++system, and thus caused it to fail under other platforms, including BSD.
++The source code has since been made more generic, and currently works on
++SunOS 4.x as well as Linux, with support for more platforms expected in
++the future.  Note that some bugs were inadvertently discovered and fixed
++during this process.</para>
++
++<para>At a guess, a great many people have worked on this program, many without
++leaving attributions.</para>
++</refsect1>
++
++<refsect1 xml:id='see_also'><title>SEE ALSO</title>
++<para><citerefentry><refentrytitle>re_comp</refentrytitle><manvolnum>3</manvolnum></citerefentry>, <citerefentry><refentrytitle>regcomp</refentrytitle><manvolnum>3</manvolnum></citerefentry>, <citerefentry><refentrytitle>strfile</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
++<citerefentry><refentrytitle>unstr</refentrytitle><manvolnum>1</manvolnum></citerefentry></para>
++</refsect1>
++</refentry>
++
+diff --color -u -r -N fortune-mod-3.26.0/fortune/fortune_with_offensive.template.man fortune-mod-3.26.0-new/fortune/fortune_with_offensive.template.man
+--- fortune-mod-3.26.0/fortune/fortune_with_offensive.template.man	1970-01-01 02:00:00.000000000 +0200
++++ fortune-mod-3.26.0-new/fortune/fortune_with_offensive.template.man	2026-01-19 09:18:08.000000000 +0200
+@@ -0,0 +1,293 @@
++'\" t
++.\"     Title: FORTUNE
++.\"    Author: [FIXME: author] [see http://www.docbook.org/tdg5/en/html/author]
++.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
++.\"      Date: 19 April 94 [May. 97]
++.\"    Manual: UNIX Reference Manual
++.\"    Source: BSD Experimental
++.\"  Language: English
++.\"
++.TH "FORTUNE" "6" "19 April 94 [May\&. 97]" "BSD Experimental" "UNIX Reference Manual"
++.\" -----------------------------------------------------------------
++.\" * Define some portability stuff
++.\" -----------------------------------------------------------------
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.\" http://bugs.debian.org/507673
++.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.ie \n(.g .ds Aq \(aq
++.el       .ds Aq '
++.\" -----------------------------------------------------------------
++.\" * set default formatting
++.\" -----------------------------------------------------------------
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.\" -----------------------------------------------------------------
++.\" * MAIN CONTENT STARTS HERE *
++.\" -----------------------------------------------------------------
++
++.SH "NAME"
++fortune \- print a random, hopefully interesting, adage
++
++.SH "SYNOPSIS"
++.HP \w'\fBfortune\fR\ 'u
++
++  \fBfortune\fR     [\-acefilosw]
++     [\-n\ \fIlength\fR]
++     [\-m\ \fIpattern\fR]
++     [[\fIn%\fR]\ \fIfile/dir/all\fR]
++
++.SH "DESCRIPTION"
++.PP
++When
++\fBfortune\fR
++is run with no arguments it prints out a random epigram\&. Epigrams are divided into several categories, where each category is sub\-divided into those which are potentially offensive and those which are not\&.
++
++.SS "Options"
++.PP
++The options are as follows:
++
++.PP
++\fB\-a\fR
++.RS 4
++
++Choose from all lists of maxims, both offensive and not\&. (See the
++\fB\-o\fR
++option for more information on offensive fortunes\&.)
++
++.RE
++.PP
++\fB\-c\fR
++.RS 4
++
++Show the cookie file from which the fortune came\&.
++
++.RE
++.PP
++\fB\-e\fR
++.RS 4
++
++Consider all fortune files to be of equal size (see discussion below on multiple files)\&.
++
++.RE
++.PP
++\fB\-f\fR
++.RS 4
++
++Print out the list of files which would be searched, but don\*(Aqt print a fortune\&.
++
++.RE
++.PP
++\fB\-l\fR
++.RS 4
++
++Long dictums only\&. See
++\fB\-n\fR
++on how \(lqlong\(rq is defined in this sense\&.
++
++.RE
++.PP
++\fB\-m \fR\fIpattern\fR
++.RS 4
++
++Print out all fortunes which match the basic regular expression
++\fIpattern\fR\&. The syntax of these expressions depends on how your system defines
++\fBre_comp\fR(3)
++or
++\fBregcomp\fR(3), but it should nevertheless be similar to the syntax used in
++\fBgrep\fR(1)\&.
++
++The fortunes are output to standard output, while the names of the file from which each fortune comes are printed to standard error\&. Either or both can be redirected; if standard output is redirected to a file, the result is a valid fortunes database file\&. If standard error is
++\fIalso\fR
++redirected to this file, the result is
++\fIstill valid\fR,
++\fBbut there will be \(lqbogus\(rq\fR
++\fBfortunes\fR, i\&.e\&. the filenames themselves, in parentheses\&. This can be useful if you wish to remove the gathered matches from their original files, since each filename\-record will precede the records from the file it names\&.
++
++.RE
++.PP
++\fB\-n \fR\fIlength\fR
++.RS 4
++
++Set the longest fortune length (in characters) considered to be \(lqshort\(rq (the default is 160)\&. All fortunes longer than this are considered \(lqlong\(rq\&. Be careful! If you set the length too short and ask for short fortunes, or too long and ask for long ones, fortune goes into a never\-ending thrash loop\&.
++
++.RE
++
++.PP
++\fB\-o\fR Choose only from potentially offensive aphorisms\&. The \-o option is ignored if a fortune directory is specified\&.
++.RS 4
++
++\fBPlease, please, please request a potentially\fR
++\fBoffensive fortune if and only if\fR
++\fByou believe, deep in your heart,\fR
++\fBthat you are willing to be\fR
++\fBoffended\&. (And that you\*(Aqll just quit\fR
++\fBusing\fR
++\-o
++\fBrather\fR
++\fBthan give us grief about it,\fR
++\fBokay?)\fR
++
++\&.\&.\&. let us keep in mind the basic governing philosophy of The Brotherhood, as handsomely summarized in these words: we believe in healthy, hearty laughter \-\- at the expense of the whole human race, if needs be\&. Needs be\&.
++
++\-\-H\&. Allen Smith, "Rude Jokes"
++
++.RE
++
++.PP
++\fB\-s\fR
++.RS 4
++
++Short apothegms only\&. See
++\fB\-n\fR
++on which fortunes are considered \(lqshort\(rq\&.
++
++.RE
++.PP
++\fB\-i\fR
++.RS 4
++
++Ignore case for
++\fB\-m\fR
++patterns\&.
++
++.RE
++.PP
++\fB\-w\fR
++.RS 4
++
++Wait before termination for an amount of time calculated from the number of characters in the message\&. This is useful if it is executed as part of the logout procedure to guarantee that the message can be read before the screen is cleared\&.
++
++.RE
++
++.PP
++The user may specify alternate sayings\&. You can specify a specific file, a directory which contains one or more files, or the special word
++\fIall\fR
++which says to use all the standard databases\&. Any of these may be preceded by a percentage, which is a number
++\fIn\fR
++between 0 and 100 inclusive, followed by a
++\fI%\fR\&. If it is, there will be a
++\fIn\fR
++percent probability that an adage will be picked from that file or directory\&. If the percentages do not sum to 100, and there are specifications without percentages, the remaining percent will apply to those files and/or directories, in which case the probability of selecting from one of them will be based on their relative sizes\&.
++
++.PP
++As an example, given two databases
++\fIfunny\fR
++and
++\fInot\-funny\fR, with
++\fIfunny\fR
++twice as big (in number of fortunes, not raw file size), saying
++
++.PP
++\fBfortune\fR
++\fIfunny not\-funny\fR
++
++.PP
++will get you fortunes out of
++\fIfunny\fR
++two\-thirds of the time\&. The command
++
++.PP
++\fBfortune\fR
++90%
++\fIfunny\fR
++10%
++\fInot\-funny\fR
++
++.PP
++will pick out 90% of its fortunes from
++\fIfunny\fR
++(the \(lq10% not\-funny\(rq is unnecessary, since 10% is all that\*(Aqs left)\&.
++
++.PP
++The
++\fB\-e\fR
++option says to consider all files equal; thus
++
++.PP
++\fBfortune \-e\fR
++\fIfunny not\-funny\fR
++
++.PP
++is equivalent to
++
++.PP
++\fBfortune\fR
++50%
++\fIfunny\fR
++50%
++\fInot\-funny\fR
++
++.PP
++This fortune also supports the BSD method of appending \(lq\-o\(rq to database names to specify offensive fortunes\&. However this is
++\fBnot\fR
++how fortune stores them: offensive fortunes are stored in a separate directory without the \(lq\-o\(rq infix\&. A plain name (i\&.e\&., not a path to a file or directory) that ends in \(lq\-o\(rq will be assumed to be an offensive database, and will have its suffix stripped off and be searched in the offensive directory (even if the neither of the
++\fB\-a\fR
++or
++\fB\-o\fR
++options were specified)\&. This feature is not only for backwards\-compatibility, but also to allow users to distinguish between inoffensive and offensive databases of the same name\&.
++
++.PP
++For example, assuming there is a database named
++\fIdefinitions\fR
++in both the inoffensive and potentially offensive collections, then the following command will select an inoffensive definition 90% of the time, and a potentially offensive definition for the remaining 10%:
++
++.PP
++\fBfortune\fR
++90%
++\fIdefinitions definitions\-o\fR
++
++.SH "FILES"
++.PP
++Note: these are the defaults as defined at compile time\&.
++
++.PP
++\fI[[cookiedir_placeholder]]\fR
++Directory for innoffensive fortunes\&.
++
++.PP
++\fI[[ocookiedir_placeholder]]\fR
++Directory for offensive fortunes\&.
++
++.PP
++If a particular set of fortunes is particularly unwanted, there is an easy solution: delete the associated
++\fB\&.dat\fR
++file\&. This leaves the data intact, should the file later be wanted, but since
++\fBfortune\fR
++no longer finds the pointers file, it ignores the text file\&.
++
++.SH "BUGS"
++.PP
++The division of fortunes into offensive and non\-offensive by directory, rather than via the `\-o\*(Aq file infix, is not 100% compatible with original BSD fortune\&. Although the `\-o\*(Aq infix is recognised as referring to an offensive database, the offensive database files still need to be in a separate directory\&. The workaround, of course, is to move the `\-o\*(Aq files into the offensive directory (with or without renaming), and to use the
++\fB\-a\fR
++option\&.
++
++.PP
++The supplied fortune databases have been attacked, in order to correct orthographical and grammatical errors, and particularly to reduce redundancy and repetition and redundancy\&. But especially to avoid repetitiousness\&. This has not been a complete success\&. In the process, some fortunes may also have been lost\&.
++
++.PP
++The fortune databases are now divided into a larger number of smaller files, some organized by format (poetry, definitions), and some by content (religion, politics)\&. There are parallel files in the main directory and in the offensive files directory (e\&.g\&., fortunes/definitions and fortunes/off/definitions)\&. Not all the potentially offensive fortunes are in the offensive fortunes files, nor are all the fortunes in the offensive files potentially offensive, probably, though a strong attempt has been made to achieve greater consistency\&. Also, a better division might be made\&.
++
++.SH "HISTORY"
++.PP
++This version of fortune is based on the NetBSD fortune 1\&.4, but with a number of bug fixes and enhancements\&.
++
++.PP
++The original fortune/strfile format used a single file; strfile read the text file and converted it to null\-delimited strings, which were stored after the table of pointers in the \&.dat file\&. By NetBSD fortune 1\&.4, this had changed to two separate files: the \&.dat file was only the header (the table of pointers, plus flags; see
++\fIstrfile\&.h\fR), and the text strings were left in their own file\&. The potential problem with this is that text file and header file may get out of synch, but the advantage is that the text files can be easily edited without resorting to unstr, and there is a potential savings in disk space (on the assumption that the sysadmin kept both \&.dat file with strings and the text file)\&.
++
++.PP
++Many of the enhancements made over the NetBSD version assumed a Linux system, and thus caused it to fail under other platforms, including BSD\&. The source code has since been made more generic, and currently works on SunOS 4\&.x as well as Linux, with support for more platforms expected in the future\&. Note that some bugs were inadvertently discovered and fixed during this process\&.
++
++.PP
++At a guess, a great many people have worked on this program, many without leaving attributions\&.
++
++.SH "SEE ALSO"
++.PP
++\fBre_comp\fR(3),
++\fBregcomp\fR(3),
++\fBstrfile\fR(1),
++\fBunstr\fR(1)
++
+diff --color -u -r -N fortune-mod-3.26.0/fortune/fortune_without_offensive.docbook5.xml fortune-mod-3.26.0-new/fortune/fortune_without_offensive.docbook5.xml
+--- fortune-mod-3.26.0/fortune/fortune_without_offensive.docbook5.xml	1970-01-01 02:00:00.000000000 +0200
++++ fortune-mod-3.26.0-new/fortune/fortune_without_offensive.docbook5.xml	2026-01-19 09:18:08.000000000 +0200
+@@ -0,0 +1,312 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!-- lifted from man+troff by doclifter -->
++<refentry xmlns='http://docbook.org/ns/docbook' version='5.0' xml:lang='en' xml:id='fortune'>
++<!-- $NetBSD: fortune.6,v 1.4 1995/03/23 08:28:37 cgd Exp $ -->
++
++<!-- Copyright (c) 1985, 1991, 1993
++The Regents of the University of California.  All rights reserved. -->
++
++<!-- This code is derived from software contributed to Berkeley by
++Ken Arnold. -->
++
++<!-- Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions
++are met:
++1. Redistributions of source code must retain the above copyright
++notice, this list of conditions and the following disclaimer.
++2. Redistributions in binary form must reproduce the above copyright
++notice, this list of conditions and the following disclaimer in the
++documentation and/or other materials provided with the distribution.
++3. All advertising materials mentioning features or use of this software
++must display the following acknowledgement:
++This product includes software developed by the University of
++California, Berkeley and its contributors.
++4. Neither the name of the University nor the names of its contributors
++may be used to endorse or promote products derived from this software
++without specific prior written permission. -->
++
++<!-- THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++SUCH DAMAGE. -->
++
++<!-- @(#)fortune.6	8.3 (Berkeley) 4/19/94 -->
++
++<!-- This version of the man page has been modified heavily, like the
++program it documents.  Some of the changes may be exclusive to
++Linux.  Amy A. Lewis, September, 1995. -->
++
++<!-- Changes Copyright (c) 1997 Dennis L. Clark.  All rights reserved. -->
++
++<!-- The changes in this file may be freely redistributed, modified or
++included in other software, as long as both the above copyright
++notice and these conditions appear intact. -->
++
++<refentryinfo><date>19 April 94 [May. 97]</date></refentryinfo>
++<refmeta>
++<refentrytitle>FORTUNE</refentrytitle>
++<manvolnum>6</manvolnum>
++<refmiscinfo class='date'>19 April 94 [May. 97]</refmiscinfo>
++<refmiscinfo class='source'>BSD Experimental</refmiscinfo>
++<refmiscinfo class='manual'>UNIX Reference Manual</refmiscinfo>
++</refmeta>
++<refnamediv>
++<refname>fortune</refname>
++<refpurpose>print a random, hopefully interesting, adage</refpurpose>
++</refnamediv>
++<!-- body begins here -->
++<refsynopsisdiv xml:id='synopsis'>
++<cmdsynopsis>
++  <command>fortune</command>    <arg choice='opt'>-acefilosw </arg>
++    <arg choice='opt'><arg choice='plain'>-n </arg><arg choice='plain'><replaceable>length</replaceable></arg></arg>
++    <arg choice='opt'><arg choice='plain'>-m </arg><arg choice='plain'><replaceable>pattern</replaceable></arg></arg>
++    <arg choice='opt'><arg choice='opt'><replaceable>n%</replaceable></arg><arg choice='plain'><replaceable>file/dir/all</replaceable></arg></arg>
++</cmdsynopsis>
++</refsynopsisdiv>
++
++
++<refsect1 xml:id='description'><title>DESCRIPTION</title>
++<para>When
++<emphasis role='strong' remap='B'>fortune</emphasis>
++is run with no arguments it prints out a random epigram. Epigrams are
++divided into several categories.</para>
++
++<refsect2 xml:id='options'><title>Options</title>
++<para>The options are as follows:</para>
++<variablelist remap='TP'>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-a</emphasis></term>
++  <listitem>
++
++<para>Choose from all lists of maxims.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-c</emphasis></term>
++  <listitem>
++<para>Show the cookie file from which the fortune came.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-e</emphasis></term>
++  <listitem>
++<para>Consider all fortune files to be of equal size (see discussion below
++on multiple files).</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-f</emphasis></term>
++  <listitem>
++<para>Print out the list of files which would be searched, but don't
++print a fortune.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-l</emphasis></term>
++  <listitem>
++<para>Long dictums only.  See
++<emphasis role='strong' remap='B'>-n</emphasis>
++on how “long” is defined in this sense.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-m </emphasis><emphasis remap='I'>pattern</emphasis></term>
++  <listitem>
++<para>Print out all fortunes which match the basic regular expression
++<emphasis remap='I'>pattern</emphasis>.
++The syntax of these expressions depends on how your system defines
++<citerefentry><refentrytitle>re_comp</refentrytitle><manvolnum>3</manvolnum></citerefentry> or <citerefentry><refentrytitle>regcomp</refentrytitle><manvolnum>3</manvolnum></citerefentry>,
++but it should nevertheless be similar to the syntax used in
++<citerefentry><refentrytitle>grep</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
++
++  <blockquote remap='RS'>
++<para>The fortunes are output to standard output, while the names of the file
++from which each fortune comes are printed to standard error.  Either or
++both can be redirected; if standard output is redirected to a file, the
++result is a valid fortunes database file.  If standard error is
++<emphasis remap='I'>also</emphasis>
++redirected to this file, the result is
++<emphasis remap='I'>still valid</emphasis>,
++<emphasis role='strong' remap='B'>but there will be “bogus”</emphasis>
++<emphasis role='strong' remap='B'>fortunes</emphasis>,
++i.e. the filenames themselves, in parentheses.  This can be useful if you
++wish to remove the gathered matches from their original files, since each
++filename-record will precede the records from the file it names.
++    </para></blockquote> <!-- remap='RE' -->
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-n </emphasis><emphasis remap='I'>length</emphasis></term>
++  <listitem>
++<para>Set the longest fortune length (in characters) considered to be
++“short” (the default is 160).  All fortunes longer than this are
++considered “long”.  Be careful!  If you set the length too short and
++ask for short fortunes, or too long and ask for long ones, fortune goes
++into a never-ending thrash loop.</para>
++  </listitem>
++  </varlistentry>
++
++
++  <varlistentry>
++  <term>
++  <emphasis role='strong' remap='B'>-s</emphasis>
++  </term>
++  <listitem>
++<para>
++Short apothegms only.  See
++<emphasis role='strong' remap='B'>-n</emphasis>
++on which fortunes are considered “short”.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-i</emphasis></term>
++  <listitem>
++<para>Ignore case for
++<option>-m</option>
++patterns.</para>
++  </listitem>
++  </varlistentry>
++  <varlistentry>
++  <term><emphasis role='strong' remap='B'>-w</emphasis></term>
++  <listitem>
++<para>Wait before termination for an amount of time calculated from the
++number of characters in the message.  This is useful if it is executed
++as part of the logout procedure to guarantee that the message can be
++read before the screen is cleared.</para>
++  </listitem>
++  </varlistentry>
++</variablelist>
++
++<para>The user may specify alternate sayings.  You can specify a specific
++file, a directory which contains one or more files, or the special word
++<emphasis remap='I'>all</emphasis>
++which says to use all the standard databases.  Any of these may be
++preceded by a percentage, which is a number
++<emphasis remap='I'>n</emphasis>
++between 0 and 100 inclusive, followed by a
++<emphasis remap='I'>%</emphasis>.
++If it is, there will be a
++<emphasis remap='I'>n</emphasis>
++percent probability that an adage will be picked from that file or
++directory. If the percentages do not sum to 100, and there are
++specifications without percentages, the remaining percent will apply
++to those files and/or directories, in which case the probability of
++selecting from one of them will be based on their relative sizes.</para>
++
++<para>As an example, given two databases
++<emphasis remap='I'>funny</emphasis> and <emphasis remap='I'>not-funny</emphasis>, with <emphasis remap='I'>funny</emphasis>
++twice as big (in number of fortunes, not raw file size), saying</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune</emphasis>
++<emphasis remap='I'>funny not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++<para>will get you fortunes out of
++<emphasis remap='I'>funny</emphasis>
++two-thirds of the time.  The command</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune</emphasis>
++90% <emphasis remap='I'>funny</emphasis> 10% <emphasis remap='I'>not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++<para>will pick out 90% of its fortunes from
++<emphasis remap='I'>funny</emphasis>
++(the “10% not-funny” is unnecessary, since 10% is all that's left).</para>
++
++<para>The
++<emphasis role='strong' remap='B'>-e</emphasis>
++option says to consider all files equal; thus</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune -e</emphasis>
++<emphasis remap='I'>funny not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++<para>is equivalent to</para>
++  <blockquote remap='RS'>
++
++<para><emphasis role='strong' remap='B'>fortune</emphasis>
++50% <emphasis remap='I'>funny</emphasis> 50% <emphasis remap='I'>not-funny</emphasis>
++
++  </para></blockquote> <!-- remap='RE' -->
++
++</refsect2>
++</refsect1>
++
++<refsect1 xml:id='files'><title>FILES</title>
++<para>Note: these are the defaults as defined at compile time.</para>
++
++<!-- PD 0 -->
++
++<para><emphasis remap='I'>[[cookiedir_placeholder]]</emphasis>
++Directory for innoffensive fortunes.</para>
++
++<!-- PD -->
++
++<para>If a particular set of fortunes is particularly unwanted, there is an
++easy solution: delete the associated
++<markup>.dat</markup>
++file.  This leaves the data intact, should the file later be wanted, but
++since
++<emphasis role='strong' remap='B'>fortune</emphasis>
++no longer finds the pointers file, it ignores the text file.</para>
++</refsect1>
++
++<refsect1 xml:id='bugs'><title>BUGS</title>
++<para>The supplied fortune databases have been attacked, in order to correct
++orthographical and grammatical errors, and particularly to reduce
++redundancy and repetition and redundancy.  But especially to avoid
++repetitiousness.  This has not been a complete success.  In the process,
++some fortunes may also have been lost.</para>
++
++<para>The fortune databases are now divided into a larger number of smaller
++files, some organized by format (poetry, definitions), and some by
++content (religion, politics).
++
++</para>
++
++</refsect1>
++
++<refsect1 xml:id='history'><title>HISTORY</title>
++<para>This version of fortune is based on the NetBSD fortune 1.4, but with a
++number of bug fixes and enhancements.</para>
++
++<para>The original fortune/strfile format used a single file; strfile read the
++text file and converted it to null-delimited strings, which were stored
++after the table of pointers in the .dat file.  By NetBSD fortune 1.4,
++this had changed to two separate files: the .dat file was only the header
++(the table of pointers, plus flags; see
++<emphasis remap='I'>strfile.h</emphasis>),
++and the text strings were left in their own file.  The potential problem
++with this is that text file and header file may get out of synch, but the
++advantage is that the text files can be easily edited without resorting
++to unstr, and there is a potential savings in disk space (on the
++assumption that the sysadmin kept both .dat file with strings and the
++text file).</para>
++
++<para>Many of the enhancements made over the NetBSD version assumed a Linux
++system, and thus caused it to fail under other platforms, including BSD.
++The source code has since been made more generic, and currently works on
++SunOS 4.x as well as Linux, with support for more platforms expected in
++the future.  Note that some bugs were inadvertently discovered and fixed
++during this process.</para>
++
++<para>At a guess, a great many people have worked on this program, many without
++leaving attributions.</para>
++</refsect1>
++
++<refsect1 xml:id='see_also'><title>SEE ALSO</title>
++<para><citerefentry><refentrytitle>re_comp</refentrytitle><manvolnum>3</manvolnum></citerefentry>, <citerefentry><refentrytitle>regcomp</refentrytitle><manvolnum>3</manvolnum></citerefentry>, <citerefentry><refentrytitle>strfile</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
++<citerefentry><refentrytitle>unstr</refentrytitle><manvolnum>1</manvolnum></citerefentry></para>
++</refsect1>
++</refentry>
++
+diff --color -u -r -N fortune-mod-3.26.0/fortune/fortune_without_offensive.template.man fortune-mod-3.26.0-new/fortune/fortune_without_offensive.template.man
+--- fortune-mod-3.26.0/fortune/fortune_without_offensive.template.man	1970-01-01 02:00:00.000000000 +0200
++++ fortune-mod-3.26.0-new/fortune/fortune_without_offensive.template.man	2026-01-19 09:18:08.000000000 +0200
+@@ -0,0 +1,242 @@
++'\" t
++.\"     Title: FORTUNE
++.\"    Author: [FIXME: author] [see http://www.docbook.org/tdg5/en/html/author]
++.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
++.\"      Date: 19 April 94 [May. 97]
++.\"    Manual: UNIX Reference Manual
++.\"    Source: BSD Experimental
++.\"  Language: English
++.\"
++.TH "FORTUNE" "6" "19 April 94 [May\&. 97]" "BSD Experimental" "UNIX Reference Manual"
++.\" -----------------------------------------------------------------
++.\" * Define some portability stuff
++.\" -----------------------------------------------------------------
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.\" http://bugs.debian.org/507673
++.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.ie \n(.g .ds Aq \(aq
++.el       .ds Aq '
++.\" -----------------------------------------------------------------
++.\" * set default formatting
++.\" -----------------------------------------------------------------
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.\" -----------------------------------------------------------------
++.\" * MAIN CONTENT STARTS HERE *
++.\" -----------------------------------------------------------------
++
++.SH "NAME"
++fortune \- print a random, hopefully interesting, adage
++
++.SH "SYNOPSIS"
++.HP \w'\fBfortune\fR\ 'u
++
++  \fBfortune\fR     [\-acefilosw]
++     [\-n\ \fIlength\fR]
++     [\-m\ \fIpattern\fR]
++     [[\fIn%\fR]\ \fIfile/dir/all\fR]
++
++.SH "DESCRIPTION"
++.PP
++When
++\fBfortune\fR
++is run with no arguments it prints out a random epigram\&. Epigrams are divided into several categories\&.
++
++.SS "Options"
++.PP
++The options are as follows:
++
++.PP
++\fB\-a\fR
++.RS 4
++
++Choose from all lists of maxims\&.
++
++.RE
++.PP
++\fB\-c\fR
++.RS 4
++
++Show the cookie file from which the fortune came\&.
++
++.RE
++.PP
++\fB\-e\fR
++.RS 4
++
++Consider all fortune files to be of equal size (see discussion below on multiple files)\&.
++
++.RE
++.PP
++\fB\-f\fR
++.RS 4
++
++Print out the list of files which would be searched, but don\*(Aqt print a fortune\&.
++
++.RE
++.PP
++\fB\-l\fR
++.RS 4
++
++Long dictums only\&. See
++\fB\-n\fR
++on how \(lqlong\(rq is defined in this sense\&.
++
++.RE
++.PP
++\fB\-m \fR\fIpattern\fR
++.RS 4
++
++Print out all fortunes which match the basic regular expression
++\fIpattern\fR\&. The syntax of these expressions depends on how your system defines
++\fBre_comp\fR(3)
++or
++\fBregcomp\fR(3), but it should nevertheless be similar to the syntax used in
++\fBgrep\fR(1)\&.
++
++The fortunes are output to standard output, while the names of the file from which each fortune comes are printed to standard error\&. Either or both can be redirected; if standard output is redirected to a file, the result is a valid fortunes database file\&. If standard error is
++\fIalso\fR
++redirected to this file, the result is
++\fIstill valid\fR,
++\fBbut there will be \(lqbogus\(rq\fR
++\fBfortunes\fR, i\&.e\&. the filenames themselves, in parentheses\&. This can be useful if you wish to remove the gathered matches from their original files, since each filename\-record will precede the records from the file it names\&.
++
++.RE
++.PP
++\fB\-n \fR\fIlength\fR
++.RS 4
++
++Set the longest fortune length (in characters) considered to be \(lqshort\(rq (the default is 160)\&. All fortunes longer than this are considered \(lqlong\(rq\&. Be careful! If you set the length too short and ask for short fortunes, or too long and ask for long ones, fortune goes into a never\-ending thrash loop\&.
++
++.RE
++
++.PP
++\fB\-s\fR
++.RS 4
++
++Short apothegms only\&. See
++\fB\-n\fR
++on which fortunes are considered \(lqshort\(rq\&.
++
++.RE
++.PP
++\fB\-i\fR
++.RS 4
++
++Ignore case for
++\fB\-m\fR
++patterns\&.
++
++.RE
++.PP
++\fB\-w\fR
++.RS 4
++
++Wait before termination for an amount of time calculated from the number of characters in the message\&. This is useful if it is executed as part of the logout procedure to guarantee that the message can be read before the screen is cleared\&.
++
++.RE
++
++.PP
++The user may specify alternate sayings\&. You can specify a specific file, a directory which contains one or more files, or the special word
++\fIall\fR
++which says to use all the standard databases\&. Any of these may be preceded by a percentage, which is a number
++\fIn\fR
++between 0 and 100 inclusive, followed by a
++\fI%\fR\&. If it is, there will be a
++\fIn\fR
++percent probability that an adage will be picked from that file or directory\&. If the percentages do not sum to 100, and there are specifications without percentages, the remaining percent will apply to those files and/or directories, in which case the probability of selecting from one of them will be based on their relative sizes\&.
++
++.PP
++As an example, given two databases
++\fIfunny\fR
++and
++\fInot\-funny\fR, with
++\fIfunny\fR
++twice as big (in number of fortunes, not raw file size), saying
++
++.PP
++\fBfortune\fR
++\fIfunny not\-funny\fR
++
++.PP
++will get you fortunes out of
++\fIfunny\fR
++two\-thirds of the time\&. The command
++
++.PP
++\fBfortune\fR
++90%
++\fIfunny\fR
++10%
++\fInot\-funny\fR
++
++.PP
++will pick out 90% of its fortunes from
++\fIfunny\fR
++(the \(lq10% not\-funny\(rq is unnecessary, since 10% is all that\*(Aqs left)\&.
++
++.PP
++The
++\fB\-e\fR
++option says to consider all files equal; thus
++
++.PP
++\fBfortune \-e\fR
++\fIfunny not\-funny\fR
++
++.PP
++is equivalent to
++
++.PP
++\fBfortune\fR
++50%
++\fIfunny\fR
++50%
++\fInot\-funny\fR
++
++.SH "FILES"
++.PP
++Note: these are the defaults as defined at compile time\&.
++
++.PP
++\fI[[cookiedir_placeholder]]\fR
++Directory for innoffensive fortunes\&.
++
++.PP
++If a particular set of fortunes is particularly unwanted, there is an easy solution: delete the associated
++\fB\&.dat\fR
++file\&. This leaves the data intact, should the file later be wanted, but since
++\fBfortune\fR
++no longer finds the pointers file, it ignores the text file\&.
++
++.SH "BUGS"
++.PP
++The supplied fortune databases have been attacked, in order to correct orthographical and grammatical errors, and particularly to reduce redundancy and repetition and redundancy\&. But especially to avoid repetitiousness\&. This has not been a complete success\&. In the process, some fortunes may also have been lost\&.
++
++.PP
++The fortune databases are now divided into a larger number of smaller files, some organized by format (poetry, definitions), and some by content (religion, politics)\&.
++
++.SH "HISTORY"
++.PP
++This version of fortune is based on the NetBSD fortune 1\&.4, but with a number of bug fixes and enhancements\&.
++
++.PP
++The original fortune/strfile format used a single file; strfile read the text file and converted it to null\-delimited strings, which were stored after the table of pointers in the \&.dat file\&. By NetBSD fortune 1\&.4, this had changed to two separate files: the \&.dat file was only the header (the table of pointers, plus flags; see
++\fIstrfile\&.h\fR), and the text strings were left in their own file\&. The potential problem with this is that text file and header file may get out of synch, but the advantage is that the text files can be easily edited without resorting to unstr, and there is a potential savings in disk space (on the assumption that the sysadmin kept both \&.dat file with strings and the text file)\&.
++
++.PP
++Many of the enhancements made over the NetBSD version assumed a Linux system, and thus caused it to fail under other platforms, including BSD\&. The source code has since been made more generic, and currently works on SunOS 4\&.x as well as Linux, with support for more platforms expected in the future\&. Note that some bugs were inadvertently discovered and fixed during this process\&.
++
++.PP
++At a guess, a great many people have worked on this program, many without leaving attributions\&.
++
++.SH "SEE ALSO"
++.PP
++\fBre_comp\fR(3),
++\fBregcomp\fR(3),
++\fBstrfile\fR(1),
++\fBunstr\fR(1)
++
+diff --color -u -r -N fortune-mod-3.26.0/util/randstr.man fortune-mod-3.26.0-new/util/randstr.man
+--- fortune-mod-3.26.0/util/randstr.man	1970-01-01 02:00:00.000000000 +0200
++++ fortune-mod-3.26.0-new/util/randstr.man	2026-01-19 09:18:08.000000000 +0200
+@@ -0,0 +1,97 @@
++'\" t
++.\"     Title: RANDSTR
++.\"    Author: [FIXME: author] [see http://www.docbook.org/tdg5/en/html/author]
++.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
++.\"      Date: 01/19/2026
++.\"    Manual: Linux hackery
++.\"    Source: October 1995
++.\"  Language: English
++.\"
++.TH "RANDSTR" "1" "01/19/2026" "October 1995" "Linux hackery"
++.\" -----------------------------------------------------------------
++.\" * Define some portability stuff
++.\" -----------------------------------------------------------------
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.\" http://bugs.debian.org/507673
++.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.ie \n(.g .ds Aq \(aq
++.el       .ds Aq '
++.\" -----------------------------------------------------------------
++.\" * set default formatting
++.\" -----------------------------------------------------------------
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.\" -----------------------------------------------------------------
++.\" * MAIN CONTENT STARTS HERE *
++.\" -----------------------------------------------------------------
++
++.SH "NAME"
++randstr \- fetch a random text string from a specified file
++
++.SH "SYNOPIS"
++.PP
++\fBrandstr \fR\fIfilename\fR
++
++.SH "DESCRIPTION"
++.PP
++In essence,
++\fBrandstr\fR
++is a stripped\-down, minimalist version of the popular
++\fBfortune\fR(6)
++program\&.
++
++.PP
++It reads files with the same structure as the fortunes databases, and displays a random string\&.
++
++.SS "Usage"
++.PP
++\fBrandstr\fR
++might be used, with a database of signatures created with a text editor and the
++\fBstrfile\fR(8)
++and
++\fBunstr\fR(8)
++utilities, to randomly change the
++\fI$HOME/\&.signature\fR
++file\&. To do so, create the necessary database as, for example,
++\fIsignatures\fR
++and
++\fIsignatures\&.dat\fR
++in the home directory, and add the following line to
++\fB\&.profile\fR
++or
++\fB\&.login\fR:
++
++.PP
++\fBrandstr \fR\fIsignatures\fR
++>\fB\&.signature\fR
++
++.PP
++As superuser, a similar sort of thing could be placed in the
++\fBPnews\fR(1)
++or
++\fBRnmail\fR(1)
++scripts, although it should certainly test to be certain that the files exist, and creating the files of signatures might require a good deal of help for a lot of users\&.
++
++.PP
++Also as superuser, one might use
++\fBrandstr\fR
++with a shell or
++\fBPerl\fR
++script to read the
++\fIetc/passwd\fR
++database and create a
++\fIstrfile\fR
++type database, and use this database to run a monthly lottery\&.
++
++.SH "BUGS"
++.PP
++None known\&.
++
++.SH "SEE ALSO"
++.PP
++\fBfortune\fR(6),
++\fBstrfile\fR(1)
++
+diff --color -u -r -N fortune-mod-3.26.0/util/strfile.man fortune-mod-3.26.0-new/util/strfile.man
+--- fortune-mod-3.26.0/util/strfile.man	1970-01-01 02:00:00.000000000 +0200
++++ fortune-mod-3.26.0-new/util/strfile.man	2026-01-19 09:18:08.000000000 +0200
+@@ -0,0 +1,220 @@
++'\" t
++.\"     Title: STRFILE
++.\"    Author: [FIXME: author] [see http://www.docbook.org/tdg5/en/html/author]
++.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
++.\"      Date: 01/19/2026
++.\"    Manual: 4th Berkeley Distribution
++.\"    Source: June 9, 1993 [Apr. 1997]
++.\"  Language: English
++.\"
++.TH "STRFILE" "1" "01/19/2026" "June 9, 1993 [Apr\&. 1997]" "4th Berkeley Distribution"
++.\" -----------------------------------------------------------------
++.\" * Define some portability stuff
++.\" -----------------------------------------------------------------
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.\" http://bugs.debian.org/507673
++.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
++.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.ie \n(.g .ds Aq \(aq
++.el       .ds Aq '
++.\" -----------------------------------------------------------------
++.\" * set default formatting
++.\" -----------------------------------------------------------------
++.\" disable hyphenation
++.nh
++.\" disable justification (adjust text to left margin only)
++.ad l
++.\" -----------------------------------------------------------------
++.\" * MAIN CONTENT STARTS HERE *
++.\" -----------------------------------------------------------------
++
++.SH "NAME"
++strfile \- create a random access file for storing strings
++.br
++unstr \- dump strings in pointer order
++
++.SH "SYNOPSIS"
++.HP \w'\fBstrfile\fR\ 'u
++
++  \fBstrfile\fR     [\-iorsx]
++     [\-c\ \fIchar\fR]
++     \fIsourcefile\fR
++     [\fIoutputfile\fR]
++
++.HP \w'\fBunstr\fR\ 'u
++
++  \fBunstr\fR     [\-c\ \fIchar\fR]
++     \fIdatafile\&.[ext]\fR
++     [\fIoutputfile\fR]
++
++.SH "DESCRIPTION"
++.PP
++\fBstrfile\fR
++reads a file containing groups of lines separated by a line containing a single percent `%\*(Aq sign (or other specified delimiter character) and creates a data file which contains a header structure and a table of file offsets for each group of lines\&. This allows random access of the strings\&.
++
++.PP
++The output file, if not specified on the command line, is named
++\fIsourcefile\&.dat\fR\&.
++
++.PP
++The purpose of
++\fBunstr\fR
++is to undo the work of
++\fBstrfile\fR\&. It prints out the strings contained in the sourcefile, which is
++\fIdatafile\&.ext\fR
++without its extension, or
++\fIdatafile\fR
++if no extension is specified (in this case, the extension
++\fB\&.dat\fR
++is added to the name of the datafile) in the order that they are listed in the header file
++\fIdatafile\fR\&. If no
++\fIoutputfile\fR
++is specified, it prints to standard output; otherwise it prints to the file specified\&.
++\fBunstr\fR
++can also universally change the delimiter character in a strings file\&. It is possible to create sorted versions of input files by using
++\fBstrfile \-o\fR
++and then using
++\fBunstr\fR
++to dump them out in the table order\&.
++
++.SS "Options"
++.PP
++The options are as follows:
++
++.PP
++\fB\-c \fR\fIchar\fR
++.RS 4
++
++Change the delimiting character from the percent sign to
++\fIchar\fR\&. This option is available for both
++\fBstrfile\fR
++and
++\fBunstr\fR\&.
++
++.RE
++.PP
++\fB\-i\fR
++.RS 4
++
++Ignore case when ordering the strings\&.
++
++.RE
++.PP
++\fB\-o\fR
++.RS 4
++
++Order the strings in alphabetical order\&. The offset table will be sorted in the alphabetical order of the groups of lines referenced\&. Any initial non\-alphanumeric characters are ignored\&. This option causes the STR_ORDERED bit in the header
++\fIstr_flags\fR
++field to be set\&. (It also now really does sort! It didn\*(Aqt used to)\&.
++
++.RE
++.PP
++\fB\-r\fR
++.RS 4
++
++Randomize access to the strings\&. Entries in the offset table will be randomly ordered\&. This option causes the STR_RANDOM bit in the header
++\fIstr_flags\fR
++field to be set\&. (And really does randomize)
++
++.RE
++.PP
++\fB\-s\fR
++.RS 4
++
++Run silently; don\*(Aqt give a summary message when finished\&.
++
++.RE
++.PP
++\fB\-x\fR
++.RS 4
++
++Note that each alphabetic character in the groups of lines is rotated 13 positions in a simple caesar cypher\&. This option causes the STR_ROTATED bit in the header
++\fIstr_flags\fR
++field to be set\&. Note that it
++\fBdoes not\fR
++rotate the strings\-\-that operation must be performed separately\&.
++
++.RE
++
++.SS "Header"
++.PP
++The format of the header is:
++
++.PP
++#define VERSION 1
++unsigned long str_version; /* version number */
++unsigned long str_numstr; /* # of strings in the file */
++unsigned long str_longlen; /* length of longest string */
++unsigned long str_shortlen; /* shortest string length */
++#define STR_RANDOM 0x1 /* randomized pointers */
++#define STR_ORDERED 0x2 /* ordered pointers */
++#define STR_ROTATED 0x4 /* rot\-13\*(Aqd text */
++unsigned long str_flags; /* bit field for flags */
++char str_delim; /* delimiting character */
++
++.PP
++All fields are written in network byte order\&.
++
++.SH "BUGS"
++.PP
++Fewer now, one hopes\&. However, fortunes (text strings) beginning with a blank line appear to be sorted between random letters\&. This includes ASCII art that contains no letters, and first lines that are solely non\-alphanumeric, apparently\&. I\*(Aqve no idea why this should be\&.
++
++.SH "OTHER USES"
++.PP
++What can you do with this besides printing sarcastic and obscene messages to the screens of lusers at login or logout?
++
++.PP
++There
++\fBare\fR
++some other possibilities\&. Source code for a sample program,
++\fBrandstr\fR, is included with this distribution: randstr splits the difference between
++\fBunstr\fR
++and
++\fBfortune\fR\&. It reads a single, specified file, and randomly selects a single text string\&.
++
++.PP
++1
++.RS 4
++
++Include
++\fIstrfile\&.h\fR
++into a news reading/posting program, to generate random signatures\&.
++\fBTin\fR(1)
++does something similar, in a much more complex manner\&.
++
++.RE
++.PP
++2
++.RS 4
++
++Include it in a game\&. While strfile doesn\*(Aqt support \*(Aqfields\*(Aq or \*(Aqrecords\*(Aq, there\*(Aqs no reason that the text strings can\*(Aqt be consistent: first line, a die roll; second line, a score; third and subsequent lines, a text message\&.
++
++.RE
++.PP
++3
++.RS 4
++
++Use it to store your address book\&. Hell, some of the guys I know would be as well off using it to decide who to call on Friday nights (and for some, it wouldn\*(Aqt matter whether there were phone numbers in it or not)\&.
++
++.RE
++.PP
++4
++.RS 4
++
++Use it in \*(Aqlottery\*(Aq situations\&. If you\*(Aqre an ISP, write a script to store login names and GECOS from
++/etc/passwd
++in strfile format, write another to send \*(Aqcongratulations, you\*(Aqve won\*(Aq to the lucky login selected\&. The prize might be a month\*(Aqs free service, or if you\*(Aqre AOL, a month free on a real service provider\&.
++
++.RE
++
++.SH "SEE ALSO"
++.PP
++\fBbyteorder\fR(3),
++\fBfortune\fR(6)
++
++.SH "HISTORY"
++.PP
++The
++\fBstrfile\fR
++utility first appeared in 4\&.4BSD\&. This version was heavily modified, much of it in ways peculiar to Linux\&. Work has since been done to make the code more generic, and has so far been tested to work with SunOS 4\&.x\&. More platforms are expected to be supported as work continues\&.
++

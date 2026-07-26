@@ -1,0 +1,12 @@
+diff --git a/test.pl b/test.pl
+index d1e161b..c578a79 100755
+--- a/test.pl
++++ b/test.pl
+@@ -103,6 +103,7 @@ if ($t3) {
+ 
+ if ($t4) {
+     $t4 = POE::Component::Child->new(
++        writemap => { quit => "bye" },
+     	events => \%t4, debug => $debug
+     	);
+     ok(defined $t4 && $t4->isa('POE::Component::Child'), "[4] init - pipe close");

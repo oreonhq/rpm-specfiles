@@ -1,0 +1,31 @@
+From 6e628076e432a7394289551d10c89c2ac327d0c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Wed, 4 Feb 2026 18:11:15 +0100
+Subject: [PATCH 3/5] Disable more test which requires db server
+
+---
+ test/test_main.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/test_main.py b/test/test_main.py
+index ca9103c..9d06284 100644
+--- a/test/test_main.py
++++ b/test/test_main.py
+@@ -54,12 +54,12 @@ def test_select_from_empty_table(executor):
+         +----+""")
+     assert expected in result.output
+ 
+-
++@dbtest
+ def test_is_valid_connection_scheme_valid(executor, capsys):
+     is_valid, scheme = is_valid_connection_scheme("mysql://test@localhost:3306/dev")
+     assert is_valid
+ 
+-
++@dbtest
+ def test_is_valid_connection_scheme_invalid(executor, capsys):
+     is_valid, scheme = is_valid_connection_scheme("nope://test@localhost:3306/dev")
+     assert not is_valid
+-- 
+2.52.0
+

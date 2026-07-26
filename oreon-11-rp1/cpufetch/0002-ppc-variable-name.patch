@@ -1,0 +1,14 @@
+diff -r -U4 cpufetch-1.07--orig/src/ppc/udev.c cpufetch-1.07--patched/src/ppc/udev.c
+--- cpufetch-1.07--orig/src/ppc/udev.c	2025-10-31 07:50:04.000000000 +0100
++++ cpufetch-1.07--patched/src/ppc/udev.c	2025-10-31 12:23:04.607516334 +0100
+@@ -12,9 +12,9 @@
+   int filelen;
+   char* buf;
+   char* end;
+   char path[128];
+-  memset(name, 0, sizeof(char) * 128);
++  memset(path, 0, sizeof(char) * 128);
+ 
+   for(int i=0; i < total_cores; i++) {
+     sprintf(path, "%s%s/cpu%d/%s", _PATH_SYS_SYSTEM, _PATH_SYS_CPU, i, SYS_PATH);
+     if((buf = read_file(path, &filelen)) == NULL) {

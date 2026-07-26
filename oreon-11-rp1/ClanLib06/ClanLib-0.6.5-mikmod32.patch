@@ -1,0 +1,11 @@
+diff -up ClanLib-0.6.5/Sources/MikMod/setupmikmod.cpp~ ClanLib-0.6.5/Sources/MikMod/setupmikmod.cpp
+--- ClanLib-0.6.5/Sources/MikMod/setupmikmod.cpp~	2008-02-17 19:14:36.000000000 +0100
++++ ClanLib-0.6.5/Sources/MikMod/setupmikmod.cpp	2008-02-17 19:14:36.000000000 +0100
+@@ -32,6 +32,7 @@ MDRIVER drv_clanlib = {
+ 	255,
+ 	255, 
+ 	"clanmikmod",
++	"",   // CmdLineHelp
+ 	NULL, // Command line
+ 	CL_Streamed_MikModSample_Session::clanMikMod_IsPresent, // IsPresent
+ 	VC_SampleLoad,

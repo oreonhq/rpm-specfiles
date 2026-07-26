@@ -1,0 +1,472 @@
+diff -urp pads-1.2.orig/src/identification.c pads-1.2/src/identification.c
+--- pads-1.2.orig/src/identification.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/identification.c	2008-07-12 10:56:07.000000000 -0400
+@@ -30,7 +30,10 @@
+ #include "storage.h"
+ #include "output/output.h"
+ 
+-Signature *signature_list;
++static Signature *signature_list = NULL, **tail = NULL;
++
++/* Local Functions */
++static void add_signature (Signature *sig);
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION     : init_identification
+@@ -40,7 +43,7 @@ Signature *signature_list;
+  * RETURN       : -1 - Error
+  *              : 0 - Normal Return
+  * ---------------------------------------------------------- */
+-int init_identification()
++int init_identification(void)
+ {
+     FILE *fp;
+     bstring filename;
+@@ -191,25 +194,13 @@ int parse_raw_signature (bstring line, i
+  * RETURN       : 0 - Success
+  *              : -1 - Error
+  * ---------------------------------------------------------- */
+-int add_signature (Signature *sig)
++static void add_signature (Signature *sig)
+ {
+-    Signature *list;
+-
+-    if (signature_list == NULL) {
++    if (tail == NULL)
+         signature_list = sig;
+-    } else {
+-        list = signature_list;
+-        while (list != NULL) {
+-            if (list->next == NULL) {
+-                list->next = sig;
+-                break;
+-            } else {
+-                list = list->next;
+-            }
+-        }
+-    }
+-
+-    return 0;
++    else
++        *tail = sig;
++    tail = &sig->next;
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -235,12 +226,12 @@ int tcp_identify (struct in_addr ip_addr
+ 
+     if (i_attempts > 0) {
+         i_attempts--;
+-        update_i_attempts(ip_addr, port, IPPROTO_TCP, i_attempts);
++        update_i_attempts(i_attempts);
+ 
+         if (pcre_identify(ip_addr, port, IPPROTO_TCP, payload, plen) == 1) {
+             /* MATCH! */
+             i_attempts = 0;
+-            update_i_attempts(ip_addr, port, IPPROTO_TCP, 0);
++            update_i_attempts(0);
+         }
+ 
+         /* Print asset if this is the last time to identify it. */
+diff -urp pads-1.2.orig/src/identification.h pads-1.2/src/identification.h
+--- pads-1.2.orig/src/identification.h	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/identification.h	2008-07-12 10:56:07.000000000 -0400
+@@ -39,7 +39,6 @@
+ /* PROTOTYPES -------------------------------------- */
+ int init_identification(void);
+ int parse_raw_signature (bstring line, int lineno);
+-int add_signature (Signature *sig);
+ int tcp_identify (struct in_addr ip_addr, u_int16_t port, char *payload, int plen);
+ int pcre_identify (struct in_addr ip_addr, u_int16_t port, unsigned short proto, const char *payload, int plen);
+ bstring get_app_name (Signature *sig, const char *payload, int *ovector, int rc);
+diff -urp pads-1.2.orig/src/mac-resolution.c pads-1.2/src/mac-resolution.c
+--- pads-1.2.orig/src/mac-resolution.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/mac-resolution.c	2008-07-12 10:56:07.000000000 -0400
+@@ -34,9 +34,14 @@
+ #include "mac-resolution.h"
+ #include "util.h"
+ 
+-Vendor *vendor_list = NULL;
++static Vendor *vendor_list = NULL;
++static Vendor **vtail = NULL;
+ 
+-/* ----------------------------------------------------------
++/* Local function prototype */
++static int parse_raw_mac (bstring line);
++static int add_vendor (const char *mac, const char *vendor);
++
++    /* ----------------------------------------------------------
+  * FUNCTION     : init_mac_resolution
+  * DESCRIPTION  : This file reads in the MAC address table.
+  * INPUT        : None
+@@ -94,7 +99,7 @@ int init_mac_resolution (void) {
+  * RETURN       : 0 - Success
+  *              : -1 - Error
+  * ---------------------------------------------------------- */
+-int parse_raw_mac (bstring line)
++static int parse_raw_mac (bstring line)
+ {
+     char mac[4];
+     char vendor[80];
+@@ -125,8 +130,8 @@ int parse_raw_mac (bstring line)
+  * INPUT        : 0 - MAC Address (bstring)
+  *              : 1 - Vendor (bstring)
+  * ---------------------------------------------------------- */
+-int add_vendor (char *mac, char *vendor){
+-    Vendor *list;
++static int add_vendor (const char *mac, const char *vendor)
++{
+     Vendor *rec;
+ 
+     /* Assign data to temporary data structure. */
+@@ -136,19 +141,11 @@ int add_vendor (char *mac, char *vendor)
+     rec->next = NULL;
+ 
+     /* Place data structure in MAC address list. */
+-    if(vendor_list == NULL) {
++    if(vtail == NULL)
+         vendor_list = rec;
+-    } else {
+-        list = vendor_list;
+-        while (list != NULL) {
+-            if (list->next == NULL) {
+-                list->next = rec;
+-                break;
+-            } else {
+-                list = list->next;
+-            }
+-        }
+-    }
++    else
++        *vtail = rec;
++    vtail = &rec->next;
+ 
+     return 0;
+ }
+diff -urp pads-1.2.orig/src/mac-resolution.h pads-1.2/src/mac-resolution.h
+--- pads-1.2.orig/src/mac-resolution.h	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/mac-resolution.h	2008-07-12 10:56:07.000000000 -0400
+@@ -39,8 +39,6 @@
+ 
+ /* PROTOTYPES -------------------------------------- */
+ int init_mac_resolution (void);
+-int parse_raw_mac (bstring line);
+-int add_vendor (char *mac, char *vendor);
+ bstring get_vendor (const char *m);
+ void end_mac_resolution (void);
+ 
+diff -urp pads-1.2.orig/src/monnet.c pads-1.2/src/monnet.c
+--- pads-1.2.orig/src/monnet.c	2008-07-12 08:36:10.000000000 -0400
++++ pads-1.2/src/monnet.c	2008-07-12 10:56:07.000000000 -0400
+@@ -87,49 +87,41 @@ void parse_networks (char *cmdline)
+     }
+ }
+ 
+-/* ----------------------------------------------------------
+- * FUNCTION	: init_netmasks
+- * DESCRIPTION	: This function will load netmasks into an
+- *		: array.
+- * INPUT	: 0 - Array
+- * RETURN	: None!
+- * ---------------------------------------------------------- */
+-void init_netmasks (unsigned int nm[33])
+-{
+-    nm[0] = 0x0;
+-    nm[1] = 0x80000000;
+-    nm[2] = 0xC0000000;
+-    nm[3] = 0xE0000000;
+-    nm[4] = 0xF0000000;
+-    nm[5] = 0xF8000000;
+-    nm[6] = 0xFC000000;
+-    nm[7] = 0xFE000000;
+-    nm[8] = 0xFF000000;
+-    nm[9] = 0xFF800000;
+-    nm[10] = 0xFFC00000;
+-    nm[11] = 0xFFE00000;
+-    nm[12] = 0xFFF00000;
+-    nm[13] = 0xFFF80000;
+-    nm[14] = 0xFFFC0000;
+-    nm[15] = 0xFFFE0000;
+-    nm[16] = 0xFFFF0000;
+-    nm[17] = 0xFFFF8000;
+-    nm[18] = 0xFFFFC000;
+-    nm[19] = 0xFFFFE000;
+-    nm[20] = 0xFFFFF000;
+-    nm[21] = 0xFFFFF800;
+-    nm[22] = 0xFFFFFC00;
+-    nm[23] = 0xFFFFFE00;
+-    nm[24] = 0xFFFFFF00;
+-    nm[25] = 0xFFFFFF80;
+-    nm[26] = 0xFFFFFFC0;
+-    nm[27] = 0xFFFFFFE0;
+-    nm[28] = 0xFFFFFFF0;
+-    nm[29] = 0xFFFFFFF8;
+-    nm[30] = 0xFFFFFFFC;
+-    nm[31] = 0xFFFFFFFE;
+-    nm[32] = 0xFFFFFFFF;
+-}
++static unsigned int netmasks[33] = {
++    0x0,
++    0x80000000,
++    0xC0000000,
++    0xE0000000,
++    0xF0000000,
++    0xF8000000,
++    0xFC000000,
++    0xFE000000,
++    0xFF000000,
++    0xFF800000,
++    0xFFC00000,
++    0xFFE00000,
++    0xFFF00000,
++    0xFFF80000,
++    0xFFFC0000,
++    0xFFFE0000,
++    0xFFFF0000,
++    0xFFFF8000,
++    0xFFFFC000,
++    0xFFFFE000,
++    0xFFFFF000,
++    0xFFFFF800,
++    0xFFFFFC00,
++    0xFFFFFE00,
++    0xFFFFFF00,
++    0xFFFFFF80,
++    0xFFFFFFC0,
++    0xFFFFFFE0,
++    0xFFFFFFF0,
++    0xFFFFFFF8,
++    0xFFFFFFFC,
++    0xFFFFFFFE,
++    0xFFFFFFFF,
++};
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: add_monnet
+@@ -143,12 +135,8 @@ void add_monnet(char *network, char *net
+ {
+     struct mon_net *rec, *data;
+     struct in_addr net_addr;
+-    unsigned int netmasks[33];
+     int nmask;
+ 
+-    /* Fill netmasks variable.  See init_netmasks in util.c. */
+-    init_netmasks(netmasks);
+-
+     nmask = atoi(netmask);
+ 
+     /* Ensure that the netmask is correct. */
+diff -urp pads-1.2.orig/src/monnet.h pads-1.2/src/monnet.h
+--- pads-1.2.orig/src/monnet.h	2008-07-12 08:36:10.000000000 -0400
++++ pads-1.2/src/monnet.h	2008-07-12 10:56:07.000000000 -0400
+@@ -41,7 +41,6 @@ struct mon_net {
+ 
+ /* PROTOTYPES -------------------------------------- */
+ void parse_networks (char *cmdline);
+-void init_netmasks (unsigned int nm[33]);
+ void add_monnet(char *network, char *netmask);
+ short check_monnet (const struct in_addr ip_addr);
+ void end_monnet (void);
+diff -urp pads-1.2.orig/src/output/output-csv.c pads-1.2/src/output/output-csv.c
+--- pads-1.2.orig/src/output/output-csv.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/output/output-csv.c	2008-07-12 10:59:31.000000000 -0400
+@@ -231,10 +231,6 @@ parse_raw_report (bstring line)
+     // Clean Up
+     if (list != NULL)
+ 	bstrListDestroy(list);
+-    if (service != NULL)
+-	bdestroy(service);
+-    if (application != NULL)
+-	bdestroy(application);
+ 
+     return ret;
+ }
+diff -urp pads-1.2.orig/src/packet.c pads-1.2/src/packet.c
+--- pads-1.2.orig/src/packet.c	2008-07-12 08:36:10.000000000 -0400
++++ pads-1.2/src/packet.c	2008-07-12 10:56:07.000000000 -0400
+@@ -232,8 +232,6 @@ void process_tcp (const struct pcap_pkth
+ 		    app = bfromcstr("unknown");
+ 		    add_asset(ip_src, tcph->th_sport,
+ 			    IPPROTO_TCP, serv, app, 0);
+-		    bdestroy(serv);
+-		    bdestroy(app);
+ 		} else {
+ 		    /* Record connection for statistical purposes. */
+ 		    print_stat(ip_src, tcph->th_sport, IPPROTO_TCP);
+@@ -295,8 +293,6 @@ void process_icmp (const struct pcap_pkt
+ 	    app = bfromcstr("ICMP");
+ 	    add_asset(ip_src, 0, IPPROTO_ICMP, serv, app, 0);
+ 	    print_asset(ip_src, 0, IPPROTO_ICMP);
+-	    bdestroy(serv);
+-	    bdestroy(app);
+ 	}
+     }
+ 
+diff -urp pads-1.2.orig/src/storage.c pads-1.2/src/storage.c
+--- pads-1.2.orig/src/storage.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/storage.c	2008-07-12 10:56:07.000000000 -0400
+@@ -29,8 +29,8 @@
+ #include "storage.h"
+ #include "mac-resolution.h"
+ 
+-static Asset *asset_list = NULL;
+-static ArpAsset *arp_asset_list = NULL;
++static Asset *asset_list = NULL, *current = NULL, **tail = NULL;
++static ArpAsset *arp_asset_list = NULL, **arp_tail = NULL;
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: check_tcp_asset
+@@ -127,8 +127,8 @@ int check_arp_asset (struct in_addr ip_a
+  * INPUT	: 0 - IP Address
+  *		: 1 - Port
+  *		: 2 - Protocol
+- *		: 3 - Service
+- *		: 4 - Application
++ *		: 3 - Service - takes custody of this memory
++ *		: 4 - Application - takes custody of this memory
+  *		: 5 - Discovered
+  * RETURN	: None!
+  * ---------------------------------------------------------- */
+@@ -140,15 +140,14 @@ void add_asset (struct in_addr ip_addr,
+ 		time_t discovered)
+ {
+     Asset *rec;
+-    Asset *list;
+ 
+     /* Assign list to temp structure.  */
+     rec = (Asset*)malloc(sizeof(Asset));
+     rec->ip_addr.s_addr = ip_addr.s_addr;
+     rec->port = port;
+     rec->proto = proto;
+-    rec->service = bstrcpy(service);
+-    rec->application = bstrcpy(application);
++    rec->service = service;
++    rec->application = application;
+     rec->next = NULL;
+ 
+     /*
+@@ -174,19 +173,11 @@ void add_asset (struct in_addr ip_addr,
+     }
+ 
+     /* Find this record's location within linked list.  */
+-    if (asset_list == NULL) {
++    if (tail == NULL) 
+ 	asset_list = rec;
+-    } else {
+-	list = asset_list;
+-	while (list != NULL) {
+-	    if (list->next == NULL) {
+-		list->next = rec;
+-		break;
+-	    } else {
+-		list = list->next;
+-	    }
+-	}
+-    }
++    else
++	*tail = rec;
++    tail = &rec->next;
+ 
+     return;
+ }
+@@ -203,7 +194,6 @@ void add_asset (struct in_addr ip_addr,
+ void add_arp_asset (struct in_addr ip_addr, const char *mac_addr,
+ 		    time_t discovered)
+ {
+-    ArpAsset *list;
+     ArpAsset *rec;
+     bstring mac_resolved;
+ 
+@@ -233,20 +223,11 @@ void add_arp_asset (struct in_addr ip_ad
+     }
+ 
+     /* Find this record's location within linked list.  */
+-    if (arp_asset_list == NULL) {
++    if (arp_tail == NULL) 
+ 	arp_asset_list = rec;
+-    } else {
+-	list = arp_asset_list;
+-
+-	while (list != NULL) {
+-	    if (list->next == NULL) {
+-		list->next = rec;
+-		break;
+-	    } else {
+-		list = list->next;
+-	    }
+-	}
+-    }
++    else
++	*arp_tail = arp_asset_list;
++    arp_tail = &arp_asset_list->next;
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -270,6 +251,7 @@ unsigned short get_i_attempts (struct in
+ 		&& port == rec->port
+ 		&& proto == rec->proto) {
+ 	    /* Found! */
++            current = rec;
+ 	    return rec->i_attempts;
+ 
+ 	} else {
+@@ -277,13 +259,14 @@ unsigned short get_i_attempts (struct in
+ 	}
+     }
+ 
++    current = NULL;
+     return 0;
+ }
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: update_i_attempts
+- * DESCRIPTION	: Updates the i_attempts field for a
+- *		: specified asset.
++ * DESCRIPTION	: Updates the i_attempts field of the current
++ *		: asset from previous call to get_i_attempts.
+  * INPUT	: 0 - IP Address
+  *		: 1 - Port
+  *		: 2 - Proto
+@@ -291,26 +274,11 @@ unsigned short get_i_attempts (struct in
+  * RETURN	: 0 - Success
+  *		: 1 - Failure
+  * ---------------------------------------------------------- */
+-short update_i_attempts (struct in_addr ip_addr,
+-			 u_int16_t port,
+-			 unsigned short proto,
+-			 unsigned short i_attempts)
++short update_i_attempts (unsigned short i_attempts)
+ {
+-    Asset *rec;
+-
+-    /* Find asset within linked list.  */
+-    rec = asset_list;
+-    while (rec != NULL) {
+-	if (ip_addr.s_addr == rec->ip_addr.s_addr
+-		&& port == rec->port
+-		&& proto == rec->proto) {
+-	    /* Found! */
+-	    rec->i_attempts = i_attempts;
+-	    return 0;
+-
+-	} else {
+-	    rec = rec->next;
+-	}
++    if (current) {
++        current->i_attempts = i_attempts;
++        return 0;
+     }
+ 
+     return 1;
+diff -urp pads-1.2.orig/src/storage.h pads-1.2/src/storage.h
+--- pads-1.2.orig/src/storage.h	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/storage.h	2008-07-12 10:56:07.000000000 -0400
+@@ -54,7 +54,7 @@ int check_arp_asset (struct in_addr ip_a
+ void add_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto, bstring service, bstring application, time_t discovered);
+ void add_arp_asset (struct in_addr ip_addr, const char *mac_addr, time_t discovered);
+ unsigned short get_i_attempts (struct in_addr ip_addr, u_int16_t port, unsigned short proto);
+-short update_i_attempts (struct in_addr ip_addr, u_int16_t port, unsigned short proto, unsigned short i_attempts);
++short update_i_attempts (unsigned short i_attempts);
+ short update_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto, bstring service, bstring application);
+ inline Asset *find_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto);
+ Asset *get_asset_pointer (void);

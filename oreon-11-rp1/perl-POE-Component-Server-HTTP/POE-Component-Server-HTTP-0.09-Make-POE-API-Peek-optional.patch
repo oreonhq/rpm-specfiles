@@ -1,0 +1,59 @@
+From 89292902bf68094808fb68ff9da94186f60f0604 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 24 Jun 2015 12:54:05 +0200
+Subject: [PATCH] Make POE::API::Peek optional
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+POE::API::Peek does not work with perl-5.22. This patch makes the
+dependency optional.
+
+CPAN RT#105463
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL  | 1 -
+ t/30_error.t | 7 ++++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9ffe9be..7399cf0 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -19,7 +19,6 @@ WriteMakefile(
+     PREREQ_PM      => {
+         POE => '0.3007',    # KR_RUN is certainly newer than 0.27, and
+                             # 0.3005 has a broken POE::Filter::HTTPD
+-        POE::API::Peek => 0,
+         File::Spec   => 0,
+         HTTP::Date   => 0,
+         HTTP::Status => 0,
+diff --git a/t/30_error.t b/t/30_error.t
+index 00bcebc..ab62389 100644
+--- a/t/30_error.t
++++ b/t/30_error.t
+@@ -11,7 +11,11 @@ use HTTP::Request;
+ use POE::Kernel;
+ use POE::Component::Server::HTTP;
+ use IO::Socket::INET;
+-use POE::API::Peek;
++
++my $have_api_peek;
++BEGIN {
++    $have_api_peek = eval 'use POE::API::Peek; 1';
++}
+ 
+ sub DEBUG { 0 };
+ my $PORT=2080;
+@@ -200,6 +204,7 @@ sub shutdown
+ sub __peek
+ {
+     my($verbose)=@_;
++    return unless $have_api_peek;
+     my $api=POE::API::Peek->new();
+     my @queue = $api->event_queue_dump();
+ 
+-- 
+2.1.0
+

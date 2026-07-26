@@ -1,0 +1,23 @@
+From 0a720a26dacbd45ae503de7dec8245f79267845b Mon Sep 17 00:00:00 2001
+From: Felix Yan <felixonmars@archlinux.org>
+Date: Mon, 10 Oct 2022 21:43:29 +0300
+Subject: [PATCH] Allow vector 0.13
+
+Tested to build fine with the new version.
+---
+ idris.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/idris.cabal b/idris.cabal
+index 19b32aded..887107853 100644
+--- a/idris.cabal
++++ b/idris.cabal
+@@ -355,7 +355,7 @@ Library
+                 , uniplate >=1.6 && < 1.7
+                 , unordered-containers < 0.3
+                 , utf8-string < 1.1
+-                , vector < 0.13
++                , vector < 0.14
+                 , vector-binary-instances < 0.3
+                 , zip-archive > 0.2.3.5 && < 0.5
+                 , fsnotify >= 0.2 && < 0.4

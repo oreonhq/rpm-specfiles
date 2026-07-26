@@ -1,0 +1,28 @@
+diff -rupN --no-dereference pyqt_builder-1.19.1/pyproject.toml pyqt_builder-1.19.1-new/pyproject.toml
+--- pyqt_builder-1.19.1/pyproject.toml	2025-06-03 16:12:19.000000000 +0200
++++ pyqt_builder-1.19.1-new/pyproject.toml	2025-12-23 08:01:28.698121841 +0100
+@@ -1,11 +1,12 @@
+ # The project configuration for PyQt-builder.
+ 
+ [build-system]
+-requires = ["setuptools>=77", "setuptools_scm>=8"]
++requires = ["setuptools>=77"]
+ build-backend = "setuptools.build_meta"
+ 
+-[tool.setuptools_scm]
+-version_file = "pyqtbuild/_version.py"
++[tool.setuptools]
++packages = ["pyqtbuild"]
++py-modules = ["__init__"]
+ 
+ [project]
+ name = "PyQt-builder"
+@@ -16,7 +17,7 @@ dependencies = ["packaging", "sip >=6.7,
+ requires-python = ">=3.8"
+ license = "BSD-2-Clause"
+ license-files = ["LICENSE"]
+-dynamic = ["version"]
++version = "@version@"
+ 
+ [[project.authors]]
+ name = "Phil Thompson"

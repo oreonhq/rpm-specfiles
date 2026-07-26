@@ -1,0 +1,23 @@
+diff -up kproperty-3.0.2/KPropertyCore.pc.cmake.pkgconfig kproperty-3.0.2/KPropertyCore.pc.cmake
+--- kproperty-3.0.2/KPropertyCore.pc.cmake.pkgconfig	2017-08-02 17:20:22.171228188 -0500
++++ kproperty-3.0.2/KPropertyCore.pc.cmake	2017-08-11 19:49:40.999822706 -0500
+@@ -7,6 +7,6 @@ Name: KPropertyCore@PROJECT_STABLE_VERSI
+ Description: A property editing framework (core library)
+ Version: @PROJECT_VERSION@
+ URL: https://community.kde.org/KProperty
+-Requires: Qt5Core
++Requires.private: Qt5Core
+ Libs: -L${libdir}
+ Cflags: -I${includedir}
+diff -up kproperty-3.0.2/KPropertyWidgets.pc.cmake.pkgconfig kproperty-3.0.2/KPropertyWidgets.pc.cmake
+--- kproperty-3.0.2/KPropertyWidgets.pc.cmake.pkgconfig	2017-08-02 17:20:22.171228188 -0500
++++ kproperty-3.0.2/KPropertyWidgets.pc.cmake	2017-08-11 19:50:33.784166098 -0500
+@@ -7,6 +7,7 @@ Name: KPropertyWidgets@PROJECT_STABLE_VE
+ Description: A property editing framework with editor (Qt Widgets library)
+ Version: @PROJECT_VERSION@
+ URL: https://community.kde.org/KProperty
+-Requires: KPropertyCore Qt5Core Qt5Gui KF5WidgetsAddons KF5GuiAddons
++Requires: KPropertyCore3
++Requires.private: Qt5Core Qt5Gui
+ Libs: -L${libdir}
+ Cflags: -I${includedir}

@@ -1,0 +1,121 @@
+From 01141f213fd47bb0aa5c86df6887eb5b4981e415 Mon Sep 17 00:00:00 2001
+From: Jussi Pakkanen <jpakkane@gmail.com>
+Date: Wed, 3 Jul 2024 23:48:06 +0300
+Subject: [PATCH] Building devtools is now optional.
+
+(cherry picked from commit bf493d8340cba0020e0feadc96a0900580ccf23f)
+---
+ {src => devtools}/hbtest.cpp    |  0
+ devtools/meson.build            | 15 +++++++++++++++
+ {src => devtools}/pdfparser.cpp |  0
+ {src => devtools}/pdfparser.hpp |  0
+ {src => devtools}/pdfviewer.cpp |  0
+ meson.build                     |  5 +++--
+ meson.options                   |  1 +
+ src/meson.build                 | 15 +--------------
+ 8 files changed, 20 insertions(+), 16 deletions(-)
+ rename {src => devtools}/hbtest.cpp (100%)
+ create mode 100644 devtools/meson.build
+ rename {src => devtools}/pdfparser.cpp (100%)
+ rename {src => devtools}/pdfparser.hpp (100%)
+ rename {src => devtools}/pdfviewer.cpp (100%)
+
+diff --git a/src/hbtest.cpp b/devtools/hbtest.cpp
+similarity index 100%
+rename from src/hbtest.cpp
+rename to devtools/hbtest.cpp
+diff --git a/devtools/meson.build b/devtools/meson.build
+new file mode 100644
+index 0000000..980dd3c
+--- /dev/null
++++ b/devtools/meson.build
+@@ -0,0 +1,15 @@
++gtk_dep = dependency('gtk4', required: false)
++hb_dep = dependency('harfbuzz', required: false)
++
++if gtk_dep.found()
++  executable('pdfviewer',
++    'pdfviewer.cpp',
++    'pdfparser.cpp',
++    dependencies: [zlib_dep, gtk_dep])
++endif
++
++if hb_dep.found()
++  executable('hbtest',
++    'hbtest.cpp',
++    dependencies: [capypdf_internal_dep, hb_dep])
++endif
+diff --git a/src/pdfparser.cpp b/devtools/pdfparser.cpp
+similarity index 100%
+rename from src/pdfparser.cpp
+rename to devtools/pdfparser.cpp
+diff --git a/src/pdfparser.hpp b/devtools/pdfparser.hpp
+similarity index 100%
+rename from src/pdfparser.hpp
+rename to devtools/pdfparser.hpp
+diff --git a/src/pdfviewer.cpp b/devtools/pdfviewer.cpp
+similarity index 100%
+rename from src/pdfviewer.cpp
+rename to devtools/pdfviewer.cpp
+diff --git a/meson.build b/meson.build
+index 8fe8ce1..1918d58 100644
+--- a/meson.build
++++ b/meson.build
+@@ -19,13 +19,14 @@ lcms_dep = dependency('lcms2')
+ jpeg_dep = dependency('libjpeg')
+ freetype_dep = dependency('freetype2')
+ tiff_dep = dependency('libtiff-4')
+-gtk_dep = dependency('gtk4', required: false)
+-hb_dep = dependency('harfbuzz', required: false)
+ 
+ pubinc = include_directories('include')
+ 
+ subdir('include')
+ subdir('src')
++if get_option('devtools')
++  subdir('devtools')
++endif
+ subdir('python')
+ subdir('test')
+ 
+diff --git a/meson.options b/meson.options
+index 10acbea..315f2fe 100644
+--- a/meson.options
++++ b/meson.options
+@@ -1 +1,2 @@
+ option('fuzzing', type: 'boolean', value: false, description: 'Build in fuzzing mode')
++option('devtools', type: 'boolean', value: false, description: 'Build devtools')
+diff --git a/src/meson.build b/src/meson.build
+index 9154bf1..353bc6d 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -34,7 +34,7 @@ capypdf_dep = declare_dependency(include_directories: pubinc,
+   link_with: capypdf_lib,
+ )
+ 
+-capypdf_internal_dep = declare_dependency(include_directories: pubinc,
++capypdf_internal_dep = declare_dependency(include_directories: [pubinc, '.'],
+   objects: capypdf_lib.extract_all_objects(recursive: false),
+   dependencies: capydeps,
+ )
+@@ -59,17 +59,4 @@ else
+     executable('loremipsum', 'loremipsum.cpp',
+       dependencies: [capypdf_internal_dep]
+     )
+-
+-    if gtk_dep.found()
+-      executable('pdfviewer',
+-        'pdfviewer.cpp',
+-        'pdfparser.cpp',
+-        dependencies: [zlib_dep, gtk_dep])
+-    endif
+-
+-    if hb_dep.found()
+-      executable('hbtest',
+-        'hbtest.cpp',
+-        dependencies: [capypdf_internal_dep, hb_dep])
+-    endif
+ endif
+-- 
+2.46.0
+

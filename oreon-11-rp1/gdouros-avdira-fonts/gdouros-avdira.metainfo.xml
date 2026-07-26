@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-avdira</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Avdira</name>
+	<summary>A font based on elements created by Demetrios Damilas (late 15th c.)</summary>
+	<description>
+		<p>
+			The first edition of Isocrates, edited by Demetrius Chalcondyles, was published
+			by Uldericus Scinzenzeler &amp; Sebastianus de Ponte Tremolo, in 1493 in Milan. It
+			was set in letters cut in 1481 by Bonus Accursius, copying the older elements
+			of Demetrius Damilas. A digital revival was prepared by Ralph P. Hancock for
+			his Milan (Mediolanum) font in 2000.
+		</p>
+		<p>
+			The font covers the Windows Glyph List, IPA Extensions, Greek Extended, Ancient
+			Greek Numbers, Byzantine and Ancient Greek Musical Notation, various
+			typographic extras and several Open Type features (Case-Sensitive Forms, Small
+			Capitals, Subscript, Superscript, Numerators, Denominators, Fractions, Old
+			Style Figures, Historical Forms, Stylistic Alternates, Ligatures).
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/Textfonts.htm</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

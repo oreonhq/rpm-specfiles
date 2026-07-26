@@ -1,0 +1,87 @@
+From 462051ad918def67d1e3e33c86b9d3f2626a9f5f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 10 Jul 2025 23:55:40 +0200
+Subject: [PATCH] Fix test_lazy_choices_help failure on Python 3.14+
+
+Python started raise early errors for invalid help strings,
+effectively triggering our LazyChoices action to query the options
+when added.
+
+By using a custom ArgumentParser subclass that disables this check,
+LazyChoices works as intended.
+
+Note that in real httpie code,
+all argument parsing is done via BaseHTTPieArgumentParser subclasses,
+so this fixes the problem in httpie as well as in the tests.
+
+Directly using BaseHTTPieArgumentParser in test_lazy_choices_help
+is not trivial, as it would require more setup.
+
+Fixes https://github.com/httpie/cli/issues/1641
+---
+ httpie/cli/argparser.py | 16 +++++++++++++++-
+ tests/test_cli_utils.py |  9 ++++++---
+ 2 files changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/httpie/cli/argparser.py b/httpie/cli/argparser.py
+index 9bf09b3b73..98b50d8e1c 100644
+--- a/httpie/cli/argparser.py
++++ b/httpie/cli/argparser.py
+@@ -76,9 +76,23 @@ def add_usage(self, usage, actions, groups, prefix=None):
+         )
+ 
+ 
++class HelpNotCheckingArgumentParser(argparse.ArgumentParser):
++    """
++    This is ArgumentParser which does not check the help when adding arguments.
++    Effectively, it reverts the behavior added to Python 3.14
++    in https://github.com/python/cpython/pull/124899
++
++    It needs to be used to make LazyChoices actually lazy.
++
++    Using this fixes https://github.com/httpie/cli/issues/1641
++    """
++    def _check_help(self, *args, **kwargs):
++        pass
++
++
+ # TODO: refactor and design type-annotated data structures
+ #       for raw args + parsed args and keep things immutable.
+-class BaseHTTPieArgumentParser(argparse.ArgumentParser):
++class BaseHTTPieArgumentParser(HelpNotCheckingArgumentParser):
+     def __init__(self, *args, **kwargs):
+         super().__init__(*args, **kwargs)
+         self.env = None
+diff --git a/tests/test_cli_utils.py b/tests/test_cli_utils.py
+index 8041727b57..69c5e7222e 100644
+--- a/tests/test_cli_utils.py
++++ b/tests/test_cli_utils.py
+@@ -1,6 +1,6 @@
+ import pytest
+-from argparse import ArgumentParser
+ from unittest.mock import Mock
++from httpie.cli.argparser import HelpNotCheckingArgumentParser
+ from httpie.cli.utils import LazyChoices
+ 
+ 
+@@ -9,7 +9,10 @@ def test_lazy_choices():
+     getter = mock.getter
+     getter.return_value = ['a', 'b', 'c']
+ 
+-    parser = ArgumentParser()
++    # On Python 3.14+ LazyChoices only works properly
++    # with our custom ArgumentParser.
++    # In httpie code base, all our argument parsers inherit from this class.
++    parser = HelpNotCheckingArgumentParser()
+     parser.register('action', 'lazy_choices', LazyChoices)
+     parser.add_argument(
+         '--option',
+@@ -57,7 +60,7 @@ def test_lazy_choices_help():
+     help_formatter = mock.help_formatter
+     help_formatter.return_value = '<my help>'
+ 
+-    parser = ArgumentParser()
++    parser = HelpNotCheckingArgumentParser()
+     parser.register('action', 'lazy_choices', LazyChoices)
+     parser.add_argument(
+         '--lazy-option',

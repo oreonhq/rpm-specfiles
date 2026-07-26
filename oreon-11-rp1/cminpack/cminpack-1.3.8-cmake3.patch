@@ -1,0 +1,15 @@
+diff -up ./examples/CMakeLists.txt.cmake3 ./examples/CMakeLists.txt
+--- ./examples/CMakeLists.txt.cmake3	2021-08-25 20:50:57.185399298 -0400
++++ ./examples/CMakeLists.txt	2021-08-25 20:51:18.570555260 -0400
+@@ -57,10 +57,9 @@ if (BUILD_EXAMPLES_FORTRAN)
+ 
+     # add the executable that will do the generation
+     add_executable (genf77tests genf77tests.c)
+-    get_target_property (GENF77TESTS_EXE genf77tests LOCATION)
+     add_custom_command (
+       OUTPUT ${FPGM_SRCS}
+-      COMMAND ${GENF77TESTS_EXE} ${CMINPACK_SOURCE_DIR}/docs/minpack-documentation.txt
++      COMMAND genf77tests ${CMINPACK_SOURCE_DIR}/docs/minpack-documentation.txt
+       WORKING_DIRECTORY ${CMINPACK_SOURCE_DIR}/examples
+       DEPENDS genf77tests
+       MAIN_DEPENDENCY ${CMINPACK_SOURCE_DIR}/docs/minpack-documentation.txt

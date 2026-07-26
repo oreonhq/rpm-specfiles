@@ -1,0 +1,9 @@
+--- a/lib/dune	2022-02-18 14:11:21.131843316 -0700
++++ b/lib/dune	2022-03-02 11:23:11.795901742 -0700
+@@ -1,4 +1,5 @@
+ (library
+  (public_name facile)
+- (ocamlopt_flags (-unsafe -noassert -inline 10))
++ (flags -cclib -lm)
++ (ocamlopt_flags (-g -unsafe -noassert -inline 10))
+ )

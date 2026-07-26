@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>ballbuster.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Ball: Buster</name>
+  <summary>Move the paddle to bounce the ball and break all the bricks</summary>
+  <description>
+    <p>
+      Game inspired by one of the great classics. The purpose of the game is
+      to remove all the bricks on the screen, by hitting them with a ball.
+      You can control the ball by bouncing it back at the bricks with a paddle
+      which you control with your mouse.
+    </p>
+    <p>The game features:</p>
+    <ul>
+     <li>A built in level editor</li>
+     <li>20 powerups</li>
+     <li>Particle effects</li>
+     <li>Alpha effects</li>
+     <li>Rotating and zooming</li>
+    </ul>
+  </description>
+  <url type="homepage">https://admin.fedoraproject.org/pkgdb/package/rpms/ballbuster/</url>
+  <screenshots>
+    <screenshot type="default">https://fedorapeople.org/~jwrdegoede/screenshots/ballbuster-play.png</screenshot>
+    <screenshot>https://fedorapeople.org/~jwrdegoede/screenshots/ballbuster-title.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

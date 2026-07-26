@@ -1,0 +1,76 @@
+--- CMakeModules/FindQWT.orig.cmake	2015-06-17 07:55:18.000000000 +0200
++++ CMakeModules/FindQWT.cmake	2015-06-22 11:34:42.750303512 +0200
+@@ -16,7 +16,8 @@
+ #  QWT_LIBRARY - Link these to use qwt
+ 
+ find_path(QWT_INCLUDE_DIR qwt.h
+-    PATHS $ENV{QWT_DIR}/include
++    PATHS /usr/include
++          $ENV{QWT_DIR}/include
+           $ENV{QWT_DIR}
+           ~/Library/Frameworks
+           /Library/Frameworks
+@@ -38,7 +39,8 @@
+           qwt-qt4
+           qwt-static
+           qwt
+-    PATHS $ENV{QWT_DIR}/lib
++    PATHS @@libdir@@
++          $ENV{QWT_DIR}/lib
+           $ENV{QWT_DIR}
+           ~/Library/Frameworks
+           /Library/Frameworks
+--- CMakeModules/FindMML.orig.cmake	2015-06-17 07:55:18.000000000 +0200
++++ CMakeModules/FindMML.cmake	2015-06-22 20:53:18.388194667 +0200
+@@ -20,6 +20,7 @@
+           /opt/csw/include   # Blastwave
+           /opt/include
+           /usr/freeware/include
++          @@_libmml_includedir@@
+     NO_DEFAULT_PATH)
+ 
+ if (NOT MML_INCLUDE_DIR)
+@@ -29,7 +30,8 @@
+ find_library(MML_LIBRARY
+     NAMES mml-static 
+           mml 
+-          QtSolutions_MMLWidget-2.4
++          QtSolutions_MMLWidget-2.4 
++          qtmmlwidget
+     PATHS $ENV{MML_DIR}/lib
+           $ENV{MML_DIR}
+           ~/Library/Frameworks
+@@ -39,13 +41,15 @@
+           /opt/csw/lib   # Blastwave
+           /opt/lib
+           /usr/freeware/lib64
++          @@_libmml_libdir@@
+      NO_DEFAULT_PATH)
+ 
+ if (NOT MML_LIBRARY)
+ find_library(MML_LIBRARY
+     NAMES mml-static 
+           mml 
+-          QtSolutions_MMLWidget-2.4)
++          QtSolutions_MMLWidget-2.4 
++          qtmmlwidget)
+ endif()
+ 
+ if (NOT MML_INCLUDE_DIR)
+--- CMakeModules/FindSBW.orig.cmake	2015-06-17 07:55:18.000000000 +0200
++++ CMakeModules/FindSBW.cmake	2015-06-22 21:46:45.681316360 +0200
+@@ -58,11 +58,10 @@
+ 
+ if (NOT SBW_LIBRARY)
+     find_library(SBW_LIBRARY
+-        NAMES SBW-static
+-              SBW
++        NAMES SBW
++              libsbw
+               sbw 
+-              libSBW 
+-              libsbw)
++              libSBW)
+ endif ()
+ 
+ if(NOT TARGET SBW::SBW)

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=cwm
+Comment=OpenBSD fork of calmwm, a clean and lightweight window manager
+Exec=cwm
+TryExec=cwm
+Type=Application
+DesktopNames=cwm
+Keywords=wm;windowmanager;window;manager;xsession

@@ -1,0 +1,46 @@
+From 39bc4ef841d2604f06f9b89674e49ffa9f23315b Mon Sep 17 00:00:00 2001
+From: Lars Kiesow <lkiesow@uos.de>
+Date: Sat, 6 Nov 2021 19:39:38 +0100
+Subject: [PATCH] Fix Tests (conversion from int to string)
+
+Running the tests with newer versions of Go fails with the following
+error:
+
+    # github.com/skip2/go-qrcode
+    ./qrcode_decode_test.go:125:14: conversion from int to string yields a string of one rune, not a string of digits (did you mean fmt.Sprint(x)?)
+    ./qrcode_decode_test.go:157:15: conversion from int to string yields a string of one rune, not a string of digits (did you mean fmt.Sprint(x)?)
+    FAIL    github.com/skip2/go-qrcode [build failed]
+
+Run into the bug wuth:
+
+    % go version
+    go version go1.16.8 linux/amd64
+
+This patch patch fixes the issue by converting `int` to `string` using
+`rune()`.
+---
+ qrcode_decode_test.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/qrcode_decode_test.go b/qrcode_decode_test.go
+index 1f4b1d3..2b0756b 100644
+--- a/qrcode_decode_test.go
++++ b/qrcode_decode_test.go
+@@ -122,7 +122,7 @@ func TestDecodeAllCharacters(t *testing.T) {
+ 
+ 	// zbarimg has trouble with null bytes, hence start from ASCII 1.
+ 	for i := 1; i < 256; i++ {
+-		content += string(i)
++		content += string(rune(i))
+ 	}
+ 
+ 	q, err := New(content, Low)
+@@ -154,7 +154,7 @@ func TestDecodeFuzz(t *testing.T) {
+ 		for j := 0; j < len; j++ {
+ 			// zbarimg seems to have trouble with special characters, test printable
+ 			// characters only for now.
+-			content += string(32 + r.Intn(94))
++			content += string(rune(32 + r.Intn(94)))
+ 		}
+ 
+ 		for _, level := range []RecoveryLevel{Low, Medium, High, Highest} {

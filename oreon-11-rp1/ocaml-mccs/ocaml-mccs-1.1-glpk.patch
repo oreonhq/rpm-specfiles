@@ -1,0 +1,10 @@
+--- a/src/dune	2022-02-19 15:13:53.512120087 -0700
++++ b/src/dune	2022-02-19 15:14:35.326162764 -0700
+@@ -12,6 +12,7 @@
+   (:include cxxflags.sexp))
+  (c_library_flags
+   :standard
++  -lglpk
+   (:include clibs.sexp))
+  (library_flags
+   :standard

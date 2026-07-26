@@ -1,0 +1,566 @@
+diff -ur auriferous-1.0.1/auriferous/auriferous.cpp auriferous-1.0.1.new/auriferous/auriferous.cpp
+--- auriferous-1.0.1/auriferous/auriferous.cpp	2019-11-06 16:48:24.463294278 +0100
++++ auriferous-1.0.1.new/auriferous/auriferous.cpp	2019-11-05 14:14:46.335888833 +0100
+@@ -102,6 +101,7 @@
+ 		cout<<err.message<<endl;
+ 		return 255;
+ 	}
++	return 0;
+ }
+ void Auriferous::intro()
+ {
+diff -up auriferous-1.0.1/auriferous/config.cpp~ auriferous-1.0.1/auriferous/config.cpp
+--- auriferous-1.0.1/auriferous/config.cpp~	2019-11-06 17:00:51.000000000 +0100
++++ auriferous-1.0.1/auriferous/config.cpp	2019-11-06 17:06:00.557337696 +0100
+@@ -26,16 +26,16 @@
+ #include <dirent.h>
+ #endif
+ 
+-bool Config::music=true;
++int Config::music=true;
+ int Config::music_vol=2;
+ int Config::maxl=100;
+-bool Config::intro=true;
++int Config::intro=true;
+ int Config::skill=2;
+-bool Config::full_screen=true;
++int Config::full_screen=true;
+ int Config::speed=3;
+-bool Config::fps=false;
++int Config::fps=false;
+ int Config::last_level=1;
+-int Config::ms=0;
++unsigned int Config::ms=0;
+ int Config::keys[18]={1,4,23,19,17,5,26,24,3,85,87,89,86,88,90,82,83,84};
+ 
+ #ifdef WIN32
+@@ -195,7 +195,7 @@ void Config::init()
+ 		cout<<"no extra maps"<<endl;
+ 	}
+ 
+-  for(int i=0; i<map_samples.size(); i++)
++  for(unsigned int i=0; i<map_samples.size(); i++)
+   {
+     if(map_samples[i]==last_levelset)
+     ms=i;
+diff -up auriferous-1.0.1/auriferous/config.h~ auriferous-1.0.1/auriferous/config.h
+--- auriferous-1.0.1/auriferous/config.h~	2002-05-20 18:58:11.000000000 +0200
++++ auriferous-1.0.1/auriferous/config.h	2019-11-06 17:05:49.158251109 +0100
+@@ -58,18 +58,18 @@ public:
+ 
+ private:
+ 
+-	static int ms;
++	static unsigned int ms;
+ 	static vector <CL_String> map_samples;
+-	static bool music;
+-	static bool intro;
+-	static bool full_screen;
++	static int music;
++	static int intro;
++	static int full_screen;
+ 	static int music_vol;
+ 	static int skill;
+ 	static int speed;
+ 	static CL_String last_levelset;
+ 	static int last_level;
+ 	static CL_String filename;
+-	static bool fps;
++	static int fps;
+ 	static int maxl;
+ };
+ 
+diff -up auriferous-1.0.1/auriferous/acid.cpp~ auriferous-1.0.1/auriferous/acid.cpp
+--- auriferous-1.0.1/auriferous/acid.cpp~	2002-05-29 21:44:36.000000000 +0200
++++ auriferous-1.0.1/auriferous/acid.cpp	2019-11-06 21:41:16.890624424 +0100
+@@ -36,14 +36,15 @@ Acid::~Acid()
+ }
+ void Acid::act()
+ {
+-	if(timer->time_elapsed()>=1.0f)
+-	if(sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==NORMAL)
+-	{
+-		move(DOWN, 20);
+-		static_cast <Maptile_normal*> (sample->map->get_maptile(map_x(16), map_y()+32))->dig();
++	if(timer->time_elapsed()>=1.0f) {
++		if(sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==NORMAL)
++		{
++			move(DOWN, 20);
++			static_cast <Maptile_normal*> (sample->map->get_maptile(map_x(16), map_y()+32))->dig();
++		}
++		else
++			this->set_delme();
+ 	}
+-	else
+-	this->set_delme();
+ }
+ void Acid::show()
+ {
+diff -up auriferous-1.0.1/auriferous/editor.cpp~ auriferous-1.0.1/auriferous/editor.cpp
+--- auriferous-1.0.1/auriferous/editor.cpp~	2019-11-06 17:11:00.000000000 +0100
++++ auriferous-1.0.1/auriferous/editor.cpp	2019-11-06 17:16:40.046195491 +0100
+@@ -192,33 +192,33 @@ void Editor::act()
+ 
+   if(timer->time_elapsed()>=0.5f)
+   {
+-  if(menu==0)
+-  if(CL_Mouse::left_pressed())
+-  {
+-    this->select();
+-    this->paint();
+-  }
+-  else if(CL_Mouse::right_pressed())
+-  {
+-    this->erase();
+-  }
+-  else if(CL_Mouse::middle_pressed())
+-  {
+-    if(CL_Mouse::get_x()>32 && CL_Mouse::get_x()<992 && CL_Mouse::get_y()>32 && CL_Mouse::get_y()<704)
++  if(menu==0) {
++    if(CL_Mouse::left_pressed())
+     {
+-      if(Toollayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1].find(110, 0)!=-1) //monk
+-      menu=1;
+-      else if(Turflayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1].find(84, 0)!=-1)  //tele
+-      menu=2;
+-      else if(Turflayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1].find(77, 0)!=-1)  //move
+-      menu=3;
++      this->select();
++      this->paint();
++    }
++    else if(CL_Mouse::right_pressed())
++    {
++      this->erase();
++    }
++    else if(CL_Mouse::middle_pressed())
++    {
++      if(CL_Mouse::get_x()>32 && CL_Mouse::get_x()<992 && CL_Mouse::get_y()>32 && CL_Mouse::get_y()<704)
++      {
++        if(Toollayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1].find(110, 0)!=-1) //monk
++        menu=1;
++        else if(Turflayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1].find(84, 0)!=-1)  //tele
++        menu=2;
++        else if(Turflayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1].find(77, 0)!=-1)  //move
++        menu=3;
+ 
+-      mx=(CL_Mouse::get_x()/32)-1;
+-      my=(CL_Mouse::get_y()/32)-1;
++        mx=(CL_Mouse::get_x()/32)-1;
++        my=(CL_Mouse::get_y()/32)-1;
++      }
+     }
+   }
+-
+-  if(menu==1)
++  else if(menu==1)
+   {
+     if(CL_Mouse::left_pressed() && CL_Mouse::get_x()>32 && CL_Mouse::get_x()<992 && CL_Mouse::get_y()>32 && CL_Mouse::get_y()<704)
+     {
+@@ -482,38 +482,39 @@ void Editor::select()
+ }
+ void Editor::paint()
+ {
+-  if(CL_Mouse::get_x()>32 && CL_Mouse::get_x()<992 && CL_Mouse::get_y()>32 && CL_Mouse::get_y()<704)
+-  if(turf)
+-  {
+-    Turflayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1]=pencil;
+-    Toollayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1]="";
+-  }
+-  else
+-  {
+-    if(pencil=="P0")
++  if(CL_Mouse::get_x()>32 && CL_Mouse::get_x()<992 && CL_Mouse::get_y()>32 && CL_Mouse::get_y()<704) {
++    if(turf)
+     {
+-      for(int x=0; x<30; ++x)
++      Turflayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1]=pencil;
++      Toollayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1]="";
++    }
++    else
++    {
++      if(pencil=="P0")
+       {
+-        for(int y=0; y<21; ++y)
++        for(int x=0; x<30; ++x)
+         {
+-          if(Toollayer[x][y]=="P0")
+-          Toollayer[x][y]="";
++          for(int y=0; y<21; ++y)
++          {
++            if(Toollayer[x][y]=="P0")
++            Toollayer[x][y]="";
++          }
+         }
+       }
+-    }
+-    else if(pencil=="P1")
+-    {
+-      for(int x=0; x<30; ++x)
++      else if(pencil=="P1")
+       {
+-        for(int y=0; y<21; ++y)
++        for(int x=0; x<30; ++x)
+         {
+-          if(Toollayer[x][y]=="P1")
+-          Toollayer[x][y]="";
++          for(int y=0; y<21; ++y)
++          {
++            if(Toollayer[x][y]=="P1")
++            Toollayer[x][y]="";
++          }
+         }
+       }
+-    }
+ 
+-    Toollayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1]=pencil;
++      Toollayer[(CL_Mouse::get_x()/32)-1][(CL_Mouse::get_y()/32)-1]=pencil;
++    }
+   }
+ 
+ }
+diff -up auriferous-1.0.1/auriferous/lasertripmine.cpp~ auriferous-1.0.1/auriferous/lasertripmine.cpp
+--- auriferous-1.0.1/auriferous/lasertripmine.cpp~	2002-05-23 20:23:54.000000000 +0200
++++ auriferous-1.0.1/auriferous/lasertripmine.cpp	2019-11-06 21:42:47.732281414 +0100
+@@ -41,7 +41,7 @@ void Lasertripmine::act()
+         PLAY(Resources::Lasertripmine());
+       }
+ 
+-			if(sample->get_gameobjectg(map_x(16), map_y())->get_type()==MONK || sample->get_map_gameobject(map_x(16), map_y())->get_type()==PLAYER && timer->time_elapsed()>=0.8f)
++			if((sample->get_gameobjectg(map_x(16), map_y())->get_type()==MONK || sample->get_map_gameobject(map_x(16), map_y())->get_type()==PLAYER) && timer->time_elapsed()>=0.8f)
+ 			{
+ 				new Explosion(x-48, y-48, 0, sample);
+ 				this->set_delme();							
+diff -up auriferous-1.0.1/auriferous/monk.cpp~ auriferous-1.0.1/auriferous/monk.cpp
+--- auriferous-1.0.1/auriferous/monk.cpp~	2002-05-31 16:36:45.000000000 +0200
++++ auriferous-1.0.1/auriferous/monk.cpp	2019-11-06 17:49:06.806032134 +0100
+@@ -237,9 +237,10 @@ void Monk::check_movement()
+ 
+ 		if(have_gold!=-1)
+ 		{
+-      if(sample->map->get_maptile(map_x(16), map_y(16)-32)->get_type()==EMPTY)
+-			new Tool_gold(map_x(16), map_y()-32, have_gold, sample);
+-			have_gold=-1;
++			if(sample->map->get_maptile(map_x(16), map_y(16)-32)->get_type()==EMPTY) {
++				new Tool_gold(map_x(16), map_y()-32, have_gold, sample);
++				have_gold=-1;
++			}
+ 		}
+ 	}
+ 
+@@ -274,33 +275,35 @@ void Monk::check_movement()
+ 		sprite->set_new(10.0f, 22, 23);
+ 		y=sample->map->get_maptile(map_x(16), map_y())->get_y();
+ 	}
+-	else if((!hole && sample->get_monkih(map_x(16), map_y(16)+32)==false) && ((sample->map->get_maptile(map_x(16), map_y()+32)->is_fallt() || sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==WATER) && sample->map->get_maptile(map_x(16), map_y(16))->get_type()!=LADDER && sample->map->get_maptile(map_x(16), map_y())->get_type()!=BAR) || fob && !hole)
++	else if((!hole && sample->get_monkih(map_x(16), map_y(16)+32)==false && (sample->map->get_maptile(map_x(16), map_y()+32)->is_fallt() || sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==WATER) && sample->map->get_maptile(map_x(16), map_y(16))->get_type()!=LADDER && sample->map->get_maptile(map_x(16), map_y())->get_type()!=BAR) || (fob && !hole))
+ 	{
+ 		move(DOWN, speed+60.0f);
+ 		falling=true;
+ 		sprite->set_new(0.1f, 22, 24);
+ 		x=sample->map->get_maptile(map_x(16), map_y())->get_x();
+ 
+-		if(sample->map->get_maptile(map_x(16), map_y()+32)->get_type()!=WATER && sample->map->get_maptile(map_x(16), map_y()+32)->is_blocking() || sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==LADDER)
++		if((sample->map->get_maptile(map_x(16), map_y()+32)->get_type()!=WATER && sample->map->get_maptile(map_x(16), map_y()+32)->is_blocking()) || sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==LADDER)
+ 		{
+ 			y=sample->map->get_maptile(map_x(16), map_y())->get_y();
+ 			dir=STOPPED;
+ 			falling=false;
+ 			fob=false;
+ 			sprite->set_new(10.0f, 22, 23);
+-		}                                         				if(sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==SLIME)
+-
+-		if(fob==true && sample->map->get_maptile(map_x(16), map_y()-32*bl)->get_type()==BAR)
+-		{
+-			fob=false;
+-			falling=false;
+-			bl++;
+ 		}
+-		else if(fob==true && sample->map->get_maptile(map_x(16), map_y())->get_type()!=BAR)
+-		{
+-			falling=false;
+-			fob=false;
+-			bl=0;
++
++		if(sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==SLIME) {
++			if(fob==true && sample->map->get_maptile(map_x(16), map_y()-32*bl)->get_type()==BAR)
++			{
++				fob=false;
++				falling=false;
++				bl++;
++			}
++			else if(fob==true && sample->map->get_maptile(map_x(16), map_y())->get_type()!=BAR)
++			{
++				falling=false;
++				fob=false;
++				bl=0;
++			}
+ 		}
+ 	}
+ 	else
+@@ -461,8 +464,8 @@ bool Monk::move_up()
+ }
+ bool Monk::move_down()
+ {
+-	if(sample->map->get_maptile(map_x(16), map_y(16))->get_type()==BAR || (sample->map->get_maptile(map_x(16), map_y(16))->get_type()==LADDER || sample->map->get_maptile(map_x(16), map_y(16)+32)->get_type()==LADDER) && sample->map->get_maptile(map_x(16), map_y(16)+32)->is_blocking()==false)
+-	return true;
++	if(sample->map->get_maptile(map_x(16), map_y(16))->get_type()==BAR || ((sample->map->get_maptile(map_x(16), map_y(16))->get_type()==LADDER || sample->map->get_maptile(map_x(16), map_y(16)+32)->get_type()==LADDER) && sample->map->get_maptile(map_x(16), map_y(16)+32)->is_blocking()==false))
++		return true;
+ 
+ 	return false;
+ }
+diff -up auriferous-1.0.1/auriferous/monk_ai.cpp~ auriferous-1.0.1/auriferous/monk_ai.cpp
+--- auriferous-1.0.1/auriferous/monk_ai.cpp~	2019-11-06 17:11:00.000000000 +0100
++++ auriferous-1.0.1/auriferous/monk_ai.cpp	2019-11-06 17:21:35.192438231 +0100
+@@ -55,7 +55,7 @@ void Monk_Ai::act()
+ 		//who's the next sacrifice? :)
+ 		if(sample->p2) /* 2 player mode ? */
+ 		{
+-			if((sample->p2->is_hunted()==false && sample->p1->is_hunted()==true) || sample->p1->is_hunted() && distance(monk->get_x(), monk->get_y(), sample->p1->get_x(), sample->p1->get_y()) <= distance(monk->get_x(), monk->get_y(), sample->p2->get_x(), sample->p2->get_y()))
++			if((sample->p2->is_hunted()==false && sample->p1->is_hunted()==true) || (sample->p1->is_hunted() && distance(monk->get_x(), monk->get_y(), sample->p1->get_x(), sample->p1->get_y()) <= distance(monk->get_x(), monk->get_y(), sample->p2->get_x(), sample->p2->get_y())))
+ 			{
+ 				if(monk->move_up() && sample->p1->get_y()<monk->get_y())
+ 				up=true;
+@@ -128,29 +128,31 @@ void Monk_Ai::act()
+ 
+ 	if(monk->move_hleft() || monk->move_hright())
+ 	{
+-
+-		if(hp1)
+-		if(monk->move_hleft() && monk->get_x() > sample->p1->get_x())
+-		{
+-			left=true;
+-			right=up=down=false;
+-		}
+-		else if(monk->move_hright() && monk->get_x() < sample->p1->get_x())
+-		{
+-			right=true;
+-			left=up=down=false;
++		if(hp1) {
++			if(monk->move_hleft() && monk->get_x() > sample->p1->get_x())
++			{
++				left=true;
++				right=up=down=false;
++			}
++			else if(monk->move_hright() && monk->get_x() < sample->p1->get_x())
++			{
++				right=true;
++				left=up=down=false;
++			}
+ 		}
+-		if (hp2)
+-		if(monk->move_hleft() && monk->get_x() > sample->p2->get_x())
+-		{
+-			left=true;
+-			right=up=down=false;
++
++		if (hp2) {
++			if(monk->move_hleft() && monk->get_x() > sample->p2->get_x())
++			{
++				left=true;
++				right=up=down=false;
++			}
++			else if(monk->move_hright() && monk->get_x() < sample->p2->get_x())
++			{
++				right=true;
++				left=up=down=false;
++			}
+ 		}
+-		else if(monk->move_hright() && monk->get_x() < sample->p2->get_x())
+-		{
+-			right=true;
+-			left=up=down=false;
+-		}		
+ 	}
+ 
+   //debug keyz :)
+diff -up auriferous-1.0.1/auriferous/player.cpp~ auriferous-1.0.1/auriferous/player.cpp
+--- auriferous-1.0.1/auriferous/player.cpp~	2019-11-06 17:11:00.000000000 +0100
++++ auriferous-1.0.1/auriferous/player.cpp	2019-11-06 17:58:27.866347845 +0100
+@@ -87,10 +87,10 @@ Player::Player(int _x, int _y, bool _t,
+ 	trapped=0;
+ 	eated=0;
+ 
+-  if(ty)
+-	sur=Resources::Playerr();
+-  else
+-	sur=Resources::Player();
++	if(ty)
++		sur=Resources::Playerr();
++	else
++		sur=Resources::Player();
+ 
+ 	sprite=new Sprite(sur, 10.0f, 0, 0);
+ }
+@@ -198,44 +198,46 @@ void Player::die()
+ }
+ void Player::show()
+ {
+-	if(lives>0)
+-	if(transfer!=true)
+-	sprite->put_screen(x, y);
+-	else
+-	Resources::Tiles()->put_screen(px, py, 41);	
++	if(lives>0) {
++		if(transfer!=true)
++			sprite->put_screen(x, y);
++		else
++			Resources::Tiles()->put_screen(px, py, 41);
++	}
++			
+ }
+ void Player::act()
+ {
+-	if(lives>0)
+-	if(controller->is_locked())
+-	{
+-		if(ctimer->time_elapsed()>1.0f)
+-		controller->set_locked(false);
+-	}
++	if(lives>0) {
++		if(controller->is_locked())
++		{
++			if(ctimer->time_elapsed()>1.0f)
++				controller->set_locked(false);
++		}
+ 
+-	if(lives>0)
+-	if(!died)
+-	{
+-		if(transfer==true)
+-		check_transfer();
+-		else if(!trapped)
+-		{
+-			if(drill || sliming || pick)
+-			drilld();
+-			else if(!check_toolment())
+-			check_movement();	
++		if(!died)
++		{
++			if(transfer==true)
++				check_transfer();
++			else if(!trapped)
++			{
++				if(drill || sliming || pick)
++					drilld();
++				else if(!check_toolment())
++					check_movement();	
++			}
++		}
++		else
++		{
++			sprite->set_new(0.1f, 135, 139);
++			if(controller->is_left() || controller->is_right() || controller->is_up() || controller->is_down())
++			{
++				died=false;
++				PLAY(Resources::Born());
++			}
+ 		}
+ 	}
+-	else
+-	{
+-		sprite->set_new(0.1f, 135, 139);
+-		if(controller->is_left() || controller->is_right() || controller->is_up() || controller->is_down())
+-    {
+-		  died=false;
+-      PLAY(Resources::Born());
+-    }
+-	}
+-  //reset the movement timer! (s=V*t)!
++	//reset the movement timer! (s=V*t)!
+ 	timer->reset();
+ 	//reset the protocol timer! (s=V*t)!
+ 	ttimer->reset();
+@@ -273,9 +275,9 @@ void Player::check_movement()
+ 		sprite->set_new(0.08f, 4, 6);
+ 		x=sample->map->get_maptile(map_x(16), map_y())->get_x();
+ 
+-    if(sample->map->get_maptile(map_x(16), map_y(16))->get_type()==BAR)
++		if(sample->map->get_maptile(map_x(16), map_y(16))->get_type()==BAR)
+ 			y=sample->map->get_maptile(map_x(16), map_y(16))->get_y();
+-		if(sample->map->get_maptile(map_x(16), map_y()+32)->get_type()!=WATER && sample->map->get_maptile(map_x(16), map_y()+32)->is_blocking() || sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==LADDER || sample->get_map_gameobject(map_x(16), map_y()+32)->get_type()==MONK)
++		if((sample->map->get_maptile(map_x(16), map_y()+32)->get_type()!=WATER && sample->map->get_maptile(map_x(16), map_y()+32)->is_blocking()) || sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==LADDER || sample->get_map_gameobject(map_x(16), map_y()+32)->get_type()==MONK)
+ 		{
+ 			y=sample->map->get_maptile(map_x(16), map_y())->get_y();
+ 			dir=STOPPED;
+@@ -570,7 +572,7 @@ bool Player::check_toolment()
+         PLAY(Resources::Putaway());
+ 			break;
+ 			case TPICKAXE:
+-				if(!pick && (dir==RIGHT && sample->map->get_maptile(map_x(16)+32, map_y())->get_type()==EMPTY) || (dir==LEFT && sample->map->get_maptile(map_x(16)-32, map_y())->get_type()==EMPTY))
++				if(!pick && ((dir==RIGHT && sample->map->get_maptile(map_x(16)+32, map_y())->get_type()==EMPTY) || (dir==LEFT && sample->map->get_maptile(map_x(16)-32, map_y())->get_type()==EMPTY)))
+ 				{
+ 					make=1;
+ 					pick=1;
+diff -up auriferous-1.0.1/auriferous/sprite.cpp~ auriferous-1.0.1/auriferous/sprite.cpp
+--- auriferous-1.0.1/auriferous/sprite.cpp~	2002-05-24 03:01:05.000000000 +0200
++++ auriferous-1.0.1/auriferous/sprite.cpp	2019-11-06 18:06:03.557865762 +0100
+@@ -131,8 +131,8 @@ void Sprite::set_inv(bool i)
+ }
+ void Sprite::jump_to(int n)
+ {
+-	if(!n>spr_n)
+-	spr=n;
++	if(n<spr_n)
++		spr=n;
+ }
+ void Sprite::set_pause(bool p)
+ {
+@@ -142,7 +142,7 @@ void Sprite::put_screen(int x, int y)
+ {
+ 	anim();
+ 
+-	if((spr<=sur->get_num_frames() || spr>=0) )
++	if((spr<=(int)sur->get_num_frames() || spr>=0) )
+ 	sur->put_screen(x, y, spr);
+ //	else
+ //	cout<<"Debug: frame "<<spr<<" in sprite not available!"<<endl;
+@@ -151,7 +151,7 @@ void Sprite::put_screen(int x, int y, fl
+ {
+ 	anim();
+ 
+-	if(spr<=sur->get_num_frames() || spr>=0)
++	if(spr<=(int)sur->get_num_frames() || spr>=0)
+ 	sur->put_screen(x, y, scale_x, scale_y, spr);
+ //  else
+ //  cout<<"Debug: frame "<<spr<<" in sprite not available!"<<endl;
+diff -up auriferous-1.0.1/auriferous/submenu.cpp~ auriferous-1.0.1/auriferous/submenu.cpp
+--- auriferous-1.0.1/auriferous/submenu.cpp~	2019-11-06 17:11:00.000000000 +0100
++++ auriferous-1.0.1/auriferous/submenu.cpp	2019-11-06 18:09:05.168267771 +0100
+@@ -167,7 +167,7 @@ void Submenu::act()
+ 		Resources::Gfont()->print_left(600, 108, "Severity:");
+ 		Resources::Gfont()->print_left(800, 108, "gfx detail:");
+ 
+-		for(int i=0; i<keys.size(); i++)
++		for(unsigned int i=0; i<keys.size(); i++)
+ 		{
+ 			if((keys[i]->is_pressed()==true && wait!=true) || s_keys[i]=="unknown")
+ 			{
+@@ -260,16 +260,9 @@ void Submenu::act()
+ }
+ void Submenu::start_new_game()
+ {
+-	bool b;
+-
+-	if(stype==ONEPLAYER)
+-	b=false;
+-	else if(stype==TWOPLAYER)
+-	b=true;
+-
+ 	app->menu->freeze_gui(true);
+ 	Game* game=new Game(app);
+-	game->run(b);
++	game->run(stype==TWOPLAYER);
+ 	delete game;
+ 	app->menu->freeze_gui(false);
+ 	CL_MouseCursor::set_cursor(Resources::Cursor());
+@@ -288,8 +281,8 @@ void Submenu::clean()
+ 		save->set_Delete_Me();
+ 		fps->set_Delete_Me();
+ 		reset->set_Delete_Me();
+-		for(int i=0; i<keys.size(); i++)
+-		keys[i]->set_Delete_Me();
++		for(unsigned int i=0; i<keys.size(); i++)
++			keys[i]->set_Delete_Me();
+ 		keys.clear();
+ 	}
+ 	else

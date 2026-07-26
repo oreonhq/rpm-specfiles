@@ -1,0 +1,13 @@
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/CMakeLists.txt	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/CMakeLists.txt	2025-10-19 18:01:23.454539547 +0200
+@@ -111,9 +111,6 @@ ENDIF(BCD_USE_CUDA)
+ SET(bcd_include_folder "${CMAKE_SOURCE_DIR}/include/bcd")
+ 
+ 
+-#MESSAGE(STATUS "Entering subdirectory 'ext'")
+-ADD_SUBDIRECTORY(ext)
+-
+ #MESSAGE(STATUS "Entering subdirectory 'src'")
+ ADD_SUBDIRECTORY(src)
+ 

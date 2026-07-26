@@ -1,0 +1,14 @@
+Include <glib/gprintf.h> for the g_printf function.
+
+diff --git a/src/callbacks.c b/src/callbacks.c
+index 05f4d4b44dc77f1d..890d83217012a067 100644
+--- a/src/callbacks.c
++++ b/src/callbacks.c
+@@ -41,6 +41,7 @@
+ #include <gtk/gtk.h>
+ #include <gdk-pixbuf/gdk-pixbuf.h>
+ #include <gdk-pixbuf/gdk-pixdata.h>
++#include <glib/gprintf.h>
+ 
+ #include "callbacks.h"
+ #include "interface.h"

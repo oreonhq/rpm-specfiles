@@ -1,0 +1,44 @@
+From f92ee15e46469504ad67ef6b2bf7dced2c962062 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 25 Apr 2017 14:01:12 +0200
+Subject: [PATCH] Disable release code
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This disables release signing and author's tests.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 88bfe3e..17ab685 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -3,6 +3,7 @@ use warnings;
+ 
+ use lib '.';
+ use inc::Module::Install;
++$Module::Install::AUTHOR = 0;
+ 
+ name				'RDF-Trine';
+ all_from			'lib/RDF/Trine.pm';
+@@ -56,13 +57,9 @@ resources(
+ 	'IRC'			=> "irc://irc.perl.org/#perlrdf",
+ );
+ 
+-author_tests('xt');
+-
+ install_script glob('bin/srx2csv');
+ install_script glob('bin/srx2table');
+ 
+-sign;
+-
+ WriteAll;
+ 
+ print <<"END";
+-- 
+2.7.4
+

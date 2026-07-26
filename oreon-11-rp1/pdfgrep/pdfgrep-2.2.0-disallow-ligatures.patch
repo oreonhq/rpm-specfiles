@@ -1,0 +1,53 @@
+--- pdfgrep-2.2.0/testsuite/pdfgrep.tests/cache.exp
++++ pdfgrep-2.2.0/testsuite/pdfgrep.tests/cache.exp
+@@ -175,7 +175,7 @@ set test "cache saves and restores page
+ clear_pdfdir
+ set pdf [mkpdf foo {
+     \pagenumbering{roman}
+-    first page
++    {f}{i}rst page
+     \newpage
+     second page
+     \newpage
+--- pdfgrep-2.2.0/testsuite/pdfgrep.tests/context.exp
++++ pdfgrep-2.2.0/testsuite/pdfgrep.tests/context.exp
+@@ -12,7 +12,7 @@ set pdf [mkpdf lines {
+     line two\\
+     line three\\
+     line four\\
+-    line five\\
++    line {f}{i}ve\\
+     line six
+ }]
+ 
+--- pdfgrep-2.2.0/testsuite/pdfgrep.tests/page_numbers.exp
++++ pdfgrep-2.2.0/testsuite/pdfgrep.tests/page_numbers.exp
+@@ -2,7 +2,7 @@ set test "Print page numbers with -n"
+ 
+ clear_pdfdir
+ set pdf [mkpdf foo {
+-    first page
++    {f}{i}rst page
+     \newpage
+     second page
+     \newpage
+@@ -52,7 +52,7 @@ set test "Argument 'label' for --page-nu
+ clear_pdfdir
+ set pdf [mkpdf foo {
+     \pagenumbering{roman}
+-    first page
++    {f}{i}rst page
+     \newpage
+     second page
+     \newpage
+--- pdfgrep-2.2.0/testsuite/pdfgrep.tests/page_range.exp
++++ pdfgrep-2.2.0/testsuite/pdfgrep.tests/page_range.exp
+@@ -2,7 +2,7 @@ set test "page range with range"
+ 
+ clear_pdfdir
+ set pdf [mkpdf foo {
+-    first page
++    {f}{i}rst page
+     \newpage
+     second page
+     \newpage

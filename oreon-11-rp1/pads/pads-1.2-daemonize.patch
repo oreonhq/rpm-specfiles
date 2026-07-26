@@ -1,0 +1,75 @@
+diff -urp pads-1.2.orig/etc/pads.conf pads-1.2/etc/pads.conf
+--- pads-1.2.orig/etc/pads.conf	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/etc/pads.conf	2008-07-01 15:54:01.000000000 -0400
+@@ -15,7 +15,7 @@
+ # -------------------------
+ # This parameter determines whether the application will go into the background.
+ # 0 = Disable, 1 = Enable
+-daemon 0
++daemon 1
+ 
+ # pid_file
+ # -------------------------
+@@ -62,13 +62,13 @@ pid_file /var/run/pads.pid
+ # -------------------------
+ # This output plugin displays PADS data to the screen.  It is mainly used for
+ # debugging purposes.
+-output screen
++#output screen
+ 
+ # output:  csv
+ # -------------------------
+ # This output plugin writes PADS data to a CSV file.  Optionally, a CSV filename
+ # can be specified as an argument.
+-output csv: assets.csv
++output csv: /etc/pads-assets.csv
+ 
+ # output:  fifo
+ # -------------------------
+diff -urp pads-1.2.orig/src/output/output-csv.c pads-1.2/src/output/output-csv.c
+--- pads-1.2.orig/src/output/output-csv.c	2008-06-30 17:54:33.000000000 -0400
++++ pads-1.2/src/output/output-csv.c	2008-07-01 15:53:30.000000000 -0400
+@@ -130,7 +130,8 @@ read_report_file (void)
+     struct bstrList *lines;
+     int i;
+ 
+-    printf("[-] Processing Existing %s\n", bdata(output_csv_conf.filename));
++
++    log_message("[-] Processing Existing %s\n", bdata(output_csv_conf.filename));
+ 
+     /* Open Signature File */
+     if ((fp = fopen((char *)bdata(output_csv_conf.filename), "r")) == NULL) {
+diff -urp pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-06-30 17:54:33.000000000 -0400
++++ pads-1.2/src/pads.c	2008-07-01 15:53:30.000000000 -0400
+@@ -195,6 +195,9 @@ init_pads (void)
+     /* Process the command line parameters. */
+     process_cmdline(prog_argc, prog_argv);
+ 
++    if (!gc.daemon_mode)
++        print_header();
++
+     /* Initialize Output Module */
+     init_output();
+ 
+@@ -523,7 +526,6 @@ main(int argc, char *argv[])
+     prog_argv = argv;
+ 
+     /* Main Program */
+-    print_header();
+     main_pads();
+ 
+     return(0);
+diff -urp pads-1.2.orig/src/util.c pads-1.2/src/util.c
+--- pads-1.2.orig/src/util.c	2008-07-01 12:46:15.000000000 -0400
++++ pads-1.2/src/util.c	2008-07-01 15:53:30.000000000 -0400
+@@ -85,7 +85,8 @@ daemonize ()
+ {
+     pid_t pid;
+ 
+-    printf("[-] Daemonizing...\n");
++    if (!gc.daemon_mode)
++        printf("[-] Daemonizing...\n");
+ 
+     pid = fork();
+     if (pid > 0) {

@@ -1,0 +1,19 @@
+Use fclose, not close, to close the input stream.  This worked before
+by accident because close almost always failed, but the error is
+ignored.
+
+With future compilers, implicit function declarations are no longer
+accepted by default, leading to the (expected) compilation error
+without this change.
+
+diff -ur japanese-bitmap-fonts-0.20080710.orig/vine-fonttools-0.1/mkitalic.c japanese-bitmap-fonts-0.20080710/vine-fonttools-0.1/mkitalic.c
+--- japanese-bitmap-fonts-0.20080710.orig/vine-fonttools-0.1/mkitalic.c	2023-02-06 07:15:37.335212881 +0100
++++ japanese-bitmap-fonts-0.20080710/vine-fonttools-0.1/mkitalic.c	2023-02-06 07:16:20.292778983 +0100
+@@ -526,6 +526,6 @@
+     puts(buf);
+   }
+ 
+-  close(infd);
++  fclose(infd);
+   return 0;
+ }

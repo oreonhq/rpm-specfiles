@@ -1,0 +1,12 @@
+diff -rupN jack-keyboard-2.7.1.org/CMakeLists.txt jack-keyboard-2.7.1/CMakeLists.txt
+--- jack-keyboard-2.7.1.org/CMakeLists.txt	2011-12-27 04:50:32.000000000 -0500
++++ jack-keyboard-2.7.1/CMakeLists.txt	2018-03-09 20:59:16.863877426 -0500
+@@ -34,7 +34,7 @@ set(JackEnable ON CACHE BOOL "Enable sup
+ set(LashEnable ON CACHE BOOL "Enable support for Lash")
+ set(X11Enable ON CACHE BOOL "Enable support for X11")
+ 
+-project(jack-keyboard)
++project(jack-keyboard C)
+ 
+ add_executable(jack-keyboard src/jack-keyboard src/pianokeyboard)
+ 

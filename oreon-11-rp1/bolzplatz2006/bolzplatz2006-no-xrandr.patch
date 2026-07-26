@@ -1,0 +1,20 @@
+diff -up bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/display.c~ bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/display.c
+--- bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/display.c~	2006-05-29 18:49:24.000000000 +0200
++++ bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/linux/display.c	2009-11-04 15:05:12.000000000 +0100
+@@ -132,10 +132,15 @@ static bool isXF86VidModeSupported(JNIEn
+ }
+ 	
+ static extension getBestDisplayModeExtension(JNIEnv *env, Display *disp) {
++/* HDG disable use of xrandr, as it hangs on exit in XRRGetScreenInfo.
++   Note I don't think this is bolzplatz fault, but lets workaround it. */
++#if 0
+ 	if (isXrandrSupported(env, disp)) {
+ 		printfDebugJava(env, "Using Xrandr for display mode switching");
+ 		return XRANDR;
+-	} else if (isXF86VidModeSupported(env, disp)) {
++	} else
++#endif
++	if (isXF86VidModeSupported(env, disp)) {
+ 		printfDebugJava(env, "Using XF86VidMode for display mode switching");
+ 		return XF86VIDMODE;
+ 	} else {

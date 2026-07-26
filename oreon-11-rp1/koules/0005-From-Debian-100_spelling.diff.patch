@@ -1,0 +1,170 @@
+Description: Fix various spelling mistakes
+Origin: other
+
+--- koules-1.4.orig/rcfiles.c
++++ koules-1.4/rcfiles.c
+@@ -66,7 +66,7 @@
+   if ((controls = fopen (fullname, "w")) == NULL)
+     {
+       printf ("could not open save file:%s\n"
+-	      "saving of controls skippen\n", fullname);
++	      "saving of controls skipped\n", fullname);
+       perror ("error");
+       return;
+     }
+@@ -96,7 +96,7 @@
+   if ((levels = fopen (fullname, "w")) == NULL)
+     {
+       printf ("could not open save file:%s\n"
+-	      "saving of controls skippen\n", fullname);
++	      "saving of controls skipped\n", fullname);
+       perror ("error");
+       return;
+     }
+--- koules-1.4.orig/text.h
++++ koules-1.4/text.h
+@@ -270,7 +270,7 @@
+ {
+   "The DARK APPLEPOLISHER",
+   "has heard about you",
+-  "Your are famous",
++  "You are famous",
+   "This has one disadvantage",
+   "B_BALLS are going to",
+   "kick you out",
+@@ -290,7 +290,7 @@
+   "...",
+   "do not",
+   "turn the power off",
+-  "your are near",
++  "you are near",
+   "your goal",
+   "NOW you can finish the game"};
+ static int      BBBALLSIZE = (sizeof (bbballtext) / sizeof (char *));
+--- koules-1.4.orig/client.c
++++ koules-1.4/client.c
+@@ -420,7 +420,7 @@
+       GETLONG ((message + pos), rpos1);
+       if (rpos1 > rpos + 1)
+ 	{
+-	  printf ("Fatal error in transfering reliable messages!\n"
++	  printf ("Fatal error in transferring reliable messages!\n"
+ 		  "Game may become VERY unstable..please contact author \n");
+ 	  return;
+ 	}
+--- koules-1.4.orig/cmap-x11.c
++++ koules-1.4/cmap-x11.c
+@@ -285,7 +285,7 @@
+       setmonopalette ();
+       return;
+     }
+-  printf ("Allocating pallette\n");
++  printf ("Allocating palette\n");
+   for (ncolor = 32; ncolor > 8; ncolor -= 4)
+     {
+       printf ("%i-", ncolor);
+--- koules-1.4.orig/server.c
++++ koules-1.4/server.c
+@@ -416,7 +416,7 @@
+       GETLONG ((message + pos), rpos1);
+       if (rpos1 > conn[i].ircount + 1)
+ 	{
+-	  printf ("Fatal error in transfering reliable messages!\n"
++	  printf ("Fatal error in transferring reliable messages!\n"
+ 		  "Game may become VERY unstable..please contact author \n");
+ 	  return;
+ 	}
+--- koules-1.4.orig/ChangeLog
++++ koules-1.4/ChangeLog
+@@ -148,7 +148,7 @@
+ 	o	HP-UX sound server by Lutz Vieweg <lkv@mania.robin.de>
+ Minor Changes
+ 	o	fixed for svgalib-1.2.8
+-	o	automatically private colormap when no colors avaiable
++	o	automatically private colormap when no colors available
+ 	o	private colormap fixed
+ 	o	removed useless -m option
+ 	o	added -b for black and white
+--- koules-1.4.orig/svgalib/init.c
++++ koules-1.4/svgalib/init.c
+@@ -82,7 +82,7 @@
+   if (sndinit)
+     init_sound ();
+ #else
+-  printf ("Sound driver not avaiable-recompile koules with SOUND enabled\n");
++  printf ("Sound driver not available-recompile koules with SOUND enabled\n");
+ #endif
+ 
+   printf ("Autoprobing hardware\n");
+@@ -92,7 +92,7 @@
+   if (joystickdevice[0] < 0)
+     {
+       perror ("Joystick driver");
+-      printf ("Joystick 1 not avaiable..\n");
++      printf ("Joystick 1 not available..\n");
+       joystickplayer[0] = -1;
+     }
+   else
+@@ -101,14 +101,14 @@
+   if (joystickdevice[1] < 0)
+     {
+       perror ("Joystick driver");
+-      printf ("Joystick 2 not avaiable..\n");
++      printf ("Joystick 2 not available..\n");
+       joystickplayer[1] = -1;
+     }
+   else
+     printf ("Joystick 2 initialized\n");
+ 
+ #else
+-  printf ("Joystick driver not avaiable(recompile koules with JOYSTICK enabled )\n");
++  printf ("Joystick driver not available(recompile koules with JOYSTICK enabled )\n");
+ #endif
+   printf ("Testing terminal\n");
+ 
+@@ -121,7 +121,7 @@
+   vga_init ();
+   if (!vga_hasmode (VGAMODE))
+     {
+-      printf ("graphics mode unavaiable(reconfigure svgalib)\n");
++      printf ("graphics mode unavailable(reconfigure svgalib)\n");
+       if (VGAMODE == G640x480x256)
+ 	printf ("or use -s option\n");
+       exit (-2);
+--- koules-1.4.orig/xlib/init.c
++++ koules-1.4/xlib/init.c
+@@ -327,7 +327,7 @@
+   else
+     sound = 0;
+ #else
+-  printf ("Sound driver not avaiable-recompile koules with SOUND enabled\n");
++  printf ("Sound driver not available-recompile koules with SOUND enabled\n");
+ #endif
+ #endif
+ #endif
+@@ -338,7 +338,7 @@
+   if (joystickdevice[0] < 0)
+     {
+       perror ("Joystick driver");
+-      printf ("Joystick 1 not avaiable..\n");
++      printf ("Joystick 1 not available..\n");
+       joystickplayer[0] = -1;
+     }
+   else
+@@ -347,14 +347,14 @@
+   if (joystickdevice[1] < 0)
+     {
+       perror ("Joystick driver");
+-      printf ("Joystick 2 not avaiable..\n");
++      printf ("Joystick 2 not available..\n");
+       joystickplayer[1] = -1;
+     }
+   else
+     printf ("Joystick 2 initialized\n");
+ 
+ #else
+-  printf ("Joystick driver not avaiable(recompile koules with JOYSTICK enabled )\n");
++  printf ("Joystick driver not available(recompile koules with JOYSTICK enabled )\n");
+ #endif
+   printf ("Connecting X server\n");
+   if ((dp = XOpenDisplay (0)) == 0)

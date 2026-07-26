@@ -1,0 +1,7 @@
+# Backends
+
+KataGo supports multiple backends. The Fedora package provides a CPU-only implementation (katago-eigen) and one using OpenCL (katago-opencl). The alternatives system controls which implementation provides /usr/bin/katago.
+
+# GTP engine
+
+KataGo requires a neural net to work. To get started, download the latest "strongest confidently-rated network" from https://katagotraining.org/networks/ and place it in ~/.katago/default_model.bin.gz. To use the GTP engine you will also need a config; an example one is provided under /usr/share/doc/katago/configs/gtp_example.cfg which should be copied under ~/.katago/default_gtp.cfg. The engine can then be started with katago gtp.

@@ -1,0 +1,72 @@
+--- data/Makefile.am.orig	2014-05-31 15:07:48.119629599 -0300
++++ data/Makefile.am	2014-05-31 15:08:20.406358882 -0300
+@@ -4,12 +4,12 @@
+ 		app-graphics/gbrainy16.png \
+ 		app-graphics/gbrainy48.png
+ 
+-analogiesdir = $(datadir)/games/gbrainy
+-themesdir = $(datadir)/games/gbrainy
+-soundsdir = $(datadir)/games/gbrainy
++analogiesdir = $(datadir)/gbrainy
++themesdir = $(datadir)/gbrainy
++soundsdir = $(datadir)/gbrainy
+ 
+ hicolordir = $(datadir)/icons/hicolor
+-datafiles = $(datadir)/games/gbrainy
++datafiles = $(datadir)/gbrainy
+ 
+ man_MANS = gbrainy.6
+ 
+--- data/Makefile.in.orig	2014-05-31 15:08:58.026203407 -0300
++++ data/Makefile.in	2014-05-31 15:09:18.649664065 -0300
+@@ -330,11 +330,11 @@
+ 		app-graphics/gbrainy16.png \
+ 		app-graphics/gbrainy48.png
+ 
+-analogiesdir = $(datadir)/games/gbrainy
+-themesdir = $(datadir)/games/gbrainy
+-soundsdir = $(datadir)/games/gbrainy
++analogiesdir = $(datadir)/gbrainy
++themesdir = $(datadir)/gbrainy
++soundsdir = $(datadir)/gbrainy
+ hicolordir = $(datadir)/icons/hicolor
+-datafiles = $(datadir)/games/gbrainy
++datafiles = $(datadir)/gbrainy
+ man_MANS = gbrainy.6
+ desktop_in_files = \
+ 	gbrainy.desktop.in	
+
+--- src/Clients/Classical/Defines.cs.in.orig	2018-03-08 02:42:54.000000000 -0300
++++ src/Clients/Classical/Defines.cs.in	2018-04-08 20:21:09.490448660 -0300
+@@ -23,7 +23,7 @@
+ 	{
+ 		public const string VERSION = "@VERSION@";
+ 		public const string GNOME_LOCALE_DIR = "@prefix@/share/locale";
+-		public const string DATA_DIR = "@prefix@/share/games/gbrainy/";
++		public const string DATA_DIR = "@prefix@/share/gbrainy/";
+ 		public const string COPYRIGHT = "@COPYRIGHT@";
+ 
+ 		public const string VERBAL_ANALOGIES = "verbal_analogies.xml";
+--- src/Core/Main/Defines.cs.in.orig	2014-05-31 15:14:15.653135744 -0300
++++ src/Core/Main/Defines.cs.in	2014-05-31 15:14:30.107443747 -0300
+@@ -24,7 +24,7 @@
+ 	public static class Defines
+ 	{
+ 		public const string VERSION = "@VERSION@";
+-		public const string DATA_DIR = "@prefix@/share/games/gbrainy/";
++		public const string DATA_DIR = "@prefix@/share/gbrainy/";
+ 		public const string CONFIG_DIR = "gbrainy"; // like .config/gbrainy
+ 	}
+ }
+
+--- tools/Defines.cs.in.orig	2018-03-08 02:42:54.000000000 -0300
++++ tools/Defines.cs.in	2018-04-08 20:24:01.403264430 -0300
+@@ -21,7 +21,7 @@
+ {
+ 	public const string VERSION = "@VERSION@";
+         public const string GNOME_LOCALE_DIR = "@prefix@/share/locale";
+-	public const string DATA_DIR = "@prefix@/share/games/gbrainy/";
++	public const string DATA_DIR = "@prefix@/share/gbrainy/";
+ 
+ 	public const string VERBAL_ANALOGIES = "verbal_analogies.xml";
+ 	public const string GAME_ASSEMBLY = "gbrainy.Games.dll";

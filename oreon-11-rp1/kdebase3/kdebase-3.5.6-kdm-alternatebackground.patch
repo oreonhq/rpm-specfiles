@@ -1,0 +1,71 @@
+diff -ur kdebase-3.5.6/kdm/kfrontend/kgapp.cpp kdebase-3.5.6-kdm-alternatebackground/kdm/kfrontend/kgapp.cpp
+--- kdebase-3.5.6/kdm/kfrontend/kgapp.cpp	2006-05-22 20:13:07.000000000 +0200
++++ kdebase-3.5.6-kdm-alternatebackground/kdm/kfrontend/kgapp.cpp	2007-05-11 15:26:03.000000000 +0200
+@@ -40,6 +40,7 @@
+ #include <qtimer.h>
+ #include <qcursor.h>
+ #include <qpalette.h>
++#include <qcolor.h>
+ 
+ #include <stdlib.h> // free(), exit()
+ #include <unistd.h> // alarm()
+@@ -145,6 +146,8 @@
+ 	if (!_colorScheme.isEmpty()) {
+ 		KSimpleConfig config( _colorScheme, true );
+ 		config.setGroup( "Color Scheme" );
++		flagAlternateBackground = true;
++		gAlternateBackground = config.readColorEntry( "alternateBackground" );
+ 		app.setPalette( app.createApplicationPalette( &config, 7 ) );
+ 	}
+ 
+diff -ur kdebase-3.5.6/kdm/kfrontend/kgreeter.cpp kdebase-3.5.6-kdm-alternatebackground/kdm/kfrontend/kgreeter.cpp
+--- kdebase-3.5.6/kdm/kfrontend/kgreeter.cpp	2006-10-01 19:32:15.000000000 +0200
++++ kdebase-3.5.6-kdm-alternatebackground/kdm/kfrontend/kgreeter.cpp	2007-05-11 15:26:44.000000000 +0200
+@@ -54,6 +54,7 @@
+ #include <qtooltip.h>
+ #include <qaccel.h>
+ #include <qeventloop.h>
++#include <qcolor.h>
+ 
+ #include <pwd.h>
+ #include <grp.h>
+@@ -63,12 +64,17 @@
+ 
+ #include <X11/Xlib.h>
+ 
++bool flagAlternateBackground;
++QColor gAlternateBackground;
++
+ class UserListView : public KListView {
+   public:
+ 	UserListView( QWidget *parent = 0, const char *name = 0 )
+ 		: KListView( parent, name )
+ 		, cachedSizeHint( -1, 0 )
+ 	{
++		if (flagAlternateBackground)
++			setAlternateBackground( gAlternateBackground );
+ 		setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
+ 		header()->hide();
+ 		addColumn( QString::null );
+diff -ur kdebase-3.5.6/kdm/kfrontend/kgreeter.h kdebase-3.5.6-kdm-alternatebackground/kdm/kfrontend/kgreeter.h
+--- kdebase-3.5.6/kdm/kfrontend/kgreeter.h	2005-10-10 17:04:31.000000000 +0200
++++ kdebase-3.5.6-kdm-alternatebackground/kdm/kfrontend/kgreeter.h	2007-05-11 15:25:28.000000000 +0200
+@@ -26,6 +26,8 @@
+ #ifndef KGREETER_H
+ #define KGREETER_H
+ 
++#include <qcolor.h>
++
+ #include "kgverify.h"
+ #include "kgdialog.h"
+ 
+@@ -42,6 +44,9 @@
+ class QPopupMenu;
+ class QListViewItem;
+ 
++extern bool flagAlternateBackground;
++extern QColor gAlternateBackground;
++
+ struct SessType {
+ 	QString name, type;
+ 	bool hid;

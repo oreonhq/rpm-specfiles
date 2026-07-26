@@ -1,0 +1,22 @@
+--- a/crawl-ref/source/rltiles/Makefile.orig	2020-03-22 05:52:08.000000000 +0100
++++ b/crawl-ref/source/rltiles/Makefile	2020-04-21 22:23:00.718813687 +0200
+@@ -11,7 +11,7 @@
+ # is not supported.  If host=target, contribs are enough.
+ 
+ PKGCONFIG = pkg-config
+-CFLAGS := -O2 $(STDFLAG) -g -Wall -Wextra -Wno-parentheses -Wno-unused-parameter
++CFLAGS := $(CFOPTIMIZE_L) $(STDFLAG) -Wno-parentheses -Wno-unused-parameter
+ 
+ ifdef ANDROID
+   CXXFLAGS :=
+--- a/crawl-ref/crawl-tiles/rltiles/Makefile.orig	2020-03-22 05:52:08.000000000 +0100
++++ b/crawl-ref/crawl-tiles/rltiles/Makefile	2020-04-21 22:23:00.718813687 +0200
+@@ -11,7 +11,7 @@
+ # is not supported.  If host=target, contribs are enough.
+ 
+ PKGCONFIG = pkg-config
+-CFLAGS := -O2 $(STDFLAG) -g -Wall -Wextra -Wno-parentheses -Wno-unused-parameter
++CFLAGS := $(CFOPTIMIZE_L) $(STDFLAG) -Wno-parentheses -Wno-unused-parameter
+ 
+ ifdef ANDROID
+   CXXFLAGS :=

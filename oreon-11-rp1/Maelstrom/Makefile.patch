@@ -1,0 +1,32 @@
+diff --git a/Makefile.am b/Makefile.am
+index fae2bd8..f6f7c8f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -65,9 +65,9 @@ DIST_SUBDIRS = $(SUBDIRS) Images Docs
+ # Special install rule for the game
+ install:
+ 	sh mkinstalldirs $(DESTDIR)@GAME_INSTALLDIR@
+-	install -m 755 Maelstrom $(DESTDIR)@GAME_INSTALLDIR@/Maelstrom
++	sh mkinstalldirs $(DESTDIR)$(bindir)
++	install -m 755 Maelstrom $(DESTDIR)$(bindir)/Maelstrom
+ 	make install_gamedata target=$(DESTDIR)@GAME_INSTALLDIR@
+-	make install_gamedocs target=$(DESTDIR)@GAME_INSTALLDIR@
+ 
+ install_gamedata:
+ 	sh mkinstalldirs $(target)/
+diff --git a/Makefile.in b/Makefile.in
+index 06c9322..1839c23 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -980,9 +980,9 @@ uninstall-am: uninstall-binPROGRAMS
+ # Special install rule for the game
+ install:
+ 	sh mkinstalldirs $(DESTDIR)@GAME_INSTALLDIR@
+-	install -m 755 Maelstrom $(DESTDIR)@GAME_INSTALLDIR@/Maelstrom
++	sh mkinstalldirs $(DESTDIR)$(bindir)
++	install -m 755 Maelstrom $(DESTDIR)$(bindir)/Maelstrom
+ 	make install_gamedata target=$(DESTDIR)@GAME_INSTALLDIR@
+-	make install_gamedocs target=$(DESTDIR)@GAME_INSTALLDIR@
+ 
+ install_gamedata:
+ 	sh mkinstalldirs $(target)/

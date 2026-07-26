@@ -1,0 +1,45 @@
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/export_library.rb.export_html	2020-01-03 16:17:05.053552865 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/export_library.rb	2020-01-03 16:24:11.989122168 +0900
+@@ -302,7 +302,7 @@
+           xhtml << <<~EOS
+             <img class="book_cover"
+                  src="#{File.join('pixmaps', final_cover(book))}"
+-                 alt="Cover file for '#{xhtml_escape(book.title)}'"
++                 alt="Cover file for '#{xhtml_escape(book.title).force_encoding("UTF-8")}'"
+                  height="#{image_s.height}" width="#{image_s.width}"
+             />
+           EOS
+@@ -314,7 +314,7 @@
+ 
+         unless book.title.nil?
+           xhtml << <<~EOS
+-            <p class="book_title">#{xhtml_escape(book.title)}</p>
++            <p class="book_title">#{xhtml_escape(book.title).force_encoding("UTF-8")}</p>
+           EOS
+         end
+ 
+@@ -322,7 +322,7 @@
+           xhtml << '<ul class="book_authors">'
+           book.authors.each do |author|
+             xhtml << <<~EOS
+-              <li class="book_author">#{xhtml_escape(author)}</li>
++              <li class="book_author">#{xhtml_escape(author).force_encoding("UTF-8")}</li>
+             EOS
+           end
+           xhtml << "</ul>"
+@@ -330,13 +330,13 @@
+ 
+         unless book.edition.nil?
+           xhtml << <<~EOS
+-            <p class="book_binding">#{xhtml_escape(book.edition)}</p>
++            <p class="book_binding">#{xhtml_escape(book.edition).force_encoding("UTF-8")}</p>
+           EOS
+         end
+ 
+         unless book.publisher.nil?
+           xhtml << <<~EOS
+-            <p class="book_publisher">#{xhtml_escape(book.publisher)}</p>
++            <p class="book_publisher">#{xhtml_escape(book.publisher).force_encoding("UTF-8")}</p>
+           EOS
+         end
+ 

@@ -1,0 +1,23 @@
+From 4f9ad6f9f95c0f1694b3024472550b16394989f4 Mon Sep 17 00:00:00 2001
+From: Hans Johnson <hans-johnson@uiowa.edu>
+Date: Sat, 8 Feb 2020 13:27:29 -0600
+Subject: [PATCH] BUG: operator() can not be const
+
+The member variable is changed, so the operator() can not be const.
+---
+ Modules/Bridge/VtkGlue/include/vtkCaptureScreen.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Modules/Bridge/VtkGlue/include/vtkCaptureScreen.h b/Modules/Bridge/VtkGlue/include/vtkCaptureScreen.h
+index 7d4e1297fff..7c9aba03c46 100644
+--- a/Modules/Bridge/VtkGlue/include/vtkCaptureScreen.h
++++ b/Modules/Bridge/VtkGlue/include/vtkCaptureScreen.h
+@@ -46,7 +46,7 @@ class vtkCaptureScreen
+     }
+ 
+   void operator( ) ( vtkRenderWindow* iRenderer,
+-                     const std::string& iFileName ) const
++                     const std::string& iFileName )
+     {
+     m_Renderer = iRenderer;
+     Capture( m_Renderer, iFileName );

@@ -1,0 +1,20 @@
+--- kita-0.177.5/kita/src/write/writeview.cpp.g++	2008-09-17 21:19:53.000000000 +0900
++++ kita-0.177.5/kita/src/write/writeview.cpp	2009-02-21 04:22:45.000000000 +0900
+@@ -352,7 +352,7 @@
+ }
+ 
+ void KitaWriteView::find_cookie_typevalue( const char *response ){
+-	char *str_cmp, *str;
++	const char *str_cmp, *str;
+ 	static char *cookie_type_static = NULL;
+ 	static char *cookie_value_static = NULL;
+ 	cookie_type = cookie_value = NULL;
+@@ -360,7 +360,7 @@
+ 	str_cmp = "<input type=hidden name=\"";
+ 	str = strstr(response, str_cmp);
+ 	if (str){
+-		char *str2 = strstr(str, "\"");
++		const char *str2 = strstr(str, "\"");
+ 		char *str3 = NULL;
+ 		str2++;
+ 		if ((!cookie_type_static) || (!(strstr(str2, cookie_type_static)))){

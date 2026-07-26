@@ -1,0 +1,11 @@
+diff --git a/src/hexglass.cpp b/src/hexglass.cpp
+--- a/src/hexglass.cpp
++++ b/src/hexglass.cpp
+@@ -74,6 +74,7 @@
+     locales_names.append(QLocale::system().name());
+ 
+     locales_path.append(QLibraryInfo::location(QLibraryInfo::TranslationsPath));
++    locales_path.append("/usr/share/hexglass/translations");
+     locales_path.append(app.applicationDirPath());
+     locales_path.append(":/");
+ 

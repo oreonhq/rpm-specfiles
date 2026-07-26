@@ -1,0 +1,25 @@
+Eliminates this warning:
+
+In function ‘fopenurl3’,
+    inlined from ‘fopenurl2’ at openurl.c:459:10,
+    inlined from ‘fopenurl’ at openurl.c:469:10,
+    inlined from ‘main’ at hxcount.c:154:30:
+openurl.c:393:3: warning: call to ‘Wcurl_easy_setopt_err_write_callback’ declared with attribute warning: curl_easy_setopt expects a curl_write_callback argument [-Wattribute-warning]
+  393 |   curl_easy_setopt(file->curl, CURLOPT_HEADERFUNCTION, header_cb);
+      |   ^
+
+--- html-xml-utils-8.7/openurl.c.orig	2023-02-09 10:06:39.000000000 -0700
++++ html-xml-utils-8.7/openurl.c	2026-01-27 09:44:06.651633767 -0700
+@@ -168,10 +168,11 @@ int libcurl_is_initialized = 0;
+ 
+ 
+ /* header_cb -- libcurl calls this once for every protocol header line */
+-static size_t header_cb(char *buf, size_t size, size_t nmemb, URL_FILE *file)
++static size_t header_cb(char *buf, size_t size, size_t nmemb, void *filep)
+ {
+   char *p, *header, *value, *url;
+   size_t i, j;
++  URL_FILE *file = (URL_FILE *)filep;
+ 
+   /* This routine currently only handles HTTP headers */
+   if (curl_easy_getinfo(file->curl, CURLINFO_EFFECTIVE_URL, &url) != CURLE_OK ||

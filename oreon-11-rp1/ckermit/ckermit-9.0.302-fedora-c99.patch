@@ -1,0 +1,55 @@
+diff -rup a/ckcmai.c b/ckcmai.c
+--- a/ckcmai.c	2011-08-20 17:20:42.000000000 -0400
++++ b/ckcmai.c	2023-02-16 15:19:50.728291202 -0500
+@@ -1581,6 +1581,10 @@ _PROTOTYP( int getiobs, (VOID) );
+ 
+ #include <signal.h>
+ 
++#ifndef VMS
++#include <time.h>
++#endif
++
+ #ifndef NOCCTRAP
+ #include <setjmp.h>
+ #include "ckcsig.h"
+diff -rup a/ckupty.c b/ckupty.c
+--- a/ckupty.c	2011-06-13 11:34:13.000000000 -0400
++++ b/ckupty.c	2023-02-16 16:40:33.519202100 -0500
+@@ -384,6 +384,10 @@ struct termbuf {
+ 
+ #endif /* TCSANOW */
+ 
++#ifdef HAVE_OPENPTY
++#include <pty.h>
++#endif
++
+ struct termios termbuf, termbuf2;       /* pty control structure */
+ 
+ #ifdef INIT_SPTY
+diff -rup a/ckutio.c b/ckutio.c
+--- a/ckutio.c	2011-08-20 17:22:35.000000000 -0400
++++ b/ckutio.c	2023-02-16 16:04:42.656846326 -0500
+@@ -14129,6 +14129,10 @@ extern int exp_handler, exp_stderr, exp_
+ #endif /* USE_CKUPTY_C */
+ #endif /* HAVE_OPENPTY */
+ 
++#ifdef HAVE_OPENPTY
++#include <pty.h>
++#endif
++
+ VOID
+ pty_make_raw(fd) int fd; {
+     int x = -23, i;
+diff -rup a/ckuusx.c b/ckuusx.c
+--- a/ckuusx.c	2023-02-16 15:02:46.440896650 -0500
++++ b/ckuusx.c	2023-02-16 15:43:24.925119195 -0500
+@@ -5883,6 +5883,9 @@ _PROTOTYP(char *tgetstr,(char *, char **
+ _PROTOTYP(int tputs,(char *, int, int (*)()));
+ _PROTOTYP(char *tgoto,(const char *, int, int));
+ #endif	/* BUG999 */
++#ifdef linux
++#include <term.h>
++#endif
+ 
+ #endif /* CK_CURSES */
+ 

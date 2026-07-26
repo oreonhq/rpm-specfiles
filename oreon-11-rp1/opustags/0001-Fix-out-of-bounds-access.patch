@@ -1,0 +1,27 @@
+From 9a80f0346b080c2f74a7a843badeba212e99f4f3 Mon Sep 17 00:00:00 2001
+From: Marian Koncek <mkoncek@redhat.com>
+Date: Tue, 5 Nov 2024 15:09:34 +0100
+Subject: [PATCH] Fix out of bounds access
+
+Upstream: https://github.com/fmang/opustags/pull/74
+
+---
+ src/base64.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/base64.cc b/src/base64.cc
+index 5102f62..c562fa9 100644
+--- a/src/base64.cc
++++ b/src/base64.cc
+@@ -56,7 +56,7 @@ std::u8string ot::encode_base64(ot::byte_string_view src)
+ ot::byte_string ot::decode_base64(std::u8string_view src)
+ {
+ 	// Remove the padding and rely on the string length instead.
+-	while (src.back() == u8'=')
++	while (!src.empty() && src.back() == u8'=')
+ 		src.remove_suffix(1);
+ 
+ 	size_t olen = src.size() / 4 * 3; // Whole blocks;
+-- 
+2.47.0
+

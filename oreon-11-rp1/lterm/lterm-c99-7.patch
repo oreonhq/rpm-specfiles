@@ -1,0 +1,29 @@
+Missing return v alue in sftp_queue_count
+
+Part of this commit upstream:
+
+commit 80747ae4040251e1b1191b1ccce59b93d9071f54
+Author: FabLeo451 <fab.leo@gmail.com>
+Date:   Mon Nov 5 17:45:37 2018 +0100
+
+     Changes to be committed:
+            modified:   ChangeLog
+            modified:   NEWS
+            modified:   src/async.c
+            modified:   src/gui.c
+            modified:   src/sftp-panel.c
+            modified:   src/transfer_window.c
+
+diff --git a/src/sftp-panel.c b/src/sftp-panel.c
+index f03f7e69616b9f55..535451c966de2a03 100755
+--- a/src/sftp-panel.c
++++ b/src/sftp-panel.c
+@@ -3041,7 +3041,7 @@ sftp_queue_count (int *nUp, int *nDown)
+     (*nDown) = 0;
+ 
+   if (!sftp_panel.queue)
+-    return;
++    return 0;
+ 
+   //pthread_mutex_lock (&sftp_panel.mutexQueue);
+   lockSFTPQueue (__func__, TRUE);

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Duel 3
+Comment=One on one spaceship duel in a 2D arena
+Exec=duel3-wrapper
+Icon=duel3
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;ActionGame;

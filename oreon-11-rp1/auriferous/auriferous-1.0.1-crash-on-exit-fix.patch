@@ -1,0 +1,138 @@
+The initialization order of globals / static class members with a non const
+initializer is not fixed. So we cannot have one static class member have a
+non const initializer which uses a static class member (from another class),
+which itself also has a non const initializer.
+
+Specifically the problem before this patch is Config::filename's
+initializer using Resources::custom_path, which in turn calls getenv().
+
+It seems that the toolchain ends up ordering things so that
+Config::filename's initialization code runs first, referring to an
+uninitialized Resources::custom_path string. For some reason this does
+not crash on application start, but it does cause a segfault on exit;
+and it causes the config-filename to be wrong.
+
+This patch fixes this.
+diff -ur auriferous-1.0.1/auriferous/config.cpp auriferous-1.0.1.new/auriferous/config.cpp
+--- auriferous-1.0.1/auriferous/config.cpp	2019-11-06 16:48:24.475294370 +0100
++++ auriferous-1.0.1.new/auriferous/config.cpp	2019-11-05 14:26:34.870351994 +0100
+@@ -37,8 +37,15 @@
+ int Config::last_level=1;
+ int Config::ms=0;
+ int Config::keys[18]={1,4,23,19,17,5,26,24,3,85,87,89,86,88,90,82,83,84};
++
++#ifdef WIN32
++static CL_String custom_path="";
++#else
++static CL_String custom_path=(CL_String)(getenv("HOME"))+"/.auriferous/";
++#endif
++
+ CL_String Config::last_levelset="default";
+-CL_String Config::filename=Resources::custom_path+"auriferous.cfg";
++CL_String Config::filename=custom_path+"auriferous.cfg";
+ vector <CL_String> Config::map_samples;
+ 
+ bool Config::get_music()
+@@ -171,7 +178,7 @@
+ 	{
+ 		CL_DirectoryScanner scan;
+ 
+-		if(scan.scan((Resources::custom_path+"levels/"), "*"))
++		if(scan.scan((custom_path+"levels/"), "*"))
+ 		{
+ 			scan.next();
+ 			scan.next();
+@@ -249,7 +256,7 @@
+ 		{
+ 			CL_DirectoryScanner scan;
+ 
+-			if(scan.scan((Resources::custom_path+"levels/"+last_levelset), "*.lvl"))
++			if(scan.scan((custom_path+"levels/"+last_levelset), "*.lvl"))
+ 			{
+ 				while(scan.next())
+ 				{
+diff -ur auriferous-1.0.1/auriferous/editor.cpp auriferous-1.0.1.new/auriferous/editor.cpp
+--- auriferous-1.0.1/auriferous/editor.cpp	2019-11-06 16:48:24.475294370 +0100
++++ auriferous-1.0.1.new/auriferous/editor.cpp	2019-11-05 14:27:10.861629508 +0100
+@@ -24,6 +24,12 @@
+ #include "button.h"
+ #include "jukebox.h"
+ 
++#ifdef WIN32
++static CL_String custom_path="";
++#else
++static CL_String custom_path=(CL_String)(getenv("HOME"))+"/.auriferous/";
++#endif
++
+ Editor::Editor(Auriferous* _app)
+ {
+ 	app=_app;
+@@ -522,7 +528,7 @@
+ }
+ void Editor::save_map()
+ {
+-  CL_String filename=Resources::custom_path+"levels/custom/level"+(wh->get_val()-1)+".lvl";
++  CL_String filename=custom_path+"levels/custom/level"+(wh->get_val()-1)+".lvl";
+   ofstream out(filename.get_string());
+ 
+   out<<(int)(wt)<<endl<<"0"<<endl;
+@@ -542,7 +548,7 @@
+ 
+ 	CL_String mapfile="";
+ 
+-	mapfile=Resources::custom_path+"levels/custom/level"+(wh->get_val()-1)+".lvl";
++	mapfile=custom_path+"levels/custom/level"+(wh->get_val()-1)+".lvl";
+ 
+ 	ifstream in(mapfile.get_string());
+ 	char last;
+diff -ur auriferous-1.0.1/auriferous/map_sample.cpp auriferous-1.0.1.new/auriferous/map_sample.cpp
+--- auriferous-1.0.1/auriferous/map_sample.cpp	2019-11-06 16:48:24.476294377 +0100
++++ auriferous-1.0.1.new/auriferous/map_sample.cpp	2019-11-05 14:26:34.246347183 +0100
+@@ -51,6 +51,11 @@
+ #include "tool_acid.h"
+ #include "monk.h"
+ 
++#ifdef WIN32
++static CL_String custom_path="";
++#else
++static CL_String custom_path=(CL_String)(getenv("HOME"))+"/.auriferous/";
++#endif
+ 
+ Map_Sample::Map_Sample(Game* _game)
+ {
+@@ -233,7 +238,7 @@
+ 	id=_id;
+ 
+ 	if(Config::get_last_levelset()!="default")
+-	mapfile=Resources::custom_path+"levels/"+Config::get_last_levelset()+"/level"+id+".lvl";
++	mapfile=custom_path+"levels/"+Config::get_last_levelset()+"/level"+id+".lvl";
+ 	else
+ 	mapfile=Resources::datapath+"levels/"+Config::get_last_levelset()+"/level"+id+".lvl";
+ 
+diff -ur auriferous-1.0.1/auriferous/resources.cpp auriferous-1.0.1.new/auriferous/resources.cpp
+--- auriferous-1.0.1/auriferous/resources.cpp	2019-11-06 16:48:24.472294347 +0100
++++ auriferous-1.0.1.new/auriferous/resources.cpp	2019-11-05 14:24:28.196375284 +0100
+@@ -93,12 +93,6 @@
+ CL_ResourceManager * Resources::res=0;
+ CL_String Resources::datapath=0;
+ 
+-#ifdef WIN32
+-CL_String Resources::custom_path="";
+-#else
+-CL_String Resources::custom_path=(CL_String)(getenv("HOME"))+"/.auriferous/";
+-#endif
+-
+ CL_Surface* Resources::Auriferous()
+ {
+ 	if(!auriferous)
+diff -ur auriferous-1.0.1/auriferous/resources.h auriferous-1.0.1.new/auriferous/resources.h
+--- auriferous-1.0.1/auriferous/resources.h	2002-05-30 15:01:36.000000000 +0200
++++ auriferous-1.0.1.new/auriferous/resources.h	2019-11-05 14:24:57.332599939 +0100
+@@ -107,7 +107,6 @@
+ 	static CL_SoundBuffer_Session* Aqua();
+ 
+ 	static CL_String datapath;
+-	static CL_String custom_path;
+ private:
+ 
+ 

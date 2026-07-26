@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015 Ankur Sinha <ankursinha AT fedoraproject DOT org> -->
+<component type="font">
+    <id>anka-coder</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <name>Anka/Coder</name>
+    <summary>A mono spaced, courier-width font</summary>
+    <description>
+        <p>
+            The Anka/Coder family is a mono spaced, courier-width (60% of height; em size 
+            2048x1229) font that contains characters from 437, 866, 1251, 1252 and some 
+            other code pages and can be used for source code, terminal windows etc. 
+            There are 3 font sets (regular. italic, bold, bold-italic each): 1. 
+            Anka/Coder (em size 2048x1229) 2. Anka/Coder Condensed (condensed by 
+            12.5%; em size 2048x1075) 3. Anka/Coder Narrow (condensed by 25%; em 
+            size 2048x922)
+        </p>
+    </description>
+    <update_contact>ankursinha_at_fedoraproject_dot_org</update_contact>
+    <url type="homepage">https://code.google.com/p/anka-coder-fonts/</url>
+</component>
+

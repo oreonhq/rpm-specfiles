@@ -1,0 +1,12 @@
+diff -pruN anthy-9100h.orig/src-worddic/record.c anthy-9100h/src-worddic/record.c
+--- anthy-9100h.orig/src-worddic/record.c	2009-01-27 21:11:21.000000000 +0900
++++ anthy-9100h/src-worddic/record.c	2024-09-19 16:45:00.587508410 +0900
+@@ -1043,7 +1043,7 @@ out:
+   if (s) {
+     s[len] = '\0';
+   }
+-  *eol = (c == '\n');
++  *eol = (c == '\n' || c == EOF);
+   return s;
+ }
+ 

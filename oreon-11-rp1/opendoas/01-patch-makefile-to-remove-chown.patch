@@ -1,0 +1,11 @@
+diff -up opendoas-6.8/GNUmakefile.orig opendoas-6.8/GNUmakefile
+--- opendoas-6.8/GNUmakefile.orig	2021-01-27 02:07:57.384210206 +0100
++++ opendoas-6.8/GNUmakefile	2021-01-27 02:07:53.333286410 +0100
+@@ -21,7 +21,6 @@ install: ${PROG} ${PAM_DOAS} ${MAN}
+ 	mkdir -p -m 0755 ${DESTDIR}${MANDIR}/man1
+ 	mkdir -p -m 0755 ${DESTDIR}${MANDIR}/man5
+ 	cp -f ${PROG} ${DESTDIR}${BINDIR}
+-	chown ${BINOWN}:${BINGRP} ${DESTDIR}${BINDIR}/${PROG}
+ 	chmod ${BINMODE} ${DESTDIR}${BINDIR}/${PROG}
+ 	[ -n "${PAM_DOAS}" ] && cp ${PAM_DOAS} ${DESTDIR}${PAMDIR}/doas || true
+ 	[ -n "${PAM_DOAS}" ] && chmod 0644 ${DESTDIR}${PAMDIR}/doas || true

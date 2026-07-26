@@ -1,0 +1,10 @@
+--- libcob/common.c~	2023-07-28 12:16:38.000000000 -0500
++++ libcob/common.c	2024-01-31 13:14:41.168118471 -0600
+@@ -136,6 +136,7 @@
+ #if defined (WITH_XML2)
+ #include <libxml/xmlversion.h>
+ #include <libxml/xmlwriter.h>
++#include <libxml/parser.h>
+ #endif
+ 
+ #if defined (WITH_CJSON)

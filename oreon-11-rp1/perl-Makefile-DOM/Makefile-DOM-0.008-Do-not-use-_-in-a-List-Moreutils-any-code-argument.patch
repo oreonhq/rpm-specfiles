@@ -1,0 +1,42 @@
+From f0a935f1056c9580144fb11f5eda64b6e453fbc7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 21 Apr 2017 15:05:02 +0200
+Subject: [PATCH] Do not use @_ in a List::Moreutils::any code argument
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+After upgrading List-Moreutils to 0.418, t/mdom/gmake/comment.t
+failed.
+
+This is because MDOM::Document::Gmake::_is_keyword() uses @_ in the
+any() code argument and the @_ is overrided in the pure-perl any()
+implementation.
+
+In my opinion, this cannot be fixed in the List::Moreutils, this this
+patch changes MDOM::Document::Gmake::_is_keyword().
+
+CPAN RT#120809
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/MDOM/Document/Gmake.pm | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/MDOM/Document/Gmake.pm b/lib/MDOM/Document/Gmake.pm
+index 2bc3367..515b0b9 100644
+--- a/lib/MDOM/Document/Gmake.pm
++++ b/lib/MDOM/Document/Gmake.pm
+@@ -471,7 +471,8 @@ sub _state_str {
+ }
+ 
+ sub _is_keyword {
+-    any { $_[0] eq $_ } @keywords;
++    my $token = $_[0];
++    any { $token eq $_ } @keywords;
+ }
+ 
+ 1;
+-- 
+2.7.4
+

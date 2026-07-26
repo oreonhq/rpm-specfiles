@@ -1,0 +1,18 @@
+--- ebview-0.3.6.2/src/dialog.c.format	2004-02-19 11:42:45.000000000 +0900
++++ ebview-0.3.6.2/src/dialog.c	2013-12-03 18:05:30.990811872 +0900
+@@ -69,6 +69,7 @@
+ 					GTK_DIALOG_DESTROY_WITH_PARENT /* | GTK_DIALOG_NO_SEPARATOR */,
+ 					GTK_MESSAGE_WARNING,
+ 					GTK_BUTTONS_OK,
++					"%s",
+ 					g_message);
+ 	gtk_dialog_run(GTK_DIALOG(dialog));
+ 	gtk_widget_destroy(dialog);
+@@ -98,6 +99,7 @@
+ 					GTK_DIALOG_DESTROY_WITH_PARENT /* | GTK_DIALOG_NO_SEPARATOR */,
+ 					GTK_MESSAGE_ERROR,
+ 					GTK_BUTTONS_CLOSE,
++					"%s",
+ 					g_message);
+ 					
+ 	gtk_dialog_run(GTK_DIALOG(dialog));

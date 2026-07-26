@@ -1,0 +1,66 @@
+--- bogl-0.1.18/Makefile.rh	2006-11-09 23:39:20.000000000 +0100
++++ bogl-0.1.18/Makefile	2006-11-09 23:42:27.000000000 +0100
+@@ -4,11 +4,14 @@
+ SONAME = libbogl.so.0
+ SHARED_LIB = libbogl.so.0.1
+ 
++libdir = /usr/lib
++
+ CFLAGS = -O2 -g -D_GNU_SOURCE
+ WARNCFLAGS += -Wall -D_GNU_SOURCE
+ ALLCFLAGS = $(CFLAGS) $(WARNCFLAGS) $(FBCFLAGS)
+ 
+-architecture := $(shell dpkg-architecture -qDEB_BUILD_ARCH_CPU)
++#architecture := $(shell dpkg-architecture -qDEB_BUILD_ARCH_CPU)
++architecture := $(patsubst i%86,i386,$(shell uname -m))
+ 
+ LIBOBJECTS = $(LIBBOGLOBJECTS) $(LIBBOMLOBJECTS) $(LIBBOWLOBJECTS)	\
+ 	$(LIBRSRCOBJECTS)
+@@ -27,7 +30,7 @@
+ 	LIBBOGLOBJECTS += bogl-cfb.o bogl-pcfb.o bogl-tcfb.o
+ endif
+ 
+-ifneq (,$(filter i386 arm ia64 amd64,$(architecture)))
++ifneq (,$(filter i386 arm ia64 x86_64,$(architecture)))
+ 	FBCFLAGS += -DBOGL_VGA16_FB=1
+ 	LIBBOGLOBJECTS += bogl-vga16.o
+ 	SOURCES_DEP += bogl-vga16.c bogl-vga16.h
+@@ -109,12 +112,12 @@
+ endif
+ 
+ install: all
+-	install -d $(DESTDIR)/usr/lib $(DESTDIR)/usr/include/bogl $(DESTDIR)/usr/bin
+-	install -m644 $(SHARED_LIB) $(DESTDIR)/usr/lib/$(SHARED_LIB)
+-	ln -s $(SHARED_LIB) $(DESTDIR)/usr/lib/$(DEVLINK)
+-	ln -s $(SHARED_LIB) $(DESTDIR)/usr/lib/$(SONAME)
+-	install -m644 $(LIB) $(DESTDIR)/usr/lib/$(LIB)
+-	install -m644 *.h $(DESTDIR)/usr/include/bogl
++	install -d $(DESTDIR)/$(libdir) $(DESTDIR)/usr/include/bogl $(DESTDIR)/usr/bin
++	install -m755 $(SHARED_LIB) $(DESTDIR)/$(libdir)/$(SHARED_LIB)
++	ln -sf $(SHARED_LIB) $(DESTDIR)/$(libdir)/$(DEVLINK)
++	ln -sf $(SHARED_LIB) $(DESTDIR)/$(libdir)/$(SONAME)
++	install -m644 $(LIB) $(DESTDIR)/$(libdir)/$(LIB)
++	install -p -m644 *.h $(DESTDIR)/usr/include/bogl
+ 	install -m755 bdftobogl mergebdf bterm pngtobogl reduce-font $(DESTDIR)/usr/bin
+ 	install -d $(DESTDIR)/usr/share/terminfo
+ 	tic -o$(DESTDIR)/usr/share/terminfo bterm.ti
+--- bogl-0.1.18/bterm.c.rh	2006-11-09 23:39:20.000000000 +0100
++++ bogl-0.1.18/bterm.c	2006-11-09 23:39:20.000000000 +0100
+@@ -179,7 +179,7 @@
+   ioctl(ttyfd, TIOCSWINSZ, &win);
+ }
+ 
+-static char *font_name;
++static char *font_name = "/usr/share/bogl/font.bgf.gz";
+ static struct bogl_term *term;
+ 
+ void reload_font(int sig)
+@@ -297,7 +297,7 @@
+   ntio.c_cc[VTIME] = 0;
+   ntio.c_cflag |= CS8;
+   ntio.c_line = 0;
+-  tcsetattr(0, TCSAFLUSH, &ntio);
++  tcsetattr(0, TCSANOW, &ntio);
+ 
+   set_window_size(ttyfd, term->xsize, term->ysize);
+ 

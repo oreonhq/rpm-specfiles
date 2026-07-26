@@ -1,0 +1,21 @@
+#!/bin/sh
+
+config=/etc/sysconfig/icecream
+[ -e $config ] && . $config
+
+netname=
+if [ -n "$ICECREAM_NETNAME" ] ; then
+	netname="-n $ICECREAM_NETNAME"
+fi
+
+logfile=
+if [ -n "$ICECREAM_SCHEDULER_LOG_FILE" ] ; then
+	logfile="-l $SCHEDULER_LOG_FILE"
+fi
+
+debug=
+if [ "$ICECREAM_SCHEDULER_DEBUG" = "yes" ] ; then
+    debug="-vvv"
+fi
+
+exec /usr/sbin/icecc-scheduler $netname $logfile $debug

@@ -1,0 +1,30 @@
+--- lib/helpview.gi.orig	2020-02-29 02:02:10.000000000 -0700
++++ lib/helpview.gi	2020-03-10 16:23:08.774969030 -0600
+@@ -437,6 +437,27 @@ if IsHPCGAP then
+     MakeReadOnlyObj(HELP_VIEWER_INFO);
+ fi;
+ 
++# View HTML, DVI, or PDF files with xdg-open, which opens documents with the
++# user's preferred application.
++HELP_VIEWER_INFO.xdghtml := rec(
++type := "url",
++show := function(url)
++  Exec(Concatenation("xdg-open \"", url, "\""));
++end
++);
++HELP_VIEWER_INFO.xdgdvi := rec(
++type := "dvi",
++show := function(file)
++  Exec(Concatenation("xdg-open \"", file, "\""));
++end
++);
++HELP_VIEWER_INFO.xdgpdf := rec(
++type := "pdf",
++show := function(file)
++  Exec(Concatenation("xdg-open \"", file, "\""));
++end
++);
++
+ #############################################################################
+ ##
+ #F  SetHelpViewer(<viewer>):  Set the viewer used for help

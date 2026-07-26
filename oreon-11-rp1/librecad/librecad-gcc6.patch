@@ -1,0 +1,26 @@
+diff -up LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/boost.pri.gcc6 LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/boost.pri
+--- LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/boost.pri.gcc6	2025-07-13 19:02:36.000000000 -0400
++++ LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/boost.pri	2025-08-04 12:54:50.628314253 -0400
+@@ -114,7 +114,7 @@ unix {
+ 
+ 
+     #BOOST_INCDIR -= $$QMAKE_DEFAULT_INCDIRS
+-    INCLUDEPATH += $${BOOST_INCDIR}
++    # INCLUDEPATH += $${BOOST_INCDIR}
+     HEADERS += $${BOOST_INCDIR}
+ 
+     !isEmpty( BOOST_LIBS ) {
+diff -up LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/muparser.pri.gcc6 LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/muparser.pri
+--- LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/muparser.pri.gcc6	2025-07-13 19:02:36.000000000 -0400
++++ LibreCAD-4636eecc323b39e4b98e6d1d12ff281f7dd2752e/librecad/src/muparser.pri	2025-08-04 12:56:13.679917539 -0400
+@@ -2,9 +2,7 @@
+ macx|win32|equals(build_muparser, "true")|!packagesExist(muparser){
+     message("Using bundled muparser")
+ 	MUPARSER_DIR = ../../libraries/muparser
+-	DEPENDPATH += $$MUPARSER_DIR/include \
+-				$$MUPARSER_DIR/src
+-	INCLUDEPATH += $$MUPARSER_DIR/include
++	DEPENDPATH += $$MUPARSER_DIR/src
+ 	GEN_LIB_DIR = ../../generated/lib
+ 	LIBS += -L$$GEN_LIB_DIR -lmuparser
+ 	msvc {

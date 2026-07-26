@@ -1,0 +1,28 @@
+From 5ab5e1137a46864b6ecd1ca302756da8b833f754 Mon Sep 17 00:00:00 2001
+From: ValdikSS <iam@valdikss.org.ru>
+Date: Sat, 6 Jul 2024 23:14:28 +0000
+Subject: [PATCH] Update miniupnpc api to v18
+
+`UPNP_GetValidIGD()` prototype has changed in API version 18.
+
+https://github.com/miniupnp/miniupnp/commit/c0a50ce33e3b99ce8a96fd43049bb5b53ffac62f
+---
+ extra/upnpc.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/extra/upnpc.cpp b/extra/upnpc.cpp
+index 46bad8528..f0bea8013 100644
+--- a/extra/upnpc.cpp
++++ b/extra/upnpc.cpp
+@@ -53,7 +53,11 @@ bool UPnPc::init()
+     if (!devices)
+         return false;
+ 
++#if (MINIUPNPC_API_VERSION >= 18)
++    bool ret = UPNP_GetValidIGD(devices, &urls, &data, nullptr, 0, nullptr, 0);
++#else
+     bool ret = UPNP_GetValidIGD(devices, &urls, &data, nullptr, 0);
++#endif
+ 
+     freeUPNPDevlist(devices);
+ 

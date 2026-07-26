@@ -1,0 +1,52 @@
+From 6dde62deda27ac31ed2c42fa1773203b61d23359 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Wed, 6 Dec 2023 15:01:20 +0100
+Subject: [PATCH] Reformat package.html file
+
+Due to the bad formatting, the file looks machine generated.
+Prevent lintian from complaining about file with missing source.
+---
+ .../java/org/globus/gsi/gssapi/package.html   | 30 ++++++++++++++-----
+ 1 file changed, 23 insertions(+), 7 deletions(-)
+
+diff --git a/gss/src/main/java/org/globus/gsi/gssapi/package.html b/gss/src/main/java/org/globus/gsi/gssapi/package.html
+index 4cda693..b0579a2 100644
+--- a/gss/src/main/java/org/globus/gsi/gssapi/package.html
++++ b/gss/src/main/java/org/globus/gsi/gssapi/package.html
+@@ -1,10 +1,26 @@
+-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"><html><head><title>org.globus.example package</title>
+-
++<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
++<html>
++<head>
++<title>org.globus.example package</title>
+ <!--
+     $Id: package.html,v 1.2 2005/02/20 06:33:28 gawor Exp $
+---></head>
+-
++-->
++</head>
+ <body bgcolor="white">
+-The Java GSI library is an implementation of the Java GSS-API. It supports the <a href="http://www.ggf.org/security/gsi/draft-ggf-gss-extensions-07.pdf">GSS-API extensions</a> and the <a href="http://www.ggf.org/security/gsi/draft-ggf-gsi-proxy-04.pdf">new proxy certificate format</a> specifications as defined by the <a href="http://www.ggf.org/">Global Grid Forum</a>. The implementation details are documented on the <a href="Java_GSI_GSSAPI.html">features and limitations</a> page. The Java GSI library is based on the <a href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html">JSSE</a> (for SSL API) and the <a href="http://www.bouncycastle.org/">BouncyCastle library</a> (for certificate processing API).<br>
+-<br>
+-</body></html>
++
++The Java GSI library is an implementation of the Java GSS-API.
++It supports the
++<a href="http://www.ggf.org/security/gsi/draft-ggf-gss-extensions-07.pdf">
++GSS-API extensions</a> and the
++<a href="http://www.ggf.org/security/gsi/draft-ggf-gsi-proxy-04.pdf">
++new proxy certificate format</a> specifications as defined by the
++<a href="http://www.ggf.org/">Global Grid Forum</a>.
++The implementation details are documented on the
++<a href="Java_GSI_GSSAPI.html">features and limitations</a> page.
++The Java GSI library is based on the
++<a href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html">JSSE</a>
++(for SSL API) and the
++<a href="http://www.bouncycastle.org/">BouncyCastle library</a>
++(for certificate processing API).
++</body>
++</html>
+-- 
+2.43.0
+

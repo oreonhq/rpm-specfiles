@@ -1,0 +1,42 @@
+From a7aa7c801bcbccdbd054c77b2a886342e115a926 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 27 May 2016 12:38:45 +0200
+Subject: [PATCH] Make database backends optional
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/RDF/Trine/Store/DBI.pm | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/lib/RDF/Trine/Store/DBI.pm b/lib/RDF/Trine/Store/DBI.pm
+index bd59ccb..877a3e4 100644
+--- a/lib/RDF/Trine/Store/DBI.pm
++++ b/lib/RDF/Trine/Store/DBI.pm
+@@ -57,9 +57,18 @@ use RDF::Trine::Iterator;
+ use Log::Log4perl;
+ 
+ use RDF::Trine::Error;
+-use RDF::Trine::Store::DBI::mysql;
+-use RDF::Trine::Store::DBI::SQLite;
+-use RDF::Trine::Store::DBI::Pg;
++BEGIN {
++	# Make database backends optional.
++	# Plain "eval {use Foo}" does not work because this code is itself
++	# loaded by Module::Load::Conditional.
++	for my $store (qw(mysql SQLite Pg)) {
++		Module::Load::Conditional::can_load(autoload => 1,
++			modules => {
++				"RDF::Trine::Store::DBI::$store" => undef
++			}
++		);
++	}
++}
+ 
+ ######################################################################
+ 
+-- 
+2.5.5
+

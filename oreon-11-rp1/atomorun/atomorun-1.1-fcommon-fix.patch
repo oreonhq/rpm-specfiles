@@ -1,0 +1,151 @@
+diff -up atomorun-1.1_pre2/src/main.c~ atomorun-1.1_pre2/src/main.c
+--- atomorun-1.1_pre2/src/main.c~	2003-12-16 18:17:04.000000000 +0100
++++ atomorun-1.1_pre2/src/main.c	2020-02-15 12:07:15.176549417 +0100
+@@ -7,6 +7,44 @@
+ GLint resx = 800;
+ GLint resy = 600;
+ GLboolean fullscreen = 1;
++GLuint texture[NUM_TEXTURES]; /* Textur-Array: Speichert alle Texturen */
++GLint sound_channels[NUM_SOUNDS]; /* stores which channel sdl_mixer uses for a specific sound */
++Mix_Chunk *sound[NUM_SOUNDS]; /* sound-array: stores all sounds */
++Mix_Music *music;
++GLfloat FrameInterval; /* Enthält die Zeit, die für den letzten Frame gebraucht wurde (Wichtig für Animationen!) */
++GLint fps; /* Speichert die FPS */
++GLuint DLIST_skybox;
++GLuint DLIST_ground;
++GLuint DLIST_block;
++GLuint DLIST_acid;
++GLuint DLIST_foot;
++GLuint DLIST_glasses;
++GLuint DLIST_body;
++GLuint DLIST_atom;
++GLuint DLIST_acidfog;
++GLuint dlist[NUM_DLISTS]; /* Displaylist-Array: Speichert alle Objekte */
++GLuint loop, loop2;	/* allgemeine Loopvariablen */
++GLboolean scene_ende; /* Zum verlassen der Loopschleifen */
++
++/* Speichert die Zustände der Tasten */
++GLboolean key_up;
++GLboolean key_down;
++GLboolean key_right;
++GLboolean key_left;
++GLboolean key_return;
++
++/* Kameraposition: */
++GLfloat camx;
++GLfloat camz;
++
++GLboolean intro_running; /* needed for the intro, should be put into scenes.c, when the ESCAPE event is rewritten */
++
++GLboolean levelrun; /* Speichert ob gerade ein Spiel läuft, wichtig für das Hauptmenü */
++
++GLbyte lvl[LEVEL_SIZE_x][LEVEL_SIZE_y]; /* Level-Array, speichert den Levelaufbau */
++GLboolean level_created; /* needed for the "Replay level" option */
++GLuint font;	/* Speichert die Displaylists für die Schrift */
++char pre_string[63]; /* Um Integers als String auszugeben (temporäre Zwischenspeicherung) */
+ 
+ void quit(GLint code)
+ {	
+diff -up atomorun-1.1_pre2/src/main.h~ atomorun-1.1_pre2/src/main.h
+--- atomorun-1.1_pre2/src/main.h~	2003-12-20 22:13:11.000000000 +0100
++++ atomorun-1.1_pre2/src/main.h	2020-02-15 12:07:50.079792335 +0100
+@@ -66,7 +66,7 @@
+ 		
+ 		#define TEXTURE_PATH_menu PIXMAP_DIR"/menu.png"
+ 		#define TEXTURE_menu 7
+-	GLuint texture[NUM_TEXTURES]; /* Textur-Array: Speichert alle Texturen */
++extern GLuint texture[NUM_TEXTURES]; /* Textur-Array: Speichert alle Texturen */
+ 
+ /* Sounds */
+ 		#define NUM_SOUNDS 6 /* number of sounds to load */
+@@ -82,29 +82,29 @@
+ 		#define SOUND_explode 4
+ 		#define SOUND_PATH_jump DATA_DIR"/jump.ogg"
+ 		#define SOUND_jump 5
+-	GLint sound_channels[NUM_SOUNDS]; /* stores which channel sdl_mixer uses for a specific sound */
+-	Mix_Chunk *sound[NUM_SOUNDS]; /* sound-array: stores all sounds */
+-	Mix_Music *music;
++extern GLint sound_channels[NUM_SOUNDS]; /* stores which channel sdl_mixer uses for a specific sound */
++extern Mix_Chunk *sound[NUM_SOUNDS]; /* sound-array: stores all sounds */
++extern Mix_Music *music;
+ 		#define MUSIC_PATH_ingame DATA_DIR"/ingame_music.ogg"
+ 	
+ /* animationsgeschwindigkeiten */
+-	GLfloat FrameInterval; /* Enthält die Zeit, die für den letzten Frame gebraucht wurde (Wichtig für Animationen!) */
+-	GLint fps; /* Speichert die FPS */
++extern GLfloat FrameInterval; /* Enthält die Zeit, die für den letzten Frame gebraucht wurde (Wichtig für Animationen!) */
++extern GLint fps; /* Speichert die FPS */
+ 		#define cam_move 20.0f
+ 		#define logo_spin 50.0f
+ 		#define acid_move 2.5f
+ /* Displaylists */
+ 	#define NUM_DLISTS 9 /* Die Anzahl der zu erstellenden Displaylists für Objekte*/
+-		GLuint DLIST_skybox;
+-		GLuint DLIST_ground;
+-		GLuint DLIST_block;
+-		GLuint DLIST_acid;
+-		GLuint DLIST_foot;
+-		GLuint DLIST_glasses;
+-		GLuint DLIST_body;
+-		GLuint DLIST_atom;
+-		GLuint DLIST_acidfog;
+-	GLuint dlist[NUM_DLISTS]; /* Displaylist-Array: Speichert alle Objekte */
++extern GLuint DLIST_skybox;
++extern GLuint DLIST_ground;
++extern GLuint DLIST_block;
++extern GLuint DLIST_acid;
++extern GLuint DLIST_foot;
++extern GLuint DLIST_glasses;
++extern GLuint DLIST_body;
++extern GLuint DLIST_atom;
++extern GLuint DLIST_acidfog;
++extern GLuint dlist[NUM_DLISTS]; /* Displaylist-Array: Speichert alle Objekte */
+ 		
+ /* levelsize */
+ 	#define LEVEL_SIZE_x 520
+@@ -112,30 +112,30 @@
+ 
+ /* SETTINGS -> */
+ 
+-GLuint loop, loop2;	/* allgemeine Loopvariablen */
++extern GLuint loop, loop2;	/* allgemeine Loopvariablen */
+ 
+ void quit(GLint code);
+ 
+-GLboolean scene_ende; /* Zum verlassen der Loopschleifen */
++extern GLboolean scene_ende; /* Zum verlassen der Loopschleifen */
+ 
+ /* Speichert die Zustände der Tasten */
+-GLboolean key_up;
+-GLboolean key_down;
+-GLboolean key_right;
+-GLboolean key_left;
+-GLboolean key_return;
++extern GLboolean key_up;
++extern GLboolean key_down;
++extern GLboolean key_right;
++extern GLboolean key_left;
++extern GLboolean key_return;
+ 
+ /* Kameraposition: */
+-GLfloat camx;
+-GLfloat camz;
++extern GLfloat camx;
++extern GLfloat camz;
+ 
+-GLboolean intro_running; /* needed for the intro, should be put into scenes.c, when the ESCAPE event is rewritten */
++extern GLboolean intro_running; /* needed for the intro, should be put into scenes.c, when the ESCAPE event is rewritten */
+ 
+-GLboolean levelrun; /* Speichert ob gerade ein Spiel läuft, wichtig für das Hauptmenü */
++extern GLboolean levelrun; /* Speichert ob gerade ein Spiel läuft, wichtig für das Hauptmenü */
+ 
+-GLbyte lvl[LEVEL_SIZE_x][LEVEL_SIZE_y]; /* Level-Array, speichert den Levelaufbau */
+-GLboolean level_created; /* needed for the "Replay level" option */
+-GLuint font;	/* Speichert die Displaylists für die Schrift */
+-char pre_string[63]; /* Um Integers als String auszugeben (temporäre Zwischenspeicherung) */
++extern GLbyte lvl[LEVEL_SIZE_x][LEVEL_SIZE_y]; /* Level-Array, speichert den Levelaufbau */
++extern GLboolean level_created; /* needed for the "Replay level" option */
++extern GLuint font;	/* Speichert die Displaylists für die Schrift */
++extern char pre_string[63]; /* Um Integers als String auszugeben (temporäre Zwischenspeicherung) */
+ 
+ #endif

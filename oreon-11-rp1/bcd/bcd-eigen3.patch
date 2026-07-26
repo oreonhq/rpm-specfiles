@@ -1,0 +1,74 @@
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/include/bcd/core/DenoisingUnit.h bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/include/bcd/core/DenoisingUnit.h
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/include/bcd/core/DenoisingUnit.h	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/include/bcd/core/DenoisingUnit.h	2025-10-19 18:01:23.767045529 +0200
+@@ -18,8 +18,8 @@
+ #include "Chronometer.h"
+ #endif
+ 
+-#include "Eigen/Eigenvalues"
+-#include "Eigen/Dense"
++#include <Eigen/Eigenvalues>
++#include <Eigen/Dense>
+ 
+ #include <vector>
+ #include <array>
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/cli/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/cli/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/cli/CMakeLists.txt	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/cli/CMakeLists.txt	2025-10-19 18:01:23.767302322 +0200
+@@ -18,7 +18,7 @@ SET(header_implementation_files
+ 
+ ADD_EXECUTABLE(${target_name} ${src_files} ${header_files} ${header_implementation_files})
+ 
+-SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 11)
++SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 14)
+ 
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${lib_bcd_core})
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${lib_bcd_io})
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/CMakeLists.txt	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/CMakeLists.txt	2025-10-19 18:01:23.767470612 +0200
+@@ -96,7 +96,7 @@ ENDIF(CUDA_FOUND)
+ 
+ TARGET_INCLUDE_DIRECTORIES(${target_name} PUBLIC ${bcd_core_include_folder})
+ 
+-SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 11)
++SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 14)
+ if (OPENMP_FOUND)
+ TARGET_LINK_LIBRARIES(${target_name} PUBLIC OpenMP)
+ endif (OPENMP_FOUND)
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/gui/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/gui/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/gui/CMakeLists.txt	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/gui/CMakeLists.txt	2025-10-19 18:01:23.767646060 +0200
+@@ -28,7 +28,7 @@ SET(header_implementation_files
+ 
+ ADD_EXECUTABLE(${target_name} ${src_files} ${header_files} ${header_implementation_files})
+ 
+-SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 11)
++SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 14)
+ 
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${lib_bcd_core})
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${lib_bcd_io})
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/io/CMakeLists.txt	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/io/CMakeLists.txt	2025-10-19 18:01:23.767805131 +0200
+@@ -70,7 +70,7 @@ TARGET_INCLUDE_DIRECTORIES(${target_name
+ TARGET_INCLUDE_DIRECTORIES(${target_name} PRIVATE ${exr_folder})
+ 
+ 
+-SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 11)
++SET_TARGET_PROPERTIES(${target_name} PROPERTIES CXX_STANDARD 14)
+ TARGET_LINK_LIBRARIES(${target_name} PUBLIC ${lib_bcd_core})
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE OpenExr)
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE Json)
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/raw_converter/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/raw_converter/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/raw_converter/CMakeLists.txt	2018-06-10 17:18:29.000000000 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/raw_converter/CMakeLists.txt	2025-10-19 18:01:23.767966667 +0200
+@@ -29,7 +29,7 @@ ADD_EXECUTABLE(${target_name} ${src_file
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${lib_bcd_core})
+ TARGET_LINK_LIBRARIES(${target_name} PRIVATE ${lib_bcd_io})
+ 
+-set_target_properties(${target_name} PROPERTIES CXX_STANDARD 11)
++set_target_properties(${target_name} PROPERTIES CXX_STANDARD 14)
+ 
+ INSTALL(TARGETS ${target_name} RUNTIME DESTINATION bin)
+ 

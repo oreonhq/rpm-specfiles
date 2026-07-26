@@ -1,0 +1,19 @@
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -39,3 +39,16 @@
+   - 'community-crypto-*.tar.gz'
+   - .gitignore
+   - changelogs/.plugin-cache.yaml
++  - .azure-pipelines
++  - .github
++  - changelogs/fragments/.keep
++  - tests
++  # Ignore temporary build files
++  - .pyproject-builddir
++  # Ignore docs and licenses that we install using %doc and %license
++  - docs
++  - README.md
++  - 'CHANGELOG.rst*'
++  - COPYING
++  - LICENSES
++  - .reuse

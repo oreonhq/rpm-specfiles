@@ -1,0 +1,18 @@
+--- foobillard-3.0a/src/ball.c.mitr	2004-02-23 02:09:01.000000000 +0100
++++ foobillard-3.0a/src/ball.c	2004-04-29 22:35:12.000000000 +0200
+@@ -1821,6 +1821,7 @@
+             } else if( options_cuberef && cuberef_binds!=0 ){
+                 glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, cuberef_binds[i]);
+ #ifdef GL_VERTEX_PROGRAM_NV
++#ifdef USE_BALL_FRESNEL
+                 {
+                     myvec cam_pos2;
+ //                    cam_pos2=vec_scale(vec_unit(vec_diff(cam_pos,balls.ball[i].r)),BALL_D/2.5);
+@@ -1829,6 +1830,7 @@
+                                            BALL_D/2.0,BALL_D/2.5,0,0 );
+                 }
+ #endif
++#endif
+                 draw_ball(&balls.ball[i],cam_pos,cam_FOV,win_width,0);
+             }else{
+                 draw_ball(&balls.ball[i],cam_pos,cam_FOV,win_width,0);

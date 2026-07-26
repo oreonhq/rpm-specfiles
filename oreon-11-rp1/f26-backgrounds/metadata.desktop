@@ -1,0 +1,25 @@
+[Desktop Entry]
+Name=Fedora Twenty Six
+Comment=Fedora Plasma theme
+
+X-KDE-PluginInfo-Author=Fedora KDE-SIG
+X-KDE-PluginInfo-Email=kde@lists.fedoraproject.org
+X-KDE-PluginInfo-Name=F26
+X-KDE-PluginInfo-Version=26.0
+X-KDE-PluginInfo-Website=http://fedoraproject.org/SIGs/KDE
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=CC-BY-SA
+X-KDE-PluginInfo-EnabledByDefault=true
+
+[Settings]
+FallbackTheme=default
+
+[Wallpaper]
+defaultWallpaperTheme=F26
+defaultFileSuffix=.png
+defaultWidth=1920
+defaultHeight=1200
+
+[Branding]
+homepage=http://fedoraproject.org

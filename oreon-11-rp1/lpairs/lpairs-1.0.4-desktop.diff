@@ -1,0 +1,12 @@
+--- lpairs.desktop.org	2009-03-07 18:54:24.000000000 +0100
++++ lpairs.desktop	2009-03-07 18:55:17.000000000 +0100
+@@ -4,6 +4,6 @@
+ GenericName=Memory Game
+ Comment=Classic memory game using SDL
+ Exec=lpairs
+-Icon=lpairs.png
++Icon=lpairs
+ Type=Application
+-Categories=Application;Game;LogicGame;
+\ No newline at end of file
++Categories=Application;Game;LogicGame;

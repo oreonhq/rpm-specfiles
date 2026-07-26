@@ -1,0 +1,21 @@
+Index: centerim-4.22.10/libmsn/msn/Makefile.am
+===================================================================
+--- centerim-4.22.10.orig/libmsn/msn/Makefile.am
++++ centerim-4.22.10/libmsn/msn/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CPPFLAGS = -I$(top_srcdir)//connwrap -I$(top_srcdir)/libmsn
++AM_CPPFLAGS = -I$(top_srcdir)/connwrap -I$(top_srcdir)/libmsn
+ noinst_LIBRARIES = libmsn.a
+ 
+ if BUILD_MSN
+Index: centerim-4.22.10/kksystr/src/Makefile.am
+===================================================================
+--- centerim-4.22.10.orig/kksystr/src/Makefile.am
++++ centerim-4.22.10/kksystr/src/Makefile.am
+@@ -1,5 +1,5 @@
+ AM_CXXFLAGS = -Wno-write-strings
+ 
+-AM_CPPFLAGS = -I$(top_srcdir)/kksystr/include -I$(top_srcdir)//kkstrtext
++AM_CPPFLAGS = -I$(top_srcdir)/kksystr/include -I$(top_srcdir)/kkstrtext
+ noinst_LIBRARIES = libsrc.a
+ libsrc_a_SOURCES =  kkfsys.cc kkiproc.cc

@@ -1,0 +1,31 @@
+From e93a13576532db5d46b365b73829e6c1600d48ff Mon Sep 17 00:00:00 2001
+From: Nicolas Williams <nico@twosigma.com>
+Date: Thu, 27 Dec 2018 13:32:46 -0600
+Subject: [PATCH] Fix check-ldap slapd start race
+
+We start slapd in the foreground (-d0) but backgrounded in the shell,
+then we wait 4 seconds.  This causes a race condition however.  This
+commit makes the slapd-init script more robust and limits the wait to
+however many seconds (up to 30) that slapd needs to start service.
+
+diff --git a/tests/ldap/slapd-init.in b/tests/ldap/slapd-init.in
+index a3975aa67..f6e9fe93a 100644
+--- a/tests/ldap/slapd-init.in
++++ b/tests/ldap/slapd-init.in
+@@ -44,5 +44,15 @@ cp "`which slapd`" . || true # fails if running
+ 
+ echo "starting slapd"
+ ./slapd -d0 -f "${srcdir}/slapd.conf" -h ldapi://.%2Fldap-socket &
++slapd_pid=$!
++
++tries=0
++while kill -0 $slapd_pid && [ ! -S ldap-socket ] && 
++      ! ldapsearch -l 2 -w '' -D '' -b "o=TEST,dc=H5L,dc=SE" -s base -H ldapi://.%2Fldap-socket >/dev/null &&
++      [ $tries -lt 30 ]; do
++    sleep 1
++    tries=`expr 1 + $tries`
++done
+ 
+-sleep 4
++kill -0 $slapd_pid || exit 1
++[ -S ldap-socket ] || exit 1

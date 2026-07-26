@@ -1,0 +1,139 @@
+From 8b3cf9caf984dff07df2c83f685c9bd7a175df67 Mon Sep 17 00:00:00 2001
+From: sand1024 <sand72@mail.ru>
+Date: Thu, 17 Oct 2024 07:19:16 +0300
+Subject: [PATCH] Rendering performance (#1922)
+
+* initial support for unified to/from string conversions in dialogs
+
+* initial support for relative zero coordinates widget
+
+* initial support for relative zero coordinates widget
+
+* settings for rel zero and axis lines, fix for #1870
+
+* basic conversion utils
+
+* rearranged general options, floating statusbar widgets, minor fixes
+
+* support of sorting widgets by group and window title
+
+* placeholders for text lines (mtext, text)
+
+* more angle snap steps
+
+* refactoring, additional settings
+
+* refactoring, additional settings
+
+* initial commit for grids (incomplete)
+
+* fix for #1877
+
+* fix for #1877
+
+* fix for #1688
+
+* fix for #1864
+
+* rework for ActionOrder action
+
+* restored/improved support of snapper crosshair
+
+* restored/improved support of snapper crosshair
+
+* code cleanup
+
+* crosshair support rework
+
+* grid related, ortho and isometric, points, lines, rendering, settings dialogs
+
+* cleanup
+
+* build
+
+* actions and menu for toggling grid view
+
+* command widget prompt
+
+* help menu restructuring
+
+* cleanup
+
+* tmp debug code commented
+
+* small help menu restructuring
+
+* tooltips
+
+* widget creator fix, minor ui improvements
+
+* clicked signal support
+
+* grawing options, opening with specified tab
+
+* options
+
+* adjustments, better support for scaling and non-regular grids
+
+* disabling irregular grid for isometric view
+
+* initial (incomplete) commit for versions checker
+
+* merge
+
+* release version check update, rework for "About" dialog
+
+* current version updated to latest
+
+* cleanup
+
+* linux build issue?
+
+* fix for slots assigning
+
+* fix for #1917
+
+* fix for #1916
+
+* fix for #1916
+
+* "grid off" for new drawings
+
+* rendering pipeline rework
+
+* restored snap to grid if grid is off
+
+* focus setting for layer name #1921
+
+* avoiding segmentation fault on splash screen destructor
+
+* hatch dialog mino changes
+
+* minor cleanup
+
+* minor cleanup, disabling render timers
+
+* localization fix
+
+* format change to pass build check on GitHub
+
+---------
+
+Co-authored-by: sand1024 <sand1024@gmail.com>
+---
+ libraries/libdxfrw/src/libdwgr.cpp            |    3 +
+
+diff --git a/libraries/libdxfrw/src/libdwgr.cpp b/libraries/libdxfrw/src/libdwgr.cpp
+index 0f74565f35..57c64611fd 100644
+--- a/src/libdwgr.cpp
++++ b/src/libdwgr.cpp
+@@ -219,6 +219,9 @@ std::unique_ptr<dwgReader> dwgR::createReaderForVersion(DRW::Version version, st
+ bool dwgR::openFile(std::ifstream *filestr){
+     bool isOk = false;
+     DRW_DBG("dwgR::read 1\n");
++   /* enum { BufferSize = 16184 };
++    char _buffer[BufferSize];
++    filestr->rdbuf()->pubsetbuf(_buffer, BufferSize);*/
+     filestr->open (fileName.c_str(), std::ios_base::in | std::ios::binary);
+     if (!filestr->is_open() || !filestr->good() ){
+         error = DRW::BAD_OPEN;

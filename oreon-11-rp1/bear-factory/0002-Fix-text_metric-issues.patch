@@ -1,0 +1,43 @@
+From 3b2d905ae8592dd9248256bc581bc8f737efdcfa Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 11 Aug 2022 22:50:01 +0200
+Subject: [PATCH 2/5] Fix text_metric issues
+
+text_layout constructor's size_box_type argument needs to have
+a lifetime of at least as long as the text_layout object
+because it is passed in by refenerence (as documented).
+
+text_metric was instead passing in a temporary stack value
+which would then later being overwritten, leading to
+text_layout.m_size.x being set to the width of a single
+character and all text getting rendered in 1 letter per
+line column.
+
+Fix this by using a size_box_type variable at the same
+scope level as the text_layout object.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ bear-engine/core/src/visual/code/text_metric.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/bear-engine/core/src/visual/code/text_metric.cpp b/bear-engine/core/src/visual/code/text_metric.cpp
+index 7204aae..8929060 100644
+--- a/bear-engine/core/src/visual/code/text_metric.cpp
++++ b/bear-engine/core/src/visual/code/text_metric.cpp
+@@ -30,10 +30,10 @@ bear::visual::text_metric::text_metric( const std::string& text, const font& f )
+ {
+   const size_type height( text.length() * f.get_line_spacing() );
+   const size_type max_size( std::numeric_limits<size_type>::max() );
++  const size_box_type s( max_size, height );
+ 
+   text_layout_display_size func( text, f, height );
+-  text_layout layout
+-    ( f, text, size_box_type( max_size, height ), text_align::align_left );
++  text_layout layout( f, text, s, text_align::align_left );
+ 
+   layout.arrange_text<text_layout_display_size&>( func );
+ 
+-- 
+2.37.1
+

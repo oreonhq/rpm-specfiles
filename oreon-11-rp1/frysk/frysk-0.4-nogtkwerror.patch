@@ -1,0 +1,11 @@
+diff -up frysk-0.4/frysk-gtk/tlwidgets/Makefile.am.2 frysk-0.4/frysk-gtk/tlwidgets/Makefile.am
+--- frysk-0.4/frysk-gtk/tlwidgets/Makefile.am.2	2009-02-09 17:28:01.000000000 -0500
++++ frysk-0.4/frysk-gtk/tlwidgets/Makefile.am	2009-02-09 17:28:18.000000000 -0500
+@@ -67,7 +67,6 @@ SRC=  $(tlwidgetssrc)/java/com/redhat/ft
+       $(tlwidgetssrc)/java/com/redhat/ftk/CustomAtkObject.java 
+ 
+ AM_CFLAGS = -fPIC -DPIC -std=gnu99 \
+-	-Wall -Werror \
+ 	-I$(srcdir)/src/widgets \
+ 	$(FRYSK_GTK_CFLAGS)
+ 

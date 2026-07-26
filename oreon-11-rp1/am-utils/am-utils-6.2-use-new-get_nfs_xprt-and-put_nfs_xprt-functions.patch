@@ -1,0 +1,60 @@
+am-utils-6.2 - use new get_nfs_xprt() and put_nfs_xprt() functions
+
+From: Ian Kent <raven@themaw.net>
+
+The nfs_quick_reply() function needs to know the current RPC transport
+outside of the NFS LOOKUP method call. It needs this to reply to the
+NFS LOOKUP call that initiated the mount.
+
+Now there are functions that avoid transport corruption if another
+request comes in during the backgroud mount make nfs_quick_reply()
+use them.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/amfs_generic.c |    3 +--
+ amd/map.c          |    2 +-
+ amd/nfs_subr.c     |    3 ++-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/amd/amfs_generic.c b/amd/amfs_generic.c
+index c352a32..86d0ab7 100644
+--- a/amd/amfs_generic.c
++++ b/amd/amfs_generic.c
+@@ -1129,8 +1129,7 @@ amfs_generic_mount_child(am_node *new_mp, int *error_return)
+    */
+   if (current_transp && !new_mp->am_transp) {
+     dlog("Saving RPC transport for %s", new_mp->am_path);
+-    new_mp->am_transp = (SVCXPRT *) xmalloc(sizeof(SVCXPRT));
+-    *(new_mp->am_transp) = *current_transp;
++    new_mp->am_transp = get_nfs_xprt(current_transp);
+   }
+   if (error && new_mp->am_al && new_mp->am_al->al_mnt &&
+       (new_mp->am_al->al_mnt->mf_ops == &amfs_error_ops))
+diff --git a/amd/map.c b/amd/map.c
+index 0d404cf..bcb2156 100644
+--- a/amd/map.c
++++ b/amd/map.c
+@@ -471,7 +471,7 @@ free_map(am_node *mp)
+   XFREE(mp->am_name);
+   XFREE(mp->am_path);
+   XFREE(mp->am_pref);
+-  XFREE(mp->am_transp);
++  put_nfs_xprt(mp->am_transp);
+ 
+   if (mp->am_al)
+     free_loc(mp->am_al);
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index 0a43b98..07d960d 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -291,7 +291,8 @@ nfs_quick_reply(am_node *mp, int error)
+     /*
+      * Free up transp.  It's only used for one reply.
+      */
+-    XFREE(mp->am_transp);
++    put_nfs_xprt(mp->am_transp);
++    mp->am_transp = NULL;
+     dlog("Quick reply sent for %s", mp->am_al->al_mnt->mf_mount);
+   }
+ }

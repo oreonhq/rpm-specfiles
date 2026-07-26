@@ -1,0 +1,9 @@
+[Unit]
+Description=EB Library Web Server Activation Socket
+
+[Socket]
+ListenStream=80
+Accept=yes
+
+[Install]
+WantedBy=sockets.target

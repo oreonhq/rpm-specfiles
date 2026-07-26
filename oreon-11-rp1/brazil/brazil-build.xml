@@ -1,0 +1,92 @@
+<project default="all" basedir=".">
+
+  <target name="init">
+    <!-- package info -->
+    <property name="name" value="Brazil"/>
+    <property name="version" value="2.3"/>
+
+    <!-- dirs -->
+    <property name="build" value="./build"/>
+    <property name="build.src" value="${build}/src"/>
+    <property name="build.dest" value="${build}/classes"/>
+    <property name="build.javadoc" value="${build}/javadoc"/>
+
+    <!-- compiler options -->
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+  </target>
+
+  <target name="prepare" depends="init">
+    <!-- create dirs -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build.src}"/>
+    <mkdir dir="${build.dest}"/>
+    <mkdir dir="${build.javadoc}"/>
+
+    <!-- copy source -->
+    <copy todir="${build.src}">
+      <fileset dir="./srcs">
+        <include name="com/sun/server/*.java"/>
+        <include name="sunlabs/brazil/asterisk/*.java"/>
+        <include name="sunlabs/brazil/filter/*.java"/>
+        <include name="sunlabs/brazil/handler/*.java"/>
+        <include name="sunlabs/brazil/properties/*.java"/>
+        <include name="sunlabs/brazil/proxy/*.java"/>
+        <include name="sunlabs/brazil/server/*.java"/>
+        <include name="sunlabs/brazil/session/*.java"/>
+        <include name="sunlabs/brazil/sunlabs/*.java"/>
+        <include name="sunlabs/brazil/template/*.java"/>
+        <include name="sunlabs/brazil/util/*.java"/>
+        <include name="sunlabs/brazil/util/http/*.java"/>
+        <include name="sunlabs/brazil/util/regexp/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="compile" depends="prepare">
+    <!-- build classes -->
+    <javac srcdir="${build.src}"
+           destdir="${build.dest}"
+           debug="true"
+           optimize="true"
+           deprecation="true"
+           target="${target}"
+           source="${source}">
+    </javac>
+  </target>
+
+  <target name="brazil" depends="compile">
+    <!-- build jar file -->
+    <jar destfile="${build}/brazil.jar" index="yes">
+      <manifest>
+        <attribute name="Main-Class" value="sunlabs.brazil.server.Main"/>
+      </manifest>
+      <fileset dir="${build.dest}" includes="**/*.class"/>
+    </jar>
+  </target>
+
+  <target name="brazil-javadoc" depends="prepare">
+    <!-- build javadocs -->
+    <javadoc sourcepath="${build.src}"
+             destdir="${build.javadoc}"
+             packagenames="*"
+             author="true"
+             version="true"
+             use="true"
+             splitindex="true"
+             noindex="false"
+             windowtitle="${name} ${version}"
+             doctitle="${name} ${version} JavaDoc">
+      <link href="http://java.sun.com/j2se/1.5.0/docs/api"/>
+    </javadoc>
+  </target>
+
+  <target name="all" depends="brazil,brazil-javadoc"/>
+
+  <target name="clean" depends="init">
+    <!-- remove build files -->
+    <delete dir="${build}"/>
+  </target>
+
+</project>
+

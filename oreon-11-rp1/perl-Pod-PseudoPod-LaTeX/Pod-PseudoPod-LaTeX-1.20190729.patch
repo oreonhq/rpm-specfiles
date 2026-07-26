@@ -1,0 +1,37 @@
+--- lib/Pod/PseudoPod/LaTeX.pm	2011-07-11 00:20:52.000000000 +0200
++++ lib/Pod/PseudoPod/LaTeX.pm	2016-02-12 12:46:21.254244485 +0100
+@@ -382,7 +382,7 @@
+ 
+     $self->{scratch} .= "\\vspace{-6pt}\n"
+                      .  "\\scriptsize\n"
+-                     .  "\\begin{Verbatim}[$verb_options]\n";
++                     .  "\\begin{verbatim}[$verb_options]\n";
+     $self->{flags}{in_verbatim}++;
+ }
+ 
+@@ -390,7 +390,7 @@
+ {
+     my $self = shift;
+ 
+-    $self->{scratch} .= "\n\\end{Verbatim}\n"
++    $self->{scratch} .= "\n\\end{verbatim}\n"
+                      .  "\\vspace{-6pt}\n";
+ 
+     #    $self->{scratch} .= "\\addtolength{\\parskip}{5pt}\n";
+--- t/sections.t	2019-07-30 00:03:35.000000000 +0200
++++ t/sections.t	2019-08-14 18:58:47.668566304 +0200
+@@ -30,12 +30,12 @@
+ like( $text, qr/\\subsubsection\*\{c heading}/,
+     'C heads should become subsubsection titles' );
+ 
+-like( $text, qr/\\begin\{Verbatim}.+"This text.+--.+\$text."\n\\end\{Verbatim}/s,
++like( $text, qr/\\begin\{verbatim}.+"This text.+--.+\$text."\n\\end\{verbatim}/s,
+     'programlistings should become unescaped, verbatim text' );
+ 
+-like( $text, qr/\\begin\{Verbatim}.*label=.+This should also be \$unm0d\+ified\n\\end\{Verbatim}/s,
++like( $text, qr/\\begin\{verbatim}.*label=.+This should also be \$unm0d\+ified\n\\end\{verbatim}/s,
+     'screens should become unescaped, verbatim text' );
+ 
+ like( $text, qr/Blockquoted text.+``escaped''\./,
+     'blockquoted text gets escaped' );
+ 

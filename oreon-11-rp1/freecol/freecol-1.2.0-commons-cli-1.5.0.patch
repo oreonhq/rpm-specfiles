@@ -1,0 +1,12 @@
+diff -uNr freecol-1.2.0.orig/build.xml freecol-1.2.0/build.xml
+--- freecol-1.2.0.orig/build.xml	2024-08-24 13:27:27.797000000 +0200
++++ freecol-1.2.0/build.xml	2024-08-24 13:28:55.585000000 +0200
+@@ -31,7 +31,7 @@
+               value="jars/miglayout-swing-5.3.jar"/>
+     <property name="miglayout-core.jar"
+               value="jars/miglayout-core-5.3.jar"/>
+-    <property name="cli.jar" value="jars/commons-cli-1.4.jar"/>
++    <property name="cli.jar" value="jars/commons-cli-1.5.jar"/>
+     <property name="cortado.jar" value="jars/cortado-0.6.0.jar"/>
+ 
+ 

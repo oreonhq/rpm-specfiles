@@ -1,0 +1,40 @@
+Add one functio ndeclaration and additional include directives to
+support building with strict(er) C99 compilers which reject implicit
+function declarations by default.
+
+diff --git a/src/file.h b/src/file.h
+index 22da1c77b054b608..7b5abda62ffdcdf8 100644
+--- a/src/file.h
++++ b/src/file.h
+@@ -172,6 +172,7 @@ public void FileInit();
+ public inline int IobufGetc( iobuf_t *iobuf );
+ public inline int IobufUngetc( int ch, iobuf_t *iobuf );
+ public offset_t IobufFtell( iobuf_t *iobuf );
++public int IobufFseek( iobuf_t *iobuf, offset_t off, int mode );
+ public int IobufFseeko( iobuf_t *iobuf, offset_t off, int mode );
+ public int IobufFeof( iobuf_t *iobuf );
+ #endif
+diff --git a/src/guess.c b/src/guess.c
+index facd95ea17678f7b..3a67df535e6c7a68 100644
+--- a/src/guess.c
++++ b/src/guess.c
+@@ -21,6 +21,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <string.h>
+ 
+ #include <import.h>
+ #include <decode.h>
+diff --git a/src/guesslocale.c b/src/guesslocale.c
+index 7974c88fde56e19f..07e73eef01dec5eb 100644
+--- a/src/guesslocale.c
++++ b/src/guesslocale.c
+@@ -25,6 +25,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <locale.h>
++#include <ctype.h>
+ #if defined(HAVE_LANGINFO_CODESET)
+ #include <langinfo.h>
+ #endif

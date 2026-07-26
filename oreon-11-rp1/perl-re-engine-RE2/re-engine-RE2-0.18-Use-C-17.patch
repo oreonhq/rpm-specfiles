@@ -1,0 +1,44 @@
+From a536ae3c81841c9117a3ec214eff54aea61ec544 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 14 Aug 2024 13:22:50 +0200
+Subject: [PATCH] Use C++17
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+abseil-cpp-20240116 via re2-20240702 needs C++17 for std::string_view.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 77b9ed2..1746422 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -78,7 +78,9 @@ if (my $gcc_version = gcc_version($cc)) {
+     $opt{OPTIMIZE} = $optimize;
+   }
+ 
+-  if ($gcc_version >= 4.8) {
++  if ($gcc_version >= 9.0) {
++    $opt{DEFINE} .= " -std=c++17";
++  } elsif ($gcc_version >= 4.8) {
+     $opt{DEFINE} .= " -std=c++11";
+   } else {
+     say "Need gcc version new enough to support C++11, exiting.";
+@@ -89,7 +91,9 @@ if (my $gcc_version = gcc_version($cc)) {
+ if (my $clang_version = clang_version($cc)) {
+   say "Compiling on clang $clang_version";
+ 
+-  if ($clang_version >= 3) {
++  if ($clang_version >= 5) {
++    $opt{DEFINE} .= " -std=c++17";
++  } elsif ($clang_version >= 3) {
+     $opt{DEFINE} .= " -std=c++11";
+   } else {
+     say "Need clang version new enough to support C++11, this will probably fail.";
+-- 
+2.46.0
+

@@ -1,0 +1,43 @@
+From 86e7f46b251983dca10a3341ad67a093889fd2c7 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:50 +0200
+Subject: [PATCH 26/41] Avoid warnings about unused labels
+
+maybejoystick label defined but not used when built without MOUSE
+noshm label defined but not used when built without MITSHM
+---
+ menu.c      | 2 ++
+ xlib/init.c | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/menu.c b/menu.c
+index 659c168..91bfe39 100644
+--- a/menu.c
++++ b/menu.c
+@@ -180,7 +180,9 @@ control_change ()
+          mouseplayer = -1;
+ #endif
+ #ifdef JOYSTICK
++#ifdef MOUSE
+ maybejoystick:;
++#endif
+          if((joystickplayer[0] == -1)&&(joystickdevice[0]>=0))
+             {
+                joystickplayer[0]=player;
+diff --git a/xlib/init.c b/xlib/init.c
+index 3950319..6fad837 100644
+--- a/xlib/init.c
++++ b/xlib/init.c
+@@ -545,8 +545,8 @@ initialize (char **argv, int argc)
+ #ifdef MITSHM
+   if (!shm)
+     {
+-#endif
+     noshm:;
++#endif
+       backscreen.pixmap = XCreatePixmap (dp, wi, MAPWIDTH, MAPHEIGHT + 20, DefaultDepth (dp, screen));
+       background.pixmap = XCreatePixmap (dp, wi, MAPWIDTH, MAPHEIGHT + 20, DefaultDepth (dp, screen));
+       starbackground.pixmap = XCreatePixmap (dp, wi, MAPWIDTH, MAPHEIGHT + 20, DefaultDepth (dp, screen));
+-- 
+2.5.0
+

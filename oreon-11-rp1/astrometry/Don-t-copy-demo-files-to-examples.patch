@@ -1,0 +1,20 @@
+From: Ole Streicher <olebole@debian.org>
+Date: Tue, 28 Apr 2020 09:27:14 +0200
+Subject: Don't copy demo files to examples
+
+---
+ Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 4b3fc9c..5c6b104 100644
+--- a/Makefile
++++ b/Makefile
+@@ -174,7 +174,6 @@ install-core:
+ 	$(MKDIR) '$(MAN1_INSTALL_DIR)'
+ 	$(CP) __init__.py '$(PY_BASE_INSTALL_DIR)'
+ 	$(CP) CREDITS LICENSE README.md report.txt '$(DOC_INSTALL_DIR)'
+-	$(CP) demo/* '$(EXAMPLE_INSTALL_DIR)'
+ 	$(CP) man/*.1 '$(MAN1_INSTALL_DIR)'
+ 	$(MAKE) -C util  install-core
+ 	$(MAKE) -C catalogs install

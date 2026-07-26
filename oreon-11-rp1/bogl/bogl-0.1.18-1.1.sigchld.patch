@@ -1,0 +1,11 @@
+--- bogl-0.1.18/bterm.c.sigchld	2005-09-20 00:44:06.000000000 +0200
++++ bogl-0.1.18/bterm.c	2005-09-20 00:46:01.000000000 +0200
+@@ -124,7 +124,7 @@
+ void sigchld(int sig)
+ {
+   int status;
+-  if (waitpid(child_pid, &status, WNOHANG)) {
++  if (waitpid(child_pid, &status, WNOHANG) > 0) {
+     child_pid = 0;
+     /* Reset ownership and permissions of ttyfd device? */
+     tcsetattr(0, TCSAFLUSH, &ttysave);

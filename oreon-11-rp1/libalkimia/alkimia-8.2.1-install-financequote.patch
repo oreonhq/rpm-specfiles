@@ -1,0 +1,25 @@
+From 089794942385e4d3fc02e028eab2039bbcaab508 Mon Sep 17 00:00:00 2001
+From: Thomas Baumgart <thb@net-bembel.de>
+Date: Thu, 28 Aug 2025 16:02:21 +0200
+Subject: [PATCH] Fix installation directory for financequote.pl on Qt5 and Qt6
+
+---
+ src/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 99edd74d..a20f23ed 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -256,7 +256,7 @@ else()
+     if(NOT KDE_INSTALL_KNSRCDIR)
+         set(KDE_INSTALL_KNSRCDIR "share/knsrcfiles")
+     endif()
+-    set(APPDATA_INSTALL_DIR ${SHARE_INSTALL_DIR})
++    set(APPDATA_INSTALL_DIR ${KDE_INSTALL_DATADIR})
+     set(FQ_LOCAL_INSTALL_PATH ${CMAKE_BINARY_DIR}/share/alkimia${ALKIMIA_PATH_SUFFIX}/misc)
+ endif()
+ 
+-- 
+GitLab
+

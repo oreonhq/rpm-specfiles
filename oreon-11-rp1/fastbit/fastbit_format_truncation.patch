@@ -1,0 +1,20 @@
+--- a/contrib/fbmerge/fbmerge.cpp	2017-09-24 14:47:56.208605477 -0400
++++ b/contrib/fbmerge/fbmerge.cpp	2017-09-24 14:48:30.712539146 -0400
+@@ -142,7 +142,7 @@
+ 	    if (dump_mode) {
+ 		if ((fd = fopen(path, "a")) != NULL) {
+ 		    for(unsigned j=0; j<part.nRows()-1; j++)
+-			fprintf(fd, "%llu\n", s64[j]);
++			fprintf(fd, "%lu\n", s64[j]);
+ 		    fclose(fd);
+ 		}
+ 	    } else {
+@@ -173,7 +173,7 @@
+ 
+     if ((dir = opendir(input_dir)) != NULL) {
+ 	while ((dirent = readdir(dir))) {
+-	    char dirname[256];
++	    char dirname[272];
+ 
+ 	    if (dirent->d_name[0] == '.') continue;
+ 	    snprintf(dirname, sizeof(dirname), "%s/%s", input_dir,

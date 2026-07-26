@@ -1,0 +1,102 @@
+--- hexer-1.0.7/config-test.c.orig	2026-02-10 16:37:54.914558026 +0100
++++ hexer-1.0.7/config-test.c	2026-02-10 16:44:22.840691700 +0100
+@@ -15,11 +15,11 @@
+ #error No option to test
+ #endif
+ 
+ #if defined(TEST_SIGTYPE_INT)
+-static int handler(void)
++static void handler(int signo)
+ {
+-	return 1;
++	((void)signo);
+ }
+ #endif
+ 
+ #if defined(TEST_VASPRINTF)
+--- hexer-1.0.7/signal.c.orig	2026-02-10 16:49:10.293247895 +0100
++++ hexer-1.0.7/signal.c	2026-02-10 16:49:53.811948641 +0100
+@@ -30,20 +30,19 @@
+ 
+ volatile int caught_sigint;
+ 
+ #ifdef SIGINT
+-  static sigtype_t
++  static void
+ sigint_handler(int sig __unused)
+ {
+   signal(SIGINT, sigint_handler);
+   caught_sigint = 1;
+-  return SIG_RVAL;
+ }
+ /* sigint_handler */
+ #endif
+ 
+ #ifdef SIGTSTP
+-  static sigtype_t
++  static void
+ sigtstp_handler(int sig __unused)
+ {
+   signal(SIGTSTP, sigtstp_handler);
+   tio_suspend();
+@@ -53,34 +52,31 @@
+   tio_printf("@AbStopped@~.  Type `fg' to restart @Abhexer@~.\n");
+   tio_reset_attributes();
+   tio_flush();
+   kill(0, SIGSTOP);
+-  return SIG_RVAL;
+ }
+ /* sigtstp_handler */
+ #endif
+ 
+ #ifdef SIGCONT
+-  static sigtype_t
++  static void
+ sigcont_handler(int sig __unused)
+ {
+   signal(SIGCONT, sigcont_handler);
+   tio_restart();
+   he_refresh_all(current_buffer->hedit);
+-  return SIG_RVAL;
+ }
+ /* sigcont_handler */
+ #endif
+ 
+ #ifdef SIGPIPE
+-  static sigtype_t
++  static void
+ sigpipe_handler(int sig __unused)
+ {
+   signal(SIGPIPE, sigpipe_handler);
+ #if 0
+   he_message(0, "broken pipe");
+ #endif
+-  return SIG_RVAL;
+ }
+ /* sigpipe_handler */
+ #endif
+ 
+--- hexer-1.0.7/tio.c.orig	2026-02-10 16:47:59.306973133 +0100
++++ hexer-1.0.7/tio.c	2026-02-10 16:51:25.934914676 +0100
+@@ -131,9 +131,9 @@
+ typedef void sigtype_t;
+ #endif
+ 
+ #ifdef SIGWINCH
+-static sigtype_t	 sigwinch_handler(int);
++static void	 sigwinch_handler(int);
+ #endif
+ #if 0
+ static void		 tio_listcaps(void);
+ #endif
+@@ -2005,9 +2005,9 @@
+ }
+ /* tio_delete_character */
+ 
+ #ifdef SIGWINCH
+-  static sigtype_t
++  static void
+ sigwinch_handler(int sig __unused)
+   /* Signal handler for signal `SIGWINCH'.
+    */
+ {

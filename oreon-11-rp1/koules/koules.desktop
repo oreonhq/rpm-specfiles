@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Koules
+Comment=Classic Linux action game with network multiplayer support
+Exec=/usr/bin/xkoules
+Icon=koules
+Terminal=false
+Type=Application
+Categories=Application;Game;ArcadeGame;

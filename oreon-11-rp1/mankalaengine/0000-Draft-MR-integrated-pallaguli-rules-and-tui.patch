@@ -1,0 +1,378 @@
+From fb29b9aa646f33c1333369ecc9b432603d424197 Mon Sep 17 00:00:00 2001
+From: Srisharan V S <srisharan.psgtech@gmail.com>
+Date: Fri, 7 Mar 2025 14:50:10 +0000
+Subject: [PATCH 0/2] Draft MR: integrated pallaguli rules and tui
+
+---
+ examples/pallangulitui.cpp                  |  85 ++++++++++++++++
+ include/mankalaengine/pallangulirules.h     | 107 ++++++++++++++++++++
+ include/mankalaengine/variantdescriptions.h |  20 ++++
+ src/CMakeLists.txt                          |   2 +
+ src/pallangulirules.cpp                     | 100 ++++++++++++++++++
+ 5 files changed, 314 insertions(+)
+ create mode 100644 examples/pallangulitui.cpp
+ create mode 100644 include/mankalaengine/pallangulirules.h
+ create mode 100644 src/pallangulirules.cpp
+
+diff --git a/examples/pallangulitui.cpp b/examples/pallangulitui.cpp
+new file mode 100644
+index 0000000..bd42ce2
+--- /dev/null
++++ b/examples/pallangulitui.cpp
+@@ -0,0 +1,85 @@
++#include "rules.h"
++#include <pallangulirules.h>
++#include <iostream>
++#include <mankalaengine.h>
++#include <moveselection.h>
++
++void print_board(const MankalaEngine::Board& board) {
++    size_t columns = board.holes.size() / 2;
++    std::cout << "     ";
++    for (size_t i = 0; i < columns; ++i) {
++        std::cout << " " << columns * 2 - 1 - i << " ";
++        if ((columns * 2 - 1 - i) / 10 < 1) {
++            std::cout << " ";
++        }
++    }
++    std::cout << "\n ";
++    for (size_t i = 0; i < columns + 2; ++i) {
++        std::cout << "--- ";
++    }
++    std::cout << "\n|   |";
++    for (size_t i = 0; i < columns; ++i) {
++        std::cout << " " << board.holes[columns * 2 - 1 - i];
++        if (board.holes[columns * 2 - 1 - i] / 10 < 1) {
++            std::cout << " ";
++        }
++        std::cout << "|";
++    }
++    std::cout << "   |";
++    std::cout << "\n| " << board.stores.at(MankalaEngine::player_2);
++    if (board.stores.at(MankalaEngine::player_2) / 10 < 1) {
++        std::cout << " ";
++    }
++    std::cout << "|";
++    for (size_t i = 0; i < columns - 1; ++i) {
++        std::cout << "--- ";
++    }
++    std::cout << "---";
++    std::cout << "| " << board.stores.at(MankalaEngine::player_1);
++    if (board.stores.at(MankalaEngine::player_1) / 10 < 1) {
++        std::cout << " ";
++    }
++    std::cout << "|";
++    std::cout << "\n|   |";
++    for (size_t i = 0; i < columns; ++i) {
++        std::cout << " " << board.holes[i];
++        if (board.holes[i] / 10 < 1) {
++            std::cout << " ";
++        }
++        std::cout << "|";
++    }
++    std::cout << "   |";
++    std::cout << "\n ";
++    for (size_t i = 0; i < columns + 2; ++i) {
++        std::cout << "--- ";
++    }
++    std::cout << "\n     ";
++    for (size_t i = 0; i < columns; ++i) {
++        std::cout << " " << i << "  ";
++    }
++    std::cout << "\n";
++}
++
++int main() {
++    MankalaEngine::MankalaEngine user(MankalaEngine::user);
++    MankalaEngine::MankalaEngine opponent(MankalaEngine::miniMax);
++    MankalaEngine::PallanguliBoard board;
++    MankalaEngine::PallanguliRules rules;
++    MankalaEngine::Player p1 = MankalaEngine::player_1;
++    MankalaEngine::Player p2 = MankalaEngine::player_2;
++
++    print_board(board);
++    while (user.play(p1, rules, board) && opponent.play(p2, rules, board)) {
++        std::cout << "\n";
++        print_board(board);
++    }
++
++    std::cout << "\nGame finished.\n";
++    if (board.stores.at(p1) > board.stores.at(p2)) {
++        std::cout << "Player 1 wins.\n";
++    } else if (board.stores.at(p2) > board.stores.at(p1)) {
++        std::cout << "Player 2 wins.\n";
++    } else {
++        std::cout << "Tie.\n";
++    }
++}
+diff --git a/include/mankalaengine/pallangulirules.h b/include/mankalaengine/pallangulirules.h
+new file mode 100644
+index 0000000..2457724
+--- /dev/null
++++ b/include/mankalaengine/pallangulirules.h
+@@ -0,0 +1,107 @@
++/*
++    SPDX-FileCopyrightText: 2025 Srisharan V S <srisharan.psgtech@gmail.com>
++    SPDX-License-Identifier: GPL-3.0-or-later
++*/
++#pragma once
++#include <mankalaengine_export.h>
++#include <memory>
++#include <rules.h>
++
++namespace MankalaEngine {
++
++/**
++ * @brief The board for the Pallanguli Mancala variation.
++ *
++ * Pallanguli is played on a board with 2 rows, each with 7 holes, and 2
++ * stores. Each player owns the store to their right hand and controls the holes
++ * on their side of the board. At the beginning, all holes are filled with 6
++ * counters.
++ */
++struct MANKALAENGINE_EXPORT PallanguliBoard : Board {
++    PallanguliBoard() { holes = std::vector<int>(14, 6); }
++};
++
++/**
++ * @brief The rules for the Pallanguli Mancala variation.
++ */
++class MANKALAENGINE_EXPORT PallanguliRules : public Rules {
++    /**
++     * @brief Represents the PallanguliRules private internal implementation
++     * details.
++     */
++    struct PallanguliRulesImpl;
++
++    /**
++     * @brief PallanguliRules private internal implementation details.
++     */
++    std::unique_ptr<PallanguliRulesImpl> _impl;
++
++public:
++    /**
++     * @brief Class constructor.
++     */
++    PallanguliRules();
++
++    /**
++     * @brief Plays a move.
++     *
++     * In Pallanguli, moves follow these rules:
++     * 1. Player picks up all counters from a pit and sows them anticlockwise
++     * 2. Capture rules:
++     *    - If sowing results in a pit containing exactly 4 counters, they are
++     *      immediately captured
++     *    - If the last counter falls into a pit where the next pit is empty but
++     *      the pit beyond contains counters, those counters are captured
++     * 3. Turn ends if:
++     *    - The last counter falls into a pit where the next two pits are empty
++     *    - There are no more valid moves
++     * 4. If turn continues, player starts from the next non-empty pit
++     *
++     * @param player The player whose turn it is to play.
++     * @param move The move to be played.
++     * @param state The board in which the move is going to be played.
++     */
++    void move(int move, Player player, Board& state) const override;
++
++    /**
++     * @brief Checks if a move breaks the rules.
++     *
++     * In Pallanguli, any move between 0 and 6 is valid, as long as there are
++     * pebbles in the hole.
++     *
++     * @param player The player whose turn it is to play.
++     * @param move The move to be played.
++     * @param state The board in which the move is going to be played.
++     *
++     * @returns True if the move can be played, false otherwise.
++     */
++    bool isValidMove(int move, Player player,
++                    const Board& state) const override;
++
++    /**
++     * @brief Copy constructor.
++     */
++    PallanguliRules(const PallanguliRules& other);
++
++    /**
++     * @brief Move constructor.
++     */
++    PallanguliRules(PallanguliRules&& other) noexcept;
++
++    /**
++     * @brief Copy assignment.
++     */
++    PallanguliRules& operator=(const PallanguliRules& other);
++
++    /**
++     * @brief Move assignment.
++     */
++    PallanguliRules& operator=(PallanguliRules&& other) noexcept;
++
++    /**
++     * @brief Class destructor.
++     */
++    ~PallanguliRules() override;
++};
++
++} // namespace MankalaEngine
+diff --git a/include/mankalaengine/variantdescriptions.h b/include/mankalaengine/variantdescriptions.h
+index 66f77cc..f9e3154 100644
+--- a/include/mankalaengine/variantdescriptions.h
++++ b/include/mankalaengine/variantdescriptions.h
+@@ -63,4 +63,24 @@ constexpr const char* OWARE_DESCRIPTION =
+     " territory, ending the game.\n"
+     "The game ends when a player has 25 or more counters in their store.";
+ 
++constexpr const char* PALLANGULI_DESCRIPTION =
++    "Pallanguli is played with a rectangular board that has two rows and 7 pits on each side, "
++    "along with pebbles/coins. To begin, each pit is filled with 6 coins (the number of coins varies). "
++    "The first player picks up coins from one of the pits and starts to drop them "
++    "in an anti-clockwise direction in each succeeding pit. "
++    "If the player reaches the last pit in the row, he/she continues on their opponent's side. "
++    "Once the last coin is dropped, the player takes the coin from the next pit "
++    "and continues playing in the same way. "
++    "If the last coin falls into a pit where the next pit is empty, "
++    "the coins in the pit beyond the empty pit are captured and stored by the player. "
++    "The player continues playing from the next cup containing coins. "
++    "If the last coin falls into a pit with two empty holes beyond, "
++    "the player's turn comes to an end. "
++    "The opponent now continues to play in the same way, "
++    "taking coins from any of his pits and going around dropping the coins "
++    "in a counter-clockwise direction. "
++    "If, after dropping a pebble into a pit, the pit contains four coins, "
++    "these coins are also captured by the player. "
++    "The round is over when no coins remain.";
++
+ } // namespace MankalaEngine
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 4932cbd..096c784 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -4,6 +4,7 @@ set(
+     "../include/mankalaengine/rules.h"
+     "../include/mankalaengine/bohnenspielrules.h"
+     "../include/mankalaengine/owarerules.h"
++    "../include/mankalaengine/pallangulirules.h"
+     "../include/mankalaengine/moveselection.h"
+     "../include/mankalaengine/variantdescriptions.h")
+ 
+@@ -18,6 +19,7 @@ add_library(
+     rules.cpp
+     bohnenspielrules.cpp
+     owarerules.cpp
++    pallangulirules.cpp
+     moveselection.cpp
+     ${HEADER_LIST})
+ 
+diff --git a/src/pallangulirules.cpp b/src/pallangulirules.cpp
+new file mode 100644
+index 0000000..f1a5ac5
+--- /dev/null
++++ b/src/pallangulirules.cpp
+@@ -0,0 +1,100 @@
++/*
++    SPDX-FileCopyrightText: 2025 Srisharan V S <srisharan.psgtech@gmail.com>
++
++    SPDX-License-Identifier: GPL-3.0-or-later
++*/
++
++#include <pallangulirules.h>
++#include <memory>
++#include <rules.h>
++#include <utility>
++#include <variantdescriptions.h>
++
++namespace MankalaEngine {
++
++struct PallanguliRules::PallanguliRulesImpl {
++    void recursive_move(int current_position, Player player, Board& state, int max_index) const {
++        int pebbles = state.holes.at(current_position);
++        // Picking up all counters in the selected pit
++        state.holes.at(current_position) = 0;
++
++        while (pebbles-- > 0) {
++            // Advance to the next pit
++            if (++current_position > max_index) {
++                current_position = 0;
++            }
++            state.holes.at(current_position) += 1;
++
++            // Check for immediate capture if the pit reaches 4 counters
++            if (state.holes.at(current_position) == 4) {
++                state.stores.at(player) += state.holes.at(current_position);
++                state.holes.at(current_position) = 0;
++            }
++        }
++        int next_position = 0;
++        int next2_position = 0;
++        if(++current_position > max_index) {
++            next_position = 0;
++            next2_position = 1;
++        }
++        else {
++            next_position = current_position;
++            if(next_position + 1 > max_index) {
++                next2_position = 0;
++            }
++            else {
++                next2_position = next_position + 1;
++            }
++        }
++        //check for termination
++        if(state.holes.at(next_position) == 0 && state.holes.at(next2_position) == 0) {
++            return;
++        }
++        //check for Capture
++        if(state.holes.at(next_position) == 0 && state.holes.at(next2_position) > 0) {
++            state.stores.at(player) += state.holes.at(next2_position);
++            state.holes.at(next2_position) = 0;
++        }
++        //check for Continue
++        else if(state.holes.at(next_position) > 0) {
++            recursive_move(next_position, player, state, max_index);
++        }
++    }
++};
++
++PallanguliRules::PallanguliRules() : Rules(7, PALLANGULI_DESCRIPTION) {}
++
++void PallanguliRules::move(int move, Player player, Board& state) const {
++    const int max_index = player_holes() * 2 - 1;
++    int const current_position = position(move, player);
++    
++    _impl->recursive_move(current_position, player, state, max_index);
++}
++
++bool PallanguliRules::isValidMove(int move, Player player, const Board& state) const {
++    if (move >= player_holes() || move < 0) {
++        return false;
++    }
++    return state.holes.at(position(move, player)) != 0;
++}
++
++PallanguliRules::PallanguliRules(PallanguliRules&& other) noexcept
++    : Rules(6, PALLANGULI_DESCRIPTION), _impl(std::move(other._impl)) {}
++
++PallanguliRules& PallanguliRules::operator=(const PallanguliRules& other) {
++    return *this = PallanguliRules(other);
++}
++
++PallanguliRules::PallanguliRules(const PallanguliRules& other)
++    : Rules(6, PALLANGULI_DESCRIPTION),
++      _impl(std::make_unique<PallanguliRulesImpl>(*other._impl)) {}
++
++PallanguliRules& 
++PallanguliRules::operator=(PallanguliRules&& other) noexcept {
++    std::swap(_impl, other._impl);
++    return *this;
++}
++
++PallanguliRules::~PallanguliRules() = default;
++
++} // namespace MankalaEngine
+-- 
+2.49.0
+

@@ -1,0 +1,11 @@
+--- a/db/compilers.xml
++++ b/db/compilers.xml
+@@ -180,7 +180,7 @@
+     <name>LD</name>
+     <executable prefix="1">(.*-wrs.*-|.*-sysgo.*-|.*-elf.*-|.*-eabi.*-|.*-eabispe.*-|avr.*-|.*-elinos-linux.*-|.*-linux-gnu-|.*mingw32.*-|.*-xcoff.*-|.*linux-android.*|arm-linux-gnueabi-|arm-linux-gnueabihf-|e500v2-gnu-linux-|powerpc-.*-linux.*-|.*-darwin.*-|.*-fastos.*|.*-freebsd.*|.*-qnx.*-|.*-rtems.*-|.*-lynxos178.*-)?ld</executable>
+     <version>
+-      <external>${PREFIX}ld -v</external>
++      <external>env LC_ALL=C ${PREFIX}ld -v</external>
+       <grep regexp="^(GNU ld.*|LLD) (\S+)" group="2"></grep>
+     </version>
+     <languages>Bin_Img</languages>

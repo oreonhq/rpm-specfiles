@@ -1,0 +1,32 @@
+From 5a32b68421b880740277e056a4b85c9de90306ec Mon Sep 17 00:00:00 2001
+From: Julian Sikorski <belegdol+github@gmail.com>
+Date: Sun, 3 Apr 2022 11:28:44 +0200
+Subject: [PATCH] Hack allowing bgfx to initialise in absence of dx9 shaders
+
+---
+ src/osd/modules/render/bgfx/shadermanager.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/osd/modules/render/bgfx/shadermanager.cpp b/src/osd/modules/render/bgfx/shadermanager.cpp
+index 282029c..e3317ef 100644
+--- a/src/osd/modules/render/bgfx/shadermanager.cpp
++++ b/src/osd/modules/render/bgfx/shadermanager.cpp
+@@ -94,7 +94,6 @@ std::string shader_manager::make_path_string(const osd_options &options, const s
+ 
+ 	switch (bgfx::getRendererType())
+ 	{
+-		case bgfx::RendererType::Noop:
+ 		case bgfx::RendererType::Direct3D9:
+ 			shader_path += "dx9";
+ 			break;
+@@ -112,6 +111,7 @@ std::string shader_manager::make_path_string(const osd_options &options, const s
+ 			shader_path += "metal";
+ 			break;
+ 
++		case bgfx::RendererType::Noop:
+ 		case bgfx::RendererType::OpenGL:
+ 			shader_path += "glsl";
+ 			break;
+-- 
+2.48.1
+

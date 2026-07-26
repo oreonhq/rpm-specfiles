@@ -1,0 +1,11 @@
+--- a/src/vecteur.h.orig	2016-05-30 05:53:13.000000000 -0600
++++ b/src/vecteur.h	2016-10-20 12:06:16.321062870 -0600
+@@ -27,6 +27,8 @@
+ #include <gsl/gsl_permutation.h>
+ #endif // HAVE_LIBGSL
+ 
++#undef iszero
++
+ #ifndef NO_NAMESPACE_GIAC
+ namespace giac {
+ #endif // ndef NO_NAMESPACE_GIAC

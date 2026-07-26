@@ -1,0 +1,130 @@
+From b938ea6a6021b5fa005d7586fa65a45aeee25f33 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Wed, 21 May 2025 18:12:29 +0200
+Subject: [PATCH] Fix passing integers to curl_easy_setopt()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+curl_easy_setopt() expects long ints, not ints. This is cought by
+curl-8.14.0-rc1 now:
+
+    isds.c: In function 'isds_set_timeout':
+    isds.c:1112:20: error: call to '_curl_easy_setopt_err_long' declared with attribute warning: curl_easy_setopt expects a long argument [-Werror=attribute-warning]
+     1112 |         curl_err = curl_easy_setopt(context->curl, CURLOPT_NOSIGNAL, 1);
+	  |                    ^
+
+This patch fixes it.
+
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ src/isds.c |  6 +++---
+ src/soap.c | 20 ++++++++++----------
+ 2 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/src/isds.c b/src/isds.c
+index 3dcd970..ea69cc6 100644
+--- a/src/isds.c
++++ b/src/isds.c
+@@ -1117,14 +1117,14 @@ isds_error isds_set_timeout(struct isds_ctx *context,
+     if (context->curl) {
+         CURLcode curl_err;
+ 
+-        curl_err = curl_easy_setopt(context->curl, CURLOPT_NOSIGNAL, 1);
++        curl_err = curl_easy_setopt(context->curl, CURLOPT_NOSIGNAL, 1L);
+         if (!curl_err) 
+ #if HAVE_DECL_CURLOPT_TIMEOUT_MS /* Since curl-7.16.2 */
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_TIMEOUT_MS,
+-                    context->timeout);
++                    (long int)context->timeout);
+ #else
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_TIMEOUT,
+-                    context->timeout / 1000);
++                    (long int)(context->timeout / 1000));
+ #endif /* not HAVE_DECL_CURLOPT_TIMEOUT_MS */
+         if (curl_err) return IE_ERROR;
+     }
+diff --git a/src/soap.c b/src/soap.c
+index f485f4f..bc6fc9c 100644
+--- a/src/soap.c
++++ b/src/soap.c
+@@ -784,22 +784,22 @@ static isds_error http(struct isds_ctx *context,
+ 
+     /* Set timeout */
+     if (!curl_err) {
+-        curl_err = curl_easy_setopt(context->curl, CURLOPT_NOSIGNAL, 1);
++        curl_err = curl_easy_setopt(context->curl, CURLOPT_NOSIGNAL, 1L);
+     }
+     if (!curl_err && context->timeout) {
+ #if HAVE_DECL_CURLOPT_TIMEOUT_MS /* Since curl-7.16.2 */
+         curl_err = curl_easy_setopt(context->curl, CURLOPT_TIMEOUT_MS,
+-                context->timeout);
++                (long int)context->timeout);
+ #else
+         curl_err = curl_easy_setopt(context->curl, CURLOPT_TIMEOUT,
+-                context->timeout / 1000);
++                (long int)(context->timeout / 1000));
+ #endif /* not HAVE_DECL_CURLOPT_TIMEOUT_MS */
+     }
+ 
+     /* Register callback */
+     if (context->progress_callback) {
+         if (!curl_err) {
+-            curl_err = curl_easy_setopt(context->curl, CURLOPT_NOPROGRESS, 0);
++            curl_err = curl_easy_setopt(context->curl, CURLOPT_NOPROGRESS, 0L);
+         }
+         if (!curl_err) {
+ #if HAVE_DECL_CURLOPT_XFERINFOFUNCTION /* Since curl-7.32.0 */
+@@ -818,7 +818,7 @@ static isds_error http(struct isds_ctx *context,
+ 
+     /* Set other CURL features */
+     if (!curl_err) {
+-        curl_err = curl_easy_setopt(context->curl, CURLOPT_FAILONERROR, 0);
++        curl_err = curl_easy_setopt(context->curl, CURLOPT_FAILONERROR, 0L);
+     }
+ 
+     /* Set get-response function */
+@@ -849,7 +849,7 @@ static isds_error http(struct isds_ctx *context,
+ #if HAVE_DECL_CURLOPT_HEADEROPT /* since curl-7.37.0 */
+     if (!curl_err) {
+         curl_err = curl_easy_setopt(context->curl, CURLOPT_HEADEROPT,
+-                CURLHEADER_SEPARATE);
++                (long int)CURLHEADER_SEPARATE);
+     }
+ #endif /* HAVE_DECL_CURLOPT_HEADEROPT */
+     if (!curl_err) {
+@@ -880,19 +880,19 @@ static isds_error http(struct isds_ctx *context,
+     if (use_get) {
+         /* Set GET request */
+         if (!curl_err) {
+-            curl_err = curl_easy_setopt(context->curl, CURLOPT_HTTPGET, 1);
++            curl_err = curl_easy_setopt(context->curl, CURLOPT_HTTPGET, 1L);
+         }
+     } else {
+         /* Set POST request body */
+         if (!curl_err) {
+-            curl_err = curl_easy_setopt(context->curl, CURLOPT_POST, 1);
++            curl_err = curl_easy_setopt(context->curl, CURLOPT_POST, 1L);
+         }
+         if (!curl_err) {
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_POSTFIELDS, request);
+         }
+         if (!curl_err) {
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_POSTFIELDSIZE,
+-                    request_length);
++                    (long int)request_length);
+         }
+     }
+ 
+@@ -902,7 +902,7 @@ static isds_error http(struct isds_ctx *context,
+             ((log_facilities & ILF_HTTP) && (log_level >= ILL_DEBUG));
+         if (!curl_err) {
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_VERBOSE,
+-                    (debug_curl) ? 1 : 0);
++                    (debug_curl) ? 1L : 0L);
+         }
+         if (!curl_err) {
+             curl_err = curl_easy_setopt(context->curl, CURLOPT_DEBUGFUNCTION,
+-- 
+2.49.0
+

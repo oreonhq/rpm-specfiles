@@ -1,0 +1,59 @@
+.TH diffpdf 1 "January 2016" "" "User Commands"
+
+.SH NAME
+diffpdf \- Compare two PDF files
+
+.SH SYNOPSIS
+.B diffpdf
+[\fIOPTIONS\fR] [\fIFILE1\fR [\fIFILE2\fR]]
+
+.SH DESCRIPTION
+.PP
+A GUI program that compares two PDF files and shows
+their differences.
+
+The files are optional and are normally set through
+the user interface.
+
+.SH OPTIONS
+.TP
+\fB\-\-help\fR
+show usage text and terminate
+(run the program without this option and press F1 for online help).
+.TP
+\fB\-a\fR, \fB\-\-appearance\fR
+set the initial comparison mode to Appearance.
+.TP
+\fB\-c\fR, \fB\-\-characters\fR
+set the initial comparison mode to Characters.
+.TP
+\fB\-w\fR, \fB\-\-words\fR
+set the initial comparison mode to Words (this is the default).
+.TP
+\fB\-\-language=LANG\fR
+set the program to use the given translation language,
+e.g., en for English, cz for Czech;
+English will be used if there is no translation available.
+.TP
+\fB\-\-debug=2\fR
+write the text fed to the sequence matcher into
+temporary files (e.g., /tmp/page1.txt etc.)
+.TP
+\fB\-\-debug=2\fR
+as --debug=2 but also includes coordinates in y, x order.
+
+.SH AUTHOR
+DiffPDF is written by Mark Summerfield.
+This man page written by Jonathan Wakely based on documentation written by
+Mark Summerfield.
+
+.SH COPYIGHT
+Copyright © 2008-13 Qtrac Ltd.
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 2 of the License, or (at your
+option), any later version. This program is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details <http://gnu.org/licenses/gpl.html>.

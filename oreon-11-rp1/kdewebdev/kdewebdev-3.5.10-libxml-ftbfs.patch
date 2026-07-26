@@ -1,0 +1,20 @@
+diff -up kdewebdev-3.5.10/quanta/treeviews/scripttreeview.cpp.old kdewebdev-3.5.10/quanta/treeviews/scripttreeview.cpp
+--- kdewebdev-3.5.10/quanta/treeviews/scripttreeview.cpp.old	2022-11-04 15:20:46.534401441 +0100
++++ kdewebdev-3.5.10/quanta/treeviews/scripttreeview.cpp	2022-11-04 15:21:29.495899384 +0100
+@@ -43,7 +43,6 @@
+ #include <libxml/debugXML.h>
+ #include <libxml/HTMLtree.h>
+ #include <libxml/xmlIO.h>
+-#include <libxml/DOCBparser.h>
+ #include <libxml/xinclude.h>
+ #include <libxml/catalog.h>
+ #include <libxslt/xslt.h>
+@@ -270,7 +269,7 @@ void ScriptTreeView::slotSendScriptInMai
+     QStringList attachmentFile;
+     attachmentFile += createScriptTarball();
+ 
+-    TagMailDlg *mailDlg = new TagMailDlg( this, i18n("Send script in email"));
++    TagMailDlg *mailDlg = new TagMailDlg( this, i18n("Send script in email").ascii());
+     QString toStr;
+     QString message = i18n("Hi,\n This is a Quanta Plus [http://quanta.kdewebdev.org] script tarball.\n\nHave fun.\n");
+     QString titleStr;

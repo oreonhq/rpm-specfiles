@@ -1,0 +1,29 @@
+From f66bcfc1bbaa0a60289bc714beb5bcac774da7d0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Mon, 18 Jan 2021 00:05:10 +0100
+Subject: [PATCH] Fix error message changed with Go 1.16
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ v2/internal/template_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/v2/internal/template_test.go b/v2/internal/template_test.go
+index 2f5d991..e1f1bb5 100644
+--- a/v2/internal/template_test.go
++++ b/v2/internal/template_test.go
+@@ -45,7 +45,7 @@ func TestExecute(t *testing.T) {
+ 			template: &Template{
+ 				Src: "hello {{",
+ 			},
+-			err:      "template: :1: unexpected unclosed action in command",
++			err:      "template: :1: unclosed action",
+ 			noallocs: true,
+ 		},
+ 	}
+-- 
+2.29.2
+

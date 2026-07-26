@@ -1,0 +1,15 @@
+diff -up frysk-0.4/frysk-gtk/tlwidgets/Makefile.am.mktlwidgetdir frysk-0.4/frysk-gtk/tlwidgets/Makefile.am
+--- frysk-0.4/frysk-gtk/tlwidgets/Makefile.am.mktlwidgetdir	2010-03-16 19:27:18.000000000 -0400
++++ frysk-0.4/frysk-gtk/tlwidgets/Makefile.am	2010-03-16 19:27:47.000000000 -0400
+@@ -180,9 +180,11 @@ BUILT_SOURCES = src/widgets/ftk_marshall
+ GENMARSHAL_COMMAND = glib-genmarshal --prefix=_ftk_marshal
+ 
+ .list.h:
++	mkdir -p `dirname $@`
+ 	$(GENMARSHAL_COMMAND) --header $< >$@
+ 
+ .list.c:
++	mkdir -p `dirname $@`
+ 	(echo '/* This file has been automatically generated.  Do not edit. */' && \
+ 	echo '#include "$*.h"' && \
+ 	$(GENMARSHAL_COMMAND) --body $< ) >$@

@@ -1,0 +1,133 @@
+%global source0_hash 2de5fbc5a9fcc2e1dad9c595dfb1d9047ff885d391f45d6ffe8b6711bb4e24e4
+
+%global _artwork_version 1.7.5
+
+%global cinnamon_desktop_version 6.6.0
+%global csd_version 6.6.0
+%global cinnamon_menus_version 6.6.0
+%global redhat_menus_version 1.8
+
+Summary: Utilities to configure the Cinnamon desktop
+Name:    cinnamon-control-center
+Version: 6.6.0
+Release: 3%{?dist}
+# The following files contain code from
+# ISC for panels/network/rfkill.h
+# And MIT for wacom/calibrator/calibrator.c
+# wacom/calibrator/calibrator.h
+# wacom/calibrator/gui_gtk.c
+# wacom/calibrator/gui_gtk.h
+# wacom/calibrator/main.c
+# Automatically converted from old format: GPLv2+ and LGPLv2+ and MIT and ISC - review is highly recommended.
+License: GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-MIT AND ISC
+URL:     https://github.com/linuxmint/%{name}
+Source0: %url/archive/%{version}/%{name}-%{version}.tar.gz
+Source1: http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_%{_artwork_version}.tar.xz
+
+ExcludeArch: %{ix86}
+
+Requires: cinnamon-settings-daemon >= %{csd_version}
+Requires: redhat-menus >= %{redhat_menus_version}
+Requires: hicolor-icon-theme
+Requires: cinnamon-translations
+Requires: %{name}-filesystem%{?_isa} = %{version}-%{release}
+# For the network panel
+Requires: nm-connection-editor
+# For the colour panel
+Requires: gnome-color-manager
+
+BuildRequires: desktop-file-utils
+BuildRequires: gcc
+BuildRequires: meson
+BuildRequires: intltool
+BuildRequires: pkgconfig(cinnamon-desktop) >= %{cinnamon_desktop_version}
+BuildRequires: pkgconfig(libcinnamon-menu-3.0) >= %{cinnamon_menus_version}
+BuildRequires: pkgconfig(gtk+-3.0) >= 3.16.0
+BuildRequires: pkgconfig(glib-2.0) >= 2.44.0
+BuildRequires: pkgconfig(gio-unix-2.0) >= 2.44.0
+BuildRequires: pkgconfig(libnotify) >= 0.7.3
+BuildRequires: pkgconfig(x11)
+BuildRequires: pkgconfig(polkit-gobject-1) >= 0.103
+BuildRequires: pkgconfig(upower-glib) >= 0.99.8
+BuildRequires: pkgconfig(xproto)
+BuildRequires: pkgconfig(libnm) >= 1.2.0
+BuildRequires: pkgconfig(libnma) >= 1.2.0
+BuildRequires: pkgconfig(mm-glib) >= 0.7
+BuildRequires: pkgconfig(colord)
+BuildRequires: pkgconfig(libwacom)
+
+%description
+This package contains configuration utilities for the Cinnamon desktop, which
+allow to configure accessibility options, desktop fonts, keyboard and mouse
+properties, sound setup, desktop theme and background, user interface
+properties, screen resolution, and other settings.
+
+%package filesystem
+Summary: Cinnamon Control Center directories
+# NOTE: this is an "inverse dep" subpackage. It gets pulled in
+# NOTE: by the main package an MUST not depend on the main package
+
+%description filesystem
+The Cinnamon control-center provides a number of extension points
+for applications. This package contains directories where applications
+can install configuration files that are picked up by the control-center
+utilities.
+
+%package devel
+Summary: Development package for %{name}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Header files and libraries for developing Muffin plugins. Also includes
+utilities for testing Metacity/Muffin themes.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -a1 -p1
+
+%build
+%meson
+%meson_build
+
+%install
+%meson_install
+
+desktop-file-install                                  \
+  --delete-original                                   \
+  --dir %{buildroot}/%{_datadir}/applications/        \
+  %{buildroot}/%{_datadir}/applications/*.desktop
+
+# install sound files
+mkdir -p %{buildroot}/%{_datadir}/cinnamon-control-center/sounds/
+install -pm 0644 mint-artwork/%{_datadir}/mint-artwork/sounds/* %{buildroot}/%{_datadir}/cinnamon-control-center/sounds/
+
+%files
+%doc AUTHORS README
+%license COPYING
+%{_bindir}/cinnamon-control-center
+%{_datadir}/applications/*.desktop
+%{_datadir}/cinnamon-control-center/panels/
+%{_datadir}/cinnamon-control-center/sounds/*.og*
+%{_datadir}/cinnamon-control-center/ui/
+%{_datadir}/icons/hicolor/*/*/*
+%{_datadir}/glib-2.0/schemas/org.cinnamon.control-center.display.gschema.xml
+# list all binaries explicitly, so we notice if one goes missing
+%{_libdir}/libcinnamon-control-center.so.1*
+%dir %{_libdir}/cinnamon-control-center-1/
+%{_libdir}/cinnamon-control-center-1/panels/libcolor.so
+%{_libdir}/cinnamon-control-center-1/panels/libdisplay.so
+%{_libdir}/cinnamon-control-center-1/panels/libnetwork.so
+%{_libdir}/cinnamon-control-center-1/panels/libwacom-properties.so
+
+%files filesystem
+%dir %{_datadir}/cinnamon-control-center/
+%dir %{_datadir}/cinnamon-control-center/sounds/
+
+%files devel
+%{_includedir}/cinnamon-control-center-1/
+%{_libdir}/libcinnamon-control-center.so
+%{_libdir}/pkgconfig/libcinnamon-control-center.pc
+
+%changelog
+%autochangelog

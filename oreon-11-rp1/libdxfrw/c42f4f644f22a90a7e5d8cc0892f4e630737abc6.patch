@@ -1,0 +1,436 @@
+From c42f4f644f22a90a7e5d8cc0892f4e630737abc6 Mon Sep 17 00:00:00 2001
+From: sand1024 <sand72@mail.ru>
+Date: Sun, 16 Mar 2025 01:56:19 +0300
+Subject: [PATCH] User Coordinates, Angles Basis, Angles format for input, etc.
+ (#2032)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+* fix for #2002
+
+* initial commit for UCS Support (WIP)
+
+* GraphicView refactoring to ViewPort, View and Renderer (WIP)
+
+* Refactoring - Simplification and unification of handling mouse in actions(LC_MouseEvent, mouseMove, mousePress, mouseRelease methods) (WIP?)
+
+* snap to angle with UCS, radians
+
+* mapping ucs->wcs in cmd coordinates
+
+* cmd - support entering absolute cartesian and polar coordinates in wcs with "!" prefix
+
+* support of UCS in actions (WIP)
+
+* removal dependency to RS_GraphicView
+
+* support of ucs in commands (WIP)
+
+* support of ucs in commands (WIP)
+
+* code cleanup
+
+* #2002 fix update
+
+* removing dependency to RS_GraphicView
+
+* removing dependency to RS_GraphicView
+
+* selection entities in UCS
+
+* support of angles basis ($ANGBASE && $ANGDIR), angles basis widget, angles overlay, angles translations, entity properties refactoring start. WIP.
+
+* cleanup of entities dialog, added translation of coordinates for support of ucs and angles basis
+
+* removing echoing entered command in history view, #1978
+
+* fix for #2012
+
+* option that let change view (zoom,pan) of drawing without affecting "modified" drawing's state
+
+* code cleanup
+
+* crash fix
+
+* support of ucs and angles basis in actions
+
+* invocation of selection overlay with pressed mouse button only (eliminate overlay for single click)
+
+* image - handles, ucs support
+
+* bounding box ucs warning
+
+* ucs/angles support
+
+* ucs/angles support
+
+* interpolated arc/circle/polyline render mode, ui and settings for it
+
+* coordinates translations optimization
+
+* coordinates translations optimization
+
+* ucs angles support in widgets, print preview (disabling controls), disabling ucs in print preview and printing mode
+
+* fix for LibreCAD#1992
+
+* support of ucs, code cleanup
+
+* code cleanup
+
+* options dialog re-layout
+
+* cleanup, translations files update
+
+* code cleanup for actions options
+
+* code cleanup, snap tuning options, translations
+
+* support of relative angles with ucs/basis, code cleanup
+
+* Support of surveyor, radiant, grad, degrees and bearing format for entering angles, option for control angles input, code cleanup
+
+* сol count increase
+
+* small cleanup, readme
+
+* small cleanup, readme
+
+* cleanup for avoiding CodeQL format complains
+
+* early initialization of info cursor preferences in constructor, thus ensuring that it will not be null
+
+* includes cleanup (<QMouseEvent> removal)
+
+* includes cleanup (<QMouseEvent> removal)
+
+* includes cleanup (<QMouseEvent> removal)
+
+* includes cleanup (<QMouseEvent> removal)
+
+* fix for crash, more aggressive initialization
+
+* cleanup
+
+* cleanup
+
+* arc rendering (#2035)
+
+* arc rendering (#2035)
+
+* merge, cleanup
+
+* initial fix for #2070 (WIP)
+
+* small cleanup
+
+* merge and precision of drawing circle, cleanup
+
+---------
+
+Co-authored-by: sand1024 <sand1024@gmail.com>
+---
+ libraries/libdxfrw/src/drw_interface.h        |     3 +
+ libraries/libdxfrw/src/drw_objects.cpp        |    85 +
+ libraries/libdxfrw/src/drw_objects.h          |    25 +
+ libraries/libdxfrw/src/libdxfrw.cpp           |    85 +-
+ libraries/libdxfrw/src/libdxfrw.h             |     2 +
+
+diff --git a/libraries/libdxfrw/src/drw_interface.h b/libraries/libdxfrw/src/drw_interface.h
+index 6559ba12f9..3cd2006b66 100644
+--- a/src/drw_interface.h
++++ b/src/drw_interface.h
+@@ -46,6 +46,8 @@ class DRW_Interface {
+     virtual void addVport(const DRW_Vport& data) = 0;
+     /** Called for every VIEW table. */
+     virtual void addView(const DRW_View& data) = 0;
++    /** Called for every UCS table. */
++    virtual void addUCS(const DRW_UCS& data) = 0;
+     /** Called for every text style. */
+     virtual void addTextStyle(const DRW_Textstyle& data) = 0;
+     /** Called for every AppId entry. */
+@@ -199,6 +201,7 @@ class DRW_Interface {
+     virtual void writeLTypes() = 0;
+     virtual void writeLayers() = 0;
+     virtual void writeViews() = 0;
++    virtual void writeUCSs() = 0;
+     virtual void writeTextstyles() = 0;
+     virtual void writeVports() = 0;
+     virtual void writeDimstyles() = 0;
+diff --git a/libraries/libdxfrw/src/drw_objects.cpp b/libraries/libdxfrw/src/drw_objects.cpp
+index b534ef6c41..27a66c96d1 100644
+--- a/src/drw_objects.cpp
++++ b/src/drw_objects.cpp
+@@ -24,6 +24,9 @@
+ //! Base class for tables entries
+ /*!
+ *  Base class for tables entries
++ *
++ *  DXF Format reference:
++ *  https://documentation.help/AutoCAD-DXF
+ *  @author Rallaz
+ */
+ bool DRW_TableEntry::parseCode(int code, dxfReader *reader){
+@@ -1298,6 +1301,88 @@ bool DRW_AppId::parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs){
+     return buf->isGood();
+ }
+ 
++bool DRW_UCS::parseDwg([[maybe_unused]]DRW::Version version, dwgBuffer *buf, [[maybe_unused]]duint32 bs) {
++    // fixme - sand - complete reading UCS from DWG
++    DRW_DBG("\n********************** parsing UCS Settings from DWG is not yet implemented **************************\n");
++    return buf->isGood();
++}
++
++bool DRW_UCS::parseCode(int code, dxfReader *reader) {
++    switch (code) {
++        case 10: {
++            origin.x = reader->getDouble();
++            break;
++        }
++        case 20: {
++            origin.y = reader->getDouble();
++            break;
++        }
++        case 30: {
++            origin.z = reader->getDouble();
++            break;
++        }
++        case 11: {
++            xAxisDirection.x = reader->getDouble();
++            break;
++        }
++        case 21: {
++            xAxisDirection.y = reader->getDouble();
++            break;
++        }
++        case 31: {
++            xAxisDirection.z = reader->getDouble();
++            break;
++        }
++        case 12: {
++            yAxisDirection.x = reader->getDouble();
++            break;
++        }
++        case 22: {
++            yAxisDirection.y = reader->getDouble();
++            break;
++        }
++        case 32: {
++            yAxisDirection.z = reader->getDouble();
++            break;
++        }
++        case 79: {
++            // always 0
++            break;
++        }
++        case 146:{
++            elevation = reader->getDouble();
++            break;
++        }
++        case 346:{
++            // ID/handle of base UCS if this is an orthographic. This code is not present if the 79 code is 0.
++            // If this code is not present and 79 code is non-zero, then base UCS is assumed to be WORLD
++            break;
++        }
++        case 71:{
++//            Orthographic type (optional; always appears in pairs with the 13, 23, 33 codes):
++//            1 = Top; 2 = Bottom
++//            3 = Front; 4 = Back
++//            5 = Left; 6 = Right
++            orthoType = reader->getInt32();
++            break;
++        }
++        case 13: {
++            orthoOrigin.x = reader->getDouble();
++            break;
++        }
++        case 23: {
++            orthoOrigin.y = reader->getDouble();
++            break;
++        }
++        case 33: {
++            orthoOrigin.z = reader->getDouble();
++            break;
++        }
++        default:
++            return DRW_TableEntry::parseCode(code, reader);
++    }
++    return true;
++}
+ 
+ bool DRW_View::parseCode(int code, dxfReader *reader) {
+     switch (code) {
+diff --git a/libraries/libdxfrw/src/drw_objects.h b/libraries/libdxfrw/src/drw_objects.h
+index 9620689a3c..c64acc474b 100644
+--- a/src/drw_objects.h
++++ b/src/drw_objects.h
+@@ -375,6 +375,31 @@ class DRW_Textstyle : public DRW_TableEntry {
+     int fontFamily;         /*!< ttf font family, italic and bold flags, code 1071 */
+ };
+ 
++class DRW_UCS:public DRW_TableEntry{
++    SETOBJFRIENDS
++public:
++    DRW_Coord origin;
++    DRW_Coord xAxisDirection;
++    DRW_Coord yAxisDirection;
++    DRW_Coord orthoOrigin;
++    double elevation;
++    int orthoType;
++
++    DRW_UCS() { reset();}
++    void reset(){
++        origin.x = origin.y = origin.z = 0.0;
++        xAxisDirection.x = xAxisDirection.y = xAxisDirection.z = 0.0;
++        yAxisDirection.x = yAxisDirection.y = yAxisDirection.z = 0.0;
++        orthoOrigin.x = orthoOrigin.y = orthoOrigin.z = 0.0;
++        elevation = 0.0;
++        orthoType = 0.0;
++    }
++protected:
++    bool parseCode(int code, dxfReader *reader) override;
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
++};
++
++
+ class DRW_View:public DRW_TableEntry{
+     SETOBJFRIENDS
+ public:
+diff --git a/libraries/libdxfrw/src/libdxfrw.cpp b/libraries/libdxfrw/src/libdxfrw.cpp
+index 78df1f8a90..16fe71a6ce 100644
+--- a/src/libdxfrw.cpp
++++ b/src/libdxfrw.cpp
+@@ -312,6 +312,58 @@ bool dxfRW::writeLayer(DRW_Layer *ent){
+     return true;
+ }
+ 
++bool dxfRW::writeUCS(DRW_UCS* ent){
++    writer->writeString(0, "UCS");
++    if (version > DRW::AC1009) {
++        writer->writeString(5, toHexStr(++entCount));
++    }
++    if (version > DRW::AC1012) {
++        writer->writeString(330, "42"); // 	Soft-pointer ID/handle to owner object, fixme - check whether id is fixed as for layers?
++    }
++    if (version > DRW::AC1009) {
++        writer->writeString(100, "AcDbSymbolTableRecord");
++        writer->writeString(100, "AcDbViewTableRecord");
++        writer->writeUtf8String(2, ent->name);
++    } else {
++        writer->writeUtf8Caps(2, ent->name);
++    }
++    writer->writeInt16(70, ent->flags);
++
++    writer->writeDouble(10, ent->origin.x);
++    writer->writeDouble(20, ent->origin.y);
++    if (ent->origin.z != 0.0) {
++        writer->writeDouble(30, ent->origin.z);
++    }
++    writer->writeDouble(11, ent->xAxisDirection.x);
++    writer->writeDouble(21, ent->xAxisDirection.y);
++    if (ent->xAxisDirection.z != 0.0) {
++        writer->writeDouble(31, ent->xAxisDirection.z);
++    }
++
++    writer->writeDouble(12, ent->yAxisDirection.x);
++    writer->writeDouble(22, ent->yAxisDirection.y);
++    if (ent->yAxisDirection.z != 0.0) {
++        writer->writeDouble(32, ent->yAxisDirection.z);
++    }
++
++    writer->writeInt16(79, 0);
++    //ID/handle of base UCS if this is an orthographic. This code is not present if the 79 code is 0.
++    // If this code is not present and 79 code is non-zero, then base UCS is assumed to be WORLD
++    // fixme - review this. Probably we'll skip support of it?
++    // writer->writeInt16(346, 0);
++
++    writer->writeDouble(146, ent->elevation);
++
++    writer->writeDouble(71, ent->orthoType);
++
++    writer->writeDouble(13, ent->orthoOrigin.x);
++    writer->writeDouble(23, ent->orthoOrigin.y);
++    if (ent->orthoOrigin.z != 0.0) {
++        writer->writeDouble(33, ent->orthoOrigin.z);
++    }
++    return true;
++}
++
+ bool dxfRW::writeView(DRW_View *ent){
+     writer->writeString(0, "VIEW");
+     if (version > DRW::AC1009) {
+@@ -1655,6 +1707,7 @@ bool dxfRW::writeTables() {
+         writer->writeString(100, "AcDbSymbolTable");
+     }
+     writer->writeInt16(70, 0); //end table def
++    iface->writeUCSs();
+     writer->writeString(0, "ENDTAB");
+ 
+     writer->writeString(0, "TABLE");
+@@ -2123,7 +2176,7 @@ bool dxfRW::processTables() {
+                     } else if (sectionstr == "VIEW") {
+                        processView();
+                     } else if (sectionstr == "UCS") {
+-//                        processUCS();
++                        processUCS();
+                     } else if (sectionstr == "APPID") {
+                         processAppId();
+                     } else if (sectionstr == "DIMSTYLE") {
+@@ -2141,6 +2194,36 @@ bool dxfRW::processTables() {
+     return setError(DRW::BAD_READ_TABLES);
+ }
+ 
++// fixme - sand - code duplication to other entities (VIEW..) Think about more generic reading method
++bool dxfRW::processUCS(){
++    DRW_DBG("dxfRW::processUCS\n");
++    int code;
++    std::string sectionstr;
++    bool reading = false;
++    DRW_UCS ucs;
++    while (reader->readRec(&code)) {
++        DRW_DBG(code); DRW_DBG("\n");
++        if (code == 0) {
++            if (reading) {
++                iface->addUCS(ucs);
++            }
++            sectionstr = reader->getString();
++            DRW_DBG(sectionstr); DRW_DBG("\n");
++            if (sectionstr == "UCS") {
++                reading = true;
++                ucs.reset();
++            } else if (sectionstr == "ENDTAB") {
++                return true;  //found ENDTAB terminate
++            }
++        } else if (reading) {
++            if (!ucs.parseCode(code, reader)) {
++                return setError( DRW::BAD_CODE_PARSED);
++            }
++        }
++    }
++    return setError(DRW::BAD_READ_TABLES);
++}
++
+ bool dxfRW::processView() {
+     DRW_DBG("dxfRW::processView\n");
+     int code;
+diff --git a/libraries/libdxfrw/src/libdxfrw.h b/libraries/libdxfrw/src/libdxfrw.h
+index 4f4c9b0c03..01fefd64ee 100644
+--- a/src/libdxfrw.h
++++ b/src/libdxfrw.h
+@@ -45,6 +45,7 @@ class dxfRW {
+     bool writeLineType(DRW_LType *ent);
+     bool writeLayer(DRW_Layer *ent);
+     bool writeView(DRW_View *ent);
++    bool writeUCS(DRW_UCS* ent);
+     bool writeDimstyle(DRW_Dimstyle *ent);
+     bool writeTextstyle(DRW_Textstyle *ent);
+     bool writeVport(DRW_Vport *ent);
+@@ -94,6 +95,7 @@ class dxfRW {
+     bool processTextStyle();
+     bool processVports();
+     bool processView();
++    bool processUCS();
+     bool processAppId();
+ 
+     bool processPoint();

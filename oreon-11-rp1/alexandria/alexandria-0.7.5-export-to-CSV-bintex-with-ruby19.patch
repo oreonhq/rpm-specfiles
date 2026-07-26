@@ -1,0 +1,30 @@
+--- alexandria-book-collection-manager-0.7.5/lib/alexandria/export_library.rb.export_csv	2020-10-17 15:49:16.241200513 +0900
++++ alexandria-book-collection-manager-0.7.5/lib/alexandria/export_library.rb	2020-10-17 16:01:18.184960155 +0900
+@@ -108,12 +108,12 @@ module Alexandria
+           io.puts "<TITLE>#{book.title} </TITLE>"
+           # put a link to the book's cover. only works on iPod 5G and above(?).
+           if File.exist?(cover(book))
+-            io.puts '<A HREF="pixmaps/' + book.ident + ".jpg" + '">' + book.title + "</A>"
++            io.puts '<A HREF="pixmaps/' + book.ident + ".jpg" + '">' + book.title.force_encoding('UTF-8') + "</A>"
+           else
+-            io.puts book.title
++            io.puts book.title.force_encoding('UTF-8')
+           end
+-          io.puts book.authors.join(", ")
+-          io.puts book.edition
++          io.puts book.authors.join(", ").force_encoding('UTF-8')
++          io.puts book.edition.force_encoding('UTF-8')
+           io.puts((book.isbn || ""))
+           # we need to close the files so the iPod can be ejected/unmounted
+           # without us closing Alexandria
+@@ -380,8 +380,8 @@ module Alexandria
+           end
+         end
+         bibtex << "\",\n"
+-        bibtex << "title = \"#{latex_escape(book.title)}\",\n"
+-        bibtex << "publisher = \"#{latex_escape(book.publisher)}\",\n"
++        bibtex << "title = \"#{latex_escape(book.title.force_encoding('UTF-8'))}\",\n"
++        bibtex << "publisher = \"#{latex_escape(book.publisher.force_encoding('UTF-8'))}\",\n"
+         if book.notes && !book.notes.empty?
+           bibtex << "OPTnote = \"#{latex_escape(book.notes)}\",\n"
+         end

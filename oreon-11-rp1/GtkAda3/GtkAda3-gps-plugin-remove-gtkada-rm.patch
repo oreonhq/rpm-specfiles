@@ -1,0 +1,16 @@
+--- a/xml/gtkada.xml
++++ b/xml/gtkada.xml
+@@ -3,13 +3,6 @@
+ <GPS>
+   <doc_path>share/doc/gtkada</doc_path>
+ 
+-  <documentation_file>
+-     <name>gtkada_rm/index.html</name>
+-     <descr>GtkAda Reference Manuel</descr>
+-     <category>GtkAda</category>
+-     <menu before="About">/Help/GtkAda/Reference Manual</menu>
+-  </documentation_file>
+-
+   <documentation_file>
+      <name>gtkada_ug/index.html</name>
+      <descr>GtkAda User's Guide</descr>

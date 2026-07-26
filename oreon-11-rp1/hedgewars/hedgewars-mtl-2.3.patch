@@ -1,0 +1,97 @@
+diff -up hedgewars-src-1.0.2/gameServer/ClientIO.hs~ hedgewars-src-1.0.2/gameServer/ClientIO.hs
+--- hedgewars-src-1.0.2/gameServer/ClientIO.hs~	2022-09-13 00:49:54.000000000 +0800
++++ hedgewars-src-1.0.2/gameServer/ClientIO.hs	2024-08-07 23:30:19.002438495 +0800
+@@ -20,6 +20,7 @@
+ module ClientIO where
+ 
+ import qualified Control.Exception as Exception
++import Control.Monad
+ import Control.Monad.State
+ import Control.Concurrent.Chan
+ import Control.Concurrent
+diff -up hedgewars-src-1.0.2/gameServer/HWProtoChecker.hs~ hedgewars-src-1.0.2/gameServer/HWProtoChecker.hs
+--- hedgewars-src-1.0.2/gameServer/HWProtoChecker.hs~	2021-06-24 02:58:09.000000000 +0800
++++ hedgewars-src-1.0.2/gameServer/HWProtoChecker.hs	2024-08-07 23:30:04.596338533 +0800
+@@ -20,6 +20,7 @@
+ module HWProtoChecker where
+ 
+ import Data.Maybe
++import Control.Monad
+ import Control.Monad.Reader
+ --------------------------------------
+ import CoreTypes
+diff -up hedgewars-src-1.0.2/gameServer/HWProtoCore.hs~ hedgewars-src-1.0.2/gameServer/HWProtoCore.hs
+--- hedgewars-src-1.0.2/gameServer/HWProtoCore.hs~	2021-06-24 02:58:09.000000000 +0800
++++ hedgewars-src-1.0.2/gameServer/HWProtoCore.hs	2024-08-07 23:30:58.151710145 +0800
+@@ -19,6 +19,7 @@
+ {-# LANGUAGE OverloadedStrings #-}
+ module HWProtoCore where
+ 
++import Control.Monad
+ import Control.Monad.Reader
+ import Data.Maybe
+ import qualified Data.ByteString.Char8 as B
+diff -up hedgewars-src-1.0.2/gameServer/HWProtoLobbyState.hs~ hedgewars-src-1.0.2/gameServer/HWProtoLobbyState.hs
+--- hedgewars-src-1.0.2/gameServer/HWProtoLobbyState.hs~	2021-06-24 02:58:09.000000000 +0800
++++ hedgewars-src-1.0.2/gameServer/HWProtoLobbyState.hs	2024-08-07 23:30:32.442531754 +0800
+@@ -21,6 +21,7 @@ module HWProtoLobbyState where
+ 
+ import Data.Maybe
+ import Data.List
++import Control.Monad
+ import Control.Monad.Reader
+ import qualified Data.ByteString.Char8 as B
+ --------------------------------------
+@@ -86,7 +87,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName,
+     let isBanned = host cl `elem` roomBansList jRoom
+     let clTeams =
+             if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) && isRegistered cl then
+-                filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
++                filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom
+                 else
+                 []
+     let clTeamsNames = map teamname clTeams
+diff -up hedgewars-src-1.0.2/gameServer/HandlerUtils.hs~ hedgewars-src-1.0.2/gameServer/HandlerUtils.hs
+--- hedgewars-src-1.0.2/gameServer/HandlerUtils.hs~	2021-06-24 02:58:09.000000000 +0800
++++ hedgewars-src-1.0.2/gameServer/HandlerUtils.hs	2024-08-07 23:29:33.501122746 +0800
+@@ -18,6 +18,7 @@
+ 
+ module HandlerUtils where
+ 
++import Control.Monad
+ import Control.Monad.Reader
+ import qualified Data.ByteString.Char8 as B
+ import Data.List
+diff -up hedgewars-src-1.0.2/gameServer/ServerState.hs~ hedgewars-src-1.0.2/gameServer/ServerState.hs
+--- hedgewars-src-1.0.2/gameServer/ServerState.hs~	2021-06-24 02:58:09.000000000 +0800
++++ hedgewars-src-1.0.2/gameServer/ServerState.hs	2024-08-07 23:29:20.827034805 +0800
+@@ -30,6 +30,7 @@ module ServerState
+     io
+     ) where
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.Set as Set(Set)
+ import Data.Word
+diff -up hedgewars-src-1.0.2/gameServer/Votes.hs~ hedgewars-src-1.0.2/gameServer/Votes.hs
+--- hedgewars-src-1.0.2/gameServer/Votes.hs~	2021-06-24 02:58:09.000000000 +0800
++++ hedgewars-src-1.0.2/gameServer/Votes.hs	2024-08-07 23:30:46.613630085 +0800
+@@ -19,6 +19,7 @@
+ {-# LANGUAGE OverloadedStrings #-}
+ module Votes where
+ 
++import Control.Monad
+ import Control.Monad.Reader
+ import Control.Monad.State.Strict
+ import ServerState
+diff -up hedgewars-src-1.0.2/tools/pas2c/Pas2C.hs~ hedgewars-src-1.0.2/tools/pas2c/Pas2C.hs
+--- hedgewars-src-1.0.2/tools/pas2c/Pas2C.hs~	2022-09-13 06:25:19.000000000 +0800
++++ hedgewars-src-1.0.2/tools/pas2c/Pas2C.hs	2024-08-07 23:36:21.818956023 +0800
+@@ -6,6 +6,7 @@ import Text.PrettyPrint.HughesPJ
+ import Data.Maybe
+ import Data.Char
+ import Text.Parsec.Prim hiding (State)
++import Control.Monad
+ import Control.Monad.State
+ import System.IO
+ import PascalPreprocessor

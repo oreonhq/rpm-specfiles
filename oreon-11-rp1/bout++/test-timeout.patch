@@ -1,0 +1,33 @@
+commit be19c871ca051e411e980f7c3518b5787d9e9625
+Author: David Bold <dave@ipp.mpg.de>
+Date:   Tue Jan 9 14:46:55 2024 +0100
+
+    Add timeout to tests
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2db9b7952..c9ae37cc9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -652,8 +652,9 @@ string(COMPARE EQUAL
+   PROJECT_IS_TOP_LEVEL
+ )
+ option(BOUT_TESTS "Build the tests" ${PROJECT_IS_TOP_LEVEL})
+-option(BOUT_ENABLE_ALL_TESTS "Enable running all of the tests, rather then the standard selection of fast tests" OFF)
+ if(BOUT_TESTS)
++  option(BOUT_ENABLE_ALL_TESTS "Enable running all of the tests, rather then the standard selection of fast tests" OFF)
++  option(BOUT_TEST_TIMEOUT "Timeout for the tests [s]" 600)
+   enable_testing()
+   # Targets for just building the tests
+   # Tests need to add themselves as dependencies to these targets
+diff --git a/cmake/BOUT++functions.cmake b/cmake/BOUT++functions.cmake
+index 40e45f99b..3e6032d85 100644
+--- a/cmake/BOUT++functions.cmake
++++ b/cmake/BOUT++functions.cmake
+@@ -226,6 +226,7 @@ function(bout_add_integrated_or_mms_test BUILD_CHECK_TARGET TESTNAME)
+   set_tests_properties(${TESTNAME} PROPERTIES
+     PROCESSORS ${BOUT_TEST_OPTIONS_PROCESSORS}
+     PROCESSOR_AFFINITY ON
++    TIMEOUT ${BOUT_TEST_TIMEOUT}
+     )
+ 
+   # Copy the input file if needed

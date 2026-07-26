@@ -1,0 +1,165 @@
+diff -Nrbu dvdisaster-0.79.5/help-dialogs.c dvdisaster-0.79.5-OK/help-dialogs.c
+--- dvdisaster-0.79.5/help-dialogs.c	2015-10-15 22:24:01.000000000 +0300
++++ dvdisaster-0.79.5-OK/help-dialogs.c	2016-02-14 01:31:26.070438905 +0300
+@@ -724,8 +724,8 @@
+ 
+ #ifdef MODIFIED_SOURCE
+    AboutTextWithLink(vbox, 
+-		     _("Modified version Copyright 2015 (please fill in - [directions])\n"
+-		       "Copyright 2004-2015 Carsten Gnoerlich"),
++		     _("Modified version for [Fedora/Linux]\n"
++		       "Original Copyright 2004-2015 Carsten Gnoerlich"),
+ 		     "MODIFYING");
+ #else
+    AboutText(vbox, _("Copyright 2004-2015 Carsten Gnoerlich"));
+@@ -746,11 +746,11 @@
+ 			"GPL");
+ 
+ #ifdef MODIFIED_SOURCE
+-   AboutTextWithLink(vbox, _("\nThis program is <b>not the original</b>. It is based on the\n"
+-			     "source code of dvdisaster, but contains third-party changes.\n\n"
+-			     "Please do not bother the original authors of dvdisaster\n"
+-			     "([www.dvdisaster.org]) about issues with this version.\n"),
+-		             "http://www.dvdisaster.org");
++   AboutTextWithLink(vbox, _("\nThis version is <b>not the original</b>. It has been patched\n"
++			     "for Fedora to support DVD-ROMs (with and without encryption).\n\n"
++			     "Please do not bother the original authors of dvdisaster,\n"
++			     "but submit bugreports against the [fedora package] instead.\n"),
++		             "https://apps.fedoraproject.org/packages/dvdisaster/bugs");
+ 
+ #else
+    lang = g_getenv("LANG");
+diff -Nrbu dvdisaster-0.79.5/locale/cs.po dvdisaster-0.79.5-OK/locale/cs.po
+--- dvdisaster-0.79.5/locale/cs.po	2015-12-15 23:39:52.000000000 +0300
++++ dvdisaster-0.79.5-OK/locale/cs.po	2016-02-14 01:38:28.154438452 +0300
+@@ -893,11 +893,11 @@
+ 
+ #: help-dialogs.c:727
+ msgid ""
+-"Modified version Copyright 2015 (please fill in - [directions])\n"
+-"Copyright 2004-2015 Carsten Gnoerlich"
++"Modified version for [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnoerlich"
+ msgstr ""
+-"Upravená verze Copyright 2015 (doplňte - [directions])\n"
+-"Copyright 2004-2015 Carsten Gnörlich"
++"Upravená verze pro [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnörlich"
+ 
+ #: help-dialogs.c:731 misc.c:205
+ msgid "Copyright 2004-2015 Carsten Gnoerlich"
+diff -Nrbu dvdisaster-0.79.5/locale/de.po dvdisaster-0.79.5-OK/locale/de.po
+--- dvdisaster-0.79.5/locale/de.po	2015-12-16 01:39:52.000000000 +0300
++++ dvdisaster-0.79.5-OK/locale/de.po	2016-02-14 01:39:39.135438376 +0300
+@@ -936,10 +936,10 @@
+ 
+ #: help-dialogs.c:727
+ msgid ""
+-"Modified version Copyright 2015 (please fill in - [directions])\n"
++"Modified version for [Fedora/Linux]\n"
+ "Copyright 2004-2015 Carsten Gnoerlich"
+ msgstr ""
+-"Veränderte Version Copyright 2015 (bitte eintragen - [Hinweise])\n"
++"Veränderte Version des [Fedora/Linux]\n"
+ "Original-Programm Copyright 2004-2015 Carsten Gnörlich"
+ 
+ #: help-dialogs.c:731 misc.c:205
+diff -Nrbu dvdisaster-0.79.5/locale/it.po dvdisaster-0.79.5-OK/locale/it.po
+--- dvdisaster-0.79.5/locale/it.po	2015-12-15 22:39:52.000000000 +0300
++++ dvdisaster-0.79.5-OK/locale/it.po	2016-02-14 01:40:18.502438332 +0300
+@@ -851,8 +851,8 @@
+ 
+ #: help-dialogs.c:727
+ msgid ""
+-"Modified version Copyright 2015 (please fill in - [directions])\n"
+-"Copyright 2004-2015 Carsten Gnoerlich"
++"Modified version for [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnoerlich"
+ msgstr ""
+ 
+ #: help-dialogs.c:731 misc.c:205
+diff -Nrbu dvdisaster-0.79.5/locale/pt_BR.po dvdisaster-0.79.5-OK/locale/pt_BR.po
+--- dvdisaster-0.79.5/locale/pt_BR.po	2015-12-16 00:39:53.000000000 +0300
++++ dvdisaster-0.79.5-OK/locale/pt_BR.po	2016-02-14 01:42:58.344438160 +0300
+@@ -869,11 +869,11 @@
+ 
+ #: help-dialogs.c:727
+ msgid ""
+-"Modified version Copyright 2015 (please fill in - [directions])\n"
+-"Copyright 2004-2015 Carsten Gnoerlich"
++"Modified version for [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnoerlich"
+ msgstr ""
+-"Versão modificada Copyright 2015 (por favor, preencha - [instruções])\n"
+-"Copyright 2004-2015 Carsten Gnoerlich"
++"Versão modificada para [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnoerlich"
+ 
+ #: help-dialogs.c:731 misc.c:205
+ msgid "Copyright 2004-2015 Carsten Gnoerlich"
+diff -Nrbu dvdisaster-0.79.5/locale/ru.po dvdisaster-0.79.5-OK/locale/ru.po
+--- dvdisaster-0.79.5/locale/ru.po	2015-12-16 00:39:53.000000000 +0300
++++ dvdisaster-0.79.5-OK/locale/ru.po	2016-02-14 01:43:52.002438103 +0300
+@@ -870,11 +870,11 @@
+ 
+ #: help-dialogs.c:727
+ msgid ""
+-"Modified version Copyright 2015 (please fill in - [directions])\n"
+-"Copyright 2004-2015 Carsten Gnoerlich"
++"Modified version for [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnoerlich"
+ msgstr ""
+-"Измененнная версия Copyright 2015 (пожалуйста, заполните - [инструкции])\n"
+-"Copyright 2004-2015 Carsten Gnoerlich"
++"Измененнная версия для [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnoerlich"
+ 
+ #: help-dialogs.c:731 misc.c:205
+ msgid "Copyright 2004-2015 Carsten Gnoerlich"
+diff -Nrbu dvdisaster-0.79.5/locale/sv.po dvdisaster-0.79.5-OK/locale/sv.po
+--- dvdisaster-0.79.5/locale/sv.po	2015-12-15 22:39:53.000000000 +0300
++++ dvdisaster-0.79.5-OK/locale/sv.po	2016-02-14 01:44:11.391438084 +0300
+@@ -852,8 +852,8 @@
+ 
+ #: help-dialogs.c:727
+ msgid ""
+-"Modified version Copyright 2015 (please fill in - [directions])\n"
+-"Copyright 2004-2015 Carsten Gnoerlich"
++"Modified version for [Fedora/Linux]\n"
++"Original Copyright 2004-2015 Carsten Gnoerlich"
+ msgstr ""
+ 
+ #: help-dialogs.c:731 misc.c:205
+diff -Nrbu dvdisaster-0.79.5/scsi-layer.c dvdisaster-0.79.5-OK/scsi-layer.c
+--- dvdisaster-0.79.5/scsi-layer.c	2015-10-28 23:56:57.000000000 +0300
++++ dvdisaster-0.79.5-OK/scsi-layer.c	2016-02-14 01:16:03.117439894 +0300
+@@ -908,6 +908,11 @@
+ 	    break;
+ 	 }
+ 
++	 if(layer_type & 0x01)
++	 {  dh->typeDescr = g_strdup("DVD-ROM");
++	    break;
++	 }
++
+ 	 if(layer_type & 0x06) /* strange thing: (re-)writeable but neither plus nor dash */ 
+ 	 {  dh->typeDescr = g_strdup("DVD-ROM (fake)");
+ 	    dh->subType = DVD;
+@@ -2712,11 +2717,17 @@
+       }
+    }
+ 
++#if 0
++   /*  People should have the possibility to recover their legally
++       bought dvd-roms, the same way they try to wipe the dust
++       and wipe scratches on this media with a copyrighted content.
++    */
+    if(dh->mainType == DVD && query_copyright(dh))
+    {  CloseImage(image);
+       Stop(_("This software does not support encrypted media.\n"));
+       return NULL;
+    }
++#endif
+ 
+    /* Create the bitmap of simulated defects */
+ 

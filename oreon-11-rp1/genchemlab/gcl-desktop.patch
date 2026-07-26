@@ -1,0 +1,24 @@
+--- genchemlab-1.0/program/genchemlab.desktop	2007-12-04 20:54:27.000000000 -0600
++++ genchemlab-1.0/programgenchemlab.desktop	2007-12-04 20:58:37.000000000 -0600
+@@ -1,11 +1,13 @@
++
+ [Desktop Entry]
+-Type=Application
+-Exec=genchemlab
+-Icon=genchemlab.png
+-DocPath=
++Version=1.0
++Encoding=UTF-8
++Name=GenChemLab
+ Comment=Simulation of a chemical lab.
+ Comment[da]=Et simuleret kemisk laboratorium.
+-Terminal=0
+-Name=GenChemLab
+-Encoding=UTF-8
+-Categories=Application;Education;Chemestry;
++Icon=genchemlab
++Terminal=false
++Type=Application
++Categories=Application;Education;Chemistry;
++Exec=genchemlab
++StartupNotify=false

@@ -1,0 +1,24 @@
+Avoid implicit ints and implicit function declarations for stricter
+C99 compatibility.  The same custom prototype is used by autoconf.
+
+Submitted upstream: <https://github.com/wjaguar/mtPaint/pull/70>
+
+diff -ur mtpaint-3.50.orig/configure mtpaint-3.50/configure
+--- mtpaint-3.50.orig/configure	2022-11-26 20:48:15.932340615 +0100
++++ mtpaint-3.50/configure	2022-11-26 20:52:22.182801910 +0100
+@@ -376,12 +376,13 @@
+ }
+ CAN_DO()
+ {
+-	echo "main() { $1; }" > _conf.c
++	echo "int main() { $1; }" > _conf.c
+ 	$MT_TESTCOMP _conf.c -o _conf.tmp > /dev/null 2>&1
+ }
+ HAVE_FUNC()
+ {
+-	CAN_DO "$1()"
++	echo "char $1 (); int main() { $1; }" > _conf.c
++	$MT_TESTCOMP _conf.c -o _conf.tmp > /dev/null 2>&1
+ }
+ 
+ HAVE_CC_VER()

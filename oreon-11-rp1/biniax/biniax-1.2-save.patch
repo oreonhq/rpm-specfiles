@@ -1,0 +1,189 @@
+--- biniax.c	2008-04-12 18:19:02.000000000 +0200
++++ biniax.c.patch	2008-10-18 22:05:08.000000000 +0200
+@@ -63,7 +63,10 @@
+ ******************************************************************************/
+ 
+ #include "game.h"
+-#include "inc.h"
++#include "inc.h"
++#include<sys/stat.h>
++
++const char *homeDir = ".biniax";
+ 
+ /* Global instance of GAME structure */
+ BNX_GAME Game;
+@@ -531,80 +534,97 @@
+ /******************************************************************************
+ GAME AND HISCORE SAVE / RESTORE
+ ******************************************************************************/
+-
+-BNX_BOOL saveGame( BNX_GAME *game )
+-{
+-	FILE		*file;
+-
+-	file = fopen( "autosave.bnx", "wb" );
+-
+-	if ( file == (FILE *) NULL )
+-		return BNX_FALSE;
+-
+-	fwrite( game, 1, sizeof( BNX_GAME ), file );
+-
+-	fclose( file );
+-
+-	return BNX_TRUE;
+-}
+-
+-BNX_BOOL loadGame( BNX_GAME *game )
+-{
+-	FILE		*file;
+-
+-	file = fopen( "autosave.bnx", "rb" );
+-
+-	if ( file == (FILE *) NULL )
+-		return BNX_FALSE;
+-
+-	fread( game, 1, sizeof( BNX_GAME ), file );
+-
+-	fclose( file );
+-
+-	return BNX_TRUE;
+-}
+-
+-BNX_BOOL saveHiScore( BNX_GAME *game )
+-{
+-	BNX_INT32	test;
+-	FILE		*file;
+-
+-	file = fopen( "hiscore.bnx", "wb" );
+-
+-	if ( file == (FILE *) NULL )
+-		return BNX_FALSE;
+-
+-	test = game->best + 1;
+-	fwrite( &game->best, 1, sizeof( game->best ), file );
+-	fwrite( &test, 1, sizeof( test ), file );
+-
+-	fclose( file );
+-
+-	return BNX_TRUE;
+-}
+-
+-BNX_BOOL loadHiScore( BNX_GAME *game )
+-{
+-	BNX_INT32	test;
+-	FILE		*file;
+-
+-	game->best = 0;
+-
+-	file = fopen( "hiscore.bnx", "rb" );
+-
+-	if ( file == (FILE *) NULL )
+-		return BNX_FALSE;
+-
+-	fread( &game->best, 1, sizeof( game->best ), file );
+-	fread( &test, 1, sizeof( game->best ), file );
+-	if ( test-1 != game->best )
+-	{
+-		game->best = 0;
+-		return BNX_FALSE;
+-	}
+-
+-	fclose( file );
+-
+-	return BNX_TRUE;
+-}
+-
++
++void createHomeDir() 
++{
++	
++	char pathTMP[512];
++	sprintf(pathTMP, "%s/%s", getenv("HOME"), homeDir);
++	mkdir(pathTMP, 0755);
++}
++
++BNX_BOOL saveGame( BNX_GAME *game )
++{
++	FILE		*file;
++        char pathTMP[512];
++	sprintf(pathTMP,"%s/%s/autosave.bnx", getenv("HOME"), homeDir);
++	createHomeDir();
++	file = fopen( pathTMP, "wb" );
++
++	if ( file == (FILE *) NULL )
++		return BNX_FALSE;
++
++	fwrite( game, 1, sizeof( BNX_GAME ), file );
++
++	fclose( file );
++
++	return BNX_TRUE;
++}
++
++BNX_BOOL loadGame( BNX_GAME *game )
++{
++	FILE		*file;
++	char pathTMP[512];
++	sprintf(pathTMP,"%s/%s/autosave.bnx", getenv("HOME"), homeDir);
++	createHomeDir();
++	file = fopen( pathTMP, "rb" );
++
++	if ( file == (FILE *) NULL )
++		return BNX_FALSE;
++
++	fread( game, 1, sizeof( BNX_GAME ), file );
++
++	fclose( file );
++
++	return BNX_TRUE;
++}
++
++BNX_BOOL saveHiScore( BNX_GAME *game )
++{
++	BNX_INT32	test;
++	FILE		*file;
++	char pathTMP[512];
++	sprintf(pathTMP,"%s/%s/hiscore.bnx", getenv("HOME"), homeDir);
++
++	createHomeDir();
++	file = fopen( pathTMP, "wb" );
++
++	if ( file == (FILE *) NULL )
++		return BNX_FALSE;
++
++	test = game->best + 1;
++	fwrite( &game->best, 1, sizeof( game->best ), file );
++	fwrite( &test, 1, sizeof( test ), file );
++
++	fclose( file );
++
++	return BNX_TRUE;
++}
++
++BNX_BOOL loadHiScore( BNX_GAME *game )
++{
++	BNX_INT32	test;
++	FILE		*file;
++	char pathTMP[512];
++	sprintf(pathTMP,"%s/%s/hiscore.bnx", getenv("HOME"), homeDir);
++	
++	game->best = 0;
++
++	createHomeDir();
++	file = fopen( pathTMP, "rb" );
++
++	if ( file == (FILE *) NULL )
++		return BNX_FALSE;
++
++	fread( &game->best, 1, sizeof( game->best ), file );
++	fread( &test, 1, sizeof( game->best ), file );
++	if ( test-1 != game->best )
++	{
++		game->best = 0;
++		return BNX_FALSE;
++	}
++
++	fclose( file );
++
++	return BNX_TRUE;
++}

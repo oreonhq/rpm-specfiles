@@ -1,0 +1,12 @@
+# Only for epel <= 7
+--- kBuild/src/kmk/configure.ac.orig	2022-10-30 19:36:49.966336934 +0000
++++ kBuild/src/kmk/configure.ac	2022-10-30 19:37:07.936270597 +0000
+@@ -30,7 +30,7 @@ AC_CONFIG_HEADERS([config.h])
+ # We cannot enable -Werror because gettext 0.18.1 has invalid content
+ # When we update gettext to 0.18.3 or better we can add it again.
+ # bird: Added subdir-objects
+-AM_INIT_AUTOMAKE([1.15 foreign -Werror -Wall subdir-objects])
++AM_INIT_AUTOMAKE([1.13.4 foreign -Werror -Wall subdir-objects])
+ 
+ # Checks for programs.
+ AC_USE_SYSTEM_EXTENSIONS

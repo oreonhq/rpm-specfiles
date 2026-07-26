@@ -1,0 +1,26 @@
+Fixes these warnings from UBSAN:
+
+src/integer.c:623:29: runtime error: negation of -9223372036854775808 cannot be represented in type '<unknown>'; cast to an unsigned type to negate this value to itself
+src/integer.c:508:7: runtime error: negation of -9223372036854775808 cannot be represented in type 'long int'; cast to an unsigned type to negate this value to itself
+
+--- src/integer.c.orig	2025-10-17 17:53:30.000000000 -0600
++++ src/integer.c	2026-03-13 14:16:07.729149547 -0600
+@@ -505,7 +505,8 @@ Obj ObjInt_Int( Int i )
+   }
+   else if (i < 0 ) {
+     gmp = NewBag( T_INTNEG, sizeof(mp_limb_t) );
+-    i = -i;
++    if (i > INTPTR_MIN)
++      i = -i;
+   }
+   else {
+     gmp = NewBag( T_INTPOS, sizeof(mp_limb_t) );
+@@ -620,7 +621,7 @@ Int Int_ObjInt(Obj i)
+     if ((!sign && (val > INT32_MAX)) || (sign && (val > (UInt)INT32_MIN)))
+ #endif
+         ErrorMayQuit("Conversion error: integer too large", 0, 0);
+-    return sign ? -(Int)val : (Int)val;
++    return (sign && val != (UInt)INTPTR_MIN) ? -(Int)val : (Int)val;
+ }
+ 
+ UInt UInt_ObjInt(Obj i)

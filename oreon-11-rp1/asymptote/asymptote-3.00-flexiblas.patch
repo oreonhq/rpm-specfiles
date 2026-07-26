@@ -1,0 +1,13 @@
+diff -up asymptote-3.00/configure.ac.flexiblas asymptote-3.00/configure.ac
+--- asymptote-3.00/configure.ac.flexiblas	2025-02-20 15:52:54.950607499 -0500
++++ asymptote-3.00/configure.ac	2025-02-20 15:53:31.286290888 -0500
+@@ -582,7 +582,8 @@ if test "x$with_vcpkg" != "xno"; then  #
+    ADD_VCPKG_LIB_FOR_PKGCONFIG(gsl)
+ else
+   PKG_CONFIG(CPPFLAGS,$CPPFLAGS,--cflags,gsl)
+-  PKG_CONFIG(LDFLAGS,$LDFLAGS,--libs,gsl)
++  # PKG_CONFIG(LDFLAGS,$LDFLAGS,--libs,gsl)
++  LDFLAGS="$LDFLAGS -lgsl -lflexiblas"
+   AC_CHECK_HEADER(gsl/gsl_sf.h,
+   CHECK_LIB_STATIC(gsl,gsl,gsl_sf_debye_6,HAVE_LIBGSL,
+            AC_MSG_NOTICE([*** Could not find libgsl: will compile without optional special functions. ***])),

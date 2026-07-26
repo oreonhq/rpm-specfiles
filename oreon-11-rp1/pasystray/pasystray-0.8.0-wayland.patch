@@ -1,0 +1,99 @@
+diff --git a/src/pasystray.c b/src/pasystray.c
+index 6e1f6c5..45e3ad3 100644
+--- a/src/pasystray.c
++++ b/src/pasystray.c
+@@ -21,6 +21,9 @@
+ 
+ #include <glib.h>
+ #include <gtk/gtk.h>
++#if GTK_CHECK_VERSION(3,0,0) && defined(GDK_WINDOWING_X11)
++#include <gdk/gdkx.h>
++#endif
+ 
+ #include "pasystray.h"
+ #include "options.h"
+@@ -35,11 +38,15 @@
+ 
+ static GMainLoop* loop;
+ static menu_infos_t* mis;
++gboolean gdkisx11 = FALSE;
+ 
+ int main(int argc, char *argv[])
+ {
+     GOptionEntry* options = get_options();
+     GError *error = NULL;
++#if GTK_CHECK_VERSION(3,10,0) && !defined(HAVE_APPINDICATOR)
++    gdk_set_allowed_backends("x11");
++#endif
+     gtk_init_with_args(&argc, &argv, NULL, options, NULL, &error);
+     if(error)
+     {
+@@ -76,7 +83,12 @@ void init(settings_t* settings)
+     avahi_start(mis);
+ 
+ #ifdef HAVE_X11
+-    if (settings->key_grabbing)
++#if GTK_CHECK_VERSION(3,0,0)
++    gdkisx11 = GDK_IS_X11_DISPLAY(gdk_display_get_default());
++#else
++    gdkisx11 = TRUE;
++#endif
++    if (settings->key_grabbing && gdkisx11)
+ 	    key_grabber_grab_keys(mis);
+ #endif
+ }
+@@ -89,7 +101,7 @@ void quit()
+ void destroy(settings_t* settings)
+ {
+ #ifdef HAVE_X11
+-    if (settings->key_grabbing)
++    if (settings->key_grabbing && gdkisx11)
+ 	    key_grabber_ungrab_keys(mis);
+ #endif
+ 
+diff --git a/src/x11-property.c b/src/x11-property.c
+index 202aea0..3f8914b 100644
+--- a/src/x11-property.c
++++ b/src/x11-property.c
+@@ -39,15 +39,20 @@ char* x11_property_get(const char* key){ return NULL; }
+ 
+ static Display* display = NULL;
+ static Window window;
++extern gboolean gdkisx11;
+ 
+ void x11_property_init(void)
+ {
++    if (!gdkisx11)
++        return;
+     display = gdk_x11_get_default_xdisplay();
+     window = RootWindow(display, 0);
+ }
+ 
+ void x11_property_set(const char* key, const char* value)
+ {
++    if (!gdkisx11)
++        return;
+     g_debug("[x11-property] setting '%s' to '%s'", key, value);
+ 
+     Atom atom = XInternAtom(display, key, False);
+@@ -57,6 +62,8 @@ void x11_property_set(const char* key, const char* value)
+ 
+ void x11_property_del(const char* key)
+ {
++    if (!gdkisx11)
++        return;
+     g_debug("[x11-property] deleting '%s'", key);
+ 
+     Atom atom = XInternAtom(display, key, False);
+@@ -65,6 +72,8 @@ void x11_property_del(const char* key)
+ 
+ char* x11_property_get(const char* key)
+ {
++    if (!gdkisx11)
++        return NULL;
+     Atom property = XInternAtom(display, key, False);
+     Atom actual_type;
+     int actual_format;
+-- 
+2.31.1
+

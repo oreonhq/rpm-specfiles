@@ -1,0 +1,28 @@
+From 6a3d1baf742a0fb8830a44a21d1a09c82e4e7e0d Mon Sep 17 00:00:00 2001
+From: Michal Schmidt <mschmidt@redhat.com>
+Date: Wed, 7 Aug 2024 15:35:03 +0200
+Subject: [PATCH 3/3] do not override optimization flags
+
+"-O0" is incompatible with _FORTIFY_SOURCE.
+---
+ src_cpp/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src_cpp/Makefile b/src_cpp/Makefile
+index 0007e237c398..8266efccadc3 100644
+--- a/src_cpp/Makefile
++++ b/src_cpp/Makefile
+@@ -60,8 +60,8 @@ ifeq ($(origin CXX),default)
+ CXX=mpiicpx
+ endif
+ override CPPFLAGS += -I.
+-override CFLAGS += -g -O0 -Wall
+-override CXXFLAGS += -g -O0 -Wall -Wextra
++override CFLAGS += -g -Wall
++override CXXFLAGS += -g -Wall -Wextra
+ ifdef WITH_OPENMP
+ ifeq ("$(CXX)",$(filter "$(CXX)", "mpiicpx" "icpx"))
+ override CXXFLAGS += -qopenmp
+-- 
+2.45.2
+

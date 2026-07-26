@@ -1,0 +1,76 @@
+Patch by Robert Scheck <robert@fedoraproject.org> originally based on a patch by
+Christian T. Steigies <cts@debian.org> for moon-buggy >= 1.0.51. This patch adds
+the ability to pause moon-buggy without dying. But this "feature" will never get
+accepted by upstream, as upstream maintainer thinks, that if you play moon-buggy
+you just have to concentrate onto moon-buggy. And for further information, please
+have a look to Debian bug ID #76430.
+
+--- moon-buggy-1.0.51/game.c			2003-04-13 21:06:31.000000000 +0200
++++ moon-buggy-1.0.51/game.c.pause		2009-01-03 18:32:47.000000000 +0100
+@@ -117,6 +117,15 @@
+     print_message ("aborted at user's request");
+     mode_change (crash_mode, 0);
+     break;
++  case 4:
++    clock_freeze ();
++    wnoutrefresh (moon);
++    print_message ("PAUSED (press any key to continue)");
++    doupdate ();
++    wait_for_key ();
++    mode_redraw ();
++    clock_thaw ();
++    break;
+   }
+ }
+ 
+@@ -214,6 +223,7 @@
+   mode_add_key (game_mode, mbk_jump, "jump", 1);
+   mode_add_key (game_mode, mbk_fire, "fire", 2);
+   mode_add_key (game_mode, mbk_end, "abort game", 3);
++  mode_add_key (game_mode, mbk_pause, "pause", 4);
+   mode_complete (game_mode);
+ 
+   crash_mode = new_mode ();
+--- moon-buggy-1.0.51/keyboard.c		2003-04-13 21:06:29.000000000 +0200
++++ moon-buggy-1.0.51/keyboard.c.pause		2009-01-03 18:33:34.000000000 +0100
+@@ -124,6 +124,8 @@
+ 
+   add_key ('s', mbk_scores, 100);
+ 
++  add_key ('p', mbk_pause, 100);
++
+   add_key ('r', mbk_redraw, 20);
+   add_key (12, mbk_redraw, 10);	/* \C-l */
+ }
+--- moon-buggy-1.0.51/moon-buggy.h		2003-04-13 21:07:04.000000000 +0200
++++ moon-buggy-1.0.51/moon-buggy.h.pause	2009-01-03 18:34:39.000000000 +0100
+@@ -42,6 +42,7 @@
+ 
+ extern  game_time  current_time (void);
+ 
++extern  void  wait_for_key (void);
+ extern  void  clock_reset (void);
+ extern  void  clock_thaw (void);
+ extern  void  clear_queue (void);
+@@ -149,8 +150,9 @@
+   mbk_copyright = 1, mbk_down = 2, mbk_end = 4, mbk_fire = 8, mbk_first = 16,
+   mbk_jump = 32, mbk_last = 64, mbk_pagedown = 128, mbk_pageup = 256,
+   mbk_start = 512, mbk_up = 1024, mbk_warranty = 2048, mbk_scores = 4096,
++  mbk_pause = 8192,
+   
+-  mbk_redraw = 8192		/* specially handled in `mode_keypress' */
++  mbk_redraw = 16384		/* specially handled in `mode_keypress' */
+ };
+ struct binding {
+   int  meanings;
+--- moon-buggy-1.0.51/queue.c			2003-04-13 21:06:32.000000000 +0200
++++ moon-buggy-1.0.51/queue.c.pause		2009-01-03 18:35:09.000000000 +0100
+@@ -120,7 +120,7 @@
+   return  res;
+ }
+ 
+-static void
++void
+ wait_for_key (void)
+ {
+   int  res;

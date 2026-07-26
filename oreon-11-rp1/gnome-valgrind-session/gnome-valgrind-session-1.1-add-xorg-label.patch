@@ -1,0 +1,35 @@
+From b130ca140a1b3aa3a464cd4b7a757582eeb63ead Mon Sep 17 00:00:00 2001
+From: "FeRD (Frank Dana)" <ferdnyc@gmail.com>
+Date: Wed, 10 May 2023 15:12:29 -0400
+Subject: [PATCH] Add "on Xorg" to session names
+
+---
+ gnome-valgrind-errors.desktop | 2 +-
+ gnome-valgrind-leaks.desktop  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gnome-valgrind-errors.desktop b/gnome-valgrind-errors.desktop
+index 1d54301..4fc7d3f 100644
+--- a/gnome-valgrind-errors.desktop
++++ b/gnome-valgrind-errors.desktop
+@@ -2,5 +2,5 @@
+ Type=Application
+ Exec=gnome-valgrind-errors
+ TryExec=gnome-valgrind-errors
+-Name=GNOME Valgrind (Errors)
++Name=GNOME Valgrind on Xorg (Errors)
+ Comment=GNOME Valgrind (Error check)
+diff --git a/gnome-valgrind-leaks.desktop b/gnome-valgrind-leaks.desktop
+index 458c1fc..7adc656 100644
+--- a/gnome-valgrind-leaks.desktop
++++ b/gnome-valgrind-leaks.desktop
+@@ -2,5 +2,5 @@
+ Type=Application
+ Exec=gnome-valgrind-leaks
+ TryExec=gnome-valgrind-leaks
+-Name=GNOME Valgrind (Leaks)
++Name=GNOME Valgrind on Xorg (Leaks)
+ Comment=GNOME Valgrind (Leak check)
+-- 
+2.40.1
+

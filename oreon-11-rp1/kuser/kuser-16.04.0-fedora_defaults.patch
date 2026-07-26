@@ -1,0 +1,11 @@
+diff -up kuser-16.04.0/kuser.kcfg.fedora_defaults kuser-16.04.0/kuser.kcfg
+--- kuser-16.04.0/kuser.kcfg.fedora_defaults	2015-11-14 11:32:18.000000000 -0600
++++ kuser-16.04.0/kuser.kcfg	2016-04-23 10:59:02.520008189 -0500
+@@ -35,6 +35,7 @@
+     <entry name="shell" type="String">
+       <label>Shell</label>
+       <whatsthis>This option allows you to select the shell which will be the default for new users.</whatsthis>
++      <default>/bin/bash</default>
+     </entry>
+     <entry name="homepath" type="String">
+       <label>Home path template</label>

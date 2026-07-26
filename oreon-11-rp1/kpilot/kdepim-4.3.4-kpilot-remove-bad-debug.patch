@@ -1,0 +1,28 @@
+diff -ur kdepim-4.3.4/kpilot/conduits/todo/todoakonadirecord.cc kdepim-4.3.4-kpilot-remove-bad-debug/kpilot/conduits/todo/todoakonadirecord.cc
+--- kdepim-4.3.4/kpilot/conduits/todo/todoakonadirecord.cc	2009-06-03 13:54:33.000000000 +0200
++++ kdepim-4.3.4-kpilot-remove-bad-debug/kpilot/conduits/todo/todoakonadirecord.cc	2019-01-04 03:34:40.458655804 +0100
+@@ -77,8 +77,6 @@
+ 	boost::shared_ptr<KCal::Todo> todo
+ 		 = boost::dynamic_pointer_cast<KCal::Todo, KCal::Incidence>( item().payload<IncidencePtr>() );
+ 	
+-	DEBUGKPILOT << this << " TodoPointer: " <<  todo;
+-	
+ 	return todo->categories().size();
+ }
+ 
+@@ -89,7 +87,6 @@
+ 	boost::shared_ptr<KCal::Todo> todo
+ 		 = boost::dynamic_pointer_cast<KCal::Todo, KCal::Incidence>( item().payload<IncidencePtr>() );
+ 	
+-	DEBUGKPILOT << todo;
+ 	return todo->categories().contains( category );
+ }
+ 
+@@ -100,7 +97,6 @@
+ 	boost::shared_ptr<KCal::Todo> todo
+ 		 = boost::dynamic_pointer_cast<KCal::Todo, KCal::Incidence>( item().payload<IncidencePtr>() );
+ 	
+-	DEBUGKPILOT << todo;
+ 	return todo->categories();
+ }
+ 

@@ -1,0 +1,119 @@
+diff --git a/configure b/configure
+index 9bfdec2..23feb35 100755
+--- a/configure
++++ b/configure
+@@ -971,7 +971,7 @@ cat > conftest.$ac_ext << EOF
+ #line 972 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:977: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+@@ -1546,8 +1546,8 @@ else
+ #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+ #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
+ int main () { int i; for (i = 0; i < 256; i++)
+-if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
+-exit (0); }
++if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) return 2;
++return 0; }
+ 
+ EOF
+ if { (eval echo configure:1554: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -1847,12 +1847,12 @@ else
+ #line 1848 "configure"
+ #include "confdefs.h"
+ #include <stdio.h>
+-main()
++int main()
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(char));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:1859: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -1886,12 +1886,12 @@ else
+ #line 1887 "configure"
+ #include "confdefs.h"
+ #include <stdio.h>
+-main()
++int main()
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(short));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:1898: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -1925,12 +1925,12 @@ else
+ #line 1926 "configure"
+ #include "confdefs.h"
+ #include <stdio.h>
+-main()
++int main()
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(int));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:1937: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -1964,12 +1964,12 @@ else
+ #line 1965 "configure"
+ #include "confdefs.h"
+ #include <stdio.h>
+-main()
++int main()
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(long));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:1976: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -2003,12 +2003,12 @@ else
+ #line 2004 "configure"
+ #include "confdefs.h"
+ #include <stdio.h>
+-main()
++int main()
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(long long));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:2015: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -2042,11 +2042,12 @@ else
+   cat > conftest.$ac_ext <<EOF
+ #line 2044 "configure"
+ #include "confdefs.h"
++#include <string.h>
+ 
+-main()
++int main()
+ {
+   char c0 = 0x40, c1 = 0x80, c2 = 0x81;
+-  exit(memcmp(&c0, &c2, 1) < 0 && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
++  return (memcmp(&c0, &c2, 1) < 0 && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
+ }
+ 
+ EOF

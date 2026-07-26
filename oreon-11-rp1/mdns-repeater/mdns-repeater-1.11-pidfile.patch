@@ -1,0 +1,24 @@
+From b45d65249dd7aaa7c3b13a63342f705f56a4aee2 Mon Sep 17 00:00:00 2001
+From: Robert Scheck <robert@fedoraproject.org>
+Date: Sat, 2 May 2020 04:00:24 +0200
+Subject: [PATCH] Warning-free redefinition of PIDFILE for downstreams
+
+Backport from upstream: https://github.com/kennylevinsen/mdns-repeater/commit/b45d65249dd7aaa7c3b13a63342f705f56a4aee2
+---
+ mdns-repeater.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/mdns-repeater.c b/mdns-repeater.c
+index 67c9a1b..0bb20aa 100644
+--- a/mdns-repeater.c
++++ b/mdns-repeater.c
+@@ -38,7 +38,9 @@
+ #define MDNS_ADDR "224.0.0.251"
+ #define MDNS_PORT 5353
+ 
++#ifndef PIDFILE
+ #define PIDFILE "/var/run/" PACKAGE ".pid"
++#endif
+ 
+ #define MAX_SOCKS 16
+ #define MAX_SUBNETS 16

@@ -1,0 +1,33 @@
+Bug: https://github.com/perlrdf/p5-rdf-rdfa-generator/issues/7
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1093341
+Author: Étienne Mollier <emollier@debian.org>
+Last-Update: 2025-01-21
+Description: disambiguate done_testing.
+ Test::More and Test::Modern both provide the done_testing function,
+ causing a test failure due to the warning identifying that Test::Modern
+ erases the implementation originating from Test::More.  It is believed
+ that the inclusion of Test::Modern is for the specific
+ Test::Modern::done_testing invocation, because no other symbols go
+ missing when demoting Test::Modern as required.  Perhaps deleting the
+ usage of Test::Modern could also be an option, but also looks more
+ likely to diverge from upstream intention; anyway, that is why the
+ issue is forwarded upstream..
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- librdf-rdfa-generator-perl.orig/t/03_kk_attean.t
++++ librdf-rdfa-generator-perl/t/03_kk_attean.t
+@@ -4,7 +4,7 @@
+ 
+ use strict;
+ use Test::More;
+-use Test::Modern;
++require Test::Modern;
+ 
+ BEGIN {
+   use_ok('Attean') or BAIL_OUT "Attean required for tests";
+@@ -73,4 +73,4 @@
+   like($string, qr|datatype="xsd:decimal"|, 'pi decimal datatype present');
+   return $string;
+ }
+-done_testing();
++Test::Modern::done_testing();

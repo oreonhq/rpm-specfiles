@@ -1,0 +1,561 @@
+diff -rupN --no-dereference kealib-1.6.2/gdal/CMakeLists.txt kealib-1.6.2-new/gdal/CMakeLists.txt
+--- kealib-1.6.2/gdal/CMakeLists.txt	2025-04-28 10:56:15.000000000 +0200
++++ kealib-1.6.2-new/gdal/CMakeLists.txt	2025-11-23 20:47:41.169963164 +0100
+@@ -1,4 +1,5 @@
+ cmake_minimum_required (VERSION 3.5)
++set(CMAKE_CXX_STANDARD 17)
+ ###############################################################################
+ # set file locations
+ set(LIBKEA_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../src CACHE PATH "Path to KEA library")
+diff -rupN --no-dereference kealib-1.6.2/gdal/keaband.h kealib-1.6.2-new/gdal/keaband.h
+--- kealib-1.6.2/gdal/keaband.h	2025-04-28 10:56:15.000000000 +0200
++++ kealib-1.6.2-new/gdal/keaband.h	2025-11-23 20:47:41.170251338 +0100
+@@ -46,6 +46,13 @@
+     #pragma message ("HAVE_64BITIMAGES not present")
+ #endif
+ 
++#if (GDAL_VERSION_MAJOR > 3) || ((GDAL_VERSION_MAJOR == 3) && (GDAL_VERSION_MINOR >= 12))
++    #define HAVE_SETVALUE_CPLERR
++    #pragma message ("defining HAVE_SETVALUE_CPLERR")
++#else
++    #pragma message ("HAVE_SETVALUE_CPLERR not present")
++#endif
++
+ #include "keadataset.h"
+ 
+ class KEAOverview;
+diff -rupN --no-dereference kealib-1.6.2/gdal/keacopy.cpp kealib-1.6.2-new/gdal/keacopy.cpp
+--- kealib-1.6.2/gdal/keacopy.cpp	2025-04-28 10:56:15.000000000 +0200
++++ kealib-1.6.2-new/gdal/keacopy.cpp	2025-11-23 20:47:41.170449889 +0100
+@@ -376,17 +376,20 @@ bool CopyBand( GDALRasterBand *pBand, ke
+ void CopySpatialInfo(GDALDataset *pDataset, kealib::KEAImageIO *pImageIO)
+ {
+     kealib::KEAImageSpatialInfo *pSpatialInfo = pImageIO->getSpatialInfo();
+-
+-    double padfTransform[6];
+-    if( pDataset->GetGeoTransform(padfTransform) == CE_None )
++#ifdef HAVE_SETVALUE_CPLERR
++    GDALGeoTransform gt;
++#else
++    double gt[6];
++#endif
++    if( pDataset->GetGeoTransform(gt) == CE_None )
+     {
+         // convert back from GDAL's array format
+-        pSpatialInfo->tlX = padfTransform[0];
+-        pSpatialInfo->xRes = padfTransform[1];
+-        pSpatialInfo->xRot = padfTransform[2];
+-        pSpatialInfo->tlY = padfTransform[3];
+-        pSpatialInfo->yRot = padfTransform[4];
+-        pSpatialInfo->yRes = padfTransform[5];
++        pSpatialInfo->tlX = gt[0];
++        pSpatialInfo->xRes = gt[1];
++        pSpatialInfo->xRot = gt[2];
++        pSpatialInfo->tlY = gt[3];
++        pSpatialInfo->yRot = gt[4];
++        pSpatialInfo->yRes = gt[5];
+     }
+ 
+     const char *pszProjection = pDataset->GetProjectionRef();
+diff -rupN --no-dereference kealib-1.6.2/gdal/keadataset.cpp kealib-1.6.2-new/gdal/keadataset.cpp
+--- kealib-1.6.2/gdal/keadataset.cpp	2025-04-28 10:56:15.000000000 +0200
++++ kealib-1.6.2-new/gdal/keadataset.cpp	2025-11-23 20:47:41.170723907 +0100
+@@ -556,44 +556,80 @@ void KEADataset::UpdateMetadataList()
+ }
+ 
+ // read in the geotransform
+-CPLErr KEADataset::GetGeoTransform( double * padfTransform )
++#ifdef HAVE_SETVALUE_CPLERR
++CPLErr KEADataset::GetGeoTransform(GDALGeoTransform &gt) const
+ {
+     try
+     {
+-        kealib::KEAImageSpatialInfo *pSpatialInfo = m_pImageIO->getSpatialInfo();
++        kealib::KEAImageSpatialInfo *pSpatialInfo =
++            m_pImageIO->getSpatialInfo();
+         // GDAL uses an array format
+-        padfTransform[0] = pSpatialInfo->tlX;
+-        padfTransform[1] = pSpatialInfo->xRes;
+-        padfTransform[2] = pSpatialInfo->xRot;
+-        padfTransform[3] = pSpatialInfo->tlY;
+-        padfTransform[4] = pSpatialInfo->yRot;
+-        padfTransform[5] = pSpatialInfo->yRes;
+-    
++        gt[0] = pSpatialInfo->tlX;
++        gt[1] = pSpatialInfo->xRes;
++        gt[2] = pSpatialInfo->xRot;
++        gt[3] = pSpatialInfo->tlY;
++        gt[4] = pSpatialInfo->yRot;
++        gt[5] = pSpatialInfo->yRes;
++
+         return CE_None;
+     }
+     catch (const kealib::KEAIOException &e)
+     {
+-        CPLError( CE_Warning, CPLE_AppDefined,
+-                "Unable to read geotransform: %s", e.what() );
++        CPLError(CE_Warning, CPLE_AppDefined, "Unable to read geotransform: %s",
++                 e.what());
+         return CE_Failure;
+     }
+ }
+ 
+-const OGRSpatialReference* KEADataset::GetSpatialRef() const
++// set the geotransform
++CPLErr KEADataset::SetGeoTransform(const GDALGeoTransform &gt)
+ {
+-    if( !m_oSRS.IsEmpty() )
+-        return &m_oSRS;
++    try
++    {
++        // get the spatial info and update it
++        kealib::KEAImageSpatialInfo *pSpatialInfo =
++            m_pImageIO->getSpatialInfo();
++        // convert back from GDAL's array format
++        pSpatialInfo->tlX = gt[0];
++        pSpatialInfo->xRes = gt[1];
++        pSpatialInfo->xRot = gt[2];
++        pSpatialInfo->tlY = gt[3];
++        pSpatialInfo->yRot = gt[4];
++        pSpatialInfo->yRes = gt[5];
++
++        m_pImageIO->setSpatialInfo(pSpatialInfo);
++        return CE_None;
++    }
++    catch (const kealib::KEAIOException &e)
++    {
++        CPLError(CE_Warning, CPLE_AppDefined,
++                 "Unable to write geotransform: %s", e.what());
++        return CE_Failure;
++    }
++}
++
++#else
+ 
++CPLErr KEADataset::GetGeoTransform( double * padfTransform )
++{
+     try
+     {
+         kealib::KEAImageSpatialInfo *pSpatialInfo = m_pImageIO->getSpatialInfo();
+-        m_oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+-        m_oSRS.importFromWkt(pSpatialInfo->wktString.c_str());
+-        return m_oSRS.IsEmpty() ? nullptr: &m_oSRS;
++        // GDAL uses an array format
++        padfTransform[0] = pSpatialInfo->tlX;
++        padfTransform[1] = pSpatialInfo->xRes;
++        padfTransform[2] = pSpatialInfo->xRot;
++        padfTransform[3] = pSpatialInfo->tlY;
++        padfTransform[4] = pSpatialInfo->yRot;
++        padfTransform[5] = pSpatialInfo->yRes;
++    
++        return CE_None;
+     }
+     catch (const kealib::KEAIOException &e)
+     {
+-        return nullptr;
++        CPLError( CE_Warning, CPLE_AppDefined,
++                "Unable to read geotransform: %s", e.what() );
++        return CE_Failure;
+     }
+ }
+ 
+@@ -623,6 +659,26 @@ CPLErr KEADataset::SetGeoTransform (doub
+     }
+ }
+ 
++#endif
++
++const OGRSpatialReference* KEADataset::GetSpatialRef() const
++{
++    if( !m_oSRS.IsEmpty() )
++        return &m_oSRS;
++
++    try
++    {
++        kealib::KEAImageSpatialInfo *pSpatialInfo = m_pImageIO->getSpatialInfo();
++        m_oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
++        m_oSRS.importFromWkt(pSpatialInfo->wktString.c_str());
++        return m_oSRS.IsEmpty() ? nullptr: &m_oSRS;
++    }
++    catch (const kealib::KEAIOException &e)
++    {
++        return nullptr;
++    }
++}
++
+ // set the projection
+ CPLErr KEADataset::SetSpatialRef(const OGRSpatialReference* poSRS)
+ {
+diff -rupN --no-dereference kealib-1.6.2/gdal/keadataset.h kealib-1.6.2-new/gdal/keadataset.h
+--- kealib-1.6.2/gdal/keadataset.h	2025-04-28 10:56:15.000000000 +0200
++++ kealib-1.6.2-new/gdal/keadataset.h	2025-11-23 20:47:41.170990772 +0100
+@@ -57,8 +57,13 @@ public:
+                                 GDALProgressFunc pfnProgress, void *pProgressData );
+ 
+     // virtual methods for dealing with transform and projection
++#ifdef HAVE_SETVALUE_CPLERR
++    CPLErr      GetGeoTransform(GDALGeoTransform &gt ) const override;
++    CPLErr SetGeoTransform(const GDALGeoTransform &gt) override;
++#else    
+     CPLErr      GetGeoTransform( double * padfTransform );
+     CPLErr  SetGeoTransform (double *padfTransform );
++#endif
+ 
+     const OGRSpatialReference* GetSpatialRef() const override;
+     CPLErr SetSpatialRef(const OGRSpatialReference* poSRS) override;
+diff -rupN --no-dereference kealib-1.6.2/gdal/kearat.cpp kealib-1.6.2-new/gdal/kearat.cpp
+--- kealib-1.6.2/gdal/kearat.cpp	2025-04-28 10:56:15.000000000 +0200
++++ kealib-1.6.2-new/gdal/kearat.cpp	2025-11-23 20:47:41.171265914 +0100
+@@ -344,6 +344,288 @@ double KEARasterAttributeTable::GetValue
+     return dfValue;
+ }
+ 
++
++#ifdef HAVE_SETVALUE_CPLERR
++
++bool KEARasterAttributeTable::GetValueAsBoolean(int iRow, int iField) const
++{
++    // Let ValuesIO do the work.
++    bool bValue = false;
++    if ((const_cast<KEARasterAttributeTable *>(this))
++            ->ValuesIO(GF_Read, iField, iRow, 1, &bValue) != CE_None)
++    {
++        return false;
++    }
++
++    return bValue;
++}
++
++GDALRATDateTime KEARasterAttributeTable::GetValueAsDateTime(int iRow,
++                                                            int iField) const
++{
++    // Let ValuesIO do the work.
++    GDALRATDateTime value;
++    const_cast<KEARasterAttributeTable *>(this)->ValuesIO(GF_Read, iField, iRow,
++                                                          1, &value);
++    return value;
++}
++
++const GByte *
++KEARasterAttributeTable::GetValueAsWKBGeometry(int iRow, int iField,
++                                               size_t &nWKBSize) const
++{
++    // Let ValuesIO do the work.
++    GByte *pabyWKB = nullptr;
++    const_cast<KEARasterAttributeTable *>(this)->ValuesIO(
++        GF_Read, iField, iRow, 1, &pabyWKB, &nWKBSize);
++    if (nWKBSize)
++        m_abyCachedWKB.assign(pabyWKB, pabyWKB + nWKBSize);
++    VSIFree(pabyWKB);
++    return nWKBSize ? m_abyCachedWKB.data() : nullptr;
++}
++
++CPLErr KEARasterAttributeTable::SetValue(int iRow, int iField,
++                                         const char *pszValue)
++{
++    return ValuesIO(GF_Write, iField, iRow, 1, const_cast<char**>(&pszValue) );
++}
++
++CPLErr KEARasterAttributeTable::SetValue( int iRow, int iField, double dfValue)
++{
++    // Get ValuesIO do do the work
++    return ValuesIO(GF_Write, iField, iRow, 1, &dfValue );
++}
++
++CPLErr KEARasterAttributeTable::SetValue( int iRow, int iField, int nValue )
++{
++    // Get ValuesIO do do the work
++    return ValuesIO(GF_Write, iField, iRow, 1, &nValue );
++}
++
++CPLErr KEARasterAttributeTable::SetValue(int iRow, int iField, bool bValue)
++{
++    // Let ValuesIO do the work.
++    return ValuesIO(GF_Write, iField, iRow, 1, &bValue);
++}
++
++CPLErr KEARasterAttributeTable::SetValue(int iRow, int iField,
++                                         const GDALRATDateTime &sDateTime)
++{
++    // Let ValuesIO do the work.
++    return ValuesIO(GF_Write, iField, iRow, 1,
++                    const_cast<GDALRATDateTime *>(&sDateTime));
++}
++
++CPLErr KEARasterAttributeTable::SetValue(int iRow, int iField,
++                                         const void *pabyWKB, size_t nWKBSize)
++{
++    // Let ValuesIO do the work.
++    const GByte **ppabyWKB = reinterpret_cast<const GByte **>(&pabyWKB);
++    return ValuesIO(GF_Write, iField, iRow, 1, const_cast<GByte **>(ppabyWKB),
++                    &nWKBSize);
++}
++
++CPLErr KEARasterAttributeTable::ValuesIO(GDALRWFlag eRWFlag, int iField,
++                                         int iStartRow, int iLength,
++                                         bool *pbData)
++{
++    /*if( ( eRWFlag == GF_Write ) && ( this->eAccess == GA_ReadOnly ) )
++    {
++        CPLError( CE_Failure, CPLE_NoWriteAccess,
++            "Dataset not open in update mode");
++        return CE_Failure;
++    }*/
++    CPLMutexHolderD(&m_hMutex);
++
++    if (iField < 0 || iField >= (int)m_aoFields.size())
++    {
++        CPLError(CE_Failure, CPLE_AppDefined, "iField (%d) out of range.",
++                 iField);
++
++        return CE_Failure;
++    }
++
++    if (iStartRow < 0 || (iStartRow + iLength) > (int)m_poKEATable->getSize())
++    {
++        CPLError(CE_Failure, CPLE_AppDefined,
++                 "iStartRow (%d) + iLength(%d) out of range.", iStartRow,
++                 iLength);
++
++        return CE_Failure;
++    }
++
++    switch (m_aoFields[iField].dataType)
++    {
++        case kealib::kea_att_bool:
++        {
++            try
++            {
++                if (eRWFlag == GF_Read)
++                    m_poKEATable->getBoolFields(iStartRow, iLength,
++                                                m_aoFields[iField].idx, pbData);
++                else
++                    m_poKEATable->setBoolFields(iStartRow, iLength,
++                                                m_aoFields[iField].idx, pbData);
++            }
++            catch (kealib::KEAException &e)
++            {
++                CPLError(CE_Failure, CPLE_AppDefined,
++                         "Failed to read/write attribute table: %s", e.what());
++                return CE_Failure;
++            }
++        }
++        break;
++        case kealib::kea_att_int:
++        {
++            // need to convert to/from int64_t
++            int64_t *panColData =
++                (int64_t *)VSI_MALLOC2_VERBOSE(iLength, sizeof(int64_t));
++            if (panColData == nullptr)
++            {
++                return CE_Failure;
++            }
++
++            if (eRWFlag == GF_Write)
++            {
++                // copy the application supplied bools to int64t
++                for (int i = 0; i < iLength; i++)
++                    panColData[i] = pbData[i];
++            }
++
++            try
++            {
++                if (eRWFlag == GF_Read)
++                    m_poKEATable->getIntFields(
++                        iStartRow, iLength, m_aoFields[iField].idx, panColData);
++                else
++                    m_poKEATable->setIntFields(
++                        iStartRow, iLength, m_aoFields[iField].idx, panColData);
++            }
++            catch (kealib::KEAException &e)
++            {
++                // fprintf(stderr,"Failed to read/write attribute table: %s %d
++                // %d %ld\n", e.what(), iStartRow, iLength,
++                // m_poKEATable->getSize() );
++                CPLError(CE_Failure, CPLE_AppDefined,
++                         "Failed to read/write attribute table: %s", e.what());
++                return CE_Failure;
++            }
++
++            if (eRWFlag == GF_Read)
++            {
++                // copy them back to bools
++                for (int i = 0; i < iLength; i++)
++                    pbData[i] = panColData[i] != 0;
++            }
++            CPLFree(panColData);
++        }
++        break;
++        case kealib::kea_att_float:
++        {
++            // allocate space for doubles
++            double *padfColData =
++                (double *)VSI_MALLOC2_VERBOSE(iLength, sizeof(double));
++            if (padfColData == nullptr)
++            {
++                return CE_Failure;
++            }
++
++            if (eRWFlag == GF_Write)
++            {
++                // copy the application supplied ints to doubles
++                for (int i = 0; i < iLength; i++)
++                    padfColData[i] = pbData[i];
++            }
++
++            // do the ValuesIO as doubles
++            CPLErr eVal =
++                ValuesIO(eRWFlag, iField, iStartRow, iLength, padfColData);
++            if (eVal != CE_None)
++            {
++                CPLFree(padfColData);
++                return eVal;
++            }
++
++            if (eRWFlag == GF_Read)
++            {
++                // copy them back to ints
++                for (int i = 0; i < iLength; i++)
++                    pbData[i] = padfColData[i] != 0;
++            }
++
++            CPLFree(padfColData);
++        }
++        break;
++        case kealib::kea_att_string:
++        {
++            // allocate space for string pointers
++            char **papszColData =
++                (char **)VSI_MALLOC2_VERBOSE(iLength, sizeof(char *));
++            if (papszColData == nullptr)
++            {
++                return CE_Failure;
++            }
++
++            if (eRWFlag == GF_Write)
++            {
++                // copy the application supplied ints to strings
++                for (int i = 0; i < iLength; i++)
++                {
++                    papszColData[i] = CPLStrdup(pbData[i] ? "true" : "false");
++                }
++            }
++
++            // do the ValuesIO as strings
++            CPLErr eVal =
++                ValuesIO(eRWFlag, iField, iStartRow, iLength, papszColData);
++            if (eVal != CE_None)
++            {
++                if (eRWFlag == GF_Write)
++                {
++                    for (int i = 0; i < iLength; i++)
++                        CPLFree(papszColData[i]);
++                }
++                CPLFree(papszColData);
++                return eVal;
++            }
++
++            if (eRWFlag == GF_Read)
++            {
++                // copy them back to ints
++                for (int i = 0; i < iLength; i++)
++                    pbData[i] = CPLTestBool(papszColData[i]);
++            }
++
++            // either we allocated them for write, or they were allocated
++            // by ValuesIO on read
++            for (int i = 0; i < iLength; i++)
++                CPLFree(papszColData[i]);
++
++            CPLFree(papszColData);
++        }
++        break;
++        default:
++            break;
++    }
++    return CE_None;
++}
++
++CPLErr KEARasterAttributeTable::ValuesIO(GDALRWFlag eRWFlag, int iField,
++                                         int iStartRow, int iLength,
++                                         GDALRATDateTime *psDateTime)
++{
++    return ValuesIODateTimeFromIntoString(eRWFlag, iField, iStartRow, iLength,
++                                          psDateTime);
++}
++
++CPLErr KEARasterAttributeTable::ValuesIO(GDALRWFlag eRWFlag, int iField,
++                                         int iStartRow, int iLength,
++                                         GByte **ppabyWKB, size_t *pnWKBSize)
++{
++    return ValuesIOWKBGeometryFromIntoString(eRWFlag, iField, iStartRow,
++                                             iLength, ppabyWKB, pnWKBSize);
++}
++#else
+ void KEARasterAttributeTable::SetValue( int iRow, int iField, const char *pszValue )
+ {
+     // Get ValuesIO do do the work
+@@ -361,6 +643,7 @@ void KEARasterAttributeTable::SetValue(
+     // Get ValuesIO do do the work
+     ValuesIO(GF_Write, iField, iRow, 1, &nValue );
+ }
++#endif
+ 
+ CPLErr KEARasterAttributeTable::ValuesIO(GDALRWFlag eRWFlag, int iField, int iStartRow, int iLength, double *pdfData)
+ {
+diff -rupN --no-dereference kealib-1.6.2/gdal/kearat.h kealib-1.6.2-new/gdal/kearat.h
+--- kealib-1.6.2/gdal/kearat.h	2025-04-28 10:56:15.000000000 +0200
++++ kealib-1.6.2-new/gdal/kearat.h	2025-11-23 20:47:41.171557558 +0100
+@@ -42,6 +42,9 @@ private:
+     CPLString osWorkingResult;
+     KEARasterBand *m_poBand;
+     CPLMutex            *m_hMutex;
++#ifdef HAVE_SETVALUE_CPLERR 
++    mutable std::vector<GByte> m_abyCachedWKB{};
++#endif
+ 
+ public:
+     KEARasterAttributeTable(kealib::KEAAttributeTable *poKEATable, KEARasterBand *poBand);
+@@ -63,14 +66,37 @@ public:
+     virtual int           GetValueAsInt( int iRow, int iField ) const;
+     virtual double        GetValueAsDouble( int iRow, int iField ) const;
+ 
+-    virtual void          SetValue( int iRow, int iField, const char *pszValue );
+-    virtual void          SetValue( int iRow, int iField, double dfValue);
+-    virtual void          SetValue( int iRow, int iField, int nValue );
+-
++#ifdef HAVE_SETVALUE_CPLERR 
++    bool GetValueAsBoolean(int iRow, int iField) const override;
++    GDALRATDateTime GetValueAsDateTime(int iRow, int iField) const override;
++    const GByte *GetValueAsWKBGeometry(int iRow, int iField,
++                                       size_t &nWKBSize) const override;
++                                       
++    virtual CPLErr SetValue(int iRow, int iField,
++                            const char *pszValue) override;
++    virtual CPLErr SetValue(int iRow, int iField, double dfValue) override;
++    virtual CPLErr SetValue(int iRow, int iField, int nValue) override;
++    CPLErr SetValue(int iRow, int iField,
++                    const GDALRATDateTime &sDateTime) override;
++    CPLErr SetValue(int iRow, int iField, const void *pabyWKB,
++                    size_t nWKBSize) override;
++    CPLErr SetValue(int iRow, int iField, bool nValue) override;
++#else
++    virtual void          SetValue( int iRow, int iField, const char *pszValue ) override;
++    virtual void          SetValue( int iRow, int iField, double dfValue) override;
++    virtual void          SetValue( int iRow, int iField, int nValue ) override;
++#endif
+     virtual CPLErr        ValuesIO(GDALRWFlag eRWFlag, int iField, int iStartRow, int iLength, double *pdfData);
+     virtual CPLErr        ValuesIO(GDALRWFlag eRWFlag, int iField, int iStartRow, int iLength, int *pnData);
+     virtual CPLErr        ValuesIO(GDALRWFlag eRWFlag, int iField, int iStartRow, int iLength, char **papszStrList);
+-
++#ifdef HAVE_SETVALUE_CPLERR
++    CPLErr ValuesIO(GDALRWFlag eRWFlag, int iField, int iStartRow, int iLength,
++                    bool *pbData) override;
++    CPLErr ValuesIO(GDALRWFlag eRWFlag, int iField, int iStartRow, int iLength,
++                    GDALRATDateTime *pasDateTime) override;
++    CPLErr ValuesIO(GDALRWFlag eRWFlag, int iField, int iStartRow, int iLength,
++                    GByte **ppabyWKB, size_t *pnWKBSize) override;
++#endif
+     virtual int           ChangesAreWrittenToFile();
+     virtual void          SetRowCount( int iCount );
+ 

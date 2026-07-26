@@ -1,0 +1,8 @@
+# Configuration file for the BZFlag game server.
+
+# Be sure to open up port 5154 for both tcp and udp if you want
+# to host internet games.
+
+# Command line options for the game server.  See the bzfs(6) man page
+# for a description of the valid options.
+BZFLAG_OPTIONS="-a 50 38"

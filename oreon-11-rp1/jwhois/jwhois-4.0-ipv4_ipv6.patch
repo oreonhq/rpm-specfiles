@@ -1,0 +1,88 @@
+diff --git a/src/dns.c b/src/dns.c
+index a81823715d776499..30e0d1f639824f10 100644
+--- a/src/dns.c
++++ b/src/dns.c
+@@ -102,6 +102,8 @@ lookup_host_saddr(struct sockaddr_in *res, const char *host, int port)
+ 
+ 
+ #ifdef HAVE_GETADDRINFO
++extern int force_ipv4;
++extern int force_ipv6;
+ /*
+  *  This function looks up a hostname or IP number using the newer
+  *  getaddrinfo() system call.
+@@ -118,6 +120,10 @@ lookup_host_addrinfo(struct addrinfo **res, const char *host, int port)
+ 
+   memset(&hints, 0, sizeof(hints));
+   hints.ai_family = PF_UNSPEC;
++  if (force_ipv6)
++	hints.ai_family = PF_INET6;
++  if (force_ipv4)
++	hints.ai_family = PF_INET;
+ 
+   hints.ai_socktype = SOCK_STREAM;
+   if (port)
+diff --git a/src/init.c b/src/init.c
+index 55ae2ebbf95ca1a2..c0027e9179709f8a 100644
+--- a/src/init.c
++++ b/src/init.c
+@@ -45,6 +45,8 @@ static struct option long_options[] =
+   {"config", 1, 0, 'c'},
+   {"host", 1, 0, 'h'},
+   {"port", 1, 0, 'p'},
++  {"force-ipv4", 0, 0, '4'},
++  {"force-ipv6", 0, 0, '6'},
+   {"force-lookup", 0, 0, 'f'},
+   {"disable-cache", 0, 0, 'd'},
+   {"no-redirect", 0, 0, 'n'},
+@@ -114,6 +116,12 @@ int enable_whoisservers;
+ /* Timeout value for connect calls in seconds */
+ int connect_timeout;
+ 
++/* Set to 1 to force ipv4 */
++int force_ipv4;
++
++/* Set to 1 to force ipv6 */
++int force_ipv6;
++
+ void help_version(int onlyversion)
+ {
+   char *COPYRIGHT = _("Copyright (C) 1999-%d  Free Software Foundation, Inc.\n");
+@@ -144,6 +152,10 @@ redistribute it under the terms of the GNU General Public License.");
+ #ifndef NOCACHE
+    printf(_("  -f, --force-lookup         force lookup even if the entry is cached\n\
+   -d, --disable-cache        disable cache functions\n"));
++#endif
++#ifdef HAVE_GETADDRINFO
++  printf(_("-4, --force-ipv4           force ipv4 address resolution for whois host\n"));
++  printf(_("-6, --force-ipv6           force ipv6 address resolution for whois host\n"));
+ #endif
+    printf("\n\n%s\n", _("Report bugs to bug-jwhois@gnu.org"));
+     }
+@@ -170,10 +182,12 @@ parse_args(int *argc, char ***argv)
+   rwhois_display = NULL;
+   rwhois_limit = 0;
+   enable_whoisservers = 1;
++  force_ipv4 = 0;
++  force_ipv6 = 0;
+ 
+   while (1)
+     {
+-      optch = getopt_long(*argc, *argv, "rainsvfdc:h:p:", long_options, &option_index);
++      optch = getopt_long(*argc, *argv, "rainsvfd46c:h:p:", long_options, &option_index);
+       if (optch == EOF)
+ 	break;
+       
+@@ -252,6 +266,12 @@ parse_args(int *argc, char ***argv)
+ 	  gport = atoi(optarg);
+ #endif
+ 	  break;
++        case '4':
++	  force_ipv4 = 1;
++	  break;
++        case '6':
++	  force_ipv6 = 1;
++	  break;
+ 	}
+     }
+ 

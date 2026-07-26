@@ -1,0 +1,11 @@
+# Created with jdDesktopEntryEdit 1.6
+[Desktop Entry]
+Type=Application
+Name=MyGUI Layout Editor
+GenericName=MyGUI Layout Editor
+Comment=Design UIs using MyGUI library
+Icon=mygui_le
+Exec=MyGUI-Tools LayoutEditor
+Categories=Development;
+StartupNotify=true
+StartupWMClass=LayoutEditor

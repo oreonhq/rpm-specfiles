@@ -1,0 +1,12 @@
+diff -up frysk-0.4/frysk-sys/jnixx/elements.hxx.cxx-scope frysk-0.4/frysk-sys/jnixx/elements.hxx
+--- frysk-0.4/frysk-sys/jnixx/elements.hxx.cxx-scope	2012-01-22 21:21:58.336000647 -0500
++++ frysk-0.4/frysk-sys/jnixx/elements.hxx	2012-01-22 21:22:13.119000651 -0500
+@@ -207,7 +207,7 @@ private:
+   char file[FILENAME_MAX];
+ public:
+   void operator=(const FileElements& src) {
+-    copy(src);
++    this->copy(src);
+     ::strcpy(this->file, src.file);
+     // Don't copy the pointer.
+   }

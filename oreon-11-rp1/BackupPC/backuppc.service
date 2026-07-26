@@ -1,0 +1,14 @@
+[Unit]
+Description= BackupPC server
+After=syslog.target local-fs.target remote-fs.target
+
+[Service]
+Type=simple
+User=backuppc
+Group=backuppc
+ExecStart=/usr/share/BackupPC/bin/BackupPC
+ExecReload=/bin/kill -HUP $MAINPID
+PIDFile=/run/BackupPC/BackupPC.pid
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,14 @@
+diff -rupN a/testsuite/Makefile.in b/testsuite/Makefile.in
+--- a/testsuite/Makefile.in	2020-01-16 03:41:34.000000000 +0300
++++ b/testsuite/Makefile.in	2020-01-28 19:05:55.770212842 +0300
+@@ -240,8 +240,8 @@ CPJAVA = CLASSPATH="..$(CLASSPATH_SEPARA
+ CPKAWA = CLASSPATH="@conf_classpath@.$(CLASSPATH_SEPARATOR)$$CLASSPATH" $(KAWA)
+ KAWATEST = CLASSPATH=".$(CLASSPATH_SEPARATOR)$$CLASSPATH" $(KAWA) $(OPTIONS) -e '(load "testing.zip")'
+ DIFF = diff
+-@ENABLE_SERVLET_TRUE@@ENABLE_XQUERY_FALSE@SERVLET_TESTS = check-HelloCgiS check-HelloCgiK
+-@ENABLE_SERVLET_TRUE@@ENABLE_XQUERY_TRUE@SERVLET_TESTS = check-HelloCgiS check-HelloCgiK check-HelloCgiX
++# @ENABLE_SERVLET_TRUE@@ENABLE_XQUERY_FALSE@SERVLET_TESTS = check-HelloCgiS check-HelloCgiK
++# @ENABLE_SERVLET_TRUE@@ENABLE_XQUERY_TRUE@SERVLET_TESTS = check-HelloCgiS check-HelloCgiK check-HelloCgiX
+ @WITH_SAX2_TRUE@SAX2_TESTS = check-MySAXApp check-jaxb-annotations3
+ WARN_FLAGS = --warn-undefined-variable --warn-invoke-unknown-method --warn-as-error
+ APPLETVIEWER = appletviewer

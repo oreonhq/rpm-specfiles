@@ -1,0 +1,173 @@
+From 9d16171dcccea3f4994a404f1780351e454bc018 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 5 Jun 2014 09:43:10 +0200
+Subject: [PATCH] Skip some test if run-time execeeds a time frame
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If some test run longer than a limit set into the tested application,
+the tests would fail. This patch skips these test in such case.
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=96216>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/02simple.t  | 41 +++++++++++++++++++++++++++++------------
+ t/03complex.t | 23 ++++++++++++++++++-----
+ 2 files changed, 47 insertions(+), 17 deletions(-)
+
+diff --git a/t/02simple.t b/t/02simple.t
+index 4a49a42..7c6bb5d 100644
+--- a/t/02simple.t
++++ b/t/02simple.t
+@@ -45,6 +45,7 @@ my ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM rate_limit_hits');
+ is($count, 0, 'fresh rate-limit DB created');
+ 
+ # setup a test package which uses rate-limit
++my $one_timeframe = 3;
+ {
+ 
+     package TestApp;
+@@ -58,7 +59,7 @@ is($count, 0, 'fresh rate-limit DB created');
+         my $rate_limit = $self->rate_limit;
+ 
+         $rate_limit->dbh($dbh);
+-        $rate_limit->protected_modes(one => {timeframe => '3s',
++        $rate_limit->protected_modes(one => {timeframe => "${one_timeframe}s",
+                                              max_hits  => 1
+                                             },
+                                      two => {timeframe => '10s',
+@@ -93,32 +94,48 @@ my $start = time;
+ {
+     my $query = CGI->new({rm => 'one'});
+     my $app = TestApp->new(QUERY => $query);
+-    like($app->run(), qr/TOO FAST FOR TestApp::one/);
++    my $output = $app->run();
++    SKIP: {
++        skip "Test did not run less than $one_timeframe s", 2
++            unless (time - $start < $one_timeframe);
+ 
+-    # should be a second row for it in the DB
+-    ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM rate_limit_hits');
+-    is($count, 2, 'second hit recorded');
++        like($output, qr/TOO FAST FOR TestApp::one/);
++
++        # should be a second row for it in the DB
++        ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM rate_limit_hits');
++        is($count, 2, 'second hit recorded');
++    }
+ }
+ 
+ # but a hit to run-mode two should be fine
++my $stop;
+ {
+     my $query = CGI->new({rm => 'two'});
+     my $app = TestApp->new(QUERY => $query);
+     like($app->run(), qr/TWO/);
+ 
+-    # should be a row for it in the DB
+-    ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM rate_limit_hits');
+-    is($count, 3, 'third hit recorded');
++    SKIP: {
++        $stop = time;
++        skip "Test did not run less than $one_timeframe s", 1
++            unless ($stop - $start < $one_timeframe);
++        # should be a row for it in the DB
++        ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM rate_limit_hits');
++        is($count, 3, 'third hit recorded');
++    }
+ }
+ 
+ # after 3 seconds we're clear
+-sleep 3;
++sleep $one_timeframe;
+ {
+     my $query = CGI->new({rm => 'one'});
+     my $app = TestApp->new(QUERY => $query);
+     like($app->run(), qr/ONE/);
+ 
+-    # should be a row for it in the DB
+-    ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM rate_limit_hits');
+-    is($count, 4, 'fourth hit recorded');
++    SKIP: {
++        skip "Previous test did not run less than $one_timeframe s", 1
++            unless ($stop - $start < $one_timeframe);
++        # should be a row for it in the DB
++        ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM rate_limit_hits');
++        is($count, 4, 'fourth hit recorded');
++    }
+ }
+diff --git a/t/03complex.t b/t/03complex.t
+index 45b9277..eb88681 100644
+--- a/t/03complex.t
++++ b/t/03complex.t
+@@ -42,6 +42,8 @@ $dbh->do(
+ });
+ 
+ # setup a test package which uses rate-limit
++my $failed_login_timeframe = 3;
++my $one_timeframe = 3;
+ {
+ 
+     package TestApp;
+@@ -55,13 +57,13 @@ $dbh->do(
+         my $rate_limit = $self->rate_limit;
+ 
+         $rate_limit->dbh($dbh);
+-        $rate_limit->protected_modes(one => {timeframe => '3s',
++        $rate_limit->protected_modes(one => {timeframe => "${one_timeframe}s",
+                                              max_hits  => 1
+                                             },
+                                      two => {timeframe => '10s',
+                                              max_hits  => 2
+                                             });
+-        $rate_limit->protected_actions(failed_login => { timeframe => '3s',
++        $rate_limit->protected_actions(failed_login => { timeframe => "${failed_login_timeframe}s",
+                                                          max_hits  => 3 });
+         $rate_limit->violation_mode('too_fast');
+     }
+@@ -93,8 +95,8 @@ $dbh->do(
+ }
+ 
+ # try revoking a hit
+-my $start = time;
+ {
++    my $start = time;
+     my $query = CGI->new({rm => 'one', revoke_me => 1});
+     my $app = TestApp->new(QUERY => $query);
+     like($app->run(), qr/ONE/);
+@@ -104,11 +106,17 @@ my $start = time;
+     like($app->run(), qr/ONE/);
+ 
+     $app = TestApp->new(QUERY => $query);
+-    like($app->run(), qr/TOO FAST/);
++    my $output = $app->run();
++    SKIP: {
++        skip "Test did not run less than $one_timeframe s", 1
++            unless (time - $start < $one_timeframe);
++        like($output, qr/TOO FAST/);
++    }
+ }
+ 
+ # try a protected action, across a few users
+ for my $user (qw(eenie meenie moe)) {
++    my $start = time;
+     $ENV{REMOTE_USER} = $user;
+     for (1 .. 3) {
+         my $query = CGI->new({rm => 'login', failed => 1});
+@@ -118,5 +126,10 @@ for my $user (qw(eenie meenie moe)) {
+ 
+     my $query = CGI->new({rm => 'login', failed => 1});
+     my $app = TestApp->new(QUERY => $query);
+-    like($app->run(), qr/TOO FAST FOR failed_login/);
++    my $output = $app->run();
++    SKIP: {
++        skip "Test did not run less than $failed_login_timeframe s", 1
++            unless (time - $start < $failed_login_timeframe);
++        like($output, qr/TOO FAST FOR failed_login/);
++    }
+ }
+-- 
+1.9.3
+

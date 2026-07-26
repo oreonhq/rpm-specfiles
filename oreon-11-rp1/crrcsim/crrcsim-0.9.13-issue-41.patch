@@ -1,0 +1,42 @@
+# HG changeset patch
+# User jreucker <slowhand_47@gmx.de>
+# Date 1530732562 -7200
+#      Wed Jul 04 21:29:22 2018 +0200
+# Node ID e3a0407da6eba38b29e44e4fde0b2b020e8bce0a
+# Parent  85cacb3c4d9fba844f7b2e5a76a1cb5ec1cc180f
+Fix issue #41 (thanks go to Jan Yenya Kasprzak for the patch)
+
+diff -r 85cacb3c4d9f -r e3a0407da6eb src/crrc_sound.cpp
+--- a/src/crrc_sound.cpp	Fri Dec 22 12:30:01 2017 +0100
++++ b/src/crrc_sound.cpp	Wed Jul 04 21:29:22 2018 +0200
+@@ -334,10 +334,14 @@
+ 
+   for (int n = 0; n < nSndVarioSineLen; n++)
+   {
+-    sinewave[n] = (Sint16)(32767 * sin(2*M_PI*n/nSndVarioSineLen));
++    sinewave.push_back((Sint16)(32767 * sin(2*M_PI*n/nSndVarioSineLen)));
+   }
+   printf("Initialized sine samples: %i\n", nSndVarioSineLen);
+ 
++  for (int n = 0; n < fmt->samples * getSampleSize(); n++)
++  {
++    dyn_buffer.push_back(0);
++  }
+ }
+ 
+ 
+diff -r 85cacb3c4d9f -r e3a0407da6eb src/crrc_soundserver.cpp
+--- a/src/crrc_soundserver.cpp	Fri Dec 22 12:30:01 2017 +0100
++++ b/src/crrc_soundserver.cpp	Wed Jul 04 21:29:22 2018 +0200
+@@ -680,6 +680,11 @@
+     #endif
+     dyn_buffer.reserve(*len);
+   }
++
++  while (dyn_buffer.size() < *len)
++  {
++    dyn_buffer.push_back(0);
++  }
+   
+ #if CRRC_SOUND_STEREO == 0
+   // 16-bit mono samples, so we have to work through len/2 samples

@@ -1,0 +1,31 @@
+From 82aeb3e977a96a6cb5d2557e01ad9308957bab9e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 29 Jun 2016 09:18:34 +0200
+Subject: [PATCH] Do not insist on run-time dependencies when building
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The distribution has no tests, it does not make sense to require them
+on build time.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index e7413db..0e32377 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -17,7 +17,6 @@ if ($version_ok < 1) {
+ WriteMakefile(
+     'NAME'			=> 'Gtk2::Ex::PodViewer',
+     'VERSION_FROM'		=> 'lib/Gtk2/Ex/PodViewer.pm',
+-    'PREREQ_FATAL'		=> 1,
+     'PREREQ_PM'			=> {
+     	'Gtk2'			=> 0,
+     	'Pod::Parser'		=> 0,
+-- 
+2.5.5
+

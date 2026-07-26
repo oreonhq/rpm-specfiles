@@ -1,0 +1,12 @@
+[Unit]
+Description=SleepBeforeShutdown Service
+DefaultDependencies=no
+Before=halt.target shutdown.target reboot.target poweroff.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/touch /var/lib/systemd/timesync/clock
+RemainAfterExit=yes
+
+[Install]
+WantedBy=halt.target shutdown.target reboot.target poweroff.target

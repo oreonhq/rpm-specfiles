@@ -1,0 +1,11 @@
+--- step.c~	2009-10-10 13:00:09.000000000 -0500
++++ step.c	2016-01-03 13:13:57.524639985 -0600
+@@ -36,7 +36,7 @@
+                 state->text=NULL;
+             }
+             if (state->houses_text[state->bombx]!=-1)
+-                asprintf(&(state->text),texts[state->houses_text[state->bombx]].text);
++                asprintf(&(state->text), "%s", texts[state->houses_text[state->bombx]].text);
+             state->houses[state->bombx]--;
+             state->blocks--;
+             state->willbebombed--;

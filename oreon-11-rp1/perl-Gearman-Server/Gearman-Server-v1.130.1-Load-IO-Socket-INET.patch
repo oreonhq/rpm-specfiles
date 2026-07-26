@@ -1,0 +1,11 @@
+diff -up Gearman-Server-v1.130.1/lib/Gearman/Server.pm.orig Gearman-Server-v1.130.1/lib/Gearman/Server.pm
+--- Gearman-Server-v1.130.1/lib/Gearman/Server.pm.orig	2016-08-10 09:13:57.075431713 +0200
++++ Gearman-Server-v1.130.1/lib/Gearman/Server.pm	2016-08-10 09:14:55.335099921 +0200
+@@ -33,6 +33,7 @@ use Gearman::Server::Client;
+ use Gearman::Server::Listener;
+ use Gearman::Server::Job;
+ use IO::Handle ();
++use IO::Socket::INET;
+ use Socket qw/
+     IPPROTO_TCP
+     SOL_SOCKET

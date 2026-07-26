@@ -1,0 +1,13 @@
+--- a/modules/javafx.graphics/src/jslc/java/com/sun/scenario/effect/compiler/JSLC.java
++++ b/modules/javafx.graphics/src/jslc/java/com/sun/scenario/effect/compiler/JSLC.java
+@@ -73,7 +73,9 @@
+ 
+     public static final int OUT_SW_PEERS   = OUT_JAVA | OUT_SSE;
+     public static final int OUT_HW_PEERS   = OUT_PRISM;
+-    public static final int OUT_HW_SHADERS = OUT_D3D | OUT_ES2 | OUT_MTL;
++    // Disable D3D and MTL
++    //public static final int OUT_HW_SHADERS = OUT_D3D | OUT_ES2 | OUT_MTL;
++    public static final int OUT_HW_SHADERS = OUT_ES2;
+     public static final int OUT_ALL        = OUT_SW_PEERS | OUT_HW_PEERS | OUT_HW_SHADERS;
+ 
+     private static final String rootPkg = "com/sun/scenario/effect";

@@ -1,0 +1,28 @@
+From 43134b54bc696e4871674a4d5412d762cc559b07 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Tue, 28 Feb 2023 17:35:03 +0900
+Subject: [PATCH] BUILDFIX: add missing header for g++13
+
+With g++13, the following error is produced:
+
+```
+src/metrics/../abstract_subnet_counters.hpp:79:28: error: 'std::function' has not been declared
+```
+
+Fix this error by including additional header.
+---
+ src/abstract_subnet_counters.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/abstract_subnet_counters.hpp b/src/abstract_subnet_counters.hpp
+index 74b82368..80fdd058 100644
+--- a/src/abstract_subnet_counters.hpp
++++ b/src/abstract_subnet_counters.hpp
+@@ -3,6 +3,7 @@
+ #include <mutex>
+ #include <unordered_map>
+ #include <algorithm>
++#include <functional>
+ 
+ // I keep these declaration here because of following error:
+ // error: there are no arguments to ‘increment_outgoing_counters’ that depend on a template parameter, so a declaration

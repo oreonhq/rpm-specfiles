@@ -1,0 +1,45 @@
+.TH FASTAPI\-CLOUD\-DEPLOY "1" "March 2026" "" "User Commands"
+.SH NAME
+.B fastapi\ cloud\ deploy
+\(en Deploy a FastAPI app to FastAPI Cloud. \[u1F680]
+.SH SYNOPSIS
+.B fastapi\ cloud\ deploy
+.RI [ OPTIONS ]
+.RI [ PATH ]
+.SH OPTIONS
+.TP
+.B \-\-no\-wait
+Skip waiting for deployment status.
+.TP
+.B \-\-app\-id\ \fITEXT
+Skip waiting for deployment status.
+Application ID to deploy to
+[env var:
+.BR FASTAPI_CLOUD_APP_ID ]
+.TP
+.B \-\-help\fR, \fB\-h
+Show a help message and exit.
+.SS "ARGUMENTS"
+.TP
+.I PATH
+A path to the folder containing the app you want to deploy.
+.SH ENVIRONMENT
+.TP
+.B FASTAPI_CLOUD_APP_ID
+Application ID to deploy to;
+same as the
+.B \-\-app\-id
+option.
+.SH "SEE ALSO"
+.BR fastapi\-cloud\-link (1),
+.BR fastapi\-cloud\-login (1),
+.BR fastapi\-cloud\-logs (1),
+.BR fastapi\-cloud\-logout (1),
+.BR fastapi\-cloud\-whoami (1),
+.BR fastapi\-cloud\-unlink (1),
+.BR fastapi\-cloud\-setup\-ci (1),
+.BR fastapi\-cloud\-env (1)
+.P
+.BR fastapi\-cloud (1)
+.P
+.BR fastapi (1)

@@ -1,0 +1,105 @@
+From a7fcacda523b4bc4e4ba2605c696d6d8cc1a0208 Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr89@gmail.com>
+Date: Thu, 18 Jan 2024 20:31:12 -0800
+Subject: [PATCH 3/5] Skip more version checks
+
+The code uses `distutils`, is completely broken with Python 3.12 and
+runs during tests.
+It's also an online check for new releases, which is not important for
+our packaging.
+---
+ cinnabar/util.py | 64 ------------------------------------------------
+ 1 file changed, 64 deletions(-)
+
+diff --git a/cinnabar/util.py b/cinnabar/util.py
+index 2dd32a2e..11eb7dbc 100644
+--- a/cinnabar/util.py
++++ b/cinnabar/util.py
+@@ -928,68 +928,6 @@ class MemoryCPUReporter(Thread):
+         self.join()
+ 
+ 
+-class VersionCheck(Thread):
+-    def __init__(self):
+-        super(VersionCheck, self).__init__()
+-        self.message = None
+-        self.parent_dir = os.path.dirname(os.path.dirname(__file__))
+-        self.skip_check = (
+-            not os.path.exists(os.path.join(self.parent_dir, '.git')) or
+-            check_enabled('no-version-check') or
+-            not interval_expired('version-check', 86400, globl=True))
+-        self.start()
+-
+-    def run(self):
+-        from cinnabar import VERSION
+-        from cinnabar.git import Git, GitProcess
+-        from distutils.version import StrictVersion
+-        if self.skip_check:
+-            return
+-        REPO = 'https://github.com/glandium/git-cinnabar'
+-        devnull = open(os.devnull, 'wb')
+-        if VERSION.endswith('a'):
+-            _, _, extra = StrictVersion(VERSION[:-1]).version
+-            ref = 'refs/heads/next' if extra == 0 else 'refs/heads/master'
+-            for line in Git.iter('ls-remote', REPO, ref, stderr=devnull):
+-                sha1, head = line.split()
+-                if fsdecode(head) != ref:
+-                    continue
+-                proc = GitProcess(
+-                    '-C', self.parent_dir, 'merge-base', '--is-ancestor', sha1,
+-                    'HEAD', stdout=devnull, stderr=devnull)
+-                if proc.wait() != 0:
+-                    self.message = (
+-                        'The `{}` branch of git-cinnabar was updated. '
+-                        'Please update your copy.\n'
+-                        'You can switch to the `release` branch if you want '
+-                        'to reduce these update notifications.'
+-                        .format(ref.partition('refs/heads/')[-1]))
+-                    break
+-        else:
+-            version = StrictVersion(VERSION)
+-            newer_version = version
+-            for line in Git.iter('ls-remote', REPO, 'refs/tags/*',
+-                                 stderr=devnull):
+-                sha1, tag = line.split()
+-                tag = fsdecode(tag).partition('refs/tags/')[-1]
+-                try:
+-                    v = StrictVersion(tag)
+-                except ValueError:
+-                    continue
+-                if v > newer_version:
+-                    newer_version = v
+-            if newer_version != version:
+-                self.message = (
+-                    'New git-cinnabar version available: {} '
+-                    '(current version: {})'
+-                    .format(newer_version, version))
+-
+-    def join(self):
+-        super(VersionCheck, self).join()
+-        if self.message:
+-            sys.stderr.write('\n' + self.message + '\n')
+-
+-
+ def run(func, args):
+     reexec = None
+     if os.environ.pop('GIT_CINNABAR_COVERAGE', None):
+@@ -1006,7 +944,6 @@ def run(func, args):
+         reporter = MemoryCPUReporter(memory=check_enabled('memory'),
+                                      cpu=check_enabled('cpu'))
+ 
+-    version_check = VersionCheck()
+     try:
+         from cinnabar.git import Git
+         objectformat = Git.config('extensions.objectformat') or 'sha1'
+@@ -1040,7 +977,6 @@ def run(func, args):
+     finally:
+         if check_enabled('memory') or check_enabled('cpu'):
+             reporter.shutdown()
+-        version_check.join()
+     if check_enabled('no-mercurial'):
+         if any(k.startswith('mercurial.') or k == 'mercurial'
+                for k in sys.modules):
+-- 
+2.43.0
+

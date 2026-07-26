@@ -1,0 +1,75 @@
+On the avrdude Fedora package
+=============================
+
+This file contains remarks for users of the avrdude Fedora package.
+
+
+Programmer Device Permission Setup
+==================================
+
+When you run `avrdude`, the avrdude process must be allowed to access
+the device special file somewhere in `/dev/` which corresponds to the
+programmer to be used.
+
+`avrdude` supports many different programmer types (run `avrdude -c
+list` to see a list of them).
+
+Many of these programmer types are USB devices which appear as a
+device `/dev/bus/usb/<NNN>/<MMM>` with `<NNN>` and `<MMM>` being 3
+digit decimal numbers padded with `0`.  Those devices can be easily
+matched in a udev rule looking for the USB idVendor and idProduct, and
+be made writable for the local user (`TAG+="uaccess"`).
+
+See `/usr/lib/udev/rules.d/70-avrdude_usbprog.rules` for how that
+works.
+
+Unfortunately, some programmers present as generic USB to serial
+converters (device file name `/dev/ttyUSB<N>`) or as generic USB
+AT-command devices (device file name `/dev/ttyACM<N>`).
+
+While it is technically possible to make all `/dev/ttyUSB<N>` and/or
+`/dev/ttyACM<N>` devices writable for whichever Linux user happens to
+be the local user, some of those devices can be devices for which it
+is better if they are not writable by just anyone.
+
+Therefore, the avrdude Fedora package does *not* make all
+`/dev/ttyUSB<N>` and/or `/dev/ttyACM<N>` writable for the local user
+just by installing the package.
+
+If you *do* want to make these devices writable for any local user,
+you can configure your system yourself by dropping a udev rules file
+into `/etc/udev/rules.d/`.  But while you are at it, you can as well
+examine your programmer more closely (`lsusb` and `lsusb -v` can be
+helpful here) and narrow down the udev rule matching to match only
+your programmer, not each and every `ttyUSB<N>` or `ttyACM<N>` device.
+
+``` /etc/udev/rules.d/99-my-avrdude-programmers.rules
+ACTION!="add|change", GOTO="my_avrdude_programmers_end"
+
+# Recommended: /dev/ttyUSB<N> devices matching specific idVendor/idProduct tuple
+SUBSYSTEM=="usb-serial", ATTR{idVendor}=="0123", ATTR{idProduct}=="4567", TAG+="uaccess"
+
+# Recommended: /dev/ttyACM<N> devices matching specific idVendor/idProduct tuple
+SUBSYSTEM=="usb", DRIVERS=="cdc_acm", ATTR{idVendor}=="0123", ATTR{idProduct}=="4567", TAG+="uaccess"
+
+# Discouraged: *ALL* /dev/ttyUSB<N> devices
+SUBSYSTEM=="usb-serial", TAG+="uaccess"
+
+# Discouraged: *ALL* /dev/ttyACM<N> devices
+SUBSYSTEM=="usb", DRIVERS=="cdc_acm", TAG+="uaccess"
+
+LABEL="my_avrdude_programmers_end"
+```
+
+
+Non-local users
+---------------
+
+At this time, the avrdude Fedora package udev rules do not support
+setting up permissions for non-local users, like e.g. users logged in
+via ssh.
+
+If you need such a setup, you will need also to write your own udev
+rules file for `/etc/udev/rules.d/`, and set `OWNER=`, `GROUP=`,
+`MODE=`, or change the device ACL with something like
+`RUN+="/usr/bin/setfacl -m g:avrdude-programmers:rw '$env{DEVNAME}'"`.

@@ -1,0 +1,970 @@
+diff -urN overgod-1.0.orig/Makefile overgod-1.0/Makefile
+--- overgod-1.0.orig/Makefile	1970-01-01 01:00:00.000000000 +0100
++++ overgod-1.0/Makefile	2006-01-21 10:36:02.000000000 +0100
+@@ -0,0 +1,28 @@
++PREFIX  = /home/opt
++DATADIR = $(PREFIX)/share/$(TARGET)
++CFLAGS  = -g -Wall -O2
++LDFLAGS = `allegro-config --libs` -lm
++DEFINES = -DDATADIR=\"$(DATADIR)/\"
++OBJS    = actor.o bullet.o cloud.o cmds.o displ_in.o display.o eclass.o \
++          enemy.o game.o input.o levels.o light.o main.o menu.o palette.o \
++          pickup.o score.o sound.o stuff.o tile.o
++TARGET  = overgod
++
++$(TARGET): $(OBJS)
++	$(CC) $(LDFLAGS) -o $@ $^
++
++%.o: %.c
++	$(CC) $(CFLAGS) $(DEFINES) -o $@ -c $<
++
++install: $(TARGET)
++	mkdir -p $(PREFIX)/bin
++	mkdir -p $(DATADIR)/gfx
++	mkdir -p $(DATADIR)/wavs/beat
++	install -p -m 755 $(TARGET) $(PREFIX)/bin
++	install -p -m 644 overgod.cfg $(DATADIR)
++	install -p -m 644 gfx/* $(DATADIR)/gfx
++	install -p -m 644 wavs/*.wav $(DATADIR)/wavs
++	install -p -m 644 wavs/beat/* $(DATADIR)/wavs/beat
++	
++clean:
++	rm -f $(OBJS) $(TARGET) *~
+diff -urN overgod-1.0.orig/actor.c overgod-1.0/actor.c
+--- overgod-1.0.orig/actor.c	2005-09-11 11:32:08.000000000 +0200
++++ overgod-1.0/actor.c	2006-01-21 10:40:31.000000000 +0100
+@@ -608,7 +608,7 @@
+ //  ysin2 = sin(angle_to_radians(actor[a].angle)) * GRAIN;
+ // }
+  
+- int target_x, target_y;
++ int target_x = 0, target_y = 0;
+  float speed_mult;
+  int accel = 0;
+ 
+diff -urN overgod-1.0.orig/bullet.c overgod-1.0/bullet.c
+--- overgod-1.0.orig/bullet.c	2005-09-11 09:35:48.000000000 +0200
++++ overgod-1.0/bullet.c	2006-01-21 10:41:54.000000000 +0100
+@@ -264,7 +264,7 @@
+ //   int y_gain = 0;
+ //   char angle_change;
+ 
+-   int cx, cy, xa, ya, xb;
++   int cx = 0, cy = 0, xa, ya, xb;
+    int c2x, c2y;
+ 
+    int passing_colour [5];
+diff -urN overgod-1.0.orig/cmds.c overgod-1.0/cmds.c
+--- overgod-1.0.orig/cmds.c	2005-09-11 09:35:48.000000000 +0200
++++ overgod-1.0/cmds.c	2006-01-21 10:45:53.000000000 +0100
+@@ -2638,9 +2638,6 @@
+ {
+  int special1;
+  int special2;
+- int special3;
+- int special4;
+- int special5;
+ 
+  timer += grand(4);
+ 
+@@ -2694,11 +2691,11 @@
+  if (angle == 0)
+   angle = 1;
+ 
++ /* note bombs don't use special3 - 5 */
+  create_bullet(btype, x, y,
+   xs, ys, sactor,
+   damage, timer, mass, angle,
+-  status, seed, colours, 1, special1, special2, special3, special4, special5);
+-
++  status, seed, colours, 1, special1, special2, 0, 0, 0);
+ 
+ }
+ 
+diff -urN overgod-1.0.orig/config.h overgod-1.0/config.h
+--- overgod-1.0.orig/config.h	2005-09-11 15:17:06.000000000 +0200
++++ overgod-1.0/config.h	2006-01-21 10:38:15.000000000 +0100
+@@ -68,6 +68,8 @@
+ #define ARMOUR_UPGRADE 200
+ 
+ 
++#define MAX_FRAMESKIP 4
++
+ struct armoury
+ {
+  char *name;
+@@ -1293,3 +1295,12 @@
+ PITCH_HEAVY
+ };
+ 
++/* compat defines */
++#include <stdio.h>
++
++#ifndef DATADIR
++#define DATADIR
++#endif
++
++#define itoa(integer, buf, bufsize) \
++ (snprintf(buf, bufsize, "%d", integer), buf)
+diff -urN overgod-1.0.orig/displ_in.c overgod-1.0/displ_in.c
+--- overgod-1.0.orig/displ_in.c	2005-09-12 17:07:32.000000000 +0200
++++ overgod-1.0/displ_in.c	2006-01-21 10:51:37.000000000 +0100
+@@ -139,11 +139,9 @@
+  player2 = NULL;
+ 
+  level_bmp = NULL;
+- RGB temp_palette2 [1024]; // these seem to serve as a buffer against strange random corruptions of temp_palette. I don't understand this at all.
+  RGB temp_palette [256];
+- RGB temp_palette3 [1024];
+ 
+- DATAFILE *datf = load_datafile("gfx//data.dat");
++ DATAFILE *datf = load_datafile(DATADIR "gfx/data.dat");
+  if (datf == NULL)
+  {
+   set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+@@ -166,7 +164,7 @@
+ 
+ //rest(1000);
+ 
+- BITMAP *temp_bitmap = load_bitmap("gfx//gb_si.bmp", temp_palette);
++ BITMAP *temp_bitmap = load_bitmap(DATADIR "gfx/gb_si.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (ships)");
+@@ -321,8 +319,8 @@
+ #ifdef FIX_FONT
+ 
+  RGB font_palette [256];
+-// BITMAP *fbmp = load_bitmap("gfx//font_cel.bmp", font_palette);
+- BITMAP *fbmp = load_bitmap("gfx//font_oc.bmp", font_palette);
++// BITMAP *fbmp = load_bitmap(DATADIR "gfx/font_cel.bmp", font_palette);
++ BITMAP *fbmp = load_bitmap(DATADIR "gfx/font_oc.bmp", font_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (font_cel)");
+@@ -395,7 +393,7 @@
+ #ifdef GENERATE_SHIPS
+ 
+ 
+- temp_bitmap = load_bitmap("gfx//gb_ship.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_ship.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("gb_ship");
+@@ -472,7 +470,7 @@
+ 
+ // Load in enemy bitmaps:
+ 
+- temp_bitmap = load_bitmap("gfx//gb_nme1.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_nme1.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_nme1.bmp not loaded correctly?)");
+@@ -496,7 +494,7 @@
+  progress_update("Enemies 1");
+ 
+ 
+- temp_bitmap = load_bitmap("gfx//gb_nme2.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_nme2.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_nme2.bmp not loaded correctly?)");
+@@ -519,7 +517,7 @@
+ //extern BITMAP *enemy_bmps [ENEMY_BMPS];
+ 
+ 
+- temp_bitmap = load_bitmap("gfx//gb_nmebm.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_nmebm.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_nmebm.bmp not loaded correctly?)");
+@@ -533,7 +531,7 @@
+ 
+  progress_update("Enemies 3");
+ 
+- temp_bitmap = load_bitmap("gfx//gb_big1.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_big1.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_big1.bmp not loaded correctly?)");
+@@ -548,7 +546,7 @@
+ 
+  progress_update("Enemies 4");
+ 
+- temp_bitmap = load_bitmap("gfx//gb_big2.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_big2.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_big2.bmp not loaded correctly?)");
+@@ -564,7 +562,7 @@
+ 
+  progress_update("Enemies 5");
+ 
+- temp_bitmap = load_bitmap("gfx//gb_big3.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_big3.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_big3.bmp not loaded correctly?)");
+@@ -580,7 +578,7 @@
+  progress_update("Enemies 6");
+ 
+ 
+- temp_bitmap = load_bitmap("gfx//gb_med1.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_med1.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_med1.bmp not loaded correctly?)");
+@@ -597,7 +595,7 @@
+ 
+  progress_update("Enemies 7");
+ 
+-/* temp_bitmap = load_bitmap("gfx//enemy3.bmp", temp_palette);
++/* temp_bitmap = load_bitmap(DATADIR "gfx/enemy3.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (enemy3.bmp not loaded correctly?)");
+@@ -621,7 +619,7 @@
+ 
+ /* progress_update("Enemy3 Loaded");
+ 
+- temp_bitmap = load_bitmap("gfx//small1.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/small1.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (small1.bmp not loaded correctly?)");
+@@ -635,7 +633,7 @@
+  
+  progress_update("Small1 Loaded");
+ */
+- temp_bitmap = load_bitmap("gfx//gb_small.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_small.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gm_small.bmp not loaded correctly?)");
+@@ -682,7 +680,7 @@
+ 
+  progress_update("Small Things");
+ 
+- temp_bitmap = load_bitmap("gfx//gb_small2.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_small2.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gm_small2.bmp not loaded correctly?)");
+@@ -733,7 +731,7 @@
+ 
+ 
+ /*
+- temp_bitmap = load_bitmap("gfx//small2.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/small2.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (small2.bmp not loaded correctly?)");
+@@ -748,7 +746,7 @@
+ 
+  progress_update("Small3 Loaded");
+ 
+- temp_bitmap = load_bitmap("gfx//enemy2.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/enemy2.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (enemy2.bmp not loaded correctly?)");
+@@ -763,7 +761,7 @@
+  
+  progress_update("Enemy2 Loaded");
+ */
+- temp_bitmap = load_bitmap("gfx//gb_lsh.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_lsh.bmp", temp_palette);
+  if (temp_bitmap == NULL)
+  {
+   bitmap_error("temp_bitmap (gb_lsh.bmp not loaded correctly?)");
+@@ -1089,7 +1087,7 @@
+ //  else
+    blit(source_bmp, temp_bmp, which_ship * 51 + 1, 1, 0, 0, 49, 49);
+ 
+- int i, x, y, px, base_col;
++ int i, x, y, px, base_col = 0;
+ 
+  for (i = 0; i < 5; i ++)
+  {
+@@ -1138,7 +1136,7 @@
+  RGB temp_palette [256];
+ // RGB temp_palette3 [1024];
+  
+- BITMAP *temp_bitmap = load_bitmap("gfx//gb_tiles.bmp", temp_palette);
++ BITMAP *temp_bitmap = load_bitmap(DATADIR "gfx/gb_tiles.bmp", temp_palette);
+ 
+  if (temp_bitmap == NULL)
+  {
+@@ -1164,7 +1162,7 @@
+ 
+  destroy_bitmap(temp_bitmap);
+ 
+- temp_bitmap = load_bitmap("gfx//gb_maze.bmp", temp_palette);
++ temp_bitmap = load_bitmap(DATADIR "gfx/gb_maze.bmp", temp_palette);
+ 
+  if (temp_bitmap == NULL)
+  {
+diff -urN overgod-1.0.orig/display.c overgod-1.0/display.c
+--- overgod-1.0.orig/display.c	2005-09-11 11:42:46.000000000 +0200
++++ overgod-1.0/display.c	2006-01-21 10:23:29.000000000 +0100
+@@ -64,13 +64,7 @@
+ #include <stdlib.h>
+ // for itoa, used in the screenshot code but not needed for ports etc
+ extern volatile int frames_per_second;
+-extern volatile int ticked;
+-extern int slacktime;
+-extern int long_slacktime_store;
+ extern int debug_sound [5];
+-
+-int slack_graph [100];
+-int slack_graph_pos;
+ int fps_graph [100];
+ int fps_graph_pos;
+ #endif
+@@ -7266,14 +7260,11 @@
+ // textprintf_ex(bmp, small_font, 20, 110, 5, "Xs %i  Ys %i  TS %f  DS %f  Drag %i",
+ //  actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed, hypot(actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed), hypot(actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed) * game.drag, actor[player[play].actor_controlled].drag_amount);
+ // textprintf_ex(bmp, small_font, 20, 60, 5, "Stack %i", stackavail());
+-// textprintf(bmp, small_font, 20, 90, 5, "Slack %i", slacktime);
+ // textprintf(bmp, small_font, 20, 100, 5, "Lock %i", actor[0].lock);
+ //textprintf_ex(bmp, small_font, 20, 100, COLOUR_GREY5, -1, "Fps %i", frames_per_second);
+ // textprintf_ex(bmp, small_font, 20, 50, 5, -1, "Fps} %i", frames_per_second);
+ #ifdef DEBUG_DISPLAY
+  textprintf_ex(bmp, small_font, 20, 90, 5, -1, "Fps %i", frames_per_second);
+- textprintf_ex(bmp, small_font, 20, 100, 5, -1, "Slack %i", slacktime);
+- textprintf_ex(bmp, small_font, 20, 110, 5, -1, "LSlack %i", long_slacktime_store);
+  int i, c = 0;
+  for (i = 0; i < NO_ENEMIES; i ++)
+  {
+@@ -7298,31 +7289,6 @@
+  
+  textprintf_ex(bmp, small_font, 20, 150, 5, -1, "%i %i %i %i", debug_sound [0], debug_sound [1], debug_sound [2], debug_sound [3]);
+ 
+-
+- if (slack_graph_pos < 0 || slack_graph_pos > 99)
+-  slack_graph_pos = 0;
+-  
+- slack_graph [slack_graph_pos] = slacktime;
+-
+- c = slack_graph_pos;
+- for (i = 0; i < 100; i ++)
+- {
+-  if (slack_graph [c] <= 5)
+-   vline(bmp, 110 - i, 300, 160, COLOUR_RED5);
+-    else
+-     vline(bmp, 110 - i, 300, 300 - (slack_graph [c] / 6000), COLOUR_YELLOW8);
+-  c --;
+-  if (c < 0)
+-   c = 99;   
+- }
+-
+- slack_graph_pos ++;
+-
+-
+-
+-
+-
+-
+  if (fps_graph_pos < 0 || fps_graph_pos > 99)
+   fps_graph_pos = 0;
+   
+@@ -7359,7 +7325,6 @@
+   enemy[0].angle, enemy[0].attribute [ATTRIB_SWERVER_ANGLE], enemy[0].attacking, enemy[0].recycle);
+  textprintf(bmp, font, 20, 200, 5, "Lock} %i ", actor[0].lock);*/
+ /* textprintf(bmp, small_font, 20, 50, 5, "FPS %i", frames_per_second);
+- textprintf(bmp, small_font, 20, 60, 5, "SLACK %i", slacktime);
+  textprintf(bmp, small_font, 20, 70, 5, "XS %i  YS %i  DRAG %i",
+   actor[player[play].actor_controlled].x_speed, actor[player[play].actor_controlled].y_speed, actor[player[play].actor_controlled].drag_amount);
+  textprintf(bmp, small_font, 20, 80, 5, "X %i  Y %i ",
+diff -urN overgod-1.0.orig/enemy.c overgod-1.0/enemy.c
+--- overgod-1.0.orig/enemy.c	2005-09-11 10:46:04.000000000 +0200
++++ overgod-1.0/enemy.c	2006-01-21 10:53:31.000000000 +0100
+@@ -195,7 +195,7 @@
+ // REMEMBER: enemies are also created in create_turret()
+ 
+    int e = 0;
+-   int i, j;
++   int i, j = 0;
+ 
+ 
+    for (e = 0; e < NO_ENEMIES; e++)
+diff -urN overgod-1.0.orig/game.c overgod-1.0/game.c
+--- overgod-1.0.orig/game.c	2005-09-11 09:35:48.000000000 +0200
++++ overgod-1.0/game.c	2006-01-21 13:51:09.000000000 +0100
+@@ -68,13 +68,10 @@
+ 
+ extern volatile unsigned char ticked;
+ extern volatile int framecounter;
+-extern int slacktime;
+-int long_slacktime;
+-int long_slacktime_store;
+-
+ 
+ void game_loop(void)
+ {
++ int frames_skipped = 0;
+  int playing = 1;
+  
+  counter = 0;
+@@ -191,33 +188,24 @@
+      
+    }
+    
+-  if (ticked == 0)
++  /* only draw if we can keepup */
++  if ( (ticked == 0) || (frames_skipped > MAX_FRAMESKIP))
+   {
+    run_display();
+    framecounter++;
++   frames_skipped = 0;
+   }
++  else
++   frames_skipped++;
+   
+   init_effects();
+ 
+-  slacktime = 0;
+-  
+-  do
+-  {
+-   slacktime ++;
+-  } while(ticked == 0);
++  while(ticked == 0)
++   rest(1);
+   ticked --;
+ 
+   counter ++;
+   
+-  if (counter % 32 == 0)
+-  {
+-   long_slacktime_store = long_slacktime;
+-   long_slacktime = 0;
+-  } 
+-   
+-   long_slacktime += slacktime / 100;
+-  
+-
+   if (key [KEY_ESC])
+    quit_query();
+   
+@@ -259,12 +247,8 @@
+ 
+   play_beats();
+ 
+-  do
+-  {
+-   slacktime ++;
+-   slacktime = 0;
+-  } while(ticked == 0);
+-
++  while(ticked == 0)
++   rest(1);
+   ticked = 0;
+ 
+  }
+@@ -429,7 +413,6 @@
+ 
+  init_level();
+ 
+- long_slacktime = 0;
+  arena.waver_on_level = 0;
+ 
+ }
+diff -urN overgod-1.0.orig/main.c overgod-1.0/main.c
+--- overgod-1.0.orig/main.c	2005-09-13 22:58:27.000000000 +0200
++++ overgod-1.0/main.c	2006-01-21 10:29:42.000000000 +0100
+@@ -155,17 +155,16 @@
+ volatile int framecounter;
+ volatile int frames_per_second;
+ 
+-volatile int inputcounter = 0;
+-volatile int inputs_per_second = 0;
++//volatile int inputcounter = 0;
++//volatile int inputs_per_second = 0;
+ 
+-volatile int turncounter = 0;
+-volatile int turns_per_second = 0;
++//volatile int turncounter = 0;
++//volatile int turns_per_second = 0;
+ 
+ void tickover(void);
+ 
+ volatile unsigned char ticked;
+ //volatile unsigned char tick_counter;
+-int slacktime;
+ // --- end timer interupt
+ 
+ extern int grid_offset_x_2p_finetune;
+@@ -214,8 +213,6 @@
+       exit(1);
+    }
+ 
+-   set_config_file("lacew.cfg");
+-   
+    install_keyboard();
+    install_timer();
+ 
+@@ -244,8 +241,8 @@
+ //   LOCK_VARIABLE (tick_counter);
+    LOCK_VARIABLE (frames_per_second);
+    LOCK_VARIABLE (framecounter);
+-   LOCK_VARIABLE (turns_per_second);
+-   LOCK_VARIABLE (turncounter);
++//   LOCK_VARIABLE (turns_per_second);
++//   LOCK_VARIABLE (turncounter);
+ //   LOCK_VARIABLE (inputs_per_second);
+ //   LOCK_VARIABLE (inputcounter);
+ 
+@@ -254,7 +251,7 @@
+ 
+    set_color_depth(8);
+ 
+-   set_config_file("overgod.cfg");
++   init_config();
+ 
+    options.resolution = get_config_int("Options", "Resolution", 0);
+    
+diff -urN overgod-1.0.orig/menu.c overgod-1.0/menu.c
+--- overgod-1.0.orig/menu.c	2005-09-12 20:23:14.000000000 +0200
++++ overgod-1.0/menu.c	2006-01-21 13:52:41.000000000 +0100
+@@ -229,7 +229,6 @@
+ void enter_keystroke(void);
+ int option_jump(int direction);
+ int special_jump(int direction);
+-void init_config(void);
+ void save_config(void);
+ 
+ void choose_ships(void);
+@@ -373,7 +372,6 @@
+ void init_menus_once_only(void)
+ {
+ // text_mode(-1);
+- init_config();
+ 
+  menu_bmp = create_bitmap(640, 480);
+ 
+@@ -394,7 +392,7 @@
+ 
+  RGB temp_palette [256];
+ 
+-/* BITMAP *temp_bmp = load_bitmap("gfx\\title_i.bmp", temp_palette);
++/* BITMAP *temp_bmp = load_bitmap(DATADIR "gfx/title_i.bmp", temp_palette);
+ 
+  if (!temp_bmp)
+  {
+@@ -414,7 +412,7 @@
+ 
+  destroy_bitmap(temp_bmp);
+ */
+- BITMAP *temp_bmp = load_bitmap("gfx//gb_title.bmp", temp_palette);
++ BITMAP *temp_bmp = load_bitmap(DATADIR "gfx/gb_title.bmp", temp_palette);
+ 
+  if (!temp_bmp)
+  {
+@@ -464,7 +462,7 @@
+  destroy_bitmap(temp_bmp);*/
+  
+ /*
+- temp_bmp = load_bitmap("gfx//title_s.bmp", temp_palette);
++ temp_bmp = load_bitmap(DATADIR "gfx/title_s.bmp", temp_palette);
+ 
+  if (!temp_bmp)
+  {
+@@ -484,7 +482,7 @@
+ 
+  destroy_bitmap(temp_bmp);
+ */
+-/* upgrade_box1 = load_bitmap("gfx//upg_box.bmp", temp_palette);
++/* upgrade_box1 = load_bitmap(DATADIR "gfx/upg_box.bmp", temp_palette);
+ 
+  if (!upgrade_box1)
+  {
+@@ -493,7 +491,7 @@
+       exit(1);
+  }
+ 
+- upgrade_box2 = load_bitmap("gfx//upg_box2.bmp", temp_palette);
++ upgrade_box2 = load_bitmap(DATADIR "gfx/upg_box2.bmp", temp_palette);
+ 
+  if (!upgrade_box2)
+  {
+@@ -502,7 +500,7 @@
+       exit(1);
+  }
+ 
+- upgrade_box3 = load_bitmap("gfx//upg_box3.bmp", temp_palette);
++ upgrade_box3 = load_bitmap(DATADIR "gfx/upg_box3.bmp", temp_palette);
+ 
+  if (!upgrade_box3)
+  {
+@@ -523,7 +521,8 @@
+ 
+ void menu_loop(void)
+ {
+-
++ int frames_skipped = 0;
++ 
+  which_menu = MENU_MAIN;
+  menu_index_max = 4;
+  menu_index_min = 0;
+@@ -551,20 +550,21 @@
+   if (which_menu == MENU_SCORES || which_menu == MENU_ENTER_SCORES)
+    make_ms_move();
+ 
+-  if (ticked == 0)
++  /* only draw if we can keepup */
++  if ( (ticked == 0) || (frames_skipped > MAX_FRAMESKIP))
+   {
+    clear_bitmap(menu_bmp);
+    menu_display();
+    menu_to_screen();
++   frames_skipped = 0;
+   }
++  else
++   frames_skipped++;
+ 
+   menu_input();
+ 
+-  slacktime = 0;
+-  do
+-  {
+-   slacktime ++;
+-  } while(ticked == 0);
++  while(ticked == 0)
++   rest(1);
+   ticked --;
+ 
+  } while(TRUE);
+@@ -2042,7 +2042,8 @@
+ 
+  game.type = game_type;
+ 
+- vsync();
++ if (options.run_vsync > 0)
++  vsync();
+  clear_bitmap(screen);
+ 
+  begin_game();
+@@ -2143,14 +2144,13 @@
+ 
+ void choose_ships(void)
+ {
++ int frames_skipped = 0;
+ 
+  player[0].ship = 0;
+  player[1].ship = 0;
+  game.single_player = 0;
+  game.users = 1;
+ 
+- int county = 0;
+-
+  int keypress_wait1 = KP_WAIT_SHORT;
+  int keypress_wait2 = KP_WAIT_SHORT;
+  int waiting = 5;
+@@ -2289,16 +2289,18 @@
+ 
+   make_grid_scroll();
+ 
+-  if (ticked == 0)
++  /* only draw if we can keepup */
++  if ( (ticked == 0) || (frames_skipped > MAX_FRAMESKIP))
+   {
+    display_ship_choice(0, p1_active, p2_active, p1_chosen, p2_chosen);
+    menu_to_screen();
++   frames_skipped = 0;
+   }
++  else
++   frames_skipped++;
+ 
+-  do
+-  {
+-   county ++;
+-  } while (ticked == 0);
++  while (ticked == 0)
++   rest(1);
+ 
+   ticked --;
+ 
+@@ -3853,17 +3855,69 @@
+ 
+ }
+ 
++/* Function(s) to find the homedir of a user under Unix */
++#ifdef __unix__
++#include <pwd.h>
++#include <unistd.h>
++#include <sys/types.h>
++#if defined(__DECC) && defined(VMS)
++#include <unixlib.h>
++static char *vms_to_unix_buffer = NULL;
++static int convert_vms_to_unix(char *vms_dir_name)
++{
++	vms_to_unix_buffer = vms_dir_name;
++}
++#endif
++
++/* 
++ * Locate user's home directory.
++ */
++char *get_home_dir(void)
++{
++	struct passwd *pw;
++
++	if (!(pw = getpwuid(getuid())))
++	{ 
++		fprintf(stderr, "Who are you? Not found in passwd database!!\n");
++		return NULL;
++	}
++
++#if defined(__DECC) && defined(VMS)
++	/* Convert The OpenVMS Formatted "$HOME" Directory Path Into Unix
++	   Format. */
++	decc$from_vms(pw->pw_dir, convert_vms_to_unix, 1);
++	return vms_to_unix_buffer;
++#else
++	return pw->pw_dir;
++#endif
++}
++#endif /* defined __unix__ */
++
+ void init_config(void)
+ {
+-
+-// set_config is in main.c
+-
+  char miscstring [40];
+  char wstring [40];
+  char itstring [40];
+  int i;
+ 
+-
++#ifdef __unix__   
++ char config_file_name[512];
++ char *home_dir = get_home_dir();
++ int using_global_cfg = 1;
++   
++ snprintf(config_file_name, sizeof(config_file_name)/sizeof(char), "%s/.%s",
++  home_dir? home_dir:".", "overgod.cfg");
++      
++ /* does the cfg file exist? */
++ if (access(config_file_name, R_OK) == 0)
++ {
++  override_config_file(config_file_name);
++  using_global_cfg = 0;
++ }
++ else
++#endif   
++  override_config_file(DATADIR "overgod.cfg");
++  
+  options.sound_init = get_config_int("Options", "Sound_init", 1);
+  options.sound_mode = get_config_int("Options", "Sound_mode", SOUNDMODE_STEREO);
+  options.run_vsync = get_config_int("Options", "Run_vsync", 0);
+@@ -3945,6 +3999,12 @@
+  best_ta_time = get_config_int("Highscores_TA", "best_time", 1000);
+  strcpy(best_ta_name, get_config_string("Highscores_TA", "best_name", "Nobody"));
+ 
++#ifdef __unix__
++ /* make sure any changes get written to the per user file and not to
++    the global file */
++ if (using_global_cfg)
++  override_config_file(config_file_name);
++#endif
+ }
+ 
+ void save_config(void)
+@@ -4127,8 +4187,7 @@
+ 
+ void display_victory_screen(void)
+ {
+-
+- int county = 0;
++ int frames_skipped = 0;
+  int county2 = 0;
+ 
+  init_ms();
+@@ -4142,7 +4201,8 @@
+   run_sparkles();
+   make_ms_move();
+   
+-  if (ticked == 0)
++  /* only draw if we can keepup */
++  if ( (ticked == 0) || (frames_skipped > MAX_FRAMESKIP))
+   {
+    clear_bitmap(menu_bmp);
+    show_grid(COLOUR_PURPLE3, COLOUR_PURPLE8);
+@@ -4157,15 +4217,16 @@
+ 
+    if (county2 > 99)
+     textprintf_centre_ex(menu_bmp, small_font, 320, 420, COLOUR_YELLOW5, -1, "Press Space to continue.");
+-   vsync();
++   if (options.run_vsync > 0)
++    vsync();
+    menu_to_screen();
++   frames_skipped = 0;
+   }
++  else
++   frames_skipped++;
+ 
+-  do
+-  {
+-   county ++;
+-  } while (ticked == 0);
+-
++  while (ticked == 0)
++   rest(1);
+   ticked --;
+ 
+   county2 ++;
+@@ -4527,8 +4588,7 @@
+ 
+ void unlock_screen(int which)
+ {
+-
+- int county = 0;
++ int frames_skipped = 0;
+  int county2 = 0;
+ 
+  do
+@@ -4536,7 +4596,8 @@
+   menu_counter ++;
+   make_grid_scroll();
+ 
+-  if (ticked == 0)
++  /* only draw if we can keepup */
++  if ( (ticked == 0) || (frames_skipped > MAX_FRAMESKIP))
+   {
+    clear_bitmap(menu_bmp);
+    show_grid(COLOUR_PURPLE3, COLOUR_PURPLE8);
+@@ -4560,15 +4621,16 @@
+ //   textprintf_centre_ex(menu_bmp, small_font, 320, 305, COLOUR_YELLOW8, "your time, like ");
+    if (county2 > 99)
+     textprintf_centre_ex(menu_bmp, small_font, 320, 380, COLOUR_YELLOW5, -1, "Press Space to continue.");
+-   vsync();
++   if (options.run_vsync > 0)
++    vsync();
+    menu_to_screen();
++   frames_skipped = 0;
+   }
++  else
++    frames_skipped++;
+ 
+-  do
+-  {
+-   county ++;
+-  } while (ticked == 0);
+-
++  while(ticked == 0)
++   rest(1);
+   ticked --;
+ 
+   county2 ++;
+diff -urN overgod-1.0.orig/menu.h overgod-1.0/menu.h
+--- overgod-1.0.orig/menu.h	2003-09-04 19:28:36.000000000 +0200
++++ overgod-1.0/menu.h	2006-01-21 09:32:09.000000000 +0100
+@@ -1,3 +1,5 @@
+ void init_menus_once_only(void);
+ 
+ void menu_loop(void);
++
++void init_config(void);
+diff -urN overgod-1.0.orig/overgod.cfg overgod-1.0/overgod.cfg
+--- overgod-1.0.orig/overgod.cfg	2005-09-13 22:59:15.000000000 +0200
++++ overgod-1.0/overgod.cfg	2006-01-21 16:37:38.000000000 +0100
+@@ -3,7 +3,7 @@
+ 
+ [Options]
+ Sound_mode = 2
+-Run_vsync = 1
++Run_vsync = 0
+ Sound_volume = 100
+ Ambience_volume = 100
+ Resolution = 2
+diff -urN overgod-1.0.orig/palette.c overgod-1.0/palette.c
+--- overgod-1.0.orig/palette.c	2005-09-11 09:35:48.000000000 +0200
++++ overgod-1.0/palette.c	2006-01-21 13:54:07.000000000 +0100
+@@ -74,6 +74,8 @@
+ #include "palette.h"
+ #include "globvars.h"
+ 
++extern struct optionstruct options;
++
+ COLOR_MAP trans_table;
+ int blend_function(int x, int y, RGB *rgbl);
+ int limit_colour(int colour_input);
+@@ -957,13 +959,14 @@
+ 
+ void set_dark_palette(void)
+ {
+- vsync();
++ if (options.run_vsync > 0)
++  vsync();
+  set_palette(dark_palet);
+ }
+ 
+ void set_light_palette(void)
+ {
+- vsync();
++ if (options.run_vsync > 0)
++  vsync();
+  set_palette(light_palet);
+ }
+-
+diff -urN overgod-1.0.orig/sound.c overgod-1.0/sound.c
+--- overgod-1.0.orig/sound.c	2005-09-11 14:44:18.000000000 +0200
++++ overgod-1.0/sound.c	2006-01-21 10:18:59.000000000 +0100
+@@ -311,7 +311,7 @@
+    }
+    
+    sound_active = 1;
+-
++   
+    if (options.sound_init == 0)
+    {
+ //    cprintf("\n\r\n\rSound disabled in proj.cfg.");
+@@ -326,6 +326,7 @@
+    if (install_sound (DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) == -1)
+    {
+ //    allegro_message("\n\r\n\rSound autodetect failed.");
++    printf("Warning: %s, sound disabled\n", allegro_error);
+     sound_active = 0;
+ //    rest(300);
+ //    do
+@@ -448,7 +449,7 @@
+ 
+  char sfile_name [50];
+ 
+- strcpy(sfile_name, ".//wavs//");
++ strcpy(sfile_name, DATADIR "wavs/");
+  strcat(sfile_name, sfile);
+  strcat(sfile_name, ".wav");
+ 
+@@ -467,7 +468,7 @@
+ 
+  char sfile_name [50];
+ 
+- strcpy(sfile_name, ".//sound//");
++ strcpy(sfile_name, DATADIR "sound/");
+  strcat(sfile_name, sfile);
+  strcat(sfile_name, ".wav");
+ 
+@@ -1547,7 +1548,7 @@
+ 
+  char sfile_name [50];
+ 
+- strcpy(sfile_name, ".//wavs//beat//");
++ strcpy(sfile_name, DATADIR "wavs/beat/");
+  strcat(sfile_name, sfile);
+  strcat(sfile_name, ".wav");
+ 
+diff -urN overgod-1.0.orig/tile.c overgod-1.0/tile.c
+--- overgod-1.0.orig/tile.c	2005-09-11 09:35:48.000000000 +0200
++++ overgod-1.0/tile.c	2006-01-21 10:55:45.000000000 +0100
+@@ -316,7 +316,7 @@
+  
+  tile_rle [MAZE_NOTHING] = make_tile(back_tile, -1, bcol1, bcol2, 0);
+ 
+- int tmaze;
++ int tmaze = 0;
+ 
+  if (arena.level <= 4)
+  {

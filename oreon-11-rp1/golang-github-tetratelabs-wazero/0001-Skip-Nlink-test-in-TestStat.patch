@@ -1,0 +1,36 @@
+From f391932d5891f2e464f4904c1fa2a0242a6d8924 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Mon, 21 Jul 2025 05:30:26 -0400
+Subject: [PATCH 1/2] Skip Nlink test in TestStat
+
+These counts seem to be filesystem-specific, so can't be relied upon to
+be the fixed values hard-coded in the test.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ internal/sysfs/stat_test.go | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/internal/sysfs/stat_test.go b/internal/sysfs/stat_test.go
+index bd9ae6df..e9b01f41 100644
+--- a/internal/sysfs/stat_test.go
++++ b/internal/sysfs/stat_test.go
+@@ -34,7 +34,6 @@ func TestStat(t *testing.T) {
+ 		if dirNlinkIncludesDot {
+ 			expectedNlink++
+ 		}
+-		require.Equal(t, expectedNlink, st.Nlink, runtime.GOOS)
+ 	})
+ 
+ 	subdir := path.Join(tmpDir, "sub")
+@@ -60,7 +59,6 @@ func TestStat(t *testing.T) {
+ 		} else if runtime.GOOS == "windows" {
+ 			expectedNlink = 1 // directory count is not returned.
+ 		}
+-		require.Equal(t, expectedNlink, st.Nlink, runtime.GOOS)
+ 	})
+ 
+ 	// TODO: Investigate why Nlink increases on BSD when a file is added, but
+-- 
+2.52.0
+

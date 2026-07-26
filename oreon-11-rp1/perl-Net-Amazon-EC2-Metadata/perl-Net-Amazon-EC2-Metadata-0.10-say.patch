@@ -1,0 +1,75 @@
+Replace say with print, so that we don't drop otherwise useless
+Perl6::Say dependency.
+
+Lubomir Rintel <lkundrak@v3.sk>
+
+diff -urp Net-Amazon-EC2-Metadata-0.10.orig/bin/ec2meta Net-Amazon-EC2-Metadata-0.10/bin/ec2meta
+--- Net-Amazon-EC2-Metadata-0.10.orig/bin/ec2meta	2008-01-21 19:06:21.000000000 +0100
++++ Net-Amazon-EC2-Metadata-0.10/bin/ec2meta	2008-07-14 10:51:55.000000000 +0200
+@@ -5,7 +5,6 @@ use strict;
+ use Data::Dumper;
+ use Getopt::Long;
+ use Pod::Usage;
+-use Perl6::Say;
+ use Net::Amazon::EC2::Metadata;
+ my $DEBUGGING;
+ my $help;
+@@ -15,16 +14,16 @@ if ( $ARGV[0]  )  {
+     no strict 'refs';
+     no warnings 'uninitialized';
+     if ($DEBUGGING)      {
+-        say "$ARGV[0]: ". eval("Net::Amazon::EC2::Metadata->$ARGV[0]") ;    
++        print "$ARGV[0]: ". eval("Net::Amazon::EC2::Metadata->$ARGV[0]\n") ;    
+     }else      {
+-        say  eval("Net::Amazon::EC2::Metadata->$ARGV[0]") ;         
++        print  eval("Net::Amazon::EC2::Metadata->$ARGV[0]\n") ;         
+     }
+ 
+ }else  {
+     no warnings 'uninitialized';
+     my $data = Net::Amazon::EC2::Metadata->all_data;
+     for (sort keys %$data)      {
+-        say "$_: $data->{$_}";
++        print "$_: $data->{$_}\n";
+     }
+ }
+ 
+diff -urp Net-Amazon-EC2-Metadata-0.10.orig/lib/Net/Amazon/EC2/Metadata.pm Net-Amazon-EC2-Metadata-0.10/lib/Net/Amazon/EC2/Metadata.pm
+--- Net-Amazon-EC2-Metadata-0.10.orig/lib/Net/Amazon/EC2/Metadata.pm	2008-01-22 20:28:59.000000000 +0100
++++ Net-Amazon-EC2-Metadata-0.10/lib/Net/Amazon/EC2/Metadata.pm	2008-07-14 10:51:02.000000000 +0200
+@@ -145,12 +145,11 @@ This document describes Net::Amazon::EC2
+ =head1 SYNOPSIS
+     
+     #  running on an EC2 instance.
+-    use Perl6::Say;
+     use Net::Amazon::EC2::Metadata;
+     no warnings 'uninitialized';
+     my $data = Net::Amazon::EC2::Metadata->all_data;
+     for (sort keys %$data)      {
+-        say "$_: $data->{$_}";
++        print "$_: $data->{$_}\n";
+     }
+ 
+     ###############
+diff -urp Net-Amazon-EC2-Metadata-0.10.orig/Makefile.PL Net-Amazon-EC2-Metadata-0.10/Makefile.PL
+--- Net-Amazon-EC2-Metadata-0.10.orig/Makefile.PL	2008-01-21 19:06:21.000000000 +0100
++++ Net-Amazon-EC2-Metadata-0.10/Makefile.PL	2008-07-14 10:51:09.000000000 +0200
+@@ -12,7 +12,6 @@ WriteMakefile(
+ 
+     PREREQ_PM => {
+         'Test::More'    => 0,
+-        'Perl6::Say'    => 0,
+         'Pod::Usage'    => 0,
+         'LWP::Simple'   => 0,
+     },
+diff -urp Net-Amazon-EC2-Metadata-0.10.orig/META.yml Net-Amazon-EC2-Metadata-0.10/META.yml
+--- Net-Amazon-EC2-Metadata-0.10.orig/META.yml	2008-01-22 20:37:41.000000000 +0100
++++ Net-Amazon-EC2-Metadata-0.10/META.yml	2008-07-14 10:50:38.000000000 +0200
+@@ -6,7 +6,6 @@ version_from: lib/Net/Amazon/EC2/Metadat
+ installdirs:  site
+ requires:
+     LWP::Simple:                   0
+-    Perl6::Say:                    0
+     Pod::Usage:                    0
+     Test::More:                    0
+ 

@@ -1,0 +1,93 @@
+commit 13af756ba3800b112c7952a5a2c6bf76b4a0ecde
+Author: Petr Písař <ppisar@redhat.com>
+Date:   Tue Mar 19 11:25:09 2019 +0100
+
+    Adapt to changes in Module-Starter-1.76
+    
+    Module::Starter::Simple changed _license_record() API. Now it returns
+    a Software::License object or undef. This caused
+    Module-Starter-Plugin-CGIApp test failures:
+    
+        Use of uninitialized value in string eq at /builddir/build/BUILD/Module-Starter-Plugin-CGIApp-0.44/blib/lib/Module/Starter/Plugin/CGIApp.pm line 468.
+        Use of uninitialized value $license_blurb in scalar chomp at /builddir/build/BUILD/Module-Starter-Plugin-CGIApp-0.44/blib/lib/Module/Starter/Plugin/CGIApp.pm line 488.
+        [...]
+        #   Failed test 'different files'
+        #   at t/common.pm line 114.
+        #          got: '4'
+        #     expected: '0'
+    
+    This patch adapts to the chanegs and increaes a dependency on Module::Starter
+    to 1.76 version.
+    
+    CPAN RT#128881
+
+diff --git a/Build.PL b/Build.PL
+index f13c4bf..1eee1ee 100644
+--- a/Build.PL
++++ b/Build.PL
+@@ -26,7 +26,7 @@ my $builder = Module::Build->new(
+     requires            => {
+         'perl'                  => 5.008,
+         'File::ShareDir'        => 0,
+-        'Module::Starter'       => 1.70,
++        'Module::Starter'       => 1.76,
+         'HTML::Template'        => 0,
+     },
+     meta_merge => {
+diff --git a/META.json b/META.json
+index d348950..4705665 100644
+--- a/META.json
++++ b/META.json
+@@ -32,7 +32,7 @@
+          "requires" : {
+             "File::ShareDir" : "1.00",
+             "HTML::Template" : "0",
+-            "Module::Starter" : "1.7",
++            "Module::Starter" : "1.76",
+             "perl" : "5.008"
+          }
+       }
+diff --git a/META.yml b/META.yml
+index d2c4fea..626df06 100644
+--- a/META.yml
++++ b/META.yml
+@@ -24,7 +24,7 @@ provides:
+ requires:
+   File::ShareDir: '1.00'
+   HTML::Template: '0'
+-  Module::Starter: '1.7'
++  Module::Starter: '1.76'
+   perl: '5.008'
+ resources:
+   homepage: http://jaldhar.github.com/Module-Starter-Plugin-CGIApp/
+diff --git a/lib/Module/Starter/Plugin/CGIApp.pm b/lib/Module/Starter/Plugin/CGIApp.pm
+index 29a102c..8b1a9fc 100644
+--- a/lib/Module/Starter/Plugin/CGIApp.pm
++++ b/lib/Module/Starter/Plugin/CGIApp.pm
+@@ -28,7 +28,7 @@ use English qw( -no_match_vars );
+ use File::Basename;
+ use File::Path qw( mkpath );
+ use File::Spec ();
+-use Module::Starter::BuilderSet;
++use Module::Starter::BuilderSet 1.76;
+ use HTML::Template;
+ 
+ =head1 VERSION
+@@ -465,7 +465,7 @@ sub _license_blurb {
+     my $license_record = $self->_license_record();
+ 
+     if ( defined $license_record ) {
+-        if ( $license_record->{license} eq 'perl' ) {
++        if ( $license_record->meta_name eq 'perl' ) {
+             $license_blurb = <<'EOT';
+ This distribution is free software; you can redistribute it and/or modify it
+ under the terms of either:
+@@ -477,7 +477,7 @@ b) the Artistic License version 1.0 or a later version.
+ EOT
+         }
+         else {
+-            $license_blurb = $license_record->{blurb};
++            $license_blurb = $license_record->notice;
+         }
+     }
+     else {

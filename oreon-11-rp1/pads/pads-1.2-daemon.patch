@@ -1,0 +1,102 @@
+diff -urp pads-1.2.orig/src/configuration.c pads-1.2/src/configuration.c
+--- pads-1.2.orig/src/configuration.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/configuration.c	2008-07-15 15:59:49.000000000 -0400
+@@ -115,7 +115,7 @@ void parse_line (bstring line)
+             else
+                 gc.daemon_mode = 0;
+         }
+-
++        become_daemon();
+     } else if ((biseqcstr(param, "pid_file")) == 1) {
+             /* PID FILE */
+         gc.pid_file = bstrcpy(value);
+diff -urp pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-07-12 08:36:10.000000000 -0400
++++ pads-1.2/src/pads.c	2008-07-15 16:02:25.000000000 -0400
+@@ -236,21 +236,13 @@ init_pads (void)
+         if ((activate_output_plugin(name, gc.report_file)) == -1)
+             err_message("Error:  'activate_output_plugin' in function 'init_pads' failed.");
+         bdestroy(name);
++        become_daemon();
+     }
+ 
+     /* Initialize Modules */
+     init_identification();
+     init_mac_resolution();
+ 
+-    /* Daemon Mode:  fork child process */
+-    if (gc.daemon_mode) {
+-        verbose_message("[-] Daemonizing...\n");
+-        if (daemon(0, 0) < 0) {
+-            err_message("Daemonize failed");
+-        }
+-        init_pid_file(gc.pid_file, gc.priv_user, gc.priv_group);
+-    }
+-
+     /* Signal Trapping */
+     (void) signal(SIGTERM, sig_term_handler);
+     (void) signal(SIGINT, sig_int_handler);
+@@ -291,9 +283,13 @@ main_pads (void)
+ 
+         /* Determine Sniffing Interface */
+         if (!gc.dev) {
++            char *dev;
+             verbose_message("Looking for sniffing interface");
+-            if (!(gc.dev = pcap_lookupdev(errbuf)))
+-                err_message("Unable to find a sniffing interface!  (%s)", errbuf);
++            dev = pcap_lookupdev(errbuf);
++            if (!dev)
++                err_message("Unable to find a sniffing interface!  (%s)",
++                        errbuf);
++            gc.dev = strdup(dev);
+         }
+ 
+         /* Set up libpcap connection. */
+diff -urp pads-1.2.orig/src/util.c pads-1.2/src/util.c
+--- pads-1.2.orig/src/util.c	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/util.c	2008-07-15 16:02:38.000000000 -0400
+@@ -81,7 +81,7 @@ chomp (char *string, int size)
+  * INPUT        : 0 - PID filename
+  * RETURN       : None!
+  * ---------------------------------------------------------- */
+-void
++static void
+ init_pid_file (bstring pid_file, bstring user, bstring group)
+ {
+     int pid;
+@@ -116,6 +116,23 @@ init_pid_file (bstring pid_file, bstring
+ }
+ 
+ /* ----------------------------------------------------------
++ *  * FUNCTION     : become_daemon
++ *   * DESCRIPTION  : This function makes pads into a daemon
++ *    * RETURN       : none
++ *     * ---------------------------------------------------------- */
++void become_daemon(void)
++{
++    if (gc.daemon_mode) {
++        /* Daemon Mode:  fork child process */
++        verbose_message("[-] Daemonizing...\n");
++        if (daemon(0, 0) < 0) {
++            err_message("Daemonize failed");
++        }
++        init_pid_file(gc.pid_file, gc.priv_user, gc.priv_group);
++    }
++}
++
++/* ----------------------------------------------------------
+  * FUNCTION     : copy_argv
+  * DESCRIPTION  : This function will flatten argv into a
+  *              : single string.  This function was taken
+diff -urp pads-1.2.orig/src/util.h pads-1.2/src/util.h
+--- pads-1.2.orig/src/util.h	2008-07-08 14:28:29.000000000 -0400
++++ pads-1.2/src/util.h	2008-07-15 16:03:04.000000000 -0400
+@@ -39,7 +39,7 @@
+ /* PROTOTYPES -------------------------------------- */
+ void strip_comment (char *string);
+ int chomp (char *string, int size);
+-void init_pid_file (bstring pid_file, bstring user, bstring group);
++void become_daemon(void);
+ char *copy_argv(register char **argv);
+ void log_message (const char *msg, ...)
+ #ifdef __GNUC__

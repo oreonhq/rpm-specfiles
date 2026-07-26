@@ -1,0 +1,67 @@
+From a494d3194d74f934380fbc2cf316af30e14c3ea8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 25 Sep 2024 17:52:43 +0200
+Subject: [PATCH] Allow testing installed code
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+t/basic.t failed when running tests without building the sources in
+order to validate an already installed code:
+
+    $ prove -v t/basic.t
+    t/basic.t ..
+    1..2
+    # Running under perl version 5.040000 for linux
+    # Current time local: Wed Sep 25 17:55:40 2024
+    # Current time GMT:   Wed Sep 25 15:55:40 2024
+    # Using Test.pm version 1.31
+    not ok 1
+    # Failed test 1 in t/basic.t at line 48
+    not ok 2
+    # Failed test 2 in t/basic.t at line 54
+    Failed 2/2 subtests
+
+The cause was a hard-coded exection of a compiled code.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/basic.t | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/t/basic.t b/t/basic.t
+index 54c19c7..0b394cb 100644
+--- a/t/basic.t
++++ b/t/basic.t
+@@ -30,7 +30,7 @@ sub run {
+   my ($cmd, $test) = @_;
+ 
+   local $/;
+-  open(SUB, "$^X $cmd < " . File::Spec->devnull . " 2>&1 |") or die $!;
++  open(SUB, "$cmd < " . File::Spec->devnull . " 2>&1 |") or die $!;
+   my $result = <SUB>;
+   close SUB or return;
+ 
+@@ -39,16 +39,17 @@ sub run {
+ 
+ my $tmp = tempdir(CLEANUP => 1);
+ my $cwd = Cwd::getcwd();
++my $command_prefix = (-d 'blib') ? "$^X -Mblib ./" : '';
+ 
+ ok(
+    run(
+-       "-Mblib ./perlindex -idir $tmp --index $cwd/README $cwd/MANIFEST $cwd/perlindex.PL",
++       "${command_prefix}perlindex -idir $tmp --index $cwd/README $cwd/MANIFEST $cwd/perlindex.PL",
+        sub { print "[[$_[0]]]\n"; $_[0] =~ /MANIFEST/ }
+       )
+   );
+ ok(
+    run(
+-       "-Mblib ./perlindex -idir $tmp --nomenu index",
++       "${command_prefix}perlindex -idir $tmp --nomenu index",
+        sub { print "[[$_[0]]]\n"; $_[0] =~ /perlindex.PL/ }
+       )
+   );
+-- 
+2.46.2
+

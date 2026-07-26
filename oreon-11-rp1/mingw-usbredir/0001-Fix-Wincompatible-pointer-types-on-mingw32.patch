@@ -1,0 +1,40 @@
+From 1f190853915852762db648b22f9deed8058c6181 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marc-Andr=C3=A9=20Lureau?= <marcandre.lureau@redhat.com>
+Date: Tue, 30 Jul 2024 12:25:53 +0400
+Subject: [PATCH] Fix -Wincompatible-pointer-types on mingw32
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+../tools/usbredirect.c: In function 'main':
+../tools/usbredirect.c:586:29: error: passing argument 2 of 'libusb_set_log_cb' from incompatible pointer type [-Wincompatible-pointer-types]
+  586 |     libusb_set_log_cb(NULL, debug_libusb_cb, LIBUSB_LOG_CB_GLOBAL);
+      |                             ^~~~~~~~~~~~~~~
+      |                             |
+      |                             void (*)(libusb_context *, enum libusb_log_level,  const char *)
+In file included from ../tools/usbredirect.c:10:
+/usr/i686-w64-mingw32/sys-root/mingw/include/libusb-1.0/libusb.h:1353:71: note: expected 'libusb_log_cb' {aka 'void (__attribute__((stdcall)) *)(libusb_context *, enum libusb_log_level,  const char *)'} but argument is of type 'void (*)(libusb_context *, enum libusb_log_level,  const char *)'
+ 1353 | void LIBUSB_CALL libusb_set_log_cb(libusb_context *ctx, libusb_log_cb cb, int mode);
+      |                                                         ~~~~~~~~~~~~~~^~
+
+Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+---
+ tools/usbredirect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/usbredirect.c b/tools/usbredirect.c
+index 5e4000d..a1aaa69 100644
+--- a/tools/usbredirect.c
++++ b/tools/usbredirect.c
+@@ -210,7 +210,7 @@ thread_handle_libusb_events(gpointer user_data)
+ }
+ 
+ #if LIBUSBX_API_VERSION >= 0x01000107
+-static void
++static void LIBUSB_CALL
+ debug_libusb_cb(libusb_context *ctx, enum libusb_log_level level, const char *msg)
+ {
+     GLogLevelFlags glog_level;
+-- 
+2.41.0.28.gd7d8841f67
+

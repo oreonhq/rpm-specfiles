@@ -1,0 +1,83 @@
+From c4326a561af46359a2f50d6fc3f4f92f5a9129bf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 19 Feb 2015 17:30:11 +0100
+Subject: [PATCH] Search assets in system directories
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+See <https://fedoraproject.org/wiki/Packaging:Web_Assets>. I kept the
+long upstream prefix to be ready when upstream adds rich content
+there.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/ini.report.pl              | 4 ++--
+ lib/Module/Metadata/Changes.pm | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/bin/ini.report.pl b/bin/ini.report.pl
+index f9cde65..4d9abb8 100644
+--- a/bin/ini.report.pl
++++ b/bin/ini.report.pl
+@@ -154,7 +154,7 @@ The name of a file to be written.
+ 
+ The path to the HTML::Template-style templates used by the -table and -webPage switches.
+ 
+-Default: '/dev/shm/html/assets/templates/module/metadata/changes'.
++Default: '/usr/share/perl-Module-Metadata-Changes/templates/module/metadata/changes'.
+ 
+ =item o -release aVersionNumber
+ 
+@@ -175,7 +175,7 @@ The table template is called C<ini.table.tmpl>.
+ The URL to insert into the web page, if using the -webPage switch,
+ which points to the CSS for the page.
+ 
+-Defaults to /assets/css/module/metadata/changes/ini.css.
++Defaults to /.sysassets/css/module/metadata/changes/ini.css.
+ 
+ =item o -verbose
+ 
+diff --git a/lib/Module/Metadata/Changes.pm b/lib/Module/Metadata/Changes.pm
+index ff57124..6ff74a0 100644
+--- a/lib/Module/Metadata/Changes.pm
++++ b/lib/Module/Metadata/Changes.pm
+@@ -78,7 +78,7 @@ has outFileName =>
+ 
+ has pathForHTML =>
+ (
+-	default  => sub{return '/dev/run/html/assets/templates/module/metadata/changes'},
++	default  => sub{return '/usr/share/perl-Module-Metadata-Changes/templates/module/metadata/changes'},
+ 	is       => 'rw',
+ 	isa      => Str,
+ 	required => 0,
+@@ -102,7 +102,7 @@ has table =>
+ 
+ has urlForCSS =>
+ (
+-	default  => sub{return '/assets/css/module/metadata/changes/ini.css'},
++	default  => sub{return '/.sysassets/perl-Module-Metadata-Changes/css/module/metadata/changes/ini.css'},
+ 	is       => 'rw',
+ 	isa      => Str,
+ 	required => 0,
+@@ -833,7 +833,7 @@ The default is 'Changelog.ini'.
+ 
+ This is path to the HTML::Template-style templates used by the 'table' and 'webPage' options.
+ 
+-The default is '/dev/shm/html/assets/templates/module/metadata/changes'.
++The default is '/usr/share/perl-Module-Metadata-Changes/templates/module/metadata/changes'.
+ 
+ =item o release
+ 
+@@ -868,7 +868,7 @@ However, if the 'webPage' option is 1, the HTML will be a complete web page.
+ 
+ =item o urlForCSS
+ 
+-The default is '/assets/css/module/metadata/changes/ini.css'.
++The default is '/.sysassets/css/module/metadata/changes/ini.css'.
+ 
+ This is only used if the 'webPage' option is 1.
+ 
+-- 
+2.4.3
+

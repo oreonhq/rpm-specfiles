@@ -1,0 +1,40 @@
+From a90d86bbf2f5016b1a618abc05ac34e0bd608165 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 10 Mar 2019 22:26:51 -0400
+Subject: [PATCH] Don't download files during build.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ R/qpdf.R    | 2 +-
+ man/qpdf.Rd | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/qpdf/R/qpdf.R b/qpdf/R/qpdf.R
+index 4cfa7cd..2efd158 100644
+--- a/qpdf/R/qpdf.R
++++ b/qpdf/R/qpdf.R
+@@ -28,7 +28,7 @@
+ #' @examples \donttest{
+ #' # extract some pages
+ #' pdf_file <- file.path(tempdir(), "output.pdf")
+-#' pdf_subset('https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf',
++#' pdf_subset('/usr/share/doc/R/manual/R-intro.pdf',
+ #'   pages = 1:3, output = pdf_file)
+ #' pdf_length(pdf_file)
+ #' unlink(pdf_file)
+diff --git a/qpdf/man/qpdf.Rd b/qpdf/man/qpdf.Rd
+index 2a3e68b..8e5dbda 100644
+--- a/qpdf/man/qpdf.Rd
++++ b/qpdf/man/qpdf.Rd
+@@ -67,7 +67,7 @@ and return the path(s) to these newly created files.
+ \donttest{
+ # extract some pages
+ pdf_file <- file.path(tempdir(), "output.pdf")
+-pdf_subset('https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf',
++pdf_subset('/usr/share/doc/R/manual/R-intro.pdf',
+   pages = 1:3, output = pdf_file)
+ pdf_length(pdf_file)
+ unlink(pdf_file)
+-- 
+2.20.1
+

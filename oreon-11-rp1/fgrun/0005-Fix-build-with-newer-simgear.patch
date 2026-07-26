@@ -1,0 +1,38 @@
+From 75638f6397d38fe93f492c682eae0352f0841310 Mon Sep 17 00:00:00 2001
+From: Fabrice Bellet <fabrice@bellet.info>
+Date: Sat, 1 Mar 2025 11:14:49 +0100
+Subject: [PATCH] Fix build with newer simgear
+
+---
+ src/main.cxx         | 1 -
+ src/wizard_funcs.cxx | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/main.cxx b/src/main.cxx
+index c9aee92..0f21763 100644
+--- a/src/main.cxx
++++ b/src/main.cxx
+@@ -32,7 +32,6 @@
+ #include <osgDB/Registry>
+ #include <simgear/scene/model/ModelRegistry.hxx>
+ #include <simgear/io/raw_socket.hxx>
+-#include <simgear/structure/OSGVersion.hxx>
+ 
+ #include "wizard.h"
+ #include "i18n.h"
+diff --git a/src/wizard_funcs.cxx b/src/wizard_funcs.cxx
+index b0dbf31..aab1671 100644
+--- a/src/wizard_funcs.cxx
++++ b/src/wizard_funcs.cxx
+@@ -684,7 +684,7 @@ loadModel( const string &fg_root, const string &fg_aircraft, const string &dir,
+ 
+     vector<SGPropertyNode_ptr> animation_nodes = props.getChildren("animation");
+     for (i = 0; i < animation_nodes.size(); i++) {
+-        const char * name = animation_nodes[i]->getStringValue("name", 0);
++        string name = animation_nodes[i]->getStringValue("name", "");
+         vector<SGPropertyNode_ptr> nopreview_nodes = animation_nodes[i]->getChildren("nopreview");
+         if ( !nopreview_nodes.empty() ) {
+             vector<SGPropertyNode_ptr> name_nodes = animation_nodes[i]->getChildren("object-name");
+-- 
+2.48.1
+

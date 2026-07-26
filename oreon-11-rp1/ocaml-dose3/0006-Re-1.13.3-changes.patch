@@ -1,0 +1,66 @@
+--- dose3-7.0.0/src/deb/apt.ml.orig	2021-07-22 01:14:19.000000000 -0600
++++ dose3-7.0.0/src/deb/apt.ml	2025-02-17 12:06:38.612708428 -0700
+@@ -113,7 +113,7 @@ let parse_request_apt s =
+   (try
+      Arg.parse_argv
+        ~current:(ref 0)
+-       (Array.of_list (Pcre.split ~rex:blank_regexp s))
++       (Array.of_list (List.filter (fun s -> s <> "") (Pcre.split ~rex:blank_regexp s)))
+        options
+        anon
+        ""
+@@ -152,7 +152,7 @@ let parse_request_aptitude s =
+   (try
+      Arg.parse_argv
+        ~current:(ref 0)
+-       (Array.of_list (Pcre.split ~rex:blank_regexp s))
++       (Array.of_list (List.filter (fun s -> s <> "") (Pcre.split ~rex:blank_regexp s)))
+        options
+        anon
+        ""
+--- dose3-7.0.0/src/deb/edsp.ml.orig	2021-07-22 01:14:19.000000000 -0600
++++ dose3-7.0.0/src/deb/edsp.ml	2025-02-17 12:18:06.482033296 -0700
+@@ -90,7 +90,7 @@ let parse_req (label, (loc, s)) =
+   let aux v =
+     Dose_pef.Packages.lexbuf_wrapper Dose_pef.Packages_parser.vpkg_top (label, v)
+   in
+-  let l = Pcre.split ~rex:Apt.blank_regexp s in
++  let l = List.filter (fun s -> s <> "") (Pcre.split ~rex:Apt.blank_regexp s) in
+   List.map (fun s -> aux (loc, s)) l
+ 
+ let parse_edsp_version (label, (_, s)) =
+--- dose3-7.0.0/src/npm/packages.ml.orig	2021-07-22 01:14:19.000000000 -0600
++++ dose3-7.0.0/src/npm/packages.ml	2025-02-17 12:18:44.687534587 -0700
+@@ -29,7 +29,7 @@ let lexbuf_wrapper type_parser v =
+   with Format822.ParseError _ -> (
+     match v with
+     | (_, (_, package)) ->
+-        let splited = Pcre.split ~rex:(Pcre.regexp " : ") package in
++        let splited = List.filter (fun s -> s <> "") (Pcre.split ~rex:(Pcre.regexp " : ") package) in
+         let base64 = Base64.encode_string (List.nth splited 1) in
+         [[(("", None), Some ("=", base64))]])
+ 
+--- dose3-7.0.0/src/pef/packages.ml.orig	2021-07-22 01:14:19.000000000 -0600
++++ dose3-7.0.0/src/pef/packages.ml	2025-02-17 12:20:09.785423779 -0700
+@@ -77,7 +77,7 @@ let blank_regexp = Pcre.regexp "[ \t]+"
+ let comma_regexp = Pcre.regexp "[ \t]*,[ \t]*"
+ 
+ let parse_string_list ?(rex = blank_regexp) (_, (_, s)) =
+-  match Pcre.split ~rex s with [] -> raise Not_found | l -> l
++  match List.filter (fun s -> s <> "") (Pcre.split ~rex s) with [] -> raise Not_found | l -> l
+ 
+ (* parse and convert to a specific type *)
+ let parse_bool (label, (_, s)) =
+--- dose3-7.0.0/src/versioning/semverNode.ml.orig	2021-07-22 01:14:19.000000000 -0600
++++ dose3-7.0.0/src/versioning/semverNode.ml	2025-02-17 12:13:26.470843259 -0700
+@@ -111,8 +111,8 @@ let sep_re = Pcre.regexp "\\."
+ let parse_raw_version version =
+   try
+     let parsed = Pcre.extract ~rex version in
+-    let pre = Pcre.split ~rex:sep_re parsed.(6) in
+-    let build = Pcre.split ~rex:sep_re parsed.(7) in
++    let pre = List.filter (fun s -> s <> "") (Pcre.split ~rex:sep_re parsed.(6)) in
++    let build = List.filter (fun s -> s <> "") (Pcre.split ~rex:sep_re parsed.(7)) in
+     (parsed.(1), parsed.(3), parsed.(5), pre, build)
+   with Not_found ->
+     raise

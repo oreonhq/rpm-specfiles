@@ -1,0 +1,97 @@
+--- a/Makefile
++++ b/Makefile
+@@ -63,11 +63,7 @@
+ # Add path to generated project files
+ export GPR_PROJECT_PATH := $(PRJ_DIR)$(PSEP)$(GPR_PROJECT_PATH)
+ 
+-LIBAWS_TYPES := static
+-
+-ifeq (${ENABLE_SHARED},true)
+-   LIBAWS_TYPES += relocatable static-pic
+-endif
++LIBAWS_TYPES := relocatable
+ 
+ #############################################################################
+ #  NO NEED TO CHANGE ANYTHING PAST THIS POINT
+@@ -136,11 +132,11 @@
+ #  build awsres tool as needed by wsdl2aws
+ 
+ build-awsres-tool-native:
+-	$(GPRBUILD) -p $(GPROPTS) $(GPR_STATIC) -XTO_BUILD=awsres.adb \
++	$(GPRBUILD) -p $(GPROPTS) $(GPR_SHARED) -XTO_BUILD=awsres.adb \
+ 		tools/tools.gpr
+ 
+ build-tools-native: gen-templates build-lib-native
+-	$(GPRBUILD) -p $(GPROPTS) $(GPR_STATIC) tools/tools.gpr
++	$(GPRBUILD) -p $(GPROPTS) $(GPR_SHARED) tools/tools.gpr
+ 
+ build-libs-%:
+ 	$(GPRBUILD) -p $(GPROPTS) \
+@@ -149,14 +145,14 @@
+ build-lib-native: ${LIBAWS_TYPES:%=build-libs-%}
+ 
+ build-gps-support: build-lib-native
+-	$(GPRBUILD) -p $(GPROPTS) $(GPR_STATIC) gps/gps_support.gpr
++	$(GPRBUILD) -p $(GPROPTS) $(GPR_SHARED) gps/gps_support.gpr
+ 	${MAKE} -C gps $(GALL_OPTIONS) after-build
+ 
+ build-native: build-tools-native build-gps-support
+ 
+ build-tools-cross: build-lib-cross
+ 	$(GPRBUILD) -p --target=$(TARGET) $(GPROPTS) \
+-		$(GPR_STATIC) tools/tools.gpr
++		$(GPR_SHARED) tools/tools.gpr
+ 
+ build-libs-cross-%:
+ 	$(GPRBUILD) -p --target=$(TARGET) $(GPROPTS) \
+@@ -191,8 +187,8 @@
+ clean-lib-native: ${LIBAWS_TYPES:%=clean-libs-%}
+ 
+ clean-native: clean-lib-native
+-	-$(GPRCLEAN) $(GPROPTS) $(GPR_STATIC) tools/tools.gpr
+-	-$(GPRCLEAN) $(GPROPTS) $(GPR_STATIC) gps/gps_support.gpr
++	-$(GPRCLEAN) $(GPROPTS) $(GPR_SHARED) tools/tools.gpr
++	-$(GPRCLEAN) $(GPROPTS) $(GPR_SHARED) gps/gps_support.gpr
+ 
+ clean-libs-cross-%:
+ 	$(GPRCLEAN) --target=$(TARGET) \
+@@ -228,8 +224,8 @@
+ install-lib-native: ${LIBAWS_TYPES:%=install-libs-%}
+ 
+ install-tools-native:
+-	$(GPRINSTALL) $(GPROPTS) $(GPRINST_OPTS) $(GPR_STATIC) --mode=usage \
+-		--build-name=static \
++	$(GPRINSTALL) $(GPROPTS) $(GPRINST_OPTS) $(GPR_SHARED) --mode=usage \
++		--build-name=relocatable \
+ 		--install-name=aws tools/tools.gpr
+ 
+ install-native: install-clean install-lib-native install-tools-native
+--- a/tools/tools.gpr
++++ b/tools/tools.gpr
+@@ -87,7 +87,7 @@
+ 
+    package Binder is
+       for Default_Switches ("Ada")
+-         use Shared.Binder'Default_Switches ("Ada") & ("-static", "-Es");
++         use Shared.Binder'Default_Switches ("Ada") & ("-shared", "-Es");
+    end Binder;
+ 
+    -------------
+--- a/tools/wsdl2aws-templates/Makefile
++++ b/tools/wsdl2aws-templates/Makefile
+@@ -16,11 +16,14 @@
+ #  to http://www.gnu.org/licenses for a complete copy of the license.      #
+ ############################################################################
+ 
++P1=$(KND_DIR)/relocatable/lib/aws/
++P2=$(KND_DIR)/relocatable/lib/ssl/
++
+ $(CMN_DIR)/src:
+ 	mkdir -p $(CMN_DIR)/src
+ 
+ gen-templates: $(CMN_DIR)/src
+-	$(KND_DIR)/static/tools/awsres \
++	LD_LIBRARY_PATH=$(P1):$(P2) $(KND_DIR)/relocatable/tools/awsres \
+ 	  -r wsdl2aws_templates \
+ 	  -o $(CMN_DIR)/src \
+ 	  *.tad[sb] *.macros

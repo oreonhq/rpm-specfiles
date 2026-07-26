@@ -1,0 +1,51 @@
+From 0efba3e19e4a2ab8f8f354e9996323492a2212fd Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Mon, 26 Jun 2023 12:40:25 -0600
+Subject: [PATCH 2/4] Do not depend on stdlib-shims
+
+---
+ dose3.opam      | 1 -
+ dune-project    | 1 -
+ src/common/dune | 2 +-
+ 3 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/dose3.opam b/dose3.opam
+index 33c4f8a..d613fcb 100644
+--- a/dose3.opam
++++ b/dose3.opam
+@@ -48,7 +48,6 @@ depends: [
+   "cudf" {>= "0.7"}
+   "ocamlgraph" {>= "2.0.0"}
+   "re" {>= "1.2.2"}
+-  "stdlib-shims"
+   "ounit2" {with-test}
+   "conf-python-3" {with-test}
+   "conf-python3-yaml" {with-test}
+diff --git a/dune-project b/dune-project
+index 3c1c97a..68678a1 100644
+--- a/dune-project
++++ b/dune-project
+@@ -40,7 +40,6 @@
+   (cudf (>= 0.7))
+   (ocamlgraph (>= 2.0.0))
+   (re (>= 1.2.2))
+-  stdlib-shims
+   (ounit2 :with-test)
+   (conf-python-3 :with-test)
+   (conf-python3-yaml :with-test)
+diff --git a/src/common/dune b/src/common/dune
+index f4f0628..1467fd7 100644
+--- a/src/common/dune
++++ b/src/common/dune
+@@ -1,7 +1,7 @@
+ (library
+  (name dose_common)
+  (public_name dose3.common)
+- (libraries extlib cudf re.pcre stdlib-shims unix)
++ (libraries extlib cudf re.pcre unix)
+  (flags (:standard)))
+ 
+ (ocamllex shell_lexer)
+-- 
+2.41.0
+

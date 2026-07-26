@@ -1,0 +1,23 @@
+--- gfan0.7/Makefile.orig	2024-08-15 15:26:30.841689860 -0600
++++ gfan0.7/Makefile	2024-08-15 16:06:28.173202173 -0600
+@@ -139,7 +139,7 @@ OPTFLAGS    =  -DGMPRATIONAL -Wuninitial
+ #OPTFLAGS    =  -DGMPRATIONAL -Wuninitialized -fno-omit-frame-pointer -O3 -msse2 -ftree-vectorizer-verbose=2 -ffast-math #-DNDEBUG
+ #OPTFLAGS    =  -DGMPRATIONAL -Wuninitialized -fno-omit-frame-pointer -O3 -mavx -msse2 -ftree-vectorizer-verbose=2 -ffast-math #-DNDEBUG
+ 
+-CFLAGS	  = $(OPTFLAGS) $(GPROFFLAG) $(STACTDUMP_OPTIONS) $(ADDITIONALINCLUDEOPTIONS) -g $(CDDDEFINE_PREFIX) -std=c++2a #-pedantic
++CFLAGS	  = $(OPTFLAGS) $(GPROFFLAG) $(STACTDUMP_OPTIONS) $(ADDITIONALINCLUDEOPTIONS) -g $(CDDDEFINE_PREFIX) #-pedantic
+ #CFLAGS	  = $(OPTFLAGS) $(GPROFFLAG) $(STACTDUMP_OPTIONS) $(ADDITIONALINCLUDEOPTIONS) -std=c++0x -g $(CDDDEFINE_PREFIX) #-pedantic
+ #CFLAGS	  = $(OPTFLAGS) $(GPROFFLAG) $(STACTDUMP_OPTIONS) $(ADDITIONALINCLUDEOPTIONS) -D_GLIBCXX_DEBUG -g $(CDDDEFINE_PREFIX) #-pedantic
+ CCFLAGS	  = $(CFLAGS)
+--- gfan0.7/src/gfanlib_circuittableint.h.orig	2024-08-12 10:00:15.000000000 -0600
++++ gfan0.7/src/gfanlib_circuittableint.h	2024-08-15 16:14:29.983298300 -0600
+@@ -591,7 +591,8 @@ public:
+ 	    ret=min;
+ 
+ 	    {
+-	    	auto ret2=CircuitTableIntPOD((s.v*denominatorDivisor.multiplicativeInverse)*boundA.v);
++		CircuitTableIntPOD ret2{};
++	    	ret2=(s.v*denominatorDivisor.multiplicativeInverse)*boundA.v;
+ 	    	ret2=MIN(ret2.v,-ret2.v);
+ 	    	return ret2;
+ 	    	if(ret.v!=ret2.v)

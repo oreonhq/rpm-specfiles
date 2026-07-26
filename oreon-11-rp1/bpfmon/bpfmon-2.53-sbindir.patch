@@ -1,0 +1,32 @@
+commit e91daa25d2396eb8dbf0abc4cc30c817120cf438
+Author: Boian Bonev <bbonev@ipacct.com>
+Date:   Thu Jan 23 02:31:09 2025 +0200
+
+    Add option to specify bin directory
+
+diff --git a/Makefile b/Makefile
+index 7c27ef0..0d229be 100644
+--- a/Makefile
++++ b/Makefile
+@@ -62,6 +62,8 @@ MYCFLAGS=$(DEBUG) $(CPPFLAGS) $(CFLAGS) $(YASCC) $(PCACC) $(CCOPT)
+ MYLIBS:=$(LIBS) $(YASLD) $(PCALD)
+ MYLDFLAGS:=$(LDFLAGS) -fPIE -pie
+ 
++PREFIX?=$(DESTDIR)/usr
++BINDIR?=$(PREFIX)/sbin
+ STRIP?=strip
+ INSTALL?=install
+ 
+@@ -81,9 +83,9 @@ clean:
+ 	rm -f bpfmon bpfmon.o psort psort.o
+ 
+ install: bpfmon
+-	$(INSTALL) -D -m 0755 $< $(DESTDIR)$(PREFIX)/sbin/$<
+-	$(INSTALL) -D -m 0644 bpfmon.8 $(DESTDIR)$(PREFIX)/share/man/man8/bpfmon.8
+-	$(STRIP) $(DESTDIR)$(PREFIX)/sbin/$<
++	$(INSTALL) -D -m 0755 $< $(BINDIR)/$<
++	$(INSTALL) -D -m 0644 bpfmon.8 $(PREFIX)/share/man/man8/bpfmon.8
++	$(STRIP) $(BINDIR)/$<
+ 
+ mkotar:
+ 	$(MAKE) clean

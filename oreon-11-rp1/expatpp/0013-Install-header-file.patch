@@ -1,0 +1,26 @@
+From afc798609cb851d460662def2cff458f265f4655 Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 17:14:25 +0200
+Subject: [PATCH 13/15] Install header file
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ lib/CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 352687d..76bc538 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -2,4 +2,5 @@
+ add_library(expatpp SHARED expatpp.cpp)
+ target_link_libraries(expatpp ${EXPAT_LIBRARIES})
+ SET_TARGET_PROPERTIES(expatpp PROPERTIES ${EXPATPP_LIBRARY_PROPERTIES})
+-INSTALL_TARGETS(/${LIB_INSTALL_DIR} expatpp)
+\ No newline at end of file
++INSTALL_TARGETS(/${LIB_INSTALL_DIR} expatpp)
++INSTALL (FILES expatpp.h DESTINATION include)
+\ No newline at end of file
+-- 
+1.7.11.7
+

@@ -1,0 +1,14 @@
+--- kdebase-3.1/konqueror/profile_webbrowsing.desktop.than	2003-02-22 14:52:21.000000000 +0100
++++ kdebase-3.1/konqueror/profile_webbrowsing.desktop	2003-02-22 14:53:54.000000000 +0100
+@@ -54,8 +54,8 @@
+ Name[zh_TW]=Web 瀏覽
+ Name[zu]=Ukucinga kwi-Web
+ RootItem=View0
+-View0_ServiceName=konq_aboutpage
+-View0_ServiceType=KonqAboutPage
+-View0_URL=about:konqueror
++View0_ServiceName=khtml
++View0_ServiceType=text/html
++View0_URL=http://start.fedoraproject.org/
+ Width=80%
+ Height=80%

@@ -1,0 +1,22 @@
+diff -rU4 DustRacing2D-2.1.1/src/game/MiniCore/src/Graphics/MCGLEW DustRacing2D-2.1.1--patched/src/game/MiniCore/src/Graphics/MCGLEW
+--- DustRacing2D-2.1.1/src/game/MiniCore/src/Graphics/MCGLEW	2021-02-21 13:07:18.000000000 +0100
++++ DustRacing2D-2.1.1--patched/src/game/MiniCore/src/Graphics/MCGLEW	2025-09-08 15:36:12.955655987 +0200
+@@ -1,7 +1,7 @@
+ // This is just wrapper header for glew.
+ #ifndef __MC_NO_GLEW__
+-  #include "contrib/glew/glew.h"
++  #include <GL/glew.h>
+ #else
+   #ifndef __MC_GLES__
+     #ifdef _MSC_VER
+       #include <windows.h>
+diff -rU4 DustRacing2D-2.1.1/src/game/MiniCore/src/Graphics/MCGLM DustRacing2D-2.1.1--patched/src/game/MiniCore/src/Graphics/MCGLM
+--- DustRacing2D-2.1.1/src/game/MiniCore/src/Graphics/MCGLM	2021-02-21 13:07:18.000000000 +0100
++++ DustRacing2D-2.1.1--patched/src/game/MiniCore/src/Graphics/MCGLM	2025-09-08 15:35:29.032140953 +0200
+@@ -1,4 +1,4 @@
+ // This is just wrapper header for glm
+-#include "contrib/glm/ogl-math/glm/glm.hpp"
+-#include "contrib/glm/ogl-math/glm/gtc/matrix_transform.hpp"
++#include <glm/glm.hpp>
++#include <glm/gtc/matrix_transform.hpp>
+ 

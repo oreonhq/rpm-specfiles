@@ -1,0 +1,12 @@
+diff -up frysk-0.4/frysk-core/frysk/bindir/fdebugrpm.sh.fdebugrpm frysk-0.4/frysk-core/frysk/bindir/fdebugrpm.sh
+--- frysk-0.4/frysk-core/frysk/bindir/fdebugrpm.sh.fdebugrpm	2010-03-15 15:34:33.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/bindir/fdebugrpm.sh	2010-03-15 15:35:32.000000000 -0400
+@@ -62,7 +62,7 @@ else                                    
+                      grep '^/'| 
+                      xargs rpm -qf --qf '%{SOURCERPM}\n' | 
+                      sort | uniq | 
+-                     sed -e 's/-/-debuginfo-/' |
++                     sed -e 's/-\([0-9]\)/-debuginfo-\1/' |
+                      sed -e 's/.src.rpm//g'`
+ 
+     if [ -n "$packages" ] 

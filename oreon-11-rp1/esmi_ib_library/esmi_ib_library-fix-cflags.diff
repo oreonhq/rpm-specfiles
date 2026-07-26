@@ -1,0 +1,25 @@
+From e6a08b1841c8218cae3f2d8cb6da655315d311a6 Mon Sep 17 00:00:00 2001
+From: Michel Lind <salimma@fedoraproject.org>
+Date: Thu, 17 Jul 2025 13:20:07 -0500
+Subject: [PATCH] Do not override CMAKE_C_FLAGS
+
+Instead, append the settings we want to exist. This unbreaks distribution builds e.g. Fedora's, by ensuring the distribution compiler flags are also applied.
+
+Signed-off-by: Michel Lind <salimma@fedoraproject.org>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b3e7b08..a1c359b 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,7 +25,7 @@ set(E_SMI "e_smi")
+ set(E_SMI_COMPONENT "lib${E_SMI}")
+ set(E_SMI_TARGET "${E_SMI}64")
+ set(E_SMI_STATIC "${E_SMI_TARGET}_static")
+-set(CMAKE_C_FLAGS "-Wall")
++set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+ 
+ if(${USE_CLANG})
+ 	set(CMAKE_C_COMPILER "/usr/bin/clang")

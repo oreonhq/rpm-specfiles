@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Freedoom: Phase 2
+Comment=Doom2 styled first person shooter game
+Exec=prboom -iwad /usr/share/doom/freedoom2.wad
+Icon=freedoom
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;
+Keywords=game;freedoom;doom;doom2;first;person;shooter;

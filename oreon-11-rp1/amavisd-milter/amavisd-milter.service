@@ -1,0 +1,21 @@
+[Unit]
+Description=Amavisd Milter
+Wants=amavisd.service
+After=network.target
+
+[Service]
+Type=forking
+User=amavis
+Group=amavis
+UMask=0007
+PIDFile=/run/amavisd/amavisd-milter.pid
+Environment="SOCKET=/run/amavisd/amavisd-milter.sock"
+Environment="MAX_CONNECTIONS=0"
+Environment="MAX_WAIT=300"
+Environment="MAILDAEMON_TIMEOUT=600"
+Environment="AMAVISD_TIMEOUT=600"
+EnvironmentFile=-/etc/sysconfig/amavisd-milter
+ExecStart=/usr/sbin/amavisd-milter -s $SOCKET -m $MAX_CONNECTIONS -M $MAX_WAIT -t $MAILDAEMON_TIMEOUT -T $AMAVISD_TIMEOUT $AMAVISD_OPTIONS
+
+[Install]
+WantedBy=multi-user.target

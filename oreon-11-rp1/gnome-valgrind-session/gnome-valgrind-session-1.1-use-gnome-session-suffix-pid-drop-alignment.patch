@@ -1,0 +1,18 @@
+diff -urNp gnome-valgrind-session-1.1.orig/gnome-valgrind-errors gnome-valgrind-session-1.1/gnome-valgrind-errors
+--- gnome-valgrind-session-1.1.orig/gnome-valgrind-errors	2017-07-26 18:00:53.148600915 +0200
++++ gnome-valgrind-session-1.1/gnome-valgrind-errors	2017-07-26 18:03:13.429585327 +0200
+@@ -18,4 +18,4 @@ rm -f $SESSIONDIR/*
+ export G_SLICE=always-malloc
+ export G_DEBUG=gc-friendly
+ 
+-valgrind -q --log-file=$SESSIONDIR/$OUTPREFIX --error-limit=no --trace-children=yes --alignment=8 --num-callers=32 --undef-value-errors=no --leak-check=no /usr/bin/gnome
++valgrind -q --log-file=$SESSIONDIR/$OUTPREFIX.%p --error-limit=no --trace-children=yes --num-callers=32 --undef-value-errors=no --leak-check=no /usr/bin/gnome-session
+diff -urNp gnome-valgrind-session-1.1.orig/gnome-valgrind-leaks gnome-valgrind-session-1.1/gnome-valgrind-leaks
+--- gnome-valgrind-session-1.1.orig/gnome-valgrind-leaks	2017-07-26 18:00:53.148600915 +0200
++++ gnome-valgrind-session-1.1/gnome-valgrind-leaks	2017-07-26 18:03:25.246668253 +0200
+@@ -18,4 +18,4 @@ rm -f $SESSIONDIR/*
+ export G_SLICE=always-malloc
+ export G_DEBUG=gc-friendly
+ 
+-valgrind -q --log-file=$SESSIONDIR/$OUTPREFIX --error-limit=no --trace-children=yes --alignment=8 --num-callers=32 --undef-value-errors=no --leak-check=yes --show-reachable=no --leak-resolution=high /usr/bin/gnome
++valgrind -q --log-file=$SESSIONDIR/$OUTPREFIX.%p --error-limit=no --trace-children=yes --num-callers=32 --undef-value-errors=no --leak-check=yes --show-reachable=no --leak-resolution=high /usr/bin/gnome-session

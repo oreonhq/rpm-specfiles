@@ -1,0 +1,30 @@
+From 6fd5973d5bb060089aa32689fef3e0e3f3107700 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:39 +0200
+Subject: [PATCH 01/41] gitignore
+
+---
+ .gitignore | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 .gitignore
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..e6d2b61
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,11 @@
++*.o
++*.a
++.*.sw?
++*.bak
++*~
++tags
++Makefile
++koules.sndsrv.linux
++koules.svga
++koules.sdl
++xkoules
+-- 
+2.5.0
+

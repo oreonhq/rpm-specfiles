@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=packETH
+GenericName=GUI packet generator tool
+Comment=GUI packet generator tool
+Exec=packETH
+Terminal=false
+Type=Application
+Categories=System;

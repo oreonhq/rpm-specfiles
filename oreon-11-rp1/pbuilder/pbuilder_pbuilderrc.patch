@@ -1,0 +1,36 @@
+diff -rupN --no-dereference pbuilder-0.231.3/pbuilderrc pbuilder-0.231.3-new/pbuilderrc
+--- pbuilder-0.231.3/pbuilderrc	2024-09-06 23:43:24.000000000 +0200
++++ pbuilder-0.231.3-new/pbuilderrc	2026-01-14 10:31:14.226270986 +0100
+@@ -52,9 +52,6 @@ REMOVEPACKAGES=""
+ #HOOKDIR="/usr/lib/pbuilder/hooks"
+ HOOKDIR=""
+ EATMYDATA=no
+-# NB: this var is private to pbuilder; ccache uses "CCACHE_DIR" instead
+-# CCACHEDIR="/var/cache/pbuilder/ccache"
+-CCACHEDIR=""
+ 
+ # make debconf not interact with user
+ export DEBIAN_FRONTEND="noninteractive"
+@@ -108,8 +105,8 @@ DEBBUILDOPTS="${DEBBUILDOPTS}"
+ APTCONFDIR=""
+ 
+ # the username and ID used by pbuilder, inside chroot. Needs fakeroot, really
+-BUILDUSERID=1234
+ BUILDUSERNAME=pbuilder
++BUILDUSERID=$(grep $BUILDUSERNAME /etc/passwd | cut -d: -f3)
+ 
+ # BINDMOUNTS is a space separated list of things to mount
+ # inside the chroot.
+@@ -154,3 +151,12 @@ COMPRESSPROG="gzip"
+ # exists and contains one of the copied files (without the leading /etc) that
+ # file will be copied from here instead of the system one
+ CONFDIR="/etc/pbuilder/conf_files"
++
++# ccache (make sure ccache is installed before uncommenting)
++CCACHEDIR=""
++# Note: CCACHEDIR is private to pbuilder, ccache uses "CCACHE_DIR"
++#CCACHEDIR="/var/cache/pbuilder/ccache"
++#export CCACHE_DIR="${CCACHEDIR}"
++#export PATH="/usr/lib/ccache:${PATH}"
++#EXTRAPACKAGES=ccache
++#BINDMOUNTS="${BINDMOUNTS} ${CCACHE_DIR}"

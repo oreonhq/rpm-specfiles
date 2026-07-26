@@ -1,0 +1,101 @@
+diff -up frysk-0.4/frysk-core/frysk/debuginfo/DebugInfoFrame.java.no-jdom frysk-0.4/frysk-core/frysk/debuginfo/DebugInfoFrame.java
+--- frysk-0.4/frysk-core/frysk/debuginfo/DebugInfoFrame.java.no-jdom	2013-02-12 20:45:26.849514083 -0500
++++ frysk-0.4/frysk-core/frysk/debuginfo/DebugInfoFrame.java	2013-02-12 20:45:54.585387049 -0500
+@@ -47,7 +47,6 @@ import lib.dwfl.DwarfDie;
+ import lib.dwfl.Dwfl;
+ import lib.dwfl.DwflDie;
+ import frysk.dwfl.DwflCache;
+-import frysk.rt.LineXXX;
+ import frysk.scopes.Function;
+ import frysk.scopes.Scope;
+ import frysk.scopes.ScopeFactory;
+@@ -172,20 +171,6 @@ public class DebugInfoFrame extends Fram
+     }
+     private SourceLocation line;
+ 
+-    /**
+-     * XXX: This function should not be used DOM information (LineXXX)
+-     * should be moved out of DebugInfoFrame.
+-     * @return
+-     */
+-    public LineXXX getLineXXX(){
+-	if (this.getLine() == SourceLocation.UNKNOWN)
+-	    return null;
+-	if (this.lineXXX == null)
+-	    this.lineXXX = new LineXXX(this.getLine(), this.getTask().getProc());
+-	return lineXXX;
+-    }
+-    private LineXXX lineXXX;
+-    
+     public void toPrint(PrintWriter writer,
+ 			PrintDebugInfoStackOptions options) {
+         Function subprogram = this.getSubprogram();
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMCommon.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMCommon.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMCompilerSuffixes.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMCompilerSuffixes.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMFactory.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMFactory.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMFrysk.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMFrysk.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMFunction.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMFunction.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMImage.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMImage.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMInlineInstance.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMInlineInstance.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMLine.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMLine.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMSource.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMSource.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMTag.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMTag.java
+diff -up frysk-0.4/frysk-core/frysk/dom/DOMTagTypes.java.no-jdom frysk-0.4/frysk-core/frysk/dom/DOMTagTypes.java
+diff -up frysk-0.4/frysk-core/frysk/dom/StaticParser.java.no-jdom frysk-0.4/frysk-core/frysk/dom/StaticParser.java
+diff -up frysk-0.4/frysk-core/frysk/dom/TestDOM.java.no-jdom frysk-0.4/frysk-core/frysk/dom/TestDOM.java
+diff -up frysk-0.4/frysk-core/frysk/rt/LineXXX.java.no-jdom frysk-0.4/frysk-core/frysk/rt/LineXXX.java
+diff -up frysk-0.4/frysk-core/Makefile.am.no-jdom frysk-0.4/frysk-core/Makefile.am
+--- frysk-0.4/frysk-core/Makefile.am.no-jdom	2013-02-12 21:15:45.382563609 -0500
++++ frysk-0.4/frysk-core/Makefile.am	2013-02-12 21:15:59.743111685 -0500
+@@ -46,13 +46,11 @@ GEN_CLASSPATH += ../frysk-imports/jline.
+ GEN_CLASSPATH += ../frysk-imports/antlr.jar
+ GEN_CLASSPATH += ../frysk-imports/junit.jar
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
+-GEN_CLASSPATH += ../frysk-imports/jdom.jar
+ GEN_GCJ_LDADD_LIST += ../frysk-sys/libfrysk-sys.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jline.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-antlr.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jdom.a
+ if USE_LIBUNWIND
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+                  ../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \
+diff -up frysk-0.4/frysk-imports/bootstrap.sh.no-jdom frysk-0.4/frysk-imports/bootstrap.sh
+--- frysk-0.4/frysk-imports/bootstrap.sh.no-jdom	2013-02-12 20:39:47.730169245 -0500
++++ frysk-0.4/frysk-imports/bootstrap.sh	2013-02-12 20:40:00.271780513 -0500
+@@ -43,7 +43,6 @@ set -e
+ FILE_LIST="\
+     junit/junit.jar \
+     ANTLR_JAR \
+-    JDOM_JAR \
+     jline/jline.jar \
+     getopt/getopt.jar \
+     "
+diff -up frysk-0.4/frysk-imports/configure.ac.no-jdom frysk-0.4/frysk-imports/configure.ac
+--- frysk-0.4/frysk-imports/configure.ac.no-jdom	2013-02-12 20:39:33.993600147 -0500
++++ frysk-0.4/frysk-imports/configure.ac	2013-02-12 20:40:14.883332957 -0500
+@@ -47,7 +47,6 @@ m4_include([common/frysk-common.ac])
+ AM_INIT_AUTOMAKE([subdir-objects foreign no-installinfo no-exeext no-dist])
+ 
+ AC_FIND_FILE([antlr.jar], [/usr/share/java /usr/share/frysk/java], ANTLR_JAR)
+-AC_FIND_FILE([jdom.jar], [/usr/share/java /usr/share/frysk/java], JDOM_JAR)
+ AC_FIND_FILE([libaudit.h], [/usr/include/], LIBAUDIT_H)
+ 
+ AC_CONFIG_FILES([
+diff -up frysk-0.4/frysk-sys/Makefile.am.no-jdom frysk-0.4/frysk-sys/Makefile.am
+--- frysk-0.4/frysk-sys/Makefile.am.no-jdom	2013-02-12 21:15:09.854684413 -0500
++++ frysk-0.4/frysk-sys/Makefile.am	2013-02-12 21:15:33.195948344 -0500
+@@ -47,12 +47,10 @@ GEN_CLASSPATH += ../frysk-imports/jline.
+ GEN_CLASSPATH += ../frysk-imports/antlr.jar
+ GEN_CLASSPATH += ../frysk-imports/junit.jar
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
+-GEN_CLASSPATH += ../frysk-imports/jdom.jar
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jline.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-antlr.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jdom.a
+ if USE_LIBUNWIND
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+                  ../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \

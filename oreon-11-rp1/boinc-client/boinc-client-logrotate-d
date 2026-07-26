@@ -1,0 +1,37 @@
+# Log Rotation for BOINC Daemon Logs
+#
+# See http://boinc.berkeley.edu/ for more information about BOINC
+#
+# Daemon is stopped and then restarted after the logs are rotated.
+#
+# On restart, all results that checkpoint will fall back to the last one, if it exists.
+# On restart, all results that did not checkpoint will start from the beginning.
+
+# Author: Kathryn Marks <kathryn.boinc@gmail.com>
+# Created: October 6, 2007
+# Modified: Milos Jakubicek <xjakub@fi.muni.cz>
+# Last Modified: July 19, 2009
+######################################################################
+
+/var/log/boinc.log /var/log/boincerr.log
+{
+	missingok
+	compress
+	delaycompress
+	notifempty
+	nomail
+	create 664 boinc boinc
+	sharedscripts
+	prerotate
+	if [ -f /var/lock/subsys/boinc-client ]; then
+		touch /tmp/boinc_was_running
+		service boinc-client stop >& /dev/null
+	fi
+	endscript
+	postrotate
+	if [ -f /tmp/boinc_was_running ]; then
+		rm /tmp/boinc_was_running
+		service boinc-client start >& /dev/null
+	fi
+	endscript
+}

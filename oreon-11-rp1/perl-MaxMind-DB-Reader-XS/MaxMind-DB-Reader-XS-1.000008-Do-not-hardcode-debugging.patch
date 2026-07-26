@@ -1,0 +1,29 @@
+From 2da43843d0bde9cb78aecfd5922a505a7656fa9c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 11 Aug 2020 11:25:39 +0200
+Subject: [PATCH] Do not hardcode debugging
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Build.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Build.PL b/Build.PL
+index 47f04ff..68132a1 100644
+--- a/Build.PL
++++ b/Build.PL
+@@ -14,7 +14,7 @@ my $mb = Module::Build->new(
+ 
+ $mb->extra_compiler_flags(
+     @{ $mb->extra_compiler_flags },
+-    qw(-std=c99 -fms-extensions -Wall -g)
++    qw(-std=c99 -fms-extensions -Wall)
+ );
+ $mb->extra_linker_flags( @{ $mb->extra_linker_flags }, '-lmaxminddb' );
+ 
+-- 
+2.25.4
+

@@ -1,0 +1,24 @@
+From 621331e7bb96d234a4badc02fcd7f13de9e8be1c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Thu, 30 Sep 2021 00:02:00 +0200
+Subject: [PATCH 13/15] Register @pytest.marker.shell custom marker
+
+See https://docs.pytest.org/en/stable/mark.html.
+---
+ pyproject.toml | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 pyproject.toml
+
+diff --git a/pyproject.toml b/pyproject.toml
+new file mode 100644
+index 0000000..d9fc210
+--- /dev/null
++++ b/pyproject.toml
+@@ -0,0 +1,4 @@
++[tool.pytest.ini_options]
++markers = [
++    "shell: marks tests that require a shell (deselect with '-m \"not shell\"')",
++]
+-- 
+2.31.1
+

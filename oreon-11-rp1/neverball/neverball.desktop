@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Neverball
+Comment=Ball guiding game.
+Exec=neverball-wrapper
+Terminal=false
+Icon=neverball
+Type=Application
+Categories=Game;LogicGame;

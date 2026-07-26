@@ -1,0 +1,21 @@
+diff --git oggvideotools-0.9.1/src/main/streamSerializer.cpp~ oggvideotools-0.9.1/src/main/streamSerializer.cpp
+index 8cd4d73409..899cc17e17 100644
+--- oggvideotools-0.9.1/src/main/streamSerializer.cpp~
++++ oggvideotools-0.9.1/src/main/streamSerializer.cpp
+@@ -207,9 +207,14 @@ void StreamSerializer::getStreamConfig(std::vector<StreamConfig>& packetList)
+ 
+   for (; it != streamList.end(); ++it) {
+     StreamEntry& entry = it->second;
+-    packetList[entry.streamConfig.streamNo] = entry.streamConfig;
+-  }
+ 
++    if (entry.streamConfig.streamNo >= packetList.size())
++      logger.error()
++        << "StreamSerializer::getStreamConfig(): bad streamConfig.streamNo value, ignoring ("
++        << (int) entry.streamConfig.streamNo << ")\n";
++    else
++      packetList[entry.streamConfig.streamNo] = entry.streamConfig;
++  }
+ }
+ 
+ void StreamSerializer::close()

@@ -1,0 +1,13 @@
+--- src/Makefile.common.in~	2011-08-12 03:21:39.000000000 +0200
++++ src/Makefile.common.in	2011-08-12 03:21:39.000000000 +0200
+@@ -106,8 +106,8 @@
+ 	${CP} ${OBJ_DIR}/*.ali "${DESTDIR}${alidir_static}"
+ 
+ module_install_shared: force
+-	$(MKDIR) "${DESTDIR}${libdir_shared}/$(INC_SUBDIR)/"
+-	$(INSTALL_PROGRAM) ${OBJ_DIR}/$(SONAME) "${DESTDIR}${libdir_shared}/$(INC_SUBDIR)/"
++	$(MKDIR) "${DESTDIR}${libdir_shared}/"
++	$(INSTALL_PROGRAM) ${OBJ_DIR}/$(SONAME) "${DESTDIR}${libdir_shared}/"
+ 	$(RM) "${DESTDIR}$(libdir)/$(LIBNAME)"
+ ifneq (${OS},Windows_NT)
+ 	$(LN) $(SONAME) "${DESTDIR}${libdir_shared}/$(LIBNAME)"

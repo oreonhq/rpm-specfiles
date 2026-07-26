@@ -1,0 +1,26 @@
+From 180c1e17264c2c0dd64520157fb8aa54e91be44c Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 16:09:32 +0200
+Subject: [PATCH 02/15] Fix case of required arg
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a9607b2..e3bdd8f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(expatpp)
+ 
+-find_package(EXPAT required)
++find_package(EXPAT REQUIRED)
+ 
+ add_library(expatpp SHARED expatpp.cpp)
+ target_link_libraries(expatpp ${EXPAT_LIBRARIES})
+\ No newline at end of file
+-- 
+1.7.11.7
+

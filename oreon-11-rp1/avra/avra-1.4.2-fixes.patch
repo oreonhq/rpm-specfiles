@@ -1,0 +1,132 @@
+From ad753ada0fca6fa2f6eb472eaec20560e701e059 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 1 Jun 2022 13:32:42 +0200
+Subject: [PATCH 1/4] fix function declarations
+
+The nocase_strcmp() and nocase_strncmp() functions are correctly returning
+an integer value, let the declarations match the definitions.
+---
+ src/avra.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/avra.h b/src/avra.h
+index 363d91f..b04bd7d 100644
+--- a/src/avra.h
++++ b/src/avra.h
+@@ -370,8 +370,8 @@ void write_map_file(struct prog_info *pi);
+ char *Space(char *n);
+ 
+ /* stdextra.c */
+-char *nocase_strcmp(const char *s, const char *t);
+-char *nocase_strncmp(char *s, char *t, int n);
++int nocase_strcmp(const char *s, const char *t);
++int nocase_strncmp(char *s, char *t, int n);
+ char *nocase_strstr(char *s, char *t);
+ int atox(char *s);
+ int atoi_n(char *s, int n);
+-- 
+2.34.3
+
+
+From 5e8409e430d9756ff04ba1614b3d73fc940d3ceb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 1 Jun 2022 19:56:58 +0200
+Subject: [PATCH 2/4] use memcpy for copying the filename
+
+fixes the following:
+
+In file included from /usr/include/string.h:519,
+                 from coff.c:35:
+In function 'strncpy',
+    inlined from 'stab_add_filename' at coff.c:890:3:
+/usr/include/bits/string_fortified.h:95:10: warning: 'strncpy' output truncated before terminating nul copying as many bytes from a string as its length [-Wstringop-truncation]
+   95 |   return __builtin___strncpy_chk (__dest, __src, __len,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   96 |                                   __glibc_objsize (__dest));
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
+coff.c: In function 'stab_add_filename':
+coff.c:859:13: note: length computed here
+  859 |         n = strlen(pName);
+      |             ^~~~~~~~~~~~~
+---
+ src/coff.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/coff.c b/src/coff.c
+index 657592a..c91aed1 100644
+--- a/src/coff.c
++++ b/src/coff.c
+@@ -887,7 +887,7 @@ stab_add_filename(char *pName, char *pLabel)
+ 	if (n <= FILNMLEN) {
+ 		/* inline filename */
+ 		memset(pAux->x_file.x_fname, 0, FILNMLEN);
+-		strncpy(pAux->x_file.x_fname, pName, n);   /* might not be zero terminated */
++		memcpy(pAux->x_file.x_fname, pName, n);   /* might not be zero terminated */
+ 	} else {
+ 		pAux->x_file.x_n.x_zeroes = 0;  /* symbol name is in string table */
+ 		pAux->x_file.x_n.x_offset = ci->ListOfStrings.TotalBytes;
+-- 
+2.34.3
+
+
+From 70dcb86c42bb71b878459ebdb87cc2bf07972f09 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 1 Jun 2022 13:25:24 +0200
+Subject: [PATCH 3/4] fix uninitialized variable in parser
+
+The temp variable is used incorrectly in the strncmp() calls, they should
+compare against the line variable.
+---
+ src/parser.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/parser.c b/src/parser.c
+index 710f1d6..9fc4316 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -196,11 +196,11 @@ parse_line(struct prog_info *pi, char *line)
+ 	/* Filter out .stab debugging information */
+ 	/* .stabs sometimes contains colon : symbol - might be interpreted as label */
+ 	if (*line == '.') {					/* minimal slowdown of existing code */
+-		if (strncmp(temp,".stabs ",7) == 0) {		/* compiler output is always lower case */
++		if (strncmp(line,".stabs ",7) == 0) {		/* compiler output is always lower case */
+ 			strcpy(temp,line);			/* TODO : Do we need this temp variable ? Please check */
+ 			return parse_stabs(pi, temp);
+ 		}
+-		if (strncmp(temp,".stabn ",7) == 0) {
++		if (strncmp(line,".stabn ",7) == 0) {
+ 			strcpy(temp,line);
+ 			return parse_stabn(pi, temp);
+ 		}
+-- 
+2.34.3
+
+
+From c444e2038550a453e607c073206aa2ad6e227204 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Tue, 31 May 2022 21:26:13 +0200
+Subject: [PATCH 4/4] use override for CFLAGS
+
+Adding CDEFS to CFLAGS in Makefile needs an override directive to allow
+user supplied CFLAGS to be used.
+
+http://www.gnu.org/software/make/manual/make.html#Override-Directive
+---
+ src/makefiles/Makefile.linux | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/makefiles/Makefile.linux b/src/makefiles/Makefile.linux
+index 121a8fd..a9badee 100755
+--- a/src/makefiles/Makefile.linux
++++ b/src/makefiles/Makefile.linux
+@@ -1,6 +1,6 @@
+ CC ?= gcc
+ CFLAGS ?= -Wall -O3
+-CFLAGS += $(CDEFS)
++override CFLAGS += $(CDEFS)
+ LDFLAGS ?= -s
+ 
+ SOURCES = avra.c \
+-- 
+2.34.3
+

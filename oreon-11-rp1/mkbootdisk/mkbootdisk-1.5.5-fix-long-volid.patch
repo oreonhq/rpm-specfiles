@@ -1,0 +1,15 @@
+diff -up mkbootdisk-1.5.5/mkbootdisk.orig mkbootdisk-1.5.5/mkbootdisk
+--- mkbootdisk-1.5.5/mkbootdisk.orig	2010-01-15 15:23:28.000000000 +0100
++++ mkbootdisk-1.5.5/mkbootdisk	2011-12-12 15:19:04.875610803 +0100
+@@ -264,9 +264,9 @@ EOF
+ 
+ chmod 644 $cfgfile
+ 
+-if [ -f /etc/redhat-release ]; then
+-    title="$(sed 's/ release.*$//' < /etc/redhat-release)"
+-else
++title=""
++[ -f /etc/redhat-release ] && title="$(sed 's/ release.*$//' /etc/redhat-release)"
++if [ -z "$title" -o $(echo -n "$title Boot CD" | wc -c) -ge 33 ]; then
+     title="Red Hat Linux"
+ fi

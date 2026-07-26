@@ -1,0 +1,18 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 2 Aug 2024 10:22:26 +0200
+Subject: [PATCH] FIXME disable plugins for Rebar3
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index b123182..088f9e0 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -6,7 +6,6 @@
+   {setup, "2.1.0"}
+  ]}.
+ 
+-{project_plugins, [rebar3_ex_doc]}.
+ {hex, [{doc, ex_doc}]}.
+ {ex_doc, [
+           {source_url, "https://github.com/Feuerlabs/exometer_core"},

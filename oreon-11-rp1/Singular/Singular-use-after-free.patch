@@ -1,0 +1,35 @@
+Keep an object from being deallocated while pointers to or into it are in use.
+Fixes these warnings:
+
+longrat.cc: In function 'nlMapC(snumber*, n_Procs_s*, n_Procs_s*)':
+longrat.cc:599:13: warning: dangling pointer to an unnamed temporary may be used [-Wdangling-pointer=]
+  599 |   e=(*f)[0]._mp_exp-size;
+      |     ~~~~~~~~^~~~~~~
+longrat.cc:573:40: note: unnamed temporary defined here
+  573 |   mpf_t *f = ((gmp_complex*)from)->real()._mpfp();
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+longrat.cc:581:8: warning: using dangling pointer 'size_113' to an unnamed temporary [-Wdangling-pointer=]
+  581 |   size = (*f)[0]._mp_size;
+      |   ~~~~~^~~~~~~~~~~~~~~~~~
+longrat.cc:573:40: note: unnamed temporary defined here
+  573 |   mpf_t *f = ((gmp_complex*)from)->real()._mpfp();
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+longrat.cc:592:6: warning: dangling pointer 'qp_115' to an unnamed temporary may be used [-Wdangling-pointer=]
+  592 |   qp = (*f)[0]._mp_d;
+      |   ~~~^~~~~~~~~~~~~~~
+longrat.cc:573:40: note: unnamed temporary defined here
+  573 |   mpf_t *f = ((gmp_complex*)from)->real()._mpfp();
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+
+--- singular-4.3.2/libpolys/coeffs/longrat.cc.orig	2024-02-01 08:40:42.664437261 -0700
++++ singular-4.3.2/libpolys/coeffs/longrat.cc	2024-02-01 08:41:54.573427454 -0700
+@@ -570,7 +570,8 @@ static number nlMapC(number from, const
+     return INT_TO_SR(0);
+   }
+ 
+-  mpf_t *f = ((gmp_complex*)from)->real()._mpfp();
++  gmp_float gfl = ((gmp_complex*)from)->real();
++  mpf_t *f = gfl._mpfp();
+ 
+   number res;
+   mpz_ptr dest,ndest;

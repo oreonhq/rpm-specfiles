@@ -1,0 +1,13 @@
+diff --git a/src/lib/chemistry/molecule/atominfo.cc b/src/lib/chemistry/molecule/atominfo.cc
+index de75dcd..a0a60c9 100644
+--- a/src/lib/chemistry/molecule/atominfo.cc
++++ b/src/lib/chemistry/molecule/atominfo.cc
+@@ -493,7 +493,7 @@ AtomInfo::string_to_Z(const std::string &name, int allow_exceptions)
+   if (iname != symbol_to_Z_.end()) return iname->second;
+ 
+   if (allow_exceptions) {
+-      ExEnv::err0() << sprintf("AtomInfo: invalid name: %s\n",name.c_str());
++      ExEnv::err0() << scprintf("AtomInfo: invalid name: %s\n",name.c_str());
+       throw std::runtime_error("invalid atom name");
+     }
+ 

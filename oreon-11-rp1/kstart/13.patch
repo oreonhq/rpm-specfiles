@@ -1,0 +1,126 @@
+From f12ef9c973ea543d1a688c0698cf26b3b585abf7 Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Thu, 14 Dec 2023 14:06:27 -0700
+Subject: [PATCH] Add systemd service files
+
+- k5start@.service system instance
+- krenew.service user service
+---
+ Makefile.am              |  5 +++++
+ configure.ac             | 31 +++++++++++++++++++++++++++++++
+ systemd/k5start@.service | 13 +++++++++++++
+ systemd/krenew.service   | 20 ++++++++++++++++++++
+ 4 files changed, 69 insertions(+)
+ create mode 100644 systemd/k5start@.service
+ create mode 100644 systemd/krenew.service
+
+diff --git a/Makefile.am b/Makefile.am
+index e073d75..596a02c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -32,6 +32,11 @@ EXTRA_DIST = .clang-format .gitignore .github LICENSE README.md bootstrap   \
+ # Enable AFS support when running distcheck.
+ DISTCHECK_CONFIGURE_FLAGS = --enable-setpag
+ 
++if HAVE_SYSTEMD
++dist_systemdsystemunit_DATA = systemd/k5start@.service
++dist_systemduserunit_DATA = systemd/krenew.service
++endif
++
+ # The following library order matters for annoying reasons.  Older
+ # libafsauthent contains its own com_err implementation, which we do not
+ # want to pick up.
+diff --git a/configure.ac b/configure.ac
+index f0edc36..41e0630 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -32,6 +32,7 @@ AM_PROG_CC_C_O
+ m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
+ AC_PROG_INSTALL
+ AC_PROG_RANLIB
++PKG_PROG_PKG_CONFIG
+ 
+ dnl aklog is the standard name for the utility to get AFS tokens from Kerberos
+ dnl tickets.  afslog is the name of the utility that comes with Heimdal.  By
+@@ -45,6 +46,36 @@ AC_ARG_WITH([aklog],
+ AC_DEFINE_UNQUOTED([PATH_AKLOG], ["$PATH_AKLOG"],
+     [Full path to aklog binary.])
+ 
++AC_ARG_WITH([systemdsystemunitdir],
++     [AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [systemd])],,
++     [with_systemdsystemunitdir=auto])
++AS_IF([test "x$with_systemdsystemunitdir" = "xyes" -o "x$with_systemdsystemunitdir" = "xauto"], [
++     def_systemdsystemunitdir=$($PKG_CONFIG --variable=systemdsystemunitdir systemd)
++
++     AS_IF([test "x$def_systemdsystemunitdir" = "x"],
++   [AS_IF([test "x$with_systemdsystemunitdir" = "xyes"],
++    [AC_MSG_ERROR([systemd support requested but pkg-config unable to query systemd package])])
++    with_systemdsystemunitdir=no],
++   [with_systemdsystemunitdir="$def_systemdsystemunitdir"])])
++AS_IF([test "x$with_systemdsystemunitdir" != "xno"],
++      [AC_SUBST([systemdsystemunitdir], [$with_systemdsystemunitdir])])
++AM_CONDITIONAL([HAVE_SYSTEMD], [test "x$with_systemdsystemunitdir" != "xno"])
++
++AC_ARG_WITH([systemduserunitdir],
++     [AS_HELP_STRING([--with-systemduserunitdir=DIR], [systemd])],,
++     [with_systemduserunitdir=auto])
++AS_IF([test "x$with_systemduserunitdir" = "xyes" -o "x$with_systemduserunitdir" = "xauto"], [
++     def_systemduserunitdir=$($PKG_CONFIG --variable=systemduserunitdir systemd)
++
++     AS_IF([test "x$def_systemduserunitdir" = "x"],
++   [AS_IF([test "x$with_systemduserunitdir" = "xyes"],
++    [AC_MSG_ERROR([systemd support requested but pkg-config unable to query systemd package])])
++    with_systemduserunitdir=no],
++   [with_systemduserunitdir="$def_systemduserunitdir"])])
++AS_IF([test "x$with_systemduserunitdir" != "xno"],
++      [AC_SUBST([systemduserunitdir], [$with_systemduserunitdir])])
++AM_CONDITIONAL([HAVE_SYSTEMD], [test "x$with_systemduserunitdir" != "xno"])
++
+ dnl Check for the Kerberos libraries and for portability between MIT and
+ dnl Heimdal.
+ RRA_LIB_KRB5
+diff --git a/systemd/k5start@.service b/systemd/k5start@.service
+new file mode 100644
+index 0000000..18ed44c
+--- /dev/null
++++ b/systemd/k5start@.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=Kerberos credentials maintainer for user %i
++After=syslog.target network-online.target
++
++[Service]
++Type=simple
++EnvironmentFile=/etc/k5start-%i.conf
++User=%i
++ExecStart=/usr/bin/k5start $K5START_OPTS
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/systemd/krenew.service b/systemd/krenew.service
+new file mode 100644
+index 0000000..61e2b69
+--- /dev/null
++++ b/systemd/krenew.service
+@@ -0,0 +1,20 @@
++
++# Run krenew as a systemd user unit
++# Enable globally for all users
++# systemctl --user --global enable krenew.service
++# Enable as an individual user.
++# systemctl --user enable krenew.service
++
++[Unit]
++Description=Renew Kerberos ticket
++Documentation=man:krenew(1)
++Before=dbus.service
++
++[Service]
++Type=simple
++PIDFile=${XDG_RUNTIME_DIR}/krenew.pid
++ExecStart=/usr/bin/krenew -K 30 -i -t -v -p ${XDG_RUNTIME_DIR}/krenew.pid
++
++[Install]
++WantedBy=default.target
++

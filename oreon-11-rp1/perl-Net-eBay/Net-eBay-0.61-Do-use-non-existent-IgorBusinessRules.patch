@@ -1,0 +1,43 @@
+From d5d1ffd783341d715f073d4452e99e161bc058ba Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 19 Jun 2015 14:56:06 +0200
+Subject: [PATCH] Do use non-existent IgorBusinessRules
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CPAN RT#105379
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ ebay-add-item.pl    | 1 -
+ ebay-revise-item.pl | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/ebay-add-item.pl b/ebay-add-item.pl
+index 6175dd4..2f4ef0f 100755
+--- a/ebay-add-item.pl
++++ b/ebay-add-item.pl
+@@ -9,7 +9,6 @@
+ # weight). Use it as a guide to write your own scripts, no more. 
+ #
+ 
+-use IgorBusinessRules;
+ use Net::eBay;
+ use Data::Dumper;
+ use Cwd;
+diff --git a/ebay-revise-item.pl b/ebay-revise-item.pl
+index c181cf1..b393002 100755
+--- a/ebay-revise-item.pl
++++ b/ebay-revise-item.pl
+@@ -3,7 +3,6 @@
+ use strict;
+ use warnings;
+ 
+-use IgorBusinessRules;
+ use Net::eBay;
+ use Data::Dumper;
+ 
+-- 
+2.1.0
+

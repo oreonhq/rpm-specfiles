@@ -1,0 +1,126 @@
+From 9d3e6daaae3f7839df1fd011940c9050e8d86075 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Nosek?= <onosek@redhat.com>
+Date: Mon, 19 Jul 2021 14:58:24 +0000
+Subject: [PATCH] curl --max-time in seconds, not minutes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Timeout is supposed to be 15 minutes. Large files need enough time
+to be downloaded. Curl accepts seconds, not minutes.
+
+Fixes: #13
+Relates: https://pagure.io/fedora-infrastructure/issue/9821
+JIRA: RHELCMP-6049
+
+Signed-off-by: Ondřej Nosek <onosek@redhat.com>
+---
+ bin/fedpkg-base                                | 4 ++--
+ tests/test_md5_bsd/expected                    | 2 +-
+ tests/test_md5_bsd_empty_line/expected         | 2 +-
+ tests/test_md5_bsd_missing_endline/expected    | 2 +-
+ tests/test_md5_old/expected                    | 2 +-
+ tests/test_md5_old_empty_line/expected         | 2 +-
+ tests/test_md5_old_missing_endline/expected    | 2 +-
+ tests/test_sha512_bsd/expected                 | 2 +-
+ tests/test_sha512_bsd_empty_line/expected      | 2 +-
+ tests/test_sha512_bsd_missing_endline/expected | 2 +-
+ 10 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/bin/fedpkg-base b/bin/fedpkg-base
+index 3fc0998..b31a6a7 100755
+--- a/bin/fedpkg-base
++++ b/bin/fedpkg-base
+@@ -36,7 +36,7 @@ if [[ -s sources ]]; then
+             # Remove parenthesis around tarball name
+             filename=${filename#(}
+             tarball=${filename%)}
+-            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 --max-time 15 "$baseurl/$pkgname/$tarball/$hashtype/$hash/$tarball"
++            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 --max-time 900 "$baseurl/$pkgname/$tarball/$hashtype/$hash/$tarball"
+         done < sources
+         "${hashtype}sum" -c sources
+     else
+@@ -45,7 +45,7 @@ if [[ -s sources ]]; then
+             if [ -z "$md5sum" ] || [ -z "$tarball" ]; then
+                 continue
+             fi
+-            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 --max-time 15 "$baseurl/$pkgname/$tarball/$md5sum/$tarball"
++            curl -L -H Pragma: -o "./$tarball" -R -S --fail --retry 5 --max-time 900 "$baseurl/$pkgname/$tarball/$md5sum/$tarball"
+         done < sources
+         md5sum -c sources
+     fi
+diff --git a/tests/test_md5_bsd/expected b/tests/test_md5_bsd/expected
+index 792d67f..6036fc9 100644
+--- a/tests/test_md5_bsd/expected
++++ b/tests/test_md5_bsd/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_md5_bsd/github-linguist-4.8.18.gem/md5/192de5f33807d72e573c54f61892fc69/github-linguist-4.8.18.gem
++curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_md5_bsd/github-linguist-4.8.18.gem/md5/192de5f33807d72e573c54f61892fc69/github-linguist-4.8.18.gem
+ md5sum -c sources
+diff --git a/tests/test_md5_bsd_empty_line/expected b/tests/test_md5_bsd_empty_line/expected
+index f8c48b5..1aaf959 100644
+--- a/tests/test_md5_bsd_empty_line/expected
++++ b/tests/test_md5_bsd_empty_line/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_md5_bsd_empty_line/github-linguist-4.8.18.gem/md5/192de5f33807d72e573c54f61892fc69/github-linguist-4.8.18.gem
++curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_md5_bsd_empty_line/github-linguist-4.8.18.gem/md5/192de5f33807d72e573c54f61892fc69/github-linguist-4.8.18.gem
+ md5sum -c sources
+diff --git a/tests/test_md5_bsd_missing_endline/expected b/tests/test_md5_bsd_missing_endline/expected
+index 72dc0a8..88a52e7 100644
+--- a/tests/test_md5_bsd_missing_endline/expected
++++ b/tests/test_md5_bsd_missing_endline/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_md5_bsd_missing_endline/github-linguist-4.8.18.gem/md5/192de5f33807d72e573c54f61892fc69/github-linguist-4.8.18.gem
++curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_md5_bsd_missing_endline/github-linguist-4.8.18.gem/md5/192de5f33807d72e573c54f61892fc69/github-linguist-4.8.18.gem
+ md5sum -c sources
+diff --git a/tests/test_md5_old/expected b/tests/test_md5_old/expected
+index 5ab54d1..c8b1c63 100644
+--- a/tests/test_md5_old/expected
++++ b/tests/test_md5_old/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./entr-3.6.tar.gz -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_md5_old/entr-3.6.tar.gz/072eed7153296a8fae6ebdedefed9fd4/entr-3.6.tar.gz
++curl -L -H Pragma: -o ./entr-3.6.tar.gz -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_md5_old/entr-3.6.tar.gz/072eed7153296a8fae6ebdedefed9fd4/entr-3.6.tar.gz
+ md5sum -c sources
+diff --git a/tests/test_md5_old_empty_line/expected b/tests/test_md5_old_empty_line/expected
+index 7415997..300b5d2 100644
+--- a/tests/test_md5_old_empty_line/expected
++++ b/tests/test_md5_old_empty_line/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./entr-3.6.tar.gz -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_md5_old_empty_line/entr-3.6.tar.gz/072eed7153296a8fae6ebdedefed9fd4/entr-3.6.tar.gz
++curl -L -H Pragma: -o ./entr-3.6.tar.gz -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_md5_old_empty_line/entr-3.6.tar.gz/072eed7153296a8fae6ebdedefed9fd4/entr-3.6.tar.gz
+ md5sum -c sources
+diff --git a/tests/test_md5_old_missing_endline/expected b/tests/test_md5_old_missing_endline/expected
+index 552ea3c..6d31180 100644
+--- a/tests/test_md5_old_missing_endline/expected
++++ b/tests/test_md5_old_missing_endline/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./entr-3.6.tar.gz -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_md5_old_missing_endline/entr-3.6.tar.gz/072eed7153296a8fae6ebdedefed9fd4/entr-3.6.tar.gz
++curl -L -H Pragma: -o ./entr-3.6.tar.gz -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_md5_old_missing_endline/entr-3.6.tar.gz/072eed7153296a8fae6ebdedefed9fd4/entr-3.6.tar.gz
+ md5sum -c sources
+diff --git a/tests/test_sha512_bsd/expected b/tests/test_sha512_bsd/expected
+index fbbf4f6..0f40858 100644
+--- a/tests/test_sha512_bsd/expected
++++ b/tests/test_sha512_bsd/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_sha512_bsd/github-linguist-4.8.18.gem/sha512/d556ffe0062bc2c745c46e94929eab18c79fd221ffc1dd0c0ea5868428bd130d7b15eec618e9c3940b50c27559923911135770792864f3330a606132dc8819c0/github-linguist-4.8.18.gem
++curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_sha512_bsd/github-linguist-4.8.18.gem/sha512/d556ffe0062bc2c745c46e94929eab18c79fd221ffc1dd0c0ea5868428bd130d7b15eec618e9c3940b50c27559923911135770792864f3330a606132dc8819c0/github-linguist-4.8.18.gem
+ sha512sum -c sources
+diff --git a/tests/test_sha512_bsd_empty_line/expected b/tests/test_sha512_bsd_empty_line/expected
+index 3ebb63a..88f3e70 100644
+--- a/tests/test_sha512_bsd_empty_line/expected
++++ b/tests/test_sha512_bsd_empty_line/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_sha512_bsd_empty_line/github-linguist-4.8.18.gem/sha512/d556ffe0062bc2c745c46e94929eab18c79fd221ffc1dd0c0ea5868428bd130d7b15eec618e9c3940b50c27559923911135770792864f3330a606132dc8819c0/github-linguist-4.8.18.gem
++curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_sha512_bsd_empty_line/github-linguist-4.8.18.gem/sha512/d556ffe0062bc2c745c46e94929eab18c79fd221ffc1dd0c0ea5868428bd130d7b15eec618e9c3940b50c27559923911135770792864f3330a606132dc8819c0/github-linguist-4.8.18.gem
+ sha512sum -c sources
+diff --git a/tests/test_sha512_bsd_missing_endline/expected b/tests/test_sha512_bsd_missing_endline/expected
+index 8521dfc..2b1b7b0 100644
+--- a/tests/test_sha512_bsd_missing_endline/expected
++++ b/tests/test_sha512_bsd_missing_endline/expected
+@@ -1,2 +1,2 @@
+-curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 15 https://src.fedoraproject.org/repo/pkgs/test_sha512_bsd_missing_endline/github-linguist-4.8.18.gem/sha512/d556ffe0062bc2c745c46e94929eab18c79fd221ffc1dd0c0ea5868428bd130d7b15eec618e9c3940b50c27559923911135770792864f3330a606132dc8819c0/github-linguist-4.8.18.gem
++curl -L -H Pragma: -o ./github-linguist-4.8.18.gem -R -S --fail --retry 5 --max-time 900 https://src.fedoraproject.org/repo/pkgs/test_sha512_bsd_missing_endline/github-linguist-4.8.18.gem/sha512/d556ffe0062bc2c745c46e94929eab18c79fd221ffc1dd0c0ea5868428bd130d7b15eec618e9c3940b50c27559923911135770792864f3330a606132dc8819c0/github-linguist-4.8.18.gem
+ sha512sum -c sources
+-- 
+2.31.1
+

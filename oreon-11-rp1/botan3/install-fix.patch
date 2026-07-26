@@ -1,0 +1,13 @@
+diff --git a/src/scripts/install.py b/src/scripts/install.py
+index 4afdfe00e..1a5491a38 100755
+--- a/src/scripts/install.py
++++ b/src/scripts/install.py
+@@ -123,7 +123,7 @@ def main(args):
+ 
+     def copy_file(src, dst):
+         logging.debug('Copying %s to %s', src, dst)
+-        shutil.copyfile(src, dst)
++        shutil.copy2(src, dst)
+ 
+     def copy_executable(src, dst):
+         copy_file(src, dst)

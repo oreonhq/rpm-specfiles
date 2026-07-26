@@ -1,0 +1,10 @@
+[Unit]
+Description=Cwdaemon Morse Daemon For Parallel Or Serial Port
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/cwdaemon -d parport0
+
+[Install]
+WantedBy=multi-user.target

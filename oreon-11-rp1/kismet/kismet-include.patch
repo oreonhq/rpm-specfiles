@@ -1,0 +1,10 @@
+--- plugin-alertsyslog/alertsyslog.cc~	2019-05-29 06:06:50.000000000 -0500
++++ plugin-alertsyslog/alertsyslog.cc	2019-05-30 12:13:53.142900830 -0500
+@@ -37,6 +37,7 @@
+ #include <globalregistry.h>
+ #include <alertracker.h>
+ #include <version.h>
++#include <memory>
+ 
+ int pack_comp_alert;
+ 

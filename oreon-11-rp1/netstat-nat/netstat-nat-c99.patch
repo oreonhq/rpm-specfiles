@@ -1,0 +1,19 @@
+Add missing function prototypes.  These functions are called before
+they are defined in the same source file.  This improves compatibility
+with future compilers, which might reject implicit function
+declarations by default.
+
+diff --git a/netstat-nat.c b/netstat-nat.c
+index d5b68abb9a03e2ab..5bbc80dc2d00c78a 100755
+--- a/netstat-nat.c
++++ b/netstat-nat.c
+@@ -193,6 +193,9 @@ int connection_index = 0;
+ char ***connection_table;
+ struct _ip_addresses *IpAddresses = NULL;
+ 
++int search_first_hit(char *search, char *line, char *ret);
++int search_sec_hit(char *search, char *line, char *ret);
++int string_search(char *string, char *search);
+ 
+ int main(int argc, char *argv[])
+     {

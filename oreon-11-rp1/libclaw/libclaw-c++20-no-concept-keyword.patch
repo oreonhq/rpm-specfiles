@@ -1,0 +1,41 @@
+--- libclaw-1.7.4/CMakeLists.txt.orig	2026-01-29 14:57:17.317737249 +0100
++++ libclaw-1.7.4/CMakeLists.txt	2026-01-29 14:57:26.811639414 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.25.0)
+ 
+ IF(CMAKE_COMPILER_IS_GNUCXX)
+   ADD_DEFINITIONS(-Wall -ansi -pedantic)
+--- libclaw-1.7.4/claw/non_copyable.hpp.orig	2026-01-29 14:29:33.366123605 +0100
++++ libclaw-1.7.4/claw/non_copyable.hpp	2026-01-29 14:31:23.625763793 +0100
+@@ -61,7 +61,15 @@
+     }; // non_copyable
+   } // namespace pattern
+ 
++  /*
++   * "concept" became a reserved keyword in C++20.
++   * Keep backward compatibility while remaining valid in C++20+.
++   */
++#if __cplusplus < 202002L
+   namespace concept = pattern;
++#else
++  namespace claw_concept = pattern;
++#endif
+ 
+ } // namespace claw
+ 
+--- libclaw-1.7.4/examples/singleton/main.cpp.orig	2026-01-29 14:45:34.983342322 +0100
++++ libclaw-1.7.4/examples/singleton/main.cpp	2026-01-29 14:46:35.564427943 +0100
+@@ -2,6 +2,12 @@
+ #include <string>
+ #include <iostream>
+ 
++#if __cplusplus < 202002L
++namespace claw_concept = claw::concept;
++#else
++namespace claw_concept = claw::claw_concept;
++#endif
++
+ class resource_manager : public claw::concept::basic_singleton<resource_manager>
+ {
+ public:

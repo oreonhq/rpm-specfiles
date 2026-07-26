@@ -1,0 +1,23 @@
+--- a/fop-core/src/main/java/org/apache/fop/pdf/PDFOutputIntent.java
++++ b/fop-core/src/main/java/org/apache/fop/pdf/PDFOutputIntent.java
+@@ -165,7 +165,7 @@
+             }
+ 
+             bout.write(encode(">>"));
+-        } catch (IOException ioe) {
++        } catch (Exception ioe) {
+             log.error("Ignored I/O exception", ioe);
+         }
+         byte[] bytes = bout.toByteArray();
+--- a/fop-core/src/main/java/org/apache/fop/render/pdf/AbstractImageAdapter.java
++++ b/fop-core/src/main/java/org/apache/fop/render/pdf/AbstractImageAdapter.java
+@@ -263,7 +263,7 @@
+             indexed.add(new PDFName("DeviceGray"));
+             try {
+                 baout.write(blues);
+-            } catch (IOException e) {
++            } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         }  else {
+

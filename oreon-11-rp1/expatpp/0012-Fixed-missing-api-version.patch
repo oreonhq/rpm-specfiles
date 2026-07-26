@@ -1,0 +1,26 @@
+From 4592e0eb8fb12d39d0eed91d821651e1583b534b Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 17:10:42 +0200
+Subject: [PATCH 12/15] Fixed missing api version
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a4bc49c..971fea4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,8 @@ SET(EXPATPP_MINOR_VERSION 6)
+ SET(EXPATPP_BUILD_VERSION 0)
+ SET(EXPATPP_VERSION
+   "${EXPATPP_MAJOR_VERSION}.${EXPATPP_MINOR_VERSION}.${EXPATPP_BUILD_VERSION}")
++SET(EXPATPP_API_VERSION
++  "${EXPATPP_MAJOR_VERSION}.${EXPATPP_MINOR_VERSION}")
+ SET(EXPATPP_LIBRARY_PROPERTIES ${EXPATPP_LIBRARY_PROPERTIES}
+   VERSION "${EXPATPP_VERSION}"
+   SOVERSION "${EXPATPP_API_VERSION}"
+-- 
+1.7.11.7
+

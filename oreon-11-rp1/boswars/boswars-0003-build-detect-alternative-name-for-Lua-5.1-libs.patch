@@ -1,0 +1,20 @@
+From: Francois Beerten <fbeerten.git@b10eng.com>
+Date: Thu, 6 Jul 2023 22:53:53 +0200
+Subject: [PATCH] build: detect alternative name for Lua 5.1 libs
+
+Some distros like Fedora, OpenSuse or Mageia use a name for the
+Lua package (lua-5.1) that wasn't in our list of candiate names.
+
+diff --git a/make.py b/make.py
+index dd39ed46..a821779c 100755
+--- a/make.py
++++ b/make.py
+@@ -275,7 +275,7 @@ def detectLua(b):
+     # Prefer that because it will call our C++ destructors on unwind.
+     # This avoids memory leaks that would be very cumbersome to fix in
+     # any other way.
+-    libs = 'lua5.1-c++ lua5.1 lua51 lua'.split()
++    libs = 'lua5.1-c++ lua5.1 lua51 lua-5.1 lua'.split()
+     if b.usepkgconfig:
+         for i in libs:
+             if pkgconfig(b, i):

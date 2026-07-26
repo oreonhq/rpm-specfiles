@@ -1,0 +1,11 @@
+--- singular-4.2.0/Singular/extra.cc.orig	2021-04-14 06:26:53.000000000 -0600
++++ singular-4.2.0/Singular/extra.cc	2021-05-25 19:54:51.313284051 -0600
+@@ -2438,7 +2438,7 @@ static BOOLEAN jjEXTENDED_SYSTEM(leftv r
+         if(strcmp(sys_cmd,"changeRing")==0)
+         {
+           int varN = currRing->N;
+-          char h[10];
++          char h[12];
+           for (int i = 1; i <= varN; i++)
+           {
+             omFree(currRing->names[i - 1]);

@@ -1,0 +1,130 @@
+Avoid implicit function declarations for improved C99 compatibility.
+Future compilers are likely to require function declarations.
+
+No need to upstream this because it's entirely in autoconf-generated
+code.
+
+diff --git a/configure b/configure
+index 023c4fd712e2b2b6..82f049272052eac7 100755
+--- a/configure
++++ b/configure
+@@ -12193,10 +12193,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -12210,7 +12206,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -12291,10 +12287,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -12308,7 +12300,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -15822,10 +15814,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -15839,7 +15827,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -15920,10 +15908,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -15937,7 +15921,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -21164,10 +21148,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -21181,7 +21161,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+@@ -21262,10 +21242,6 @@ else
+ #  endif
+ #endif
+ 
+-#ifdef __cplusplus
+-extern "C" void exit (int);
+-#endif
+-
+ void fnord() { int i=42;}
+ int main ()
+ {
+@@ -21279,7 +21255,7 @@ int main ()
+       /* dlclose (self); */
+     }
+ 
+-    exit (status);
++    return status;
+ }
+ EOF
+   if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5

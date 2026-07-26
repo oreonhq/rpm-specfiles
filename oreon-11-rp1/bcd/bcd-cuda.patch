@@ -1,0 +1,11 @@
+diff -rupN --no-dereference bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/CMakeLists.txt bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/CMakeLists.txt
+--- bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b/src/core/CMakeLists.txt	2025-10-19 18:01:24.079906621 +0200
++++ bcd-d94c9fa77c11afe7d04670d92b3930c417e19f4b-new/src/core/CMakeLists.txt	2025-10-19 18:01:24.083972978 +0200
+@@ -79,7 +79,6 @@ SET(header_implementation_files
+ 
+ IF(CUDA_FOUND)
+ 	MESSAGE(STATUS "Using cuda's nvcc for generating ${target_name}")
+-	list(APPEND CUDA_NVCC_FLAGS "-arch=sm_20")
+ 	SET(src_files ${src_files} CudaHistogramDistance.cu)
+ 	SET(header_files
+ 		${header_files}

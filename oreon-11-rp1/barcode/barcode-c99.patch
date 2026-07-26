@@ -1,0 +1,15 @@
+Include <string.h> for the strcmp function.
+
+Submitted upstream: <https://savannah.gnu.org/support/index.php?110800>
+
+diff --git a/sample.c b/sample.c
+index 46e620586ca3c05e..a7bc389b3fc14306 100644
+--- a/sample.c
++++ b/sample.c
+@@ -1,5 +1,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #include "barcode.h"
+ 

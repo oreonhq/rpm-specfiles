@@ -1,0 +1,31 @@
+From e6671cdf4ed8b21b4a8bd1973bd458f62792cd29 Mon Sep 17 00:00:00 2001
+From: Kenneth Loafman <kenneth@loafman.com>
+Date: Sat, 26 Nov 2022 10:01:48 -0600
+Subject: [PATCH] chg:test: Add test case for issue #683.
+
+---
+ testing/manual/issue683.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100755 testing/manual/issue683.sh
+
+diff --git a/testing/manual/issue683.sh b/testing/manual/issue683.sh
+new file mode 100755
+index 00000000..31f28b55
+--- /dev/null
++++ b/testing/manual/issue683.sh
+@@ -0,0 +1,12 @@
++#!/bin/bash
++
++set -e
++
++cd `dirname $0`/../..
++
++export PYTHONPATH=`pwd`
++export PASSPHRASE="test"
++
++rm -rf /tmp/issue683/ ~/.cache/duplicity/issue683
++LANG=cs_CZ.UTF-8 bin/duplicity -vINFO --name=issue683 testing file:///tmp/issue683
++LANG=cs_CZ.UTF-8 bin/duplicity --pydevd -vINFO --name=issue683 testing file:///tmp/issue683
+-- 
+GitLab
+

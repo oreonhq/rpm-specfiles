@@ -1,0 +1,19 @@
+diff -up jpilot-1.8.2/configure.confp jpilot-1.8.2/configure
+--- jpilot-1.8.2/configure.confp	2014-05-18 05:45:22.000000000 +0200
++++ jpilot-1.8.2/configure	2014-06-10 21:20:35.326500429 +0200
+@@ -15718,9 +15718,15 @@ fi
+ abilib=$ABILIB
+ if test "x$abilib" = "x"; then
+ 
++if (test `uname -m` = x86_64) then 
++cat >>confdefs.h <<_ACEOF
++#define ABILIB "lib64"
++_ACEOF
++else 
+ cat >>confdefs.h <<_ACEOF
+ #define ABILIB "lib"
+ _ACEOF
++fi
+ 
+ else
+ 

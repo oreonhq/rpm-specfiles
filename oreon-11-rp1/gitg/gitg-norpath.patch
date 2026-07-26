@@ -1,0 +1,9 @@
+diff -up gitg-f7501bc827f1d4476336b0db0791335cf8a613c4/gitg/meson.build.orig gitg-f7501bc827f1d4476336b0db0791335cf8a613c4/gitg/meson.build
+--- gitg-f7501bc827f1d4476336b0db0791335cf8a613c4/gitg/meson.build.orig	2025-05-12 23:54:48.000000000 +0200
++++ gitg-f7501bc827f1d4476336b0db0791335cf8a613c4/gitg/meson.build	2025-07-07 12:06:46.918033157 +0200
+@@ -155,5 +155,4 @@ executable(
+   vala_args: vala_flags,
+   gui_app: true,
+   install: true,
+-  install_rpath: gitg_libdir,
+ )

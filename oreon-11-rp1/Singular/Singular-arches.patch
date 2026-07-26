@@ -1,0 +1,11 @@
+--- Singular-Release-4-2-1p3/m4/cpu-check.m4.orig	2021-12-17 11:35:18.000000000 -0700
++++ Singular-Release-4-2-1p3/m4/cpu-check.m4	2022-03-03 15:28:43.256747747 -0700
+@@ -69,6 +69,8 @@ dnl the following settings seems to be b
+                AC_DEFINE(HAVE_INVTABLE,1,division via a table of logarithms)
+ 	       AC_DEFINE(HAVE_GENERIC_MULT,1,multiplication is fast on the cpu: a*b is with mod otherwise using tables of logartihms)
+ 	       ],
++dnl FIXME: need to run some tests
++  [s390*], [AC_DEFINE(HAVE_GENERIC_ADD,1,use branch for addition in Z/p otherwise it uses a generic add)],
+   []
+ )
+ 

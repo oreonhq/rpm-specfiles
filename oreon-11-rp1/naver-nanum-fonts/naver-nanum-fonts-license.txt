@@ -1,0 +1,1221 @@
+메뉴건너뛰고 본문 바로가기 <#start>
+** <#>
+
+
+  사용자 링크
+
+  * 내 블로그 <http://blog.naver.com/MyBlog.nhn>
+  * 내 N드라이브 <http://ndrive.naver.com/>
+  * 내 정보관리 <https://nid.naver.com/user/help.nhn?todo=main>
+
+로그인 <https://nid.naver.com/nidlogin.login>
+
+  * 네이버 <http://www.naver.com/>
+  * me <http://me.naver.com>/0/ <#>
+  * 메일 <http://mail.naver.com/>/0/ <http://mail.naver.com/>
+  * 카페 <http://section.cafe.naver.com/>
+  * 블로그 <http://blog.naver.com/>
+  * 전체 서비스 더보기 <#>
+
+    /ㄱ/-/ㅁ/
+        가계부 <http://moneybook.naver.com>
+        건강 <http://health.naver.com>
+        게임 <http://game.naver.com>
+        날씨 <http://weather.naver.com>
+        뉴스 <http://news.naver.com>
+        만화/웹툰 <http://comic.naver.com>
+        뮤직 <http://music.naver.com>
+        미디어 플레이어
+        <http://tools.naver.com/service/mediaplayer/index.nhn>
+
+    /ㅂ/-/ㅇ/
+        백신 <http://tools.naver.com/service/vaccine/index.nhn>
+        부동산 <http://land.naver.com>
+        사전 <http://dic.naver.com>
+        샵N <http://shop.naver.com/main/introduction/introduce>
+        소프트웨어 <http://software.naver.com>
+        스포츠 <http://sports.news.naver.com>
+        영화 <http://movie.naver.com>
+
+    /ㅈ/-/ㅋ/
+        자동차 <http://auto.naver.com>
+        증권 <http://stock.naver.com>
+        지도 <http://map.naver.com>
+        지식쇼핑 <http://shopping.naver.com>
+        지식iN <http://kin.naver.com>
+        쪽지 <http://note.naver.com>
+        책 <http://book.naver.com>
+        캘린더 <https://calendar.naver.com>
+        캡처 <http://toolbar.naver.com/intro/index.nhn?menuId=16>
+
+    /ㅌ/-/기타/
+        툴바 <http://tools.naver.com/service/toolbar/index.nhn>
+        포토뷰어 <http://tools.naver.com/service/photoviewer/index.nhn>
+        포토앨범 <http://photo.ndrive.naver.com>
+        해피빈 <http://happybean.naver.com/>
+        N드라이브 <http://ndrive.naver.com>
+        TV편성표 <http://tvguide.naver.com>
+        QR코드 <http://qr.naver.com>
+
+    /신규서비스/
+        라인 <http://campaign.naver.com/line>
+        마일리지 <http://mileage.naver.com/customer/home>
+        베트남어사전 <http://vndic.naver.com>
+        웹소설 <http://novel.naver.com>
+        프로야구 <http://news.naver.com/sports/index.nhn?category=baseball>
+        N스토어 <http://nstore.naver.com>
+
+    전체보기 <http://www.naver.com/more.html>
+
+네이버 통합검색
+
+
+  NAVER <http://www.naver.com> 도움말
+
+검색
+
+  * 도움말.문의하기 <https://help.naver.com/support/list/home.nhn>
+
+*공지사항 :* [안내] 위닝일레븐 2014 게임 이용 관련 안내
+<http://help.naver.com/ops/step1/notice.nhn?url=http://ui.nboard2.naver.com/nboard2/read/1000003518/10000000000029886334>
+
+본문시작
+
+
+      도움말 원하시는 도움말을 아래 목록에서 찾아보세요
+
+문의하기
+<https://help.naver.com/ops/step2/mail.nhn?catg=2653&fcatid=12119&trackingType=C&parentId=12119>
+
+
+
+      // 네이버 전반 <?parentId=12119> 세부분류
+
+  * *나눔글꼴* <#>
+  * 나눔글꼴에코 <#>
+  * 한글문서서식 <#>
+  * 네이버 접속 장애 <#>
+  * 네이버Active X 가이드 <#>
+  * Young Designers Challenge <#>
+      o 제출/응모관련 <#>
+      o 심사/발표관련 <#>
+  * 이벤트 <#>
+  * 기타 <#>
+  * 셧다운제 <#>
+
+메뉴바 접기/펼치기 <javascript:void(toggleSplitBar());>
+
+
+        네이버 전반>네이버 전반>나눔글꼴
+
+  * 네이버 나눔글꼴 라이선스 내용은 구체적으로 어떻게 되나요? <#도움말보기>
+    목록보기 <javascript:view_list('15879');>
+
+    네이버 나눔글꼴의 지적 재산권은 네이버에 있습니다.
+    네이버 나눔글꼴은 개인 및 기업 사용자를 포함한 모든 사용자에게
+
+    무료로 제공되며 자유롭게 수정하고 재배포하실 수 있습니다.
+
+    단, 글꼴 자체를 유료로 판매하는 것은 금지하며,
+
+    네이버 나눔글꼴은 본 저작권 안내와 라이선스 전문을 포함해서
+
+    다른 소프트웨어와 번들하거나 재배포 또는 판매가 가능합니다.
+    네이버 나눔글꼴 라이선스 전문을 포함하기 어려울 경우,
+
+    나눔글꼴의 출처 표기를 권장합니다.
+
+    예) 이 페이지에는 네이버에서 제공한 나눔글꼴이 적용되어 있습니다
+
+    네이버 나눔글꼴을 사용한 인쇄물, 광고물(온라인 포함)의 이미지는
+
+    나눔글꼴 프로모션을 위해 활용될 수 있습니다.
+
+    이를 원치 않는 사용자는 언제든지 당사에 요청하실 수 있습니다.
+
+    정확한 사용 조건은 아래 네이버 나눔글꼴 라이선스 전문을 참고하시기
+    바랍니다.
+
+     
+
+     
+
+    *나눔글꼴 라이선스 전문의 한글은 이용자의 이해를 돕기 위해 영문 원본
+    을 번역해 서비스하고 있으며
+
+      법적 효력은 영문에 한합니다. 이 점 참고하시기 바랍니다.
+
+     
+
+    Copyright (c) 2010, NAVER Corporation (http://www.nhncorp.com
+    <http://www.nhncorp.com/>),
+
+    with Reserved Font Name Nanum, Naver Nanum, NanumGothic, Naver
+    NanumGothic, NanumMyeongjo, Naver NanumMyeongjo, NanumBrush, Naver
+    NanumBrush, NanumPen, Naver NanumPen, Naver NanumGothicEco,
+    NanumGothicEco, Naver NanumMyeongjoEco, NanumMyeongjoEco, Naver
+    NanumGothicLight, NanumGothicLight, NanumBarunGothic, Naver
+    NanumBarunGothic,
+
+    This Font Software is licensed under the SIL Open Font License,
+    Version 1.1.
+
+    This license is copied below, and is also available with a FAQ at:
+    http://scripts.sil.org/OFL
+
+    SIL OPEN FONT LICENSE
+
+    Version 1.1 - 26 February 2007
+
+     
+
+    ‘나눔, 네이버 나눔, 나눔고딕, 네이버 나눔고딕, 나눔명조, 네이버 나눔
+    명조, 나눔손글씨, 네이버 나눔손글씨, 나눔펜, 네이버 나눔펜, 네이버
+    나눔고딕에코, 나눔고딕에코, 네이버 나눔명조에코, 나눔명조에코, 네이
+    버 나눔고딕라이트, 나눔고딕라이트, 나눔바른고딕, 네이버나눔바른고딕’
+    폰트명에 대해 NAVER (http://www.nhncorp.com <http://www.nhncorp.com
+    />)이 저작권을 소유하고 있습니다.
+
+    본 폰트 소프트웨어는 SIL 오픈 폰트 라이선스 버전 1.1에 따라 라이선스
+    취득을 하였습니다.
+
+    본 라이선스는 하단에 복사되었고http://scripts.sil.org/OFL의 FAQ란 에
+    서도 열람가능 합니다.
+
+     
+
+    SIL 오픈 폰트 라이선스
+
+    버전 1.1 (2007년 2월 26일)  
+
+     
+
+     
+
+    DEFINITIONS
+
+    "Font Software" refers to the set of files released by the Copyright
+    Holder(s) under this license and clearly marked as such. This may
+    include source files, build scripts and documentation.
+
+     
+
+    "Reserved Font Name" refers to any names specified as such after the
+    copyright statement(s).
+
+     
+
+    "Original Version" refers to the collection of Font Software
+    components as distributed by the Copyright Holder(s).
+
+     
+
+    "Modified Version" refers to any derivative made by adding to,
+    deleting, or substituting in part or in whole any of the components
+    of the Original Version, by changing formats or by porting the Font
+    Software to a new environment.‘
+
+     
+
+    "Author" refers to any designer, engineer, programmer, technical
+    writer or other person who contributed to the Font Software.
+
+     
+
+    정의
+
+    ‘폰트 소프트웨어’는 본 라이선스에 입거해 저작권자가 배포하고 명확하
+    게 같은 표시가 된 파일들의 집합을 뜻하며, 여기에는 소스 파일, 빌드
+    스크립트와 문서가 이에 포함됩니다.
+
+     
+
+    ‘저작권이 있는 폰트명’은 저작권 정책에 따라서 지정된 이름을 말합니다.
+
+     
+
+    ‘원본’은 저작권자가 배포한 폰트 소프트웨어 구성요소를 의미합니다.
+
+     
+
+    ‘수정본’은 포맷의 변경이나 폰트 소프트웨어를 새로운 환경에 포팅시켜,
+    원본의 일부 혹은 전체에 추가, 삭제 대체해 만든 파생 저작물을 의미합니다.
+
+     
+
+    ‘저자’는 폰트 소프트웨어에 기여한 디자이너, 엔지니어, 프로그래머, 기
+    술 전문가 등을 의미합니다.
+
+
+     
+
+    PREAMBLE
+
+    The goals of the Open Font License (OFL) are to stimulate worldwide
+    development of collaborative font projects,
+
+    to support the font creation efforts of academic and linguistic
+    communities, and to provide a free and open framework
+    in which fonts may be shared and improved in partnership with others.
+
+    The OFL allows the licensed fonts to be used, studied, modified and
+    redistributed freely as long as they are not sold
+    by themselves. The fonts, including any derivative works, can be
+    bundled, embedded, redistributed and/or sold with any software
+    provided that any reserved names are not used by derivative works.
+    The fonts and derivatives, however, cannot be released under any
+    other type of license.
+
+    The requirement for fonts to remain under this license does not
+    apply to any document created using the fonts or their derivatives.
+
+     
+
+    전문
+
+    본 폰트 라이선스를 오픈 하는 것은(이하 OFL)는 전 세계 폰트 개발 프로
+    젝트를 지원하고 학계와 언어 관련 학계의 폰트 개발을 위한 연구를 지지
+    하기 위해서인 동시에, 폰트 제휴를 통해 폰트가 공유되고 개선될 수 있
+    는 자유롭게 개방된 환경을 만들기 위해서 입니다.  
+
+    OFL은 라이선스를 취득한 폰트가 그 자체로 판매되지 않는 한 자유롭게
+    사용, 연구, 수정, 재배포 하는 것을 허가합니다. 수정된 폰트를 포함한
+    폰트는 저작권 명이 사용되지 않는 한 기타 소프트웨어와 함께 묶이거나
+    삽입, 재배포 할 수 있습니다. 단 폰트와 수정된 폰트는 기타 다른 라이
+    선스에 포함되어 배포될 수는 없습니다. 이 라이선스 하에 있기 위한 폰
+    트에 대한 요구사항은 본 폰트나 수정본을 사용하여 제작된 어떠한 문서
+    에도 적용되지 않습니다.
+
+     
+
+     
+
+    PERMISSION & CONDITIONS
+
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of the Font Software, to use, study, copy, merge,
+    embed, modify, redistribute, and sell modified and unmodified copies
+    of the Font Software, subject to the following conditions:
+
+     
+
+    허가 및 조건
+
+    본 폰트 소프트웨어를 사용하도록 허가 받은 개인/기업/단체 누구라도 다
+    음 명시된 조건에 따라 폰트 소프트웨어의 수정 혹은 수정되지 않은 복사
+    본을 무료로 사용, 연구, 복사, 통합, 삽입, 수정, 재배포할 수 있도록
+    허가합니다.
+
+     
+
+    1) Neither the Font Software nor any of its individual components,in
+    Original or Modified Versions, may be sold by itself.
+
+     원본이나 수정본의 폰트 소프트웨어 혹은 개별 구성요소인 폰트 자체가
+    판매되어서는 안됩니다.
+
+     
+
+    2) Original or Modified Versions of the Font Software may be
+    bundled, redistributed and/or sold with any software, provided that
+    each copy contains the above copyright notice and this license.
+    These can be included either as stand-alone text files,
+    human-readable headers or in the appropriate machine-readable
+    metadata fields within text or binary files as long as those fields
+    can be easily viewed by the user.
+
+     
+
+    본 폰트 소프트웨어의 원본 혹은 수정본은 상기 저작권 안내와 본 라이선
+    스에 대한 내용을 포함하는 경우에는 다른 소프트웨어와 함께 묶이거나
+    재배포 혹은 판매가 가능합니다. 이는 독립 텍스트 파일과 가독성이 있는
+    헤더 혹은 유저가 용이하게 열람 가능한 이상 텍스트파일 혹은 이진파일
+    내 기계가 읽을 수 있는 메타데이터 형태를 모두 의미 합니다.
+
+     
+
+    3) No Modified Version of the Font Software may use the Reserved
+    Font Name(s) unless explicit written
+
+    permission is granted by the corresponding Copyright Holder. This
+    restriction only applies to the primary font name as presented to
+    the users.
+
+     
+
+    본 폰트 소프트웨어의 어떠한 수정본도 동일한 저작권자가 명시적 허가서
+    를 부여하지 않는 한 저작권이 있는 폰트명을 사용해서는 안 됩니다. 본
+    제한 사항은 유저들에게 제공된 기존 폰트명을 뜻합니다.
+
+     
+
+    4) The name(s) of the Copyright Holder(s) or the Author(s) of the
+    Font Software shall not be used to promote, endorse or advertise any
+    Modified Version, except to acknowledge the contribution(s) of the
+    Copyright Holder(s) and the Author(s) or with their explicit written
+    permission.
+
+     
+
+    본 폰트 소프트웨어의 저작권자 혹은 저자의 이름은 그들의 명시적 서면
+    허가가 있거나 또는 그들의 공헌을 인정하기 위한 경우를 제외하고는 수
+    정본에 대한 사용을 유도,추천 혹은 광고하기 위한 목적으로 사용할 수
+    없습니다.
+
+     
+
+    5) The Font Software, modified or unmodified, in part or in whole,
+    must be distributed entirely under this license, and must not be
+    distributed any other license. The requirement for fonts to remain
+    under this license does not apply to any document created using the
+    Font Software.
+
+     
+
+    본 폰트 소프트웨어는 전체나 부분, 혹은 수정 여부에 상관없이 본 라이
+    선스 하에 배포가 되어야 하며 기타 다른 라이선스 하에서는 배포를 할
+    수 없습니다. 폰트에 대한 요구조건은 이 라이선스 하에서만 유효하며 이
+    라이선스 하에 있기 위한 폰트에 대한 요구사항은 본 폰트 소프트웨어를
+    사용해 제작한 어떠한 문서에도 적용되지 않습니다.
+
+      
+
+     
+
+    TERMINATION계약의 종료
+
+    This license becomes null and void if any of the above conditions
+    are not met.
+
+    본 라이선스는 상기 조건 중 일부라도 부합되지 않으면 무효가 될 수 있
+    습니다.
+
+     
+
+     
+
+    DISCLAIMER
+
+    THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN
+    NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES
+    OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT,
+    INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF
+    CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR
+    INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE
+    FONT SOFTWARE.
+
+     
+
+     
+
+    면책조항
+
+    본 폰트 소프트웨어는 저작권, 특허권, 상표권 및 기타 권리의 비침해성
+    과 특정 목적에의 적합성 포함한 명시적, 묵시적인 어떠한 종류의 보증
+    없이 “있는 그대로” 제공됩니다. 어떠한 경우에도 저작권자는 본 폰트 소
+    프트웨어의 사용 또는 이의 사용불가, 그밖에 폰트 소프트웨어의 취급과
+    관련하여 발생하는 모든 계약, 불법행위 혹은 다른 일로 하여금 발생하는
+    일반적, 특수적, 간접적, 부차적 혹은 필연적 손해를 포함하는 소송, 손
+    해, 혹은 기타 책임에 대한 의무를 가지지 않습니다.
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=15879&trackingType=F>
+
+  * 나눔글꼴 제거는 어떻게 하나요? <#도움말보기>
+    목록보기 <javascript:view_list('16631');>
+    나눔글꼴의 제거는 윈도우>제어판>프로그램 추가/제거에서 '나눔글꼴'을
+    선택하시면
+    나눔글꼴 제거 프로그램이 실행되며, 설치하신 나눔글꼴을 종류 별로 선
+    택적으로 제거하실 수 있습니다.
+
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=16631&trackingType=F>
+
+  * 나눔글꼴 업그레이드가 가능한가요? <#도움말보기>
+    목록보기 <javascript:view_list('16633');>
+
+    나눔글꼴은 구버전에서 최신버전으로 업그레이드가 가능합니다.
+    업그레이드 방법은 아래와 같습니다.
+
+    1. 한글한글 아름답게 홈페이지 이동(http://hangeul.naver.com)
+    2. 나눔글꼴 설치하기 클릭
+    3. TTF 윈도우용 설치하기 클릭
+    4. 나눔글꼴 설치 프로그램이 실행되면, 업그레이드가 가능한 폰트에 '업
+    그레이드 필요' 문구 표시됨
+    5. 업그레이드를 원하는 폰트를 선택하고, 설치 진행
+    6. 완료
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=16633&trackingType=F>
+
+  * 나눔손글씨를 더욱 예쁘게 쓰는 방법은 무엇이 있을까요? <#도움말보기>
+    목록보기 <javascript:view_list('16757');>
+
+    2010년 10월 8일 배포된 나눔손글씨를 더욱 예쁘게 사용하는 방법!
+    나눔손글씨의 멀티글립기능을 소개합니다.
+
+    멀티글립이란, 정해진 글자에 추가 글자를 활용하여 다양한 변화를 줄 수
+    있는 기능인데요.
+    글자의 위치에 따라 적절한 손글씨의 느낌을 더욱 부각시켜줄 수 있습니다.
+
+
+
+    멀티글립기능은 인디자인, 일러스트레이트 CS 버전 이상에서 가능합니다.
+
+    사용방법
+    Type > Glyphs > Altemates for Selection에서 변경하고자 하는 글짜를
+    드래그 한 후, 적용하면 됩니다.
+
+
+
+
+    멀티글립 해당 추가 글자 (54자)
+
+    가꺄과까꺄꽈나냐놔다댜돠따돠라랴롸마먀뫄바뱌봐뺘뺘사샤솨싸쏴
+    아야와자쟈좌짜쫘차챠촤카캬콰타탸톼파퍄퐈하햐화
+
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=16757&trackingType=F>
+
+  * 네이버 클리어타입 컨트롤을 설치한 후에도 나눔글꼴이 선명하게 보이지
+    않는데 어떻게 해야 하나요? <#도움말보기>
+    목록보기 <javascript:view_list('14006');>
+
+     
+
+    네이버 클리어타입 컨트롤을 설치한 후에 수동이나 다른 방법으로 글꼴
+    가장자리 처리 방식이 바뀔 수 있습니다.
+
+    이때, 네이버 클리어타입 컨트롤을 제거하고 다시 설치하거나 수동으로
+    글꼴 가장자리 처리 방식을 클리어타입으로 설정하면 됩니다.
+
+     
+
+     
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014008&
+    selected_nodeId=NODE0000010412>_네이버 클리어타입 컨트롤 _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014008&
+    selected_nodeId=NODE0000010412>_제거하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014008&selected_nodeId=NODE0000010412>_*
+
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&
+    selected_nodeId=NODE0000010412>_네이버 클리어타입 컨트롤_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&
+    selected_nodeId=NODE0000010412>_설치하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&selected_nodeId=NODE0000010412>_*
+
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_수동 설정_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_방법 확인하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&selected_nodeId=NODE0000010412>_*
+
+
+     
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14006&trackingType=F>
+
+  * 화면에 나타난 선명한 나눔글꼴 설정 안내 창을 닫아 버렸습니다. 다시
+    보려면 어떻게 해야 하나요? <#도움말보기>
+    목록보기 <javascript:view_list('14004');>
+
+    나눔글꼴이 적용된 *__네이버캐스트_ <http://navercast.naver.com
+    />_* 페이지에서 왼쪽 배너를 클릭하면 선명한 나눔글꼴 설정 안내 창이
+    나타납니다.
+
+     
+
+
+     
+    위 배너는 나눔글꼴이 적용된 네이버캐스트 서비스에서만 나타납니다.
+
+    대부분의 네이버캐스트 서비스에 나눔글꼴을 적용하고 있으며 추후 더 많
+    은 서비스에 나눔글꼴을 적용할 예정입니다.
+
+     
+
+
+    *__>> _ <http://navercast.naver.com/>_네이버캐스트 페이지 바로가기_
+    <http://navercast.naver.com/>_*
+
+     
+
+    ﻿
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14004&trackingType=F>
+
+  * 네이버 클리어타입 컨트롤을 제거하고 싶습니다. 어떻게 해야 하나요? <#
+    도움말보기>
+    목록보기 <javascript:view_list('14008');>
+
+    네이버 클리어타입 컨트롤 제거 방법은 일반 프로그램 제거 방법과 동일
+    합니다.
+
+     
+
+    1. Windows 작업 표시줄에서 시작 > 제어판을 선택합니다.
+    2. 제어판에서 프로그램 추가/제거를 실행합니다.
+    3. 현재 설치된 프로그램: 목록에서 네이버 ActiveX 가이드를 선택하고
+    변경/제거를 클릭합니다.
+
+     
+
+     
+
+    4. 다음과 같은 제거 안내 창이 나타나면 다음을 클릭합니다.
+
+     
+
+     
+
+    5. 나타난 ActiveX 목록에서 네이버 클리어타입 컨트롤을 선택하고 제거
+    를 클릭합니다.
+
+     
+
+     
+
+    6. 인터넷 브라우저가 실행 중인 경우 아래와 같은 창이 나타납니다.
+
+        이 창에서 확인을 클릭하면 사용 중인 웹 브라우저가 종료되고 네이
+    버 클리어타입 컨트롤을 제거합니다.
+
+     
+
+     
+
+    7. 네이버 클리어타입 컨트롤 제거가 완료되면 마침을 클릭합니다.
+
+     
+
+     
+
+    ※ 네이버 클리어타입 컨트롤을 제거하더라도, 글꼴 가장자리 처리 방식은
+    클리어타입으로 유지됩니다.
+
+        만약 클리어타입 설정을 사용하지 않으려면 글꼴 가장자리 처리 방식
+    을 표준으로 지정하면 됩니다.
+
+     
+
+     
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_수동 설정 _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_방법 확인하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&selected_nodeId=NODE0000010412>_*
+
+
+     
+
+     
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14008&trackingType=F>
+
+  * 네이버 클리어타입 컨트롤을 설치하지 않고 나눔글꼴을 선명하게 볼 수
+    있는 방법은 없나요? <#도움말보기>
+    목록보기 <javascript:view_list('14007');>
+
+     
+
+    네이버 클리어타입 컨트롤을 설치하지 않아도 수동으로 글꼴 가장자리 처
+    리 방식을 클리어타입으로
+
+    설정할 수 있습니다. 수동 설정 절차는 운영체제가 Windows XP일 경우와
+    Windows Vista일 경우를 나눠서 설명합니다.
+
+     
+
+    ＊ Windows XP에서 클리어타입 설정하기
+
+      
+
+      1. 바탕화면에서 마우스 오른쪽 버튼을 클릭하고 속성을 선택합니다.
+
+     
+
+       
+
+     
+
+       2. 디스플레이 등록 정보 창에서 화면 배색을 선택합니다.
+
+     
+
+      
+
+        
+
+      3. 화면 배색 탭에서 효과를 클릭합니다.
+
+     
+
+      4. 효과 창에서 화면 글꼴의 가장자리를 다듬는 데 다음 방법 사용을
+    선택하고 ClearType을 선택합니다.
+
+     
+
+      
+
+     
+
+     
+
+    *Windows Vista에서 클리어타입 설정하기
+
+     
+
+      1. 바탕화면에서 마우슨 오른쪽 버튼을 클릭하고개인 설정을 선택합니다.
+
+     
+
+      
+
+     
+
+      2. 개인 설정 창에서 Window 색상 및 모양을 선택합니다.
+
+     
+
+     
+
+     
+
+      3. Window 색상 및 모양 창에서 기타 색 옵션을 보기 위해 모양 속성
+    열기를 선택합니다.
+
+     
+
+     
+
+     
+
+      4. 화면 배색 설정 창에서 효과를 클릭합니다.
+
+     
+
+     
+
+     
+
+      5. 효과 창에서 화면 글꼴의 가장자리를 다듬는 데 다음 방법 사용을
+    선택하고 ClearType을 선택합니다.
+
+     
+
+     
+
+     
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14007&trackingType=F>
+
+  * 선명한 나눔글꼴 설정 안내 창이 계속 나타납니다. 더 이상 안내 창이 나
+    타나지 않도록 하려면 어떻게 해야 하나요? <#도움말보기>
+    목록보기 <javascript:view_list('14005');>
+
+    네이버 클리어타입 컨트롤을 설치하면 이후부터 선명한 나눔글꼴 설정 안
+    내 창이 나타나지 않습니다.
+
+
+    이미 글꼴 가장자리 처리 방식을 클리어타입으로 설정하였으면 안내 창
+    오른쪽 아래에 있는
+
+    이미 클리어타입이 설정되어 있습니다.를 선택하고 닫기를 클릭합니다.
+
+     
+
+     
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&
+    selected_nodeId=NODE0000010412>_네이버 클리어타입 컨트롤 설치 방법
+    확인하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&selected_nodeId=NODE0000010412>_*
+
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_수동 설정 방법 확인하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&selected_nodeId=NODE0000010412>_*
+
+
+      
+
+    ※ 선명한 나눔글꼴 설정 안내 창은 운영체제가 Windows XP이고, 웹 브라
+    우저가 Internet Explorer 6.0 버전인
+
+        환경에서만 나타납니다. Internet Explorer 6.0이 아닌 버전을 사용
+    하거나 다른 웹 브라우저를 사용하고 있는
+
+        경우 해당 안내 창은 나타나지 않습니다.
+
+     
+
+    ※ Internet Explorer 6.0 버전에서 이미 클리어타입이 설정되어 있습니
+    다.를 사용한 경우 저장된 쿠키가 지워지면
+
+        안내 창이 다시 나타납니다. 따라서 네이버 클리어타입 컨트롤을 설
+    치하거나 Internet Explorer 6.0 버전보다
+
+        상위 버전을 사용할 것을 권장합니다. Internet Explorer 6.0 버전보
+    다 상위 버전을 사용하면 자동으로 클리어타입이 적용됩니다.
+
+        Internet Explorer에서 도움말 > Internet Explorer 정보를 선택하면
+    Internet Explorer 버전을 확인할 수 있으며,
+
+        다음 사이트에서 Internet Explorer 상위 버전을 받을 수 있습니다.
+
+     
+
+     
+
+    _*_>> _
+    <http://www.microsoft.com/korea/windows/internet-explorer/ie7.aspx>_Internet
+    Explorer 7 다운로드 페이지 바로가기_
+    <http://www.microsoft.com/korea/windows/internet-explorer/ie7.aspx>*_
+
+    *__>> _ <http://www.microsoft.com/korea/ie8>_Internet Explorer 8 다
+    운로드 페이지 바로가기_ <http://www.microsoft.com/korea/ie8>_*
+
+     
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14005&trackingType=F>
+
+  * 네이버 클리어타입 컨트롤을 어떻게 설치하나요? <#도움말보기>
+    목록보기 <javascript:view_list('14002');>
+
+     
+
+    네이버 클리어타입 컨트롤은 다음과 같이 설치할 수 있습니다.
+
+
+    1. 선명한 나눔글꼴 설정 안내 창에서 확인을 클릭합니다.
+
+     
+
+
+    2. 아래 창이 나타나면, 알림 표시줄을 클릭하여 ActiveX 컨트롤 설치를
+    선택합니다.
+
+     
+
+
+     
+
+    3. 다음과 같은 보안 경고 창이 나타나면 설치를 클릭합니다.
+
+     
+
+
+    4. 다음과 같이 네이버 클리어타입 컨트롤 설치 창이 나타나면 설치를 클
+    릭합니다.
+
+    설치를 클릭하면 네이버 클리어타입 컨트롤 설치가 자동으로 완료됩니다.
+
+     
+
+     
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14002&trackingType=F>
+
+  * 컴퓨터에서 네이버캐스트가 나눔글꼴로 보이지 않습니다. 왜 그런가요?
+    <#도움말보기>
+    목록보기 <javascript:view_list('14001');>
+
+     
+
+    네이버캐스트는 운영체제가 Windows XP 또는 Windows Vista이고
+
+    웹 브라우저가 Internet Explorer 6.0 버전 이상일 경우에만 나눔글꼴로
+    표현됩니다.
+
+
+    위에서 설명한 운영체제를 사용하지 않고 나눔글꼴을 사용하면 클리어타
+    입(Clear Type) 설정이 적용되지 않고
+
+    한자가 표현되지 않아 가독성이 떨어집니다.
+
+    따라서 네이버캐스트는 다른 운영체제에서 나눔글꼴로 표현되지 않습니다.
+
+
+    별도로 나눔글꼴을 설치할 필요 없이 웹 브라우저에서 나눔글꼴을 보려면
+    웹 브라우저가 웹 폰트(.eot)를 지원해야 합니다.
+
+    이를 지원하지 않는 웹 브라우저(Firefox, Chrome, Opera, Safari 등)는
+    나눔글꼴 대신 시스템 기본 글꼴을 표시합니다.
+
+     
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14001&trackingType=F>
+
+  * 네이버 클리어타입 컨트롤은 어디서 다운로드할 수 있나요? <#도움말보기>
+    목록보기 <javascript:view_list('14000');>
+    ﻿
+
+     
+
+    네이버 클리어타입 컨트롤은 아래 페이지를 방문하여 네이버 클리어타입
+    컨트롤 설치하기를 클릭하면 다운로드할 수 있습니다.
+
+     
+
+     
+
+    *__>> _ <http://hangeul.naver.com/cleartype.nhn>_나눔글꼴을 더욱 선
+    명하게" 페이지 _ <http://hangeul.naver.com/cleartype.nhn>_바로가기_
+    <http://hangeul.naver.com/cleartype.nhn>_*
+
+     
+
+     ﻿
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=14000&trackingType=F>
+
+  * 클리어타입(Clear Type)이란 무엇인가요? <#도움말보기>
+    목록보기 <javascript:view_list('13999');>
+
+     
+
+    클리어타입(Clear Type)은 화면에 글꼴을 선명히 표현하는 글꼴 표현 기
+    술입니다.
+
+    클리어타입을 사용하면 나눔글꼴을 선명하게 볼 수 있습니다.
+
+
+    자세한 내용은 아래 링크된 페이지를 방문하시면 확인할 수 있습니다.
+
+     
+
+     
+
+    *__>> _ <http://hangeul.naver.com/cleartype.nhn>_"나눔글꼴을 더욱 선
+    명하게_ <http://hangeul.naver.com/cleartype.nhn>_**__" 페이지 바로가
+    기_ <http://hangeul.naver.com/cleartype.nhn>_*
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&
+    selected_nodeId=NODE0000010412>_네이버 클리어타입 컨트롤 _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&
+    selected_nodeId=NODE0000010412>_설치 방법 확인하기 _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&selected_nodeId=NODE0000010412>_*
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_수동 설정 방법 _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_**__확인하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&selected_nodeId=NODE0000010412>_*
+
+
+     
+
+     
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=13999&trackingType=F>
+
+  * 선명한 나눔글꼴 설정이란 무엇인가요? <#도움말보기>
+    목록보기 <javascript:view_list('13998');>
+
+     
+
+    선명한 나눔글꼴 설정이란 Windows 설정 중 글꼴 가장자리 처리 방식을
+    클리어타입(Clear Type)으로 지정하여
+
+    나눔글꼴이 화면에서 매끄럽고 선명하게 나타나도록 만드는 것입니다.
+
+
+    선명한 나눔글꼴 설정 방법은 네이버 클리어타입 컨트롤을 설치하여 자동
+    으로 설정하는 방법과 수동으로 하는 방법이 있습니다.
+
+     
+
+     
+
+    *__>> _ <http://hangeul.naver.com/cleartype.nhn>_'나눔글꼴을 더욱 선
+    명하게' _ <http://hangeul.naver.com/cleartype.nhn>_**__페이지 바로가
+    기_ <http://hangeul.naver.com/cleartype.nhn>_*
+
+    *__>> 네이버 클리어타입 컨트롤 _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&
+    selected_nodeId=NODE0000010412>_**__설치 방법 확인하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014002&selected_nodeId=NODE0000010412>_*
+
+
+    *__>> _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_수동 설정 _
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&
+    selected_nodeId=NODE0000010412>_**__방법 확인하기_
+    <http://help.naver.com/service/svc_index.jsp?faqId=FAQS0000014007&selected_nodeId=NODE0000010412>_*
+
+
+     
+
+     
+
+    ﻿
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=13998&trackingType=F>
+
+  * 네이버의 여러 서비스 페이지를 나눔글꼴로 보려면 어떻게 해야 하나요?
+    <#도움말보기>
+    목록보기 <javascript:view_list('15611');>
+
+    네이버내 나눔글꼴을 지원하는 서비스들의 경우, 우측 상단에 나눔글꼴과
+    시스템글꼴 전환 버튼을 제공하고 있습니다.
+
+     
+
+    아래와 같은 드롭다운 메뉴에서 ‘나눔글꼴’를 선택하시면 해당 페이지를
+    나눔글꼴로 보실 수 있습니다.
+
+    만약 예전의 기본글꼴로 돌아가려면, ‘시스템글꼴’을 클릭하시면 됩니다.
+
+     
+
+    [글꼴 전환하기]
+
+     
+
+    주) ‘나눔글꼴’ 적용 시, PC에 나눔글꼴이 설치되어 않으면, 글꼴 설치
+    후이용해 주시기 바랍니다.
+
+
+    *이해하기 쉽게 작성 되었나요?*  예  아니오
+
+    *궁금하신 내용 해결에 도움이 되셨나요?*  예  아니오
+
+    도움이 되지 않았다면 어떤 내용이 부족한지 알려주세요. [It's All Text!]
+
+    최대 500자/0자 입력
+
+      o 지식Q&A의 '네이버사용법'에서 검색하거나 직접답변을 받으실 수 있
+        습니다. *지식Q&A 확인*
+        <http://kin.naver.com/qna/list.nhn?m=noanswer&dirId=10601>
+      o 도움말 또는 지식iN에서 문제가 해결되지 않았다면 고객센터로 문의
+        해 주세요. *문의하기*
+        <https://help.naver.com/ops/step2/mail.nhn?catg=335&faqId=15611&trackingType=F>
+
+
+이전페이지 </ops/step2/faq.nhn?faqId=15879&page=1> *1*2
+</ops/step2/faq.nhn?faqId=15879&page=2> 다음페이지
+</ops/step2/faq.nhn?faqId=15879&page=2>
+문의하기
+<https://help.naver.com/ops/step2/mail.nhn?catg=335&fcatid=10412&trackingType=C>
+
+
+  * 이용약관 <http://www.naver.com/rules/service.html>
+  * *개인정보취급방침* <http://www.naver.com/rules/privacy.html>
+  * 책임의 한계와 법적고지 <http://www.naver.com/rules/disclaimer.html>
+  * 웹문서수집 및 삭제정책
+    <http://help.naver.com/customer/etc/webDocument.nhn>
+  * 네이버도움말 <https://help.naver.com/support/home.nhn>
+
+NAVER <http://www.navercorp.com> /Copyright ©/ NAVER Corp.
+<http://www.navercorp.com> All Rights Reserved.
+

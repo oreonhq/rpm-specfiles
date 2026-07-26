@@ -1,0 +1,62 @@
+From 21656da69738482cca947cb70ad9ef25ac95cbfa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Mon, 14 Oct 2024 20:36:13 +0200
+Subject: [PATCH 4/4] Use raw strings
+
+---
+ gmond/python_modules/memory/mem_stats.py  | 2 +-
+ gmond/python_modules/network/netstats.py  | 4 ++--
+ gmond/python_modules/vm_stats/vm_stats.py | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/gmond/python_modules/memory/mem_stats.py b/gmond/python_modules/memory/mem_stats.py
+index 0a6dd6a..522268e 100644
+--- a/gmond/python_modules/memory/mem_stats.py
++++ b/gmond/python_modules/memory/mem_stats.py
+@@ -26,7 +26,7 @@ def metrics_handler(name):
+     if name == 'mem_swap_used':
+         return metrics_handler('mem_swap_total') - metrics_handler('mem_swap_free')
+     for line in file:
+-        parts = re.split("\s+", line)
++        parts = re.split(r"\s+", line)
+         if parts[0] == metric_map[name]['name'] + ":":
+             # All of the measurements are in kBytes. We want to change them over
+             # to Bytes
+diff --git a/gmond/python_modules/network/netstats.py b/gmond/python_modules/network/netstats.py
+index ec65d1e..3805f4b 100644
+--- a/gmond/python_modules/network/netstats.py
++++ b/gmond/python_modules/network/netstats.py
+@@ -46,7 +46,7 @@ def get_metrics():
+             for line in file:
+                 if re.match("(.*): [0-9]", line):
+                     count = 0
+-                    metrics = re.split("\s+", line)
++                    metrics = re.split(r"\s+", line)
+                     metric_group = metrics[0].replace(":", "").lower()
+                     if metric_group not in stats_pos:
+                         continue
+@@ -202,7 +202,7 @@ def metric_init(params):
+             # Lines with
+             if not re.match("(.*): [0-9]", line):
+                 count = 0
+-                mapping = re.split("\s+", line)
++                mapping = re.split(r"\s+", line)
+                 metric_group = mapping[0].replace(":", "").lower()
+                 stats_pos[metric_group] = dict()
+                 for metric in mapping:
+diff --git a/gmond/python_modules/vm_stats/vm_stats.py b/gmond/python_modules/vm_stats/vm_stats.py
+index 8eb9c11..fc5a241 100644
+--- a/gmond/python_modules/vm_stats/vm_stats.py
++++ b/gmond/python_modules/vm_stats/vm_stats.py
+@@ -46,7 +46,7 @@ def get_metrics():
+         # convert to dict
+         metrics = {}
+         for line in file:
+-            parts = re.split("\s+", line)
++            parts = re.split(r"\s+", line)
+             metrics[parts[0]] = parts[1]
+ 
+         # update cache
+-- 
+2.47.0
+

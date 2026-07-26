@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# Generate a new private server key for the Monotone Server, if needed
+#
+# Author: Thomas Moschny <thomas.moschny@gmx.de>
+#
+set -eu
+
+MONOTONE_CONFDIR="${MONOTONE_CONFDIR:-/etc/monotone}"
+MONOTONE_KEYDIR="${MONOTONE_KEYDIR:-/etc/monotone/private-keys}"
+MONOTONE_DBFILE="${MONOTONE_DBFILE:-/var/lib/monotone/server.mtn}"
+MONOTONE_PPFILE="${MONOTONE_PPFILE:-/etc/monotone/passphrase.lua}"
+
+MONOTONE_KEYID="${MONOTONE_KEYID:-monotone@$(hostname -f)}"
+MONOTONE_HOME="${MONOTONE_HOME:-/var/lib/monotone}"
+
+cd "${MONOTONE_HOME}"
+
+# check for existing keys
+for key in "${MONOTONE_KEYDIR}/${MONOTONE_KEYID}"* ; do
+  if [ -e "${key}" ] ; then
+    echo $"Found private key $key"
+    exit
+  fi
+done
+
+# check for existing rc file
+if [ -s "${MONOTONE_PPFILE}" ] ; then
+  echo >&2 $"Not overwriting passphrase file ${MONOTONE_PPFILE}"
+  exit 1
+fi
+
+# no key found, let's generate one
+echo $"Generating key for server ${MONOTONE_KEYID}"
+
+# generate random passphrase
+passphrase="$(dd 2>/dev/null if=/dev/urandom bs=1 count=16 | hexdump -ve '/1 "%02x"')"
+
+# generate keypair, needs to be run as root
+{ echo "${passphrase}"; echo "${passphrase}" ; } |
+mtn --confdir="${MONOTONE_CONFDIR}" --db="${MONOTONE_DBFILE}" \
+  --keydir="${MONOTONE_KEYDIR}" --force-duplicate-key \
+  genkey "${MONOTONE_KEYID}"
+
+# fix permissions
+for key in "${MONOTONE_KEYDIR}/${MONOTONE_KEYID}"* ; do
+  if [ -e "${key}" ] ; then
+    chgrp monotone "${key}"
+    chmod 0640 "${key}"
+    break
+  fi
+  echo >&2 $"No key found, key generation failed?"
+  exit 1
+done
+
+# generate rc file
+install -o root -g monotone -m 0440 /dev/null "${MONOTONE_PPFILE}"
+cat > "${MONOTONE_PPFILE}" <<EOF
+function get_passphrase(keyid)
+  return "${passphrase}"
+end
+EOF

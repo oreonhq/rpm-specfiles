@@ -1,0 +1,119 @@
+diff -Naur aprsd-2.2.5-15/aprsd.spec aprsd-compile/aprsd.spec
+--- aprsd-2.2.5-15/aprsd.spec	1970-01-01 02:00:00.000000000 +0200
++++ aprsd-compile/aprsd.spec	2008-02-21 19:21:49.000000000 +0200
+@@ -0,0 +1,62 @@
++%define rel 15
++Name: aprsd
++Summary: aprsd is a server daemon that provides Internet gateway and client access to amateur radio APRS packet data. 
++Version: 2.2.5
++Release: %{rel}.1%{?dist}
++Group: Applications/Internet
++License: GPLv2+
++Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}-%{rel}.tar.gz
++BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
++URL: http://aprsd.sourceforge.net/
++
++BuildRequires: gettext
++
++%description
++APRSd is an APRS server program that uses amateur radio and internet#
++services to convey GPS mapping, weather, and positional data.
++It has been developed by and for amateur radio enthusiasts to provide
++real-time data in an easy to use package.
++
++%prep
++%setup -q -n %{name}-%{version}-%{rel}
++
++%build
++%configure
++make %{?_smp_mflags}
++
++%install
++rm -rf %{buildroot}
++make install DESTDIR="%{buildroot}"
++find %{buildroot} -name \*\.la -print | xargs rm -f
++%find_lang %{name}
++
++%clean
++rm -rf %{buildroot}
++
++%post
++/sbin/ldconfig
++
++%preun
++/sbin/ldconfig
++
++%postun -p /sbin/ldconfig
++
++%files -f %{name}.lang
++%defattr(-,root,root,-)
++%{_datadir}/evolution/*/images/spam.gif
++%{_datadir}/evolution/*/images/nspam.gif
++%{_sysconfdir}/gconf/schemas/rspam.schemas
++%{_datadir}/evolution/*/errors/org-gnome-sa-rspam.error
++%{_libdir}/evolution/*/plugins/org-gnome-sa-rspam.eplug
++%{_libdir}/evolution/*/plugins/liborg-gnome-sa-rspam.so
++%doc AUTHORS
++%doc COPYING
++%doc ChangeLog
++%doc NEWS
++%doc README
++%doc TODO
++
++%changelog
++* Thu Feb 21 2008 Lucian Langa <cooly@gnome.eu.org> - 2.2.5-15-1
++- Initial spec file created
++
+diff -Naur aprsd-2.2.5-15/src/aprsd.cpp aprsd-compile/src/aprsd.cpp
+--- aprsd-2.2.5-15/src/aprsd.cpp	2003-05-29 06:09:39.000000000 +0300
++++ aprsd-compile/src/aprsd.cpp	2008-02-21 19:36:31.000000000 +0200
+@@ -53,13 +53,14 @@
+ 
+ #include <fstream>
+ #include <iostream>
+-#include <strstream>
++//#include <strstream>
+ #include <iomanip>
+ #include <sstream>
+ 
+ #ifdef linux
+ #include <linux/kernel.h>
+-#include <linux/sys.h>
++//#include <linux/sys.h>
++//#include <iostream.h>
+ #endif
+ #include <sys/resource.h>
+ 
+diff -Naur aprsd-2.2.5-15/src/aprsString.h aprsd-compile/src/aprsString.h
+--- aprsd-2.2.5-15/src/aprsString.h	2003-10-01 19:58:27.000000000 +0300
++++ aprsd-compile/src/aprsString.h	2008-02-21 19:37:40.000000000 +0200
+@@ -196,7 +196,7 @@
+    void parseLogon(void);
+    bool parseCommand(void);
+    bool parsePortFilter(void);
+-   void aprsString::getMsgText(string& msg);
++   void getMsgText(string& msg);
+    void print(ostream& os);
+    string getAX25Source(void);
+    string getAX25Dest(void);
+diff -Naur aprsd-2.2.5-15/src/servers.cpp aprsd-compile/src/servers.cpp
+--- aprsd-2.2.5-15/src/servers.cpp	2003-10-01 19:58:27.000000000 +0300
++++ aprsd-compile/src/servers.cpp	2008-02-22 08:01:57.000000000 +0200
+@@ -46,7 +46,7 @@
+ 
+ #ifdef linux
+ #include <linux/kernel.h>
+-#include <linux/sys.h>
++//#include <linux/sys.h>
+ #endif
+ #include <sys/resource.h>
+ 
+@@ -3277,7 +3277,7 @@
+ 
+ //----------------------------------------------------------------------
+ 
+-inline string convertUpTime(int dTime)
++string convertUpTime(int dTime)
+ {
+     std::ostringstream ostr;
+     int x;

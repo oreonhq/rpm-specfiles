@@ -1,0 +1,15 @@
+[Unit]
+Description=Ganglia Meta Daemon
+After=multi-user.target
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/gmond 
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+

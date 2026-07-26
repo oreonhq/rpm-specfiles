@@ -1,0 +1,11 @@
+--- src/main.cpp~	2012-08-17 14:22:03.000000000 -0500
++++ src/main.cpp	2017-08-07 13:25:29.380148505 -0500
+@@ -58,7 +58,7 @@
+       {
+         if(strcmp(argv[i]+1,"help")!=0 && strcmp(argv[i]+1,"-help")!=0)
+           printf( "Unknown parameter.\n\n" );
+-        printf(help);
++        printf("%s"), help;
+         exit(-2);
+       }
+     }

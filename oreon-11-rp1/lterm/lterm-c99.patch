@@ -1,0 +1,344 @@
+Add more function prototypes to avoid implicit function declarations,
+to avoid build issues with future compilers.
+
+The readFile change (avoiding an implicit int) should fix a crash when
+exporting a putty configuration (it was already upstream).
+
+Submitted upstream: <https://github.com/FabLeo451/lterm/pull/2>
+
+diff --git a/src/async.h b/src/async.h
+index 5331c3b93d9854e5..6ad2f454941ae005 100755
+--- a/src/async.h
++++ b/src/async.h
+@@ -14,5 +14,6 @@ gpointer async_lterm_loop(gpointer data);
+ gboolean async_is_transferring ();
+ int async_sftp_transfer (gpointer userdata);
+ 
+-#endif
++void lockSSH (char *caller, gboolean flagLock);
+ 
++#endif
+diff --git a/src/connection.c b/src/connection.c
+index 0e428e887d8c0485..427bff95f36ca46c 100755
+--- a/src/connection.c
++++ b/src/connection.c
+@@ -37,6 +37,7 @@
+ #include "main.h"
+ #include "utils.h"
+ #include "xml.h"
++#include "terminal.h"
+ 
+ #define SEARCH_BY_NAME "Search by name"
+ #define SEARCH_BY_HOST "Search by host"
+@@ -95,6 +96,8 @@ int g_rebuilding_tree_store = 0;
+ 
+ GtkWidget * create_connections_tree_view ();
+ 
++static int get_selected_connection (GtkTreeSelection *, struct Connection *);
++
+ void
+ connection_init_stuff ()
+ {
+@@ -1116,7 +1119,7 @@ load_connections ()
+ }
+ 
+ int
+-count_current_connections ()
++count_current_connections (void)
+ {
+   return (cl_count (&conn_list));
+ }
+@@ -2769,7 +2772,7 @@ create_search_by_combo ()
+   return (search_by_combo);
+ }
+ 
+-int
++static int
+ get_selected_connection (GtkTreeSelection *select, struct Connection *p_conn)
+ {
+   GtkTreeIter iter;
+diff --git a/src/connection.h b/src/connection.h
+index 86edf94bb40666f1..d6f8a182faa88cb4 100755
+--- a/src/connection.h
++++ b/src/connection.h
+@@ -54,6 +54,12 @@ void connection_init_stuff ();
+ void rebuild_tree_store ();
+ GtkWidget *create_entry_control (char *label, GtkWidget *entry);
+ void create_quick_launch_window (struct QuickLaunchWindow *p_qlv);
++int conn_update_last_user (char *cname, char *last_user);
++int choose_manage_connection (struct Connection *p_conn);
++int count_current_connections (void);
++int save_connections_to_file_xml (char *filename);
++
++void refresh_connection_tree_view (GtkTreeView *tree_view);
+ 
+ #endif
+ 
+diff --git a/src/connection_list.h b/src/connection_list.h
+index 64052543004bba5f..d57b1a6a404f92b9 100755
+--- a/src/connection_list.h
++++ b/src/connection_list.h
+@@ -97,6 +97,9 @@ struct Connection *cl_insert_sorted (struct Connection_List *p_cl, struct Connec
+ struct Connection *cl_host_search (struct Connection_List *p_cl, char *host, char *skip_this);
+ struct Connection *cl_get_by_index (struct Connection_List *p_cl, int index);
+ struct Connection *cl_get_by_name (struct Connection_List *p_cl, char *name);
++void cl_remove (struct Connection_List *p_cl, char *name);
++int cl_count (struct Connection_List *p_cl);
++void cl_check (struct Connection_List *p_cl);
+ 
+ /*
+ //void init_bookmarks (struct Bookmarks *bookmarks);
+@@ -110,5 +113,7 @@ void add_directory (SConnection *pConn, char *item);
+ 
+ int connection_fill_from_string (struct Connection *p_conn, char *connection_string);
+ 
++void connection_copy (struct Connection *p_dst, struct Connection *p_src);
++
+ #endif
+ 
+diff --git a/src/grouptree.c b/src/grouptree.c
+index 7fa65414e92012eb..a0050fd0d265186e 100755
+--- a/src/grouptree.c
++++ b/src/grouptree.c
+@@ -26,6 +26,7 @@
+ #include "connection_list.h"
+ #include "grouptree.h"
+ #include "main.h"
++#include "utils.h"
+ 
+ extern struct Connection_List conn_list;
+ 
+diff --git a/src/gui.c b/src/gui.c
+index 3e23fa43dfb5c72b..98c0894909418167 100755
+--- a/src/gui.c
++++ b/src/gui.c
+@@ -27,6 +27,7 @@
+ #include <openssl/opensslv.h>
+ #include <openssl/md5.h>
+ #include <sys/utsname.h>
++#include <sys/wait.h>
+ #include <string.h>
+ #include <time.h>
+ #include <stdlib.h>
+@@ -403,8 +404,11 @@ struct EncodingEntry enc_array[] =
+     { "EUC-JP (Japanese)", "EUC-JP" }
+   };
+ 
++static gboolean search_entry_focus_out_event_cb (GtkWidget *, GdkEvent *,
++                                                 gpointer);
++
+ void
+-ifr_init ()
++ifr_init (void)
+ {
+   int i;
+ 
+@@ -2289,7 +2293,7 @@ load_recent_connections ()
+ }
+ 
+ int
+-save_recent_connections ()
++save_recent_connections (void)
+ {
+   struct Connection conn;
+   struct Connection *p_conn;
+@@ -4182,7 +4186,7 @@ search_entry_focus_in_event_cb (GtkWidget *widget, GdkEvent *event, gpointer use
+   return (TRUE);
+ }
+ 
+-gboolean
++static gboolean
+ search_entry_focus_out_event_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
+ {
+   
+@@ -4224,7 +4228,7 @@ create_accelerators ()
+ }
+ 
+ void 
+-refresh_search_completion ()
++refresh_search_completion (void)
+ {
+   GtkListStore *model;
+   GtkTreeIter iter; 
+@@ -5659,7 +5663,7 @@ update_all_profiles ()
+     }
+ }
+ 
+-int
++void
+ open_connection (char *connection)
+ {
+   int rc;
+diff --git a/src/gui.h b/src/gui.h
+index 6233720f16498299..08709f62aa9dcc39 100755
+--- a/src/gui.h
++++ b/src/gui.h
+@@ -265,4 +265,18 @@ void sftp_download_files ();
+ 
+ void sb_msg_push (char *);
+ 
++void refresh_search_completion (void);
++void connection_tab_add (struct ConnectionTab *connection_tab);
++void connection_tab_close (struct ConnectionTab *p_ct);
++void open_connection (char *connection);
++int save_recent_connections (void);
++
++void ifr_init (void);
++int ifr_get (struct Iteration_Function_Request *dest);
++
++struct Profile;
++void apply_profile_terminal (GtkWidget *terminal, struct Profile *p_profile);
++
++void start_gtk (int argc, char **argv);
++
+ #endif
+diff --git a/src/main.c b/src/main.c
+index 2d2aaf6e0bcae501..11da089685cda12d 100755
+--- a/src/main.c
++++ b/src/main.c
+@@ -34,6 +34,8 @@
+ #include <vte/vte.h>
+ #include <libssh/libssh.h> 
+ #include <libssh/callbacks.h>
++#include <X11/Xlib.h>
++#include <libintl.h>
+ #include <pwd.h>
+ #include "main.h"
+ #include "gui.h"
+@@ -45,6 +47,7 @@
+ #include "utils.h"
+ #include "config.h"
+ #include "async.h"
++#include "terminal.h"
+ 
+ #ifdef __APPLE__
+ #include <sys/event.h>
+@@ -193,7 +196,7 @@ gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE,
+ }
+ 
+ void
+-lterm_iteration ()
++lterm_iteration (void)
+ {
+   struct Iteration_Function_Request ifr_function;
+   struct ConnectionTab *lterminal;
+diff --git a/src/main.h b/src/main.h
+index 459cb9d1a7ee881d..0a7155d867e88185 100755
+--- a/src/main.h
++++ b/src/main.h
+@@ -182,5 +182,6 @@ int cmpver (char *v1, char *v2);
+ 
+ //void recent_add (char *);
+ 
++void lterm_iteration (void);
+ 
+ #endif
+diff --git a/src/protocol.h b/src/protocol.h
+index 01a98cb8e8f8da90..f8782da773b4a02c 100755
+--- a/src/protocol.h
++++ b/src/protocol.h
+@@ -31,10 +31,14 @@ struct Protocol_List
+     struct Protocol *tail;
+   };
+ 
++void pl_init (struct Protocol_List *p_pl);
++void pl_release (struct Protocol_List *p_pl);
++
+ struct Protocol *get_protocol (struct Protocol_List *p_pl, char *name);
+ void manage_protocols (struct Protocol_List *);
+ void refresh_protocols (struct Protocol_List *p_pl);
+ int load_protocols_from_file_xml (char *filename, struct Protocol_List *p_pl);
+ int save_protocols_to_file_xml (char *filename, struct Protocol_List *p_pl);
++void check_standard_protocols (struct Protocol_List *p_pl);
+ 
+ #endif
+diff --git a/src/sftp-panel.c b/src/sftp-panel.c
+index 4581f5139ceeeb8e..36845823e984a027 100755
+--- a/src/sftp-panel.c
++++ b/src/sftp-panel.c
+@@ -1610,7 +1610,7 @@ sftp_panel_order_invert ()
+ }*/
+ 
+ void
+-refresh_panel_history ()
++refresh_panel_history (void)
+ {
+   struct Connection *c;
+   struct Bookmark *b;
+diff --git a/src/sftp-panel.h b/src/sftp-panel.h
+index a01c57d5c585325f..038480a6b52f374c 100755
+--- a/src/sftp-panel.h
++++ b/src/sftp-panel.h
+@@ -169,6 +169,7 @@ int sftp_queue_length ();
+ int sftp_queue_count (int *nUp, int *nDown);
+ STransferInfo *sftp_queue_nth (int n);
+ int sftp_queue_add (int action, GSList *filelist, struct SSH_Info *p_ssh, char *local_directory);
++void refresh_panel_history (void);
+ 
+ #endif
+ 
+diff --git a/src/ssh.c b/src/ssh.c
+index d12035a8ca9109b1..316d48aca432b9a4 100755
+--- a/src/ssh.c
++++ b/src/ssh.c
+@@ -32,6 +32,7 @@
+ #include "ssh.h"
+ #include "sftp-panel.h"
+ #include "connection_list.h"
++#include "async.h"
+ 
+ extern Globals globals;
+ extern Prefs prefs;
+diff --git a/src/transfer_window.c b/src/transfer_window.c
+index 5e0aa88524dae266..1436edf7ca3f7a54 100755
+--- a/src/transfer_window.c
++++ b/src/transfer_window.c
+@@ -25,6 +25,8 @@
+ #include "sftp-panel.h"
+ #include "utils.h"
+ #include "transfer_window.h"
++#include "async.h"
++#include "gui.h"
+ 
+ extern GtkWidget *main_window;
+ extern Globals globals;
+diff --git a/src/utils.c b/src/utils.c
+index 6780e1d008ec963c..c6c5a1fe452136bf 100755
+--- a/src/utils.c
++++ b/src/utils.c
+@@ -34,6 +34,7 @@
+ #include <sys/dir.h>
+ #include <sys/stat.h>
+ #include <sys/utsname.h>
++#include <ctype.h>x
+ 
+ #ifndef __APPLE__
+ #include <crypt.h>
+@@ -1005,7 +1006,7 @@ get_system (char *sys_name)
+ }
+ 
+ char *
+-readFile (filename)
++readFile (char *filename)
+ {
+   char * buffer = 0;
+   long length;
+diff --git a/src/utils.h b/src/utils.h
+index 918ffdd129adf006..366ecb97b5d671ae 100755
+--- a/src/utils.h
++++ b/src/utils.h
+@@ -44,7 +44,13 @@ char *des_decrypt_b64 (char *ecrypted_text);
+ void des_decrypt_b64_2 (char *ecrypted_text, char *clear_text);
+ char *shortenString (char *original, int threshold, char *shortened);
+ int file_exists (char *filename);
+-char *readFile (filename);
++char *readFile (char *filename);
++
++int list_get_nth (char *list, int n, char sep, char *elem);
++void lower (char *s);
++void get_system (char *sys_name);
++int list_count (char *list, char sep);
++
+ 
+ #endif
+ 

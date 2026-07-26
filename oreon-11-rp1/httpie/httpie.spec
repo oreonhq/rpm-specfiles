@@ -1,0 +1,98 @@
+%global source0_hash b185cd8d81325f97c773582e50f1c5e047c2d8575b53d676469c9daf2a52f341
+
+Name:           httpie
+Version:        3.2.4
+Release:        %autorelease
+Summary:        A Curl-like tool for humans
+
+License:        BSD-3-Clause
+URL:            https://httpie.org/
+Source:         https://github.com/httpie/cli/archive/%{version}/cli-%{version}.tar.gz
+
+# Fix test_lazy_choices_help failure on Python 3.14+
+Patch:          https://github.com/httpie/cli/pull/1643.patch
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+
+# The tests are enabled by default, --without tests option exists
+%bcond_without tests
+
+%description
+HTTPie is a CLI HTTP utility built out of frustration with existing tools. The
+goal is to make CLI interaction with HTTP-based services as human-friendly as
+possible.
+
+HTTPie does so by providing an http command that allows for issuing arbitrary
+HTTP requests using a simple and natural syntax and displaying colorized
+responses.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n cli-%{version}
+
+# Upstream pins werkzeug<2.1.0 to avoid a problem in httpbin that Fedora has patch for
+# https://github.com/httpie/httpie/pull/1345
+# we revert it to allow building with newer werkzeug
+sed -i "/werkzeug<2.1.0/d" setup.cfg
+
+%generate_buildrequires
+%pyproject_buildrequires %{?with_tests:-x test}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files httpie
+
+# Bash completion
+mkdir -p %{buildroot}%{bash_completions_dir}
+cp -a extras/httpie-completion.bash %{buildroot}%{bash_completions_dir}/http
+ln -s ./http %{buildroot}%{bash_completions_dir}/https
+
+# Fish completion
+mkdir -p %{buildroot}%{fish_completions_dir}/
+cp -a extras/httpie-completion.fish %{buildroot}%{fish_completions_dir}/http.fish
+ln -s ./http.fish %{buildroot}%{fish_completions_dir}/https.fish
+
+# Man pages
+mkdir -p %{buildroot}%{_mandir}/man1
+cp -a extras/man/*.1 %{buildroot}%{_mandir}/man1/
+
+%check
+%if %{with tests}
+# Charset-normalizer 3.4.2 failures
+# https://github.com/httpie/cli/issues/1628
+normalizer="not test_terminal_output_response_charset_detection and not test_terminal_output_request_charset_detection"
+# Werkzeug >= 3 failures
+# https://github.com/httpie/cli/issues/1530
+issue1530="not test_compress_form and not test_binary"
+# Disabled plugins tests, TODO investigate
+plugins="not test_plugins_installation and not test_plugin_installation_with_custom_config and not test_plugins_listing and not test_plugins_uninstall and not test_plugins_double_uninstall and not test_broken_plugins"
+# New argparse behavior, TODO report upstream
+argparse="not (test_naked_invocation and args3)"
+# test_daemon_runner fails for unknown reason, TODO investigate
+dr="not test_daemon_runner"
+%pytest -v -k "$normalizer and $issue1530 and $plugins and $argparse and $dr"
+%else
+%pyproject_check_import
+%endif
+
+%files -f %{pyproject_files}
+%doc README.md
+%{_bindir}/http
+%{_bindir}/https
+%{_bindir}/httpie
+%{_mandir}/man1/http.1*
+%{_mandir}/man1/https.1*
+%{_mandir}/man1/httpie.1*
+%{bash_completions_dir}/http
+%{bash_completions_dir}/https
+%{fish_completions_dir}/http.fish
+%{fish_completions_dir}/https.fish
+
+%changelog
+%autochangelog

@@ -1,0 +1,44 @@
+diff -ruN infinipath-psm-3.3-26_g604758e_open.orig/ipath/ipath_proto.c infinipath-psm-3.3-26_g604758e_open/ipath/ipath_proto.c
+--- infinipath-psm-3.3-26_g604758e_open.orig/ipath/ipath_proto.c	2020-12-09 09:34:06.556378925 +0100
++++ infinipath-psm-3.3-26_g604758e_open/ipath/ipath_proto.c	2020-12-09 10:03:27.225580369 +0100
+@@ -37,11 +37,8 @@
+ // level infinipath protocol code.
+ 
+ #include <sys/poll.h>
+-#if __GNUC__ <= 6
+ #include <sys/types.h>
+-#else
+ #include <sys/sysmacros.h>
+-#endif
+ #include <sys/stat.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff -ruN infinipath-psm-3.3-26_g604758e_open.orig/ipath/ipath_time.c infinipath-psm-3.3-26_g604758e_open/ipath/ipath_time.c
+--- infinipath-psm-3.3-26_g604758e_open.orig/ipath/ipath_time.c	2019-02-12 05:02:37.000000000 +0100
++++ infinipath-psm-3.3-26_g604758e_open/ipath/ipath_time.c	2020-12-09 09:34:41.897301872 +0100
+@@ -279,7 +279,7 @@
+ #endif
+ 
+     /* If there's no change (within a small range), just return the old one */
+-    if (abs(new_pico_per_cycle - old_pico_per_cycle) < 5)
++    if (new_pico_per_cycle - old_pico_per_cycle < 5)
+ 	return old_pico_per_cycle;
+ 
+     if (ipath_timebase_isvalid(new_pico_per_cycle)) {
+diff -ruN infinipath-psm-3.3-26_g604758e_open.orig/ptl_ips/ptl.c infinipath-psm-3.3-26_g604758e_open/ptl_ips/ptl.c
+--- infinipath-psm-3.3-26_g604758e_open.orig/ptl_ips/ptl.c	2019-02-12 05:02:38.000000000 +0100
++++ infinipath-psm-3.3-26_g604758e_open/ptl_ips/ptl.c	2020-12-09 09:43:19.585179426 +0100
+@@ -536,13 +536,6 @@
+ 
+ PSMI_INLINE(
+ void
+-ips_lock_shared_context (struct ptl_shared *recvshc))
+-{
+-    pthread_spin_lock(recvshc->context_lock);
+-}
+-
+-PSMI_INLINE(
+-void
+ ips_unlock_shared_context (struct ptl_shared *recvshc))
+ {
+     pthread_spin_unlock(recvshc->context_lock);

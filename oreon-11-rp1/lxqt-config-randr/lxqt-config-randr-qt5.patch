@@ -1,0 +1,904 @@
+=== modified file 'CMakeLists.txt'
+--- CMakeLists.txt	2014-04-29 17:15:22 +0000
++++ CMakeLists.txt	2014-06-28 12:42:30 +0000
+@@ -1,5 +1,5 @@
+ project(lxqt-config-randr)
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 2.8.9)
+ 
+ if (NOT CMAKE_BUILD_TYPE)
+     set ( CMAKE_BUILD_TYPE Release )
+@@ -20,6 +20,26 @@
+ set(STR_VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION})
+ add_definitions(-DSTR_VERSION=\"${STR_VERSION}\")
+ 
++# Support Qt5
++option(USE_QT5 "Build with Qt5." $ENV{USE_QT5})
++set(CMAKE_INCLUDE_CURRENT_DIR ON)
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++set(CMAKE_AUTOMOC ON)
++if(USE_QT5)
++  cmake_minimum_required(VERSION 2.8.11)
++  find_package(Qt5Widgets REQUIRED)
++  find_package(Qt5X11Extras REQUIRED)
++  find_package(Qt5LinguistTools REQUIRED QUIET)
++  find_package(lxqt-qt5 REQUIRED)
++  message(STATUS "Building with Qt${Qt5Core_VERSION_STRING}")
++else()
++  find_package(Qt4 REQUIRED QtCore QtGui QtXml QtScript)
++  include(${QT_USE_FILE})
++  find_package(LXQT REQUIRED)
++  message(STATUS "Building with Qt${QTVERSION}")
++endif()
++include(${LXQT_USE_FILE})
++
+ subdirs(src)
+ 
+ set(DESKTOP_FILES
+
+=== modified file 'src/CMakeLists.txt'
+--- src/CMakeLists.txt	2013-12-26 20:57:26 +0000
++++ src/CMakeLists.txt	2014-06-28 12:42:30 +0000
+@@ -1,4 +1,13 @@
+ set(EXE_NAME lxqt-config-randr)
++
++if(USE_QT5)
++  set(QTX_INCLUDE_DIRS "")
++  set(QTX_LIBRARIES Qt5::Widgets Qt5::X11Extras)
++else()
++  set(QTX_INCLUDE_DIRS ${QT_INCLUDE_DIR})
++  set(QTX_LIBRARIES ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
++endif()
++
+ find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+ find_package(X11 REQUIRED)
+ 
+@@ -36,21 +45,6 @@
+     main.cpp
+ )
+ 
+-set(MOC_SOURCES_FILES
+-    randrscreen.h
+-    randrcrtc.h
+-    randroutput.h
+-    legacyrandrscreen.h
+-    qtimerconfirmdialog.h
+-    collapsiblewidget.h
+-    outputgraphicsitem.h
+-    outputconfig.h
+-    layoutmanager.h
+-    randrconfig.h
+-#    loaderconfiglogin.h
+-    razorrandrconfiguration.h
+-)
+-
+ set(UI_SOURCES_FILES
+     forms/outputconfigbase.ui
+     forms/qtimerconfirmdialog.ui
+@@ -61,17 +55,18 @@
+ set( RESOURCES_SRC_FILES
+     lxqtconfigrandr.qrc
+ )
+-QT4_WRAP_UI(UI_FILES ${UI_SOURCES_FILES} )
+-QT4_WRAP_CPP(MOC_FILES ${MOC_SOURCES_FILES} )
+-QT4_ADD_RESOURCES(RESOURCES_FILES ${RESOURCES_SRC_FILES} )
+-#QT4_ADD_TRANSLATION(RAZORRANDR_QM ${RAZORRANDR_TS} )
+-
+-include(${QT_USE_FILE})
+-
+-INCLUDE_DIRECTORIES(
+-    ${CMAKE_CURRENT_SOURCE_DIR}
++
++if(USE_QT5)
++	qt5_wrap_ui(UI_FILES ${UI_SOURCES_FILES} )
++	qt5_add_resources(RESOURCES_FILES ${RESOURCES_SRC_FILES} )
++else()
++	qt4_wrap_ui(UI_FILES ${UI_SOURCES_FILES} )
++	qt4_add_resources(RESOURCES_FILES ${RESOURCES_SRC_FILES} )
++endif()
++
++include_directories(
+     ${CMAKE_CURRENT_BINARY_DIR}
+-    ${QT_INCLUDE_DIR}
++    ${QTX_INCLUDE_DIRS}
+     ${X11_Xrandr_INCLUDE_PATH}
+ )
+ add_executable(${EXE_NAME}
+@@ -82,8 +77,7 @@
+ )
+ 
+ target_link_libraries(${EXE_NAME}
+-    ${QT_QTCORE_LIBRARY}
+-    ${QT_QTGUI_LIBRARY}
++    ${QTX_LIBRARIES}
+     ${X11_LIBRARIES}
+     ${XRANDR_LIBRARY}
+ )
+
+=== modified file 'src/collapsiblewidget.cpp'
+--- src/collapsiblewidget.cpp	2012-11-05 03:56:39 +0000
++++ src/collapsiblewidget.cpp	2014-06-28 12:42:30 +0000
+@@ -17,8 +17,11 @@
+    Boston, MA 02110-1301, USA.
+ */
+ 
+-#include <QtGui/QtGui>
+-#include <QtCore/QTimeLine>
++#include <QTimeLine>
++#include <QStyleOption>
++#include <QPainter>
++#include <QGridLayout>
++#include <QVBoxLayout>
+ #include <collapsiblewidget.h>
+ 
+ /******************************************************************
+
+=== modified file 'src/collapsiblewidget.h'
+--- src/collapsiblewidget.h	2012-11-05 03:56:39 +0000
++++ src/collapsiblewidget.h	2014-06-28 12:42:30 +0000
+@@ -23,10 +23,10 @@
+ #ifndef COLLAPSIBLEWIDGET_H
+ #define COLLAPSIBLEWIDGET_H
+ 
+-#include <QtGui/QScrollArea>
+-#include <QtGui/QLabel>
+-#include <QtCore/QDebug>
+-#include <QtGui/QAbstractButton>
++#include <QScrollArea>
++#include <QLabel>
++#include <QDebug>
++#include <QAbstractButton>
+ 
+ class QScrollArea;
+ 
+
+=== added file 'src/fixx11h.h'
+--- src/fixx11h.h	1970-01-01 00:00:00 +0000
++++ src/fixx11h.h	2014-06-28 12:42:30 +0000
+@@ -0,0 +1,301 @@
++/****************************************************************************
++
++ Copyright (C) 2003 Lubos Lunak        <l.lunak@kde.org>
++
++Permission is hereby granted, free of charge, to any person obtaining a
++copy of this software and associated documentation files (the "Software"),
++to deal in the Software without restriction, including without limitation
++the rights to use, copy, modify, merge, publish, distribute, sublicense,
++and/or sell copies of the Software, and to permit persons to whom the
++Software is furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in
++all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
++THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
++FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++DEALINGS IN THE SOFTWARE.
++
++****************************************************************************/
++
++
++//#ifdef    don't do this, this file is supposed to be included
++//#define   multiple times
++
++#include <QtCore/QtGlobal>
++
++
++/* Usage:
++
++ If you get compile errors caused by X11 includes (the line
++ where first error appears contains word like None, Unsorted,
++ Below, etc.), put #include <fixx11h.h> in the .cpp file
++ (not .h file!) between the place where X11 headers are
++ included and the place where the file with compile
++ error is included (or the place where the compile error
++ in the .cpp file occurs).
++
++ This file remaps X11 #defines to const variables or
++ inline functions. The side effect may be that these
++ symbols may now refer to different variables
++ (e.g. if X11 #defined NoButton, after this file
++ is included NoButton would no longer be X11's
++ NoButton, but Qt::NoButton instead). At this time,
++ there's no conflict known that could cause problems.
++
++ The original X11 symbols are still accessible
++ (e.g. for None) as X::None, XNone, and also still
++ None, unless name lookup finds different None
++ first (in the current class, etc.)
++
++ Use 'Unsorted', 'Bool' and 'index' as templates.
++
++*/
++
++namespace X
++{
++
++// template --->
++// Affects: Should be without side effects.
++#ifdef Unsorted
++#ifndef FIXX11H_Unsorted
++#define FIXX11H_Unsorted
++const int XUnsorted = Unsorted;
++#undef Unsorted
++const int Unsorted = XUnsorted;
++#endif
++#undef Unsorted
++#endif
++// template <---
++
++// Affects: Should be without side effects.
++#ifdef None
++#ifndef FIXX11H_None
++#define FIXX11H_None
++const XID XNone = None;
++#undef None
++const XID None = XNone;
++#endif
++#undef None
++#endif
++
++// Affects: Should be without side effects.
++#ifdef Expose
++    #ifndef FIXX11H_Expose
++        #define FIXX11H_Expose
++    #endif
++    #undef Expose
++#endif
++
++// template --->
++// Affects: Should be without side effects.
++#ifdef Bool
++#ifndef FIXX11H_Bool
++#define FIXX11H_Bool
++#ifdef _XTYPEDEF_BOOL /* Xdefs.h has typedef'ed Bool already */
++ #undef Bool
++#else
++ typedef Bool XBool;
++ #undef Bool
++ typedef XBool Bool;
++#endif
++#endif
++#undef Bool
++#define _XTYPEDEF_BOOL
++#endif
++// template <---
++
++// Affects: Should be without side effects.
++#ifdef KeyPress
++#ifndef FIXX11H_KeyPress
++#define FIXX11H_KeyPress
++const int XKeyPress = KeyPress;
++#undef KeyPress
++const int KeyPress = XKeyPress;
++#endif
++#undef KeyPress
++#endif
++
++// Affects: Should be without side effects.
++#ifdef KeyRelease
++#ifndef FIXX11H_KeyRelease
++#define FIXX11H_KeyRelease
++const int XKeyRelease = KeyRelease;
++#undef KeyRelease
++const int KeyRelease = XKeyRelease;
++#endif
++#undef KeyRelease
++#endif
++
++// Affects: Should be without side effects.
++#ifdef Above
++#ifndef FIXX11H_Above
++#define FIXX11H_Above
++const int XAbove = Above;
++#undef Above
++const int Above = XAbove;
++#endif
++#undef Above
++#endif
++
++// Affects: Should be without side effects.
++#ifdef Below
++#ifndef FIXX11H_Below
++#define FIXX11H_Below
++const int XBelow = Below;
++#undef Below
++const int Below = XBelow;
++#endif
++#undef Below
++#endif
++
++// Affects: Should be without side effects.
++#ifdef FocusIn
++#ifndef FIXX11H_FocusIn
++#define FIXX11H_FocusIn
++const int XFocusIn = FocusIn;
++#undef FocusIn
++const int FocusIn = XFocusIn;
++#endif
++#undef FocusIn
++#endif
++
++// Affects: Should be without side effects.
++#ifdef FocusOut
++#ifndef FIXX11H_FocusOut
++#define FIXX11H_FocusOut
++const int XFocusOut = FocusOut;
++#undef FocusOut
++const int FocusOut = XFocusOut;
++#endif
++#undef FocusOut
++#endif
++
++// Affects: Should be without side effects.
++#ifdef Always
++#ifndef FIXX11H_Always
++#define FIXX11H_Always
++const int XAlways = Always;
++#undef Always
++const int Always = XAlways;
++#endif
++#undef Always
++#endif
++
++// Affects: Should be without side effects.
++#ifdef Success
++#ifndef FIXX11H_Success
++#define FIXX11H_Success
++const int XSuccess = Success;
++#undef Success
++const int Success = XSuccess;
++#endif
++#undef Success
++#endif
++
++// Affects: Should be without side effects.
++#ifdef GrayScale
++#ifndef FIXX11H_GrayScale
++#define FIXX11H_GrayScale
++const int XGrayScale = GrayScale;
++#undef GrayScale
++const int GrayScale = XGrayScale;
++#endif
++#undef GrayScale
++#endif
++
++// Affects: Should be without side effects.
++#ifdef Status
++#ifndef FIXX11H_Status
++#define FIXX11H_Status
++typedef Status XStatus;
++#undef Status
++typedef XStatus Status;
++#endif
++#undef Status
++#endif
++
++// template --->
++// Affects: Should be without side effects.
++#ifdef CursorShape
++#ifndef FIXX11H_CursorShape
++#define FIXX11H_CursorShape
++const int XCursorShape = CursorShape;
++#undef CursorShape
++const int CursorShape = XCursorShape;
++#endif
++#undef CursorShape
++#endif
++// template <---
++
++// template --->
++// Affects: Should be without side effects.
++#ifdef FontChange
++#ifndef FIXX11H_FontChange
++#define FIXX11H_FontChange
++const int XFontChange = FontChange;
++#undef FontChange
++const int FontChange = XFontChange;
++#endif
++#undef FontChange
++#endif
++// template <---
++
++// Affects: Should be without side effects.
++#ifdef NormalState
++#ifndef FIXX11H_NormalState
++#define FIXX11H_NormalState
++const int XNormalState = NormalState;
++#undef NormalState
++const int NormalState = XNormalState;
++#endif
++#undef NormalState
++#endif
++
++// template --->
++// Affects: Should be without side effects.
++#ifdef index
++#ifndef FIXX11H_index
++#define FIXX11H_index
++inline
++const char* Xindex( const char* s, int c )
++    {
++    return index( s, c );
++    }
++#undef index
++inline
++const char* index( const char* s, int c )
++    {
++    return Xindex( s, c );
++    }
++#endif
++#undef index
++#endif
++// template <---
++
++#ifdef rindex
++// Affects: Should be without side effects.
++#ifndef FIXX11H_rindex
++#define FIXX11H_rindex
++inline
++const char* Xrindex( const char* s, int c )
++    {
++    return rindex( s, c );
++    }
++#undef rindex
++inline
++const char* rindex( const char* s, int c )
++    {
++    return Xrindex( s, c );
++    }
++#endif
++#undef rindex
++#endif
++}
++
++using namespace X;
++
+
+=== modified file 'src/layoutmanager.cpp'
+--- src/layoutmanager.cpp	2012-11-05 03:56:39 +0000
++++ src/layoutmanager.cpp	2014-06-28 12:42:30 +0000
+@@ -23,7 +23,7 @@
+ #include "randroutput.h"
+ #include "outputgraphicsitem.h"
+ 
+-#include <QtGui/QGraphicsScene>
++#include <QGraphicsScene>
+ #include <cmath>
+ #include <math.h>
+ 
+
+=== modified file 'src/layoutmanager.h'
+--- src/layoutmanager.h	2012-11-05 03:56:39 +0000
++++ src/layoutmanager.h	2014-06-28 12:42:30 +0000
+@@ -20,7 +20,7 @@
+ #ifndef __LAYOUTMANAGER_H__
+ #define __LAYOUTMANAGER_H__
+ 
+-#include <QtCore/QObject>
++#include <QObject>
+ #include "randr.h"
+ 
+ class RandRScreen;
+
+=== modified file 'src/legacyrandrscreen.cpp'
+--- src/legacyrandrscreen.cpp	2014-05-18 06:19:13 +0000
++++ src/legacyrandrscreen.cpp	2014-06-28 12:42:30 +0000
+@@ -18,12 +18,12 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtCore/QDebug>
+-#include <QtGui/QLabel>
+-#include <QtGui/QDesktopWidget>
++#include <QDebug>
++#include <QLabel>
++#include <QDesktopWidget>
+ #include <QX11Info>
+-#include <QtCore/QTimer>
+-#include <QtGui/QPixmap>
++#include <QTimer>
++#include <QPixmap>
+ 
+ #include "qtimerconfirmdialog.h"
+ #include "legacyrandrscreen.h"
+
+=== modified file 'src/legacyrandrscreen.h'
+--- src/legacyrandrscreen.h	2012-11-05 03:56:39 +0000
++++ src/legacyrandrscreen.h	2014-06-28 12:42:30 +0000
+@@ -21,9 +21,9 @@
+ #ifndef LEGACYRANDRSCREEN_H
+ #define LEGACYRANDRSCREEN_H
+ 
+-#include <QtCore/QObject>
+-#include <QtGui/QPixmap>
+-#include <QtCore/QSettings>
++#include <QObject>
++#include <QPixmap>
++#include <QSettings>
+ 
+ #include "qtimerconfirmdialog.h"
+ #include "randr.h"
+
+=== modified file 'src/loaderconfiglogin.cpp'
+--- src/loaderconfiglogin.cpp	2013-11-10 03:46:16 +0000
++++ src/loaderconfiglogin.cpp	2014-06-28 12:42:30 +0000
+@@ -1,6 +1,6 @@
+-#include <QtCore/QSettings>
+-#include <QtCore/QFile>
+-#include <QtCore/QDebug>
++#include <QSettings>
++#include <QFile>
++#include <QDebug>
+ #include "randrconfig.h"
+ #include "randrdisplay.h"
+ 
+
+=== modified file 'src/main.cpp'
+--- src/main.cpp	2013-11-10 03:46:16 +0000
++++ src/main.cpp	2014-06-28 12:42:30 +0000
+@@ -16,10 +16,10 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtGui/QApplication>
+-#include <QtCore/QSettings>
+-#include <QtCore/QFile>
+-#include <QtCore/QDebug>
++#include <QApplication>
++#include <QSettings>
++#include <QFile>
++#include <QDebug>
+ #include <getopt.h>
+ #include <stdlib.h>
+ 
+
+=== modified file 'src/outputconfig.cpp'
+--- src/outputconfig.cpp	2014-06-25 00:57:57 +0000
++++ src/outputconfig.cpp	2014-07-03 01:54:41 +0000
+@@ -24,7 +24,7 @@
+ #include "randrscreen.h"
+ #include "randrmode.h"
+ #include "randrcrtc.h"
+-#include <QtCore/QDebug>
++#include <QDebug>
+ #include <QMessageBox>
+ 
+ OutputConfig::OutputConfig(QWidget* parent, RandROutput* output, OutputConfigList preceding, bool unified)
+
+=== modified file 'src/outputconfig.h'
+--- src/outputconfig.h	2014-01-04 23:47:53 +0000
++++ src/outputconfig.h	2014-06-28 12:42:30 +0000
+@@ -20,9 +20,9 @@
+ #ifndef __OUTPUTCONFIG_H__
+ #define __OUTPUTCONFIG_H__
+ 
+-#include <QtGui/QWidget>
+-#include <QtCore/QTextStream>
+-#include <QtCore/QTimer>
++#include <QWidget>
++#include <QTextStream>
++#include <QTimer>
+ #include "ui_outputconfigbase.h"
+ #include "randr.h"
+ #include "randroutput.h"
+
+=== modified file 'src/outputgraphicsitem.cpp'
+--- src/outputgraphicsitem.cpp	2013-01-14 03:39:10 +0000
++++ src/outputgraphicsitem.cpp	2014-06-28 12:42:30 +0000
+@@ -16,11 +16,11 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtGui/QPen>
+-#include <QtGui/QBrush>
+-#include <QtGui/QFont>
+-#include <QtGui/QGraphicsScene>
+-#include <QtGui/QApplication>
++#include <QPen>
++#include <QBrush>
++#include <QFont>
++#include <QGraphicsScene>
++#include <QApplication>
+ 
+ #include "outputconfig.h"
+ #include "outputgraphicsitem.h"
+
+=== modified file 'src/outputgraphicsitem.h'
+--- src/outputgraphicsitem.h	2012-11-05 03:56:39 +0000
++++ src/outputgraphicsitem.h	2014-06-28 12:42:30 +0000
+@@ -19,8 +19,8 @@
+ #ifndef OUTPUTGRAPHICSITEM_H
+ #define OUTPUTGRAPHICSITEM_H
+ 
+-#include <QtGui/QGraphicsRectItem>
+-#include <QtGui/QGraphicsTextItem>
++#include <QGraphicsRectItem>
++#include <QGraphicsTextItem>
+ 
+ #include "randr.h"
+ 
+
+=== modified file 'src/qtimerconfirmdialog.cpp'
+--- src/qtimerconfirmdialog.cpp	2012-11-05 03:56:39 +0000
++++ src/qtimerconfirmdialog.cpp	2014-06-28 12:42:30 +0000
+@@ -1,4 +1,4 @@
+-#include <QtCore/QDebug>
++#include <QDebug>
+ 
+ #include "qtimerconfirmdialog.h"
+ #include "ui_qtimerconfirmdialog.h"
+
+=== modified file 'src/qtimerconfirmdialog.h'
+--- src/qtimerconfirmdialog.h	2012-11-05 03:56:39 +0000
++++ src/qtimerconfirmdialog.h	2014-06-28 12:42:30 +0000
+@@ -1,9 +1,9 @@
+ #ifndef QTIMERCONFIRMDIALOG_H
+ #define QTIMERCONFIRMDIALOG_H
+ 
+-#include <QtCore/QTimer>
+-#include <QtGui/QDialog>
+-#include <QtGui/QDialogButtonBox>
++#include <QTimer>
++#include <QDialog>
++#include <QDialogButtonBox>
+ 
+ namespace Ui {
+ class QTimerConfirmDialog;
+
+=== modified file 'src/randr.cpp'
+--- src/randr.cpp	2013-01-14 03:39:10 +0000
++++ src/randr.cpp	2014-06-28 12:42:30 +0000
+@@ -18,7 +18,7 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtGui/QIcon>
++#include <QIcon>
+ #include "qtimerconfirmdialog.h"
+ #include "randr.h"
+ 
+
+=== modified file 'src/randr.h'
+--- src/randr.h	2014-01-01 10:37:33 +0000
++++ src/randr.h	2014-06-28 12:42:30 +0000
+@@ -22,12 +22,13 @@
+ #ifndef RANDR_H
+ #define RANDR_H
+ 
+-#include <QtCore/QDebug>
+-#include <QtCore/QString>
+-#include <QtGui/QPixmap>
++#include <QDebug>
++#include <QString>
++#include <QPixmap>
+ #include <config-randr.h>
+ 
+ #include <X11/extensions/Xrandr.h>
++#include "fixx11h.h"
+ 
+ #ifdef HAS_RANDR_1_2
+ class RandRScreen;
+
+=== modified file 'src/randrconfig.cpp'
+--- src/randrconfig.cpp	2014-01-04 23:47:53 +0000
++++ src/randrconfig.cpp	2014-06-28 12:42:30 +0000
+@@ -17,8 +17,8 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtGui/QMessageBox>
+-#include <QtGui/QMenu>
++#include <QMessageBox>
++#include <QMenu>
+ 
+ #include "collapsiblewidget.h"
+ #include "outputconfig.h"
+@@ -443,7 +443,9 @@
+     message.show();
+ }
+ 
++/*
+ bool RandRConfig::x11Event(XEvent* e)
+ {
+     return QWidget::x11Event(e);
+ }
++*/
+
+=== modified file 'src/randrconfig.h'
+--- src/randrconfig.h	2012-11-05 03:56:39 +0000
++++ src/randrconfig.h	2014-06-28 12:42:30 +0000
+@@ -23,8 +23,8 @@
+ #include "ui_randrconfigbase.h"
+ #include "randr.h"
+ 
+-#include <QtGui/QWidget>
+-#include <QtCore/QTimer>
++#include <QWidget>
++#include <QTimer>
+ 
+ class QGraphicsScene;
+ class SettingsContainer;
+@@ -50,7 +50,7 @@
+     void apply();
+     void update();
+ 
+-    virtual bool x11Event(XEvent* e);
++    //virtual bool x11Event(XEvent* e);
+ 
+ public slots:
+     void slotUpdateView();
+
+=== modified file 'src/randrcrtc.h'
+--- src/randrcrtc.h	2014-01-04 23:47:53 +0000
++++ src/randrcrtc.h	2014-06-28 12:42:30 +0000
+@@ -20,9 +20,9 @@
+ #ifndef RANDRCRTC_H
+ #define RANDRCRTC_H
+ 
+-#include <QtGui/QX11Info>
+-#include <QtCore/QObject>
+-#include <QtCore/QRect>
++#include <QX11Info>
++#include <QObject>
++#include <QRect>
+ 
+ #include "randr.h"
+ 
+
+=== modified file 'src/randrdisplay.cpp'
+--- src/randrdisplay.cpp	2013-11-10 17:26:36 +0000
++++ src/randrdisplay.cpp	2014-06-28 12:42:30 +0000
+@@ -19,10 +19,10 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtCore/QDebug>
+-#include <QtGui/QApplication>
+-#include <QtGui/QDesktopWidget>
+-#include <QtGui/QX11Info>
++#include <QDebug>
++#include <QApplication>
++#include <QDesktopWidget>
++#include <QX11Info>
+ 
+ #include "randrdisplay.h"
+ #ifdef HAS_RANDR_1_2
+@@ -155,9 +155,12 @@
+     // Xinerama by default, which doesn't work properly with randr.
+     // It will return more screens than exist for the display, causing
+     // a crash in the screen/currentScreen methods.
++#if QT_VERSION_CHECK(5, 0, 0)
++    // FIXME: 
++#else
+     if(widget)
+         return widget->x11Info().screen();
+-
++#endif
+     return -1;
+ }
+ 
+
+=== modified file 'src/randrdisplay.h'
+--- src/randrdisplay.h	2013-11-10 01:28:08 +0000
++++ src/randrdisplay.h	2014-06-28 12:42:30 +0000
+@@ -21,8 +21,8 @@
+ #ifndef RANDRDISPLAY_H
+ #define RANDRDISPLAY_H
+ 
+-#include <QtGui/QWidget>
+-#include <QtCore/QSettings>
++#include <QWidget>
++#include <QSettings>
+ #include <X11/Xlib.h>
+ #include <config-randr.h>
+ 
+
+=== modified file 'src/randroutput.cpp'
+--- src/randroutput.cpp	2014-02-02 15:00:30 +0000
++++ src/randroutput.cpp	2014-06-28 12:42:30 +0000
+@@ -18,9 +18,9 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtCore/QSettings>
+-#include <QtGui/QX11Info>
+-#include <QtGui/QAction>
++#include <QSettings>
++#include <QX11Info>
++#include <QAction>
+ 
+ #include "randroutput.h"
+ #include "randrscreen.h"
+
+=== modified file 'src/randroutput.h'
+--- src/randroutput.h	2014-01-04 23:47:53 +0000
++++ src/randroutput.h	2014-06-28 12:42:30 +0000
+@@ -21,9 +21,9 @@
+ #ifndef RANDROUTPUT_H
+ #define RANDROUTPUT_H
+ 
+-#include <QtCore/QObject>
+-#include <QtCore/QString>
+-#include <QtCore/QRect>
++#include <QObject>
++#include <QString>
++#include <QRect>
+ 
+ #include "randr.h"
+ #include "randrmode.h"
+
+=== modified file 'src/randrscreen.cpp'
+--- src/randrscreen.cpp	2014-01-04 23:47:53 +0000
++++ src/randrscreen.cpp	2014-06-28 12:42:30 +0000
+@@ -17,8 +17,8 @@
+  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  */
+ 
+-#include <QtCore/QSettings>
+-#include <QtGui/QAction>
++#include <QSettings>
++#include <QAction>
+ 
+ #include "randrscreen.h"
+ #include "randrcrtc.h"
+
+=== modified file 'src/randrscreen.h'
+--- src/randrscreen.h	2012-11-05 03:56:39 +0000
++++ src/randrscreen.h	2014-06-28 12:42:30 +0000
+@@ -21,9 +21,9 @@
+ #define RANDRSCREEN_H
+ 
+ #include "randr.h"
+-#include <QtGui/QX11Info>
+-#include <QtCore/QObject>
+-#include <QtCore/QMap>
++#include <QX11Info>
++#include <QObject>
++#include <QMap>
+ 
+ class QSize;
+ class QAction;
+
+=== modified file 'src/razorrandrconfiguration.cpp'
+--- src/razorrandrconfiguration.cpp	2013-11-09 21:11:15 +0000
++++ src/razorrandrconfiguration.cpp	2014-06-28 12:42:30 +0000
+@@ -18,7 +18,7 @@
+  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+  ***************************************************************************/
+ 
+-#include <QtGui/QMessageBox>
++#include <QMessageBox>
+ 
+ #include "razorrandrconfiguration.h"
+ #include "ui_razorrandrconfiguration.h"
+
+=== modified file 'src/razorrandrconfiguration.h'
+--- src/razorrandrconfiguration.h	2013-11-09 21:11:15 +0000
++++ src/razorrandrconfiguration.h	2014-06-28 12:42:30 +0000
+@@ -21,7 +21,7 @@
+ #ifndef RAZORRANDRCONFIGURATION_H
+ #define RAZORRANDRCONFIGURATION_H
+ 
+-#include <QtGui/QDialog>
++#include <QDialog>
+ #include "randrconfig.h"
+ #include "randrdisplay.h"
+ 
+
+=== modified file 'src/razorrandrdialog.h'
+--- src/razorrandrdialog.h	2012-11-05 03:56:39 +0000
++++ src/razorrandrdialog.h	2014-06-28 12:42:30 +0000
+@@ -21,7 +21,7 @@
+ #ifndef RAZORRANDRDIALOG_H
+ #define RAZORRANDRDIALOG_H
+ 
+-#include <QtGui/QDialog>
++#include <QDialog>
+ #include "randrdisplay.h"
+ 
+ namespace Ui {
+

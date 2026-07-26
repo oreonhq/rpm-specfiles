@@ -1,0 +1,14 @@
+diff -pruN ebnetd-1.0.orig/ebnetd/defs.h.in ebnetd-1.0/ebnetd/defs.h.in
+--- ebnetd-1.0.orig/ebnetd/defs.h.in	2003-06-15 20:39:27.000000000 +0900
++++ ebnetd-1.0/ebnetd/defs.h.in	2020-01-31 20:16:21.136296356 +0900
+@@ -313,8 +313,8 @@ extern char work_path[];
+ extern char configuration_file_name[];
+ extern in_port_t listening_port;
+ extern in_port_t old_listening_port;
+-fd_set listening_files;
+-int max_listening_file;
++extern fd_set listening_files;
++extern int max_listening_file;
+ extern int accepted_in_file;
+ extern int accepted_out_file;
+ extern uid_t user_id;

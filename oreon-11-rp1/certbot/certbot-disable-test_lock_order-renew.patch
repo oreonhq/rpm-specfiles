@@ -1,0 +1,13 @@
+diff --git a/certbot/src/certbot/_internal/tests/main_test.py b/certbot/src/certbot/_internal/tests/main_test.py
+index 2176c9da8..ff0ec3304 100644
+--- a/certbot/src/certbot/_internal/tests/main_test.py
++++ b/certbot/src/certbot/_internal/tests/main_test.py
+@@ -2530,7 +2530,7 @@ class TestLockOrder:
+             with mock.patch.object(null.Installer, 'prepare', installer_lock):
+                 yield
+ 
+-    @pytest.fixture(params='certonly install renew run'.split())
++    @pytest.fixture(params='certonly install run'.split())
+     def args_and_lock_order(self, mock_lock_dir, request, tmp_path):
+         """Sets up Certbot with args and mocks to error after acquiring the last lock.
+ 

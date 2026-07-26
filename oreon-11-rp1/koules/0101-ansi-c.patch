@@ -1,0 +1,183 @@
+diff -up koules1.4/font.c.ansi koules1.4/font.c
+--- koules1.4/font.c.ansi	1998-03-04 13:59:19.000000000 -0500
++++ koules1.4/font.c	2025-01-21 21:48:45.641392060 -0500
+@@ -433,8 +433,7 @@ static int      stop_after_this_x = NO_C
+ #define BEST static
+ #endif
+ BEST void
+-fontc_ul (x, y, r)
+-     CONST int       x, y, r;
++fontc_ul (CONST int x, CONST int y, CONST int r)
+ {
+   int             r34;
+ 
+@@ -446,8 +445,7 @@ fontc_ul (x, y, r)
+ }
+ 
+ BEST void
+-fontc_ur (x, y, r)
+-     CONST int       x, y, r;
++fontc_ur (CONST int x, CONST int y, CONST int r)
+ {
+   int             r34;
+ 
+@@ -459,8 +457,7 @@ fontc_ur (x, y, r)
+ }
+ 
+ BEST void
+-fontc_ll (x, y, r)
+-     CONST int       x, y, r;
++fontc_ll (CONST int x, CONST int y, CONST int r)
+ {
+   int             r34;
+ 
+@@ -472,8 +469,7 @@ fontc_ll (x, y, r)
+ }
+ 
+ BEST void
+-fontc_lr (x, y, r)
+-     CONST int       x, y, r;
++fontc_lr (CONST int x, CONST int y, CONST int r)
+ {
+   int             r34;
+ 
+@@ -485,40 +481,35 @@ fontc_lr (x, y, r)
+ }
+ 
+ static void
+-fontc_l (x, y, r)
+-     CONST int       x, y, r;
++fontc_l (CONST int x, CONST int y, CONST int r)
+ {
+   fontc_ll (x, y, r);
+   fontc_lr (x, y, r);
+ }
+ 
+ static void
+-fontc_u (x, y, r)
+-     CONST int       x, y, r;
++fontc_u (CONST int x, CONST int y, CONST int r)
+ {
+   fontc_ul (x, y, r);
+   fontc_ur (x, y, r);
+ }
+ 
+ static void
+-fontc_r (x, y, r)
+-     CONST int       x, y, r;
++fontc_r (CONST int x, CONST int y, CONST int r)
+ {
+   fontc_ur (x, y, r);
+   fontc_lr (x, y, r);
+ }
+ 
+ static void
+-fontc_left (x, y, r)
+-     CONST int       x, y, r;
++fontc_left (CONST int x, CONST int y, CONST int r)
+ {
+   fontc_ul (x, y, r);
+   fontc_ll (x, y, r);
+ }
+ 
+ static void
+-fontcircle (x, y, r)
+-     CONST int       x, y, r;
++fontcircle (CONST int x, CONST int y, CONST int r)
+ {
+   fontc_u (x, y, r);
+   fontc_l (x, y, r);
+@@ -535,9 +526,7 @@ myindex (char *s, CONST int c)
+ 
+ 
+ int
+-vgadrawtext (x, y, siz, str)
+-     CONST int       x, y, siz;
+-     CONST char     *str;
++vgadrawtext (CONST int x, CONST int y, CONST int siz, CONST char *str)
+ {
+   int             f, a, b, c, s1, s2, s3, s4, s5, s6, gap;
+   b = y;
+@@ -979,9 +968,7 @@ vgadrawtext (x, y, siz, str)
+ 
+ /* here's a new one - this gets how wide text will be */
+ int
+-vgatextsize (sizearg, str)
+-     CONST int       sizearg;
+-     CONST char     *str;
++vgatextsize (CONST int sizearg, CONST char *str)
+ {
+   int             r;
+ 
+@@ -993,8 +980,7 @@ vgatextsize (sizearg, str)
+ 
+ 
+ void
+-set_max_text_width (width)
+-     CONST int       width;
++set_max_text_width (CONST int width)
+ {
+   stop_after_this_x = width;
+ }
+diff -up koules1.4/koules.sndsrv.linux.c.ansi koules1.4/koules.sndsrv.linux.c
+--- koules1.4/koules.sndsrv.linux.c.ansi	2025-01-21 21:23:57.386772410 -0500
++++ koules1.4/koules.sndsrv.linux.c	2025-01-21 21:49:12.459688866 -0500
+@@ -284,9 +284,7 @@ do_everything (int dsp, int is_pcsp)
+ 
+ 
+ int
+-main (argc, argv)
+-     int             argc;
+-     char          **argv;
++main (int argc, char **argv)
+ {
+   int             dsp, is_pcsp;
+ 
+diff -up koules1.4/mygetopt.c.ansi koules1.4/mygetopt.c
+--- koules1.4/mygetopt.c.ansi	1998-03-04 13:59:19.000000000 -0500
++++ koules1.4/mygetopt.c	2025-01-21 21:55:57.373170150 -0500
+@@ -61,10 +61,7 @@ char           *myoptarg;	/* argument as
+ #define        EMSG    ""
+ 
+ int
+-mygetopt (nargc, nargv, ostr)
+-     int             nargc;
+-     char          **nargv;
+-     char           *ostr;
++mygetopt (int nargc, char **nargv, char *ostr)
+ {
+   static char    *place = EMSG;	/* option letter processing */
+   register char  *oli;		/* option letter list index */
+diff -up koules1.4/sound.c.ansi koules1.4/sound.c
+--- koules1.4/sound.c.ansi	1998-03-04 13:59:19.000000000 -0500
++++ koules1.4/sound.c	2025-01-21 21:41:19.813477943 -0500
+@@ -78,8 +78,7 @@ init_sound ()
+ }
+ 
+ int
+-play_sound (k)
+-     int             k;
++play_sound (int k)
+ {
+   char            c;
+   test_sound ();
+@@ -92,8 +91,7 @@ play_sound (k)
+ 
+ 
+ void
+-maybe_play_sound (k)
+-     int             k;
++maybe_play_sound (int k)
+ {
+   char            c;
+ 
+@@ -110,8 +108,7 @@ maybe_play_sound (k)
+ 
+ 
+ void
+-sound_completed (k)
+-     int             k;
++sound_completed (int k)
+ {
+   sound_flags[k] &= ~1;
+ }

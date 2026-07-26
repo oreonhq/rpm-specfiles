@@ -1,0 +1,26 @@
+Prevents this warning:
+
+In file included from /usr/include/cxsc/real.hpp:38,
+             	from cxsc_poly.C:13:
+/usr/include/cxsc/except.hpp:745:43: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
+  745 |             	ERROR__WRONG_ROW_OR_COL<T>() noexcept;
+  	|                                       	^
+/usr/include/cxsc/except.hpp:745:43: note: remove the '< >'
+/usr/include/cxsc/except.hpp:746:43: warning: template-id not allowed for constructor in C++20 [-Wtemplate-id-cdtor]
+  746 |             	ERROR__WRONG_ROW_OR_COL<T>(const string &f) noexcept;
+  	|                                       	^
+/usr/include/cxsc/except.hpp:746:43: note: remove the '< >'
+
+--- src/except.hpp.orig	2014-01-30 10:23:45.000000000 -0700
++++ src/except.hpp	2024-09-11 14:07:13.633432103 -0600
+@@ -742,8 +742,8 @@ class ERROR__WRONG_ROW_OR_COL: virtual p
+ 	public:
+ 		virtual int errnum() const throw();
+ 		virtual string errtext() const throw();
+-		ERROR__WRONG_ROW_OR_COL<T>() throw();
+-		ERROR__WRONG_ROW_OR_COL<T>(const string &f) throw();
++		ERROR__WRONG_ROW_OR_COL() throw();
++		ERROR__WRONG_ROW_OR_COL(const string &f) throw();
+ //		virtual ~ERROR__WRONG_ROW_OR_COL() throw() { }
+ //	private:
+ //		string fkt;

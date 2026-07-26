@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Flying Saucers attack
+Comment=Shoot down the attacking UFOs and to save the city
+Exec=flyingsaucersattack
+Icon=flyingsaucersattack
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;
+Keywords=Game;Arcade;Retro;UFO;Flying;Saucers;Attack;

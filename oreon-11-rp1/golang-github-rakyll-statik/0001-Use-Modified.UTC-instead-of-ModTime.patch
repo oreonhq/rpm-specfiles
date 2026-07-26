@@ -1,0 +1,74 @@
+From a7825b3fb4f1e38bb4ba66cff04f31737e94326d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Tue, 6 Aug 2019 21:35:12 +0200
+Subject: [PATCH] Use Modified.UTC() instead of ModTime()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ fs/fs_test.go | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/fs/fs_test.go b/fs/fs_test.go
+index 9eed9d2..b1290d2 100644
+--- a/fs/fs_test.go
++++ b/fs/fs_test.go
+@@ -58,7 +58,7 @@ func TestOpen(t *testing.T) {
+ 				"/file.txt": {
+ 					data:    mustReadFile("../testdata/file/file.txt"),
+ 					isDir:   false,
+-					modTime: fileTxtHeader.ModTime(),
++					modTime: fileTxtHeader.Modified.UTC(),
+ 					mode:    fileTxtHeader.Mode(),
+ 					name:    fileTxtHeader.Name,
+ 					size:    int64(fileTxtHeader.UncompressedSize64),
+@@ -72,7 +72,7 @@ func TestOpen(t *testing.T) {
+ 				"/pixel.gif": {
+ 					data:    mustReadFile("../testdata/image/pixel.gif"),
+ 					isDir:   false,
+-					modTime: pixelGifHeader.ModTime(),
++					modTime: pixelGifHeader.Modified.UTC(),
+ 					mode:    pixelGifHeader.Mode(),
+ 					name:    pixelGifHeader.Name,
+ 					size:    int64(pixelGifHeader.UncompressedSize64),
+@@ -86,7 +86,7 @@ func TestOpen(t *testing.T) {
+ 				"/index.html": {
+ 					data:    mustReadFile("../testdata/index/index.html"),
+ 					isDir:   false,
+-					modTime: indexHTMLHeader.ModTime(),
++					modTime: indexHTMLHeader.Modified.UTC(),
+ 					mode:    indexHTMLHeader.Mode(),
+ 					name:    indexHTMLHeader.Name,
+ 					size:    int64(indexHTMLHeader.UncompressedSize64),
+@@ -94,7 +94,7 @@ func TestOpen(t *testing.T) {
+ 				"/sub_dir/index.html": {
+ 					data:    mustReadFile("../testdata/index/sub_dir/index.html"),
+ 					isDir:   false,
+-					modTime: subdirIndexHTMLHeader.ModTime(),
++					modTime: subdirIndexHTMLHeader.Modified.UTC(),
+ 					mode:    subdirIndexHTMLHeader.Mode(),
+ 					name:    subdirIndexHTMLHeader.Name,
+ 					size:    int64(subdirIndexHTMLHeader.UncompressedSize64),
+@@ -127,7 +127,7 @@ func TestOpen(t *testing.T) {
+ 				"/a": {
+ 					data:    mustReadFile("../testdata/deep/a"),
+ 					isDir:   false,
+-					modTime: deepAHTMLHeader.ModTime(),
++					modTime: deepAHTMLHeader.Modified.UTC(),
+ 					mode:    deepAHTMLHeader.Mode(),
+ 					name:    deepAHTMLHeader.Name,
+ 					size:    int64(deepAHTMLHeader.UncompressedSize64),
+@@ -135,7 +135,7 @@ func TestOpen(t *testing.T) {
+ 				"/aa/bb/c": {
+ 					data:    mustReadFile("../testdata/deep/aa/bb/c"),
+ 					isDir:   false,
+-					modTime: deepCHTMLHeader.ModTime(),
++					modTime: deepCHTMLHeader.Modified.UTC(),
+ 					mode:    deepCHTMLHeader.Mode(),
+ 					name:    deepCHTMLHeader.Name,
+ 					size:    int64(deepCHTMLHeader.UncompressedSize64),
+-- 
+2.21.0
+

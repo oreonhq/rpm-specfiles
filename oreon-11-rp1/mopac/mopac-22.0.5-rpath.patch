@@ -1,0 +1,19 @@
+diff -up mopac-22.0.5/CMakeLists.txt.rpath mopac-22.0.5/CMakeLists.txt
+--- mopac-22.0.5/CMakeLists.txt.rpath	2022-11-09 11:13:44.969847212 +0000
++++ mopac-22.0.5/CMakeLists.txt	2022-11-09 11:14:09.868405481 +0000
+@@ -80,15 +80,6 @@ message(STATUS "Build type is ${CMAKE_BU
+ # location for CMake modules
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+ 
+-# Set relative RPATH for installation
+-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+-# Install-time options
+-if(APPLE)
+-  set(CMAKE_INSTALL_RPATH "\@loader_path/../lib")
+-elseif(UNIX)
+-  set(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib")
+-endif()
+-
+ # Define a common library and executables for MOPAC & PARAM
+ if (STATIC_BUILD)
+   # Static build

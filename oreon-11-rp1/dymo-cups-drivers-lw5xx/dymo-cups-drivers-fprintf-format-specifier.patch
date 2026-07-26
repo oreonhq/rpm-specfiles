@@ -1,0 +1,36 @@
+From bf42f757cd0ffe2e95f426188ec679335d88763e Mon Sep 17 00:00:00 2001
+From: Andrew Bauer <zonexpertconsulting@outlook.com>
+Date: Mon, 26 May 2025 15:28:32 -0500
+Subject: [PATCH] add format specifier to fprintf
+
+---
+ LW5xx_Linux/samples/paper_bounds/PaperBounds.cpp | 2 +-
+ LW5xx_Linux/samples/test_label/TestLabel.cpp     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/LW5xx_Linux/samples/paper_bounds/PaperBounds.cpp b/LW5xx_Linux/samples/paper_bounds/PaperBounds.cpp
+index 97f27414..a646d8b8 100644
+--- a/LW5xx_Linux/samples/paper_bounds/PaperBounds.cpp
++++ b/LW5xx_Linux/samples/paper_bounds/PaperBounds.cpp
+@@ -238,7 +238,7 @@ int main(int argc, char** argv)
+   }
+   catch(std::exception& e)
+   {
+-    fprintf(stderr, e.what());
++    fprintf(stderr, "%s", e.what());
+     fprintf(stderr, "\n");
+     return 1;
+   }
+diff --git a/LW5xx_Linux/samples/test_label/TestLabel.cpp b/LW5xx_Linux/samples/test_label/TestLabel.cpp
+index e9d645a2..f4447429 100644
+--- a/LW5xx_Linux/samples/test_label/TestLabel.cpp
++++ b/LW5xx_Linux/samples/test_label/TestLabel.cpp
+@@ -221,7 +221,7 @@ int main(int argc, char** argv)
+   }
+   catch(std::exception& e)
+   {
+-    fprintf(stderr, e.what());
++    fprintf(stderr, "%s", e.what());
+     fprintf(stderr, "\n");
+     return 1;
+   }

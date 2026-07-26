@@ -1,0 +1,35 @@
+From e463b6e644318c5da502f9328abf8069173ee4bc Mon Sep 17 00:00:00 2001
+From: Allen Winter <winter@kde.org>
+Date: Sun, 6 Sep 2015 11:28:23 -0400
+Subject: [PATCH 21/31] kimap/loginjob.cpp - support for GSSAPI authentication
+ patch by eifert almost 3 years ago. ok'd by Christian
+
+BUG: 267884
+MERGE: looks safe for merging to modern versions
+---
+ kimap/loginjob.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/kimap/loginjob.cpp b/kimap/loginjob.cpp
+index d3473d4..b7d2cd8 100644
+--- a/kimap/loginjob.cpp
++++ b/kimap/loginjob.cpp
+@@ -372,8 +372,14 @@ void LoginJob::handleResponse( const Message &response )
+         if ( !d->answerChallenge( QByteArray::fromBase64( response.content[1].toString() ) ) ) {
+           emitResult(); //error, we're done
+         }
++      } else if ( d->authMode == QLatin1String( "GSSAPI" ) && response.content.size() == 1 ) {
++          // fix for bug 267884
++          // Empty continuation for GSSAPI, accept as challenge nevertheless
++          if ( !d->answerChallenge( "" ) ) {
++              emitResult(); //error, we're done
++          }
+       } else {
+-        // Received empty continuation for authMode other than PLAIN
++        // Received empty continuation for authMode other than PLAIN or GSSAPI
+         code = MALFORMED;
+       }
+       break;
+-- 
+2.5.0
+

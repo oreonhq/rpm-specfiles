@@ -1,0 +1,25 @@
+From 1b9111b616f7256e5e75310cf488670f987b0995 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Wed, 20 May 2020 11:32:50 +0100
+Subject: [PATCH 1/1] Pass -g option to ocamlmklib.
+
+---
+ runtime/Makefile.unix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/runtime/Makefile.unix b/runtime/Makefile.unix
+index 6ee4812..039e085 100644
+--- a/runtime/Makefile.unix
++++ b/runtime/Makefile.unix
+@@ -18,7 +18,7 @@ all: dllcamlidl.so libcamlidl.a
+ 
+ dllcamlidl.so libcamlidl.a: $(OBJS)
+ 	- rm -f $@
+-	ocamlmklib -o camlidl  $(OBJS) 
++	ocamlmklib -g -o camlidl  $(OBJS) 
+ 
+ #libcamlidl.a: $(OBJS)
+ #	- rm -f $@
+-- 
+2.26.2
+

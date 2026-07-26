@@ -1,0 +1,46 @@
+From f7bb4621f5396bd335f3ce6e9e9e4ec88dd06f36 Mon Sep 17 00:00:00 2001
+From: Kevin Ottens <ervin@kde.org>
+Date: Mon, 20 Jul 2015 16:52:30 +0200
+Subject: [PATCH 06/31] Adjust to cmake policy change
+
+---
+ akonadi/kmime/tests/CMakeLists.txt | 2 +-
+ mailtransport/tests/CMakeLists.txt | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/akonadi/kmime/tests/CMakeLists.txt b/akonadi/kmime/tests/CMakeLists.txt
+index 1f1e4b6..1e5105d 100644
+--- a/akonadi/kmime/tests/CMakeLists.txt
++++ b/akonadi/kmime/tests/CMakeLists.txt
+@@ -37,7 +37,7 @@ macro(add_akonadi_isolated_test _source)
+ 
+   # based on kde4_add_unit_test
+   if (WIN32)
+-    get_target_property( _loc ${_targetName} LOCATION )
++    set(_loc ${EXECUTABLE_OUTPUT_PATH}/${_targetName})
+     set(_executable ${_loc}.bat)
+   else()
+     set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_targetName})
+diff --git a/mailtransport/tests/CMakeLists.txt b/mailtransport/tests/CMakeLists.txt
+index e2e2c3c..f83acc7 100644
+--- a/mailtransport/tests/CMakeLists.txt
++++ b/mailtransport/tests/CMakeLists.txt
+@@ -23,7 +23,7 @@ macro(add_akonadi_isolated_test _source _path)
+ 
+   # based on kde4_add_unit_test
+   if (WIN32)
+-    get_target_property( _loc ${_targetName} LOCATION )
++    set(_loc ${EXECUTABLE_OUTPUT_PATH}/${_targetName})
+     set(_executable ${_loc}.bat)
+   else()
+     set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_targetName})
+@@ -70,4 +70,4 @@ add_akonadi_isolated_test( attributetest.cpp unittestenv )
+ add_akonadi_isolated_test( filteractiontest.cpp unittestenv_akonadi )
+ if (KDEPIMLIBS_RUN_KDEPIMRUNTIME_ISOLATED_TESTS)
+     add_akonadi_isolated_test( messagequeuejobtest.cpp unittestenv )
+-endif ()
+\ No newline at end of file
++endif ()
+-- 
+2.5.0
+

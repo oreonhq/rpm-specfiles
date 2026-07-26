@@ -1,0 +1,298 @@
+From 12c10f1fedd3a1895bfa23a4a16e2172237f3dd6 Mon Sep 17 00:00:00 2001
+From: wh11204 <wh11204@2a5c6006-c6dd-42ca-98ab-0921f2732cef>
+Date: Sun, 6 Apr 2025 09:23:51 +0000
+Subject: [PATCH 1/4] - SFML template: Remove comments with invalid characters
+ (ticket #1523, thanks Dan Horak). Double quotes are not allowed inside
+ comments.
+
+git-svn-id: https://svn.code.sf.net/p/codeblocks/code/trunk@13649 2a5c6006-c6dd-42ca-98ab-0921f2732cef
+(cherry picked from commit 7c8989cce81993d6c83b979e8d0763417f62ce89)
+---
+ src/templates/common/sfml.cbp | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/templates/common/sfml.cbp b/src/templates/common/sfml.cbp
+index f7d847416..f656d99eb 100644
+--- a/src/templates/common/sfml.cbp
++++ b/src/templates/common/sfml.cbp
+@@ -20,7 +20,6 @@
+ 			</Target>
+ 		</Build>
+ 		<Compiler>
+-			<!--<Add option="`pkg-config sfml --cflags`"/>-->
+ 		</Compiler>
+ 		<Linker>
+ 			<Add library="sfml-audio"/>
+@@ -28,7 +27,6 @@
+ 			<Add library="sfml-network"/>
+ 			<Add library="sfml-system"/>
+ 			<Add library="sfml-window"/>
+-			<!--<Add option="`pkg-config sfml --libs`"/>-->
+ 		</Linker>
+ 	</Project>
+ </CodeBlocks_project_file>
+-- 
+2.52.0
+
+
+From a4291c91b2448f89f330c46fb609573f15ee3700 Mon Sep 17 00:00:00 2001
+From: wh11204 <wh11204@2a5c6006-c6dd-42ca-98ab-0921f2732cef>
+Date: Tue, 21 Oct 2025 11:34:49 +0000
+Subject: [PATCH 2/4] - NassiShneiderman: Do not link with unused boost_system
+ library (ticket #1563). The boost_system library has been removed in recent
+ boost, now it is a header-only library and part of C++11. Tested on Mint 18,
+ tHe autotools part will come later.
+
+git-svn-id: https://svn.code.sf.net/p/codeblocks/code/trunk@13751 2a5c6006-c6dd-42ca-98ab-0921f2732cef
+(cherry picked from commit 1073dd2153ecaef1b26369e515207dc1523ec725)
+---
+ .../contrib/NassiShneiderman/NassiShneiderman_wx30-unix.cbp    | 3 ---
+ .../contrib/NassiShneiderman/NassiShneiderman_wx32-unix.cbp    | 3 ---
+ 2 files changed, 6 deletions(-)
+
+diff --git a/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx30-unix.cbp b/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx30-unix.cbp
+index 7300ceaf9..48aca35de 100644
+--- a/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx30-unix.cbp
++++ b/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx30-unix.cbp
+@@ -58,9 +58,6 @@
+ 			<Add option="-Wall" />
+ 			<Add option="-std=c++11" />
+ 		</Compiler>
+-		<Linker>
+-			<Add library="boost_system" />
+-		</Linker>
+ 		<Unit filename="CParser.cpp" />
+ 		<Unit filename="DataObject.cpp" />
+ 		<Unit filename="DataObject.h" />
+diff --git a/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx32-unix.cbp b/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx32-unix.cbp
+index fdb997a18..def7921f8 100644
+--- a/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx32-unix.cbp
++++ b/src/plugins/contrib/NassiShneiderman/NassiShneiderman_wx32-unix.cbp
+@@ -58,9 +58,6 @@
+ 			<Add option="-Wall" />
+ 			<Add option="-std=c++11" />
+ 		</Compiler>
+-		<Linker>
+-			<Add library="boost_system" />
+-		</Linker>
+ 		<Unit filename="CParser.cpp" />
+ 		<Unit filename="DataObject.cpp" />
+ 		<Unit filename="DataObject.h" />
+-- 
+2.52.0
+
+
+From a19531a51d85e45f43e04c54a4866a24962933b3 Mon Sep 17 00:00:00 2001
+From: wh11204 <wh11204@2a5c6006-c6dd-42ca-98ab-0921f2732cef>
+Date: Tue, 21 Oct 2025 15:06:58 +0000
+Subject: [PATCH 3/4] - NassiShneiderman: Remove boost_system requirement from
+ autotools (ticket #1563). The plugin uses header-only boost libraries.
+
+git-svn-id: https://svn.code.sf.net/p/codeblocks/code/trunk@13752 2a5c6006-c6dd-42ca-98ab-0921f2732cef
+(cherry picked from commit 576003121343859a25e050ef6fd3900773c0c0e2)
+---
+ configure.ac                                     | 1 -
+ src/plugins/contrib/NassiShneiderman/Makefile.am | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index e69501386..b46880989 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -235,7 +235,6 @@ case $WX_BASENAME in
+ 		if test "x$BUILD_NASSISHNEIDERMAN_TRUE" = "x" ; then
+ 			dnl Check whether boost is installed
+ 			AX_BOOST_BASE
+-			AX_BOOST_SYSTEM
+ 		fi
+ 
+ 		CB_GLIB2_CFLAGS="$GLIB2_CFLAGS"
+diff --git a/src/plugins/contrib/NassiShneiderman/Makefile.am b/src/plugins/contrib/NassiShneiderman/Makefile.am
+index 4cbb8965a..0423c38de 100644
+--- a/src/plugins/contrib/NassiShneiderman/Makefile.am
++++ b/src/plugins/contrib/NassiShneiderman/Makefile.am
+@@ -10,7 +10,7 @@ pluginlib_LTLIBRARIES = libNassiShneiderman.la
+ 
+ libNassiShneiderman_la_LDFLAGS = @MODULE_SHARED_LDFLAGS@ -version-info 0:1:0 -no-undefined -avoid-version
+ 
+-libNassiShneiderman_la_LIBADD = ../../../sdk/libcodeblocks.la $(WX_LIBS) $(BOOST_LDFLAGS) $(BOOST_SYSTEM_LIB)
++libNassiShneiderman_la_LIBADD = ../../../sdk/libcodeblocks.la $(WX_LIBS)
+ 
+ libNassiShneiderman_la_SOURCES = bricks.cpp \
+ 		cbEditorPanel.cpp \
+-- 
+2.52.0
+
+
+From 513d4a15ff499f971ccb35e79682b107d30716bc Mon Sep 17 00:00:00 2001
+From: wh11204 <wh11204@2a5c6006-c6dd-42ca-98ab-0921f2732cef>
+Date: Wed, 19 Nov 2025 15:28:06 +0000
+Subject: [PATCH 4/4] - Build: Remove boost::system detection (end of ticket
+ #1563). The NassiShneiderman plugin does not use it and now it is a
+ header-only library, so detection failed.
+
+git-svn-id: https://svn.code.sf.net/p/codeblocks/code/trunk@13760 2a5c6006-c6dd-42ca-98ab-0921f2732cef
+(cherry picked from commit 89fe56c8041b8a9bbaed9da3abb2ece87d7695e7)
+---
+ configure.ac                                  |   1 -
+ m4/ax_boost_system.m4                         | 121 ------------------
+ .../contrib/NassiShneiderman/Makefile.am      |   3 +-
+ 3 files changed, 1 insertion(+), 124 deletions(-)
+ delete mode 100644 m4/ax_boost_system.m4
+
+diff --git a/configure.ac b/configure.ac
+index b46880989..552cedbcf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -15,7 +15,6 @@ AC_MSG_RESULT([${enable_flags_setting}])
+ m4_include([m4/acinclude.m4])
+ m4_include([m4/ax_cxx_compile_stdcxx.m4])
+ m4_include([m4/ax_boost_base.m4])
+-m4_include([m4/ax_boost_system.m4])
+ 
+ CODEBLOCKS_CHECK_DEBUG
+ 
+diff --git a/m4/ax_boost_system.m4 b/m4/ax_boost_system.m4
+deleted file mode 100644
+index 207d7be8d..000000000
+--- a/m4/ax_boost_system.m4
++++ /dev/null
+@@ -1,121 +0,0 @@
+-# ===========================================================================
+-#     https://www.gnu.org/software/autoconf-archive/ax_boost_system.html
+-# ===========================================================================
+-#
+-# SYNOPSIS
+-#
+-#   AX_BOOST_SYSTEM
+-#
+-# DESCRIPTION
+-#
+-#   Test for System library from the Boost C++ libraries. The macro requires
+-#   a preceding call to AX_BOOST_BASE. Further documentation is available at
+-#   <http://randspringer.de/boost/index.html>.
+-#
+-#   This macro calls:
+-#
+-#     AC_SUBST(BOOST_SYSTEM_LIB)
+-#
+-#   And sets:
+-#
+-#     HAVE_BOOST_SYSTEM
+-#
+-# LICENSE
+-#
+-#   Copyright (c) 2008 Thomas Porschberg <thomas@randspringer.de>
+-#   Copyright (c) 2008 Michael Tindal
+-#   Copyright (c) 2008 Daniel Casimiro <dan.casimiro@gmail.com>
+-#
+-#   Copying and distribution of this file, with or without modification, are
+-#   permitted in any medium without royalty provided the copyright notice
+-#   and this notice are preserved. This file is offered as-is, without any
+-#   warranty.
+-
+-#serial 19
+-
+-AC_DEFUN([AX_BOOST_SYSTEM],
+-[
+-	AC_ARG_WITH([boost-system],
+-	AS_HELP_STRING([--with-boost-system@<:@=special-lib@:>@],
+-                   [use the System library from boost - it is possible to specify a certain library for the linker
+-                        e.g. --with-boost-system=boost_system-gcc-mt ]),
+-        [
+-        if test "$withval" = "no"; then
+-			want_boost="no"
+-        elif test "$withval" = "yes"; then
+-            want_boost="yes"
+-            ax_boost_user_system_lib=""
+-        else
+-		    want_boost="yes"
+-		ax_boost_user_system_lib="$withval"
+-		fi
+-        ],
+-        [want_boost="yes"]
+-	)
+-
+-	if test "x$want_boost" = "xyes"; then
+-        AC_REQUIRE([AC_PROG_CC])
+-        AC_REQUIRE([AC_CANONICAL_BUILD])
+-		CPPFLAGS_SAVED="$CPPFLAGS"
+-		CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+-		export CPPFLAGS
+-
+-		LDFLAGS_SAVED="$LDFLAGS"
+-		LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
+-		export LDFLAGS
+-
+-        AC_CACHE_CHECK(whether the Boost::System library is available,
+-					   ax_cv_boost_system,
+-        [AC_LANG_PUSH([C++])
+-			 CXXFLAGS_SAVE=$CXXFLAGS
+-			 CXXFLAGS=
+-
+-			 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[@%:@include <boost/system/error_code.hpp>]],
+-				    [[boost::system::error_category *a = 0;]])],
+-                   ax_cv_boost_system=yes, ax_cv_boost_system=no)
+-			 CXXFLAGS=$CXXFLAGS_SAVE
+-             AC_LANG_POP([C++])
+-		])
+-		if test "x$ax_cv_boost_system" = "xyes"; then
+-			AC_SUBST(BOOST_CPPFLAGS)
+-
+-			AC_DEFINE(HAVE_BOOST_SYSTEM,,[define if the Boost::System library is available])
+-            BOOSTLIBDIR=`echo $BOOST_LDFLAGS | sed -e 's/@<:@^\/@:>@*//'`
+-
+-			LDFLAGS_SAVE=$LDFLAGS
+-            if test "x$ax_boost_user_system_lib" = "x"; then
+-                for libextension in `ls -r $BOOSTLIBDIR/libboost_system* 2>/dev/null | sed 's,.*/lib,,' | sed 's,\..*,,'` ; do
+-                     ax_lib=${libextension}
+-				    AC_CHECK_LIB($ax_lib, exit,
+-                                 [BOOST_SYSTEM_LIB="-l$ax_lib"; AC_SUBST(BOOST_SYSTEM_LIB) link_system="yes"; break],
+-                                 [link_system="no"])
+-				done
+-                if test "x$link_system" != "xyes"; then
+-                for libextension in `ls -r $BOOSTLIBDIR/boost_system* 2>/dev/null | sed 's,.*/,,' | sed -e 's,\..*,,'` ; do
+-                     ax_lib=${libextension}
+-				    AC_CHECK_LIB($ax_lib, exit,
+-                                 [BOOST_SYSTEM_LIB="-l$ax_lib"; AC_SUBST(BOOST_SYSTEM_LIB) link_system="yes"; break],
+-                                 [link_system="no"])
+-				done
+-                fi
+-
+-            else
+-               for ax_lib in $ax_boost_user_system_lib boost_system-$ax_boost_user_system_lib; do
+-				      AC_CHECK_LIB($ax_lib, exit,
+-                                   [BOOST_SYSTEM_LIB="-l$ax_lib"; AC_SUBST(BOOST_SYSTEM_LIB) link_system="yes"; break],
+-                                   [link_system="no"])
+-                  done
+-
+-            fi
+-            if test "x$ax_lib" = "x"; then
+-                AC_MSG_ERROR(Could not find a version of the library!)
+-            fi
+-			if test "x$link_system" = "xno"; then
+-				AC_MSG_ERROR(Could not link against $ax_lib !)
+-			fi
+-		fi
+-
+-		CPPFLAGS="$CPPFLAGS_SAVED"
+-	LDFLAGS="$LDFLAGS_SAVED"
+-	fi
+-])
+diff --git a/src/plugins/contrib/NassiShneiderman/Makefile.am b/src/plugins/contrib/NassiShneiderman/Makefile.am
+index 0423c38de..44899857f 100644
+--- a/src/plugins/contrib/NassiShneiderman/Makefile.am
++++ b/src/plugins/contrib/NassiShneiderman/Makefile.am
+@@ -1,8 +1,7 @@
+ AM_CPPFLAGS = $(WX_CXXFLAGS) \
+ 		-I$(top_srcdir)/src/include \
+ 		-I$(top_srcdir)/src/sdk/wxscintilla/include \
+-		$(BOOST_CPPFLAGS) \
+-		-DBOOST_SYSTEM_NO_DEPRECATED
++		$(BOOST_CPPFLAGS)
+ 
+ pluginlibdir = $(pkglibdir)/plugins
+ 
+-- 
+2.52.0
+

@@ -1,0 +1,71 @@
+-------------------------------------------------------------------------------
+
+dl is a file exchange service that allows you to upload any file to a web
+server and generate a unique ticket for others to download. The ticket is
+automatically expired according to the specified rules, so that you don't need
+to keep track or cleanup afterward. dl also allows you to grant an anonymous,
+one-time upload for others to send you a file, without the requirement of
+account management.
+
+dl is usually installed as a "email attachments replacement" due to its
+simplicity (though can be used in other ways).
+
+Once this package is installed, there are a few configuration items which need
+to be performed before it is usable.  This package makes use of a configuration
+database to hold information about users that are allowed to use the service.
+By default, a sqlite configuration database is configured.  MySQL and
+PostgreSQL are also supported.  The default configuration does not have any
+users defined.
+
+To create a user "admin", you'll need to perform the following commands:
+
+    # cd /usr/share/dl/include/scripts
+    # php useradmin.php add admin true s3cr3t
+
+This will create a user "admin" with a password of "s3cr3t".
+
+See the included file 'README.rst' for more detailed configuration information.
+
+-------------------------------------------------------------------------------
+
+Next, you'll need to modify the $masterPath setting in /etc/dl/config.php to
+specify the URL that your users will use to access the application.  By
+default, only "http://localhost/dl/" is defined.
+
+You should also review the other configuration settings to customize the email
+address that notifications appear to come from, retention settings, logging,
+and other options as described in the 'README.rst' documentation file.
+
+Note that if you don't have a default timezone specified in /etc/php.ini, you
+may receive warnings like the following:
+
+    PHP Notice:  date_default_timezone_set(): Timezone ID '' is invalid in
+        /usr/share/dl/include/init.php on line 52
+
+-------------------------------------------------------------------------------
+
+If you're running SELinux, the following is run by the RPM %post scriptlet for
+you to set file contexts allowing PHP to read/write the /var/spool/dl
+directory:
+
+    semanage fcontext -a -t httpd_sys_rw_content_t "/var/spool/dl(/.*)?"
+    restorecon -R -v /var/spool/dl
+
+However, to send notification emails, you will need to manually enable the
+SELinux option to allow this:
+
+    setsebool -P httpd_can_sendmail=1
+
+-------------------------------------------------------------------------------
+
+Finally, you'll need to modify /etc/httpd/conf.d/dl.conf to specify what
+networks should be allowed to use the application.  By default, only localhost
+is allowed to access it.
+
+After editing /etc/httpd/conf.d/dl.conf, restart the webserver to pickup the
+configuration changes.
+
+At this point, you should be able to access http://localhost/dl/ and verify
+that you're able to log in.
+
+-------------------------------------------------------------------------------

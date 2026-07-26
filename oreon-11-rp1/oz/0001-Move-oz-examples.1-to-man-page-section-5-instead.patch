@@ -1,0 +1,110 @@
+From 9832cd038efdd39fa58f0b156d53c57b71a929d0 Mon Sep 17 00:00:00 2001
+From: Simon Josefsson <simon@josefsson.org>
+Date: Tue, 8 Feb 2022 12:30:26 +0100
+Subject: [PATCH 01/26] Move oz-examples.1 to man page section 5 instead.
+
+Signed-off-by: Simon Josefsson <simon@josefsson.org>
+---
+ Makefile                 | 2 +-
+ man/oz-cleanup-cache.1   | 2 +-
+ man/oz-customize.1       | 2 +-
+ man/oz-examples.1        | 2 +-
+ man/oz-generate-icicle.1 | 2 +-
+ man/oz-install.1         | 2 +-
+ setup.py                 | 5 +++--
+ 7 files changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index c8c5a54..0cea640 100644
+--- a/Makefile
++++ b/Makefile
+@@ -26,7 +26,7 @@ release: signed-rpm signed-tarball deb
+ man2html:
+ 	@for file in oz-install oz-customize oz-generate-icicle oz-cleanup-cache oz-examples; do \
+ 		echo "Generating $$file HTML page from man" ; \
+-		groff -mandoc -mwww man/$$file.1 -T html > man/$$file.html ; \
++		groff -mandoc -mwww man/$$file.? -T html > man/$$file.html ; \
+ 	done
+ 
+ $(VENV_DIR):
+diff --git a/man/oz-cleanup-cache.1 b/man/oz-cleanup-cache.1
+index 98b161d..aed99a9 100644
+--- a/man/oz-cleanup-cache.1
++++ b/man/oz-cleanup-cache.1
+@@ -117,7 +117,7 @@ the ICICLE is generated, Oz will delete the backing file, leaving
+ the original disk image pristine.
+ 
+ .SH SEE ALSO
+-oz-generate-icicle(1), oz-install(1), oz-customize(1), oz-examples(1)
++oz-generate-icicle(1), oz-install(1), oz-customize(1), oz-examples(5)
+ 
+ .SH AUTHOR
+ Chris Lalancette <clalancette@gmail.com>
+diff --git a/man/oz-customize.1 b/man/oz-customize.1
+index 76653ad..27a4305 100644
+--- a/man/oz-customize.1
++++ b/man/oz-customize.1
+@@ -119,7 +119,7 @@ the ICICLE is generated, Oz will delete the backing file, leaving
+ the original disk image pristine.
+ 
+ .SH SEE ALSO
+-oz-generate-icicle(1), oz-install(1), oz-cleanup-cache(1), oz-examples(1)
++oz-generate-icicle(1), oz-install(1), oz-cleanup-cache(1), oz-examples(5)
+ 
+ .SH AUTHOR
+ Chris Lalancette <clalancette@gmail.com>
+diff --git a/man/oz-examples.1 b/man/oz-examples.1
+index 3e5522f..157b168 100644
+--- a/man/oz-examples.1
++++ b/man/oz-examples.1
+@@ -1,4 +1,4 @@
+-.TH OZ-EXAMPLES 1 "July 2013" "oz-examples"
++.TH OZ-EXAMPLES 5 "July 2013" "oz-examples"
+ 
+ .SH NAME
+ oz-examples - example TDL files for Oz.
+diff --git a/man/oz-generate-icicle.1 b/man/oz-generate-icicle.1
+index 64c3147..4d0a706 100644
+--- a/man/oz-generate-icicle.1
++++ b/man/oz-generate-icicle.1
+@@ -123,7 +123,7 @@ the ICICLE is generated, Oz will delete the backing file, leaving
+ the original disk image pristine.
+ 
+ .SH SEE ALSO
+-oz-install(1), oz-customize(1), oz-cleanup-cache(1), oz-examples(1)
++oz-install(1), oz-customize(1), oz-cleanup-cache(1), oz-examples(5)
+ 
+ .SH AUTHOR
+ Chris Lalancette <clalancette@gmail.com>
+diff --git a/man/oz-install.1 b/man/oz-install.1
+index 2739b6f..7dce6eb 100644
+--- a/man/oz-install.1
++++ b/man/oz-install.1
+@@ -197,7 +197,7 @@ the ICICLE is generated, Oz will delete the backing file, leaving
+ the original disk image pristine.
+ 
+ .SH SEE ALSO
+-oz-generate-icicle(1), oz-customize(1), oz-cleanup-cache(1), oz-examples(1)
++oz-generate-icicle(1), oz-customize(1), oz-cleanup-cache(1), oz-examples(5)
+ 
+ .SH AUTHOR
+ Chris Lalancette <clalancette@gmail.com>
+diff --git a/setup.py b/setup.py
+index 8ca211f..42a982c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -7,8 +7,9 @@ VERSION = '0.19.0'
+ RELEASE = '0'
+ 
+ datafiles = [('share/man/man1', ['man/oz-install.1', 'man/oz-generate-icicle.1',
+-                                 'man/oz-customize.1', 'man/oz-examples.1',
+-                                 'man/oz-cleanup-cache.1'])
++                                 'man/oz-customize.1',
++                                 'man/oz-cleanup-cache.1']),
++             ('share/man/man5', ['man/oz-examples.5'])
+              ]
+ 
+ class sdist(_sdist):
+-- 
+2.46.2
+

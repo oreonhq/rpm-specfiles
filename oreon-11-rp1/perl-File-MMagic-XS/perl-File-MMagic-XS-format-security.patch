@@ -1,0 +1,12 @@
+diff -up File-MMagic-XS-0.09008/src/perl-mmagic-xs.c.format-security File-MMagic-XS-0.09008/src/perl-mmagic-xs.c
+--- File-MMagic-XS-0.09008/src/perl-mmagic-xs.c.format-security	2015-03-19 16:42:29.730420193 -0400
++++ File-MMagic-XS-0.09008/src/perl-mmagic-xs.c	2015-03-19 16:43:41.244952016 -0400
+@@ -1110,7 +1110,7 @@ GetDesc:
+ 
+  error:
+     FMM_SET_ERROR(state, err);
+-    croak(SvPV_nolen(err));
++    croak("%s", SvPV_nolen(err));
+ }
+ 
+ /* maps to mod_mime_magic::apprentice */

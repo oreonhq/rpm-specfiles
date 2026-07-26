@@ -1,0 +1,12 @@
+diff --git a/clanbomber/Controller_Joystick.cpp b/clanbomber/Controller_Joystick.cpp
+index 86e26ba..27fc5a6 100644
+--- a/clanbomber/Controller_Joystick.cpp
++++ b/clanbomber/Controller_Joystick.cpp
+@@ -16,6 +16,7 @@
+  ***************************************************************************/
+ // $Id: Controller_Joystick.cpp,v 1.1 2001/08/08 21:46:14 der_fisch Exp $
+ 
++#include <cstddef>
+ #include <ClanLib/Core/System/cl_assert.h>
+ #include <ClanLib/Display/Input/input.h>
+ #include <ClanLib/Display/Input/inputdevice.h>

@@ -1,0 +1,31 @@
+From 701347e01a066eb5749ea07da65ec355c194b38c Mon Sep 17 00:00:00 2001
+From: David Faure <david.faure@kdab.com>
+Date: Thu, 3 Oct 2024 14:40:26 +0200
+Subject: [PATCH] Fix build error due to Qt::Gui not found during
+ check_cxx_symbol_exists
+
+I'm not sure why that alias isn't available at that point...
+CMake says:
+Target "cmTC_4f21f" links to: Qt::Gui but the target was not found.
+
+It works with Qt6::Gui.
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0cb895bb8..4ed39e8e7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -547,9 +547,9 @@ set(HAVE_QT_SVG ${QtSvg_FOUND})
+ set(HAVE_QT_SCXML ${QtScxml_FOUND})
+ set(HAVE_QT_DESIGNER ${QtDesigner_FOUND})
+ 
+-if(TARGET Qt::Gui)
++if(TARGET Qt${QtGui_VERSION_MAJOR}::Gui)
+     cmake_push_check_state()
+-    set(CMAKE_REQUIRED_LIBRARIES Qt::Gui)
++    set(CMAKE_REQUIRED_LIBRARIES Qt${QtGui_VERSION_MAJOR}::Gui)
+     check_cxx_symbol_exists(QT_NO_OPENGL "QOpenGLContext" QT_NO_OPENGL)
+     cmake_pop_check_state()
+ endif()

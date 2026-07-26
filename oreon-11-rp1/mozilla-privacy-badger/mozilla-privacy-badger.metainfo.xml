@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2024 Dominik Mierzejewski <dominik@greysector.net> -->
+<component type="addon">
+  <id>mozilla-privacy-badger</id>
+  <extends>org.mozilla.firefox.desktop</extends>
+  <name>Privacy Badger for Firefox</name>
+  <summary>Automatically learns to block invisible trackers.</summary>
+  <url type="homepage">https://privacybadger.org/</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <updatecontact>dominik@greysector.net</updatecontact>
+</component>

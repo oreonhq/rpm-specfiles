@@ -1,0 +1,270 @@
+diff --git a/man/btrfs-sxbackup-destroy.1 b/man/btrfs-sxbackup-destroy.1
+new file mode 100644
+index 0000000..08e5886
+--- /dev/null
++++ b/man/btrfs-sxbackup-destroy.1
+@@ -0,0 +1,23 @@
++.TH "btrfs-sxbackup-destroy" "1" "0.5.9" "Marco Schindler" ""
++.SH "NAME"
++.LP 
++btrfs\-sxbackup\-destroy \- Destroy a backup job
++.SH "SYNOPSIS"
++.LP 
++\fBbtrfs\-sxbackup destroy\fR [\-h] [\-\-purge] <subvolume> [<subvolume> ...]
++.SH "DESCRIPTION"
++.LP 
++Destroy a \fBbtrfs\-sxbackup\fR job.
++.SH "OPTIONS"
++.LP 
++.TP 
++\fB<subvolume>\fR
++backup job source or destination subvolume. local path or SSH url
++.TP 
++\fB\-h\fR, \fB\-\-help\fR
++show help message and exit
++\fB\-\-purge\fR
++removes all backup snapshots from source and destination
++.SH "SEE ALSO"
++.LP 
++btrfs\-sxbackup(1)
+diff --git a/man/btrfs-sxbackup-info.1 b/man/btrfs-sxbackup-info.1
+new file mode 100644
+index 0000000..696af76
+--- /dev/null
++++ b/man/btrfs-sxbackup-info.1
+@@ -0,0 +1,21 @@
++.TH "btrfs-sxbackup-info" "1" "0.5.9" "Marco Schindler" ""
++.SH "NAME"
++.LP 
++btrfs\-sxbackup\-info \- Show backup job info
++.SH "SYNOPSIS"
++.LP 
++\fBbtrfs\-sxbackup info\fR [\-h] <subvolume> [<subvolume> ...]
++.SH "DESCRIPTION"
++.LP 
++Show information about a \fBbtrfs\-sxbackup\fR job.
++.SH "OPTIONS"
++.LP 
++.TP 
++\fB<subvolume>\fR
++backup job source or destination subvolume. local path or SSH url
++.TP 
++\fB\-h\fR, \fB\-\-help\fR
++show help message and exit
++.SH "SEE ALSO"
++.LP 
++btrfs\-sxbackup(1)
+diff --git a/man/btrfs-sxbackup-init.1 b/man/btrfs-sxbackup-init.1
+new file mode 100644
+index 0000000..fbef4e5
+--- /dev/null
++++ b/man/btrfs-sxbackup-init.1
+@@ -0,0 +1,33 @@
++.TH "btrfs-sxbackup-init" "1" "0.5.9" "Marco Schindler" ""
++.SH "NAME"
++.LP 
++btrfs\-sxbackup\-init \- Initialize a backup job
++.SH "SYNOPSIS"
++.LP 
++\fBbtrfs\-sxbackup init\fR [\-h] [\-sr <source_retention>] [\-dr <destination_retention>] [\-c] <source_subvolume> <destination_subvolume>
++.SH "DESCRIPTION"
++.LP 
++Initialize a \fBbtrfs\-sxbackup\fR job.
++.SH "OPTIONS"
++.LP 
++.TP 
++\fB<source_subvolume>\fR
++source subvolume to backup. local path or ssh url
++.TP 
++\fB<destination_subvolume>\fR
++destination subvolume receiving backup snapshots. local path or ssh url
++.TP 
++\fB\-h\fR, \fB\-\-help\fR
++show help message and exit
++.TP 
++\fB\-sr\fR <source_retention>, \fB\-\-source\-retention\fR <source_retention>
++expression defining which source snapshots to retain/cleanup. can be a static number (of backups) or more complex expression like "1d:4/d, 1w:daily, 2m:none" literally translating to: "1 day from now keep 4 backups a day, 1 week from now keep daily backups, 2 months from now keep none"
++.TP 
++\fB\-dr\fR <destination_retention>, \fB\-\-destination\-retention\fR <destination_retention>
++expression defining which destination snapshots to retain/cleanup. can be a static number (of backups) or more complex expression (see \fB\-\-source\-retention\fR argument)
++.TP 
++\fB\-c\fR, \fB\-\-compress\fR
++enables compression during transmission. Requires lzop to be installed on both source and destination
++.SH "SEE ALSO"
++.LP 
++btrfs\-sxbackup(1)
+diff --git a/man/btrfs-sxbackup-run.1 b/man/btrfs-sxbackup-run.1
+new file mode 100644
+index 0000000..22b0489
+--- /dev/null
++++ b/man/btrfs-sxbackup-run.1
+@@ -0,0 +1,24 @@
++.TH "btrfs-sxbackup-run" "1" "0.5.9" "Marco Schindler" ""
++.SH "NAME"
++.LP 
++btrfs\-sxbackup\-run \- Run a backup job
++.SH "SYNOPSIS"
++.LP 
++\fBbtrfs\-sxbackup run\fR [\-h] [\-m <mail_address>] [\-li <log_ident>] <subvolume> [<subvolume> ...]
++.SH "DESCRIPTION"
++.LP 
++Run a \fBbtrfs\-sxbackup\fR job.
++.SH "OPTIONS"
++.LP 
++.TP 
++\fB<subvolume>\fR
++backup job source or destination subvolume. local path or SSH url
++.TP 
++\fB\-m\fR <mail_address>, \fB\-\-mail\fR <mail_address>
++enables email notifications. If an email address is given, it overrides the default email\-recipient setting in \fB/etc/btrfs\-sxbackup.conf\fR
++.TP 
++\fB\-li\fR <log_ident>, \fB\-\-log\-ident\fR <log_ident>
++log ident used for syslog logging, defaults to script name
++.SH "SEE ALSO"
++.LP 
++btrfs\-sxbackup(1)
+diff --git a/man/btrfs-sxbackup-transfer.1 b/man/btrfs-sxbackup-transfer.1
+new file mode 100644
+index 0000000..2dd94b2
+--- /dev/null
++++ b/man/btrfs-sxbackup-transfer.1
+@@ -0,0 +1,27 @@
++.TH "btrfs-sxbackup-transfer" "1" "0.5.9" "Marco Schindler" ""
++.SH "NAME"
++.LP 
++btrfs\-sxbackup\-transfer \- Transfer a backup snapshot
++.SH "SYNOPSIS"
++.LP 
++\fBbtrfs\-sxbackup transfer\fR [\-h] [\-c] <source_subvolume> <destination_subvolume>
++.SH "DESCRIPTION"
++.LP 
++Transfer a \fBbtrfs\-sxbackup\fR snapshot.
++.SH "OPTIONS"
++.LP 
++.TP 
++\fB<source_subvolume>\fR
++source subvolume to backup. local path or ssh url
++.TP 
++\fB<destination_subvolume>\fR
++destination subvolume receiving backup snapshots. local path or ssh url
++.TP 
++\fB\-h\fR, \fB\-\-help\fR
++show help message and exit
++.TP 
++\fB\-c\fR, \fB\-\-compress\fR
++enables compression during transmission. Requires lzop to be installed on both source and destination
++.SH "SEE ALSO"
++.LP 
++btrfs\-sxbackup(1)
+diff --git a/man/btrfs-sxbackup-update.1 b/man/btrfs-sxbackup-update.1
+new file mode 100644
+index 0000000..0c0716a
+--- /dev/null
++++ b/man/btrfs-sxbackup-update.1
+@@ -0,0 +1,30 @@
++.TH "btrfs-sxbackup-update" "1" "0.5.9" "Marco Schindler" ""
++.SH "NAME"
++.LP 
++btrfs\-sxbackup\-update \- Update a backup job
++.SH "SYNOPSIS"
++.LP 
++\fBbtrfs\-sxbackup update\fR [\-h] [\-sr <source_retention>] [\-dr <destination_retention>] [\-c] <subvolume> [<subvolume> ...]
++.SH "DESCRIPTION"
++.LP 
++Update a \fBbtrfs\-sxbackup\fR job.
++.SH "OPTIONS"
++.LP 
++.TP 
++\fB<subvolume>\fR
++backup job source or destination subvolume. local path or SSH url
++.TP 
++\fB\-h\fR, \fB\-\-help\fR
++show help message and exit
++.TP 
++\fB\-sr\fR <source_retention>, \fB\-\-source\-retention\fR <source_retention>
++expression defining which source snapshots to retain/cleanup. can be a static number (of backups) or more complex expression like "1d:4/d, 1w:daily, 2m:none" literally translating to: "1 day from now keep 4 backups a day, 1 week from now keep daily backups, 2 months from now keep none"
++.TP 
++\fB\-dr\fR <destination_retention>, \fB\-\-destination\-retention\fR <destination_retention>
++expression defining which destination snapshots to retain/cleanup. can be a static number (of backups) or more complex expression (see \fB\-\-source\-retention\fR argument)
++.TP 
++\fB\-c\fR, \fB\-\-compress\fR
++enables compression during transmission. Requires lzop to be installed on both source and destination
++.SH "SEE ALSO"
++.LP 
++btrfs\-sxbackup(1), btrfs\-sxbackup\-init(1)
+diff --git a/man/btrfs-sxbackup.1 b/man/btrfs-sxbackup.1
+new file mode 100644
+index 0000000..d4ad0f8
+--- /dev/null
++++ b/man/btrfs-sxbackup.1
+@@ -0,0 +1,70 @@
++.TH "btrfs-sxbackup" "1" "0.5.8" "" ""
++.SH "NAME"
++.LP 
++\fBbtrfs\-sxbackup\fR \- a btrfs snapshot backup utility
++.SH "SYNOPSIS"
++.LP 
++\fBbtrfs\-sxbackup\fR [\-h | \-\-help] [\-q | \-\-quiet] [\-v] [\-\-version]
++.SH "DESCRIPTION"
++.LP 
++Btrfs snapshot backup utility with push/pull support via SSH, retention, email notifications, compression of transferred data, and syslog logging.
++.SH "OPTIONS"
++.LP 
++.TP 
++\fB\-h\fR, \fB\-\-help\fR
++show help message and exit
++.TP 
++\fB\-q\fR, \fB\-\-quiet\fR
++do not log to stdout
++.TP 
++\fB\-\-version\fR
++show program's version number and exit
++.TP 
++\fB\-v\fR
++can be specified multiple times to increase verbosity
++.SH "EXAMPLES"
++.LP 
++.SS
++Initialize
++Initialize a backup job pulling snapshots of subvolume \fB/\fR on remote host \fBmyhost.org\fR to local subvolume \fB/backup/myhost\fR:
++
++.nf 
++.RS
++btrfs\-sxbackup init ssh://root@myhost.org:/ /backup/myhost
++.RE
++.fi 
++
++Initialize a backup job pushing snapshots of local subvolume \fB/\fR to remote subvolume \fB/backup/myhost\fR on host \fBmybackupserver.org\fR:
++
++.nf 
++.RS
++btrfs\-sxbackup init / ssh://root@mybackupserver.org:/backup/myhost
++.RE
++.fi 
++
++.LP 
++.SS
++Run
++Run a backup job:
++
++.nf 
++.RS
++btrfs\-sxbackup run /backup/myhost
++.RE
++.fi 
++
++.LP 
++.SS
++Cron
++Cronjob performing a pull backup job:
++
++.nf 
++.RS
++# /etc/cron.d/btrfs\-sxbackup
++PATH="/usr/sbin:/usr/bin:/sbin:/bin"
++30 2    * * *     root     btrfs\-sxbackup run /backup/myhost
++.RE
++.fi 
++.SH "SEE ALSO"
++.LP 
++btrfs\-sxbackup\-init(1), btrfs\-sxbackup\-run(1), btrfs\-sxbackup\-info(1), btrfs\-sxbackup\-update(1), btrfs\-sxbackup\-destroy(1), btrfs\-sxbackup\-transfer(1)

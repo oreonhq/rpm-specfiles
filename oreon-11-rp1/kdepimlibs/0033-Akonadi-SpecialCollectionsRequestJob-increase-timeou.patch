@@ -1,0 +1,36 @@
+From cdc600992f8d281fe8f5c92f59ea5c303a70bb49 Mon Sep 17 00:00:00 2001
+From: David Faure <faure@kde.org>
+Date: Thu, 25 Feb 2016 08:38:32 +0100
+Subject: [PATCH 33/35] Akonadi::SpecialCollectionsRequestJob: increase timeout
+ from 10s to 30s
+
+When KMail is started as part of session restoration, many things are
+happening at the same time, and it can happen that another program has
+the lock for more than 10 seconds.
+
+This reduces the risk of being greeted in the morning by a suicide note:
+"The EMail program encountered a fatal error and will terminate now.
+The error was: Timeout trying to get lock"
+
+BUG: 246027
+REVIEW: 127175
+---
+ akonadi/specialcollectionshelperjobs.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/akonadi/specialcollectionshelperjobs.cpp b/akonadi/specialcollectionshelperjobs.cpp
+index e755cad..571f89c 100644
+--- a/akonadi/specialcollectionshelperjobs.cpp
++++ b/akonadi/specialcollectionshelperjobs.cpp
+@@ -44,7 +44,7 @@
+ #include <QtCore/QTime>
+ #include <QtCore/QTimer>
+ 
+-#define LOCK_WAIT_TIMEOUT_SECONDS 10
++#define LOCK_WAIT_TIMEOUT_SECONDS 30
+ 
+ using namespace Akonadi;
+ 
+-- 
+1.9.3
+

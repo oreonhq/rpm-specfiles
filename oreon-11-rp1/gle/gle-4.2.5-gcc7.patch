@@ -1,0 +1,39 @@
+diff --git a/src/gle/surface/f2c.h b/src/gle/surface/f2c.h
+index 2b88ae8..4ad1cfa 100644
+--- a/src/gle/surface/f2c.h
++++ b/src/gle/surface/f2c.h
+@@ -181,7 +181,6 @@ struct Namelist {
+ 	};
+ typedef struct Namelist Namelist;
+ 
+-#define abs(x) ((x) >= 0 ? (x) : -(x))
+ #define dabs(x) (doublereal)abs(x)
+ #define min(a,b) ((a) <= (b) ? (a) : (b))
+ #define max(a,b) ((a) >= (b) ? (a) : (b))
+diff --git a/src/gle/surface/fcontour.cpp b/src/gle/surface/fcontour.cpp
+index b4b6647..7bf9cef 100644
+--- a/src/gle/surface/fcontour.cpp
++++ b/src/gle/surface/fcontour.cpp
+@@ -44,7 +44,9 @@
+ #define huge
+ #endif
+ 
++#include <cmath>
+ #include "f2c.h"
++using std::abs;
+ 
+ /* Common Block Declarations */
+ 
+diff --git a/src/gle/surface/ffitcontour.cpp b/src/gle/surface/ffitcontour.cpp
+index 6a971ae..2ad6d01 100644
+--- a/src/gle/surface/ffitcontour.cpp
++++ b/src/gle/surface/ffitcontour.cpp
+@@ -51,6 +51,8 @@
+ #include "f2c.h"
+ #include <stdio.h>
+ #include <math.h>
++#include <cmath>
++using std::abs;
+ #endif
+ 
+ doublereal gutre2_(real* a, real* b);

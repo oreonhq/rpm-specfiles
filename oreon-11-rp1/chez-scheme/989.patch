@@ -1,0 +1,23 @@
+From 6a40a2134f4feae41c367654f2163b124f860f57 Mon Sep 17 00:00:00 2001
+From: Matthew Flatt <mflatt@racket-lang.org>
+Date: Tue, 4 Nov 2025 07:50:57 -0700
+Subject: [PATCH] repair a foreign.ms test
+
+The `ufoo64b` function expects an unsigned integer as its first argument.
+---
+ mats/foreign.ms | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mats/foreign.ms b/mats/foreign.ms
+index d0b3eb5ad..3eca70958 100644
+--- a/mats/foreign.ms
++++ b/mats/foreign.ms
+@@ -1693,7 +1693,7 @@
+       (foreign-procedure "ufoo64a" (unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64)
+         unsigned-64))
+     (define ufoo64b
+-      (foreign-procedure "ufoo64b" (integer-32 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64)
++      (foreign-procedure "ufoo64b" (unsigned-32 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64 unsigned-64)
+         unsigned-64))
+     (define test-ufoo
+       (lambda (foo x a b c d e f g)

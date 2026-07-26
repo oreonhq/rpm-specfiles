@@ -1,0 +1,31 @@
+Add additional prototypes to avoid implicit function declarations.
+This improves compatibility with future C99 compilers.
+
+(Different programs use different function signatures.)
+
+diff --git a/src/multial.h b/src/multial.h
+index 48e7058c70511f88..c30d4f97e3309e84 100644
+--- a/src/multial.h
++++ b/src/multial.h
+@@ -73,6 +73,7 @@ hll* getAnchsFromAlign(align* current, int seqnum, int cutoff);
+ int getSeqNum(align* ali, seq* trgt);
+ int printTextAlign(FILE *, align* myalign);
+ int printFASTAAlign(FILE *, align* myalign);
++int printXMFAAlign(FILE* outfile, align* myalign);
+ void printSeqsNames(align *a);
+ void buildcache();
+ 
+diff --git a/src/order.c b/src/order.c
+index 12df878c75010749..a9fd222a8e494ace 100644
+--- a/src/order.c
++++ b/src/order.c
+@@ -27,7 +27,8 @@
+ #define WEQ3(x,y,z,a)  ((x==a)? 0: (y==a)? 1: (z==a)? 2:-1)
+ 
+ align* makeAlign(dmat* mydm, char* seq1, char* seq2);
+-
++int printMFAAlign(char* seq1, char* seq2, align* myalign, char* n1, char* n2);
++int printXMFAAlign(char* seq1, char* seq2, align* myalign, char* n1, char* n2);
+ 
+ char* alpha = "ATCGN.";
+ 

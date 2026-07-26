@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.gnu.ddd</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+
+  <name>Data Display Debugger</name>
+  <developer_name>GNU Project</developer_name>
+  <summary>Graphical debugger frontend</summary>
+  <description>
+    <p>
+      The Data Display Debugger (DDD) is a popular GUI for command-line
+      debuggers like GDB, DBX, JDB, WDB, XDB, the Perl debugger, and the
+      Python debugger. DDD allows you to view source texts and provides
+      an interactive graphical data display, in which data structures
+      are displayed as graphs. You can use your mouse to dereference
+      pointers or view structure contents, which are updated
+      every time the program stops.
+    </p>
+    <p>
+      DDD can debug programs written in Ada, C, C++, Chill, Fortran,
+      Java, Modula, Pascal, Perl, and Python. DDD provides machine-level
+      debugging; hypertext source navigation and lookup; breakpoint,
+      watchpoint, backtrace, and history editors; array plots; undo
+      and redo; preferences and settings editors; program execution
+      in the terminal emulation window, debugging on a remote host,
+      an on-line manual, extensive help on the Motif user interface,
+      and a command-line interface with full editing, history
+      and completion capabilities.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">ddd.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main Window</caption>
+      <image>https://www.gnu.org/software/ddd/all.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Debugger Settings</caption>
+      <image>https://www.gnu.org/software/ddd/settings.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Registers</caption>
+      <image>https://www.gnu.org/software/ddd/registers.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Plots</caption>
+      <image>https://www.gnu.org/software/ddd/plots.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Signals</caption>
+      <image>https://www.gnu.org/software/ddd/signal.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://www.gnu.org/software/ddd/</url>
+  <url type="bugtracker">https://www.gnu.org/software/ddd/#Bugs</url>
+
+  <content_rating type="oars-1.1"/>
+</component>

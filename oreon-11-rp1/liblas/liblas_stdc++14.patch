@@ -1,0 +1,12 @@
+diff -rupN --no-dereference libLAS-62f3d57215ba1b074a84ff08a1539b69e69e38fb/CMakeLists.txt libLAS-62f3d57215ba1b074a84ff08a1539b69e69e38fb-new/CMakeLists.txt
+--- libLAS-62f3d57215ba1b074a84ff08a1539b69e69e38fb/CMakeLists.txt	2024-09-16 20:55:36.000000000 +0200
++++ libLAS-62f3d57215ba1b074a84ff08a1539b69e69e38fb-new/CMakeLists.txt	2025-02-12 23:56:00.570966630 +0100
+@@ -231,7 +231,7 @@ if (WITH_GDAL)
+   endif ()
+ endif ()
+ if (GDAL_FOUND)
+-  SET(CMAKE_CXX_STANDARD 11)
++  # SET(CMAKE_CXX_STANDARD 11)
+   SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+   SET(CMAKE_CXX_EXTENSIONS OFF)
+   include_directories(${GDAL_INCLUDE_DIR})

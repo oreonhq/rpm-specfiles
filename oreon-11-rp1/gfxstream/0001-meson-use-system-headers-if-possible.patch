@@ -1,0 +1,53 @@
+From 17bb25ca3bd8dd7d14bdcb4f9e88a522fbeef31a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marc-Andr=C3=A9=20Lureau?= <marcandre.lureau@redhat.com>
+Date: Tue, 28 Nov 2023 11:40:03 +0400
+Subject: [PATCH] meson: use system headers if possible
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+---
+ meson.build | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 99beb23b..6aba3a81 100644
+--- a/meson.build
++++ b/meson.build
+@@ -141,8 +141,17 @@ inc_include = include_directories('include')
+ inc_utils = include_directories('utils/include')
+ 
+ if use_vulkan
+-  inc_vulkan_headers = include_directories('common/vulkan/include')
+-  inc_renderdoc_external = include_directories('third-party/renderdoc/include')
++  if cc.has_header('vulkan/vulkan.h')
++    inc_vulkan_headers = include_directories()
++  else
++    inc_vulkan_headers = include_directories('common/vulkan/include')
++  endif
++
++  if cc.has_header('renderdoc_app.h')
++    inc_renderdoc_external = include_directories()
++  else
++    inc_renderdoc_external = include_directories('third-party/renderdoc/include')
++  endif
+ endif
+ 
+ if use_magma
+@@ -150,7 +159,11 @@ if use_magma
+   inc_magma_external_lib = include_directories('third-party/fuchsia/magma/include/lib')
+ endif
+ 
+-inc_glm = include_directories('third-party/glm/include')
++if cc.has_header('glm/glm.hpp')
++  inc_glm = include_directories()
++else
++  inc_glm = include_directories('third-party/glm/include')
++endif
+ 
+ #================#
+ # Subdirectories #
+-- 
+2.42.0
+

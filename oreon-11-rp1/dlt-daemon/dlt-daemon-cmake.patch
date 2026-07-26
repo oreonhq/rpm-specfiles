@@ -1,0 +1,15 @@
+diff -up ./CMakeLists.txt.cmake4 ./CMakeLists.txt
+--- ./CMakeLists.txt.cmake4	2025-07-30 12:23:24.900226446 -0400
++++ ./CMakeLists.txt	2025-07-30 12:24:00.826276665 -0400
+@@ -14,9 +14,9 @@
+ #######
+ 
+ # Set minimum Cmake version and setup policy behavior
+-cmake_minimum_required(VERSION 3.3)
++cmake_minimum_required(VERSION 3.5)
+ 
+-if(${CMAKE_VERSION} VERSION_GREATER "3.20" OR ${CMAKE_VERSION} VERSION_EQUAL "3.20")
++if(${CMAKE_VERSION} VERSION_GREATER "3.20")
+     cmake_policy(SET CMP0115 OLD)
+ endif()
+ project(automotive-dlt VERSION 2.18.10)

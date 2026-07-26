@@ -1,0 +1,87 @@
+From d4ebb8d60a87a638c20fa1de1b4560142a69feb5 Mon Sep 17 00:00:00 2001
+From: Carlos Rodriguez-Fernandez <carlosrodrifernandez@gmail.com>
+Date: Wed, 29 Oct 2025 12:15:25 -0700
+Subject: [PATCH] fixes
+
+---
+ src/Makefile | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index 72986407c..49cbaf924 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -52,7 +52,7 @@ endif
+ ## Makefile flags
+ ##
+ 
+-MAKEFLAGS               += -l -j 8 -rR --no-print-directory
++MAKEFLAGS               += -l -rR --no-print-directory
+ 
+ ifneq ($(findstring clean,$(MAKECMDGOALS)),)
+ MAKEFLAGS               += -j 1
+@@ -167,8 +167,6 @@ DEPS_UNRAR_PATH         := $(LIBRARY_DEV_ROOT_FOLDER)
+ endif
+ endif
+ 
+-DEPS_SSE2NEON           := deps/sse2neon
+-
+ ##
+ ## Filenames for library and frontend
+ ##
+@@ -275,10 +273,7 @@ endif
+ endif
+ 
+ ifeq ($(DEBUG),0)
+-CFLAGS                  += -O2
+-ifneq ($(UNAME),Darwin)
+-LFLAGS                  += -s
+-endif
++CFLAGS                  += -DNDEBUG
+ else
+ ifeq ($(DEBUG),1)
+ ifneq ($(UNAME),Darwin)
+@@ -427,7 +422,6 @@ endif # Darwin
+ 
+ ifeq ($(IS_ARM),1)
+ CFLAGS_NATIVE           += -DSSE2NEON_SUPPRESS_WARNINGS
+-CFLAGS_NATIVE           += -I$(DEPS_SSE2NEON)
+ endif
+ 
+ ifeq ($(UNAME),CYGWIN)
+@@ -589,7 +583,7 @@ endif
+ 
+ .PHONY: install
+ ifeq ($(SHARED),1)
+-install: install_docs install_shared install_tools install_library install_library_dev install_tunings install_kernels install_modules install_bridges install_hashcat
++install: install_shared install_library install_library_dev install_tunings install_kernels install_modules install_bridges install_hashcat
+ else
+ install: install_docs install_shared install_tools                                     install_tunings install_kernels install_modules install_bridges install_hashcat
+ endif
+@@ -660,13 +654,13 @@ install_kernels: install_shared
+ install_modules: install_shared modules
+ 	$(INSTALL) -m 755 -d                                                    $(DESTDIR)$(SHARED_FOLDER)/modules
+ 	$(FIND) modules/  -mindepth 1 -type d -execdir $(INSTALL) -m 755 -d     $(DESTDIR)$(SHARED_FOLDER)/modules/{} \;
+-	$(FIND) modules/  -mindepth 1 -type f -execdir $(INSTALL) -m 644 {}     $(DESTDIR)$(SHARED_FOLDER)/modules/{} \;
++	$(FIND) modules/  -mindepth 1 -type f -execdir $(INSTALL) -m 755 {}     $(DESTDIR)$(SHARED_FOLDER)/modules/{} \;
+ 
+ .PHONY: install_bridges
+ install_bridges: install_shared bridges
+ 	$(INSTALL) -m 755 -d                                                    $(DESTDIR)$(SHARED_FOLDER)/bridges
+ 	$(FIND) bridges/  -mindepth 1 -type d -execdir $(INSTALL) -m 755 -d     $(DESTDIR)$(SHARED_FOLDER)/bridges/{} \;
+-	$(FIND) bridges/  -mindepth 1 -type f -execdir $(INSTALL) -m 644 {}     $(DESTDIR)$(SHARED_FOLDER)/bridges/{} \;
++	$(FIND) bridges/  -mindepth 1 -type f -execdir $(INSTALL) -m 755 {}     $(DESTDIR)$(SHARED_FOLDER)/bridges/{} \;
+ 
+ .PHONY: install_library
+ install_library: $(HASHCAT_LIBRARY)
+@@ -892,7 +886,6 @@ endif
+ 
+ ifeq ($(IS_ARM),1)
+ CFLAGS_CROSS_LINUX      += -DSSE2NEON_SUPPRESS_WARNINGS
+-CFLAGS_CROSS_LINUX      += -I$(DEPS_SSE2NEON)
+ endif
+ 
+ ##
+-- 
+2.51.0
+

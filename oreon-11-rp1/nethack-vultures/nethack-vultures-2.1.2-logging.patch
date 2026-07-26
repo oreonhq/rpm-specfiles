@@ -1,0 +1,12 @@
+diff -up vultures-2.1.2/vultures/vultures_gen.c~ vultures-2.1.2/vultures/vultures_gen.c
+--- vultures-2.1.2/vultures/vultures_gen.c~	2008-07-16 16:59:01.000000000 +0300
++++ vultures-2.1.2/vultures/vultures_gen.c	2009-05-23 10:58:31.000000000 +0300
+@@ -16,7 +16,7 @@
+ #include "vultures_opt.h"
+ 
+ /* Remove/undefine this to have all log messages end up in stderr */
+-#define V_LOG_FILENAME "vultures_log.txt"
++#define V_LOG_FILENAME "/var/log/vultures/vultures_log.txt"
+ 
+ 
+ extern void append_slash(char *);

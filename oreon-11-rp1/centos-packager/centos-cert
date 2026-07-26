@@ -1,0 +1,141 @@
+#!/bin/bash
+
+# This is a simple bash wrapper for CentOS SIG and using fasjson-client with some values
+# Goal is to retrieve signed TLS cert for user accounts, using kerberos ticket and then using the fasjson endpoint
+
+function usage() {
+cat << EOF
+
+You need to call the script like this : $0 -arguments
+ -u : username ([REQUIRED] : your existing ACO/FAS username)
+ -v : just validates the existing TLS certificate ([OPTIONAL])
+ -r : REALM to use for kerberos ([OPTIONAL] : defaults to FEDORAPROJECT.ORG)
+ -f : fasjson url ([OPTIONAL]: defaults to https://fasjson.fedoraproject.org)
+ -h : display this help
+
+EOF
+
+}
+
+function varcheck() {
+if [ -z "$1" ] ; then
+        usage
+        exit 1
+fi
+}
+
+function f_log() {
+   echo "[+] $(date +%Y%m%d-%H:%M) centos-cert -> $*" 
+}
+
+function verify_cert() {
+  echo ""
+  f_log "Verifying if TLS cert is still valid ..."
+  if [ ! -e ~/.centos-server-ca.cert ] ; then
+    f_log "[ERROR] No CA cert found to validate your TLS cert"
+    f_log "Please retrieve it first with [$0 -u]"
+    exit 1
+  fi
+  if [ -e ~/.centos.cert ] ; then
+    f_log "Validating TLS cert against ~/.centos-server-ca.cert ..."
+    openssl verify -CAfile ~/.centos-server-ca.cert ~/.centos.cert
+    if [ "$?" -ne "0" ] ; then
+      f_log "[ERROR] your TLS cert is not signed by correct CA"
+      exit 1
+    else
+      f_log "[SUCCESS] ~/.centos.cert TLS cert verified by ~/.centos-server-ca.cert CA crt"   
+    fi
+    end_date=$(openssl x509 -in ~/.centos.cert -noout -text|sed -n 's/ *Not After : *//p')
+    end_date_seconds=$(date '+%s' --date "$end_date")
+    now_seconds=$(date '+%s')
+    remaining_days=$(echo "($end_date_seconds-$now_seconds)/24/3600" | bc)
+    if [ "${remaining_days}" -gt "0" ] ; then
+      f_log "[SUCCESS] Your TLS cert is still valid for [${remaining_days}] days"
+      echo ""
+      exit 0
+    else
+      f_log "[ERROR] Your TLS cert has expired : [${remaining_days}] days"
+      echo ""
+      exit 1
+    fi
+  else
+    f_log "[WARNING] : no TLS cert found so running this script to first get one"
+    echo ""
+  fi
+}
+
+function check_url() {
+  echo ""
+  f_log Validating user [${fasjson_user}] with realm [${fasjson_realm}] against ${fasjson_url}
+  curl --fail --negotiate -u : ${fasjson_url}/v1/me/ --silent >/dev/null 
+  if [ "$?" -ne "0" ] ; then
+    f_log "Not able to negotiate kerberos with ${fasjson_url} ..."
+    f_log "Forcing kinit to obtain valid kerberos ticket :"
+    kinit ${fasjson_user}@${fasjson_realm} || (f_log "Not able to get kerberos ticket .." ; exit 1)
+  else
+    f_log "We can reach [${fasjson_url}] with realm [${fasjson_user}@${fasjson_realm}], so now asking for TLS cert ..." 
+  fi
+}
+
+function get_cert(){
+  fasjson-client --verbose --url ${fasjson_url} get-cert -u ${fasjson_user} -p ~/.centos-${fasjson_user}.key -s ~/.centos-${fasjson_user}.crt --overwrite
+  if [ "$?" -ne "0" ] ; then
+    f_log "[ISSUE] : Unable to retrieve TLS cert"
+    exit 1
+  else
+    f_log "Concatenating cert to ~/.centos.cert"
+    cat ~/.centos-${fasjson_user}.key ~/.centos-${fasjson_user}.crt > ~/.centos.cert
+  fi
+  f_log "Downloading correct CA cert .."
+  curl --fail --silent ${ca_url} > ~/.centos-server-ca.cert CA crt
+  echo ""
+}
+
+
+while getopts "hu:r:vf:" option
+do
+  case ${option} in
+    h)
+      usage
+      exit 1
+      ;;
+    u)
+      opt_user=${OPTARG}
+      ;;
+    r)
+      opt_realm=${OPTARG}
+      ;;
+    v)
+      verify_cert
+      exit
+      ;;
+    f)
+      opt_fasjson_url=${OPTARG}
+      ;;
+    ?)
+      usage
+      exit
+      ;;
+  esac
+done
+
+# Parsing and assigning default values if needed
+fasjson_user=${opt_user:-$USER}
+fasjson_realm=${opt_realm:-FEDORAPROJECT.ORG}
+fasjson_url=${opt_fasjson_url:-https://fasjson.fedoraproject.org}
+if [[ "$fasjson_url" =~ "fasjson.stg*" ]] ; then
+  ca_url="https://id.stg.fedoraproject.org/ipa/config/ca.crt"
+else
+  ca_url="https://id.fedoraproject.org/ipa/config/ca.crt"
+fi
+
+
+# Now the real work and calling functions
+if [ "$#" -eq "0" ] ;then
+  usage
+  exit 1
+fi
+check_url
+get_cert
+verify_cert
+

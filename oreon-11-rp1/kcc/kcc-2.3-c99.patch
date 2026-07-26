@@ -1,0 +1,36 @@
+Adjustments for building in strict C99 mode: More includes for
+more prototypes, manual prototype declaration, removal of implicit
+int.
+
+diff --git a/kcc.c b/kcc.c
+index e323e48da8bfe672..c292bc68435566dc 100644
+--- a/kcc.c
++++ b/kcc.c
+@@ -27,9 +27,11 @@ static char copyright[] = "@(#)Copyright (c) 1992 Yasuhiro Tonooka";
+ #endif
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <unistd.h>
+ 
+ /*-
+  *  OPTIONS
+@@ -135,6 +137,7 @@ extern unsigned short hiragana[];
+ unsigned short *kanatbl = katakana;
+ 
+ void error(const char * va_alist, ...);
++int getstr(char *str, int n, FILE *fp);
+ 
+ /**********************************************************************
+  *                                                                    *
+@@ -145,6 +148,7 @@ void error(const char * va_alist, ...);
+     NAME
+ 	main
+  ---------------------------------------------------------------------*/
++int
+ main(c, v)
+     register int c;
+     register char *v[];

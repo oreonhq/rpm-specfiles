@@ -1,0 +1,496 @@
+From eb7b155e3396ac645dc075665e87b16bc34e6827 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Lum=C3=ADr=20=27Frenzy=27=20Balhar?=
+ <frenzy.madness@gmail.com>
+Date: Mon, 7 Oct 2024 19:25:36 +0200
+Subject: [PATCH] infra: update pytest to v8 (#135)
+
+* Tested with Python 3.12
+
+* Upgrade pytest to the latest version 8.3.3
+
+* Rename setup/teardown functions
+
+Old names were there for compatibility with nose and they're no longer supported in pytest 8.
+
+---------
+
+Co-authored-by: Markus Siemens <markus@m-siemens.de>
+---
+ PyGitUp/tests/__init__.py                      |  2 +-
+ PyGitUp/tests/test_ahead_of_upstream.py        |  2 +-
+ PyGitUp/tests/test_detached.py                 |  2 +-
+ PyGitUp/tests/test_diverged.py                 |  2 +-
+ PyGitUp/tests/test_fast_forwarded.py           |  2 +-
+ PyGitUp/tests/test_faster_fastforwarded.py     |  2 +-
+ PyGitUp/tests/test_fetch_fail.py               |  2 +-
+ PyGitUp/tests/test_fetch_large_output.py       |  2 +-
+ PyGitUp/tests/test_fetchall.py                 |  2 +-
+ PyGitUp/tests/test_git_not_in_path.py          |  2 +-
+ PyGitUp/tests/test_issue_55.py                 |  2 +-
+ PyGitUp/tests/test_local_tracking.py           |  2 +-
+ PyGitUp/tests/test_log_hook.py                 |  2 +-
+ PyGitUp/tests/test_multiple_remotes.py         |  2 +-
+ PyGitUp/tests/test_no_remotes.py               |  2 +-
+ PyGitUp/tests/test_nofetch.py                  |  2 +-
+ PyGitUp/tests/test_not_on_a_git_repo.py        |  2 +-
+ PyGitUp/tests/test_out_of_tree.py              |  2 +-
+ .../tests/test_overwrite_untracked_error.py    |  2 +-
+ PyGitUp/tests/test_push.py                     |  2 +-
+ PyGitUp/tests/test_rebase_arguments.py         |  2 +-
+ PyGitUp/tests/test_rebase_error.py             |  2 +-
+ PyGitUp/tests/test_rebasing.py                 |  2 +-
+ PyGitUp/tests/test_remote_branch_deleted.py    |  2 +-
+ PyGitUp/tests/test_returning_to_branch.py      |  2 +-
+ PyGitUp/tests/test_run_in_subdir.py            |  2 +-
+ PyGitUp/tests/test_separate_worktree.py        |  2 +-
+ PyGitUp/tests/test_stash_error.py              |  2 +-
+ PyGitUp/tests/test_submodules.py               |  2 +-
+ PyGitUp/tests/test_submodules_dirty.py         |  2 +-
+ PyGitUp/tests/test_tracking.py                 |  2 +-
+ PyGitUp/tests/test_unstash_error.py            |  2 +-
+ PyGitUp/tests/test_up_to_date.py               |  2 +-
+ pyproject.toml                                 |  2 +-
+ 35 files changed, 43 insertions(+), 43 deletions(-)
+
+diff --git a/PyGitUp/tests/__init__.py b/PyGitUp/tests/__init__.py
+index 6d0be07..80c8873 100644
+--- a/PyGitUp/tests/__init__.py
++++ b/PyGitUp/tests/__init__.py
+@@ -26,7 +26,7 @@ def capture():
+             out[1] = out[1].getvalue()
+ 
+ 
+-def teardown():
++def teardown_function():
+     """
+      Cleanup created files and directories
+     """
+diff --git a/PyGitUp/tests/test_ahead_of_upstream.py b/PyGitUp/tests/test_ahead_of_upstream.py
+index 9e4a186..dbb4323 100644
+--- a/PyGitUp/tests/test_ahead_of_upstream.py
++++ b/PyGitUp/tests/test_ahead_of_upstream.py
+@@ -12,7 +12,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_detached.py b/PyGitUp/tests/test_detached.py
+index b138801..4134ea4 100644
+--- a/PyGitUp/tests/test_detached.py
++++ b/PyGitUp/tests/test_detached.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_diverged.py b/PyGitUp/tests/test_diverged.py
+index 9974565..3caa04a 100644
+--- a/PyGitUp/tests/test_diverged.py
++++ b/PyGitUp/tests/test_diverged.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_fast_forwarded.py b/PyGitUp/tests/test_fast_forwarded.py
+index bdf5b78..c530d4e 100644
+--- a/PyGitUp/tests/test_fast_forwarded.py
++++ b/PyGitUp/tests/test_fast_forwarded.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_faster_fastforwarded.py b/PyGitUp/tests/test_faster_fastforwarded.py
+index 0edb4d3..dc8ec89 100644
+--- a/PyGitUp/tests/test_faster_fastforwarded.py
++++ b/PyGitUp/tests/test_faster_fastforwarded.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     global master, repo
+     master_path, master = init_master(test_name)
+ 
+diff --git a/PyGitUp/tests/test_fetch_fail.py b/PyGitUp/tests/test_fetch_fail.py
+index 8febe8b..31f417a 100644
+--- a/PyGitUp/tests/test_fetch_fail.py
++++ b/PyGitUp/tests/test_fetch_fail.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_fetch_large_output.py b/PyGitUp/tests/test_fetch_large_output.py
+index 8c221e4..a80cabc 100644
+--- a/PyGitUp/tests/test_fetch_large_output.py
++++ b/PyGitUp/tests/test_fetch_large_output.py
+@@ -11,7 +11,7 @@
+ REPO_PATH = join(basepath, TEST_NAME + sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(TEST_NAME)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_fetchall.py b/PyGitUp/tests/test_fetchall.py
+index c1c267a..b2054ff 100644
+--- a/PyGitUp/tests/test_fetchall.py
++++ b/PyGitUp/tests/test_fetchall.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+     master_path2, master2 = init_master(test_name + '2')
+ 
+diff --git a/PyGitUp/tests/test_git_not_in_path.py b/PyGitUp/tests/test_git_not_in_path.py
+index 509e3f4..2515960 100644
+--- a/PyGitUp/tests/test_git_not_in_path.py
++++ b/PyGitUp/tests/test_git_not_in_path.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     os.makedirs(repo_path, 0o700)
+ 
+ 
+diff --git a/PyGitUp/tests/test_issue_55.py b/PyGitUp/tests/test_issue_55.py
+index ba96400..27bc721 100644
+--- a/PyGitUp/tests/test_issue_55.py
++++ b/PyGitUp/tests/test_issue_55.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     branch_name = 'feature/#11772-replace-api-url'
+diff --git a/PyGitUp/tests/test_local_tracking.py b/PyGitUp/tests/test_local_tracking.py
+index 1bd244e..05c8cb5 100644
+--- a/PyGitUp/tests/test_local_tracking.py
++++ b/PyGitUp/tests/test_local_tracking.py
+@@ -13,7 +13,7 @@ def _read_file(path):
+         return f.read()
+ 
+ 
+-def setup():
++def setup_function():
+     global repo_path
+     master_path, master = init_master(test_name)
+ 
+diff --git a/PyGitUp/tests/test_log_hook.py b/PyGitUp/tests/test_log_hook.py
+index fe717b2..63af495 100644
+--- a/PyGitUp/tests/test_log_hook.py
++++ b/PyGitUp/tests/test_log_hook.py
+@@ -10,7 +10,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_multiple_remotes.py b/PyGitUp/tests/test_multiple_remotes.py
+index d91f9c5..b254300 100644
+--- a/PyGitUp/tests/test_multiple_remotes.py
++++ b/PyGitUp/tests/test_multiple_remotes.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master1_path, master1 = init_master(test_name + '.1')
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_no_remotes.py b/PyGitUp/tests/test_no_remotes.py
+index be52141..596a5c5 100644
+--- a/PyGitUp/tests/test_no_remotes.py
++++ b/PyGitUp/tests/test_no_remotes.py
+@@ -9,7 +9,7 @@
+ test_name = 'no_remotes'
+ 
+ 
+-def setup():
++def setup_function():
+     global master_path
+     master_path, master = init_master(test_name)
+ 
+diff --git a/PyGitUp/tests/test_nofetch.py b/PyGitUp/tests/test_nofetch.py
+index 0f5bd18..c5674d5 100644
+--- a/PyGitUp/tests/test_nofetch.py
++++ b/PyGitUp/tests/test_nofetch.py
+@@ -14,7 +14,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_not_on_a_git_repo.py b/PyGitUp/tests/test_not_on_a_git_repo.py
+index 7924ea3..93d014c 100644
+--- a/PyGitUp/tests/test_not_on_a_git_repo.py
++++ b/PyGitUp/tests/test_not_on_a_git_repo.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     os.makedirs(repo_path, 0o700)
+ 
+ 
+diff --git a/PyGitUp/tests/test_out_of_tree.py b/PyGitUp/tests/test_out_of_tree.py
+index 7cdb6ec..bd11d82 100644
+--- a/PyGitUp/tests/test_out_of_tree.py
++++ b/PyGitUp/tests/test_out_of_tree.py
+@@ -13,7 +13,7 @@
+ work_tree = join(repo_path, 'work-tree')
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     os.makedirs(git_dir)
+diff --git a/PyGitUp/tests/test_overwrite_untracked_error.py b/PyGitUp/tests/test_overwrite_untracked_error.py
+index d56227c..981bd8d 100644
+--- a/PyGitUp/tests/test_overwrite_untracked_error.py
++++ b/PyGitUp/tests/test_overwrite_untracked_error.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_push.py b/PyGitUp/tests/test_push.py
+index 3a6a8c9..109af7e 100644
+--- a/PyGitUp/tests/test_push.py
++++ b/PyGitUp/tests/test_push.py
+@@ -15,7 +15,7 @@ def _read_file(path):
+         return f.read()
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+     master.git.config('receive.denyCurrentBranch', 'ignore', add=True)
+ 
+diff --git a/PyGitUp/tests/test_rebase_arguments.py b/PyGitUp/tests/test_rebase_arguments.py
+index 9d41cc8..eab3230 100644
+--- a/PyGitUp/tests/test_rebase_arguments.py
++++ b/PyGitUp/tests/test_rebase_arguments.py
+@@ -16,7 +16,7 @@ def _read_file(path):
+         return f.read()
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_rebase_error.py b/PyGitUp/tests/test_rebase_error.py
+index 94f05ff..028ab6d 100644
+--- a/PyGitUp/tests/test_rebase_error.py
++++ b/PyGitUp/tests/test_rebase_error.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_rebasing.py b/PyGitUp/tests/test_rebasing.py
+index 105d522..ec8043a 100644
+--- a/PyGitUp/tests/test_rebasing.py
++++ b/PyGitUp/tests/test_rebasing.py
+@@ -15,7 +15,7 @@ def _read_file(path):
+         return f.read()
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_remote_branch_deleted.py b/PyGitUp/tests/test_remote_branch_deleted.py
+index 249b0dc..f1dc5ec 100644
+--- a/PyGitUp/tests/test_remote_branch_deleted.py
++++ b/PyGitUp/tests/test_remote_branch_deleted.py
+@@ -10,7 +10,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_returning_to_branch.py b/PyGitUp/tests/test_returning_to_branch.py
+index dc0dd12..ed855a6 100644
+--- a/PyGitUp/tests/test_returning_to_branch.py
++++ b/PyGitUp/tests/test_returning_to_branch.py
+@@ -10,7 +10,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_run_in_subdir.py b/PyGitUp/tests/test_run_in_subdir.py
+index b0d34bd..fb1ccb0 100644
+--- a/PyGitUp/tests/test_run_in_subdir.py
++++ b/PyGitUp/tests/test_run_in_subdir.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_separate_worktree.py b/PyGitUp/tests/test_separate_worktree.py
+index 97fce15..3c80c71 100644
+--- a/PyGitUp/tests/test_separate_worktree.py
++++ b/PyGitUp/tests/test_separate_worktree.py
+@@ -13,7 +13,7 @@
+ worktree_path = join(basepath, worktree_dir)
+ 
+ 
+-def setup():
++def setup_function():
+     if Git().version_info[:3] < (2, 5, 1):
+         return
+ 
+diff --git a/PyGitUp/tests/test_stash_error.py b/PyGitUp/tests/test_stash_error.py
+index c80b9c3..5d1a771 100644
+--- a/PyGitUp/tests/test_stash_error.py
++++ b/PyGitUp/tests/test_stash_error.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_submodules.py b/PyGitUp/tests/test_submodules.py
+index 9bc2c58..7186bc4 100644
+--- a/PyGitUp/tests/test_submodules.py
++++ b/PyGitUp/tests/test_submodules.py
+@@ -14,7 +14,7 @@ def _read_file(path):
+         return f.read()
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_submodules_dirty.py b/PyGitUp/tests/test_submodules_dirty.py
+index b6fb3ec..57c9dee 100644
+--- a/PyGitUp/tests/test_submodules_dirty.py
++++ b/PyGitUp/tests/test_submodules_dirty.py
+@@ -14,7 +14,7 @@ def _read_file(path):
+         return f.read()
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_tracking.py b/PyGitUp/tests/test_tracking.py
+index 7972179..937b9d0 100644
+--- a/PyGitUp/tests/test_tracking.py
++++ b/PyGitUp/tests/test_tracking.py
+@@ -14,7 +14,7 @@ def _read_file(path):
+         return f.read()
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_unstash_error.py b/PyGitUp/tests/test_unstash_error.py
+index 156bd6c..cc0dd2b 100644
+--- a/PyGitUp/tests/test_unstash_error.py
++++ b/PyGitUp/tests/test_unstash_error.py
+@@ -11,7 +11,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/PyGitUp/tests/test_up_to_date.py b/PyGitUp/tests/test_up_to_date.py
+index 7edc4bb..b27ce6c 100644
+--- a/PyGitUp/tests/test_up_to_date.py
++++ b/PyGitUp/tests/test_up_to_date.py
+@@ -9,7 +9,7 @@
+ repo_path = join(basepath, test_name + os.sep)
+ 
+ 
+-def setup():
++def setup_function():
+     master_path, master = init_master(test_name)
+ 
+     # Prepare master repo
+diff --git a/pyproject.toml b/pyproject.toml
+index 7dbda45..6271e6b 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -37,7 +37,7 @@ termcolor = "^2.0.0"
+ 
+ [tool.poetry.dev-dependencies]
+ coveralls = "^3.0.0"
+-pytest = "^7.2.0"
++pytest = "^8.3.3"
+ pytest-cov = "^4.0.0"
+ 
+ [build-system]

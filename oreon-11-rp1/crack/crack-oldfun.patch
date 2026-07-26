@@ -1,0 +1,263 @@
+diff -drup c50a.orig/src/lib/dawglib.c c50a/src/lib/dawglib.c
+--- c50a.orig/src/lib/dawglib.c	1996-11-05 01:01:46.000000000 +0100
++++ c50a/src/lib/dawglib.c	2025-01-30 15:15:57.283946135 +0100
+@@ -39,9 +39,7 @@ static char gbuffer[STRINGSIZE];
+ static char pbuffer[STRINGSIZE];
+ 
+ static char *
+-PutDAWG (fp, buffer)
+-    FILE *fp;
+-    char *buffer;
++PutDAWG (FILE *fp, char *buffer)
+ {
+     int i;
+ 
+@@ -62,9 +60,7 @@ PutDAWG (fp, buffer)
+ }
+ 
+ static char *
+-GetDAWG (fp, buffer)
+-    FILE *fp;
+-    char *buffer;
++GetDAWG (FILE *fp, char *buffer)
+ {
+     unsigned int off;
+ 
+@@ -96,9 +92,7 @@ ResetDAWG ()
+ }
+ 
+ int
+-PackDAWG (infp, outfp)
+-    FILE *infp;
+-    FILE *outfp;
++PackDAWG (FILE *infp, FILE *outfp)
+ {
+     char buffer[STRINGSIZE];
+ 
+@@ -115,9 +109,7 @@ PackDAWG (infp, outfp)
+ }
+ 
+ int
+-UnPackDAWG (infp, outfp)
+-    FILE *infp;
+-    FILE *outfp;
++UnPackDAWG (FILE *infp, FILE *outfp)
+ {
+     char buffer[STRINGSIZE];
+ 
+diff -drup c50a.orig/src/lib/debug.c c50a/src/lib/debug.c
+--- c50a.orig/src/lib/debug.c	1996-11-05 01:01:46.000000000 +0100
++++ c50a/src/lib/debug.c	2025-01-30 15:22:21.440319337 +0100
+@@ -9,15 +9,15 @@
+ # document which accompanies distributions of Crack v5.0 and upwards.
+ */
+ 
++#include <stdarg.h>
+ #include "libcrack.h"
+ 
+ int
+-Debug (level, fmt, arg1, arg2, arg3, arg4, arg5, arg6)
+-    int level;
+-    char *fmt;
+-    char *arg1, *arg2, *arg3, *arg4, *arg5, *arg6;
++Debug (int level, char *fmt, ...)
+ {
+-    fprintf (stderr, fmt, arg1, arg2, arg3, arg4, arg5, arg6);
++    va_list ap;
++    va_start(ap, fmt);
++    vfprintf (stderr, fmt, ap);
+ 
+     if (level < 0)
+     {
+diff -drup c50a.orig/src/lib/libcrack.h c50a/src/lib/libcrack.h
+--- c50a.orig/src/lib/libcrack.h	1996-11-05 01:08:06.000000000 +0100
++++ c50a/src/lib/libcrack.h	2025-01-30 15:14:50.735529034 +0100
+@@ -74,16 +74,16 @@ typedef unsigned long int int32;
+ 
+ extern char dawgmagic[];
+ 
+-extern char **SplitOn();
+-extern char *Clone();
+-extern char *Mangle();
+-extern char *Trim();
+-extern char Chop();
+-extern char ChopNL();
+-extern int Debug();
+-extern int PackDAWG();
++extern char **SplitOn(char c, char *ptr, int maxf);
++extern char *Clone(char *string);
++extern char *Mangle(char *input, char *control);
++extern char *Trim(char *string);
++extern char Chop(char *string);
++extern char ChopNL(char *string);
++extern int Debug(int level, char *fmt, ...);
++extern int PackDAWG(FILE *infp, FILE *outfp);
+ extern int ResetDAWG();
+-extern int UnPackDAWG();
++extern int UnPackDAWG(FILE *infp, FILE *outfp);
+ 
+ /* ------------------------------------------------------------------ */
+ 
+@@ -117,7 +117,6 @@ typedef struct
+ PWDICT;
+ 
+ extern PWDICT *PWOpen();
+-extern char *Mangle();
+ extern char *FascistCheck();
+ 
+ #define PW_WORDS(x) ((x)->header.pih_numwords)
+diff -drup c50a.orig/src/lib/rules.c c50a/src/lib/rules.c
+--- c50a.orig/src/lib/rules.c	1996-12-16 08:50:41.000000000 +0100
++++ c50a/src/lib/rules.c	2025-01-30 14:59:39.169886990 +0100
+@@ -505,9 +505,7 @@ char character;
+ }
+ 
+ char *
+-Mangle(input, control)		/* returns a pointer to a controlled Mangle */
+-char *input;
+-char *control;
++Mangle(char *input, char *control)		/* returns a pointer to a controlled Mangle */
+ {
+     int limit;
+     char *ptr;
+diff -drup c50a.orig/src/lib/stringlib.c c50a/src/lib/stringlib.c
+--- c50a.orig/src/lib/stringlib.c	1996-11-05 01:01:46.000000000 +0100
++++ c50a/src/lib/stringlib.c	2025-01-30 15:00:40.131262971 +0100
+@@ -12,8 +12,7 @@
+ #include "libcrack.h"
+ 
+ char
+-Chop(string)
+-char *string;
++Chop(char *string)
+ {
+     char c;
+     char *ptr;
+@@ -32,8 +31,7 @@ char *string;
+ }
+ 
+ char
+-ChopNL(string)
+-char *string;
++ChopNL(char *string)
+ {
+     char c;
+     char *ptr;
+@@ -56,8 +54,7 @@ char *string;
+ }
+ 
+ char *
+-Trim(string)
+-char *string;
++Trim(char *string)
+ {
+     char *ptr;
+ 
+@@ -77,8 +74,7 @@ char *string;
+  */
+ 
+ char *
+-Clone(string)
+-char *string;
++Clone(char *string)
+ {
+     char *retval;
+ 
+diff -drup c50a.orig/src/util/cracker.c c50a/src/util/cracker.c
+--- c50a.orig/src/util/cracker.c	2025-01-30 15:49:06.482196202 +0100
++++ c50a/src/util/cracker.c	2025-01-30 15:49:44.852435797 +0100
+@@ -9,6 +9,7 @@
+    # document which accompanies distributions of Crack v5.0 and upwards.
+  */
+ 
++#include <time.h>
+ #include "libcrack.h"
+ #include "elcid.h"
+ #include <stdarg.h>
+diff -drup c50a.orig/src/util/dawg.c c50a/src/util/dawg.c
+--- c50a.orig/src/util/dawg.c	1996-11-05 01:01:46.000000000 +0100
++++ c50a/src/util/dawg.c	2025-01-30 15:25:49.139600633 +0100
+@@ -19,7 +19,7 @@ main (argc, argv)
+     int i;
+     int errcnt;
+     int packp;
+-    int (*fn) ();
++    int (*fn) (FILE *infp, FILE *outfp);
+ 
+     errcnt = 0;
+     i = strlen (argv[0]);
+diff -drup c50a.orig/src/util/elcid.c,bsd c50a/src/util/elcid.c,bsd
+--- c50a.orig/src/util/elcid.c,bsd	1996-11-05 01:01:46.000000000 +0100
++++ c50a/src/util/elcid.c,bsd	2025-01-30 16:04:04.260786335 +0100
+@@ -62,11 +62,11 @@ elcid_pwsize()
+ }
+ 
+ int
+-elcid_mkcookies(ciphertexts, usernames, cookies, m)
+-char **ciphertexts;             /* vector of M ciphertexts */
+-char **usernames;               /* vector of M usernames */
+-void **cookies;                 /* vector to contain M cookies */
+-int m;                          /* M */
++elcid_mkcookies(char **ciphertexts, char **usernames, void **cookies, int m)
++/*char **ciphertexts;             vector of M ciphertexts */
++/*char **usernames;               vector of M usernames */
++/*void **cookies;                 vector to contain M cookies */
++/*int m;                          M */
+ {
+     while (m--)
+     {
+@@ -76,9 +76,9 @@ int m;                          /* M */
+ }
+ 
+ int
+-elcid_setup(ciphertexts, m)
+-char **ciphertexts;             /* vector of M ciphertexts */
+-int m;                          /* not used in this implementation */
++elcid_setup(char **ciphertexts)
++/*char **ciphertexts;             vector of M ciphertexts */
++/*int m;                          not used in this implementation */
+ {
+     if (ciphertexts[0])
+     {
+@@ -95,8 +95,7 @@ int m;                          /* not u
+ }
+ 
+ int
+-elcid_invalid(ciphertext)       /* check validity of a ciphertext */
+-char *ciphertext;
++elcid_invalid(char *ciphertext)       /* check validity of a ciphertext */
+ {
+     int i;
+     int retval;
+@@ -117,11 +116,11 @@ char *ciphertext;
+ }
+ 
+ int
+-elcid_test(guesses, cookies, results, cookiecount)
+-char **guesses;                 /* vector of N guesses */
+-void **cookies;                 /* vector of M cookies */
+-char **results;                 /* vector of M results (guessed passwords) */
+-int cookiecount;                /* M */
++elcid_test(char **guesses, void **cookies, char **results, int cookiecount)
++/*char **guesses;                 vector of N guesses */
++/*void **cookies;                 vector of M cookies */
++/*char **results;                 vector of M results (guessed passwords) */
++/*int cookiecount;                M */
+ {
+     int i;
+     int retval;
+diff -drup c50a.orig/src/util/elcid.h c50a/src/util/elcid.h
+--- c50a.orig/src/util/elcid.h	1996-11-05 01:01:46.000000000 +0100
++++ c50a/src/util/elcid.h	2025-01-30 15:55:23.208543362 +0100
+@@ -12,7 +12,7 @@
+ extern int elcid_init();
+ extern int elcid_bsize();
+ extern int elcid_pwsize();
+-extern int elcid_mkcookies();
+-extern int elcid_setup();
+-extern int elcid_invalid();
+-extern int elcid_test();
++extern int elcid_mkcookies(char **ciphertexts, char **usernames, void **cookies, int m);
++extern int elcid_setup(char **ciphertexts);
++extern int elcid_invalid(char *ciphertext);
++extern int elcid_test(char **guesses, void **cookies, char **results, int cookiecount);

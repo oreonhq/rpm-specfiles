@@ -1,0 +1,43 @@
+From 11b0270f45ff2d8eeee3c42524656a989545392e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?I=C3=B1aki=20=C3=9Acar?= <iucar@fedoraproject.org>
+Date: Sun, 28 Aug 2022 12:57:45 +0200
+Subject: [PATCH] use built-in find blas/lapack
+
+---
+ .../OpenMEEGMathsBlasLapackConfig.h                    |  2 +-
+ cmake/thirdParties.cmake                               | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/OpenMEEGMaths/include/BlasLapackImplementations/OpenMEEGMathsBlasLapackConfig.h b/OpenMEEGMaths/include/BlasLapackImplementations/OpenMEEGMathsBlasLapackConfig.h
+index 8293163..53c7252 100644
+--- a/OpenMEEGMaths/include/BlasLapackImplementations/OpenMEEGMathsBlasLapackConfig.h
++++ b/OpenMEEGMaths/include/BlasLapackImplementations/OpenMEEGMathsBlasLapackConfig.h
+@@ -1,6 +1,6 @@
+ #pragma once
+ 
+-#include <BlasLapackImplementations/FortranCInterface.h>
++#include <flexiblas/flexiblas_fortran_mangle.h>
+ 
+ #define CblasColMajor
+ #define CblasTrans 'T'
+diff --git a/cmake/thirdParties.cmake b/cmake/thirdParties.cmake
+index 7076d7e..8126354 100644
+--- a/cmake/thirdParties.cmake
++++ b/cmake/thirdParties.cmake
+@@ -1,4 +1,12 @@
+-include(FindBLASImplementation)
++find_package(BLAS)
++if (BLAS_FOUND)
++    set(HAVE_BLAS ON)
++endif()
++find_package(LAPACK)
++if (LAPACK_FOUND)
++    set(HAVE_LAPACK ON)
++    set(USE_LAPACK ON)
++endif()
+ 
+ if (BLA_STATIC)
+     set(MATIO_USE_STATIC_LIBRARIES TRUE) # XXX This should be an option
+-- 
+2.36.1
+

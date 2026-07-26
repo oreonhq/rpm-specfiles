@@ -1,0 +1,51 @@
+From 32f97dd5f5e6f4270f4f16229f6abda5a798e26c Mon Sep 17 00:00:00 2001
+From: Jerry James <loganjerry@gmail.com>
+Date: Mon, 26 Jun 2023 12:42:09 -0600
+Subject: [PATCH 4/4] OCaml 5 compatibility
+
+---
+ dose3.opam                | 1 +
+ dune-project              | 1 +
+ tests/DebianPackages/dune | 2 +-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dose3.opam b/dose3.opam
+index d613fcb..d1b7db2 100644
+--- a/dose3.opam
++++ b/dose3.opam
+@@ -48,6 +48,7 @@ depends: [
+   "cudf" {>= "0.7"}
+   "ocamlgraph" {>= "2.0.0"}
+   "re" {>= "1.2.2"}
++  "camlp-streams" {with-test}
+   "ounit2" {with-test}
+   "conf-python-3" {with-test}
+   "conf-python3-yaml" {with-test}
+diff --git a/dune-project b/dune-project
+index 68678a1..251a65b 100644
+--- a/dune-project
++++ b/dune-project
+@@ -40,6 +40,7 @@
+   (cudf (>= 0.7))
+   (ocamlgraph (>= 2.0.0))
+   (re (>= 1.2.2))
++  (camlp-streams :with-test)
+   (ounit2 :with-test)
+   (conf-python-3 :with-test)
+   (conf-python3-yaml :with-test)
+diff --git a/tests/DebianPackages/dune b/tests/DebianPackages/dune
+index 122693e..0e2dffc 100644
+--- a/tests/DebianPackages/dune
++++ b/tests/DebianPackages/dune
+@@ -20,7 +20,7 @@
+ 
+ (executable
+  (name debGrep)
+- (libraries extlib dose3.common dose3-extra.doseparse dose3-extra.debian)
++ (libraries camlp-streams extlib dose3.common dose3-extra.doseparse dose3-extra.debian)
+  (modules debGrep grep_argv_parser grep_argv_types))
+ 
+ (ocamlyacc grep_argv_parser)
+-- 
+2.41.0
+

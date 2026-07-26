@@ -1,0 +1,13 @@
+--- parsec-numbers-0.1.0/parsec-numbers.cabal~	2014-09-05 20:47:34.000000000 +0800
++++ parsec-numbers-0.1.0/parsec-numbers.cabal	2023-07-20 09:38:06.862558597 +0800
+@@ -3,7 +3,7 @@
+ build-type:    Simple
+ cabal-version: >= 1.6
+ license:       BSD3
+-license-file:  LICENSE
++-- empty license-file:  LICENSE
+ author:        chr.maeder@web.de
+ maintainer:    chr.maeder@web.de
+ category:      Parsing
+
+Diff finished.  Thu Jul 20 09:38:11 2023

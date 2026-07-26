@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>flyingsaucersattack.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT and CC-BY-NC-SA-4.0</project_license>
+  <name>Flying Saucers attack</name>
+  <summary>Shoot down the attacking UFOs and to save the city</summary>
+  <description>
+    <p>
+      F.S.A.(Flying Saucers Attack) aka
+      F.U.G.A.(Fliegende Untertassen greifen an)
+      is a kind of mixture between two old Atari2600 games.
+      It comes in German and English language.
+    </p>
+    <p>
+      You'll see a screen with your city that you have to
+      save against 30 Alien attack waves in three different
+      difficulty levels.
+    </p>
+    <p>
+      You shoot attacking UFOs with two cannons positioned
+      at the left and right borders of the screen.
+      The UFOs will first bomb away all your buildings then
+      send in little green men to dig tunnels to blow your
+      cannons which results in a game over.
+    </p>
+  </description>
+  <url type="homepage">http://www.dennisbusch.de/fsa.php</url>
+  <screenshots>
+    <screenshot type="default">http://www.dennisbusch.de/software/fsa/full/01_full.png</screenshot>
+    <screenshot>http://www.dennisbusch.de/software/fsa/full/04_full.png</screenshot>
+    <screenshot>http://www.dennisbusch.de/software/fsa/full/02_full.png</screenshot>
+    <screenshot>http://www.dennisbusch.de/software/fsa/full/00_full.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

@@ -1,0 +1,14 @@
+diff -ur a/configure b/configure
+--- a/configure	2025-06-30 10:33:41.700328645 +0200
++++ b/configure	2025-06-30 10:34:09.105441511 +0200
+@@ -22250,8 +22250,8 @@
+   e) cflags_add="-O3" ;;
+ esac
+ fi
+-CFLAGS="-Wall $cflags_add $CFLAGS"
+-CXXFLAGS="-Wall $cflags_add $CXXFLAGS"
++#CFLAGS="-Wall $cflags_add $CFLAGS"
++#CXXFLAGS="-Wall $cflags_add $CXXFLAGS"
+ 
+ 
+ 

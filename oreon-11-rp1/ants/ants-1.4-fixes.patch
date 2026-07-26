@@ -1,0 +1,560 @@
+--- ants-1.4/src/Makefile.fix	2004-01-06 15:11:20.000000000 +0100
++++ ants-1.4/src/Makefile	2007-05-13 13:22:49.000000000 +0200
+@@ -1,6 +1,8 @@
++CFLAGS=-g $(EXTRA_CFLAGS) -Wall -Wno-deprecated-declarations
++
+ all:
+-	g++ ants.cpp -o ../ants `allegro-config --libs`
+-	g++ ants_le.cpp -o ../ants_le `allegro-config --libs`
++	g++ $(CFLAGS) ants.cpp -o ../ants `allegro-config --libs`
++	g++ $(CFLAGS) ants_le.cpp -o ../ants_le `allegro-config --libs`
+ 
+ clean:
+ 	rm -f ../ants ../ants_le
+--- ants-1.4/src/ants_le.cpp.fix	2004-01-06 15:16:58.000000000 +0100
++++ ants-1.4/src/ants_le.cpp	2007-05-13 22:49:13.000000000 +0200
+@@ -51,12 +51,12 @@
+ string itoa(int i, char *buf, int size)
+ {
+ 	string s;
+-	snprintf(buf, i, "%d", buf);
++	snprintf(buf, size, "%d", i);
+ 	s = buf;
+ 	return s;
+ }
+ 
+-void main()
++int main()
+ {
+ 	ofstream df;
+ 
+@@ -74,7 +74,7 @@
+ 
+ 	df << "Loading packfile..." << endl;
+ 	packfile_password("AntsData");
+-	data = load_datafile("ants.dat");
++	data = load_datafile("/usr/share/ants/ants.dat");
+ 	packfile_password(NULL);
+ 
+ 	df << "Creating colors..." << endl;
+@@ -483,6 +483,7 @@
+ 			if( key[KEY_UP] || key[KEY_DOWN] || key[KEY_RIGHT] || key[KEY_LEFT] || Started )
+ 			{
+ 				ifstream test;
++				int orig_dir = dir_selected;
+ 	
+ 				Started = false;
+ 	
+@@ -493,12 +494,18 @@
+ 	
+ 				TheNumber = itoa(dir_selected,ch_buf,10);
+ 				dir_file = "levels" + TheNumber;
++				if (!exists(("/usr/share/ants/" + dir_file).c_str()))
++				{
++					dir_selected = orig_dir;
++					TheNumber = itoa(dir_selected,ch_buf,10);
++					dir_file = "levels" + TheNumber;
++				}
+ 				TheNumber = itoa(level_selected,ch_buf,10);
+ 				inf_file = dir_file + "/level" + TheNumber + ".ini";
+ 	
+-				test.open(inf_file.c_str());
++				test.open(("/usr/share/ants/" + inf_file).c_str());
+ 	
+-				if( !exists(inf_file.c_str()) ) level_name = "----------";
++				if( !exists(("/usr/share/ants/" + inf_file).c_str()) ) level_name = "----------";
+ 				else
+ 				{
+ 					test >> level_name;
+@@ -523,7 +530,7 @@
+ 				_putpixel16(pretty_level,0,0,C_Dark_Blue);
+ 
+ 				TheNumber = itoa(dir_selected,ch_buf,10);
+-				dir_file = "levels" + TheNumber;
++				dir_file = "/usr/share/ants/levels" + TheNumber;
+ 
+ //Temporarily disable by Georgik				
+ //				mkdir(dir_file.c_str());
+@@ -651,6 +658,8 @@
+ 			if( key[KEY_UP] || key[KEY_DOWN] || key[KEY_RIGHT] || key[KEY_LEFT] || Started )
+ 			{
+ 				ifstream test;
++				int orig_level = level_selected;
++				int orig_dir   = dir_selected;
+ 	
+ 				Started = false;
+ 	
+@@ -664,9 +673,19 @@
+ 				TheNumber = itoa(level_selected,ch_buf,10);
+ 				inf_file = dir_file + "/level" + TheNumber + ".ini";
+ 	
+-				test.open(inf_file.c_str());
++				test.open(("/usr/share/ants/" + inf_file).c_str());
+ 	
+-				if( !exists(inf_file.c_str()) ) level_name = "----------";
++				if( !exists(("/usr/share/ants/" + inf_file).c_str()) )
++				{
++					dir_selected   = orig_dir;
++					level_selected = orig_level;
++					
++					TheNumber = itoa(dir_selected,ch_buf,10);
++					dir_file = "levels" + TheNumber;
++					
++					TheNumber = itoa(level_selected,ch_buf,10);;
++					inf_file = dir_file + "/level" + TheNumber + ".ini";
++				}
+ 				else test >> level_name;
+ 
+ 				test.close();
+@@ -677,7 +696,7 @@
+ 				ifstream inf;
+ 
+ 				TheNumber = itoa(dir_selected,ch_buf,10);
+-				dir_file = "levels" + TheNumber;
++				dir_file = "/usr/share/ants/levels" + TheNumber;
+ 				TheNumber = itoa(level_selected,ch_buf,10);
+ 				inf_file = dir_file + "/level" + TheNumber + ".ini";
+ 
+@@ -842,6 +861,7 @@
+ 		
+ 		while( !(retrace_count - c_tick) ) { yield_timeslice(); }
+ 	}
++	return 0;
+ }
+ 
+ END_OF_MAIN();
+--- ants-1.4/src/ants.cpp.fix	2004-01-06 15:13:14.000000000 +0100
++++ ants-1.4/src/ants.cpp	2007-05-13 13:22:49.000000000 +0200
+@@ -39,7 +39,7 @@
+ #include <fstream>
+ //#include <iostream>
+ //#include <time.h>
+-#include <ants.h>
++#include "ants.h"
+ #include <string>
+ using namespace std; // So we can use strings correctly.
+ 
+@@ -83,8 +83,6 @@
+ 
+ int Red_Slot=-1, Blue_Slot=-1, Green_Slot=-1;
+ 
+-ofstream df; // debug file
+-
+ struct COIN
+ {
+ 	COIN *N_Coin;
+@@ -349,7 +347,7 @@
+ 			break;
+ 		case 10: // Umbrella
+ 			Color = C_Job_Ant;
+-			hline(buffer,X-1+320-Screen_X,Y-2-Screen_Y,X+1+320-Screen_X,C_Yellow);
++			hline(buffer,X-1-Screen_X,Y-2-Screen_Y,X+1-Screen_X,C_Yellow);
+ 			if( i2++ > 4 )
+ 			{
+ 				i2=0;
+@@ -393,8 +391,8 @@
+ 			break;
+ 		case 12: // Bomber
+ 			if( i1 != -46 ) { i1= -46; i2 = 0; }
+-			circlefill(buffer,X+320-Screen_X,Y-Screen_Y,10-i2,C_Red);
+-			circlefill(buffer,X+320-Screen_X,Y-Screen_Y,5-(i2/2),C_Yellow);
++			circlefill(buffer,X-Screen_X,Y-Screen_Y,10-i2,C_Red);
++			circlefill(buffer,X-Screen_X,Y-Screen_Y,5-(i2/2),C_Yellow);
+ 			if(i2++==0)
+ 			{
+ 				circlefill(level,X,Y,10,0);
+@@ -463,7 +461,7 @@
+ 			break;
+ 		case 15: // Bubble
+ 			Color = C_Job_Ant;
+-			circle(buffer,X+320-Screen_X,Y-Screen_Y-1,2,C_Yellow);
++			circle(buffer,X-Screen_X,Y-Screen_Y-1,2,C_Yellow);
+ 			if( i2++ > 12 )
+ 			{
+ 				i2=0;
+@@ -616,7 +614,7 @@
+ 	srand( time(NULL) );
+ 
+ 	clear_bitmap( screen );
+-	textprintf(screen,font,160,116,65535,"Generating Level...");
++	textprintf(screen,font,320,232,65535,"Generating Level...");
+ 
+ 	int z=0, w=0, CX, CY, WaterLevel = rand()%40+5, Amt_R = rand()%22+5, Amt_S = rand()%6+1, Amt_K = rand()%5;
+ 
+@@ -846,7 +844,7 @@
+ 	Nukem = false;
+ 
+ 	clear_bitmap(screen);
+-	textprintf_centre(screen,font,160,112,65535,"Loading. . .");
++	textprintf_centre(screen,font,320,224,65535,"Loading. . .");
+ 
+ 	F_Ant.N_Ant = &L_Ant;
+ 	L_Ant.P_Ant = &F_Ant;
+@@ -868,7 +866,7 @@
+ 
+ 	char ch_buf[20];
+ 	string level_to_load, pretty_level_to_load, inf_to_load, TheNumber, check;
+-	string dir_to_load="levels";
++	string dir_to_load="/usr/share/ants/levels";
+ 
+ 	Start_Locations = 0;
+ 	h=0;
+@@ -1187,15 +1185,13 @@
+ 
+ 	while( key[KEY_ENTER] || key[KEY_ESC] ) { yield_timeslice(); }
+ 
+-	df << "Game ready. Displaying the main menu!" << endl;
+-
+-	df.close();
+-
+ 	while( InMenu )
+ 	{
+ 		if( key[KEY_UP] || key[KEY_DOWN] || key[KEY_RIGHT] || key[KEY_LEFT] || Started )
+ 		{
+ 			ifstream test;
++			int orig_level = level_selected;
++			int orig_dir   = dir_selected;
+ 
+ 			Started = false;
+ 
+@@ -1204,12 +1200,12 @@
+ 
+ 			if( level_selected > 0 )
+ 			{
+-				if( key[KEY_RIGHT] ) { dir_selected++; }
+-				else if( key[KEY_LEFT] && dir_selected > 1 ) { dir_selected--; }
++				if( key[KEY_RIGHT] ) { dir_selected++; level_selected = 1; }
++				else if( key[KEY_LEFT] && dir_selected > 1 ) { dir_selected--; level_selected = 1; }
+ 
+ 				//TheNumber = itoa(dir_selected,ch_buf,10);
+ 
+-				snprintf(ch_buf, 10, "%d", level_selected);
++				snprintf(ch_buf, 10, "%d", dir_selected);
+ 				TheNumber = ch_buf;
+ 				dir_to_load="levels"+TheNumber;
+ 				
+@@ -1218,9 +1214,21 @@
+ 				TheNumber = ch_buf;
+ 				inf_to_load = dir_to_load + "/level" + TheNumber + ".ini";
+ 
+-				test.open(inf_to_load.c_str());
++				test.open(("/usr/share/ants/" + inf_to_load).c_str());
+ 
+-				if( !exists(inf_to_load.c_str()) ) level_name = "----------";
++				if( !exists(("/usr/share/ants/" + inf_to_load).c_str()) )
++				{
++					dir_selected   = orig_dir;
++					level_selected = orig_level;
++					
++					snprintf(ch_buf, 10, "%d", dir_selected);
++					TheNumber = ch_buf;
++					dir_to_load="levels"+TheNumber;
++					
++					snprintf(ch_buf, 10, "%d", level_selected);
++					TheNumber = ch_buf;
++					inf_to_load = dir_to_load + "/level" + TheNumber + ".ini";
++				}
+ 				else
+ 				{
+ 					test >> level_name;
+@@ -1235,12 +1243,12 @@
+ 			}
+ 		}
+ 
+-		blit(title,buffer,0,0,320,0,320,240);
+-		textprintf(buffer,font,146+320,162,65535,"%i",level_selected);
+-		textprintf(buffer,font,146+320,176,65535,"%s",level_name.c_str() );
+-		textprintf(buffer,font,146+320,190,65535,"%s",inf_to_load.c_str() );
+-		textprintf(buffer,font,275+320,27,C_LGrey,"v1.4");
+-		blit(buffer,screen,320,0,0,0,320,240);
++		blit(title,buffer,0,0,0,0,320,240);
++		textprintf(buffer,font,146,162,65535,"%i",level_selected);
++		textprintf(buffer,font,146,176,65535,"%s",level_name.c_str() );
++		textprintf(buffer,font,146,190,65535,"%s",inf_to_load.c_str() );
++		textprintf(buffer,font,275,27,C_LGrey,"v1.4");
++		stretch_blit(buffer,screen,0,0,320,240,0,0,640,480);
+ 
+ 		readkey();
+ 
+@@ -1264,24 +1272,19 @@
+ {
+ 	set_color_conversion(COLORCONV_REDUCE_TRUE_TO_HI);
+ 	
+-	df << "Initializing Linked Lists..." << endl;
+ 	F_Ant.N_Ant = &L_Ant;
+ 	L_Ant.P_Ant = &F_Ant;
+ 
+ 	F_Coin.N_Coin = &L_Coin;
+ 	L_Coin.P_Coin = &F_Coin;
+ 
+-	df << "Creating video bitmap buffer..." << endl;
+-	buffer = create_video_bitmap(640,240);
+-	if( !buffer ) { buffer = create_bitmap(640,240); df << "Cannot support video bitmap, using normal bitmap." << endl; }
++	buffer = create_bitmap(320,240);
+ 	clear_bitmap(buffer);
+ 
+-	df << "Loading images..." << endl;
+ 	point = (BITMAP *)data[ADF_point].dat;
+ 	title = (BITMAP *)data[ADF_title].dat;
+ 	status = (BITMAP *)data[ADF_status].dat;
+ 
+-	df << "Creating color table..." << endl;
+ 	C_Red = makecol16(255, 0, 0);
+     C_Blue = makecol16(0, 0, 255);
+ 	C_Green = makecol16(0, 255, 0);
+@@ -1303,7 +1306,6 @@
+ 	block[10] = (BITMAP *)data[ADF_fast].dat;
+ 	block[11] = (BITMAP *)data[ADF_pause].dat;
+ 
+-	df << "Loading sounds..." << endl;
+ 	S_begin = (SAMPLE *)data[ADF_begin].dat;
+ 	S_dink = (SAMPLE *)data[ADF_dink].dat;
+ 	S_drown = (SAMPLE *)data[ADF_drown].dat;
+@@ -1328,7 +1330,6 @@
+ 	S_safe[2] = (SAMPLE *)data[ADF_safe3].dat;
+ 	S_safe[3] = (SAMPLE *)data[ADF_safe4].dat;
+ 
+-	df << "Setting mouse info..." << endl;
+ 	set_mouse_sprite(point);
+ 	set_mouse_sprite_focus(3, 3);
+ }
+@@ -1337,31 +1338,31 @@
+ {
+ 	for(int i=0;i<12;i++)
+ 	{
+-		blit(block[i],buffer,0,0,((i*25))+320,205,25,35);
+-		if( JobSlot[i] != -1 && i < 10 ) { textprintf_centre(buffer,font,((i*25)+13)+320,228,65535,"%i",JobSlot_Amt[i]); }
+-		if( block_selected == i ) rect(buffer, ((i*25))+320, 205, ((i*25)+24)+320, 239, C_Yellow);
+-		if( i == Red_Slot ) { rect(buffer,((i*25))+322,208,((i*25)+21)+321,236,C_Red); }
+-		else if( i == Green_Slot ) { rect(buffer,((i*25))+322,208,((i*25)+21)+321,236,C_Green); }
+-		else if( i == Blue_Slot ) { rect(buffer,((i*25))+322,208,((i*25)+21)+321,236,C_Blue); }
+-	}
+-	blit(status,buffer,0,0,620,205,20,35);
+-	if( ANTS_SAVED < ANTS_TO_SAVE ) { textprintf_centre(buffer,font,630,212,C_Red,"%i",ANTS_SAVED); }
+-	else { textprintf_centre(buffer,font,630,212,C_Green,"%i",ANTS_SAVED); }
+-	textprintf_centre(buffer,font,630,230,65535,"%i",ANTS_OUT);
++		blit(block[i],buffer,0,0,((i*25)),205,25,35);
++		if( JobSlot[i] != -1 && i < 10 ) { textprintf_centre(buffer,font,((i*25)+13),228,65535,"%i",JobSlot_Amt[i]); }
++		if( block_selected == i ) rect(buffer, ((i*25)), 205, ((i*25)+24), 239, C_Yellow);
++		if( i == Red_Slot ) { rect(buffer,((i*25))+2,208,((i*25)+21)+1,236,C_Red); }
++		else if( i == Green_Slot ) { rect(buffer,((i*25))+2,208,((i*25)+21)+1,236,C_Green); }
++		else if( i == Blue_Slot ) { rect(buffer,((i*25))+2,208,((i*25)+21)+1,236,C_Blue); }
++	}
++	blit(status,buffer,0,0,300,205,20,35);
++	if( ANTS_SAVED < ANTS_TO_SAVE ) { textprintf_centre(buffer,font,310,212,C_Red,"%i",ANTS_SAVED); }
++	else { textprintf_centre(buffer,font,310,212,C_Green,"%i",ANTS_SAVED); }
++	textprintf_centre(buffer,font,310,230,65535,"%i",ANTS_OUT);
+ 
+-	if( Nukem ) { textprintf_centre(buffer,font,160+320,0,65535,"Nukage. Press [ESC] to exit."); }
++	if( Nukem ) { textprintf_centre(buffer,font,160,0,65535,"Nukage. Press [ESC] to exit."); }
+ 
+ 	if( key[KEY_RIGHT] )
+ 	{
+-		line(buffer,mouse_x-3+320,mouse_y+6,mouse_x+3+320,mouse_y+6,65535);
+-		line(buffer,mouse_x+3+320,mouse_y+6,mouse_x+1+320,mouse_y+4,65535);
+-		line(buffer,mouse_x+3+320,mouse_y+6,mouse_x+1+320,mouse_y+8,65535);
++		line(buffer,(mouse_x/2)-3,(mouse_y/2)+6,(mouse_x/2)+3,(mouse_y/2)+6,65535);
++		line(buffer,(mouse_x/2)+3,(mouse_y/2)+6,(mouse_x/2)+1,(mouse_y/2)+4,65535);
++		line(buffer,(mouse_x/2)+3,(mouse_y/2)+6,(mouse_x/2)+1,(mouse_y/2)+8,65535);
+ 	}
+ 	else if( key[KEY_LEFT] )
+ 	{
+-		line(buffer,mouse_x-3+320,mouse_y+6,mouse_x+3+320,mouse_y+6,65535);
+-		line(buffer,mouse_x-3+320,mouse_y+6,mouse_x-1+320,mouse_y+4,65535);
+-		line(buffer,mouse_x-3+320,mouse_y+6,mouse_x-1+320,mouse_y+8,65535);
++		line(buffer,(mouse_x/2)-3,(mouse_y/2)+6,(mouse_x/2)+3,(mouse_y/2)+6,65535);
++		line(buffer,(mouse_x/2)-3,(mouse_y/2)+6,(mouse_x/2)-1,(mouse_y/2)+4,65535);
++		line(buffer,(mouse_x/2)-3,(mouse_y/2)+6,(mouse_x/2)-1,(mouse_y/2)+8,65535);
+ 	}
+ }
+ 
+@@ -1371,7 +1372,7 @@
+ 	ANT *selected = &F_Ant;
+ 	for(ANT *a=F_Ant.N_Ant;a!=&L_Ant;a=a->N_Ant)
+ 	{
+-		c_DFC = abs(a->X-(mouse_x+Screen_X)) + abs(a->Y-2-(mouse_y+Screen_Y));
++		c_DFC = abs(a->X-((mouse_x/2)+Screen_X)) + abs(a->Y-2-((mouse_y/2)+Screen_Y));
+ 		if( key[KEY_RIGHT] && a->Direction < 1 || key[KEY_LEFT] && a->Direction > -1 ) { c_DFC = 6; }
+ 		if( c_DFC < DFC )
+ 		{
+@@ -1398,10 +1399,10 @@
+ 	}
+ 	else { DownKey = false; }
+ 
+-	if( mouse_x > 317 && Screen_X < level->w-320 ) Screen_X++;
+-	if( mouse_x < 3 && Screen_X > 0 ) Screen_X--;
+-	if( mouse_y > 237 && Screen_Y < level->h-205 ) Screen_Y++;
+-	if( mouse_y < 3 && Screen_Y > 0 ) Screen_Y--;
++	if( (mouse_x/2) > 317 && Screen_X < level->w-320 ) Screen_X++;
++	if( (mouse_x/2) < 3 && Screen_X > 0 ) Screen_X--;
++	if( (mouse_y/2) > 237 && Screen_Y < level->h-205 ) Screen_Y++;
++	if( (mouse_y/2) < 3 && Screen_Y > 0 ) Screen_Y--;
+ 
+ 	if( key[KEY_1] ) { if(block_selected!=0){block_selected=0; SelJob = JobSlot[block_selected]; play_sample(S_select,50,128,700,false);} }
+ 	else if( key[KEY_2] ) { if(block_selected!=1){block_selected=1; SelJob = JobSlot[block_selected]; play_sample(S_select,50,128,750,false);} }
+@@ -1418,10 +1419,10 @@
+ 	{
+ 		if( !mouse_down )
+ 		{
+-			if( mouse_y > 205 && mouse_x < 300 )
++			if( (mouse_y/2) > 205 && (mouse_x/2) < 300 )
+ 			{
+ 				mouse_down = true;
+-				TheJob = (mouse_x)/25;
++				TheJob = ((mouse_x/2))/25;
+ 				if( block_selected == TheJob )
+ 				{
+ 					TheJob = old_block;
+@@ -1506,11 +1507,11 @@
+ 
+ 		if( math_x > 0 && math_x < 320 && math_y > 0 && math_y < 205 )
+ 		{
+-			circlefill(buffer,math_x+320,math_y,1,c->Color);
++			circlefill(buffer,math_x,math_y,1,c->Color);
+ 			if( c->ticker++ > 40 )
+ 			{ 
+ 				if( c->ticker > 80 ) c->ticker=0; 
+-				circle(buffer,math_x+320,math_y,2,C_Yellow);
++				circle(buffer,math_x,math_y,2,C_Yellow);
+ 			}
+ 		}
+ 
+@@ -1520,9 +1521,9 @@
+ 
+ 	for(ANT *a=F_Ant.N_Ant;a!=&L_Ant;a=a->N_Ant)
+ 	{
+-		if( a->X+320-Screen_X >= 320 && a->X+320-Screen_X < 640
++		if( a->X-Screen_X >= 0 && a->X-Screen_X < 320
+ 			&& a->Y-Screen_Y >= 0 && a->Y-Screen_Y < 240 )
+-				vline(buffer, a->X+320-Screen_X, a->Y-Screen_Y, a->Y-2-Screen_Y, a->Color);
++				vline(buffer, a->X-Screen_X, a->Y-Screen_Y, a->Y-2-Screen_Y, a->Color);
+ 
+ 		if( a->CurrentJob != -3 )
+ 		{
+@@ -1544,11 +1545,11 @@
+ 		{
+ 			if( block_selected != 11 ) a->i5++;
+ 
+-			if( a->i5 < 60 ) { masked_blit(number[4],buffer,0,0,a->X-2+320-Screen_X,a->Y-9-Screen_Y,4,5); }
+-			else if( a->i5 < 120 ) { masked_blit(number[3],buffer,0,0,a->X-2+320-Screen_X,a->Y-9-Screen_Y,4,5); }
+-			else if( a->i5 < 180 ) { masked_blit(number[2],buffer,0,0,a->X-2+320-Screen_X,a->Y-9-Screen_Y,4,5); }
+-			else if( a->i5 < 240 ) { masked_blit(number[1],buffer,0,0,a->X-2+320-Screen_X,a->Y-9-Screen_Y,4,5); }
+-			else if( a->i5 < 300 ) { masked_blit(number[0],buffer,0,0,a->X-2+320-Screen_X,a->Y-9-Screen_Y,4,5); }
++			if( a->i5 < 60 ) { masked_blit(number[4],buffer,0,0,a->X-2-Screen_X,a->Y-9-Screen_Y,4,5); }
++			else if( a->i5 < 120 ) { masked_blit(number[3],buffer,0,0,a->X-2-Screen_X,a->Y-9-Screen_Y,4,5); }
++			else if( a->i5 < 180 ) { masked_blit(number[2],buffer,0,0,a->X-2-Screen_X,a->Y-9-Screen_Y,4,5); }
++			else if( a->i5 < 240 ) { masked_blit(number[1],buffer,0,0,a->X-2-Screen_X,a->Y-9-Screen_Y,4,5); }
++			else if( a->i5 < 300 ) { masked_blit(number[0],buffer,0,0,a->X-2-Screen_X,a->Y-9-Screen_Y,4,5); }
+ 			else
+ 			{
+ 				if( a->i5 > 308 ) { a->Remove(); }
+@@ -1618,9 +1619,9 @@
+ 
+ 	play_sample(S_begin,110,128,1000,false);
+ 
+-	rect(screen,10,80,310,160,65535);
+-	textprintf_centre(screen,font,160,100,65535,"Save %i out of %i ants!",ANTS_TO_SAVE,MAX_ANTS);
+-	textprintf_centre(screen,font,160,140,65535,"Press any key to continue.");
++	rect(screen,170,200,470,280,65535);
++	textprintf_centre(screen,font,320,220,65535,"Save %i out of %i ants!",ANTS_TO_SAVE,MAX_ANTS);
++	textprintf_centre(screen,font,320,260,65535,"Press any key to continue.");
+ 
+ 	while( key[KEY_ENTER] ) { yield_timeslice(); }
+ 
+@@ -1631,6 +1632,7 @@
+ 	clear_keybuf();
+ 
+ 	show_mouse(screen);
++	enable_hardware_cursor();
+ 
+ 	while( GamePlaying )
+ 	{
+@@ -1638,14 +1640,12 @@
+ 
+ 		acquire_bitmap(buffer);
+ 
+-		blit(pretty_level,buffer,Screen_X,Screen_Y,320,0,320,205);
++		blit(pretty_level,buffer,Screen_X,Screen_Y,0,0,320,205);
+ 		Ants_Control();
+ 		Draw_GUI();
+ 		Input_Control();
+ 
+-		show_mouse(NULL);
+-		blit(buffer,screen,320,0,0,0,320,240);
+-		show_mouse(screen);
++		stretch_blit(buffer,screen,0,0,320,240,0,0,640,480);
+ 
+ 		release_bitmap(buffer);
+ 
+@@ -1667,19 +1667,19 @@
+ 	show_mouse(NULL);
+ 
+ 	clear_bitmap(screen);
+-	rect(screen,10,80,310,160,65535);
++	rect(screen,170,200,470,280,65535);
+ 	
+ 	if( ANTS_SAVED < ANTS_TO_SAVE )
+ 	{
+-		textprintf_centre(screen,font,160,100,C_Red,"You needed to save %i more ants!",ANTS_TO_SAVE-ANTS_SAVED);
+-		textprintf_centre(screen,font,160,140,C_Red,"Press any key to continue.");
++		textprintf_centre(screen,font,320,220,C_Red,"You needed to save %i more ants!",ANTS_TO_SAVE-ANTS_SAVED);
++		textprintf_centre(screen,font,320,260,C_Red,"Press any key to continue.");
+ 
+ 		play_sample(S_fail,110,128,650,false);
+ 	}
+ 	else
+ 	{
+-		textprintf_centre(screen,font,160,100,C_Green,"Great job!");
+-		textprintf_centre(screen,font,160,140,C_Green,"Press any key to continue.");
++		textprintf_centre(screen,font,320,220,C_Green,"Great job!");
++		textprintf_centre(screen,font,320,260,C_Green,"Press any key to continue.");
+ 		if( level_selected > 0 ) level_selected++;
+ 	}
+ 
+@@ -1694,41 +1694,28 @@
+ 	Main_Menu();
+ }
+ 
+-void main()
++int main()
+ {
+-	df.open("debug.log");
+-
+-	df << "Init Allegro..." << endl;
+-
+ 	allegro_init();
+ 
+-	df << "Installing keyboard..." << endl;
+-
+ 	install_keyboard();
+-	df << "Installing timer..." << endl;
+ 	install_timer();
+-	df << "Installing mouse..." << endl;
+ 	install_mouse();
+ 
+-	df << "Setting color depth..." << endl;
+ 	set_color_depth(16);
+-	df << "Changing graphics mode..." << endl;
+-	set_gfx_mode(GFX_AUTODETECT,320,240,0,0);
+-	df << "Setting text mode to -1..." << endl;
++	set_gfx_mode(GFX_AUTODETECT,640,480,0,0);
+ 	text_mode(-1);
+ 
+-	df << "Installing sound driver..." << endl;
+ 	install_sound(DIGI_AUTODETECT,MIDI_NONE,NULL);
+ 
+-	df << "Loading packfile..." << endl;
+ 	packfile_password("AntsData");
+-	data = load_datafile("ants.dat");
++	data = load_datafile("/usr/share/ants/ants.dat");
+ 	packfile_password(NULL);
+ 
+-	df << "Starting the Init_Game() routine..." << endl;
+ 	Init_Game();
+-	df << "Entering the Main_Menu()..." << endl;
+ 	Main_Menu();
++	
++	return 0;
+ }
+ 
+ END_OF_MAIN();

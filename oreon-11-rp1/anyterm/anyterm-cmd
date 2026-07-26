@@ -1,0 +1,34 @@
+#!/bin/bash
+# Default command anyterm will run.
+# Simply prompt the user for a username and 
+# ssh locally as that user
+
+set -eo pipefail
+
+while : ; do
+    echo -n "Username: "
+    read U
+    if [[ -z "$U" ]]; then
+	echo "Disconnecting."
+	exit
+    fi
+    # Make sure it does not start with a "-" and only contains valid
+    # username characters.
+    if [[ "$U" =~ ^[A-Za-z0-9_][A-Za-z0-9_-]*$ ]]; then
+	cd ~
+
+	if [[ ! -e .ssh/known_hosts ]]; then
+	    mkdir -p --mode=700 .ssh
+	    for k in /etc/ssh/ssh_host_{rsa,dsa}_key.pub; do
+		if [[ -r "$k" ]]; then
+		    echo -n "localhost.localdomain "
+		    cat "$k"
+		fi
+	    done >.ssh/known_hosts
+	fi
+
+	ssh -l "$U" localhost.localdomain" || :
+    else
+	echo "Bad username."
+    fi
+done

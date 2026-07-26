@@ -1,0 +1,428 @@
+                                                                                                                                                                                                                                                               
+Delivered-To: miro@hroncok.cz
+Received: by 10.66.254.169 with SMTP id aj9csp11601pad;
+        Sat, 15 Dec 2012 03:12:16 -0800 (PST)
+Received: by 10.42.215.10 with SMTP id hc10mr6901075icb.19.1355569934800;
+        Sat, 15 Dec 2012 03:12:14 -0800 (PST)
+Return-Path: <derek.bradley@disneyresearch.com>
+Received: from mail-ia0-f178.google.com (mail-ia0-f178.google.com [209.85.210.178])
+        by mx.google.com with ESMTPS id cf7si7598398icc.23.2012.12.15.03.12.12
+        (version=TLSv1/SSLv3 cipher=OTHER);
+        Sat, 15 Dec 2012 03:12:13 -0800 (PST)
+Received-SPF: pass (google.com: domain of derek.bradley@disneyresearch.com designates 209.85.210.178 as permitted sender) client-ip=209.85.210.178;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of derek.bradley@disneyresearch.com designates 209.85.210.178 as permitted sender) smtp.mail=derek.bradley@disneyresearch.com
+Received: by mail-ia0-f178.google.com with SMTP id k25so3909235iah.9
+        for <miro@hroncok.cz>; Sat, 15 Dec 2012 03:12:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20120113;
+        h=mime-version:in-reply-to:references:date:message-id:subject:from:to
+         :content-type:x-gm-message-state;
+        bh=Qbmn3vSuhzQu42fVM6ixjkXawCukgkHEfW6ibdqYEIg=;
+        b=WlJP81ZozLxp4xuapu1vacB2pD5q60LY8Wrym9Jnw8mGxTLBfMEo9jDif9Ge1a+ytX
+         f/ESPwGRThFhBtIz0mbCOVfrmsnmOh+pD6hPOcZQZaiidy0QkNfrlGLLJKjEduIzhq89
+         o5KNvC7zYSTscivKrVDWzFPCnBA4OP8cLSiVOpjObLq8OrJEuHE3tU2hEhIZwLOHoH5l
+         tbNm935U8ewItDmYXVAsKYpBh9/QqnfsXam7iAOJ+N3FCcuw/SjAYEfTXzo32mPOW7/B
+         f59ZbF7rc8xyeBu/Vi8UTIdBz2LLSt2d0HIHicyEMa5U/D4zMzFQJJXJpdLwmfcwR+eY
+         h7xQ==
+MIME-Version: 1.0
+Received: by 10.50.150.167 with SMTP id uj7mr4296553igb.33.1355569932340; Sat,
+ 15 Dec 2012 03:12:12 -0800 (PST)
+Received: by 10.64.136.76 with HTTP; Sat, 15 Dec 2012 03:12:12 -0800 (PST)
+In-Reply-To: <CAG7fsRSpLFu=XMVbskxA4SEGpNCtpdER5f5uewbv3ewbEwmnXQ@mail.gmail.com>
+References: <CAG7fsRR4BUSQ+92HKORDsRtxF=dGZ2zBYjSf0SW2HCxBY+82Tg@mail.gmail.com>
+	<CAHsWv6ptuzY9ihO_i9C3qTPhgA=de-JrtBs0KysH6E2RFxSKAQ@mail.gmail.com>
+	<CAG7fsRTMF6u5VPi2tZe0US26zY+ijqrB1tJDYNGfb3qE-1Px8w@mail.gmail.com>
+	<CAG7fsRQ+FMF6+mohoKadX9T_AToMuh_BF7znkwffQiJqkKgOqw@mail.gmail.com>
+	<CAHsWv6p_rMgEAa6AiRP3AF5j1gJpyxrEdwRQJq9hAQi_TaGrcw@mail.gmail.com>
+	<CAG7fsRSpLFu=XMVbskxA4SEGpNCtpdER5f5uewbv3ewbEwmnXQ@mail.gmail.com>
+Date: Sat, 15 Dec 2012 12:12:12 +0100
+Message-ID: <CAHsWv6oQHh51=D47TmA6CQPQ7qy-iwr2JgocTWCsPcmwEx4RVw@mail.gmail.com>
+Subject: Re: Veronoi license
+From: Derek Bradley <derek.bradley@disneyresearch.com>
+To: =?UTF-8?Q?Miro_Hron=C4=8Dok?= <miro@hroncok.cz>
+Content-Type: multipart/alternative; boundary=f46d04339d40490be704d0e2384d
+X-Gm-Message-State: ALoCoQkYIoib+mRquySW7V1IAOvo8Sg99byn5P7bfiT6ux2zOcPW0TGrlCRIdzGLFVjHYb3Nf4kV
+
+--f46d04339d40490be704d0e2384d
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+The Voronoi code I modified came originally from Steve Fortune.  It is free
+software, so you can redistribute it and/or modify it under the same terms
+as the original code from Steve Fortune.
+Derek Bradley
+
+On Sat, Dec 15, 2012 at 11:13 AM, Miro Hron=C4=8Dok <miro@hroncok.cz> wrote=
+:
+
+> Sorry for disturbing you again,
+> could you please send me a full statement, something like this?
+>
+> "The Veronoi code from Steven Fortune with my modifications is free
+> software, you can redistribute it and/or modify it under the same
+> terms as the original code from Steven Fortune."
+>
+> (Probably without quoting me)
+>
+> Thanks again,
+> Miro Hron=C4=8Dok
+>
+> Jabber: miro@hroncok.cz
+> Telefon: +420777974800
+>
+>
+> 2012/12/12 Derek Bradley <derek.bradley@disneyresearch.com>:
+> > hi,
+> > Actually I never went to MIT... so technically *my* parts of the code a=
+re
+> > probably not under the MIT license.
+> > But most of that code is directly from Steve Fortune, and the changes I
+> made
+> > are quite small.  So probably my version is still under the MIT license=
+.
+> > So you can distribute the code with my changes under the MIT license.
+> > Sound ok?
+> > Derek
+> >
+> > On Wed, Dec 12, 2012 at 11:51 PM, Miro Hron=C4=8Dok <miro@hroncok.cz> w=
+rote:
+> >>
+> >> Sorry for the incorrect statement about the "use" world, don't know,
+> >> where it came from :D
+> >>
+> >> Miro Hron=C4=8Dok
+> >>
+> >> Jabber: miro@hroncok.cz
+> >> Telefon: +420777974800
+> >>
+> >>
+> >> 2012/12/12 Miro Hron=C4=8Dok <miro@hroncok.cz>:
+> >> > Could you please use the full statement like this:
+> >> >
+> >> > "You can distribute the code under the terms of MIT license"
+> >> >
+> >> > The word "use" is kind of tricky.
+> >> >
+> >> > Thanks,
+> >> > Miro Hron=C4=8Dok
+> >> >
+> >> > Jabber: miro@hroncok.cz
+> >> > Telefon: +420777974800
+> >> >
+> >> >
+> >> > 2012/12/12 Derek Bradley <derek.bradley@disneyresearch.com>:
+> >> >> hi Miro,
+> >> >> Sure, you can distribute the code.
+> >> >> best,
+> >> >> Derek
+> >> >>
+> >> >> On Wed, Dec 12, 2012 at 11:45 PM, Miro Hron=C4=8Dok <miro@hroncok.c=
+z>
+> wrote:
+> >> >>>
+> >> >>> Hello,
+> >> >>> Hope you are the right Derek Bradley :)
+> >> >>>
+> >> >>> I am currently trying to package some software to Fedora. One part
+> of
+> >> >>> this software is Perl module Math::Geometry::Voronoi, but it has a
+> >> >>> license issue:
+> >> >>>
+> >> >>> "As far as I can tell the underlying C code used here never had a
+> >> >>> license attached to it, or if it did I couldn't find any trace of
+> it.
+> >> >>> If this worries you please contact Steve and Derek through the lin=
+ks
+> >> >>> above."
+> >> >>>
+> >> >>> The underaying code is your code that used to be located on this
+> >> >>> website [1]. It now seem it is located on the new place [2].
+> >> >>>
+> >> >>> I'v already contacted Steve Fortune and he agrees to distribute hi=
+s
+> >> >>> code [3] under the terms of the MIT license [4].
+> >> >>>
+> >> >>> I would really appreciate, if you could do the same thing.
+> >> >>>
+> >> >>> Thank You very much,
+> >> >>> Miro Hron=C4=8Dok
+> >> >>>
+> >> >>> [1] http://www.derekbradley.ca/voronoi.html
+> >> >>> [2] http://zurich.disneyresearch.com/derekbradley/voronoi.html
+> >> >>> [3] http://cm.bell-labs.com/who/sjf/
+> >> >>> [4] http://en.wikipedia.org/wiki/MIT_license
+> >> >>
+> >> >>
+> >> >>
+> >> >>
+> >> >> --
+> >> >> Derek Bradley
+> >> >> Associate Research Scientist
+> >> >>
+> >> >> The Walt Disney Company (Switzerland) GmbH
+> >> >> Disney Research Zurich
+> >> >> Clausiusstrasse 49, 8092 Zurich
+> >> >> +41 44 632 97 54
+> >> >>
+> >> >> Think Before you Print!
+> >> >>
+> >> >> This email, including attachments, is private and confidential. If
+> you
+> >> >> have
+> >> >> received this email in error, please notify the sender and delete i=
+t
+> >> >> from
+> >> >> your system. Emails are not secure and may contain viruses. No
+> >> >> liability can
+> >> >> be accepted for viruses that might be transferred by this email or
+> any
+> >> >> attachment.
+> >
+> >
+> >
+> >
+> > --
+> > Derek Bradley
+> > Associate Research Scientist
+> >
+> > The Walt Disney Company (Switzerland) GmbH
+> > Disney Research Zurich
+> > Clausiusstrasse 49, 8092 Zurich
+> > +41 44 632 97 54
+> >
+> > Think Before you Print!
+> >
+> > This email, including attachments, is private and confidential. If you
+> have
+> > received this email in error, please notify the sender and delete it fr=
+om
+> > your system. Emails are not secure and may contain viruses. No liabilit=
+y
+> can
+> > be accepted for viruses that might be transferred by this email or any
+> > attachment.
+>
+
+
+
+--=20
+Derek Bradley
+Associate Research Scientist
+
+The Walt Disney Company (Switzerland) GmbH
+Disney Research Zurich
+Clausiusstrasse 49, 8092 Zurich
++41 44 632 97 54
+
+Think Before you Print!
+
+This email, including attachments, is private and confidential. If you have
+received this email in error, please notify the sender and delete it from
+your system. Emails are not secure and may contain viruses. No liability
+can be accepted for viruses that might be transferred by this email or any
+attachment.
+
+--f46d04339d40490be704d0e2384d
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<font face=3D"arial,helvetica,sans-serif">The Voronoi code I modified came =
+originally from Steve Fortune. =C2=A0It is free software, so you can redist=
+ribute it and/or modify it under the same terms as the original code from S=
+teve Fortune. =C2=A0</font><div>
+<font face=3D"arial,helvetica,sans-serif">Derek Bradley<br></font><br><div =
+class=3D"gmail_quote">On Sat, Dec 15, 2012 at 11:13 AM, Miro Hron=C4=8Dok <=
+span dir=3D"ltr">&lt;<a href=3D"mailto:miro@hroncok.cz" target=3D"_blank">m=
+iro@hroncok.cz</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Sorry for disturbing you again,<br>
+could you please send me a full statement, something like this?<br>
+<br>
+&quot;The Veronoi code from Steven Fortune with my modifications is free<br=
+>
+software, you can redistribute it and/or modify it under the same<br>
+terms as the original code from Steven Fortune.&quot;<br>
+<br>
+(Probably without quoting me)<br>
+<br>
+Thanks again,<br>
+<div class=3D"HOEnZb"><div class=3D"h5">Miro Hron=C4=8Dok<br>
+<br>
+Jabber: <a href=3D"mailto:miro@hroncok.cz">miro@hroncok.cz</a><br>
+Telefon: <a href=3D"tel:%2B420777974800" value=3D"+420777974800">+420777974=
+800</a><br>
+<br>
+<br>
+2012/12/12 Derek Bradley &lt;<a href=3D"mailto:derek.bradley@disneyresearch=
+.com">derek.bradley@disneyresearch.com</a>&gt;:<br>
+&gt; hi,<br>
+&gt; Actually I never went to MIT... so technically *my* parts of the code =
+are<br>
+&gt; probably not under the MIT license.<br>
+&gt; But most of that code is directly from Steve Fortune, and the changes =
+I made<br>
+&gt; are quite small. =C2=A0So probably my version is still under the MIT l=
+icense.<br>
+&gt; So you can distribute the code with my changes under the MIT license.<=
+br>
+&gt; Sound ok?<br>
+&gt; Derek<br>
+&gt;<br>
+&gt; On Wed, Dec 12, 2012 at 11:51 PM, Miro Hron=C4=8Dok &lt;<a href=3D"mai=
+lto:miro@hroncok.cz">miro@hroncok.cz</a>&gt; wrote:<br>
+&gt;&gt;<br>
+&gt;&gt; Sorry for the incorrect statement about the &quot;use&quot; world,=
+ don&#39;t know,<br>
+&gt;&gt; where it came from :D<br>
+&gt;&gt;<br>
+&gt;&gt; Miro Hron=C4=8Dok<br>
+&gt;&gt;<br>
+&gt;&gt; Jabber: <a href=3D"mailto:miro@hroncok.cz">miro@hroncok.cz</a><br>
+&gt;&gt; Telefon: <a href=3D"tel:%2B420777974800" value=3D"+420777974800">+=
+420777974800</a><br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; 2012/12/12 Miro Hron=C4=8Dok &lt;<a href=3D"mailto:miro@hroncok.cz=
+">miro@hroncok.cz</a>&gt;:<br>
+&gt;&gt; &gt; Could you please use the full statement like this:<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; &quot;You can distribute the code under the terms of MIT lice=
+nse&quot;<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; The word &quot;use&quot; is kind of tricky.<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; Thanks,<br>
+&gt;&gt; &gt; Miro Hron=C4=8Dok<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; Jabber: <a href=3D"mailto:miro@hroncok.cz">miro@hroncok.cz</a=
+><br>
+&gt;&gt; &gt; Telefon: <a href=3D"tel:%2B420777974800" value=3D"+4207779748=
+00">+420777974800</a><br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; 2012/12/12 Derek Bradley &lt;<a href=3D"mailto:derek.bradley@=
+disneyresearch.com">derek.bradley@disneyresearch.com</a>&gt;:<br>
+&gt;&gt; &gt;&gt; hi Miro,<br>
+&gt;&gt; &gt;&gt; Sure, you can distribute the code.<br>
+&gt;&gt; &gt;&gt; best,<br>
+&gt;&gt; &gt;&gt; Derek<br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt; On Wed, Dec 12, 2012 at 11:45 PM, Miro Hron=C4=8Dok &lt;<=
+a href=3D"mailto:miro@hroncok.cz">miro@hroncok.cz</a>&gt; wrote:<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; Hello,<br>
+&gt;&gt; &gt;&gt;&gt; Hope you are the right Derek Bradley :)<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; I am currently trying to package some software to Fed=
+ora. One part of<br>
+&gt;&gt; &gt;&gt;&gt; this software is Perl module Math::Geometry::Voronoi,=
+ but it has a<br>
+&gt;&gt; &gt;&gt;&gt; license issue:<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; &quot;As far as I can tell the underlying C code used=
+ here never had a<br>
+&gt;&gt; &gt;&gt;&gt; license attached to it, or if it did I couldn&#39;t f=
+ind any trace of it.<br>
+&gt;&gt; &gt;&gt;&gt; If this worries you please contact Steve and Derek th=
+rough the links<br>
+&gt;&gt; &gt;&gt;&gt; above.&quot;<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; The underaying code is your code that used to be loca=
+ted on this<br>
+&gt;&gt; &gt;&gt;&gt; website [1]. It now seem it is located on the new pla=
+ce [2].<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; I&#39;v already contacted Steve Fortune and he agrees=
+ to distribute his<br>
+&gt;&gt; &gt;&gt;&gt; code [3] under the terms of the MIT license [4].<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; I would really appreciate, if you could do the same t=
+hing.<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; Thank You very much,<br>
+&gt;&gt; &gt;&gt;&gt; Miro Hron=C4=8Dok<br>
+&gt;&gt; &gt;&gt;&gt;<br>
+&gt;&gt; &gt;&gt;&gt; [1] <a href=3D"http://www.derekbradley.ca/voronoi.htm=
+l" target=3D"_blank">http://www.derekbradley.ca/voronoi.html</a><br>
+&gt;&gt; &gt;&gt;&gt; [2] <a href=3D"http://zurich.disneyresearch.com/derek=
+bradley/voronoi.html" target=3D"_blank">http://zurich.disneyresearch.com/de=
+rekbradley/voronoi.html</a><br>
+&gt;&gt; &gt;&gt;&gt; [3] <a href=3D"http://cm.bell-labs.com/who/sjf/" targ=
+et=3D"_blank">http://cm.bell-labs.com/who/sjf/</a><br>
+&gt;&gt; &gt;&gt;&gt; [4] <a href=3D"http://en.wikipedia.org/wiki/MIT_licen=
+se" target=3D"_blank">http://en.wikipedia.org/wiki/MIT_license</a><br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt; --<br>
+&gt;&gt; &gt;&gt; Derek Bradley<br>
+&gt;&gt; &gt;&gt; Associate Research Scientist<br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt; The Walt Disney Company (Switzerland) GmbH<br>
+&gt;&gt; &gt;&gt; Disney Research Zurich<br>
+&gt;&gt; &gt;&gt; Clausiusstrasse 49, 8092 Zurich<br>
+&gt;&gt; &gt;&gt; <a href=3D"tel:%2B41%2044%20632%2097%2054" value=3D"+4144=
+6329754">+41 44 632 97 54</a><br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt; Think Before you Print!<br>
+&gt;&gt; &gt;&gt;<br>
+&gt;&gt; &gt;&gt; This email, including attachments, is private and confide=
+ntial. If you<br>
+&gt;&gt; &gt;&gt; have<br>
+&gt;&gt; &gt;&gt; received this email in error, please notify the sender an=
+d delete it<br>
+&gt;&gt; &gt;&gt; from<br>
+&gt;&gt; &gt;&gt; your system. Emails are not secure and may contain viruse=
+s. No<br>
+&gt;&gt; &gt;&gt; liability can<br>
+&gt;&gt; &gt;&gt; be accepted for viruses that might be transferred by this=
+ email or any<br>
+&gt;&gt; &gt;&gt; attachment.<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt; --<br>
+&gt; Derek Bradley<br>
+&gt; Associate Research Scientist<br>
+&gt;<br>
+&gt; The Walt Disney Company (Switzerland) GmbH<br>
+&gt; Disney Research Zurich<br>
+&gt; Clausiusstrasse 49, 8092 Zurich<br>
+&gt; <a href=3D"tel:%2B41%2044%20632%2097%2054" value=3D"+41446329754">+41 =
+44 632 97 54</a><br>
+&gt;<br>
+&gt; Think Before you Print!<br>
+&gt;<br>
+&gt; This email, including attachments, is private and confidential. If you=
+ have<br>
+&gt; received this email in error, please notify the sender and delete it f=
+rom<br>
+&gt; your system. Emails are not secure and may contain viruses. No liabili=
+ty can<br>
+&gt; be accepted for viruses that might be transferred by this email or any=
+<br>
+&gt; attachment.<br>
+</div></div></blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>=
+<font><span style=3D"font-size:11pt"><font style=3D"font-family:arial,helve=
+tica,sans-serif" color=3D"#1f497d">Derek Bradley<br>
+Associate Research Scientist<br>
+</font></span></font><font><span style=3D"font-size:11pt"><font style=3D"fo=
+nt-family:arial,helvetica,sans-serif" color=3D"#1f497d"><br>
+The Walt Disney Company (Switzerland) GmbH<br>Disney Research Zurich<br>Cla=
+usiusstrasse 49, 8092 Zurich<br>+41 44 632 97 54<br>
+</font><font style=3D"font-family:arial,helvetica,sans-serif" color=3D"#1f4=
+97d"><br>
+</font><font style=3D"font-family:arial,helvetica,sans-serif" color=3D"#00b=
+050">Think Before you Print!</font><font color=3D"#1f497d"><br><br style=3D=
+"font-family:arial,helvetica,sans-serif"><span style=3D"font-family:arial,h=
+elvetica,sans-serif">
+This email, including attachments, is private and confidential. If you=20
+have received this email in error, please notify the sender and delete=20
+it from your system. Emails are not secure and may contain viruses. No=20
+liability can be accepted for viruses that might be transferred by this=20
+email or any attachment.</span></font></span></font><br>
+</div>
+
+--f46d04339d40490be704d0e2384d--

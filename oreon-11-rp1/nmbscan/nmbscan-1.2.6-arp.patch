@@ -1,0 +1,26 @@
+https://bugzilla.redhat.com/show_bug.cgi?id=784772
+Jiri Popelka <jpopelka@redhat.com>
+arp is part of net-tools which has been deprecated for some time and we would
+like to eventually get rid of it.
+use 'ip neigh' (equivalent of 'arp -n' from iproute package) instead of 'arp -n' 
+diff -up nmbscan-1.2.6/nmbscan.arp nmbscan-1.2.6/nmbscan
+--- nmbscan-1.2.6/nmbscan.arp	2010-09-08 23:23:40.000000000 +0200
++++ nmbscan-1.2.6/nmbscan	2012-01-26 08:50:35.717190274 +0100
+@@ -384,7 +384,7 @@ EOF
+ function get_mac_by_addr_through_arp
+ {
+     ping -c 1 $1 > /dev/null 2>&1
+-    V=$(arp -n | grep "\\([^0-9]\\|^\\)$1\\([^0-9]\\|$\\)" | grep '..:..:..:..:..:..' | sed 's/.*\(..:..:..:..:..:..\).*/\1/'|head -1|tr "[a-f-]" "[A-F:]")
++    V=$(ip neigh show to $1 | grep '..:..:..:..:..:..' | sed 's/.*\(..:..:..:..:..:..\).*/\1/'|head -1|tr "[a-f-]" "[A-F:]")
+     if [ "$V" = "00:00:00:00:00:00" ]; then
+       echo "-"
+     else
+@@ -614,7 +614,7 @@
+ 
+ function check_dependencies
+ {
+-  for C in ping arp nmblookup smbclient awk egrep grep echo head more sed; do
++  for C in ping ip nmblookup smbclient awk egrep grep echo head more sed; do
+     which $C > /dev/null 2>&1 || echo WARNING: lacking dependency: $C
+   done
+   which nslookup > /dev/null 2>&1 || which host > /dev/null 2>&1 || \

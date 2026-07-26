@@ -1,0 +1,15 @@
+--- a/libgeopm/Makefile.am	2025-06-09 12:33:35.045236346 +0300
++++ b/libgeopm/Makefile.am	2025-06-09 12:34:03.287836666 +0300
+@@ -97,9 +97,9 @@
+ 
+ all-local: $(all_local)
+ 
+-dist_doc_DATA = LICENSE-BSD-3-Clause \
+-                README.md \
+-                VERSION \
++#dist_doc_DATA = LICENSE-BSD-3-Clause \
++#                README.md \
++#                VERSION \
+                 # end
+ 
+ EXTRA_DIST += .gitignore \

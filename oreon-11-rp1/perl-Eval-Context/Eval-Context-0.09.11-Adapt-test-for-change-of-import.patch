@@ -1,0 +1,36 @@
+diff -up Eval-Context-0.09.11/t/010_shared_variables.t.orig Eval-Context-0.09.11/t/010_shared_variables.t
+--- Eval-Context-0.09.11/t/010_shared_variables.t.orig	2024-05-13 10:24:50.180512719 +0200
++++ Eval-Context-0.09.11/t/010_shared_variables.t	2024-05-13 10:25:04.977641250 +0200
+@@ -38,7 +38,7 @@ use Test::NoWarnings qw(had_no_warnings)
+ use Test::More 'no_plan';
+ use Test::Block qw($Plan);
+ 
+-use Eval::Context 'constants' ; 
++use Eval::Context; 
+ 
+ use constant SETUP => 0 ;
+ use constant CODE => 1 ;
+diff -up Eval-Context-0.09.11/t/011_eval_side_persistent_variables.t.orig Eval-Context-0.09.11/t/011_eval_side_persistent_variables.t
+--- Eval-Context-0.09.11/t/011_eval_side_persistent_variables.t.orig	2024-05-13 10:25:36.100911595 +0200
++++ Eval-Context-0.09.11/t/011_eval_side_persistent_variables.t	2024-05-13 10:28:30.111419133 +0200
+@@ -35,7 +35,7 @@ use Test::NoWarnings qw(had_no_warnings)
+ use Test::More 'no_plan';
+ use Test::Block qw($Plan);
+ 
+-use Eval::Context 'constants' ; 
++use Eval::Context; 
+ 
+ {
+ local $Plan = {'EVAL SIDE PERSISTENCE' => 5} ;
+diff -up Eval-Context-0.09.11/t/013_safe_variables.t.orig Eval-Context-0.09.11/t/013_safe_variables.t
+--- Eval-Context-0.09.11/t/013_safe_variables.t.orig	2024-05-13 10:24:06.947137186 +0200
++++ Eval-Context-0.09.11/t/013_safe_variables.t	2024-05-13 10:24:35.173382364 +0200
+@@ -35,7 +35,7 @@ use Test::Warn;
+ use Test::More 'no_plan';
+ use Test::Block qw($Plan);
+ 
+-use Eval::Context 'constants' ; 
++use Eval::Context; 
+ 
+ {
+ local $Plan = {'SAFE and variables from caller side' => 3} ;

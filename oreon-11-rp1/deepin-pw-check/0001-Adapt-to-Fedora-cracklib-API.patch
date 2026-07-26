@@ -1,0 +1,33 @@
+From 0c1d5b27afcc143da618fb3fbe9e2db3b3c223db Mon Sep 17 00:00:00 2001
+From: Robin Lee <cheeselee@fedoraproject.org>
+Date: Tue, 10 Aug 2021 22:29:37 +0800
+Subject: [PATCH 1/2] Adapt to Fedora cracklib API
+
+---
+ lib/word_check.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/word_check.c b/lib/word_check.c
+index fc32446..4b26fc3 100644
+--- a/lib/word_check.c
++++ b/lib/word_check.c
+@@ -378,6 +378,7 @@ int word_check(const char* pw,const char* dict_path) {
+     PWDICT *pwp;
+     unsigned int notfound;
+     int ret = 0;
++    char area[STRINGSIZE];
+ 
+     if (dict_path == NULL || (strcmp(dict_path, "") == 0)){
+         dict_path = GetDefaultCracklibDict();
+@@ -395,7 +396,7 @@ int word_check(const char* pw,const char* dict_path) {
+     {
+         char *a;
+ 
+-        if (!(a = Mangle((char*)pw, r_destructors[i])))
++        if (!(a = Mangle((char*)pw, r_destructors[i], area)))
+         {
+             continue;
+         }
+-- 
+2.31.1
+

@@ -1,0 +1,10 @@
+--- a/pyproject.toml	2025-08-19 22:07:57.058845746 +0300
++++ b/pyproject.toml	2025-08-19 22:08:07.247651325 +0300
+@@ -1,3 +1,7 @@
++[build-system]
++build-backend = "setuptools.build_meta"
++requires = ["setuptools>=68"]
++
+ [project]
+ name = "pepc"
+ version = "1.6.10"

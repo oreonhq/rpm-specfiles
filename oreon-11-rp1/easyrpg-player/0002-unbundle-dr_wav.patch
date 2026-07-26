@@ -1,0 +1,15 @@
+diff -r -U4 Player-0.7.0--orig/CMakeLists.txt Player-0.7.0--patched/CMakeLists.txt
+--- Player-0.7.0--orig/CMakeLists.txt	2021-10-29 21:10:15.000000000 +0200
++++ Player-0.7.0--patched/CMakeLists.txt	2021-11-03 12:56:35.546862548 +0100
+@@ -830,10 +830,9 @@
+ 	if(PLAYER_ENABLE_DRWAV)
+ 		target_compile_definitions(${PROJECT_NAME} PUBLIC WANT_DRWAV=1)
+ 		target_sources(${PROJECT_NAME} PRIVATE
+ 			src/decoder_drwav.cpp
+-			src/decoder_drwav.h
+-			src/external/dr_wav.h)
++			src/decoder_drwav.h)
+ 	endif()
+ endif()
+ 
+ # Executable

@@ -1,0 +1,28 @@
+--- edit-1.2.0/Cargo.toml	2025-06-16 09:08:50.607587435 +0800
++++ edit-1.2.0/Cargo.toml	2025-06-16 09:13:16.289592389 +0800
+@@ -38,25 +38,7 @@
+ [target.'cfg(unix)'.dependencies]
+ libc = "0.2"
+ 
+-[target.'cfg(windows)'.build-dependencies]
+-winresource = "0.1.22"
+-
+-[target.'cfg(windows)'.dependencies.windows-sys]
+-version = "0.59"
+-features = [
+-    "Win32_Globalization",
+-    "Win32_Security",
+-    "Win32_Storage_FileSystem",
+-    "Win32_System_Console",
+-    "Win32_System_Diagnostics_Debug",
+-    "Win32_System_IO",
+-    "Win32_System_LibraryLoader",
+-    "Win32_System_Memory",
+-    "Win32_System_Threading",
+-]
+-
+ [dev-dependencies]
+-criterion = { version = "0.6", features = ["html_reports"] }
+ serde = { version = "1.0", features = ["derive"] }
+ serde_json = { version = "1.0" }
+ zstd = { version = "0.13", default-features = false }

@@ -1,0 +1,53 @@
+--- a/compress.c.orig	2024-03-09 17:09:09.000000000 -0700
++++ b/compress.c	2024-03-14 10:13:55.293122900 -0600
+@@ -66,7 +66,7 @@ int main (int argc, char** argv) {
+   FILE *input  = fopen (argv[1], "r");
+   FILE *output = fopen (argv[2], "w");
+ 
+-  int i, tmp, line, lit, del, size = 0;
++  int i, tmp, line, lit, del = 0, size = 0;
+   int sort = 1;
+ 
+   if (sort) {
+--- a/decompress.c.orig	2024-03-09 17:09:09.000000000 -0700
++++ b/decompress.c	2024-03-14 10:15:47.496560198 -0600
+@@ -46,7 +46,7 @@ int read_lit (FILE* input, ltype *lit) {
+ 
+ int main (int argc, char** argv) {
+   int mode = MODE;
+-  FILE *input;
++  FILE *input = NULL;
+ 
+   if (argc <= 1) {
+     printf("c %s needs one argument: an input in compressed DRAT/LRAT format\n", argv[0]);
+@@ -61,7 +61,7 @@ int main (int argc, char** argv) {
+       if (input == NULL) { printf ("c ERROR opening %s\n", argv[i]); exit (1); } }
+     }
+ 
+-  ltype lit, index;
++  ltype lit, index = 0;
+ 
+   while (1) {
+     read_lit (input, &lit);
+--- a/drat-trim.c.orig	2024-03-14 10:13:50.149194542 -0600
++++ b/drat-trim.c	2024-03-14 10:13:55.293122900 -0600
+@@ -207,7 +207,7 @@ void noAnalyze (struct solver* S) {
+ int propagate (struct solver* S, int init, int mark) { // Performs unit propagation (init not used?)
+   int *start[2];
+   int check = 0, mode = !S->prep;
+-  int i, lit, _lit = 0; long *watch, *_watch;
++  int i, lit, _lit = 0; long *watch, *_watch = NULL;
+   start[0] = start[1] = S->processed;
+   flip_check:;
+   check ^= 1;
+--- a/gapless.c.orig	2024-03-09 17:09:09.000000000 -0700
++++ b/gapless.c	2024-03-14 10:13:55.293122900 -0600
+@@ -75,7 +75,7 @@ int main (int argc, char** argv) {
+   long long *map = (long long*) malloc (sizeof (long long) * mapAlloc);
+ 
+   long long line, lit;
+-  int del, zeros, size = 0;
++  int del = 0, zeros = 0, size = 0;
+ 
+   long long max = offset;
+ 

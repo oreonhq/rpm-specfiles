@@ -1,0 +1,26 @@
+From a3d7effaf56a1138fc5fa1a9f760c9a33b4e58ac Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 25 Dec 2025 11:05:23 +0000
+Subject: [PATCH] Downstream-only; patch out coverage from script test
+
+https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+---
+ tests/test_cli.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/test_cli.py b/tests/test_cli.py
+index 1b07cfe..51359d8 100644
+--- a/tests/test_cli.py
++++ b/tests/test_cli.py
+@@ -4,7 +4,7 @@ import sys
+ 
+ def test_script() -> None:
+     result = subprocess.run(
+-        [sys.executable, "-m", "coverage", "run", "-m", "fastapi_new", "--help"],
++        [sys.executable, "-m", "fastapi_new", "--help"],
+         capture_output=True,
+         encoding="utf-8",
+     )
+-- 
+2.52.0
+

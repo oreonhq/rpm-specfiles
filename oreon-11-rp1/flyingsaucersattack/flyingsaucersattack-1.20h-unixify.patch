@@ -1,0 +1,221 @@
+diff -up fuga120h/sources/Makefile.unix fuga120h/sources/Makefile
+--- fuga120h/sources/Makefile.unix	2016-02-27 16:35:01.604551576 +0100
++++ fuga120h/sources/Makefile	2016-02-27 16:35:01.604551576 +0100
+@@ -0,0 +1,22 @@
++TARGET = flyingsaucersattack
++PREFIX = /usr
++DATADIR = $(PREFIX)/share/$(TARGET)
++DEFINES = -DDATADIR=\"$(DATADIR)\"
++CFLAGS  = -g -Wall -O2 -Wno-deprecated-declarations -Wno-deprecated -Wno-write-strings
++LDFLAGS = -ldumb -laldmb `allegro-config --libs`
++
++$(TARGET): fugamain.cpp
++	g++ $(LDFLAGS) $(CFLAGS) $(DEFINES) -o $@ $^
++
++install: $(TARGET)
++	mkdir -p $(DESTDIR)$(PREFIX)/bin
++	mkdir -p $(DESTDIR)$(DATADIR)
++	install -p -m 755 $(TARGET) $(DESTDIR)$(PREFIX)/bin
++	install -p -m 644 ../FUGADAT2.DAT $(DESTDIR)$(DATADIR)
++
++uninstall:
++	rm $(DESTDIR)$(PREFIX)/bin/$(TARGET)
++	rm $(DESTDIR)$(DATADIR)/FUGADAT2.DAT
++
++clean:
++	rm -f $(TARGET) *~
+diff -up fuga120h/sources/all_text.cpp.unix fuga120h/sources/all_text.cpp
+--- fuga120h/sources/all_text.cpp.unix	2010-01-24 13:49:40.000000000 +0100
++++ fuga120h/sources/all_text.cpp	2016-02-27 16:35:01.604551576 +0100
+@@ -66,7 +66,7 @@ char *ger_text[] =
+   "http://www.dennisbusch.de",
+   "http://alleg.sourceforge.net/",
+   "http://dumb.sf.net/",
+-  "Freeware V.1.20g",
++  "V.1.20h",
+   "powered by:",
+   "Spiel starten",
+   "Schwierigkeit",
+@@ -159,7 +159,7 @@ char *eng_text[] =
+   "http://www.dennisbusch.de",
+   "http://alleg.sourceforge.net/",
+   "http://dumb.sf.net/",
+-  "Freeware V.1.20g",
++  "V.1.20h",
+   "powered by:",
+   "Start Game",
+   "Difficulty",
+diff -up fuga120h/sources/fugamain.cpp.unix fuga120h/sources/fugamain.cpp
+--- fuga120h/sources/fugamain.cpp.unix	2014-10-06 12:21:56.000000000 +0200
++++ fuga120h/sources/fugamain.cpp	2016-02-27 16:37:34.846104698 +0100
+@@ -138,7 +138,7 @@ AL_DUH_PLAYER *music_player=NULL;
+ const int mus_channels = 2;
+ const float mus_volume = 1.0;
+ const float sfx_volume = 0.7; //( 0.0 <= sfx_volume <= 1.0)
+-const long mus_buffer = 4096;
++const int mus_buffer = 4096;
+ const int mus_freq = 44100;
+ // Ende Variablen f¸r DUMB
+ 
+@@ -316,7 +316,7 @@ int fuga_start()
+   // fixes color problem in Windows 7
+   set_color_conversion(COLORCONV_TOTAL |
+                        COLORCONV_KEEP_TRANS);
+-  if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0)==0) runlevel=2; else return 2;
++  if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, 640, 480, 0, 0)==0) runlevel=2; else return 2;
+ 
+   // Backbuffer erzeugen
+   sprintf(debug_msg,messages[msg_create_backbuffer]); debug_add(debug_msg);
+@@ -358,7 +358,7 @@ int fuga_start()
+   packfile_password("..!-:)");
+ 
+   // load and set palette before loading datafile
+-  DATAFILE* pal = load_datafile_object("FUGADAT2.DAT", "GFX_GAMEPAL");
++  DATAFILE* pal = load_datafile_object(DATADIR "/FUGADAT2.DAT", "GFX_GAMEPAL");
+   if(pal != NULL)
+   {
+     set_palette((RGB*)pal->dat);
+@@ -367,7 +367,7 @@ int fuga_start()
+ 
+   }
+ 
+-  fugadata = load_datafile("FUGADAT2.DAT");
++  fugadata = load_datafile(DATADIR "/FUGADAT2.DAT");
+   if (fugadata!=NULL)
+   {
+     sprintf(debug_msg,messages[msg_ok_load_data]); debug_add(debug_msg);
+@@ -775,7 +775,7 @@ void save_top_ten()
+   FILE *scorefile;
+   int i;
+ 
+-  scorefile = fopen("TOPTEN2.DAT","wb");
++  scorefile = fopen(get_homedir_filename("TOPTEN2.DAT"), "wb");
+ 
+   if (scorefile!=NULL)
+   {
+@@ -797,7 +797,7 @@ void load_top_ten()
+   FILE *scorefile;
+   int i;
+ 
+-  scorefile = fopen("TOPTEN2.DAT","rb");
++  scorefile = fopen(get_homedir_filename("TOPTEN2.DAT"), "rb");
+ 
+   if (scorefile!=NULL)
+   {
+@@ -902,7 +902,7 @@ void enter_top_ten()
+ {
+   global_screen_state = enter_top10_screen;
+   int i;
+-  int pos;        // nummer des erreichten Platzes
++  int pos=0;        // nummer des erreichten Platzes
+   int txt_pos=0;
+   bool have_a_score=FALSE;
+   char what='#';
+@@ -1010,16 +1010,21 @@ void main_menue()
+         {
+           ingame_music = (DUH *)fugadata[MUSIC_INGAMEMUSIC].dat;
+           music_player = al_start_duh(ingame_music,mus_channels,0,mus_volume,mus_buffer,mus_freq);
+-          sprintf(debug_msg,"a) DUMB plyr: %x | DUMB duh: %x | ch: %i | vol: %2.4f | buf: %i | freq: %i",music_player,ingame_music,mus_channels,mus_volume,mus_buffer,mus_freq);
++          sprintf(debug_msg,"a) DUMB plyr: %p | DUMB duh: %p | ch: %i | vol: %2.4f | buf: %i | freq: %i",music_player,ingame_music,mus_channels,mus_volume,mus_buffer,mus_freq);
+           debug_add(debug_msg);
+         }
+         game_cycle();
+         if ((can_do_sound)&&(MUSIC_ON)) 
+         { 
+-          sprintf(debug_msg,"b) DUMB plyr: %x | DUMB duh: %x | ch: %i | vol: %2.4f | buf: %i | freq: %i",music_player,ingame_music,mus_channels,mus_volume,mus_buffer,mus_freq);
++          sprintf(debug_msg,"b) DUMB plyr: %p | DUMB duh: %p | ch: %i | vol: %2.4f | buf: %i | freq: %i",music_player,ingame_music,mus_channels,mus_volume,mus_buffer,mus_freq);
+           debug_add(debug_msg);
+-          if(music_player) al_stop_duh(music_player); music_player=NULL; ingame_music=NULL; 
+-          sprintf(debug_msg,"c) DUMB plyr: %x | DUMB duh: %x | ch: %i | vol: %2.4f | buf: %i | freq: %i",music_player,ingame_music,mus_channels,mus_volume,mus_buffer,mus_freq);
++          if (music_player)
++          {
++            al_stop_duh(music_player);
++            music_player=NULL;
++            ingame_music=NULL;
++          }
++          sprintf(debug_msg,"c) DUMB plyr: %p | DUMB duh: %p | ch: %i | vol: %2.4f | buf: %i | freq: %i",music_player,ingame_music,mus_channels,mus_volume,mus_buffer,mus_freq);
+           debug_add(debug_msg);
+         }
+         enter_top_ten();
+diff -up fuga120h/sources/game.cpp.unix fuga120h/sources/game.cpp
+--- fuga120h/sources/game.cpp.unix	2014-10-06 12:30:42.000000000 +0200
++++ fuga120h/sources/game.cpp	2016-02-27 16:35:01.605551573 +0100
+@@ -396,9 +396,9 @@ int get_free_enemy()
+ // Erzeugt an der jeweiligen Kanone ein neues Geschoss
+ void fire_cannon(int which)
+ {
+-  int wx, wy;
++  int wx = 0, wy = 0;
+   bool can_shoot=TRUE;
+-  float wangle;
++  float wangle = 0;
+   
+     switch (which)
+     {
+@@ -892,8 +892,8 @@ void update_screen()
+   textprintf(backbuffer,font,10,110,_COL_15,"animStackTop: %i",anim_top);
+   textprintf(backbuffer,font,10,120,_COL_15,"shotStackTop: %i",shot_top);
+   textprintf(backbuffer,font,10,130,_COL_15,"enmyStackTop: %i",enemy_top);
+-  textprintf(backbuffer,font,10,140,_COL_15,"DUMB plyr: %x",music_player);
+-  textprintf(backbuffer,font,10,150,_COL_15,"DUMB duh : %x",ingame_music);
++  textprintf(backbuffer,font,10,140,_COL_15,"DUMB plyr: %p",music_player);
++  textprintf(backbuffer,font,10,150,_COL_15,"DUMB duh : %p",ingame_music);
+   }
+ 
+   // Mausanzeigen und finalen Blit performen
+@@ -902,7 +902,7 @@ void update_screen()
+   if (screen_shot)
+   {
+     FILE *shotfile=NULL;
+-    shotfile = fopen("shot.raw","wb");
++    shotfile = fopen(get_homedir_filename("shot.raw"), "wb");
+     char col;
+     if (shotfile!=NULL)
+     {
+diff -up fuga120h/sources/system.cpp.unix fuga120h/sources/system.cpp
+--- fuga120h/sources/system.cpp.unix	2010-01-24 14:50:46.000000000 +0100
++++ fuga120h/sources/system.cpp	2016-02-27 16:35:01.605551573 +0100
+@@ -24,6 +24,7 @@
+ #include <stdlib.h>      // fÅr random etc.
+ //#include <conio.h>       // fÅr clrscr(); DOS-spezifisch
+ #include <time.h>        // fÅr die Abfrage der Systemzeit
++#include <linux/limits.h>
+ 
+ #include "message.cpp"   // EnthÑlt alle mîglichen Nachrichten
+ #include "allegro.h"     // ohne Allegro von Shawn Hargreaves lÑuft hier gar nichts
+@@ -194,7 +195,16 @@ void shutdown()
+ };
+ 
+ 
+-
++char *get_homedir_filename(const char *postfix)
++{
++  static char buf[PATH_MAX];
++  const char *home = getenv("HOME");
++  if (!home)
++    home = ".";
++
++  snprintf(buf, PATH_MAX, "%s/.flyingsaucersattack-%s", home, postfix);
++  return buf;
++}
+ 
+ /* init_debug()
+    Legt eine "DEBUG.TXT" an.
+@@ -203,7 +213,7 @@ void shutdown()
+ int init_debug(){
+   if (DO_DEBUG){
+     debug_ok=TRUE;
+-    debug_file = fopen("DEBUG.TXT","wt");
++    debug_file = fopen(get_homedir_filename("DEBUG.TXT"), "wt");
+     if (debug_file==0)
+     {
+       debug_ok=FALSE;
+@@ -247,7 +257,7 @@ void debug_add(char *what){
+     time_t time_stamp;
+     time(&time_stamp);
+     if (debug_ok){
+-      debug_file = fopen("DEBUG.TXT","at");
++      debug_file = fopen(get_homedir_filename("DEBUG.TXT"), "at");
+       sprintf(time_string,"%s",asctime(localtime(&time_stamp)));
+       //fputs(time_string,debug_file);
+       //fputs(what,debug_file);

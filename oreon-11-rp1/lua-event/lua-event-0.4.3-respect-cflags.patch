@@ -1,0 +1,23 @@
+diff -Naur a/Makefile b/Makefile
+--- a/Makefile	2013-03-12 01:33:16.000000000 +0000
++++ b/Makefile	2013-04-16 22:31:22.279650191 +0100
+@@ -8,8 +8,8 @@
+ INSTALL_DATA = $(INSTALL) -m 644
+ 
+ # Flags
+-CFLAGS = -Wall -fpic
+-LDFLAGS = -shared
++CFLAGS ?= -Wall -fpic
++LDFLAGS ?= -shared
+ 
+ # Directories
+ LUA_INC_DIR ?= /usr/include/lua5.1
+@@ -37,7 +37,7 @@
+ dist-zip: distdir
+ 	git archive --format=zip --prefix=$(VERSION)/ HEAD > $(DIST_DIR)/$(VERSION).zip
+ 
+-install: all
++install:
+ 	mkdir -p $(DESTDIR)$(INSTALL_DIR_LUA)
+ 	$(INSTALL_DATA) lua/luaevent.lua $(DESTDIR)$(INSTALL_DIR_LUA)/luaevent.lua
+ 	mkdir -p $(DESTDIR)$(INSTALL_DIR_BIN)/luaevent/

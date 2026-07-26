@@ -1,0 +1,44 @@
+Index: luv-1.51.0-0/tests/test-udp.lua
+===================================================================
+--- luv-1.51.0-0.orig/tests/test-udp.lua	2025-05-10 12:54:02.000000000 +0200
++++ luv-1.51.0-0/tests/test-udp.lua	2025-05-13 11:31:36.460878663 +0200
+@@ -291,23 +291,23 @@ return require('lib/tap')(function (test
+     return false
+   end
+ 
+-  test("udp multicast join ipv4", function(print, p, expect, uv)
+-    if not has_external_interface(uv, "inet") then
+-      print("no external ipv4 interface, skipping")
+-      return
+-    end
+-    local testfn = multicast_join_test("0.0.0.0", "239.255.0.1", nil)
+-    return testfn(print, p, expect, uv)
+-  end)
++  -- test("udp multicast join ipv4", function(print, p, expect, uv)
++  --   if not has_external_interface(uv, "inet") then
++  --     print("no external ipv4 interface, skipping")
++  --     return
++  --   end
++  --   local testfn = multicast_join_test("0.0.0.0", "239.255.0.1", nil)
++  --   return testfn(print, p, expect, uv)
++  -- end)
+ 
+-  test("udp multicast join ipv6", function(print, p, expect, uv)
+-    if not has_external_interface(uv, "inet6") then
+-      print("no external ipv6 interface, skipping")
+-      return
+-    end
+-    local testfn = multicast_join_test("::", "ff02::1", nil)
+-    return testfn(print, p, expect, uv)
+-  end)
++  -- test("udp multicast join ipv6", function(print, p, expect, uv)
++  --   if not has_external_interface(uv, "inet6") then
++  --     print("no external ipv6 interface, skipping")
++  --     return
++  --   end
++  --   local testfn = multicast_join_test("::", "ff02::1", nil)
++  --   return testfn(print, p, expect, uv)
++  -- end)
+ 
+   test("udp recvmmsg", function(print, p, expect, uv)
+     local NUM_SENDS = 8

@@ -1,0 +1,26 @@
+From 963f9d0368a3d54e0c06ce5331d51a7c59634459 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:48 +0200
+Subject: [PATCH 13/41] From Debian: 109_fpe_fix.diff
+
+---
+ xlib/shmbitmap.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/xlib/shmbitmap.c b/xlib/shmbitmap.c
+index d0b5574..145cbdf 100644
+--- a/xlib/shmbitmap.c
++++ b/xlib/shmbitmap.c
+@@ -187,6 +187,9 @@ putmaskcompiledclip (CONST int nx, CONST int ny, CONST int nw, CONST int nh, CON
+ void
+ ShmPutBitmap (int x, int y, int w, int h, void *_dp)
+ {
++  if (x < 0 || y < 0)
++    return;
++
+ /* no clipping */
+   uchar          *dp = _dp;
+   uchar          *vp, *vpline;
+-- 
+2.5.0
+

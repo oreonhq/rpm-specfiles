@@ -1,0 +1,84 @@
+diff -up crm114-20100106-BlameMichelson.src/mailtrainer.crm.r crm114-20100106-BlameMichelson.src/mailtrainer.crm
+--- crm114-20100106-BlameMichelson.src/mailtrainer.crm.r	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/mailtrainer.crm	2010-06-19 20:18:43.000000000 +0200
+@@ -90,7 +90,7 @@ isolate (:log_rejections:) //
+ #
+ #      this ISOLATE will guarantee that :fileprefix: exists, and keep it's
+ #      prior (commandline) value if it does, and an empty string if it doesnt
+-isolate (:fileprefix:) <default> //
++isolate (:fileprefix:) <default> /:*:_env_HOME:\/.crm114\//
+ isolate (:spamcss:) <default> /spam.css/
+ isolate (:goodcss:) <default> /nonspam.css/
+ #
+@@ -384,7 +384,7 @@ alter (:report:) /:*:report:  concise lo
+     # output / Full set of files, before sort-randomization: \n:*:randfiles:\n/
+     #    now randomize the files.  NOTE that this requires a shuffler
+     #    command somewhere.
+-    syscall (:*:randfiles:) (:randfiles:) /:*:fileprefix::*:trainer_randomizer_command: /
++    syscall (:*:randfiles:) (:randfiles:) /:*:trainer_randomizer_command: /
+     # output /\n Full set of files, after randomize: \n:*:randfiles:\n/
+ 
+ }
+diff -up crm114-20100106-BlameMichelson.src/Makefile.r crm114-20100106-BlameMichelson.src/Makefile
+--- crm114-20100106-BlameMichelson.src/Makefile.r	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/Makefile	2010-06-19 20:20:42.000000000 +0200
+@@ -104,7 +104,7 @@ CFLAGS += -DVERSION='"$(VERSION)"'
+ #  certain functions to be inline (I added that to force gcc to inline functions
+ #  under high optimization but not under low so that debugging is possible - 
+ #  that's why DO_INLINES is defined at O3 but not O0 - JB):
+-CFLAGS += -O3 -Wall -DDO_INLINES
++CFLAGS += $(OPTFLAGS)
+ #     turn this one on for no optimization, but debugging
+ #CFLAGS += -g -O0 -Wall
+ #
+@@ -119,7 +119,7 @@ CFLAGS += -O3 -Wall -DDO_INLINES
+ #    BSD users - do NOT use -static-libgcc!!!
+ #    Also note that this keeps valgrind from running correctly so comment
+ #    it out for debugging.
+-LDFLAGS += -static -static-libgcc
++#LDFLAGS += -static -static-libgcc
+ #    use this one if you want program profiling.
+ #LDFLAGS += -static -static-libgcc -pg
+ #LDFLAGS += -pg
+@@ -361,13 +361,13 @@ install_utils:
+ 	#    Installing Utilities
+ 	#
+ 	$(MAKE) cssmerge cssutil cssdiff osbf-util
+-	install $(INSTALLFLAGS) cssdiff $(BINDIR)/cssdiff$(VER_SUFFIX)
+-	install $(INSTALLFLAGS) cssmerge $(BINDIR)/cssmerge$(VER_SUFFIX)
+-	install $(INSTALLFLAGS) cssutil $(BINDIR)/cssutil$(VER_SUFFIX)
+-	install $(INSTALLFLAGS) osbf-util $(BINDIR)/osbf-util$(VER_SUFFIX)
++	install $(INSTALLFLAGS) cssdiff $(DESTDIR)$(BINDIR)/cssdiff$(VER_SUFFIX)
++	install $(INSTALLFLAGS) cssmerge $(DESTDIR)$(BINDIR)/cssmerge$(VER_SUFFIX)
++	install $(INSTALLFLAGS) cssutil $(DESTDIR)$(BINDIR)/cssutil$(VER_SUFFIX)
++	install $(INSTALLFLAGS) osbf-util $(DESTDIR)$(BINDIR)/osbf-util$(VER_SUFFIX)
+ 	#   if you don't have EMACS installed in the default place, you
+ 	#   won't get the crm114-mode.el automatically.
+-	-install $(INSTALLFLAGS) crm114-mode.el $(prefix)/share/emacs/site-lisp/crm114-mode.el$(VER_SUFFIX)
++	-install $(INSTALLFLAGS) crm114-mode.el $(DESTDIR)$(prefix)/share/emacs/site-lisp/crm114-mode.el$(VER_SUFFIX)
+ 
+ 
+ # use different name so we can keep it around along with default one
+@@ -376,15 +376,15 @@ install_engine: crm114
+ 	#
+ 	#    Installing engine
+ 	#
+-	install $(INSTALLFLAGS) crm114 $(BINDIR)/crm$(VER_SUFFIX)
++	install $(INSTALLFLAGS) crm114 $(DESTDIR)$(BINDIR)/crm$(VER_SUFFIX)
+ 
+ install_binary_only: FORCE
+-	install $(INSTALLFLAGS) crm114 $(BINDIR)/crm$(VER_SUFFIX)
+-	install $(INSTALLFLAGS) cssdiff $(BINDIR)/cssdiff$(VER_SUFFIX)
+-	install $(INSTALLFLAGS) cssmerge $(BINDIR)/cssmerge$(VER_SUFFIX)
+-	install $(INSTALLFLAGS) cssutil $(BINDIR)/cssutil$(VER_SUFFIX)
+-	install $(INSTALLFLAGS) osbf-util $(BINDIR)/osbf-util$(VER_SUFFIX)
+-	-install $(INSTALLFLAGS) crm114-mode.el $(prefix)/share/emacs/site-lisp/crm114-mode.el$(VER_SUFFIX)
++	install $(INSTALLFLAGS) crm114 $(DESTDIR)$(BINDIR)/crm$(VER_SUFFIX)
++	install $(INSTALLFLAGS) cssdiff $(DESTDIR)$(BINDIR)/cssdiff$(VER_SUFFIX)
++	install $(INSTALLFLAGS) cssmerge $(DESTDIR)$(BINDIR)/cssmerge$(VER_SUFFIX)
++	install $(INSTALLFLAGS) cssutil $(DESTDIR)$(BINDIR)/cssutil$(VER_SUFFIX)
++	install $(INSTALLFLAGS) osbf-util $(DESTDIR)$(BINDIR)/osbf-util$(VER_SUFFIX)
++	-install $(INSTALLFLAGS) crm114-mode.el $(DESTDIR)$(prefix)/share/emacs/site-lisp/crm114-mode.el$(VER_SUFFIX)
+ 
+ uninstall: FORCE
+ 	-rm -rf $(BINDIR)/crm$(VER_SUFFIX)

@@ -1,0 +1,14 @@
+--- CPU-X-5.1.2/data/CMakeLists.txt.orig	2025-02-24 08:14:50.208510501 +0100
++++ CPU-X-5.1.2/data/CMakeLists.txt	2025-02-24 08:15:51.197735297 +0100
+@@ -38,9 +38,9 @@
+ 
+ 	# Install policy rule
+ 	pkg_get_variable(POLKIT_ACTION_DIR polkit-gobject-1 actiondir)
+-	if(POLKIT_ACTION_DIR STREQUAL "")
++	if (NOT POLKIT_ACTION_DIR OR POLKIT_ACTION_DIR STREQUAL "")
+ 		set(POLKIT_ACTION_DIR "${CMAKE_INSTALL_FULL_DATADIR}/polkit-1/actions/")
+-	endif(POLKIT_ACTION_DIR STREQUAL "")
++	endif()
+ 	install(FILES
+ 		${CMAKE_DATA_OUTPUT_DIRECTORY}/io.github.thetumultuousunicornofdarkness.cpu-x-daemon.policy
+ 		DESTINATION ${POLKIT_ACTION_DIR}

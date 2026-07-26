@@ -1,0 +1,1331 @@
+--- camlimages-5.0.5/exif/exif_c.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/exif/exif_c.c	2024-05-06 14:15:07.171451773 -0600
+@@ -41,7 +41,7 @@ CAMLprim value Val_ExifBytes(unsigned ch
+     CAMLlocal1(res);
+ 
+     int i;
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i,Val_int(p[i]));
+     }
+@@ -56,7 +56,7 @@ CAMLprim value Val_ExifSBytes(signed cha
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i,Val_int(p[i]));
+     }
+@@ -71,7 +71,7 @@ CAMLprim value Val_ExifShorts(unsigned s
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i,Val_int(p[i]));
+     }
+@@ -86,7 +86,7 @@ CAMLprim value Val_ExifSShorts(short *p,
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i,Val_int(p[i]));
+     }
+@@ -100,7 +100,7 @@ CAMLprim value Val_ExifLongs(unsigned lo
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i,caml_copy_int64(p[i]) /* too big... */ );
+     }
+@@ -115,7 +115,7 @@ CAMLprim value Val_ExifSLongs(long *p, v
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i,caml_copy_int32(p[i]) /* too big... */ );
+     }
+@@ -130,9 +130,9 @@ CAMLprim value Val_ExifRationals(unsigne
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+-        tmp = alloc(2,0);
++        tmp = caml_alloc(2,0);
+         Store_field(tmp,0, caml_copy_int64(p[i*2]) /* too big... */ );
+         Store_field(tmp,1, caml_copy_int64(p[i*2+1]) /* too big... */ );
+         Store_field(res,i, tmp);
+@@ -148,9 +148,9 @@ CAMLprim value Val_ExifSRationals(long *
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+-        tmp = alloc(2,0);
++        tmp = caml_alloc(2,0);
+         Store_field(tmp,0,caml_copy_int32(p[i*2]) /* too big... */ );
+         Store_field(tmp,1,caml_copy_int32(p[i*2]+1) /* too big... */ );
+         Store_field(res,i,tmp);
+@@ -166,7 +166,7 @@ CAMLprim value Val_ExifFloats(float *p,
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i,caml_copy_double(p[i]));
+     }
+@@ -181,7 +181,7 @@ CAMLprim value Val_ExifDoubles(double *p
+ 
+     int i;
+ 
+-    res = alloc(Int_val(vsize),0);
++    res = caml_alloc(Int_val(vsize),0);
+     for(i=0; i<Int_val(vsize); i++){
+         Store_field(res,i, caml_copy_double(p[i]));
+     }
+@@ -207,9 +207,9 @@ CAMLprim value caml_val_exif_data(value
+     ExifData *data = exif_data_new_from_data((const unsigned char*)String_val(string), 
+                                              caml_string_length(string));
+ 
+-    if( !data ){ failwith("exif_data_new_from_data"); }
++    if( !data ){ caml_failwith("exif_data_new_from_data"); }
+ 
+-    res = alloc_small(1,0);
++    res = caml_alloc_small(1,0);
+     Field(res,0) = Val_ptr(data);
+ 
+     CAMLreturn(res);
+@@ -267,14 +267,14 @@ CAMLprim value caml_exif_data_contents(v
+ 
+     ExifData *data = ExifData_of_data(vdata);
+     //fprintf(stderr, "data=%x\n", data);
+-    res = alloc_tuple(EXIF_IFD_COUNT);
++    res = caml_alloc_tuple(EXIF_IFD_COUNT);
+     for(i=0; i< EXIF_IFD_COUNT; i++){
+         ExifContent *p = data->ifd[i];
+         if( p ){ 
+             exif_content_ref(p);
+-            tmp = alloc_small(1,0);
++            tmp = caml_alloc_small(1,0);
+             Field(tmp,0) = Val_ptr(p);
+-            tmp2 = alloc_small(1,0);
++            tmp2 = caml_alloc_small(1,0);
+             //fprintf(stderr, "content=%x (count=%d)\n", p, p->count);
+             Field(tmp2,0) = tmp;
+             Store_field(res,i,tmp2);
+@@ -312,11 +312,11 @@ CAMLprim value caml_exif_content_entries
+             exif_entry_ref(e);
+             
+             // boxing
+-            tmp = alloc_small(1,0);
++            tmp = caml_alloc_small(1,0);
+             Field(tmp,0) = Val_ptr(e);
+ 
+             // cons
+-            tmp2 = alloc_small(2,0);
++            tmp2 = caml_alloc_small(2,0);
+             Field(tmp2,0) = tmp;
+             Field(tmp2,1) = res;
+ 
+@@ -345,11 +345,11 @@ CAMLprim value caml_exif_decode_entry(va
+ 
+     ExifEntry *p = Ptr_val(Field(vdata,0));
+ 
+-    tpl = alloc_tuple(4);
++    tpl = caml_alloc_tuple(4);
+     Store_field(tpl,0,Val_int(p->tag));
+     Store_field(tpl,1,Val_int(p->format));
+     Store_field(tpl,2,Val_int(p->components)); // hope it never overflow...
+-    Store_field(tpl,3,alloc_string(p->size));
++    Store_field(tpl,3,caml_alloc_string(p->size));
+     memcpy(Bytes_val(Field(tpl,3)), p->data, p->size);
+ 
+     CAMLreturn(tpl);
+@@ -362,7 +362,7 @@ CAMLprim value caml_exif_decode_entry(va
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-#define NA(x) value x(){ failwith("unsupported"); }
++#define NA(x) value x(){ caml_failwith("unsupported"); }
+ 
+ NA(Val_ExifBytes)
+ NA(Val_ExifSBytes)
+--- camlimages-5.0.5/freetype/ftintf.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/freetype/ftintf.c	2024-05-06 14:23:44.644105823 -0600
+@@ -34,12 +34,12 @@ CAMLprim value init_FreeType()
+ 
+     FT_Library *library;
+ 
+-    if( (library = stat_alloc( sizeof(FT_Library) )) == NULL ){
+-        failwith( "init_FreeType: Memory over" );
++    if( (library = caml_stat_alloc( sizeof(FT_Library) )) == NULL ){
++        caml_failwith( "init_FreeType: Memory over" );
+     }
+     if( FT_Init_FreeType( library ) ){
+-        stat_free(library);
+-        failwith( "FT_Init_FreeType" );
++        caml_stat_free(library);
++        caml_failwith( "FT_Init_FreeType" );
+     }
+ 
+     CAMLreturn( Val_ptr(library) );
+@@ -53,10 +53,10 @@ CAMLprim value done_FreeType( lib )
+     FT_Library* library = FT_Library_val(lib);
+ 
+     if ( FT_Done_FreeType( *library ) ){
+-        failwith( "FT_Done_FreeType" );
++        caml_failwith( "FT_Done_FreeType" );
+     }
+ 
+-    stat_free( (void *) library );
++    caml_stat_free( (void *) library );
+ 
+     CAMLreturn(Val_unit);
+ }
+@@ -72,12 +72,12 @@ CAMLprim value new_Face( lib, fontpath,
+     FT_Library *library = FT_Library_val(lib);
+     FT_Face *face;
+ 
+-    if( (face = stat_alloc( sizeof(FT_Face) )) == NULL ){
+-        failwith( "new_Face: Memory over" );
++    if( (face = caml_stat_alloc( sizeof(FT_Face) )) == NULL ){
++        caml_failwith( "new_Face: Memory over" );
+     }
+     if( FT_New_Face( *library, String_val( fontpath ), Int_val( idx ), face ) ){
+-        stat_free(face);
+-        failwith( "new_Face: Could not open face" );
++        caml_stat_free(face);
++        caml_failwith( "new_Face: Could not open face" );
+     }
+ 
+     CAMLreturn( Val_ptr(face) );
+@@ -91,11 +91,11 @@ CAMLprim value face_info( vface )
+ 
+     FT_Face face = *(FT_Face*)Ptr_val(vface);
+   
+-    res = alloc_tuple(14);
++    res = caml_alloc_tuple(14);
+     Store_field(res, 0, Val_int( face->num_faces ));
+     Store_field(res, 1, Val_int( face->num_glyphs ));
+-    Store_field(res, 2, copy_string( face->family_name == NULL ? "" : face->family_name ));
+-    Store_field(res, 3, copy_string( face->style_name == NULL ? "" : face->style_name ));
++    Store_field(res, 2, caml_copy_string( face->family_name == NULL ? "" : face->family_name ));
++    Store_field(res, 3, caml_copy_string( face->style_name == NULL ? "" : face->style_name ));
+     Store_field(res, 4, Val_bool( FT_HAS_HORIZONTAL( face ) ));
+     Store_field(res, 5, Val_bool( FT_HAS_VERTICAL( face ) ));
+     Store_field(res, 6, Val_bool( FT_HAS_KERNING( face ) ));
+@@ -118,7 +118,7 @@ CAMLprim value done_Face( vface )
+     FT_Face* face = Ptr_val(vface);
+ 
+     if ( FT_Done_Face( *face ) ){
+-        failwith("FT_Done_Face");
++        caml_failwith("FT_Done_Face");
+     }
+ 
+     CAMLreturn( Val_unit );
+@@ -147,7 +147,7 @@ CAMLprim value set_Char_Size( vface, cha
+     if ( FT_Set_Char_Size( *face,
+                            Int_val(char_w), Int_val(char_h),
+                            Int_val(res_h), Int_val(res_v) ) ){
+-        failwith("FT_Set_Char_Size");
++        caml_failwith("FT_Set_Char_Size");
+     }
+ 
+     CAMLreturn(Val_unit);
+@@ -165,7 +165,7 @@ value pixel_w, pixel_h; /* dot */
+     FT_Face *face = Ptr_val(vface);
+ 
+     if ( FT_Set_Pixel_Sizes( *face, Int_val(pixel_w), Int_val(pixel_h) ) ){
+-        failwith("FT_Set_Pixel_Sizes");
++        caml_failwith("FT_Set_Pixel_Sizes");
+     }
+ 
+     CAMLreturn(Val_unit);
+@@ -177,7 +177,7 @@ CAMLprim value val_CharMap( charmapp )
+     CAMLparam0();
+     CAMLlocal1(res);
+ 
+-    res = alloc_tuple(2);
++    res = caml_alloc_tuple(2);
+     Store_field(res,0, Val_int((*charmapp)->platform_id));
+     Store_field(res,1, Val_int((*charmapp)->encoding_id));
+ 
+@@ -198,7 +198,7 @@ CAMLprim value get_CharMaps( vface )
+     list = last_cell = Val_unit;
+ 
+     while( i < face->num_charmaps ){
+-        new_cell = alloc_tuple(2);
++        new_cell = caml_alloc_tuple(2);
+         Store_field(new_cell,0, val_CharMap( face->charmaps + i ));
+         Store_field(new_cell,1, Val_unit);
+         if( i == 0 ){
+@@ -233,7 +233,7 @@ CAMLprim value set_CharMap( vface, charm
+         if ( charmap->platform_id == my_pid &&
+              charmap->encoding_id == my_eid ){
+             if ( FT_Set_Charmap( face, charmap ) ){
+-                failwith("FT_Set_Charmap");
++                caml_failwith("FT_Set_Charmap");
+             }
+             CAMLreturn(Val_unit);
+         } else {
+@@ -241,7 +241,7 @@ CAMLprim value set_CharMap( vface, charm
+         }
+     }
+ 
+-    failwith("freetype:set_charmaps: selected pid+eid do not exist");
++    caml_failwith("freetype:set_charmaps: selected pid+eid do not exist");
+ }
+ 
+ CAMLprim value get_Char_Index( vface, code )
+@@ -263,10 +263,10 @@ CAMLprim value load_Glyph( vface, index,
+     FT_Face *face = Ptr_val(vface);
+ 
+     if( FT_Load_Glyph( *face, Int_val(index), FT_LOAD_DEFAULT | Int_val(flags)) ){
+-        failwith("FT_Load_Glyph");
++        caml_failwith("FT_Load_Glyph");
+     }
+ 
+-    res = alloc_tuple(2);
++    res = caml_alloc_tuple(2);
+     Store_field(res,0, Val_int( (*face)->glyph->advance.x ));
+     Store_field(res,1, Val_int( (*face)->glyph->advance.y ));
+ 
+@@ -283,10 +283,10 @@ CAMLprim value load_Char( vface, code, f
+ 
+     /* FT_Load_Glyph(face, FT_Get_Char_Index( face, code )) */
+     if( FT_Load_Char( *face, Int_val(code), FT_LOAD_DEFAULT | Int_val(flags)) ){
+-        failwith("FT_Load_Char");
++        caml_failwith("FT_Load_Char");
+     }
+ 
+-    res = alloc_tuple(2);
++    res = caml_alloc_tuple(2);
+     Store_field(res,0, Val_int( (*(FT_Face*)face)->glyph->advance.x ));
+     Store_field(res,1, Val_int( (*(FT_Face*)face)->glyph->advance.y ));
+ 
+@@ -302,7 +302,7 @@ CAMLprim value render_Glyph_of_Face( vfa
+     FT_Face *face = (FT_Face*)Ptr_val(vface);
+ 
+     if (FT_Render_Glyph( (*face)->glyph , Int_val(mode) )){
+-        failwith("FT_Render_Glyph");
++        caml_failwith("FT_Render_Glyph");
+     }
+     CAMLreturn(Val_unit);
+ }
+@@ -320,10 +320,10 @@ CAMLprim value render_Char( vface, code,
+                       FT_LOAD_RENDER |
+                       Int_val(flags) |
+                       (Int_val(mode) ? FT_LOAD_MONOCHROME : 0)) ){
+-        failwith("FT_Load_Char");
++        caml_failwith("FT_Load_Char");
+     }
+ 
+-    res = alloc_tuple(2);
++    res = caml_alloc_tuple(2);
+     Store_field(res,0, Val_int( (*(FT_Face*)face)->glyph->advance.x ));
+     Store_field(res,1, Val_int( (*(FT_Face*)face)->glyph->advance.y ));
+ 
+@@ -365,16 +365,16 @@ CAMLprim value get_Bitmap_Info( vface )
+     switch ( bitmap.pixel_mode ) {
+     case ft_pixel_mode_grays:
+         if ( bitmap.num_grays != 256 ){
+-            failwith("get_Bitmap_Info: unknown num_grays");
++            caml_failwith("get_Bitmap_Info: unknown num_grays");
+         }
+         break;
+     case ft_pixel_mode_mono:
+         break;
+     default:
+-        failwith("get_Bitmap_Info: unknown pixel mode");
++        caml_failwith("get_Bitmap_Info: unknown pixel mode");
+     }
+ 
+-    res = alloc_tuple(5);
++    res = caml_alloc_tuple(5);
+     Store_field(res,0, Val_int(glyph->bitmap_left));
+     Store_field(res,1, Val_int(glyph->bitmap_top));
+     Store_field(res,2, Val_int(bitmap.width));
+@@ -418,7 +418,7 @@ CAMLprim value read_Bitmap( vface, vx, v
+         break;
+ 
+     default:
+-        failwith("read_Bitmap: unknown pixel mode");
++        caml_failwith("read_Bitmap: unknown pixel mode");
+     }
+ 
+ }
+@@ -434,17 +434,17 @@ CAMLprim value get_Glyph_Metrics( vface
+     /* no soundness check ! */
+     FT_Glyph_Metrics *metrics = &((*face)->glyph->metrics);
+ 
+-    res1 = alloc_tuple(3);
++    res1 = caml_alloc_tuple(3);
+     Store_field(res1,0, Val_int(metrics->horiBearingX));
+     Store_field(res1,1, Val_int(metrics->horiBearingY));
+     Store_field(res1,2, Val_int(metrics->horiAdvance));
+ 
+-    res2 = alloc_tuple(3);
++    res2 = caml_alloc_tuple(3);
+     Store_field(res2,0, Val_int(metrics->vertBearingX));
+     Store_field(res2,1, Val_int(metrics->vertBearingY));
+     Store_field(res2,2, Val_int(metrics->vertAdvance));
+ 
+-    res = alloc_tuple(4);
++    res = caml_alloc_tuple(4);
+     Store_field(res,0, Val_int(metrics->width));
+     Store_field(res,1, Val_int(metrics->height));
+     Store_field(res,2, res1);
+@@ -462,7 +462,7 @@ CAMLprim value get_Size_Metrics( vface )
+     FT_Face *face = Ptr_val(vface);
+     FT_Size_Metrics *imetrics = &((*face)->size->metrics);
+ 
+-    res = alloc_tuple(4);
++    res = caml_alloc_tuple(4);
+     Store_field(res,0, Val_int(imetrics->x_ppem));
+     Store_field(res,1, Val_int(imetrics->y_ppem));
+     Store_field(res,2, Val_int(imetrics->x_scale));
+@@ -494,14 +494,14 @@ CAMLprim value get_Outline_Contents(valu
+     int n_contours = outline->n_contours;
+     int n_points   = outline->n_points;
+ 
+-    points   = alloc_tuple(n_points);
+-    tags     = alloc_tuple(n_points);
+-    contours = alloc_tuple(n_contours);
++    points   = caml_alloc_tuple(n_points);
++    tags     = caml_alloc_tuple(n_points);
++    contours = caml_alloc_tuple(n_contours);
+ 
+     for( i=0; i<n_points; i++ ) {
+         FT_Vector* raw_points = outline->points;
+         char* raw_flags  = outline->tags;
+-        tmp = alloc_tuple(2);
++        tmp = caml_alloc_tuple(2);
+         /* caution: 26.6 fixed into 31 bit */
+         Store_field(tmp, 0, Val_int(raw_points[i].x));
+         Store_field(tmp, 1, Val_int(raw_points[i].y));
+@@ -520,7 +520,7 @@ CAMLprim value get_Outline_Contents(valu
+         Store_field(contours, i, Val_int(raw_contours[i]));
+     }
+ 
+-    res = alloc_tuple(5);
++    res = caml_alloc_tuple(5);
+     Store_field(res, 0, Val_int(n_contours));
+     Store_field(res, 1, Val_int(n_points));
+     Store_field(res, 2, points);
+@@ -537,27 +537,27 @@ CAMLprim value get_Outline_Contents(valu
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-value init_FreeType(){ failwith("unsupported"); }
+-value done_FreeType(){ failwith("unsupported"); }
+-value new_Face(){ failwith("unsupported"); }
+-value face_info(){ failwith("unsupported"); }
+-value done_Face(){ failwith("unsupported"); }
+-value get_num_glyphs(){ failwith("unsupported"); }
+-value set_Char_Size(){ failwith("unsupported"); }
+-value set_Pixel_Sizes(){ failwith("unsupported"); }
+-value val_CharMap(){ failwith("unsupported"); }
+-value get_CharMaps(){ failwith("unsupported"); }
+-value set_CharMap(){ failwith("unsupported"); }
+-value get_Char_Index(){ failwith("unsupported"); }
+-value load_Glyph(){ failwith("unsupported"); }
+-value load_Char(){ failwith("unsupported"); }
+-value render_Glyph_of_Face(){ failwith("unsupported"); }
+-value render_Char(){ failwith("unsupported"); }
+-value set_Transform(){ failwith("unsupported"); }
+-value get_Bitmap_Info(){ failwith("unsupported"); }
+-value read_Bitmap(){ failwith("unsupported"); }
+-value get_Glyph_Metrics(){ failwith("unsupported"); }
+-value get_Size_Metrics(){ failwith("unsupported"); }
+-value get_Outline_Contents(){ failwith("unsupported"); }
++value init_FreeType(){ caml_failwith("unsupported"); }
++value done_FreeType(){ caml_failwith("unsupported"); }
++value new_Face(){ caml_failwith("unsupported"); }
++value face_info(){ caml_failwith("unsupported"); }
++value done_Face(){ caml_failwith("unsupported"); }
++value get_num_glyphs(){ caml_failwith("unsupported"); }
++value set_Char_Size(){ caml_failwith("unsupported"); }
++value set_Pixel_Sizes(){ caml_failwith("unsupported"); }
++value val_CharMap(){ caml_failwith("unsupported"); }
++value get_CharMaps(){ caml_failwith("unsupported"); }
++value set_CharMap(){ caml_failwith("unsupported"); }
++value get_Char_Index(){ caml_failwith("unsupported"); }
++value load_Glyph(){ caml_failwith("unsupported"); }
++value load_Char(){ caml_failwith("unsupported"); }
++value render_Glyph_of_Face(){ caml_failwith("unsupported"); }
++value render_Char(){ caml_failwith("unsupported"); }
++value set_Transform(){ caml_failwith("unsupported"); }
++value get_Bitmap_Info(){ caml_failwith("unsupported"); }
++value read_Bitmap(){ caml_failwith("unsupported"); }
++value get_Glyph_Metrics(){ caml_failwith("unsupported"); }
++value get_Size_Metrics(){ caml_failwith("unsupported"); }
++value get_Outline_Contents(){ caml_failwith("unsupported"); }
+ 
+ #endif // HAS_FREETYPE
+--- camlimages-5.0.5/gif/gifread.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/gif/gifread.c	2024-05-06 14:26:39.345625765 -0600
+@@ -44,7 +44,7 @@ value Val_GifColorType( GifColorType *co
+     r[0] = Val_int( color->Red );
+     r[1] = Val_int( color->Green );
+     r[2] = Val_int( color->Blue );
+-    res = alloc_small(3,0);
++    res = caml_alloc_small(3,0);
+     for(i=0; i<3; i++) Field(res, i) = r[i];
+ #ifdef DEBUG_GIF
+     fprintf(stderr, "Color(%d,%d,%d)\n", color->Red, color->Green, color->Blue);
+@@ -65,7 +65,7 @@ value Val_ColorMapObject( ColorMapObject
+         fflush(stderr);
+ #endif 
+ 
+-        cmap = alloc_tuple(colorMap->ColorCount);
++        cmap = caml_alloc_tuple(colorMap->ColorCount);
+         for(i= 0; i< colorMap->ColorCount; i++){
+             Store_field(cmap,i, Val_GifColorType( &colorMap->Colors[i] ));
+         }
+@@ -74,7 +74,7 @@ value Val_ColorMapObject( ColorMapObject
+         fprintf(stderr, "Colormap(0)...\n");
+         fflush(stderr);
+ #endif 
+-        cmap = Atom(0); /* cmap = alloc_tuple(0); is WRONG!! */
++        cmap = Atom(0); /* cmap = caml_alloc_tuple(0); is WRONG!! */
+     }
+     CAMLreturn(cmap);
+ }
+@@ -114,7 +114,7 @@ value Val_GifImageDesc( GifImageDesc *im
+     r[3] = Val_int( imageDesc->Height );
+     r[4] = Val_int( imageDesc->Interlace );
+     r[5] = Val_ColorMapObject( imageDesc->ColorMap );
+-    res = alloc_small(6,0);
++    res = caml_alloc_small(6,0);
+     for(i=0; i<6; i++) Field(res, i) = r[i];
+     CAMLreturn(res);
+ }
+@@ -132,7 +132,7 @@ value Val_ScreenInfo( GifFileType *GifFi
+     r[2] = Val_int(GifFile->SColorResolution);
+     r[3] = Val_int(GifFile->SBackGroundColor);
+     r[4] = Val_ColorMapObject(GifFile->SColorMap);
+-    res = alloc_small(5,0);
++    res = caml_alloc_small(5,0);
+     for(i=0; i<5; i++) Field(res, i) = r[i];
+ 
+     CAMLreturn(res);
+@@ -154,12 +154,12 @@ value dGifOpenFileName( value name )
+ #endif
+ 
+     if(GifFile == NULL){
+-        failwith("DGifOpenFileName");
++        caml_failwith("DGifOpenFileName");
+     }
+ 
+     r[0] = Val_ScreenInfo( GifFile );
+     r[1] = Val_ptr( GifFile );
+-    res = alloc_small(2,0);
++    res = caml_alloc_small(2,0);
+     for(i=0; i<2; i++) Field(res, i) = r[i];
+ 
+     CAMLreturn(res);
+@@ -192,7 +192,7 @@ value dGifGetRecordType( value hdl )
+ 
+     GifRecordType RecordType;
+     if (DGifGetRecordType(GifFile, &RecordType) == GIF_ERROR) {
+-        failwith("DGifGetRecordType");
++        caml_failwith("DGifGetRecordType");
+     }
+     CAMLreturn(Val_int(RecordType));
+ }
+@@ -204,7 +204,7 @@ value dGifGetImageDesc( value hdl )
+     GifFileType *GifFile = Ptr_val(hdl);
+ 
+     if (DGifGetImageDesc(GifFile)  == GIF_ERROR){
+-        failwith("DGIFGetImageDesc");
++        caml_failwith("DGIFGetImageDesc");
+     }
+ 
+     CAMLreturn(Val_GifImageDesc( &(GifFile->Image) ));
+@@ -220,12 +220,12 @@ value dGifGetLine( value hdl )
+     if( oversized( GifFile->Image.Width, sizeof(GifPixelType) ) ){
+         failwith_oversized("gif");
+     }
+-    buf = alloc_string( GifFile->Image.Width * sizeof(GifPixelType) ); 
++    buf = caml_alloc_string( GifFile->Image.Width * sizeof(GifPixelType) ); 
+ 
+     if( DGifGetLine(GifFile, (unsigned char*)String_val(buf), GifFile->Image.Width ) 
+         == GIF_ERROR ){
+         // PrintGifError ();
+-        failwith("DGifGetLine");
++        caml_failwith("DGifGetLine");
+     }
+     CAMLreturn(buf);
+ }
+@@ -243,19 +243,19 @@ value dGifGetExtension( value hdl )
+     exts = Val_int(0);
+ 
+     if (DGifGetExtension(GifFile,&func, &extData) == GIF_ERROR){
+-        failwith("DGifGetExtension");
++        caml_failwith("DGifGetExtension");
+     }
+ 
+     while( extData != NULL ){
+-        ext= alloc_string(extData[0]);
++        ext= caml_alloc_string(extData[0]);
+         memcpy(Bytes_val(ext), &extData[1], extData[0]);
+-        newres = alloc_small(2,0);
++        newres = caml_alloc_small(2,0);
+         Field(newres, 0)= ext;
+         Field(newres, 1)= exts;
+         exts= newres;
+         DGifGetExtensionNext(GifFile, &extData);
+     }
+-    res = alloc_small(2,0);
++    res = caml_alloc_small(2,0);
+     Field(res,0) = Val_int(func);
+     Field(res,1) = exts;
+ 
+@@ -269,21 +269,21 @@ value dGifGetExtension( value hdl )
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-value Val_GifColorType(){ failwith("unsupported"); }
+-value Val_ColorMapObject(){ failwith("unsupported"); }
+-value Val_GifImageDesc(){ failwith("unsupported"); }
+-value Val_ScreenInfo(){ failwith("unsupported"); }
+-value dGifOpenFileName(){ failwith("unsupported"); }
+-value dGifCloseFile(){ failwith("unsupported"); }
+-value dGifGetRecordType(){ failwith("unsupported"); }
+-value dGifGetImageDesc(){ failwith("unsupported"); }
+-value dGifGetLine(){ failwith("unsupported"); }
+-value dGifGetExtension(){ failwith("unsupported"); }
+-value eGifOpenFileName(){ failwith("unsupported"); }
+-value eGifCloseFile(){ failwith("unsupported"); }
+-value eGifPutScreenDesc(){ failwith("unsupported"); }
+-value eGifPutImageDesc(){ failwith("unsupported"); }
+-value eGifPutLine(){ failwith("unsupported"); }
+-value eGifPutExtension(){ failwith("unsupported"); }
++value Val_GifColorType(){ caml_failwith("unsupported"); }
++value Val_ColorMapObject(){ caml_failwith("unsupported"); }
++value Val_GifImageDesc(){ caml_failwith("unsupported"); }
++value Val_ScreenInfo(){ caml_failwith("unsupported"); }
++value dGifOpenFileName(){ caml_failwith("unsupported"); }
++value dGifCloseFile(){ caml_failwith("unsupported"); }
++value dGifGetRecordType(){ caml_failwith("unsupported"); }
++value dGifGetImageDesc(){ caml_failwith("unsupported"); }
++value dGifGetLine(){ caml_failwith("unsupported"); }
++value dGifGetExtension(){ caml_failwith("unsupported"); }
++value eGifOpenFileName(){ caml_failwith("unsupported"); }
++value eGifCloseFile(){ caml_failwith("unsupported"); }
++value eGifPutScreenDesc(){ caml_failwith("unsupported"); }
++value eGifPutImageDesc(){ caml_failwith("unsupported"); }
++value eGifPutLine(){ caml_failwith("unsupported"); }
++value eGifPutExtension(){ caml_failwith("unsupported"); }
+ 
+ #endif // HAS_GIF
+--- camlimages-5.0.5/gif/gifwrite.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/gif/gifwrite.c	2024-05-06 14:28:21.944167920 -0600
+@@ -86,7 +86,7 @@ value eGifOpenFileName( name )
+ #endif
+ 
+     if (GifFileOut == NULL) {
+-        failwith("EGifOpenFileName");
++        caml_failwith("EGifOpenFileName");
+     }
+     /* gcc -fwritable-strings is required to compile libungif */
+ #if GIFLIB_BUG_FIXED
+@@ -126,7 +126,7 @@ void eGifPutScreenDesc( value oc, value
+                            Int_val(Field(sdesc, 2)),
+                            Int_val(Field(sdesc, 3)),
+                            ColorMapObject_val( Field(sdesc, 4) )) == GIF_ERROR){
+-        failwith("EGifPutScreenDesc");
++        caml_failwith("EGifPutScreenDesc");
+     }
+     CAMLreturn0;
+ }
+@@ -143,7 +143,7 @@ void eGifPutImageDesc( value oc, value i
+                           Int_val(Field(idesc, 3)),
+                           Int_val(Field(idesc, 4)),
+                           ColorMapObject_val( Field(idesc, 5) )) == GIF_ERROR){
+-        failwith("EGifPutImageDesc");
++        caml_failwith("EGifPutImageDesc");
+     }
+     CAMLreturn0;
+ }
+@@ -157,7 +157,7 @@ void eGifPutLine( value oc, value buf )
+     if ( EGifPutLine(GifFileOut, (unsigned char*)String_val(buf), GifFileOut->Image.Width) 
+          == GIF_ERROR ){
+         // PrintGifError ();
+-        failwith("EGifPutLine");
++        caml_failwith("EGifPutLine");
+     }
+     CAMLreturn0;
+ }
+@@ -176,17 +176,17 @@ void eGifPutExtension( value oc, value e
+     extCode = Int_val(Field(ext,0));
+     extLen = list_length( Field(ext,1) );
+     if( (extension = malloc(sizeof(char*) * extLen)) == NULL ){
+-        failwith("EGifPutExtension");
++        caml_failwith("EGifPutExtension");
+     }
+     for( i=0, l= Field(ext,1); i<extLen; i++, l= Field(l,1)){
+         int len;
+         char *str;
+-        len = string_length( Field(l,0) );
++        len = caml_string_length( Field(l,0) );
+         if( len > 255 ){
+-            failwith("EGifPutExtension: strlen > 255");
++            caml_failwith("EGifPutExtension: strlen > 255");
+         }
+         if( (str = malloc(len + 1)) == NULL ){
+-            failwith("EGifPutExtension");
++            caml_failwith("EGifPutExtension");
+         }
+         str[0] = len;
+         memcpy(str+1, String_val(Field(l,0)), len);
+@@ -197,7 +197,7 @@ void eGifPutExtension( value oc, value e
+             free(extension[i]);
+         }
+         free(extension);
+-        failwith("EGifPutExtension");
++        caml_failwith("EGifPutExtension");
+     }
+     CAMLreturn0;
+ }
+--- camlimages-5.0.5/jpeg/jpegread.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/jpeg/jpegread.c	2024-05-06 14:29:08.264502123 -0600
+@@ -153,7 +153,7 @@ CAMLprim value open_jpeg_file_for_read(
+     filename= String_val( name );
+ 
+     if ((infile = fopen(filename, "rb")) == NULL) {
+-        failwith("failed to open jpeg file");
++        caml_failwith("failed to open jpeg file");
+     }
+ 
+     cinfop = malloc(sizeof (struct jpeg_decompress_struct));
+@@ -180,7 +180,7 @@ CAMLprim value open_jpeg_file_for_read(
+         free(cinfop);
+         free(myerrp);
+         fclose(infile);
+-        failwith(jpg_error_message);
++        caml_failwith(jpg_error_message);
+     }
+     /* Now we can initialize the JPEG decompression object. */
+     jpeg_create_decompress(cinfop);
+@@ -353,11 +353,11 @@ CAMLprim value close_jpeg_file_for_read(
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-CAMLprim value jpeg_set_scale_denom(){ failwith("unsupported"); }
+-CAMLprim value open_jpeg_file_for_read(){ failwith("unsupported"); }
+-CAMLprim value open_jpeg_file_for_read_start(){ failwith("unsupported"); }
+-CAMLprim value read_jpeg_scanline(){ failwith("unsupported"); }
+-CAMLprim value read_jpeg_scanlines(){ failwith("unsupported"); }
+-CAMLprim value close_jpeg_file_for_read(){ failwith("unsupported"); }
++CAMLprim value jpeg_set_scale_denom(){ caml_failwith("unsupported"); }
++CAMLprim value open_jpeg_file_for_read(){ caml_failwith("unsupported"); }
++CAMLprim value open_jpeg_file_for_read_start(){ caml_failwith("unsupported"); }
++CAMLprim value read_jpeg_scanline(){ caml_failwith("unsupported"); }
++CAMLprim value read_jpeg_scanlines(){ caml_failwith("unsupported"); }
++CAMLprim value close_jpeg_file_for_read(){ caml_failwith("unsupported"); }
+ 
+ #endif // HAS_JPEG
+--- camlimages-5.0.5/jpeg/jpegwrite.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/jpeg/jpegwrite.c	2024-05-06 14:29:59.094771485 -0600
+@@ -80,7 +80,7 @@ value open_jpeg_file_for_write_colorspac
+   quality= Int_val(qual);
+  
+   if ((outfile = fopen(filename, "wb")) == NULL) {
+-    failwith("failed to open jpeg file");
++    caml_failwith("failed to open jpeg file");
+   }
+ 
+   cinfop = malloc(sizeof (struct jpeg_compress_struct));
+@@ -95,7 +95,7 @@ value open_jpeg_file_for_write_colorspac
+     jpeg_destroy_compress(cinfop);
+     free(jerrp);
+     fclose(outfile);
+-    failwith(jpg_error_message);
++    caml_failwith(jpg_error_message);
+   }
+ 
+   jpeg_create_compress(cinfop);
+@@ -109,7 +109,7 @@ value open_jpeg_file_for_write_colorspac
+   jpeg_set_quality(cinfop, quality, TRUE);
+   jpeg_start_compress(cinfop, TRUE);
+ 
+-  res = alloc_small(3,0);
++  res = caml_alloc_small(3,0);
+   Field(res, 0) = Val_ptr(cinfop);
+   Field(res, 1) = Val_ptr(outfile);
+   Field(res, 2) = Val_ptr(jerrp);
+@@ -217,11 +217,11 @@ value close_jpeg_file_for_write( jpegh )
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-CAMLprim value open_jpeg_file_for_write_colorspace(){ failwith("unsupported"); }
+-CAMLprim value open_jpeg_file_for_write(){ failwith("unsupported"); }
+-CAMLprim value open_jpeg_file_for_write_cmyk(){ failwith("unsupported"); }
+-CAMLprim value write_jpeg_scanline(){ failwith("unsupported"); }
+-CAMLprim value close_jpeg_file_for_write(){ failwith("unsupported"); }
+-CAMLprim void caml_jpeg_write_marker(){ failwith("unsupported"); }
++CAMLprim value open_jpeg_file_for_write_colorspace(){ caml_failwith("unsupported"); }
++CAMLprim value open_jpeg_file_for_write(){ caml_failwith("unsupported"); }
++CAMLprim value open_jpeg_file_for_write_cmyk(){ caml_failwith("unsupported"); }
++CAMLprim value write_jpeg_scanline(){ caml_failwith("unsupported"); }
++CAMLprim value close_jpeg_file_for_write(){ caml_failwith("unsupported"); }
++CAMLprim void caml_jpeg_write_marker(){ caml_failwith("unsupported"); }
+ 
+ #endif // HAS_JPEG
+--- camlimages-5.0.5/png/pngread.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/png/pngread.c	2024-05-06 14:36:46.361917261 -0600
+@@ -51,7 +51,7 @@ value read_png_file_as_rgb24( name )
+     filename = String_val( name );
+ 
+     if (( fp = fopen(filename, "rb")) == NULL ){
+-        failwith("png file open failed");
++        caml_failwith("png file open failed");
+     }
+ 
+     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
+@@ -60,14 +60,14 @@ value read_png_file_as_rgb24( name )
+ 
+     if( png_ptr == NULL ){
+         fclose(fp);
+-        failwith("it is not a png file.");
++        caml_failwith("it is not a png file.");
+     }
+ 
+     info_ptr = png_create_info_struct(png_ptr);
+     if(info_ptr == NULL ){
+         fclose(fp);
+         png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+-        failwith("not enough memory");
++        caml_failwith("not enough memory");
+     }
+ 
+     /* error handling */
+@@ -76,7 +76,7 @@ value read_png_file_as_rgb24( name )
+         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+         fclose(fp);
+         /* If we get here, we had a problem reading the file */
+-        failwith("png read error");
++        caml_failwith("png read error");
+     }
+ 
+     /* use standard C stream */
+@@ -111,7 +111,7 @@ value read_png_file_as_rgb24( name )
+     if ( color_type != PNG_COLOR_TYPE_RGB || bit_depth != 8 ) {
+         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+         fclose(fp);
+-        failwith("unsupported color type");
++        caml_failwith("unsupported color type");
+     }
+ 
+     rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+@@ -120,7 +120,7 @@ value read_png_file_as_rgb24( name )
+     if (oversized(rowbytes, height) || oversized(sizeof(png_bytep), height)){
+         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+         fclose(fp);
+-        failwith("png error: image contains oversized or bogus width and height");
++        caml_failwith("png error: image contains oversized or bogus width and height");
+     }
+   
+     {
+@@ -128,7 +128,7 @@ value read_png_file_as_rgb24( name )
+         png_bytep *row_pointers;
+         void * buf;
+ 
+-        row_pointers = (png_bytep*) stat_alloc(sizeof(png_bytep) * height);
++        row_pointers = (png_bytep*) caml_stat_alloc(sizeof(png_bytep) * height);
+         buf = stat_alloc( rowbytes * height );
+         for( i = 0; i < height; i ++ ){
+             row_pointers[i] = buf + rowbytes * i;
+@@ -142,8 +142,8 @@ value read_png_file_as_rgb24( name )
+             fclose(fp);
+             /* If we get here, we had a problem reading the file */
+             fprintf(stderr, "png short file\n");
+-            stat_free(row_pointers);
+-            stat_free(buf);
++            caml_stat_free(row_pointers);
++            caml_stat_free(buf);
+             CAMLreturn(res);
+         }
+ 
+@@ -151,13 +151,13 @@ value read_png_file_as_rgb24( name )
+         png_read_end(png_ptr, info_ptr);
+         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+ 
+-        r = alloc_tuple(height);
++        r = caml_alloc_tuple(height);
+         for( i = 0; i < height; i ++ ){
+             tmp = caml_alloc_string(rowbytes);
+             memcpy(Bytes_val(tmp), buf+rowbytes*i, rowbytes);
+             Store_field( r, i, tmp );
+         }
+-        res = alloc_small(3,0);
++        res = caml_alloc_small(3,0);
+         Field( res, 0 ) =  Val_int(width);
+         Field( res, 1 ) =  Val_int(height);
+         Field( res, 2 ) =  r;
+@@ -165,8 +165,8 @@ value read_png_file_as_rgb24( name )
+         /* close the file */
+         fclose(fp);
+ 
+-        stat_free((void*)row_pointers);
+-        stat_free(buf);
++        caml_stat_free((void*)row_pointers);
++        caml_stat_free(buf);
+         CAMLreturn(res);
+     }
+ }
+@@ -184,7 +184,7 @@ value Val_PngColor( png_color *col )
+     r[0] = Val_int( col->red );
+     r[1] = Val_int( col->green );
+     r[2] = Val_int( col->blue );
+-    res = alloc_small(3,0);
++    res = caml_alloc_small(3,0);
+     for(i=0; i<3; i++) Field(res, i) = r[i];
+ 
+     CAMLreturn(res);
+@@ -197,7 +197,7 @@ value Val_PngPalette( png_colorp plte, i
+     int i;
+ 
+     if ( len != 0 ) {
+-        cmap = alloc_tuple( len );
++        cmap = caml_alloc_tuple( len );
+         for(i= 0; i< len; i++){
+             Store_field(cmap, i, Val_PngColor( &plte[i] ));
+         }
+@@ -225,7 +225,7 @@ value read_png_file( name )
+     filename = String_val( name );
+ 
+     if (( fp = fopen(filename, "rb")) == NULL ){
+-        failwith("png file open failed");
++        caml_failwith("png file open failed");
+     }
+ 
+     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
+@@ -234,14 +234,14 @@ value read_png_file( name )
+ 
+     if( png_ptr == NULL ){
+         fclose(fp);
+-        failwith("it is not a png file.");
++        caml_failwith("it is not a png file.");
+     }
+ 
+     info_ptr = png_create_info_struct(png_ptr);
+     if(info_ptr == NULL ){
+         fclose(fp);
+         png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+-        failwith("not enough memory");
++        caml_failwith("not enough memory");
+     }
+ 
+     /* error handling */
+@@ -250,7 +250,7 @@ value read_png_file( name )
+         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+         fclose(fp);
+         /* If we get here, we had a problem reading the file */
+-        failwith("png read error");
++        caml_failwith("png read error");
+     }
+ 
+     /* use standard C stream */
+@@ -301,8 +301,8 @@ value read_png_file( name )
+         void *buf;
+         char mesg[256];
+ 
+-        buf = stat_alloc(rowbytes * height);
+-        row_pointers = (png_bytep*)stat_alloc(sizeof(png_bytep) * height);
++        buf = caml_stat_alloc(rowbytes * height);
++        row_pointers = (png_bytep*)caml_stat_alloc(sizeof(png_bytep) * height);
+         for(i=0; i<height; i++){
+             row_pointers[i] = buf + rowbytes * i; 
+         }
+@@ -314,14 +314,14 @@ value read_png_file( name )
+             png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+             fclose(fp);
+             /* If we get here, we had a problem reading the file */
+-            stat_free((void*)row_pointers);
+-            stat_free(buf);
+-            failwith("png short file");
++            caml_stat_free((void*)row_pointers);
++            caml_stat_free(buf);
++            caml_failwith("png short file");
+         }
+ 
+         png_read_image(png_ptr, row_pointers);
+ 
+-        res = alloc_tuple(3);
++        res = caml_alloc_tuple(3);
+ 
+         switch(color_type){
+         case PNG_COLOR_TYPE_PALETTE:
+@@ -351,13 +351,13 @@ value read_png_file( name )
+                 fclose(fp);
+                 sprintf(mesg, "png error (unsupported bytes/pixel=%d/%d)",
+                         (int)rowbytes, (int)width);
+-                stat_free(buf);
+-                stat_free((void*)row_pointers);
+-                failwith(mesg);
++                caml_stat_free(buf);
++                caml_stat_free((void*)row_pointers);
++                caml_failwith(mesg);
+             }
+ 
+-            r1 = alloc( 2, tag );
+-            r2 = alloc_tuple(height);
++            r1 = caml_alloc( 2, tag );
++            r2 = caml_alloc_tuple(height);
+             for( i = 0; i < height; i ++ ){
+                 tmp = caml_alloc_string(rowbytes);
+                 memcpy(Bytes_val(tmp), buf+rowbytes*i, rowbytes);
+@@ -379,10 +379,10 @@ value read_png_file( name )
+               fprintf(stderr, "pngread.c: rgb image\n"); fflush(stderr);
+               sc      fprintf(stderr, "width rowbytes: %d %d\n", width, rowbytes); fflush(stderr);
+             */
+-            r1 = alloc( 1,
++            r1 = caml_alloc( 1,
+                         color_type == PNG_COLOR_TYPE_RGB ?
+                         PNG_TAG_RGB24 : PNG_TAG_RGBA32 );
+-            r2 = alloc_tuple( height );
++            r2 = caml_alloc_tuple( height );
+             for( i = 0; i < height; i ++ ){
+                 tmp = caml_alloc_string(rowbytes);
+                 memcpy(Bytes_val(tmp), buf+rowbytes*i, rowbytes);
+@@ -397,9 +397,9 @@ value read_png_file( name )
+         default:
+             sprintf(mesg, "png error (unsupported color_type=%d)",
+                     (int)color_type);
+-            stat_free(buf);
+-            stat_free((void*)row_pointers);
+-            failwith(mesg);
++            caml_stat_free(buf);
++            caml_stat_free((void*)row_pointers);
++            caml_failwith(mesg);
+         }
+ 
+         png_read_end(png_ptr, info_ptr);
+@@ -407,8 +407,8 @@ value read_png_file( name )
+ 
+         /* close the file */
+         fclose(fp);
+-        stat_free(buf);
+-        stat_free((void*)row_pointers);
++        caml_stat_free(buf);
++        caml_stat_free((void*)row_pointers);
+ 
+         CAMLreturn(res);
+     }
+@@ -421,11 +421,11 @@ value read_png_file( name )
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-value read_png_file_as_rgb24(){ failwith("unsupported"); }
+-value Val_PngColor(){ failwith("unsupported"); }
+-value Val_PngPalette(){ failwith("unsupported"); }
+-value read_png_file(){ failwith("unsupported"); }
+-value write_png_file_rgb(){ failwith("unsupported"); }
+-value write_png_file_index(){ failwith("unsupported"); }
++value read_png_file_as_rgb24(){ caml_failwith("unsupported"); }
++value Val_PngColor(){ caml_failwith("unsupported"); }
++value Val_PngPalette(){ caml_failwith("unsupported"); }
++value read_png_file(){ caml_failwith("unsupported"); }
++value write_png_file_rgb(){ caml_failwith("unsupported"); }
++value write_png_file_index(){ caml_failwith("unsupported"); }
+ 
+ #endif // HAS_PNG
+--- camlimages-5.0.5/png/pngwrite.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/png/pngwrite.c	2024-05-06 14:38:24.185511109 -0600
+@@ -47,19 +47,19 @@ value write_png_file_rgb( name, buffer,
+   a = Bool_val(with_alpha);
+ 
+   if (( fp = fopen(String_val(name), "wb")) == NULL ){
+-    failwith("png file open failed");
++    caml_failwith("png file open failed");
+   }
+ 
+   if ((png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
+                                         NULL, NULL, NULL)) == NULL ){
+     fclose(fp);
+-    failwith("png_create_write_struct");
++    caml_failwith("png_create_write_struct");
+   }
+ 
+   if( (info_ptr = png_create_info_struct(png_ptr)) == NULL ){
+     fclose(fp);
+     png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+-    failwith("png_create_info_struct");
++    caml_failwith("png_create_info_struct");
+   }
+ 
+   /* error handling */
+@@ -68,7 +68,7 @@ value write_png_file_rgb( name, buffer,
+     png_destroy_write_struct(&png_ptr, &info_ptr);
+     fclose(fp);
+     /* If we get here, we had a problem writing the file */
+-    failwith("png write error");
++    caml_failwith("png write error");
+   }
+ 
+   /* use standard C stream */
+@@ -95,7 +95,7 @@ value write_png_file_rgb( name, buffer,
+     png_bytep *row_pointers;
+     png_bytep buf = Bytes_val(buffer);
+ 
+-    row_pointers = (png_bytep*)stat_alloc(sizeof(png_bytep) * h);
++    row_pointers = (png_bytep*)caml_stat_alloc(sizeof(png_bytep) * h);
+ 
+     rowbytes= png_get_rowbytes(png_ptr, info_ptr);
+ #if 0
+@@ -106,7 +106,7 @@ value write_png_file_rgb( name, buffer,
+     }
+ 
+     png_write_image(png_ptr, row_pointers);
+-    stat_free((void*)row_pointers);
++    caml_stat_free((void*)row_pointers);
+   }
+ 
+   png_write_end(png_ptr, info_ptr);
+@@ -156,19 +156,19 @@ value write_png_file_index( name, buffer
+   h = Int_val(height);
+ 
+   if (( fp = fopen(String_val(name), "wb")) == NULL ){
+-    failwith("png file open failed");
++    caml_failwith("png file open failed");
+   }
+ 
+   if ((png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
+                                         NULL, NULL, NULL)) == NULL ){
+     fclose(fp);
+-    failwith("png_create_write_struct");
++    caml_failwith("png_create_write_struct");
+   }
+ 
+   if( (info_ptr = png_create_info_struct(png_ptr)) == NULL ){
+     fclose(fp);
+     png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+-    failwith("png_create_info_struct");
++    caml_failwith("png_create_info_struct");
+   }
+ 
+   /* error handling */
+@@ -177,7 +177,7 @@ value write_png_file_index( name, buffer
+     png_destroy_write_struct(&png_ptr, &info_ptr);
+     fclose(fp);
+     /* If we get here, we had a problem writing the file */
+-    failwith("png write error");
++    caml_failwith("png write error");
+   }
+ 
+   /* use standard C stream */
+@@ -205,7 +205,7 @@ value write_png_file_index( name, buffer
+       png_destroy_write_struct(&png_ptr, &info_ptr);
+       fclose(fp);
+       /* If we get here, we had a problem writing the file */
+-      failwith("png write error (null colormap)");
++      caml_failwith("png write error (null colormap)");
+     }
+     png_set_PLTE( png_ptr, info_ptr, palette, num_palette );
+   }
+@@ -219,7 +219,7 @@ value write_png_file_index( name, buffer
+     png_bytep *row_pointers;
+     png_bytep buf = Bytes_val(buffer);
+ 
+-    row_pointers = (png_bytep*)stat_alloc(sizeof(png_bytep) * h);
++    row_pointers = (png_bytep*)caml_stat_alloc(sizeof(png_bytep) * h);
+ 
+     rowbytes= png_get_rowbytes(png_ptr, info_ptr);
+ #if 0
+@@ -230,14 +230,14 @@ value write_png_file_index( name, buffer
+       png_destroy_write_struct(&png_ptr, &info_ptr);
+       fclose(fp);
+       /* If we get here, we had a problem writing the file */
+-      failwith("png write error (illegal byte/pixel)");
++      caml_failwith("png write error (illegal byte/pixel)");
+     }
+     for(i=0; i< h; i++){
+       row_pointers[i] = buf + rowbytes * i;
+     }
+ 
+     png_write_image(png_ptr, row_pointers);
+-    stat_free((void*)row_pointers);
++    caml_stat_free((void*)row_pointers);
+   }
+ 
+   png_write_end(png_ptr, info_ptr);
+--- camlimages-5.0.5/tiff/tiffread.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/tiff/tiffread.c	2024-05-06 14:46:32.314494667 -0600
+@@ -59,15 +59,15 @@ value open_tiff_file_for_read( name )
+   
+     tif = TIFFOpen(filename, "r");
+     if (tif) {
+-        uint32 imagelength;
+-        uint32 imagewidth;
+-        uint16 imagesample;
+-        uint16 imagebits;
++        uint32_t imagelength;
++        uint32_t imagewidth;
++        uint16_t imagesample;
++        uint16_t imagebits;
+         tdata_t buf;
+         int i;
+-        uint16 runit;
++        uint16_t runit;
+         float xres, yres;
+-        uint16 photometric;
++        uint16_t photometric;
+ 
+         TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &imagelength);
+         TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &imagewidth);
+@@ -84,19 +84,19 @@ value open_tiff_file_for_read( name )
+ 
+         if( imagesample == 3 && photometric == PHOTOMETRIC_RGB ){
+             if( imagebits != 8 ){
+-                failwith("Sorry, tiff rgb file must be 24bit-color");
++                caml_failwith("Sorry, tiff rgb file must be 24bit-color");
+             }
+             r[3] = Val_int(0); /* RGB */
+         } else if( imagesample == 4 && photometric == PHOTOMETRIC_SEPARATED ){
+             if( imagebits != 8 ){
+-                failwith("Sorry, tiff cmyk file must be 32bit-color");
++                caml_failwith("Sorry, tiff cmyk file must be 32bit-color");
+             }
+             r[3] = Val_int(1); /* CMYK */
+         } else if( imagesample == 1 && imagebits == 1 ) { /* BW */
+             r[3] = Val_int (photometric == PHOTOMETRIC_MINISWHITE ? 2 : 3);
+         } else {
+             fprintf(stderr, "photometric=%d, imagesample=%d, imagebits=%d\n", photometric, imagesample, imagebits);
+-            failwith("Sorry, unsupported tiff format");
++            caml_failwith("Sorry, unsupported tiff format");
+         }
+ 
+         buf = _TIFFmalloc(TIFFScanlineSize(tif));
+@@ -105,18 +105,18 @@ value open_tiff_file_for_read( name )
+         r[1] = Val_int(imagelength);
+         if ( runit == RESUNIT_INCH &&
+              xres == yres ){
+-            r[2] = copy_double( xres );
++            r[2] = caml_copy_double( xres );
+         } else {
+-            r[2] = copy_double ( -1.0 );
++            r[2] = caml_copy_double ( -1.0 );
+         }
+         /* r[3] is defined above */ 
+         r[4] = Val_ptr(tif);
+-        res = alloc_small(5,0);
++        res = caml_alloc_small(5,0);
+         for(i=0; i<5; i++) Store_field(res, i, r[i]);
+ 
+         CAMLreturn(res);
+     } else {
+-        failwith("failed to open tiff file");
++        caml_failwith("failed to open tiff file");
+     }
+ }
+ 
+@@ -151,10 +151,10 @@ value close_tiff_file( vtiffh )
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-value open_tiff_file_for_read(){ failwith("unsupported"); }
+-value read_tiff_scanline(){ failwith("unsupported"); }
+-value close_tiff_file(){ failwith("unsupported"); }
+-value open_tiff_file_for_write(){ failwith("unsupported"); }
+-value write_tiff_scanline(){ failwith("unsupported"); }
++value open_tiff_file_for_read(){ caml_failwith("unsupported"); }
++value read_tiff_scanline(){ caml_failwith("unsupported"); }
++value close_tiff_file(){ caml_failwith("unsupported"); }
++value open_tiff_file_for_write(){ caml_failwith("unsupported"); }
++value write_tiff_scanline(){ caml_failwith("unsupported"); }
+ 
+ #endif // HAS_TIFF
+--- camlimages-5.0.5/tiff/tiffwrite.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/tiff/tiffwrite.c	2024-05-06 14:47:06.489003437 -0600
+@@ -64,8 +64,8 @@ value open_tiff_file_for_write( value fi
+         /* Resolution */
+         /* FillOrder */
+     
+-        TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, (uint32) image_width);
+-        TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32) image_height);
++        TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, (uint32_t) image_width);
++        TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32_t) image_height);
+         TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+         TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
+         TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+@@ -81,7 +81,7 @@ value open_tiff_file_for_write( value fi
+ 
+         CAMLreturn( Val_ptr(tif) );
+     } else {
+-        failwith("failed to open tiff file to write");
++        caml_failwith("failed to open tiff file to write");
+     }
+ }
+ 
+--- camlimages-5.0.5/xpm/xpmread.c.orig	2023-12-08 21:17:37.000000000 -0700
++++ camlimages-5.0.5/xpm/xpmread.c	2024-05-06 14:48:16.319999656 -0600
+@@ -46,7 +46,7 @@ value read_xpm_file( name )
+     fprintf(stderr, "colors = %d\n", image.ncolors);
+     */
+ 
+-    cmap = alloc_tuple( image.ncolors );
++    cmap = caml_alloc_tuple( image.ncolors );
+     for(i=0; i<image.ncolors; i++){
+       XpmColor *color = image.colorTable + i;
+       /*
+@@ -62,16 +62,16 @@ value read_xpm_file( name )
+ 
+       if( color->c_color == NULL ) {
+           fprintf(stderr, "color id %d has no c_color\n", i);
+-          Store_field(cmap, i, copy_string("null"));
++          Store_field(cmap, i, caml_copy_string("null"));
+       } else {
+-          Store_field(cmap, i, copy_string(color->c_color));
++          Store_field(cmap, i, caml_copy_string(color->c_color));
+       }
+     }
+ 
+     { /* image map alloc */
+       int size = image.width * image.height;
+ 
+-      imap = alloc_tuple( size );
++      imap = caml_alloc_tuple( size );
+       for(i=0; i<size; i++){
+           Store_field(imap,i,Val_int(image.data[i]));
+       }
+@@ -79,7 +79,7 @@ value read_xpm_file( name )
+ 
+     
+     /* connect the result */
+-    result = alloc_small(4,0);
++    result = caml_alloc_small(4,0);
+     Field(result,0) = Val_int(image.width);
+     Field(result,1) = Val_int(image.height);
+     Field(result,2) = cmap;
+@@ -89,7 +89,7 @@ value read_xpm_file( name )
+ 
+     CAMLreturn(result);
+   } else {
+-    failwith("failed to open xpm file");
++    caml_failwith("failed to open xpm file");
+   }
+ }
+ 
+@@ -100,6 +100,6 @@ value read_xpm_file( name )
+ #include <caml/memory.h>
+ #include <caml/fail.h>
+ 
+-value read_xpm_file(){ failwith("unsupported"); }
++value read_xpm_file(){ caml_failwith("unsupported"); }
+ 
+ #endif

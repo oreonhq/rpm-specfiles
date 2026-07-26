@@ -1,0 +1,11 @@
+diff -up meshlab-MeshLab-2023.12/src/external/downloads/libE57Format-2.3.0/include/E57Format.h.e57-gcc13 meshlab-MeshLab-2023.12/src/external/downloads/libE57Format-2.3.0/include/E57Format.h
+--- meshlab-MeshLab-2023.12/src/external/downloads/libE57Format-2.3.0/include/E57Format.h.e57-gcc13	2023-12-31 17:05:08.017217317 -0500
++++ meshlab-MeshLab-2023.12/src/external/downloads/libE57Format-2.3.0/include/E57Format.h	2023-12-31 17:05:54.330888615 -0500
+@@ -32,6 +32,7 @@
+ //! @file  E57Format.h Header file for the E57 API.
+ 
+ #include <cfloat>
++#include <cstdint>
+ #include <memory>
+ #include <vector>
+ 

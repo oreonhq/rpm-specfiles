@@ -1,0 +1,28 @@
+From ac251baee26d6eb62a28b3d807c5cbc68eb45ff5 Mon Sep 17 00:00:00 2001
+From: Pat Riehecky <riehecky@fnal.gov>
+Date: Wed, 19 Feb 2020 15:16:14 -0600
+Subject: [PATCH] Avoid double include
+
+---
+ get-edid.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/get-edid.h b/get-edid.h
+index 2f72f0e..2a00366 100644
+--- a/get-edid.h
++++ b/get-edid.h
+@@ -1,6 +1,11 @@
++#ifndef GET_EDID_H
++#define GET_EDID_H
++
+ #define EDID_BLOCK_SIZE		128
+ #define MAX_EXTENSION_COUNT	4
+ 
+ extern int verbose;
+ 
+ int get_edid(char *edid, int port, int skip_vbe_check);
++
++#endif
+-- 
+2.24.1
+

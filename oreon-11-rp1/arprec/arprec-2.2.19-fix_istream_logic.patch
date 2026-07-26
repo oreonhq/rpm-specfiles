@@ -1,0 +1,13 @@
+Index: arprec/src/read.cpp
+===================================================================
+--- a/arprec/src/read.cpp
++++ b/arprec/src/read.cpp
+@@ -125,7 +125,7 @@ bool mp_real::read(istream &s) {
+   construct(expn_str, str, digit_str);
+ 
+   s.flags(old_flags);
+-  return !s.fail();
++  return !s.bad();
+ }
+ 
+ bool mp_real::read(const string &s) {

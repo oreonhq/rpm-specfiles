@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>oflb-goudy-bookletter-1911</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Goudy Bookletter 1911</name>
+  <summary>Clean serif font based on Kennerly Old Style</summary>
+  <description>
+    <p>
+      Based on the roman of Frederic Goudy's Kennerley Old Style (designed and cut in
+      1911 for a limited edition of "The Door in the Wall and Other Stories" by H G
+      Wells, published by Mitchell Kennerley). The letters, though not condensed, may
+      seem to fit together like pieces of a jigsaw puzzle, giving text an unusually
+      solid appearance.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://home.comcast.net/~crudfactory/cf3/gb1911.html</url>
+</component>
+

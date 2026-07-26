@@ -1,0 +1,37 @@
+diff -up olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegdecoder.cpp.ffmpeg8 olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegdecoder.cpp
+--- olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegdecoder.cpp.ffmpeg8	2025-10-23 10:52:58.496712697 +0200
++++ olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegdecoder.cpp	2025-10-23 11:13:17.156805996 +0200
+@@ -355,8 +355,13 @@ FootageDescription FFmpegDecoder::Probe(
+               // Read first frame and retrieve some metadata
+               if (instance.GetFrame(pkt, frame) >= 0) {
+                 // Check if video is interlaced and what field dominance it has if so
++#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(59,60,100)
++                if (frame->flags & AV_FRAME_FLAG_INTERLACED) {
++                  if (frame->flags & AV_FRAME_FLAG_TOP_FIELD_FIRST) {
++#else
+                 if (frame->interlaced_frame) {
+                   if (frame->top_field_first) {
++#endif
+                     interlacing = VideoParams::kInterlacedTopFirst;
+                   } else {
+                     interlacing = VideoParams::kInterlacedBottomFirst;
+diff -up olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegencoder.cpp.ffmpeg8 olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegencoder.cpp
+--- olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegencoder.cpp.ffmpeg8	2025-10-23 10:52:58.497012249 +0200
++++ olive-617ff8761250aa4c9f1dd8fde6dec45e0b96639a/app/codec/ffmpeg/ffmpegencoder.cpp	2025-10-23 11:17:48.374303229 +0200
+@@ -787,12 +787,16 @@ void FFmpegEncoder::FlushEncoders()
+   }
+ 
+   if (fmt_ctx_) {
++#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(62,3,100)
+     if (fmt_ctx_->oformat->flags & AVFMT_ALLOW_FLUSH) {
++#endif
+       int r = av_interleaved_write_frame(fmt_ctx_, nullptr);
+       if (r < 0) {
+         FFmpegError(tr("Failed to write interleaved packet"), r);
+       }
++#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(62,3,100)
+     }
++#endif
+   }
+ }
+ 

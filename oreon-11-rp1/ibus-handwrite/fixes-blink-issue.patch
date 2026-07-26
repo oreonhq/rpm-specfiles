@@ -1,0 +1,14 @@
+Index: ibus-handwrite-3.0.0/src/engine.c
+===================================================================
+--- ibus-handwrite-3.0.0.orig/src/engine.c
++++ ibus-handwrite-3.0.0/src/engine.c
+@@ -155,9 +155,7 @@ static void ibus_handwrite_engine_focus_
+ 
+ static void ibus_handwrite_engine_focus_out(IBusHandwriteEngine *engine)
+ {
+-	UI_hide_ui(engine);
+ 	printf("%s \n", __func__);
+-
+ }
+ 
+ static void ibus_handwrite_engine_reset(IBusHandwriteEngine *engine)

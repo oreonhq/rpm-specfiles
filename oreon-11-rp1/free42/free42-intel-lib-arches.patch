@@ -1,0 +1,13 @@
+diff -up free42-nologo-3.0.17/gtk/build-intel-lib.sh.orig free42-nologo-3.0.17/gtk/build-intel-lib.sh
+--- free42-nologo-3.0.17/gtk/build-intel-lib.sh.orig	2023-01-24 21:57:38.535744527 -0500
++++ free42-nologo-3.0.17/gtk/build-intel-lib.sh	2023-01-24 21:58:35.514965444 -0500
+@@ -59,7 +59,8 @@ case `uname -m` in
+   armv7|armv7l|i386|ppc)
+     patch -p0 <../intel-lib-unknown-32bit.patch
+     ;;
+-  aarch64|arm64|i86pc)
++  aarch64|arm64|i86pc|ppc64le|s390x)
++    sed -i -e 's/unsigned short int fexcept_t/unsigned int fexcept_t/' LIBRARY/src/bid_functions.h
+     patch -p0 <../intel-lib-unknown-64bit.patch
+     ;;
+ esac

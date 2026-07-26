@@ -1,0 +1,40 @@
+From a4adedf0fd292d348812d573b6354db8972b52f4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 6 Apr 2022 10:12:23 +0200
+Subject: [PATCH] Unbundle inc::Module::Install
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+And disable Module::Install::CheckConflicts not yet packaged in
+Fedora.
+
+This also fixes building on Perl without "." in @INC.
+<https://github.com/bobtfish/text-markdown/issues/41>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9c8f66f..fc01d7c 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -24,13 +24,8 @@ test_requires  'FindBin'         => undef;
+ if ($Module::Install::AUTHOR) {
+     system("pod2text lib/Text/Markdown.pm > README")
+         and die $!;
+-    require Module::Install::CheckConflicts;
+ }
+ 
+-check_conflicts(
+-    'Text::MultiMarkdown' => '1.0.27',
+-);
+-
+ install_script 'script/Markdown.pl';
+ 
+ WriteAll;
+-- 
+2.34.1
+

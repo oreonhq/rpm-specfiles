@@ -1,0 +1,42 @@
+From 9dd9d9b2ba189a0e3e8bef43d87d2e669d266a77 Mon Sep 17 00:00:00 2001
+From: Srisharan V S <srisharan.psgtech@gmail.com>
+Date: Fri, 28 Mar 2025 22:54:18 +0000
+Subject: [PATCH 1/2] Removed cppcheck from CMakeLists.txt
+
+---
+ .gitlab-ci.yml | 1 +
+ CMakeLists.txt | 9 ---------
+ 2 files changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index b46b3bf..9fcb511 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -9,3 +9,4 @@ include:
+       - /gitlab-templates/windows-qt6.yml
+       - /gitlab-templates/android-qt6.yml
+       - /gitlab-templates/alpine-qt6.yml
++      - /gitlab-templates/cppcheck.yml
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index eb1633f..887f278 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,15 +35,6 @@ if (${IS_PROJECT} AND BUILD_LINTING)
+     if(CLANG_TIDY)
+         set(CLANG_TIDY_COMMAND "${CLANG_TIDY}" "-p" "${CMAKE_BINARY_DIR}")
+     endif()
+-
+-    find_program(CPPCHECK NAMES "cppcheck")
+-    if(CPPCHECK)
+-      set(
+-          CPPCHECK_COMMAND
+-          "${CPPCHECK}"
+-          "--enable=warning,style,performance"
+-          "-I include/mankalaengine/")
+-    endif()
+ endif()
+ 
+ if(${IS_PROJECT} AND BUILD_TESTING AND Qt6_FOUND)
+-- 
+2.49.0
+

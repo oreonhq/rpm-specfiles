@@ -1,0 +1,43 @@
+From 720f5918c22a1117422fcca656bd8a413a7249fe Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 20 Sep 2024 23:27:48 +0200
+Subject: [PATCH 6/7] generator: fix warnings by implementing Display instead
+ of to_string
+
+---
+ generator/src/subcommands/gen_cmake/target.rs | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/generator/src/subcommands/gen_cmake/target.rs b/generator/src/subcommands/gen_cmake/target.rs
+index e9fcdae..9479d6a 100644
+--- a/generator/src/subcommands/gen_cmake/target.rs
++++ b/generator/src/subcommands/gen_cmake/target.rs
+@@ -1,4 +1,5 @@
+ use std::error::Error;
++use std::fmt::Display;
+ use std::path::PathBuf;
+ use std::rc::Rc;
+ 
+@@ -19,8 +20,8 @@ pub struct CargoTarget {
+     workspace_manifest_path: Rc<PathBuf>,
+ }
+ 
+-impl CargoTargetType {
+-    fn to_string(&self) -> String {
++impl Display for CargoTargetType {
++    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+         let mut s = String::new();
+         match self {
+             Self::Executable => {
+@@ -38,7 +39,7 @@ impl CargoTargetType {
+                 }
+             }
+         }
+-        s
++        write!(f, "{}", s)
+     }
+ }
+ 
+-- 
+2.46.0
+

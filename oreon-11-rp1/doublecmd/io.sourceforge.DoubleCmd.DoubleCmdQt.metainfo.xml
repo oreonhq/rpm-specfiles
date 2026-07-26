@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.sourceforge.DoubleCmd.DoubleCmdQt</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+
+  <name>Double Commander (Qt)</name>
+  <summary>Cross platform file manager with two panels side by side</summary>
+  <description>
+    <p>
+      Double Commander (Qt version) is a free cross platform open source file manager with two panels side by side. It is inspired by Total Commander and features new ideas.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">doublecmd-qt.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main window</caption>
+      <image>https://doublecmd.sourceforge.io/gallery/images/MainWindowDark.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://doublecmd.sourceforge.io</url>
+
+  <content_rating type="oars-1.1" />
+</component>

@@ -1,0 +1,15 @@
+--- fyi/main.c.orig	2026-01-01 11:18:24.448803922 -0500
++++ fyi/main.c	2026-01-01 11:18:45.519853331 -0500
+@@ -551,9 +551,9 @@
+         }
+ 
+         case 'H': {
+-            const char *type_str = optarg;
+-            const char *name = NULL;
+-            const char *value = NULL;
++            char *type_str = optarg;
++            char *name = NULL;
++            char *value = NULL;
+ 
+             char *split = strchr(type_str, ':');
+             if (split != NULL) {

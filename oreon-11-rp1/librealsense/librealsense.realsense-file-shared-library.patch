@@ -1,0 +1,26 @@
+commit f7b84e86348cd8d85c5502097a6c7533602447a8
+Author: Till Hofmann <thofmann@fedoraproject.org>
+Date:   Thu Dec 26 11:01:49 2024 +0100
+
+    Build realsense-file as shared library
+
+diff --git a/third-party/realsense-file/CMakeLists.txt b/third-party/realsense-file/CMakeLists.txt
+index 45c323b8b..fb7138587 100644
+--- a/third-party/realsense-file/CMakeLists.txt
++++ b/third-party/realsense-file/CMakeLists.txt
+@@ -24,13 +24,14 @@ endif()
+ 
+ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+ 
+-add_library(${PROJECT_NAME} STATIC
++add_library(${PROJECT_NAME} SHARED
+     ${AllSources}
+     ${HEADER_FILES_ROSBAG}
+     ${SOURCE_FILES_ROSBAG}
+     ${SOURCE_FILES_COMPRESSION}
+ )
+ 
++set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${REALSENSE_VERSION_STRING} SOVERSION "${REALSENSE_VERSION_MAJOR}.${REALSENSE_VERSION_MINOR}")
+ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
+ 
+ target_include_directories(${PROJECT_NAME} PRIVATE

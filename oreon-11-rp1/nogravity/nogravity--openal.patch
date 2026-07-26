@@ -1,0 +1,173 @@
+--- nogravity-2.00/rlx32/src/linux/snd_openal.c	2005-05-07 11:46:24.000000000 +0200
++++ nogravity-2.00.new/rlx32/src/linux/snd_openal.c	2007-12-30 20:39:36.000000000 +0100
+@@ -184,7 +184,8 @@
+   }
+   if (lpDistanceF != NULL)
+   {
+-    for (channel = 0; channel < g_nchannels; channel ++)
++    // g_nchannels - 1, highest channel is reserver for music / streams
++    for (channel = 0; channel < (g_nchannels - 1); channel ++)
+     {
+       alSourcef(g_pchannels[channel].src, AL_REFERENCE_DISTANCE, (ALfloat)*lpDistanceF);
+     }
+@@ -194,7 +195,8 @@
+   }
+   if (lpRolloffF != NULL)
+   {
+-    for (channel = 0; channel < g_nchannels; channel ++)
++    // g_nchannels - 1, highest channel is reserver for music / streams
++    for (channel = 0; channel < (g_nchannels - 1); channel ++)
+     {
+       alSourcef(g_pchannels[channel].src, AL_ROLLOFF_FACTOR, (ALfloat)*lpRolloffF);
+     }
+@@ -233,7 +235,9 @@
+ 
+ static void ChannelSetSamplingRate(int channel, int sampleRate)
+ {
+-   alSourcef(g_pchannels[channel].src, AL_PITCH, 44100.0 / sampleRate);
++   float bufferSampleRate = g_pchannels[channel].sam?
++      g_pchannels[channel].sam->samplingRate : 44100.0;
++   alSourcef(g_pchannels[channel].src, AL_PITCH, bufferSampleRate / sampleRate);
+ }
+ 
+ static void ChannelSetParms(int channel, V3XVECTOR *pos, V3XVECTOR *velocity, V3XRANGE *fRange)
+@@ -277,6 +281,8 @@
+ static void ChannelStop(int channel)
+ {
+   alSourceStop(g_pchannels[channel].src);
++  g_pchannels[channel].sam = NULL;
++  g_pchannels[channel].play = FALSE;
+ }
+ 
+ static int ChannelGetStatus(int channel)
+@@ -293,7 +299,8 @@
+ static int ChannelGetFree(V3XA_HANDLE *sam)
+ {
+   int channel;
+-  for (channel = 0; channel < g_nchannels; channel ++)
++  // g_nchannels - 1, highest channel is reserver for music / streams
++  for (channel = 0; channel < (g_nchannels - 1); channel ++)
+   {
+     if ((!g_pchannels[channel].play) &&
+         (!g_pchannels[channel].stream))
+@@ -301,7 +308,7 @@
+       break;
+     }
+   }
+-  if (channel >= g_nchannels)
++  if (channel >= (g_nchannels - 1))
+   {
+     channel = -1;
+   }
+@@ -311,7 +318,8 @@
+ static void ChannelFlushAll(int mode)
+ {
+   int channel;
+-  for (channel = 0; channel < g_nchannels; channel ++)
++  // g_nchannels - 1, highest channel is reserver for music / streams
++  for (channel = 0; channel < (g_nchannels - 1); channel ++)
+   {
+     if (ChannelGetStatus(channel))
+     {
+@@ -323,7 +331,8 @@
+ static void ChannelInvalidate(V3XA_HANDLE *sam)
+ {
+   int channel;
+-  for (channel = 0; channel < g_nchannels; channel ++)
++  // g_nchannels - 1, highest channel is reserver for music / streams
++  for (channel = 0; channel < (g_nchannels - 1); channel ++)
+   {
+     if ((g_pchannels[channel].sam == sam) &&
+ 	(ChannelGetStatus(channel)))
+@@ -347,7 +356,7 @@
+     alSourceUnqueueBuffers(g_pchannels[g_pstreams[handle].chan].src, 1, &g_pstreams[handle].bufs[g_pstreams[handle].first]);
+     alDeleteBuffers(1, &g_pstreams[handle].bufs[g_pstreams[handle].first]);
+     g_pstreams[handle].first ++;
+-    if (g_pstreams[handle].first > g_nbufsperstream)
++    if (g_pstreams[handle].first >= g_nbufsperstream)
+     {
+       g_pstreams[handle].first = 0;
+     }
+@@ -368,12 +377,11 @@
+ 	g_pstreams[stream].first = 0;
+ 	g_pstreams[stream].last = 0;
+ 	g_pchannels[g_pstreams[stream].chan].stream = TRUE;
+-	ChannelSetSamplingRate(g_pstreams[stream].chan, g_pstreams[stream].rate);
+ 	ChannelSetVolume(g_pstreams[stream].chan, 1.0);
+ 	ChannelSetPanning(g_pstreams[stream].chan, 0.0);
+ 	ChannelSetParms(g_pstreams[stream].chan, (V3XVECTOR *)&vector, (V3XVECTOR *)&vector, (V3XRANGE *)&range);
+ 	alSourcei(g_pchannels[g_pstreams[stream].chan].src, AL_LOOPING, AL_FALSE);
+- 
++	alSourcef(g_pchannels[g_pstreams[stream].chan].src, AL_PITCH, 1.0);
+ }
+ 
+ static V3XA_STREAM StreamInitialize(int sampleFormat, int sampleRate, size_t size)
+@@ -389,19 +397,12 @@
+   }
+   if (stream < g_nstreams)
+   {
+-    channel = 31;
+-    if (channel != -1)
+-    {
++	   channel = g_nchannels - 1;
+ 	   g_pstreams[stream].chan = channel;
+ 	   g_pstreams[stream].fmt = (sampleFormat & V3XA_FMTSTEREO) ?  ((sampleFormat & V3XA_FMT16BIT) ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16) : ((sampleFormat & V3XA_FMT16BIT) ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8);
+    	   g_pstreams[stream].rate = sampleRate;
+ 
+    	   StreamReset(stream);
+-	}
+-    else
+-    {
+-      stream = -1;
+-    }
+   }
+   else
+   {
+@@ -442,16 +443,16 @@
+     g_pstreams[handle].pos += size;
+     alDeleteBuffers(1, &g_pstreams[handle].bufs[g_pstreams[handle].first]);
+     g_pstreams[handle].first ++;
+-    if (g_pstreams[handle].first > g_nbufsperstream)
++    if (g_pstreams[handle].first >= g_nbufsperstream)
+     {
+       g_pstreams[handle].first = 0;
+     }
+     processed --;
+    }
+   if (((g_pstreams[handle].last >= g_pstreams[handle].first) &&
+-       (g_pstreams[handle].last - g_pstreams[handle].first <= 20)) ||
++       (g_pstreams[handle].last - g_pstreams[handle].first <= 25)) ||
+       ((g_pstreams[handle].last < g_pstreams[handle].first) &&
+-       (g_pstreams[handle].last + g_nbufsperstream - g_pstreams[handle].first <= 20)))
++       (g_pstreams[handle].last + g_nbufsperstream - g_pstreams[handle].first <= 25)))
+   {
+     ret_code = 0;
+   }
+@@ -475,7 +477,7 @@
+     alBufferData(g_pstreams[handle].bufs[g_pstreams[handle].last], g_pstreams[handle].fmt, data, size, g_pstreams[handle].rate);
+     alSourceQueueBuffers(g_pchannels[g_pstreams[handle].chan].src, 1, &g_pstreams[handle].bufs[g_pstreams[handle].last]);
+     g_pstreams[handle].last ++;
+-    if (g_pstreams[handle].last > g_nbufsperstream)
++    if (g_pstreams[handle].last >= g_nbufsperstream)
+     {
+       g_pstreams[handle].last = 0;
+     }
+--- nogravity-2.00/src/lt_sound.c	2005-06-17 21:59:34.000000000 +0200
++++ nogravity-2.00.new/src/lt_sound.c	2007-12-30 14:55:28.000000000 +0100
+@@ -414,6 +414,7 @@
+     if (RLX.Audio.Config&RLXAUDIO_Use3D)
+     {
+         V3XA.Client->ChannelSetParms(playChannel, pos, speed, NULL);
++        V3XA.Client->ChannelSetVolume(playChannel, (float)g_SGSettings.VolFX / 100);
+ 		return 1;
+     }
+     else
+@@ -444,7 +445,7 @@
+         {
+             V3XRANGE range = {1000.f, 100000.f};
+             info.smpHandle->sampleFormat|=V3XA_FMT3D;
+-            V3XA.Client->ChannelPlay(info.playChannel, 44100, 1, 0, info.smpHandle);
++            V3XA.Client->ChannelPlay(info.playChannel, 44100, (float)g_SGSettings.VolFX / 100, 0, info.smpHandle);
+             V3XA.Client->ChannelSetParms(info.playChannel, pos, speed, &range);
+         }
+         else

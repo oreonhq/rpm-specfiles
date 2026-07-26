@@ -1,0 +1,75 @@
+diff -up abcde-2.9/abcde.1.normalize abcde-2.9/abcde.1
+--- abcde-2.9/abcde.1.normalize	2018-03-08 01:22:48.000000000 +0100
++++ abcde-2.9/abcde.1	2018-03-09 16:16:02.405903317 +0100
+@@ -385,7 +385,7 @@ At this point only \'ffmpeg\' is availab
+ .TP
+ .B NORMALIZERSYNTAX
+ Specifies the style of normalizer to use.  Valid options are \'default\'
+-and \'normalize'\ (and both run \'normalize-audio\'), since we only support it,
++and \'normalize'\ (and both run \'normalize\'), since we only support it,
+ ATM.
+ .TP
+ .B CDROMREADERSYNTAX
+@@ -669,7 +669,7 @@ ImageMagick package should be installed.
+ (optional) distmp3, a client/server for distributed mp3 encoding.
+ .TP
+ .B *
+-(optional) normalize-audio, a WAV file volume normalizer.
++(optional) normalize, a WAV file volume normalizer.
+ .TP
+ .B *
+ (optional) a replaygain file volume modifier (vorbisgain, metaflac, mp3gain, mpcgain, wvgain),
+@@ -685,7 +685,7 @@ ImageMagick package should be installed.
+ .BR mid3v2 (1),
+ .BR pird (1),
+ .BR dagrab (1),
+-.BR normalize-audio (1),
++.BR normalize (1),
+ .BR oggenc (1),
+ .BR vorbize (1),
+ .BR flac (1),
+diff -up abcde-2.9/abcde.conf.normalize abcde-2.9/abcde.conf
+--- abcde-2.9/abcde.conf.normalize	2018-03-08 01:22:48.000000000 +0100
++++ abcde-2.9/abcde.conf	2018-03-09 16:16:02.405903317 +0100
+@@ -189,7 +189,7 @@
+ #DISTMP3=distmp3
+ #VORBISCOMMENT=vorbiscomment
+ #METAFLAC=metaflac
+-#NORMALIZE=normalize-audio
++#NORMALIZE=normalize
+ #CDSPEED=eject
+ #VORBISGAIN=vorbisgain
+ #MKCUE=mkcue
+diff -up abcde-2.9/abcde.normalize abcde-2.9/abcde
+--- abcde-2.9/abcde.normalize	2018-03-09 16:16:02.404903308 +0100
++++ abcde-2.9/abcde	2018-03-09 16:16:42.876271969 +0100
+@@ -3890,7 +3890,7 @@ MUSICBRAINZ=abcde-musicbrainz-tool
+ EJECT=eject
+ MD5SUM=md5sum
+ DISTMP3=distmp3
+-NORMALIZE="normalize-audio"
++NORMALIZE="normalize"
+ CDSPEED=eject
+ VORBISGAIN=vorbisgain
+ MP3GAIN=mp3gain
+diff -up abcde-2.9/README.normalize abcde-2.9/README
+--- abcde-2.9/README.normalize	2018-03-08 01:22:48.000000000 +0100
++++ abcde-2.9/README	2018-03-09 16:16:02.405903317 +0100
+@@ -218,7 +218,7 @@ Options added/modified from 2.1.1 to 2.1
+ 
+ Options added/modified from 2.0.3 to 2.1.x:
+ 
+-* -b use batch processing. It uses normalize-audio to adjust the volume of
++* -b use batch processing. It uses normalize to adjust the volume of
+   the songs, and a -g gapless option from lame to remove gaps. Only available
+   for mp3+lame combination.
+ * a new "normalize" option has been added to -a, to normalize the volume.
+@@ -267,7 +267,7 @@ abcde requires the following backend too
+ * An Opus encoder )opusenc) or:
+ * A Monkey's Ausio encoder (mac) or:
+ * A WavPack encoder (wavpack)
+-* normalize-audio for volume normalization.
++* normalize for volume normalization.
+ * CD Paranoia, an audio CD reading utility or:
+ * icedax/cdda2wav, the audio CD reading utility cdparanoia was born from or:
+ * cd-paranoia, an audio cd reading utility, courtesy of GNU libcdio or:

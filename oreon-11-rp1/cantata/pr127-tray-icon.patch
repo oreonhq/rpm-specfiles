@@ -1,0 +1,319 @@
+From ea1f04e90b68e08e1843df695da4de2375d1b2a5 Mon Sep 17 00:00:00 2001
+From: Gerald B Cox <gbcox@fedoraproject.org>
+Date: Thu, 14 Aug 2025 11:06:36 -0700
+Subject: [PATCH] Improve tray icon behavior and KDE integration (patch p5)
+
+ 43 # Conflicts:
+ 42 #       CMakeLists.txt
+ 41 #
+ 40 # It looks like you may be committing a cherry-pick.
+ 39 # If this is not correct, please run
+ 38 #       git update-ref -d CHERRY_PICK_HEAD
+ 37 # and try again.
+ 36
+ 35
+ 34 # Please enter the commit message for your changes. Lines starting
+ 33 # with '#' will be ignored, and an empty message aborts the commit.
+ 32 #
+ 31 # Date:      Thu Aug 14 11:06:36 2025 -0700
+ 30 #
+ 29 # On branch trayicon-rescue
+ 28 # Your branch is up to date with 'upstream/main'.
+ 27 #
+ 26 # You are currently cherry-picking commit 064530ef.
+ 25 #
+ 24 # Changes to be committed:
+ 23 #       modified:   CMakeLists.txt
+ 22 #       modified:   gui/mainwindow.cpp
+ 21 #       modified:   gui/trayitem.cpp
+ 20 #       modified:   gui/trayitem.h
+ 19 #       modified:   support/QtAwesome.cpp
+ 18 #
+ 17 # Untracked files:
+ 16 #       3rdparty/ebur128-not-used/
+ 15 #       3rdparty/kcategorizedview-debundle/
+ 14 #       3rdparty/qtiocompressor-removed/
+ 13 #       3rdparty/qtsingleapplication-not-used-linux/
+ 12 #       3rdparty/qxt-not-used-linux/
+ 11 #       3rdparty/solid-lite-not-used/
+ 10 #       CMakeLists.txt.IO
+  9 #       CMakeLists.txt.old
+  8 #       CMakeLists.txt.orig
+  7 #       CMakeLists.txt.save
+  6 #       data/
+  5 #       online/onlinedbservice.cpp.orig
+  4 #       online/podcastsearchdialog.cpp.orig
+  3 #       support/CMakeCache.txt
+  2 #       support/CMakeFiles/
+  1 #       support/QtAwesome.cpp.txt
+46  #                                              #
+---
+ gui/mainwindow.cpp    |  10 +++++
+ gui/trayitem.cpp      | 102 +++++++++++++++++++++++++++++++++---------
+ gui/trayitem.h        |  62 ++++++++++++++++---------
+ support/QtAwesome.cpp |   2 +-
+ 4 files changed, 133 insertions(+), 43 deletions(-)
+
+diff --git a/gui/mainwindow.cpp b/gui/mainwindow.cpp
+index 869f5353..08fe9dfa 100644
+--- a/gui/mainwindow.cpp
++++ b/gui/mainwindow.cpp
+@@ -2146,6 +2146,16 @@ void MainWindow::updateStatus(MPDStatus* const status)
+ 	}
+ 	if (status->state() != lastState && (MPDState_Playing == status->state() || MPDState_Stopped == status->state())) {
+ 		startContextTimer();
++// Queue finished (end of playlist or stop-after-current)
++		if (status->state() == MPDState_Stopped &&
++			status->nextSongId() == -1 &&
++		    Settings::self()->showPopups()) {    
++			auto *n = new KNotification(QStringLiteral("queueFinished"));
++		    n->setTitle(tr("Queue finished"));
++		    n->setText(QString());
++		    n->setUrgency(KNotification::NormalUrgency);
++		    n->sendEvent();
++		}
+ 	}
+ 
+ 	// Update status info
+diff --git a/gui/trayitem.cpp b/gui/trayitem.cpp
+index 8514ba00..343ba8f8 100644
+--- a/gui/trayitem.cpp
++++ b/gui/trayitem.cpp
+@@ -121,11 +121,21 @@ void TrayItem::setup()
+ 	//if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+ 	//    return;
+ 	//}
+-
+-	trayItem = new QSystemTrayIcon(this);
+-	trayItem->installEventFilter(new VolumeSliderEventHandler(this));
+-	trayItemMenu = new QMenu(nullptr);
+-	trayItemMenu->addAction(StdActions::self()->prevTrackAction);
++    // Create tray backend
++#if defined(USE_KSNI)
++    trayItem = new KStatusNotifierItem(this);
++    trayItem->setCategory(KStatusNotifierItem::ApplicationStatus);
++    trayItem->setStatus(KStatusNotifierItem::Active);
++    trayItemMenu = new QMenu(nullptr);
++    trayItem->setContextMenu(trayItemMenu);
++#else
++    trayItem = new QSystemTrayIcon(this);
++    trayItem->installEventFilter(new VolumeSliderEventHandler(this));
++    trayItemMenu = new QMenu(nullptr);
++    trayItem->setContextMenu(trayItemMenu);
++#endif
++    // Populate common menu
++    trayItemMenu->addAction(StdActions::self()->prevTrackAction);
+ 	trayItemMenu->addAction(StdActions::self()->playPauseTrackAction);
+ 	trayItemMenu->addAction(StdActions::self()->stopPlaybackAction);
+ 	trayItemMenu->addAction(StdActions::self()->stopAfterCurrentTrackAction);
+@@ -162,12 +172,32 @@ void TrayItem::setup()
+ 		icon.addFile(QLatin1String(ICON_INSTALL_PREFIX "/scalable/apps/" PROJECT_REV_ID ".svg"));
+ 	}
+ #endif
+-	trayItem->setIcon(icon);
+-	trayItem->setToolTip(tr("Cantata"));
+-	trayItem->show();
+-	connect(trayItem, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayItemClicked(QSystemTrayIcon::ActivationReason)));
++
++    trayItem->setIcon(icon);
++#if defined(USE_KSNI)
++    trayItem->setToolTip(QIcon::fromTheme(QStringLiteral(PROJECT_REV_ID)), tr("Cantata"), QString());
++    // KStatusNotifierItem does not need show() or QSystemTrayIcon connections
++#else
++    trayItem->setToolTip(tr("Cantata"));
++    trayItem->show();
++    connect(trayItem, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
++            this, SLOT(trayItemClicked(QSystemTrayIcon::ActivationReason)));
+ #endif
++
++#endif
++}
++
++#if defined(USE_KSNI)
++void TrayItem::setOverlayPaused(bool paused)
++{
++    if (!trayItem) return;
++    if (paused) {
++        trayItem->setOverlayIconByName(QStringLiteral("media-playback-pause"));
++    } else {
++        trayItem->setOverlayIcon(QIcon()); // clear overlay
++    }
+ }
++#endif
+ 
+ void TrayItem::trayItemClicked(QSystemTrayIcon::ActivationReason reason)
+ {
+@@ -194,22 +224,54 @@ void TrayItem::trayItemClicked(QSystemTrayIcon::ActivationReason reason)
+ 
+ void TrayItem::songChanged(const Song& song, bool isPlaying)
+ {
+-	if (Settings::self()->showPopups()) {
+ 		bool useable = song.isStandardStream()
+ 				? !song.title.isEmpty() && !song.name().isEmpty()
+ 				: !song.title.isEmpty() && !song.artist.isEmpty() && !song.album.isEmpty();
+ 		if (useable && isPlaying) {
+-			if (songNotif == nullptr) {
+-				songNotif = new KNotification("newSong");
+-				songNotif->setAutoDelete(false);
+-			}
+-			songNotif->setTitle(song.mainText());
+-			songNotif->setText(song.subText());
+-			songNotif->setImage(CurrentCover::self()->image().scaledToHeight(512, Qt::SmoothTransformation));
+-			songNotif->setUrgency(KNotification::LowUrgency);
+-			songNotif->sendEvent();
+-		}
++			// Always emit a KDE notification: Plasma can suppress popups but still keep history.
++            auto *n = new KNotification(QStringLiteral("newSong"));
++            // Ensure it maps to cantata.notifyrc (safer for per‑app settings/history)
++            n->setComponentName(QStringLiteral("cantata"));
++            n->setTitle(song.mainText());
++            n->setText(song.subText());
++            n->setImage(CurrentCover::self()->image().scaledToHeight(512, Qt::SmoothTransformation));
++            n->setUrgency(KNotification::LowUrgency);
++            n->sendEvent();
++
++			#if defined(USE_KSNI)
++// Multi-line tooltip + overlay (Linux SNI)
++		    const QString title = song.isStandardStream()
++				    ? song.name()
++		            : QStringLiteral("%1 — %2").arg(song.artist, song.title);
++		 
++   const QString sub   = song.isStandardStream()
++				    ? song.title
++		            : song.album;
++		    setToolTip(QStringLiteral("audio-x-generic"), title, sub);
++		    setOverlayPaused(!isPlaying);
++			#else
++// Single-line tooltip fallback (Windows/macOS or Linux without SNI)
++		    const QString oneLine = song.isStandardStream()
++				    ? QStringLiteral("%1 — %2").arg(song.name(), song.title)
++		            : QStringLiteral("%1 — %2").arg(song.artist, song.title);
++		    setToolTip(QString(), oneLine, QString());
++			#endif
+ 	}
++
++#if defined(USE_KSNI)
++    const QString title = song.isStandardStream()
++            ? song.name()
++            : QStringLiteral("%1 — %2").arg(song.artist, song.title);
++    const QString sub   = song.isStandardStream() ? song.title : song.album;
++    setToolTip(QStringLiteral("audio-x-generic"), title, sub);
++    setOverlayPaused(!isPlaying);
++#else
++    const QString oneLine = song.isStandardStream()
++            ? QStringLiteral("%1 — %2").arg(song.name(), song.title)
++            : QStringLiteral("%1 — %2").arg(song.artist, song.title);
++    setToolTip(QString(), oneLine, QString());
++#endif
++
+ }
+ 
+ #ifndef Q_OS_MAC
+diff --git a/gui/trayitem.h b/gui/trayitem.h
+index 0e4ddcd7..98da8dde 100644
+--- a/gui/trayitem.h
++++ b/gui/trayitem.h
+@@ -28,6 +28,10 @@
+ #include "support/icon.h"
+ #include <QObject>
+ #include <QSystemTrayIcon>
++#if defined(USE_KSNI)
++#include <KStatusNotifierItem>
++#endif
++
+ class QMenu;
+ #include "config.h"
+ 
+@@ -49,40 +53,54 @@ public:
+ 	void setToolTip(const QString&, const QString&, const QString&) {}
+ #else
+ 	bool isActive() const { return nullptr != trayItem; }
+-	void setIcon(const QIcon& icon)
+-	{
+-		if (trayItem) {
+-			trayItem->setIcon(icon);
+-		}
+-	}
+-	void setToolTip(const QString& iconName, const QString& title, const QString& subTitle)
+-	{
+-		if (trayItem) {
+-			Q_UNUSED(iconName)
+-			Q_UNUSED(subTitle)
+-			trayItem->setToolTip(title);
+-		}
+-	}
++
++    void setIcon(const QIcon& icon)
++    {
++#if defined(USE_KSNI)
++        if (trayItem) trayItem->setIcon(icon);
++#else
++        if (trayItem) trayItem->setIcon(icon);
++#endif
++    }
++    void setToolTip(const QString& iconName, const QString& title, const QString& subTitle)
++    {
++        if (!trayItem) return;
++#if defined(USE_KSNI)
++        Q_UNUSED(subTitle) // body comes from separate call below if needed
++        trayItem->setToolTip(QIcon::fromTheme(iconName), title, QString());
++#else
++        Q_UNUSED(iconName)
++        Q_UNUSED(subTitle)
++        trayItem->setToolTip(title);
++#endif
++    }
+ #endif
+ 	void songChanged(const Song& song, bool isPlaying);
+ 	void updateConnections();
+ 	void updatePartitions();
+ 	void updateOutputs();
+ 
++#if defined(USE_KSNI)
++    void setOverlayPaused(bool paused);
++#endif
++
+ private Q_SLOTS:
+ 	void trayItemClicked(QSystemTrayIcon::ActivationReason reason);
+ 
+ private:
+ #ifndef Q_OS_MAC
+-
+-	MainWindow* mw;
+-	QSystemTrayIcon* trayItem;
+-	QMenu* trayItemMenu;
+-	Action* connectionsAction;
+-	Action* partitionsAction;
+-	Action* outputsAction;
+-
++    MainWindow* mw;
++#if defined(USE_KSNI)
++    KStatusNotifierItem* trayItem = nullptr;
++#else
++    QSystemTrayIcon* trayItem = nullptr;
++#endif
++    QMenu*  trayItemMenu       = nullptr;
++    Action* connectionsAction  = nullptr;
++    Action* partitionsAction   = nullptr;
++    Action* outputsAction      = nullptr;
+ #endif
++
+ 	KNotification* songNotif = nullptr;
+ };
+ 
+diff --git a/support/QtAwesome.cpp b/support/QtAwesome.cpp
+index 58fb353c..7f4073dd 100644
+--- a/support/QtAwesome.cpp
++++ b/support/QtAwesome.cpp
+@@ -28,7 +28,7 @@
+ #endif
+ 
+ // Initializing namespaces need to happen outside a namespace
+-static void qtawesome_init_resources()
++[[maybe_unused]] static void qtawesome_init_resources()
+ {
+ #ifdef BUNDLED_FONTAWESOME
+ 	Q_INIT_RESOURCE(QtAwesomeFree);
+-- 
+2.52.0
+

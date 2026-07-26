@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id='mapcache_detail'>
+
+  <refmeta>
+    <refentrytitle>mapcache_detail</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>mapcache_detail</refname>
+    <refpurpose>coverage analysis tool for SQLite caches</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv id='synopsis'>
+    <cmdsynopsis>
+      <command>mapcache_detail</command>
+      <arg choice='opt'><replaceable>options</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id='description'>
+    <title>DESCRIPTION</title>
+    <para>
+      <command>mapcache_detail</command> is a coverage analysis tool for SQLite caches.
+    </para>
+  </refsect1>
+
+  <refsect1 id='options'>
+    <title>OPTIONS</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>-c</option></term>
+        <term><option>--config</option> <replaceable>file</replaceable></term>
+        <listitem>
+          <para>Configuration file (/path/to/mapcache.xml)</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-D</option></term>
+        <term><option>--dimension</option> <replaceable>DIMENSION_NAME=VALUE</replaceable></term>
+        <listitem>
+          <para>Set the value of a dimension: format DIMENSIONNAME=VALUE. Can be used multiple times for multiple dimensions</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-t</option></term>
+        <term><option>--tileset</option> <replaceable>name</replaceable></term>
+        <listitem>
+          <para>Tileset to analyze</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-g</option></term>
+        <term><option>--grid</option> <replaceable>name</replaceable></term>
+        <listitem>
+          <para>Grid to analyze</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-e</option></term>
+        <term><option>--extent</option> <replaceable>minx,miny,maxx,maxy</replaceable></term>
+        <listitem>
+          <para>Extent to analyze: format minx,miny,maxx,maxy. Cannot be used with <option>--ogr-datasource</option></para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-d</option></term>
+        <term><option>--ogr-datasource</option> <replaceable>data source</replaceable></term>
+        <listitem>
+          <para>OGR data source to get features from. Cannot be used with <option>--extent</option>.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-l</option></term>
+        <term><option>--ogr-layer</option> <replaceable>layer</replaceable></term>
+        <listitem>
+          <para>OGR layer inside OGR data source. Cannot be used with <option>--ogr-sql</option>.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-w</option></term>
+        <term><option>--ogr-where</option> <replaceable>filter</replaceable></term>
+        <listitem>
+          <para>Filter to apply on OGR layer features. Cannot be used with <option>--ogr-sql</option>.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-s</option></term>
+        <term><option>--ogr-sql</option> <replaceable>SQL query</replaceable></term>
+        <listitem>
+          <para>SQL query to filter inside OGR data source. Cannot be used with <option>--ogr-layer</option> or <option>--ogr-where</option>.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-z</option></term>
+        <term><option>--zoom</option> <replaceable>minzoom,maxzoom</replaceable></term>
+        <listitem>
+          <para>Set min and max zoom levels to analyze, separated by a comma, eg: 12,15</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-q</option></term>
+        <term><option>--query</option> <replaceable>value</replaceable></term>
+        <listitem>
+          <para>Set query for counting tiles in a rectangle. Default value works with default schema of SQLite caches.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>-o</option></term>
+        <term><option>--short-output</option></term>
+        <listitem>
+          <para>Only existing SQLite files are reported, missing SQLite files are still taken into account for level and global coverage.</para>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+  </refsect1>
+
+  <refsect1 id='example'>
+    <title>EXAMPLE</title>
+
+    <informalexample>
+      <para>Analyze tile coverage of tileset osm with the g grid. Default extent is the whole world and default zoom level is 0:</para>
+      <screen>
+        mapcache_detail --config mapcache.xml --tileset osm --grid g
+      </screen>
+    </informalexample>
+
+    <informalexample>
+      <para>Same as beforehand, with explicit zoom levels 9 to 12 and explicit extent covering Switzerland:</para>
+      <screen>
+        mapcache_detail --config mapcache.xml --tileset osm --grid g --zoom 9,12 --extent 663000,5751230,1167680,6075050
+      </screen>
+    </informalexample>
+
+  </refsect1>
+
+</refentry>

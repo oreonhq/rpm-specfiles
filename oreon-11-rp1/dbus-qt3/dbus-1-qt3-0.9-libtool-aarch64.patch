@@ -1,0 +1,12 @@
+diff -ur dbus-1-qt3-0.9/configure dbus-1-qt3-0.9-libtool-aarch64/configure
+--- dbus-1-qt3-0.9/configure	2008-06-05 23:11:32.000000000 +0200
++++ dbus-1-qt3-0.9-libtool-aarch64/configure	2019-01-04 03:18:17.027751864 +0100
+@@ -7895,7 +7895,7 @@
+ # This must be Linux ELF.
+ linux*)
+   case $host_cpu in
+-  alpha* | hppa* | i*86 | ia64* | m68* | mips* | powerpc* | sparc* | s390* | sh* | x86_64* )
++  alpha* | hppa* | i*86 | ia64* | m68* | mips* | powerpc* | sparc* | s390* | sh* | x86_64* | aarch64* )
+     lt_cv_deplibs_check_method=pass_all ;;
+   # the debian people say, arm and glibc 2.3.1 works for them with pass_all
+   arm* )

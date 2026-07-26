@@ -1,0 +1,205 @@
+%global source0_hash 176705f1de58ab7c1eebbf5c6de46ab76fcd8b856508dbd28f5648f7c6e1a7f0
+
+%bcond autoreconf 1
+
+# Not (yet) in EPEL10:
+# mingw{32,64}-{expat,libcharset,minizip}
+%bcond mingw %{undefined el10}
+
+Name:           freexl
+Version:        2.0.0
+%global so_version 1
+Release:        %autorelease
+Summary:        Library to extract data from within an Excel spreadsheet
+
+# The entire source is triply-licensed as (MPL-1.1 OR GPL-2.0-or-later OR
+# LGPL-2.1-or-later), except for some build-system files that do not contribute
+# to the license of the binary RPMs:
+#   - aclocal.m4, m4/ltoptions.m4, m4/ltsugar.m4, m4/ltversion.m4, and
+#     m4/lt~obsolete.m4 are FSFULLR
+#   - compile, config.guess, config.sub, depcomp, ltmain.sh, missing, and
+#     test-driver are GPL-2.0-or-later
+#   - configure is FSFUL, or, more likely,
+#     (FSFUL AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later))
+#   - install-sh is X11
+#   - m4/libtool.m4 is (FSFULLR AND GPL-2.0-or-later)
+License:        MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later
+URL:            https://www.gaia-gis.it/fossil/freexl/index
+Source:         https://www.gaia-gis.it/gaia-sins/freexl-%{version}.tar.gz
+
+# Fix incompatible pointer type in the mingw32 build
+#
+# Freexl calls iconv with incompatible pointer type in mingw32 builds
+# https://www.gaia-gis.it/fossil/freexl/tktview/79f730a917ae90257a88acb974490daf115c2192
+Patch:          freexl-2.0.0-iconv-mingw32.patch
+
+%if %{with autoreconf}
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+%endif
+
+BuildRequires:  expat-devel
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  minizip-ng-compat-devel
+
+BuildRequires:  doxygen
+
+%if %{with mingw}
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw32-expat
+BuildRequires:  mingw32-libcharset
+BuildRequires:  mingw32-minizip
+BuildRequires:  mingw32-win-iconv
+
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc
+BuildRequires:  mingw64-expat
+BuildRequires:  mingw64-libcharset
+BuildRequires:  mingw64-minizip
+BuildRequires:  mingw64-win-iconv
+%endif
+
+%description
+FreeXL is a library to extract valid data from within spreadsheets.
+
+Design goals:
+  • to be simple and lightweight
+  • to be stable, robust and efficient
+  • to be easily and universally portable
+  • completely ignoring any GUI-related oddity
+
+%package doc
+Summary:        Documentation and examples for FreeXL
+
+# We unbundle Doxygen-inserted JavaScript assets from the HTML documentation
+# as much as possible, as prescribed in
+# https://src.fedoraproject.org/rpms/doxygen/blob/f42/f/README.rpm-packaging.
+#
+# Some files originating in Doxygen are still bundled or are generated from
+# templates specifically for this package; where these have explicitly
+# documented licenses, they are MIT.
+License:        %{license} AND MIT
+
+BuildArch:      noarch
+
+%{?doxygen_js_requires}
+
+%description doc
+%{summary}.
+
+%package devel
+Summary:  Development Libraries for FreeXL
+Requires: freexl%{?_isa} = %{version}-%{release}
+
+%description devel
+The freexl-devel package contains libraries and header files for
+developing applications that use freexl.
+
+%if %{with mingw}
+%package -n mingw32-%{name}
+Summary:       MinGW Windows freexl library
+BuildArch:     noarch
+
+%description -n mingw32-%{name}
+MinGW Windows freexl library.
+
+%package -n mingw64-%{name}
+Summary:       MinGW Windows freexl library
+BuildArch:     noarch
+
+%description -n mingw64-%{name}
+MinGW Windows freexl library.
+
+%{?mingw_debug_package}
+%endif
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1
+
+# We want to install a “clean” version of the examples
+mkdir -p clean
+cp -rp examples clean/
+# Automake files don’t work without a configure.ac; don’t bother installing
+# them.
+rm -vf clean/examples/Makefile.*
+
+# Prepare native build dir with testdata
+mkdir build_native
+cp -a tests build_native
+
+%conf
+%if %{with autoreconf}
+autoreconf --force --install --verbose
+%endif
+
+pushd build_native
+%global _configure ../configure
+%configure --disable-static
+popd
+
+%if %{with mingw}
+%mingw_configure --disable-static
+%endif
+
+%build
+pushd build_native
+%make_build
+
+doxygen Doxyfile
+%{doxygen_unbundle html}
+popd
+
+%if %{with mingw}
+%mingw_make_build
+%endif
+
+%install
+%make_install -C build_native
+
+%if %{with mingw}
+%mingw_make_install
+%mingw_debug_install_post
+%endif
+
+%check
+%make_build -C build_native check
+
+%files
+%license COPYING
+%{_libdir}/libfreexl.so.%{so_version}{,.*}
+
+%files devel
+%{_includedir}/freexl.h
+%{_libdir}/libfreexl.so
+%{_libdir}/pkgconfig/freexl.pc
+
+%files doc
+%license COPYING
+%doc AUTHORS
+%doc README
+%doc clean/examples/
+%doc build_native/html/
+
+%if %{with mingw}
+%files -n mingw32-%{name}
+%license COPYING
+%{mingw32_bindir}/libfreexl-1.dll
+%{mingw32_includedir}/freexl.h
+%{mingw32_libdir}/libfreexl.dll.a
+%{mingw32_libdir}/pkgconfig/freexl.pc
+
+%files -n mingw64-%{name}
+%license COPYING
+%{mingw64_bindir}/libfreexl-1.dll
+%{mingw64_includedir}/freexl.h
+%{mingw64_libdir}/libfreexl.dll.a
+%{mingw64_libdir}/pkgconfig/freexl.pc
+%endif
+
+%changelog
+%autochangelog

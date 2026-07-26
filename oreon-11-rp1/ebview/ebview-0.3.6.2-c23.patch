@@ -1,0 +1,63 @@
+diff --git a/src/headword.c b/src/headword.c
+index 86d97ac..e2bd823 100644
+--- a/src/headword.c
++++ b/src/headword.c
+@@ -637,7 +637,7 @@ void update_tree_view()
+ 	gtk_tree_view_column_set_visible(dict_column, !bsort_by_dictionary);
+ }
+ 
+-void next_heading(GtkWidget *widget, gpointer *data){
++void next_heading(){
+ 
+ 	LOG(LOG_DEBUG, "IN : next_heading()");
+ 
+@@ -654,7 +654,7 @@ void next_heading(GtkWidget *widget, gpointer *data){
+ 
+ }
+ 
+-void previous_heading(GtkWidget *widget, gpointer *data){
++void previous_heading(){
+ 
+ 	LOG(LOG_DEBUG, "IN : previous_heading()");
+ 
+diff --git a/src/headword.h b/src/headword.h
+index 0cbe1b3..becd7b7 100644
+--- a/src/headword.h
++++ b/src/headword.h
+@@ -24,8 +24,8 @@ void show_result_tree();
+ void select_first_item();
+ void item_next();
+ void item_previous();
+-void next_heading(GtkWidget *widget, gpointer *data);
+-void previous_heading(GtkWidget *widget, gpointer *data);
++void next_heading();
++void previous_heading();
+ 
+ GtkWidget *create_headword_tree();
+ void update_tree_view();
+diff --git a/src/mainwindow.c b/src/mainwindow.c
+index f1249c9..bbc13df 100644
+--- a/src/mainwindow.c
++++ b/src/mainwindow.c
+@@ -268,7 +268,7 @@ static gint entry_activate_event(GtkWidget *widget, GdkEventKey *event){
+ 
+ 	LOG(LOG_DEBUG, "IN : entry_activate_event()");
+ 
+-	start_search(NULL, NULL);
++	start_search();
+ 
+ 	LOG(LOG_DEBUG, "OUT : entry_activate_event()");
+ 	return(FALSE);
+diff --git a/src/popup.c b/src/popup.c
+index 73fd25b..b30af8f 100644
+--- a/src/popup.c
++++ b/src/popup.c
+@@ -460,7 +460,7 @@ static void create_popup_window(){
+ }
+ 
+ 
+-static gint scroll_to_top()
++static gint scroll_to_top(gpointer data)
+ {
+ 	GtkTextIter iter;
+ 	GtkTextMark *mark;

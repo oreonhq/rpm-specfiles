@@ -1,0 +1,170 @@
+diff -up ./cmake/FindTINYXML2.cmake.orig ./cmake/FindTINYXML2.cmake
+--- ./cmake/FindTINYXML2.cmake.orig	2020-08-13 09:09:54.115315390 +0200
++++ ./cmake/FindTINYXML2.cmake	2020-08-13 09:34:39.071909695 +0200
+@@ -0,0 +1,15 @@
++# - Find the tinyxml2 includes and library
++# This module defines
++#  TINYXML2_INCLUDE_DIR, where to find tinyxml.h, etc.
++#  TINYXML2_LIBRARY, the libraries required to use tinyxml2.
++#  TINYXML2_FOUND, If false, do not try to use tinyxml2.
++
++FIND_PATH(TINYXML2_INCLUDE_DIR tinyxml2.h)
++FIND_LIBRARY(TINYXML2_LIBRARY NAMES tinyxml2)
++
++# handle the QUIETLY and REQUIRED arguments and set TINYXML2_FOUND to TRUE if 
++# all listed variables are TRUE
++INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
++FIND_PACKAGE_HANDLE_STANDARD_ARGS(TINYXML2 DEFAULT_MSG TINYXML2_LIBRARY TINYXML2_INCLUDE_DIR)
++
++MARK_AS_ADVANCED(TINYXML2_INCLUDE_DIR TINYXML2_LIBRARY)
+diff -up ./libdvblinkremote/src/channel.cpp.orig ./libdvblinkremote/src/channel.cpp
+--- ./libdvblinkremote/src/channel.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/channel.cpp	2020-08-13 09:25:33.520282886 +0200
+@@ -114,7 +114,7 @@ bool GetChannelsResponseSerializer::Read
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("channels");
+     GetChannelsResponseXmlDataDeserializer* xmlDataDeserializer = new GetChannelsResponseXmlDataDeserializer(*this, object);
+     elRoot->Accept(xmlDataDeserializer);
+diff -up ./libdvblinkremote/src/epg.cpp.orig ./libdvblinkremote/src/epg.cpp
+--- ./libdvblinkremote/src/epg.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/epg.cpp	2020-08-13 09:25:33.524282788 +0200
+@@ -189,7 +189,7 @@ bool EpgSearchResponseSerializer::ReadOb
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("epg_searcher");
+     ChannelEpgXmlDataDeserializer* xmlDataDeserializer = new ChannelEpgXmlDataDeserializer(*this, object);
+     elRoot->Accept(xmlDataDeserializer);
+diff -up ./libdvblinkremote/src/generic_response.cpp.orig ./libdvblinkremote/src/generic_response.cpp
+--- ./libdvblinkremote/src/generic_response.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/generic_response.cpp	2020-08-13 09:25:33.542282346 +0200
+@@ -74,7 +74,7 @@ bool GenericResponseSerializer::ReadObje
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("response");
+     int statusCode = Util::GetXmlFirstChildElementTextAsInt(elRoot, "status_code");
+ 
+diff -up ./libdvblinkremote/src/parental_lock.cpp.orig ./libdvblinkremote/src/parental_lock.cpp
+--- ./libdvblinkremote/src/parental_lock.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/parental_lock.cpp	2020-08-13 09:25:33.529282665 +0200
+@@ -95,7 +95,7 @@ bool ParentalStatusSerializer::ReadObjec
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("parental_status");
+     object.IsEnabled = Util::GetXmlFirstChildElementTextAsBoolean(elRoot, "is_enabled");
+     return true;
+diff -up ./libdvblinkremote/src/playback_object.cpp.orig ./libdvblinkremote/src/playback_object.cpp
+--- ./libdvblinkremote/src/playback_object.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/playback_object.cpp	2020-08-13 09:25:33.539282420 +0200
+@@ -136,7 +136,7 @@ bool GetPlaybackObjectResponseSerializer
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("object");
+     
+     if (HasChildElement(*elRoot, "containers")) 
+diff -up ./libdvblinkremote/src/recording.cpp.orig ./libdvblinkremote/src/recording.cpp
+--- ./libdvblinkremote/src/recording.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/recording.cpp	2020-08-13 09:25:33.513283057 +0200
+@@ -104,7 +104,7 @@ bool GetRecordingsResponseSerializer::Re
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("recordings");
+     GetRecordingsResponseXmlDataDeserializer* xmlDataDeserializer = new GetRecordingsResponseXmlDataDeserializer(*this, object);
+     elRoot->Accept(xmlDataDeserializer);
+diff -up ./libdvblinkremote/src/recording_settings.cpp.orig ./libdvblinkremote/src/recording_settings.cpp
+--- ./libdvblinkremote/src/recording_settings.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/recording_settings.cpp	2020-08-13 09:25:33.483283793 +0200
+@@ -75,7 +75,7 @@ bool RecordingSettingsSerializer::ReadOb
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("recording_settings");
+     object.TimeMarginBeforeScheduledRecordings = Util::GetXmlFirstChildElementTextAsInt(elRoot, "before_margin");
+     object.TimeMarginAfterScheduledRecordings = Util::GetXmlFirstChildElementTextAsInt(elRoot, "after_margin");
+diff -up ./libdvblinkremote/src/scheduling.cpp.orig ./libdvblinkremote/src/scheduling.cpp
+--- ./libdvblinkremote/src/scheduling.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/scheduling.cpp	2020-08-13 09:25:33.533282567 +0200
+@@ -304,7 +304,7 @@ bool GetSchedulesResponseSerializer::Rea
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("schedules");
+     GetSchedulesResponseXmlDataDeserializer* xmlDataDeserializer = new GetSchedulesResponseXmlDataDeserializer(*this, object);
+     elRoot->Accept(xmlDataDeserializer);
+diff -up ./libdvblinkremote/src/stream.cpp.orig ./libdvblinkremote/src/stream.cpp
+--- ./libdvblinkremote/src/stream.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/stream.cpp	2020-08-13 09:25:33.516282984 +0200
+@@ -74,7 +74,7 @@ bool StreamResponseSerializer::ReadObjec
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("stream");
+     long channelHandle = Util::GetXmlFirstChildElementTextAsLong(elRoot, "channel_handle");
+     std::string url = Util::GetXmlFirstChildElementText(elRoot, "url");
+diff -up ./libdvblinkremote/src/streaming_capabilities.cpp.orig ./libdvblinkremote/src/streaming_capabilities.cpp
+--- ./libdvblinkremote/src/streaming_capabilities.cpp.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/streaming_capabilities.cpp	2020-08-13 09:25:33.509283155 +0200
+@@ -83,7 +83,7 @@ bool StreamingCapabilitiesSerializer::Re
+ {
+   tinyxml2::XMLDocument& doc = GetXmlDocument();
+     
+-  if (doc.Parse(xml.c_str()) == tinyxml2::XML_NO_ERROR) {
++  if (doc.Parse(xml.c_str()) == tinyxml2::XML_SUCCESS) {
+     tinyxml2::XMLElement* elRoot = doc.FirstChildElement("streaming_caps");
+     object.SupportedProtocols = Util::GetXmlFirstChildElementTextAsInt(elRoot, "protocols");
+     object.SupportedTranscoders = Util::GetXmlFirstChildElementTextAsInt(elRoot, "transcoders");
+diff -up ./libdvblinkremote/src/util.h.orig ./libdvblinkremote/src/util.h
+--- ./libdvblinkremote/src/util.h.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/util.h	2020-08-13 09:15:46.250681543 +0200
+@@ -27,7 +27,7 @@
+ #include <sstream>
+ #include <iostream>
+ #include <cstdio>
+-#include "tinyxml2/tinyxml2.h"
++#include "tinyxml2.h"
+ 
+ namespace dvblinkremote {
+   class Util {
+@@ -53,4 +53,4 @@ namespace dvblinkremote {
+     template <class T> static bool from_string(T& t, const std::string& s, std::ios_base& (*f)(std::ios_base&));
+     template <class T> static bool to_string(const T& t, std::string& s);
+   };
+-}
+\ Pas de fin de ligne à la fin du fichier
++}
+diff -up ./libdvblinkremote/src/xml_object_serializer.h.orig ./libdvblinkremote/src/xml_object_serializer.h
+--- ./libdvblinkremote/src/xml_object_serializer.h.orig	2012-10-22 01:07:36.000000000 +0200
++++ ./libdvblinkremote/src/xml_object_serializer.h	2020-08-13 09:15:38.745865549 +0200
+@@ -30,7 +30,7 @@
+ #include "request.h"
+ #include "response.h"
+ #include "util.h"
+-#include "tinyxml2/tinyxml2.h"
++#include "tinyxml2.h"
+ 
+ using namespace dvblinkremote;
+ 

@@ -1,0 +1,86 @@
+From 9ae2fde74ec08415c9c5882668748456555a8e14 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 10 Nov 2025 13:54:31 +0100
+Subject: [PATCH] Set locale to C for tests that compare textual messages
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Some tests failed in cs_CZ.UTF-8 locale because they expected
+non-localized messages, like this:
+
+    $ xvfb-run -a prove -l t/0602_Dialog_Scan.t
+    t/0602_Dialog_Scan.t .. 1/23 2025/11/10 14:01:30 Ignoring invalid argument 'Lineart' for option 'mode'.
+    t/0602_Dialog_Scan.t .. 20/23
+    #   Failed test 'paper combobox has a value'
+    #   at t/0602_Dialog_Scan.t line 411.
+    Wide character in print at /usr/share/perl5/vendor_perl/Test2/Formatter/TAP.pm line 125.
+    #          got: 'Ručně'
+    #     expected: 'Manual'
+    # Looks like you failed 1 test of 23.
+
+This patch fixes them.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/053_Dialog_MultipleMessage.t   | 3 +++
+ t/0602_Dialog_Scan.t             | 1 +
+ t/06192_Dialog_Scan_Image_Sane.t | 1 +
+ t/06292_Dialog_Scan_CLI.t        | 3 +++
+ 4 files changed, 8 insertions(+)
+
+diff --git a/t/053_Dialog_MultipleMessage.t b/t/053_Dialog_MultipleMessage.t
+index 2fa87259..2a1f1f4b 100644
+--- a/t/053_Dialog_MultipleMessage.t
++++ b/t/053_Dialog_MultipleMessage.t
+@@ -2,6 +2,9 @@ use warnings;
+ use strict;
+ use Test::More tests => 23;
+ use Glib qw(TRUE FALSE);    # To get TRUE and FALSE
++BEGIN {
++    $ENV{'LC_ALL'} = 'C';
++}
+ use Gtk3 -init;
+ 
+ BEGIN {
+diff --git a/t/0602_Dialog_Scan.t b/t/0602_Dialog_Scan.t
+index 67ef36eb..36e89827 100644
+--- a/t/0602_Dialog_Scan.t
++++ b/t/0602_Dialog_Scan.t
+@@ -5,6 +5,7 @@ use Glib qw(TRUE FALSE);    # To get TRUE and FALSE
+ use Image::Sane ':all';     # To get SANE_* enums
+ 
+ BEGIN {
++    $ENV{'LC_ALL'} = 'C';
+     use Gscan2pdf::Dialog::Scan::Image_Sane;
+ }
+ use Gtk3 -init;  # on some systems, initialising earlier segfaults
+diff --git a/t/06192_Dialog_Scan_Image_Sane.t b/t/06192_Dialog_Scan_Image_Sane.t
+index 3dd0eab2..236850b4 100644
+--- a/t/06192_Dialog_Scan_Image_Sane.t
++++ b/t/06192_Dialog_Scan_Image_Sane.t
+@@ -5,6 +5,7 @@ use Glib qw(TRUE FALSE);    # To get TRUE and FALSE
+ use Image::Sane ':all';     # To get SANE_* enums
+ 
+ BEGIN {
++    $ENV{'LC_ALL'} = 'C';
+     use Gscan2pdf::Dialog::Scan::Image_Sane;
+ }
+ use Gtk3 -init;  # on some systems, initialising earlier segfaults
+diff --git a/t/06292_Dialog_Scan_CLI.t b/t/06292_Dialog_Scan_CLI.t
+index 7b9d5da1..17abe559 100644
+--- a/t/06292_Dialog_Scan_CLI.t
++++ b/t/06292_Dialog_Scan_CLI.t
+@@ -2,6 +2,9 @@ use warnings;
+ use strict;
+ use Test::More tests => 7;
+ use Glib qw(TRUE FALSE);    # To get TRUE and FALSE
++BEGIN {
++    $ENV{'LC_ALL'} = 'C';
++}
+ use Gtk3 -init;             # Could just call init separately
+ use Image::Sane ':all';     # To get SANE_* enums
+ 
+-- 
+2.51.1
+

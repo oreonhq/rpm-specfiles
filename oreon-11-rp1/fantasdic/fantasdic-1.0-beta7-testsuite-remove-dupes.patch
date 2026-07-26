@@ -1,0 +1,22 @@
+--- fantasdic-1.0-beta7.orig/test/test_source_base.rb	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/test/test_source_base.rb	2022-11-08 23:05:10.969149178 +0900
+@@ -115,7 +115,7 @@ class TestSourceBase < Test::Unit::TestC
+     end
+     private :test_match_number
+ 
+-    def test_cached_multiple_define
++    def test_cached_multiple_define_2
+         test_match_number("2", "4")
+         assert_equal(@source.n_match_calls, 1)
+ 
+--- fantasdic-1.0-beta7.orig/test/test_stardict_file.rb	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/test/test_stardict_file.rb	2022-11-08 23:05:25.264158384 +0900
+@@ -74,7 +74,7 @@
+         end
+     end
+ 
+-    def test_match_suffix
++    def test_match_suffix_2
+         StardictIndex.open(@index_file) do |index|
+             assert_equal(index.match_word("piece"),
+                          [["10c piece", 1121, 26], ["5c piece", 1147, 25],

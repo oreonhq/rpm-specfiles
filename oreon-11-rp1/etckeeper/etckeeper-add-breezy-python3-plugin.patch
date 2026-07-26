@@ -1,0 +1,52 @@
+From b5919d7919dda614c3c3c76ba126f45e205494bd Mon Sep 17 00:00:00 2001
+From: Dimitri John Ledkov <xnox@ubuntu.com>
+Date: Mon, 29 Apr 2019 14:11:09 +0100
+Subject: [PATCH 1/3] Add breezy python3 plugin
+
+---
+ Makefile                  |  3 +++
+ debian/changelog          |  6 ++++++
+ debian/control            |  6 +++---
+ etckeeper-brz/__init__.py | 34 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+), 3 deletions(-)
+ create mode 100644 etckeeper-brz/__init__.py
+
+Index: etckeeper-1.18.10/etckeeper-brz/__init__.py
+===================================================================
+--- /dev/null
++++ etckeeper-1.18.10/etckeeper-brz/__init__.py
+@@ -0,0 +1,34 @@
++#
++# Breezy plugin that runs etckeeper pre-commit when necessary
++
++"""Runs etckeeper pre-commit when necessary."""
++
++from breezy.errors import BzrError
++import os
++
++def etckeeper_startcommit_hook(tree):
++    abspath = getattr(tree, "abspath", None)
++    if abspath is None or not os.path.exists(abspath(".etckeeper")):
++        # Only run the commit hook when this is an etckeeper branch
++        return
++    import subprocess
++    ret = subprocess.call(["etckeeper", "pre-commit", abspath(".")])
++    if ret != 0:
++        raise BzrError("etckeeper pre-commit failed")
++
++try:
++    from breezy.hooks import install_lazy_named_hook
++except ImportError:
++    from breezy.mutabletree import MutableTree
++    MutableTree.hooks.install_named_hook('start_commit',
++        etckeeper_startcommit_hook, 'etckeeper')
++else:
++    install_lazy_named_hook(
++        "breezy.mutabletree", "MutableTree.hooks",
++        'start_commit', etckeeper_startcommit_hook, 'etckeeper')
++
++if __name__ == "__main__":
++    from distutils.core import setup
++    setup(name="brz-etckeeper",
++          packages=["breezy.plugins.etckeeper"],
++          package_dir={"breezy.plugins.etckeeper":"etckeeper-brz"})

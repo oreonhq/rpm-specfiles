@@ -1,0 +1,24 @@
+diff -up ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.am.ld ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.am
+--- ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.am.ld	2004-01-09 22:01:20.000000000 +0100
++++ ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.am	2010-02-15 00:57:07.000000000 +0100
+@@ -3,7 +3,7 @@ bin_PROGRAMS=ed2k_hash_gui
+ 
+ ed2k_hash_gui_CXXFLAGS = -I.. -D_GUI
+ ed2k_hash_gui_CFLAGS = -I.. -D_GUI
+-ed2k_hash_gui_LDADD = -lfltk
++ed2k_hash_gui_LDADD = -lfltk -pthread
+ 
+ 
+ ed2k_hash_gui_SOURCES = \
+diff -up ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.in.ld ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.in
+--- ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.in.ld	2004-01-09 22:36:30.000000000 +0100
++++ ed2k_hash-0.4.0/ed2k_hash/GUI/Makefile.in	2010-02-15 00:57:46.000000000 +0100
+@@ -116,7 +116,7 @@ bin_PROGRAMS = ed2k_hash_gui
+ 
+ ed2k_hash_gui_CXXFLAGS = -I.. -D_GUI
+ ed2k_hash_gui_CFLAGS = -I.. -D_GUI
+-ed2k_hash_gui_LDADD = -lfltk
++ed2k_hash_gui_LDADD = -lfltk -pthread
+ 
+ ed2k_hash_gui_SOURCES = \
+  ../linkedlist.c        \

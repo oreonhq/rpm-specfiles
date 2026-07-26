@@ -1,0 +1,12 @@
+diff -rupN iaxclient-2.1beta3/configure.ac iaxclient-2.1beta3-new/configure.ac
+--- iaxclient-2.1beta3/configure.ac	2008-04-07 18:07:13.000000000 +0200
++++ iaxclient-2.1beta3-new/configure.ac	2015-05-04 16:36:23.435118617 +0200
+@@ -305,7 +305,7 @@ dnl Check for debug libraries
+    has_wx_xrc=xno
+    AC_MSG_CHECKING([for wx xrc library])
+    for wx_xrc_lib in " " "-lwx_gtk${wx_lib_prefix}_xrc-2.4" "-lwx_msw${wx_lib_prefix}_xrc-2.4" "-lwxxrc"; do
+-      LIBS="$wx_xrc_lib $WX_LIBS $save_LIBS"
++      LIBS="$wx_xrc_lib $WX_LIBS $save_LIBS -fPIC"
+       AC_LINK_IFELSE([
+ #include <wx/xrc/xmlres.h>
+ int main()

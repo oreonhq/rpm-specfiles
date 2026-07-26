@@ -1,0 +1,22 @@
+From 0656c634af5a5bd36771964dd6bcef9750afe662 Mon Sep 17 00:00:00 2001
+From: Andrew Bauer <zonexpertconsulting@outlook.com>
+Date: Mon, 26 May 2025 14:46:44 -0500
+Subject: [PATCH] replace deprecated type
+
+---
+ LW5xx_Linux/src/common/CupsFilter.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/LW5xx_Linux/src/common/CupsFilter.h b/LW5xx_Linux/src/common/CupsFilter.h
+index 6b2dffc1..df105ee6 100644
+--- a/LW5xx_Linux/src/common/CupsFilter.h
++++ b/LW5xx_Linux/src/common/CupsFilter.h
+@@ -184,7 +184,7 @@ template <class D, class DI, class LM> int CCupsFilter<D, DI, LM>::Run(int argc,
+                 Driver_.StartPage();
+             }
+ 
+-            std::auto_ptr<CHalftoneFilter> H;
++            std::unique_ptr<CHalftoneFilter> H;
+             if(UseCustomHalftoning)
+             {
+                 if(HalftoningMethod_ == "NLL")

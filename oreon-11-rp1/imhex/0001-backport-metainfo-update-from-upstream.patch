@@ -1,0 +1,172 @@
+From 76a8616ea996fe51bc481202619548b1cacf31d2 Mon Sep 17 00:00:00 2001
+From: Jonathan Wright <jonathan@almalinux.org>
+Date: Wed, 23 Jul 2025 09:58:35 -0500
+Subject: [PATCH] backport metainfo update from upstream
+
+---
+ cmake/build_helpers.cmake           |  5 +--
+ dist/net.werwolv.ImHex.metainfo.xml | 62 +++++++++++++++++++++++++++++
+ dist/net.werwolv.ImHex.yaml         | 22 ----------
+ dist/net.werwolv.imhex.metainfo.xml | 34 ----------------
+ 4 files changed, 64 insertions(+), 59 deletions(-)
+ create mode 100644 dist/net.werwolv.ImHex.metainfo.xml
+ delete mode 100644 dist/net.werwolv.ImHex.yaml
+ delete mode 100644 dist/net.werwolv.imhex.metainfo.xml
+
+diff --git a/cmake/build_helpers.cmake b/cmake/build_helpers.cmake
+index 39244d5..44c8875 100644
+--- a/cmake/build_helpers.cmake
++++ b/cmake/build_helpers.cmake
+@@ -302,11 +302,10 @@ macro(createPackage)
+         downloadImHexPatternsFiles("./share/imhex")
+ 
+         # install AppStream file
+-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dist/net.werwolv.imhex.metainfo.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo)
++        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dist/net.werwolv.ImHex.metainfo.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo)
+ 
+         # install symlink for the old standard name
+-        file(CREATE_LINK net.werwolv.imhex.metainfo.xml ${CMAKE_CURRENT_BINARY_DIR}/net.werwolv.imhex.appdata.xml SYMBOLIC)
+-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.werwolv.imhex.appdata.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo)
++        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/dist/net.werwolv.ImHex.metainfo.xml DESTINATION ${CMAKE_INSTALL_PREFIX}/share/metainfo RENAME net.werwolv.ImHex.appdata.xml)
+ 
+     endif()
+ 
+diff --git a/dist/net.werwolv.ImHex.metainfo.xml b/dist/net.werwolv.ImHex.metainfo.xml
+new file mode 100644
+index 0000000..41da72b
+--- /dev/null
++++ b/dist/net.werwolv.ImHex.metainfo.xml
+@@ -0,0 +1,62 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<component type="desktop">
++    <id>net.werwolv.ImHex</id>
++    <name>ImHex</name>
++    <summary>Modern REing Hex Editor</summary>
++    <description>
++        <p>
++            ImHex is a modern Hex Editor for Reverse Engineers, Developers, Malware Analysists and Hackers who value
++            their retinas when working at 3 AM once again.
++        </p>
++        <p>
++            Features:
++        </p>
++        <ul>
++            <li>Featureful hex view</li>
++            <li>Custom C++-like pattern language for parsing and highlighting a file's content</li>
++            <li>Data importing and exporting</li>
++            <li>Data inspector allowing interpretation of data as many different types</li>
++            <li>Huge file support with fast and efficient loading</li>
++            <li>Strings search</li>
++            <li>File hashing support</li>
++            <li>Disassembler supporting many different architectures: ARM, x86, PowerPC, MIPS, and more</li>
++            <li>Bookmarks</li>
++            <li>Data analyzer</li>
++            <li>
++                Helpful tools such as an Itanium and MSVC demangler, ASCII table, Regex
++                replacer, mathematical expression evaluator (calculator), hexadecimal
++                color picker and many more
++            </li>
++            <li>Doesn't burn out your retinas when used in late-night sessions</li>
++        </ul>
++    </description>
++    <metadata_license>CC0-1.0</metadata_license>
++    <project_license>GPL-2.0-only</project_license>
++    <developer id="net.werwolv">
++        <name>WerWolv</name>
++    </developer>
++    <url type="homepage">https://imhex.werwolv.net</url>
++    <url type="bugtracker">https://github.com/WerWolv/ImHex/issues</url>
++    <url type="help">https://docs.werwolv.net/imhex</url>
++    <url type="donation">https://www.patreon.com/werwolv</url>
++    <url type="contact">https://imhex.werwolv.net/discord</url>
++    <url type="vcs-browser">https://github.com/WerWolv/ImHex</url>
++    <url type="contribute">https://github.com/WerWolv/ImHex/blob/master/CONTRIBUTING.md</url>
++    <launchable type="desktop-id">imhex.desktop</launchable>
++    <screenshots>
++        <screenshot type="default" width="1920" height="1017">
++            <image type="source">https://raw.githubusercontent.com/flathub/net.werwolv.ImHex/master/screenshots/screenshot1.png</image>
++            <caption>Using a pattern to parse and highlight different sections of an ELF executable file</caption>
++        </screenshot>
++        <screenshot type="default" width="1920" height="1017">
++            <image type="source">https://raw.githubusercontent.com/flathub/net.werwolv.ImHex/master/screenshots/screenshot2.png</image>
++            <caption>Managing bookmarks, diffing two files and decrypting a region of data using the data preprocessor</caption>
++        </screenshot>
++    </screenshots>
++    <content_rating type="oars-1.1"/>
++    <branding>
++        <color type="primary" scheme_preference="light">#babec9</color>
++        <color type="primary" scheme_preference="dark">#0f0f0f</color>
++    </branding>
++    <update_contact>hey@werwolv.net</update_contact>
++</component>
+diff --git a/dist/net.werwolv.ImHex.yaml b/dist/net.werwolv.ImHex.yaml
+deleted file mode 100644
+index 925c5f5..0000000
+--- a/dist/net.werwolv.ImHex.yaml
++++ /dev/null
+@@ -1,22 +0,0 @@
+-app-id: net.werwolv.ImHex
+-runtime: org.freedesktop.Platform
+-runtime-version: '20.08'
+-default-branch: stable
+-sdk: org.freedesktop.Sdk
+-command: imhex
+-
+-finish-args:
+-  - --share=ipc
+-  - --socket=x11
+-  - --filesystem=host
+-  - --device=all
+-
+-modules:
+-  - name: imhex
+-    buildsystem: cmake
+-    config-opts:
+-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+-
+-    sources:
+-      - type: git
+-        url: https://github.com/WerWolv/ImHex.git
+diff --git a/dist/net.werwolv.imhex.metainfo.xml b/dist/net.werwolv.imhex.metainfo.xml
+deleted file mode 100644
+index 0e95229..0000000
+--- a/dist/net.werwolv.imhex.metainfo.xml
++++ /dev/null
+@@ -1,34 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<component type="desktop-application">
+-    <id>imhex</id>
+-    <metadata_license>CC0-1.0</metadata_license>
+-    <project_license>GPL-2.0</project_license>
+-    <name>ImHex</name>
+-    <developer_name>WerWolv</developer_name>
+-    <update_contact>hey@werwolv.net</update_contact>
+-    <summary>A Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM</summary>
+-    <description>
+-        <p>ImHex is a feature-rich Hex Editor aimed towards Reverse Engineers working with foreign data formats, malware, executables and raw memory. 
+-Besides all the features a common Hex Editor has, ImHex also features a custom scripting language used to declare and dissect data structures, support for running YARA rules, a node-based graphical data pre-processor and support for various data sources such as files, raw disks or GDB Servers.</p>
+-    </description>
+-    <launchable type="desktop-id">imhex.desktop</launchable>
+-    <url type="homepage">https://imhex.werwolv.net</url>
+-    <screenshots>
+-        <screenshot type="default">
+-            <image>https://user-images.githubusercontent.com/10835354/139717326-8044769d-527b-4d88-8adf-2d4ecafdca1f.png</image>
+-        </screenshot>
+-        <screenshot>
+-            <image>https://user-images.githubusercontent.com/10835354/139717323-1f8c9d52-f7eb-4f43-9f11-097ac728ed6c.png</image>
+-        </screenshot>
+-    </screenshots>
+-
+-    <provides>
+-        <id>imhex.desktop</id>
+-    </provides>
+-
+-    <categories>
+-        <category>Development</category>
+-    </categories>
+-
+-
+-</component>
+-- 
+2.49.0
+

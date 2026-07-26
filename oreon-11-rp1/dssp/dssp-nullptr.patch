@@ -1,0 +1,24 @@
+From 2c9cff471d20477e027be4a78182d40f995bc78c Mon Sep 17 00:00:00 2001
+From: Coos Baakman <cbaakman@radboudumc.nl>
+Date: Thu, 11 Oct 2018 09:31:53 +0200
+Subject: [PATCH] not needed anymore, since we're working with std=c++11
+
+---
+ src/mas.h | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/src/mas.h b/src/mas.h
+index 7d73356..2974c92 100644
+--- a/src/mas.h
++++ b/src/mas.h
+@@ -40,10 +40,6 @@ typedef uint32_t  uint32;
+ typedef int64_t    int64;
+ typedef uint64_t  uint64;
+ 
+-#ifndef nullptr
+-#define nullptr NULL
+-#endif
+-
+ // we even have globals:
+ extern int VERBOSE;
+ 

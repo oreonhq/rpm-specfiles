@@ -1,0 +1,35 @@
+From c539d49d06fea9c6a9efb4e684a8837b82889f7f Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 4 Dec 2013 23:16:52 +0100
+Subject: [PATCH] Fix build with -Werror=format-security
+
+Fedora, starting with version 21, will enable this flag in order to limit
+potentially insecure uses of format strings. It is required for format strings
+to be constant now.
+---
+ corrida/console.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/corrida/console.c b/corrida/console.c
+index 29acc3b..de35b69 100644
+--- a/corrida/console.c
++++ b/corrida/console.c
+@@ -15,14 +15,5 @@ void corrida_printf( char *message )
+ 
+ void console_printf( char *message )
+ {
+-  gboolean corrida_printf_switch = TRUE;
+-  char string[MAX_CORRIDA_STRLEN];
+-  
+-  if (corrida_printf_switch == TRUE) {
+-    strcpy (string, APPLICATION_NAME);
+-    strcat (string, ": ");
+-    strcat (string, message);
+-    strcat (string, "\n");
+-    printf (string);
+-  }
++  printf (APPLICATION_NAME ": %s\n", message);
+ }
+-- 
+1.8.4.2
+

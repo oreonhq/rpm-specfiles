@@ -1,0 +1,28 @@
+From 974db3df3f752e21e429a46960ef796cf40f4cc7 Mon Sep 17 00:00:00 2001
+From: Priscila Gutierres <prgutier@redhat.com>
+Date: Sun, 5 Jan 2025 15:01:33 -0300
+Subject: [PATCH] change
+
+---
+ usr/bin/byobu-shell.in | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/usr/bin/byobu-shell.in b/usr/bin/byobu-shell.in
+index 4610a54..2de4745 100755
+--- a/usr/bin/byobu-shell.in
++++ b/usr/bin/byobu-shell.in
+@@ -40,9 +40,6 @@ if [ ! -e "$FLAG" ]; then
+ 	echo
+ 	touch "$FLAG"
+ fi
++[ -n "$SHELL" -a -x "$SHELL" ] && exec "$SHELL" || exec /bin/sh
+ 
+-# This needs to be a -l login shell, in order to source profiles
+-# and colorize the prompt
+-[ -n "$SHELL" -a -x "$SHELL" ] && exec "$SHELL" -l || exec /bin/sh -l
+-
+-# vi: syntax=sh ts=4 noexpandtab
++#vi: syntax=sh ts=4 noexpandtab
+-- 
+2.47.1
+

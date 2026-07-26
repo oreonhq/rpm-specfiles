@@ -1,0 +1,41 @@
+diff -r -U3 garden-1.0.8.orig/src/stuff.c garden-1.0.8/src/stuff.c
+--- garden-1.0.8.orig/src/stuff.c	2008-12-19 16:33:26.000000000 -0600
++++ garden-1.0.8/src/stuff.c	2015-03-26 14:11:52.979679884 -0500
+@@ -52,7 +52,7 @@
+ float cos_table[ANGLE_1];
+ float sin_table[ANGLE_1];
+ 
+-inline int xpart (int angle, int length);
++int xpart (int angle, int length);
+ 
+ void init_trig (void)
+ {
+@@ -67,12 +67,12 @@
+ 
+ }
+ 
+-inline int xpart (int angle, int length)
++int xpart (int angle, int length)
+ {
+ 	return (cos_table[angle & 1023] * length);
+ }
+ 
+-inline int ypart (int angle, int length)
++int ypart (int angle, int length)
+ {
+ 	return (sin_table[angle & 1023] * length);
+ }
+diff -r -U3 garden-1.0.8.orig/src/stuff.h garden-1.0.8/src/stuff.h
+--- garden-1.0.8.orig/src/stuff.h	2008-12-19 16:33:26.000000000 -0600
++++ garden-1.0.8/src/stuff.h	2015-03-26 14:11:34.076679364 -0500
+@@ -24,8 +24,8 @@
+ int crandom (int number);
+ int turn_towards_angle (int angle, int tangle, int turning);
+ int turn_towards_xy (int x1, int y1, int x2, int y2, int angle, int turning);
+-inline int xpart (int angle, int length);
+-inline int ypart (int angle, int length);
++int xpart (int angle, int length);
++int ypart (int angle, int length);
+ int pulsate (int speed, int amount, int county);
+ int angle_difference (int a1, int a2);
+ 

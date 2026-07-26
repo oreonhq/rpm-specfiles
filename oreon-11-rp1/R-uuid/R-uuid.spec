@@ -1,0 +1,53 @@
+%global source0_hash f90e49733d7d6ea7cf91abdc07b7d0e9a34a4b993e6914d754f0621281fc4b96
+
+Name:           R-uuid
+Version:        %R_rpm_version 1.2-1
+Release:        %autorelease
+Summary:        Tools for generating and handling of UUIDs
+
+License:        MIT
+URL:            %{cran_url}
+Source:         %{cran_source}
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+
+BuildRequires:  R-devel
+BuildRequires:  libuuid-devel
+
+%description
+Tools for generating and handling of UUIDs (Universally Unique
+Identifiers).
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -c
+# Use system libuuid.
+pushd uuid
+rm configure.ac configure src/Makevars.in src/[a-z]*.[ch]
+sed -i -e '/configure/d' -e '/Makevars/d' -e '/src\/[a-z].*.[ch]/d' MD5
+rm -r src/config.h.in src/win32
+sed -i -e '/config.h/d' MD5
+cat > src/Makevars << EOF
+PKG_CFLAGS = \$(shell pkg-config --cflags uuid)
+PKG_LIBS = \$(shell pkg-config --libs uuid)
+EOF
+popd
+
+%generate_buildrequires
+%R_buildrequires
+
+%build
+
+%install
+%R_install
+%R_save_files
+
+%check
+%R_check
+
+%files -f %{R_files}
+
+%changelog
+%autochangelog

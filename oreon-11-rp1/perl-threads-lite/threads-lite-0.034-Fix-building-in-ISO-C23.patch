@@ -1,0 +1,49 @@
+From b3146a31058bfd3a0008721d3ab5e4e2a9582876 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 10 Feb 2025 17:24:16 +0100
+Subject: [PATCH] Fix building in ISO C23
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Building with GCC 15, which defaults to ISO C23 langauge version,
+failed like this:
+
+    gcc -Isrc -I/usr/lib64/perl5/CORE -fPIC -c -D_REENTRANT -D_GNU_SOURCE -O2 '-flto=auto' -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wno-complain-wrong-lang '-Werror=format-security' '-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3' -Wp,-D_GLIBCXX_ASSERTIONS '-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1' -fstack-protector-strong '-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1' -m64 '-march=x86-64' '-mtune=generic' -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection '-mtls-dialect=gnu2' -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fwrapv -fno-strict-aliasing -I/usr/local/include -D_LARGEFILE_SOURCE '-D_FILE_OFFSET_BITS=64' -g -o src/resources.o src/resources.c
+    [...]
+    src/resources.c:144:4: error: conflicting types for ‘S_queue_alloc’; have ‘UV(PerlInterpreter *)’ {aka ‘long unsigned int(struct interpreter *)’}
+      144 | UV S_queue_alloc(pTHX) {
+	  |    ^~~~~~~~~~~~~
+    In file included from src/resources.c:10:
+    src/resources.h:5:4: note: previous declaration of ‘S_queue_alloc’ with type ‘UV(void)’ {aka ‘long unsigned int(void)’}
+	5 | UV S_queue_alloc();
+	  |    ^~~~~~~~~~~~~
+
+The cause was a mismatch between S_queue_alloc() prototype and definition. In
+ISO C23 an empty argument list means no arguments, while before it meant
+unspecified arguments.
+
+This patch corrects the protype.
+
+Resolves: https://bugzilla.redhat.com/show_bug.cgi?id=2341042
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/resources.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/resources.h b/src/resources.h
+index 3f69acf..9fb3aee 100644
+--- a/src/resources.h
++++ b/src/resources.h
+@@ -2,7 +2,7 @@ void global_init(pTHX);
+ 
+ mthread* mthread_alloc(PerlInterpreter*);
+ void mthread_destroy(mthread*);
+-UV S_queue_alloc();
++UV S_queue_alloc(pTHX);
+ 
+ void S_thread_send(pTHX_ UV thread_id, const message* message);
+ void S_queue_send(pTHX_ UV queue_id, const message* message);
+-- 
+2.48.1
+

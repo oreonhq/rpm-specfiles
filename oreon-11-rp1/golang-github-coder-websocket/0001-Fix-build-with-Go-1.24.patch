@@ -1,0 +1,32 @@
+From 925eca0193412e5e0734a72c45dc73c550efe42a Mon Sep 17 00:00:00 2001
+From: "W. Michael Petullo" <mike@flyn.org>
+Date: Tue, 21 Jan 2025 12:44:32 -0600
+Subject: [PATCH] Fix build with Go 1.24
+
+Go 1.24 provides stricter checking that forbids passing a variable as a
+format string to Printf-like functions with no other arguments. Remove
+instances of this. See also:
+
+https://tip.golang.org/doc/go1.24#vet
+
+Signed-off-by: W. Michael Petullo <mike@flyn.org>
+---
+ autobahn_test.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/autobahn_test.go b/autobahn_test.go
+index b1b3a7e..7af9c49 100644
+--- a/autobahn_test.go
++++ b/autobahn_test.go
+@@ -92,7 +92,7 @@ func TestAutobahn(t *testing.T) {
+ 		}
+ 	})
+ 
+-	c, _, err := websocket.Dial(ctx, fmt.Sprintf(wstestURL+"/updateReports?agent=main"), nil)
++	c, _, err := websocket.Dial(ctx, fmt.Sprint(wstestURL+"/updateReports?agent=main"), nil)
+ 	assert.Success(t, err)
+ 	c.Close(websocket.StatusNormalClosure, "")
+ 
+-- 
+2.48.1
+

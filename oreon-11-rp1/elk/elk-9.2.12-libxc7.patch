@@ -1,0 +1,352 @@
+diff -up elk-9.2.12/src/libxcifc.f90.libxc7 elk-9.2.12/src/libxcifc.f90
+--- elk-9.2.12/src/libxcifc.f90.libxc7	2023-12-12 13:40:28.625500442 +0000
++++ elk-9.2.12/src/libxcifc.f90	2024-10-13 16:22:14.618260381 +0000
+@@ -5,7 +5,7 @@
+ 
+ module libxcifc
+ 
+-use xc_f90_lib_m
++use xc_f03_lib_m
+ 
+ ! libxc version number
+ integer libxcv(3)
+@@ -103,7 +103,7 @@ real(8), optional, intent(out) :: wc(n),
+ ! local variables
+ integer nspin,fmly,id,k
+ integer(c_size_t) np
+-type(xc_f90_func_t) p
++type(xc_f03_func_t) p
+ ! allocatable arrays
+ real(8), allocatable :: r(:,:),sigma(:,:),vrho(:,:),vsigma(:,:)
+ real(8), allocatable :: lapl(:,:),t(:,:),vlapl(:,:),vtau(:,:)
+@@ -132,9 +132,9 @@ np=n
+ do k=2,3
+   id=xctype(k)
+   if (id > 0) then
+-    fmly=xc_f90_family_from_id(id)
++    fmly=xc_f03_family_from_id(id)
+ ! initialise functional
+-    call xc_f90_func_init(p,id,nspin)
++    call xc_f03_func_init(p,id,nspin)
+     select case(fmly)
+     case(XC_FAMILY_LDA)
+ !-------------------------!
+@@ -142,23 +142,23 @@ do k=2,3
+ !-------------------------!
+ ! set temperature for free energy functional
+       if ((id == XC_LDA_XC_KSDT).or.(id == XC_LDA_XC_GDSMFB)) then
+-        call xc_f90_func_set_ext_params(p,[tempa])
++        call xc_f03_func_set_ext_params(p,[tempa])
+       end if
+       if (k == 2) then
+ ! exchange or a kinetic energy functional
+         if (present(rho)) then
+           if (present(ex)) then
+-            call xc_f90_lda_exc_vxc(p,np,rho,ex,vx)
++            call xc_f03_lda_exc_vxc(p,np,rho,ex,vx)
+           else
+-            call xc_f90_lda_vxc(p,np,rho,vx)
++            call xc_f03_lda_vxc(p,np,rho,vx)
+           end if
+         else
+           allocate(r(2,n),vrho(2,n))
+           r(1,:)=rhoup(:); r(2,:)=rhodn(:)
+           if (present(ex)) then
+-            call xc_f90_lda_exc_vxc(p,np,r,ex,vrho)
++            call xc_f03_lda_exc_vxc(p,np,r,ex,vrho)
+           else
+-            call xc_f90_lda_vxc(p,np,r,vrho)
++            call xc_f03_lda_vxc(p,np,r,vrho)
+           end if
+           vxup(:)=vrho(1,:); vxdn(:)=vrho(2,:)
+           deallocate(r,vrho)
+@@ -167,17 +167,17 @@ do k=2,3
+ ! correlation
+         if (present(rho)) then
+           if (present(ec)) then
+-            call xc_f90_lda_exc_vxc(p,np,rho,ec,vc)
++            call xc_f03_lda_exc_vxc(p,np,rho,ec,vc)
+           else
+-            call xc_f90_lda_vxc(p,np,rho,vc)
++            call xc_f03_lda_vxc(p,np,rho,vc)
+           end if
+         else
+           allocate(r(2,n),vrho(2,n))
+           r(1,:)=rhoup(:); r(2,:)=rhodn(:)
+           if (present(ec)) then
+-            call xc_f90_lda_exc_vxc(p,np,r,ec,vrho)
++            call xc_f03_lda_exc_vxc(p,np,r,ec,vrho)
+           else
+-            call xc_f90_lda_vxc(p,np,r,vrho)
++            call xc_f03_lda_vxc(p,np,r,vrho)
+           end if
+           vcup(:)=vrho(1,:); vcdn=vrho(2,:)
+           deallocate(r,vrho)
+@@ -191,9 +191,9 @@ do k=2,3
+ ! exchange or a kinetic energy functional
+         if (present(rho)) then
+           if (present(ex)) then
+-            call xc_f90_gga_exc_vxc(p,np,rho,grho2,ex,vx,dxdgr2)
++            call xc_f03_gga_exc_vxc(p,np,rho,grho2,ex,vx,dxdgr2)
+           else
+-            call xc_f90_gga_vxc(p,np,rho,grho2,vx,dxdgr2)
++            call xc_f03_gga_vxc(p,np,rho,grho2,vx,dxdgr2)
+           end if
+         else
+           allocate(r(2,n),sigma(3,n),vrho(2,n),vsigma(3,n))
+@@ -206,9 +206,9 @@ do k=2,3
+           end if
+           sigma(3,:)=gdn2(:)
+           if (present(ex)) then
+-            call xc_f90_gga_exc_vxc(p,np,r,sigma,ex,vrho,vsigma)
++            call xc_f03_gga_exc_vxc(p,np,r,sigma,ex,vrho,vsigma)
+           else
+-            call xc_f90_gga_vxc(p,np,r,sigma,vrho,vsigma)
++            call xc_f03_gga_vxc(p,np,r,sigma,vrho,vsigma)
+           end if
+           vxup(:)=vrho(1,:); vxdn(:)=vrho(2,:)
+           dxdgu2(:)=vsigma(1,:)
+@@ -220,18 +220,18 @@ do k=2,3
+ ! correlation
+         if (present(rho)) then
+           if (present(ec)) then
+-            call xc_f90_gga_exc_vxc(p,np,rho,grho2,ec,vc,dcdgr2)
++            call xc_f03_gga_exc_vxc(p,np,rho,grho2,ec,vc,dcdgr2)
+           else
+-            call xc_f90_gga_vxc(p,np,rho,grho2,vc,dcdgr2)
++            call xc_f03_gga_vxc(p,np,rho,grho2,vc,dcdgr2)
+           end if
+         else
+           allocate(r(2,n),sigma(3,n),vrho(2,n),vsigma(3,n))
+           r(1,:)=rhoup(:); r(2,:)=rhodn(:)
+           sigma(1,:)=gup2(:); sigma(2,:)=gupdn(:); sigma(3,:)=gdn2(:)
+           if (present(ec)) then
+-            call xc_f90_gga_exc_vxc(p,np,r,sigma,ec,vrho,vsigma)
++            call xc_f03_gga_exc_vxc(p,np,r,sigma,ec,vrho,vsigma)
+           else
+-            call xc_f90_gga_vxc(p,np,r,sigma,vrho,vsigma)
++            call xc_f03_gga_vxc(p,np,r,sigma,vrho,vsigma)
+           end if
+           vcup(:)=vrho(1,:); vcdn(:)=vrho(2,:)
+           dcdgu2(:)=vsigma(1,:); dcdgud(:)=vsigma(2,:); dcdgd2(:)=vsigma(3,:)
+@@ -246,10 +246,10 @@ do k=2,3
+ ! exchange or a kinetic energy functional
+         if (present(rho)) then
+           if (present(ex)) then
+-            call xc_f90_mgga_exc_vxc(p,np,rho,grho2,g2rho,tau,ex,vx,dxdgr2, &
++            call xc_f03_mgga_exc_vxc(p,np,rho,grho2,g2rho,tau,ex,vx,dxdgr2, &
+              dxdg2r,wx)
+           else
+-            call xc_f90_mgga_vxc(p,np,rho,grho2,g2rho,tau,vx,dxdgr2,dxdg2r,wx)
++            call xc_f03_mgga_vxc(p,np,rho,grho2,g2rho,tau,vx,dxdgr2,dxdg2r,wx)
+           end if
+         else
+           allocate(r(2,n),sigma(3,n),lapl(2,n),t(2,n))
+@@ -264,10 +264,10 @@ do k=2,3
+           lapl(1,:)=g2up(:); lapl(2,:)=g2dn(:)
+           t(1,:)=tauup(:); t(2,:)=taudn(:)
+           if (present(ex)) then
+-            call xc_f90_mgga_exc_vxc(p,np,r,sigma,lapl,t,ex,vrho,vsigma,vlapl, &
++            call xc_f03_mgga_exc_vxc(p,np,r,sigma,lapl,t,ex,vrho,vsigma,vlapl, &
+              vtau)
+           else
+-            call xc_f90_mgga_vxc(p,np,r,sigma,lapl,t,vrho,vsigma,vlapl,vtau)
++            call xc_f03_mgga_vxc(p,np,r,sigma,lapl,t,vrho,vsigma,vlapl,vtau)
+           end if
+           vxup(:)=vrho(1,:); vxdn(:)=vrho(2,:)
+           dxdgu2(:)=vsigma(1,:); dxdgd2(:)=vsigma(3,:)
+@@ -281,10 +281,10 @@ do k=2,3
+ ! correlation
+         if (present(rho)) then
+           if (present(ec)) then
+-            call xc_f90_mgga_exc_vxc(p,np,rho,grho2,g2rho,tau,ec,vc,dcdgr2, &
++            call xc_f03_mgga_exc_vxc(p,np,rho,grho2,g2rho,tau,ec,vc,dcdgr2, &
+              dcdg2r,wc)
+           else
+-            call xc_f90_mgga_vxc(p,np,rho,grho2,g2rho,tau,vc,dcdgr2,dcdg2r,wc)
++            call xc_f03_mgga_vxc(p,np,rho,grho2,g2rho,tau,vc,dcdgr2,dcdg2r,wc)
+           end if
+         else
+           allocate(r(2,n),sigma(3,n),lapl(2,n),t(2,n))
+@@ -294,10 +294,10 @@ do k=2,3
+           lapl(1,:)=g2up(:); lapl(2,:)=g2dn(:)
+           t(1,:)=tauup(:); t(2,:)=taudn(:)
+           if (present(ec)) then
+-            call xc_f90_mgga_exc_vxc(p,np,r,sigma,lapl,t,ec,vrho,vsigma,vlapl, &
++            call xc_f03_mgga_exc_vxc(p,np,r,sigma,lapl,t,ec,vrho,vsigma,vlapl, &
+              vtau)
+           else
+-            call xc_f90_mgga_vxc(p,np,r,sigma,lapl,t,vrho,vsigma,vlapl,vtau)
++            call xc_f03_mgga_vxc(p,np,r,sigma,lapl,t,vrho,vsigma,vlapl,vtau)
+           end if
+           vcup(:)=vrho(1,:); vcdn(:)=vrho(2,:)
+           dcdgu2(:)=vsigma(1,:); dcdgud(:)=vsigma(2,:); dcdgd2(:)=vsigma(3,:)
+@@ -315,7 +315,7 @@ do k=2,3
+       stop
+     end select
+ ! destroy functional
+-    call xc_f90_func_end(p)
++    call xc_f03_func_end(p)
+   else
+ ! case when id=0
+     if (k == 2) then
+@@ -364,7 +364,7 @@ real(8), optional, intent(out) :: fxc(n)
+ ! local variables
+ integer nspin,fmly,id,k
+ integer(c_size_t) np
+-type(xc_f90_func_t) p
++type(xc_f03_func_t) p
+ ! allocatable arrays
+ real(8), allocatable :: r(:,:),f(:,:)
+ np=n
+@@ -387,9 +387,9 @@ if (present(fxcdd)) fxcdd(:)=0.d0
+ do k=2,3
+   id=fxctype(k)
+   if (id <= 0) cycle
+-  fmly=xc_f90_family_from_id(id)
++  fmly=xc_f03_family_from_id(id)
+ ! initialise functional
+-  call xc_f90_func_init(p,id,nspin)
++  call xc_f03_func_init(p,id,nspin)
+   select case(fmly)
+   case(XC_FAMILY_LDA)
+ !-------------------------!
+@@ -397,13 +397,13 @@ do k=2,3
+ !-------------------------!
+     if (present(rho)) then
+       allocate(f(1,n))
+-      call xc_f90_lda_fxc(p,np,rho,f)
++      call xc_f03_lda_fxc(p,np,rho,f)
+       fxc(:)=fxc(:)+f(1,:)
+       deallocate(f)
+     else
+       allocate(r(2,n),f(3,n))
+       r(1,:)=rhoup(:); r(2,:)=rhodn(:)
+-      call xc_f90_lda_fxc(p,np,r,f)
++      call xc_f03_lda_fxc(p,np,r,f)
+       fxcuu(:)=fxcuu(:)+f(1,:)
+       fxcud(:)=fxcud(:)+f(2,:)
+       fxcdd(:)=fxcdd(:)+f(3,:)
+@@ -418,7 +418,7 @@ do k=2,3
+     stop
+   end select
+ ! destroy functional
+-  call xc_f90_func_end(p)
++  call xc_f03_func_end(p)
+ end do
+ end subroutine
+ 
+@@ -433,10 +433,10 @@ real(8), intent(out) :: hybridc
+ ! local variables
+ integer k,id,fmly,g
+ character(128) name
+-type(xc_f90_func_t) p
++type(xc_f03_func_t) p
+ ! check version is compatible
+-call xc_f90_version(libxcv(1),libxcv(2),libxcv(3))
+-if (libxcv(1) /= 6) then
++call xc_f03_version(libxcv(1),libxcv(2),libxcv(3))
++if (libxcv(1) /= 6 .and. libxcv(1) /= 7) then
+   write(*,*)
+   write(*,'("Error(libxcifc): incompatible Libxc version : ",I2.2,".",I3.3,".",&
+    &I3.3)') libxcv(:)
+@@ -455,7 +455,7 @@ do k=2,3
+   id=xctype(k)
+   if (id <= 0) cycle
+ ! initialise functional
+-  call xc_f90_func_init(p,id,XC_UNPOLARIZED)
++  call xc_f03_func_init(p,id,XC_UNPOLARIZED)
+ !-----------------------!
+ !     gradient type     !
+ !-----------------------!
+@@ -479,7 +479,7 @@ do k=2,3
+ !----------------------------!
+ !     hybrid functionals     !
+ !----------------------------!
+-  fmly=xc_f90_family_from_id(id)
++  fmly=xc_f03_family_from_id(id)
+ ! hybrid GGA functionals
+   if (fmly == XC_FAMILY_HYB_GGA) then
+     if (k == 2) then
+@@ -490,36 +490,36 @@ do k=2,3
+       stop
+     end if
+ ! set the hybrid mixing coefficient
+-    hybridc=xc_f90_hyb_exx_coef(p)
++    hybridc=xc_f03_hyb_exx_coef(p)
+     hybrid=.true.
+   end if
+ !--------------------------------!
+ !     functional description     !
+ !--------------------------------!
+-  name=xc_f90_functional_get_name(id)
++  name=xc_f03_functional_get_name(id)
+   if (k == 2) then
+     xcdescr=trim(name)
+   else
+     xcdescr=trim(xcdescr)//'; '//trim(name)
+   end if
+ ! destroy functional
+-  call xc_f90_func_end(p)
++  call xc_f03_func_end(p)
+ end do
+ end subroutine
+ 
+ integer function grad(p)
+ implicit none
+ ! arguments
+-type(xc_f90_func_t), intent(in) :: p
++type(xc_f03_func_t), intent(in) :: p
+ ! local variables
+-type(xc_f90_func_info_t) info
+-type(xc_f90_func_t) pa
++type(xc_f03_func_info_t) info
++type(xc_f03_func_t) pa
+ integer fmly,flg,knd
+ integer naux,i
+ ! allocatable arrays
+ integer, allocatable :: ida(:)
+-info=xc_f90_func_get_info(p)
+-fmly=xc_f90_func_info_get_family(info)
++info=xc_f03_func_get_info(p)
++fmly=xc_f03_func_info_get_family(info)
+ select case(fmly)
+ case(XC_FAMILY_LDA)
+ ! no gradients required
+@@ -528,7 +528,7 @@ case(XC_FAMILY_GGA,XC_FAMILY_HYB_GGA)
+ ! GGA gradients required
+   grad=2
+ case(XC_FAMILY_MGGA)
+-  flg=xc_f90_func_info_get_flags(info)
++  flg=xc_f03_func_info_get_flags(info)
+   if (iand(flg,XC_FLAGS_NEEDS_LAPLACIAN) == 0) then
+ ! tau and no Laplacian
+     grad=4
+@@ -537,20 +537,20 @@ case(XC_FAMILY_MGGA)
+     grad=5
+   end if
+ ! check if tau is not required
+-  knd=xc_f90_func_info_get_kind(info)
++  knd=xc_f03_func_info_get_kind(info)
+   if (knd == XC_KINETIC) then
+ ! this is a kinetic energy functional
+     grad=3
+   else
+ ! this is an exchange and/or correlation functional
+-    naux=xc_f90_num_aux_funcs(p)
++    naux=xc_f03_num_aux_funcs(p)
+     allocate(ida(naux))
+-    call xc_f90_aux_func_ids(p,ida)
++    call xc_f03_aux_func_ids(p,ida)
+     do i=1,naux
+-      call xc_f90_func_init(pa,ida(i),XC_UNPOLARIZED)
+-      info=xc_f90_func_get_info(pa)
+-      knd=xc_f90_func_info_get_kind(info)
+-      call xc_f90_func_end(pa)
++      call xc_f03_func_init(pa,ida(i),XC_UNPOLARIZED)
++      info=xc_f03_func_get_info(pa)
++      knd=xc_f03_func_info_get_kind(info)
++      call xc_f03_func_end(pa)
+       if (knd == XC_KINETIC) then
+ ! this is a deorbitalised functional and does not require tau
+         grad=3

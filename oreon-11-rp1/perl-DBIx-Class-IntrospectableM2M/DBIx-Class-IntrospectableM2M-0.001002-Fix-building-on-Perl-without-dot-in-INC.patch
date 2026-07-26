@@ -1,0 +1,10 @@
+diff -up DBIx-Class-IntrospectableM2M-0.001002/Makefile.PL.orig DBIx-Class-IntrospectableM2M-0.001002/Makefile.PL
+--- DBIx-Class-IntrospectableM2M-0.001002/Makefile.PL.orig	2017-05-26 13:15:44.794792853 +0200
++++ DBIx-Class-IntrospectableM2M-0.001002/Makefile.PL	2017-05-26 13:15:56.962718572 +0200
+@@ -1,5 +1,6 @@
+ #! /usr/bin/perl -w
+ 
++BEGIN { push @INC, '.'; }
+ # Load the Module::Install bundled in ./inc/
+ use inc::Module::Install;
+ 

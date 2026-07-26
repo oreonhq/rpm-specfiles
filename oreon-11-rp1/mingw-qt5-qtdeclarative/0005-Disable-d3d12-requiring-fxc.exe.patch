@@ -1,0 +1,9 @@
+diff -rupN --no-dereference qtdeclarative-everywhere-src-5.15.17/src/plugins/scenegraph/scenegraph.pro qtdeclarative-everywhere-src-5.15.17-new/src/plugins/scenegraph/scenegraph.pro
+--- qtdeclarative-everywhere-src-5.15.17/src/plugins/scenegraph/scenegraph.pro	2024-11-20 14:56:37.000000000 +0100
++++ qtdeclarative-everywhere-src-5.15.17-new/src/plugins/scenegraph/scenegraph.pro	2025-05-31 11:20:26.577417642 +0200
+@@ -1,5 +1,4 @@
+ TEMPLATE = subdirs
+ QT_FOR_CONFIG += quick
+-qtConfig(d3d12): SUBDIRS += d3d12
+ qtConfig(openvg): SUBDIRS += openvg
+ 

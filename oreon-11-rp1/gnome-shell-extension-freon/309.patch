@@ -1,0 +1,21 @@
+From db7a6bfcd85fe7489c167fd4f84a004cb30e8544 Mon Sep 17 00:00:00 2001
+From: Nils Philippsen <nils@tiptoe.de>
+Date: Fri, 6 Mar 2026 10:21:08 +0100
+Subject: [PATCH] Mark compatible with GNOME Shell 50
+
+Signed-off-by: Nils Philippsen <nils@tiptoe.de>
+---
+ freon@UshakovVasilii_Github.yahoo.com/metadata.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/freon@UshakovVasilii_Github.yahoo.com/metadata.json b/freon@UshakovVasilii_Github.yahoo.com/metadata.json
+index d23765a..46de7ea 100644
+--- a/freon@UshakovVasilii_Github.yahoo.com/metadata.json
++++ b/freon@UshakovVasilii_Github.yahoo.com/metadata.json
+@@ -1,5 +1,5 @@
+ {
+-  "shell-version": ["45", "46", "47", "48", "49"],
++  "shell-version": ["45", "46", "47", "48", "49", "50"],
+   "uuid": "freon@UshakovVasilii_Github.yahoo.com",
+   "name": "Freon",
+   "description": "Shows CPU temperature, disk temperature, video card temperature (NVIDIA/Catalyst/Bumblebee&NVIDIA), voltage and fan RPM (forked from xtranophilist/gnome-shell-extension-sensors)",

@@ -1,0 +1,47 @@
+diff --git a/META.json b/META.json
+index a514fd3..a7457c2 100755
+--- a/META.json
++++ b/META.json
+@@ -39,7 +39,6 @@
+             "Moo" : "0",
+             "PPI" : "0",
+             "Path::Class" : "0",
+-            "Test::InDistDir" : "0",
+             "Test::More" : "0",
+             "Type::Utils" : "0",
+             "Types::Standard" : "0",
+diff --git a/META.yml b/META.yml
+index aa57c57..9ad2c3e 100755
+--- a/META.yml
++++ b/META.yml
+@@ -25,7 +25,6 @@ requires:
+   Moo: '0'
+   PPI: '0'
+   Path::Class: '0'
+-  Test::InDistDir: '0'
+   Test::More: '0'
+   Type::Utils: '0'
+   Types::Standard: '0'
+diff --git a/Makefile.PL b/Makefile.PL
+index 5589cba..ccd7e31 100755
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -18,7 +18,6 @@ WriteMakefile(
+           Moo
+           Path::Class
+           PPI
+-          Test::InDistDir
+           Test::More
+           Type::Utils
+           Types::Standard
+diff --git a/t/simple.t b/t/simple.t
+index a1d71ed..b422884 100755
+--- a/t/simple.t
++++ b/t/simple.t
+@@ -1,6 +1,5 @@
+ #!/usr/bin/perl
+ use strict;
+-use Test::InDistDir;
+ use Test::More;
+ use File::Slurp 'read_file';
+ 

@@ -1,0 +1,20 @@
+diff -ru ballerburg-v1.2.3/po/CMakeLists.txt ballerburg-v1.2.3-new/po/CMakeLists.txt
+--- ballerburg-v1.2.3/po/CMakeLists.txt	2025-03-09 08:02:38.000000000 +0100
++++ ballerburg-v1.2.3-new/po/CMakeLists.txt	2025-05-19 17:24:53.857898267 +0200
+@@ -5,6 +5,7 @@
+ if (GETTEXT_FOUND)
+ 
+ 	# Generate template file
++	file(GLOB src_files ${PROJECT_SOURCE_DIR}/src/*.c)
+ 	add_custom_target(po-template ALL
+ 		DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.pot)
+ 	add_custom_command(
+@@ -16,7 +17,7 @@
+ 		COMMAND sed -i	-e s/charset=CHARSET/charset=ISO-8859-1/
+ 				-e s%"${CMAKE_CURRENT_SOURCE_DIR}/../"%%g
+ 				${CMAKE_PROJECT_NAME}.pot
+-		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../src/*.c
++		DEPENDS ${src_files}
+ 		)
+ 
+ 	file(GLOB POFILES *.po)

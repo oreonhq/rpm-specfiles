@@ -1,0 +1,11 @@
+--- a/src/graphe.orig.cc	2021-09-06 21:27:18.514049316 +0200
++++ b/src/graphe.cc	2021-09-06 21:27:17.150072679 +0200
+@@ -15757,7 +15757,7 @@
+                         continue;
+                     std::sort(d.begin(),d.end());
+                     if (d==d0) {
+-                        G.make_haar_graph(n);
++                        G.make_haar_graph(int(n));
+                         if (is_isomorphic(G,isom,false)) {
+                             vecteur v(k);
+                             for (int i=0;i<k;++i) {

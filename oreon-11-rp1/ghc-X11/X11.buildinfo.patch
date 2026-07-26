@@ -1,0 +1,10 @@
+--- X11-1.10.3/X11.buildinfo.in~	2001-09-09 09:46:40.000000000 +0800
++++ X11-1.10.3/X11.buildinfo.in	2024-05-09 23:10:39.997958915 +0800
+@@ -3,6 +3,6 @@
+ --
+ buildable: @BUILD_PACKAGE_BOOL@
+ cc-options: @X_CFLAGS@ @CPPFLAGS@
+-ld-options: @X_LIBS@ @LDFLAGS@
++ld-options: @X_LIBS@
+ extra-libraries: @EXTRA_LIBRARIES@
+ extra-lib-dirs: @X_LIBRARIES@

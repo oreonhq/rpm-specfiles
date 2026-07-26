@@ -1,0 +1,12 @@
+diff -up kdebase-3.5.10/kioslave/nfs/nfs_prot_xdr.c.me kdebase-3.5.10/kioslave/nfs/nfs_prot_xdr.c
+--- kdebase-3.5.10/kioslave/nfs/nfs_prot_xdr.c.me	2024-01-30 09:28:48.417758494 +0100
++++ kdebase-3.5.10/kioslave/nfs/nfs_prot_xdr.c	2024-01-30 09:33:59.280629088 +0100
+@@ -738,7 +738,7 @@ xdr_entry(XDR *xdrs, entry *objp)
+ 	 if (!xdr_nfscookie(xdrs, objp->cookie)) {
+ 		 return (FALSE);
+ 	 }
+-	 if (!xdr_pointer(xdrs, &objp->nextentry, sizeof(entry), (xdrproc_t)xdr_entry)) {
++	 if (!xdr_pointer(xdrs, (char **)&objp->nextentry, sizeof(entry), (xdrproc_t)xdr_entry)) {
+ 		 return (FALSE);
+ 	 }
+ 	return (TRUE);

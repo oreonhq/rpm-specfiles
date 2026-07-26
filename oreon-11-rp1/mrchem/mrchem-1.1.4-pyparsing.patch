@@ -1,0 +1,55 @@
+diff -up mrchem-1.1.4/python/mrchem/CUBEparser.py.pyparsing mrchem-1.1.4/python/mrchem/CUBEparser.py
+--- mrchem-1.1.4/python/mrchem/CUBEparser.py.pyparsing	2024-01-17 13:01:08.000000000 +0000
++++ mrchem-1.1.4/python/mrchem/CUBEparser.py	2025-06-12 07:26:52.393603766 +0000
+@@ -26,7 +26,7 @@
+ from json import dumps
+ from pathlib import Path
+ 
+-from .input_parser.plumbing import pyparsing as pp
++import pyparsing as pp
+ 
+ 
+ def write_cube_vectors(user_dict):
+diff -up mrchem-1.1.4/python/mrchem/input_parser/plumbing/atoms.py.pyparsing mrchem-1.1.4/python/mrchem/input_parser/plumbing/atoms.py
+--- mrchem-1.1.4/python/mrchem/input_parser/plumbing/atoms.py.pyparsing	2024-01-17 13:01:08.000000000 +0000
++++ mrchem-1.1.4/python/mrchem/input_parser/plumbing/atoms.py	2025-06-12 07:27:35.610829071 +0000
+@@ -31,17 +31,7 @@
+ 
+ import functools
+ from typing import Any, List, Union
+-
+-try:
+-    import pyparsing as pp
+-
+-    if pp.__version__.split(".")[0] < "3":
+-        # Import local copy
+-        from . import pyparsing as pp  # type: ignore
+-except ImportError:
+-    # Import local copy
+-    from . import pyparsing as pp  # type: ignore
+-
++import pyparsing as pp
+ 
+ TRUTHY = ["TRUE", "ON", "YES", "Y"]
+ """List[str]: List of true-like values."""
+diff -up mrchem-1.1.4/python/mrchem/input_parser/plumbing/getkw.py.pyparsing mrchem-1.1.4/python/mrchem/input_parser/plumbing/getkw.py
+--- mrchem-1.1.4/python/mrchem/input_parser/plumbing/getkw.py.pyparsing	2024-01-17 13:01:08.000000000 +0000
++++ mrchem-1.1.4/python/mrchem/input_parser/plumbing/getkw.py	2025-06-12 07:27:57.212441845 +0000
+@@ -41,16 +41,7 @@ from .atoms import (
+     unquoted_str_t,
+ )
+ 
+-try:
+-    import pyparsing as pp
+-
+-    if pp.__version__.split(".")[0] < "3":
+-        # Import local copy
+-        from . import pyparsing as pp  # type: ignore
+-except ImportError:
+-    # Import local copy
+-    from . import pyparsing as pp  # type: ignore
+-
++import pyparsing as pp
+ 
+ def grammar(*, has_complex: bool = False) -> pp.ParserElement:
+     """The Getkw recursive grammar.

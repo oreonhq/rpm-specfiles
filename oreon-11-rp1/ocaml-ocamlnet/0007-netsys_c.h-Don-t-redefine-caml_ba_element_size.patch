@@ -1,0 +1,42 @@
+From f34069d5c6b47ed52646333710e6a67fa8b60080 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Wed, 15 Oct 2025 11:35:19 +0100
+Subject: [PATCH 7/8] netsys_c.h: Don't redefine caml_ba_element_size
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It is already defined in the OCaml headers:
+
+In file included from netsys_c_outofheap.c:10:
+netsys_c.h:218:12: error: conflicting types for ‘caml_ba_element_size’; have ‘int[]’
+  218 | extern int caml_ba_element_size[];
+      |            ^~~~~~~~~~~~~~~~~~~~
+In file included from netsys_c.h:70:
+/usr/lib64/ocaml/caml/bigarray.h:113:22: note: previous declaration of ‘caml_ba_element_size’ with type ‘const int[]’
+  113 | CAMLextern const int caml_ba_element_size[];
+      |                      ^~~~~~~~~~~~~~~~~~~~
+---
+ code/src/netsys/netsys_c.h | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/code/src/netsys/netsys_c.h b/code/src/netsys/netsys_c.h
+index cf6ff27..e953e21 100644
+--- a/code/src/netsys/netsys_c.h
++++ b/code/src/netsys/netsys_c.h
+@@ -210,12 +210,4 @@ union sock_addr_union {
+ #define GET_INET6_ADDR(v) (*((struct in6_addr *) (v)))
+ #endif
+ 
+-
+-/**********************************************************************/
+-/* bigarrays                                                          */
+-/**********************************************************************/
+-
+-extern int caml_ba_element_size[];
+-
+-
+ #endif
+-- 
+2.50.1
+

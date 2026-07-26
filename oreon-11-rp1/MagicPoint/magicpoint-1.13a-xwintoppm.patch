@@ -1,0 +1,182 @@
+diff -up magicpoint-1.13a/contrib/xwintoppm/dsimple.c.xwintoppm magicpoint-1.13a/contrib/xwintoppm/dsimple.c
+--- magicpoint-1.13a/contrib/xwintoppm/dsimple.c.xwintoppm	1998-02-13 08:48:29.000000000 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/dsimple.c	2012-05-15 12:18:50.957861102 +0200
+@@ -35,6 +35,7 @@ from the X Consortium.
+ #include <X11/Xutil.h>
+ #include <X11/cursorfont.h>
+ #include <stdio.h>
++#include <stdarg.h>
+ /*
+  * Other_stuff.h: Definitions of routines in other_stuff.
+  *
+@@ -55,6 +56,8 @@ void out();
+ void blip();
+ Window Window_With_Name();
+ void Fatal_Error();
++void outl(char *msg, ...);
++int usage(void);
+ 
+ /*
+  * Just_display: A group of routines designed to make the writting of simple
+@@ -495,12 +497,17 @@ Window Window_With_Name(dpy, top, name)
+  *       printf with up to 7 arguments.
+  */
+ /* VARARGS1 */
+-outl(msg, arg0,arg1,arg2,arg3,arg4,arg5,arg6)
+-     char *msg;
+-     char *arg0, *arg1, *arg2, *arg3, *arg4, *arg5, *arg6;
++void
++outl(char *msg, ...)
+ {
++	va_list args;
++
+ 	fflush(stdout);
+-	fprintf(stderr, msg, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
++
++	va_start(args, msg);
++	vfprintf(stderr, msg, args);
++	va_end(args);
++
+ 	fprintf(stderr, "\n");
+ 	fflush(stderr);
+ }
+diff -up magicpoint-1.13a/contrib/xwintoppm/list.c~ magicpoint-1.13a/contrib/xwintoppm/list.c
+--- magicpoint-1.13a/contrib/xwintoppm/list.c~	1998-02-13 08:48:31.000000000 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/list.c	2012-05-15 13:24:29.377808335 +0200
+@@ -101,7 +101,7 @@ list_ptr new_list ()
+ {
+     list_ptr lp;
+ 
+-    if (lp = (list_ptr) malloc( sizeof( list_item))) {
++    if ((lp = (list_ptr) malloc( sizeof( list_item)))) {
+ 	lp->next = NULL;
+ 	lp->ptr.item = NULL;
+     }
+diff -up magicpoint-1.13a/contrib/xwintoppm/multiVis.c~ magicpoint-1.13a/contrib/xwintoppm/multiVis.c
+--- magicpoint-1.13a/contrib/xwintoppm/multiVis.c~	1998-02-13 08:48:33.000000000 +0100
++++ magicpoint-1.13a/contrib/xwintoppm/multiVis.c	2012-05-15 13:26:28.463806740 +0200
+@@ -331,7 +331,7 @@ int srcw,srch,dst_x , dst_y ;
+     int *indexMap,ncolors ;
+     int i,j,old_pixel,new_pixel,red_ind,green_ind,blue_ind ;
+     XColor *colors;
+-    int rShift,gShift,bShift;
++    int rShift = 0, gShift = 0, bShift = 0;
+     int targetBytesPerLine ;
+ 
+     ncolors = QueryColorMap(disp,reg->cmap,reg->vis,&colors,
+@@ -519,7 +519,7 @@ XImage *ReadAreaToImage(disp, srcRootWin
+     image_region_type	*reg;
+     XRectangle		bbox;		/* bounding box of grabbed area */
+     int 		depth ;
+-    XImage		*ximage, *ximage_ipm ;
++    XImage		*ximage, *ximage_ipm = NULL;
+     Visual		fakeVis ;
+     int 	x1, y1;
+     XImage	*image;
+diff -up magicpoint-1.13a/contrib/xwintoppm/xwintoppm.c.xwintoppm magicpoint-1.13a/contrib/xwintoppm/xwintoppm.c
+--- magicpoint-1.13a/contrib/xwintoppm/xwintoppm.c.xwintoppm	1998-08-26 07:30:16.000000000 +0200
++++ magicpoint-1.13a/contrib/xwintoppm/xwintoppm.c	2012-05-15 12:18:50.957861102 +0200
+@@ -96,6 +96,7 @@ in this Software without prior written a
+ %*/
+ 
+ #include <stdio.h>
++#include <stdarg.h>
+ #include <errno.h>
+ #include <X11/Xos.h>
+ 
+@@ -125,6 +126,12 @@ typedef unsigned long Pixel;
+ #include <X11/extensions/XKBbells.h>
+ #endif
+ 
++void usage(void);
++void Error(char *);
++void outl(char *msg, ...);
++int Image_Size(XImage *image);
++int Get_XColors(XWindowAttributes *win_info, XColor **colors);
++          
+ /* Setable Options */
+ 
+ int format = ZPixmap;
+@@ -138,6 +138,7 @@ long add_pixel_value = 0;
+ 
+ extern int (*_XErrorFunction)();
+ extern int _XDefaultError();
++void Window_Dump(Window window, FILE *out);
+ 
+ static long parse_long (s)
+     char *s;
+@@ -163,11 +163,11 @@ static long parse_long (s)
+     return (thesign * retval);
+ }
+ 
+-main(argc, argv)
++int main(argc, argv)
+     int argc;
+     char **argv;
+ {
+-    register i;
++    int i;
+     Window target_win;
+     FILE *out_file = stdout;
+     Bool frame_only = False;
+@@ -281,6 +282,7 @@ XColor **colors ;
+  *              writting.
+  */
+ 
++void
+ Window_Dump(window, out)
+      Window window;
+      FILE *out;
+@@ -590,7 +590,7 @@ Window_Dump(window, out)
+ 		buf[1] = (pixel & mask[1]) >> shift0[1] << shift8[1];
+ 		buf[2] = (pixel & mask[2]) >> shift0[2] << shift8[2];
+ 	    }
+-	    fwrite(buf, 3, 1, out);
++	    i = fwrite(buf, 3, 1, out);
+ 	}
+     }
+   }
+@@ -618,7 +618,7 @@ Window_Dump(window, out)
+ /*
+  * Report the syntax for calling xwd.
+  */
+-usage()
++void usage()
+ {
+     fprintf (stderr,
+ "usage: %s [-display host:dpy] [-debug] [-help] %s [-nobdrs] [-out <file>]",
+@@ -632,7 +632,7 @@ usage()
+  * Error - Fatal xwd error.
+  */
+ 
+-Error(string)
++void Error(string)
+ 	char *string;	/* Error description string. */
+ {
+ 	outl("\nxwd: Error => %s\n", string);
+@@ -716,9 +718,9 @@ int Get_XColors(win_info, colors)
+     return ncolors ;
+ }
+ 
+-_swapshort (bp, n)
+-    register char *bp;
+-    register unsigned n;
++void
++_swapshort (register char *bp,
++	    register unsigned n)
+ {
+     register char c;
+     register char *ep = bp + n;
+@@ -731,9 +733,9 @@ _swapshort (bp, n)
+     }
+ }
+ 
+-_swaplong (bp, n)
+-    register char *bp;
+-    register unsigned n;
++void
++_swaplong (register char *bp,
++	   register unsigned  n)
+ {
+     register char c;
+     register char *ep = bp + n;

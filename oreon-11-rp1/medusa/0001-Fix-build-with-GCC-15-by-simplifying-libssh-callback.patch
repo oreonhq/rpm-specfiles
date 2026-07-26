@@ -1,0 +1,49 @@
+From 136178c645e58e3266f1c86f7e3ac6bb9b54b3c3 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Thu, 30 Jan 2025 14:20:07 -0800
+Subject: [PATCH] Fix build with GCC 15 by simplifying libssh callback handling
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The current code failed to build with GCC 15 in Fedora's mass
+rebuild with "error: assignment to ‘void (*)(void)’ from
+incompatible pointer type". I'm not a C coder, I just play one
+on TV, but looking at other projects that use
+libssh2_userauth_keyboard_interactive , it seems like we don't
+need to declare a variable like this at all, we can just pass a
+pointer to the callback function directly, which should avoid
+the problem.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ src/modsrc/ssh.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/modsrc/ssh.c b/src/modsrc/ssh.c
+index 313a00d..23b5f35 100644
+--- a/src/modsrc/ssh.c
++++ b/src/modsrc/ssh.c
+@@ -436,10 +436,8 @@ int tryLogin(_SSH2_DATA* _psSessionData, LIBSSH2_SESSION *session, sLogin** psLo
+ {
+   char *pErrorMsg = NULL;
+   int iErrorMsg, iAuthMode, iRet;
+-  void (*pResponseCallback) ();
+   char *strtok_ptr = NULL;
+   char *pAuth = NULL;
+-  pResponseCallback = response_callback;
+ 
+   /*
+     Password authentication failure delay: 2
+@@ -492,7 +490,7 @@ int tryLogin(_SSH2_DATA* _psSessionData, LIBSSH2_SESSION *session, sLogin** psLo
+   switch (iAuthMode)
+   {
+     case SSH_AUTH_KBDINT:
+-      if (libssh2_userauth_keyboard_interactive(session, szLogin, pResponseCallback) ) 
++      if (libssh2_userauth_keyboard_interactive(session, szLogin, &response_callback) ) 
+       {
+         writeError(ERR_DEBUG_MODULE, "Keyboard-Interactive authentication failed: Host: %s User: %s Pass: %s", (*psLogin)->psServer->pHostIP, szLogin, szPassword);
+         (*psLogin)->iResult = LOGIN_RESULT_FAIL;
+-- 
+2.47.1
+

@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -74,11 +74,6 @@ astnames.h: jsi.h
+ opnames.h: jsi.h
+ 	grep -E '\<OP_' jsi.h | sed 's/^[^A-Z]*OP_/"/;s/,.*/",/' | tr A-Z a-z > $@
+ 
+-UnicodeData.txt:
+-	curl -s -o $@ https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt
+-SpecialCasing.txt:
+-	curl -s -o $@ https://www.unicode.org/Public/16.0.0/ucd/SpecialCasing.txt
+-
+ utfdata.h: genucd.py UnicodeData.txt SpecialCasing.txt
+ 	python3 genucd.py UnicodeData.txt SpecialCasing.txt >$@
+ 

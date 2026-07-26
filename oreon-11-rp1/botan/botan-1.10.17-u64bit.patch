@@ -1,0 +1,12 @@
+diff -up Botan-1.10.17/src/hash/gost_3411/gost_3411.cpp~ Botan-1.10.17/src/hash/gost_3411/gost_3411.cpp
+--- Botan-1.10.17/src/hash/gost_3411/gost_3411.cpp~	2017-10-02 08:00:00.000000000 +0200
++++ Botan-1.10.17/src/hash/gost_3411/gost_3411.cpp	2023-01-22 13:01:38.984150336 +0100
+@@ -91,7 +91,7 @@ void GOST_34_11::compress_n(const byte i
+          // P transformation
+          for(size_t k = 0; k != 4; ++k)
+             {
+-            const uint64_t UVk = U[k] ^ V[k];
++            const u64bit UVk = U[k] ^ V[k];
+             for(size_t l = 0; l != 8; ++l)
+                key[4*l+k] = get_byte(l, UVk);
+             }

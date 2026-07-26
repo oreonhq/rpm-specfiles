@@ -1,0 +1,31 @@
+diff --git a/scripts/fbb.in b/scripts/fbb.in
+index 40fc0dd..025721a 100644
+--- a/scripts/fbb.in
++++ b/scripts/fbb.in
+@@ -474,14 +474,24 @@ fbb_run()
+ 		echo "Running XFBB in foreground mode ^C to abort"
+ 		sleep 5
+ 		echo "Starting XFBB (pwd = `pwd`)..."
+-		fbb_loop > $FBBLOG 2>&1
++		if [ "$FBBLOG" = - ] ; then
++			fbb_loop
++		else
++			fbb_loop > $FBBLOG 2>&1
++		fi
+ 	else
+ 		echo "Running XFBB in background mode ^C to abort"
+ 		sleep 5
+ 		FBB_BACKGROUND=1
+ 		export FBB_BACKGROUND
+ 		echo "Starting XFBB (pwd = `pwd`)..."
+-		(cd $LOCALDIR ; $MY_SHELL $FBB_PARAM > $FBBLOG 2>&1 & )
++		pushd $LOCALDIR
++		if [ "$FBBLOG" = - ]; then
++			$MY_SHELL $FBB_PARAM &
++		else
++			$MY_SHELL $FBB_PARAM > $FBBLOG 2>&1 &
++		fi
++		popd
+ 		exit 0
+ 	fi
+ }

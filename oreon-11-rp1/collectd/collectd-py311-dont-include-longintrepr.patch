@@ -1,0 +1,14 @@
+diff -up collectd-5.12.0/src/cpython.h.nolonginc collectd-5.12.0/src/cpython.h
+--- collectd-5.12.0/src/cpython.h.nolonginc	2022-06-22 09:45:19.531621504 +0200
++++ collectd-5.12.0/src/cpython.h	2022-06-22 09:45:29.381704317 +0200
+@@ -24,10 +24,6 @@
+  *   Sven Trenkel <collectd at semidefinite.de>
+  **/
+ 
+-/* Some python versions don't include this by default. */
+-
+-#include <longintrepr.h>
+-
+ /* These two macros are basically Py_BEGIN_ALLOW_THREADS and
+  * Py_BEGIN_ALLOW_THREADS
+  * from the other direction. If a Python thread calls a C function

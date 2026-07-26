@@ -1,0 +1,41 @@
+From 3ea9665ed6a2616981355adcbc6c2e8795c17c95 Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fb.com>
+Date: Fri, 18 Jun 2021 08:17:14 -0700
+Subject: [PATCH] Update Tcsetattr usage to the new API
+
+This is needed after
+https://github.com/pkg/term/commit/7d3cb3e73c47035ffe75de8cfc3a1d569b66c6be
+to fix a build error.
+---
+ termhook.go | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/termhook.go b/termhook.go
+index 3aaa52d..15abeed 100644
+--- a/termhook.go
++++ b/termhook.go
+@@ -13,7 +13,6 @@ import (
+ 
+ 	"github.com/pkg/term"
+ 	"github.com/pkg/term/termios"
+-	"golang.org/x/sys/unix"
+ )
+ 
+ // LineHandler defines the function that is called at each line of output from
+@@ -138,12 +137,12 @@ func (h *Hook) handleSignals(signalCh <-chan os.Signal, w io.Writer) error {
+ // handleInput handles the input coming from stdin
+ func (h *Hook) handleInput(w io.Writer) error {
+ 	// set stdin unbuffered
+-	var a unix.Termios
+-	if err := termios.Tcgetattr(uintptr(syscall.Stdin), &a); err != nil {
++	a, err := termios.Tcgetattr(uintptr(syscall.Stdin))
++	if err != nil {
+ 		return err
+ 	}
+-	termios.Cfmakeraw(&a)
+-	if err := termios.Tcsetattr(uintptr(syscall.Stdin), termios.TCSANOW, &a); err != nil {
++	termios.Cfmakeraw(a)
++	if err := termios.Tcsetattr(uintptr(syscall.Stdin), termios.TCSANOW, a); err != nil {
+ 		return err
+ 	}
+ 

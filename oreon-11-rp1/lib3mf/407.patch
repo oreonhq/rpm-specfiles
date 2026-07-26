@@ -1,0 +1,39 @@
+From deee9827b7121d138a94ca4e0309ab82fba2179a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 30 Jan 2025 01:06:20 +0100
+Subject: [PATCH] Include <cstdint> for uint64_t definition
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Or else this fails to build with GCC 15:
+
+    /builddir/build/BUILD/lib3mf-2.2.0-build/lib3mf-2.2.0/Source/Common/Platform/NMR_ImportStream_Unique_Memory.cpp: In member function ‘virtual const NMR::nfByte* NMR::CImportStream_Unique_Memory::getAt(NMR::nfUint64)’:
+    /builddir/build/BUILD/lib3mf-2.2.0-build/lib3mf-2.2.0/Source/Common/Platform/NMR_ImportStream_Unique_Memory.cpp:128:35: error: ‘uint64_t’ was not declared in this scope
+      128 |                 if (nPosition >= (uint64_t) m_Buffer.size())
+          |                                   ^~~~~~~~
+    /builddir/build/BUILD/lib3mf-2.2.0-build/lib3mf-2.2.0/Source/Common/Platform/NMR_ImportStream_Unique_Memory.cpp:37:1: note: ‘uint64_t’ is defined in header ‘<cstdint>’; this is probably fixable by adding ‘#include <cstdint>’
+       36 | #include "Common/NMR_Exception_Windows.h"
+      +++ |+#include <cstdint>
+       37 |
+    /builddir/build/BUILD/lib3mf-2.2.0-build/lib3mf-2.2.0/Source/Common/Platform/NMR_ImportStream_Unique_Memory.cpp:128:44: error: expected ‘)’ before ‘m_Buffer’
+      128 |                 if (nPosition >= (uint64_t) m_Buffer.size())
+          |                    ~                       ^~~~~~~~~
+          |                                            )
+    make[2]: *** [CMakeFiles/lib3mf.dir/build.make:1342: CMakeFiles/lib3mf.dir/Source/Common/Platform/NMR_ImportStream_Unique_Memory.cpp.o] Error 1
+---
+ Include/Common/Platform/NMR_ImportStream_Unique_Memory.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Include/Common/Platform/NMR_ImportStream_Unique_Memory.h b/Include/Common/Platform/NMR_ImportStream_Unique_Memory.h
+index 5711f26ac..612b2ddb9 100644
+--- a/Include/Common/Platform/NMR_ImportStream_Unique_Memory.h
++++ b/Include/Common/Platform/NMR_ImportStream_Unique_Memory.h
+@@ -38,6 +38,7 @@ This is a platform independent class for keeping data in a memory stream that ow
+ #include "Common/NMR_Types.h"
+ #include "Common/NMR_Local.h"
+ 
++#include <cstdint>
+ #include <vector>
+ 
+ namespace NMR {

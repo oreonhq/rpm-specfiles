@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=GL Globe Simulator
+GenericName=Globe (Earth) Simulation
+Comment=Globe (Earth) simulation written in OpenGL
+Categories=Education;
+Exec=glglobe
+Icon=glglobe.24x24.png
+Terminal=false
+Type=Application
+X-Desktop-File-Install-Version=0.4
+Name[en_AU]=GL Globe Simulator

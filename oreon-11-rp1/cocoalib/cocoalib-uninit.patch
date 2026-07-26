@@ -1,0 +1,26 @@
+--- src/AlgebraicCore/SparsePolyOps-ideal-ZeroDim.C.orig	2024-03-29 05:25:40.000000000 -0600
++++ src/AlgebraicCore/SparsePolyOps-ideal-ZeroDim.C	2024-03-29 08:57:29.058154748 -0600
+@@ -497,6 +497,7 @@ namespace CoCoA
+           return;
+         }
+       }
++      IsTotalSplit = false;
+     }
+ 
+ 
+@@ -533,6 +534,7 @@ namespace CoCoA
+         poly = zero(P);
+         //		  factorization :=record[factors:=[one(P)],multiplicities:=[1]],
+         //		  IsTotalSplit := true];
++        IsTotalSplit = false;
+         return;
+       }
+       double prob=0.0;
+@@ -598,6 +600,7 @@ namespace CoCoA
+       if (IsPrimary(I))
+       {
+         poly = zero(P);
++        IsTotalSplit = false;
+         return;
+       }
+       //      CoCoA_THROW_ERROR(ERR::NYI, "PDSplittingRandomLinear");

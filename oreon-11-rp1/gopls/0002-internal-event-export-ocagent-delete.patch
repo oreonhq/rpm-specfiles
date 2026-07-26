@@ -1,0 +1,208 @@
+From 46967b5548e61bc5b94b3c58b94057c4bc16a961 Mon Sep 17 00:00:00 2001
+From: Alan Donovan <adonovan@google.com>
+Date: Wed, 26 Feb 2025 13:35:43 -0500
+Subject: [PATCH 2/2] internal/event/export/ocagent: delete
+
+We never use it, and OpenCensus is officially moribund.
+
+Change-Id: I0095f996c58954c238be7875694ee62dd721b3f2
+Reviewed-on: https://go-review.googlesource.com/c/tools/+/653016
+LUCI-TryBot-Result: Go LUCI <golang-scoped@luci-project-accounts.iam.gserviceaccount.com>
+Reviewed-by: Robert Findley <rfindley@google.com>
+Commit-Queue: Alan Donovan <adonovan@google.com>
+Auto-Submit: Alan Donovan <adonovan@google.com>
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ gopls/internal/cmd/cmd.go                 |  7 +------
+ gopls/internal/cmd/usage/usage-v.hlp      |  2 --
+ gopls/internal/cmd/usage/usage.hlp        |  2 --
+ gopls/internal/debug/serve.go             | 15 ++-------------
+ gopls/internal/lsprpc/lsprpc_test.go      |  8 ++++----
+ gopls/internal/test/integration/runner.go |  4 ++--
+ gopls/internal/test/marker/marker_test.go |  2 +-
+ 7 files changed, 10 insertions(+), 30 deletions(-)
+
+diff --git a/gopls/internal/cmd/cmd.go b/gopls/internal/cmd/cmd.go
+index a647b3198..3aa28c5eb 100644
+--- a/gopls/internal/cmd/cmd.go
++++ b/gopls/internal/cmd/cmd.go
+@@ -63,9 +63,6 @@ type Application struct {
+ 	// VeryVerbose enables a higher level of verbosity in logging output.
+ 	VeryVerbose bool `flag:"vv,veryverbose" help:"very verbose output"`
+ 
+-	// Control ocagent export of telemetry
+-	OCAgent string `flag:"ocagent" help:"the address of the ocagent (e.g. http://localhost:55678), or off"`
+-
+ 	// PrepareOptions is called to update the options when a new view is built.
+ 	// It is primarily to allow the behavior of gopls to be modified by hooks.
+ 	PrepareOptions func(*settings.Options)
+@@ -98,8 +95,6 @@ func (app *Application) verbose() bool {
+ // New returns a new Application ready to run.
+ func New() *Application {
+ 	app := &Application{
+-		OCAgent: "off", //TODO: Remove this line to default the exporter to on
+-
+ 		Serve: Serve{
+ 			RemoteListenTimeout: 1 * time.Minute,
+ 		},
+@@ -238,7 +233,7 @@ func (app *Application) Run(ctx context.Context, args ...string) error {
+ 	// executable, and immediately runs a gc.
+ 	filecache.Start()
+ 
+-	ctx = debug.WithInstance(ctx, app.OCAgent)
++	ctx = debug.WithInstance(ctx)
+ 	if len(args) == 0 {
+ 		s := flag.NewFlagSet(app.Name(), flag.ExitOnError)
+ 		return tool.Run(ctx, s, &app.Serve, args)
+diff --git a/gopls/internal/cmd/usage/usage-v.hlp b/gopls/internal/cmd/usage/usage-v.hlp
+index 64f99a338..044d4251e 100644
+--- a/gopls/internal/cmd/usage/usage-v.hlp
++++ b/gopls/internal/cmd/usage/usage-v.hlp
+@@ -61,8 +61,6 @@ flags:
+     	filename to log to. if value is "auto", then logging to a default output file is enabled
+   -mode=string
+     	no effect
+-  -ocagent=string
+-    	the address of the ocagent (e.g. http://localhost:55678), or off (default "off")
+   -port=int
+     	port on which to run gopls for debugging purposes
+   -profile.alloc=string
+diff --git a/gopls/internal/cmd/usage/usage.hlp b/gopls/internal/cmd/usage/usage.hlp
+index c801a4676..b918b24a4 100644
+--- a/gopls/internal/cmd/usage/usage.hlp
++++ b/gopls/internal/cmd/usage/usage.hlp
+@@ -58,8 +58,6 @@ flags:
+     	filename to log to. if value is "auto", then logging to a default output file is enabled
+   -mode=string
+     	no effect
+-  -ocagent=string
+-    	the address of the ocagent (e.g. http://localhost:55678), or off (default "off")
+   -port=int
+     	port on which to run gopls for debugging purposes
+   -profile.alloc=string
+diff --git a/gopls/internal/debug/serve.go b/gopls/internal/debug/serve.go
+index 058254b75..2ce7a0951 100644
+--- a/gopls/internal/debug/serve.go
++++ b/gopls/internal/debug/serve.go
+@@ -33,7 +33,6 @@ import (
+ 	"golang.org/x/tools/internal/event/core"
+ 	"golang.org/x/tools/internal/event/export"
+ 	"golang.org/x/tools/internal/event/export/metric"
+-	"golang.org/x/tools/internal/event/export/ocagent"
+ 	"golang.org/x/tools/internal/event/export/prometheus"
+ 	"golang.org/x/tools/internal/event/keys"
+ 	"golang.org/x/tools/internal/event/label"
+@@ -51,13 +50,11 @@ type Instance struct {
+ 	Logfile       string
+ 	StartTime     time.Time
+ 	ServerAddress string
+-	OCAgentConfig string
+ 
+ 	LogWriter io.Writer
+ 
+ 	exporter event.Exporter
+ 
+-	ocagent    *ocagent.Exporter
+ 	prometheus *prometheus.Exporter
+ 	rpcs       *Rpcs
+ 	traces     *traces
+@@ -363,16 +360,11 @@ func GetInstance(ctx context.Context) *Instance {
+ 
+ // WithInstance creates debug instance ready for use using the supplied
+ // configuration and stores it in the returned context.
+-func WithInstance(ctx context.Context, agent string) context.Context {
++func WithInstance(ctx context.Context) context.Context {
+ 	i := &Instance{
+-		StartTime:     time.Now(),
+-		OCAgentConfig: agent,
++		StartTime: time.Now(),
+ 	}
+ 	i.LogWriter = os.Stderr
+-	ocConfig := ocagent.Discover()
+-	//TODO: we should not need to adjust the discovered configuration
+-	ocConfig.Address = i.OCAgentConfig
+-	i.ocagent = ocagent.Connect(ocConfig)
+ 	i.prometheus = prometheus.New()
+ 	i.rpcs = &Rpcs{}
+ 	i.traces = &traces{}
+@@ -541,9 +533,6 @@ func messageType(l log.Level) protocol.MessageType {
+ 
+ func makeInstanceExporter(i *Instance) event.Exporter {
+ 	exporter := func(ctx context.Context, ev core.Event, lm label.Map) context.Context {
+-		if i.ocagent != nil {
+-			ctx = i.ocagent.ProcessEvent(ctx, ev, lm)
+-		}
+ 		if i.prometheus != nil {
+ 			ctx = i.prometheus.ProcessEvent(ctx, ev, lm)
+ 		}
+diff --git a/gopls/internal/lsprpc/lsprpc_test.go b/gopls/internal/lsprpc/lsprpc_test.go
+index c4ccab71a..af17bcab0 100644
+--- a/gopls/internal/lsprpc/lsprpc_test.go
++++ b/gopls/internal/lsprpc/lsprpc_test.go
+@@ -58,7 +58,7 @@ func TestClientLogging(t *testing.T) {
+ 	server := PingServer{}
+ 	client := FakeClient{Logs: make(chan string, 10)}
+ 
+-	ctx = debug.WithInstance(ctx, "")
++	ctx = debug.WithInstance(ctx)
+ 	ss := NewStreamServer(cache.New(nil), false, nil).(*StreamServer)
+ 	ss.serverForTest = server
+ 	ts := servertest.NewPipeServer(ss, nil)
+@@ -121,7 +121,7 @@ func checkClose(t *testing.T, closer func() error) {
+ 
+ func setupForwarding(ctx context.Context, t *testing.T, s protocol.Server) (direct, forwarded servertest.Connector, cleanup func()) {
+ 	t.Helper()
+-	serveCtx := debug.WithInstance(ctx, "")
++	serveCtx := debug.WithInstance(ctx)
+ 	ss := NewStreamServer(cache.New(nil), false, nil).(*StreamServer)
+ 	ss.serverForTest = s
+ 	tsDirect := servertest.NewTCPServer(serveCtx, ss, nil)
+@@ -214,8 +214,8 @@ func TestDebugInfoLifecycle(t *testing.T) {
+ 
+ 	baseCtx, cancel := context.WithCancel(context.Background())
+ 	defer cancel()
+-	clientCtx := debug.WithInstance(baseCtx, "")
+-	serverCtx := debug.WithInstance(baseCtx, "")
++	clientCtx := debug.WithInstance(baseCtx)
++	serverCtx := debug.WithInstance(baseCtx)
+ 
+ 	cache := cache.New(nil)
+ 	ss := NewStreamServer(cache, false, nil)
+diff --git a/gopls/internal/test/integration/runner.go b/gopls/internal/test/integration/runner.go
+index 6d10b16ca..b3e98b859 100644
+--- a/gopls/internal/test/integration/runner.go
++++ b/gopls/internal/test/integration/runner.go
+@@ -173,7 +173,7 @@ func (r *Runner) Run(t *testing.T, files string, test TestFunc, opts ...RunOptio
+ 			}
+ 
+ 			// TODO(rfindley): do we need an instance at all? Can it be removed?
+-			ctx = debug.WithInstance(ctx, "off")
++			ctx = debug.WithInstance(ctx)
+ 
+ 			rootDir := filepath.Join(r.tempDir, filepath.FromSlash(t.Name()))
+ 			if err := os.MkdirAll(rootDir, 0755); err != nil {
+@@ -349,7 +349,7 @@ func (r *Runner) defaultServer() jsonrpc2.StreamServer {
+ func (r *Runner) forwardedServer() jsonrpc2.StreamServer {
+ 	r.tsOnce.Do(func() {
+ 		ctx := context.Background()
+-		ctx = debug.WithInstance(ctx, "off")
++		ctx = debug.WithInstance(ctx)
+ 		ss := lsprpc.NewStreamServer(cache.New(nil), false, nil)
+ 		r.ts = servertest.NewTCPServer(ctx, ss, nil)
+ 	})
+diff --git a/gopls/internal/test/marker/marker_test.go b/gopls/internal/test/marker/marker_test.go
+index 516dfeb38..7286d1720 100644
+--- a/gopls/internal/test/marker/marker_test.go
++++ b/gopls/internal/test/marker/marker_test.go
+@@ -961,7 +961,7 @@ func newEnv(t *testing.T, cache *cache.Cache, files, proxyFiles map[string][]byt
+ 	// Put a debug instance in the context to prevent logging to stderr.
+ 	// See associated TODO in runner.go: we should revisit this pattern.
+ 	ctx := context.Background()
+-	ctx = debug.WithInstance(ctx, "off")
++	ctx = debug.WithInstance(ctx)
+ 
+ 	awaiter := integration.NewAwaiter(sandbox.Workdir)
+ 	ss := lsprpc.NewStreamServer(cache, false, nil)
+-- 
+2.49.0
+

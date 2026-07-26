@@ -1,0 +1,52 @@
+From f4a69e595751fb5426d777ebad2cd36e9fc61fca Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Mon, 29 Apr 2019 20:21:55 +0200
+Subject: [PATCH] Fix debugf arguments
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Robert-André Mauchin <zebob.m@gmail.com>
+---
+ gridfs.go  | 2 +-
+ session.go | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gridfs.go b/gridfs.go
+index 0954b16..e508504 100644
+--- a/gridfs.go
++++ b/gridfs.go
+@@ -678,7 +678,7 @@ func (file *GridFile) insertChunk(data []byte) {
+ // an error, if any.
+ func (file *GridFile) Seek(offset int64, whence int) (pos int64, err error) {
+ 	file.m.Lock()
+-	debugf("GridFile %p: seeking for %s (whence=%d)", file, offset, whence)
++	debugf("GridFile %p: seeking for %d (whence=%d)", file, offset, whence)
+ 	defer file.m.Unlock()
+ 	switch whence {
+ 	case os.SEEK_SET:
+diff --git a/session.go b/session.go
+index cd2a53e..09e22a1 100644
+--- a/session.go
++++ b/session.go
+@@ -94,7 +94,7 @@ const (
+ // All Session methods are concurrency-safe and may be called from multiple
+ // goroutines. In all session modes but Eventual, using the session from
+ // multiple goroutines will cause them to share the same underlying socket.
+-// See the documentation on Session.SetMode for more details.
++// See the documentation on Session.SetMode for more details.git@github.com:eclipseo/mgo.git
+ type Session struct {
+ 	defaultdb        string
+ 	sourcedb         string
+@@ -3885,7 +3885,7 @@ func (db *Database) run(socket *mongoSocket, cmd, result interface{}) (err error
+ 	if result != nil {
+ 		err = bson.Unmarshal(data, result)
+ 		if err != nil {
+-			debugf("Run command unmarshaling failed: %#v", op, err)
++			debugf("Run command unmarshaling failed: %#v, error: %#v", op, err)
+ 			return err
+ 		}
+ 		if globalDebug && globalLogger != nil {
+-- 
+2.21.0
+

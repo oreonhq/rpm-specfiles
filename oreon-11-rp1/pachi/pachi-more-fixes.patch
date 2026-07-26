@@ -1,0 +1,22 @@
+--- Pachi/src/game.c	2009-01-11 21:15:47.000000000 +0100
++++ Pachi.new/src/game.c	2009-01-11 21:05:04.000000000 +0100
+@@ -80,7 +80,7 @@
+     if(y < R_max_y)
+ 	if(roommap[x][y+1]==stage)
+ 	    show_arrow(arrow_down, show);
+-    if(y < 0)
++    if(y > 0)
+ 	if(roommap[x][y-1]==stage)
+ 	    show_arrow(arrow_up, show);
+ }
+--- Pachi/src/text.c	2009-01-11 21:15:47.000000000 +0100
++++ Pachi.new/src/text.c	2009-01-11 21:08:15.000000000 +0100
+@@ -15,7 +15,7 @@
+     srctxt.y = 0;
+     int linecounter = 0 ; // este contador se utiliza para saber en que linea imprimimos el texto
+     int charpos = 0;
+-    for(unsigned charcounter = 0; charcounter <= (strlen(texto));charcounter++)
++    for(size_t charcounter = 0; charcounter < strlen(texto); charcounter++)
+     {
+ 	int curchar=texto[charcounter];
+ 	if(curchar == 94)

@@ -1,0 +1,12 @@
+diff --git a/lunchbox/sleep.cpp b/lunchbox/sleep.cpp
+index 14aa052..885c47a 100644
+--- a/lunchbox/sleep.cpp
++++ b/lunchbox/sleep.cpp
+@@ -19,6 +19,7 @@
+ 
+ #include "os.h"
+ #include "time.h"
++#include <time.h>
+ 
+ namespace lunchbox
+ {

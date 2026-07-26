@@ -1,0 +1,67 @@
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/CMakeLists.txt qtwebkit-5.212.0-alpha4-new/CMakeLists.txt
+--- qtwebkit-5.212.0-alpha4/CMakeLists.txt	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/CMakeLists.txt	2025-07-18 10:44:52.063617008 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.5)
+ project(WebKit)
+ 
+ # This should be removed once we require CMake 3.3.
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Source/JavaScriptCore/CMakeLists.txt qtwebkit-5.212.0-alpha4-new/Source/JavaScriptCore/CMakeLists.txt
+--- qtwebkit-5.212.0-alpha4/Source/JavaScriptCore/CMakeLists.txt	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Source/JavaScriptCore/CMakeLists.txt	2025-07-18 10:44:52.063942144 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.5)
+ include(WebKitCommon)
+ 
+ set(JavaScriptCore_INCLUDE_DIRECTORIES
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Source/WebCore/CMakeLists.txt qtwebkit-5.212.0-alpha4-new/Source/WebCore/CMakeLists.txt
+--- qtwebkit-5.212.0-alpha4/Source/WebCore/CMakeLists.txt	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Source/WebCore/CMakeLists.txt	2025-07-18 10:44:52.064316553 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.5)
+ include(WebKitCommon)
+ 
+ set(WebCore_INCLUDE_DIRECTORIES
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Source/WebKit/CMakeLists.txt qtwebkit-5.212.0-alpha4-new/Source/WebKit/CMakeLists.txt
+--- qtwebkit-5.212.0-alpha4/Source/WebKit/CMakeLists.txt	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Source/WebKit/CMakeLists.txt	2025-07-18 10:44:52.064759495 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.5)
+ include(WebKitCommon)
+ 
+ set(WebKit_SOURCES
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Source/WTF/CMakeLists.txt qtwebkit-5.212.0-alpha4-new/Source/WTF/CMakeLists.txt
+--- qtwebkit-5.212.0-alpha4/Source/WTF/CMakeLists.txt	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Source/WTF/CMakeLists.txt	2025-07-18 10:44:52.064898927 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.5)
+ include(WebKitCommon)
+ 
+ add_subdirectory(wtf)
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/tests/webkitwidgets/cmake/CMakeLists.txt qtwebkit-5.212.0-alpha4-new/tests/webkitwidgets/cmake/CMakeLists.txt
+--- qtwebkit-5.212.0-alpha4/tests/webkitwidgets/cmake/CMakeLists.txt	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/tests/webkitwidgets/cmake/CMakeLists.txt	2025-07-18 10:44:52.065038204 +0200
+@@ -1,5 +1,5 @@
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(qmake_cmake_files)
+ 
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Tools/TestWebKitAPI/CMakeLists.txt qtwebkit-5.212.0-alpha4-new/Tools/TestWebKitAPI/CMakeLists.txt
+--- qtwebkit-5.212.0-alpha4/Tools/TestWebKitAPI/CMakeLists.txt	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Tools/TestWebKitAPI/CMakeLists.txt	2025-07-18 10:44:52.065186447 +0200
+@@ -170,7 +170,7 @@ add_executable(TestWTF
+     ${TestWTF_SOURCES}
+ )
+ 
+-if (WIN32)
++if (WIN32 AND NOT MINGW)
+     add_dependencies(TestWTF TestWTFLib)
+ endif ()
+ 

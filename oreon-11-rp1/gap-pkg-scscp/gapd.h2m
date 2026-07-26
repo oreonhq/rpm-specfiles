@@ -1,0 +1,50 @@
+[FILES]
+.TP
+.I /etc/scscp/gap/server.g
+This file is the GAP SCSCP server configuration file
+on Fedora systems:
+it
+loads all necessary packages,
+reads all needed code,
+installs all procedures which will be exposed to the client
+and finally starts the SCSCP server itself.
+.TP
+.I /etc/scscp/gap/config.g
+.I /etc/scscp/gap/configpar.g
+These files set the default parameters needed by the GAP SCSCP package;
+they are fully commented.
+.TP
+.I /etc/scscp/gap/
+This directory is the default location on Fedora systems
+for all systemwide configuration material needed by
+the GAP SCSCP server
+and any GAP SCSCP client.
+
+[AUTHORS]
+Alexander Konovalov and Steve Linton.
+The GAP Daemon script
+.BR gapd
+was slightly improved
+with backward compatibility
+and documented hereby
+by Jerome Benoit
+on behalf of the Debian Science Team
+(August 2014).
+
+[COPYRIGHT]
+Copyright \(co 2007-2014 by Alexander Konovalov and Steve Linton
+
+GAP SCSCP package is free software;
+you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation;
+either version 2 of the License, or (at your option) any later version.
+
+[SEE ALSO]
+.BR gap (1),
+.BR hostname (1)
+
+The complete manual
+for the GAP SCSCP package
+is available at
+/usr/lib/gap/pkg/scscp/doc
+or via the GAP online help system.

@@ -1,0 +1,58 @@
+From 49d35d3007b2e7431a2d7d923293f6a182983a68 Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 17:08:14 +0200
+Subject: [PATCH 11/15] added soname info
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ CMakeLists.txt     | 19 +++++++++++--------
+ lib/CMakeLists.txt |  1 +
+ 2 files changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9c95a61..a4bc49c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,17 +3,20 @@ cmake_minimum_required(VERSION 2.6)
+ 
+ project(expatpp)
+ 
+-
+ find_package(EXPAT REQUIRED)
+ 
++SET(EXPATPP_MAJOR_VERSION 0)
++SET(EXPATPP_MINOR_VERSION 6)
++SET(EXPATPP_BUILD_VERSION 0)
++SET(EXPATPP_VERSION
++  "${EXPATPP_MAJOR_VERSION}.${EXPATPP_MINOR_VERSION}.${EXPATPP_BUILD_VERSION}")
++SET(EXPATPP_LIBRARY_PROPERTIES ${EXPATPP_LIBRARY_PROPERTIES}
++  VERSION "${EXPATPP_VERSION}"
++  SOVERSION "${EXPATPP_API_VERSION}"
++)
++
++
+ add_subdirectory(lib)
+ add_subdirectory(test)
+ 
+-SET(CPACK_GENERATOR "RPM")
+-SET(CPACK_RPM_PACKAGE_SUMMARY "A tiniy object oriented wrapper around expat library")
+-SET(CPACK_RPM_PACKAGE_NAME "expatpp")
+-SET(CPACK_RPM_PACKAGE_VERSION 0.6)
+-SET(CPACK_RPM_PACKAGE_RELEASE 1)
+-SET(CPACK_RPM_PACKAGE_LICENSE "Mozilla")
+-
+ INCLUDE(CPack)
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 171601f..352687d 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -1,4 +1,5 @@
+ 
+ add_library(expatpp SHARED expatpp.cpp)
+ target_link_libraries(expatpp ${EXPAT_LIBRARIES})
++SET_TARGET_PROPERTIES(expatpp PROPERTIES ${EXPATPP_LIBRARY_PROPERTIES})
+ INSTALL_TARGETS(/${LIB_INSTALL_DIR} expatpp)
+\ No newline at end of file
+-- 
+1.7.11.7
+

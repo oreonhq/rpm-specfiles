@@ -1,0 +1,21 @@
+*Please* read the included README, so you understand the security
+aspects, and how it all works.
+
+For the impatient: Run
+
+    etckeeper init
+    etckeeper vcs status
+    etckeeper vcs commit -m 'msg'
+
+to get etckeeper started.
+
+Once you do that, the cronjob is in place and it'll do daily
+autocommits for you. To disable it, set AVOID_DAILY_AUTOCOMMITS=1 in
+/etc/etckeeper/etckeeper.conf.
+
+There's a yum plugin enabled that autocommits before and after each
+yum transaction. A dnf plugin is also included, in the subpackage
+etckeeper-dnf.
+
+The yum plugin can be disabled in
+/etc/yum/pluginconf.d/etckeeper.conf.

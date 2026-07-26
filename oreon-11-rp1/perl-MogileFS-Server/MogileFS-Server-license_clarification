@@ -1,0 +1,110 @@
+From bradfitz@gmail.com Sun Apr 16 19:55:54 2017
+Return-Path: bradfitz@gmail.com
+Received: from zmta02.collab.prod.int.phx2.redhat.com (LHLO
+ zmta02.collab.prod.int.phx2.redhat.com) (10.5.81.9) by
+ zmail20.collab.prod.int.phx2.redhat.com with LMTP; Sun, 16 Apr 2017
+ 13:55:54 -0400 (EDT)
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+	by zmta02.collab.prod.int.phx2.redhat.com (Postfix) with ESMTP id 832EB123B47
+	for <ppisar@mail.corp.redhat.com>; Sun, 16 Apr 2017 13:55:54 -0400 (EDT)
+Received: by smtp.corp.redhat.com (Postfix)
+	id 71F0777D62; Sun, 16 Apr 2017 17:55:54 +0000 (UTC)
+Delivered-To: ppisar@redhat.com
+Received: from mx1.redhat.com (ext-mx10.extmail.prod.ext.phx2.redhat.com [10.5.110.39])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id 6ADFD17A75
+	for <ppisar@redhat.com>; Sun, 16 Apr 2017 17:55:54 +0000 (UTC)
+Received: from mail-vk0-f49.google.com (mail-vk0-f49.google.com [209.85.213.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mx1.redhat.com (Postfix) with ESMTPS id D7C9861B93
+	for <ppisar@redhat.com>; Sun, 16 Apr 2017 17:55:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mx1.redhat.com D7C9861B93
+Authentication-Results: ext-mx10.extmail.prod.ext.phx2.redhat.com; dmarc=none (p=none dis=none) header.from=danga.com
+Authentication-Results: ext-mx10.extmail.prod.ext.phx2.redhat.com; spf=pass smtp.mailfrom=bradfitz@gmail.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.redhat.com D7C9861B93
+Authentication-Results: mx1.redhat.com;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PPW9/Q8W"
+Received: by mail-vk0-f49.google.com with SMTP id q78so23007619vke.3
+        for <ppisar@redhat.com>; Sun, 16 Apr 2017 10:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:in-reply-to:references:from:date
+         :message-id:subject:to;
+        bh=usjhLvs0jlDdclkQrHKPq4UWbfrFmZDhgeSdZmInMyM=;
+        b=PPW9/Q8WI4WtKbloDTsOELXDORGHJOYfOWaIbWXRh24vevqMjIMLFNTa2V7NtV+jEU
+         Lm7U4yXoXkdPFFe85lonTlHiaJ2KqKQuNcbT1uQD6iJgMjQg8vPduffYurNzUWFgsvKy
+         xmHGD4g3SS+rGiawb/Aisp6JwyZ+LQ9s+TmWdzv39sSXbyqS7XyZNo5y5ejpA6tf1q45
+         sTbE6awkuw0vSv8VgUN2i2rU7ELzWKje8TDKZNSvWHClRw3rSacnbxFNom3tfTZJR+n7
+         9YvmF7nbUAnOq/BmzxSwl0p5RY+PATT7nXyFEDLWXgOi4L+NcTUMiW4G+zyvPJiY/S2X
+         8QwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:in-reply-to
+         :references:from:date:message-id:subject:to;
+        bh=usjhLvs0jlDdclkQrHKPq4UWbfrFmZDhgeSdZmInMyM=;
+        b=jM74Xwa2CGJqyZKbfgkcaUnk67t5nsu2oyIqyB1ToDEPCrQ+P43C0lFlGN7Th6dvGt
+         vZeLdYD+nFwGuI/4BTKBvhhuXHzESfFeNzwpR4HKplLjTF9HyLE9HfEBVKyVQ8FFRuwq
+         GjsjhHHN/6ZpchCLkDkA7O9mqI3BNHWlLoB6l8zI2JYqQfe1wCpa3v3aMUA6ORgo4d/N
+         t7UsfrCokJDu3BpdahGHYR6yc8o8dY2X7s3yncIvdOwS2EZtRIp55xga0v7jEoW2YK9d
+         oaI0UqB7JqAON+izn0aCoG4M9hfNhrhm5Lz2j82EgT0+wEXJo1n1+SL4j8B0FXcTtS2D
+         ZIqA==
+X-Gm-Message-State: AN3rC/4CyEW13Y6d92bMtO9UM1ZFTjNcMlQGeyInSqXiRmlrg3AAx3zH
+	qPrapr7rxOk0xODS5dqr9l8ZRydKecIp
+X-Received: by 10.31.72.6 with SMTP id v6mr5867079vka.37.1492365351862; Sun,
+ 16 Apr 2017 10:55:51 -0700 (PDT)
+MIME-Version: 1.0
+Reply-To: brad@danga.com
+Sender: bradfitz@gmail.com
+Received: by 10.176.94.136 with HTTP; Sun, 16 Apr 2017 10:55:51 -0700 (PDT)
+In-Reply-To: <20170412091204.GA2624@dhcp-0-146.brq.redhat.com>
+References: <20170412091204.GA2624@dhcp-0-146.brq.redhat.com>
+From: Brad Fitzpatrick <brad@danga.com>
+Date: Sun, 16 Apr 2017 10:55:51 -0700
+X-Google-Sender-Auth: c6zRqe_EKOierzNwtdHCDkyoQRs
+Message-ID: <CAKPOmqOag3WGhROt1PAbQ5StQ_ebirxjm3i17o9D=LQjaasC5Q@mail.gmail.com>
+Subject: Re: MogileFS-Server license
+To: Petr Pisar <ppisar@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Sun, 16 Apr 2017 17:55:53 +0000 (UTC)
+X-Greylist: inspected by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Sun, 16 Apr 2017 17:55:53 +0000 (UTC) for IP:'209.85.213.49' DOMAIN:'mail-vk0-f49.google.com' HELO:'mail-vk0-f49.google.com' FROM:'bradfitz@gmail.com' RCPT:''
+X-RedHat-Spam-Score: 0.57  (BAYES_50,DCC_REPUT_00_12,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_PASS) 209.85.213.49 mail-vk0-f49.google.com 209.85.213.49 mail-vk0-f49.google.com <bradfitz@gmail.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.5.110.39
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Status: RO
+Content-Length: 1108
+Lines: 33
+
+I suppose at the time I licensed that, there was no GPLv3, so the
+statement was somewhat accurate, even if I was confused.
+
+But the real intent at the time was that I was lazy and didn't care,
+so GPL+ (including GPLv3) is in that spirit.
+
+
+
+
+
+
+
+On Wed, Apr 12, 2017 at 2:12 AM, Petr Pisar <ppisar@redhat.com> wrote:
+> Hello,
+>
+> I try to package MogileFS-Server-2.72 into Fedora Linux distribution and when
+> reviewing the package <https://bugzilla.redhat.com/show_bug.cgi?id=915791#c18>
+> there was a question risen regarding mogstored file license text:
+>
+>     Same terms as Perl itself.  Artistic/GPLv2, at your choosing.
+>
+> The issue is that "Perl itself" is not covered by (Artistic or GPLv2) license,
+> but by (Artistic or GPL+) license <http://dev.perl.org/licenses/>. The
+> difference is in the freedom of GPL license version.
+>
+> Could you please clarify your intentions behined the two sentences?
+>
+> Is the meaning "You can choose from Perl or Artistic or GPLv2 licenses"?
+>
+> Or is the meaning "Perl license, i.e. Artistic or GPL+", while you made
+> a mistake with the GPL version.
+>
+> -- Petr
+

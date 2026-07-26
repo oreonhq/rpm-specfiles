@@ -1,0 +1,11 @@
+diff -up a2ps-4.15.5/src/main.c.numeric a2ps-4.15.5/src/main.c
+--- a2ps-4.15.5/src/main.c.numeric	2023-07-25 13:51:15.682949214 +0200
++++ a2ps-4.15.5/src/main.c	2023-07-25 13:56:01.934924976 +0200
+@@ -927,6 +927,7 @@ main (int argc, char *argv[])
+   setlocale (LC_MESSAGES, "");
+   setlocale (LC_CTYPE, "");
+   setlocale (LC_PAPER, "");
++  setlocale (LC_NUMERIC, "C");
+ 
+   bindtextdomain (PACKAGE, LOCALEDIR);
+   bindtextdomain (PACKAGE "-gnulib", LOCALEDIR);

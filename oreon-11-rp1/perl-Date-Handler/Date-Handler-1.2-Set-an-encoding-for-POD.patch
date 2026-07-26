@@ -1,0 +1,56 @@
+From 112cf6a98a5f80eeaef4a9d07ad3003f24cc0a6e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 25 Sep 2023 10:20:30 +0200
+Subject: [PATCH] Set an encoding for POD
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Default POD encoding is ASCII. This patch declares the real one.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Handler.pod      | 2 ++
+ Handler/Delta.pm | 2 ++
+ Handler/Range.pm | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/Handler.pod b/Handler.pod
+index d31c634..ae29dda 100755
+--- a/Handler.pod
++++ b/Handler.pod
+@@ -1,3 +1,5 @@
++=encoding iso-8859-1
++
+ =head1 NAME
+ 
+ Date::Handler - Easy but complete date object (1.1)
+diff --git a/Handler/Delta.pm b/Handler/Delta.pm
+index 59f9b7e..971d832 100755
+--- a/Handler/Delta.pm
++++ b/Handler/Delta.pm
+@@ -301,6 +301,8 @@ sub DeltaFromArray
+ 666;
+ __END__
+ 
++=encoding iso-8859-1
++
+ =head1 NAME
+ 
+ Date::Handler::Delta - Time lapse object 
+diff --git a/Handler/Range.pm b/Handler/Range.pm
+index 54482c7..1c617c5 100755
+--- a/Handler/Range.pm
++++ b/Handler/Range.pm
+@@ -159,6 +159,8 @@ sub Overlaps
+ 666;
+ __END__
+ 
++=encoding iso-8859-1
++
+ =head1 NAME
+ 
+ Date::Handler::Range - Time range object 
+-- 
+2.41.0
+

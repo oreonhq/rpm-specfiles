@@ -1,0 +1,33 @@
+diff -up MySQL-zrm-3.0/usr/bin/mysql-zrm-restore.tmpwrite MySQL-zrm-3.0/usr/bin/mysql-zrm-restore
+--- MySQL-zrm-3.0/usr/bin/mysql-zrm-restore.tmpwrite	2013-08-26 14:45:36.000000000 -0600
++++ MySQL-zrm-3.0/usr/bin/mysql-zrm-restore	2014-03-19 16:13:17.360910775 -0600
+@@ -415,7 +415,7 @@ sub extractToTmpFile()
+         $dbs =~s/\s/|/g;
+         open( MSQL, $sqlmaster ) or &printAndDie( "Could not open file $sqlmaster $!\n" );
+ 	my $tf = tmpnam();
+-        open(OF,">$tf" ) or &printAndDie( "Coupld not open tmp file $tf $!\n" );
++        open(OF,">$tf" ) or &printAndDie( "Could not open tmp file $tf $!\n" );
+         my $found = 0;
+         while(<MSQL>){
+                 if( /^-- Current Database: / ){
+@@ -425,10 +425,18 @@ sub extractToTmpFile()
+                         $found = /\`($dbs)\`/ ? 1:0;
+                 }
+                 if( $found ){
+-                        print OF $_;
++                        if ( ! print OF $_ ) {
++                                my $r = "$!";
++                                unlink( $tf );
++                                &printAndDie( "Could not write to tmp file $tf $r\n" );
++                        }
+                 }elsif( /^\/\*\!\d*\s*SET / ){
+                         # Also print if statement is "/*! SET "
+-                        print OF $_;
++                        if ( ! print OF $_ ) {
++                                my $r = "$!";
++                                unlink( $tf );
++                                &printAndDie( "Could not write to tmp file $tf $r\n" );
++                        }
+                 }
+         }
+         close( OF );

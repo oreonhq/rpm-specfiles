@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Gnubik
+GenericName=Logical game
+Comment=3D interactive graphics puzzle
+Icon=gnubik
+Exec=gnubik
+Terminal=false
+Categories=Game;LogicGame;

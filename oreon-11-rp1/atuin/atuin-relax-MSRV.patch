@@ -1,0 +1,12 @@
+diff -ru atuin-18.11.0/Cargo.toml atuin-18.11.0-new/Cargo.toml
+--- atuin-18.11.0/Cargo.toml	2026-01-13 00:46:58.000000000 +0100
++++ atuin-18.11.0-new/Cargo.toml	2026-02-09 12:06:56.973776476 +0100
+@@ -7,7 +7,7 @@
+ [workspace.package]
+ version = "18.11.0"
+ authors = ["Ellie Huxtable <ellie@atuin.sh>"]
+-rust-version = "1.91"
++rust-version = "1.88"
+ license = "MIT"
+ homepage = "https://atuin.sh"
+ repository = "https://github.com/atuinsh/atuin"

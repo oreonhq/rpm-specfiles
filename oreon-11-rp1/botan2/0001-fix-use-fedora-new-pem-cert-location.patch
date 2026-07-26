@@ -1,0 +1,24 @@
+From d1454aabce3490711f6e1a07a0c2f0fe658b061b Mon Sep 17 00:00:00 2001
+From: Carlos Rodriguez-Fernandez <carlosrodrifernandez@gmail.com>
+Date: Mon, 28 Jul 2025 21:44:10 -0700
+Subject: [PATCH] fix: use fedora new pem cert location
+
+---
+ configure.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.py b/configure.py
+index 6bebdc40f..13546474b 100755
+--- a/configure.py
++++ b/configure.py
+@@ -2939,6 +2939,7 @@ def set_defaults_for_unset_options(options, info_arch, info_cc, info_os): # pyli
+         default_paths = [
+             '/etc/ssl/certs/ca-certificates.crt', # Ubuntu, Debian, Arch, Gentoo
+             '/etc/pki/tls/certs/ca-bundle.crt', # RHEL
++            '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem', # Fedora
+             '/etc/ssl/ca-bundle.pem', # SuSE
+             '/etc/ssl/cert.pem', # OpenBSD, FreeBSD, Alpine
+             '/etc/certs/ca-certificates.crt', # Solaris
+-- 
+2.50.0
+

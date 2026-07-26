@@ -1,0 +1,167 @@
+Index: src/Preferences.cxx
+===================================================================
+RCS file: /cvsroot/atlas/Atlas/src/Preferences.cxx,v
+retrieving revision 1.29
+diff -u -p -r1.29 Preferences.cxx
+--- src/Preferences.cxx	26 Nov 2012 19:51:16 -0000	1.29
++++ src/Preferences.cxx	15 Feb 2016 21:19:11 -0000
+@@ -351,20 +351,22 @@ int Geometry::operator!=(const Geometry&
+ }
+ 
+ // EYE - why do I need to add Prefs:: here (and for other friend functions)?
+-istream& Prefs::operator>>(istream& str, Geometry& g)
+-{
+-    char by;
+-    str >> g._w;
+-    str >> by;
+-    if (by != 'x') {
+-	str.setstate(ios::failbit);
++namespace Prefs {
++    istream& operator>>(istream& str, Geometry& g)
++    {
++        char by;
++        str >> g._w;
++        str >> by;
++        if (by != 'x') {
++            str.setstate(ios::failbit);
++        }
++        return str >> g._h;
+     }
+-    return str >> g._h;
+-}
+ 
+-ostream& Prefs::operator<<(ostream& str, const Geometry& g)
+-{
+-    return str << g._w << "x" << g._h;
++    ostream& operator<<(ostream& str, const Geometry& g)
++    {
++        return str << g._w << "x" << g._h;
++    }
+ }
+ 
+ //////////////////////////////////////////////////////////////////////
+@@ -394,29 +396,31 @@ int Bool::operator!=(const Bool& right) 
+     return !(*this == right);
+ }
+ 
+-istream& Prefs::operator>>(istream& istr, Bool& b)
+-{
+-    string str;
+-    istr >> str;
+-    if ((str == "true") || (str == "t") ||
+-	(str == "yes") || (str == "y") ||
+-	(str == "on") || (str == "1")) {
+-	b._b = true;
+-    } else {
+-	b._b = false;
+-    }
+-    return istr;
+-}
+-
+-ostream& Prefs::operator<<(ostream& str, const Bool& b)
+-{
+-    if (b._b) {
+-	// // return str << "";
+-	// return str << "on";
+-	return str << "y";
+-    } else {
+-	// return str << "off";
+-	return str << "n";
++namespace Prefs {
++    istream& operator>>(istream& istr, Bool& b)
++    {
++        string str;
++        istr >> str;
++        if ((str == "true") || (str == "t") ||
++            (str == "yes") || (str == "y") ||
++            (str == "on") || (str == "1")) {
++            b._b = true;
++        } else {
++            b._b = false;
++        }
++        return istr;
++    }
++
++    ostream& operator<<(ostream& str, const Bool& b)
++    {
++        if (b._b) {
++            // // return str << "";
++            // return str << "on";
++            return str << "y";
++        } else {
++            // return str << "off";
++            return str << "n";
++        }
+     }
+ }
+ 
+@@ -449,20 +453,22 @@ int LightPosition::operator!=(const Ligh
+     return !(*this == right);
+ }
+ 
+-istream& Prefs::operator>>(istream& istr, LightPosition& g)
+-{
+-    char comma;
+-    istr >> g._azimuth;
+-    istr >> comma;
+-    if (comma != ',') {
+-	istr.setstate(ios::failbit);
++namespace Prefs {
++    istream& operator>>(istream& istr, LightPosition& g)
++    {
++        char comma;
++        istr >> g._azimuth;
++        istr >> comma;
++        if (comma != ',') {
++            istr.setstate(ios::failbit);
++        }
++        return istr >> g._elevation;
+     }
+-    return istr >> g._elevation;
+-}
+ 
+-ostream& Prefs::operator<<(ostream& ostr, const LightPosition& g)
+-{
+-    return ostr << g._azimuth << "," << g._elevation;
++    ostream& operator<<(ostream& ostr, const LightPosition& g)
++    {
++        return ostr << g._azimuth << "," << g._elevation;
++    }
+ }
+ 
+ //////////////////////////////////////////////////////////////////////
+@@ -523,20 +529,22 @@ int SerialConnection::operator!=(const S
+     return !(*this == right);
+ }
+ 
+-istream& Prefs::operator>>(istream& istr, SerialConnection& sc)
+-{
+-    char comma;
+-    istr >> sc._baud;
+-    istr >> comma;
+-    if (comma != ',') {
+-	istr.setstate(ios::failbit);
++namespace Prefs {
++    istream& operator>>(istream& istr, SerialConnection& sc)
++    {
++        char comma;
++        istr >> sc._baud;
++        istr >> comma;
++        if (comma != ',') {
++            istr.setstate(ios::failbit);
++        }
++        return istr >> sc._device;
+     }
+-    return istr >> sc._device;
+-}
+ 
+-ostream& Prefs::operator<<(ostream& ostr, const SerialConnection& sc)
+-{
+-    return ostr << sc._baud << "," << sc._device;
++    ostream& operator<<(ostream& ostr, const SerialConnection& sc)
++    {
++        return ostr << sc._baud << "," << sc._device;
++    }
+ }
+ 
+ //////////////////////////////////////////////////////////////////////

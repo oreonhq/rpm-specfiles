@@ -1,0 +1,13 @@
+    <engine>
+        <symbol>vi</symbol>
+        <name>Bamboo::Us</name>
+        <language>vi</language>
+        <license>GPLv3</license>
+        <author>Luong Thanh Lam &lt;ltlam93@gmail.com&gt;</author>
+        <icon>/usr/share/ibus-bamboo/icons/vi.svg</icon>
+        <layout>us</layout>
+        <longname>Bamboo (US layout)</longname>
+        <description>Vietnamese input method editor with US keyboard layout</description>
+        <rank>1</rank>
+        <setup>/usr/libexec/ibus-engine-bamboo -gui</setup>
+    </engine>

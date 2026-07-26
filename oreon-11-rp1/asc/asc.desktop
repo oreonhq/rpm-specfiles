@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Advanced Strategic Command
+Comment=Turn based strategy game
+Exec=asc
+Icon=asc
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Game;StrategyGame;
+Keywords=game;strategy;turn-based;

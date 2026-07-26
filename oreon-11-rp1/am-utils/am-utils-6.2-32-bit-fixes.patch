@@ -1,0 +1,145 @@
+commit a6bbb7d9b098dacd2636925c232c630452e4b46e
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Sun Jan 18 18:03:37 2015 -0500
+
+    32 bit fixes
+
+diff --git a/amd/amq_subr.c b/amd/amq_subr.c
+index 8783611..86f0351 100644
+--- a/amd/amq_subr.c
++++ b/amd/amq_subr.c
+@@ -528,6 +528,7 @@ xdr_amq_map_info_qelem(XDR *xdrs, qelem *qhead)
+   u_int len = 0;
+   int x;
+   char *n;
++  long modify;
+ 
+   /*
+    * Compute length of list
+@@ -552,7 +553,8 @@ xdr_amq_map_info_qelem(XDR *xdrs, qelem *qhead)
+       return (FALSE);
+     }
+ 
+-    if (!xdr_long(xdrs, &m->modify)) {
++    modify = (long)m->modify;
++    if (!xdr_long(xdrs, &modify)) {
+       return (FALSE);
+     }
+ 
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index e463ff7..7192a6a 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -1104,9 +1104,9 @@ am_nfs3_getattr_3_svc(am_GETATTR3args *argp, struct svc_req *rqstp)
+   result.status = AM_NFS3_OK;
+ 
+   if (amuDebug(D_TRACE))
+-    plog(XLOG_DEBUG, "\tstat(%s), size = %lu, mtime=%d.%d",
++    plog(XLOG_DEBUG, "\tstat(%s), size = %llu, mtime=%d.%d",
+ 	 mp->am_path,
+-	 (am_size3) fattr3->size,
++	 (unsigned long long)fattr3->size,
+ 	 (u_int) fattr3->mtime.seconds,
+ 	 (u_int) fattr3->mtime.nseconds);
+ 
+diff --git a/amd/readdir.c b/amd/readdir.c
+index 4b5e61b..57773a5 100644
+--- a/amd/readdir.c
++++ b/amd/readdir.c
+@@ -635,7 +635,7 @@ static size_t needroom3(void)
+ 
+ /* This one is called only if map is browsable */
+ static int
+-amfs_readdir3_browsable(am_node *mp, am_cookie3 cookie,
++amfs_readdir3_browsable(am_node *mp, voidp cookie,
+ 			am_dirlist3 *dp, am_entry3 *ep, u_int count,
+ 			int fully_browsable)
+ {
+@@ -647,7 +647,8 @@ amfs_readdir3_browsable(am_node *mp, am_cookie3 cookie,
+   dp->eof = FALSE;		/* assume readdir not done */
+ 
+   if (amuDebug(D_READDIR))
+-    plog(XLOG_DEBUG, "amfs_readdir3_browsable gen=%lu, count=%d", gen, count);
++    plog(XLOG_DEBUG, "%s: gen=%llu, count=%d", __func__,
++	(unsigned long long)gen, count);
+ 
+   if (gen == 0) {
+     size_t needed = needroom3();
+@@ -732,8 +733,9 @@ amfs_readdir3_browsable(am_node *mp, am_cookie3 cookie,
+       for (j = 0, ne = te; ne; ne = ne->ne_nextentry)
+ 	plog(XLOG_DEBUG, "gen2 key %4d \"%s\"", j++, ne->name);
+       for (j = 0, ne = ep; ne; ne = ne->ne_nextentry) {
+-	plog(XLOG_DEBUG, "gen2+ key %4d \"%s\" fi=%lu ck=%lu",
+-	     j++, ne->name, ne->fileid, ne->cookie);
++	plog(XLOG_DEBUG, "gen2+ key %4d \"%s\" fi=%llu ck=%llu",
++	     j++, ne->name, (unsigned long long)ne->fileid,
++	     (unsigned long long)ne->cookie);
+       }
+       plog(XLOG_DEBUG, "EOF is %d", dp->eof);
+     }
+@@ -793,14 +795,15 @@ amfs_readdir3_browsable(am_node *mp, am_cookie3 cookie,
+ }
+ 
+ static int
+-amfs_readdir3(am_node *mp, am_cookie3 cookie,
++amfs_readdir3(am_node *mp, voidp cookie,
+ 	      am_dirlist3 *dp, am_entry3 *ep, u_int count)
+ {
+   uint64 gen = *(uint64 *) cookie;
+   am_node *xp;
+ 
+   if (amuDebug(D_READDIR))
+-    plog(XLOG_DEBUG, "amfs_readdir3 gen=%lu, count=%d", gen, count);
++    plog(XLOG_DEBUG, "%s: gen=%llu, count=%d", __func__,
++	(unsigned long long)gen, count);
+ 
+   dp->eof = FALSE;		/* assume readdir not done */
+ 
+@@ -847,8 +850,9 @@ amfs_readdir3(am_node *mp, am_cookie3 cookie,
+       am_entry3 *ne;
+       int j;
+       for (j = 0, ne = ep; ne; ne = ne->nextentry) {
+-	plog(XLOG_DEBUG, "gen1 key %4d \"%s\" fi=%lu ck=%lu",
+-	     j++, ne->name, ne->fileid, ne->cookie);
++	plog(XLOG_DEBUG, "gen1 key %4d \"%s\" fi=%llu ck=%llu",
++	     j++, ne->name, (unsigned long long)ne->fileid,
++	     (unsigned long long)ne->cookie);
+       }
+     }
+     return 0;
+@@ -907,8 +911,9 @@ amfs_readdir3(am_node *mp, am_cookie3 cookie,
+       am_entry3 *ne;
+       int j;
+       for (j = 0, ne = ep; ne; ne = ne->nextentry) {
+-	plog(XLOG_DEBUG, "gen2 key %4d \"%s\" fi=%lu ck=%lu",
+-	     j++, ne->name, ne->fileid, ne->cookie);
++	plog(XLOG_DEBUG, "gen2 key %4d \"%s\" fi=%llu ck=%llu",
++	     j++, ne->name, (unsigned long long)ne->fileid,
++	     (unsigned long long)ne->cookie);
+       }
+     }
+     return 0;
+@@ -944,8 +949,8 @@ amfs_generic_readdir(am_node *mp, voidp cookie, voidp dp, voidp ep, u_int count)
+       return amfs_readdir(mp, cookie, dp, ep, count);
+   } else {
+     if (browsable)
+-      return amfs_readdir3_browsable(mp, (am_cookie3) cookie, dp, ep, count, full);
++      return amfs_readdir3_browsable(mp, cookie, dp, ep, count, full);
+     else
+-      return amfs_readdir3(mp, (am_cookie3) cookie, dp, ep, count);
++      return amfs_readdir3(mp, cookie, dp, ep, count);
+   }
+ }
+diff --git a/amq/amq.c b/amq/amq.c
+index 5d4ed7a..dc5fe02 100644
+--- a/amq/amq.c
++++ b/amq/amq.c
+@@ -79,7 +79,7 @@ enum show_opt {
+ static void
+ time_print(time_type tt)
+ {
+-  time_t t = (time_t)tt;
++  time_t t = (time_t)*tt;
+   struct tm *tp = localtime(&t);
+   printf("%02d/%02d/%04d %02d:%02d:%02d",
+ 	 tp->tm_mon + 1, tp->tm_mday,

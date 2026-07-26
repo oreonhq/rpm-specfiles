@@ -1,0 +1,27 @@
+commit 917f578ed1083835e0f8be47fe21bbf742fc76d8
+Author: Till Hofmann <hofmann@kbsg.rwth-aachen.de>
+Date:   Thu Apr 16 10:30:49 2020 +0200
+
+    Catch exception in client destructor
+    
+    The connection may have died when the destructor is called. Catch any
+    exception and log it.
+
+diff --git a/src/client/client.cpp b/src/client/client.cpp
+index b6d35ea..819fb16 100644
+--- a/src/client/client.cpp
++++ b/src/client/client.cpp
+@@ -341,7 +341,12 @@ void UaClient::CloseSecureChannel()
+ 
+ UaClient::~UaClient()
+ {
+-  Disconnect();//Do not leave any thread or connection running
++  try {
++    Disconnect(); // Do not leave any thread or connection running
++  } catch (std::exception &e) {
++    LOG_WARN(Logger,
++             "ua_client             | Failed to disconnect: {}", e.what());
++  }
+ }
+ 
+ void UaClient::Disconnect()

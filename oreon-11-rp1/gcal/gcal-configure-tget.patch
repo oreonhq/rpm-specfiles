@@ -1,0 +1,79 @@
+Fix implicit declaration of functions tgetent() and tgetstr() in ./configure
+leading otherwise to disabled terminal library support in gcal <= 4.1. Patch
+
+  https://lists.gnu.org/archive/html/bug-gcal/2022-12/msg00000.html
+
+is a prerequisite. Without this fix, ./configure output contains e.g.:
+
+> configure: checking for libraries...
+> checking for initscr in -lncurses... yes
+> checking for working terminal libraries... using -lncurses fails
+> checking for tgetent in -ltermcap... yes
+> checking for working terminal libraries again... using -ltermcap fails
+> checking for tgetent in -ltermlib... no
+> hmm... whats this??
+> configure: WARNING: no terminal libraries available
+> configure: WARNING: 
+> configure: WARNING: this means gcal-4.1 will use its defaults now
+> configure: WARNING: and is unable to support several terminal types!
+> configure: WARNING: note: gcal-4.1 would work more flexible if libncurses.a
+> configure: WARNING: libtermcap.a or libtermlib.a are installed.
+
+And config.log file afterwards contains e.g.:
+
+> conftest.c: In function 'main':
+> conftest.c:48:1: error: implicit declaration of function 'tgetent' [-Wimplicit-function-declaration]
+>    48 | tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);
+>       | ^~~~~~~
+> conftest.c:48:13: error: implicit declaration of function 'tgetflag' [-Wimplicit-function-declaration]
+>    48 | tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);
+>       |             ^~~~~~~~
+> conftest.c:48:26: error: implicit declaration of function 'tgetnum' [-Wimplicit-function-declaration]
+>    48 | tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);
+>       |                          ^~~~~~~
+> conftest.c:48:38: error: implicit declaration of function 'tgetstr' [-Wimplicit-function-declaration]
+>    48 | tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);
+>       |                                      ^~~~~~~
+
+Patch was suggested to upstream:
+
+  https://lists.gnu.org/archive/html/bug-gcal/2025-06/msg00001.html
+
+--- gcal-4.1/configure.ac			2025-06-29 15:24:25.000000000 +0200
++++ gcal-4.1/configure.ac.configure-tget	2025-06-29 15:29:46.000000000 +0200
+@@ -320,7 +320,7 @@
+   SAVE_LIBS=$LIBS
+   LIBS="$LIBS $TTYLIBS"
+   AC_TRY_LINK([#include <term.h>],
+-    [tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);],
++    [tgetent(0,0); tgetflag(0); tgetnum(0); tgetstr(0,0);],
+     [gcal_ttylibs_ok=yes])
+   if test "$gcal_ttylibs_ok" = yes; then
+     AC_DEFINE([HAVE_TTYLIBS], [1], [Link -lncurses or -ltermcap or -ltermlib to executable.])
+@@ -335,7 +335,7 @@
+       AC_MSG_CHECKING(for working terminal libraries again)
+       LIBS="$LIBS $TTYLIBS"
+       AC_TRY_LINK([#include <term.h>],
+-        [tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);],
++        [tgetent(0,0); tgetflag(0); tgetnum(0); tgetstr(0,0);],
+         [gcal_ttylibs_ok=yes])
+       if test "$gcal_ttylibs_ok" = yes; then
+         AC_DEFINE([HAVE_TTYLIBS], [1], [Link -lncurses or -ltermcap or -ltermlib to executable.])
+@@ -352,7 +352,7 @@
+         if test "$have_libtermlib" = yes; then
+           AC_MSG_CHECKING(for working terminal libraries again)
+           AC_TRY_LINK(,
+-            [tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);],
++            [tgetent(0,0); tgetflag(0); tgetnum(0); tgetstr(0,0);],
+             [gcal_libtermlib_ok=yes])
+           if test "$gcal_libtermlib_ok" = yes; then
+             AC_DEFINE([HAVE_TTYLIBS], [1], [Link -lncurses or -ltermcap or -ltermlib to executable.])
+@@ -365,7 +365,7 @@
+         TTYLIBS="-ltermlib"
+         LIBS="$SAVE_LIBS $TTYLIBS"
+         AC_TRY_LINK(,
+-          [tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);],
++          [tgetent(0,0); tgetflag(0); tgetnum(0); tgetstr(0,0);],
+           [gcal_libtermlib_ok=yes])
+         if test "$gcal_libtermlib_ok" = yes; then
+             AC_DEFINE([HAVE_TTYLIBS], [1], [Link -lncurses or -ltermcap or -ltermlib to executable.])

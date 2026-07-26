@@ -1,0 +1,23 @@
+diff -up monotone-1.1/extra/mtn-hooks/monotone-ciabot.py.orig monotone-1.1/extra/mtn-hooks/monotone-ciabot.py
+--- monotone-1.1/extra/mtn-hooks/monotone-ciabot.py.orig	2019-08-10 09:00:03.203454091 +0200
++++ monotone-1.1/extra/mtn-hooks/monotone-ciabot.py	2019-08-10 09:07:13.873700583 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ #
+ # Copyright (C) Nathaniel Smith <njs@pobox.com>
+ #               Timothy Brownawell <tbrownaw@gmail.com>
+@@ -192,10 +192,10 @@ def escape_for_xml(text, is_attrib=0):
+ 
+ def send_message(message, c):
+     if c.delivery == "debug":
+-        print message
++        print(message)
+     elif c.delivery == "xmlrpc":
+-        import xmlrpclib
+-        xmlrpclib.ServerProxy(c.xmlrpc_server).hub.deliver(message)
++        import xmlrpc.client
++        xmlrpc.client.ServerProxy(c.xmlrpc_server).hub.deliver(message)
+     elif c.delivery == "email":
+         import smtplib
+         smtp = smtplib.SMTP(c.smtp_server)

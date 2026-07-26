@@ -1,0 +1,94 @@
+From 7762bb39a25818fa471a687ad24b23d774d13558 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 15 Jul 2025 12:36:36 +0200
+Subject: [PATCH 2/2] Adapt tests to perl 5.41.7
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+t/mapping/double.t faileded with perl 5.42.0:
+
+    #   Failed test 'Inf as double->double'
+    #   at t/mapping/double.t line 55.
+    #          got: 'NV'
+    #     expected: 'PVNV'
+
+    #   Failed test '-Inf as double->double'
+    #   at t/mapping/double.t line 55.
+    #          got: 'NV'
+    #     expected: 'PVNV'
+
+    #   Failed test 'NaN as double->double'
+    #   at t/mapping/double.t line 55.
+    #          got: 'NV'
+    #     expected: 'PVNV'
+
+    #   Failed test 'Inf as BSON::Double->BSON::Double'
+    #   at t/mapping/double.t line 69.
+    #          got: 'NV'
+    #     expected: 'PVNV'
+
+    #   Failed test '-Inf as BSON::Double->BSON::Double'
+    #   at t/mapping/double.t line 69.
+    #          got: 'NV'
+    #     expected: 'PVNV'
+
+    #   Failed test 'NaN as BSON::Double->BSON::Double'
+    #   at t/mapping/double.t line 69.
+    #          got: 'NV'
+    #     expected: 'PVNV'
+    # Looks like you failed 6 tests of 39.
+    t/mapping/double.t ...............
+    Dubious, test returned 6 (wstat 1536, 0x600)
+    Failed 6/39 subtests
+
+The is caused by an optimiziation in 5.41.7:
+
+    When assigning from an SVt_IV into a SVt_NV (or vice versa),
+    providing that both are "bodyless" types, Perl_sv_setsv_flags will
+    now just change the destination type to match the source type.
+    Previously, an SVt_IV would have been upgraded to a SVt_PVNV to
+    store an NV, and an SVt_NV would have been upgraded to a SVt_PVIV to
+    store an IV. This change prevents the need to allocate - and later
+    free - the relevant body struct.
+
+The new behavior is more consistent because
+decode(encode({A => 3.14159})) now has both input and output NV. Users
+who want the old behvior are advised to call "decode(, wrap_numbers
+=> 1)" as documented in BSON.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2380086
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/mapping/double.t | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/t/mapping/double.t b/t/mapping/double.t
+index 786db15..8dc1251 100644
+--- a/t/mapping/double.t
++++ b/t/mapping/double.t
+@@ -50,9 +50,11 @@ my %special = (
+     "NaN"  => BSON::Double::NaN(),
+ );
+ 
++my $double_type = ("$]" < 5.041007) ? 'PVNV' : 'NV';
++
+ for my $s ( qw/Inf -Inf NaN/ ) {
+     $hash = decode( encode( { A => $special{$s} } ) );
+-    is( sv_type( $hash->{A} ), 'PVNV', "$s as double->double" );
++    is( sv_type( $hash->{A} ), $double_type, "$s as double->double" );
+     packed_is( FLOAT, $hash->{A}, $special{$s}, "value correct" );
+ }
+ 
+@@ -66,7 +68,7 @@ for my $s ( qw/Inf -Inf NaN/ ) {
+ # test special BSON::Double
+ for my $s ( qw/Inf -Inf NaN/ ) {
+     $hash = decode( encode( { A => bson_double($special{$s}) } ) );
+-    is( sv_type( $hash->{A} ), 'PVNV', "$s as BSON::Double->BSON::Double" );
++    is( sv_type( $hash->{A} ), $double_type, "$s as BSON::Double->BSON::Double" );
+     packed_is( FLOAT, $hash->{A}, $special{$s}, "value correct" );
+ }
+ 
+-- 
+2.50.1
+

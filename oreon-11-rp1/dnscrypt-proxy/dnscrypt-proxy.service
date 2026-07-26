@@ -1,0 +1,22 @@
+[Unit]
+Description=DNSCrypt-proxy client
+Documentation=https://github.com/jedisct1/dnscrypt-proxy/wiki
+Description=Encrypted/authenticated DNS proxy
+ConditionFileIsExecutable=/usr/bin/dnscrypt-proxy
+After=network.target
+Before=nss-lookup.target
+Wants=nss-lookup.target
+
+
+[Service]
+StartLimitInterval=5
+StartLimitBurst=10
+ExecStart=/usr/bin/dnscrypt-proxy "-config" "/etc/dnscrypt-proxy/dnscrypt-proxy.toml"
+WorkingDirectory=/
+Restart=always
+RestartSec=120
+EnvironmentFile=-/etc/sysconfig/dnscrypt-proxy
+
+
+[Install]
+WantedBy=multi-user.target

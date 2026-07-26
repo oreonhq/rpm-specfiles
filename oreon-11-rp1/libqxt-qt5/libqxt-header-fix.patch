@@ -1,0 +1,10 @@
+--- a/src/network/qxtmailattachment.h.orig	2017-11-13 22:16:17.837003565 +0100
++++ b/src/network/qxtmailattachment.h	2017-11-13 22:16:40.987063625 +0100
+@@ -38,6 +38,7 @@
+ #include <QByteArray>
+ #include <QMetaType>
+ #include <QSharedDataPointer>
++#include <QIODevice>
+ 
+ class QxtMailAttachmentPrivate;
+ class QXT_NETWORK_EXPORT QxtMailAttachment

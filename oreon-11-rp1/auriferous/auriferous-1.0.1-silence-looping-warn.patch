@@ -1,0 +1,48 @@
+diff -up auriferous-1.0.1/auriferous/resources.cpp~ auriferous-1.0.1/auriferous/resources.cpp
+--- auriferous-1.0.1/auriferous/resources.cpp~	2002-05-30 15:23:11.000000000 +0200
++++ auriferous-1.0.1/auriferous/resources.cpp	2009-12-01 11:54:56.000000000 +0100
+@@ -489,7 +489,7 @@ CL_SoundBuffer_Session* Resources::Jungl
+ 	{
+     CL_SoundBuffer *sample= new CL_SoundBuffer(new CL_VorbisSoundProvider("music/jungle.ogg", res), true);
+     jungle = new CL_SoundBuffer_Session(sample->prepare());
+-    jungle->set_looping(true);
++    //jungle->set_looping(true);
+   }
+ 	return jungle;
+ }
+@@ -499,7 +499,7 @@ CL_SoundBuffer_Session* Resources::Tech(
+ 	{
+     CL_SoundBuffer *sample= new CL_SoundBuffer(new CL_VorbisSoundProvider("music/tech.ogg", res), true);
+     tech = new CL_SoundBuffer_Session(sample->prepare());
+-    tech->set_looping(true);
++    //tech->set_looping(true);
+   }
+ 	return tech;
+ }
+@@ -509,7 +509,7 @@ CL_SoundBuffer_Session* Resources::Lava(
+ 	{
+     CL_SoundBuffer *sample= new CL_SoundBuffer(new CL_VorbisSoundProvider("music/lava.ogg", res), true);
+     lava = new CL_SoundBuffer_Session(sample->prepare());
+-    lava->set_looping(true);
++    //lava->set_looping(true);
+   }
+ 	return lava;
+ }
+@@ -519,7 +519,7 @@ CL_SoundBuffer_Session* Resources::Ice()
+ 	{
+     CL_SoundBuffer *sample= new CL_SoundBuffer(new CL_VorbisSoundProvider("music/ice.ogg", res), true);
+     ice = new CL_SoundBuffer_Session(sample->prepare());
+-    ice->set_looping(true);
++    //ice->set_looping(true);
+   }
+ 	return ice;
+ }
+@@ -529,7 +529,7 @@ CL_SoundBuffer_Session* Resources::Aqua(
+ 	{
+     CL_SoundBuffer *sample= new CL_SoundBuffer(new CL_VorbisSoundProvider("music/aqua.ogg", res), true);
+     aqua = new CL_SoundBuffer_Session(sample->prepare());
+-    aqua->set_looping(true);
++    //aqua->set_looping(true);
+   }
+ 	return aqua;
+ }

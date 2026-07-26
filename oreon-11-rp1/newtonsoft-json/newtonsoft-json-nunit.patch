@@ -1,0 +1,10 @@
+--- Src/Newtonsoft.Json.Tests/Newtonsoft.Json.Tests.Net40.csproj	2016-07-11 18:15:58.903411004 +0200
++++ Src/Newtonsoft.Json.Tests/Newtonsoft.Json.Tests.Net40.csproj	2016-07-11 18:15:36.361235513 +0200
+@@ -104,6 +104,7 @@
+     <Reference Include="System.Xml.Linq">
+       <RequiredTargetFramework>3.5</RequiredTargetFramework>
+     </Reference>
++    <Reference Include="nunit.framework"><Package>nunit2</Package></Reference>
+   </ItemGroup>
+   <ItemGroup>
+     <Compile Include="Bson\BsonWriterTests.cs" />

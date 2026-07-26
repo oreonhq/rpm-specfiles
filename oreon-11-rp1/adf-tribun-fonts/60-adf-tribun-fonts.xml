@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Tribun ADF Std</target>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>Bold</name>
+        <value>200</value>
+      </step>
+    </axis>
+    <axis>
+      <name>width</name>
+      <step>
+        <name>Condensed</name>
+        <match>
+          <keyword>Cond</keyword>
+        </match>
+      </step>
+    </axis>
+    <like>
+      <family>Tribun ADF Pro</family>
+      <family>Tribun ADF</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

@@ -1,0 +1,9 @@
+diff -Naur bitcoin-30.0.old/src/kernel/CMakeLists.txt bitcoin-30.0/src/kernel/CMakeLists.txt
+--- bitcoin-30.0.old/src/kernel/CMakeLists.txt	2025-10-16 18:35:05.538795833 +0200
++++ bitcoin-30.0/src/kernel/CMakeLists.txt	2025-10-16 18:37:54.715894722 +0200
+@@ -124,3 +124,5 @@
+     DESTINATION ${CMAKE_INSTALL_LIBDIR}
+     COMPONENT libbitcoinkernel
+ )
++
++set_target_properties(bitcoinkernel PROPERTIES VERSION ${CLIENT_VERSION_MAJOR}.${CLIENT_VERSION_MINOR} SOVERSION ${CLIENT_VERSION_MAJOR})

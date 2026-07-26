@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Anarch (LIB_NAME)
+Comment=Public domain, anarcho-pacifict, suckless Doom clone (LIB_NAME version)
+Exec=anarch-LIB_SUFFIX
+Icon=anarch-LIB_SUFFIX
+Terminal=false
+Categories=Game;
+StartupNotify=false

@@ -1,0 +1,38 @@
+diff -rupN --no-dereference libkdtree-0.7.5/CMakeLists.txt libkdtree-0.7.5-new/CMakeLists.txt
+--- libkdtree-0.7.5/CMakeLists.txt	2025-10-12 17:48:26.000000000 +0200
++++ libkdtree-0.7.5-new/CMakeLists.txt	2025-10-13 12:02:45.231476168 +0200
+@@ -33,5 +33,5 @@ include_directories (${PROJECT_SOURCE_DI
+ add_subdirectory(examples)
+ 
+ file (GLOB KDTREE_HEADERS kdtree++/*.hpp)
+-install (FILES ${KDTREE_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
++install (FILES ${KDTREE_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/kdtree++)
+ 
+diff -rupN --no-dereference libkdtree-0.7.5/python-bindings/CMakeLists.txt libkdtree-0.7.5-new/python-bindings/CMakeLists.txt
+--- libkdtree-0.7.5/python-bindings/CMakeLists.txt	2025-10-12 17:48:26.000000000 +0200
++++ libkdtree-0.7.5-new/python-bindings/CMakeLists.txt	2025-10-13 12:02:45.231736365 +0200
+@@ -1,8 +1,8 @@
+ find_package (SWIG REQUIRED)
+ include (${SWIG_USE_FILE})
+ 
+-find_package (PythonLibs)
+-include_directories (${PYTHON_INCLUDE_PATH})
++find_package(Python COMPONENTS Interpreter Development)
++include_directories (${Python_INCLUDE_DIRS})
+ 
+ include_directories (${CMAKE_CURRENT_SOURCE_DIR})
+ include_directories (${CMAKE_CURRENT_SOURCE_DIR}/..)
+@@ -10,10 +10,9 @@ include_directories (${CMAKE_CURRENT_SOU
+ # Build the _kdtree python module
+ set_source_files_properties (py-kdtree.i PROPERTIES CPLUSPLUS ON)
+ swig_add_module (kdtree python py-kdtree.i)
+-swig_link_libraries (kdtree ${PYTHON_LIBRARIES})
++swig_link_libraries (kdtree ${Python_LIBRARIES})
+ 
+ # Copy the test file into the build dir
+-install (FILES py-kdtree_test.py DESTINATION ${CMAKE_INSTALL_PREFIX}/python)
+-install (FILES ${CMAKE_BINARY_DIR}/python-bindings/kdtree.py DESTINATION ${CMAKE_INSTALL_PREFIX}/python)
+-install (FILES ${CMAKE_BINARY_DIR}/python-bindings/_kdtree.so DESTINATION ${CMAKE_INSTALL_PREFIX}/python)
++install (FILES ${CMAKE_BINARY_DIR}/python-bindings/kdtree.py DESTINATION ${Python_SITEARCH})
++install (FILES ${CMAKE_BINARY_DIR}/python-bindings/_kdtree.so DESTINATION ${Python_SITEARCH})
+ 

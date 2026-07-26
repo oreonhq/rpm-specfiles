@@ -1,0 +1,31 @@
+
+v 0.0.5
+- utf-8 decode
+
+- decodage des caracteres au format utf-8
+
+v 0.0.4
+- balise "table:number-columns-repeated" in sxc file
+
+- gestion des balises table:number-columns-repeated dans les fichiers
+  sxc (calc) pour les cellules repetees
+
+v 0.0.3
+- remove xml balise when -f field_name does not match any field
+
+- suppression des balises xml lorsque le champ indique avec le parametre
+  -f n'existe pas
+
+v 0.0.2
+- Support balise table
+- file content.xml removed
+- display version number with usage
+
+- Support des balises table (tableaux)
+- suppression du fichier content.xml apres traitement
+- affichage du numero de version avec l'usage
+
+v 0.0.1
+- first version
+
+- premiere version

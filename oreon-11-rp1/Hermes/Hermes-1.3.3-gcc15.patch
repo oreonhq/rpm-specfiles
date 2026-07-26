@@ -1,0 +1,134 @@
+diff -up Hermes-1.3.3/src/HeadMMX.h~ Hermes-1.3.3/src/HeadMMX.h
+--- Hermes-1.3.3/src/HeadMMX.h~	2025-04-10 20:48:53.000000000 +0200
++++ Hermes-1.3.3/src/HeadMMX.h	2025-04-10 20:57:10.458573535 +0200
+@@ -34,14 +34,21 @@ void STACKCALL _ClearMMX_24(HermesClearI
+ void STACKCALL _ClearMMX_16(HermesClearInterface *);
+ void STACKCALL _ClearMMX_8(HermesClearInterface *);
+ 
+-void _ConvertMMXpII32_24RGB888();
+-void _ConvertMMXpII32_16RGB565();
+-void _ConvertMMXpII32_16BGR565();
+-void _ConvertMMXpII32_16RGB555();
+-void _ConvertMMXpII32_16BGR565();
+-void _ConvertMMXpII32_16BGR555();
++void _ConvertMMXpII32_24RGB888(char8 *source, char8 *dest,
++                               unsigned int count, unsigned int inc_source);
++void _ConvertMMXpII32_16RGB565(char8 *source, char8 *dest,
++                               unsigned int count, unsigned int inc_source);
++void _ConvertMMXpII32_16BGR565(char8 *source, char8 *dest,
++                               unsigned int count, unsigned int inc_source);
++void _ConvertMMXpII32_16RGB555(char8 *source, char8 *dest,
++                               unsigned int count, unsigned int inc_source);
++void _ConvertMMXpII32_16BGR565(char8 *source, char8 *dest,
++                               unsigned int count, unsigned int inc_source);
++void _ConvertMMXpII32_16BGR555(char8 *source, char8 *dest,
++                               unsigned int count, unsigned int inc_source);
+ 
+-void _ConvertMMXp32_16RGB555();
++void _ConvertMMXp32_16RGB555(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
+ 
+ #ifdef __cplusplus
+ }
+diff -up Hermes-1.3.3/src/HeadX86.h~ Hermes-1.3.3/src/HeadX86.h
+--- Hermes-1.3.3/src/HeadX86.h~	2025-04-10 21:01:39.000000000 +0200
++++ Hermes-1.3.3/src/HeadX86.h	2025-04-10 21:09:07.794120474 +0200
+@@ -36,38 +36,66 @@ void STACKCALL _ClearX86_8(HermesClearIn
+ 
+ int STACKCALL _Hermes_X86_CPU();
+ 
+-void _ConvertX86p32_32BGR888();
+-void _ConvertX86p32_32RGBA888();
+-void _ConvertX86p32_32BGRA888();
+-void _ConvertX86p32_24RGB888();
+-void _ConvertX86p32_24BGR888();
+-void _ConvertX86p32_16RGB565();
+-void _ConvertX86p32_16BGR565();
+-void _ConvertX86p32_16RGB555();
+-void _ConvertX86p32_16BGR555();
+-void _ConvertX86p32_8RGB332();
+-
+-void _ConvertX86p32_16RGB565_S();
+-
+-void _ConvertX86p16_32RGB888();
+-void _ConvertX86p16_32BGR888();
+-void _ConvertX86p16_32RGBA888();
+-void _ConvertX86p16_32BGRA888();
+-void _ConvertX86p16_24RGB888();
+-void _ConvertX86p16_24BGR888();
+-void _ConvertX86p16_16BGR565();
+-void _ConvertX86p16_16RGB555();
+-void _ConvertX86p16_16BGR555();
+-void _ConvertX86p16_8RGB332();
+-
+-void _CopyX86p_4byte();
+-void _CopyX86p_3byte();
+-void _CopyX86p_2byte();
+-void _CopyX86p_1byte();
+-
+-void _ConvertX86pI8_32();
+-void _ConvertX86pI8_24();
+-void _ConvertX86pI8_16();
++void _ConvertX86p32_32BGR888(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_32RGBA888(char8 *source, char8 *dest,
++                              unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_32BGRA888(char8 *source, char8 *dest,
++                              unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_24RGB888(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_24BGR888(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_16RGB565(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_16BGR565(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_16RGB555(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_16BGR555(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p32_8RGB332(char8 *source, char8 *dest,
++                            unsigned int count, unsigned int inc_source);
++
++void _ConvertX86p32_16RGB565_S(char8 *source, char8 *dest,
++                               unsigned int count, unsigned int inc_source);
++
++void _ConvertX86p16_32RGB888(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_32BGR888(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_32RGBA888(char8 *source, char8 *dest,
++                              unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_32BGRA888(char8 *source, char8 *dest,
++                              unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_24RGB888(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_24BGR888(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_16BGR565(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_16RGB555(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_16BGR555(char8 *source, char8 *dest,
++                             unsigned int count, unsigned int inc_source);
++void _ConvertX86p16_8RGB332(char8 *source, char8 *dest,
++                            unsigned int count, unsigned int inc_source);
++
++void _CopyX86p_4byte(char8 *source, char8 *dest,
++                     unsigned int count, unsigned int inc_source);
++void _CopyX86p_3byte(char8 *source, char8 *dest,
++                     unsigned int count, unsigned int inc_source);
++void _CopyX86p_2byte(char8 *source, char8 *dest,
++                     unsigned int count, unsigned int inc_source);
++void _CopyX86p_1byte(char8 *source, char8 *dest,
++                     unsigned int count, unsigned int inc_source);
++
++void _ConvertX86pI8_32(char8 *source, char8 *dest,
++                       unsigned int count, unsigned int inc_source);
++void _ConvertX86pI8_24(char8 *source, char8 *dest,
++                       unsigned int count, unsigned int inc_source);
++void _ConvertX86pI8_16(char8 *source, char8 *dest,
++                       unsigned int count, unsigned int inc_source);
+ 
+ extern int32 _ConvertX86p16_32RGB888_LUT_X86[512];
+ extern int32 _ConvertX86p16_32BGR888_LUT_X86[512];

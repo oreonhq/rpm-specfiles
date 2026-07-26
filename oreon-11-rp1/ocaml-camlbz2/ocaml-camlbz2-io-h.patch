@@ -1,0 +1,19 @@
+--- camlbz2-0.8.0/src/bz2_stubs.c.orig	2024-02-21 10:20:18.000000000 -0700
++++ camlbz2-0.8.0/src/bz2_stubs.c	2024-12-09 11:19:34.621731574 -0700
+@@ -16,13 +16,15 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ 
++#define CAML_INTERNALS
+ #include <caml/mlvalues.h>
+ #include <caml/fail.h>
+ #include <caml/alloc.h>
+ #include <caml/callback.h>
+ 
+ #include <bzlib.h>
+-#include "io.h"
++
++#include <caml/io.h>
+ 
+ #ifdef BZ_PREFIX
+ #define BZ_P(a) BZ2_ ## a

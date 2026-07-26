@@ -1,0 +1,12 @@
+diff -up luabind-0.9.1/src/inheritance.cpp.orderfix luabind-0.9.1/src/inheritance.cpp
+--- luabind-0.9.1/src/inheritance.cpp.orderfix	2023-08-02 11:46:56.107443123 -0400
++++ luabind-0.9.1/src/inheritance.cpp	2023-08-02 11:47:06.779557177 -0400
+@@ -190,7 +190,7 @@ std::pair<void*, int> cast_graph::impl::
+         }
+     }
+ 
+-    m_cache.put(src, target, dynamic_id, object_offset, cache::invalid, -1);
++    m_cache.put(src, target, dynamic_id, object_offset, -1, cache::invalid);
+ 
+     return std::pair<void*, int>((void*)0, -1);
+ }

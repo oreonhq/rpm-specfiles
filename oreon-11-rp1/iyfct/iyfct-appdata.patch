@@ -1,0 +1,93 @@
+--- a/appdata/iyfct
++++ b/appdata/iyfct
+@@ -0,0 +1,13 @@
++#!/bin/sh
++if [ $# -ne 0 ]
++then
++ if [ "$1" == "-h" ]||[ "$1" == "--help" ]
++ then
++  man 6 iyfct
++  exit
++ fi
++ echo "Invalid option(s): $*" 1>&2
++ echo Usage: `basename $0` [-h] 1>&2
++ exit 1
++fi
++love /usr/share/iyfct/iyfct.love
+--- a/appdata/iyfct.6
++++ b/appdata/iyfct.6
+@@ -0,0 +1,29 @@
++.TH iyfct 6 "VERSION" "In Your Face City Trains"
++.SH NAME
++iyfct - In Your Face City Trains v VERSION
++.SH SYNOPSIS
++Side scrolling endless runner game
++.SH INSTRUCTIONS
++The goal of the game is to survive as long as you can.
++Jump over trains with closed doors and try (as much as possible) to run
++through trains with open doors to avoid birds and tunnels. Some open trains
++will give you coffee. When your coffee-meter is full, you have one extra life.
++.SH CONTROLS
++.IP Space
++Jump
++.IP R
++Restart
++.IP 1-4,F1-F4
++Set zoom
++.IP P
++Pause game
++.IP M
++Mute sound
++.SH DESCRIPTION
++This game is made with LOVE. You can find more games and
++information about the author(s) at http://tangramgames.dk/
++.SH OPTIONS
++.BR \-h ", " \-\-help
++Show manpage.
++.SH SEE ALSO
++.BR love(6)
+--- a/appdata/iyfct.appdata.xml
++++ b/appdata/iyfct.appdata.xml
+@@ -0,0 +1,31 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<component type="desktop">
++ <id>iyfct.desktop</id>
++ <metadata_license>CC-BY-SA</metadata_license>
++ <project_license>GPL-3.0</project_license>
++ <name>In Your Face City Trains</name>
++ <summary>Side scrolling endless runner game</summary>
++ <description>
++  <p>
++   The goal of the game is to survive as long as you can.
++   Jump over trains with closed doors and try (as much as possible) to run
++   through trains with open doors to avoid birds and tunnels. Some open trains
++   will give you coffee. When your coffee-meter is full, you have one extra life.
++  </p>
++  <p>
++   Space: Jump
++   R: Restart
++   1-4 or F1-F4: Set zoom
++   P: Pause game
++   M: Mute sound
++  </p>
++ </description>
++ <screenshots>
++  <screenshot type="default">
++   <image>https://love2d.org/w/images/7/7f/iyfct.png</image>
++   <caption>Example gameplay</caption>
++  </screenshot>
++ </screenshots>
++ <url type="homepage">https://github.com/SimonLarsen/iyfct</url>
++ <url type="bugtracker">https://github.com/SimonLarsen/iyfct/issues</url>
++</component>
+--- a/appdata/iyfct.desktop
++++ b/appdata/iyfct.desktop
+@@ -0,0 +1,8 @@
++[Desktop Entry]
++Name=In Your Face City Trains
++Comment=Side scrolling endless runner game
++Exec=iyfct
++Type=Application
++Categories=Game;ArcadeGame;
++Terminal=false
++Icon=iyfct

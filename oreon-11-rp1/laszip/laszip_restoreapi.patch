@@ -1,0 +1,59 @@
+diff -rupN --no-dereference LASzip-3.5.0/src/CMakeLists.txt LASzip-3.5.0-new/src/CMakeLists.txt
+--- LASzip-3.5.0/src/CMakeLists.txt	2025-12-08 17:36:04.000000000 +0100
++++ LASzip-3.5.0-new/src/CMakeLists.txt	2025-12-13 11:50:16.790078347 +0100
+@@ -71,6 +71,8 @@ set(LASZIP_SOURCES
+     laszip_decompress_selective_v3.hpp
+     ../include/laszip/laszip_common.h
+     laszip_dll.cpp
++    laszipper.cpp
++    lasunzipper.cpp
+ )
+ 
+ add_definitions(-DLASZIPDLL_EXPORTS)
+@@ -80,3 +82,4 @@ if(HAVE_UNORDERED_MAP)
+     add_definitions(-DHAVE_UNORDERED_MAP=1)
+ endif(HAVE_UNORDERED_MAP)
+ LASZIP_ADD_LIBRARY(${LASZIP_BASE_LIB_NAME} ${LASZIP_SOURCES})
++LASZIP_ADD_INCLUDES("laszip" laszip.hpp laszipper.hpp lasunzipper.hpp)
+diff -rupN --no-dereference LASzip-3.5.0/src/lasunzipper.cpp LASzip-3.5.0-new/src/lasunzipper.cpp
+--- LASzip-3.5.0/src/lasunzipper.cpp	2025-12-08 17:36:04.000000000 +0100
++++ LASzip-3.5.0-new/src/lasunzipper.cpp	2025-12-13 11:50:16.793309725 +0100
+@@ -47,7 +47,7 @@ bool LASunzipper::open(FILE* infile, con
+   if (!reader) return return_error("alloc of LASreadPoint failed");
+   if (!reader->setup(laszip->num_items, laszip->items, laszip)) return return_error("setup() of LASreadPoint failed");
+   if (stream) delete stream;
+-  if (IS_LITTLE_ENDIAN())
++  if (Endian::IS_LITTLE_ENDIAN)
+     stream = new ByteStreamInFileLE(infile);
+   else
+     stream = new ByteStreamInFileBE(infile);
+@@ -65,7 +65,7 @@ bool LASunzipper::open(istream& instream
+   if (!reader) return return_error("alloc of LASreadPoint failed");
+   if (!reader->setup(laszip->num_items, laszip->items, laszip)) return return_error("setup() of LASreadPoint failed");
+   if (stream) delete stream;
+-  if (IS_LITTLE_ENDIAN())
++  if (Endian::IS_LITTLE_ENDIAN)
+     stream = new ByteStreamInIstreamLE(instream);
+   else
+     stream = new ByteStreamInIstreamBE(instream);
+diff -rupN --no-dereference LASzip-3.5.0/src/laszipper.cpp LASzip-3.5.0-new/src/laszipper.cpp
+--- LASzip-3.5.0/src/laszipper.cpp	2025-12-08 17:36:04.000000000 +0100
++++ LASzip-3.5.0-new/src/laszipper.cpp	2025-12-13 11:50:16.793549936 +0100
+@@ -47,7 +47,7 @@ bool LASzipper::open(FILE* outfile, cons
+   if (!writer) return return_error("alloc of LASwritePoint failed");
+   if (!writer->setup(laszip->num_items, laszip->items, laszip)) return return_error("setup() of LASwritePoint failed");
+   if (stream) delete stream;
+-  if (IS_LITTLE_ENDIAN())
++  if (Endian::IS_LITTLE_ENDIAN)
+     stream = new ByteStreamOutFileLE(outfile);
+   else
+     stream = new ByteStreamOutFileBE(outfile);
+@@ -65,7 +65,7 @@ bool LASzipper::open(ostream& outstream,
+   if (!writer) return return_error("alloc of LASwritePoint failed");
+   if (!writer->setup(laszip->num_items, laszip->items, laszip)) return return_error("setup() of LASwritePoint failed");
+   if (stream) delete stream;
+-  if (IS_LITTLE_ENDIAN())
++  if (Endian::IS_LITTLE_ENDIAN)
+     stream = new ByteStreamOutOstreamLE(outstream);
+   else
+     stream = new ByteStreamOutOstreamBE(outstream);

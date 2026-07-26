@@ -1,0 +1,22 @@
+--- src/json_parse_rapidjson.h.orig	2023-06-28 19:56:20.000000000 -0600
++++ src/json_parse_rapidjson.h	2024-02-09 10:58:29.040269538 -0700
+@@ -126,6 +126,10 @@ struct MessageHandler {
+     return true;
+   }
+ 
++  bool RawNumber(const char *str, SizeType length, bool copy) {
++    return String(str, length, copy);
++  }
++
+   bool Bool(bool b) {
+ 		DEBUG_OUT("B"<<b);
+     if (name_ == arg_IsCover) {
+@@ -138,7 +142,7 @@ struct MessageHandler {
+     }
+   }
+ 
+-  bool EndObject(SizeType) { return name_ = arg_INVALID; }
++  bool EndObject(SizeType) { name_ = arg_INVALID; return true; }
+ 
+   bool Null() {
+     DEBUG_OUT("NULL");

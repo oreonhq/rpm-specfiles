@@ -1,0 +1,27 @@
+From c245bf62c569ef5bfd9267c06709f5dfe90d5694 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:46 +0200
+Subject: [PATCH 07/41] We do not install manual pages
+
+Make imake not complain about knowing about manual pages.
+This one comes from PLD Linux's koules-noman.patch
+---
+ Imakefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Imakefile b/Imakefile
+index 29674b8..e48730d 100644
+--- a/Imakefile
++++ b/Imakefile
+@@ -87,7 +87,7 @@ all::xkoules
+ BINDIR = $(KOULESDIR)
+ DESTDIR = /
+ 
+-ComplexProgramTarget(xkoules)
++ComplexProgramTargetNoMan(xkoules)
+ 
+ 
+ #ifdef SOUND
+-- 
+2.5.0
+

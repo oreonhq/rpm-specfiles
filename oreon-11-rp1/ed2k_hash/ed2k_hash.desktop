@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=ed2k_hash GUI
+GenericName=ED2k links generator
+Exec=ed2k_hash_gui
+Icon=ed2k_hash
+Terminal=false
+Type=Application
+Categories=Utility;

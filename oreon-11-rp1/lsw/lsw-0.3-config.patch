@@ -1,0 +1,24 @@
+diff --git a/config.mk b/config.mk
+index 1d32307..3527fee 100644
+--- a/config.mk
++++ b/config.mk
+@@ -2,7 +2,7 @@
+ VERSION = 0.3
+ 
+ # paths
+-PREFIX = /usr/local
++PREFIX ?= /usr/local
+ MANPREFIX = ${PREFIX}/share/man
+ 
+ X11INC = /usr/X11R6/include
+@@ -14,8 +14,8 @@ LIBS = -L${X11LIB} -lX11
+ 
+ # flags
+ CPPFLAGS = -DVERSION=\"${VERSION}\"
+-CFLAGS   = -ansi -pedantic -Wall -Os ${INCS} ${CPPFLAGS}
+-LDFLAGS  = -s ${LIBS}
++CFLAGS   = ${RPM_OPT_FLAGS} ${INCS} ${CPPFLAGS}
++LDFLAGS += ${LIBS}
+ 
+ # compiler and linker
+ CC = cc

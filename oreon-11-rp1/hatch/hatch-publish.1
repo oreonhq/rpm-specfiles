@@ -1,0 +1,132 @@
+.TH HATCH\-PUBLISH "1" "August 2024" "" "User Commands"
+.SH NAME
+.B hatch\ publish
+\(en Publish build artifacts
+.SH SYNOPSIS
+.B hatch\ publish
+.RI [ OPTIONS ]
+.RI [ ARTIFACTS ]...
+.SH OPTIONS
+.TP
+.B \-r\fR, \fB\-\-repo\ \fITEXT
+The repository with which to publish artifacts
+[env var:
+.BR HATCH_INDEX_REPO ]
+.TP
+.B \-u\fR, \fB\-\-user\ \fITEXT
+The user with which to authenticate
+[env var:
+.BR HATCH_INDEX_USER ]
+.TP
+.B \-a\fR, \fB\-\-auth\ \fITEXT
+The credentials to use for authentication
+[env var:
+.BR HATCH_INDEX_AUTH ]
+.TP
+.B \-\-ca\-cert\ \fITEXT
+The path to a CA bundle
+[env var:
+.BR HATCH_INDEX_CA_CERT ]
+.TP
+.B \-\-client\-cert\ \fITEXT
+The path to a client certificate,
+optionally containing the private key
+[env var:
+.BR HATCH_INDEX_CLIENT_CERT ]
+.TP
+.B \-\-client\-key\ \fITEXT
+The path to the client certificate\(cqs private key
+[env var:
+.BR HATCH_INDEX_CLIENT_KEY ]
+.TP
+.B \-n\fR, \fB\-\-no\-prompt
+Disable prompts, such as for missing required fields
+.TP
+.B \-\-initialize\-auth
+Save first-time authentication information
+even if nothing was published
+.TP
+.B \-p\fR, \fB\-\-publisher\ \fITEXT
+The publisher plugin to use (default is
+.BR index )
+[env var:
+.BR HATCH_PUBLISHER ]
+.TP
+.B \-o\fR, \fB\-\-option\ \fITEXT
+Options to pass to the publisher plugin.
+This may be selected multiple times
+e.g. \fB\-o\ foo=bar \-o\ baz=23
+[env var:
+.BR HATCH_PUBLISHER_OPTIONS ]
+.TP
+.B \-y\fR, \fB\-\-yes
+Confirm without prompting when the plugin is disabled
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH ENVIRONMENT
+.TP
+.B HATCH_INDEX_REPO
+The repository with which to publish artifacts
+[option:
+.BR \-r ,
+.BR \-\-repo ]
+.TP
+.B HATCH_INDEX_USER
+The user with which to authenticate
+[option:
+.BR \-u ,
+.BR \-\-user ]
+.TP
+.B HATCH_INDEX_AUTH
+The credentials to use for authentication
+[option:
+.BR \-a ,
+.BR \-\-auth ]
+.TP
+.B HATCH_INDEX_CA_CERT
+The path to a CA bundle
+[option:
+.BR \-\-ca\-cert ]
+.TP
+.B HATCH_INDEX_CLIENT_CERT
+The path to a client certificate,
+optionally containing the private key
+[option:
+.BR \-\-client\-cert ]
+.TP
+.B HATCH_INDEX_CLIENT_KEY
+The path to the client certificate\(cqs private key
+[option:
+.BR \-\-client\-key ]
+.TP
+.B HATCH_PUBLISHER
+The publisher plugin to use (default is
+.BR index )
+[option:
+.BR \-p ,
+.BR \-\-publisher ]
+.TP
+.B HATCH_PUBLISHER_OPTIONS
+Options to pass to the publisher plugin
+[option:
+.BR \-o ,
+.BR \-\-option ]
+.SH "SEE ALSO"
+.BR hatch\-build (1),
+.BR hatch\-clean (1),
+.BR hatch\-config (1),
+.BR hatch\-dep (1),
+.BR hatch\-env (1),
+.BR hatch\-fmt (1),
+.BR hatch\-new (1),
+.BR hatch\-project (1),
+.BR hatch\-python (1),
+.BR hatch\-run (1),
+.BR hatch\-self (1),
+.BR hatch\-shell (1),
+.BR hatch\-status (1),
+.BR hatch\-test (1),
+.BR hatch\-version (1)
+.P
+.BR hatch (1)

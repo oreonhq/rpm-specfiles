@@ -1,0 +1,11 @@
+diff -up gkrellsun-1.0.0/src20/gkrellsun.c~ gkrellsun-1.0.0/src20/gkrellsun.c
+--- gkrellsun-1.0.0/src20/gkrellsun.c~	2023-08-13 21:22:10.000000000 +0200
++++ gkrellsun-1.0.0/src20/gkrellsun.c	2023-08-13 21:30:20.474445418 +0200
+@@ -17,7 +17,6 @@ time_t* CurrentTime;
+ #include <math.h>
+ 
+ /* splint */
+-extern gchar* g_string_free (/*@only@*/ GString *, gboolean);
+ extern void pango_font_description_free (/*@owned@*/PangoFontDescription *);
+ 
+ #define PLUGIN_HEIGHT 54

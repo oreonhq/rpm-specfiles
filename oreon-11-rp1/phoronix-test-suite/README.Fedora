@@ -1,0 +1,26 @@
+The Fedora Project only advocates the use of free software.  For more
+information on the Fedora Project's commitment to software freedom see
+http://fedoraproject.org/wiki/Foundations.  For a detailed summary of what
+software Fedora considers free see https://fedoraproject.org/wiki/Licensing.
+
+The Phoronix Test Suite (PTS) is free software that runs benchmark tests on
+your system. The vast majority of the tests only involve free software.
+However, some of the tests PTS can be called upon to run involve non-free
+software.  To find out which tests are non-free run: phoronix-test-suite
+list-tests.  
+
+Below is a list of known tests involving non-free software which PTS can run:
+
+ut2004-demo
+unigine-heaven
+unigine-sanctuary
+unigine-tropics
+quake4
+prey
+lightsmark
+etqw
+etqw-demo
+etqw-demo-iqc
+doom3
+
+phoronix-test-suite gui is not working due to missing php-gtk package.

@@ -1,0 +1,41 @@
+From 844e867be461685c62ae1fd21d14e293a1bd4aa6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 22 Apr 2025 09:53:47 +0200
+Subject: [PATCH] Adapt tests to RPM 6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+A test failed after upgrading RPM to 5.99.90, an RPM 6 prerelease:
+
+    # Failed test 38 in test.pl at line 133
+    #  test.pl line 133 is: ok(RPM2->rpm_api_version =~ /4.\d+/);
+
+The rpm_api_version() call returned "5.99".
+
+With RPM 6.0.0, rpm_api_version() returns "6".
+
+This patch fixes the check to accept any decimal (optionally
+fractional) number.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ test.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test.pl b/test.pl
+index 5982f97..858b002 100644
+--- a/test.pl
++++ b/test.pl
+@@ -130,7 +130,7 @@ ok(RPM2->expand_macro("%rpm2_test_macro") eq "testval $$");
+ RPM2->delete_macro("rpm2_test_macro");
+ ok(RPM2->expand_macro("%rpm2_test_macro") eq "%rpm2_test_macro");
+ 
+-ok(RPM2->rpm_api_version =~ /4.\d+/);
++ok(RPM2->rpm_api_version =~ /^(?:\d+(?:\.\d+)?)$/);
+ 
+ #
+ # Clean up before transaction tests (close the database
+-- 
+2.51.0
+

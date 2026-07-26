@@ -1,0 +1,25 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3bea58a27..b539f0a45 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -132,7 +132,7 @@ if(WANT_DEBUG)
+     set(CMAKE_BUILD_TYPE Debug)
+     set(H2CORE_HAVE_DEBUG TRUE)
+ else()
+-    set(CMAKE_BUILD_TYPE Release)
++    set(CMAKE_BUILD_TYPE RelWithDebInfo)
+     set(H2CORE_HAVE_DEBUG FALSE)
+ endif()
+ 
+@@ -171,9 +171,9 @@ else()
+ endif()
+ 
+ if(WANT_DEBUG)
+-	set(CMAKE_CXX_FLAGS "$ENV{CMAKE_CXX_FLAGS} -O0")
++	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
+ else()
+-	set(CMAKE_CXX_FLAGS "$ENV{CMAKE_CXX_FLAGS} -O3 -ffast-math")
++	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
+ endif()
+ 
+ if(WANT_APPIMAGE)

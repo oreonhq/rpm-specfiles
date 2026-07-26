@@ -1,0 +1,33 @@
+From 1a0baf7574e384f5f2b36e5dc57f685add01aa51 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 3 Sep 2013 16:43:32 +0200
+Subject: [PATCH 2/2] Disable a test for kanji name
+
+It's not possible to access a Encode::JP::Mobile character by kanji name.
+Let's disable the test for now.
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=87393>
+---
+ t/charnames.t | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/t/charnames.t b/t/charnames.t
+index 7242fb3..36db3ef 100644
+--- a/t/charnames.t
++++ b/t/charnames.t
+@@ -42,7 +42,11 @@ BEGIN {
+     is unicode2name_en(0xE047), 'Beer';      # SoftBank
+ 
+     is "\N{DoCoMo Beer}",                     "\x{E672}";
+-    is "\N{DoCoMo ファーストフード}", "\x{E673}";
++    TODO: {
++        local $TODO = 'charnames cannot be accesed by non-ASCII name ' .
++            'with perl 5.18 (CPAN RT#87393)';
++        is "\N{DoCoMo ファーストフード}",     "\x{E673}";
++    }
+     is "\N{KDDI Beer}",                       "\x{E4C3}";
+     is "\N{SoftBank Beer}",                   "\x{E047}";
+ 
+-- 
+1.8.3.1
+

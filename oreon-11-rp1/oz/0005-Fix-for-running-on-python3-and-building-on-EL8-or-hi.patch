@@ -1,0 +1,60 @@
+From cf560591d75adfbcf6688d11486f60c2d3a15942 Mon Sep 17 00:00:00 2001
+From: Neil Hanlon <neil@rockylinux.org>
+Date: Mon, 4 Jul 2022 15:57:15 -0400
+Subject: [PATCH 05/26] Fix for running on python3 and building on EL8 or
+ higher
+
+---
+ Makefile   | 2 +-
+ oz.spec.in | 2 +-
+ setup.py   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index c8c5a54..fa81313 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@ VERSION = $(shell egrep "^VERSION" setup.py | awk '{print $$3}')
+ VENV_DIR = tests/.venv
+ 
+ sdist: oz.spec.in
+-	python setup.py sdist
++	python3 setup.py sdist
+ 
+ oz.spec: sdist
+ 
+diff --git a/oz.spec.in b/oz.spec.in
+index e738026..37716b1 100644
+--- a/oz.spec.in
++++ b/oz.spec.in
+@@ -25,7 +25,7 @@ Requires: libvirt >= 0.9.7
+ Requires: python3-requests
+ Requires: genisoimage
+ Requires: mtools
+-%if 0%{?fedora} < 26
++%if 0%{?fedora} < 26 or 0%{?rhel} < 8
+ Requires: python-uuid
+ %endif
+ Requires: openssh-clients
+diff --git a/setup.py b/setup.py
+index 8ca211f..22ec1fd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,12 +23,12 @@ class sdist(_sdist):
+                                     shell=True,
+                                     stdout=subprocess.PIPE).communicate()[0].strip()
+         date = time.strftime("%Y%m%d%H%M%S", time.gmtime())
+-        git_release = "%sgit%s" % (date, git_head)
++        git_release = "%sgit%s" % (date, git_head.decode())
+ 
+         # Expand macros in oz.spec.in and create oz.spec
+         spec_in = open('oz.spec.in', 'r')
+         spec = open('oz.spec', 'w')
+-        for line in spec_in.xreadlines():
++        for line in spec_in.readlines():
+             if "@VERSION@" in line:
+                 line = line.replace("@VERSION@", VERSION)
+             elif "@RELEASE@" in line:
+-- 
+2.46.2
+

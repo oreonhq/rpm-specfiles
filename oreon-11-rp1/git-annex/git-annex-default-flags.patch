@@ -1,0 +1,30 @@
+--- git-annex-10.20250929/git-annex.cabal~	2025-10-06 19:41:39.826203911 +0800
++++ git-annex-10.20250929/git-annex.cabal	2025-10-06 19:40:03.367735156 +0800
+@@ -154,6 +154,7 @@
+ 
+ Flag Production
+   Description: Enable production build (slower build; faster binary)
++  Default: True
+ 
+ Flag ParallelBuild
+   Description: Enable building in parallel
+@@ -165,9 +167,11 @@
+ 
+ Flag TorrentParser
+   Description: Use haskell torrent library to parse torrent files
++  Default: True
+ 
+ Flag MagicMime
+   Description: Use libmagic to determine file MIME types
++  Default: True
+ 
+ Flag OsPath
+   Description: Use the os-string library and related libraries, for faster filename manipulation
+@@ -183,6 +187,7 @@
+ 
+ Flag Dbus
+   Description: Enable dbus support
++  Default: True
+ 
+ source-repository head
+   type: git

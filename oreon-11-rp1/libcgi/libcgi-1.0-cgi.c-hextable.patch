@@ -1,0 +1,12 @@
+diff -ruN libcgi-1.0-orig/src/cgi.c libcgi-1.0/src/cgi.c
+--- libcgi-1.0-orig/src/cgi.c	2003-12-15 13:30:11.000000000 +0000
++++ libcgi-1.0/src/cgi.c	2007-01-02 00:11:36.000000000 +0000
+@@ -336,7 +336,7 @@
+ 	hextable['b'] = 11;
+ 	hextable['c'] = 12;
+ 	hextable['d'] = 13;
+-	hextable['e'] = 13;
++	hextable['e'] = 14;
+ 	hextable['f'] = 15;
+ 	hextable['A'] = 10;
+ 	hextable['B'] = 11;

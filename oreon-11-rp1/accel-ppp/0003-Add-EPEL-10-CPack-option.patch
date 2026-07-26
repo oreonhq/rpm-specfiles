@@ -1,0 +1,31 @@
+From 9b3d4340a57225401896f7f807b70f86a9d8ceee Mon Sep 17 00:00:00 2001
+From: Neel Chauhan <neel@neelc.org>
+Date: Sun, 16 Feb 2025 19:15:17 -0500
+Subject: [PATCH 3/3] Add EPEL 10 CPack option
+
+---
+ cmake/cpack.cmake | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/cmake/cpack.cmake b/cmake/cpack.cmake
+index f17bcaa3..bd9edd8b 100644
+--- a/cmake/cpack.cmake
++++ b/cmake/cpack.cmake
+@@ -94,6 +94,14 @@ IF(CPACK_TYPE STREQUAL Centos9)
+         INCLUDE(${CMAKE_HOME_DIRECTORY}/cmake/centos/centos.cmake)
+ ENDIF()
+ 
++IF(CPACK_TYPE STREQUAL Centos10)
++        SET(CPACK_RPM_PACKAGE_LICENSE "GPL")
++        SET(CPACK_RPM_PACKAGE_URL "http://accel-ppp.org")
++        SET(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/sbin")
++	SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.34, openssl-libs >= 3.0.1, pcre2 >= 10.40")
++        INCLUDE(${CMAKE_HOME_DIRECTORY}/cmake/centos/centos.cmake)
++ENDIF()
++
+ IF(CPACK_TYPE STREQUAL Fedora)
+         SET(CPACK_RPM_PACKAGE_LICENSE "GPL")
+         SET(CPACK_RPM_PACKAGE_URL "http://accel-ppp.org")
+-- 
+2.53.0
+

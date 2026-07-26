@@ -1,0 +1,19 @@
+diff -ur RInside.orig/R/RInsidePaths.R RInside/R/RInsidePaths.R
+--- RInside.orig/R/RInsidePaths.R	2013-12-28 01:38:48.000000000 +0100
++++ RInside/R/RInsidePaths.R	2016-03-02 04:13:36.071952639 +0100
+@@ -18,12 +18,9 @@
+ ##                    Note that this is probably being called from LdFlags()
+ RInsideLdFlags <- function(static=TRUE) {
+     rinsidedir <- RInsideLdPath()
+-    if (static) {                               # static is default on Windows and OS X
+-        flags <- paste(rinsidedir, "/libRInside.a", sep="")
+-        if (.Platform$OS.type=="windows") {
+-            flags <- shQuote(flags)
+-        }
+-    } else {					# else for dynamic linking
++    if (rinsidedir == "") {
++        flags = "-lRInside"
++    } else {
+         flags <- paste("-L", rinsidedir, " -lRInside", sep="") # baseline setting
+         if ((.Platform$OS.type == "unix") &&    # on Linux, we can use rpath to encode path
+             (length(grep("^linux",R.version$os)))) {

@@ -1,0 +1,29 @@
+diff -up optim-1.6.2/inst/private/__max_nargin_optim__.m.octave10 optim-1.6.2/inst/private/__max_nargin_optim__.m
+--- optim-1.6.2/inst/private/__max_nargin_optim__.m.octave10	2025-08-01 20:38:47.683555744 -0600
++++ optim-1.6.2/inst/private/__max_nargin_optim__.m	2025-08-01 20:38:23.125292466 -0600
+@@ -0,0 +1,12 @@
++function n = __max_nargin_optim__ (fh)
++  if (! is_function_handle (fh))
++    error ("__max_nargin_optim__: argument not a function handle");
++  endif
++  
++  n = nargin (fh);
++  
++  ## If function accepts variable arguments (varargin), nargin returns -1
++  if (n < 0)
++    n = Inf;
++  endif
++endfunction
+diff -up optim-1.6.2/src/Makefile.in.octave10 optim-1.6.2/src/Makefile.in
+--- optim-1.6.2/src/Makefile.in.octave10	2022-04-10 08:31:04.000000000 -0600
++++ optim-1.6.2/src/Makefile.in	2025-08-01 20:40:20.203995097 -0600
+@@ -50,8 +50,7 @@ INFOFILE := ../doc/optim.info
+ TEXIFILE := $(addsuffix .texi,$(basename $(INFOFILE)))
+ TXIFILE := $(addsuffix .txi,$(basename $(INFOFILE)))
+ HTMLDIR := ../doc/html/
+-OCTFILES := __bfgsmin.oct numgradient.oct numhessian.oct __disna_optim__.oct \
+-            __max_nargin_optim__.oct
++OCTFILES := __bfgsmin.oct numgradient.oct numhessian.oct __disna_optim__.oct
+ 
+ OCTSOURCEFILES := $(addsuffix .cc,$(basename $(OCTFILES)))
+ DSFILES := $(addsuffix .docstrings,$(OCTSOURCEFILES))

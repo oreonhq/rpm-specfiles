@@ -1,0 +1,66 @@
+From 4bed63dd220bef62d25698d4f4dfbbb91df4372d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 12 May 2011 18:00:31 +0200
+Subject: [PATCH] Unify paths in examples
+
+---
+ examples/Makefile.am |    2 --
+ examples/example.c   |   12 ++++++------
+ examples/wizard      |    2 +-
+ 3 files changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/examples/Makefile.am b/examples/Makefile.am
+index 0d14ca2..d83178e 100644
+--- a/examples/Makefile.am
++++ b/examples/Makefile.am
+@@ -1,11 +1,9 @@
+ EXTRA_DIST=wizard etc/hostname  etc/hosts  etc/interfaces  etc/interfaces  etc/resolv.conf
+ 
+-noinst_PROGRAMS=example
+ 
+ example_SOURCES=	\
+ 	example.c
+ 
+-AM_CFLAGS = -I../src/ -I../src/parsers/
+ 
+ example_LDADD = ../src/libllconf.la
+ 
+diff --git a/examples/example.c b/examples/example.c
+index 63e1276..71cd980 100644
+--- a/examples/example.c
++++ b/examples/example.c
+@@ -26,12 +26,12 @@
+ #include <unistd.h>
+ #include <errno.h>
+ 
+-#include "strutils.h"
+-#include "nodes.h"
+-#include "lines.h"
+-#include "entry.h"
+-#include "modules.h"
+-#include "parsers/pslave.h"
++#include <llconf/strutils.h>
++#include <llconf/nodes.h>
++#include <llconf/lines.h>
++#include <llconf/entry.h>
++#include <llconf/modules.h>
++#include <llconf/parsers/pslave.h>
+ 
+ int main(int argc, char *argv[])
+ {
+diff --git a/examples/wizard b/examples/wizard
+index de9e597..14f5c1b 100755
+--- a/examples/wizard
++++ b/examples/wizard
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # really need bash?
+ 
+-llconf=../src/llconf
++llconf=llconf
+ eni_file=./etc/interfaces
+ rsv_file=./etc/resolv.conf
+ hostname_file=./etc/hostname
+-- 
+1.7.4.4
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>darkgarden</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Dark Garden</name>
+  <summary>A decorative outline font of unusual shape</summary>
+  <description>
+    <p>
+      Dark Garden is a decorative outline font of unusual shape.
+      The typeface is based on author's original hand drawings.
+      The letterform is complex, with all characters decorated
+      with spikes resembling thorns or flames, character spacing
+      is very dense. Such a theme makes it a great font for titles,
+      banners, logos etc. Due to the font's complicated form,
+      long text passages are not very legible, but short paragraphs
+      such as titles or lyrics / poetry look very well.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://darkgarden.sourceforge.net/</url>
+</component>
+

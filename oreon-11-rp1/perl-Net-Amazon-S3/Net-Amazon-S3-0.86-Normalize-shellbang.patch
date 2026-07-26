@@ -1,0 +1,27 @@
+From 90f88652a79ebe3593015b0e314c034459f5d316 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 15 Apr 2019 08:56:59 +0200
+Subject: [PATCH] Normalize shellbang
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+ExtUtils::MakeMaker rewrites it to the actually used interpreter.
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/s3cl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bin/s3cl b/bin/s3cl
+index e017a72..6ada30f 100755
+--- a/bin/s3cl
++++ b/bin/s3cl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ use strict;
+ use warnings;
+ use Getopt::Long;
+-- 
+2.20.1
+

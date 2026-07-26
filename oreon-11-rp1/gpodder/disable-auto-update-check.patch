@@ -1,0 +1,34 @@
+--- a/src/gpodder/config.py~	2021-07-19 23:58:51.000000000 -0500
++++ a/src/gpodder/config.py	2021-08-16 14:12:19.621214508 -0500
+@@ -94,7 +94,7 @@
+ 
+     # Software updates from gpodder.org
+     'software_update': {
+-        'check_on_startup': True,  # check for updates on start
++        'check_on_startup': False,  # check for updates on start
+         'last_check': 0,  # unix timestamp of last update check
+         'interval': 5,  # interval (in days) to check for updates
+     },
+--- a/src/gpodder/gtkui/main.py~	2022-07-30 23:35:28.000000000 -0500
++++ a/src/gpodder/gtkui/main.py	2022-08-01 08:55:28.446038204 -0500
+@@ -248,13 +248,13 @@
+             util.idle_add(self.subscribe_to_url, self.options.subscribe)
+         elif not self.channels:
+             self.on_itemUpdate_activate()
+-        elif self.config.software_update.check_on_startup:
+-            # Check for software updates from gpodder.org
+-            diff = time.time() - self.config.software_update.last_check
+-            if diff > (60 * 60 * 24) * self.config.software_update.interval:
+-                self.config.software_update.last_check = int(time.time())
+-                if not os.path.exists(gpodder.no_update_check_file):
+-                    self.check_for_updates(silent=True)
++        #elif self.config.software_update.check_on_startup:
++        #    # Check for software updates from gpodder.org
++        #    diff = time.time() - self.config.software_update.last_check
++        #    if diff > (60 * 60 * 24) * self.config.software_update.interval:
++        #        self.config.software_update.last_check = int(time.time())
++        #        if not os.path.exists(gpodder.no_update_check_file):
++        #            self.check_for_updates(silent=True)
+ 
+         if self.options.close_after_startup:
+             logger.warning("Startup done, closing (--close-after-startup)")

@@ -1,0 +1,17 @@
+diff -up Devel-Dumpvar-1.06/Makefile.PL.dsl Devel-Dumpvar-1.06/Makefile.PL
+--- Devel-Dumpvar-1.06/Makefile.PL.dsl	2023-05-05 10:03:58.288616212 +0200
++++ Devel-Dumpvar-1.06/Makefile.PL	2023-05-05 10:05:20.009275262 +0200
+@@ -1,6 +1,8 @@
+-use inc::Module::Install::DSL 0.91;
++use inc::Module::Install;
+ 
+-all_from      lib/Devel/Dumpvar.pm
+-requires_from lib/Devel/Dumpvar.pm
+-test_requires File::Spec 0.80
+-test_requires Test::More 0.42
++all_from      'lib/Devel/Dumpvar.pm';
++requires_from 'lib/Devel/Dumpvar.pm';
++test_requires 'File::Spec' => '0.80';
++test_requires 'Test::More' => '0.42';
++
++WriteAll();

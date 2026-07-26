@@ -1,0 +1,477 @@
+--- HiGHS-1.13.1/app/HighsRuntimeOptions.h.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/app/HighsRuntimeOptions.h	2026-02-12 10:24:56.715095716 -0700
+@@ -14,7 +14,7 @@
+ 
+ #include <cassert>
+ 
+-#include "../extern/CLI11.hpp"
++#include <CLI/CLI.hpp>
+ #include "HConfig.h"
+ #include "io/HighsIO.h"
+ #include "io/LoadOptions.h"
+--- HiGHS-1.13.1/CMakeLists.txt.orig	2026-02-12 10:24:48.978221079 -0700
++++ HiGHS-1.13.1/CMakeLists.txt	2026-02-12 10:24:56.715376770 -0700
+@@ -539,8 +539,9 @@ if(NOT FAST_BUILD OR CSHARP)
+ endif()
+ 
+ # if zlib is found, then we can enable reading zlib-compressed input
+-if(ZLIB AND NOT TARGET ZLIB::ZLIB)
+-  find_package(ZLIB 1.2.3)
++if(ZLIB AND NOT TARGET zlib-ng::zlib)
++  find_package(zlib-ng 2.1.0)
++  set(ZLIB_FOUND ON)
+ endif()
+ 
+ if (PYTHON_BUILD_SETUP OR CMAKE_INSTALL_DOCDIR STREQUAL "" OR NOT BUILD_CXX)
+--- HiGHS-1.13.1/cmake/sources.cmake.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/cmake/sources.cmake	2026-02-12 10:24:56.715598733 -0700
+@@ -1,7 +1,5 @@
+ set(include_dirs
+   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern>
+-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/pdqsort>
+-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/zstr>
+   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/highs>
+   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/highs/interfaces>
+   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/highs/io>
+@@ -258,71 +256,9 @@ set(hipo_util_headers
+     ipm/hipo/auxiliary/VectorOperations.h)
+ 
+ set(hipo_orderings_sources
+-    ../extern/amd/amd_1.c
+-    ../extern/amd/amd_2.c
+-    ../extern/amd/amd_aat.c
+-    ../extern/amd/amd_control.c
+-    ../extern/amd/amd_defaults.c
+-    ../extern/amd/amd_info.c
+-    ../extern/amd/amd_order.c
+-    ../extern/amd/amd_post_tree.c
+-    ../extern/amd/amd_postorder.c
+-    ../extern/amd/amd_preprocess.c
+-    ../extern/amd/amd_valid.c
+-    ../extern/amd/SuiteSparse_config.c
+-    ../extern/metis/GKlib/error.c
+-    ../extern/metis/GKlib/mcore.c
+-    ../extern/metis/GKlib/memory.c
+-    ../extern/metis/GKlib/random.c
+-    ../extern/metis/libmetis/auxapi.c
+-    ../extern/metis/libmetis/balance.c
+-    ../extern/metis/libmetis/bucketsort.c
+-    ../extern/metis/libmetis/coarsen.c
+-    ../extern/metis/libmetis/compress.c
+-    ../extern/metis/libmetis/contig.c
+-    ../extern/metis/libmetis/fm.c
+-    ../extern/metis/libmetis/gklib.c
+-    ../extern/metis/libmetis/graph.c
+-    ../extern/metis/libmetis/initpart.c
+-    ../extern/metis/libmetis/mcutil.c
+-    ../extern/metis/libmetis/mmd.c
+-    ../extern/metis/libmetis/ometis.c
+-    ../extern/metis/libmetis/options.c
+-    ../extern/metis/libmetis/refine.c
+-    ../extern/metis/libmetis/separator.c
+-    ../extern/metis/libmetis/sfm.c
+-    ../extern/metis/libmetis/srefine.c
+-    ../extern/metis/libmetis/util.c
+-    ../extern/metis/libmetis/wspace.c
+     ../extern/rcm/rcm.cpp)
+ 
+ set(hipo_orderings_headers
+-    ../extern/amd/amd_internal.h
+-    ../extern/amd/amd.h
+-    ../extern/amd/SuiteSparse_config.h
+-    ../extern/metis/GKlib/gk_arch.h
+-    ../extern/metis/GKlib/gk_defs.h
+-    ../extern/metis/GKlib/gk_macros.h
+-    ../extern/metis/GKlib/gk_mkblas.h
+-    ../extern/metis/GKlib/gk_mkmemory.h
+-    ../extern/metis/GKlib/gk_mkpqueue.h
+-    ../extern/metis/GKlib/gk_mkrandom.h
+-    ../extern/metis/GKlib/gk_mksort.h
+-    ../extern/metis/GKlib/gk_ms_inttypes.h
+-    ../extern/metis/GKlib/gk_ms_stat.h
+-    ../extern/metis/GKlib/gk_ms_stdint.h
+-    ../extern/metis/GKlib/gk_proto.h
+-    ../extern/metis/GKlib/gk_struct.h
+-    ../extern/metis/GKlib/gk_types.h
+-    ../extern/metis/GKlib/GKlib.h
+-    ../extern/metis/libmetis/defs.h
+-    ../extern/metis/libmetis/gklib_defs.h
+-    ../extern/metis/libmetis/macros.h
+-    ../extern/metis/libmetis/metislib.h
+-    ../extern/metis/libmetis/proto.h
+-    ../extern/metis/libmetis/stdheaders.h
+-    ../extern/metis/libmetis/struct.h
+-    ../extern/metis/metis.h
+     ../extern/rcm/rcm.h)
+ 
+ # redefinition of 'kHighsInf'
+@@ -441,9 +377,6 @@ set(highs_sources
+ 
+ # add catch header?
+ set(highs_headers
+-    ../extern/pdqsort/pdqsort.h
+-    ../extern/zstr/strict_fstream.hpp
+-    ../extern/zstr/zstr.hpp
+     interfaces/highs_c_api.h
+     io/Filereader.h
+     io/FilereaderEms.h
+--- HiGHS-1.13.1/cmake/sources-python.cmake.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/cmake/sources-python.cmake	2026-02-12 10:24:56.715781023 -0700
+@@ -1,7 +1,5 @@
+ set(include_dirs_python
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern>
+-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/pdqsort>
+-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/zstr>
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/highs>
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/highs/interfaces>
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/highs/io>
+@@ -286,7 +284,6 @@ set(highs_sources_python
+     highs/util/stringutil.cpp)
+ 
+ set(highs_headers_python
+-    extern/pdqsort/pdqsort.h
+     highs/interfaces/highs_c_api.h
+     highs/io/Filereader.h
+     highs/io/FilereaderEms.h
+--- HiGHS-1.13.1/highs/CMakeLists.txt.orig	2026-02-12 10:24:40.931990342 -0700
++++ HiGHS-1.13.1/highs/CMakeLists.txt	2026-02-12 10:24:56.715953043 -0700
+@@ -51,8 +51,8 @@ if(NOT FAST_BUILD)
+   )
+ 
+   if(ZLIB AND ZLIB_FOUND)
+-    target_link_libraries(libhighs ZLIB::ZLIB)
+-    set(CONF_DEPENDENCIES "include(CMakeFindDependencyMacro)\nfind_dependency(ZLIB)")
++    target_link_libraries(libhighs zlib-ng::zlib)
++    set(CONF_DEPENDENCIES "include(CMakeFindDependencyMacro)\nfind_dependency(zlib-ng)")
+   endif()
+ 
+   # set the install rpath to the installed destination
+@@ -156,6 +156,7 @@ else()
+ 
+ 
+   target_sources(highs PRIVATE ${sources} ${headers} ${win_version_file})
++  target_link_libraries(highs PRIVATE metis amd)
+ 
+   # Optional Cuda
+   if (CUPDLP_GPU)
+@@ -211,7 +212,7 @@ else()
+       else()
+           # LINUX
+           if(BLAS_LIB)
+-              target_link_libraries(highs PRIVATE "${BLAS_LIB}" cblas)
++              target_link_libraries(highs PRIVATE "${BLAS_LIB}")
+           elseif(OPENBLAS_LIB)
+               target_link_libraries(highs PRIVATE "${OPENBLAS_LIB}")
+               target_compile_definitions(highs PRIVATE HIPO_USES_OPENBLAS)
+@@ -292,10 +293,7 @@ else()
+ 
+ 
+   if(ZLIB AND ZLIB_FOUND)
+-    target_include_directories(highs PRIVATE
+-      $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/extern/zstr>
+-    )
+-    target_link_libraries(highs PRIVATE ZLIB::ZLIB)
++    target_link_libraries(highs PRIVATE zlib-ng::zlib)
+   endif()
+ 
+   # install the header files of highs
+--- HiGHS-1.13.1/highs/io/filereaderlp/reader.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/io/filereaderlp/reader.cpp	2026-02-12 10:24:56.716184655 -0700
+@@ -17,7 +17,7 @@
+ #include "builder.hpp"
+ #include "def.hpp"
+ #ifdef ZLIB_FOUND
+-#include "../extern/zstr/zstr.hpp"
++#include <zstr/zstr.hpp>
+ #endif
+ 
+ // Cygwin doesn't come with an implementation for strdup if compiled with
+--- HiGHS-1.13.1/highs/io/HMpsFF.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/io/HMpsFF.cpp	2026-02-12 10:24:56.716441754 -0700
+@@ -11,7 +11,7 @@
+ #include "lp_data/HighsModelUtils.h"
+ 
+ #ifdef ZLIB_FOUND
+-#include "../extern/zstr/zstr.hpp"
++#include <zstr/zstr.hpp>
+ #endif
+ 
+ namespace free_format_parser {
+--- HiGHS-1.13.1/highs/io/HMPSIO.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/io/HMPSIO.cpp	2026-02-12 10:24:56.716692170 -0700
+@@ -21,7 +21,7 @@
+ #include "util/stringutil.h"
+ 
+ #ifdef ZLIB_FOUND
+-#include "../extern/zstr/zstr.hpp"
++#include <zstr/zstr.hpp>
+ #endif
+ 
+ using std::map;
+--- HiGHS-1.13.1/highs/ipm/hipo/factorhighs/Analyse.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/ipm/hipo/factorhighs/Analyse.cpp	2026-02-12 10:28:11.479543826 -0700
+@@ -9,10 +9,10 @@
+ #include "DataCollector.h"
+ #include "FactorHiGHSSettings.h"
+ #include "ReturnValues.h"
+-#include "amd/amd.h"
++#include <suitesparse/amd.h>
+ #include "ipm/hipo/auxiliary/Auxiliary.h"
+ #include "ipm/hipo/auxiliary/Log.h"
+-#include "metis/metis.h"
++#include <metis.h>
+ #include "rcm/rcm.h"
+ 
+ namespace hipo {
+@@ -122,7 +122,7 @@ Int Analyse::getPermutation() {
+     // ----- METIS ----------------
+     // ----------------------------
+     idx_t options[METIS_NOPTIONS];
+-    Highs_METIS_SetDefaultOptions(options);
++    METIS_SetDefaultOptions(options);
+     options[METIS_OPTION_SEED] = kMetisSeed;
+ 
+     // set logging of Metis depending on debug level
+@@ -135,7 +135,7 @@ Int Analyse::getPermutation() {
+ 
+     if (log_) log_->printDevInfo("Running Metis\n");
+ 
+-    Int status = Highs_METIS_NodeND(&n_, temp_ptr.data(), temp_rows.data(),
++    Int status = METIS_NodeND(&n_, temp_ptr.data(), temp_rows.data(),
+                                     NULL, options, perm_.data(), iperm_.data());
+ 
+     if (log_) log_->printDevInfo("Metis done\n");
+@@ -149,11 +149,11 @@ Int Analyse::getPermutation() {
+     // ------ AMD -----------------
+     // ----------------------------
+     double control[AMD_CONTROL];
+-    Highs_amd_defaults(control);
++    amd_defaults(control);
+     double info[AMD_INFO];
+ 
+     if (log_) log_->printDevInfo("Running AMD\n");
+-    Int status = Highs_amd_order(n_, temp_ptr.data(), temp_rows.data(),
++    Int status = amd_order(n_, temp_ptr.data(), temp_rows.data(),
+                                  perm_.data(), control, info);
+     if (log_) log_->printDevInfo("AMD done\n");
+ 
+--- HiGHS-1.13.1/highs/ipm/ipx/model.cc.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/ipm/ipx/model.cc	2026-02-12 10:24:56.717163669 -0700
+@@ -3,7 +3,7 @@
+ #include <cassert>
+ #include <cmath>
+ #include "ipm/ipx/utils.h"
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ 
+ namespace ipx {
+ 
+--- HiGHS-1.13.1/highs/ipm/ipx/sparse_matrix.cc.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/ipm/ipx/sparse_matrix.cc	2026-02-12 10:24:56.717398216 -0700
+@@ -4,7 +4,7 @@
+ #include <cmath>
+ #include <utility>
+ #include "ipm/ipx/utils.h"
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ 
+ namespace ipx {
+ 
+--- HiGHS-1.13.1/highs/ipm/ipx/utils.cc.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/ipm/ipx/utils.cc	2026-02-12 10:24:56.717544508 -0700
+@@ -3,7 +3,7 @@
+ #include <cassert>
+ #include <cmath>
+ #include <utility>
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ 
+ namespace ipx {
+ 
+--- HiGHS-1.13.1/highs/mip/HighsCliqueTable.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsCliqueTable.cpp	2026-02-12 10:24:56.717761122 -0700
+@@ -12,7 +12,7 @@
+ #include <cstdio>
+ #include <numeric>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsCutPool.h"
+ #include "mip/HighsDomain.h"
+ #include "mip/HighsMipSolver.h"
+--- HiGHS-1.13.1/highs/mip/HighsCutGeneration.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsCutGeneration.cpp	2026-02-12 10:24:56.718024322 -0700
+@@ -7,7 +7,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ #include "mip/HighsCutGeneration.h"
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsMipSolverData.h"
+ #include "mip/HighsTransformedLp.h"
+ #include "util/HighsIntegers.h"
+--- HiGHS-1.13.1/highs/mip/HighsCutPool.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsCutPool.cpp	2026-02-12 10:24:56.718242839 -0700
+@@ -11,7 +11,7 @@
+ #include <cassert>
+ #include <numeric>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsDomain.h"
+ #include "mip/HighsLpRelaxation.h"
+ #include "mip/HighsMipSolverData.h"
+--- HiGHS-1.13.1/highs/mip/HighsDomain.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsDomain.cpp	2026-02-12 10:24:56.718556985 -0700
+@@ -12,7 +12,7 @@
+ #include <numeric>
+ #include <queue>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsConflictPool.h"
+ #include "mip/HighsCutPool.h"
+ #include "mip/HighsMipSolverData.h"
+--- HiGHS-1.13.1/highs/mip/HighsImplications.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsImplications.cpp	2026-02-12 10:24:56.718903891 -0700
+@@ -7,7 +7,7 @@
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ #include "mip/HighsImplications.h"
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsCliqueTable.h"
+ #include "mip/HighsMipSolverData.h"
+ #include "mip/MipTimer.h"
+--- HiGHS-1.13.1/highs/mip/HighsMipSolverData.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsMipSolverData.cpp	2026-02-12 10:24:56.719165038 -0700
+@@ -10,7 +10,7 @@
+ #include <random>
+ #include <sstream>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "lp_data/HighsModelUtils.h"
+ #include "mip/HighsPseudocost.h"
+ #include "mip/HighsRedcostFixing.h"
+--- HiGHS-1.13.1/highs/mip/HighsModkSeparator.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsModkSeparator.cpp	2026-02-12 10:24:56.719464816 -0700
+@@ -12,7 +12,7 @@
+ 
+ #include <unordered_set>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsCutGeneration.h"
+ #include "mip/HighsGFkSolve.h"
+ #include "mip/HighsLpAggregator.h"
+--- HiGHS-1.13.1/highs/mip/HighsObjectiveFunction.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsObjectiveFunction.cpp	2026-02-12 10:24:56.719626928 -0700
+@@ -10,7 +10,7 @@
+ 
+ #include <numeric>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "lp_data/HighsLp.h"
+ #include "mip/HighsCliqueTable.h"
+ #include "mip/HighsDomain.h"
+--- HiGHS-1.13.1/highs/mip/HighsPrimalHeuristics.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsPrimalHeuristics.cpp	2026-02-12 10:24:56.719804519 -0700
+@@ -10,7 +10,7 @@
+ #include <numeric>
+ #include <unordered_set>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "io/HighsIO.h"
+ #include "lp_data/HConst.h"
+ #include "lp_data/HighsLpUtils.h"
+--- HiGHS-1.13.1/highs/mip/HighsTableauSeparator.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/mip/HighsTableauSeparator.cpp	2026-02-12 10:24:56.720019359 -0700
+@@ -12,7 +12,7 @@
+ 
+ #include <algorithm>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsCutGeneration.h"
+ #include "mip/HighsLpAggregator.h"
+ #include "mip/HighsLpRelaxation.h"
+--- HiGHS-1.13.1/highs/presolve/HighsSymmetry.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/presolve/HighsSymmetry.cpp	2026-02-12 10:24:56.720242535 -0700
+@@ -15,7 +15,7 @@
+ #include <algorithm>
+ #include <numeric>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "mip/HighsCliqueTable.h"
+ #include "mip/HighsDomain.h"
+ #include "parallel/HighsParallel.h"
+--- HiGHS-1.13.1/highs/presolve/HPresolve.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/presolve/HPresolve.cpp	2026-02-12 10:24:56.720782311 -0700
+@@ -12,7 +12,7 @@
+ #include <cmath>
+ #include <limits>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "Highs.h"
+ #include "io/HighsIO.h"
+ #include "lp_data/HConst.h"
+--- HiGHS-1.13.1/highs/simplex/HEkkDualRHS.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/simplex/HEkkDualRHS.cpp	2026-02-12 10:24:56.721343616 -0700
+@@ -15,7 +15,7 @@
+ #include <iostream>
+ #include <set>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "simplex/SimplexTimer.h"
+ 
+ using std::fill_n;
+--- HiGHS-1.13.1/highs/simplex/HEkkDualRow.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/simplex/HEkkDualRow.cpp	2026-02-12 10:24:56.721515968 -0700
+@@ -13,7 +13,7 @@
+ #include <cassert>
+ #include <iostream>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "simplex/HSimplexDebug.h"
+ #include "simplex/SimplexTimer.h"
+ #include "util/HighsCDouble.h"
+--- HiGHS-1.13.1/highs/simplex/HEkkPrimal.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/simplex/HEkkPrimal.cpp	2026-02-12 10:24:56.721727261 -0700
+@@ -10,7 +10,7 @@
+  */
+ #include "simplex/HEkkPrimal.h"
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "simplex/HEkkDual.h"
+ #include "simplex/SimplexTimer.h"
+ #include "util/HighsSort.h"
+--- HiGHS-1.13.1/highs/simplex/HSimplexNla.cpp.orig	2026-02-11 04:31:15.000000000 -0700
++++ HiGHS-1.13.1/highs/simplex/HSimplexNla.cpp	2026-02-12 10:24:56.721993046 -0700
+@@ -14,7 +14,7 @@
+ 
+ #include <stdio.h>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "parallel/HighsParallel.h"
+ #include "simplex/HSimplex.h"
+ 
+--- HiGHS-1.13.1/highs/util/HFactor.cpp.orig	2026-02-12 10:24:52.834291658 -0700
++++ HiGHS-1.13.1/highs/util/HFactor.cpp	2026-02-12 10:24:56.722218857 -0700
+@@ -13,7 +13,7 @@
+ #include <cassert>
+ #include <iostream>
+ 
+-#include "../extern/pdqsort/pdqsort.h"
++#include <pdqsort.h>
+ #include "lp_data/HConst.h"
+ #include "util/FactorTimer.h"
+ #include "util/HFactorDebug.h"

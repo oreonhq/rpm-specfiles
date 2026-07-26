@@ -1,0 +1,24 @@
+diff -up clanbomber-1.05/clanbomber/Config.cpp~ clanbomber-1.05/clanbomber/Config.cpp
+--- clanbomber-1.05/clanbomber/Config.cpp~	2016-02-20 13:51:58.000000000 +0100
++++ clanbomber-1.05/clanbomber/Config.cpp	2016-02-20 14:04:53.341302922 +0100
+@@ -524,7 +524,7 @@ bool Config::save(bool init)
+ 		bomber[7].set_name( "You" );
+ 	}
+ 
+-	ofstream configfile(filename);
++	ofstream configfile((const char *)filename);
+ 
+ 	configfile << "27" << endl; // version
+ 
+diff -up clanbomber-1.05/clanbomber/Map.cpp~ clanbomber-1.05/clanbomber/Map.cpp
+--- clanbomber-1.05/clanbomber/Map.cpp~	2004-01-08 19:10:39.000000000 +0100
++++ clanbomber-1.05/clanbomber/Map.cpp	2016-02-20 14:05:36.317306365 +0100
+@@ -739,7 +739,7 @@ void Map::save_selection()
+ 	filename = getenv("HOME");
+ 	filename += "/.clanbomber/maps.disabled";
+ #endif
+-	ofstream map_selection_file(filename);
++	ofstream map_selection_file((const char *)filename);
+ 	CL_Iterator<MapEntry> map_entry_iterator(map_list);
+ 	while (map_entry_iterator.next()!=NULL)
+ 	{

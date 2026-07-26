@@ -1,0 +1,38 @@
+From c8f3fcbd466234915723f32a7a310c6416459865 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon, 9 Nov 2015 09:25:14 +0100
+Subject: [PATCH 36/41] Remove redundant normalize function
+
+Just causes a duplicate symbol error.
+---
+ koules.h | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/koules.h b/koules.h
+index 0940fa1..295393c 100644
+--- a/koules.h
++++ b/koules.h
+@@ -289,20 +289,6 @@ extern unsigned char rocketcolor[5];
+ 
+ #endif
+ 
+-#if defined(__GNUC__)&&!defined(ONLYANSI)
+-static inline void
+-normalize (float *x, float *y, CONST float size)
+-{
+-  float           length = sqrt ((*x) * (*x) + (*y) * (*y));
+-  if (length == 0)
+-    length = 1;
+-  *x *= size / length;
+-  *y *= size / length;
+-}
+-#else
+-extern void     normalize (float *, float *, CONST float);
+-#endif
+-
+ extern void     addpoint (CONST int, CONST int, CONST int, CONST int, CONST int, CONST int);
+ extern void     destroy (CONST int);
+ extern void     creator (CONST int);
+-- 
+2.5.0
+

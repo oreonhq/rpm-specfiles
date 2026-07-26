@@ -1,0 +1,54 @@
+From 17a567c10643807901c8bb52f175d4a77c61fdbe Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Wed, 1 Feb 2023 21:49:39 +0100
+Subject: [PATCH] client: sendxmldoc: Fix a use after free on two places
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 12.2.1 correctly detected a use after free when deallocating a list:
+(1) in an error path after a memory allocation failure.
+(2) when disposing a document list just before exiting a program.
+
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ client/sendxmldoc.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/client/sendxmldoc.c b/client/sendxmldoc.c
+index f4b4448..cf4907a 100644
+--- a/client/sendxmldoc.c
++++ b/client/sendxmldoc.c
+@@ -36,10 +36,13 @@ int xpath2nodelist(xmlNodePtr *node_list, xmlXPathContextPtr xpath_ctx, const xm
+             /* Make weak copy of the node */
+             node = malloc(sizeof(*node));
+             if (!node) {
+-                fprintf(stderr, "Not enoungh memory\n");
++                fprintf(stderr, "Not enough memory\n");
+                 xmlXPathFreeObject(result);
+-                for (node = *node_list; node; node = node->next)
++                for (node = *node_list; node;) {
++                    xmlNodePtr next_node = node->next;
+                     free(node);
++                    node = next_node;
++                }
+                 *node_list = NULL;
+                 return -1;
+             }
+@@ -239,9 +242,11 @@ int main(int argc, char **argv) {
+             struct isds_document *document =
+                 (struct isds_document *)item->data;
+             if (document->is_xml) {
+-                for (xmlNodePtr node = document->xml_node_list; node;
+-                        node = node->next)
++                for (xmlNodePtr node = document->xml_node_list; node;) {
++                    xmlNodePtr next_node = node->next;
+                     free(node);
++                    node = next_node;
++                }
+             }
+         }
+     }
+-- 
+2.39.1
+

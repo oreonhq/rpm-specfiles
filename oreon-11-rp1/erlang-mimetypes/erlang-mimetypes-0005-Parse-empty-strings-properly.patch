@@ -1,0 +1,31 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 1 Jun 2016 15:34:37 +0300
+Subject: [PATCH] Parse empty strings properly
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/mimetypes_parse.yrl b/src/mimetypes_parse.yrl
+index 6861884..1b5bec6 100644
+--- a/src/mimetypes_parse.yrl
++++ b/src/mimetypes_parse.yrl
+@@ -1,6 +1,6 @@
+ Nonterminals
+ 
+-mappings mapping exts ext.
++mappings mapping exts ext newlines.
+ 
+ Terminals
+ 
+@@ -13,8 +13,10 @@ ext -> string : string('$1').
+ exts -> ext : ['$1'].
+ exts -> ext exts : ['$1' | '$2' ].
+ 
+-mapping -> string newline : skip.
+-mapping -> string exts newline : {string('$1'), '$2'}.
++newlines -> newline : newline.
++newlines -> newline newlines : $2.
++mapping -> string newlines : skip.
++mapping -> string exts newlines : {string('$1'), '$2'}.
+ 
+ mappings -> mapping : ['$1'].
+ mappings -> mapping mappings :

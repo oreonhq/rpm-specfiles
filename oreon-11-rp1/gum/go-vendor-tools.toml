@@ -1,0 +1,16 @@
+[archive]
+
+[archive.dependency_overrides]
+# https://github.com/mattn/go-localereader/pull/1
+"github.com/mattn/go-localereader" = "2491eb6c1c75720122ef321ed7acc3a8d9de95b1"
+
+[licensing]
+detector = "askalono"
+
+[licensing.detector_config]
+multiple = "true"
+
+[[licensing.licenses]]
+path = "vendor/github.com/lucasb-eyer/go-colorful/LICENSE"
+sha256sum = "1e4cf2a117516ec1b54041d68ed4f5d331878b04de3386f4790e7b5b9c04e1ec"
+expression = "MIT"

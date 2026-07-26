@@ -1,0 +1,30 @@
+diff -ur Net-Async-SOCKS-0.003.dist/Makefile.PL Net-Async-SOCKS-0.003/Makefile.PL
+--- Net-Async-SOCKS-0.003.dist/Makefile.PL	2018-04-02 12:10:40.000000000 -0500
++++ Net-Async-SOCKS-0.003/Makefile.PL	2024-03-11 09:13:08.387441905 -0500
+@@ -34,7 +34,6 @@
+     "Test::Fatal" => "0.010",
+     "Test::HexString" => 0,
+     "Test::More" => "0.98",
+-    "Test::Refcount" => "0.07"
+   },
+   "VERSION" => "0.003",
+   "test" => {
+@@ -55,7 +54,6 @@
+   "Test::Fatal" => "0.010",
+   "Test::HexString" => 0,
+   "Test::More" => "0.98",
+-  "Test::Refcount" => "0.07",
+   "parent" => 0
+ );
+ 
+diff -ur Net-Async-SOCKS-0.003.dist/t/000-report-versions-tiny.t Net-Async-SOCKS-0.003/t/000-report-versions-tiny.t
+--- Net-Async-SOCKS-0.003.dist/t/000-report-versions-tiny.t	2014-08-29 00:43:36.000000000 -0500
++++ Net-Async-SOCKS-0.003/t/000-report-versions-tiny.t	2024-03-11 09:13:02.738349752 -0500
+@@ -60,7 +60,6 @@
+ eval { $v .= pmver('Test::Fatal','0.010') };
+ eval { $v .= pmver('Test::HexString','any version') };
+ eval { $v .= pmver('Test::More','0.98') };
+-eval { $v .= pmver('Test::Refcount','0.07') };
+ eval { $v .= pmver('parent','any version') };
+ 
+ 

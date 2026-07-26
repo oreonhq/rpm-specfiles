@@ -1,0 +1,14 @@
+diff -up xmonad-contrib-0.17.1/XMonad/Hooks/EwmhDesktops.hs~ xmonad-contrib-0.17.1/XMonad/Hooks/EwmhDesktops.hs
+--- xmonad-contrib-0.17.1/XMonad/Hooks/EwmhDesktops.hs~	2001-09-09 09:46:40.000000000 +0800
++++ xmonad-contrib-0.17.1/XMonad/Hooks/EwmhDesktops.hs	2022-09-14 20:50:49.173905849 +0800
+@@ -490,6 +490,10 @@ setActiveWindow w = withDisplay $ \dpy -
+     r <- asks theRoot
+     a <- getAtom "_NET_ACTIVE_WINDOW"
+     io $ changeProperty32 dpy r a wINDOW propModeReplace [fromIntegral w]
++    -- init _NET_WM_STATE to prevent gtk3 making apps look unfocused
++    a' <- getAtom "_NET_WM_STATE"
++    c' <- getAtom "ATOM"
++    io $ changeProperty32 dpy w a' c' propModeAppend []
+ 
+ setDesktopViewport :: [Position] -> X ()
+ setDesktopViewport positions = withDisplay $ \dpy -> do

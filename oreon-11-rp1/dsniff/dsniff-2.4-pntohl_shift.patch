@@ -1,0 +1,15 @@
+Patch by Matthew Boyle <mlb@decisionsoft.co.uk> for dsniff >= 2.4b1 which corrects
+the incorrect bit-shift in pntohl(), the left-shift should be 8 bits, not 18. For
+further information please have a look to Red Hat Bugzilla ID #714958 and #850496.
+
+--- dsniff-2.4/decode.h				2001-03-15 09:33:06.000000000 +0100
++++ dsniff-2.4/decode.h.pntohl_shift		2013-12-20 22:16:52.000000000 +0100
+@@ -35,7 +35,7 @@
+ 			  (u_short)*((u_char *)p+0)<<8))
+ 			 
+ #define pntohl(p)	((u_int32_t)*((u_char *)p+3)<<0|   \
+-			 (u_int32_t)*((u_char *)p+2)<<18|  \
++			 (u_int32_t)*((u_char *)p+2)<<8|  \
+ 			 (u_int32_t)*((u_char *)p+1)<<16|  \
+ 			 (u_int32_t)*((u_char *)p+0)<<24)
+ 

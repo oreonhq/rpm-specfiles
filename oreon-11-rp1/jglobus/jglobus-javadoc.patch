@@ -1,0 +1,853 @@
+From da1a49eb70b6b80038b017e58ac93973a62be2df Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 3 Jul 2017 13:08:15 +0200
+Subject: [PATCH] Javadoc fixes
+
+---
+ .../java/org/globus/gram/GramAttributes.java  |  2 +-
+ .../main/java/org/globus/gram/GramJob.java    |  4 +-
+ .../java/org/globus/rsl/ParseException.java   |  2 +-
+ .../main/java/org/globus/ftp/ByteRange.java   |  2 +-
+ .../java/org/globus/ftp/ByteRangeList.java    |  6 +--
+ .../main/java/org/globus/ftp/FTPClient.java   | 16 +++----
+ .../main/java/org/globus/ftp/HostPort6.java   |  4 +-
+ .../globus/ftp/dc/AbstractDataChannel.java    |  4 +-
+ .../java/org/globus/ftp/vanilla/Command.java  |  3 +-
+ .../java/org/globus/ftp/vanilla/Reply.java    |  4 --
+ .../org/globus/gsi/gssapi/GlobusGSSName.java  |  2 +-
+ .../globus/gsi/jsse/SSLConfiguratorTest.java  |  2 +-
+ .../java/org/globus/common/CoGProperties.java |  6 +--
+ .../main/java/org/globus/gsi/OpenSSLKey.java  |  2 +-
+ .../org/globus/gsi/SigningPolicyParser.java   | 37 +++++++++-------
+ .../org/globus/gsi/TrustedCertificates.java   |  6 +--
+ .../java/org/globus/gsi/X509Credential.java   |  2 +-
+ .../gsi/X509ProxyCertPathParameters.java      |  2 -
+ .../globus/gsi/gssapi/jaas/JaasSubject.java   |  6 +--
+ .../globus/gsi/proxy/ext/ProxyCertInfo.java   |  2 +-
+ .../gsi/stores/PEMKeyStoreParameters.java     |  2 +-
+ .../globus/gsi/stores/ResourceCertStore.java  |  8 ++--
+ .../stores/ResourceCertStoreParameters.java   |  6 +--
+ .../ResourceSigningPolicyStoreParameters.java |  6 +--
+ .../gsi/trustmanager/PKITrustManager.java     |  2 +-
+ .../trustmanager/PKITrustManagerFactory.java  |  2 +-
+ .../trustmanager/TrustedCertPathFinder.java   |  4 +-
+ .../X509ProxyCertPathValidator.java           |  4 +-
+ .../globus/gsi/util/CertificateLoadUtil.java  |  2 +-
+ .../main/java/org/globus/tools/ProxyInfo.java |  2 +-
+ .../globus/gsi/provider/MockCertStore.java    |  8 ++--
+ .../org/globus/gsi/provider/MockKeyStore.java | 42 +++++++++----------
+ .../globus/gsi/provider/TestTrustManager.java |  2 +-
+ 33 files changed, 101 insertions(+), 103 deletions(-)
+
+diff --git a/gram/src/main/java/org/globus/gram/GramAttributes.java b/gram/src/main/java/org/globus/gram/GramAttributes.java
+index de8da9e..5b96cf8 100644
+--- a/gram/src/main/java/org/globus/gram/GramAttributes.java
++++ b/gram/src/main/java/org/globus/gram/GramAttributes.java
+@@ -38,7 +38,7 @@ import org.globus.rsl.ParseException;
+  * </pre>
+  * the resulting rsl will look like:
+  * <pre>
+- * &("stdout"="$(MY_URL)/hello")("environment"=("MY_URL" "http://foo"))
++ * &amp;("stdout"="$(MY_URL)/hello")("environment"=("MY_URL" "http://foo"))
+  * </pre>
+  * Since the "$(MY_URL)/hello" is in double quotes it will be treated as
+  * a single string and the variable will never be resolved. The parser
+diff --git a/gram/src/main/java/org/globus/gram/GramJob.java b/gram/src/main/java/org/globus/gram/GramJob.java
+index bce1f5b..f09790f 100644
+--- a/gram/src/main/java/org/globus/gram/GramJob.java
++++ b/gram/src/main/java/org/globus/gram/GramJob.java
+@@ -198,7 +198,7 @@ public class GramJob implements GRAMConstants {
+      * the job has not completed, or if the service did not provide
+      * an exit code for this job, this method will return
+      * <code>0</code> and {@link #isExitCodeValid()} will return
+-     * <code>false</code>.</p>
++     * <code>false</code>.
+      * @return the job exit code or <code>0</code> if the service did
+      * not provide one or the job has not completed.
+      */
+@@ -208,7 +208,7 @@ public class GramJob implements GRAMConstants {
+ 
+     /**
+      * <p>Can be used to determine whether the job exit code
+-     * returned by {@link #getExitCode()} is valid.</p>
++     * returned by {@link #getExitCode()} is valid.
+      * <p>This method will return <code>false</code> if either
+      * of the following is true:
+      * <ul>
+diff --git a/gram/src/main/java/org/globus/rsl/ParseException.java b/gram/src/main/java/org/globus/rsl/ParseException.java
+index 32a8559..405fe54 100644
+--- a/gram/src/main/java/org/globus/rsl/ParseException.java
++++ b/gram/src/main/java/org/globus/rsl/ParseException.java
+@@ -22,7 +22,7 @@ public class ParseException extends Exception {
+    * This constructor calls its super class with the empty string
+    * to force the "toString" method of parent class "Throwable" to
+    * print the error message in the form:
+-   *     ParseException: <result of getMessage>
++   *     ParseException: &lt;result of getMessage&gt;
+    */
+   public ParseException(Token currentTokenVal,
+                         int[][] expectedTokenSequencesVal,
+diff --git a/gridftp/src/main/java/org/globus/ftp/ByteRange.java b/gridftp/src/main/java/org/globus/ftp/ByteRange.java
+index 2bd86be..a7c2e92 100644
+--- a/gridftp/src/main/java/org/globus/ftp/ByteRange.java
++++ b/gridftp/src/main/java/org/globus/ftp/ByteRange.java
+@@ -33,7 +33,7 @@ public class ByteRange {
+     /**
+        @param from lower range limit
+        @param to upper range limit
+-       @throws IllegalArgumentException if to < from
++       @throws IllegalArgumentException if to &lt; from
+      **/
+     public ByteRange(long from, long to) {
+ 	if (to < from) {
+diff --git a/gridftp/src/main/java/org/globus/ftp/ByteRangeList.java b/gridftp/src/main/java/org/globus/ftp/ByteRangeList.java
+index 731963a..f233bb3 100644
+--- a/gridftp/src/main/java/org/globus/ftp/ByteRangeList.java
++++ b/gridftp/src/main/java/org/globus/ftp/ByteRangeList.java
+@@ -94,9 +94,9 @@ public class ByteRangeList implements RestartData {
+        while the parameter object will remain intact.
+        For instance:
+        <ul>
+-       <li>merge("10-15 30-35", "20-25") ->  "10-15 20-25 30-35"
+-       <li>merge("10-15 30-35", "12-15") ->  "10-15 20-25"
+-       <li>merge("10-15 30-35", "16-40") ->  "10-40"
++       <li>merge("10-15 30-35", "20-25") -&lt;  "10-15 20-25 30-35"
++       <li>merge("10-15 30-35", "12-15") -&lt;  "10-15 20-25"
++       <li>merge("10-15 30-35", "16-40") -&lt;  "10-40"
+        </ul>
+      **/
+     public void merge(final ByteRange range) {
+diff --git a/gridftp/src/main/java/org/globus/ftp/FTPClient.java b/gridftp/src/main/java/org/globus/ftp/FTPClient.java
+index f3aa009..dba39ca 100644
+--- a/gridftp/src/main/java/org/globus/ftp/FTPClient.java
++++ b/gridftp/src/main/java/org/globus/ftp/FTPClient.java
+@@ -2063,14 +2063,14 @@ public class  FTPClient {
+      * <a href="http://www.ogf.org/documents/GFD.47.pdf">GridFTP v2 Protocol Description</a>
+      * checksum feature has the following syntax:
+      * <pre>
+-     * CKSUM <algorithm>[, …]
++     * CKSUM &lt;algorithm&gt;[, …]
+      * </pre>
+      * getSupportedCksumAlgorithms parses checsum feauture parms and form a
+      * list of checksum algorithms supported by the server
+      * @return a list of checksum algorithms supported by the server in the order
+      * specified by the server
+      * @throws org.globus.ftp.exception.ClientException
+-     * @throws org.globus.ftp.org.globus.ftp.exception.ServerException
++     * @throws org.globus.ftp.exception.ServerException
+      * @throws java.io.IOException
+      */
+     public List<String> getSupportedCksumAlgorithms()
+@@ -2130,12 +2130,12 @@ public class  FTPClient {
+      * 5.1 CKSM
+      * This command is used by the client to request checksum calculation over a portion or
+      * whole file existing on the server. The syntax is:
+-     * CKSM <algorithm> <offset> <length> <path> CRLF
++     * CKSM &lt;algorithm&gt; &lt;offset&gt; &lt;length&gt; &lt;path&gt; CRLF
+      * Server executes this command by calculating specified type of checksum over
+      * portion of the file starting at the offset and of the specified length. If length is –1,
+      * the checksum will be calculated through the end of the file. On success, the server
+      * replies with
+-     * 2xx <checksum value>
++     * 2xx &lt;checksum value&gt;
+      * Actual format of checksum value depends on the algorithm used, but generally,
+      * hexadecimal representation should be used.
+      * </pre>
+@@ -2146,7 +2146,7 @@ public class  FTPClient {
+      * @param path
+      * @return ckecksum value returned by the server
+      * @throws org.globus.ftp.exception.ClientException
+-     * @throws org.globus.ftp.org.globus.ftp.exception.ServerException
++     * @throws org.globus.ftp.exception.ServerException
+      * @throws java.io.IOException
+      */
+     public String getChecksum(String algorithm,
+@@ -2180,7 +2180,7 @@ public class  FTPClient {
+      * @param  path
+      * @return ckecksum value returned by the server
+      * @throws org.globus.ftp.exception.ClientException
+-     * @throws org.globus.ftp.org.globus.ftp.exception.ServerException
++     * @throws org.globus.ftp.exception.ServerException
+      * @throws java.io.IOException
+      */
+     public String getChecksum(String algorithm,
+@@ -2199,14 +2199,14 @@ public class  FTPClient {
+      * uploaded. At the end of transfer, server will calculate checksum for the received file,
+      * and if it does not match, will consider the transfer to have failed. Syntax of the
+      * command is:
+-     * SCKS <algorithm> <value> CRLF
++     * SCKS &lt;algorithm&gt; &lt;value&gt; CRLF
+      * Actual format of checksum value depends on the algorithm used, but generally,
+      * hexadecimal representation should be used.
+      * </pre>
+      * @param algorithm
+      * @param value
+      * @throws org.globus.ftp.exception.ClientException
+-     * @throws org.globus.ftp.org.globus.ftp.exception.ServerException
++     * @throws org.globus.ftp.exception.ServerException
+      * @throws java.io.IOException
+      */
+     public void setChecksum(String algorithm, String value)
+diff --git a/gridftp/src/main/java/org/globus/ftp/HostPort6.java b/gridftp/src/main/java/org/globus/ftp/HostPort6.java
+index 309f8c6..00e99be 100644
+--- a/gridftp/src/main/java/org/globus/ftp/HostPort6.java
++++ b/gridftp/src/main/java/org/globus/ftp/HostPort6.java
+@@ -38,7 +38,7 @@ public class HostPort6 extends HostPort {
+      * Parses host-port from passive mode reply message.
+      * Note that the argument is not the whole message, but
+      * only the content of the brackets:
+-     * <d><net-prt><d><net-addr><d><tcp-port><d>
++     * &lt;d&gt;&lt;net-prt&gt;&lt;d&gt;&lt;net-addr&gt;&lt;d&gt;&lt;tcp-port&gt;&lt;d&gt;
+      *
+      * @param passiveReplyMessage reply message for the EPSV command
+      */
+@@ -143,7 +143,7 @@ public class HostPort6 extends HostPort {
+     /**
+      * Returns the host-port information in the
+      * format used by EPRT command.
+-     * <d><net-prt><d><net-addr><d><tcp-port><d>
++     * &lt;d&gt;&lt;net-prt&gt;&lt;d&gt;&lt;net-addr&gt;&lt;d&gt;&lt;tcp-port&gt;&lt;d&gt;
+      *
+      * @return host-port information in EPRT command
+      *         representation.
+diff --git a/gridftp/src/main/java/org/globus/ftp/dc/AbstractDataChannel.java b/gridftp/src/main/java/org/globus/ftp/dc/AbstractDataChannel.java
+index 42dfcb4..803ca65 100644
+--- a/gridftp/src/main/java/org/globus/ftp/dc/AbstractDataChannel.java
++++ b/gridftp/src/main/java/org/globus/ftp/dc/AbstractDataChannel.java
+@@ -124,7 +124,7 @@ public abstract class AbstractDataChannel implements DataChannel {
+ 
+     /**
+      * Tests if the client supports specified transfer type and mode
+-     * (the client can read data in specific type & mode from the
++     * (the client can read data in specific type and mode from the
+      * data connection)
+      */
+     public boolean isDataSourceModeSupported() {
+@@ -134,7 +134,7 @@ public abstract class AbstractDataChannel implements DataChannel {
+ 
+     /**
+      * Tests if the client supports specified transfer type and mode
+-     * (the client can write data in specific type & mode to the
++     * (the client can write data in specific type and mode to the
+      * data connection)
+      */
+     public boolean isDataSinkModeSupported() {
+diff --git a/gridftp/src/main/java/org/globus/ftp/vanilla/Command.java b/gridftp/src/main/java/org/globus/ftp/vanilla/Command.java
+index 7875a79..4e89ee7 100644
+--- a/gridftp/src/main/java/org/globus/ftp/vanilla/Command.java
++++ b/gridftp/src/main/java/org/globus/ftp/vanilla/Command.java
+@@ -73,8 +73,7 @@ public class Command {
+ 
+     /**
+      * @return a String representation of this object, that is
+-     * <name> <sp> <parameters> <CRLF>
+-     * </p>
++     * &lt;name&gt; &lt;sp&gt; &lt;parameters&gt; &lt;CRLF&gt;
+      */
+     public static String toString(Command command) {
+ 	return command.toString();
+diff --git a/gridftp/src/main/java/org/globus/ftp/vanilla/Reply.java b/gridftp/src/main/java/org/globus/ftp/vanilla/Reply.java
+index 8ae694a..4dbf20f 100644
+--- a/gridftp/src/main/java/org/globus/ftp/vanilla/Reply.java
++++ b/gridftp/src/main/java/org/globus/ftp/vanilla/Reply.java
+@@ -196,10 +196,6 @@ public class Reply
+      * dash &quot;-&quot; and the CRLF following the last line, excluding the mentioned
+      * dash and CRLF. Note that lines are separated by the local line separator
+      * [as returned by System.getProperty("line.separator")] rather than CRLF.
+-     *
+-     * </p>
+-     * <p>
+-     *
+      * </p>
+      */
+     public String getMessage() {
+diff --git a/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSName.java b/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSName.java
+index a1177e6..93ca976 100644
+--- a/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSName.java
++++ b/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSName.java
+@@ -320,7 +320,7 @@ public class GlobusGSSName implements GSSName, Serializable {
+     /**
+      * Returns globus ID string representation of the name.
+      * If name represents is an anonymous name string
+-     * "<anonymous>" is returned.
++     * "&lt;anonymous&gt;" is returned.
+      */
+     public String toString() {
+ 	if (this.name == null) {
+diff --git a/jsse/src/test/java/org/globus/gsi/jsse/SSLConfiguratorTest.java b/jsse/src/test/java/org/globus/gsi/jsse/SSLConfiguratorTest.java
+index 30fcc59..669f87a 100644
+--- a/jsse/src/test/java/org/globus/gsi/jsse/SSLConfiguratorTest.java
++++ b/jsse/src/test/java/org/globus/gsi/jsse/SSLConfiguratorTest.java
+@@ -110,7 +110,7 @@ public class SSLConfiguratorTest {
+ 			 * used to create a thread, starting the thread causes the object's
+ 			 * <code>run</code> method to be called in that separately executing
+ 			 * thread.
+-			 * <p/>
++			 * <p>
+ 			 * The general contract of the method <code>run</code> is that it
+ 			 * may take any action whatsoever.
+ 			 *
+diff --git a/ssl-proxies/src/main/java/org/globus/common/CoGProperties.java b/ssl-proxies/src/main/java/org/globus/common/CoGProperties.java
+index 3b78e05..e89c6b7 100644
+--- a/ssl-proxies/src/main/java/org/globus/common/CoGProperties.java
++++ b/ssl-proxies/src/main/java/org/globus/common/CoGProperties.java
+@@ -401,7 +401,7 @@ public class CoGProperties extends Properties {
+      * property is checked. If that system property is not set then it returns
+      * the value specified in the configuration file. Returns null if the port
+      * range is not defined.<BR>
+-     * The port range is in the following form: <minport>, <maxport>
++     * The port range is in the following form: &lt;minport&gt;, &lt;maxport&gt;
+      *
+      * @return <code>String</code> the port range.
+      */
+@@ -426,7 +426,7 @@ public class CoGProperties extends Properties {
+      * If that system property is not set then it returns
+      * the value specified in the configuration file. Returns null if the port
+      * range is not defined.<BR>
+-     * The port range is in the following form: <minport>, <maxport>
++     * The port range is in the following form: &lt;minport&gt;, &lt;maxport&gt;
+      *
+      * @return <code>String</code> the port range.
+      */
+@@ -451,7 +451,7 @@ public class CoGProperties extends Properties {
+      * If that system property is not set then it returns
+      * the value specified in the configuration file. Returns null if the port
+      * range is not defined.<BR>
+-     * The port range is in the following form: <minport>, <maxport>
++     * The port range is in the following form: &lt;minport&gt;, &lt;maxport&gt;
+      *
+      * @return <code>String</code> the port range.
+      */
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/OpenSSLKey.java b/ssl-proxies/src/main/java/org/globus/gsi/OpenSSLKey.java
+index 0ee95be..5670111 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/OpenSSLKey.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/OpenSSLKey.java
+@@ -50,7 +50,7 @@ import org.bouncycastle.util.encoders.Base64;
+ /**
+  * Represents a OpenSSL-style PEM-formatted private key. It supports encryption and decryption of the key. Currently,
+  * only RSA keys are supported, and only TripleDES encryption is supported.
+- * <p/>
++ * <p>
+  * This is based on work done by Ming Yung at DSTC.
+  *
+  * @version ${version}
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/SigningPolicyParser.java b/ssl-proxies/src/main/java/org/globus/gsi/SigningPolicyParser.java
+index be944a7..d3806f2 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/SigningPolicyParser.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/SigningPolicyParser.java
+@@ -39,18 +39,23 @@ import javax.security.auth.x500.X500Principal;
+ 
+ /**
+  * Signing policy BCNF grammar as implemented here: (based on C implementation)
+- * <p/>
+- * eacl ::=  {eacl_entry} eacl_entry ::= {access_identity} pos_rights
+- * {restriction} {pos_rights {restriction}} | {access_identity} neg_rights
+- * access_identity ::= access_identity_type  def_authority  value  \n
+- * access_identity_type ::= "access_id_HOST"  | "access_id_USER"  |
+- * "access_id_GROUP" | "access_id_CA"    | "access_id_APPLICATION" |
+- * "access_id_ANYBODY" pos_rights ::=  "pos_rights" def_authority value
+- * {"pos_rights" def_authority value} neg_rights ::= "neg_rights" def_authority
+- * value {"neg_rights" def_authority value} restriction ::= condition_type
+- * def_authority  value  \n condition_type ::= alphanumeric_string def_authority
+- * ::= alphanumeric_string value ::= alphanumeric_string
+- * <p/>
++ * <p>
++ * eacl ::= {eacl_entry}<br>
++ * eacl_entry ::= {access_identity} pos_rights {restriction}
++ * {pos_rights {restriction}} | {access_identity} neg_rights<br>
++ * access_identity ::= access_identity_type def_authority value<br>
++ * access_identity_type ::= "access_id_HOST" | "access_id_USER" |
++ * "access_id_GROUP" | "access_id_CA" | "access_id_APPLICATION" |
++ * "access_id_ANYBODY"<br>
++ * pos_rights ::= "pos_rights" def_authority value
++ * {"pos_rights" def_authority value}<br>
++ * neg_rights ::= "neg_rights" def_authority value
++ * {"neg_rights" def_authority value}<br>
++ * restriction ::= condition_type def_authority value<br>
++ * condition_type ::= alphanumeric_string<br>
++ * def_authority ::= alphanumeric_string<br>
++ * value ::= alphanumeric_string
++ * <p>
+  * This class take a signing policy file as input and parses it to extract the
+  * policy that is enforced. Only the following policy is enforced: access_id_CA
+  * with defining authority as X509 with CA DN as value. Any positive rights
+@@ -59,16 +64,16 @@ import javax.security.auth.x500.X500Principal;
+  * CA is authorized to sign. restrictions are assumed to start with cond_. Order
+  * of rights matter, so the first occurance of CA:Sign with allowedDNs is used
+  * and rest of the policy is ignored.
+- * <p/>
++ * <p>
+  * For a given signing policy file, only policy with the particular CA's DN is
+  * parsed.
+- * <p/>
++ * <p>
+  * subject names may include the following wildcard characters: *    Matches
+  * zero or any number of characters. ?    Matches any single character.
+- * <p/>
++ * <p>
+  * All subject names should be in Globus format, with slashes and should NOT be
+  * revered.
+- * <p/>
++ * <p>
+  * The allowed DN patterns are returned as a vector of java.util.regexp.Pattern.
+  * The BCNF grammar that uses wildcard (*) and single character (?) are replaced
+  * with the regexp grammar needed by the Pattern class.
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/TrustedCertificates.java b/ssl-proxies/src/main/java/org/globus/gsi/TrustedCertificates.java
+index cc14d52..17fcba4 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/TrustedCertificates.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/TrustedCertificates.java
+@@ -82,7 +82,7 @@ public class TrustedCertificates implements Serializable {
+ 
+     /**
+      * Default signing policy suffix. The files are expected to be
+-     * <caHash>.signing_policy in the same directory as the trusted
++     * &lt;caHash&gt;.signing_policy in the same directory as the trusted
+      * certificates.
+      */
+     public final static String SIGNING_POLICY_FILE_SUFFIX = ".signing_policy";
+@@ -176,7 +176,7 @@ public class TrustedCertificates implements Serializable {
+      * and all files in the form of <i>hashcode.number</i> and will be
+      * loaded automatically as trusted certificates. An attempt will
+      * be made to load signing policy for the CA associated with
+-     * that hashcode from <hashcode>.signing_policy. If policy file is
++     * that hashcode from &lt;hashcode&gt;.signing_policy. If policy file is
+      * not found, no error will be thrown, only path validation code
+      * enforces the signing policy requirement.
+      *
+@@ -305,7 +305,7 @@ public class TrustedCertificates implements Serializable {
+     }
+ 
+     /**
+-     * Signing policy name is created as <hashcode>.signing_policy.
++     * Signing policy name is created as &lt;hashcode&gt;.signing_policy.
+      */
+     private String getPolicyFileName(String caFileName) {
+         return caFileName.substring(0, caFileName.lastIndexOf(".")) + SIGNING_POLICY_FILE_SUFFIX ;
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/X509Credential.java b/ssl-proxies/src/main/java/org/globus/gsi/X509Credential.java
+index 47a8831..5b0f133 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/X509Credential.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/X509Credential.java
+@@ -63,7 +63,7 @@ import org.globus.gsi.bc.BouncyCastleOpenSSLKey;
+ 
+ /**
+  * FILL ME
+- * <p/>
++ * <p>
+  * This class equivalent was called GlobusCredential in CoG -maybe a better name?
+  *
+  * @author ranantha@mcs.anl.gov
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/X509ProxyCertPathParameters.java b/ssl-proxies/src/main/java/org/globus/gsi/X509ProxyCertPathParameters.java
+index ee44e2e..096a402 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/X509ProxyCertPathParameters.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/X509ProxyCertPathParameters.java
+@@ -23,8 +23,6 @@ import java.util.Map;
+ import org.globus.gsi.proxy.ProxyPolicyHandler;
+ 
+ /**
+- *
+- * <p/>
+  * Refactor to have an interface that retuns trusted certificates, crls,
+  * keys and policy. Manage stores within parameters. PKITrustManager can take
+  * that interface and the validator can also be agnostic of this implementation
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/gssapi/jaas/JaasSubject.java b/ssl-proxies/src/main/java/org/globus/gsi/gssapi/jaas/JaasSubject.java
+index b315113..92af972 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/gssapi/jaas/JaasSubject.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/gssapi/jaas/JaasSubject.java
+@@ -91,7 +91,7 @@ public abstract class JaasSubject {
+ 
+     /**
+      * A convenience method, calls
+-     * <code>JaasSubject.getJaasSubject().runAs()<code/>.
++     * <code>JaasSubject.getJaasSubject().runAs()</code>.
+      */
+     public static Object doAs(Subject subject, PrivilegedExceptionAction action)
+ 	throws PrivilegedActionException {
+@@ -100,7 +100,7 @@ public abstract class JaasSubject {
+ 
+     /**
+      * A convenience method, calls
+-     * <code>JaasSubject.getJaasSubject().runAs()<code/>.
++     * <code>JaasSubject.getJaasSubject().runAs()</code>.
+      */
+     public static Object doAs(Subject subject, PrivilegedAction action) {
+ 	return JaasSubject.getJaasSubject().runAs(subject, action);
+@@ -108,7 +108,7 @@ public abstract class JaasSubject {
+ 
+     /**
+      * A convenience method, calls
+-     * <code>JaasSubject.getJaasSubject().getSubject()<code/>.
++     * <code>JaasSubject.getJaasSubject().getSubject()</code>.
+      */
+     public static Subject getCurrentSubject() {
+ 	return JaasSubject.getJaasSubject().getSubject();
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java
+index 9821afe..108df42 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyCertInfo.java
+@@ -28,7 +28,7 @@ import org.bouncycastle.asn1.DERSequence;
+ 
+ /**
+  * Represents ProxyCertInfo extension. <BR>
+- * <p/>
++ * <p>
+  * <PRE>
+  * ProxyCertInfo ::= SEQUENCE { pCPathLenConstraint      INTEGER (0..MAX) OPTIONAL, proxyPolicy ProxyPolicy }
+  * </PRE>
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/stores/PEMKeyStoreParameters.java b/ssl-proxies/src/main/java/org/globus/gsi/stores/PEMKeyStoreParameters.java
+index 12ce0a5..592dfe1 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/stores/PEMKeyStoreParameters.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/stores/PEMKeyStoreParameters.java
+@@ -20,7 +20,7 @@ import java.security.KeyStore.ProtectionParameter;
+ 
+ /**
+  * This parameter class provides all of the options for creating a FileBasedKeyStore.
+- * <p/>
++ * <p>
+  * It is immutable.
+  *
+  * @version ${vesion}
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStore.java b/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStore.java
+index f6b9f62..2fb4a51 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStore.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStore.java
+@@ -77,14 +77,14 @@ public class ResourceCertStore extends CertStoreSpi {
+ 	 * Returns a <code>Collection</code> of <code>Certificate</code>s that match
+ 	 * the specified selector. If no <code>Certificate</code>s match the
+ 	 * selector, an empty <code>Collection</code> will be returned.
+-	 * <p/>
++	 * <p>
+ 	 * For some <code>CertStore</code> types, the resulting
+ 	 * <code>Collection</code> may not contain <b>all</b> of the
+ 	 * <code>Certificate</code>s that match the selector. For instance, an LDAP
+ 	 * <code>CertStore</code> may not search all entries in the directory.
+ 	 * Instead, it may just search entries that are likely to contain the
+ 	 * <code>Certificate</code>s it is looking for.
+-	 * <p/>
++	 * <p>
+ 	 * Some <code>CertStore</code> implementations (especially LDAP
+ 	 * <code>CertStore</code>s) may throw a <code>CertStoreException</code>
+ 	 * unless a non-null <code>CertSelector</code> is provided that includes
+@@ -135,14 +135,14 @@ public class ResourceCertStore extends CertStoreSpi {
+ 	 * Returns a <code>Collection</code> of <code>CRL</code>s that match the
+ 	 * specified selector. If no <code>CRL</code>s match the selector, an empty
+ 	 * <code>Collection</code> will be returned.
+-	 * <p/>
++	 * <p>
+ 	 * For some <code>CertStore</code> types, the resulting
+ 	 * <code>Collection</code> may not contain <b>all</b> of the
+ 	 * <code>CRL</code>s that match the selector. For instance, an LDAP
+ 	 * <code>CertStore</code> may not search all entries in the directory.
+ 	 * Instead, it may just search entries that are likely to contain the
+ 	 * <code>CRL</code>s it is looking for.
+-	 * <p/>
++	 * <p>
+ 	 * Some <code>CertStore</code> implementations (especially LDAP
+ 	 * <code>CertStore</code>s) may throw a <code>CertStoreException</code>
+ 	 * unless a non-null <code>CRLSelector</code> is provided that includes
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStoreParameters.java b/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStoreParameters.java
+index 602fa54..16dc358 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStoreParameters.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceCertStoreParameters.java
+@@ -62,13 +62,13 @@ public class ResourceCertStoreParameters implements CertStoreParameters {
+ 
+     /**
+      * Makes a copy of this <code>CertStoreParameters</code>.
+-     * <p/>
++     * <p>
+      * The precise meaning of "copy" may depend on the class of the
+      * <code>CertStoreParameters</code> object. A typical implementation
+      * performs a "deep copy" of this object, but this is not an absolute
+      * requirement. Some implementations may perform a "shallow copy" of some or
+      * all of the fields of this object.
+-     * <p/>
++     * <p>
+      * Note that the <code>CertStore.getInstance</code> methods make a copy of
+      * the specified <code>CertStoreParameters</code>. A deep copy
+      * implementation of <code>clone</code> is safer and more robust, as it
+@@ -82,7 +82,7 @@ public class ResourceCertStoreParameters implements CertStoreParameters {
+      * waiting for the garbage collection mechanism. This should be done with
+      * the utmost care, since the <code>CertStore</code> may still be in use by
+      * other threads.
+-     * <p/>
++     * <p>
+      * Each subclass should state the precise behavior of this method so that
+      * users and developers know what to expect.
+      *
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceSigningPolicyStoreParameters.java b/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceSigningPolicyStoreParameters.java
+index 99c297f..d4a3853 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceSigningPolicyStoreParameters.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/stores/ResourceSigningPolicyStoreParameters.java
+@@ -41,13 +41,13 @@ public class ResourceSigningPolicyStoreParameters implements SigningPolicyStoreP
+ 
+     /**
+      * Makes a copy of this <code>CertStoreParameters</code>.
+-     * <p/>
++     * <p>
+      * The precise meaning of "copy" may depend on the class of the
+      * <code>CertStoreParameters</code> object. A typical implementation
+      * performs a "deep copy" of this object, but this is not an absolute
+      * requirement. Some implementations may perform a "shallow copy" of some or
+      * all of the fields of this object.
+-     * <p/>
++     * <p>
+      * Note that the <code>CertStore.getInstance</code> methods make a copy of
+      * the specified <code>CertStoreParameters</code>. A deep copy
+      * implementation of <code>clone</code> is safer and more robust, as it
+@@ -61,7 +61,7 @@ public class ResourceSigningPolicyStoreParameters implements SigningPolicyStoreP
+      * waiting for the garbage collection mechanism. This should be done with
+      * the utmost care, since the <code>CertStore</code> may still be in use by
+      * other threads.
+-     * <p/>
++     * <p>
+      * Each subclass should state the precise behavior of this method so that
+      * users and developers know what to expect.
+      *
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManager.java b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManager.java
+index 404ba03..d739ecb 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManager.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManager.java
+@@ -45,7 +45,7 @@ import javax.net.ssl.X509TrustManager;
+ /**
+  * This is an implementation of an X509TrustManager which supports the validation of proxy certificates.
+  * It uses the Globus CertPathValidator.
+- * <p/>
++ * <p>
+  * JGLOBUS-97 : ability to accept anonymous connections?
+  *
+  * @version ${version}
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManagerFactory.java b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManagerFactory.java
+index 9aaee75..7643674 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManagerFactory.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/PKITrustManagerFactory.java
+@@ -70,7 +70,7 @@ public class PKITrustManagerFactory extends TrustManagerFactorySpi {
+ 	 * defined by the provider. The provider can then call the specified methods
+ 	 * in the ManagerFactoryParameters implementation to obtain the needed
+ 	 * information.
+-	 * <p/>
++	 * <p>
+ 	 * This implementation requires X509ProxyCertPathParameters.
+ 	 *
+ 	 * @param managerFactoryParameters
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/TrustedCertPathFinder.java b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/TrustedCertPathFinder.java
+index d31c3ee..cf9f543 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/TrustedCertPathFinder.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/TrustedCertPathFinder.java
+@@ -83,10 +83,10 @@ public final class TrustedCertPathFinder {
+ 
+     /**
+      * Method that validates the provided cert path to find a trusted certificate in the certificate store.
+-     * <p/>
++     * <p>
+      * For each certificate i in certPath, it is expected that the i+1 certificate is the issuer of the certificate
+      * path. See CertPath.
+-     * <p/>
++     * <p>
+      * For each certificate i in certpath, validate signature of certificate i get issuer of certificate i get
+      * certificate i+i ensure that the certificate i+1 is issuer of certificate i If not, throw an exception for
+      * illegal argument validate signature of i+1 Throw exception if it does not validate check if i+1 is a trusted
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
+index f390019..ce132c9 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/trustmanager/X509ProxyCertPathValidator.java
+@@ -72,7 +72,7 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+ 
+     /**
+      * Validates the specified certification path using the specified algorithm parameter set.
+-     * <p/>
++     * <p>
+      * The <code>CertPath</code> specified must be of a type that is supported by the validation algorithm, otherwise
+      * an <code>InvalidAlgorithmParameterException</code> will be thrown. For example, a <code>CertPathValidator</code>
+      * that implements the PKIX algorithm validates <code>CertPath</code> objects of type X.509.
+@@ -137,7 +137,7 @@ public class X509ProxyCertPathValidator extends CertPathValidatorSpi {
+      * Validates the certificate path and does the following for each certificate in the chain: method
+      * checkCertificate() In addition: a) Validates if the issuer type of each certificate is correct b) CA path
+      * constraints c) Proxy path constraints
+-     * <p/>
++     * <p>
+      * If it is of type proxy, check following: a) proxy constraints b) restricted proxy else if certificate, check the
+      * following: a) keyisage
+      *
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateLoadUtil.java b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateLoadUtil.java
+index b2567a0..9980f62 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateLoadUtil.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/util/CertificateLoadUtil.java
+@@ -190,7 +190,7 @@ public final class CertificateLoadUtil {
+      * Loads a X.509 certificate from the specified reader. The certificate
+      * contents must start with "BEGIN CERTIFICATE" line and end with "END
+      * CERTIFICATE" line, and be in PEM/Base64 format.
+-     * <p/>
++     * <p>
+      * This function does not close the input stream.
+      *
+      * @param reader the stream from which load the certificate.
+diff --git a/ssl-proxies/src/main/java/org/globus/tools/ProxyInfo.java b/ssl-proxies/src/main/java/org/globus/tools/ProxyInfo.java
+index 0990e27..5d936a4 100644
+--- a/ssl-proxies/src/main/java/org/globus/tools/ProxyInfo.java
++++ b/ssl-proxies/src/main/java/org/globus/tools/ProxyInfo.java
+@@ -36,7 +36,7 @@ import java.security.cert.X509Certificate;
+   * Options
+   * -help | -usage
+   *     Displays usage
+-  * -f <proxyfile> | -file <proxyfile>
++  * -f &lt;proxyfile&gt; | -file &lt;proxyfile&gt;
+   *     Non-standard location of proxy
+   * [printoptions]
+   *     Prints information about proxy
+diff --git a/ssl-proxies/src/test/java/org/globus/gsi/provider/MockCertStore.java b/ssl-proxies/src/test/java/org/globus/gsi/provider/MockCertStore.java
+index e5b631b..61f2abf 100644
+--- a/ssl-proxies/src/test/java/org/globus/gsi/provider/MockCertStore.java
++++ b/ssl-proxies/src/test/java/org/globus/gsi/provider/MockCertStore.java
+@@ -67,14 +67,14 @@ public class MockCertStore extends CertStoreSpi {
+      * Returns a <code>Collection</code> of <code>Certificate</code>s that match
+      * the specified selector. If no <code>Certificate</code>s match the
+      * selector, an empty <code>Collection</code> will be returned.
+-     * <p/>
++     * <p>
+      * For some <code>CertStore</code> types, the resulting
+      * <code>Collection</code> may not contain <b>all</b> of the
+      * <code>Certificate</code>s that match the selector. For instance, an LDAP
+      * <code>CertStore</code> may not search all entries in the directory.
+      * Instead, it may just search entries that are likely to contain the
+      * <code>Certificate</code>s it is looking for.
+-     * <p/>
++     * <p>
+      * Some <code>CertStore</code> implementations (especially LDAP
+      * <code>CertStore</code>s) may throw a <code>CertStoreException</code>
+      * unless a non-null <code>CertSelector</code> is provided that includes
+@@ -101,14 +101,14 @@ public class MockCertStore extends CertStoreSpi {
+      * Returns a <code>Collection</code> of <code>CRL</code>s that match the
+      * specified selector. If no <code>CRL</code>s match the selector, an empty
+      * <code>Collection</code> will be returned.
+-     * <p/>
++     * <p>
+      * For some <code>CertStore</code> types, the resulting
+      * <code>Collection</code> may not contain <b>all</b> of the
+      * <code>CRL</code>s that match the selector. For instance, an LDAP
+      * <code>CertStore</code> may not search all entries in the directory.
+      * Instead, it may just search entries that are likely to contain the
+      * <code>CRL</code>s it is looking for.
+-     * <p/>
++     * <p>
+      * Some <code>CertStore</code> implementations (especially LDAP
+      * <code>CertStore</code>s) may throw a <code>CertStoreException</code>
+      * unless a non-null <code>CRLSelector</code> is provided that includes
+diff --git a/ssl-proxies/src/test/java/org/globus/gsi/provider/MockKeyStore.java b/ssl-proxies/src/test/java/org/globus/gsi/provider/MockKeyStore.java
+index 0446e8c..90ae311 100644
+--- a/ssl-proxies/src/test/java/org/globus/gsi/provider/MockKeyStore.java
++++ b/ssl-proxies/src/test/java/org/globus/gsi/provider/MockKeyStore.java
+@@ -76,13 +76,13 @@ public class MockKeyStore extends KeyStoreSpi {
+ 
+     /**
+      * Returns the certificate associated with the given alias.
+-     * <p/>
+-     * <p> If the given alias name identifies an entry created by a call to
++     * <p>
++     * If the given alias name identifies an entry created by a call to
+      * <code>setCertificateEntry</code>, or created by a call to
+      * <code>setEntry</code> with a <code>TrustedCertificateEntry</code>, then
+      * the trusted certificate contained in that entry is returned.
+-     * <p/>
+-     * <p> If the given alias name identifies an entry created by a call to
++     * <p>
++     * If the given alias name identifies an entry created by a call to
+      * <code>setKeyEntry</code>, or created by a call to <code>setEntry</code>
+      * with a <code>PrivateKeyEntry</code>, then the first element of the
+      * certificate chain in that entry (if a chain exists) is returned.
+@@ -109,12 +109,12 @@ public class MockKeyStore extends KeyStoreSpi {
+     /**
+      * Assigns the given key to the given alias, protecting it with the given
+      * password.
+-     * <p/>
+-     * <p>If the given key is of type <code>java.security.PrivateKey</code>, it
++     * <p>
++     * If the given key is of type <code>java.security.PrivateKey</code>, it
+      * must be accompanied by a certificate chain certifying the corresponding
+      * public key.
+-     * <p/>
+-     * <p>If the given alias already exists, the keystore information associated
++     * <p>
++     * If the given alias already exists, the keystore information associated
+      * with it is overridden by the given key (and possibly certificate chain).
+      *
+      * @param alias    the alias name
+@@ -136,12 +136,12 @@ public class MockKeyStore extends KeyStoreSpi {
+     /**
+      * Assigns the given key (that has already been protected) to the given
+      * alias.
+-     * <p/>
+-     * <p>If the protected key is of type <code>java.security.PrivateKey</code>,
++     * <p>
++     * If the protected key is of type <code>java.security.PrivateKey</code>,
+      * it must be accompanied by a certificate chain certifying the
+      * corresponding public key.
+-     * <p/>
+-     * <p>If the given alias already exists, the keystore information associated
++     * <p>
++     * If the given alias already exists, the keystore information associated
+      * with it is overridden by the given key (and possibly certificate chain).
+      *
+      * @param alias the alias name
+@@ -159,8 +159,8 @@ public class MockKeyStore extends KeyStoreSpi {
+ 
+     /**
+      * Assigns the given certificate to the given alias.
+-     * <p/>
+-     * <p> If the given alias identifies an existing entry created by a call to
++     * <p>
++     * If the given alias identifies an existing entry created by a call to
+      * <code>setCertificateEntry</code>, or created by a call to
+      * <code>setEntry</code> with a <code>TrustedCertificateEntry</code>, the
+      * trusted certificate in the existing entry is overridden by the given
+@@ -262,14 +262,14 @@ public class MockKeyStore extends KeyStoreSpi {
+     /**
+      * Returns the (alias) name of the first keystore entry whose certificate
+      * matches the given certificate.
+-     * <p/>
+-     * <p>This method attempts to match the given certificate with each keystore
++     * <p>
++     * This method attempts to match the given certificate with each keystore
+      * entry. If the entry being considered was created by a call to
+      * <code>setCertificateEntry</code>, or created by a call to
+      * <code>setEntry</code> with a <code>TrustedCertificateEntry</code>, then
+      * the given certificate is compared to that entry's certificate.
+-     * <p/>
+-     * <p> If the entry being considered was created by a call to
++     * <p>
++     * If the entry being considered was created by a call to
+      * <code>setKeyEntry</code>, or created by a call to <code>setEntry</code>
+      * with a <code>PrivateKeyEntry</code>, then the given certificate is
+      * compared to the first element of that entry's certificate chain.
+@@ -303,8 +303,8 @@ public class MockKeyStore extends KeyStoreSpi {
+ 
+     /**
+      * Loads the keystore from the given input stream.
+-     * <p/>
+-     * <p>A password may be given to unlock the keystore (e.g. the keystore
++     * <p>
++     * A password may be given to unlock the keystore (e.g. the keystore
+      * resides on a hardware token device), or to check the integrity of the
+      * keystore data. If a password is not given for integrity checking, then
+      * integrity checking is not performed.
+@@ -330,4 +330,4 @@ public class MockKeyStore extends KeyStoreSpi {
+         // To force keystore initialization
+         // empty impl.
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/ssl-proxies/src/test/java/org/globus/gsi/provider/TestTrustManager.java b/ssl-proxies/src/test/java/org/globus/gsi/provider/TestTrustManager.java
+index c33749a..e91f7a4 100644
+--- a/ssl-proxies/src/test/java/org/globus/gsi/provider/TestTrustManager.java
++++ b/ssl-proxies/src/test/java/org/globus/gsi/provider/TestTrustManager.java
+@@ -31,7 +31,7 @@ import org.junit.Test;
+ 
+ /**
+  * FILL ME
+- * <p/>
++ * <p>
+  * // JGLOBUS-103  separate this from proxy path validator test class.
+  *
+  * @author ranantha@mcs.anl.gov
+-- 
+2.17.2
+

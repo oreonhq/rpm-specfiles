@@ -1,0 +1,37 @@
+diff -Nrbu ipxripd-0.8/ipxd.c ipxripd-0.8-OK/ipxd.c
+--- ipxripd-0.8/ipxd.c	2025-01-23 18:25:26.988259036 +0300
++++ ipxripd-0.8-OK/ipxd.c	2025-01-23 18:28:44.217771305 +0300
+@@ -72,14 +72,14 @@
+ }
+ 
+ static void
+-int_handler()
++int_handler(int signum)
+ {
+ 	signal(SIGINT,int_handler);
+ 	dump_request=1;
+ }
+ 
+ static void
+-timer_handler()
++timer_handler(int signum)
+ {
+ 	signal(SIGALRM,timer_handler);
+ 	timer_request=1;
+@@ -87,14 +87,14 @@
+ }
+ 
+ static void
+-terminate_handler()
++terminate_handler(int signum)
+ {
+ 	signal(SIGTERM,terminate_handler);
+ 	terminate=1;
+ }
+ 
+ static void
+-hup_handler()
++hup_handler(int signum)
+ {
+ 	signal(SIGHUP,hup_handler);
+ 	scan_ticks_request=1;

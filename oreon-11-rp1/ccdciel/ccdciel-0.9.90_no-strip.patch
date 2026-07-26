@@ -1,0 +1,12 @@
+diff -U 3 -dHrN a/install.sh b/install.sh
+--- a/install.sh	2025-04-25 20:17:56.000000000 +0200
++++ b/install.sh	2025-05-04 09:24:24.639961381 +0200
+@@ -44,7 +44,7 @@
+ install -m 755 -d $destdir/share/ccdciel/data/jpleph
+ install -m 755 -d $destdir/share/ccdciel/doc
+ 
+-install -v -m 755 -s src/ccdciel  $destdir/bin/ccdciel
++install -v -m 755 src/ccdciel  $destdir/bin/ccdciel
+ install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
+ install -v -m 755 scripts/astrometry-blind.sh  $destdir/share/ccdciel/scripts/astrometry-blind.sh
+ install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh

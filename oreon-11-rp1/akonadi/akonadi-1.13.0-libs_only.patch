@@ -1,0 +1,33 @@
+diff -up akonadi-1.13.0/CMakeLists.txt.opt akonadi-1.13.0/CMakeLists.txt
+--- akonadi-1.13.0/CMakeLists.txt.opt	2015-12-11 07:44:57.653216984 -0600
++++ akonadi-1.13.0/CMakeLists.txt	2015-12-11 07:52:14.749205933 -0600
+@@ -339,22 +339,22 @@ endif()
+ 
+ include_directories(${Akonadi_SOURCE_DIR} ${Akonadi_BINARY_DIR} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})
+ 
+-add_subdirectory(interfaces)
++add_subdirectory(interfaces)
+ add_subdirectory(libs)
+ set(AKONADI_PROTOCOLINTERNALS_LIBS ${akonadiprotocolinternals_LIB_DEPENDS} akonadiprotocolinternals)
+ 
+-add_subdirectory(shared)
+-add_subdirectory(agentserver)
+-add_subdirectory(server)
++#add_subdirectory(shared)
++#add_subdirectory(agentserver)
++#add_subdirectory(server)
+ 
+-add_subdirectory(rds)
++#add_subdirectory(rds)
+ if(NOT WIN32)
+-  add_subdirectory(asapcat)
++  #add_subdirectory(asapcat)
+ endif()
+ if (NOT QT5_BUILD)
+   if(SQLITE_FOUND)
+     option(SQLITE_LINK_STATIC "link libsqlite3 statically" FALSE)
+-    add_subdirectory(qsqlite)
++    #add_subdirectory(qsqlite)
+   endif()
+ endif()
+ 

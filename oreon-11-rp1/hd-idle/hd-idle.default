@@ -1,0 +1,32 @@
+# hd-idle command line options
+# Options are:
+#  -a <name>               Set device name of disks for subsequent idle-time
+#                          parameters (-i). This parameter is optional in the
+#                          sense that there's a default entry for all disks
+#                          which are not named otherwise by using this
+#                          parameter. This can also be a symlink
+#                          (e.g. /dev/disk/by-uuid/...)
+#  -i <idle_time>          Idle time in seconds.
+#
+# Options not exactly useful here:
+#  -t <disk>               Spin-down the specfified disk immediately and exit.
+#  -d                      Debug mode. This will prevent hd-idle from
+#                          becoming a daemon and print debugging info to
+#                          stdout/stderr
+#  -n                      No daemon mode.
+#  -h                      Print usage information.
+#  -l <logfile>            Name of logfile (written only after a disk has spun
+#                          up). Please note that this option might cause the
+#                          disk which holds the logfile to spin up just because
+#                          another disk had some activity. This option should
+#                          not be used on systems with more than one disk
+#                          except for tuning purposes. On single-disk systems,
+#                          this option should not cause any additional spinups.
+#
+# spin down all disks after 180 seconds
+#HD_IDLE_OPTS="-i 180"
+#
+# only spin down /dev/sdb after 180 seconds
+#HD_IDLE_OPTS="-i 0 -a /dev/sdb -i 180"
+
+HD_IDLE_OPTS="-i 600"

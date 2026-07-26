@@ -1,0 +1,11 @@
+--- a/src/bindings/python/CMakeLists.orig.txt	2019-03-21 11:17:24.000000000 +0100
++++ b/src/bindings/python/CMakeLists.txt	2020-11-13 19:47:28.116185053 +0100
+@@ -135,7 +135,7 @@
+ #
+ set(PYTHON_PACKAGE_INSTALL_DIR)
+ if (UNIX OR CYGWIN) 
+-  execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c "import sys;import platform; sys.stdout.write(platform.python_version().rsplit('.', 1)[0])"
++  execute_process(COMMAND "${PYTHON_EXECUTABLE}" -c "import sys;import platform; sys.stdout.write('{}.{}'.format(*platform.python_version_tuple()[:2]))"
+     OUTPUT_VARIABLE PYTHON_VERSION)
+   set(PYTHON_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/python${PYTHON_VERSION}/site-packages)
+ else()

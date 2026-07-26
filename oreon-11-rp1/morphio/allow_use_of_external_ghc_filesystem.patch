@@ -1,0 +1,46 @@
+diff --git a/3rdparty/CMakeLists.txt b/3rdparty/CMakeLists.txt
+index b5d2de4..5fd7880 100644
+--- a/3rdparty/CMakeLists.txt
++++ b/3rdparty/CMakeLists.txt
+@@ -15,5 +15,6 @@ target_include_directories(gsl-lite SYSTEM INTERFACE)
+ add_library(lexertl INTERFACE)
+ target_include_directories(lexertl SYSTEM INTERFACE lexertl14/include)
+ 
+-add_subdirectory(ghc_filesystem)
+-
++if (NOT EXTERNAL_GHC_FILESYSTEM)
++  add_subdirectory(ghc_filesystem)
++endif()
+diff --git a/CMake/MorphIOConfig.cmake b/CMake/MorphIOConfig.cmake
+index 1ede9ae..f3dabde 100644
+--- a/CMake/MorphIOConfig.cmake
++++ b/CMake/MorphIOConfig.cmake
+@@ -2,5 +2,6 @@ include(CMakeFindDependencyMacro)
+ 
+ find_dependency(gsl-lite)
+ find_dependency(HighFive)
++find_dependency(ghc_filesystem)
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/MorphIOTargets.cmake")
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5d6cfb0..0201f94 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,6 +10,7 @@ option(MorphIO_CXX_WARNINGS "Compile C++ with warnings" ON)
+ option(MorphIO_WERROR "If compiled with warnings, additionally activate '-Werror'" ON)
+ option(EXTERNAL_CATCH2 "Use Catch2 from external source" OFF)
+ option(EXTERNAL_HIGHFIVE "Use HighFive from external source" OFF)
++option(EXTERNAL_GHC_FILESYSTEM "Use ghc_filesystem from external source" OFF)
+ option(EXTERNAL_PYBIND11 "Use pybind11 from external source" OFF)
+ option(MORPHIO_TESTS "Build tests" ON)
+ option(MORPHIO_USE_DOUBLE "Use doubles instead of floats" OFF)
+@@ -40,6 +41,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ if (EXTERNAL_HIGHFIVE)
+   find_package(HighFive REQUIRED)
+ endif()
++if (EXTERNAL_GHC_FILESYSTEM)
++  find_package(ghc_filesystem REQUIRED)
++endif()
+ if (EXTERNAL_PYBIND11)
+   find_package(pybind11 REQUIRED CONFIG)
+ endif()

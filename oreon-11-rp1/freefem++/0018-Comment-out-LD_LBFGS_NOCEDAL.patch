@@ -1,0 +1,52 @@
+From 169dfd21b0578a050f937f0aa73084f9723592ea Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 22 Dec 2024 16:19:29 +0100
+Subject: [PATCH 18/18] Comment out LD_LBFGS_NOCEDAL
+
+---
+ plugin/seq/ff-NLopt.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/plugin/seq/ff-NLopt.cpp b/plugin/seq/ff-NLopt.cpp
+index 9bd3facc2..eb7e48d43 100644
+--- a/plugin/seq/ff-NLopt.cpp
++++ b/plugin/seq/ff-NLopt.cpp
+@@ -43,11 +43,13 @@ struct Info {
+   static const bool DF = true, SA = false;
+   static const char *name;
+ };    // DF=Derivative Free , SA=need a Sub Algorithm
++#if UNUSED
+ template<>
+ struct Info< nlopt::LD_LBFGS_NOCEDAL > {
+   static const bool DF = false, SA = false;
+   static const char *name;
+ };
++#endif
+ template<>
+ struct Info< nlopt::LD_LBFGS > {
+   static const bool DF = false, SA = false;
+@@ -187,7 +189,9 @@ const char *Info< nlopt::GN_ORIG_DIRECT_L >::name =
+   "Original Glabonsky's Locally Biased Dividing Rectangles";
+ const char *Info< nlopt::GD_STOGO >::name = "StoGO";
+ const char *Info< nlopt::GD_STOGO_RAND >::name = "Randomized StoGO";
++#if UNUSED
+ const char *Info< nlopt::LD_LBFGS_NOCEDAL >::name = "Nocedal's Low-Storage BFGS";
++#endif
+ const char *Info< nlopt::LD_LBFGS >::name = "Low-Storage BFGS";
+ template<>
+ const char *Info< nlopt::LN_PRAXIS >::name = "Principal Axis";
+@@ -1444,9 +1448,11 @@ static void Load_Init( ) {
+   Global.Add("nloptOrigDIRECTL", "(", new OptimNLopt< nlopt::GN_ORIG_DIRECT_L >(1));
+   Global.Add("nloptStoGO", "(", new OptimNLopt< nlopt::GD_STOGO >(1));
+   Global.Add("nloptStoGORand", "(", new OptimNLopt< nlopt::GD_STOGO_RAND >(1));
++#if UNUSED
+   // Global.Add("nloptLBFGSNocedal",					"(",new
+   // OptimNLopt<nlopt::LD_LBFGS_NOCEDAL>(1));
+   // //Invalid argument
++#endif
+   Global.Add("nloptLBFGS", "(", new OptimNLopt< nlopt::LD_LBFGS >(1));
+   Global.Add("nloptPRAXIS", "(", new OptimNLopt< nlopt::LN_PRAXIS >(1));
+   Global.Add("nloptVar1", "(", new OptimNLopt< nlopt::LD_VAR1 >(1));
+-- 
+2.47.1
+

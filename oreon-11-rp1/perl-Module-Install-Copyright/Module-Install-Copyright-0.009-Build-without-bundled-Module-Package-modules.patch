@@ -1,0 +1,31 @@
+From 3295aeca214313015ca5c444f1a5b9d50124b6dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 24 Jun 2016 15:38:03 +0200
+Subject: [PATCH] Build without bundled Module::Package modules
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This Module-Install-Copyright distribution bundles
+inc/Module/Package/Dist/RDF.pm that is loaded from Makefile.PL by
+inc::Module::Install via Module::Package via Module::Package::RDF.
+Module::Package::RDF run-requires this Module-Install-Copyright
+distribution.
+
+This patch breaks the build cycle.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9be3edc..4e29aa4 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1 +1 @@
+-use inc::Module::Package 'RDF:tobyink 0.012';
++use inc::Module::Package;
+-- 
+2.5.5
+

@@ -1,0 +1,46 @@
+--- a/gendarme/rules/Gendarme.Rules.Exceptions/DoNotThrowInUnexpectedLocationRule.cs	2019-07-12 21:24:10.414799788 +0200
++++ b/gendarme/rules/Gendarme.Rules.Exceptions/DoNotThrowInUnexpectedLocationRule.cs	2019-07-12 21:45:04.148079301 +0200
+@@ -120,39 +120,11 @@
+ 	/// System.NotImplementedException because 
+ 	/// DoNotForgetNotImplementedMethodsRule will flag them. Also the rule
+ 	/// may fire with anonymous types with gmcs versions prior to 2.2, see
+-	/// [https://bugzilla.novell.com/show_bug.cgi?id=462622] for more details.
++	/// https://bugzilla.novell.com/show_bug.cgi?id=462622 for more details.
+ 	/// </summary>
+-	/// <example>
+-	/// Bad example:
+-	/// <code>
+-	/// public override bool Equals (object obj)
+-	/// {
+-	/// 	if (obj == null) {
+-	/// 		return false;
+-	/// 	}
+-	/// 	
+-	/// 	Customer rhs = (Customer) obj;	// throws if obj is not a Customer
+-	/// 	return name == rhs.name;
+-	/// }
+-	/// </code>
+-	/// </example>
+-	/// <example>
+-	/// Good example:
+-	/// <code>
+-	/// public override bool Equals (object obj)
+-	/// {
+-	/// 	Customer rhs = obj as Customer;
+-	/// 	if (rhs == null) {
+-	/// 		return false;
+-	/// 	}
+-	/// 	
+-	/// 	return name == rhs.name;
+-	/// }
+-	/// </code>
+-	/// </example>
+-	/// <remarks>This rule is available since Gendarme 2.4</remarks>
+-
+-	// http://msdn.microsoft.com/en-us/library/bb386039.aspx
++	/// <remarks>This rule is available since Gendarme 2.4
++	/// see also http://msdn.microsoft.com/en-us/library/bb386039.aspx
++        /// </remarks>
+ 	[Problem ("A method throws an exception it should not.")]
+ 	[Solution ("Change the code so that it does not throw, throws a legal exception, or traps exceptions.")]
+ 	[FxCopCompatibility ("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]

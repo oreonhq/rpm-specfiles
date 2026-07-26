@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Flobopuyo
+GenericName=2 player Falling dots game
+Comment=Match the dots to confound your opponent
+Exec=flobopuyo
+Icon=flobopuyo
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;BlocksGame;

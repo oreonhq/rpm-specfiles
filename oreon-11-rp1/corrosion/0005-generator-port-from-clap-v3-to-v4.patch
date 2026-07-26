@@ -1,0 +1,88 @@
+From 882ca098eeb1b0ad113f58ff9098bec7bdd90b78 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 20 Sep 2024 23:26:05 +0200
+Subject: [PATCH 5/7] generator: port from clap v3 to v4
+
+---
+ generator/Cargo.toml                   |  2 +-
+ generator/src/main.rs                  |  2 +-
+ generator/src/subcommands/gen_cmake.rs | 12 ++++++------
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/generator/Cargo.toml b/generator/Cargo.toml
+index fbb53a1..9964e5d 100644
+--- a/generator/Cargo.toml
++++ b/generator/Cargo.toml
+@@ -10,7 +10,7 @@ cargo_metadata = "0.18"
+ serde = { version = " 1.0.186", features = ["derive"] }
+ 
+ [dependencies.clap]
+-version = "3"
++version = "4"
+ default-features = false
+ features = ["std"]
+ 
+diff --git a/generator/src/main.rs b/generator/src/main.rs
+index cbcf101..067224a 100644
+--- a/generator/src/main.rs
++++ b/generator/src/main.rs
+@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
+                 .value_name("Cargo.toml")
+                 .help("Specifies the target Cargo project")
+                 .required(true)
+-                .takes_value(true),
++                .num_args(1),
+         )
+         .arg(
+             Arg::new(CARGO_EXECUTABLE)
+diff --git a/generator/src/subcommands/gen_cmake.rs b/generator/src/subcommands/gen_cmake.rs
+index ab01c08..91ed3bd 100644
+--- a/generator/src/subcommands/gen_cmake.rs
++++ b/generator/src/subcommands/gen_cmake.rs
+@@ -20,13 +20,13 @@ const IMPORTED_CRATES: &str = "imported-crates";
+ const CRATE_TYPE: &str = "crate-type";
+ const PASSTHROUGH_ADD_CARGO_BUILD: &str = "passthrough-acb";
+ 
+-pub fn subcommand() -> Command<'static> {
++pub fn subcommand() -> Command {
+     Command::new(GEN_CMAKE)
+         .arg(
+             Arg::new(CONFIGURATION_ROOT)
+                 .long("configuration-root")
+                 .value_name("DIRECTORY")
+-                .takes_value(true)
++                .num_args(1)
+                 .help(
+                     "Specifies a root directory for configuration folders. E.g. Win32 \
+                  in VS Generator.",
+@@ -36,9 +36,9 @@ pub fn subcommand() -> Command<'static> {
+             Arg::new(CRATES)
+                 .long("crates")
+                 .value_name("crates")
+-                .takes_value(true)
++                .num_args(1..)
+                 .action(ArgAction::Append)
+-                .require_value_delimiter(true)
++                .value_delimiter(' ')
+                 .help("Specifies which crates of the workspace to import"),
+         )
+         .arg(
+@@ -61,13 +61,13 @@ pub fn subcommand() -> Command<'static> {
+             Arg::new(IMPORTED_CRATES)
+                 .long(IMPORTED_CRATES)
+                 .value_name("variable_name")
+-                .takes_value(true)
++                .num_args(1)
+                 .help("Save a list of the imported target names into c CMake variable with the given name"),
+         )
+         .arg(
+             Arg::new(PASSTHROUGH_ADD_CARGO_BUILD)
+                 .long(PASSTHROUGH_ADD_CARGO_BUILD)
+-                .takes_value(true)
++                .num_args(1..)
+                 .action(ArgAction::Append)
+                 .value_delimiter(std::char::from_u32(0x1f).unwrap())
+                 .help("Passthrough arguments to the _add_cargo_build invocation(s) in CMake")
+-- 
+2.46.0
+

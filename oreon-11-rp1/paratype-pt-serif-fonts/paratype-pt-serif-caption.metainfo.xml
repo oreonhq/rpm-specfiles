@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Rajeesh K V <rajeesh AT inflow DOT ws> -->
+<component type="font">
+  <id>paratype-pt-serif-caption</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <extends>paratype-pt-serif</extends>
+</component>
+

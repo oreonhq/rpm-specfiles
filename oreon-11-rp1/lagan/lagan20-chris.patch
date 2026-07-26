@@ -1,0 +1,662 @@
+diff -up lagan20/Readmes/README.FIRST.chris lagan20/Readmes/README.FIRST
+--- lagan20/Readmes/README.FIRST.chris	2006-09-14 23:23:08.000000000 +0200
++++ lagan20/Readmes/README.FIRST	2007-09-18 17:27:46.000000000 +0200
+@@ -30,8 +30,7 @@ This will create the executable files ch
+ glocal, prolagan as well as many tools in the utils directory. 
+ 
+ You may also need to go into all the .pl file, and change the first line
+-to call your perl interpreter. You must also specify an environment
+-variable $LAGAN_DIR to point to the directory where you installed LAGAN.
++to call your perl interpreter.
+ 
+ Because LAGAN uses no system-dependent or implementation dependent 
+ libraries it should compile on all platforms and ANSI C compilers. 
+diff -up lagan20/Readmes/README.shuffle.chris lagan20/Readmes/README.shuffle
+--- lagan20/Readmes/README.shuffle.chris	2006-09-15 01:14:40.000000000 +0200
++++ lagan20/Readmes/README.shuffle	2007-09-18 17:27:46.000000000 +0200
+@@ -13,14 +13,13 @@ unpublished.
+ 1. Installation
+ 
+ If you received Shuffle-LAGAN as part of the LAGAN toolkit it is installed 
+-automatically with the rest of the package. The code assumes $LAGAN_DIR 
+-has been set. 
++automatically with the rest of the package.
+ 
+ 
+ 2. Running
+ Just give it two sequences and let it roll:
+ 
+-#slagan.pl seq1.fa seq2.fa 
++#slagan seq1.fa seq2.fa 
+ 
+ 3. Input
+ 
+diff -up lagan20/Readmes/README.chaos.chris lagan20/Readmes/README.chaos
+--- lagan20/Readmes/README.chaos.chris	2006-09-14 22:40:19.000000000 +0200
++++ lagan20/Readmes/README.chaos	2007-09-18 17:27:46.000000000 +0200
+@@ -29,13 +29,7 @@ connecting CHAOS with DIALIGN. Both thes
+ 
+ Because CHAOS uses no system-dependent or implementation dependent libraries
+ it should compile on all platforms and ANSI C compilers. If you have problems
+-compiling the sources please e-mail the author. You will need to also set the
+-environment variable LAGAN_DIR to the directory where you installed CHAOS. in
+-c-shell this can be done by executing
+-
+-% setenv LAGAN_DIR `pwd`
+-
+-on the prompt. For other shells the command differs.
++compiling the sources please e-mail the author.
+ 
+ II Description
+    CHAOS is a heuristic local alignment tool optimized for non-coding 
+diff -up lagan20/Readmes/README.lagan.chris lagan20/Readmes/README.lagan
+--- lagan20/Readmes/README.lagan.chris	2006-09-15 01:12:53.000000000 +0200
++++ lagan20/Readmes/README.lagan	2007-09-18 17:27:46.000000000 +0200
+@@ -22,7 +22,7 @@ using the anchors program.
+ 3. Doing global alignment in a limited area of thw NW matrix given the set of 
+ anchors (order tool).
+ 
+-lagan.pl is the main executable that calls the three steps.
++lagan is the main executable that calls the three steps.
+ 
+ II Usage
+ 
+diff -up lagan20/src/utils/scorealign.c.chris lagan20/src/utils/scorealign.c
+--- lagan20/src/utils/scorealign.c.chris	2006-09-14 22:40:18.000000000 +0200
++++ lagan20/src/utils/scorealign.c	2007-09-18 17:27:46.000000000 +0200
+@@ -402,10 +402,6 @@ void readScoreMatrix (char *filename){
+   char *lagan_dir;
+ 
+   lagan_dir = getenv ("LAGAN_DIR");
+-  if (!lagan_dir){
+-    fprintf (stderr, "Error: $LAGAN_DIR not set.\n");
+-    exit (1);
+-  }
+ 
+   sprintf (line, "%s/%s", lagan_dir, filename);
+   fprintf (stderr, "%s\n", line);
+diff -up lagan20/src/utils/Glue.cpp.chris lagan20/src/utils/Glue.cpp
+--- lagan20/src/utils/Glue.cpp.chris	2006-09-14 22:40:18.000000000 +0200
++++ lagan20/src/utils/Glue.cpp	2008-01-27 00:10:28.000000000 +0100
+@@ -6,6 +6,7 @@
+ #include <fstream>
+ #include <iostream>
+ #include <algorithm>
++#include <cstring>
+ 
+ #define NUCLEOTIDE_MATRIX_FILE "nucmatrix.txt"
+ #define MAX_LINE_LENGTH 1024
+@@ -30,10 +31,6 @@ void readScoreMatrix (char *filename){
+   char *lagan_dir;
+ 
+   lagan_dir = getenv ("LAGAN_DIR");
+-  if (!lagan_dir){
+-    fprintf (stderr, "Error: $LAGAN_DIR not set.\n");
+-    exit (1);
+-  }
+ 
+   sprintf (line, "%s/%s", lagan_dir, filename);
+   fprintf (stderr, "%s\n", line);
+diff -up lagan20/src/utils/mrun.pl.chris lagan20/src/utils/mrun.pl
+--- lagan20/src/utils/mrun.pl.chris	2006-09-14 22:40:18.000000000 +0200
++++ lagan20/src/utils/mrun.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -1,11 +1,6 @@
+ #!/usr/bin/env perl
+ 
+-# This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
+-
+-# VISTA .plotfile defaults
+-
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ $paregmin = 75;
+ $paregmax = 100;
+@@ -87,11 +82,6 @@ if (!$treespec) { 
+     exit(1);
+ }
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ $mextstr = "$lagandir/utils/mextract.pl $filename";
+ print "$mextstr\n";
+ if(!`$mextstr`) { print "\nMulti-FASTA extraction failure...\n"; exit(1); }
+diff -up lagan20/src/utils/mrunfile.pl.chris lagan20/src/utils/mrunfile.pl
+--- lagan20/src/utils/mrunfile.pl.chris	2006-09-14 22:40:18.000000000 +0200
++++ lagan20/src/utils/mrunfile.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -1,14 +1,14 @@
+ #!/usr/bin/env perl
+ 
+ # This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
++# VISTA_DIR
+ 
+ if (@ARGV < 1) {
+     print ("usage:\n mrunfile.pl filename [-pairwise] [-vista]\n\n");
+     exit(1);
+ }
+ 
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ 
+ $filename = $ARGV[0];
+@@ -48,11 +48,6 @@ while ($line = <PARAMFILE>) {
+     }
+ }
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ if ($pairwise) {
+     $mexecs = "mrunpairs.pl";
+ } else {
+diff -up lagan20/src/utils/mrunpairs.pl.chris lagan20/src/utils/mrunpairs.pl
+--- lagan20/src/utils/mrunpairs.pl.chris	2006-09-14 22:40:18.000000000 +0200
++++ lagan20/src/utils/mrunpairs.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -1,11 +1,6 @@
+ #!/usr/bin/env perl
+ 
+-# This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
+-
+-# VISTA .plotfile defaults
+-
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ $paregmin = 75;
+ $paregmax = 100;
+@@ -87,11 +82,6 @@ if (!$treespec) { 
+     @params[++$j] = "\"()\"";
+ }
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ $mextstr = "$lagandir/mextract.pl $filename";
+ print "$mextstr\n";
+ if(!`$mextstr`) { print "\nMulti-FASTA extraction failure...\n"; exit(1); }
+diff -up lagan20/src/utils/mviz.pl.chris lagan20/src/utils/mviz.pl
+--- lagan20/src/utils/mviz.pl.chris	2006-09-14 22:40:18.000000000 +0200
++++ lagan20/src/utils/mviz.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -2,9 +2,9 @@
+ 
+ 
+ # This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
++# VISTA_DIR
+ 
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ $paregmin = 75;
+ $paregmax = 100;
+@@ -57,11 +57,6 @@ while ($line = <PARAMFILE>) {
+ 
+ $seqfile = @ARGV[0];
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ for ($i=0; $i<@vparams; $i+=2) {
+     if (@vparams[$i] eq "--regmin") { $paregmin = @vparams[$i+1]; }
+     elsif (@vparams[$i] eq "--regmax") { $paregmax = @vparams[$i+1]; }
+diff -up lagan20/src/mlagan.c.chris lagan20/src/mlagan.c
+--- lagan20/src/mlagan.c.chris	2006-09-15 17:57:48.000000000 +0200
++++ lagan20/src/mlagan.c	2007-09-18 17:27:46.000000000 +0200
+@@ -950,10 +950,6 @@ int main(int argc, char** argv) {
+ 
+   outfile = stdout;
+   lagan_dir = getenv ("LAGAN_DIR");
+-  if (!lagan_dir) {
+-    fprintf(stderr, "Environment variable LAGAN_DIR not set\n");
+-    exit(1);
+-  }
+ 
+   buildcache();
+   initLib();
+diff -up lagan20/src/prolagan.c.chris lagan20/src/prolagan.c
+--- lagan20/src/prolagan.c.chris	2006-09-14 23:17:32.000000000 +0200
++++ lagan20/src/prolagan.c	2007-09-18 17:27:46.000000000 +0200
+@@ -968,10 +968,6 @@ int main(int argc, char** argv) {
+ 
+   outfile = stdout;
+   lagan_dir = getenv ("LAGAN_DIR");
+-  if (!lagan_dir) {
+-    fprintf(stderr, "Environment variable LAGAN_DIR not set\n");
+-    exit(1);
+-  }
+ 
+   buildcache();
+   initLib();
+diff -up lagan20/src/slagan-mfa.pl.chris lagan20/src/slagan-mfa.pl
+--- lagan20/src/slagan-mfa.pl.chris	2006-09-14 22:40:19.000000000 +0200
++++ lagan20/src/slagan-mfa.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -4,7 +4,6 @@ use strict;
+ 
+ $0 = rindex($0, "/") > -1 ? substr($0, rindex($0, "/")+1) : $0;
+ 
+-die("$0: LAGAN_DIR not defined. Stopped") unless defined $ENV{"LAGAN_DIR"};
+ my $LAGAN_DIR = $ENV{LAGAN_DIR};
+ 
+ my ($outfile, $base);
+diff -up lagan20/src/supermap.pl.chris lagan20/src/supermap.pl
+--- lagan20/src/supermap.pl.chris	2006-09-14 22:40:19.000000000 +0200
++++ lagan20/src/supermap.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -18,7 +18,6 @@ my $max_job_size = 50000; # Maximum job 
+ my $erode_align = 15; # Amount by which to erode the coords of each align loaded (to avoid overlap problems when chaining)
+ my ($c1, $c2, $c3, $c4) = (100, 50, 400, 25); # BLAT->CHAOS score conversion parameters
+ #my $max_dist_y = 10000; # Join x-monotonic into same single-chain only if at most that apart in y-species.
+-my $default_lagan_dir = "/home/genome/glocal";
+ my $glocal_name = (0 ? "SLAGAN" : "glocal");
+ 
+ use Getopt::Long;
+@@ -93,12 +92,7 @@ my $supermapexec = $0; my $mycwd = getcw
+ die("$0: Problem resolving my name, \'$supermapexec\' is not a file") unless -f $supermapexec or $ARGV[0] eq "worker";
+ $0 = rindex($0, "/") > -1 ? substr($0, rindex($0, "/")+1) : $0;
+ 
+-$lagan_dir = $ENV{"LAGAN_DIR"} if defined $ENV{"LAGAN_DIR"};
+-$lagan_dir = $ENV{"LAGAN_DIR"} = $default_lagan_dir unless defined $ENV{"LAGAN_DIR"};
+-$lagan_dir =~ s/^\.\./$mycwd\/\.\./;
+-$lagan_dir =~ s/^\./$mycwd\//;
+-$ENV{"LAGAN_DIR"} = $lagan_dir;
+-print STDERR "$0: Warning: LAGAN_DIR=$lagan_dir is not a valid directory\n" unless -d $lagan_dir;
++$lagan_dir = $ENV{LAGAN_DIR};
+ push @INC, $lagan_dir;
+ 
+ my $SLAGAN = $lagan_dir."/".$glocal_name;
+diff -up lagan20/src/xmfa2mfa.pl.chris lagan20/src/xmfa2mfa.pl
+--- lagan20/src/xmfa2mfa.pl.chris	2006-09-14 22:40:19.000000000 +0200
++++ lagan20/src/xmfa2mfa.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -9,8 +9,6 @@ my ($line, $line_in, $type);
+ 
+ my $mode = ($ARGV[0] eq "1" ? "M1" : ($ARGV[0] eq "2" ? "M2" : die("$0: Invalid base genome argument (expected 1 or 2)")));
+ 
+-die("$0: LAGAN_DIR not defined. Stopped") unless defined $ENV{"LAGAN_DIR"};
+-
+ while (<STDIN>) {
+ 	$line_in = $_;
+ 	if ($line_in =~ /^\=.*(DM|M1|M2)$/) {
+@@ -47,7 +45,7 @@ open(OUT, "> tmp.xmfa");
+ foreach my $line (@filt_lines) { print OUT $line; }
+ close OUT;
+ 
+-system($ENV{"LAGAN_DIR"}."/utils/Glue tmp.xmfa > glue.out 2> glue.err");
++system($ENV{LAGAN_DIR}."/utils/Glue tmp.xmfa > glue.out 2> glue.err");
+ 
+ open(IN, "< glue.out");
+ my @glue_out = <IN>;
+diff -up lagan20/utils/mrunpairs.pl.chris lagan20/utils/mrunpairs.pl
+--- lagan20/utils/mrunpairs.pl.chris	2006-09-14 22:40:17.000000000 +0200
++++ lagan20/utils/mrunpairs.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -1,11 +1,6 @@
+ #!/usr/bin/env perl
+ 
+-# This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
+-
+-# VISTA .plotfile defaults
+-
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ $paregmin = 75;
+ $paregmax = 100;
+@@ -87,11 +82,6 @@ if (!$treespec) { 
+     @params[++$j] = "\"()\"";
+ }
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ $mextstr = "$lagandir/mextract.pl $filename";
+ print "$mextstr\n";
+ if(!`$mextstr`) { print "\nMulti-FASTA extraction failure...\n"; exit(1); }
+@@ -189,7 +179,7 @@ for($i=1; $i<@targets; $i+=2) {
+ 	$mparams = "$mparams $s";
+     }
+     
+-    $mlagan = "$lagandir/mlagan$mfiles$mparams > $outprefix.out";
++    $mlagan = "mlagan$mfiles$mparams > $outprefix.out";
+     print "\n$mlagan\n\n";
+     if(`$mlagan`) { print "\n\n"; exit(1); }
+ 
+diff -up lagan20/utils/draft.pl.chris lagan20/utils/draft.pl
+--- lagan20/utils/draft.pl.chris	2006-09-14 22:40:17.000000000 +0200
++++ lagan20/utils/draft.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -109,7 +109,7 @@ for ($i = 0; $i < @contigs; $i++){
+     $skip1 = $skip2 = 0;
+     # make alignments
+     if (!$lazyflag || !(-e "$contigs[$i].mfa")){
+-	$execute = "perl $lagandir/lagan.pl $ARGV[0] $contigs[$i] -mfa $arglist -out $contigs[$i].mfa";
++	$execute = "lagan $ARGV[0] $contigs[$i] -mfa $arglist -out $contigs[$i].mfa";
+ 	$execute = $execute." -gap $anchgapstart $anchgapcont" if ($usebounds);
+ 	`$execute`;
+ 	$ex_val = $? >> 8;
+@@ -128,7 +128,7 @@ for ($i = 0; $i < @contigs; $i++){
+     }
+ 
+     if (!$lazyflag || !(-e "$contigs[$i].rc.mfa")){
+-	$execute = "perl $lagandir/lagan.pl $ARGV[0] $contigs[$i].rc -mfa $arglist -out $contigs[$i].rc.mfa";
++	$execute = "lagan $ARGV[0] $contigs[$i].rc -mfa $arglist -out $contigs[$i].rc.mfa";
+ 	$execute = $execute." -gap $anchgapstart $anchgapcont" if ($usebounds);
+ 	`$execute`;
+ 	$ex_val = $? >> 8;
+diff -up lagan20/utils/mrunfile.pl.chris lagan20/utils/mrunfile.pl
+--- lagan20/utils/mrunfile.pl.chris	2006-09-14 22:40:17.000000000 +0200
++++ lagan20/utils/mrunfile.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -1,14 +1,14 @@
+ #!/usr/bin/env perl
+ 
+ # This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
++# VISTA_DIR
+ 
+ if (@ARGV < 1) {
+     print ("usage:\n mrunfile.pl filename [-pairwise] [-vista]\n\n");
+     exit(1);
+ }
+ 
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ 
+ $filename = $ARGV[0];
+@@ -48,11 +48,6 @@ while ($line = <PARAMFILE>) {
+     }
+ }
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ if ($pairwise) {
+     $mexecs = "mrunpairs.pl";
+ } else {
+diff -up lagan20/utils/mviz.pl.chris lagan20/utils/mviz.pl
+--- lagan20/utils/mviz.pl.chris	2006-09-14 22:40:17.000000000 +0200
++++ lagan20/utils/mviz.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -2,9 +2,9 @@
+ 
+ 
+ # This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
++# VISTA_DIR
+ 
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ $paregmin = 75;
+ $paregmax = 100;
+@@ -57,11 +57,6 @@ while ($line = <PARAMFILE>) {
+ 
+ $seqfile = @ARGV[0];
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ for ($i=0; $i<@vparams; $i+=2) {
+     if (@vparams[$i] eq "--regmin") { $paregmin = @vparams[$i+1]; }
+     elsif (@vparams[$i] eq "--regmax") { $paregmax = @vparams[$i+1]; }
+diff -up lagan20/utils/mrun.pl.chris lagan20/utils/mrun.pl
+--- lagan20/utils/mrun.pl.chris	2006-09-14 22:40:17.000000000 +0200
++++ lagan20/utils/mrun.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -1,11 +1,6 @@
+ #!/usr/bin/env perl
+ 
+-# This script requires the environment variables:
+-# LAGAN_DIR and VISTA_DIR
+-
+-# VISTA .plotfile defaults
+-
+-($lagandir = $ENV{LAGAN_DIR}) or die "LAGAN_DIR not set";
++$lagandir = $ENV{LAGAN_DIR};
+ 
+ $paregmin = 75;
+ $paregmax = 100;
+@@ -87,11 +82,6 @@ if (!$treespec) { 
+     exit(1);
+ }
+ 
+-if ($lagandir eq "") {
+-    print ("Must specify environment variable LAGAN_DIR\n");
+-    exit(1);
+-}
+-
+ $mextstr = "$lagandir/utils/mextract.pl $filename";
+ print "$mextstr\n";
+ if(!`$mextstr`) { print "\nMulti-FASTA extraction failure...\n"; exit(1); }
+@@ -169,7 +159,7 @@ foreach $s (@params) {
+     $mparams = "$mparams $s";
+ }
+ 
+-$mlagan = "$lagandir/mlagan$mfiles$mparams > $prefix.out";
++$mlagan = "mlagan$mfiles$mparams > $prefix.out";
+ print STDERR "\n$mlagan\n\n";
+ if(`$mlagan`) { print "\n\n"; exit(1); }
+ 
+diff -up lagan20/slagan.pl.chris lagan20/slagan.pl
+--- lagan20/slagan.pl.chris	2006-09-14 22:40:20.000000000 +0200
++++ lagan20/slagan.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -5,7 +5,7 @@ use strict;
+ my $lagandir = $ENV{LAGAN_DIR};
+ 
+ if (@ARGV < 2) {
+-	print ("Usage:\n slagan.pl seqfile1 seqfile2 [-glocal \"glocal flags\"] [-chaos \"chaos flags\"] [-order \"order flags\"] [-recurse \"(wl1,nd1,co1),(wl2,nd2,co2),...\"] [-mfa] [-out \"filename\"] [-maskedonly] [-debug] [-translate] [-fastreject]\n");
++	print ("Usage:\n slagan seqfile1 seqfile2 [-glocal \"glocal flags\"] [-chaos \"chaos flags\"] [-order \"order flags\"] [-recurse \"(wl1,nd1,co1),(wl2,nd2,co2),...\"] [-mfa] [-out \"filename\"] [-maskedonly] [-debug] [-translate] [-fastreject]\n");
+ 	exit(1);
+ }
+ 
+@@ -85,7 +85,7 @@ if ($lazy && -e "${outName1}_$outName2.c
+     `cp ${outName1}_$outName2.chaos chaos.$$`;
+ }
+ else {
+-    `$lagandir/chaos $seq1 $seq2 $chaos_fl > chaos.$$`;
++    `chaos $seq1 $seq2 $chaos_fl > chaos.$$`;
+     if ($?) { exit(1); }
+     `cat chaos.$$ > ${outName1}_$outName2.chaos`;
+ }
+@@ -123,8 +123,8 @@ for (my $k = 0; $k < @regs; $k++) {
+ 	if ($extra1) { `$lagandir/utils/fa2xfa $seq1 $startreg1 $endreg1 1 > seq1$k.$$.masked\n`; }
+ 	if ($extra2) { `$lagandir/utils/fa2xfa $seq2 $startreg2 $endreg2 2 $rcf > seq2$k.$$.masked\n`; }
+ 
+-#print "$lagandir/lagan.pl seq1$k.$$ seq2$k.$$ $arglist $lagan_fl -mfa -out lagan.$k.$$\n";
+-	`$lagandir/lagan.pl seq1$k.$$ seq2$k.$$ $arglist $lagan_fl -mfa -out lagan.$k.$$\n`;
++#print "lagan seq1$k.$$ seq2$k.$$ $arglist $lagan_fl -mfa -out lagan.$k.$$\n";
++	`lagan seq1$k.$$ seq2$k.$$ $arglist $lagan_fl -mfa -out lagan.$k.$$\n`;
+ 
+ 	my $suff = "";
+ 	if ($outfile) { $suff = " >> $outfile"; }
+diff -up lagan20/lagan.pl.chris lagan20/lagan.pl
+--- lagan20/lagan.pl.chris	2006-09-14 22:40:20.000000000 +0200
++++ lagan20/lagan.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -105,13 +105,13 @@ for ($i = 2; $i < @ARGV; $i++) {
+ 	$rundraft = 1;
+     }
+     elsif ($ARGV[$i] =~ /-cons/){
+-	$draftparams = $draftparams." -cons $ARGV[$++i]";
++	$draftparams = $draftparams." -cons ".$ARGV[++$i];
+     }
+     elsif ($ARGV[$i] =~ /-draftskipfr/){
+-	$draftparams = $draftparams." -skipfr $ARGV[$++i]";
++	$draftparams = $draftparams." -skipfr ".$ARGV[++$i];
+     }
+     elsif ($ARGV[$i] =~ /-lazy/){
+-	$draftparams = $draftparams." -cons $ARGV[$++i]";
++	$draftparams = $draftparams." -cons ".$ARGV[++$i];
+     }
+ 
+     else {
+@@ -233,7 +233,7 @@ if ($infofile == 3){
+ #    `$lagandir/utils/rm $infofilename` if ($binfile);
+ }
+ 
+-`rm $secondName` if ($rcflag);
++`rm $secondName` if ($rcFlag);
+ `rm $$.*`;
+ if ($?) { exit(1); }
+ 
+diff -up lagan20/rechaos.pl.chris lagan20/rechaos.pl
+--- lagan20/rechaos.pl.chris	2006-09-14 22:40:20.000000000 +0200
++++ lagan20/rechaos.pl	2007-09-18 17:28:54.000000000 +0200
+@@ -182,12 +182,12 @@ while (1) {
+ #    print STDERR "-----------------\n";
+ #    print STDERR `cat $$.anchs.pairs`;
+ #    print STDERR "-----------------\n";
+-#    print STDERR "$lagandir/chaos $seq1 $seq2 -wl $wordlen -nd $degeneracy -co $cutoff $extraparams $gfc $chaosfl -pairs $$.anchs.pairs > $$.anchtemp";
++#    print STDERR "chaos $seq1 $seq2 -wl $wordlen -nd $degeneracy -co $cutoff $extraparams $gfc $chaosfl -pairs $$.anchs.pairs > $$.anchtemp";
+ 
+ # PERFORM THE ALIGNMENTS USING CHAOS
+     
+-    $saver = "$lagandir/chaos $seq1 $seq2 $extraparams -wl $wordlen -nd $degeneracy -co $cutoff $gfc $chaosfl -pairs $$.anchs.pairs > $$.anchtemp";
+-    `$lagandir/chaos $seq1 $seq2 $extraparams -wl $wordlen -nd $degeneracy -co $cutoff $gfc $chaosfl -pairs $$.anchs.pairs > $$.anchtemp`;
++    $saver = "chaos $seq1 $seq2 $extraparams -wl $wordlen -nd $degeneracy -co $cutoff $gfc $chaosfl -pairs $$.anchs.pairs > $$.anchtemp";
++    `chaos $seq1 $seq2 $extraparams -wl $wordlen -nd $degeneracy -co $cutoff $gfc $chaosfl -pairs $$.anchs.pairs > $$.anchtemp`;
+     if ($?) { 
+ 	print STDERR "$saver\n";
+ 	exit(1); 
+@@ -216,7 +216,7 @@ while (1) {
+ 
+ # FIND MAXIMAL-SCORING CONSISTENT CHAIN
+ 
+-    `$lagandir/anchors $$.anchtemp $gfc $anchparams | sort -n +1 > $$.anchs.sorted`;
++    `$lagandir/anchors $$.anchtemp $gfc $anchparams | sort -n -k 2 > $$.anchs.sorted`;
+     if ($?) { exit(1); }
+ 
+ # IF WE'RE DONE, THEN QUIT!
+@@ -243,7 +243,6 @@ while (1) {
+     @b2new = 0;
+     @e1new = 0;
+     @e2new = 0;
+-    @scores = 0;
+ 
+     $app_str = "";
+     
+@@ -357,7 +356,7 @@ while (1) {
+     $i++;
+ }
+ 
+-$res = `sort -nr +1 $$.anchs.sorted`;
++$res = `sort -nr -k 2 $$.anchs.sorted`;
+ if ($?) { exit(1); }
+ 
+ `rm $$.*`;
+diff -up lagan20/slagan-mfa.pl.chris lagan20/slagan-mfa.pl
+--- lagan20/slagan-mfa.pl.chris	2006-09-14 22:40:20.000000000 +0200
++++ lagan20/slagan-mfa.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -4,7 +4,6 @@ use strict;
+ 
+ $0 = rindex($0, "/") > -1 ? substr($0, rindex($0, "/")+1) : $0;
+ 
+-die("$0: LAGAN_DIR not defined. Stopped") unless defined $ENV{"LAGAN_DIR"};
+ my $LAGAN_DIR = $ENV{LAGAN_DIR};
+ 
+ my ($outfile, $base);
+diff -up lagan20/supermap.pl.chris lagan20/supermap.pl
+--- lagan20/supermap.pl.chris	2006-09-14 22:40:20.000000000 +0200
++++ lagan20/supermap.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -18,7 +18,6 @@ my $max_job_size = 50000; # Maximum job 
+ my $erode_align = 15; # Amount by which to erode the coords of each align loaded (to avoid overlap problems when chaining)
+ my ($c1, $c2, $c3, $c4) = (100, 50, 400, 25); # BLAT->CHAOS score conversion parameters
+ #my $max_dist_y = 10000; # Join x-monotonic into same single-chain only if at most that apart in y-species.
+-my $default_lagan_dir = "/home/genome/glocal";
+ my $glocal_name = (0 ? "SLAGAN" : "glocal");
+ 
+ use Getopt::Long;
+@@ -93,12 +92,7 @@ my $supermapexec = $0; my $mycwd = getcw
+ die("$0: Problem resolving my name, \'$supermapexec\' is not a file") unless -f $supermapexec or $ARGV[0] eq "worker";
+ $0 = rindex($0, "/") > -1 ? substr($0, rindex($0, "/")+1) : $0;
+ 
+-$lagan_dir = $ENV{"LAGAN_DIR"} if defined $ENV{"LAGAN_DIR"};
+-$lagan_dir = $ENV{"LAGAN_DIR"} = $default_lagan_dir unless defined $ENV{"LAGAN_DIR"};
+-$lagan_dir =~ s/^\.\./$mycwd\/\.\./;
+-$lagan_dir =~ s/^\./$mycwd\//;
+-$ENV{"LAGAN_DIR"} = $lagan_dir;
+-print STDERR "$0: Warning: LAGAN_DIR=$lagan_dir is not a valid directory\n" unless -d $lagan_dir;
++$lagan_dir = $ENV{LAGAN_DIR};
+ push @INC, $lagan_dir;
+ 
+ my $SLAGAN = $lagan_dir."/".$glocal_name;
+diff -up lagan20/xmfa2mfa.pl.chris lagan20/xmfa2mfa.pl
+--- lagan20/xmfa2mfa.pl.chris	2006-09-14 22:40:20.000000000 +0200
++++ lagan20/xmfa2mfa.pl	2007-09-18 17:27:46.000000000 +0200
+@@ -9,8 +9,6 @@ my ($line, $line_in, $type);
+ 
+ my $mode = ($ARGV[0] eq "1" ? "M1" : ($ARGV[0] eq "2" ? "M2" : die("$0: Invalid base genome argument (expected 1 or 2)")));
+ 
+-die("$0: LAGAN_DIR not defined. Stopped") unless defined $ENV{"LAGAN_DIR"};
+-
+ while (<STDIN>) {
+ 	$line_in = $_;
+ 	if ($line_in =~ /^\=.*(DM|M1|M2)$/) {
+@@ -47,7 +45,7 @@ open(OUT, "> tmp.xmfa");
+ foreach my $line (@filt_lines) { print OUT $line; }
+ close OUT;
+ 
+-system($ENV{"LAGAN_DIR"}."/utils/Glue tmp.xmfa > glue.out 2> glue.err");
++system($ENV{LAGAN_DIR}."/utils/Glue tmp.xmfa > glue.out 2> glue.err");
+ 
+ open(IN, "< glue.out");
+ my @glue_out = <IN>;
+diff -up lagan20/src/glocal/rightinfluence.cpp.chris lagan20/src/glocal/rightinfluence.cpp
+--- lagan20/src/glocal/rightinfluence.cpp.chris	2016-02-29 11:18:23.356435400 +0100
++++ lagan20/src/glocal/rightinfluence.cpp	2016-02-29 11:19:23.667047926 +0100
+@@ -1,6 +1,6 @@
+ #include <rightinfluence.h>
+ 
+-Fragment origin, end;
++Fragment origin, Fend;
+ 
+ // Sets the first default owner of the whole region
+ void initRI(RI *RightInfluence, long long int scoreIndex) {
+@@ -18,17 +18,17 @@ void initRI(RI *RightInfluence, long lon
+ 
+ 	// hack to aid winner selection
+ 	origin.score = -1;
+-	end.score = -2;
+-	origin.totalScore = end.totalScore = 0;
++	Fend.score = -2;
++	origin.totalScore = Fend.totalScore = 0;
+ 
+ 	// will win against anyone
+-	end.seq1End = 0; end.seq2End = 0;
+-	end.seq1Start = 0; end.seq2Start = 0;
++	Fend.seq1End = 0; Fend.seq2End = 0;
++	Fend.seq1Start = 0; Fend.seq2Start = 0;
+ 
+ 	origin.back = NULL;
+ 
+     RightInfluence->act[-INF] = &origin;
+-    RightInfluence->act[+INF] = &end;
++    RightInfluence->act[+INF] = &Fend;
+ }
+ 
+ 
+diff -up lagan20/src/glocal/score.cpp.chris lagan20/src/glocal/score.cpp
+--- lagan20/src/glocal/score.cpp.chris	2008-01-27 00:10:50.000000000 +0100
++++ lagan20/src/glocal/score.cpp	2008-01-27 00:11:01.000000000 +0100
+@@ -2,7 +2,7 @@
+ #include<score.h>
+ #include<leftinfluence.h>
+ #include<rightinfluence.h>
+-#include<fstream.h>
++#include<fstream>
+ 
+ extern vector<class Score*> scoreFunctions[1<<(UPSTRANDBITS+DOWNSTRANDBITS+RELPOSBITS)];
+ 

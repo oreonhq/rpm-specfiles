@@ -1,0 +1,18 @@
+diff -up normalize-0.7.7/src/Makefile.am~ normalize-0.7.7/src/Makefile.am
+--- normalize-0.7.7/src/Makefile.am~	2005-09-12 07:31:15.000000000 +0200
++++ normalize-0.7.7/src/Makefile.am	2013-03-25 23:02:32.832497764 +0100
+@@ -55,10 +55,10 @@ CLEANFILES = mktestwav riffwalk wavread
+ 
+ install-exec-hook:
+ 	(cd $(DESTDIR)$(bindir); \
+-	$(LN_S) `echo normalize-mp3 | sed @program_transform_name@` \
+-	        `echo normalize-ogg | sed @program_transform_name@`; \
+-	mv -f `echo normalize | sed @program_transform_name@` \
+-	      `echo @NORMALIZE_BIN@ | sed @program_transform_name@`; \
++	$(LN_S) `echo normalize-mp3 | sed '@program_transform_name@'` \
++	        `echo normalize-ogg | sed '@program_transform_name@'`; \
++	mv -f `echo normalize | sed '@program_transform_name@'` \
++	      `echo @NORMALIZE_BIN@ | sed '@program_transform_name@'`; \
+ 	exit 0)
+ 
+ # test program targets follow

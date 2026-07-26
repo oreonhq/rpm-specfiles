@@ -1,0 +1,31 @@
+.TH BST "1" "February 2026" "" "User Commands"
+.SH NAME
+.B bst
+\(en BIDS Schema Tools
+.SH SYNOPSIS
+.B bst
+.RI [ OPTIONS ]
+.I COMMAND
+.RI [ ARGS ]...
+.SH OPTIONS
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+.TP
+.B \-q\fR,\ \fB\-\-quiet
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit.
+.SS "COMMANDS"
+.TP
+.B export
+Export BIDS schema to JSON document
+.TP
+.B export\-metaschema
+Export BIDS schema to JSON document
+.TP
+.B pre\-receive\-hook
+Validate filenames from a list of files against the BIDS schema
+.SH "SEE ALSO"
+.BR bst\-export (1),
+.BR bst\-export\-metaschema (1),
+.BR bst\-pre\-receive\-hook (1)

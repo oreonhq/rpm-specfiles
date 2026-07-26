@@ -1,0 +1,36 @@
+diff -c -r1.7 gtkitementry.c
+*** gtkextra/gtkitementry.c	13 Mar 2010 09:45:54 -0000	1.7
+--- gtkextra/gtkitementry.c	11 Jun 2010 23:33:41 -0000
+***************
+*** 131,137 ****
+--- 131,139 ----
+  static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
+                                                          gboolean        include_preedit);
+  static void         gtk_entry_queue_draw               (GtkEntry       *entry);
++ #if GTK_CHECK_VERSION(2,21,0) == 0
+  static void         gtk_entry_reset_im_context         (GtkEntry       *entry);
++ #endif 
+  static void         gtk_entry_recompute                (GtkEntry       *entry);
+  static void         gtk_entry_get_cursor_locations     (GtkEntry       *entry,
+  							CursorType      type,
+***************
+*** 1754,1759 ****
+--- 1756,1762 ----
+      gdk_window_invalidate_rect (entry->text_area, NULL, FALSE);
+  }
+  
++ #if GTK_CHECK_VERSION(2,21,0) == 0
+  static void
+  gtk_entry_reset_im_context (GtkEntry *entry)
+  {
+***************
+*** 1763,1768 ****
+--- 1766,1772 ----
+        gtk_im_context_reset (entry->im_context);
+      }
+  }
++ #endif // GTK_CHECK_VERSION(2,21,0) == 0
+  
+  static void
+  gtk_entry_get_cursor_locations (GtkEntry   *entry,
+

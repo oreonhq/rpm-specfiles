@@ -1,0 +1,24 @@
+diff -up guitone-1.0rc5/src/monotone/MonotoneManager.cpp~ guitone-1.0rc5/src/monotone/MonotoneManager.cpp
+--- guitone-1.0rc5/src/monotone/MonotoneManager.cpp~	2010-11-06 00:57:16.000000000 +0100
++++ guitone-1.0rc5/src/monotone/MonotoneManager.cpp	2016-02-04 17:40:13.815449666 +0100
+@@ -254,7 +254,7 @@ QString MonotoneManager::getInterfaceVer
+     if (regex.indexIn(output) == -1)
+     {
+         D(QString("couldn't parse output: %1").arg(output));
+-        return false;
++        return QString();
+     }
+ 
+     return regex.cap(1);
+diff -up guitone-1.0rc5/src/model/Ancestors.cpp~ guitone-1.0rc5/src/model/Ancestors.cpp
+--- guitone-1.0rc5/src/model/Ancestors.cpp~	2010-11-06 00:57:16.000000000 +0100
++++ guitone-1.0rc5/src/model/Ancestors.cpp	2016-02-04 17:55:49.441680345 +0100
+@@ -60,7 +60,7 @@ void Ancestors::processTaskResult(const
+         return;
+     }
+ 
+-    if (selRevisions > 0)
++    if (selRevisions)
+     {
+         selRevisions->clear();
+         delete selRevisions;

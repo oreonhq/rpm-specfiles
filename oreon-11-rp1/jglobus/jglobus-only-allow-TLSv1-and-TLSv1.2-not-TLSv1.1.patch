@@ -1,0 +1,38 @@
+From b63db173f3c4c878cc2b564be668f5897a1d0d25 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Mon, 12 Nov 2018 09:36:12 +0100
+Subject: [PATCH 1/2] Only allow TLSv1 and TLSv1.2 (not TLSv1.1)
+
+---
+ .../main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java   | 2 ++
+ myproxy/src/main/java/org/globus/myproxy/MyProxy.java           | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java b/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java
+index 61734ce..48d23cc 100644
+--- a/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java
++++ b/gss/src/main/java/org/globus/gsi/gssapi/GlobusGSSContextImpl.java
+@@ -1301,6 +1301,8 @@ done:      do {
+             throw new GlobusGSSException(GSSException.FAILURE, e);
+         }
+ 
++        this.sslEngine.setEnabledProtocols(new String[] {"TLSv1", "TLSv1.2"});
++
+ 	logger.debug("SUPPORTED PROTOCOLS: " +
+                     Arrays.toString(this.sslEngine.getSupportedProtocols()) +
+                     "; ENABLED PROTOCOLS: " +
+diff --git a/myproxy/src/main/java/org/globus/myproxy/MyProxy.java b/myproxy/src/main/java/org/globus/myproxy/MyProxy.java
+index 359776b..33cbee6 100644
+--- a/myproxy/src/main/java/org/globus/myproxy/MyProxy.java
++++ b/myproxy/src/main/java/org/globus/myproxy/MyProxy.java
+@@ -1170,6 +1170,7 @@ public class MyProxy  {
+             sc.init(null, trustAllCerts, new java.security.SecureRandom());
+             SSLSocketFactory sf = sc.getSocketFactory();
+             SSLSocket socket = (SSLSocket)sf.createSocket(this.host, this.port);
++            socket.setEnabledProtocols(new String[] {"TLSv1", "TLSv1.2"});
+             socket.startHandshake();
+             socket.close();
+ 
+-- 
+2.19.1
+

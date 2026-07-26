@@ -1,0 +1,63 @@
+From 1c52ba26fe6f70c21a2ff89bb4c41cc4ac0b5315 Mon Sep 17 00:00:00 2001
+From: Alexander Bokovoy <abokovoy@redhat.com>
+Date: Wed, 7 Jan 2026 12:37:32 +0200
+Subject: [PATCH] Few more fixes for discarded qualifiers in tests
+
+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
+---
+ test/check_oauth2.c  | 2 +-
+ test/check_openidc.c | 4 ++--
+ test/check_proto.c   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/test/check_oauth2.c b/test/check_oauth2.c
+index a5355ba..e8dc019 100644
+--- a/test/check_oauth2.c
++++ b/test/check_oauth2.c
+@@ -549,7 +549,7 @@ static char *oauth2_check_oauth2_serve_post(const char *request)
+ 	if (strncmp(request, post_introspection_path,
+ 		    strlen(post_introspection_path)) == 0) {
+ 		request += strlen(post_introspection_path) + 5;
+-		data = strstr(request, sep);
++		data = strstr((char *)request, sep);
+ 		if (data == NULL)
+ 			goto error;
+ 		data += strlen(sep);
+diff --git a/test/check_openidc.c b/test/check_openidc.c
+index 21cdae7..d8d8fb0 100644
+--- a/test/check_openidc.c
++++ b/test/check_openidc.c
+@@ -235,7 +235,7 @@ static char *oauth2_check_openidc_serve_post(const char *request)
+ 	if (strncmp(request, token_endpoint_path,
+ 		    strlen(token_endpoint_path)) == 0) {
+ 		request += strlen(token_endpoint_path) + 5;
+-		data = strstr(request, sep);
++		data = strstr((char *)request, sep);
+ 		if (data == NULL)
+ 			goto error;
+ 		data += strlen(sep);
+@@ -817,7 +817,7 @@ static void _openidc_verify_authentication_request_state(
+ {
+ 	bool rc = false;
+ 	const char *location = NULL;
+-	char *state = NULL;
++	const char *state = NULL;
+ 
+ 	ck_assert_ptr_ne(NULL, response);
+ 	ck_assert_uint_eq(oauth2_http_response_status_code_get(_log, response),
+diff --git a/test/check_proto.c b/test/check_proto.c
+index 904c09a..a097b69 100644
+--- a/test/check_proto.c
++++ b/test/check_proto.c
+@@ -332,7 +332,7 @@ static char *oauth2_check_proto_serve_post(const char *request)
+ 	if (strncmp(request, token_endpoint_path,
+ 		    strlen(token_endpoint_path)) == 0) {
+ 		request += strlen(token_endpoint_path) + 5;
+-		data = strstr(request, sep);
++		data = strstr((char *)request, sep);
+ 		if (data == NULL)
+ 			goto error;
+ 		data += strlen(sep);
+-- 
+2.52.0
+

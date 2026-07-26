@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=LCD4Linux 
+Type=Application
+Categories=System;Monitor;
+Exec=lcd4X11
+Icon=lcd4linux
+Terminal=0

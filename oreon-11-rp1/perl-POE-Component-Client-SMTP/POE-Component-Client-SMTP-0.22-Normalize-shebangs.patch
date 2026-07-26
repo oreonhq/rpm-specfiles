@@ -1,0 +1,48 @@
+From 8ff9df59151acb5e6ba3f346edcf9782d0382c13 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 6 Feb 2020 16:46:22 +0100
+Subject: [PATCH] Normalize shebangs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ eg/send_email.pl      | 2 +-
+ eg/send_email_auth.pl | 2 +-
+ eg/test_template.pl   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/eg/send_email.pl b/eg/send_email.pl
+index 27c7048..4be959d 100644
+--- a/eg/send_email.pl
++++ b/eg/send_email.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ use strict;
+ use warnings;
+ 
+diff --git a/eg/send_email_auth.pl b/eg/send_email_auth.pl
+index 37a17be..64e9c82 100644
+--- a/eg/send_email_auth.pl
++++ b/eg/send_email_auth.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ use strict;
+ use warnings;
+ 
+diff --git a/eg/test_template.pl b/eg/test_template.pl
+index f66aeff..ff44870 100644
+--- a/eg/test_template.pl
++++ b/eg/test_template.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl 
++#!/usr/bin/perl
+ 
+ # Copyright (c) 2005 - 2008 George Nistorica
+ # All rights reserved.
+-- 
+2.21.1
+

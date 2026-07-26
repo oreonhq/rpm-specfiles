@@ -1,0 +1,26 @@
+The autossh systemd service uses configuration files from the
+/etc/autossh directory. Each configuration file should define a single
+variable OPTIONS, which contains all command line options to pass to
+the respective autossh service instance. The configuration file is the
+name of the service instance suffixed with .conf, for example
+autossh@myconnection.service loads its configuration from the
+/etc/autossh/myconnection.conf file. For example (all on one line,
+wrapped here for readability):
+
+    OPTIONS=-M 0 -NT
+        -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3"
+        -l autossh -i /path/to/id_rsa -L 7474:127.0.0.1:7474
+        srv.example.com
+
+Note that it is not necessary to configure everything related to the
+actual connection in $OPTIONS, instead just as with regular ssh(1)
+use, the -F option can be used there to load them from separate
+configuration files. For example:
+
+    OPTIONS=-M 0 -N -F /path/to/myconnection_ssh_config srv.example.com
+
+The services run as the autossh user by default. This means that
+functionality requiring root access, for example forwarding local
+privileged ports, is not available to them. If root functionality is
+required, it can be accomplished through the systemd unit override
+mechanisms, see systemd.unit(5).

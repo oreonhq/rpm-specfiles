@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>octave-general</id>
+  <extends>www.octave.org-octave.desktop</extends>
+  <name>General</name>
+  <summary>General tools for GNU Octave</summary>
+  <url type="homepage">http://octave.sourceforge.net/general</url>
+  <url type="bugtracker">https://savannah.gnu.org/projects/octave</url>
+  <project_license>GPL-3.0+</project_license>
+  <update_contact>maintainers@octave.org</update_contact>
+  <metadata_license>FSFAP</metadata_license>
+</component>

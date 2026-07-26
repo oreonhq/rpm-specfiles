@@ -1,0 +1,40 @@
+This patch is needed to fix a C99 compatibility issue in the configure
+script.  Future compilers are likely to reject implicit function
+declarations by default, causing these configure checks to fail always.
+
+Submitted upstream:
+
+  <https://lists.beasts.org/pipermail/iftop-users/2022-December/000513.html>
+
+diff --git a/configure b/configure
+index a0bb579d62bd6658..4ea776e4318a39e7 100755
+--- a/configure
++++ b/configure
+@@ -5079,9 +5079,9 @@ else
+ int main() {
+     $type dummy;
+     FILE *f=fopen("conftestval", "w");
+-    if (!f) exit(1);
++    if (!f) return 1;
+     fprintf(f, "%d\n", sizeof($1));
+-    exit(0);
++    return 0;
+ }
+ 
+ _ACEOF
+diff --git a/configure.ac b/configure.ac
+index 886a23a353c01856..e9ef7f57d002c54e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -111,9 +111,9 @@ for type in u_int8_t u_int16_t u_int32_t ; do
+ int main() {
+     $type dummy;
+     FILE *f=fopen("conftestval", "w");
+-    if (!f) exit(1);
++    if (!f) return 1;
+     fprintf(f, "%d\n", sizeof($1));
+-    exit(0);
++    return 0;
+ }
+     ])], [
+         x=`cat conftestval`

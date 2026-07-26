@@ -1,0 +1,41 @@
+--- a/bundles/org.eclipse.swt/Eclipse-SWT-PI/gtk/library/make_linux.mak
++++ b/bundles/org.eclipse.swt/Eclipse-SWT-PI/gtk/library/make_linux.mak
+@@ -24,7 +24,7 @@
+ #SWT_LIB_DEBUG=1     # to debug glue code in /bundles/org.eclipse.swt/bin/library. E.g os_custom.c:swt_fixed_forall(..)
+ # Can be set via environment like: export SWT_LIB_DEBUG=1
+ ifdef SWT_LIB_DEBUG
+-SWT_DEBUG = -O0 -g3 -ggdb3
++#SWT_DEBUG = -O0 -g3 -ggdb3
+ NO_STRIP=1
+ endif
+ 
+@@ -100,13 +100,15 @@
+ GLX_OBJECTS = swt.o glx.o glx_structs.o glx_stats.o
+ 
+ CFLAGS := $(CFLAGS) \
++		-DSWT_VERSION=$(SWT_VERSION) \
+ 		$(SWT_DEBUG) \
+ 		$(SWT_WEBKIT_DEBUG) \
+ 		-DLINUX -DGTK \
+ 		-I$(SWT_JAVA_HOME)/include \
+ 		-I$(SWT_JAVA_HOME)/include/linux \
+ 		-std=gnu17 \
+-		${SWT_PTR_CFLAGS}
++		${SWT_PTR_CFLAGS} \
++		${RPM_OPT_FLAGS}
+ LFLAGS = -shared -fPIC ${SWT_LFLAGS}
+ 
+ # Treat all warnings as errors. If your new code produces a warning, please
+
+--- a/bundles/org.eclipse.swt/Eclipse-SWT-PI/gtk/library/build.sh
++++ b/bundles/org.eclipse.swt/Eclipse-SWT-PI/gtk/library/build.sh
+@@ -74,7 +74,8 @@
+ 
+ MAKE_TYPE=make
+ 
+-export CFLAGS="-O -Wall -fPIC ${GTK_XCFLAGS}"
++export CFLAGS="$CFLAGS ${GTK_XCFLAGS}"
++OUTPUT_DIR=../../..
+ 
+ # Determine which OS we are on
+ if [ "${OS}" = "" ]; then

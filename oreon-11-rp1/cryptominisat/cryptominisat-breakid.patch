@@ -1,0 +1,11 @@
+--- cryptominisat-release-5.13.0/src/cms_breakid.cpp.orig	2025-04-19 13:14:50.000000000 -0600
++++ cryptominisat-release-5.13.0/src/cms_breakid.cpp	2025-04-25 08:24:47.937030696 -0600
+@@ -224,7 +224,7 @@ bool BreakID::doit()
+     breakid->set_useMatrixDetection(solver->conf.breakid_matrix_detect);
+     breakid->set_symBreakingFormLength(solver->conf.breakid_max_constr_per_permut);
+     breakid->start_dynamic_cnf(solver->nVars());
+-    verb_print(1, "[breakid] version " << breakid->get_sha1_version());
++    verb_print(1, "[breakid] version " << breakid->get_version_sha1());
+ 
+     // We can fail adding clauses if they are UNSAT under the current assumptions
+     if (!add_clauses()) {

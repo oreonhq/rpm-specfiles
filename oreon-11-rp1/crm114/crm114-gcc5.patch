@@ -1,0 +1,31 @@
+diff -up crm114-20100106-BlameMichelson.src/crm_svm_matrix.h.gcc5 crm114-20100106-BlameMichelson.src/crm_svm_matrix.h
+--- crm114-20100106-BlameMichelson.src/crm_svm_matrix.h.gcc5	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_svm_matrix.h	2015-07-14 01:13:07.589837137 +0200
+@@ -141,14 +141,14 @@ Vector *vector_make(unsigned int dim, Ve
+ Vector *vector_make_size(unsigned int dim, VectorType type, int compact, 
+ 			 int init_size);
+ void vector_copy(Vector *from, Vector *to);
+-inline void vector_set(Vector *v, unsigned int i, double d);
+-inline double vector_get(Vector *v, unsigned int i);
++void vector_set(Vector *v, unsigned int i, double d);
++double vector_get(Vector *v, unsigned int i);
+ void vector_add_col(Vector *v);
+ void vector_add_ncols(Vector *v, unsigned int n);
+ void vector_remove_col(Vector *v, unsigned int c);
+-inline int vector_iszero(Vector *V);
++int vector_iszero(Vector *V);
+ int vector_equals(Vector *v1, Vector *v2);
+-inline void vector_zero(Vector *v);
++void vector_zero(Vector *v);
+ void vector_add(Vector *v1, Vector *v2, Vector *ret);
+ void vector_multiply(Vector *v, double s, Vector *ret);
+ double dot(Vector *v1, Vector *v2);
+@@ -182,7 +182,7 @@ static inline double vector_dist(Vector
+ void vectorit_zero_elt(VectorIterator *vit, Vector *v);
+ void vectorit_insert(VectorIterator *vit, unsigned int c, double d, Vector *v);
+ void vectorit_find(VectorIterator *vit, unsigned int c, Vector *v);
+-inline void vectorit_set_col(VectorIterator vit, unsigned int c, Vector *v);
++void vectorit_set_col(VectorIterator vit, unsigned int c, Vector *v);
+ 
+ //defined in this file - forced to be inline'd at high optimization
+ MY_INLINE void vectorit_set_at_beg(VectorIterator *vit, Vector *v);

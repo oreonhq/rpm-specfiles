@@ -1,0 +1,42 @@
+--- buffer.c.orig	2024-05-29 21:07:39.000000000 -0600
++++ buffer.c	2025-01-18 12:22:26.529260062 -0700
+@@ -25,7 +25,6 @@ main(int argc, char *argv[])
+         char *c;
+         char *buffer [MAXBUFFER];
+         int maxbuffer=500;
+-        void *calloc();
+ 
+         maxline=50000;
+ /* allocate space for buffer */
+--- float2rat.c.orig	2024-05-29 21:07:44.000000000 -0600
++++ float2rat.c	2025-01-18 12:22:56.416884318 -0700
+@@ -37,15 +37,11 @@ int usage(){ fprintf(stderr,"\n%s\n",rcs
+ #define CHECK_HELP   if (argc > 1 && argv[1][0]=='-' && argv[1][1]=='h') usage();
+ 
+ 
+-int main(argc,argv)
+-	 int argc;
+-	 char **argv;
++int main(int argc, char *argv[])
+ {
+   long int  m,n;
+   int i,j;
+   
+-  long atol();
+-  
+     char  buf[BUFSIZ];
+   
+   CHECK_HELP;
+--- rat2float.c.orig	2024-05-29 21:07:44.000000000 -0600
++++ rat2float.c	2025-01-18 12:25:23.175039350 -0700
+@@ -77,9 +77,7 @@ typedef  lrs_mp integer_t;
+ 
+ 
+ 
+-int main(argc,argv)
+-	 int argc;
+-	 char **argv;
++int main(int argc, char *argv[])
+ {
+   long int  n;
+   int j;

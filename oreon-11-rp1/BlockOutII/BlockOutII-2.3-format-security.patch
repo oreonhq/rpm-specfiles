@@ -1,0 +1,24 @@
+diff -up BL_SRC/BlockOut/GLApp/GLApp.cpp~ BL_SRC/BlockOut/GLApp/GLApp.cpp
+--- BL_SRC/BlockOut/GLApp/GLApp.cpp~	2014-10-27 13:40:46.000000000 +0100
++++ BL_SRC/BlockOut/GLApp/GLApp.cpp	2014-10-27 13:49:14.518436819 +0100
+@@ -274,7 +274,7 @@ void GLApplication::printGlError() {
+ #ifdef WINDOWS
+   MessageBox(NULL, message, "Error", MB_OK | MB_ICONERROR);
+ #else
+-  printf(message);
++  printf("%s\n", message);
+ #endif
+ 
+ }
+diff -up BL_SRC/BlockOut/PageHallOfFameOnLine.cpp~ BL_SRC/BlockOut/PageHallOfFameOnLine.cpp
+--- BL_SRC/BlockOut/PageHallOfFameOnLine.cpp~	2014-05-06 11:47:54.000000000 +0200
++++ BL_SRC/BlockOut/PageHallOfFameOnLine.cpp	2014-10-27 13:51:51.157271001 +0100
+@@ -60,7 +59,7 @@ void PageHallOfFameOnLine::DownloadScore
+   if( page==NULL ) {
+ 
+     downloadState = -1;
+-    strcpy(errMsg,mParent->GetHttp()->GetError());
++    snprintf(errMsg, sizeof(errMsg), "%s", mParent->GetHttp()->GetError());
+ 
+   } else {
+ 

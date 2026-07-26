@@ -1,0 +1,22 @@
+If unprivileged users attempt to access a serial port, e.g.
+/dev/ttyS<n> or /dev/ttyUSB<n>, they will normally get an error
+message such as:
+
+    Sorry, write access to UUCP lockfile directory denied.
+
+This message is actually due to permissions on the device, not the
+lockfile directory.
+
+If it is desired to allow specific unprivileged users to use ckermit
+to access serial ports, add those users to the "dialout" group.  One
+way to accomplish this is using a command line such as:
+
+    sudo usermod -a -G dialout <username>
+
+This will apply to future logins by that user.
+
+If you want to make the serial ports accessible to all users without
+adding them to the dialout group (not recommended), you can change the
+permissions of the serial device to 666, e.g.,
+
+    sudo chmod 666 /dev/ttyS<n>

@@ -1,0 +1,15 @@
+diff -rupN --no-dereference opencv-4.12.0/modules/python/common.cmake opencv-4.12.0-new/modules/python/common.cmake
+--- opencv-4.12.0/modules/python/common.cmake	2025-07-02 09:54:13.000000000 +0200
++++ opencv-4.12.0-new/modules/python/common.cmake	2025-12-13 11:14:05.823873870 +0100
+@@ -19,6 +19,11 @@ if(NOT WIN32 AND NOT APPLE AND NOT OPENC
+   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--exclude-libs=ALL")
+ endif()
+ 
++# Pass -Wa,-mbig-obj to linker
++if(MINGW)
++  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wa,-mbig-obj")
++endif()
++
+ ocv_add_library(${the_module} MODULE
+   ${PYTHON_SOURCE_DIR}/src2/cv2.cpp
+   ${PYTHON_SOURCE_DIR}/src2/cv2_util.cpp

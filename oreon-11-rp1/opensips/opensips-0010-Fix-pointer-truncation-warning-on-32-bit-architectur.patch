@@ -1,0 +1,290 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 26 Dec 2025 21:08:00 +0100
+Subject: [PATCH] Fix pointer truncation warning on 32-bit architectures in
+ aaa_diameter
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+During compilation on i686 (32-bit) architecture with GCC 15, a pointer
+truncation warning appears:
+
+```
+aaa_diameter.c: In function 'dm_send_answer':
+aaa_diameter.c:423:73: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  423 |  dmsg = _dm_create_message(NULL, AAA_CUSTOM_RPL, appid, cmdcode, (void *)fd_req);
+```
+
+The `dm_message` struct stores a pointer to a FreeDiameter message
+structure in the `fd_req` field, but the type is mismatched across
+different code paths:
+
+1. In `aaa_diameter.c`, a pointer is serialized as `uint64_t` (8 bytes)
+2. It's then cast to `void *` and passed to `_dm_create_message()`
+3. On **i686**, `void *` is only 4 bytes, causing **truncation** of the
+   upper 32 bits
+4. In `dm_peer.c`, it's cast back to `struct msg *` for use
+
+**On x86_64 (64-bit):**
+
+- `uint64_t` = 8 bytes
+- `void *` = 8 bytes
+- No truncation, works fine
+
+**On i686 (32-bit):**
+
+- `uint64_t` = 8 bytes
+- `void *` = 4 bytes
+- **Truncation occurs**, losing upper 32 bits of the pointer!
+
+Change `fd_req` from `void *` to `uintptr_t` throughout the codebase.
+
+`uintptr_t` is:
+
+- **Portable**: Sized correctly for pointers on any architecture (4
+  bytes on 32-bit, 8 bytes on 64-bit)
+- **Standard**: Defined in C99 `<stdint.h>`
+- **Semantic**: Explicitly designed for storing pointer values as
+  integers
+- **Safe**: Guaranteed by C99 to preserve pointer values during
+  round-trip conversions
+
+**1. Struct definition (`modules/aaa_diameter/dm_impl.h` line 93):**
+
+```c
+struct dm_message {
+    // Changed from: void *fd_req;
+    uintptr_t fd_req;
+    // ...
+};
+```
+
+**2. Function signature (`modules/aaa_diameter/dm_impl.h` ~line 165):**
+
+```c
+aaa_message *_dm_create_message(aaa_conn *_, int msg_type,
+    unsigned int app_id, unsigned int cmd_code, uintptr_t fd_req);
+    // Changed from: void *fd_req
+```
+
+**3. Function definition (`modules/aaa_diameter/dm_impl.c` line 1695):**
+
+```c
+aaa_message *_dm_create_message(aaa_conn *_, int msg_type,
+    unsigned int app_id, unsigned int cmd_code, uintptr_t fd_msg)
+    // Changed from: void *fd_msg
+```
+
+**4. Call sites - pointer to uintptr_t:**
+
+```c
+// aaa_diameter.c line 423 - remove void* cast:
+dmsg = _dm_create_message(NULL, AAA_CUSTOM_RPL, appid, cmdcode, fd_req);
+
+// dm_impl.c - add explicit casts when storing pointers:
+dm.fd_req = (uintptr_t)req;
+dm->fd_req = (uintptr_t)fd_msg;
+```
+
+**5. Call sites with NULL - use 0 instead:**
+
+Since `uintptr_t` is an integer type (not a pointer type), we use `0`
+instead of `NULL` to represent "no pointer":
+
+```c
+// Multiple locations in aaa_diameter.c, dm_impl.c:
+dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, *app_id, *cmd_code, 0);
+// Changed from: ..., NULL);
+```
+
+**Note:** In C, `NULL` is typically `((void *)0)` - a pointer type. When
+passing to an integer parameter like `uintptr_t`, we use the integer `0`
+directly to avoid implicit pointer-to-integer conversion warnings.
+
+**6. Usage site - uintptr_t to pointer (`dm_peer.c`):**
+
+```c
+// Changed from: struct msg *ans = (struct msg *)dm->fd_req;
+struct msg *ans = (struct msg *)(uintptr_t)dm->fd_req;
+```
+
+The double cast `(struct msg *)(uintptr_t)value` is required by C99 for
+guaranteed correctness:
+
+1. **C99 guarantees** that any pointer can be converted to `uintptr_t` and back
+2. Direct `integer → pointer` conversion is **implementation-defined** behavior
+3. The proper conversion path is: `pointer → uintptr_t → pointer`
+
+While a single cast from `uintptr_t` to pointer often works in practice,
+the double cast explicitly follows the C99 standard's guaranteed
+conversion path, ensuring the code is strictly conformant and won't
+cause issues with strict aliasing rules or future compiler
+optimizations.
+
+The pattern is:
+- **Pointer → uintptr_t**: `(uintptr_t)pointer`
+- **uintptr_t → Pointer**: `(struct msg *)(uintptr_t)value`
+- **Null value**: `0` (not `NULL`, since `uintptr_t` is an integer type)
+
+This fix ensures pointers are correctly preserved on all architectures
+without truncation.
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/modules/aaa_diameter/aaa_diameter.c b/modules/aaa_diameter/aaa_diameter.c
+index ca0709c57..0d6bfdd70 100644
+--- a/modules/aaa_diameter/aaa_diameter.c
++++ b/modules/aaa_diameter/aaa_diameter.c
+@@ -19,6 +19,7 @@
+  */
+ 
+ #include <freeDiameter/extension.h>
++#include <stdint.h>
+ 
+ #include "../../sr_module.h"
+ #include "../../lib/list.h"
+@@ -308,7 +309,7 @@ static int dm_send_request(struct sip_msg *msg, int *app_id, int *cmd_code,
+ 		goto error;
+ 	}
+ 
+-	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, *app_id, *cmd_code, NULL);
++	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, *app_id, *cmd_code, 0);
+ 	if (!dmsg) {
+ 		LM_ERR("oom\n");
+ 		goto error;
+@@ -421,7 +422,7 @@ static int dm_send_answer(struct sip_msg *msg, str *avp_json, int *is_error)
+ 		reverse_hex2int64(res.rs.s, res.rs.len, 1, &fd_req);
+ 	}
+ 
+-	dmsg = _dm_create_message(NULL, AAA_CUSTOM_RPL, appid, cmdcode, (void *)fd_req);
++	dmsg = _dm_create_message(NULL, AAA_CUSTOM_RPL, appid, cmdcode, fd_req);
+ 	if (!dmsg) {
+ 		LM_ERR("oom\n");
+ 		goto error;
+@@ -572,7 +573,7 @@ static int dm_send_request_async(struct sip_msg *msg, async_ctx *ctx,
+ 		goto error;
+ 	}
+ 
+-	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, *app_id, *cmd_code, NULL);
++	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, *app_id, *cmd_code, 0);
+ 	if (!dmsg) {
+ 		LM_ERR("oom\n");
+ 		goto error;
+diff --git a/modules/aaa_diameter/dm_impl.c b/modules/aaa_diameter/dm_impl.c
+index 927261899..012072376 100644
+--- a/modules/aaa_diameter/dm_impl.c
++++ b/modules/aaa_diameter/dm_impl.c
+@@ -21,6 +21,7 @@
+ #include <freeDiameter/extension.h>
+ #include <sys/eventfd.h>
+ #include <inttypes.h>
++#include <stdint.h>
+ 
+ #include "../../ut.h"
+ #include "../../lib/list.h"
+@@ -592,7 +593,7 @@ static int dm_receive_req(struct msg **_req, struct avp * avp, struct session *
+ 
+ 		memset(&dm, 0, sizeof dm);
+ 
+-		dm.fd_req = req;
++		dm.fd_req = (uintptr_t)req;
+ 		dm.app_id = hdr->msg_appl;
+ 		dm.cmd_code = hdr->msg_code;
+ 		dm.error_bit = 1;
+@@ -1694,7 +1695,7 @@ int dm_api_find_cmd(diameter_conn *conn, int cmd_code)
+ }
+ 
+ aaa_message *_dm_create_message(aaa_conn *_, int msg_type,
+-        unsigned int app_id, unsigned int cmd_code, void *fd_msg)
++        unsigned int app_id, unsigned int cmd_code, uintptr_t fd_msg)
+ {
+ 	aaa_message *m;
+ 	struct dm_message *dm;
+@@ -1721,7 +1722,7 @@ aaa_message *_dm_create_message(aaa_conn *_, int msg_type,
+ 	dm->am = m;
+ 	dm->app_id = app_id;
+ 	dm->cmd_code = cmd_code;
+-	dm->fd_req = fd_msg;
++	dm->fd_req = (uintptr_t)fd_msg;
+ 
+ 	return m;
+ }
+@@ -1729,7 +1730,7 @@ aaa_message *_dm_create_message(aaa_conn *_, int msg_type,
+ 
+ aaa_message *dm_create_message(aaa_conn *_, int msg_type)
+ {
+-	return _dm_create_message(_, msg_type, 0, 0, NULL);
++	return _dm_create_message(_, msg_type, 0, 0, 0);
+ }
+ 
+ 
+@@ -2082,7 +2083,7 @@ int dm_api_send_req(diameter_conn *conn, int app_id, int cmd_code, cJSON *req, d
+ 		return -2;
+ 	}
+ 
+-	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, app_id, cmd_code, NULL);
++	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, app_id, cmd_code, 0);
+ 	if (!dmsg) {
+ 		LM_ERR("oom\n");
+ 		return -1;
+@@ -2119,7 +2120,7 @@ int dm_api_send_req_async(diameter_conn *conn, int app_id, int cmd_code, cJSON *
+ 		return -2;
+ 	}
+ 
+-	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, app_id, cmd_code, NULL);
++	dmsg = _dm_create_message(NULL, AAA_CUSTOM_REQ, app_id, cmd_code, 0);
+ 	if (!dmsg) {
+ 		LM_ERR("oom\n");
+ 		return -1;
+diff --git a/modules/aaa_diameter/dm_impl.h b/modules/aaa_diameter/dm_impl.h
+index 2de25d5fa..6367dfa5d 100644
+--- a/modules/aaa_diameter/dm_impl.h
++++ b/modules/aaa_diameter/dm_impl.h
+@@ -23,6 +23,7 @@
+ 
+ #include "../../aaa/aaa.h"
+ #include "diameter_api.h"
++#include <stdint.h>
+ 
+ #define __FD_CHECK(__call__, __retok__, __retval__) \
+ 	do { \
+@@ -90,7 +91,7 @@ struct _dm_dict {
+ struct dm_message {
+ 	aaa_message *am; /* back-reference, useful during cleanup */
+ 
+-	void *fd_req;
++	uintptr_t fd_req;
+ 	unsigned int app_id;   /* these two are used when sending */
+ 	unsigned int cmd_code; /* custom Diameter requests */
+ 	int error_bit;
+@@ -163,7 +164,7 @@ int dm_register_callbacks(void);
+ int dm_find(aaa_conn *_, aaa_map *map, int op);
+ aaa_message *dm_create_message(aaa_conn *_, int msg_type);
+ aaa_message *_dm_create_message(aaa_conn *_, int msg_type,
+-        unsigned int app_id, unsigned int cmd_code, void *fd_req);
++        unsigned int app_id, unsigned int cmd_code, uintptr_t fd_req);
+ int dm_avp_add(aaa_conn *_, aaa_message *msg, aaa_map *avp, void *val,
+                int val_length, int vendor);
+ int dm_build_avps(struct list_head *subavps, cJSON *array);
+diff --git a/modules/aaa_diameter/dm_peer.c b/modules/aaa_diameter/dm_peer.c
+index 9dbfd1d6c..06b17a884 100644
+--- a/modules/aaa_diameter/dm_peer.c
++++ b/modules/aaa_diameter/dm_peer.c
+@@ -24,6 +24,7 @@
+ #include "../../sr_module.h"
+ #include "../../locking.h"
+ #include "../../lib/list.h"
++#include <stdint.h>
+ 
+ #include "dm_impl.h"
+ #include "dm_peer.h"
+@@ -511,7 +512,7 @@ static int dm_send_custom_req(struct dm_message *msg)
+ 
+ int dm_send_custom_rpl(struct dm_message *dm)
+ {
+-	struct msg *ans = (struct msg *)dm->fd_req;
++	struct msg *ans = (struct msg *)(uintptr_t)dm->fd_req;
+ 	int rc, flags = 0;
+ 
+ 	if (!dm_server_autoreply_error && dm_remove_unreplied_req(ans) != 0) {

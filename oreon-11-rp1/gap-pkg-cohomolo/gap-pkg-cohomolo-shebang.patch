@@ -1,0 +1,35 @@
+--- a/standalone/progs.d/clrgrp	2019-07-07 15:23:27.000000000 -0600
++++ b/standalone/progs.d/clrgrp	2019-09-19 08:32:37.864667134 -0600
+@@ -1,3 +1,4 @@
++#!/bin/sh
+ for i do
+   gpname=$i
+   rm -f ${gpname}.[a-hj-ru-wyz]* ${gpname}.i[a-mo-z]* ${gpname}.t[abd-z]*
+--- a/standalone/progs.d/cohomology	2019-07-07 15:23:27.000000000 -0600
++++ b/standalone/progs.d/cohomology	2019-09-19 08:33:01.898317414 -0600
+@@ -1,3 +1,4 @@
++#!/bin/sh
+ newjob=true co=false mult=false check=true grponly=false
+ tojunk=false step=false history=false nosubs=false one=false
+ gpname=
+--- a/standalone/progs.d/execcmd	2019-07-07 15:23:27.000000000 -0600
++++ b/standalone/progs.d/execcmd	2019-09-19 08:33:26.531958959 -0600
+@@ -1,3 +1,4 @@
++#!/bin/sh
+ case $step in
+   true) echo -n $cmd "   ?"
+         read ans
+--- a/standalone/progs.d/execcmd.gap	2019-07-07 15:23:27.000000000 -0600
++++ b/standalone/progs.d/execcmd.gap	2019-09-19 08:33:43.046718656 -0600
+@@ -1,3 +1,4 @@
++#!/bin/sh
+ case $step in
+   true) echo -n $cmd $cmdsource $cmddest"   ?"
+         read ans
+--- a/standalone/progs.d/myman	2019-07-07 15:23:27.000000000 -0600
++++ b/standalone/progs.d/myman	2019-09-19 08:33:55.989530321 -0600
+@@ -1,3 +1,4 @@
++#!/bin/sh
+ case $# in 
+      0) more $HOME/coho.d/info.d/info.2;;
+      *) for i

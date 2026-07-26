@@ -1,0 +1,23 @@
+From 341761491a3f50c88ecad6befb0bf7a96443e8f1 Mon Sep 17 00:00:00 2001
+From: Srisharan V S <srisharan.psgtech@gmail.com>
+Date: Thu, 10 Apr 2025 10:56:29 +0000
+Subject: [PATCH 2/2] Installing Tui binaries
+
+---
+ examples/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index d060a81..6b33af8 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -8,5 +8,6 @@ if(BUILD_EXAMPLES)
+ 
+         target_include_directories(${example_name} PUBLIC ../include/mankalaengine)
+         ecm_mark_nongui_executable(${example_name})
++        install(TARGETS ${example_name} RUNTIME DESTINATION bin)
+     endforeach()
+ endif()
+-- 
+2.49.0
+

@@ -1,0 +1,20 @@
+diff --git a/Makefile b/Makefile
+index ddecede..a363885 100755
+--- a/Makefile
++++ b/Makefile
+@@ -35,13 +35,9 @@
+ D = source
+ VPATH = . : $D  
+ 
+-flagsNormal = -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 \
+--Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong  \
+--grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables
++flagsNormal = ${CXXFLAGS}
+ 
+-flagsNoGlut = -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 \
+--Wp,-D_GLIBCXX_ASSERTIONS -Wp,-D_NO_GLUT_ -fexceptions -fstack-protector-strong  \
+--grecord-gcc-switches -m64 -mtune=generic -fasynchronous-unwind-tables
++flagsNoGlut = -Wp,-D_NO_GLUT_ ${CXXFLAGS}
+ 
+ ifeq ($(shell uname -s), Darwin)
+     libsNormal = -lm -framework OpenGL -framework GLUT ${LDFLAGS}

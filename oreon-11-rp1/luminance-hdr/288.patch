@@ -1,0 +1,20 @@
+From c4cebae7dec29aaebc73b041bba3240cbd33569d Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 6 Mar 2025 11:17:02 -0500
+Subject: [PATCH] Set CMake min. version to a range, 3.3...3.12: support CMake
+ 4.0
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3c8b093f..b9115249 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.3...3.12)
+ CMAKE_POLICY(SET CMP0025 NEW)
+ CMAKE_POLICY(SET CMP0043 NEW)
+ CMAKE_POLICY(SET CMP0054 NEW)

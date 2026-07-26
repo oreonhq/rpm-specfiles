@@ -1,0 +1,14 @@
+diff -rupN --no-dereference lxml-6.0.2/setupinfo.py lxml-6.0.2-new/setupinfo.py
+--- lxml-6.0.2/setupinfo.py	2025-09-21 20:57:57.000000000 +0200
++++ lxml-6.0.2-new/setupinfo.py	2025-09-23 11:16:28.927034875 +0200
+@@ -266,8 +266,8 @@ def print_libxml_error():
+ 
+ def libraries():
+     standard_libs = []
+-    if 'linux' in sys.platform:
+-        standard_libs.append('rt')
++    #if 'linux' in sys.platform:
++        #standard_libs.append('rt')
+     if not OPTION_BUILD_LIBXML2XSLT:
+         standard_libs.append('z')
+     standard_libs.append('m')

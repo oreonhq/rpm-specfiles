@@ -1,0 +1,12 @@
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/ui_manager.rb.icon_multibyte	2020-01-03 16:17:05.051552867 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/ui_manager.rb	2020-01-03 16:41:08.841182941 +0900
+@@ -713,6 +713,9 @@
+         iter[Columns::IDENT] = book.ident.to_s
+         iter[Columns::TITLE] = book.title
+         title = book.title.sub(REDUCE_TITLE_REGEX, '\1...')
++        # More nice method is needed here...
++        title = title.encode("UTF-16", "UTF-8", :invalid => :replace, :undef => :replace, :replace => ".")
++        title = title.encode("UTF-8")
+         iter[Columns::TITLE_REDUCED] = title
+         # Don't know why, however force_encoding seems needed here to
+         # prevent crash...

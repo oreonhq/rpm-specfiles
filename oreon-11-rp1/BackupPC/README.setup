@@ -1,0 +1,33 @@
+BackupPC's README file for Fedora & EPEL
+
+## BackupPC's user
+For security reasons, backuppc user cannot log in. If you want to start manual
+backup (ie for debugging), you'll need to set it a shell :
+
+Permanent:
+usermod -s /bin/bash backuppc
+
+or
+
+Temporary:
+su -s /bin/bash -l backuppc
+
+
+Do not forget to create an SSH key (ssk-keygen) as the backuppc user and copy
+it to remote computers if you plan to use tar/rsync over SSH backup method.
+
+The easiest way to do this (after logging in as the backuppc user) is to use ssh-copy-id
+
+ssh-copy-id <user>@<host>
+
+
+## BackupPC's web interface
+The CGI web interface is located at :
+http://localhost/BackupPC
+
+You will need to create users in /etc/BackupPC/apache.users :
+htpasswd /etc/BackupPC/apache.users <username>
+
+Once complete, add that user as an admin in config.pl:
+
+$Conf{BackupPCUser} = '<username>'

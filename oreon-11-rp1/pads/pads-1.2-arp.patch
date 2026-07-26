@@ -1,0 +1,173 @@
+diff -urp pads-1.2.orig/src/mac-resolution.c pads-1.2/src/mac-resolution.c
+--- pads-1.2.orig/src/mac-resolution.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/mac-resolution.c	2008-07-07 12:07:36.000000000 -0400
+@@ -160,7 +160,7 @@ int add_vendor (char *mac, char *vendor)
+  * INPUT        : 0 - MAC Address
+  * RETURN       : Vendor Name
+  * ---------------------------------------------------------- */
+-bstring get_vendor (char *m)
++bstring get_vendor (const char *m)
+ {
+     Vendor *list;
+     char mac[4];
+diff -urp pads-1.2.orig/src/mac-resolution.h pads-1.2/src/mac-resolution.h
+--- pads-1.2.orig/src/mac-resolution.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/mac-resolution.h	2008-07-07 12:07:36.000000000 -0400
+@@ -41,7 +41,7 @@
+ int init_mac_resolution (void);
+ int parse_raw_mac (bstring line);
+ int add_vendor (char *mac, char *vendor);
+-bstring get_vendor (char *m);
++bstring get_vendor (const char *m);
+ void end_mac_resolution (void);
+ 
+ #ifdef DEBUG
+diff -urp pads-1.2.orig/src/output/output-csv.c pads-1.2/src/output/output-csv.c
+--- pads-1.2.orig/src/output/output-csv.c	2008-07-02 09:24:19.000000000 -0400
++++ pads-1.2/src/output/output-csv.c	2008-07-07 12:07:36.000000000 -0400
+@@ -91,6 +91,7 @@ init_output_csv (bstring filename)
+ 	/* File does not exist, create new.. */
+ 	if ((output_csv_conf.file = fopen((char *)bdata(output_csv_conf.filename), "w")) != NULL) {
+ 	    fprintf(output_csv_conf.file, "asset,port,proto,service,application,discovered\n");
++	    fflush(output_csv_conf.file);
+ 
+ 	} else {
+ 	    err_message("Cannot open file %s!", bdata(output_csv_conf.filename));
+@@ -216,8 +217,11 @@ parse_raw_report (bstring line)
+     /* Add Asset to Data Structure */
+     if (proto == 0 && ret != -1) {
+ 	/* ARP */
+-	mac2hex((char *)bdata(application), mac_addr, MAC_LEN);
+-	add_arp_asset(ip_addr, mac_addr, discovered);
++	if (mac2hex((char *)bdata(application), mac_addr, MAC_LEN) == 0)
++		add_arp_asset(ip_addr, mac_addr, discovered);
++	else
++		log_message("Error parsing HWaddr %s - skipping", 
++			(char *)bdata(application));
+     } else {
+ 	/* Everything Else */
+ 	add_asset(ip_addr, port, proto, service, application, discovered);
+diff -urp pads-1.2.orig/src/storage.c pads-1.2/src/storage.c
+--- pads-1.2.orig/src/storage.c	2008-06-30 17:54:33.000000000 -0400
++++ pads-1.2/src/storage.c	2008-07-07 12:07:36.000000000 -0400
+@@ -108,7 +108,7 @@ int check_arp_asset (struct in_addr ip_a
+     rec = arp_asset_list;
+     while (rec != NULL) {
+ 	if (rec->ip_addr.s_addr == ip_addr.s_addr
+-		&& (strcmp(rec->mac_addr, mac_addr) == 0)) {
++		&& (memcmp(rec->mac_addr, mac_addr, MAC_LEN) == 0)) {
+ 	    return 0;
+ 
+ 	} else {
+@@ -200,7 +200,7 @@ void add_asset (struct in_addr ip_addr,
+  *		: 2 - Discovered
+  * RETURN	: None!
+  * ---------------------------------------------------------- */
+-void add_arp_asset (struct in_addr ip_addr, char mac_addr[MAC_LEN],
++void add_arp_asset (struct in_addr ip_addr, const char *mac_addr,
+ 		    time_t discovered)
+ {
+     ArpAsset *list;
+diff -urp pads-1.2.orig/src/storage.h pads-1.2/src/storage.h
+--- pads-1.2.orig/src/storage.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/storage.h	2008-07-07 12:07:36.000000000 -0400
+@@ -52,7 +52,7 @@ int check_tcp_asset (struct in_addr ip_a
+ int check_icmp_asset (struct in_addr ip_addr);
+ int check_arp_asset (struct in_addr ip_addr, char mac_addr[MAC_LEN]);
+ void add_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto, bstring service, bstring application, time_t discovered);
+-void add_arp_asset (struct in_addr ip_addr, char mac_addr[MAC_LEN], time_t discovered);
++void add_arp_asset (struct in_addr ip_addr, const char *mac_addr, time_t discovered);
+ unsigned short get_i_attempts (struct in_addr ip_addr, u_int16_t port, unsigned short proto);
+ short update_i_attempts (struct in_addr ip_addr, u_int16_t port, unsigned short proto, unsigned short i_attempts);
+ short update_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto, bstring service, bstring application);
+diff -urp pads-1.2.orig/src/util.c pads-1.2/src/util.c
+--- pads-1.2.orig/src/util.c	2008-07-02 09:24:19.000000000 -0400
++++ pads-1.2/src/util.c	2008-07-07 12:08:00.000000000 -0400
+@@ -27,6 +27,7 @@
+  **************************************************************************/
+ #include <unistd.h>
+ #include <ctype.h>
++#include <errno.h>
+ #include "util.h"
+ #include "pads.h"
+ 
+@@ -426,31 +427,39 @@ drop_privs (bstring newuser, bstring new
+  * INPUT        : 0 - MAC Address
+  *              : 1 - Converted
+  *              : 0 - Size of 1
+- * RETURN       : None
++ * RETURN       : 0 - success, -1 failure
+  * ---------------------------------------------------------- */
+-void
++int
+ mac2hex(const char *mac, char *dst, int len)
+ {
+     int i;
+-    long l;
+-    char *pp;
++    unsigned long l;
+ 
+     if (len < 6)
+-        return;
++        return -1;
+ 
+     while (isspace(*mac))
+         mac++;
+ 
+     /* expect 6 hex octets separated by ':' or space/NUL if last octet */
+-    for (i = 0; i < 6; i++) {
+-        l = strtol(mac, &pp, 16);
+-        if (pp == mac || l > 0xFF || l < 0)
+-            return;
+-        if (!(*pp == ':' || (i == 5 && (isspace(*pp) || *pp == '\0'))))
+-            return;
+-        dst[i] = (u_char) l;
+-        mac = pp + 1;
++    for (i = 0; i < MAC_LEN; i++) {
++        char tmp[3];
++
++        while (*mac == ':' || *mac == ' ')
++            mac++;
++        if (mac[0] == 0 || mac[1] == 0)
++            return -1;
++        tmp[0] = mac[0];
++        tmp[1] = mac[1];
++        tmp[2] = 0;
++        errno = 0;
++        l = strtoul(tmp, NULL, 16);
++        if (errno)
++            return -1;
++        dst[i] = (u_char)(l & 0xFF);
++        mac+=2;
+     }
++    return 0;
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -464,11 +473,11 @@ mac2hex(const char *mac, char *dst, int 
+ char *
+ hex2mac(const char *mac)
+ {
+-    static char buf[18];
++    static char buf[32];
+ 
+     snprintf(buf, sizeof(buf), "%02X:%02X:%02X:%02X:%02X:%02X",
+-        mac[0], mac[1], mac[2],
+-        mac[3], mac[4], mac[5]);
++        (mac[0] & 0xFF) , (mac[1] & 0xFF), (mac[2] & 0xFF),
++        (mac[3] & 0xFF), (mac[4] & 0xFF), (mac[5] & 0xFF));
+ 
+     return buf;
+ }
+diff -urp pads-1.2.orig/src/util.h pads-1.2/src/util.h
+--- pads-1.2.orig/src/util.h	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/util.h	2008-07-07 12:07:36.000000000 -0400
+@@ -52,7 +52,7 @@ size_t strlcpy(char *dst, const char *sr
+ size_t strlcat(char *dst, const char *src, size_t len);
+ #endif
+ void drop_privs (bstring newuser, bstring newgroup);
+-void mac2hex(const char *mac, char *dst, int len);
++int mac2hex(const char *mac, char *dst, int len);
+ char *hex2mac(const char *mac);
+ 
+ /* GLOBALS ----------------------------------------- */

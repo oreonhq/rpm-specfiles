@@ -1,0 +1,10 @@
+[Unit]
+Description=dehydrated client for signing certificates with an ACME server
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=2h
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,21 @@
+diff -up arts-1.5.10/admin/cvs.sh.autoconf2.7x arts-1.5.10/admin/cvs.sh
+--- arts-1.5.10/admin/cvs.sh.autoconf2.7x	2008-08-19 22:18:41.000000000 +0200
++++ arts-1.5.10/admin/cvs.sh	2021-08-31 15:15:42.907835119 +0200
+@@ -32,7 +32,7 @@ check_autotool_versions()
+ required_autoconf_version="2.53 or newer"
+ AUTOCONF_VERSION=`$AUTOCONF --version | head -n 1`
+ case $AUTOCONF_VERSION in
+-  Autoconf*2.5* | autoconf*2.5* | autoconf*2.6* ) : ;;
++  Autoconf*2.5* | autoconf*2.5* | autoconf*2.6* | autoconf*2.7*) : ;;
+   "" )
+     echo "*** AUTOCONF NOT FOUND!."
+     echo "*** KDE requires autoconf $required_autoconf_version"
+@@ -47,7 +47,7 @@ esac
+ 
+ AUTOHEADER_VERSION=`$AUTOHEADER --version | head -n 1`
+ case $AUTOHEADER_VERSION in
+-  Autoconf*2.5* | autoheader*2.5* | autoheader*2.6* ) : ;;
++  Autoconf*2.5* | autoheader*2.5* | autoheader*2.6* | autoheader*2.7*) : ;;
+   "" )
+     echo "*** AUTOHEADER NOT FOUND!."
+     echo "*** KDE requires autoheader $required_autoconf_version"

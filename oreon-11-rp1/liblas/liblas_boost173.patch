@@ -1,0 +1,33 @@
+diff -rupN --no-dereference libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/src/c_api.cpp libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/src/c_api.cpp
+--- libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/src/c_api.cpp	2025-11-08 16:34:42.000000000 +0100
++++ libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/src/c_api.cpp	2025-11-23 20:04:03.492215947 +0100
+@@ -511,7 +511,7 @@ LAS_DLL LASErrorEnum LASReader_SetOutput
+         
+         transforms.erase( std::remove_if( transforms.begin(), 
+                                   transforms.end(),
+-                                  boost::bind( &IsReprojectionTransform, _1 ) ),
++                                  std::bind( &IsReprojectionTransform, std::placeholders::_1 ) ),
+                   transforms.end());
+         
+         liblas::TransformPtr srs_transform = liblas::TransformPtr(new liblas::ReprojectionTransform(in_ref, *out_ref, &h));
+@@ -1853,7 +1853,7 @@ LAS_DLL LASErrorEnum LASWriter_SetOutput
+         
+         transforms.erase( std::remove_if( transforms.begin(), 
+                                   transforms.end(),
+-                                  boost::bind( &IsReprojectionTransform, _1 ) ),
++                                  std::bind( &IsReprojectionTransform, std::placeholders::_1 ) ),
+                   transforms.end());
+         
+         liblas::TransformPtr srs_transform = liblas::TransformPtr(new liblas::ReprojectionTransform(in_ref, *out_ref, &h));
+diff -rupN --no-dereference libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/src/header.cpp libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/src/header.cpp
+--- libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/src/header.cpp	2025-11-08 16:34:42.000000000 +0100
++++ libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/src/header.cpp	2025-11-23 20:04:03.492638447 +0100
+@@ -609,7 +609,7 @@ void Header::DeleteVLRs(std::string cons
+ {
+     m_vlrs.erase( std::remove_if( m_vlrs.begin(),
+                                   m_vlrs.end(),
+-                                  boost::bind( &SameVLRs, name, id, _1 ) ),
++                                  std::bind( &SameVLRs, name, id, std::placeholders::_1 ) ),
+                   m_vlrs.end());
+ 
+     m_recordsCount = static_cast<uint32_t>(m_vlrs.size());

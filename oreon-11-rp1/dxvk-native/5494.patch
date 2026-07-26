@@ -1,0 +1,22 @@
+From a66e4aeb7bc519337ae91b4cfaabccbd1b5bdfe4 Mon Sep 17 00:00:00 2001
+From: Ethan Lee <flibitijibibo@gmail.com>
+Date: Fri, 6 Feb 2026 10:04:16 -0500
+Subject: [PATCH] native: Add define for DECLARE_INTERFACE_IID_.
+
+Recent versions of the MinGW DirectX headers added IID parameters to its interface declarations.
+---
+ include/native/windows/windows_base.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/native/windows/windows_base.h b/include/native/windows/windows_base.h
+index 2facfaffe45..8650d2e3a88 100644
+--- a/include/native/windows/windows_base.h
++++ b/include/native/windows/windows_base.h
+@@ -353,6 +353,7 @@ typedef struct RGNDATA {
+ #endif // CONST_VTABLE
+ #define DECLARE_INTERFACE_(x, y) DECLARE_INTERFACE(x)
+ #endif // __cplusplus
++#define DECLARE_INTERFACE_IID_(x, y, z) DECLARE_INTERFACE_(x, y)
+ 
+ #define BEGIN_INTERFACE
+ #define END_INTERFACE

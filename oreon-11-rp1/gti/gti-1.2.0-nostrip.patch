@@ -1,0 +1,11 @@
+diff -up gti-1.2.0/Makefile.nostrip gti-1.2.0/Makefile
+--- gti-1.2.0/Makefile.nostrip	2014-08-08 11:14:29.215636970 +0200
++++ gti-1.2.0/Makefile	2014-08-08 11:14:50.594538927 +0200
+@@ -18,7 +18,6 @@ MANPAGE=gti.6.gz
+ 
+ $(PROG): *.c
+ 	$(CC) -o $@ $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $^
+-	-$(STRIP) -s $@
+ 
+ $(MANPAGE): gti.6
+ 	gzip -9 -n -c gti.6 > gti.6.gz

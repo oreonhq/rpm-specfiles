@@ -1,0 +1,19 @@
+Fix old autoconf-generate code to be compatibile with C99 compilers.
+This issue goes away once configure is regenerated from configure.in,
+so there is no need to report this upstream.
+
+diff --git a/configure b/configure
+index afa32e3ca2d33f4b..fe9b2d5ec2960590 100755
+--- a/configure
++++ b/configure
+@@ -3696,8 +3696,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

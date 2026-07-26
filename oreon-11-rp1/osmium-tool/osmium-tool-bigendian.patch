@@ -1,0 +1,33 @@
+From f3f0f2b4e38c75440ac0b2daaa49705a66455978 Mon Sep 17 00:00:00 2001
+From: Tom Hughes <tom@compton.nu>
+Date: Tue, 17 Sep 2019 12:49:30 +0100
+Subject: [PATCH 1/2] Disable endian specific tests
+
+---
+ test/export/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/export/CMakeLists.txt b/test/export/CMakeLists.txt
+index a02a0d6..52b2b31 100644
+--- a/test/export/CMakeLists.txt
++++ b/test/export/CMakeLists.txt
+@@ -18,7 +18,7 @@ check_export(geojsoncnt "-f geojsonseq -u counter" input.osm output-cnt.geojsons
+ check_export(geojsonattr "-f geojson -n -a type,id,version,changeset,timestamp,uid,user,way_nodes" input.osm output-attr.geojson)
+ check_export(geojsonchar "-f geojson -n -a type,id,version,changeset,timestamp,uid,user,way_nodes" input-chars.osm output-chars.geojson)
+ 
+-check_export(pg         "-f pg"            input.osm output.pg)
++#check_export(pg         "-f pg"            input.osm output.pg)
+ 
+ check_export(missing-node "-f geojson" input-missing-node.osm output-missing-node.geojson)
+ check_export(single-node-way "-f geojson" input-single-node-way.osm output-empty.geojson)
+@@ -69,6 +69,6 @@ check_export(c-tag-null    "-E -f text -c export/config-tag-null.json" way.osm w
+ 
+ #-----------------------------------------------------------------------------
+ 
+-check_export(pg-untagged "-f pg --keep-untagged" input.osm output-untagged.pg)
++#check_export(pg-untagged "-f pg --keep-untagged" input.osm output-untagged.pg)
+ 
+ #-----------------------------------------------------------------------------
+-- 
+2.52.0
+

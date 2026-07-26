@@ -1,0 +1,27 @@
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,7 @@
+ CFLAGS    += -D_LARGEFILE_SOURCE -DLARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -D_REENTRANT
+ CFLAGS    += -Wall
+ OBJECTS    = main.o
+-LDFLAGS   += -s
++LDFLAGS   +=
+ LOADLIBES += -lm
+ INSTALL   ?= install
+ 
+@@ -17,11 +17,11 @@
+ 	$(CC) $(CFLAGS) -c $<
+ 
+ install:	all
+-	$(INSTALL) -d $(PREFIX)/bin
+-	$(INSTALL) -m 755 M2VRequantiser $(PREFIX)/bin
++	$(INSTALL) -d $(DESTDIR)$(PREFIX)/bin
++	$(INSTALL) -pm 755 M2VRequantiser $(DESTDIR)$(PREFIX)/bin
+ 	
+ uninstall:
+-	rm -f $(PREFIX)/bin/M2VRequantiser
++	rm -f $(DESTDIR)$(PREFIX)/bin/M2VRequantiser
+ 
+ clean:
+ 	rm -f M2VRequantiser *.o *~ core
+

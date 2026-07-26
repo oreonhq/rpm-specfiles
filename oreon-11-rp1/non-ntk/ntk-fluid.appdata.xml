@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>ntk-fluid.desktop</id>
+  <name>ntk-fluid</name>
+  <summary>Fast Light User Interface Designer</summary>
+  <developer_name></developer_name>
+  <description>
+  <p>Fast Light User Interface Designer, an interactive GUI designer for non-ntk</p>
+  </description>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+ and LGPLv2+</project_license>
+  <url type="bugtracker">https://github.com/original-male/non/issues</url>
+  <url type="help">http://non.tuxfamily.org/wiki/HomePage</url>
+  <url type="homepage">http://non.tuxfamily.org/</url>
+  <screenshots>
+    <screenshot type="default">
+      <caption/>
+      <image height="685" width="1027">https://www.fltk.org/images/fluid-flphoto.png</image>
+    </screenshot>
+  </screenshots>
+</component>

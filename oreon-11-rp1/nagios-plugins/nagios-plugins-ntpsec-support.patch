@@ -1,0 +1,28 @@
+From 2796243fbc13943f8c6e1ad362f3d421a634b356 Mon Sep 17 00:00:00 2001
+From: Miroslav Lichvar <mlichvar@redhat.com>
+Date: Mon, 11 Jan 2021 13:38:37 +0100
+Subject: [PATCH] check_ntp.pl: add support for ntpsec ntpdate
+
+---
+ plugins-scripts/check_ntp.pl | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/plugins-scripts/check_ntp.pl b/plugins-scripts/check_ntp.pl
+index 63100aef..3239b8b1 100755
+--- a/plugins-scripts/check_ntp.pl
++++ b/plugins-scripts/check_ntp.pl
+@@ -230,6 +230,14 @@
+ 	
+ 	}
+ 
++	# Parse output from ntpsec's ntpdate
++	if (/ ([+-.\d]+) \+\/-.* s(\d+) (no|add|del)-leap/) {
++		$offset = $1;
++		$stratum = $2;
++		$ntpdate_error = $ERRORS{"OK"};
++		print "ntperr = $ntpdate_error \n" if $verbose;
++	}
++
+ 	if (/no server suitable for synchronization found/) {
+ 		if ($stratum == 16) {
+ 			$ntpdate_error = $ERRORS{"WARNING"};

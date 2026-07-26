@@ -1,0 +1,9 @@
+hash: 995a756274fe494f980c4b5275635ef769592f22150203541d47edc8f03f621c
+imports:
+- name: github.com/hashicorp/go-cleanhttp
+  version: ad28ea4487f05916463e2423a55166280e8254b5
+- name: github.com/circonus-labs/circonusllhist
+  version: a20e1eabe49e252ce392fa4f983c315867f6e5cd
+- name: github.com/hashicorp/go-retryablehttp
+  version: 6e85be8fee1dcaa02c0eaaac2df5a8fbecf94145
+updated: '2018-06-09T13:00:33.559557+00:00'

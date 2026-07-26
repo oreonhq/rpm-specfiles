@@ -1,0 +1,51 @@
+util.h: Replace TIME_WITH_SYS_TIME construct with direct #includes
+
+The TIME_WITH_SYS_TIME macro is not defined anywhere, so neither
+<time.h> nor <sys/time.h> are ever included. Fix this by including
+them if they are available.
+
+This avoids an implicit declaration of the time function and a build
+failure with future compilers which do not support implicit function
+declarations by default.
+
+Submitted upstream: <https://github.com/rmohr/libjoedog/pull/2>
+
+diff --git a/configure.ac b/configure.ac
+index 032416d448dbadcf..725429418bddca4e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -34,7 +34,7 @@ AC_PROG_CC
+ # Checks for libraries.
+ 
+ # Checks for header files.
+-AC_CHECK_HEADERS([fcntl.h memory.h stdlib.h string.h strings.h sys/time.h sys/times.h syslog.h unistd.h])
++AC_CHECK_HEADERS([fcntl.h memory.h stdlib.h string.h strings.h sys/time.h sys/times.h syslog.h time.h unistd.h])
+ 
+ # Checks for typedefs, structures, and compiler characteristics.
+ AC_TYPE_SIZE_T
+diff --git a/src/util.h b/src/util.h
+index 49850aab3c53f4ab..017da10951edb5dc 100644
+--- a/src/util.h
++++ b/src/util.h
+@@ -46,16 +46,13 @@ char *strchr (), *strrchr ();
+ # include <sys/times.h>
+ #endif /* HAVE_SYS_TIMES_H */
+ 
+-#if TIME_WITH_SYS_TIME
++#if HAVE_SYS_TIME_H
+ # include <sys/time.h>
++#endif
++
++#if HAVE_TIME_H
+ # include <time.h>
+-#else
+-# if HAVE_SYS_TIME_H
+-#  include <sys/time.h>
+-# else
+-#  include <time.h>
+-# endif /* HAVE_SYS_TIME_H    */
+-#endif  /* TIME_WITH_SYS_TIME */ 
++#endif
+ 
+ #include <stdio.h>
+ #include <stdlib.h>

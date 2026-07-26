@@ -1,0 +1,60 @@
+diff -up ZipArchive-4.1.1/ZipArchive/ZipCollections_stl.h.gcc47 ZipArchive-4.1.1/ZipArchive/ZipCollections_stl.h
+--- ZipArchive-4.1.1/ZipArchive/ZipCollections_stl.h.gcc47	2011-06-28 09:45:36.000000000 +0200
++++ ZipArchive-4.1.1/ZipArchive/ZipCollections_stl.h	2012-01-12 22:49:15.092984963 +0100
+@@ -88,10 +88,10 @@ public:
+ 	TYPE& GetAt(size_t uIndex) {return this->at(uIndex);}
+ 	const TYPE& GetAt(size_t uIndex) const {return this->at(uIndex);} 
+ 	void SetAt(size_t uIndex, TYPE value) {inherited::operator[](uIndex) = value; }
+-	size_t Add(const TYPE& x) {push_back(x);return GetUpperBound();}
++	size_t Add(const TYPE& x) {this->push_back(x);return GetUpperBound();}
+ 	void RemoveAll() {this->clear();}
+-	void RemoveAt(size_t uIndex) { erase(GetIterFromIndex(uIndex));}
+-	void InsertAt(size_t uIndex, const TYPE& x){insert(GetIterFromIndex(uIndex), x);}
++	void RemoveAt(size_t uIndex) { this->erase(GetIterFromIndex(uIndex));}
++	void InsertAt(size_t uIndex, const TYPE& x){this->insert(GetIterFromIndex(uIndex), x);}
+ 	TYPE& operator[](size_t uIndex)
+ 	{
+ 		return inherited::operator[](uIndex);
+@@ -115,7 +115,7 @@ public:
+ 	typedef typename std::list<TYPE>::iterator iterator;
+ 	typedef typename std::list<TYPE>::const_iterator const_iterator;
+ 	size_t GetCount() const {return this->size();}
+-	void AddTail(const TYPE& x){push_back(x);}
++	void AddTail(const TYPE& x){this->push_back(x);}
+ 	void AddHead(const TYPE& x){push_front(x);}
+ 	void RemoveHead() {this->pop_front();}
+ 	void RemoveTail() {this->pop_back();}
+@@ -132,7 +132,7 @@ public:
+ 	TYPE& GetPrev(iterator& pos) { return *pos--;}
+ 	TYPE GetPrev(iterator& pos) const{ return *pos--;}
+ 	iterator Find(TYPE& x) { return std::find(this->begin(), this->end(), x);}
+-	void RemoveAt(iterator& pos) { erase(pos);}
++	void RemoveAt(iterator& pos) { this->erase(pos);}
+ 	bool IteratorValid(const_iterator &iter) const
+ 	{
+ 		return iter != this->end();
+@@ -168,11 +168,11 @@ public:
+ 	typedef typename  std::map<KEY,VALUE, std::less<KEY>, std::allocator<std::pair<const KEY, VALUE> > >::value_type v_type;
+ 	void SetAt( KEY key, VALUE newValue)
+ 	{
+-		insert(v_type(key, newValue));
++		this->insert(v_type(key, newValue));
+ 	}
+ 	ZBOOL RemoveKey( KEY key )
+ 	{
+-		return erase(key) != 0;
++		return this->erase(key) != 0;
+ 	}
+ 	ZBOOL Lookup( KEY key, VALUE& rValue ) const
+ 	{
+diff -up ZipArchive-4.1.1/ZipArchive/ZipPlatform.h.gcc47 ZipArchive-4.1.1/ZipArchive/ZipPlatform.h
+--- ZipArchive-4.1.1/ZipArchive/ZipPlatform.h.gcc47	2012-01-12 22:49:43.750984616 +0100
++++ ZipArchive-4.1.1/ZipArchive/ZipPlatform.h	2012-01-12 22:49:59.620984395 +0100
+@@ -29,6 +29,7 @@ class CZipAutoBuffer;
+ 
+ #include "ZipString.h"
+ #include "ZipPathComponent.h"
++#include <stdint.h>
+ #include <sys/types.h>
+ #include "ZipExport.h"
+ 

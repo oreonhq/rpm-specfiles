@@ -1,0 +1,13 @@
+diff -r -u nazghul.armbuild/src/cmdwin.c nazghul/src/cmdwin.c
+--- nazghul.armbuild/src/cmdwin.c	2012-02-28 13:12:29.000000000 -0600
++++ nazghul/src/cmdwin.c	2015-02-21 14:26:30.304531152 -0600
+@@ -221,7 +221,8 @@
+ 
+ void cmdwin_push_mark()
+ {
+-        cmdwin_vpush(CMDWIN_FRAG_MARK, 0, 0);
++        va_list args;
++        cmdwin_vpush(CMDWIN_FRAG_MARK, 0, args);
+ }
+ 
+ void cmdwin_pop(void)

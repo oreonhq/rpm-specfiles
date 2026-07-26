@@ -1,0 +1,56 @@
+From d0a5356ba751a715d85223494a58260d474a5981 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 17 Feb 2016 15:16:42 +0100
+Subject: [PATCH 6/9] dx-magick
+
+---
+ src/exec/dxmods/_im_image.c | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/src/exec/dxmods/_im_image.c b/src/exec/dxmods/_im_image.c
+index b7ca6df..f439859 100644
+--- a/src/exec/dxmods/_im_image.c
++++ b/src/exec/dxmods/_im_image.c
+@@ -328,9 +328,6 @@ static Error write_im(RWImageArgs *iargs) {
+             DestroyImage(image);
+             DestroyImageInfo(new_frame_info);
+             DestroyImageInfo(image_info);
+-#if MagickLibVersion > 0x0537
+-            DestroyConstitute();
+-#endif
+              DXSetError(ERROR_INTERNAL, "reason = %s, description = %s",
+                         image->exception.reason,
+                         image->exception.description);
+@@ -345,9 +342,6 @@ static Error write_im(RWImageArgs *iargs) {
+             DestroyImage(image);
+             DestroyImageInfo(new_frame_info);
+             DestroyImageInfo(image_info);
+-#if MagickLibVersion > 0x0537
+-            DestroyConstitute();
+-#endif
+             DXErrorReturn( ERROR_INTERNAL , "out of memory allocating buffer _im_image.c");
+         }
+ 	
+@@ -374,9 +368,6 @@ static Error write_im(RWImageArgs *iargs) {
+         DestroyImage(image);
+         DestroyImageInfo(image_info);
+         DestroyImageInfo(new_frame_info);
+-#if MagickLibVersion > 0x0537
+-        DestroyConstitute();
+-#endif
+         
+         DEBUGMESSAGE("back from DestroyImage");
+         
+@@ -490,9 +481,6 @@ static Error write_im(RWImageArgs *iargs) {
+         DXFree(copycolors);
+         DestroyImage(image);
+         DestroyImageInfo(image_info);
+-#if MagickLibVersion > 0x0537
+-        DestroyConstitute();
+-#endif
+     }
+     return (OK);
+ #else /* ndef HAVE_LIBMAGICK */
+-- 
+2.9.3
+

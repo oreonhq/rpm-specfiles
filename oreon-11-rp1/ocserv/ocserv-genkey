@@ -1,0 +1,49 @@
+#!/bin/sh
+#default key type:rsa
+KEY_TYPE="rsa"
+
+#check key type 'rsa', 'rsa-pss', 'dsa', 'ecdsa', 'ed25519, 'ed448', 'x25519', and 'x448'
+if [ $# -gt 0 ]; then
+    case "$1" in
+        rsa|rsa-pss|dsa|ecdsa|ed25519|ed448|x25519|x448)
+            KEY_TYPE="$1"
+            ;;
+        *)
+            echo "Usage: $0 [rsa|rsa-pss|dsa|ecdsa|ed25519|ed448|x25519|x448]"
+            echo "Default key type: rsa"
+            exit 1
+            ;;
+    esac
+fi
+
+#generate CA certificate/key
+if test ! -f /etc/pki/ocserv/private/ca.key;then
+mkdir -p /etc/pki/ocserv/private
+certtool --generate-privkey --key-type=$KEY_TYPE --outfile /etc/pki/ocserv/private/ca.key >/dev/null 2>&1
+echo "cn=`hostname -f` CA" >/etc/pki/ocserv/ca.tmpl
+echo "expiration_days=-1" >>/etc/pki/ocserv/ca.tmpl
+echo "serial=1" >>/etc/pki/ocserv/ca.tmpl
+echo "ca" >>/etc/pki/ocserv/ca.tmpl
+echo "cert_signing_key" >>/etc/pki/ocserv/ca.tmpl
+certtool --template /etc/pki/ocserv/ca.tmpl \
+	--generate-self-signed --load-privkey /etc/pki/ocserv/private/ca.key \
+	--outfile /etc/pki/ocserv/cacerts/ca.crt >/dev/null 2>&1
+#rm -f /etc/pki/ocserv/ca.tmpl
+fi
+
+#generate server certificate/key
+if test ! -f /etc/pki/ocserv/private/server.key;then
+certtool --generate-privkey --key-type=$KEY_TYPE --outfile /etc/pki/ocserv/private/server.key >/dev/null 2>&1
+echo "cn=`hostname -f`" >/etc/pki/ocserv/server.tmpl
+echo "serial=2" >>/etc/pki/ocserv/server.tmpl
+echo "expiration_days=-1" >>/etc/pki/ocserv/server.tmpl
+echo "signing_key" >>/etc/pki/ocserv/server.tmpl
+echo "encryption_key" >>/etc/pki/ocserv/server.tmpl
+certtool --template /etc/pki/ocserv/server.tmpl \
+	--generate-certificate --load-privkey /etc/pki/ocserv/private/server.key \
+	--load-ca-certificate /etc/pki/ocserv/cacerts/ca.crt --load-ca-privkey \
+	/etc/pki/ocserv/private/ca.key --outfile /etc/pki/ocserv/public/server.crt >/dev/null 2>&1
+#rm -f /etc/pki/ocserv/server.tmpl
+fi
+
+exit 0

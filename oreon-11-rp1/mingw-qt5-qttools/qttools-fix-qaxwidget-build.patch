@@ -1,0 +1,11 @@
+diff -rupN --no-dereference qttools-everywhere-src-5.15.18/src/designer/src/plugins/activeqt/activeqt.pro qttools-everywhere-src-5.15.18-new/src/designer/src/plugins/activeqt/activeqt.pro
+--- qttools-everywhere-src-5.15.18/src/designer/src/plugins/activeqt/activeqt.pro	2025-03-30 13:49:56.000000000 +0200
++++ qttools-everywhere-src-5.15.18-new/src/designer/src/plugins/activeqt/activeqt.pro	2025-11-09 21:36:15.349903485 +0100
+@@ -16,4 +16,7 @@ qdesigneraxwidget.h \
+ qaxwidgetpropertysheet.h \
+ qaxwidgettaskmenu.h
+ 
++LIBS_PRIVATE += -lole32 -loleaut32 -luser32 -lgdi32 -ladvapi32
++mingw: LIBS_PRIVATE += -luuid
++
+ OTHER_FILES += activeqt.json

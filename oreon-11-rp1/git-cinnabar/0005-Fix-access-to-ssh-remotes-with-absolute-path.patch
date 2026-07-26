@@ -1,0 +1,46 @@
+From c626009b1d6ad950e9f5aad2e1aa4b6e34f63f39 Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr89@gmail.com>
+Date: Thu, 18 Jan 2024 20:34:46 -0800
+Subject: [PATCH 5/5] Fix access to ssh remotes with absolute path
+
+Mercurial only strips a single leading '/' from the path of an ssh
+remote, and preserves the rest.
+`git-cinnabar` strips all the leading slashes, essentially corrupting
+the absolute paths in the remote URL and making it impossible to access
+such repositories.
+
+Compare:
+```
+$ hg --debug clone ssh://localhost//home/alebastr/sources/repo | grep running
+running ssh localhost 'hg -R /home/alebastr/sources/repo serve --stdio'
+
+$ hg --debug clone ssh://localhost///home/alebastr/sources/repo | grep running
+running ssh localhost 'hg -R //home/alebastr/sources/repo serve --stdio'
+
+$ git clone hg::ssh://localhost//home/alebastr/sources/repo
+Cloning into 'repo'...
+remote: abort: repository home/alebastr/sources/repo not found
+fatal: called `Result::unwrap()` on an `Err` value: ParseIntError { kind: Empty }
+...
+
+(backported from 02d90ef5c156fd96abdbcf3dbedd73eb15f10a7a)
+---
+ helper/hg-connect-stdio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/helper/hg-connect-stdio.c b/helper/hg-connect-stdio.c
+index 5599c338..a51fdbc9 100644
+--- a/helper/hg-connect-stdio.c
++++ b/helper/hg-connect-stdio.c
+@@ -231,7 +231,7 @@ struct hg_connection *hg_connect_stdio(const char *url, int flags)
+ 			port = get_port(ssh_host);
+ 
+ 		proc->trace2_child_class = "transport/ssh";
+-		while (*remote_path == '/')
++		if (*remote_path == '/')
+ 			remote_path++;
+ 		fill_ssh_args(proc, ssh_host, port, protocol_v0, flags);
+ 	} else if (protocol == PROTO_FILE || protocol == PROTO_LOCAL) {
+-- 
+2.43.0
+

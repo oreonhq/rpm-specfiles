@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 Michael Kuhn <suraia@fedoraproject.org> -->
+<component type="font">
+  <id>fira-code</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>OFL-1.1</project_license>
+  <name>Fira Code</name>
+  <summary>Fira Code fonts</summary>
+  <url type="homepage">https://github.com/tonsky/FiraCode</url>
+  <update_contact>suraia@fedoraproject.org</update_contact>
+</component>

@@ -1,0 +1,12 @@
+diff -up libint-2.9.0/CMakeLists.txt.datadir libint-2.9.0/CMakeLists.txt
+--- libint-2.9.0/CMakeLists.txt.datadir	2024-08-16 18:09:07.000000000 +0000
++++ libint-2.9.0/CMakeLists.txt	2024-09-03 18:26:42.987384071 +0000
+@@ -377,7 +377,7 @@ if (LIBINT_HAS_CXX_API)
+       target_compile_definitions(
+         libint2_cxx
+         INTERFACE
+-          $<INSTALL_INTERFACE:DATADIR="\$\{_IMPORT_PREFIX\}/${LIBINT2_INSTALL_DATADIR}">
++          $<INSTALL_INTERFACE:DATADIR="${LIBINT2_INSTALL_DATADIR}">
+         )
+   endif()
+   # Add library to the list of installed components

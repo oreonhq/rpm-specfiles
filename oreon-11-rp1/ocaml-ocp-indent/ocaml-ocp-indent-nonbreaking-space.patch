@@ -1,0 +1,19 @@
+--- ocp-indent-1.9.0.old/src/ocp-indent-lib/indentConfig.ml	2025-10-01 14:20:33.000000000 +0100
++++ ocp-indent-1.9.0/src/ocp-indent-lib/indentConfig.ml	2025-10-13 10:05:51.844728734 +0100
+@@ -191,15 +191,7 @@
+   let option_name name kind default =
+     Printf.sprintf "$(b,%s)=%s (default=%s)" name kind default
+   in
+-  let pre s =
+-    List.fold_right
+-      (fun line acc ->
+-         let i = ref 0 and line = Bytes.copy line in
+-         while !i < Bytes.length line && Bytes.get line (!i) = ' ' do
+-           Bytes.set line (!i) '\xa0'; incr i done;
+-         let line = Bytes.to_string line in
+-         `P line :: (if acc = [] then [] else `Noblank :: acc))
+-      (List.map Bytes.of_string (Util.string_split '\n' s)) []
++  let pre s = [`Pre s]
+   in
+   [ `P "A configuration definition is a list of bindings in the form \
+         $(i,NAME=VALUE) or of $(i,PRESET), separated by commas or newlines";

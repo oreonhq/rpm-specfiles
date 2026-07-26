@@ -1,0 +1,60 @@
+From 46b1a7fb5b99209fdd308ca2ebd3b9131dafe084 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 17 Aug 2023 15:04:08 +0200
+Subject: [PATCH] Fix: Make "now/r == now" time test tolerant to CPU
+ scheduler's decisions
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+I randomly observered failures of "now/r == now" time test:
+
+    PASS: tests/time 116 now/igloo_ctime_to_time_t
+    FAIL: tests/time 117 now/r == now
+    PASS: tests/time 118 now/marked correctly as non-ro
+    ERROR: tests/time - exited with status 1
+
+The cause is that the test hard-coded a 1-second tolerance to now and r
+difference. That's not enough as a CPU scheduler can pause the test process for
+a longer period, especially on heavily loaded systems. The failure can be
+reproduced with injecting "sleep(2);" between time() and igloo_ctime_from_now()
+calls:
+
+	 igloo_ctime_t ctime;
+	 time_t now = time(NULL);
+	 time_t r;
+
+    +    sleep(2);
+	 igloo_tap_test_success("igloo_ctime_from_now", igloo_ctime_from_now(&ctime, igloo_CLOCK_REALTIME));
+	 igloo_tap_test_success("igloo_ctime_to_time_t", igloo_ctime_to_time_t(&r, ctime));
+         igloo_tap_test("r == now", r == now || r == (now - 1));
+
+This patch fixes it by measuring when the test finished and using that time
+stamp as an upper bound for the tested return value.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ tests/time.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tests/time.c b/tests/time.c
+index c91f584..30ecaba 100644
+--- a/tests/time.c
++++ b/tests/time.c
+@@ -69,10 +69,12 @@ static void test_now(void)
+     igloo_ctime_t ctime;
+     time_t now = time(NULL);
+     time_t r;
++    time_t then;
+ 
+     igloo_tap_test_success("igloo_ctime_from_now", igloo_ctime_from_now(&ctime, igloo_CLOCK_REALTIME));
++    then = time(NULL);
+     igloo_tap_test_success("igloo_ctime_to_time_t", igloo_ctime_to_time_t(&r, ctime));
+-    igloo_tap_test("r == now", r == now || r == (now - 1));
++    igloo_tap_test("r == now", r >= now && r <= then);
+     test_align(ctime);
+ }
+ 
+-- 
+2.41.0
+

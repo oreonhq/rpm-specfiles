@@ -1,0 +1,76 @@
+Index: liblinear-1.93/linear.cpp
+===================================================================
+--- liblinear-1.93.orig/linear.cpp
++++ liblinear-1.93/linear.cpp
+@@ -1010,7 +1010,7 @@ static void solve_l2r_l1l2_svr(
+ 	double d, G, H;
+ 	double Gmax_old = INF;
+ 	double Gmax_new, Gnorm1_new;
+-	double Gnorm1_init;
++	double Gnorm1_init = 0.0;
+ 	double *beta = new double[l];
+ 	double *QD = new double[l];
+ 	double *y = prob->y;
+@@ -1409,7 +1409,7 @@ static void solve_l1r_l2_svc(
+ 	double d, G_loss, G, H;
+ 	double Gmax_old = INF;
+ 	double Gmax_new, Gnorm1_new;
+-	double Gnorm1_init;
++	double Gnorm1_init = 0.0;
+ 	double d_old, d_diff;
+ 	double loss_old, loss_new;
+ 	double appxcond, cond;
+@@ -2634,10 +2634,10 @@ struct model *load_model(const char *mod
+ 	char cmd[81];
+ 	while(1)
+ 	{
+-		fscanf(fp,"%80s",cmd);
++		(void)!fscanf(fp,"%80s",cmd);
+ 		if(strcmp(cmd,"solver_type")==0)
+ 		{
+-			fscanf(fp,"%80s",cmd);
++			(void)!fscanf(fp,"%80s",cmd);
+ 			int i;
+ 			for(i=0;solver_type_table[i];i++)
+ 			{
+@@ -2660,17 +2660,17 @@ struct model *load_model(const char *mod
+ 		}
+ 		else if(strcmp(cmd,"nr_class")==0)
+ 		{
+-			fscanf(fp,"%d",&nr_class);
++			(void)!fscanf(fp,"%d",&nr_class);
+ 			model_->nr_class=nr_class;
+ 		}
+ 		else if(strcmp(cmd,"nr_feature")==0)
+ 		{
+-			fscanf(fp,"%d",&nr_feature);
++			(void)!fscanf(fp,"%d",&nr_feature);
+ 			model_->nr_feature=nr_feature;
+ 		}
+ 		else if(strcmp(cmd,"bias")==0)
+ 		{
+-			fscanf(fp,"%lf",&bias);
++			(void)!fscanf(fp,"%lf",&bias);
+ 			model_->bias=bias;
+ 		}
+ 		else if(strcmp(cmd,"w")==0)
+@@ -2682,7 +2682,7 @@ struct model *load_model(const char *mod
+ 			int nr_class = model_->nr_class;
+ 			model_->label = Malloc(int,nr_class);
+ 			for(int i=0;i<nr_class;i++)
+-				fscanf(fp,"%d",&model_->label[i]);
++				(void)!fscanf(fp,"%d",&model_->label[i]);
+ 		}
+ 		else
+ 		{
+@@ -2712,8 +2712,8 @@ struct model *load_model(const char *mod
+ 	{
+ 		int j;
+ 		for(j=0; j<nr_w; j++)
+-			fscanf(fp, "%lf ", &model_->w[i*nr_w+j]);
+-		fscanf(fp, "\n");
++			(void)!fscanf(fp, "%lf ", &model_->w[i*nr_w+j]);
++		(void)!fscanf(fp, "\n");
+ 	}
+ 
+ 	setlocale(LC_ALL, old_locale);

@@ -1,0 +1,80 @@
+diff -ruN GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05/build/gmake.linux/genie.make GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05-mod/build/gmake.linux/genie.make
+--- GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05/build/gmake.linux/genie.make	2024-12-07 05:52:31.000000000 +0300
++++ GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05-mod/build/gmake.linux/genie.make	2025-01-02 17:24:37.949740774 +0300
+@@ -52,11 +52,11 @@
+   DEFINES            += -DNDEBUG -DLUA_COMPAT_MODULE -DLUA_USE_POSIX -DLUA_USE_DLOPEN -D_FILE_OFFSET_BITS=64
+   INCLUDES           += -I"../../src/host/lua-5.3.0/src"
+   ALL_CPPFLAGS       += $(CPPFLAGS) -MMD -MP -MP $(DEFINES) $(INCLUDES)
+-  ALL_ASMFLAGS       += $(ASMFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os -m64 -Wno-implicit-fallthrough
+-  ALL_CFLAGS         += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os -m64 -Wno-implicit-fallthrough
+-  ALL_CXXFLAGS       += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os -m64 -Wno-implicit-fallthrough
+-  ALL_OBJCFLAGS      += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os -m64 -Wno-implicit-fallthrough
+-  ALL_OBJCPPFLAGS    += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os -m64 -Wno-implicit-fallthrough
++  ALL_ASMFLAGS       += $(ASMFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os $(MPARAM) -Wno-implicit-fallthrough
++  ALL_CFLAGS         += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os $(MPARAM) -Wno-implicit-fallthrough
++  ALL_CXXFLAGS       += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os $(MPARAM) -Wno-implicit-fallthrough
++  ALL_OBJCFLAGS      += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os $(MPARAM) -Wno-implicit-fallthrough
++  ALL_OBJCPPFLAGS    += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -Os $(MPARAM) -Wno-implicit-fallthrough
+   ALL_RESFLAGS       += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+   ALL_LDFLAGS        += $(LDFLAGS) -L"." -s -rdynamic
+   LIBDEPS            +=
+@@ -139,11 +139,11 @@
+   DEFINES            += -D_DEBUG -DLUA_COMPAT_MODULE -DLUA_USE_POSIX -DLUA_USE_DLOPEN -D_FILE_OFFSET_BITS=64
+   INCLUDES           += -I"../../src/host/lua-5.3.0/src"
+   ALL_CPPFLAGS       += $(CPPFLAGS) -MMD -MP -MP $(DEFINES) $(INCLUDES)
+-  ALL_ASMFLAGS       += $(ASMFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g -m64 -Wno-implicit-fallthrough
+-  ALL_CFLAGS         += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g -m64 -Wno-implicit-fallthrough
+-  ALL_CXXFLAGS       += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g -m64 -Wno-implicit-fallthrough
+-  ALL_OBJCFLAGS      += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g -m64 -Wno-implicit-fallthrough
+-  ALL_OBJCPPFLAGS    += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g -m64 -Wno-implicit-fallthrough
++  ALL_ASMFLAGS       += $(ASMFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g $(MPARAM) -Wno-implicit-fallthrough
++  ALL_CFLAGS         += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g $(MPARAM) -Wno-implicit-fallthrough
++  ALL_CXXFLAGS       += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g $(MPARAM) -Wno-implicit-fallthrough
++  ALL_OBJCFLAGS      += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g $(MPARAM) -Wno-implicit-fallthrough
++  ALL_OBJCPPFLAGS    += $(CXXFLAGS) $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -Wall -Wextra -g $(MPARAM) -Wno-implicit-fallthrough
+   ALL_RESFLAGS       += $(RESFLAGS) $(DEFINES) $(INCLUDES)
+   ALL_LDFLAGS        += $(LDFLAGS) -L"." -rdynamic
+   LIBDEPS            +=
+diff -ruN GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05/makefile GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05-mod/makefile
+--- GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05/makefile	2024-12-07 05:52:31.000000000 +0300
++++ GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05-mod/makefile	2025-01-02 17:22:42.255982895 +0300
+@@ -22,6 +22,27 @@
+ OS=windows
+ endif
+ 
++
++UNAME_M := $(shell uname -m)
++ifeq ($(UNAME_M),$(filter i%86,$(UNAME_M)))
++MPARAM=-m32
++else
++ifeq ($(UNAME_M),$(filter aarch64,$(UNAME_M)))
++MPARAM=
++else
++ifeq ($(UNAME_M),$(filter armv%,$(UNAME_M)))
++MPARAM=
++else
++ifeq ($(UNAME_M),$(filter riscv%,$(UNAME_M)))
++MPARAM=
++else
++MPARAM=-m64
++endif
++endif
++endif
++endif
++export MPARAM
++
+ .PHONY: release
+ 
+ GENIE=bin/$(OS)/genie
+diff -ruN GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05/scripts/genie.lua GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05-mod/scripts/genie.lua
+--- GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05/scripts/genie.lua	2024-12-07 05:52:31.000000000 +0300
++++ GENie-93f6621b979f64aed4f31448cb3ce4b21b758f05-mod/scripts/genie.lua	2025-01-02 17:25:53.573582504 +0300
+@@ -46,7 +46,7 @@
+ 		}
+ 
+ 		buildoptions {
+-			"-m64",
++			"$(MPARAM)",
+ 		}
+ 
+ 		configuration "Debug"

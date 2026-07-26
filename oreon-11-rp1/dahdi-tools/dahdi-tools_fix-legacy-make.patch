@@ -1,0 +1,31 @@
+From 81b37269e8f4dd9055d76dd4909cba366ea28ca4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 21 Jun 2022 12:39:25 +0200
+Subject: [PATCH] Pass flags to Makefile.legacy
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.am | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 5442214..c67aea7 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -3,7 +3,9 @@ ACLOCAL_AMFLAGS	= -I m4
+ LEGACY_MAKE	= \
+ 	 $(MAKE) -f $(srcdir)/Makefile.legacy \
+ 		top_srcdir=$(top_srcdir) \
+-		srcdir=$(srcdir)
++		srcdir=$(srcdir) \
++		CFLAGS="$(CFLAGS)" \
++		LDFLAGS="$(LDFLAGS)"
+ 
+ CFLAGS	+= -Wall $(DAHDI_INCLUDE)
+ if DAHDI_DEVMODE
+-- 
+2.35.3
+

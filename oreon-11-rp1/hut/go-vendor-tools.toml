@@ -1,0 +1,14 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+
+[[licensing.licenses]]
+path = "vendor/github.com/juju/ansiterm/LICENSE"
+sha256sum = "a92f49abd3f15a3523b022a9b74fb885b53c228f8244c817add3a835427b10d9"
+expression = "LGPL-3.0-or-later WITH LGPL-3.0-linking-exception"
+
+[[licensing.licenses]]
+path = "vendor/github.com/agnivade/levenshtein/License.txt"
+sha256sum = "911d0fb30ff3345e4df60da21c2f2340a69bd98c0e3d1e79d27ae6177ebeb617"
+expression = "MIT"

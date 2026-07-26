@@ -1,0 +1,33 @@
+From 1b3f53f50706d2cb12651e30bfee3cf326e5e07c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 27 Aug 2015 17:47:37 +0200
+Subject: [PATCH] Use non-conflicting display numbers
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+xfvb-run insists on :99 display. It prevents from running multiple
+Test::NeedsDisplay in parallel.
+
+This patch instructs xvfb-run to use a free display number.
+
+It also prevents from random failures I noticed in
+<https://bugzilla.redhat.com/show_bug.cgi?id=1248968>.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+
+diff --git a/lib/Test/NeedsDisplay.pm b/lib/Test/NeedsDisplay.pm
+index 6ff8448..275e6d8 100644
+--- a/lib/Test/NeedsDisplay.pm
++++ b/lib/Test/NeedsDisplay.pm
+@@ -107,6 +107,7 @@ sub import {
+ 		print "# Restarting with xvfb-run...\n";
+ 		exec(
+ 			$xvfb_run,
++            '-a',
+ 			$^X,
+ 			($INC{'blib.pm'} ? '-Mblib' : ()),
+ 			($INC{'perl5db.pl'} ? '-d' : ()),
+-- 
+2.4.3
+

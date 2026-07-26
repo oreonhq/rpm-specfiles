@@ -1,0 +1,177 @@
+diff -up vultures-2.1.2/nethack/include/config.h~ vultures-2.1.2/nethack/include/config.h
+--- vultures-2.1.2/nethack/include/config.h~	2008-07-16 16:59:02.000000000 +0300
++++ vultures-2.1.2/nethack/include/config.h	2009-05-23 01:06:43.000000000 +0300
+@@ -153,10 +153,10 @@
+ 
+ #ifndef WIZARD		/* allow for compile-time or Makefile changes */
+ # ifndef KR1ED
+-#  define WIZARD  "wizard" /* the person allowed to use the -D option */
++#  define WIZARD  "games" /* the person allowed to use the -D option */
+ # else
+ #  define WIZARD
+-#  define WIZARD_NAME "wizard"
++#  define WIZARD_NAME "games"
+ # endif
+ #endif
+ 
+@@ -179,8 +179,8 @@
+ 
+ #ifdef UNIX
+ /* path and file name extension for compression program */
+-#define COMPRESS "/usr/bin/compress"   /* Lempel-Ziv compression */                                      
+-#define COMPRESS_EXTENSION ".Z"        /* compress's extension */                                        
++#define COMPRESS "/usr/bin/bzip2"
++#define COMPRESS_EXTENSION ".bz2"
+ /* An example of one alternative you might want to use: */
+ /* #define COMPRESS "/usr/local/bin/gzip" */   /* FSF gzip compression */                                
+ /* #define COMPRESS_EXTENSION ".gz" */     /* normal gzip extension */                                   
+@@ -224,7 +224,7 @@
+  * since the user might create files in a directory of his choice.
+  * Of course SECURE is meaningful only if HACKDIR is defined.
+  */
+-/* #define SECURE */	/* do setuid(getuid()) after chdir() */
++#define SECURE	/* do setuid(getuid()) after chdir() */
+ 
+ /*
+  * If it is desirable to limit the number of people that can play Hack
+@@ -310,7 +310,7 @@ typedef unsigned char	uchar;
+  * functions that have been macroized.
+  */
+ 
+-/* #define VISION_TABLES */ /* use vision tables generated at compile time */
++#define VISION_TABLES /* use vision tables generated at compile time */
+ #ifndef VISION_TABLES
+ # ifndef NO_MACRO_CPATH
+ #  define MACRO_CPATH	/* use clear_path macros instead of functions */
+@@ -348,7 +348,7 @@ typedef unsigned char	uchar;
+ #endif
+ 
+ #define EXP_ON_BOTL	/* Show experience on bottom line */
+-/* #define SCORE_ON_BOTL */	/* added by Gary Erickson (erickson@ucivax) */
++#define SCORE_ON_BOTL	/* added by Gary Erickson (erickson@ucivax) */
+ 
+ /*
+  * Section 5:  EXPERIMENTAL STUFF
+diff -up vultures-2.1.2/nethack/include/unixconf.h~ vultures-2.1.2/nethack/include/unixconf.h
+--- vultures-2.1.2/nethack/include/unixconf.h~	2008-07-16 16:59:02.000000000 +0300
++++ vultures-2.1.2/nethack/include/unixconf.h	2009-05-23 01:06:50.000000000 +0300
+@@ -37,7 +37,7 @@
+ #define NETWORK		/* if running on a networked system */
+ 			/* e.g. Suns sharing a playground through NFS */
+ /* #define SUNOS4 */	/* SunOS 4.x */
+-/* #define LINUX */     /* Another Unix clone */
++#define LINUX		/* Another Unix clone */
+ /* #define CYGWIN32 */	/* Unix on Win32 -- use with case sensitive defines */
+ /* #define GENIX */	/* Yet Another Unix Clone */
+ /* #define HISX */	/* Bull Unix for XPS Machines */
+@@ -102,7 +102,7 @@
+  * If you want the static parts of your playground on a read-only file
+  * system, define VAR_PLAYGROUND to be where the variable parts are kept.
+  */
+-/* #define VAR_PLAYGROUND "/var/lib/games/nethack" */
++#define VAR_PLAYGROUND "/var/lib/games/nethack"
+ 
+ 
+ /*
+@@ -204,7 +204,7 @@
+  * You can also include any other strange options your compress needs.
+  * If you have a normal compress, just leave it commented out.
+  */
+-/* #define COMPRESS_OPTIONS "-q" */
++#define COMPRESS_OPTIONS "-q9"
+ #endif
+ 
+ #define FCMASK	0660	/* file creation mask */
+diff -up vultures-2.1.2/slashem/include/config.h~ vultures-2.1.2/slashem/include/config.h
+--- vultures-2.1.2/slashem/include/config.h~	2008-07-16 16:58:59.000000000 +0300
++++ vultures-2.1.2/slashem/include/config.h	2009-05-23 01:06:53.000000000 +0300
+@@ -209,10 +209,10 @@
+ 
+ #ifndef WIZARD		/* allow for compile-time or Makefile changes */
+ # ifndef KR1ED
+-#  define WIZARD  "wizard" /* the person allowed to use the -D option */
++#  define WIZARD  "games" /* the person allowed to use the -D option */
+ # else
+ #  define WIZARD
+-#  define WIZARD_NAME "wizard"
++#  define WIZARD_NAME "games"
+ # endif
+ #endif
+ 
+@@ -237,8 +237,8 @@
+ 
+ #ifdef UNIX
+ /* path and file name extension for compression program */
+-# define COMPRESS "/usr/bin/compress" /* Lempel-Ziv compression */
+-# define COMPRESS_EXTENSION ".Z"	     /* compress's extension */
++#define COMPRESS "/usr/bin/bzip2"
++#define COMPRESS_EXTENSION ".bz2"
+ 
+ /* An example of one alternative you might want to use: */
+ /* # define COMPRESS "/usr/local/bin/gzip" */   /* FSF gzip compression */
+@@ -278,7 +278,7 @@
+ #  ifdef __APPLE__
+ #    define HACKDIR "nethackdir"      /* nethack directory */
+ #  else
+-#    define HACKDIR "."
++#    define HACKDIR "/usr/games/lib/nethackdir"
+ #  endif
+ # endif
+ 
+@@ -289,7 +289,7 @@
+  * since the user might create files in a directory of his choice.
+  * Of course SECURE is meaningful only if HACKDIR is defined.
+  */
+-/* #define SECURE */	/* do setuid(getuid()) after chdir() */
++#define SECURE	/* do setuid(getuid()) after chdir() */
+ 
+ /*
+  * If it is desirable to limit the number of people that can play Hack
+@@ -377,7 +377,7 @@ typedef unsigned char	uchar;
+  * functions that have been macroized.
+  */
+ /* WAC Can be defined under DJGPP,  even though it's DOS*/
+-/*#define VISION_TABLES */ /* use vision tables generated at compile time */
++#define VISION_TABLES /* use vision tables generated at compile time */
+ #ifndef VISION_TABLES
+ # ifndef NO_MACRO_CPATH
+ #  define MACRO_CPATH	/* use clear_path macros instead of functions */
+@@ -470,7 +470,7 @@ typedef unsigned char	uchar;
+ #endif
+ 
+ #define EXP_ON_BOTL	/* Show experience on bottom line */
+-/* #define SCORE_ON_BOTL */	/* added by Gary Erickson (erickson@ucivax) */
++#define SCORE_ON_BOTL	/* added by Gary Erickson (erickson@ucivax) */
+ /* #define BORG */            /* Works only under DOS */
+ /* #define KEEP_SAVE */       /* Keep savefiles after Restore (wac@intergate.bc.ca)*/
+ /* #define CHARON */	/* Charon's boat, enables Cerebus - not implemented */
+diff -up vultures-2.1.2/slashem/include/unixconf.h~ vultures-2.1.2/slashem/include/unixconf.h
+--- vultures-2.1.2/slashem/include/unixconf.h~	2008-07-16 16:58:59.000000000 +0300
++++ vultures-2.1.2/slashem/include/unixconf.h	2009-05-23 01:06:41.000000000 +0300
+@@ -38,7 +38,7 @@
+ #define NETWORK		/* if running on a networked system */
+ 			/* e.g. Suns sharing a playground through NFS */
+ /* #define SUNOS4 */	/* SunOS 4.x */
+-/* #define LINUX */	/* Another Unix clone */
++#define LINUX	/* Another Unix clone */
+ /* #define CYGWIN32 */	/* Unix on Win32 -- use with case sensitive defines */
+ /* #define GENIX */	/* Yet Another Unix Clone */
+ /* #define HISX */	/* Bull Unix for XPS Machines */
+@@ -174,7 +174,7 @@
+  * If you want the static parts of your playground on a read-only file
+  * system, define VAR_PLAYGROUND to be where the variable parts are kept.
+  */
+-/* #define VAR_PLAYGROUND "/var/lib/games/nethack" */
++#define VAR_PLAYGROUND "/var/lib/games/nethack"
+ 
+ 
+ 
+@@ -271,7 +271,7 @@
+  * You can also include any other strange options your compress needs.
+  * If you have a normal compress, just leave it commented out.
+  */
+-/* #define COMPRESS_OPTIONS "-q" */
++#define COMPRESS_OPTIONS "-q9"
+ #endif
+ 
+ #define FCMASK	0660	/* file creation mask */

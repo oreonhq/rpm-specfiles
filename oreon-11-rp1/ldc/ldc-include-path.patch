@@ -1,0 +1,14 @@
+diff -up ldc-1.42.0-src/CMakeLists.txt.orig ldc-1.42.0-src/CMakeLists.txt
+--- ldc-1.42.0-src/CMakeLists.txt.orig	2026-03-01 19:43:34.000000000 +0100
++++ ldc-1.42.0-src/CMakeLists.txt	2026-03-01 23:02:17.292634555 +0100
+@@ -976,7 +976,9 @@ makeConfSection(NAME "30-compiler" SECTI
+ 
+     INSTALL
+     SWITCHES ${switches}
+-    POST_SWITCHES "-I${INCLUDE_INSTALL_DIR}"
++    POST_SWITCHES
++        "-I${INCLUDE_INSTALL_DIR}"
++        "-I/usr/include/d"
+ )
+ 
+ set(wasm_switches)

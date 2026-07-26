@@ -1,0 +1,25 @@
+diff -up a/eric/src/eric7/Preferences/__init__.py.defaults b/eric/src/eric7/Preferences/__init__.py
+--- a/eric/src/eric7/Preferences/__init__.py.defaults	2020-01-27 08:42:04.442893427 -0600
++++ b/eric/src/eric7/Preferences/__init__.py	2020-01-27 08:43:52.885446881 -0600
+@@ -192,7 +192,7 @@ class Prefs(object):
+         "ShowSplash": True,
+         "SplitOrientationVertical": False,
+         "UseNativeMenuBar": True,
+-        "PerformVersionCheck": 3,
++        "PerformVersionCheck": 0,
+         # 0 = off
+         # 1 = at startup
+         # 2 = daily
+@@ -1010,9 +1010,9 @@ class Prefs(object):
+     # defaults for the help settings
+     helpDefaults = {
+         "CustomViewer": "",
+-        "PythonDocDir": "",
+-        "Qt6DocDir": "",
+-        "PyQt6DocDir": "https://www.riverbankcomputing.com/static/Docs/PyQt6/",
++        "PythonDocDir": "/usr/share/doc/python3-docs/html",
++        "Qt6DocDir": "/usr/share/doc/qt6/qtdoc",
++        "PyQt6DocDir": "/usr/share/doc/python-pyqt6-doc/html",
+         "PySide6DocDir": "",
+         "EricDocDir": "",
+         "HelpViewerType": 0,  # internal help viewer

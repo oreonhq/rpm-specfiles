@@ -1,0 +1,16 @@
+Description: Fix build with -Werror=format-security
+Author: Vincent Legout <vlegout@debian.org>
+Last-Update: 2012-03-27
+
+Index: grhino/gutil.cc
+===================================================================
+--- grhino.orig/gutil.cc	2012-03-27 19:14:52.759014821 +0200
++++ grhino/gutil.cc	2012-03-27 19:45:46.490973483 +0200
+@@ -27,6 +27,7 @@
+ {
+ 	GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+ 						   GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, 
++                                                   "%s",
+ 						   bufstr.str().c_str());
+ 	gtk_dialog_run(GTK_DIALOG(dialog));
+ 	gtk_widget_destroy(dialog);

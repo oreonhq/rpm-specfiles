@@ -1,0 +1,43 @@
+From d4a13a071b6bf7a04a79fc3326175193f920aea3 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Tue, 30 Jan 2024 12:41:12 +0000
+Subject: [PATCH 1/2] perl_c.c: Fix declaration of argv
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+In GCC 14:
+
+perl_c.c: In function ‘perl4caml_init’:
+perl_c.c:97:25: error: passing argument 2 of ‘Perl_sys_init’ from incompatible pointer type [-Wincompatible-pointer-types]
+   97 |   PERL_SYS_INIT (&argc, &argv);
+      |                         ^~~~~
+      |                         |
+      |                         char * (*)[5]
+/usr/lib64/perl5/CORE/perl.h:3608:61: note: in definition of macro ‘PERL_SYS_INIT’
+ 3608 | #define PERL_SYS_INIT(argc, argv)       Perl_sys_init(argc, argv)
+      |                                                             ^~~~
+In file included from /usr/lib64/perl5/CORE/perl.h:6188:
+/usr/lib64/perl5/CORE/proto.h:4992:34: note: expected ‘char ***’ but argument is of type ‘char * (*)[5]’
+ 4992 | Perl_sys_init(int *argc, char ***argv);
+      |                          ~~~~~~~~^~~~
+---
+ perl_c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/perl_c.c b/perl_c.c
+index ce53667..83f9332 100644
+--- a/perl_c.c
++++ b/perl_c.c
+@@ -94,7 +94,7 @@ perl4caml_init (value unit)
+   int argc = 4;
+   static char *argv[] = { "", "-w", "-e", "0", NULL };
+ 
+-  PERL_SYS_INIT (&argc, &argv);
++  PERL_SYS_INIT (&argc, (char ***) &argv);
+   my_perl = perl_alloc ();
+   perl_construct (my_perl);
+   PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+-- 
+2.43.0
+

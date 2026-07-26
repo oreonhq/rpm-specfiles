@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Glmark2-wayland
+GenericName=Glmark2 OpenGL 2.0 benchmark on Wayland
+Comment=Popular OpenGL 2.0 API benchmark on Wayland
+Exec=glmark2-wayland
+Icon=glmark2-wayland
+Terminal=false
+Type=Application
+Categories=Graphics;

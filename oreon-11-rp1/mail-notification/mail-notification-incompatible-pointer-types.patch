@@ -1,0 +1,371 @@
+diff -Nrup a/src/mn-base-mbox-mailbox-backend.gob b/src/mn-base-mbox-mailbox-backend.gob
+--- a/src/mn-base-mbox-mailbox-backend.gob	2013-12-31 19:31:59.000000000 +0400
++++ b/src/mn-base-mbox-mailbox-backend.gob	2024-01-30 01:16:07.346991722 +0300
+@@ -140,7 +140,7 @@ class MN:Base:Mbox:Mailbox:Backend from
+ 	    mime_message = g_mime_parser_construct_message(parser);
+ 	    if (mime_message)
+ 	      {
+-		if (g_mime_object_get_header(mime_message, "X-Mozilla-Status"))
++		if (g_mime_object_get_header(GMIME_OBJECT(mime_message), "X-Mozilla-Status"))
+ 		  {
+ #if WITH_MOZILLA
+ 		    type = MN_TYPE_MOZILLA_MAILBOX_BACKEND;
+diff -Nrup a/src/mn-mail-icon-widget.gob b/src/mn-mail-icon-widget.gob
+--- a/src/mn-mail-icon-widget.gob	2013-12-31 19:31:59.000000000 +0400
++++ b/src/mn-mail-icon-widget.gob	2024-01-30 01:16:07.347991716 +0300
+@@ -132,64 +132,65 @@ class MN:Mail:Icon:Widget from Mn:Widget
+   }
+ 
+   override (Mn:Widget) void
+-    mn_size_request (GtkWidget *widget, GtkRequisition *requisition)
++    mn_size_request (Mn:Widget *widget, GtkRequisition *requisition)
+   {
+-    self_size_request_internal(widget, requisition);
++    self_size_request_internal(GTK_WIDGET(widget), requisition);
+   }
+ 
+   override (Mn:Widget) void
+-    mn_get_preferred_width (GtkWidget *widget, gint *minimal_width, gint *natural_width)
++    mn_get_preferred_width (Mn:Widget *widget, gint *minimal_width, gint *natural_width)
+   {
+ #if GTK_CHECK_VERSION(3,0,0)
+     GtkRequisition requisition;
+ 
+-     self_size_request_internal (widget, &requisition);
++     self_size_request_internal (GTK_WIDGET(widget), &requisition);
+      *minimal_width = *natural_width = requisition.width;
+ #endif
+   }
+ 
+   override (Mn:Widget) void
+-    mn_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height)
++    mn_get_preferred_height(Mn:Widget *widget, gint *minimal_height, gint *natural_height)
+   {
+ #if GTK_CHECK_VERSION(3,0,0)
+     GtkRequisition requisition;
+ 
+-    self_size_request_internal (widget, &requisition);
++    self_size_request_internal (GTK_WIDGET(widget), &requisition);
+     *minimal_height = *natural_height = requisition.height;
+ #endif
+   }
+ 
+   /* GTK2 only */
+   override (Mn:Widget) gboolean
+-    mn_expose_event (GtkWidget *widget, GdkEventExpose *event)
++    mn_expose_event (Mn:Widget *widget, GdkEventExpose *event)
+   {
+ #if !GTK_CHECK_VERSION(3,0,0)
+     Self *self = SELF(widget);
+ 
+-    if (! GTK_WIDGET_DRAWABLE(widget) || ! selfp->stock_id)
++    if (! GTK_WIDGET_DRAWABLE(GTK_WIDGET(widget)) || ! selfp->stock_id)
+       return FALSE;
+ 
+     if (selfp->is_on) {
+       int x;
+       int y;
+       GdkRectangle image_area;
++      GtkWidget *gtkwidget = GTK_WIDGET(widget);
+ 
+       /* note: widget->requisition is the pixbuf size, see size_request() */
+ 
+-      x = floor(widget->allocation.x + ((widget->allocation.width - widget->requisition.width) * ICON_XALIGN));
+-      y = floor(widget->allocation.y + ((widget->allocation.height - widget->requisition.height) * ICON_YALIGN));
++      x = floor(gtkwidget->allocation.x + ((gtkwidget->allocation.width - gtkwidget->requisition.width) * ICON_XALIGN));
++      y = floor(gtkwidget->allocation.y + ((gtkwidget->allocation.height - gtkwidget->requisition.height) * ICON_YALIGN));
+ 
+       image_area.x = x;
+       image_area.y = y;
+-      image_area.width = widget->requisition.width;
+-      image_area.height = widget->requisition.height;
++      image_area.width = gtkwidget->requisition.width;
++      image_area.height = gtkwidget->requisition.height;
+ 
+       if (gdk_rectangle_intersect(&event->area, &image_area, &image_area)) {
+         GdkPixbuf *pixbuf;
+ 
+         pixbuf = self_render_icon(self);
+ 
+-        gdk_draw_pixbuf(widget->window,
++        gdk_draw_pixbuf(gtkwidget->window,
+                         NULL,
+                         pixbuf,
+                         image_area.x - x,
+@@ -219,12 +220,12 @@ class MN:Mail:Icon:Widget from Mn:Widget
+         const char *size;
+         char *markup;
+ 
+-        if (widget->allocation.height < 32)
++        if (gtkwidget->allocation.height < 32)
+           size = "small";
+         else
+           size = "medium";
+ 
+-        selfp->count_layout = gtk_widget_create_pango_layout(widget, NULL);
++        selfp->count_layout = gtk_widget_create_pango_layout(gtkwidget, NULL);
+ 
+         markup = g_strdup_printf("<span size=\"%s\">%i</span>", size, selfp->count);
+         pango_layout_set_markup(selfp->count_layout, markup, -1);
+@@ -236,19 +237,19 @@ class MN:Mail:Icon:Widget from Mn:Widget
+       box_width = count_rect.width + COUNT_BOX_XPAD * 2;
+       box_height = count_rect.height + COUNT_BOX_YPAD * 2;
+ 
+-      box_x = widget->allocation.x + widget->allocation.width - box_width - COUNT_BOX_XMARGIN;
+-      box_y = widget->allocation.y + widget->allocation.height - box_height - COUNT_BOX_YMARGIN;
++      box_x = gtkwidget->allocation.x + gtkwidget->allocation.width - box_width - COUNT_BOX_XMARGIN;
++      box_y = gtkwidget->allocation.y + gtkwidget->allocation.height - box_height - COUNT_BOX_YMARGIN;
+ 
+       count_x = box_x - count_rect.x + COUNT_BOX_XPAD;
+       count_y = box_y - count_rect.y + COUNT_BOX_YPAD;
+ 
+ #if !GTK_CHECK_VERSION(2,8,0)
+-      gtk_paint_box(widget->style,
+-                    widget->window,
++      gtk_paint_box(gtkwidget->style,
++                    gtkwidget->window,
+                     GTK_WIDGET_STATE(widget),
+                     GTK_SHADOW_OUT,
+                     &event->area,
+-                    widget,
++                    gtkwidget,
+                     NULL,
+                     box_x,
+                     box_y,
+@@ -256,7 +257,7 @@ class MN:Mail:Icon:Widget from Mn:Widget
+                     box_height);
+ #else
+       cairo_t *cr;
+-      cr = gdk_cairo_create(GDK_DRAWABLE(widget->window));
++      cr = gdk_cairo_create(GDK_DRAWABLE(gtkwidget->window));
+       cairo_save(cr);
+       cairo_set_line_width(cr, 2.0);
+       cairo_set_source_rgba (cr, 0.66, 0.62, 0.55, 1.0);
+@@ -271,12 +272,12 @@ class MN:Mail:Icon:Widget from Mn:Widget
+       cairo_destroy(cr);
+ #endif
+ 
+-      gtk_paint_layout(widget->style,
+-                       widget->window,
+-                       GTK_WIDGET_STATE(widget),
++      gtk_paint_layout(gtkwidget->style,
++                       gtkwidget->window,
++                       GTK_WIDGET_STATE(gtkwidget),
+                        FALSE,
+                        &event->area,
+-                       widget,
++                       gtkwidget,
+                        NULL,
+                        count_x,
+                        count_y,
+@@ -289,12 +290,12 @@ class MN:Mail:Icon:Widget from Mn:Widget
+ 
+   /* GTK3 only */
+   override (Mn:Widget) gboolean
+-    mn_draw (GtkWidget *widget, cairo_t *cr)
++    mn_draw (Mn:Widget *widget, cairo_t *cr)
+   {
+ #if GTK_CHECK_VERSION(3,0,0)
+     Self *self = SELF(widget);
+ 
+-    if (! gtk_widget_is_drawable(widget) || ! selfp->stock_id)
++    if (! gtk_widget_is_drawable(GTK_WIDGET(widget)) || ! selfp->stock_id)
+       return FALSE;
+ 
+     if (selfp->is_on) {
+@@ -307,8 +308,8 @@ class MN:Mail:Icon:Widget from Mn:Widget
+ 
+       /* note: widget->requisition is the pixbuf size, see size_request() */
+ 
+-      gtk_widget_get_allocation(widget, &allocation);
+-      gtk_widget_get_requisition(widget, &requisition);
++      gtk_widget_get_allocation(GTK_WIDGET(widget), &allocation);
++      gtk_widget_get_requisition(GTK_WIDGET(widget), &requisition);
+ 
+       x = floor(allocation.x + ((allocation.width - requisition.width) * ICON_XALIGN));
+       y = floor(allocation.y + ((allocation.height - requisition.height) * ICON_YALIGN));
+@@ -338,7 +339,7 @@ class MN:Mail:Icon:Widget from Mn:Widget
+       int box_height;
+       GtkAllocation allocation;
+ 
+-      gtk_widget_get_allocation(widget, &allocation);
++      gtk_widget_get_allocation(GTK_WIDGET(widget), &allocation);
+ 
+       if (! selfp->count_layout) {
+         const char *size;
+@@ -349,7 +350,7 @@ class MN:Mail:Icon:Widget from Mn:Widget
+         else
+           size = "medium";
+ 
+-        selfp->count_layout = gtk_widget_create_pango_layout(widget, NULL);
++        selfp->count_layout = gtk_widget_create_pango_layout(GTK_WIDGET(widget), NULL);
+ 
+         markup = g_strdup_printf("<span size=\"%s\">%i</span>", size, selfp->count);
+         pango_layout_set_markup(selfp->count_layout, markup, -1);
+@@ -379,11 +380,11 @@ class MN:Mail:Icon:Widget from Mn:Widget
+ 
+       cairo_restore(cr);
+ 
+-      gtk_paint_layout(gtk_widget_get_style(widget),
++      gtk_paint_layout(gtk_widget_get_style(GTK_WIDGET(widget)),
+                        cr,
+-                       gtk_widget_get_state_flags(widget),
++                       gtk_widget_get_state_flags(GTK_WIDGET(widget)),
+                        FALSE,
+-                       widget,
++                       GTK_WIDGET(widget),
+                        NULL,
+                        count_x,
+                        count_y,
+diff -Nrup a/src/mn-mail-icon.gob b/src/mn-mail-icon.gob
+--- a/src/mn-mail-icon.gob	2013-12-31 19:31:59.000000000 +0400
++++ b/src/mn-mail-icon.gob	2024-01-30 01:16:07.346991722 +0300
+@@ -43,7 +43,7 @@
+ class MN:Mail:Icon from Egg:Tray:Icon
+ {
+   private MNTooltips *tooltips = {mn_tooltips_new()} unrefwith g_object_unref;
+-  private GtkWidget *widget = {mn_mail_icon_widget_new()};
++  private GtkWidget *widget = {GTK_WIDGET(mn_mail_icon_widget_new())};
+ 
+   private char *stock_id destroywith g_free;
+   private int size;
+diff -Nrup a/src/mn-message-mime.c b/src/mn-message-mime.c
+--- a/src/mn-message-mime.c	2013-12-31 19:31:59.000000000 +0400
++++ b/src/mn-message-mime.c	2024-01-30 01:16:07.347991716 +0300
+@@ -33,12 +33,12 @@ is_spam (GMimeMessage *mime_message)
+   g_return_val_if_fail(GMIME_IS_MESSAGE(mime_message), FALSE);
+ 
+   /* SpamAssassin */
+-  spam = g_mime_object_get_header(mime_message, "X-Spam-Status");
++  spam = g_mime_object_get_header(GMIME_OBJECT(mime_message), "X-Spam-Status");
+   if (spam && mn_ascii_str_case_has_prefix(spam, "yes"))
+     return TRUE;
+ 
+   /* bogofilter */
+-  spam = g_mime_object_get_header(mime_message, "X-Bogosity");
++  spam = g_mime_object_get_header(GMIME_OBJECT(mime_message), "X-Bogosity");
+   if (spam && mn_ascii_str_case_has_prefix(spam, "yes"))
+     return TRUE;
+ 
+@@ -89,7 +89,7 @@ mn_message_new_from_mime_message_full (G
+     {
+       const char *status;
+ 
+-      status = g_mime_object_get_header(mime_message, "Status");
++      status = g_mime_object_get_header(GMIME_OBJECT(mime_message), "Status");
+       if (status && strchr(status, 'R'))
+ 	return NULL;		/* the message was read */
+       else if (status && strchr(status, 'O'))
+diff -Nrup a/src/mn-mozilla-mailbox-backend.gob b/src/mn-mozilla-mailbox-backend.gob
+--- a/src/mn-mozilla-mailbox-backend.gob	2013-12-31 19:31:59.000000000 +0400
++++ b/src/mn-mozilla-mailbox-backend.gob	2024-01-30 01:16:07.347991716 +0300
+@@ -69,7 +69,7 @@ class MN:Mozilla:Mailbox:Backend from MN
+   {
+     const char *header;
+ 
+-    header = g_mime_object_get_header(mime_message, header_name);
++    header = g_mime_object_get_header(GMIME_OBJECT(mime_message), header_name);
+     if (header && mn_str_ishex(header))
+       return strtol(header, NULL, 16);
+     else
+diff -Nrup a/src/mn-text-table.gob b/src/mn-text-table.gob
+--- a/src/mn-text-table.gob	2013-12-31 19:31:59.000000000 +0400
++++ b/src/mn-text-table.gob	2024-01-30 01:16:07.347991716 +0300
+@@ -105,7 +105,7 @@ class MN:Text:Table from Mn:Widget
+   }
+ 
+   private void
+-  size_request_internal (GtkWidget *widget, GtkRequisition *requisition)
++  size_request_internal (Mn:Widget *widget, GtkRequisition *requisition)
+   {
+     Self *self = SELF(widget);
+ 
+@@ -116,13 +116,13 @@ class MN:Text:Table from Mn:Widget
+   }
+ 
+   override (Mn:Widget) void
+-    mn_size_request (GtkWidget *widget, GtkRequisition *requisition)
++    mn_size_request (Mn:Widget *widget, GtkRequisition *requisition)
+   {
+     self_size_request_internal(widget, requisition);
+   }
+ 
+   override (Mn:Widget) void
+-    mn_get_preferred_width (GtkWidget * widget, gint * minimal_width, gint * natural_width)
++    mn_get_preferred_width (Mn:Widget * widget, gint * minimal_width, gint * natural_width)
+   {
+ #if GTK_CHECK_VERSION(3,0,0)
+     GtkRequisition requisition;
+@@ -133,7 +133,7 @@ class MN:Text:Table from Mn:Widget
+   }
+ 
+   override (Mn:Widget) void
+-    mn_get_preferred_height (GtkWidget * widget, gint * minimal_height, gint * natural_height)
++    mn_get_preferred_height (Mn:Widget * widget, gint * minimal_height, gint * natural_height)
+   {
+ #if GTK_CHECK_VERSION(3,0,0)
+     GtkRequisition requisition;
+@@ -218,16 +218,16 @@ class MN:Text:Table from Mn:Widget
+ 
+   /* GTK2 only */
+   override (Mn:Widget) gboolean
+-    mn_expose_event (GtkWidget *widget, GdkEventExpose *event)
++    mn_expose_event (Mn:Widget *widget, GdkEventExpose *event)
+   {
+-      return self_draw_internal(widget, event, NULL);
++      return self_draw_internal(GTK_WIDGET(widget), event, NULL);
+   }
+ 
+   /* GTK3 only */
+   override (Mn:Widget) gboolean
+-    mn_draw (GtkWidget *widget, cairo_t *cr)
++    mn_draw (Mn:Widget *widget, cairo_t *cr)
+   {
+-      return self_draw_internal(widget, NULL, cr);
++      return self_draw_internal(GTK_WIDGET(widget), NULL, cr);
+   }
+ 
+   private void
+diff -Nrup a/src/mn-widget.c b/src/mn-widget.c
+--- a/src/mn-widget.c	2013-12-31 19:31:59.000000000 +0400
++++ b/src/mn-widget.c	2024-01-30 01:16:07.348991710 +0300
+@@ -42,32 +42,33 @@ mn_size_request (MnWidget *widget, GtkRe
+ /* GTK3 */
+ #if GTK_CHECK_VERSION(3,0,0)
+ static gboolean
+-mn_draw (MnWidget *widget, cairo_t *cr)
++mn_draw (GtkWidget *widget, cairo_t *cr)
+ {
+     MnWidgetClass *klass = MN_WIDGET_GET_CLASS(widget);
+ 
+     if (klass->mn_draw) {
+-        klass->mn_draw(widget, cr);
++        klass->mn_draw(MN_WIDGET(widget), cr);
+     }
++    return FALSE;
+ }
+ 
+ static void
+-mn_get_preferred_height (MnWidget *widget, gint *minimum_height, gint *natural_height)
++mn_get_preferred_height (GtkWidget *widget, gint *minimum_height, gint *natural_height)
+ {
+     MnWidgetClass *klass = MN_WIDGET_GET_CLASS(widget);
+ 
+     if (klass->mn_get_preferred_height) {
+-        klass->mn_get_preferred_height(widget, minimum_height, natural_height);
++        klass->mn_get_preferred_height(MN_WIDGET(widget), minimum_height, natural_height);
+     }
+ }
+ 
+ static void
+-mn_get_preferred_width (MnWidget *widget, gint *minimum_width, gint *natural_width)
++mn_get_preferred_width (GtkWidget *widget, gint *minimum_width, gint *natural_width)
+ {
+     MnWidgetClass *klass = MN_WIDGET_GET_CLASS(widget);
+ 
+     if (klass->mn_get_preferred_width) {
+-        klass->mn_get_preferred_width(widget, minimum_width, natural_width);
++        klass->mn_get_preferred_width(MN_WIDGET(widget), minimum_width, natural_width);
+     }
+ }
+ #endif

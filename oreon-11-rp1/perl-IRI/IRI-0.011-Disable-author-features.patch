@@ -1,0 +1,34 @@
+From f94eef19647dff8346fb41d273ba52c425cb144c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 3 Apr 2017 14:25:31 +0200
+Subject: [PATCH] Disable author features
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Do not run authors tests.
+Do not generate DOAP changelog. Module::Install::DOAPChangeSets is in
+build cycle with RDF::Trine and IRI.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 36a6ee2..762304f 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -25,9 +25,4 @@ resources(
+ 	'bugtracker' => "https://github.com/kasei/perl-iri/issues"
+ );
+ 
+-author_tests('xt');
+-
+-write_doap_changes "meta/changes.ttl", "Changes", "turtle";
+-
+-sign;
+ WriteAll;
+-- 
+2.21.1
+

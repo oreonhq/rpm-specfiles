@@ -1,0 +1,28 @@
+diff -Naur openca-ocspd-1.7.0.orig/configure.in openca-ocspd-1.7.0.new/configure.in
+--- openca-ocspd-1.7.0.orig/configure.in	2013-11-05 11:35:16.362736109 +0100
++++ openca-ocspd-1.7.0.new/configure.in	2013-11-05 12:13:46.949198675 +0100
+@@ -45,6 +45,10 @@
+ 	[AC_MSG_ERROR([pthread library is needed!])]
+ )
+ 
++AC_CHECK_FUNC(setgroups,
++	[AC_DEFINE([HAVE_SETGROUPS], 1, [setgroups() function])]
++)
++
+ if test x$arch = xlinux ; then
+   AC_DEFINE(OCSPD_TARGET_LINUX, 1, [Linux])
+ fi
+diff -Naur openca-ocspd-1.7.0.orig/src/support.c openca-ocspd-1.7.0.new/src/support.c
+--- openca-ocspd-1.7.0.orig/src/support.c	2008-11-10 21:14:06.000000000 +0100
++++ openca-ocspd-1.7.0.new/src/support.c	2013-11-05 11:59:56.344162745 +0100
+@@ -275,6 +275,10 @@
+ 		return 0;
+ 	}
+ 
++#ifdef HAVE_SETGROUPS
++	setgroups(1, &gr->gr_gid);
++#endif
++
+ 	if (setuid (pw->pw_uid) == -1) {
+ 		syslog(LOG_ERR,"Error setting user %d (%s)", 
+ 						pw->pw_uid, conf->user );

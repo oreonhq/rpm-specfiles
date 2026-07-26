@@ -1,0 +1,20 @@
+diff -up ./Makefile.install ./Makefile
+--- ./Makefile.install	2006-12-10 12:59:54.000000000 -0500
++++ ./Makefile	2015-08-31 11:58:40.446290655 -0400
+@@ -17,7 +17,7 @@ MACOS_CCOPTS = -I/sw/include
+ FORMATDEFS = -DRWIMG_JPEG -DRWIMG_PNG -DRWIMG_GIF
+ 
+ LDOPTS = $(MACOS_LDOPTS) -L/usr/X11R6/lib $(PROFILE) $(DEBUG)
+-CCOPTS = $(MACOS_CCOPTS) -I/usr/X11R6/include -I/usr/X11R6/include/X11 -I. -Irwimg -Wall $(OPTIMIZE) $(DEBUG) $(PROFILE) -DMETAPIXEL_VERSION=\"$(VERSION)\"
++CCOPTS = $(CFLAGS) $(MACOS_CCOPTS) -I/usr/X11R6/include -I/usr/X11R6/include/X11 -I. -Irwimg -Wall $(OPTIMIZE) $(DEBUG) $(PROFILE) -DMETAPIXEL_VERSION=\"$(VERSION)\"
+ CC = gcc
+ #LIBFFM = -lffm
+ 
+@@ -53,6 +53,7 @@ librwimg :
+ 
+ install : metapixel metapixel.1
+ 	$(INSTALL) -d $(BINDIR)
++	$(INSTALL) -d $(MANDIR)/man1
+ 	$(INSTALL) metapixel $(BINDIR)
+ 	$(INSTALL) metapixel-prepare $(BINDIR)
+ 	$(INSTALL) metapixel.1 $(MANDIR)/man1

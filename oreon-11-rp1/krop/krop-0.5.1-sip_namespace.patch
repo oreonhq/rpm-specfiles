@@ -1,0 +1,34 @@
+diff -up krop-0.5.1/krop/config.py.sip krop-0.5.1/krop/config.py
+--- krop-0.5.1/krop/config.py.sip	2019-09-18 15:22:09.851429103 -0500
++++ krop-0.5.1/krop/config.py	2019-09-18 16:35:51.347966628 -0500
+@@ -2,23 +2,26 @@ import sys
+ 
+ PYQT5 = False
+ try:
+-    import sip
+     # use PyQt5 unless not available or specified otherwise
+     if '--no-qt5' not in sys.argv:
+         try:
+             import PyQt5
+             PYQT5 = True
++            import PyQt5.sip
++            PyQt5.sip.setapi('QString', 2)
++            PyQt5.sip.setapi('QVariant', 2)
+         except ImportError:
+             pass
+     if not PYQT5:
+         import PyQt4
++        import PyQt4.sip
++        PyQt4.sip.setapi('QString', 2)
++        PyQt4.sip.setapi('QVariant', 2)
++
+ except ImportError:
+     _msg = "Please install PyQt4 or PyQt5 first."
+     raise RuntimeError(_msg)
+ 
+-sip.setapi('QString', 2)
+-sip.setapi('QVariant', 2)
+-
+ # use KDE unless not available or specified otherwise
+ KDE = False
+ if '--no-kde' not in sys.argv:

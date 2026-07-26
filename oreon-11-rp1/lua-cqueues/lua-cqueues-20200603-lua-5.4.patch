@@ -1,0 +1,176 @@
+diff -up cqueues-rel-20200603/GNUmakefile.lua54 cqueues-rel-20200603/GNUmakefile
+--- cqueues-rel-20200603/GNUmakefile.lua54	2020-06-03 02:57:02.000000000 -0400
++++ cqueues-rel-20200603/GNUmakefile	2020-06-30 11:36:27.145696142 -0400
+@@ -12,7 +12,7 @@ all: # default target
+ #
+ # G N U  M A K E  F U N C T I O N S
+ #
+-KNOWN_APIS = 5.1 5.2 5.3
++KNOWN_APIS = 5.1 5.2 5.3 5.4
+ 
+ # template for invoking luapath script
+ LUAPATH := $(d)/mk/luapath
+@@ -40,6 +40,9 @@ lua52cpath ?= $(libdir)/lua/5.2
+ lua52path ?= $(datadir)/lua/5.2
+ lua53cpath ?= $(libdir)/lua/5.3
+ lua53path ?= $(datadir)/lua/5.3
++lua54cpath ?= $(libdir)/lua/5.4
++lua54path ?= $(datadir)/lua/5.4
++
+ 
+ AR ?= ar
+ RANLIB ?= ranlib
+@@ -64,7 +67,7 @@ PRINT_$(d) = printf "%s = %s\n" '$(1)' '
+ 
+ LAZY_$(d) = \
+ 	prefix includedir libdir datadir bindir \
+-	lua51cpath lua51path lua52cpath lua52path lua53cpath lua53path \
++	lua51cpath lua51path lua52cpath lua52path lua53cpath lua53path lua54cpath lua54path \
+ 	CC ALL_CPPFLAGS CPPFLAGS ALL_CFLAGS CFLAGS ALL_LDFLAGS LDFLAGS \
+ 	ALL_SOFLAGS SOFLAGS ALL_LIB LIBS \
+ 	$(foreach API,$(KNOWN_APIS),ALL_LUA$(subst .,,$(API))_CPPFLAGS) \
+@@ -96,7 +99,7 @@ endif
+ 
+ # set LUA_APIS if empty or "?"
+ ifeq ($(or $(strip $(LUA_APIS)),?),?)
+-override LUA_APIS := $(call HAVE_API_FN,5.1) $(call HAVE_API_FN,5.2) $(call HAVE_API_FN,5.3)
++override LUA_APIS := $(call HAVE_API_FN,5.1) $(call HAVE_API_FN,5.2) $(call HAVE_API_FN,5.3) $(call HAVE_API_FN,5.4)
+ endif
+ 
+ define LUAXY_template
+@@ -131,6 +134,7 @@ endef # LUAXY_template
+ $(eval $(call LUAXY_template,5.1))
+ $(eval $(call LUAXY_template,5.2))
+ $(eval $(call LUAXY_template,5.3))
++$(eval $(call LUAXY_template,5.4))
+ 
+ #
+ # A U T O D E T E C T  C O M P I L A T I O N  F L A G S
+diff -up cqueues-rel-20200603/src/cqueues.c.lua54 cqueues-rel-20200603/src/cqueues.c
+--- cqueues-rel-20200603/src/cqueues.c.lua54	2020-06-30 11:45:50.152509805 -0400
++++ cqueues-rel-20200603/src/cqueues.c	2020-06-30 11:45:55.956415099 -0400
+@@ -2050,8 +2050,12 @@ static cqs_status_t cqueue_resume(lua_St
+ 	timer_del(Q, &T->timer);
+ 
+ 	cstack_push(Q->cstack, &(struct stackinfo){ Q, L, I->self, T->L });
+-
++#if defined(LUA_VERSION_NUM) && LUA_VERSION_NUM >= 504
++	int nres;
++	status = lua_resume(T->L, L, nargs, &nres);
++#else
+ 	status = lua_resume(T->L, L, nargs);
++#endif
+ 
+ 	cstack_pop(Q->cstack);
+ 
+diff -up cqueues-rel-20200603/src/GNUmakefile.lua54 cqueues-rel-20200603/src/GNUmakefile
+--- cqueues-rel-20200603/src/GNUmakefile.lua54	2020-06-03 02:57:02.000000000 -0400
++++ cqueues-rel-20200603/src/GNUmakefile	2020-06-30 11:36:27.145696142 -0400
+@@ -67,12 +67,14 @@ $$(d)/$(1)/thread.o: $$(d)/lib/llrb.h
+ $$(d)/$(1)/notify.o: $$(d)/lib/notify.h
+ 
+ ifneq ($(1), 5.3)
++ifneq ($(1), 5.4)
+ $$(d)/$(1)/compat53.o: $$(d)/../vendor/compat53/c-api/compat-5.3.c $$(d)/../vendor/compat53/c-api/compat-5.3.h $$(d)/config.h
+ 	$$(MKDIR) -p $$(@D)
+ 	$$(CC) $$(CFLAGS_$(d)) $$(ALL_LUA$(subst .,,$(1))_CPPFLAGS) $$(CPPFLAGS_$(d)) -c -o $$@ $$<
+ 
+ $$(d)/$(1)/cqueues.so: $$(d)/$(1)/compat53.o
+ endif
++endif
+ 
+ .SECONDARY: liblua$(1)-cqueues cqueues$(1) cqueues
+ 
+@@ -83,13 +85,15 @@ endef # BUILD_$(d)
+ $(eval $(call BUILD_$(d),5.1))
+ $(eval $(call BUILD_$(d),5.2))
+ $(eval $(call BUILD_$(d),5.3))
++$(eval $(call BUILD_$(d),5.4))
+ 
+ ifneq "$(filter $(abspath $(d)/..)/%, $(abspath $(firstword $(MAKEFILE_LIST))))" ""
+-.SECONDARY: all all5.1 all5.2 all5.3
++.SECONDARY: all all5.1 all5.2 all5.3 all5.4
+ 
+ all5.1: liblua5.1-cqueues
+ all5.2: liblua5.2-cqueues
+ all5.3: liblua5.3-cqueues
++all5.4: liblua5.4-cqueues
+ all: $(foreach API,$(strip $(LUA_APIS)),all$(API))
+ 
+ endif
+@@ -155,14 +159,16 @@ endef # INSTALL_$(d)
+ $(eval $(call INSTALL_$(d),5.1,$$(lua51cpath),$$(lua51path)))
+ $(eval $(call INSTALL_$(d),5.2,$$(lua52cpath),$$(lua52path)))
+ $(eval $(call INSTALL_$(d),5.3,$$(lua53cpath),$$(lua53path)))
++$(eval $(call INSTALL_$(d),5.4,$$(lua54cpath),$$(lua54path)))
+ 
+ ifneq "$(filter $(abspath $(d)/..)/%, $(abspath $(firstword $(MAKEFILE_LIST))))" ""
+ 
+-.SECONDARY: install5.1 install5.2 install5.3 install
++.SECONDARY: install5.1 install5.2 install5.3 install5.4 install
+ 
+ install5.1: liblua5.1-cqueues-install
+ install5.2: liblua5.2-cqueues-install
+ install5.3: liblua5.3-cqueues-install
++install5.4: liblua5.4-cqueues-install
+ install: $(foreach API,$(strip $(LUA_APIS)),install$(API))
+ 
+ .PHONY: uninstall5.1 uninstall5.2 uninstall5.3 uninstall
+@@ -170,6 +176,7 @@ install: $(foreach API,$(strip $(LUA_API
+ uninstall5.1: liblua5.1-cqueues-uninstall
+ uninstall5.2: liblua5.2-cqueues-uninstall
+ uninstall5.3: liblua5.3-cqueues-uninstall
++uninstall5.4: liblua5.4-cqueues-uninstall
+ uninstall: $(foreach API,$(strip $(LUA_APIS)),uninstall$(API))
+ 
+ endif
+@@ -204,14 +211,17 @@ $(d)/help:
+ 	@echo "      all5.1 - build 5.1/cqueues.so"
+ 	@echo "      all5.2 - build 5.2/cqueues.so"
+ 	@echo "      all5.3 - build 5.3/cqueues.so"
++	@echo "      all5.4 - build 5.4/cqueues.so"
+ 	@echo "     install - install all API targets"
+ 	@echo "  install5.1 - install cqueues Lua 5.1 modules"
+ 	@echo "  install5.2 - install cqueues Lua 5.2 modules"
+ 	@echo "  install5.3 - install cqueues Lua 5.3 modules"
++	@echo "  install5.4 - install cqueues Lua 5.4 modules"
+ 	@echo "   uninstall - uninstall all API targets"
+ 	@echo "uninstall5.1 - uninstall cqueues Lua 5.1 modules"
+ 	@echo "uninstall5.2 - uninstall cqueues Lua 5.2 modules"
+ 	@echo "uninstall5.3 - uninstall cqueues Lua 5.3 modules"
++	@echo "uninstall5.4 - uninstall cqueues Lua 5.4 modules"
+ 	@echo "       clean - rm binary targets, object files, debugging symbols, etc"
+ 	@echo "      clean~ - clean + rm *~"
+ 	@echo "        help - echo this help message"
+@@ -226,10 +236,13 @@ $(d)/help:
+ 	@echo 'lua52cpath - install path for Lua 5.2 C modules ($(value lua52cpath))'
+ 	@echo ' lua53path - install path for Lua 5.3 modules ($(value lua53path))'
+ 	@echo 'lua53cpath - install path for Lua 5.3 C modules ($(value lua53cpath))'
++	@echo ' lua54path - install path for Lua 5.4 modules ($(value lua54path))'
++	@echo 'lua54cpath - install path for Lua 5.4 C modules ($(value lua54cpath))'
+ 	@echo ""
+ 	@echo 'LUA51_CPPFLAGS - cpp flags for Lua 5.1 headers ($(LUA51_CPPFLAGS))'
+ 	@echo 'LUA52_CPPFLAGS - cpp flags for Lua 5.2 headers ($(LUA52_CPPFLAGS))'
+ 	@echo 'LUA53_CPPFLAGS - cpp flags for Lua 5.3 headers ($(LUA53_CPPFLAGS))'
++	@echo 'LUA54_CPPFLAGS - cpp flags for Lua 5.4 headers ($(LUA54_CPPFLAGS))'
+ 	@echo ""
+ 	@echo "(NOTE: all the common GNU-style paths are supported, including"
+ 	@echo "prefix, bindir, libdir, datadir, includedir, and DESTDIR.)"
+diff -up cqueues-rel-20200603/vendor/compat53/c-api/compat-5.3.h.lua54 cqueues-rel-20200603/vendor/compat53/c-api/compat-5.3.h
+--- cqueues-rel-20200603/vendor/compat53/c-api/compat-5.3.h.lua54	2020-06-03 02:57:02.000000000 -0400
++++ cqueues-rel-20200603/vendor/compat53/c-api/compat-5.3.h	2020-06-30 11:36:27.145696142 -0400
+@@ -395,11 +395,11 @@ COMPAT53_API void luaL_requiref (lua_Sta
+ 
+ 
+ /* other Lua versions */
+-#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501 || LUA_VERSION_NUM > 503
++#if !defined(LUA_VERSION_NUM) || LUA_VERSION_NUM < 501 || LUA_VERSION_NUM > 504
+ 
+-#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, or 5.3)"
++#  error "unsupported Lua version (i.e. not Lua 5.1, 5.2, 5.3, or 5.4)"
+ 
+-#endif /* other Lua versions except 5.1, 5.2, and 5.3 */
++#endif /* other Lua versions except 5.1, 5.2, 5.3, 5.4 */
+ 
+ 
+ 

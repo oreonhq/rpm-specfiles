@@ -1,0 +1,63 @@
+The first patch is not needed with newer autoconf
+
+The second and third patch fix an undeclared exit function in a
+custom autoconf check, so it needs to be fixed in the sources.
+The fork at <https://github.com/mej/Eterm> has already addressed this.
+
+diff -ur Eterm-0.9.6.orig/configure Eterm-0.9.6/configure
+--- Eterm-0.9.6.orig/configure	2011-03-16 07:10:27.000000000 +0100
++++ Eterm-0.9.6/configure	2022-11-27 18:05:36.030207328 +0100
+@@ -3068,7 +3068,7 @@
+   echo "$as_me:$LINENO: \$? = $ac_status" >&5
+   (exit $ac_status); }; }; then
+   for ac_declaration in \
+-   '' \
++   '#include <stdlib.h>' \
+    'extern "C" void std::exit (int) throw (); using std::exit;' \
+    'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+@@ -3846,8 +3846,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext
+diff -ur Eterm-0.9.6.orig/aclocal.m4 Eterm-0.9.6/aclocal.m4
+--- Eterm-0.9.6.orig/aclocal.m4	2011-03-16 07:10:25.000000000 +0100
++++ Eterm-0.9.6/aclocal.m4	2022-11-27 18:11:42.411234497 +0100
+@@ -490,10 +490,10 @@
+ int i;
+ for (i=0; i<7; i++) ovbuf[i]='x';
+ snprintf(ovbuf, 4,"foo%s", "bar");
+-if (ovbuf[5]!='x') exit(1);
++if (ovbuf[5]!='x') return 1;
+ snprintf(ovbuf, 4,"foo%d", 666);
+-if (ovbuf[5]!='x') exit(1);
+-exit(0);
++if (ovbuf[5]!='x') return 1;
++return 0;
+ } >>
+             changequote([, ])
+         , dps_cv_snprintf_bug=0, dps_cv_snprintf_bug=1, dps_cv_snprintf_bug=2)
+diff -ur Eterm-0.9.6.orig/configure Eterm-0.9.6/configure
+--- Eterm-0.9.6.orig/configure	2022-11-27 18:05:36.030207328 +0100
++++ Eterm-0.9.6/configure	2022-11-27 18:12:07.309963397 +0100
+@@ -22434,10 +22434,10 @@
+ int i;
+ for (i=0; i<7; i++) ovbuf[i]='x';
+ snprintf(ovbuf, 4,"foo%s", "bar");
+-if (ovbuf[5]!='x') exit(1);
++if (ovbuf[5]!='x') return 1;
+ snprintf(ovbuf, 4,"foo%d", 666);
+-if (ovbuf[5]!='x') exit(1);
+-exit(0);
++if (ovbuf[5]!='x') return 1;
++return 0;
+ }
+ 
+ 

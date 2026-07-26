@@ -1,0 +1,33 @@
+diff -up atomorun-1.1_pre2/src/engine_setup.c~ atomorun-1.1_pre2/src/engine_setup.c
+--- atomorun-1.1_pre2/src/engine_setup.c~	2020-02-15 12:12:11.000000000 +0100
++++ atomorun-1.1_pre2/src/engine_setup.c	2020-02-15 12:14:03.768198256 +0100
+@@ -34,7 +34,7 @@ void stop_all_sounds()
+ 
+ void load_sound(GLbyte *name, GLint sound_id)
+ {
+-	GLbyte name2[strlen(name)];
++	GLbyte name2[strlen(name) +  1];
+ 	
+ 	strcpy(name2, name);
+ 		
+@@ -236,7 +236,7 @@ void load_texture(GLbyte *name, GLint te
+ {
+ 	SDL_Surface *TextureImage[1];	/* Platz für die Textur freimachen */
+ 	SDL_RWops *rwop;
+-	GLbyte name2[strlen(name)];
++	GLbyte name2[strlen(name) + 1];
+ 	
+ 	strcpy(name2, name);
+ 	
+diff -up atomorun-1.1_pre2/src/main.c~ atomorun-1.1_pre2/src/main.c
+--- atomorun-1.1_pre2/src/main.c~	2020-02-15 12:12:11.000000000 +0100
++++ atomorun-1.1_pre2/src/main.c	2020-02-15 12:15:10.861659023 +0100
+@@ -158,7 +158,7 @@ void process_args(int argc, char** argv)
+ 						quit(0);
+ 						break;
+ 					case 'h':
+-						printf("Atomorun help:\n", VERSION);
++						printf("Atomorun %s help:\n", VERSION);
+ 						printf("--------------\n");
+ 						printf("Usage: atomorun [OPTION]...\n\n");
+ 						printf("  -r X\tSelect resolution. X must be one of the following:\n");

@@ -1,0 +1,22 @@
+From 1897adad2747c7a4e6b19d1d5064024a8bda6c88 Mon Sep 17 00:00:00 2001
+From: Tomasz Torcz <ttorcz@fedoraproject.org>
+Date: Thu, 21 Mar 2013 17:36:15 +0100
+Subject: [PATCH] install into perl directories
+
+---
+ module/swig/perl5/OW/Makefile.linux.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/module/swig/perl5/OW/Makefile.linux.in b/module/swig/perl5/OW/Makefile.linux.in
+index dc424e0..b737f10 100644
+--- a/module/swig/perl5/OW/Makefile.linux.in
++++ b/module/swig/perl5/OW/Makefile.linux.in
+@@ -17,4 +17,5 @@ WriteMakefile(
+     'OBJECT'	=>	'ow_wrap.o',
+     'NAME'      =>	'OW',
+ 	'POLLUTE'	=>  1,
++    'INSTALLDIRS' =>    'perl',
+ ) ;
+-- 
+1.8.1.4
+

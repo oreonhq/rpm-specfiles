@@ -1,0 +1,12 @@
+diff -uNr gitweb.orig/gitweb/gitweb_defaults.perl gitweb/gitweb/gitweb_defaults.perl
+--- gitweb.orig/gitweb/gitweb_defaults.perl	2010-01-06 16:25:05.000000000 -0800
++++ gitweb/gitweb/gitweb_defaults.perl	2010-02-04 15:35:28.000000000 -0800
+@@ -32,7 +32,7 @@
+ 
+ # core git executable to use
+ # this can just be "git" if your webserver has a sensible PATH
+-$GIT = "++GIT_BINDIR++/git";
++$GIT = "/usr/bin/git";
+ 
+ # absolute fs-path which will be prepended to the project path
+ #our $projectroot = "/pub/scm";

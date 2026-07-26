@@ -1,0 +1,26 @@
+diff --git a/META.json b/META.json
+index 175aa90..ea07bfe 100644
+--- a/META.json
++++ b/META.json
+@@ -21,7 +21,7 @@
+       },
+       "configure" : {
+          "requires" : {
+-            "Module::Build" : "0.4"
++            "Module::Build" : 0
+          }
+       },
+       "runtime" : {
+diff --git a/META.yml b/META.yml
+index 0746bd5..8de63b5 100644
+--- a/META.yml
++++ b/META.yml
+@@ -5,7 +5,7 @@ author:
+ build_requires:
+   Test::More: 0
+ configure_requires:
+-  Module::Build: 0.4
++  Module::Build: 0
+ dynamic_config: 1
+ generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.113640'
+ license: perl

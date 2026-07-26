@@ -1,0 +1,75 @@
+From: Raphael Geissert <geissert@debian.org>
+Subject: Bug#772493: [PATCH] koules: correct a few spelling mistakes
+
+Hi,
+
+Just to correct a few spelling mistakes I found at random in the Debian
+archive.
+
+Cheers.
+
+---
+--- a/server.c
++++ b/server.c
+@@ -342,7 +342,7 @@
+     ssendallreliable (buffer, HEADSIZE + 1);
+   if (registered == connected)
+     {
+-      printf ("All clients sucesfully registered. Entering configure mode\n");
++      printf ("All clients successfully registered. Entering configure mode\n");
+       close (Socket), Socket = -1;
+       PUTHEAD (CMENU2);
+       ssendallreliable (buffer, HEADSIZE);
+@@ -378,7 +378,7 @@
+      ssend ( client,buffer, HEADSIZE+2); */
+   if (registered == connected)
+     {
+-      printf ("All clients sucesfully registered. Starting game\n");
++      printf ("All clients successfully registered. Starting game\n");
+       PUTHEAD (CGAME);
+       ssendallreliable (buffer, HEADSIZE);
+       gamemode = GAME;
+--- a/koules.svga.6
++++ b/koules.svga.6
+@@ -104,7 +104,7 @@
+ select dificulty for server:
+      0: nightmare
+      1: hard
+-     2: medium(default and recomended)
++     2: medium (default and recommended)
+      3: easy
+      4: very easy
+ .TP
+--- a/svgalib/init.c
++++ b/svgalib/init.c
+@@ -420,7 +420,7 @@
+ 		  " -D<number> select dificulty for server:\n"
+ 		  "     0: nightmare\n"
+ 		  "     1: hard\n"
+-		  "     2: medium(default and recomended)\n"
++		  "     2: medium (default and recommended)\n"
+ 		  "     3: easy\n"
+ 		  "     4: very easy\n"
+ 		  " -K run server in deathmatch mode\n", DEFAULTINITPORT
+--- a/xkoules.6
++++ b/xkoules.6
+@@ -121,7 +121,7 @@
+ select dificulty for server:
+      0: nightmare
+      1: hard
+-     2: medium(default and recomended)
++     2: medium (default and recommended)
+      3: easy
+      4: very easy
+ .TP
+--- a/xlib/init.c
++++ b/xlib/init.c
+@@ -795,7 +795,7 @@
+ -D<number> select dificulty for server:\n \
+     0: nightmare\n \
+     1: hard\n \
+-    2: medium(default and recomended)\n \
++    2: medium (default and recommended)\n \
+     3: easy\n \
+     4: very easy\n \
+ -K run server in deathmatch mode\n "

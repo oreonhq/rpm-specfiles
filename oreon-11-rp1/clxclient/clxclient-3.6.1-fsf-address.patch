@@ -1,0 +1,195 @@
+diff --git a/source/button.cc b/source/button.cc
+index 0adb42c..c3251a5 100644
+--- a/source/button.cc
++++ b/source/button.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/clxclient.h b/source/clxclient.h
+index fc95e59..75808db 100644
+--- a/source/clxclient.h
++++ b/source/clxclient.h
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/enumip.cc b/source/enumip.cc
+index 0873da8..8240c49 100644
+--- a/source/enumip.cc
++++ b/source/enumip.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/mclist.cc b/source/mclist.cc
+index 1937591..7eaab5a 100644
+--- a/source/mclist.cc
++++ b/source/mclist.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/menuwin.cc b/source/menuwin.cc
+index c78abd7..c23888a 100644
+--- a/source/menuwin.cc
++++ b/source/menuwin.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/meter.cc b/source/meter.cc
+index d16b65a..139eb24 100644
+--- a/source/meter.cc
++++ b/source/meter.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/scale.cc b/source/scale.cc
+index e4c4e45..782cc1b 100644
+--- a/source/scale.cc
++++ b/source/scale.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/scroll.cc b/source/scroll.cc
+index de1d06f..183e281 100644
+--- a/source/scroll.cc
++++ b/source/scroll.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/slider.cc b/source/slider.cc
+index b5ff1e1..d0acf84 100644
+--- a/source/slider.cc
++++ b/source/slider.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/textip.cc b/source/textip.cc
+index 3af61f2..61de615 100644
+--- a/source/textip.cc
++++ b/source/textip.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/xdisplay.cc b/source/xdisplay.cc
+index 977f34e..846ee59 100644
+--- a/source/xdisplay.cc
++++ b/source/xdisplay.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/xdraw.cc b/source/xdraw.cc
+index 5463c14..259c319 100644
+--- a/source/xdraw.cc
++++ b/source/xdraw.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/xhandler.cc b/source/xhandler.cc
+index 521a934..f90010e 100644
+--- a/source/xhandler.cc
++++ b/source/xhandler.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/xresman.cc b/source/xresman.cc
+index 392550c..e7f5b8e 100644
+--- a/source/xresman.cc
++++ b/source/xresman.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 
+diff --git a/source/xwindow.cc b/source/xwindow.cc
+index dbbd08e..9693c1b 100644
+--- a/source/xwindow.cc
++++ b/source/xwindow.cc
+@@ -14,7 +14,7 @@
+ //
+ //  You should have received a copy of the GNU Lesser General Public
+ //  License along with this program; if not, write to the Free Software
+-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++//  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ //
+ // ---------------------------------------------------------------------------------
+ 

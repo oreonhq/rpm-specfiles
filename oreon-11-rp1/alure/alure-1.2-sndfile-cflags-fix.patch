@@ -1,0 +1,15 @@
+diff -up alure-1.2/CMakeLists.txt.sndfile-cflags-fix alure-1.2/CMakeLists.txt
+--- alure-1.2/CMakeLists.txt.sndfile-cflags-fix	2024-10-22 09:12:33.559930694 -0400
++++ alure-1.2/CMakeLists.txt	2024-10-22 09:12:39.122009443 -0400
+@@ -214,8 +214,9 @@ IF(SNDFILE)
+     IF(SNDFILE_FOUND)
+         SET(HAS_SNDFILE 1)
+         LINK_DIRECTORIES(${SNDFILE_LIBRARY_DIRS})
+-        SET_SOURCE_FILES_PROPERTIES(src/codec_sndfile.cpp PROPERTIES
+-                                    COMPILE_FLAGS "${SNDFILE_CFLAGS}")
++        STRING(REPLACE ";" " " SNDFILE_PROPER_CFLAGS "${SNDFILE_CFLAGS}")
++        SET_PROPERTY(SOURCE src/codec_sndfile.cpp PROPERTY
++                                    COMPILE_FLAGS "${SNDFILE_PROPER_CFLAGS}")
+     ELSE(SNDFILE_FOUND)
+         FIND_PACKAGE(SndFile)
+         IF(SNDFILE_FOUND)

@@ -1,0 +1,44 @@
+From a37f55b8e331c2fabf0b03cfbbe074a6a23a93ca Mon Sep 17 00:00:00 2001
+From: Jan Chaloupka <jchaloup@redhat.com>
+Date: Sat, 9 Jun 2018 19:30:05 +0200
+Subject: [PATCH] Fix formatting
+
+---
+ canonical/json/decode_test.go | 2 +-
+ canonical/json/encode_test.go | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/canonical/json/decode_test.go b/canonical/json/decode_test.go
+index 9546ae4..98291f8 100644
+--- a/canonical/json/decode_test.go
++++ b/canonical/json/decode_test.go
+@@ -1270,7 +1270,7 @@ func TestSliceOfCustomByte(t *testing.T) {
+ 		t.Fatal(err)
+ 	}
+ 	if !reflect.DeepEqual(a, b) {
+-		t.Fatal("expected %v == %v", a, b)
++		t.Fatalf("expected %v == %v", a, b)
+ 	}
+ }
+ 
+diff --git a/canonical/json/encode_test.go b/canonical/json/encode_test.go
+index 2937c0a..e93c839 100644
+--- a/canonical/json/encode_test.go
++++ b/canonical/json/encode_test.go
+@@ -601,11 +601,11 @@ func TestCanonicalFloatAsInt(t *testing.T) {
+ 
+ 	b, err := MarshalCanonical(in)
+ 	if err != nil {
+-		t.Fatalf("Marshal(%q): %v", in, err)
++		t.Fatalf("Marshal(%#v): %v", in, err)
+ 	}
+ 	out := string(b)
+ 	expected := `{"A":1234567}`
+ 	if out != expected {
+-		t.Errorf("Marshal(%q) = %#q, want %#q", in, out, expected)
++		t.Errorf("Marshal(%#v) = %#q, want %#q", in, out, expected)
+ 	}
+ }
+-- 
+2.7.5
+

@@ -1,0 +1,34 @@
+From 991433e7f0cd8db3ad24f1b0c429881d44251505 Mon Sep 17 00:00:00 2001
+From: Felipe Zimmerle <fcosta@trustwave.com>
+Date: Tue, 15 Sep 2020 22:06:01 -0300
+Subject: [PATCH 3/8] Adds usage info libinjection_xss
+
+Patch to address the discussion held on:
+client9/libinjection#150
+---
+ src/libinjection_xss.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/libinjection_xss.c b/src/libinjection_xss.c
+index 1de4ab8..557d511 100644
+--- a/src/libinjection_xss.c
++++ b/src/libinjection_xss.c
+@@ -509,6 +509,15 @@ int libinjection_is_xss(const char* s, size_t len, int flags)
+ 
+ /*
+  * wrapper
++ *
++ *
++ * const char* s: is expected to be a null terminated string.
++ * size_t len: should represent the length of the string
++ *             without the null terminator - strlen(s). 
++ * 
++ * Further info:
++ *   - https://github.com/client9/libinjection/issues/150
++ *
+  */
+ int libinjection_xss(const char* s, size_t len)
+ {
+-- 
+2.27.0
+

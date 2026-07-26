@@ -1,0 +1,10 @@
+gliv
+	command=gliv
+	name=Gliv Image Viewer
+	can_open_multiple_files=true
+	expects_uris=no
+	requires_terminal=false
+	all_gnome_vfs_schemes_supported=yes
+	uses_gnomevfs=true
+	startup_notify=true
+	mime_types=image/gif;image/x-xpm;image/x-xbm;image/jpeg;image/x-bmp;image/png;image/x-tiff;image/x-tga;

@@ -1,0 +1,12 @@
+diff -up ORLite-Migrate-1.07/lib/ORLite/Migrate.pm.orig ORLite-Migrate-1.07/lib/ORLite/Migrate.pm
+--- ORLite-Migrate-1.07/lib/ORLite/Migrate.pm.orig	2010-03-25 11:25:24.000000000 +0100
++++ ORLite-Migrate-1.07/lib/ORLite/Migrate.pm	2010-08-09 08:55:25.720819126 +0200
+@@ -5,7 +5,7 @@ package ORLite::Migrate;
+ use 5.006;
+ use strict;
+ use Carp              ();
+-use File::Spec 3.2701 ();
++use File::Spec   3.28 ();
+ use File::Path   2.04 ();
+ use File::Basename    ();
+ use Params::Util 0.37 ();

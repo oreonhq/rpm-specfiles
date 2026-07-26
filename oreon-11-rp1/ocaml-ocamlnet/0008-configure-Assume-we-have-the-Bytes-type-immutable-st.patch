@@ -1,0 +1,36 @@
+From be8abb56f650289953dc6a19008aca30fe2b2ed1 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Wed, 15 Oct 2025 11:44:36 +0100
+Subject: [PATCH 8/8] configure: Assume we have the Bytes type / immutable
+ strings
+
+This is true for all recent OCaml.
+---
+ code/configure | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/code/configure b/code/configure
+index 1992160..004fb38 100755
+--- a/code/configure
++++ b/code/configure
+@@ -614,14 +614,10 @@ fi
+ 
+ ######################################################################
+ 
++# Simply assume this is true for all recent OCaml.
+ printf "Checking for immutable strings... "
+-if ocamlc -safe-string >/dev/null 2>/dev/null; then
+-    istring=1
+-    echo "yes"
+-else
+-    istring=0
+-    echo "no"
+-fi
++istring=1
++echo "yes"
+ 
+ if [ $istring -gt 0 ]; then
+     string_opts="-safe-string"
+-- 
+2.50.1
+

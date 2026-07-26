@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Name=wxiax
+GenericName=wx IAX Phone Client
+Exec=/usr/bin/wxiax
+Icon=wxiax
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Network;Telephony;

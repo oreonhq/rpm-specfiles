@@ -1,0 +1,12 @@
+diff -u --recursive academic-file-converter-vanilla/pyproject.toml academic-file-converter/pyproject.toml
+--- academic-file-converter-vanilla/pyproject.toml	2025-06-18 13:14:28.847064863 -0500
++++ academic-file-converter/pyproject.toml	2025-06-18 15:35:16.337538039 -0500
+@@ -29,7 +29,7 @@
+ [tool.poetry.dependencies]
+ python = ">=3.11.5"
+ bibtexparser = "~1.4"
+-"ruamel.yaml" = "~0.17"
++"ruamel.yaml" = ">=0.17"
+ nbconvert = "^7.10.0"
+ pyyaml = "^6.0.1"
+ 

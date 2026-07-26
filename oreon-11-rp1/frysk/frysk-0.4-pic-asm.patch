@@ -1,0 +1,29 @@
+diff -up frysk-0.4/frysk-core/Makefile.am.pic-asm frysk-0.4/frysk-core/Makefile.am
+--- frysk-0.4/frysk-core/Makefile.am.pic-asm	2015-08-17 15:29:36.749569562 -0400
++++ frysk-0.4/frysk-core/Makefile.am	2015-08-17 15:33:00.545752668 -0400
+@@ -191,16 +191,15 @@ frysk/pkglibdir/funit-cpp-scopes-class-n
+ 
+ # Create executables for symbol tests for TestSymbol.java.
+ 
+-noinst_PROGRAMS += frysk/pkglibdir/funit-symbols-nodebug
+-frysk_pkglibdir_funit_symbols_nodebug_SOURCES =
+-frysk/pkglibdir/funit-symbols-nodebug: frysk/pkglibdir/funit-symbols
+-	strip --strip-debug -o $@ frysk/pkglibdir/funit-symbols
+-
+-
+-noinst_PROGRAMS += frysk/pkglibdir/funit-symbols-stripped
+-frysk_pkglibdir_funit_symbols_stripped_SOURCES =
+-frysk/pkglibdir/funit-symbols-stripped: frysk/pkglibdir/funit-symbols
+-	strip -o $@ frysk/pkglibdir/funit-symbols
++# noinst_PROGRAMS += frysk/pkglibdir/funit-symbols-nodebug
++# frysk_pkglibdir_funit_symbols_nodebug_SOURCES =
++# frysk/pkglibdir/funit-symbols-nodebug: frysk/pkglibdir/funit-symbols
++#	strip --strip-debug -o $@ frysk/pkglibdir/funit-symbols
++
++# noinst_PROGRAMS += frysk/pkglibdir/funit-symbols-stripped
++# frysk_pkglibdir_funit_symbols_stripped_SOURCES =
++# frysk/pkglibdir/funit-symbols-stripped: frysk/pkglibdir/funit-symbols
++#	strip -o $@ frysk/pkglibdir/funit-symbols
+ 
+ # Create executable for list tests for TestListCommand.java
+ 

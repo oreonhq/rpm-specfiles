@@ -1,0 +1,25 @@
+diff -up konsole-20.12.1/src/history/HistoryFile.cpp.rex konsole-20.12.1/src/history/HistoryFile.cpp
+--- konsole-20.12.1/src/history/HistoryFile.cpp.rex	2021-01-02 07:42:20.000000000 -0600
++++ konsole-20.12.1/src/history/HistoryFile.cpp	2021-01-15 14:29:31.744493765 -0600
+@@ -64,7 +64,7 @@ HistoryFile::HistoryFile() :
+         }
+ 
+         KConfigGroup configGroup = appConfig->group("FileLocation");
+-        if (configGroup.readEntry("scrollbackUseCacheLocation", false)) {
++        if (configGroup.readEntry("scrollbackUseCacheLocation", true)) {
+             fileLocation = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+         } else if (configGroup.readEntry("scrollbackUseSpecifiedLocation", false)) {
+             const QUrl specifiedUrl = KonsoleSettings::scrollbackUseSpecifiedLocationDirectory();
+diff -up konsole-20.12.1/src/settings/konsole.kcfg.rex konsole-20.12.1/src/settings/konsole.kcfg
+--- konsole-20.12.1/src/settings/konsole.kcfg.rex	2021-01-02 07:42:20.000000000 -0600
++++ konsole-20.12.1/src/settings/konsole.kcfg	2021-01-15 14:27:57.757946183 -0600
+@@ -184,7 +184,7 @@
+     </entry>
+     <entry name="scrollbackUseCacheLocation" type="Bool">
+       <label>For scrollback files, use user's specific folder location</label>
+-      <default>false</default>
++      <default>true</default>
+     </entry>
+     <entry name="scrollbackUseSpecifiedLocation" type="Bool">
+       <label>For scrollback files, use specified folder location</label>
+diff -up konsole-20.12.1/src/settings/TemporaryFilesSettings.cpp.rex konsole-20.12.1/src/settings/TemporaryFilesSettings.cpp

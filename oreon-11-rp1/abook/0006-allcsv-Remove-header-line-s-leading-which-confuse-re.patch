@@ -1,0 +1,25 @@
+From 887082c9912b245c977d2791b2997a4ac568c64f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rapha=C3=ABl=20Droz?= <raphael.droz@gmail.com>
+Date: Tue, 21 Jan 2025 01:23:12 -0300
+Subject: [PATCH 6/8] allcsv: Remove header line's leading "#" which confuse
+ real CSV parsers trying to identify columns name
+
+---
+ filter.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/filter.c b/filter.c
+index e4ae121..9540409 100644
+--- a/filter.c
++++ b/filter.c
+@@ -1936,7 +1936,6 @@ allcsv_export_database(FILE *out, struct db_enumerator e)
+ 		CSV_LAST
+ 	};
+ 
+-	fprintf(out, "#");
+ 	int i = 0;
+ 	while(allcsv_export_fields[i+1] != CSV_LAST) {
+ 		fprintf(out, "\"%s\",", standard_fields[i++].key);
+-- 
+2.53.0
+

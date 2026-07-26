@@ -1,0 +1,22 @@
+--- glglobe.c~	2019-09-18 13:52:15.000000000 -0500
++++ glglobe.c	2019-09-18 13:52:45.709459211 -0500
+@@ -23,7 +23,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <math.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ //#include <sys/timeb.h>  /* my_time */
+ #include <sys/time.h>   // us time measure
+ #include <time.h>   // us time measure
+--- globe.c~	2019-09-18 13:53:45.000000000 -0500
++++ globe.c	2019-09-18 13:54:20.683311739 -0500
+@@ -20,7 +20,7 @@
+ */
+ 
+ #include <GL/glu.h>
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #include <math.h>
+ #include <stdio.h>
+ #include <stdlib.h>

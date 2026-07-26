@@ -1,0 +1,15 @@
+diff -up ./doc/man/Makefile.am.fix_manpage ./doc/man/Makefile.am
+--- ./doc/man/Makefile.am.fix_manpage	2010-02-17 03:53:00.000000000 -0800
++++ ./doc/man/Makefile.am	2010-02-18 01:22:17.000000000 -0800
+@@ -2,9 +2,9 @@ ACLOCAL_AMFLAGS = -I m4
+ 
+ dist_man1_MANS = libhid-detach-device.1
+ 
+-XP = xsltproc -''-nonet
++XP = db2x_docbook2man 
+ %.1: %.dbk
+-	$(XP) $(DB2MAN_FILE) $<
++	$(XP) $<
+ 
+ maintainerclean-local:
+ 	rm -f ${wildcard *.[0-9]}

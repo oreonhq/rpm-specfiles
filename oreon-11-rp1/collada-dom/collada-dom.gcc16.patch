@@ -1,0 +1,12 @@
+--- collada-dom-2.5.0/dom/src/dae/daeMetaElement.cpp~	2017-10-21 06:05:24.000000000 +0100
++++ collada-dom-2.5.0/dom/src/dae/daeMetaElement.cpp	2026-01-14 13:27:05.640775773 +0000
+@@ -175,8 +175,7 @@
+     else
+         _metaAttributes.append(attr);
+ 
+-    if ((attr->getName() != NULL) &&
+-        (strcmp(attr->getName(),"id") == 0)) {
++    if (strcmp(attr->getName(),"id") == 0) {
+         _metaID = attr;
+         _isTrackableForQueries = true;
+     }

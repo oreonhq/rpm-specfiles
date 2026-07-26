@@ -1,0 +1,35 @@
+--- Makefile.in.orig   2017-08-23 06:49:52.000000000 -0600
++++ Makefile.in        2019-05-27 21:11:10.304632260 -0600
+@@ -13,11 +13,12 @@
+ # (enclosed in the file LGPL).
+ 
+ # where to install the binaries
+-DESTDIR=@prefix@
+-# prefix=@prefix@
++
++prefix=@prefix@
++libdir=@libdir@
+ # exec_prefix=@exec_prefix@
+ # BINDIR=$(DESTDIR)@bindir@
+-LIBDIR=$(DESTDIR)/lib/
++LIBDIR=$(prefix)$(libdir)
+ # DATADIR=$(DESTDIR)@datadir@/ocplib-simplex
+ 
+ # where to install the man page
+@@ -112,12 +113,14 @@
+ ##############
+ 
+ install: all META
+-	OCAMLFIND_DESTDIR=$(LIBDIR) \
++	mkdir -p $(DESTDIR)$(LIBDIR)
++	OCAMLFIND_DESTDIR=$(DESTDIR)$(LIBDIR) \
+ 	  ocamlfind install ocplib-simplex src/$(LIBNAME).* src/*.mli META
+ 
+ 
+ uninstall:
+-	ocamlfind remove ocplib-simplex
++	OCAMLFIND_DESTDIR=$(DESTDIR)$(LIBDIR) \
++	  ocamlfind remove ocplib-simplex
+ 
+ # generic rules
+ ###############

@@ -1,0 +1,50 @@
+g_warning() is a printf-like function and its first argument should
+be a format string.
+
+--- src/mainwindow.c
++++ src/mainwindow.c
+@@ -634,7 +634,7 @@
+   /* create the open file thread */
+   if(g_thread_create(open_torrent_file, filename, FALSE, &err) == NULL)
+   {
+-    g_warning(err->message);
++    g_warning("%s", err->message);
+     g_free(filename);
+     g_error_free(err);
+   } 
+@@ -671,7 +671,7 @@
+ 
+   if(g_thread_create(tracker_scrape, tracker, FALSE, &err) == NULL)
+   {
+-    g_warning(err->message);
++    g_warning("%s", err->message);
+     g_free(tracker);
+     g_error_free(err);
+   } 
+@@ -722,7 +722,7 @@
+        filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+        if(g_thread_create(check_files, filename, FALSE, &err) == NULL)
+        {
+-         g_warning(err->message);
++         g_warning("%s", err->message);
+          g_free(filename); 
+          g_error_free(err);
+        }
+@@ -755,7 +755,7 @@
+ 
+   if(g_thread_create(tracker_scrape, tracker, FALSE, &err) == NULL)
+   {
+-    g_warning(err->message);
++    g_warning("%s", err->message);
+     g_error_free(err);
+   } 
+   
+@@ -853,7 +853,7 @@
+     {
+       if(g_thread_create(open_torrent_file, filename, FALSE, &err) == NULL)
+       {
+-        g_warning(err->message);
++        g_warning("%s", err->message);
+         g_free(filename);
+         g_error_free(err);
+       } 

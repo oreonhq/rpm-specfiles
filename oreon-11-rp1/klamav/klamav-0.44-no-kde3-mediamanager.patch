@@ -1,0 +1,12 @@
+diff -ur klamav-0.44/src/directorylist.cpp klamav-0.44-no-kde3-mediamanager/src/directorylist.cpp
+--- klamav-0.44/src/directorylist.cpp	2008-07-06 14:05:42.000000000 +0200
++++ klamav-0.44-no-kde3-mediamanager/src/directorylist.cpp	2009-03-08 09:43:59.000000000 +0100
+@@ -68,7 +68,7 @@
+     reinterpret_cast<QWidget*>(m_view->header())->hide();
+     new Item(  m_view, i18n( "System Folder" ), "/", "folder_red" );
+     new Item(  m_view, i18n( "Home Folder" ), QDir::homeDirPath(), "folder_home" );
+-    new DeviceItem(  m_view );
++    // new DeviceItem(  m_view );
+     
+     setSpacing( 6 );
+ }

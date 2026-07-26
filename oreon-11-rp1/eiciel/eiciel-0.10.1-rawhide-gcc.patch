@@ -1,0 +1,12 @@
+diff -Naur eiciel-0.10.1-orig/src/acl_editor_controller.cpp eiciel-0.10.1/src/acl_editor_controller.cpp
+--- eiciel-0.10.1-orig/src/acl_editor_controller.cpp	2024-08-16 06:31:32.000000000 +0200
++++ eiciel-0.10.1/src/acl_editor_controller.cpp	2024-08-30 20:48:20.375148014 +0200
+@@ -313,7 +313,7 @@
+       enclosed_editor_controller->get_file_access_acl_text();
+ 
+   Glib::RefPtr<Gdk::Display> display = toplevel_window->get_display();
+-  Glib::RefPtr<Gdk::Cursor> clock_cursor = Gdk::Cursor::create("wait");
++  Glib::RefPtr<Gdk::Cursor> clock_cursor = Gdk::Cursor::create(Glib::ustring("wait"));
+   toplevel_window->set_cursor(clock_cursor);
+   set_active(false);
+ 

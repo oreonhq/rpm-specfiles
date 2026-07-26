@@ -1,0 +1,14 @@
+diff -ru makepasswd-0.5.3.orig/src/makepasswd.c makepasswd-0.5.3/src/makepasswd.c
+--- makepasswd-0.5.3.orig/src/makepasswd.c	2020-01-03 19:14:17.595917691 +0100
++++ makepasswd-0.5.3/src/makepasswd.c	2020-01-03 20:05:44.173941721 +0100
+@@ -717,8 +717,8 @@
+ 
+ 	memset(&prefs, 0, sizeof(prefs));
+ 	prefs.count = 1;
+-	prefs.max = 8;
+-	prefs.min = 6;
++	prefs.max = 16;
++	prefs.min = 16;
+ 	prefs.seed = 1;
+ 	while((o = getopt(argc, argv, "c:Ee:i:l:M:m:n:p:Ss:")) != -1)
+ 		switch(o)

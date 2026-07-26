@@ -1,0 +1,17 @@
+--- a/libsrc/jirr-dev/irrlicht.i.org	2007-06-18 17:08:18.000000000 +0200
++++ b/libsrc/jirr-dev/irrlicht.i	2007-06-18 17:08:43.000000000 +0200
+@@ -264,6 +264,7 @@
+ %include "IShaderConstantSetCallBack.h" // 0.9
+ %include "IStringParameters.h" // 0.9
+ 
++%include "ICrowdSceneNode.h"
+ 
+ //OAK INSERTED THIS
+ %include "irrlicht.h"
+@@ -525,4 +526,4 @@
+ 		return ((irr::core::matrix4 const *)self)->operator *((irr::core::matrix4 const &)*matrix);
+ 	};	
+ }
+-	
+\ Kein Zeilenumbruch am Dateiende.
++	

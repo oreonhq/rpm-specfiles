@@ -1,0 +1,24 @@
+diff --git a/galaxy.yml b/galaxy.yml
+index 8085599..7815991 100644
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -90,3 +90,19 @@ build_ignore:
+   - pulp-ci
+   - vagrant
+   - Vagrantfile
++  # Ignored in RPM package
++  - .azure-pipelines
++  - LICENSE
++  - COPYRIGHT
++  - COMMITMENT
++  - README.md
++  - CHANGES
++  - RELEASING.md  - Makefile
++  - ansible.cfg
++  - .yamllint
++  - .ansible-lint
++  - .markdownlint.yml
++  - .gitmodules
++  - 'package*.json'
++  # Docs will be provided by a subpackage
++  - docs

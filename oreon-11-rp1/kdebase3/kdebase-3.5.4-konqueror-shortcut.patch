@@ -1,0 +1,11 @@
+--- kdebase-3.5.4/konqueror/konqueror.rc.orig	2006-10-04 16:03:25.000000000 +0200
++++ kdebase-3.5.4/konqueror/konqueror.rc	2006-10-04 16:03:33.000000000 +0200
+@@ -146,6 +146,8 @@
+ </ToolBar>
+ <ActionProperties>
+   <Action shortcut="F9" name="konq_sidebartng" />
++  <Action shortcut="Ctrl+Shift+Left;Shift+Left" name="tab_move_left" />
++  <Action shortcut="Ctrl+Shift+Right;Shift+Right" name="tab_move_right" />
+ </ActionProperties>
+ 
+ </gui>

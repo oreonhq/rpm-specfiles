@@ -1,0 +1,404 @@
+2005-03-03 Enrico Scholz <enrico.scholz@informatik.tu-chemnitz.de>
+	* use consistently 'unsigned' for mac buffers and for port
+	  numbers
+
+--- hunt-1.5/addpolicy.c.signness	1999-02-13 13:23:15.000000000 +0100
++++ hunt-1.5/addpolicy.c	2005-03-03 14:36:18.000000000 +0100
+@@ -105,7 +105,7 @@ void addpolicy_add_item(void)
+ 	struct add_policy_info *api;
+ 	unsigned int src_ip, dst_ip;
+ 	unsigned int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	int nr;
+ 
+ 
+@@ -138,7 +138,7 @@ void addpolicy_mod_item(void)
+ 	struct add_policy_info *api;
+ 	unsigned int src_ip, dst_ip;
+ 	unsigned int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	int nr;
+ 	
+ 	addpolicy_list_items();
+--- hunt-1.5/arphijack.c.signness	1999-06-13 16:53:20.000000000 +0200
++++ hunt-1.5/arphijack.c	2005-03-03 14:36:18.000000000 +0100
+@@ -23,8 +23,8 @@
+  *
+  */
+ 
+-int user_arp_hijack(struct user_conn_info *uci, char *src_fake_mac,
+-		    char *dst_fake_mac, int input_mode)
++int user_arp_hijack(struct user_conn_info *uci, unsigned char *src_fake_mac,
++		    unsigned char *dst_fake_mac, int input_mode)
+ {
+ 	struct conn_info *ci;
+ 	int retval;
+@@ -44,7 +44,7 @@ int user_arp_hijack(struct user_conn_inf
+  */
+ 
+ struct watch_tty_data {
+-	char *src_fake_mac;
++	unsigned char *src_fake_mac;
+ 	struct conn_info *ci;
+ 	int input_mode;
+ };
+@@ -100,7 +100,7 @@ static struct arp_spoof_info *asi_src; /
+ static struct arp_spoof_info *asi_dst; /* dst in src host */
+ static struct arp_dont_relay *dont_relay;
+ 
+-int arp_hijack(struct conn_info *ci, char *src_fake_mac, char *dst_fake_mac,
++int arp_hijack(struct conn_info *ci, unsigned char *src_fake_mac, unsigned char *dst_fake_mac,
+ 	       int input_mode)
+ {
+ 	struct iphdr *iph;
+@@ -253,12 +253,12 @@ int arp_hijack(struct conn_info *ci, cha
+ }
+ 
+ 
+-void user_arp_hijack_done(char *src_fake_mac, char *dst_fake_mac)
++void user_arp_hijack_done(unsigned char *src_fake_mac, unsigned char *dst_fake_mac)
+ {
+ 	arp_hijack_done(src_fake_mac, dst_fake_mac);
+ }
+ 
+-void arp_hijack_done(char *src_fake_mac, char *dst_fake_mac)
++void arp_hijack_done(unsigned char *src_fake_mac, unsigned char *dst_fake_mac)
+ {
+ 	arp_dont_relay_remove(dont_relay);
+ 	if (asi_src && src_fake_mac) {
+--- hunt-1.5/arpspoof.c.signness	2000-05-26 13:29:29.000000000 +0200
++++ hunt-1.5/arpspoof.c	2005-03-03 14:36:18.000000000 +0100
+@@ -22,7 +22,7 @@ struct arp_spoof_range {
+ 	unsigned int 	dst_start_addr;
+ 	unsigned int 	dst_end_addr;
+ 	unsigned int	src_addr;
+-	char 		src_fake_mac[ETH_ALEN];
++	unsigned char	src_fake_mac[ETH_ALEN];
+ 	int		refresh;
+ 	int		can_forward;
+ 	struct arp_spoof_range *next;
+@@ -395,7 +395,7 @@ static void asi_wait_for_release(struct 
+ 
+ struct arp_spoof_info *start_arp_spoof(unsigned int src_addr,
+ 				       unsigned int dst_addr,
+-		char *src_mac, char *dst_mac, char *src_fake_mac,
++		unsigned char *src_mac, unsigned char *dst_mac, unsigned char *src_fake_mac,
+ 		int refresh, int can_forward, int in_range)
+ {
+ 	struct arp_spoof_info *asi, *tmp;
+--- hunt-1.5/hostup.c.signness	1999-06-03 12:10:35.000000000 +0200
++++ hunt-1.5/hostup.c	2005-03-03 14:36:18.000000000 +0100
+@@ -118,7 +118,7 @@ static void perform_ping(struct host_up_
+ 	printf("\n");
+ }
+ 
+-static void send_arp_message(unsigned int ip, char *dst_mac)
++static void send_arp_message(unsigned int ip, unsigned char *dst_mac)
+ {
+ 	struct arp_spec as;
+ 	
+@@ -226,7 +226,8 @@ void host_up(void)
+ 	struct host_up_info *hui;
+ 	struct timespec ts;
+ 	unsigned int len;
+-	unsigned char buf_mac[BUFSIZE], fake_mac[ETH_ALEN];
++	char buf_mac[BUFSIZE];
++	unsigned char fake_mac[ETH_ALEN];
+ 	
+ 	if ((start_ip = menu_choose_hostname("start ip addr", host_lookup(start_ip_def, HL_MODE_NR))) == -1)
+ 		return;
+--- hunt-1.5/hunt.c.signness	2000-05-26 15:56:35.000000000 +0200
++++ hunt-1.5/hunt.c	2005-03-03 14:36:18.000000000 +0100
+@@ -644,7 +644,7 @@ static inline void fast_tcp_process(stru
+ 	list_unlock(&l_ifunc_fast_tcp);
+ }
+ 
+-static void mac_table_update(unsigned int ip, char *mac)
++static void mac_table_update(unsigned int ip, unsigned char *mac)
+ {
+ 	struct mac_info *mi;
+ 	
+@@ -685,7 +685,7 @@ void mac_info_release(struct mac_info *m
+ static void mac_arp_learn(struct packet *p)
+ {
+ 	unsigned int ip;
+-	char *mac;
++	unsigned char *mac;
+ 	struct arpeth_hdr *arpethh;
+ 
+ 	arpethh = (struct arpeth_hdr *)(p->p_arph + 1);
+@@ -704,7 +704,7 @@ static void mac_arp_learn(struct packet 
+ static void mac_ip_learn(struct packet *p)
+ {
+ 	unsigned int ip;
+-	char *mac;
++	unsigned char *mac;
+ 	
+ 	ip = p->p_iph->saddr;
+ 	mac = p->p_ethh->h_source;
+--- hunt-1.5/hunt.h.signness	2005-03-03 14:36:18.000000000 +0100
++++ hunt-1.5/hunt.h	2005-03-03 14:36:32.000000000 +0100
+@@ -235,7 +235,7 @@ struct arpeth_hdr {
+ };
+ 
+ struct mac_info {
+-	char mac[ETH_ALEN];
++	unsigned char mac[ETH_ALEN];
+ 	pthread_mutex_t mutex;
+ };
+ 
+@@ -355,7 +355,7 @@ int menu_choose_string(char *label, char
+ int menu(char *head, char *str_menu, char *label, char *opt, char dfl);
+ void press_key(char *label);
+ unsigned int menu_choose_hostname(char *label, char *dfl);
+-int menu_choose_ports(char *label, int *ret_ports, char *dfl);
++int menu_choose_ports(char *label, unsigned int *ret_ports, char *dfl);
+ int menu_choose_mac(char *label, unsigned char *mac_ret, char *dfl);
+ int menu_choose_sdb(char *label, char dfl);
+ 
+@@ -363,7 +363,7 @@ int menu_choose_host_mask_ports(char *la
+ 		unsigned int *ret_mask, unsigned int *ret_ports, char *dfl);
+ int menu_choose_host_mask_ports_dfl(char *label, unsigned int *ret_ip,
+ 		unsigned int *ret_mask, unsigned int *ret_ports,
+-		unsigned int dfl_ip, unsigned int dfl_mask, int *dfl_ports);
++		unsigned int dfl_ip, unsigned int dfl_mask, unsigned int *dfl_ports);
+ 
+ void clear_new_conn_ind(void);
+ void print_new_conn_ind(int add_new);
+@@ -415,9 +415,9 @@ int print_eth_mac(unsigned char *mac);
+ int sprintf_eth_mac(char *b, unsigned char *mac);
+ int tap(char *device, int promisc_mode);
+ int rawsock(void);
+-int get_ifc_info(char *ifc_name, unsigned int *ip, char *mac);
++int get_ifc_info(char *ifc_name, unsigned int *ip, unsigned char *mac);
+ 
+-int port_match(int port, unsigned int *db_ports);
++int port_match(unsigned int port, unsigned int *db_ports);
+ void port_htons(unsigned int *db_ports);
+ 
+ extern unsigned char __suggest_mac[ETH_ALEN];
+@@ -493,11 +493,11 @@ void func_hijack_src(struct packet *p, s
+ #define INPUT_MODE_RAW		0
+ #define INPUT_MODE_LINEECHOR	1
+ #define INPUT_MODE_LINEECHO	2
+-int user_arp_hijack(struct user_conn_info *uci, char *src_fake_mac,
+-		    char *dst_fake_mac, int input_mode);
+-void user_arp_hijack_done(char *src_fake_mac, char *dst_fake_mac);
+-int arp_hijack(struct conn_info *ci, char *src_fake_mac, char *dst_fake_mac, int input_mode);
+-void arp_hijack_done(char *src_fake_mac, char *dst_fake_mac);
++int user_arp_hijack(struct user_conn_info *uci, unsigned char *src_fake_mac,
++		    unsigned char *dst_fake_mac, int input_mode);
++void user_arp_hijack_done(unsigned char *src_fake_mac, unsigned char *dst_fake_mac);
++int arp_hijack(struct conn_info *ci, unsigned char *src_fake_mac, unsigned char *dst_fake_mac, int input_mode);
++void arp_hijack_done(unsigned char *src_fake_mac, unsigned char *dst_fake_mac);
+ 
+ /*
+  * synchijack
+@@ -512,7 +512,7 @@ extern unsigned char mac_broadcast[ETH_A
+ extern unsigned char mac_zero[ETH_ALEN];
+ struct arp_spoof_info *start_arp_spoof(unsigned int src_addr,
+ 				       unsigned int dst_addr,
+-		char *src_mac, char *dst_mac, char *src_fake_mac,
++		unsigned char *src_mac, unsigned char *dst_mac, unsigned char *src_fake_mac,
+ 		int refresh, int can_forward, int in_range);
+ struct arp_spoof_info *get_arp_spoof(unsigned int src_addr, unsigned int dst_addr);
+ void stop_arp_spoof(struct arp_spoof_info *asi);
+@@ -650,8 +650,8 @@ struct tcp_spec {
+ 	unsigned long daddr;
+ 	unsigned short sport;
+ 	unsigned short dport;
+-	char *src_mac;
+-	char *dst_mac;
++	unsigned char *src_mac;
++	unsigned char *dst_mac;
+ 	unsigned long seq;
+ 	unsigned long ack_seq;
+ 	unsigned short window;
+@@ -669,8 +669,8 @@ int send_tcp_packet(struct tcp_spec *ts)
+ struct icmp_spec {
+ 	unsigned int src_addr;
+ 	unsigned int dst_addr;
+-	char *src_mac;
+-	char *dst_mac;
++	unsigned char *src_mac;
++	unsigned char *dst_mac;
+ 	
+ 	short type;
+ 	short code;
+@@ -688,19 +688,19 @@ struct icmp_spec {
+ 
+ int send_icmp_packet(struct icmp_spec *is);
+ void send_icmp_request(unsigned int src_addr, unsigned int dst_addr,
+-		       char *src_mac, char *dst_mac, unsigned short seq);
++		       unsigned char *src_mac, unsigned char *dst_mac, unsigned short seq);
+ int is_icmp_reply(struct packet *p, unsigned int src_addr, unsigned int dst_addr,
+-		  char *src_mac, char *dst_mac);
++		  unsigned char *src_mac, unsigned char *dst_mac);
+ 
+ 
+ struct arp_spec {
+-	char *src_mac;
+-	char *dst_mac;
++	unsigned char *src_mac;
++	unsigned char *dst_mac;
+ 	
+ 	int oper;
+-	char *sender_mac;
++	unsigned char *sender_mac;
+ 	unsigned long sender_addr;
+-	char *target_mac;
++	unsigned char *target_mac;
+ 	unsigned long target_addr;
+ };
+ 
+--- hunt-1.5/menu.c.signness	1999-06-06 18:04:00.000000000 +0200
++++ hunt-1.5/menu.c	2005-03-03 14:36:18.000000000 +0100
+@@ -170,7 +170,7 @@ unsigned int parse_hostname(char *buf)
+ 	}
+ }
+ 
+-int parse_mac(char *buf, char *mac_ret)
++int parse_mac(char *buf, unsigned char *mac_ret)
+ {
+ 	unsigned char mac[ETH_ALEN];
+ 	char *p, *tmp, *buf_p;
+@@ -271,7 +271,7 @@ unsigned int menu_choose_hostname(char *
+ }
+ 
+ 
+-int menu_choose_ports(char *label, int *ret_ports, char *dfl)
++int menu_choose_ports(char *label, unsigned int *ret_ports, char *dfl)
+ {
+ 	char buf[BUFSIZE];
+ 	
+@@ -336,7 +336,7 @@ int menu_choose_host_mask_ports(char *la
+ 
+ int menu_choose_host_mask_ports_dfl(char *label, unsigned int *ret_ip,
+ 		unsigned int *ret_mask, unsigned int *ret_ports,
+-		unsigned int dfl_ip, unsigned int dfl_mask, int *dfl_ports)
++		unsigned int dfl_ip, unsigned int dfl_mask, unsigned int *dfl_ports)
+ {
+ 	char dfl[256], *buf_p;
+ 	
+--- hunt-1.5/net.c.signness	1999-06-08 14:18:42.000000000 +0200
++++ hunt-1.5/net.c	2005-03-03 14:36:18.000000000 +0100
+@@ -162,7 +162,7 @@ int send_icmp_packet(struct icmp_spec *i
+ }
+ 
+ void send_icmp_request(unsigned int src_addr, unsigned int dst_addr,
+-		       char *src_mac, char *dst_mac, unsigned short seq)
++		       unsigned char *src_mac, unsigned char *dst_mac, unsigned short seq)
+ {
+ 	struct icmp_spec icmp;
+ 	
+@@ -181,7 +181,7 @@ void send_icmp_request(unsigned int src_
+ }
+ 
+ int is_icmp_reply(struct packet *p, unsigned int src_addr, unsigned int dst_addr,
+-		  char *src_mac, char *dst_mac)
++		  unsigned char *src_mac, unsigned char *dst_mac)
+ {
+ 	struct iphdr *iph = p->p_iph;
+ 	struct icmphdr *icmph = p->p_hdr.p_icmph;
+--- hunt-1.5/pktrelay.c.signness	1999-11-12 11:09:18.000000000 +0100
++++ hunt-1.5/pktrelay.c	2005-03-03 14:36:18.000000000 +0100
+@@ -259,9 +259,9 @@ static void relay_add_item(void)
+ 	struct relay_item *ri;
+ 	unsigned int src_ip, dst_ip;
+ 	unsigned int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	char name_buf[128], name_buf2[256];
+-	char ethtap_mac[ETH_ALEN];
++	unsigned char ethtap_mac[ETH_ALEN];
+ 	int flags_c;
+ 	int nr, ethtap_fd;
+ 
+@@ -318,7 +318,7 @@ static void relay_mod_item(void)
+ 	struct relay_item *ri;
+ 	unsigned int src_ip, dst_ip;
+ 	unsigned int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	char name_buf[128], name_buf2[256];
+ 	int nr;
+ 	char flags_dfl;
+--- hunt-1.5/rstd.c.signness	1999-07-13 09:22:57.000000000 +0200
++++ hunt-1.5/rstd.c	2005-03-03 14:36:18.000000000 +0100
+@@ -256,7 +256,7 @@ static void rst_add_item(void)
+ 	struct rst_db_item *dbi;
+ 	unsigned int src_ip, dst_ip;
+ 	unsigned int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	int mode, syn_mode;
+ 	int nr;
+ 
+@@ -301,7 +301,7 @@ static void rst_mod_item(void)
+ 	struct rst_db_item *dbi;
+ 	unsigned int src_ip, dst_ip;
+ 	unsigned int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	int mode, syn_mode;
+ 	int nr;
+ 	
+--- hunt-1.5/sniff.c.signness	1999-04-02 13:58:48.000000000 +0200
++++ hunt-1.5/sniff.c	2005-03-03 14:36:18.000000000 +0100
+@@ -42,8 +42,8 @@ struct sniff_info {
+ 	unsigned int dst_addr;
+ 	int src_mask;
+ 	int dst_mask;
+-	int src_ports[MAX_PORTS + 1];
+-	int dst_ports[MAX_PORTS + 1];
++	unsigned int src_ports[MAX_PORTS + 1];
++	unsigned int dst_ports[MAX_PORTS + 1];
+ 	
+ 	int srch_mode;
+ 	char *search;
+@@ -653,8 +653,8 @@ static void sniff_add_item(void)
+ 	char file_name[BUFSIZE], file_name_buf[BUFSIZE];
+ 	struct sniff_info *si;
+ 	unsigned int src_ip, dst_ip;
+-	int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_mask, dst_mask;
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	int srch_mode, len;
+ 	int log_mode, log_bytes;
+ 	int nr;
+@@ -732,8 +732,8 @@ static void sniff_mod_item(void)
+ 	struct sniff_info *si;
+ 	struct sniff_log *slog;
+ 	unsigned int src_ip, dst_ip;
+-	int src_mask, dst_mask;
+-	int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
++	unsigned int src_mask, dst_mask;
++	unsigned int src_ports[MAX_PORTS + 1], dst_ports[MAX_PORTS + 1];
+ 	int srch_mode, len;
+ 	int log_mode, log_bytes;
+ 	int nr;
+--- hunt-1.5/tap.c.signness	1999-09-23 13:55:38.000000000 +0200
++++ hunt-1.5/tap.c	2005-03-03 14:36:18.000000000 +0100
+@@ -107,7 +107,7 @@ int tap(char *device, int promisc_mode)
+ 	}
+ }
+ 
+-int get_ifc_info(char *ifc_name, unsigned int *ip, char *mac)
++int get_ifc_info(char *ifc_name, unsigned int *ip, unsigned char *mac)
+ {
+ 	int fd;				
+ 	struct ifreq ifr;
+--- hunt-1.5/util.c.signness	2005-03-03 14:36:18.000000000 +0100
++++ hunt-1.5/util.c	2005-03-03 14:37:23.000000000 +0100
+@@ -286,7 +286,7 @@ int sprintf_db_ports(unsigned int *ports
+ 	return buf - buf_orig;
+ }
+ 
+-int port_match(int port, unsigned int *db_ports)
++int port_match(unsigned int port, unsigned int *db_ports)
+ {
+ 	int start, end;
+ 	int pass;

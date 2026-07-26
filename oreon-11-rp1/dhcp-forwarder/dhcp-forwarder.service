@@ -1,0 +1,11 @@
+[Unit]
+Description=Agent to relay DHCP messages between two networks
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/dhcp-fwd -n -c /etc/dhcp-fwd.conf
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

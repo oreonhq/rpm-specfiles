@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>mirrormagic.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-1.0+</project_license>
+  <name>Mirror Magic</name>
+  <summary>Puzzle game where you steer a beam of light using mirrors</summary>
+  <description>
+    <p>
+      MirrorMagic is a game where you shoot around obstacles to collect
+      energy using your beam. It is similar to "Mindbender" (Amiga) from the
+      same author.
+    </p>
+    <p>
+      The goal is to work out how to get around obstacles to shoot energy
+      containers with your beam, thereby opening the path to the next level.
+      Included are many levels familiar from the games "Deflektor" and
+      "Mindbender".
+    </p>
+  </description>
+  <url type="homepage">http://www.artsoft.org/mirrormagic/</url>
+  <screenshots>
+    <screenshot
+    type="default">http://www.artsoft.org/mirrormagic/screenshots/playing1.gif</screenshot>
+    <screenshot>http://www.artsoft.org/mirrormagic/screenshots/mainmenu.gif</screenshot>
+    <screenshot>http://www.artsoft.org/mirrormagic/screenshots/playing2.gif</screenshot>
+    <screenshot>http://www.artsoft.org/mirrormagic/screenshots/infoscreen.gif</screenshot>
+    <screenshot>http://www.artsoft.org/mirrormagic/screenshots/editor.gif</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

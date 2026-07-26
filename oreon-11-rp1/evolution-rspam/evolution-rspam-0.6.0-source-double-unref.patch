@@ -1,0 +1,13 @@
+diff -up evolution-rspam-0.6.0/src/rspam.c.source-double-unref evolution-rspam-0.6.0/src/rspam.c
+--- evolution-rspam-0.6.0/src/rspam.c.source-double-unref	2015-08-19 10:34:44.638417803 +0200
++++ evolution-rspam-0.6.0/src/rspam.c	2015-08-19 10:34:46.276417734 +0200
+@@ -636,9 +636,6 @@ spamcop_report(CamelMimeMessage *msg, gc
+ #else
+ 		camel_object_unref(addr);
+ #endif
+-#if EVOLUTION_VERSION > 30501
+-		g_object_unref(source);
+-#endif
+ 
+ 		xev = mail_tool_remove_xevolution_headers (msg);
+ 		camel_header_raw_clear(&xev);

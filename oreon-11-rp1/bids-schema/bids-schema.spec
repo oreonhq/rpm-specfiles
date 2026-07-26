@@ -1,0 +1,278 @@
+%global source0_hash 60f67a1af4894366df3b5b0fc5dac9a943764421f4c95fc83f542bb7afa33d4a
+
+# Removable test dependency, not yet packaged:
+# https://pypi.org/project/check-jsonschema
+%bcond check_jsonschema 0
+
+Name:           bids-schema
+Version:        1.2.1
+Release:        %autorelease
+Summary:        BIDS schema description
+
+%global srcversion %(echo '%{version}' | tr '^' '.')
+# Installation paths imitate the structure of
+# https://github.com/bids-standard/bids-schema/ in case we start packaging from
+# that in the future. Schemas are installed under directories versioned by the
+# BIDS specification version, not the schema version. If the following is set
+# correctly, then
+#   https://github.com/bids-standard/bids-schema/raw/refs/heads/main/…
+#   versions/%%{bidsversion}/schema/SCHEMA_VERSION
+# should match or nearly match the schema version packaged here.
+%global bidsversion 1.10.1
+
+# The specification, and the schema data derived from it, are CC-BY-4.0.
+#
+# The Python library in tools/schemacode/, packaged as python3-bidsschematools,
+# is MIT.
+License:        CC-BY-4.0
+# CC0-1.0 comes from the filtered test datasets, Source2 and Source3
+SourceLicense:  CC0-1.0 AND CC-BY-4.0 AND MIT
+URL:            https://github.com/bids-standard/bids-specification
+# The PyPI sdist corresponds to the tools/schemacode directory in git.
+Source0:        %{url}/archive/schema-%{srcversion}/bids-specification-schema-%{srcversion}.tar.gz
+
+# Tests would like to use the following datasets from
+# https://github.com/bids-standard/bids-examples:
+#   CC0-1.0:
+#   - asl003/ ds000248/ micr_SEMzarr/ micr_SPIM/ pet003/ qmri_tb1tfl/
+#   CC-BY-4.0:
+#   - eeg_cbm/
+#   Unclear licensing (no license specified or "Custom" with no text or details):
+#   - hcp_example_bids/ qmri_vfa/
+#   ODC-By-1.0 (not-allowed in Fedora)
+#   - fnirs_automaticity/
+#
+# Also, the following from https://github.com/bids-standard/bids-error-examples:
+#   CC0-1.0:
+#   - invalid_asl003/ invalid_pet001/
+#
+# See BIDS_SELECTION and BIDS_ERROR_SELECTION in
+# tools/schemacode/src/bidsschematools/conftest.py.
+#
+# We use the latest commits from each repository at the time of packaging; see
+# tools/schemacode/src/bidsschematools/conftest.py, which contains code to download
+# these if they are not present.
+%global examples_url https://github.com/bids-standard/bids-examples
+%global examples_commit dd545712672537c13ac684b95699b8f11fcedc89
+%global error_examples_url https://github.com/bids-standard/bids-error-examples
+%global error_examples_commit ac0a2f58f34ce284847dde5bd3b90d7ea048c141
+#
+# We use a script to create archives containing only the test datasets that
+# fall under clearly-acceptable content license terms *and* are used in the
+# tests. The script requires that each of the following macros occupies a
+# single (long, if necessary) line.
+%global examples asl003 ds000248 eeg_cbm micr_SEMzarr micr_SPIM pet003 qmri_tb1tfl
+%global error_examples invalid_asl003 invalid_pet001
+# Run this script with no arguments to parse the spec file (in the same
+# directory) for commits, URLs, and whitelisted datasets, and create two
+# corresponding source archives in the current working directory.
+Source1:        get_test_data
+# License: CC0-1.0 AND CC-BY-4.0
+# (does not contribute to the licenses of the binary RPMs)
+Source2:        bids-examples-%{examples_commit}-filtered.tar.zst
+# License: CC0-1.0
+# (does not contribute to the licenses of the binary RPMs)
+Source3:        bids-error-examples-%{error_examples_commit}-filtered.tar.zst
+
+# Man pages hand-written for Fedora in groff_man(7) format based on --help
+Source10:       bst.1
+Source11:       bst-export.1
+Source12:       bst-export-metaschema.1
+Source13:       bst-pre-receive-hook.1
+
+BuildArch:      noarch
+
+BuildRequires:  symlinks
+BuildRequires:  python3-devel
+# The tests extra includes mostly linting/coverage tools; considering
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters,
+# it is easier to enumerate test dependencies by hand.
+BuildRequires:  %{py3_dist pytest}
+%if %{with check_jsonschema}
+BuildRequires:  %{py3_dist check-jsonschema}
+%endif
+
+%description
+Portions of the BIDS specification are defined using YAML files in order to
+make the specification machine-readable.
+
+Currently the portions of the specification that rely on this schema are:
+
+  • the entity tables,
+  • entity definitions,
+  • filename templates,
+  • metadata tables.
+
+Any changes to the specification should be mirrored in the schema.
+
+%package -n python3-bidsschematools
+Summary:        Python tools for working with the BIDS schema
+License:        MIT
+
+Requires:       %{name} = %{version}-%{release}
+
+%description -n python3-bidsschematools
+A Python library (available after installation in the Python interpreter as
+bidsschematools) for working with the Brain Imaging Data Structure (BIDS)
+schema.
+
+Features: 
+
+  • lightweight
+  • reference schema parsing implementation used for schema testing
+  • simple CLI bindings (e.g. bst export)
+
+%pyproject_extras_subpkg -n python3-bidsschematools validation render expressions
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n bids-specification-schema-%{srcversion}
+%setup -q -T -D -a 2 -c -n bids-specification-schema-%{srcversion}
+%setup -q -T -D -a 3 -c -n bids-specification-schema-%{srcversion}
+
+# Remove JavaScript sources used for building the specification documents
+# (which we don’t do anyway); these include a bundled pre-compiled/minified
+# version of JQuery, which is (license-wise) allowable in the source RPM, but
+# must not be shipped in the binary RPMs. Removing it confirms that it is not
+# used or shipped. We also preemptively remove the CSS sources, which currently
+# don’t contain anything bundled or pre-minified, but are unused and might
+# contain something objectionable in a future release.
+rm -rf src/js/ src/css/
+
+%generate_buildrequires
+pushd tools/schemacode >/dev/null
+%pyproject_buildrequires -x validation,render,expressions
+popd >/dev/null
+
+%build
+pushd tools/schemacode >/dev/null
+%pyproject_wheel
+popd
+
+%install
+# Imitate the structure of https://github.com/bids-standard/bids-schema/ in
+# case we start packaging from that in the future.
+install -d '%{buildroot}%{_datadir}/bids-schema/versions/%{bidsversion}'
+ln -s '%{bidsversion}' '%{buildroot}%{_datadir}/bids-schema/versions/latest'
+cp -rvp src/schema \
+    '%{buildroot}%{_datadir}/bids-schema/versions/%{bidsversion}/schema'
+# While https://github.com/bids-standard/bids-schema does not install
+# metaschema.json alongside the schema/ directory, it *is* included in the PyPI
+# sdist for bidsschematools.
+install -t '%{buildroot}%{_datadir}/bids-schema/versions/%{bidsversion}' \
+    -p -m 0644 src/metaschema.json
+
+pushd tools/schemacode >/dev/null
+%pyproject_install
+%pyproject_save_files -L bidsschematools
+popd
+
+# Include a copy of the “exported” JSON version of the schema in the base
+# package to imitate the structure of
+# https://github.com/bids-standard/bids-schema. See readthedocs.yml.
+install -p -m 0644 \
+    -t '%{buildroot}%{_datadir}/bids-schema/versions/%{bidsversion}' \
+    '%{buildroot}%{python3_sitelib}/bidsschematools/data/schema.json'
+
+# Unbundle the schema data from the Python library.
+sed -r -i '/\/bidsschematools\/data\/schema(\/|$)/d' %{pyproject_files}
+for thing in metaschema.json schema.json
+do
+  rm "%{buildroot}%{python3_sitelib}/bidsschematools/data/${thing}"
+  # Create an absolute symlink into the buildroot and then convert it to a
+  # relative one; the relative symlink works both in %%check and after the
+  # package is actually installed.
+  ln -s \
+      "%{buildroot}%{_datadir}/bids-schema/versions/%{bidsversion}/${thing}" \
+      "%{buildroot}%{python3_sitelib}/bidsschematools/data/${thing}"
+  symlinks -c -o "%{buildroot}%{python3_sitelib}/bidsschematools/data/${thing}"
+done
+
+# Do not ship the tests.
+sed -r -i '/\/bidsschematools\/tests(\/|$)/d' %{pyproject_files}
+sed -r -i '/bidsschematools\.tests(\.|$)/d' '%{_pyproject_modules}'
+rm -rvf '%{buildroot}%{python3_sitelib}/bidsschematools/tests'
+
+# Install the man pages
+install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
+    '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}'
+
+# Install documentation. (Since we use %%doc with an absolute path for the
+# README.md file in the schema directory, we must use absolute paths for all
+# documentation; see
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_documentation.)
+install -t '%{buildroot}%{_pkgdocdir}' -D -p -m 0644 \
+    CITATION.cff
+# The top-level README.md in the source tree is really for the *specification*,
+# and this package is for the *schema*. We therefore form a relative symlink to
+# the README.md in the schema directory (in two steps).
+ln -s \
+    '%{buildroot}%{_datadir}/bids-schema/versions/%{bidsversion}/schema/README.md' \
+    '%{buildroot}%{_pkgdocdir}/README.md'
+symlinks -c -o '%{buildroot}%{_pkgdocdir}/README.md'
+install -t '%{buildroot}%{_docdir}/python3-bidsschematools' -D -p -m 0644 \
+    tools/schemacode/README.md
+
+%check
+# Sanity check
+verfile='%{_datadir}/bids-schema/versions/%{bidsversion}/schema/SCHEMA_VERSION'
+[ '%{srcversion}' = "$(cat "%{buildroot}${verfile}")" ]
+
+%pyproject_check_import
+
+# These tests require example files that were filtered out for license reasons.
+k="${k-}${k+ and }not test_bids_datasets[hcp_example_bids]"
+k="${k-}${k+ and }not test_bids_datasets[qmri_vfa]"
+k="${k-}${k+ and }not test_bids_datasets[fnirs_automaticity]"
+
+# Since we removed the tests from the installed package, we now link the
+# example data into the original source copy of the library for testing.
+ln -s "${PWD}/bids-examples-%{examples_commit}" \
+    tools/schemacode/tests/data/bids-examples
+ln -s "${PWD}/bids-error-examples-%{error_examples_commit}" \
+    tools/schemacode/tests/data/bids-error-examples
+# All of this manipulation is OK here in %%check because we already built the
+# wheel and installed the library to the buildroot.
+
+%if %{without check_jsonschema}
+k="${k-}${k+ and }not test_valid_schema_with_check_jsonschema"
+%endif
+
+%pytest ${ignore-} -k "${k-}" -v
+
+%files
+%license LICENSE
+%doc %dir %{_pkgdocdir}
+%doc %{_pkgdocdir}/CITATION.cff
+# This is a symbolic link to the README.md in the schema directory:
+%doc %{_pkgdocdir}/README.md
+
+%dir %{_datadir}/bids-schema/
+%dir %{_datadir}/bids-schema/versions/
+# Symbolic link to the current version
+%{_datadir}/bids-schema/versions/latest
+%dir %{_datadir}/bids-schema/versions/%{bidsversion}/
+%{_datadir}/bids-schema/versions/%{bidsversion}/metaschema.json
+%{_datadir}/bids-schema/versions/%{bidsversion}/schema.json
+%dir %{_datadir}/bids-schema/versions/%{bidsversion}/schema
+%doc %{_datadir}/bids-schema/versions/%{bidsversion}/schema/README.md
+# Version files
+%{_datadir}/bids-schema/versions/%{bidsversion}/schema/BIDS_VERSION
+%{_datadir}/bids-schema/versions/%{bidsversion}/schema/SCHEMA_VERSION
+# Directories (or directory trees) filled with YAML files
+%{_datadir}/bids-schema/versions/%{bidsversion}/schema/meta/
+%{_datadir}/bids-schema/versions/%{bidsversion}/schema/objects/
+%{_datadir}/bids-schema/versions/%{bidsversion}/schema/rules/
+
+%files -n python3-bidsschematools -f %{pyproject_files}
+%license tools/schemacode/LICENSE
+%doc %dir %{_docdir}/python3-bidsschematools
+%doc %{_docdir}/python3-bidsschematools/README.md
+
+%{_bindir}/bst
+%{_mandir}/man1/bst.1*
+%{_mandir}/man1/bst-*.1*
+
+%changelog
+%autochangelog

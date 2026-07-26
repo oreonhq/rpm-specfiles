@@ -1,0 +1,76 @@
+diff -up gimp-data-extras-2.0.4/configure.gimp3 gimp-data-extras-2.0.4/configure
+--- gimp-data-extras-2.0.4/configure.gimp3	2018-06-11 16:47:39.000000000 +0200
++++ gimp-data-extras-2.0.4/configure	2024-10-15 18:11:54.883617279 +0200
+@@ -2504,12 +2504,12 @@ if test -n "$gimp_CFLAGS"; then
+     pkg_cv_gimp_CFLAGS="$gimp_CFLAGS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gimp-2.0\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "gimp-2.0") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gimp-3.0\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "gimp-3.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_gimp_CFLAGS=`$PKG_CONFIG --cflags "gimp-2.0" 2>/dev/null`
++  pkg_cv_gimp_CFLAGS=`$PKG_CONFIG --cflags "gimp-3.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -2521,12 +2521,12 @@ if test -n "$gimp_LIBS"; then
+     pkg_cv_gimp_LIBS="$gimp_LIBS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gimp-2.0\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "gimp-2.0") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gimp-3.0\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "gimp-3.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_gimp_LIBS=`$PKG_CONFIG --libs "gimp-2.0" 2>/dev/null`
++  pkg_cv_gimp_LIBS=`$PKG_CONFIG --libs "gimp-3.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -2547,14 +2547,14 @@ else
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        gimp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gimp-2.0" 2>&1`
++	        gimp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gimp-3.0" 2>&1`
+         else
+-	        gimp_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gimp-2.0" 2>&1`
++	        gimp_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gimp-3.0" 2>&1`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+ 	echo "$gimp_PKG_ERRORS" >&5
+ 
+-	as_fn_error $? "Package requirements (gimp-2.0) were not met:
++	as_fn_error $? "Package requirements (gimp-3.0) were not met:
+ 
+ $gimp_PKG_ERRORS
+ 
+@@ -2586,7 +2586,7 @@ else
+ $as_echo "yes" >&6; }
+ 
+ fi
+-GIMP_DATA_DIR=`$PKG_CONFIG gimp-2.0 --variable=gimpdatadir`
++GIMP_DATA_DIR=`$PKG_CONFIG gimp-3.0 --variable=gimpdatadir`
+ 
+ 
+ 
+diff -up gimp-data-extras-2.0.4/configure.in.gimp3 gimp-data-extras-2.0.4/configure.in
+--- gimp-data-extras-2.0.4/configure.in.gimp3	2018-06-11 16:40:10.000000000 +0200
++++ gimp-data-extras-2.0.4/configure.in	2024-10-15 18:11:17.446865125 +0200
+@@ -17,8 +17,8 @@ AC_CONFIG_SRCDIR([brushes/Splatters/flow
+ AM_INIT_AUTOMAKE(no-define dist-bzip2)
+ AM_MAINTAINER_MODE
+ 
+-PKG_CHECK_MODULES(gimp, gimp-2.0)
+-GIMP_DATA_DIR=`$PKG_CONFIG gimp-2.0 --variable=gimpdatadir`
++PKG_CHECK_MODULES(gimp, gimp-3.0)
++GIMP_DATA_DIR=`$PKG_CONFIG gimp-3.0 --variable=gimpdatadir`
+ 
+ AC_SUBST(GIMP_DATA_DIR)
+ 

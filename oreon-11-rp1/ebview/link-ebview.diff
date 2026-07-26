@@ -1,0 +1,22 @@
+From: Matthias Klose <doko@debian.org>
+Date: Tue, 29 Oct 2013 00:11:14 +0100
+Subject: link-ebview
+
+===================================================================
+---
+ src/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 31241b7..8821f9b 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -5,7 +5,7 @@ AM_CPPFLAGS= @EBCONF_PTHREAD_CPPFLAGS@ @EBCONF_EBINCS@ \
+ AM_CFLAGS = @PANGO_CFLAGS@ @GTK_CFLAGS@ @EBCONF_PTHREAD_CFLAGS@  @CYGWIN_CFLAGS@ -Wall
+ AM_CXXFLAGS = @PANGO_CFLAGS@ @GTK_CFLAGS@ @EBCONF_PTHREAD_CFLAGS@
+ ebview_LDADD = @PANGO_LIBS@ @GTK_LIBS@ @THREAD_LIBS@ @CYGWIN_CFLAGS@ \
+-               @EBCONF_EBLIBS@ @EBCONF_ZLIBLIBS@ @EBCONF_INTLLIBS@ @RES_FILE@ @EXTRA_LIBS@
++               @EBCONF_EBLIBS@ @EBCONF_ZLIBLIBS@ @EBCONF_INTLLIBS@ @RES_FILE@ @EXTRA_LIBS@ -lX11
+ ebview_LDFLAGS = @EBCONF_PTHREAD_LDFLAGS@
+ 
+ ebview_SOURCES = \

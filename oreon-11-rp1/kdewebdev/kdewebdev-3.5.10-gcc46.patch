@@ -1,0 +1,16 @@
+diff -ur kdewebdev-3.5.10/quanta/parsers/tag.h kdewebdev-3.5.10-gcc46/quanta/parsers/tag.h
+--- kdewebdev-3.5.10/quanta/parsers/tag.h	2005-09-10 10:22:52.000000000 +0200
++++ kdewebdev-3.5.10-gcc46/quanta/parsers/tag.h	2011-03-11 00:16:25.000000000 +0100
+@@ -86,8 +86,10 @@
+   QString attributeValue(const QString &attr, bool ignoreCase = false);
+   /** Add an attribute */
+   void addAttribute(TagAttr attr) {attrs.append(attr);}
+-  /** Get the attribute number index */
+-  TagAttr getAttribute(uint index) const {return attrs[index];}
++  /** Get the attribute number index (const version) */
++  const TagAttr &getAttribute(uint index) const {return attrs[index];}
++  /** Get the attribute number index (must return a reference for Kafka) */
++  TagAttr &getAttribute(uint index) {return attrs[index];}
+   /** Remove the attribute number index */
+   void deleteAttribute(uint index) {attrs.remove(attrs.at(index));}
+   /** Insert a new Attribute, even if it already exists. Prefer using editAttribute.

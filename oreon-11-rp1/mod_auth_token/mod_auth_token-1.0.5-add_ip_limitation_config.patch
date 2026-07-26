@@ -1,0 +1,194 @@
+Index: mod_auth_token-1.0.5/AUTHORS
+===================================================================
+--- mod_auth_token-1.0.5.orig/AUTHORS
++++ mod_auth_token-1.0.5/AUTHORS
+@@ -1 +1,2 @@
+-Mikael Johansson (http://www.synd.info)
+\ No newline at end of file
++Mikael Johansson (http://www.synd.info)
++David Alves(http://www.alvesdavid.com)
+\ No newline at end of file
+Index: mod_auth_token-1.0.5/ChangeLog
+===================================================================
+--- mod_auth_token-1.0.5.orig/ChangeLog
++++ mod_auth_token-1.0.5/ChangeLog
+@@ -1,2 +1,5 @@
++2010-02-10
++	Added Ip limitation
++
+ 2006-02-09
+-	Initial release
+\ No newline at end of file
++	Initial release
+Index: mod_auth_token-1.0.5/README
+===================================================================
+--- mod_auth_token-1.0.5.orig/README
++++ mod_auth_token-1.0.5/README
+@@ -1,43 +1,45 @@
+-
+-  This module uses token based authentication to secure downloads 
+-  and prevent deep-linking. 
+-
+-  Have your script or servlet generate a token to authenticate the 
+-  download and let Apache handle the file transfer without having 
+-  to pipe it through a script for security.
+-  
+-  You can find downloads, daily snapshots and support information at
+-    http://www.synd.info/
+-
+-USAGE
+-
+-  The token is an hex-encoded MD5 hash of the 
+-  secret password, relative file path and the timestamp. It is 
+-  encoded onto the URI as:
+-
+-    <uri-prefix><token>/<timestamp-in-hex><rel-path>
+-
+-  For example
+-  
+-    /protected/dee0ed6174a894113d5e8f6c98f0e92b/43eaf9c5/path/to/file.txt
+-
+-  where the token is generated as 
+-
+-    md5("secret" + "/path/to/file.txt" + dechex(time_now()))
+-
+-  with the following configuration in httpd.conf
+-
+-    <Location /protected/>
+-      AuthTokenSecret       "secret"
+-      AuthTokenPrefix       /protected/
+-      AuthTokenTimeout      60
+-    </Location
+-
+-  The actual file would be located in
+-  
+-    /protected/path/to/file.txt
+-
+-CREDITS
+-
+-  Implementation ideas were taken from mod_secdownload for LIGHTTPD
+-    - http://trac.lighttpd.net/trac/wiki/Docs%3AModSecDownload
++
++  This module uses token based authentication to secure downloads
++  and prevent deep-linking.
++
++  Have your script or servlet generate a token to authenticate the
++  download and let Apache handle the file transfer without having
++  to pipe it through a script for security.
++
++  You can find downloads, daily snapshots and support information at
++    http://www.synd.info/
++
++USAGE
++
++  The token is an hex-encoded MD5 hash of the
++  secret password, relative file path and the timestamp. It is
++  encoded onto the URI as:
++
++    <uri-prefix><token>/<timestamp-in-hex><rel-path>
++
++  For example
++
++    /protected/dee0ed6174a894113d5e8f6c98f0e92b/43eaf9c5/path/to/file.txt
++
++  where the token is generated as
++
++    md5("secret" + "/path/to/file.txt" + dechex(time_now()))
++  you can add in the md5 hash the ip (and not the hostname) of the client to limit by ip. If you do so, enable AuthTokenLimitByIp in the config file of apache
++
++  with the following configuration in httpd.conf
++
++    <Location /protected/>
++      AuthTokenSecret       "secret"
++      AuthTokenPrefix       /protected/
++      AuthTokenTimeout      60
++      AuthTokenLimitByIp    off
++    </Location
++
++  The actual file would be located in
++
++    /protected/path/to/file.txt
++
++CREDITS
++
++  Implementation ideas were taken from mod_secdownload for LIGHTTPD
++    - http://trac.lighttpd.net/trac/wiki/Docs%3AModSecDownload
+Index: mod_auth_token-1.0.5/mod_auth_token.c
+===================================================================
+--- mod_auth_token-1.0.5.orig/mod_auth_token.c
++++ mod_auth_token-1.0.5/mod_auth_token.c
+@@ -16,6 +16,7 @@
+ 
+ /*
+  * Written by Mikael Johansson <mikael AT synd DOT info>
++ * Some code by David Aves <david.alves AT gmx DOT fr>
+  *
+  * This module uses token based authentication to secure files and
+  * prevent deep-linking.
+@@ -42,6 +43,7 @@ typedef struct {
+ 	char *prefix;
+ 	unsigned int prefix_len;
+ 	int timeout;
++	int checkip;
+ } auth_token_config_rec;
+ 
+ static void *create_auth_token_dir_config(apr_pool_t *p, char *d)
+@@ -52,7 +54,7 @@ static void *create_auth_token_dir_confi
+ 	conf->prefix = NULL;
+ 	conf->prefix_len = 0;
+ 	conf->timeout = 60;		/* 60 second timeout per default */
+-
++    conf->checkip = 0;		/* Disabling IP check by default */
+ 	return conf;
+ }
+ 
+@@ -84,6 +86,9 @@ static const command_rec auth_token_cmds
+ 	AP_INIT_TAKE1("AuthTokenTimeout", ap_set_int_slot,
+ 	 (void *)APR_OFFSETOF(auth_token_config_rec, timeout),
+ 	 ACCESS_CONF, "time to live for tokens"),
++	AP_INIT_FLAG("AuthTokenLimitByIp", ap_set_flag_slot,
++	 (void *)APR_OFFSETOF(auth_token_config_rec, checkip),
++	 ACCESS_CONF, "enable or disable ip checking"),
+ 	{NULL}
+ };
+ 
+@@ -135,14 +140,27 @@ static void auth_token_bin2hex(char *res
+ 
+ static int authenticate_token(request_rec *r)
+ {
+-	const char *usertoken, *timestamp, *path;
++	const char *usertoken, *timestamp, *path, *remoteip = NULL;
+ 	unsigned char digest[APR_MD5_DIGESTSIZE];
+ 	char token[APR_MD5_DIGESTSIZE * 2];
+ 	auth_token_config_rec *conf;
+ 	apr_md5_ctx_t context;
+ 
+-	/* check if the request uri is to be protected */
+ 	conf = ap_get_module_config(r->per_dir_config, &auth_token_module);
++
++	/* Get the remote IP , forcing to get an IP instead DNS record*/
++	if (conf->checkip) {
++		remoteip = ap_get_remote_host(r->connection, NULL, REMOTE_NAME, NULL);
++    	if(NULL == remoteip)
++		{
++			ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r, "mod_auth_token: request from ip FAILED." );
++			return DECLINED;
++		}
++		ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r, "mod_auth_token: request from ip %s", remoteip );
++	}
++
++
++	/* check if the request uri is to be protected */
+ 	if (conf->prefix == NULL || strncmp(r->uri, conf->prefix, conf->prefix_len)) {
+ 		return DECLINED;
+ 	}
+@@ -172,6 +190,9 @@ static int authenticate_token(request_re
+ 	apr_md5_update(&context, (unsigned char *) path, strlen(path));
+ 	apr_md5_update(&context, (unsigned char *) timestamp, 8);
+ 
++	if (conf->checkip)
++		apr_md5_update(&context, (unsigned char *) remoteip, strlen(remoteip));
++
+ 	apr_md5_final(digest, &context);
+ 
+ 	/* compare hex encoded token and user provided token */

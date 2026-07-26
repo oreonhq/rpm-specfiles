@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Clear Sans</target>
+    <match>
+      <family>Clear Sans Light</family>
+      <prepend-keyword>Light</prepend-keyword>
+    </match>
+    <match>
+      <family>Clear Sans Medium</family>
+      <prepend-keyword>Medium</prepend-keyword>
+    </match>
+    <match>
+      <family>Clear Sans Thin</family>
+      <prepend-keyword>Thin</prepend-keyword>
+    </match>
+    <like>
+      <family>Intel Clear</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

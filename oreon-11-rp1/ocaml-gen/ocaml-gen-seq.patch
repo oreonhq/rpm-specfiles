@@ -1,0 +1,19 @@
+--- gen-1.1/gen.opam.orig	2023-03-21 16:58:01.771376618 -0600
++++ gen-1.1/gen.opam	2023-03-21 16:58:18.499064350 -0600
+@@ -12,7 +12,6 @@ build: [
+ ]
+ depends: [
+   "dune" {>= "1.1"}
+-  "seq"
+   "odoc" {with-doc}
+   "qcheck" {with-test}
+   "qtest" {with-test}
+--- gen-1.1/src/dune.orig	2023-03-21 16:58:01.772376599 -0600
++++ gen-1.1/src/dune	2023-03-21 16:58:40.857646959 -0600
+@@ -19,5 +19,4 @@
+   (wrapped false)
+   (modules Gen GenLabels GenM GenClone GenMList GenM_intf Gen_intf GenLabels_intf GenShims_)
+   (flags :standard -warn-error -a+8 -safe-string -nolabels)
+-  (ocamlopt_flags :standard (:include flambda.flags))
+-  (libraries seq))
++  (ocamlopt_flags :standard (:include flambda.flags)))

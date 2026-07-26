@@ -1,0 +1,12 @@
+diff -rupN mtPaint-3884b6d6ebc18511df7bf1485a19fe774dd61dcf/src/spawn.c mtPaint-3884b6d6ebc18511df7bf1485a19fe774dd61dcf-new/src/spawn.c
+--- mtPaint-3884b6d6ebc18511df7bf1485a19fe774dd61dcf/src/spawn.c	2018-01-17 23:39:32.643262972 +0100
++++ mtPaint-3884b6d6ebc18511df7bf1485a19fe774dd61dcf-new/src/spawn.c	2018-01-17 23:39:32.676262970 +0100
+@@ -425,7 +425,7 @@ void init_factions()
+ 		{"View filesystem data (xterm)", "xterm -hold -e ls -l %f"},
+ 		{"Edit in Gimp", "gimp %f"},
+ 		{"View in GQview", "gqview %f"},
+-		{"Print image", "kprinter %f"},
++		{"Print image", "yad --print --type IMAGE --print-add-preview --filename %f"},
+ 		{"Email image", "seamonkey -compose attachment=file://%f"},
+ 		{"Send image to Firefox", "firefox %f"},
+ 		{"Send image to OpenOffice", "soffice %f"},

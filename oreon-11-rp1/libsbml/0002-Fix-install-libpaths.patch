@@ -1,0 +1,64 @@
+From bdc4f6987b617eba3355fade73edca8af326b5ae Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Wed, 6 Dec 2023 23:23:15 +0100
+Subject: [PATCH 2/5] Fix install libpaths
+
+---
+ src/bindings/csharp/CMakeLists.txt | 2 +-
+ src/bindings/octave/CMakeLists.txt | 2 +-
+ src/bindings/perl/CMakeLists.txt   | 2 +-
+ src/bindings/ruby/CMakeLists.txt   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/bindings/csharp/CMakeLists.txt b/src/bindings/csharp/CMakeLists.txt
+index c1d30c1014..d70d15dc38 100644
+--- a/src/bindings/csharp/CMakeLists.txt
++++ b/src/bindings/csharp/CMakeLists.txt
+@@ -213,7 +213,7 @@ add_custom_target(binding_csharp_swig ALL DEPENDS ${SWIG_DEPENDENCIES})
+ #
+ set(CSHAPR_PACKAGE_INSTALL_DIR)
+ if (UNIX OR CYGWIN)
+-  set(CSHAPR_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/mono/libsbmlcsP)
++  set(CSHAPR_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/mono/libsbmlcsP)
+ else()
+   set(CSHAPR_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/csharp)
+ endif()
+diff --git a/src/bindings/octave/CMakeLists.txt b/src/bindings/octave/CMakeLists.txt
+index 73dc18f552..fe5e4db926 100644
+--- a/src/bindings/octave/CMakeLists.txt
++++ b/src/bindings/octave/CMakeLists.txt
+@@ -81,7 +81,7 @@ set(OCTAVE_PACKAGE_INSTALL_DIR)
+ if (UNIX OR CYGWIN) 
+ execute_process(COMMAND "${OCTAVE_CONFIG_EXECUTABLE}" -p CANONICAL_HOST_TYPE
+     OUTPUT_VARIABLE OCTAVE_PLATFORM OUTPUT_STRIP_TRAILING_WHITESPACE)
+-  set(OCTAVE_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/octave/site/oct/${OCTAVE_PLATFORM})
++  set(OCTAVE_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/octave/packages/SBML-${PACKAGE_VERSION})
+ else()
+   set(OCTAVE_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/octave)
+ endif()
+diff --git a/src/bindings/perl/CMakeLists.txt b/src/bindings/perl/CMakeLists.txt
+index 8c6044717b..dd4cf8809d 100644
+--- a/src/bindings/perl/CMakeLists.txt
++++ b/src/bindings/perl/CMakeLists.txt
+@@ -232,7 +232,7 @@ Could not determine Perl version, please check the variable:
+   string(REPLACE "'" "" PERL_PLATFORM ${PERL_PLATFORM})
+   string(REPLACE ";" "" PERL_PLATFORM ${PERL_PLATFORM})
+   string(REPLACE "archname=" "" PERL_PLATFORM ${PERL_PLATFORM})
+-  set(PERL_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/perl5/site_perl/${PERL_VERSION}/${PERL_PLATFORM})
++  set(PERL_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/perl5/vendor_perl)
+   set(PERL_PACKAGE_INSTALL_BIN_DIR ${PERL_PACKAGE_INSTALL_DIR}/auto/LibSBML)
+ else()
+   set(PERL_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/perl)
+diff --git a/src/bindings/ruby/CMakeLists.txt b/src/bindings/ruby/CMakeLists.txt
+index 1c1a3897b9..d6b1fb3f4e 100644
+--- a/src/bindings/ruby/CMakeLists.txt
++++ b/src/bindings/ruby/CMakeLists.txt
+@@ -177,7 +177,7 @@ set(RUBY_PACKAGE_INSTALL_DIR)
+ if (UNIX OR CYGWIN) 
+   execute_process(COMMAND "${RUBY_EXECUTABLE}" -e "print RUBY_PLATFORM"
+     OUTPUT_VARIABLE RUBY_PLATFORM)
+-  set(RUBY_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/ruby/site_ruby/${RUBY_VERSION_MAJOR}.${RUBY_VERSION_MINOR}/${RUBY_PLATFORM})
++  set(RUBY_PACKAGE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/ruby/vendor_ruby)
+ else()
+   set(RUBY_PACKAGE_INSTALL_DIR ${MISC_PREFIX}bindings/ruby)
+ endif()

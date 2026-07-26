@@ -1,0 +1,8 @@
+diff -up Kwiki-Revisions-0.15/Makefile.PL.orig Kwiki-Revisions-0.15/Makefile.PL
+--- Kwiki-Revisions-0.15/Makefile.PL.orig	2017-05-22 12:13:00.277697804 +0200
++++ Kwiki-Revisions-0.15/Makefile.PL	2017-05-22 12:13:32.784491261 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name('Kwiki-Revisions');

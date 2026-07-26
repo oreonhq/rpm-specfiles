@@ -1,0 +1,38 @@
+From 77cd198d691ee28e3efb097850120e74b3b403b4 Mon Sep 17 00:00:00 2001
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 24 Jul 2011 13:20:06 +0400
+Subject: [PATCH 3/3] Don't strip the resulting binary
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+---
+ makefile_linuxLP64_utf8 |    1 -
+ makefile_linux_utf8     |    1 -
+ 2 files changed, 0 insertions(+), 2 deletions(-)
+
+diff --git a/makefile_linuxLP64_utf8 b/makefile_linuxLP64_utf8
+index 9458501..6171efe 100644
+--- a/makefile_linuxLP64_utf8
++++ b/makefile_linuxLP64_utf8
+@@ -15,7 +15,6 @@ default: $(OBJS)
+ #	$(CC) $(OBJS) -m64 -g -lm -ldl -lreadline -ltermcap -o newlisp # slackware
+ #	$(CC) $(OBJS) -m64 -g -lm -ldl -lreadline -lncurses -o newlisp # other Linux Dist
+ #	$(CC) $(OBJS) -m64 -g -lm -ldl -o newlisp # without readline support
+-	strip newlisp
+ 
+ .c.o:
+ 	$(CC) $(CFLAGS) $<
+diff --git a/makefile_linux_utf8 b/makefile_linux_utf8
+index e05cdcc..7a30291 100644
+--- a/makefile_linux_utf8
++++ b/makefile_linux_utf8
+@@ -15,7 +15,6 @@ default: $(OBJS)
+ #	$(CC) $(OBJS) -m32 -g -lm -ldl -lreadline -ltermcap -o newlisp # slackware
+ #	$(CC) $(OBJS) -m32 -g -lm -ldl -lreadline -lncurses -o newlisp # other Linux Dist
+ #	$(CC) $(OBJS) -m32 -g -lm -ldl -o newlisp # without readline support
+-	strip newlisp
+ 
+ .c.o:
+ 	$(CC) $(CFLAGS) $<
+-- 
+1.7.6
+

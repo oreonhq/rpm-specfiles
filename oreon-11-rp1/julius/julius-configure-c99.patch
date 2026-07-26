@@ -1,0 +1,53 @@
+libjulius: Fix incompatible types in POSIX threads configure checks
+
+NULL is not necessarily a valid pthread_t value. Compilers
+increasingly enforce C type safety, and these configure checks may
+fail incorrectly with such compilers. POSIX guarantees that
+pthread_self() returns a valid pthread_t value, so use that instead.
+
+Submitted upstream: <https://github.com/julius-speech/julius/pull/195>
+
+diff -ur julius-4.6.orig/libjulius/configure julius-4.6/libjulius/configure
+--- julius-4.6.orig/libjulius/configure	2020-09-02 03:28:43.000000000 +0200
++++ julius-4.6/libjulius/configure	2023-11-28 11:47:21.251847195 +0100
+@@ -4532,7 +4532,7 @@
+ int
+ main ()
+ {
+-pthread_equal(NULL,NULL);
++pthread_equal(pthread_self(),pthread_self());
+   ;
+   return 0;
+ }
+@@ -4564,7 +4564,7 @@
+ int
+ main ()
+ {
+-pthread_equal(NULL,NULL);
++pthread_equal(pthread_self(),pthread_self());
+   ;
+   return 0;
+ }
+diff -ur julius-4.6.orig/libjulius/configure.in julius-4.6/libjulius/configure.in
+--- julius-4.6.orig/libjulius/configure.in	2020-09-02 03:28:43.000000000 +0200
++++ julius-4.6/libjulius/configure.in	2023-11-28 11:27:42.241305063 +0100
+@@ -373,7 +373,8 @@
+ 	AC_MSG_CHECKING([for linking POSIX threaded process])
+  	ac_save_CFLAGS="$CFLAGS"
+  	CFLAGS="$CFLAGS -pthread"
+- 	AC_TRY_LINK([#include <pthread.h>],[pthread_equal(NULL,NULL);],
++ 	AC_TRY_LINK([#include <pthread.h>],
++		    [pthread_equal(pthread_self(),pthread_self());],
+      	    use_pthread=yes
+      	    AC_DEFINE(HAVE_PTHREAD)
+ 	    CPPFLAGS="$CPPFLAGS -pthread",
+@@ -388,7 +389,8 @@
+ 	AC_MSG_CHECKING([for POSIX thread library in -lpthread])
+ 	ac_save_LIBS_p="$LIBS"
+ 	LIBS="$LIBS -lpthread"
+-	AC_TRY_LINK([#include <pthread.h>],[pthread_equal(NULL,NULL);],
++	AC_TRY_LINK([#include <pthread.h>],
++	            [pthread_equal(pthread_self(),pthread_self());],
+ 	    use_pthread=yes
+ 	    AC_DEFINE(HAVE_PTHREAD),
+ 	  use_pthread=no

@@ -1,0 +1,29 @@
+From 30633206b21b652e189039dac91866ad7fe30cb9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 5 Nov 2021 16:05:03 +0100
+Subject: [PATCH] Adapt tests to added shebangs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/open.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/open.t b/t/open.t
+index 1413a68..4767a3a 100644
+--- a/t/open.t
++++ b/t/open.t
+@@ -33,7 +33,7 @@ is(
+         ['-<ddd.json', 't/lib/OpenXXX.pm', 9,  'OpenXXX'],
+         ['dir/eee',    't/lib/OpenXXX.pm', 10, 'OpenXXX'],
+         ['dir/eee',    't/lib/OpenXXX.pm', 11, 'OpenXXX'],
+-        ['dir/eee',    't/open.t',         24, 'main'],
++        ['dir/eee',    't/open.t',         25, 'main'],
+     ],
+     "Traced opens",
+ );
+-- 
+2.31.1
+

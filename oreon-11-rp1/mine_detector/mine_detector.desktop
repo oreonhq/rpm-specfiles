@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Mine Detector
+Name[sv]=Mine Detector
+Comment=a somewhat different mine-finding game
+Comment[sv]=ett litet annorlunda minröjningsspel
+Exec=mine_detector
+Terminal=false
+Type=Application
+Categories=Game;LogicGame;GTK;

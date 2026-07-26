@@ -1,0 +1,30 @@
+--- libtrash-3.2/libtrash.conf.defaults	2007-12-04 00:33:34.000000000 +0100
++++ libtrash-3.2/libtrash.conf	2008-03-06 15:47:51.000000000 +0100
+@@ -89,7 +89,7 @@ INTERCEPT_OPEN = NO
+ # directory in which "deleted" files will be stored. It mustn't contain
+ # any slashes:
+   
+-TRASH_CAN = Trash
++TRASH_CAN = .Trash
+ 
+ 
+ # This setting defines what should be done in case of failure: should we
+@@ -159,7 +159,8 @@ PROTECT_TRASH = YES
+ #
+ # .c;.h
+ 
+-IGNORE_EXTENSIONS = o;log;aux
++#IGNORE_EXTENSIONS = o;log;aux
++IGNORE_EXTENSIONS = 
+ 
+ 
+ # This setting defines whether hidden files (or files under a hidden
+@@ -170,7 +171,7 @@ IGNORE_EXTENSIONS = o;log;aux
+ # "normally", i.e., they will be moved to your trash can rather than
+ # really destroyed:
+   
+-IGNORE_HIDDEN = YES
++IGNORE_HIDDEN = NO
+ 
+ 
+ # This setting defines whether files whose names end in a tilde ('~')

@@ -1,0 +1,22 @@
+diff -up pdd-1.7/Makefile.orig pdd-1.7/Makefile
+--- pdd-1.7/Makefile.orig	2022-12-03 03:44:00.000000000 +0100
++++ pdd-1.7/Makefile	2022-12-27 18:56:55.751153577 +0100
+@@ -22,15 +22,15 @@ install-bin:
+ install-completions: install-bash-completion install-zsh-completion install-fish-completion
+ 
+ install-bash-completion:
+-	install -m644 auto-completion/bash/pdd.bash $(PREFIX)/share/bash-completion/compilations/pdd
++	install -m644 auto-completion/bash/pdd.bash $(DESTDIR)$(PREFIX)/share/bash-completion/compilations/pdd
+ 
+ install-fish-completion:
+-	install -m644 auto-completion/fish/pdd.fish -t $(PREFIX)/share/fish/vendor_completions.d
++	install -m644 auto-completion/fish/pdd.fish -t $(DESTDIR)$(PREFIX)/share/fish/vendor_completions.d
+ 
+ install-zsh-completion:
+ 	cp pdd pdd.py
+ 	auto-completion/zsh/zsh_completion.py
+-	install -m644 _pdd -t $(PREFIX)/share/zsh/site-functions
++	install -m644 _pdd -t $(DESTDIR)$(PREFIX)/share/zsh/site-functions
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/pdd

@@ -1,0 +1,19 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sat, 9 Apr 2022 20:07:44 +0200
+Subject: [PATCH] Disable eqc rebar3 plugin
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index c39daca..d2de9a5 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -17,7 +17,7 @@
+ 
+ {xref_checks,[undefined_function_calls,undefined_functions,locals_not_used]}.
+ 
+-{plugins, [{eqc_rebar, {git, "https://github.com/Quviq/eqc-rebar", {branch, "master"}}}]}.
++{plugins, []}.
+ 
+ {deps, [
+   {lager, {git, "https://github.com/erlang-lager/lager.git", {tag, "3.8.0"}}},

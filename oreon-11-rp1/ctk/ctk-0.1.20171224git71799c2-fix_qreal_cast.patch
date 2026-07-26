@@ -1,0 +1,19 @@
+Index: CTK-71799c27da506c899f2ef04b50cd8d454374870d/Libs/Widgets/ctkMaterialPropertyPreviewLabel.cpp
+===================================================================
+--- CTK-71799c27da506c899f2ef04b50cd8d454374870d.orig/Libs/Widgets/ctkMaterialPropertyPreviewLabel.cpp
++++ CTK-71799c27da506c899f2ef04b50cd8d454374870d/Libs/Widgets/ctkMaterialPropertyPreviewLabel.cpp
+@@ -315,10 +315,10 @@ void ctkMaterialPropertyPreviewLabel::dr
+           }
+         else
+           {
+-          rgba = qRgba(static_cast<unsigned char>(qMin(255. * intensity.x() * opacity + qRed(rgba)*(1. - opacity), static_cast<qreal>(255.))),
+-                       static_cast<unsigned char>(qMin(255. * intensity.y() * opacity + qGreen(rgba)*(1. - opacity), static_cast<qreal>(255.))),
+-                       static_cast<unsigned char>(qMin(255. * intensity.z() * opacity + qBlue(rgba)*(1. - opacity), static_cast<qreal>(255.))),
+-                       static_cast<unsigned char>(qMin(255. * opacity + qAlpha(rgba)*(1. - opacity), static_cast<qreal>(255.))));
++          rgba = qRgba(static_cast<unsigned char>(qMin(static_cast<qreal>(255. * intensity.x() * opacity + qRed(rgba)*(1. - opacity)), static_cast<qreal>(255.))),
++                       static_cast<unsigned char>(qMin(static_cast<qreal>(255. * intensity.y() * opacity + qGreen(rgba)*(1. - opacity)), static_cast<qreal>(255.))),
++                       static_cast<unsigned char>(qMin(static_cast<qreal>(255. * intensity.z() * opacity + qBlue(rgba)*(1. - opacity)), static_cast<qreal>(255.))),
++                       static_cast<unsigned char>(qMin(static_cast<qreal>(255. * opacity + qAlpha(rgba)*(1. - opacity)), static_cast<qreal>(255.))));
+           }
+         }
+       image.setPixel(i,j,rgba);

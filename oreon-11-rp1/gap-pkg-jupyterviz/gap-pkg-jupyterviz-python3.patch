@@ -1,0 +1,98 @@
+--- examples/convert.py.orig	2019-02-26 06:33:35.000000000 -0700
++++ examples/convert.py	2019-03-27 21:06:59.365046783 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ # This is a simple python script to convert a short markdown
+ # document into a jupyter notebook that can be run to show the
+@@ -85,7 +85,7 @@ image = """
+ def process_file ( mdfile ):
+     # "Verify" the file is an .md file
+     if mdfile[-3:] != '.md':
+-        print "Input file must have extension .md: " + mdfile
++        print("Input file must have extension .md: " + mdfile)
+         sys.exit()
+ 
+     # Read the input file and store it in this format:
+@@ -96,8 +96,8 @@ def process_file ( mdfile ):
+     #   [ "code",     [ "G := Group((1,2),(3,4));\n" ] ],
+     #   ...
+     # ]
+-    print "Processing: " + mdfile
+-    print "\tReading file..."
++    print("Processing: " + mdfile)
++    print("\tReading file...")
+     lines = [ ]
+     mode = 'markdown'
+     inf = open( mdfile, 'r' )
+@@ -152,7 +152,7 @@ def process_file ( mdfile ):
+     # Write the .ipynb output file in this same folder.
+     outfile = mdfile[:-3] + '.ipynb'
+     seen_code_yet = False
+-    print "\tWriting " + outfile + "..."
++    print("\tWriting " + outfile + "...")
+     outf = open( outfile, 'w' )
+     outf.write( header )
+     for index, line in enumerate( lines ):
+@@ -174,7 +174,7 @@ def process_file ( mdfile ):
+     # Replace markdown headings with AutoDoc headings,
+     # then write the .gd output file in the ../lib/ folder.
+     outfname = "../lib/ch2-examples-" + mdfile[:-3] + ".gd"
+-    print "\tWriting " + outfname + "..."
++    print("\tWriting " + outfname + "...")
+     outf = open( outfname, 'w' )
+     outf.write( "#! @Chapter Examples\n" );
+     for line in lines:
+@@ -199,11 +199,11 @@ for fname in os.listdir( "." ):
+     if fname[-3:] == ".md":
+         process_file( fname )
+         converted += [ fname ]
+-print "Done."
+-print "Don't forget to open each X.ipynb file generated this " + \
++print("Done.")
++print("Don't forget to open each X.ipynb file generated this " + \
+       "way, run all cells, and save the final image created " + \
+-      "as ../doc/X.png so that it can be included in the docs."
+-print "You can copy and paste these commands to make it easier:"
++      "as ../doc/X.png so that it can be included in the docs.")
++print("You can copy and paste these commands to make it easier:")
+ for name in converted:
+-    print "jupyter notebook " + name
++    print("jupyter notebook " + name)
+ 
+--- extract_examples.py.orig	2019-02-26 06:33:35.000000000 -0700
++++ extract_examples.py	2019-03-27 21:06:59.378046751 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python
++#!/usr/bin/python3
+ 
+ # This is a simple python script to look through all the GAP code
+ # and documentation in the lib/ folder of this repository, find
+@@ -70,7 +70,7 @@ codecell = """
+ snippets = [ ]
+ def process_file ( gdfile ):
+     global snippets
+-    print "Processing " + gdfile + "..."
++    print("Processing " + gdfile + "...")
+     mode = "not in a snippet"
+     inf = open( gdfile, "r" )
+     for line in inf.readlines():
+@@ -87,7 +87,7 @@ def process_file ( gdfile ):
+ outfile = "extracted_snippets.ipynb"
+ def write_all ():
+     global snippets, outfile
+-    print "Writing " + outfile + "..."
++    print("Writing " + outfile + "...")
+     outf = open( outfile, "w" )
+     outf.write( header )
+     outf.write( mdcell % ( json.dumps( [ \
+@@ -109,6 +109,6 @@ for fname in os.listdir( "lib" ):
+     if fname[-3:] == ".gd":
+         process_file( "lib/" + fname )
+ write_all()
+-print "Done.  You can open the resulting file with this command:"
+-print "jupyter notebook " + outfile
++print("Done.  You can open the resulting file with this command:")
++print("jupyter notebook " + outfile)
+ 

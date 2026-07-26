@@ -1,0 +1,9 @@
+[Unit]
+Description=babeld routing daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/babeld
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,46 @@
+Sólo en c17.03/data/chianti/mn/mn_8: .meo.swp
+diff -ur c17.03/source/Makefile c17.03.mk/source/Makefile
+--- c17.03/source/Makefile	2022-05-06 19:27:50.000000000 +0200
++++ c17.03.mk/source/Makefile	2022-08-25 21:09:08.791465469 +0200
+@@ -8,11 +8,11 @@
+   DEFCXX := ${shell which clang++ 2> /dev/null}
+ endif
+ 
+-OPT = -O3 -ftrapping-math -fno-math-errno
++OPT = 
+ DEBUGOPT = -finline
+ CXX = $(DEFCXX)
+ # -W is the old name for -Wextra, g++ 3.3 only supports the former
+-CXXFLAGS = -ansi ${OPT} -Wall -W -g
++#CXXFLAGS = -ansi ${OPT} -Wall -W -g
+ LDFLAGS = ${OPT} -Wall -g
+ LDLIBS =
+ NO_TRAP_FLAGS =
+@@ -83,6 +83,9 @@
+   OPT = $(DEBUGOPT)
+ endif
+ 
++# EMPTY OPT
++OPT = 
++
+ CXXDEFINES = ${filter -D%,${CXXFLAGS}}
+ 
+ # Precompiling the cddefines.h header speeds up compilation dramatically with g++
+@@ -184,7 +187,7 @@
+ default: $(DEFAULT)
+ 
+ cloudy.exe: ${preobjects} maincl.${OBJEXT} libcloudy.${LIBEXT}
+-	${CXX} ${LDFLAGS} -o cloudy.exe maincl.${OBJEXT} -L. -lcloudy ${LDLIBS}
++	${CXX} ${CXXFLAGS} ${LDFLAGS} -o cloudy.exe maincl.${OBJEXT} -L. -lcloudy ${LDLIBS}
+ 
+ libcloudy.${LIBEXT}: ${libobjects}
+ 	ar cr libcloudy.${LIBEXT} $^
+@@ -194,7 +197,7 @@
+ 	cd ${SRCDIR}/../data/cdms+jpl && $(MAKE)
+ 
+ md5datafile.exe: ${preobjects} md5datafile.${OBJEXT} libcloudy.${LIBEXT}
+-	${CXX} ${LDFLAGS} -o md5datafile.exe md5datafile.${OBJEXT} -L. -lcloudy ${LDLIBS}
++	${CXX} ${CXXFLAGS} ${LDFLAGS} -o md5datafile.exe md5datafile.${OBJEXT} -L. -lcloudy ${LDLIBS}
+ 
+ testclean:
+ 	rm -f Test*.${OBJEXT}

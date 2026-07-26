@@ -1,0 +1,20 @@
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -19,7 +19,7 @@ FetchContent_Declare(
+ # For Windows, Prevent overriding the parent project's compiler/linker settings
+ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+ set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+-FetchContent_MakeAvailable(GoogleTest)
++# FetchContent_MakeAvailable(GoogleTest)
+ include(GoogleTest)
+ 
+ macro(package_add_test TEST_NAME LABEL TEST_FILE)
+@@ -29,7 +29,7 @@ macro(package_add_test TEST_NAME LABEL T
+       $<$<CXX_COMPILER_ID:MSVC>:/W3 /WX>
+       $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Wconversion -Wno-sign-conversion -Werror>
+       )
+-    target_link_libraries(${TEST_NAME} gmock_main dispenso)
++    target_link_libraries(${TEST_NAME} gmock gmock_main gtest dispenso)
+     gtest_discover_tests(${TEST_NAME}
+       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+       PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"

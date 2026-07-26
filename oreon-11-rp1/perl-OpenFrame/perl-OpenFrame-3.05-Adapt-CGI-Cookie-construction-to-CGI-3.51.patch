@@ -1,0 +1,30 @@
+From f6fea01379c50fa7d6dc1d981e3f7e11f9c19bd6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 24 Jun 2011 15:22:19 +0200
+Subject: [PATCH] Adapt CGI::Cookie construction to CGI 3.51 (RT#69077)
+
+---
+ lib/OpenFrame/Cookies.pm |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/lib/OpenFrame/Cookies.pm b/lib/OpenFrame/Cookies.pm
+index 7ee5379..7293a10 100644
+--- a/lib/OpenFrame/Cookies.pm
++++ b/lib/OpenFrame/Cookies.pm
+@@ -43,9 +43,10 @@ sub set {
+     ## right, we have a key value pair that we need to turn
+     ## into an OpenFrame::Cookie object
+ 
+-    my $cookie = OpenFrame::Cookie->new();
+-    $cookie->name( $key );
+-    $cookie->value( [ $val ] );
++    my $cookie = OpenFrame::Cookie->new(
++        -name => $key,
++        -value => [ $val ]
++    );
+ 
+     ## call this method again with the cookie as the parameter
+     $self->set( $cookie );
+-- 
+1.7.5.4
+

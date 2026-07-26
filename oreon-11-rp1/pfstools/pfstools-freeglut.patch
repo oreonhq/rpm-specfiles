@@ -1,0 +1,68 @@
+--- a/src/pfsglview/CMakeLists.txt~	2017-11-13 11:38:26.000000000 -0600
++++ a/src/pfsglview/CMakeLists.txt	2019-09-19 10:07:11.350642598 -0500
+@@ -1,5 +1,5 @@
+ 
+-include_directories ("${PROJECT_BINARY_DIR}/" "${PROJECT_SOURCE_DIR}/src/pfs" ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS})
++include_directories ("${PROJECT_BINARY_DIR}/" "${PROJECT_SOURCE_DIR}/src/pfs" ${OPENGL_INCLUDE_DIRS} ${FreeGLUT_INCLUDE_DIRS})
+ if( NOT HAS_GETOPT )
+ 	include_directories ("${GETOPT_INCLUDE}")
+ endif( NOT HAS_GETOPT )
+@@ -11,8 +11,8 @@
+ 
+ add_executable(pfsglview pfsglview.cpp picture_io.cpp module.cpp m_histogram.cpp m_status.cpp m_on_screen_display.cpp)
+ 
+-# TODO: Use ${GLUT_LIBRARY} instead.
+-target_link_libraries(pfsglview ${OPENGL_LIBRARIES} ${GLUT_glut_LIBRARY} pfs)
++# TODO: Use ${FreeGLUT_LIBRARY} instead.
++target_link_libraries(pfsglview ${OPENGL_LIBRARIES} -lglut pfs)
+ 
+ install (TARGETS pfsglview DESTINATION bin)
+ install (FILES pfsglview.1 DESTINATION ${MAN_DIR})
+--- a/src/CMakeLists.txt~	2017-11-13 11:38:28.000000000 -0600
++++ a/src/CMakeLists.txt	2019-09-19 10:19:30.051372391 -0500
+@@ -18,9 +18,9 @@
+     add_subdirectory (matlab)
+ endif( MATLAB_FOUND )
+ 
+-if( OPENGL_FOUND AND GLUT_FOUND )
++if( OPENGL_FOUND AND FreeGLUT_FOUND )
+     add_subdirectory (pfsglview)
+-endif( OPENGL_FOUND AND GLUT_FOUND )
++endif( OPENGL_FOUND AND FreeGLUT_FOUND )
+ 
+ if( WITH_HDRVC )
+ 	add_subdirectory (hdrvc)
+--- a/CMakeLists.txt~	2017-11-13 11:38:18.000000000 -0600
++++ a/CMakeLists.txt	2019-09-19 10:36:27.025771833 -0500
+@@ -221,17 +221,17 @@
+ find_path(OPENGL_INCLUDE_DIR GL/gl.h )
+ 
+ find_package(OpenGL )
+-find_package(GLUT )
++find_package(FreeGLUT )
+ 
+ if( NOT OPENGL_FOUND )
+ 	MESSAGE( STATUS "OpenGL not found. The following command will not be
+ compiled: pfsglview. " )
+ endif( NOT OPENGL_FOUND )
+ 
+-if( NOT GLUT_FOUND )
++if( NOT FreeGLUT_FOUND )
+ 	MESSAGE( STATUS "GLUT not found. The following command will not be
+ compiled: pfsglview. " )
+-endif( NOT GLUT_FOUND )
++endif( NOT FreeGLUT_FOUND )
+ 
+ endif( WITH_pfsglview )
+ 
+--- a/src/pfsglview/glenv.h~	2017-11-13 11:38:26.000000000 -0600
++++ a/src/pfsglview/glenv.h	2019-09-19 10:43:41.179049107 -0500
+@@ -11,7 +11,7 @@
+  #if defined(_WIN32) || defined(_WIN64) || defined(__CYGWIN__)
+    #include <windef.h>
+  #endif
+-#include "GL/glut.h"
++#include "GL/freeglut.h"
+ #include "GL/gl.h"
+ #include "GL/glu.h"
+ #include "GL/glext.h"

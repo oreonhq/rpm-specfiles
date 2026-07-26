@@ -1,0 +1,216 @@
+%global source0_hash cd5fd71c46271d70c08ad44562e57c34e787d6a8650071db115910999a335ba8
+
+%global shortname adwaita-qt
+
+%{?mingw_package_header}
+
+Name:           mingw-adwaita-qt
+Version:        1.4.2
+Release:        10%{?dist}
+Summary:        Adwaita theme for Qt-based applications
+
+License:        LGPL-2.0-or-later AND GPL-2.0-or-later
+Url:            https://github.com/FedoraQt/adwaita-qt
+Source0:        https://github.com/FedoraQt/adwaita-qt/archive/%{version}/adwaita-qt-%{version}.tar.gz
+
+BuildArch:      noarch
+BuildRequires:  cmake
+BuildRequires:  make
+
+BuildRequires:  mingw32-filesystem >= 95
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw32-gcc-c++
+BuildRequires:  mingw32-qt5-qtbase
+BuildRequires:  mingw32-qt6-qtbase
+
+BuildRequires:  mingw64-filesystem >= 95
+BuildRequires:  mingw64-gcc
+BuildRequires:  mingw64-gcc-c++
+BuildRequires:  mingw64-qt5-qtbase
+BuildRequires:  mingw64-qt6-qtbase
+
+%description
+Theme to let Qt applications fit nicely into Fedora Workstation
+
+# Win32
+%package -n mingw32-adwaita-qt5
+Summary:        Adwaita Qt5 theme
+Requires:       mingw32-libadwaita-qt5 = %{version}-%{release}
+
+%description -n mingw32-adwaita-qt5
+Adwaita theme variant for applications utilizing Qt5.
+
+%package -n mingw32-libadwaita-qt5
+Summary:        Adwaita Qt5 library
+
+%description -n mingw32-libadwaita-qt5
+%{summary}.
+
+%package -n mingw32-libadwaita-qt5-static
+Summary:        Development files for mingw32-libadwaita-qt5
+Requires:       mingw32-libadwaita-qt5 = %{version}-%{release}
+
+%description -n mingw32-libadwaita-qt5-static
+Static version of the mingw32-libadwaita-qt5 library.
+
+# Win64
+%package -n mingw64-adwaita-qt5
+Summary:        Adwaita Qt5 theme
+Requires:       mingw64-libadwaita-qt5 = %{version}-%{release}
+BuildArch:      noarch
+
+%description -n mingw64-adwaita-qt5
+Adwaita theme variant for applications utilizing Qt5.
+
+%package -n mingw64-libadwaita-qt5
+Summary:        Adwaita Qt5 library
+
+%description -n mingw64-libadwaita-qt5
+%{summary}.
+
+%package -n mingw64-libadwaita-qt5-static
+Summary:        Development files for mingw64-libadwaita-qt5
+Requires:       mingw64-libadwaita-qt5 = %{version}-%{release}
+
+%description -n mingw64-libadwaita-qt5-static
+Static version of the mingw64-libadwaita-qt5 library.
+
+# Win32
+%package -n mingw32-adwaita-qt6
+Summary:        Adwaita Qt6 theme
+Requires:       mingw32-libadwaita-qt6 = %{version}-%{release}
+
+%description -n mingw32-adwaita-qt6
+Adwaita theme variant for applications utilizing Qt6.
+
+%package -n mingw32-libadwaita-qt6
+Summary:        Adwaita Qt6 library
+
+%description -n mingw32-libadwaita-qt6
+%{summary}.
+
+%package -n mingw32-libadwaita-qt6-static
+Summary:        Development files for mingw32-libadwaita-qt6
+Requires:       mingw32-libadwaita-qt6 = %{version}-%{release}
+
+%description -n mingw32-libadwaita-qt6-static
+Static version of the mingw32-libadwaita-qt6 library.
+
+# Win64
+%package -n mingw64-adwaita-qt6
+Summary:        Adwaita Qt6 theme
+Requires:       mingw64-libadwaita-qt6 = %{version}-%{release}
+BuildArch:      noarch
+
+%description -n mingw64-adwaita-qt6
+Adwaita theme variant for applications utilizing Qt6.
+
+%package -n mingw64-libadwaita-qt6
+Summary:        Adwaita Qt6 library
+
+%description -n mingw64-libadwaita-qt6
+%{summary}.
+
+%package -n mingw64-libadwaita-qt6-static
+Summary:        Development files for mingw64-libadwaita-qt6
+Requires:       mingw64-libadwaita-qt6 = %{version}-%{release}
+
+%description -n mingw64-libadwaita-qt6-static
+Static version of the mingw64-libadwaita-qt6 library.
+
+%{?mingw_debug_package}
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n adwaita-qt-%{version}
+
+%build
+mkdir %{_target_platform}-qt5
+pushd %{_target_platform}-qt5
+
+%mingw_cmake ../..
+
+%mingw_make_build
+
+popd
+
+mkdir %{_target_platform}-qt6
+pushd %{_target_platform}-qt6
+
+%mingw_cmake -DUSE_QT6=ON ../..
+
+%mingw_make_build
+
+popd
+
+%install
+pushd %{_target_platform}-qt5
+%mingw_make_install
+popd
+
+pushd %{_target_platform}-qt6
+%mingw_make_install
+popd
+
+# Win32
+%files -n mingw32-adwaita-qt5
+%{mingw32_libdir}/qt5/plugins/styles/libadwaita-qt.dll
+
+%files -n mingw32-libadwaita-qt5
+%{mingw32_bindir}/libadwaitaqt-1.dll
+%{mingw32_bindir}/libadwaitaqtpriv-1.dll
+%{mingw32_includedir}/AdwaitaQt/
+%{mingw32_libdir}/cmake/AdwaitaQt/
+%{mingw32_libdir}/pkgconfig/adwaita-qt.pc
+
+%files -n mingw32-libadwaita-qt5-static
+%{mingw32_libdir}/libadwaitaqt.dll.a
+%{mingw32_libdir}/libadwaitaqtpriv.dll.a
+
+# Win64
+%files -n mingw64-adwaita-qt5
+%{mingw64_libdir}/qt5/plugins/styles/libadwaita-qt.dll
+
+%files -n mingw64-libadwaita-qt5
+%{mingw64_bindir}/libadwaitaqt-1.dll
+%{mingw64_bindir}/libadwaitaqtpriv-1.dll
+%{mingw64_includedir}/AdwaitaQt/
+%{mingw64_libdir}/cmake/AdwaitaQt/
+%{mingw64_libdir}/pkgconfig/adwaita-qt.pc
+
+%files -n mingw64-libadwaita-qt5-static
+%{mingw64_libdir}/libadwaitaqt.dll.a
+%{mingw64_libdir}/libadwaitaqtpriv.dll.a
+
+%files -n mingw32-adwaita-qt6
+%{mingw32_libdir}/qt6/plugins/styles/libadwaita-qt.dll
+
+%files -n mingw32-libadwaita-qt6
+%{mingw32_bindir}/libadwaitaqt6-1.dll
+%{mingw32_bindir}/libadwaitaqt6priv-1.dll
+%{mingw32_includedir}/AdwaitaQt6/
+%{mingw32_libdir}/cmake/AdwaitaQt6/
+%{mingw32_libdir}/pkgconfig/adwaita-qt6.pc
+
+%files -n mingw32-libadwaita-qt6-static
+%{mingw32_libdir}/libadwaitaqt6.dll.a
+%{mingw32_libdir}/libadwaitaqt6priv.dll.a
+
+# Win64
+%files -n mingw64-adwaita-qt6
+%{mingw64_libdir}/qt6/plugins/styles/libadwaita-qt.dll
+
+%files -n mingw64-libadwaita-qt6
+%{mingw64_bindir}/libadwaitaqt6-1.dll
+%{mingw64_bindir}/libadwaitaqt6priv-1.dll
+%{mingw64_includedir}/AdwaitaQt6/
+%{mingw64_libdir}/cmake/AdwaitaQt6/
+%{mingw64_libdir}/pkgconfig/adwaita-qt6.pc
+
+%files -n mingw64-libadwaita-qt6-static
+%{mingw64_libdir}/libadwaitaqt6.dll.a
+%{mingw64_libdir}/libadwaitaqt6priv.dll.a
+
+%changelog
+%autochangelog

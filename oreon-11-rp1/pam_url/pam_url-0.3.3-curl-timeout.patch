@@ -1,0 +1,57 @@
+diff --git a/examples/pam_url.conf b/examples/pam_url.conf
+index 15439cc..1d43d59 100644
+--- a/examples/pam_url.conf
++++ b/examples/pam_url.conf
+@@ -10,6 +10,10 @@ pam_url:
+         passwdfield = "token";                     # passwdfield name to send
+         extradata   = "&do=login";                 # extra data to send
+         prompt      = "Token: ";                   # password prompt
++        connect_timeout_ms = 2000;                 # Connect timeout of 2000ms
++        timeout_ms  = 10000;                       # Overall timeout of 10000ms
++                                                   # Take into consideration that the remote end might delay a response on
++                                                   # purpose when the password is incorrect, to limit brute force attempts
+     };
+ 
+     ssl:
+diff --git a/pam_url.c b/pam_url.c
+index c1da689..2a0918d 100644
+--- a/pam_url.c
++++ b/pam_url.c
+@@ -120,6 +120,11 @@ int parse_opts(pam_url_opts *opts, int argc, const char *argv[], int mode)
+ 	if(config_lookup_string(&config, "pam_url.settings.extradata", (const char **)&opts->extra_field) == CONFIG_FALSE)
+ 		opts->extra_field = DEF_EXTRA;
+ 	
++	if(config_lookup_int(&config, "pam_url.settings.connect_timeout_ms", &opts->connect_timeout_ms) == CONFIG_FALSE)
++		opts->connect_timeout_ms = 0; // Select cURL lib default
++
++	if(config_lookup_int(&config, "pam_url.settings.timeout_ms", &opts->timeout_ms) == CONFIG_FALSE)
++		opts->connect_timeout_ms = 0; // Select cURL lib default
+ 	
+ 	// SSL Options
+ 	if(config_lookup_string(&config, "pam_url.ssl.client_cert", &opts->ssl_cert) == CONFIG_FALSE)
+@@ -286,6 +291,12 @@ int fetch_url(pam_handle_t *pamh, pam_url_opts opts)
+ 	if( CURLE_OK != curl_easy_setopt(eh, CURLOPT_CAINFO, opts.ca_cert) )
+ 		goto curl_error;
+ 
++	if( CURLE_OK != curl_easy_setopt(eh, CURLOPT_CONNECTTIMEOUT_MS, opts.connect_timeout_ms) )
++		goto curl_error;
++
++	if( CURLE_OK != curl_easy_setopt(eh, CURLOPT_TIMEOUT_MS, opts.timeout_ms) )
++		goto curl_error;
++
+ 	if( opts.ssl_verify_host == true )
+ 	{
+ 		if( CURLE_OK != curl_easy_setopt(eh, CURLOPT_SSL_VERIFYHOST, 2) )
+diff --git a/pam_url.h b/pam_url.h
+index 39bc286..8cb32d6 100644
+--- a/pam_url.h
++++ b/pam_url.h
+@@ -99,6 +99,8 @@ typedef struct pam_url_opts_ {
+ 	int use_first_pass;
+ 	int prepend_first_pass;
+ 	char *first_pass;
++	int connect_timeout_ms;
++	int timeout_ms;
+ 
+ 	int ssl_verify_peer;
+ 	int ssl_verify_host;

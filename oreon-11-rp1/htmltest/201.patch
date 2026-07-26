@@ -1,0 +1,598 @@
+From ee7dbb7e8f02a847fa38ce1e7336371e9a7fe3f8 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Fri, 12 Jul 2019 01:42:20 -0400
+Subject: [PATCH 1/2] Update to govcr.v3.
+
+The breaking changes in v3 were not used, so there's not much to change
+here.
+---
+ go.mod               | 2 +-
+ go.sum               | 4 ++--
+ htmltest/htmltest.go | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/go.mod b/go.mod
+index 68d4d4f..b876063 100644
+--- a/go.mod
++++ b/go.mod
+@@ -13,7 +13,7 @@ require (
+ 	github.com/seborama/govcr v2.2.1+incompatible // indirect
+ 	golang.org/x/net v0.0.0-20201224014010-6772e930b67b
+ 	golang.org/x/sys v0.0.0-20210113181707-4bcb84eeeb78 // indirect
+-	gopkg.in/seborama/govcr.v2 v2.4.2
++	gopkg.in/seborama/govcr.v3 v3.2.0
+ 	gopkg.in/yaml.v2 v2.4.0
+ )
+ 
+diff --git a/go.sum b/go.sum
+index a213801..dfe536d 100644
+--- a/go.sum
++++ b/go.sum
+@@ -39,8 +39,8 @@ golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
+ golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
+ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+-gopkg.in/seborama/govcr.v2 v2.4.2 h1:03Uhka6c893+KTz1WmSWvdwFWlK3pDpThPPdwcAd6Wk=
+-gopkg.in/seborama/govcr.v2 v2.4.2/go.mod h1:0ERlmX5DdmlKL6gvWYyegw24WXF8lr97+AM+hA8i2Bo=
++gopkg.in/seborama/govcr.v3 v3.2.0 h1:LouNzIgIvVAUHqmiXQouHh7ruf9L5wiKr5q3TptXlDc=
++gopkg.in/seborama/govcr.v3 v3.2.0/go.mod h1:UC3NCHcU8z90RyWto+CZsR2CXXzYpmiVfwO3VP8NyTU=
+ gopkg.in/yaml.v2 v2.3.0/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+ gopkg.in/yaml.v2 v2.4.0 h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=
+ gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
+diff --git a/htmltest/htmltest.go b/htmltest/htmltest.go
+index 8bed808..c0dce52 100644
+--- a/htmltest/htmltest.go
++++ b/htmltest/htmltest.go
+@@ -17,7 +17,7 @@ import (
+ 	"github.com/wjdp/htmltest/issues"
+ 	"github.com/wjdp/htmltest/output"
+ 	"github.com/wjdp/htmltest/refcache"
+-	"gopkg.in/seborama/govcr.v2"
++	"gopkg.in/seborama/govcr.v3"
+ )
+ 
+ // Base path for VCR cassettes, relative to this package
+
+From 371710cd046e9ab98dabf947d61a3eee2f1a0b49 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Thu, 25 Jul 2019 03:57:07 -0400
+Subject: [PATCH 2/2] Update to govcr.v4.
+
+The breaking change in v4 was to remove a "Path" entry from the cassette
+files, so do that as well. I did not re-create the cassettes from
+scratch, though.
+
+Additionally, v4.3.0 fixes the bug of replaying errors:
+https://github.com/seborama/govcr/commit/1f8d20bd6cb95328aecec192e9e115755e524a85
+which means there are some tweaks to the test results.
+---
+ go.mod                                                    | 4 ++--
+ go.sum                                                    | 8 ++++----
+ htmltest/check-link_test.go                               | 4 ++--
+ htmltest/check-script_test.go                             | 2 +-
+ htmltest/fixtures/vcr/generic/citeBroken.html.cassette    | 1 -
+ htmltest/fixtures/vcr/generic/citeValid.html.cassette     | 1 -
+ htmltest/fixtures/vcr/generic/videoBroken.html.cassette   | 1 -
+ .../fixtures/vcr/html/normal_looking_page.html.cassette   | 1 -
+ .../vcr/images/existingImageExternal.html.cassette        | 1 -
+ .../images/image_missing_protocol_invalid.html.cassette   | 1 -
+ .../vcr/images/image_missing_protocol_valid.html.cassette | 1 -
+ htmltest/fixtures/vcr/images/lineBreaks.html.cassette     | 1 -
+ .../vcr/images/missingImageExternal.html.cassette         | 1 -
+ htmltest/fixtures/vcr/images/src_http.html.cassette       | 1 -
+ htmltest/fixtures/vcr/links/anchors_in_pre.html.cassette  | 1 -
+ .../fixtures/vcr/links/bad_external_links.html.cassette   | 1 -
+ .../fixtures/vcr/links/brokenCanonicalLink.html.cassette  | 1 -
+ .../fixtures/vcr/links/brokenHashOnTheWeb.html.cassette   | 1 -
+ .../fixtures/vcr/links/brokenLinkExternal.html.cassette   | 1 -
+ htmltest/fixtures/vcr/links/escape_pipes.html.cassette    | 1 -
+ .../fixtures/vcr/links/http_requires_accept.html.cassette | 1 -
+ htmltest/fixtures/vcr/links/https-invalid.html.cassette   | 1 -
+ htmltest/fixtures/vcr/links/https-valid-h2.html.cassette  | 1 -
+ htmltest/fixtures/vcr/links/https-valid.html.cassette     | 1 -
+ htmltest/fixtures/vcr/links/ip_href.html.cassette         | 1 -
+ .../fixtures/vcr/links/linkWithRedirect.html.cassette     | 1 -
+ .../vcr/links/link_missing_protocol_invalid.html.cassette | 1 -
+ .../vcr/links/link_missing_protocol_valid.html.cassette   | 1 -
+ htmltest/fixtures/vcr/links/non_https.html.cassette       | 1 -
+ .../fixtures/vcr/links/non_https_ignore.html.cassette     | 1 -
+ .../vcr/links/non_standard_characters.html.cassette       | 1 -
+ htmltest/fixtures/vcr/links/utf8Link.html.cassette        | 1 -
+ .../vcr/meta/refresh-external-broken.html.cassette        | 1 -
+ .../vcr/meta/refresh-external-valid-caps.html.cassette    | 1 -
+ .../vcr/meta/refresh-external-valid-space.html.cassette   | 1 -
+ .../vcr/meta/refresh-external-valid.html.cassette         | 1 -
+ .../fixtures/vcr/scripts/scriptInsecure.html.cassette     | 1 -
+ .../vcr/scripts/script_broken_external.html.cassette      | 1 -
+ htmltest/fixtures/vcr/scripts/script_in_pre.html.cassette | 1 -
+ .../vcr/scripts/script_valid_external.html.cassette       | 1 -
+ htmltest/htmltest.go                                      | 2 +-
+ 41 files changed, 10 insertions(+), 46 deletions(-)
+
+diff --git a/go.mod b/go.mod
+index b876063..df4ab4b 100644
+--- a/go.mod
++++ b/go.mod
+@@ -10,10 +10,10 @@ require (
+ 	github.com/golangplus/bytes v1.0.0 // indirect
+ 	github.com/golangplus/sort v1.0.0 // indirect
+ 	github.com/imdario/mergo v0.3.11
+-	github.com/seborama/govcr v2.2.1+incompatible // indirect
++	github.com/seborama/govcr v4.5.0+incompatible // indirect
+ 	golang.org/x/net v0.0.0-20201224014010-6772e930b67b
+ 	golang.org/x/sys v0.0.0-20210113181707-4bcb84eeeb78 // indirect
+-	gopkg.in/seborama/govcr.v3 v3.2.0
++	gopkg.in/seborama/govcr.v4 v4.5.0
+ 	gopkg.in/yaml.v2 v2.4.0
+ )
+ 
+diff --git a/go.sum b/go.sum
+index dfe536d..1cc499b 100644
+--- a/go.sum
++++ b/go.sum
+@@ -25,8 +25,8 @@ github.com/mattn/go-colorable v0.1.8 h1:c1ghPdyEDarC70ftn0y+A/Ee++9zz8ljHG1b13eJ
+ github.com/mattn/go-colorable v0.1.8/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
+ github.com/mattn/go-isatty v0.0.12 h1:wuysRhFDzyxgEmMf5xjvJ2M9dZoWAXNNr5LSBS7uHXY=
+ github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Kysco4FUpU=
+-github.com/seborama/govcr v2.2.1+incompatible h1:rELLpGxrv9ahY6zC5ruwNJtbNaSYsIC5VE9q7pI/+3I=
+-github.com/seborama/govcr v2.2.1+incompatible/go.mod h1:EgcISudCCYDLzbiAImJ8i7kk4+wTA44Kp+j4S0LhASI=
++github.com/seborama/govcr v4.5.0+incompatible h1:XvdHtXi0d4cUAn+0aWolvwfS3nmhNC8Z+yMQwn/M64I=
++github.com/seborama/govcr v4.5.0+incompatible/go.mod h1:EgcISudCCYDLzbiAImJ8i7kk4+wTA44Kp+j4S0LhASI=
+ golang.org/x/net v0.0.0-20201224014010-6772e930b67b h1:iFwSg7t5GZmB/Q5TjiEAsdoLDrdJRC1RiF2WhuV29Qw=
+ golang.org/x/net v0.0.0-20201224014010-6772e930b67b/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
+ golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+@@ -39,8 +39,8 @@ golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
+ golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
+ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
+ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+-gopkg.in/seborama/govcr.v3 v3.2.0 h1:LouNzIgIvVAUHqmiXQouHh7ruf9L5wiKr5q3TptXlDc=
+-gopkg.in/seborama/govcr.v3 v3.2.0/go.mod h1:UC3NCHcU8z90RyWto+CZsR2CXXzYpmiVfwO3VP8NyTU=
++gopkg.in/seborama/govcr.v4 v4.5.0 h1:hQ8Kt7CFNQetfPZhu9uldJsfhGPMTCIxaNylKPVr3JA=
++gopkg.in/seborama/govcr.v4 v4.5.0/go.mod h1:GSulKzJ4LIk6XH6sE+OKL76FwDIVQEja2Oh2hTSddIk=
+ gopkg.in/yaml.v2 v2.3.0/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+ gopkg.in/yaml.v2 v2.4.0 h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=
+ gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=
+diff --git a/htmltest/check-link_test.go b/htmltest/check-link_test.go
+index fddaa4c..7ebe80d 100644
+--- a/htmltest/check-link_test.go
++++ b/htmltest/check-link_test.go
+@@ -146,7 +146,7 @@ func TestAnchorExternalInsecureOptionIgnoredInsecure(t *testing.T) {
+ 		})
+ 	tExpectIssueCount(t, hT, 2)
+ 	tExpectIssue(t, hT, "is not an HTTPS target", 1)
+-	tExpectIssue(t, hT, "Non-OK status", 1)
++	tExpectIssue(t, hT, "no such host", 1)
+ }
+ 
+ func TestAnchorExternalHrefIP(t *testing.T) {
+@@ -695,7 +695,7 @@ func TestAnchorPre(t *testing.T) {
+ 	hT := tTestFileOpts("fixtures/links/anchors_in_pre.html",
+ 		map[string]interface{}{"VCREnable": true})
+ 	tExpectIssueCount(t, hT, 2)
+-	tExpectIssue(t, hT, "Non-OK status", 2)
++	tExpectIssue(t, hT, "no such host", 2)
+ }
+ 
+ func TestLinkPre(t *testing.T) {
+diff --git a/htmltest/check-script_test.go b/htmltest/check-script_test.go
+index ba9ba02..32ab885 100644
+--- a/htmltest/check-script_test.go
++++ b/htmltest/check-script_test.go
+@@ -74,7 +74,7 @@ func TestScriptInPre(t *testing.T) {
+ 	hT := tTestFileOpts("fixtures/scripts/script_in_pre.html",
+ 		map[string]interface{}{"VCREnable": true})
+ 	tExpectIssueCount(t, hT, 4)
+-	tExpectIssue(t, hT, "Non-OK status", 2)
++	tExpectIssue(t, hT, "no such host", 2)
+ 	tExpectIssue(t, hT, "script content missing", 2)
+ 
+ }
+diff --git a/htmltest/fixtures/vcr/generic/citeBroken.html.cassette b/htmltest/fixtures/vcr/generic/citeBroken.html.cassette
+index 09cc6e6..b919c01 100644
+--- a/htmltest/fixtures/vcr/generic/citeBroken.html.cassette
++++ b/htmltest/fixtures/vcr/generic/citeBroken.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "citeBroken.html",
+-  "Path": "fixtures/vcr/generic",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/generic/citeValid.html.cassette b/htmltest/fixtures/vcr/generic/citeValid.html.cassette
+index 512d436..afecee8 100644
+--- a/htmltest/fixtures/vcr/generic/citeValid.html.cassette
++++ b/htmltest/fixtures/vcr/generic/citeValid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "citeValid.html",
+-  "Path": "fixtures/vcr/generic",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/generic/videoBroken.html.cassette b/htmltest/fixtures/vcr/generic/videoBroken.html.cassette
+index 04a7048..85d75c6 100644
+--- a/htmltest/fixtures/vcr/generic/videoBroken.html.cassette
++++ b/htmltest/fixtures/vcr/generic/videoBroken.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "videoBroken.html",
+-  "Path": "fixtures/vcr/generic",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/html/normal_looking_page.html.cassette b/htmltest/fixtures/vcr/html/normal_looking_page.html.cassette
+index 2b9a9c5..33128e4 100644
+--- a/htmltest/fixtures/vcr/html/normal_looking_page.html.cassette
++++ b/htmltest/fixtures/vcr/html/normal_looking_page.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "normal_looking_page.html",
+-  "Path": "fixtures/vcr/html",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/images/existingImageExternal.html.cassette b/htmltest/fixtures/vcr/images/existingImageExternal.html.cassette
+index ffd5e6f..55aa29f 100644
+--- a/htmltest/fixtures/vcr/images/existingImageExternal.html.cassette
++++ b/htmltest/fixtures/vcr/images/existingImageExternal.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "existingImageExternal.html",
+-  "Path": "fixtures/vcr/images",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/images/image_missing_protocol_invalid.html.cassette b/htmltest/fixtures/vcr/images/image_missing_protocol_invalid.html.cassette
+index 56094bc..381796e 100644
+--- a/htmltest/fixtures/vcr/images/image_missing_protocol_invalid.html.cassette
++++ b/htmltest/fixtures/vcr/images/image_missing_protocol_invalid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "image_missing_protocol_invalid.html",
+-  "Path": "fixtures/vcr/images",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/images/image_missing_protocol_valid.html.cassette b/htmltest/fixtures/vcr/images/image_missing_protocol_valid.html.cassette
+index caf4ea7..2ecacc6 100644
+--- a/htmltest/fixtures/vcr/images/image_missing_protocol_valid.html.cassette
++++ b/htmltest/fixtures/vcr/images/image_missing_protocol_valid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "image_missing_protocol_valid.html",
+-  "Path": "fixtures/vcr/images",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/images/lineBreaks.html.cassette b/htmltest/fixtures/vcr/images/lineBreaks.html.cassette
+index 01a5821..ffcefa9 100644
+--- a/htmltest/fixtures/vcr/images/lineBreaks.html.cassette
++++ b/htmltest/fixtures/vcr/images/lineBreaks.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "lineBreaks.html",
+-  "Path": "fixtures/vcr/images",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/images/missingImageExternal.html.cassette b/htmltest/fixtures/vcr/images/missingImageExternal.html.cassette
+index 3406293..039cfc3 100644
+--- a/htmltest/fixtures/vcr/images/missingImageExternal.html.cassette
++++ b/htmltest/fixtures/vcr/images/missingImageExternal.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "missingImageExternal.html",
+-  "Path": "fixtures/vcr/images",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/images/src_http.html.cassette b/htmltest/fixtures/vcr/images/src_http.html.cassette
+index 7053724..73fc746 100644
+--- a/htmltest/fixtures/vcr/images/src_http.html.cassette
++++ b/htmltest/fixtures/vcr/images/src_http.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "src_http.html",
+-  "Path": "fixtures/vcr/images",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/anchors_in_pre.html.cassette b/htmltest/fixtures/vcr/links/anchors_in_pre.html.cassette
+index 2004325..5d97cf5 100644
+--- a/htmltest/fixtures/vcr/links/anchors_in_pre.html.cassette
++++ b/htmltest/fixtures/vcr/links/anchors_in_pre.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "anchors_in_pre.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/bad_external_links.html.cassette b/htmltest/fixtures/vcr/links/bad_external_links.html.cassette
+index 2034f66..7fd70ce 100644
+--- a/htmltest/fixtures/vcr/links/bad_external_links.html.cassette
++++ b/htmltest/fixtures/vcr/links/bad_external_links.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "bad_external_links.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/brokenCanonicalLink.html.cassette b/htmltest/fixtures/vcr/links/brokenCanonicalLink.html.cassette
+index 24642d1..e7a555a 100644
+--- a/htmltest/fixtures/vcr/links/brokenCanonicalLink.html.cassette
++++ b/htmltest/fixtures/vcr/links/brokenCanonicalLink.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "brokenCanonicalLink.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/brokenHashOnTheWeb.html.cassette b/htmltest/fixtures/vcr/links/brokenHashOnTheWeb.html.cassette
+index 2cff4d8..c215a6b 100644
+--- a/htmltest/fixtures/vcr/links/brokenHashOnTheWeb.html.cassette
++++ b/htmltest/fixtures/vcr/links/brokenHashOnTheWeb.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "brokenHashOnTheWeb.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/brokenLinkExternal.html.cassette b/htmltest/fixtures/vcr/links/brokenLinkExternal.html.cassette
+index b075483..d3db270 100644
+--- a/htmltest/fixtures/vcr/links/brokenLinkExternal.html.cassette
++++ b/htmltest/fixtures/vcr/links/brokenLinkExternal.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "brokenLinkExternal.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/escape_pipes.html.cassette b/htmltest/fixtures/vcr/links/escape_pipes.html.cassette
+index 002b2ef..1b4bd9b 100644
+--- a/htmltest/fixtures/vcr/links/escape_pipes.html.cassette
++++ b/htmltest/fixtures/vcr/links/escape_pipes.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "escape_pipes.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/http_requires_accept.html.cassette b/htmltest/fixtures/vcr/links/http_requires_accept.html.cassette
+index a3d2a50..25ec741 100644
+--- a/htmltest/fixtures/vcr/links/http_requires_accept.html.cassette
++++ b/htmltest/fixtures/vcr/links/http_requires_accept.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "http_requires_accept.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/https-invalid.html.cassette b/htmltest/fixtures/vcr/links/https-invalid.html.cassette
+index 918371e..fe42465 100644
+--- a/htmltest/fixtures/vcr/links/https-invalid.html.cassette
++++ b/htmltest/fixtures/vcr/links/https-invalid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "https-invalid.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/https-valid-h2.html.cassette b/htmltest/fixtures/vcr/links/https-valid-h2.html.cassette
+index 0730a35..0727959 100644
+--- a/htmltest/fixtures/vcr/links/https-valid-h2.html.cassette
++++ b/htmltest/fixtures/vcr/links/https-valid-h2.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "https-valid-h2.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/https-valid.html.cassette b/htmltest/fixtures/vcr/links/https-valid.html.cassette
+index 9ac96fc..5c77185 100644
+--- a/htmltest/fixtures/vcr/links/https-valid.html.cassette
++++ b/htmltest/fixtures/vcr/links/https-valid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "https-valid.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/ip_href.html.cassette b/htmltest/fixtures/vcr/links/ip_href.html.cassette
+index d96600f..5bb2c37 100644
+--- a/htmltest/fixtures/vcr/links/ip_href.html.cassette
++++ b/htmltest/fixtures/vcr/links/ip_href.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "ip_href.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/linkWithRedirect.html.cassette b/htmltest/fixtures/vcr/links/linkWithRedirect.html.cassette
+index 36ce45f..ded4363 100644
+--- a/htmltest/fixtures/vcr/links/linkWithRedirect.html.cassette
++++ b/htmltest/fixtures/vcr/links/linkWithRedirect.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "linkWithRedirect.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/link_missing_protocol_invalid.html.cassette b/htmltest/fixtures/vcr/links/link_missing_protocol_invalid.html.cassette
+index 6a1cfab..7149264 100644
+--- a/htmltest/fixtures/vcr/links/link_missing_protocol_invalid.html.cassette
++++ b/htmltest/fixtures/vcr/links/link_missing_protocol_invalid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "link_missing_protocol_invalid.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/link_missing_protocol_valid.html.cassette b/htmltest/fixtures/vcr/links/link_missing_protocol_valid.html.cassette
+index 2e1d959..2198ef9 100644
+--- a/htmltest/fixtures/vcr/links/link_missing_protocol_valid.html.cassette
++++ b/htmltest/fixtures/vcr/links/link_missing_protocol_valid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "link_missing_protocol_valid.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/non_https.html.cassette b/htmltest/fixtures/vcr/links/non_https.html.cassette
+index 2c77c17..04b2ba6 100644
+--- a/htmltest/fixtures/vcr/links/non_https.html.cassette
++++ b/htmltest/fixtures/vcr/links/non_https.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "non_https.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/non_https_ignore.html.cassette b/htmltest/fixtures/vcr/links/non_https_ignore.html.cassette
+index d66fb40..61d061f 100644
+--- a/htmltest/fixtures/vcr/links/non_https_ignore.html.cassette
++++ b/htmltest/fixtures/vcr/links/non_https_ignore.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "non_https_ignore.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/non_standard_characters.html.cassette b/htmltest/fixtures/vcr/links/non_standard_characters.html.cassette
+index 3bb1ec1..f6c8c61 100644
+--- a/htmltest/fixtures/vcr/links/non_standard_characters.html.cassette
++++ b/htmltest/fixtures/vcr/links/non_standard_characters.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "non_standard_characters.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/links/utf8Link.html.cassette b/htmltest/fixtures/vcr/links/utf8Link.html.cassette
+index 0f03e8d..08ccdce 100644
+--- a/htmltest/fixtures/vcr/links/utf8Link.html.cassette
++++ b/htmltest/fixtures/vcr/links/utf8Link.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "utf8Link.html",
+-  "Path": "fixtures/vcr/links",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/meta/refresh-external-broken.html.cassette b/htmltest/fixtures/vcr/meta/refresh-external-broken.html.cassette
+index 590fcc4..5826098 100644
+--- a/htmltest/fixtures/vcr/meta/refresh-external-broken.html.cassette
++++ b/htmltest/fixtures/vcr/meta/refresh-external-broken.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "refresh-external-broken.html",
+-  "Path": "fixtures/vcr/meta",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/meta/refresh-external-valid-caps.html.cassette b/htmltest/fixtures/vcr/meta/refresh-external-valid-caps.html.cassette
+index f3ff0e9..100fc12 100644
+--- a/htmltest/fixtures/vcr/meta/refresh-external-valid-caps.html.cassette
++++ b/htmltest/fixtures/vcr/meta/refresh-external-valid-caps.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "refresh-external-valid-caps.html",
+-  "Path": "fixtures/vcr/meta",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/meta/refresh-external-valid-space.html.cassette b/htmltest/fixtures/vcr/meta/refresh-external-valid-space.html.cassette
+index b2bc979..69e745f 100644
+--- a/htmltest/fixtures/vcr/meta/refresh-external-valid-space.html.cassette
++++ b/htmltest/fixtures/vcr/meta/refresh-external-valid-space.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "refresh-external-valid-space.html",
+-  "Path": "fixtures/vcr/meta",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/meta/refresh-external-valid.html.cassette b/htmltest/fixtures/vcr/meta/refresh-external-valid.html.cassette
+index 8e92a9b..aa7c4c3 100644
+--- a/htmltest/fixtures/vcr/meta/refresh-external-valid.html.cassette
++++ b/htmltest/fixtures/vcr/meta/refresh-external-valid.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "refresh-external-valid.html",
+-  "Path": "fixtures/vcr/meta",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/scripts/scriptInsecure.html.cassette b/htmltest/fixtures/vcr/scripts/scriptInsecure.html.cassette
+index dad9d67..ef82e66 100644
+--- a/htmltest/fixtures/vcr/scripts/scriptInsecure.html.cassette
++++ b/htmltest/fixtures/vcr/scripts/scriptInsecure.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "scriptInsecure.html",
+-  "Path": "fixtures/vcr/scripts",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/scripts/script_broken_external.html.cassette b/htmltest/fixtures/vcr/scripts/script_broken_external.html.cassette
+index f2bab9c..fa74494 100644
+--- a/htmltest/fixtures/vcr/scripts/script_broken_external.html.cassette
++++ b/htmltest/fixtures/vcr/scripts/script_broken_external.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "script_broken_external.html",
+-  "Path": "fixtures/vcr/scripts",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/scripts/script_in_pre.html.cassette b/htmltest/fixtures/vcr/scripts/script_in_pre.html.cassette
+index 8429c0a..34f4573 100644
+--- a/htmltest/fixtures/vcr/scripts/script_in_pre.html.cassette
++++ b/htmltest/fixtures/vcr/scripts/script_in_pre.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "script_in_pre.html",
+-  "Path": "fixtures/vcr/scripts",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/fixtures/vcr/scripts/script_valid_external.html.cassette b/htmltest/fixtures/vcr/scripts/script_valid_external.html.cassette
+index bcb30ab..1ecae45 100644
+--- a/htmltest/fixtures/vcr/scripts/script_valid_external.html.cassette
++++ b/htmltest/fixtures/vcr/scripts/script_valid_external.html.cassette
+@@ -1,6 +1,5 @@
+ {
+   "Name": "script_valid_external.html",
+-  "Path": "fixtures/vcr/scripts",
+   "Tracks": [
+     {
+       "Request": {
+diff --git a/htmltest/htmltest.go b/htmltest/htmltest.go
+index c0dce52..359707a 100644
+--- a/htmltest/htmltest.go
++++ b/htmltest/htmltest.go
+@@ -17,7 +17,7 @@ import (
+ 	"github.com/wjdp/htmltest/issues"
+ 	"github.com/wjdp/htmltest/output"
+ 	"github.com/wjdp/htmltest/refcache"
+-	"gopkg.in/seborama/govcr.v3"
++	"gopkg.in/seborama/govcr.v4"
+ )
+ 
+ // Base path for VCR cassettes, relative to this package

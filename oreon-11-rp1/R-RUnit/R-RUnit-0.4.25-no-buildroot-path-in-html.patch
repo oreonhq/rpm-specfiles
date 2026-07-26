@@ -1,0 +1,14 @@
+diff -up RUnit/RUnit/man/checkFuncs.Rd.BAD RUnit/RUnit/man/checkFuncs.Rd
+--- RUnit/RUnit/man/checkFuncs.Rd.BAD	2010-01-21 14:35:41.594307303 -0500
++++ RUnit/RUnit/man/checkFuncs.Rd	2010-01-21 14:36:11.952468805 -0500
+@@ -117,9 +117,7 @@ DEACTIVATED(msg)
+   performed. This is an advise gained from the cumbersome experience:
+   not doing so leads to difficult to pin down error causes incurred
+   from previously executed test cases.
+-  For a simple example see the provided test cases in
+-  \Sexpr{file.path(system.file("examples", package="RUnit"), 
+-  "runitVirtualClassTest.r")}.
++  For a simple example see the provided test cases in "runitVirtualClassTest.r".
+ }
+ 
+ 

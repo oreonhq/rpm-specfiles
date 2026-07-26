@@ -1,0 +1,97 @@
+From 8a634e7f7b96b2ef9a79cfc919701526345fdc1b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Tue, 24 Dec 2024 12:42:44 +0100
+Subject: [PATCH 01/18] Build fixes
+
+---
+ Makefile.am           |  3 +--
+ examples/CheckAll     |  2 ++
+ src/lglib/Makefile.am |  4 ++--
+ src/medit/Makefile.am | 22 ++--------------------
+ 4 files changed, 7 insertions(+), 24 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 945b6fbb4..f2a794f12 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -203,8 +203,7 @@ ide:
+ 	cd src/fflib && $(MAKE) $(AM_MAKEFLAGS)
+ 	cd src/ide && $(MAKE) $(AM_MAKEFLAGS) FreeFem++-cs$(EXEEXT)
+ 
+-bin/md2edp$(EXEEXT):etc/tools/md2edp.cpp 
+-	$(CXX) etc/tools/md2edp.cpp -o bin/md2edp$(EXEEXT)
++bin_md2edp_SOURCES = etc/tools/md2edp.cpp
+ 
+ # Cleaning generated files which are stored in the CVS repository, to
+ # avoid technical CVS conflicts.
+diff --git a/examples/CheckAll b/examples/CheckAll
+index caffe736c..595b7ea2f 100755
+--- a/examples/CheckAll
++++ b/examples/CheckAll
+@@ -1,3 +1,5 @@
++#!/bin/bash
++
+ test -x ../src/nw/FreeFem++-nw && ff=../../src/nw/FreeFem++ || ff=`which FreeFem++`
+ test -x ../src/mpi/ff-mpirun && ffmpi=../../src/mpi/ff-mpirun || ffmpi=`which ff-mpirun`
+ 
+diff --git a/src/lglib/Makefile.am b/src/lglib/Makefile.am
+index db84354af..a4ec74181 100644
+--- a/src/lglib/Makefile.am
++++ b/src/lglib/Makefile.am
+@@ -11,9 +11,9 @@ BUILT_SOURCES=lg.tab.hpp lg.tab.cpp
+ # machine (the danger is to generate unnecessary version conflicts) on these automatically generated files
+ 
+ lg.tab.hpp lg.tab.cpp:
+-	-rm lg.tab.hpp  lg.tab.cpp lg.tab.cpp.h
++	rm -f lg.tab.hpp  lg.tab.cpp lg.tab.cpp.h
+ 	bison -dtv -p lg  lg.ypp  -o lg.tab.cpp
+-	-mv lg.tab.cpp.h  lg.tab.hpp # pour un  pb entre des versions de bison 
++	mv -f lg.tab.cpp.h  lg.tab.hpp # pour un  pb entre des versions de bison 
+ 
+ libfreefem++.dylib: lg.tab.o ../fflib/libff.a
+ 	g++ -bundle lg.tab.o  ../fflib/libff.a $(UMFPACKLIB) $(ARPACKLIB) $(BLASLIB) $(LIBS) -o libfreefem++.dylib
+diff --git a/src/medit/Makefile.am b/src/medit/Makefile.am
+index a9fbda326..2b914c591 100644
+--- a/src/medit/Makefile.am
++++ b/src/medit/Makefile.am
+@@ -4,35 +4,17 @@
+ CXXLD=$(STATICTOOL) $(CXX)
+ 
+ bin_PROGRAMS=$(MEDITPROG)
+-EXTRA_DIST=picking.c 
+ EXTRA_PROGRAMS=ffmedit
+ ffmedit_SOURCES=animat.c cube.c image.c listnum.c mouse.c persp.c stream.c zaldy2.c bbfile.c dlists.c inmsh2.c \
+ 	material.c normal.c tiles.c camera.c ellipse.c inout.c medit.c param.c psfile.c transform.c cenrad.c geometry.c \
+ 	inout_morice.c menus.c parsar.c scene.c util.c clip.c gisfil.c inout_popenbinaire.c mesh.c parsop.c scissor.c vector.c \
+ 	clipvol.c hash.c items.c mlists.c particle.c sftcpy.c view.c critip.c ilists.c keyboard.c morphing.c path.c status.c \
+-	zaldy1.c chrono.h extern.h image.h mesh.h eigenv.h grafic.h medit.h sproto.h
++	zaldy1.c chrono.h extern.h image.h mesh.h eigenv.h grafic.h medit.h sproto.h picking.c
+ 
+ 
+-LDADD=picking.$(OBJEXT) ../libMesh/libMesh.a $(LIBSGLUT) -lm
++LDADD=../libMesh/libMesh.a $(LIBSGLUT) -lm
+ AM_CPPFLAGS=-I$(srcdir)/../libMesh
+ BUILT_SOURCES=compil.date
+ compil.date: $(ffmedit_SOURCES)
+ 	echo "#define COMPIL " '"' `date` '(with ff++ $(VERSION))''"' > compil.date
+ #.PHONY: compil.date
+-
+-# ALH - during a parallel make, we should make sure that picking.o is not used before being made by a different
+-# thread. If I understand things correctly, picking.c should not be compiled with the regular CFLAGS options.
+-
+-ffmedit_DEPENDENCIES=picking.$(OBJEXT)
+-picking.$(OBJEXT):picking.c
+-	${CC} -c $< $(CNOFLAGS) -o $@ 
+-
+-#pinking.no-optffmedit$(EXEEXT):picking.c
+-#	rm picking.$(OBJEXT)
+-#	$(MAKE) picking.o $(MEDITPROG) CFLAGS="$(CNOFLAGS)"
+-#	touch pinking.no-optffmedit$(EXEEXT)
+-#pinking.no-opt:picking.c
+-#	touch pinking.no-opt
+-#clean-local:
+-#	-rm pinking.no-opt pinking.no-optffmedit$(EXEEXT)
+-
+-- 
+2.47.1
+

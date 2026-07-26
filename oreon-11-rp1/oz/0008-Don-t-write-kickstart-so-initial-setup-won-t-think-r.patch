@@ -1,0 +1,46 @@
+From b6f74850e8bca82c5596394e8c3ccfa682c4fe52 Mon Sep 17 00:00:00 2001
+From: Peter Robinson <pbrobinson@gmail.com>
+Date: Sat, 5 Feb 2022 13:38:34 +0000
+Subject: [PATCH 08/26] Don't write kickstart so initial-setup won't think root
+ pw is set
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+---
+ oz/Fedora.py | 4 ++++
+ oz/RedHat.py | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/oz/Fedora.py b/oz/Fedora.py
+index 58557d7..7ab800b 100644
+--- a/oz/Fedora.py
++++ b/oz/Fedora.py
+@@ -293,6 +293,10 @@ class FedoraGuest(oz.RedHat.RedHatLinuxCDYumGuest):
+             # out the method completely
+             if not self.config.brokenisomethod:
+                 initrdline += " inst.method=cdrom:/dev/cdrom"
++        # don't write the kickstart to the image, or else initial-setup
++        # will think a root password has been set:
++        # https://bugzilla.redhat.com/show_bug.cgi?id=2015490
++        initrdline += " inst.nosave=output_ks"
+         self._modify_isolinux(initrdline)
+ 
+     def generate_diskimage(self, size=10, force=False):
+diff --git a/oz/RedHat.py b/oz/RedHat.py
+index af00c11..868b549 100644
+--- a/oz/RedHat.py
++++ b/oz/RedHat.py
+@@ -79,6 +79,10 @@ Subsystem	sftp	/usr/libexec/openssh/sftp-server
+                                         self.tdl.distro + self.tdl.update + self.tdl.arch + "-ramdisk")
+ 
+         self.cmdline = "inst.method=" + self.url + " inst.ks=file:/ks.cfg"
++        # don't write the kickstart to the image, or else initial-setup
++        # will think a root password has been set:
++        # https://bugzilla.redhat.com/show_bug.cgi?id=2015490
++        self.cmdline += " inst.nosave=output_ks"
+         if self.tdl.kernel_param:
+             self.cmdline += " " + self.tdl.kernel_param
+ 
+-- 
+2.46.2
+

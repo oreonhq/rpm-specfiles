@@ -1,0 +1,10 @@
+--- frama-c-32.0-Germanium/src/dune.orig	2025-12-04 14:15:00.042836553 -0700
++++ frama-c-32.0-Germanium/src/dune	2025-12-04 14:15:15.346716318 -0700
+@@ -47,6 +47,7 @@
+   (foreign_stubs (language c) (names c_bindings floating_point))
+   (flags :standard -w -9)
+   (libraries frama-c.init fpath str unix zarith ocamlgraph dynlink yaml.unix yojson menhirLib dune-site dune-site.plugins zip)
++  (c_library_flags -lm)
+   (instrumentation (backend landmarks))
+   (instrumentation (backend bisect_ppx))
+   (inline_tests (libraries frama-c.init.cmdline))

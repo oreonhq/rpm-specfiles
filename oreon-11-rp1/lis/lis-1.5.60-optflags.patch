@@ -1,0 +1,22 @@
+--- configure.ac.orig	2016-01-06 21:37:16.778965359 +0100
++++ configure.ac	2016-01-06 21:37:29.377976131 +0100
+@@ -374,7 +374,7 @@ if test "$TARGET" = ""; then
+ 	AC_MSG_RESULT($[ax_cv_]_AC_LANG_ABBREV[_compiler_vendor])
+ 	  case $ax_cv_c_compiler_vendor in
+ 	    dec) CFLAGS="-newc -w0 -O5 -ansi_alias -ansi_args -fp_reorder -tune host $CFLAGS" ;;
+-	    gnu) CFLAGS="-O3 -fomit-frame-pointer $CFLAGS" ;;
++	    gnu) CFLAGS="$CFLAGS" ;;
+ 	    intel) CFLAGS="-ansi_alias $CFLAGS" ;;	    
+ 	    portland) CFLAGS="-O3 -B -fastsse $CFLAGS" ;;
+ 	    pathscale) CFLAGS="-O3 $CFLAGS" ;;
+@@ -583,8 +583,8 @@ if test "$TARGET" = ""; then
+   AC_MSG_RESULT($[ax_cv_]_AC_LANG_ABBREV[_compiler_vendor])
+   AC_LANG_POP(Fortran 77)
+   case $ax_cv_f77_compiler_vendor in
+-    gnu) FFLAGS="-O3 -fomit-frame-pointer $FFLAGS" 
+-         FCFLAGS="-O3 -fomit-frame-pointer $FCFLAGS" ;;
++    gnu) FFLAGS="$FFLAGS" 
++         FCFLAGS="$FCFLAGS" ;;
+     intel) FFLAGS="-fpp $FFLAGS"
+          FCFLAGS="-fpp $FCFLAGS"
+          LDFLAGS="-Vaxlib"

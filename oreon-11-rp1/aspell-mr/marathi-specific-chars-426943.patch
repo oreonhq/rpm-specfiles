@@ -1,0 +1,31 @@
+--- info	2005-05-24 16:27:38.000000000 +0530
++++ info-new	2007-12-31 08:21:10.000000000 +0530
+@@ -1,8 +1,8 @@
+ name_english Marathi
+ name_native मराठी
+ lang mr
+-data-file u-deva.cset
+-data-file u-deva.cmap
++data-file u-deva-mr.cset
++data-file u-deva-mr.cmap
+ author:
+   name The janabhaaratii Team
+   name-native जनभारती
+--- mr.dat	2005-01-27 00:31:34.000000000 +0530
++++ mr-new.dat	2007-12-31 08:21:56.000000000 +0530
+@@ -1,3 +1,3 @@
+ name mr
+-charset u-deva
++charset u-deva-mr
+ data-encoding utf-8
+--- Makefile.pre	2005-05-24 16:27:48.000000000 +0530
++++ Makefile-new.pre	2007-12-31 08:32:18.000000000 +0530
+@@ -4,7 +4,7 @@
+ version = 0.10-0
+ 
+ cwl_files = mr.cwl
+-data_files = mr.dat u-deva.cset u-deva.cmap
++data_files = mr.dat u-deva-mr.cset u-deva-mr.cmap
+ doc_files = README COPYING Copyright
+ extra_files = configure info Makefile.pre
+ multi_files = marathi.alias mr.multi

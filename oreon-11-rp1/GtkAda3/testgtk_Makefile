@@ -1,0 +1,15 @@
+# This makefile for TestGTK was added in the RPM package.
+# Copyright 2015 B. Persson, Bjorn@Rombobeorn.se
+#
+# This makefile is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option)
+# any later version.
+
+
+testgtk test_rtree:
+	gprbuild -P testgtk.gpr -p ${GNAT_BUILDER_FLAGS} \
+	         -cargs:Ada ${ADAFLAGS} \
+	         -cargs:C `pkg-config --cflags glib-2.0` ${CPPFLAGS} ${CFLAGS} \
+	         -bargs ${GNATBINDFLAGS} \
+	         -largs -Wl,--as-needed `pkg-config --libs glib-2.0 gtk+-3.0` -lm ${LDFLAGS}

@@ -1,0 +1,12 @@
+prefix=%prefix%
+exec_prefix=%prefix%
+libdir=%libdir%
+includedir=%includedir%/ArmCompute
+
+Name: arm_compute_graph
+Description: Optimised arm CPU, GPU and NPU functions 
+Version: %VERSION%
+
+Requires: arm_compute
+Libs: -L${libdir} -larm_compute_graph
+Cflags: -I${includedir}

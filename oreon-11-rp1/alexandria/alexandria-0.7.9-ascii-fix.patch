@@ -1,0 +1,15 @@
+--- alexandria-book-collection-manager-0.7.4/util/rake/omfgenerate.rb.ascii	2020-01-03 12:47:58.335653134 +0900
++++ alexandria-book-collection-manager-0.7.4/util/rake/omfgenerate.rb	2020-01-03 12:50:29.657487059 +0900
+@@ -67,10 +67,10 @@ class OmfGenerateTask < Rake::TaskLib
+     rule ".omf" => [".omf.in"] do |t|
+       path = File.join(@gnome_helpfiles_dir, @projectname,
+                        locale_for(t.name), "#{@projectname}.xml")
+-      data = File.read(t.source)
++      data = File.read(t.source, :encoding => "BINARY")
+       data.sub!(/PATH_TO_DOC_FILE/, path)
+       puts "Generating #{t.name}..."
+-      File.open(t.name, "w") { |io| io.puts data }
++      File.open(t.name, "w", :encoding => "BINARY") { |io| io.puts data }
+     end
+     omf_files.each { |o| @generated_files << o }
+   end

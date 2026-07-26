@@ -1,0 +1,27 @@
+diff -up ./scripts/pdfbklt.orig ./scripts/pdfbklt
+--- ./scripts/pdfbklt.orig	2016-08-27 11:01:51.132467199 +0200
++++ ./scripts/pdfbklt	2016-08-27 11:03:21.794000691 +0200
+@@ -38,7 +38,7 @@ if (!defined $ARGV[0])
+ modifications at the end.
+ 
+   -b num/size    Specifies which page contains the output page size details [1]
+-            or gives the dimensions of the page in pts (x;y) or A4,ltr,lgl,A5
++            or gives the dimensions of the page in pts (x;y) or A4,A1,A2,A3,A4,A5,ltr,lgl
+   -g num[;offset] Makes up page groups, or signatures with num pages in each
+             and offset pages in the first signature.
+             num and offset must be multiples of 4
+@@ -62,6 +62,14 @@ EOT
+ }
+ 
+ %sizes=(
++    'a0' => '2384;3371',
++    'a0l' => '3371;2384',
++    'a1' => '1685;2384',
++    'a1l' => '2384;1685',
++    'a2' => '1190;1684',
++    'a2l' => '1684;1190',
++    'a3' => '842;1190',
++    'a3l' => '1190;842',
+     'a4' => '595;842',
+     'a4l' => '842;595',
+     'ltr' => '612;792',

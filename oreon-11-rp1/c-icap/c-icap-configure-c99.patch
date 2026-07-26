@@ -1,0 +1,19 @@
+configure.ac: Include <stdlib.h> for exit() in the semaphore probe
+
+Otherwise, the probe will fail unconditionally (not test anything) if
+the C compiler does not support implicit function declarations.
+
+Submitted upstream: <https://github.com/c-icap/c-icap-server/pull/58>
+
+diff --git a/configure.ac b/configure.ac
+index c41fbd58d4d76845..03de09d89566cb30 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -985,6 +985,7 @@ AC_CACHE_CHECK([if posix 1003.1b interprocess semaphores works], ac_cv_10031b_ip
+    [AC_LANG_SOURCE([
+    #include <semaphore.h>
+    #include <sys/wait.h>
++   #include <stdlib.h>
+ 
+    int main(int argc,char **argv){
+          sem_t s;

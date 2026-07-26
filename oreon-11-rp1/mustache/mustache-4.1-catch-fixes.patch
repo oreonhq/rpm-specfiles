@@ -1,0 +1,22 @@
+From a35c69ed5dba7bce7e91de7a0028da1e5258b759 Mon Sep 17 00:00:00 2001
+From: Kevin Wojniak <kainjow@users.noreply.github.com>
+Date: Sat, 18 Apr 2020 18:33:44 -0700
+Subject: [PATCH] Upgrade to Catch 2 (#42)
+
+---
+ tests/tests.cpp |     2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/tests/tests.cpp b/tests/tests.cpp
+index 4b383ce..0334b8d 100644
+--- a/tests/tests.cpp
++++ b/tests/tests.cpp
+@@ -1091,7 +1091,7 @@ TEST_CASE("custom_escape") {
+         mustache::escape_handler esc;
+         tmpl.set_custom_escape(esc);
+         object dat({ {"what", "\"friend\""} });
+-        CHECK_THROWS_AS(tmpl.render(dat), std::bad_function_call&);
++        CHECK_THROWS_AS(tmpl.render(dat), std::bad_function_call);
+     }
+ 
+ }

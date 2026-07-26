@@ -1,0 +1,16 @@
+diff -up bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/common/common_tools.h~ bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/common/common_tools.h
+--- bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/common/common_tools.h~	2006-05-29 20:49:26.000000000 +0200
++++ bolzplatz2006-1.0.3/libsrc/lwjgl/src/native/common/common_tools.h	2025-10-05 21:53:33.052852484 +0200
+@@ -59,12 +59,6 @@ typedef struct {
+ 	int attribs[ATTRIB_LIST_SIZE];
+ } attrib_list_t;
+ 
+-#ifndef __cplusplus
+-#ifndef bool
+-typedef enum {false, true} bool;
+-#endif
+-#endif
+-
+ #ifdef _WIN32
+ #define inline __inline
+ #include <Basetsd.h>

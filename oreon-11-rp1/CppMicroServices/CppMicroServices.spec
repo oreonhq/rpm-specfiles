@@ -1,0 +1,250 @@
+%global source0_hash 882158dea81c4ee6246239b840ec301aef0fbf0a1ae4b032b717f6e5542791cc
+
+# LTO (more specifically -ffat-lto-objects) breaks compilation
+# due to inconsistent decls in the header macros
+# CPPMICROSERVICES_IMPORT_BUNDLE & CPPMICROSERVICES_INITIALIZE_BUNDLE
+# and trying the obvious fix caused a ripple effect breaking other
+# areas
+%global _lto_cflags %nil
+
+#  usFrameworkTests fail with "Resource temporarily unavailable"
+%ifarch %{ix86}
+%global with_tests 0
+%else
+%global with_tests 1
+%endif
+
+Name: CppMicroServices
+Version: 3.8.9
+Release: %autorelease
+Summary: C++ components for building service-oriented applications
+Url: http://cppmicroservices.org/
+
+License: %{shrink:
+  Apache-2.0 AND
+  %dnl third_party/tinyscheme
+  BSD-3-Clause AND
+  %dnl framework/include/cppmicroservices/Any.h
+  %dnl webconsole/include/cppmicroservices/webconsole/mustache.hpp
+  BSL-1.0 AND
+  %dnl webconsole/resources/res/*.{jss,css}
+  %dnl third_party/{rapidjson,optionparser,miniz}
+  MIT
+}
+
+Source0: https://github.com/CppMicroServices/CppMicroServices/archive/refs/tags/v%{version}.tar.gz#/CppMicroServices-%{version}.tar.gz
+
+# Raised issue upstream to discuss possibility of officially
+# supporting more system libraries to eliminate carrying these
+# patches:
+#
+#   https://github.com/CppMicroServices/CppMicroServices/issues/1060
+#
+# Patches maintained in:
+#
+#  https://github.com/berrange/CppMicroServices/commits/dist-git-{version}
+#
+Patch: 0001-Fully-use-system-boost.patch
+Patch: 0002-Use-system-jsoncpp-library.patch
+Patch: 0003-Use-system-spdlog-package.patch
+Patch: 0004-Replace-use-of-removed-htmlescape-function-from-sphi.patch
+Patch: 0005-Remove-broken-docs-python-monkeypatching.patch
+Patch: 0006-Fix-for-system-libraries-for-gmock-google-benchmark.patch
+Patch: 0007-Fix-inconsistent-public-private-class-name-usage.patch
+Patch: 0008-Disable-JSON-comment-test.patch
+Patch: 0009-Disable-use-of-Werror.patch
+Patch: 0010-Remove-use-of-docutils.error_reporting.patch
+
+# Regardless of the above issue wrt system libraries, the following
+# are likely to need carrying as bundled libraries indefinitely in
+# Fedora. See later comments in this spec where we remove all of
+# the 'third_party/' directory contents except for these four.
+#
+# Needs git snapshot which is not available in Fedora
+Provides: bundled(rapidjson) = 091de040edb3355dcf2f4a18c425aec51b906f08
+# Non-upstream modifications
+Provides: bundled(miniz) = 3.0.2
+# Non-upstream modifications
+Provides: bundled(optionparser) = 1.7
+# Not available in Fedora
+Provides: bundled(tinyscheme) = 1.41
+
+BuildRequires: gcc-c++
+BuildRequires: doxygen
+BuildRequires: cmake
+BuildRequires: boost-devel
+BuildRequires: jsoncpp-devel
+BuildRequires: rapidjson-devel
+BuildRequires: spdlog-devel
+BuildRequires: python3-sphinx
+BuildRequires: python3-sphinx_rtd_theme
+BuildRequires: python3-breathe
+%if %{with_tests}
+BuildRequires: gmock-devel
+BuildRequires: google-benchmark-devel
+BuildRequires: gtest-devel
+BuildRequires: lsof
+%endif
+
+%description
+The C++ Micro Services project is a collection of components for
+building modular and dynamic service-oriented applications. It
+is based on OSGi, but tailored to support native cross-platform
+solutions.
+
+%package devel
+Summary: Development files for CppMicroServices
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+The C++ Micro Services project is a collection of components for
+building modular and dynamic service-oriented applications. It
+is based on OSGi, but tailored to support native cross-platform
+solutions.
+
+This provides the development headers and libraries.
+
+%package docs
+Summary: Development files for CppMicroServices
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description docs
+The C++ Micro Services project is a collection of components for
+building modular and dynamic service-oriented applications. It
+is based on OSGi, but tailored to support native cross-platform
+solutions.
+
+This provides the library documentation
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1
+
+# Patched to use Fedora package
+rm -rf third_party/benchmark
+
+# Patched to use Fedora package
+rm -rf third_party/boost
+
+# Not really third party code AFAICT, so not
+# applicable to unbundle
+#rm -rf third_party/cppmicroservices_pe.h
+
+# Not applicable to Linux build
+rm -rf third_party/dirent_win32.h
+
+# Patched to use Fedora package
+rm -rf third_party/googletest
+
+# Patched to use Fedora package
+rm -rf third_party/json
+rm -rf third_party/jsoncpp.cpp
+
+# Has local modifications adding features that are not
+# in upstream so can't use standard Fedora package
+#rm -rf third_party/miniz*
+
+# Not in Fedora and has local modifications adding
+# features that are not in upstream so undesirable
+# to add a Fedora package
+#rm -rf third_party/optionparser.h
+
+# Needs git master. Upstream is dead and won't be making
+# any more releases:
+#
+#    https://github.com/Tencent/rapidjson/issues/1006
+#
+# Fedora has 1.1.0 and is resisting shipping git snapshots:
+#
+#    https://lists.fedorahosted.org/archives/list/devel@lists.fedoraproject.org/message/RKNCGOALWVIEYMIB5ZRPTVSH5EDG4NGU/
+#rm -rf third_party/rapidjson
+
+# Patched to use Fedora package
+rm -rf third_party/spdlog
+
+# Not in Fedora, and has build time settings for controlling
+# available features that are intended to be set to match
+# the application's required usage.
+#rm -rf third_party/tinyscheme
+
+%build
+# We set 'memcheck' command to /bin/true as running
+# tests under memcheck takes 1hr20 even on a fast
+# x86_64 machine. This is unreasonably long for
+# unit tests considering some architectures are
+# far slower
+%cmake \
+  -DUS_USE_SYSTEM_BOOST:BOOL=ON \
+%if %{with_tests}
+  -DUS_USE_SYSTEM_GTEST:BOOL=ON \
+  -DUS_BUILD_TESTING:BOOL=ON \
+  -DUS_MEMCHECK_COMMAND:PATH=/bin/true \
+%else
+  -DUS_BUILD_TESTING:BOOL=OFF \
+%endif
+  -DUS_BUILD_DOC_HTML:BOOL=ON \
+  -DUS_BUILD_DOC_MAN:BOOL=ON \
+  -DLIBRARY_INSTALL_DIR=%{_libdir} \
+  -DTOOLS_INSTALL_DIR=%{_bindir} \
+  -DRUNTIME_INSTALL_DIR=%{_bindir} \
+  -DARCHIVE_INSTALL_DIR=%{_libdir} \
+  -DHEADER_INSTALL_DIR=%{_includedir}/cppmicroservices3 \
+  -DAUXILIARY_INSTALL_DIR=%{_datadir}/cppmicroservices3 \
+  -DDOC_INSTALL_DIR=%{_datadir}/doc/cppmicroservices3 \
+  -DMAN_INSTALL_DIR=%{_mandir}
+%cmake_build
+
+%install
+%cmake_install
+# Not needed for pre-packaged builds
+rm -f %{buildroot}/%{_bindir}/change_namespace
+
+%check
+%if %{with_tests}
+%cmake_build -t test || (
+  echo "==================== TEST LOGS ===================="
+  cat %{__cmake_builddir}/Testing/Temporary/LastTest.log;
+  exit 1
+)
+%endif
+
+%files
+%license LICENSE
+# These three change ABI on pretty much every release. Use
+# full SONAME version to remind of need to rebuild deps
+%{_libdir}/libConfigurationAdmind.so.1.3.13
+%{_libdir}/libCppMicroServicesd.so.3.8.9
+%{_libdir}/libDeclarativeServicesd.so.1.5.16
+%{_libdir}/libLogServiced.so.1.0.0
+# NB: not a versioned library :-(
+%{_libdir}/libusAsyncWorkServiced.so
+# NB: not a versioned library :-(
+%{_libdir}/libusEMd.so
+# NB: not a versioned library :-(
+%{_libdir}/libusServiceComponentd.so
+
+%files devel
+%{_datadir}/cppmicroservices3
+%{_includedir}/cppmicroservices3
+%{_bindir}/SCRCodeGen3
+%{_bindir}/jsonschemavalidator
+%{_bindir}/usResourceCompiler3
+%{_libdir}/libConfigurationAdmind.so
+%{_libdir}/libCppMicroServicesd.so
+%{_libdir}/libDeclarativeServicesd.so
+%{_libdir}/libLogServiced.so
+%{_mandir}/man1/usResourceCompiler3.1*
+%{_mandir}/man3/cppmicroservices-asyncworkservice.3*
+%{_mandir}/man3/cppmicroservices-configadmin.3*
+%{_mandir}/man3/cppmicroservices-ds.3*
+%{_mandir}/man3/cppmicroservices-framework.3*
+%{_mandir}/man3/cppmicroservices-logservice.3*
+%{_mandir}/man3/cppmicroservices.3*
+%{_mandir}/man7/cppmicroservices.7*
+
+%files docs
+%{_datadir}/doc/cppmicroservices3
+
+%changelog
+%autochangelog

@@ -1,0 +1,128 @@
+diff -Naur openca-ocspd-1.7.0.orig/src/hash-db.c openca-ocspd-1.7.0.new/src/hash-db.c
+--- openca-ocspd-1.7.0.orig/src/hash-db.c	2013-02-20 14:08:37.959103608 +0100
++++ openca-ocspd-1.7.0.new/src/hash-db.c	2013-02-20 16:36:05.511726770 +0100
+@@ -127,6 +127,8 @@
+ 	LDAP	*ld = NULL;
+ 	int	protocol = -1;
+ 	int	ret = 0;
++	char * cp = NULL;
++	struct berval bv;
+ 
+ 	
+         (void) signal( SIGPIPE, SIG_IGN );
+@@ -144,11 +146,23 @@
+ 	if(ocspd_conf->verbose)
+ 		syslog( LOG_INFO, "INFO::Connecting to LDAP (%s)", url->addr );
+ 
+-	if (( ld = ldap_init( url->addr, url->port )) == NULL ) {
+-		syslog( LOG_ERR, "ERROR::ldap_init failure!");
++	cp = malloc(strlen(url->addr) + 14);
++
++	if (!cp) {
++		syslog( LOG_ERR, "ERROR::No memory for LDAP url");
++		return NULL;
++	}
++
++	sprintf(cp, "ldap://%s:%d", url->addr, url->port);
++
++	if (ldap_initialize(&ld, cp) != LDAP_SUCCESS) {
++		free(cp);
++		syslog( LOG_ERR, "ERROR::ldap_initialize failure!");
+ 		return NULL;
+ 	}
+ 
++	free(cp);
++
+ 	if(ocspd_conf->verbose)
+ 		syslog( LOG_INFO, "INFO::Connection established (%s)",
+ 			url->addr );
+@@ -159,13 +173,16 @@
+ 						!= LDAP_OPT_SUCCESS ) {
+ 		syslog( LOG_ERR, "ERROR::Could not set LDAP_OPT_PROTOCOL_VERSION %d\n",
+                                  protocol );
+-		ldap_unbind(ld);
++		ldap_unbind_ext(ld, NULL, NULL);
+ 		return(NULL);
+ 	}
+ 
+-	if ( (ret = ldap_bind_s( ld, url->usr, url->pwd, LDAP_AUTH_SIMPLE )) 
+-			!= LDAP_SUCCESS ) {
+-		syslog( LOG_ERR, "ERROR::ldap_bind_s failure (%s:%d) [%d]",
++	bv.bv_len = strlen(url->pwd);
++	bv.bv_val = url->pwd;
++
++	if ((ret = ldap_sasl_bind_s(ld, url->usr, LDAP_SASL_SIMPLE, &bv,
++	    NULL, NULL, NULL)) != LDAP_SUCCESS) {
++		syslog( LOG_ERR, "ERROR::ldap_sasl_bind_s failure (%s:%d) [%d]",
+ 		     url->addr, url->port, ret );
+ 		return NULL;
+ 	}
+@@ -199,9 +216,8 @@
+ 	}
+ 
+ 	/* We search for the exact match, so LDAP_SCOPE_BASE is used here */
+-	if (( rc = ldap_search_s( ld, url->dn, LDAP_SCOPE_BASE,
+-			filter, attrs, 0, &res )) != LDAP_SUCCESS ) {
+-
++	if ((rc = ldap_search_ext_s(ld, url->dn, LDAP_SCOPE_BASE, filter,
++	    attrs, 0, NULL, NULL, NULL, LDAP_NO_LIMIT, &res)) != LDAP_SUCCESS) {
+ 		if ( rc != LDAP_NO_SUCH_OBJECT ) {
+ 			syslog( LOG_ERR, 
+ 				"LDAP: [%s] object not found", url->dn );
+@@ -282,7 +298,7 @@
+ 
+ end:
+ 	if(res) ldap_msgfree( res );
+-	if(ld) ldap_unbind( ld );
++	if(ld) ldap_unbind_ext(ld, NULL, NULL);
+ 
+ 	if( ocspd_conf->verbose )
+ 		syslog( LOG_INFO, "INFO::LDAP::Successfully unbinded");
+@@ -300,6 +316,7 @@
+ 	struct berval **vals = NULL;
+ 	LDAPMessage *res = NULL;
+ 	BIO	*membio = NULL;
++	struct berval bv;
+ 
+ 	X509_CRL *crl = NULL;
+ 
+@@ -307,11 +324,14 @@
+ 		return NULL;
+ 	}
+ 
+-	if ( (ret = ldap_bind_s( ld, url->usr, url->pwd, LDAP_AUTH_SIMPLE )) 
+-			!= LDAP_SUCCESS ) {
+-		syslog( LOG_ERR, "LDAP: ldap_bind_s failure (%s:%d) [%d]",
++	bv.bv_len = strlen(url->pwd);
++	bv.bv_val = url->pwd;
++
++	if ((ret = ldap_sasl_bind_s(ld, url->usr, LDAP_SASL_SIMPLE, &bv,
++	    NULL, NULL, NULL)) != LDAP_SUCCESS) {
++		syslog( LOG_ERR, "LDAP: ldap_sasl_bind_s failure (%s:%d) [%d]",
+ 		     url->addr, url->port, ret );
+-		// ldap_perror( ld, "ldap_bind" );
++		// ldap_perror( ld, "ldap_sasl_bind_s" );
+ 		return NULL;
+ 	}
+ 
+@@ -319,9 +339,8 @@
+ 		syslog( LOG_INFO, "INFO::LDAP::Successfully binded (%s)", url->dn);
+ 
+ 	/* We search for the exact match, so LDAP_SCOPE_BASE is used here */
+-	if (( rc = ldap_search_s( ld, url->dn, LDAP_SCOPE_BASE,
+-			filter, attrs, 0, &res )) != LDAP_SUCCESS ) {
+-
++	if ((rc = ldap_search_ext_s(ld, url->dn, LDAP_SCOPE_BASE, filter,
++	    attrs, 0, NULL, NULL, NULL, LDAP_NO_LIMIT, &res)) != LDAP_SUCCESS) {
+ 		if ( rc != LDAP_NO_SUCH_OBJECT ) 
+ 			syslog( LOG_ERR, "ERROR::LDAP::[%s] NOT found", 
+ 				url->dn );
+@@ -372,7 +391,7 @@
+ 
+ end:
+ 	if(res) ldap_msgfree( res );
+-	if(ld) ldap_unbind( ld );
++	if(ld) ldap_unbind_ext(ld, NULL, NULL);
+ 
+ 	if( ocspd_conf->verbose )
+ 		syslog( LOG_INFO, "INFO::LDAP::Successfully unbinded" );

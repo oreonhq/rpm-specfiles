@@ -1,0 +1,10 @@
+--- a/aws.gpr
++++ b/aws.gpr
+@@ -29,6 +29,7 @@
+    for Library_Kind use Shared.Library_Type;
+    for Library_Dir use Shared'Library_Dir & "/aws";
+    for Library_Options use ("-L", "-ltemplates_parser", "-lzlib_ada");
++   for Library_Version use "lib" & Project'Library_Name & ".so." & external ("VERSION");
+ 
+    case Shared.Library_Type is
+       when "static" | "static-pic" =>

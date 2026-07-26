@@ -1,0 +1,13 @@
+diff -up flex-2.5.4/MISC/texinfo/flex.texi\~ flex-2.5.4/MISC/texinfo/flex.texi
+--- flex-2.5.4/MISC/texinfo/flex.texi~	2013-08-16 11:30:30.763146028 +0200
++++ flex-2.5.4/MISC/texinfo/flex.texi	2013-08-16 11:37:03.920218393 +0200
+@@ -114,6 +114,7 @@ PURPOSE.
+ 
+ @node Top, Name, (dir), (dir)
+ @top flex
++@raisesections
+ 
+ @cindex scanner generator
+ 
+
+Diff finished.  Fri Aug 16 11:37:12 2013

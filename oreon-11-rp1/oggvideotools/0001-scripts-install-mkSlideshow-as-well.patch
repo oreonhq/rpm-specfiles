@@ -1,0 +1,23 @@
+From 1ca8bb7b828c54b273ecb6332cc9d0115113d0be Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenko@redhat.com>
+Date: Sat, 9 Apr 2016 19:17:14 +0200
+Subject: [PATCH 1/5] scripts: install mkSlideshow as well
+
+Signed-off-by: Igor Gnatenko <ignatenko@redhat.com>
+---
+ scripts/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index e34e212..952df2e 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-SET ( SCRIPT_SRC mkThumbs )
++SET ( SCRIPT_SRC mkThumbs mkSlideshow )
+ 
+ INSTALL ( FILES ${SCRIPT_SRC} DESTINATION sbin )
+ 
+-- 
+2.7.3
+

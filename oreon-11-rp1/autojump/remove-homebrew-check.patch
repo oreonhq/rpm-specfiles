@@ -1,0 +1,22 @@
+diff --git a/bin/autojump.zsh b/bin/autojump.zsh
+index fbc0960..7d88786 100644
+--- a/bin/autojump.zsh
++++ b/bin/autojump.zsh
+@@ -9,15 +9,6 @@ if [[ -d ~/.autojump/functions ]]; then
+ fi
+
+
+-# set homebrew installation paths
+-if command -v brew &>/dev/null; then
+-  local brew_prefix=${BREW_PREFIX:-$(brew --prefix)}
+-  if [[ -d "${brew_prefix}/share/zsh/site-functions" ]]; then
+-    fpath=("${brew_prefix}/share/zsh/site-functions" ${fpath})
+-  fi
+-fi
+-
+-
+ # set error file location
+ if [[ "$(uname)" == "Darwin" ]]; then
+     export AUTOJUMP_ERROR_PATH=~/Library/autojump/errors.log
+-- 
+2.17.0.rc2

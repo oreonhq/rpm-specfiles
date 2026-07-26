@@ -1,0 +1,110 @@
+From dd30c5b02602ad80dd2ac8216e71e6907d433a7c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 22 Apr 2024 12:02:31 +0200
+Subject: [PATCH] Adapt to libXaw-1.0.16
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+libXaw-1.0.16 corrected a prototype of XawListChange() to use X11's String type
+instead of const char * type
+<https://gitlab.freedesktop.org/xorg/lib/libxaw/-/merge_requests/28>.
+That triggered compilation errors like this:
+
+    audemo.c:524:23: error: passing argument 2 of ‘XawListChange’ from incompatible pointer type [-Wincompatible-pointer-types]
+      524 |                       (const char **)makeFileList(globals->fileNames, globals->numFiles),
+	  |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	  |                       |
+	  |                       const char **
+    In file included from audemo.c:97:
+    /usr/include/X11/Xaw/List.h:170:26: note: expected ‘char **’ but argument is of type ‘const char **’
+
+Because that new type has undefined constness, <X11/Intrinsic.h>:
+
+    #ifdef _CONST_X_STRING
+    typedef const char *String;
+    #else
+    typedef char *String;
+    #endif
+
+and because libXaw does not provide any handy macro, this patch fixes
+it by using that or that type based on a result of a configure-time
+check.
+
+I tested it with libXaw 1.0.15 and 1.0.16.
+
+<https://bugzilla.redhat.com/show_bug.cgi?id=2276343>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ clients/audio/audemo/audemo.c |  8 ++++----
+ config/configure.ac           | 13 +++++++++++++
+ 2 files changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/clients/audio/audemo/audemo.c b/clients/audio/audemo/audemo.c
+index e77b95d..01d9b34 100644
+--- a/clients/audio/audemo/audemo.c
++++ b/clients/audio/audemo/audemo.c
+@@ -501,7 +501,7 @@ static void
+ rescanCB(Widget w, XtPointer globalsp, XtPointer call_data)
+ {
+     GlobalDataPtr       globals = (GlobalDataPtr) globalsp;
+-    static const char   *noFilesString = "No files found";
++    static XAWLISTCHANGE_TYPE   noFilesString = "No files found";
+     char                *dir,
+                         *template;
+     int                 i;
+@@ -521,7 +521,7 @@ rescanCB(Widget w, XtPointer globalsp, XtPointer call_data)
+     if (globals->numFiles)
+     {
+ 	XawListChange(globals->samples,
+-		      (const char **)makeFileList(globals->fileNames, globals->numFiles),
++		      (XAWLISTCHANGE_TYPE *)makeFileList(globals->fileNames, globals->numFiles),
+ 		      globals->numFiles, -1, True);
+ 	XtSetSensitive(globals->samples, True);
+     }
+@@ -597,7 +597,7 @@ bucketQueryCB(Widget w, XtPointer globalsp, XtPointer call_data)
+                         access[4],
+ 			desc[COMMENT_LEN];
+     int                 i;
+-    static const char  *noBucketString = "No buckets";
++    static XAWLISTCHANGE_TYPE noBucketString = "No buckets";
+ 
+     if (buf->numBuckets)
+     {
+@@ -652,7 +652,7 @@ bucketQueryCB(Widget w, XtPointer globalsp, XtPointer call_data)
+ 
+     if (buf->numBuckets)
+     {
+-	XawListChange(buf->bucketList, (const char **)buf->bucketText,
++	XawListChange(buf->bucketList, (XAWLISTCHANGE_TYPE *)buf->bucketText,
+ 	              buf->numBuckets, -1, True);
+ 	XtSetSensitive(buf->bucketList, True);
+     }
+diff --git a/config/configure.ac b/config/configure.ac
+index e57c27e..6b1a2ef 100644
+--- a/config/configure.ac
++++ b/config/configure.ac
+@@ -78,6 +78,19 @@ main(void)
+ ]])],[AC_MSG_RESULT(yes)
+   AC_DEFINE(SYS_ERRLIST_DECLARED, 1, [sys_errlist declared])],[AC_MSG_RESULT(no)],[:])
+ 
++dnl libXaw-1.0.16 changed a type of a second argument of XawListChange().
++AH_TEMPLATE([XAWLISTCHANGE_TYPE],
++            [Define to a type XawListChange() uses as a second argument pointing to.])
++AC_COMPILE_IFELSE(AC_LANG_SOURCE[
++		#include <X11/Xaw/List.h>
++		void test(void) {
++			Widget w;
++			String *list;
++			XawListChange(w, list, 0, 0, 0);
++		} ],
++    AC_DEFINE([XAWLISTCHANGE_TYPE], [String], []),
++    AC_DEFINE([XAWLISTCHANGE_TYPE], [const char *], []))
++
+ AC_OUTPUT
+ 
+ 
+-- 
+2.44.0
+

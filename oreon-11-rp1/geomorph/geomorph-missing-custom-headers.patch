@@ -1,0 +1,22 @@
+diff -rup a/src/hf/dialog_utilities.c b/src/hf/dialog_utilities.c
+--- a/src/hf/dialog_utilities.c	2016-05-13 09:40:17.246215045 +0200
++++ b/src/hf/dialog_utilities.c	2016-05-13 09:43:10.759075521 +0200
+@@ -25,6 +25,7 @@
+ #include "hf_calc.h"
+ #include "globals.h"
+ #include "gl_preview.h"
++#include "hf_wrapper.h"
+ 
+ //	Icons for merge mode
+ #include "../icons/raise.xpm"
+diff -rup a/src/hf/gl_preview.c b/src/hf/gl_preview.c
+--- a/src/hf/gl_preview.c	2016-05-13 09:40:17.247215039 +0200
++++ b/src/hf/gl_preview.c	2016-05-13 09:42:16.789431046 +0200
+@@ -40,6 +40,7 @@ in Linux Magazine France, n. 33-34.
+ #include "gl_preview.h"
+ // hf_calc.h for data types and some macros
+ #include "hf_calc.h"
++#include "dialog_utilities.h"
+ 
+ #include "../icons/rotate_y.xpm"
+ #include "../icons/rotate_x.xpm"

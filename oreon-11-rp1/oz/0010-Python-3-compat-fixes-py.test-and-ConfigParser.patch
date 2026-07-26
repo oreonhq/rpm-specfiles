@@ -1,0 +1,562 @@
+From 4c894b9ebb23909a54d6a1282eb528bb0917931a Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 14:48:33 -0800
+Subject: [PATCH 10/26] Python 3 compat fixes: py.test and ConfigParser
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ oz/RedHat.py                  | 10 ++++-
+ oz/ozutil.py                  | 12 +++++-
+ tests/factory/test_factory.py | 14 +++++--
+ tests/guest/test_guest.py     | 71 +++++++++++++++++++++--------------
+ tests/ozutil/test_ozutil.py   | 50 ++++++++++++------------
+ tests/tdl/test_tdl.py         |  4 +-
+ 6 files changed, 97 insertions(+), 64 deletions(-)
+
+diff --git a/oz/RedHat.py b/oz/RedHat.py
+index 868b549..57e43f4 100644
+--- a/oz/RedHat.py
++++ b/oz/RedHat.py
+@@ -507,8 +507,14 @@ echo -n "!$ADDR,%s!" > %s
+         initrd paths out of it.
+         """
+         self.log.debug("Got treeinfo, parsing")
+-        config = configparser.SafeConfigParser()
+-        config.readfp(fp)
++        try:
++            config = configparser.SafeConfigParser()
++            config.readfp(fp)
++        except AttributeError:
++            # SafeConfigParser was deprecated in Python 3.2 and readfp
++            # was renamed to read_file
++            config = configparser.ConfigParser()
++            config.read_file(fp)
+         section = "images-%s" % (self.tdl.arch)
+         kernel = oz.ozutil.config_get_key(config, section, "kernel", None)
+         initrd = oz.ozutil.config_get_key(config, section, "initrd", None)
+diff --git a/oz/ozutil.py b/oz/ozutil.py
+index 3a861be..5e90797 100644
+--- a/oz/ozutil.py
++++ b/oz/ozutil.py
+@@ -724,12 +724,20 @@ def parse_config(config_file):
+     Function to parse the configuration file.  If the passed in config_file is
+     None, then the default configuration file is used.
+     """
+-    config = configparser.SafeConfigParser()
++    try:
++        config = configparser.SafeConfigParser()
++    except AttributeError:
++        # SafeConfigParser was deprecated in Python 3.2
++        config = configparser.ConfigParser()
+     if config_file is not None:
+         # If the config_file passed in is not None, then we want to try to read
+         # that config file (after expanding it).  If that config file doesn't
+         # exist, we want to throw an error (which is why we use readfp here).
+-        config.readfp(open(os.path.expanduser(config_file)))
++        try:
++            config.readfp(open(os.path.expanduser(config_file)))
++        except AttributeError:
++            # readfp was renamed to read_file in Python 3.2
++            config.read_file(open(os.path.expanduser(config_file)))
+     else:
+         # The config file was not passed in, so we want to use one of the
+         # defaults.  First we check to see if a ~/.oz/oz.cfg exists; if it does,
+diff --git a/tests/factory/test_factory.py b/tests/factory/test_factory.py
+index 8f08b62..1328b9f 100755
+--- a/tests/factory/test_factory.py
++++ b/tests/factory/test_factory.py
+@@ -31,9 +31,9 @@ except ImportError as e:
+     sys.exit(1)
+ 
+ try:
+-    import py.test
++    import pytest
+ except ImportError:
+-    print('Unable to import py.test.  Is py.test installed?')
++    print('Unable to import pytest.  Is pytest installed?')
+     sys.exit(1)
+ 
+ def default_route():
+@@ -87,8 +87,14 @@ def runtest(**kwargs):
+     try:
+         tdl = oz.TDL.TDL(tdlxml)
+ 
+-        config = configparser.SafeConfigParser()
+-        config.readfp(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
++        try:
++            config = configparser.SafeConfigParser()
++            config.readfp(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
++        except AttributeError:
++            # SafeConfigParser was deprecated in Python 3.2 and
++            # readfp was renamed to read_file
++            config = configparser.ConfigParser()
++            config.read_file(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
+ 
+         if os.getenv('DEBUG') is not None:
+             logging.basicConfig(level=logging.DEBUG, format="%(message)s")
+diff --git a/tests/guest/test_guest.py b/tests/guest/test_guest.py
+index 71e869a..19b0863 100644
+--- a/tests/guest/test_guest.py
++++ b/tests/guest/test_guest.py
+@@ -31,9 +31,9 @@ except ImportError as e:
+     sys.exit(1)
+ 
+ try:
+-    import py.test
++    import pytest
+ except ImportError:
+-    print('Unable to import py.test.  Is py.test installed?')
++    print('Unable to import pytest.  Is pytest installed?')
+     sys.exit(1)
+ 
+ def default_route():
+@@ -63,8 +63,14 @@ route = default_route()
+ def setup_guest(xml, macaddress=None):
+     tdl = oz.TDL.TDL(xml)
+ 
+-    config = configparser.SafeConfigParser()
+-    config.readfp(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
++    try:
++        config = configparser.SafeConfigParser()
++        config.readfp(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
++    except AttributeError:
++        # SafeConfigParser was deprecated in Python 3.2 and readfp
++        # was renamed to read_file
++        config = configparser.ConfigParser()
++        config.read_file(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
+ 
+     guest = oz.GuestFactory.guest_factory(tdl, config, None, macaddress=macaddress)
+     return guest
+@@ -104,7 +110,7 @@ tdlxml2 = """
+ def test_geteltorito_none_src():
+     guest = setup_guest(tdlxml)
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(None, None)
+ 
+ def test_geteltorito_none_dst(tmpdir):
+@@ -113,7 +119,7 @@ def test_geteltorito_none_dst(tmpdir):
+     src = os.path.join(str(tmpdir), 'src')
+     open(src, 'w').write('src')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, None)
+ 
+ def test_geteltorito_short_pvd(tmpdir):
+@@ -124,7 +130,7 @@ def test_geteltorito_short_pvd(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_pvd_desc(tmpdir):
+@@ -138,7 +144,7 @@ def test_geteltorito_bogus_pvd_desc(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_pvd_ident(tmpdir):
+@@ -153,7 +159,7 @@ def test_geteltorito_bogus_pvd_ident(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_pvd_unused(tmpdir):
+@@ -170,7 +176,7 @@ def test_geteltorito_bogus_pvd_unused(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_pvd_unused2(tmpdir):
+@@ -191,7 +197,7 @@ def test_geteltorito_bogus_pvd_unused2(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_short_boot_sector(tmpdir):
+@@ -212,7 +218,7 @@ def test_geteltorito_short_boot_sector(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_boot_sector(tmpdir):
+@@ -236,7 +242,7 @@ def test_geteltorito_bogus_boot_sector(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_boot_isoident(tmpdir):
+@@ -261,7 +267,7 @@ def test_geteltorito_bogus_boot_isoident(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_boot_version(tmpdir):
+@@ -286,7 +292,7 @@ def test_geteltorito_bogus_boot_version(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_boot_torito(tmpdir):
+@@ -312,7 +318,7 @@ def test_geteltorito_bogus_boot_torito(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(oz.OzException.OzException):
++    with pytest.raises(oz.OzException.OzException):
+         guest._geteltorito(src, dst)
+ 
+ def test_geteltorito_bogus_bootp(tmpdir):
+@@ -340,7 +346,7 @@ def test_geteltorito_bogus_bootp(tmpdir):
+ 
+     dst = os.path.join(str(tmpdir), 'dst')
+ 
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         guest._geteltorito(src, dst)
+ 
+ def test_init_guest():
+@@ -354,9 +360,16 @@ def test_init_guest():
+ def test_init_guest_bad_arch():
+     tdl = oz.TDL.TDL(tdlxml)
+     tdl.arch = 'armhf'  # Done here to make sure the TDL class doesn't error
+-    config = configparser.SafeConfigParser()
+-    config.readfp(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
+-    with py.test.raises(Exception):
++    try:
++        config = configparser.SafeConfigParser()
++        config.readfp(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
++    except AttributeError:
++        # SafeConfigParser was deprecated in Python 3.2 and readfp
++        # was renamed to read_file
++        config = configparser.ConfigParser()
++        config.read_file(StringIO("[libvirt]\nuri=qemu:///session\nbridge_name=%s" % route))
++
++    with pytest.raises(Exception):
+         oz.GuestFactory.guest_factory(tdl, config, None)
+ 
+ def test_icicle_generation():
+@@ -490,7 +503,7 @@ def test_get_disks_and_interfaces_missing_interface_target():
+ 
+     # Get the comparision xml
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._get_disks_and_interfaces(test_xml)
+@@ -503,7 +516,7 @@ def test_get_disks_and_interfaces_missing_interface_target_device():
+ 
+     # Get the comparision xml
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._get_disks_and_interfaces(test_xml)
+@@ -516,7 +529,7 @@ def test_get_disks_and_interfaces_missing_disk_target():
+ 
+     # Get the comparision xml
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._get_disks_and_interfaces(test_xml)
+@@ -528,7 +541,7 @@ def test_get_disks_and_interfaces_missing_disk_target_device():
+     # Get the comparision xml
+     path = os.path.dirname(__file__) + '/libvirt/test_get_disks_and_interfaces_missing_disk_target_device.xml'
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._get_disks_and_interfaces(test_xml)
+@@ -557,7 +570,7 @@ def test_modify_libvirt_xml_for_serial_too_many_targets():
+     # Get the comparision xml
+     path = os.path.dirname(__file__) + '/libvirt/test_modify_libvirt_xml_for_serial_too_many_targets.xml'
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._modify_libvirt_xml_for_serial(test_xml)
+@@ -569,7 +582,7 @@ def test_modify_libvirt_xml_for_serial_missing_devices():
+     # Get the comparision xml
+     path = os.path.dirname(__file__) + '/libvirt/test_modify_libvirt_xml_for_serial_missing_devices.xml'
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._modify_libvirt_xml_for_serial(test_xml)
+@@ -581,7 +594,7 @@ def test_modify_libvirt_xml_for_serial_too_many_devices():
+     # Get the comparision xml
+     path = os.path.dirname(__file__) + '/libvirt/test_modify_libvirt_xml_for_serial_too_many_devices.xml'
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._modify_libvirt_xml_for_serial(test_xml)
+@@ -614,7 +627,7 @@ def test_modify_libvirt_xml_diskimage_missing_disk_source():
+     # Get the comparision xml
+     path = os.path.dirname(__file__) + '/libvirt/test_modify_libvirt_xml_diskimage_missing_disk_source.xml'
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._modify_libvirt_xml_diskimage(test_xml, guest.diskimage, 'qcow2')
+@@ -626,7 +639,7 @@ def test_modify_libvirt_xml_diskimage_too_many_drivers():
+     # Get the comparision xml
+     path = os.path.dirname(__file__) + '/libvirt/test_modify_libvirt_xml_diskimage_too_many_drivers.xml'
+     with open(path, 'r') as handle:
+-        with py.test.raises(Exception):
++        with pytest.raises(Exception):
+             # Replace various smaller items as they are auto generated
+             test_xml = handle.read() % (guest.uuid, route, guest.listen_port, guest.diskimage)
+             guest._modify_libvirt_xml_diskimage(test_xml, guest.diskimage, 'qcow2')
+diff --git a/tests/ozutil/test_ozutil.py b/tests/ozutil/test_ozutil.py
+index dd84f5b..4624251 100644
+--- a/tests/ozutil/test_ozutil.py
++++ b/tests/ozutil/test_ozutil.py
+@@ -4,9 +4,9 @@ import sys
+ import os
+ 
+ try:
+-    import py.test
++    import pytest
+ except ImportError:
+-    print('Unable to import py.test.  Is py.test installed?')
++    print('Unable to import pytest.  Is pytest installed?')
+     sys.exit(1)
+ 
+ # Find oz
+@@ -29,7 +29,7 @@ def test_auto():
+     assert(oz.ozutil.generate_full_auto_path('fedora-14-jeos.ks') == os.path.realpath(os.path.join(prefix, 'oz', 'auto', 'fedora-14-jeos.ks')))
+ 
+ def test_auto_none():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.generate_full_auto_path(None)
+ 
+ # test oz.ozutil.executable_exists
+@@ -37,33 +37,33 @@ def test_exe_exists_bin_ls():
+     assert(oz.ozutil.executable_exists('/bin/ls'))
+ 
+ def test_exe_exists_foo():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.executable_exists('foo')
+ 
+ def test_exe_exists_full_foo():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.executable_exists('/bin/foo')
+ 
+ def test_exe_exists_not_x():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.executable_exists('/etc/hosts')
+ 
+ def test_exe_exists_relative_false():
+     assert(oz.ozutil.executable_exists('false'))
+ 
+ def test_exe_exists_none():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.executable_exists(None)
+ 
+ # test oz.ozutil.copyfile_sparse
+ def test_copy_sparse_none_src():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copyfile_sparse(None, None)
+ 
+ def test_copy_sparse_none_dst(tmpdir):
+     fullname = os.path.join(str(tmpdir), 'src')
+     open(fullname, 'w').write('src')
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copyfile_sparse(fullname, None)
+ 
+ def test_copy_sparse_bad_src_mode(tmpdir):
+@@ -75,7 +75,7 @@ def test_copy_sparse_bad_src_mode(tmpdir):
+     os.chmod(fullname, 0000)
+     # because copyfile_sparse uses os.open() instead of open(), it throws an
+     # OSError
+-    with py.test.raises(OSError):
++    with pytest.raises(OSError):
+         oz.ozutil.copyfile_sparse(fullname, 'output')
+ 
+ def test_copy_sparse_bad_dst_mode(tmpdir):
+@@ -87,7 +87,7 @@ def test_copy_sparse_bad_dst_mode(tmpdir):
+     dstname = os.path.join(str(tmpdir), 'dst')
+     open(dstname, 'w').write('dst')
+     os.chmod(dstname, 0o444)
+-    with py.test.raises(OSError):
++    with pytest.raises(OSError):
+         oz.ozutil.copyfile_sparse(srcname, dstname)
+ 
+ def test_copy_sparse_zero_size_src(tmpdir):
+@@ -151,7 +151,7 @@ def test_copy_sparse_src_not_exists(tmpdir):
+     srcname = os.path.join(str(tmpdir), 'src')
+     dstname = os.path.join(str(tmpdir), 'dst')
+     open(dstname, 'w').write('dst')
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copyfile_sparse(srcname, dstname)
+ 
+ def test_copy_sparse_dest_not_exists(tmpdir):
+@@ -164,13 +164,13 @@ def test_copy_sparse_dest_not_exists(tmpdir):
+ def test_copy_sparse_src_is_dir(tmpdir):
+     dstname = os.path.join(str(tmpdir), 'dst')
+     open(dstname, 'w').write('dst')
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copyfile_sparse(tmpdir, dstname)
+ 
+ def test_copy_sparse_dst_is_dir(tmpdir):
+     srcname = os.path.join(str(tmpdir), 'src')
+     open(srcname, 'w').write('src')
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copyfile_sparse(srcname, tmpdir)
+ 
+ # test oz.ozutil.string_to_bool
+@@ -205,7 +205,7 @@ def test_stb_true():
+                     assert(oz.ozutil.string_to_bool(curr) == True)
+ 
+ def test_stb_none():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.string_to_bool(None)
+ 
+ 
+@@ -231,11 +231,11 @@ def test_mkdir_p_twice(tmpdir):
+ def test_mkdir_p_file_exists(tmpdir):
+     fullname = os.path.join(str(tmpdir), 'file_exists')
+     open(fullname, 'w').write('file_exists')
+-    with py.test.raises(OSError):
++    with pytest.raises(OSError):
+         oz.ozutil.mkdir_p(fullname)
+ 
+ def test_mkdir_p_none():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.mkdir_p(None)
+ 
+ def test_mkdir_p_empty_string():
+@@ -243,20 +243,20 @@ def test_mkdir_p_empty_string():
+ 
+ # test oz.ozutil.copy_modify_file
+ def test_copy_modify_none_src():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copy_modify_file(None, None, None)
+ 
+ def test_copy_modify_none_dst(tmpdir):
+     fullname = os.path.join(str(tmpdir), 'src')
+     open(fullname, 'w').write('src')
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copy_modify_file(fullname, None, None)
+ 
+ def test_copy_modify_none_subfunc(tmpdir):
+     src = os.path.join(str(tmpdir), 'src')
+     open(src, 'w').write('src')
+     dst = os.path.join(str(tmpdir), 'dst')
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.copy_modify_file(src, dst, None)
+ 
+ def test_copy_modify_bad_src_mode(tmpdir):
+@@ -269,7 +269,7 @@ def test_copy_modify_bad_src_mode(tmpdir):
+     open(fullname, 'w').write('writeonly')
+     os.chmod(fullname, 0000)
+     dst = os.path.join(str(tmpdir), 'dst')
+-    with py.test.raises(IOError):
++    with pytest.raises(IOError):
+         oz.ozutil.copy_modify_file(fullname, dst, sub)
+ 
+ def test_copy_modify_empty_file(tmpdir):
+@@ -295,11 +295,11 @@ def test_copy_modify_file(tmpdir):
+ 
+ # test oz.ozutil.write_cpio
+ def test_write_cpio_none_input():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.write_cpio(None, None)
+ 
+ def test_write_cpio_none_output():
+-    with py.test.raises(Exception):
++    with pytest.raises(Exception):
+         oz.ozutil.write_cpio({}, None)
+ 
+ def test_write_cpio_empty_dict(tmpdir):
+@@ -313,7 +313,7 @@ def test_write_cpio_existing_file(tmpdir):
+     dst = os.path.join(str(tmpdir), 'dst')
+     open(dst, 'w').write('hello')
+     os.chmod(dst, 0000)
+-    with py.test.raises(IOError):
++    with pytest.raises(IOError):
+         oz.ozutil.write_cpio({}, dst)
+ 
+ def test_write_cpio_single_file(tmpdir):
+@@ -344,7 +344,7 @@ def test_write_cpio_exception(tmpdir):
+     open(src, 'w').write('src')
+     os.chmod(src, 0000)
+     dst = os.path.join(str(tmpdir), 'dst')
+-    with py.test.raises(IOError):
++    with pytest.raises(IOError):
+         oz.ozutil.write_cpio({src: 'src'}, dst)
+ 
+ def test_md5sum_regular(tmpdir):
+diff --git a/tests/tdl/test_tdl.py b/tests/tdl/test_tdl.py
+index 6846ef1..a94b2c1 100644
+--- a/tests/tdl/test_tdl.py
++++ b/tests/tdl/test_tdl.py
+@@ -10,9 +10,9 @@ except ImportError:
+     sys.exit(1)
+ 
+ try:
+-    import py.test
++    import pytest
+ except ImportError:
+-    print('Unable to import py.test.  Is py.test installed?')
++    print('Unable to import pytest.  Is pytest installed?')
+     sys.exit(1)
+ 
+ # Find oz
+-- 
+2.46.2
+

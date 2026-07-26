@@ -1,0 +1,26 @@
+From 713cbb3ca7076d98ca15bff88b0bed110ef70159 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 20 Sep 2024 22:57:29 +0200
+Subject: [PATCH 2/7] generator: bump cargo_metadata dependency from 0.17 to
+ 0.18
+
+---
+ generator/Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/generator/Cargo.toml b/generator/Cargo.toml
+index e22689f..255b273 100644
+--- a/generator/Cargo.toml
++++ b/generator/Cargo.toml
+@@ -6,7 +6,7 @@ license = "MIT"
+ edition = "2018"
+ 
+ [dependencies]
+-cargo_metadata = "0.17"
++cargo_metadata = "0.18"
+ serde = { version = " 1.0.186", features = ["derive"] }
+ 
+ [dependencies.clap]
+-- 
+2.46.0
+

@@ -1,0 +1,10 @@
+--- compiler/DirectedGraph/Schedule.hh~	2024-12-26 05:33:55.000000000 -0600
++++ compiler/DirectedGraph/Schedule.hh	2025-02-18 14:48:51.913367844 -0600
+@@ -20,6 +20,7 @@
+ #include <sstream>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ #include "DirectedGraph.hh"
+ #include "DirectedGraphAlgorythm.hh"
+ 

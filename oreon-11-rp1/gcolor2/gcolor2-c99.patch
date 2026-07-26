@@ -1,0 +1,20 @@
+Add missing prototypes that are needed for building callbacks.c
+with strict(er) C99 compilers.
+
+Submitted upstream: <https://sourceforge.net/p/gcolor2/patches/9/>
+
+diff --git a/src/callbacks.h b/src/callbacks.h
+index b3608bb10220dc07..25fe4c487387702f 100644
+--- a/src/callbacks.h
++++ b/src/callbacks.h
+@@ -58,6 +58,10 @@ gchar* get_user_file();
+ 
+ void show_file_error (gchar* message);
+ 
++void add_rgb_file (gchar *filename, gchar *type);
++gchar* get_system_file ();
++void add_list_color (gchar *spec, gchar *name, gchar *type, gboolean is_new_color);
++
+ void destroy_aboutdialog (GtkObject *object, gpointer user_data);
+ 
+ void on_about_button_clicked (GtkButton *button, gpointer user_data);

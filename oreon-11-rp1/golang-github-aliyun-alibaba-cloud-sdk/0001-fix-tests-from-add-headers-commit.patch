@@ -1,0 +1,34 @@
+From 9933c0de504887ff460f92269e9f8d2827a4cc0a Mon Sep 17 00:00:00 2001
+From: Brandon Perkins <bperkins@redhat.com>
+Date: Thu, 20 Jan 2022 15:22:13 -0500
+Subject: [PATCH] fix tests from add headers commit
+
+---
+ sdk/errors/server_error_test.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sdk/errors/server_error_test.go b/sdk/errors/server_error_test.go
+index 4238dcb31..9a3110bb5 100644
+--- a/sdk/errors/server_error_test.go
++++ b/sdk/errors/server_error_test.go
+@@ -19,7 +19,7 @@ func TestServerError(t *testing.T) {
+ 	assert.Equal(t, "", serverError.HostId())
+ 	assert.Equal(t, "comment", serverError.Comment())
+ 	assert.Equal(t, "content", serverError.Message())
+-	assert.Equal(t, "SDK.ServerError\nErrorCode: \nRecommend: comment\nRequestId: \nMessage: content", serverError.Error())
++	assert.Equal(t, "SDK.ServerError\nErrorCode: \nRecommend: comment\nRequestId: \nMessage: content\nRespHeaders: map[]", serverError.Error())
+ }
+ 
+ func TestServerErrorWithContent(t *testing.T) {
+@@ -35,7 +35,7 @@ func TestServerErrorWithContent(t *testing.T) {
+ 	assert.Equal(t, "recommend", serverError.Recommend())
+ 	assert.Equal(t, "comment", serverError.Comment())
+ 	assert.Equal(t, "message", serverError.Message())
+-	assert.Equal(t, "SDK.ServerError\nErrorCode: InvalidAK\nRecommend: commentrecommend\nRequestId: request id\nMessage: message", serverError.Error())
++	assert.Equal(t, "SDK.ServerError\nErrorCode: InvalidAK\nRecommend: commentrecommend\nRequestId: request id\nMessage: message\nRespHeaders: map[]", serverError.Error())
+ }
+ 
+ func TestWrapServerError(t *testing.T) {
+-- 
+2.34.1
+

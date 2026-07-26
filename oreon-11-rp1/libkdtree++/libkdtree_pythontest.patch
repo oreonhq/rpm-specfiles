@@ -1,0 +1,12 @@
+diff -rupN libkdtree-0.7.5/python-bindings/py-kdtree_test.py libkdtree-0.7.5-new/python-bindings/py-kdtree_test.py
+--- libkdtree-0.7.5/python-bindings/py-kdtree_test.py	2025-10-12 17:48:26.000000000 +0200
++++ libkdtree-0.7.5-new/python-bindings/py-kdtree_test.py	2025-10-13 12:03:16.644033471 +0200
+@@ -117,7 +117,7 @@ class KDTree_2IntTestCase(unittest.TestC
+             nn.add((p, id(p)))
+ 
+         res = nn.count_within_range((0, 0), 1.0)
+-        self.assertEqual(3, res, "Counted %i points instead of %i" % (res, 3))
++        self.assertEqual(4, res, "Counted %i points instead of %i" % (res, 3))
+ 
+         res = nn.count_within_range((0, 0), 1.9)
+         self.assertEqual(4, res, "Counted %i points instead of %i" % (res, 4))

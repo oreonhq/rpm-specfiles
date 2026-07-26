@@ -1,0 +1,14 @@
+diff -up etckeeper-1.18.7/update-ignore.d/01update-ignore.orig etckeeper-1.18.7/update-ignore.d/01update-ignore
+--- etckeeper-1.18.7/update-ignore.d/01update-ignore.orig	2017-08-13 12:31:57.360734395 +0200
++++ etckeeper-1.18.7/update-ignore.d/01update-ignore	2017-08-13 12:32:45.246242478 +0200
+@@ -91,7 +91,9 @@ writefile () {
+ 		nl
+ 	elif [ "$LOWLEVEL_PACKAGE_MANAGER" = "rpm" ]; then
+ 		comment "new and old versions of conffiles, stored by apt/rpm"
+-		ignore "*.rpm*"
++		ignore "*.rpmnew"
++		ignore "*.rpmorig"
++		ignore "*.rpmsave"
+ 		nl
+ 	elif [ "$LOWLEVEL_PACKAGE_MANAGER" = "pacman-g2" -o "$LOWLEVEL_PACKAGE_MANAGER" = "pacman" -o "$LOWLEVEL_PACKAGE_MANAGER" = "pacmatic" ]; then
+ 		comment "new and old versions of conffiles, stored by pacman"

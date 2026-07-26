@@ -1,0 +1,56 @@
+diff -up glaxium_0.5/scratcher.hpp.fix glaxium_0.5/scratcher.hpp
+--- glaxium_0.5/scratcher.hpp.fix	2007-10-04 16:21:08.000000000 +0200
++++ glaxium_0.5/scratcher.hpp	2007-10-04 16:21:27.000000000 +0200
+@@ -34,7 +34,7 @@ public:
+             UNDEF
+     } ;
+     
+-    Scratcher:: Scratcher(List *list, float x, float z, int bench=0);
++    Scratcher(List *list, float x, float z, int bench=0);
+     void draw();
+     void drawShadowable();
+     void move();
+diff -up glaxium_0.5/tank.hpp.fix glaxium_0.5/tank.hpp
+--- glaxium_0.5/tank.hpp.fix	2007-10-04 16:21:08.000000000 +0200
++++ glaxium_0.5/tank.hpp	2007-10-04 16:21:27.000000000 +0200
+@@ -61,7 +61,7 @@ protected:
+ 
+ class TankFire : public Sprite {
+ public:
+-    TankFire::TankFire(List *list, Tank *tank, float x, float y, float z,float dx, float dz,float rotated);
++    TankFire(List *list, Tank *tank, float x, float y, float z,float dx, float dz,float rotated);
+     void draw();
+ 	void drawShadowable();
+     void move();
+diff -up glaxium_0.5/variables.cpp.fix glaxium_0.5/variables.cpp
+--- glaxium_0.5/variables.cpp.fix	2007-10-04 16:21:08.000000000 +0200
++++ glaxium_0.5/variables.cpp	2007-10-04 16:21:27.000000000 +0200
+@@ -453,6 +453,7 @@ char* GlaxiumVariables::getFullOptionsPa
+ 	static char strReturn[1024];
+ 	strcpy(strReturn, getenv("HOME"));
+ 	strcat(strReturn, "/.glaxiumrc");
++	return strReturn;
+ #endif
+ }
+ 
+diff -up glaxium_0.5/Makefile.in~ glaxium_0.5/Makefile.in
+--- glaxium_0.5/Makefile.in~	2010-02-16 13:20:12.000000000 +0100
++++ glaxium_0.5/Makefile.in	2010-02-16 13:21:14.984680703 +0100
+@@ -1,7 +1,7 @@
+ 
+ CC=@CXX@
+ INCLUDE=@CFLAGS@ @CPPFLAGS@
+-LIB=@LIBS@
++LIB=@LIBS@ -lm
+ 
+ OBJ= $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+ DATE=`date +"%d.%m.%Y"`
+@@ -19,7 +19,7 @@ GLAXIUM_HOME=$(datadir)/glaxium
+ MAN_DIR=$(mandir)
+ 
+ glaxium : $(OBJ)
+-	gcc -g -o glaxium $(OBJ) $(LIB)
++	g++ -g -o glaxium $(OBJ) $(LIB)
+ 
+ 
+ 

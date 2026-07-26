@@ -1,0 +1,24 @@
+--- manedit-1.1.1/manedit/viewer.c.debug2	2008-07-03 15:55:10.000000000 +0900
++++ manedit-1.1.1/manedit/viewer.c	2008-07-03 16:16:24.000000000 +0900
+@@ -2676,8 +2676,9 @@
+ 		(branch_row->parent != NULL) : FALSE;
+ 	    GTK_WIDGET_SET_SENSITIVE(v->index_parent_mi, sensitive);
+ 
++            /* sensitive may be 0 */
+ 	    if((v->index_ctree != NULL) &&
+-	       (v->last_selected_index_node != NULL)
++	       (v->last_selected_index_node != NULL) && sensitive
+ 	    )
+ 		item = VIEWER_INDEX_ITEM(gtk_ctree_node_get_row_data(
+ 		    GTK_CTREE(v->index_ctree), v->last_selected_index_node
+@@ -2741,8 +2742,9 @@
+ 	    (branch_row->parent != NULL) : FALSE;
+ 	GTK_WIDGET_SET_SENSITIVE(v->index_parent_btn, sensitive);
+ 
++        /* sensitive may be 0 */
+ 	if((v->index_ctree != NULL) &&
+-	   (v->last_selected_index_node != NULL)
++	   (v->last_selected_index_node != NULL && sensitive)
+ 	)
+ 	    item = VIEWER_INDEX_ITEM(gtk_ctree_node_get_row_data(
+ 		GTK_CTREE(v->index_ctree),

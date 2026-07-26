@@ -1,0 +1,9 @@
+/var/log/gapd/gapd.log {
+	size 8M
+	missingok
+	rotate 5
+	compress
+	delaycompress
+	notifempty
+	create 0640 gapd gapd
+}

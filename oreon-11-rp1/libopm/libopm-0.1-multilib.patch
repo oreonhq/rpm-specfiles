@@ -1,0 +1,23 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for libopm >= 0.1, which solves the
+multilib/multiarch problem by removing the timestamp within the footer from the doxygen
+generated files.
+
+--- libopm-0.1/doc/Doxyfile.in				2003-01-06 13:48:21.000000000 +0100
++++ libopm-0.1/doc/Doxyfile.in.multilib			2007-12-14 22:22:04.000000000 +0100
+@@ -491,7 +491,7 @@
+ # each generated HTML page. If it is left blank doxygen will generate a 
+ # standard footer.
+ 
+-HTML_FOOTER            = 
++HTML_FOOTER            = footer_no_timestamp.html
+ 
+ # The HTML_STYLESHEET tag can be used to specify a user defined cascading 
+ # style sheet that is used by each HTML page. It can be used to 
+--- libopm-0.1/doc/footer_no_timestamp.html		1970-01-01 01:00:00.000000000 +0100
++++ libopm-0.1/doc/footer_no_timestamp.html.multilib	2007-12-14 22:21:35.000000000 +0100
+@@ -0,0 +1,5 @@
++<hr size="1"><address style="text-align: right;"><small>Generated for $projectname by&nbsp;
++<a href="http://www.doxygen.org/index.html">
++<img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> $doxygenversion </small></address>
++</body>
++</html>

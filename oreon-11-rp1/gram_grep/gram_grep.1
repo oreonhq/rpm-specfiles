@@ -1,0 +1,429 @@
+.TH GRAM_GREP "1" "February 2026" "" "User Commands"
+.SH NAME
+.B gram_grep
+\(en Search for \fIPATTERN\fRs in each \fIFILE\fR or standard input
+.SH SYNOPSIS
+.B gram_grep
+.RI ([ OPTION ]...\:
+.IR PATTERN )+
+.RI [ FILE ]...\:
+.SH DESCRIPTION
+Search for
+.IR PATTERN s
+in each
+.I FILE
+or standard input.
+.I PATTERN
+is, by default, a basic regular expression (BRE).
+This is only true for the first
+.I PATTERN
+(for
+.BR grep (1)
+compatibility).
+.SH OPTIONS
+.SS "PATTERN SELECTION AND INTERPRETATION"
+.TP
+.B \-E\fR, \fB\-\-extended\-regexp
+.IR PATTERN s
+are extended regular expressions
+.TP
+.B \-F\fR, \fB\-\-fixed\-strings
+.I PATTERN
+is a string
+.TP
+.B \-G\fR, \fB\-\-basic\-regexp
+.IR PATTERN s
+are basic regular expressions
+.TP
+.B \-P\fR, \fB\-\-perl\-regexp
+.I PATTERN
+is a Perl regular expression
+.TP
+.B \-e\fR, \fB\-\-regexp=\fIPATTERNS
+use
+.IR PATTERN s
+for matching
+.TP
+.B \-f\fR, \fB\-\-file=\fIFILE
+take
+.IR PATTERN s
+from
+.I FILE
+.TP
+.B \-i\fR, \fB\-\-ignore\-case
+ignore case distinctions in patterns and data
+.TP
+.B \-\-no\-ignore\-case
+do not ignore case distinctions
+.RI ( default )
+.TP
+.B \-w\fR, \fB\-\-word\-regexp
+match only whole words
+.TP
+.B \-x\fR, \fB\-\-line\-regexp
+match only whole lines
+.SS MISCELLANEOUS
+.TP
+.B \-s\fR, \fB\-\-no\-messages
+suppress error messages
+.TP
+.B \-v\fR, \fB\-\-invert\-match
+select non-matching text
+.TP
+.B \-V\fR, \fB\-\-version
+display version information and exit
+.TP
+.B \-\-help
+display help text and exit
+.SS "OUTPUT CONTROL"
+.TP
+.B \-m\fR, \fB\-\-max\-count=\fINUM
+stop after
+.I NUM
+selected lines
+.TP
+.B \-b\fR, \fB\-\-byte\-offset
+print the byte offset with output lines
+.TP
+.B \-n\fR, \fB\-\-line\-number
+print line number with output lines
+.TP
+.B \-\-line\-buffered
+flush output on every line
+.TP
+.B \-H\fR, \fB\-\-with\-filename
+print file name with output lines
+.TP
+.B \-h\fR, \fB\-\-no\-filename
+suppress the file name prefix on output
+.TP
+.B \-\-label=\fILABEL
+use
+.I LABEL
+as the standard input file name prefix
+.TP
+.B \-o\fR, \fB\-\-only\-matching
+show only nonempty parts of lines that match
+.TP
+.B \-q\fR, \fB\-\-quiet\fR, \fB\-\-silent
+suppress all normal output
+.TP
+.B \-\-binary\-files=\fITYPE
+assume that binary files are
+.IR TYPE ;
+.I TYPE
+is
+.BR binary ,
+.BR text ,
+or
+.B without\-match
+.TP
+.B \-a\fR, \fB\-\-text
+equivalent to
+.B \-\-binary\-files=text
+.TP
+.B \-I
+equivalent to
+.B \-\-binary\-files=without\-match
+.TP
+.B \-d\fR, \fB\-\-directories=\fIACTION
+how to handle directories;
+.I ACTION
+is
+.BR read ,
+.BR recurse ,
+or
+.B skip
+.TP
+.B \-r\fR, \fB\-\-recursive
+like
+.B \-\-directories=recurse
+.TP
+.B \-R\fR, \fB\-\-dereference\-recursive
+likewise, but follow all symlinks
+.TP
+.B \-\-include=\fIGLOB
+search only files that match
+.I GLOB
+(a file pattern)
+.TP
+.B \-\-exclude=\fIGLOB
+skip files that match
+.I GLOB
+.TP
+.B \-\-exclude\-from=\fIFILE
+skip files that match any file pattern from
+.I FILE
+.TP
+.B \-\-exclude-dir=\fIGLOB
+skip directories that match
+.I GLOB
+.TP
+.B \-L\fR, \fB\-\-files\-without\-match
+print only names of
+.IR FILE s
+with no selected lines
+.TP
+.B \-l\fR, \fB\-\-files\-with\-matches
+print only names of
+.IR FILE s
+with selected lines
+.TP
+.B \-c\fR, \fB\-\-count
+print only a count of selected lines per
+.I FILE
+.TP
+.B \-T\fR, \fB\-\-initial\-tab
+make tabs line up (if needed)
+.TP
+.B \-Z\fR, \fB\-\-null
+print 0 byte after
+.I FILE
+name
+.SS "CONTEXT CONTROL"
+.TP
+.B \-B\fR, \fB\-\-before\-context=\fINUM
+print
+.I NUM
+lines of leading context
+.TP
+.B \-A\fR, \fB\-\-after\-context=\fINUM
+print
+.I NUM
+lines of trailing context
+.TP
+.B \-C\fR, \fB\-\-context=\fINUM
+print
+.I NUM
+lines of output context
+.TP
+.B \-\fINUM
+same as
+.B \-\-context=\fINUM
+.TP
+.B \-\-group\-separator=\fISEP
+print
+.I SEP
+on line between matches with context
+.TP
+.B \-\-no\-group\-separator
+do not print separator for matches with context
+.TP
+.B \-\-color\fR[\fB=\fIWHEN\fR], \fB\-\-colour\fR[\fB=\fIWHEN\fR]
+use markers to highlight the matching strings;
+.I WHEN
+is
+.BR always ,
+.BR never ,
+or
+.B auto
+.SS "GRAM_GREP SPECIFIC SWITCHES"
+.TP
+.B \-\-checkout=\fICMD
+checkout command (include
+.B $1
+for pathname)
+.TP
+.B \-\-config=\fICONFIG_FILE
+search using config file
+.TP
+.B \-\-display\-whole\-match
+display a multiline match
+.TP
+.B \-\-dump
+dump DFA regexp
+.TP
+.B \-\-dump-argv
+dump command line arguments
+.TP
+.B \-\-dump-dot
+dump DFA regexp in DOT format
+.TP
+.B \-\-exec=\fICMD
+Executes the supplied command
+.TP
+.B \-\-extend\-search
+extend the end of the next match to be the current match
+.TP
+.B \-\-flex\-regexp
+.I PATTERN
+is a flex style regexp
+.TP
+.B \-\-force-write
+if a file is read only, force it to be writable
+.TP
+.B \-\-if=\fICONDITION
+make search conditional
+.TP
+.B \-\-invert\-match\-all
+only match if the search does not match at all
+.TP
+.B \-N\fR, \fB\-\-line\-number\-parens
+print line number in parenthesis with output lines
+.TP
+.B \-\-perform\-output
+output changes to matching file
+.TP
+.B \-p\fR, \fB\-\-print=\fITEXT
+print
+.I TEXT
+instead of line of match
+.TP
+.B \-\-print\-script=\fISCRIPT
+print result of
+.I SCRIPT
+instead of line of match
+.TP
+.B \-\-replace=\fITEXT
+replace match with
+.I TEXT
+.TP
+.B \-\-replace\-script=\fISCRIPT
+replace match with result of
+.I SCRIPT
+.TP
+.B \-\-return-previous-match
+return the previous match instead of the current one
+.TP
+.B \-\-shutdown=\fICMD
+command to run when exiting
+.TP
+.B \-\-startup=\fICMD
+command to run at startup
+.TP
+.B \-\-summary
+show match count footer
+.TP
+.B \-\-utf8
+in the absence of a BOM assume UTF-8
+.TP
+.B \-W\fR, \fB\-\-word\-list=\fIPATHNAME
+search for a word from the supplied word list
+.TP
+.B \-\-writable
+only process files that are writable
+.SH FILES
+A configuration file can be supplied using
+.B \-\-config=\fICONFIG_FILE\fR.
+.SS "CONFIG FILE FORMAT"
+.P
+.RS +3n
+.EX
+.BI < grammar\ directives >
+.B %%
+.BI < grammar >
+.B %%
+.BI < regexp\ macros >
+.B %%
+.BI < regexes >
+.B %%
+.EE
+.RE
+.SS "GRAMMAR DIRECTIVES"
+.TP
+.B %captures
+(parenthesis in grammars will be treated as captures)
+.TP
+.B %consume
+(list tokens that are not to be reported as unused)
+.TP
+.B %option caseless
+.TP
+.B %token
+.TP
+.B %left
+.TP
+.B %right
+.TP
+.B %nonassoc
+.TP
+.B %precedence
+.TP
+.B %start
+.TP
+.B %x
+.SS "GRAMMAR SCRIPTING"
+.IP \(bu +2n
+Note that all strings can contain item
+.RB ( $\fIn )
+specifiers
+.SS "FUNCTIONS RETURNING STRINGS"
+.TP
+.B capitalise('\fItext\fB');
+.TP
+.B format('\fItext\fB', ...);
+(use
+.B {}
+for format specifiers)
+.TP
+.B replace_all('\fItext\fB', '\fIregexp\fB', '\fItext\fB');
+.TP
+.B system('\fItext\fB');
+.TP
+.B tolower('\fItext\fB');
+.TP
+.B toupper('\fItext\fB');
+.SS "GENERAL FUNCTIONS"
+.TP
+.B erase($\fIn\fB);
+.TP
+.B erase($\fIfrom\fB, $\fIto\fB);
+.TP
+.B erase($\fIfrom\fB.second, $\fIto\fB.first);
+.TP
+.B insert($\fIn\fB, '\fItext\fB');
+.TP
+.B insert($\fIn\fB.second, '\fItext\fB');
+.TP
+.B match = $\fIn\fB;
+.TP
+.B match += $\fIn\fB;
+.TP
+.B match = substr($\fIn\fB, \fR<\fIomit\ from\ left\fR>\fB, \fR<\fIomit\ from\ right\fR>\fB);
+.TP
+.B match += substr($\fIn\fB, \fR<\fIomit\ from\ left\fR>\fB, \fR<\fIomit\ from\ right\fR>\fB);
+.TP
+.B print('\fItext\fB');
+.TP
+.B replace($\fIn\fB, '\fItext\fB');
+.TP
+.B replace($\fIfrom\fB, $\fIto, '\fItext\fB');
+.TP
+.B replace($\fIfrom\fB.second, $\fIto\fB.first, '\fItext\fB');
+.TP
+.B replace_all($\fIn\fB, '\fIregexp\fB', '\fItext\fB');
+.SS "\-\-if SYNTAX"
+.TP
+.B regex_search($\fIn\fB, '\fIregex\fB'){ ||\ regex_search($\fIn\fB, '\fIregex\fB')}
+.TP
+.B tolower($\fIn\fB);
+.TP
+.B toupper($\fIn\fB);
+.SS EXAMPLE
+.RS +3n
+.EX
+.B %token\ RawString\ String
+.B %%
+.B list:\ String {\ match\ =\ substr($1,\ 1,\ 1);\ };
+.B list:\ RawString\ {\ match\ =\ substr($1,\ 3,\ 2);\ };
+.B list:\ list\ String\ { match\ +=\ substr($2\, 1,\ 1);\ };
+.B list:\ list\ RawString\ { match\ +=\ substr($2,\ 3,\ 2);\ };
+.B %%
+.B ws\ [\ \\\\t\\\\r\\\\n]+
+.B %%
+.B \\\\"([^"\\\\\\\\\\\\r\\\\n]|\\\\\\\\.)*\\\\"\ \ \ \ \ \ \ \ String
+.B R\\\\"\\\\((?s:.)*?\\\\)\\\\"\ \ \ \ \ \ \ \ \ \ \ \ RawString
+.B '([^'\\\\\\\\\\\\r\\\\n]|\\\\\\\\.)*'\ \ \ \ \ \ \ \ \ \ skip()
+.B {ws}|"//".*|"/*"(?s:.)*?"*/"\ skip()
+.B %%
+.EE
+.RE
+.SH NOTES
+Note that you can pipeline searches by using multiple switches.
+The searches are run in the order they occur on the command line.
+.SH EXAMPLES
+.EX
+.B gram_grep\ \-i\ "hello\ world"\ menu.h\ main.c
+.EE
+.SH "SEE ALSO"
+.BR grep (1)

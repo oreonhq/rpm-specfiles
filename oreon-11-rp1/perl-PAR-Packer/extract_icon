@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+
+# Copyright 2011 Petr Písař <ppisar@redhat.com>.
+# This tool is licensed under the terms of GNU GPL version 3 or any later.
+
+use strict;
+use warnings;
+
+my $gif;
+
+while (<>) {
+    chomp;
+    if (/\A[^#]*my\s+\$icon_gif\s+=/) {
+        $gif = '';
+        next;
+    }
+    if (defined $gif && /\A\./) {
+        last;
+    }
+    if (defined $gif) {
+        $gif .= $_;
+    }
+}
+
+if (! defined $gif) { exit 1; }
+
+use MIME::Base64;
+print decode_base64($gif);

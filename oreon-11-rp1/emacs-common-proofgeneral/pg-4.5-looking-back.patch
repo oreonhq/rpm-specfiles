@@ -1,0 +1,24 @@
+--- coq/coq-indent.el.orig	2024-09-12 09:58:25.000000000 -0600
++++ coq/coq-indent.el	2024-09-29 08:49:51.476960374 -0600
+@@ -376,8 +376,8 @@ Comments are ignored, of course."
+    ;; vernacular controls Time, Fail, Redirect, Timeout
+    ((or (and (looking-at "e\\>") (looking-back "\\<Tim" (- (point) 3)))
+         (and (looking-at "l\\>") (looking-back "\\<Fai" (- (point) 3)))
+-        (and (looking-at "\"") (looking-back "\\<Redirect\\s-+\"[^\"]+"))
+-        (and (looking-at "[[:digit:]]\\_>") (looking-back "\\<Timeout\\s-+[[:digit:]]*")))
++        (and (looking-at "\"") (looking-back "\\<Redirect\\s-+\"[^\"]+" nil))
++        (and (looking-at "[[:digit:]]\\_>") (looking-back "\\<Timeout\\s-+[[:digit:]]*" nil)))
+     (goto-char (match-beginning 0))
+     (coq-empty-command-p))
+    ;; not a bullet, we found something else, it should be either a
+--- generic/pg-user.el.orig	2024-09-12 09:58:25.000000000 -0600
++++ generic/pg-user.el	2024-09-29 08:50:12.436670326 -0600
+@@ -638,7 +638,7 @@ white space."
+           ;; to the start of the command.
+           (re-search-forward "[[:blank:]\n]*")
+           (end-of-line)
+-          (when (looking-back "(\\* \\(PASS\\|FAIL\\) \\*)")
++          (when (looking-back "(\\* \\(PASS\\|FAIL\\) \\*)" nil)
+             (delete-char -10)
+             (delete-horizontal-space))
+           (when (or annotate-passing (not (car pr)))

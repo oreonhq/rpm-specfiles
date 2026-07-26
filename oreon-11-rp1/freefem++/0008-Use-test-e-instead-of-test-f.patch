@@ -1,0 +1,42 @@
+From 6b51c5b7b430151ae5688ceaf3f7c1f33e23e0c5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Thu, 11 Apr 2019 15:45:19 +0200
+Subject: [PATCH 08/18] Use test -e instead of test -f
+
+---
+ plugin/seq/load.link.in | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/plugin/seq/load.link.in b/plugin/seq/load.link.in
+index 1be2ef20d..7efdd26b3 100755
+--- a/plugin/seq/load.link.in
++++ b/plugin/seq/load.link.in
+@@ -24,16 +24,16 @@ if [ "$FFFFLAGS" = '@'FF_FLAGS'@' ] ; then FFFFLAGS=""; fi
+ if [ "$FFFLIBS" = '@'FLIBS'@' ] ; then FFFLIBS=""; fi
+ if [ "$FFVERSION" = '@'VERSION'@' ] ; then FFVERSION=""; fi
+ if [ -z "$INCFF" ] ; then
+-    if [ -f "@INCFF@/ff++.hpp" ] ; then
+-	INCFF="'-I@INCFF@'"
+-    elif [ -f "${dircommand}/include/ff++.hpp" ]; then
+-	INCFF="'-I${dircommand}/include'"
+-    elif [ -f ../seq/include/ff++.hpp ]; then
++    if [ -e "@INCFF@/ff++.hpp" ] ; then
++	INCFF="-I@INCFF@"
++    elif [ -e "${dircommand}/include/ff++.hpp" ]; then
++	INCFF="-I${dircommand}/include"
++    elif [ -e ../seq/include/ff++.hpp ]; then
+ 	INCFF="-I../seq/include"
+-    elif [ -f "@FFAPPLI_INC@/ff++.hpp" ] ; then
+-	INCFF="'-I@FFAPPLI_INC@'"
+-    elif [ -f '@ff_prefix_dir@/include/ff++.hpp' ] ; then
+-	INCFF="'-I@ff_prefix_dir@/include'"
++    elif [ -e "FFAPPLI_INC/ff++.hpp" ] ; then
++	INCFF="-IFFAPPLI_INC"
++    elif [ -e '@ff_prefix_dir@/include/ff++.hpp' ] ; then
++	INCFF='-I@ff_prefix_dir@/include'
+     else
+ 	ff=`which freefem++.exe`;
+ 	ffinc=`dirname "$ff"`/seq/include
+-- 
+2.47.1
+

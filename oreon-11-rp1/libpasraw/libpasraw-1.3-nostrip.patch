@@ -1,0 +1,16 @@
+diff -U 3 -dHrN -- a/install.sh b/install.sh
+--- a/install.sh	2020-03-02 09:39:22.000000000 +0100
++++ b/install.sh	2020-03-16 11:06:46.687483281 +0100
+@@ -14,10 +14,10 @@
+ install -m 755 -d $destdir/share/doc
+ install -m 755 -d $destdir/share/doc/libpasraw
+ 
+-install -v -m 644 -s raw/libpasraw.so.*  $destdir/lib/
++install -v -m 755 raw/libpasraw.so.*  $destdir/lib/
+ install -v -m 644 changelog $destdir/share/doc/libpasraw/changelog
+ install -v -m 644 copyright $destdir/share/doc/libpasraw/copyright
+ 
+ cd $destdir/lib
+ ln -s libpasraw.so.1.1 libpasraw.so.1
+-
++ln -s libpasraw.so.1 libpasraw.so

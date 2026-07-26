@@ -1,0 +1,15 @@
+This fixes a new warning from gcc15 pointing out an actual bug which likely was
+not hit before because of the template not getting used.
+
+diff -up ClanLib-1.0.0/Sources/API/Signals/signal_v3.h~ ClanLib-1.0.0/Sources/API/Signals/signal_v3.h
+--- ClanLib-1.0.0/Sources/API/Signals/signal_v3.h~	2006-10-27 03:55:01.000000000 +0200
++++ ClanLib-1.0.0/Sources/API/Signals/signal_v3.h	2025-02-03 15:32:06.835664192 +0100
+@@ -90,7 +90,7 @@ public:
+ 		for (SlotIterator slot_it = impl->slots.begin(); slot_it != impl->slots.end(); slot_it++)
+ 		{
+ 			Slot slot = *slot_it;
+-			slot->add_signal_ref(this->owner);
++			slot->add_signal_ref(this->impl->owner);
+ 		}
+ 	}
+ 

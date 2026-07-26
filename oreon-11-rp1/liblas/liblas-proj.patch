@@ -1,0 +1,11 @@
+diff -rupN --no-dereference libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/cmake/liblas-config.cmake.in libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/cmake/liblas-config.cmake.in
+--- libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b/cmake/liblas-config.cmake.in	2025-11-08 16:34:42.000000000 +0100
++++ libLAS-0756b73ed41211d1bb8d9b96c6767f2350d8fe2b-new/cmake/liblas-config.cmake.in	2025-11-23 20:04:03.581598329 +0100
+@@ -16,6 +16,7 @@ endif ()
+ 
+ include (CMakeFindDependencyMacro)
+ find_dependency (Boost @Boost_VERSION_STRING@ EXACT COMPONENTS iostreams program_options serialization thread)
++find_dependency (PROJ)
+ 
+ # Tell the user project where to find our headers and libraries
+ get_filename_component (_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)

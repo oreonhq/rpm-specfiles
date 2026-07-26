@@ -1,0 +1,93 @@
+diff -up gkrellsun-1.0.0/src20/gkrellsun.c.fixes gkrellsun-1.0.0/src20/gkrellsun.c
+--- gkrellsun-1.0.0/src20/gkrellsun.c.fixes	2006-03-17 08:29:51.000000000 -0500
++++ gkrellsun-1.0.0/src20/gkrellsun.c	2012-03-09 14:05:39.076951940 -0500
+@@ -746,7 +746,7 @@ static void drawTextTime(double tod, int
+ };
+ 
+ static void
+-sun_update_plugin()
++sun_update_plugin( void )
+ {
+    int image_x_offset, image_y_offset;
+    int pos_x, pos_y;
+@@ -1106,7 +1106,7 @@ static void panel_button_event(/*@unused
+    }
+ }
+ 
+-static void load_images()
++static void load_images( void )
+ {
+    GkrellmPiximage *image = NULL;
+ 
+@@ -1134,7 +1134,7 @@ static void load_images()
+ /* Since init is only called upon gkrellm startup, set stuff to NULL here in case user enables plugin */
+ /* If plubin disabled or when gkrellm2 quits */
+ static void
+-cb_plugin_disabled()
++cb_plugin_disabled( void )
+ {
+    gint i, j;
+ 
+@@ -1362,12 +1362,12 @@ static void sun_create_plugin(GtkWidget
+ 
+    if (first_create)
+    {
+-      (void)gtk_signal_connect(GTK_OBJECT(panel->drawing_area),
+-         "expose_event", (GtkSignalFunc) panel_expose_event,
++      (void)g_signal_connect(GTK_OBJECT(panel->drawing_area),
++         "expose_event", G_CALLBACK( panel_expose_event ),
+          NULL);
+ 
+-      (void)gtk_signal_connect(GTK_OBJECT(panel->drawing_area),
+-         "button_press_event", (GtkSignalFunc) panel_button_event,
++      (void)g_signal_connect(GTK_OBJECT(panel->drawing_area),
++         "button_press_event", G_CALLBACK( panel_button_event ),
+          NULL);
+ 
+       tooltip=gtk_tooltips_new();
+@@ -1694,7 +1694,7 @@ sun_create_tab(GtkWidget *tab_vbox)
+ }
+ 
+ static void
+-sun_apply_config()
++sun_apply_config( void )
+ {
+    gint sun, time, whichSun;
+ 
+@@ -1823,7 +1823,7 @@ __declspec(dllexport) GkrellmMonitor *
+ gkrellm_init_plugin(win32_plugin_callbacks* calls)
+ #else
+ GkrellmMonitor *
+-gkrellm_init_plugin()
++gkrellm_init_plugin( void )
+ #endif
+ {
+    gint sun, time;
+diff -up gkrellsun-1.0.0/src20/Moon.c.fixes gkrellsun-1.0.0/src20/Moon.c
+--- gkrellsun-1.0.0/src20/Moon.c.fixes	2004-03-06 01:35:41.000000000 -0500
++++ gkrellsun-1.0.0/src20/Moon.c	2012-03-09 14:05:39.078951920 -0500
+@@ -363,8 +363,7 @@ gdouble * AGE)
+ 
+ gdouble NewMoon(gdouble ax, gdouble bx, gdouble cx)
+ {
+-
+-   gdouble f1, f2, x0, x1, x2, x3, Moon();
++   gdouble f1, f2, x0, x1, x2, x3;
+    gdouble L, B, Rad, AGE, tol = 1e-7;
+ 
+    x0 = ax;
+diff -up gkrellsun-1.0.0/src20/MoonRise.c.fixes gkrellsun-1.0.0/src20/MoonRise.c
+--- gkrellsun-1.0.0/src20/MoonRise.c.fixes	2006-03-16 13:47:37.000000000 -0500
++++ gkrellsun-1.0.0/src20/MoonRise.c	2012-03-09 14:05:39.079951910 -0500
+@@ -63,10 +63,8 @@ Interp(gdouble ym, gdouble y0, gdouble y
+ 
+ static gdouble SinH(CTrans * c, gdouble UT)
+ {
+-
+ 	gdouble TU, TU2, TU3, LambdaMoon, BetaMoon, R, AGE;
+-	gdouble RA_Moon, DEC_Moon, gmst, lmst, Tau, epsilon, Moon();
+-	gdouble angle2pi();
++	gdouble RA_Moon, DEC_Moon, gmst, lmst, Tau, epsilon;
+ 
+ 	TU = (jd(c->year, c->month, c->day, UT) - 2451545.0) / 36525.0;
+ 

@@ -1,0 +1,33 @@
+diff --git a/DisplayCAL/setup.py b/DisplayCAL/setup.py
+index 082f2e72..52d7d19a 100644
+--- a/DisplayCAL/setup.py
++++ b/DisplayCAL/setup.py
+@@ -715,11 +715,7 @@ def setup():
+             )
+             data_files.append(
+                 (
+-                    (
+-                        autostart
+-                        if os.geteuid() == 0 or prefix.startswith("/")
+-                        else autostart_home
+-                    ),
++                    "share/DisplayCAL",
+                     [
+                         os.path.join(
+                             pydir,
+@@ -730,6 +726,7 @@ def setup():
+                     ],
+                 )
+             )
++            print(f"Fichiers {data_files[-1]}")
+             data_files.append(
+                 (
+                     os.path.join(os.path.dirname(data), "man", "man1"),
+@@ -923,6 +920,7 @@ def setup():
+ 
+     packages = [name, f"{name}.lib", f"{name}.lib.agw"]
+ 
++    print(data_files)
+     attrs = {
+         "author": author_ascii,
+         "author_email": author_email,

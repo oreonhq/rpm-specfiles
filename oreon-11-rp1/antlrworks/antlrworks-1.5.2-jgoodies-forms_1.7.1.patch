@@ -1,0 +1,1389 @@
+diff -up ./src/org/antlr/works/debugger/remote/DBRemoteConnectDialog.java.orig ./src/org/antlr/works/debugger/remote/DBRemoteConnectDialog.java
+--- ./src/org/antlr/works/debugger/remote/DBRemoteConnectDialog.java.orig	2014-07-01 23:39:16.217687522 +0200
++++ ./src/org/antlr/works/debugger/remote/DBRemoteConnectDialog.java	2014-07-01 23:42:59.384499626 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.debugger.remote;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.xjlib.appkit.frame.XJDialog;
+ import org.antlr.xjlib.foundation.XJSystem;
+@@ -98,23 +98,23 @@ public class DBRemoteConnectDialog exten
+ 
+         //======== dialogPane ========
+         {
+-        	dialogPane.setBorder(Borders.DIALOG_BORDER);
++        	dialogPane.setBorder(Borders.DIALOG);
+         	dialogPane.setLayout(new BorderLayout());
+ 
+         	//======== contentPane ========
+         	{
+         		contentPane.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.DEFAULT_COLSPEC,
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(Sizes.dluX(120))
+         			},
+         			new RowSpec[] {
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC
+         			}));
+ 
+         		//---- label1 ----
+@@ -139,13 +139,13 @@ public class DBRemoteConnectDialog exten
+ 
+         	//======== buttonBar ========
+         	{
+-        		buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++        		buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+         		buttonBar.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.GLUE_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC,
+-        				FormFactory.RELATED_GAP_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC
++        				FormSpecs.GLUE_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC,
++        				FormSpecs.RELATED_GAP_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC
+         			},
+         			RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/dialog/AWPrefsDialog.java.orig ./src/org/antlr/works/dialog/AWPrefsDialog.java
+--- ./src/org/antlr/works/dialog/AWPrefsDialog.java.orig	2014-07-01 23:39:16.185688408 +0200
++++ ./src/org/antlr/works/dialog/AWPrefsDialog.java	2014-07-01 23:49:49.268116465 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.dialog;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.works.IDE;
+ import org.antlr.works.debugger.local.DBLocal;
+@@ -567,7 +567,7 @@ public class AWPrefsDialog extends XJPan
+ 
+         //======== dialogPane ========
+         {
+-        	dialogPane.setBorder(Borders.DIALOG_BORDER);
++        	dialogPane.setBorder(Borders.DIALOG);
+         	dialogPane.setMinimumSize(new Dimension(540, 350));
+         	dialogPane.setLayout(new BorderLayout());
+ 
+@@ -585,35 +585,35 @@ public class AWPrefsDialog extends XJPan
+         				tabGeneral.setLayout(new FormLayout(
+         					new ColumnSpec[] {
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						new ColumnSpec("max(min;20dlu)"),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						ColumnSpec.decode("max(min;20dlu)"),
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						new ColumnSpec("max(min;40dlu)"),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						ColumnSpec.decode("max(min;40dlu)"),
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(10))
+         					},
+         					new RowSpec[] {
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC
+         					}));
+ 
+         				//---- label2 ----
+@@ -680,42 +680,42 @@ public class AWPrefsDialog extends XJPan
+         				tabEditor.setLayout(new FormLayout(
+         					new ColumnSpec[] {
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(20)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						new ColumnSpec("max(default;45dlu)"),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						ColumnSpec.decode("max(default;45dlu)"),
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(20)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(30)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(10))
+         					},
+         					new RowSpec[] {
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
+         						new RowSpec(Sizes.dluY(10))
+         					}));
+ 
+@@ -794,41 +794,41 @@ public class AWPrefsDialog extends XJPan
+         				tabSyntax.setLayout(new FormLayout(
+         					new ColumnSpec[] {
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(20)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+         					},
+         					new RowSpec[] {
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC
+         					}));
+ 
+         				//---- label26 ----
+@@ -1035,33 +1035,33 @@ public class AWPrefsDialog extends XJPan
+         				tabCompiler.setLayout(new FormLayout(
+         					new ColumnSpec[] {
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
+         						new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        						FormFactory.DEFAULT_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(10))
+         					},
+         					new RowSpec[] {
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC
+         					}));
+ 
+         				//---- jikesRadio ----
+@@ -1122,43 +1122,43 @@ public class AWPrefsDialog extends XJPan
+         				tabDebugger.setLayout(new FormLayout(
+         					new ColumnSpec[] {
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						new ColumnSpec("max(default;20dlu)"),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						ColumnSpec.decode("max(default;20dlu)"),
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(10))
+         					},
+         					new RowSpec[] {
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC
+         					}));
+ 
+         				//---- label33 ----
+@@ -1276,23 +1276,23 @@ public class AWPrefsDialog extends XJPan
+         				panel1.setLayout(new FormLayout(
+         					new ColumnSpec[] {
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC
+         					},
+         					new RowSpec[] {
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC
+         					}));
+ 
+         				//---- label8 ----
+@@ -1331,27 +1331,27 @@ public class AWPrefsDialog extends XJPan
+         				tabUpdates.setLayout(new FormLayout(
+         					new ColumnSpec[] {
+         						new ColumnSpec(Sizes.dluX(10)),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        						FormFactory.DEFAULT_COLSPEC,
+-        						FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        						FormSpecs.DEFAULT_COLSPEC,
++        						FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         						new ColumnSpec(Sizes.dluX(10))
+         					},
+         					new RowSpec[] {
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
+         						new RowSpec(Sizes.dluY(10)),
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC,
+-        						FormFactory.LINE_GAP_ROWSPEC,
+-        						FormFactory.DEFAULT_ROWSPEC
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC,
++        						FormSpecs.LINE_GAP_ROWSPEC,
++        						FormSpecs.DEFAULT_ROWSPEC
+         					}));
+ 
+         				//---- label7 ----
+@@ -1390,26 +1390,26 @@ public class AWPrefsDialog extends XJPan
+                         tabTestRig.setLayout(new FormLayout(
+                                 new ColumnSpec[] {
+                                     new ColumnSpec(Sizes.dluX(10)),
+-                                    FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                                    FormFactory.DEFAULT_COLSPEC,
+-                                    FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                                    FormFactory.DEFAULT_COLSPEC,
+-                                    FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                                    FormFactory.DEFAULT_COLSPEC,
+-                                    FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                                    FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                                    FormSpecs.DEFAULT_COLSPEC,
++                                    FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                                    FormSpecs.DEFAULT_COLSPEC,
++                                    FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                                    FormSpecs.DEFAULT_COLSPEC,
++                                    FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                                     new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                                    FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                                    FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                                     new ColumnSpec(Sizes.dluX(10))
+                                 },
+                                 new RowSpec[] {
+                                     new RowSpec(Sizes.dluY(10)),
+-                                    FormFactory.LINE_GAP_ROWSPEC,
+-                                    FormFactory.DEFAULT_ROWSPEC,
+-                                    FormFactory.UNRELATED_GAP_ROWSPEC,
+-                                    FormFactory.DEFAULT_ROWSPEC,
+-                                    FormFactory.LINE_GAP_ROWSPEC,
++                                    FormSpecs.LINE_GAP_ROWSPEC,
++                                    FormSpecs.DEFAULT_ROWSPEC,
++                                    FormSpecs.UNRELATED_GAP_ROWSPEC,
++                                    FormSpecs.DEFAULT_ROWSPEC,
++                                    FormSpecs.LINE_GAP_ROWSPEC,
+                                     new RowSpec(RowSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                                    FormFactory.LINE_GAP_ROWSPEC,
++                                    FormSpecs.LINE_GAP_ROWSPEC,
+                                     new RowSpec(Sizes.dluY(10))
+                                 }));
+ 
+@@ -1448,11 +1448,11 @@ public class AWPrefsDialog extends XJPan
+ 
+             //======== buttonBar ========
+             {
+-                buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++                buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+                 buttonBar.setLayout(new FormLayout(
+                     new ColumnSpec[] {
+-                        FormFactory.GLUE_COLSPEC,
+-                        FormFactory.BUTTON_COLSPEC
++                        FormSpecs.GLUE_COLSPEC,
++                        FormSpecs.BUTTON_COLSPEC
+                     },
+                     RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/dialog/DebuggerInputDialog.java.orig ./src/org/antlr/works/dialog/DebuggerInputDialog.java
+--- ./src/org/antlr/works/dialog/DebuggerInputDialog.java.orig	2014-07-01 23:39:16.207687799 +0200
++++ ./src/org/antlr/works/dialog/DebuggerInputDialog.java	2014-07-01 23:42:59.381499709 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.dialog;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.works.debugger.DebuggerTab;
+ import org.antlr.works.grammar.element.ElementRule;
+@@ -178,7 +178,7 @@ public class DebuggerInputDialog extends
+ 
+         //======== dialogPane ========
+         {
+-        	dialogPane.setBorder(Borders.DIALOG_BORDER);
++        	dialogPane.setBorder(Borders.DIALOG);
+         	dialogPane.setLayout(new BorderLayout());
+ 
+         	//======== contentPane ========
+@@ -186,25 +186,25 @@ public class DebuggerInputDialog extends
+         		contentPane.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+         				new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				FormFactory.DEFAULT_COLSPEC,
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				FormFactory.DEFAULT_COLSPEC
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC
+         			},
+         			new RowSpec[] {
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(RowSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC
+         			}));
+ 
+         		//---- textInputRadio ----
+@@ -249,13 +249,13 @@ public class DebuggerInputDialog extends
+ 
+         	//======== buttonBar ========
+         	{
+-        		buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++        		buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+         		buttonBar.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.GLUE_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC,
+-        				FormFactory.RELATED_GAP_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC
++        				FormSpecs.GLUE_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC,
++        				FormSpecs.RELATED_GAP_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC
+         			},
+         			RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/dialog/DialogAbout.java.orig ./src/org/antlr/works/dialog/DialogAbout.java
+--- ./src/org/antlr/works/dialog/DialogAbout.java.orig	2014-07-01 23:39:16.211687688 +0200
++++ ./src/org/antlr/works/dialog/DialogAbout.java	2014-07-01 23:51:48.770796716 +0200
+@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ 
+ package org.antlr.works.dialog;
+ 
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.Tool;
+ import org.antlr.stringtemplate.StringTemplate;
+@@ -155,26 +155,26 @@ public class DialogAbout extends XJPanel
+         contentPane.setLayout(new FormLayout(
+         	new ColumnSpec[] {
+         		new ColumnSpec(Sizes.dluX(10)),
+-        		FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        		FormFactory.DEFAULT_COLSPEC,
+-        		FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        		FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        		FormSpecs.DEFAULT_COLSPEC,
++        		FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         		new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        		FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        		FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         		new ColumnSpec(Sizes.dluX(10))
+         	},
+         	new RowSpec[] {
+         		new RowSpec(Sizes.dluY(10)),
+-        		FormFactory.LINE_GAP_ROWSPEC,
++        		FormSpecs.LINE_GAP_ROWSPEC,
+         		new RowSpec(RowSpec.BOTTOM, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        		FormFactory.LINE_GAP_ROWSPEC,
+-        		new RowSpec("top:max(default;15dlu)"),
+-        		FormFactory.LINE_GAP_ROWSPEC,
+-        		new RowSpec("bottom:max(default;10dlu)"),
+-        		FormFactory.LINE_GAP_ROWSPEC,
+-        		new RowSpec("top:max(default;10dlu)"),
+-        		FormFactory.LINE_GAP_ROWSPEC,
+-        		new RowSpec("fill:max(default;60dlu):grow"),
+-        		FormFactory.LINE_GAP_ROWSPEC,
++        		FormSpecs.LINE_GAP_ROWSPEC,
++        		RowSpec.decode("top:max(default;15dlu)"),
++        		FormSpecs.LINE_GAP_ROWSPEC,
++        		RowSpec.decode("bottom:max(default;10dlu)"),
++        		FormSpecs.LINE_GAP_ROWSPEC,
++        		RowSpec.decode("top:max(default;10dlu)"),
++        		FormSpecs.LINE_GAP_ROWSPEC,
++        		RowSpec.decode("fill:max(default;60dlu):grow"),
++        		FormSpecs.LINE_GAP_ROWSPEC,
+         		new RowSpec(Sizes.dluY(10))
+         	}));
+ 
+@@ -220,16 +220,16 @@ public class DialogAbout extends XJPanel
+         		panel2.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+         				new ColumnSpec(Sizes.dluX(10)),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(Sizes.dluX(10))
+         			},
+         			new RowSpec[] {
+         				new RowSpec(Sizes.dluY(10)),
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(RowSpec.FILL, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(Sizes.dluY(10))
+         			}));
+ 
+@@ -247,16 +247,16 @@ public class DialogAbout extends XJPanel
+         		panel1.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+         				new ColumnSpec(Sizes.dluX(10)),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(Sizes.dluX(10))
+         			},
+         			new RowSpec[] {
+         				new RowSpec(Sizes.dluY(10)),
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(RowSpec.FILL, Sizes.dluY(10), FormSpec.DEFAULT_GROW),
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(Sizes.dluY(10))
+         			}));
+ 
+diff -up ./src/org/antlr/works/dialog/DialogGenerate.java.orig ./src/org/antlr/works/dialog/DialogGenerate.java
+--- ./src/org/antlr/works/dialog/DialogGenerate.java.orig	2014-07-01 23:39:16.193688187 +0200
++++ ./src/org/antlr/works/dialog/DialogGenerate.java	2014-07-01 23:52:05.167341204 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.dialog;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.CellConstraints;
+ import com.jgoodies.forms.layout.ColumnSpec;
+ import com.jgoodies.forms.layout.FormLayout;
+@@ -119,23 +119,23 @@ public class DialogGenerate extends XJDi
+ 
+         //======== dialogPane ========
+         {
+-        	dialogPane.setBorder(Borders.DIALOG_BORDER);
++        	dialogPane.setBorder(Borders.DIALOG);
+         	dialogPane.setLayout(new BorderLayout());
+ 
+         	//======== contentPane ========
+         	{
+         		contentPane.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.DEFAULT_COLSPEC,
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				new ColumnSpec("max(min;200dlu):grow"),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				FormFactory.DEFAULT_COLSPEC
++        				FormSpecs.DEFAULT_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				ColumnSpec.decode("max(min;200dlu):grow"),
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC
+         			},
+         			new RowSpec[] {
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC
+         			}));
+ 
+         		//---- label1 ----
+@@ -156,13 +156,13 @@ public class DialogGenerate extends XJDi
+ 
+         	//======== buttonBar ========
+         	{
+-        		buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++        		buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+         		buttonBar.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.GLUE_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC,
+-        				FormFactory.RELATED_GAP_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC
++        				FormSpecs.GLUE_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC,
++        				FormSpecs.RELATED_GAP_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC
+         			},
+         			RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/dialog/DialogPersonalInfo.java.orig ./src/org/antlr/works/dialog/DialogPersonalInfo.java
+--- ./src/org/antlr/works/dialog/DialogPersonalInfo.java.orig	2014-07-01 23:39:16.204687882 +0200
++++ ./src/org/antlr/works/dialog/DialogPersonalInfo.java	2014-07-01 23:52:12.279143610 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.dialog;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.works.IDE;
+ import org.antlr.works.prefs.AWPrefs;
+@@ -151,7 +151,7 @@ public class DialogPersonalInfo extends
+ 
+         //======== dialogPane ========
+         {
+-        	dialogPane.setBorder(Borders.DIALOG_BORDER);
++        	dialogPane.setBorder(Borders.DIALOG);
+         	dialogPane.setPreferredSize(new Dimension(750, 500));
+         	dialogPane.setLayout(new BorderLayout());
+ 
+@@ -159,53 +159,53 @@ public class DialogPersonalInfo extends
+         	{
+         		contentPane.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.DEFAULT_COLSPEC,
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(Sizes.dluX(50)),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				new ColumnSpec("max(min;100dlu):grow"),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				new ColumnSpec("max(default;30dlu)"),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				FormFactory.DEFAULT_COLSPEC
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				ColumnSpec.decode("max(min;100dlu):grow"),
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				ColumnSpec.decode("max(default;30dlu)"),
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC
+         			},
+         			new RowSpec[] {
+         				new RowSpec(RowSpec.FILL, Sizes.DEFAULT, FormSpec.NO_GROW),
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(Sizes.DLUY5),
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(Sizes.DLUY5),
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(RowSpec.CENTER, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+         			}));
+ 
+@@ -318,13 +318,13 @@ public class DialogPersonalInfo extends
+ 
+         	//======== buttonBar ========
+         	{
+-        		buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++        		buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+         		buttonBar.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.GLUE_COLSPEC,
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				FormFactory.DEFAULT_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC
++        				FormSpecs.GLUE_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC
+         			},
+         			RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/dialog/DialogReports.java.orig ./src/org/antlr/works/dialog/DialogReports.java
+--- ./src/org/antlr/works/dialog/DialogReports.java.orig	2014-07-01 23:39:16.178688602 +0200
++++ ./src/org/antlr/works/dialog/DialogReports.java	2014-07-01 23:52:22.303865101 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.dialog;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.xjlib.appkit.frame.XJDialog;
+ import org.antlr.xjlib.appkit.utils.XJAlert;
+@@ -320,7 +320,7 @@ public class DialogReports extends XJDia
+ 
+         //======== dialogPane ========
+         {
+-        	dialogPane.setBorder(Borders.DIALOG_BORDER);
++        	dialogPane.setBorder(Borders.DIALOG);
+         	dialogPane.setPreferredSize(new Dimension(500, 500));
+         	dialogPane.setLayout(new BorderLayout());
+ 
+@@ -328,25 +328,25 @@ public class DialogReports extends XJDia
+         	{
+         		contentPane.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+-        				FormFactory.DEFAULT_COLSPEC,
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				new ColumnSpec("max(min;30dlu)"),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				FormFactory.RELATED_GAP_COLSPEC,
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				new ColumnSpec("max(min;30dlu):grow"),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.DEFAULT_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				ColumnSpec.decode("max(min;30dlu)"),
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.RELATED_GAP_COLSPEC,
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				ColumnSpec.decode("max(min;30dlu):grow"),
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+         				new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+         			},
+         			new RowSpec[] {
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
+-        				FormFactory.DEFAULT_ROWSPEC,
+-        				FormFactory.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
++        				FormSpecs.DEFAULT_ROWSPEC,
++        				FormSpecs.LINE_GAP_ROWSPEC,
+         				new RowSpec(RowSpec.CENTER, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+         			}));
+ 
+@@ -402,14 +402,14 @@ public class DialogReports extends XJDia
+ 
+         	//======== buttonBar ========
+         	{
+-        		buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++        		buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+         		buttonBar.setLayout(new FormLayout(
+         			new ColumnSpec[] {
+         				new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-        				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC,
+-        				FormFactory.RELATED_GAP_COLSPEC,
+-        				FormFactory.BUTTON_COLSPEC
++        				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC,
++        				FormSpecs.RELATED_GAP_COLSPEC,
++        				FormSpecs.BUTTON_COLSPEC
+         			},
+         			RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/dialog/DialogTestTemplate.java.orig ./src/org/antlr/works/dialog/DialogTestTemplate.java
+--- ./src/org/antlr/works/dialog/DialogTestTemplate.java.orig	2014-07-01 23:39:16.200687993 +0200
++++ ./src/org/antlr/works/dialog/DialogTestTemplate.java	2014-07-01 23:42:59.379499765 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.dialog;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.works.IDE;
+ import org.antlr.works.debugger.DebuggerTab;
+@@ -235,7 +235,7 @@ public class DialogTestTemplate extends
+ 
+         //======== dialogPane ========
+         {
+-            dialogPane.setBorder(Borders.DIALOG_BORDER);
++            dialogPane.setBorder(Borders.DIALOG);
+             dialogPane.setMinimumSize(new Dimension(340, 250));
+             dialogPane.setLayout(new BorderLayout());
+ 
+@@ -244,19 +244,19 @@ public class DialogTestTemplate extends
+                 contentPanel.setLayout(new FormLayout(
+                     new ColumnSpec[] {
+                         new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                        FormFactory.DEFAULT_COLSPEC,
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.DEFAULT_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                         new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+                     },
+                     new RowSpec[] {
+-                        FormFactory.DEFAULT_ROWSPEC,
+-                        FormFactory.LINE_GAP_ROWSPEC,
+-                        FormFactory.DEFAULT_ROWSPEC,
+-                        FormFactory.LINE_GAP_ROWSPEC,
++                        FormSpecs.DEFAULT_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
++                        FormSpecs.DEFAULT_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
+                         new RowSpec(RowSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                        FormFactory.LINE_GAP_ROWSPEC,
+-                        FormFactory.DEFAULT_ROWSPEC
++                        FormSpecs.LINE_GAP_ROWSPEC,
++                        FormSpecs.DEFAULT_ROWSPEC
+                     }));
+ 
+                 //---- textTestRadio ----
+@@ -298,13 +298,13 @@ public class DialogTestTemplate extends
+ 
+             //======== buttonBar ========
+             {
+-                buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++                buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+                 buttonBar.setLayout(new FormLayout(
+                     new ColumnSpec[] {
+-                        FormFactory.GLUE_COLSPEC,
+-                        FormFactory.BUTTON_COLSPEC,
+-                        FormFactory.RELATED_GAP_COLSPEC,
+-                        FormFactory.BUTTON_COLSPEC
++                        FormSpecs.GLUE_COLSPEC,
++                        FormSpecs.BUTTON_COLSPEC,
++                        FormSpecs.RELATED_GAP_COLSPEC,
++                        FormSpecs.BUTTON_COLSPEC
+                     },
+                     RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/dialog/FindAndReplaceDialog.java.orig ./src/org/antlr/works/dialog/FindAndReplaceDialog.java
+--- ./src/org/antlr/works/dialog/FindAndReplaceDialog.java.orig	2014-07-01 23:39:16.197688076 +0200
++++ ./src/org/antlr/works/dialog/FindAndReplaceDialog.java	2014-07-01 23:39:16.199688021 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ 
+ package org.antlr.works.dialog;
+ 
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.works.find.FindAndReplace;
+ import org.antlr.xjlib.appkit.frame.XJPanel;
+@@ -196,34 +196,34 @@ public class FindAndReplaceDialog extend
+         contentPane.setLayout(new FormLayout(
+                 new ColumnSpec[] {
+                         new ColumnSpec(Sizes.DLUX5),
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                         new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                        FormFactory.DEFAULT_COLSPEC,
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                        FormFactory.DEFAULT_COLSPEC,
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.DEFAULT_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.DEFAULT_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                         new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                        FormFactory.DEFAULT_COLSPEC,
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                        FormFactory.DEFAULT_COLSPEC,
+-                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.DEFAULT_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                        FormSpecs.DEFAULT_COLSPEC,
++                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                         new ColumnSpec(Sizes.DLUX5)
+                 },
+                 new RowSpec[] {
+                         new RowSpec(Sizes.DLUY5),
+-                        FormFactory.LINE_GAP_ROWSPEC,
+-                        FormFactory.DEFAULT_ROWSPEC,
+-                        FormFactory.LINE_GAP_ROWSPEC,
+-                        FormFactory.DEFAULT_ROWSPEC,
+-                        FormFactory.LINE_GAP_ROWSPEC,
+-                        FormFactory.DEFAULT_ROWSPEC,
+-                        FormFactory.LINE_GAP_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
++                        FormSpecs.DEFAULT_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
++                        FormSpecs.DEFAULT_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
++                        FormSpecs.DEFAULT_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
+                         new RowSpec(RowSpec.CENTER, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                        FormFactory.LINE_GAP_ROWSPEC,
+-                        FormFactory.DEFAULT_ROWSPEC,
+-                        FormFactory.LINE_GAP_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
++                        FormSpecs.DEFAULT_ROWSPEC,
++                        FormSpecs.LINE_GAP_ROWSPEC,
+                         new RowSpec(Sizes.DLUY5)
+                 }));
+ 
+diff -up ./src/org/antlr/works/dialog/NewWizardDialog.java.orig ./src/org/antlr/works/dialog/NewWizardDialog.java
+--- ./src/org/antlr/works/dialog/NewWizardDialog.java.orig	2014-07-01 23:39:16.214687605 +0200
++++ ./src/org/antlr/works/dialog/NewWizardDialog.java	2014-07-01 23:42:59.383499654 +0200
+@@ -32,7 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ package org.antlr.works.dialog;
+ 
+ import com.jgoodies.forms.factories.Borders;
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.stringtemplate.StringTemplate;
+ import org.antlr.stringtemplate.StringTemplateGroup;
+@@ -183,26 +183,26 @@ public class NewWizardDialog extends XJD
+ 
+         //======== dialogPane ========
+         {
+-            dialogPane.setBorder(Borders.DIALOG_BORDER);
++            dialogPane.setBorder(Borders.DIALOG);
+             dialogPane.setLayout(new BorderLayout());
+ 
+             //======== contentPanel ========
+             {
+                 contentPanel.setLayout(new FormLayout(
+                         new ColumnSpec[] {
+-                                FormFactory.RELATED_GAP_COLSPEC,
+-                                FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                                FormSpecs.RELATED_GAP_COLSPEC,
++                                FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                                 new ColumnSpec(ColumnSpec.RIGHT, Sizes.DEFAULT, FormSpec.NO_GROW),
+-                                FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                                FormFactory.DEFAULT_COLSPEC,
+-                                FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                                FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                                FormSpecs.DEFAULT_COLSPEC,
++                                FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                                 new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+                         },
+                         new RowSpec[] {
+-                                FormFactory.DEFAULT_ROWSPEC,
+-                                FormFactory.LINE_GAP_ROWSPEC,
+-                                FormFactory.DEFAULT_ROWSPEC,
+-                                FormFactory.UNRELATED_GAP_ROWSPEC,
++                                FormSpecs.DEFAULT_ROWSPEC,
++                                FormSpecs.LINE_GAP_ROWSPEC,
++                                FormSpecs.DEFAULT_ROWSPEC,
++                                FormSpecs.UNRELATED_GAP_ROWSPEC,
+                                 new RowSpec(RowSpec.TOP, Sizes.DEFAULT, RowSpec.DEFAULT_GROW)
+                         }
+                 ));
+@@ -272,7 +272,7 @@ public class NewWizardDialog extends XJD
+                     lexicalItemPanel.setLayout(new FormLayout(
+                             new ColumnSpec[] {
+                                     new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                                    FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                                    FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                                     new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+                             },
+                             new RowSpec[] {
+@@ -286,19 +286,19 @@ public class NewWizardDialog extends XJD
+                                 new ColumnSpec[] {
+                                         new ColumnSpec(ColumnSpec.DEFAULT, Sizes.dluX(10), FormSpec.NO_GROW),
+                                         new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                                         new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+                                 },
+                                 new RowSpec[] {
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC
+                                 }
+                         ));
+ 
+@@ -334,12 +334,12 @@ public class NewWizardDialog extends XJD
+                             commentsPanel.setBorder(new TitledBorder(null, null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION));
+                             commentsPanel.setLayout(new FormLayout(
+                                     new ColumnSpec[] {
+-                                            FormFactory.DEFAULT_COLSPEC
++                                            FormSpecs.DEFAULT_COLSPEC
+                                     },
+                                     new RowSpec[] {
+-                                            FormFactory.DEFAULT_ROWSPEC,
+-                                            FormFactory.LINE_GAP_ROWSPEC,
+-                                            FormFactory.DEFAULT_ROWSPEC
++                                            FormSpecs.DEFAULT_ROWSPEC,
++                                            FormSpecs.LINE_GAP_ROWSPEC,
++                                            FormSpecs.DEFAULT_ROWSPEC
+                                     }
+                             ));
+ 
+@@ -387,21 +387,21 @@ public class NewWizardDialog extends XJD
+                                 new ColumnSpec[] {
+                                         new ColumnSpec(ColumnSpec.DEFAULT, Sizes.dluX(10), FormSpec.NO_GROW),
+                                         new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW),
+-                                        FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                                        FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                                         new ColumnSpec(ColumnSpec.FILL, Sizes.DEFAULT, FormSpec.DEFAULT_GROW)
+                                 },
+                                 new RowSpec[] {
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC,
+-                                        FormFactory.LINE_GAP_ROWSPEC,
+-                                        FormFactory.DEFAULT_ROWSPEC
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC,
++                                        FormSpecs.LINE_GAP_ROWSPEC,
++                                        FormSpecs.DEFAULT_ROWSPEC
+                                 }
+                         ));
+ 
+@@ -425,12 +425,12 @@ public class NewWizardDialog extends XJD
+                             stringPanel.setBorder(new EtchedBorder());
+                             stringPanel.setLayout(new FormLayout(
+                                     new ColumnSpec[] {
+-                                            FormFactory.DEFAULT_COLSPEC
++                                            FormSpecs.DEFAULT_COLSPEC
+                                     },
+                                     new RowSpec[] {
+-                                            FormFactory.DEFAULT_ROWSPEC,
+-                                            FormFactory.LINE_GAP_ROWSPEC,
+-                                            FormFactory.DEFAULT_ROWSPEC
++                                            FormSpecs.DEFAULT_ROWSPEC,
++                                            FormSpecs.LINE_GAP_ROWSPEC,
++                                            FormSpecs.DEFAULT_ROWSPEC
+                                     }
+                             ));
+ 
+@@ -460,14 +460,14 @@ public class NewWizardDialog extends XJD
+                             wsPanel.setBorder(new EtchedBorder());
+                             wsPanel.setLayout(new FormLayout(
+                                     new ColumnSpec[] {
+-                                            FormFactory.DEFAULT_COLSPEC
++                                            FormSpecs.DEFAULT_COLSPEC
+                                     },
+                                     new RowSpec[] {
+-                                            FormFactory.DEFAULT_ROWSPEC,
+-                                            FormFactory.LINE_GAP_ROWSPEC,
+-                                            FormFactory.DEFAULT_ROWSPEC,
+-                                            FormFactory.LINE_GAP_ROWSPEC,
+-                                            FormFactory.DEFAULT_ROWSPEC
++                                            FormSpecs.DEFAULT_ROWSPEC,
++                                            FormSpecs.LINE_GAP_ROWSPEC,
++                                            FormSpecs.DEFAULT_ROWSPEC,
++                                            FormSpecs.LINE_GAP_ROWSPEC,
++                                            FormSpecs.DEFAULT_ROWSPEC
+                                     }
+                             ));
+ 
+@@ -499,13 +499,13 @@ public class NewWizardDialog extends XJD
+ 
+             //======== buttonBar ========
+             {
+-                buttonBar.setBorder(Borders.BUTTON_BAR_GAP_BORDER);
++                buttonBar.setBorder(Borders.BUTTON_BAR_PAD);
+                 buttonBar.setLayout(new FormLayout(
+                     new ColumnSpec[] {
+-                        FormFactory.GLUE_COLSPEC,
+-                        FormFactory.BUTTON_COLSPEC,
+-                        FormFactory.RELATED_GAP_COLSPEC,
+-                        FormFactory.BUTTON_COLSPEC
++                        FormSpecs.GLUE_COLSPEC,
++                        FormSpecs.BUTTON_COLSPEC,
++                        FormSpecs.RELATED_GAP_COLSPEC,
++                        FormSpecs.BUTTON_COLSPEC
+                     },
+                     RowSpec.decodeSpecs("pref")));
+ 
+diff -up ./src/org/antlr/works/SplashScreen.java.orig ./src/org/antlr/works/SplashScreen.java
+--- ./src/org/antlr/works/SplashScreen.java.orig	2014-07-01 23:39:16.220687439 +0200
++++ ./src/org/antlr/works/SplashScreen.java	2014-07-01 23:39:16.221687411 +0200
+@@ -31,7 +31,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE PO
+ 
+ package org.antlr.works;
+ 
+-import com.jgoodies.forms.factories.FormFactory;
++import com.jgoodies.forms.layout.FormSpecs;
+ import com.jgoodies.forms.layout.*;
+ import org.antlr.works.utils.IconManager;
+ import org.antlr.works.utils.Localizable;
+@@ -83,24 +83,24 @@ public class SplashScreen extends JWindo
+         contentPane.setLayout(new FormLayout(
+             new ColumnSpec[] {
+                 new ColumnSpec(Sizes.dluX(0)),
+-                FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+-                FormFactory.DEFAULT_COLSPEC,
++                FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
++                FormSpecs.DEFAULT_COLSPEC,
+                 new ColumnSpec(ColumnSpec.LEFT, Sizes.DLUX5, FormSpec.NO_GROW),
+-                FormFactory.DEFAULT_COLSPEC,
+-                FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
++                FormSpecs.DEFAULT_COLSPEC,
++                FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+                 new ColumnSpec(Sizes.dluX(10))
+             },
+             new RowSpec[] {
+                 new RowSpec(Sizes.dluY(10)),
+-                FormFactory.LINE_GAP_ROWSPEC,
++                FormSpecs.LINE_GAP_ROWSPEC,
+                 new RowSpec(RowSpec.TOP, Sizes.DEFAULT, FormSpec.NO_GROW),
+-                FormFactory.LINE_GAP_ROWSPEC,
++                FormSpecs.LINE_GAP_ROWSPEC,
+                 new RowSpec(RowSpec.TOP, Sizes.dluY(10), FormSpec.NO_GROW),
+-                FormFactory.LINE_GAP_ROWSPEC,
+-                FormFactory.DEFAULT_ROWSPEC,
+-                FormFactory.LINE_GAP_ROWSPEC,
+-                FormFactory.DEFAULT_ROWSPEC,
+-                FormFactory.LINE_GAP_ROWSPEC,
++                FormSpecs.LINE_GAP_ROWSPEC,
++                FormSpecs.DEFAULT_ROWSPEC,
++                FormSpecs.LINE_GAP_ROWSPEC,
++                FormSpecs.DEFAULT_ROWSPEC,
++                FormSpecs.LINE_GAP_ROWSPEC,
+                 new RowSpec(Sizes.dluY(10))
+             }));
+ 

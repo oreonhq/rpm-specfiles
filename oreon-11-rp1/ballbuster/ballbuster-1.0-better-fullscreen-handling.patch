@@ -1,0 +1,117 @@
+diff -up ballbuster-1.0/main.cpp.orig ballbuster-1.0/main.cpp
+--- ballbuster-1.0/main.cpp.orig	2016-02-15 15:15:20.781925176 +0100
++++ ballbuster-1.0/main.cpp	2016-02-15 15:15:33.738986682 +0100
+@@ -61,7 +60,11 @@ testy::testy()
+ 	catchbluestart = catchredstart = CL_System::get_time();
+ 	fireball = blaster = stageover = transitionout = died = dying = false;
+ 	deathstart= 0;
+-	fullscreen= true;
++	fullscreen= false;
++	fullscreen_width = -1;
++	fullscreen_height = -1;
++	windowed_width = 800;
++	windowed_height = 600;
+ 
+ 	transitionspeed= 0;
+ 	transdelay= 100; transstart= 0;
+@@ -109,6 +112,29 @@ int testy::main(int argc, char **argv)
+ //	try {
+ 		// initialization, looks like they need to be nested
+ 	unsigned int timer = CL_System::get_time();
++	int width;
++	int height;
++
++	for (int i = 1; i < argc; i++) {
++		if (strcmp(argv[i], "-windowsize") == 0 && ++i < argc &&
++		    sscanf(argv[i], "%dx%d", &windowed_width,
++					     &windowed_height) == 2)
++			;
++		else if (strcmp(argv[i], "-fullscreensize") == 0 && ++i < argc
++		         && sscanf(argv[i], "%dx%d", &fullscreen_width,
++						     &fullscreen_height) == 2)
++			;
++		else if (strcmp(argv[i], "-fullscreen") == 0)
++			fullscreen = true;
++#ifdef _DEBUG
++		else if (strcmp(argv[i], "-debug") == 0)
++			debugger = true;
++#endif
++		else {
++			printf("Usage: ballbuster [-windowsize XXXxYYY] [-fullscreensize XXXxYYY] [-fullscreen]\n");
++			return 1;
++		}
++	}
+ 
+ 	srand(timer);
+ 
+@@ -119,17 +145,27 @@ int testy::main(int argc, char **argv)
+ 	CL_SetupVorbis::init();
+ 	CL_SoundOutput output(44100);
+ 
+-	bool fulls = true;
+-
+-#ifdef _DEBUG
+-	if (argc > 1)
+-		if (strcmp(argv[1], "-debug") == 0) debugger = true;
+-#endif
+ 	if (debugger)
+-		fulls = false;
++		fullscreen = false;
++
++	if (fullscreen_height == -1) {
++		std::vector<CL_DisplayMode> &modes =
++			CL_DisplayMode::get_display_modes();
++		if (modes.size() > 0) {
++			CL_Size size = modes[0].get_resolution();
++			fullscreen_width = size.width;
++			fullscreen_height = size.height;
++			} else {
++			fullscreen_width = 800;
++			fullscreen_height = 600;
++			}
++		}
+ 
+ 	// now it gets fun, set up the display mode
+-	CL_DisplayWindow mywindow("Ball: Buster", 800, 600, fulls, false);
++	width = fullscreen ? fullscreen_width : windowed_width;
++	height = fullscreen ? fullscreen_height : windowed_height;
++	CL_DisplayWindow mywindow("Ball: Buster", width, height, fullscreen, false);
++	CL_Display::set_scale(width / 800.0, height / 600.0);
+ 
+ 	displayFormat = &mywindow.get_buffer(0);
+ 
+@@ -1146,14 +1182,14 @@ void testy::mouseRelease(const CL_InputE
+ 			}
+ 		if(mousex > 100-20 && mousex < 500 && mousey > 190 && mousey < 220) {
+ 			if(fullscreen) { 
++				CL_Display::set_size(windowed_width, windowed_height);
+ 				CL_Display::set_windowed(); fullscreen= false;
+-				CL_Display::set_size(800, 600);
+-				return;
+-				}
+-			if(!fullscreen) { 
+-				CL_Display::set_fullscreen(800, 600, 32); fullscreen= true; 
+-				return;
++				} else {
++				CL_Display::set_fullscreen(fullscreen_width, fullscreen_height, 32); fullscreen= true;
+ 				}
++			CL_Display::set_scale(CL_Display::get_width() / 800.0,
++					      CL_Display::get_height() / 600.0);
++			return;
+ 			}
+ 		if(mousex > 100-20 && mousex < 500 && mousey > 220 && mousey < 250) {
+ 			bgscroll= bgscroll ? false : true;
+diff -up ballbuster-1.0/main.h~ ballbuster-1.0/main.h
+--- ballbuster-1.0/main.h~	2016-02-15 15:40:30.000000000 +0100
++++ ballbuster-1.0/main.h	2016-02-15 15:41:34.336494247 +0100
+@@ -222,6 +222,10 @@ private:
+ 	char brush;
+ 	string editormode;
+ 	bool fullscreen;
++	int fullscreen_width;
++	int fullscreen_height;
++	int windowed_width;
++	int windowed_height;
+ 
+ 	string runEditor();
+ 	void loadEditor();

@@ -1,0 +1,11 @@
+--- cxxtest-4.4/cxxtest/unix.h.orig	2014-06-03 21:57:07.000000000 -0600
++++ cxxtest-4.4/cxxtest/unix.h	2023-07-05 14:13:04.678038839 -0600
+@@ -60,7 +60,7 @@ public:
+         if (tracker().failedTests())
+         {
+             (*_o) << "Failed " << tracker().failedTests() << " of " << totalTests << endl;
+-            unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracer().skippedTests();
++            unsigned numPassed = desc.numTotalTests() - tracker().failedTests() - tracker().skippedTests();
+             unsigned numTotal = desc.numTotalTests() - tracker().skippedTests();
+             if (numTotal == 0)
+             {

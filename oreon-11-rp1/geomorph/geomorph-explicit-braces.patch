@@ -1,0 +1,19 @@
+diff -rup a/src/utils/x_alloc.c b/src/utils/x_alloc.c
+--- a/src/utils/x_alloc.c	2016-05-13 09:49:35.740378003 +0200
++++ b/src/utils/x_alloc.c	2016-05-13 10:02:15.972085060 +0200
+@@ -253,13 +253,14 @@ static void add_node (gpointer ptr, gint
+ 
+ static void check_ptr (gpointer ptr, gchar *name) {
+ 	// Check memory
+-	if (!ptr)
++	if (!ptr) {
+ 		if (!HEAP.no_mem_exit) {
+ 			printf ("*** No more memory available when allocating %s - stopping ***\n", name);
+ 			exit(99);
+ 		}
+ 		else
+ 			(*HEAP.no_mem_exit) (name);
++	}
+ }
+ 
+ gpointer x_malloc (size_t size, gchar *name) {

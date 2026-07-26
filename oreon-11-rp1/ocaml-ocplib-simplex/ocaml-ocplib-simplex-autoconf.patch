@@ -1,0 +1,23 @@
+--- configure.in.orig  2017-08-23 06:49:52.000000000 -0600
++++ configure.in       2021-03-29 14:40:50.317505290 -0600
+@@ -29,9 +29,11 @@
+ #   OCAMLWIN32    "yes"/"no" depending on Sys.os_type = "Win32"
+ #   EXE           ".exe" if OCAMLWIN32=yes, "" otherwise
+ 
++AC_INIT([ocplib-simplex], [0.4])
++
+ # check for one particular file of the sources 
+ # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
+-AC_INIT(src/core.ml)
++AC_CONFIG_SRCDIR([src/core.ml])
+ 
+ # Check for Ocaml compilers
+ 
+@@ -137,5 +139,6 @@ AC_SUBST(OCAMLWIN32)
+ AC_SUBST(EXE)
+ 
+ # Finally create the Makefile.configurable from Makefile.configurable.in
+-AC_OUTPUT(Makefile)
++AC_CONFIG_FILES([Makefile])
++AC_OUTPUT
+ chmod a-w Makefile

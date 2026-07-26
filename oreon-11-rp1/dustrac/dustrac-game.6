@@ -1,0 +1,26 @@
+.TH DUSTRAC\-GAME 6 "2025-09-12" "" "Games Manual"
+.SH NAME
+dustrac\-game \- traditional 2D top-down racing game
+.SH SYNOPSIS
+.B dustrac\-game
+[\fIOPTIONS\fR]
+.
+.SH OPTIONS
+.IP "\fB\-h\fR, \fB\-\-help\fR"
+Show usage help and exit.
+.IP "\fB\-\-screen\fR \fINUMBER\fR"
+On multi\-display setups, force running on a certain screen (numbered from zero).
+.IP "\fB\-\-lang\fR \fIVALUE\fR"
+Force language: fi, fr, it, cs, nl, ru, tr.
+.IP "\fB\-\-no\-vsync\fR"
+Force vsync off.
+.IP "\fB\-\-debug\fR"
+Set log level to debug.
+.IP "\fB\-\-trace\fR"
+Set log level to trace.
+.
+.SH FILES
+The game's data files can be found in \fB/usr/share/dustrac/\fR.
+
+The game will look for custom racetracks inside \fB${XDG_DATA_HOME}/DustRacing2D/tracks/\fR,
+as well as \fB${HOME}/DustRacingTracks/\fR.

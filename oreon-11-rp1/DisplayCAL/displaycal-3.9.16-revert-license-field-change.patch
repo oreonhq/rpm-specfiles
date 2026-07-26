@@ -1,0 +1,29 @@
+From 480bbe135a4fbaed58d66a0551a38feae5050408 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@fedoraproject.org>
+Date: Mon, 5 May 2025 07:48:39 -0400
+Subject: [PATCH] Revert "[#536] Updated `license` entry to a simple text in
+ `pyproject.toml` as Python 3.8 support is now dropped."
+
+This fixes the buildrequires generator for F42 and older.
+
+This reverts commit 95914773af355d05da32208b5df8178999cec62b.
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index b43679f0..59a01f0f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -27,7 +27,7 @@ classifiers = [
+ ]
+ description = "Display calibration and profiling with a focus on accuracy and versatility"
+ dynamic = ["version", "dependencies"]
+-license = "GPL-3.0-or-later"
++license = {text = "GPL-3.0-or-later"}
+ maintainers = [
+     {name = "Erkan Özgür Yılmaz", email = "eoyilmaz@gmail.com"},
+ ]
+-- 
+2.49.0
+

@@ -1,0 +1,27 @@
+From c441d8a698d252908b0cd3957e9fc1c69123abde Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Sun, 9 Feb 2025 10:57:02 +0100
+Subject: [PATCH] Remove unneeded dev dependencies
+
+---
+ aw-client-rust/Cargo.toml | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/aw-client-rust/Cargo.toml b/aw-client-rust/Cargo.toml
+index f41c370..bf8ad4e 100644
+--- a/aw-client-rust/Cargo.toml
++++ b/aw-client-rust/Cargo.toml
+@@ -12,9 +12,3 @@ serde_json = "1.0"
+ chrono = { version = "0.4", features = ["serde"] }
+ aw-models = { path = "../aw-models" }
+ tokio = { version = "1.28.2", features = ["rt"] }
+-
+-[dev-dependencies]
+-aw-datastore = { path = "../aw-datastore" }
+-aw-server = { path = "../aw-server", default-features = false, features=[] }
+-rocket = "0.5.0-rc.1"
+-tokio-test = "*"
+-- 
+2.48.1
+

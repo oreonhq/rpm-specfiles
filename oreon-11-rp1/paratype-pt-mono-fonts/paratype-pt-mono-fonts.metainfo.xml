@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Rajeesh K V <rajeesh AT inflo DOT ws> -->
+<component type="font">
+  <id>paratype-pt-mono</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>PT Mono</name>
+  <summary>A pan-Cyrillic monospace typeface</summary>
+  <description>
+    <p>
+    Font PT Mono™ — the last addition to the pan-Cyrillic font superfamily 
+	PT Sans – PT Serif developed for the project “Public Types of Russian Federation”.
+
+	PT Mono was developed for the special needs — for use in forms, tables,
+	work sheets etc. Equal widths of characters are very helpful in setting
+	complex documents, with such font you may easily calculate size of entry 
+	fields, column widths in tables and so on. One of the most important area 
+	of use is Web sites of «electronic governments» where visitors have to fill 
+	different request forms. Currently PT Mono consists of just one Regular style.
+
+	PT Mono was designed by Alexandra Korolkova with participation of 
+	Isabella Chaeva and with financial support of Google.
+	</p>
+  </description>
+  <updatecontact>rajeesh_at_inflo_dot_ws</updatecontact>
+  <url type="homepage">http://www.paratype.com/public/</url>
+</component>
+

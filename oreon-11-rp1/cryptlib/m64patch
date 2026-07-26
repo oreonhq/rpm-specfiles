@@ -1,0 +1,11 @@
+--- cl-original/tools/ccopts.sh	2026-02-24 12:46:41.438914430 +0100
++++ cl-patched/tools/ccopts.sh	2026-02-24 12:47:39.922282563 +0100
+@@ -1256,7 +1256,7 @@
+ 		if [ $GENERICBUILD -gt 0 ] ; then
+ 			echo "  (Enabling lowest-common-denominator build options for cross-platform library)." >&2 ;
+ 		else
+-			CCARGS="$CCARGS -march=x86-64-v3" ;
++			CCARGS="$CCARGS -m64" ;
+ 		fi
+ 	elif [ "$COMPILER_VER" -ge 45 ] ; then
+ 		if [ $GENERICBUILD -gt 0 ] ; then

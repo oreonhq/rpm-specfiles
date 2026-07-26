@@ -1,0 +1,63 @@
+.TH HATCH\-CLEAN "1" "August 2024" "" "User Commands"
+.SH NAME
+.B hatch\ clean
+\(en Remove build artifacts
+.SH SYNOPSIS
+.B hatch\ clean
+.RI [ OPTIONS ]
+.RI [ LOCATION ]
+.SH OPTIONS
+.TP
+.B \-t\fR, \fB\-\-target\ \fITEXT
+The target with which to remove artifacts,
+overriding project defaults.
+This may be selected multiple times
+e.g. \fB\-t\ sdist \-t\ wheel\fR
+.TP
+.B \-\-hooks\-only
+Whether or not to only remove artifacts from build hooks
+[env var:
+.BR HATCH_BUILD_HOOKS_ONLY ]
+.TP
+.B \-\-no\-hooks
+Whether or not to ignore artifacts from build hooks
+[env var:
+.BR HATCH_BUILD_NO_HOOKS ]
+.TP
+.B \-\-ext
+Whether or not to only remove artifacts from build hooks for
+distributing binary Python packages, such as compiled extensions.
+Equivalent to
+.B \-\-hooks\-only\ \-t\ wheel
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH ENVIRONMENT
+.TP
+.B HATCH_BUILD_HOOKS_ONLY
+Whether or not to only remove artifacts from build hooks
+[option:
+.BR \-\-hooks\-only ]
+.TP
+.B HATCH_BUILD_NO_HOOKS
+Whether or not to ignore artifacts from build hooks
+[option:
+.BR \-\-no\-hooks ]
+.SH "SEE ALSO"
+.BR hatch\-build (1),
+.BR hatch\-config (1),
+.BR hatch\-dep (1),
+.BR hatch\-env (1),
+.BR hatch\-fmt (1),
+.BR hatch\-new (1),
+.BR hatch\-project (1),
+.BR hatch\-publish (1),
+.BR hatch\-python (1),
+.BR hatch\-run (1),
+.BR hatch\-self (1),
+.BR hatch\-shell (1),
+.BR hatch\-status (1),
+.BR hatch\-test (1),
+.BR hatch\-version (1)
+.P
+.BR hatch (1)

@@ -1,0 +1,12 @@
+diff -up palp-2.1/cws.c.orig palp-2.1/cws.c
+--- palp-2.1/cws.c.orig	2020-02-11 12:27:58.028217444 -0700
++++ palp-2.1/cws.c	2020-02-11 12:32:17.084911522 -0700
+@@ -1739,7 +1739,7 @@ Long NP_use_lat(EqList *_E, PolyPointLis
+ {
+     int tmp;
+     char command[100];
+-    sprintf(command,"count zzL.tmp | grep '*' | awk '{print $7}' > zzL.tmp1");
++    sprintf(command,"latte-count zzL.tmp | grep '*' | awk '{print $7}' > zzL.tmp1");
+     
+     td_Print_EL(_E,&_P->n,0,"");
+     system(command);outFILE=fopen("zzL.tmp1","r");

@@ -1,0 +1,69 @@
+From d4e8e83bfaff27a65d6f7ff4657bcc66a21d0e0f Mon Sep 17 00:00:00 2001
+From: Daithi O Crualaoich <daithi.ocrualaoich@gmail.com>
+Date: Wed, 3 Jan 2018 23:08:52 +0000
+Subject: [PATCH] Update to opencontainers/image-spec v1.0.1.
+
+---
+ lib/common/common.go                          |    1 -
+ lib/internal/backend/file/file.go             |   27 +-
+
+diff --git a/lib/common/common.go b/lib/common/common.go
+index a7d567e8..ec025c30 100644
+--- a/lib/common/common.go
++++ b/lib/common/common.go
+@@ -131,7 +131,6 @@ const (
+ 	MediaTypeDockerV22RootFS       = "application/vnd.docker.image.rootfs.diff.tar.gzip"
+ 
+ 	MediaTypeOCIV1Manifest     = spec.MediaTypeImageManifest
+-	MediaTypeOCIV1ManifestList = spec.MediaTypeImageManifestList
+ 	MediaTypeOCIV1Config       = spec.MediaTypeImageConfig
+ 	MediaTypeOCIV1Layer        = spec.MediaTypeImageLayer
+ )
+diff --git a/lib/internal/backend/file/file.go b/lib/internal/backend/file/file.go
+index 85275c5d..333a7dcf 100644
+--- a/lib/internal/backend/file/file.go
++++ b/lib/internal/backend/file/file.go
+@@ -292,10 +292,10 @@ func getImageID(file *os.File, dockerURL
+ 			imageID = string(app[tag])
+ 		}
+ 
+-		if clean == "refs/"+tag {
+-			refb, err := ioutil.ReadAll(t.TarStream)
++		if clean == "index.json" {
++			indexb, err := ioutil.ReadAll(t.TarStream)
+ 			if err != nil {
+-				return fmt.Errorf("error reading ref descriptor for tag %s: %v", tag, err)
++				return fmt.Errorf("error reading index.json")
+ 			}
+ 
+ 			if dockerURL == nil {
+@@ -306,15 +306,22 @@ func getImageID(file *os.File, dockerURL
+ 				}
+ 			}
+ 
+-			var ref spec.Descriptor
+-			if err := json.Unmarshal(refb, &ref); err != nil {
+-				return fmt.Errorf("error unmarshaling ref descriptor for tag %s", tag)
++			var index spec.Index
++			if err := json.Unmarshal(indexb, &index); err != nil {
++				return fmt.Errorf("error unmarshaling data from index.json")
+ 			}
+-			imageID, ancestry, err = getDataFromManifest(file, ref.Digest)
+-			if err != nil {
+-				return err
++
++			// Search the index manifests for one matching the required tag.
++			for _, manifest := range index.Manifests {
++				if manifest.Annotations["org.opencontainers.image.ref.name"] == tag {
++					var digest = fmt.Sprintf("%s", manifest.Digest)
++					imageID, ancestry, err = getDataFromManifest(file, digest)
++					if err != nil {
++						return err
++					}
++					return io.EOF
++				}
+ 			}
+-			return io.EOF
+ 		}
+ 		return nil
+ 	}

@@ -1,0 +1,15 @@
+diff -Naur glob2-0.9.4.4.orig2/SConstruct glob2-0.9.4.4/SConstruct
+--- glob2-0.9.4.4.orig/SConstruct	2019-04-27 12:22:40.472921991 +0200
++++ glob2-0.9.4.4/SConstruct	2019-04-27 12:34:30.894462916 +0200
+@@ -123,9 +123,9 @@
+     # Boost.Thread needs Boost.System DSO's.
+     boost_system = ''
+     if conf.CheckLib("boost_system"):
+-	boost_system="boost_system"
++        boost_system="boost_system"
+     elif conf.CheckLib("boost_system-mt"):
+-	boost_system="boost_system-mt"
++        boost_system="boost_system-mt"
+     else:
+         print("Could not find libboost_system or libboost_system-mt")
+         missing.append("libboost_system")

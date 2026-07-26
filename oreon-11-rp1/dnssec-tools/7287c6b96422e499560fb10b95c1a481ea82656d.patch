@@ -1,0 +1,51 @@
+From 7287c6b96422e499560fb10b95c1a481ea82656d Mon Sep 17 00:00:00 2001
+From: Conrad Kostecki <conrad@kostecki.com>
+Date: Sun, 21 Apr 2019 12:55:15 +0200
+Subject: [PATCH] Update makefile to respect users LDFLAGS
+
+Signed-off-by: Conrad Kostecki <conrad@kostecki.com>
+---
+ dnssec-tools/validator/libsres/Makefile.in     | 2 +-
+ dnssec-tools/validator/libval/Makefile.in      | 2 +-
+ dnssec-tools/validator/libval_shim/Makefile.in | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/dnssec-tools/validator/libsres/Makefile.in b/dnssec-tools/validator/libsres/Makefile.in
+index e20f6d788..0ef21cf80 100644
+--- a/dnssec-tools/validator/libsres/Makefile.in
++++ b/dnssec-tools/validator/libsres/Makefile.in
+@@ -63,7 +63,7 @@ clean:
+ 	$(RM) -rf $(LT_DIR)
+ 
+ $(LIBRES): $(LOBJ)
+-	$(LIBTOOLLD) -o $@ $(LOBJ) 
++	$(LIBTOOLLD) -o $@ $(LOBJ) $(LDFLAGS)
+ 
+ install:
+ 	$(MKPATH) $(DESTDIR)$(libdir)
+diff --git a/dnssec-tools/validator/libval/Makefile.in b/dnssec-tools/validator/libval/Makefile.in
+index 0d6f35f99..6b361756c 100644
+--- a/dnssec-tools/validator/libval/Makefile.in
++++ b/dnssec-tools/validator/libval/Makefile.in
+@@ -65,7 +65,7 @@ clean:
+ 	$(RM) -rf $(LT_DIR)
+ 
+ $(LIBVAL): $(LOBJ)
+-	$(LIBTOOLLD) -o $@ $(LOBJ) $(LSRES)
++	$(LIBTOOLLD) -o $@ $(LOBJ) $(LSRES) $(LDFLAGS)
+ 
+ install:
+ 	$(MKPATH) $(DESTDIR)$(libdir)
+diff --git a/dnssec-tools/validator/libval_shim/Makefile.in b/dnssec-tools/validator/libval_shim/Makefile.in
+index 8b7c8e550..303943cc3 100644
+--- a/dnssec-tools/validator/libval_shim/Makefile.in
++++ b/dnssec-tools/validator/libval_shim/Makefile.in
+@@ -21,7 +21,7 @@ clean:
+ 	$(RM) -rf $(LT_DIR)
+ 
+ $(LIBVAL_SHIM): $(LOBJ)
+-	$(LIBTOOLLD) -o $@ $(LOBJ) $(EXTRA_LIBS)
++	$(LIBTOOLLD) -o $@ $(LOBJ) $(EXTRA_LIBS) $(LDFLAGS)
+ 
+ install:
+ 	$(MKPATH) $(DESTDIR)$(libdir)

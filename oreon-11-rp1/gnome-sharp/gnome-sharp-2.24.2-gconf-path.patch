@@ -1,0 +1,24 @@
+From cfabe1b0a581f8cd10ec75d347a93ebc1c365ac7 Mon Sep 17 00:00:00 2001
+From: David Naylor <naylor.b.david@gmail.com>
+Date: Thu, 4 Jan 2018 18:12:22 +0200
+Subject: [PATCH] Makefile: remove dll reference from MONO_PATH.
+
+With mono-5, referencing a dll in MONO_PATH is no longer supported.
+Instead, just reference the directory containing the dll.
+---
+ sample/gconf/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sample/gconf/Makefile.am b/sample/gconf/Makefile.am
+index a0ee802..8260694 100644
+--- a/sample/gconf/Makefile.am
++++ b/sample/gconf/Makefile.am
+@@ -22,7 +22,7 @@ sample.exe: $(SCHEMA) $(srcdir)/sample.glade $(FILES) $(ASSEMBLIES)
+ 	$(CSC) /out:sample.exe $(FILES) $(REFERENCES) $(RESOURCES)
+ 
+ Settings.cs: $(SCHEMA)
+-	MONO_PATH=$(top_builddir)/gconf/GConf/gconf-sharp.dll:${MONO_PATH} $(RUNTIME) $(GCONFDIR)/tools/gconfsharp-schemagen.exe Sample $(SCHEMA) > Settings.cs
++	MONO_PATH=$(top_builddir)/gconf/GConf/:${MONO_PATH} $(RUNTIME) $(GCONFDIR)/tools/gconfsharp-schemagen.exe Sample $(SCHEMA) > Settings.cs
+ 
+ CLEANFILES = sample.exe Settings.cs
+ 

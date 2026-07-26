@@ -1,0 +1,11 @@
+diff -urp mathgl-2.4.2.1/CMakeLists.txt mathgl-2.4.2.1-norebuild_l10n/CMakeLists.txt
+--- mathgl-2.4.2.1/CMakeLists.txt	2018-03-31 00:32:12.000000000 +0700
++++ mathgl-2.4.2.1-norebuild_l10n/CMakeLists.txt	2020-03-02 10:07:18.750912058 +0700
+@@ -636,6 +636,7 @@ if(WIN32)
+ 	set(USE_GETTEXT 0)
+ 	set(MGL_USE_LIBINTL 0)
+ endif(WIN32)
++set(USE_GETTEXT 0)
+ 
+ if(enable-doc-info)
+ 	set(MGL_HAVE_DOC_INFO 1)

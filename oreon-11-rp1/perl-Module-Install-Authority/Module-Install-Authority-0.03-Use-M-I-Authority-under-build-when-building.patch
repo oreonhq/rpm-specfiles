@@ -1,0 +1,30 @@
+From f120d96b03fd1d9f908e0fef965c4c9da55b947c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 19 Feb 2015 15:27:04 +0100
+Subject: [PATCH] Use M::I::Authority under build when building
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is needed for boostrap
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index a8c0511..94d7890 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,6 +1,7 @@
+ use strict;
+ use warnings;
+ no warnings 'redefine';
++use lib 'lib';
+ use inc::Module::Install 0.91;
+ use Module::Install::AuthorRequires;
+ use Module::Install::AuthorTests;
+-- 
+2.1.0
+

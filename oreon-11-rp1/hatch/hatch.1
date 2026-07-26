@@ -1,0 +1,237 @@
+.TH HATCH "1" "August 2024" "" "User Commands"
+.SH NAME
+.B hatch
+\(en Modern, extensible Python project management
+.SH SYNOPSIS
+.B hatch
+.RI [ OPTIONS ]
+.I COMMAND
+.RI [ ARGS ]...
+.SH OPTIONS
+.TP
+.B \-e\fR,\ \fB\-\-env\ \fITEXT
+The name of the environment to use
+[env var:
+.BR HATCH_ENV ]
+.TP
+.B \-p\fR,\ \fB\-\-project\ \fITEXT
+The name of the project to work on
+[env var:
+.BR HATCH_PROJECT ]
+.TP
+.B \-v\fR,\ \fB\-\-verbose
+Increase verbosity
+(can be used additively)
+[env var:
+.BR HATCH_VERBOSE ]
+.TP
+.B \-q\fR,\ \fB\-\-quiet
+Decrease verbosity
+(can be used additively)
+[env var:
+.BR HATCH_QUIET ]
+.TP
+.B \-\-color\fR\ /  \fB\-\-no\-color
+Whether or not to display colored output
+(default is auto-detection)
+[env vars:
+.BR FORCE_COLOR / NO_COLOR ]
+.TP
+.B \-\-interactive\fR\ /  \fB\-\-no\-interactive
+Whether or not to allow features like prompts and progress bars
+(default is auto-detection)
+[env var:
+.BR HATCH_INTERACTIVE ]
+.TP
+.B \-\-data\-dir\ \fITEXT
+The path to a custom directory used to persist data
+[env var:
+.BR HATCH_DATA_DIR ]
+.TP
+.B \-\-cache\-dir\ \fITEXT
+The path to a custom directory used to cache data
+[env var:
+.BR HATCH_CACHE_DIR ]
+.TP
+.B \-\-config\ \fITEXT
+The path to a custom config file to use
+[env var:
+.BR HATCH_CONFIG ]
+.TP
+.B \-\-version
+Show the version and exit.
+.TP
+.B \-h\fR,\ \fB\-\-help
+Show a help message and exit.
+.SS "COMMANDS"
+.TP
+.B build
+Build a project
+.IP
+See
+.BR hatch\-build (1).
+.TP
+.B clean
+Remove build artifacts
+.IP
+See
+.BR hatch\-clean (1).
+.TP
+.B config
+Manage the config file
+.IP
+See
+.BR hatch\-config (1).
+.TP
+.B dep
+Manage environment dependencies
+.IP
+See
+.BR hatch\-dep (1).
+.TP
+.B env
+Manage project environments
+.IP
+See
+.BR hatch\-env (1).
+.TP
+.B fmt
+Lint and format source code
+.IP
+See
+.BR hatch\-fmt (1).
+.TP
+.B new
+Create or initialize a project
+.IP
+See
+.BR hatch\-new (1).
+.TP
+.B project
+View project information
+.IP
+See
+.BR hatch\-project (1).
+.TP
+.B publish
+Publish build artifacts
+.IP
+See
+.BR hatch\-publish (1).
+.TP
+.B python
+Manage Python installations
+.IP
+See
+.BR hatch\-python (1).
+.TP
+.B run
+Run commands within project environments
+.IP
+See
+.BR hatch\-run (1).
+.TP
+.B self
+Manage Hatch
+.IP
+See
+.BR hatch\-self (1).
+.TP
+.B shell
+Enter a shell within a project\(cqs environment
+.IP
+See
+.BR hatch\-shell (1).
+.TP
+.B status
+Show information about the current environment
+.IP
+See
+.BR hatch\-status (1).
+.TP
+.B test
+Run tests
+.IP
+See
+.BR hatch\-test (1).
+.TP
+.B version
+View or set a project\(cqs version
+.IP
+See
+.BR hatch\-version (1).
+.SH ENVIRONMENT
+.TP
+.B HATCH_ENV
+The name of the environment to use
+[option:
+.BR \-e ,
+.BR \-\-env ]
+.TP
+.B HATCH_PROJECT
+The name of the project to work on
+[option:
+.BR \-p ,
+.BR \-\-project ]
+.TP
+.B HATCH_VERBOSE
+Increase verbosity
+[option:
+.BR \-v ,
+.BR \-\-verbose ]
+.TP
+.B HATCH_QUIET
+Decrease verbosity
+[option:
+.BR \-q ,
+.BR \-\-quiet ]
+.TP
+.B FORCE_COLOR
+Display colored output
+(default is auto-detection)
+[option:
+.BR \-\-color ]
+.TP
+.B NO_COLOR
+Do not display colored output
+(default is auto-detection)
+[option:
+.BR \-\-no\-color ]
+.TP
+.B HATCH_INTERACTIVE
+Whether or not to allow features like prompts and progress bars
+(default is auto-detection)
+[options:
+.BR \-\-interactive / \-\-no\-interactive ]
+.TP
+.B HATCH_DATA_DIR
+The path to a custom directory used to persist data
+[option:
+.BR \-\-data\-dir ]
+.TP
+.B HATCH_CACHE_DIR
+The path to a custom directory used to acahe data
+[option:
+.BR \-\-cache\-dir ]
+.TP
+.B HATCH_CONFIG
+The path to a custom custom config file to use
+[option:
+.BR \-\-config ]
+.SH "SEE ALSO"
+.BR hatch\-build (1),
+.BR hatch\-clean (1),
+.BR hatch\-config (1),
+.BR hatch\-dep (1),
+.BR hatch\-env (1),
+.BR hatch\-fmt (1),
+.BR hatch\-new (1),
+.BR hatch\-project (1),
+.BR hatch\-publish (1),
+.BR hatch\-python (1),
+.BR hatch\-run (1),
+.BR hatch\-self (1),
+.BR hatch\-shell (1),
+.BR hatch\-status (1),
+.BR hatch\-test (1),
+.BR hatch\-version (1)

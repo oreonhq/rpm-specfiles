@@ -1,0 +1,17 @@
+[Unit]
+Description=NSD DNS Server
+After=syslog.target network-online.target time-sync.target
+StartLimitIntervalSec=30
+StartLimitBurst=5
+
+[Service]
+Type=notify
+ExecStart=/usr/sbin/nsd -d -c /etc/nsd/nsd.conf $NSD_EXTRA_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+PrivateTmp=true
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

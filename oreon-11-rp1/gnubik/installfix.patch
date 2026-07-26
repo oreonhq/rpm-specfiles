@@ -1,0 +1,11 @@
+--- Makefile.in.orig	2018-04-15 15:48:23.901806505 -0300
++++ Makefile.in	2018-04-15 15:48:39.753772881 -0300
+@@ -611,7 +611,7 @@
+ context = apps
+ sizes = 16 22 32 48
+ desktopdir = $(DESTDIR)$(datadir)/applications
+-INSTALL_DATA_HOOKS = install-icons install-desktop
++INSTALL_DATA_HOOKS = install-icons
+ UNINSTALL_DATA_HOOKS = uninstall-icons uninstall-desktop
+ ACLOCAL_AMFLAGS = -I m4
+ all: config.h

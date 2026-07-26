@@ -1,0 +1,26 @@
+From ee50bf96acc13c2265cc4fec6f406e4a434edf94 Mon Sep 17 00:00:00 2001
+From: Stephen Kelly <steveire@gmail.com>
+Date: Sun, 26 Jul 2015 11:13:00 +0200
+Subject: [PATCH 11/31] Remove use of command creating un-useful output.
+
+It is deprecated with CMP0033.
+---
+ gpgme++/CMakeLists.txt | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/gpgme++/CMakeLists.txt b/gpgme++/CMakeLists.txt
+index b0836ab..a31702c 100644
+--- a/gpgme++/CMakeLists.txt
++++ b/gpgme++/CMakeLists.txt
+@@ -116,8 +116,6 @@ if ( GPGME_PTH_FOUND )
+    install(TARGETS gpgmepp-pth EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+ endif()
+ 
+-# this writes way too much, but do we care?
+-EXPORT_LIBRARY_DEPENDENCIES( ${CMAKE_CURRENT_BINARY_DIR}/GpgmeppLibraryDepends.cmake )
+ 
+ ########### install files ###############
+ 
+-- 
+2.5.0
+

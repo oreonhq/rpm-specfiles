@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# Initialize a new database for the Monotone Server, if needed
+#
+# Author: Thomas Moschny <thomas.moschny@gmx.de>
+#
+set -eu
+
+MONOTONE_CONFDIR="${MONOTONE_CONFDIR:-/etc/monotone}"
+MONOTONE_KEYDIR="${MONOTONE_KEYDIR:-/etc/monotone/private-keys}"
+MONOTONE_DBFILE="${MONOTONE_DBFILE:-/var/lib/monotone/server.mtn}"
+MONOTONE_PPFILE="${MONOTONE_PPFILE:-/etc/monotone/passphrase.lua}"
+
+MONOTONE_KEYID="${MONOTONE_KEYID:-monotone@$(hostname -f)}"
+MONOTONE_HOME="${MONOTONE_HOME:-/var/lib/monotone}"
+
+cd "${MONOTONE_HOME}"
+
+# check for existing database
+if [ -s "${MONOTONE_DBFILE}" ] ; then
+  echo $"Found database ${MONOTONE_DBFILE}"
+  exit
+fi
+
+# no db found
+echo $"Creating dababase ${MONOTONE_DBFILE}"
+
+# create database
+runuser -u monotone -- mtn --confdir="${MONOTONE_CONFDIR}" \
+   --db="${MONOTONE_DBFILE}" --keydir="${MONOTONE_KEYDIR}" \
+   db init
+
+# fix permissions
+chmod 0640 "${MONOTONE_DBFILE}"

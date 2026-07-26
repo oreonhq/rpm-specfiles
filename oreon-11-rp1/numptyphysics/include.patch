@@ -1,0 +1,22 @@
+diff -Nrup a/external/thp/thp_format.h b/external/thp/thp_format.h
+--- a/external/thp/thp_format.h	2015-12-31 01:38:46.000000000 -0700
++++ b/external/thp/thp_format.h	2019-09-23 16:09:43.982154904 -0600
+@@ -17,6 +17,7 @@
+ #define THP_FORMAT_H
+ 
+ #include <functional>
++#include <string>
+ 
+ namespace thp {
+ 
+--- a/platform/sdl2/SDL2Renderer.cpp~	2015-12-31 02:38:46.000000000 -0600
++++ b/platform/sdl2/SDL2Renderer.cpp	2025-02-03 13:58:57.047931902 -0600
+@@ -20,7 +20,7 @@
+ 
+ #include <SDL_image.h>
+ #include <SDL_ttf.h>
+-
++#include <cstring>
+ 
+ class SDLFontData : public NP::FontData {
+ public:

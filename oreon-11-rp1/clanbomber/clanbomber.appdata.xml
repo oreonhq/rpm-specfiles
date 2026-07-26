@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>clanbomber.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>ClanBomber</name>
+  <summary>Lay bombs and Blast the other players of the field</summary>
+  <description>
+    <p>
+      ClanBomber is a free multiplayer game, where the "purpose" is to Blast
+      the other players of the gamefield by laying bombs close to them.
+      While at the same time you must avoid being blown up yourself.
+    </p>
+    <p>
+      It is fully playable and features Computer controlled bombers, however,
+      it is recommended to play ClanBomber with friends (3-8 players are
+      really fun).
+    </p>
+  </description>
+  <url type="homepage">http://clanbomber.sourceforge.net/</url>
+  <screenshots>
+    <screenshot type="default">http://clanbomber.sourceforge.net/screenshots/screen3.gif</screenshot>
+    <screenshot>http://clanbomber.sourceforge.net/screenshots/screen4.gif</screenshot>
+    <screenshot>http://clanbomber.sourceforge.net/screenshots/screen1.gif</screenshot>
+    <screenshot>http://clanbomber.sourceforge.net/screenshots/screen2.gif</screenshot>
+    <screenshot>http://clanbomber.sourceforge.net/screenshots/screen5.gif</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

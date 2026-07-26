@@ -1,0 +1,30 @@
+From 5223c81b75f3653c0752106c5a1bb286cb93d47f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 7 Apr 2014 13:59:42 +0200
+Subject: [PATCH] security XML external entity
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Frontier/RPC2.pm | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/lib/Frontier/RPC2.pm b/lib/Frontier/RPC2.pm
+index ed17a8e..6d98938 100644
+--- a/lib/Frontier/RPC2.pm
++++ b/lib/Frontier/RPC2.pm
+@@ -307,6 +307,9 @@ sub date_time {
+ ### XML::Parser callbacks
+ ###
+ 
++sub externent { '' }
++sub externentfin { '' }
++
+ sub die {
+     my $expat = shift; my $message = shift;
+ 
+-- 
+1.9.0
+

@@ -1,0 +1,21 @@
+From 7611debaa6459e66b95e03937a2573316e42b69e Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 26 Jan 2023 08:25:54 -0500
+Subject: [PATCH] Add missing #include needed on GCC13
+
+---
+ tests/fuzz_driver.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/fuzz_driver.cc b/tests/fuzz_driver.cc
+index 4980317..3f0ce70 100644
+--- a/tests/fuzz_driver.cc
++++ b/tests/fuzz_driver.cc
+@@ -13,6 +13,7 @@
+ // limitations under the License.
+ 
+ #include <cassert>
++#include <cstdint>
+ #include <iostream>
+ #include <fstream>
+ #include <vector>

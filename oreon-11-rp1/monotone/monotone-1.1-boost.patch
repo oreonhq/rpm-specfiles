@@ -1,0 +1,555 @@
+A function macro named E clashes with internal boost definitions.  Rearrange
+the order of header inclusion so that affected boost headers are included
+before monotone defines the macro.
+
+Also, stop bundling boost/circular_buffer, which is available in current
+versions of boost.
+
+diff -up monotone-1.1/Makefile.in.orig monotone-1.1/Makefile.in
+--- monotone-1.1/Makefile.in.orig	2014-05-04 03:18:01.000000000 -0600
++++ monotone-1.1/Makefile.in	2020-06-30 10:02:57.849746309 -0600
+@@ -156,10 +156,7 @@ am__v_AR_1 =
+ src_lib3rdparty_a_AR = $(AR) $(ARFLAGS)
+ src_lib3rdparty_a_LIBADD =
+ am__src_lib3rdparty_a_SOURCES_DIST =  \
+-	src/boost/circular_buffer_adaptor.hpp \
+-	src/boost/circular_buffer_base.hpp \
+-	src/boost/circular_buffer_fwd.hpp \
+-	src/boost/circular_buffer.hpp src/netxx/accept.cxx \
++	src/netxx/accept.cxx \
+ 	src/netxx/accept.h src/netxx/address.cxx src/netxx/common.h \
+ 	src/netxx/compat.h src/netxx/datagram.cxx \
+ 	src/netxx/datagramserver.cxx src/netxx/osutil.cxx \
+@@ -933,12 +930,6 @@ NETXX_SOURCES = \
+ 	src/netxx/stream.h src/netxx/streambase.h 			\
+ 	src/netxx/streamserver.h src/netxx/timeout.h src/netxx/types.h
+ 
+-BOOST_SANDBOX_SOURCES = \
+-	src/boost/circular_buffer_adaptor.hpp				\
+-	src/boost/circular_buffer_base.hpp				\
+-	src/boost/circular_buffer_fwd.hpp				\
+-	src/boost/circular_buffer.hpp
+-
+ UNIX_PLATFORM_SOURCES = \
+ 	src/unix/read_password.cc src/unix/get_system_flavour.cc	\
+ 	src/unix/process.cc src/unix/terminal.cc src/unix/inodeprint.cc	\
+@@ -1026,7 +1017,7 @@ nodist_test_bin_tester_SOURCES = test/sr
+ noinst_LIBRARIES = src/libplatform.a src/lib3rdparty.a
+ src_libplatform_a_SOURCES = src/platform.hh $(am__append_1) \
+ 	$(am__append_6)
+-src_lib3rdparty_a_SOURCES = $(BOOST_SANDBOX_SOURCES) $(NETXX_SOURCES) \
++src_lib3rdparty_a_SOURCES = $(NETXX_SOURCES) \
+ 	$(am__append_9) $(am__append_11) $(am__append_13) \
+ 	$(am__append_14)
+ bashcompdir = $(sysconfdir)/bash_completion.d
+diff -up monotone-1.1/src/ancestry.cc.orig monotone-1.1/src/ancestry.cc
+--- monotone-1.1/src/ancestry.cc.orig	2014-05-04 03:15:15.000000000 -0600
++++ monotone-1.1/src/ancestry.cc	2020-06-30 11:34:52.796544704 -0600
+@@ -8,8 +8,8 @@
+ // PURPOSE.
+ 
+ #include "base.hh"
+-#include "sanity.hh"
+ #include "revision.hh"
++#include "sanity.hh"
+ #include "rev_height.hh"
+ #include "roster.hh"
+ 
+diff -up monotone-1.1/src/asciik.hh.orig monotone-1.1/src/asciik.hh
+--- monotone-1.1/src/asciik.hh.orig	2014-05-04 03:15:15.000000000 -0600
++++ monotone-1.1/src/asciik.hh	2020-06-30 10:15:12.007654082 -0600
+@@ -11,8 +11,8 @@
+ #define __ASCIIK_HH__
+ 
+ #include <set>
+-#include "vector.hh"
+ #include "vocab.hh"
++#include "vector.hh"
+ 
+ class asciik
+ {
+diff -up monotone-1.1/src/automate.cc.orig monotone-1.1/src/automate.cc
+--- monotone-1.1/src/automate.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/automate.cc	2020-06-30 11:38:43.421264711 -0600
+@@ -13,12 +13,12 @@
+ #include <iterator>
+ #include <sstream>
+ #include <unistd.h>
+-#include "vector.hh"
+ 
+ #include <boost/bind.hpp>
+ #include <boost/function.hpp>
+ #include "lexical_cast.hh"
+ #include <boost/tuple/tuple.hpp>
++#include "vector.hh"
+ 
+ #include "app_state.hh"
+ #include "automate_stdio_helpers.hh"
+diff -up monotone-1.1/src/basic_io.hh.orig monotone-1.1/src/basic_io.hh
+--- monotone-1.1/src/basic_io.hh.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/basic_io.hh	2020-06-30 09:47:13.560973524 -0600
+@@ -11,11 +11,11 @@
+ #ifndef __BASIC_IO_HH__
+ #define __BASIC_IO_HH__
+ 
+-#include "vector.hh"
+ #include <map>
+ 
+ #include "paths.hh"
+ #include "sanity.hh"
++#include "vector.hh"
+ #include "vocab.hh"
+ #include "numeric_vocab.hh"
+ #include "char_classifiers.hh"
+diff -up monotone-1.1/src/charset.cc.orig monotone-1.1/src/charset.cc
+--- monotone-1.1/src/charset.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/charset.cc	2020-06-30 09:37:09.073857197 -0600
+@@ -7,13 +7,13 @@
+ // implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ // PURPOSE.
+ 
+-#include "base.hh"
+-#include "vector.hh"
+-
+ #include <boost/tokenizer.hpp>
+ #include <idna.h>
+ #include <stringprep.h>
+ 
++#include "base.hh"
++#include "vector.hh"
++
+ #include "charset.hh"
+ #include "numeric_vocab.hh"
+ #include "sanity.hh"
+diff -up monotone-1.1/src/cmd_list.cc.orig monotone-1.1/src/cmd_list.cc
+--- monotone-1.1/src/cmd_list.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/cmd_list.cc	2020-06-30 10:12:30.695874287 -0600
+@@ -10,7 +10,6 @@
+ 
+ #include "base.hh"
+ #include <algorithm>
+-#include "safe_map.hh"
+ #include <utility>
+ #include <iostream>
+ #include <iterator>
+@@ -18,6 +17,7 @@
+ #include <boost/tuple/tuple.hpp>
+ 
+ #include "basic_io.hh"
++#include "safe_map.hh"
+ #include "cert.hh"
+ #include "charset.hh"
+ #include "cmd.hh"
+diff -up monotone-1.1/src/commands.hh.orig monotone-1.1/src/commands.hh
+--- monotone-1.1/src/commands.hh.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/commands.hh	2020-06-30 10:09:04.000156549 -0600
+@@ -10,8 +10,8 @@
+ #ifndef __COMMANDS_HH__
+ #define __COMMANDS_HH__
+ 
+-#include "vector.hh"
+ #include "options.hh"
++#include "vector.hh"
+ class app_state;
+ class utf8;
+ 
+diff -up monotone-1.1/src/database.cc.orig monotone-1.1/src/database.cc
+--- monotone-1.1/src/database.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/database.cc	2020-06-30 11:07:31.767911489 -0600
+@@ -17,13 +17,13 @@
+ #include <numeric>
+ #include <set>
+ #include <sstream>
+-#include "vector.hh"
+ 
+ #include <string.h>
+ #include <boost/bind.hpp>
+ #include <boost/shared_ptr.hpp>
+ #include <boost/tuple/tuple.hpp>
+ #include <boost/tuple/tuple_comparison.hpp>
++#include "vector.hh"
+ 
+ #include <botan/botan.h>
+ #include <botan/rsa.h>
+diff -up monotone-1.1/src/database.hh.orig monotone-1.1/src/database.hh
+--- monotone-1.1/src/database.hh.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/database.hh	2020-06-30 11:39:49.533184469 -0600
+@@ -11,10 +11,10 @@
+ #ifndef __DATABASE_HH__
+ #define __DATABASE_HH__
+ 
+-#include "vector.hh"
+ #include <set>
+ #include <boost/function.hpp>
+ #include <boost/shared_ptr.hpp>
++#include "vector.hh"
+ 
+ #include "rev_types.hh"
+ #include "cert.hh"
+diff -up monotone-1.1/src/enumerator.cc.orig monotone-1.1/src/enumerator.cc
+--- monotone-1.1/src/enumerator.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/enumerator.cc	2020-06-30 11:17:48.813031155 -0600
+@@ -11,9 +11,9 @@
+ #include <deque>
+ #include <map>
+ #include <set>
+-#include "vector.hh"
+ 
+ #include "cset.hh"
++#include "vector.hh"
+ #include "enumerator.hh"
+ #include "revision.hh"
+ #include "vocab.hh"
+diff -up monotone-1.1/src/file_io.cc.orig monotone-1.1/src/file_io.cc
+--- monotone-1.1/src/file_io.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/file_io.cc	2020-06-30 09:50:13.560669858 -0600
+@@ -12,9 +12,9 @@
+ #include <fstream>
+ 
+ #include <botan/botan.h>
+-#include "botan_pipe_cache.hh"
+ 
+ #include "file_io.hh"
++#include "botan_pipe_cache.hh"
+ #include "sanity.hh"
+ #include "simplestring_xform.hh"
+ #include "charset.hh"
+diff -up monotone-1.1/src/globish.cc.orig monotone-1.1/src/globish.cc
+--- monotone-1.1/src/globish.cc.orig	2014-05-04 03:15:16.000000000 -0600
++++ monotone-1.1/src/globish.cc	2020-06-30 09:56:22.529324520 -0600
+@@ -9,9 +9,9 @@
+ // PURPOSE.
+ 
+ #include "base.hh"
++#include "option.hh" // for arg_type
+ #include "sanity.hh"
+ #include "globish.hh"
+-#include "option.hh" // for arg_type
+ #include "numeric_vocab.hh"
+ 
+ #include <iterator>
+diff -up monotone-1.1/src/hmac.cc.orig monotone-1.1/src/hmac.cc
+--- monotone-1.1/src/hmac.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/hmac.cc	2020-06-30 11:43:21.171953985 -0600
+@@ -10,9 +10,9 @@
+ #include "base.hh"
+ #include <botan/botan.h>
+ 
+-#include "sanity.hh"
+ #include "hmac.hh"
+ #include "vocab.hh"
++#include "sanity.hh"
+ #include "constants.hh"
+ 
+ using std::string;
+diff -up monotone-1.1/src/key_store.hh.orig monotone-1.1/src/key_store.hh
+--- monotone-1.1/src/key_store.hh.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/key_store.hh	2020-06-30 11:06:22.925984151 -0600
+@@ -19,8 +19,8 @@
+ #include <botan/libstate.h>
+ #endif
+ 
+-#include "vector.hh"
+ #include "vocab.hh"
++#include "vector.hh"
+ #include "paths.hh"
+ 
+ class app_state;
+diff -up monotone-1.1/src/migrate_work.cc.orig monotone-1.1/src/migrate_work.cc
+--- monotone-1.1/src/migrate_work.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/migrate_work.cc	2020-06-30 10:57:13.325615053 -0600
+@@ -8,8 +8,8 @@
+ // PURPOSE.
+ 
+ #include "base.hh"
+-#include "sanity.hh"
+ #include "cset.hh"
++#include "sanity.hh"
+ #include "simplestring_xform.hh"
+ #include "revision.hh"
+ #include "file_io.hh"
+diff -up monotone-1.1/src/netcmd.cc.orig monotone-1.1/src/netcmd.cc
+--- monotone-1.1/src/netcmd.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/netcmd.cc	2020-06-30 11:29:04.877013138 -0600
+@@ -8,11 +8,11 @@
+ // PURPOSE.
+ 
+ #include "base.hh"
+-#include "vector.hh"
+ #include <utility>
+ 
+ #include "constants.hh"
+ #include "netcmd.hh"
++#include "vector.hh"
+ #include "netio.hh"
+ #include "numeric_vocab.hh"
+ #include "sanity.hh"
+diff -up monotone-1.1/src/netcmd.hh.orig monotone-1.1/src/netcmd.hh
+--- monotone-1.1/src/netcmd.hh.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/netcmd.hh	2020-06-30 11:25:11.916333993 -0600
+@@ -10,13 +10,13 @@
+ #ifndef __NETCMD_HH__
+ #define __NETCMD_HH__
+ 
+-#include "vector.hh"
+ #include <list>
+ #include <utility>
+ #include <iostream>
+ 
+-#include "globish.hh"
+ #include "merkle_tree.hh"
++#include "vector.hh"
++#include "globish.hh"
+ #include "numeric_vocab.hh"
+ #include "uri.hh"
+ #include "vocab.hh"
+diff -up monotone-1.1/src/network/listener_base.hh.orig monotone-1.1/src/network/listener_base.hh
+--- monotone-1.1/src/network/listener_base.hh.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/network/listener_base.hh	2020-06-30 11:19:34.500864837 -0600
+@@ -11,10 +11,10 @@
+ #ifndef __LISTENER_BASE_HH__
+ #define __LISTENER_BASE_HH__
+ 
+-#include "reactable.hh"
+-
+ #include <boost/shared_ptr.hpp>
+ 
++#include "reactable.hh"
++
+ // This is not currently needed because there's only one kind of listener.
+ // But it's already here and not hurting anything, and might be useful if
+ // we want to add another kind of listener later (something that accepts
+diff -up monotone-1.1/src/option.hh.orig monotone-1.1/src/option.hh
+--- monotone-1.1/src/option.hh.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/option.hh	2020-06-30 09:23:18.706152659 -0600
+@@ -22,9 +22,9 @@
+ #include <stdexcept>
+ #include <map>
+ #include <set>
+-#include "vector.hh"
+-
+ #include <boost/function.hpp>
++
++#include "vector.hh"
+ #include "lexical_cast.hh"
+ 
+ #include "sanity.hh"
+diff -up monotone-1.1/src/project.cc.orig monotone-1.1/src/project.cc
+--- monotone-1.1/src/project.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/project.cc	2020-06-30 10:58:34.582498413 -0600
+@@ -8,9 +8,9 @@
+ // PURPOSE.
+ 
+ #include "base.hh"
+-#include "vector.hh"
+ 
+ #include "cert.hh"
++#include "vector.hh"
+ #include "database.hh"
+ #include "date_format.hh"
+ #include "project.hh"
+diff -up monotone-1.1/src/rcs_file.cc.orig monotone-1.1/src/rcs_file.cc
+--- monotone-1.1/src/rcs_file.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/rcs_file.cc	2020-06-30 11:10:45.213647993 -0600
+@@ -10,7 +10,6 @@
+ 
+ #include "base.hh"
+ #include <fstream>
+-#include "vector.hh"
+ 
+ #ifdef WIN32
+ #include <windows.h>
+@@ -32,6 +31,7 @@
+ #endif
+ 
+ #include "rcs_file.hh"
++#include "vector.hh"
+ #include "sanity.hh"
+ #include "char_classifiers.hh"
+ 
+diff -up monotone-1.1/src/rcs_file.hh.orig monotone-1.1/src/rcs_file.hh
+--- monotone-1.1/src/rcs_file.hh.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/rcs_file.hh	2020-06-30 11:14:24.238333814 -0600
+@@ -10,9 +10,9 @@
+ #ifndef __RCS_FILE_HH__
+ #define __RCS_FILE_HH__
+ 
+-#include "vector.hh"
+ #include <map>
+ #include <boost/shared_ptr.hpp>
++#include "vector.hh"
+ 
+ struct rcs_admin
+ {
+diff -up monotone-1.1/src/rcs_import.cc.orig monotone-1.1/src/rcs_import.cc
+--- monotone-1.1/src/rcs_import.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/rcs_import.cc	2020-06-30 11:29:44.579958676 -0600
+@@ -16,13 +16,13 @@
+ #include <sstream>
+ #include <stack>
+ #include <stdexcept>
+-#include "vector.hh"
+ #include <cstring> // memset
+ 
+ #include <boost/shared_ptr.hpp>
+ #include <boost/scoped_ptr.hpp>
+ #include "lexical_cast.hh"
+ #include <boost/tokenizer.hpp>
++#include "vector.hh"
+ 
+ #include "cert.hh"
+ #include "constants.hh"
+diff -up monotone-1.1/src/restrictions.cc.orig monotone-1.1/src/restrictions.cc
+--- monotone-1.1/src/restrictions.cc.orig	2014-05-04 03:15:17.000000000 -0600
++++ monotone-1.1/src/restrictions.cc	2020-06-30 11:43:53.380932870 -0600
+@@ -8,9 +8,9 @@
+ // PURPOSE.
+ 
+ #include "base.hh"
++#include "restrictions.hh"
+ #include "safe_map.hh"
+ #include "vector.hh"
+-#include "restrictions.hh"
+ #include "file_io.hh"
+ #include "roster.hh"
+ #include "database.hh" // for parent_roster
+diff -up monotone-1.1/src/revision.hh.orig monotone-1.1/src/revision.hh
+--- monotone-1.1/src/revision.hh.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/revision.hh	2020-06-30 11:18:10.388997198 -0600
+@@ -11,8 +11,8 @@
+ #define __REVISION_HH__
+ 
+ #include <set>
+-#include "vector.hh"
+ #include "rev_types.hh"
++#include "vector.hh"
+ 
+ class key_store;
+ class node_restriction;
+diff -up monotone-1.1/src/roster.cc.orig monotone-1.1/src/roster.cc
+--- monotone-1.1/src/roster.cc.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/roster.cc	2020-06-30 11:35:20.489511075 -0600
+@@ -11,10 +11,10 @@
+ #include "base.hh"
+ #include <algorithm>
+ #include <set>
+-#include "vector.hh"
+ #include <sstream>
+ 
+ #include "basic_io.hh"
++#include "vector.hh"
+ #include "cset.hh"
+ #include "database.hh"
+ #include "platform-wrapped.hh"
+diff -up monotone-1.1/src/sanity.cc.orig monotone-1.1/src/sanity.cc
+--- monotone-1.1/src/sanity.cc.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/sanity.cc	2020-06-30 09:32:43.994207307 -0600
+@@ -12,12 +12,11 @@
+ #include <iterator>
+ #include <fstream>
+ #include <sstream>
+-#include "vector.hh"
+-
+ #include <boost/format.hpp>
+ 
+-// circular_buffer is not in Boost 1.34; it's in monotone/boost.
+-#include "boost/circular_buffer.hpp"
++#include "vector.hh"
++
++#include <boost/circular_buffer.hpp>
+ 
+ #include "lexical_cast.hh"
+ #include "constants.hh"
+diff -up monotone-1.1/src/sanity.hh.orig monotone-1.1/src/sanity.hh
+--- monotone-1.1/src/sanity.hh.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/sanity.hh	2020-06-30 09:31:59.698281778 -0600
+@@ -14,7 +14,7 @@
+ #include <ostream>
+ #include <cstdio>
+ 
+-#include "boost/current_function.hpp"
++#include <boost/current_function.hpp>
+ 
+ #include "numeric_vocab.hh"
+ #include "origin_type.hh"
+diff -up monotone-1.1/src/sha1.cc.orig monotone-1.1/src/sha1.cc
+--- monotone-1.1/src/sha1.cc.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/sha1.cc	2020-06-30 11:51:10.427645711 -0600
+@@ -22,10 +22,10 @@
+   #include <botan/benchmark.h>
+ #endif
+ 
+-#include "sanity.hh"
+-#include "ui.hh"
+ #include "platform.hh"
+ #include "cmd.hh"
++#include "sanity.hh"
++#include "ui.hh"
+ #include "transforms.hh"
+ 
+ using std::string;
+diff -up monotone-1.1/src/transforms.cc.orig monotone-1.1/src/transforms.cc
+--- monotone-1.1/src/transforms.cc.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/transforms.cc	2020-06-30 10:19:25.976307371 -0600
+@@ -12,12 +12,12 @@
+ #include <botan/botan.h>
+ #include <botan/sha160.h>
+ 
+-#include "botan_pipe_cache.hh"
+-#include "gzip.hh"
+-
+ #include "transforms.hh"
+ #include "char_classifiers.hh"
+ 
++#include "botan_pipe_cache.hh"
++#include "gzip.hh"
++
+ using std::string;
+ using Botan::Pipe;
+ using Botan::Base64_Encoder;
+diff -up monotone-1.1/src/update.cc.orig monotone-1.1/src/update.cc
+--- monotone-1.1/src/update.cc.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/update.cc	2020-06-30 11:03:03.726194356 -0600
+@@ -9,9 +9,9 @@
+ 
+ #include "base.hh"
+ #include <set>
++#include "lexical_cast.hh"
+ #include "safe_map.hh"
+ #include "vector.hh"
+-#include "lexical_cast.hh"
+ 
+ #include "database.hh"
+ #include "sanity.hh"
+diff -up monotone-1.1/src/vocab.cc.orig monotone-1.1/src/vocab.cc
+--- monotone-1.1/src/vocab.cc.orig	2014-05-04 03:15:18.000000000 -0600
++++ monotone-1.1/src/vocab.cc	2020-06-30 09:36:18.769919254 -0600
+@@ -11,8 +11,8 @@
+ #include "base.hh"
+ #include "constants.hh"
+ #include "hash_map.hh"
+-#include "sanity.hh"
+ #include "vocab.hh"
++#include "sanity.hh"
+ #include "char_classifiers.hh"
+ #include "transforms.hh"
+ 
+diff -up monotone-1.1/src/xdelta.cc.orig monotone-1.1/src/xdelta.cc
+--- monotone-1.1/src/xdelta.cc.orig	2014-05-04 03:15:19.000000000 -0600
++++ monotone-1.1/src/xdelta.cc	2020-06-30 11:13:38.014400075 -0600
+@@ -26,7 +26,6 @@
+ 
+ #include "base.hh"
+ #include <algorithm>
+-#include "vector.hh"
+ #include <set>
+ #include <sstream>
+ #include <cstring>  // memcmp
+@@ -34,6 +33,7 @@
+ #include <boost/shared_ptr.hpp>
+ #include <boost/version.hpp>
+ 
++#include "vector.hh"
+ #include "adler32.hh"
+ #include "hash_map.hh"
+ #include "numeric_vocab.hh"

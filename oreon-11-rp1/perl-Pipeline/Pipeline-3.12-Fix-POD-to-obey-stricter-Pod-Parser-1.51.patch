@@ -1,0 +1,52 @@
+From 4e89afbc1237d10208f9c132ef29ea1ea96b8a95 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 19 Jun 2012 10:10:36 +0200
+Subject: [PATCH] Fix POD to obey stricter Pod-Parser-1.51
+
+https://rt.cpan.org/Public/Bug/Display.html?id=77896
+---
+ lib/Pipeline/Dispatch.pm     |    5 -----
+ lib/Pipeline/Segment.pm      |    1 +
+ lib/Pipeline/Store/Simple.pm |    1 +
+ 3 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/lib/Pipeline/Dispatch.pm b/lib/Pipeline/Dispatch.pm
+index e97af77..8f7f6ce 100644
+--- a/lib/Pipeline/Dispatch.pm
++++ b/lib/Pipeline/Dispatch.pm
+@@ -216,8 +216,3 @@ http://opensource.fotango.com
+ 
+ =cut
+ 
+-
+-
+-
+-
+-=cut
+diff --git a/lib/Pipeline/Segment.pm b/lib/Pipeline/Segment.pm
+index 274db01..c3cd033 100644
+--- a/lib/Pipeline/Segment.pm
++++ b/lib/Pipeline/Segment.pm
+@@ -133,6 +133,7 @@ James A. Duncan <jduncan@fotango.com>
+ Copyright 2003 Fotango Ltd. All Rights Reserved.
+ 
+ This software is released under the same terms as Perl itself.
++
+ =cut
+ 
+ 
+diff --git a/lib/Pipeline/Store/Simple.pm b/lib/Pipeline/Store/Simple.pm
+index f63908c..b246dcd 100644
+--- a/lib/Pipeline/Store/Simple.pm
++++ b/lib/Pipeline/Store/Simple.pm
+@@ -98,6 +98,7 @@ James A. Duncan <jduncan@fotango.com>
+ Copyright 2003 Fotango Ltd. All Rights Reserved.
+ 
+ This software is released under the same terms as Perl itself.
++
+ =cut
+ 
+ 
+-- 
+1.7.7.6
+

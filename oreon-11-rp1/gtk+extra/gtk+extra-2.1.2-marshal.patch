@@ -1,0 +1,32 @@
+diff --git a/gtkextra/gtkcolorcombo.c b/gtkextra/gtkcolorcombo.c
+index 236a613..cae2a23 100644
+--- a/gtkextra/gtkcolorcombo.c
++++ b/gtkextra/gtkcolorcombo.c
+@@ -146,7 +146,7 @@ gtk_color_combo_class_init (GtkColorComboClass * klass)
+                                       GTK_CLASS_TYPE(object_class),
+                                       GTK_SIGNAL_OFFSET(GtkColorComboClass,
+                                       changed),
+-                                      gtkextra_VOID__INT_BOXED,
++                                      gtkextra_VOID__BOXED_BOXED,
+                                       GTK_TYPE_NONE,  
+                                       2, GTK_TYPE_INT, GDK_TYPE_COLOR);
+ 
+diff --git a/gtkextra/gtkextra-marshal.h b/gtkextra/gtkextra-marshal.h
+index 82dfe5c..d67ff9f 100644
+--- a/gtkextra/gtkextra-marshal.h
++++ b/gtkextra/gtkextra-marshal.h
+@@ -34,12 +34,8 @@ extern void gtkextra_BOOLEAN__BOXED_STRING (GClosure     *closure,
+ #define gtkextra_BOOL__BOXED_STRING	gtkextra_BOOLEAN__BOXED_STRING
+ 
+ /* BOOL:BOXED,BOXED (gtkextra-marshal.list:4) */
+-extern void gtkextra_BOOLEAN__BOXED_BOXED (GClosure     *closure,
+-                                           GValue       *return_value,
+-                                           guint         n_param_values,
+-                                           const GValue *param_values,
+-                                           gpointer      invocation_hint,
+-                                           gpointer      marshal_data);
++#define gtkextra_BOOLEAN__BOXED_BOXED g_cclosure_marshal_BOOLEAN__BOXED_BOXED
++
+ #define gtkextra_BOOL__BOXED_BOXED	gtkextra_BOOLEAN__BOXED_BOXED
+ 
+ /* BOOL:BOXED,DOUBLE,DOUBLE (gtkextra-marshal.list:5) */

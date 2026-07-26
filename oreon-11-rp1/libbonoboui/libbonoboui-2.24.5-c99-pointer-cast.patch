@@ -1,0 +1,26 @@
+diff --git a/bonobo/bonobo-control-frame.c b/bonobo/bonobo-control-frame.c
+index 86dbecb..38250b2 100644
+--- a/bonobo/bonobo-control-frame.c
++++ b/bonobo/bonobo-control-frame.c
+@@ -1088,7 +1088,7 @@ bonobo_control_frame_set_socket (BonoboControlFrame *frame,
+ 	old_socket = (BonoboSocket *) frame->priv->socket;
+ 
+ 	if (socket)
+-		frame->priv->socket = g_object_ref (socket);
++		frame->priv->socket = (GtkWidget *) g_object_ref (socket);
+ 	else
+ 		frame->priv->socket = NULL;
+ 
+diff --git a/bonobo/bonobo-control.c b/bonobo/bonobo-control.c
+index 4458d18..c26f52a 100644
+--- a/bonobo/bonobo-control.c
++++ b/bonobo/bonobo-control.c
+@@ -1368,7 +1368,7 @@ bonobo_control_set_plug (BonoboControl *control,
+ 	old_plug = (BonoboPlug *) control->priv->plug;
+ 
+ 	if (plug)
+-		control->priv->plug = g_object_ref (plug);
++		control->priv->plug = (GtkWidget *) g_object_ref (plug);
+ 	else
+ 		control->priv->plug = NULL;
+ 

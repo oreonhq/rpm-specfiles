@@ -1,0 +1,23 @@
+diff -rupN --no-dereference pbuilder-0.231.3/Documentation/Makefile pbuilder-0.231.3-new/Documentation/Makefile
+--- pbuilder-0.231.3/Documentation/Makefile	2024-09-06 23:43:24.000000000 +0200
++++ pbuilder-0.231.3-new/Documentation/Makefile	2026-01-14 10:31:14.251297709 +0100
+@@ -12,7 +12,7 @@ MASTERXML=pbuilder-doc.xml
+ HTMLDOCS= pbuilder-doc.html pbuilder-doc.ja.html pbuilder-doc.fr.html pbuilder-doc.de.html
+ PDFDOCS = pbuilder-doc.pdf
+ 
+-all: $(HTMLDOCS) $(PDFDOCS)
++all: $(PDFDOCS)
+ 
+ %.html: %.xml pbuilder-doc.xsl
+ 	xsltproc pbuilder-doc.xsl $< > $@.tmp
+@@ -28,9 +28,8 @@ pbuilder-doc.%.po: $(MASTERXML)
+ 	# requires dblatex package.
+ 	dblatex --tmpdir=docbuild $<
+ 
+-install: $(HTMLDOCS) $(PDFDOCS)
++install: $(PDFDOCS)
+ 	install -d -m 755 $(DESTDIR)/usr/share/doc/pbuilder/
+-	install -m 644 $(HTMLDOCS) $(DESTDIR)/usr/share/doc/pbuilder/
+ 	install -m 644 pbuilder-doc.pdf $(DESTDIR)/usr/share/doc/pbuilder/
+ 
+ preview: pbuilder-doc.html

@@ -1,0 +1,19 @@
+diff -up VirtualGL-2.5.2/server/vglrun.in.redhatlibexecpathsfix VirtualGL-2.5.2/server/vglrun.in
+--- VirtualGL-2.5.2/server/vglrun.in.redhatlibexecpathsfix	2018-05-08 16:50:05.668587030 -0400
++++ VirtualGL-2.5.2/server/vglrun.in	2018-05-08 16:53:32.340734005 -0400
+@@ -218,11 +218,11 @@ fi
+ 
+ # This is so we can launch both 32-bit and 64-bit executables using the same
+ # script.
+-if [ -x "$MYPATH/.vglrun.vars64" ]; then
+-	. "$MYPATH/.vglrun.vars64"
++if [ -f "/usr/libexec/vglrun.vars64" ]; then
++       . "/usr/libexec/vglrun.vars64"
+ fi
+-if [ -x "$MYPATH/.vglrun.vars32" ]; then
+-	. "$MYPATH/.vglrun.vars32"
++if [ -f "/usr/libexec/vglrun.vars32" ]; then
++       . "/usr/libexec/vglrun.vars32"
+ fi
+ if [ ! -z "$VGL_LIBRARY_PATH" ]; then
+ 	LD_LIBRARY_PATH=$VGL_LIBRARY_PATH:$LD_LIBRARY_PATH

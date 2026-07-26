@@ -1,0 +1,12 @@
+diff -Naur levels.h.orig levels.h
+--- levels.h.orig	2010-08-24 23:57:10.000000000 +0200
++++ levels.h		2015-01-02 16:40:22.631654038 +0100
+@@ -26,7 +26,7 @@
+ #endif
+ #define LEVELS_DIR "levels"
+ #define DEFAULT_USER_LEVEL_PACK "mylevels.dat"
+-#define DEFAULT_LEVEL_PACK "original.dat"
++#define DEFAULT_LEVEL_PACK "demo.dat"
+ #define DEFAULT_LEVEL_START 1	/* Start level for Robbo */
+ #define DEFAULT_LEVEL_COLOUR 0x608050
+ 

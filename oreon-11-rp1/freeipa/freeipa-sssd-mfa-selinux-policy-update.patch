@@ -1,0 +1,180 @@
+From d1bd43afdd5f1992a66254bc132bab9e4ca7db0d Mon Sep 17 00:00:00 2001
+From: Alexander Bokovoy <abokovoy@redhat.com>
+Date: Thu, 5 Mar 2026 18:34:17 +0200
+Subject: [PATCH 1/4] SELinux: transition ipa_otpd_t to sssd_mfa_t when
+ executing MFA helpers
+
+When ipa_otpd_t executes sssd MFA helper binaries (oidc_child,
+passkey_child) labeled sssd_mfa_exec_t, use domtrans_pattern to
+transition into sssd_mfa_t rather than running them in the ipa_otpd_t
+domain. sssd_mfa_t already carries the correct network and device
+permissions for those helpers.
+
+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
+---
+ selinux/ipa.te | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/selinux/ipa.te b/selinux/ipa.te
+index a91c4efce..f98108ed2 100644
+--- a/selinux/ipa.te
++++ b/selinux/ipa.te
+@@ -16,7 +16,7 @@ init_daemon_domain(ipa_otpd_t, ipa_otpd_exec_t)
+ 
+ type sssd_mfa_t, ipa_domain;
+ type sssd_mfa_exec_t;
+-can_exec(sssd_mfa_t,sssd_mfa_exec_t)
++init_daemon_domain(sssd_mfa_t, sssd_mfa_exec_t)
+ 
+ kernel_dgram_send(ipa_otpd_t)
+ allow ipa_otpd_t self:unix_dgram_socket { create getopt setopt };
+@@ -156,6 +156,9 @@ optional_policy(`
+ 
+ logging_send_syslog_msg(ipa_otpd_t)
+ 
++domtrans_pattern(ipa_otpd_t, sssd_mfa_exec_t, sssd_mfa_t)
++allow ipa_otpd_t sssd_mfa_t:process { noatsecure rlimitinh siginh };
++
+ ########################################
+ #
+ # sssd_mfa local policy
+-- 
+2.50.1
+
+
+From a29a4175f3b18e5acf9f05e827db8c40ab869735 Mon Sep 17 00:00:00 2001
+From: Alexander Bokovoy <abokovoy@redhat.com>
+Date: Thu, 5 Mar 2026 18:34:50 +0200
+Subject: [PATCH 2/4] SELinux: wrap bare gen_require blocks in optional_policy
+ in dnskey section
+
+Four bare gen_require+allow blocks in the ipa_dnskey_t local policy
+referenced external types (ndc_t, systemd_tmpfiles_t, fs_t, named_t)
+outside of optional_policy, causing hard compilation failures if those
+types are absent from the loaded policy. Wrap each block in
+optional_policy to match the convention used throughout the rest of
+the module.
+
+Related: https://pagure.io/freeipa/issue/9948
+
+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
+---
+ selinux/ipa.te | 32 ++++++++++++++++++++------------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/selinux/ipa.te b/selinux/ipa.te
+index f98108ed2..92951a170 100644
+--- a/selinux/ipa.te
++++ b/selinux/ipa.te
+@@ -370,24 +370,32 @@ corenet_tcp_connect_kerberos_port(ipa_dnskey_t)
+ corenet_tcp_connect_rndc_port(ipa_dnskey_t)
+ 
+ # Allow rndc to access SoftHSM token in IPA directory
+-gen_require(`
+-    type ndc_t;
++optional_policy(`
++    gen_require(`
++        type ndc_t;
++    ')
++    allow ndc_t ipa_dnskey_t:file { getattr open read };
+ ')
+-allow ndc_t ipa_dnskey_t:file { getattr open read };
+ 
+ # Allow relabel from systemd_tmpfiles_t
+-gen_require(`
+-    type systemd_tmpfiles_t;
++optional_policy(`
++    gen_require(`
++        type systemd_tmpfiles_t;
++    ')
++    allow systemd_tmpfiles_t ipa_dnskey_t:file { getattr relabelfrom relabelto };
+ ')
+-allow systemd_tmpfiles_t ipa_dnskey_t:file { getattr relabelfrom relabelto };
+-gen_require(`
+-    type fs_t;
++optional_policy(`
++    gen_require(`
++        type fs_t;
++    ')
++    allow ipa_dnskey_t fs_t:filesystem associate;
+ ')
+-allow ipa_dnskey_t fs_t:filesystem associate;
+-gen_require(`
+-    type named_t;
++optional_policy(`
++    gen_require(`
++        type named_t;
++    ')
++    allow named_t ipa_dnskey_t:file { getattr open read };
+ ')
+-allow named_t ipa_dnskey_t:file { getattr open read };
+ 
+ dev_read_rand(ipa_dnskey_t)
+ dev_read_sysfs(ipa_dnskey_t)
+-- 
+2.50.1
+
+
+From 23bf11795883adb98bcf7a46e64267495b3741fe Mon Sep 17 00:00:00 2001
+From: Alexander Bokovoy <abokovoy@redhat.com>
+Date: Thu, 5 Mar 2026 22:31:43 +0200
+Subject: [PATCH 3/4] SELinux: expand policy coverage for sssd_mfa_t domain
+
+sssd_mfa_t runs oidc_child and passkey_child. Add permissions needed
+for their runtime operation:
+
+- auth_use_nsswitch: NSS lookups (nsswitch.conf traversal)
+- files_read_usr_files: OpenSSL crypto-policies config in /usr/share
+- miscfiles_read_localization: timezone data
+- kernel_read_crypto_sysctls: /proc/sys/crypto/fips_enabled check
+- selinux_getattr_fs: SELinux status probe (is_selinux_enabled)
+- dontaudit net_admin: suppress capability probe that is not required
+- dontaudit init_t:unix_stream_socket: suppress noise from RADIUS
+  socket leaked to child (should be close-on-exec in ipa-otpd)
+- ps_process_pattern(syslogd_t): allow systemd-journal to read
+  sssd_mfa_t process entries in /proc for structured log entries
+
+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
+---
+ selinux/ipa.te | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/selinux/ipa.te b/selinux/ipa.te
+index 92951a170..ca13d5b7c 100644
+--- a/selinux/ipa.te
++++ b/selinux/ipa.te
+@@ -205,6 +205,31 @@ optional_policy(`
+ 
+ logging_send_syslog_msg(sssd_mfa_t)
+ 
++auth_use_nsswitch(sssd_mfa_t)
++
++files_read_usr_files(sssd_mfa_t)
++miscfiles_read_localization(sssd_mfa_t)
++
++kernel_read_crypto_sysctls(sssd_mfa_t)
++
++selinux_getattr_fs(sssd_mfa_t)
++
++dontaudit sssd_mfa_t self:capability net_admin;
++
++optional_policy(`
++    gen_require(`
++        type init_t;
++    ')
++    dontaudit sssd_mfa_t init_t:unix_stream_socket { read write };
++')
++
++optional_policy(`
++    gen_require(`
++        type syslogd_t;
++    ')
++    ps_process_pattern(syslogd_t, sssd_mfa_t)
++')
++
+ optional_policy(`
+ 	ipa_read_lib(sssd_mfa_t)
+ 	ipa_search_lib(sssd_mfa_t)
+-- 
+2.50.1
+

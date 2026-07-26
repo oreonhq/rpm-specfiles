@@ -1,0 +1,35 @@
+From 8fb26a56ca8cc62f5d8b626754df41917d4031d1 Mon Sep 17 00:00:00 2001
+Message-ID: <8fb26a56ca8cc62f5d8b626754df41917d4031d1.1766871116.git.christoph.erhardt@sicherha.de>
+From: Christoph Erhardt <christoph.erhardt@sicherha.de>
+Date: Sat, 27 Dec 2025 22:31:41 +0100
+Subject: [PATCH] Make `ctest_to.py` compatible with `argparse-manpage`
+
+---
+ cmakelang/ctest_to.py | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/cmakelang/ctest_to.py b/cmakelang/ctest_to.py
+index 9d93661..1aae955 100644
+--- a/cmakelang/ctest_to.py
++++ b/cmakelang/ctest_to.py
+@@ -243,10 +243,15 @@ def setup_argparse(argparser):
+   argparser.add_argument("directory", nargs="?", default=".")
+ 
+ 
+-def main():
+-  logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
++def get_argparser():
+   argparser = argparse.ArgumentParser(prog="ctest-to", description=__doc__)
+   setup_argparse(argparser)
++  return argparser
++
++
++def main():
++  logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
++  argparser = get_argparser()
+   args = argparser.parse_args()
+   logger.setLevel(getattr(logging, args.log_level.upper()))
+   ctx = ParseContext()
+-- 
+2.52.0
+

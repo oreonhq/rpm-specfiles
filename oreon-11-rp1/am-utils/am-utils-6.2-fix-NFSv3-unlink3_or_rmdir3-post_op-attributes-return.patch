@@ -1,0 +1,62 @@
+am-utils-6.2 - fix NFSv3 unlink3_or_rmdir3() post_op attributes return
+
+From: Ian Kent <raven@themaw.net>
+
+The function unlink3_or_rmdir3() is called by both NFS v3 remove and
+rmdir methods. Both of these methods require post op wcc attributes
+to be returned but unlink3_or_rmdir3() was returning only the pre op
+wcc attributes.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_subr.c |   16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index 00a1dc0..0a43b98 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -1033,7 +1033,7 @@ static am_nfsstat3 unlink3_or_rmdir3(am_diropargs3 *argp,
+   am_pre_op_attr *pre_op_dir = &wcc_data->before;
+   am_post_op_attr *post_op_dir = &wcc_data->after;
+   nfsfattr *fattr;
+-  am_wcc_attr *wcc_attr;
++  am_wcc_attr *pre_op_wcc_attr, *post_op_wcc_attr;
+   am_node *mp, *ap;
+   int retry;
+ 
+@@ -1050,12 +1050,17 @@ static am_nfsstat3 unlink3_or_rmdir3(am_diropargs3 *argp,
+     goto out;
+   }
+ 
++  post_op_dir->attributes_follow = 1;
++  post_op_wcc_attr = &post_op_dir->am_post_op_attr_u.attributes;
++
+   pre_op_dir->attributes_follow = 1;
++  pre_op_wcc_attr = &pre_op_dir->am_pre_op_attr_u.attributes;
++
+   fattr = &mp->am_fattr;
+-  wcc_attr = &pre_op_dir->am_pre_op_attr_u.attributes;
+-  fattr_to_wcc_attr(fattr, wcc_attr);
++  fattr_to_wcc_attr(fattr, pre_op_wcc_attr);
+ 
+   if (mp->am_fattr.na_type != NFDIR) {
++    fattr_to_wcc_attr(fattr, post_op_wcc_attr);
+     res = nfs_error(ENOTDIR);
+     goto out;
+   }
+@@ -1075,9 +1080,14 @@ static am_nfsstat3 unlink3_or_rmdir3(am_diropargs3 *argp,
+      */
+     else if (retry == ENOENT)
+       retry = 0;
++    fattr_to_wcc_attr(fattr, post_op_wcc_attr);
+     res = nfs_error(retry);
+   } else {
+     forcibly_timeout_mp(mp);
++    /* we can't wait for the expire so use the attributes as
++     * they are now for the post op wcc attributes.
++     */
++    fattr_to_wcc_attr(fattr, post_op_wcc_attr);
+     res = AM_NFS3_OK;
+   }
+ 

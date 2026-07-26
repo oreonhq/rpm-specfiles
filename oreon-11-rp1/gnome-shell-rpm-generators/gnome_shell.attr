@@ -1,0 +1,36 @@
+%__gnome_shell_provides() %{lua:
+    -- Match buildroot/payload paths of the form
+    --    /PATH/OF/BUILDROOT/usr/share/gnome-shell/extensions/USER@URL/metadata.json
+    -- generating a line of the form
+    --    gnome-shell-extension(USER@URL) = VERSION
+    local path = rpm.expand('%1')
+    local prefix = rpm.expand('%{_datadir}') .. '/gnome%-shell/extensions'
+    if path:match(prefix .. '/%w+@[%w%p]+/metadata.json$') then
+        local version = rpm.expand('%version')
+	local pattern = '.*' .. prefix .. '/(%w+@[%w%p]+)/metadata.json$'
+        local provide, n = path:gsub(pattern, 'gnome-shell-extension(%1) = ' .. version)
+        print(provide)
+    end
+}
+
+%__gnome_shell_requires() %{lua:
+    -- Match buildroot/payload paths of the form
+    --    /PATH/OF/BUILDROOT/usr/share/gnome-shell/extensions/USER@URL/metadata.json
+    -- generating a line of the form
+    --    gnome-shell-extension(USER@URL) = VERSION
+    local path = rpm.expand('%1')
+    local prefix = rpm.expand('%{_datadir}') .. '/gnome%-shell/extensions'
+    if path:match(prefix .. '/%w+@[%w%p]+/metadata.json$') then
+	-- (gnome-shell(api) = 45 or gnome-shell(api) = 46 or ...)
+	-- print('(gnome-shell(api) = 45 or gnome-shell(api) = 46)')
+	local wrapper = rpm.expand('%{_rpmconfigdir}') .. '/gnome_shell_requires.sh'
+	local proc = io.popen(wrapper .. ' ' .. path)
+	-- local proc = io.popen('echo "(gnome-shell(api) = 45 or gnome-shell(api) = 46)"')
+	local req = proc:read('*all')
+	print(req)
+	-- print(path)
+    end
+
+}
+
+%__gnome_shell_path ^%{_datadir}/gnome-shell/extensions/.*/metadata\.json$

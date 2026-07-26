@@ -1,0 +1,26 @@
+From bf72f75b987616d5817a5df19193c989ae303074 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 19 Jun 2013 10:43:59 +0200
+Subject: [PATCH] use #if condition because XDL_FAST_HASH is always defined to
+ 0 or 1
+
+---
+ xutils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xutils.c b/xutils.c
+index b387fcd..8fa9c1f 100644
+--- a/xutils.c
++++ b/xutils.c
+@@ -278,7 +278,7 @@ static unsigned long xdl_hash_record_with_whitespace(char const **data,
+ 	return ha;
+ }
+ 
+-#ifdef XDL_FAST_HASH
++#if XDL_FAST_HASH
+ 
+ #define REPEAT_BYTE(x)  ((~0ul / 0xff) * (x))
+ 
+-- 
+1.8.1.4
+

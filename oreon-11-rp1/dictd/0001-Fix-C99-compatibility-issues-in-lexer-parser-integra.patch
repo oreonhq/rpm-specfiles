@@ -1,0 +1,117 @@
+From 3f72d457cc49bd52106c8bd7779d867ca7a57e0d Mon Sep 17 00:00:00 2001
+From: Florian Weimer <fweimer@redhat.com>
+Date: Thu, 11 Jan 2024 08:53:25 -0700
+Subject: [PATCH] Fix C99 compatibility issues in lexer/parser integration
+
+Consolidate all lexer/parser declarations in lexparse.h and include
+this file in both the generated lexers and parsers and the code that
+invokes them.
+
+This avoids implicit function declarations and build failures with
+future compilers.
+
+Submitted upstream: <https://sourceforge.net/p/dict/mailman/message/37772919/>
+
+Related to:
+  <https://fedoraproject.org/wiki/Changes/PortingToModernC>
+  <https://fedoraproject.org/wiki/Toolchain/PortingToModernC>
+---
+ clientparse.y | 1 +
+ clientscan.l  | 4 +---
+ lexparse.h    | 8 ++++++++
+ parse.c       | 4 +---
+ servparse.y   | 1 +
+ servscan.l    | 4 +---
+ 6 files changed, 13 insertions(+), 9 deletions(-)
+ create mode 100644 lexparse.h
+
+diff --git a/clientparse.y b/clientparse.y
+index f4162e6..073c85a 100644
+--- a/clientparse.y
++++ b/clientparse.y
+@@ -20,6 +20,7 @@
+ 
+ %{
+ #include "dict.h"
++#include "lexparse.h"
+ #define YYDEBUG 1
+ #define YYERROR_VERBOSE
+ 
+diff --git a/clientscan.l b/clientscan.l
+index d47b5b8..dbcc8f6 100644
+--- a/clientscan.l
++++ b/clientscan.l
+@@ -24,9 +24,7 @@
+ 
+ #include "dict.h"
+ #include "clientparse.h"
+-extern int  yylex( void );
+-extern int  yydebug;
+-extern void yyerror( const char *message );
++#include "lexparse.h"
+ #define RETURN(val) do {                  \
+    yylval.token.src = src_get( yyleng );  \
+    return val;                            \
+diff --git a/lexparse.h b/lexparse.h
+new file mode 100644
+index 0000000..d7b1955
+--- /dev/null
++++ b/lexparse.h
+@@ -0,0 +1,8 @@
++/* Shared prototypes for lexers and parsers. */
++
++extern int  yylex( void );
++extern int  yydebug;
++extern void yyerror( const char *message );
++extern int yydebug;
++extern FILE *yyin;
++extern int yyparse( void );
+diff --git a/parse.c b/parse.c
+index 1cdaf91..47c2ebc 100644
+--- a/parse.c
++++ b/parse.c
+@@ -24,13 +24,11 @@
+ #include "dictP.h"
+ #include "maa.h"
+ #include "parse.h"
++#include "lexparse.h"
+ 
+ static int           _prs_debug_flag   = 0;
+ static const char    *_prs_cpp_options = NULL;
+ 
+-extern int        yydebug;
+-extern FILE       *yyin;
+-extern int        yyparse( void );
+ 
+ /* \doc |prs_set_debug| specifies the value of |yyerror| that |prs_file|
+    will use. */
+diff --git a/servparse.y b/servparse.y
+index 4d4e0bc..ae7fb39 100644
+--- a/servparse.y
++++ b/servparse.y
+@@ -24,6 +24,7 @@
+ #include "index.h"
+ #include "data.h"
+ #include "maa.h"
++#include "lexparse.h"
+ 
+ #define YYDEBUG 1
+ #define YYERROR_VERBOSE
+diff --git a/servscan.l b/servscan.l
+index 2001605..2460ea4 100644
+--- a/servscan.l
++++ b/servscan.l
+@@ -22,9 +22,7 @@
+ %{
+ #include "dictd.h"
+ #include "servparse.h"
+-extern int  yylex( void );
+-extern int  yydebug;
+-extern void yyerror( const char *message );
++#include "lexparse.h"
+ static void include_file( void );
+ static void include_complete( void );
+ YY_BUFFER_STATE orig_buffer = NULL;
+-- 
+2.43.0
+

@@ -1,0 +1,19 @@
+diff -urp '--exclude=*~' '--exclude=*pycache*' gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/rss.py gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/rss.py
+--- gphotoframe-2.0.2-hg2084299dffb6.orig/lib/plugins/rss.py	2021-03-13 02:41:53.618569277 +0900
++++ gphotoframe-2.0.2-hg2084299dffb6/lib/plugins/rss.py	2024-09-03 12:05:01.664562035 +0900
+@@ -47,8 +47,13 @@ class RSSPhotoList(base.PhotoList):
+         self._start_timer(interval_min)
+ 
+     def _random_choice(self):
+-        rate = self.random()
+-        return random.choice(self.photos[rate.name])
++        try:
++            rate = self.random()
++            return random.choice(self.photos[rate.name])
++        except AttributeError:
++            # probably _prepare_cb was called with _start_timer but not yet finished
++            # probably loading rss is taking very long time
++            return None
+ 
+     def _prepare_cb(self, data):
+         rss = feedparser.parse(data)

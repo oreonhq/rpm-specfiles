@@ -1,0 +1,172 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.utf8 mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.utf8	2017-07-12 10:34:55.761535649 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs	2017-07-12 10:35:58.281003640 -0400
+@@ -85,7 +85,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         
+             ServiceRef sd_ref;
+             ServiceError error = Native.DNSServiceResolve(out sd_ref, ServiceFlags.None, 
+-                InterfaceIndex, Name, RegType, ReplyDomain, resolve_reply_handler, IntPtr.Zero);
++                InterfaceIndex, Encoding.UTF8.GetBytes(Name), RegType, ReplyDomain, resolve_reply_handler, IntPtr.Zero);
+                 
+             if(error != ServiceError.NoError) {
+                 throw new ServiceErrorException(error);
+@@ -110,14 +110,14 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         }
+         
+         private void OnResolveReply(ServiceRef sdRef, ServiceFlags flags, uint interfaceIndex,
+-            ServiceError errorCode, string fullname, string hosttarget, ushort port, ushort txtLen, 
++            ServiceError errorCode, IntPtr fullname, string hosttarget, ushort port, ushort txtLen, 
+             IntPtr txtRecord, IntPtr contex)
+         {
+             is_resolved = true;
+             resolve_pending = false;
+             
+             InterfaceIndex = interfaceIndex;
+-            FullName = fullname;
++            FullName = Native.Utf8toString(fullname);
+             this.port = (ushort)IPAddress.NetworkToHostOrder((short)port);
+             TxtRecord = new TxtRecord(txtLen, txtRecord);
+ 
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs.utf8 mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs.utf8	2017-07-12 10:38:25.619393186 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/RegisterService.cs	2017-07-12 10:39:43.787482671 -0400
+@@ -30,6 +30,7 @@ using System;
+ using System.Net;
+ using System.Threading;
+ using System.Runtime.InteropServices;
++using System.Text;
+ 
+ namespace Mono.Zeroconf.Providers.Bonjour
+ {
+@@ -107,7 +108,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             
+             ServiceError error = Native.DNSServiceRegister(out sd_ref, 
+                 auto_rename ? ServiceFlags.None : ServiceFlags.NoAutoRename, InterfaceIndex,
+-                Name, RegType, ReplyDomain, HostTarget, (ushort)IPAddress.HostToNetworkOrder((short)port), txt_rec_length, txt_rec,
++                Encoding.UTF8.GetBytes(Name), RegType, ReplyDomain, HostTarget, (ushort)IPAddress.HostToNetworkOrder((short)port), txt_rec_length, txt_rec,
+                 register_reply_handler, IntPtr.Zero);
+ 
+             if(error != ServiceError.NoError) {
+@@ -128,7 +129,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         }
+         
+         private void OnRegisterReply(ServiceRef sdRef, ServiceFlags flags, ServiceError errorCode,
+-            string name, string regtype, string domain, IntPtr context)
++            IntPtr name, string regtype, string domain, IntPtr context)
+         {
+             RegisterServiceEventArgs args = new RegisterServiceEventArgs();
+             
+@@ -137,7 +138,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             args.ServiceError = (ServiceErrorCode)errorCode;
+             
+             if(errorCode == ServiceError.NoError) {
+-                Name = name;
++                Name = Native.Utf8toString(name);
+                 RegType = regtype;
+                 ReplyDomain = domain;
+                 args.IsRegistered = true;
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs.utf8 mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs.utf8	2017-07-12 10:39:52.187277608 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/ServiceBrowser.cs	2017-07-12 10:41:07.457440051 -0400
+@@ -168,11 +168,12 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         }
+         
+         private void OnBrowseReply(ServiceRef sdRef, ServiceFlags flags, uint interfaceIndex, ServiceError errorCode, 
+-            string serviceName, string regtype, string replyDomain, IntPtr context)
++            IntPtr serviceName, string regtype, string replyDomain, IntPtr context)
+         {
++            string name = Native.Utf8toString(serviceName);
+             BrowseService service = new BrowseService();
+             service.Flags = flags;
+-            service.Name = serviceName;
++            service.Name = name;
+             service.RegType = regtype;
+             service.ReplyDomain = replyDomain;
+             service.InterfaceIndex = interfaceIndex;
+@@ -183,10 +184,10 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             
+             if((flags & ServiceFlags.Add) != 0) {
+                 lock (service_table) {
+-                    if (service_table.ContainsKey (serviceName)) {
+-                        service_table[serviceName] = service;
++                    if (service_table.ContainsKey (name)) {
++                        service_table[name] = service;
+                     } else {
+-                        service_table.Add (serviceName, service);
++                        service_table.Add (name, service);
+                     }
+                 }
+                 
+@@ -196,8 +197,8 @@ namespace Mono.Zeroconf.Providers.Bonjou
+                 }
+             } else {
+                 lock (service_table) {
+-                    if (service_table.ContainsKey (serviceName)) {
+-                        service_table.Remove (serviceName);
++                    if (service_table.ContainsKey (name)) {
++                        service_table.Remove (name);
+                     }
+                 }
+                 
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/Native.cs.utf8	2007-10-09 12:42:44.000000000 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/Native.cs	2017-07-12 10:48:26.709609231 -0400
+@@ -28,6 +28,7 @@
+ 
+ using System;
+ using System.Runtime.InteropServices;
++using System.Text;
+ 
+ namespace Mono.Zeroconf.Providers.Bonjour
+ {
+@@ -50,7 +51,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         // DNSServiceBrowse
+         
+         public delegate void DNSServiceBrowseReply(ServiceRef sdRef, ServiceFlags flags, uint interfaceIndex,
+-            ServiceError errorCode, string serviceName, string regtype, string replyDomain, 
++            ServiceError errorCode, IntPtr serviceName, string regtype, string replyDomain, 
+             IntPtr context);
+             
+         [DllImport("dnssd.dll")]
+@@ -61,22 +62,22 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         // DNSServiceResolve
+         
+         public delegate void DNSServiceResolveReply(ServiceRef sdRef, ServiceFlags flags, uint interfaceIndex,
+-            ServiceError errorCode, string fullname, string hosttarget, ushort port, ushort txtLen, 
++            ServiceError errorCode, IntPtr fullname, string hosttarget, ushort port, ushort txtLen, 
+             IntPtr txtRecord, IntPtr context);
+             
+         [DllImport("dnssd.dll")]
+         public static extern ServiceError DNSServiceResolve(out ServiceRef sdRef, ServiceFlags flags,
+-            uint interfaceIndex, string name, string regtype, string domain, DNSServiceResolveReply callBack,
++            uint interfaceIndex, byte [] name, string regtype, string domain, DNSServiceResolveReply callBack,
+             IntPtr context);
+         
+         // DNSServiceRegister
+     
+         public delegate void DNSServiceRegisterReply(ServiceRef sdRef, ServiceFlags flags, ServiceError errorCode,
+-            string name, string regtype, string domain, IntPtr context);
++            IntPtr name, string regtype, string domain, IntPtr context);
+     
+         [DllImport("dnssd.dll")]
+         public static extern ServiceError DNSServiceRegister(out ServiceRef sdRef, ServiceFlags flags,
+-            uint interfaceIndex, string name, string regtype, string domain, string host, ushort port,
++            uint interfaceIndex, byte [] name, string regtype, string domain, string host, ushort port,
+             ushort txtLen, byte [] txtRecord, DNSServiceRegisterReply callBack, IntPtr context);
+ 
+         // DNSServiceQueryRecord
+@@ -117,5 +118,15 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         
+         [DllImport("dnssd.dll")]
+         public static extern ushort TXTRecordGetCount(ushort txtLen, IntPtr txtRecord);
++
++        public static string Utf8toString(IntPtr ptr) {
++            int len = 0;
++            while (Marshal.ReadByte(ptr, len) != 0) {
++                len++;
++            }
++            byte[] raw = new byte[len];
++            Marshal.Copy(ptr, raw, 0, len);
++            return Encoding.UTF8.GetString(raw);
++        }
+     }
+ }

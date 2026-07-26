@@ -1,0 +1,60 @@
+From 04ff4c060cdc233af9a6deeb85a6523da0416f31 Mon Sep 17 00:00:00 2001
+From: Nic Boet <nic@boet.cc>
+Date: Fri, 13 Jun 2025 16:44:57 -0500
+Subject: [PATCH] Dovecot 2.4 filter support
+
+Dovecot 2.4 release is a major upgrade
+Logger event structure has changed, all messages are now
+prefixed with:
+
+        "Login aborted: " <reason> "auth failed"
+
+Maintain 2.3 support as many folks have yet to migrate,
+community edition is still receiving cretial security patches
+
+Dovecot 2.4.1
+Python 3.12.10
+
+Signed-off-by: Nic Boet <nic@boet.cc>
+---
+ config/filter.d/dovecot.conf      | 2 ++
+ fail2ban/tests/files/logs/dovecot | 6 ++++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/config/filter.d/dovecot.conf b/config/filter.d/dovecot.conf
+index dc3ebbcd42..f49eebe726 100644
+--- a/config/filter.d/dovecot.conf
++++ b/config/filter.d/dovecot.conf
+@@ -17,6 +17,7 @@ prefregex = ^%(__prefix_line)s(?:%(_auth_worker)s(?:\([^\)]+\))?: )?(?:%(__pam_a
+ 
+ failregex = ^authentication failure; logname=<F-ALT_USER1>\S*</F-ALT_USER1> uid=\S* euid=\S* tty=dovecot ruser=<F-USER>\S*</F-USER> rhost=<HOST>(?:\s+user=<F-ALT_USER>\S*</F-ALT_USER>)?\s*$
+             ^(?:Aborted login|Disconnected|Remote closed connection|Client has quit the connection)%(_bypass_reject_reason)s \((?:auth failed, \d+ attempts(?: in \d+ secs)?|tried to use (?:disabled|disallowed) \S+ auth|proxy dest auth failed)\):(?: user=<<F-USER>[^>]*</F-USER>>,)?(?: method=\S+,)? rip=<HOST>(?:[^>]*(?:, session=<\S+>)?)\s*$
++            ^(?:Login aborted):\s*%(_bypass_reject_reason)s.*?\((?:auth failed, \d+ attempts(?: in \d+ secs)?|tried to use (?:disabled|disallowed) \S+ auth|proxy dest auth failed)\)(?:\s*\([^)]+\))?:\s*(?:user=<<F-USER>[^>]*</F-USER>>,?\s*)?(?:,?\s*method=\S+,\s*)?rip=<HOST>(?:[^>]*(?:, session=<\S+>)?)\s*$
+             ^pam\(\S+,<HOST>(?:,\S*)?\): pam_authenticate\(\) failed: (?:User not known to the underlying authentication module: \d+ Time\(s\)|Authentication failure \([Pp]assword mismatch\?\)|Permission denied)\s*$
+             ^[a-z\-]{3,15}\(\S*,<HOST>(?:,\S*)?\): (?:[Uu]nknown user|[Ii]nvalid credentials|[Pp]assword mismatch)
+             <mdre-<mode>>
+@@ -43,6 +44,7 @@ datepattern = {^LN-BEG}TAI64N
+ # DEV Notes:
+ # * the first regex is essentially a copy of pam-generic.conf
+ # * Probably doesn't do dovecot sql/ldap backends properly (resolved in edit 21/03/2016)
++# * Dovecot version 2.4 changed event log structure, line prior needed to maintain 2.3 support
+ #
+ # Author: Martin Waschbuesch
+ #         Daniel Black (rewrote with begin and end anchors)
+diff --git a/fail2ban/tests/files/logs/dovecot b/fail2ban/tests/files/logs/dovecot
+index 0e33296129..4f5a0b7867 100644
+--- a/fail2ban/tests/files/logs/dovecot
++++ b/fail2ban/tests/files/logs/dovecot
+@@ -22,6 +22,12 @@ Jun 14 00:48:21 platypus dovecot: imap-login: Disconnected (auth failed, 1 attem
+ # failJSON: { "time": "2005-06-23T00:52:43", "match": true , "host": "193.95.245.163" }
+ Jun 23 00:52:43 vhost1-ua dovecot: pop3-login: Disconnected: Inactivity (auth failed, 1 attempts): user=<info>, method=PLAIN, rip=193.95.245.163, lip=176.214.13.210
+ 
++# Dovecot version 2.4
++# failJSON: { "time": "2005-06-12T19:07:29", "match": true , "host": "192.0.2.241" }
++Jun 12 19:07:29 hostname dovecot[241]: imap-login: Login aborted: Connection closed (auth failed, 3 attempts in 16 secs) (auth_failed): user=<test>, method=PLAIN, rip=192.0.2.241, lip=203.0.113.104, TLS, session=<9ZHq02g3J8S60fan>
++# failJSON: { "time": "2005-06-13T16:35:56", "match": true , "host": "192.0.2.241" }
++Jun 13 16:35:56 mx dovecot[241]: managesieve-login: Login aborted: Logged out (auth failed, 1 attempts in 10 secs) (auth_failed): user=<user@domain>, method=PLAIN, rip=192.0.2.241, lip=203.0.113.104, TLS, session=<Dp8j1Ho3suQYdo+k>
++
+ # failJSON: { "time": "2005-07-02T13:49:31", "match": true , "host": "192.51.100.13" }
+ Jul 02 13:49:31 hostname dovecot[442]: pop3-login: Aborted login (auth failed, 1 attempts in 17 secs): user=<test>, method=PLAIN, rip=192.51.100.13, lip=203.0.113.17, session=<YADINsQCDs5BH8Pg>
+ 

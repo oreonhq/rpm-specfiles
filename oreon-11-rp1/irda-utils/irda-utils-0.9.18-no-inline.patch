@@ -1,0 +1,299 @@
+diff -Nrbu irda-utils-0.9.18/irdadump/irdadump.c irda-utils-0.9.18-OK/irdadump/irdadump.c
+--- irda-utils-0.9.18/irdadump/irdadump.c	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/irdadump/irdadump.c	2017-02-13 03:42:20.216303403 +0300
+@@ -71,7 +71,7 @@
+  *    Print current time
+  *
+  */
+-inline void print_time(const struct timeval *timev, GString *str)
++void print_time(const struct timeval *timev, GString *str)
+ {
+         int s;
+ 
+@@ -90,7 +90,7 @@
+  *    Print the difference in time between this frame and the previous one
+  *
+  */
+-inline void print_diff_time(struct timeval *timev, struct timeval *prev_timev,
++void print_diff_time(struct timeval *timev, struct timeval *prev_timev,
+ 			    GString *str)
+ {
+ 	float diff;
+diff -Nrbu irda-utils-0.9.18/irdadump/irdadump.h irda-utils-0.9.18-OK/irdadump/irdadump.h
+--- irda-utils-0.9.18/irdadump/irdadump.h	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/irdadump/irdadump.h	2017-02-13 03:41:55.785303429 +0300
+@@ -219,10 +219,10 @@
+ 	guint8   caddr;      /* LAP connection address (for garbage collect) */
+ };
+ 
+-inline void parse_obex(GNetBuf *buf, GString *str, int cmd);
+-inline void parse_irlmp(GNetBuf *buf, GString *str,
++void parse_obex(GNetBuf *buf, GString *str, int cmd);
++void parse_irlmp(GNetBuf *buf, GString *str,
+ 			guint8 caddr, int type, int cmd);
+-inline void parse_ui_irlmp(GNetBuf *buf, GString *str, int type);
++void parse_ui_irlmp(GNetBuf *buf, GString *str, int type);
+ void parse_ircomm_params(guint8 clen, GNetBuf *buf, GString *str);
+ void parse_ircomm_connect(GNetBuf *buf, GString *str);
+ void parse_ircomm_lmp(GNetBuf *buf, GString *str);
+diff -Nrbu irda-utils-0.9.18/irdadump/irlap.c irda-utils-0.9.18-OK/irdadump/irlap.c
+--- irda-utils-0.9.18/irdadump/irlap.c	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/irdadump/irlap.c	2017-02-13 03:43:06.858303354 +0300
+@@ -91,7 +91,7 @@
+  *    Garbage collect destroyes LAP connections
+  *
+  */
+-inline void garbage_connection(guint8 caddr)
++void garbage_connection(guint8 caddr)
+ {
+ 	gint i;
+ 
+@@ -226,7 +226,7 @@
+  *    Parse and print the names of the various hint bits if they are set
+  *
+  */
+-inline void parse_hints(guint8 *hint, GString *str)
++void parse_hints(guint8 *hint, GString *str)
+ {
+ 	g_string_append(str, "[ ");
+ 	if (hint[0] & HINT_PNP)
+@@ -261,7 +261,7 @@
+  *    Exchange station identification frame
+  *
+  */
+-inline void parse_xid_frame(guint8 command, guint8 pf, int type,
++void parse_xid_frame(guint8 command, guint8 pf, int type,
+ 			    GNetBuf *buf, GString *str)
+ {
+ 	struct xid_frame *frame = (struct xid_frame *) buf->data;
+@@ -339,7 +339,7 @@
+  *    Information frames
+  *
+  */
+-inline void parse_i_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
++void parse_i_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
+ 			  GNetBuf *buf, GString *str)
+ {
+ 	int nr, ns;
+@@ -396,7 +396,7 @@
+  *    Information frames
+  *
+  */
+-inline void parse_ui_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_ui_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			   GNetBuf *buf, GString *str)
+ {
+ 	/* Remove IrLAP header */
+@@ -417,7 +417,7 @@
+  *    Frame reject frame
+  *
+  */
+-inline void parse_frmr_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_frmr_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			     GNetBuf *buf, GString *str)
+ {
+ 	int nr, ns;
+@@ -439,7 +439,7 @@
+  *    Receive ready frame
+  *
+  */
+-inline void parse_rr_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_rr_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			   GNetBuf *buf, GString *str)
+ {
+ 	int nr;
+@@ -479,7 +479,7 @@
+  *    Receive not ready frame
+  *
+  */
+-inline void parse_rnr_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_rnr_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			    GNetBuf *buf, GString *str)
+ {
+ 	int nr;
+@@ -497,7 +497,7 @@
+  *    Reject frame
+  *
+  */
+-inline void parse_rej_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_rej_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			    GNetBuf *buf, GString *str)
+ {
+ 	int nr;
+@@ -515,7 +515,7 @@
+  *    Selective reject frame
+  *
+  */
+-inline void parse_srej_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_srej_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			     GNetBuf *buf, GString *str)
+ {
+ 	int nr;
+@@ -533,7 +533,7 @@
+  *    Unnumbered acknowledgement frame
+  *
+  */
+-inline void parse_ua_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
++void parse_ua_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
+ 			   GNetBuf *buf, GString *str)
+ {
+ 	struct ua_frame *frame = (struct ua_frame *) buf->data;
+@@ -564,7 +564,7 @@
+  *    Disconnect frame
+  *
+  */
+-inline void parse_disc_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_disc_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			     GNetBuf *buf, GString *str)
+ {
+ 	/* Kill "unused" warning */
+@@ -582,7 +582,7 @@
+  *    Disconnected mode frame
+  *
+  */
+-inline void parse_dm_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
++void parse_dm_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
+ 			   GNetBuf *buf, GString *str)
+ {
+ 	/* Kill "unused" warning */
+@@ -598,7 +598,7 @@
+  *    Request disconnect frame
+  *
+  */
+-inline void parse_rd_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_rd_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			   GNetBuf *buf, GString *str)
+ {
+ 	/* Kill "unused" warning */
+@@ -614,7 +614,7 @@
+  *    Test frame
+  *
+  */
+-inline void parse_test_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
++void parse_test_frame(guint8 caddr, guint8 cmd, guint8 pf, int type, 
+ 			     GNetBuf *buf, GString *str)
+ {
+ 	struct test_frame *frame = (struct test_frame *) buf->data;
+@@ -634,7 +634,7 @@
+  *    Set normal response mode frame
+  *
+  */
+-inline void parse_snrm_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
++void parse_snrm_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
+ 			     GNetBuf *buf, GString *str)
+ {
+ 	struct snrm_frame *frame = (struct snrm_frame *) buf->data;
+@@ -671,7 +671,7 @@
+  *    Request normal response mode
+  *
+  */
+-inline void parse_rnrm_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
++void parse_rnrm_frame(guint8 caddr, guint8 cmd, guint8 pf, int type,
+ 			     GNetBuf *buf, GString *str)
+ {
+ 	gint32 saddr, daddr;
+diff -Nrbu irda-utils-0.9.18/irdadump/irlmp.c irda-utils-0.9.18-OK/irdadump/irlmp.c
+--- irda-utils-0.9.18/irdadump/irlmp.c	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/irdadump/irlmp.c	2017-02-13 03:41:45.654303441 +0300
+@@ -47,7 +47,7 @@
+  *    Try to parse and print the LM-IAS query
+  *
+  */
+-inline void parse_iriap_command(GNetBuf *buf, GString *str, guint8 slsap_sel)
++void parse_iriap_command(GNetBuf *buf, GString *str, guint8 slsap_sel)
+ {
+ 	guint8 opcode;
+ 	char name[255];
+@@ -193,7 +193,7 @@
+  *    
+  *
+  */
+-inline void parse_iriap_response(GNetBuf *buf, GString *str, guint8 dlsap_sel)
++void parse_iriap_response(GNetBuf *buf, GString *str, guint8 dlsap_sel)
+ {
+ 	guint8 opcode, rsp;
+ 
+@@ -239,7 +239,7 @@
+  *    Parse IrTTP data frame
+  *
+  */
+-inline void parse_irnet(GNetBuf *buf, GString *str) 
++void parse_irnet(GNetBuf *buf, GString *str) 
+ {
+ 	/* Kill "unused" warning */
+ 	buf = buf;
+@@ -256,7 +256,7 @@
+  *    Parse IrTTP data frame
+  *
+  */
+-inline void parse_irttp(GNetBuf *buf, GString *str) 
++void parse_irttp(GNetBuf *buf, GString *str) 
+ {
+ 	g_string_sprintfa(str, "TTP credits=%d ", buf->data[0] & 0x7f);
+ 
+@@ -273,7 +273,7 @@
+  *    Parse IrTTP connect frame
+  *
+  */
+-inline void parse_irttp_connect(GNetBuf *buf, GString *str)
++void parse_irttp_connect(GNetBuf *buf, GString *str)
+ {
+ 	guint8 plen, pi, pl;
+ 	guint16 tmp_cpu;
+@@ -303,7 +303,7 @@
+  *    Parse IrLMP frame
+  *
+  */
+-inline void parse_irlmp(GNetBuf *buf, GString *str,
++void parse_irlmp(GNetBuf *buf, GString *str,
+ 			guint8 caddr, int type, int cmd)
+ {
+ 	guint8 slsap_sel, dlsap_sel;
+@@ -437,7 +437,7 @@
+  *    Parse IrLMP frame in UI frame
+  *
+  */
+-inline void parse_ui_irlmp(GNetBuf *buf, GString *str, int type)
++void parse_ui_irlmp(GNetBuf *buf, GString *str, int type)
+ {
+ 	guint8 slsap_sel, dlsap_sel;
+ 	int ctrl;
+diff -Nrbu irda-utils-0.9.18/irdadump/obex.c irda-utils-0.9.18-OK/irdadump/obex.c
+--- irda-utils-0.9.18/irdadump/obex.c	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/irdadump/obex.c	2017-02-13 03:42:10.356303414 +0300
+@@ -112,7 +112,7 @@
+  *    Parse an OBEX put command
+  *
+  */
+-inline void parse_obex_headers(GNetBuf *buf, GString *str)
++void parse_obex_headers(GNetBuf *buf, GString *str)
+ {
+ 	struct obex_minimal_frame *frame;
+ 	int final;
+@@ -179,7 +179,7 @@
+ 	}
+ }
+ 
+-inline void parse_obex_connect(GNetBuf *buf, GString *str)
++void parse_obex_connect(GNetBuf *buf, GString *str)
+ {
+ 	struct obex_connect_frame *frame;
+ 	guint16 length;
+@@ -210,7 +210,7 @@
+  * We also need to parse the anser to GET request properly
+  * Jean II
+  */
+-inline void parse_obex_success(GNetBuf *buf, GString *str)
++void parse_obex_success(GNetBuf *buf, GString *str)
+ {
+ 	struct obex_connect_frame *frame;
+ 	guint16 length;
+@@ -252,7 +252,7 @@
+  *    Parse OBEX commands and responses
+  *
+  */
+-inline void parse_obex(GNetBuf *buf, GString *str, int cmd)
++void parse_obex(GNetBuf *buf, GString *str, int cmd)
+ {
+ 	guint8	opcode;
+ 	int	len;

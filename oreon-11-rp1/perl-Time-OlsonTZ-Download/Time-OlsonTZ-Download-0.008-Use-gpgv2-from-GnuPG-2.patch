@@ -1,0 +1,40 @@
+From aa4551d587a80f42d465e727439d79ff1e5b0ef1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 19 Jan 2018 14:32:41 +0100
+Subject: [PATCH] Use gpgv2 from GnuPG-2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GnuPG2 is successor of GnuPG.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Time/OlsonTZ/Download.pm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/Time/OlsonTZ/Download.pm b/lib/Time/OlsonTZ/Download.pm
+index 6a5e4e8..7fa98e1 100644
+--- a/lib/Time/OlsonTZ/Download.pm
++++ b/lib/Time/OlsonTZ/Download.pm
+@@ -93,7 +93,7 @@ sub _verify_signature($$) {
+ 		$self->{have_keyring} = 1;
+ 	}
+ 	my $subjfile = $self->{top_dir}."/".$localname;
+-	filter("", "gpgv", "--keyring", $krfile, "$subjfile.asc", $subjfile);
++	filter("", "gpgv2", "--keyring", $krfile, "$subjfile.asc", $subjfile);
+ }
+ 
+ my $archive_hash = <<'HASHES';
+@@ -1904,7 +1904,7 @@ Most of what this class does will only work on Unix platforms.  This is
+ largely because the Olson database source is heavily Unix-oriented.
+ 
+ This class also depends on the availability of some tools beyond
+-baseline Unix.  Specifically, it requires GNU C<gpgv>, GNU C<tar>,
++baseline Unix.  Specifically, it requires GNU C<gpgv2>, GNU C<tar>,
+ C<lzip>, C<sha512sum>, and GNU C<make>.
+ 
+ It also won't be much good if you're not connected to the Internet.
+-- 
+2.13.6
+

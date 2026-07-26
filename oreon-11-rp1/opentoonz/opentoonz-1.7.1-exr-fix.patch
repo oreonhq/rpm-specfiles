@@ -1,0 +1,118 @@
+diff --git a/toonz/sources/image/CMakeLists.txt b/toonz/sources/image/CMakeLists.txt
+index 87953ced..8c0b24fe 100644
+--- a/toonz/sources/image/CMakeLists.txt
++++ b/toonz/sources/image/CMakeLists.txt
+@@ -197,4 +197,6 @@ elseif(BUILD_ENV_UNIXLIKE)
+     endif()
+ endif()
+ 
++set(EXTRA_LIBS ${EXTRA_LIBS} -ltinyexr)
++
+ target_link_libraries(image Qt5::Core Qt5::Gui Qt5::Network ${Z_LIB} ${GLUT_LIB} ${GL_LIB} ${JPEG_LIB} ${TIFF_LIB} ${PNG_LIB} ${EXTRA_LIBS})
+diff --git a/toonz/sources/image/exr/tinyexr_otmod.h b/toonz/sources/image/exr/tinyexr_otmod.h
+index ece31755..01a01786 100644
+--- a/toonz/sources/image/exr/tinyexr_otmod.h
++++ b/toonz/sources/image/exr/tinyexr_otmod.h
+@@ -1,7 +1,6 @@
+ #ifndef TINYEXR_OTMOD_H_
+ #define TINYEXR_OTMOD_H_
+ 
+-#define TINYEXR_IMPLEMENTATION
+ #include "tinyexr.h"
+ 
+ /*
+@@ -76,6 +75,85 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ // End of OpenEXR license -------------------------------------------------
+ 
++#ifndef TINYEXR_IMPLEMENTATION_DEFINED
++
++#include <cassert>
++#include <cstdio>
++#include <cstdlib>
++#include <cstring>
++
++#include <algorithm>
++#include <sstream>
++#include <string>
++#include <vector>
++
++namespace tinyexr {
++
++static const int kEXRVersionSize = 8;
++
++struct LayerChannel {
++  explicit LayerChannel(size_t i, std::string n) : index(i), name(n) {}
++  size_t index;
++  std::string name;
++};
++
++
++static void SetErrorMessage(const std::string &msg, const char **err) {
++  if (err) {
++#ifdef _WIN32
++    (*err) = _strdup(msg.c_str());
++#else
++    (*err) = strdup(msg.c_str());
++#endif
++  }
++}
++
++static void GetLayers(const EXRHeader &exr_header,
++                      std::vector<std::string> &layer_names) {
++  // Naive implementation
++  // Group channels by layers
++  // go over all channel names, split by periods
++  // collect unique names
++  layer_names.clear();
++  for (int c = 0; c < exr_header.num_channels; c++) {
++    std::string full_name(exr_header.channels[c].name);
++    const size_t pos = full_name.find_last_of('.');
++    if (pos != std::string::npos && pos != 0 && pos + 1 < full_name.size()) {
++      full_name.erase(pos);
++      if (std::find(layer_names.begin(), layer_names.end(), full_name) ==
++          layer_names.end())
++        layer_names.push_back(full_name);
++    }
++  }
++}
++
++static void ChannelsInLayer(const EXRHeader &exr_header,
++                            const std::string layer_name,
++                            std::vector<LayerChannel> &channels) {
++  channels.clear();
++  for (int c = 0; c < exr_header.num_channels; c++) {
++    std::string ch_name(exr_header.channels[c].name);
++    if (layer_name.empty()) {
++      const size_t pos = ch_name.find_last_of('.');
++      if (pos != std::string::npos && pos < ch_name.size()) {
++        ch_name = ch_name.substr(pos + 1);
++      }
++    } else {
++      const size_t pos = ch_name.find(layer_name + '.');
++      if (pos == std::string::npos) continue;
++      if (pos == 0) {
++        ch_name = ch_name.substr(layer_name.size() + 1);
++      }
++    }
++    LayerChannel ch(size_t(c), ch_name);
++    channels.push_back(ch);
++  }
++}
++
++}
++
++#endif
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+@@ -473,7 +551,7 @@ int SaveEXRImageToFileHandle(const EXRImage *exr_image,
+   unsigned char *mem = NULL;
+   size_t mem_size    = SaveEXRImageToMemory(exr_image, exr_header, &mem, err);
+   if (mem_size == 0) {
+-    return TINYEXR_ERROR_SERIALZATION_FAILED;
++    return TINYEXR_ERROR_SERIALIZATION_FAILED;
+   }
+ 
+   size_t written_size = 0;

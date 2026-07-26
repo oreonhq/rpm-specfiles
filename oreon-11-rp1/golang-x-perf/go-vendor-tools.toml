@@ -1,0 +1,42 @@
+[archive]
+post_commands = [
+	[
+		"find",
+		"vendor/github.com/gonum/",
+		"-maxdepth", "1",
+		"-mindepth", "1",
+		"-exec", "cp", "-p", "vendor/gonum.org/v1/plot/LICENSE", "{}", ";"
+	]
+]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "vendor/github.com/ajstarks/svgo/LICENSE-link.txt"
+sha256sum = "faef26bb83b741b22eed4593980048f1607bdc679232ca9635ccf505cf2abe77"
+expression = "CC-BY-4.0"
+
+[[licensing.licenses]]
+path = "vendor/github.com/golang/freetype/LICENSE"
+sha256sum = "d3ba056adc2b7909e95681deaae397fb37c97ed491a920f491214f07b62c41d0"
+expression = "FTL"
+[[licensing.licenses]]
+path = "vendor/github.com/gonum/blas/LICENSE"
+sha256sum = "b44d9e394ba3efc15de4e5a8ebd843bd8d6325f6ffbb0a4ff6db7181aa15dda3"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/gonum/internal/LICENSE"
+sha256sum = "b44d9e394ba3efc15de4e5a8ebd843bd8d6325f6ffbb0a4ff6db7181aa15dda3"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/gonum/matrix/LICENSE"
+sha256sum = "b44d9e394ba3efc15de4e5a8ebd843bd8d6325f6ffbb0a4ff6db7181aa15dda3"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/gonum/lapack/LICENSE"
+sha256sum = "b44d9e394ba3efc15de4e5a8ebd843bd8d6325f6ffbb0a4ff6db7181aa15dda3"
+expression = "BSD-3-Clause"
+[[licensing.licenses]]
+path = "vendor/github.com/gonum/floats/LICENSE"
+sha256sum = "b44d9e394ba3efc15de4e5a8ebd843bd8d6325f6ffbb0a4ff6db7181aa15dda3"
+expression = "BSD-3-Clause"

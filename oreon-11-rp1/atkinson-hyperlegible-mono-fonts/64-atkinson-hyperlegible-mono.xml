@@ -1,0 +1,9 @@
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+    <group>
+        <target>Atkinson Hyperlegible Mono</target>
+        <like>
+            <family>monospace</family>
+        </like>
+    </group>
+</fontconfig>

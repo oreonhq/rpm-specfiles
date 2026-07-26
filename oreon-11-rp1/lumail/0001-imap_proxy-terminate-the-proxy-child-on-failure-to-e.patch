@@ -1,0 +1,22 @@
+From fe9337e3953a2424eaf7ea8a715f351f8bf57725 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sun, 18 Nov 2018 23:07:59 +0100
+Subject: [PATCH] imap_proxy: terminate the proxy child on failure to exec()
+
+Otherwise we could end up running two copies of the parent.
+---
+ src/imap_proxy.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/imap_proxy.cc b/src/imap_proxy.cc
+index 4efed9c..7c9c020 100644
+--- a/src/imap_proxy.cc
++++ b/src/imap_proxy.cc
+@@ -99,6 +99,7 @@ void CIMAPProxy::launch()
+             if (m_child == 0)
+             {
+                 unused = execl(path.c_str(), CFile::basename(path).c_str(), NULL);
++                exit(1);
+             }
+ 
+             sleep(1.0);

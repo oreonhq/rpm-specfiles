@@ -1,0 +1,25 @@
+diff -up PPI-PowerToys-0.14/Makefile.PL.dsl PPI-PowerToys-0.14/Makefile.PL
+--- PPI-PowerToys-0.14/Makefile.PL.dsl	2023-05-09 16:37:35.503238536 +0200
++++ PPI-PowerToys-0.14/Makefile.PL	2023-05-09 16:38:53.456900455 +0200
+@@ -1,10 +1,12 @@
+-use inc::Module::Install::DSL 0.87;
++use inc::Module::Install;
+ 
+-all_from       lib/PPI/PowerToys.pm
+-requires_from  lib/PPI/App/ppi_version.pm
+-test_requires  Test::More   0.47
+-test_requires  Test::Script 1.03
+-test_requires  Probe::Perl  0.01
+-test_requires  IPC::Run3    0.034
+-install_script ppi_version
+-install_script ppi_copyright
++all_from       'lib/PPI/PowerToys.pm';
++requires_from  'lib/PPI/App/ppi_version.pm';
++test_requires  'Test::More'   => '0.47';
++test_requires  'Test::Script' => '1.03';
++test_requires  'Probe::Perl'  => '0.01';
++test_requires  'IPC::Run3'    => '0.034';
++install_script 'ppi_version';
++install_script 'ppi_copyright';
++
++WriteAll;

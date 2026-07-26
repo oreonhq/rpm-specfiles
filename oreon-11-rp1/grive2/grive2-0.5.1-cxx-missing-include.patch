@@ -1,0 +1,10 @@
+--- grive2-0.5.1/libgrive/src/base/Syncer.hh.include	2019-11-13 07:05:31.000000000 +0900
++++ grive2-0.5.1/libgrive/src/base/Syncer.hh	2022-09-07 23:44:45.555093074 +0900
+@@ -24,6 +24,7 @@
+ #include <string>
+ #include <vector>
+ #include <iosfwd>
++#include <memory>
+ 
+ namespace gr {
+ 

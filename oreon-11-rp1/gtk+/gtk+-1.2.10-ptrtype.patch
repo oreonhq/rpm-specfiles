@@ -1,0 +1,26 @@
+This resolves the error:
+
+gdkwindow.c: In function 'gdk_window_set_icon_name':
+gdkwindow.c:2081:36: error: passing argument 2 of 'XmbTextListToTextProperty' from incompatible pointer type
+ 2081 |                                    &name, 1, XStdICCTextStyle,
+      |                                    ^~~~~
+      |                                    |
+      |                                    const gchar ** {aka const char **}
+
+The XmbTextListToTextProperty doesn't actually change anything via its second argument,
+so it could have been declared 'const char **' rather than 'char **' but it's an ancient
+API that pre-dates widespread use of 'const'.
+
+Casting to 'char **' is the same approach as used in gtk3.
+
+--- gtk+-1.2.10/gdk/gdkwindow.c
++++ gtk+-1.2.10/gdk/gdkwindow.c
+@@ -2078,7 +2078,7 @@ gdk_window_set_icon_name (GdkWindow   *w
+   if (window_private->destroyed)
+     return;
+   res = XmbTextListToTextProperty (window_private->xdisplay,
+-				   &name, 1, XStdICCTextStyle,
++				   (char **)&name, 1, XStdICCTextStyle,
+                                	   &property);
+   if (res < 0)
+     {

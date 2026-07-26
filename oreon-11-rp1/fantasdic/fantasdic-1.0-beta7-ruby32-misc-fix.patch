@@ -1,0 +1,92 @@
+--- fantasdic-1.0-beta7.orig/lib/fantasdic/sources/google_translate.rb	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/lib/fantasdic/sources/google_translate.rb	2022-11-09 09:10:42.504286393 +0900
+@@ -75,7 +75,7 @@ module Source
+         def define(db, word)
+             db_escaped, word_escaped = CGI.escape(db), CGI.escape(word)
+             begin               
+-                Kernel::open(URL % [db_escaped, word_escaped]) do |buffer|
++                URI.open(URL % [db_escaped, word_escaped]) do |buffer|
+                     case buffer.read
+                         when /#{START_MARKUP}(.*)/
+                             pos = $2.index(END_MARKUP)
+--- fantasdic-1.0-beta7.orig/lib/fantasdic/utils.rb	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/lib/fantasdic/utils.rb	2022-11-08 23:07:34.216508130 +0900
+@@ -171,4 +171,10 @@ module Enumerable
+         end
+     end
+ 
+-end
+\ No newline at end of file
++end
++
++class Array
++    def sum(identity = 0, &block)
++        super
++    end
++end
+diff --git a/lib/fantasdic/dictzip.rb b/lib/fantasdic/dictzip.rb
+index 83746f5..f906b7d 100644
+--- a/lib/fantasdic/dictzip.rb
++++ b/lib/fantasdic/dictzip.rb
+@@ -222,7 +222,7 @@ class Dictzip
+     end
+ 
+     def read_byte_internal
+-        @file.getc
++        @file.getc.unpack("C*").first
+     end
+ 
+     def read_char_internal
+@@ -252,4 +252,4 @@ class Dictzip
+ 
+ end
+ 
+-end
+\ No newline at end of file
++end
+diff --git a/lib/fantasdic/file_source.rb b/lib/fantasdic/file_source.rb
+index 1a4af85..238f8f2 100644
+--- a/lib/fantasdic/file_source.rb
++++ b/lib/fantasdic/file_source.rb
+@@ -25,7 +25,7 @@ class DictionaryIndex < File
+ 
+     def match_exact(word)
+         match_binary_search(word) do |s1, s2|
+-            s1 <=> s2
++            s1.force_encoding("ASCII-8BIT") <=> s2.force_encoding("ASCII-8BIT")
+         end
+     end
+ 
+@@ -246,4 +246,4 @@ class FileSource < Base
+ end
+ 
+ end
+-end
+\ No newline at end of file
++end
+diff --git a/lib/fantasdic/sources/dictd_file.rb b/lib/fantasdic/sources/dictd_file.rb
+index f38d927..7d16c30 100644
+--- a/lib/fantasdic/sources/dictd_file.rb
++++ b/lib/fantasdic/sources/dictd_file.rb
+@@ -132,7 +132,7 @@ class DictdIndex < DictionaryIndex
+ 
+     def get_word_list
+         self.rewind
+-        self.lines.map { |line| DictdIndex.get_fields(line) }
++        self.each_line.map { |line| DictdIndex.get_fields(line) }
+     end
+ 
+ end
+diff --git a/test/test_dictd_file.rb b/test/test_dictd_file.rb
+index 5f0353e..c08268f 100644
+--- a/test/test_dictd_file.rb
++++ b/test/test_dictd_file.rb
+@@ -91,7 +91,7 @@ class TestDictdFileSource < Test::Unit::TestCase
+                          map { |a| a.first }, ["00databasealphabet"])
+ 
+             assert_equal(index.match_exact("\303\242b").map { |a| a.first },
+-                         ["\303\242b"])  
++                         ["\303\242b".force_encoding("ASCII-8BIT")])
+         end
+     end
+ 

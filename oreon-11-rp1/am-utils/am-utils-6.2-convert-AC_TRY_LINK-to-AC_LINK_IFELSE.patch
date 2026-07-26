@@ -1,0 +1,67 @@
+am-utils-6.2 - convert AC_TRY_LINK to AC_LINK_IFELSE
+
+From: Ian Kent <raven@themaw.net>
+
+autoconf 2.71 autoreconf tells us AC_TRY_LINK is obsolete.
+Convert to use the AC_LINK_IFELSE instead.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ m4/macros/check_lib2.m4 |   30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/m4/macros/check_lib2.m4 b/m4/macros/check_lib2.m4
+index 64e6bb5b..7d4e5a5e 100644
+--- a/m4/macros/check_lib2.m4
++++ b/m4/macros/check_lib2.m4
+@@ -16,32 +16,38 @@ AC_CACHE_VAL(ac_cv_lib_$ac_lib_var,
+ 
+ # first try with base library, without auxiliary library
+ LIBS="-l$1 $LIBS"
+-AC_TRY_LINK(dnl
+-ifelse([$2], [main], , dnl Avoid conflicting decl of main.
++dnl ithe ifelse() macro is used to avoid conflicting decl of main.
++AC_LINK_IFELSE(
++[AC_LANG_SOURCE(
++[[
++ifelse([$2], [main], ,
+ [/* Override any gcc2 internal prototype to avoid an error.  */
+ ]
+ [/* We use char because int might match the return type of a gcc2
+     builtin and then its argument prototype would still apply.  */
+ char $2();
+-]),
+-	    [$2()],
+-	    eval "ac_cv_lib_$ac_lib_var=\"$1\"",
+-	    eval "ac_cv_lib_$ac_lib_var=no")
++])]],
++	    [[$2()]])],
++	    [eval "ac_cv_lib_$ac_lib_var=\"$1\""],
++	    [eval "ac_cv_lib_$ac_lib_var=no"])
+ 
+ # if OK, set to no auxiliary library, else try auxiliary library
+ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = no"; then
+  LIBS="-l$1 $5 $LIBS"
+- AC_TRY_LINK(dnl
+- ifelse([$2], [main], , dnl Avoid conflicting decl of main.
++dnl ithe ifelse() macro is used to avoid conflicting decl of main.
++ AC_LINK_IFELSE(
++ [AC_LANG_SOURCE(
++ [[
++ ifelse([$2], [main], ,
+  [/* Override any gcc2 internal prototype to avoid an error.  */
+  ]
+  [/* We use char because int might match the return type of a gcc2
+      builtin and then its argument prototype would still apply.  */
+  char $2();
+- ]),
+- 	    [$2()],
+- 	    eval "ac_cv_lib_$ac_lib_var=\"$1 $5\"",
+- 	    eval "ac_cv_lib_$ac_lib_var=no")
++ ])]],
++	    [[$2()]])],
++	    [eval "ac_cv_lib_$ac_lib_var=\"$1 $5\""],
++	    [eval "ac_cv_lib_$ac_lib_var=no"])
+ fi
+ 
+ LIBS="$ac_save_LIBS"

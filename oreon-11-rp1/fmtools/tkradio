@@ -1,0 +1,66 @@
+#!/usr/bin/wish
+# Matt Willis - simple tk interface to fmtools 
+# The radio keeps on after leaving.
+# -*- tcl -*-
+
+# These are stations in the Rio de Janeiro area. Customize for your own locale.
+set stations \
+        "
+	MPB          90.3 
+        CBN          92.5 
+	BandNews     94.9
+        PARADISO     95.7
+	Nativa       96.5
+	98FM         98.0 
+	MEC          98.9 
+	JBFM         99.7
+	O_Dia        100.5
+	Transamerica 101.3
+	JovenPan     102.1
+	Oi           102.9
+	Antena1	     103.7
+	"
+
+# intial volume
+set volume 100
+set n [expr [llength $stations]/2]
+# default radio station
+set radbut 3
+
+# make tuner buttons
+frame .labels
+for {set i 0} {$i<$n} {incr i 1} {
+    radiobutton .r$i -value $i -variable radbut \
+	    -text [lindex $stations [expr $i *2]] -command setstation
+    pack .r$i -anchor w -in .labels
+}
+
+# turns the radio on
+eval exec fm on
+
+frame .rhs
+scale .vol -orient horizontal -from 0 -to 100 -showvalue 0 \
+	-variable volume -label Volume:
+entry .stn -bg black -fg yellow -font "-*-helvetica-*-r-*-*-60-*-*-*-*-*-*-*" \
+	-width 6 -justify right -state disabled
+button .exit -command exit -text exit
+pack .vol .stn .exit -in .rhs
+
+pack .labels .rhs -side left
+.vol configure -command setvolume
+
+proc setstation {} {
+    global stations radbut volume
+#   roma 20091221
+#   eval exec fm [lindex $stations [expr $radbut*2+1]] $volume
+    eval exec fm [lindex $stations [expr $radbut*2+1]]
+    eval exec amixer -q -c 0 set PCM $volume%
+    .stn configure -state normal
+    .stn delete 0 end
+    .stn insert 0  [lindex $stations [expr $radbut*2+1]]
+    .stn configure -state disabled
+}
+
+proc setvolume {sliderval} {
+    setstation
+}

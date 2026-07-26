@@ -1,0 +1,70 @@
+diff -up lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.am~ lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.am
+--- lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.am~	2008-02-28 20:31:45.000000000 +0100
++++ lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.am	2008-02-28 20:31:45.000000000 +0100
+@@ -1,6 +1,5 @@
+ EXTRA_DIST = back0.png back1.png back2.png back3.png back4.png back5.png \
+-bricks.png extras.png fr_left.png fr_right.png fr_top.png \
+-life.png menuback.png paddle.png shot.png weapon.png \
++bricks.png extras.png life.png paddle.png shot.png weapon.png \
+ ABOUT README
+ 
+ install-data-local:
+diff -up lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.am~ lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.am
+--- lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.am~	2008-02-28 20:32:27.000000000 +0100
++++ lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.am	2008-02-28 20:32:27.000000000 +0100
+@@ -1,6 +1,5 @@
+ EXTRA_DIST = back0.png back1.png back2.png back3.png back4.png back5.png \
+-bricks.png extras.png fr_left.png fr_right.png fr_top.png \
+-fr_mp_left.png fr_mp_right.png \
++bricks.png extras.png \
+ life.png paddle.png \
+ ABOUT
+ 
+diff -up lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.am~ lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.am
+--- lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.am~	2008-02-28 20:32:47.000000000 +0100
++++ lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.am	2008-02-28 20:32:47.000000000 +0100
+@@ -1,5 +1,5 @@
+ EXTRA_DIST = back0.png back1.png back2.png back3.png back4.png \
+-bricks.png fr_left.png fr_right.png fr_top.png \
++bricks.png \
+ life.png paddle.png \
+ README
+ 
+diff -up lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.in~ lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.in
+--- lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.in~	2008-02-28 20:32:05.000000000 +0100
++++ lbreakout2-2.6beta-7/client/gfx/AbsoluteB/Makefile.in	2008-02-28 20:32:05.000000000 +0100
+@@ -195,8 +195,7 @@ warp_flag = @warp_flag@
+ win32_deps = @win32_deps@
+ win32_inst_script = @win32_inst_script@
+ EXTRA_DIST = back0.png back1.png back2.png back3.png back4.png back5.png \
+-bricks.png extras.png fr_left.png fr_right.png fr_top.png \
+-life.png menuback.png paddle.png shot.png weapon.png \
++bricks.png extras.png life.png paddle.png shot.png weapon.png \
+ ABOUT README
+ 
+ all: all-am
+diff -up lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.in~ lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.in
+--- lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.in~	2008-02-28 20:32:37.000000000 +0100
++++ lbreakout2-2.6beta-7/client/gfx/Moiree/Makefile.in	2008-02-28 20:32:37.000000000 +0100
+@@ -195,8 +195,7 @@ warp_flag = @warp_flag@
+ win32_deps = @win32_deps@
+ win32_inst_script = @win32_inst_script@
+ EXTRA_DIST = back0.png back1.png back2.png back3.png back4.png back5.png \
+-bricks.png extras.png fr_left.png fr_right.png fr_top.png \
+-fr_mp_left.png fr_mp_right.png \
++bricks.png extras.png \
+ life.png paddle.png \
+ ABOUT
+ 
+diff -up lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.in~ lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.in
+--- lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.in~	2008-02-28 20:32:55.000000000 +0100
++++ lbreakout2-2.6beta-7/client/gfx/Oz/Makefile.in	2008-02-28 20:32:55.000000000 +0100
+@@ -195,7 +195,7 @@ warp_flag = @warp_flag@
+ win32_deps = @win32_deps@
+ win32_inst_script = @win32_inst_script@
+ EXTRA_DIST = back0.png back1.png back2.png back3.png back4.png \
+-bricks.png fr_left.png fr_right.png fr_top.png \
++bricks.png \
+ life.png paddle.png \
+ README
+ 

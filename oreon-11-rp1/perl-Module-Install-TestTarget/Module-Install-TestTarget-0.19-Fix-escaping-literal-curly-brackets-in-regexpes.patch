@@ -1,0 +1,148 @@
+From 8997572338161e39ebb0ce6a9dde4f92e91227c8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 22 May 2017 13:57:35 +0200
+Subject: [PATCH] Fix escaping literal curly brackets in regexpes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Unescaped literal '{' in a regexp is a warning since 5.22.0 and an
+error since 5.26.0.
+
+CPAN RT#102922
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/test_target/env.t                | 12 ++++++------
+ t/test_target/insert_on_finalize.t | 12 ++++++------
+ t/test_target/insert_on_prepare.t  | 12 ++++++------
+ t/test_target/run_on_finalize.t    |  6 +++---
+ t/test_target/run_on_prepare.t     |  6 +++---
+ 5 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/t/test_target/env.t b/t/test_target/env.t
+index 23f5fab..f62e023 100644
+--- a/t/test_target/env.t
++++ b/t/test_target/env.t
+@@ -7,16 +7,16 @@ use t::Util;
+ 
+ ok my $cmd = find_make_test_command(*DATA, 'extends_test'), 'find make test command';
+ if (DMAKE) {
+-    like $cmd->{extends_test}, qr|\$\$ENV{{q{{FOO}}}} = q{{bar}};|, 'find env';
+-    like $cmd->{extends_test}, qr|\$\$ENV{{q{{BA\\}}R}}}} = q{{ba\\}}z}};|, 'find env';
++    like $cmd->{extends_test}, qr|\$\$ENV\{\{q\{\{FOO\}\}\}\} = q\{\{bar\}\};|, 'find env';
++    like $cmd->{extends_test}, qr|\$\$ENV\{\{q\{\{BA\\\}\}R\}\}\}\} = q\{\{ba\\\}\}z\}\};|, 'find env';
+ }
+ elsif (NMAKE) {
+-    like $cmd->{extends_test}, qr|\$\$ENV{q{FOO}} = q{bar};|, 'find env';
+-    like $cmd->{extends_test}, qr|\$\$ENV{q{BA\\}R}} = q{ba\\}z};|, 'find env';
++    like $cmd->{extends_test}, qr|\$\$ENV\{q\{FOO\}\} = q\{bar\};|, 'find env';
++    like $cmd->{extends_test}, qr|\$\$ENV\{q\{BA\\\}R\}\} = q\{ba\\\}z};|, 'find env';
+ }
+ else {
+-    like $cmd->{extends_test}, qr|\\\$\$ENV{q{FOO}} = q{bar};|, 'find env';
+-    like $cmd->{extends_test}, qr|\\\$\$ENV{q{BA\\}R}} = q{ba\\}z};|, 'find env';
++    like $cmd->{extends_test}, qr|\\\$\$ENV\{q\{FOO\}\} = q\{bar\};|, 'find env';
++    like $cmd->{extends_test}, qr|\\\$\$ENV\{q\{BA\\\}R\}\} = q\{ba\\\}z};|, 'find env';
+ }
+ 
+ done_testing;
+diff --git a/t/test_target/insert_on_finalize.t b/t/test_target/insert_on_finalize.t
+index 1f35fe8..4d881ff 100644
+--- a/t/test_target/insert_on_finalize.t
++++ b/t/test_target/insert_on_finalize.t
+@@ -8,16 +8,16 @@ use t::Util;
+ ok my $cmd = find_make_test_command(*DATA, 'extends_test'), 'find make test command';
+ like $cmd->{extends_test}, qr|system.+cat.+Makefile\.PL|, 'find after run coderef';
+ if (DMAKE) {
+-    like $cmd->{extends_test}, qr|sub {{ print scalar localtime }}->\(\); |, 'find after run code';
+-    like $cmd->{extends_test}, qr|\$\$ENV{{__TEST__}} = 1|, 'find escaped sigil';
++    like $cmd->{extends_test}, qr|sub \{\{ print scalar localtime \}\}->\(\); |, 'find after run code';
++    like $cmd->{extends_test}, qr|\$\$ENV\{\{__TEST__\}\} = 1|, 'find escaped sigil';
+ }
+ elsif (NMAKE) {
+-    like $cmd->{extends_test}, qr|sub { print scalar localtime }->\(\); |, 'find after run code';
+-    like $cmd->{extends_test}, qr|\$\$ENV{__TEST__} = 1|, 'find escaped sigil';
++    like $cmd->{extends_test}, qr|sub \{ print scalar localtime \}->\(\); |, 'find after run code';
++    like $cmd->{extends_test}, qr|\$\$ENV\{__TEST__\} = 1|, 'find escaped sigil';
+ }
+ else {
+-    like $cmd->{extends_test}, qr|sub { print scalar localtime }->\(\); |, 'find after run code';
+-    like $cmd->{extends_test}, qr|\\\$\$ENV{__TEST__} = 1|, 'find escaped sigil';
++    like $cmd->{extends_test}, qr|sub \{ print scalar localtime \}->\(\); |, 'find after run code';
++    like $cmd->{extends_test}, qr|\\\$\$ENV\{__TEST__\} = 1|, 'find escaped sigil';
+ }
+ 
+ done_testing;
+diff --git a/t/test_target/insert_on_prepare.t b/t/test_target/insert_on_prepare.t
+index 8917799..ecf92c7 100644
+--- a/t/test_target/insert_on_prepare.t
++++ b/t/test_target/insert_on_prepare.t
+@@ -8,16 +8,16 @@ use t::Util;
+ ok my $cmd = find_make_test_command(*DATA, 'extends_test'), 'find make test command';
+ like $cmd->{extends_test}, qr|system.+cat.+Makefile\.PL|, 'find before run coderef';
+ if (DMAKE) {
+-    like $cmd->{extends_test}, qr|sub {{ print scalar localtime }}->\(\); |, 'find before run code';
+-    like $cmd->{extends_test}, qr|\$\$ENV{{__TEST__}} = 1|, 'find escaped sigil';
++    like $cmd->{extends_test}, qr|sub \{\{ print scalar localtime \}\}->\(\); |, 'find before run code';
++    like $cmd->{extends_test}, qr|\$\$ENV\{\{__TEST__\}\} = 1|, 'find escaped sigil';
+ }
+ elsif (NMAKE) {
+-    like $cmd->{extends_test}, qr|sub { print scalar localtime }->\(\); |, 'find before run code';
+-    like $cmd->{extends_test}, qr|\$\$ENV{__TEST__} = 1|, 'find escaped sigil';
++    like $cmd->{extends_test}, qr|sub \{ print scalar localtime \}->\(\); |, 'find before run code';
++    like $cmd->{extends_test}, qr|\$\$ENV\{__TEST__\} = 1|, 'find escaped sigil';
+ }
+ else {
+-    like $cmd->{extends_test}, qr|sub { print scalar localtime }->\(\); |, 'find before run code';
+-    like $cmd->{extends_test}, qr|\\\$\$ENV{__TEST__} = 1|, 'find escaped sigil';
++    like $cmd->{extends_test}, qr|sub \{ print scalar localtime \}->\(\); |, 'find before run code';
++    like $cmd->{extends_test}, qr|\\\$\$ENV\{__TEST__\} = 1|, 'find escaped sigil';
+ }
+ 
+ done_testing;
+diff --git a/t/test_target/run_on_finalize.t b/t/test_target/run_on_finalize.t
+index 3109c18..0d0f475 100644
+--- a/t/test_target/run_on_finalize.t
++++ b/t/test_target/run_on_finalize.t
+@@ -7,13 +7,13 @@ use t::Util;
+ 
+ ok my $cmd = find_make_test_command(*DATA, 'extends_test'), 'find make test command';
+ if (DMAKE) {
+-    like $cmd->{extends_test}, qr|do {{ local \$\$@; do './tool/bar.pl'; die \$\$@ if \$\$@ }};|, 'find after run scripts';
++    like $cmd->{extends_test}, qr|do \{\{ local \$\$@; do './tool/bar.pl'; die \$\$@ if \$\$@ \}\};|, 'find after run scripts';
+ }
+ elsif (NMAKE) {
+-    like $cmd->{extends_test}, qr|do { local \$\$@; do './tool/bar.pl'; die \$\$@ if \$\$@ };|, 'find after run scripts';
++    like $cmd->{extends_test}, qr|do \{ local \$\$@; do './tool/bar.pl'; die \$\$@ if \$\$@ \};|, 'find after run scripts';
+ }
+ else {
+-    like $cmd->{extends_test}, qr|do { local \\\$\$@; do './tool/bar.pl'; die \\\$\$@ if \\\$\$@ };|, 'find after run scripts';
++    like $cmd->{extends_test}, qr|do \{ local \\\$\$@; do './tool/bar.pl'; die \\\$\$@ if \\\$\$@ \};|, 'find after run scripts';
+ }
+ 
+ done_testing;
+diff --git a/t/test_target/run_on_prepare.t b/t/test_target/run_on_prepare.t
+index 05e16c8..3fd9319 100644
+--- a/t/test_target/run_on_prepare.t
++++ b/t/test_target/run_on_prepare.t
+@@ -7,13 +7,13 @@ use t::Util;
+ 
+ ok my $cmd = find_make_test_command(*DATA, 'extends_test'), 'find make test command';
+ if (DMAKE) {
+-    like $cmd->{extends_test}, qr|do {{ local \$\$@; do './tool/foo.pl'; die \$\$@ if \$\$@ }};|, 'find after run scripts';
++    like $cmd->{extends_test}, qr|do \{\{ local \$\$@; do './tool/foo.pl'; die \$\$@ if \$\$@ \}\};|, 'find after run scripts';
+ }
+ elsif (NMAKE) {
+-    like $cmd->{extends_test}, qr|do { local \$\$@; do './tool/foo.pl'; die \$\$@ if \$\$@ };|, 'find after run scripts';
++    like $cmd->{extends_test}, qr|do \{ local \$\$@; do './tool/foo.pl'; die \$\$@ if \$\$@ \};|, 'find after run scripts';
+ }
+ else {
+-    like $cmd->{extends_test}, qr|do { local \\\$\$@; do './tool/foo.pl'; die \\\$\$@ if \\\$\$@ };|, 'find after run scripts';
++    like $cmd->{extends_test}, qr|do \{ local \\\$\$@; do './tool/foo.pl'; die \\\$\$@ if \\\$\$@ \};|, 'find after run scripts';
+ }
+ 
+ done_testing;
+-- 
+2.9.4
+

@@ -1,0 +1,20 @@
+diff -Naur a/src/wx-main.cc b/src/wx-main.cc
+--- a/src/wx-main.cc	2020-12-01 11:49:05.000000000 -0800
++++ b/src/wx-main.cc	2024-01-25 14:29:55.976837780 -0800
+@@ -8,6 +8,16 @@
+ 
+ int main(int argc, char **argv)
+ {
++        /*
++         * PCem does not work properly on Wayland at the moment, so force
++         * SDL and GTK to use the x11 backend.
++         *
++         * See https://github.com/sarah-walker-pcem/pcem/issues/128 for details
++         */
++
++        setenv("SDL_VIDEODRIVER", "x11", 1);
++        setenv("GDK_BACKEND", "x11", 1);
++
+         if (!pc_main(argc, argv))
+                 return -1;
+ 

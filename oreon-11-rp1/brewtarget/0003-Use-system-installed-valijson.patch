@@ -1,0 +1,25 @@
+From 750ec1b943cc991c4113588fb299b7a8c209efa3 Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Thu, 21 Nov 2024 10:47:58 +0100
+Subject: [PATCH 3/3] Use system installed valijson
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index b38002ae..0290e688 100644
+--- a/meson.build
++++ b/meson.build
+@@ -532,7 +532,7 @@ message('OpenSSL Library:', openSslDependency.name(), 'found =', openSslDependen
+ 
+ #==================================================== Other headers ====================================================
+ # Other directories to search in for headers.  Meson will barf an error if any of these directories does not exist.
+-includeDirs = include_directories('src', 'third-party/valijson/include', 'third-party/libbacktrace')
++includeDirs = include_directories('src')
+ 
+ 
+ #=======================================================================================================================
+-- 
+2.47.0
+

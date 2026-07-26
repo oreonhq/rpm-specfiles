@@ -1,0 +1,102 @@
+--- src/SimplexNoise.cpp.orig	2009-08-29 22:39:06.000000000 +0200
++++ src/SimplexNoise.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -181,6 +181,7 @@
+ 		case 14: return  z + y;
+ 		case 15: return y-z;// - y;
+ 		}//switch
++        return 0;
+ 	}
+ 
+ 	int hashGridPoint(int gx, int gy, int gz) {
+--- src/YOGClientDownloadableMapList.cpp.orig	2009-08-29 22:39:07.000000000 +0200
++++ src/YOGClientDownloadableMapList.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -91,6 +91,7 @@
+ 			return *i;
+ 		}
+ 	}
++    return *(maps.begin());
+ }
+ 
+ 
+@@ -118,6 +119,7 @@
+ 			return thumbnails[i - maps.begin()];
+ 		}
+ 	}
++    return thumbnails[0];
+ }
+ 
+ 
+--- src/YOGPlayerPrivateInfo.cpp.orig	2010-02-02 02:28:35.000000000 +0100
++++ src/YOGPlayerPrivateInfo.cpp	2010-02-02 02:28:58.000000000 +0100
+@@ -44,13 +44,13 @@
+ 
+ bool YOGPlayerPrivateInfo::operator==(const YOGPlayerPrivateInfo& rhs) const
+ {
+-
++    return false;
+ }
+ 
+ 
+ 
+ bool YOGPlayerPrivateInfo::operator!=(const YOGPlayerPrivateInfo& rhs) const
+ {
+-
++    return false;
+ }
+ 
+--- src/YOGClientMapDownloadScreen.cpp.orig	2009-08-29 22:39:07.000000000 +0200
++++ src/YOGClientMapDownloadScreen.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -397,4 +397,5 @@
+ 			return GAGCore::naturalStringSort(lhs.getMapHeader().getMapName(), rhs.getMapHeader().getMapName());
+ 		}
+ 	}
++    return false;
+ }
+--- src/YOGServer.cpp.orig	2009-08-29 22:39:07.000000000 +0200
++++ src/YOGServer.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -399,6 +399,7 @@
+ 			return *i;
+ 		}
+ 	}
++    return *(gameList.begin());
+ }
+ 
+ 
+--- src/UnitConsts.cpp.orig	2009-08-29 22:39:06.000000000 +0200
++++ src/UnitConsts.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -34,4 +34,5 @@
+ 		return Toolkit::getStringTable()->getString("[Warrior]");
+ 	if(type == EXPLORER)
+ 		return Toolkit::getStringTable()->getString("[Explorer]");
++	return Toolkit::getStringTable()->getString("[Worker]");
+ }
+--- src/YOGClientPlayerListManager.cpp.orig	2009-08-29 22:39:07.000000000 +0200
++++ src/YOGClientPlayerListManager.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -100,6 +100,7 @@
+ 		if(i->getPlayerName() == name)
+ 			return *i;
+ 	}
++    return *(players.begin());
+ }
+ 
+ 
+--- src/WinningConditions.cpp.orig	2009-08-29 22:39:06.000000000 +0200
++++ src/WinningConditions.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -71,6 +71,7 @@
+ 		}
+ 		break;
+ 	}
++    assert(false);
+ }
+ 
+ 
+--- src/NetGamePlayerManager.cpp.orig	2009-08-29 22:39:06.000000000 +0200
++++ src/NetGamePlayerManager.cpp	2010-02-02 02:28:21.000000000 +0100
+@@ -181,6 +181,7 @@
+ 			return readyToStart[x];
+ 		}
+ 	}
++    return false;
+ }
+ 
+ 

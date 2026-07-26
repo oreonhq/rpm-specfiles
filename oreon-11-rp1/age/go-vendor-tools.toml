@@ -1,0 +1,9 @@
+
+[archive]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "vendor/c2sp.org/CCTV/age/README.md"
+sha256sum = "fdbd4b06044f3803c72bdaf2df7681fdce3a45a326a2898e75640eae906606ad"
+expression = "0BSD OR CC0-1.0 OR Unlicense"

@@ -1,0 +1,12 @@
+--- a/src/tests/class_tests/openms/CMakeLists.orig.txt	2015-04-09 17:57:04.000000000 +0200
++++ b/src/tests/class_tests/openms/CMakeLists.txt	2015-04-14 11:12:48.620239096 +0200
+@@ -65,7 +65,7 @@
+ # disable optimization for tests for gcc like compilers
+ if (CMAKE_COMPILER_IS_INTELCXX OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG)
+   set(_TMP_CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+-  set(CMAKE_CXX_FLAGS_RELEASE "-O0")
++  set(CMAKE_CXX_FLAGS_RELEASE " ")
+ endif()
+ 
+ #------------------------------------------------------------------------------
+

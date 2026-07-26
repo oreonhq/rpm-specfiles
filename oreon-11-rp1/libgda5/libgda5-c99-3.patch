@@ -1,0 +1,20 @@
+The cast was added in this upstream commit along with other changes:
+
+Author: Daniel Espinosa <esodan@gmail.com>
+Date:   Wed Oct 3 17:49:46 2018 -0500
+
+    gda-connection: avoids check internal connection data for virtual ones
+
+diff --git a/libgda/gda-connection.c b/libgda/gda-connection.c
+index 43911e96addb1ed0..71c7ddec2683b30f 100644
+--- a/libgda/gda-connection.c
++++ b/libgda/gda-connection.c
+@@ -6458,7 +6458,7 @@ gda_connection_add_prepared_statement (GdaConnection *cnc, GdaStatement *gda_stm
+ 
+ 	if (!cnc->priv->prepared_stmts)
+ 		cnc->priv->prepared_stmts = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+-								   NULL, _gda_prepared_estatement_free);
++								   NULL, (GDestroyNotify) _gda_prepared_estatement_free);
+ 	g_hash_table_remove (cnc->priv->prepared_stmts, gda_stmt);
+ 	PreparedStatementRef *ref = _gda_prepared_estatement_new (gda_stmt, prepared_stmt);
+ 	g_hash_table_insert (cnc->priv->prepared_stmts, gda_stmt, ref);

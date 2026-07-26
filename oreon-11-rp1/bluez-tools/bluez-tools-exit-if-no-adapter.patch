@@ -1,0 +1,96 @@
+diff -up bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-adapter.c.orig bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-adapter.c
+--- bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-adapter.c.orig	2017-09-12 03:52:17.000000000 +0200
++++ bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-adapter.c	2025-01-09 13:31:59.722843131 +0100
+@@ -179,6 +179,11 @@ int main(int argc, char *argv[])
+     {
+         Adapter *adapter = find_adapter(adapter_arg, &error);
+         exit_if_error(error);
++        if (adapter == NULL)
++        {
++            g_print("No adapters found\n");
++            exit(EXIT_FAILURE);
++        }
+ 
+         gchar *adapter_intf = g_path_get_basename(adapter_get_dbus_object_path(adapter));
+         g_print("[%s]\n", adapter_intf);
+@@ -208,6 +213,11 @@ int main(int argc, char *argv[])
+     {
+         Adapter *adapter = find_adapter(adapter_arg, &error);
+         exit_if_error(error);
++        if (adapter == NULL)
++        {
++            g_print("No adapters found\n");
++            exit(EXIT_FAILURE);
++        }
+ 
+         // To store pairs MAC => Name
+         GHashTable *found_devices = g_hash_table_new(g_str_hash, g_str_equal);
+@@ -244,6 +254,11 @@ int main(int argc, char *argv[])
+ 
+         Adapter *adapter = find_adapter(adapter_arg, &error);
+         exit_if_error(error);
++        if (adapter == NULL)
++        {
++            g_print("No adapters found\n");
++            exit(EXIT_FAILURE);
++        }
+ 
+         GVariant *v = NULL;
+ 
+diff -up bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-device.c.orig bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-device.c
+--- bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-device.c.orig	2017-09-12 03:52:17.000000000 +0200
++++ bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-device.c	2025-01-09 13:36:40.157344218 +0100
+@@ -509,6 +509,11 @@ int main(int argc, char *argv[])
+     Manager *manager = manager_new();
+     Adapter *adapter = find_adapter(adapter_arg, &error);
+     exit_if_error(error);
++    if (adapter == NULL)
++    {
++        g_print("No adapters found\n");
++        exit(EXIT_FAILURE);
++    }
+ 
+     if (list_arg)
+     {
+diff -up bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-network.c.orig bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-network.c
+--- bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-network.c.orig	2017-09-12 03:52:17.000000000 +0200
++++ bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-network.c	2025-01-09 13:37:36.941850652 +0100
+@@ -161,6 +161,11 @@ int main(int argc, char *argv[])
+ 
+ 	Adapter *adapter = find_adapter(adapter_arg, &error);
+ 	exit_if_error(error);
++	if (adapter == NULL)
++	{
++		g_print("No adapters found\n");
++		exit(EXIT_FAILURE);
++	}
+ 
+ 	if (connect_arg) {
+ 		connect_device_arg = argv[1];
+diff -up bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-obex.c.orig bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-obex.c
+--- bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-obex.c.orig	2017-09-12 03:52:17.000000000 +0200
++++ bluez-tools-7cb788c9c43facfd2d14ff50e16d6a19f033a6a7/src/bt-obex.c	2025-01-09 13:38:19.421229512 +0100
+@@ -573,6 +573,11 @@ int main(int argc, char *argv[])
+         /* Get source address (address of adapter) */
+         Adapter *adapter = find_adapter(adapter_arg, &error);
+         exit_if_error(error);
++        if (adapter == NULL)
++        {
++            g_print("No adapters found\n");
++            exit(EXIT_FAILURE);
++        }
+         gchar *src_address = g_strdup(adapter_get_address(adapter, &error));
+         exit_if_error(error);
+         
+@@ -669,6 +674,11 @@ int main(int argc, char *argv[])
+         /* Get source address (address of adapter) */
+         Adapter *adapter = find_adapter(adapter_arg, &error);
+         exit_if_error(error);
++        if (adapter == NULL)
++        {
++            g_print("No adapters found\n");
++            exit(EXIT_FAILURE);
++        }
+         gchar *src_address = g_strdup(adapter_get_address(adapter, &error));
+         exit_if_error(error);
+ 

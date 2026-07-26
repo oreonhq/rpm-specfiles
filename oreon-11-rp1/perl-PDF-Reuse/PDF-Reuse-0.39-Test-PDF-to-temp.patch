@@ -1,0 +1,55 @@
+diff -ru PDF-Reuse-0.39.orig/Makefile.PL PDF-Reuse-0.39/Makefile.PL
+--- Makefile.PL	2022-10-31 15:49:25.199545619 +0100
++++ Makefile.PL	2022-10-31 15:56:42.221856897 +0100
+@@ -21,6 +21,8 @@
+         },
+     },
+     TEST_REQUIRES => {
++        'File::Spec::Functions' => 0,
++        'File::Temp'    => 0,
+         'Test' 		=> 0,
+ 	'Test::More'	=> 0,
+ 	'Test::Deep'	=> 0,
+diff -ru PDF-Reuse-0.39.orig/t/Reuse.t PDF-Reuse-0.39/t/Reuse.t
+--- t/Reuse.t	2022-10-31 15:49:25.200545623 +0100
++++ t/Reuse.t	2022-10-31 15:54:25.176450554 +0100
+@@ -3,6 +3,8 @@
+ use strict;
+ use warnings;
+ 
++use File::Spec::Functions qw(catfile);
++use File::Temp qw(tempdir);
+ use Test::More tests => 6;
+ use Test::Deep;
+ 
+@@ -10,6 +12,9 @@
+         use_ok('PDF::Reuse') or BAIL_OUT "Can't load PDF::Reuse";
+ }
+ 
++my $tempdir = tempdir(CLEANUP => 1);
++my $test_pdf = catfile($tempdir, 'test.pdf');
++
+ ### NOTE: Any changes in the module code which result in a change to the contents of test.pdf
+ ### will require a corresponding change in the expected contents as listed below the __DATA__
+ ### tag at the end of this test file.
+@@ -31,9 +36,9 @@
+     'Z'   => 'ZapfDingbats',
+ };
+ 
+-prFile('./test.pdf');
++prFile($test_pdf);
+ 
+-my $f_flag = 1 if -e './test.pdf';
++my $f_flag = 1 if -e $test_pdf;
+ is ($f_flag, 1, "PDF file created successfully");
+ 
+ # Test findFont
+@@ -63,7 +68,7 @@
+ prEnd();
+ 
+ # Test newly created PDF file
+-open (my $pdf, "<", "test.pdf") or BAIL_OUT "Can't open test.pdf: $!";
++open (my $pdf, "<", $test_pdf) or BAIL_OUT "Can't open test.pdf: $!";
+ binmode $pdf;
+ my @pdf_got = <$pdf>;
+ close $pdf;

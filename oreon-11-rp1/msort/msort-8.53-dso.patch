@@ -1,0 +1,12 @@
+diff -up msort-8.53/Makefile.am~ msort-8.53/Makefile.am
+--- msort-8.53/Makefile.am~	2009-08-05 05:09:21.000000000 +0200
++++ msort-8.53/Makefile.am	2010-02-10 23:38:03.063239835 +0100
+@@ -22,7 +22,7 @@ if UTF8PROCOK
+ LIBS+=-lutf8proc
+ AM_CFLAGS += -DUSEUTF8PROC
+ else
+-LIBS+=-licutu
++LIBS+=-licutu -licuuc
+ endif
+ 
+ msg:	msg.tcl

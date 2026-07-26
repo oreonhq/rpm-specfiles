@@ -1,0 +1,25 @@
+From aa9b2df27df67f9d1424b8d29463b77c38328778 Mon Sep 17 00:00:00 2001
+From: dequis <dx@dxzone.com.ar>
+Date: Fri, 7 Apr 2023 22:46:42 +0200
+Subject: [PATCH] twitter: switch to an app that didn't get murdered yet
+
+Wonder how long this will last, probably not very.
+---
+ protocols/twitter/twitter.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/protocols/twitter/twitter.c b/protocols/twitter/twitter.c
+index bb02997a..6ea91057 100644
+--- a/protocols/twitter/twitter.c
++++ b/protocols/twitter/twitter.c
+@@ -355,8 +355,8 @@ static const struct oauth_service twitter_oauth = {
+ 	"https://api.twitter.com/oauth/request_token",
+ 	"https://api.twitter.com/oauth/access_token",
+ 	"https://api.twitter.com/oauth/authorize",
+-	.consumer_key = "xsDNKJuNZYkZyMcu914uEA",
+-	.consumer_secret = "FCxqcr0pXKzsF9ajmP57S3VQ8V6Drk4o2QYtqMcOszo",
++	.consumer_key = "ItChnf5KelJE5DOWVhz9ZuwYb",
++	.consumer_secret = "yoWJ16DRmJlILoB9Tf5T5lIUUPnIarqoO0YUWkYUOD7ttR0J6T",
+ };
+ 
+ static gboolean twitter_oauth_callback(struct oauth_info *info);

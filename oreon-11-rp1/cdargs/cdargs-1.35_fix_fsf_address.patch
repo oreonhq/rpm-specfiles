@@ -1,0 +1,47 @@
+diff -up cdargs-1.35/contrib/cdargs.el.fix_fsf_address cdargs-1.35/contrib/cdargs.el
+--- cdargs-1.35/contrib/cdargs.el.fix_fsf_address	2003-02-23 23:10:31.000000000 +0100
++++ cdargs-1.35/contrib/cdargs.el	2018-04-05 21:31:06.710480461 +0200
+@@ -17,8 +17,8 @@
+ 
+ ;; You should have received a copy of the GNU General Public License
+ ;; along with this program; see the file COPYING. If not, write to the Free
+-;; Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+-;; 02111-1307, USA.
++;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++;; Boston, MA 02110-1335, USA.
+ 
+ 
+ ;;; Commentary:
+@@ -119,4 +119,4 @@ quick access."
+ 
+ (provide 'cdargs)
+ 
+-;;; cdargs.el ends here
+\ No newline at end of file
++;;; cdargs.el ends here
+diff -up cdargs-1.35/src/cdargs.cc.fix_fsf_address cdargs-1.35/src/cdargs.cc
+--- cdargs-1.35/src/cdargs.cc.fix_fsf_address	2006-02-26 18:06:47.000000000 +0100
++++ cdargs-1.35/src/cdargs.cc	2018-04-05 21:31:47.933399214 +0200
+@@ -19,7 +19,8 @@
+  * 
+  *     You should have received a copy of the GNU General Public License
+  *     along with this program; if not, write to the Free Software
+- *     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ *     Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ *     Boston, MA 02110-1335.
+  */ 
+ 
+ /********************************************************************/
+diff -up cdargs-1.35/src/cdargs.h.fix_fsf_address cdargs-1.35/src/cdargs.h
+--- cdargs-1.35/src/cdargs.h.fix_fsf_address	2004-03-31 18:15:41.000000000 +0200
++++ cdargs-1.35/src/cdargs.h	2018-04-05 21:32:40.166296267 +0200
+@@ -19,7 +19,8 @@
+  * 
+  *     You should have received a copy of the GNU General Public License
+  *     along with this program; if not, write to the Free Software
+- *     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ *     Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ *     Boston, MA 02110-1335, USA.
+  */ 
+ 
+ 

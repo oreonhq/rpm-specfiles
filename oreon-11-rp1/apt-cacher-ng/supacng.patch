@@ -1,0 +1,16 @@
+# Author: Jonathan Wright
+# Purpose: versioning the shared library to comply with Fedora Policy
+# https://bugzilla.redhat.com/show_bug.cgi?id=2157646
+# Upstreamed: no
+diff -uNr apt-cacher-ng-3.7.4.orig/src/CMakeLists.txt apt-cacher-ng-3.7.4/src/CMakeLists.txt
+--- apt-cacher-ng-3.7.4.orig/src/CMakeLists.txt 2022-12-28 15:31:55.893118781 -0600
++++ apt-cacher-ng-3.7.4/src/CMakeLists.txt      2022-12-28 15:32:49.351832421 -0600
+@@ -20,7 +20,7 @@
+ add_definitions(-DACNG_CORE_IN_SO)
+ endif()
+
+-SET_TARGET_PROPERTIES(supacng PROPERTIES COMPILE_FLAGS "${ACNG_COMPFLAGS} ${ACNG_CXXFLAGS} ${CFLAGS_DAEMON} ${CFLAGS_PTHREAD}")
++SET_TARGET_PROPERTIES(supacng PROPERTIES VERSION ${ACVERSION} SOVERSION 1 COMPILE_FLAGS "${ACNG_COMPFLAGS} ${ACNG_CXXFLAGS} ${CFLAGS_DAEMON} ${CFLAGS_PTHREAD}")
+
+ option(ENABLE_PCH "Enable use of precompiled headers for faster builds" off)
+ if(ENABLE_PCH)

@@ -1,0 +1,21 @@
+These functions are only declared in the non-installed, private header
+file.  Add declarations for now, so that things keep building.
+
+This looks like it fixes a pointer trucation issue.
+
+Submitted upstream: <https://rt.cpan.org/Ticket/Display.html?id=145548>
+
+diff -ur Goo-Canvas-0.06.orig/goocanvas-perl.h Goo-Canvas-0.06/goocanvas-perl.h
+--- Goo-Canvas-0.06.orig/goocanvas-perl.h	2007-09-29 02:59:38.000000000 +0200
++++ Goo-Canvas-0.06/goocanvas-perl.h	2022-12-09 21:09:33.927299572 +0100
+@@ -9,6 +9,10 @@
+ #include "cairo-perl.h"
+ #include "goocanvas.h"
+ 
++/* From goocanvasprivate.h.  */
++cairo_pattern_t* goo_canvas_cairo_pattern_from_pixbuf (GdkPixbuf *pixbuf);
++cairo_surface_t* goo_canvas_cairo_surface_from_pixbuf (GdkPixbuf *pixbuf);
++
+ /* FIXME: How to avoid compile error in autogen.h */
+ #define GooCairoPattern cairo_pattern_t
+ #define GooCairoMatrix cairo_matrix_t

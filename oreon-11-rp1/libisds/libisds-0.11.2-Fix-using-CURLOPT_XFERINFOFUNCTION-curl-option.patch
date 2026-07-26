@@ -1,0 +1,46 @@
+From cf07f96bf8465c5ab225b7b6e31ed51b33ca8a63 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <petr.pisar@atlas.cz>
+Date: Mon, 11 Mar 2024 21:54:01 +0100
+Subject: [PATCH] Fix using CURLOPT_XFERINFOFUNCTION curl option
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Commit 25acc6d44db3eb5f944a6992336b00ae97c85e20 (Use
+CURLOPT_XFERINFOFUNCTION curl option if available) started to use
+CURLOPT_XFERINFOFUNCTION instead of deprecated CURLOPT_PROGRESSFUNCTION.
+But there was a bug in the callback prototype and as a result the
+transfer values were gerbled.
+
+This patch fixes the callback prototype.
+
+Signed-off-by: Petr Písař <petr.pisar@atlas.cz>
+---
+ src/soap.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/src/soap.c b/src/soap.c
+index 7378fcd..f485f4f 100644
+--- a/src/soap.c
++++ b/src/soap.c
+@@ -491,8 +491,15 @@ leave:
+ 
+ /* CURL progress callback proxy to rearrange arguments.
+  * @curl_data is session context  */
+-static int progress_proxy(void *curl_data, double download_total,
+-        double download_current, double upload_total, double upload_current) {
++static int progress_proxy(void *curl_data,
++#if HAVE_DECL_CURLOPT_XFERINFOFUNCTION /* Since curl-7.32.0 */
++        curl_off_t download_total, curl_off_t download_current,
++        curl_off_t upload_total, curl_off_t upload_current
++#else
++        double download_total, double download_current,
++        double upload_total, double upload_current
++#endif /* not HAVE_DECL_CURLOPT_XFERINFOFUNCTION */
++        ) {
+     struct isds_ctx *context = (struct isds_ctx *) curl_data;
+     int abort = 0;
+ 
+-- 
+2.44.0
+

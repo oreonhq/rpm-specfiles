@@ -1,0 +1,22 @@
+# logrotate requires dionaea to be started with a pidfile
+# in this case -p /opt/dionaea/var/run/dionaea.pid
+# adjust the path to your needs
+/var/log/dionaea/dionaea.log /var/log/dionaea/dionaea-errors.log {
+        daily
+        rotate 365
+        missingok
+        compress
+        delaycompress
+        su dionaea dionaea
+        create 660 dionaea dionaea
+        dateext
+        postrotate
+                # Simple reload of the configuration with HUP should, but doesn't work
+                # https://github.com/DinoTools/dionaea/issues/206
+                # https://github.com/DinoTools/dionaea/blob/master/doc/source/old/configuration.rst
+                # kill -HUP `cat /var/run/dionaea.pid`
+
+                # do full service restart instead
+                /bin/systemctl -q is-active dionaea.service && /bin/systemctl restart dionaea.service > /dev/null 2>/dev/null || true
+        endscript
+}

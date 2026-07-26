@@ -1,0 +1,15 @@
+--- doc/radiroot.tex.orig	2018-04-23 01:42:40.000000000 -0600
++++ doc/radiroot.tex	2019-01-30 14:01:36.524752660 -0700
+@@ -151,10 +151,10 @@ session.
+ 
+ The computation may take a very long time and can get unfeasible if the
+ degree of <f> is greater than 7.
+-\beginexample
+-\endexample
+ 
++\beginexample
+ \> RootsOfPolynomialAsRadicalsNC( <f> [, <mode> [, <file> ] ] )
++\endexample
+ 
+ does essentially the same as `RootsOfPolynomialAsRadicals' except
+ that it runs no test on the input before starting the actual

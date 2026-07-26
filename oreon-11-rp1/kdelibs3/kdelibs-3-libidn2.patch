@@ -1,0 +1,93 @@
+diff -up kdelibs-3.5.10/configure.in.than kdelibs-3.5.10/configure.in
+--- kdelibs-3.5.10/configure.in.than	2017-06-20 18:02:22.845910412 +0200
++++ kdelibs-3.5.10/configure.in	2017-06-20 18:03:09.058172814 +0200
+@@ -692,10 +692,10 @@ AC_ARG_WITH(libidn,
+   [], with_libidn=check)
+ LIB_IDN=
+ if test "x$with_libidn" != xno; then
+-  AC_CHECK_HEADERS([idna.h punycode.h stringprep.h])
+-  KDE_CHECK_LIB(idn, idna_to_ascii_4i, [
++  AC_CHECK_HEADERS([idn2.h])
++  KDE_CHECK_LIB(idn2, idn2_to_ascii_4i, [
+     AC_DEFINE_UNQUOTED(HAVE_LIBIDN, 1, [Defined if you have libidn in your system])
+-    LIB_IDN=-lidn
++    LIB_IDN=-lidn2
+   ])
+   if test "x$with_libidn" != xcheck && test -z "$LIB_IDN"; then
+     AC_MSG_ERROR([--with-libidn was given, but test for libidn failed])
+diff -up kdelibs-3.5.10/kdecore/configure.in.in.than kdelibs-3.5.10/kdecore/configure.in.in
+--- kdelibs-3.5.10/kdecore/configure.in.in.than	2017-06-20 17:53:41.544511539 +0200
++++ kdelibs-3.5.10/kdecore/configure.in.in	2017-06-20 18:01:27.557989259 +0200
+@@ -48,10 +48,10 @@ AC_ARG_WITH(libidn,
+   [], with_libidn=check)
+ LIB_IDN=
+ if test "x$with_libidn" != xno; then
+-  AC_CHECK_HEADERS([idna.h punycode.h stringprep.h])
+-  KDE_CHECK_LIB(idn, idna_to_ascii_4i, [
++  AC_CHECK_HEADERS([idn2.h])
++  KDE_CHECK_LIB(idn2, idn2_to_ascii_4i, [
+     AC_DEFINE_UNQUOTED(HAVE_LIBIDN, 1, [Defined if you have libidn in your system])
+-    LIB_IDN=-lidn
++    LIB_IDN=-lidn2
+   ])
+   if test "x$with_libidn" != xcheck && test -z "$LIB_IDN"; then
+     AC_MSG_ERROR([--with-libidn was given, but test for libidn failed])
+diff -up kdelibs-3.5.10/kdecore/network/kresolver.cpp.than kdelibs-3.5.10/kdecore/network/kresolver.cpp
+--- kdelibs-3.5.10/kdecore/network/kresolver.cpp.than	2017-06-21 12:55:55.733217103 +0200
++++ kdelibs-3.5.10/kdecore/network/kresolver.cpp	2017-06-21 13:27:38.956737181 +0200
+@@ -49,8 +49,8 @@
+ #include <qguardedptr.h>
+ 
+ // IDN
+-#ifdef HAVE_IDNA_H
+-# include <idna.h>
++#ifdef HAVE_IDN2_H
++# include <idn2.h>
+ #endif
+ 
+ // KDE
+@@ -1083,7 +1083,7 @@ static QStringList splitLabels(const QSt
+ 
+ static QCString ToASCII(const QString& label)
+ {
+-#ifdef HAVE_IDNA_H
++#ifdef HAVE_IDN2_H
+   // We have idna.h, so we can use the idna_to_ascii
+   // function :)
+ 
+@@ -1104,7 +1104,7 @@ static QCString ToASCII(const QString& l
+     ucs4[i] = (unsigned long)label[i].unicode();
+   ucs4[i] = 0;			// terminate with NUL, just to be on the safe side
+ 
+-  if (idna_to_ascii_4i(ucs4, label.length(), buf, 0) == IDNA_SUCCESS)
++  if (idn2_to_ascii_4i(ucs4, label.length(), buf, 0|IDN2_NFC_INPUT|IDN2_NONTRANSITIONAL) == IDN2_OK)
+     // success!
+     retval = buf;
+ 
+@@ -1117,7 +1117,7 @@ static QCString ToASCII(const QString& l
+ 
+ static QString ToUnicode(const QString& label)
+ {
+-#ifdef HAVE_IDNA_H
++#ifdef HAVE_IDN2_H
+   // We have idna.h, so we can use the idna_to_unicode
+   // function :)
+ 
+@@ -1131,7 +1131,7 @@ static QString ToUnicode(const QString&
+   // try the same length for output
+   ucs4_output = new Q_UINT32[outlen = label.length()];
+ 
+-  idna_to_unicode_44i(ucs4_input, label.length(),
++  idn2_to_unicode_44i(ucs4_input, label.length(),
+ 		      ucs4_output, &outlen,
+ 		      0);
+ 
+@@ -1141,7 +1141,7 @@ static QString ToUnicode(const QString&
+       delete [] ucs4_output;
+       ucs4_output = new Q_UINT32[outlen];
+ 
+-      idna_to_unicode_44i(ucs4_input, label.length(),
++      idn2_to_unicode_44i(ucs4_input, label.length(),
+ 			  ucs4_output, &outlen,
+ 			  0);
+     }

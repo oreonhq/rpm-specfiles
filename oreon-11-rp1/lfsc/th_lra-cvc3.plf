@@ -1,0 +1,1089 @@
+; polynomial normalization for unary minus
+
+(declare pn_mul_u-_c_L
+  (! y (term Real)
+  (! py poly
+  (! pz poly
+  (! x mpq
+  (! pny (poly_norm y py)
+  (! a (^ (poly_mul_c py (mp_neg x)) pz)
+    (poly_norm (*_Real (u-_Real (a_real x)) y) pz))))))))
+    
+(declare pn_mul_u-_c_R
+  (! y (term Real)
+  (! py poly
+  (! pz poly
+  (! x mpq
+  (! pny (poly_norm y py)
+  (! a (^ (poly_mul_c py (mp_neg x)) pz)
+    (poly_norm (*_Real y (u-_Real (a_real x))) pz))))))))
+
+(declare pn_u-
+  (! y (term Real)
+  (! py poly
+  (! pz poly
+  (! pny (poly_norm y py)
+  (! a (^ (poly_neg py) pz)
+    (poly_norm (u-_Real y) pz)))))))
+   
+    
+; and normalization
+
+(program do_and_elim ((f formula) (c mpz) (isEnd bool)) formula
+  (match f
+    ((and f1 f2) 
+      (mp_ifzero c 
+        (match isEnd (tt f) (ff f1)) 
+        (do_and_elim f2 (mp_add c (~ 1)) isEnd)))
+    (default f)))
+    
+(program do_and_rem ((f formula) (c mpz)) formula
+  (match f
+    ((and f1 f2) (mp_ifzero c f2 (and f1 (do_and_rem f2 (mp_add c (~ 1))))))
+    (default f)))
+    
+(declare and_elim
+  (! f formula
+  (! f' formula
+  (! c mpz
+  (! u1 (th_holds f)
+  (! r (^ (do_and_elim f c ff) f')
+    (th_holds f')))))))
+    
+(declare and_elim_end
+  (! f formula
+  (! f' formula
+  (! c mpz
+  (! u1 (th_holds f)
+  (! r (^ (do_and_elim f c tt) f')
+    (th_holds f')))))))
+    
+(declare and_rem
+  (! f formula
+  (! f' formula
+  (! c mpz
+  (! u1 (th_holds f)
+  (! r (^ (do_and_rem f c) f')
+    (th_holds f')))))))
+
+; and normalize
+(program do_and_normalize_h ((f formula) (fc formula)) formula
+    (match f
+     ; ((true) fc)
+      ((and f1 f2) (do_and_normalize_h f1 (do_and_normalize_h f2 fc)))
+      (default (and f fc))))
+    
+(program do_and_normalize ((f formula)) formula
+  (match f
+    ((and f1 f2) (do_and_normalize_h f1 (do_and_normalize f2)))
+    (default f)))
+
+(declare and_norm
+  (! f formula
+  (! f' formula
+  (! u (th_holds f)
+  (! r (^ (do_and_normalize f) f')
+    (th_holds f'))))))
+    
+(declare and_normalize
+  (! f' formula
+  (! f formula
+  (! r (^ (do_and_normalize f) f')
+    (th_holds (iff f f'))))))
+
+(declare and_nd
+  (! f1 formula
+  (! f2 formula
+  (! f' formula
+  (! u (th_holds (iff f1 f2))
+  (! r (^ (do_and_normalize f1) f')
+    (th_holds (iff f1 f2))))))))
+
+(declare and_redundant
+  (! f formula
+    (th_holds (iff (and f f) f))))
+    
+(declare and_symm
+  (! f1 formula
+  (! f2 formula
+    (th_holds (iff (and f1 f2) (and f2 f1))))))
+
+
+
+
+
+; or elimination
+
+(program do_or_elim ((f formula) (c mpz) (isEnd bool)) formula
+  (match f
+    ((or f1 f2) 
+      (mp_ifzero c 
+        (match isEnd (tt f) (ff f1)) 
+        (do_or_elim f2 (mp_add c (~ 1)) isEnd)))
+    (default f)))
+
+(declare or_elim
+  (! f formula
+  (! f' formula
+  (! c mpz
+  (! u1 (th_holds (not f))
+  (! r (^ (do_or_elim f c ff) f')
+    (th_holds (not f'))))))))
+    
+(declare or_elim_end
+  (! f formula
+  (! f' formula
+  (! c mpz
+  (! u1 (th_holds (not f))
+  (! r (^ (do_or_elim f c tt) f')
+    (th_holds (not f'))))))))
+
+(program do_or_normalize_h ((f formula) (fc formula)) formula
+  (match f
+  ;  ((false) fc)
+    ((or f1 f2) (do_or_normalize_h f1 (do_or_normalize_h f2 fc)))
+    (default (or f fc))))
+    
+(program do_or_normalize ((f formula)) formula
+  (match f
+    ((or f1 f2) (do_or_normalize_h f1 (do_or_normalize f2)))
+    (default f)))
+
+(declare or_norm
+  (! f formula
+  (! f' formula
+  (! u (th_holds f)
+  (! r (^ (do_or_normalize f) f')
+    (th_holds f'))))))
+    
+(declare or_normalize
+  (! f' formula
+  (! f formula
+  (! r (^ (do_or_normalize f) f')
+    (th_holds (iff f f'))))))
+    
+(declare or_nd
+  (! f1 formula
+  (! f2 formula
+  (! f' formula
+  (! u (th_holds (iff f1 f2))
+  (! r (^ (do_or_normalize f1) f')
+    (th_holds (iff f1 f2))))))))
+
+(declare or_redundant
+  (! f formula
+    (th_holds (iff (or f f) f))))
+    
+(declare or_symm
+  (! f1 formula
+  (! f2 formula
+    (th_holds (iff (or f1 f2) (or f2 f1))))))
+    
+(declare or_intro_1 
+  (! f1 formula
+  (! f2 formula
+  (! v var
+  (! a (atom v f2)
+  (! u (th_holds f1)
+    (th_holds (or f1 f2))))))))
+    
+(declare or_intro_2 
+  (! f1 formula
+  (! f2 formula
+  (! v var
+  (! a (atom v f2)
+  (! u (th_holds f1)
+    (th_holds (or f2 f1))))))))
+
+
+
+
+
+
+
+; transitivity for iff
+(declare impl_trans (! f1 formula
+                   (! f2 formula
+                   (! f3 formula
+                   (! i1 (th_holds (impl f1 f2))
+                   (! i2 (th_holds (impl f2 f3))
+                      (th_holds (impl f1 f3))))))))
+
+(define impl_mp impl_elim)
+
+; reflexivity for impl
+(declare impl_refl (! f formula
+                       (th_holds (impl f f))))
+; reflexivity for impl
+(declare impl_refl_atom (! v var
+                        (! f formula
+                        (! a (atom v f)
+                          (th_holds (impl f f))))))
+(declare impl_refl_atom_not (! v var
+                            (! f formula
+                            (! a (atom v f)
+                              (th_holds (impl (not f) (not f))))))) 
+                          
+                     
+(declare impl_refl_false (th_holds (impl false false)))
+(declare impl_refl_true (th_holds (impl true true)))
+
+; symmetry for iff
+(declare impl_symm (! f1 formula
+                  (! f2 formula
+                  (! i1 (th_holds (impl f1 f2))
+                    (th_holds (impl f2 f1))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Rules for iff
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; dual implication is iff
+(declare iff_intro (! f1 formula
+                   (! f2 formula
+                   (! i1 (th_holds (impl f1 f2))
+                   (! i2 (th_holds (impl f2 f1))
+                     (th_holds (iff f1 f2)))))))
+
+; reflexivity for iff
+(declare iff_refl_false (th_holds (iff false false)))
+(declare iff_refl_true (th_holds (iff true true)))
+(declare iff_refl 
+  (! f formula
+    (th_holds (iff f f))))
+
+; symmetry for iff
+(declare iff_symm (! f1 formula
+                  (! f2 formula
+                  (! i1 (th_holds (iff f1 f2))
+                    (th_holds (iff f2 f1))))))
+
+; transitivity for iff
+(declare iff_trans (! f1 formula
+                   (! f2 formula
+                   (! f3 formula
+                   (! i1 (th_holds (iff f1 f2))
+                   (! i2 (th_holds (iff f2 f3))
+                      (th_holds (iff f1 f3))))))))
+                  
+; mp for iff
+(declare iff_mp (! f1 formula
+                (! f2 formula
+                (! i1 (th_holds f1)
+                (! i2 (th_holds (iff f1 f2))
+                  (th_holds f2))))))
+
+;;
+
+(declare basic_subst_op_=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (iff (= Real t1 t3) (= Real t2 t4))))))))))
+    
+(declare basic_subst_op_<
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (iff (<_Real t1 t3) (<_Real t2 t4))))))))))
+    
+(declare basic_subst_op_>
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (iff (>_Real t1 t3) (>_Real t2 t4))))))))))
+    
+(declare basic_subst_op_<=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (iff (<=_Real t1 t3) (<=_Real t2 t4))))))))))
+    
+(declare basic_subst_op_>=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (iff (>=_Real t1 t3) (>=_Real t2 t4))))))))))
+    
+(declare basic_subst_op_distinct
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (iff (distinct Real t1 t3) (distinct Real t2 t4))))))))))
+    
+    
+;; subst op1
+    
+(declare basic_subst_op1_+
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (= Real (+_Real t1 t3) (+_Real t2 t4))))))))))
+    
+(declare basic_subst_op1_-
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (= Real (-_Real t1 t3) (-_Real t2 t4))))))))))
+    
+(declare basic_subst_op1_*
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+  (! i2 (th_holds (= Real t3 t4))
+    (th_holds (= Real (*_Real t1 t3) (*_Real t2 t4))))))))))
+    
+(declare basic_subst_op1_or
+  (! f1 formula
+  (! f2 formula
+  (! f3 formula
+  (! f4 formula
+  (! i1 (th_holds (iff f1 f2))
+  (! i2 (th_holds (iff f3 f4))
+    (th_holds (iff (or f1 f3) (or f2 f4))))))))))
+    
+(declare basic_subst_op1_and
+  (! f1 formula
+  (! f2 formula
+  (! f3 formula
+  (! f4 formula
+  (! i1 (th_holds (iff f1 f2))
+  (! i2 (th_holds (iff f3 f4))
+    (th_holds (iff (and f1 f3) (and f2 f4))))))))))
+
+(declare basic_subst_op1_iff
+  (! f1 formula
+  (! f2 formula
+  (! f3 formula
+  (! f4 formula
+  (! i1 (th_holds (iff f1 f2))
+  (! i2 (th_holds (iff f3 f4))
+    (th_holds (iff (iff f1 f3) (iff f2 f4))))))))))
+
+(define basic_subst_op1_= basic_subst_op_=)
+(define basic_subst_op1_>= basic_subst_op_>=)
+(define basic_subst_op1_<= basic_subst_op_<=)
+(define basic_subst_op1_> basic_subst_op_>)
+(define basic_subst_op1_< basic_subst_op_<)
+(define basic_subst_op1_distinct basic_subst_op_distinct)
+
+(declare basic_subst_op1_impl_or
+  (! f1 formula
+  (! f2 formula
+  (! f3 formula
+  (! f4 formula
+  (! i1 (th_holds (impl f1 f2))
+  (! i2 (th_holds (impl f3 f4))
+    (th_holds (impl (or f1 f3) (or f2 f4))))))))))
+    
+(declare basic_subst_op1_impl_and
+  (! f1 formula
+  (! f2 formula
+  (! f3 formula
+  (! f4 formula
+  (! i1 (th_holds (impl f1 f2))
+  (! i2 (th_holds (impl f3 f4))
+    (th_holds (impl (and f1 f3) (and f2 f4))))))))))
+    
+
+
+(declare basic_subst_op0_not
+  (! f1 formula
+  (! f2 formula
+  (! i1 (th_holds (iff f1 f2))
+    (th_holds (iff (not f1) (not f2)))))))
+    
+(declare basic_subst_op0_u-
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! i1 (th_holds (= Real t1 t2))
+    (th_holds (= Real (u-_Real t1) (u-_Real t2)))))))
+    
+(declare optimized_subst_op_ite
+  (! f formula
+  (! f1 formula
+  (! f2 formula
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! u1 (th_holds (= Real (ite Real f t1 t2) (ite Real f t3 t4)))
+  (! u2 (th_holds (iff f1 f2))
+    (th_holds (= Real (ite Real f1 t1 t2) (ite Real f2 t3 t4)))))))))))))
+    
+(declare optimized_subst_op_ite_t1
+  (! f1 formula
+  (! f2 formula
+  (! t (term Real)
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! u1 (th_holds (= Real (ite Real f1 t t2) (ite Real f2 t t4)))
+  (! u (th_holds (= Real t1 t3))
+    (th_holds (= Real (ite Real f1 t1 t2) (ite Real f2 t3 t4)))))))))))))
+    
+(declare optimized_subst_op_ite_t2
+  (! f1 formula
+  (! f2 formula
+  (! t (term Real)
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! u1 (th_holds (= Real (ite Real f1 t1 t) (ite Real f2 t3 t)))
+  (! u (th_holds (= Real t2 t4))
+    (th_holds (= Real (ite Real f1 t1 t2) (ite Real f2 t3 t4)))))))))))))
+    
+    
+(declare optimized_subst_op_ifte
+  (! f formula
+  (! f1 formula
+  (! f2 formula
+  (! ft1 formula
+  (! ft2 formula
+  (! ft3 formula
+  (! ft4 formula
+  (! u1 (th_holds (iff (ifte f ft1 ft2) (ifte f ft3 ft4)))
+  (! u2 (th_holds (iff f1 f2))
+    (th_holds (iff (ifte f1 ft1 ft2) (ifte f2 ft3 ft4)))))))))))))
+    
+(declare optimized_subst_op_ifte_t1
+  (! f1 formula
+  (! f2 formula
+  (! ft formula
+  (! ft1 formula
+  (! ft2 formula
+  (! ft3 formula
+  (! ft4 formula
+  (! u1 (th_holds (iff (ifte f1 ft ft2) (ifte f2 ft ft4)))
+  (! u (th_holds (iff ft1 ft3))
+    (th_holds (iff (ifte f1 ft1 ft2) (ifte f2 ft3 ft4)))))))))))))
+    
+(declare optimized_subst_op_ifte_t2
+  (! f1 formula
+  (! f2 formula
+  (! ft formula
+  (! ft1 formula
+  (! ft2 formula
+  (! ft3 formula
+  (! ft4 formula
+  (! u1 (th_holds (iff (ifte f1 ft1 ft) (ifte f2 ft3 ft)))
+  (! u (th_holds (iff ft2 ft4))
+    (th_holds (iff (ifte f1 ft1 ft2) (ifte f2 ft3 ft4)))))))))))))
+    
+(declare optimized_subst_op_impl_ite
+  (! f1 formula
+  (! f2 formula
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! u (th_holds (impl f1 f2))
+    (th_holds (= Real (ite Real f1 t1 t2) (ite Real f2 t1 t2)))))))))
+    
+(declare optimized_subst_op_impl_and
+  (! f1 formula
+  (! f2 formula
+  (! f3 formula
+  (! u (th_holds (impl f1 f2))
+    (th_holds (impl (and f1 f3) (and f1 f3))))))))
+    
+(declare optimized_subst_op_impl_or
+  (! f1 formula
+  (! f2 formula
+  (! f3 formula
+  (! u (th_holds (impl f1 f2))
+    (th_holds (impl (or f1 f3) (or f1 f3))))))))
+    
+    
+;; real shadow
+
+(declare real_shadow_<_<
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! f1 (th_holds (<_Real t1 t2))
+  (! f2 (th_holds (<_Real t2 t3))
+    (th_holds (<_Real t1 t3))))))))
+    
+(declare real_shadow_<_<=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! f1 (th_holds (<_Real t1 t2))
+  (! f2 (th_holds (<=_Real t2 t3))
+    (th_holds (<_Real t1 t3))))))))
+    
+(declare real_shadow_<=_<
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! f1 (th_holds (<=_Real t1 t2))
+  (! f2 (th_holds (<_Real t2 t3))
+    (th_holds (<_Real t1 t3))))))))
+    
+(declare real_shadow_<=_<=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! f1 (th_holds (<=_Real t1 t2))
+  (! f2 (th_holds (<=_Real t2 t3))
+    (th_holds (<=_Real t1 t3))))))))
+    
+;; real shadow eq
+
+(declare real_shadow_eq
+ (! t1 (term Real)
+ (! t2 (term Real)
+ (! i1 (th_holds (<=_Real t1 t2))
+ (! i2 (th_holds (<=_Real t2 t1))
+   (th_holds (= Real t1 t2)))))))
+
+;; add inequalities 
+
+(declare add_inequalities_<_<=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (!f1 (th_holds ( <_Real t1 t2))
+  (!f2 (th_holds ( <=_Real t3 t4))
+    (th_holds (<_Real (+_Real t1 t3) (+_Real t2 t4))))))))))
+
+
+;; right minus left
+
+(declare right_minus_left_=
+  (! x (term Real)
+  (! y (term Real)
+    (th_holds (iff (= Real x y) (= Real (a_real 0/1) (-_Real y x)))))))
+    
+(declare right_minus_left_>
+  (! x (term Real)
+  (! y (term Real)
+    (th_holds (iff (>_Real x y) (>_Real (a_real 0/1) (-_Real y x)))))))
+    
+(declare right_minus_left_<
+  (! x (term Real)
+  (! y (term Real)
+    (th_holds (iff (<_Real x y) (<_Real (a_real 0/1) (-_Real y x)))))))
+    
+(declare right_minus_left_>=
+  (! x (term Real)
+  (! y (term Real)
+    (th_holds (iff (>=_Real x y) (>=_Real (a_real 0/1) (-_Real y x)))))))
+    
+(declare right_minus_left_<=
+  (! x (term Real)
+  (! y (term Real)
+    (th_holds (iff (<=_Real x y) (<=_Real (a_real 0/1) (-_Real y x)))))))
+
+(declare right_minus_left_distinct
+  (! x (term Real)
+  (! y (term Real)
+    (th_holds (iff (distinct Real x y) (distinct Real (a_real 0/1) (-_Real y x)))))))
+
+; minus to plus
+
+(declare minus_to_plus
+  (! x (term Real)
+  (! y (term Real)
+    (th_holds (= Real (-_Real x y) (+_Real x (*_Real (a_real (~ 1/1)) y)))))))
+
+;; plus pred
+
+(declare plus_predicate_=
+  (! x (term Real)
+  (! y (term Real)
+  (! z (term Real)
+    (th_holds (iff (= Real x y) (= Real (+_Real x z) (+_Real y z))))))))
+
+(declare plus_predicate_>
+  (! x (term Real)
+  (! y (term Real)
+  (! z (term Real)
+    (th_holds (iff (>_Real x y) (>_Real (+_Real x z) (+_Real y z))))))))
+    
+(declare plus_predicate_<
+  (! x (term Real)
+  (! y (term Real)
+  (! z (term Real)
+    (th_holds (iff (<_Real x y) (<_Real (+_Real x z) (+_Real y z))))))))
+
+(declare plus_predicate_>=
+  (! x (term Real)
+  (! y (term Real)
+  (! z (term Real)
+    (th_holds (iff (>=_Real x y) (>=_Real (+_Real x z) (+_Real y z))))))))
+    
+(declare plus_predicate_<=
+  (! x (term Real)
+  (! y (term Real)
+  (! z (term Real)
+    (th_holds (iff (<=_Real x y) (<=_Real (+_Real x z) (+_Real y z))))))))
+
+(declare plus_predicate_distinct
+  (! x (term Real)
+  (! y (term Real)
+  (! z (term Real)
+    (th_holds (iff (distinct Real x y) (distinct Real (+_Real x z) (+_Real y z))))))))
+    
+;; mult_ineqn
+
+(declare mult_eqn
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+    (th_holds (iff (= Real x y) (= Real (*_Real x (a_real c)) (*_Real y (a_real c))))))))))
+    
+(declare mult_ineqn_>
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mpq_ifpos c) tt)
+    (th_holds (iff (>_Real x y) (>_Real (*_Real x (a_real c)) (*_Real y (a_real c))))))))))
+    
+(declare mult_ineqn_<
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mpq_ifpos c) tt)
+    (th_holds (iff (<_Real x y) (<_Real (*_Real x (a_real c)) (*_Real y (a_real c))))))))))
+    
+(declare mult_ineqn_>=
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mpq_ifpos c) tt)
+    (th_holds (iff (>=_Real x y) (>=_Real (*_Real x (a_real c)) (*_Real y (a_real c))))))))))
+    
+(declare mult_ineqn_<=
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mpq_ifpos c) tt)
+    (th_holds (iff (<=_Real x y) (<=_Real (*_Real x (a_real c)) (*_Real y (a_real c))))))))))
+
+(declare mult_ineqn_neg_>
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mp_ifneg c tt ff) tt)
+    (th_holds (iff (>_Real x y) (>_Real (*_Real y (a_real c)) (*_Real x (a_real c))))))))))
+    
+(declare mult_ineqn_neg_<
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mp_ifneg c tt ff) tt)
+    (th_holds (iff (<_Real x y) (<_Real (*_Real y (a_real c)) (*_Real x (a_real c))))))))))
+    
+(declare mult_ineqn_neg_>=
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mp_ifneg c tt ff) tt)
+    (th_holds (iff (>=_Real x y) (>=_Real (*_Real y (a_real c)) (*_Real x (a_real c))))))))))
+    
+(declare mult_ineqn_neg_<=
+  (! x (term Real)
+  (! y (term Real)
+  (! c mpq
+  (! u (^ (mp_ifneg c tt ff) tt)
+    (th_holds (iff (<=_Real x y) (<=_Real (*_Real y (a_real c)) (*_Real x (a_real c))))))))))
+
+;; canon
+(declare canonize_=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! p poly
+  (! pn (poly_norm (-_Real t1 t2) p)
+  (! u (^ (mp_ifzero (is_poly_const p) tt ff) tt)
+    (th_holds (= Real t1 t2))))))))
+    
+(declare canonize_iff
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! p1 poly
+  (! p2 poly
+  (! pn1 (poly_norm (-_Real t1 t2) p1)
+  (! pn2 (poly_norm (-_Real t3 t4) p2)
+  (! u (^ (mp_ifzero (is_poly_const (poly_add p1 p2)) tt ff) tt)
+    (th_holds (iff (= Real t1 t2) (= Real t3 t4)))))))))))))
+    
+(declare canonize_conv
+  (! t1 (term Real)
+  (! t2 (term Real) 
+  (! t1' (term Real)
+  (! t2' (term Real)  
+  (! p poly
+  (! p' poly
+  (! pn (poly_norm (-_Real t1 t2) p)
+  (! pn (poly_norm (-_Real t1' t2') p')
+  (! u (th_holds (= Real t1 t2))
+  (! r (^ (mp_ifzero (is_poly_const (poly_sub p p')) tt ff) tt)
+    (th_holds (= Real t1' t2')))))))))))))
+
+;; flip_inequality
+
+(declare flip_inequality_>_<
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (>_Real t1 t2) (<_Real t2 t1))))))
+    
+(declare flip_inequality_>=_<=
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (>=_Real t1 t2) (<=_Real t2 t1))))))
+    
+   (declare flip_inequality_<_>
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (<_Real t1 t2) (>_Real t2 t1))))))
+    
+(declare flip_inequality_<=_>=
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (<=_Real t1 t2) (>=_Real t2 t1)))))) 
+
+;; negated inequality
+
+(declare negated_inequality_>_<=
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (not (>_Real t1 t2)) (<=_Real t1 t2))))))
+    
+(declare negated_inequality_>=_<
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (not (>=_Real t1 t2)) (<_Real t1 t2))))))
+    
+(declare negated_inequality_<_>=
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (not (<_Real t1 t2)) (>=_Real t1 t2))))))
+    
+(declare negated_inequality_<=_>
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (not (<=_Real t1 t2)) (>_Real t1 t2))))))
+    
+;; imply negated inequality
+
+(declare imply_negated_inequality_<_<
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! p1 poly
+  (! p2 poly
+  (! pn1 (poly_norm t1 p1)
+  (! pn2 (poly_norm t2 p2)
+  (! u (^ (mp_ifneg (is_poly_const (poly_add p1 p2)) tt ff) tt)
+    (th_holds 
+      (impl (<_Real (a_real 0/1) t1)
+            (not (<_Real (a_real 0/1) t2))))))))))))
+
+(declare imply_negated_inequality_<=_<=
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! p1 poly
+  (! p2 poly
+  (! pn1 (poly_norm t1 p1)
+  (! pn2 (poly_norm t2 p2)
+  (! u (^ (mp_ifneg (is_poly_const (poly_add p1 p2)) tt ff) tt)
+    (th_holds 
+      (impl (<=_Real (a_real 0/1) t1)
+            (not (<=_Real (a_real 0/1) t2))))))))))))
+
+(declare imply_negated_inequality_<=_<
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! p1 poly
+  (! p2 poly
+  (! pn1 (poly_norm t1 p1)
+  (! pn2 (poly_norm t2 p2)
+  (! u (^ (mp_ifneg (is_poly_const (poly_add p1 p2)) tt ff) tt)
+    (th_holds 
+      (impl (<=_Real (a_real 0/1) t1)
+            (not (<_Real (a_real 0/1) t2))))))))))))
+
+(declare imply_negated_inequality_<_<=
+  (! t1 (term Real)
+  (! t2 (term Real)    
+  (! p1 poly
+  (! p2 poly
+  (! pn1 (poly_norm t1 p1)
+  (! pn2 (poly_norm t2 p2)
+  (! u (^ (mp_ifneg (is_poly_const (poly_add p1 p2)) tt ff) tt)
+    (th_holds 
+      (impl (<_Real (a_real 0/1) t1)
+            (not (<=_Real (a_real 0/1) t2))))))))))))
+
+;; imply weaker inequality
+
+(declare imply_weaker_inequality_<_<
+  (! t (term Real)
+  (! c1 mpq
+  (! c2 mpq
+  (! u (^ (mp_ifneg (mp_add c2 (mp_mul (~ 1/1 ) c1)) tt ff) ff)
+    (th_holds 
+      (impl (<_Real (a_real 0/1) (+_Real (a_real c1) t)) 
+            (<_Real (a_real 0/1) (+_Real (a_real c2) t)))))))))
+           
+(declare imply_weaker_inequality_<=_<=
+  (! t (term Real)
+  (! c1 mpq
+  (! c2 mpq
+  (! u (^ (mp_ifneg (mp_add c2 (mp_mul (~ 1/1 ) c1)) tt ff) ff)
+    (th_holds 
+      (impl (<=_Real (a_real 0/1) (+_Real (a_real c1) t)) 
+            (<=_Real (a_real 0/1) (+_Real (a_real c2) t)))))))))
+            
+(declare imply_weaker_inequality_<=_<
+  (! t (term Real)
+  (! c1 mpq
+  (! c2 mpq
+  (! u (^ (mpq_ifpos (mp_add c2 (mp_mul (~ 1/1 ) c1))) tt)
+    (th_holds 
+      (impl (<=_Real (a_real 0/1) (+_Real (a_real c1) t)) 
+            (<_Real (a_real 0/1) (+_Real (a_real c2) t)))))))))
+           
+(declare imply_weaker_inequality_<_<=
+  (! t (term Real)
+  (! c1 mpq
+  (! c2 mpq
+  (! u (^ (mp_ifneg (mp_add c2 (mp_mul (~ 1/1 ) c1)) tt ff) ff)
+    (th_holds 
+      (impl (<_Real (a_real 0/1) (+_Real (a_real c1) t)) 
+            (<=_Real (a_real 0/1) (+_Real (a_real c2) t)))))))))
+            
+            
+(declare rewrite_iff_symm 
+  (! f1 formula
+  (! f2 formula
+    (th_holds (iff (iff f1 f2) (iff f2 f1))))))
+
+(declare rewrite_eq_symm 
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (= Real t1 t2) (= Real t2 t1))))))
+    
+
+;; rewrite implies
+
+(declare rewrite_implies
+  (! f1 formula
+  (! f2 formula
+    (th_holds (iff (impl f1 f2) (or (not f1) f2))))))
+
+;; not to iff
+
+(declare not_to_iff
+  (! f1 formula
+  (! f2 (th_holds (not f1))
+    (th_holds (iff f1 false)))))
+
+;; rewrite_not_not
+
+(declare rewrite_not_not
+  (! f formula
+    (th_holds (iff (not (not f)) f ))))
+    
+(declare uminus_to_mult
+  (! c mpq
+    (th_holds (= Real (u-_Real (a_real c)) (*_Real (a_real (~ 1/1)) (a_real c))))))
+    
+;; const_predicate
+(declare const_predicate_=
+  (! c1 mpq
+  (! c2 mpq
+  (! r (^ (mp_ifzero (mp_add c2 (mp_mul (~ 1/1) c1)) tt ff) ff)
+    (th_holds (iff (= Real (a_real c1) (a_real c2)) false))))))
+
+(declare const_predicate_<
+  (! c1 mpq
+  (! c2 mpq
+  (! r (^ (mpq_ifpos (mp_add c2 (mp_mul (~ 1/1) c1))) ff)
+    (th_holds (iff (<_Real (a_real c1) (a_real c2)) false))))))
+    
+(declare const_predicate_<=
+  (! c1 mpq
+  (! c2 mpq
+  (! r (^ (mp_ifneg (mp_add c2 (mp_mul (~ 1/1) c1)) tt ff) tt)
+    (th_holds (iff (<=_Real (a_real c1) (a_real c2)) false))))))
+    
+(declare const_predicate_=_t
+  (! c1 mpq
+  (! c2 mpq
+  (! r (^ (mp_ifzero (mp_add c2 (mp_mul (~ 1/1) c1)) tt ff) tt)
+    (th_holds (iff (= Real (a_real c1) (a_real c2)) true))))))
+    
+(declare const_predicate_<_t
+  (! c1 mpq
+  (! c2 mpq
+  (! r (^ (mpq_ifpos (mp_add c2 (mp_mul (~ 1/1) c1))) tt)
+    (th_holds (iff (<_Real (a_real c1) (a_real c2)) true))))))
+    
+(declare const_predicate_<=_t
+  (! c1 mpq
+  (! c2 mpq
+  (! r (^ (mp_ifneg (mp_add c2 (mp_mul (~ 1/1) c1)) tt ff) ff)
+    (th_holds (iff (<=_Real (a_real c1) (a_real c2)) true))))))
+    
+    
+(declare rewrite_not_true (th_holds (iff (not true) false)))
+
+(declare rewrite_not_false (th_holds (iff (not false) true)))
+
+(declare rewrite_eq_symm
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (iff (= Real t1 t2) (= Real t2 t1))))))
+
+(declare rewrite_eq_refl
+ (! t1 (term Real)
+   (th_holds (iff (= Real t1 t1) true))))
+
+; class of ignored rules
+
+(declare iff_true 
+  (! f formula
+  (! u (th_holds f)
+    (th_holds (iff f true)))))
+    
+    
+(declare iff_not_false
+  (! f formula
+  (! u (th_holds f)
+    (th_holds (iff (not f) false)))))
+    
+(declare iff_true_elim
+  (! f formula
+  (! u (th_holds (iff f true))
+    (th_holds f))))
+    
+(declare iff_false_elim
+  (! f formula
+  (! u (th_holds (iff f false))
+    (th_holds (not f)))))
+ 
+(declare not_to_iff
+  (! f formula
+  (! u (th_holds (not f))
+    (th_holds (iff f false)))))
+    
+    
+(declare iff_true_impl
+  (! f formula
+  (! u (th_holds f)
+    (th_holds (impl f true)))))
+    
+(declare iff_not_false_impl
+  (! f formula
+  (! u (th_holds f)
+    (th_holds (impl (not f) false)))))
+    
+(declare iff_true_elim_impl
+  (! f formula
+  (! u (th_holds (impl f true))
+    (th_holds f))))
+    
+(declare iff_false_elim_impl
+  (! f formula
+  (! u (th_holds (impl f false))
+    (th_holds (not f)))))
+ 
+(declare not_to_iff_impl
+  (! f formula
+  (! u (th_holds (not f))
+    (th_holds (impl f false)))))
+    
+
+; the different rewrite_iff cases
+
+(declare rewrite_iff_true_l
+  (!f1 formula
+    (th_holds (iff (iff true f1) f1))))
+
+(declare rewrite_iff_false_l
+  (!f1 formula
+    (th_holds (iff (iff false f1) (not f1)))))
+
+(declare rewrite_iff_not_l
+  (!f1 formula
+    (th_holds (iff (iff (not f1) f1) false))))
+
+(declare rewrite_iff_true_r
+  (!f1 formula
+    (th_holds (iff (iff f1 true) f1))))
+
+(declare rewrite_iff_false_r
+  (!f1 formula
+    (th_holds (iff (iff f1 false) (not f1)))))
+
+(declare rewrite_iff_not_r
+  (!f1 formula
+    (th_holds (iff (iff f1 (not f1)) false))))
+
+
+
+; ite axiom
+(declare ite_axiom
+  (! f formula
+  (! t1 (term Real)
+  (! t2 (term Real)
+    (th_holds (ifte f (= Real (ite Real f t1 t2) t1) (= Real (ite Real f t1 t2) t2)))))))
+
+; ite same
+(declare rewrite_ite_same
+  (! f formula
+  (! t (term Real)
+    (th_holds (= Real (ite Real f t t) t)))))
+    
+(declare imply_equalities
+  (! t1 (term Real)
+  (! t2 (term Real)
+  (! t3 (term Real)
+  (! t4 (term Real)
+  (! p1 poly
+  (! p2 poly
+  (! pn1 (poly_norm (-_Real t2 t1) p1)
+  (! pn2 (poly_norm (-_Real t4 t3) p2)
+  (! u1 (th_holds (<=_Real t1 t2))
+  (! u2 (th_holds (<=_Real t3 t4))
+  (! u (^ (mp_ifzero (is_poly_const (poly_add p1 p2)) tt ff) tt)
+    (th_holds (and (= Real t1 t2) (= Real t3 t4)))))))))))))))
+    
+    
+(declare contrapositive
+  (! f1 formula
+  (! f2 formula
+  (! u (th_holds (impl f1 f2))
+    (th_holds (impl (not f2) (not f1)))))))

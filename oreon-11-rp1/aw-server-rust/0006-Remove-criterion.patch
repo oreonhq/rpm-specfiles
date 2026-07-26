@@ -1,0 +1,42 @@
+From 2ad8e3a8aee7c1d37798d159092cf2fbc0e0bea7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Mon, 9 Dec 2024 17:57:00 +0100
+Subject: [PATCH 6/8] Remove criterion
+
+---
+ aw-query/Cargo.toml     | 3 ---
+ aw-transform/Cargo.toml | 3 ---
+ 2 files changed, 6 deletions(-)
+
+diff --git a/aw-query/Cargo.toml b/aw-query/Cargo.toml
+index d25d3c4..fcd9ad7 100644
+--- a/aw-query/Cargo.toml
++++ b/aw-query/Cargo.toml
+@@ -17,9 +17,6 @@ aw-datastore = { path = "../aw-datastore" }
+ aw-models = { path = "../aw-models" }
+ aw-transform = { path = "../aw-transform" }
+ 
+-[dev-dependencies]
+-criterion = "0.5.1"
+-
+ [[bench]]
+ name = "benchmark"
+ harness = false
+diff --git a/aw-transform/Cargo.toml b/aw-transform/Cargo.toml
+index ac31135..1de6f65 100644
+--- a/aw-transform/Cargo.toml
++++ b/aw-transform/Cargo.toml
+@@ -15,9 +15,6 @@ log = "0.4"
+ chrono = { version = "0.4", features = ["serde"] }
+ aw-models = { path = "../aw-models" }
+ 
+-[dev-dependencies]
+-criterion = "0.5.1"
+-
+ [[bench]]
+ name = "bench"
+ harness = false
+-- 
+2.51.1
+

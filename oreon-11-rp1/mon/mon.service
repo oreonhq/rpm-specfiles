@@ -1,0 +1,10 @@
+[Unit]
+Description=Mon - Service Monitor
+
+[Service]
+Type=forking
+PIDFile=/run/mon.pid
+ExecStart=/usr/bin/mon -f -c /etc/mon/mon.cf -P /run/mon.pid
+
+[Install]
+WantedBy=multi-user.target

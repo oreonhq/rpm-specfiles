@@ -1,0 +1,37 @@
+Include <wchar.h> for towlower, towupper, to avoid implicit function
+declarations and build failures with future compilers.
+
+Submitted upstream: <https://sourceforge.net/p/dc3dd/bugs/22/>
+
+diff --git a/configure b/configure
+index 1901a37..5a4b0c3
+--- a/configure
++++ b/configure
+@@ -54147,6 +54147,7 @@ cat >>conftest.$ac_ext <<_ACEOF
+ #endif
+ #include <stdlib.h>
+ #include <string.h>
++#include <wctype.h>
+ struct tm t;
+ char buf[16];
+ int main () {
+@@ -54913,6 +54914,7 @@ cat >>conftest.$ac_ext <<_ACEOF
+ #endif
+ #include <stdlib.h>
+ #include <string.h>
++#include <wctype.h>
+ struct tm t;
+ char buf[16];
+ int main () {
+diff --git a/m4/locale-tr.m4 b/m4/locale-tr.m4
+index d6a2088..d92c674 100644
+--- a/m4/locale-tr.m4
++++ b/m4/locale-tr.m4
+@@ -20,6 +20,7 @@ changequote(,)dnl
+ #endif
+ #include <stdlib.h>
+ #include <string.h>
++#include <wctype.h>
+ struct tm t;
+ char buf[16];
+ int main () {

@@ -1,0 +1,22 @@
+From d4e23121016786a88992ffeabda2de6c5df1f29f Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Sat, 11 Mar 2023 12:58:09 -0500
+Subject: [PATCH] Allow later dateparser
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 45d8284..ee83231 100644
+--- a/setup.py
++++ b/setup.py
+@@ -82,7 +82,7 @@ def get_git_commit_datetime() -> str:
+     'aiohttp>=3.8,<4',
+     'click-log>=0.4,<0.5',
+     'click>=8,<9',
+-    'dateparser>=0.7.1,<0.8',
++    'dateparser>=0.7.1,<1.2',
+     'jinja2>=2.10',
+     'jsonpath-ng>=1.5.1,<2',
+     'netdisco>=3.0.0,<4',

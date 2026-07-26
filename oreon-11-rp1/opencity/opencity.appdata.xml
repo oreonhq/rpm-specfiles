@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 Alexandre Moine <nobrakal@gmail.com> -->
+<component type="desktop">
+  <id>opencity.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>Opencity</name>
+  <summary>Full 3D city simulator game project</summary>
+  <description>
+    <p>
+Once upon the time, I was travelling over the Internet, and I found a city simulator under linux called FreeReign at SourceForge. 
+But it isn't maintained any more. 
+I decided to push the game up so I had a look at the FreeReign sources. 
+However, its codes were not obvious to me, and in addition the game design didn't fit my programming style. 
+Finally, I decided to write my own free 3D city simulator, based on the original ideas of the FreeReign project. 
+Few months later, OpenCity was born.
+</p>
+    <p xml:lang="fr">
+Il y a très, très longtemps, je voyageais sur l'Internet, et j'ai trouvé un simulateur de ville sous Linux appelé FreeReign sur SourceForge. 
+Mais hélas, il n'est plus entretenu. 
+Je voulais améliorer le jeu FreeReign en m'appuyant sur son code source. 
+Toutefois, ce code n'était pas évident pour moi. 
+En outre, la conception du jeu FreeReign ne correspondait pas à mon style de programmation. 
+Enfin, j'ai décidé d'écrire mon propre simulateur de ville 3D, sur la base des idées originales du projet FreeReign. 
+Quelques mois plus tard, OpenCity est né.
+</p>
+    <p>
+OpenCity is a full 3D city simulator game project. 
+It is written in standard C++ with OpenGL and SDL from scratch. 
+It is not intended to be a clone of any famous city simulator from Max*s. 
+So, if you are looking to download a free SimCity 4 like, please forget OpenCity. 
+I work on it at my spare time, and I really meant it "my spare time" !
+</p>
+    <p xml:lang="fr">
+OpenCity est un projet de simulateur de ville en 3 dimensions. 
+Il est écrit en C++ standard avec OpenGL et la bibliothèque SDL à partir de zéro. 
+Il n'est pas destiné à être un clone d'un célèbre simulateur de Max*s ou autre. 
+Donc, si vous cherchez à télécharger une version gratuite comme SimCity 4, s'il vous plaît oubliez OpenCity. 
+Je travaille dessus pendant mon temps libre, et j'insiste : "mon temps libre" !
+</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://www.opencity.info/screenshot/full/opencity-0.0.5-mainstatusbar.jpg</image>
+      <caption>In-game interface</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.opencity.info/screenshot/full/opencity-0.0.5-island.jpg</image>
+      <caption>An island under construction</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.opencity.info/screenshot/full/opencity-0.0.5-alphatree.jpg</image>
+      <caption>Some trees in-game</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>nobrakal@gmail.com</update_contact>
+  <url type="homepage">http://www.opencity.info</url>
+
+  <developer_name>Duong Khang Nguyen</developer_name>
+
+  <url type="bugtracker">https://sourceforge.net/p/opencity/bugs/</url>
+
+  <url type="help">http://www.opencity.info/en/Guide.html</url>
+
+  <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">none</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+
+</component>

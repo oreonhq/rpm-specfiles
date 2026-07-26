@@ -1,0 +1,90 @@
+%global source0_hash 67a8fc1c9bef2b3704381bfb3fb3ce99e3952bc4fea2817729a7180fddf4a71e
+
+Name:		libsoundio
+Version:	2.0.0
+Release:	17%{?dist}
+Summary:	C library for cross-platform real-time audio input and output
+License:	MIT
+URL:		http://libsound.io/
+Source0:	http://github.com/andrewrk/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+BuildRequires:	alsa-lib-devel
+BuildRequires:	cmake
+BuildRequires:	coreutils
+BuildRequires:	doxygen
+BuildRequires:	gcc
+BuildRequires:	jack-audio-connection-kit-devel
+BuildRequires:	pulseaudio-libs-devel
+BuildRequires:	make
+# https://github.com/andrewrk/libsoundio/issues/309
+Patch:		libsoundio-2.0.0-cmake-4.patch
+
+%description
+C library providing cross-platform audio input and output. The API is suitable
+for real-time software such as digital audio workstations as well as consumer
+software such as music players.
+
+%package devel
+Summary:	Development files for libsoundio
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Development files for libsoundio.
+
+%package doc
+Summary:	Documentation for libsoundio
+Requires:	%{name} = %{version}-%{release}
+BuildArch:	noarch
+
+%description doc
+Documentation for libsoundio.
+
+%package utils
+Summary:	Utilities for libsoundio
+
+%description utils
+Utilities files for libsoundio.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1
+
+%build
+%cmake -DBUILD_STATIC_LIBS=FALSE
+%cmake_build
+%cmake_build -t doc
+
+%install
+%cmake_install
+
+# install docs
+cd %{__cmake_builddir}
+install -m 0644 -pDt %{buildroot}%{_docdir}/%{name}-doc/html html/*
+
+%check
+cd %{__cmake_builddir}
+./unit_tests
+./overflow
+./underflow
+
+%files
+%doc README.md CHANGELOG.md
+%license LICENSE
+%{_libdir}/libsoundio.so.*
+
+%files devel
+%{_includedir}/soundio
+%{_libdir}/libsoundio.so
+
+%files doc
+%doc %{_docdir}/%{name}-doc/html
+%doc example
+
+%files utils
+%{_bindir}/sio_list_devices
+%{_bindir}/sio_microphone
+%{_bindir}/sio_record
+%{_bindir}/sio_sine
+
+%changelog
+%autochangelog

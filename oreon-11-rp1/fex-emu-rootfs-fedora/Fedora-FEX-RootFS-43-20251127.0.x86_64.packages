@@ -1,0 +1,749 @@
+OpenCL-ICD-Loader|(none)|3.0.6|4.20241023git5907ac1.fc43|x86_64|(none)|Apache-2.0
+SDL2_gfx|(none)|1.0.4|16.fc43|i686|(none)|Zlib
+SDL2_gfx|(none)|1.0.4|16.fc43|x86_64|(none)|Zlib
+SDL2_image|(none)|2.8.8|2.fc43|i686|(none)|LicenseRef-Callaway-LGPLv2+ AND Zlib
+SDL2_image|(none)|2.8.8|2.fc43|x86_64|(none)|LicenseRef-Callaway-LGPLv2+ AND Zlib
+SDL2_mixer|(none)|2.8.1|2.fc43|i686|(none)|Zlib
+SDL2_mixer|(none)|2.8.1|2.fc43|x86_64|(none)|Zlib
+SDL2_net|(none)|2.2.0|8.fc43|i686|(none)|zlib
+SDL2_net|(none)|2.2.0|8.fc43|x86_64|(none)|zlib
+SDL2_sound|(none)|2.0.4|5.fc43|i686|(none)|Zlib AND LGPL-2.1-or-later AND (Unlicense OR MIT-0) AND (MIT OR Unlicense) AND LicenseRef-Fedora-Public-Domain
+SDL2_sound|(none)|2.0.4|5.fc43|x86_64|(none)|Zlib AND LGPL-2.1-or-later AND (Unlicense OR MIT-0) AND (MIT OR Unlicense) AND LicenseRef-Fedora-Public-Domain
+SDL2_ttf|(none)|2.24.0|1.fc43|i686|(none)|Zlib
+SDL2_ttf|(none)|2.24.0|1.fc43|x86_64|(none)|Zlib
+SDL3|(none)|3.2.24|1.fc43|i686|(none)|Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
+SDL3|(none)|3.2.24|1.fc43|x86_64|(none)|Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
+abattis-cantarell-vf-fonts|(none)|0.301|15.fc43|noarch|(none)|OFL-1.1
+add-determinism|(none)|0.6.0|2.fc43|x86_64|(none)|GPL-3.0-or-later AND MIT AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (MIT OR Zlib OR Apache-2.0) AND (Unlicense OR MIT)
+adwaita-cursor-theme|(none)|49.0|1.fc43|noarch|(none)|LGPL-3.0-only OR CC-BY-SA-3.0
+adwaita-icon-theme-legacy|(none)|46.2|4.fc43|noarch|(none)|LGPL-3.0-only OR CC-BY-SA-3.0
+adwaita-icon-theme|(none)|49.0|1.fc43|noarch|(none)|LGPL-3.0-only OR CC-BY-SA-3.0
+alsa-lib|(none)|1.2.14|4.fc43|x86_64|(none)|LGPL-2.1-or-later
+alternatives|(none)|1.33|3.fc43|x86_64|(none)|GPL-2.0-only
+ansible-srpm-macros|(none)|1|18.1.fc43|noarch|(none)|GPL-3.0-or-later
+at-spi2-atk|(none)|2.58.1|1.fc43|i686|(none)|LGPL-2.1-or-later
+at-spi2-atk|(none)|2.58.1|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+at-spi2-core|(none)|2.58.1|1.fc43|i686|(none)|LGPL-2.1-or-later
+at-spi2-core|(none)|2.58.1|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+atk|(none)|2.58.1|1.fc43|i686|(none)|LGPL-2.1-or-later
+atk|(none)|2.58.1|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+audit-libs|(none)|4.1.2|2.fc43|i686|(none)|LGPL-2.0-or-later
+audit-libs|(none)|4.1.2|2.fc43|x86_64|(none)|LGPL-2.0-or-later
+authselect-libs|(none)|1.6.2|1.fc43|x86_64|(none)|GPL-3.0-or-later
+authselect|(none)|1.6.2|1.fc43|x86_64|(none)|GPL-3.0-or-later
+avahi-glib|(none)|0.9~rc2|6.fc43|i686|(none)|LGPL-2.1-or-later AND LGPL-2.0-or-later AND BSD-2-Clause-Views AND MIT
+avahi-glib|(none)|0.9~rc2|6.fc43|x86_64|(none)|LGPL-2.1-or-later AND LGPL-2.0-or-later AND BSD-2-Clause-Views AND MIT
+avahi-libs|(none)|0.9~rc2|6.fc43|i686|(none)|LGPL-2.1-or-later AND LGPL-2.0-or-later AND BSD-2-Clause-Views AND MIT
+avahi-libs|(none)|0.9~rc2|6.fc43|x86_64|(none)|LGPL-2.1-or-later AND LGPL-2.0-or-later AND BSD-2-Clause-Views AND MIT
+bash|(none)|5.3.0|2.fc43|x86_64|(none)|GPL-3.0-or-later
+bubblewrap|(none)|0.11.0|2.fc43|x86_64|(none)|LGPL-2.0-or-later
+build-reproducibility-srpm-macros|(none)|0.6.0|2.fc43|noarch|(none)|GPL-3.0-or-later
+bzip2-libs|(none)|1.0.8|21.fc43|i686|(none)|BSD-4-Clause
+bzip2-libs|(none)|1.0.8|21.fc43|x86_64|(none)|BSD-4-Clause
+ca-certificates|(none)|2025.2.80_v9.0.304|1.1.fc43|noarch|(none)|MIT AND GPL-2.0-or-later
+cairo-gobject|(none)|1.18.4|2.fc43|i686|(none)|LGPL-2.1-only OR MPL-1.1
+cairo-gobject|(none)|1.18.4|2.fc43|x86_64|(none)|LGPL-2.1-only OR MPL-1.1
+cairo|(none)|1.18.4|2.fc43|i686|(none)|LGPL-2.1-only OR MPL-1.1
+cairo|(none)|1.18.4|2.fc43|x86_64|(none)|LGPL-2.1-only OR MPL-1.1
+cdparanoia-libs|(none)|10.2|48.fc43|x86_64|(none)|LicenseRef-Callaway-LGPLv2
+clang-libs|(none)|21.1.6|1.fc43|i686|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+clang-libs|(none)|21.1.6|1.fc43|x86_64|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+clang-resource-filesystem|(none)|21.1.6|1.fc43|i686|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+clang-resource-filesystem|(none)|21.1.6|1.fc43|x86_64|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+clinfo|(none)|3.0.25.02.14|1.fc43|x86_64|(none)|CC0-1.0
+cmake-rpm-macros|(none)|3.31.6|4.fc43|noarch|(none)|BSD-3-Clause AND MIT-open-group AND Zlib AND Apache-2.0
+colord-libs|(none)|1.4.8|2.fc43|i686|(none)|GPL-2.0-or-later AND LGPL-2.1-or-later
+colord-libs|(none)|1.4.8|2.fc43|x86_64|(none)|GPL-2.0-or-later AND LGPL-2.1-or-later
+coreutils-common|(none)|9.7|6.fc43|x86_64|(none)|GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
+coreutils|(none)|9.7|6.fc43|x86_64|(none)|GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
+cracklib|(none)|2.9.11|8.fc43|x86_64|(none)|LGPL-2.1-or-later
+crypto-policies|(none)|20250714|5.gitcd6043a.fc43|noarch|(none)|LGPL-2.1-or-later
+cups-filesystem|1|2.4.14|3.fc43|noarch|(none)|Apache-2.0 WITH LLVM-exception AND BSD-3-Clause AND Zlib AND BSD-2-Clause
+cups-libs|1|2.4.14|3.fc43|i686|(none)|Apache-2.0 WITH LLVM-exception AND BSD-3-Clause AND Zlib AND BSD-2-Clause
+cups-libs|1|2.4.14|3.fc43|x86_64|(none)|Apache-2.0 WITH LLVM-exception AND BSD-3-Clause AND Zlib AND BSD-2-Clause
+curl|(none)|8.15.0|3.fc43|x86_64|(none)|curl
+cyrus-sasl-lib|(none)|2.1.28|33.fc43|x86_64|(none)|BSD-Attribution-HPND-disclaimer
+dbus-broker|(none)|37|2.fc43|x86_64|(none)|Apache-2.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND (Apache-2.0 OR LGPL-2.1-or-later)
+dbus-common|1|1.16.0|4.fc43|noarch|(none)|(AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
+dbus-glib|(none)|0.112|11.fc43|i686|(none)|(AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
+dbus-glib|(none)|0.112|11.fc43|x86_64|(none)|(AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
+dbus-libs|1|1.16.0|4.fc43|i686|(none)|(AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
+dbus-libs|1|1.16.0|4.fc43|x86_64|(none)|(AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
+dbus|1|1.16.0|4.fc43|x86_64|(none)|(AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
+default-fonts-core-sans|(none)|4.2|5.fc43|noarch|(none)|GPL-2.0-or-later
+desktop-file-utils|(none)|0.28|2.fc43|x86_64|(none)|GPL-2.0-or-later
+dnf5-plugins|(none)|5.2.17.0|2.fc43|x86_64|(none)|LGPL-2.1-or-later
+dnf5|(none)|5.2.17.0|2.fc43|x86_64|(none)|GPL-2.0-or-later
+dwz|(none)|0.16|2.fc43|x86_64|(none)|GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND GPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND LGPL-2.0-or-later
+efi-srpm-macros|(none)|6|4.fc43|noarch|(none)|GPL-3.0-or-later
+elfutils-default-yama-scope|(none)|0.194|1.fc43|noarch|(none)|GPL-2.0-or-later OR LGPL-3.0-or-later
+elfutils-libelf|(none)|0.194|1.fc43|i686|(none)|GPL-2.0-or-later OR LGPL-3.0-or-later
+elfutils-libelf|(none)|0.194|1.fc43|x86_64|(none)|GPL-2.0-or-later OR LGPL-3.0-or-later
+elfutils-libs|(none)|0.194|1.fc43|x86_64|(none)|GPL-2.0-or-later OR LGPL-3.0-or-later
+emacs-filesystem|1|30.0|5.fc43|noarch|(none)|CC0-1.0
+expat|(none)|2.7.2|1.fc43|i686|(none)|MIT
+expat|(none)|2.7.2|1.fc43|x86_64|(none)|MIT
+fedora-gpg-keys|(none)|43|1|noarch|(none)|MIT
+fedora-release-common|(none)|43|25|noarch|(none)|MIT
+fedora-release-identity-basic|(none)|43|25|noarch|(none)|MIT
+fedora-release|(none)|43|25|noarch|(none)|MIT
+fedora-repos|(none)|43|1|noarch|(none)|MIT
+file-libs|(none)|5.46|8.fc43|x86_64|(none)|BSD-2-Clause-Darwin AND BSD-2-Clause
+filesystem-srpm-macros|(none)|3.18|50.fc43|noarch|(none)|LicenseRef-Fedora-Public-Domain
+filesystem|(none)|3.18|50.fc43|x86_64|(none)|LicenseRef-Fedora-Public-Domain
+file|(none)|5.46|8.fc43|x86_64|(none)|BSD-2-Clause-Darwin AND BSD-2-Clause
+findutils|1|4.10.0|6.fc43|x86_64|(none)|GPL-3.0-or-later
+flac-libs|(none)|1.5.0|4.fc43|i686|(none)|BSD-3-Clause AND GPL-2.0-or-later AND GFDL-1.3-or-later
+flac-libs|(none)|1.5.0|4.fc43|x86_64|(none)|BSD-3-Clause AND GPL-2.0-or-later AND GFDL-1.3-or-later
+fmt|(none)|11.2.0|3.fc43|i686|(none)|MIT
+fmt|(none)|11.2.0|3.fc43|x86_64|(none)|MIT
+fontconfig|(none)|2.17.0|3.fc43|i686|(none)|HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
+fontconfig|(none)|2.17.0|3.fc43|x86_64|(none)|HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
+fonts-filesystem|1|2.0.5|23.fc43|noarch|(none)|MIT
+fonts-srpm-macros|1|2.0.5|23.fc43|noarch|(none)|GPL-3.0-or-later
+forge-srpm-macros|(none)|0.4.0|3.fc43|noarch|(none)|GPL-1.0-or-later
+fpc-srpm-macros|(none)|1.3|15.fc43|noarch|(none)|MIT
+freeglut|(none)|3.8.0|1.fc43|x86_64|(none)|MIT
+freetype|(none)|2.13.3|3.fc43|i686|(none)|(FTL OR GPL-2.0-or-later) AND BSD-3-Clause AND MIT AND MIT-Modern-Variant AND LicenseRef-Fedora-Public-Domain AND Zlib
+freetype|(none)|2.13.3|3.fc43|x86_64|(none)|(FTL OR GPL-2.0-or-later) AND BSD-3-Clause AND MIT AND MIT-Modern-Variant AND LicenseRef-Fedora-Public-Domain AND Zlib
+fribidi|(none)|1.0.16|3.fc43|i686|(none)|LGPL-2.1-or-later AND Unicode-DFS-2016
+fribidi|(none)|1.0.16|3.fc43|x86_64|(none)|LGPL-2.1-or-later AND Unicode-DFS-2016
+fuse-libs|(none)|2.9.9|24.fc43|i686|(none)|LGPL-2.1-or-later
+fuse-libs|(none)|2.9.9|24.fc43|x86_64|(none)|LGPL-2.1-or-later
+fuse3-libs|(none)|3.16.2|5.fc42|i686|(none)|LGPL-2.1-or-later
+fuse3-libs|(none)|3.16.2|5.fc42|x86_64|(none)|LGPL-2.1-or-later
+gap-srpm-macros|(none)|2|1.fc43|noarch|(none)|MIT
+gdbm-libs|1|1.23|10.fc43|i686|(none)|GPL-3.0-or-later
+gdbm-libs|1|1.23|10.fc43|x86_64|(none)|GPL-3.0-or-later
+gdbm|1|1.23|10.fc43|x86_64|(none)|GPL-3.0-or-later
+gdk-pixbuf2|(none)|2.44.4|1.fc43|i686|(none)|LGPL-2.1-or-later
+gdk-pixbuf2|(none)|2.44.4|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+gd|(none)|2.3.3|19.fc43|x86_64|(none)|GD
+ghc-srpm-macros|(none)|1.9.2|3.fc43|noarch|(none)|GPL-2.0-or-later
+glfw|1|3.4|5.fc43|i686|(none)|Zlib
+glfw|1|3.4|5.fc43|x86_64|(none)|Zlib
+glib2|(none)|2.86.1|5.fc43|i686|(none)|LGPL-2.1-or-later
+glib2|(none)|2.86.1|5.fc43|x86_64|(none)|LGPL-2.1-or-later
+glibc-common|(none)|2.42|4.fc43|x86_64|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+glibc-gconv-extra|(none)|2.42|4.fc43|i686|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+glibc-gconv-extra|(none)|2.42|4.fc43|x86_64|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+glibc-langpack-en|(none)|2.42|4.fc43|x86_64|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+glibc|(none)|2.42|4.fc43|i686|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+glibc|(none)|2.42|4.fc43|x86_64|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+glycin-libs|(none)|2.0.4|1.fc43|i686|(none)|(MPL-2.0 OR LGPL-2.1-or-later) AND BSD-3-Clause AND GPL-3.0-or-later AND IJG AND ISC AND MIT AND Unicode-3.0 AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (BSD-3-Clause OR Apache-2.0) AND (MIT OR Apache-2.0 OR Zlib) AND (Unlicense OR MIT)
+glycin-libs|(none)|2.0.4|1.fc43|x86_64|(none)|(MPL-2.0 OR LGPL-2.1-or-later) AND BSD-3-Clause AND GPL-3.0-or-later AND IJG AND ISC AND MIT AND Unicode-3.0 AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (BSD-3-Clause OR Apache-2.0) AND (MIT OR Apache-2.0 OR Zlib) AND (Unlicense OR MIT)
+glycin-loaders|(none)|2.0.4|1.fc43|i686|(none)|(MPL-2.0 OR LGPL-2.1-or-later) AND BSD-3-Clause AND GPL-3.0-or-later AND IJG AND ISC AND MIT AND Unicode-3.0 AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (BSD-3-Clause OR Apache-2.0) AND (MIT OR Apache-2.0 OR Zlib) AND (Unlicense OR MIT)
+glycin-loaders|(none)|2.0.4|1.fc43|x86_64|(none)|(MPL-2.0 OR LGPL-2.1-or-later) AND BSD-3-Clause AND GPL-3.0-or-later AND IJG AND ISC AND MIT AND Unicode-3.0 AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND (BSD-3-Clause OR Apache-2.0) AND (MIT OR Apache-2.0 OR Zlib) AND (Unlicense OR MIT)
+gmp|1|6.3.0|4.fc43|i686|(none)|(LGPL-3.0-or-later OR GPL-2.0-or-later OR (LGPL-3.0-or-later AND GPL-2.0-or-later)) AND GFDL-1.3-invariants-or-later
+gmp|1|6.3.0|4.fc43|x86_64|(none)|(LGPL-3.0-or-later OR GPL-2.0-or-later OR (LGPL-3.0-or-later AND GPL-2.0-or-later)) AND GFDL-1.3-invariants-or-later
+gnat-srpm-macros|(none)|6|8.fc43|noarch|(none)|FSFAP
+gnulib-l10n|(none)|20241231|1.fc43|noarch|(none)|LGPL-2.1-or-later
+gnupg2-dirmngr|(none)|2.4.8|4.fc43|x86_64|(none)|CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
+gnupg2-gpg-agent|(none)|2.4.8|4.fc43|x86_64|(none)|CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
+gnupg2-gpgconf|(none)|2.4.8|4.fc43|x86_64|(none)|CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
+gnupg2-keyboxd|(none)|2.4.8|4.fc43|x86_64|(none)|CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
+gnupg2-verify|(none)|2.4.8|4.fc43|x86_64|(none)|CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
+gnupg2|(none)|2.4.8|4.fc43|x86_64|(none)|CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
+gnutls|(none)|3.8.11|5.fc43|i686|(none)|GPL-3.0-or-later AND LGPL-2.1-or-later
+gnutls|(none)|3.8.11|5.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-2.1-or-later
+go-srpm-macros|(none)|3.8.0|1.fc43|noarch|(none)|GPL-3.0-or-later
+gobject-introspection|(none)|1.84.0|3.fc43|x86_64|(none)|GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause
+google-noto-fonts-common|(none)|20251101|2.fc43|noarch|(none)|OFL-1.1
+google-noto-sans-vf-fonts|(none)|20251101|2.fc43|noarch|(none)|OFL-1.1
+gpg-pubkey|(none)|c6e7f081cf80e13146676e88829b606631645531|66b6dccf|(none)|(none)|pubkey
+gpgverify|(none)|2.2|3.fc43|noarch|(none)|Boehm-GC
+graphene|(none)|1.10.8|2.fc43|x86_64|(none)|MIT
+graphite2|(none)|1.3.14|19.fc43|i686|(none)|LGPL-2.1-or-later OR MPL-2.0 OR GPL-2.0-or-later
+graphite2|(none)|1.3.14|19.fc43|x86_64|(none)|LGPL-2.1-or-later OR MPL-2.0 OR GPL-2.0-or-later
+grep|(none)|3.12|2.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
+groff-base|(none)|1.23.0|10.fc43|x86_64|(none)|GPL-3.0-or-later AND GFDL-1.3-or-later AND BSD-4-Clause-UC AND MIT AND X11 AND LicenseRef-Fedora-Public-Domain
+gsm|(none)|1.0.23|1.fc43|i686|(none)|tu-berlin-2.0
+gsm|(none)|1.0.23|1.fc43|x86_64|(none)|tu-berlin-2.0
+gstreamer1-plugins-base|(none)|1.26.8|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+gstreamer1|(none)|1.26.8|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+gtk-update-icon-cache|(none)|3.24.51|2.fc43|x86_64|(none)|LGPL-2.0-or-later
+gtk2-immodule-xim|(none)|2.24.33|23.fc43|i686|(none)|LicenseRef-Callaway-LGPLv2+
+gtk2-immodule-xim|(none)|2.24.33|23.fc43|x86_64|(none)|LicenseRef-Callaway-LGPLv2+
+gtk2|(none)|2.24.33|23.fc43|i686|(none)|LicenseRef-Callaway-LGPLv2+
+gtk2|(none)|2.24.33|23.fc43|x86_64|(none)|LicenseRef-Callaway-LGPLv2+
+gtk3-immodule-xim|(none)|3.24.51|2.fc43|x86_64|(none)|LGPL-2.0-or-later
+gtk3|(none)|3.24.51|2.fc43|i686|(none)|LGPL-2.0-or-later
+gtk3|(none)|3.24.51|2.fc43|x86_64|(none)|LGPL-2.0-or-later
+gzip|(none)|1.13|4.fc43|x86_64|(none)|GPL-3.0-or-later AND GFDL-1.3-only
+harfbuzz|(none)|11.5.1|1.fc43|i686|(none)|MIT-Modern-Variant
+harfbuzz|(none)|11.5.1|1.fc43|x86_64|(none)|MIT-Modern-Variant
+hicolor-icon-theme|(none)|0.18|2.fc43|noarch|(none)|GPL-2.0-or-later
+highway|(none)|1.2.0|5.fc42|i686|(none)|Apache-2.0
+highway|(none)|1.2.0|5.fc42|x86_64|(none)|Apache-2.0
+hwdata|(none)|0.401|1.fc43|noarch|(none)|GPL-2.0-or-later
+ima-evm-utils-libs|(none)|1.6.2|6.fc43|x86_64|(none)|LGPL-2.0-or-later
+iso-codes|(none)|4.18.0|2.fc43|noarch|(none)|LGPL-2.1-or-later
+jansson|(none)|2.14|3.fc43|x86_64|(none)|MIT AND LicenseRef-Fedora-Public-Domain
+java-srpm-macros|(none)|1|7.fc43|noarch|(none)|MIT-0
+jbigkit-libs|(none)|2.1|32.fc43|i686|(none)|GPL-2.0-or-later
+jbigkit-libs|(none)|2.1|32.fc43|x86_64|(none)|GPL-2.0-or-later
+json-c|(none)|0.18|7.fc43|x86_64|(none)|MIT
+json-glib|(none)|1.10.8|1.fc43|i686|(none)|LGPL-2.1-or-later
+json-glib|(none)|1.10.8|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+kbd-misc|(none)|2.8.0|3.fc43|noarch|(none)|GPL-2.0-or-later
+kernel-srpm-macros|(none)|1.0|27.fc43|noarch|(none)|MIT
+keyutils-libs|(none)|1.6.3|6.fc43|i686|(none)|GPL-2.0-or-later AND LGPL-2.1-or-later
+keyutils-libs|(none)|1.6.3|6.fc43|x86_64|(none)|GPL-2.0-or-later AND LGPL-2.1-or-later
+kmod-libs|(none)|34.2|2.fc43|x86_64|(none)|GPL-2.0-or-later AND GPL-3.0-or-later AND FSFUL AND FSFULLRWD AND LGPL-2.1-only AND LGPL-2.1-or-later AND X11
+krb5-libs|(none)|1.21.3|7.fc43|i686|(none)|Brian-Gladman-2-Clause AND BSD-2-Clause AND (BSD-2-Clause OR GPL-2.0-or-later) AND BSD-2-Clause-first-lines AND BSD-3-Clause AND BSD-4-Clause AND CMU-Mach-nodoc AND FSFULLRWD AND HPND AND HPND-export2-US AND HPND-export-US AND HPND-export-US-acknowledgement AND HPND-export-US-modify AND ISC AND MIT AND MIT-CMU AND OLDAP-2.8 AND OpenVision
+krb5-libs|(none)|1.21.3|7.fc43|x86_64|(none)|Brian-Gladman-2-Clause AND BSD-2-Clause AND (BSD-2-Clause OR GPL-2.0-or-later) AND BSD-2-Clause-first-lines AND BSD-3-Clause AND BSD-4-Clause AND CMU-Mach-nodoc AND FSFULLRWD AND HPND AND HPND-export2-US AND HPND-export-US AND HPND-export-US-acknowledgement AND HPND-export-US-modify AND ISC AND MIT AND MIT-CMU AND OLDAP-2.8 AND OpenVision
+lame-libs|(none)|3.100|20.fc43|i686|(none)|LGPL-2.0-or-later AND LGPL-2.1-or-later
+lame-libs|(none)|3.100|20.fc43|x86_64|(none)|LGPL-2.0-or-later AND LGPL-2.1-or-later
+lcms2|(none)|2.16|6.fc43|i686|(none)|MIT AND GPL-3.0-or-later
+lcms2|(none)|2.16|6.fc43|x86_64|(none)|MIT AND GPL-3.0-or-later
+libGLEW|(none)|2.2.0|11.fc43|i686|(none)|LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT
+libGLEW|(none)|2.2.0|11.fc43|x86_64|(none)|LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT
+libICE|(none)|1.1.2|3.fc43|x86_64|(none)|MIT-open-group
+libSM|(none)|1.2.5|3.fc43|x86_64|(none)|MIT AND MIT-open-group
+libX11-common|(none)|1.8.12|1.fc43|noarch|(none)|MIT AND X11
+libX11-xcb|(none)|1.8.12|1.fc43|i686|(none)|MIT AND X11
+libX11-xcb|(none)|1.8.12|1.fc43|x86_64|(none)|MIT AND X11
+libX11|(none)|1.8.12|1.fc43|i686|(none)|MIT AND X11
+libX11|(none)|1.8.12|1.fc43|x86_64|(none)|MIT AND X11
+libXau|(none)|1.0.12|3.fc43|i686|(none)|MIT-open-group
+libXau|(none)|1.0.12|3.fc43|x86_64|(none)|MIT-open-group
+libXaw|(none)|1.0.16|4.fc43|x86_64|(none)|MIT-open-group AND X11 AND HPND AND HPND-sell-variant AND SMLNJ AND NTP
+libXcomposite|(none)|0.4.6|6.fc43|i686|(none)|MIT AND HPND-sell-variant
+libXcomposite|(none)|0.4.6|6.fc43|x86_64|(none)|MIT AND HPND-sell-variant
+libXcursor|(none)|1.2.3|3.fc43|i686|(none)|HPND-sell-variant
+libXcursor|(none)|1.2.3|3.fc43|x86_64|(none)|HPND-sell-variant
+libXdamage|(none)|1.1.6|6.fc43|i686|(none)|HPND-sell-variant
+libXdamage|(none)|1.1.6|6.fc43|x86_64|(none)|HPND-sell-variant
+libXext|(none)|1.3.6|4.fc43|i686|(none)|MIT-open-group AND X11 AND HPND AND HPND-sell-variant AND SMLNJ AND MIT AND ISC AND HPND-doc AND HPND-doc-sell
+libXext|(none)|1.3.6|4.fc43|x86_64|(none)|MIT-open-group AND X11 AND HPND AND HPND-sell-variant AND SMLNJ AND MIT AND ISC AND HPND-doc AND HPND-doc-sell
+libXfixes|(none)|6.0.1|6.fc43|i686|(none)|MIT AND HPND-sell-variant
+libXfixes|(none)|6.0.1|6.fc43|x86_64|(none)|MIT AND HPND-sell-variant
+libXft|(none)|2.3.8|9.fc43|i686|(none)|HPND-sell-variant
+libXft|(none)|2.3.8|9.fc43|x86_64|(none)|HPND-sell-variant
+libXinerama|(none)|1.1.5|9.fc43|i686|(none)|MIT AND MIT-open-group AND X11
+libXinerama|(none)|1.1.5|9.fc43|x86_64|(none)|MIT AND MIT-open-group AND X11
+libXi|(none)|1.8.2|3.fc43|i686|(none)|MIT-open-group AND SMLNJ AND MIT
+libXi|(none)|1.8.2|3.fc43|x86_64|(none)|MIT-open-group AND SMLNJ AND MIT
+libXmu|(none)|1.2.1|4.fc43|x86_64|(none)|MIT-open-group AND SMLNJ AND X11 AND ISC
+libXpm|(none)|3.5.17|6.fc43|x86_64|(none)|MIT AND X11-distribute-modifications-variant
+libXrandr|(none)|1.5.4|6.fc43|i686|(none)|HPND-sell-variant
+libXrandr|(none)|1.5.4|6.fc43|x86_64|(none)|HPND-sell-variant
+libXrender|(none)|0.9.12|3.fc43|i686|(none)|HPND-sell-variant
+libXrender|(none)|0.9.12|3.fc43|x86_64|(none)|HPND-sell-variant
+libXtst|(none)|1.2.5|3.fc43|i686|(none)|MIT-open-group AND HPND-sell-variant AND X11 AND HPND-doc AND HPND-doc-sell
+libXtst|(none)|1.2.5|3.fc43|x86_64|(none)|MIT-open-group AND HPND-sell-variant AND X11 AND HPND-doc AND HPND-doc-sell
+libXt|(none)|1.3.1|3.fc43|x86_64|(none)|MIT AND HPND-sell-variant AND SMLNJ AND MIT-open-group AND X11
+libXv|(none)|1.0.13|3.fc43|x86_64|(none)|SMLNJ AND HPND-sell-variant
+libXxf86vm|(none)|1.1.6|3.fc43|i686|(none)|X11-distribute-modifications-variant
+libXxf86vm|(none)|1.1.6|3.fc43|x86_64|(none)|X11-distribute-modifications-variant
+libacl|(none)|2.3.2|4.fc43|i686|(none)|LGPL-2.1-or-later
+libacl|(none)|2.3.2|4.fc43|x86_64|(none)|LGPL-2.1-or-later
+libaom|(none)|3.13.1|1.fc43|i686|(none)|BSD-3-Clause
+libaom|(none)|3.13.1|1.fc43|x86_64|(none)|BSD-3-Clause
+libarchive|(none)|3.8.1|3.fc43|x86_64|(none)|BSD-2-Clause AND FSFULLR AND GPL-2.0-or-later WITH Libtool-exception AND BSD-3-Clause AND FSFUL
+libassuan|(none)|2.5.7|4.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
+libasyncns|(none)|0.8|31.fc43|i686|(none)|LGPL-2.1-or-later
+libasyncns|(none)|0.8|31.fc43|x86_64|(none)|LGPL-2.1-or-later
+libatomic_ops|(none)|7.8.2|6.fc43|i686|(none)|GPL-2.0-or-later AND MIT
+libatomic_ops|(none)|7.8.2|6.fc43|x86_64|(none)|GPL-2.0-or-later AND MIT
+libatomic|(none)|15.2.1|4.fc43|i686|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+libatomic|(none)|15.2.1|4.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+libattr|(none)|2.5.2|6.fc43|i686|(none)|LGPL-2.1-or-later
+libattr|(none)|2.5.2|6.fc43|x86_64|(none)|LGPL-2.1-or-later
+libavif|(none)|1.3.0|2.fc43|i686|(none)|BSD-2-Clause AND IJG AND Apache-2.0 AND BSD-3-Clause
+libavif|(none)|1.3.0|2.fc43|x86_64|(none)|BSD-2-Clause AND IJG AND Apache-2.0 AND BSD-3-Clause
+libblkid|(none)|2.41.1|17.fc43|i686|(none)|LGPL-2.1-or-later
+libblkid|(none)|2.41.1|17.fc43|x86_64|(none)|LGPL-2.1-or-later
+libbrotli|(none)|1.1.0|10.fc43|i686|(none)|MIT
+libbrotli|(none)|1.1.0|10.fc43|x86_64|(none)|MIT
+libcap-ng|(none)|0.8.5|8.fc43|i686|(none)|LGPL-2.0-or-later
+libcap-ng|(none)|0.8.5|8.fc43|x86_64|(none)|LGPL-2.0-or-later
+libcap|(none)|2.76|3.fc43|i686|(none)|BSD-3-Clause OR GPL-2.0-only
+libcap|(none)|2.76|3.fc43|x86_64|(none)|BSD-3-Clause OR GPL-2.0-only
+libclc-spirv|(none)|21.1.6|1.fc43|i686|(none)|Apache-2.0 WITH LLVM-exception OR NCSA OR MIT
+libclc-spirv|(none)|21.1.6|1.fc43|x86_64|(none)|Apache-2.0 WITH LLVM-exception OR NCSA OR MIT
+libclc|(none)|21.1.6|1.fc43|i686|(none)|Apache-2.0 WITH LLVM-exception OR NCSA OR MIT
+libclc|(none)|21.1.6|1.fc43|x86_64|(none)|Apache-2.0 WITH LLVM-exception OR NCSA OR MIT
+libcloudproviders|(none)|0.3.6|2.fc43|i686|(none)|LGPL-3.0-or-later
+libcloudproviders|(none)|0.3.6|2.fc43|x86_64|(none)|LGPL-3.0-or-later
+libcom_err|(none)|1.47.3|2.fc43|i686|(none)|MIT
+libcom_err|(none)|1.47.3|2.fc43|x86_64|(none)|MIT
+libcurl|(none)|8.15.0|3.fc43|x86_64|(none)|curl
+libdatrie|(none)|0.2.13|12.fc43|i686|(none)|LGPL-2.1-or-later
+libdatrie|(none)|0.2.13|12.fc43|x86_64|(none)|LGPL-2.1-or-later
+libdav1d|(none)|1.5.2|1.fc43|i686|(none)|BSD-2-Clause AND ISC
+libdav1d|(none)|1.5.2|1.fc43|x86_64|(none)|BSD-2-Clause AND ISC
+libdecor|(none)|0.2.4|1.fc43|i686|(none)|MIT
+libdecor|(none)|0.2.4|1.fc43|x86_64|(none)|MIT
+libdnf5-cli|(none)|5.2.17.0|2.fc43|x86_64|(none)|LGPL-2.1-or-later
+libdnf5|(none)|5.2.17.0|2.fc43|x86_64|(none)|LGPL-2.1-or-later
+libdrm|(none)|2.4.128|3.fc43|i686|(none)|MIT
+libdrm|(none)|2.4.128|3.fc43|x86_64|(none)|MIT
+libeconf|(none)|0.7.9|2.fc43|i686|(none)|MIT
+libeconf|(none)|0.7.9|2.fc43|x86_64|(none)|MIT
+libedit|(none)|3.1|57.20251016cvs.fc43|i686|(none)|BSD-3-Clause AND BSD-2-Clause AND ISC
+libedit|(none)|3.1|57.20251016cvs.fc43|x86_64|(none)|BSD-3-Clause AND BSD-2-Clause AND ISC
+libepoxy|(none)|1.5.10|11.fc43|i686|(none)|MIT
+libepoxy|(none)|1.5.10|11.fc43|x86_64|(none)|MIT
+liberation-mono-fonts|1|2.1.5|14.fc43|noarch|(none)|OFL-1.1-RFN
+liberation-narrow-fonts|2|1.07.6|18.fc43|noarch|(none)|LicenseRef-Liberation
+liberation-sans-fonts|1|2.1.5|14.fc43|noarch|(none)|OFL-1.1-RFN
+liberation-serif-fonts|1|2.1.5|14.fc43|noarch|(none)|OFL-1.1-RFN
+libevent|(none)|2.1.12|16.fc43|i686|(none)|BSD-3-Clause AND ISC AND LicenseRef-Fedora-Public-Domain
+libevent|(none)|2.1.12|16.fc43|x86_64|(none)|BSD-3-Clause AND ISC AND LicenseRef-Fedora-Public-Domain
+libexif|(none)|0.6.25|2.fc43|x86_64|(none)|LGPL-2.1-or-later
+libfdisk|(none)|2.41.1|17.fc43|i686|(none)|LGPL-2.1-or-later
+libfdisk|(none)|2.41.1|17.fc43|x86_64|(none)|LGPL-2.1-or-later
+libffi|(none)|3.5.2|1.fc43|i686|(none)|MIT AND CC-PDDC AND (GPL-3.0-or-later WITH Texinfo-exception)
+libffi|(none)|3.5.2|1.fc43|x86_64|(none)|MIT AND CC-PDDC AND (GPL-3.0-or-later WITH Texinfo-exception)
+libfsverity|(none)|1.6|3.fc43|x86_64|(none)|LicenseRef-Callaway-BSD
+libgcc|(none)|15.2.1|4.fc43|i686|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+libgcc|(none)|15.2.1|4.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+libgcrypt|(none)|1.11.1|2.fc43|x86_64|(none)|BSD-3-Clause AND (BSD-3-Clause OR GPL-2.0-only) AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later AND MIT-Modern-Variant
+libglvnd-egl|1|1.7.0|8.fc43|i686|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd-egl|1|1.7.0|8.fc43|x86_64|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd-gles|1|1.7.0|8.fc43|i686|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd-gles|1|1.7.0|8.fc43|x86_64|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd-glx|1|1.7.0|8.fc43|i686|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd-glx|1|1.7.0|8.fc43|x86_64|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd-opengl|1|1.7.0|8.fc43|i686|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd-opengl|1|1.7.0|8.fc43|x86_64|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd|1|1.7.0|8.fc43|i686|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libglvnd|1|1.7.0|8.fc43|x86_64|(none)|MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
+libgomp|(none)|15.2.1|4.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+libgpg-error|(none)|1.55|2.fc43|i686|(none)|LGPL-2.1-or-later AND (BSD-3-Clause OR LGPL-2.1-or-later) AND FSFULLR AND GPL-2.0-or-later
+libgpg-error|(none)|1.55|2.fc43|x86_64|(none)|LGPL-2.1-or-later AND (BSD-3-Clause OR LGPL-2.1-or-later) AND FSFULLR AND GPL-2.0-or-later
+libgphoto2|(none)|2.5.31|4.fc43|x86_64|(none)|GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND BSD-3-Clause AND IJG-short AND (MIT OR Unlicense)
+libgudev|(none)|238|8.fc43|x86_64|(none)|LGPL-2.1-or-later
+libgusb|(none)|0.4.9|4.fc43|i686|(none)|LGPL-2.1-or-later
+libgusb|(none)|0.4.9|4.fc43|x86_64|(none)|LGPL-2.1-or-later
+libheif|(none)|1.20.2|6.fc43|i686|(none)|LGPL-3.0-or-later and MIT
+libheif|(none)|1.20.2|6.fc43|x86_64|(none)|LGPL-3.0-or-later and MIT
+libibverbs|(none)|58.0|4.fc43|x86_64|(none)|GPL-2.0-only OR BSD-2-Clause AND BSD-3-Clause
+libicu|(none)|77.1|1.fc43|i686|(none)|Unicode-DFS-2016 AND BSD-2-Clause AND BSD-3-Clause AND NAIST-2003 AND LicenseRef-Fedora-Public-Domain
+libicu|(none)|77.1|1.fc43|x86_64|(none)|Unicode-DFS-2016 AND BSD-2-Clause AND BSD-3-Clause AND NAIST-2003 AND LicenseRef-Fedora-Public-Domain
+libidn2|(none)|2.3.8|2.fc43|i686|(none)|(GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later
+libidn2|(none)|2.3.8|2.fc43|x86_64|(none)|(GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later
+libimagequant|(none)|4.0.3|8.fc43|x86_64|(none)|Apache-2.0 AND GPL-3.0-or-later AND MIT
+libjpeg-turbo|(none)|3.1.2|1.fc43|i686|(none)|Zlib AND BSD-3-Clause AND MIT AND IJG
+libjpeg-turbo|(none)|3.1.2|1.fc43|x86_64|(none)|Zlib AND BSD-3-Clause AND MIT AND IJG
+libjxl|1|0.11.1|6.fc43|i686|(none)|BSD-3-Clause AND Apache-2.0 AND Zlib
+libjxl|1|0.11.1|6.fc43|x86_64|(none)|BSD-3-Clause AND Apache-2.0 AND Zlib
+libksba|(none)|1.6.7|4.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-2.1-or-later AND (LGPL-3.0-or-later OR GPL-2.0-or-later)
+libldb|2|4.23.3|1.fc43|x86_64|(none)|LGPL-3.0-or-later
+liblerc|(none)|4.0.0|9.fc43|i686|(none)|Apache-2.0
+liblerc|(none)|4.0.0|9.fc43|x86_64|(none)|Apache-2.0
+libmodulemd|(none)|2.15.2|4.fc43|x86_64|(none)|MIT
+libmount|(none)|2.41.1|17.fc43|i686|(none)|LGPL-2.1-or-later
+libmount|(none)|2.41.1|17.fc43|x86_64|(none)|LGPL-2.1-or-later
+libnetapi|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+libnghttp2|(none)|1.66.0|2.fc43|i686|(none)|MIT
+libnghttp2|(none)|1.66.0|2.fc43|x86_64|(none)|MIT
+libnl3|(none)|3.11.0|6.fc43|x86_64|(none)|LGPL-2.1-only
+libnsl2|(none)|2.0.1|4.fc43|x86_64|(none)|BSD-3-Clause AND LGPL-2.1-or-later
+libnsl|(none)|2.42|4.fc43|i686|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+libnsl|(none)|2.42|4.fc43|x86_64|(none)|LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only
+libogg|2|1.3.6|2.fc43|i686|(none)|BSD-3-Clause
+libogg|2|1.3.6|2.fc43|x86_64|(none)|BSD-3-Clause
+libopenjph|(none)|0.22.0|2.fc43|x86_64|(none)|BSD-2-Clause
+libpcap|14|1.10.5|3.fc43|x86_64|(none)|ISC AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause-UC
+libpciaccess|(none)|0.16|16.fc43|i686|(none)|HPND AND MIT
+libpciaccess|(none)|0.16|16.fc43|x86_64|(none)|HPND AND MIT
+libpkgconf|(none)|2.3.0|3.fc43|i686|(none)|ISC AND BSD-4-Clause AND BSD-2-Clause AND pkgconf AND MIT
+libpkgconf|(none)|2.3.0|3.fc43|x86_64|(none)|ISC AND BSD-4-Clause AND BSD-2-Clause AND pkgconf AND MIT
+libpng|2|1.6.50|2.fc43|i686|(none)|zlib
+libpng|2|1.6.50|2.fc43|x86_64|(none)|zlib
+libpsl|(none)|0.21.5|6.fc43|i686|(none)|MIT
+libpsl|(none)|0.21.5|6.fc43|x86_64|(none)|MIT
+libpwquality|(none)|1.4.5|14.fc43|x86_64|(none)|BSD-3-Clause OR GPL-2.0-or-later
+librepo|(none)|1.20.0|4.fc43|x86_64|(none)|LGPL-2.1-or-later
+librsvg2|(none)|2.61.0|2.fc43|i686|(none)|LGPL-2.1-or-later AND Apache-2.0 AND BSD-3-Clause AND MIT AND MPL-2.0 AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR MIT) AND (MIT OR Apache-2.0 OR Zlib) AND (Unlicense OR MIT)
+librsvg2|(none)|2.61.0|2.fc43|x86_64|(none)|LGPL-2.1-or-later AND Apache-2.0 AND BSD-3-Clause AND MIT AND MPL-2.0 AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND (Apache-2.0 OR MIT) AND (MIT OR Apache-2.0 OR Zlib) AND (Unlicense OR MIT)
+libseccomp|(none)|2.6.0|2.fc43|i686|(none)|LGPL-2.1-only
+libseccomp|(none)|2.6.0|2.fc43|x86_64|(none)|LGPL-2.1-only
+libselinux|(none)|3.9|5.fc43|i686|(none)|LicenseRef-Fedora-Public-Domain
+libselinux|(none)|3.9|5.fc43|x86_64|(none)|LicenseRef-Fedora-Public-Domain
+libsemanage|(none)|3.9|4.fc43|x86_64|(none)|LGPL-2.1-or-later
+libsepol|(none)|3.9|2.fc43|i686|(none)|LGPL-2.1-or-later
+libsepol|(none)|3.9|2.fc43|x86_64|(none)|LGPL-2.1-or-later
+libsmartcols|(none)|2.41.1|17.fc43|x86_64|(none)|LGPL-2.1-or-later
+libsndfile|(none)|1.2.2|10.fc43|i686|(none)|LGPL-2.1-or-later AND GPL-2.0-or-later AND BSD-3-Clause
+libsndfile|(none)|1.2.2|10.fc43|x86_64|(none)|LGPL-2.1-or-later AND GPL-2.0-or-later AND BSD-3-Clause
+libsolv|(none)|0.7.35|1.fc43|x86_64|(none)|BSD-3-Clause
+libsoup3|(none)|3.6.5|8.fc43|i686|(none)|LGPL-2.0-or-later AND LGPL-2.1-or-later
+libsoup3|(none)|3.6.5|8.fc43|x86_64|(none)|LGPL-2.0-or-later AND LGPL-2.1-or-later
+libssh-config|(none)|0.11.3|1.fc43|noarch|(none)|LGPL-2.1-or-later
+libssh|(none)|0.11.3|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+libstdc++|(none)|15.2.1|4.fc43|i686|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+libstdc++|(none)|15.2.1|4.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+libstemmer|(none)|3.0.1|8.fc43|i686|(none)|BSD-3-Clause
+libstemmer|(none)|3.0.1|8.fc43|x86_64|(none)|BSD-3-Clause
+libtalloc|(none)|2.4.3|4.fc43|x86_64|(none)|LGPL-3.0-or-later
+libtasn1|(none)|4.20.0|2.fc43|i686|(none)|GPL-3.0-or-later AND LGPL-2.1-or-later
+libtasn1|(none)|4.20.0|2.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-2.1-or-later
+libtdb|(none)|1.4.14|3.fc43|x86_64|(none)|LGPL-3.0-or-later
+libtevent|(none)|0.17.1|3.fc43|x86_64|(none)|LGPL-3.0-or-later
+libthai|(none)|0.1.29|11.fc43|i686|(none)|LGPL-2.1-or-later
+libthai|(none)|0.1.29|11.fc43|x86_64|(none)|LGPL-2.1-or-later
+libtheora|1|1.1.1|40.fc43|x86_64|(none)|BSD-3-Clause
+libtiff|(none)|4.7.1|1.fc43|i686|(none)|libtiff
+libtiff|(none)|4.7.1|1.fc43|x86_64|(none)|libtiff
+libtinysparql|(none)|3.10.1|1.fc43|i686|(none)|LGPL-2.1-or-later
+libtinysparql|(none)|3.10.1|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+libtirpc|(none)|1.3.7|1.fc43|x86_64|(none)|SISSL AND BSD-3-Clause
+libtool-ltdl|(none)|2.5.4|7.fc43|x86_64|(none)|LGPLv2+
+libunistring|(none)|1.1|10.fc43|i686|(none)|GPL-2.0-or-later OR LGPL-3.0-or-later
+libunistring|(none)|1.1|10.fc43|x86_64|(none)|GPL-2.0-or-later OR LGPL-3.0-or-later
+libunwind|(none)|1.8.1|3.fc43|i686|(none)|MIT
+libunwind|(none)|1.8.1|3.fc43|x86_64|(none)|MIT
+libusb1|(none)|1.0.29|4.fc43|i686|(none)|LGPL-2.1-or-later
+libusb1|(none)|1.0.29|4.fc43|x86_64|(none)|LGPL-2.1-or-later
+libutempter|(none)|1.2.1|19.fc43|x86_64|(none)|LGPL-2.1-or-later AND LGPL-2.1-only AND BSD-2-Clause
+libuuid|(none)|2.41.1|17.fc43|i686|(none)|BSD-3-Clause
+libuuid|(none)|2.41.1|17.fc43|x86_64|(none)|BSD-3-Clause
+libv4l|(none)|1.32.0|1.fc43|x86_64|(none)|LGPL-2.1-or-later AND GPL-2.0-or-later AND IJG-short AND BSD-2-Clause
+libvarlink|(none)|24|3.fc43|x86_64|(none)|Apache-2.0 AND BSD-3-Clause
+libva|(none)|2.22.0|6.fc43|i686|(none)|MIT AND HPND-sell-variant AND ICU
+libva|(none)|2.22.0|6.fc43|x86_64|(none)|MIT AND HPND-sell-variant AND ICU
+libvdpau|(none)|1.5|10.fc43|i686|(none)|MIT
+libvdpau|(none)|1.5|10.fc43|x86_64|(none)|MIT
+libverto|(none)|0.3.2|11.fc43|i686|(none)|MIT
+libverto|(none)|0.3.2|11.fc43|x86_64|(none)|MIT
+libvisual|1|0.4.2|3.fc43|x86_64|(none)|LGPL-2.1-or-later
+libvmaf|(none)|3.0.0|4.fc43|x86_64|(none)|BSD-2-Clause-Patent
+libvorbis|1|1.3.7|13.fc43|i686|(none)|BSD-3-Clause
+libvorbis|1|1.3.7|13.fc43|x86_64|(none)|BSD-3-Clause
+libwayland-client|(none)|1.24.0|1.fc43|i686|(none)|MIT
+libwayland-client|(none)|1.24.0|1.fc43|x86_64|(none)|MIT
+libwayland-cursor|(none)|1.24.0|1.fc43|i686|(none)|MIT
+libwayland-cursor|(none)|1.24.0|1.fc43|x86_64|(none)|MIT
+libwayland-egl|(none)|1.24.0|1.fc43|i686|(none)|MIT
+libwayland-egl|(none)|1.24.0|1.fc43|x86_64|(none)|MIT
+libwbclient|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+libwebp|(none)|1.6.0|2.fc43|i686|(none)|Apache-2.0 AND LicenseRef-scancode-google-patent-license-webm AND BSD-3-Clause AND FSFULLRWD
+libwebp|(none)|1.6.0|2.fc43|x86_64|(none)|Apache-2.0 AND LicenseRef-scancode-google-patent-license-webm AND BSD-3-Clause AND FSFULLRWD
+libxcb|(none)|1.17.0|6.fc43|i686|(none)|X11
+libxcb|(none)|1.17.0|6.fc43|x86_64|(none)|X11
+libxcrypt|(none)|4.5.2|1.fc43|i686|(none)|LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND BSD-2-Clause-FreeBSD AND 0BSD AND CC0-1.0 AND LicenseRef-Fedora-Public-Domain
+libxcrypt|(none)|4.5.2|1.fc43|x86_64|(none)|LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND BSD-2-Clause-FreeBSD AND 0BSD AND CC0-1.0 AND LicenseRef-Fedora-Public-Domain
+libxkbcommon-x11|(none)|1.11.0|1.fc43|x86_64|(none)|MIT AND X11 AND MIT-CMU
+libxkbcommon|(none)|1.11.0|1.fc43|i686|(none)|MIT AND X11 AND MIT-CMU
+libxkbcommon|(none)|1.11.0|1.fc43|x86_64|(none)|MIT AND X11 AND MIT-CMU
+libxml2|(none)|2.12.10|5.fc43|i686|(none)|MIT AND ISC-Veillard AND W3C
+libxml2|(none)|2.12.10|5.fc43|x86_64|(none)|MIT AND ISC-Veillard AND W3C
+libxshmfence|(none)|1.3.2|7.fc43|i686|(none)|HPND-sell-variant
+libxshmfence|(none)|1.3.2|7.fc43|x86_64|(none)|HPND-sell-variant
+libxslt|(none)|1.1.43|5.fc43|i686|(none)|MIT
+libxslt|(none)|1.1.43|5.fc43|x86_64|(none)|MIT
+libyaml|(none)|0.2.5|17.fc43|x86_64|(none)|MIT
+libyuv|(none)|0|0.57.20240704git96bbdb5.fc43|i686|(none)|BSD-3-Clause
+libyuv|(none)|0|0.57.20240704git96bbdb5.fc43|x86_64|(none)|BSD-3-Clause
+libzstd|(none)|1.5.7|2.fc43|i686|(none)|BSD-3-Clause AND GPL-2.0-only
+libzstd|(none)|1.5.7|2.fc43|x86_64|(none)|BSD-3-Clause AND GPL-2.0-only
+llvm-filesystem|(none)|21.1.6|1.fc43|i686|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+llvm-filesystem|(none)|21.1.6|1.fc43|x86_64|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+llvm-libs|(none)|21.1.6|1.fc43|i686|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+llvm-libs|(none)|21.1.6|1.fc43|x86_64|(none)|Apache-2.0 WITH LLVM-exception OR NCSA
+lm_sensors-libs|(none)|3.6.0|23.fc43|i686|(none)|LGPL-2.1-or-later
+lm_sensors-libs|(none)|3.6.0|23.fc43|x86_64|(none)|LGPL-2.1-or-later
+lmdb-libs|(none)|0.9.33|4.fc43|x86_64|(none)|OLDAP-2.8
+lockdev|(none)|1.0.4|0.53.20111007git.fc43|x86_64|(none)|LGPL-2.1-or-later
+lua-libs|(none)|5.4.8|3.fc43|x86_64|(none)|MIT
+lua-srpm-macros|(none)|1|16.fc43|noarch|(none)|MIT
+lz4-libs|(none)|1.10.0|3.fc43|x86_64|(none)|GPL-2.0-or-later AND BSD-2-Clause
+lzo|(none)|2.10|15.fc43|i686|(none)|gpl-2.0-or-later
+lzo|(none)|2.10|15.fc43|x86_64|(none)|gpl-2.0-or-later
+mangohud|(none)|0.8.1|3.fc43|i686|(none)|MIT
+mangohud|(none)|0.8.1|3.fc43|x86_64|(none)|MIT
+mesa-demos|(none)|9.0.0|10.fc43|x86_64|(none)|MIT
+mesa-dri-drivers|(none)|25.2.7|3.fc43|i686|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-dri-drivers|(none)|25.2.7|3.fc43|x86_64|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-filesystem|(none)|25.2.7|3.fc43|i686|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-filesystem|(none)|25.2.7|3.fc43|x86_64|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-libEGL|(none)|25.2.7|3.fc43|i686|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-libEGL|(none)|25.2.7|3.fc43|x86_64|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-libGLU|(none)|9.0.3|7.fc43|i686|(none)|X11
+mesa-libGLU|(none)|9.0.3|7.fc43|x86_64|(none)|X11
+mesa-libGL|(none)|25.2.7|3.fc43|i686|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-libGL|(none)|25.2.7|3.fc43|x86_64|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-libgbm|(none)|25.2.7|3.fc43|i686|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-libgbm|(none)|25.2.7|3.fc43|x86_64|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-va-drivers|(none)|25.2.7|3.fc43|i686|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-va-drivers|(none)|25.2.7|3.fc43|x86_64|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-vulkan-drivers|(none)|25.2.7|3.fc43|i686|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mesa-vulkan-drivers|(none)|25.2.7|3.fc43|x86_64|(none)|MIT AND BSD-3-Clause AND SGI-B-2.0
+mingw-binutils-generic|(none)|2.45|2.fc43|x86_64|(none)|GPL-3.0-or-later AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND BSD-3-Clause AND GFDL-1.3-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
+mingw-filesystem-base|(none)|150|3.fc43|noarch|(none)|GPL-2.0-or-later
+mingw32-wine-gecko|(none)|2.47.4|9.fc43|noarch|(none)|LicenseRef-Callaway-MPLv1.1 OR GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+
+mingw64-FAudio|(none)|25.05|2.fc43|noarch|(none)|zlib
+mingw64-SDL3|(none)|3.2.16|2.fc43|noarch|(none)|Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
+mingw64-crt|(none)|13.0.0|2.fc43|noarch|(none)|LicenseRef-Fedora-Public-Domain AND ZPL-2.1
+mingw64-filesystem|(none)|150|3.fc43|noarch|(none)|GPL-2.0-or-later
+mingw64-lcms2|(none)|2.14|8.fc43|noarch|(none)|MIT
+mingw64-libgcc|(none)|15.2.1|2.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+mingw64-libjpeg-turbo|(none)|3.1.2|1.fc43|noarch|(none)|Zlib AND BSD-3-Clause AND MIT AND IJG
+mingw64-libpng|(none)|1.6.50|2.fc43|noarch|(none)|Zlib
+mingw64-libstdc++|(none)|15.2.1|2.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+mingw64-libtiff|(none)|4.4.0|8.fc43|noarch|(none)|libtiff
+mingw64-libxml2|(none)|2.12.10|2.fc43|noarch|(none)|MIT
+mingw64-libxslt|(none)|1.1.43|3.fc43|noarch|(none)|MIT
+mingw64-vkd3d|(none)|1.14|3.fc43|noarch|(none)|LicenseRef-Callaway-LGPLv2+
+mingw64-win-iconv|(none)|0.0.10|3.fc43|noarch|(none)|LicenseRef-Fedora-Public-Domain
+mingw64-wine-gecko|(none)|2.47.4|9.fc43|noarch|(none)|LicenseRef-Callaway-MPLv1.1 OR GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+
+mingw64-winpthreads|(none)|13.0.0|2.fc43|noarch|(none)|BSD-3-Clause AND MIT AND LicenseRef-Fedora-Public-Domain
+mingw64-zlib|(none)|1.3.1|5.fc43|noarch|(none)|Zlib
+mpdecimal|(none)|4.0.1|2.fc43|i686|(none)|BSD-2-Clause
+mpdecimal|(none)|4.0.1|2.fc43|x86_64|(none)|BSD-2-Clause
+mpg123-libs|(none)|1.32.10|2.fc43|i686|(none)|GPL-2.0-or-later
+mpg123-libs|(none)|1.32.10|2.fc43|x86_64|(none)|GPL-2.0-or-later
+ncurses-base|(none)|6.5|7.20250614.fc43|noarch|(none)|MIT-open-group
+ncurses-libs|(none)|6.5|7.20250614.fc43|i686|(none)|MIT-open-group
+ncurses-libs|(none)|6.5|7.20250614.fc43|x86_64|(none)|MIT-open-group
+ncurses|(none)|6.5|7.20250614.fc43|x86_64|(none)|MIT-open-group
+nettle|(none)|3.10.1|2.fc43|i686|(none)|LGPL-3.0-or-later OR GPL-2.0-or-later
+nettle|(none)|3.10.1|2.fc43|x86_64|(none)|LGPL-3.0-or-later OR GPL-2.0-or-later
+ngtcp2-crypto-gnutls|(none)|1.18.0|1.fc43|x86_64|(none)|MIT
+ngtcp2|(none)|1.18.0|1.fc43|x86_64|(none)|MIT
+noopenh264|(none)|2.6.0|2.fc43|x86_64|(none)|BSD-2-Clause and LGPL-2.1-or-later
+npth|(none)|1.8|3.fc43|x86_64|(none)|LGPL-2.1-or-later
+nspr|(none)|4.37.0|7.fc43|i686|(none)|MPL-2.0
+nspr|(none)|4.37.0|7.fc43|x86_64|(none)|MPL-2.0
+nss-softokn-freebl|(none)|3.118.1|2.fc43|i686|(none)|MPL-2.0
+nss-softokn-freebl|(none)|3.118.1|2.fc43|x86_64|(none)|MPL-2.0
+nss-softokn|(none)|3.118.1|2.fc43|i686|(none)|MPL-2.0
+nss-softokn|(none)|3.118.1|2.fc43|x86_64|(none)|MPL-2.0
+nss-sysinit|(none)|3.118.1|2.fc43|x86_64|(none)|MPL-2.0
+nss-util|(none)|3.118.1|2.fc43|i686|(none)|MPL-2.0
+nss-util|(none)|3.118.1|2.fc43|x86_64|(none)|MPL-2.0
+nss|(none)|3.118.1|2.fc43|i686|(none)|MPL-2.0
+nss|(none)|3.118.1|2.fc43|x86_64|(none)|MPL-2.0
+ocaml-srpm-macros|(none)|11|2.fc43|noarch|(none)|GPL-2.0-or-later
+openal-soft|(none)|1.24.2|4.fc43|i686|(none)|LGPL-2.0-or-later AND BSD-3-Clause AND GPL-2.0-or-later AND Apache-2.0 AND (LGPL-2.0-or-later AND BSD-3-Clause) AND (MIT WITH fmt-exception) AND NCL AND MIT AND LicenseRef-Fedora-Public-Domain
+openal-soft|(none)|1.24.2|4.fc43|x86_64|(none)|LGPL-2.0-or-later AND BSD-3-Clause AND GPL-2.0-or-later AND Apache-2.0 AND (LGPL-2.0-or-later AND BSD-3-Clause) AND (MIT WITH fmt-exception) AND NCL AND MIT AND LicenseRef-Fedora-Public-Domain
+openblas-srpm-macros|(none)|2|20.fc43|noarch|(none)|MIT
+openjpeg|(none)|2.5.4|1.fc43|i686|(none)|BSD-2-Clause AND MIT
+openjpeg|(none)|2.5.4|1.fc43|x86_64|(none)|BSD-2-Clause AND MIT
+openldap|(none)|2.6.10|4.fc43|x86_64|(none)|OLDAP-2.8
+openssl-libs|1|3.5.4|1.fc43|i686|(none)|Apache-2.0
+openssl-libs|1|3.5.4|1.fc43|x86_64|(none)|Apache-2.0
+opus|(none)|1.5.2|3.fc43|i686|(none)|BSD-3-Clause AND BSD-2-Clause
+opus|(none)|1.5.2|3.fc43|x86_64|(none)|BSD-3-Clause AND BSD-2-Clause
+orc|(none)|0.4.41|2.fc43|x86_64|(none)|BSD-2-Clause AND BSD-3-Clause
+p11-kit-trust|(none)|0.25.8|1.fc43|x86_64|(none)|BSD-3-Clause
+p11-kit|(none)|0.25.8|1.fc43|i686|(none)|BSD-3-Clause
+p11-kit|(none)|0.25.8|1.fc43|x86_64|(none)|BSD-3-Clause
+package-notes-srpm-macros|(none)|0.5|14.fc43|noarch|(none)|0BSD
+pam-libs|(none)|1.7.1|3.fc43|i686|(none)|BSD-3-Clause AND GPL-2.0-or-later
+pam-libs|(none)|1.7.1|3.fc43|x86_64|(none)|BSD-3-Clause AND GPL-2.0-or-later
+pam|(none)|1.7.1|3.fc43|x86_64|(none)|BSD-3-Clause AND GPL-2.0-or-later
+pango|(none)|1.57.0|1.fc43|i686|(none)|LGPL-2.0-or-later
+pango|(none)|1.57.0|1.fc43|x86_64|(none)|LGPL-2.0-or-later
+pciutils-libs|(none)|3.14.0|2.fc43|x86_64|(none)|GPL-2.0-or-later
+pciutils|(none)|3.14.0|2.fc43|x86_64|(none)|GPL-2.0-or-later
+pcre2-syntax|(none)|10.47|1.fc43|noarch|(none)|BSD-3-Clause AND FSFULLR AND X11 AND GPL-2.0-or-later AND FSFAP AND FSFUL AND GPL-3.0-or-later
+pcre2|(none)|10.47|1.fc43|i686|(none)|BSD-3-Clause AND FSFULLR AND X11 AND GPL-2.0-or-later AND FSFAP AND FSFUL AND GPL-3.0-or-later
+pcre2|(none)|10.47|1.fc43|x86_64|(none)|BSD-3-Clause AND FSFULLR AND X11 AND GPL-2.0-or-later AND FSFAP AND FSFUL AND GPL-3.0-or-later
+pcsc-lite-libs|(none)|2.3.3|2.fc43|x86_64|(none)|BSD-3-Clause AND BSD-2-Clause AND GPL-3.0-or-later
+perl-AutoLoader|0|5.74|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-B|0|1.89|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Carp|(none)|1.54|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Class-Struct|0|0.68|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Data-Dumper|(none)|2.191|521.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Digest-MD5|(none)|2.59|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Digest|(none)|1.20|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-DynaLoader|0|1.57|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Encode|4|3.21|520.fc43|x86_64|(none)|(GPL-1.0-or-later OR Artistic-1.0-Perl) AND Artistic-2.0
+perl-Errno|0|1.38|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Exporter|(none)|5.79|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Fcntl|0|1.20|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-File-Basename|0|2.86|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-File-Copy|0|2.41|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-File-Path|(none)|2.18|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-File-Temp|1|0.231.100|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-File-stat|0|1.14|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-FileHandle|0|2.05|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Getopt-Long|1|2.58|520.fc43|noarch|(none)|GPL-2.0-or-later OR Artistic-1.0-Perl
+perl-Getopt-Std|0|1.14|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-HTTP-Tiny|(none)|0.090|521.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-IO-Socket-IP|(none)|0.43|521.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-IO-Socket-SSL|(none)|2.095|2.fc43|noarch|(none)|(GPL-1.0-or-later OR Artistic-1.0-Perl) AND MPL-2.0
+perl-IO|0|1.55|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-IPC-Open3|0|1.24|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-MIME-Base32|(none)|1.303|24.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-MIME-Base64|(none)|3.16|520.fc43|x86_64|(none)|(GPL-1.0-or-later OR Artistic-1.0-Perl) AND metamail
+perl-Net-SSLeay|(none)|1.94|11.fc43|x86_64|(none)|Artistic-2.0
+perl-POSIX|0|2.23|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-PathTools|(none)|3.94|520.fc43|x86_64|(none)|( GPL-1.0-or-later OR Artistic-1.0-Perl ) AND BSD-3-Clause
+perl-Pod-Escapes|1|1.07|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Pod-Perldoc|(none)|3.28.01|521.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Pod-Simple|1|3.47|3.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Pod-Usage|4|2.05|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Scalar-List-Utils|5|1.70|1.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-SelectSaver|0|1.02|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Socket|4|2.040|2.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Storable|1|3.37|521.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Symbol|0|1.09|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Term-ANSIColor|(none)|5.01|521.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Term-Cap|(none)|1.18|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Text-ParseWords|(none)|3.31|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-Text-Tabs+Wrap|(none)|2024.001|520.fc43|noarch|(none)|TTWL
+perl-Time-Local|2|1.350|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-URI|(none)|5.34|2.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-base|0|2.27|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-constant|(none)|1.33|521.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-if|0|0.61.000|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-interpreter|4|5.42.0|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-libnet|(none)|3.15|521.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-libs|4|5.42.0|520.fc43|x86_64|(none)|(GPL-1.0-or-later OR Artistic-1.0-Perl) AND Martin-Birgmeier AND Spencer-86 AND MIT AND Unicode-3.0 AND LicenseRef-Fedora-Public-Domain
+perl-locale|0|1.13|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-mro|0|1.29|520.fc43|x86_64|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-overloading|0|0.02|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-overload|0|1.40|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-parent|1|0.244|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+perl-podlators|1|6.0.2|520.fc43|noarch|(none)|(GPL-1.0-or-later OR Artistic-1.0-Perl) AND FSFAP
+perl-srpm-macros|(none)|1|60.fc43|noarch|(none)|GPL-3.0-or-later
+perl-vars|0|1.05|520.fc43|noarch|(none)|GPL-1.0-or-later OR Artistic-1.0-Perl
+pixman|(none)|0.46.2|2.fc43|i686|(none)|MIT
+pixman|(none)|0.46.2|2.fc43|x86_64|(none)|MIT
+pkgconf-m4|(none)|2.3.0|3.fc43|noarch|(none)|GPL-2.0-or-later WITH Autoconf-exception-generic
+pkgconf-pkg-config|(none)|2.3.0|3.fc43|x86_64|(none)|ISC AND BSD-4-Clause AND BSD-2-Clause AND pkgconf AND MIT
+pkgconf|(none)|2.3.0|3.fc43|i686|(none)|ISC AND BSD-4-Clause AND BSD-2-Clause AND pkgconf AND MIT
+pkgconf|(none)|2.3.0|3.fc43|x86_64|(none)|ISC AND BSD-4-Clause AND BSD-2-Clause AND pkgconf AND MIT
+popt|(none)|1.19|9.fc43|x86_64|(none)|MIT AND LicenseRef-Fedora-Public-Domain
+protobuf-compiler|(none)|3.19.6|18.fc43|i686|(none)|BSD-3-Clause
+protobuf-compiler|(none)|3.19.6|18.fc43|x86_64|(none)|BSD-3-Clause
+protobuf-c|(none)|1.5.1|2.fc43|i686|(none)|BSD-2-Clause
+protobuf-c|(none)|1.5.1|2.fc43|x86_64|(none)|BSD-2-Clause
+protobuf|(none)|3.19.6|18.fc43|i686|(none)|BSD-3-Clause
+protobuf|(none)|3.19.6|18.fc43|x86_64|(none)|BSD-3-Clause
+publicsuffix-list-dafsa|(none)|20250616|2.fc43|noarch|(none)|MPL-2.0
+pulseaudio-libs|(none)|17.0|7.fc43|i686|(none)|LGPL-2.1-or-later
+pulseaudio-libs|(none)|17.0|7.fc43|x86_64|(none)|LGPL-2.1-or-later
+pyproject-srpm-macros|(none)|1.18.5|1.fc43|noarch|(none)|MIT
+python-pip-wheel|(none)|25.1.1|18.fc43|noarch|(none)|MIT AND Python-2.0.1 AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MPL-2.0 AND (Apache-2.0 OR BSD-2-Clause)
+python-srpm-macros|(none)|3.14|5.fc43|noarch|(none)|MIT AND PSF-2.0 AND GPL-2.0-or-later
+python3-libs|(none)|3.14.0|2.fc43|i686|(none)|Python-2.0.1 AND MIT AND BSD-3-Clause AND MIT-CMU AND HPND-SMC AND BSD-2-Clause AND dtoa
+python3-libs|(none)|3.14.0|2.fc43|x86_64|(none)|Python-2.0.1 AND MIT AND BSD-3-Clause AND MIT-CMU AND HPND-SMC AND BSD-2-Clause AND dtoa
+python3|(none)|3.14.0|2.fc43|i686|(none)|Python-2.0.1
+python3|(none)|3.14.0|2.fc43|x86_64|(none)|Python-2.0.1
+qt5-srpm-macros|(none)|5.15.18|1.fc43|noarch|(none)|GPL-3.0-only
+qt6-srpm-macros|(none)|6.10.1|1.fc43|noarch|(none)|GPL-3.0-only
+rav1e-libs|(none)|0.7.1|8.fc43|i686|(none)|BSD-2-Clause AND ISC AND MIT AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
+rav1e-libs|(none)|0.7.1|8.fc43|x86_64|(none)|BSD-2-Clause AND ISC AND MIT AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
+readline|(none)|8.3|2.fc43|i686|(none)|GPL-3.0-or-later AND GPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
+readline|(none)|8.3|2.fc43|x86_64|(none)|GPL-3.0-or-later AND GPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
+redhat-rpm-config|(none)|343|11.fc43|noarch|(none)|GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
+rpm-build-libs|(none)|6.0.0|1.fc43|x86_64|(none)|GPL-2.0-or-later
+rpm-libs|(none)|6.0.0|1.fc43|x86_64|(none)|GPL-2.0-or-later OR LGPL-2.1-or-later
+rpm-sequoia|(none)|1.9.0|2.fc43|x86_64|(none)|LGPL-2.0-or-later AND Apache-2.0 AND BSD-3-Clause AND BSL-1.0 AND MIT AND Unicode-3.0 AND Unicode-DFS-2016 AND (Apache-2.0 OR MIT) AND (Unlicense OR MIT)
+rpm-sign-libs|(none)|6.0.0|1.fc43|x86_64|(none)|GPL-2.0-or-later
+rpm|(none)|6.0.0|1.fc43|x86_64|(none)|GPL-2.0-or-later
+rust-srpm-macros|(none)|26.4|1.fc43|noarch|(none)|MIT
+samba-client-libs|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-common-libs|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-common-tools|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-common|2|4.23.3|1.fc43|noarch|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-dcerpc|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-ldb-ldap-modules|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-libs|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-winbind-clients|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-winbind-modules|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+samba-winbind|2|4.23.3|1.fc43|x86_64|(none)|GPL-3.0-or-later AND LGPL-3.0-or-later
+sane-backends-libs|(none)|1.4.0|4.fc43|x86_64|(none)|GPL-2.0-or-later WITH SANE-exception AND GPL-2.0-or-later AND GPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain AND IJG AND MIT
+sdbus-cpp|(none)|2.1.0|3.fc43|x86_64|(none)|LGPL-2.1-only
+sdl12-compat|(none)|1.2.68|6.fc43|i686|(none)|Zlib AND (LicenseRef-Callaway-Public-Domain OR MIT-0) AND LicenseRef-Callaway-MIT
+sdl12-compat|(none)|1.2.68|6.fc43|x86_64|(none)|Zlib AND (LicenseRef-Callaway-Public-Domain OR MIT-0) AND LicenseRef-Callaway-MIT
+sdl2-compat|(none)|2.32.56|2.fc43|i686|(none)|Zlib
+sdl2-compat|(none)|2.32.56|2.fc43|x86_64|(none)|Zlib
+sed|(none)|4.9|5.fc43|x86_64|(none)|GPL-3.0-or-later
+setup|(none)|2.15.0|26.fc43|noarch|(none)|LicenseRef-Fedora-Public-Domain
+shadow-utils|2|4.18.0|3.fc43|x86_64|(none)|BSD-3-Clause AND GPL-2.0-or-later
+shared-mime-info|(none)|2.4|2.fc43|x86_64|(none)|GPL-2.0-or-later
+spdlog|(none)|1.15.3|3.fc43|i686|(none)|MIT
+spdlog|(none)|1.15.3|3.fc43|x86_64|(none)|MIT
+speex|(none)|1.2.0|20.fc43|i686|(none)|BSD-3-clause AND TU-Berlin-1.0
+speex|(none)|1.2.0|20.fc43|x86_64|(none)|BSD-3-clause AND TU-Berlin-1.0
+spirv-llvm-translator|(none)|21.1.0|1.fc43|i686|(none)|NCSA
+spirv-llvm-translator|(none)|21.1.0|1.fc43|x86_64|(none)|NCSA
+spirv-tools-libs|(none)|2025.3|4.fc43|i686|(none)|Apache-2.0
+spirv-tools-libs|(none)|2025.3|4.fc43|x86_64|(none)|Apache-2.0
+sqlite-libs|(none)|3.50.2|2.fc43|i686|(none)|blessing
+sqlite-libs|(none)|3.50.2|2.fc43|x86_64|(none)|blessing
+svt-av1-libs|(none)|3.1.2|1.fc43|i686|(none)|LicenseRef-BSD-3-Clause-Clear-WITH-AdditionRef-AOMPL-1.0 AND MIT AND ISC AND LicenseRef-Fedora-Public-Domain AND BSD-2-Clause
+svt-av1-libs|(none)|3.1.2|1.fc43|x86_64|(none)|LicenseRef-BSD-3-Clause-Clear-WITH-AdditionRef-AOMPL-1.0 AND MIT AND ISC AND LicenseRef-Fedora-Public-Domain AND BSD-2-Clause
+systemd-libs|(none)|258.2|1.fc43|i686|(none)|LGPL-2.1-or-later AND MIT
+systemd-libs|(none)|258.2|1.fc43|x86_64|(none)|LGPL-2.1-or-later AND MIT
+systemd-pam|(none)|258.2|1.fc43|i686|(none)|LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later
+systemd-pam|(none)|258.2|1.fc43|x86_64|(none)|LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later
+systemd-shared|(none)|258.2|1.fc43|i686|(none)|LGPL-2.1-or-later AND MIT
+systemd-shared|(none)|258.2|1.fc43|x86_64|(none)|LGPL-2.1-or-later AND MIT
+systemd-sysusers|(none)|258.2|1.fc43|x86_64|(none)|LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later
+systemd|(none)|258.2|1.fc43|i686|(none)|LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later
+systemd|(none)|258.2|1.fc43|x86_64|(none)|LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later
+tpm2-tss|(none)|4.1.3|8.fc43|x86_64|(none)|BSD-2-Clause
+tree-sitter-srpm-macros|(none)|0.4.2|1.fc43|noarch|(none)|MIT
+tzdata|(none)|2025b|3.fc43|noarch|(none)|LicenseRef-Fedora-Public-Domain AND (GPL-2.0-only WITH ClassPath-exception-2.0)
+unixODBC|(none)|2.3.12|7.fc43|x86_64|(none)|GPL-2.0-or-later AND LGPL-2.1-or-later
+unzip|(none)|6.0|67.fc43|x86_64|(none)|Info-ZIP
+usbutils|(none)|018|4.fc43|x86_64|(none)|GPL-2.0-or-later
+util-linux-core|(none)|2.41.1|17.fc43|x86_64|(none)|GPL-2.0-only AND GPL-2.0-or-later AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause-UC AND LicenseRef-Fedora-Public-Domain
+vulkan-loader|(none)|1.4.321.0|3.fc43|i686|(none)|Apache-2.0
+vulkan-loader|(none)|1.4.321.0|3.fc43|x86_64|(none)|Apache-2.0
+vulkan-tools|(none)|1.4.321.0|4.fc43|x86_64|(none)|Apache-2.0
+wine-alsa|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-arial-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-cms|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-common|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-core|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-courier-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-desktop|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-filesystem|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-fixedsys-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-ldap|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-marlett-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-mono|(none)|10.2.0|1.fc43|noarch|(none)|GPL-2.0-or-later AND LGPL-2.1-only AND MIT AND BSD-4-Clause-UC AND MS-PL AND MPL-1.1
+wine-ms-sans-serif-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-opencl|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-pulseaudio|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-small-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-smartcard|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-symbol-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-system-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-systemd|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-tahoma-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-times-new-roman-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-twain|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+wine-webdings-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine-wingdings-fonts|(none)|10.15|1.fc43|noarch|(none)|LGPL-2.1-or-later
+wine|(none)|10.15|1.fc43|x86_64|(none)|LGPL-2.1-or-later
+xcb-imdkit|(none)|1.0.9|5.fc43|i686|(none)|LicenseRef-Callaway-LGPLv2 AND LicenseRef-Callaway-MIT
+xcb-imdkit|(none)|1.0.9|5.fc43|x86_64|(none)|LicenseRef-Callaway-LGPLv2 AND LicenseRef-Callaway-MIT
+xcb-util-cursor|(none)|0.1.5|4.fc43|i686|(none)|X11-distribute-modifications-variant
+xcb-util-cursor|(none)|0.1.5|4.fc43|x86_64|(none)|X11-distribute-modifications-variant
+xcb-util-image|(none)|0.4.1|8.fc43|i686|(none)|X11-distribute-modifications-variant
+xcb-util-image|(none)|0.4.1|8.fc43|x86_64|(none)|X11-distribute-modifications-variant
+xcb-util-keysyms|(none)|0.4.1|8.fc43|i686|(none)|X11-distribute-modifications-variant
+xcb-util-keysyms|(none)|0.4.1|8.fc43|x86_64|(none)|X11-distribute-modifications-variant
+xcb-util-renderutil|(none)|0.3.10|8.fc43|i686|(none)|X11-distribute-modifications-variant AND HPND-sell-variant
+xcb-util-renderutil|(none)|0.3.10|8.fc43|x86_64|(none)|X11-distribute-modifications-variant AND HPND-sell-variant
+xcb-util-wm|(none)|0.4.2|8.fc43|i686|(none)|X11-distribute-modifications-variant
+xcb-util-wm|(none)|0.4.2|8.fc43|x86_64|(none)|X11-distribute-modifications-variant
+xcb-util-xrm|(none)|1.3|16.fc43|i686|(none)|MIT
+xcb-util-xrm|(none)|1.3|16.fc43|x86_64|(none)|MIT
+xcb-util|(none)|0.4.1|8.fc43|i686|(none)|X11-distribute-modifications-variant
+xcb-util|(none)|0.4.1|8.fc43|x86_64|(none)|X11-distribute-modifications-variant
+xkeyboard-config|(none)|2.46|1.fc43|noarch|(none)|HPND AND HPND-sell-variant AND X11 AND X11-distribute-modifications-variant AND MIT AND MIT-open-group AND xkeyboard-config-Zinoviev
+xml-common|(none)|0.6.3|67.fc43|noarch|(none)|GPL-1.0-or-later
+xprop|(none)|1.2.8|4.fc43|x86_64|(none)|MIT
+xterm|(none)|401|2.fc43|x86_64|(none)|MIT AND X11 AND HPND AND CC-BY-4.0
+xz-libs|1|5.8.1|4.fc43|i686|(none)|0BSD
+xz-libs|1|5.8.1|4.fc43|x86_64|(none)|0BSD
+xz|1|5.8.1|4.fc43|x86_64|(none)|0BSD AND GPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain
+zchunk-libs|(none)|1.5.1|3.fc43|x86_64|(none)|BSD-2-Clause AND MIT
+zig-srpm-macros|(none)|1|5.fc43|noarch|(none)|MIT
+zip|(none)|3.0|44.fc43|x86_64|(none)|Info-ZIP
+zlib-ng-compat|(none)|2.2.5|2.fc43|i686|(none)|Zlib
+zlib-ng-compat|(none)|2.2.5|2.fc43|x86_64|(none)|Zlib
+zlib-ng|(none)|2.2.5|2.fc43|i686|(none)|Zlib
+zlib-ng|(none)|2.2.5|2.fc43|x86_64|(none)|Zlib

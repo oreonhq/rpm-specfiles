@@ -1,0 +1,15 @@
+diff -up ElectricFence-2.2.2/Makefile\~ ElectricFence-2.2.2/Makefile
+--- ElectricFence-2.2.2/Makefile~	2010-09-10 13:24:35.000000000 +0200
++++ ElectricFence-2.2.2/Makefile	2010-09-10 13:28:36.000000000 +0200
+@@ -16,6 +16,9 @@ PACKAGE_SOURCE= README efence.3 Makefile
+ 
+ OBJECTS= efence.o page.o print.o
+ 
++efence.o: override CFLAGS += -fno-builtin-malloc -fno-builtin-calloc \
++  -fno-builtin-valloc -fno-builtin-realloc -fno-builtin-free
++
+ all:	libefence.a libefence.so.0.0 tstheap eftest
+ 	@ echo
+ 	@ echo "Testing Electric Fence."
+
+Diff finished.  Fri Sep 10 13:28:42 2010

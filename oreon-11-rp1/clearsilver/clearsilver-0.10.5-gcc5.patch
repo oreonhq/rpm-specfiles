@@ -1,0 +1,101 @@
+From sanek23994@gmail.com Thu Jul 24 21:23:56 2014
+Received: (at submit) by bugs.debian.org; 24 Jul 2014 21:23:56 +0000
+X-Spam-Checker-Version: SpamAssassin 3.3.2-bugs.debian.org_2005_01_02
+	(2011-06-06) on buxtehude.debian.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.0 required=4.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	FOURLA,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,MURPHY_DRUGS_REL8,
+	NML_ADSP_CUSTOM_MED,RCVD_IN_BRBL_LASTEXT,RDNS_NONE,SPF_SOFTFAIL,
+	XMAILER_REPORTBUG,X_DEBBUGS_CC autolearn=no
+	version=3.3.2-bugs.debian.org_2005_01_02
+X-Spam-Bayes: score:0.0000 Tokens: new, 25; hammy, 151; neutral, 62; spammy,
+	0. spammytokens: hammytokens:0.000-+--H*M:reportbug, 0.000-+--H*MI:reportbug,
+	0.000-+--3204amd64, 0.000-+--3.2.0-4-amd64, 0.000-+--H*x:reportbug
+Return-path: <sanek23994@gmail.com>
+Received: from [195.191.146.16] (helo=[127.0.1.1])
+	by buxtehude.debian.org with esmtp (Exim 4.80)
+	(envelope-from <sanek23994@gmail.com>)
+	id 1XAQUW-0007Qz-1H
+	for submit@bugs.debian.org; Thu, 24 Jul 2014 21:23:56 +0000
+Content-Type: multipart/mixed; boundary="===============0005443326715870233=="
+MIME-Version: 1.0
+From: Alexander <sanek23994@gmail.com>
+To: Debian Bug Tracking System <submit@bugs.debian.org>
+Subject: FTBFS with clang instead of gcc
+Message-ID: <20140724212349.32028.10028.reportbug@debian>
+X-Mailer: reportbug 6.5.0
+Date: Fri, 25 Jul 2014 01:23:49 +0400
+X-Debbugs-Cc: sanek23994@gmail.com, sylvestre@debian.org
+Delivered-To: submit@bugs.debian.org
+
+This is a multi-part MIME message sent by reportbug.
+
+
+--===============0005443326715870233==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+Source: clearsilver
+Severity: minor
+Tags: patch
+User: pkg-llvm-team@lists.alioth.debian.org
+Usertags: clang-ftbfs
+
+Hello,
+
+Using the rebuild infrastructure, your package fails to build with clang 
+(instead of gcc).
+
+We detected this kinf of error:
+http://clang.debian.net/status.php?version=3.4.2&key=EXPECTED_DECLARATION
+
+Full build log is available here:
+http://clang.debian.net/logs/2014-06-16/clearsilver_0.10.5-1.3_unstable_clang.log
+
+Thanks,
+Alexander
+
+-- System Information:
+Debian Release: jessie/sid
+  APT prefers unstable
+  APT policy: (500, 'unstable'), (1, 'experimental')
+Architecture: amd64 (x86_64)
+Foreign Architectures: i386
+
+Kernel: Linux 3.2.0-4-amd64 (SMP w/4 CPU cores)
+Locale: LANG=en_US.UTF-8, LC_CTYPE=en_US.UTF-8 (charmap=UTF-8)
+Shell: /bin/sh linked to /bin/dash
+
+--===============0005443326715870233==
+Content-Type: text/x-diff; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="clearsilver.diff"
+
+--- ./util/neo_err.h	2007-07-12 07:09:09.000000000 +0400
++++ ../clearsilver-0.10.5-my/./util/neo_err.h	2014-07-25 01:20:37.190677890 +0400
+@@ -85,7 +85,7 @@
+  */
+ #if defined(USE_C99_VARARG_MACROS)
+ #define nerr_raise(e,f,...) \
+-   nerr_raisef(__PRETTY_FUNCTION__,__FILE__,__LINE__,e,f,__VA_ARGS__)
++   nerr_raisef(__PRETTY_FUNCTION__,__FILE__,__LINE__,e,f, ##__VA_ARGS__)
+ #elif defined(USE_GNUC_VARARG_MACROS)
+ #define nerr_raise(e,f,a...) \
+    nerr_raisef(__PRETTY_FUNCTION__,__FILE__,__LINE__,e,f,##a)
+@@ -99,7 +99,7 @@
+ 
+ #if defined(USE_C99_VARARG_MACROS)
+ #define nerr_raise_errno(e,f,...) \
+-   nerr_raise_errnof(__PRETTY_FUNCTION__,__FILE__,__LINE__,e,f,__VA_ARGS__)
++   nerr_raise_errnof(__PRETTY_FUNCTION__,__FILE__,__LINE__,e,f, ##__VA_ARGS__)
+ #elif defined(USE_GNUC_VARARG_MACROS)
+ #define nerr_raise_errno(e,f,a...) \
+    nerr_raise_errnof(__PRETTY_FUNCTION__,__FILE__,__LINE__,e,f,##a)
+
+--===============0005443326715870233==--
+
+
+

@@ -1,0 +1,27 @@
+From 211eaa43a9cf5e07562e44611faae460ede800ea Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Tue, 21 Oct 2025 22:23:38 -0400
+Subject: [PATCH] Fix Hebrew on Yandex and DuckDuckGo
+
+The "iw" code for Hebrew is unique to Google, and already has an override
+in s_googleLanguageCodes.  Other engines which support Hebrew (not all do)
+use the standard "he" code instead.
+---
+ src/onlinetranslator.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/onlinetranslator.cpp b/src/onlinetranslator.cpp
+index a34094a..1f1771d 100644
+--- a/src/onlinetranslator.cpp
++++ b/src/onlinetranslator.cpp
+@@ -95,7 +95,6 @@ const QMap<OnlineTranslator::Language, QString> OnlineTranslator::s_genericLangu
+     {Hausa, QStringLiteral("ha")},
+     {Hawaiian, QStringLiteral("haw")},
+     {Hebrew, QStringLiteral("he")},
+-    {Hebrew, QStringLiteral("iw")},
+     {HillMari, QStringLiteral("mrj")},
+     {Hindi, QStringLiteral("hi")},
+     {Hmong, QStringLiteral("hmn")},
+-- 
+2.51.0
+

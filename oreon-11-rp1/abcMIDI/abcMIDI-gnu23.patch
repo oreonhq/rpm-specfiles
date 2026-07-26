@@ -1,0 +1,221 @@
+diff -up ./genmidi.h.gnu23 ./genmidi.h
+--- ./genmidi.h.gnu23	2025-02-16 20:30:44.000000000 -0500
++++ ./genmidi.h	2025-04-23 21:21:39.558432536 -0400
+@@ -23,6 +23,7 @@ extern void midi_noteoff();
+ extern void progress_sequence();
+ #endif
+ 
++int parse_stress_params (char *input);
+ 
+ /* introduced 2010-02-01 (feb 01) [SS] */
+ struct trackstruct {enum {NOTES, WORDS, NOTEWORDS, GCHORDS, DRUMS, DRONE} tracktype;
+diff -up ./Makefile.gnu23 ./Makefile
+--- ./Makefile.gnu23	2025-02-16 20:30:44.000000000 -0500
++++ ./Makefile	2025-04-23 21:21:39.558774383 -0400
+@@ -33,7 +33,7 @@
+ 
+ VERSION = @VERSION@
+ 
+-CC = gcc
++CC = gcc --std=gnu17
+ INSTALL = /usr/bin/install -c
+ INSTALL_DATA = ${INSTALL} -m 644
+ INSTALL_PROGRAM = ${INSTALL}
+diff -up ./midicopy.c.gnu23 ./midicopy.c
+--- ./midicopy.c.gnu23	2025-04-23 21:22:18.174069818 -0400
++++ ./midicopy.c	2025-04-23 21:22:29.021627006 -0400
+@@ -53,7 +53,6 @@
+ 
+ 
+ #define VERSION "1.40 August 11 2024 midicopy"
+-#include "midicopy.h"
+ #define NULLFUNC 0
+ #define NULL 0
+ 
+@@ -63,6 +62,7 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#include "midicopy.h"
+ 
+ 
+ /* Functions to be called while processing the MIDI file. */
+diff -up ./midicopy.h.gnu23 ./midicopy.h
+--- ./midicopy.h.gnu23	2025-02-16 20:30:44.000000000 -0500
++++ ./midicopy.h	2025-04-23 21:21:39.559005865 -0400
+@@ -1,7 +1,8 @@
+ /* definitions for MIDI file writing code */
+ float mf_ticks2sec();
+ long mf_sec2ticks();
+-void mfwrite();
++/* FIXME: also defined in midifile.h */
++void mfwrite(int format,int ntracks,int division,FILE *fp);
+ void mfread();
+ 
+ /* MIDI status commands most significant bit is 1 */
+diff -up ./midifile.c.gnu23 ./midifile.c
+--- ./midifile.c.gnu23	2025-02-16 20:30:44.000000000 -0500
++++ ./midifile.c	2025-04-23 21:21:39.559270736 -0400
+@@ -80,11 +80,11 @@ void (*Mf_error)() = NULLFUNC;
+ void (*Mf_header)() = NULLFUNC;
+ void (*Mf_trackstart)() = NULLFUNC;
+ void (*Mf_trackend)() = NULLFUNC;
+-void (*Mf_noteon)() = NULLFUNC;
+-void (*Mf_noteoff)() = NULLFUNC;
+-void (*Mf_pressure)() = NULLFUNC;
+-void (*Mf_parameter)() = NULLFUNC;
+-void (*Mf_pitchbend)() = NULLFUNC;
++void (*Mf_noteon)(int,int,int) = NULLFUNC;
++void (*Mf_noteoff)(int,int,int) = NULLFUNC;
++void (*Mf_pressure)(int,int,int) = NULLFUNC;
++void (*Mf_parameter)(int,int,int) = NULLFUNC;
++void (*Mf_pitchbend)(int,int,int) = NULLFUNC;
+ void (*Mf_program)() = NULLFUNC;
+ void (*Mf_chanpressure)() = NULLFUNC;
+ void (*Mf_sysex)() = NULLFUNC;
+@@ -101,7 +101,7 @@ void (*Mf_text)() = NULLFUNC;
+ 
+ /* Functions to implement in order to write a MIDI file */
+ int (*Mf_putc)() = NULLFUNC;
+-long (*Mf_writetrack)() = NULLFUNC;
++long (*Mf_writetrack)(int) = NULLFUNC;
+ int (*Mf_writetempotrack)() = NULLFUNC;
+ 
+ int Mf_nomerge = 0;    /* 1 => continue'ed system exclusives are */
+@@ -128,7 +128,7 @@ static void readheader();
+ static void badbyte();
+ static void metaevent();
+ static void sysex();
+-static void chanmessage();
++static void chanmessage(int,int,int);
+ static void msginit();
+ static void msgadd();
+ static void biggermsg();
+@@ -580,8 +580,7 @@ read16bit()
+ }
+ 
+ /* static */
+-void mferror(s)
+-	char *s;
++void mferror(char *s)
+ {
+   if ( Mf_error ) {
+     (*Mf_error)(s);
+diff -up ./midifile.h.gnu23 ./midifile.h
+--- ./midifile.h.gnu23	2025-02-16 20:30:44.000000000 -0500
++++ ./midifile.h	2025-04-23 21:21:39.559575903 -0400
+@@ -28,16 +28,16 @@ extern int Mf_nomerge;
+ 
+ /* definitions for MIDI file writing code */
+ extern int (*Mf_putc)();
+-extern long (*Mf_writetrack)();
++extern long (*Mf_writetrack)(int);
+ extern int (*Mf_writetempotrack)();
+ float mf_ticks2sec();
+ long mf_sec2ticks();
+-void mfwrite();
++void mfwrite(int format,int ntracks,int division,FILE *fp);
+ void mfread();
+ int mf_write_meta_event();
+ int mf_write_midi_event();
+ void mf_write_tempo();
+-void mferror();
++void mferror(char *s);
+ 
+ /* MIDI status commands most significant bit is 1 */
+ #define note_off         	0x80
+diff -up ./parseabc.h.gnu23 ./parseabc.h
+--- ./parseabc.h.gnu23	2025-02-16 20:30:44.000000000 -0500
++++ ./parseabc.h	2025-04-23 21:21:39.559857281 -0400
+@@ -171,11 +171,11 @@ extern void event_acciaccatura();
+ extern void event_start_extended_overlay();
+ extern void event_stop_extended_overlay();
+ extern void event_split_voice();
+-extern void event_temperament();
++extern void event_temperament(char *line);
+ extern void print_voicecodes(void);
+ extern void init_abbreviations();
+ extern void free_abbreviations();
+-extern void parsefile();
++extern void parsefile(char *name);
+ extern int parsetune();
+ #else
+ extern void event_init();
+@@ -239,6 +239,7 @@ extern void event_split_voice();
+ extern void print_voicecodes();
+ extern void init_abbreviations();
+ extern void free_abbreviations();
+-extern void parsefile();
++extern void parsefile(char *name);
+ extern int parsetune();
+ #endif
++extern int readaln (char out[], char **in, int limit);
+diff -up ./store.c.gnu23 ./store.c
+--- ./store.c.gnu23	2025-02-16 20:30:44.000000000 -0500
++++ ./store.c	2025-04-23 21:21:39.560510000 -0400
+@@ -157,9 +157,6 @@ void dotie()
+ void fix_enclosed_note_lengths()
+ int patchup_chordtie()
+ void tiefix()
+-void applygrace()
+-void applygrace_orig()
+-void applygrace_new()
+ void dograce()
+ void zerobar()
+ void event_bar()
+@@ -503,7 +500,7 @@ static void addfeature(int f,int p,int n
+ static void replacefeature(int f, int p, int n, int d, int loc);
+ void insertfeature(int f, int p, int n, int d, int loc);
+ static void textfeature(int type, char *s);
+-extern long writetrack();
++extern long writetrack(int);
+ void init_drum_map();
+ static void fix_enclosed_note_lengths(int from, int end);
+ static int patchup_chordtie(int chordstart,int chordend);
+@@ -511,7 +508,6 @@ static void copymap(struct voicecontext*
+ void init_stresspat();
+ void beat_modifier(int);
+ void readstressfile (char * filename);
+-int parse_stress_params();
+ void calculate_stress_parameters();
+ extern int inbody; /* from parseabc.c [SS] 2009-12-18 */
+ extern int lineposition; /* from parseabc.c [SS] 2011-07-18 */
+@@ -1884,7 +1880,7 @@ j = 1;
+ k = 0;
+ while (j > 0) {
+     skipspace(&p);
+-    j = readaln(&name,&p,31);
++    j = readaln(name,&p,31);
+     if (j < 1) break;
+     for (i=0; i<nmidicmd;i++) {
+ 	  if (strcmp(midicmdname[i],name) == 0) break;
+@@ -5134,8 +5130,7 @@ if (verbose >3) printf("tiefix finished\
+ static void applygrace_orig(int);
+ static void applygrace_new(int);
+ 
+-static void applygrace(place)
+-int place;
++static void applygrace(int place)
+ {
+ if (gfact_method)  applygrace_orig(place); 
+ else applygrace_new(place);
+@@ -5146,8 +5141,7 @@ removefeatures(start,end);
+ } /* [SS]  2021-01-24 */
+ 
+ 
+-static void applygrace_orig(place)
+-int place;
++static void applygrace_orig(int place)
+ /* assign lengths to grace notes before generating MIDI */
+ /* This version adjusts the length of the grace notes
+  * based on the length of the following note, the
+@@ -5257,8 +5251,7 @@ int place;
+   };
+ }
+ 
+-static void applygrace_new(place)
+-int place;
++static void applygrace_new(int place)
+ /* assign lengths to grace notes before generating MIDI */
+ /* In this version each grace note has a predetermined
+  * length, eg, (1/64 th note) and the total length of

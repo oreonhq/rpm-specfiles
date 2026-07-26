@@ -1,0 +1,13 @@
+diff --git a/build.xml b/build.xml
+index 51930c5..318bf38 100644
+--- a/build.xml
++++ b/build.xml
+@@ -15,7 +15,7 @@
+ 
+ 	<target name="classes">
+ 		<mkdir dir="build/classes" />
+-		<javac destdir="build/classes" source="1.5" target="1.5" debug="on"
++		<javac destdir="build/classes" source="1.8" target="1.8" debug="on"
+ 			includeantruntime="false">
+ 			<src path="src/java" />
+ 			<classpath>

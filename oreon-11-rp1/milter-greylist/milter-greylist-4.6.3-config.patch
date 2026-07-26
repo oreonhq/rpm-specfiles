@@ -1,0 +1,31 @@
+--- greylist.conf
++++ greylist.conf
+@@ -5,11 +5,12 @@
+ # $Id: greylist.conf,v 1.50 2013/08/13 12:45:08 manu Exp $
+ #
+ 
+-pidfile "/var/run/milter-greylist.pid"
++#pidfile "/var/run/milter-greylist.pid"
+ socket "/var/milter-greylist/milter-greylist.sock"
+ dumpfile "/var/milter-greylist/greylist.db" 600
++geoip2db "/usr/share/GeoIP/GeoLite2-Country.mmdb"
+ dumpfreq 1
+-user "smmsp"
++user "grmilter"
+ 
+ 
+ # Log milter-greylist activity to a file
+--- rc-redhat.sh.in
++++ rc-redhat.sh.in
+@@ -13,10 +13,9 @@
+ . /etc/init.d/functions
+ 
+ pidfile="/var/milter-greylist/milter-greylist.pid"
+-socket="/var/milter-greylist/milter-greylist.sock"
+ user="@USER@"
+ hardstopdelay=5
+-OPTIONS="-u $user -P $pidfile -p $socket"
++OPTIONS="-u $user -P $pidfile"
+ if [ -f /etc/sysconfig/milter-greylist ]
+ then
+     . /etc/sysconfig/milter-greylist

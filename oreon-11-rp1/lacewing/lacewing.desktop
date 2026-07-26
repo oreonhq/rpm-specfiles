@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Lacewing
+Comment=A cross between Spacewar and Centipede
+Exec=lacewing
+Icon=lacewing
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ArcadeGame;

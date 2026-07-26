@@ -1,0 +1,283 @@
+diff -ur Pachi/src/definitions.h Pachi.new/src/definitions.h
+--- Pachi/src/definitions.h	2004-03-28 15:17:11.000000000 +0200
++++ Pachi.new/src/definitions.h	2007-01-11 16:19:58.000000000 +0100
+@@ -65,6 +65,7 @@
+ int menuvalue = 1;
+ int fullscreen = 1;
+ int dificulty = 2;
++int sound_available = 1;
+ 
+ // --- Monsters related
+ #define M_w 48
+diff -ur Pachi/src/file.c Pachi.new/src/file.c
+--- Pachi/src/file.c	2007-01-11 16:36:21.000000000 +0100
++++ Pachi.new/src/file.c	2007-01-11 16:35:34.000000000 +0100
+@@ -115,7 +115,6 @@
+ 	    lobyte=getc(file);
+ 	    scorescore[a]=(vhibyte*65536)+(hibyte*256)+lobyte;
+     }
+-    fclose(file);
+ }
+ void unload_hiscoredata()
+ {
+@@ -152,7 +151,6 @@
+ 	putc(hibyte,file);
+ 	putc(lobyte,file);
+     }
+-    fclose(file);
+ }
+ 
+ void load_helpgfx()
+diff -ur Pachi/src/fx.c Pachi.new/src/fx.c
+--- Pachi/src/fx.c	2004-03-28 22:48:37.000000000 +0200
++++ Pachi.new/src/fx.c	2007-01-11 16:28:37.000000000 +0100
+@@ -98,14 +98,14 @@
+ 
+ void screen_fx()
+ {
+-    Mix_Volume(7,128);
++    if(sound_available) Mix_Volume(7,128);
+     if(seconds==15 || seconds==45)
+     {
+ 	if(stage<6) // en el cementerio
+ 	{
+ 	    if(int(oldsec-1)==int(seconds))
+ 	    {
+-		Mix_PlayChannel(7,storm,0);
++		if(sound_available) Mix_PlayChannel(7,storm,0);
+ 		blinkscreen(220,220,255,128);
+ 		load_room();
+ 		print_room();
+diff -ur Pachi/src/game.c Pachi.new/src/game.c
+--- Pachi/src/game.c	2007-01-11 16:36:21.000000000 +0100
++++ Pachi.new/src/game.c	2007-01-11 16:28:37.000000000 +0100
+@@ -50,7 +50,7 @@
+ 
+     while(escape_exit==0)
+     {
+-	if(!Mix_PlayingMusic())
++	if(sound_available && !Mix_PlayingMusic())
+ 	    Mix_PlayMusic(music,0);
+ 	credits_events();
+ 	print_credits();
+@@ -108,8 +108,11 @@
+ 	    gametimer--;
+ 	    minutes = int(gametimer/60);
+     	    seconds = int(gametimer-minutes*60);
+-	    Mix_Volume(0,100);
+-	    Mix_PlayChannel(0,timer,0);
++	    if(sound_available)
++	    {
++	        Mix_Volume(0,100);
++	        Mix_PlayChannel(0,timer,0);
++	    }
+ 	    print_monitor();
+ 	    print_timer();
+ 	    SDL_Delay(20);
+@@ -222,7 +225,7 @@
+ }
+ void play_music()
+ {
+-    if(!Mix_PlayingMusic())
++    if(sound_available && !Mix_PlayingMusic())
+ 	Mix_PlayMusic(music,0);
+ }
+ 
+@@ -236,8 +239,11 @@
+ 	else
+ 	{
+ 	    respawned=0;
+-	    Mix_Volume(1,90);
+-	    Mix_PlayChannel(1,respawnsnd,1);
++	    if(sound_available)
++	    {
++	        Mix_Volume(1,90);
++	        Mix_PlayChannel(1,respawnsnd,1);
++	    }
+ 	    while(respawned==0)
+     	    {
+ 		delta_time();
+@@ -270,10 +276,10 @@
+     print_text(scorefont,screen,16,16,224,564,"TIME   :");
+     if(minutes==0 && seconds <=10)
+     {
+-	Mix_Volume(0,100);
++	if(sound_available) Mix_Volume(0,100);
+     	font=scorefont2;
+ 	if((int(oldsec-1)==int(seconds))&& seconds > 0)
+-	    Mix_PlayChannel(0,timer,0);	
++	    if(sound_available) Mix_PlayChannel(0,timer,0);	
+     }
+     else
+ 	font=scorefont1;
+diff -ur Pachi/src/init.c Pachi.new/src/init.c
+--- Pachi/src/init.c	2004-03-28 20:19:04.000000000 +0200
++++ Pachi.new/src/init.c	2007-01-11 16:28:37.000000000 +0100
+@@ -29,6 +29,7 @@
+     if(Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 2048) < 0)
+     {
+         fprintf(stderr,"Warning: Couldn't set 44100 Hz 16-bit audio\n: %s\n", SDL_GetError());
++        sound_available = 0;
+     }
+     SDL_WM_SetIcon(SDL_LoadBMP(DATADIR"/Tgfx/icon.bmp"),NULL);
+ 
+diff -ur Pachi/src/input.c Pachi.new/src/input.c
+--- Pachi/src/input.c	2007-01-11 16:36:21.000000000 +0100
++++ Pachi.new/src/input.c	2007-01-11 16:28:37.000000000 +0100
+@@ -101,7 +101,7 @@
+ {
+     SDL_Event event;
+     Uint8 *keys;
+-    Mix_Volume(0,100);
++    if(sound_available) Mix_Volume(0,100);
+     while(SDL_PollEvent(&event)==1)
+     {
+ 	if(event.type==SDL_QUIT)
+@@ -111,7 +111,7 @@
+ 	keys = SDL_GetKeyState(NULL);
+         if(keys[SDLK_DOWN] || keys[SDLK_KP2] || keys[SDLK_a] || joypos[JOY_DOWN])
+ 	{
+-	    Mix_PlayChannel(0,option,0);
++	    if(sound_available) Mix_PlayChannel(0,option,0);
+     	    if(menuvalue == 7)
+ 		menuvalue=1;
+ 	    else
+@@ -119,7 +119,7 @@
+ 	}
+ 	if(keys[SDLK_UP] || keys[SDLK_KP8] || keys[SDLK_q] || joypos[JOY_UP])
+ 	{
+-	    Mix_PlayChannel(0,option,0);
++	    if(sound_available) Mix_PlayChannel(0,option,0);
+ 	    if(menuvalue == 1)
+ 		menuvalue = 7;
+ 	    else
+@@ -127,7 +127,7 @@
+         }
+ 	if(keys[SDLK_SPACE] || keys[SDLK_RETURN] || joypos[JOY_BUTTON0])
+ 	{
+-    	    Mix_PlayChannel(0,option,0);
++    	    if(sound_available) Mix_PlayChannel(0,option,0);
+ 
+ 		switch(menuvalue)
+ 		{
+@@ -387,8 +387,11 @@
+ 		mplayer[dificulty].upflag=1;
+ 		mplayer[dificulty].downflag=0;
+     		mplayer[dificulty].jump = 1;
+-		Mix_Volume(0,100);
+-		Mix_PlayChannel(0,jump,0);
++		if(sound_available)
++		{
++		    Mix_Volume(0,100);
++		    Mix_PlayChannel(0,jump,0);
++		}
+ 	    }
+ 	}
+ 	if(keys[SDLK_ESCAPE])
+diff -ur Pachi/src/menu.c Pachi.new/src/menu.c
+--- Pachi/src/menu.c	2004-03-28 22:51:18.000000000 +0200
++++ Pachi.new/src/menu.c	2007-01-11 16:28:37.000000000 +0100
+@@ -18,7 +18,7 @@
+ 
+ void do_code()
+ {
+-    Mix_Volume(3,100);
++    if(sound_available) Mix_Volume(3,100);
+     SDL_Rect coderect;
+     coderect.x=300;
+     coderect.y=232;
+@@ -54,11 +54,14 @@
+ 	    startstage=n-1;
+ 	    right=1;
+ 	}
+-    }
+-    if(right==1)    
+-	Mix_PlayChannel(3,coderight,0);
+-    else
+-	Mix_PlayChannel(3,codewrong,0);
++    }
++    if (sound_available)
++    {
++        if(right==1)    
++	    Mix_PlayChannel(3,coderight,0);
++        else
++  	    Mix_PlayChannel(3,codewrong,0);
++    }
+ 
+     setback();
+ }
+@@ -108,7 +111,7 @@
+ void menu_loop()
+ {
+     do_menu();
+-    if(!Mix_PlayingMusic())
++    if(sound_available && !Mix_PlayingMusic())
+ 	Mix_PlayMusic(music,0);
+     SDL_Delay(1);
+ }
+diff -ur Pachi/src/player.c Pachi.new/src/player.c
+--- Pachi/src/player.c	2004-03-28 22:52:47.000000000 +0200
++++ Pachi.new/src/player.c	2007-01-11 16:28:37.000000000 +0100
+@@ -18,8 +18,11 @@
+ 
+ void loose_life()
+ {
+-    Mix_Volume(4,100);
+-    Mix_PlayChannel(4,die,0);
++    if(sound_available)
++    {
++        Mix_Volume(4,100);
++        Mix_PlayChannel(4,die,0);
++    }
+     blinkscreen(255,0,0,0);
+     mplayer[dificulty].x=mplayer[dificulty].start_x;
+     mplayer[dificulty].y=mplayer[dificulty].start_y;
+@@ -53,8 +56,11 @@
+ 	    if(sequence==mobject[(R_current-1)*5+n].seq)
+ 	    {
+ 		gametimer=gametimer+5;
+-		Mix_Volume(6,128);
+-		Mix_PlayChannel(6,objseq,0);
++		if(sound_available)
++		{
++		    Mix_Volume(6,128);
++		    Mix_PlayChannel(6,objseq,0);
++		}
+ 	    }
+ 	    mobject[(R_current-1)*5+n].type = 0;
+ 	    mobject[(R_current-1)*5+n].x = 0;
+@@ -65,15 +71,15 @@
+     }
+     
+     mplayer[dificulty].objects++;
+-    Mix_Volume(1,100);
++    if(sound_available) Mix_Volume(1,100);
+     if(mplayer[dificulty].objects==mstage[stage-1].objects)
+     {
+ 	stagecompleted = 1;
+ 	blinkscreen(255,255,255,0);
+-	Mix_PlayChannel(1,stageready,0);
++	if(sound_available) Mix_PlayChannel(1,stageready,0);
+     }
+     else
+-	Mix_PlayChannel(1,obj,0);
++	if(sound_available) Mix_PlayChannel(1,obj,0);
+     print_room();
+ }
+ 
+@@ -81,9 +87,12 @@
+ {
+     if((mroom.data[x][y] >= 239) && (stagecompleted == 1))
+     {
+-	Mix_HaltMusic();
+-	Mix_Volume(0,100);
+-	Mix_PlayChannel(0,exitlevel,0);
++	if(sound_available)
++	{
++	    Mix_HaltMusic();
++	    Mix_Volume(0,100);
++	    Mix_PlayChannel(0,exitlevel,0);
++	}
+ 	mplayer[dificulty].stageup=1;
+     }
+     if((mroom.data[x][y] >= 220) && (mroom.data[x][y] < 239))

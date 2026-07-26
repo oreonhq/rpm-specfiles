@@ -1,0 +1,11 @@
+--- a/data/default-preferences.xml	2020-04-08 21:52:33.420792394 +0200
++++ b/data/default-preferences.xml	2020-04-08 21:52:52.632063488 +0200
+@@ -1,7 +1,7 @@
+ <preferences>
+ 	<pref name="Session.RememberCursorPosition">True</pref>
+ 	<pref name="Tools.ConversionTable.LEDecoding">False</pref>
+-	<pref name="Default.EditMode">Insert</pref>
++	<pref name="Default.EditMode">Overwrite</pref>
+ 	<pref name="Tools.ConversionTable.Show">True</pref>
+ 	<pref name="Tools.Statistics.Show">False</pref>
+ 	<pref name="Session.RememberWindowGeometry">True</pref>

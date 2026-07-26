@@ -1,0 +1,11 @@
+--- context-free3.4.1/Makefile~	2025-01-08 13:49:10.942056778 -0600
++++ context-free3.4.1/Makefile	2025-01-08 13:52:06.783315052 -0600
+@@ -134,7 +134,7 @@
+ 
+ cfdg: $(OBJS)
+ 	$(LINK.o) $^ $(LINKFLAGS) -o $@
+-	strip $@
++#	strip $@
+ 
+ 
+ #

@@ -1,0 +1,152 @@
+Index: hunt-1.5/c/list.c
+===================================================================
+--- hunt-1.5.orig/c/list.c
++++ hunt-1.5/c/list.c
+@@ -239,7 +239,7 @@ void *list_at(struct list *l, int nr)
+ 	return retval;
+ }
+ 
+-static inline int __func_remove(int nr, void *p, void *m)
++static inline int __func_remove(long nr, void *p, void *m)
+ {
+ 	if (p == m)
+ 		return 1;
+@@ -247,16 +247,16 @@ static inline int __func_remove(int nr, 
+ 		return 0;
+ }
+ 
+-static inline int __func_remove_at(int nr, void *p, void *m)
++static inline int __func_remove_at(long nr, void *p, void *m)
+ {
+-	if (nr == (int) m)
++	if (nr == (long) m)
+ 		return 1;
+ 	else
+ 		return 0;
+ }
+ 
+ static inline void *__list_remove(struct list *l, 
+-				  int (*func)(int nr, void *, void *m), void *m)
++				  int (*func)(long nr, void *, void *m), void *m)
+ {
+ 	void *retval;
+ 	void **p;
+@@ -292,13 +292,13 @@ void *list_remove(struct list *l, void *
+ 	return __list_remove(l, __func_remove, m);
+ }
+ 
+-void *list_remove_at(struct list *l, int nr)
++void *list_remove_at(struct list *l, long nr)
+ {
+ 	return __list_remove(l, __func_remove_at, (void *) nr);
+ }
+ 
+ void *list_remove_func(struct list *l, 
+-		       int (*func)(int nr, void *, void *m), void *m)
++		       int (*func)(long nr, void *, void *m), void *m)
+ {
+ 	return __list_remove(l, func, m);
+ }
+Index: hunt-1.5/c/list.h
+===================================================================
+--- hunt-1.5.orig/c/list.h
++++ hunt-1.5/c/list.h
+@@ -79,8 +79,8 @@ void *list_consume_rel(struct list *l, c
+ void *list_peek(struct list *l);
+ void *list_at(struct list *l, int nr);
+ void *list_remove(struct list *l, void *m);
+-void *list_remove_at(struct list *l, int nr);
+-void *list_remove_func(struct list *l, int (*func)(int nr, void *, void *m), void *m);
++void *list_remove_at(struct list *l, long nr);
++void *list_remove_func(struct list *l, int (*func)(long nr, void *, void *m), void *m);
+ int list_count(struct list *l);
+ 
+ void list_lock(struct list *l);
+Index: hunt-1.5/hunt.h
+===================================================================
+--- hunt-1.5.orig/hunt.h
++++ hunt-1.5/hunt.h
+@@ -374,7 +374,7 @@ void print_new_conn_ind(int add_new);
+ #define MODE_BOTH	2
+ int sdb_to_int(char c);
+ char int_to_sdb(int i);
+-char *sdbmode_to_char(int mode);
++char *sdbmode_to_char(long mode);
+ 
+ /*
+  * util
+Index: hunt-1.5/menu.c
+===================================================================
+--- hunt-1.5.orig/menu.c
++++ hunt-1.5/menu.c
+@@ -519,7 +519,7 @@ int menu(char *head, char *str_menu, cha
+ 	printf("\n");
+ 	if (verbose) {
+ 		set_tty_color_bg(COLOR_BLACK, COLOR_WHITE);
+-		printf("%*s", strlen(head) + 9, " ");
++		printf("%*s", (int)(strlen(head) + 9), " ");
+ 		printf("droppkt %u, other proto pkt %u",
+ 		       pkts_dropped, pkts_unhandled);
+ 		set_tty_color_bg(COLOR_WHITE, COLOR_BLACK);
+@@ -618,7 +618,7 @@ int sdb_to_int(char mode)
+ 	return retval;
+ }
+ 
+-char *sdbmode_to_char(int mode)
++char *sdbmode_to_char(long mode)
+ {
+ 	char *str_mode;
+ 	
+Index: hunt-1.5/resolv.c
+===================================================================
+--- hunt-1.5.orig/resolv.c
++++ hunt-1.5/resolv.c
+@@ -43,7 +43,7 @@ struct slave {
+ #define MAX_SLAVES	5
+ #define SLAVE_MAX_IDLE	(1 * 60)
+ 
+-static int   fd_req = -1;	/* pipe to resolver daemon */
++static long  fd_req = -1;	/* pipe to resolver daemon */
+ static pid_t pid_req = 0;	/* pid of resolver daemon */
+ static pid_t pid_parent = 0;
+ 
+@@ -128,7 +128,7 @@ static void *update_thr(void *arg)
+ {
+ 	struct timeval timeout;
+ 	fd_set rdset;
+-	int fd = (int) arg;
++	int fd = (long) arg;
+ 	struct res r;
+ 	char buf[256];
+ 	int update_thr_run;
+Index: hunt-1.5/rstd.c
+===================================================================
+--- hunt-1.5.orig/rstd.c
++++ hunt-1.5/rstd.c
+@@ -23,7 +23,7 @@ struct rst_db_item {
+ 	unsigned int dst_mask;
+ 	unsigned int src_ports[MAX_PORTS + 1];
+ 	unsigned int dst_ports[MAX_PORTS + 1];
+-	int rst_mode;
++	long rst_mode;
+ 	int rst_only_syn;
+ 	struct rst_db_item *next;
+ };
+@@ -97,7 +97,7 @@ static void *rst_daemon_thr(void *arg)
+ 	struct user_conn_info uci;
+ 	struct packet *p;
+ 	struct timespec ts;
+-	int rst_mode;
++	long rst_mode;
+ 
+ 	pthread_sigmask(SIG_BLOCK, &intr_mask, NULL);
+ 	setpriority(PRIO_PROCESS, getpid(), 0);
+@@ -137,7 +137,7 @@ static void *rst_daemon_thr(void *arg)
+ 		} else
+ 			ci = pci;
+ 		packet_free(p);
+-		rst_mode = (int) p->p_arg[MODULE_RSTD];
++		rst_mode = (long) p->p_arg[MODULE_RSTD];
+ 		ts.tv_sec = 0;
+ 		ts.tv_nsec = 100000000;
+ 		switch (rst_mode) {

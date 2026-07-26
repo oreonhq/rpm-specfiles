@@ -1,0 +1,46 @@
+--- cohomolo-1.6.11/standalone/progs.d/exc.c.orig	2023-01-03 08:17:48.000000000 -0700
++++ cohomolo-1.6.11/standalone/progs.d/exc.c	2023-01-06 19:48:52.358377408 -0700
+@@ -8,6 +8,8 @@ extern short **simcos[], pinv[], gno[],
+     cp[], bno, invg[], **mat[], mwl2, mwdl, mlwdl, maxcos, dim, prime, *spv,
+     **spm, ng, rwl, nb;
+ extern FILE *ip, *op;
++extern short addsv(short,short *);
++extern short image(short);
+ 
+ int gc(void)
+ /* Garbage collection of coefficients by writing and rereading */
+--- cohomolo-1.6.11/standalone/progs.d/gpp.c.orig	2023-01-03 08:17:48.000000000 -0700
++++ cohomolo-1.6.11/standalone/progs.d/gpp.c	2023-01-06 19:47:50.407054642 -0700
+@@ -21,7 +21,7 @@ FILE *     ip, *op;
+    cp[1]cp[2]..cp[*cp]. This product can be evaluated by the procedure image
+    in permfns.c
+ */
+-short gpprog(void)
++int gpprog(void)
+ {
+   short i, j, k, l, m, nperms, nb, jobt, np2, seek, cord, ocord, given,
+       ordknown, trivrel, lsv, u, v, w, x, y, z, mxp, mnb, bno, id;
+--- cohomolo-1.6.11/standalone/progs.d/nqp3.c.orig	2023-01-03 08:17:48.000000000 -0700
++++ cohomolo-1.6.11/standalone/progs.d/nqp3.c	2023-01-06 19:49:15.885740607 -0700
+@@ -3,7 +3,8 @@
+ extern char  inf[], inf1[], outf1[];
+ extern short facexp, prime, exp, *rpf, *rpb, *eexpnt, **pcb, dim, onng,
+     expnt[], **comptr[], *vec[], **mat[], cp[], *wf, *wc, **extno, **subno,
+-    chsdim, chpdim, gap;
++    chsdim, chpdim;
++extern char gap;
+ extern FILE *ip, *op;
+ 
+ int comprels(void)
+--- cohomolo-1.6.11/standalone/progs.d/pcscfns.c.orig	2023-01-03 08:17:48.000000000 -0700
++++ cohomolo-1.6.11/standalone/progs.d/pcscfns.c	2023-01-06 19:49:38.909117447 -0700
+@@ -2,6 +2,9 @@
+ 
+ extern short npt, nb, npt1, exp, prime, pinv[], cp[], power[], wt[], base[],
+     ngno[], igno[], *svptr[], *pptr[], d1[];
++extern short addsv(short,short *);
++extern short image(short);
++extern short invert(short *,short *);
+ 
+ /* Let the central series for P be P=P(n)>...>P(1)>P(0)=1. The procedures
+    in this file express a permutation g in P in in its normal form in the

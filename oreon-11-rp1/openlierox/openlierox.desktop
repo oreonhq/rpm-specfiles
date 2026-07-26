@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=OpenLieroX
+Comment=Addictive realtime multiplayer 2D shoot-em-up
+Exec=openlierox
+Icon=openlierox
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ActionGame;StrategyGame;
+Keywords=game;lierox;multi-player;shoot-em-up;deathmatch;

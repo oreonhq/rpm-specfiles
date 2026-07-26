@@ -1,0 +1,16 @@
+diff -up kwalletmanager-15.04.3/src/konfigurator/konfigurator.cpp.defaults kwalletmanager-15.04.3/src/konfigurator/konfigurator.cpp
+--- kwalletmanager-15.04.3/src/konfigurator/konfigurator.cpp.defaults	2015-01-20 21:54:22.000000000 -0600
++++ kwalletmanager-15.04.3/src/konfigurator/konfigurator.cpp	2016-01-21 13:55:53.452697911 -0600
+@@ -347,10 +347,10 @@ void KWalletConfig::save() {
+ void KWalletConfig::defaults() {
+ 	_wcw->_enabled->setChecked(true);
+ 	_wcw->_openPrompt->setChecked(false);
+-	_wcw->_launchManager->setChecked(true);
++	_wcw->_launchManager->setChecked(false);
+ 	_wcw->_autocloseManager->setChecked(false);
+ 	_wcw->_screensaverLock->setChecked(false);
+-	_wcw->_autoclose->setChecked(true);
++	_wcw->_autoclose->setChecked(false);
+ 	_wcw->_closeIdle->setChecked(false);
+ 	_wcw->_idleTime->setValue(10);
+ 	_wcw->_defaultWallet->setCurrentIndex(0);

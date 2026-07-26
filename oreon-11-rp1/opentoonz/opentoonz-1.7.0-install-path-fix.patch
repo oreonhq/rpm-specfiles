@@ -1,0 +1,74 @@
+diff --git a/toonz/sources/toonz/CMakeLists.txt b/toonz/sources/toonz/CMakeLists.txt
+index d3aee491..dde69079 100644
+--- a/toonz/sources/toonz/CMakeLists.txt
++++ b/toonz/sources/toonz/CMakeLists.txt
+@@ -660,21 +660,20 @@ elseif(BUILD_ENV_UNIXLIKE AND NOT BUILD_TARGET_WIN)
+     install(
+         TARGETS
+             OpenToonz
+-        DESTINATION bin
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+     )
+ 
+     # Shell script that copies files to the home directory as needed
+     # and sets the library preload path.
+     file(WRITE ${CMAKE_BINARY_DIR}/bin/opentoonz
+ "#!/bin/sh
+-OPENTOONZ_BASE=\$(dirname \"\$0\")/..
+ 
+ if [ ! -d \$HOME/.config/OpenToonz ]; then
+     mkdir -p \$HOME/.config/OpenToonz
+ fi
+ 
+ if [ ! -d \$HOME/.config/OpenToonz/stuff ]; then
+-    cp -r \$OPENTOONZ_BASE/share/opentoonz/stuff \$HOME/.config/OpenToonz
++    cp -r ${SHARE_INSTALL_PREFIX}/opentoonz/stuff \$HOME/.config/OpenToonz
+ fi
+ 
+ if [ ! -d \$HOME/.config/OpenToonz/stuff/projects/library ]; then
+@@ -701,9 +700,9 @@ TOONZSTUDIOPALETTE=\"\$HOME/.config/OpenToonz/stuff/studiopalette\"
+ EOF
+ fi
+ 
+-export ${PRELOAD_VARIABLE}=\${OPENTOONZ_BASE}/lib/opentoonz:\${${PRELOAD_VARIABLE}}
++export ${PRELOAD_VARIABLE}=${LIB_INSTALL_DIR}/opentoonz:\${${PRELOAD_VARIABLE}}
+ 
+-exec \$OPENTOONZ_BASE/bin/OpenToonz \"\$@\"
++exec ${CMAKE_INSTALL_PREFIX}/bin/OpenToonz \"\$@\"
+ ")
+     # only needed for executing without installing
+     execute_process(COMMAND chmod +x ${CMAKE_BINARY_DIR}/bin/opentoonz)
+@@ -716,7 +715,7 @@ exec \$OPENTOONZ_BASE/bin/OpenToonz \"\$@\"
+             "$<TARGET_FILE:tconverter>"
+             "$<TARGET_FILE:tfarmcontroller>"
+             "$<TARGET_FILE:tfarmserver>"
+-        DESTINATION bin
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+     )
+ 
+     if(LZODRIVER_FOUND)
+@@ -724,7 +723,7 @@ exec \$OPENTOONZ_BASE/bin/OpenToonz \"\$@\"
+             PROGRAMS
+                 "$<TARGET_FILE:lzocompress>"
+                 "$<TARGET_FILE:lzodecompress>"
+-            DESTINATION bin
++            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+         )
+     endif()
+ 
+@@ -741,13 +740,13 @@ exec \$OPENTOONZ_BASE/bin/OpenToonz \"\$@\"
+             "$<TARGET_FILE:tnztools>"
+             "$<TARGET_FILE:tnzstdfx>"
+             "$<TARGET_FILE:tfarm>"
+-        DESTINATION lib/opentoonz
++        DESTINATION ${LIB_INSTALL_DIR}/opentoonz
+     )
+ 
+     install(
+         DIRECTORY
+             ${CMAKE_SOURCE_DIR}/../../stuff
+-        DESTINATION share/opentoonz
++        DESTINATION ${SHARE_INSTALL_PREFIX}/opentoonz
+     )
+ 
+ endif()

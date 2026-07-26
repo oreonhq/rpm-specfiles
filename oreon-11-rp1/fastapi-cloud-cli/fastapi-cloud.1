@@ -1,0 +1,54 @@
+.TH FASTAPI\-CLOUD "1" "March 2026" "" "User Commands"
+.SH NAME
+.B fastapi\ cloud
+\(en Manage FastAPI Cloud deployments. \[u1F60E]
+.SH SYNOPSIS
+.B fastapi\ cloud
+.RI [ OPTIONS ]
+.I COMMAND
+.RI [ ARGS ]...
+.SH OPTIONS
+.TP
+.B \-\-help
+Show a help message and exit.
+.SS COMMANDS
+.TP
+.B deploy
+Deploy a FastAPI app to FastAPI Cloud. \[u1F680]
+.TP
+.B link
+Link a local directory to an existing FastAPI Cloud app.
+.TP
+.B login
+Login to FastAPI Cloud. \[u1F680]
+.TP
+.B logs
+Stream or fetch logs from your deployed app.
+.TP
+.B logout
+Logout from FastAPI Cloud. \[u1F680]
+.TP
+.B whoami
+.TP
+.B unlink
+Unlink by deleting the
+.B .fastapicloud
+directory.
+.TP
+.B setup\-ci
+Configures a GitHub Actions workflow for deploying the app
+on push to the specified branch.
+.TP
+.B env
+.SH "SEE ALSO"
+.BR fastapi\-cloud\-deploy (1),
+.BR fastapi\-cloud\-link (1),
+.BR fastapi\-cloud\-login (1),
+.BR fastapi\-cloud\-logs (1),
+.BR fastapi\-cloud\-logout (1),
+.BR fastapi\-cloud\-whoami (1),
+.BR fastapi\-cloud\-unlink (1),
+.BR fastapi\-cloud\-setup\-ci (1),
+.BR fastapi\-cloud\-env (1)
+.P
+.BR fastapi (1)

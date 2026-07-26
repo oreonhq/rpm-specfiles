@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-alexander</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Alexander</name>
+	<summary>A Greek typeface inspired by Alexander Wilson</summary>
+	<description>
+		<p>
+			A text typeface using the Greek letters designed by Alexander Wilson
+			(1714-1786), a Scottish doctor, astronomer, and type founder, who established a
+			type foundry in Glasgow in 1744. The type was especially designed for an
+			edition of Homer’s epics, published in 1756-8 by Andrew and Robert Foulis,
+			printers to the University of Glasgow. A modern revival, Wilson Greek, was
+			designed by Matthew Carter in 1995. Peter S. Baker is also using Wilson’s Greek
+			type in his Junicode font for medieval scholars (2007).
+		</p>
+		<p>
+			Latin and Cyrillic are based on a Garamond typeface. The font covers the
+			Windows Glyph List, IPA Extensions, Greek Extended, Ancient Greek Numbers,
+			Byzantine and Ancient Greek Musical Notation, various typographic extras and
+			several Open Type features (Case-Sensitive Forms, Small Capitals, Subscript,
+			Superscript, Numerators, Denominators, Fractions, Old Style Figures, Historical
+			Forms, Stylistic Alternates, Ligatures).
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/Textfonts.htm</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

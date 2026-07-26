@@ -1,0 +1,11 @@
+diff -rupN PDAL-2.9.3-src/pdal/util/VSIIO.cpp PDAL-2.9.3-src-new/pdal/util/VSIIO.cpp
+--- PDAL-2.9.3-src/pdal/util/VSIIO.cpp	2025-11-26 18:44:18.000000000 +0100
++++ PDAL-2.9.3-src-new/pdal/util/VSIIO.cpp	2025-11-30 17:51:00.687220283 +0100
+@@ -32,6 +32,7 @@
+ * OF SUCH DAMAGE.
+ ****************************************************************************/
+ 
++#include <cstdint>
+ #include <memory>
+ #include <sstream>
+ #include <streambuf>

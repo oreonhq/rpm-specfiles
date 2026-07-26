@@ -1,0 +1,23 @@
+diff -urp -x po ebview-0.3.6.2.orig/src/eb.c ebview-0.3.6.2/src/eb.c
+--- ebview-0.3.6.2.orig/src/eb.c	2009-08-16 07:50:28.000000000 +0900
++++ ebview-0.3.6.2/src/eb.c	2022-11-23 22:17:18.692102770 +0900
+@@ -58,7 +58,7 @@ EB_Error_Code ebook_set_subbook(BOOK_INF
+ 
+ static gchar *ebook_message = NULL;
+ 
+-gchar *ebook_error_message(error_code)
++gchar *ebook_error_message(EB_Error_Code error_code)
+ {
+ 	const gchar *message;
+ 
+diff -urp -x po ebview-0.3.6.2.orig/src/shortcut.c ebview-0.3.6.2/src/shortcut.c
+--- ebview-0.3.6.2.orig/src/shortcut.c	2009-08-16 07:50:28.000000000 +0900
++++ ebview-0.3.6.2/src/shortcut.c	2022-11-23 22:18:02.002157521 +0900
+@@ -23,6 +23,7 @@
+ extern struct _shortcut_command commands[];
+ 
+ gint menuitem_handler(GtkWidget *widget, gchar *string);
++gboolean perform_shortcut_by_event(GdkEventKey *event);
+ 
+ GtkAccelGroup *accel_group=NULL;
+ 

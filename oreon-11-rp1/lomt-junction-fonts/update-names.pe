@@ -1,0 +1,12 @@
+#!/usr/local/bin/fontforge
+# Arguments
+# 1 font file name to open
+# 2 fontname to use
+# 3 Human readable full name
+# 4 font weight
+# 5 temporary file
+Open($1)
+# Update fontname, family, fullname, weight
+SetFontNames($2,$2,$3,$4)
+# Regenerate from sfd file to get names updated
+Generate($5)

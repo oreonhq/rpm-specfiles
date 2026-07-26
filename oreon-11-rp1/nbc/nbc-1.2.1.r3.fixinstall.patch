@@ -1,0 +1,23 @@
+diff -up ./Makefile.fixinstall ./Makefile
+--- ./Makefile.fixinstall	2011-03-01 21:16:01.486580002 -0500
++++ ./Makefile	2011-03-01 21:27:48.920579851 -0500
+@@ -10,4 +10,4 @@ realclean:
+ 
+ install:
+ 	cd NXT && make install
+-	gzip -9 doc/nbc.1 && install -m 644 doc/nbc.1.gz $(DISTDIR)$(SHARE)/man/man1 && gzip -d doc/nbc.1.gz
++	install -p -D -m 644 doc/nbc.1 $(DISTDIR)$(SHARE)/man/man1/nbc.1
+diff -up ./NXT/Makefile.fixinstall ./NXT/Makefile
+--- ./NXT/Makefile.fixinstall	2011-03-01 21:16:35.064579990 -0500
++++ ./NXT/Makefile	2011-03-01 21:16:45.500579295 -0500
+@@ -12,8 +12,9 @@ realclean:: clean
+ 	rm -f $(PROGRAMS) mkdata NBCCommonData.pas NXTDefsData.pas NXCDefsData.pas
+ 
+ install:: all
++	install -D -m 755 nbc $(DISTDIR)/usr/bin/nbc
+ 
+-PFLAGS=-S2cdghi -dRELEASE -vewnhi -l -Fu../ -Fu. -Fu../bricktools -dCAN_DOWNLOAD
++PFLAGS=-S2cdghi -dRELEASE -vewnhi -gw -l -Fu../ -Fu. -Fu../bricktools -dCAN_DOWNLOAD
+ 
+ 
+ # PTOOLPREFIX may differ on different platforms (e.g. /usr/local/bin/)

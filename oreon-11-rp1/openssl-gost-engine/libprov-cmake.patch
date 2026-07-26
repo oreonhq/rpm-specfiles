@@ -1,0 +1,10 @@
+diff --git a/libprov/CMakeLists.txt b/libprov/CMakeLists.txt
+index ba7843e..5c09ec4 100644
+--- a/libprov/CMakeLists.txt
++++ b/libprov/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+ project(libprov LANGUAGES C)
+ set(CMAKE_C_STANDARD 99)
+ 

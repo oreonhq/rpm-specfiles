@@ -1,0 +1,15 @@
+[Unit]
+Description=Update gsissh host key permissions
+Documentation=https://fedoraproject.org/wiki/Changes/SSHKeySignSuidBit
+Before=gsisshd.service
+After=gsissh-keygen.target
+ConditionPathExists=!/var/lib/.gsissh-host-keys-migration
+
+[Service]
+Type=oneshot
+ExecStart=-/usr/libexec/gsissh/ssh-host-keys-migration.sh
+ExecStart=touch /var/lib/.gsissh-host-keys-migration
+RemainAfterExit=yes
+
+[Install]
+WantedBy=gsisshd.service

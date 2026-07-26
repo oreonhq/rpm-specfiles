@@ -1,0 +1,22 @@
+diff -ur free42-nologo-3.0.17.orig/gtk/Makefile free42-nologo-3.0.17/gtk/Makefile
+--- free42-nologo-3.3.5.orig/gtk/Makefile	2022-12-14 14:03:02.000000000 -0500
++++ free42-nologo-3.3.5/gtk/Makefile	2023-01-24 20:40:20.089407399 -0500
+@@ -18,7 +18,7 @@
+ PKG_CONFIG ?= pkg-config
+ CXX_FOR_BUILD ?= $(CXX)
+ 
+-CFLAGS += -MMD \
++COMPILE_FLAGS = -MMD \
+ 	 -Wall \
+ 	 -Wno-parentheses \
+ 	 -Wno-sign-compare \
+@@ -37,7 +37,8 @@
+ 	 -DDECIMAL_GLOBAL_EXCEPTION_FLAGS_ACCESS_FUNCTIONS=1 \
+ 	 -DHAVE_SINCOS=1
+ 
+-CXXFLAGS = $(CFLAGS) \
++CFLAGS += $(COMPILE_FLAGS)
++CXXFLAGS += $(COMPILE_FLAGS) \
+ 	 -fno-exceptions \
+ 	 -fno-rtti \
+ 	 -D_WCHAR_T_DEFINED

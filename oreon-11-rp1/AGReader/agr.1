@@ -1,0 +1,119 @@
+.TH "agr" 1
+.SH NAME
+agr \- Displays AmigaGuide files in a terminal
+.SH SYNOPSIS
+.B agr
+.I guidefile
+.SH DESCRIPTION
+AmigaGuide Reader (\fBagr\fR for short) is a command line program for viewing
+AmigaGuide files, the native documentation format commonly used on the Amiga
+platform and its clones. It supports the complete v39 specification and a
+significant part of the v40 specification. AmigaGuide files traditionally use
+the .guide filename suffix.
+.SH OPTIONS
+.TP
+None
+.SH USAGE
+.PP
+In summary, \fBagr\fR primarily uses the TAB, CURSOR, SPACE and RETURN keys for
+navigation. An exhaustive list follows.
+.IP "q or ^C"
+Quits \fBagr\fR.
+.IP "CURSOR keys or i,j,k,l"
+Scroll the document up, down, left or right in cases where it is wider or
+longer than your terminal
+.IP "PAGE UP/PAGE DOWN"
+Scrolls the document up or down by one complete page, equal to the height of
+your terminal.
+.IP "HOME or g"
+Jumps to the top of the document node.
+.IP "END or G"
+Jumps to the bottom of the document node.
+.IP "SPACE or RETURN"
+Display the highlighted document node link.
+.IP "TAB"
+Highlight the next visible node link.
+.IP "a"
+Highlight the previous visible node link.
+.IP "F1"
+Display the Help Node if the AmigaGuide file has one defined. If you are using a
+terminal emulator under \fBX\fR(1), it may trap this key rendering it unavailable.
+.IP "F2"
+Display the Index Node if the AmigaGuide file has one defined.
+.IP "F3"
+Display the Table of Contents Node if the AmigaGuide file has one defined.
+.IP "n/b"
+Display the next  or previous document node. Please note, the next or previous
+document node does not follow the logical layout of the AmigaGuide document as
+it is displayed, but refers to the next or previous document node as
+sequentially written in the AmigaGuide file.
+.IP "+/-"
+Increase or decrease the TAB size (tabstop) by the equivalent of one space.
+.IP "t"
+Display the current TAB size (tabstop) in the lower right hand corner.
+.IP "r"
+Refresh the display.
+.IP "?"
+Display any meta data stored in the AmigaGuide file.
+.IP "v"
+Displays the contents of any broken links.
+.IP "="
+Displays the current line number in the lower right hand corner.
+.IP "C"
+Attempt to use native Amiga colouring for coloured text.
+.sp
+ANSI colours on the Amiga are not standardised but depend upon the current
+colourmap and palette in use. Thus if the user changes the colours used by
+their desktop environment, the ANSI colours change too. This command attempts
+to convert the colours displayed in \fBagr\fR from standard ANSI colours to
+those one would see by default on AmigaOS 2.0+. See the conversion table below.
+.RS
+.IP "Colour Table"
+#: ANSI       Amiga
+.br
+------------------------
+.br
+0: Black   -> Light Grey
+.br
+1: Red     -> Black
+.br
+2: Green   -> White
+.br
+3: Yellow  -> Light Blue
+.br
+4: Blue    -> Yellow
+.br
+5: Magenta -> Blue
+.br
+6: Cyan    -> Green
+.br
+7: White   -> Red
+.SH AUTHOR
+.PP
+Written by Thierry Pierron.
+.br
+Additional patches by Hans de Goede.
+.br
+This man page was written by Ian Chapman.
+.SH BUGS
+.PP
+Does not support the complete v40 specification.
+.br
+AREXX node links are not supported (rarely used feature).
+.br
+System command node links are not supported (rarely used feature).
+.PP
+This software is not actively updated, but patches or bug fixes are welcome and
+should be sent to <packages@amiga\-hardware.com>.
+.SH CAVEATS
+.PP
+Amiga filepaths are similar but differ slightly from UNIX file paths. In some
+cases this may lead to external files referenced by the AmigaGuide file as not
+being found. However \fBagr\fR tries several techniques to avoid this.
+.PP
+Amiga filenames are case insensitive so unless the correct case has been used
+in the AmigaGuide file, externally referenced files may not be found.
+.SH "SEE ALSO"
+.PP
+The full documentation for \fBagr\fR is available as an HTML file in addition to an
+AmigaGuide file which should have been installed alongside agr.

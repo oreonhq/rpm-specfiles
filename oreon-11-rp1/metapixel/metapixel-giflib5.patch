@@ -1,0 +1,21 @@
+diff -rupN metapixel-1.0.2/rwimg/rwgif.c metapixel-1.0.2-new/rwimg/rwgif.c
+--- metapixel-1.0.2/rwimg/rwgif.c	2006-12-10 18:59:54.000000000 +0100
++++ metapixel-1.0.2-new/rwimg/rwgif.c	2018-01-22 23:17:13.322206515 +0100
+@@ -54,7 +54,7 @@ open_gif_file (const char *filename, int
+     
+     assert(data != 0);
+     
+-    data->file = DGifOpenFileName(filename);
++    data->file = DGifOpenFileName(filename, NULL);
+     
+     assert(data->file !=0);
+         
+@@ -137,7 +137,7 @@ open_gif_file (const char *filename, int
+     }
+     free(buffer);
+     
+-    assert(DGifCloseFile(data->file) == GIF_OK);
++    assert(DGifCloseFile(data->file, NULL) == GIF_OK);
+     
+     return data;
+ }

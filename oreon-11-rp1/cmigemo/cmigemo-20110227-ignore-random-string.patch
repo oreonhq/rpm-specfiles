@@ -1,0 +1,71 @@
+--- cmigemo-default-src/src/migemo.c.random	2011-02-27 19:45:40.000000000 +0900
++++ cmigemo-default-src/src/migemo.c	2011-03-09 00:35:08.000000000 +0900
+@@ -412,9 +412,42 @@
+ }
+ 
+ /*
++   余りに無茶苦茶な文字列は処理しない
++*/
++
++static int 
++too_random_string(const unsigned char *string)
++{
++
++	unsigned char *query = string;
++	unsigned short int no_vowels = 0;
++	unsigned short int length_bunsetsu = 0;
++	unsigned short int randomness = 0;
++	unsigned short int found_upper = 0;
++	unsigned short int length = 0;
++
++
++	for (; *query; query++, length++){
++		if (isupper (*query)){
++			found_upper = 1;
++			if (length_bunsetsu < 2 && (query != string)) randomness++;
++			length_bunsetsu = 0;
++		}
++		else
++			length_bunsetsu++ ;
++
++	}
++
++	if (randomness >= 3) return 1;
++	if (found_upper && (length <= 3)) return 1;
++	return 0;
++}
++
++/*
+  * queryを文節に分解する。文節の切れ目は通常アルファベットの大文字。文節が複
+  * 数文字の大文字で始まった文節は非大文字を区切りとする。
+  */
++
+     static wordlist_p
+ parse_query(migemo* object, const unsigned char* query)
+ {
+@@ -422,6 +455,8 @@
+     const unsigned char *start = NULL;
+     wordlist_p querylist = NULL, *pp = &querylist;
+ 
++    int random_query_p = too_random_string (query);
++
+     while (1)
+     {
+ 	int len, upper;
+@@ -430,14 +465,14 @@
+ 	if (!object->char2int || (len = object->char2int(curr, NULL)) < 1)
+ 	    len = 1;
+ 	start = curr;
+-	upper = (len == 1 && isupper(*curr) && isupper(curr[1]));
++	upper = (len == 1 && isupper(*curr) && isupper(curr[1]) && (!random_query_p));
+ 	curr += len;
+         sum += len;
+ 	while (1)
+ 	{
+ 	    if (!object->char2int || (len = object->char2int(curr, NULL)) < 1)
+ 		len = 1;
+-	    if (*curr == '\0' || (len == 1 && (isupper(*curr) != 0) != upper))
++	    if (*curr == '\0' || (len == 1 && (isupper(*curr) != 0) != upper) && (!random_query_p))
+ 		break;
+ 	    curr += len;
+             sum += len;

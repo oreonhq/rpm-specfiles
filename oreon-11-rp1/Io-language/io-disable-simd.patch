@@ -1,0 +1,11 @@
+--- libs/basekit/source/UArray_math.c~	2016-01-24 12:59:28.000000000 -0500
++++ libs/basekit/source/UArray_math.c	2016-01-25 11:07:08.635258429 -0500
+@@ -7,7 +7,7 @@
+ #include <math.h>
+ #include <float.h>
+ 
+-#define IO_USE_SIMD 1
++//#define IO_USE_SIMD 1
+ 
+ #ifdef IO_USE_SIMD
+ 

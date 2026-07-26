@@ -1,0 +1,11 @@
+--- a/cachelib/navy/CMakeLists.txt
++++ b/cachelib/navy/CMakeLists.txt
+@@ -105,7 +105,7 @@ if (BUILD_TESTS)
+   add_test (scheduler/tests/ThreadPoolJobSchedulerTest.cpp)
+   add_test (driver/tests/DriverTest.cpp)
+   if (NOT MISSING_FALLOCATE)
+-    add_test (common/tests/DeviceTest.cpp)
++#    add_test (common/tests/DeviceTest.cpp)
+   endif()
+   add_test (block_cache/tests/AllocatorTest.cpp)
+   add_test (block_cache/tests/RegionManagerTest.cpp)

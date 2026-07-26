@@ -1,0 +1,150 @@
+--- monafont-2.90/ttftools/jis2ascii.debug	2002-09-15 06:07:03.000000000 +0900
++++ monafont-2.90/ttftools/jis2ascii	2010-09-09 06:23:07.000000000 +0900
+@@ -11,7 +11,7 @@
+ 
+ while(<>) {
+     chop;
+-    split(/\s+/);
+-    my $x = eval($_[0]);
+-    printf "0x%04x\t%d\n", $x, $_[1] if ($x < 256);
++    @line = split(/\s+/);
++    my $x = eval(@line[0]);
++    printf "0x%04x\t%d\n", $x, @line[1] if ($x < 256);
+ }
+--- monafont-2.90/ttftools/jis2sjis.debug	2002-09-15 06:07:03.000000000 +0900
++++ monafont-2.90/ttftools/jis2sjis	2010-09-09 06:23:53.000000000 +0900
+@@ -11,8 +11,8 @@
+ 
+ while(<>) {
+     chop;
+-    split(/\s+/);
+-    my $x = eval($_[0]);
++    @line = split(/\s+/);
++    my $x = eval($line[0]);
+     if (256 <= $x) {
+ 	# not optimized for readers' convenience.
+ 	my $c = (int($x / 256) - 0x21) * (0x7e-0x21+1) + (($x % 256) - 0x21);
+--- monafont-2.90/ttftools/jis2unicode.debug	2003-09-10 11:54:11.000000000 +0900
++++ monafont-2.90/ttftools/jis2unicode	2010-09-09 03:37:03.000000000 +0900
+@@ -8061,12 +8061,12 @@
+ } else {
+     while(<>) {
+ 	chop;
+-	split(/\s+/);
+-	$x = $map{jis2sjis(eval($_[0]))};
++	@list = split(/\s+/);
++	$x = $map{jis2sjis(eval(@list[0]))};
+ 	if ($x) {
+-	    printf "0x%04x\t%d\n", $x, $_[1];
++	    printf "0x%04x\t%d\n", $x, @list[1];
+ 	} else {
+-	    print STDERR "jis2unicode: warning: undefined mapping: $_[0]\n";
++	    print STDERR "jis2unicode: warning: undefined mapping: @list[0]\n";
+ 	}
+     }
+ }
+--- monafont-2.90/ttftools/lib_form.pl.debug	2002-09-15 06:07:03.000000000 +0900
++++ monafont-2.90/ttftools/lib_form.pl	2010-09-09 05:19:01.000000000 +0900
+@@ -18,12 +18,12 @@
+     foreach $_ (split("\n", $_[0])) {
+ 	my $c;
+ 	$c = $1 if (s/(\#.*)$//);
+-	split(/\s+/);
+-	if (2 <= @_) {
+-	    push(@form_fields, $_[1]);
++	@list = split(/\s+/);
++	if (2 <= @list) {
++	    push(@form_fields, @list[1]);
+ 	    push(@form_comments, $c);
+-	    $_[1] =~ tr/A-Z/a-z/;
+-	    $form_types{$_[1]} = $_[0];
++	    @list[1] =~ tr/A-Z/a-z/;
++	    $form_types{@list[1]} = @list[0];
+ 	}
+     }
+     1;
+@@ -101,9 +101,9 @@
+     open(IN, $ff) || die("open: $ff: $!");
+     %form_val = ();
+     while($_ = getline(IN)) {
+-	split(/\s+/);
+-	next if (@_ < 2);
+-	make_field1(@_);
++	@oneline = split(/\s+/);
++	next if (@oneline < 2);
++	make_field1(@oneline);
+     }
+     close(IN);
+     foreach my $x (@extra) {
+--- monafont-2.90/ttftools/make_EBSC.debug	2003-08-06 01:26:37.000000000 +0900
++++ monafont-2.90/ttftools/make_EBSC	2010-09-09 06:28:14.000000000 +0900
+@@ -28,8 +28,8 @@
+ open(IN, $ARGV[0]) || die("open: $ARGV[0]: $!");
+ %metric = ();
+ while($_ = getline(IN)) {
+-    split(/:\s+/);
+-    $metric{$_[0]} = eval($_[1]);
++    @oneline = split(/:\s+/);
++    $metric{@oneline[0]} = eval(@oneline[1]);
+     if ($metric{'ppem'} && $metric{'subst'} &&
+ 	$metric{'ascender'} && $metric{'descender'} && $metric{'widmax'}) {
+ 	push(@sizes, [ $metric{'ppem'},
+--- monafont-2.90/ttftools/make_cmap.debug	2003-08-06 01:26:37.000000000 +0900
++++ monafont-2.90/ttftools/make_cmap	2010-09-09 06:30:18.000000000 +0900
+@@ -46,8 +46,8 @@
+     @enc = ();
+     open(IN, $_[0]) || die("open: $_[0]: $!");
+     while($_ = getline(IN)) {
+-	split(/\s+/);
+-	$enc[eval($_[0])] = eval($_[1]);
++	@oneline = split(/\s+/);
++	$enc[eval(@oneline[0])] = eval(@oneline[1]);
+     }
+     close(IN);
+ }
+--- monafont-2.90/ttftools/merge_glyf.debug	2003-09-08 08:26:44.000000000 +0900
++++ monafont-2.90/ttftools/merge_glyf	2010-09-09 05:42:28.000000000 +0900
+@@ -76,7 +76,7 @@
+     open(IN, $cmap) || die("open: $src_cmap: $!");
+     while(<IN>) {
+ 	chop;
+-	if (!/^\s*\#/) { split; $cmap_table{$_[0]} = $_[1]; }
++	if (!/^\s*\#/) { @cmapline = split() ; $cmap_table{@cmapline[0]} = @cmapline[1]; }
+     }
+     close(IN);
+     
+--- monafont-2.90/ttftools/pickchars.debug	2003-08-06 01:26:37.000000000 +0900
++++ monafont-2.90/ttftools/pickchars	2010-09-09 05:52:40.000000000 +0900
+@@ -49,8 +49,8 @@
+ $f=shift(@ARGV);
+ open(IN, $f) || die("open: $f: $!");
+ while($_ = getline(IN)) {
+-    split(/\s+/);
+-    $enc{eval($_[0])} = 1;
++    @oneline = split(/\s+/);
++    $enc{eval(@oneline[0])} = 1;
+ }
+ close(IN);
+ 
+--- monafont-2.90/ttftools/remap_glyf.debug	2003-09-08 08:26:44.000000000 +0900
++++ monafont-2.90/ttftools/remap_glyf	2010-09-09 06:09:54.000000000 +0900
+@@ -65,7 +65,7 @@
+ while(<IN>) {
+     chop; 
+     # $src_glyfnum is a mapping from CHARACTER_CODE to GLYPH_NUMBER in the source font.
+-    if (!/^\s*\#/) { split; $src_glyfnum{$_[0]} = $_[1]; }
++    if (!/^\s*\#/) { @oneline = split; $src_glyfnum{@oneline[0]} = @oneline[1]; }
+ }
+ close(IN);
+ 
+@@ -79,8 +79,8 @@
+     chop; 
+     if (!/^\s*\#/) { 
+ 	# $dest_charnum is a mapping from GLYPH_NUMBER to CHARACTER_CODE in the dest font.
+-	split; $dest_charnum{$_[1]} = $_[0]; 
+-	$max_dest_glyfnum = $_[1] if ($max_dest_glyfnum < $_[1]);
++	@oneline = split; $dest_charnum{@oneline[1]} = @oneline[0]; 
++	$max_dest_glyfnum = @oneline[1] if ($max_dest_glyfnum < @oneline[1]);
+     }
+ }
+ close(IN);

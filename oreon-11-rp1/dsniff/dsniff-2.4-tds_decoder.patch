@@ -1,0 +1,19 @@
+Patch by Hilko Bengen <bengen@debian.org> for dsniff >= 2.4b1, to avoid a
+possible DoS opportunity in the Tabular Data Stream protocol handler. For
+further information, please have a look to the Debian bug ID #609988 and
+#712648.
+
+--- dsniff-2.4/decode_tds.c		2013-12-19 23:36:26.000000000 +0100
++++ dsniff-2.4/decode_tds.c.tds_decoder	2013-12-19 23:38:01.000000000 +0100
+@@ -144,6 +144,11 @@
+ 	     len > sizeof(*th) && len >= ntohs(th->size);
+ 	     buf += ntohs(th->size), len -= ntohs(th->size)) {
+ 		
++		if (th->size != 8) {
++			/* wrong header length */
++			break;
++		}
++
+ 		if (th->type == 2) {
+ 			/* Version 4.x, 5.0 */
+ 			if (len < sizeof(*th) + sizeof(*tl))

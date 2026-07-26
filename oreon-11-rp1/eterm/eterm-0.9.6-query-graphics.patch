@@ -1,0 +1,24 @@
+diff --git a/src/term.c b/src/term.c
+index 11b84fe..e9c0548 100644
+--- a/src/term.c
++++ b/src/term.c
+@@ -1176,6 +1176,11 @@ process_escape_seq(void)
+         case 'E':
+             scr_add_lines((unsigned char *) "\n\r", 1, 2);
+             break;
++/*
++ disabled because embedded newlines can make exploits easier
++ https://github.com/exg/rxvt-unicode/commit/2e7149935839bb7aa69b5bfe9558ba449e4db363
++ */
++#if 0
+         case 'G':
+             if ((ch = cmd_getc()) == 'Q') {     /* query graphics */
+                 tt_printf((unsigned char *) "\033G0\n");        /* no graphics */
+@@ -1185,6 +1190,7 @@ process_escape_seq(void)
+                 } while (ch != ':');
+             }
+             break;
++#endif
+         case 'H':
+             scr_set_tab(1);
+             break;

@@ -1,0 +1,47 @@
+diff -upr beesu-2.7-old/console.apps/beesu beesu-2.7/console.apps/beesu
+--- beesu-2.7-old/console.apps/beesu	2009-12-15 10:52:11.000000000 +0100
++++ beesu-2.7/console.apps/beesu	2025-01-26 21:26:15.516980692 +0100
+@@ -1,4 +1,4 @@
+ USER=root
+-PROGRAM=/usr/sbin/beesu
++PROGRAM=/usr/libexec/beesu
+ SESSION=true
+ 
+diff -upr beesu-2.7-old/Makefile beesu-2.7/Makefile
+--- beesu-2.7-old/Makefile	2009-12-15 10:52:11.000000000 +0100
++++ beesu-2.7/Makefile	2025-01-26 21:39:33.484727187 +0100
+@@ -21,7 +21,7 @@ INSTALL=install
+ DESTDIR?=
+ MANDIR=$(DESTDIR)/usr/share/man
+ BINDIR=$(DESTDIR)/usr/bin
+-SBINDIR=$(DESTDIR)/usr/sbin
++LIBEXECDIR=$(DESTDIR)/usr/libexec
+ CONFDIR=$(DESTDIR)/etc
+ CONSOLEHELPER=consolehelper
+ 
+@@ -44,14 +44,14 @@ clean:
+ 
+ # To install things in the right place
+ install:
+-	$(MKDIR) -v -p $(SBINDIR)
++	$(MKDIR) -v -p $(LIBEXECDIR)
+ 	$(MKDIR) -v -p $(BINDIR)
+ 	$(MKDIR) -v -p $(CONFDIR)
+ 	$(MKDIR) -v -p $(CONFDIR)/pam.d
+ 	$(MKDIR) -v -p $(CONFDIR)/security/console.apps
+ 	$(MKDIR) -v -p $(CONFDIR)/profile.d
+ 	$(MKDIR) -v -p $(MANDIR)/man1
+-	$(INSTALL) -p -m 755 $(PROG) $(SBINDIR)
++	$(INSTALL) -p -m 755 $(PROG) $(LIBEXECDIR)
+ 	$(INSTALL) -p -m 644 pam.d/$(PROG) $(CONFDIR)/pam.d
+ 	$(INSTALL) -p -m 644 console.apps/$(PROG) $(CONFDIR)/security/console.apps
+ 	$(INSTALL) -p -m 644 beesu.conf $(CONFDIR)
+@@ -64,7 +64,7 @@ install:
+ uninstall:
+ 	$(RM) $(CONFDIR)/pam.d/$(PROG)
+ 	$(RM) $(CONFDIR)/security/console.apps/$(PROG)
+-	$(RM) $(SBINDIR)/$(PROG)
++	$(RM) $(LIBEXCDIR)/$(PROG)
+ 	$(RM) $(BINDIR)/$(PROG)
+ 	$(RM) $(CONFDIR)/beesu.conf
+ 	$(RM) $(MANDIR)/man1/$(PROG).1.gz

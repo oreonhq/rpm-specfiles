@@ -1,0 +1,3941 @@
+diff -up libaesgm-20090429/aes_amd64.asm.git libaesgm-20090429/aes_amd64.asm
+--- libaesgm-20090429/aes_amd64.asm.git	2008-03-01 17:54:40.000000000 -0500
++++ libaesgm-20090429/aes_amd64.asm	2020-12-30 14:37:45.716571886 -0500
+@@ -1,28 +1,21 @@
+ 
+ ; ---------------------------------------------------------------------------
+-; Copyright (c) 1998-2007, Brian Gladman, Worcester, UK. All rights reserved.
+-; 
+-; LICENSE TERMS
+-; 
+-; The free distribution and use of this software is allowed (with or without
+-; changes) provided that:
+-; 
+-;  1. source code distributions include the above copyright notice, this
+-;     list of conditions and the following disclaimer;
+-; 
+-;  2. binary distributions include the above copyright notice, this list
+-;     of conditions and the following disclaimer in their documentation;
+-; 
+-;  3. the name of the copyright holder is not used to endorse products
+-;     built using this software without specific written permission.
+-; 
+-; DISCLAIMER
+-; 
++; Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
++;
++; The redistribution and use of this software (with or without changes)
++; is allowed without the payment of fees or royalties provided that:
++;
++;   source code distributions include the above copyright notice, this
++;   list of conditions and the following disclaimer;
++;
++;   binary distributions include the above copyright notice, this list
++;   of conditions and the following disclaimer in their documentation.
++;
+ ; This software is provided 'as is' with no explicit or implied warranties
+-; in respect of its properties, including, but not limited to, correctness
+-; and/or fitness for purpose.
++; in respect of its operation, including, but not limited to, correctness
++; and fitness for purpose.
+ ; ---------------------------------------------------------------------------
+-; Issue 20/12/2007
++; Issue Date: 27/10/2018
+ ;
+ ; I am grateful to Dag Arne Osvik for many discussions of the techniques that
+ ; can be used to optimise AES assembler code on AMD64/EM64T architectures.
+@@ -51,7 +44,10 @@
+ ; used if __GNUC__ is defined.
+ ;
+ ; Define _SEH_ to include support for Win64 structured exception handling
+-; (this requires YASM version 0.6 or later).
++; (this requires YASM version 0.6 or later).  
++;
++; In order to use this code in Windows kernel mode, set the NO_PAGING define
++; to disable structured exception handling and paging.
+ ;
+ ; This code provides the standard AES block size (128 bits, 16 bytes) and the
+ ; three standard AES key sizes (128, 192 and 256 bits). It has the same call
+@@ -77,19 +73,40 @@
+ ;     AES_RETURN aes_decrypt_key(const unsigned char key[],
+ ;                           unsigned int len, const aes_decrypt_ctx cx[1]);
+ ;
+-; where <NNN> is 128, 102 or 256.  In the last two calls the length can be in
++; where <NNN> is 128, 192 or 256.  In the last two calls the length can be in
+ ; either bits or bytes.
+-;
+-; Comment in/out the following lines to obtain the desired subroutines. These
+-; selections MUST match those in the C header file aes.h
+ 
++;----------------------------------------------------------------------------
++
++; Use of this assembler code in Windows kernel mode requires structured
++; exception handling and memory paging to be disabled
++%ifdef NO_PAGING
++%undef _SEH_
++%define set_page nopage
++%else
++%define set_page
++%endif
++
++; Comment in/out the following lines to obtain the desired subroutines. These
++; selections MUST match those in the C header files aes.h and aesopt.h
++%ifdef INTEL_AES_POSSIBLE
++%define USE_INTEL_AES_IF_PRESENT
++%endif
+ %define AES_128                 ; define if AES with 128 bit keys is needed
+ %define AES_192                 ; define if AES with 192 bit keys is needed
+ %define AES_256                 ; define if AES with 256 bit keys is needed
+ %define AES_VAR                 ; define if a variable key size is needed
+ %define ENCRYPTION              ; define if encryption is needed
+ %define DECRYPTION              ; define if decryption is needed
+-%define AES_REV_DKS             ; define if key decryption schedule is reversed
++;----------------------------------------------------------------------------
++
++%ifdef USE_INTEL_AES_IF_PRESENT
++%define aes_ni(x) aes_ %+ x %+ _i
++%undef  AES_REV_DKS
++%else
++%define aes_ni(x) aes_ %+ x
++%define AES_REV_DKS
++%endif
+ 
+ %define LAST_ROUND_TABLES       ; define for the faster version using extra tables
+ 
+@@ -126,15 +143,15 @@
+ ;     | decryption round N-1 | = INV_MIX_COL[ | encryption round N-1 | ]
+ ; hi: | decryption round N   | =              | encryption round N   |
+ ;
+-; This layout is faster when the assembler key scheduling provided here
+-; is used.
++; This layout is faster when the assembler key scheduling is used (not
++; used here).
+ ;
+ ; The DLL interface must use the _stdcall convention in which the number
+-; of bytes of parameter space is added after an @ to the sutine's name.
++; of bytes of parameter space is added after an @ to the rouutine's name.
+ ; We must also remove our parameters from the stack before return (see
+ ; the do_exit macro). Define DLL_EXPORT for the Dynamic Link Library version.
+ 
+-;%define DLL_EXPORT
++; %define DLL_EXPORT
+ 
+ ; End of user defines
+ 
+@@ -671,12 +688,12 @@
+ 
+ %ifdef ENCRYPTION
+ 
+-    global  aes_encrypt
++    global  aes_ni(encrypt)
+ %ifdef DLL_EXPORT
+-    export  aes_encrypt
++    export  aes_ni(encrypt)
+ %endif
+ 
+-    section .data align=64
++    section .data align=64 set_page
+     align   64
+ enc_tab:
+     enc_vals u8
+@@ -684,40 +701,40 @@ enc_tab:
+     enc_vals w8
+ %endif
+ 
+-    section .text align=16
++    section .text align=16 set_page
+     align   16
+ 
+ %ifdef _SEH_
+-proc_frame aes_encrypt
+-	alloc_stack	7*8			; 7 to align stack to 16 bytes
+-	save_reg	rsi,4*8
+-	save_reg	rdi,5*8
+-	save_reg	rbx,1*8
+-	save_reg	rbp,2*8
+-	save_reg	r12,3*8
++proc_frame aes_ni(encrypt)
++    alloc_stack	7*8			; 7 to align stack to 16 bytes
++    save_reg	rsi,4*8
++    save_reg	rdi,5*8
++    save_reg	rbx,1*8
++    save_reg	rbp,2*8
++    save_reg	r12,3*8
+ end_prologue
+     mov     rdi, rcx        ; input pointer
+     mov     [rsp+0*8], rdx  ; output pointer
+ %else
+-	aes_encrypt:
+-	%ifdef __GNUC__
+-		sub     rsp, 4*8        ; gnu/linux binary interface
+-		mov     [rsp+0*8], rsi  ; output pointer
+-		mov     r8, rdx         ; context
+-	%else
+-		sub     rsp, 6*8        ; windows binary interface
+-		mov     [rsp+4*8], rsi
+-		mov     [rsp+5*8], rdi
+-		mov     rdi, rcx        ; input pointer
+-		mov     [rsp+0*8], rdx  ; output pointer
+-	%endif
+-		mov     [rsp+1*8], rbx  ; input pointer in rdi
+-		mov     [rsp+2*8], rbp  ; output pointer in [rsp]
+-		mov     [rsp+3*8], r12  ; context in r8
++    aes_ni(encrypt):
++    %ifdef __GNUC__
++        sub     rsp, 4*8        ; gnu/linux binary interface
++        mov     [rsp+0*8], rsi  ; output pointer
++        mov     r8, rdx         ; context
++    %else
++        sub     rsp, 6*8        ; windows binary interface
++        mov     [rsp+4*8], rsi
++        mov     [rsp+5*8], rdi
++        mov     rdi, rcx        ; input pointer
++        mov     [rsp+0*8], rdx  ; output pointer
++    %endif
++        mov     [rsp+1*8], rbx  ; input pointer in rdi
++        mov     [rsp+2*8], rbp  ; output pointer in [rsp]
++        mov     [rsp+3*8], r12  ; context in r8
+ %endif
+ 
+     movzx   esi, byte [kptr+4*KS_LENGTH]
+-    lea     tptr,[enc_tab wrt rip]
++    lea     tptr, [rel enc_tab]
+     sub     kptr, fofs
+ 
+     mov     eax, [rdi+0*4]
+@@ -769,25 +786,25 @@ end_prologue
+     add     rsp, 4*8
+     ret
+ %else
+-	mov     rsi, [rsp+4*8]
+-	mov     rdi, [rsp+5*8]
+-	%ifdef _SEH_
+-		add     rsp, 7*8
+-		ret
+-	endproc_frame
+-	%else
+-		add     rsp, 6*8
+-		ret
+-	%endif
++    mov     rsi, [rsp+4*8]
++    mov     rdi, [rsp+5*8]
++    %ifdef _SEH_
++        add     rsp, 7*8
++        ret
++    endproc_frame
++    %else
++        add     rsp, 6*8
++        ret
++    %endif
+ %endif
+ 
+ %endif
+ 
+ %ifdef DECRYPTION
+ 
+-    global  aes_decrypt
++    global  aes_ni(decrypt)
+ %ifdef DLL_EXPORT
+-    export  aes_decrypt
++    export  aes_ni(decrypt)
+ %endif
+ 
+     section .data
+@@ -802,36 +819,36 @@ dec_tab:
+     align   16
+ 
+ %ifdef _SEH_
+-proc_frame aes_decrypt
+-	alloc_stack	7*8			; 7 to align stack to 16 bytes
+-	save_reg	rsi,4*8
+-	save_reg	rdi,5*8
+-	save_reg	rbx,1*8
+-	save_reg	rbp,2*8
+-	save_reg	r12,3*8
++proc_frame aes_ni(decrypt)
++    alloc_stack	7*8			; 7 to align stack to 16 bytes
++    save_reg	rsi,4*8
++    save_reg	rdi,5*8
++    save_reg	rbx,1*8
++    save_reg	rbp,2*8
++    save_reg	r12,3*8
+ end_prologue
+     mov     rdi, rcx        ; input pointer
+     mov     [rsp+0*8], rdx  ; output pointer
+ %else
+-	aes_decrypt:
+-	%ifdef __GNUC__
+-		sub     rsp, 4*8        ; gnu/linux binary interface
+-		mov     [rsp+0*8], rsi  ; output pointer
+-		mov     r8, rdx         ; context
+-	%else
+-		sub     rsp, 6*8        ; windows binary interface
+-		mov     [rsp+4*8], rsi
+-		mov     [rsp+5*8], rdi
+-		mov     rdi, rcx        ; input pointer
+-		mov     [rsp+0*8], rdx  ; output pointer
+-	%endif
+-		mov     [rsp+1*8], rbx  ; input pointer in rdi
+-		mov     [rsp+2*8], rbp  ; output pointer in [rsp]
+-		mov     [rsp+3*8], r12  ; context in r8
++    aes_ni(decrypt):
++    %ifdef __GNUC__
++        sub     rsp, 4*8        ; gnu/linux binary interface
++        mov     [rsp+0*8], rsi  ; output pointer
++        mov     r8, rdx         ; context
++    %else
++        sub     rsp, 6*8        ; windows binary interface
++        mov     [rsp+4*8], rsi
++        mov     [rsp+5*8], rdi
++        mov     rdi, rcx        ; input pointer
++        mov     [rsp+0*8], rdx  ; output pointer
++    %endif
++        mov     [rsp+1*8], rbx  ; input pointer in rdi
++        mov     [rsp+2*8], rbp  ; output pointer in [rsp]
++        mov     [rsp+3*8], r12  ; context in r8
+ %endif
+ 
+-    movzx   esi,byte[kptr+4*KS_LENGTH]
+-    lea     tptr,[dec_tab wrt rip]
++    movzx   esi, byte[kptr+4*KS_LENGTH]
++    lea     tptr, [rel dec_tab]
+     sub     kptr, rofs
+ 
+     mov     eax, [rdi+0*4]
+@@ -888,16 +905,16 @@ end_prologue
+     add     rsp, 4*8
+     ret
+ %else
+-	mov     rsi, [rsp+4*8]
+-	mov     rdi, [rsp+5*8]
+-	%ifdef _SEH_
+-		add     rsp, 7*8
+-		ret
+-	endproc_frame
+-	%else
+-		add     rsp, 6*8
+-		ret
+-	%endif
++    mov     rsi, [rsp+4*8]
++    mov     rdi, [rsp+5*8]
++    %ifdef _SEH_
++        add     rsp, 7*8
++        ret
++    endproc_frame
++    %else
++        add     rsp, 6*8
++        ret
++    %endif
+ %endif
+ 
+ %endif
+diff -up libaesgm-20090429/aescpp.h.git libaesgm-20090429/aescpp.h
+--- libaesgm-20090429/aescpp.h.git	2008-07-08 11:04:56.000000000 -0400
++++ libaesgm-20090429/aescpp.h	2020-12-30 14:36:52.071842465 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ 
+  This file contains the definitions required to use AES (Rijndael) in C++.
+ */
+diff -up libaesgm-20090429/aescrypt.c.git libaesgm-20090429/aescrypt.c
+--- libaesgm-20090429/aescrypt.c.git	2008-07-08 11:04:56.000000000 -0400
++++ libaesgm-20090429/aescrypt.c	2020-12-30 14:38:48.248422101 -0500
+@@ -1,33 +1,33 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ */
+ 
+ #include "aesopt.h"
+ #include "aestab.h"
+ 
++#if defined( USE_INTEL_AES_IF_PRESENT )
++#  include "aes_ni.h"
++#else
++/* map names here to provide the external API ('name' -> 'aes_name') */
++#  define aes_xi(x) aes_ ## x
++#endif
++
+ #if defined(__cplusplus)
+ extern "C"
+ {
+@@ -51,11 +51,11 @@ extern "C"
+ #if ( FUNCS_IN_C & ENCRYPTION_IN_C )
+ 
+ /* Visual C++ .Net v7.1 provides the fastest encryption code when using
+-   Pentium optimiation with small code but this is poor for decryption
++   Pentium optimisation with small code but this is poor for decryption
+    so we need to control this with the following VC++ pragmas
+ */
+ 
+-#if defined( _MSC_VER ) && !defined( _WIN64 )
++#if defined( _MSC_VER ) && !defined( _WIN64 ) && !defined( __clang__ )
+ #pragma optimize( "s", on )
+ #endif
+ 
+@@ -94,32 +94,32 @@ extern "C"
+ #define fwd_lrnd(y,x,k,c)   (s(y,c) = (k)[c] ^ no_table(x,t_use(s,box),fwd_var,rf1,c))
+ #endif
+ 
+-AES_RETURN aes_encrypt(const unsigned char *in, unsigned char *out, const aes_encrypt_ctx cx[1])
+-{   uint_32t         locals(b0, b1);
+-    const uint_32t   *kp;
++AES_RETURN aes_xi(encrypt)(const unsigned char *in, unsigned char *out, const aes_encrypt_ctx cx[1])
++{   uint32_t         locals(b0, b1);
++    const uint32_t   *kp;
+ #if defined( dec_fmvars )
+     dec_fmvars; /* declare variables for fwd_mcol() if needed */
+ #endif
+ 
+-    if( cx->inf.b[0] != 10 * 16 && cx->inf.b[0] != 12 * 16 && cx->inf.b[0] != 14 * 16 )
+-        return EXIT_FAILURE;
++	if(cx->inf.b[0] != 10 * AES_BLOCK_SIZE && cx->inf.b[0] != 12 * AES_BLOCK_SIZE && cx->inf.b[0] != 14 * AES_BLOCK_SIZE)
++		return EXIT_FAILURE;
+ 
+-    kp = cx->ks;
++	kp = cx->ks;
+     state_in(b0, in, kp);
+ 
+ #if (ENC_UNROLL == FULL)
+ 
+     switch(cx->inf.b[0])
+     {
+-    case 14 * 16:
++    case 14 * AES_BLOCK_SIZE:
+         round(fwd_rnd,  b1, b0, kp + 1 * N_COLS);
+         round(fwd_rnd,  b0, b1, kp + 2 * N_COLS);
+         kp += 2 * N_COLS;
+-    case 12 * 16:
++    case 12 * AES_BLOCK_SIZE:
+         round(fwd_rnd,  b1, b0, kp + 1 * N_COLS);
+         round(fwd_rnd,  b0, b1, kp + 2 * N_COLS);
+         kp += 2 * N_COLS;
+-    case 10 * 16:
++    case 10 * AES_BLOCK_SIZE:
+         round(fwd_rnd,  b1, b0, kp + 1 * N_COLS);
+         round(fwd_rnd,  b0, b1, kp + 2 * N_COLS);
+         round(fwd_rnd,  b1, b0, kp + 3 * N_COLS);
+@@ -135,8 +135,8 @@ AES_RETURN aes_encrypt(const unsigned ch
+ #else
+ 
+ #if (ENC_UNROLL == PARTIAL)
+-    {   uint_32t    rnd;
+-        for(rnd = 0; rnd < (cx->inf.b[0] >> 5) - 1; ++rnd)
++    {   uint32_t    rnd;
++        for(rnd = 0; rnd < (cx->inf.b[0] >> 5) - 1ul; ++rnd)
+         {
+             kp += N_COLS;
+             round(fwd_rnd, b1, b0, kp);
+@@ -146,8 +146,8 @@ AES_RETURN aes_encrypt(const unsigned ch
+         kp += N_COLS;
+         round(fwd_rnd,  b1, b0, kp);
+ #else
+-    {   uint_32t    rnd;
+-        for(rnd = 0; rnd < (cx->inf.b[0] >> 4) - 1; ++rnd)
++    {   uint32_t    rnd;
++        for(rnd = 0; rnd < (cx->inf.b[0] >> 4) - 1ul; ++rnd)
+         {
+             kp += N_COLS;
+             round(fwd_rnd, b1, b0, kp);
+@@ -168,11 +168,11 @@ AES_RETURN aes_encrypt(const unsigned ch
+ #if ( FUNCS_IN_C & DECRYPTION_IN_C)
+ 
+ /* Visual C++ .Net v7.1 provides the fastest encryption code when using
+-   Pentium optimiation with small code but this is poor for decryption
++   Pentium optimisation with small code but this is poor for decryption
+    so we need to control this with the following VC++ pragmas
+ */
+ 
+-#if defined( _MSC_VER ) && !defined( _WIN64 )
++#if defined( _MSC_VER ) && !defined( _WIN64 ) && !defined( __clang__ )
+ #pragma optimize( "t", on )
+ #endif
+ 
+@@ -212,7 +212,7 @@ AES_RETURN aes_encrypt(const unsigned ch
+ #endif
+ 
+ /* This code can work with the decryption key schedule in the   */
+-/* order that is used for encrytpion (where the 1st decryption  */
++/* order that is used for encryption (where the 1st decryption  */
+ /* round key is at the high end ot the schedule) or with a key  */
+ /* schedule that has been reversed to put the 1st decryption    */
+ /* round key at the low end of the schedule in memory (when     */
+@@ -226,15 +226,15 @@ AES_RETURN aes_encrypt(const unsigned ch
+ #define rnd_key(n)  (kp - n * N_COLS)
+ #endif
+ 
+-AES_RETURN aes_decrypt(const unsigned char *in, unsigned char *out, const aes_decrypt_ctx cx[1])
+-{   uint_32t        locals(b0, b1);
++AES_RETURN aes_xi(decrypt)(const unsigned char *in, unsigned char *out, const aes_decrypt_ctx cx[1])
++{   uint32_t        locals(b0, b1);
+ #if defined( dec_imvars )
+     dec_imvars; /* declare variables for inv_mcol() if needed */
+ #endif
+-    const uint_32t *kp;
++    const uint32_t *kp;
+ 
+-    if( cx->inf.b[0] != 10 * 16 && cx->inf.b[0] != 12 * 16 && cx->inf.b[0] != 14 * 16 )
+-        return EXIT_FAILURE;
++	if(cx->inf.b[0] != 10 * AES_BLOCK_SIZE && cx->inf.b[0] != 12 * AES_BLOCK_SIZE && cx->inf.b[0] != 14 * AES_BLOCK_SIZE)
++		return EXIT_FAILURE;
+ 
+     kp = cx->ks + (key_ofs ? (cx->inf.b[0] >> 2) : 0);
+     state_in(b0, in, kp);
+@@ -244,13 +244,13 @@ AES_RETURN aes_decrypt(const unsigned ch
+     kp = cx->ks + (key_ofs ? 0 : (cx->inf.b[0] >> 2));
+     switch(cx->inf.b[0])
+     {
+-    case 14 * 16:
++    case 14 * AES_BLOCK_SIZE:
+         round(inv_rnd,  b1, b0, rnd_key(-13));
+         round(inv_rnd,  b0, b1, rnd_key(-12));
+-    case 12 * 16:
++    case 12 * AES_BLOCK_SIZE:
+         round(inv_rnd,  b1, b0, rnd_key(-11));
+         round(inv_rnd,  b0, b1, rnd_key(-10));
+-    case 10 * 16:
++    case 10 * AES_BLOCK_SIZE:
+         round(inv_rnd,  b1, b0, rnd_key(-9));
+         round(inv_rnd,  b0, b1, rnd_key(-8));
+         round(inv_rnd,  b1, b0, rnd_key(-7));
+@@ -266,8 +266,8 @@ AES_RETURN aes_decrypt(const unsigned ch
+ #else
+ 
+ #if (DEC_UNROLL == PARTIAL)
+-    {   uint_32t    rnd;
+-        for(rnd = 0; rnd < (cx->inf.b[0] >> 5) - 1; ++rnd)
++    {   uint32_t    rnd;
++        for(rnd = 0; rnd < (cx->inf.b[0] >> 5) - 1ul; ++rnd)
+         {
+             kp = rnd_key(1);
+             round(inv_rnd, b1, b0, kp);
+@@ -277,8 +277,8 @@ AES_RETURN aes_decrypt(const unsigned ch
+         kp = rnd_key(1);
+         round(inv_rnd, b1, b0, kp);
+ #else
+-    {   uint_32t    rnd;
+-        for(rnd = 0; rnd < (cx->inf.b[0] >> 4) - 1; ++rnd)
++    {   uint32_t    rnd;
++        for(rnd = 0; rnd < (cx->inf.b[0] >> 4) - 1ul; ++rnd)
+         {
+             kp = rnd_key(1);
+             round(inv_rnd, b1, b0, kp);
+diff -up libaesgm-20090429/aes.h.git libaesgm-20090429/aes.h
+--- libaesgm-20090429/aes.h.git	2008-07-08 11:04:56.000000000 -0400
++++ libaesgm-20090429/aes.h	2020-12-30 14:39:48.574242350 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 02/09/2018
+ 
+  This file contains the definitions required to use AES in C. See aesopt.h
+  for optimisation details.
+@@ -33,7 +26,7 @@
+ 
+ #include <stdlib.h>
+ 
+-/*  This include is used to find 8 & 32 bit unsigned integer types  */
++/*  This include is used to find 8 & 32 bit unsigned integer types   */
+ #include "brg_types.h"
+ 
+ #if defined(__cplusplus)
+@@ -41,24 +34,30 @@ extern "C"
+ {
+ #endif
+ 
+-#define AES_128     /* if a fast 128 bit key scheduler is needed    */
+-#define AES_192     /* if a fast 192 bit key scheduler is needed    */
+-#define AES_256     /* if a fast 256 bit key scheduler is needed    */
+-#define AES_VAR     /* if variable key size scheduler is needed     */
+-#define AES_MODES   /* if support is needed for modes               */
+-
+-/* The following must also be set in assembler files if being used  */
+-
+-#define AES_ENCRYPT /* if support for encryption is needed          */
+-#define AES_DECRYPT /* if support for decryption is needed          */
+-#define AES_REV_DKS /* define to reverse decryption key schedule    */
+-
+-#define AES_BLOCK_SIZE  16  /* the AES block size in bytes          */
+-#define N_COLS           4  /* the number of columns in the state   */
+-
+-/* The key schedule length is 11, 13 or 15 16-byte blocks for 128,  */
+-/* 192 or 256-bit keys respectively. That is 176, 208 or 240 bytes  */
+-/* or 44, 52 or 60 32-bit words.                                    */
++#define AES_128     /* if a fast 128 bit key scheduler is needed     */
++#define AES_192     /* if a fast 192 bit key scheduler is needed     */
++#define AES_256     /* if a fast 256 bit key scheduler is needed     */
++#define AES_VAR     /* if variable key size scheduler is needed      */
++#if 1
++#  define AES_MODES /* if support is needed for modes in the C code  */
++#endif              /* (these will use AES_NI if it is present)      */
++#if 0               /* add this to make direct calls to the AES_NI   */
++#                   /* implemented CBC and CTR modes available       */
++#   define ADD_AESNI_MODE_CALLS
++#endif
++
++/* The following must also be set in assembler files if being used   */
++
++#define AES_ENCRYPT /* if support for encryption is needed           */
++#define AES_DECRYPT /* if support for decryption is needed           */
++
++#define AES_BLOCK_SIZE_P2  4  /* AES block size as a power of 2      */
++#define AES_BLOCK_SIZE    (1 << AES_BLOCK_SIZE_P2) /* AES block size */
++#define N_COLS             4  /* the number of columns in the state  */
++
++/* The key schedule length is 11, 13 or 15 16-byte blocks for 128,   */
++/* 192 or 256-bit keys respectively. That is 176, 208 or 240 bytes   */
++/* or 44, 52 or 60 32-bit words.                                     */
+ 
+ #if defined( AES_VAR ) || defined( AES_256 )
+ #define KS_LENGTH       60
+@@ -70,25 +69,46 @@ extern "C"
+ 
+ #define AES_RETURN INT_RETURN
+ 
+-/* the character array 'inf' in the following structures is used    */
+-/* to hold AES context information. This AES code uses cx->inf.b[0] */
+-/* to hold the number of rounds multiplied by 16. The other three   */
+-/* elements can be used by code that implements additional modes    */
++/* the character array 'inf' in the following structures is used     */
++/* to hold AES context information. This AES code uses cx->inf.b[0]  */
++/* to hold the number of rounds multiplied by 16. The other three    */
++/* elements can be used by code that implements additional modes     */
+ 
+ typedef union
+-{   uint_32t l;
+-    uint_8t b[4];
++{   uint32_t l;
++    uint8_t b[4];
+ } aes_inf;
+ 
+-typedef struct
+-{   uint_32t ks[KS_LENGTH];
+-    aes_inf inf;
+-} aes_encrypt_ctx;
++/* Macros for detecting whether a given context was initialized for  */
++/* use with encryption or decryption code. These should only be used */
++/* by e.g. language bindings which lose type information when the    */
++/* context pointer is passed to the calling language's runtime.      */
++#define IS_ENCRYPTION_CTX(cx) (((cx)->inf.b[2] & (uint8_t)0x01) == 1)
++#define IS_DECRYPTION_CTX(cx) (((cx)->inf.b[2] & (uint8_t)0x01) == 0)
++
++#ifdef _MSC_VER
++#  pragma warning( disable : 4324 )
++#endif
++
++#if defined(_MSC_VER) && defined(_WIN64)
++#define ALIGNED_(x) __declspec(align(x))
++#elif defined(__GNUC__) && defined(__x86_64__)
++#define ALIGNED_(x) __attribute__ ((aligned(x)))
++#else
++#define ALIGNED_(x)
++#endif
+ 
+-typedef struct
+-{   uint_32t ks[KS_LENGTH];
++typedef struct ALIGNED_(16)
++{   uint32_t ks[KS_LENGTH];
+     aes_inf inf;
+-} aes_decrypt_ctx;
++} aes_crypt_ctx;
++
++typedef aes_crypt_ctx aes_encrypt_ctx;
++typedef aes_crypt_ctx aes_decrypt_ctx;
++
++#ifdef _MSC_VER
++#  pragma warning( default : 4324 )
++#endif
+ 
+ /* This routine must be called before first use if non-static       */
+ /* tables are being used                                            */
+@@ -146,14 +166,14 @@ AES_RETURN aes_decrypt(const unsigned ch
+ 
+ /* Multiple calls to the following subroutines for multiple block   */
+ /* ECB, CBC, CFB, OFB and CTR mode encryption can be used to handle */
+-/* long messages incremantally provided that the context AND the iv */
++/* long messages incrementally provided that the context AND the iv */
+ /* are preserved between all such calls.  For the ECB and CBC modes */
+ /* each individual call within a series of incremental calls must   */
+ /* process only full blocks (i.e. len must be a multiple of 16) but */
+ /* the CFB, OFB and CTR mode calls can handle multiple incremental  */
+-/* calls of any length. Each mode is reset when a new AES key is    */
+-/* set but ECB and CBC operations can be reset without setting a    */
+-/* new key by setting a new IV value.  To reset CFB, OFB and CTR    */
++/* calls of any length.  Each mode is reset when a new AES key is   */
++/* set but ECB needs no reset and CBC can be reset without setting  */
++/* a new key by setting a new IV value.  To reset CFB, OFB and CTR  */
+ /* without setting the key, aes_mode_reset() must be called and the */
+ /* IV must be set.  NOTE: All these calls update the IV on exit so  */
+ /* this has to be reset if a new operation with the same IV as the  */
+@@ -198,6 +218,59 @@ AES_RETURN aes_ctr_crypt(const unsigned
+ 
+ #endif
+ 
++#if 0 && defined( ADD_AESNI_MODE_CALLS )
++#  define USE_AES_CONTEXT
++#endif
++
++#ifdef ADD_AESNI_MODE_CALLS
++#  ifdef USE_AES_CONTEXT
++
++AES_RETURN aes_CBC_encrypt(const unsigned char *in,
++    unsigned char *out,
++    unsigned char ivec[16],
++    unsigned long length,
++    const aes_encrypt_ctx cx[1]);
++
++AES_RETURN aes_CBC_decrypt(const unsigned char *in,
++    unsigned char *out,
++    unsigned char ivec[16],
++    unsigned long length,
++    const aes_decrypt_ctx cx[1]);
++
++AES_RETURN AES_CTR_encrypt(const unsigned char *in,
++    unsigned char *out,
++    const unsigned char ivec[8],
++    const unsigned char nonce[4],
++    unsigned long length,
++    const aes_encrypt_ctx cx[1]);
++
++#  else
++
++void aes_CBC_encrypt(const unsigned char *in,
++    unsigned char *out,
++    unsigned char ivec[16],
++    unsigned long length,
++    unsigned char *key,
++    int number_of_rounds);
++
++void aes_CBC_decrypt(const unsigned char *in,
++    unsigned char *out,
++    unsigned char ivec[16],
++    unsigned long length,
++    unsigned char *key,
++    int number_of_rounds);
++
++void aes_CTR_encrypt(const unsigned char *in,
++    unsigned char *out,
++    const unsigned char ivec[8],
++    const unsigned char nonce[4],
++    unsigned long length,
++    const unsigned char *key,
++    int number_of_rounds);
++
++#  endif
++#endif
++
+ #if defined(__cplusplus)
+ }
+ #endif
+diff -up libaesgm-20090429/aeskey.c.git libaesgm-20090429/aeskey.c
+--- libaesgm-20090429/aeskey.c.git	2008-07-08 15:58:56.000000000 -0400
++++ libaesgm-20090429/aeskey.c	2020-12-30 14:41:50.725903176 -0500
+@@ -1,33 +1,33 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ */
+ 
+ #include "aesopt.h"
+ #include "aestab.h"
+ 
++#if defined( USE_INTEL_AES_IF_PRESENT )
++#  include "aes_ni.h"
++#else
++/* map names here to provide the external API ('name' -> 'aes_name') */
++#  define aes_xi(x) aes_ ## x
++#endif
++
+ #ifdef USE_VIA_ACE_IF_PRESENT
+ #  include "aes_via_ace.h"
+ #endif
+@@ -37,6 +37,13 @@ extern "C"
+ {
+ #endif
+ 
++/* Use the low bit in the context's inf.b[2] as a flag to
++   indicate whether a context was initialized for encryption
++   or decryption.
++*/
++#define MARK_AS_ENCRYPTION_CTX(cx) (cx)->inf.b[2] |= (uint8_t)0x01
++#define MARK_AS_DECRYPTION_CTX(cx) (cx)->inf.b[2] &= (uint8_t)0xfe
++
+ /* Initialise the key schedule from the user supplied key. The key
+    length can be specified in bytes, with legal values of 16, 24
+    and 32, or in bits, with legal values of 128, 192 and 256. These
+@@ -57,9 +64,9 @@ extern "C"
+ 
+ #if defined( REDUCE_CODE_SIZE )
+ #  define ls_box ls_sub
+-   uint_32t ls_sub(const uint_32t t, const uint_32t n);
++   uint32_t ls_sub(const uint32_t t, const uint32_t n);
+ #  define inv_mcol im_sub
+-   uint_32t im_sub(const uint_32t x);
++   uint32_t im_sub(const uint32_t x);
+ #  ifdef ENC_KS_UNROLL
+ #    undef ENC_KS_UNROLL
+ #  endif
+@@ -79,8 +86,8 @@ extern "C"
+     k[4*(i)+7] = ss[3] ^= ss[2]; \
+ }
+ 
+-AES_RETURN aes_encrypt_key128(const unsigned char *key, aes_encrypt_ctx cx[1])
+-{   uint_32t    ss[4];
++AES_RETURN aes_xi(encrypt_key128)(const unsigned char *key, aes_encrypt_ctx cx[1])
++{   uint32_t    ss[4];
+ 
+     cx->ks[0] = ss[0] = word_in(key, 0);
+     cx->ks[1] = ss[1] = word_in(key, 1);
+@@ -94,19 +101,20 @@ AES_RETURN aes_encrypt_key128(const unsi
+     ke4(cx->ks, 6);  ke4(cx->ks, 7);
+     ke4(cx->ks, 8);
+ #else
+-    {   uint_32t i;
++    {   uint32_t i;
+         for(i = 0; i < 9; ++i)
+             ke4(cx->ks, i);
+     }
+ #endif
+     ke4(cx->ks, 9);
+     cx->inf.l = 0;
+-    cx->inf.b[0] = 10 * 16;
++    cx->inf.b[0] = 10 * AES_BLOCK_SIZE;
+ 
+ #ifdef USE_VIA_ACE_IF_PRESENT
+     if(VIA_ACE_AVAILABLE)
+         cx->inf.b[1] = 0xff;
+ #endif
++    MARK_AS_ENCRYPTION_CTX(cx);
+     return EXIT_SUCCESS;
+ }
+ 
+@@ -127,10 +135,10 @@ AES_RETURN aes_encrypt_key128(const unsi
+     k[6*(i)+11] = ss[5] ^= ss[4]; \
+ }
+ 
+-AES_RETURN aes_encrypt_key192(const unsigned char *key, aes_encrypt_ctx cx[1])
+-{   uint_32t    ss[6];
++AES_RETURN aes_xi(encrypt_key192)(const unsigned char *key, aes_encrypt_ctx cx[1])
++{   uint32_t    ss[6];
+ 
+-    cx->ks[0] = ss[0] = word_in(key, 0);
++	cx->ks[0] = ss[0] = word_in(key, 0);
+     cx->ks[1] = ss[1] = word_in(key, 1);
+     cx->ks[2] = ss[2] = word_in(key, 2);
+     cx->ks[3] = ss[3] = word_in(key, 3);
+@@ -143,19 +151,20 @@ AES_RETURN aes_encrypt_key192(const unsi
+     ke6(cx->ks, 4);  ke6(cx->ks, 5);
+     ke6(cx->ks, 6);
+ #else
+-    {   uint_32t i;
++    {   uint32_t i;
+         for(i = 0; i < 7; ++i)
+             ke6(cx->ks, i);
+     }
+ #endif
+     kef6(cx->ks, 7);
+     cx->inf.l = 0;
+-    cx->inf.b[0] = 12 * 16;
++    cx->inf.b[0] = 12 * AES_BLOCK_SIZE;
+ 
+ #ifdef USE_VIA_ACE_IF_PRESENT
+     if(VIA_ACE_AVAILABLE)
+         cx->inf.b[1] = 0xff;
+ #endif
++    MARK_AS_ENCRYPTION_CTX(cx);
+     return EXIT_SUCCESS;
+ }
+ 
+@@ -178,8 +187,8 @@ AES_RETURN aes_encrypt_key192(const unsi
+     k[8*(i)+15] = ss[7] ^= ss[6]; \
+ }
+ 
+-AES_RETURN aes_encrypt_key256(const unsigned char *key, aes_encrypt_ctx cx[1])
+-{   uint_32t    ss[8];
++AES_RETURN aes_xi(encrypt_key256)(const unsigned char *key, aes_encrypt_ctx cx[1])
++{   uint32_t    ss[8];
+ 
+     cx->ks[0] = ss[0] = word_in(key, 0);
+     cx->ks[1] = ss[1] = word_in(key, 1);
+@@ -195,39 +204,25 @@ AES_RETURN aes_encrypt_key256(const unsi
+     ke8(cx->ks, 2); ke8(cx->ks, 3);
+     ke8(cx->ks, 4); ke8(cx->ks, 5);
+ #else
+-    {   uint_32t i;
++    {   uint32_t i;
+         for(i = 0; i < 6; ++i)
+             ke8(cx->ks,  i);
+     }
+ #endif
+     kef8(cx->ks, 6);
+     cx->inf.l = 0;
+-    cx->inf.b[0] = 14 * 16;
++    cx->inf.b[0] = 14 * AES_BLOCK_SIZE;
+ 
+ #ifdef USE_VIA_ACE_IF_PRESENT
+     if(VIA_ACE_AVAILABLE)
+         cx->inf.b[1] = 0xff;
+ #endif
++    MARK_AS_ENCRYPTION_CTX(cx);
+     return EXIT_SUCCESS;
+ }
+ 
+ #endif
+ 
+-#if defined( AES_VAR )
+-
+-AES_RETURN aes_encrypt_key(const unsigned char *key, int key_len, aes_encrypt_ctx cx[1])
+-{   
+-    switch(key_len)
+-    {
+-    case 16: case 128: return aes_encrypt_key128(key, cx);
+-    case 24: case 192: return aes_encrypt_key192(key, cx);
+-    case 32: case 256: return aes_encrypt_key256(key, cx);
+-    default: return EXIT_FAILURE;
+-    }
+-}
+-
+-#endif
+-
+ #endif
+ 
+ #if (FUNCS_IN_C & DEC_KEYING_IN_C)
+@@ -316,12 +311,13 @@ AES_RETURN aes_encrypt_key(const unsigne
+ 
+ #endif
+ 
+-AES_RETURN aes_decrypt_key128(const unsigned char *key, aes_decrypt_ctx cx[1])
+-{   uint_32t    ss[5];
++AES_RETURN aes_xi(decrypt_key128)(const unsigned char *key, aes_decrypt_ctx cx[1])
++{   uint32_t    ss[5];
+ #if defined( d_vars )
+         d_vars;
+ #endif
+-    cx->ks[v(40,(0))] = ss[0] = word_in(key, 0);
++
++	cx->ks[v(40,(0))] = ss[0] = word_in(key, 0);
+     cx->ks[v(40,(1))] = ss[1] = word_in(key, 1);
+     cx->ks[v(40,(2))] = ss[2] = word_in(key, 2);
+     cx->ks[v(40,(3))] = ss[3] = word_in(key, 3);
+@@ -333,7 +329,7 @@ AES_RETURN aes_decrypt_key128(const unsi
+      kd4(cx->ks, 6);  kd4(cx->ks, 7);
+      kd4(cx->ks, 8);  kdl4(cx->ks, 9);
+ #else
+-    {   uint_32t i;
++    {   uint32_t i;
+         for(i = 0; i < 10; ++i)
+             k4e(cx->ks, i);
+ #if !(DEC_ROUND == NO_TABLES)
+@@ -343,12 +339,13 @@ AES_RETURN aes_decrypt_key128(const unsi
+     }
+ #endif
+     cx->inf.l = 0;
+-    cx->inf.b[0] = 10 * 16;
++    cx->inf.b[0] = 10 * AES_BLOCK_SIZE;
+ 
+ #ifdef USE_VIA_ACE_IF_PRESENT
+     if(VIA_ACE_AVAILABLE)
+         cx->inf.b[1] = 0xff;
+ #endif
++    MARK_AS_DECRYPTION_CTX(cx);
+     return EXIT_SUCCESS;
+ }
+ 
+@@ -395,19 +392,22 @@ AES_RETURN aes_decrypt_key128(const unsi
+     ss[3] ^= ss[2]; k[v(48,(6*(i))+ 9)] = ss[3]; \
+ }
+ 
+-AES_RETURN aes_decrypt_key192(const unsigned char *key, aes_decrypt_ctx cx[1])
+-{   uint_32t    ss[7];
++AES_RETURN aes_xi(decrypt_key192)(const unsigned char *key, aes_decrypt_ctx cx[1])
++{   uint32_t    ss[7];
+ #if defined( d_vars )
+         d_vars;
+ #endif
++
+     cx->ks[v(48,(0))] = ss[0] = word_in(key, 0);
+     cx->ks[v(48,(1))] = ss[1] = word_in(key, 1);
+     cx->ks[v(48,(2))] = ss[2] = word_in(key, 2);
+     cx->ks[v(48,(3))] = ss[3] = word_in(key, 3);
+ 
+ #ifdef DEC_KS_UNROLL
+-    cx->ks[v(48,(4))] = ff(ss[4] = word_in(key, 4));
+-    cx->ks[v(48,(5))] = ff(ss[5] = word_in(key, 5));
++    ss[4] = word_in(key, 4);
++    ss[5] = word_in(key, 5);
++    cx->ks[v(48, (4))] = ff(ss[4]);
++    cx->ks[v(48, (5))] = ff(ss[5]);
+     kdf6(cx->ks, 0); kd6(cx->ks, 1);
+     kd6(cx->ks, 2);  kd6(cx->ks, 3);
+     kd6(cx->ks, 4);  kd6(cx->ks, 5);
+@@ -415,7 +415,7 @@ AES_RETURN aes_decrypt_key192(const unsi
+ #else
+     cx->ks[v(48,(4))] = ss[4] = word_in(key, 4);
+     cx->ks[v(48,(5))] = ss[5] = word_in(key, 5);
+-    {   uint_32t i;
++    {   uint32_t i;
+ 
+         for(i = 0; i < 7; ++i)
+             k6e(cx->ks, i);
+@@ -427,12 +427,13 @@ AES_RETURN aes_decrypt_key192(const unsi
+     }
+ #endif
+     cx->inf.l = 0;
+-    cx->inf.b[0] = 12 * 16;
++    cx->inf.b[0] = 12 * AES_BLOCK_SIZE;
+ 
+ #ifdef USE_VIA_ACE_IF_PRESENT
+     if(VIA_ACE_AVAILABLE)
+         cx->inf.b[1] = 0xff;
+ #endif
++    MARK_AS_DECRYPTION_CTX(cx);
+     return EXIT_SUCCESS;
+ }
+ 
+@@ -486,21 +487,26 @@ AES_RETURN aes_decrypt_key192(const unsi
+     ss[3] ^= ss[2]; k[v(56,(8*(i))+11)] = ss[3]; \
+ }
+ 
+-AES_RETURN aes_decrypt_key256(const unsigned char *key, aes_decrypt_ctx cx[1])
+-{   uint_32t    ss[9];
++AES_RETURN aes_xi(decrypt_key256)(const unsigned char *key, aes_decrypt_ctx cx[1])
++{   uint32_t    ss[9];
+ #if defined( d_vars )
+         d_vars;
+ #endif
++
+     cx->ks[v(56,(0))] = ss[0] = word_in(key, 0);
+     cx->ks[v(56,(1))] = ss[1] = word_in(key, 1);
+     cx->ks[v(56,(2))] = ss[2] = word_in(key, 2);
+     cx->ks[v(56,(3))] = ss[3] = word_in(key, 3);
+ 
+ #ifdef DEC_KS_UNROLL
+-    cx->ks[v(56,(4))] = ff(ss[4] = word_in(key, 4));
+-    cx->ks[v(56,(5))] = ff(ss[5] = word_in(key, 5));
+-    cx->ks[v(56,(6))] = ff(ss[6] = word_in(key, 6));
+-    cx->ks[v(56,(7))] = ff(ss[7] = word_in(key, 7));
++    ss[4] = word_in(key, 4);
++    ss[5] = word_in(key, 5);
++    ss[6] = word_in(key, 6);
++    ss[7] = word_in(key, 7);
++    cx->ks[v(56,(4))] = ff(ss[4]);
++    cx->ks[v(56,(5))] = ff(ss[5]);
++    cx->ks[v(56,(6))] = ff(ss[6]);
++    cx->ks[v(56,(7))] = ff(ss[7]);
+     kdf8(cx->ks, 0); kd8(cx->ks, 1);
+     kd8(cx->ks, 2);  kd8(cx->ks, 3);
+     kd8(cx->ks, 4);  kd8(cx->ks, 5);
+@@ -510,7 +516,7 @@ AES_RETURN aes_decrypt_key256(const unsi
+     cx->ks[v(56,(5))] = ss[5] = word_in(key, 5);
+     cx->ks[v(56,(6))] = ss[6] = word_in(key, 6);
+     cx->ks[v(56,(7))] = ss[7] = word_in(key, 7);
+-    {   uint_32t i;
++    {   uint32_t i;
+ 
+         for(i = 0; i < 6; ++i)
+             k8e(cx->ks,  i);
+@@ -522,31 +528,43 @@ AES_RETURN aes_decrypt_key256(const unsi
+     }
+ #endif
+     cx->inf.l = 0;
+-    cx->inf.b[0] = 14 * 16;
++    cx->inf.b[0] = 14 * AES_BLOCK_SIZE;
+ 
+ #ifdef USE_VIA_ACE_IF_PRESENT
+     if(VIA_ACE_AVAILABLE)
+         cx->inf.b[1] = 0xff;
+ #endif
++    MARK_AS_DECRYPTION_CTX(cx);
+     return EXIT_SUCCESS;
+ }
+ 
+ #endif
+ 
++#endif
++
+ #if defined( AES_VAR )
+ 
+-AES_RETURN aes_decrypt_key(const unsigned char *key, int key_len, aes_decrypt_ctx cx[1])
++AES_RETURN aes_encrypt_key(const unsigned char *key, int key_len, aes_encrypt_ctx cx[1])
+ {
+-    switch(key_len)
+-    {
+-    case 16: case 128: return aes_decrypt_key128(key, cx);
+-    case 24: case 192: return aes_decrypt_key192(key, cx);
+-    case 32: case 256: return aes_decrypt_key256(key, cx);
+-    default: return EXIT_FAILURE;
+-    }
++	switch(key_len)
++	{
++	case 16: case 128: return aes_encrypt_key128(key, cx);
++	case 24: case 192: return aes_encrypt_key192(key, cx);
++	case 32: case 256: return aes_encrypt_key256(key, cx);
++	default: return EXIT_FAILURE;
++	}
+ }
+ 
+-#endif
++AES_RETURN aes_decrypt_key(const unsigned char *key, int key_len, aes_decrypt_ctx cx[1])
++{
++	switch(key_len)
++	{
++	case 16: case 128: return aes_decrypt_key128(key, cx);
++	case 24: case 192: return aes_decrypt_key192(key, cx);
++	case 32: case 256: return aes_decrypt_key256(key, cx);
++	default: return EXIT_FAILURE;
++	}
++}
+ 
+ #endif
+ 
+diff -up libaesgm-20090429/aes_modes.c.git libaesgm-20090429/aes_modes.c
+--- libaesgm-20090429/aes_modes.c.git	2009-04-29 16:33:48.000000000 -0400
++++ libaesgm-20090429/aes_modes.c	2020-12-30 14:43:05.647921833 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ 
+  These subroutines implement multiple block AES modes for ECB, CBC, CFB,
+  OFB and CTR encryption,  The code provides support for the VIA Advanced
+@@ -34,6 +27,7 @@
+ 
+ #include <string.h>
+ #include <assert.h>
++#include <stdint.h>
+ 
+ #include "aesopt.h"
+ 
+@@ -55,7 +49,7 @@ extern "C"
+ 
+ #define FAST_BUFFER_OPERATIONS
+ 
+-#define lp32(x)         ((uint_32t*)(x))
++#define lp32(x)         ((uint32_t*)(x))
+ 
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+@@ -72,13 +66,21 @@ aligned_array(unsigned long, dec_hybrid_
+ 
+ /* NOTE: These control word macros must only be used after  */
+ /* a key has been set up because they depend on key size    */
++/* See the VIA ACE documentation for key type information   */
++/* and aes_via_ace.h for non-default NEH_KEY_TYPE values    */
++
++#ifndef NEH_KEY_TYPE
++#  define NEH_KEY_TYPE NEH_HYBRID
++#endif
+ 
+ #if NEH_KEY_TYPE == NEH_LOAD
+-#define kd_adr(c)   ((uint_8t*)(c)->ks)
++#define kd_adr(c)   ((uint8_t*)(c)->ks)
+ #elif NEH_KEY_TYPE == NEH_GENERATE
+-#define kd_adr(c)   ((uint_8t*)(c)->ks + (c)->inf.b[0])
++#define kd_adr(c)   ((uint8_t*)(c)->ks + (c)->inf.b[0])
++#elif NEH_KEY_TYPE == NEH_HYBRID
++#define kd_adr(c)   ((uint8_t*)(c)->ks + ((c)->inf.b[0] == 160 ? 160 : 0))
+ #else
+-#define kd_adr(c)   ((uint_8t*)(c)->ks + ((c)->inf.b[0] == 160 ? 160 : 0))
++#error no key type defined for VIA ACE 
+ #endif
+ 
+ #else
+@@ -105,25 +107,25 @@ aligned_array(unsigned long, dec_hybrid_
+ /* test the code for detecting and setting pointer alignment */
+ 
+ AES_RETURN aes_test_alignment_detection(unsigned int n)	/* 4 <= n <= 16 */
+-{	uint_8t	p[16];
+-	uint_32t i, count_eq = 0, count_neq = 0;
++{	uint8_t	p[16];
++    uint32_t i, count_eq = 0, count_neq = 0;
+ 
+-	if(n < 4 || n > 16)
+-		return EXIT_FAILURE;
++    if(n < 4 || n > 16)
++        return EXIT_FAILURE;
+ 
+-	for(i = 0; i < n; ++i)
+-	{
+-		uint_8t *qf = ALIGN_FLOOR(p + i, n),
+-				*qh =  ALIGN_CEIL(p + i, n);
+-		
+-		if(qh == qf)
+-			++count_eq;
+-		else if(qh == qf + n)
+-			++count_neq;
+-		else
+-			return EXIT_FAILURE;
+-	}
+-	return (count_eq != 1 || count_neq != n - 1 ? EXIT_FAILURE : EXIT_SUCCESS);
++    for(i = 0; i < n; ++i)
++    {
++        uint8_t *qf = ALIGN_FLOOR(p + i, n),
++                *qh =  ALIGN_CEIL(p + i, n);
++        
++        if(qh == qf)
++            ++count_eq;
++        else if(qh == qf + n)
++            ++count_neq;
++        else
++            return EXIT_FAILURE;
++    }
++    return (count_eq != 1 || count_neq != n - 1 ? EXIT_FAILURE : EXIT_SUCCESS);
+ }
+ 
+ AES_RETURN aes_mode_reset(aes_encrypt_ctx ctx[1])
+@@ -134,7 +136,7 @@ AES_RETURN aes_mode_reset(aes_encrypt_ct
+ 
+ AES_RETURN aes_ecb_encrypt(const unsigned char *ibuf, unsigned char *obuf,
+                     int len, const aes_encrypt_ctx ctx[1])
+-{   int nb = len >> 4;
++{   int nb = len >> AES_BLOCK_SIZE_P2;
+ 
+     if(len & (AES_BLOCK_SIZE - 1))
+         return EXIT_FAILURE;
+@@ -142,7 +144,7 @@ AES_RETURN aes_ecb_encrypt(const unsigne
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+     if(ctx->inf.b[1] == 0xff)
+-    {   uint_8t *ksp = (uint_8t*)(ctx->ks);
++    {   uint8_t *ksp = (uint8_t*)(ctx->ks);
+         via_cwd(cwd, hybrid, enc, 2 * ctx->inf.b[0] - 192);
+ 
+         if(ALIGN_OFFSET( ctx, 16 ))
+@@ -153,8 +155,8 @@ AES_RETURN aes_ecb_encrypt(const unsigne
+             via_ecb_op5(ksp, cwd, ibuf, obuf, nb);
+         }
+         else
+-        {   aligned_auto(uint_8t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
+-            uint_8t *ip, *op;
++        {   aligned_auto(uint8_t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
++            uint8_t *ip, *op;
+ 
+             while(nb)
+             {
+@@ -186,7 +188,7 @@ AES_RETURN aes_ecb_encrypt(const unsigne
+     while(nb--)
+     {
+         if(aes_encrypt(ibuf, obuf, ctx) != EXIT_SUCCESS)
+-			return EXIT_FAILURE;
++            return EXIT_FAILURE;
+         ibuf += AES_BLOCK_SIZE;
+         obuf += AES_BLOCK_SIZE;
+     }
+@@ -196,7 +198,7 @@ AES_RETURN aes_ecb_encrypt(const unsigne
+ 
+ AES_RETURN aes_ecb_decrypt(const unsigned char *ibuf, unsigned char *obuf,
+                     int len, const aes_decrypt_ctx ctx[1])
+-{   int nb = len >> 4;
++{   int nb = len >> AES_BLOCK_SIZE_P2;
+ 
+     if(len & (AES_BLOCK_SIZE - 1))
+         return EXIT_FAILURE;
+@@ -204,7 +206,7 @@ AES_RETURN aes_ecb_decrypt(const unsigne
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+     if(ctx->inf.b[1] == 0xff)
+-    {   uint_8t *ksp = kd_adr(ctx);
++    {   uint8_t *ksp = kd_adr(ctx);
+         via_cwd(cwd, hybrid, dec, 2 * ctx->inf.b[0] - 192);
+ 
+         if(ALIGN_OFFSET( ctx, 16 ))
+@@ -215,8 +217,8 @@ AES_RETURN aes_ecb_decrypt(const unsigne
+             via_ecb_op5(ksp, cwd, ibuf, obuf, nb);
+         }
+         else
+-        {   aligned_auto(uint_8t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
+-            uint_8t *ip, *op;
++        {   aligned_auto(uint8_t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
++            uint8_t *ip, *op;
+ 
+             while(nb)
+             {
+@@ -248,7 +250,7 @@ AES_RETURN aes_ecb_decrypt(const unsigne
+     while(nb--)
+     {
+         if(aes_decrypt(ibuf, obuf, ctx) != EXIT_SUCCESS)
+-			return EXIT_FAILURE;
++            return EXIT_FAILURE;
+         ibuf += AES_BLOCK_SIZE;
+         obuf += AES_BLOCK_SIZE;
+     }
+@@ -258,7 +260,7 @@ AES_RETURN aes_ecb_decrypt(const unsigne
+ 
+ AES_RETURN aes_cbc_encrypt(const unsigned char *ibuf, unsigned char *obuf,
+                     int len, unsigned char *iv, const aes_encrypt_ctx ctx[1])
+-{   int nb = len >> 4;
++{   int nb = len >> AES_BLOCK_SIZE_P2;
+ 
+     if(len & (AES_BLOCK_SIZE - 1))
+         return EXIT_FAILURE;
+@@ -266,8 +268,8 @@ AES_RETURN aes_cbc_encrypt(const unsigne
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+     if(ctx->inf.b[1] == 0xff)
+-    {   uint_8t *ksp = (uint_8t*)(ctx->ks), *ivp = iv;
+-        aligned_auto(uint_8t, liv, AES_BLOCK_SIZE, 16);
++    {   uint8_t *ksp = (uint8_t*)(ctx->ks), *ivp = iv;
++        aligned_auto(uint8_t, liv, AES_BLOCK_SIZE, 16);
+         via_cwd(cwd, hybrid, enc, 2 * ctx->inf.b[0] - 192);
+ 
+         if(ALIGN_OFFSET( ctx, 16 ))
+@@ -284,8 +286,8 @@ AES_RETURN aes_cbc_encrypt(const unsigne
+             via_cbc_op7(ksp, cwd, ibuf, obuf, nb, ivp, ivp);
+         }
+         else
+-        {   aligned_auto(uint_8t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
+-            uint_8t *ip, *op;
++        {   aligned_auto(uint8_t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
++            uint8_t *ip, *op;
+ 
+             while(nb)
+             {
+@@ -326,7 +328,7 @@ AES_RETURN aes_cbc_encrypt(const unsigne
+             lp32(iv)[2] ^= lp32(ibuf)[2];
+             lp32(iv)[3] ^= lp32(ibuf)[3];
+             if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-				return EXIT_FAILURE;
++                return EXIT_FAILURE;
+             memcpy(obuf, iv, AES_BLOCK_SIZE);
+             ibuf += AES_BLOCK_SIZE;
+             obuf += AES_BLOCK_SIZE;
+@@ -344,7 +346,7 @@ AES_RETURN aes_cbc_encrypt(const unsigne
+             iv[12] ^= ibuf[12]; iv[13] ^= ibuf[13];
+             iv[14] ^= ibuf[14]; iv[15] ^= ibuf[15];
+             if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-				return EXIT_FAILURE;
++                return EXIT_FAILURE;
+             memcpy(obuf, iv, AES_BLOCK_SIZE);
+             ibuf += AES_BLOCK_SIZE;
+             obuf += AES_BLOCK_SIZE;
+@@ -356,7 +358,7 @@ AES_RETURN aes_cbc_encrypt(const unsigne
+ AES_RETURN aes_cbc_decrypt(const unsigned char *ibuf, unsigned char *obuf,
+                     int len, unsigned char *iv, const aes_decrypt_ctx ctx[1])
+ {   unsigned char tmp[AES_BLOCK_SIZE];
+-    int nb = len >> 4;
++    int nb = len >> AES_BLOCK_SIZE_P2;
+ 
+     if(len & (AES_BLOCK_SIZE - 1))
+         return EXIT_FAILURE;
+@@ -364,8 +366,8 @@ AES_RETURN aes_cbc_decrypt(const unsigne
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+     if(ctx->inf.b[1] == 0xff)
+-    {   uint_8t *ksp = kd_adr(ctx), *ivp = iv;
+-        aligned_auto(uint_8t, liv, AES_BLOCK_SIZE, 16);
++    {   uint8_t *ksp = kd_adr(ctx), *ivp = iv;
++        aligned_auto(uint8_t, liv, AES_BLOCK_SIZE, 16);
+         via_cwd(cwd, hybrid, dec, 2 * ctx->inf.b[0] - 192);
+ 
+         if(ALIGN_OFFSET( ctx, 16 ))
+@@ -382,8 +384,8 @@ AES_RETURN aes_cbc_decrypt(const unsigne
+             via_cbc_op6(ksp, cwd, ibuf, obuf, nb, ivp);
+         }
+         else
+-        {   aligned_auto(uint_8t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
+-            uint_8t *ip, *op;
++        {   aligned_auto(uint8_t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
++            uint8_t *ip, *op;
+ 
+             while(nb)
+             {
+@@ -420,7 +422,7 @@ AES_RETURN aes_cbc_decrypt(const unsigne
+         {
+             memcpy(tmp, ibuf, AES_BLOCK_SIZE);
+             if(aes_decrypt(ibuf, obuf, ctx) != EXIT_SUCCESS)
+-				return EXIT_FAILURE;
++                return EXIT_FAILURE;
+             lp32(obuf)[0] ^= lp32(iv)[0];
+             lp32(obuf)[1] ^= lp32(iv)[1];
+             lp32(obuf)[2] ^= lp32(iv)[2];
+@@ -435,7 +437,7 @@ AES_RETURN aes_cbc_decrypt(const unsigne
+         {
+             memcpy(tmp, ibuf, AES_BLOCK_SIZE);
+             if(aes_decrypt(ibuf, obuf, ctx) != EXIT_SUCCESS)
+-				return EXIT_FAILURE;
++                return EXIT_FAILURE;
+             obuf[ 0] ^= iv[ 0]; obuf[ 1] ^= iv[ 1];
+             obuf[ 2] ^= iv[ 2]; obuf[ 3] ^= iv[ 3];
+             obuf[ 4] ^= iv[ 4]; obuf[ 5] ^= iv[ 5];
+@@ -467,14 +469,14 @@ AES_RETURN aes_cfb_encrypt(const unsigne
+         b_pos = (b_pos == AES_BLOCK_SIZE ? 0 : b_pos);
+     }
+ 
+-    if((nb = (len - cnt) >> 4) != 0)    /* process whole blocks */
++    if((nb = (len - cnt) >> AES_BLOCK_SIZE_P2) != 0)    /* process whole blocks */
+     {
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+         if(ctx->inf.b[1] == 0xff)
+         {   int m;
+-            uint_8t *ksp = (uint_8t*)(ctx->ks), *ivp = iv;
+-            aligned_auto(uint_8t, liv, AES_BLOCK_SIZE, 16);
++            uint8_t *ksp = (uint8_t*)(ctx->ks), *ivp = iv;
++            aligned_auto(uint8_t, liv, AES_BLOCK_SIZE, 16);
+             via_cwd(cwd, hybrid, enc, 2 * ctx->inf.b[0] - 192);
+ 
+             if(ALIGN_OFFSET( ctx, 16 ))
+@@ -494,8 +496,8 @@ AES_RETURN aes_cfb_encrypt(const unsigne
+                 cnt  += nb * AES_BLOCK_SIZE;
+             }
+             else    /* input, output or both are unaligned  */
+-            {   aligned_auto(uint_8t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
+-                uint_8t *ip, *op;
++            {   aligned_auto(uint8_t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
++                uint8_t *ip, *op;
+ 
+                 while(nb)
+                 {
+@@ -528,7 +530,7 @@ AES_RETURN aes_cfb_encrypt(const unsigne
+             {
+                 assert(b_pos == 0);
+                 if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-					return EXIT_FAILURE;
++                    return EXIT_FAILURE;
+                 lp32(obuf)[0] = lp32(iv)[0] ^= lp32(ibuf)[0];
+                 lp32(obuf)[1] = lp32(iv)[1] ^= lp32(ibuf)[1];
+                 lp32(obuf)[2] = lp32(iv)[2] ^= lp32(ibuf)[2];
+@@ -543,7 +545,7 @@ AES_RETURN aes_cfb_encrypt(const unsigne
+             {
+                 assert(b_pos == 0);
+                 if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-					return EXIT_FAILURE;
++                    return EXIT_FAILURE;
+                 obuf[ 0] = iv[ 0] ^= ibuf[ 0]; obuf[ 1] = iv[ 1] ^= ibuf[ 1];
+                 obuf[ 2] = iv[ 2] ^= ibuf[ 2]; obuf[ 3] = iv[ 3] ^= ibuf[ 3];
+                 obuf[ 4] = iv[ 4] ^= ibuf[ 4]; obuf[ 5] = iv[ 5] ^= ibuf[ 5];
+@@ -562,7 +564,7 @@ AES_RETURN aes_cfb_encrypt(const unsigne
+     while(cnt < len)
+     {
+         if(!b_pos && aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-			return EXIT_FAILURE;
++            return EXIT_FAILURE;
+ 
+         while(cnt < len && b_pos < AES_BLOCK_SIZE)
+         {
+@@ -573,7 +575,7 @@ AES_RETURN aes_cfb_encrypt(const unsigne
+         b_pos = (b_pos == AES_BLOCK_SIZE ? 0 : b_pos);
+     }
+ 
+-    ctx->inf.b[2] = (uint_8t)b_pos;
++    ctx->inf.b[2] = (uint8_t)b_pos;
+     return EXIT_SUCCESS;
+ }
+ 
+@@ -582,7 +584,7 @@ AES_RETURN aes_cfb_decrypt(const unsigne
+ {   int cnt = 0, b_pos = (int)ctx->inf.b[2], nb;
+ 
+     if(b_pos)           /* complete any partial block   */
+-    {   uint_8t t;
++    {   uint8_t t;
+ 
+         while(b_pos < AES_BLOCK_SIZE && cnt < len)
+         {
+@@ -595,14 +597,14 @@ AES_RETURN aes_cfb_decrypt(const unsigne
+         b_pos = (b_pos == AES_BLOCK_SIZE ? 0 : b_pos);
+     }
+ 
+-    if((nb = (len - cnt) >> 4) != 0)    /* process whole blocks */
++    if((nb = (len - cnt) >> AES_BLOCK_SIZE_P2) != 0)    /* process whole blocks */
+     {
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+         if(ctx->inf.b[1] == 0xff)
+         {   int m;
+-            uint_8t *ksp = (uint_8t*)(ctx->ks), *ivp = iv;
+-            aligned_auto(uint_8t, liv, AES_BLOCK_SIZE, 16);
++            uint8_t *ksp = (uint8_t*)(ctx->ks), *ivp = iv;
++            aligned_auto(uint8_t, liv, AES_BLOCK_SIZE, 16);
+             via_cwd(cwd, hybrid, dec, 2 * ctx->inf.b[0] - 192);
+ 
+             if(ALIGN_OFFSET( ctx, 16 ))
+@@ -622,8 +624,8 @@ AES_RETURN aes_cfb_decrypt(const unsigne
+                 cnt  += nb * AES_BLOCK_SIZE;
+             }
+             else    /* input, output or both are unaligned  */
+-            {   aligned_auto(uint_8t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
+-                uint_8t *ip, *op;
++            {   aligned_auto(uint8_t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
++                uint8_t *ip, *op;
+ 
+                 while(nb)
+                 {
+@@ -653,11 +655,11 @@ AES_RETURN aes_cfb_decrypt(const unsigne
+ # ifdef FAST_BUFFER_OPERATIONS
+         if(!ALIGN_OFFSET( ibuf, 4 ) && !ALIGN_OFFSET( obuf, 4 ) &&!ALIGN_OFFSET( iv, 4 ))
+             while(cnt + AES_BLOCK_SIZE <= len)
+-            {   uint_32t t;
++            {   uint32_t t;
+ 
+                 assert(b_pos == 0);
+                 if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-					return EXIT_FAILURE;
++                    return EXIT_FAILURE;
+                 t = lp32(ibuf)[0], lp32(obuf)[0] = t ^ lp32(iv)[0], lp32(iv)[0] = t;
+                 t = lp32(ibuf)[1], lp32(obuf)[1] = t ^ lp32(iv)[1], lp32(iv)[1] = t;
+                 t = lp32(ibuf)[2], lp32(obuf)[2] = t ^ lp32(iv)[2], lp32(iv)[2] = t;
+@@ -669,11 +671,11 @@ AES_RETURN aes_cfb_decrypt(const unsigne
+         else
+ # endif
+             while(cnt + AES_BLOCK_SIZE <= len)
+-            {   uint_8t t;
++            {   uint8_t t;
+ 
+                 assert(b_pos == 0);
+                 if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-					return EXIT_FAILURE;
++                    return EXIT_FAILURE;
+                 t = ibuf[ 0], obuf[ 0] = t ^ iv[ 0], iv[ 0] = t;
+                 t = ibuf[ 1], obuf[ 1] = t ^ iv[ 1], iv[ 1] = t;
+                 t = ibuf[ 2], obuf[ 2] = t ^ iv[ 2], iv[ 2] = t;
+@@ -698,10 +700,10 @@ AES_RETURN aes_cfb_decrypt(const unsigne
+     }
+ 
+     while(cnt < len)
+-    {   uint_8t t;
++    {   uint8_t t;
+ 
+         if(!b_pos && aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-			return EXIT_FAILURE;
++            return EXIT_FAILURE;
+ 
+         while(cnt < len && b_pos < AES_BLOCK_SIZE)
+         {
+@@ -714,7 +716,7 @@ AES_RETURN aes_cfb_decrypt(const unsigne
+         b_pos = (b_pos == AES_BLOCK_SIZE ? 0 : b_pos);
+     }
+ 
+-    ctx->inf.b[2] = (uint_8t)b_pos;
++    ctx->inf.b[2] = (uint8_t)b_pos;
+     return EXIT_SUCCESS;
+ }
+ 
+@@ -733,14 +735,14 @@ AES_RETURN aes_ofb_crypt(const unsigned
+         b_pos = (b_pos == AES_BLOCK_SIZE ? 0 : b_pos);
+     }
+ 
+-    if((nb = (len - cnt) >> 4) != 0)   /* process whole blocks */
++    if((nb = (len - cnt) >> AES_BLOCK_SIZE_P2) != 0)   /* process whole blocks */
+     {
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+ 
+         if(ctx->inf.b[1] == 0xff)
+         {   int m;
+-            uint_8t *ksp = (uint_8t*)(ctx->ks), *ivp = iv;
+-            aligned_auto(uint_8t, liv, AES_BLOCK_SIZE, 16);
++            uint8_t *ksp = (uint8_t*)(ctx->ks), *ivp = iv;
++            aligned_auto(uint8_t, liv, AES_BLOCK_SIZE, 16);
+             via_cwd(cwd, hybrid, enc, 2 * ctx->inf.b[0] - 192);
+ 
+             if(ALIGN_OFFSET( ctx, 16 ))
+@@ -760,8 +762,8 @@ AES_RETURN aes_ofb_crypt(const unsigned
+                 cnt  += nb * AES_BLOCK_SIZE;
+             }
+             else    /* input, output or both are unaligned  */
+-        {   aligned_auto(uint_8t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
+-            uint_8t *ip, *op;
++        {   aligned_auto(uint8_t, buf, BFR_BLOCKS * AES_BLOCK_SIZE, 16);
++            uint8_t *ip, *op;
+ 
+                 while(nb)
+                 {
+@@ -794,7 +796,7 @@ AES_RETURN aes_ofb_crypt(const unsigned
+             {
+                 assert(b_pos == 0);
+                 if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-					return EXIT_FAILURE;
++                    return EXIT_FAILURE;
+                 lp32(obuf)[0] = lp32(iv)[0] ^ lp32(ibuf)[0];
+                 lp32(obuf)[1] = lp32(iv)[1] ^ lp32(ibuf)[1];
+                 lp32(obuf)[2] = lp32(iv)[2] ^ lp32(ibuf)[2];
+@@ -809,7 +811,7 @@ AES_RETURN aes_ofb_crypt(const unsigned
+             {
+                 assert(b_pos == 0);
+                 if(aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-					return EXIT_FAILURE;
++                    return EXIT_FAILURE;
+                 obuf[ 0] = iv[ 0] ^ ibuf[ 0]; obuf[ 1] = iv[ 1] ^ ibuf[ 1];
+                 obuf[ 2] = iv[ 2] ^ ibuf[ 2]; obuf[ 3] = iv[ 3] ^ ibuf[ 3];
+                 obuf[ 4] = iv[ 4] ^ ibuf[ 4]; obuf[ 5] = iv[ 5] ^ ibuf[ 5];
+@@ -828,7 +830,7 @@ AES_RETURN aes_ofb_crypt(const unsigned
+     while(cnt < len)
+     {
+         if(!b_pos && aes_encrypt(iv, iv, ctx) != EXIT_SUCCESS)
+-			return EXIT_FAILURE;
++            return EXIT_FAILURE;
+ 
+         while(cnt < len && b_pos < AES_BLOCK_SIZE)
+         {
+@@ -839,7 +841,7 @@ AES_RETURN aes_ofb_crypt(const unsigned
+         b_pos = (b_pos == AES_BLOCK_SIZE ? 0 : b_pos);
+     }
+ 
+-    ctx->inf.b[2] = (uint_8t)b_pos;
++    ctx->inf.b[2] = (uint8_t)b_pos;
+     return EXIT_SUCCESS;
+ }
+ 
+@@ -851,18 +853,18 @@ AES_RETURN aes_ctr_crypt(const unsigned
+     int             i, blen, b_pos = (int)(ctx->inf.b[2]);
+ 
+ #if defined( USE_VIA_ACE_IF_PRESENT )
+-    aligned_auto(uint_8t, buf, BFR_LENGTH, 16);
++    aligned_auto(uint8_t, buf, BFR_LENGTH, 16);
+     if(ctx->inf.b[1] == 0xff && ALIGN_OFFSET( ctx, 16 ))
+         return EXIT_FAILURE;
+ #else
+-    uint_8t buf[BFR_LENGTH];
++    uint8_t buf[BFR_LENGTH];
+ #endif
+ 
+     if(b_pos)
+     {
+         memcpy(buf, cbuf, AES_BLOCK_SIZE);
+         if(aes_ecb_encrypt(buf, buf, AES_BLOCK_SIZE, ctx) != EXIT_SUCCESS)
+-			return EXIT_FAILURE;
++            return EXIT_FAILURE;
+ 
+         while(b_pos < AES_BLOCK_SIZE && len)
+         {
+@@ -878,7 +880,7 @@ AES_RETURN aes_ctr_crypt(const unsigned
+     {
+         blen = (len > BFR_LENGTH ? BFR_LENGTH : len), len -= blen;
+ 
+-        for(i = 0, ip = buf; i < (blen >> 4); ++i)
++        for(i = 0, ip = buf; i < (blen >> AES_BLOCK_SIZE_P2); ++i)
+         {
+             memcpy(ip, cbuf, AES_BLOCK_SIZE);
+             ctr_inc(cbuf);
+@@ -897,7 +899,7 @@ AES_RETURN aes_ctr_crypt(const unsigned
+         else
+ #endif
+         if(aes_ecb_encrypt(buf, buf, i * AES_BLOCK_SIZE, ctx) != EXIT_SUCCESS)
+-			return EXIT_FAILURE;
++            return EXIT_FAILURE;
+ 
+         i = 0; ip = buf;
+ # ifdef FAST_BUFFER_OPERATIONS
+@@ -935,7 +937,7 @@ AES_RETURN aes_ctr_crypt(const unsigned
+             *obuf++ = *ibuf++ ^ ip[b_pos++];
+     }
+ 
+-    ctx->inf.b[2] = (uint_8t)b_pos;
++    ctx->inf.b[2] = (uint8_t)b_pos;
+     return EXIT_SUCCESS;
+ }
+ 
+diff -up libaesgm-20090429/aesopt.h.git libaesgm-20090429/aesopt.h
+--- libaesgm-20090429/aesopt.h.git	2008-07-08 11:04:56.000000000 -0400
++++ libaesgm-20090429/aesopt.h	2020-12-30 14:37:38.629475527 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ 
+  This file contains the compilation options for AES (Rijndael) and code
+  that is common across encryption, key scheduling and table generation.
+@@ -44,8 +37,8 @@
+  The cipher interface is implemented as an array of bytes in which lower
+  AES bit sequence indexes map to higher numeric significance within bytes.
+ 
+-  uint_8t                 (an unsigned  8-bit type)
+-  uint_32t                (an unsigned 32-bit type)
++  uint8_t                 (an unsigned  8-bit type)
++  uint32_t                (an unsigned 32-bit type)
+   struct aes_encrypt_ctx  (structure for the cipher encryption context)
+   struct aes_decrypt_ctx  (structure for the cipher decryption context)
+   AES_RETURN                the function return type
+@@ -71,7 +64,7 @@
+ 
+      Class AESencrypt  for encryption
+ 
+-      Construtors:
++      Constructors:
+           AESencrypt(void)
+           AESencrypt(const unsigned char *key) - 128 bit key
+       Members:
+@@ -81,7 +74,7 @@
+           AES_RETURN encrypt(const unsigned char *in, unsigned char *out) const
+ 
+       Class AESdecrypt  for encryption
+-      Construtors:
++      Constructors:
+           AESdecrypt(void)
+           AESdecrypt(const unsigned char *key) - 128 bit key
+       Members:
+@@ -168,14 +161,47 @@
+ #  error The algorithm byte order is not defined
+ #endif
+ 
+-/*  2. VIA ACE SUPPORT */
++/*  2. Intel AES AND VIA ACE SUPPORT */
+ 
+-#if defined( __GNUC__ ) && defined( __i386__ ) \
+- || defined( _WIN32   ) && defined( _M_IX86  ) \
+- && !(defined( _WIN64 ) || defined( _WIN32_WCE ) || defined( _MSC_VER ) && ( _MSC_VER <= 800 ))
++#if defined( __GNUC__ ) && defined( __i386__ ) && !defined(__BEOS__)  \
++ || defined( _WIN32 ) && defined( _M_IX86 ) && !(defined( _WIN64 ) \
++ || defined( _WIN32_WCE ) || defined( _MSC_VER ) && ( _MSC_VER <= 800 ))
+ #  define VIA_ACE_POSSIBLE
+ #endif
+ 
++/* AESNI is supported by all Windows x64 compilers, but for Linux/GCC
++   we have to test for SSE 2, SSE 3, and AES to before enabling it; */
++#if !defined( INTEL_AES_POSSIBLE )
++#  if defined( _WIN64 ) && defined( _MSC_VER ) \
++   || defined( __GNUC__ ) && defined( __x86_64__ ) && \
++	  defined( __SSE2__ ) && defined( __SSE3__ ) && \
++	  defined( __AES__ )
++#    define INTEL_AES_POSSIBLE
++#  endif
++#endif
++
++/*  Define this option if support for the Intel AESNI is required
++    If USE_INTEL_AES_IF_PRESENT is defined then AESNI will be used
++    if it is detected (both present and enabled).
++
++	AESNI uses a decryption key schedule with the first decryption
++	round key at the high end of the key schedule with the following
++	round keys at lower positions in memory.  So AES_REV_DKS must NOT
++	be defined when AESNI will be used.  Although it is unlikely that
++	assembler code will be used with an AESNI build, if it is then
++	AES_REV_DKS must NOT be defined when the assembler files are
++	built (the definition of USE_INTEL_AES_IF_PRESENT in the assembler
++	code files must match that here if they are used). 
++*/
++
++#if defined( INTEL_AES_POSSIBLE )
++#  if 1 && !defined( USE_INTEL_AES_IF_PRESENT )
++#    define USE_INTEL_AES_IF_PRESENT
++#  endif
++#elif defined( USE_INTEL_AES_IF_PRESENT )
++#  error: AES_NI is not available on this platform
++#endif
++
+ /*  Define this option if support for the VIA ACE is required. This uses
+     inline assembler instructions and is only implemented for the Microsoft,
+     Intel and GCC compilers.  If VIA ACE is known to be present, then defining
+@@ -189,6 +215,8 @@
+     but there are very large performance gains if this can be arranged.
+     VIA ACE also requires the decryption key schedule to be in reverse
+     order (which later checks below ensure).
++
++	AES_REV_DKS must be set for assembler code used with a VIA ACE build
+ */
+ 
+ #if 1 && defined( VIA_ACE_POSSIBLE ) && !defined( USE_VIA_ACE_IF_PRESENT )
+@@ -228,8 +256,14 @@
+ #  define ASM_AMD64_C
+ #endif
+ 
++#if defined( __i386 ) || defined( _M_IX86 )
++#  define A32_
++#elif defined( __x86_64__ ) || defined( _M_X64 )
++#  define A64_
++#endif
++
+ #if (defined ( ASM_X86_V1C ) || defined( ASM_X86_V2 ) || defined( ASM_X86_V2C )) \
+-      && !defined( _M_IX86 ) || defined( ASM_AMD64_C ) && !defined( _M_X64 )
++       && !defined( A32_ )  || defined( ASM_AMD64_C ) && !defined( A64_ )
+ #  error Assembler code is only available for x86 and AMD64 systems
+ #endif
+ 
+@@ -255,7 +289,7 @@
+ 
+ /*  5. LOOP UNROLLING
+ 
+-    The code for encryption and decrytpion cycles through a number of rounds
++    The code for encryption and decryption cycles through a number of rounds
+     that can be implemented either in a loop or by expanding the code into a
+     long sequence of instructions, the latter producing a larger program but
+     one that will often be much faster. The latter is called loop unrolling.
+@@ -291,7 +325,7 @@
+ /*  6. FAST FINITE FIELD OPERATIONS
+ 
+     If this section is included, tables are used to provide faster finite
+-    field arithmetic (this has no effect if FIXED_TABLES is defined).
++    field arithmetic (this has no effect if STATIC_TABLES is defined).
+ */
+ #if 1
+ #  define FF_TABLES
+@@ -300,9 +334,9 @@
+ /*  7. INTERNAL STATE VARIABLE FORMAT
+ 
+     The internal state of Rijndael is stored in a number of local 32-bit
+-    word varaibles which can be defined either as an array or as individual
++    word variables which can be defined either as an array or as individual
+     names variables. Include this section if you want to store these local
+-    varaibles in arrays. Otherwise individual local variables will be used.
++    variables in arrays. Otherwise individual local variables will be used.
+ */
+ #if 1
+ #  define ARRAYS
+@@ -315,26 +349,26 @@
+     must be called to compute them before the code is first used.
+ */
+ #if 1 && !(defined( _MSC_VER ) && ( _MSC_VER <= 800 ))
+-#  define FIXED_TABLES
++#  define STATIC_TABLES
+ #endif
+ 
+ /*  9. MASKING OR CASTING FROM LONGER VALUES TO BYTES
+ 
+-    In some systems it is better to mask longer values to extract bytes 
++    In some systems it is better to mask longer values to extract bytes
+     rather than using a cast. This option allows this choice.
+ */
+ #if 0
+-#  define to_byte(x)  ((uint_8t)(x))
++#  define to_byte(x)  ((uint8_t)(x))
+ #else
+ #  define to_byte(x)  ((x) & 0xff)
+ #endif
+ 
+ /*  10. TABLE ALIGNMENT
+ 
+-    On some sytsems speed will be improved by aligning the AES large lookup
++    On some systems speed will be improved by aligning the AES large lookup
+     tables on particular boundaries. This define should be set to a power of
+     two giving the desired alignment. It can be left undefined if alignment
+-    is not needed.  This option is specific to the Microsft VC++ compiler -
++    is not needed.  This option is specific to the Microsoft VC++ compiler -
+     it seems to sometimes cause trouble for the VC++ version 6 compiler.
+ */
+ 
+@@ -359,7 +393,7 @@
+     up using tables.  The basic tables are each 256 32-bit words, with either
+     one or four tables being required for each round function depending on
+     how much speed is required. The encryption and decryption round functions
+-    are different and the last encryption and decrytpion round functions are
++    are different and the last encryption and decryption round functions are
+     different again making four different round functions in all.
+ 
+     This means that:
+@@ -433,10 +467,16 @@
+ #  define USE_VIA_ACE_IF_PRESENT
+ #endif
+ 
+-#if defined( USE_VIA_ACE_IF_PRESENT ) && !defined ( AES_REV_DKS )
++/* define to reverse decryption key schedule    */
++#if 1 || defined( USE_VIA_ACE_IF_PRESENT ) && !defined ( AES_REV_DKS )
+ #  define AES_REV_DKS
+ #endif
+ 
++/* Intel AESNI uses a decryption key schedule in the encryption order */
++#if defined( USE_INTEL_AES_IF_PRESENT ) && defined ( AES_REV_DKS )
++#  undef AES_REV_DKS
++#endif
++
+ /* Assembler support requires the use of platform byte order */
+ 
+ #if ( defined( ASM_X86_V1C ) || defined( ASM_X86_V2C ) || defined( ASM_AMD64_C ) ) \
+@@ -452,7 +492,7 @@
+    a column number c to the way the state array variable is to be held.
+    The first define below maps the state into an array x[c] whereas the
+    second form maps the state into a number of individual variables x0,
+-   x1, etc.  Another form could map individual state colums to machine
++   x1, etc.  Another form could map individual state columns to machine
+    register names.
+ */
+ 
+@@ -529,7 +569,7 @@
+ #elif defined( bswap_32 )
+ #  define aes_sw32    bswap_32
+ #else
+-#  define brot(x,n)   (((uint_32t)(x) <<  n) | ((uint_32t)(x) >> (32 - n)))
++#  define brot(x,n)   (((uint32_t)(x) <<  n) | ((uint32_t)(x) >> (32 - n)))
+ #  define aes_sw32(x) ((brot((x),8) & 0x00ff00ff) | (brot((x),24) & 0xff00ff00))
+ #endif
+ 
+@@ -545,32 +585,32 @@
+ */
+ 
+ #if ( ALGORITHM_BYTE_ORDER == IS_LITTLE_ENDIAN )
+-#  define upr(x,n)      (((uint_32t)(x) << (8 * (n))) | ((uint_32t)(x) >> (32 - 8 * (n))))
+-#  define ups(x,n)      ((uint_32t) (x) << (8 * (n)))
++#  define upr(x,n)      (((uint32_t)(x) << (8 * (n))) | ((uint32_t)(x) >> (32 - 8 * (n))))
++#  define ups(x,n)      ((uint32_t) (x) << (8 * (n)))
+ #  define bval(x,n)     to_byte((x) >> (8 * (n)))
+ #  define bytes2word(b0, b1, b2, b3)  \
+-        (((uint_32t)(b3) << 24) | ((uint_32t)(b2) << 16) | ((uint_32t)(b1) << 8) | (b0))
++        (((uint32_t)(b3) << 24) | ((uint32_t)(b2) << 16) | ((uint32_t)(b1) << 8) | (b0))
+ #endif
+ 
+ #if ( ALGORITHM_BYTE_ORDER == IS_BIG_ENDIAN )
+-#  define upr(x,n)      (((uint_32t)(x) >> (8 * (n))) | ((uint_32t)(x) << (32 - 8 * (n))))
+-#  define ups(x,n)      ((uint_32t) (x) >> (8 * (n)))
++#  define upr(x,n)      (((uint32_t)(x) >> (8 * (n))) | ((uint32_t)(x) << (32 - 8 * (n))))
++#  define ups(x,n)      ((uint32_t) (x) >> (8 * (n)))
+ #  define bval(x,n)     to_byte((x) >> (24 - 8 * (n)))
+ #  define bytes2word(b0, b1, b2, b3)  \
+-        (((uint_32t)(b0) << 24) | ((uint_32t)(b1) << 16) | ((uint_32t)(b2) << 8) | (b3))
++        (((uint32_t)(b0) << 24) | ((uint32_t)(b1) << 16) | ((uint32_t)(b2) << 8) | (b3))
+ #endif
+ 
+ #if defined( SAFE_IO )
+-#  define word_in(x,c)    bytes2word(((const uint_8t*)(x)+4*c)[0], ((const uint_8t*)(x)+4*c)[1], \
+-                                   ((const uint_8t*)(x)+4*c)[2], ((const uint_8t*)(x)+4*c)[3])
+-#  define word_out(x,c,v) { ((uint_8t*)(x)+4*c)[0] = bval(v,0); ((uint_8t*)(x)+4*c)[1] = bval(v,1); \
+-                          ((uint_8t*)(x)+4*c)[2] = bval(v,2); ((uint_8t*)(x)+4*c)[3] = bval(v,3); }
++#  define word_in(x,c)    bytes2word(((const uint8_t*)(x)+4*c)[0], ((const uint8_t*)(x)+4*c)[1], \
++                                   ((const uint8_t*)(x)+4*c)[2], ((const uint8_t*)(x)+4*c)[3])
++#  define word_out(x,c,v) { ((uint8_t*)(x)+4*c)[0] = bval(v,0); ((uint8_t*)(x)+4*c)[1] = bval(v,1); \
++                          ((uint8_t*)(x)+4*c)[2] = bval(v,2); ((uint8_t*)(x)+4*c)[3] = bval(v,3); }
+ #elif ( ALGORITHM_BYTE_ORDER == PLATFORM_BYTE_ORDER )
+-#  define word_in(x,c)    (*((uint_32t*)(x)+(c)))
+-#  define word_out(x,c,v) (*((uint_32t*)(x)+(c)) = (v))
++#  define word_in(x,c)    (*((uint32_t*)(x)+(c)))
++#  define word_out(x,c,v) (*((uint32_t*)(x)+(c)) = (v))
+ #else
+-#  define word_in(x,c)    aes_sw32(*((uint_32t*)(x)+(c)))
+-#  define word_out(x,c,v) (*((uint_32t*)(x)+(c)) = aes_sw32(v))
++#  define word_in(x,c)    aes_sw32(*((uint32_t*)(x)+(c)))
++#  define word_out(x,c,v) (*((uint32_t*)(x)+(c)) = aes_sw32(v))
+ #endif
+ 
+ /* the finite field modular polynomial and elements */
+@@ -580,17 +620,17 @@
+ 
+ /* multiply four bytes in GF(2^8) by 'x' {02} in parallel */
+ 
+-#define m1  0x80808080
+-#define m2  0x7f7f7f7f
+-#define gf_mulx(x)  ((((x) & m2) << 1) ^ ((((x) & m1) >> 7) * BPOLY))
++#define gf_c1  0x80808080
++#define gf_c2  0x7f7f7f7f
++#define gf_mulx(x)  ((((x) & gf_c2) << 1) ^ ((((x) & gf_c1) >> 7) * BPOLY))
+ 
+ /* The following defines provide alternative definitions of gf_mulx that might
+    give improved performance if a fast 32-bit multiply is not available. Note
+    that a temporary variable u needs to be defined where gf_mulx is used.
+ 
+-#define gf_mulx(x) (u = (x) & m1, u |= (u >> 1), ((x) & m2) << 1) ^ ((u >> 3) | (u >> 6))
+-#define m4  (0x01010101 * BPOLY)
+-#define gf_mulx(x) (u = (x) & m1, ((x) & m2) << 1) ^ ((u - (u >> 7)) & m4)
++#define gf_mulx(x) (u = (x) & gf_c1, u |= (u >> 1), ((x) & gf_c2) << 1) ^ ((u >> 3) | (u >> 6))
++#define gf_c4  (0x01010101 * BPOLY)
++#define gf_mulx(x) (u = (x) & gf_c1, ((x) & gf_c2) << 1) ^ ((u - (u >> 7)) & gf_c4)
+ */
+ 
+ /* Work out which tables are needed for the different options   */
+@@ -655,7 +695,7 @@
+ #if !(defined( REDUCE_CODE_SIZE ) && (defined( ASM_X86_V2 ) || defined( ASM_X86_V2C )))
+ #  if ((FUNCS_IN_C & ENC_KEYING_IN_C) || (FUNCS_IN_C & DEC_KEYING_IN_C))
+ #    if KEY_SCHED == ONE_TABLE
+-#      if !defined( FL1_SET )  && !defined( FL4_SET ) 
++#      if !defined( FL1_SET )  && !defined( FL4_SET )
+ #        define LS1_SET
+ #      endif
+ #    elif KEY_SCHED == FOUR_TABLES
+@@ -704,14 +744,14 @@
+ /* perform forward and inverse column mix operation on four bytes in long word x in */
+ /* parallel. NOTE: x must be a simple variable, NOT an expression in these macros.  */
+ 
+-#if !(defined( REDUCE_CODE_SIZE ) && (defined( ASM_X86_V2 ) || defined( ASM_X86_V2C ))) 
++#if !(defined( REDUCE_CODE_SIZE ) && (defined( ASM_X86_V2 ) || defined( ASM_X86_V2C )))
+ 
+ #if defined( FM4_SET )      /* not currently used */
+ #  define fwd_mcol(x)       four_tables(x,t_use(f,m),vf1,rf1,0)
+ #elif defined( FM1_SET )    /* not currently used */
+ #  define fwd_mcol(x)       one_table(x,upr,t_use(f,m),vf1,rf1,0)
+ #else
+-#  define dec_fmvars        uint_32t g2
++#  define dec_fmvars        uint32_t g2
+ #  define fwd_mcol(x)       (g2 = gf_mulx(x), g2 ^ upr((x) ^ g2, 3) ^ upr((x), 2) ^ upr((x), 1))
+ #endif
+ 
+@@ -720,7 +760,7 @@
+ #elif defined( IM1_SET )
+ #  define inv_mcol(x)       one_table(x,upr,t_use(i,m),vf1,rf1,0)
+ #else
+-#  define dec_imvars        uint_32t g2, g4, g9
++#  define dec_imvars        uint32_t g2, g4, g9
+ #  define inv_mcol(x)       (g2 = gf_mulx(x), g4 = gf_mulx(g2), g9 = (x) ^ gf_mulx(g4), g4 ^= g9, \
+                             (x) ^ g2 ^ g4 ^ upr(g2 ^ g9, 3) ^ upr(g4, 2) ^ upr(g9, 1))
+ #endif
+diff -up libaesgm-20090429/aestab.c.git libaesgm-20090429/aestab.c
+--- libaesgm-20090429/aestab.c.git	2009-04-29 14:35:46.000000000 -0400
++++ libaesgm-20090429/aestab.c	2020-12-30 14:37:38.616475350 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ */
+ 
+ #define DO_TABLES
+@@ -30,7 +23,7 @@
+ #include "aes.h"
+ #include "aesopt.h"
+ 
+-#if defined(FIXED_TABLES)
++#if defined(STATIC_TABLES)
+ 
+ #define sb_data(w) {\
+     w(0x63), w(0x7c), w(0x77), w(0x7b), w(0xf2), w(0x6b), w(0x6f), w(0xc5),\
+@@ -157,7 +150,7 @@
+ 
+ #endif
+ 
+-#if defined(FIXED_TABLES) || !defined(FF_TABLES)
++#if defined(STATIC_TABLES) || !defined(FF_TABLES)
+ 
+ #define f2(x)   ((x<<1) ^ (((x>>7) & 1) * WPOLY))
+ #define f4(x)   ((x<<2) ^ (((x>>6) & 1) * WPOLY) ^ (((x>>6) & 2) * WPOLY))
+@@ -187,7 +180,7 @@ extern "C"
+ {
+ #endif
+ 
+-#if defined(FIXED_TABLES)
++#if defined(STATIC_TABLES)
+ 
+ /* implemented in case of wrong call for fixed tables */
+ 
+@@ -202,7 +195,7 @@ AES_RETURN aes_init(void)
+ 
+ #define gf_inv(x)   ((x) ? pow[ 255 - log[x]] : 0)
+ 
+-#else 
++#else
+ 
+ /*  It will generally be sensible to use tables to compute finite
+     field multiplies and inverses but where memory is scarse this
+@@ -215,8 +208,8 @@ AES_RETURN aes_init(void)
+     used so that locals within fi can be bytes rather than words
+ */
+ 
+-static uint_8t hibit(const uint_32t x)
+-{   uint_8t r = (uint_8t)((x >> 1) | (x >> 2));
++static uint8_t hibit(const uint32_t x)
++{   uint8_t r = (uint8_t)((x >> 1) | (x >> 2));
+ 
+     r |= (r >> 2);
+     r |= (r >> 4);
+@@ -225,10 +218,10 @@ static uint_8t hibit(const uint_32t x)
+ 
+ /* return the inverse of the finite field element x */
+ 
+-static uint_8t gf_inv(const uint_8t x)
+-{   uint_8t p1 = x, p2 = BPOLY, n1 = hibit(x), n2 = 0x80, v1 = 1, v2 = 0;
++static uint8_t gf_inv(const uint8_t x)
++{   uint8_t p1 = x, p2 = BPOLY, n1 = hibit(x), n2 = 0x80, v1 = 1, v2 = 0;
+ 
+-    if(x < 2) 
++    if(x < 2)
+         return x;
+ 
+     for( ; ; )
+@@ -236,20 +229,20 @@ static uint_8t gf_inv(const uint_8t x)
+         if(n1)
+             while(n2 >= n1)             /* divide polynomial p2 by p1    */
+             {
+-                n2 /= n1;               /* shift smaller polynomial left */ 
++                n2 /= n1;               /* shift smaller polynomial left */
+                 p2 ^= (p1 * n2) & 0xff; /* and remove from larger one    */
+-                v2 ^= v1 * n2;          /* shift accumulated value and   */ 
++                v2 ^= v1 * n2;          /* shift accumulated value and   */
+                 n2 = hibit(p2);         /* add into result               */
+             }
+         else
+             return v1;
+ 
+-        if(n2)                          /* repeat with values swapped    */ 
++        if(n2)                          /* repeat with values swapped    */
+             while(n1 >= n2)
+             {
+-                n1 /= n2; 
+-                p1 ^= p2 * n1; 
+-                v1 ^= v2 * n1; 
++                n1 /= n2;
++                p1 ^= p2 * n1;
++                v1 ^= v2 * n1;
+                 n1 = hibit(p1);
+             }
+         else
+@@ -260,14 +253,14 @@ static uint_8t gf_inv(const uint_8t x)
+ #endif
+ 
+ /* The forward and inverse affine transformations used in the S-box */
+-uint_8t fwd_affine(const uint_8t x)
+-{   uint_32t w = x;
++uint8_t fwd_affine(const uint8_t x)
++{   uint32_t w = x;
+     w ^= (w << 1) ^ (w << 2) ^ (w << 3) ^ (w << 4);
+     return 0x63 ^ ((w ^ (w >> 8)) & 0xff);
+ }
+ 
+-uint_8t inv_affine(const uint_8t x)
+-{   uint_32t w = x;
++uint8_t inv_affine(const uint8_t x)
++{   uint32_t w = x;
+     w = (w << 1) ^ (w << 3) ^ (w << 6);
+     return 0x05 ^ ((w ^ (w >> 8)) & 0xff);
+ }
+@@ -275,11 +268,11 @@ uint_8t inv_affine(const uint_8t x)
+ static int init = 0;
+ 
+ AES_RETURN aes_init(void)
+-{   uint_32t  i, w;
++{   uint32_t  i, w;
+ 
+ #if defined(FF_TABLES)
+ 
+-    uint_8t  pow[512], log[256];
++    uint8_t  pow[512], log[256];
+ 
+     if(init)
+         return EXIT_SUCCESS;
+@@ -291,9 +284,9 @@ AES_RETURN aes_init(void)
+     i = 0; w = 1;
+     do
+     {
+-        pow[i] = (uint_8t)w;
+-        pow[i + 255] = (uint_8t)w;
+-        log[w] = (uint_8t)i++;
++        pow[i] = (uint8_t)w;
++        pow[i + 255] = (uint8_t)w;
++        log[w] = (uint8_t)i++;
+         w ^=  (w << 1) ^ (w & 0x80 ? WPOLY : 0);
+     }
+     while (w != 1);
+@@ -310,9 +303,9 @@ AES_RETURN aes_init(void)
+     }
+ 
+     for(i = 0; i < 256; ++i)
+-    {   uint_8t    b;
++    {   uint8_t    b;
+ 
+-        b = fwd_affine(gf_inv((uint_8t)i));
++        b = fwd_affine(gf_inv((uint8_t)i));
+         w = bytes2word(f2(b), b, b, f3(b));
+ 
+ #if defined( SBX_SET )
+@@ -350,7 +343,7 @@ AES_RETURN aes_init(void)
+         t_set(l,s)[3][i] = upr(w,3);
+ #endif
+ 
+-        b = gf_inv(inv_affine((uint_8t)i));
++        b = gf_inv(inv_affine((uint8_t)i));
+         w = bytes2word(fe(b), f9(b), fd(b), fb(b));
+ 
+ #if defined( IM1_SET )			/* tables for the inverse mix column operation  */
+@@ -390,6 +383,33 @@ AES_RETURN aes_init(void)
+     return EXIT_SUCCESS;
+ }
+ 
++/* 
++   Automatic code initialisation (suggested by by Henrik S. Gaßmann)
++   based on code provided by Joe Lowe and placed in the public domain at:
++   http://stackoverflow.com/questions/1113409/attribute-constructor-equivalent-in-vc
++*/
++
++#ifdef _MSC_VER
++
++#pragma section(".CRT$XCU", read)
++
++__declspec(allocate(".CRT$XCU")) void (__cdecl *aes_startup)(void) = aes_init;
++
++#elif defined(__GNUC__)
++
++static void aes_startup(void) __attribute__((constructor));
++
++static void aes_startup(void)
++{
++    aes_init();
++}
++
++#else
++
++#pragma message( "dynamic tables must be initialised manually on your system" )
++
++#endif
++
+ #endif
+ 
+ #if defined(__cplusplus)
+diff -up libaesgm-20090429/aestab.h.git libaesgm-20090429/aestab.h
+--- libaesgm-20090429/aestab.h.git	2008-08-29 11:06:04.000000000 -0400
++++ libaesgm-20090429/aestab.h	2020-12-30 14:37:38.630475541 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ 
+  This file contains the code for declaring the tables needed to implement
+  AES. The file aesopt.h is assumed to be included before this header file.
+@@ -36,7 +29,7 @@
+  that control the calls to aes_init() and the aes_init() routine itself will
+  have to be changed for a specific implementation. If global variables are
+  available it will generally be preferable to use them with the precomputed
+- FIXED_TABLES option that uses static global tables.
++ STATIC_TABLES option that uses static global tables.
+ 
+  The following defines can be used to control the way the tables
+  are defined, initialised and used in embedded environments that
+@@ -76,7 +69,7 @@ extern "C" {
+ #define t_set(m,n) t_##m##n
+ #define t_use(m,n) t_##m##n
+ 
+-#if defined(FIXED_TABLES)
++#if defined(STATIC_TABLES)
+ #  if !defined( __GNUC__ ) && (defined( __MSDOS__ ) || defined( __WIN16__ ))
+ /*   make tables far data to avoid using too much DGROUP space (PG) */
+ #    define CONST const far
+@@ -105,56 +98,56 @@ extern "C" {
+ #  define XP_DIR
+ #endif
+ 
+-#if defined(DO_TABLES) && defined(FIXED_TABLES)
++#if defined(DO_TABLES) && defined(STATIC_TABLES)
+ #define d_1(t,n,b,e)       EXTERN ALIGN CONST XP_DIR t n[256]    =   b(e)
+ #define d_4(t,n,b,e,f,g,h) EXTERN ALIGN CONST XP_DIR t n[4][256] = { b(e), b(f), b(g), b(h) }
+-EXTERN ALIGN CONST uint_32t t_dec(r,c)[RC_LENGTH] = rc_data(w0);
++EXTERN ALIGN CONST uint32_t t_dec(r,c)[RC_LENGTH] = rc_data(w0);
+ #else
+ #define d_1(t,n,b,e)       EXTERN ALIGN CONST XP_DIR t n[256]
+ #define d_4(t,n,b,e,f,g,h) EXTERN ALIGN CONST XP_DIR t n[4][256]
+-EXTERN ALIGN CONST uint_32t t_dec(r,c)[RC_LENGTH];
++EXTERN ALIGN CONST uint32_t t_dec(r,c)[RC_LENGTH];
+ #endif
+ 
+ #if defined( SBX_SET )
+-    d_1(uint_8t, t_dec(s,box), sb_data, h0);
++    d_1(uint8_t, t_dec(s,box), sb_data, h0);
+ #endif
+ #if defined( ISB_SET )
+-    d_1(uint_8t, t_dec(i,box), isb_data, h0);
++    d_1(uint8_t, t_dec(i,box), isb_data, h0);
+ #endif
+ 
+ #if defined( FT1_SET )
+-    d_1(uint_32t, t_dec(f,n), sb_data, u0);
++    d_1(uint32_t, t_dec(f,n), sb_data, u0);
+ #endif
+ #if defined( FT4_SET )
+-    d_4(uint_32t, t_dec(f,n), sb_data, u0, u1, u2, u3);
++    d_4(uint32_t, t_dec(f,n), sb_data, u0, u1, u2, u3);
+ #endif
+ 
+ #if defined( FL1_SET )
+-    d_1(uint_32t, t_dec(f,l), sb_data, w0);
++    d_1(uint32_t, t_dec(f,l), sb_data, w0);
+ #endif
+ #if defined( FL4_SET )
+-    d_4(uint_32t, t_dec(f,l), sb_data, w0, w1, w2, w3);
++    d_4(uint32_t, t_dec(f,l), sb_data, w0, w1, w2, w3);
+ #endif
+ 
+ #if defined( IT1_SET )
+-    d_1(uint_32t, t_dec(i,n), isb_data, v0);
++    d_1(uint32_t, t_dec(i,n), isb_data, v0);
+ #endif
+ #if defined( IT4_SET )
+-    d_4(uint_32t, t_dec(i,n), isb_data, v0, v1, v2, v3);
++    d_4(uint32_t, t_dec(i,n), isb_data, v0, v1, v2, v3);
+ #endif
+ 
+ #if defined( IL1_SET )
+-    d_1(uint_32t, t_dec(i,l), isb_data, w0);
++    d_1(uint32_t, t_dec(i,l), isb_data, w0);
+ #endif
+ #if defined( IL4_SET )
+-    d_4(uint_32t, t_dec(i,l), isb_data, w0, w1, w2, w3);
++    d_4(uint32_t, t_dec(i,l), isb_data, w0, w1, w2, w3);
+ #endif
+ 
+ #if defined( LS1_SET )
+ #if defined( FL1_SET )
+ #undef  LS1_SET
+ #else
+-    d_1(uint_32t, t_dec(l,s), sb_data, w0);
++    d_1(uint32_t, t_dec(l,s), sb_data, w0);
+ #endif
+ #endif
+ 
+@@ -162,15 +155,15 @@ EXTERN ALIGN CONST uint_32t t_dec(r,c)[R
+ #if defined( FL4_SET )
+ #undef  LS4_SET
+ #else
+-    d_4(uint_32t, t_dec(l,s), sb_data, w0, w1, w2, w3);
++    d_4(uint32_t, t_dec(l,s), sb_data, w0, w1, w2, w3);
+ #endif
+ #endif
+ 
+ #if defined( IM1_SET )
+-    d_1(uint_32t, t_dec(i,m), mm_data, v0);
++    d_1(uint32_t, t_dec(i,m), mm_data, v0);
+ #endif
+ #if defined( IM4_SET )
+-    d_4(uint_32t, t_dec(i,m), mm_data, v0, v1, v2, v3);
++    d_4(uint32_t, t_dec(i,m), mm_data, v0, v1, v2, v3);
+ #endif
+ 
+ #if defined(__cplusplus)
+diff -up libaesgm-20090429/aes_via_ace.h.git libaesgm-20090429/aes_via_ace.h
+--- libaesgm-20090429/aes_via_ace.h.git	2008-07-08 11:04:58.000000000 -0400
++++ libaesgm-20090429/aes_via_ace.h	2020-12-30 14:52:13.742374071 -0500
+@@ -1,28 +1,20 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/20077
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ */
+ 
+ #ifndef AES_VIA_ACE_H
+@@ -172,7 +164,8 @@ INLINE int has_cpuid(void)
+ INLINE int is_via_cpu(void)
+ {   char ret_value;
+     __asm
+-    {   xor     eax,eax         /* use CPUID to get vendor  */
++    {   push    ebx
++        xor     eax,eax         /* use CPUID to get vendor  */
+         cpuid                   /* identity string          */
+         xor     eax,eax         /* is it "CentaurHauls" ?   */
+         sub     ebx,0x746e6543  /* 'Cent'                   */
+@@ -186,6 +179,7 @@ INLINE int is_via_cpu(void)
+         or      dl,al           /* & store result in flags  */
+         mov     [via_flags],dl  /* set VIA detected flag    */
+         mov     ret_value,al    /*     able to change it    */
++        pop     ebx
+     }
+     return (int)ret_value;
+ }
+@@ -193,8 +187,7 @@ INLINE int is_via_cpu(void)
+ INLINE int read_via_flags(void)
+ {   char ret_value = 0;
+     __asm
+-    {
+-        mov     eax,0xC0000000  /* Centaur extended CPUID   */
++    {   mov     eax,0xC0000000  /* Centaur extended CPUID   */
+         cpuid
+         mov     edx,0xc0000001  /* >= 0xc0000001 if support */
+         cmp     eax,edx         /* for VIA extended feature */
+@@ -213,8 +206,7 @@ no_rng:
+ INLINE unsigned int via_rng_in(void *buf)
+ {   char ret_value = 0x1f;
+     __asm
+-    {
+-        push    edi
++    {   push    edi
+         mov     edi,buf         /* input buffer address     */
+         xor     edx,edx         /* try to fetch 8 bytes     */
+         NEH_RNG                 /* do RNG read operation    */
+@@ -227,7 +219,7 @@ INLINE unsigned int via_rng_in(void *buf
+ INLINE void via_ecb_op5(
+             const void *k, const void *c, const void *s, void *d, int l)
+ {   __asm
+-    {
++    {   push    ebx
+         NEH_REKEY
+         mov     ebx, (k)
+         mov     edx, (c)
+@@ -235,13 +227,14 @@ INLINE void via_ecb_op5(
+         mov     edi, (d)
+         mov     ecx, (l)
+         NEH_ECB
++        pop     ebx
+     }
+ }
+ 
+ INLINE void via_cbc_op6(
+             const void *k, const void *c, const void *s, void *d, int l, void *v)
+ {   __asm
+-    {
++    {   push    ebx
+         NEH_REKEY
+         mov     ebx, (k)
+         mov     edx, (c)
+@@ -250,13 +243,14 @@ INLINE void via_cbc_op6(
+         mov     ecx, (l)
+         mov     eax, (v)
+         NEH_CBC
++        pop     ebx
+     }
+ }
+ 
+ INLINE void via_cbc_op7(
+         const void *k, const void *c, const void *s, void *d, int l, void *v, void *w)
+ {   __asm
+-    {
++    {   push    ebx
+         NEH_REKEY
+         mov     ebx, (k)
+         mov     edx, (c)
+@@ -271,13 +265,14 @@ INLINE void via_cbc_op7(
+         movsd
+         movsd
+         movsd
++        pop     ebx
+     }
+ }
+ 
+ INLINE void via_cfb_op6(
+             const void *k, const void *c, const void *s, void *d, int l, void *v)
+ {   __asm
+-    {
++    {   push    ebx
+         NEH_REKEY
+         mov     ebx, (k)
+         mov     edx, (c)
+@@ -286,13 +281,14 @@ INLINE void via_cfb_op6(
+         mov     ecx, (l)
+         mov     eax, (v)
+         NEH_CFB
++        pop     ebx
+     }
+ }
+ 
+ INLINE void via_cfb_op7(
+         const void *k, const void *c, const void *s, void *d, int l, void *v, void *w)
+ {   __asm
+-    {
++    {   push    ebx
+         NEH_REKEY
+         mov     ebx, (k)
+         mov     edx, (c)
+@@ -307,13 +303,14 @@ INLINE void via_cfb_op7(
+         movsd
+         movsd
+         movsd
++        pop     ebx
+     }
+ }
+ 
+ INLINE void via_ofb_op6(
+             const void *k, const void *c, const void *s, void *d, int l, void *v)
+ {   __asm
+-    {
++    {   push    ebx
+         NEH_REKEY
+         mov     ebx, (k)
+         mov     edx, (c)
+@@ -322,6 +319,7 @@ INLINE void via_ofb_op6(
+         mov     ecx, (l)
+         mov     eax, (v)
+         NEH_OFB
++        pop     ebx
+     }
+ }
+ 
+@@ -352,6 +350,10 @@ INLINE int has_cpuid(void)
+ 
+ INLINE int is_via_cpu(void)
+ {   int val;
++    asm("pushl %eax\n\t");
++    asm("pushl %ebx\n\t");
++    asm("pushl %ecx\n\t");
++    asm("pushl %edx\n\t");
+     asm("xorl %eax,%eax\n\t");
+     asm("cpuid\n\t");
+     asm("xorl %eax,%eax\n\t");
+@@ -362,6 +364,10 @@ INLINE int is_via_cpu(void)
+     asm("subl $0x736c7561,%ecx\n\t");
+     asm("orl  %ecx,%eax\n\t");
+     asm("movl %%eax,%0\n\t" : "=m" (val));
++    asm("popl %edx\n\t");
++    asm("popl %ecx\n\t");
++    asm("popl %ebx\n\t");
++    asm("popl %eax\n\t");
+     val = (val ? 0 : 1);
+     via_flags = (val | NEH_CPU_READ);
+     return val;
+@@ -399,6 +405,7 @@ INLINE int via_rng_in(void *buf)
+ INLINE volatile  void via_ecb_op5(
+             const void *k, const void *c, const void *s, void *d, int l)
+ {
++    asm("pushl %ebx\n\t");
+     NEH_REKEY;
+     asm("movl %0, %%ebx\n\t" : : "m" (k));
+     asm("movl %0, %%edx\n\t" : : "m" (c));
+@@ -406,11 +413,13 @@ INLINE volatile  void via_ecb_op5(
+     asm("movl %0, %%edi\n\t" : : "m" (d));
+     asm("movl %0, %%ecx\n\t" : : "m" (l));
+     NEH_ECB;
++    asm("popl %ebx\n\t");
+ }
+ 
+ INLINE volatile  void via_cbc_op6(
+             const void *k, const void *c, const void *s, void *d, int l, void *v)
+ {
++    asm("pushl %ebx\n\t");
+     NEH_REKEY;
+     asm("movl %0, %%ebx\n\t" : : "m" (k));
+     asm("movl %0, %%edx\n\t" : : "m" (c));
+@@ -419,11 +428,13 @@ INLINE volatile  void via_cbc_op6(
+     asm("movl %0, %%ecx\n\t" : : "m" (l));
+     asm("movl %0, %%eax\n\t" : : "m" (v));
+     NEH_CBC;
++    asm("popl %ebx\n\t");
+ }
+ 
+ INLINE volatile  void via_cbc_op7(
+         const void *k, const void *c, const void *s, void *d, int l, void *v, void *w)
+ {
++    asm("pushl %ebx\n\t");
+     NEH_REKEY;
+     asm("movl %0, %%ebx\n\t" : : "m" (k));
+     asm("movl %0, %%edx\n\t" : : "m" (c));
+@@ -435,11 +446,13 @@ INLINE volatile  void via_cbc_op7(
+     asm("movl %eax,%esi\n\t");
+     asm("movl %0, %%edi\n\t" : : "m" (w));
+     asm("movsl; movsl; movsl; movsl\n\t");
++    asm("popl %ebx\n\t");
+ }
+ 
+ INLINE volatile  void via_cfb_op6(
+             const void *k, const void *c, const void *s, void *d, int l, void *v)
+ {
++    asm("pushl %ebx\n\t");
+     NEH_REKEY;
+     asm("movl %0, %%ebx\n\t" : : "m" (k));
+     asm("movl %0, %%edx\n\t" : : "m" (c));
+@@ -448,11 +461,13 @@ INLINE volatile  void via_cfb_op6(
+     asm("movl %0, %%ecx\n\t" : : "m" (l));
+     asm("movl %0, %%eax\n\t" : : "m" (v));
+     NEH_CFB;
++    asm("popl %ebx\n\t");
+ }
+ 
+ INLINE volatile  void via_cfb_op7(
+         const void *k, const void *c, const void *s, void *d, int l, void *v, void *w)
+ {
++    asm("pushl %ebx\n\t");
+     NEH_REKEY;
+     asm("movl %0, %%ebx\n\t" : : "m" (k));
+     asm("movl %0, %%edx\n\t" : : "m" (c));
+@@ -464,11 +479,13 @@ INLINE volatile  void via_cfb_op7(
+     asm("movl %eax,%esi\n\t");
+     asm("movl %0, %%edi\n\t" : : "m" (w));
+     asm("movsl; movsl; movsl; movsl\n\t");
++    asm("popl %ebx\n\t");
+ }
+ 
+ INLINE volatile  void via_ofb_op6(
+             const void *k, const void *c, const void *s, void *d, int l, void *v)
+ {
++    asm("pushl %ebx\n\t");
+     NEH_REKEY;
+     asm("movl %0, %%ebx\n\t" : : "m" (k));
+     asm("movl %0, %%edx\n\t" : : "m" (c));
+@@ -477,6 +494,7 @@ INLINE volatile  void via_ofb_op6(
+     asm("movl %0, %%ecx\n\t" : : "m" (l));
+     asm("movl %0, %%eax\n\t" : : "m" (v));
+     NEH_OFB;
++    asm("popl %ebx\n\t");
+ }
+ 
+ #else
+diff -up libaesgm-20090429/aes_x86_v1.asm.git libaesgm-20090429/aes_x86_v1.asm
+--- libaesgm-20090429/aes_x86_v1.asm.git	2008-08-13 10:42:30.000000000 -0400
++++ libaesgm-20090429/aes_x86_v1.asm	2020-12-30 15:04:36.010466390 -0500
+@@ -1,26 +1,19 @@
+ 
+ ; ---------------------------------------------------------------------------
+-; Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
+-;
+-; LICENSE TERMS
++; Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ ;
+ ; The redistribution and use of this software (with or without changes)
+ ; is allowed without the payment of fees or royalties provided that:
+ ;
+-;  1. source code distributions include the above copyright notice, this
+-;     list of conditions and the following disclaimer;
+-;
+-;  2. binary distributions include the above copyright notice, this list
+-;     of conditions and the following disclaimer in their documentation;
+-;
+-;  3. the name of the copyright holder is not used to endorse products
+-;     built using this software without specific written permission.
++;   source code distributions include the above copyright notice, this
++;   list of conditions and the following disclaimer;
+ ;
+-; DISCLAIMER
++;   binary distributions include the above copyright notice, this list
++;   of conditions and the following disclaimer in their documentation.
+ ;
+ ; This software is provided 'as is' with no explicit or implied warranties
+-; in respect of its properties, including, but not limited to, correctness
+-; and/or fitness for purpose.
++; in respect of its operation, including, but not limited to, correctness
++; and fitness for purpose.
+ ; ---------------------------------------------------------------------------
+ ; Issue 13/08/2008
+ ;
+@@ -67,7 +60,15 @@
+ ;
+ ; where <NNN> is 128, 102 or 256.  In the last two calls the length can be in
+ ; either bits or bytes.
+-;
++
++; Use of this assembler code in Windows kernel mode requires memory paging 
++; to be disabled
++%ifdef NO_PAGING
++%define set_page nopage
++%else
++%define set_page
++%endif
++
+ ; Comment in/out the following lines to obtain the desired subroutines. These
+ ; selections MUST match those in the C header file aes.h
+ 
+@@ -133,6 +134,8 @@ stk_spc equ    20   ; stack space
+ 
+ ; End of user defines
+ 
++    section .text align=32 set_page
++
+ %ifdef AES_VAR
+ %ifndef AES_128
+ %define AES_128
+@@ -353,8 +356,6 @@ stk_spc equ    20   ; stack space
+ 
+ %endmacro
+ 
+-    section .text align=32
+-
+ ; AES Encryption Subroutine
+ 
+     align   32
+@@ -564,8 +565,6 @@ stk_spc equ    20   ; stack space
+ 
+ %endmacro
+ 
+-    section .text
+-
+ ; AES Decryption Subroutine
+ 
+     align   32
+diff -up libaesgm-20090429/aes_x86_v2.asm.git libaesgm-20090429/aes_x86_v2.asm
+--- libaesgm-20090429/aes_x86_v2.asm.git	2008-08-13 18:53:00.000000000 -0400
++++ libaesgm-20090429/aes_x86_v2.asm	2020-12-30 15:04:36.010466390 -0500
+@@ -1,28 +1,21 @@
+ 
+ ; ---------------------------------------------------------------------------
+-; Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
+-;
+-; LICENSE TERMS
++; Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ ;
+ ; The redistribution and use of this software (with or without changes)
+ ; is allowed without the payment of fees or royalties provided that:
+ ;
+-;  1. source code distributions include the above copyright notice, this
+-;     list of conditions and the following disclaimer;
+-;
+-;  2. binary distributions include the above copyright notice, this list
+-;     of conditions and the following disclaimer in their documentation;
+-;
+-;  3. the name of the copyright holder is not used to endorse products
+-;     built using this software without specific written permission.
++;   source code distributions include the above copyright notice, this
++;   list of conditions and the following disclaimer;
+ ;
+-; DISCLAIMER
++;   binary distributions include the above copyright notice, this list
++;   of conditions and the following disclaimer in their documentation.
+ ;
+ ; This software is provided 'as is' with no explicit or implied warranties
+-; in respect of its properties, including, but not limited to, correctness
+-; and/or fitness for purpose.
++; in respect of its operation, including, but not limited to, correctness
++; and fitness for purpose.
+ ; ---------------------------------------------------------------------------
+-; Issue 13/08/2008
++; Issue Date: 20/11/2013
+ ;
+ ; This code requires either ASM_X86_V2 or ASM_X86_V2C to be set in aesopt.h
+ ; and the same define to be set here as well. If AES_V2C is set this file
+@@ -79,6 +72,14 @@
+ ; where <NNN> is 128, 102 or 256.  In the last two calls the length can be in
+ ; either bits or bytes.
+ 
++; Use of this assembler code in Windows kernel mode requires memory paging 
++; to be disabled
++%ifdef NO_PAGING
++%define set_page nopage
++%else
++%define set_page
++%endif
++
+ ; The DLL interface must use the _stdcall convention in which the number
+ ; of bytes of parameter space is added after an @ to the sutine's name.
+ ; We must also remove our parameters from the stack before return (see
+@@ -145,6 +146,8 @@
+ ;
+ ; End of user defines
+ 
++    section .text align=32 set_page
++    
+ %ifdef AES_VAR
+ %ifndef AES_128
+ %define AES_128
+@@ -346,7 +349,7 @@
+ ;   Apply S-Box to the 4 bytes in a 32-bit word and rotate byte positions
+ 
+ %ifdef REDUCE_CODE_SIZE
+-    
++
+     global _ls_sub
+ _ls_sub:                        ; ls_sub(t,n) = ls_box(t,n)
+     mov     ecx,[esp+8]
+@@ -411,9 +414,8 @@ stk_spc equ    16   ; stack space
+ 
+ %define ENCRYPTION_TABLE
+ 
+-%ifdef REDUCE_CODE_SIZE
++%macro _enc_round 0
+ 
+-enc_round:
+     add     ebp,16
+     mov     esi,[ebp+8]
+     mov     edi,[ebp+12]
+@@ -425,24 +427,19 @@ enc_round:
+     mov     edx,edi
+     xor     eax,[ebp]
+     xor     ebx,[ebp+4]
+-    ret
+-    
+-%else
+ 
+-%macro enc_round 0
++%endmacro
+ 
+-    add     ebp,16
+-    mov     esi,[ebp+8]
+-    mov     edi,[ebp+12]
+-    push    ebp
+-    rnd_fun nr_xor, nr_mov
+-    mov     eax,ebp
+-    pop     ebp
+-    mov     ecx,esi
+-    mov     edx,edi
+-    xor     eax,[ebp]
+-    xor     ebx,[ebp+4]
++%ifdef REDUCE_CODE_SIZE
+ 
++enc_round:
++    _enc_round
++	ret
++
++%else
++
++%macro enc_round 0
++    _enc_round
+ %endmacro
+ 
+ %endif
+@@ -461,10 +458,7 @@ enc_round:
+ 
+ %endmacro
+ 
+-    section .text align=32
+-
+ ;   AES Encryption Subroutine
+-
+     align   32
+     do_name _aes_encrypt,12
+     push    ebp
+@@ -789,51 +783,6 @@ enc_round:
+ 
+ %endif
+ 
+-%ifdef ENCRYPTION_TABLE
+-
+-; S-box data - 256 entries
+-
+-    section .data align=32
+-    align 32
+-
+-%define u8(x)   0, x, x, f3(x), f2(x), x, x, f3(x)
+-
+-enc_tab:
+-    db  u8(0x63),u8(0x7c),u8(0x77),u8(0x7b),u8(0xf2),u8(0x6b),u8(0x6f),u8(0xc5)
+-    db  u8(0x30),u8(0x01),u8(0x67),u8(0x2b),u8(0xfe),u8(0xd7),u8(0xab),u8(0x76)
+-    db  u8(0xca),u8(0x82),u8(0xc9),u8(0x7d),u8(0xfa),u8(0x59),u8(0x47),u8(0xf0)
+-    db  u8(0xad),u8(0xd4),u8(0xa2),u8(0xaf),u8(0x9c),u8(0xa4),u8(0x72),u8(0xc0)
+-    db  u8(0xb7),u8(0xfd),u8(0x93),u8(0x26),u8(0x36),u8(0x3f),u8(0xf7),u8(0xcc)
+-    db  u8(0x34),u8(0xa5),u8(0xe5),u8(0xf1),u8(0x71),u8(0xd8),u8(0x31),u8(0x15)
+-    db  u8(0x04),u8(0xc7),u8(0x23),u8(0xc3),u8(0x18),u8(0x96),u8(0x05),u8(0x9a)
+-    db  u8(0x07),u8(0x12),u8(0x80),u8(0xe2),u8(0xeb),u8(0x27),u8(0xb2),u8(0x75)
+-    db  u8(0x09),u8(0x83),u8(0x2c),u8(0x1a),u8(0x1b),u8(0x6e),u8(0x5a),u8(0xa0)
+-    db  u8(0x52),u8(0x3b),u8(0xd6),u8(0xb3),u8(0x29),u8(0xe3),u8(0x2f),u8(0x84)
+-    db  u8(0x53),u8(0xd1),u8(0x00),u8(0xed),u8(0x20),u8(0xfc),u8(0xb1),u8(0x5b)
+-    db  u8(0x6a),u8(0xcb),u8(0xbe),u8(0x39),u8(0x4a),u8(0x4c),u8(0x58),u8(0xcf)
+-    db  u8(0xd0),u8(0xef),u8(0xaa),u8(0xfb),u8(0x43),u8(0x4d),u8(0x33),u8(0x85)
+-    db  u8(0x45),u8(0xf9),u8(0x02),u8(0x7f),u8(0x50),u8(0x3c),u8(0x9f),u8(0xa8)
+-    db  u8(0x51),u8(0xa3),u8(0x40),u8(0x8f),u8(0x92),u8(0x9d),u8(0x38),u8(0xf5)
+-    db  u8(0xbc),u8(0xb6),u8(0xda),u8(0x21),u8(0x10),u8(0xff),u8(0xf3),u8(0xd2)
+-    db  u8(0xcd),u8(0x0c),u8(0x13),u8(0xec),u8(0x5f),u8(0x97),u8(0x44),u8(0x17)
+-    db  u8(0xc4),u8(0xa7),u8(0x7e),u8(0x3d),u8(0x64),u8(0x5d),u8(0x19),u8(0x73)
+-    db  u8(0x60),u8(0x81),u8(0x4f),u8(0xdc),u8(0x22),u8(0x2a),u8(0x90),u8(0x88)
+-    db  u8(0x46),u8(0xee),u8(0xb8),u8(0x14),u8(0xde),u8(0x5e),u8(0x0b),u8(0xdb)
+-    db  u8(0xe0),u8(0x32),u8(0x3a),u8(0x0a),u8(0x49),u8(0x06),u8(0x24),u8(0x5c)
+-    db  u8(0xc2),u8(0xd3),u8(0xac),u8(0x62),u8(0x91),u8(0x95),u8(0xe4),u8(0x79)
+-    db  u8(0xe7),u8(0xc8),u8(0x37),u8(0x6d),u8(0x8d),u8(0xd5),u8(0x4e),u8(0xa9)
+-    db  u8(0x6c),u8(0x56),u8(0xf4),u8(0xea),u8(0x65),u8(0x7a),u8(0xae),u8(0x08)
+-    db  u8(0xba),u8(0x78),u8(0x25),u8(0x2e),u8(0x1c),u8(0xa6),u8(0xb4),u8(0xc6)
+-    db  u8(0xe8),u8(0xdd),u8(0x74),u8(0x1f),u8(0x4b),u8(0xbd),u8(0x8b),u8(0x8a)
+-    db  u8(0x70),u8(0x3e),u8(0xb5),u8(0x66),u8(0x48),u8(0x03),u8(0xf6),u8(0x0e)
+-    db  u8(0x61),u8(0x35),u8(0x57),u8(0xb9),u8(0x86),u8(0xc1),u8(0x1d),u8(0x9e)
+-    db  u8(0xe1),u8(0xf8),u8(0x98),u8(0x11),u8(0x69),u8(0xd9),u8(0x8e),u8(0x94)
+-    db  u8(0x9b),u8(0x1e),u8(0x87),u8(0xe9),u8(0xce),u8(0x55),u8(0x28),u8(0xdf)
+-    db  u8(0x8c),u8(0xa1),u8(0x89),u8(0x0d),u8(0xbf),u8(0xe6),u8(0x42),u8(0x68)
+-    db  u8(0x41),u8(0x99),u8(0x2d),u8(0x0f),u8(0xb0),u8(0x54),u8(0xbb),u8(0x16)
+-
+-%endif
+-
+ %ifdef  DECRYPTION
+ 
+ %define DECRYPTION_TABLE
+@@ -903,9 +852,8 @@ enc_tab:
+ %endif
+ %endmacro
+ 
+-%ifdef REDUCE_CODE_SIZE
++%macro _dec_round 0
+ 
+-dec_round:
+ %ifdef AES_REV_DKS
+     add     ebp,16
+ %else
+@@ -921,28 +869,20 @@ dec_round:
+     mov     edx,edi
+     xor     eax,[ebp]
+     xor     ebx,[ebp+4]
+-    ret
+ 
+-%else
++%endmacro
+ 
+-%macro dec_round 0
++%ifdef REDUCE_CODE_SIZE
++
++	align 32
++dec_round:
++	_dec_round
++	ret
+ 
+-%ifdef AES_REV_DKS
+-    add     ebp,16
+ %else
+-    sub     ebp,16
+-%endif
+-    mov     esi,[ebp+8]
+-    mov     edi,[ebp+12]
+-    push    ebp
+-    irn_fun ni_xor, ni_mov
+-    mov     ebx,ebp
+-    pop     ebp
+-    mov     ecx,esi
+-    mov     edx,edi
+-    xor     eax,[ebp]
+-    xor     ebx,[ebp+4]
+ 
++%macro dec_round 0
++	_dec_round
+ %endmacro
+ 
+ %endif
+@@ -965,10 +905,7 @@ dec_round:
+ 
+ %endmacro
+ 
+-    section .text
+-
+ ; AES Decryption Subroutine
+-
+     align   32
+     do_name _aes_decrypt,12
+     push    ebp
+@@ -1370,13 +1307,54 @@ dec_end:
+ 
+ %endif
+ 
++    section .data align=32 set_page
++
++%ifdef ENCRYPTION_TABLE
++
++; S-box data - 256 entries
++
++%define u8(x)   0, x, x, f3(x), f2(x), x, x, f3(x)
++
++enc_tab:
++    db  u8(0x63),u8(0x7c),u8(0x77),u8(0x7b),u8(0xf2),u8(0x6b),u8(0x6f),u8(0xc5)
++    db  u8(0x30),u8(0x01),u8(0x67),u8(0x2b),u8(0xfe),u8(0xd7),u8(0xab),u8(0x76)
++    db  u8(0xca),u8(0x82),u8(0xc9),u8(0x7d),u8(0xfa),u8(0x59),u8(0x47),u8(0xf0)
++    db  u8(0xad),u8(0xd4),u8(0xa2),u8(0xaf),u8(0x9c),u8(0xa4),u8(0x72),u8(0xc0)
++    db  u8(0xb7),u8(0xfd),u8(0x93),u8(0x26),u8(0x36),u8(0x3f),u8(0xf7),u8(0xcc)
++    db  u8(0x34),u8(0xa5),u8(0xe5),u8(0xf1),u8(0x71),u8(0xd8),u8(0x31),u8(0x15)
++    db  u8(0x04),u8(0xc7),u8(0x23),u8(0xc3),u8(0x18),u8(0x96),u8(0x05),u8(0x9a)
++    db  u8(0x07),u8(0x12),u8(0x80),u8(0xe2),u8(0xeb),u8(0x27),u8(0xb2),u8(0x75)
++    db  u8(0x09),u8(0x83),u8(0x2c),u8(0x1a),u8(0x1b),u8(0x6e),u8(0x5a),u8(0xa0)
++    db  u8(0x52),u8(0x3b),u8(0xd6),u8(0xb3),u8(0x29),u8(0xe3),u8(0x2f),u8(0x84)
++    db  u8(0x53),u8(0xd1),u8(0x00),u8(0xed),u8(0x20),u8(0xfc),u8(0xb1),u8(0x5b)
++    db  u8(0x6a),u8(0xcb),u8(0xbe),u8(0x39),u8(0x4a),u8(0x4c),u8(0x58),u8(0xcf)
++    db  u8(0xd0),u8(0xef),u8(0xaa),u8(0xfb),u8(0x43),u8(0x4d),u8(0x33),u8(0x85)
++    db  u8(0x45),u8(0xf9),u8(0x02),u8(0x7f),u8(0x50),u8(0x3c),u8(0x9f),u8(0xa8)
++    db  u8(0x51),u8(0xa3),u8(0x40),u8(0x8f),u8(0x92),u8(0x9d),u8(0x38),u8(0xf5)
++    db  u8(0xbc),u8(0xb6),u8(0xda),u8(0x21),u8(0x10),u8(0xff),u8(0xf3),u8(0xd2)
++    db  u8(0xcd),u8(0x0c),u8(0x13),u8(0xec),u8(0x5f),u8(0x97),u8(0x44),u8(0x17)
++    db  u8(0xc4),u8(0xa7),u8(0x7e),u8(0x3d),u8(0x64),u8(0x5d),u8(0x19),u8(0x73)
++    db  u8(0x60),u8(0x81),u8(0x4f),u8(0xdc),u8(0x22),u8(0x2a),u8(0x90),u8(0x88)
++    db  u8(0x46),u8(0xee),u8(0xb8),u8(0x14),u8(0xde),u8(0x5e),u8(0x0b),u8(0xdb)
++    db  u8(0xe0),u8(0x32),u8(0x3a),u8(0x0a),u8(0x49),u8(0x06),u8(0x24),u8(0x5c)
++    db  u8(0xc2),u8(0xd3),u8(0xac),u8(0x62),u8(0x91),u8(0x95),u8(0xe4),u8(0x79)
++    db  u8(0xe7),u8(0xc8),u8(0x37),u8(0x6d),u8(0x8d),u8(0xd5),u8(0x4e),u8(0xa9)
++    db  u8(0x6c),u8(0x56),u8(0xf4),u8(0xea),u8(0x65),u8(0x7a),u8(0xae),u8(0x08)
++    db  u8(0xba),u8(0x78),u8(0x25),u8(0x2e),u8(0x1c),u8(0xa6),u8(0xb4),u8(0xc6)
++    db  u8(0xe8),u8(0xdd),u8(0x74),u8(0x1f),u8(0x4b),u8(0xbd),u8(0x8b),u8(0x8a)
++    db  u8(0x70),u8(0x3e),u8(0xb5),u8(0x66),u8(0x48),u8(0x03),u8(0xf6),u8(0x0e)
++    db  u8(0x61),u8(0x35),u8(0x57),u8(0xb9),u8(0x86),u8(0xc1),u8(0x1d),u8(0x9e)
++    db  u8(0xe1),u8(0xf8),u8(0x98),u8(0x11),u8(0x69),u8(0xd9),u8(0x8e),u8(0x94)
++    db  u8(0x9b),u8(0x1e),u8(0x87),u8(0xe9),u8(0xce),u8(0x55),u8(0x28),u8(0xdf)
++    db  u8(0x8c),u8(0xa1),u8(0x89),u8(0x0d),u8(0xbf),u8(0xe6),u8(0x42),u8(0x68)
++    db  u8(0x41),u8(0x99),u8(0x2d),u8(0x0f),u8(0xb0),u8(0x54),u8(0xbb),u8(0x16)
++
++%endif
++
+ %ifdef DECRYPTION_TABLE
+ 
+ ; Inverse S-box data - 256 entries
+ 
+-    section .data
+-    align 32
+-
+ %define v8(x)   fe(x), f9(x), fd(x), fb(x), fe(x), f9(x), fd(x), x
+ 
+ dec_tab:
+@@ -1416,4 +1394,3 @@ dec_tab:
+ %endif
+ 
+     end
+-
+diff -up libaesgm-20090429/aesxam.c.git libaesgm-20090429/aesxam.c
+--- libaesgm-20090429/aesxam.c.git	2008-07-08 11:04:58.000000000 -0400
++++ libaesgm-20090429/aesxam.c	2020-12-30 15:06:47.372252479 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 25/09/2018
+ */
+ 
+ //  An example of the use of AES (Rijndael) for file encryption.  This code
+@@ -124,6 +117,24 @@
+ #include "aes.h"
+ #include "rdtsc.h"
+ 
++#if !defined( _MSC_VER ) 
++// substitute for MSVC fopen_s() on Unix/Linux
++int fopen_s(FILE** pFile, const char *filename, const char *mode)
++{
++	char ul_name[64], *d = ul_name;
++	const char *s = filename;
++	FILE * fp;
++
++	do{
++		*d++ = (char)(*s == '\\' ? '/' : *s);
++	}
++	while(*s++);
++
++	*pFile = fp = fopen(ul_name, mode);
++	return fp == NULL;
++}
++#endif
++
+ #define BLOCK_LEN   16
+ 
+ #define OK           0
+@@ -166,8 +177,8 @@ int encfile(FILE *fin, FILE *fout, aes_e
+ {   unsigned char dbuf[3 * BLOCK_LEN];
+     unsigned long i, len, wlen = BLOCK_LEN;
+ 
+-    // When ciphertext stealing is used, we three ciphertext blocks so
+-    // we use a buffer that is three times the block length.  The buffer
++    // When ciphertext stealing is used, we need three ciphertext blocks
++    // so we use a buffer that is three times the block length.  The buffer
+     // pointers b1, b2 and b3 point to the buffer positions of three
+     // ciphertext blocks, b3 being the most recent and b1 being the
+     // oldest. We start with the IV in b1 and the block to be decrypted
+@@ -254,8 +265,8 @@ int decfile(FILE *fin, FILE *fout, aes_d
+ {   unsigned char dbuf[3 * BLOCK_LEN], buf[BLOCK_LEN];
+     unsigned long i, len, wlen = BLOCK_LEN;
+ 
+-    // When ciphertext stealing is used, we three ciphertext blocks so
+-    // we use a buffer that is three times the block length.  The buffer
++    // When ciphertext stealing is used, we need three ciphertext blocks
++    // so we use a buffer that is three times the block length.  The buffer
+     // pointers b1, b2 and b3 point to the buffer positions of three
+     // ciphertext blocks, b3 being the most recent and b1 being the
+     // oldest. We start with the IV in b1 and the block to be decrypted
+@@ -383,13 +394,13 @@ int main(int argc, char *argv[])
+ 
+     key_len = i / 2;
+ 
+-    if(!(fin = fopen(argv[1], "rb")))   // try to open the input file
++    if(fopen_s(&fin, argv[1], "rb"))   // try to open the input file
+     {
+         printf("The input file: %s could not be opened\n", argv[1]);
+         err = -5; goto exit;
+     }
+ 
+-    if(!(fout = fopen(argv[2], "wb")))  // try to open the output file
++    if(fopen_s(&fout, argv[2], "wb"))  // try to open the output file
+     {
+         printf("The output file: %s could not be opened\n", argv[2]);
+         err = -6; goto exit;
+diff -up libaesgm-20090429/brg_endian.h.git libaesgm-20090429/brg_endian.h
+--- libaesgm-20090429/brg_endian.h.git	2008-07-08 11:04:58.000000000 -0400
++++ libaesgm-20090429/brg_endian.h	2020-12-30 15:12:15.798717951 -0500
+@@ -1,28 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 10/09/2018
+ */
+ 
+ #ifndef _BRG_ENDIAN_H
+@@ -31,6 +24,12 @@
+ #define IS_BIG_ENDIAN      4321 /* byte 0 is most significant (mc68k) */
+ #define IS_LITTLE_ENDIAN   1234 /* byte 0 is least significant (i386) */
+ 
++/* This is needed when using clang with MSVC to avoid including */
++/* endian.h and byteswap.h which are not present on Windows     */
++#if defined( _MSC_VER ) && defined( __clang__ )
++#  undef __GNUC__
++#endif
++
+ /* Include files where endian defines and byteswap functions may reside */
+ #if defined( __sun )
+ #  include <sys/isa_defs.h>
+@@ -49,8 +48,20 @@
+ #endif
+ 
+ /* Now attempt to set the define for platform byte order using any  */
+-/* of the four forms SYMBOL, _SYMBOL, __SYMBOL & __SYMBOL__, which  */
+-/* seem to encompass most endian symbol definitions                 */
++/* of the four forms SYMBOL, _SYMBOL, __SYMBOL & __SYMBOL__, ...    */
++/* which seem to encompass most endian symbol definitions           */
++
++#if defined( __ORDER_BIG_ENDIAN__ ) && defined( __ORDER_LITTLE_ENDIAN__ )
++#  if defined( __BYTE_ORDER__ ) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
++#    define PLATFORM_BYTE_ORDER IS_BIG_ENDIAN
++#  elif defined( __BYTE_ORDER__ ) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++#    define PLATFORM_BYTE_ORDER IS_LITTLE_ENDIAN
++#  endif
++#elif defined( __ORDER_BIG_ENDIAN__ )
++#  define PLATFORM_BYTE_ORDER IS_BIG_ENDIAN
++#elif defined( __ORDER_LITTLE_ENDIAN__ )
++#  define PLATFORM_BYTE_ORDER IS_LITTLE_ENDIAN
++#endif
+ 
+ #if defined( BIG_ENDIAN ) && defined( LITTLE_ENDIAN )
+ #  if defined( BYTE_ORDER ) && BYTE_ORDER == BIG_ENDIAN
+diff -up libaesgm-20090429/brg_types.h.git libaesgm-20090429/brg_types.h
+--- libaesgm-20090429/brg_types.h.git	2009-04-29 14:36:08.000000000 -0400
++++ libaesgm-20090429/brg_types.h	2020-12-30 15:12:15.798717951 -0500
+@@ -1,37 +1,21 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
+-
+- The unsigned integer types defined here are of the form uint_<nn>t where
+- <nn> is the length of the type; for example, the unsigned 32-bit type is
+- 'uint_32t'.  These are NOT the same as the 'C99 integer types' that are
+- defined in the inttypes.h and stdint.h headers since attempts to use these
+- types have shown that support for them is still highly variable.  However,
+- since the latter are of the form uint<nn>_t, a regular expression search
+- and replace (in VC++ search on 'uint_{:z}t' and replace with 'uint\1_t')
+- can be used to convert the types used here to the C99 standard types.
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 30/09/2017
+ */
+ 
+ #ifndef _BRG_TYPES_H
+@@ -42,6 +26,7 @@ extern "C" {
+ #endif
+ 
+ #include <limits.h>
++#include <stdint.h>
+ 
+ #if defined( _MSC_VER ) && ( _MSC_VER >= 1300 )
+ #  include <stddef.h>
+@@ -49,93 +34,99 @@ extern "C" {
+ #elif defined( __ECOS__ )
+ #  define intptr_t unsigned int
+ #  define ptrint_t intptr_t
+-#elif defined( __GNUC__ ) && ( __GNUC__ >= 3 )
+-#  include <stdint.h>
++#elif defined( __GNUC__ ) && ( __GNUC__ >= 3 ) && !(defined( __HAIKU__ ) || defined( __VxWorks__ ))
+ #  define ptrint_t intptr_t
+ #else
+ #  define ptrint_t int
+ #endif
+ 
+-#ifndef BRG_UI8
+-#  define BRG_UI8
+-#  if UCHAR_MAX == 255u
+-     typedef unsigned char uint_8t;
+-#  else
+-#    error Please define uint_8t as an 8-bit unsigned integer type in brg_types.h
+-#  endif
++/* define unsigned 8-bit type if not available in stdint.h */
++#if !defined(UINT8_MAX)
++  typedef unsigned char uint8_t;
+ #endif
+ 
+-#ifndef BRG_UI16
+-#  define BRG_UI16
+-#  if USHRT_MAX == 65535u
+-     typedef unsigned short uint_16t;
+-#  else
+-#    error Please define uint_16t as a 16-bit unsigned short type in brg_types.h
+-#  endif
++/* define unsigned 16-bit type if not available in stdint.h */
++#if !defined(UINT16_MAX)
++  typedef unsigned short uint16_t;
+ #endif
+ 
+-#ifndef BRG_UI32
+-#  define BRG_UI32
+-#  if UINT_MAX == 4294967295u
+-#    define li_32(h) 0x##h##u
+-     typedef unsigned int uint_32t;
+-#  elif ULONG_MAX == 4294967295u
+-#    define li_32(h) 0x##h##ul
+-     typedef unsigned long uint_32t;
+-#  elif defined( _CRAY )
+-#    error This code needs 32-bit data types, which Cray machines do not provide
+-#  else
+-#    error Please define uint_32t as a 32-bit unsigned integer type in brg_types.h
++/* define unsigned 32-bit type if not available in stdint.h and define the
++   macro li_32(h) which converts a sequence of eight hexadecimal characters
++   into a 32 bit constant 
++*/
++#if defined(UINT_MAX) && UINT_MAX == 4294967295u
++#  define li_32(h) 0x##h##u
++#  if !defined(UINT32_MAX)
++     typedef unsigned int uint32_t;
++#  endif
++#elif defined(ULONG_MAX) && ULONG_MAX == 4294967295u
++#  define li_32(h) 0x##h##ul
++#  if !defined(UINT32_MAX)
++     typedef unsigned long uint32_t;
+ #  endif
++#elif defined( _CRAY )
++#  error This code needs 32-bit data types, which Cray machines do not provide
++#else
++#  error Please define uint32_t as a 32-bit unsigned integer type in brg_types.h
+ #endif
+ 
+-#ifndef BRG_UI64
+-#  if defined( __BORLANDC__ ) && !defined( __MSDOS__ )
+-#    define BRG_UI64
+-#    define li_64(h) 0x##h##ui64
+-     typedef unsigned __int64 uint_64t;
+-#  elif defined( _MSC_VER ) && ( _MSC_VER < 1300 )    /* 1300 == VC++ 7.0 */
+-#    define BRG_UI64
+-#    define li_64(h) 0x##h##ui64
+-     typedef unsigned __int64 uint_64t;
+-#  elif defined( __sun ) && defined( ULONG_MAX ) && ULONG_MAX == 0xfffffffful
+-#    define BRG_UI64
++/* define unsigned 64-bit type if not available in stdint.h and define the
++   macro li_64(h) which converts a sequence of eight hexadecimal characters
++   into a 64 bit constant 
++*/
++#if defined( __BORLANDC__ ) && !defined( __MSDOS__ )
++#  define li_64(h) 0x##h##ui64
++#  if !defined(UINT64_MAX)
++     typedef unsigned __int64 uint64_t;  
++#  endif
++#elif defined( _MSC_VER ) && ( _MSC_VER < 1300 )    /* 1300 == VC++ 7.0 */
++#  define li_64(h) 0x##h##ui64
++#  if !defined(UINT64_MAX)
++     typedef unsigned __int64 uint64_t;
++#  endif
++#elif defined( __sun ) && defined( ULONG_MAX ) && ULONG_MAX == 0xfffffffful
++#  define li_64(h) 0x##h##ull
++#  if !defined(UINT64_MAX)
++     typedef unsigned long long uint64_t;
++#  endif
++#elif defined( __MVS__ )
++#  define li_64(h) 0x##h##ull
++#  if !defined(UINT64_MAX)
++     typedef unsigned long long uint64_t;
++#  endif
++#elif defined( UINT_MAX ) && UINT_MAX > 4294967295u
++#  if UINT_MAX == 18446744073709551615u
++#    define li_64(h) 0x##h##u
++#    if !defined(UINT64_MAX)
++       typedef unsigned int uint64_t;
++#    endif
++#  endif
++#elif defined( ULONG_MAX ) && ULONG_MAX > 4294967295u
++#  if ULONG_MAX == 18446744073709551615ul
++#    define li_64(h) 0x##h##ul
++#    if !defined(UINT64_MAX) && !defined(_UINT64_T)
++       typedef unsigned long uint64_t;
++#    endif
++#  endif
++#elif defined( ULLONG_MAX ) && ULLONG_MAX > 4294967295u
++#  if ULLONG_MAX == 18446744073709551615ull
+ #    define li_64(h) 0x##h##ull
+-     typedef unsigned long long uint_64t;
+-#  elif defined( __MVS__ )
+-#    define BRG_UI64
++#    if !defined(UINT64_MAX) && !defined( __HAIKU__ )
++       typedef unsigned long long uint64_t;
++#    endif
++#  endif
++#elif defined( ULONG_LONG_MAX ) && ULONG_LONG_MAX > 4294967295u
++#  if ULONG_LONG_MAX == 18446744073709551615ull
+ #    define li_64(h) 0x##h##ull
+-     typedef unsigned int long long uint_64t;
+-#  elif defined( UINT_MAX ) && UINT_MAX > 4294967295u
+-#    if UINT_MAX == 18446744073709551615u
+-#      define BRG_UI64
+-#      define li_64(h) 0x##h##u
+-       typedef unsigned int uint_64t;
+-#    endif
+-#  elif defined( ULONG_MAX ) && ULONG_MAX > 4294967295u
+-#    if ULONG_MAX == 18446744073709551615ul
+-#      define BRG_UI64
+-#      define li_64(h) 0x##h##ul
+-       typedef unsigned long uint_64t;
+-#    endif
+-#  elif defined( ULLONG_MAX ) && ULLONG_MAX > 4294967295u
+-#    if ULLONG_MAX == 18446744073709551615ull
+-#      define BRG_UI64
+-#      define li_64(h) 0x##h##ull
+-       typedef unsigned long long uint_64t;
+-#    endif
+-#  elif defined( ULONG_LONG_MAX ) && ULONG_LONG_MAX > 4294967295u
+-#    if ULONG_LONG_MAX == 18446744073709551615ull
+-#      define BRG_UI64
+-#      define li_64(h) 0x##h##ull
+-       typedef unsigned long long uint_64t;
++#    if !defined(UINT64_MAX)
++       typedef unsigned long long uint64_t;
+ #    endif
+ #  endif
+ #endif
+ 
+-#if !defined( BRG_UI64 )
++#if !defined( li_64 )
+ #  if defined( NEED_UINT_64T )
+-#    error Please define uint_64t as an unsigned 64 bit type in brg_types.h
++#    error Please define uint64_t as an unsigned 64 bit type in brg_types.h
+ #  endif
+ #endif
+ 
+@@ -173,25 +164,25 @@ extern "C" {
+ /*	These defines are used to detect and set the memory alignment of pointers.
+     Note that offsets are in bytes.
+ 
+-	ALIGN_OFFSET(x,n)			return the positive or zero offset of 
+-								the memory addressed by the pointer 'x' 
+-								from an address that is aligned on an 
+-								'n' byte boundary ('n' is a power of 2)
+-
+-	ALIGN_FLOOR(x,n)			return a pointer that points to memory
+-								that is aligned on an 'n' byte boundary 
+-								and is not higher than the memory address
+-								pointed to by 'x' ('n' is a power of 2)
+-
+-	ALIGN_CEIL(x,n)				return a pointer that points to memory
+-								that is aligned on an 'n' byte boundary 
+-								and is not lower than the memory address
+-								pointed to by 'x' ('n' is a power of 2)
++    ALIGN_OFFSET(x,n)			return the positive or zero offset of 
++                                the memory addressed by the pointer 'x' 
++                                from an address that is aligned on an 
++                                'n' byte boundary ('n' is a power of 2)
++
++    ALIGN_FLOOR(x,n)			return a pointer that points to memory
++                                that is aligned on an 'n' byte boundary 
++                                and is not higher than the memory address
++                                pointed to by 'x' ('n' is a power of 2)
++
++    ALIGN_CEIL(x,n)				return a pointer that points to memory
++                                that is aligned on an 'n' byte boundary 
++                                and is not lower than the memory address
++                                pointed to by 'x' ('n' is a power of 2)
+ */
+ 
+ #define ALIGN_OFFSET(x,n)	(((ptrint_t)(x)) & ((n) - 1))
+-#define ALIGN_FLOOR(x,n)	((uint_8t*)(x) - ( ((ptrint_t)(x)) & ((n) - 1)))
+-#define ALIGN_CEIL(x,n)		((uint_8t*)(x) + (-((ptrint_t)(x)) & ((n) - 1)))
++#define ALIGN_FLOOR(x,n)	((uint8_t*)(x) - ( ((ptrint_t)(x)) & ((n) - 1)))
++#define ALIGN_CEIL(x,n)		((uint8_t*)(x) + (-((ptrint_t)(x)) & ((n) - 1)))
+ 
+ /*  These defines are used to declare buffers in a way that allows
+     faster operations on longer variables to be used.  In all these
+@@ -210,10 +201,10 @@ extern "C" {
+                                 length 'size' bits
+ 
+     UPTR_CAST(x,size)           casts a pointer to a pointer to a 
+-                                varaiable of length 'size' bits
++                                variable of length 'size' bits
+ */
+ 
+-#define UI_TYPE(size)               uint_##size##t
++#define UI_TYPE(size)               uint##size##_t
+ #define UNIT_TYPEDEF(x,size)        typedef UI_TYPE(size) x
+ #define BUFR_TYPEDEF(x,size,bsize)  typedef UI_TYPE(size) x[bsize / (size >> 3)]
+ #define UNIT_CAST(x,size)           ((UI_TYPE(size) )(x))  
+diff -up libaesgm-20090429/license.txt.git libaesgm-20090429/license.txt
+--- libaesgm-20090429/license.txt.git	2020-12-30 15:12:37.578014088 -0500
++++ libaesgm-20090429/license.txt	2020-12-30 14:33:53.679416983 -0500
+@@ -0,0 +1,19 @@
++
++The files in this distribution are provided under the following license:
++
++---------------------------------------------------------------------------
++Copyright (c) 1998-2018, Brian Gladman, Worcester, UK. All rights reserved.
++
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
++
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
++
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
+diff -up libaesgm-20090429/rdtsc.h.git libaesgm-20090429/rdtsc.h
+--- libaesgm-20090429/rdtsc.h.git	2020-12-30 15:14:53.214858234 -0500
++++ libaesgm-20090429/rdtsc.h	2020-12-30 15:14:28.387520679 -0500
+@@ -0,0 +1,47 @@
++/*
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
++
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
++
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
++
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
++*/
++
++#ifndef RDTSC_H
++#define RDTSC_H
++
++#if defined( __GNUC__ )
++
++    static inline volatile unsigned long long read_tsc(void)
++    {
++        unsigned int cyl, cyh;
++        __asm__ __volatile__("movl $0, %%eax; cpuid; rdtsc":"=a"(cyl),"=d"(cyh)::"ebx","ecx");
++        return ((unsigned long long)cyh << 32) | cyl;
++    }
++
++#elif defined( _WIN32 ) || defined( _WIN64 )
++
++#   include <intrin.h>
++#   pragma intrinsic( __rdtsc )
++
++    __inline volatile unsigned long long read_tsc(void)
++    {
++        return __rdtsc();
++    }
++
++#else
++#   error A high resolution timer is not available
++#endif
++
++#endif
+diff -up libaesgm-20090429/rfc3686.c.git libaesgm-20090429/rfc3686.c
+--- libaesgm-20090429/rfc3686.c.git	2008-10-07 09:27:34.000000000 -0400
++++ libaesgm-20090429/rfc3686.c	2020-12-30 15:15:10.266090094 -0500
+@@ -1,3 +1,22 @@
++/*
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
++
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
++
++source code distributions include the above copyright notice, this
++list of conditions and the following disclaimer;
++
++binary distributions include the above copyright notice, this list
++of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/11/2013
++*/
+ 
+ #include <stdio.h>
+ #include <string.h>
+@@ -312,16 +331,21 @@ void rfc3686_test(void)
+ {   aes_encrypt_ctx aes_ctx[1];
+     unsigned char ctr_buf[AES_BLOCK_SIZE];
+     unsigned char obuf[36];
+-    unsigned int i; 
++    unsigned int i, err = 0; 
+     
+     for( i = 0 ; i < sizeof(tests) / sizeof(test_str) ; ++i )
+     {
+         aes_encrypt_key(tests[i].key, tests[i].k_len, aes_ctx);
+         rfc3686_init(tests[i].nonce, tests[i].iv, ctr_buf);
+         rfc3686_crypt(tests[i].p_txt, obuf, tests[i].m_len, ctr_buf, aes_ctx);
+-        if(memcmp(obuf, tests[i].c_txt, tests[i].m_len) != 0)
+-            printf("\nerror");
++		if(memcmp(obuf, tests[i].c_txt, tests[i].m_len) != 0)
++		{
++			err++;
++			printf("error\n");
++		}
+     }
++	if(!err)
++		printf("RFC3686 Tests Passed\n");
+ }
+ 
+ int main(void)
+diff -up libaesgm-20090429/tablegen.c.git libaesgm-20090429/tablegen.c
+--- libaesgm-20090429/tablegen.c.git	2008-07-08 11:04:58.000000000 -0400
++++ libaesgm-20090429/tablegen.c	2020-12-30 15:15:23.983276613 -0500
+@@ -1,33 +1,27 @@
+ /*
+- ---------------------------------------------------------------------------
+- Copyright (c) 1998-2008, Brian Gladman, Worcester, UK. All rights reserved.
++---------------------------------------------------------------------------
++Copyright (c) 1998-2013, Brian Gladman, Worcester, UK. All rights reserved.
+ 
+- LICENSE TERMS
++The redistribution and use of this software (with or without changes)
++is allowed without the payment of fees or royalties provided that:
+ 
+- The redistribution and use of this software (with or without changes)
+- is allowed without the payment of fees or royalties provided that:
++  source code distributions include the above copyright notice, this
++  list of conditions and the following disclaimer;
+ 
+-  1. source code distributions include the above copyright notice, this
+-     list of conditions and the following disclaimer;
+-
+-  2. binary distributions include the above copyright notice, this list
+-     of conditions and the following disclaimer in their documentation;
+-
+-  3. the name of the copyright holder is not used to endorse products
+-     built using this software without specific written permission.
+-
+- DISCLAIMER
+-
+- This software is provided 'as is' with no explicit or implied warranties
+- in respect of its properties, including, but not limited to, correctness
+- and/or fitness for purpose.
+- ---------------------------------------------------------------------------
+- Issue Date: 20/12/2007
++  binary distributions include the above copyright notice, this list
++  of conditions and the following disclaimer in their documentation.
++
++This software is provided 'as is' with no explicit or implied warranties
++in respect of its operation, including, but not limited to, correctness
++and fitness for purpose.
++---------------------------------------------------------------------------
++Issue Date: 20/12/2007
+ */
+ 
+ #define DO_TABLES
+ 
+ #include <stdio.h>
++#include "aesaux.h"
+ #include "aesopt.h"
+ 
+ #define sb_data(w) {\
+@@ -170,7 +164,7 @@
+ void rtab(FILE *f, unsigned char *h, const unsigned int t[RC_LENGTH])
+ {   int i;
+ 
+-    fprintf(f, "\nuint_32t %s[RC_LENGTH] = \n{", h);
++    fprintf(f, "\nuint32_t %s[RC_LENGTH] = \n{", h);
+ 
+     for(i = 0; i < RC_LENGTH; ++i)
+     {
+@@ -188,7 +182,7 @@ void rtab(FILE *f, unsigned char *h, con
+ void btab_1(FILE *f, unsigned char *h, const unsigned char t[256])
+ {   int i;
+ 
+-    fprintf(f, "\nuint_8t %s[256] = \n{", h);
++    fprintf(f, "\nuint8_t %s[256] = \n{", h);
+ 
+     for(i = 0; i < 256; ++i)
+     {
+@@ -206,7 +200,7 @@ void btab_1(FILE *f, unsigned char *h, c
+ void wtab_1(FILE *f, unsigned char *h, const unsigned int t[256])
+ {   int i;
+ 
+-    fprintf(f, "\nuint_32t %s[256] = \n{", h);
++    fprintf(f, "\nuint32_t %s[256] = \n{", h);
+ 
+     for(i = 0; i < 256; ++i)
+     {
+@@ -224,7 +218,7 @@ void wtab_1(FILE *f, unsigned char *h, c
+ void wtab_4(FILE *f, unsigned char *h, const unsigned int t[4][256])
+ {   int i, j;
+ 
+-    fprintf(f, "\nuint_32t %s[4][256] = \n{", h);
++    fprintf(f, "\nuint32_t %s[4][256] = \n{", h);
+ 
+     for(i = 0; i < 4; ++i)
+     {
+@@ -251,8 +245,13 @@ void wtab_4(FILE *f, unsigned char *h, c
+ 
+ int main(void)
+ {   FILE *f;
++    char *fn = "aestab2.c";
+ 
+-    f = fopen("aestab2.c", "w");
++    if(fopen_s(&f, fn, "w"))
++	{
++		printf("\nCannot open %s for output\n", fn);
++		return -1;
++	}
+ 
+     fprintf(f, "\n#include \"aes.h\"\n");
+     fprintf(f, "\n#define RC_LENGTH   (5 * (AES_BLOCK_SIZE / 4 - 2))\n");

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>GFS Galatea</target>
+    <like>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

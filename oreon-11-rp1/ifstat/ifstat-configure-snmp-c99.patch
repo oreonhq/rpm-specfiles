@@ -1,0 +1,30 @@
+Include the right net-snmp header, to obtain a propotype for
+snmp_sess_init.  Otherwise, the implicit function declaration
+may result in incorrect feature detection if the compiler does
+not support this obsolete C language feature.
+
+Use the usual fake autoconf prototype for a second probe
+involing snmp_sess_init.
+
+diff --git a/configure.in b/configure.in
+index d1d99be74658f701..7e77913c34d565ff 100644
+--- a/configure.in
++++ b/configure.in
+@@ -389,7 +389,7 @@ if test "x$with_snmp" != "xno" ; then
+     CPPFLAGS="$CPPFLAGS `$netsnmpconfig --base-cflags 2>/dev/null`"
+     LDFLAGS="$LDFLAGS `$netsnmpconfig --libs 2>/dev/null`"
+     AC_MSG_CHECKING([whether net-snmp-config hints compiles and links fine])
+-    AC_TRY_LINK([#include<net-snmp/net-snmp-config.h>], [snmp_sess_init((void *) 0);],
++    AC_TRY_LINK([#include<net-snmp/session_api.h>], [snmp_sess_init((void *) 0);],
+                 [snmp_ok=yes], [snmp_ok=no])
+     AC_MSG_RESULT([$snmp_ok])
+     if test "x$snmp_ok" = "xyes"; then
+@@ -433,7 +433,7 @@ if test "x$with_snmp" != "xno" ; then
+           AC_MSG_CHECKING([for snmp support in $lib])
+           OLIBS="$LIBS"
+           LIBS="$LIBS $lib"
+-          AC_TRY_LINK([], [snmp_sess_init();],
++          AC_TRY_LINK([char snmp_sess_init(void);], [snmp_sess_init();],
+                       [with_snmp=yes], [LIBS="$OLIBS"])
+           AC_MSG_RESULT([$with_snmp])
+         fi

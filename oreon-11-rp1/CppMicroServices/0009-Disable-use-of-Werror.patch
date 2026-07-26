@@ -1,0 +1,32 @@
+From 69f2f43abe0e6fd5ab65bb299157eddfae6a1375 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
+Date: Thu, 29 Jan 2026 14:01:42 +0000
+Subject: [PATCH 09/10] Disable use of -Werror
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+New releases of GCC frequently introduce new warnings that would
+otherwise break the buld.
+
+Signed-off-by: Daniel P. Berrangé <berrange@redhat.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7e7e3361..146326c4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -560,7 +560,7 @@ else()
+     usFunctionCheckCompilerFlags(-fstack-protector-all US_CXX_FLAGS)
+   endif()
+ 
+-  foreach(_cxxflag  -Werror -Wall -Wextra -Wpointer-arith -Winvalid-pch -Wcast-align
++  foreach(_cxxflag  -Wall -Wextra -Wpointer-arith -Winvalid-pch -Wcast-align
+           -Wwrite-strings -Woverloaded-virtual -Wnon-virtual-dtor -Wold-style-cast
+           -Wstrict-null-sentinel -Wsign-promo -fdiagnostics-show-option )
+     usFunctionCheckCompilerFlags(${_cxxflag} US_CXX_FLAGS)
+-- 
+2.52.0
+

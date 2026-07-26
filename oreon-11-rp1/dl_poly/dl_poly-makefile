@@ -1,0 +1,13 @@
+ifeq ($(PAR),1)
+TYPE = par
+include ../build/MakePAR
+build:
+	$(MAKE) FC=mpif90 LD="mpif90 $(LDFLAGS) -o" FFLAGS="-c $(FFLAGS)" \
+	EX=$(EX) BINROOT=$(BINROOT) par
+else
+TYPE = seq
+include ../build/MakeSEQ
+build:
+	$(MAKE) FC=gfortran LD="gfortran $(LDFLAGS) -o" FFLAGS="-c $(FFLAGS)" \
+	EX=$(EX) BINROOT=$(BINROOT) seq
+endif

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=EBView Dictionary
+Name[ja]=EBView
+Comment=An EPWING CD-ROM dictionary viewer
+Comment[ja]=辞書(EPWING形式のCD-ROM)
+Exec=ebview
+Icon=ebview
+Terminal=false
+Type=Application
+Categories=GTK;Utility;Dictionary;

@@ -1,0 +1,24 @@
+diff -uprN ubuntu-mate-mate-menu-f4328f0400ec-orig/data/applications.list ubuntu-mate-mate-menu-f4328f0400ec/data/applications.list
+--- ubuntu-mate-mate-menu-f4328f0400ec-orig/data/applications.list	2017-03-29 00:36:39.000000000 +0200
++++ ubuntu-mate-mate-menu-f4328f0400ec/data/applications.list	2017-04-04 21:39:42.084887154 +0200
+@@ -1,12 +1,18 @@
+ location:/usr/share/applications/firefox.desktop
++location:/usr/share/applications/claws-mail.desktop
+ location:/usr/share/applications/thunderbird.desktop
+ location:/usr/share/applications/pidgin.desktop
+-location:/usr/share/applications/rhythmbox.desktop
++location:/usr/share/applications/xchat.desktop
++location:/usr/share/applications/hexchat.desktop
+ separator
+ location:/usr/share/applications/mate-calc.desktop
+ location:/usr/share/applications/pluma.desktop
+ location:/usr/share/applications/mate-terminal.desktop
+-location:/usr/share/applications/mate-volume-control.desktop
++location:/usr/share/applications/parole.desktop
++location:/usr/share/applications/exaile.desktop
++location:/usr/share/applications/rhythmbox.desktop
+ separator
+ location:/usr/share/applications/mate-display-properties.desktop
+ location:/usr/share/applications/mate-system-monitor.desktop
++location:/usr/share/applications/mate-volume-control.desktop
++location:/usr/share/applications/ca.desrt.dconf-editor.desktop

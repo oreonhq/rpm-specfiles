@@ -1,0 +1,26 @@
+diff --git a/configure.ac b/configure.ac
+index cfa75a7..2807463 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -97,20 +97,7 @@ AC_ARG_ENABLE(darwin, [  --enable-darwin Builds plugins that will be shared obje
+ 
+ CFLAGS="$lrintf_save_CFLAGS -I@top_srcdir@/intl -I@top_srcdir@"
+ 
+-if [ echo ${CFLAGS} | grep "\-march=" ]; then
+-  AC_MSG_WARN([CFLAGS appears to allready contain architecture specifaction, using exiting one])
+-else
+-  AC_MSG_WARN([Can't find architecture specifaction in CFLAGS])
+-
+-  CFLAGS="$CFLAGS -Wall -O3 -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -fPIC -DPIC ${USE_SSE} ${DARWIN_CFLAGS}"
+-
+-  dnl For Intel's C compiler use:
+-  dnl CC="icc"
+-  dnl CFLAGS="$CFLAGS -O2 -rcd -tpp6 -xiMK -KPIC -DPIC"
+-  
+-  dnl For debugging use:
+-  dnl CFLAGS="$CFLAGS -Wall -g -ffast-math -fPIC -DPIC"
+-fi
++CFLAGS="$CFLAGS -fPIC -DPIC ${USE_SSE}"
+ 
+ AC_PROG_LD
+ AM_PROG_LIBTOOL

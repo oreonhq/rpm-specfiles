@@ -1,0 +1,23 @@
+From db99642428fcac11d3e5a0f3c110a21eb861dd82 Mon Sep 17 00:00:00 2001
+From: KaushikiAnand <kaushiki.anand@hashicorp.com>
+Date: Tue, 4 Mar 2025 14:29:44 +0530
+Subject: [PATCH 1/4] few updations to go-tests.yml
+
+---
+ version.go                     |  2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/version.go b/version.go
+index 7c683c2..caeea1e 100644
+--- a/version.go
++++ b/version.go
+@@ -389,7 +389,7 @@ func (v *Version) String() string {
+ 		str := strconv.FormatInt(s, 10)
+ 		fmtParts[i] = str
+ 	}
+-	fmt.Fprintf(&buf, strings.Join(fmtParts, "."))
++	fmt.Fprintf(&buf, "%s", strings.Join(fmtParts, "."))
+ 	if v.pre != "" {
+ 		fmt.Fprintf(&buf, "-%s", v.pre)
+ 	}
+

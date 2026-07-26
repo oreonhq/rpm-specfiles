@@ -1,0 +1,26 @@
+diff --git a/irtt_client.go b/irtt_client.go
+index 38f2d21c9427..c8d2cd3f0556 100644
+--- a/irtt_client.go
++++ b/irtt_client.go
+@@ -14,7 +14,7 @@ import (
+ 	"text/tabwriter"
+ 	"time"
+ 
+-	flag "github.com/ogier/pflag"
++	flag "github.com/spf13/pflag"
+ )
+ 
+ func clientUsage() {
+diff --git a/irtt_server.go b/irtt_server.go
+index f994cbbb5861..fb3f0dce6366 100644
+--- a/irtt_server.go
++++ b/irtt_server.go
+@@ -6,7 +6,7 @@ import (
+ 	"strings"
+ 	"syscall"
+ 
+-	flag "github.com/ogier/pflag"
++	flag "github.com/spf13/pflag"
+ )
+ 
+ func serverUsage() {

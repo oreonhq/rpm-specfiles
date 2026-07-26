@@ -1,0 +1,40 @@
+From 6bfeec1f3d77f6679d04c00f1ce3c26994a1ab01 Mon Sep 17 00:00:00 2001
+From: Jonathan Steffan <jsteffan@fedoraproject.org>
+Date: Sat, 7 Feb 2026 14:12:07 -0700
+Subject: [PATCH] fix(apk-download): fix download location for WiVRn APKs
+
+---
+ src/ui/install_wivrn_box.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/ui/install_wivrn_box.rs b/src/ui/install_wivrn_box.rs
+index bb7901d..839c703 100644
+--- a/src/ui/install_wivrn_box.rs
++++ b/src/ui/install_wivrn_box.rs
+@@ -11,7 +11,7 @@ use std::fs::remove_file;
+ use tracing::error;
+ 
+ const WIVRN_LATEST_RELEASE_APK_URL: &str =
+-    "https://github.com/WiVRn/WiVRn/releases/latest/download/WiVRn-standard-release.apk";
++    "https://github.com/WiVRn/WiVRn/releases/latest/download/WiVRn-release.apk";
+ 
+ #[derive(Debug)]
+ enum GetWivrnApkRefErr {
+@@ -200,12 +200,12 @@ impl AsyncComponent for InstallWivrnBox {
+                     }
+                     Ok(WivrnApkRef::Tag(tag)) => {
+                         sender.input(Self::Input::DoInstall(
+-                            format!("https://github.com/WiVRn/WiVRn/releases/download/{tag}/WiVRn-standard-release.apk")
++                            format!("https://github.com/WiVRn/WiVRn/releases/download/{tag}/WiVRn-release.apk")
+                         ));
+                     }
+                     Ok(WivrnApkRef::Commit(commit)) => {
+                         sender.input(Self::Input::DoInstall(
+-                            format!("https://github.com/WiVRn/WiVRn-APK/releases/download/apk-{commit}/org.meumeu.wivrn-standard-release.apk")
++                            format!("https://github.com/WiVRn/WiVRn-APK/releases/download/apk-{commit}/org.meumeu.wivrn-release.apk")
+                         ));
+                     }
+                 };
+-- 
+GitLab
+

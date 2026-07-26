@@ -1,0 +1,37 @@
+.TH FBZX "1" "January 2016" "fbzx 3.1.0" "User Commands"
+.SH NAME
+fbzx \- ZX Spectrum emulator for X / framebuffer
+.SH SYNOPSIS
+.B fbzx
+[\fI\,-nosound\/\fR] [\fI\,-alsa\/\fR] [\fI\,-oss\/\fR] [\fI\,-pulse\/\fR] [\fI\,-mini\/\fR] [\fI\,-rotate\/\fR] [\fI\,-fs\/\fR] [\fI\,-hw\/\fR] [\fI\,-db\/\fR] [\fI\,-ds\/\fR] [\fI\,-ss\/\fR] [\fI\,-jump N\/\fR] [\fI\,gamefile\/\fR]
+.SH DESCRIPTION
+.HP
+\fB\-nosound\fR: don't emulate sound
+.HP
+\fB\-alsa\fR: use ALSA for sound output
+.HP
+\fB\-oss\fR: use OSS for sound output
+.HP
+\fB\-pulse\fR: use PulseAudio for sound output (default)
+.HP
+\fB\-mini\fR: show screen at 320x240 in a rotated 640x480 screen
+.HP
+\fB\-rotate\fR: rotate screen clockwise
+.HP
+\fB\-fs\fR: start FBZX at fullscreen
+.HP
+\fB\-hw\fR: use hardware buffer (best for console framebuffer)
+.HP
+\fB\-db\fR: use double buffer
+.HP
+\fB\-ds\fR: use doublescan (don't emulate TV black stripes)
+.HP
+\fB\-ss\fR: force singlescan (emulate TV black stripes)
+.HP
+\fB\-bw\fR: emulate black&white TV set
+.HP
+\fB\-color\fR: emulate a color TV set
+.HP
+\fB\-jump\fR N: show one TV refresh and jump over N refreshes (for slow systems)
+.IP
+gamefile: an optional .Z80 snapshot or .TAP/.TZX tape file

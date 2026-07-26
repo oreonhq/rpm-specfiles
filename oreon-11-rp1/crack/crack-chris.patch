@@ -1,0 +1,334 @@
+--- c50a/src/util/Makefile.chris	1996-12-16 09:27:35.000000000 +0100
++++ c50a/src/util/Makefile	2007-05-10 13:46:45.000000000 +0200
+@@ -17,7 +17,7 @@
+ EXE=    $(XDIR)/dawg \
+ 	$(XDIR)/dictfilt \
+ 	$(XDIR)/kickdict \
+-	$(XDIR)/cracker
++	$(XDIR)/stdlib-cracker
+ 
+ #------------------------------------------------------------------
+ 
+@@ -69,7 +69,7 @@
+ #------------------------------------------------------------------
+ 
+ # don't you just love dependency graphs?
+-$(XDIR)/dictfilt: dictfilt.c $(XLIB) $(XDIR)/cracker
++$(XDIR)/dictfilt: dictfilt.c $(XLIB) $(XDIR)/stdlib-cracker
+ 	$(CC) $(CFLAGS) -o $(XDIR)/dictfilt dictfilt.c elcid.o $(XLIB)
+ 
+ #------------------------------------------------------------------
+--- c50a/src/util/cracker.c.chris	1996-12-16 16:20:03.000000000 +0100
++++ c50a/src/util/cracker.c	2007-05-10 13:46:45.000000000 +0200
+@@ -11,6 +11,7 @@
+ 
+ #include "libcrack.h"
+ #include "elcid.h"
++#include <stdarg.h>
+ 
+ #define CRACK_MEMSMALL          0x0001
+ #define CRACK_DISKSMALL         0x0002
+@@ -97,18 +98,23 @@
+ 
+ /* ------------------------------------------------------------------ */
+ 
++#ifdef __GNUC__
+ void
+-Logger(key, fmt, a, b, c, d, e, f)
+-char key;
+-char *fmt;
+-char *a, *b, *c, *d, *e, *f;
++Logger(char key, const char *fmt, ...)
++    __attribute__ ((format (printf, 2, 3)));
++#endif
++void
++Logger(char key, const char *fmt, ...)
+ {
+     long t;
++    va_list ap;
+ 
+     time(&t);
+ 
+     fprintf(stdout, "%c:%ld:", key, t);
+-    fprintf(stdout, fmt, a, b, c, d, e, f);
++    va_start(ap, fmt);
++    vprintf(fmt, ap);
++    va_end(ap);
+ 
+     fflush(stdout);
+     fflush(stderr);		/* and why not ? */
+--- c50a/Crack.chris	1996-12-21 02:09:41.000000000 +0100
++++ c50a/Crack	2007-05-10 13:52:31.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ ###
+ # This program was written by and is copyright Alec Muffett 1991,
+ # 1992, 1993, 1994, 1995, and 1996, and is provided as part of the
+@@ -12,85 +12,11 @@
+ # User-configurable junk for Crack
+ ###
+ 
+-# nice, generic path (RedHat Linux, Solaris1, Solaris2)
+-CRACK_PATH=/usr/local/bin:/usr/ccs/bin:/usr/sbin:/sbin:/usr/bin:/bin:/usr/ucb:/usr/etc:$PATH
+-
+-# compiler options for crack 5.0
+-#
+-# -DUSE_BZERO        /* add this to C5FLAGS if you don't have memset() */
+-# -DUSE_MALLOC_H
+-# -DUSE_PWD_H
+-# -DUSE_SIGNAL_H
+-# -DUSE_STDLIB_H
+-# -DUSE_STRINGS_H
+-# -DUSE_STRING_H
+-# -DUSE_SYS_TYPES_H
+-# -DUSE_UNISTD_H
+-# -DMAXWORDLEN=      /* ignore if you don't read the code */
+-# -DNUMWORDS=        /* ignore if you don't read the code */
+-# -DSTRINGSIZE=      /* ignore if you don't read the code */
+-
+-# this set tested on:
+-# - solaris 2.5
+-# - redhat linux 4.0
+-# - digital unix v4.0
+-
+-C5FLAGS="-DUSE_STRING_H -DUSE_STDLIB_H -DUSE_SIGNAL_H -DUSE_SYS_TYPES_H -DUSE_UNISTD_H -DUSE_PWD_H"
+-
+-#
+-# now pick your compiler
+-#
+-
+-# vanilla unix cc
+-CC=cc
+-CFLAGS="-g -O $C5FLAGS"
+-#LIBS=-lcrypt # uncomment only if necessary to use stdlib crypt(), eg: NetBSD MD5
+-
+-# gcc 2.7.2
+-#CC=gcc
+-#CFLAGS="-g -O2 -Wall $C5FLAGS"
+-#LIBS=-lcrypt # uncomment only if necessary to use stdlib crypt(), eg: NetBSD MD5
+-
+-# digital unix v4.0, CFLAGS for ev4/ev5 chipsets (pick one)
+-#CC=cc
+-#CFLAGS="-O4 -fast -tune ev4 $C5FLAGS"
+-#CFLAGS="-O4 -fast -tune ev5 $C5FLAGS"
+-#LIBS=
+-
+-# Uncomment the next two lines if a) you are running Crack in
+-# networking mode, and b) your environment's operating system will not
+-# necessarily run binaries compiled on other revs of the same
+-# operating system which have the same architecture and the same
+-# *MAJOR* revision number.
+-#
+-# eg: if you have Foonix 2.0 boxes as well as Foonix 2.1 boxes; in
+-# this example, the major revision number is "2".  If the Foonix 2.1
+-# O/S will not run Foonix 2.0 binaries for some reason, or vice-versa,
+-# then uncomment these lines.
+-
+-#STRICT_OSREV=yes
+-#export STRICT_OSREV
+-
+-# Uncomment and/or modify on HP/UX or similar where the UCB "rsh"
+-# command has been renamed.  See scripts/crack-rsh also
+-#CRACK_RSH=remsh
+-#CRACK_RCP=rcp
+-
+-###########################################################
+-###########################################################
+-#################### THAT'S ALL, FOLKS ####################
+-#### NOW GO CONFIGURE YOUR CRYPT ALGORITHM, EG: LIBDES ####
+-###########################################################
+-###########################################################
+-
+ ###
+ # security
+ ###
+ 
+ umask 077
+-export CRACK_PATH                       # So it can be picked up later
+-PATH=$CRACK_PATH                        # For temporary use...
+-export PATH
+ 
+ ###
+ # Defaults
+@@ -108,12 +34,9 @@
+ # home base
+ ###
+ 
+-CRACK_HOME=`echo $0 | sed -e 's/Crack$//'`
++old_wd=`pwd`
+ 
+-if [ "$CRACK_HOME" = "" ]
+-then
+-	CRACK_HOME=.
+-fi
++CRACK_HOME=${CRACK_HOME:-"/var/lib/crack"}
+ 
+ if cd $CRACK_HOME
+ then
+@@ -126,25 +49,6 @@
+ export CRACK_HOME
+ 
+ ###
+-# sanity check
+-###
+-
+-if [ ! -f "$CRACK_HOME/Crack" ]
+-then
+-	echo "Fatal Error: $CRACK_HOME: something weird going down" 1>&2
+-	exit 1
+-fi
+-
+-###
+-# Hierarchy
+-###
+-
+-for dir in run run/bin
+-do
+-	test -d $dir || mkdir $dir || exit 1
+-done
+-
+-###
+ # Flagwaving
+ ###
+ 
+@@ -158,8 +62,6 @@
+ # Parse Arguments
+ ###
+ 
+-argbackup1="$*"
+-
+ while [ "x$1" != "x" ]
+ do
+ 	case $1 in
+@@ -275,50 +177,24 @@
+ 	exit 1
+ fi
+ 
+-###
+-# Sanity test bindir - written in gruntscript for clarity.
+-###
+-
+-bdname=`scripts/binstamp 2>/dev/null`
+-
+-if [ "x$bdname" = "x" ]
+-then
+-	echo "Crack: error: cannot continue as binstamp returned empty string" 1>&2
+-	exit 0
+-fi
+-
+-echo "Stamp: $bdname"
+ echo ""
+ 
+ 
+ if [ "x$1" != "x" ]
+ then
+-	if [ "$1" = "-fmt" ]            # use generic name
+-	then
+-		bindir=run/bin/$bdname
+-	elif [ -d run/bin/$1 ]          # have been here before
+-	then
+-		bindir=run/bin/$1
+-		shift
+-	elif [ ! -f $1 ]                # use specified name
+-	then
+-		bindir=run/bin/$1
+-		shift
+-	else                            # use generic name
+-		bindir=run/bin/$bdname
+-	fi
++	bindir=bin
+ else                                    # supporting "-makeonly"
+ 	if [ "$makeonlyflag" != "" ]
+ 	then
+-		bindir=run/bin/$bdname
++		bindir=bin
+ 
+ 	elif [ "$makedictflag" != "" ]
+ 	then
+-		bindir=run/bin/$bdname
++		bindir=bin
+ 
+ 	elif [ "$remoteflag" != "" ]
+ 	then
+-		bindir=run/bin/$bdname
++		bindir=bin
+ 	else
+ 		echo $usage 1>&2
+ 		exit 1
+@@ -333,21 +209,6 @@
+ export PATH
+ 
+ ###
+-# Make the binaries
+-###
+-
+-echo "Crack: making utilities in $bindir"
+-
+-if [ ! -d $bindir ] # small redundancy, big benefit
+-then
+-	mkdir $bindir || exit 1
+-fi
+-
+-make clean || exit 1
+-
+-make ARGS="\"XDIR=../../$bindir\" \"XCFLAGS=$CFLAGS\" \"XCC=$CC\" \"XLIBS=$LIBS\"" utils || exit 1
+-
+-###
+ # Make Only ?
+ ###
+ 
+@@ -439,7 +300,6 @@
+ 	fbmerge
+ 
+ 	echo "Crack: Merging password files..."
+-	argbackup2="$*"
+ 
+ 	(
+ 		cat run/F-merged        # first the feedback
+@@ -451,16 +311,22 @@
+ 				shift || exit 1
+ 				deffmt=$1
+ 
+-			elif [ "$deffmt" = "spf" ]
+-			then
+-				cat $1 1>&3 # skip the sort
+ 			else
+-				${deffmt}2spf $1
++			  theFile=$1
++			  if [ ! -r $theFile ]; then
++			    theFile="$old_wd/$theFile"
++			  fi
++			  if [ "$deffmt" = "spf" ]
++			  then
++			  	  cat $theFile 1>&3 # skip the sort
++			  else
++			  	  ${deffmt}2spf $theFile
++			  fi
+ 			fi
+ 
+ 			shift
+ 		done |
+-		crack-sort -t: +1
++		crack-sort -t: -k 2
+ 	) 3>&1 |
+ 	fbfilt $crackfb $crackmf > $crackin # remove feedback-guessable users
+ 
+--- c50a/Reporter.chris	1996-12-13 20:13:55.000000000 +0100
++++ c50a/Reporter	2007-05-10 13:46:45.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!/bin/sh
++#!/bin/bash
+ ###
+ # This program was written by and is copyright Alec Muffett 1991,
+ # 1992, 1993, 1994, 1995, and 1996, and is provided as part of the
+@@ -10,6 +10,9 @@
+ # document which accompanies distributions of Crack v5.0 and upwards.
+ ###
+ 
++CRACK_HOME=${CRACK_HOME:-"/var/lib/crack"}
++cd $CRACK_HOME
++
+ tfile=run/T$$
+ date=`date`
+ 

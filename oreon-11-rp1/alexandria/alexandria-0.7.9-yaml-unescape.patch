@@ -1,0 +1,54 @@
+--- alexandria-book-collection-manager-0.7.6/lib/alexandria/library_store.rb.broken_yaml	2020-11-01 21:35:07.000000000 +0900
++++ alexandria-book-collection-manager-0.7.6/lib/alexandria/library_store.rb	2020-11-03 00:26:24.240552377 +0900
+@@ -48,8 +48,23 @@ module Alexandria
+         Dir["*" + Library::EXT[:book]].sort.each do |filename|
+           test[1] = filename if (test[0]).zero?
+ 
++          book_valid_p = true
++
+           unless File.size? test[1]
+             log.warn { "Book file #{test[1]} was empty" }
++            book_valid_p = false
++          end
++
++          if book_valid_p
++            begin
++              book = regularize_book_from_yaml(test[1])
++            rescue Psych::SyntaxError => e
++              log.warn "Book file #{test[1]} could not be parsed"
++              book_valid_p = false
++            end
++          end
++
++          if not book_valid_p
+             md = /([\dxX]{10,13})#{Library::EXT[:book]}/.match(filename)
+             if md
+               file_isbn = md[1]
+@@ -60,7 +75,7 @@ module Alexandria
+             end
+             next
+           end
+-          book = regularize_book_from_yaml(test[1])
++
+           old_isbn = book.isbn
+           old_pub_year = book.publishing_year
+           begin
+@@ -181,6 +196,9 @@ module Alexandria
+     private
+ 
+     def regularize_book_from_yaml(name)
++      require 'syck/constants'
++      require 'syck/encoding'
++
+       text = File.read(name)
+ 
+       # Code to remove the mystery string in books imported from Amazon
+@@ -203,7 +221,7 @@ module Alexandria
+       end
+ 
+-      book = Book.from_yaml(text)
++      book = Book.from_yaml(Syck::unescape(text))
+ 
+       unless book.isbn.instance_of? String
+         # HACK
+         md = /isbn: (.+)/.match(text)

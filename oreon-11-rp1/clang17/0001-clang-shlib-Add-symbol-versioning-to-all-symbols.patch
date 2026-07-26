@@ -1,0 +1,39 @@
+From 59673ed97d92df34d6f662da5a51f6e28806b5af Mon Sep 17 00:00:00 2001
+From: Tom Stellard <tstellar@redhat.com>
+Date: Thu, 26 Sep 2024 13:53:18 +0000
+Subject: [PATCH] [clang-shlib] Add symbol versioning to all symbols
+
+We do the same thing for libLLVM.so.  This should help avoid issues
+when an applications loads two different versions of the library at
+the same time.
+---
+ clang/tools/clang-shlib/CMakeLists.txt               | 7 +++++++
+ clang/tools/clang-shlib/simple_version_script.map.in | 1 +
+ 2 files changed, 8 insertions(+)
+ create mode 100644 clang/tools/clang-shlib/simple_version_script.map.in
+
+diff --git a/clang/tools/clang-shlib/CMakeLists.txt b/clang/tools/clang-shlib/CMakeLists.txt
+index 298d3a9d18fe..004ce2897960 100644
+--- a/clang/tools/clang-shlib/CMakeLists.txt
++++ b/clang/tools/clang-shlib/CMakeLists.txt
+@@ -61,3 +61,10 @@ if (MINGW OR CYGWIN)
+   # make sure we export all symbols despite potential dllexports.
+   target_link_options(clang-cpp PRIVATE LINKER:--export-all-symbols)
+ endif()
++
++# Solaris ld does not accept global: *; so there is no way to version *all* global symbols
++if (NOT LLVM_LINKER_IS_SOLARISLD AND NOT MINGW)
++  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/simple_version_script.map.in
++	         ${CMAKE_CURRENT_BINARY_DIR}/simple_version_script.map)
++  target_link_options(clang-cpp PRIVATE -Wl,--version-script,${CMAKE_CURRENT_BINARY_DIR}/simple_version_script.map)
++endif()
+diff --git a/clang/tools/clang-shlib/simple_version_script.map.in b/clang/tools/clang-shlib/simple_version_script.map.in
+new file mode 100644
+index 000000000000..cb2306d1f596
+--- /dev/null
++++ b/clang/tools/clang-shlib/simple_version_script.map.in
+@@ -0,0 +1 @@
++@LLVM_SHLIB_SYMBOL_VERSION@ { global: *; };
+-- 
+2.46.0
+

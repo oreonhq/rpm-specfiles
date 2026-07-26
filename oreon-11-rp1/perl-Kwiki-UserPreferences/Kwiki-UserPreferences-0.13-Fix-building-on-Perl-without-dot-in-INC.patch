@@ -1,0 +1,8 @@
+diff -up Kwiki-UserPreferences-0.13/Makefile.PL.orig Kwiki-UserPreferences-0.13/Makefile.PL
+--- Kwiki-UserPreferences-0.13/Makefile.PL.orig	2017-05-22 12:33:38.802138507 +0200
++++ Kwiki-UserPreferences-0.13/Makefile.PL	2017-05-22 12:35:30.404449317 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name('Kwiki-UserPreferences');

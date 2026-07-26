@@ -1,0 +1,13 @@
+diff --git a/t/query_time.t b/t/query_time.t
+index 8c4efbe..5b1a897 100644
+--- a/t/query_time.t
++++ b/t/query_time.t
+@@ -55,7 +55,7 @@ SKIP:
+     eval("use Time::Timezone 99.062401;");
+     skip "Time::Timezone not installed", 1 if $@;
+ 
+-    like( $query3->GetTZ(), qr/^\S+$/, "look like a timezone?" );
++    like( $query3->GetTZ(), qr/^\S+( \S+)?$/, "look like a timezone?" );
+ }
+ 
+ 

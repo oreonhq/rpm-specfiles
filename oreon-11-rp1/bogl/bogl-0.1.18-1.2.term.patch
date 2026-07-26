@@ -1,0 +1,34 @@
+--- bogl-0.1.18/bogl-term.c.term	2003-11-05 05:38:22.000000000 +0100
++++ bogl-0.1.18/bogl-term.c	2006-11-05 21:34:54.000000000 +0100
+@@ -24,6 +24,9 @@
+  * described by the terminfo source in "bterm.ti".
+  */
+ 
++#include <string.h>
++#include <unistd.h>
++
+ #include "bogl.h"
+ #include "bogl-term.h"
+ 
+@@ -353,6 +356,21 @@
+         if (wc == 0)            /* 0 has a special meaning in term->screen[] */
+             continue;
+ 
++        if (wc == 7) {          /* bell=^G: flash screen by XORing it twice */
++            for (i = 0; i < term->xsize * term->ysize; i++) {
++                term->screenfg[i] = term->screenfg[i] ^ 0x7;
++                term->screenbg[i] = term->screenbg[i] ^ 0x7;
++            }
++            bogl_term_redraw(term);
++            usleep(100000); // pause 1/10th of a second
++            for (i = 0; i < term->xsize * term->ysize; i++) {
++                term->screenfg[i] = term->screenfg[i] ^ 0x7;
++                term->screenbg[i] = term->screenbg[i] ^ 0x7;
++            }
++            bogl_term_redraw(term);
++            continue;
++        }
++
+         if (wc == 8)
+         {                       /* cub1=^H */
+             if (term->xpos)

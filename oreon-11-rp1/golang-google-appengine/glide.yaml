@@ -1,0 +1,11 @@
+import:
+- package: golang.org/x/net
+  subpackages:
+  - context
+  version: 01c190206fbdffa42f334f4b2bf2220f50e64920
+- package: github.com/golang/protobuf
+  subpackages:
+  - proto
+  version: 1643683e1b54a9e88ad26d98f81400c8c9d9f4f9
+package: google.golang.org/appengine
+

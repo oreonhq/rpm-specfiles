@@ -1,0 +1,9 @@
+diff -up Kwiki-Archive-Rcs-0.16/Makefile.PL.orig Kwiki-Archive-Rcs-0.16/Makefile.PL
+--- Kwiki-Archive-Rcs-0.16/Makefile.PL.orig	2017-05-21 19:22:44.562637346 +0200
++++ Kwiki-Archive-Rcs-0.16/Makefile.PL	2017-05-21 19:23:02.133546243 +0200
+@@ -1,3 +1,5 @@
++BEGIN { push @INC, '.'; }
++
+ use inc::Module::Install;
+ 
+ name('Kwiki-Archive-Rcs');

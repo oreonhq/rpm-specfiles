@@ -1,0 +1,499 @@
+diff -up gbdfed-1.6/fontgrid.c.gtkfix gbdfed-1.6/fontgrid.c
+--- gbdfed-1.6/fontgrid.c.gtkfix	2010-04-16 10:39:02.000000000 -0400
++++ gbdfed-1.6/fontgrid.c	2013-12-03 11:31:39.564924701 -0500
+@@ -219,7 +219,7 @@ static GdkPoint encoding_digits[19*6];
+ /*
+  * A macro for getting the current foreground GC.
+  */
+-#define WIDGET_FG_GC(w) ((w)->style->fg_gc[GTK_WIDGET_STATE(w)])
++#define WIDGET_FG_GC(w) ((w)->style->fg_gc[gtk_widget_get_state(w)])
+ 
+ #define HMARGINS(fw) ((fw)->hmargin << 1)
+ #define VMARGINS(fw) ((fw)->vmargin << 1)
+@@ -581,7 +581,7 @@ fontgrid_actual_size(GtkWidget *widget,
+      */
+     fontgrid_set_rows_cols(fw, actual);
+ 
+-    if (GTK_WIDGET_REALIZED(widget))
++    if (gtk_widget_get_realized(widget))
+       gdk_window_move_resize(widget->window, actual->x, actual->y,
+                              actual->width, actual->height);
+ }
+@@ -598,7 +598,7 @@ fontgrid_realize(GtkWidget *widget)
+     g_return_if_fail(IS_FONTGRID(widget));
+ 
+     fw = FONTGRID(widget);
+-    GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
++    gtk_widget_set_realized(widget, TRUE);
+ 
+     attributes.window_type = GDK_WINDOW_CHILD;
+     attributes.x = widget->allocation.x;
+@@ -632,8 +632,8 @@ fontgrid_realize(GtkWidget *widget)
+      * Create the GC used to display selected cells.
+      */
+     values.foreground.pixel =
+-        widget->style->fg[GTK_WIDGET_STATE(widget)].pixel ^
+-        widget->style->bg[GTK_WIDGET_STATE(widget)].pixel;
++        widget->style->fg[gtk_widget_get_state(widget)].pixel ^
++        widget->style->bg[gtk_widget_get_state(widget)].pixel;
+     (void) memset((char *) &values.background, 0, sizeof(GdkColor));
+     values.function = GDK_XOR;
+     fw->xor_gc = gdk_gc_new_with_values(widget->window, &values,
+@@ -849,7 +849,7 @@ fontgrid_draw_encoding(GtkWidget *w, Gdk
+     gint i, j, d;
+     GdkPoint *dp;
+ 
+-    if (!GTK_WIDGET_REALIZED(w))
++    if (!gtk_widget_get_realized(w))
+       return;
+ 
+     dp = encoding_digits;
+@@ -899,7 +899,7 @@ fontgrid_draw_cells(GtkWidget *widget, g
+     GdkRectangle rect;
+     gchar nbuf[16];
+ 
+-    if (!GTK_WIDGET_REALIZED(widget) || (labels == FALSE && glyphs == FALSE))
++    if (!gtk_widget_get_realized(widget) || (labels == FALSE && glyphs == FALSE))
+       return;
+ 
+     fw = FONTGRID(widget);
+@@ -942,7 +942,7 @@ fontgrid_draw_cells(GtkWidget *widget, g
+ 
+     gp = glyph;
+ 
+-    gc = widget->style->fg_gc[GTK_WIDGET_STATE(widget)];
++    gc = widget->style->fg_gc[gtk_widget_get_state(widget)];
+ 
+     for (ng = 0, i = start; i <= end; i++) {
+         /*
+@@ -1119,7 +1119,7 @@ fontgrid_draw(GtkWidget *widget, GdkRegi
+ 
+     fw = FONTGRID(widget);
+ 
+-    gc = widget->style->fg_gc[GTK_WIDGET_STATE(widget)];
++    gc = widget->style->fg_gc[gtk_widget_get_state(widget)];
+ 
+     gw = fw->cell_width * fw->cell_cols;
+     gh = fw->cell_height * fw->cell_rows;
+@@ -1259,15 +1259,15 @@ fontgrid_draw_focus(GtkWidget *widget, G
+                          "focus-line-width", &fwidth,
+                          "focus-padding", &fpad, NULL);
+ 
+-    gc = widget->style->bg_gc[GTK_WIDGET_STATE(widget)];
++    gc = widget->style->bg_gc[gtk_widget_get_state(widget)];
+ 
+     x = (widget->style->xthickness + fwidth + fpad) - 1;
+     y = (widget->style->ythickness + fwidth + fpad) - 1;
+     wd = (widget->allocation.width - (x * 2));
+     ht = (widget->allocation.height - (y * 2));
+ 
+-    if (GTK_WIDGET_HAS_FOCUS(widget))
+-      gtk_paint_focus(widget->style, widget->window, GTK_WIDGET_STATE(widget),
++    if (gtk_widget_has_focus(widget))
++      gtk_paint_focus(widget->style, widget->window, gtk_widget_get_state(widget),
+                       area, widget, "fontgrid", x, y, wd, ht);
+     else {
+         gdk_gc_set_clip_rectangle(gc, area);
+@@ -1282,9 +1282,9 @@ fontgrid_expose(GtkWidget *widget, GdkEv
+     /*
+      * Paint the shadow first.
+      */
+-    if (GTK_WIDGET_DRAWABLE(widget))
++    if (gtk_widget_is_drawable(widget))
+       gtk_paint_shadow(widget->style, widget->window,
+-                       GTK_WIDGET_STATE(widget), GTK_SHADOW_OUT,
++                       gtk_widget_get_state(widget), GTK_SHADOW_OUT,
+                        &event->area, widget, "fontgrid",
+                        0, 0,
+                        widget->allocation.width,
+@@ -1304,7 +1304,8 @@ fontgrid_focus_in(GtkWidget *widget, Gdk
+     g_return_val_if_fail(IS_FONTGRID(widget), FALSE);
+     g_return_val_if_fail(event != NULL, FALSE);
+ 
+-    GTK_WIDGET_SET_FLAGS(widget, GTK_HAS_FOCUS);
++    gtk_widget_set_can_focus(widget, TRUE);
++    gtk_widget_grab_focus(widget);
+     fontgrid_draw_focus(widget, 0);
+ 
+     return FALSE;
+@@ -1317,7 +1318,7 @@ fontgrid_focus_out(GtkWidget *widget, Gd
+     g_return_val_if_fail(IS_FONTGRID(widget), FALSE);
+     g_return_val_if_fail(event != NULL, FALSE);
+ 
+-    GTK_WIDGET_UNSET_FLAGS(widget, GTK_HAS_FOCUS);
++    gtk_widget_set_can_focus(widget, FALSE);
+     fontgrid_draw_focus(widget, 0);
+ 
+     return FALSE;
+@@ -1440,8 +1441,9 @@ start_selection(GtkWidget *widget, GdkEv
+     /*
+      * Deal with the focus issue first.
+      */
+-    if (!GTK_WIDGET_HAS_FOCUS(widget)) {
+-        GTK_WIDGET_SET_FLAGS(widget, GTK_HAS_FOCUS);
++    if (!gtk_widget_has_focus(widget)) {
++        gtk_widget_set_can_focus(widget, TRUE);
++        gtk_widget_grab_focus(widget);
+         (void) fontgrid_draw_focus(widget, NULL);
+     }
+ 
+@@ -1555,8 +1557,9 @@ extend_selection(GtkWidget *widget, gint
+     /*
+      * Deal with the focus issue first.
+      */
+-    if (!GTK_WIDGET_HAS_FOCUS(widget)) {
+-        GTK_WIDGET_SET_FLAGS(widget, GTK_HAS_FOCUS);
++    if (!gtk_widget_has_focus(widget)) {
++        gtk_widget_set_can_focus(widget, TRUE);
++        gtk_widget_grab_focus(widget);
+         (void) fontgrid_draw_focus(widget, NULL);
+     }
+ 
+@@ -2456,7 +2459,7 @@ fontgrid_init(GTypeInstance *obj, gpoint
+     GdkScreen *screen;
+     gint fwidth, fpad;
+ 
+-    GTK_WIDGET_SET_FLAGS(fw, GTK_CAN_FOCUS);
++    gtk_widget_set_can_focus(GTK_WIDGET(fw), TRUE);
+ 
+     gtk_widget_style_get(GTK_WIDGET(fw),
+                          "focus-line-width", &fwidth,
+@@ -3752,11 +3755,11 @@ fontgrid_translate_glyphs(Fontgrid *fw,
+     if (bdf_translate_glyphs(fw->font, dx, dy, start, end, 0, 0,
+                              fw->unencoded)) {
+         gtk_widget_queue_resize(w);
+-        if (GTK_WIDGET_REALIZED(w))
++        if (gtk_widget_get_realized(w))
+           gdk_window_clear(w->window);
+ 
+         gtk_widget_queue_resize(w);
+-        if (GTK_WIDGET_REALIZED(w))
++        if (gtk_widget_get_realized(w))
+           gdk_window_clear(w->window);
+ 
+         minfo.reason = FONTGRID_GLYPHS_MODIFIED;
+@@ -3787,7 +3790,7 @@ fontgrid_rotate_glyphs(Fontgrid *fw, gin
+     if (bdf_rotate_glyphs(fw->font, degrees, start, end, 0, 0,
+                           fw->unencoded)) {
+         gtk_widget_queue_resize(w);
+-        if (GTK_WIDGET_REALIZED(w))
++        if (gtk_widget_get_realized(w))
+           gdk_window_clear(w->window);
+ 
+         minfo.reason = FONTGRID_GLYPHS_MODIFIED;
+@@ -3818,7 +3821,7 @@ fontgrid_shear_glyphs(Fontgrid *fw, gint
+     if (bdf_shear_glyphs(fw->font, degrees, start, end, 0, 0,
+                           fw->unencoded)) {
+         gtk_widget_queue_resize(w);
+-        if (GTK_WIDGET_REALIZED(w))
++        if (gtk_widget_get_realized(w))
+           gdk_window_clear(w->window);
+ 
+         minfo.reason = FONTGRID_GLYPHS_MODIFIED;
+@@ -3852,7 +3855,7 @@ fontgrid_embolden_glyphs(Fontgrid *fw, g
+                             fw->unencoded, &resize)) {
+         if (resize) {
+             gtk_widget_queue_resize(w);
+-            if (GTK_WIDGET_REALIZED(w))
++            if (gtk_widget_get_realized(w))
+               gdk_window_clear(w->window);
+         } else
+           /*
+@@ -4346,7 +4349,7 @@ fontgrid_paste_selection(Fontgrid *fw, F
+     FontgridSelectionInfo sinfo;
+ 
+     g_return_if_fail(fw != 0);
+-    g_return_if_fail(GTK_WIDGET_REALIZED(w));
++    g_return_if_fail(gtk_widget_get_realized(w));
+ 
+     if ((win = gdk_selection_owner_get(FONTGRID_CLIPBOARD)) == 0) {
+         gdk_selection_owner_set(w->window, FONTGRID_CLIPBOARD,
+diff -up gbdfed-1.6/gectrl.c.gtkfix gbdfed-1.6/gectrl.c
+--- gbdfed-1.6/gectrl.c.gtkfix	2010-04-16 10:39:03.000000000 -0400
++++ gbdfed-1.6/gectrl.c	2013-12-03 11:31:39.564924701 -0500
+@@ -556,7 +556,7 @@ gecontrol_actual_size(GtkWidget *widget,
+ 
+     gecontrol_position_buttons(widget);
+ 
+-    if (GTK_WIDGET_REALIZED(widget))
++    if (gtk_widget_get_realized(widget))
+       gdk_window_move_resize(widget->window, actual->x, actual->y,
+                              actual->width, actual->height);
+ }
+@@ -700,7 +700,7 @@ gecontrol_button_normal(GEControl *ge, g
+         v = (GEC_BUTTON_SIZE >> 1) - (BMAP_DIM >> 1);
+     }
+ 
+-    gdk_draw_pixbuf(w->window, w->style->fg_gc[GTK_WIDGET_STATE(w)],
++    gdk_draw_pixbuf(w->window, w->style->fg_gc[gtk_widget_get_state(w)],
+                     ge->buttons[button].image, 0, 0,
+                     ge->buttons[button].x + v, ge->buttons[button].y + v,
+                     BMAP_DIM, BMAP_DIM, GDK_RGB_DITHER_NONE, 0, 0);
+@@ -741,7 +741,7 @@ gecontrol_button_prelight(GEControl *ge,
+         v = (GEC_BUTTON_SIZE >> 1) - (BMAP_DIM >> 1);
+     }
+ 
+-    gdk_draw_pixbuf(w->window, w->style->fg_gc[GTK_WIDGET_STATE(w)],
++    gdk_draw_pixbuf(w->window, w->style->fg_gc[gtk_widget_get_state(w)],
+                     ge->buttons[button].image, 0, 0,
+                     ge->buttons[button].x + v, ge->buttons[button].y + v,
+                     BMAP_DIM, BMAP_DIM, GDK_RGB_DITHER_NONE, 0, 0);
+@@ -782,7 +782,7 @@ gecontrol_button_active(GEControl *ge, g
+         v = (GEC_BUTTON_SIZE >> 1) - (BMAP_DIM >> 1);
+     }
+ 
+-    gdk_draw_pixbuf(w->window, w->style->fg_gc[GTK_WIDGET_STATE(w)],
++    gdk_draw_pixbuf(w->window, w->style->fg_gc[gtk_widget_get_state(w)],
+                     ge->buttons[button].image, 0, 0,
+                     ge->buttons[button].x + v, ge->buttons[button].y + v,
+                     BMAP_DIM, BMAP_DIM, GDK_RGB_DITHER_NONE, 0, 0);
+@@ -1004,7 +1004,7 @@ gecontrol_draw_glyph_image(GEControl *ge
+      */
+     gecontrol_make_rgb_glyph(ge);
+     gdk_draw_rgb_image(w->window,
+-                       w->style->bg_gc[GTK_WIDGET_STATE(w)],
++                       w->style->bg_gc[gtk_widget_get_state(w)],
+                        ge->gimage->x + 2, ge->gimage->y + 2,
+                        ge->gimage->width, ge->gimage->height,
+                        GDK_RGB_DITHER_NONE, ge->rgb,
+@@ -1039,8 +1039,8 @@ gecontrol_expose(GtkWidget *w, GdkEventE
+          * Make sure the selection GC has been created.
+          */
+         if (gec->selgc == 0) {
+-            gcv.foreground.pixel = w->style->fg[GTK_WIDGET_STATE(w)].pixel;
+-            gcv.background.pixel = w->style->bg[GTK_WIDGET_STATE(w)].pixel;
++            gcv.foreground.pixel = w->style->fg[gtk_widget_get_state(w)].pixel;
++            gcv.background.pixel = w->style->bg[gtk_widget_get_state(w)].pixel;
+             gcv.foreground.pixel ^= gcv.background.pixel;
+             gcv.function = GDK_XOR;
+             gec->selgc = gdk_gc_new_with_values(w->window, &gcv,
+@@ -1050,7 +1050,7 @@ gecontrol_expose(GtkWidget *w, GdkEventE
+         gecontrol_make_color_spots(ge, ge->gimage->bpp);
+ 
+         gdk_draw_gray_image(w->window,
+-                            w->style->fg_gc[GTK_WIDGET_STATE(w)],
++                            w->style->fg_gc[gtk_widget_get_state(w)],
+                             ge->spot.x, ge->spot.y,
+                             ge->spot.width, ge->spot.height,
+                             GDK_RGB_DITHER_NONE, ge->rgb, ge->spot.width);
+diff -up gbdfed-1.6/glyphedit.c.gtkfix gbdfed-1.6/glyphedit.c
+--- gbdfed-1.6/glyphedit.c.gtkfix	2010-04-16 10:39:04.000000000 -0400
++++ gbdfed-1.6/glyphedit.c	2013-12-03 11:31:39.565924699 -0500
+@@ -316,7 +316,7 @@ glyphedit_actual_size(GtkWidget *widget,
+ {
+     widget->allocation = *actual;
+ 
+-    if (GTK_WIDGET_REALIZED(widget))
++    if (gtk_widget_get_realized(widget))
+       gdk_window_move_resize(widget->window, actual->x, actual->y,
+                              actual->width, actual->height);
+ }
+@@ -335,15 +335,15 @@ glyphedit_draw_focus(GtkWidget *widget,
+                          "focus-line-width", &fwidth,
+                          "focus-padding", &fpad, NULL);
+ 
+-    gc = widget->style->bg_gc[GTK_WIDGET_STATE(widget)];
++    gc = widget->style->bg_gc[gtk_widget_get_state(widget)];
+ 
+     x = (widget->style->xthickness + fwidth + fpad) - 1;
+     y = (widget->style->ythickness + fwidth + fpad) - 1;
+     wd = (widget->allocation.width - (x * 2));
+     ht = (widget->allocation.height - (y * 2));
+ 
+-    if (GTK_WIDGET_HAS_FOCUS(widget))
+-      gtk_paint_focus(widget->style, widget->window, GTK_WIDGET_STATE(widget),
++    if (gtk_widget_has_focus(widget))
++      gtk_paint_focus(widget->style, widget->window, gtk_widget_get_state(widget),
+                       area, widget, "glyphedit", x, y, wd, ht);
+     else {
+         gdk_gc_set_clip_rectangle(gc, area);
+@@ -621,9 +621,9 @@ glyphedit_create_gcs(GtkWidget *widget,
+         if (gwc->gridgc != 0)
+           g_object_unref(G_OBJECT(gwc->gridgc));
+         gcv.foreground.pixel =
+-            widget->style->fg[GTK_WIDGET_STATE(widget)].pixel;
++            widget->style->fg[gtk_widget_get_state(widget)].pixel;
+         gcv.background.pixel =
+-            widget->style->bg[GTK_WIDGET_STATE(widget)].pixel;
++            widget->style->bg[gtk_widget_get_state(widget)].pixel;
+         gcv.function = GDK_COPY;
+         gcv.line_style = GDK_LINE_ON_OFF_DASH;
+         gwc->gridgc = gdk_gc_new_with_values(widget->window, &gcv,
+@@ -657,9 +657,9 @@ glyphedit_create_gcs(GtkWidget *widget,
+           g_object_unref(G_OBJECT(gwc->selgc));
+ 
+         gcv.foreground.pixel =
+-            widget->style->fg[GTK_WIDGET_STATE(widget)].pixel;
++            widget->style->fg[gtk_widget_get_state(widget)].pixel;
+         gcv.background.pixel =
+-            widget->style->bg[GTK_WIDGET_STATE(widget)].pixel;
++            widget->style->bg[gtk_widget_get_state(widget)].pixel;
+         gcv.foreground.pixel ^= gcv.background.pixel;
+         gcv.function = GDK_XOR;
+         gwc->selgc = gdk_gc_new_with_values(widget->window, &gcv, gcm);
+@@ -670,9 +670,9 @@ glyphedit_create_gcs(GtkWidget *widget,
+           g_object_unref(G_OBJECT(gwc->pixgc));
+ 
+         gcv.foreground.pixel =
+-            widget->style->fg[GTK_WIDGET_STATE(widget)].pixel;
++            widget->style->fg[gtk_widget_get_state(widget)].pixel;
+         gcv.background.pixel =
+-            widget->style->bg[GTK_WIDGET_STATE(widget)].pixel;
++            widget->style->bg[gtk_widget_get_state(widget)].pixel;
+         gcv.function = GDK_COPY;
+         gwc->pixgc = gdk_gc_new_with_values(widget->window, &gcv, gcm);
+     }
+@@ -741,9 +741,9 @@ glyphedit_expose(GtkWidget *widget, GdkE
+     /*
+      * Paint the shadow first.
+      */
+-    if (GTK_WIDGET_DRAWABLE(widget))
++    if (gtk_widget_is_drawable(widget))
+       gtk_paint_shadow(widget->style, widget->window,
+-                       GTK_WIDGET_STATE(widget), GTK_SHADOW_OUT,
++                       gtk_widget_get_state(widget), GTK_SHADOW_OUT,
+                        &event->area, widget, "glyphedit",
+                        0, 0,
+                        widget->allocation.width,
+@@ -1558,7 +1558,7 @@ glyphedit_own_clipboard(Glyphedit *gw)
+     GdkWindow *win;
+ 
+     w = GTK_WIDGET(gw);
+-    if (!GTK_WIDGET_REALIZED(w) || gw->owns_clipboard == TRUE)
++    if (!gtk_widget_get_realized(w) || gw->owns_clipboard == TRUE)
+       return;
+ 
+     win = gdk_selection_owner_get(GLYPHEDIT_CLIPBOARD);
+@@ -2182,7 +2182,7 @@ glyphedit_button_release(GtkWidget *w, G
+     /*
+      * Button releases on a widget without the focus is ignored.
+      */
+-    if (!GTK_WIDGET_HAS_FOCUS(w))
++    if (!gtk_widget_has_focus(w))
+       return FALSE;
+ 
+     gw = GLYPHEDIT(w);
+@@ -2258,7 +2258,7 @@ glyphedit_motion_notify(GtkWidget *w, Gd
+      * If the event is a simple motion event with no button being pressed,
+      * then simply return at this point.
+      */
+-    if (!GTK_WIDGET_HAS_FOCUS(w) ||
++    if (!gtk_widget_has_focus(w) ||
+         !(event->state & (GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK)))
+       return FALSE;
+ 
+diff -up gbdfed-1.6/glyphtest.c.gtkfix gbdfed-1.6/glyphtest.c
+--- gbdfed-1.6/glyphtest.c.gtkfix	2010-04-16 10:39:04.000000000 -0400
++++ gbdfed-1.6/glyphtest.c	2013-12-03 11:31:39.565924699 -0500
+@@ -229,7 +229,7 @@ glyphtest_actual_size(GtkWidget *widget,
+ {
+     widget->allocation = *actual;
+ 
+-    if (GTK_WIDGET_REALIZED(widget))
++    if (gtk_widget_get_realized(widget))
+       gdk_window_move_resize(widget->window, actual->x, actual->y,
+                              actual->width, actual->height);
+ }
+@@ -248,15 +248,15 @@ glyphtest_draw_focus(GtkWidget *widget,
+                          "focus-line-width", &fwidth,
+                          "focus-padding", &fpad, NULL);
+ 
+-    gc = widget->style->bg_gc[GTK_WIDGET_STATE(widget)];
++    gc = widget->style->bg_gc[gtk_widget_get_state(widget)];
+ 
+     x = (widget->style->xthickness + fwidth + fpad) - 1;
+     y = (widget->style->ythickness + fwidth + fpad) - 1;
+     wd = (widget->allocation.width - (x * 2));
+     ht = (widget->allocation.height - (y * 2));
+ 
+-    if (GTK_WIDGET_HAS_FOCUS(widget))
+-      gtk_paint_focus(widget->style, widget->window, GTK_WIDGET_STATE(widget),
++    if (gtk_widget_has_focus(widget))
++      gtk_paint_focus(widget->style, widget->window, gtk_widget_get_state(widget),
+                       area, widget, "glyphtest", x, y, wd, ht);
+     else {
+         gdk_gc_set_clip_rectangle(gc, area);
+@@ -323,7 +323,7 @@ _glyphtest_draw_glyph(Glyphtest *gw, bdf
+ 
+     w = GTK_WIDGET(gw);
+ 
+-    if (!GTK_WIDGET_REALIZED(w))
++    if (!gtk_widget_get_realized(w))
+       return;
+ 
+     ry = gw->line.cpoint.y;
+@@ -348,7 +348,7 @@ _glyphtest_redraw_glyphs(Glyphtest *gw)
+ 
+     w = GTK_WIDGET(gw);
+ 
+-    if (!GTK_WIDGET_REALIZED(w))
++    if (!gtk_widget_get_realized(w))
+       return;
+ 
+     lp = &gw->line;
+@@ -393,7 +393,7 @@ glyphtest_draw(GtkWidget *widget, GdkRec
+     GdkPoint s, e;
+     GdkRectangle clear;
+ 
+-    if (!GTK_WIDGET_REALIZED(widget))
++    if (!gtk_widget_get_realized(widget))
+       return;
+ 
+     gw = GLYPHTEST(widget);
+@@ -421,7 +421,7 @@ glyphtest_draw(GtkWidget *widget, GdkRec
+         s.y = e.y = gw->line.cpoint.y;
+ 
+         gdk_draw_line(widget->window,
+-                      widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
++                      widget->style->fg_gc[gtk_widget_get_state(widget)],
+                       s.x, s.y, e.x, e.y);
+     }
+ }
+@@ -432,9 +432,9 @@ glyphtest_expose(GtkWidget *widget, GdkE
+     /*
+      * Paint the shadow first.
+      */
+-    if (GTK_WIDGET_DRAWABLE(widget))
++    if (gtk_widget_is_drawable(widget))
+       gtk_paint_shadow(widget->style, widget->window,
+-                       GTK_WIDGET_STATE(widget), GTK_SHADOW_OUT,
++                       gtk_widget_get_state(widget), GTK_SHADOW_OUT,
+                        &event->area,
+                        widget, "glyphtest",
+                        0, 0,
+diff -up gbdfed-1.6/grayswatch.c.gtkfix gbdfed-1.6/grayswatch.c
+--- gbdfed-1.6/grayswatch.c.gtkfix	2010-04-16 10:39:05.000000000 -0400
++++ gbdfed-1.6/grayswatch.c	2013-12-03 11:31:39.565924699 -0500
+@@ -74,9 +74,9 @@ value_changed(GtkSpinButton *b, gpointer
+ 
+     memset(gs->image, v, gs->image_size);
+ 
+-    if (GTK_WIDGET_DRAWABLE(sw))
++    if (gtk_widget_is_drawable(sw))
+       gdk_draw_gray_image(sw->window,
+-                          sw->style->fg_gc[GTK_WIDGET_STATE(sw)],
++                          sw->style->fg_gc[gtk_widget_get_state(sw)],
+                           GTK_CONTAINER(gs)->border_width,
+                           GTK_CONTAINER(gs)->border_width,
+                           sw->allocation.width, sw->allocation.height,
+@@ -124,7 +124,7 @@ grayswatch_expose(GtkWidget *widget, Gdk
+ 
+     if (gs->image_size > 0)
+       gdk_draw_gray_image(widget->window,
+-                          widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
++                          widget->style->fg_gc[gtk_widget_get_state(widget)],
+                           GTK_CONTAINER(gs)->border_width,
+                           GTK_CONTAINER(gs)->border_width,
+                           widget->allocation.width,
+diff -up gbdfed-1.6/labcon.c.gtkfix gbdfed-1.6/labcon.c
+--- gbdfed-1.6/labcon.c.gtkfix	2010-04-16 10:39:08.000000000 -0400
++++ gbdfed-1.6/labcon.c	2013-12-03 11:31:39.565924699 -0500
+@@ -240,7 +240,7 @@ draw_pixbuf(GtkWidget *w, GdkEventExpose
+ 
+     x = (w->allocation.width >> 1) - (wd >> 1);
+     y = (w->allocation.height >> 1) - (ht >> 1);
+-    gdk_draw_pixbuf(w->window, w->style->fg_gc[GTK_WIDGET_STATE(w)],
++    gdk_draw_pixbuf(w->window, w->style->fg_gc[gtk_widget_get_state(w)],
+                     p, 0, 0, x, y, wd, ht, GDK_RGB_DITHER_NONE, 0, 0);
+ 
+     return FALSE;

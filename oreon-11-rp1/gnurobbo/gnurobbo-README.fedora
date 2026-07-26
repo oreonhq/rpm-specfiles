@@ -1,0 +1,85 @@
+About legal issues with content from upstream (rhbz #1157664)
+===============================================================================
+Analysing of Changelogs shows the following:
+Debian does not support robbo.ttf for legal reason, so why should we. 
+-Deleted fonts.
+
+Debian knows a bug with oily skin causing crashes for people.
+(Debian #614042)
+-Deleted oily.
+
+Upstream introduced skins with v0.64 as a feature. 
+Original: "Original GNU Robbo skin based on the Atari Robbo graphics."
+-NOT_LEGAL
+Oily: "… based on the orginal … graphics … oily effect."
+-NOT_LEGAL
+Tronic: "Newly created skin with some vintage science fiction influences."
+-OK??
+-Deleted wrong skins cause feature is not compatible with our policy.
+
+Upstream introduced sound with v0.64 as a feature. 
+-Deleted sounds and disabled support. Comply with policy.
+
+
+-------------------------------------------------------------------------------
+ Tom "spot" Callaway 2014-10-30 20:02:18 CET
+
+Looking this over as it is currently, I think you can keep:
+
+data/sounds/free
+
+and delete:
+
+data/sounds/default and data/sounds/oily
+
+(Right now, it looks like you're deleting data/sounds entirely)
+
+Everything else (with the removals already done) looks okay.
+
+Lifting FE-Legal.
+
+
+-------------------------------------------------------------------------------
+ Thomas Spura from 2014-10-26 20:27:22 CET)
+
+The data subpackage has it's own LICENCE file which reads:
+Creative Commons Sampling Plus 1.0
+ 
+According to [1] this is a bad license, which is "NOT OKAY for Fedora".
+Is it possible to use the game without music? Maybe that's an option to go,
+otherwise maybe RPMFusion...
+ 
+The fonts have also a separate license which reads:
+Bitstream Vera Fonts Copyright and Arev Fonts Copyright
+whereas the first seems to be fine and you MUST name the license of the
+subpackage "Bitstream Vera", you must ask the fedora-legal list for the
+other one to be added to the list...
+
+
+-------------------------------------------------------------------------------
+ Andrea Musuruane 2014-10-26 22:10:57 CET
+
+You should not trust the LINCENSE-ttf font. They refer to
+"Bitstream Vera Fonts" but one of the included fonts do not belong to these.
+
+data/skins/oily/robbo.ttf and data/skins/original/ robbo.ttf are the same
+font: "ZapfHumnst L2 Bold Italic". 
+It is "Copyright 1990-1996 Bitstream Inc.  All rights reserved.".
+This is a nonfree font.
+
+/data/skins/tronic/robbo.ttf is "DejaVu Sans Condensed". 
+It is free (license is Bitstream Vera and Public Domain) and it is already
+packaged in Fedora in the dejavu-sans-fonts package. To use this font the
+packager should replace the installed font with a symlink to the font
+provided by dejavu-sans-fonts.
+
+More info about the legal status here:
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=553911
+
+I know it is possible not to use the fonts and use a pixmap font that has
+no licensing problem. You have to enable its use in the Makefile.
+
+I think the game is even better because it has a better "retro" feel with
+the pixmap font. 
+
+The (c) Bitstream fonts must be removed from the source in Fedora though.

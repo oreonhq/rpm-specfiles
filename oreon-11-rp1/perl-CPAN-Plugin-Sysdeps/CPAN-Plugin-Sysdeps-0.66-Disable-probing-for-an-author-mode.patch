@@ -1,0 +1,29 @@
+From 708399e5472d8df6fe95c9e61b8d2300002ebb66 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 23 Oct 2020 14:54:54 +0200
+Subject: [PATCH] Disable probing for an author mode
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index a0b50bf..00e30ce 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,7 +1,7 @@
+ use strict;
+ use ExtUtils::MakeMaker;
+ 
+-my $is_devel_host = defined $ENV{USER} && $ENV{USER} eq 'eserte' && ($^O =~ /bsd/i || $ENV{PERL_RELEASE_READY}) && -f "../../perl.release.mk";
++my $is_devel_host = 0;
+ my $eumm_recent_enough = $ExtUtils::MakeMaker::VERSION >= 6.54;
+ 
+ if (!$eumm_recent_enough) {
+-- 
+2.25.4
+

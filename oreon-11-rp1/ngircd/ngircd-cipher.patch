@@ -1,0 +1,21 @@
+diff -up ngircd-23/doc/sample-ngircd.conf.tmpl.cipher ngircd-23/doc/sample-ngircd.conf.tmpl
+--- ngircd-23/doc/sample-ngircd.conf.tmpl.cipher	2015-08-20 08:29:56.000000000 -0600
++++ ngircd-23/doc/sample-ngircd.conf.tmpl	2015-11-17 10:30:10.124060823 -0700
+@@ -246,7 +246,7 @@
+ 	# be used. (Default: not set)
+ 	;WebircPassword = xyz
+ 
+-;[SSL]
++[SSL]
+ 	# SSL-related configuration options. Please note that this section
+ 	# is only available when ngIRCd is compiled with support for SSL!
+ 	# So don't forget to remove the ";" above if this is the case ...
+@@ -262,6 +262,8 @@
+ 	;CipherList = HIGH:!aNULL:@STRENGTH:!SSLv3
+ 	# For GnuTLS:
+ 	;CipherList = SECURE128:-VERS-SSL3.0
++	# Set the default to use Fedora's site wide crypto policy.
++	CipherList = @SYSTEM
+ 
+ 	# Diffie-Hellman parameters
+ 	;DHFile = :ETCDIR:/ssl/dhparams.pem

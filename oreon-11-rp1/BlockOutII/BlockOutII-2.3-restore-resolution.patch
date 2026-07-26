@@ -1,0 +1,54 @@
+diff -up BL_SRC/BlockOut/GLApp/GLApp.cpp~ BL_SRC/BlockOut/GLApp/GLApp.cpp
+--- BL_SRC/BlockOut/GLApp/GLApp.cpp~	2014-05-06 11:47:55.000000000 +0200
++++ BL_SRC/BlockOut/GLApp/GLApp.cpp	2014-10-27 13:26:09.726477105 +0100
+@@ -63,22 +63,8 @@ int GLApplication::SetVideoMode() {
+ 
+ int GLApplication::ToggleFullscreen() {
+ 
+-  int errCode;
+-
+-  InvalidateDeviceObjects();
+-
+-  m_bWindowed = !m_bWindowed;
+-
+-  if( !SetVideoMode() ) return GL_FAIL;
+-
+-  SDL_Surface *vSurf = SDL_GetVideoSurface();
+-  m_bitsPerPixel = vSurf->format->BitsPerPixel;
+-
+-  errCode = RestoreDeviceObjects();
+-  if( !errCode ) {
+-    printGlError();
+-    exit(1);
+-  }
++  if (SDL_WM_ToggleFullScreen(SDL_GetVideoSurface()))
++    m_bWindowed = !m_bWindowed;
+ 
+   return GL_OK;
+     
+@@ -114,6 +100,8 @@ int GLApplication::Create(int width, int
+ 	return GL_FAIL;    
+   }
+ 
++  atexit(SDL_Quit);
++
+   SDL_WM_SetCaption(m_strWindowTitle, NULL);
+ 
+   //SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
+diff -up BL_SRC/BlockOut/BlockOut.cpp~ BL_SRC/BlockOut/BlockOut.cpp
+--- BL_SRC/BlockOut/BlockOut.cpp~	2014-05-06 11:47:54.000000000 +0200
++++ BL_SRC/BlockOut/BlockOut.cpp	2014-10-27 13:23:44.333304949 +0100
+@@ -145,12 +145,7 @@ int BlockOut::FrameMove()
+           break;
+         case 100: // Exit
+           InvalidateDeviceObjects();
+-          BOOL fs = theSetup.GetFullScreen();
+-          if (fs) {
+-            theSetup.SetFullScreen(!fs);
+-            UpdateFullScreen();
+-          }  
+-          _exit(0);
++          exit(0);
+           break;
+       }
+       break;

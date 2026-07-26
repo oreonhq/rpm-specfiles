@@ -1,0 +1,13 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 8bf1bf8..11e22e2 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -14,7 +14,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(CMAKE_AUTOMOC ON)
+ set(CMAKE_AUTOUIC ON)
+ 
+-find_package(Qt6 6.6 REQUIRED COMPONENTS DBus Gui Test Widgets)
++find_package(Qt6 6.6 REQUIRED COMPONENTS DBus Gui GuiPrivate Test Widgets)
+ find_package(Wayland 1.22 REQUIRED COMPONENTS Client)
+ find_package(LayerShellQt 6.0 REQUIRED)
+ 

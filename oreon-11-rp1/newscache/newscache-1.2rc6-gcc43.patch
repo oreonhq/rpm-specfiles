@@ -1,0 +1,133 @@
+diff -Nrbu NewsCache-1.2rc6/NServer-0.9.1/checks/cArticle.cc NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cArticle.cc
+--- NewsCache-1.2rc6/NServer-0.9.1/checks/cArticle.cc	2003-01-21 11:59:28.000000000 +0300
++++ NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cArticle.cc	2008-02-14 16:27:41.000000000 +0300
+@@ -2,6 +2,7 @@
+ #include <fstream>
+ #include <string>
+ 
++#include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <unistd.h>
+diff -Nrbu NewsCache-1.2rc6/NServer-0.9.1/checks/cNSError.cc NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cNSError.cc
+--- NewsCache-1.2rc6/NServer-0.9.1/checks/cNSError.cc	2003-01-21 11:59:28.000000000 +0300
++++ NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cNSError.cc	2008-02-14 16:26:30.000000000 +0300
+@@ -4,6 +4,7 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#include <stdlib.h>
+ 
+ #include "NSError.h"
+ 
+diff -Nrbu NewsCache-1.2rc6/NServer-0.9.1/checks/cNewsgroupFilter.cc NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cNewsgroupFilter.cc
+--- NewsCache-1.2rc6/NServer-0.9.1/checks/cNewsgroupFilter.cc	2003-01-21 11:59:28.000000000 +0300
++++ NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cNewsgroupFilter.cc	2008-02-14 16:26:58.000000000 +0300
+@@ -1,5 +1,7 @@
+ #include <iostream>
+ 
++#include <stdlib.h>
++
+ #include "NewsgroupFilter.h"
+ 
+ #define V(x) if(verbose) { x; }
+diff -Nrbu NewsCache-1.2rc6/NServer-0.9.1/checks/cOverviewFmt.cc NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cOverviewFmt.cc
+--- NewsCache-1.2rc6/NServer-0.9.1/checks/cOverviewFmt.cc	2003-01-21 11:59:28.000000000 +0300
++++ NewsCache-1.2rc6-OK/NServer-0.9.1/checks/cOverviewFmt.cc	2008-02-14 16:27:20.000000000 +0300
+@@ -2,6 +2,7 @@
+ #include <fstream>
+ #include <string>
+ 
++#include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
+ #include <unistd.h>
+diff -Nrbu NewsCache-1.2rc6/NServer-0.9.1/readline.cc NewsCache-1.2rc6-OK/NServer-0.9.1/readline.cc
+--- NewsCache-1.2rc6/NServer-0.9.1/readline.cc	2003-01-21 11:59:28.000000000 +0300
++++ NewsCache-1.2rc6-OK/NServer-0.9.1/readline.cc	2008-02-14 16:25:47.000000000 +0300
+@@ -2,6 +2,8 @@
+ #include <string>
+ #include <iostream>
+ 
++#include <stdlib.h>
++
+ #include "Debug.h"
+ #include "readline.h"
+ 
+diff -Nrbu NewsCache-1.2rc6/NServer-0.9.1/wildmat.c NewsCache-1.2rc6-OK/NServer-0.9.1/wildmat.c
+--- NewsCache-1.2rc6/NServer-0.9.1/wildmat.c	2003-01-21 11:59:28.000000000 +0300
++++ NewsCache-1.2rc6-OK/NServer-0.9.1/wildmat.c	2008-02-14 16:25:19.000000000 +0300
+@@ -35,6 +35,7 @@
+ **  released version unless you have a good test data base to try it out
+ **  on.
+ */
++#include <stdlib.h>
+ #include <stdio.h>
+ #include <sys/types.h>
+ //#include "configdata.h"
+diff -Nrbu NewsCache-1.2rc6/NVClasses-0.9.1/NVArray.cc NewsCache-1.2rc6-OK/NVClasses-0.9.1/NVArray.cc
+--- NewsCache-1.2rc6/NVClasses-0.9.1/NVArray.cc	2003-02-05 21:19:17.000000000 +0300
++++ NewsCache-1.2rc6-OK/NVClasses-0.9.1/NVArray.cc	2008-02-14 16:24:33.000000000 +0300
+@@ -6,6 +6,7 @@
+ #include <sys/types.h>
+ #include <signal.h>
+ #include <stdio.h>
++#include <stdlib.h>
+ 
+ using namespace std;
+ 
+diff -Nrbu NewsCache-1.2rc6/src/NewsCache.cc NewsCache-1.2rc6-OK/src/NewsCache.cc
+--- NewsCache-1.2rc6/src/NewsCache.cc	2004-06-28 12:49:25.000000000 +0400
++++ NewsCache-1.2rc6-OK/src/NewsCache.cc	2008-02-14 16:29:01.000000000 +0300
+@@ -28,6 +28,7 @@
+ #include <crypt.h>
+ #endif
+ #include <ctype.h>
++#include <stdlib.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <errno.h>
+diff -Nrbu NewsCache-1.2rc6/src/NewsCacheClean.cc NewsCache-1.2rc6-OK/src/NewsCacheClean.cc
+--- NewsCache-1.2rc6/src/NewsCacheClean.cc	2004-09-27 01:45:46.000000000 +0400
++++ NewsCache-1.2rc6-OK/src/NewsCacheClean.cc	2008-02-14 16:29:35.000000000 +0300
+@@ -37,6 +37,7 @@
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <dirent.h>
++#include <stdlib.h>
+ #include <unistd.h>
+ #ifdef TIME_WITH_SYS_TIME
+ #include <sys/time.h>
+diff -Nrbu NewsCache-1.2rc6/src/cConfig.cc NewsCache-1.2rc6-OK/src/cConfig.cc
+--- NewsCache-1.2rc6/src/cConfig.cc	2003-01-21 11:59:29.000000000 +0300
++++ NewsCache-1.2rc6-OK/src/cConfig.cc	2008-02-14 16:30:29.000000000 +0300
+@@ -1,5 +1,7 @@
+ #include <iostream>
+ 
++#include <stdlib.h>
++
+ #include "Logger.h"
+ #include "Config.h"
+ 
+diff -Nrbu NewsCache-1.2rc6/src/updatenews.cc NewsCache-1.2rc6-OK/src/updatenews.cc
+--- NewsCache-1.2rc6/src/updatenews.cc	2004-07-22 13:46:11.000000000 +0400
++++ NewsCache-1.2rc6-OK/src/updatenews.cc	2008-02-14 16:30:01.000000000 +0300
+@@ -15,6 +15,7 @@
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  */
++#include <stdlib.h>
+ #include <unistd.h>
+ #include <string.h>
+ #include <errno.h>
+diff -Nrbu NewsCache-1.2rc6/test/tlock.cc NewsCache-1.2rc6-OK/test/tlock.cc
+--- NewsCache-1.2rc6/test/tlock.cc	2003-02-05 21:19:17.000000000 +0300
++++ NewsCache-1.2rc6-OK/test/tlock.cc	2008-02-14 16:28:07.000000000 +0300
+@@ -16,6 +16,7 @@
+  */
+ #include <iostream>
+ 
++#include <stdlib.h>
+ #include <stdio.h>
+ #include <unistd.h>
+ 

@@ -1,0 +1,126 @@
+From ba4377f1b5b108d57efed59d64b1c7db0f034134 Mon Sep 17 00:00:00 2001
+From: Tom Rix <Tom.Rix@amd.com>
+Date: Sun, 2 Nov 2025 08:17:47 -0800
+Subject: [PATCH] hip-tests link with libamd64
+
+---
+ catch/external/Catch2/cmake/Catch2/Catch.cmake | 2 ++
+ catch/unit/compiler/CMakeLists.txt             | 4 ++--
+ catch/unit/memory/CMakeLists.txt               | 2 ++
+ catch/unit/printf/CMakeLists.txt               | 2 +-
+ catch/unit/rtc/CMakeLists.txt                  | 4 ++--
+ catch/unit/stream/CMakeLists.txt               | 2 ++
+ 6 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/catch/external/Catch2/cmake/Catch2/Catch.cmake b/catch/external/Catch2/cmake/Catch2/Catch.cmake
+index fe5a7b586df7..faeb7039da41 100644
+--- a/catch/external/Catch2/cmake/Catch2/Catch.cmake
++++ b/catch/external/Catch2/cmake/Catch2/Catch.cmake
+@@ -316,6 +316,7 @@ function(hip_add_exe_to_target_compile_time_detection)
+ 
+ 
+     if(UNIX)
++      set(_LINKER_LIBS ${_LINKER_LIBS} amdhip64)
+       set(_LINKER_LIBS ${_LINKER_LIBS} stdc++fs)
+       set(_LINKER_LIBS ${_LINKER_LIBS} -ldl)
+     else()
+@@ -397,6 +398,7 @@ function(hip_add_exe_to_target)
+       set_property(TARGET ${_EXE_NAME} PROPERTY ${_PROPERTY})
+     endif()
+     if(UNIX)
++      set(_LINKER_LIBS ${_LINKER_LIBS} amdhip64)
+       set(_LINKER_LIBS ${_LINKER_LIBS} stdc++fs)
+       set(_LINKER_LIBS ${_LINKER_LIBS} -ldl)
+       set(_LINKER_LIBS ${_LINKER_LIBS} pthread)
+diff --git a/catch/unit/compiler/CMakeLists.txt b/catch/unit/compiler/CMakeLists.txt
+index b191e10b1585..c20792da4f41 100644
+--- a/catch/unit/compiler/CMakeLists.txt
++++ b/catch/unit/compiler/CMakeLists.txt
+@@ -47,7 +47,7 @@ if(HIP_PLATFORM MATCHES "amd")
+                     -I${HIP_PATH}/include/ --hip-path=${HIP_PATH}
+                     -I${CMAKE_CURRENT_SOURCE_DIR}/../../include
+                     -I${CMAKE_CURRENT_SOURCE_DIR}/../../external/Catch2
+-                    -I${CMAKE_CURRENT_SOURCE_DIR}/../../external/picojson ${LIBFS})
++                    -I${CMAKE_CURRENT_SOURCE_DIR}/../../external/picojson ${LIBFS} -lamdhip64)
+     add_custom_target(hipSquareGenericTargetOnlyCompressed ALL
+                     COMMAND ${CMAKE_CXX_COMPILER} -DNO_GENERIC_TARGET_ONLY_TEST -DGENERIC_COMPRESSED --std=c++17 -mcode-object-version=6 --offload-compress -w "${OFFLOAD_ARCH_GENERIC_STR}"
+                     ${CMAKE_CURRENT_SOURCE_DIR}/hipSquareGenericTarget.cc
+@@ -58,7 +58,7 @@ if(HIP_PLATFORM MATCHES "amd")
+                     -I${HIP_PATH}/include/ --hip-path=${HIP_PATH}
+                     -I${CMAKE_CURRENT_SOURCE_DIR}/../../include
+                     -I${CMAKE_CURRENT_SOURCE_DIR}/../../external/Catch2
+-                    -I${CMAKE_CURRENT_SOURCE_DIR}/../../external/picojson ${LIBFS})
++                    -I${CMAKE_CURRENT_SOURCE_DIR}/../../external/picojson ${LIBFS} -lamdhip64)
+     set_property(GLOBAL APPEND PROPERTY G_INSTALL_CUSTOM_TARGETS ${CMAKE_CURRENT_BINARY_DIR}/${GENERIC_TARGET_ONLY_EXE})
+     set_property(GLOBAL APPEND PROPERTY G_INSTALL_CUSTOM_TARGETS ${CMAKE_CURRENT_BINARY_DIR}/${GENERIC_TARGET_ONLY_COMPRESSED_EXE})
+   else()
+diff --git a/catch/unit/memory/CMakeLists.txt b/catch/unit/memory/CMakeLists.txt
+index d0257488d245..3d915bda9119 100644
+--- a/catch/unit/memory/CMakeLists.txt
++++ b/catch/unit/memory/CMakeLists.txt
+@@ -146,10 +146,12 @@ endif()
+ if(HIP_PLATFORM MATCHES "amd")
+   set_source_files_properties(hipHostRegister.cc PROPERTIES COMPILE_FLAGS -std=c++17)
+   add_executable(hipHostRegisterPerf EXCLUDE_FROM_ALL hipHostRegister_exe.cc)
++  target_link_libraries(hipHostRegisterPerf amdhip64)
+   add_dependencies(build_tests hipHostRegisterPerf)
+   set_property(GLOBAL APPEND PROPERTY G_INSTALL_EXE_TARGETS hipHostRegisterPerf)
+ if(UNIX)
+   add_executable(hipMemAdviseTstAlignedAllocMem EXCLUDE_FROM_ALL hipMemAdvise_AlignedAllocMem_Exe.cc)
++  target_link_libraries(hipMemAdviseTstAlignedAllocMem amdhip64)
+   add_dependencies(MemoryTest1 hipMemAdviseTstAlignedAllocMem)
+   set_property(GLOBAL APPEND PROPERTY G_INSTALL_EXE_TARGETS hipMemAdviseTstAlignedAllocMem)
+ endif()
+diff --git a/catch/unit/printf/CMakeLists.txt b/catch/unit/printf/CMakeLists.txt
+index c3b501caf3c7..f9fbe9d46759 100644
+--- a/catch/unit/printf/CMakeLists.txt
++++ b/catch/unit/printf/CMakeLists.txt
+@@ -10,7 +10,7 @@ set(TEST_SRC
+ if(HIP_PLATFORM MATCHES "nvidia")
+   set(LINKER_LIBS nvrtc)
+ elseif(HIP_PLATFORM MATCHES "amd")
+-  set(LINKER_LIBS hiprtc)
++  set(LINKER_LIBS hiprtc amdhip64)
+ endif()
+ 
+ if(UNIX)
+diff --git a/catch/unit/rtc/CMakeLists.txt b/catch/unit/rtc/CMakeLists.txt
+index db606ce794cf..7c7f3ac8ac9f 100644
+--- a/catch/unit/rtc/CMakeLists.txt
++++ b/catch/unit/rtc/CMakeLists.txt
+@@ -58,7 +58,7 @@ elseif(HIP_PLATFORM MATCHES "amd")
+   hip_add_exe_to_target(NAME RTC
+                       TEST_SRC ${TEST_SRC}
+                       TEST_TARGET_NAME build_tests
+-                      LINKER_LIBS hiprtc)
++                      LINKER_LIBS hiprtc amdhip64)
+ endif()
+ 
+ add_executable(ChkPtrdiff_t_Exe EXCLUDE_FROM_ALL ChkPtrdiff_t_Exe.cc)
+@@ -67,7 +67,7 @@ set_property(GLOBAL APPEND PROPERTY G_INSTALL_EXE_TARGETS ChkPtrdiff_t_Exe)
+ if(HIP_PLATFORM MATCHES "nvidia")
+   target_link_libraries(ChkPtrdiff_t_Exe nvrtc)
+ elseif(HIP_PLATFORM MATCHES "amd")
+-  target_link_libraries(ChkPtrdiff_t_Exe hiprtc)
++  target_link_libraries(ChkPtrdiff_t_Exe hiprtc amdhip64)
+ endif()
+ 
+ add_dependencies(build_tests copyRtcHeaders ChkPtrdiff_t_Exe)
+diff --git a/catch/unit/stream/CMakeLists.txt b/catch/unit/stream/CMakeLists.txt
+index bdaa5050c9b3..aacd829f05a4 100644
+--- a/catch/unit/stream/CMakeLists.txt
++++ b/catch/unit/stream/CMakeLists.txt
+@@ -53,8 +53,10 @@ endif()
+ hip_add_exe_to_target(
+   NAME StreamTest
+   TEST_SRC ${TEST_SRC} TEST_TARGET_NAME build_tests
++  LINKER_LIBS amdhip64
+   COMPILE_OPTIONS -std=c++17 COMMON_SHARED_SRC ${COMMON_SHARED_SRC})
+ 
+ add_executable(hipStreamLegacy_exe EXCLUDE_FROM_ALL hipStreamLegacy_exe.cc)
++target_link_libraries(hipStreamLegacy_exe amdhip64)
+ add_dependencies(StreamTest hipStreamLegacy_exe)
+ set_property(GLOBAL APPEND PROPERTY G_INSTALL_EXE_TARGETS hipStreamLegacy_exe)
+-- 
+2.51.0
+

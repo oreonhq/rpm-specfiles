@@ -1,0 +1,136 @@
+From 3ef95f36437b4995d963387a04cbdfe34efb15eb Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sat, 30 Jan 2016 23:07:11 +0100
+Subject: [PATCH] SortableVector: avoid qsort()ing C++ objects
+
+That's a sin to memcpy() a non-primitive type such as std::string. With
+the current GCC libstdc++ implementation std::string inlines and copying
+them directly causes no end of mayhem.
+
+Valgrind just waved goodbye and exited through an open window.
+
+Let's just get rid of the broken SortableVector class altogether, use
+the standard std::sort interface, overload < instead of using a custom
+comparator and implement swap to do the replaces correctly.
+---
+ src/Levels.cpp | 31 +++++++++++++++++++++++--------
+ src/Levels.h   | 21 ++++-----------------
+ 2 files changed, 27 insertions(+), 25 deletions(-)
+
+diff --git a/src/Levels.cpp b/src/Levels.cpp
+index 2579fcf..669a3c7 100644
+--- a/src/Levels.cpp
++++ b/src/Levels.cpp
+@@ -27,6 +27,7 @@
+ 
+ #include <iostream>
+ #include <string>
++#include <algorithm>
+ 
+ 
+ static const char MISC_COLLECTION[] = "C99_My Levels";
+@@ -99,16 +100,30 @@ compare_names(const std::string &a, const std::string &b)
+     return ma[2].compare(mb[2]);
+ }
+ 
+-int
+-LevelDesc::compare(const LevelDesc *a, const LevelDesc *b)
++bool
++operator<(LevelDesc a, LevelDesc b)
+ {
+-    return compare_names(a->file, b->file);
++    return compare_names(a.file, b.file) < 0;
+ }
+ 
+-int
+-Collection::compare(const Collection *a, const Collection *b)
++void
++LevelDesc::swap(LevelDesc &a, LevelDesc &b)
++{
++    std::swap(a.file, b.file);
++}
++
++bool
++operator<(Collection a, Collection b)
++{
++    return compare_names(a.name, b.name) < 0;
++}
++
++void
++Collection::swap(Collection &a, Collection &b)
+ {
+-    return compare_names(a->name, b->name);
++    std::swap(a.file, b.file);
++    std::swap(a.name, b.name);
++    std::swap(a.levels, b.levels);
+ }
+ 
+ Levels::Levels(std::vector<std::string> dirs)
+@@ -242,9 +257,9 @@ std::string Levels::levelName( int i, bool pretty )
+ void
+ Levels::sort()
+ {
+-    m_collections.sort();
++    std::sort(m_collections.begin(), m_collections.end());
+     for (auto &collection: m_collections) {
+-        collection.levels.sort();
++        std::sort(collection.levels.begin(), collection.levels.end());
+     }
+ }
+ 
+diff --git a/src/Levels.h b/src/Levels.h
+index aafe521..796fda2 100644
+--- a/src/Levels.h
++++ b/src/Levels.h
+@@ -20,19 +20,6 @@
+ #include <cstdio>
+ #include <sstream>
+ #include <vector>
+-#include <stdlib.h>
+-
+-template <typename T>
+-class SortableVector : public std::vector<T> {
+-public:
+-    SortableVector() : std::vector<T>() {}
+-
+-    void sort()
+-    {
+-        qsort(std::vector<T>::data(), std::vector<T>::size(), sizeof(T),
+-              (int (*)(const void *, const void *))T::compare);
+-    }
+-};
+ 
+ struct LevelDesc {
+     LevelDesc()
+@@ -45,7 +32,7 @@ struct LevelDesc {
+     {
+     }
+ 
+-    static int compare(const LevelDesc *a, const LevelDesc *b);
++    void swap(LevelDesc &a, LevelDesc &b);
+ 
+     std::string file;
+ };
+@@ -65,11 +52,11 @@ struct Collection {
+     {
+     }
+ 
+-    static int compare(const Collection *a, const Collection *b);
++    void swap(Collection &a, Collection &b);
+ 
+     std::string file;
+     std::string name;
+-    SortableVector<LevelDesc> levels;
++    std::vector<LevelDesc> levels;
+ };
+ 
+ class Levels
+@@ -107,7 +94,7 @@ class Levels
+   bool scanCollection(const std::string& file);
+ 
+   int m_numLevels;
+-  SortableVector<Collection> m_collections;
++  std::vector<Collection> m_collections;
+ };
+ 
+ #endif //LEVELS_H

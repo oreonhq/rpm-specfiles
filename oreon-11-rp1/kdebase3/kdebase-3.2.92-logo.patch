@@ -1,0 +1,20 @@
+--- kdebase-3.2.92/kcontrol/energy/energy.cpp.orig	2004-07-26 14:22:30.093671939 +0200
++++ kdebase-3.2.92/kcontrol/energy/energy.cpp	2004-07-26 14:24:50.108990431 +0200
+@@ -162,7 +162,7 @@
+         lbl = new QLabel(i18n("Your display does not support power saving."), this);
+          hbox->addWidget(lbl);
+     }
+-
++#if 0
+     KURLLabel *logo = new KURLLabel(this);
+     logo->setURL("http://www.energystar.gov");
+     logo->setPixmap(QPixmap(locate("data", "kcontrol/pics/energybig.png")));
+@@ -172,7 +172,7 @@
+ 
+     hbox->addStretch();
+     hbox->addWidget(logo);
+-
++#endif
+     // Sliders
+     m_pStandbySlider = new KIntNumInput(m_Standby, this);
+     m_pStandbySlider->setLabel(i18n("&Standby after:"));

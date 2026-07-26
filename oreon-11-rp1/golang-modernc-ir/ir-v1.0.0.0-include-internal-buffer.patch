@@ -1,0 +1,267 @@
+diff -u --recursive --new-file ir-v1.0.0-vanilla/buffer.go ir-v1.0.0/buffer.go
+--- ir-v1.0.0-vanilla/buffer.go	1969-12-31 18:00:00.000000000 -0600
++++ ir-v1.0.0/buffer.go	2023-08-14 09:39:45.501595901 -0500
+@@ -0,0 +1,145 @@
++// Copyright 2016 The Internal Authors. All rights reserved.
++// Use of this source code is governed by a BSD-style
++// license that can be found in the LICENSE file.
++
++// Package buffer implements a pool of pointers to byte slices.
++//
++// Example usage pattern
++//
++//	p := buffer.Get(size)
++//	b := *p	// Now you can use b in any way you need.
++//	...
++//	// When b will not be used anymore
++//	buffer.Put(p)
++//	...
++//	// If b or p are not going out of scope soon, optionally
++//	b = nil
++//	p = nil
++//
++// Otherwise the pool cannot release the buffer on garbage collection.
++//
++// Do not do
++//
++//	p := buffer.Get(size)
++//	b := *p
++//	...
++//	buffer.Put(&b)
++//
++// or
++//
++//	b := *buffer.Get(size)
++//	...
++//	buffer.Put(&b)
++package ir // import "modernc.org/ir"
++
++import (
++	"io"
++)
++
++// CGet returns a pointer to a byte slice of len size. The pointed to byte
++// slice is zeroed up to its cap. CGet panics for size < 0.
++//
++// CGet is safe for concurrent use by multiple goroutines.
++func CGet(size int) *[]byte { return Bytes2.CGet(size).(*[]byte) }
++
++// Get returns a pointer to a byte slice of len size. The pointed to byte slice
++// is not zeroed. Get panics for size < 0.
++//
++// Get is safe for concurrent use by multiple goroutines.
++func Get(size int) *[]byte { return Bytes2.Get(size).(*[]byte) }
++
++// Put puts a pointer to a byte slice into a pool for possible later reuse by
++// CGet or Get.
++//
++// Put is safe for concurrent use by multiple goroutines.
++func Put(p *[]byte) { Bytes2.Put(p) }
++
++// Bytes is similar to bytes.Buffer but may generate less garbage when properly
++// Closed. Zero value is ready to use.
++type Bytes struct {
++	p *[]byte
++}
++
++// Bytes return the content of b. The result is R/O.
++func (b *Bytes) Bytes() []byte {
++	if b.p != nil {
++		return *b.p
++	}
++
++	return nil
++}
++
++// Close will recycle the underlying storage, if any. After Close, b is again
++// the zero value.
++func (b *Bytes) Close() error {
++	if b.p != nil {
++		Put(b.p)
++		b.p = nil
++	}
++	return nil
++}
++
++// Len returns the size of content in b.
++func (b *Bytes) Len() int {
++	if b.p != nil {
++		return len(*b.p)
++	}
++
++	return 0
++}
++
++// Reset discard the content of Bytes while keeping the internal storage, if any.
++func (b *Bytes) Reset() {
++	if b.p != nil {
++		*b.p = (*b.p)[:0]
++	}
++}
++
++// Write writes p into b and returns (len(p), nil).
++func (b *Bytes) Write(p []byte) (int, error) {
++	n := b.Len()
++	b.grow(n + len(p))
++	copy((*b.p)[n:], p)
++	return len(p), nil
++}
++
++// WriteByte writes p into b and returns nil.
++func (b *Bytes) WriteByte(p byte) error {
++	n := b.Len()
++	b.grow(n + 1)
++	(*b.p)[n] = p
++	return nil
++}
++
++// WriteTo writes b's content to w and returns the number of bytes written to w
++// and an error, if any.
++func (b *Bytes) WriteTo(w io.Writer) (int64, error) {
++	n, err := w.Write(b.Bytes())
++	return int64(n), err
++}
++
++// WriteString writes s to b and returns (len(s), nil).
++func (b *Bytes) WriteString(s string) (int, error) {
++	n := b.Len()
++	b.grow(n + len(s))
++	copy((*b.p)[n:], s)
++	return len(s), nil
++}
++
++func (b *Bytes) grow(n int) {
++	if b.p != nil {
++		if n <= cap(*b.p) {
++			*b.p = (*b.p)[:n]
++			return
++		}
++
++		np := Get(2 * n)
++		*np = (*np)[:n]
++		copy(*np, *b.p)
++		Put(b.p)
++		b.p = np
++		return
++	}
++
++	b.p = Get(n)
++}
+diff -u --recursive --new-file ir-v1.0.0-vanilla/ir.go ir-v1.0.0/ir.go
+--- ir-v1.0.0-vanilla/ir.go	2018-11-06 11:48:47.000000000 -0600
++++ ir-v1.0.0/ir.go	2023-08-14 09:42:46.644310502 -0500
+@@ -41,8 +41,6 @@
+ import (
+ 	"fmt"
+ 	"go/token"
+-
+-	"modernc.org/internal/buffer"
+ )
+ 
+ var (
+@@ -260,10 +258,10 @@
+ 		}
+ 	}
+ 
+-	p := buffer.CGet(len(f.Body))
++	p := CGet(len(f.Body))
+ 	ipFlags := *p
+ 
+-	defer buffer.Put(p)
++	defer Put(p)
+ 
+ 	phi := map[int][]TypeID{}
+ 	var g func(int, []TypeID) error
+diff -u --recursive --new-file ir-v1.0.0-vanilla/link.go ir-v1.0.0/link.go
+--- ir-v1.0.0-vanilla/link.go	2018-11-06 11:48:47.000000000 -0600
++++ ir-v1.0.0/link.go	2023-08-14 09:42:54.589241164 -0500
+@@ -15,8 +15,6 @@
+ 	"sort"
+ 	"strconv"
+ 	"time"
+-
+-	"modernc.org/internal/buffer"
+ )
+ 
+ const (
+@@ -102,7 +100,7 @@
+ 	var c counter
+ 	gw := gzip.NewWriter(io.MultiWriter(w, &c))
+ 	gw.Header.Comment = "IR objects"
+-	var buf buffer.Bytes
++	var buf Bytes
+ 	buf.Write(magic)
+ 	fmt.Fprintf(&buf, fmt.Sprintf("%s|%s|%v", runtime.GOOS, runtime.GOARCH, binaryVersion))
+ 	gw.Header.Extra = buf.Bytes()
+@@ -485,7 +483,7 @@
+ 				case ok:
+ 					x.Index = l.define(ex)
+ 				default:
+-					var buf buffer.Bytes
++					var buf Bytes
+ 					buf.Write(dict.S(idBuiltinPrefix))
+ 					buf.Write(dict.S(int(x.NameID)))
+ 					nm := NameID(dict.ID(buf.Bytes()))
+diff -u --recursive --new-file ir-v1.0.0-vanilla/operation.go ir-v1.0.0/operation.go
+--- ir-v1.0.0-vanilla/operation.go	2018-11-06 11:48:47.000000000 -0600
++++ ir-v1.0.0/operation.go	2023-08-14 09:43:01.965176792 -0500
+@@ -7,8 +7,6 @@
+ import (
+ 	"fmt"
+ 	"go/token"
+-
+-	"modernc.org/internal/buffer"
+ )
+ 
+ const opw = 16
+@@ -1887,7 +1885,7 @@
+ }
+ 
+ func (o *Switch) String() string {
+-	var buf buffer.Bytes
++	var buf Bytes
+ 
+ 	defer buf.Close()
+ 
+diff -u --recursive --new-file ir-v1.0.0-vanilla/type.go ir-v1.0.0/type.go
+--- ir-v1.0.0-vanilla/type.go	2018-11-06 11:48:47.000000000 -0600
++++ ir-v1.0.0/type.go	2023-08-14 09:43:10.637101108 -0500
+@@ -7,8 +7,6 @@
+ import (
+ 	"fmt"
+ 	"math"
+-
+-	"modernc.org/internal/buffer"
+ )
+ 
+ var (
+@@ -87,7 +85,7 @@
+ func (t *TypeBase) Pointer() Type { return newPointerType(t) }
+ 
+ func newPointerType(t Type) Type {
+-	var buf buffer.Bytes
++	var buf Bytes
+ 	buf.WriteByte('*')
+ 	buf.Write(dict.S(int(t.ID())))
+ 	return &PointerType{
+diff -u --recursive --new-file ir-v1.0.0-vanilla/value.go ir-v1.0.0/value.go
+--- ir-v1.0.0-vanilla/value.go	2018-11-06 11:48:47.000000000 -0600
++++ ir-v1.0.0/value.go	2023-08-14 09:43:17.701039463 -0500
+@@ -6,8 +6,6 @@
+ 
+ import (
+ 	"fmt"
+-
+-	"modernc.org/internal/buffer"
+ )
+ 
+ var (
+@@ -95,7 +93,7 @@
+ }
+ 
+ func (v *CompositeValue) String() string {
+-	var b buffer.Bytes
++	var b Bytes
+ 	b.WriteByte('{')
+ 	for i, v := range v.Values {
+ 		if i != 0 {

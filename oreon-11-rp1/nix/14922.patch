@@ -1,0 +1,25 @@
+From 9a7f41279bfb8750e3c8dc2417b55001a704ce53 Mon Sep 17 00:00:00 2001
+From: Jens Petersen <petersen@redhat.com>
+Date: Tue, 6 Jan 2026 14:07:42 +0800
+Subject: [PATCH] Prevent multiple executions of nix-profile.sh (see #12805)
+
+Add a check to ensure the script executes only once per shell.
+
+This makes bash behave the same way as fish, which checks `__ETC_PROFILE_NIX_SOURCED` both for nix.fish and nix-daemon.fish
+---
+ scripts/nix-profile.sh.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/scripts/nix-profile.sh.in b/scripts/nix-profile.sh.in
+index 2d6bf6e9514..e7459c4eeaf 100644
+--- a/scripts/nix-profile.sh.in
++++ b/scripts/nix-profile.sh.in
+@@ -1,4 +1,8 @@
++# Only execute this file once per shell.
+ # This file is tested by tests/installer/default.nix.
++if [ -n "${__ETC_PROFILE_NIX_SOURCED:-}" ]; then return; fi
++export __ETC_PROFILE_NIX_SOURCED=1
++
+ if [ -n "${HOME-}" ] && [ -n "${USER-}" ]; then
+ 
+     # Set up the per-user profile.

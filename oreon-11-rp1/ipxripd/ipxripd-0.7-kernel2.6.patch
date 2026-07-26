@@ -1,0 +1,25 @@
+diff -Nrbu ipxripd/ipxkern.c ipxripd-OK/ipxkern.c
+--- ipxripd/ipxkern.c	1996-02-01 19:56:07.000000000 +0300
++++ ipxripd-OK/ipxkern.c	2005-03-10 18:09:53.215272940 +0300
+@@ -51,7 +51,9 @@
+ 	FILE *ipx_route;
+ 	char buf[512];
+ 
+-	ipx_route = fopen("/proc/net/ipx_route", "r");
++	ipx_route = fopen("/proc/net/ipx/route", "r");
++	if (!ipx_route)
++		ipx_route = fopen("/proc/net/ipx_route", "r"); /* old kernels */
+ 
+ 	if (ipx_route == NULL)
+ 	{
+@@ -109,7 +111,9 @@
+ 	FILE *ipx_ifc;
+ 	char buf[512];
+ 
+-	ipx_ifc = fopen("/proc/net/ipx_interface", "r");
++	ipx_ifc = fopen("/proc/net/ipx/interface", "r");
++	if (!ipx_ifc)
++		ipx_ifc = fopen("/proc/net/ipx_interface", "r"); /*old kernels*/
+ 
+ 	if (ipx_ifc == NULL)
+ 	{

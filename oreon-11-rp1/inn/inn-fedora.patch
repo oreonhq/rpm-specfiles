@@ -1,0 +1,103 @@
+diff -up inn-2.7.2/lib/innconf.c.rh inn-2.7.2/lib/innconf.c
+--- inn-2.7.2/lib/innconf.c.rh	2024-10-13 17:15:46.538079313 +0200
++++ inn-2.7.2/lib/innconf.c	2024-10-13 17:16:21.059904326 +0200
+@@ -226,7 +226,7 @@ static const struct config config_table[
+     {K(pgpverify),                  BOOL(false)       },
+ 
+     /* The following settings are specific to innwatch. */
+-    {K(doinnwatch),                 BOOL(true)        },
++    {K(doinnwatch),                 BOOL(false)       },
+     {K(innwatchbatchspace),         UNUMBER(4000)     },
+     {K(innwatchlibspace),           UNUMBER(25000)    },
+     {K(innwatchloload),             UNUMBER(1000)     },
+diff -up inn-2.7.2/Makefile.global.in.rh inn-2.7.2/Makefile.global.in
+--- inn-2.7.2/Makefile.global.in.rh	2024-06-22 13:22:42.000000000 +0200
++++ inn-2.7.2/Makefile.global.in	2024-10-13 17:15:46.539079308 +0200
+@@ -279,8 +279,8 @@ INEWSMODE	= @INEWSMODE@
+ RNEWSMODE	= @RNEWSMODE@
+ FILEMODE	= @FILEMODE@
+ 
+-OWNER		= -o $(RUNASUSER) -g $(RUNASGROUP)
+-ROWNER		= -o $(RUNASUSER) -g $(RNEWSGROUP)
++OWNER		=
++ROWNER		=
+ 
+ INSTALL		= $(top)/support/install-sh -p
+ 
+diff -up inn-2.7.3/perl/INN/Config.pm.in.orig inn-2.7.3/perl/INN/Config.pm.in
+--- inn-2.7.3/perl/INN/Config.pm.in.orig	2025-05-09 15:53:41.000000000 +0200
++++ inn-2.7.3/perl/INN/Config.pm.in	2025-05-27 11:57:42.812206690 +0200
+@@ -29,7 +29,7 @@ our $exec_prefix = "@exec_prefix@";
+ 
+ ##  Then, process the variables provided by innconfval.
+ my @INNCONFVAR = ();
+-my @values = qx(${exec_prefix}/bin/innconfval -p);
++my @values = qx(${exec_prefix}/innconfval -p);
+ foreach my $line (@values) {
+     eval 'our ' . $line;
+     if ($line =~ /^(.*?) = /m) {
+diff -up inn-2.7.2/samples/inn.conf.in.rh inn-2.7.2/samples/inn.conf.in
+--- inn-2.7.2/samples/inn.conf.in.rh	2024-06-22 13:22:42.000000000 +0200
++++ inn-2.7.2/samples/inn.conf.in	2024-10-13 17:15:46.539079308 +0200
+@@ -21,7 +21,7 @@ mta:                         "@SENDMAIL@
+ organization:                "A poorly-installed InterNetNews site"
+ ovmethod:                    tradindexed
+ hismethod:                   hisv6
+-pathhost:                    @HOSTNAME@
++#pathhost:                    localhost
+ pathnews:                    @prefix@
+ 
+ #runasuser:
+@@ -149,7 +149,7 @@ backofftrigger:              10000
+ 
+ # Monitoring
+ 
+-doinnwatch:                  true
++doinnwatch:                  false
+ innwatchbatchspace:          4000
+ innwatchlibspace:            25000
+ innwatchloload:              1000
+diff -up inn-2.7.2/scripts/Makefile.rh inn-2.7.2/scripts/Makefile
+--- inn-2.7.2/scripts/Makefile.rh	2024-06-22 13:22:42.000000000 +0200
++++ inn-2.7.2/scripts/Makefile	2024-10-13 17:15:46.540079303 +0200
+@@ -25,7 +25,7 @@ install: all
+ 	done
+ 	for F in innreport-display.conf innreport_inn.pm \
+ 	         innshellvars innshellvars.pl innshellvars.tcl ; do \
+-	    $(CP_RPUB) $$F $D$(PATHLIB)/$$F ; \
++	    $(CP_RPUB) $$F $D$(PATHBIN)/$$F ; \
+ 	done
+ 
+ bootstrap:
+diff -up inn-2.7.2/support/fixscript.in.rh inn-2.7.2/support/fixscript.in
+--- inn-2.7.2/support/fixscript.in.rh	2024-06-22 13:22:42.000000000 +0200
++++ inn-2.7.2/support/fixscript.in	2024-10-13 17:15:46.540079303 +0200
+@@ -24,6 +24,7 @@ prefix="@prefix@"
+ exec_prefix="@exec_prefix@"
+ libdir="@libdir@"
+ libperldir="@LIBPERLDIR@"
++libexecdir="@libexecdir@"
+ 
+ # We can probably just assume sed is on the path, but since we have it, we may
+ # as well use it.
+@@ -58,7 +59,7 @@ interpreter=$(head -n 1 "$input")
+ case "$interpreter" in
+ */sh | *SH*)
+     path="@SHELL@"
+-    lib=". $libdir/innshellvars"
++    lib=". $libexecdir/news/innshellvars"
+     ;;
+ */perl* | *PERL*)
+     path=$(echo "$interpreter" | sed 's%^#! *[^ ][^ ]*%'"$PERLPATH%")
+diff -up inn-2.7.2/tests/lib/innconf-t.c.rh inn-2.7.2/tests/lib/innconf-t.c
+--- inn-2.7.2/tests/lib/innconf-t.c.rh	2024-06-22 13:22:42.000000000 +0200
++++ inn-2.7.2/tests/lib/innconf-t.c	2024-10-13 17:15:46.540079303 +0200
+@@ -72,7 +72,7 @@ main(void)
+     fclose(config);
+     ok(7, !innconf_check("config/tmp"));
+     unlink("config/tmp");
+-    ok_string(8, "config/tmp:29: unknown parameter foo\n", errors);
++    ok_string(8, "config/tmp:28: unknown parameter foo\n", errors);
+     errors_uncapture();
+     free(errors);
+     errors = NULL;

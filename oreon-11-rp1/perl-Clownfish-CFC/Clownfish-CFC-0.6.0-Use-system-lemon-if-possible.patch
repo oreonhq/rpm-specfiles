@@ -1,0 +1,52 @@
+From 38ae145430e95b939ea6f07c3f5656c9721fda98 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 17 Sep 2015 17:14:52 +0200
+Subject: [PATCH] Use system lemon if possible
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If lemon tool is already available on the system, use that instead of
+building it from bundled code.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ buildlib/Clownfish/CFC/Build.pm | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/buildlib/Clownfish/CFC/Build.pm b/buildlib/Clownfish/CFC/Build.pm
+index 87f906f..0f38d63 100644
+--- a/buildlib/Clownfish/CFC/Build.pm
++++ b/buildlib/Clownfish/CFC/Build.pm
+@@ -59,9 +59,16 @@ else {
+     $MODULES_DIR    = catdir( updir(), 'modules' );
+ }
+ my $CMARK_SOURCE_DIR = catdir( $MODULES_DIR, 'CommonMark', 'src' );
+-my $LEMON_EXE_PATH   = catfile( $LEMON_DIR, "lemon$Config{_exe}" );
+ my $PPPORT_H_PATH    = catfile( $INCLUDE,   'ppport.h' );
+ 
++# Prefer lemon from system
++my $LEMON_EXE_PATH = "lemon$Config{_exe}";
++if (system( $LEMON_EXE_PATH, '-x')) {
++    $LEMON_EXE_PATH = catfile( $LEMON_DIR, "lemon$Config{_exe}" );
++} else {
++    $LEMON_DIR = undef;
++}
++
+ __PACKAGE__->add_property('with_system_cmark');
+ 
+ sub new {
+@@ -140,6 +147,10 @@ sub ACTION_ppport {
+ # Build the Lemon parser generator.
+ sub ACTION_lemon {
+     my $self = shift;
++    if (!defined $LEMON_DIR) {
++        print "Using system Lemon parser generator...\n\n";
++        return;
++    }
+     print "Building the Lemon parser generator...\n\n";
+     $self->_run_make(
+         dir  => $LEMON_DIR,
+-- 
+2.7.4
+

@@ -1,0 +1,52 @@
+--- CMakeModules/FindCROSSGUID.orig.cmake	2019-03-23 19:54:03.269453000 +0100
++++ CMakeModules/FindCROSSGUID.cmake	2019-03-23 19:56:45.218630640 +0100
+@@ -21,11 +21,11 @@
+ string(TOUPPER ${PROJECT_NAME} _UPPER_PROJECT_NAME)
+ set(_PROJECT_DEPENDENCY_DIR ${_UPPER_PROJECT_NAME}_DEPENDENCY_DIR)
+ 
+-find_package(crossguid CONFIG REQUIRED
+-  CONFIGS crossguid-config.cmake
++find_package(crossguid2 CONFIG REQUIRED
++  CONFIGS crossguid2-config.cmake
+   PATHS $ENV{CROSSGUID_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake
+         ${${_PROJECT_DEPENDENCY_DIR}}/${CMAKE_INSTALL_LIBDIR}/cmake
+-        /usr/${CMAKE_INSTALL_LIBDIR}/cmake
++        ${CMAKE_INSTALL_LIBDIR}/cmake/crossguid2
+         ${CONAN_LIB_DIRS_CROSSGUID}/cmake
+         CMAKE_FIND_ROOT_PATH_BOTH
+   )
+@@ -34,6 +34,7 @@
+ 
+   find_path(CROSSGUID_INCLUDE_DIR crossguid/guid.hpp
+     PATHS $ENV{CROSSGUID_DIR}/include
++          ${INCLUDE_INSTALL_DIR}/crossguid2
+           $ENV{CROSSGUID_DIR}
+           ${${_PROJECT_DEPENDENCY_DIR}}/include
+           ${${_PROJECT_DEPENDENCY_DIR}}
+@@ -51,7 +52,7 @@
+   endif (NOT CROSSGUID_INCLUDE_DIR)
+ 
+   find_library(CROSSGUID_LIBRARY 
+-    NAMES crossguid crossguid-dgb
++    NAMES crossguid2 crossguid-dgb
+     PATHS $ENV{CROSSGUID_DIR}/lib
+           $ENV{CROSSGUID_DIR}
+           ${${_PROJECT_DEPENDENCY_DIR}}/${CMAKE_INSTALL_LIBDIR}
+@@ -82,14 +83,14 @@
+ else ()
+   set(CROSSGUID_FOUND ${crossguid_FOUND})
+ 
+-  get_target_property(CROSSGUID_INCLUDE_DIR crossguid INTERFACE_INCLUDE_DIRECTORIES)
+-  get_target_property(CROSSGUID_LIBRARY crossguid IMPORTED_LOCATION_RELEASE)
++  get_target_property(CROSSGUID_INCLUDE_DIR crossguid2 INTERFACE_INCLUDE_DIRECTORIES)
++  get_target_property(CROSSGUID_LIBRARY crossguid2 IMPORTED_LOCATION_RELEASE)
+   
+   if (NOT CROSSGUID_LIBRARY)
+     get_target_property(CROSSGUID_LIBRARY crossguid IMPORTED_LOCATION_DEBUG)
+   endif()
+ 
+-  get_target_property(CROSSGUID_INTERFACE_LINK_LIBRARIES crossguid INTERFACE_LINK_LIBRARIES)
++  get_target_property(CROSSGUID_INTERFACE_LINK_LIBRARIES crossguid2 INTERFACE_LINK_LIBRARIES)
+ 
+   if (CROSSGUID_INTERFACE_LINK_LIBRARIES)
+     set(CROSSGUID_LIBRARY ${CROSSGUID_LIBRARY} ${CROSSGUID_INTERFACE_LINK_LIBRARIES})

@@ -1,0 +1,21 @@
+diff --git a/lib/private/Updater.php b/lib/private/Updater.php
+index 5a14bb17507..38dcb55db7f 100644
+--- a/lib/private/Updater.php
++++ b/lib/private/Updater.php
+@@ -174,10 +174,13 @@
+ 			$this->config->setAppValue('core', 'vendor', $currentVendor);
+ 		}
+ 
++		/*
++			Fedora package:
++			Remove updater version check, we know that updates across more than one
++			version are possible
++		*/
+ 		if ($currentVendor === 'nextcloud') {
+-			return isset($allowedPreviousVersions[$currentVendor][$majorMinor])
+-				&& (version_compare($oldVersion, $newVersion, '<=')
+-					|| $this->config->getSystemValueBool('debug', false));
++			return true;
+ 		}
+ 
+ 		// Check if the instance can be migrated

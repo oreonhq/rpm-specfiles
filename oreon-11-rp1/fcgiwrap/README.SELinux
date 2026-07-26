@@ -1,0 +1,8 @@
+Until BZ #1655702 [1] is resolved and a new selinux-polcy is pushed out, the
+local system administrator must apply the following command to avoid avc write
+denials, if selinux security policies are being enforced:
+
+   semanage fcontext -a -t httpd_var_run_t '/var/run/fcgiwrap(/.*)?'
+
+
+[1] https://bugzilla.redhat.com/show_bug.cgi?id=1655702

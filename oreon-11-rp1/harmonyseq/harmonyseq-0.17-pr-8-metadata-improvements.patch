@@ -1,0 +1,214 @@
+diff -Naur harmonySEQ-0.17-original/CMakeLists.txt harmonySEQ-0.17/CMakeLists.txt
+--- harmonySEQ-0.17-original/CMakeLists.txt	2020-03-04 08:48:23.000000000 -0500
++++ harmonySEQ-0.17/CMakeLists.txt	2021-04-30 06:54:32.915295366 -0400
+@@ -43,12 +43,22 @@
+   DESTINATION share/mime/packages/
+   )
+ 
+-configure_file(harmonyseq.desktop.in harmonyseq.desktop)
+ install(
+-  FILES "${PROJECT_BINARY_DIR}/harmonyseq.desktop"
++  FILES "${PROJECT_SOURCE_DIR}/org.cielak.harmonyseq.metainfo.xml"
++  DESTINATION share/metainfo/
++  )
++
++configure_file(org.cielak.harmonyseq.desktop.in org.cielak.harmonyseq.desktop)
++install(
++  FILES "${PROJECT_BINARY_DIR}/org.cielak.harmonyseq.desktop"
+   DESTINATION share/applications/
+   )
+ 
++install(
++  FILES "${PROJECT_SOURCE_DIR}/doc/harmonySEQ.1"
++  DESTINATION share/man/man1/
++  )
++
+ # Debian package
+ SET(CPACK_GENERATOR "DEB")
+ SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgtkmm-3.0-1v5, libglibmm-2.4-1v5, libasound2, liblo7, libstdc++6, libc6")
+diff -Naur harmonySEQ-0.17-original/doc/harmonySEQ.1 harmonySEQ-0.17/doc/harmonySEQ.1
+--- harmonySEQ-0.17-original/doc/harmonySEQ.1	1969-12-31 19:00:00.000000000 -0500
++++ harmonySEQ-0.17/doc/harmonySEQ.1	2021-04-30 06:54:33.248297282 -0400
+@@ -0,0 +1,61 @@
++.TH HARMONYSEQ "1" "April 2021" "" "User Commands"
++.SH NAME
++harmonySEQ \- MIDI sequencer designed for live performances
++.SH SYNOPSIS
++.B harmonySEQ
++.RI [ OPTION ...]
++.RI [ FILE ]
++.SH DESCRIPTION
++A MIDI software sequencer designed for live performances and jams.
++.P
++.BR harmonySEQ (1)
++operates a number of synchronized sequencers, each with its own pattern,
++repeating looped melodies of different length, duration and MIDI channel.
++.P
++Main features include:
++.RS +7n
++.IP \(bu 2
++support for complex polyrhythms
++.IP \(bu 2
++multi-pattern configuration for each sequencer
++.IP \(bu 2
++customizable action triggers \(en exceptionally useful for live performances
++.IP \(bu 2
++chord management system which allows to easily organize melodies that sound
++great together
++.IP \(bu 2
++support for sequencing MIDI control messages
++.IP \(bu 2
++an easy-to-use yet powerful interface, with a rich piano-roll pattern editor
++.RE
++.P
++As for now
++.BR harmonySEQ (1)
++works on Linux only.
++.P
++It uses ALSA
++.RB ( asound )
++library, and
++.B GTKmm
++for graphical interface.
++.P
++No official user documentation exists at the moment, but you can refer to UI
++tooltips \(en nearly everything has a detailed explanation.
++.P
++More information can be found on the project\(cqs
++.UR https://harmonyseq.wordpress.com
++website
++.UE .
++.SH OPTIONS
++.TP
++.B \-d, \-\-debug
++enters debug mode, prints lots of debug messeges
++.TP
++.B \-\-pass\-midi
++passes the midi events through the program by default
++.TP
++.B \-\-help
++prints a help message and exits
++.TP
++.B \-\-version
++prints the program version
+diff -Naur harmonySEQ-0.17-original/harmonyseq.desktop.in harmonySEQ-0.17/harmonyseq.desktop.in
+--- harmonySEQ-0.17-original/harmonyseq.desktop.in	2020-03-04 08:48:23.000000000 -0500
++++ harmonySEQ-0.17/harmonyseq.desktop.in	1969-12-31 19:00:00.000000000 -0500
+@@ -1,9 +0,0 @@
+-[Desktop Entry]
+-Name=harmonySEQ
+-Comment=MIDI sequencer for live performances
+-Exec=@CMAKE_INSTALL_PREFIX@/bin/harmonySEQ %F
+-Terminal=false
+-Type=Application
+-Categories=AudioVideo;Audio;Midi;Sequencer;
+-MimeType=text/x-harmonyseq
+-Icon=@CMAKE_INSTALL_PREFIX@/share/harmonySEQ/pixmaps/scalable/apps/harmonyseq.svg
+diff -Naur harmonySEQ-0.17-original/images/LICENSE harmonySEQ-0.17/images/LICENSE
+--- harmonySEQ-0.17-original/images/LICENSE	1969-12-31 19:00:00.000000000 -0500
++++ harmonySEQ-0.17/images/LICENSE	2021-04-30 06:54:33.248297282 -0400
+@@ -0,0 +1,5 @@
++The images in this directory are part of harmonySEQ project. All
++images in this directory are licensed under the terms of Creative
++Commons CC0 license (version 1.0 or newer of your choice). See the
++full text at:
++https://creativecommons.org/publicdomain/zero/1.0/legalcode
+diff -Naur harmonySEQ-0.17-original/org.cielak.harmonyseq.desktop.in harmonySEQ-0.17/org.cielak.harmonyseq.desktop.in
+--- harmonySEQ-0.17-original/org.cielak.harmonyseq.desktop.in	1969-12-31 19:00:00.000000000 -0500
++++ harmonySEQ-0.17/org.cielak.harmonyseq.desktop.in	2021-04-30 06:54:33.248297282 -0400
+@@ -0,0 +1,9 @@
++[Desktop Entry]
++Name=harmonySEQ
++Comment=MIDI sequencer for live performances
++Exec=@CMAKE_INSTALL_PREFIX@/bin/harmonySEQ %F
++Terminal=false
++Type=Application
++Categories=AudioVideo;Audio;Midi;Sequencer;
++MimeType=text/x-harmonyseq
++Icon=@CMAKE_INSTALL_PREFIX@/share/harmonySEQ/pixmaps/scalable/apps/harmonyseq.svg
+diff -Naur harmonySEQ-0.17-original/org.cielak.harmonyseq.metainfo.xml harmonySEQ-0.17/org.cielak.harmonyseq.metainfo.xml
+--- harmonySEQ-0.17-original/org.cielak.harmonyseq.metainfo.xml	1969-12-31 19:00:00.000000000 -0500
++++ harmonySEQ-0.17/org.cielak.harmonyseq.metainfo.xml	2021-04-30 06:54:33.248297282 -0400
+@@ -0,0 +1,46 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<component type="desktop-application">
++  <id>org.cielak.harmonyseq</id>
++
++  <name>harmonySEQ</name>
++  <summary>MIDI sequencer designed for live performances and jams</summary>
++
++  <metadata_license>CC0-1.0</metadata_license>
++  <project_license>GPL-3.0-or-later</project_license>
++
++  <description>
++    <p>
++      harmonySEQ is a MIDI sequencer that operates a number of
++      synchronized tracks, each with its own pattern, repeating looped
++      melodies of different length, duration and MIDI channel.
++    </p>
++    <p>Main features include:</p>
++    <ul>
++      <li>support for complex polyrhythms</li>
++      <li>multi-pattern configuration for each sequencer</li>
++      <li>customizable action triggers - exceptionally useful for live performances</li>
++      <li>chord management system which allows to easily organize melodies that sound great together</li>
++      <li>support for sequencing MIDI control messages</li>
++      <li>an easy-to-use yet powerful interface, with a rich piano-roll pattern editor</li>
++    </ul>
++  </description>
++
++  <url type="homepage">https://harmonyseq.wordpress.com/</url>
++  <url type="bugtracker">https://github.com/rafalcieslak/harmonySEQ/issues</url>
++
++  <screenshots>
++    <screenshot type="default">
++      <caption>Main interface, sequencer pattern view, and events list</caption>
++      <image>https://harmonyseq.files.wordpress.com/2020/03/screenshot2.png</image>
++    </screenshot>
++    <screenshot>
++      <caption>Action edit dialog with CC automation editor in the background</caption>
++      <image>https://harmonyseq.files.wordpress.com/2020/03/screenshot3.png</image>
++    </screenshot>
++  </screenshots>
++
++  <launchable type="desktop-id">org.cielak.harmonyseq.desktop</launchable>
++  <provides>
++    <binary>harmonySEQ</binary>
++  </provides>
++</component>
+diff -Naur harmonySEQ-0.17-original/README.md harmonySEQ-0.17/README.md
+--- harmonySEQ-0.17-original/README.md	2020-03-04 08:48:23.000000000 -0500
++++ harmonySEQ-0.17/README.md	2021-04-30 06:54:33.247297276 -0400
+@@ -9,7 +9,7 @@
+ 
+ Main features include:
+ 
+-- support for complex polyrythms
++- support for complex polyrhythms
+ - multi-pattern configuration for each sequencer
+ - customizable action triggers - exceptionally useful for live
+   performances
+diff -Naur harmonySEQ-0.17-original/src/main.cpp harmonySEQ-0.17/src/main.cpp
+--- harmonySEQ-0.17-original/src/main.cpp	2020-03-04 08:48:23.000000000 -0500
++++ harmonySEQ-0.17/src/main.cpp	2021-04-30 06:54:33.248297282 -0400
+@@ -23,6 +23,8 @@
+ #include <getopt.h>
+ #include <iostream>
+ 
++#include <glibmm/miscutils.h>
++
+ #include "Configuration.hpp"
+ #include "Files.hpp"
+ #include "MainWindow.hpp"
+@@ -209,6 +211,11 @@
+     // Initialize GTK
+     Gtk::Main gtk_main(argc, argv);
+ 
++    // For the icon to appear correctly on GNOME/Wayland, this needs to match
++    // the ID used in the AppStream XML and desktop files.
++    // See: https://gitlab.com/inkscape/inkscape/-/issues/539
++    Glib::set_prgname("org.cielak.harmonyseq");
++
+     // Initialize the MIDI driver...
+     engine = new Engine();
+ 

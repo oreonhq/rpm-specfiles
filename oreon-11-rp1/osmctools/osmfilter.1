@@ -1,0 +1,390 @@
+.TH OSMFILTER "1" "September 2013" 
+.SH NAME
+osmfilter \- The experimental OSM filters data 
+.SH "SYNOPSIS"
+\&\fBosmfilter\fR \fIoptions\fR [\fIinput file\fR]
+.SH DESCRIPTION
+.PP
+THIS PROGRAM IS FOR EXPERIMENTAL USE ONLY.
+PLEASE EXPECT MALFUNCTION AND DATA LOSS.
+SAVE YOUR DATA BEFORE STARTING THIS PROGRAM.
+.PP
+This program filters OpenStreetMap data.
+.PP
+The input file name must be supplied as command line argument. The
+file must not be a stream. Redirections from standard input will not
+work because the program needs random access to the file. You do not
+need to specify the input format, osmfilter will recognize these
+formats: .osm (XML), .osc (OSM Change File), .osh (OSM Full History),
+\&.o5m (speed\-optimized) and .o5c (speed\-optimized Change File).
+.PP
+The output format is .osm by default. If you want a different format,
+please specify it using the appropriate command line parameter.
+.SH OPTIONS
+\fB\-\-keep\fR=\fIOBJECT_FILTER\fR
+.IP
+All object types (nodes, ways and relations) will be kept
+if they meet the filter criteria. Same applies to dependent
+objects, e.g. nodes in ways, ways in relations, relations in
+other relations.
+Please look below for a syntax description of OBJECT_FILTER.
+.PP
+\-\-keep\-nodes\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-keep\-ways\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-keep\-relations\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-keep\-nodes\-ways\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-keep\-nodes\-relations\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-keep\-ways\-relations\fR=\fIOBJECT_FILTER\fR
+.IP
+Same as above, but just for the specified object types.
+.PP
+\fB\-\-drop\fR=\fIOBJECT_FILTER\fR
+.IP
+All object types (nodes, ways and relations) which meet the
+supplied filter criteria will be dropped, regardless of
+meeting the criteria of a keep filter (see above).
+Please look below for a syntax description of OBJECT_FILTER.
+.PP
+\-\-drop\-nodes\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-drop\-ways\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-drop\-relations\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-drop\-nodes\-ways\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-drop\-nodes\-relations\fR=\fIOBJECT_FILTER\fR
+.br
+\-\-drop\-ways\-relations\fR=\fIOBJECT_FILTER\fR
+.IP
+Same as above, but just for the specified object types.
+.PP
+\fB\-\-keep\-tags\fR=\fITAG_FILTER\fR
+.IP
+The in TAG_FILTER specified tags will be allowed on output.
+Please look below for a syntax description of TAG_FILTER.
+.PP
+\-\-keep\-node\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-keep\-way\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-keep\-relation\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-keep\-node\-way\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-keep\-node\-relation\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-keep\-way\-relation\-tags\fR=\fITAG_FILTER\fR
+.IP
+Same as above, but just for the specified object types.
+.PP
+\fB\-\-drop\-tags\fR=\fITAG_FILTER\fR
+.IP
+The specified tags will be dropped. This overrules the
+previously described parameter \fB\-\-keep\-tags\fR.
+Please look below for a syntax description of TAG_FILTER.
+.PP
+\-\-drop\-node\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-drop\-way\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-drop\-relation\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-drop\-node\-way\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-drop\-node\-relation\-tags\fR=\fITAG_FILTER\fR
+.br
+\-\-drop\-way\-relation\-tags\fR=\fITAG_FILTER\fR
+.IP
+Same as above, but just for the specified object types.
+.PP
+\fB\-\-modify\-tags=TAG_MODIFICATION_LIST\fR
+.IP
+The specified tags will be modified. This is done after any
+filtering (see \-\-keep, \-\-keep\-tags, \-\-drop, \-\-drop\-tags).
+Please look below for a description of TAG_MODIFICATION_LIST.
+.PP
+\-\-modify\-node\-tags=TAG_MODIFICATION_LIST\fR
+.br
+\-\-modify\-way\-tags=TAG_MODIFICATION_LIST\fR
+.br
+\-\-modify\-relation\-tags=TAG_MODIFICATION_LIST\fR
+.br
+\-\-modify\-node\-way\-tags=TAG_MODIFICATION_LIST\fR
+.br
+\-\-modify\-node\-relation\-tags=TAG_MODIFICATION_LIST\fR
+.br
+\-\-modify\-way\-relation\-tags=TAG_MODIFICATION_LIST\fR
+.IP
+Same as above, but just for the specified object types.
+.PP
+\fB\-\-drop\-author\fR
+.IP
+For most applications the author tags are not needed. If you
+specify this option, no author information will be written:
+no changeset, user or timestamp.
+.PP
+\fB\-\-drop\-version\fR
+.IP
+If you want to exclude not only the author information but
+also the version number, specify this option.
+.PP
+\-\-drop\-nodes\fR
+.br
+\-\-drop\-ways\fR
+.br
+\-\-drop\-relations\fR
+.IP
+According to the combination of these parameters, no members
+of the referred section will be written.
+.PP
+\-\-emulate\-osmosis\fR
+.br
+\-\-emulate\-pbf2osm\fR
+.IP
+In case of .osm output format, the program will try to use
+the same data syntax as Osmosis, resp. pbf2osm.
+.PP
+\fB\-\-fake\-author\fR
+.IP
+If you have dropped author information (\fB\-\-drop\-author\fR) that
+data will be lost, of course. Some programs however require
+author information on input although they do not need that
+data. For this purpose, you can fake the author information.
+o5mfiler will write changeset 1, timestamp 1970.
+.PP
+\fB\-\-fake\-version\fR
+.IP
+Same as \fB\-\-fake\-author\fR, but \- if .osm xml is used as output
+format \- only the version number will be written (version 1).
+This is useful if you want to inspect the data with JOSM.
+.PP
+\fB\-\-fake\-lonlat\fR
+.IP
+Some programs depend on getting longitude/latitude values,
+even when the object in question shall be deleted. With this
+option you can have osmfilter to fake these values:
+.br
+\&... lat="0" lon="0" ...
+.br
+Note that this is for XML files only (.osc and .osh).
+.PP
+\fB\-h\fR
+.IP
+Display a short parameter overview.
+.PP
+\fB\-\-help\fR
+.IP
+Display this help.
+.PP
+\fB\-\-ignore\-dependencies\fR
+.IP
+Usually, all member nodes of a way which meets the filter
+criteria will be included as well. Same applies to members of
+included relations. If you activate this option, all these
+dependencies between OSM objects will be ignored.
+.PP
+\fB\-\-out\-key\fR=\fIKEYNAME\fR
+.IP
+The output will contain no regular OSM data but only
+statistics: a list of all used keys is assembled. Left to
+each key, the number of occurrences is printed.
+If KEYNAME is given, the program will list all values which
+are used in connections with this key.
+You may use wildcard characters for KEYNAME, but only at the
+beginning and/or at the end. For example:  \fB\-\-out\-key\fR=\fIaddr\fR:*
+.PP
+\fB\-\-out\-count\fR=\fIKEYNAME\fR
+.IP
+Same as \fB\-\-out\-key=\fR, but the list is sorted by the number of
+occurrences of the keys resp. values.
+.PP
+\fB\-\-out\-osm\fR
+.IP
+Data will be written in .osm format. This is the default
+output format.
+.PP
+\fB\-\-out\-osc\fR
+.IP
+The OSM Change format will be used for output. Please note
+that OSM objects which are to be deleted are represented by
+their ids only.
+.PP
+\fB\-\-out\-osh\fR
+.IP
+For every OSM object, the appropriate 'visible' tag will be
+added to meet 'full planet history' specification.
+.PP
+\fB\-\-out\-o5m\fR
+.IP
+The .o5m format will be used. This format has the same
+structure as the conventional .osm format, but the data are
+stored as binary numbers and are therefore much more compact
+than in .osm format. No packing is used, so you can pack .o5m
+files using every file packer you want, e.g. lzo, bz2, etc.
+.PP
+\fB\-\-out\-o5c\fR
+.IP
+This is the change file format of .o5m data format. All
+<delete> tags will not be performed as delete actions but
+converted into .o5c data format.
+.PP
+\fB\-o=\fR<outfile>
+.IP
+Standard output will be rerouted to the specified file.
+If no output format has been specified, the program will
+proceed according to the file name extension.
+.PP
+\fB\-t=\fR<tempfile>
+.IP
+osmfilter uses a temporary file to process interrelational
+dependencies. This parameter defines the name prefix. The
+default value is "osmfilter_tempfile".
+.PP
+\fB\-\-parameter\-file\fR=\fIFILE\fR
+.IP
+If you want to supply one ore more command line arguments
+by a parameter file, please use this option and specify the
+file name. Within the parameter file, parameters must be
+separated by empty lines. Line feeds inside a parameter will
+be converted to spaces.
+Lines starting with "// " will be treated as comments.
+.PP
+\fB\-v\fR
+\fB\-\-verbose\fR
+.IP
+With activated 'verbose' mode, some statistical data and
+diagnosis data will be displayed.
+If \fB\-v\fR resp. \fB\-\-verbose\fR is the first parameter in the line,
+osmfilter will display all input parameters.
+.PP
+.SS OBJECT_FILTER
+Some of the command line arguments need a filter to be
+specified. This filter definition consists of key/val pairs
+and uses the following syntax:
+.br
+"KEY1=VAL1 OP KEY2=VAL2 OP KEY3=VAL3 ..."
+.IP
+OP is the Boolean operator, it must be either "and" or "or".
+As usual, "and" will be processed prior to "or". If you
+want to influence the sequence of processing, you may use
+brackets to do so. Please note that brackets always must be
+padded by spaces. Example: lit=yes and ( note=a or source=b )
+Instead of each "=" you may enter one of these comparison
+operators: != (not equal), <, >, <=, >=
+The program will use ASCII\-alphabetic comparison unless you
+compare against a value which is starting with a digit.
+If there are different possible values for the same key, you
+need to write the key only once. For example:
+.br
+"amenity=restaurant =pub =bar"
+.IP
+It is allowed to omit the value. In this case, the program
+will accept every value for the defined key. For example:
+.br
+"highway= and lit=yes"
+.IP
+You may use wildcard characters for key or value, but only at
+the beginning and/or at the end. For example:
+.br
+"wikipedia:*=highway=*ary  ref_name=*central*"
+.IP
+Please be careful with wildcards in keys since only the first
+key which meets the pattern will be processed.
+There are three special keys which represent object id, user
+id and user name: @id, @uid and @user. They allow you to
+search for certain objects or for edits of specific users.
+.PP
+.SS TAG_FILTER
+The tag filter determines which tags will be kept and which
+will be not. For example :
+.br
+\fB\-\-keep\-tags=\fR"highway=motorway =primary"\fR
+.br
+will not accept "highway" tags other than "motorway" or
+"primary". Note that neither the object itself will be
+deleted, nor the remaining tags. If you want to drop every
+tag which is not mentioned in a list, use this example:
+.br
+all highway= amenity= name=
+.PP
+.SS TAG_MODIFICATION_LIST
+The tag modification list determines which tags will be
+modified. The example
+.br
+\fB\-\-modify\-tags="highway=primary to =secondary"\fR
+.br
+will change every "primary" highway into "secondary".
+You can also use comparisons or add additional tags:
+.br
+\fB--modify-way-tags="maxspeed>200 add highspeed=yes"\fR
+.SH TUNING
+To speed\-up the process, the program uses some main memory for a
+hash table. By default, it uses 1200 MB for storing a flag for every
+possible node, 150 for the way flags, and 10 relation flags.
+Every byte holds the flags for 8 ID numbers, i.e., in 1200 MB the
+program can store 9600 million flags. As there are less than 5700
+million IDs for nodes at present (May 2018), 720 MB would suffice.
+So, for example, you can decrease the hash sizes to e.g. 720, 80 and
+2 MB (for relations, 2 flags are needed each) using this option:
+.br
+\fB\-\-hash\-memory\fR=\fI720\-80\-2\fR
+.PP
+But keep in mind that the OSM database is continuously expanding. For
+this reason the program\-own default value is higher than shown in the
+example, and it may be appropriate to increase it in the future.
+If you do not want to bother with the details, you can enter the
+amount of memory as a sum, and the program will divide it by itself.
+For example:
+.br
+\fB\-\-hash\-memory\fR=\fI1000\fR
+.PP
+These 1000 MiB will be split in three parts: 800 for nodes, 150 for
+ways, and 50 for relations.
+.PP
+Because we are taking hashes, it is not necessary to provide all the
+suggested memory; the program will operate with less hash memory too.
+But, in this case, the border filter will be less effective, i.e.,
+some ways and some relations will be left in the output file although
+they should have been excluded.
+The maximum value the program accepts for the hash size is 4000 MiB;
+If you exceed the maximum amount of memory available on your system,
+the program will try to reduce this amount and display a warning
+message.
+.SH LIMITATIONS
+When filtering whole OSM objects (\fB\-\-keep\fR...=, \fB\-\-drop\fR...=), the input
+file must contain the objects ordered by their type: first, all nodes
+nodes, next, all ways, followed by all relations.
+.PP
+Usual .osm, .osc, .o5m and o5c files adhere to this condition. This
+means that you do not have to worry about this limitation. osmfilter
+will display an error message if this sequence is broken.
+.PP
+The number of key/val pairs in each filter parameter is limited to
+1000, the length of each key or val is limited to 100.
+.SH NOTES
+.PP
+This program is for experimental use. Expect malfunctions and data
+loss. Do not use the program in productive or commercial systems.
+.PP
+There is NO WARRANTY, to the extent permitted by law.
+Please send any bug reports to marqqs@gmx.eu
+.SH EXAMPLE
+osmfilter europe.o5m \-\-keep=amenity=bar \-o=new.o5m
+.br
+osmfilter a.osm \-\-keep\-nodes=lit=yes \-\-drop\-ways \-o=light.osm
+.br
+osmfilter a.osm \-\-keep="place=city or ( place=town and population>=10000 )" \-o=b.osm
+.br
+osmfilter region.o5m \-\-keep="bridge=yes and layer>=2" \-o=r.o5m
+.SH "SEE ALSO"
+osmconvert(1), osmupdate(1)
+.SH AUTHORS
+.B osmfilter
+was written by Markus Weber
+

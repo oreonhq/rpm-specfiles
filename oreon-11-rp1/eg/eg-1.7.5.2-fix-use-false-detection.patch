@@ -1,0 +1,49 @@
+diff -up eg-1.7.5.2/eg.false eg-1.7.5.2/eg
+--- eg-1.7.5.2/eg.false	2013-04-30 11:16:02.524748253 -0400
++++ eg-1.7.5.2/eg	2013-04-30 11:18:01.716757063 -0400
+@@ -1466,8 +1466,8 @@ Options:
+     Reasons for this change:
+       * New users automatically get sane behavior, and use either eg diff A B
+         or eg diff A..B, each doing what one would expect.  They do not ever
+-        realize that A...B is a bit weird because they have no need to try to
+-        use it; eg diff A B covers their needs.
++        realize that A...B is a bit weird because they have no need to try
++        to use it; eg diff A B covers their needs.
+       * Users worried about switching between eg and git without having to
+         modify their command lines can always use either diff A B or
+         diff A...B, but never any other form; using this subset ensures that
+@@ -2267,9 +2267,10 @@ Cryptographic checksums
+   (in particular, a sha1sum) identifying it.  This cryptographic checksum
+   is a sequence of 40 letters and numbers from 0-9 and a-f.  For example,
+     dae86e1950b1277e545cee180551750029cfe735
+-  In addition to using these sha1sums to refer to revisions, one can also
+-  use an abbreviation of a sha1sum so long as enough characters are used to
+-  uniquely identify the revision (typically 6-8 characters are enough).
++  In addition to using these sha1sums to refer to revisions, one can 
++  also use an abbreviation of a sha1sum so long as enough characters are 
++  used to uniquely identify the revision (typically 6-8 characters are 
++  enough).
+ 
+ Special Names
+   There are a few special revision names.
+@@ -2755,13 +2756,13 @@ Description:
+       pull' and 'eg help push' first.
+ 
+     Current branch
+-      All development is done on a branch, though smaller projects may only
+-      use one branch per repository (thus making the repository effectively
+-      serve as a branch).  In contrast to cvs and svn which refer to
+-      mainline development as \"HEAD\" and \"TRUNK\", respectively, eg
+-      calls the mainline development a branch as well, with the default
+-      name of \"master\").  See 'eg help branch' and 'eg help topic
+-      storage' for more details.
++      All development is done on a branch, though smaller projects may
++      only use one branch per repository (thus making the repository 
++      effectively serve as a branch).  In contrast to cvs and svn which 
++      refer to mainline development as \"HEAD\" and \"TRUNK\", 
++      respectively, eg calls the mainline development a branch as well, 
++      with the default name of \"master\").  See 'eg help branch' and 'eg 
++      help topic storage' for more details.
+ 
+     Cryptographic checksum
+       Each revision has an associated cryptographic checksum of both its

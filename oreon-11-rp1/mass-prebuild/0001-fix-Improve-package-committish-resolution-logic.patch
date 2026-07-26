@@ -1,0 +1,389 @@
+From 67a2329a9c743f9be5c45315c0ac1d9dd2cacabd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Fr=C3=A9d=C3=A9ric=20B=C3=A9rat?= <fberat@redhat.com>
+Date: Tue, 9 Dec 2025 20:26:43 +0100
+Subject: [PATCH] fix: Improve package committish resolution logic
+
+Centralizes and corrects how package committish (branch/tag/commit) is
+determined for various package types and configurations.
+
+This change addresses inconsistencies in branch determination, incorrect
+EPEL chroot string formatting, and missing parameters in
+`get_last_build` for reverse dependencies.
+
+- Refactored `MpbPackage.collect_build_info` to improve clarity and
+  accuracy of committish resolution.
+- Introduced `MpbBackend.get_distgit_branch` to centralize logic for
+  retrieving default branches based on distgit and release version.
+- Corrected the EPEL chroot string format from `el{release}` to
+  `epel{release}`.
+- Ensured `is_revdep` is correctly passed to
+  `MpbWhatrequires.get_last_build` when retrieving build info for
+  reverse dependencies.
+- Refined `@last_build` committish handling to accurately set a value
+  only if a valid last build is found.
+- Updated `revdep_branch` formatting to consistently apply `releasever`
+  from metalinks configurations.
+- Added debug logging for resolved committish values in `MpbPackage`.
+- Updated CI regression tests (`006-copr.sh`, `007-info.gl.sh`) to
+  thoroughly validate the new branch resolution logic for main and
+  reverse dependency packages, including specific EPEL scenarios, and
+  improved test output for clarity.
+- Commented out an example `branch` setting in `epel.yaml`.
+---
+ examples/repo.conf.d/epel.yaml        |   2 +-
+ mass_prebuild/backend/backend.py      |  16 ++-
+ mass_prebuild/backend/package.py      |  23 ++++-
+ tests/ci/03-regression/006-copr.sh    |   7 +-
+ tests/ci/03-regression/007-info.gl.sh | 134 ++++++++++++++++++++------
+ 5 files changed, 143 insertions(+), 39 deletions(-)
+
+diff --git a/examples/repo.conf.d/epel.yaml b/examples/repo.conf.d/epel.yaml
+index c71a336a9f5f00e4..5f7d21f7bfa8364d 100644
+--- a/examples/repo.conf.d/epel.yaml
++++ b/examples/repo.conf.d/epel.yaml
+@@ -6,7 +6,7 @@ epel:
+   # Revdeps are sourced from Fedora's distgit
+   distgit: fedora
+   # Fallback branch for revdeps is 'epel{release}'
+-  branch: epel{release}
++  # branch: epel{release}
+   src-repos:
+   - repo=epel-source-{release}&arch=source
+   bin-repos:
+diff --git a/mass_prebuild/backend/backend.py b/mass_prebuild/backend/backend.py
+index a88295546f77e515..42c45eae5fe52b9a 100644
+--- a/mass_prebuild/backend/backend.py
++++ b/mass_prebuild/backend/backend.py
+@@ -112,7 +112,7 @@ class MpbBackend:
+         if self.distgit in self.whatrequires.metalinks:
+             meta = self.whatrequires.metalinks[self.distgit]
+             if 'branch' in meta:
+-                self.revdep_branch = meta['branch']
++                self.revdep_branch = meta['branch'].format(release=self.releasever)
+ 
+         self._pkg_class = self._get_package_class()
+         self._init_packages(config)
+@@ -407,7 +407,7 @@ class MpbBackend:
+     _chroot_strings = {
+         'centos-stream': {'*': 'c{}s'},
+         'fedora': {'rawhide': '{}', 'eln': 'rawhide', '*': 'f{}'},
+-        'epel': {'*': 'el{}'},
++        'epel': {'*': 'epel{}'},
+         'mageia': {'cauldron': '{}', '*': '{}'},  # To be checked
+         'openmandriva': {'cooker': 'master', 'rolling': '{}'},  # To be checked
+         'opensuse': {
+@@ -436,6 +436,18 @@ class MpbBackend:
+ 
+         return None, None, None
+ 
++    def get_distgit_branch(self, distgit):
++        """Return the default branch for a given distgit"""
++        if distgit not in self._chroot_strings:
++            return self.committish
++
++        branch_names = self._chroot_strings[distgit]
++        for bname, bformat in branch_names.items():
++            if bname in self.releasever or bname == '*':
++                return bformat.format(self.releasever)
++
++        return self.committish
++
+     def _set_package_defaults(self, pkg, name, pkg_type):
+         """Set package default values"""
+         if 'build_order' in pkg and 'priority' in pkg:
+diff --git a/mass_prebuild/backend/package.py b/mass_prebuild/backend/package.py
+index 86cd71d21daba10c..701a84fdd3757d99 100644
+--- a/mass_prebuild/backend/package.py
++++ b/mass_prebuild/backend/package.py
+@@ -255,25 +255,38 @@ class MpbPackage:
+             (self.src_pkg_name,
+              committish,
+              self.nvr,
+-             source) = self._owner.whatrequires.get_last_build(self.name, arch)
++             source) = self._owner.whatrequires.get_last_build(
++                 self.name,
++                 arch,
++                 is_revdep=bool(self.pkg_type & ALL_DEP_PKG)
++             )
+ 
+             if committish:
+                 break
+ 
+         if self.committish == '@last_build':
+-            self.committish = ''
+-            if committish is not None:
++            if committish:
+                 self.committish = committish
+             else:
++                self.committish = ''
+                 # Looks like there was an error while retrieving this package
+                 # There is no existing valid build for any arch
+                 self.pkg_type |= NO_BUILD
+ 
+-        if not self.committish:
++        if not self.committish and not self.pkg_type & NO_BUILD:
+             if self.pkg_type & ALL_DEP_PKG:
+                 self.committish = self._owner.revdep_branch
+             else:
+-                self.committish = self._owner.committish
++                # Check if there is a 'main' override in the metalinks for the current distgit
++                distgit = self._owner.distgit
++                if distgit and distgit in self._owner.whatrequires.metalinks:
++                    meta = self._owner.whatrequires.metalinks[distgit]
++                    if 'main' in meta:
++                        distgit = meta['main']
++
++                self.committish = self._owner.get_distgit_branch(distgit)
++
++        self._logger.debug(f"Package {self.name}: committish set to '{self.committish}'")
+ 
+         if self.src_type == 'distgit':
+             self.src = source
+diff --git a/tests/ci/03-regression/006-copr.sh b/tests/ci/03-regression/006-copr.sh
+index a8abcfb8abf08e9a..03c4781fc000d3fb 100644
+--- a/tests/ci/03-regression/006-copr.sh
++++ b/tests/ci/03-regression/006-copr.sh
+@@ -398,6 +398,9 @@ echo ""
+ 
+ echo -e "${Blue}Test EPEL/main branch logic with copr backend${Color_Off}"
+ 
++# Work around failure from DNF to cache repos on first attempt
++mpb-whatrequires meson --distrib epel --release 10 --no-deps 2>&1 || true
++
+ cat > ${CONFIG_FILE} << EOF
+ backend: copr
+ archs: x86_64
+@@ -442,10 +445,12 @@ disown ${PID}
+ kill -s KILL ${PID} > /dev/null 2>&1 || true
+ sleep 1
+ 
+-cat ${LOG_FILE}
+ grep -q 'Using distgit "centos-stream" for package meson' ${LOG_FILE} || { echo 'FAIL: meson: "centos-stream" distgit string not found.'; FAIL; }
+ grep -q 'Using distgit "fedora" for package libnice' ${LOG_FILE} || { echo 'FAIL: libnice: "fedora" distgit string not found.'; FAIL; }
+ 
++grep -Eq "Package meson: committish set to '[0-9a-f]{40}'" ${LOG_FILE} || { echo 'FAIL: meson: committish hash not found.'; FAIL; }
++grep -Eq "Package libnice: committish set to '[0-9a-f]{40}'" ${LOG_FILE} || { echo 'FAIL: libnice: committish hash not found.'; FAIL; }
++
+ mpb --clean --buildid ${ID} > /dev/null 2>&1 || echo -e "${BRed}Failed to clean test-epel-build${Color_Off}"
+ 
+ echo -e "${BGreen}OK${Color_Off}"
+diff --git a/tests/ci/03-regression/007-info.gl.sh b/tests/ci/03-regression/007-info.gl.sh
+index 242f9e4127f73acb..b66cf6dade2715ec 100644
+--- a/tests/ci/03-regression/007-info.gl.sh
++++ b/tests/ci/03-regression/007-info.gl.sh
+@@ -12,22 +12,24 @@ packages:
+   redhat-rpm-config
+ revdeps:
+   list:
+-    autoconf
++    autoconf:
++      committish: '@last_build'
+ verbose: 5
+ backend: dummy
+ name: check-list-info
++retry: 5
+ EOF
+ 
+ res=""
+ # There is some probability that the main package fails for testing purpose
+ mpb --config=${CONFIG_FILE} > ${LOG_FILE} 2>&1 || true
+ ID=$(grep -m 1 "mpb --buildid"  ${LOG_FILE} | sed "s/\"//g" | cut -d " " -f 3 || true)
+-res1=$(grep "backend: dummy" ${LOG_FILE} || true)
+-res2=$(grep "Executing stage 4" ${LOG_FILE} || true)
+-
+-if [ "x${res1}" == "x" ] || [ "x${res2}" == "x" ]
+-then
+-  # General failure case
++if ! grep -q "backend: dummy" ${LOG_FILE}; then
++  echo "Check failed: initial build did not log 'backend: dummy'"
++  FAIL
++fi
++if ! grep -q "Executing stage 4" ${LOG_FILE}; then
++  echo "Check failed: initial build did not log 'Executing stage 4'"
+   FAIL
+ fi
+ 
+@@ -35,8 +37,8 @@ echo -e "${Blue}Check build list${Color_Off}"
+ mpb --list > ${LOG_FILE} 2>&1 || true
+ res=$(grep "check-list-info" ${LOG_FILE} || true)
+ 
+-if [ "x${res}" == "x" ]
+-then
++if [ "x${res}" == "x" ]; then
++  echo "Check failed: build 'check-list-info' not found in list output"
+   FAIL
+ fi
+ 
+@@ -65,13 +67,13 @@ CHECK_BACKEND=$(echo ${res} | tr -d ' ' | cut -d '|' -f 4)
+ 
+ if [ ! "${CHECK_ID}" == "${ID}" ] || [ ! "${CHECK_NAME}" == "check-list-info" ] || [ ! "${CHECK_BACKEND}" == "dummy" ]
+ then
++  echo "Check failed: info output mismatch. Got ID:'${CHECK_ID}', Name:'${CHECK_NAME}', Backend:'${CHECK_BACKEND}'"
+   FAIL
+ fi
+ 
+-res=$(grep "Build status of main packages" ${LOG_FILE} || true)
+-
+-if [ "x${res}" == "x" ]
++if ! grep -q "Build status of main packages" ${LOG_FILE}
+ then
++  echo "Check failed: 'Build status of main packages' not found in info output"
+   FAIL
+ fi
+ 
+@@ -81,6 +83,7 @@ res=$(grep "check-list-info" ${LOG_FILE} || true)
+ 
+ if [ "x${res}" == "x" ]
+ then
++  echo "Check failed: build 'check-list-info' not found in info -V output"
+   FAIL
+ fi
+ 
+@@ -90,24 +93,34 @@ CHECK_BACKEND=$(echo ${res} | tr -d ' ' | cut -d '|' -f 4)
+ 
+ if [ ! "${CHECK_ID}" == "${ID}" ] || [ ! "${CHECK_NAME}" == "check-list-info" ] || [ ! "${CHECK_BACKEND}" == "dummy" ]
+ then
++  echo "Check failed: info -V output mismatch. Got ID:'${CHECK_ID}', Name:'${CHECK_NAME}', Backend:'${CHECK_BACKEND}'"
+   FAIL
+ fi
+ 
+-res=$(grep "Configuration:" ${LOG_FILE} || true)
+-res1=$(grep "backend: dummy" ${LOG_FILE} || true)
+-res2=$(grep "build_id: ${ID}" ${LOG_FILE} || true)
+-
+-if [ "x${res}" == "x" ] || [ "x${res1}" == "x" ] || [ "x${res2}" == "x" ]
++if ! grep -q "Configuration:" ${LOG_FILE}
+ then
++  echo "Check failed: 'Configuration:' not found in info -V output"
++  FAIL
++fi
++if ! grep -q "backend: dummy" ${LOG_FILE}
++then
++  echo "Check failed: 'backend: dummy' not found in info -V output"
++  FAIL
++fi
++if ! grep -q "build_id: ${ID}" ${LOG_FILE}
++then
++  echo "Check failed: 'build_id: ${ID}' not found in info -V output"
+   FAIL
+ fi
+ 
+-res=$(grep "Full package list:" ${LOG_FILE} || true)
+-res1=$(grep "build_status:" ${LOG_FILE} || true)
+-res2=$(grep "committish: rawhide" ${LOG_FILE} || true)
+-
+-if [ ! "x${res}" == "x" ] || [ ! "x${res1}" == "x" ] || [ ! "x${res2}" == "x" ]
++if grep -q "Full package list:" ${LOG_FILE}
+ then
++  echo "Check failed: 'Full package list:' unexpectedly found in info -V output"
++  FAIL
++fi
++if grep -q "build_status:" ${LOG_FILE}
++then
++  echo "Check failed: 'build_status:' unexpectedly found in info -V output"
+   FAIL
+ fi
+ 
+@@ -126,23 +139,34 @@ CHECK_BACKEND=$(echo ${res} | tr -d ' ' | cut -d '|' -f 4)
+ 
+ if [ ! "${CHECK_ID}" == "${ID}" ] || [ ! "${CHECK_NAME}" == "check-list-info" ] || [ ! "${CHECK_BACKEND}" == "dummy" ]
+ then
++  echo "Check failed: info -VV output mismatch. Got ID:'${CHECK_ID}', Name:'${CHECK_NAME}', Backend:'${CHECK_BACKEND}'"
+   FAIL
+ fi
+ 
+-res=$(grep "Full package list:" ${LOG_FILE} || true)
+-res1=$(grep "build_status:" ${LOG_FILE} || true)
+-res2=$(grep "committish: rawhide" ${LOG_FILE} || true)
+-
+-if [ "x${res}" == "x" ] || [ "x${res1}" == "x" ] || [ "x${res2}" == "x" ]
++if ! grep -q "Full package list:" ${LOG_FILE}
++then
++  echo "Check failed: 'Full package list:' not found in info -VV output"
++  FAIL
++fi
++if ! grep -q "build_status:" ${LOG_FILE}
+ then
++  echo "Check failed: 'build_status:' not found in info -VV output"
++  FAIL
++fi
++if ! grep -q "committish: rawhide" ${LOG_FILE}
++then
++  echo "Check failed: 'committish: rawhide' not found in info -VV output"
++  FAIL
++fi
++if ! grep -Eq "committish: [0-9a-f]{40}" ${LOG_FILE}
++then
++  echo "Check failed: 'committish: [0-9a-f]{40}' not found in info -VV output"
+   FAIL
+ fi
+ 
+ if [ -f ${EXCEPTION_LOG} ]
+ then
+-  except=$(grep "exception" ${EXCEPTION_LOG} || true)
+-  if [ ! "x${except}" == "x" ]
+-  then
++  if grep -q "exception" ${EXCEPTION_LOG}; then
+     echo -e "${BRed}Exception raised during tests${Color_Off}"
+     FAIL
+   fi
+@@ -151,6 +175,56 @@ fi
+ rm -f ${LOG_FILE} || true
+ rm -f ${EXCEPTION_LOG} || true
+ 
++echo -e "${Blue}Check build info (V=2) for EPEL 10${Color_Off}"
++cat > ${CONFIG_FILE} << EOF
++archs: x86_64
++packages:
++  redhat-rpm-config
++revdeps:
++  list:
++    libnice:
++      src_type: distgit
++      committish: '@last_build'
++    automake:
++      src_type: distgit
++verbose: 5
++backend: dummy
++chroot: epel-10
++name: check-info-epel
++retry: 5
++EOF
++
++mpb --config=${CONFIG_FILE} > ${LOG_FILE} 2>&1 || true
++ID=$(grep -m 1 "mpb --buildid"  ${LOG_FILE} | sed "s/\"//g" | cut -d " " -f 3 || true)
++
++mpb --info --buildid ${ID} -VV > ${LOG_FILE} 2>&1 || true
++res=$(grep "check-info-epel" ${LOG_FILE} || true)
++
++if [ "x${res}" == "x" ]; then
++  echo "Check failed: build 'check-info-epel' not found in info -VV output"
++  FAIL
++fi
++
++# Main package (redhat-rpm-config) should use c10s (CentOS Stream 10)
++if ! grep -q "committish: c10s" ${LOG_FILE}; then
++  echo "Check failed: 'committish: c10s' not found in info -VV output for EPEL 10 build (main pkg)"
++  FAIL
++fi
++
++# Revdep 1 (libnice) with @last_build should resolve to a hash (assuming it exists in Koji/repo)
++if ! grep -Eq "committish: [0-9a-f]{40}" ${LOG_FILE}; then
++     echo "Check failed: 'committish: [hash]' not found in info -VV output for libnice (@last_build)"
++     FAIL
++fi
++
++# Revdep 2 (automake) with default (empty) committish should resolve to epel10
++if ! grep -q "committish: epel10" ${LOG_FILE}; then
++     echo "Check failed: 'committish: epel10' not found in info -VV output for automake (default)"
++     FAIL
++fi
++
++mpb --clean --buildid ${ID} > /dev/null 2>&1 || true
++
+ echo -e "${BGreen}OK${Color_Off}"
+ 
+ echo ""
+-- 
+2.52.0
+

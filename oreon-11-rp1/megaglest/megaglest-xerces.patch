@@ -1,0 +1,11 @@
+diff -up megaglest-3.12.0/mk/cmake/Modules/FindXercesC.cmake.orig megaglest-3.12.0/mk/cmake/Modules/FindXercesC.cmake
+--- megaglest-3.12.0/mk/cmake/Modules/FindXercesC.cmake.orig	2016-06-24 07:35:27.991490442 -0300
++++ megaglest-3.12.0/mk/cmake/Modules/FindXercesC.cmake	2016-06-24 07:36:15.882493477 -0300
+@@ -65,6 +65,7 @@ IF (NOT XERCESC_INCLUDE)
+ 	 /usr/local/include
+ 	 /usr/include
+ 	)
++    SET(XERCESC_INCLUDE_DIR ${XERCESC_INCLUDE})
+ ENDIF()
+ 
+ #MESSAGE(STATUS "Current Xerces-C lib [${XERCESC_LIBRARY}] XERCESC_INCLUDE [${XERCESC_INCLUDE}")

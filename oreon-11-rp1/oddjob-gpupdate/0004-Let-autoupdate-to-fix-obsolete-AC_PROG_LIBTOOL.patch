@@ -1,0 +1,47 @@
+From c8ccac5fbab6532ac48fa7e03357b5f421bbb078 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Pavel=20Filipensk=C3=BD?= <pfilipen@redhat.com>
+Date: Mon, 27 Jun 2022 13:46:57 +0200
+Subject: [PATCH] Let autoupdate to fix obsolete AC_PROG_LIBTOOL
+
+---
+ configure.ac | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 844c852..ce46028 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,5 +1,5 @@
+-AC_INIT(oddjob-gpupdate,0.2.1)
+-AC_PREREQ(2.59)
++AC_INIT([oddjob-gpupdate],[0.2.1])
++AC_PREREQ([2.69])
+ PACKAGE_NAME_CAPS=`echo $PACKAGE_NAME | tr '[a-z]' '[A-Z]'`
+ AC_DEFINE_UNQUOTED(PACKAGE_NAME_CAPS,"$PACKAGE_NAME_CAPS",[Define to the package name, in caps.])
+ AC_SUBST(PACKAGE_NAME_CAPS)
+@@ -10,7 +10,7 @@ AM_MAINTAINER_MODE
+ 
+ AC_DEFINE(_GNU_SOURCE,1,[Use GNU libc extensions.])
+ 
+-AC_PROG_LIBTOOL
++LT_INIT
+ 
+ DBUS_PACKAGE=dbus-1
+ PKG_CHECK_MODULES(DBUS,$DBUS_PACKAGE)
+@@ -269,7 +269,7 @@ AM_CONDITIONAL(NOW,[test x$now = xyes])
+ AC_CONFIG_COMMANDS(src/gpupdatefor+x,[chmod +x src/gpupdatefor])
+ AC_CONFIG_COMMANDS(src/gpupdateforme+x,[chmod +x src/gpupdateforme])
+ 
+-AC_OUTPUT([
++AC_CONFIG_FILES([
+ Makefile
+ autoversion
+ src/Makefile
+@@ -280,3 +280,4 @@ src/oddjob-gpupdate.conf
+ src/oddjobd-gpupdate.conf
+ src/gpupdatefor
+ ])
++AC_OUTPUT
+-- 
+2.34.1
+

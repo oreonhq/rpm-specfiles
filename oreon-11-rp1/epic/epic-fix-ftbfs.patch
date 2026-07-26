@@ -1,0 +1,15 @@
+diff -up epic4-3.0/Makefile.in.orig epic4-3.0/Makefile.in
+--- Makefile.in.orig	2024-09-05 04:32:25.000000000 +0200
++++ Makefile.in	2025-01-24 13:42:08.797432489 +0100
+@@ -198,9 +198,9 @@ installdirs:
+ 		$(IP)$(DESTDIR)$(mandir)/man1
+ 
+ test.o: @srcdir@/test.c
+-	$(CC) -c @srcdir@/test.c
++	$(CC) -std=gnu17 -c @srcdir@/test.c
+ test: test.o
+-	$(CC) test.o -o my_test
++	$(CC) -std=gnu17 test.o -o my_test
+ 
+ clean:
+ 	@-if test -f source/Makefile; then cd source; $(MAKE2) clean; fi

@@ -1,0 +1,30 @@
+diff -up ClanLib-0.6.5/Sources/Core/System/Unix/mutex_pthread.cpp~ ClanLib-0.6.5/Sources/Core/System/Unix/mutex_pthread.cpp
+--- ClanLib-0.6.5/Sources/Core/System/Unix/mutex_pthread.cpp~	2002-06-22 14:58:04.000000000 +0200
++++ ClanLib-0.6.5/Sources/Core/System/Unix/mutex_pthread.cpp	2022-03-06 16:51:56.223430499 +0100
+@@ -17,13 +17,6 @@
+ #include <pthread.h>
+ #include "mutex_pthread.h"
+ 
+-// We need to do this because the posix threads library under linux obviously
+-// suck:
+-extern "C"
+-{
+-	int pthread_mutexattr_setkind_np(pthread_mutexattr_t *attr, int kind);
+-}
+-
+ CL_Mutex *CL_Mutex::create()
+ {
+ 	return new CL_Mutex;
+@@ -36,11 +29,7 @@ CL_Mutex::CL_Mutex()
+ {
+ 	pthread_mutexattr_t attr;
+ 	pthread_mutexattr_init(&attr);
+-#ifndef linux
+-	pthread_mutexattr_setkind_np(&attr, PTHREAD_MUTEX_RECURSIVE);
+-#else
+-	pthread_mutexattr_setkind_np(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+-#endif
++	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+ 	pthread_mutex_init(&impl->mutex, &attr);
+ 	pthread_mutexattr_destroy(&attr);
+ 

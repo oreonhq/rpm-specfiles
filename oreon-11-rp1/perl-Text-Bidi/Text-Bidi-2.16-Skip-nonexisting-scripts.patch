@@ -1,0 +1,32 @@
+From 79a3e52ffcd3cea7000962a9f4532da9e96c1b3c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 25 Apr 2022 15:25:33 +0200
+Subject: [PATCH] Skip nonexisting scripts
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Out-tree tests reported bad test plan. Fix it by skipping a test if
+the script does not exist.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/00-compile.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/00-compile.t b/t/00-compile.t
+index 591bd78..1c7049e 100644
+--- a/t/00-compile.t
++++ b/t/00-compile.t
+@@ -65,7 +65,7 @@ for my $lib (@module_files)
+ 
+ foreach my $file (@scripts)
+ { SKIP: {
+-    open my $fh, '<', $file or warn("Unable to open $file: $!"), next;
++    open my $fh, '<', $file or skip("Unable to open $file: $!", 1);
+     my $line = <$fh>;
+ 
+     close $fh and skip("$file isn't perl", 1) unless $line =~ /^#!\s*(?:\S*perl\S*)((?:\s+-\w*)*)(?:\s*#.*)?$/;
+-- 
+2.35.3
+

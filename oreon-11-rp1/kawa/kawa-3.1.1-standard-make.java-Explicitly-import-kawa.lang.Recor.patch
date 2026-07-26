@@ -1,0 +1,24 @@
+From 2b9674927ba82847cc830eb05466086d3fdcebd2 Mon Sep 17 00:00:00 2001
+From: Per Bothner <per@bothner.com>
+Date: Mon, 15 Jun 2020 09:26:53 -0700
+Subject: [PATCH 1/1] * standard/make.java: Explicitly import kawa.lang.Record.
+
+This avoids class with java.lang.Record introduced in Java 14.
+---
+ kawa/standard/make.java | 1 +
+ 1 files changed, 1 insertions(+)
+
+diff --git a/kawa/standard/make.java b/kawa/standard/make.java
+index a5a3816ed..769c693e3 100644
+--- a/kawa/standard/make.java
++++ b/kawa/standard/make.java
+@@ -1,5 +1,6 @@
+ package kawa.standard;
+ import kawa.lang.*;
++import kawa.lang.Record; // avoid clash with java.lang.Record in Java 14
+ import gnu.mapping.*;
+ import gnu.expr.*;
+ 
+-- 
+2.47.0
+

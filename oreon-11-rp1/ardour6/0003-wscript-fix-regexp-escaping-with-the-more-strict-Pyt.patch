@@ -1,0 +1,34 @@
+From 47adbb76ef46b51463d0f0b093b5849998c33391 Mon Sep 17 00:00:00 2001
+From: Mads Kiilerich <mads@kiilerich.com>
+Date: Tue, 25 Jul 2023 19:34:33 +0200
+Subject: [PATCH 3/7] wscript: fix regexp escaping with the more strict Python
+ 3.12
+
+Previous Python versions allowed sloppy escaping. Python 3.12 will issue
+SyntaxWarning like:
+  wscript:1114: SyntaxWarning: invalid escape sequence '\.'
+
+Use raw strings to pass the \ through Python syntax and down/up to
+Regexp syntax.
+
+(cherry picked from commit c86c4441578e1042ef66705f8086870ac7d2d812)
+---
+ wscript | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wscript b/wscript
+index a6f1e3c758..3e11c92d4e 100644
+--- a/wscript
++++ b/wscript
+@@ -1071,7 +1071,7 @@ def configure(conf):
+ 
+         if (
+                 # osx up to and including 10.6 (uname 10.X.X)
+-                (re.search ("^[1-9][0-9]\.", os.uname()[2]) is None or not re.search ("^10\.", os.uname()[2]) is None)
++                (re.search (r"^[1-9][0-9]\.", os.uname()[2]) is None or not re.search (r"^10\.", os.uname()[2]) is None)
+                 and (Options.options.generic or Options.options.ppc)
+                 and not Options.options.nocarbon
+            ):
+-- 
+2.41.0
+

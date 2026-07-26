@@ -1,0 +1,36 @@
+diff -urN clide-0.9/Makefile clide-0.9-fedora/Makefile
+--- clide-0.9/Makefile	2010-05-19 13:16:02.000000000 +0100
++++ clide-0.9-fedora/Makefile	2010-06-07 21:09:39.000000000 +0100
+@@ -50,6 +50,7 @@
+ all: manpages
+ 	for file in $(UTILS) ; do \
+ 		cat $$file | sed 's|^#!/usr/bin/perl|#!$(PERL)|' > $$file.out ; \
++		touch -r $$file $$file.out ; \
+ 		mv $$file.out $$file ; chmod a+x $$file ; done
+ 
+ install:
+@@ -81,21 +82,17 @@
+ manpages:
+ 	for doc in $(UTILS) ; do \
+ 		pod2man $$doc > $$doc.1 ; \
+-		gzip $$doc.1 ; chmod 644 $$doc.1.gz \
++		touch -r $$doc $$doc.1 \
+ 		; done
+ 
+ rpminstall:
+ 	install -m 0755 -d		$(BINDIR)
+ 	for util in $(UTILS) ; do \
+-	    install -m 0755 $$util	$(BINDIR) ; done
+-
+-	install -m 0755 -d		$(DOCDIR)
+-	for doc in $(DOCS) ; do \
+-	    install -m 0644 $$doc	$(DOCDIR) ; done
++	    install -p -m 0755 $$util	$(BINDIR) ; done
+ 
+ 	install -m 0755 -d		$(MANDIR)
+ 	for man in $(UTILS) ; do \
+-		install -m 0644 $$man.1.gz $(MANDIR) ; done
++		install -p -m 0644 $$man.1 $(MANDIR) ; done
+ 
+ clean:
+ 	rm -f $(PROJECT).spec

@@ -1,0 +1,9 @@
+[Unit]
+Description=Netperf netserver daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/netserver -D
+
+[Install]
+WantedBy=multi-user.target

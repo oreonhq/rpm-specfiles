@@ -1,0 +1,118 @@
+--- desktop/gfx.c	2005-10-29 23:13:42.000000000 +0200
++++ desktop/gfx.c.patch	2008-10-18 21:53:18.000000000 +0200
+@@ -43,7 +43,7 @@
+ 	SDL_WM_SetCaption("BINIAX", "");
+ 
+ 	/* Load GAME related graphics data */
+-	temp = SDL_LoadBMP("data/background.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/background.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+@@ -56,56 +56,56 @@
+ 	SDL_FreeSurface(temp);
+ 
+ 	// Loading Game Elements
+-	temp = SDL_LoadBMP("data/element0.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/element0.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.elements[ 0 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/element1.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/element1.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.elements[ 1 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/element2.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/element2.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.elements[ 2 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/element3.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/element3.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.elements[ 3 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/shield.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/shield.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.shield = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/cursor0.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/cursor0.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.cursors[ 0 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/cursor1.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/cursor1.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.cursors[ 1 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/gameover.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/gameover.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+@@ -114,28 +114,28 @@
+ 	SDL_FreeSurface(temp);
+ 
+ 	/* Load MENU related graphics data */
+-	temp = SDL_LoadBMP("data/splash.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/splash.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.splash = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/option0.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/option0.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.options[ 0 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/option1.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/option1.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+ 	}
+ 	_Gfx.options[ 1 ] = SDL_DisplayFormat(temp);
+ 	SDL_FreeSurface(temp);
+-	temp = SDL_LoadBMP("data/option2.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/option2.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;
+@@ -144,7 +144,7 @@
+ 	SDL_FreeSurface(temp);
+ 
+ 	/* Load FONT related graphics data */
+-	temp = SDL_LoadBMP("data/font.bmp");
++	temp = SDL_LoadBMP("@DATADIR@/biniax/data/font.bmp");
+ 	if ( temp == 0 )
+ 	{
+ 		return BNX_FALSE;

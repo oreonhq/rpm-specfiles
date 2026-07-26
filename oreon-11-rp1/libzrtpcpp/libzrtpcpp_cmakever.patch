@@ -1,0 +1,39 @@
+diff -rupN --no-dereference ZRTPCPP-4.6.6/clients/ccrtp/CMakeLists.txt ZRTPCPP-4.6.6-new/clients/ccrtp/CMakeLists.txt
+--- ZRTPCPP-4.6.6/clients/ccrtp/CMakeLists.txt	2017-06-02 09:05:34.000000000 +0200
++++ ZRTPCPP-4.6.6-new/clients/ccrtp/CMakeLists.txt	2025-07-17 14:02:03.450001018 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.6)
++cmake_minimum_required (VERSION 3.5)
+ 
+ # setup the Thread include and lib
+ find_package(Threads)
+diff -rupN --no-dereference ZRTPCPP-4.6.6/clients/no_client/CMakeLists.txt ZRTPCPP-4.6.6-new/clients/no_client/CMakeLists.txt
+--- ZRTPCPP-4.6.6/clients/no_client/CMakeLists.txt	2017-06-02 09:05:34.000000000 +0200
++++ ZRTPCPP-4.6.6-new/clients/no_client/CMakeLists.txt	2025-07-17 14:02:03.450174068 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.6)
++cmake_minimum_required (VERSION 3.5)
+ 
+ # setup the Thread include and lib
+ find_package(Threads)
+diff -rupN --no-dereference ZRTPCPP-4.6.6/clients/tivi/CMakeLists.txt ZRTPCPP-4.6.6-new/clients/tivi/CMakeLists.txt
+--- ZRTPCPP-4.6.6/clients/tivi/CMakeLists.txt	2017-06-02 09:05:34.000000000 +0200
++++ ZRTPCPP-4.6.6-new/clients/tivi/CMakeLists.txt	2025-07-17 14:02:03.450359608 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.6)
++cmake_minimum_required (VERSION 3.5)
+ 
+ # setup the Thread include and lib
+ find_package(Threads)
+diff -rupN --no-dereference ZRTPCPP-4.6.6/CMakeLists.txt ZRTPCPP-4.6.6-new/CMakeLists.txt
+--- ZRTPCPP-4.6.6/CMakeLists.txt	2017-06-02 09:05:34.000000000 +0200
++++ ZRTPCPP-4.6.6-new/CMakeLists.txt	2025-07-17 14:02:03.449724902 +0200
+@@ -8,7 +8,7 @@
+ # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+ # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ #
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.5)
+ 
+ PROJECT(libzrtpcpp)
+ 

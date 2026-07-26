@@ -1,0 +1,26 @@
+commit 116309607c437e302dafa1efb60330f54f815761
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Sat Jan 17 12:21:24 2015 -0500
+
+    print_nfs_common_args() is only needed with DEBUG
+
+diff --git a/libamu/mount_fs.c b/libamu/mount_fs.c
+index b5576bd..b577bab 100644
+--- a/libamu/mount_fs.c
++++ b/libamu/mount_fs.c
+@@ -647,6 +647,7 @@ compute_nfs_common_args(struct nfs_common_args *nap, mntent_t *mntp,
+ #endif /* defined(MNT2_NFS_OPT_XLATECOOKIE) && defined(MNTTAB_OPT_XLATECOOKIE) */
+ }
+ 
++#ifdef DEBUG
+ static void
+ print_nfs_common_args(const struct nfs_common_args *a)
+ {
+@@ -664,6 +665,7 @@ print_nfs_common_args(const struct nfs_common_args *a)
+   plog(XLOG_DEBUG, "NA->acdirmax = %lu", a->acdirmax);
+ #endif /* HAVE_NFS_ARGS_T_ACREGMIN */
+ }
++#endif
+ 
+ static void
+ discard_nfs23_args(nfs_args_t *nap)

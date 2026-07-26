@@ -1,0 +1,75 @@
+%global source0_hash d79ea786d08768b30cd868d9afdd5de07ff8277bba7ac2a06f2ac4798fa576b0
+
+# 22 of the 23 provided unit tests require a valid configuration file and certificate.
+# The remaining dependency fails due to the dependency adjustments in %%prep
+%bcond_with     tests
+
+Name:           oci-cli
+Version:        3.73.2
+Release:        %autorelease
+Summary:        Command Line Interface for Oracle Cloud Infrastructure 
+
+License:        UPL-1.0
+URL:            https://github.com/oracle/oci-cli
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+
+%if %{with tests}
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(vcrpy)
+%endif
+
+%global _description %{expand:
+This is the command line interface for Oracle Cloud Infrastructure.}
+
+%description %{_description}
+
+# Awaiting a fix for python-cx-oracle
+# https://src.fedoraproject.org/rpms/python-cx-oracle/pull-request/1
+# %%pyproject_extras_subpkg -n %%{name} db
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{name}-%{version}
+
+# Remove upper limits and pinned dependencies.
+sed -i -e 's/,[<=]\+[0-9\.]\+//' -e 's/==/>=/' setup.py
+
+# Ignore the version of certifi.
+sed -i -e 's/certifi>=[0-9\.]*/certifi/' setup.py
+
+# Work around a versioning bug when trying to find terminaltables.
+sed -i 's/terminaltables>=[0-9\.]\+/terminaltables/' setup.py
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+# Remove extra script that isn't needed.
+rm -f %{buildroot}/%{_bindir}/create_backup_from_onprem
+
+%pyproject_save_files alloy common_util interactive oci_cli services
+
+%check
+%pyproject_check_import -e 'oci_cli.scripts.database.dbaas' -e 'services.*'
+
+%if %{with tests}
+%pytest
+%endif
+
+%files -n %{name} -f %{pyproject_files}
+%license LICENSE.txt THIRD_PARTY_LICENSES.txt
+%doc CHANGELOG.rst COMMON_ISSUES.rst README.rst
+%{_bindir}/oci
+
+%changelog
+%autochangelog

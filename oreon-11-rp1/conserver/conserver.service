@@ -1,0 +1,12 @@
+[Unit]
+Description=Conserver Serial-Port Console Daemon
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/conserver -d
+ExecReload=/usr/bin/kill -HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

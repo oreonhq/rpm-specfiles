@@ -1,0 +1,50 @@
+From b1cfd62c4fb90e4ebee218bd4a2e9e8f09d10c2b Mon Sep 17 00:00:00 2001
+From: Neil Hanlon <neil@rockylinux.org>
+Date: Mon, 4 Jul 2022 15:57:42 -0400
+Subject: [PATCH 06/26] Fix RHEL templates to pass required useuefi parameter
+
+---
+ oz/RHEL_8.py | 4 ++--
+ oz/RHEL_9.py | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/oz/RHEL_8.py b/oz/RHEL_8.py
+index 575f50e..49a6cff 100644
+--- a/oz/RHEL_8.py
++++ b/oz/RHEL_8.py
+@@ -31,12 +31,12 @@ class RHEL8Guest(oz.RedHat.RedHatLinuxCDYumGuest):
+     Class for RHEL-8 installation
+     """
+     def __init__(self, tdl, config, auto, output_disk=None, netdev=None,
+-                 diskbus=None, macaddress=None):
++                 diskbus=None, macaddress=None, useuefi=True):
+         # dnf distro
+         oz.RedHat.RedHatLinuxCDYumGuest.__init__(self, tdl, config, auto,
+                                                  output_disk, netdev, diskbus,
+                                                  True, True, "cpio", macaddress,
+-                                                 False)
++                                                 False, useuefi)
+         self.virtio_channel_name = 'org.fedoraproject.anaconda.log.0'
+ 
+     def _modify_iso(self):
+diff --git a/oz/RHEL_9.py b/oz/RHEL_9.py
+index 7a9c90b..6a548b6 100644
+--- a/oz/RHEL_9.py
++++ b/oz/RHEL_9.py
+@@ -31,11 +31,11 @@ class RHEL9Guest(oz.RHEL_8.RHEL8Guest):
+     Class for RHEL-9 installation
+     """
+     def __init__(self, tdl, config, auto, output_disk=None, netdev=None,
+-                 diskbus=None, macaddress=None):
++                 diskbus=None, macaddress=None, useuefi=True):
+         # dnf distro
+         oz.RHEL_8.RHEL8Guest.__init__(self, tdl, config, auto,
+                                       output_disk, netdev, diskbus,
+-                                       macaddress)
++                                       macaddress, useuefi)
+ 
+         # method and ks options were dropped
+         self.cmdline = "inst.repo=" + self.url + " inst.ks=file:/ks.cfg"
+-- 
+2.46.2
+

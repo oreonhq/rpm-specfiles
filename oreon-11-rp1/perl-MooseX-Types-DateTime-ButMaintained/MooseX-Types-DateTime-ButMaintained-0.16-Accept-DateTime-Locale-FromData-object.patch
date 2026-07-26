@@ -1,0 +1,40 @@
+diff -up MooseX-Types-DateTime-ButMaintained-0.16/lib/MooseX/Types/DateTime/ButMaintained.pm.orig MooseX-Types-DateTime-ButMaintained-0.16/lib/MooseX/Types/DateTime/ButMaintained.pm
+--- MooseX-Types-DateTime-ButMaintained-0.16/lib/MooseX/Types/DateTime/ButMaintained.pm.orig	2015-11-24 09:37:27.800280623 +0100
++++ MooseX-Types-DateTime-ButMaintained-0.16/lib/MooseX/Types/DateTime/ButMaintained.pm	2015-11-24 09:40:01.707349049 +0100
+@@ -19,13 +19,14 @@ use namespace::autoclean;
+ class_type "DateTime";
+ class_type "DateTime::Duration";
+ class_type "DateTime::TimeZone";
+-class_type "DateTime::Locale::root" => { name => "DateTime::Locale" };
+ 
+ subtype DateTime, as 'DateTime';
+ subtype Duration, as 'DateTime::Duration';
+ subtype TimeZone, as Object, where {
+     $_->isa('DateTime::TimeZone') || $_->isa('DateTime::TimeZone::Tzfile')
+ };
++subtype 'DateTime::Locale', as Object,
++    where { $_->isa('DateTime::Locale::root') || $_->isa('DateTime::Locale::FromData') };
+ subtype Locale,   as 'DateTime::Locale';
+ 
+ subtype( Now, as Str, where { $_ eq 'now' },
+diff -up MooseX-Types-DateTime-ButMaintained-0.16/t/01_basic.t.orig MooseX-Types-DateTime-ButMaintained-0.16/t/01_basic.t
+--- MooseX-Types-DateTime-ButMaintained-0.16/t/01_basic.t.orig	2011-11-17 17:54:44.000000000 +0100
++++ MooseX-Types-DateTime-ButMaintained-0.16/t/01_basic.t	2015-11-24 09:36:04.000000000 +0100
+@@ -103,7 +103,7 @@ isa_ok( find_type_constraint($_), "Moose
+ 
+     my $loc = Gorch->new( loc => "he_IL" )->loc;
+ 
+-    isa_ok( $loc, "DateTime::Locale::he", "coerced from string" );
++    like( $loc->id, qr/he[_\-]IL/, "coerced from string" );
+ 
+     dies_ok { Gorch->new( loc => "not_a_place_or_a_locale" ) } "bad locale name";
+ 
+@@ -126,7 +126,7 @@ isa_ok( find_type_constraint($_), "Moose
+ 
+         isa_ok( $handle, "Some::L10N", "maketext handle" );
+ 
+-        isa_ok( Gorch->new( loc => $handle )->loc, "DateTime::Locale::ja", "coerced from maketext" );;
++	is( Gorch->new( loc => $handle )->loc->id, "ja", "coerced from maketext" );;
+     }
+ }
+ 

@@ -1,0 +1,42 @@
+From ed0f39074a7b068896d8622a79759d9bae824390 Mon Sep 17 00:00:00 2001
+From: Steve Cossette <farchord@gmail.com>
+Date: Mon, 3 Feb 2025 19:36:29 -0500
+Subject: [PATCH] Fedora changes
+
+---
+ kasten/controllers/view/structures/allprimitivetypes.cpp        | 1 +
+ .../view/structures/datatypes/primitive/enumdefinition.cpp      | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kasten/controllers/view/structures/allprimitivetypes.cpp b/kasten/controllers/view/structures/allprimitivetypes.cpp
+index 1a789a25b..35515dda6 100644
+--- a/kasten/controllers/view/structures/allprimitivetypes.cpp
++++ b/kasten/controllers/view/structures/allprimitivetypes.cpp
+@@ -6,6 +6,7 @@
+     SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+ */
+ 
++#include <limits>
+ #include "allprimitivetypes.hpp"
+ 
+ #include <Okteta/AbstractByteArrayModel>
+diff --git a/kasten/controllers/view/structures/datatypes/primitive/enumdefinition.cpp b/kasten/controllers/view/structures/datatypes/primitive/enumdefinition.cpp
+index 4401437fd..f7c214ba5 100644
+--- a/kasten/controllers/view/structures/datatypes/primitive/enumdefinition.cpp
++++ b/kasten/controllers/view/structures/datatypes/primitive/enumdefinition.cpp
+@@ -6,11 +6,11 @@
+     SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+ */
+ 
++#include <limits>
+ #include "enumdefinition.hpp"
+ 
+ #include <QScriptValue>
+ #include <QScriptValueIterator>
+-#include <limits>
+ 
+ #include "../../script/scriptlogger.hpp"
+ 
+-- 
+GitLab
+

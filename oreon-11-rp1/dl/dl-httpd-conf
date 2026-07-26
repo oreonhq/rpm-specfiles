@@ -1,0 +1,18 @@
+Alias /dl /usr/share/dl
+
+<Directory /usr/share/dl>
+  AllowOverride Options
+  <IfModule mod_authz_core.c>
+    <RequireAny>
+      Require ip 127.0.0.1
+      Require ip ::1
+    </RequireAny>
+  </IfModule>
+</Directory>
+
+<Directory ~ /usr/share/dl/(style/)?include>
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+</Directory>
+

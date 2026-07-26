@@ -1,0 +1,27 @@
+Description: adapt test for Data::TreeDumper 0.41
+ Data::TreeDumper 0.41 omits the starting newline
+Author: Damyan Ivanov <dmn@debian.org>
+Bug: https://rt.cpan.org/Public/Bug/Display.html?id=150480
+Bud-Debian: https://bugs.debian.org/1056143
+
+--- a/t/012_safe.t
++++ b/t/012_safe.t
+@@ -125,7 +125,6 @@ $output = $context->eval
+ 		) ;
+ 
+ is($output,<<EOT,'Test STDOUT') or diag DumpTree $context ;
+-
+ `- A = 1  [S1]
+ EOT
+ }
+--- a/META.yml
++++ b/META.yml
+@@ -25,7 +25,7 @@ provides:
+ requires:
+   Data::Compare: 0
+   Data::Dumper: 0
+-  Data::TreeDumper: 0
++  Data::TreeDumper: 0.41
+   File::Slurp: 0
+   Package::Generator: 0
+   Readonly: 0

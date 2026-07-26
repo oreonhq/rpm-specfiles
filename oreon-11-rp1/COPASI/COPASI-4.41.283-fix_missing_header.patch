@@ -1,0 +1,10 @@
+--- a/copasi/plotUI/CQMarchingSquares.orig.cpp	2023-11-21 00:26:09.000000000 +0100
++++ b/copasi/plotUI/CQMarchingSquares.cpp	2023-11-24 22:04:22.224510401 +0100
+@@ -4,6 +4,7 @@
+ // All rights reserved.
+ 
+ #include "CQMarchingSquares.h"
++#include <vector>
+ 
+ #if defined(COPASI_USE_QCUSTOMPLOT)
+ 

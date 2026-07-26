@@ -1,0 +1,25 @@
+From d07768720acfdb8fc882097ed5e79ddd3ec39482 Mon Sep 17 00:00:00 2001
+From: Fabrice Bellet <fabrice@bellet.info>
+Date: Sun, 22 Sep 2013 12:54:45 +0200
+Subject: [PATCH] Fix reloadPath logic
+
+---
+ src/wizard_funcs.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/wizard_funcs.cxx b/src/wizard_funcs.cxx
+index 6d6ca9b..dff4cd0 100644
+--- a/src/wizard_funcs.cxx
++++ b/src/wizard_funcs.cxx
+@@ -325,7 +325,7 @@ Wizard::reset()
+     {
+         fg_scenery = buf;
+     }
+-    else if (reloadPath && systemPrefs.get( "fg_scenery", buf, "", buflen-1))
++    else if (systemPrefs.get( "fg_scenery", buf, "", buflen-1))
+     {
+         fg_scenery = buf;
+         prefs.set("fg_scenery", buf);
+-- 
+2.5.0
+

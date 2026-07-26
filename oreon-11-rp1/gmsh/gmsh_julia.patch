@@ -1,0 +1,12 @@
+diff -rupN --no-dereference gmsh-4.15.0-source/CMakeLists.txt gmsh-4.15.0-source-new/CMakeLists.txt
+--- gmsh-4.15.0-source/CMakeLists.txt	2025-11-16 12:11:30.209672907 +0100
++++ gmsh-4.15.0-source-new/CMakeLists.txt	2025-11-16 12:11:30.455854462 +0100
+@@ -2041,7 +2041,7 @@ endif()
+ if(ENABLE_BUILD_LIB OR ENABLE_BUILD_SHARED OR ENABLE_BUILD_DYNAMIC)
+   install(FILES ${GMSH_API} DESTINATION ${GMSH_INC})
+   install(FILES ${GMSH_PY} DESTINATION ${PYTHON3_SITE_PACKAGES})
+-  install(FILES ${GMSH_JL} DESTINATION ${GMSH_LIB})
++  install(FILES ${GMSH_JL} DESTINATION share/gmsh)
+   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/METADATA DESTINATION
+                 ${PYTHON3_SITE_PACKAGES}/gmsh-${GMSH_PYTHON_VERSION}.dist-info)
+   if(ENABLE_PRIVATE_API)

@@ -1,0 +1,35 @@
+From: Ole Streicher <olebole@debian.org>
+Date: Thu, 1 Dec 2016 21:18:56 +0100
+Subject: Fix issues when using Debian libs instead of convienience copies
+
+---
+ util/Makefile     | 2 +-
+ util/makefile.gsl | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/util/Makefile b/util/Makefile
+index 9253faa..95835a1 100644
+--- a/util/Makefile
++++ b/util/Makefile
+@@ -101,7 +101,7 @@ CFLAGS += -I.
+ 
+ LDFLAGS += $(LDFLAGS_DEF)
+ 
+-LDLIBS := $(LDLIBS_DEF) -lm
++LDLIBS := $(LDLIBS_DEF) -lwcs -lgsl -lgslcblas -lm
+ 
+ SHAREDLIBFLAGS := $(SHAREDLIBFLAGS_DEF)
+ 
+diff --git a/util/makefile.gsl b/util/makefile.gsl
+index 5bb6920..59a5529 100644
+--- a/util/makefile.gsl
++++ b/util/makefile.gsl
+@@ -2,7 +2,7 @@
+ # Licensed under a 3-clause BSD style license - see LICENSE
+ 
+ # On by default?  This doesn't seem to work
+-#SYSTEM_GSL ?= $(shell pkg-config --modversion gsl >/dev/null 2>/dev/null && echo yes)
++SYSTEM_GSL ?= yes
+ 
+ ifeq ($(SYSTEM_GSL),yes)
+ 

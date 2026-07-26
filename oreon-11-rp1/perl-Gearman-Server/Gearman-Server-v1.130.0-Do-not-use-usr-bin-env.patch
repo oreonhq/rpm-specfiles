@@ -1,0 +1,26 @@
+From fb5ab8d3ebd3f9792ba69215a3e93bad5788daf4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 12 Jul 2016 10:41:43 +0200
+Subject: [PATCH] Do not use /usr/bin/env
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/gearmand | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bin/gearmand b/bin/gearmand
+index 6046a99..cca8678 100755
+--- a/bin/gearmand
++++ b/bin/gearmand
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ 
+ =head1 NAME
+ 
+-- 
+2.5.5
+

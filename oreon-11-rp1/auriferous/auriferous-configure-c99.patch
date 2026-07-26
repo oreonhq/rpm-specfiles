@@ -1,0 +1,20 @@
+Do not call the undeclared exit function.  Implicit function
+declarations have been removed from C99.  No need to upstream this patch
+because re-running autoconf fixes this; the shell code is built into
+autoconf itself.
+
+diff --git a/configure b/configure
+index b18d15359374b8f5..71354e39cc6b1a99 100755
+--- a/configure
++++ b/configure
+@@ -2886,8 +2886,8 @@ main ()
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+         || toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Alexander Ploumistos <alexpl@fedoraproject.org> -->
+<component type="font">
+	<id>gdouros-akkadian</id>
+	<metadata_license> CC0-1.0</metadata_license>
+	<name>Akkadian</name>
+	<summary>A font for Sumero-Akkadian cuneiform</summary>
+	<description>
+		<p>
+			Akkadian covers the following scripts and symbols supported by The Unicode
+			Standard 7.0: Sumero-Akkadian Cuneiform, Cuneiform Numbers and Punctuation,
+			Early Dynastic Cuneiform Basic Latin, Greek and Coptic, and some Symbols.
+			
+			It was created by George Douros.
+		</p>
+	</description>
+	<url type="homepage">http://users.teilar.gr/~g1951d/</url>
+	<updatecontact>alexpl@fedoraproject.org</updatecontact>
+</component>

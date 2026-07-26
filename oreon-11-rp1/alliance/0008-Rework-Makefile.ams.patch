@@ -1,0 +1,1923 @@
+From 9346ac619fd8314e023ac3cc658119358945d872 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sun, 28 Feb 2016 09:44:14 +0100
+Subject: [PATCH 08/10] Rework Makefile.ams.
+
+---
+ alliance/src/abe/src/Makefile.am        |  7 ++++--
+ alliance/src/abl/src/Makefile.am        |  6 +++--
+ alliance/src/abt/src/Makefile.am        |  9 +++++--
+ alliance/src/abv/src/Makefile.am        | 10 ++++++--
+ alliance/src/alcban/src/Makefile.am     |  7 +++---
+ alliance/src/asimut/src/Makefile.am     | 16 +++---------
+ alliance/src/aut/src/Makefile.am        |  5 ++--
+ alliance/src/b2f/src/Makefile.am        | 31 +++++++++++------------
+ alliance/src/bdd/src/Makefile.am        |  4 +--
+ alliance/src/beh/src/Makefile.am        |  4 +--
+ alliance/src/bhl/src/Makefile.am        | 10 ++++++--
+ alliance/src/boog/src/Makefile.am       | 27 ++++++++++----------
+ alliance/src/btr/src/Makefile.am        |  7 ++++--
+ alliance/src/bvl/src/Makefile.am        | 13 ++++++++--
+ alliance/src/ctl/src/Makefile.am        |  5 ++--
+ alliance/src/ctp/src/Makefile.am        | 16 +++++++++---
+ alliance/src/druc/src/Makefile.am       | 13 ++++++----
+ alliance/src/elp/src/Makefile.am        |  9 +++++--
+ alliance/src/exp/src/Makefile.am        |  4 +--
+ alliance/src/fks/src/Makefile.am        |  9 +++++--
+ alliance/src/flatbeh/src/Makefile.am    | 14 +++--------
+ alliance/src/flatph/src/Makefile.am     | 12 ++++-----
+ alliance/src/fmi/src/Makefile.am        | 24 +++++++++---------
+ alliance/src/fsm/src/Makefile.am        |  8 ++++--
+ alliance/src/fsp/src/Makefile.am        | 15 +++--------
+ alliance/src/ftl/src/Makefile.am        | 22 ++++++++++++++---
+ alliance/src/fvh/src/Makefile.am        | 11 +++++++--
+ alliance/src/genlib/src/Makefile.am     | 10 +++++---
+ alliance/src/genpat/src/Makefile.am     |  6 +++--
+ alliance/src/graal/src/Makefile.am      | 12 ++++-----
+ alliance/src/k2f/src/Makefile.am        | 15 +++--------
+ alliance/src/l2p/src/Makefile.am        |  7 +++---
+ alliance/src/log/src/Makefile.am        |  5 ++--
+ alliance/src/loon/src/Makefile.am       | 16 ++++--------
+ alliance/src/lvx/src/Makefile.am        |  7 +++---
+ alliance/src/lynx/src/Makefile.am       | 11 +++------
+ alliance/src/mbk/src/Makefile.am        | 10 +++++---
+ alliance/src/mips_asm/src/Makefile.am   | 11 +++------
+ alliance/src/mocha/src/Makefile.am      | 41 +++++++++++++++---------------
+ alliance/src/nero/src/Makefile.am       | 22 +++++------------
+ alliance/src/ocp/src/placer/Makefile.am | 31 ++++++++++++-----------
+ alliance/src/pat/src/Makefile.am        |  7 ++++--
+ alliance/src/pat2spi/src/Makefile.am    |  8 +++---
+ alliance/src/proof/src/Makefile.am      | 18 ++++++--------
+ alliance/src/rds/src/Makefile.am        |  4 +--
+ alliance/src/ring/src/Makefile.am       | 26 ++++++++++---------
+ alliance/src/rtd/src/Makefile.am        |  7 ++++--
+ alliance/src/rtn/src/Makefile.am        |  7 ++++--
+ alliance/src/s2r/src/Makefile.am        | 17 +++++++------
+ alliance/src/scapin/src/Makefile.am     |  9 +++----
+ alliance/src/scl/src/Makefile.am        | 15 ++++++++---
+ alliance/src/sea/src/Makefile.am        | 15 ++++-------
+ alliance/src/syf/src/Makefile.am        | 27 ++++++++++----------
+ alliance/src/vasy/src/Makefile.am       | 44 ++++++++++++++++-----------------
+ alliance/src/vbh/src/Makefile.am        |  9 +++++--
+ alliance/src/vex/src/Makefile.am        |  6 +++--
+ alliance/src/vpn/src/Makefile.am        |  7 ++++--
+ alliance/src/x2y/src/Makefile.am        | 16 +++++++-----
+ alliance/src/xfsm/src/Makefile.am       | 25 +++++++++----------
+ alliance/src/xgra/src/Makefile.am       |  8 +++---
+ alliance/src/xpat/src/Makefile.am       | 18 +++++++-------
+ alliance/src/xsch/src/Makefile.am       | 23 ++++++++---------
+ alliance/src/xvpn/src/Makefile.am       | 18 +++++++-------
+ 63 files changed, 455 insertions(+), 401 deletions(-)
+
+diff --git a/alliance/src/abe/src/Makefile.am b/alliance/src/abe/src/Makefile.am
+index 8b29638..10cff00 100644
+--- a/alliance/src/abe/src/Makefile.am
++++ b/alliance/src/abe/src/Makefile.am
+@@ -1,7 +1,10 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/abl/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/abl/src
+ lib_LTLIBRARIES     = libAbe.la
+ include_HEADERS     = abe.h
+ libAbe_la_SOURCES   = abe.h	   beh_del.c   beh_error.c  beh_getgenva.c  beh_rmv.c	   beh_view.c \
+                       beh_add.c  beh_dict.c  beh_fre.c    beh_message.c   beh_toolbug.c
+ libAbe_la_LDFLAGS   = -version-info @ABE_DLL_VERSION@
+-libAbe_la_LIBADD    = -lAbl -lAut -lMut
++libAbe_la_LIBADD    =
++libAbe_la_LIBADD    += $(top_builddir)/abl/src/libAbl.la
++libAbe_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libAbe_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/abl/src/Makefile.am b/alliance/src/abl/src/Makefile.am
+index bae65f3..44462ab 100644
+--- a/alliance/src/abl/src/Makefile.am
++++ b/alliance/src/abl/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS            = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src
++AM_CPPFLAGS          = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src
+ lib_LTLIBRARIES      = libAbl.la
+ include_HEADERS      = abl.h
+ libAbl_la_SOURCES    = abldel.h       ablflat.h      abloptim.h     ablunflat.h \
+@@ -12,4 +12,6 @@ libAbl_la_SOURCES    = abldel.h       ablflat.h      abloptim.h     ablunflat.h
+                        ablctlsimp.h   ablerror.h     ablmap.h       ablsubst.h \
+                        abldel.c       ablflat.c      abloptim.c     ablunflat.c
+ libAbl_la_LDFLAGS    = -version-info @ABL_DLL_VERSION@
+-libAbl_la_LIBADD     = -lAut -lMut
++libAbl_la_LIBADD     =
++libAbl_la_LIBADD     += $(top_builddir)/aut/src/libAut.la
++libAbl_la_LIBADD     += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/abt/src/Makefile.am b/alliance/src/abt/src/Makefile.am
+index 28da65d..a22b830 100644
+--- a/alliance/src/abt/src/Makefile.am
++++ b/alliance/src/abt/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src \
+                       -I$(top_srcdir)/aut/src \
+                       -I$(top_srcdir)/abl/src \
+                       -I$(top_srcdir)/bdd/src \
+@@ -9,4 +9,9 @@ libAbt_la_SOURCES   = abt.h	      bhl_depend.c  bhl_freabl.c  bhl_makgex.c \
+                       bhl_delaux.c  bhl_error.c   bhl_makbdd.c  bhl_orderbdd.c \
+                       bhl_delaux.h  bhl_error.h   bhl_makbdd.h  bhl_orderbdd.h
+ libAbt_la_LDFLAGS   = -version-info @ABT_DLL_VERSION@
+-libAbt_la_LIBADD    = -lBdd -lAbe -lAbl -lAut -lMut
++libAbt_la_LIBADD    =
++libAbt_la_LIBADD    += $(top_builddir)/bdd/src/libBdd.la
++libAbt_la_LIBADD    += $(top_builddir)/abe/src/libAbe.la
++libAbt_la_LIBADD    += $(top_builddir)/abl/src/libAbl.la
++libAbt_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libAbt_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/abv/src/Makefile.am b/alliance/src/abv/src/Makefile.am
+index 73e5fdb..d7ec3b6 100644
+--- a/alliance/src/abv/src/Makefile.am
++++ b/alliance/src/abv/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src \
+                       -I$(top_srcdir)/aut/src \
+                       -I$(top_srcdir)/abl/src \
+                       -I$(top_srcdir)/bdd/src \
+@@ -9,7 +9,11 @@ libAbv_la_SOURCES   = bvl_bcomp_y.y bvl_bcomp_l.l \
+                       abv.h	     bvl_bspec.c  bvl_drive.c  bvl_parse.h  bvl_util.h \
+                       bvl_bedef.h  bvl_bspec.h  bvl_drive.h  bvl_utdef.h  bvl_utype.h \
+                       bvl_blex.h   bvl_byacc.h  bvl_parse.c  bvl_util.c
+-libAbv_la_LIBADD    = -lAbe -lBdd -lMut
++libAbv_la_LIBADD    =
++libAbv_la_LIBADD    += $(top_builddir)/abe/src/libAbe.la
++libAbv_la_LIBADD    += $(top_builddir)/bdd/src/libBdd.la
++libAbv_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
++
+ 
+ CLEANFILES          = bvl_bcomp_y.c bvl_bcomp_y.h bvl_bcomp_l.c
+ 
+@@ -21,3 +25,5 @@ bvl_bcomp_l.c : $(srcdir)/bvl_bcomp_l.l bvl_bcomp_y.h
+ 	$(LEX) -t $(srcdir)/bvl_bcomp_l.l | sed -e "s/yy/bvl_y_/g" -e "s/YY/BVL_Y_/g" > bvl_bcomp_l.c
+ 
+ libAbv_la_LDFLAGS = -version-info @ABV_DLL_VERSION@
++
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/alcban/src/Makefile.am b/alliance/src/alcban/src/Makefile.am
+index 033fa40..f6b02d4 100644
+--- a/alliance/src/alcban/src/Makefile.am
++++ b/alliance/src/alcban/src/Makefile.am
+@@ -2,9 +2,10 @@
+ 
+ bin_PROGRAMS = alcbanner
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/mbk/src
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = -I$(top_srcdir)/mbk/src
+ 
+-alcbanner_LDADD = @ALLIANCE_LIBS@ \
+-          -L$(top_builddir)/mbk/src/.libs -lMut
++alcbanner_LDADD = @ALLIANCE_LIBS@
++alcbanner_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ alcbanner_SOURCES = alcbanner.c
+diff --git a/alliance/src/asimut/src/Makefile.am b/alliance/src/asimut/src/Makefile.am
+index d7b5e77..aaad8cf 100644
+--- a/alliance/src/asimut/src/Makefile.am
++++ b/alliance/src/asimut/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS = -I$(top_srcdir)/mbk/src \
+             -I$(top_srcdir)/log/src \
+             -I$(top_srcdir)/beh/src \
+             -I$(top_srcdir)/pat/src \
+@@ -17,20 +17,12 @@ libSch_la_SOURCES = sch_addshent.c	sch_CrtSch.c  sch_GetCTim.c  sch.h	     sch_r
+                     sch_bug.c	sch_Free.c    sch_GoNTim.c   sch_message.c
+ 
+ libSch_la_LDFLAGS = -version-info @SCH_DLL_VERSION@
+-libSch_la_LIBADD  = -lMut
++libSch_la_LIBADD  = $(top_builddir)/mbk/src/libMut.la
+ 
+ bin_PROGRAMS      = asimut
+ 
+-asimut_LDADD      = -L. libSch.la -lBvl -lBhl \
+-                    -L$(top_builddir)/mbk/src \
+-                    -L$(top_builddir)/bvl/src \
+-                    -L$(top_builddir)/bhl/src \
+-                    -L$(top_builddir)/beh/src \
+-                    -L$(top_builddir)/pat/src \
+-                    -L$(top_builddir)/log/src \
+-                    -L$(top_builddir)/abl/src \
+-                    -L$(top_builddir)/aut/src \
+-                    -lAut -lAbl -lMlu -lRcn -lBvl -lBhl -lBeh -lPat -lLog -lMut
++asimut_LDADD      = libSch.la $(top_builddir)/bvl/src/libBvl.la $(top_builddir)/bhl/src/libBhl.la \
++                    $(top_builddir)/aut/src/libAut.la $(top_builddir)/abl/src/libAbl.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/bvl/src/libBvl.la $(top_builddir)/bhl/src/libBhl.la $(top_builddir)/beh/src/libBeh.la $(top_builddir)/pat/src/libPat.la $(top_builddir)/log/src/libLog.la $(top_builddir)/mbk/src/libMut.la
+ 
+ asimut_SOURCES    = beh_delay.h	  c_fsyn_sr1k_56.c    vh_debug.c    vh_lspec.c	  vh_util.h  vh_init.h \
+                     beh_setdelay.c	  c_fsyn_sr4k_10.c    vh_debug.h    vh_lspec.h	  vh_xcomm.c \
+diff --git a/alliance/src/aut/src/Makefile.am b/alliance/src/aut/src/Makefile.am
+index d26d76a..ae9af96 100644
+--- a/alliance/src/aut/src/Makefile.am
++++ b/alliance/src/aut/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
+ lib_LTLIBRARIES     = libAut.la
+ include_HEADERS     = aut.h
+ libAut_la_SOURCES   =  autenv.h autfree.h     authash2.h    autsort.h \
+@@ -9,4 +9,5 @@ autdebug.h    autexit.h     authash.h     autresize.h   \
+ autenv.c      autfree.c     authash2.c    autsort.c
+ 
+ libAut_la_LDFLAGS = -version-info @AUT_DLL_VERSION@
+-libAut_la_LIBADD  = -lMut
++libAut_la_LIBADD  =
++libAut_la_LIBADD  += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/b2f/src/Makefile.am b/alliance/src/b2f/src/Makefile.am
+index 883d4af..9ef32d6 100644
+--- a/alliance/src/b2f/src/Makefile.am
++++ b/alliance/src/b2f/src/Makefile.am
+@@ -2,7 +2,8 @@
+ 
+ bin_PROGRAMS = b2f
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/abe/src \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = -I$(top_srcdir)/abe/src \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/abt/src \
+ -I$(top_srcdir)/abv/src \
+@@ -13,21 +14,19 @@ AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/abe/src \
+ -I$(top_srcdir)/ftl/src \
+ -I$(top_srcdir)/mbk/src
+ 
+-b2f_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abt/src/.libs \
+--L$(top_builddir)/abv/src/.libs \
+--L$(top_builddir)/abe/src/.libs \
+--L$(top_builddir)/ftl/src/.libs \
+--L$(top_builddir)/fks/src/.libs \
+--L$(top_builddir)/fvh/src/.libs \
+--L$(top_builddir)/fsm/src/.libs \
+--L$(top_builddir)/btr/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+-          -lAbt -lAbv -lAbe -lFtl -lFks -lFvh -lFsm \
+-	  -lBtr -lBdd -lAbl -lAut -lMut
++b2f_LDADD = @ALLIANCE_LIBS@
++b2f_LDADD += $(top_builddir)/abt/src/libAbt.la
++b2f_LDADD += $(top_builddir)/abv/src/libAbv.la
++b2f_LDADD += $(top_builddir)/abe/src/libAbe.la
++b2f_LDADD += $(top_builddir)/ftl/src/libFtl.la
++b2f_LDADD += $(top_builddir)/fks/src/libFks.la
++b2f_LDADD += $(top_builddir)/fvh/src/libFvh.la
++b2f_LDADD += $(top_builddir)/fsm/src/libFsm.la
++b2f_LDADD += $(top_builddir)/btr/src/libBtr.la
++b2f_LDADD += $(top_builddir)/bdd/src/libBdd.la
++b2f_LDADD += $(top_builddir)/abl/src/libAbl.la
++b2f_LDADD += $(top_builddir)/aut/src/libAut.la
++b2f_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ b2f_SOURCES = \
+ b2f_beh2fsm.c   b2f_error.c     b2f_main.c \
+diff --git a/alliance/src/bdd/src/Makefile.am b/alliance/src/bdd/src/Makefile.am
+index 8b4df4e..41bf95a 100644
+--- a/alliance/src/bdd/src/Makefile.am
++++ b/alliance/src/bdd/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/abl/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/abl/src
+ lib_LTLIBRARIES     = libBdd.la
+ include_HEADERS     = bdd.h
+ libBdd_la_SOURCES   = bdd.h            bddenv.h         bddimply.h       bddsimpdc.h \
+@@ -25,4 +25,4 @@ libBdd_la_SOURCES   = bdd.h            bddenv.h         bddimply.h       bddsimp
+                       bddenv.c         bddimply.c       bddsimpdc.c
+ 
+ libBdd_la_LDFLAGS   = -version-info @BDD_DLL_VERSION@
+-libBdd_la_LIBADD    = -lAbl -lAut
++libBdd_la_LIBADD    = $(top_builddir)/abl/src/libAbl.la $(top_builddir)/aut/src/libAut.la
+diff --git a/alliance/src/beh/src/Makefile.am b/alliance/src/beh/src/Makefile.am
+index f087c94..5f70ef1 100644
+--- a/alliance/src/beh/src/Makefile.am
++++ b/alliance/src/beh/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/log/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/log/src
+ lib_LTLIBRARIES     = libBeh.la
+ include_HEADERS     = beh.h cst.h
+ libBeh_la_SOURCES   = beh_addbeaux.c	 beh_delbebus.c    beh_frebeaux.c  beh_message.c \
+@@ -25,4 +25,4 @@ libBeh_la_SOURCES   = beh_addbeaux.c	 beh_delbebus.c    beh_frebeaux.c  beh_mess
+                       cst_DisjunctSet.c  cst_GetPrevElt.c  cst_SetCmp.c
+ 
+ libBeh_la_LDFLAGS   = -version-info @BEH_DLL_VERSION@
+-libBeh_la_LIBADD    = -lLog -lAbl -lAut -lMut
++libBeh_la_LIBADD    = $(top_builddir)/log/src/libLog.la $(top_builddir)/abl/src/libAbl.la $(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/bhl/src/Makefile.am b/alliance/src/bhl/src/Makefile.am
+index 1d52002..97936f3 100644
+--- a/alliance/src/bhl/src/Makefile.am
++++ b/alliance/src/bhl/src/Makefile.am
+@@ -1,4 +1,7 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/log/src -I$(top_srcdir)/beh/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         += -I$(top_srcdir)/log/src
++AM_CPPFLAGS         += -I$(top_srcdir)/beh/src
++
+ lib_LTLIBRARIES     = libBhl.la
+ include_HEADERS     = bhl.h
+ libBhl_la_SOURCES   = beh_chkbefig.c	 beh_dly2sta.c	 beh_makbdd.c	 beh_makvarlist.c \
+@@ -7,4 +10,7 @@ libBhl_la_SOURCES   = beh_chkbefig.c	 beh_dly2sta.c	 beh_makbdd.c	 beh_makvarlis
+                       beh_debug.h	 beh_indexbdd.c  beh_maknode.c	 beh_unamlist.c \
+                       beh_depend.c	 beh_makquad.c	 bhl.h
+ libBhl_la_LDFLAGS   = -version-info @BHL_DLL_VERSION@
+-libBhl_la_LIBADD    = -lBeh -lAut -lMut
++libBhl_la_LIBADD    =
++libBhl_la_LIBADD    += $(top_builddir)/beh/src/libBeh.la
++libBhl_la_LIBADD    += $(top_builddir)/log/src/libLog.la
++libBhl_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/boog/src/Makefile.am b/alliance/src/boog/src/Makefile.am
+index 3581883..d66b486 100644
+--- a/alliance/src/boog/src/Makefile.am
++++ b/alliance/src/boog/src/Makefile.am
+@@ -1,25 +1,26 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-AM_CFLAGS    = -I$(top_srcdir)/abe/src \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS  = -I$(top_srcdir)/abe/src \
+                -I$(top_srcdir)/abl/src \
+                -I$(top_srcdir)/abv/src \
+                -I$(top_srcdir)/bdd/src \
+                -I$(top_srcdir)/aut/src \
+-               -I$(top_srcdir)/mbk/src \
+-               @ALLIANCE_CFLAGS@
++               -I$(top_srcdir)/mbk/src
+ 
+ bin_PROGRAMS = boog
+ 
+-boog_LDADD   = @ALLIANCE_LIBS@ \
+-               -L$(builddir)/../../abv/src \
+-               -L$(builddir)/../../abe/src \
+-               -L$(builddir)/../../abt/src \
+-               -L$(builddir)/../../mbk/src \
+-               -L$(builddir)/../../mbk/src \
+-               -L$(builddir)/../../bdd/src \
+-               -L$(builddir)/../../abl/src \
+-               -L$(builddir)/../../aut/src \
+-               -lAbv -lAbe -lAbt -lMlu -lRcn -lMlo -lBdd -lAbl -lAut -lMut
++boog_LDADD   = @ALLIANCE_LIBS@
++boog_LDADD   += $(top_builddir)/abv/src/libAbv.la
++boog_LDADD   += $(top_builddir)/abe/src/libAbe.la
++boog_LDADD   += $(top_builddir)/abt/src/libAbt.la
++boog_LDADD   += $(top_builddir)/mbk/src/libMlu.la
++boog_LDADD   += $(top_builddir)/mbk/src/libRcn.la
++boog_LDADD   += $(top_builddir)/mbk/src/libMlo.la
++boog_LDADD   += $(top_builddir)/bdd/src/libBdd.la
++boog_LDADD   += $(top_builddir)/abl/src/libAbl.la
++boog_LDADD   += $(top_builddir)/aut/src/libAut.la
++boog_LDADD   += $(top_builddir)/mbk/src/libMut.la
+ 	   
+ boog_SOURCES = bog_lax_param.c            bog_map_adapt.h            bog_normalize_simplify.h \
+                bog_lax_param.h            bog_map_befig.c            bog_signal_adapt.c \
+diff --git a/alliance/src/btr/src/Makefile.am b/alliance/src/btr/src/Makefile.am
+index d9eb2c3..f988e2d 100644
+--- a/alliance/src/btr/src/Makefile.am
++++ b/alliance/src/btr/src/Makefile.am
+@@ -1,8 +1,11 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/abl/src -I$(top_srcdir)/bdd/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         += -I$(top_srcdir)/aut/src
++AM_CPPFLAGS         += -I$(top_srcdir)/abl/src
++AM_CPPFLAGS         += -I$(top_srcdir)/bdd/src
+ lib_LTLIBRARIES     = libBtr.la
+ include_HEADERS     = btr.h
+ libBtr_la_SOURCES   = btr.h	  btrenv.c	btrerror.h  btrfunc.c	 btrresize.h  \
+                       btralloc.c  btrenv.h	btrfree.c   btrfunc.h	 btrtrans.c   \
+                       btralloc.h  btrerror.c	btrfree.h   btrresize.c  btrtrans.h
+ libBtr_la_LDFLAGS   = -version-info @BTR_DLL_VERSION@
+-libBtr_la_LIBADD    = -lBdd
++libBtr_la_LIBADD    = $(top_builddir)/bdd/src/libBdd.la
+diff --git a/alliance/src/bvl/src/Makefile.am b/alliance/src/bvl/src/Makefile.am
+index 5d81aec..89fa559 100644
+--- a/alliance/src/bvl/src/Makefile.am
++++ b/alliance/src/bvl/src/Makefile.am
+@@ -1,11 +1,18 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/log/src -I$(top_srcdir)/beh/src -I$(top_srcdir)/bhl/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         += -I$(top_srcdir)/log/src
++AM_CPPFLAGS         += -I$(top_srcdir)/beh/src
++AM_CPPFLAGS         += -I$(top_srcdir)/bhl/src
+ lib_LTLIBRARIES     = libBvl.la
+ include_HEADERS     = bvl.h
+ libBvl_la_SOURCES   = bvl_bcomp_y.y bvl_bcomp_l.l  bvl_bcomp_y.h \
+                       bvl_bedef.h   bvl_drive.c    bvl.h         bvl_util.c \
+                       bvl_byacc.h   bvl_globals.c  bvl_parse.c
+ libBvl_la_LDFLAGS   = -version-info @BVL_DLL_VERSION@
+-libBvl_la_LIBADD    = -lBhl -lBeh -lMut
++libBvl_la_LIBADD    =
++libBvl_la_LIBADD    += $(top_builddir)/bhl/src/libBhl.la
++libBvl_la_LIBADD    += $(top_builddir)/beh/src/libBeh.la
++libBvl_la_LIBADD    += $(top_builddir)/log/src/libLog.la
++libBvl_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+ 
+ CLEANFILES          = bvl_bcomp_y.c bvl_bcomp_y.h bvl_bcomp_l.c
+ 
+@@ -13,3 +20,5 @@ bvl_bcomp_y.c bvl_bcomp_y.h : $(srcdir)/bvl_bcomp_y.y
+ 	$(YACC) -d $(YFLAGS) $(srcdir)/bvl_bcomp_y.y && sed -e "s/yy/bvl_y_/g" -e "s/YY/BVL_Y_/g" y.tab.c > bvl_bcomp_y.c && sed -e "s/yy/bvl_y_/g" -e "s/YY/BVL_Y_/g" y.tab.h > bvl_bcomp_y.h
+ bvl_bcomp_l.c : $(srcdir)/bvl_bcomp_l.l bvl_bcomp_y.h
+ 	$(LEX) -t $(srcdir)/bvl_bcomp_l.l | sed -e "s/yy/bvl_y_/g" -e "s/YY/BVL_Y_/g" > bvl_bcomp_l.c
++
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/ctl/src/Makefile.am b/alliance/src/ctl/src/Makefile.am
+index b4c6000..3e441fd 100644
+--- a/alliance/src/ctl/src/Makefile.am
++++ b/alliance/src/ctl/src/Makefile.am
+@@ -1,8 +1,9 @@
+-AM_CFLAGS           = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src
++AM_CFLAGS           = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src
+ lib_LTLIBRARIES     = libCtl.la
+ include_HEADERS     = ctl.h
+ libCtl_la_SOURCES   = ctladd.c    ctlalloc.h	ctlenv.c    ctlerror.h	ctl.h	     ctlview.c \
+                       ctladd.h    ctldel.c	ctlenv.h    ctlfree.c	ctlsearch.c  ctlview.h \
+                       ctlalloc.c  ctldel.h	ctlerror.c  ctlfree.h	ctlsearch.h
+ libCtl_la_LDFLAGS   = -version-info @CTL_DLL_VERSION@
+-libCtl_la_LIBADD    = -lVex -lAut -lMut
++libCtl_la_LIBADD    = $(top_builddir)/vex/src/libVex.la $(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/ctp/src/Makefile.am b/alliance/src/ctp/src/Makefile.am
+index 165e582..7c52107 100644
+--- a/alliance/src/ctp/src/Makefile.am
++++ b/alliance/src/ctp/src/Makefile.am
+@@ -1,11 +1,15 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src -I$(top_srcdir)/ctl/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src -I$(top_srcdir)/ctl/src
+ lib_LTLIBRARIES     = libCtp.la
+ include_HEADERS     = ctp.h
+ libCtp_la_SOURCES   = ctp_y.y ctp_l.l ctp.h  \
+                       ctp_bedef.h  ctp_bspec.c  ctp_byacc.h  ctp_parse.c  ctp_util.h \
+                       ctp_blex.h   ctp_bspec.h  ctp_util.c   ctp_utype.h
+ libCtp_la_LDFLAGS   = -version-info @CTP_DLL_VERSION@
+-libCtp_la_LIBADD    = -lCtl -lVex -lAut -lMut
++libCtp_la_LIBADD    =
++libCtp_la_LIBADD    += $(top_builddir)/ctl/src/libCtl.la
++libCtp_la_LIBADD    += $(top_builddir)/vex/src/libVex.la
++libCtp_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libCtp_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+ 
+ CLEANFILES          = ctp_y.c ctp_y.h ctp_l.c
+ 
+@@ -19,6 +23,12 @@ ctp_l.c : $(srcdir)/ctp_l.l ctp_y.h
+ 
+ EXTRA_PROGRAMS  = ctptest
+ 
+-ctptest_LDADD   = -L. -lCtp -lCtl -lVex -lAut -lMut
++ctptest_LDADD    = libCtp.la
++ctptest_LDADD    += $(top_builddir)/ctl/src/libCtl.la
++ctptest_LDADD    += $(top_builddir)/vex/src/libVex.la
++ctptest_LDADD    += $(top_builddir)/aut/src/libAut.la
++ctptest_LDADD    += $(top_builddir)/mbk/src/libMut.la
+ 
+ ctptest_SOURCES = main.c
++
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/druc/src/Makefile.am b/alliance/src/druc/src/Makefile.am
+index bb31154..f4c125e 100644
+--- a/alliance/src/druc/src/Makefile.am
++++ b/alliance/src/druc/src/Makefile.am
+@@ -8,10 +8,11 @@ drucompi.h drucring.c drucring.h drucutil.c drucutil.h vmcaract.c vmcaract.h \
+ vmcasmld.c vmcasmld.h vmcerror.c vmcerror.h vmcmesur.c vmcmesur.h vmcrelat.c \
+ vmcrelat.h vmctools.c vmctools.h vmcunify.c vmcunify.h
+ 
+-AM_CFLAGS = $(ALLIANCE_CFLAGS)
+ AM_CPPFLAGS = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/rds/src
+ libVrd_la_LDFLAGS = -version-info @VRD_DLL_VERSION@
+-libVrd_la_LIBADD  = -lRds -lMut
++libVrd_la_LIBADD  =
++libVrd_la_LIBADD  += $(top_builddir)/rds/src/libRds.la
++libVrd_la_LIBADD  += $(top_builddir)/mbk/src/libMut.la
+ 
+ CLEANFILES          = drucompi_l.c drucompi_y.h drucompi_y.c
+ 
+@@ -23,9 +24,11 @@ drucompi_l.c : $(srcdir)/drucompi_l.l drucompi_y.h
+ 
+ bin_PROGRAMS = druc
+ 
+-druc_LDADD = $(ALLIANCE_LIBS) -L. libVrd.la \
+--L$(builddir)/../../rds/src/.libs -lRds \
+--L$(builddir)/../../mbk/src/.libs -lMpu -lMut
++druc_LDADD = libVrd.la
++druc_LDADD += $(top_builddir)/rds/src/libRds.la
++druc_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ druc_SOURCES = \
+ drucbath.c drucbath.h
++
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/elp/src/Makefile.am b/alliance/src/elp/src/Makefile.am
+index 41969ab..28581fa 100644
+--- a/alliance/src/elp/src/Makefile.am
++++ b/alliance/src/elp/src/Makefile.am
+@@ -1,11 +1,14 @@
+-AM_CFLAGS           = -DTECHNOLOGY=\"etc/prol.elp\" -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         = -DTECHNOLOGY=\"etc/prol.elp\"
++AM_CPPFLAGS         += -I$(top_srcdir)/mbk/src
+ 
+ lib_LTLIBRARIES     = libElp.la
+ include_HEADERS     = elp.h
+ libElp_la_SOURCES   = elp_y.y elp_l.l elp.c  elperror.c elp.h
+ 
+ libElp_la_LDFLAGS   = -version-info @ELP_DLL_VERSION@
+-libElp_la_LIBADD    = -lRcn -lMut
++libElp_la_LIBADD    =
++libElp_la_LIBADD    += $(top_builddir)/mbk/src/libRcn.la
++libElp_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+ 
+ CLEANFILES          = elp_y.c elp_y.h elp_l.c
+ 
+@@ -14,3 +17,5 @@ elp_y.c elp_y.h : $(srcdir)/elp_y.y
+ 
+ elp_l.c : $(srcdir)/elp_l.l elp_y.h
+ 	$(LEX) -t $(srcdir)/elp_l.l | sed -e "s/yy/elpyy/g" -e "s/YY/elpYY/g" > elp_l.c
++
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/exp/src/Makefile.am b/alliance/src/exp/src/Makefile.am
+index 03f8892..21fdf5f 100644
+--- a/alliance/src/exp/src/Makefile.am
++++ b/alliance/src/exp/src/Makefile.am
+@@ -2,9 +2,7 @@
+ 
+ bin_PROGRAMS = exp 
+ 
+-YACC = @YACC@ -d -v --debug
+-CFLAGS = @CFLAGS@ @ALLIANCE_CFLAGS@
+-exp_LDADD =
++AM_YFLAGS = -d --debug
+ 
+ exp_SOURCES = exp.h expy.y expl.l ht.c ht.h main.c
+ 
+diff --git a/alliance/src/fks/src/Makefile.am b/alliance/src/fks/src/Makefile.am
+index 49f46ba..884e6bd 100644
+--- a/alliance/src/fks/src/Makefile.am
++++ b/alliance/src/fks/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src \
+                       -I$(top_srcdir)/aut/src \
+                       -I$(top_srcdir)/abl/src \
+                       -I$(top_srcdir)/bdd/src \
+@@ -7,4 +7,9 @@ lib_LTLIBRARIES     = libFks.la
+ include_HEADERS     = fks.h
+ libFks_la_SOURCES   = fks.h  fksdrive.c  fksdrive.h  fkserror.c  fkserror.h  fksparse.c  fksparse.h
+ libFks_la_LDFLAGS   = -version-info @FKS_DLL_VERSION@
+-libFks_la_LIBADD    = -lFsm -lAbl -lBdd -lAut -lMut
++libFks_la_LIBADD    =
++libFks_la_LIBADD    += $(top_builddir)/fsm/src/libFsm.la
++libFks_la_LIBADD    += $(top_builddir)/abl/src/libAbl.la
++libFks_la_LIBADD    += $(top_builddir)/bdd/src/libBdd.la
++libFks_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libFks_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/flatbeh/src/Makefile.am b/alliance/src/flatbeh/src/Makefile.am
+index 9419dd8..fa6a82a 100644
+--- a/alliance/src/flatbeh/src/Makefile.am
++++ b/alliance/src/flatbeh/src/Makefile.am
+@@ -1,6 +1,7 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS  = \
+ -I$(top_srcdir)/abe/src \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/abv/src \
+@@ -11,14 +12,7 @@ AM_CFLAGS    = @ALLIANCE_CFLAGS@ \
+ bin_PROGRAMS = flatbeh
+ 
+ flatbeh_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abv/src/.libs \
+--L$(top_builddir)/abe/src/.libs \
+--L$(top_builddir)/abt/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+-          -lAbv -lAbe -lAbt -lMlu -lRcn -lMlo -lBdd -lAbl -lAut -lMut
+-	   
++          $(top_builddir)/abv/src/libAbv.la $(top_builddir)/abe/src/libAbe.la $(top_builddir)/abt/src/libAbt.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/bdd/src/libBdd.la $(top_builddir)/abl/src/libAbl.la $(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
++
+ flatbeh_SOURCES = abstract.c abstract.h utils.c utils.h main.c
+ 
+diff --git a/alliance/src/flatph/src/Makefile.am b/alliance/src/flatph/src/Makefile.am
+index 6fcf5bd..6ecbbfd 100644
+--- a/alliance/src/flatph/src/Makefile.am
++++ b/alliance/src/flatph/src/Makefile.am
+@@ -1,14 +1,12 @@
+ # $Id: Makefile.am,v 1.5 2005/01/19 15:13:50 hcl Exp $
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/mbk/src
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = -I$(top_srcdir)/mbk/src
+ 
+ bin_PROGRAMS = flatph
+ 
+-flatph_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/mbk/src/.libs \
+-          -lMpu -lMlu \
+-	  -lMlo \
+-	  -lMph -lMut \
+-	  -lRcn 
++flatph_LDADD = @ALLIANCE_LIBS@
++flatph_LDADD += $(top_builddir)/mbk/src/libMpu.la
++flatph_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 	   
+ flatph_SOURCES = flatph.c
+diff --git a/alliance/src/fmi/src/Makefile.am b/alliance/src/fmi/src/Makefile.am
+index 0248fd3..157f536 100644
+--- a/alliance/src/fmi/src/Makefile.am
++++ b/alliance/src/fmi/src/Makefile.am
+@@ -2,24 +2,24 @@
+ 
+ bin_PROGRAMS = fmi
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/abl/src \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = \
++-I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/aut/src \
+ -I$(top_srcdir)/bdd/src \
+ -I$(top_srcdir)/fsm/src \
+ -I$(top_srcdir)/ftl/src \
+ -I$(top_srcdir)/mbk/src
+ 
+-fmi_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/fks/src/.libs \
+--L$(top_builddir)/fsm/src/.libs \
+--L$(top_builddir)/ftl/src/.libs \
+--L$(top_builddir)/fvh/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+-          -lFtl -lFks -lFvh -lFsm \
+-	  -lBdd -lAbl -lAut -lMut
++fmi_LDADD = @ALLIANCE_LIBS@
++fmi_LDADD += $(top_builddir)/abl/src/libAbl.la
++fmi_LDADD += $(top_builddir)/aut/src/libAut.la
++fmi_LDADD += $(top_builddir)/bdd/src/libBdd.la
++fmi_LDADD += $(top_builddir)/fks/src/libFks.la
++fmi_LDADD += $(top_builddir)/fsm/src/libFsm.la
++fmi_LDADD += $(top_builddir)/ftl/src/libFtl.la
++fmi_LDADD += $(top_builddir)/fvh/src/libFvh.la
++fmi_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ fmi_SOURCES = \
+ fmi_bdd.c     fmi_main.c    fmi_optim.c   fmi_parse.c   \
+diff --git a/alliance/src/fsm/src/Makefile.am b/alliance/src/fsm/src/Makefile.am
+index 47f639a..b52b63e 100644
+--- a/alliance/src/fsm/src/Makefile.am
++++ b/alliance/src/fsm/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/abl/src -I$(top_srcdir)/bdd/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/abl/src -I$(top_srcdir)/bdd/src
+ lib_LTLIBRARIES     = libFsm.la
+ include_HEADERS     = fsm.h
+ libFsm_la_SOURCES   = fsm.h	    fsmalloc.h	fsmdel.h    fsmfree.h	 fsmsearch.h  fsmview.h \
+@@ -6,4 +6,8 @@ libFsm_la_SOURCES   = fsm.h	    fsmalloc.h	fsmdel.h    fsmfree.h	 fsmsearch.h  f
+                       fsmadd.h    fsmbdd.h	fsmerror.h  fsmorder.h	 fsmsimp.h \
+                       fsmalloc.c  fsmdel.c	fsmfree.c   fsmsearch.c  fsmview.c
+ libFsm_la_LDFLAGS   = -version-info @FSM_DLL_VERSION@
+-libFsm_la_LIBADD    = -lBdd -lAbl -lAut -lMut
++libFsm_la_LIBADD    =
++libFsm_la_LIBADD    += $(top_builddir)/bdd/src/libBdd.la
++libFsm_la_LIBADD    += $(top_builddir)/abl/src/libAbl.la
++libFsm_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libFsm_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/fsp/src/Makefile.am b/alliance/src/fsp/src/Makefile.am
+index dca3a4a..198270a 100644
+--- a/alliance/src/fsp/src/Makefile.am
++++ b/alliance/src/fsp/src/Makefile.am
+@@ -2,7 +2,8 @@
+ 
+ bin_PROGRAMS = fsp
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/aut/src \
+ -I$(top_srcdir)/bdd/src \
+@@ -11,16 +12,8 @@ AM_CFLAGS = @ALLIANCE_CFLAGS@ \
+ -I$(top_srcdir)/mbk/src
+ 
+ fsp_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/fks/src/.libs \
+--L$(top_builddir)/fsm/src/.libs \
+--L$(top_builddir)/ftl/src/.libs \
+--L$(top_builddir)/fvh/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+-          -lFtl -lFks -lFvh -lFsm \
+-	  -lBdd -lAbl -lAut -lMut
++          $(top_builddir)/ftl/src/libFtl.la $(top_builddir)/fks/src/libFks.la $(top_builddir)/fvh/src/libFvh.la $(top_builddir)/fsm/src/libFsm.la \
++	  $(top_builddir)/bdd/src/libBdd.la $(top_builddir)/abl/src/libAbl.la $(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
+ 
+ 
+ fsp_SOURCES = \
+diff --git a/alliance/src/ftl/src/Makefile.am b/alliance/src/ftl/src/Makefile.am
+index b50d0ad..2c4b10d 100644
+--- a/alliance/src/ftl/src/Makefile.am
++++ b/alliance/src/ftl/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src \
+                       -I$(top_srcdir)/aut/src \
+                       -I$(top_srcdir)/abl/src \
+                       -I$(top_srcdir)/bdd/src \
+@@ -7,10 +7,24 @@ lib_LTLIBRARIES     = libFtl.la
+ include_HEADERS     = ftl.h
+ libFtl_la_SOURCES   = ftl.h  ftlacces.c  ftlacces.h  ftlerror.c  ftlerror.h
+ libFtl_la_LDFLAGS   = -version-info @FTL_DLL_VERSION@
+-libFtl_la_LIBADD    = -lFks -lFvh -lFsm -lBdd -lAbl -lAut -lMut 
+-
++libFtl_la_LIBADD    =
++libFtl_la_LIBADD    += $(top_builddir)/fks/src/libFks.la
++libFtl_la_LIBADD    += $(top_builddir)/fvh/src/libFvh.la
++libFtl_la_LIBADD    += $(top_builddir)/fsm/src/libFsm.la
++libFtl_la_LIBADD    += $(top_builddir)/bdd/src/libBdd.la
++libFtl_la_LIBADD    += $(top_builddir)/abl/src/libAbl.la
++libFtl_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libFtl_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+ EXTRA_PROGRAMS = fsmtest
+ 
+ 
+-fsmtest_LDADD       = -L. -lFtl -lFks -lFvh -lFsm -lBdd -lAbl -lAut -lMut
++fsmtest_LDADD       = libFtl.la
++fsmtest_LDADD       += $(top_builddir)/fks/src/libFks.la
++fsmtest_LDADD       += $(top_builddir)/fvh/src/libFvh.la
++fsmtest_LDADD       += $(top_builddir)/fsm/src/libFsm.la
++fsmtest_LDADD       += $(top_builddir)/bdd/src/libBdd.la
++fsmtest_LDADD       += $(top_builddir)/abl/src/libAbl.la
++fsmtest_LDADD       += $(top_builddir)/aut/src/libAut.la
++fsmtest_LDADD       += $(top_builddir)/mbk/src/libMut.la
++
+ fsmtest_SOURCES     = main.c
+diff --git a/alliance/src/fvh/src/Makefile.am b/alliance/src/fvh/src/Makefile.am
+index 29a3a31..008893b 100644
+--- a/alliance/src/fvh/src/Makefile.am
++++ b/alliance/src/fvh/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src \
+                       -I$(top_srcdir)/aut/src \
+                       -I$(top_srcdir)/abl/src \
+                       -I$(top_srcdir)/bdd/src \
+@@ -14,7 +14,12 @@ libFvh_la_SOURCES   = fbl_bcomp_y.y fbl_bcomp_l.l \
+                       fvhfbh2fsm.c fvhfbh2fsm.h fvh.h fvhparse.c fvhparse.h
+ 
+ libFvh_la_LDFLAGS   = -version-info @FVH_DLL_VERSION@
+-libFvh_la_LIBADD    = -lFsm -lAbl -lBdd -lAut -lMut
++libFvh_la_LIBADD    =
++libFvh_la_LIBADD    += $(top_builddir)/fsm/src/libFsm.la
++libFvh_la_LIBADD    += $(top_builddir)/abl/src/libAbl.la
++libFvh_la_LIBADD    += $(top_builddir)/bdd/src/libBdd.la
++libFvh_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libFvh_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+ 
+ CLEANFILES          = fbl_bcomp_y.c fbl_bcomp_y.h fbl_bcomp_l.c
+ 
+@@ -24,3 +29,5 @@ fbl_bcomp_y.c fbl_bcomp_y.h : $(srcdir)/fbl_bcomp_y.y
+ 	sed -e "s/yy/fbl_y_/g" -e "s/YY/FBL_Y_/g" y.tab.h > fbl_bcomp_y.h
+ fbl_bcomp_l.c : $(srcdir)/fbl_bcomp_l.l fbl_bcomp_y.h
+ 	$(LEX) -t $(srcdir)/fbl_bcomp_l.l | sed -e "s/yy/fbl_y_/g" -e "s/YY/FBL_Y_/g" > fbl_bcomp_l.c
++
++CLEANFILES += y.tab.h y.tab.c
+diff --git a/alliance/src/genlib/src/Makefile.am b/alliance/src/genlib/src/Makefile.am
+index 5ed3463..c78135b 100644
+--- a/alliance/src/genlib/src/Makefile.am
++++ b/alliance/src/genlib/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
+ AM_YFLAGS           =
+ AM_LFLAGS           =
+ lib_LTLIBRARIES     = libMgn.la
+@@ -26,8 +26,12 @@ libMgn_la_SOURCES   = genlib.c \
+                       dpgen_Shifter.c
+ 
+ libMgn_la_LDFLAGS = -version-info @MGN_DLL_VERSION@
+-libMgn_la_LIBADD  = -lMlu -lMlo -lMpu -lMph -lMut
+-
++libMgn_la_LIBADD  =
++libMgn_la_LIBADD += $(top_builddir)/mbk/src/libMlu.la
++libMgn_la_LIBADD += $(top_builddir)/mbk/src/libMlo.la
++libMgn_la_LIBADD += $(top_builddir)/mbk/src/libMpu.la
++libMgn_la_LIBADD += $(top_builddir)/mbk/src/libMph.la
++libMgn_la_LIBADD += $(top_builddir)/mbk/src/libMut.la
+ bin_SCRIPTS         = genlib
+ CLEANFILES          = genlib y.output dpgen_ROM_code.c dpgen_ROM_code.h
+ 
+diff --git a/alliance/src/genpat/src/Makefile.am b/alliance/src/genpat/src/Makefile.am
+index 8a81622..9bb71f9 100644
+--- a/alliance/src/genpat/src/Makefile.am
++++ b/alliance/src/genpat/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS         = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS       = -I$(top_srcdir)/mbk/src \
+                     -I$(top_srcdir)/pat/src 
+ 
+ lib_LTLIBRARIES   = libPgn.la
+@@ -8,7 +8,9 @@ libPgn_la_SOURCES = AFFECT.c ARRAY.c CONV.c DECLAR.c DEF_GEN.c GETCPAT.c \
+                     libpat_l.c libpat_l.h
+ 
+ libPgn_la_LDFLAGS = -version-info @PGN_DLL_VERSION@
+-libPgn_la_LIBADD  = -lPat -lMut
++libPgn_la_LIBADD  =
++libPgn_la_LIBADD += $(top_builddir)/pat/src/libPat.la
++libPgn_la_LIBADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ bin_SCRIPTS       = genpat
+ CLEANFILES        = genpat
+diff --git a/alliance/src/graal/src/Makefile.am b/alliance/src/graal/src/Makefile.am
+index 28d295c..b827041 100644
+--- a/alliance/src/graal/src/Makefile.am
++++ b/alliance/src/graal/src/Makefile.am
+@@ -1,8 +1,8 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ bin_PROGRAMS = graal
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@ \
+-               -I$(top_srcdir)/mbk/src \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@
++AM_CPPFLAGS  = -I$(top_srcdir)/mbk/src \
+                -I$(top_srcdir)/rds/src \
+                -I$(top_srcdir)/druc/src \
+                -DGRAAL_DEFAULT_TECHNO_NAME=\"etc/cmos.graal\" \
+@@ -48,11 +48,9 @@ ALL_X_LIBS = $(X_LDFLAGS) $(LIBXM) $(LIBXT) $(LIBXPM) \
+ 
+ 
+ 
+-graal_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS) \
+-              -L$(top_builddir)/druc/src \
+-              -L$(top_builddir)/mbk/src \
+-              -L$(top_builddir)/rds/src \
+-              -lVrd -lRds -lMpu -lMph -lMut
++graal_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS)
++graal_LDADD += $(top_builddir)/druc/src/libVrd.la
++graal_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ graal_SOURCES = \
+ graal.c GMC_create.c GMC_create.h GMC_dialog.c GMC_dialog.h GMC.h GMC_menu.c GMC_menu.h \
+diff --git a/alliance/src/k2f/src/Makefile.am b/alliance/src/k2f/src/Makefile.am
+index c36edea..76561d7 100644
+--- a/alliance/src/k2f/src/Makefile.am
++++ b/alliance/src/k2f/src/Makefile.am
+@@ -2,7 +2,8 @@
+ 
+ bin_PROGRAMS = k2f
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/aut/src \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = -I$(top_srcdir)/aut/src \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/bdd/src \
+ -I$(top_srcdir)/fsm/src \
+@@ -10,16 +11,8 @@ AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/aut/src \
+ -I$(top_srcdir)/mbk/src
+ 
+ k2f_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/fks/src/.libs \
+--L$(top_builddir)/fsm/src/.libs \
+--L$(top_builddir)/ftl/src/.libs \
+--L$(top_builddir)/fvh/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+-          -lFtl -lFks -lFvh -lFsm \
+-	  -lBdd -lAbl -lAut -lMut
++          $(top_builddir)/ftl/src/libFtl.la $(top_builddir)/fks/src/libFks.la $(top_builddir)/fvh/src/libFvh.la $(top_builddir)/fsm/src/libFsm.la \
++	  $(top_builddir)/bdd/src/libBdd.la $(top_builddir)/abl/src/libAbl.la $(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
+ 
+ 
+ k2f_SOURCES = \
+diff --git a/alliance/src/l2p/src/Makefile.am b/alliance/src/l2p/src/Makefile.am
+index 56ea85f..3cc9ead 100644
+--- a/alliance/src/l2p/src/Makefile.am
++++ b/alliance/src/l2p/src/Makefile.am
+@@ -2,13 +2,12 @@
+ 
+ bin_PROGRAMS = l2p
+ 
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/mbk/src \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS  = -I$(top_srcdir)/mbk/src \
+                -I$(top_srcdir)/rds/src
+ 
+ l2p_LDADD    = @ALLIANCE_LIBS@ \
+-               -L$(top_builddir)/mbk/src/.libs \
+-               -L$(top_builddir)/rds/src/.libs \
+-               -lMlu -lMpu -lMlo -lMph -lMut -lRds
++               $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/rds/src/libRds.la
+ 
+ l2p_SOURCES  = drive_ps.c  rps_inc.h   tmp_man.c \
+                dict_color.ps  l2p.c	   tmp_dict.c
+diff --git a/alliance/src/log/src/Makefile.am b/alliance/src/log/src/Makefile.am
+index dc7e4e1..2c85f8c 100644
+--- a/alliance/src/log/src/Makefile.am
++++ b/alliance/src/log/src/Makefile.am
+@@ -1,7 +1,8 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
+ lib_LTLIBRARIES     = libLog.la
+ include_HEADERS     = log.h
+ libLog_la_SOURCES   = log_bdd0.c  log.h	log_thashbdd.c  log_thashloc.c \
+                       log_bdd1.c  log_prefbib.c  log_thash.c
+ libLog_la_LDFLAGS   = -version-info @LOG_DLL_VERSION@
+-libLog_la_LIBADD    = -lMut
++libLog_la_LIBADD    = $(top_builddir)/mbk/src/libMut.la
++
+diff --git a/alliance/src/loon/src/Makefile.am b/alliance/src/loon/src/Makefile.am
+index a0a4f06..7ab7975 100644
+--- a/alliance/src/loon/src/Makefile.am
++++ b/alliance/src/loon/src/Makefile.am
+@@ -2,23 +2,17 @@
+ 
+ bin_PROGRAMS = loon
+ 
+-AM_CFLAGS =  -I$(top_srcdir)/abe/src \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = \
++-I$(top_srcdir)/abe/src \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/aut/src \
+ -I$(top_srcdir)/abv/src \
+ -I$(top_srcdir)/bdd/src \
+--I$(top_srcdir)/mbk/src \
+-@ALLIANCE_CFLAGS@
++-I$(top_srcdir)/mbk/src
+ 
+ loon_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abe/src \
+--L$(top_builddir)/abl/src \
+--L$(top_builddir)/abt/src \
+--L$(top_builddir)/abv/src \
+--L$(top_builddir)/aut/src \
+--L$(top_builddir)/bdd/src \
+--L$(top_builddir)/mbk/src \
+-          -lAbv -lAbe -lAbt -lMlu -lMlo -lBdd -lAbl -lAut -lMut
++          $(top_builddir)/abv/src/libAbv.la $(top_builddir)/abe/src/libAbe.la $(top_builddir)/abt/src/libAbt.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/bdd/src/libBdd.la $(top_builddir)/abl/src/libAbl.la $(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
+ 	   
+ loon_SOURCES = \
+ lon_lax_param.c           lon_lib_utils.c           lon_optim_capa.h \
+diff --git a/alliance/src/lvx/src/Makefile.am b/alliance/src/lvx/src/Makefile.am
+index 620999a..3bbdade 100644
+--- a/alliance/src/lvx/src/Makefile.am
++++ b/alliance/src/lvx/src/Makefile.am
+@@ -1,10 +1,9 @@
+ ## Process this file with automake to produce Makefile.in
+ bin_PROGRAMS = lvx
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS = -I$(top_srcdir)/mbk/src
+ 
+-lvx_LDADD = @ALLIANCE_LIBS@ \
+-            -L$(top_builddir)/mbk/src/.libs \
+-            -lMlu -lMlo -lMut -lRcn 
++lvx_LDADD = \
++            $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/mbk/src/libRcn.la 
+ 	   
+ lvx_SOURCES = lvx.c
+diff --git a/alliance/src/lynx/src/Makefile.am b/alliance/src/lynx/src/Makefile.am
+index 6aa94ba..21b0152 100644
+--- a/alliance/src/lynx/src/Makefile.am
++++ b/alliance/src/lynx/src/Makefile.am
+@@ -2,19 +2,16 @@
+ 
+ bin_PROGRAMS    = cougar flatrds
+ 
+-AM_CFLAGS       = @ALLIANCE_CFLAGS@ \
++AM_CFLAGS       = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS     = \
+                   -I$(top_srcdir)/mbk/src \
+                   -I$(top_srcdir)/rds/src
+ 
+ cougar_LDADD    = @ALLIANCE_LIBS@ \
+-                  -L$(top_builddir)/mbk/src/.libs \
+-                  -L$(top_builddir)/rds/src/.libs \
+-                  -lRds -lMlu -lMpu -lMlo -lMph -lMut 
++                  $(top_builddir)/rds/src/libRds.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la 
+ 
+ flatrds_LDADD   = @ALLIANCE_LIBS@ \
+-                  -L$(top_builddir)/mbk/src/.libs \
+-                  -L$(top_builddir)/rds/src/.libs \
+-                  -lRds -lMlu -lMpu -lMlo -lMph -lMut 
++                  $(top_builddir)/rds/src/libRds.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la 
+ 
+ flatrds_SOURCES = flatrds.c
+ 
+diff --git a/alliance/src/mbk/src/Makefile.am b/alliance/src/mbk/src/Makefile.am
+index 3830341..47820e0 100644
+--- a/alliance/src/mbk/src/Makefile.am
++++ b/alliance/src/mbk/src/Makefile.am
+@@ -1,5 +1,5 @@
+ AM_CFLAGS         = -DTECHNO=\"symbolic_cmos\"
+-YFLAGS            = -d
++AM_YFLAGS         = -d
+ 
+ lib_LTLIBRARIES   = libMut.la libMph.la libMpu.la libRcn.la libMlo.la libMlu.la
+ include_HEADERS   = mlu.h mlo.h mpu.h mph.h mut.h rcn.h msl.h
+@@ -49,22 +49,24 @@ CLEANFILES        = mg2mbk_y.c mg2mbk_y.h mg2mbk_l.c \
+                     mvl_scomp_y.c mvl_scomp_y.h mvl_scomp_l.c
+ 
+ mg2mbk_y.c mg2mbk_y.h : $(srcdir)/mg2mbk_y.y
+-	$(YACC) $(YFLAGS) $(srcdir)/mg2mbk_y.y && \
++	$(YACC) $(AM_YFLAGS) $(srcdir)/mg2mbk_y.y && \
+ 	sed -e "s/yy/mgn/g" -e "s/YY/MGN/g" y.tab.c > mg2mbk_y.c && \
+ 	sed -e "s/yy/mgn/g" -e "s/YY/MGN/g" y.tab.h > mg2mbk_y.h
+ mg2mbk_l.c : $(srcdir)/mg2mbk_l.l mg2mbk_y.h
+ 	$(LEX) -t $(srcdir)/mg2mbk_l.l | sed -e "s/yy/mgn/g" -e "s/YY/MGN/g" > mg2mbk_l.c
+ 
+ parser_y.c parser_y.h : $(srcdir)/parser_y.y
+-	$(YACC) $(YFLAGS) $(srcdir)/parser_y.y && \
++	$(YACC) $(AM_YFLAGS) $(srcdir)/parser_y.y && \
+ 	sed -e "s/yy/edif/g" -e "s/YY/EDIF/g" y.tab.c > parser_y.c && \
+ 	sed -e "s/yy/edif/g" -e "s/YY/EDIF/g" y.tab.h > parser_y.h
+ parser_l.c : $(srcdir)/parser_l.l parser_y.h
+ 	$(LEX) -t $(srcdir)/parser_l.l | sed -e "s/yy/edif/g" -e "s/YY/EDIF/g" > parser_l.c
+ 
+ mvl_scomp_y.c mvl_scomp_y.h : $(srcdir)/mvl_scomp_y.y
+-	$(YACC) $(YFLAGS) $(srcdir)/mvl_scomp_y.y && \
++	$(YACC) $(AM_YFLAGS) $(srcdir)/mvl_scomp_y.y && \
+ 	sed -e "s/yy/mvl_y_/g" -e "s/YY/MVL_Y_/g" y.tab.c > mvl_scomp_y.c && \
+ 	sed -e "s/yy/mvl_y_/g" -e "s/YY/MVL_Y_/g" y.tab.h > mvl_scomp_y.h
+ mvl_scomp_l.c : $(srcdir)/mvl_scomp_l.l mvl_scomp_y.h
+ 	$(LEX) -t $(srcdir)/mvl_scomp_l.l | sed -e "s/yy/mvl_y_/g" -e "s/YY/MVL_Y_/g" > mvl_scomp_l.c
++
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/mips_asm/src/Makefile.am b/alliance/src/mips_asm/src/Makefile.am
+index f1bc628..6478ed8 100644
+--- a/alliance/src/mips_asm/src/Makefile.am
++++ b/alliance/src/mips_asm/src/Makefile.am
+@@ -4,8 +4,8 @@ YACC = @YACC@ -d
+ 
+ #INCLUDES = -I$(srcdir)
+ 
+-AM_CXXFLAGS = @ALLIANCE_CFLAGS@
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = \
+ -I$(top_srcdir)/beh/src \
+ -I$(top_srcdir)/log/src \
+ -I$(top_srcdir)/mbk/src
+@@ -13,12 +13,7 @@ AM_CFLAGS = @ALLIANCE_CFLAGS@ \
+ bin_PROGRAMS = mips_asm
+ 
+ mips_asm_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/beh/src/.libs \
+--L$(top_builddir)/log/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+-	  -lBeh -lMut -lLog
++	  $(top_builddir)/beh/src/libBeh.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/log/src/libLog.la
+ 	   
+ mips_asm_SOURCES = mips_defs.h mips_y.y mips_l.l mips_globals.c mips_lex.h mips_type.h mips_yacc.h mips_util.c
+ 
+diff --git a/alliance/src/mocha/src/Makefile.am b/alliance/src/mocha/src/Makefile.am
+index bb3cd6a..89f011e 100644
+--- a/alliance/src/mocha/src/Makefile.am
++++ b/alliance/src/mocha/src/Makefile.am
+@@ -2,7 +2,9 @@
+ 
+ bin_PROGRAMS = moka
+ 
+-AM_CFLAGS = -Wall \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++
++AM_CPPFLAGS = \
+ -I$(top_srcdir)/abe/src \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/abv/src \
+@@ -15,27 +17,24 @@ AM_CFLAGS = -Wall \
+ -I$(top_srcdir)/ftl/src \
+ -I$(top_srcdir)/mbk/src \
+ -I$(top_srcdir)/fvh/src \
+--I$(top_srcdir)/vex/src \
+-@ALLIANCE_CFLAGS@  
++-I$(top_srcdir)/vex/src
+ 
+-moka_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abe/src/.libs \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/abt/src/.libs \
+--L$(top_builddir)/abv/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/btr/src/.libs \
+--L$(top_builddir)/ctl/src/.libs \
+--L$(top_builddir)/ctp/src/.libs \
+--L$(top_builddir)/fks/src/.libs \
+--L$(top_builddir)/fsm/src/.libs \
+--L$(top_builddir)/ftl/src/.libs \
+--L$(top_builddir)/fvh/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+--L$(top_builddir)/vex/src/.libs \
+-          -lFtl -lFks -lFvh -lFsm \
+-	  -lCtp -lCtl -lVex -lAbt -lAbv -lAbe -lBtr -lBdd -lAbl -lAut -lMut
++moka_LDADD = @ALLIANCE_LIBS@
++moka_LDADD += $(top_builddir)/abe/src/libAbe.la
++moka_LDADD += $(top_builddir)/abl/src/libAbl.la
++moka_LDADD += $(top_builddir)/abt/src/libAbt.la
++moka_LDADD += $(top_builddir)/abv/src/libAbv.la
++moka_LDADD += $(top_builddir)/aut/src/libAut.la
++moka_LDADD += $(top_builddir)/bdd/src/libBdd.la
++moka_LDADD += $(top_builddir)/btr/src/libBtr.la
++moka_LDADD += $(top_builddir)/ctl/src/libCtl.la
++moka_LDADD += $(top_builddir)/ctp/src/libCtp.la
++moka_LDADD += $(top_builddir)/fks/src/libFks.la
++moka_LDADD += $(top_builddir)/fsm/src/libFsm.la
++moka_LDADD += $(top_builddir)/ftl/src/libFtl.la
++moka_LDADD += $(top_builddir)/fvh/src/libFvh.la
++moka_LDADD += $(top_builddir)/mbk/src/libMut.la
++moka_LDADD += $(top_builddir)/vex/src/libVex.la
+ 
+ 
+ moka_SOURCES = \
+diff --git a/alliance/src/nero/src/Makefile.am b/alliance/src/nero/src/Makefile.am
+index f3a5abd..b24b5a3 100644
+--- a/alliance/src/nero/src/Makefile.am
++++ b/alliance/src/nero/src/Makefile.am
+@@ -1,13 +1,8 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-AM_CXXFLAGS      = @ALLIANCE_CFLAGS@ \
+-                   -I$(top_srcdir)/abl/src \
+-                   -I$(top_srcdir)/aut/src \
+-                   -I$(top_srcdir)/beh/src \
+-                   -I$(top_srcdir)/genlib/src \
+-                   -I$(top_srcdir)/rds/src \
+-                   -I$(top_srcdir)/mbk/src
+-AM_CFLAGS        = @ALLIANCE_CFLAGS@ \
++AM_CXXFLAGS      = @ALLIANCE_CFLAGS@
++AM_CFLAGS        = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS     = \
+                    -I$(top_srcdir)/abl/src \
+                    -I$(top_srcdir)/aut/src \
+                    -I$(top_srcdir)/beh/src \
+@@ -18,12 +13,9 @@ AM_CFLAGS        = @ALLIANCE_CFLAGS@ \
+ bin_PROGRAMS     = nero pdv
+ #noinst_PROGRAMS  = debug
+ 
+-nero_LDADD       = -L$(libdir) @ALLIANCE_LIBS@  \
++nero_LDADD       = @ALLIANCE_LIBS@  \
+                    ./libU.a     \
+-                   -L$(top_builddir)/aut/src/.libs \
+-                   -L$(top_builddir)/mbk/src/.libs \
+-                   -L$(top_builddir)/rds/src/.libs \
+-                   -lMpu -lRds -lMlu -lMlo -lMph -lMut -lRcn -lAut
++                   $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/rds/src/libRds.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/aut/src/libAut.la
+ 
+ noinst_LIBRARIES = libU.a
+ 
+@@ -51,9 +43,7 @@ libU_a_SOURCES   = UConst.cpp  \
+ nero_SOURCES     = nero.cpp
+ 
+ pdv_LDADD        = @ALLIANCE_LIBS@  \
+-                   -L$(top_builddir)/aut/src/.libs \
+-                   -L$(top_builddir)/mbk/src/.libs \
+-                   -lMpu -lMlu -lMlo -lMph -lMut -lRcn -lAut
++                   $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/aut/src/libAut.la
+ 
+ pdv_SOURCES      = pdv.c
+ 
+diff --git a/alliance/src/ocp/src/placer/Makefile.am b/alliance/src/ocp/src/placer/Makefile.am
+index 49093f6..30437f0 100644
+--- a/alliance/src/ocp/src/placer/Makefile.am
++++ b/alliance/src/ocp/src/placer/Makefile.am
+@@ -1,16 +1,14 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-YACC             = @YACC@ -d
++AM_YFLAGS = -d
+ 
+-INCLUDES         = -I$(srcdir)/../common
++AM_CPPFLAGS      = -I$(srcdir)/../common
+ 
+-AM_CXXFLAGS = @ALLIANCE_CFLAGS@ \
+-	-I$(top_srcdir)/rds/src \
+-	-I$(top_srcdir)/mbk/src \
+-	-std=gnu++0x
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ \
+-	-I$(top_srcdir)/rds/src \
+-	-I$(top_srcdir)/mbk/src
++AM_CPPFLAGS      += -I$(top_srcdir)/rds/src
++AM_CPPFLAGS      += -I$(top_srcdir)/mbk/src
++
++# HACK
++AM_CXXFLAGS = -std=c++11
+ 
+ bin_PROGRAMS     = ocp
+ 
+@@ -19,11 +17,14 @@ noinst_LIBRARIES = libOcp.a
+ libOcp_a_SOURCES = PElem.cpp PIns.cpp PNet.cpp \
+ 		   PCon.cpp
+ 
+-ocp_LDADD        = @ALLIANCE_LIBS@ \
+-                   ../common/libPCommon.a \
+-                   -L$(top_builddir)/mbk/src/.libs \
+-                   -L$(top_builddir)/rds/src/.libs \
+-                   -lMpu -lRds -lMlu -lMlo -lMph -lMut -lRcn
++ocp_LDADD = ../common/libPCommon.a
++ocp_LDADD += $(top_builddir)/mbk/src/libMpu.la
++ocp_LDADD += $(top_builddir)/rds/src/libRds.la
++ocp_LDADD += $(top_builddir)/mbk/src/libMlu.la
++ocp_LDADD += $(top_builddir)/mbk/src/libMlo.la
++ocp_LDADD += $(top_builddir)/mbk/src/libMph.la
++ocp_LDADD += $(top_builddir)/mbk/src/libMut.la
++ocp_LDADD += $(top_builddir)/mbk/src/libRcn.la
+ 	   
+ ocp_SOURCES = Ocp.cpp PBin.cpp PCon.cpp \
+ 	      PIns.cpp PMove.cpp PNet.cpp PONet.cpp \
+@@ -47,4 +48,4 @@ ocp_SOURCES = Ocp.cpp PBin.cpp PCon.cpp \
+ 
+ EXTRA_DIST = iocgram.h
+ 
+-CLEANFILES = iocgram.c iocgram.h
++CLEANFILES = iocgram.c iocgram.h iocscan.c
+diff --git a/alliance/src/pat/src/Makefile.am b/alliance/src/pat/src/Makefile.am
+index ac409be..d8875fb 100644
+--- a/alliance/src/pat/src/Makefile.am
++++ b/alliance/src/pat/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
+ lib_LTLIBRARIES     = libPat.la
+ include_HEADERS     = pat.h ppt.h phl.h
+ libPat_la_SOURCES   = pat_addpacom.c pat_addpaevt.c pat_addpagrp.c pat_addpaini.c \
+@@ -13,7 +13,9 @@ libPat_la_SOURCES   = pat_addpacom.c pat_addpaevt.c pat_addpagrp.c pat_addpaini.
+                       pat_type.h ppt.h \
+                       pat_debug.c pat_debug.h pat_getusage.c phl.h
+ libPat_la_LDFLAGS   = -version-info @PAT_DLL_VERSION@
+-libPat_la_LIBADD    = -lAut -lMut
++libPat_la_LIBADD    = 
++libPat_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
++
+ 
+ EXTRADIST   = pat_decl_y.c pat_decl_y.h pat_desc_y.h pat_desc_y.c \
+               pat_decl_l.c 
+@@ -45,3 +47,4 @@ pat_desc_y.c pat_desc_y.h : $(srcdir)/pat_desc_y.y
+ pat_desc_l.c : $(srcdir)/pat_desc_l.l pat_desc_y.h
+ 	$(LEX) -t $(srcdir)/pat_desc_l.l | sed -e "s/yy/pat_desc_y_/g" -e "s/YY/PAT_DESC_Y_/g" > pat_desc_l.c
+ 
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/pat2spi/src/Makefile.am b/alliance/src/pat2spi/src/Makefile.am
+index 55e24ba..d6c3e37 100644
+--- a/alliance/src/pat2spi/src/Makefile.am
++++ b/alliance/src/pat2spi/src/Makefile.am
+@@ -2,14 +2,12 @@
+ 
+ bin_PROGRAMS    = pat2spi
+ 
+-AM_CFLAGS       = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/aut/src \
++AM_CFLAGS       = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS     = -I$(top_srcdir)/aut/src \
+                   -I$(top_srcdir)/mbk/src \
+                   -I$(top_srcdir)/pat/src
+ 
+ pat2spi_LDADD   = @ALLIANCE_LIBS@ \
+-                  -L$(top_builddir)/aut/src/.libs \
+-                  -L$(top_builddir)/mbk/src/.libs \
+-                  -L$(top_builddir)/pat/src/.libs \
+-                  -lPat -lAut -lMut
++                  $(top_builddir)/pat/src/libPat.la $(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
+ 
+ pat2spi_SOURCES = pat2spi.c   pat2spi.h
+diff --git a/alliance/src/proof/src/Makefile.am b/alliance/src/proof/src/Makefile.am
+index c6b6130..094988e 100644
+--- a/alliance/src/proof/src/Makefile.am
++++ b/alliance/src/proof/src/Makefile.am
+@@ -2,21 +2,17 @@
+ 
+ bin_PROGRAMS  = proof
+ 
+-AM_CFLAGS     = @ALLIANCE_CFLAGS@ -I$(top_srcdir)/beh/src \
++AM_CFLAGS     = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS   = -I$(top_srcdir)/beh/src \
+                 -I$(top_srcdir)/bvl/src \
+                 -I$(top_srcdir)/log/src \
+                 -I$(top_srcdir)/mbk/src
+ 
+-proof_LDADD   = @ALLIANCE_LIBS@ \
+-                -L$(top_builddir)/asimut/src/.libs \
+-                -L$(top_builddir)/abl/src/.libs \
+-                -L$(top_builddir)/aut/src/.libs \
+-                -L$(top_builddir)/beh/src/.libs \
+-                -L$(top_builddir)/bhl/src/.libs \
+-                -L$(top_builddir)/bvl/src/.libs \
+-                -L$(top_builddir)/log/src/.libs \
+-                -L$(top_builddir)/mbk/src/.libs \
+-                -lBvl -lBhl -lBeh -lLog -lMut
++proof_LDADD   = @ALLIANCE_LIBS@
++proof_LDADD   += $(top_builddir)/beh/src/libBeh.la
++proof_LDADD   += $(top_builddir)/bvl/src/libBvl.la
++proof_LDADD   += $(top_builddir)/log/src/libLog.la
++proof_LDADD   += $(top_builddir)/mbk/src/libMut.la
+ 
+ proof_SOURCES = proof_compile.c  proof_main.c  proof_util.c \
+                 proof_compile.h proof_util.h
+diff --git a/alliance/src/rds/src/Makefile.am b/alliance/src/rds/src/Makefile.am
+index 1773e3f..df695f1 100644
+--- a/alliance/src/rds/src/Makefile.am
++++ b/alliance/src/rds/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -DRTL_DEFAULT_TECHNO=\"etc/cmos.rds\" -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         = -DRTL_DEFAULT_TECHNO=\"etc/cmos.rds\" -I$(top_srcdir)/mbk/src
+ 
+ lib_LTLIBRARIES     = libRds.la
+ include_HEADERS     = rds.h rfm.h rtl.h rwi.h rpr.h rut.h
+@@ -24,4 +24,4 @@ libRds_la_SOURCES   = rdsalloc.c rdsfree.c rdsadd.c rdsdel.c rdsview.c \
+                       gds_drive.h gds_parse.c gds_swap.h gds.h \
+                       gds_error.c gds_parse.h rgs.h gds_drive.c gds_error.h gds_swap.c
+ libRds_la_LDFLAGS   = -version-info @RDS_DLL_VERSION@
+-libRds_la_LIBADD    = -lMpu -lMut
++libRds_la_LIBADD    = $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/ring/src/Makefile.am b/alliance/src/ring/src/Makefile.am
+index 65e1653..ae13f98 100644
+--- a/alliance/src/ring/src/Makefile.am
++++ b/alliance/src/ring/src/Makefile.am
+@@ -1,19 +1,23 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+-YACC         = @YACC@ -d
++AM_YFLAGS      = -d -p ring_yy
++AM_LFLAGS      = -P ring_yy -o rinscan.c
+ 
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ \
+-               -I$(top_srcdir)/mbk/src \
+-               -I$(top_srcdir)/genlib/src
++AM_CFLAGS    = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS  =
++AM_CPPFLAGS  += -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS  += -I$(top_srcdir)/genlib/src
+ 
+ bin_PROGRAMS = ring
+ 
+-ring_LDADD   = @ALLIANCE_LIBS@ \
+-               -L$(top_builddir)/genlib/src \
+-               -L$(top_builddir)/mbk/src \
+-               -L$(top_builddir)/rds/src \
+-               -lMgn -lMpu -lMlu -lMlo -lMph -lMut -lRcn -lRds
+-	   
++ring_LDADD   =  @ALLIANCE_LIBS@
++ring_LDADD   += $(top_builddir)/genlib/src/libMgn.la
++ring_LDADD   += $(top_builddir)/rds/src/libRds.la
++ring_LDADD   += $(top_builddir)/mbk/src/libMpu.la
++ring_LDADD   += $(top_builddir)/mbk/src/libMlu.la
++ring_LDADD   += $(top_builddir)/mbk/src/libMlo.la
++ring_LDADD   += $(top_builddir)/mbk/src/libMut.la
++
+ ring_SOURCES = bigvia.c bigvia.h \
+ 		compress.c compress.h \
+ 		deport.c deport.h \
+@@ -34,6 +38,6 @@ ring_SOURCES = bigvia.c bigvia.h \
+ 		struct.h \
+ 		barre.c barre.h
+ 
+-EXTRA_DIST = ringram.h
++# EXTRA_DIST = ringram.h
+ 
+ CLEANFILES = ringram.c ringram.h rinscan.c
+diff --git a/alliance/src/rtd/src/Makefile.am b/alliance/src/rtd/src/Makefile.am
+index 509c9c8..c208ef1 100644
+--- a/alliance/src/rtd/src/Makefile.am
++++ b/alliance/src/rtd/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src \
+                       -I$(top_srcdir)/aut/src \
+                       -I$(top_srcdir)/vex/src \
+                       -I$(top_srcdir)/rtn/src
+@@ -7,4 +7,7 @@ include_HEADERS     = rtd.h
+ libRtd_la_SOURCES   = rtd.h     rtd_drive.h  rtd_error.h  rtd_get.h    rtd_parse.h \
+                       rtd_drive.c  rtd_error.c  rtd_get.c    rtd_parse.c
+ libRtd_la_LDFLAGS   = -version-info @RTD_DLL_VERSION@
+-libRtd_la_LIBADD    = -lRtn -lVex -lMut
++libRtd_la_LIBADD    =
++libRtd_la_LIBADD    += $(top_builddir)/rtn/src/libRtn.la
++libRtd_la_LIBADD    += $(top_builddir)/vex/src/libVex.la
++libRtd_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+\ No newline at end of file
+diff --git a/alliance/src/rtn/src/Makefile.am b/alliance/src/rtn/src/Makefile.am
+index 0121f97..16a5028 100644
+--- a/alliance/src/rtn/src/Makefile.am
++++ b/alliance/src/rtn/src/Makefile.am
+@@ -1,8 +1,11 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src
+ lib_LTLIBRARIES     = libRtn.la
+ include_HEADERS     = rtn.h
+ libRtn_la_SOURCES   = rtnadd.h    rtndel.c	  rtnerror.h  rtnget.c	   rtnsearch.h \
+                       rtn.h	  rtnalloc.c  rtndel.h	  rtnfree.c   rtnget.h	   rtnview.c \
+                       rtnadd.c  rtnalloc.h  rtnerror.c  rtnfree.h   rtnsearch.c  rtnview.h
+ libRtn_la_LDFLAGS   = -version-info @RTN_DLL_VERSION@
+-libRtn_la_LIBADD    = -lVex -lAut -lMut
++libRtn_la_LIBADD    =
++libRtn_la_LIBADD    += $(top_builddir)/vex/src/libVex.la
++libRtn_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libRtn_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/s2r/src/Makefile.am b/alliance/src/s2r/src/Makefile.am
+index b193efd..06b3df8 100644
+--- a/alliance/src/s2r/src/Makefile.am
++++ b/alliance/src/s2r/src/Makefile.am
+@@ -2,15 +2,16 @@
+ 
+ bin_PROGRAMS = s2r 
+ 
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ \
+-               -I$(top_srcdir)/rds/src \
+-               -I$(top_srcdir)/genview/src/gcc-1.42 \
+-               -I$(top_srcdir)/mbk/src
++AM_CFLAGS    = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS =
++AM_CPPFLAGS += -I$(top_srcdir)/rds/src
++AM_CPPFLAGS += -I$(top_srcdir)/mbk/src
+ 
+-s2r_LDADD    = @ALLIANCE_LIBS@ \
+-               -L$(top_builddir)/mbk/src/.libs \
+-               -L$(top_builddir)/rds/src/.libs \
+-               -lMpu -lRds -lMph -lMut
++s2r_LDADD    = @ALLIANCE_LIBS@
++s2r_LDADD    += $(top_builddir)/mbk/src/libMpu.la
++s2r_LDADD    += $(top_builddir)/rds/src/libRds.la
++s2r_LDADD    += $(top_builddir)/mbk/src/libMph.la
++s2r_LDADD    += $(top_builddir)/mbk/src/libMut.la
+ 
+ s2r_SOURCES  = generic.h  hash.h  maxima.h  merge.h\
+                postrat.h rdsacces.h  statistics.c hash.c\
+diff --git a/alliance/src/scapin/src/Makefile.am b/alliance/src/scapin/src/Makefile.am
+index 342d67c..a729da1 100644
+--- a/alliance/src/scapin/src/Makefile.am
++++ b/alliance/src/scapin/src/Makefile.am
+@@ -2,15 +2,14 @@
+ 
+ bin_PROGRAMS   = scapin
+ 
+-AM_CFLAGS      = @ALLIANCE_CFLAGS@ \
++AM_CFLAGS      = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS    = \
+                  -I$(top_srcdir)/aut/src \
+                  -I$(top_srcdir)/mbk/src \
+                  -DSCAPIN_DEFAULT_PARAM_NAME=\"etc/sxlib.scapin\"
+ 
+-scapin_LDADD   = @ALLIANCE_LIBS@ \
+-                 -L$(top_builddir)/aut/src/.libs \
+-                 -L$(top_builddir)/mbk/src/.libs \
+-                 -lMlu -lMlo -lMut -lRcn -lAut
++scapin_LDADD   = @ALLIANCE_LIBS@
++scapin_LDADD   += $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/aut/src/libAut.la
+ 
+ scapin_SOURCES = scan_insert.c scan_insert.h scan_main.c scan_main.h \
+                  scan_param.c scan_param.h scan_path.c scan_path.h
+diff --git a/alliance/src/scl/src/Makefile.am b/alliance/src/scl/src/Makefile.am
+index 77bf364..867c8d4 100644
+--- a/alliance/src/scl/src/Makefile.am
++++ b/alliance/src/scl/src/Makefile.am
+@@ -1,6 +1,8 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src \
+-                      -I$(top_srcdir)/abl/src -I$(top_srcdir)/bdd/src \
+-                      -I$(top_srcdir)/abe/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src
++AM_CPPFLAGS         += -I$(top_srcdir)/aut/src
++AM_CPPFLAGS         += -I$(top_srcdir)/abl/src
++AM_CPPFLAGS         += -I$(top_srcdir)/bdd/src
++AM_CPPFLAGS         += -I$(top_srcdir)/abe/src
+ lib_LTLIBRARIES     = libScl.la
+ include_HEADERS     = scl.h
+ libScl_la_SOURCES   = scgmain.h	schenv.c    schget.h   scpadd.h    scpfree.c \
+@@ -11,4 +13,9 @@ libScl_la_SOURCES   = scgmain.h	schenv.c    schget.h   scpadd.h    scpfree.c \
+                       scglofig.h  schdel.c	schfree.h   scp.h      scpdel.c \
+                       scgmain.c   schdel.h	schget.c    scpadd.c   scpdel.h
+ libScl_la_LDFLAGS   = -version-info @SCL_DLL_VERSION@
+-libScl_la_LIBADD    = -lAbl -lAut -lMut
++libScl_la_LIBADD    =
++libScl_la_LIBADD    += $(top_builddir)/abe/src/libAbe.la
++libScl_la_LIBADD    += $(top_builddir)/bdd/src/libBdd.la
++libScl_la_LIBADD    += $(top_builddir)/abl/src/libAbl.la
++libScl_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libScl_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/sea/src/Makefile.am b/alliance/src/sea/src/Makefile.am
+index e1dcce1..2ba9e7f 100644
+--- a/alliance/src/sea/src/Makefile.am
++++ b/alliance/src/sea/src/Makefile.am
+@@ -3,7 +3,8 @@
+ AM_YFLAGS    = -d -v -p DEF_grammar
+ AM_LFLAGS    = -s -f -8 -pp -PDEF_grammar -olex.yy.c
+ 
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS  = \
+                -I$(top_srcdir)/aut/src \
+                -I$(top_srcdir)/mbk/src
+ 
+@@ -12,21 +13,15 @@ bin_SCRIPTS  = sea seroute seplace a2lef
+ 
+ a2def_LDADD  = @ALLIANCE_LIBS@ \
+                ./libUtil.a \
+-               -L$(top_builddir)/aut/src/.libs \
+-               -L$(top_builddir)/mbk/src/.libs \
+-               -lMpu -lMlu -lMlo -lMph -lMut -lRcn -lAut
++               $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/aut/src/libAut.la
+ 
+ def2a_LDADD  = @ALLIANCE_LIBS@ \
+                ./libUtil.a \
+-               -L$(top_builddir)/aut/src/.libs \
+-               -L$(top_builddir)/mbk/src/.libs \
+-               -lMpu -lMlu -lMlo -lMph -lMut -lRcn -lAut
++               $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/aut/src/libAut.la
+ 
+ sxlib2lef_LDADD = @ALLIANCE_LIBS@ \
+                   ./libUtil.a \
+-                  -L$(top_builddir)/aut/src/.libs \
+-                  -L$(top_builddir)/mbk/src/.libs \
+-                  -lMpu -lMlu -lMlo -lMph -lMut -lRcn -lAut
++                  $(top_builddir)/mbk/src/libMpu.la $(top_builddir)/mbk/src/libMlu.la $(top_builddir)/mbk/src/libMlo.la $(top_builddir)/mbk/src/libMph.la $(top_builddir)/mbk/src/libMut.la $(top_builddir)/mbk/src/libRcn.la $(top_builddir)/aut/src/libAut.la
+ 
+ noinst_LIBRARIES = libUtil.a
+ 
+diff --git a/alliance/src/syf/src/Makefile.am b/alliance/src/syf/src/Makefile.am
+index 293e333..f1a4de5 100644
+--- a/alliance/src/syf/src/Makefile.am
++++ b/alliance/src/syf/src/Makefile.am
+@@ -2,27 +2,26 @@
+ 
+ bin_PROGRAMS = syf
+ 
+-AM_CFLAGS =  \
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++
++AM_CPPFLAGS =  \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/aut/src \
+ -I$(top_srcdir)/bdd/src \
+ -I$(top_srcdir)/fsm/src \
+ -I$(top_srcdir)/ftl/src \
+ -I$(top_srcdir)/fvh/src \
+--I$(top_srcdir)/mbk/src \
+-@ALLIANCE_CFLAGS@
++-I$(top_srcdir)/mbk/src
+ 
+-syf_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/fks/src/.libs \
+--L$(top_builddir)/fsm/src/.libs \
+--L$(top_builddir)/ftl/src/.libs \
+--L$(top_builddir)/fvh/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+-          -lFtl -lFks -lFvh -lFsm \
+-	  -lBdd -lAbl -lAut -lMut
++syf_LDADD = @ALLIANCE_LIBS@
++syf_LDADD += $(top_builddir)/abl/src/libAbl.la
++syf_LDADD += $(top_builddir)/aut/src/libAut.la
++syf_LDADD += $(top_builddir)/bdd/src/libBdd.la
++syf_LDADD += $(top_builddir)/fks/src/libFks.la
++syf_LDADD += $(top_builddir)/fsm/src/libFsm.la
++syf_LDADD += $(top_builddir)/ftl/src/libFtl.la
++syf_LDADD += $(top_builddir)/fvh/src/libFvh.la
++syf_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ 
+ syf_SOURCES = \
+diff --git a/alliance/src/vasy/src/Makefile.am b/alliance/src/vasy/src/Makefile.am
+index 168d186..b89eca2 100644
+--- a/alliance/src/vasy/src/Makefile.am
++++ b/alliance/src/vasy/src/Makefile.am
+@@ -2,29 +2,29 @@
+ 
+ bin_PROGRAMS = vasy
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ \
+--I$(top_srcdir)/abl/src \
+--I$(top_srcdir)/aut/src \
+--I$(top_srcdir)/bdd/src \
+--I$(top_srcdir)/mbk/src \
+--I$(top_srcdir)/rtd/src \
+--I$(top_srcdir)/rtn/src \
+--I$(top_srcdir)/vex/src \
+--I$(top_srcdir)/vbh/src \
+--I$(top_srcdir)/vpn/src
++AM_CFLAGS = @ALLIANCE_CFLAGS@
+ 
+-vasy_LDADD = @ALLIANCE_LIBS@ \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+--L$(top_builddir)/rtd/src/.libs \
+--L$(top_builddir)/rtn/src/.libs \
+--L$(top_builddir)/vbh/src/.libs \
+--L$(top_builddir)/vex/src/.libs \
+--L$(top_builddir)/vpn/src/.libs \
+-          -lRtd -lRtn -lVpn -lVbh \
+-	  -lVex -lBdd -lAbl -lAut -lMut
++AM_CPPFLAGS =
++AM_CPPFLAGS += -I$(top_srcdir)/abl/src
++AM_CPPFLAGS += -I$(top_srcdir)/aut/src 
++AM_CPPFLAGS += -I$(top_srcdir)/bdd/src 
++AM_CPPFLAGS += -I$(top_srcdir)/mbk/src 
++AM_CPPFLAGS += -I$(top_srcdir)/rtd/src 
++AM_CPPFLAGS += -I$(top_srcdir)/rtn/src 
++AM_CPPFLAGS += -I$(top_srcdir)/vex/src 
++AM_CPPFLAGS += -I$(top_srcdir)/vbh/src 
++AM_CPPFLAGS += -I$(top_srcdir)/vpn/src
++
++vasy_LDADD = @ALLIANCE_LIBS@
++vasy_LDADD += $(top_builddir)/abl/src/libAbl.la
++vasy_LDADD += $(top_builddir)/aut/src/libAut.la
++vasy_LDADD += $(top_builddir)/bdd/src/libBdd.la
++vasy_LDADD += $(top_builddir)/mbk/src/libMut.la
++vasy_LDADD += $(top_builddir)/rtd/src/libRtd.la
++vasy_LDADD += $(top_builddir)/rtn/src/libRtn.la
++vasy_LDADD += $(top_builddir)/vbh/src/libVbh.la
++vasy_LDADD += $(top_builddir)/vex/src/libVex.la
++vasy_LDADD += $(top_builddir)/vpn/src/libVpn.la
+ 
+ vasy_SOURCES = \
+ vasy_analys.c     vasy_drvvlog.h    vasy_mulwait.c    vasy_redwait.h \
+diff --git a/alliance/src/vbh/src/Makefile.am b/alliance/src/vbh/src/Makefile.am
+index d017730..e3b8c97 100644
+--- a/alliance/src/vbh/src/Makefile.am
++++ b/alliance/src/vbh/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src \
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src \
+                       -I$(top_srcdir)/aut/src \
+                       -I$(top_srcdir)/vex/src \
+                       -I$(top_srcdir)/vpn/src
+@@ -13,7 +13,10 @@ libVbh_la_SOURCES   = vbh.h  vbh_add.c  vbh_crt.c  vbh_dup.c	vbh_fre.c  vbh_simp
+                       vtl.h  vtlacces.c	vtlacces.h  vtlerror.c	vtlerror.h \
+                       vpd.h          vpd_drive.h  vpd_error.h  vpd_parse.h \
+                       vpd_drive.c  vpd_error.c  vpd_parse.c
+-libVbh_la_LIBADD    = -lVpn -lVex -lAut -lMut
++libVbh_la_LIBADD    = $(top_builddir)/vpn/src/libVpn.la
++libVbh_la_LIBADD   += $(top_builddir)/vex/src/libVex.la
++libVbh_la_LIBADD   += $(top_builddir)/aut/src/libAut.la
++libVbh_la_LIBADD   += $(top_builddir)/mbk/src/libMut.la
+ 
+ CLEANFILES          = vbl_bcomp_y.c vbl_bcomp_y.h vbl_bcomp_l.c
+ 
+@@ -21,3 +24,5 @@ vbl_bcomp_y.c vbl_bcomp_y.h : $(srcdir)/vbl_bcomp_y.y
+ 	$(YACC) -d $(YFLAGS) $(srcdir)/vbl_bcomp_y.y && sed -e "s/yy/vbl_y_/g" -e "s/YY/VBL_Y_/g" y.tab.c > vbl_bcomp_y.c && sed -e "s/yy/vbl_y_/g" -e "s/YY/VBL_Y_/g" y.tab.h > vbl_bcomp_y.h
+ vbl_bcomp_l.c : $(srcdir)/vbl_bcomp_l.l vbl_bcomp_y.h
+ 	$(LEX) -t $(srcdir)/vbl_bcomp_l.l | sed -e "s/yy/vbl_y_/g" -e "s/YY/VBL_Y_/g" > vbl_bcomp_l.c
++
++CLEANFILES += y.tab.c y.tab.h
+diff --git a/alliance/src/vex/src/Makefile.am b/alliance/src/vex/src/Makefile.am
+index 167c80e..f148ffc 100644
+--- a/alliance/src/vex/src/Makefile.am
++++ b/alliance/src/vex/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src
+ lib_LTLIBRARIES     = libVex.la
+ include_HEADERS     = vex.h
+ libVex_la_SOURCES   = vexcreate.h  vexerror.c   vexfree.h   vexshift.c	vexunflat.h \
+@@ -9,4 +9,6 @@ libVex_la_SOURCES   = vexcreate.h  vexerror.c   vexfree.h   vexshift.c	vexunflat
+                       vexalloc.h   vexenv.c	  vexextend.h  vexoptim.c  vexslice.h \
+                       vexcreate.c  vexenv.h	  vexfree.c    vexoptim.h  vexunflat.c
+ libVex_la_LDFLAGS   = -version-info @VEX_DLL_VERSION@
+-libVex_la_LIBADD    = -lAut -lMut
++libVex_la_LIBADD    =
++libVex_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libVex_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/vpn/src/Makefile.am b/alliance/src/vpn/src/Makefile.am
+index c5687e9..e68b1af 100644
+--- a/alliance/src/vpn/src/Makefile.am
++++ b/alliance/src/vpn/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS           = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src
++AM_CPPFLAGS         = -I$(top_srcdir)/mbk/src -I$(top_srcdir)/aut/src -I$(top_srcdir)/vex/src
+ lib_LTLIBRARIES     = libVpn.la
+ include_HEADERS     = vpn.h
+ libVpn_la_SOURCES   = vpnalloc.c  vpnenv.h	  vpnget.c     vpnsimp.h \
+@@ -7,4 +7,7 @@ libVpn_la_SOURCES   = vpnalloc.c  vpnenv.h	  vpnget.c     vpnsimp.h \
+                       vpnadd.c  vpndel.h    vpnfree.c   vpnsearch.h  vpnview.c \
+                       vpnadd.h  vpnenv.c    vpnfree.h   vpnsimp.c    vpnview.h
+ libVpn_la_LDFLAGS   = -version-info @VPN_DLL_VERSION@
+-libVpn_la_LIBADD    = -lVex -lAut -lMut
++libVpn_la_LIBADD    =
++libVpn_la_LIBADD    += $(top_builddir)/vex/src/libVex.la
++libVpn_la_LIBADD    += $(top_builddir)/aut/src/libAut.la
++libVpn_la_LIBADD    += $(top_builddir)/mbk/src/libMut.la
+diff --git a/alliance/src/x2y/src/Makefile.am b/alliance/src/x2y/src/Makefile.am
+index 48f3ae0..ffb43c7 100644
+--- a/alliance/src/x2y/src/Makefile.am
++++ b/alliance/src/x2y/src/Makefile.am
+@@ -1,12 +1,16 @@
+ # $Id: Makefile.am,v 1.8 2005/01/19 15:13:57 hcl Exp $
+ 
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ \
+--I$(top_srcdir)/mbk/src
++AM_CFLAGS = @ALLIANCE_CFLAGS@
++AM_CPPFLAGS = -I$(top_srcdir)/mbk/src
+ 
+ bin_PROGRAMS = x2y
+ 
+-x2y_LDADD = @ALLIANCE_LIBS@ \
+-            -L$(top_builddir)/mbk/src/.libs \
+-            -lMpu -lMlu -lMlo -lMph -lMut -lRcn 
+-	  
++x2y_LDADD = @ALLIANCE_LIBS@
++x2y_LDADD += $(top_builddir)/mbk/src/libMpu.la
++x2y_LDADD += $(top_builddir)/mbk/src/libMlu.la
++x2y_LDADD += $(top_builddir)/mbk/src/libMlo.la
++x2y_LDADD += $(top_builddir)/mbk/src/libMph.la
++x2y_LDADD += $(top_builddir)/mbk/src/libMut.la
++x2y_LDADD += $(top_builddir)/mbk/src/libRcn.la
++
+ x2y_SOURCES = x2y.c
+diff --git a/alliance/src/xfsm/src/Makefile.am b/alliance/src/xfsm/src/Makefile.am
+index e702229..7040cb1 100644
+--- a/alliance/src/xfsm/src/Makefile.am
++++ b/alliance/src/xfsm/src/Makefile.am
+@@ -1,8 +1,9 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ bin_PROGRAMS = xfsm
+-AM_CFLAGS = @ALLIANCE_CFLAGS@ @X_CFLAGS@ \
+-	 -DXFSM_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xfsm.par\" \
++AM_CFLAGS = @ALLIANCE_CFLAGS@ @X_CFLAGS@
++
++AM_CPPFLAGS = -DXFSM_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xfsm.par\" \
+ 	 -DXMS_FILE_NAME=\".xfsm.cfg\" \
+ -I$(top_srcdir)/abl/src \
+ -I$(top_srcdir)/aut/src \
+@@ -42,18 +43,16 @@ ALL_X_LIBS = $(X_LDFLAGS) $(LIBXM) $(LIBXT) \
+              $(LIBXP) $(LIBXEXT) $(LIBX11)
+ 
+ 
++xfsm_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS)
++xfsm_LDADD += $(top_builddir)/ftl/src/libFtl.la
++xfsm_LDADD += $(top_builddir)/fks/src/libFks.la
++xfsm_LDADD += $(top_builddir)/fvh/src/libFvh.la
++xfsm_LDADD += $(top_builddir)/fsm/src/libFsm.la
++xfsm_LDADD += $(top_builddir)/bdd/src/libBdd.la
++xfsm_LDADD += $(top_builddir)/abl/src/libAbl.la
++xfsm_LDADD += $(top_builddir)/aut/src/libAut.la
++xfsm_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+-xfsm_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS) \
+--L$(top_builddir)/abl/src/.libs \
+--L$(top_builddir)/aut/src/.libs \
+--L$(top_builddir)/bdd/src/.libs \
+--L$(top_builddir)/fks/src/.libs \
+--L$(top_builddir)/fsm/src/.libs \
+--L$(top_builddir)/ftl/src/.libs \
+--L$(top_builddir)/fvh/src/.libs \
+--L$(top_builddir)/mbk/src/.libs \
+-          -lFtl -lFks -lFvh -lFsm \
+-	  -lBdd -lAbl -lAut -lMut
+ 
+ xfsm_SOURCES = \
+ LIP6bw.h        XME_search.c    XMS_panel.c     XMV_panel.h     XMX_panel.h \
+diff --git a/alliance/src/xgra/src/Makefile.am b/alliance/src/xgra/src/Makefile.am
+index 5ebd988..a78c146 100644
+--- a/alliance/src/xgra/src/Makefile.am
++++ b/alliance/src/xgra/src/Makefile.am
+@@ -2,14 +2,14 @@
+ 
+ bin_PROGRAMS = xgra
+ AM_CFLAGS = @ALLIANCE_CFLAGS@ @X_CFLAGS@ \
++         $(GLIB_CFLAGS)
++AM_CPPFLAGS = \
+          -I$(top_srcdir)/aut/src \
+          -I$(top_srcdir)/mbk/src \
+ 	 -DXGRA_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xgra.par\" \
+ 	 -DXMS_FILE_NAME=\".xgra.cfg\" \
+-         $(GLIB_CFLAGS) \
+          -DG_LOG_DOMAIN=\"xgra\"
+ 
+-
+ # -----------------------------------------------------------------------------
+ # X Libraries.
+ # -----------------------------------------------------------------------------
+@@ -43,9 +43,7 @@ ALL_X_LIBS = $(X_LDFLAGS) $(LIBXM) $(LIBXT) \
+ 
+ 
+ xgra_LDADD = @ALLIANCE_LIBS@ $(GLIB_CFLAGS) $(ALL_X_LIBS) \
+--L$(top_builddir)/aut/src \
+--L$(top_builddir)/mbk/src \
+--lAut -lMut
++$(top_builddir)/aut/src/libAut.la $(top_builddir)/mbk/src/libMut.la
+ 
+ xgra_SOURCES = \
+ LIP6bw.h XME_dialog.c XME_dialog.h XME_edit.c XME_edit.h XME.h XME_menu.c \
+diff --git a/alliance/src/xpat/src/Makefile.am b/alliance/src/xpat/src/Makefile.am
+index 0ade0a1..9ab3be2 100644
+--- a/alliance/src/xpat/src/Makefile.am
++++ b/alliance/src/xpat/src/Makefile.am
+@@ -1,10 +1,11 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ bin_PROGRAMS = xpat
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@ \
+-               -DXPAT_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xpat.par\" \
+-               -DXMS_FILE_NAME=\".xpat.cfg\" \
+-               -I$(top_srcdir)/aut/src \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@
++AM_CPPFLAGS  = -DXPAT_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xpat.par\" \
++               -DXMS_FILE_NAME=\".xpat.cfg\"
++
++AM_CPPFLAGS  += -I$(top_srcdir)/aut/src \
+                -I$(top_srcdir)/mbk/src \
+                -I$(top_srcdir)/pat/src 
+ 
+@@ -40,11 +41,10 @@ ALL_X_LIBS = $(X_LDFLAGS) $(LIBXM) $(LIBXT) \
+ 
+ 
+ 
+-xpat_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS) \
+-             -L$(top_builddir)/aut/src/.libs \
+-             -L$(top_builddir)/mbk/src/.libs \
+-             -L$(top_builddir)/pat/src/.libs \
+-	     -lPat -lAut -lMut
++xpat_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS)
++xpat_LDADD += $(top_builddir)/pat/src/libPat.la
++xpat_LDADD += $(top_builddir)/aut/src/libAut.la
++xpat_LDADD += $(top_builddir)/mbk/src/libMut.la
+ 
+ xpat_SOURCES = \
+ LIP6bw.h XME_dialog.c XME_dialog.h XME_edit.c XME_edit.h \
+diff --git a/alliance/src/xsch/src/Makefile.am b/alliance/src/xsch/src/Makefile.am
+index df964a2..677076a 100644
+--- a/alliance/src/xsch/src/Makefile.am
++++ b/alliance/src/xsch/src/Makefile.am
+@@ -1,8 +1,8 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ bin_PROGRAMS = xsch
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@ \
+-               -DXSCH_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xsch.par\" \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@
++AM_CPPFLAGS  = -DXSCH_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xsch.par\" \
+                -DXMS_FILE_NAME=\".xsch.cfg\" \
+                -I$(top_srcdir)/abe/src \
+                -I$(top_srcdir)/abl/src \
+@@ -44,15 +44,16 @@ ALL_X_LIBS = $(X_LDFLAGS) $(LIBXM) $(LIBXT) \
+ 
+ 
+ 
+-xsch_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS) \
+-             -L$(top_builddir)/abe/src/.libs \
+-             -L$(top_builddir)/abl/src/.libs \
+-             -L$(top_builddir)/abv/src/.libs \
+-             -L$(top_builddir)/aut/src/.libs \
+-             -L$(top_builddir)/bdd/src/.libs \
+-             -L$(top_builddir)/mbk/src/.libs \
+-             -L$(top_builddir)/scl/src/.libs \
+-             -lScl -lMlu -lMlo -lMut -lAbv -lAbe -lBdd -lAbl -lAut -lRcn
++xsch_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS)
++xsch_LDADD += $(top_builddir)/abe/src/libAbe.la
++xsch_LDADD += $(top_builddir)/abl/src/libAbl.la
++xsch_LDADD += $(top_builddir)/abv/src/libAbv.la
++xsch_LDADD += $(top_builddir)/aut/src/libAut.la
++xsch_LDADD += $(top_builddir)/bdd/src/libBdd.la
++xsch_LDADD += $(top_builddir)/mbk/src/libMut.la
++xsch_LDADD += $(top_builddir)/scl/src/libScl.la
++xsch_LDADD += $(top_builddir)/mbk/src/libMlo.la
++xsch_LDADD += $(top_builddir)/mbk/src/libMlu.la
+ 
+ xsch_SOURCES = \
+ LIP6bw.h XME_dialog.c XME_dialog.h XME_edit.c XME_edit.h XME.h XME_menu.c XME_menu.h \
+diff --git a/alliance/src/xvpn/src/Makefile.am b/alliance/src/xvpn/src/Makefile.am
+index fdb4ff6..1a88cbe 100644
+--- a/alliance/src/xvpn/src/Makefile.am
++++ b/alliance/src/xvpn/src/Makefile.am
+@@ -1,7 +1,8 @@
+ ## Process this file with automake to produce Makefile.in
+ 
+ bin_PROGRAMS = xvpn
+-AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@ \
++AM_CFLAGS    = @ALLIANCE_CFLAGS@ @X_CFLAGS@
++AM_CPPFLAGS  = \
+                -DXVPN_DEFAULT_PARAM_NAME=\"${ALLIANCE_TOP}/etc/xvpn.par\" \
+                -DXMS_FILE_NAME=\".xvpn.cfg\" \
+                -I$(top_srcdir)/aut/src \
+@@ -44,14 +45,13 @@ ALL_X_LIBS = $(X_LDFLAGS) $(LIBXM) $(LIBXT) \
+ 
+ 
+ 
+-xvpn_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS) \
+-             -L$(top_builddir)/abl/src/.libs \
+-             -L$(top_builddir)/aut/src/.libs \
+-             -L$(top_builddir)/mbk/src/.libs \
+-             -L$(top_builddir)/vbh/src/.libs \
+-             -L$(top_builddir)/vex/src/.libs \
+-             -L$(top_builddir)/vpn/src/.libs \
+-             -lVpn -lVbh -lVex -lAbl -lAut -lMut
++xvpn_LDADD = @ALLIANCE_LIBS@ $(ALL_X_LIBS)
++xvpn_LDADD += $(top_builddir)/abl/src/libAbl.la
++xvpn_LDADD += $(top_builddir)/aut/src/libAut.la
++xvpn_LDADD += $(top_builddir)/mbk/src/libMut.la
++xvpn_LDADD += $(top_builddir)/vbh/src/libVbh.la
++xvpn_LDADD += $(top_builddir)/vex/src/libVex.la
++xvpn_LDADD += $(top_builddir)/vpn/src/libVpn.la
+ 
+ xvpn_SOURCES = \
+ LIP6bw.h XME_dialog.c XME_dialog.h XME_edit.c XME_edit.h XME.h XME_menu.c \
+-- 
+2.5.0
+

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=GNU Backgammon
+GenericName=Backgammon
+Comment=A backgammon game and analyser
+Exec=gnubg --window-system-only
+Icon=gnubg.png
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=BoardGame;Game;
+Version=1.0

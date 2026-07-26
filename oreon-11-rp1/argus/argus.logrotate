@@ -1,0 +1,8 @@
+# logrotate configuration file for package argus
+/var/lib/argus/argus.out {
+    daily
+    rotate 366
+    missingok
+    olddir /var/lib/argus/archive
+    compress
+}

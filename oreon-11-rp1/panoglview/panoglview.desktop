@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Panoglview
+GenericName=Panorama viewer
+Comment=View equirectangular panoramas
+Exec=panoglview %f
+Terminal=false
+Type=Application
+Icon=panoglview
+Categories=Graphics;
+MimeType=image/jpeg;image/tiff;image/png;

@@ -1,0 +1,31 @@
+From 691e0416670149d4e392f5f187f93404d95ff8da Mon Sep 17 00:00:00 2001
+From: Wenchuan Weng <wengwenchuan@gmail.com>
+Date: Tue, 17 Oct 2017 22:18:38 -0700
+Subject: [PATCH 5/8] Pass the correct pointer to memmem()
+
+In parse_money(), if there is a "$foobar$", it calls memmem() to find it
+again. Wrong pointer can cause itself to backtrack in a dead loop and hang
+the entire process.
+---
+ src/libinjection_sqli.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/libinjection_sqli.c b/src/libinjection_sqli.c
+index 94cbed2..7b582df 100644
+--- a/src/libinjection_sqli.c
++++ b/src/libinjection_sqli.c
+@@ -1064,9 +1064,9 @@ static size_t parse_money(struct libinjection_sqli_state *sf)
+             }
+ 
+             /* we have $foobar$ ... find it again */
+-            strend = my_memmem(cs+xlen+2, slen - (pos+xlen+2), cs + pos, xlen+2);
++            strend = my_memmem(cs+pos+xlen+2, slen - (pos+xlen+2), cs + pos, xlen+2);
+ 
+-            if (strend == NULL || ((size_t)(strend - cs) < (pos+xlen+2))) {
++            if (strend == NULL) {
+                 /* fell off edge */
+                 st_assign(sf->current, TYPE_STRING, pos+xlen+2, slen - pos - xlen - 2, cs+pos+xlen+2);
+                 sf->current->str_open = '$';
+-- 
+2.27.0
+

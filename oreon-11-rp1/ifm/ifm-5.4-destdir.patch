@@ -1,0 +1,45 @@
+From 766ca7239321029c6f9ca7a075a87f4d918066f9 Mon Sep 17 00:00:00 2001
+From: "FeRD (Frank Dana)" <ferdnyc@gmail.com>
+Date: Fri, 5 Jun 2020 04:33:40 -0400
+Subject: [PATCH] Fix DESTDIR support in doc Makefile
+
+---
+ doc/Makefile.in | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/doc/Makefile.in b/doc/Makefile.in
+index 3ceadbd..f1a77d9 100644
+--- a/doc/Makefile.in
++++ b/doc/Makefile.in
+@@ -508,20 +508,20 @@ install-doc: install-html
+ install-html: $(ifmdocdir)
+ 	@ if test -d $(htmldir); then					\
+ 	   set -x;							\
+-	   rm -rf $(ifmdocdir);						\
+-	   mkdir -p $(ifmdocdir);					\
+-	   cp -rf $(htmldir)/* $(ifmdocdir);				\
++	   rm -rf $(DESTDIR)$(ifmdocdir);						\
++	   mkdir -p $(DESTDIR)$(ifmdocdir);					\
++	   cp -rf $(htmldir)/* $(DESTDIR)$(ifmdocdir);				\
+ 	fi
+ 
+ $(ifmdocdir):
+-	- chmod u+w $(prefix)
+-	$(mkinstalldirs) $(docdir)
+-	- chmod u+w $(docdir)
+-	$(mkinstalldirs) $(ifmdocdir)
++	- chmod u+w $(DESTDIR)$(prefix)
++	$(mkinstalldirs) $(DESTDIR)$(docdir)
++	- chmod u+w $(DESTDIR)$(docdir)
++	$(mkinstalldirs) $(DESTDIR)$(ifmdocdir)
+ 
+ dist-doc:
+ 	if test -d $(htmldir); then					\
+-	   cp -rf $(htmldir) $(distdir);				\
++	   cp -rf $(htmldir) $(DESTDIR)$(distdir);				\
+ 	fi
+ 
+ check-doc:
+-- 
+2.26.2
+

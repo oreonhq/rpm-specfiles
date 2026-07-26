@@ -1,0 +1,13 @@
+--- mkvtoolnix-97.0/configure~	2026-01-13 18:59:30.199872496 +0000
++++ mkvtoolnix-97.0/configure	2026-01-13 19:00:01.504337018 +0000
+@@ -3165,8 +3165,8 @@
+ }
+ {
+   // Unicode literals
+-  char const *utf8 = u8"UTF-8 string \u2500";
+-  char16_t const *utf16 = u"UTF-8 string \u2500";
++  auto const *utf8 = u8"UTF-8 string \u2500";
++  char16_t const *utf16 = u"UTF-16 string \u2500";
+   char32_t const *utf32 = U"UTF-32 string \u2500";
+ }
+ '

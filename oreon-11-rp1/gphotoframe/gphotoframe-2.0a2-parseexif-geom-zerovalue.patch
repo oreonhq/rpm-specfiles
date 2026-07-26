@@ -1,0 +1,30 @@
+--- ./gphotoframe-2.0-a2/lib/plugins/base/parseexif.py.zero	2012-02-15 16:05:52.000000000 +0900
++++ ./gphotoframe-2.0-a2/lib/plugins/base/parseexif.py	2012-08-13 16:21:32.000000000 +0900
+@@ -61,6 +61,14 @@
+ 
+         return orientation
+ 
++    def realvalue_geo(self, fracs):
++        result = 0.
++        factor = 1.
++        for frac in fracs:
++            result += frac.num and frac.num / factor / frac.den or 0.
++            factor *= 60.
++        return result
++
+     def get_geo(self):
+         lat_array = self.tags.get('GPS GPSLatitude')
+         lon_array = self.tags.get('GPS GPSLongitude')
+@@ -70,8 +78,10 @@
+             lon = lon_array.values
+             lat = lat_array.values
+ 
+-            x = lon[0].num + lon[1].num/60 + lon[2].num/3600/lon[2].den
+-            y = lat[0].num + lat[1].num/60 + lat[2].num/3600/lat[2].den
++            #x = lon[0].num + lon[1].num/60. + lon[2].num/3600./lon[2].den
++            #y = lat[0].num + lat[1].num/60. + lat[2].num/3600./lat[2].den
++            x = self.realvalue_geo(lon)
++            y = self.realvalue_geo(lat)
+ 
+             lon_ref = -1 if str(self.tags.get('GPS GPSLongitudeRef')) == 'W' else 1
+             lat_ref = -1 if str(self.tags.get('GPS GPSLatitudeRef'))  == 'S' else 1

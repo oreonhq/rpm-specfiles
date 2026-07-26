@@ -1,0 +1,12 @@
+diff -up lincity-ng-2.14.2-Source/data/CMakeLists.txt.manfix lincity-ng-2.14.2-Source/data/CMakeLists.txt
+--- lincity-ng-2.14.2-Source/data/CMakeLists.txt.manfix	2025-11-06 16:02:56.397405981 -0500
++++ lincity-ng-2.14.2-Source/data/CMakeLists.txt	2025-11-06 16:03:13.884727929 -0500
+@@ -59,7 +59,7 @@ endforeach()
+ 
+ copy_data_file(${APPSTREAM_ID}.desktop ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_INSTALL_DATADIR}/applications data_files_out)
+ copy_data_file(${APPSTREAM_ID}.metainfo.xml ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_INSTALL_DATADIR}/metainfo data_files_out)
+-copy_data_file(lincity-ng.6 ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_INSTALL_MANDIR} data_files_out)
++copy_data_file(lincity-ng.6 ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_INSTALL_MANDIR}/man6 data_files_out)
+ 
+ # app icon for Windows
+ if(WIN32)

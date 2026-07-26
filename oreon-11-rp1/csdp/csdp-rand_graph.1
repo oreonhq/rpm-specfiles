@@ -1,0 +1,48 @@
+.TH "CSDP-RAND_GRAPH" "1" "6.1.1" "Brian Borchers" "User Commands"
+.SH "NAME"
+csdp-rand_graph \- Generate a random graph
+.SH "SYNOPSIS"
+.B csdp-rand_graph
+OUTPUT_FILE N P [\fISEED\fP]
+.SH "DESCRIPTION"
+.PP 
+The csdp-rand_graph program generates a random graph, which is written to the
+indicated output file.  The parameter N is the desired number of vertices.
+P is the probability of an edge between any given pair of vertices.  SEED is
+used to seed the random number generator; if not provided, the value 1 is used
+as the seed.
+
+.SH "FILE FORMAT"
+.PP
+The generated graph is written to the output file in the following format:
+.RS
+.br
+n
+.br
+m
+.br
+i1 j1
+.br
+\[u2026]
+.br
+im jm
+.RE
+where n is the number of nodes, m is the number of edges, and each i/j pair
+describes one edge.
+
+.SH "EXIT STATUS"
+.PP 
+The exit status is zero if the graph is generated successfully.  Otherwise, the
+exit status is one, and an error message indicating the problem is produced on
+standard out.
+
+.SH "AUTHORS"
+Csdp was written by Dr. Brian Borchers <borchers@nmt.edu>, with contributions
+by Joseph Young <josyoun@nmt.edu> and Aaron Wilson <wilson@nmt.edu>.
+.PP 
+This man page was written by Jerry James <loganjerry@gmail.com>.
+It is distributed under the same terms as Csdp.
+
+.SH "SEE ALSO"
+.PP
+\fIcsdp-theta\fP(1), \fIcsdp-graphtoprob\fP(1), \fIcsdp-complement\fP(1)

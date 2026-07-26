@@ -1,0 +1,25 @@
+From 50e9c3fb016ff65eea2d5dde2a9fc91699017f0d Mon Sep 17 00:00:00 2001
+From: Otto Liljalaakso <otto.liljalaakso@iki.fi>
+Date: Wed, 22 Nov 2023 22:43:53 +0200
+Subject: [PATCH] Disable coverage report
+
+---
+ makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/makefile b/makefile
+index 374e1e92..84c27ad8 100644
+--- a/makefile
++++ b/makefile
+@@ -64,7 +64,7 @@ help:
+ 
+ unittest:
+ 	LC_ALL=C PYTHONPATH=src/ $(PYTEST) --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
+-	LC_ALL=C PYTHONPATH=src/ $(PYTEST) tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
++	LC_ALL=C PYTHONPATH=src/ $(PYTEST) tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient
+ 
+ ISORTOPTS := -c share src/gpodder tools bin/* *.py
+ lint:
+-- 
+2.42.0
+

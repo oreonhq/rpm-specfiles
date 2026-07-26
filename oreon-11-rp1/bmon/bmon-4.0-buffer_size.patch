@@ -1,0 +1,11 @@
+--- bmon-4.0/src/in_netlink.c.orig	2020-12-01 02:34:34.218612445 +0200
++++ bmon-4.0/src/in_netlink.c	2020-12-01 02:34:36.935549069 +0200
+@@ -550,7 +550,7 @@ static void find_qdiscs(int, uint32_t, s
+ static struct element *handle_tc_obj(struct rtnl_tc *tc, const char *prefix,
+ 				     const struct rdata *rdata)
+ {
+-	char buf[IFNAME_MAX], name[IFNAME_MAX];
++	char buf[IFNAME_MAX], name[IFNAME_MAX + 6];
+ 	uint32_t id = rtnl_tc_get_handle(tc);
+ 	struct element *e;
+ 

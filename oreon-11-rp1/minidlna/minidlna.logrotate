@@ -1,0 +1,13 @@
+/var/log/minidlna/*.log
+{
+    rotate 4
+    weekly
+    missingok
+    notifempty
+    delaycompress
+    compress
+    create 0644 minidlna minidlna
+    postrotate
+        /usr/bin/systemctl try-restart minidlna.service >/dev/null 2>&1 || true
+    endscript
+}

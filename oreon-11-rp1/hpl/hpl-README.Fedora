@@ -1,0 +1,19 @@
+Run the benchmark by (for e.g. mpich-x86_64 implementation):
+$ module load mpi/mpich-x86_64
+$ mpirun -n 4 xhpl_mpich
+$ module unload mpi/mpich-x86_64
+
+In case you have only one MPI implementation installed or you don't care
+about the implementation you can load it simply by:
+$ module load mpi
+
+If you just installed the environment-modules, the module command may not
+work until the shell is restarted or the appropriate file is sourced
+by e.g. (for bash):
+$ . /etc/profile.d/modules.sh
+
+Benchmark configuration file HPL.dat is loaded from the current directory.
+If the configuration file is not found in the current directory and
+$MPI_SYSCONFIG enviroment variable is set, the configuration is loaded
+from the $MPI_SYSCONFIG/hpl directory. If $MPI_SYSCONFIG enviroment variable
+is not set, the /etc/hpl directory is tried as the last resort.

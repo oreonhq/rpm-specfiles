@@ -1,0 +1,11 @@
+--- a/zstd/gnatcoll_zstd.gpr
++++ b/zstd/gnatcoll_zstd.gpr
+@@ -21,7 +21,7 @@
+ --                                                                          --
+ ------------------------------------------------------------------------------
+ 
+-with "gnatcoll_minimal";
++with "gnatcoll_core";
+ with "config/gnatcoll_zstd_constants";
+ 
+ library project GNATCOLL_Zstd is

@@ -1,0 +1,129 @@
+diff -up guvcview-src-2.1.0/gview_encoder/audio_codecs.c.orig guvcview-src-2.1.0/gview_encoder/audio_codecs.c
+--- guvcview-src-2.1.0/gview_encoder/audio_codecs.c.orig	2024-01-22 15:08:43.000000000 +0100
++++ guvcview-src-2.1.0/gview_encoder/audio_codecs.c	2025-10-11 12:27:47.514947849 +0200
+@@ -39,7 +39,7 @@ extern int enc_verbosity;
+ 
+ /* AAC object types index: MAIN = 1; LOW = 2; SSR = 3; LTP = 4*/
+ static int AAC_OBJ_TYPE[5] =
+-	{ FF_PROFILE_UNKNOWN, FF_PROFILE_AAC_MAIN, FF_PROFILE_AAC_LOW, FF_PROFILE_AAC_SSR, FF_PROFILE_AAC_LTP };
++	{ AV_PROFILE_UNKNOWN, AV_PROFILE_AAC_MAIN, AV_PROFILE_AAC_LOW, AV_PROFILE_AAC_SSR, AV_PROFILE_AAC_LTP };
+ /*-1 = reserved; 0 = freq. is writen explictly (increases header by 24 bits)*/
+ static int AAC_SAMP_FREQ[16] =
+ 	{ 96000, 88200, 64000, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000, 7350, -1, -1, 0};
+@@ -65,7 +65,7 @@ static audio_codec_t listSupCodecs[] = /
+ 		.codec_id     = AV_CODEC_ID_PCM_F32LE,
+ 		.codec_name   = "pcm_f32le",
+ 		.sample_format = AV_SAMPLE_FMT_FLT,
+-		.profile      = FF_PROFILE_UNKNOWN,
++		.profile      = AV_PROFILE_UNKNOWN,
+ 		.mkv_codpriv  = NULL,
+ 		.codpriv_size = 0,
+ 		.flags        = 0,
+@@ -82,7 +82,7 @@ static audio_codec_t listSupCodecs[] = /
+ 		.codec_id     = AV_CODEC_ID_MP2,
+ 		.codec_name   = "mp2",
+ 		.sample_format = AV_SAMPLE_FMT_S16,
+-		.profile      = FF_PROFILE_UNKNOWN,
++		.profile      = AV_PROFILE_UNKNOWN,
+ 		.mkv_codpriv  = NULL,
+ 		.codpriv_size = 0,
+ 		.flags        = 0,
+@@ -103,7 +103,7 @@ static audio_codec_t listSupCodecs[] = /
+ #else
+ 		.sample_format = AV_SAMPLE_FMT_S16,
+ #endif
+-		.profile      = FF_PROFILE_UNKNOWN,
++		.profile      = AV_PROFILE_UNKNOWN,
+ 		.mkv_codpriv  = NULL,
+ 		.codpriv_size = 0,
+ 		.flags        = 0,
+@@ -124,7 +124,7 @@ static audio_codec_t listSupCodecs[] = /
+ #else
+ 		.sample_format = AV_SAMPLE_FMT_FLT,
+ #endif
+-		.profile      = FF_PROFILE_UNKNOWN,
++		.profile      = AV_PROFILE_UNKNOWN,
+ 		.mkv_codpriv  = NULL,
+ 		.codpriv_size = 0,
+ 		.flags        = 0,
+@@ -145,7 +145,7 @@ static audio_codec_t listSupCodecs[] = /
+ #else
+ 		.sample_format = AV_SAMPLE_FMT_S16,
+ #endif
+-		.profile      = FF_PROFILE_AAC_LOW,
++		.profile      = AV_PROFILE_AAC_LOW,
+ 		.mkv_codpriv  = AAC_ESDS,
+ 		.codpriv_size = 2,
+ 		.flags        = 0,
+@@ -166,7 +166,7 @@ static audio_codec_t listSupCodecs[] = /
+ #else
+ 		.sample_format = AV_SAMPLE_FMT_S16,
+ #endif
+-		.profile      = FF_PROFILE_UNKNOWN,
++		.profile      = AV_PROFILE_UNKNOWN,
+ 		.mkv_codpriv  =  NULL,
+ 		.codpriv_size =  0,
+ 		.flags        = 0,
+diff -up guvcview-src-2.1.0/gview_encoder/encoder.c.orig guvcview-src-2.1.0/gview_encoder/encoder.c
+--- guvcview-src-2.1.0/gview_encoder/encoder.c.orig	2024-01-22 15:08:43.000000000 +0100
++++ guvcview-src-2.1.0/gview_encoder/encoder.c	2025-10-11 12:14:00.647920400 +0200
+@@ -1992,7 +1992,7 @@ void encoder_close(encoder_context_t *en
+ 				avcodec_flush_buffers(video_codec_data->codec_context);
+ 				enc_video_ctx->flushed_buffers = 1;
+ 			}
+-			avcodec_close(video_codec_data->codec_context);
++			avcodec_free_context(&video_codec_data->codec_context);
+ 			free(video_codec_data->codec_context);
+ 
+ 			av_dict_free(&(video_codec_data->private_options));
+@@ -2024,7 +2024,7 @@ void encoder_close(encoder_context_t *en
+ 		{
+ 			avcodec_flush_buffers(audio_codec_data->codec_context);
+ 
+-			avcodec_close(audio_codec_data->codec_context);
++			avcodec_free_context(&audio_codec_data->codec_context);
+ 			free(audio_codec_data->codec_context);
+ 
+ 			if (audio_codec_data->frame)
+diff -up guvcview-src-2.1.0/gview_v4l2core/jpeg_decoder.c.orig guvcview-src-2.1.0/gview_v4l2core/jpeg_decoder.c
+--- guvcview-src-2.1.0/gview_v4l2core/jpeg_decoder.c.orig	2025-10-11 12:04:24.068488665 +0200
++++ guvcview-src-2.1.0/gview_v4l2core/jpeg_decoder.c	2025-10-11 12:13:13.710480851 +0200
+@@ -1435,7 +1435,7 @@ int jpeg_init_decoder(int width, int hei
+ #endif
+ 	{
+ 		fprintf(stderr, "V4L2_CORE: (mjpeg decoder) couldn't open codec\n");
+-		avcodec_close(codec_data->context);
++		avcodec_free_context(&codec_data->context);
+ 		free(codec_data->context);
+ 		free(codec_data);
+ 		free(jpeg_ctx);
+@@ -1558,7 +1558,7 @@ void jpeg_close_decoder()
+ 
+ 	codec_data_t *codec_data = (codec_data_t *) jpeg_ctx->codec_data;
+ 
+-	avcodec_close(codec_data->context);
++	avcodec_free_context(&codec_data->context);
+ 
+ 	free(codec_data->context);
+ 
+diff -up guvcview-src-2.1.0/gview_v4l2core/uvc_h264.c.orig guvcview-src-2.1.0/gview_v4l2core/uvc_h264.c
+--- guvcview-src-2.1.0/gview_v4l2core/uvc_h264.c.orig	2025-10-11 12:04:24.068713759 +0200
++++ guvcview-src-2.1.0/gview_v4l2core/uvc_h264.c	2025-10-11 12:13:37.913043590 +0200
+@@ -1033,7 +1033,7 @@ int h264_init_decoder(int width, int hei
+ #endif
+ 	{
+ 		fprintf(stderr, "V4L2_CORE: (H264 decoder) couldn't open codec\n");
+-		avcodec_close(h264_ctx->context);
++		avcodec_free_context(&h264_ctx->context);
+ 		free(h264_ctx->context);
+ 		free(h264_ctx);
+ 		h264_ctx = NULL;
+@@ -1143,7 +1143,7 @@ void h264_close_decoder()
+ 	if(h264_ctx == NULL)
+ 		return;
+ 
+-	avcodec_close(h264_ctx->context);
++	avcodec_free_context(&h264_ctx->context);
+ 
+ 	free(h264_ctx->context);
+ 

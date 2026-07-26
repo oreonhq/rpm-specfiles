@@ -1,0 +1,14 @@
+diff --git a/okcompilers/do b/okcompilers/do
+index 372b7e0..5429488 100755
+--- a/okcompilers/do
++++ b/okcompilers/do
+@@ -88,7 +88,8 @@ do
+   done
+ 
+   abi=`awk '{print length($0),$0}' < c-compatible \
+-  | sort -n | head -1 | sed 's/ *$//' | sed 's/^[^ ]* //' | tr ' /' '__'`
++  | sort -n | head -1 | sed 's/ *$//' | sed 's/^[^ ]* //' | tr ' /' '__' \
++  | head -c 128`
+ 
+   echo "echo '"$abi"'" >&7
+ 

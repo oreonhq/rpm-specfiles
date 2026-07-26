@@ -1,0 +1,12 @@
+diff -up ./Makefile.gcc47 ./Makefile
+--- ./Makefile.gcc47	2012-01-14 12:56:54.751665998 -0500
++++ ./Makefile	2012-01-14 12:57:03.897998378 -0500
+@@ -48,7 +48,7 @@ FLEX ?= flex
+ 
+ # Link in any necessary C++ libraries
+ #
+-LIBS ?= -lstdc++
++LIBS ?= -lstdc++ -lc
+ 
+ 
+ 

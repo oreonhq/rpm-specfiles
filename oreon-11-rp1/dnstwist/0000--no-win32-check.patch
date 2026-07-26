@@ -1,0 +1,14 @@
+diff -r -U4 dnstwist-20211204--orig/dnstwist.py dnstwist-20211204--patched/dnstwist.py
+--- dnstwist-20211204--orig/dnstwist.py	2021-12-04 16:49:45.000000000 +0100
++++ dnstwist-20211204--patched/dnstwist.py	2021-12-04 20:54:21.945961232 +0100
+@@ -115,9 +115,9 @@
+ REQUEST_TIMEOUT_HTTP = 5
+ REQUEST_TIMEOUT_SMTP = 5
+ THREAD_COUNT_DEFAULT = min(32, os.cpu_count() + 4)
+ 
+-if sys.platform != 'win32' and sys.stdout.isatty():
++if sys.stdout.isatty():
+ 	FG_RND = '\x1b[3{}m'.format(int(time.time())%8+1)
+ 	FG_YEL = '\x1b[33m'
+ 	FG_CYA = '\x1b[36m'
+ 	FG_BLU = '\x1b[34m'

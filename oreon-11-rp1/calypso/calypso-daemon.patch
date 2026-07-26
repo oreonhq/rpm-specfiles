@@ -1,0 +1,12 @@
+diff -up calypso-2.0/setup.py.daemon calypso-2.0/setup.py
+--- calypso-2.0/setup.py.daemon	2020-03-02 18:15:00.000000000 +0100
++++ calypso-2.0/setup.py	2020-03-11 20:31:03.786431712 +0100
+@@ -77,7 +77,7 @@ setup(
+     platforms="Any",
+     packages=["calypso", "calypso.acl"],
+     provides=["calypso"],
+-    install_requires=["daemon","vobject"],
++    install_requires=["python-daemon","vobject"],
+     tests_require=['nose>=0.11.1'],
+     scripts=["calypso.py"],
+     cmdclass={"build_scripts": BuildScripts},

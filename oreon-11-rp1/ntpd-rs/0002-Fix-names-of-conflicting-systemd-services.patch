@@ -1,0 +1,25 @@
+From aed7d09d2204d87f05b0fe809785fd54ca4d18dc Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 12 Jul 2024 21:01:11 +0200
+Subject: [PATCH 2/4] Fix names of conflicting systemd services
+
+---
+ docs/examples/conf/ntpd-rs.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/examples/conf/ntpd-rs.service b/docs/examples/conf/ntpd-rs.service
+index 1623361..c171993 100644
+--- a/docs/examples/conf/ntpd-rs.service
++++ b/docs/examples/conf/ntpd-rs.service
+@@ -3,7 +3,7 @@ Description=Network Time Service (ntpd-rs)
+ Documentation=https://github.com/pendulum-project/ntpd-rs
+ After=network-online.target
+ Wants=network-online.target
+-Conflicts=systemd-timesyncd.service ntp.service chrony.service
++Conflicts=systemd-timesyncd.service ntpd.service chronyd.service timemaster.service
+ 
+ [Service]
+ Type=simple
+-- 
+2.51.0
+

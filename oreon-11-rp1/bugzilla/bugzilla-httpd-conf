@@ -1,0 +1,23 @@
+Alias /var/lib/bugzilla/data/webdot /var/lib/bugzilla/data/webdot
+Alias /bugzilla /usr/share/bugzilla
+
+<Directory /usr/share/bugzilla>
+
+  <IfModule mod_authz_core.c>
+    # Bugzilla will be accessible to all machines in your network
+    # Replace with "Require local" if you want access to be restricted
+    # to this machine.
+    Require all granted
+  </IfModule>
+
+  AddHandler cgi-script .cgi
+  Options +Indexes +ExecCGI +FollowSymLinks
+  DirectoryIndex index.cgi index.html
+  AllowOverride Limit Options FileInfo Indexes AuthConfig
+  AddType application/vnd.mozilla.xul+xml .xul
+  AddType application/rdf+xml .rdf
+</Directory>
+
+<Directory /var/lib/bugzilla/data/webdot>
+  Require all granted
+</Directory>

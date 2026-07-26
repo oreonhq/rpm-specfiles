@@ -1,0 +1,44 @@
+--- orsa-0.7.0/configure.orig	2005-01-11 22:35:31.000000000 +0100
++++ orsa-0.7.0/configure	2008-09-07 17:06:37.000000000 +0200
+@@ -20362,9 +20362,9 @@
+             sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+     cln_min_micro_version=`echo $cln_min_version | \
+             sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+-    CLN_CPPFLAGS=`$CLN_CONFIG $cln_config_args --cppflags`
++    CLN_CPPFLAGS=`$CLN_CONFIG $cln_config_args --cflags`
+     CLN_LIBS=`$CLN_CONFIG $cln_config_args --libs`
+-    cln_config_version=`$CLN_CONFIG $cln_config_args --version`
++    cln_config_version=`$CLN_CONFIG $cln_config_args --modversion`
+     cln_config_major_version=`echo $cln_config_version | \
+             sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+     cln_config_minor_version=`echo $cln_config_version | \
+@@ -20637,9 +20637,9 @@
+             sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+     ginac_min_micro_version=`echo $ginac_min_version | \
+             sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+-    GINACLIB_CPPFLAGS=`$GINACLIB_CONFIG $ginac_args --cppflags`
++    GINACLIB_CPPFLAGS=`$GINACLIB_CONFIG $ginac_args --cflags`
+     GINACLIB_LIBS=`$GINACLIB_CONFIG $ginac_args --libs`
+-    ginac_config_version=`$GINACLIB_CONFIG $ginac_args --version`
++    ginac_config_version=`$GINACLIB_CONFIG $ginac_args --modversion`
+     ginac_config_major_version=`echo $ginac_config_version | \
+             sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+     ginac_config_minor_version=`echo $ginac_config_version | \
+@@ -27012,7 +27012,7 @@
+ echo "${ECHO_T}$ac_cv_have_fftw" >&6
+     if test "$ac_cv_have_fftw" != "no"; then
+         ac_save_LIBS="$LIBS"
+-        LIBS="-lfftw $ac_save_LIBS"
++        LIBS="-lfftw -lm $ac_save_LIBS"
+         cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+@@ -27021,7 +27021,7 @@
+ /* end confdefs.h.  */
+ 
+            #include <fftw.h>
+-
++           #include <math.h>
+ int
+ main ()
+ {

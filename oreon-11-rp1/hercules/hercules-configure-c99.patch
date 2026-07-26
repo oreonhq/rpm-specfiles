@@ -1,0 +1,47 @@
+Avoid implicit function declarations in the configure script, for C99
+compatibility.  Future compilers are likely not to accept implicit
+function declarations by default.
+
+Submitted upstream: <https://github.com/rbowler/spinhawk/pull/111>
+
+diff --git a/autoconf/hercules.m4 b/autoconf/hercules.m4
+index 52e211ac0c875df0..db4fa6fd5d87c6a5 100644
+--- a/autoconf/hercules.m4
++++ b/autoconf/hercules.m4
+@@ -237,6 +237,7 @@ AC_DEFUN([_HC_CHECK_NEED_GETOPT_WRAPPER],
+                    Will the linker complain about duplicate
+                    symbols for getopt? We'll soon find out!
+                 */
++		int getopt(int, char *const[], const char *);
+                 extern char *optarg;
+                 extern int optind;
+ 
+@@ -261,6 +262,7 @@ DUPGETOPT1
+                    needs getopt. Will linker complain about
+                    duplicate symbols for getopt? Let's see.
+                 */
++		int getopt(int, char *const[], const char *);
+                 extern char *optarg;
+                 extern int optind;
+                 extern int test2();
+@@ -331,7 +333,7 @@ AC_DEFUN([HC_CHECK_NEED_GETOPT_OPTRESET],
+         [hc_cv_need_getopt_optreset],
+         [
+             AC_TRY_LINK(
+-                [],
++                [int getopt(int, char *const[], const char *);],
+                 [
+                     extern int optreset;
+                     optreset=1;
+diff --git a/configure.ac b/configure.ac
+index 0558c902fec58379..71b2843a1efdfff0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -871,6 +871,7 @@ if test "$GCC" = "yes"; then
+ 
+                             -g -O2 -fomit-frame-pointer
+                     */
++		    #include <string.h>
+ 
+                     int foo ()
+                     {

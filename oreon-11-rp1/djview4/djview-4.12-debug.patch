@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index 98c7270..52fc41e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -122,7 +122,6 @@ AC_SUBST(LIBTOOL_DEPS)
+ 
+ # C++
+ AC_LANG(C++)
+-AC_CXX_OPTIMIZE
+ 
+ # Only nsdejavu needs libtool.
+ # But some combinations of libtool and autoconf

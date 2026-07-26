@@ -1,0 +1,64 @@
+commit cb493f02ca3b8fbf0dba18d5a733345f54513300
+Author: zoulasc <christos@zoulas.com>
+Date:   Mon Mar 7 18:03:19 2016 -0500
+
+    1. Add the "sys" alias for "unix", as well as "none", and "null"
+    2. Properly handle multiple flavors, although the linux kernel does not (yet?)
+    3. Don't add the "sec=" field, because it is already there.
+
+diff --git a/libamu/mount_fs.c b/libamu/mount_fs.c
+index 87f64c3..366eb8b 100644
+--- a/libamu/mount_fs.c
++++ b/libamu/mount_fs.c
+@@ -1076,7 +1076,10 @@ struct {
+   const char *name;
+   int num;
+ } flavours[] = {
++  { "none",     AUTH_NONE },
++  { "null",     AUTH_NULL },
+   { "unix",	AUTH_UNIX },
++  { "sys",      AUTH_SYS },
+   { "krb5",	RPC_AUTH_GSS_KRB5 },
+   { "krb5i",	RPC_AUTH_GSS_KRB5I },
+   { "krb5p",	RPC_AUTH_GSS_KRB5P },
+@@ -1104,12 +1107,13 @@ set_nfs4_security(nfs4_args_t *nap, mntent_t *mntp)
+   nap->auth_flavours = xmalloc(l * sizeof(*nap->auth_flavours));
+ 
+   s = ss = xstrdup(o);
++  l = 0;
+   for (;;) {
+     q = strchr(s, ',');
+     if (q)
+ 	*q = '\0';
+ 
+-    for (l = 0, i = 0; i < sizeof(flavours) / sizeof(flavours[0]); i++)
++    for (i = 0; i < sizeof(flavours) / sizeof(flavours[0]); i++)
+       if (strcmp(flavours[i].name, s) == 0) {
+ 	nap->auth_flavours[l++] = flavours[i].num;
+ 	break;
+@@ -1125,6 +1129,9 @@ set_nfs4_security(nfs4_args_t *nap, mntent_t *mntp)
+     s = ++q;
+   }
+ 
++  if (l == 0) {
++    nap->auth_flavours[l++] = AUTH_UNIX;
++  }
+   nap->auth_flavourlen = l;
+   return ss;
+ }
+@@ -1172,12 +1179,15 @@ add_nfs4_mntopts(const nfs4_args_t *nap, mntent_t *mntp, char *sec)
+   opts = xrealloc(mntp->mnt_opts, len);
+   xstrlcat(opts, buf, len);
+ 
++#ifdef notdef
++  /* Already in the options */
+   if (sec) {
+     xstrlcat(opts, ",", len);
+     xstrlcat(opts, MNTTAB_OPT_SEC, len);
+     xstrlcat(opts, "=", len);
+     xstrlcat(opts, sec, len);
+   }
++#endif
+ 
+   mntp->mnt_opts = opts;
+ }

@@ -1,0 +1,57 @@
+From 9ce1b9856b13f485442c5600511b616ba47e455e Mon Sep 17 00:00:00 2001
+From: David Faure <faure@kde.org>
+Date: Sun, 24 Jan 2016 10:49:38 +0100
+Subject: [PATCH 29/31] Speed up the default Identity() constructor.
+
+Sonnet::defaultLanguageName() is very slow (it parses 3 config files).
+Sonnet is fixed in KF5, well, that method is gone and the call in identity.cpp
+is commented out, but at least Sonnet has the default dict in a member var...
+
+Testcase: opening a mail with an invitation took a very long time before
+rendering the invitation. Now it only takes a long time (ICAL parsing).
+
+REVIEW: 126867
+---
+ kpimidentities/identity.cpp | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/kpimidentities/identity.cpp b/kpimidentities/identity.cpp
+index f644c7a..68560a6 100644
+--- a/kpimidentities/identity.cpp
++++ b/kpimidentities/identity.cpp
+@@ -46,7 +46,6 @@ Identity::Identity( const QString &id, const QString &fullName,
+   setProperty( QLatin1String(s_email), emailAddr );
+   setProperty( QLatin1String(s_organization), organization );
+   setProperty( QLatin1String(s_replyto), replyToAddr );
+-  setDictionary( Sonnet::defaultLanguageName() );
+   setProperty( QLatin1String(s_disabledFcc), false );
+   setProperty( QLatin1String(s_defaultDomainName), QHostInfo::localHostName());
+ }
+@@ -72,11 +71,6 @@ bool Identity::isNull() const
+       ++i;
+       continue;
+     }
+-    // Take into account that the dictionary for a null identity is not empty
+-    if ( i.key() == QLatin1String(s_dict) ) {
+-      ++i;
+-      continue;
+-    }
+     // Take into account that disableFcc == false for a null identity 
+     if( i.key() == QLatin1String(s_disabledFcc) && i.value().toBool() == false ) {
+       ++i;
+@@ -434,7 +428,11 @@ QString Identity::xface() const
+ 
+ QString Identity::dictionary() const
+ {
+-  return property( QLatin1String( s_dict ) ).toString();
++  const QString dict = property( QLatin1String( s_dict ) ).toString();
++  if (dict.isEmpty()) {
++      return Sonnet::defaultLanguageName(); // this is slow, so do it on demand
++  }
++  return QString();
+ }
+ 
+ QString Identity::templates() const
+-- 
+2.5.0
+

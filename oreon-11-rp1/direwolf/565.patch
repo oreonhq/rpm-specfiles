@@ -1,0 +1,53 @@
+From dbc60068ef59bde21518d6268949ff70d955c13e Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fedoraproject.org>
+Date: Wed, 9 Apr 2025 09:17:04 -0700
+Subject: [PATCH] Only include externals when actually needed
+
+This adds an option to use the system library for HIDAPI if enabled, and
+gates the misc and regex external libraries to only the platforms where
+they're actually needed.
+---
+ CMakeLists.txt | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+Index: direwolf-1.8.1/CMakeLists.txt
+===================================================================
+--- direwolf-1.8.1.orig/CMakeLists.txt
++++ direwolf-1.8.1/CMakeLists.txt
+@@ -14,6 +14,7 @@ option(FORCE_SSE "Compile with SSE instr
+ option(FORCE_SSSE3 "Compile with SSSE3 instruction only" OFF)
+ option(FORCE_SSE41 "Compile with SSE4.1 instruction only" OFF)
+ option(OPTIONAL_TEST "Compile optional test (might be broken)" OFF)
++option(USE_SYSTEM_HIDAPI "Use the system library for hidapi" OFF)
+ # UNITTEST option must be after CMAKE_BUILT_TYPE
+ option(OPTIONAL_DNSSD "Include support for DNS-SD" ON)
+ 
+@@ -75,7 +76,11 @@ set(CUSTOM_SRC_DIR "${CMAKE_SOURCE_DIR}/
+ set(CUSTOM_EXTERNAL_DIR "${CMAKE_SOURCE_DIR}/external")
+ set(CUSTOM_MISC_DIR "${CUSTOM_EXTERNAL_DIR}/misc")
+ set(CUSTOM_REGEX_DIR "${CUSTOM_EXTERNAL_DIR}/regex")
+-set(CUSTOM_HIDAPI_DIR "${CUSTOM_EXTERNAL_DIR}/hidapi")
++if(USE_SYSTEM_HIDAPI)
++  find_package(hidapi REQUIRED)
++else()
++  set(CUSTOM_HIDAPI_DIR "${CUSTOM_EXTERNAL_DIR}/hidapi")
++endif()
+ set(CUSTOM_GEOTRANZ_DIR "${CUSTOM_EXTERNAL_DIR}/geotranz")
+ set(CUSTOM_DATA_DIR "${CMAKE_SOURCE_DIR}/data")
+ set(CUSTOM_SCRIPTS_DIR "${CMAKE_SOURCE_DIR}/scripts")
+@@ -434,12 +439,10 @@ add_subdirectory(data)
+ 
+ # external libraries
+ add_subdirectory(${CUSTOM_GEOTRANZ_DIR})
+-add_subdirectory(${CUSTOM_REGEX_DIR})
+-if(NOT APPLE)
+-  # Mac builds use the hidapi library, not custom local files
+-  add_subdirectory(${CUSTOM_HIDAPI_DIR})
++if(WIN32)
++  add_subdirectory(${CUSTOM_REGEX_DIR})
++  add_subdirectory(${CUSTOM_MISC_DIR})
+ endif()
+-add_subdirectory(${CUSTOM_MISC_DIR})
+ 
+ # direwolf source code and utilities
+ add_subdirectory(src)

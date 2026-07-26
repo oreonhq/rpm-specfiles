@@ -1,0 +1,25 @@
+--- lxmusic-0.4.6/src/lxmusic.c.mainwindestroy	2014-09-06 23:20:39.000000000 +0900
++++ lxmusic-0.4.6/src/lxmusic.c	2015-08-09 09:38:39.236954148 +0900
+@@ -1799,15 +1799,22 @@ static int on_playback_status_changed( x
+             xmmsc_result_notifier_set_and_unref(res2, on_playlist_pos_changed, NULL);
+             break;
+         }
++        /* main_win may be already distroyed with on_xmms_quit */
+         case XMMS_PLAYBACK_STATUS_STOP:
++		if (main_win)
++		{
+             gtk_label_set_text( GTK_LABEL(time_label), "--:--" );
+             gtk_range_set_value( GTK_RANGE(progress_bar), 0.0 );
+ 			gtk_window_set_title ((GtkWindow*)main_win, "LXMusic");
++		}
+         case XMMS_PLAYBACK_STATUS_PAUSE:
++		if (main_win)
++		{
+             gtk_widget_set_tooltip_text( play_btn, _("Play") );
+             img = gtk_bin_get_child( (GtkBin*)play_btn );
+             gtk_image_set_from_stock( (GtkImage*)img, GTK_STOCK_MEDIA_PLAY,
+                                       GTK_ICON_SIZE_BUTTON );
++		}
+             break;
+     }
+ 

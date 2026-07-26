@@ -1,0 +1,109 @@
+diff -urp pads-1.2.orig/src/output/output.c pads-1.2/src/output/output.c
+--- pads-1.2.orig/src/output/output.c	2008-07-08 10:53:14.000000000 -0400
++++ pads-1.2/src/output/output.c	2008-07-08 10:41:13.000000000 -0400
+@@ -129,7 +129,8 @@ int activate_output_plugin (bstring name
+ 	    /* MATCH! Set record to active and run 'init' function. */
+ 	    list->active = 1;
+ 	    if (plugin != NULL && plugin->init != NULL)
+-		(*plugin->init)(args);
++		if ((*plugin->init)(args) < 0)
++			return -1;
+ 	    break;
+ 	}
+ 
+diff -urp pads-1.2.orig/src/output/output-csv.c pads-1.2/src/output/output-csv.c
+--- pads-1.2.orig/src/output/output-csv.c	2008-07-07 13:56:10.000000000 -0400
++++ pads-1.2/src/output/output-csv.c	2008-07-08 10:44:48.000000000 -0400
+@@ -58,6 +58,7 @@ setup_output_csv (void)
+ 	if (plugin != NULL)
+ 	    free(plugin);
+ 	log_message("warning:  'register_output_plugin' in function 'setup_output_csv' failed.");
++	return -1;
+     }
+ 
+     return 0;
+diff -urp pads-1.2.orig/src/output/output-fifo.c pads-1.2/src/output/output-fifo.c
+--- pads-1.2.orig/src/output/output-fifo.c	2008-06-30 17:54:33.000000000 -0400
++++ pads-1.2/src/output/output-fifo.c	2008-07-08 10:46:32.000000000 -0400
+@@ -83,6 +83,7 @@ setup_output_fifo (void)
+ 	if (plugin != NULL)
+ 	    free(plugin);
+ 	log_message("warning:  'register_output_plugin' in function 'setup_output_fifo' failed.");
++	return -1;
+     }
+ 
+     return 0;
+@@ -109,8 +110,10 @@ init_output_fifo (bstring fifo_file)
+     mkfifo ((char *)bdata(fifo_file), 0755);
+ 
+     verbose_message("Open FIFO File\n");
+-    if ((output_fifo_conf.file = fopen((char*)bdata(fifo_file), "w+")) == NULL)
++    if ((output_fifo_conf.file = fopen((char*)bdata(fifo_file), "w+")) == NULL){
+ 	err_message("Unable to open FIFO file (%s)!\n", bdata(fifo_file));
++        return -1;
++    }
+ 
+     return 0;
+ }
+diff -urp pads-1.2.orig/src/output/output-prelude.c pads-1.2/src/output/output-prelude.c
+--- pads-1.2.orig/src/output/output-prelude.c	2008-07-08 10:53:14.000000000 -0400
++++ pads-1.2/src/output/output-prelude.c	2008-07-08 10:44:25.000000000 -0400
+@@ -407,9 +407,6 @@ setup_output_prelude (void)
+     OutputPlugin *plugin;
+ 
+ 
+-    if (init_prelude() < 0)
+-	return -1;
+-
+     /* Allocate and setup plugin data record. */
+     plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
+     plugin->name = bfromcstr("prelude");
+@@ -424,6 +421,7 @@ setup_output_prelude (void)
+ 	if (plugin != NULL)
+ 	    free(plugin);
+ 	log_message("warning:  'register_output_plugin' in function 'setup_output_prelude' failed.");
++	return -1;
+     }
+ 
+     return 0;
+@@ -442,6 +440,10 @@ init_output_prelude (bstring args)
+ {
+     verbose_message("Initializing PRELUDE output processor.");
+     profile = strdup((char *)bdata(args));
++
++    if (init_prelude() < 0)
++	return -1;
++
+     return 0;
+ }
+ 
+diff -urp pads-1.2.orig/src/output/output-screen.c pads-1.2/src/output/output-screen.c
+--- pads-1.2.orig/src/output/output-screen.c	2008-06-30 17:54:33.000000000 -0400
++++ pads-1.2/src/output/output-screen.c	2008-07-08 10:45:03.000000000 -0400
+@@ -55,6 +55,7 @@ setup_output_screen (void)
+ 	if (plugin != NULL)
+ 	    free(plugin);
+ 	log_message("warning:  'register_output_plugin' in function 'setup_output_screen' failed.");
++	return -1;
+     }
+ 
+     return 0;
+diff -urp pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-07-08 10:53:14.000000000 -0400
++++ pads-1.2/src/pads.c	2008-07-08 10:42:58.000000000 -0400
+@@ -228,13 +228,13 @@ init_pads (void)
+         name = bfromcstr("screen");
+         args = bfromcstr("");
+         if ((activate_output_plugin(name, args)) == -1)
+-            log_message("warning:  'activate_output_plugin' in function 'init_pads' failed.");
++            err_message("Error:  'activate_output_plugin' in function 'init_pads' failed.");
+         bdestroy(name);
+         bdestroy(args);
+         /* output:  csv */
+         name = bfromcstr("csv");
+         if ((activate_output_plugin(name, gc.report_file)) == -1)
+-            log_message("warning:  'activate_output_plugin' in function 'init_pads' failed.");
++            err_message("Error:  'activate_output_plugin' in function 'init_pads' failed.");
+         bdestroy(name);
+     }
+ 

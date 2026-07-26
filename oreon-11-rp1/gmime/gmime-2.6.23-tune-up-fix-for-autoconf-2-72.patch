@@ -1,0 +1,28 @@
+From 836d8cca8e955773120d7da0c555ac8f5d9fd04f Mon Sep 17 00:00:00 2001
+From: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+Date: Tue, 3 Sep 2024 16:38:01 -0400
+Subject: [PATCH] Tune up fix for autoconf 2.72
+
+In #158, the build for gmime was corrected for autoconf version 2.72,
+which treats ac_cv_sys_file_offset_bits differently. (see
+de4f1b044141df3ef0b1fc20be422dc667443484)
+
+This fix should make gmime keep building on systems that use older
+version of autoconf, not just 2.72 or later.
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 78d8bce..003b7ec 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -526,7 +526,7 @@ if test "x$enable_largefile" != "xno"; then
+         enable_largefile="yes"
+     fi
+     
+-    if test "x$ac_cv_sys_file_offset_bits" != "x"; then
++    if test "x$ac_cv_sys_file_offset_bits" != "x" && test "$ac_cv_sys_file_offset_bits" != "xno"; then
+         LFS_CFLAGS="$LFS_CFLAGS -D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+         enable_largefile="yes"
+     fi

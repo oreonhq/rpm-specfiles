@@ -1,0 +1,25 @@
+am-utils-6.2 - add debug log trace to NFSv3 readdirplus
+
+From: Ian Kent <raven@themaw.net>
+
+Add log trace print to NFSv3 readdirplus for debuging purposes.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_subr.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index 30effba..ef07a4a 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -1642,6 +1642,9 @@ am_nfs3_readdirplus_3_svc(am_READDIRPLUS3args *argp, struct svc_req *rqstp)
+   am_node *mp;
+   int retry;
+ 
++  if (amuDebug(D_TRACE))
++    plog(XLOG_DEBUG, "readdirplus_3:");
++
+   mp = fh3_to_mp3(dir, &retry, VLOOK_CREATE);
+   if (mp == NULL) {
+     if (retry < 0) {

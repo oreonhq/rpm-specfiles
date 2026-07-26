@@ -1,0 +1,44 @@
+Add missing return types and include <unistd.h> for the pause function.
+This avoids implicit ints and implicit function declarations, so that
+building in strict(er) C99 mode is possible.
+
+diff --git a/oneko.c b/oneko.c
+index 635863518de960ac..1b25a8132f969a67 100644
+--- a/oneko.c
++++ b/oneko.c
+@@ -333,6 +333,7 @@ char	*resource;
+  *	リソース・データベースからオプションを設定
+  */
+ 
++void
+ GetResources()
+ {
+   char	*resource;
+@@ -432,6 +433,7 @@ GetResources()
+  *	ねずみ型カーソルを作る
+  */
+ 
++void
+ MakeMouseCursor()
+ {
+     Pixmap			theCursorSource;
+@@ -461,6 +463,7 @@ MakeMouseCursor()
+  *	色を初期設定する
+  */
+ 
++void
+ SetupColors()
+ {
+     XColor	theExactColor;
+diff --git a/oneko.h b/oneko.h
+index 04d79967f349a395..4f45ce7dc788e347 100644
+--- a/oneko.h
++++ b/oneko.h
+@@ -19,6 +19,7 @@
+ #include <signal.h>
+ #include <math.h>
+ #include <sys/time.h>
++#include <unistd.h>
+ 
+ 
+ /*

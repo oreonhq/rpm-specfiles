@@ -1,0 +1,15 @@
+diff -up mathgl-8.0.1/lang/CMakeLists.txt.nooctaveinstall mathgl-8.0.1/lang/CMakeLists.txt
+--- mathgl-8.0.1/lang/CMakeLists.txt.nooctaveinstall	2022-10-05 20:51:43.595636043 -0600
++++ mathgl-8.0.1/lang/CMakeLists.txt	2022-10-05 20:52:22.411935656 -0600
+@@ -138,11 +138,6 @@ message(STATUS "${oct_prog} ${oct_host}
+ 	add_custom_target(mgl_octave_module ALL DEPENDS mathgl.tar.gz)
+ 
+ 	install(FILES ${CMAKE_BINARY_DIR}/lang/mathgl.tar.gz DESTINATION ${MGL_DATA_PATH})
+-	if(enable-octave-install)
+-		install(CODE "execute_process(
+-			COMMAND ${oct_exec} -q --eval \"pkg install mathgl.tar.gz\"
+-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/lang )")
+-	endif(enable-octave-install)
+ 	set(mgl_clean_files ${mgl_clean_files} mathgl)
+ endif(enable-octave)
+ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${mgl_clean_files}")

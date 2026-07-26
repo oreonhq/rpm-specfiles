@@ -1,0 +1,24 @@
+diff -up OpenLieroX/include/XMLutils.h~ OpenLieroX/include/XMLutils.h
+--- OpenLieroX/include/XMLutils.h~	2018-01-30 14:49:55.000000000 +0100
++++ OpenLieroX/include/XMLutils.h	2024-07-29 15:02:04.800219168 +0200
+@@ -16,7 +16,7 @@
+ // Karel Petranek
+ 
+ #include <string>
+-#include <libxml/xmlmemory.h>
++#include <libxml/tree.h>
+ #include "Color.h"
+ 
+ int xmlGetInt(xmlNodePtr node, const std::string& name, int def = 0);
+diff -up OpenLieroX/src/common/StringUtils.cpp~ OpenLieroX/src/common/StringUtils.cpp
+--- OpenLieroX/src/common/StringUtils.cpp~	2018-02-01 16:56:41.000000000 +0100
++++ OpenLieroX/src/common/StringUtils.cpp	2024-07-29 15:59:03.357387230 +0200
+@@ -751,7 +751,7 @@ static void charactersParsed(void* conte
+ }
+ 
+ /* GCS: custom error function to ignore errors */
+-static void xmlErrorHandlerDummy(void *, xmlErrorPtr)
++static void xmlErrorHandlerDummy(void *, const _xmlError*)
+ {
+ 	/* ignore all errors */
+ }

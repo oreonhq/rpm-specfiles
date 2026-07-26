@@ -1,0 +1,8 @@
+[archive]
+
+[licensing]
+detector = "scancode"
+[[licensing.licenses]]
+path = "vendor/github.com/smartystreets/goconvey/LICENSE.md"
+sha256sum = "1781d9a48516850d16ca31d53f15aaea89c588148b1c64c73e3167d0345aa8f2"
+expression = "MIT"

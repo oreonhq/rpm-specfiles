@@ -1,0 +1,34 @@
+diff -up gpac-26.02.0/applications/gpac/Makefile.norpath gpac-26.02.0/applications/gpac/Makefile
+--- gpac-26.02.0/applications/gpac/Makefile.norpath	2026-02-05 14:26:28.000000000 +0100
++++ gpac-26.02.0/applications/gpac/Makefile	2026-02-08 22:37:27.873008289 +0100
+@@ -58,8 +58,6 @@ LINKFLAGS+=-lgpac
+ ifeq ($(CONFIG_EMSCRIPTEN),yes)
+ else ifeq ($(CONFIG_DARWIN),yes)
+ #LINKFLAGS+= -Wl,-rpath,'@loader_path'
+-else
+-LINKFLAGS+= -Wl,-rpath,'$$ORIGIN' -Wl,-rpath,$(prefix)/lib -Wl,-rpath-link,../../bin/gcc
+ endif
+ endif
+ 
+diff -up gpac-26.02.0/applications/mp4box/Makefile.norpath gpac-26.02.0/applications/mp4box/Makefile
+--- gpac-26.02.0/applications/mp4box/Makefile.norpath	2026-02-05 14:26:28.000000000 +0100
++++ gpac-26.02.0/applications/mp4box/Makefile	2026-02-08 22:37:00.294059639 +0100
+@@ -23,8 +23,6 @@ LINKFLAGS=-L../../bin/gcc -L../../extra_
+ ifeq ($(CONFIG_EMSCRIPTEN),yes)
+ else ifeq ($(CONFIG_DARWIN),yes)
+ #LINKFLAGS+= -Wl,-rpath,'@loader_path'
+-else
+-LINKFLAGS+= -Wl,-rpath,'$$ORIGIN' -Wl,-rpath,$(prefix)/lib -Wl,-rpath-link,../../bin/gcc
+ endif
+ 
+ ifeq ($(STATIC_BUILD),yes)
+diff -up gpac-26.02.0/modules/common.mak.norpath gpac-26.02.0/modules/common.mak
+--- gpac-26.02.0/modules/common.mak.norpath	2026-02-05 14:26:28.000000000 +0100
++++ gpac-26.02.0/modules/common.mak	2026-02-08 23:48:58.171581006 +0100
+@@ -11,6 +11,4 @@ endif
+ 
+ ifeq ($(CONFIG_EMSCRIPTEN),yes)
+ else ifeq ($(CONFIG_DARWIN),yes)
+-else
+-LDFLAGS+= -Wl,-rpath,'$$ORIGIN' -Wl,-rpath,$(prefix)/lib -Wl,-rpath-link,../../bin/gcc
+ endif

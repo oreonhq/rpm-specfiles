@@ -1,0 +1,74 @@
+From 90b55f6267fa139df653147a106c8a58925fd451 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 19 May 2016 17:02:21 +0200
+Subject: [PATCH] Do not use \C in regexps
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Pelr 5.24.0 removed support for \C (bytes positions). This patch
+rewrites the tests for the ungreedy sequence of bytes with a miximum
+size.
+
+CPAN RT#105144
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/KinoSearch1/Highlight/Highlighter.pm | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/lib/KinoSearch1/Highlight/Highlighter.pm b/lib/KinoSearch1/Highlight/Highlighter.pm
+index bb8f910..50faca7 100644
+--- a/lib/KinoSearch1/Highlight/Highlighter.pm
++++ b/lib/KinoSearch1/Highlight/Highlighter.pm
+@@ -84,32 +84,39 @@ sub generate_excerpt {
+         $text = bytes::substr( $text, $top );
+ 
+         # try to start the excerpt at a sentence boundary
+-        if ($text =~ s/
++        if ($text =~ /
+                 \A
+                 (
+-                \C{0,$limit}?
++                (.*?)
+                 \.\s+
+                 )
+-                //xsm
++                /xsm
++            and bytes::length($2) <= $limit
+             )
+         {
+-            $top += bytes::length($1);
++            my $bytes_length = bytes::length($1);
++            $text = bytes::substr($text, $bytes_length);
++            $top += $bytes_length;
+         }
+         # no sentence boundary, so we'll need an ellipsis
+         else {
+             # skip past possible partial tokens, prepend an ellipsis
+-            if ($text =~ s/
++            if ($text =~ /
+                 \A
+                 (
+-                \C{0,$limit}?  # don't go outside the window
++                (.*?)          # don't go outside the window
+                 $token_re      # match possible partial token
+                 .*?            # ... and any junk following that token
+                 )
+                 (?=$token_re)  # just before the start of a full token...
+-                /... /xsm    # ... insert an ellipsis
++                /xsm
++                and bytes::length($2) <= $limit # don't go outside the window
+                 )
+             {
+-                $top += bytes::length($1);
++                my $bytes_length = bytes::length($1);
++                # ... insert an ellipsis
++                $text = '... ' . bytes::substr($text, $bytes_length);
++                $top += $bytes_length;
+                 $top -= 4    # three dots and a space
+             }
+         }
+-- 
+2.5.5
+

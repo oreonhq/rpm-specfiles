@@ -1,0 +1,67 @@
+diff -rU4 eureka-2.1.0--orig/src/sys_endian.h eureka-2.1.0--patched/src/sys_endian.h
+--- eureka-2.1.0--orig/src/sys_endian.h	2025-10-09 22:49:07.000000000 +0200
++++ eureka-2.1.0--patched/src/sys_endian.h	2026-01-24 15:20:23.435217990 +0100
+@@ -35,9 +35,10 @@
+ #if defined(__LITTLE_ENDIAN__) || defined(WIN32) ||  \
+     defined(__i386__) || defined(__i386) ||          \
+     defined(__ia64__) || defined(__x86_64__)  ||     \
+     defined(__alpha__) || defined(__alpha)  ||       \
+-    defined(__arm__) || defined(__SYMBIAN32__) ||    \
++    defined(__arm__) || defined(__aarch64__) ||      \
++    defined(__SYMBIAN32__) ||                        \
+     (defined(__mips__) && defined(__MIPSEL__))
+ #define UT_BYTEORDER   UT_LIL_ENDIAN
+ #else
+ #define UT_BYTEORDER   UT_BIG_ENDIAN
+diff -rU4 eureka-2.1.0--orig/src/w_wad.cc eureka-2.1.0--patched/src/w_wad.cc
+--- eureka-2.1.0--orig/src/w_wad.cc	2025-10-09 22:49:07.000000000 +0200
++++ eureka-2.1.0--patched/src/w_wad.cc	2026-01-24 13:12:22.008948954 +0100
+@@ -1102,23 +1103,27 @@
+ // Writes to the given path
+ //
+ void Wad_file::writeToPath(const fs::path &path) const noexcept(false)
+ {
++	int32_t le32;
++
+ 	BufferedOutFile sof(path);
+ 	// Write the header
+ 	if(kind == WadKind::PWAD)
+ 		sof.write("PWAD", 4);
+ 	else
+ 		sof.write("IWAD", 4);
+ 
+ 	int32_t numlumps = (int32_t)directory.size();
+-	sof.write(&numlumps, 4);
++	le32 = LE_S32(numlumps);
++	sof.write(&le32, 4);
+ 
+ 	int32_t infotableofs = 12;
+ 	for(const LumpRef &ref : directory)
+ 		infotableofs += (int32_t)ref.lump->Length();
+ 
+-	sof.write(&infotableofs, 4);
++	le32 = LE_S32(infotableofs);
++	sof.write(&le32, 4);
+ 	for(const LumpRef &ref : directory)
+ 	{
+ 		assert(ref.lump.get() != nullptr);
+ 		const Lump_c &lump = *ref.lump;
+@@ -1126,12 +1131,16 @@
+ 	}
+ 	infotableofs = 12;
+ 	for(const LumpRef &ref : directory)
+ 	{
+-		sof.write(&infotableofs, 4);
++		le32 = LE_S32(infotableofs);
++		sof.write(&le32, 4);
++
+ 		const Lump_c &lump = *ref.lump;
+ 		numlumps = lump.Length();
+-		sof.write(&numlumps, 4);
++		le32 = LE_S32(numlumps);
++		sof.write(&le32, 4);
++
+ 		infotableofs += numlumps;
+ 		int64_t nm = lump.getName8();
+ 		sof.write(&nm, 8);
+ 	}

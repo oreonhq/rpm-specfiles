@@ -1,0 +1,10 @@
+diff -up QsLog/QsLogSharedLibrary.pro.nodoc QsLog/QsLogSharedLibrary.pro
+--- QsLog/QsLogSharedLibrary.pro.nodoc	2013-09-24 10:55:22.634325755 +0300
++++ QsLog/QsLogSharedLibrary.pro	2013-09-24 10:55:53.055533294 +0300
+@@ -26,5 +26,5 @@ unix:!macx {
+         target.path = /usr/lib
+     }
+ 
+-    INSTALLS += headers target other_files
++    INSTALLS += headers target
+ }

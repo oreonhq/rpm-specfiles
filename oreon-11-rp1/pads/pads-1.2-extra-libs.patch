@@ -1,0 +1,12 @@
+diff -ur pads-1.2.orig/src/Makefile.am pads-1.2/src/Makefile.am
+--- pads-1.2.orig/src/Makefile.am	2019-02-11 16:48:47.516302720 -0500
++++ pads-1.2/src/Makefile.am	2019-02-11 17:49:51.772909507 -0500
+@@ -12,7 +12,7 @@
+                util.c util.h \
+                global.h
+ pads_LDFLAGS = -pthread
+-pads_LDADD = $(top_srcdir)/lib/bstring/libbstring.a output/liboutput.a
++pads_LDADD = $(top_srcdir)/lib/bstring/libbstring.a output/liboutput.a $(EXTRA_LIBS)
+ bin_SCRIPTS = pads-report
+ 
+ EXTRA_DIST = pads-report.pl

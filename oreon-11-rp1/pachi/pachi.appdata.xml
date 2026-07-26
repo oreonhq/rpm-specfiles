@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>pachi.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Pachi El Marciano</name>
+  <summary>Comic style 2D platform game</summary>
+  <description>
+    <p>
+     Pachi el marciano is a cool 2D platform game inspired by classic games
+     from the 80s. Pachi is a comics character created by Nicolas Radeff.
+    </p>
+    <p>
+     Pachi came from Mars and crashlanded on our planet because of an
+     accident with his U.F.O.
+    </p>
+    <p>
+     The goal of the game is to collect all the objects of each level, when
+     this is made, the exit gate to the next stage will appear and you can
+     pass trough.
+    </p>
+  </description>
+  <url type="homepage">http://dragontech.sourceforge.net/index.php?main=pachi</url>
+  <screenshots>
+    <screenshot type="default">http://dragontech.sourceforge.net/gfx/screenshots/pachi_1.png</screenshot>
+    <screenshot>http://dragontech.sourceforge.net/gfx/screenshots/pachi_2.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

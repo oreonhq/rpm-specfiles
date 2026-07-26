@@ -1,0 +1,18 @@
+diff -rupN drmingw-0.9.3/CMakeLists.txt drmingw-0.9.3-new/CMakeLists.txt
+--- drmingw-0.9.3/CMakeLists.txt	2021-02-21 17:37:37.000000000 +0100
++++ drmingw-0.9.3-new/CMakeLists.txt	2022-03-26 17:53:18.112484678 +0100
+@@ -33,12 +33,12 @@ include_directories (
+     ${CMAKE_SOURCE_DIR}/thirdparty/elf
+     ${CMAKE_SOURCE_DIR}/thirdparty/dwarf
+     ${CMAKE_SOURCE_DIR}/thirdparty/libiberty
+-    ${CMAKE_SOURCE_DIR}/thirdparty/zlib
+ )
+ 
+ add_subdirectory (thirdparty/dwarf)
+ add_subdirectory (thirdparty/libiberty)
+-add_subdirectory (thirdparty/zlib)
++
++find_package (zlib)
+ 
+ if (CMAKE_VERSION VERSION_LESS 3.16)
+     # Find dlltool

@@ -1,0 +1,15 @@
+Actually print the cache size instead of cpufreq a second time.
+
+Reported and fixed by Stephane Wirtel <stephane@wirtel.be>
+
+diff -rNu acpitool-0.5.1/src/cpu.cpp acpitool-0.5.1-modified/src/cpu.cpp
+--- acpitool-0.5.1/src/cpu.cpp	2009-08-13 21:26:02.000000000 +0200
++++ acpitool-0.5.1-modified/src/cpu.cpp	2019-04-18 16:01:54.091620544 +0200
+@@ -80,6 +80,7 @@
+ 		}
+ 		
+ 		fgets(str, 299, cpuinfo_fp);
++		fgets(str, 299, cpuinfo_fp);
+ 		memset(temp, '\0', 130);
+ 		sscanf(str, "%*[^:] %*s %s",temp);  
+ 		printf("  Cache size             : %s KB\n", temp);

@@ -1,0 +1,51 @@
+diff -up mathgl-8.0.2/examples/CMakeLists.txt.examples mathgl-8.0.2/examples/CMakeLists.txt
+--- mathgl-8.0.2/examples/CMakeLists.txt.examples	2024-10-02 04:37:09.000000000 -0600
++++ mathgl-8.0.2/examples/CMakeLists.txt	2024-12-15 22:10:17.163730689 -0700
+@@ -5,6 +5,7 @@ file(COPY ${CMAKE_SOURCE_DIR}/examples/s
+ file(COPY ${CMAKE_SOURCE_DIR}/examples/wnd_samples.cpp DESTINATION ${CMAKE_BINARY_DIR}/examples)
+ add_executable(mgl_example wnd_samples.cpp full_test.cpp samples.cpp)
+ target_link_libraries(mgl_example mgl-static ${getopt_lib-static})
++SET(MGL_INSTALL_EXAMPLES_LIST mgl_example)
+ if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND CMAKE_COMPILER_IS_GNUCXX AND enable-lcov)
+ 	setup_target_for_coverage(
+ 	    NAME mgl_coverage
+@@ -17,17 +18,20 @@ if(MGL_HAVE_FLTK)
+ 	include_directories(${FLTK_INCLUDE_DIR})
+ 	add_executable(mgl_fltk_example wnd_samples.cpp fltk_example.cpp)
+ 	target_link_libraries(mgl_fltk_example mgl-fltk)
++	SET(MGL_INSTALL_EXAMPLES_LIST ${MGL_INSTALL_EXAMPLES_LIST} mgl_fltk_example)
+ endif(MGL_HAVE_FLTK)
+ 
+ if(MGL_HAVE_GLUT)
+ 	add_executable(mgl_glut_example wnd_samples.cpp glut_example.cpp)
+ 	target_link_libraries(mgl_glut_example mgl-glut)
++	SET(MGL_INSTALL_EXAMPLES_LIST ${MGL_INSTALL_EXAMPLES_LIST} mgl_glut_example)
+ endif(MGL_HAVE_GLUT)
+ 
+ if(MGL_HAVE_WX)
+ 	include(${wxWidgets_USE_FILE})
+ 	add_executable(mgl_wx_example wnd_samples.cpp wx_example.cpp)
+ 	target_link_libraries(mgl_wx_example mgl-wx)
++	SET(MGL_INSTALL_EXAMPLES_LIST ${MGL_INSTALL_EXAMPLES_LIST} mgl_wx_example)
+ endif(MGL_HAVE_WX)
+ 
+ if(TARGET mgl-qt)
+@@ -40,7 +44,9 @@ if(TARGET mgl-qt)
+ 	if(MGL_HAVE_OPENGL)
+ 		add_executable(mgl_qgl_example wnd_samples.cpp qgl_example.cpp)
+ 		target_link_libraries(mgl_qgl_example mgl ${MGL_QT_LIBS})
++		SET(MGL_INSTALL_EXAMPLES_LIST ${MGL_INSTALL_EXAMPLES_LIST} mgl_qgl_example)
+ 	endif(MGL_HAVE_OPENGL)
++	SET(MGL_INSTALL_EXAMPLES_LIST ${MGL_INSTALL_EXAMPLES_LIST} mgl_qt_example)
+ endif(TARGET mgl-qt)
+ 
+ if(MGL_HAVE_LTDL)
+@@ -53,3 +59,8 @@ if(MGL_HAVE_MPI)
+ 	target_link_libraries(mgl_mpi_example mgl-mpi mgl ${MPI_LIBRARIES})
+ 	target_include_directories(mgl_mpi_example SYSTEM PUBLIC ${MPI_CXX_INCLUDE_PATH})
+ endif(MGL_HAVE_MPI)
++
++install(
++	TARGETS ${MGL_INSTALL_EXAMPLES_LIST}
++	RUNTIME DESTINATION bin
++)

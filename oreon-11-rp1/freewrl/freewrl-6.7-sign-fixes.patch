@@ -1,0 +1,190 @@
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/DIS/DIS.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/DIS/DIS.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/DIS/DIS.c.signfix	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/DIS/DIS.c	2025-03-26 10:57:47.471678842 -0400
+@@ -1651,14 +1651,14 @@ void initializeclass(unsigned char *t, i
+     field = DIS_CLASS[distype].fields;
+     do{
+         //initialize field
+-        initialize_field(t+field->offset,field);
++        initialize_field((char *)t+field->offset,field);
+         field++;
+     } while(field->kind > -1);
+ }
+ void initialize_field(char *t,struct disfieldattr* field){
+     switch(field->kind){
+         case CLASSREF:
+-            initializeclass(t,field->type);
++            initializeclass((unsigned char *)t,field->type);
+             break;
+         case PRIMITIVE:
+            switch(field->type){
+@@ -1807,7 +1807,7 @@ unsigned char *dis_marshal_list_item(uns
+            if(unde) printf("/classref\n");
+            break; 
+        case PRIMITIVE: 
+-           endianswap(carat,item, size); 
++           endianswap((char *)carat,(char *)item, size); 
+            if(unde) printf("doing primitive size %d\n",size*8);
+            carat += size; //size in bytes 
+            break; 
+@@ -1834,7 +1834,7 @@ unsigned char * dis_marshal(unsigned cha
+                 carat = dis_marshal(carat,item + field->offset, field->type); 
+                 break; 
+             case PRIMITIVE: 
+-                endianswap(carat,item + field->offset,field->size); 
++                endianswap((char *)carat, (char *)item + field->offset,field->size); 
+                 carat += field->size; //size in bytes  
+                 break; 
+             case FIXED_LIST: 
+@@ -1878,7 +1878,7 @@ unsigned char *dis_unmarshal_list_item(u
+             if(unde) printf("/classref\n");
+             break; 
+         case PRIMITIVE: 
+-            endianswap(item,carat, size); 
++            endianswap((char *)item, (char *)carat, size); 
+             if(unde) printf("doing primitive size %d\n",size*8);
+             carat += size; //size in bytes 
+             break; 
+@@ -1906,7 +1906,7 @@ unsigned char *dis_unmarshal(unsigned ch
+                 if(unde) printf("/classref\n");
+                 break; 
+             case PRIMITIVE: 
+-                endianswap(item + field->offset,carat, field->size); 
++                endianswap((char *)item + field->offset,(char *)carat, field->size); 
+                 if(unde) printf("doing %s primitive size %d\n",field->name,field->size*8);
+                 carat += field->size; //size in bytes 
+                 break; 
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/io_files.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/io_files.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/io_files.c.signfix	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/io_files.c	2025-03-26 10:57:47.472236319 -0400
+@@ -631,7 +631,7 @@ int determineFileType(const char *buffer
+ 	}
+ 
+     #if defined (INCLUDE_STL_FILES)
+-	return stlDTFT(buffer,len);
++	return stlDTFT((const unsigned char*)buffer,len);
+     #endif //INCLUDE_STL_FILES
+     
+ 	return IS_TYPE_UNKNOWN;
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.c.signfix	2025-03-26 10:57:47.465982460 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main/MainLoop.c	2025-03-26 10:59:40.930635158 -0400
+@@ -807,7 +807,7 @@ void captiontext_setString(void *_self,
+ 	}
+ 	strcpy(self->caption,utf8string);
+ 	self->len = lenstr;
+-	self->utf32 = utf8_to_utf32(self->caption,self->utf32,&self->len32);
++	self->utf32 = (int *)utf8_to_utf32((unsigned char *)self->caption,(unsigned int *)self->utf32,(unsigned int *)&self->len32);
+ }
+ 
+ 
+@@ -1161,11 +1161,11 @@ void textpanel_render_blobmethod(content
+ 			jrow++;
+ 			if(jrow >  panelsizechars.Y) //would be rendered off-panel
+ 				break;
+-			row = &P[-nchars + i0];
++			row = (char *)&P[-nchars + i0];
+ 			if(hasTU && Trow == i){
+ 				l0 = T - &A[i0];
+ 				l1 = lenrow - l0;
+-				row = self->row;
++				row = (char *)self->row;
+ 				memcpy(&row[l0],U,l1);
+ 				memcpy(row,&A[i0],l0);
+ 				P = &self->E[bchars];
+@@ -1395,7 +1395,7 @@ int multitouch_pick(void *_self, int mev
+ 		//record for rendering
+ 		ihandle = 0;
+ 		if(fwl_get_touchtype() == TOUCHTYPE_EMULATE_MULTITOUCH){
+-			ihandle = emulate_multitouch2(self->touchlist,self->ntouch,&self->IDD,&self->lastbut,&mev,&butnum,mouseX,mouseY,&ID,windex);
++			ihandle = emulate_multitouch2(self->touchlist,self->ntouch,&self->IDD,&self->lastbut,&mev,(unsigned int *)&butnum,mouseX,mouseY,(int *)&ID,windex);
+ 			iret = ihandle < 0 ? 0 : 1;
+ 		}
+ 		if(iret == 0){
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.c.signfix	2025-03-26 10:57:47.466679440 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/main/ProdCon.c	2025-03-26 10:57:47.473703591 -0400
+@@ -421,7 +421,7 @@ static bool parser_do_parse_string(const
+             break;
+         }
+         case IS_TYPE_BINARY_STL: {
+-            char *newData = convertBinarySTL(input);
++            char *newData = convertBinarySTL((const unsigned char *)input);
+             p->lastSTLScaling = getLastSTLScale();
+ 
+             ret = cParse (ectx,nRn,(int) offsetof (struct X3D_Group, children), newData);
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/opengl/Textures.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/opengl/Textures.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/opengl/Textures.c.signfix	2025-03-26 10:57:47.467075702 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/opengl/Textures.c	2025-03-26 10:57:47.473950774 -0400
+@@ -387,7 +387,7 @@ void compute_3D_alpha_gradient_store_rgb
+ 		tti2->x = x;
+ 		tti2->y = y;
+ 		tti2->z = z;
+-		tti2->texdata = dest;
++		tti2->texdata = (unsigned char *)dest;
+ 		tti2->channels = 3;
+ 		saveImage_web3dit(tti2,"gradientRGB.web3dit");
+ 		tti2->channels = 4;
+@@ -2134,7 +2134,7 @@ void move_texture_to_opengl(textureTable
+ 						//and hope that the one info channel is alpha because we overwrite rgb
+ 						if(me->channels == 1){
+ 							//alpha only scalar image, RGB are free to hold gradient
+-							compute_3D_alpha_gradient_store_rgb(dest,x,y,z);
++							compute_3D_alpha_gradient_store_rgb((char *)dest,x,y,z);
+ 						}
+ 
+ 						ny = (int) sqrt(z+1);
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c.signfix	2025-03-26 10:57:47.467757459 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_DIS.c	2025-03-26 11:05:25.206303312 -0400
+@@ -2755,7 +2755,7 @@ void dis_sendloop(){
+ 		pdus = dis_avatar2pdus();
+ 		nb = dis_write_stream(&buf2[nbytes], pdus);
+ 		nbytes += nb;
+-		if (nbytes) socksendto(dsock, buf2, nbytes);
++		if (nbytes) socksendto(dsock, (const char *)buf2, nbytes);
+ 		// Q. where is the garbage collection for pdua vector?
+ 		// I think the ctor/dtor for pdus works on the pdus themselves. 
+ 		// But not the pdu vector list I pass around
+@@ -3186,7 +3186,7 @@ int dis_write_stream(unsigned char * dat
+ 			carat = dis_marshal(carat,(unsigned char*)pdu,distype);
+ 			//printf("pdu %d wrote %d bytes\n",i,nbytes);
+ 		}
+-		//*streamsize = nbytes;
++		// *streamsize = nbytes;
+ 		nbytes = (int)(carat - datastream);
+ 	}
+ 	return nbytes;
+@@ -3496,7 +3496,7 @@ void dis_recvloop(){
+ 					dis_dtor((unsigned char *)pdu,pduToDis(pdu->pduType));
+ 				}
+ 				pdus->n = 0;
+-				dis_read_stream(buf,nbytes,pdus,&heard);
++				dis_read_stream((unsigned char *)buf,nbytes,pdus,&heard);
+ 				for (int j = 0; j < pdus->n; j++) {
+ 					struct Pdu* pdu = vector_get(struct Pdu*, pdus, j);
+ 					pdu->padding = TAG_UNCLAIMED; //0
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c.signfix	2025-03-26 10:45:38.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/Component_Sound.c	2025-03-26 10:57:47.474842301 -0400
+@@ -527,7 +527,7 @@ void render_Sound (struct X3D_Sound *nod
+ 					//convert buffer to openAL sound source
+ 					ALint source;
+ 					source = 0;
+-					alGenSources(1, &source);
++					alGenSources(1, (ALuint *)&source);
+ 					alSourcei(source, AL_BUFFER, acp->__sourceNumber);
+ 					alSourcef (source, AL_PITCH,    acp->pitch);
+ 					alSourcef (source, AL_GAIN,     node->intensity );
+diff -up freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/socketutils.c.signfix freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/socketutils.c
+--- freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/socketutils.c.signfix	2025-03-26 10:45:28.000000000 -0400
++++ freewrl-6.7-20240420gitb3254b1/src/lib/scenegraph/socketutils.c	2025-03-26 10:57:47.475014978 -0400
+@@ -164,7 +164,7 @@ int sockrecvfrom(struct dis_socket *dsoc
+         int status, fromlen;
+         fromlen = sizeof(struct sockaddr);
+         status = recvfrom(dsock->socket, buf, len, 0, 
+-                     (struct sockaddr *)&dsock->saddr, &fromlen );
++                     (struct sockaddr *)&dsock->saddr, (socklen_t *)&fromlen );
+         // I think -1 is normal for non-blocking when no data
+         // if(status < 0) print_socket_error("recvfrom ",status);
+         return status;

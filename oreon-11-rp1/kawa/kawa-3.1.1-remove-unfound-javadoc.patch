@@ -1,0 +1,17 @@
+diff -rupN a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2020-01-16 03:43:40.000000000 +0300
++++ b/Makefile.in	2021-02-15 22:50:32.405251788 +0300
+@@ -1321,12 +1321,11 @@ JAVADOC_DIR = $$HOME/Kawa/api
+ JAVADOC_PACKAGES = \
+   gnu.bytecode gnu.ecmascript gnu.expr gnu.mapping gnu.math gnu.text gnu.lists\
+   gnu.xml gnu.kawa.reflect gnu.kawa.util gnu.kawa.lispexpr gnu.kawa.functions \
+-  gnu.kawa.servlet gnu.kawa.ant kawa kawa.lang kawa.standard kawa.lib \
++  gnu.kawa.servlet gnu.kawa.ant kawa kawa.lang kawa.standard \
+   gnu.kawa.xml gnu.xquery.lang gnu.xquery.util gnu.brl gnu.kawa.brl \
+   gnu.kawa.xslt gnu.kawa.sax gnu.commonlisp.lang gnu.q2.lang \
+   gnu.kawa.models gnu.kawa.swingviews gnu.kawa.swtviews gnu.kawa.echo2 \
+   gnu.jemacs.lang gnu.jemacs.buffer gnu.jemacs.swing gnu.jemacs.swt \
+-  gnu.kawa.android gnu.kawa.javafx
+ 
+ JAVADOC = javadoc
+ JAVADOC_FLAGS = -use

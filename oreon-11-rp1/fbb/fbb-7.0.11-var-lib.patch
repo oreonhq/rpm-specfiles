@@ -1,0 +1,263 @@
+diff --git a/Makefile.am b/Makefile.am
+index 29b49d0..724e466 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -17,21 +17,21 @@ install-data-hook:
+ 	$(mkinstalldirs) $(DESTDIR)$(pkglibdir)/script/stop_system
+ 	$(mkinstalldirs) $(DESTDIR)$(pkglibdir)/script/sig_segv
+ 	$(mkinstalldirs) $(DESTDIR)$(pkglibdir)/script/reset
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/log
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/oldmail
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/sat
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/wp
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/fbbdos
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/fbbdos/yapp
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/fbbdos/readonly
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/mail
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/log
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/oldmail
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/sat
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/wp
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/fbbdos
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/fbbdos/yapp
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/fbbdos/readonly
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/mail
+ 	for n in 0 1 2 3 4 5 6 7 8 9; do \
+-	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/mail/mail$$n; \
++	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/mail/mail$$n; \
+ 	done
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/binmail
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/binmail
+ 	for n in 0 1 2 3 4 5 6 7 8 9; do \
+-	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/binmail/mail$$n; \
++	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/binmail/mail$$n; \
+ 	done
+ 	@echo
+ 	@echo " *** Read the \'README' if you haven't already done so!"
+diff --git a/Makefile.in b/Makefile.in
+index 6aee2fd..9e38972 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -801,21 +801,21 @@ install-data-hook:
+ 	$(mkinstalldirs) $(DESTDIR)$(pkglibdir)/script/stop_system
+ 	$(mkinstalldirs) $(DESTDIR)$(pkglibdir)/script/sig_segv
+ 	$(mkinstalldirs) $(DESTDIR)$(pkglibdir)/script/reset
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/log
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/oldmail
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/sat
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/wp
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/fbbdos
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/fbbdos/yapp
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/fbbdos/readonly
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/mail
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/log
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/oldmail
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/sat
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/wp
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/fbbdos
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/fbbdos/yapp
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/fbbdos/readonly
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/mail
+ 	for n in 0 1 2 3 4 5 6 7 8 9; do \
+-	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/mail/mail$$n; \
++	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/mail/mail$$n; \
+ 	done
+-	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/binmail
++	$(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/binmail
+ 	for n in 0 1 2 3 4 5 6 7 8 9; do \
+-	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/ax25/fbb/binmail/mail$$n; \
++	  $(mkinstalldirs) $(DESTDIR)$(localstatedir)/lib/fbb/binmail/mail$$n; \
+ 	done
+ 	@echo
+ 	@echo " *** Read the \'README' if you haven't already done so!"
+diff --git a/doc/fbb.conf.sample.in b/doc/fbb.conf.sample.in
+index 75fe821..945c4da 100644
+--- a/doc/fbb.conf.sample.in
++++ b/doc/fbb.conf.sample.in
+@@ -73,25 +73,25 @@ server = REQDIR  reqdir     Directory request
+ #
+ 
+ # Directory of data files
+-data = @localstatedir@/ax25/fbb
++data = @localstatedir@/lib/fbb
+ 
+ # Directory of config files
+ config = @sysconfdir@/ax25/fbb
+ 
+ # Directory of message files
+-messages = @localstatedir@/ax25/fbb/mail
++messages = @localstatedir@/lib/fbb/mail
+ 
+ # Directory of compressed files
+-compressed = @localstatedir@/ax25/fbb/binmail
++compressed = @localstatedir@/lib/fbb/binmail
+ 
+ # Directory of users
+-fbbdos = *,*,@localstatedir@/ax25/fbb/fbbdos,*,*,*,*,*
++fbbdos = *,*,@localstatedir@/lib/fbb/fbbdos,*,*,*,*,*
+ 
+ # Directory of YAPP files
+-yapp = @localstatedir@/ax25/fbb/fbbdos/yapp
++yapp = @localstatedir@/lib/fbb/fbbdos/yapp
+ 
+ # Directory of documentation files
+-docs = @localstatedir@/ax25/fbb/docs
++docs = @localstatedir@/lib/fbb/docs
+ 
+ # Directory of the pg programs
+ pg = @libdir@/fbb/pg
+@@ -106,7 +106,7 @@ sdir = @libdir@/fbb/server
+ tdir = @libdir@/fbb/tool
+ 
+ # Path and filename for import file
+-import = @localstatedir@/ax25/fbb/mail/mail.in
++import = @localstatedir@/lib/fbb/mail/mail.in
+ 
+ # Full log
+ logs = OK
+diff --git a/doc/satdoc-e.doc b/doc/satdoc-e.doc
+index 1813e57..2ff0b28 100644
+--- a/doc/satdoc-e.doc
++++ b/doc/satdoc-e.doc
+@@ -63,7 +63,7 @@ A AMSAT
+    G KEPLER
+    G AMSAT
+    P @
+-   c /usr/local/var/ax25/fbb/sat/amsat.txt
++   c /var/lib/fbb/sat/amsat.txt
+    B AMSAT
+    F AMSAT
+    F KEP
+diff --git a/doc/satdoc-f.doc b/doc/satdoc-f.doc
+index b93fe20..9fd28a3 100644
+--- a/doc/satdoc-f.doc
++++ b/doc/satdoc-f.doc
+@@ -69,7 +69,7 @@ A AMSAT
+    G KEPLER
+    G AMSAT
+    P @
+-   c /usr/local/var/ax25/fbb/sat/amsat.txt
++   c /var/lib/fbb/sat/amsat.txt
+    B AMSAT
+    F AMSAT
+    F KEP
+diff --git a/etc/amsat.fwd.in b/etc/amsat.fwd.in
+index 69a2061..0d7f883 100644
+--- a/etc/amsat.fwd.in
++++ b/etc/amsat.fwd.in
+@@ -2,7 +2,7 @@ A AMSAT
+ #
+   P @
+ #
+-  c @localstatedir@/ax25/fbb/sat/amsat.txt
++  c @localstatedir@/lib/fbb/sat/amsat.txt
+ #
+   B SAT
+   F SAT
+diff --git a/etc/fbbopt.conf.in b/etc/fbbopt.conf.in
+index ffd3295..9e37e46 100644
+--- a/etc/fbbopt.conf.in
++++ b/etc/fbbopt.conf.in
+@@ -33,22 +33,22 @@ server = REQDIR  reqdir     Directory request
+ #
+ 
+ # Directory of data files
+-data = @localstatedir@/ax25/fbb
++data = @localstatedir@/lib/fbb
+ 
+ # Directory of config files
+-config = @sysconfdir@/ax25/fbb
++config = @sysconfdir@/lib/fbb
+ 
+ # Directory of message files
+-messages = @localstatedir@/ax25/fbb/mail
++messages = @localstatedir@/lib/fbb/mail
+ 
+ # Directory of compressed files
+-compressed = @localstatedir@/ax25/fbb/binmail
++compressed = @localstatedir@/lib/fbb/binmail
+ 
+ # Directory of users
+-fbbdos = *,*,@localstatedir@/ax25/fbb/fbbdos,*,*,*,*,*
++fbbdos = *,*,@localstatedir@/lib/fbb/fbbdos,*,*,*,*,*
+ 
+ # Directory of YAPP files
+-yapp = @localstatedir@/ax25/fbb/fbbdos/yapp
++yapp = @localstatedir@/lib/fbb/fbbdos/yapp
+ 
+ # Directory of documentation files
+ docs = @docdir@
+@@ -66,7 +66,7 @@ sdir = @libdir@/fbb/server
+ tdir = @libdir@/fbb/tool
+ 
+ # Path and filename for import file
+-import = @localstatedir@/ax25/fbb/mail/mail.in
++import = @localstatedir@/lib/fbb/mail/mail.in
+ 
+ # Full log gives you a log-file for every week. If you write NO here, no
+ # log-file will be made. The log-file will appear in the directory named LOG.
+diff --git a/etc/protect.sys.in b/etc/protect.sys.in
+index 41edee7..2bb3d6c 100644
+--- a/etc/protect.sys.in
++++ b/etc/protect.sys.in
+@@ -10,6 +10,6 @@
+ # path MUST be LINUX ABSOLUTE path (starting with a "/")
+ #
+ 
+-@localstatedir@/ax25/fbb/fbbdos/readonly
++@localstatedir@/lib/fbb/fbbdos/readonly
+ 
+ 
+diff --git a/scripts/fbb.in b/scripts/fbb.in
+index 6d64d7b..c4a45f4 100644
+--- a/scripts/fbb.in
++++ b/scripts/fbb.in
+@@ -1,8 +1,8 @@
+ #!/bin/bash
+ FBBCONF=@sysconfdir@/ax25/fbb
+ CONFDIR=@sysconfdir@/ax25/fbb
+-DATADIR=@localstatedir@/ax25/fbb
+-FBBDIR=@localstatedir@/ax25/fbb
++DATADIR=@localstatedir@/lib/fbb
++FBBDIR=@localstatedir@/lib/fbb
+ LIBDIR=@libdir@/fbb
+ SBINDIR=@sbindir@
+ DOCDIR=@docdir@
+@@ -392,7 +392,7 @@ fbb_conf()
+ 		$FBB -i
+ 		if [ $? -ne 2 ] ; then
+ 			echo "Configuration error ! Giving up."
+-			echo "Please read file @localstatedir@/ax25/fbb/ERROR.SYS"
++			echo "Please read file @localstatedir@/lib/fbb/ERROR.SYS"
+ 			exit 1
+ 		fi
+ 	else
+diff --git a/src/fbb_conf.c.in b/src/fbb_conf.c.in
+index da9b89f..893461e 100644
+--- a/src/fbb_conf.c.in
++++ b/src/fbb_conf.c.in
+@@ -32,14 +32,14 @@
+ 
+ static char *defstr[] = {
+ 	"conf",	"@sysconfdir@/ax25/fbb",
+-	"data",	"@localstatedir@/ax25/fbb",
+-	"mess",	"@localstatedir@/ax25/fbb/mail",
+-	"comp",	"@localstatedir@/ax25/fbb/binmail",
+-	"fbbd",	"*,*,@localstatedir@/ax25/fbb/fbbdos,*,*,*,*,*",
+-	"yapp",	"@localstatedir@/ax25/fbb/fbbdos/yapp",
++	"data",	"@localstatedir@/lib/fbb",
++	"mess",	"@localstatedir@/lib/fbb/mail",
++	"comp",	"@localstatedir@/lib/fbb/binmail",
++	"fbbd",	"*,*,@localstatedir@/lib/fbb/fbbdos,*,*,*,*,*",
++	"yapp",	"@localstatedir@/lib/fbb/fbbdos/yapp",
+ 	"docs",	"@docdir@",
+ 	"sysm", "",
+-	"impo",	"@localstatedir@/ax25/fbb/mail/mail.in",
++	"impo",	"@localstatedir@/lib/fbb/mail/mail.in",
+ 	"logs",	"OK",
+ 	"test",	"NO",
+ 	"fbbf",	"OK 160",

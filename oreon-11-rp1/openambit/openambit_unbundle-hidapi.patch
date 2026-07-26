@@ -1,0 +1,38 @@
+diff -rupN --no-dereference openambit-0.5/src/libambit/CMakeLists.txt openambit-0.5-new/src/libambit/CMakeLists.txt
+--- openambit-0.5/src/libambit/CMakeLists.txt	2019-11-12 22:27:23.000000000 +0100
++++ openambit-0.5-new/src/libambit/CMakeLists.txt	2025-07-17 22:52:42.691529599 +0200
+@@ -16,9 +16,11 @@ IF (DEFINED DEBUG_PRINT_FILE_LINE)
+   set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG_PRINT_FILE_LINE=${DEBUG_PRINT_FILE_LINE}")
+ ENDIF()
+ 
+-include(HidapiDriver)
+ include(GNUInstallDirs)
+ 
++find_package(PkgConfig)
++pkg_check_modules(HIDAPI REQUIRED hidapi-hidraw)
++
+ add_library (
+   ambit
+   SHARED
+@@ -38,19 +40,18 @@ add_library (
+   sha256.c
+   utils.c
+   sport_mode_serialize.c
+-  ${HIDAPI_SOURCE_FILES}
+ )
+ 
+ target_link_libraries(
+   ambit
+-  ${HIDAPI_LIBS}
++  ${HIDAPI_LIBRARIES}
+   m
+ )
+ 
+ set_target_properties(ambit PROPERTIES VERSION 0.4.0 SOVERSION 0)
+ 
+ include_directories(
+-  ${HIDAPI_INCLUDE_DIR}
++  ${HIDAPI_INCLUDE_DIRS}
+ )
+ 
+ install(TARGETS ambit DESTINATION ${CMAKE_INSTALL_LIBDIR})

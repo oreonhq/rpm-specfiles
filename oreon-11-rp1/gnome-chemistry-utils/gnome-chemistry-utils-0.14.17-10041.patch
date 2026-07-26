@@ -1,0 +1,59 @@
+diff -up gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.cc.gnm10041 gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.cc
+--- gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.cc.gnm10041	2017-02-12 10:10:11.000000000 +0100
++++ gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.cc	2021-03-21 15:01:48.653638912 +0100
+@@ -75,13 +75,14 @@ static void on_merge (G_GNUC_UNUSED GtkW
+ gcpSelectionTool::gcpSelectionTool (gcp::Application *App): gcp::Tool (App, "Select")
+ {
+ 	m_bRotate = false;
+-	m_UIManager = NULL;
++//	m_UIManager = NULL;
++	m_MergeBtn = NULL;
+ }
+ 
+ gcpSelectionTool::~gcpSelectionTool ()
+ {
+-	if (m_UIManager)
+-		delete m_UIManager;
++//	if (m_UIManager)
++//		delete m_UIManager;
+ }
+ 
+ bool gcpSelectionTool::OnClicked ()
+@@ -238,7 +238,7 @@ void gcpSelectionTool::OnRelease ()
+ 
+ void gcpSelectionTool::Activate ()
+ {
+-	if (m_UIManager)
++	if (GTK_IS_WIDGET (m_MergeBtn))
+ 		gtk_widget_set_sensitive (m_MergeBtn, false);
+ 	gcp::Document *pDoc = m_pApp->GetActiveDocument ();
+ 	if (pDoc) {
+@@ -283,14 +283,14 @@ void gcpSelectionTool::AddSelection (gcp
+ 			m_pData = d;
+ 		}
+ 		// If the selection is made of two molecules, activate the merge tool
+-		if (m_UIManager) {
++/*		if (m_UIManager) */{
+ 			std::set < Object * >::iterator i = m_pData->SelectedObjects.begin ();
+ 			gtk_widget_set_sensitive (m_MergeBtn, ((m_pData->SelectedObjects.size () == 2) &&
+ 				((*i++)->GetType () == MoleculeType) &&
+ 				((*i)->GetType () == MoleculeType)));
+ 		}
+ 	} else {
+-		if (m_UIManager)
++//		if (m_UIManager)
+ 			gtk_widget_set_sensitive (m_MergeBtn, false);
+ 		win->ActivateActionWidget ("/MainMenu/EditMenu/Erase", false);
+ 	}
+diff -up gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.h.gnm10041 gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.h
+--- gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.h.gnm10041	2017-02-12 10:10:11.000000000 +0100
++++ gnome-chemistry-utils-0.14.17/plugins/paint/selection/selectiontool.h	2021-03-21 15:01:48.654638903 +0100
+@@ -72,7 +72,7 @@ private:
+ 	gcp::Operation *m_pOp;
+ 	gcu::TypeId m_Type;
+ 	std::list<int> m_uiIds;
+-	gcugtk::UIManager *m_UIManager;
++//	gcugtk::UIManager *m_UIManager;
+ 	GtkWidget *m_MergeBtn;
+ };
+ 

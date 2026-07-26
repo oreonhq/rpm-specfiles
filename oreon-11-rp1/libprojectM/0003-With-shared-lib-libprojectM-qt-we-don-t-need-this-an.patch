@@ -1,0 +1,22 @@
+From 0e49ef79bbe7ab30147ab990b9f5779cb20cc5e9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?S=C3=A9rgio=20M=2E=20Basto?= <sergio@serjux.com>
+Date: Sat, 18 Sep 2021 17:49:19 +0100
+Subject: [PATCH 3/3] With shared lib libprojectM-qt we don't need this anymore
+
+    With shared lib libprojectM-qt we don't need this anymore
+    
+diff --git a/configure.ac b/configure.ac
+index 05107a37..8c43b5fb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -177,10 +188,6 @@ AS_IF([test "$enable_qt" != "no"],
+         # we have at least qt5 if $have_qt is true
+         enable_qt=yes
+         export QT_SELECT=qt5
+-
+-        # we depend on libQt5Gui and libQt5OpenGL
+-        # https://github.com/projectM-visualizer/projectm/issues/271
+-        LIBS="$LIBS -lQt5Gui -lQt5OpenGL"
+     ],
+     [AS_IF([test "$enable_qt" = "yes"],
+         [AC_MSG_ERROR(["Qt5 not found"])],

@@ -1,0 +1,37 @@
+diff -up gbdfed-1.6/bdf.c.format-security gbdfed-1.6/bdf.c
+--- gbdfed-1.6/bdf.c.format-security	2013-12-03 11:35:25.998654667 -0500
++++ gbdfed-1.6/bdf.c	2013-12-03 11:36:55.002550482 -0500
+@@ -2843,14 +2843,14 @@ bdf_save_font(FILE *out, bdf_font_t *fon
+         bpr = ((c->bbx.width * font->bpp) + 7) >> 3;
+         for (j = 0; bpr != 0 && j < c->bytes; j++) {
+             if (j && j % bpr == 0)
+-              fprintf(out, eol);
++              fprintf(out, "%s", eol);
+             fprintf(out, "%02X", c->bitmap[j]);
+         }
+         /*
+          * Handle empty bitmaps like this.
+          */
+         if (c->bbx.height > 0)
+-          fprintf(out, eol);
++          fprintf(out, "%s", eol);
+         fprintf(out, "ENDCHAR%s", eol);
+ 
+         /*
+@@ -2915,14 +2915,14 @@ bdf_save_font(FILE *out, bdf_font_t *fon
+         bpr = ((c->bbx.width * font->bpp) + 7) >> 3;
+         for (j = 0; bpr != 0 && j < c->bytes; j++) {
+             if (j && j % bpr == 0)
+-              fprintf(out, eol);
++              fprintf(out, "%s", eol);
+             fprintf(out, "%02X", c->bitmap[j]);
+         }
+         /*
+          * Handle empty bitmaps like this.
+          */
+         if (c->bbx.height > 0)
+-          fprintf(out, eol);
++          fprintf(out, "%s", eol);
+         fprintf(out, "ENDCHAR%s", eol);
+ 
+         /*

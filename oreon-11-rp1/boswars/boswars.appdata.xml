@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>boswars.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>Bos Wars</name>
+  <summary>Futuristic real-time strategy game</summary>
+  <description>
+    <p>
+      Bos Wars is a futuristic real-time strategy game (RTS). In a RTS game,
+      the player has to combat his enemies while developing his war economy.
+      Everything runs in real-time, as opposed to turn-based games where the
+      player always has to wait for his turn. The trick is to balance the
+      effort put into building his economy and building an army to defend and
+      attack the enemies.
+    </p>
+    <p>
+      Bos Wars has a dynamic rate based economy. Energy is produced by power
+      plants and magma gets pumped from hot spots. Buildings and mobile units
+      are also built at a continuous rate. Control of larger parts of the map
+      creates the potential to increase your economy throughput. Holding key
+      points like roads and passages allow for different strategies.
+    </p>
+    <p>
+      It is possible to play against human opponents over LAN, internet, or
+      against the computer. Bos Wars aims to create a completly original and
+      fun open source RTS game.
+    </p>
+  </description>
+  <url type="homepage">http://www.boswars.org/</url>
+  <screenshots>
+    <screenshot type="default">http://www.boswars.org/images/bos-pre2.2-2.jpg</screenshot>
+    <screenshot>http://www.boswars.org/images/bos-pre2.2-1.jpg</screenshot>
+    <screenshot>http://www.boswars.org/images/boswars-2.4-0.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

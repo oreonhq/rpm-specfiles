@@ -1,0 +1,15 @@
+2005-03-03 Enrico Scholz <enrico.scholz@informatik.tu-chemnitz.de>
+	* c/hash.c: fixed out-of-range array subscript; reported in
+	  https://bugzilla.redhat.com/beta/show_bug.cgi?id=149777
+
+--- hunt-1.5/c/hash.c.arridx	2000-02-16 10:26:14.000000000 +0100
++++ hunt-1.5/c/hash.c	2005-03-03 13:26:09.000000000 +0100
+@@ -26,7 +26,7 @@ static int __chose_table_size(int size)
+ 	int i;
+ 	
+ 	if (size >= ht_size[sizeof(ht_size) / sizeof(ht_size[0]) - 1])
+-	    return ht_size[sizeof(ht_size) / sizeof(ht_size[0])];
++	    return ht_size[sizeof(ht_size) / sizeof(ht_size[0]) - 1];
+ 	for (i = 0; ht_size[i] < size; i++)
+ 	    ;
+ 	return ht_size[i];

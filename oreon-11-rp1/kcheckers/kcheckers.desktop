@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=KCheckers
+GenericName=Checkers
+GenericName[ru]=Шашки
+Comment=Classic boardgame - checkers
+Comment[ru]=Классическая настольная игра - шашки
+Icon=kcheckers
+Exec=kcheckers
+Terminal=false
+Categories=Game;BoardGame;

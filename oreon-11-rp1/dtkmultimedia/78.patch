@@ -1,0 +1,86 @@
+From befb8b24898220d9dbcece40e6829903b5df5d12 Mon Sep 17 00:00:00 2001
+From: Hillwood Yang <hillwood@opensuse.org>
+Date: Thu, 6 Nov 2025 23:10:11 +0800
+Subject: [PATCH 1/2] feat: support Qt 6.10.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Log: add conditional check for Qt6 GuiPrivate in Qt ≥ 6.10
+---
+ src/multimedia/CMakeLists.txt        | 3 +++
+ src/multimediawidgets/CMakeLists.txt | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/src/multimedia/CMakeLists.txt b/src/multimedia/CMakeLists.txt
+index 8f7be40..9b852e1 100644
+--- a/src/multimedia/CMakeLists.txt
++++ b/src/multimedia/CMakeLists.txt
+@@ -83,6 +83,9 @@ set_target_properties(${BIN_NAME} PROPERTIES
+ target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}")
+ 
+ find_package(Qt${QT_VERSION_MAJOR}Gui)
++if(Qt6_VERSION VERSION_GREATER_EQUAL 6.10)
++    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS GuiPrivate REQUIRED)
++endif()
+ find_package(Qt${QT_VERSION_MAJOR}Multimedia)
+ find_package(PkgConfig)
+ 
+diff --git a/src/multimediawidgets/CMakeLists.txt b/src/multimediawidgets/CMakeLists.txt
+index 7e9bfa3..a6dbee2 100644
+--- a/src/multimediawidgets/CMakeLists.txt
++++ b/src/multimediawidgets/CMakeLists.txt
+@@ -39,6 +39,9 @@ find_package(Qt${QT_VERSION_MAJOR}Network)
+ find_package(Qt${QT_VERSION_MAJOR}Concurrent)
+ find_package(Qt${QT_VERSION_MAJOR}Multimedia)
+ find_package(Qt${QT_VERSION_MAJOR}MultimediaWidgets)
++if(Qt6_VERSION VERSION_GREATER_EQUAL 6.10)
++    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS GuiPrivate REQUIRED)
++endif()
+ if (ENABLE_Qt6)
+     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS OpenGLWidgets)
+ else()
+
+From fc13de07a7822e2ebce89f64c03f7faa760d5503 Mon Sep 17 00:00:00 2001
+From: Hillwood Yang <hillwood@opensuse.org>
+Date: Thu, 6 Nov 2025 23:11:31 +0800
+Subject: [PATCH 2/2] fix: (libcam_encoder)add compatibility macros for FFmpeg
+ 7
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+FFmpeg 7.0 and later have renamed FF_PROFILE_* macros to AV_PROFILE_*.
+This causes build failures when compiling with recent FFmpeg headers:
+
+    error: ‘FF_PROFILE_UNKNOWN’ undeclared
+    error: ‘FF_PROFILE_AAC_MAIN’ undeclared
+
+Add compatibility definitions mapping FF_PROFILE_* to AV_PROFILE_*
+if the old names are not defined. This keeps the code compatible
+with both old and new FFmpeg versions.
+
+Log: Fix build failure with FFmpeg 7
+---
+ .../camera/libcam/libcam_encoder/audio_codecs.c           | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/multimedia/camera/libcam/libcam_encoder/audio_codecs.c b/src/multimedia/camera/libcam/libcam_encoder/audio_codecs.c
+index 04e1f61..2a18b27 100644
+--- a/src/multimedia/camera/libcam/libcam_encoder/audio_codecs.c
++++ b/src/multimedia/camera/libcam/libcam_encoder/audio_codecs.c
+@@ -36,6 +36,14 @@
+ #include "encoder.h"
+ #include "load_libs.h"
+ 
++#ifndef FF_PROFILE_UNKNOWN
++#define FF_PROFILE_UNKNOWN AV_PROFILE_UNKNOWN
++#define FF_PROFILE_AAC_MAIN AV_PROFILE_AAC_MAIN
++#define FF_PROFILE_AAC_LOW AV_PROFILE_AAC_LOW
++#define FF_PROFILE_AAC_SSR AV_PROFILE_AAC_SSR
++#define FF_PROFILE_AAC_LTP AV_PROFILE_AAC_LTP
++#endif
++
+ extern int verbosity;
+ 
+ /* AAC object types index: MAIN = 1; LOW = 2; SSR = 3; LTP = 4*/

@@ -1,0 +1,10 @@
+diff -up itk4.1.0/pkgIndex.tcl.in.tolowercase itk4.1.0/pkgIndex.tcl.in
+--- itk4.1.0/pkgIndex.tcl.in.tolowercase	2019-09-18 21:21:06.557471167 -0600
++++ itk4.1.0/pkgIndex.tcl.in	2019-09-18 21:21:52.466793382 -0600
+@@ -2,5 +2,5 @@
+ 
+ if {![package vsatisfies [package provide Tcl] 8.6]} return
+ if {[string length [package provide Itcl]] && ![package vsatisfies [package provide Itcl] 4.1]} return
+-package ifneeded itk @PACKAGE_VERSION@ [list load [file join $dir .. .. "@PKG_LIB_FILE@"] Itk]
++package ifneeded itk @PACKAGE_VERSION@ [list load [file join $dir .. .. "@PKG_LIB_FILE@"] itk]
+ package ifneeded Itk @PACKAGE_VERSION@ [list load [file join $dir .. .. "@PKG_LIB_FILE@"] Itk]

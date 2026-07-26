@@ -1,0 +1,33 @@
+From effcc9840fb51102aca9369760d41309f82ffef8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 23 Jul 2013 09:51:53 +0200
+Subject: [PATCH] Adapt tests to IO::Socket::SSL 1.80
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Author: Steffen_Ullrich [...] genua.de
+<https://rt.cpan.org/Public/Bug/Display.html?id=81932>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/testmodule.t | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/t/testmodule.t b/t/testmodule.t
+index d03aeef..6ca235a 100644
+--- a/t/testmodule.t
++++ b/t/testmodule.t
+@@ -59,7 +59,8 @@ my $server = new HTTP::Daemon::SSL(LocalPort => $SSL_SERVER_PORT,
+ 				   ReuseAddr => 1,
+ 				   SSL_verify_mode => 0x00,
+ 				   SSL_ca_file => "certs/test-ca.pem",
+-				   SSL_cert_file => "certs/server-cert.pem");
++				   SSL_cert_file => "certs/server-cert.pem",
++				   SSL_key_file => "certs/server-key.pem");
+ 
+ if (!$server) {
+     print "not ok $test\n";
+-- 
+1.8.1.4
+

@@ -1,0 +1,11 @@
+--- bsd-games-2.17/boggle/boggle/word.c.orig	2024-11-27 23:17:50.170707535 +0000
++++ bsd-games-2.17/boggle/boggle/word.c	2024-11-27 23:22:28.601210911 +0000
+@@ -165,7 +165,7 @@ loaddict(fp)
+ 
+ 	p = dictspace;
+ 	st = -1;
+-	while (n > 0 && (st = fread(p, 1, BUFSIZ, fp)) > 0) {
++	while (n > 0 && (st = fread(p, 1, n > st ? BUFSIZ : n, fp)) > 0) {
+ 		p += st;
+ 		n -= st;
+ 	}

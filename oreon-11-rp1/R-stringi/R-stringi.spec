@@ -1,0 +1,54 @@
+%global source0_hash 0526decdcd41b7c42278aca96945394c2cb66ba6fdd47fd917b5d3d38ed5c8c6
+
+Name:           R-stringi
+Version:        %R_rpm_version 1.8.7
+Release:        %autorelease
+Summary:        Character String Processing Facilities
+
+# See `LICENSE` for breakdown, but ignore the ICU parts that have been unbundled.
+License:        BSD-3-Clause AND GPL-2.0-or-later
+URL:            %{cran_url}
+Source:         %{cran_source}
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+
+BuildRequires:  R-devel
+BuildRequires:  libicu-devel >= 61
+
+Obsoletes:      %{name}-devel <= 1.8.7
+
+%description
+A multitude of character string/text/natural language processing tools: pattern
+searching (e.g., with 'Java'-like regular expressions or the 'Unicode'
+collation algorithm), random string generation, case mapping, string
+transliteration, concatenation, sorting, padding, wrapping, Unicode
+normalisation, date-time formatting and parsing, and many more. They are fast,
+consistent, convenient, and - owing to the use of the 'ICU' (International
+Components for Unicode) library - portable across all locales and platforms.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -c
+
+# Remove bundled code.
+rm -r stringi/src/icu74
+sed -i -e '/src\/icu74\//d' stringi/MD5
+
+%generate_buildrequires
+%R_buildrequires
+
+%build
+
+%install
+%R_install \--configure-args="--disable-icu-bundle"
+%R_save_files
+
+%check
+%R_check
+
+%files -f %{R_files}
+
+%changelog
+%autochangelog

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>chisholm-to-be-continued</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>ToBeContinued</name>
+  <summary>Decorative Sans Serif Font</summary>
+  <description>
+    <p>
+      To Be Continued is a decorative/graffiti sans-serif font.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.theory.org/~matt/fonts/free/?font=2bc</url>
+</component>
+

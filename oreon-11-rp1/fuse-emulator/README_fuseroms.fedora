@@ -1,0 +1,6 @@
+Note
+----
+
+Due to Fedora policy, this version has been packaged WITHOUT the ROMs. These
+are available from a 3rd party repository http://dribble.org.uk as an RPM,
+or from the original Fuse site at: http://fuse-emulator.sourceforge.net

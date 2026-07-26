@@ -1,0 +1,62 @@
+From 4cc57bf07c5ee60baac971e2b06c342851eeaff2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 7 Oct 2025 15:33:33 +0200
+Subject: [PATCH] Read-only t/core_rwops.t
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+t/core_rwops.t used to create a file in the current working directory
+and then test that SDL::RWOps can open it, seek in it and read it.
+I.e. the test did not perform any write operation, yet setting up the
+test required writing.
+
+This unnecessary write prevented from running the tests from
+a read-only location.
+
+This patch precreates the test file so that no write operation is
+needed when running the test.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/core_rwops.t  | 7 +------
+ test/data/rwops | 1 +
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+ create mode 100644 test/data/rwops
+
+diff --git a/t/core_rwops.t b/t/core_rwops.t
+index 5f40a82f..0c9d5628 100644
+--- a/t/core_rwops.t
++++ b/t/core_rwops.t
+@@ -11,11 +11,7 @@ my @done = qw/
+ 	/;
+ can_ok( 'SDL::RWOps', @done );
+ 
+-open FH, '>', '.rwops';
+-print FH 'rwops';
+-close FH;
+-
+-my $file = SDL::RWOps->new_file( '.rwops', 'rw' );
++my $file = SDL::RWOps->new_file( 'test/data/rwops', 'r' );
+ isa_ok( $file, 'SDL::RWOps', '[from_file] returns RWOps' );
+ 
+ #0        SEEK_SET
+@@ -35,7 +31,6 @@ SKIP:
+ 	is( $blocks, 5, '[read] got ' . $char );
+ }
+ $file->close();
+-unlink '.rwops';
+ my @left = qw/
+ 	from_fp
+ 	from_mem
+diff --git a/test/data/rwops b/test/data/rwops
+new file mode 100644
+index 00000000..d6380184
+--- /dev/null
++++ b/test/data/rwops
+@@ -0,0 +1 @@
++rwops
+\ No newline at end of file
+-- 
+2.51.0
+

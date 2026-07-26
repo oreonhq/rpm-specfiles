@@ -1,0 +1,15 @@
+diff -Naur e00compr-1.0.1-original/e00read.c e00compr-1.0.1/e00read.c
+--- e00compr-1.0.1-original/e00read.c	2009-02-24 15:09:10.000000000 -0500
++++ e00compr-1.0.1/e00read.c	2022-01-05 12:49:06.019206961 -0500
+@@ -354,7 +354,11 @@
+             pszLine = psInfo->pfnReadNextLine(psInfo->pRefData);
+             if (pszLine)
+             {
++		/* strncpy() does not null-terminate when truncation is
++		 * required, so we must do it explicitly:
++		 */
+                 strncpy(psInfo->szInBuf, pszLine, E00_READ_BUF_SIZE);
++                psInfo->szInBuf[E00_READ_BUF_SIZE-1] = '\0';
+             }
+             else
+             {

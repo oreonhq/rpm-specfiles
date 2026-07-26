@@ -1,0 +1,15 @@
+--- M2/configure.ac.orig	2021-01-12 14:20:55.509886490 -0700
++++ M2/configure.ac	2021-01-12 14:21:55.866785423 -0700
+@@ -252,9 +252,9 @@ AC_MSG_NOTICE([checking for C compiler f
+ 
+ dnl always compile with "-g", so we can debug even optimized versions
+ if test "$GCC" = yes
+-then CFLAGS="$CFLAGS -g3"
+-     CXXFLAGS="$CXXFLAGS -g3"
+-     LDFLAGS="$LDFLAGS -g3"
++then CFLAGS="$CFLAGS -g"
++     CXXFLAGS="$CXXFLAGS -g"
++     LDFLAGS="$LDFLAGS -g"
+ else CFLAGS="$CFLAGS -g"
+      CXXFLAGS="$CXXFLAGS -g"
+      LDFLAGS="$LDFLAGS -g"

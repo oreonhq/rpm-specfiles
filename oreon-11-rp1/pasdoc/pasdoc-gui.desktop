@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Name=PasDoc GUI
+Comment=Documentation generator for Pascal and Object Pascal source code
+Exec=pasdoc-gui
+Icon=pasdoc-gui
+Type=Application
+Categories=Development;

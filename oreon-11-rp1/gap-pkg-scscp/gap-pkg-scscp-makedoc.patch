@@ -1,0 +1,22 @@
+--- makedoc.g.orig	2022-12-10 08:28:31.000000000 -0700
++++ makedoc.g	2022-12-11 09:27:37.593145344 -0700
+@@ -6,7 +6,7 @@
+ ###########################################################################
+ 
+ ExtractMyManualExamples:=function( pkgname, main, files )
+-local path, tst, i, s, basename, name, output, ch, a, location, pos, comment;
++local path, tst, i, s, basename, name, output, ch, a, location, pos, pos2, comment;
+ path:=Directory( 
+         Concatenation(PackageInfo(pkgname)[1].InstallationPath, "/doc") );
+ Print("Extracting manual examples for ", pkgname, " package ...\n" );
+@@ -43,7 +43,9 @@ for i in [ 1 .. Length(tst) ] do
+       if pos <> fail then
+         comment := location{[ pos+Length(pkgname)+1 .. Length(location) ]};
+       else
+-        pos := PositionSublist(location,".//");
++        pos := PositionSublist(location,"../");
++        pos2 := PositionSublist(location,"../",pos+1);
++        if pos2 <> fail then pos := pos2; fi;
+         comment := location{[ pos+3 .. Length(location) ]};
+       fi;
+       AppendTo(output, "# ", comment, ":", a[2][2], "-", a[2][3], "\n", StripBeginEnd(a[1], "\n"), "\n\n");

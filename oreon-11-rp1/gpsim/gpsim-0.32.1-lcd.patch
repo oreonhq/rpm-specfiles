@@ -1,0 +1,492 @@
+Index: extras/lcd/examples/README
+===================================================================
+--- extras/lcd/examples/README	(revision 2626)
++++ extras/lcd/examples/README	(revision 2627)
+@@ -9,10 +9,10 @@
+ Building
+ 
+ The Makefile in this directory is for the top level packager. So
+-to "build" the project, do this:
++to "build" lcd_mod.cod`, do this:
+ 
+ 
+-$ gpasm lcd_mod.asm
++$ make -f makefile 
+ 
+ This should assemble with no errors.
+ 
+Index: extras/lcd/examples/makefile
+===================================================================
+--- extras/lcd/examples/makefile	(nonexistent)
++++ extras/lcd/examples/makefile	(revision 2627)
+@@ -0,0 +1,16 @@
++
++all :  lcd_mod.cod
++
++ifdef EXTENDED_INSTRUCTIONS
++  ASM_FLAGS = -c --extended
++else
++  ASM_FLAGS = -c
++endif
++
++
++%.o : %.asm
++	gpasm $(ASM_FLAGS) $<
++
++%.cod : %.o
++	gplink --map  -q -o $@ $<
++
+Index: extras/lcd/lcd.h
+===================================================================
+--- extras/lcd/lcd.h	(revision 2626)
++++ extras/lcd/lcd.h	(revision 2627)
+@@ -60,6 +60,7 @@
+ 
+ typedef char _5X7 [7][6];
+ typedef char _5X8 [8][6];
++struct raw_font { _5X8 C_5X8;};
+ 
+ class LcdFont {
+ public:
+Index: extras/lcd/lcdfont.h
+===================================================================
+--- extras/lcd/lcdfont.h	(revision 2626)
++++ extras/lcd/lcdfont.h	(revision 2627)
+@@ -1,5 +1,5 @@
+ #define FONT_LEN 256
+-_5X8 test[FONT_LEN] = {
++raw_font font_list[FONT_LEN] = {
+  { /* 0 */
+   "     ",
+   "     ",
+Index: extras/lcd/lcdgui.cc
+===================================================================
+--- extras/lcd/lcdgui.cc	(revision 2626)
++++ extras/lcd/lcdgui.cc	(revision 2627)
+@@ -31,29 +31,32 @@
+ 
+ cairo_surface_t *LcdFont::create_image(LcdDisplay *lcdP, _5X8 *ch)
+ {
+-  int rows = 6 + lcdP->dots.y * lcdP->pixels.y;
+-  int cols = 1 + lcdP->dots.x * lcdP->pixels.x;
+-  cairo_surface_t *image = gdk_window_create_similar_surface(mywindow,
+-                           CAIRO_CONTENT_COLOR_ALPHA, cols, rows);
+-  cairo_t *cr = cairo_create(image);
+-  cairo_set_line_width(cr, 0.5);
++    int rows = 6 + lcdP->dots.y * lcdP->pixels.y;
++    int cols = 1 + lcdP->dots.x * lcdP->pixels.x;
++    cairo_surface_t *image = gdk_window_create_similar_surface(mywindow,
++                             CAIRO_CONTENT_COLOR_ALPHA, cols, rows);
++    cairo_t *cr = cairo_create(image);
++    cairo_set_line_width(cr, 0.5);
+ 
+-  for (int j = 0; j < lcdP->dots.y; j++) {
+-    for (int i = 0; i < lcdP->dots.x; i++) {
+-      if (ch[0][j][i] == '.') {
+-        double y = 5 + lcdP->pixels.y * j;
+-        double x = i * lcdP->pixels.x;
+-        cairo_set_source_rgb(cr, double(0x11) / 255, double(0x33) / 255, double(0x11) / 255);
+-        cairo_rectangle(cr, x, y, lcdP->pixels.x, lcdP->pixels.y);
+-        cairo_fill_preserve(cr);
+-        cairo_set_source_rgb(cr, double(0x66) / 255, double(0x88) / 255, double(0x66) / 255);
+-        cairo_stroke(cr);
+-      }
++    for (int j = 0; j < lcdP->dots.y; j++)
++    {
++        for (int i = 0; i < lcdP->dots.x; i++)
++        {
++            if (ch[0][j][i] == '.')
++            {
++                double y = 5 + lcdP->pixels.y * j;
++                double x = i * lcdP->pixels.x;
++                cairo_set_source_rgb(cr, double(0x11) / 255, double(0x33) / 255, double(0x11) / 255);
++                cairo_rectangle(cr, x, y, lcdP->pixels.x, lcdP->pixels.y);
++                cairo_fill_preserve(cr);
++                cairo_set_source_rgb(cr, double(0x66) / 255, double(0x88) / 255, double(0x66) / 255);
++                cairo_stroke(cr);
++            }
++        }
+     }
+-  }
+ 
+-  cairo_destroy(cr);
+-  return image;
++    cairo_destroy(cr);
++    return image;
+ }
+ 
+ 
+@@ -66,147 +69,169 @@
+ 
+ LcdFont::LcdFont(gint characters, GtkWidget *parent_window, LcdDisplay *lcdP)
+ {
+-  pixmaps.reserve(characters);
+-  mywindow = gtk_widget_get_window(parent_window);
++    pixmaps.reserve(characters);
++    mywindow = gtk_widget_get_window(parent_window);
+ 
+-  for (gint i = 0; i < characters; i++) {
+-    if (strlen(test[i][0]) < 5) {
+-      pixmaps.push_back(nullptr);
++    for (gint i = 0; i < characters; i++)
++    {
++        if (strlen(font_list[i].C_5X8[0]) < 5)
++        {
++            pixmaps.push_back(nullptr);
+ 
+-    } else {
+-      pixmaps.push_back(create_image(lcdP, &test[i]));
++        }
++        else
++        {
++            pixmaps.push_back(create_image(lcdP, &font_list[i].C_5X8));
++        }
+     }
+-  }
+ }
+ 
+ 
+ LcdFont::~LcdFont()
+ {
+-  for (size_t i = 0; i < pixmaps.size(); ++i) {
+-    if (pixmaps[i]) {
+-      cairo_surface_destroy(pixmaps[i]);
++    for (size_t i = 0; i < pixmaps.size(); ++i)
++    {
++        if (pixmaps[i])
++        {
++            cairo_surface_destroy(pixmaps[i]);
++        }
+     }
+-  }
+ }
+ 
+ 
+ void LcdFont::update_pixmap(int pos, _5X8 *tempchar, LcdDisplay *lcdP)
+ {
+-  if (pixmaps[pos]) {
+-    cairo_surface_destroy(pixmaps[pos]);
+-    pixmaps[pos] = nullptr;
+-  }
++    if (pixmaps[pos])
++    {
++        cairo_surface_destroy(pixmaps[pos]);
++        pixmaps[pos] = nullptr;
++    }
+ 
+-  pixmaps[pos] = create_image(lcdP, tempchar);
++    pixmaps[pos] = create_image(lcdP, tempchar);
+ }
+ 
+ 
+ cairo_surface_t *LcdFont::getPixMap(unsigned int index)
+ {
+-  return ((index < pixmaps.size()) && pixmaps[index]) ? pixmaps[index] : pixmaps[0];
++    return ((index < pixmaps.size()) && pixmaps[index]) ? pixmaps[index] : pixmaps[0];
+ }
+ 
+ 
+ void LcdDisplay::update_cgram_pixmaps()
+ {
+-  int i, j, k;
+-  _5X8 tempchar;
++    int i, j, k;
++    _5X8 tempchar;
+ 
+-  if (fontP == nullptr) {
+-    return;
+-  }
++    if (fontP == nullptr)
++    {
++        return;
++    }
+ 
+-  for (i = 0; i < CGRAM_SIZE / 8; i++) {
+-    for (j = 0; j < 8; j++) {
+-      for (k = 0; k < 5; k++) {
+-        if (m_hd44780->getCGRam(8 * i + j) & (1 << (4 - k))) {
+-          tempchar[j][k] = '.';
++    for (i = 0; i < CGRAM_SIZE / 8; i++)
++    {
++        for (j = 0; j < 8; j++)
++        {
++            for (k = 0; k < 5; k++)
++            {
++                if (m_hd44780->getCGRam(8 * i + j) & (1 << (4 - k)))
++                {
++                    tempchar[j][k] = '.';
+ 
+-        } else {
+-          tempchar[j][k] = ' ';
++                }
++                else
++                {
++                    tempchar[j][k] = ' ';
++                }
++            }
++
++            tempchar[j][5] = 0;
+         }
+-      }
+ 
+-      tempchar[j][5] = 0;
++        fontP->update_pixmap(i, &tempchar, this);
++        fontP->update_pixmap(i + 8, &tempchar, this);
+     }
+ 
+-    fontP->update_pixmap(i, &tempchar, this);
+-    fontP->update_pixmap(i + 8, &tempchar, this);
+-  }
+-
+-  m_hd44780->setCGRamupdate(false);
++    m_hd44780->setCGRamupdate(false);
+ }
+ 
+ 
+ cairo_surface_t *LcdDisplay::get_pixmap(gint row, gint col)
+ {
+-  if (m_hd44780->CGRamupdate()) {
+-    update_cgram_pixmaps();
+-  }
++    if (m_hd44780->CGRamupdate())
++    {
++        update_cgram_pixmaps();
++    }
+ 
+-  return fontP ? fontP->getPixMap(m_hd44780->getDDRam(row, col)) : nullptr;
++    return fontP ? fontP->getPixMap(m_hd44780->getDDRam(row, col)) : nullptr;
+ }
+ 
+ 
+-static gboolean lcd_expose_event(GtkWidget *widget, GdkEvent * , gpointer user_data)
++static gboolean lcd_expose_event(GtkWidget *widget, GdkEvent *, gpointer user_data)
+ {
+-  LcdDisplay *lcdP = static_cast<LcdDisplay *>(user_data);
+-  // If there is no font, then go create it.
++    LcdDisplay *lcdP = static_cast<LcdDisplay *>(user_data);
++    // If there is no font, then go create it.
+ 
+-  if (!lcdP->fontP) {
+-    lcdP->fontP = new LcdFont(FONT_LEN, widget, lcdP);
+-  }
++    if (!lcdP->fontP)
++    {
++        lcdP->fontP = new LcdFont(FONT_LEN, widget, lcdP);
++    }
+ 
+-  GtkAllocation allocation;
+-  gtk_widget_get_allocation(widget, &allocation);
+-  lcdP->w_width = allocation.width;
+-  lcdP->w_height = allocation.height;
+-  cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(widget));
+-  lcdP->update(cr);
+-  cairo_destroy(cr);
+-  return FALSE;
++    GtkAllocation allocation;
++    gtk_widget_get_allocation(widget, &allocation);
++    lcdP->w_width = allocation.width;
++    lcdP->w_height = allocation.height;
++    cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(widget));
++    lcdP->update(cr);
++    cairo_destroy(cr);
++    return FALSE;
+ }
+ 
+ 
+ void LcdDisplay::update(cairo_t *cr)
+ {
+-  guint i, j;
+-  cairo_set_source_rgb(cr,
+-                       double(0x78) / 255, double(0xa8) / 255, double(0x78) / 255);
+-  cairo_rectangle(cr, 0.0, 0.0, w_width, w_height);
+-  cairo_fill(cr);
+-  gint cw = get_char_width();
+-  gint ch = get_char_height();
+-  gint border = get_border();
++    guint i, j;
++    cairo_set_source_rgb(cr,
++                         double(0x78) / 255, double(0xa8) / 255, double(0x78) / 255);
++    cairo_rectangle(cr, 0.0, 0.0, w_width, w_height);
++    cairo_fill(cr);
++    gint cw = get_char_width();
++    gint ch = get_char_height();
++    gint border = get_border();
+ 
+-  if (!(disp_type & TWO_ROWS_IN_ONE)) {
+-    for (j = 0; j < rows; j++)
+-      for (i = 0; i < cols; i++) {
+-        cairo_set_source_surface(cr, get_pixmap(j, i), border + i * cw, border + j * (ch));
+-        cairo_paint(cr);
+-      }
++    if (!(disp_type & TWO_ROWS_IN_ONE))
++    {
++        for (j = 0; j < rows; j++)
++            for (i = 0; i < cols; i++)
++            {
++                cairo_set_source_surface(cr, get_pixmap(j, i), border + i * cw, border + j * (ch));
++                cairo_paint(cr);
++            }
+ 
+-  } else {
+-    guint pos;
++    }
++    else
++    {
++        guint pos;
+ 
+-    for (pos = 0, j = 0; j < rows; j++)
+-      for (i = 0; i < cols; pos++, i++) {
+-        cairo_set_source_surface(cr, get_pixmap(j, i), border + pos * cw, border);
+-        cairo_paint(cr);
+-      }
+-  }
++        for (pos = 0, j = 0; j < rows; j++)
++            for (i = 0; i < cols; pos++, i++)
++            {
++                cairo_set_source_surface(cr, get_pixmap(j, i), border + pos * cw, border);
++                cairo_paint(cr);
++            }
++    }
+ }
+ 
+ 
+-static gint cursor_event(GtkWidget * , GdkEvent *event, gpointer  * )
++static gint cursor_event(GtkWidget *, GdkEvent *event, gpointer  * )
+ {
+-  if ((event->type == GDK_BUTTON_PRESS) &&
+-      ((event->button.button == 1) ||
+-       (event->button.button == 3))) {
+-    return TRUE;
+-  }
++    if ((event->type == GDK_BUTTON_PRESS) &&
++            ((event->button.button == 1) ||
++             (event->button.button == 3)))
++    {
++        return TRUE;
++    }
+ 
+-  return FALSE;
++    return FALSE;
+ }
+ 
+ 
+@@ -217,63 +242,68 @@
+ 
+ void LcdDisplay::CreateGraphics()
+ {
+-  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
++    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+ 
+-  if (window) {
+-    char title[128];
+-    g_snprintf(title, sizeof(title), "%d X %d", rows, cols);
++    if (window)
++    {
++        char title[128];
++        g_snprintf(title, sizeof(title), "%d X %d", rows, cols);
+ 
+-    if (disp_type & TWO_ROWS_IN_ONE) {
+-      g_strlcat(title, " (in one row)", sizeof(title));
+-    }
++        if (disp_type & TWO_ROWS_IN_ONE)
++        {
++            g_strlcat(title, " (in one row)", sizeof(title));
++        }
+ 
+-    gtk_widget_realize(window);
+-    gtk_window_set_title(GTK_WINDOW(window), "LCD");
+-    GtkWidget *main_vbox = gtk_vbox_new(FALSE, 5);
+-    gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 0);
+-    gtk_container_add(GTK_CONTAINER(window), main_vbox);
+-    GtkWidget *vbox =
+-      gtk_widget_new(gtk_vbox_get_type(),
+-                     "GtkBox::homogeneous", FALSE,
+-                     //"GtkBox::spacing", 5,
+-                     //"GtkContainer::border_width", 10,
+-                     "GtkWidget::parent", main_vbox,
+-                     "GtkWidget::visible", TRUE,
+-                     nullptr);
+-    GtkWidget *frame =
+-      gtk_widget_new(gtk_frame_get_type(),
+-                     "GtkFrame::shadow", GTK_SHADOW_ETCHED_IN,
+-                     "GtkFrame::label_xalign", 0.5,
+-                     "GtkFrame::label", title,
+-                     //"GtkContainer::border_width", 10,
+-                     "GtkWidget::parent", vbox,
+-                     "GtkWidget::visible", TRUE,
+-                     nullptr);
+-    darea = gtk_drawing_area_new();
++        gtk_widget_realize(window);
++        gtk_window_set_title(GTK_WINDOW(window), "LCD");
++        GtkWidget *main_vbox = gtk_vbox_new(FALSE, 5);
++        gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 0);
++        gtk_container_add(GTK_CONTAINER(window), main_vbox);
++        GtkWidget *vbox =
++            gtk_widget_new(gtk_vbox_get_type(),
++                           "GtkBox::homogeneous", FALSE,
++                           //"GtkBox::spacing", 5,
++                           //"GtkContainer::border_width", 10,
++                           "GtkWidget::parent", main_vbox,
++                           "GtkWidget::visible", TRUE,
++                           nullptr);
++        GtkWidget *frame =
++            gtk_widget_new(gtk_frame_get_type(),
++                           "GtkFrame::shadow", GTK_SHADOW_ETCHED_IN,
++                           "GtkFrame::label_xalign", 0.5,
++                           "GtkFrame::label", title,
++                           //"GtkContainer::border_width", 10,
++                           "GtkWidget::parent", vbox,
++                           "GtkWidget::visible", TRUE,
++                           nullptr);
++        darea = gtk_drawing_area_new();
+ 
+-    if (!(disp_type & TWO_ROWS_IN_ONE)) {
+-      gtk_widget_set_size_request(darea,
+-                                  cols * get_char_width() + 2 * get_border(),
+-                                  rows * (get_char_height() + get_border()) + get_border());
++        if (!(disp_type & TWO_ROWS_IN_ONE))
++        {
++            gtk_widget_set_size_request(darea,
++                                        cols * get_char_width() + 2 * get_border(),
++                                        rows * (get_char_height() + get_border()) + get_border());
+ 
+-    } else {
+-      gtk_widget_set_size_request(darea,
+-                                  rows * cols * get_char_width() + 2 * get_border(),
+-                                  get_char_height() + 2 * get_border());
++        }
++        else
++        {
++            gtk_widget_set_size_request(darea,
++                                        rows * cols * get_char_width() + 2 * get_border(),
++                                        get_char_height() + 2 * get_border());
++        }
++
++        gtk_container_add(GTK_CONTAINER(frame), darea);
++        g_signal_connect(darea,
++                         "expose_event",
++                         G_CALLBACK(lcd_expose_event),
++                         this);
++        gtk_widget_add_events(darea, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK);
++        g_signal_connect(darea,
++                         "button_press_event",
++                         G_CALLBACK(cursor_event),
++                         nullptr);
++        gtk_widget_show_all(window);
+     }
+-
+-    gtk_container_add(GTK_CONTAINER(frame), darea);
+-    g_signal_connect(darea,
+-                     "expose_event",
+-                     G_CALLBACK(lcd_expose_event),
+-                     this);
+-    gtk_widget_add_events(darea, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK);
+-    g_signal_connect(darea,
+-                     "button_press_event",
+-                     G_CALLBACK(cursor_event),
+-                     nullptr);
+-    gtk_widget_show_all(window);
+-  }
+ }
+ 
+ #endif //HAVE_GUI

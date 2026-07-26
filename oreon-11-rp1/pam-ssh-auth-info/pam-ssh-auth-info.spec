@@ -1,0 +1,51 @@
+%global source0_hash f15e88b268e2244b75a6a986bb6fffbef7b72e77c412e974e8415c7156052213
+
+Name:		pam-ssh-auth-info
+Version:	1.8.20230906
+Release:	8%{?dist}
+Summary:	PAM SSH Authentication Information Module
+# GPL-3.0-or-later: * line_tokens_match_test.h
+# LGPL-3.0-or-later: pam_*.c *.h
+License:	GPL-3.0-or-later AND LGPL-3.0-or-later
+URL:		https://github.eero.häkkinen.fi/%{name}/
+Source0:	https://github.com/eehakkin/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	gcc
+BuildRequires:	libtool
+BuildRequires:	pam-devel
+Requires:	pam%{?_isa}
+
+%description
+The pam_ssh_auth_info.so PAM module is designed to succeed or fail
+authentication based on SSH authentication information consisting of a
+list of successfully completed authentication methods and public
+credentials (e.g. keys) used to authenticate the user. One use is to
+select whether to load other modules based on this test.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup
+
+%build
+autoreconf --install
+%configure
+%make_build
+
+%check
+make check
+
+%install
+%make_install
+[ ${RPM_BUILD_ROOT} != "/" ] && find $RPM_BUILD_ROOT -name "*.la" -delete
+
+%files
+%doc README.md
+%license COPYING
+%license COPYING.LESSER
+%{_libdir}/security/pam_ssh_auth_info.so
+%{_mandir}/man8/pam_ssh_auth_info.8.gz
+
+%changelog
+%autochangelog

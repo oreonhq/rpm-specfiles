@@ -1,0 +1,12 @@
+[Unit]
+Description=MySQL MMM agent
+After=network.target mysqld.service
+
+[Service]
+Type=forking
+PIDFile=/run/mysql-mmm-agent.pid
+ExecStart=/usr/bin/mmm_agentd
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

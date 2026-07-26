@@ -1,0 +1,29 @@
+From 5e7c380f8ff45d19f52e375a93cb9aa0d4082ad9 Mon Sep 17 00:00:00 2001
+From: fujiwarat <takao.fujiwara1@gmail.com>
+Date: Fri, 10 Oct 2025 10:26:59 +0900
+Subject: [PATCH] Fix not to send unnecessary IBusAttribute
+
+When a GTK3 application is used with GTK_IM_MODULE=ibus, it
+outputs many warnings.
+---
+ engine_preedit.go | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/engine_preedit.go b/engine_preedit.go
+index 0ec5601..3b95799 100644
+--- a/engine_preedit.go
++++ b/engine_preedit.go
+@@ -110,9 +110,7 @@ func (e *IBusBambooEngine) updatePreedit(processedStr string) {
+ 		return
+ 	}
+ 
+-	if e.config.IBflags&config.IBnoUnderline != 0 {
+-		ibusText.AppendAttr(ibus.IBUS_ATTR_TYPE_NONE, ibus.IBUS_ATTR_UNDERLINE_SINGLE, 0, preeditLen)
+-	} else {
++	if e.config.IBflags&config.IBnoUnderline == 0 {
+ 		ibusText.AppendAttr(ibus.IBUS_ATTR_TYPE_UNDERLINE, ibus.IBUS_ATTR_UNDERLINE_SINGLE, 0, preeditLen)
+ 	}
+ 	e.UpdatePreeditTextWithMode(ibusText, preeditLen, true, ibus.IBUS_ENGINE_PREEDIT_COMMIT)
+-- 
+2.51.0
+

@@ -1,0 +1,37 @@
+--- bolzplatz2006/libsrc/irrlicht-0.14-patched/CImageLoaderPNG.cpp~	2007-09-07 21:58:09.000000000 +0200
++++ bolzplatz2006/libsrc/irrlicht-0.14-patched/CImageLoaderPNG.cpp	2007-09-07 22:08:27.000000000 +0200
+@@ -157,10 +157,17 @@ IImage* CImageLoaderPng::loadImage(irr::
+ 	png_set_sig_bytes(png_ptr, 8);   // Tell png that we read the signature 
+ 
+ 	png_read_info(png_ptr, info_ptr);   // Read the info section of the png file 
++	
++	/* We MUST use these and not use the address of our width/height
++	   attributes directly as png_uint_32 = 64 bits on 64 bits, brilliant
++	   huh? */
++	png_uint_32 temp_width, temp_height;
+ 
+-	png_get_IHDR(png_ptr, info_ptr, (png_uint_32*)&width, 
+-		(png_uint_32*)&height, &bitdepth, &colortype, &interlace,
++	png_get_IHDR(png_ptr, info_ptr, &temp_width, 
++		&temp_height, &bitdepth, &colortype, &interlace,
+ 		&compression, &filter);   // Extract info 
++	width = temp_width;
++	height = temp_height;  
+ 
+ 	if ( bitdepth != 8)
+ 	{
+@@ -206,10 +213,13 @@ IImage* CImageLoaderPng::loadImage(irr::
+ 	png_read_update_info(png_ptr, info_ptr); 
+ 
+ 	png_get_IHDR(png_ptr, info_ptr, 
+-		(png_uint_32*)&width, (png_uint_32*)&height, 
++		&temp_width, &temp_height, 
+ 		&bitdepth,&colortype, &interlace, &compression, 
+ 		&filter);   // Extract info 
+ 
++	width = temp_width;
++	height = temp_height;  
++
+ 	// Check the number of bytes per row 
+ 	int bytes_per_row = png_get_rowbytes(png_ptr, info_ptr); 
+ 

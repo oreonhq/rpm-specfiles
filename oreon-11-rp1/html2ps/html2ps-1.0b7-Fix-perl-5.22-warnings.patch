@@ -1,0 +1,61 @@
+From 9f2cd47563fc85bed30f5f4eb224d443b7e65c43 Mon Sep 17 00:00:00 2001
+From: Todd Lewis <todd_lewis@unc.edu>
+Date: Thu, 15 Dec 2016 12:30:37 +0100
+Subject: [PATCH] Fix perl-5.22 warnings
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Unescaped literal left curly bracket and POSIX::tmpnam() are
+deprecated and produce warnings since Perl 5.22. This patch fixes it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ html2ps | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/html2ps b/html2ps
+index a5f363d..6bcc0d1 100755
+--- a/html2ps
++++ b/html2ps
+@@ -353,6 +353,7 @@ A:link, HR { color: black }
+ 
+ EOR
+ 
++use File::Temp qw/ tempfile /;
+ use POSIX;
+ $posix = 1;
+ 
+@@ -494,9 +495,8 @@ die "Ghostscript is required to generate DSC PostScript\n"
+  if($opt_D && !$package{'Ghostscript'});
+ die "Ghostscript is required to generate cross references\n"
+  if($opt_R && !$package{'Ghostscript'});
+-$tmpname=$posix?POSIX::tmpnam():"h2p_$$";
+-sysopen TMP, $tmpname, O_RDWR|O_CREAT|O_EXCL, 0600 or die "$!";
+-close TMP;
++(undef,$tmpname)=tempfile();
++die "$!" unless $tmpname;
+ ($scr=$tmpname)=~/\w+$/;
+ $tempdir=$`;
+ 
+@@ -3829,7 +3829,7 @@ sub DSC {
+       $temp=$'=~/\/P\d+_?\d* \{/?$`:$rest;
+       ($eps{$pid})=$temp=~/([\w\W]*)} D/;
+     }
+-    if(/\/DH {/) {
++    if(/\/DH \{/) {
+       $'=~/%EndDH/;
+       $ph="/DH {$`";
+     }
+@@ -4080,7 +4080,7 @@ sub inihyph {
+   }
+   if(open(HYPH,"<$hyfile")) {
+     &dbg("Reading hyphenation patterns from $hyfile\n") if($opt_d);
+-    <HYPH>=~/\\patterns{.*/;
++    <HYPH>=~/\\patterns\{.*/;
+     close HYPH;
+     $def=$`;
+     ($patterns=$')=~s/\^\^($X$X)/chr hex $1/eg;
+-- 
+2.7.4
+

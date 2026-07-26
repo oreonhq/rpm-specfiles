@@ -1,0 +1,10 @@
+--- a/aws.gpr
++++ b/aws.gpr
+@@ -19,6 +19,7 @@
+ with "shared";
+ with "zlib_ada";
+ with "templates_parser";
++with "xmlada";
+ 
+ aggregate library project AWS is
+ 

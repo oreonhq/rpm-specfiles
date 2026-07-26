@@ -1,0 +1,119 @@
+diff --git a/frysk-common/frysk-common.ac b/frysk-common/frysk-common.ac
+index c9a2be863..7e0bbb0d0 100644
+--- a/frysk-common/frysk-common.ac
++++ b/frysk-common/frysk-common.ac
+@@ -89,13 +89,13 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/$lib/frysk/pkgconfig
+ 
+ # Check for XMLLINT
+ AC_CHECK_PROGS([XMLLINT], [xmllint], [no])
+-test $XMLLINT = no && AC_ERROR([no xmllint program found])
++test $XMLLINT = no && AC_MSG_ERROR([no xmllint program found])
+ AC_CHECK_PROGS([XMLCATALOG], [xmlcatalog], [no])
+-test $XMLCATALOG = no && AC_ERROR([no xmlcatalog program found])
++test $XMLCATALOG = no && AC_MSG_ERROR([no xmlcatalog program found])
+ 
+ # Check for uudecode
+ AC_CHECK_PROGS([UUDECODE], [uudecode], [no])
+-test $UUDECODE = no && AC_ERROR([no uudecode program found, please install sharutils package])
++test $UUDECODE = no && AC_MSG_ERROR([no uudecode program found, please install sharutils package])
+ 
+ FRYSK_USE_LIBUNWIND
+ 
+diff --git a/frysk-core/configure.ac b/frysk-core/configure.ac
+index 69fc220b3..d0fe07c3a 100644
+--- a/frysk-core/configure.ac
++++ b/frysk-core/configure.ac
+@@ -37,7 +37,7 @@
+ # version and license this file solely under the GPL without
+ # exception.
+ 
+-AC_PREREQ(2.59)
++AC_PREREQ([2.69])
+ 
+ sinclude(common/version.ac)
+ AC_INIT(frysk, [FRYSK_VERSION])
+diff --git a/frysk-gtk/configure.ac b/frysk-gtk/configure.ac
+index aaa123f82..55c592ebf 100644
+--- a/frysk-gtk/configure.ac
++++ b/frysk-gtk/configure.ac
+@@ -36,7 +36,7 @@
+ # version and license this file solely under the GPL without
+ # exception.
+ 
+-AC_PREREQ(2.59)
++AC_PREREQ([2.69])
+ 
+ sinclude(common/version.ac)
+ AC_INIT(frysk, [FRYSK_VERSION])
+diff --git a/frysk-gui/configure.ac b/frysk-gui/configure.ac
+index 9a274c68b..ec5950d2a 100644
+--- a/frysk-gui/configure.ac
++++ b/frysk-gui/configure.ac
+@@ -36,7 +36,7 @@
+ # version and license this file solely under the GPL without
+ # exception.
+ 
+-AC_PREREQ(2.59)
++AC_PREREQ([2.69])
+ 
+ sinclude(common/version.ac)
+ AC_INIT(frysk, [FRYSK_VERSION])
+diff --git a/frysk-imports/configure.ac b/frysk-imports/configure.ac
+index b9a6c32c3..e65f4c433 100644
+--- a/frysk-imports/configure.ac
++++ b/frysk-imports/configure.ac
+@@ -37,7 +37,7 @@
+ # version and license this file solely under the GPL without
+ # exception.
+ 
+-AC_PREREQ(2.59)
++AC_PREREQ([2.69])
+ 
+ sinclude(common/version.ac)
+ AC_INIT(frysk, [FRYSK_VERSION])
+diff --git a/frysk-imports/libunwind/configure.ac b/frysk-imports/libunwind/configure.ac
+index 7fa2e4bcf..37c9072a0 100644
+--- a/frysk-imports/libunwind/configure.ac
++++ b/frysk-imports/libunwind/configure.ac
+@@ -57,7 +57,6 @@ esac
+ CHECK_ATOMIC_OPS
+ 
+ dnl Checks for header files.
+-AC_HEADER_STDC
+ AC_CHECK_HEADERS(asm/ptrace_offsets.h endian.h sys/endian.h execinfo.h \
+ 		ia64intrin.h sys/uc_access.h unistd.h signal.h sys/types.h \
+ 		sys/procfs.h sys/ptrace.h byteswap.h elf.h sys/elf.h link.h sys/link.h)
+diff --git a/frysk-sys/configure.ac b/frysk-sys/configure.ac
+index 6a1e0cad8..4f838439d 100644
+--- a/frysk-sys/configure.ac
++++ b/frysk-sys/configure.ac
+@@ -36,7 +36,7 @@
+ # version and license this file solely under the GPL without
+ # exception.
+ 
+-AC_PREREQ(2.59)
++AC_PREREQ([2.69])
+ 
+ sinclude(common/version.ac)
+ AC_INIT(frysk, [FRYSK_VERSION])
+diff --git a/frysk-top/configure.ac b/frysk-top/configure.ac
+index f57136a56..ee68665d3 100644
+--- a/frysk-top/configure.ac
++++ b/frysk-top/configure.ac
+@@ -36,14 +36,14 @@
+ # version and license this file solely under the GPL without
+ # exception.
+ 
+-AC_PREREQ(2.59)
++AC_PREREQ([2.69])
+ 
+ sinclude(common/version.ac)
+ AC_INIT(frysk,defn([FRYSK_VERSION]))
+ m4_include([common/frysk-common.ac])
+ 
+ AC_ARG_ENABLE(gnome,
+-AC_HELP_STRING(
++AS_HELP_STRING(
+ 	[--enable-gnome],
+ 	[enable gnome user interface (default no)]),
+ [enable_gnome=$enableval],

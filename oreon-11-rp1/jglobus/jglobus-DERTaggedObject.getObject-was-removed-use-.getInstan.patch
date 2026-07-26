@@ -1,0 +1,26 @@
+From 0fdcf83709359f52fcb50b41572e3131c7101088 Mon Sep 17 00:00:00 2001
+From: Mattias Ellert <mattias.ellert@physics.uu.se>
+Date: Wed, 6 Dec 2023 11:02:57 +0100
+Subject: [PATCH] DERTaggedObject.getObject() was removed - use .getInstance()
+ instead
+
+---
+ .../src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java
+index d1d9bce..746f122 100644
+--- a/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java
++++ b/ssl-proxies/src/main/java/org/globus/gsi/proxy/ext/ProxyPolicy.java
+@@ -60,7 +60,7 @@ public class ProxyPolicy implements ASN1Encodable {
+         if (seq.size() > 1) {
+             ASN1Encodable obj = seq.getObjectAt(1);
+             if (obj instanceof DERTaggedObject) {
+-                obj = ((DERTaggedObject) obj).getObject();
++                obj = DERTaggedObject.getInstance(obj);
+             }
+             this.policy = (DEROctetString) obj;
+         }
+-- 
+2.43.0
+

@@ -1,0 +1,31 @@
+From 0b7ac4f6b5f8d41bfe9f9fc0ae907f6aa0decc8e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 10 Jun 2021 12:23:35 +0200
+Subject: [PATCH] Do not set rpath on Linux
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Our libraries are in standard dynamic linker path.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ inc/My/Builder/Unix.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/inc/My/Builder/Unix.pm b/inc/My/Builder/Unix.pm
+index 15291d5..5bd61f5 100644
+--- a/inc/My/Builder/Unix.pm
++++ b/inc/My/Builder/Unix.pm
+@@ -33,7 +33,7 @@ sub get_additional_libs {
+     my $ld       = $inc_lib_candidates->{$_};
+     if( -d $_ && -d $ld ) {
+       $rv{"-L$ld"}          = 1;
+-      $rv{"-Wl,-rpath,$ld"} = 1 if $^O =~ /^linux|dragonfly|.+bsd$/;
++      $rv{"-Wl,-rpath,$ld"} = 1 if $^O =~ /dragonfly|.+bsd$/;
+     }
+   }
+   push @list, (keys %rv);
+-- 
+2.31.1
+

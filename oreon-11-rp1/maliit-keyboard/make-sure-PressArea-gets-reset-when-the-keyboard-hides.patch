@@ -1,0 +1,91 @@
+From dd793f17f6536fc0e977684f6f528881169cca4b Mon Sep 17 00:00:00 2001
+From: Aleix Pol <aleixpol@kde.org>
+Date: Thu, 9 Mar 2023 04:27:55 +0100
+Subject: [PATCH] Make sure PressArea gets reset when the keyboard hides
+
+When the keyboard hides, pressed would remain true and hover events
+would still trigger as if the drag session never finished.
+
+This makes sure that the press area gets disabled and the swipe works on
+consecutive Panel sessions.
+---
+ qml/keys/PressArea.qml     | 2 ++
+ src/plugin/inputmethod.cpp | 7 +++++++
+ src/plugin/inputmethod.h   | 4 ++++
+ src/plugin/inputmethod_p.h | 3 +++
+ 4 files changed, 16 insertions(+)
+
+diff --git a/qml/keys/PressArea.qml b/qml/keys/PressArea.qml
+index 46f7104f..e889ae54 100644
+--- a/qml/keys/PressArea.qml
++++ b/qml/keys/PressArea.qml
+@@ -53,6 +53,8 @@ MultiPointTouchArea {
+         holdTimer.stop();
+     }
+ 
++    enabled: Keyboard.shown
++
+     touchPoints: [
+         TouchPoint { 
+             id: point
+diff --git a/src/plugin/inputmethod.cpp b/src/plugin/inputmethod.cpp
+index 23cacca6..6e01d318 100644
+--- a/src/plugin/inputmethod.cpp
++++ b/src/plugin/inputmethod.cpp
+@@ -173,6 +173,13 @@ void InputMethod::hide()
+     d->m_geometry->setShown(false);
+ }
+ 
++bool InputMethod::shown() const
++{
++    Q_D(const InputMethod);
++    return d->m_geometry->shown();
++}
++
++
+ //! \brief InputMethod::close
+ //! Closes the keyboard instantly (typically only called by QML after the
+ //! hiding animation has finished, under normal circumstances hide() should
+diff --git a/src/plugin/inputmethod.h b/src/plugin/inputmethod.h
+index f29ae7eb..f1f28294 100644
+--- a/src/plugin/inputmethod.h
++++ b/src/plugin/inputmethod.h
+@@ -64,6 +64,7 @@ class InputMethod
+     Q_PROPERTY(QString surroundingLeft READ surroundingLeft)
+     Q_PROPERTY(QString surroundingRight READ surroundingRight)
+     Q_PROPERTY(bool animationEnabled READ isAnimationEnabled NOTIFY animationEnabledChanged)
++    Q_PROPERTY(bool shown READ shown NOTIFY shownChanged)
+ 
+ public:
+     /// Same as Maliit::TextContentType but usable in QML
+@@ -80,6 +81,8 @@ class InputMethod
+     explicit InputMethod(MAbstractInputMethodHost *host);
+     ~InputMethod() override;
+ 
++    bool shown() const;
++
+     //! \reimp
+     void show() override;
+     Q_SLOT void hide() override;
+@@ -174,6 +177,7 @@ class InputMethod
+     void cursorPositionChanged(int cursor_position);
+     void opacityChanged(double opacity);
+     void animationEnabledChanged();
++    void shownChanged();
+ 
+ private:
+     Q_SLOT void onAutoCorrectSettingChanged();
+diff --git a/src/plugin/inputmethod_p.h b/src/plugin/inputmethod_p.h
+index 749ff3da..db19cf54 100644
+--- a/src/plugin/inputmethod_p.h
++++ b/src/plugin/inputmethod_p.h
+@@ -168,6 +168,9 @@ class InputMethodPrivate
+         QObject::connect(editor.wordEngine(), &MaliitKeyboard::Logic::AbstractWordEngine::commitTextRequested,
+                          &editor, &MaliitKeyboard::AbstractTextEditor::replaceAndCommitPreedit);
+ 
++        QObject::connect(m_geometry, &KeyboardGeometry::shownChanged,
++                         q, &InputMethod::shownChanged);
++
+ 
+         view->setWindowState(Qt::WindowNoState);
+ 

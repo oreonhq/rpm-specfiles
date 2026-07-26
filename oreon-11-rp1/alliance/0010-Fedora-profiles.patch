@@ -1,0 +1,114 @@
+From 52c5cec07b86e606d5062da6e83ada94cf214c13 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Tue, 1 Mar 2016 15:27:11 +0100
+Subject: [PATCH 10/10] Fedora profiles.
+
+---
+ alliance/src/distrib/etc/alc_env.csh.in | 32 ++-----------------------------
+ alliance/src/distrib/etc/alc_env.sh.in  | 34 +++------------------------------
+ 2 files changed, 5 insertions(+), 61 deletions(-)
+
+diff --git a/alliance/src/distrib/etc/alc_env.csh.in b/alliance/src/distrib/etc/alc_env.csh.in
+index cea6941..4051fba 100644
+--- a/alliance/src/distrib/etc/alc_env.csh.in
++++ b/alliance/src/distrib/etc/alc_env.csh.in
+@@ -21,13 +21,8 @@
+ 
+ # Where the Alliance CAD is installed
+  setenv ALLIANCE_TOP         "@prefix@"
+- set    SYSCONF_TOP          "${ALLIANCE_TOP}/etc"
+- set    CELLS_TOP            "${ALLIANCE_TOP}/cells"
+- if ( "${ALLIANCE_TOP}" == "/usr/lib/alliance" ) then
+-# For installation in the FHS.
+-   set  SYSCONF_TOP          "/etc/alliance"
+-   set  CELLS_TOP            "/usr/share/alliance/cells"
+- endif
++ set  SYSCONF_TOP            "@sysconfdir@/alliance"
++ set  CELLS_TOP              "@datadir@/alliance/cells"
+ 
+ 
+ # Alliance environment variables.
+@@ -75,29 +70,6 @@
+  setenv ELP_TECHNO_NAME      "${SYSCONF_TOP}/prol.elp"
+ 
+ 
+-# System PATH variables, only needed when not installed in the FHS.
+- if ( "${ALLIANCE_TOP}" != "/usr/lib/alliance" ) then
+-   if ( $?PATH ) then
+-     setenv PATH "${PATH}:${ALLIANCE_TOP}/bin"
+-   else
+-     setenv PATH "${ALLIANCE_TOP}/bin"
+-   endif
+-  
+-   if ( "`uname -o`" != "GNU/Linux" ) then
+-    # Only needed on Solaris (included in /etc/ld.so.conf under Linux).
+-     if ( $?LD_LIBRARY_PATH ) then
+-       setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${ALLIANCE_TOP}/lib"
+-     else
+-       setenv LD_LIBRARY_PATH "${ALLIANCE_TOP}/lib"
+-     endif
+-   endif
+-  
+-   if ( $?MANPATH ) then
+-     setenv MANPATH "${MANPATH}:${ALLIANCE_TOP}/share/man"
+-   else
+-     setenv MANPATH ":${ALLIANCE_TOP}/share/man:`manpath`"
+-   endif
+- endif
+  
+  # fixing *** ERROR *** : Variable MBK_SPI_MODEL not found.
+  setenv MBK_SPI_MODEL     "${SYSCONF_TOP}/spimodel.cfg"
+diff --git a/alliance/src/distrib/etc/alc_env.sh.in b/alliance/src/distrib/etc/alc_env.sh.in
+index a4115f2..246eec6 100644
+--- a/alliance/src/distrib/etc/alc_env.sh.in
++++ b/alliance/src/distrib/etc/alc_env.sh.in
+@@ -20,14 +20,9 @@
+ 
+ 
+ # Where the Alliance CAD is installed
+-        ALLIANCE_TOP=@prefix@;                       export ALLIANCE_TOP
+-         SYSCONF_TOP=$ALLIANCE_TOP/etc
+-           CELLS_TOP=$ALLIANCE_TOP/cells
+- if [ "$ALLIANCE_TOP" = "/usr/lib/alliance" ]; then
+-  # FHS Installation.
+-         SYSCONF_TOP="/etc/alliance"
+-           CELLS_TOP="/usr/share/alliance/cells"
+- fi
++        ALLIANCE_TOP="@prefix@";                       export ALLIANCE_TOP
++         SYSCONF_TOP="@sysconfdir@/alliance"
++           CELLS_TOP="@datadir@/alliance/cells"
+ 
+ # Alliance environment variables.
+            MBK_IN_LO=vst;                            export MBK_IN_LO
+@@ -76,28 +71,5 @@
+      ELP_TECHNO_NAME=$SYSCONF_TOP/prol.elp;          export ELP_TECHNO_NAME
+ 
+ 
+-# System PATH variables, only needed when not installed in the FHS.
+- if [ "$ALLIANCE_TOP" != "/usr/lib/alliance" ]; then
+-   PATH=$PATH:$ALLIANCE_TOP/bin
+-   export PATH
+-  
+-  # Only needed on Solaris (included in /etc/ld.so.conf under Linux).
+-  #if [ "`uname -o`" != "GNU/Linux" ]; then
+-     if [ -z "${LD_LIBRARY_PATH}" ]; then
+-       LD_LIBRARY_PATH=$ALLIANCE_TOP/lib
+-     else
+-       LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ALLIANCE_TOP/lib
+-     fi
+-     export LD_LIBRARY_PATH
+-  #fi
+-  
+-   if [ -z "${MANPATH}" ]; then
+-     MANPATH=:$ALLIANCE_TOP/share/man:$(manpath)
+-   else
+-     MANPATH=$MANPATH:$ALLIANCE_TOP/share/man
+-   fi
+-   export MANPATH
+- fi
+- 
+ # fixing *** ERROR *** : Variable MBK_SPI_MODEL not found.
+  MBK_SPI_MODEL=$SYSCONF_TOP/spimodel.cfg;      export MBK_SPI_MODEL
+-- 
+2.5.0
+

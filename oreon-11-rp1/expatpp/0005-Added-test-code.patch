@@ -1,0 +1,659 @@
+From daf99e1143d6c9ec5b140d9f574aa54f3e39df81 Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 16:16:00 +0200
+Subject: [PATCH 05/15] Added test code
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ test/carb.r           |   1 +
+ test/testexpat.c      |  87 +++++++++++++++++++
+ test/testexpatpp.cpp  | 103 +++++++++++++++++++++++
+ test/testexpatpp2.cpp | 226 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ test/testexpatpp3.cpp | 188 +++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 605 insertions(+)
+ create mode 100644 test/carb.r
+ create mode 100755 test/testexpat.c
+ create mode 100755 test/testexpatpp.cpp
+ create mode 100755 test/testexpatpp2.cpp
+ create mode 100644 test/testexpatpp3.cpp
+
+diff --git a/test/carb.r b/test/carb.r
+new file mode 100644
+index 0000000..e214e4b
+--- /dev/null
++++ b/test/carb.r
+@@ -0,0 +1 @@
++/* *  Permit this Carbon application to launch on OS X * *  Copyright © 1997-2002 Metrowerks Corporation.  All Rights Reserved. * *  Questions and comments to: *       <mailto:support@metrowerks.com> *       <http://www.metrowerks.com/> *//*----------------------------carb ¥ Carbon on OS X launch information --------------------------*/type 'carb' {};resource 'carb'(0) {};
+\ No newline at end of file
+diff --git a/test/testexpat.c b/test/testexpat.c
+new file mode 100755
+index 0000000..e8bca82
+--- /dev/null
++++ b/test/testexpat.c
+@@ -0,0 +1,87 @@
++/* This is simple demonstration of how to use expat. This program
++reads an XML document from standard input and writes a line with the
++name of each element to standard output indenting child elements by
++one tab stop more than their parent element. 
++
++Copied from elements.c 98/08/31 AD to open specified file rather than stdin
++and added a CharacterDataHandler
++*/
++
++#include <stdio.h>
++#include "xmlparse.h"
++
++void startElement(void *userData, const char *name, const char **atts)
++{
++  int i;
++  int *depthPtr = userData;
++  for (i = 0; i < *depthPtr; i++)
++    putchar('\t');
++  puts(name);
++  *depthPtr += 1;
++}
++
++void endElement(void *userData, const char *name)
++{
++  int *depthPtr = userData;
++  *depthPtr -= 1;
++}
++
++
++void charData(void *userData, const XML_Char *s, int len)
++{
++/* write indent level stored in userData */
++  int i;
++  int *depthPtr = userData;
++  
++  if (len==0)
++  	return;  // lots of extra calls?
++  	
++  for (i = 0; i < *depthPtr; i++)
++    putchar('\t');
++
++/* write out the user data bracketed by ()*/
++  putchar('(');
++  fwrite(s, len, 1, stdout);
++  puts(")");
++}
++
++
++int main()
++{	
++  char filename[80];
++  FILE* xmlFile;
++  char buf[BUFSIZ];
++  for (;;) {	  
++	  XML_Parser parser;
++	  int done;
++	  int depth = 0;
++
++	  puts("\n\nXML test: enter filename");
++	  gets(filename);
++	  if (strlen(filename)==0)
++	  	break;
++	  	
++	  xmlFile = fopen(filename, "r");
++	  if (!xmlFile)
++	  	break;
++
++	  parser = XML_ParserCreate(NULL);
++	  XML_SetUserData(parser, &depth);
++	  XML_SetElementHandler(parser, startElement, endElement);
++	  XML_SetCharacterDataHandler(parser, charData);
++	  do {
++	    size_t len = fread(buf, 1, sizeof(buf), xmlFile /*stdin*/);
++	    done = len < sizeof(buf);
++	    if (!XML_Parse(parser, buf, len, done)) {
++	      fprintf(stderr,
++		      "%s at line %d\n",
++		      XML_ErrorString(XML_GetErrorCode(parser)),
++		      XML_GetCurrentLineNumber(parser));
++	      return 1;
++	    }
++	  } while (!done);
++	  XML_ParserFree(parser);
++/*	  return 0;  */
++  }
++  puts("\nfinished!");
++}
+\ No newline at end of file
+diff --git a/test/testexpatpp.cpp b/test/testexpatpp.cpp
+new file mode 100755
+index 0000000..30af4ff
+--- /dev/null
++++ b/test/testexpatpp.cpp
+@@ -0,0 +1,103 @@
++/* This is simple demonstration of how to use expat. This program
++reads an XML document from standard input and writes a line with the
++name of each element to standard output indenting child elements by
++one tab stop more than their parent element. 
++
++Copied from elements.c 98/08/31 AD to open specified file rather than stdin
++and added a CharacterDataHandler
++*/
++
++#include <stdio.h>
++#include "expatpp.h"
++#include <string.h>
++
++class myParser : public expatpp {
++public:
++	myParser() : mDepth(0) {};
++	
++	virtual void startElement(const XML_Char *name, const XML_Char **atts);
++	virtual void endElement(const XML_Char* name);
++	virtual void charData(const XML_Char *s, int len);
++	
++private:
++	void WriteIndent();
++	int	mDepth;	
++};
++
++
++void 
++myParser::WriteIndent()
++{
++  for (int i = 0; i < mDepth; i++)
++    putchar('\t');
++}
++
++
++void 
++myParser::startElement(const XML_Char* name, const XML_Char** atts)
++{
++  WriteIndent();
++  puts(name);
++  if (atts) { /* write list of attributes indented below element */
++    int i;
++    for (i=0; atts[i]; i++) {
++      WriteIndent();
++      putchar('-'); putchar(' ');
++      puts(atts[i]);
++    }
++  }
++  mDepth++;
++}
++
++
++void 
++myParser::endElement(const XML_Char*)
++{
++  mDepth--;
++}
++
++
++void 
++myParser::charData(const XML_Char *s, int len)
++{
++  const int leadingSpace = skipWhiteSpace(s);
++  if (len==0 || len==leadingSpace)
++  	return;  // called with whitespace between elements
++  	
++  WriteIndent();
++
++/* write out the user data bracketed by ()*/
++  putchar('(');
++  fwrite(s, len, 1, stdout);
++  puts(")");
++}
++
++
++int main()
++{	
++	myParser parser;
++	char filename[80];
++	FILE* xmlFile;
++	for (;;) {	  
++		int depth = 0;
++		
++		puts("\n\nXML test: enter filename");
++		gets(filename);
++		if (strlen(filename)==0)
++			break;
++		
++		xmlFile = fopen(filename, "r");
++		if (!xmlFile)
++			break;
++		
++		if (!parser.parseFile(xmlFile)) {
++			fprintf(stderr,
++				"%s at line %d\n",
++				XML_ErrorString(parser.XML_GetErrorCode()),
++				parser.XML_GetCurrentLineNumber()
++			);
++			return 1;
++		}
++	}  // loop asking for and parsing files
++	puts("\nfinished!");
++}
+diff --git a/test/testexpatpp2.cpp b/test/testexpatpp2.cpp
+new file mode 100755
+index 0000000..120a8d7
+--- /dev/null
++++ b/test/testexpatpp2.cpp
+@@ -0,0 +1,226 @@
++/**
++\file testexpatpp2.cpp
++Uses OOFILE XML classes to help write an XML file to the name you specify
++then parses it back into a data structure. This shows the simple persistence
++you would use to store an XML-based preferences file.
++*/
++
++#include <stdio.h>
++#include "expatpp.h"
++#include <string.h>
++#ifndef H_OOFXML
++	#include "oofxml.h"
++#endif 
++
++/**
++Simple data class with public members so it can be updated
++by parser.
++
++writes itself as XML file like
++<?xml version="1.0" standalone="no" ?>
++<simpleData>
++	<name>Andy Dent</name>
++	<isProgrammer/>
++	<age>37</age>
++</simpleData>
++*/
++
++
++// -------------------------------------------------------
++//      s i m p l e D a t a
++// -------------------------------------------------------
++class simpleData {
++public:
++	simpleData(const char* inName=0, int inAge=0, bool inProg=false);
++	
++	static void writeSampleXML(FILE* xmlFile);
++	void writeXML(FILE* xmlFile);
++	void dumpData();
++
++	oofString	mName;
++	int	mAge;
++	bool mIsProgrammer;
++};
++
++
++simpleData::simpleData(const char* inName, int inAge, bool inProg) :
++	mName(inName),
++	mAge(inAge),
++	mIsProgrammer(inProg)
++{
++}
++
++
++void
++simpleData::writeXML(FILE* xmlFile)
++{
++	oofXMLwriter theXML;
++	theXML.startElement("simpleData");
++		theXML.addSimpleElement("name", mName);
++		theXML.addSimpleElement("age", mAge);
++		if (mIsProgrammer)
++			theXML.addEmptyElement("isProgrammer");
++	theXML.endElement();
++	
++	assert(theXML.topLevelClosed());
++	
++	fputs(theXML.generatedXML(), xmlFile);
++	fseek(xmlFile, 0, SEEK_SET); // reset for reading
++}
++
++
++void
++simpleData::dumpData()
++{
++	printf("simpleData\n");
++	printf("   name=%s\n", mName.chars());
++	printf("   age=%d\n", mAge);
++	if (mIsProgrammer)
++		printf("   is Programmer\n");
++	else
++		printf("   is NOT Programmer\n");
++}
++
++
++void
++simpleData::writeSampleXML(FILE* xmlFile)
++{
++	simpleData theSample("Andy Dent", 37, true);
++	theSample.writeXML(xmlFile);
++}
++
++
++// -------------------------------------------------------
++//      s d P a r s e r
++// -------------------------------------------------------
++class sdParser : public expatpp {
++public:
++	sdParser(simpleData&);
++	
++	virtual void startElement(const XML_Char *name, const XML_Char **atts);
++	virtual void endElement(const XML_Char* name);
++	virtual void charData(const XML_Char *s, int len);
++	
++private:
++	enum elementStateT {eNone, eInName, eInAge};
++	elementStateT mState;
++	simpleData& mData;	
++};
++
++
++sdParser::sdParser(simpleData& inData) : 
++	mState(eNone),
++	mData(inData) 
++{}
++
++
++/**
++Either change state or set bool indicating hit empty element
++*/
++void 
++sdParser::startElement(const XML_Char* name, const XML_Char** /*atts*/)
++{
++	if(strcmp(name,"name")==0){
++		// ignore the attributes
++		assert(mState==eNone);  // enforce the structure we expect
++		mState = eInName;
++	}
++	else if(strcmp(name,"age")==0){
++		assert(mState==eNone);  // enforce the structure we expect
++		mState = eInAge;
++	}
++	else if(strcmp(name,"isProgrammer")==0) {
++		mData.mIsProgrammer = true;
++		mState = eNone;
++	}
++}
++
++
++void 
++sdParser::endElement(const XML_Char*)
++{
++	mState = eNone;
++}
++
++
++/**
++Based on state - read name or age.
++If you are developing to a rigid XML format it is a really good idea to start
++with a parser that has assertions for unknowns like this one because it will quickly
++help you identify problems with the data being written. Flexible XML formats make it hard
++to decide if bugs are in the writer or reader.
++*/
++void 
++sdParser::charData(const XML_Char *s, int len)
++{
++	if (emptyCharData(s, len))
++		return;
++	
++	switch(mState) {
++		case eInName :
++			mData.mName.setChars(s, len);
++			break;
++			
++		case eInAge :
++		{
++			int i;
++			std::sscanf(s,"%d", &i);
++			mData.mAge = i;
++		}
++			break;
++		
++		default : {
++			assert(mState==eNone);  // more flexible parser would ignore unknown states
++		}	
++	};
++}
++
++
++// -------------------------------------------------------
++//      m a i n
++// -------------------------------------------------------
++/**
++sample showing parsing of file in loop reading minimal sized buffer
++to cut down on overhead.
++*/
++int main()
++{
++	simpleData theData;	
++	sdParser parser(theData);
++	char filename[80];
++	FILE* xmlFile;
++	char buf[BUFSIZ];
++	
++	int done;
++	int depth = 0;
++	
++	puts("\n\nXML test: enter filename to write");
++	gets(filename);
++	if (strlen(filename)==0)
++		return 0;
++	
++	xmlFile = fopen(filename, "wb+");
++	if (!xmlFile)
++		return 0;
++	
++	puts("sample data in original empty state!");
++	theData.dumpData();
++	
++	simpleData::writeSampleXML(xmlFile);
++  
++// read back thefile
++	if (!parser.parseFile(xmlFile)) {
++		fprintf(stderr,
++			"%s at line %d\n",
++			XML_ErrorString(parser.XML_GetErrorCode()),
++			parser.XML_GetCurrentLineNumber()
++		);
++		return 1;
++	}
++
++	puts("\n\nsample data after reading back!\n");
++	theData.dumpData();
++	
++	puts("\nfinished!");
++}
++
+diff --git a/test/testexpatpp3.cpp b/test/testexpatpp3.cpp
+new file mode 100644
+index 0000000..bbc9efb
+--- /dev/null
++++ b/test/testexpatpp3.cpp
+@@ -0,0 +1,188 @@
++/* 
++	\file testexpatpp3.cpp
++	Demonstrates use of nesting parsers and parsing attributes
++	Structure of topParser is similar to myParser in testexpatpp.cpp
++	
++	\invoking nested parsers with attributes
++	An important point when writing a nested parser is that the element
++	used to invoke the parser, eg: <settings>, is "consumed" by the parent parser.
++	That's fine if you have an element-oriented architecture like oofRep.
++	
++	If you expect to have important attributes on the starting element for your
++	sub-parser then use a handleAtts() approach as shown below.
++	
++	If the ONLY thing in your sub-parser is handling attributes and it will never
++	be invoked with nested elements then consider not bothering making it a sub-parser
++	at all and just make it a method of the current parent parser. 
++	
++	\par expected output
++\verbatim
++BEEPX.MSG
++- channel
++- 1
++- msgno
++- 1
++    ignored
++settingsParser::ctor
++   ComPort='1'
++   DataSource='device'
++   RecordFile='off'
++   WindowingStyle='hanning'
++   Points='256'
++
++
++settingsParser::ctor
++
++
++  settingsParser::startElement
++     anAtt='Andy'
++     anotherAtt='woz here'
++
++
++
++finished!
++\endverbatim
++	
++*/
++
++#include <stdio.h>
++#include "expatpp.h"
++#include <string.h>
++
++/// sample with a nested element with many attributes
++const char kSample[] = 
++	"<BEEPX.MSG channel='1' msgno='1'>"
++		"<ignored />"
++		"<settings \n"  // note this is a top-level settings object with attributes
++		"ComPort='1'\n"
++		"DataSource='device'\n"
++		"RecordFile='off'\n"
++		"WindowingStyle='hanning'\n"
++		"Points='256'\n"
++		" />"
++		"<settings>"
++			"<anElementWithinSettings anAtt='Andy' anotherAtt='woz here' />"
++		"</settings>"	
++	"</BEEPX.MSG>"
++;
++
++class topParser : public expatppNesting {
++public:
++	topParser() : mDepth(0) {};
++	
++	virtual void startElement(const XML_Char *name, const XML_Char **atts);
++	virtual void endElement(const XML_Char* name);
++	virtual void charData(const XML_Char *s, int len);
++	
++private:
++	void WriteIndent();
++	int	mDepth;	
++};
++
++
++class settingsParser : public expatppNesting {
++public:
++	settingsParser(expatppNesting* parent, const XML_Char **atts);
++	virtual void startElement(const XML_Char* name, const XML_Char** atts);
++	
++private:
++	void handleAtts(const XML_Char** atts);
++};
++	
++
++void 
++topParser::WriteIndent()
++{
++  for (int i = 0; i < mDepth; i++)
++    putchar('\t');
++}
++
++
++void 
++topParser::startElement(const char* name, const char** atts)
++{
++	if(strcmp(name,"settings")==0)
++		new settingsParser(this, atts);  // transfer control to settings parser
++	else {
++		WriteIndent();
++		puts(name);
++		if (atts) { /* write list of attributes indented below element */
++			int i;
++			for (i=0; atts[i]; i++) {
++				WriteIndent();
++				putchar('-'); putchar(' ');
++				puts(atts[i]);
++			}
++		}
++		mDepth++;
++	}
++}
++
++
++void 
++topParser::endElement(const char*)
++{
++  mDepth--;
++}
++
++
++void 
++topParser::charData(const XML_Char *s, int len)
++{
++  const int leadingSpace = skipWhiteSpace(s);
++  if (len==0 || len==leadingSpace)
++  	return;  // called with whitespace between elements
++  	
++  WriteIndent();
++
++/* write out the user data bracketed by ()*/
++  putchar('(');
++  fwrite(s, len, 1, stdout);
++  puts(")");
++}
++
++
++settingsParser::settingsParser(expatppNesting* parent, const XML_Char **atts) :
++	expatppNesting(parent)
++{
++	printf("settingsParser::ctor\n");
++	handleAtts(atts);
++	printf("\n\n");
++}
++
++
++void 
++settingsParser::startElement(const XML_Char* name, const XML_Char** atts)
++{
++	printf("  settingsParser::startElement\n");
++	handleAtts(atts);
++	printf("\n\n");
++}
++
++
++void 
++settingsParser::handleAtts(const XML_Char** atts)
++{
++	for (int i=0; atts[i]!=0; i++) {
++		printf("   %s='%s'\n", atts[i], atts[++i]);
++	}
++}
++
++
++
++int main()
++{	
++	topParser parser;
++	char filename[80];
++	int depth = 0;
++	
++	if (!parser.parseString(kSample)) {
++		fprintf(stderr,
++			"%s at line %d\n",
++			XML_ErrorString(parser.XML_GetErrorCode()),
++			parser.XML_GetCurrentLineNumber()
++		);
++		return 1;
++	}
++	puts("\nfinished!");
++}
+-- 
+1.7.11.7
+

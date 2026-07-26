@@ -1,0 +1,14 @@
+--- dose3-7.0.0/tests/applications/dose-tests/ceve_cone_dot.orig	2021-07-22 01:14:19.000000000 -0600
++++ dose3-7.0.0/tests/applications/dose-tests/ceve_cone_dot	2023-09-01 12:46:01.053215026 -0600
+@@ -280,3 +280,4 @@ digraph G {
+   1054195454 -> 203983860 [style="solid", ];
+   
+   }
++
+--- dose3-7.0.0/tests/applications/dose-tests/ceve_cone_multiarch_dot.orig	2021-07-22 01:14:19.000000000 -0600
++++ dose3-7.0.0/tests/applications/dose-tests/ceve_cone_multiarch_dot	2023-09-01 12:46:27.236763293 -0600
+@@ -280,3 +280,4 @@ digraph G {
+   828552574 -> 744010895 [style="solid", ];
+   
+   }
++

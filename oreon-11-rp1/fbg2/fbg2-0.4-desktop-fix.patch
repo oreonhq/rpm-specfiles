@@ -1,0 +1,13 @@
+diff -up fbg2-0.4/fbg2.desktop.fix fbg2-0.4/fbg2.desktop
+--- fbg2-0.4/fbg2.desktop.fix	2011-07-28 11:34:06.000000000 -0400
++++ fbg2-0.4/fbg2.desktop	2011-12-09 15:17:35.187077308 -0500
+@@ -2,7 +2,7 @@
+ Name=Falling Block Game
+ Type=Application
+ Comment=Classic block-stacking arcade game
+-Icon=fbg2.png
++Icon=fbg2
+ Exec=fbg2
+-Categories=Game
++Categories=Game;ArcadeGame;
+ 

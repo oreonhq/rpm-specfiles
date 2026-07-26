@@ -1,0 +1,45 @@
+From 2f7fcf6a3846fc90eb1d0597415a090d3c3af1ae Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 8 Nov 2017 19:20:12 +0100
+Subject: [PATCH 1/2] extension: unbreak the libnm code path
+
+---
+ disconnect-wifi@kgshank.net/extension.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/disconnect-wifi@kgshank.net/extension.js b/disconnect-wifi@kgshank.net/extension.js
+index 98b19a3..d9fa5ba 100644
+--- a/disconnect-wifi@kgshank.net/extension.js
++++ b/disconnect-wifi@kgshank.net/extension.js
+@@ -151,7 +151,7 @@ const WifiDisconnector = new Lang.Class({
+             }
+         } else {
+             if (_activeConnection) {
+-                this._client.activate_connection_async(_activeConnection.connection.path,device,null,null,null);
++                this._client.activate_connection_async(_activeConnection.connection,device,null,null,null);
+             } else {
+                 this._client.activate_connection_async(null,device,null,null,null);
+             }
+
+From a878a1c7b01f54cd0bc2a8efdce7f22ac7574c95 Mon Sep 17 00:00:00 2001
+From: gopi <gopi@gopi-v3-771g>
+Date: Thu, 9 Nov 2017 21:33:02 +0530
+Subject: [PATCH 2/2] Version Sync with extensions.gnome.org
+
+---
+ disconnect-wifi@kgshank.net/metadata.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/disconnect-wifi@kgshank.net/metadata.json b/disconnect-wifi@kgshank.net/metadata.json
+index 2d7d8df..928525d 100644
+--- a/disconnect-wifi@kgshank.net/metadata.json
++++ b/disconnect-wifi@kgshank.net/metadata.json
+@@ -12,7 +12,7 @@
+     "uuid": "disconnect-wifi@kgshank.net", 
+     "name": "Disconnect Wifi", 
+     "description": "Adds a Disconnect option for Wifi in status menu, when a network is connected. Shows a Reconnect option, after network is disconnected.",
+-    "version": "17",
++    "version": "18",
+     "original-author": "GopI",
+     "url": "https://github.com/kgshank/gse-disconnect-wifi"
+ }

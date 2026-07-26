@@ -1,0 +1,42 @@
+README.Fedora - keychain opt-in
+
+keychain is a manager for both ssh-agent and gpg-agent. It allows your shells
+and cron jobs to share a single ssh-agent or gpg-agent process. keychain
+typically runs from the login shell environment setting, i.e. ~/.bash_profile
+when using bash or ~/.login when running a tcsh shell. It's general usage and
+different options are documented in keychain(1).
+
+Installed from Fedora keychain can be easily activated by simply touching an
+empty ~/.keychainrc file when using either bash, sh, ksh, zsh, csh or tcsh.
+This will let the user's shell invoke a default setup of keychain where it
+loads all user's ssh keys from ~/.ssh/ to an ssh-agent process. gpg keys are
+not loaded by default as the necessary gpg-agent is not part of the Fedora Core
+gnupg package, but provided by the additional gnupg2 package of Fedora. The
+default setup starts keychain in quiet mode, so only messages are printed out
+in case of warnings, errors or if interactivity is required.
+
+To override the default settings with which keychain is activated when
+the shell environment finds a ~/.keychainrc, the user can customize following
+variables by setting them inside the ~/.keychainrc.
+
+KCHOPTS=""
+    This variable takes options for keychain like "--nocolor" or "--noask".
+    Please see the keychain manpage for a full list.
+SSHKEYS=""
+    Instead of loading all keys the user can list those keys to be loaded by
+    their file names. The key list has to be space separated.
+GPGKEYS=""
+    gpg keys to be loaded by keychain have to be specified by their key ID.
+    The user can get a full list of keys and IDs in his secret keyring by
+    running `gpg --list-secret-keys'. GPGKEYS defines a single key ID or a
+    space separated list of key IDs.
+
+Please be aware that you still need to source the keychain file with the
+ssh-agent environment variables along with the crontab entry when you want
+to make use of ssh public key auth or of gpg signing through cron jobs,
+because cron uses a non-interactive shell and has a limited environment set.
+
+Note: This opt-in is not part of keychain, which is originally written by
+Daniel Robbins <drobbins@gentoo.org>, but added to the Fedora package of
+keychain to allow Fedora users an overall ease of use.
+

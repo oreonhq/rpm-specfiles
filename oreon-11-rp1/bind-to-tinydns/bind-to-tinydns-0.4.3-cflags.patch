@@ -1,0 +1,14 @@
+Binary files bind-to-tinydns-0.4.3/bind-to-tinydns and bind-to-tinydns-0.4.3.new/bind-to-tinydns differ
+diff -ruNp bind-to-tinydns-0.4.3/Makefile bind-to-tinydns-0.4.3.new/Makefile
+--- bind-to-tinydns-0.4.3/Makefile	2003-06-01 14:21:34.000000000 -0300
++++ bind-to-tinydns-0.4.3.new/Makefile	2009-01-27 12:20:44.000000000 -0200
+@@ -1,7 +1,8 @@
+ CC=cc -Wall -g
++CFLAGS=
+ 
+ bind-to-tinydns: bind-to-tinydns.c
+-	${CC} -o bind-to-tinydns bind-to-tinydns.c
++	${CC} $(CFLAGS) -o bind-to-tinydns bind-to-tinydns.c
+ 
+ clean:
+ 	rm -f bind-to-tinydns

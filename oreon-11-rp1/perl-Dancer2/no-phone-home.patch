@@ -1,0 +1,29 @@
+Description: Remove version check when generating an application tree
+ This is a privacy breach and serves no real purpose for the package in
+ Debian/stable
+
+--- a/lib/Dancer2/CLI/Gen.pm
++++ b/lib/Dancer2/CLI/Gen.pm
+@@ -58,14 +58,6 @@ option overwrite => (
+     default  => 0,
+ );
+ 
+-option no_check => (
+-    is       => 'ro',
+-    short    => 'x',
+-    doc      => "don't check latest Dancer2 version (default: check - requires internet)",
+-    required => 0,
+-    default  => 0,
+-);
+-
+ option skel => (
+     is         => 'ro',
+     short      => 's',
+@@ -154,7 +146,6 @@ dots, hyphens or start with a number.
+ 
+ sub run {
+     my $self = shift;
+-    $self->_version_check unless $self->no_check;
+ 
+     my $app_name = $self->application;
+     my $app_file = $self->parent_command->_get_app_file( $app_name );

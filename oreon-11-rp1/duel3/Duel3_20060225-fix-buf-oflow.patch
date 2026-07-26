@@ -1,0 +1,12 @@
+diff -up Duel3_20060225_src/Source/Player.cpp~ Duel3_20060225_src/Source/Player.cpp
+--- Duel3_20060225_src/Source/Player.cpp~	2008-12-03 16:46:42.000000000 +0100
++++ Duel3_20060225_src/Source/Player.cpp	2008-12-03 16:46:42.000000000 +0100
+@@ -111,7 +111,7 @@ void Player::drawHotSeatHUD(int playerNu
+     //if(blue_bar.retExist()==false)
+     //    blue_bar.setPict(161,10,"w_hud/blue_bar.bmp");
+ 
+-    char ammo_left[4], shield_percent[5], armour_percent[5], lives_left[4];
++    char ammo_left[5], shield_percent[5], armour_percent[5], lives_left[4];
+     int xPos,yPos;
+     
+     if(ship.retWepHoming()==true)   //only display the tageting reticle if a weapon with homing is selected

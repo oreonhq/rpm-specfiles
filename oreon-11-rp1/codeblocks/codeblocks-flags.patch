@@ -1,0 +1,21 @@
+diff -up codeblocks_25.03/configure.ac.orig codeblocks_25.03/configure.ac
+--- codeblocks_25.03/configure.ac.orig	2025-04-01 15:34:30.320226867 +0200
++++ codeblocks_25.03/configure.ac	2025-04-01 15:35:23.351072364 +0200
+@@ -42,8 +42,6 @@ AC_PROG_LN_S
+ AC_PROG_MAKE_SET
+ AC_PROG_AWK
+ 
+-AX_CXX_COMPILE_STDCXX(11, noext)
+-
+ CODEBLOCKS_CHECK_LINK_FLAG([-Wl,--no-undefined],[LDFLAGS="-Wl,--no-undefined $LDFLAGS"])
+ 
+ CODEBLOCKS_SETUP_FOR_TARGET
+@@ -379,7 +377,7 @@ case `uname` in
+ esac
+ AC_MSG_RESULT("$PIC_CFLAGS -DPIC")
+ 
+-CFLAGS="$CFLAGS $PIC_CFLAGS -std=c90"
++CFLAGS="$CFLAGS $PIC_CFLAGS"
+ CPPFLAGS="$CPPFLAGS -DPIC $CB_TINYXML_CFLAGS"
+ CXXFLAGS="$CXXFLAGS $PIC_CFLAGS -fexceptions"
+ AC_SUBST(codeblocks_PCH_FLAGS, "$PCH_FLAGS")

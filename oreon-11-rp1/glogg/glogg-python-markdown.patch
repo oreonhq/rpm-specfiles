@@ -1,0 +1,25 @@
+Index: glogg-0.9.0/glogg.pro
+===================================================================
+--- glogg-0.9.0.orig/glogg.pro	2012-01-05 10:56:31.000000000 +0100
++++ glogg-0.9.0/glogg.pro	2012-10-25 21:34:25.606164277 +0200
+@@ -98,17 +98,17 @@ RC_FILE = glogg.rc
+ RESOURCES = glogg.qrc
+ 
+ # Build HTML documentation (if 'markdown' is available)
+-system(type markdown >/dev/null) {
++system(type markdown2 >/dev/null) {
+     MARKDOWN += doc/documentation.markdown
+ }
+ else {
+-    message("markdown not found, HTML doc will not be generated")
++    message("markdown_py not found, HTML doc will not be generated")
+ }
+ 
+ doc_processor.name = markdown
+ doc_processor.input = MARKDOWN
+ doc_processor.output = doc/${QMAKE_FILE_BASE}.html
+-doc_processor.commands = markdown ${QMAKE_FILE_NAME} | \
++doc_processor.commands = markdown2 ${QMAKE_FILE_NAME} | \
+     sed -f finish.sed >${QMAKE_FILE_OUT}
+ 
+ doc_processor.CONFIG += target_predeps

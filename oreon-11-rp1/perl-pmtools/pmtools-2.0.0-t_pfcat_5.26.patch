@@ -1,0 +1,15 @@
+Description: perlfunc.pod formatting changed in 5.26. Adjust regexp in test.
+Origin: vendor
+Author: gregor herrmann <gregoa@debian.org>
+Last-Update: 2017-06-24
+Forwarded: https://rt.cpan.org/Ticket/Display.html?id=122210
+Bug: https://rt.cpan.org/Ticket/Display.html?id=122210
+
+--- a/t/pfcat.t
++++ b/t/pfcat.t
+@@ -16,4 +16,4 @@
+ };
+ 
+ is($?,        0,                                                     "pfcat runs");
+-like($output, qr/There is no .*systell.* function.\s+Use .*sysseek/, "catted module function");
++like($output, qr/There is no .*systell.* function.\s+Use\s.*sysseek/, "catted module function");

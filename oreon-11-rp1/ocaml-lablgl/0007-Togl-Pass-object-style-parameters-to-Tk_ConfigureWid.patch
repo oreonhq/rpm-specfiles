@@ -1,0 +1,46 @@
+From 586edd39f6e75b615f2a96c5762603d6f232e225 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Mon, 17 Feb 2025 10:50:20 +0000
+Subject: [PATCH 7/8] Togl: Pass object-style parameters to Tk_ConfigureWidget
+
+For details see:
+https://core.tcl-lang.org/tips/doc/main/tip/647.md
+---
+ Togl/src/Togl/togl.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/Togl/src/Togl/togl.c b/Togl/src/Togl/togl.c
+index ad424e2..2bae6ea 100644
+--- a/Togl/src/Togl/togl.c
++++ b/Togl/src/Togl/togl.c
+@@ -1245,8 +1245,25 @@ Togl_Configure(Tcl_Interp *interp, Togl *togl,
+     int     oldHeight = togl->Height;
+     int     oldSetGrid = togl->SetGrid;
+ 
+-    if (Tk_ConfigureWidget(interp, togl->TkWin, configSpecs,
+-                    argc, argv, WIDGREC togl, flags) == TCL_ERROR) {
++    /* Convert argv array to Tcl_Obj, required in Tcl 9.0
++     * https://core.tcl-lang.org/tips/doc/main/tip/647.md
++     */
++    Tcl_Obj **objv = ckalloc(argc * sizeof (Tcl_Obj *));
++    size_t i;
++    for (i = 0; i < argc; ++i) {
++        objv[i] = Tcl_NewStringObj(argv[i], strlen(argv[i]));
++        Tcl_IncrRefCount(objv[i]);
++    }
++
++    int r;
++    r = Tk_ConfigureWidget(interp, togl->TkWin, configSpecs,
++                           argc, objv, WIDGREC togl,
++                           flags|TK_CONFIG_OBJS);
++    for (i = 0; i < argc; ++i) {
++        Tcl_DecrRefCount(objv[i]);
++    }
++    ckfree(objv);
++    if (r == TCL_ERROR) {
+         return (TCL_ERROR);
+     }
+ #ifndef USE_OVERLAY
+-- 
+2.48.1
+

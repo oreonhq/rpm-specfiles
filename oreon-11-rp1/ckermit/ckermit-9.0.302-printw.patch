@@ -1,0 +1,12 @@
+diff -up ckermit-9.0.302/ckuusx.c.orig ckermit-9.0.302/ckuusx.c
+--- ckermit-9.0.302/ckuusx.c.orig	2011-06-17 10:11:34.000000000 -0400
++++ ckermit-9.0.302/ckuusx.c	2022-08-02 11:13:37.262526928 -0400
+@@ -8022,7 +8021,7 @@ char *s;        /* a string */
+             move(CW_MSG,22);
+ 	    clrtoeol();
+             if (!s) s = "";
+-            printw(*s ? s : "User interruption or connection lost");
++            printw("%s", *s ? s : "User interruption or connection lost");
+ #ifdef KUI
+ #ifndef K95G
+             KuiSetProperty(KUI_FILE_TRANSFER,

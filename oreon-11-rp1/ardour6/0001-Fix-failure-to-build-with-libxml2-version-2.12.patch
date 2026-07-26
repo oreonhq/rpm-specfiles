@@ -1,0 +1,32 @@
+From 62988d8e447cfce9d4efe1842d09b0160598d97d Mon Sep 17 00:00:00 2001
+From: Nils Philippsen <nils@tiptoe.de>
+Date: Fri, 17 Nov 2023 23:26:06 +0100
+Subject: [PATCH] Fix failure to build with libxml2 version 2.12
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This made one argument of xmlStructuredErrorFunc() const, which wasn’t
+previously so.
+
+Signed-off-by: Nils Philippsen <nils@tiptoe.de>
+---
+ gtk2_ardour/ardour_ui.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gtk2_ardour/ardour_ui.cc b/gtk2_ardour/ardour_ui.cc
+index 54ed79ea83..827ae61771 100644
+--- a/gtk2_ardour/ardour_ui.cc
++++ b/gtk2_ardour/ardour_ui.cc
+@@ -255,7 +255,7 @@ libxml_generic_error_func (void* /* parsing_context*/,
+ 
+ static void
+ libxml_structured_error_func (void* /* parsing_context*/,
+-                              xmlErrorPtr err)
++                              const xmlError *err)
+ {
+ 	string msg;
+ 
+-- 
+2.42.0
+

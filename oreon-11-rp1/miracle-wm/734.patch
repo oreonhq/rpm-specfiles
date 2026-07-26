@@ -1,0 +1,26 @@
+From 61acefe0a2bdb4f6955575f8b0031d6e75c12054 Mon Sep 17 00:00:00 2001
+From: Matt Kosarek <matt.kosarek@canonical.com>
+Date: Mon, 8 Dec 2025 16:09:26 -0500
+Subject: [PATCH] bugfix: only install libmirrenderer-dev if it is available
+
+---
+ .github/workflows/build-ubuntu.yml | 4 +++-
+ CMakeLists.txt                     | 2 +-
+ snap/snapcraft.yaml                | 6 +++++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+(Pruned parts specific to upstream CI.)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 869fa1c0..a45ba158 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -90,7 +90,7 @@ find_package(PkgConfig)
+ 
+ set(MIR_MINIMUM_VERSION 2.18)
+ pkg_check_modules(MIRAL REQUIRED miral>=5.1)
+-pkg_check_modules(MIRRENDERER REQUIRED mirrenderer>=${MIR_MINIMUM_VERSION})
++pkg_check_modules(MIRRENDERER mirrenderer>=${MIR_MINIMUM_VERSION})
+ pkg_check_modules(MIRPLATFORM REQUIRED mirplatform>=${MIR_MINIMUM_VERSION})
+ pkg_check_modules(MIRCOMMON REQUIRED mircommon>=${MIR_MINIMUM_VERSION})
+ pkg_check_modules(MIRCOMMON_INTERNAL REQUIRED mircommon-internal>=${MIR_MINIMUM_VERSION})

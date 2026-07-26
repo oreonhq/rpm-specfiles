@@ -1,0 +1,31 @@
+From b877ec33b331ba01e8fad8bed0d3cde55e1efa9e Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Fri, 4 Dec 2015 02:26:35 -0600
+Subject: [PATCH 4/6] Add ppc64le support
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Little endian uses the same syscalls as the big endian kernel.
+
+Signed-off-by: Petr Šabata <contyk@redhat.com>
+---
+ lib/Sys/Syscall.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Sys/Syscall.pm b/lib/Sys/Syscall.pm
+index 8d7cca2..ece65de 100644
+--- a/lib/Sys/Syscall.pm
++++ b/lib/Sys/Syscall.pm
+@@ -65,7 +65,7 @@ if ($^O eq "linux") {
+         $SYS_epoll_wait   = 232;
+         $SYS_sendfile     =  40;
+         $SYS_readahead    = 187;
+-    } elsif ($machine eq "ppc64") {
++    } elsif ($machine =~ m/^ppc64/) {
+         $SYS_epoll_create = 236;
+         $SYS_epoll_ctl    = 237;
+         $SYS_epoll_wait   = 238;
+-- 
+2.5.0
+

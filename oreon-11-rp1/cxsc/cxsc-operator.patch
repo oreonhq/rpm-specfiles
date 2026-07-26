@@ -1,0 +1,11 @@
+--- src/sparsevector.inl.orig	2014-01-30 10:23:49.000000000 -0700
++++ src/sparsevector.inl	2016-06-17 13:17:15.135816756 -0600
+@@ -1822,7 +1822,7 @@ inline bool fsl_vv_less(const Tx& v2, co
+         j++;
+       else
+         return false;
+-    } else if(!(v2[Lb(v2)+i]) < TType(0.0)) {
++    } else if((v2[Lb(v2)+i]) >= TType(0.0)) {
+       return false;
+     }
+   }

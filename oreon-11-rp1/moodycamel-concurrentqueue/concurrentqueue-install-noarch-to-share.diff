@@ -1,0 +1,36 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,7 +26,7 @@ write_basic_package_version_file(
+ configure_package_config_file(${PROJECT_NAME}Config.cmake.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+         INSTALL_DESTINATION 
+-                ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/
++                ${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}/
+ )
+ 
+ install(EXPORT 
+@@ -36,7 +36,7 @@ install(EXPORT
+         NAMESPACE 
+                 "${PROJECT_NAME}::"
+         DESTINATION
+-                ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
++                ${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}
+         COMPONENT
+                 Devel
+ )
+@@ -46,7 +46,7 @@ install(
+                 ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+                 ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+         DESTINATION
+-                ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
++                ${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}
+         COMPONENT
+                 Devel
+ )
+@@ -71,4 +71,4 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJE
+ set(CPACK_DEBIAN_PACKAGE_MAINTAINER ${CPACK_PACKAGE_VENDOR})
+ set(CPACK_GENERATOR "RPM;DEB")
+ 
+-include(CPack)
+\ No newline at end of file
++include(CPack)

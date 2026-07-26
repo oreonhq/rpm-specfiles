@@ -1,0 +1,45 @@
+# Based on the original Makefile; adjusted to use shared libraries.
+
+CC= gcc
+CFLAGS= -Wall
+LFLAGS= 
+
+LIB_OBJS= e00read.o e00write.o cpl_error.o cpl_conv.o cpl_vsisimple.o
+SOVER=    1
+LIB=      libe00compr.so.$(SOVER)
+
+default: all
+
+all: e00conv
+
+$(LIB_OBJS): e00compr.h
+
+e00conv: e00conv.o $(LIB)
+	$(CC) $(LFLAGS) -fPIE -o e00conv e00conv.o $(LIB)
+
+ex_read: ex_read.o $(LIB)
+	$(CC) $(LFLAGS) -fPIE -o ex_read ex_read.o $(LIB)
+
+ex_readcb: ex_readcb.o $(LIB)
+	$(CC) $(LFLAGS) -fPIE -o ex_readcb ex_readcb.o $(LIB)
+
+ex_write: ex_write.o $(LIB)
+	$(CC) $(LFLAGS) -fPIE -o ex_write ex_write.o $(LIB)
+
+ex_writecb: ex_writecb.o $(LIB)
+	$(CC) $(LFLAGS) -fPIE -o ex_writecb ex_writecb.o $(LIB)
+
+.c.o:
+	$(CC) -c $(CFLAGS) -fPIC $<
+
+$(LIB): $(LIB_OBJS)
+	rm -f $(LIB)
+	$(CC) -shared -Wl,-soname,libe00compr.so.$(SOVER) $^ -o $@
+	ln -s $(LIB) libe00compr.so
+
+clean:	clean-examples
+	rm -f e00conv e00conv.o $(LIB) libe00compr.so $(LIB_OBJS)
+
+clean-examples:
+	rm -f ex_read ex_read.o ex_readcb ex_readcb.o
+	rm -f ex_write ex_write.o ex_writecb ex_writecb.o

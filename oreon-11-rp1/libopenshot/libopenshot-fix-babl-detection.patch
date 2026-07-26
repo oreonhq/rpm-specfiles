@@ -1,0 +1,12 @@
+diff -up libopenshot-0.4.0/cmake/Modules/Findbabl.cmake.orig libopenshot-0.4.0/cmake/Modules/Findbabl.cmake
+--- libopenshot-0.4.0/cmake/Modules/Findbabl.cmake.orig	2024-12-21 23:27:30.000000000 +0100
++++ libopenshot-0.4.0/cmake/Modules/Findbabl.cmake	2025-10-20 13:30:52.920386348 +0200
+@@ -20,7 +20,7 @@ function(_babl_GET_VERSION _header)
+ endfunction()
+ 
+ find_package(PkgConfig)
+-pkg_check_modules(PC_BABL babl)
++pkg_check_modules(PC_BABL babl-0.1)
+ 
+ set(babl_VERSION ${PC_BABL_VERSION})
+ 

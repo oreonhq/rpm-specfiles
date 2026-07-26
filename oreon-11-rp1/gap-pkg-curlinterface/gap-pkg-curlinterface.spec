@@ -1,0 +1,81 @@
+%global source0_hash 973d4b518bb25295fa36e367c54fd257adb7af4723634f039f53dae507855756
+
+# TESTING NOTE: the tests, unsurprisingly, require network access.  Since the
+# koji builders have no network access, the tests always fail.  The maintainer
+# should run the tests in an environment where testing is possible prior to
+# each koji build.
+%bcond tests 0
+
+%global gap_pkgname    curlinterface
+%global gap_upname     curlInterface
+%global gap_skip_check %[!%{?with_tests}]
+%global giturl         https://github.com/gap-packages/curlInterface
+
+Name:           gap-pkg-%{gap_pkgname}
+Version:        2.4.2
+Release:        %autorelease
+Summary:        Simple web access for GAP
+
+License:        GPL-2.0-or-later
+URL:            https://gap-packages.github.io/curlInterface/
+VCS:            git:%{giturl}.git
+Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
+
+# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+BuildSystem:    gap
+BuildOption(install): bin gap tst
+BuildOption(check): tst/testall.g
+
+BuildRequires:  gap-devel
+BuildRequires:  gap-pkg-autodoc
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig(libcurl)
+
+Requires:       gap-core%{?_isa}
+
+%description
+This package provides a simple GAP wrapper around libcurl, to allow
+downloading files over http, ftp and https.
+
+%package doc
+# The content is GPL-2.0-or-later.  The remaining licenses cover the various
+# fonts embedded in PDFs.
+# CM: Knuth-CTAN
+# CM-Super: GPL-1.0-or-later
+# Nimbus: AGPL-3.0-only
+License:        GPL-2.0-or-later AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only
+Summary:        Curl interface for GAP documentation
+BuildArch:      noarch
+Requires:       %{name} = %{version}-%{release}
+Requires:       gap-online-help
+
+%description doc
+This package contains documentation for gap-pkg-%{gap_pkgname}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{gap_upname}-%{version} -p1
+
+%build -p
+%configure --with-gaproot=%{gap_archdir} --disable-silent-rules
+%make_build
+
+%files
+%doc CHANGES README.md
+%license GPL LICENSE
+%dir %{gap_archdir}/pkg/%{gap_upname}/
+%{gap_archdir}/pkg/%{gap_upname}/*.g
+%{gap_archdir}/pkg/%{gap_upname}/bin/
+%{gap_archdir}/pkg/%{gap_upname}/gap/
+%{gap_archdir}/pkg/%{gap_upname}/tst/
+
+%files doc
+%docdir %{gap_archdir}/pkg/%{gap_upname}/doc/
+%{gap_archdir}/pkg/%{gap_upname}/doc/
+
+%changelog
+%autochangelog

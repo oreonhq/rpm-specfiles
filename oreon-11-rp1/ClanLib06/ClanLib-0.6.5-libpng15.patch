@@ -1,0 +1,12 @@
+diff -up ClanLib-0.6.5/Sources/PNG/provider_png.cpp~ ClanLib-0.6.5/Sources/PNG/provider_png.cpp
+--- ClanLib-0.6.5/Sources/PNG/provider_png.cpp~	2011-12-11 11:51:50.000000000 +0100
++++ ClanLib-0.6.5/Sources/PNG/provider_png.cpp	2011-12-11 12:03:31.622865327 +0100
+@@ -544,7 +544,7 @@ void CL_PNGProvider::perform_lock()
+ 					(png_infopp)NULL);
+ 		cl_assert(false);
+ 	}   
+-	if (setjmp(png_ptr->jmpbuf))
++	if (setjmp(png_jmpbuf(png_ptr)))
+ 	{
+ 		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+ 		cl_assert(false);

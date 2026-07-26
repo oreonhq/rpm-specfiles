@@ -1,0 +1,22 @@
+diff --git a/gdigi.h b/gdigi.h
+index 0fb906d8b067..9b24c777abf1 100644
+--- a/gdigi.h
++++ b/gdigi.h
+@@ -42,7 +42,7 @@ gboolean debug_flag_is_set (debug_flags_t flag);
+ #define GNX_CABINET_WARP 263
+ #define GNX_CHANNEL_FS_MODE 264
+ 
+-unsigned char product_id;
++extern unsigned char product_id;
+ 
+ enum {
+   GNX3K_WAH_TYPE_CRY = 129,
+@@ -1114,7 +1114,7 @@ enum {
+     GENETX_TYPE_CABINET
+ };
+ 
+-enum {
++extern enum {
+     GENETX_CHANNEL1 = 0,
+     GENETX_CHANNEL2 = 1,
+     GENETX_CHANNEL1_CUSTOM = 2,

@@ -1,0 +1,29 @@
+From a23857696f7a8a59617c4dcef934de448cf356ba Mon Sep 17 00:00:00 2001
+From: Kim Woelders <kim@woelders.dk>
+Date: Wed, 10 Dec 2025 17:37:33 +0100
+Subject: [PATCH] backgrounds: Save backgrounds after modifying one in
+ backgrounds dialog
+
+Should have been in 4e064c3d6b3a3a4ebcc687574aace580024a2c9c.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2419828
+---
+ src/backgrounds.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/backgrounds.c b/src/backgrounds.c
+index a1b5e9ea..2c97d0dc 100644
+--- a/src/backgrounds.c
++++ b/src/backgrounds.c
+@@ -1479,6 +1479,8 @@ _DlgApplyBackground(Dialog *d, int val __UNUSED__, void *data __UNUSED__)
+     _BgDlgRedrawView(d);
+ 
+     dd->bg_set = dd->bg;
++
++    bg_cfg_dirty = true;
+ }
+ 
+ static void
+-- 
+2.52.0
+

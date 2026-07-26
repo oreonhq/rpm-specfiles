@@ -1,0 +1,28 @@
+From f7a84c88e02b111e92e71d3c8d0797dd458430eb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 7 Nov 2017 16:30:24 +0100
+Subject: [PATCH] Remove /usr/bin/env from shebang
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This is forbidden by packaging guidelines now.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ bin/viv | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bin/viv b/bin/viv
+index 5913424..d13fb67 100644
+--- a/bin/viv
++++ b/bin/viv
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ 
+ =head1 NAME
+ 
+-- 
+2.13.6
+

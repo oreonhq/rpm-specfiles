@@ -1,0 +1,47 @@
+.TH "CSDP-COMPLEMENT" "1" "6.1.1" "Brian Borchers" "User Commands"
+.SH "NAME"
+csdp-complement \- Compute the complement of a graph
+.SH "SYNOPSIS"
+.B csdp-complement
+GRAPH_FILE OUTPUT_FILE
+.SH "DESCRIPTION"
+.PP 
+The csdp-complement program computes the complement of a graph.
+
+.SH "FILE FORMAT"
+.PP
+The input file should be in the following format:
+.RS
+.br
+n
+.br
+m
+.br
+i1 j1
+.br
+\[u2026]
+.br
+im jm
+.RE
+where n is the number of nodes, m is the number of edges, and each i/j pair
+describes one edge.
+.PP
+The output file has the the complement of the graph written to it in the same
+format.
+
+.SH "EXIT STATUS"
+.PP 
+The exit status is zero if the complement is computed successfully.  Otherwise,
+the exit status is one, and an error message indicating the problem is produced
+on standard out.
+
+.SH "AUTHORS"
+Csdp was written by Dr. Brian Borchers <borchers@nmt.edu>, with contributions
+by Joseph Young <josyoun@nmt.edu> and Aaron Wilson <wilson@nmt.edu>.
+.PP 
+This man page was written by Jerry James <loganjerry@gmail.com>.
+It is distributed under the same terms as Csdp.
+
+.SH "SEE ALSO"
+.PP
+\fIcsdp-theta\fP(1), \fIcsdp-graphtoprob\fP(1), \fIcsdp-rand_graph\fP(1)

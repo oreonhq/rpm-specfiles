@@ -1,0 +1,32 @@
+diff --git a/configure.ac b/configure.ac
+index fe7983b..d0a6d18 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -319,22 +319,17 @@ if test x"$enable_python" = xyes; then
+   if test -n "$PYTHON_BIN"; then
+     # find out python version
+     AC_MSG_CHECKING(Python version)
+-    PyVERSION=`$PYTHON_BIN -c ['import sys; print sys.version[:3]'`]
+-    PyMAJVERSION=`$PYTHON_BIN -c ['import sys; print sys.version[:1]'`]
++    PyVERSION=`$PYTHON_BIN -c ['import sys; print("%s.%s%s" % (sys.version_info.major, sys.version_info.minor, sys.abiflags))'`]
++    PyMAJVERSION=`$PYTHON_BIN -c ['import sys; print(sys.version_info.major)'`]
+     AC_MSG_RESULT($PyVERSION)
+     PYTHON_VERSION=$PyVERSION
+     AC_SUBST(PYTHON_VERSION)
+-
+-    PyEXEC_INSTALLDIR=`$PYTHON_BIN -c "import sys; print sys.exec_prefix"`
+-    if test -f "$PyEXEC_INSTALLDIR/include/python/Python.h"; then
+-      PYTHON_INCLUDES="-I$PyEXEC_INSTALLDIR/include/python"
++    PyINC_DIR=`$PYTHON_BIN -c ['import sysconfig; print(sysconfig.get_paths()["include"])'`]
++    if test -f "$PyINC_DIR/Python.h"; then
++      PYTHON_INCLUDES="-I$PyINC_DIR"
+     else
+-      if test -f "$PyEXEC_INSTALLDIR/include/python$PyVERSION/Python.h"; then
+-        PYTHON_INCLUDES="-I$PyEXEC_INSTALLDIR/include/python$PyVERSION"
+-      else
+         PYTHON_INCLUDES=""
+         enable_python="no"
+-      fi
+     fi
+     AC_SUBST(PYTHON_INCLUDES)
+   else

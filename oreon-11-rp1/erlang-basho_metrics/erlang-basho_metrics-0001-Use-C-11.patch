@@ -1,0 +1,31 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 12 Feb 2016 16:30:04 +0300
+Subject: [PATCH] Use C++11
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/c_src/ewma.hpp b/c_src/ewma.hpp
+index 95907cf..5e81b04 100644
+--- a/c_src/ewma.hpp
++++ b/c_src/ewma.hpp
+@@ -37,7 +37,7 @@
+  */
+ class ewma
+ {
+-    static const double NANOS = 1000000000.0;
++    static constexpr double NANOS = 1000000000.0;
+ public:
+     explicit ewma(double alpha, unsigned int interval=5)
+         : rate_(0.0),
+diff --git a/rebar.config b/rebar.config
+index 2adba92..b6f564f 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -4,6 +4,7 @@
+ 
+ {port_envs, [
+              {"CFLAGS", "$CFLAGS -fPIC"},
++             {"CXXFLAGS", "$CXXFLAGS -fPIC -std=c++11"},
+              {"DRV_CFLAGS", "$DRV_CFLAGS -Ic_src/boost -Ic_src/boost.atomic"},
+              {"DRV_LDFLAGS", "$DRV_LDFLAGS -lstdc++"}
+              ]}.

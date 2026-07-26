@@ -1,0 +1,32 @@
+From 8be54fc654b6beee287ae8903b64a93fb92f8428 Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Thu, 1 Feb 2024 23:58:57 +0000
+Subject: [PATCH] galaxy.yml: add unnecessary files to build_ignore
+
+---
+ galaxy.yml | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/galaxy.yml b/galaxy.yml
+index c0b80af..6615ef7 100644
+--- a/galaxy.yml
++++ b/galaxy.yml
+@@ -25,3 +25,15 @@ issues: https://github.com/ansible-collections/community.library_inventory_filte
+ build_ignore:
+   - .gitignore
+   - changelogs/.plugin-cache.yaml
++  - .github
++  - changelogs/fragments
++  - tools
++  - tests
++  # Included in %license / %doc
++  - "CHANGELOG.rst*"
++  - "CHANGELOG.md*"
++  - COPYING
++  - "LICENSE*"
++  - REUSE.toml
++  - README.md
++  - changelogs/changelog.yaml.license
+-- 
+2.51.0
+

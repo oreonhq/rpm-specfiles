@@ -1,0 +1,132 @@
+diff --git a/frysk-imports/libunwind/src/Makefile.am b/frysk-imports/libunwind/src/Makefile.am
+index c187a9a4c..1f551b953 100644
+--- a/frysk-imports/libunwind/src/Makefile.am
++++ b/frysk-imports/libunwind/src/Makefile.am
+@@ -110,7 +110,8 @@ libunwind_la_SOURCES_generic =						\
+ 	mi/Gget_reg.c mi/Gset_reg.c					\
+ 	mi/Gget_fpreg.c mi/Gset_fpreg.c					\
+ 	mi/Gget_unwind_table.c						\
+-	mi/Gset_caching_policy.c
++	mi/Gset_caching_policy.c					\
++	mi/dyn-info-list.c
+ 
+ if SUPPORT_CXX_EXCEPTIONS
+ libunwind_la_SOURCES_local_unwind =					\
+@@ -131,7 +132,10 @@ endif
+ libunwind_la_SOURCES_local_nounwind =					\
+ 	$(libunwind_la_SOURCES_os_local)				\
+ 	mi/backtrace.c							\
+-	mi/dyn-cancel.c mi/dyn-info-list.c mi/dyn-register.c		\
++	mi/dyn-cancel.c 						\
++	mi/dyn-info-list.c						\
++	mi/dyn-info-list-addr.c						\
++	mi/dyn-register.c						\
+ 	mi/Ldyn-extract.c mi/Lfind_dynamic_proc_info.c			\
+ 	mi/Lget_accessors.c						\
+ 	mi/Lget_proc_info_by_ip.c mi/Lget_proc_name.c			\
+diff --git a/frysk-imports/libunwind/src/mi/dyn-info-list-addr.c b/frysk-imports/libunwind/src/mi/dyn-info-list-addr.c
+new file mode 100644
+index 000000000..2bde9edc8
+--- /dev/null
++++ b/frysk-imports/libunwind/src/mi/dyn-info-list-addr.c
+@@ -0,0 +1,32 @@
++/* libunwind - a platform-independent unwind library
++   Copyright (C) 2001-2002, 2005 Hewlett-Packard Co
++        Contributed by David Mosberger-Tang <davidm@hpl.hp.com>
++
++This file is part of libunwind.
++
++Permission is hereby granted, free of charge, to any person obtaining
++a copy of this software and associated documentation files (the
++"Software"), to deal in the Software without restriction, including
++without limitation the rights to use, copy, modify, merge, publish,
++distribute, sublicense, and/or sell copies of the Software, and to
++permit persons to whom the Software is furnished to do so, subject to
++the following conditions:
++
++The above copyright notice and this permission notice shall be
++included in all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
++
++#include "libunwind_i.h"
++
++PROTECTED unw_word_t
++_U_dyn_info_list_addr (void)
++{
++  return (unw_word_t) (uintptr_t) &_U_dyn_info_list;
++}
+diff --git a/frysk-imports/libunwind/src/mi/dyn-info-list.c b/frysk-imports/libunwind/src/mi/dyn-info-list.c
+index 1a0790d36..69e4998ea 100644
+--- a/frysk-imports/libunwind/src/mi/dyn-info-list.c
++++ b/frysk-imports/libunwind/src/mi/dyn-info-list.c
+@@ -27,8 +27,3 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
+ 
+ HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+ 
+-PROTECTED unw_word_t
+-_U_dyn_info_list_addr (void)
+-{
+-  return (unw_word_t) (uintptr_t) &_U_dyn_info_list;
+-}
+diff --git a/frysk-imports/libunwind/src/x86/Ginit.c b/frysk-imports/libunwind/src/x86/Ginit.c
+index b05a08edb..79bd611c0 100644
+--- a/frysk-imports/libunwind/src/x86/Ginit.c
++++ b/frysk-imports/libunwind/src/x86/Ginit.c
+@@ -54,8 +54,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+ 
+ # endif /* UNW_LOCAL_ONLY */
+ 
+-HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+-
+ /* XXX fix me: there is currently no way to locate the dyn-info list
+        by a remote unwinder.  On ia64, this is done via a special
+        unwind-table entry.  Perhaps something similar can be done with
+diff --git a/frysk-imports/libunwind/src/x86_64/Ginit.c b/frysk-imports/libunwind/src/x86_64/Ginit.c
+index 782757622..36e30af8e 100644
+--- a/frysk-imports/libunwind/src/x86_64/Ginit.c
++++ b/frysk-imports/libunwind/src/x86_64/Ginit.c
+@@ -48,8 +48,6 @@ static struct unw_addr_space local_addr_space;
+ 
+ PROTECTED unw_addr_space_t unw_local_addr_space = &local_addr_space;
+ 
+-HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+-
+ /* XXX fix me: there is currently no way to locate the dyn-info list
+        by a remote unwinder.  On ia64, this is done via a special
+        unwind-table entry.  Perhaps something similar can be done with
+diff --git a/frysk-sys/Makefile.am b/frysk-sys/Makefile.am
+index f69fd01b8..c54cb8a92 100644
+--- a/frysk-sys/Makefile.am
++++ b/frysk-sys/Makefile.am
+@@ -1,7 +1,7 @@
+ # This file is part of the program FRYSK.
+ #
+ # Copyright 2005, 2007, 2008, Red Hat Inc.
+-# Copyright 2016, Andrew Cagney
++# Copyright 2016, 2020, Andrew Cagney
+ #
+ # FRYSK is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -56,9 +56,12 @@ JNI_LIBRARY_LIST += -lstdc++
+ JNI_LIBRARY_LIST += -laudit
+ JNI_LIBRARY_LIST += -ldw
+ # Bundle in the local libunwind code.
+-JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/dwarf/.libs/*.o
+-JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/mi/.libs/G*.o
+-JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/mi/.libs/{init,mempool,flush_cache}.o
++JNI_OBJECT_LIST += ../frysk-imports/libunwind-x86_64/src/dwarf/.libs/*.o
++JNI_OBJECT_LIST += ../frysk-imports/libunwind-x86_64/src/mi/.libs/G*.o
++JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/mi/.libs/init.o
++JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/mi/.libs/mempool.o
++JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/mi/.libs/flush_cache.o
++JNI_OBJECT_LIST += ../frysk-imports/libunwind-x86_64/src/mi/.libs/dyn-info-list.o
+ JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/x86/.libs/*.o
+ JNI_OBJECT_LIST += ../frysk-imports/libunwind-*/src/x86_64/.libs/*.o
+ 

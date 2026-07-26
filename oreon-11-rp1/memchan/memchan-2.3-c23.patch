@@ -1,0 +1,27 @@
+diff -up Memchan2.3/generic/random.c.c23 Memchan2.3/generic/random.c
+--- Memchan2.3/generic/random.c.c23	2025-03-24 08:15:16.491166270 -0400
++++ Memchan2.3/generic/random.c	2025-03-24 08:15:35.175484205 -0400
+@@ -526,7 +526,7 @@ Memchan_CreateRandomChannel(interp)
+      */
+     seed = time(NULL) + ((long)Tcl_GetCurrentThread() << 12);
+     memcpy(&instance->state.randrsl, &seed, sizeof(seed));
+-    randinit(&instance->state);
++    randinit(&instance->state, TRUE);
+     
+     Tcl_RegisterChannel  (interp, chan);
+     Tcl_SetChannelOption (interp, chan, "-buffering", "none");
+diff -up Memchan2.3/isaac/rand.h.c23 Memchan2.3/isaac/rand.h
+--- Memchan2.3/isaac/rand.h.c23	2004-05-21 19:20:20.000000000 -0400
++++ Memchan2.3/isaac/rand.h	2025-03-24 08:13:02.789759333 -0400
+@@ -36,9 +36,9 @@ typedef  struct randctx  randctx;
+  If (flag==TRUE), then use the contents of randrsl[0..RANDSIZ-1] as the seed.
+ ------------------------------------------------------------------------------
+ */
+-void randinit(/*_ randctx *r, word flag _*/);
++void randinit(randctx *r, word flag);
+ 
+-void isaac(/*_ randctx *r _*/);
++void isaac(randctx *r);
+ 
+ 
+ /*

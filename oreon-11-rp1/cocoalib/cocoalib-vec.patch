@@ -1,0 +1,43 @@
+--- include/CoCoA/degree.H.orig	2021-02-10 12:32:01.000000000 -0700
++++ include/CoCoA/degree.H	2021-06-01 09:24:34.183448063 -0600
+@@ -86,9 +86,8 @@ namespace CoCoA
+   // FastCmp is the same as cmp except it is inline and does not check compatibility
+   inline int FastCmp(const degree& d1, const degree& d2) noexcept
+   {
+-    const long dim = d1.myGradingDim();
+-    return LexCmp3(&d1.myCoords[0], &d1.myCoords[dim],
+-                   &d2.myCoords[0], &d2.myCoords[dim]);
++    return LexCmp3(d1.myCoords.cbegin(), d1.myCoords.cend(),
++                   d2.myCoords.cbegin(), d2.myCoords.cend());
+   }
+ 
+ 
+--- include/CoCoA/MatrixFp.H.orig	2021-01-07 07:16:10.000000000 -0700
++++ include/CoCoA/MatrixFp.H	2021-06-01 09:24:34.184448064 -0600
+@@ -73,6 +73,7 @@ private: // data members
+   class LinDepFp
+   {
+   public:
++    LinDepFp() = delete;
+     LinDepFp(const SmallFpImpl& ModP, long dim);
+     bool myAppendVec(std::vector<SmallFpImpl::value>& v);
+ //    bool IsLinDep() const { return };
+@@ -94,6 +95,7 @@ private: // data members
+   class RowRednFp
+   {
+   public:
++    RowRednFp() = delete;
+     RowRednFp(const SmallFpImpl& ModP, long dim);
+     void myAppendVec(std::vector<SmallFpImpl::value>& v);
+ //    bool IsLinDep() const { return };
+--- src/AlgebraicCore/MatrixFp.C.orig	2021-01-07 08:16:51.000000000 -0700
++++ src/AlgebraicCore/MatrixFp.C	2021-06-01 09:24:34.185448064 -0600
+@@ -419,6 +419,8 @@ void LinSolver::SolveByGauss()//const Sm
+ //    VerboseLog VERBOSE("LinDepFp::myAppendVec");
+ //    VERBOSE(10) << "Recvd vec " << v << endl;
+     CoCoA_ASSERT(len(v) == myDim);
++    if (myRow.size() < myDim * 2)
++      myRow.resize(myDim * 2);
+     for (int i=0; i < myDim; ++i)
+     {
+       myRow[i] = v[i];

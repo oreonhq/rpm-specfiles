@@ -1,0 +1,51 @@
+diff --git a/scripts/mkc_check_decl.1 b/scripts/mkc_check_decl.1
+index feb67a7..bba02f7 100644
+--- a/scripts/mkc_check_decl.1
++++ b/scripts/mkc_check_decl.1
+@@ -181,20 +181,11 @@ int func(void)
+  ...
+ #include <headerN.h>
+ 
+-void func (void);
+-void func2 (void);
+-
+ void func (void)
+ {
+-   if (ttt) return;
++   void (*p)(int,char**) = ttt;
+ }
+ 
+-void ttt(int, char**);
+-
+-void func2 (void)
+-{
+-   if (ttt) return;
+-}
+ .VE
+ .SH AUTHOR
+ Aleksey Cheusov <vle@gmx.net>
+diff --git a/scripts/mkc_check_decl.in b/scripts/mkc_check_decl.in
+index 4d2b2c9..df33529 100755
+--- a/scripts/mkc_check_decl.in
++++ b/scripts/mkc_check_decl.in
+@@ -201,18 +201,11 @@ is_funcordefine (){
+ ##############################
+ is_prototype (){
+     get_includes "$@" > "$tmpc"
+-
++    _cast_expr=$(echo "${declwhat}" | sed "s/${funcname}/(*p)/")
+     cat >> "$tmpc" <<EOF
+-void func2 (void);
+-void func (void);
+-void func2 (void)
+-{
+-   if (${funcname}) return;
+-}
+-${declwhat};
+ void func (void)
+ {
+-   if (${funcname}) return;
++   ${_cast_expr} = ${funcname};
+ }
+ EOF
+ 

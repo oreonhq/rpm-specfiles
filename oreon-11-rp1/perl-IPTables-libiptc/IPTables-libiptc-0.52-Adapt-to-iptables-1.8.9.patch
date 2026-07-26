@@ -1,0 +1,72 @@
+From ca6f841a3b8d33a02d3f147599bf97329b018fee Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 24 Jan 2023 15:52:24 +0100
+Subject: [PATCH] Adapt to iptables-1.8.9
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+iptables-1.8.9 added previously internal structures to a public header
+file and a compiler errored on a redefinition:
+
+In file included from xshared.h:22,
+                 from iptables.c-v1.6.1:42,
+                 from iptables-detect-version.c:66:
+xshared.h-v1.6.1:41:8: error: redefinition of 'struct xtables_afinfo'
+   41 | struct xtables_afinfo {
+      |        ^~~~~~~~~~~~~~
+
+This patch removes these definitions. It does not bundle a new copy
+from iptables-1.8.9 because iptables-1.8.9 did not bump
+XTABLES_VERSION_CODE (inspite of removing some functions from ABI).
+Instead, it removes the definition based on IPTABLES_VERSION_CODE.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ iptables/xshared.h-v1.6.1 | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/iptables/xshared.h-v1.6.1 b/iptables/xshared.h-v1.6.1
+index 18b1cf3..6bc2eea 100644
+--- a/iptables/xshared.h-v1.6.1
++++ b/iptables/xshared.h-v1.6.1
+@@ -28,6 +28,7 @@ struct xtables_globals;
+ struct xtables_rule_match;
+ struct xtables_target;
+ 
++#if IPTABLES_VERSION_CODE < 67593
+ /**
+  * xtables_afinfo - protocol family dependent information
+  * @kmod:		kernel module basename (e.g. "ip_tables")
+@@ -47,6 +48,7 @@ struct xtables_afinfo {
+ 	int so_rev_match;
+ 	int so_rev_target;
+ };
++#endif
+ 
+ struct iptables_command_state {
+ 	union {
+@@ -73,9 +75,11 @@ struct subcommand {
+ 	mainfunc_t main;
+ };
+ 
++#if IPTABLES_VERSION_CODE < 67593
+ enum {
+ 	XT_OPTION_OFFSET_SCALE = 256,
+ };
++#endif
+ 
+ extern void print_extension_helps(const struct xtables_target *,
+ 	const struct xtables_rule_match *);
+@@ -90,6 +94,8 @@ bool xtables_lock(int wait, struct timeval *wait_interval);
+ 
+ void parse_wait_interval(const char *str, struct timeval *wait_interval);
+ 
++#if IPTABLES_VERSION_CODE < 67593
+ extern const struct xtables_afinfo *afinfo;
++#endif
+ 
+ #endif /* IPTABLES_XSHARED_H */
+-- 
+2.39.1
+

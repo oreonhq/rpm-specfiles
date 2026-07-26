@@ -1,0 +1,21 @@
+diff -u bwbar-1.2.3/bwbar.c bwbar-1.2.3.new/bwbar.c
+--- bwbar-1.2.3/bwbar.c	2006-08-26 18:31:26.000000000 +0200
++++ bwbar-1.2.3.new/bwbar.c	2008-09-01 11:30:41.000000000 +0200
+@@ -214,7 +216,7 @@
+ 
+   program = argv[0];
+ 
+-  while ( (opt = getopt_long(argc, argv, "iof:p:t:x:y:b:kMGh", longopts, NULL)) != -1 ) {
++  while ( (opt = getopt_long(argc, argv, "iof:p:t:x:y:b:kMGhD", longopts, NULL)) != -1 ) {
+     switch ( opt ) {
+     case 'i':
+       measure_input = 1;
+@@ -260,6 +260,8 @@
+       unit = 1.0e+9;
+       unit_name = "Gbit/s";
+       break;
++    case 'D':
++      break;
+     case 'h':
+       usage(0);
+       break;

@@ -1,0 +1,21 @@
+--- icons/automake.mk.orig	2017-04-03 09:10:35.000000000 -0300
++++ icons/automake.mk	2018-04-15 15:42:56.355501120 -0300
+@@ -1,6 +1,6 @@
+ themedir = $(DESTDIR)$(datadir)/icons/hicolor
+ context = apps
+-sizes = 16 22 24 32 48
++sizes = 16 22 32 48
+ 
+ install-icons:
+ 	for size in $(sizes); do \
+--- Makefile.in.orig	2017-04-03 09:21:50.000000000 -0300
++++ Makefile.in	2018-04-15 15:43:21.784447187 -0300
+@@ -609,7 +609,7 @@
+ GMOFILES = $(POFILES:.po=.gmo)
+ themedir = $(DESTDIR)$(datadir)/icons/hicolor
+ context = apps
+-sizes = 16 22 24 32 48
++sizes = 16 22 32 48
+ desktopdir = $(DESTDIR)$(datadir)/applications
+ INSTALL_DATA_HOOKS = install-icons install-desktop
+ UNINSTALL_DATA_HOOKS = uninstall-icons uninstall-desktop

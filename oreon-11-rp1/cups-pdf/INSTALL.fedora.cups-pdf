@@ -1,0 +1,18 @@
+===== Virtual Printer =====
+
+This cups-pdf RPM is designed to create a Cups-PDF virtual printer
+during the installation, but only if cups is running.
+
+You can create the virtual pinter using :
+    /usr/sbin/lpadmin -p Cups-PDF -v cups-pdf:/ -m CUPS-PDF.ppd -E
+
+You can remove the virtual printer using
+    /usr/sbin/lpadmin -x Cups-PDF
+
+
+===== SELinux Notes =====
+
+Default configuration will save PDF in the user Desktop
+This requires special SElinux context managed by main
+policies (selinux-policy).
+

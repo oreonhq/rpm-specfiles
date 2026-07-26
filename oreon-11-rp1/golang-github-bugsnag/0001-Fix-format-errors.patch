@@ -1,0 +1,91 @@
+From 9c72b5aedcfbae63451a0ad808226456c1b39654 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alejandro=20S=C3=A1ez?= <asm@redhat.com>
+Date: Wed, 12 Mar 2025 17:06:38 +0100
+Subject: [PATCH] Fix format errors
+
+---
+ bugsnag.go    | 38 ++++++++++++++++++++++----------------
+ v2/bugsnag.go |  2 +-
+ 2 files changed, 23 insertions(+), 17 deletions(-)
+
+diff --git a/bugsnag.go b/bugsnag.go
+index 46be0c2..525fe5a 100644
+--- a/bugsnag.go
++++ b/bugsnag.go
+@@ -88,11 +88,13 @@ func Notify(err error, rawData ...interface{}) error {
+ // The rawData is used to send extra information along with any
+ // panics that are handled this way.
+ // Usage:
+-//  go func() {
+-//      ctx := bugsnag.StartSession(context.Background())
+-//		defer bugsnag.AutoNotify(ctx)
+-//      // (possibly crashy code)
+-//  }()
++//
++//	 go func() {
++//	     ctx := bugsnag.StartSession(context.Background())
++//			defer bugsnag.AutoNotify(ctx)
++//	     // (possibly crashy code)
++//	 }()
++//
+ // See also: bugsnag.Recover()
+ func AutoNotify(rawData ...interface{}) {
+ 	if err := recover(); err != nil {
+@@ -119,18 +121,22 @@ func AutoNotify(rawData ...interface{}) {
+ // The rawData is used to send extra information along with
+ // any panics that are handled this way
+ // Usage:
+-// go func() {
+-//     ctx := bugsnag.StartSession(context.Background())
+-//     defer bugsnag.Recover(ctx)
+-//     // (possibly crashy code)
+-// }()
++//
++//	go func() {
++//	    ctx := bugsnag.StartSession(context.Background())
++//	    defer bugsnag.Recover(ctx)
++//	    // (possibly crashy code)
++//	}()
++//
+ // If you wish that any panics caught by the call to Recover shall affect your
+ // stability score (it does not by default):
+-// go func() {
+-//     ctx := bugsnag.StartSession(context.Background())
+-//     defer bugsnag.Recover(ctx, bugsnag.HandledState{Unhandled: true})
+-//     // (possibly crashy code)
+-// }()
++//
++//	go func() {
++//	    ctx := bugsnag.StartSession(context.Background())
++//	    defer bugsnag.Recover(ctx, bugsnag.HandledState{Unhandled: true})
++//	    // (possibly crashy code)
++//	}()
++//
+ // See also: bugsnag.AutoNotify()
+ func Recover(rawData ...interface{}) {
+ 	if err := recover(); err != nil {
+@@ -212,7 +218,7 @@ func checkForEmptyError(err error) error {
+ 	}
+ 	msg := "attempted to notify Bugsnag without supplying an error. Bugsnag not notified"
+ 	Config.Logger.Printf("ERROR: " + msg)
+-	return fmt.Errorf(msg)
++	return fmt.Errorf("%s", msg)
+ }
+ 
+ func init() {
+diff --git a/v2/bugsnag.go b/v2/bugsnag.go
+index 05d2778..72ecd7e 100644
+--- a/v2/bugsnag.go
++++ b/v2/bugsnag.go
+@@ -224,7 +224,7 @@ func checkForEmptyError(err error) error {
+ 	}
+ 	msg := "attempted to notify Bugsnag without supplying an error. Bugsnag not notified"
+ 	Config.Logger.Printf("ERROR: " + msg)
+-	return fmt.Errorf(msg)
++	return fmt.Errorf("%s", msg)
+ }
+ 
+ func init() {
+-- 
+2.48.1
+

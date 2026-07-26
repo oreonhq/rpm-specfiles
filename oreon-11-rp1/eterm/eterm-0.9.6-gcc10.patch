@@ -1,0 +1,86 @@
+From: Jeff Law <law@redhat.com>
+Subject: Minor problem with eterm package in Fedora
+
+Red Hat's compiler team continues to try and be proactive in identifying
+issues that will arise as a result of the introduction of a new GCC
+release into Fedora each spring.
+
+You're being contacted because a package you maintain in Fedora is going
+to fail to build with gcc-10 in the spring.  Yes, I know that's many
+months away, but it's far easier to fix this stuff proactively now than
+wait.
+
+Fixing it now also means that your package will continue to be built
+with testing versions of gcc-10 as we proceed through the development
+process thus allowing additional issues to be caught early.
+
+[ Usually I put in the build failure messages, but I accidentally
+  removed them from my jenkins instance -- sorry ]
+
+Your package fails to link because posix_get_pty and other functions
+are undefined.
+
+You have declared this function as inline, but with no explicit scope
+(extern vs static).    This is commonly referred to as an inline
+function with external linkage.   Since GNU99, no externally visible
+function is emitted in this case.  Thus if you fail to provide one
+elsewhere and the compiler chooses not to inline calls to this function
+you will get link errrors.
+
+gcc-10 has significantly re-tuned its inlining heuristics and does not
+inline calls to this function in  your package.  As a result your
+package gets link errors.  This is a relatively common failure we're
+seeing with gcc-10.
+
+Fixing this is pretty simple.  Something like the attached
+patch which also marks the function as "static" is sufficient.
+
+Ideally you'd work with upstream to get this fixed, but a Fedora
+patch  is clearly OK as well.  I'm not really familiar with your
+package, so you may want to fix it differently.
+
+Jeff
+
+
+diff -Nrup a/src/command.c b/src/command.c
+--- a/src/command.c	2011-03-16 00:05:03.000000000 -0600
++++ b/src/command.c	2019-10-15 13:16:25.826820397 -0600
+@@ -1388,9 +1388,9 @@ sco_get_pty(void)
+ #endif
+ 
+ #if defined(HAVE_POSIX_OPENPT) || defined(HAVE_DEV_PTMX)
+-inline int posix_get_pty(void);
++static inline int posix_get_pty(void);
+ 
+-inline int
++static inline int
+ posix_get_pty(void)
+ {
+ 
+@@ -1425,9 +1425,9 @@ posix_get_pty(void)
+ #define PTYCHAR1 "pqrstuvwxyz"
+ #define PTYCHAR2 "0123456789abcdefghijklmnopqrstuvwxyz"
+ 
+-inline int gen_get_pty(void);
++static inline int gen_get_pty(void);
+ 
+-inline int
++static inline int
+ gen_get_pty(void)
+ {
+ 
+diff -Nrup a/src/screen.c b/src/screen.c
+--- a/src/screen.c	2011-03-15 23:16:59.000000000 -0600
++++ b/src/screen.c	2019-10-15 13:16:37.715755141 -0600
+@@ -115,8 +115,8 @@ blank_line(text_t *et, rend_t *er, int w
+ }
+ 
+ /* Create a new row in the screen buffer and initialize it. */
+-inline void blank_screen_mem(text_t **, rend_t **, int, rend_t);
+-inline void
++static inline void blank_screen_mem(text_t **, rend_t **, int, rend_t);
++static inline void
+ blank_screen_mem(text_t **tp, rend_t **rp, int row, rend_t efs)
+ {
+     register unsigned int i = TERM_WINDOW_GET_REPORTED_COLS();
+

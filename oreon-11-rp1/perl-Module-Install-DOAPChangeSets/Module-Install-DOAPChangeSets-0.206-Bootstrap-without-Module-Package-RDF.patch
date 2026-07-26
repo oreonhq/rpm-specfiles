@@ -1,0 +1,26 @@
+From b922151b0a768f05b5cd0f1d1ca2dbbfa6a43d5a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 21 Dec 2016 15:57:44 +0100
+Subject: [PATCH] Bootstrap without Module::Package::RDF
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+There is a circural dependency between Module-Package-RDF and
+Module-Install-DOAPChangeSets.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index e7f29c8..4e29aa4 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1 +1 @@
+-use inc::Module::Package 'RDF:standard 0.003';
++use inc::Module::Package;
+-- 
+2.7.4
+

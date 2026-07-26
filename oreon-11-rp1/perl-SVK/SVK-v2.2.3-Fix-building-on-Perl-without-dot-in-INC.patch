@@ -1,0 +1,11 @@
+diff -up SVK-v2.2.3/Makefile.PL.orig SVK-v2.2.3/Makefile.PL
+--- SVK-v2.2.3/Makefile.PL.orig	2017-05-22 14:13:08.731162763 +0200
++++ SVK-v2.2.3/Makefile.PL	2017-05-22 14:13:32.861019523 +0200
+@@ -52,6 +52,7 @@
+ my $required_svn = '1.3.0';
+ my $required_svm = '0.71';
+ 
++BEGIN { push @INC, '.'; }
+ use strict;
+ use inc::Module::Install;
+ 

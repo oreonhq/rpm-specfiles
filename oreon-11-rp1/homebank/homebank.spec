@@ -1,0 +1,84 @@
+%global source0_hash 783fd8bb2ebba09713e5d7c183d454f4a4393e828af5763f768b48afabc54386
+
+Name:           homebank
+Version:        5.10
+Release:        %{autorelease}
+Summary:        Free easy personal accounting for all  
+License:        GPL-2.0-or-later
+URL:            https://gethomebank.org/
+Source0:        https://gethomebank.org/public/sources/%{name}-%{version}.tar.gz
+BuildRequires:  gcc
+BuildRequires:  atk-devel cairo-devel desktop-file-utils gettext gtk3-devel
+BuildRequires:  intltool libappstream-glib libofx-devel perl(XML::Parser)
+BuildRequires:  libsoup3-devel
+BuildRequires:  make
+
+%description
+HomeBank is the free software you have always wanted to manage your personal
+accounts at home. The main concept is to be light, simple and very easy to use.
+It brings you many features that allows you to analyze your finances in a
+detailed way instantly and dynamically with powerful report tools based on
+filtering and graphical charts.
+
+%package doc
+Summary: Documentation files for homebank
+BuildArch: noarch
+Requires: %{name} = %{version}-%{release}
+%description doc
+Documentation files for homebank
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+# workaround for 5.10 difference between .tar.gz and the actual 5.10.0 dir
+# this workarnoud should be remove from 5.10.x onwards
+%autosetup -n %{name}-%{version}.0
+chmod -x NEWS
+chmod -x ChangeLog
+chmod -x README
+chmod -x AUTHORS
+chmod -x COPYING
+chmod -x doc/TODO
+chmod -x src/*.*
+
+%build
+%configure
+%make_build
+
+%install
+make install DESTDIR=%{buildroot} INSTALL='install -p'
+mkdir -p %{buildroot}%{_datadir}/pixmaps
+mkdir -p %{buildroot}%{_datadir}/applications
+desktop-file-install                                    \
+        --delete-original                               \
+        --dir %{buildroot}%{_datadir}/applications   \
+        --mode 0644                                     \
+        %{buildroot}%{_datadir}/applications/%{name}.desktop
+
+%find_lang %{name}
+
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/%{name}.appdata.xml
+
+%ldconfig_scriptlets
+
+%files -f %{name}.lang
+%doc AUTHORS ChangeLog NEWS README
+%license COPYING
+%{_bindir}/%{name}
+%dir %{_datadir}/%{name}/
+%{_datadir}/%{name}/images
+%{_datadir}/%{name}/icons
+%{_datadir}/%{name}/datas
+%{_datadir}/applications/*%{name}.desktop
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
+%{_datadir}/mime-info/%{name}.*
+%{_datadir}/mime/packages/%{name}.xml
+%{_datadir}/application-registry/%{name}.applications
+%{_datadir}/metainfo/%{name}.appdata.xml
+
+%files doc
+%doc doc/TODO
+%{_datadir}/%{name}/help
+
+%changelog
+%autochangelog

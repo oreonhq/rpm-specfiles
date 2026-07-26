@@ -1,0 +1,123 @@
+diff -Nrbu irda-utils-0.9.18/README irda-utils-0.9.18-OK/README
+--- irda-utils-0.9.18/README	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/README	2025-01-23 18:58:15.456409010 +0300
+@@ -28,7 +28,7 @@
+ 
+ First of all you need to install the tools in this package. Make and
+ make install should do that for you. By default it will install the
+-files in /etc/irda, and in /usr/sbin. If you don't like that, you
++files in /etc/irda, and in /usr/bin. If you don't like that, you
+ should edit the makefile.
+ 
+ 2.2 irattach
+diff -Nrbu irda-utils-0.9.18/etc/irda.rc irda-utils-0.9.18-OK/etc/irda.rc
+--- irda-utils-0.9.18/etc/irda.rc	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/etc/irda.rc	2025-01-23 18:59:07.746012761 +0300
+@@ -17,7 +17,7 @@
+ # Check that irda is up.
+ [ ${IRDA} = "no" ] && exit 0
+ 
+-[ -f /usr/sbin/irattach ] || exit 0
++[ -f /usr/bin/irattach ] || exit 0
+ 
+ ARGS=
+ if [ $DONGLE ]; then
+@@ -32,7 +32,7 @@
+   start)
+         # Attach irda device 
+         echo -n "Starting IrDA: "
+-        daemon /usr/sbin/irattach ${DEVICE} ${ARGS}
++        daemon /usr/bin/irattach ${DEVICE} ${ARGS}
+ 	touch /var/lock/subsys/irda
+         echo
+         ;;
+diff -Nrbu irda-utils-0.9.18/findchip/Makefile irda-utils-0.9.18-OK/findchip/Makefile
+--- irda-utils-0.9.18/findchip/Makefile	2025-01-23 18:49:11.278515528 +0300
++++ irda-utils-0.9.18-OK/findchip/Makefile	2025-01-23 18:58:49.747149179 +0300
+@@ -60,7 +60,7 @@
+ 
+ install: findchip
+ 	$(prn_install)
+-	$(ECMD)install findchip $(ROOT)/usr/sbin/
++	$(ECMD)install findchip $(ROOT)/usr/bin/
+ 
+ 
+ gfindchip: gfindchip.c 
+diff -Nrbu irda-utils-0.9.18/irattach/Makefile irda-utils-0.9.18-OK/irattach/Makefile
+--- irda-utils-0.9.18/irattach/Makefile	2025-01-23 18:49:11.278515528 +0300
++++ irda-utils-0.9.18-OK/irattach/Makefile	2025-01-23 19:00:28.246402814 +0300
+@@ -60,8 +60,8 @@
+ 
+ install: $(TARGETS)
+ 	$(prn_install)
+-	$(ECMD)install irattach $(ROOT)/usr/sbin
+-	$(ECMD)install dongle_attach $(ROOT)/usr/sbin
++	$(ECMD)install irattach $(ROOT)/usr/bin
++	$(ECMD)install dongle_attach $(ROOT)/usr/bin
+ 
+ 
+ clean: 
+diff -Nrbu irda-utils-0.9.18/irattach/irattach.c irda-utils-0.9.18-OK/irattach/irattach.c
+--- irda-utils-0.9.18/irattach/irattach.c	2025-01-23 18:49:11.285515475 +0300
++++ irda-utils-0.9.18-OK/irattach/irattach.c	2025-01-23 19:00:18.207478893 +0300
+@@ -262,7 +262,7 @@
+ 	int ret;
+ 	
+ 	sprintf(msg, "Trying to load module %s", name);
+-	sprintf(cmd, "/sbin/modprobe %s", name);
++	sprintf(cmd, "modprobe %s", name);
+ 
+ 	ret = execute(msg, cmd);
+ 
+diff -Nrbu irda-utils-0.9.18/irdadump/Makefile irda-utils-0.9.18-OK/irdadump/Makefile
+--- irda-utils-0.9.18/irdadump/Makefile	2025-01-23 18:49:11.278515528 +0300
++++ irda-utils-0.9.18-OK/irdadump/Makefile	2025-01-23 18:58:43.057199840 +0300
+@@ -50,7 +50,7 @@
+ 
+ install: $(IRDADUMP_TARGET)
+ 	$(prn_install)
+-	$(ECMD)install $(IRDADUMP_TARGET) $(ROOT)/usr/sbin
++	$(ECMD)install $(IRDADUMP_TARGET) $(ROOT)/usr/bin
+ 
+ clean:
+ 	$(RM_CMD)
+diff -Nrbu irda-utils-0.9.18/irdaping/Makefile irda-utils-0.9.18-OK/irdaping/Makefile
+--- irda-utils-0.9.18/irdaping/Makefile	2025-01-23 18:49:11.278515528 +0300
++++ irda-utils-0.9.18-OK/irdaping/Makefile	2025-01-23 19:00:00.446613473 +0300
+@@ -65,7 +65,7 @@
+ 
+ install: $(TARGETS)
+ 	$(prn_install)
+-	$(ECMD)install irdaping $(ROOT)/usr/sbin
++	$(ECMD)install irdaping $(ROOT)/usr/bin
+ 
+ clean:
+ 	$(RM_CMD)
+diff -Nrbu irda-utils-0.9.18/irnetd/Makefile irda-utils-0.9.18-OK/irnetd/Makefile
+--- irda-utils-0.9.18/irnetd/Makefile	2025-01-23 18:49:11.279515520 +0300
++++ irda-utils-0.9.18-OK/irnetd/Makefile	2025-01-23 18:58:29.216304738 +0300
+@@ -55,7 +55,7 @@
+ 
+ install: irnetd
+ 	$(prn_install)
+-	$(ECMD) install irnetd $(ROOT)/usr/sbin/
++	$(ECMD) install irnetd $(ROOT)/usr/bin/
+ 
+ 
+ clean:
+diff -Nrbu irda-utils-0.9.18/smcinit/Makefile irda-utils-0.9.18-OK/smcinit/Makefile
+--- irda-utils-0.9.18/smcinit/Makefile	2006-07-11 10:16:06.000000000 +0400
++++ irda-utils-0.9.18-OK/smcinit/Makefile	2025-01-23 18:59:49.557695945 +0300
+@@ -45,9 +45,9 @@
+ 
+ install: $(SMCINIT_TARGETS)
+ 	$(prn_install)
+-	$(ECMD)install smcinit $(ROOT)/usr/sbin
+-	$(ECMD)install tosh1800-smcinit $(ROOT)/usr/sbin
+-	$(ECMD)install tosh2450-smcinit $(ROOT)/usr/sbin
++	$(ECMD)install smcinit $(ROOT)/usr/bin
++	$(ECMD)install tosh1800-smcinit $(ROOT)/usr/bin
++	$(ECMD)install tosh2450-smcinit $(ROOT)/usr/bin
+ 
+ clean:
+ 	$(RM_CMD)

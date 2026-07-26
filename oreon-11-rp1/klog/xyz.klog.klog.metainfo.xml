@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>xyz.klog.klog</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+
+  <name>KLog</name>
+  <developer_name>Jaime Robles</developer_name>
+  <summary>Multiplatform free hamradio logger</summary>
+  <description>
+    <p>
+      KLog is a multiplatform free hamradio logger. It runs natively on Linux, macOS and Windows.
+    </p>
+    <p>
+      KLog is providing QSO management, useful QSL management DX-Cluster client, DXCC management, ClubLog integration, WSJT-X, DX-Marathon support and much more!
+    </p>
+  </description>
+
+  <launchable type="desktop-id">klog.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main Window</caption>
+      <image>https://i0.wp.com/www.klog.xyz/wp-content/uploads/2017/05/klog-0926.osx_.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>DX Cluster</caption>
+      <image>https://i0.wp.com/www.klog.xyz/wp-content/uploads/2017/06/klog-0926-cluster1-osx.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>DXCC Status</caption>
+      <image>https://i0.wp.com/www.klog.xyz/wp-content/uploads/2017/06/klog-0926-cluster-osx.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://www.klog.xyz/</url>
+  <url type="bugtracker">https://github.com/ea4k/klog/issues</url>
+
+  <content_rating type="oars-1.1"/>
+</component>

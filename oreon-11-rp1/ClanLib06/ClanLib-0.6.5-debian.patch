@@ -1,0 +1,878 @@
+diff -ur ClanLib-0.6.5.orig/Makefile.in ClanLib-0.6.5/Makefile.in
+--- ClanLib-0.6.5.orig/Makefile.in	2002-03-29 01:45:30.000000000 +0100
++++ ClanLib-0.6.5/Makefile.in	2006-07-19 20:19:36.000000000 +0200
+@@ -118,8 +118,8 @@
+ clean:
+ 	@echo "Cleaning project..."
+ 	@if [ -d "Libs" ]; then rm -rf Libs; fi
+-	@find . -name '*.3' -exec rm "{}" \;
+-	@find . -name '*.1' -exec rm "{}" \;
++	@#find . -name '*.3' -exec rm "{}" \;
++	@#find . -name '*.1' -exec rm "{}" \;
+ 
+ distclean: clean
+ 	@echo "Cleaning configure output, etc..."
+diff -ur ClanLib-0.6.5.orig/Setup/Tests/lua.cpp ClanLib-0.6.5/Setup/Tests/lua.cpp
+--- ClanLib-0.6.5.orig/Setup/Tests/lua.cpp	2001-12-05 13:57:18.000000000 +0100
++++ ClanLib-0.6.5/Setup/Tests/lua.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -17,7 +17,8 @@
+ 
+ #include <lua.h>
+ #include <stdio.h>
+-#include <tolua.h>
++#include <tolua++.h>
++#include <string.h>
+ #undef class
+ 
+ int main(int, char**)
+diff -ur ClanLib-0.6.5.orig/Setup/Tests/ttf.cpp ClanLib-0.6.5/Setup/Tests/ttf.cpp
+--- ClanLib-0.6.5.orig/Setup/Tests/ttf.cpp	2001-09-08 21:24:17.000000000 +0200
++++ ClanLib-0.6.5/Setup/Tests/ttf.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -11,7 +11,9 @@
+ 
+ 	------------------------------------------------------------------------
+ */
+-#include <freetype2/freetype/freetype.h>
++#include <ft2build.h>
++#include FT_FREETYPE_H
++
+ 
+ int main() {
+ 	return 0;
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.app.in ClanLib-0.6.5/Setup/Unix/Makefile.app.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.app.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.app.in	2006-07-19 20:19:36.000000000 +0200
+@@ -19,6 +19,7 @@
+ 
+ Libs/libclanApp.so: Libs/libclanCore.so $(OBJF_LIB_App)
+ 	@echo "Building Libs/libclanApp.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanApp.so.$(D_VERSION_MAJOR) -o Libs/libclanApp.so.$(D_VERSION_MINOR) $(OBJF_LIB_App) -L Libs -lclanCore
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanApp.so.$(D_VERSION_MAJOR) -o Libs/libclanApp.so.$(D_VERSION_MINOR) $(OBJF_LIB_App) -L Libs -lclanCore
+ 	@ln -s -f libclanApp.so.$(D_VERSION_MINOR) Libs/libclanApp.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanApp.so.$(D_VERSION_MAJOR) Libs/libclanApp.so
+@@ -26,4 +27,5 @@
+ Libs/libclanApp.a: $(OBJF_LIB_App)
+ 	@echo "Building Libs/libclanApp.a"
+ 	-@if [ -e Libs/libclanApp.a ]; then rm -f Libs/libclanApp.a; fi
++	@echo ar qc Libs/libclanApp.a $(OBJF_LIB_App)
+ 	@ar qc Libs/libclanApp.a $(OBJF_LIB_App)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.conf.in ClanLib-0.6.5/Setup/Unix/Makefile.conf.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.conf.in	2002-04-06 14:54:58.000000000 +0200
++++ ClanLib-0.6.5/Setup/Unix/Makefile.conf.in	2006-07-19 20:19:36.000000000 +0200
+@@ -12,6 +12,7 @@
+ INC_PREFIX    = @includedir@
+ BIN_PREFIX    = @bindir@
+ TARGET_PREFIX = @libdir@/ClanLib
++MAN_PREFIX    = @mandir@
+ 
+ INCLUDE_DIRS  = -I Sources @x_includes@ @extra_includes@
+ 
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.core.in ClanLib-0.6.5/Setup/Unix/Makefile.core.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.core.in	2002-01-08 22:58:35.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.core.in	2006-07-19 20:19:36.000000000 +0200
+@@ -17,8 +17,9 @@
+ 	@install Libs/libclanCore.a $(LIB_PREFIX)
+ 	@ln -s -f libclanCore.so.$(D_VERSION_MINOR) $(LIB_PREFIX)/libclanCore.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanCore.so.$(D_VERSION_MAJOR) $(LIB_PREFIX)/libclanCore.so
+-	@install -d $(BIN_PREFIX)
++	@install -d $(BIN_PREFIX) $(MAN_PREFIX)/man1/
+ 	@install Setup/Unix/clanlib-config $(BIN_PREFIX)
++	@install Setup/Unix/clanlib-config.1 $(MAN_PREFIX)/man1/
+ 
+ OBJF_CORE_GENERIC = \
+ 	Libs/Intermediate/cl_assert.o \
+@@ -92,6 +93,7 @@
+ 
+ Libs/libclanCore.so: $(OBJF_CORE_ALL)
+ 	@echo "Building Libs/libclanCore.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanCore.so.$(D_VERSION_MAJOR) -o Libs/libclanCore.so.$(D_VERSION_MINOR) $(OBJF_CORE_ALL) $(LINK_CORE)
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanCore.so.$(D_VERSION_MAJOR) -o Libs/libclanCore.so.$(D_VERSION_MINOR) $(OBJF_CORE_ALL) $(LINK_CORE)
+ 	@ln -s -f libclanCore.so.$(D_VERSION_MINOR) Libs/libclanCore.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanCore.so.$(D_VERSION_MAJOR) Libs/libclanCore.so
+@@ -99,5 +101,6 @@
+ Libs/libclanCore.a: $(OBJF_CORE_ALL)
+ 	@echo "Building Libs/libclanCore.a"
+ 	-@if [ -e Libs/libclanCore.a ]; then rm -f Libs/libclanCore.a; fi
++	@echo ar qc Libs/libclanCore.a $(OBJF_CORE_ALL)
+ 	@ar qc Libs/libclanCore.a $(OBJF_CORE_ALL)
+ 
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.display.in ClanLib-0.6.5/Setup/Unix/Makefile.display.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.display.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.display.in	2006-07-19 20:19:36.000000000 +0200
+@@ -114,10 +114,11 @@
+ 
+ # $(OBJF_DISP_X11) $(OBJF_DISP_FBDEV)
+ 
+-LINK_DISP = -L Libs -lclanCore @x_libraries@ -lHermes @directfb_libs@
++LINK_DISP = -L Libs -lclanCore -lclanApp @x_libraries@ -lHermes @directfb_libs@
+ 
+ Libs/libclanDisplay.so: Libs/libclanCore.so $(OBJF_DISP_ALL)
+ 	@echo "Building Libs/libclanDisplay.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanDisplay.so.$(D_VERSION_MAJOR) -o Libs/libclanDisplay.so.$(D_VERSION_MINOR) $(OBJF_DISP_ALL) $(LINK_DISP)
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanDisplay.so.$(D_VERSION_MAJOR) -o Libs/libclanDisplay.so.$(D_VERSION_MINOR) $(OBJF_DISP_ALL) $(LINK_DISP)
+ 	@ln -s -f libclanDisplay.so.$(D_VERSION_MINOR) Libs/libclanDisplay.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanDisplay.so.$(D_VERSION_MAJOR) Libs/libclanDisplay.so
+@@ -125,4 +126,5 @@
+ Libs/libclanDisplay.a: $(OBJF_DISP_ALL)
+ 	@echo "Building Libs/libclanDisplay.a"
+ 	-@if [ -e Libs/libclanDisplay.a ]; then rm -f Libs/libclanDisplay.a; fi
++	@echo ar qc Libs/libclanDisplay.a $(OBJF_DISP_ALL)
+ 	@ar qc Libs/libclanDisplay.a $(OBJF_DISP_ALL)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.gl.in ClanLib-0.6.5/Setup/Unix/Makefile.gl.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.gl.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.gl.in	2006-07-19 20:19:36.000000000 +0200
+@@ -25,11 +25,13 @@
+ 
+ Libs/libclanGL.so: Libs/libclanCore.so $(OBJF_LIB_GL)
+ 	@echo "Building Libs/libclanGL.so"
+-	@$(LINK_COMMAND) -Wl,-soname=libclanGL.so.$(D_VERSION_MAJOR) -o Libs/libclanGL.so.$(D_VERSION_MINOR) $(OBJF_LIB_GL) -L Libs -lclanDisplay -lGL -lGLU @x_libraries@  
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanGL.so.$(D_VERSION_MAJOR) -o Libs/libclanGL.so.$(D_VERSION_MINOR) $(OBJF_LIB_GL) -L Libs -lclanDisplay -lclanApp -lGL -lGLU @x_libraries@  
++	@$(LINK_COMMAND) -Wl,-soname=libclanGL.so.$(D_VERSION_MAJOR) -o Libs/libclanGL.so.$(D_VERSION_MINOR) $(OBJF_LIB_GL) -L Libs -lclanDisplay -lclanApp -lGL -lGLU @x_libraries@  
+ 	@ln -s -f libclanGL.so.$(D_VERSION_MINOR) Libs/libclanGL.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanGL.so.$(D_VERSION_MAJOR) Libs/libclanGL.so
+ 
+ Libs/libclanGL.a: Libs/libclanCore.a $(OBJF_LIB_GL)
+ 	@echo "Building Libs/libclanGL.a"
+ 	-@if [ -e Libs/libclanGL.a ]; then rm -f Libs/libclanGL.a; fi
++	@echo ar qc Libs/libclanGL.a $(OBJF_LIB_GL)
+ 	@ar qc Libs/libclanGL.a $(OBJF_LIB_GL)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.gui.in ClanLib-0.6.5/Setup/Unix/Makefile.gui.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.gui.in	2002-03-16 18:28:44.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.gui.in	2006-07-19 20:19:36.000000000 +0200
+@@ -84,10 +84,12 @@
+ 
+ Libs/libclanGUI.so: Libs/libclanCore.so $(OBJF_LIB_GUI)
+ 	@echo "Building Libs/libclanGUI.so"
+-	@$(LINK_COMMAND) -Wl,-soname=libclanGUI.so.$(D_VERSION_MAJOR) -o Libs/libclanGUI.so.$(D_VERSION_MINOR) $(OBJF_LIB_GUI) -L Libs -lclanCore
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanGUI.so.$(D_VERSION_MAJOR) -o Libs/libclanGUI.so.$(D_VERSION_MINOR) $(OBJF_LIB_GUI) -L Libs -lclanCore -lclanDisplay
++	@$(LINK_COMMAND) -Wl,-soname=libclanGUI.so.$(D_VERSION_MAJOR) -o Libs/libclanGUI.so.$(D_VERSION_MINOR) $(OBJF_LIB_GUI) -L Libs -lclanCore -lclanDisplay
+ 	@ln -s -f libclanGUI.so.$(D_VERSION_MINOR) Libs/libclanGUI.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanGUI.so.$(D_VERSION_MAJOR) Libs/libclanGUI.so	
+ 
+ Libs/libclanGUI.a: $(OBJF_LIB_GUI)
+ 	@echo "Building Libs/libclanGUI.a"
++	@echo ar qc Libs/libclanGUI.a $(OBJF_LIB_GUI)
+ 	@ar qc Libs/libclanGUI.a $(OBJF_LIB_GUI)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.jpeg.in ClanLib-0.6.5/Setup/Unix/Makefile.jpeg.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.jpeg.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.jpeg.in	2006-07-19 20:19:36.000000000 +0200
+@@ -21,11 +21,13 @@
+ 
+ Libs/libclanJPEG.so: Libs/libclanCore.so $(OBJF_LIB_JPEG)
+ 	@echo "Building Libs/libclanJPEG.so"
+-	@$(LINK_COMMAND) -Wl,-soname=libclanJPEG.so.$(D_VERSION_MAJOR) -o Libs/libclanJPEG.so.$(D_VERSION_MINOR) $(OBJF_LIB_JPEG) -L Libs -lclanCore -ljpeg
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanJPEG.so.$(D_VERSION_MAJOR) -o Libs/libclanJPEG.so.$(D_VERSION_MINOR) $(OBJF_LIB_JPEG) -L Libs -lclanCore -lclanDisplay -ljpeg
++	@$(LINK_COMMAND) -Wl,-soname=libclanJPEG.so.$(D_VERSION_MAJOR) -o Libs/libclanJPEG.so.$(D_VERSION_MINOR) $(OBJF_LIB_JPEG) -L Libs -lclanCore -lclanDisplay -ljpeg
+ 	@ln -s -f libclanJPEG.so.$(D_VERSION_MINOR) Libs/libclanJPEG.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanJPEG.so.$(D_VERSION_MAJOR) Libs/libclanJPEG.so
+ 
+ Libs/libclanJPEG.a: $(OBJF_LIB_JPEG)
+ 	@echo "Building Libs/libclanJPEG.a"
+ 	-@if [ -e Libs/libclanJPEG.a ]; then rm -f Libs/libclanJPEG.a; fi
++	@echo ar qc Libs/libclanJPEG.a $(OBJF_LIB_JPEG)
+ 	@ar qc Libs/libclanJPEG.a $(OBJF_LIB_JPEG)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.lua.in ClanLib-0.6.5/Setup/Unix/Makefile.lua.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.lua.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.lua.in	2006-07-19 20:22:17.000000000 +0200
+@@ -19,12 +19,14 @@
+ 
+ Libs/libclanLua.so: Libs/libclanCore.so $(OBJF_LIB_LUA)
+ 	@echo "Building Libs/libclanLua.so"
+-	@$(LINK_COMMAND) -Wl,-soname=libclanLua.so.$(D_VERSION_MAJOR) -o Libs/libclanLua.so.$(D_VERSION_MINOR) $(OBJF_LIB_LUA) -L Libs -lclanCore -llua -llualib -ltolua
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanLua.so.$(D_VERSION_MAJOR) -o Libs/libclanLua.so.$(D_VERSION_MINOR) $(OBJF_LIB_LUA) -L Libs -lclanCore -lclanDisplay -llua -ltolua++
++	@$(LINK_COMMAND) -Wl,-soname=libclanLua.so.$(D_VERSION_MAJOR) -o Libs/libclanLua.so.$(D_VERSION_MINOR) $(OBJF_LIB_LUA) -L Libs -lclanCore -lclanDisplay -llua -ltolua++
+ 	@ln -s -f libclanLua.so.$(D_VERSION_MINOR) Libs/libclanLua.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanLua.so.$(D_VERSION_MAJOR) Libs/libclanLua.so
+ 
+ Libs/libclanLua.a: $(OBJF_LIB_LUA)
+ 	@echo "Building Libs/libclanLua.a"
+ 	-@if [ -e Libs/libclanLua.a ]; then rm -f Libs/libclanLua.a; fi
++	@echo ar qc Libs/libclanLua.a $(OBJF_LIB_LUA)
+ 	@ar qc Libs/libclanLua.a $(OBJF_LIB_LUA)
+ 
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.mikmod.in ClanLib-0.6.5/Setup/Unix/Makefile.mikmod.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.mikmod.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.mikmod.in	2006-07-19 20:19:36.000000000 +0200
+@@ -22,11 +22,13 @@
+ 
+ Libs/libclanMikMod.so: Libs/libclanCore.so $(OBJF_LIB_MIKMOD)
+ 	@echo "Building Libs/libclanMikMod.so"
+-	@$(LINK_COMMAND) -Wl,-soname=libclanMikMod.so.$(D_VERSION_MAJOR) -o Libs/libclanMikMod.so.$(D_VERSION_MINOR) $(OBJF_LIB_MIKMOD) -L Libs -lclanCore -lmikmod
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanMikMod.so.$(D_VERSION_MAJOR) -o Libs/libclanMikMod.so.$(D_VERSION_MINOR) $(OBJF_LIB_MIKMOD) -L Libs -lclanCore -lclanSound -lmikmod
++	@$(LINK_COMMAND) -Wl,-soname=libclanMikMod.so.$(D_VERSION_MAJOR) -o Libs/libclanMikMod.so.$(D_VERSION_MINOR) $(OBJF_LIB_MIKMOD) -L Libs -lclanCore -lclanSound -lmikmod
+ 	@ln -s -f libclanMikMod.so.$(D_VERSION_MINOR) Libs/libclanMikMod.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanMikMod.so.$(D_VERSION_MAJOR) Libs/libclanMikMod.so
+ 
+ Libs/libclanMikMod.a: $(OBJF_LIB_MIKMOD)
+ 	@echo "Building Libs/libclanMikMod.a"
+ 	-@if [ -e Libs/libclanMikMod.a ]; then rm -f Libs/libclanMikMod.a; fi
++	@echo ar qc Libs/libclanMikMod.a $(OBJF_LIB_MIKMOD)
+ 	@ar qc Libs/libclanMikMod.a $(OBJF_LIB_MIKMOD)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.mpeg.in ClanLib-0.6.5/Setup/Unix/Makefile.mpeg.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.mpeg.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.mpeg.in	2006-07-19 20:19:36.000000000 +0200
+@@ -19,6 +19,7 @@
+ 
+ Libs/libclanMPEG.so: Libs/libclanCore.so $(OBJF_LIB_MPEG)
+ 	@echo "Building Libs/libclanMPEG.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanMPEG.so.$(D_VERSION_MAJOR) -o Libs/libclanMPEG.so.$(D_VERSION_MINOR) $(OBJF_LIB_MPEG) -L Libs -lclanCore 
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanMPEG.so.$(D_VERSION_MAJOR) -o Libs/libclanMPEG.so.$(D_VERSION_MINOR) $(OBJF_LIB_MPEG) -L Libs -lclanCore 
+ 	@ln -s -f libclanMPEG.so.$(D_VERSION_MINOR) Libs/libclanMPEG.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanMPEG.so.$(D_VERSION_MAJOR) Libs/libclanMPEG.so
+@@ -26,4 +27,5 @@
+ Libs/libclanMPEG.a: $(OBJF_LIB_MPEG)
+ 	@echo "Building Libs/libclanMPEG.a"
+ 	-@if [ -e Libs/libclanMPEG.a ]; then rm -f Libs/libclanMPEG.a; fi
++	@echo ar qc Libs/libclanMPEG.a $(OBJF_LIB_MPEG)
+ 	@ar qc Libs/libclanMPEG.a $(OBJF_LIB_MPEG)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.network.in ClanLib-0.6.5/Setup/Unix/Makefile.network.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.network.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.network.in	2006-07-19 20:19:36.000000000 +0200
+@@ -52,6 +52,7 @@
+ 
+ Libs/libclanNetwork.so: Libs/libclanCore.so $(OBJF_LIB_NETWORK)
+ 	@echo "Building Libs/libclanNetwork.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanNetwork.so.$(D_VERSION_MAJOR) -o Libs/libclanNetwork.so.$(D_VERSION_MINOR) $(OBJF_LIB_NETWORK) -L Libs -lclanCore
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanNetwork.so.$(D_VERSION_MAJOR) -o Libs/libclanNetwork.so.$(D_VERSION_MINOR) $(OBJF_LIB_NETWORK) -L Libs -lclanCore
+ 	@ln -s -f libclanNetwork.so.$(D_VERSION_MINOR) Libs/libclanNetwork.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanNetwork.so.$(D_VERSION_MAJOR) Libs/libclanNetwork.so
+@@ -59,4 +60,5 @@
+ Libs/libclanNetwork.a: $(OBJF_LIB_NETWORK)
+ 	@echo "Building Libs/libclanNetwork.a"
+ 	-@if [ -e Libs/libclanNetwork.a ]; then rm -f Libs/libclanNetwork.a; fi
++	@echo ar qc Libs/libclanNetwork.a $(OBJF_LIB_NETWORK)
+ 	@ar qc Libs/libclanNetwork.a $(OBJF_LIB_NETWORK)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.png.in ClanLib-0.6.5/Setup/Unix/Makefile.png.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.png.in	2002-01-10 21:17:13.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.png.in	2006-07-19 20:19:36.000000000 +0200
+@@ -20,11 +20,13 @@
+ 
+ Libs/libclanPNG.so: Libs/libclanCore.so $(OBJF_LIB_PNG)
+ 	@echo "Building Libs/libclanPNG.so"
+-	@$(LINK_COMMAND) -Wl,-soname=libclanPNG.so.$(D_VERSION_MAJOR) -o Libs/libclanPNG.so.$(D_VERSION_MINOR) $(OBJF_LIB_PNG) -L Libs -lclanCore -lpng
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanPNG.so.$(D_VERSION_MAJOR) -o Libs/libclanPNG.so.$(D_VERSION_MINOR) $(OBJF_LIB_PNG) -L Libs -lclanCore -lclanDisplay -lpng
++	@$(LINK_COMMAND) -Wl,-soname=libclanPNG.so.$(D_VERSION_MAJOR) -o Libs/libclanPNG.so.$(D_VERSION_MINOR) $(OBJF_LIB_PNG) -L Libs -lclanCore -lclanDisplay -lpng
+ 	@ln -s -f libclanPNG.so.$(D_VERSION_MINOR) Libs/libclanPNG.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanPNG.so.$(D_VERSION_MAJOR) Libs/libclanPNG.so
+ 
+ Libs/libclanPNG.a: $(OBJF_LIB_PNG)
+ 	@echo "Building Libs/libclanPNG.a"
+ 	-@if [ -e Libs/libclanPNG.a ]; then rm -f Libs/libclanPNG.a; fi
++	@echo ar qc Libs/libclanPNG.a $(OBJF_LIB_PNG)
+ 	@ar qc Libs/libclanPNG.a $(OBJF_LIB_PNG)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.smalljpeg.in ClanLib-0.6.5/Setup/Unix/Makefile.smalljpeg.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.smalljpeg.in	2002-02-14 06:54:15.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.smalljpeg.in	2006-07-19 20:19:36.000000000 +0200
+@@ -27,6 +27,7 @@
+ 
+ Libs/libclanSmallJPEG.so: Libs/libclanCore.so Libs/libclanDisplay.so $(OBJF_LIB_SMALLJPEG) @small_jpeg_assembly@
+ 	@echo "Building Libs/libclanSmallJPEG.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanSmallJPEG.so.$(D_VERSION_MAJOR) -o Libs/libclanSmallJPEG.so.$(D_VERSION_MINOR) $(OBJF_LIB_SMALLJPEG) -L Libs -lclanCore -lclanDisplay
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanSmallJPEG.so.$(D_VERSION_MAJOR) -o Libs/libclanSmallJPEG.so.$(D_VERSION_MINOR) $(OBJF_LIB_SMALLJPEG) -L Libs -lclanCore -lclanDisplay
+ 	@ln -s -f libclanSmallJPEG.so.$(D_VERSION_MINOR) Libs/libclanSmallJPEG.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanSmallJPEG.so.$(D_VERSION_MAJOR) Libs/libclanSmallJPEG.so
+@@ -34,4 +35,5 @@
+ Libs/libclanSmallJPEG.a: $(OBJF_LIB_SMALLJPEG)
+ 	@echo "Building Libs/libclanSmallJPEG.a"
+ 	-@if [ -e Libs/libclanSmallJPEG.a ]; then rm -f Libs/libclanSmallJPEG.a; fi
++	@echo ar qc Libs/libclanSmallJPEG.a $(OBJF_LIB_SMALLJPEG)
+ 	@ar qc Libs/libclanSmallJPEG.a $(OBJF_LIB_SMALLJPEG)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.sound.in ClanLib-0.6.5/Setup/Unix/Makefile.sound.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.sound.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.sound.in	2006-07-19 20:19:36.000000000 +0200
+@@ -51,6 +51,7 @@
+ 
+ Libs/libclanSound.so: Libs/libclanCore.so $(OBJF_SOUND_ALL)
+ 	@echo "Building Libs/libclanSound.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanSound.so.$(D_VERSION_MAJOR) -o Libs/libclanSound.so.$(D_VERSION_MINOR) $(OBJF_SOUND_ALL) -L Libs -lclanCore
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanSound.so.$(D_VERSION_MAJOR) -o Libs/libclanSound.so.$(D_VERSION_MINOR) $(OBJF_SOUND_ALL) -L Libs -lclanCore
+ 	@ln -s -f libclanSound.so.$(D_VERSION_MINOR) Libs/libclanSound.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanSound.so.$(D_VERSION_MAJOR) Libs/libclanSound.so
+@@ -58,4 +59,5 @@
+ Libs/libclanSound.a: $(OBJF_SOUND_ALL)
+ 	@echo "Building Libs/libclanSound.a"
+ 	-@if [ -e Libs/libclanSound.a ]; then rm -f Libs/libclanSound.a; fi
++	@echo ar qc Libs/libclanSound.a $(OBJF_SOUND_ALL)
+ 	@ar qc Libs/libclanSound.a $(OBJF_SOUND_ALL)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.ttf.in ClanLib-0.6.5/Setup/Unix/Makefile.ttf.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.ttf.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.ttf.in	2006-07-19 20:19:36.000000000 +0200
+@@ -22,11 +22,13 @@
+ 
+ Libs/libclanTTF.so: Libs/libclanCore.so $(OBJF_LIB_TTF)
+ 	@echo "Building Libs/libclanTTF.so"
+-	@$(LINK_COMMAND) -Wl,-soname=libclanTTF.so.$(D_VERSION_MAJOR) -o Libs/libclanTTF.so.$(D_VERSION_MINOR) $(OBJF_LIB_TTF) -L Libs -lclanCore -lfreetype
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanTTF.so.$(D_VERSION_MAJOR) -o Libs/libclanTTF.so.$(D_VERSION_MINOR) $(OBJF_LIB_TTF) -L Libs -lclanCore -lclanDisplay -lfreetype
++	@$(LINK_COMMAND) -Wl,-soname=libclanTTF.so.$(D_VERSION_MAJOR) -o Libs/libclanTTF.so.$(D_VERSION_MINOR) $(OBJF_LIB_TTF) -L Libs -lclanCore -lclanDisplay -lfreetype
+ 	@ln -s -f libclanTTF.so.$(D_VERSION_MINOR) Libs/libclanTTF.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanTTF.so.$(D_VERSION_MAJOR) Libs/libclanTTF.so
+ 
+ Libs/libclanTTF.a: $(OBJF_LIB_TTF)
+ 	@echo "Building Libs/libclanTTF.a"
+ 	-@if [ -e Libs/libclanTTF.a ]; then rm -f Libs/libclanTTF.a; fi
++	@echo ar qc Libs/libclanTTF.a $(OBJF_LIB_TTF)
+ 	@ar qc Libs/libclanTTF.a $(OBJF_LIB_TTF)
+diff -ur ClanLib-0.6.5.orig/Setup/Unix/Makefile.vorbis.in ClanLib-0.6.5/Setup/Unix/Makefile.vorbis.in
+--- ClanLib-0.6.5.orig/Setup/Unix/Makefile.vorbis.in	2001-12-24 17:12:59.000000000 +0100
++++ ClanLib-0.6.5/Setup/Unix/Makefile.vorbis.in	2006-07-19 20:19:36.000000000 +0200
+@@ -20,6 +20,7 @@
+ 
+ Libs/libclanVorbis.so: Libs/libclanCore.so $(OBJF_LIB_VORBIS)
+ 	@echo "Building Libs/libclanVorbis.so"
++	@echo $(LINK_COMMAND) -Wl,-soname=libclanVorbis.so.$(D_VERSION_MAJOR) -o Libs/libclanVorbis.so.$(D_VERSION_MINOR) $(OBJF_LIB_VORBIS) -L Libs -lclanCore -lvorbis
+ 	@$(LINK_COMMAND) -Wl,-soname=libclanVorbis.so.$(D_VERSION_MAJOR) -o Libs/libclanVorbis.so.$(D_VERSION_MINOR) $(OBJF_LIB_VORBIS) -L Libs -lclanCore -lvorbis
+ 	@ln -s -f libclanVorbis.so.$(D_VERSION_MINOR) Libs/libclanVorbis.so.$(D_VERSION_MAJOR)
+ 	@ln -s -f libclanVorbis.so.$(D_VERSION_MAJOR) Libs/libclanVorbis.so	
+@@ -27,4 +28,5 @@
+ Libs/libclanVorbis.a: $(OBJF_LIB_VORBIS)
+ 	@echo "Building Libs/libclanVorbis.a"
+ 	-@if [ -e Libs/libclanVorbis.a ]; then rm -f Libs/libclanVorbis.a; fi
++	@echo ar qc Libs/libclanVorbis.a $(OBJF_LIB_VORBIS)
+ 	@ar qc Libs/libclanVorbis.a $(OBJF_LIB_VORBIS)
+diff -ur ClanLib-0.6.5.orig/Sources/Core/DatafileCompiler/datafile_writer.cpp ClanLib-0.6.5/Sources/Core/DatafileCompiler/datafile_writer.cpp
+--- ClanLib-0.6.5.orig/Sources/Core/DatafileCompiler/datafile_writer.cpp	2002-04-06 21:50:45.000000000 +0200
++++ ClanLib-0.6.5/Sources/Core/DatafileCompiler/datafile_writer.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -34,6 +34,7 @@
+ #endif
+ 
+ #include "datafile_writer.h"
++#include "API/Core/IOData/cl_endian.h"
+ 
+ #ifndef WIN32
+ 	#define OPEN_FLAGS O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH
+@@ -53,6 +54,7 @@
+ 
+ 	int index_pos = -1;
+ 	write(datafile_fd, datafile_id, strlen(datafile_id));
++	SWAP_IF_BIG(index_pos);
+ 	write(datafile_fd, &index_pos, sizeof(int));
+ }
+ 
+@@ -60,7 +62,9 @@
+ {
+ 	int index_pos = lseek(datafile_fd, 0, SEEK_CUR);
+ 	int num_indexes = indexes.size();
++	int sh, in;
+ 
++	SWAP_IF_BIG(num_indexes);
+ 	write(datafile_fd, &num_indexes, sizeof(int));
+ 
+ 	for (
+@@ -69,14 +73,21 @@
+ 		it++)
+ 	{
+ 		short name_len = (*it)->name.get_length()+1;
+-		write(datafile_fd, &name_len, sizeof(short));
++		sh = name_len;
++		SWAP_IF_BIG(sh);
++		write(datafile_fd, &sh, sizeof(short));
+ 		write(datafile_fd, (*it)->name, name_len);
+-		write(datafile_fd, &(*it)->pos, sizeof(int));
+-		write(datafile_fd, &(*it)->size, sizeof(int));
++		in=(*it)->pos;
++		SWAP_IF_BIG(in);
++		write(datafile_fd, &in, sizeof(int));
++		in=(*it)->size;
++		SWAP_IF_BIG(in);
++		write(datafile_fd, &in, sizeof(int));
+ 		delete *it;
+ 	}
+ 
+ 	lseek(datafile_fd, strlen(datafile_id), SEEK_SET);
++	SWAP_IF_BIG(index_pos);
+ 	write(datafile_fd, &index_pos, sizeof(int));
+ 
+ 	close(datafile_fd);
+diff -ur ClanLib-0.6.5.orig/Sources/Core/IOData/Generic/datafile_inputprovider.cpp ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.cpp
+--- ClanLib-0.6.5.orig/Sources/Core/IOData/Generic/datafile_inputprovider.cpp	2002-02-28 23:12:56.000000000 +0100
++++ ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -15,6 +15,7 @@
+ #include "Core/precomp.h"
+ #include "datafile_inputprovider.h"
+ #include "API/Core/System/cl_assert.h"
++#include "API/Core/IOData/cl_endian.h"
+ 
+ #ifndef WIN32
+ #include <unistd.h>
+@@ -111,6 +112,7 @@
+ 	lseek(datafile_handle, strlen(datafile_id), SEEK_SET);	// Skip file ID
+ 	int index_pos;
+ 	::read(datafile_handle, &index_pos, sizeof(int));
++	SWAP_IF_BIG(index_pos);
+ 	lseek(datafile_handle, index_pos, SEEK_SET);
+ 
+ 	int num_indexes = 0;
+@@ -119,6 +121,7 @@
+ 	{
+ 		short length;
+ 		::read(datafile_handle, &length,sizeof(short));
++		SWAP_IF_BIG(length);
+ 
+ 		char *objname = new char[length];
+ 		int objpos;
+@@ -126,7 +129,9 @@
+ 
+ 		::read(datafile_handle, objname, length);
+ 		::read(datafile_handle, &objpos, sizeof(int));
++		SWAP_IF_BIG(objpos);
+ 		::read(datafile_handle, &objsize, sizeof(int));
++		SWAP_IF_BIG(objsize);
+ 
+ 		resource_cache->insert(objname, objpos, objsize);
+ 
+diff -ur ClanLib-0.6.5.orig/Sources/Core/IOData/Generic/inputsource.cpp ClanLib-0.6.5/Sources/Core/IOData/Generic/inputsource.cpp
+--- ClanLib-0.6.5.orig/Sources/Core/IOData/Generic/inputsource.cpp	2001-09-10 05:40:32.000000000 +0200
++++ ClanLib-0.6.5/Sources/Core/IOData/Generic/inputsource.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -21,7 +21,7 @@
+ 
+ void CL_InputSource::set_system_mode()
+ {
+-	little_endian_mode = true; // fix me: should use whatever endianess the system uses.
++	little_endian_mode = ! CL_Endian::is_system_big();
+ }
+ 
+ void CL_InputSource::set_big_endian_mode()
+@@ -105,6 +105,7 @@
+ {
+ 	bool answer;
+ 	if (read(&answer, sizeof(bool)) != sizeof(bool)) throw CL_Error("CL_InputSource_Datafile::read_bool8() failed");
++	SWAP_IF_BIG(answer);
+ 	// todo: do endianess converting here, if needed.
+ 	return answer;
+ }
+diff -ur ClanLib-0.6.5.orig/Sources/Core/IOData/Generic/outputsource.cpp ClanLib-0.6.5/Sources/Core/IOData/Generic/outputsource.cpp
+--- ClanLib-0.6.5.orig/Sources/Core/IOData/Generic/outputsource.cpp	2001-09-08 21:12:44.000000000 +0200
++++ ClanLib-0.6.5/Sources/Core/IOData/Generic/outputsource.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -14,13 +14,14 @@
+ 
+ #include "Core/precomp.h"
+ #include "API/Core/IOData/outputsource.h"
++#include "API/Core/IOData/cl_endian.h"
+ 
+ /////////////////////////////////////////////////////////////////////////////
+ // CL_OutputSource operations:
+ 
+ void CL_OutputSource::set_system_mode()
+ {
+-	little_endian_mode = true;
++	little_endian_mode = ! CL_Endian::is_system_big();
+ }
+ 
+ void CL_OutputSource::set_big_endian_mode()
+@@ -35,21 +36,25 @@
+ 
+ void CL_OutputSource::write_int32(int data)
+ {
++	SWAP_IF_BIG(data);
+ 	write(&data, sizeof(int));
+ }
+ 
+ void CL_OutputSource::write_uint32(unsigned int data)
+ {
++	SWAP_IF_BIG(data);
+ 	write(&data, sizeof(unsigned int));
+ }
+ 
+ void CL_OutputSource::write_short16(short data)
+ {
++	SWAP_IF_BIG(data);
+ 	write(&data, sizeof(short));
+ }
+ 
+ void CL_OutputSource::write_ushort16(unsigned short data)
+ {
++	SWAP_IF_BIG(data);
+ 	write(&data, sizeof(unsigned short));
+ }
+ 
+@@ -65,11 +70,13 @@
+ 
+ void CL_OutputSource::write_float32(float data)
+ {
++	SWAP_IF_BIG(data);
+ 	write(&data, sizeof(float));
+ }
+ 
+ void CL_OutputSource::write_bool8(bool data)
+ {
++	SWAP_IF_BIG(data);
+ 	write(&data, sizeof(bool));
+ }
+ 
+diff -ur ClanLib-0.6.5.orig/Sources/Display/SurfaceProviders/provider_targa.cpp ClanLib-0.6.5/Sources/Display/SurfaceProviders/provider_targa.cpp
+--- ClanLib-0.6.5.orig/Sources/Display/SurfaceProviders/provider_targa.cpp	2001-05-13 18:48:58.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/SurfaceProviders/provider_targa.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -191,8 +191,7 @@
+ 	// read or skip the colormap (rgb-palette)
+ 	if (colormaptype == 1)
+ 	{
+-		map_length = *((unsigned short *) &file[5]);
+-		SWAP_IF_BIG(map_length);
++		map_length = file[6] << 8 | file[5];
+ 		unsigned char map_size = file[7]>>3;
+ 
+ 		if (!read_colormap)
+@@ -240,13 +239,11 @@
+ 	}
+ 
+ 	// read pitch, height and bits-pr-pixel
+-	pitch = *((unsigned short *) &file[12]);
+-	SWAP_IF_BIG(pitch);
++	pitch = file[13] << 8 | file[12];
+ 	bounding_left = pitch;
+ 	bounding_right = 0;
+ 
+-	height = *((unsigned short *) &file[14]);
+-	SWAP_IF_BIG(height);
++	height = file[15] << 8 | file[14];
+ 	bounding_top = height;
+ 	bounding_bottom = 0;
+ 
+@@ -542,8 +539,7 @@
+ 	}
+ 	else
+ 	{
+-		entry = *((unsigned short *) &file[pos]);
+-		SWAP_IF_BIG(entry);
++		entry = file[pos+1] << 8 | file[pos];
+ 		pos += 2;
+ 	}
+ 
+diff -ur ClanLib-0.6.5.orig/Sources/GL/GLX/displaycard_glx.h ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.h
+--- ClanLib-0.6.5.orig/Sources/GL/GLX/displaycard_glx.h	2002-02-16 17:10:41.000000000 +0100
++++ ClanLib-0.6.5/Sources/GL/GLX/displaycard_glx.h	2006-07-19 20:19:36.000000000 +0200
+@@ -20,6 +20,7 @@
+ #include "Display/Display/X11/display_xwindow.h"
+ #include "Display/Display/X11/x11_resolution.h"
+ #include "GL/Generic/displaycard_gl_generic.h"
++#define GLX_GLXEXT_PROTOTYPES
+ #include <GL/glx.h>
+ #include <iostream>
+ 
+diff -ur ClanLib-0.6.5.orig/Sources/GUI/messagebox_generic.h ClanLib-0.6.5/Sources/GUI/messagebox_generic.h
+--- ClanLib-0.6.5.orig/Sources/GUI/messagebox_generic.h	2002-01-16 20:16:51.000000000 +0100
++++ ClanLib-0.6.5/Sources/GUI/messagebox_generic.h	2006-07-19 20:19:36.000000000 +0200
+@@ -26,7 +26,7 @@
+ 		const std::string &button2,
+ 		const std::string &button3);
+ 
+-	CL_MessageBox_Generic::~CL_MessageBox_Generic();
++	~CL_MessageBox_Generic();
+ 
+ 	void set_text(const std::string &text);
+ 
+diff -ur ClanLib-0.6.5.orig/Sources/JPEG/provider_jpeg.cpp ClanLib-0.6.5/Sources/JPEG/provider_jpeg.cpp
+--- ClanLib-0.6.5.orig/Sources/JPEG/provider_jpeg.cpp	2002-01-22 11:29:33.000000000 +0100
++++ ClanLib-0.6.5/Sources/JPEG/provider_jpeg.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -17,6 +17,7 @@
+ #include "API/JPEG/provider_jpeg.h"
+ #include "provider_jpeg_generic.h"
+ #include "API/Display/Display/surface.h"
++#include "API/Core/IOData/cl_endian.h"
+ #include "API/Display/Display/res_surface.h"
+ 
+ CL_Surface *CL_JPEGProvider::create(
+diff -ur ClanLib-0.6.5.orig/Sources/JPEG/provider_jpeg_generic.cpp ClanLib-0.6.5/Sources/JPEG/provider_jpeg_generic.cpp
+--- ClanLib-0.6.5.orig/Sources/JPEG/provider_jpeg_generic.cpp	2001-11-01 14:56:51.000000000 +0100
++++ ClanLib-0.6.5/Sources/JPEG/provider_jpeg_generic.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -120,12 +120,24 @@
+ 		{
+ 			jpeg_read_scanlines(&cinfo, buffer, 1);
+ 		
+-			for(unsigned int i=0; i < get_pitch(); i += 3)
+-			{
+-				image[pitch * (cinfo.output_scanline - 1) + i + 0] = buffer[0][i + 2];
+-				image[pitch * (cinfo.output_scanline - 1) + i + 1] = buffer[0][i + 1];
+-				image[pitch * (cinfo.output_scanline - 1) + i + 2] = buffer[0][i + 0];
+-			}
++                        if (CL_Endian::is_system_big())
++                        {
++                                for(unsigned int i=0; i < get_pitch(); i += 3)
++                                {
++                                        image[pitch * (cinfo.output_scanline - 1) + i + 2] = buffer[0][i + 2];
++                                        image[pitch * (cinfo.output_scanline - 1) + i + 1] = buffer[0][i + 1];
++                                        image[pitch * (cinfo.output_scanline - 1) + i + 0] = buffer[0][i + 0];
++                                }
++                        }
++                        else
++                        {
++                                for(unsigned int i=0; i < get_pitch(); i += 3)
++                                {
++                                        image[pitch * (cinfo.output_scanline - 1) + i + 0] = buffer[0][i + 2];
++                                        image[pitch * (cinfo.output_scanline - 1) + i + 1] = buffer[0][i + 1];
++                                        image[pitch * (cinfo.output_scanline - 1) + i + 2] = buffer[0][i + 0];
++                                }
++                        }
+ 		}
+ 	}
+ 	// Greyscale Image
+@@ -135,12 +147,24 @@
+ 		{
+ 			jpeg_read_scanlines(&cinfo, buffer, 1);
+ 			
+-			for(int i=0; i < width; i += 1)
+-			{
+-				image[pitch * (cinfo.output_scanline - 1) + 3*i + 0] = buffer[0][i];
+-				image[pitch * (cinfo.output_scanline - 1) + 3*i + 1] = buffer[0][i];
+-				image[pitch * (cinfo.output_scanline - 1) + 3*i + 2] = buffer[0][i];
+-			}			
++                        if (CL_Endian::is_system_big())
++                        {
++                                for(int i=0; i < width; i += 1)
++                                {
++                                        image[pitch * (cinfo.output_scanline - 1) + 3*i + 2] = buffer[0][i];
++                                        image[pitch * (cinfo.output_scanline - 1) + 3*i + 1] = buffer[0][i];
++                                        image[pitch * (cinfo.output_scanline - 1) + 3*i + 0] = buffer[0][i];
++                                }
++                        }
++			else
++                        {
++                                for(int i=0; i < width; i += 1)
++                                {
++                                        image[pitch * (cinfo.output_scanline - 1) + 3*i + 0] = buffer[0][i];
++                                        image[pitch * (cinfo.output_scanline - 1) + 3*i + 1] = buffer[0][i];
++                                        image[pitch * (cinfo.output_scanline - 1) + 3*i + 2] = buffer[0][i];
++                                }
++                        }
+ 		}
+ 	}
+ 	else
+diff -ur ClanLib-0.6.5.orig/Sources/PNG/provider_png.cpp ClanLib-0.6.5/Sources/PNG/provider_png.cpp
+--- ClanLib-0.6.5.orig/Sources/PNG/provider_png.cpp	2002-03-23 08:09:26.000000000 +0100
++++ ClanLib-0.6.5/Sources/PNG/provider_png.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -26,6 +26,7 @@
+ #include "API/Display/Display/res_surface.h"
+ #include "API/Core/Resources/resourceoptions.h"
+ #include "API/Core/System/error.h" 
++#include "API/Core/IOData/cl_endian.h"
+ #include "API/PNG/provider_png.h"
+ 
+ // Workaround for a VC bug
+@@ -220,23 +221,49 @@
+ 
+ 	if (!ignore_alphachannel)
+ 	{
+-		for (int i = 0; i < pitch * height; i += 4)
+-		{
+-			image[i + 0] = tmp_image[i + 3];
+-			image[i + 1] = tmp_image[i + 2];
+-			image[i + 2] = tmp_image[i + 1];
+-			image[i + 3] = tmp_image[i + 0];
+-		}
++                if (CL_Endian::is_system_big())
++                {
++                        for (int i = 0; i < pitch * height; i += 4)
++                        {
++                                image[i + 3] = tmp_image[i + 3];
++                                image[i + 2] = tmp_image[i + 2];
++                                image[i + 1] = tmp_image[i + 1];
++                                image[i + 0] = tmp_image[i + 0];
++                        }
++                }
++                else
++                {
++                        for (int i = 0; i < pitch * height; i += 4)
++                        {
++                                image[i + 0] = tmp_image[i + 3];
++                                image[i + 1] = tmp_image[i + 2];
++                                image[i + 2] = tmp_image[i + 1];
++                                image[i + 3] = tmp_image[i + 0];
++                        }
++                }
+ 	}
+ 	else
+ 	{
+-		for (int i = 0; i < pitch * height; i += 4)
+-		{
+-			image[i + 0] = 255;
+-			image[i + 1] = tmp_image[i + 2];
+-			image[i + 2] = tmp_image[i + 1];
+-			image[i + 3] = tmp_image[i + 0];
+-		}
++                if (CL_Endian::is_system_big())
++                {
++                        for (int i = 0; i < pitch * height; i += 4)
++                        {
++                                image[i + 3] = 255;
++                                image[i + 2] = tmp_image[i + 2];
++                                image[i + 1] = tmp_image[i + 1];
++                                image[i + 0] = tmp_image[i + 0];
++                        }
++                }
++                else
++                {
++                        for (int i = 0; i < pitch * height; i += 4)
++                        {
++                                image[i + 0] = 255;
++                                image[i + 1] = tmp_image[i + 2];
++                                image[i + 2] = tmp_image[i + 1];
++                                image[i + 3] = tmp_image[i + 0];
++                        }
++                }
+ 	}
+ 
+ 	delete[] tmp_image;
+@@ -265,13 +292,26 @@
+ 	delete[] row_pointers;
+ 
+ 	image = new unsigned char[height * pitch];
+-	// Coverting the data in the tmp buffer to our final data
+-	for (int i = 0; i < rowbytes * height; i++)
+-	{
+-		image[3*i + 0] = tmp_image[i];
+-		image[3*i + 1] = tmp_image[i];
+-		image[3*i + 2] = tmp_image[i];
+-	}
++
++        if (CL_Endian::is_system_big())
++        {
++                // Coverting the data in the tmp buffer to our final data
++                for (int i = 0; i < rowbytes * height; i++)
++                {
++                        image[3*i + 2] = tmp_image[i];
++                        image[3*i + 1] = tmp_image[i];
++                        image[3*i + 0] = tmp_image[i];
++                }
++        }
++        else
++        {
++                for (int i = 0; i < rowbytes * height; i++)
++                {
++                        image[3*i + 0] = tmp_image[i];
++                        image[3*i + 1] = tmp_image[i];
++                        image[3*i + 2] = tmp_image[i];
++                }
++        }
+ 	delete[] tmp_image;
+ }
+ 
+@@ -298,25 +338,52 @@
+ 
+ 	// Creating the final image out of tmp_image
+ 	image = new unsigned char[width * pitch];
++
+ 	if (!ignore_alphachannel)
+ 	{
+-		for (int i = 0; i < rowbytes * height; i += 2)
+-		{
+-			image[2*i + 0] = tmp_image[i + 1];
+-			image[2*i + 1] = tmp_image[i + 0];
+-			image[2*i + 2] = tmp_image[i + 0];
+-			image[2*i + 3] = tmp_image[i + 0];
+-		}
++                if (CL_Endian::is_system_big())
++                {
++                        for (int i = 0; i < rowbytes * height; i += 2)
++                        {
++                                image[2*i + 3] = tmp_image[i + 1];
++                                image[2*i + 2] = tmp_image[i + 0];
++                                image[2*i + 1] = tmp_image[i + 0];
++                                image[2*i + 0] = tmp_image[i + 0];
++                        }
++                }
++                else
++                {
++                        for (int i = 0; i < rowbytes * height; i += 2)
++                        {
++                                image[2*i + 0] = tmp_image[i + 1];
++                                image[2*i + 1] = tmp_image[i + 0];
++                                image[2*i + 2] = tmp_image[i + 0];
++                                image[2*i + 3] = tmp_image[i + 0];
++                        }
++                }
+ 	} 
+ 	else
+ 	{
+-		for (int i = 0; i < rowbytes * height; i += 2)
+-		{
+-			image[2*i + 0] = 255;
+-			image[2*i + 1] = tmp_image[i + 0];
+-			image[2*i + 2] = tmp_image[i + 0];
+-			image[2*i + 3] = tmp_image[i + 0];
+-		}
++                if (CL_Endian::is_system_big())
++                {
++                        for (int i = 0; i < rowbytes * height; i += 2)
++                        {
++                                image[2*i + 3] = 255;
++                                image[2*i + 2] = tmp_image[i + 0];
++                                image[2*i + 1] = tmp_image[i + 0];
++                                image[2*i + 0] = tmp_image[i + 0];
++                        }
++                }
++                else
++                {
++                        for (int i = 0; i < rowbytes * height; i += 2)
++                        {
++                                image[2*i + 0] = 255;
++                                image[2*i + 1] = tmp_image[i + 0];
++                                image[2*i + 2] = tmp_image[i + 0];
++                                image[2*i + 3] = tmp_image[i + 0];
++                        }
++                }
+ 	}
+ 
+ 	delete[] tmp_image;
+diff -ur ClanLib-0.6.5.orig/Sources/TTF/font_ttf.cpp ClanLib-0.6.5/Sources/TTF/font_ttf.cpp
+--- ClanLib-0.6.5.orig/Sources/TTF/font_ttf.cpp	2002-01-15 17:18:48.000000000 +0100
++++ ClanLib-0.6.5/Sources/TTF/font_ttf.cpp	2006-07-19 20:19:36.000000000 +0200
+@@ -21,7 +21,8 @@
+ #include <malloc.h>
+ #include "Display/Font/font_generic.h"
+ 
+-#include <freetype/freetype.h>
++#include <ft2build.h>
++#include FT_FREETYPE_H
+ 
+ #include "font_ttf.h"
+ 
+diff -ur ClanLib-0.6.5.orig/configure.in ClanLib-0.6.5/configure.in
+--- ClanLib-0.6.5.orig/configure.in	2002-08-05 20:00:03.000000000 +0200
++++ ClanLib-0.6.5/configure.in	2006-07-19 20:19:36.000000000 +0200
+@@ -72,8 +72,8 @@
+ dnl Check system endianess: (note: ClanLib is _not_ endian clean right now)
+ dnl -----------------------------------------------------------------------
+ 
+-dnl AC_C_BIGENDIAN
+-dnl AC_CHECK_SIZEOF(int, 4)
++AC_C_BIGENDIAN
++AC_CHECK_SIZEOF(int, 4)
+ 
+ if test "$ac_cv_sizeof_int" = "8"; then
+ 	AC_DEFINE(USE_64BIT)
+--- ClanLib-0.6.2/Setup/Unix/clanlib-config.1.orig
++++ ClanLib-0.6.2/Setup/Unix/clanlib-config.1
+@@ -0,0 +1,33 @@
++.\" Hey, Emacs!  This is an -*- nroff -*- source file.
++.\"
++.\" This manpage is in the public domain.
++.\"
++
++.TH clanlib-config 1 "12 Aug 2001" "" "ClanLib Game SDK"
++
++.SH NAME
++clanlib\-config \- clanlib development helper script
++
++.SH SYNOPSIS
++clanlib-config
++[ \fB--cflags\fP ]
++[ \fB--libs\fP ]
++[ \fB--version\fP ]
++
++.SH DESCRIPTION
++.I clanlib\-config
++is a script to help in building applications using the ClanLib Game SDK.
++It can be used to automatically set build flags such as directory where
++ClanLib headers are located or the exact name of the ClanLib library your
++application should link with.
++
++.SH AUTHOR
++Filip Van Raemdonck (mechanix@debian.org) wrote this manpage for the Debian
++prepackaged version of ClanLib, but it may be used by others.
++
++.SH SEE ALSO
++.BR libmikmod-config
++(1),
++.BR trophy
++(6)
++

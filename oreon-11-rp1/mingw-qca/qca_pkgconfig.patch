@@ -1,0 +1,12 @@
+diff -rupN --no-dereference qca-2.3.10/CMakeLists.txt qca-2.3.10-new/CMakeLists.txt
+--- qca-2.3.10/CMakeLists.txt	2025-03-09 13:09:03.000000000 +0100
++++ qca-2.3.10-new/CMakeLists.txt	2025-03-17 10:49:29.429534515 +0100
+@@ -245,7 +245,7 @@ foreach(PATH QCA_PLUGINS_INSTALL_DIR
+   endif()
+ endforeach()
+ 
+-if(NOT WIN32)
++if(NOT MSVC)
+   if(OSX_FRAMEWORK)
+     set(PKGCONFIG_CFLAGS "-F\${libdir} -I\${includedir}")
+     set(PKGCONFIG_LIBS "-F\${libdir} -framework ${QCA_LIB_NAME}")

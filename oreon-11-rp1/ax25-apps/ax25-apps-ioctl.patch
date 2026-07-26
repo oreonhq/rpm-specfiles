@@ -1,0 +1,12 @@
+Index: ax25apps-2.0.0/ax25ipd/io.c
+===================================================================
+--- ax25apps-2.0.0.orig/ax25ipd/io.c
++++ ax25apps-2.0.0/ax25ipd/io.c
+@@ -27,6 +27,7 @@
+ #include <netinet/in_systm.h>
+ #include <netinet/ip.h>
+ #include <sys/types.h>
++#include <sys/ioctl.h>
+ #include <sys/time.h>
+ #include <sys/socket.h>
+ 

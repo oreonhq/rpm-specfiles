@@ -1,0 +1,19 @@
+DESTDIR=
+PREFIX=/usr
+BINDIR=${PREFIX}/bin
+MANDIR=${PREFIX}/share/man
+
+build:
+	${CC} ${CFLAGS} -D__sun -D_GNU_SOURCE -D__USE_FILE_OFFSET64 \
+  -DNOMD5 -c *.c
+	${CC} ${CFLAGS} -D__sun -D_GNU_SOURCE -D__USE_FILE_OFFSET64 \
+  -DNOMD5 *.o -o cpdup
+
+install:
+	mkdir -p ${DESTDIR}${BINDIR} ${DESTDIR}${MANDIR}/man1
+	cp -p cpdup ${DESTDIR}${BINDIR}/
+	cp -p cpdup.1 ${DESTDIR}${MANDIR}/man1/
+
+clean:
+	-rm -f *.o
+

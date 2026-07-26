@@ -1,0 +1,204 @@
+diff --git a/main.cpp b/main.cpp
+index 087a0bf..9beada5 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -170,12 +170,21 @@ int main(int argc, char *argv[])
+ 	/* Command line flags */
+ 	int doprinthigh = 0;
+ 	int speedtest = 0;
++	gid_t gid;
++
+ 	Uint32 video_flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+ 
+ 	/* Normal variables */
+ 	SDL_Event event;
+ 	LibPath::SetExePath(argv[0]);
+ 
++	GetScoreFile();
++	gid = getgid();
++	if (setresgid(-1,gid,gid) != 0) {
++		error("Could not drop privleges. -- Exiting.\n");
++		exit(1);
++	}
++
+ #ifndef __WIN95__
+ 	/* The first thing we do is calculate our checksum */
+ 	(void) checksum();
+@@ -481,7 +490,7 @@ void DrawMainScreen(void)
+ 	if ( title == NULL ) {
+ 		error("Can't load 'title' title! (ID=%d)\n", 129);
+ 		exit(255);
+-        }
++	}
+ 
+ 	clr = screen->MapRGB(30000>>8, 30000>>8, 0xFF);
+ 	ltClr = screen->MapRGB(40000>>8, 40000>>8, 0xFF);
+@@ -682,4 +691,3 @@ void Message(const char *message)
+ 	}
+ 	screen->Update();
+ }
+-
+diff --git a/scores.cpp b/scores.cpp
+index 5e023c6..9ec1e76 100644
+--- a/scores.cpp
++++ b/scores.cpp
+@@ -4,6 +4,8 @@
+ */
+ 
+ #ifdef unix
++#include <arpa/inet.h>
++#include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #endif
+@@ -15,11 +17,11 @@
+ #include "load.h"
+ #include "dialog.h"
+ 
+-#define MAELSTROM_SCORES	"Maelstrom-Scores"
++#define MAELSTROM_SCORES	"/var/lib/games/Maelstrom-Scores"
+ #define NUM_SCORES		10		// Do not change this!
+ 
+ /* Everyone can write to scores file if defined to 0 */
+-#define SCORES_PERMMASK		022
++#define SCORES_PERMMASK		002
+ 
+ #define CLR_DIALOG_WIDTH	281
+ #define CLR_DIALOG_HEIGHT	111
+@@ -27,10 +29,31 @@
+ Bool gNetScores = 0;
+ Scores hScores[NUM_SCORES];
+ 
++int gScoreFile = -1;
++
++void GetScoreFile(void)
++{
++#ifdef unix
++   int omask;
++#endif
++   int f;
++
++#ifdef unix
++   omask=umask(SCORES_PERMMASK);
++#endif
++   f = open(MAELSTROM_SCORES,O_RDWR|O_CREAT,S_IRUSR | S_IWUSR | S_IWGRP | S_IRGRP);
++   if (f == -1)
++	   f = open(MAELSTROM_SCORES,O_RDONLY);
++   if (f == -1)
++	   error("Couldn't open score file %s.\n",MAELSTROM_SCORES);
++   gScoreFile = f;
++#ifdef unix
++   umask(omask);
++#endif
++}
++
+ void LoadScores(void)
+ {
+-	SavePath path;
+-	SDL_RWops *scores_src;
+ 	int i;
+ 
+ 	/* Try to load network scores, if we can */
+@@ -44,50 +67,48 @@ void LoadScores(void)
+ 	}
+ 	memset(&hScores, 0, sizeof(hScores));
+ 
+-	scores_src = SDL_RWFromFile(path.Path(MAELSTROM_SCORES), "rb");
+-	if ( scores_src != NULL ) {
++	if (gScoreFile != -1) {
++		lseek(gScoreFile,0,SEEK_SET);
+ 		for ( i=0; i<NUM_SCORES; ++i ) {
+-			SDL_RWread(scores_src, hScores[i].name,
+-			           sizeof(hScores[i].name), 1);
+-			hScores[i].wave = SDL_ReadBE32(scores_src);
+-			hScores[i].score = SDL_ReadBE32(scores_src);
++			Uint32 tmp;
++			if (read(gScoreFile,hScores[i].name,sizeof(hScores[i].name)) != sizeof(hScores[i].name))
++				break;
++			if (read(gScoreFile,&tmp,sizeof(Uint32)) != sizeof(Uint32))
++				break;
++			hScores[i].wave = ntohl(tmp);
++			if (read(gScoreFile,&tmp,sizeof(Uint32)) != sizeof(Uint32))
++				break;
++			hScores[i].score = ntohl(tmp);
+ 		}
+-		SDL_RWclose(scores_src);
+ 	}
+ }
+ 
+ void SaveScores(void)
+ {
+-	SavePath path;
+-	SDL_RWops *scores_src;
+ 	int i;
+-#ifdef unix
+-	int omask;
+-#endif
+ 
+ 	/* Don't save network scores */
+ 	if ( gNetScores )
+ 		return;
+ 
+-#ifdef unix
+-	omask=umask(SCORES_PERMMASK);
+-#endif
+-	scores_src = SDL_RWFromFile(path.Path(MAELSTROM_SCORES), "wb");
+-	if ( scores_src != NULL ) {
++	if (gScoreFile != -1) {
++		lseek(gScoreFile,0,SEEK_SET);
+ 		for ( i=0; i<NUM_SCORES; ++i ) {
+-			SDL_RWwrite(scores_src, hScores[i].name,
+-			            sizeof(hScores[i].name), 1);
+-			SDL_WriteBE32(scores_src, hScores[i].wave);
+-			SDL_WriteBE32(scores_src, hScores[i].score);
++			Uint32 tmp;
++			if (write(gScoreFile, hScores[i].name, sizeof(hScores[i].name)) != sizeof(hScores[i].name))
++				goto out_err;
++			tmp = htonl(hScores[i].wave);
++			if (write(gScoreFile, &tmp,sizeof(Uint32)) != sizeof(Uint32))
++				goto out_err;
++			tmp = htonl(hScores[i].score);
++			if (write(gScoreFile, &tmp,sizeof(Uint32)) != sizeof(Uint32))
++				goto out_err;
+ 		}
+-		SDL_RWclose(scores_src);
+-	} else {
+-		error("Warning: Couldn't save scores to %s\n",
+-						path.Path(MAELSTROM_SCORES));
++		fsync(gScoreFile);
++		return;
+ 	}
+-#ifdef unix
+-	umask(omask);
+-#endif
++out_err:
++	error("Warning: Couldn't save scores to %s\n", MAELSTROM_SCORES);
+ }
+ 
+ /* Just show the high scores */
+@@ -148,7 +169,7 @@ int ZapHighScores(void)
+ 	clear = new Mac_Button(99, 74, BUTTON_WIDTH, BUTTON_HEIGHT,
+ 				"Clear", chicago, fontserv, Clear_callback);
+ 	dialog->Add_Dialog(clear);
+-	cancel = new Mac_DefaultButton(99+BUTTON_WIDTH+14, 74, 
++	cancel = new Mac_DefaultButton(99+BUTTON_WIDTH+14, 74,
+ 				BUTTON_WIDTH, BUTTON_HEIGHT,
+ 				"Cancel", chicago, fontserv, Cancel_callback);
+ 	dialog->Add_Dialog(cancel);
+@@ -268,4 +289,3 @@ int GetStartLevel(void)
+ 	}
+ 	return(0);
+ }
+-
+diff --git a/scores.h b/scores.h
+index 4126260..4716751 100644
+--- a/scores.h
++++ b/scores.h
+@@ -2,6 +2,7 @@
+ // Functions from scores.cc
+ extern void	LoadScores(void);
+ extern void	SaveScores(void);
++extern void	GetScoreFile(void);
+ extern int	ZapHighScores(void);
+ extern int	GetStartLevel(void);
+ extern void	PrintHighScores(void);

@@ -1,0 +1,22 @@
+--- glyph-keeper-0.32/src/glyph_index.c~	2007-02-16 11:12:41.000000000 +0100
++++ glyph-keeper-0.32/src/glyph_index.c	2007-02-16 11:12:41.000000000 +0100
+@@ -340,7 +340,7 @@
+     CARE(page_c[c_index]==0);
+ 
+     page_c[c_index] = glyph;
+-    (*(int*)(page_c+128))++;
++    (*(long*)(page_c+128))++;
+     glyph->index = index;
+ 
+     glyph->prev = 0;
+--- glyph-keeper-0.32/Makefile.GNU.all~	2007-02-16 11:14:27.000000000 +0100
++++ glyph-keeper-0.32/Makefile.GNU.all	2007-02-16 11:14:27.000000000 +0100
+@@ -90,7 +90,7 @@
+ 
+ WFLAGS := -W -Wall
+ 
+-OFLAGS := -O2 -s
++OFLAGS = -O2 -s
+ 
+ FT_CFLAGS := $(WFLAGS) -std=c89 $(OFLAGS) -Ifreetype/include $(ft_defines)
+ GK_CFLAGS := $(WFLAGS) -std=c89 -pedantic $(OFLAGS) -Iinclude $(gk_defines) $(if $(FT_LIB),,-Ifreetype/include)

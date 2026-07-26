@@ -1,0 +1,26 @@
+diff --git a/fortran/fdate.c b/fortran/fdate.c
+index a9d3337..a1fe742 100644
+--- a/fortran/fdate.c
++++ b/fortran/fdate.c
+@@ -21,7 +21,7 @@ LAST MODIFIACTION
+ #include <time.h>
+ #include <string.h>
+ 
+-void fdate_(char *cht, ftnlen cht_len)
++void fdate_(char *cht)
+ {
+     static time_t t;
+     time(&t);
+diff --git a/fortran/mopac7f2c.h b/fortran/mopac7f2c.h
+index b94ee7c..246ab3a 100644
+--- a/fortran/mopac7f2c.h
++++ b/fortran/mopac7f2c.h
+@@ -198,6 +198,8 @@ typedef VOID H_f;	/* character function */
+ typedef VOID Z_f;	/* double complex function */
+ typedef doublereal E_f;	/* real function with -R not specified */
+ 
++void s_copy(register char *a, register char *b, ftnlen la, ftnlen lb);
++
+ /* undef any lower-case symbols that your C compiler predefines, e.g.: */
+ 
+ #ifndef Skip_f2c_Undefs

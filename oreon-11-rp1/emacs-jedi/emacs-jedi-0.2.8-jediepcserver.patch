@@ -1,0 +1,12 @@
+diff -up ./jedi-core.el.orig ./jedi-core.el
+--- ./jedi-core.el.orig	2019-10-11 19:50:08.000000000 +0200
++++ ./jedi-core.el	2020-04-13 18:11:01.197711975 +0200
+@@ -92,7 +92,7 @@ to make this setting work."
+ 
+ (defcustom jedi:server-command
+   (or (jedi:-env-server-command)
+-      (list "python" jedi:server-script))
++      (list "/usr/bin/jediepcserver"))
+   "Command used to run Jedi server.
+ 
+ .. NOTE::

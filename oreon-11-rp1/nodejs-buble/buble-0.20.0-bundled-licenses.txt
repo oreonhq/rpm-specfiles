@@ -1,0 +1,2 @@
+"BSD-2-Clause"
+"MIT"

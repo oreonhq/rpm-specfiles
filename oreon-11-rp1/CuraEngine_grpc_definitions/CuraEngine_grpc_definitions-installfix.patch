@@ -1,0 +1,15 @@
+diff -up CuraEngine_grpc_definitions-0.1.0/CMakeLists.txt.installfix CuraEngine_grpc_definitions-0.1.0/CMakeLists.txt
+--- CuraEngine_grpc_definitions-0.1.0/CMakeLists.txt.installfix	2023-11-22 16:40:53.974712616 -0500
++++ CuraEngine_grpc_definitions-0.1.0/CMakeLists.txt	2023-11-22 16:44:03.395467964 -0500
+@@ -13,4 +13,9 @@ asio_grpc_protobuf_generate(PROTOS "${GR
+ 
+ add_library(curaengine_grpc_definitions ${ASIO_GRPC_PLUGIN_PROTO_SOURCES})
+ target_include_directories(curaengine_grpc_definitions PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/generated)
+-target_link_libraries(curaengine_grpc_definitions PUBLIC asio-grpc::asio-grpc protobuf::libprotobuf)
+\ No newline at end of file
++target_link_libraries(curaengine_grpc_definitions PUBLIC asio-grpc::asio-grpc protobuf::libprotobuf)
++set(CEGD_SOVERSION 0)
++set_target_properties(curaengine_grpc_definitions PROPERTIES SOVERSION ${CEGD_SOVERSION})
++
++include(GNUInstallDirs)
++install(TARGETS curaengine_grpc_definitions LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")

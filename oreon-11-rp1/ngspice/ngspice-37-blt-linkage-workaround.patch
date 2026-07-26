@@ -1,0 +1,102 @@
+--- ngspice-26/tclspice/configure.ac.link	2016-07-02 18:09:34.205996501 +0900
++++ ngspice-26/tclspice/configure.ac	2016-07-03 12:29:48.273370215 +0900
+@@ -471,12 +471,27 @@
+ 
+     AC_SUBST([STATIC], [-shared])
+ 
++    save_LDFLAGS="$LDFLAGS"
++    LDFLAGS="$LDFLAGS -L$libdir"
++    AC_CHECK_LIB(BLTlite24, Blt_ResetVector,[BLTLITE_LIBS="-lBLTlite24"],[BLTLITE_LIBS=""])
++    AC_CHECK_LIB(BLT24, Blt_ResetVector,[BLT_LIBS="-lBLT24"],[BLT_LIBS=""])
++    LDFLAGS="$save_LDFLAGS"
++
++    AC_CHECK_LIB(tcl, Tcl_Eval, [TCL_LIBS="-ltcl"], [TCL_LIBS=""])
++
+ else
+     TCL_PACKAGE_PATH=""
+     TCL_LIB_SPEC=""
+     AC_SUBST([STATIC], [-static])
++    BLTLITE_LIBS=""
++    BLT_LIBS=""
++    TCL_LIBS=""
+ fi
+ 
++AC_SUBST(BLTLITE_LIBS)
++AC_SUBST(BLT_LIBS)
++AC_SUBST(TCL_LIBS)
++
+ 
+ AM_CONDITIONAL([SHARED_MODULE], [test "x$has_shared_module" = xtrue])
+ AM_CONDITIONAL([SHWIN], [test "x$has_shwin" = xtrue])
+--- ngspice-37/tclspice/src/Makefile.am.link	2014-01-12 00:28:59.000000000 +0900
++++ ngspice-37/tclspice/src/Makefile.am	2016-07-03 12:29:38.747329190 +0900
+@@ -331,6 +331,7 @@
+ 
+ if TCL_MODULE
+ lib_LTLIBRARIES = libspice.la
++lib_LTLIBRARIES += libspicelite.la
+ initdata_DATA += tclspinit
+ pkgIndex_DATA = pkgIndex.tcl
+ pkgIndexdir = $(pkglibdir)
+@@ -346,9 +347,13 @@
+ 	ngspice.c \
+ 	tclspice.c
+ 
++libspicelite_la_SOURCES	= $(libspice_la_SOURCES)
++
+ libspice_la_CPPFLAGS = $(AM_CPPFLAGS)  -DSIMULATOR \
+ 	-DTCLSPICE_version="\"$(TCLSPICE_VERSION)\""
+ 
++libspicelite_la_CPPFLAGS = $(libspice_la_CPPFLAGS)
++
+ libspice_la_LIBADD = \
+ 	@X_LIBS@ \
+ 	frontend/libfte.la
+@@ -422,17 +427,27 @@
+     maths/dense/libdense.la
+ endif
+ 
++libspicelite_la_LIBADD = $(libspice_la_LIBADD)
++
+ libspice_la_CFLAGS = -shared
+-libspice_la_LDFLAGS =  -shared -Wl,--version-script=$(srcdir)/tclspice.map
++libspicelite_la_CFLAGS = $(libspice_la_CFLAGS)
++libspice_la_LDFLAGS_COMMON =  -shared -Wl,--version-script=$(srcdir)/tclspice.map
+ if TCLWIN
+-libspice_la_LDFLAGS +=  -no-undefined
+-libspice_la_LDFLAGS += --def spice.def @TCL_LIB_SPEC@
++libspice_la_LDFLAGS_COMMON +=  -no-undefined
++libspice_la_LDFLAGS_COMMON += --def spice.def @TCL_LIB_SPEC@
+ endif
+ if TCLCYG
+-libspice_la_LDFLAGS +=  -no-undefined
+-libspice_la_LDFLAGS += --def spice.def @TCL_LIB_SPEC@
++libspice_la_LDFLAGS_COMMON +=  -no-undefined
++libspice_la_LDFLAGS_COMMON += --def spice.def @TCL_LIB_SPEC@
+ endif
+ 
++libspice_la_LDFLAGS = $(libspice_la_LDFLAGS_COMMON)
++libspicelite_la_LDFLAGS = $(libspice_la_LDFLAGS_COMMON)
++
++libspice_la_LDFLAGS += @BLT_LIBS@ @TCL_LIBS@
++
++libspicelite_la_LDFLAGS += @BLTLITE_LIBS@ @TCL_LIBS@
++
+ TCLSPICE_VERSION = @VERSION@
+ 
+ pkgIndex_edit = sed \
+--- ngspice-26/tclspice/src/pkgIndex.tcl.in.link	2014-01-12 00:28:59.000000000 +0900
++++ ngspice-26/tclspice/src/pkgIndex.tcl.in	2016-07-03 02:03:59.046647551 +0900
+@@ -5,7 +5,11 @@
+  
+     set suffix [info sharedlibextension]
+ 
+-    set library spice${suffix}
++    if { [info commands tk] == "tk" } {
++      set library spice${suffix}
++    } else {
++      set library spicelite${suffix}
++    }
+ 
+     global tcl_platform
+     if { $tcl_platform(platform) == "unix" } {

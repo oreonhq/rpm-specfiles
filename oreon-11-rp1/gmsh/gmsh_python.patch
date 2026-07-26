@@ -1,0 +1,48 @@
+diff -rupN --no-dereference gmsh-4.15.0-source/CMakeLists.txt gmsh-4.15.0-source-new/CMakeLists.txt
+--- gmsh-4.15.0-source/CMakeLists.txt	2025-10-25 17:09:26.000000000 +0200
++++ gmsh-4.15.0-source-new/CMakeLists.txt	2025-11-16 12:11:29.982761471 +0100
+@@ -2001,6 +2001,8 @@ else()
+   set(GMSH_INC ${CMAKE_INSTALL_INCLUDEDIR})
+ endif()
+ 
++execute_process ( COMMAND python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())" OUTPUT_VARIABLE PYTHON3_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
++
+ # mark targets as optional so we can install them separately if needed
+ # (e.g. "make lib" or "make shared" followed by "make install/fast")
+ install(TARGETS gmsh
+@@ -2034,14 +2036,14 @@ if(ENABLE_BUILD_LIB OR ENABLE_BUILD_SHAR
+ endif()
+ 
+ if(ENABLE_ONELAB AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/contrib/onelab)
+-  install(FILES ${ONELAB_PY} DESTINATION ${GMSH_BIN})
++  install(FILES ${ONELAB_PY} DESTINATION ${PYTHON3_SITE_PACKAGES})
+ endif()
+ if(ENABLE_BUILD_LIB OR ENABLE_BUILD_SHARED OR ENABLE_BUILD_DYNAMIC)
+   install(FILES ${GMSH_API} DESTINATION ${GMSH_INC})
+-  install(FILES ${GMSH_PY} DESTINATION ${GMSH_LIB})
++  install(FILES ${GMSH_PY} DESTINATION ${PYTHON3_SITE_PACKAGES})
+   install(FILES ${GMSH_JL} DESTINATION ${GMSH_LIB})
+   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/METADATA DESTINATION
+-                ${GMSH_LIB}/gmsh-${GMSH_PYTHON_VERSION}.dist-info)
++                ${PYTHON3_SITE_PACKAGES}/gmsh-${GMSH_PYTHON_VERSION}.dist-info)
+   if(ENABLE_PRIVATE_API)
+     install(FILES ${GMSH_PRIVATE_API} DESTINATION ${GMSH_INC}/gmsh)
+     if(HAVE_CONTRIB_EIGEN) # the private API depends on Eigen
+diff -rupN --no-dereference gmsh-4.15.0-source/src/common/GmshMessage.cpp gmsh-4.15.0-source-new/src/common/GmshMessage.cpp
+--- gmsh-4.15.0-source/src/common/GmshMessage.cpp	2025-10-01 16:39:02.000000000 +0200
++++ gmsh-4.15.0-source-new/src/common/GmshMessage.cpp	2025-11-16 12:11:29.983375719 +0100
+@@ -177,14 +177,6 @@ void Msg::Initialize(int argc, char **ar
+   if(CTX::instance()->exeFileName.empty() && _commandLineArgs.size())
+     CTX::instance()->exeFileName = _commandLineArgs[0];
+ 
+-  if(_env) {
+-    // add the directory where the binary is installed to the path where Python
+-    // looks for modules, and to the path for executables (this allows us to
+-    // find the onelab.py module or subclients automatically)
+-    addGmshPathToEnvironmentVar("PYTHONPATH");
+-    addGmshPathToEnvironmentVar("PATH");
+-  }
+-
+   if(_locale) {
+     // make sure to use the "C" locale; in particular this ensures that we will
+     // use a dot for for the decimal separator when writing ASCII mesh files

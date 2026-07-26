@@ -1,0 +1,103 @@
+diff -uNr maradns-3.5.0036/deadwood-3.5.0036/src/DwSocket.h maradns-3.5.0036-patched/deadwood-3.5.0036/src/DwSocket.h
+--- maradns-3.5.0036/deadwood-3.5.0036/src/DwSocket.h	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/deadwood-3.5.0036/src/DwSocket.h	2025-02-18 10:32:10.384646061 +0100
+@@ -275,7 +275,7 @@
+ SOCKET do_bind(ip_addr_T *ip,int type);
+ 
+ /* Get an upstream IP address (Not thread safe w/o locking) */
+-ip_addr_T get_upstream_ip();
++ip_addr_T get_upstream_ip(dw_str *query, int b);
+ 
+ /* Find a free remote pending connection */
+ int_fast32_t find_free_remote();
+diff -uNr maradns-3.5.0036/deadwood-3.5.0036/src/DwSys.h maradns-3.5.0036-patched/deadwood-3.5.0036/src/DwSys.h
+--- maradns-3.5.0036/deadwood-3.5.0036/src/DwSys.h	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/deadwood-3.5.0036/src/DwSys.h	2025-02-18 10:34:07.603568612 +0100
+@@ -101,7 +101,7 @@
+ 
+ /* Read mararc parameters and set global variables based on those
+  * parameters */
+-void process_mararc();
++void process_mararc(char *name);
+ 
+ /* Initialize the cache */
+ void init_cache();
+diff -uNr maradns-3.5.0036/libs/MaraHash.h maradns-3.5.0036-patched/libs/MaraHash.h
+--- maradns-3.5.0036/libs/MaraHash.h	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/libs/MaraHash.h	2025-02-18 10:36:45.926464005 +0100
+@@ -55,7 +55,7 @@
+ 
+ /* Function prototypes */
+ /* mhash (assosciative array) objects */
+-mhash *mhash_create();
++mhash *mhash_create(int hash_bits);
+ mhash_offset mhash_js(js_string *tohash, int hash_bits);
+ mhash_offset mhash_inc(mhash_offset old, int hash_bits);
+ int mhash_put(mhash *hash, js_string *key, void *value, int datatype);
+diff -uNr maradns-3.5.0036/server/MaraDNS.c maradns-3.5.0036-patched/server/MaraDNS.c
+--- maradns-3.5.0036/server/MaraDNS.c	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/server/MaraDNS.c	2025-02-18 10:50:30.611918558 +0100
+@@ -237,7 +237,7 @@
+ int got_hup_signal = 0;
+ 
+ /* Signal handler for HUP signal */
+-void handle_hup() {
++void handle_hup(int signum) {
+     got_hup_signal = 1;
+     return;
+     }
+diff -uNr maradns-3.5.0036/server/udpsuccess.c maradns-3.5.0036-patched/server/udpsuccess.c
+--- maradns-3.5.0036/server/udpsuccess.c	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/server/udpsuccess.c	2025-02-18 10:38:12.618406728 +0100
+@@ -39,7 +39,7 @@
+ extern rr *seenlist[256];
+ extern int seenlist_where;
+ extern ipv4pair long_packet[512];
+-extern int calc_ra_value(); /* Make -Wall happy */
++extern int calc_ra_value(int); /* Make -Wall happy */
+ 
+ /* If we successfully found a record, spit out that record on the
+    udp packet.
+diff -uNr maradns-3.5.0036/tcp/fetchzone.c maradns-3.5.0036-patched/tcp/fetchzone.c
+--- maradns-3.5.0036/tcp/fetchzone.c	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/tcp/fetchzone.c	2025-02-18 10:53:56.955781783 +0100
+@@ -50,7 +50,7 @@
+     exit(3);
+     }
+ 
+-void timeout() {
++void timeout(int signum) {
+     harderror(L_TIMEOUT); /* "Connection timed out" */
+     }
+ 
+diff -uNr maradns-3.5.0036/tcp/getzone.c maradns-3.5.0036-patched/tcp/getzone.c
+--- maradns-3.5.0036/tcp/getzone.c	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/tcp/getzone.c	2025-02-18 10:53:33.478797344 +0100
+@@ -47,7 +47,7 @@
+     exit(3);
+     }
+ 
+-void timeout() {
++void timeout(int signum) {
+     harderror(L_TIMEOUT); /* "Connection timed out" */
+     }
+ 
+diff -uNr maradns-3.5.0036/tcp/zoneserver.c maradns-3.5.0036-patched/tcp/zoneserver.c
+--- maradns-3.5.0036/tcp/zoneserver.c	2023-05-03 02:53:39.000000000 +0200
++++ maradns-3.5.0036-patched/tcp/zoneserver.c	2025-02-18 10:51:08.924893163 +0100
+@@ -84,13 +84,13 @@
+ int no_cname_warnings = 1; /* So we can link to MaraBigHash.o */
+ 
+ /* Signal handler for handling the exit of a child */
+-void handle_childs() {
++void handle_childs(int signum) {
+     if(waitpid(0,NULL,WNOHANG) > 0)
+         num_children--;
+ }
+ 
+ /* Signal handler for termination of the root process */
+-void handle_term() {
++void handle_term(int signum) {
+     killpg(getpgrp(), SIGTERM);
+     exit(0);
+ }

@@ -1,0 +1,17 @@
+--- desktop/snd.c	2005-08-24 02:45:22.000000000 +0200
++++ desktop/snd.c.patch	2008-10-18 21:57:09.000000000 +0200
+@@ -37,10 +37,10 @@
+ 		Mix_QuerySpec( &audio_rate, &audio_format, &audio_channels );
+ 	}
+ 
+-	_Snd.sounds[ 1 ] = Mix_LoadWAV("data/sfx1.wav");
+-	_Snd.sounds[ 2 ] = Mix_LoadWAV("data/sfx2.wav");
+-	_Snd.sounds[ 3 ] = Mix_LoadWAV("data/sfx3.wav");
+-	_Snd.sounds[ 4 ] = Mix_LoadWAV("data/sfx4.wav");
++	_Snd.sounds[ 1 ] = Mix_LoadWAV("@DATADIR@/biniax/data/sfx1.wav");
++	_Snd.sounds[ 2 ] = Mix_LoadWAV("@DATADIR@/biniax/data/sfx2.wav");
++	_Snd.sounds[ 3 ] = Mix_LoadWAV("@DATADIR@/biniax/data/sfx3.wav");
++	_Snd.sounds[ 4 ] = Mix_LoadWAV("@DATADIR@/biniax/data/sfx4.wav");
+ 
+ 
+ 	return BNX_TRUE;

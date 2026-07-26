@@ -1,0 +1,63 @@
+diff -up MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.exclude MySQL-zrm-3.0/usr/bin/mysql-zrm-backup
+--- MySQL-zrm-3.0/usr/bin/mysql-zrm-backup.exclude	2013-08-26 14:45:36.000000000 -0600
++++ MySQL-zrm-3.0/usr/bin/mysql-zrm-backup	2014-04-03 17:02:13.648882414 -0600
+@@ -1584,7 +1584,7 @@ sub doLogicalFullBackup()
+     	&printStartPhase( "Creating logical backup\n" );
+     }
+     my $params;
+-    my $mydumperparams;
++    my $mydumperparams = "";
+     my $msg = "";
+     my $dbs = "";
+     my $index_msg = "";
+@@ -1611,15 +1611,9 @@ sub doLogicalFullBackup()
+         $index_msg = "logical-databases=".$inputs{"databases"}."\n";
+  	if($isMyDumper){
+         	my @mdbs = split " ", $inputs{"databases"};
+-        	my $str ="";
+-        	foreach(@mdbs){
+-        		$str.="$_|";
+-        	}
+-        	$str =~ s/\|$//;
+-        	$mydumperparams = "--regex '^(".$str.")'";
++        	$mydumperparams = "--regex '^(".join("|", @mdbs).")'";
+         }
+     } else {
+-        $params = "--all-databases ";
+         @pdbs = &enumAllDatabases();
+         if( defined $inputs{"exclude-pattern"} ){
+             my $ln = @pdbs;
+@@ -1629,28 +1623,18 @@ sub doLogicalFullBackup()
+                 &printAndDie( "Nothing to backup after exclude-pattern is applied\n" );
+             }
+  	        # handle the all-databases with ZRM exclude filter
+-            my $str = "";
+             if($isMyDumper){
+                 if($ln > $l){
+-                        foreach(@pdbs){
+-                        $str.="$_|";
+-                        }
+-                        $str =~ s/\|$//;
+-                        $mydumperparams = "--regex '^(".$str.")'";
+-                }else{
+-                        $mydumperparams = "";
++                    $mydumperparams = "--regex '^(".join("|", @pdbs).")'";
+                 }
+-           }
++            }
+         }
++        $params = "--databases @pdbs";
+         if( $verbose ){
+             &printLog( "backup of the following databases will be done @pdbs\n" );
+         }
+-        $msg = "Logical backup done for the following database(s)\n";
+-        foreach( @pdbs ) {
+-            $dbs = $dbs.$_." ";
+-        }
+-        $msg = $msg.$dbs."\n";
+-        $index_msg = "logical-databases=".$dbs."\n";
++        $msg = "Logical backup done for the following database(s)\n@pdbs\n";
++        $index_msg = "logical-databases=@pdbs\n";
+     }
+     my $ntp = &checkIfNonTrans( @pdbs );
+     if($isMyDumper){

@@ -1,0 +1,13 @@
+diff --git a/src/main/java/org/hid4java/jna/HidrawHidApiLibrary.java b/src/main/java/org/hid4java/jna/HidrawHidApiLibrary.java
+index b3f3887..bb335fa 100644
+--- a/src/main/java/org/hid4java/jna/HidrawHidApiLibrary.java
++++ b/src/main/java/org/hid4java/jna/HidrawHidApiLibrary.java
+@@ -34,6 +34,6 @@ import com.sun.jna.Native;
+  */
+ public interface HidrawHidApiLibrary extends HidApiLibrary {
+
+-  HidApiLibrary INSTANCE = Native.load("hidapi", HidApiLibrary.class);
++  HidApiLibrary INSTANCE = Native.load("hidapi-hidraw", HidApiLibrary.class);
+
+ }
+\ No newline at end of file

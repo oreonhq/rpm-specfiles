@@ -1,0 +1,11 @@
+--- libs/basekit/CMakeLists.txt~	2017-08-11 13:47:18.000000000 -0500
++++ libs/basekit/CMakeLists.txt	2023-10-10 16:54:33.687360560 -0500
+@@ -24,7 +24,7 @@
+ 
+ # Now build the shared library
+ add_library(basekit SHARED ${SRCS})
+-target_link_libraries(basekit ${BASEKIT_LIBS})
++target_link_libraries(basekit ${BASEKIT_LIBS} m)
+ 
+ # ...And the static library
+ #add_library(basekit_static STATIC ${SRCS})

@@ -1,0 +1,24 @@
+From: Daniel Leidert <dleidert@debian.org>
+Date: Wed, 28 Oct 2020 02:14:22 +0100
+Subject: Remove gnome-common macros
+
+Bug-Debian: https://bugs.debian.org/830039
+---
+ configure.ac | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index a68e47a..be4b090 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -29,9 +29,7 @@ AM_PROG_CC_C_O
+ IT_PROG_INTLTOOL([0.40.6])
+ GNOME_DOC_INIT
+ 
+-GNOME_COMPILE_WARNINGS([maximum])
+-GNOME_CXX_WARNINGS([yes])
+-GNOME_MAINTAINER_MODE_DEFINES
++AX_COMPILER_FLAGS([WARN_CFLAGS],[WARN_LDFLAGS])
+ 
+ AC_ARG_VAR(GLIB_GENMARSHAL, [The glib-genmarshal executable.])
+ AC_CHECK_PROG(GLIB_GENMARSHAL, glib-genmarshal, glib-genmarshal)

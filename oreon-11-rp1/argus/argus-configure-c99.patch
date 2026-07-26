@@ -1,0 +1,38 @@
+Include relevant headers to avoid implicit function declarations.
+Declare the return type of main to avoid an implicit int.
+
+Submitted upstream:
+
+  <https://github.com/openargus/argus/pull/5>
+  <https://github.com/openargus/clients/pull/7>
+
+diff -ur argus-3.0.8.2.orig/acsite.m4 argus-3.0.8.2/acsite.m4
+--- argus-3.0.8.2.orig/acsite.m4	2015-04-14 16:32:33.000000000 +0200
++++ argus-3.0.8.2/acsite.m4	2022-11-25 18:44:48.934763450 +0100
+@@ -298,8 +298,10 @@
+ #      include <sys/types.h>
+ #      include <sys/wait.h>
+ #      include <stdio.h>
++#      include <stdlib.h>
++#      include <unistd.h>
+       unsigned char a[[5]] = { 1, 2, 3, 4, 5 };
+-      main() {
++      int main() {
+       unsigned int i;
+       pid_t pid;
+       int status;
+diff -ur argus-3.0.8.2.orig/configure argus-3.0.8.2/configure
+--- argus-3.0.8.2.orig/configure	2016-06-01 20:29:33.000000000 +0200
++++ argus-3.0.8.2/configure	2022-11-25 18:44:56.248688727 +0100
+@@ -5789,8 +5789,10 @@
+ #      include <sys/types.h>
+ #      include <sys/wait.h>
+ #      include <stdio.h>
++#      include <stdlib.h>
++#      include <unistd.h>
+       unsigned char a[5] = { 1, 2, 3, 4, 5 };
+-      main() {
++      int main() {
+       unsigned int i;
+       pid_t pid;
+       int status;

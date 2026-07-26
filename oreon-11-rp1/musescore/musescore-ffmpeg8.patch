@@ -1,0 +1,12 @@
+diff -up MuseScore-4.6.2/src/importexport/videoexport/internal/videoencoder.cpp.ffmpeg8 MuseScore-4.6.2/src/importexport/videoexport/internal/videoencoder.cpp
+--- MuseScore-4.6.2/src/importexport/videoexport/internal/videoencoder.cpp.ffmpeg8	2025-10-10 11:21:06.000000000 +0200
++++ MuseScore-4.6.2/src/importexport/videoexport/internal/videoencoder.cpp	2025-10-16 12:11:45.585730770 +0200
+@@ -126,7 +126,7 @@ bool VideoEncoder::open(const muse::io::
+         return false;
+     }
+ #endif
+-    m_ffmpeg->codecCtx->profile = FF_PROFILE_H264_HIGH;
++    m_ffmpeg->codecCtx->profile = AV_PROFILE_H264_HIGH;
+ 
+     m_ffmpeg->codecCtx->bit_rate = bitrate;
+     m_ffmpeg->codecCtx->width = width;

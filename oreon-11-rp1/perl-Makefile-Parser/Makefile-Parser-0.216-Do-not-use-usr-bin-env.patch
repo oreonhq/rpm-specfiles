@@ -1,0 +1,49 @@
+From d14443cf126ac5696bf6cedaeebaf63cc1ca055d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 22 Sep 2015 12:40:55 +0200
+Subject: [PATCH] Do not use /usr/bin/env
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+ExtUtils::MakeMaker rewrites #!perl into correct perl automatically.
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ script/makesimple | 2 +-
+ script/pgmake-db  | 2 +-
+ script/plmake     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/script/makesimple b/script/makesimple
+index 58d8d3a..2b805e9 100755
+--- a/script/makesimple
++++ b/script/makesimple
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ 
+ use strict;
+ use warnings;
+diff --git a/script/pgmake-db b/script/pgmake-db
+index 9025e3a..43362c3 100755
+--- a/script/pgmake-db
++++ b/script/pgmake-db
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl 
++#!perl 
+ 
+ use strict;
+ use warnings;
+diff --git a/script/plmake b/script/plmake
+index 18ee584..951998b 100644
+--- a/script/plmake
++++ b/script/plmake
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!perl
+ 
+ use strict;
+ use warnings;
+-- 
+2.4.3
+

@@ -1,0 +1,120 @@
+From 0b5444bf7e59868e2dd79cffa113197870776ef6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Wed, 12 Jun 2019 23:28:13 +0200
+Subject: [PATCH 01/15] Remove Python version management on Fedora
+
+This removes the pythonz-bd dependency which is not available in Fedora
+anymore.
+Furthermore, there is strong support upstream to either remove Pew's
+Python version management or replace it with pyenv:
+https://github.com/berdario/pew/issues/195.
+---
+ pew/pew.py                     | 22 +++-------------------
+ pew/shell_config/complete.fish |  9 ---------
+ pew/shell_config/complete.zsh  |  3 ---
+ tests/test_install.py          | 29 -----------------------------
+ 4 files changed, 3 insertions(+), 60 deletions(-)
+ delete mode 100644 tests/test_install.py
+
+diff --git a/pew/pew.py b/pew/pew.py
+index c588a2e..2ffea2f 100644
+--- a/pew/pew.py
++++ b/pew/pew.py
+@@ -19,25 +19,9 @@ windows = sys.platform == 'win32'
+ 
+ from clonevirtualenv import clone_virtualenv
+ if not windows:
+-    try:
+-        # Try importing these packages if avaiable
+-        from pythonz.commands.install import InstallCommand
+-        from pythonz.commands.uninstall import UninstallCommand
+-        from pythonz.installer.pythoninstaller import PythonInstaller, AlreadyInstalledError
+-        from pythonz.commands.list import ListCommand
+-        from pythonz.define import PATH_PYTHONS
+-        from pythonz.commands.locate import LocateCommand as LocatePython
+-
+-        def ListPythons():
+-            try:
+-                Path(PATH_PYTHONS).mkdir(parents=True)
+-            except OSError:
+-                pass
+-            return ListCommand()
+-    except:
+-        # create mock commands
+-        InstallCommand = ListPythons = LocatePython = UninstallCommand = \
+-            lambda : sys.exit('You need to install the pythonz extra.  pip install pew[pythonz]')
++    # Mock Pythonz commands
++    InstallCommand = ListPythons = LocatePython = UninstallCommand = \
++        lambda : sys.exit('Python version management is not supported on Fedora.')
+ else:
+     # Pythonz does not support windows
+     InstallCommand = ListPythons = LocatePython = UninstallCommand = \
+diff --git a/pew/shell_config/complete.fish b/pew/shell_config/complete.fish
+index af9f6d2..5dd0195 100644
+--- a/pew/shell_config/complete.fish
++++ b/pew/shell_config/complete.fish
+@@ -105,12 +105,3 @@ complete -f -c $pew -n '__pew_using_command workon' -a '(__pew_list_envs)' -d 'V
+ 
+ #### rename
+ complete -f -c $pew -n '__pew_needs_command' -a rename -d 'Rename a virtualenv'
+-
+-#### install
+-complete -f -c $pew -n '__pew_needs_command' -a install -d 'Use Pythonz to download and build a Python vm'
+-
+-#### list_pythons
+-complete -f -c $pew -n '__pew_needs_command' -a list_pythons -d 'List the pythons installed by Pythonz'
+-
+-#### locate_python
+-complete -f -c $pew -n '__pew_needs_command' -a locate_python -d 'Locate the path for the python version installed by Pythonz'
+diff --git a/pew/shell_config/complete.zsh b/pew/shell_config/complete.zsh
+index 623fbff..e3a9aa5 100644
+--- a/pew/shell_config/complete.zsh
++++ b/pew/shell_config/complete.zsh
+@@ -23,9 +23,6 @@ case $state in
+             'add:Add directories to python path of active virtualenv'
+             'cp:Duplicate the named virtualenv to make a new one'
+             'inall:Run a command in each virtualenv:command'
+-            'install:Use Pythonz to download and build the specified Python version'
+-            'list_pythons:List the pythons installed by Pythonz (or all the installable ones)'
+-            'locate_python:Locate the path for the python version installed by Pythonz'
+             'ls:List all existing virtual environments'
+             'lssitepackages:List currently active site-packages'
+             'mkproject:Create environment with an associated project directory'
+diff --git a/tests/test_install.py b/tests/test_install.py
+deleted file mode 100644
+index 478ccbb..0000000
+--- a/tests/test_install.py
++++ /dev/null
+@@ -1,29 +0,0 @@
+-import sys
+-import os
+-from subprocess import check_call
+-from pew._utils import invoke_pew as invoke
+-from utils import skip_windows, connection_required
+-import pytest
+-
+-def skip_marker(f):
+-    return skip_windows(reason='Pythonz unavailable in Windows')(
+-        pytest.mark.skipif(
+-            sys.platform == 'cygwin',
+-            reason='Pythonz unavailable in Cygwin')(
+-                pytest.mark.skipif(os.environ.get('NIX'),
+-                                   reason='Pythonz unavailable in Nix')(
+-                    connection_required(f))))
+-
+-@skip_marker
+-def test_install():
+-    py_version = ['2.6.1', '--type', 'pypy']
+-    assert invoke('install', *py_version).returncode == 0
+-    py = invoke('locate_python', *py_version).out
+-    check_call([py, '-V'])
+-
+-@skip_marker
+-def test_uninstall():
+-    py_version = ['2.6.1', '--type', 'pypy']
+-    invoke('install', *py_version)
+-    assert invoke('uninstall', *py_version).returncode == 0
+-    assert invoke('locate_python', *py_version).returncode != 0
+-- 
+2.31.1
+

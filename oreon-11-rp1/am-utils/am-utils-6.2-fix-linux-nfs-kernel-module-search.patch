@@ -1,0 +1,134 @@
+am-utils-6.2 - fix linux nfs kernel module search
+
+From: Ian Kent <raven@themaw.net>
+
+The configure macros AMU_CHECK_FS_MNTENT() and AMU_CHECK_MOUNT_TYPE()
+haven't been updated for a log time. In particular kernel modules that
+are xz compressed aren't considered.
+
+Also the containing subdirectory name isn't always the the same as
+the module name and needs to be special cased.
+
+The cases I found have been fixed, there are probably more but this
+is enough to get us started.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/amfs_host.c               |    1 +
+ configure.ac                  |    6 +++---
+ m4/macros/check_fs_mntent.m4  |   17 +++++++++++++++--
+ m4/macros/check_mount_type.m4 |   29 +++++++++++++++++++++++++----
+ 4 files changed, 44 insertions(+), 9 deletions(-)
+
+diff --git a/amd/amfs_host.c b/amd/amfs_host.c
+index a363c5cc..deaf69fa 100644
+--- a/amd/amfs_host.c
++++ b/amd/amfs_host.c
+@@ -50,6 +50,7 @@
+ #endif /* HAVE_CONFIG_H */
+ #include <am_defs.h>
+ #include <amd.h>
++#include <am_utils.h>
+ 
+ static char *amfs_host_match(am_opts *fo);
+ static int amfs_host_init(mntfs *mf);
+diff --git a/configure.ac b/configure.ac
+index ef4dab0e..408964d8 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -808,8 +808,8 @@ dnl NFS related tests need to happen earlier: many things depend on them
+ AMU_STRUCT_FIELD_NFS_FH
+ AMU_STRUCT_NFS_FH
+ AMU_STRUCT_NFS_FH3
+-AMU_CHECK_FS_MNTENT(nfs3)
+-AMU_CHECK_FS_MNTENT(nfs4)
++AMU_CHECK_FS_MNTENT(nfsv3 nfs3, nfs3)
++AMU_CHECK_FS_MNTENT(nfsv4 nfs4, nfs4)
+ dnl ======================================================================
+ 
+ dnl -----------------------------------------------------------------------
+@@ -1117,7 +1117,7 @@ dnl check for mount(2) type/name for filesystem (MNTTYPE_*, MOUNT_*)
+ AC_MSG_NOTICE(*** MOUNTING TYPES ***)
+ AMU_CHECK_MOUNT_TYPE(nfs)
+ AMU_CHECK_MOUNT_TYPE(nfs3)
+-AMU_CHECK_MOUNT_TYPE(nfs4)
++AMU_CHECK_MOUNT_TYPE(nfsv4 nfs4, nfs4)
+ AMU_CHECK_MOUNT_TYPE(lustre)
+ AMU_CHECK_MOUNT_TYPE(ext4 ext3 ext2 ffs ufs 4.2 4.3 4.4 efs xfs jfs ultrix, ufs)
+ AMU_CHECK_MOUNT_TYPE(xfs)
+diff --git a/m4/macros/check_fs_mntent.m4 b/m4/macros/check_fs_mntent.m4
+index e612b4ec..45ac4974 100644
+--- a/m4/macros/check_fs_mntent.m4
++++ b/m4/macros/check_fs_mntent.m4
+@@ -98,12 +98,25 @@ do
+   fi
+ 
+   # look for a loadable filesystem module (linux 2.4+)
+-  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_tmp/$ac_fs_tmp.ko
++  ac_fs_subdir=$ac_fs_tmp
++  if test -n "$2"
++  then
++    if test "$ac_fs_tmp" = "nfsv3" -o "$ac_fs_tmp" = "nfsv4"
++    then
++      ac_fs_subdir="nfs"
++    fi
++  fi
++  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_subdir/$ac_fs_tmp.ko.xz
++  then
++    eval "ac_cv_fs_$ac_fs_name=yes"
++    break
++  fi
++  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_subdir/$ac_fs_tmp.ko
+   then
+     eval "ac_cv_fs_$ac_fs_name=yes"
+     break
+   fi
+-  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_tmp/$ac_fs_tmp.o
++  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_subdir/$ac_fs_tmp.o
+   then
+     eval "ac_cv_fs_$ac_fs_name=yes"
+     break
+diff --git a/m4/macros/check_mount_type.m4 b/m4/macros/check_mount_type.m4
+index c779e0bf..88f85323 100644
+--- a/m4/macros/check_mount_type.m4
++++ b/m4/macros/check_mount_type.m4
+@@ -104,14 +104,35 @@ do
+   fi
+ 
+   # look for a loadable filesystem module (linux 2.4+)
+-  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_tmp/$ac_fs_tmp.ko
++  # special casing here assumes preferred option name will be
++  # first in the list.
++  ac_fs_option="$ac_fs_tmp"
++  ac_fs_subdir=$ac_fs_tmp
++  if test -n "$2"
+   then
+-    eval "ac_cv_mount_type_$ac_fs_name=\\\"$ac_fs_tmp\\\""
++    if test "$ac_fs_tmp" = "nfsv3" -o "$ac_fs_tmp" = "nfsv4"
++    then
++      ac_fs_subdir="nfs"
++      ac_fs_option="$ac_fs_name"
++    fi
++    if test "$ac_fs_tmp" = "vfat" -o "$ac_fs_tmp" = "msdos"
++    then
++      ac_fs_subdir="fat"
++    fi
++  fi
++  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_subdir/$ac_fs_tmp.ko.xz
++  then
++    eval "ac_cv_mount_type_$ac_fs_name=\\\"$ac_fs_option\\\""
+     break
+   fi
+-  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_tmp/$ac_fs_tmp.o
++  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_subdir/$ac_fs_tmp.ko
+   then
+-    eval "ac_cv_mount_type_$ac_fs_name=\\\"$ac_fs_tmp\\\""
++    eval "ac_cv_mount_type_$ac_fs_name=\\\"$ac_fs_option\\\""
++    break
++  fi
++  if test -f /lib/modules/$host_os_version/kernel/fs/$ac_fs_subdir/$ac_fs_tmp.o
++  then
++    eval "ac_cv_mount_type_$ac_fs_name=\\\"$ac_fs_option\\\""
+     break
+   fi
+ 

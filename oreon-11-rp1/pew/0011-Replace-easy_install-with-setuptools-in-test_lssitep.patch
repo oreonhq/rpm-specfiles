@@ -1,0 +1,38 @@
+From 012a65cd7cbd967fdff76797287ce25fa264b9b3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Mon, 13 Sep 2021 15:06:08 +0200
+Subject: [PATCH 11/15] Replace easy_install with setuptools in
+ test_lssitepackages
+
+The easy_install top-level model and the easy_install console script
+have been removed in setuptools 52+:
+https://setuptools.readthedocs.io/en/latest/history.html#v52-0-0
+
+Replace them with a setuptools exec that check for presence of a
+setuptools dist-info, e.g. setuptools-57.4.0.dist-info.
+---
+ tests/test_ls.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tests/test_ls.py b/tests/test_ls.py
+index d5cb879..642ff02 100644
+--- a/tests/test_ls.py
++++ b/tests/test_ls.py
+@@ -1,4 +1,5 @@
+ from pathlib import Path
++import re
+ 
+ from pew._utils import invoke_pew as invoke
+ 
+@@ -17,7 +18,7 @@ def test_get_site_packages_dir(workon_home):
+ def test_lssitepackages(workon_home):
+     invoke('new', 'env', '-d')
+     pkgs = invoke('in', 'env', 'pew', 'lssitepackages').out
+-    assert 'easy_install' in pkgs
++    assert re.search(r'setuptools-((\d+\.)+)dist-info', pkgs)
+     invoke('rm', 'env')
+ 
+ 
+-- 
+2.31.1
+

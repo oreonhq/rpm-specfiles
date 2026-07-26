@@ -1,0 +1,21 @@
+diff -Naur gshutdown-0.2.old/src/gui.c gshutdown-0.2/src/gui.c
+--- gshutdown-0.2.old/src/gui.c	2014-08-06 06:41:05.789103128 +0200
++++ gshutdown-0.2/src/gui.c	2014-08-06 06:41:46.573613266 +0200
+@@ -725,7 +725,7 @@
+                                     GTK_DIALOG_MODAL,
+                                     GTK_MESSAGE_QUESTION,
+                                     GTK_BUTTONS_YES_NO,
+-                                    message);
++                                    "%s", message);
+ 
+     response = gtk_dialog_run(GTK_DIALOG(dialog));
+     gtk_widget_destroy(GTK_WIDGET(dialog));
+@@ -759,7 +759,7 @@
+                                         GTK_DIALOG_MODAL,
+                                         GTK_MESSAGE_ERROR,
+                                         GTK_BUTTONS_OK,
+-                                        message);
++                                        "%s", message);
+         gtk_dialog_run(GTK_DIALOG(dialog));
+         gtk_widget_destroy(dialog);
+ 

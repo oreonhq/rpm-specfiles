@@ -1,0 +1,25 @@
+diff -up conda-24.9.1/conda/common/path/python.py.python conda-24.9.1/conda/common/path/python.py
+--- conda-24.9.1/conda/common/path/python.py.python	2024-10-01 15:11:32.000000000 -0600
++++ conda-24.9.1/conda/common/path/python.py	2024-10-07 21:43:44.951895698 -0600
+@@ -5,6 +5,7 @@
+ from __future__ import annotations
+ 
+ import re
++import sys
+ from logging import getLogger
+ from os.path import join, split, splitext
+ 
+@@ -52,9 +53,11 @@ def parse_entry_point_def(ep_definition)
+ def get_python_short_path(python_version=None):
+     if on_win:
+         return "python.exe"
+-    if python_version and "." not in python_version:
++    if not python_version:
++        return sys.executable
++    if '.' not in python_version:
+         python_version = ".".join(python_version)
+-    return join("bin", "python%s" % (python_version or ""))
++    return join("bin", "python" + python_version)
+ 
+ 
+ def get_python_site_packages_short_path(python_version):

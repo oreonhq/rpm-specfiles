@@ -1,0 +1,11 @@
+--- src/rts/b_lnve.c.orig	2014-01-30 10:24:04.000000000 -0700
++++ src/rts/b_lnve.c	2016-12-30 09:06:03.051205284 -0700
+@@ -257,7 +257,7 @@ dynamic *Larg;
+ 
+    if (rc != 0) ERREXIT(RESUL,266,poolvars);
+ 
+-   if ((rc = COPY_(y,Res)) != 0)  ERREXIT(rc,268,poolvars);
++   if ((COPY_(y,Res)) != 0)  ERREXIT(rc,268,poolvars);
+ 
+    Maxl = Currprec+2;
+ 

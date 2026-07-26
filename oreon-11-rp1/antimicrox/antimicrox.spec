@@ -1,0 +1,88 @@
+%global source0_hash 5449c96b98e9875ce808963f3f657683035adc8b5815a64ac72004ac1b0b7c7b
+
+# Force out of source build
+%undefine __cmake_in_source_build
+
+%global appname io.github.antimicrox.antimicrox
+
+Name:         antimicrox
+Version:      3.5.1
+Release:      3%{?dist}
+Summary:      Graphical program used to map keyboard buttons and mouse controls to a gamepad
+
+License:  GPL-3.0-or-later AND Zlib AND LGPL-3.0-or-later AND LGPL-2.1-or-later
+URL:      https://github.com/AntiMicroX/%{name}
+
+%global archivename %{name}-%{version}
+
+Source0:        %{url}/archive/%{version}/%{archivename}.tar.gz
+Patch0:         isnan.patch
+
+BuildRequires:  gcc-c++
+BuildRequires:  cmake
+BuildRequires:  extra-cmake-modules
+BuildRequires:  libX11-devel
+BuildRequires:  libXi-devel
+BuildRequires:  libXtst-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qttools-devel
+BuildRequires:  qt5-qtx11extras-devel
+BuildRequires:  SDL2-devel
+BuildRequires:  itstool
+BuildRequires:  gettext
+# For desktop file & AppData
+BuildRequires:  libappstream-glib
+BuildRequires:  desktop-file-utils
+BuildRequires:  systemd
+
+Requires:       systemd-udev
+
+%description
+%{name} is a graphical program used to map keyboard keys and mouse controls
+to a gamepad. This program is useful for playing PC games using a gamepad that
+do not have any form of built-in gamepad support. %{name} is a fork of
+AntiMicro which was inspired by QJoyPad but has additional features.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%setup -n %{archivename} -q
+%patch 0 -p1
+
+%build
+%cmake3
+%cmake3_build
+
+%install
+%cmake3_install
+
+%find_lang %{name} --with-qt
+
+%post
+%udev_rules_update
+
+%postun
+%udev_rules_update
+
+%files -f %{name}.lang
+# Redundant
+%exclude %{_datadir}/%{name}/CHANGELOG.md
+%exclude %dir %{_datadir}/%{name}/translations
+%exclude %{_datadir}/%{name}/translations/*
+%doc CHANGELOG.md README.md
+%{_bindir}/%{name}
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/*
+%{_datadir}/applications/%{appname}.desktop
+%{_datadir}/icons/*/*/apps/*
+%{_metainfodir}/%{appname}.appdata.xml
+%{_datadir}/mime/packages/%{appname}.xml
+%{_mandir}/man1/%{name}.1*
+%{_udevrulesdir}/60-antimicrox-uinput.rules
+
+%check
+%{_bindir}/desktop-file-validate %{buildroot}/%{_datadir}/applications/%{appname}.desktop
+%{_bindir}/appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{appname}.appdata.xml
+
+%changelog
+%autochangelog

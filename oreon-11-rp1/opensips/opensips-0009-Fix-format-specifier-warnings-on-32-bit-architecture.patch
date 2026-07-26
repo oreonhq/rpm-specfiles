@@ -1,0 +1,88 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 26 Dec 2025 17:49:21 +0100
+Subject: [PATCH] Fix format specifier warnings on 32-bit architectures (i686)
+
+During compilation on i686 (32-bit) architecture with GCC 15, format
+specifier warnings appear due to type size differences between 32-bit
+and 64-bit platforms.
+
+```
+server.c: In function 'on_frame_recv_callback':
+warning: format '%ld' expects argument of type 'long int', but argument 14
+has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+  638 |  LM_DBG("h2 header [%d], %p %ld\n", frame->hd.type, frame->headers.nva, frame->headers.nvlen);
+
+dm_impl.c: In function 'dm_avps2json':
+warning: format '%ld' expects argument of type 'long int', but argument 15
+has type 'int64_t' {aka 'long long int'} [-Wformat=]
+  484 |  LM_DBG("%2d. got int64   AVP %s (%u), value: %ld\n", i, dm_avp.avp_name, h->avp_code, h->avp_value->i64);
+
+warning: format '%lu' expects argument of type 'long unsigned int', but argument 15
+has type 'uint64_t' {aka 'long long unsigned int'} [-Wformat=]
+  494 |  LM_DBG("%2d. got uint64  AVP %s (%u), value: %lu\n", i, dm_avp.avp_name, h->avp_code, h->avp_value->u64);
+```
+
+Type sizes differ between 32-bit and 64-bit architectures:
+
+**On x86_64 (64-bit):**
+- `size_t` = `unsigned long` (8 bytes)
+- `int64_t` = `long int` (8 bytes)
+
+**On i686 (32-bit):**
+- `size_t` = `unsigned int` (4 bytes)
+- `int64_t` = `long long int` (8 bytes)
+- `uint64_t` = `unsigned long long int` (8 bytes)
+
+Use portable C99 format specifiers that work correctly on all
+architectures:
+
+- `%zu` for `size_t` (modules/http2d/server.c line 638)
+- `%" PRId64` for `int64_t` (modules/aaa_diameter/dm_impl.c line 484)
+- `%" PRIu64` for `uint64_t` (modules/aaa_diameter/dm_impl.c line 494)
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+Assisted-by: Claude (Anthropic) <https://claude.ai>
+
+diff --git a/modules/aaa_diameter/dm_impl.c b/modules/aaa_diameter/dm_impl.c
+index 5ba697767..927261899 100644
+--- a/modules/aaa_diameter/dm_impl.c
++++ b/modules/aaa_diameter/dm_impl.c
+@@ -20,6 +20,7 @@
+ 
+ #include <freeDiameter/extension.h>
+ #include <sys/eventfd.h>
++#include <inttypes.h>
+ 
+ #include "../../ut.h"
+ #include "../../lib/list.h"
+@@ -481,7 +482,7 @@ static int dm_avps2json(void *root, cJSON *avps)
+ 			break;
+ 
+ 		case AVP_TYPE_INTEGER64:
+-			LM_DBG("%2d. got int64   AVP %s (%u), value: %ld\n", i, dm_avp.avp_name, h->avp_code, h->avp_value->i64);
++			LM_DBG("%2d. got int64   AVP %s (%u), value: %" PRId64 "\n", i, dm_avp.avp_name, h->avp_code, h->avp_value->i64);
+ 			num_val = (double)h->avp_value->i64;
+ 			break;
+ 
+@@ -491,7 +492,7 @@ static int dm_avps2json(void *root, cJSON *avps)
+ 			break;
+ 
+ 		case AVP_TYPE_UNSIGNED64:
+-			LM_DBG("%2d. got uint64  AVP %s (%u), value: %lu\n", i, dm_avp.avp_name, h->avp_code, h->avp_value->u64);
++			LM_DBG("%2d. got uint64  AVP %s (%u), value: %" PRIu64 "\n", i, dm_avp.avp_name, h->avp_code, h->avp_value->u64);
+ 			num_val = (double)h->avp_value->u64;
+ 			break;
+ 
+diff --git a/modules/http2d/server.c b/modules/http2d/server.c
+index 0154e1e85..870728628 100644
+--- a/modules/http2d/server.c
++++ b/modules/http2d/server.c
+@@ -635,7 +635,7 @@ static int on_frame_recv_callback(nghttp2_session *session,
+ 	switch (frame->hd.type) {
+ 	case NGHTTP2_DATA:
+ 	case NGHTTP2_HEADERS:
+-		LM_DBG("h2 header [%d], %p %ld\n", frame->hd.type, frame->headers.nva, frame->headers.nvlen);
++		LM_DBG("h2 header [%d], %p %zu\n", frame->hd.type, frame->headers.nva, frame->headers.nvlen);
+ 		/* Check that the client request has finished */
+ 		if (frame->hd.flags & NGHTTP2_FLAG_END_STREAM) {
+ 			stream_data =

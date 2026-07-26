@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppData file for GearHead2, copyleft 2022 suve (veg@svgames.pl) -->
+<component type="desktop">
+	<id>gearhead1-sdl.desktop</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>LGPL-2.1+</project_license>
+	<name>GearHead II</name>
+	<summary>Roguelike mecha role-playing game</summary>
+	<description>
+		<p>
+			The sequel to GearHead: Arena.
+			Five years after the Typhon Incident, tensions are high in the L5 region as all sides prepare for a possible war between Earth and Luna.
+			The arrival of a mysterious new pirate fleet has further destabilized this vulnerable region.
+		</p>
+	</description>
+	<launchable type="desktop-id">gearhead2-sdl.desktop</launchable>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://img.itch.zone/aW1hZ2UvMjAwMTY2LzkzNjIxNC5wbmc=/original/zRZYMD.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://img.itch.zone/aW1hZ2UvMjAwMTY2LzkzNjIxNS5wbmc=/original/R%2B12Oi.png</image>
+		</screenshot>
+	</screenshots>
+	<developer_name>Joseph Hewitt</developer_name>
+	<update_contact>veg@svgames.pl</update_contact>
+	<url type="homepage">http://gearheadrpg.com</url>
+	<url type="bugtracker">https://github.com/jwvhewitt/gearhead-2/issues</url>
+	<content_rating type="oars-1.1">
+		<content_attribute id="violence-cartoon">moderate</content_attribute>
+		<content_attribute id="violence-fantasy">moderate</content_attribute>
+		<content_attribute id="violence-bloodshed">mild</content_attribute>
+		<content_attribute id="sex-homosexuality">mild</content_attribute>
+	</content_rating>
+</component>

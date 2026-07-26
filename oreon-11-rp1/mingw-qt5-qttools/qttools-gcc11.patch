@@ -1,0 +1,11 @@
+diff -rupN --no-dereference qttools-everywhere-src-5.15.18/src/shared/winutils/elfreader.cpp qttools-everywhere-src-5.15.18-new/src/shared/winutils/elfreader.cpp
+--- qttools-everywhere-src-5.15.18/src/shared/winutils/elfreader.cpp	2025-03-30 13:49:56.000000000 +0200
++++ qttools-everywhere-src-5.15.18-new/src/shared/winutils/elfreader.cpp	2025-11-09 21:36:15.692995605 +0100
+@@ -26,6 +26,7 @@
+ **
+ ****************************************************************************/
+ 
++#include <limits>
+ #include "elfreader.h"
+ 
+ #include <QDir>

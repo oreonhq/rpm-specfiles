@@ -1,0 +1,12 @@
+diff -Nru pcsc-cyberjack-3.99.5final.SP09.orig/configure.ac pcsc-cyberjack-3.99.5final.SP09/configure.ac
+--- pcsc-cyberjack-3.99.5final.SP09.orig/configure.ac	2016-03-15 13:57:40.000000000 +0100
++++ pcsc-cyberjack-3.99.5final.SP09/configure.ac	2016-05-28 10:10:27.781058162 +0200
+@@ -137,7 +137,7 @@
+ 
+ AC_LIBTOOL_WIN32_DLL
+ AC_LIBTOOL_RC
+-AC_PROG_LIBTOOL
++LT_INIT
+ AC_PROG_AWK
+ AC_CHECK_PROG(SED,sed,sed)
+ 

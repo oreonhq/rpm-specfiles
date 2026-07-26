@@ -1,0 +1,22 @@
+diff -rupN gtk+-2.24.33/modules/engines/ms-windows/msw_style.c gtk+-2.24.33-new/modules/engines/ms-windows/msw_style.c
+--- gtk+-2.24.33/modules/engines/ms-windows/msw_style.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/modules/engines/ms-windows/msw_style.c	2024-07-24 12:30:52.462353138 +0200
+@@ -40,7 +40,6 @@
+ #include <math.h>
+ #include <string.h>
+ #include <stdio.h>
+-
+ #include "gdk/gdk.h"
+ #include "gtk/gtk.h"
+ 
+@@ -53,6 +52,10 @@
+ 
+ #define DETAIL(xx)   ((detail) && (!strcmp(xx, detail)))
+ 
++void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
++					   gint	          *width,
++					   gint  	  *height);
++
+ 
+ /* Default values, not normally used
+  */

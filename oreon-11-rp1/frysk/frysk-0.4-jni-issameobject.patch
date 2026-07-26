@@ -1,0 +1,56 @@
+commit a729808906f5700da55008f2e3b1282e2156bc96
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Wed Apr 13 14:27:12 2016 -0400
+
+    Use IsSameObject when implementing == in JNIXX
+    
+    Patch: frysk-0.4-jni-issameobject.patch
+
+diff --git a/frysk-sys/jnixx/JniBindings.java b/frysk-sys/jnixx/JniBindings.java
+index 3b517d6..49a594e 100644
+--- a/frysk-sys/jnixx/JniBindings.java
++++ b/frysk-sys/jnixx/JniBindings.java
+@@ -1,6 +1,7 @@
+ // This file is part of the program FRYSK.
+ //
+ // Copyright 2008, Red Hat Inc.
++// Copyright 2016, Andrew Cagney
+ //
+ // FRYSK is free software; you can redistribute it and/or modify it
+ // under the terms of the GNU General Public License as published by
+@@ -222,7 +223,7 @@ class JniBindings {
+ 	     },
+ 	     null,
+ 	     new Object[] {
+-		 "return this->_object == _object;",
++		 "return this->_object == _object || _env_().IsSameObject(this->_object, _object);",
+ 	     })
+ 	.put(Object.class, Binding.DYNAMIC,
+ 	     "bool", "operator==",
+@@ -231,7 +232,7 @@ class JniBindings {
+ 	     },
+ 	     null,
+ 	     new Object[] {
+-		 "return this->_object == other._object;",
++		 "return this->_object == other._object || _env_().IsSameObject(this->_object, other._object);",
+ 	     })
+ 	.put(Object.class, Binding.DYNAMIC,
+ 	     "bool", "operator!=",
+@@ -240,7 +241,16 @@ class JniBindings {
+ 	     },
+ 	     null,
+ 	     new Object[] {
+-		 "return this->_object != _object;",
++		 "return !this->operator==(_object);",
++	     })
++	.put(Object.class, Binding.DYNAMIC,
++	     "bool", "operator!=",
++	     new String[] {
++		 "const Object&", "other",
++	     },
++	     null,
++	     new Object[] {
++		 "return !this->operator==(other);",
+ 	     })
+ 	// DeleteLocalRef
+ 	.put(Object.class, Binding.DYNAMIC,

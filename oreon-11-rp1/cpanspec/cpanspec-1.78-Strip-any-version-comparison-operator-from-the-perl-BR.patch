@@ -1,0 +1,33 @@
+From c406955800472398c0105c72f46ba5b73ade5597 Mon Sep 17 00:00:00 2001
+From: Dennis Kaarsemaker <dennis@kaarsemaker.net>
+Date: Fri, 19 Aug 2011 08:23:50 +0200
+Subject: [PATCH] Strip any version comparison operator from the 'perl' build
+ requirement
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Because cpanspec does things with the epoch, and already adds version
+comparison operators itself, they should be stripped from whatever
+META.yml specifies so cpanspec does not generate invalid spec files.
+
+Signed-off-by: Petr Šabata <contyk@redhat.com>
+---
+ cpanspec | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/cpanspec b/cpanspec
+index 8e9334a..f7fc1fc 100755
+--- a/cpanspec
++++ b/cpanspec
+@@ -1015,6 +1015,7 @@ END
+     }
+ 
+     if (defined($build_requires{perl})) {
++        $build_requires{perl} =~ s/^[<>=]+ *//;
+         printf $spec "%-16s%s >= %s\n", "BuildRequires:", "perl",
+             (($build_requires{perl} lt "5.6.0" ? "0:" : "1:")
+             . $build_requires{perl}) if $build_requires{perl};
+-- 
+1.9.3
+

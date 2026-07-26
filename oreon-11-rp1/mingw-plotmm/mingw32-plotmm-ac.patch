@@ -1,0 +1,57 @@
+--- configure.ac.orig	2009-04-19 21:09:50.000000000 +0200
++++ configure.ac	2009-04-19 21:10:10.000000000 +0200
+@@ -16,6 +16,12 @@
+ AC_PROG_RANLIB
+ AM_PROG_LIBTOOL
+ 
++AC_LANG_CPLUSPLUS
++
++AC_MINGW32
++AC_EXEEXT
++AC_OBJEXT
++
+ AC_CHECK_TOOL(DOXYGEN, doxygen)
+ 
+ pkg_modules="gtkmm-2.0"
+--- plotmm/Makefile.am.mingw32	2005-11-09 17:37:09.000000000 +0100
++++ plotmm/Makefile.am	2009-04-19 22:14:54.000000000 +0200
+@@ -13,6 +13,8 @@
+ 	supplemental.h supplemental.cc \
+ 	plot.h plot.cc \
+ 	compat.h
++libplotmm_la_LIBADD = @PACKAGE_LIBS@
++libplotmm_la_LDFLAGS = -no-undefined
+ 
+ libplotmm_la_CXXFLAGS = @PACKAGE_CFLAGS@ -I$(top_srcdir)
+ 
+--- examples/simple/Makefile.am.orig	2013-03-02 11:45:44.216733911 +0100
++++ examples/simple/Makefile.am	2013-03-02 11:46:01.102194165 +0100
+@@ -5,6 +5,6 @@
+ 
+ simple_CXXFLAGS = @PACKAGE_CFLAGS@ -I$(top_srcdir)
+ 
+-simple_LDADD = $(top_srcdir)/plotmm/libplotmm.la @PACKAGE_LIBS@
++simple_LDADD = ../../plotmm/libplotmm.la @PACKAGE_LIBS@
+ 
+ CLEANFILES = *~
+--- examples/curves/Makefile.am.orig	2013-03-02 11:46:08.076797367 +0100
++++ examples/curves/Makefile.am	2013-03-02 11:46:20.932909287 +0100
+@@ -5,6 +5,6 @@
+ 
+ curves_CXXFLAGS = @PACKAGE_CFLAGS@ -I$(top_srcdir)
+ 
+-curves_LDADD = $(top_srcdir)/plotmm/libplotmm.la @PACKAGE_LIBS@
++curves_LDADD = ../../plotmm/libplotmm.la @PACKAGE_LIBS@
+ 
+ CLEANFILES = *~
+--- Makefile.am.orig	2013-03-02 11:50:06.058388870 +0100
++++ Makefile.am	2013-03-02 11:50:16.674307730 +0100
+@@ -10,7 +10,7 @@
+ CLEANFILES = *~
+ 
+ plotmm_includedir       = $(includedir)/plotmm
+-plotmm_include_HEADERS  = plotmm/*.h
++plotmm_include_HEADERS  = $(top_srcdir)/plotmm/*.h
+ 
+ plotmm_docdir           = $(datadir)/doc/packages/plotmm/docs
+ 

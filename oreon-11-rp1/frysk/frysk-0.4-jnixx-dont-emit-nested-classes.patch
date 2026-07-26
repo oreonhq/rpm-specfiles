@@ -1,0 +1,353 @@
+diff --git a/frysk-sys/frysk/junit/Runner.java b/frysk-sys/frysk/junit/Runner.java
+index 23e960430..33091729f 100755
+--- a/frysk-sys/frysk/junit/Runner.java
++++ b/frysk-sys/frysk/junit/Runner.java
+@@ -126,7 +126,7 @@ public class Runner extends TestRunner {
+ 		testMethod = null;
+ 	    }
+ 	    fine.log(this, "testClass", testClass, "testMethod", testMethod);
+-		    
++
+ 	    for (Iterator c = testClasses.iterator(); c.hasNext (); ) {
+ 		Class testKlass = (Class) c.next ();
+ 		if (testMethod == null) {
+@@ -141,7 +141,7 @@ public class Runner extends TestRunner {
+ 			try {
+ 			    // Probe the class to see if the method
+ 			    // exists.
+-			    testKlass.getMethod(testMethod, null);
++			    testKlass.getMethod(testMethod, (Class[])null);
+ 			    TestCase test = (TestCase)testKlass.newInstance();
+ 			    test.setName(testMethod);
+ 			    testSuite.addTest(test);
+diff --git a/frysk-sys/jnixx/ClassVisitor.java b/frysk-sys/jnixx/ClassVisitor.java
+index b2cafaa19..e5c7af90d 100644
+--- a/frysk-sys/jnixx/ClassVisitor.java
++++ b/frysk-sys/jnixx/ClassVisitor.java
+@@ -76,6 +76,9 @@ abstract class ClassVisitor {
+ 	Class[] classes = klass.getDeclaredClasses();
+ 	for (int i = 0; i < classes.length; i++) {
+ 	    Class inner = classes[i];
++	    if (inner.isSynthetic()) {
++		continue;
++	    }
+ 	    acceptClass(inner);
+ 	}
+     }
+diff --git a/frysk-sys/jnixx/ClassWalker.java b/frysk-sys/jnixx/ClassWalker.java
+index 45ed0dd87..6fb78d392 100644
+--- a/frysk-sys/jnixx/ClassWalker.java
++++ b/frysk-sys/jnixx/ClassWalker.java
+@@ -45,39 +45,43 @@ import java.util.Set;
+ import java.util.HashSet;
+ 
+ abstract class ClassWalker {
++
+     private final Set visited = new HashSet();
+-    void walk(Class[] klasses) {
++    private final Set<Class> required;
++
++    ClassWalker(Set<Class> required) {
++	this.required = required;
++    }
++
++    void walk() {
++	Class[] classes = new Class[required.size()];
++	required.toArray(classes);
++	walk(classes, 0);
++    }
++
++    void walk(Class[] klasses, int level) {
+ 	for (int i = 0; i < klasses.length; i++) {
+-	    walk(klasses[i]);
++	    Class klass = klasses[i];
++	    walk(klass, level+1);
++	}
++    }
++    void indent(int level) {
++	for (int i = 0; i < level; i++) {
++	    System.err.print(" ");
+ 	}
+     }
+-    private final ClassVisitor visitor = new ClassVisitor() {
+-	    void acceptInterface(Class klass) {
+-		walk(klass);
+-	    }
+-	    void acceptConstructor(Constructor constructor) {
+-		walk(constructor.getParameterTypes());
+-	    }
+-	    void acceptField(Field field) {
+-		walk(field.getType());
+-	    }
+-	    void acceptMethod(Method method) {
+-		walk(method.getReturnType());
+-		walk(method.getParameterTypes());
+-	    }
+-	    void acceptClass(Class klass) {
+-		walk(klass);
+-	    }
+-	};
+-    void walk(Class klass) {
++    void walk(Class klass, int level) {
+ 	if (klass == null)
+ 	    return;
+-	walk(klass.getSuperclass());
++	/* walk down from parent's parent first */
++	walk(klass.getSuperclass(), level+1);
+ 	if (visited.contains(klass))
+ 	    return;
++	indent(level);
++	System.err.println(klass);
+ 	visited.add(klass);
+ 	if (klass.isArray()) {
+-	    walk(klass.getComponentType());
++	    walk(klass.getComponentType(), level+1);
+ 	    acceptArray(klass);
+ 	} else if (klass.isPrimitive()) {
+ 	    acceptPrimitive(klass);
+@@ -86,6 +90,29 @@ abstract class ClassWalker {
+ 	} else {
+ 	    acceptClass(klass);
+ 	}
++	ClassVisitor visitor = new ClassVisitor() {
++		void acceptInterface(Class klassInterface) {
++		    walk(klassInterface, level+1);
++		}
++		void acceptConstructor(Constructor constructor) {
++		    walk(constructor.getParameterTypes(), level+1);
++		}
++		void acceptField(Field field) {
++		    walk(field.getType(), level+1);
++		}
++		void acceptMethod(Method method) {
++		    walk(method.getReturnType(), level+1);
++		    walk(method.getParameterTypes(), level+1);
++		}
++		void acceptClass(Class nestedKlass) {
++		    if (required.contains(klass)) {
++			walk(nestedKlass, level+1);
++		    } else {
++			indent(level);
++			System.err.println("dropping " + nestedKlass);
++		    }
++		}
++	    };
+ 	visitor.visit(klass);
+     }
+     /**
+diff --git a/frysk-sys/jnixx/Main.java b/frysk-sys/jnixx/Main.java
+index d68bd1a67..4942f620d 100644
+--- a/frysk-sys/jnixx/Main.java
++++ b/frysk-sys/jnixx/Main.java
+@@ -48,6 +48,7 @@ import java.util.jar.JarFile;
+ import java.util.jar.JarEntry;
+ import java.util.Collections;
+ import java.util.List;
++import java.util.Set;
+ import java.util.HashSet;
+ import java.util.Iterator;
+ import java.io.IOException;
+@@ -56,13 +57,13 @@ class Main {
+     /**
+      * Collection of classes that need native bindings.
+      */
+-    private static final HashSet nativeClasses = new HashSet();
++    private static final HashSet<Class> nativeClasses = new HashSet();
+ 
+     /**
+      * Collection of classes that should be visible (non-visible
+      * classes don't get their bindings generated).
+      */
+-    private static final HashSet visibleClasses = new HashSet();
++    private static final HashSet<Class> visibleClasses = new HashSet();
+ 
+     /**
+      * Does this method require native bindings?  Methods that are not
+@@ -87,10 +88,10 @@ class Main {
+ 	return Modifier.isPrivate(member.getModifiers());
+     }
+ 
+-    private static HashSet getJarClasses(String jarFile)
++    private static HashSet<Class> getJarClasses(String jarFile)
+ 	throws IOException, ClassNotFoundException {
+ 	// Generate a list of classes in the jar file.
+-	HashSet jarClasses = new HashSet();
++	HashSet<Class> jarClasses = new HashSet();
+ 	List entries = Collections.list(new JarFile(jarFile).entries());
+ 	for (Iterator i = entries.iterator(); i.hasNext(); ) {
+ 	    JarEntry entry = (JarEntry) i.next();
+@@ -107,8 +108,8 @@ class Main {
+ 	return jarClasses;
+     }
+ 
+-    private static HashSet getNativeClasses(HashSet classes) {
+-	final HashSet natives = new HashSet();
++    private static HashSet<Class> getNativeClasses(HashSet<Class> classes) {
++	final HashSet<Class> natives = new HashSet();
+ 	// Iterate over just these identifying which are native.
+ 	ClassVisitor findNatives = new ClassVisitor() {
+ 		void acceptInterface(Class klass) {
+@@ -133,7 +134,7 @@ class Main {
+     }
+ 
+     private static void printHxxFile(Printer p, String headerFile,
+-				     Class[] classes) {
++				     Set<Class> classes) {
+ 	p.println("#include \"jnixx/jnixx.hxx\"");
+ 	p.println();
+ 	p.println("namespace jnixx {");
+@@ -142,17 +143,17 @@ class Main {
+ 	p.println();
+ 	p.println("\f");
+ 	System.err.println("Generating namespaces");
+-	new PrintNamespaces(p).walk(classes);
++	new PrintNamespaces(p, classes).walk();
+ 	System.err.println("Generating declarations");
+-	new PrintDeclarations(p).walk(classes);
++	new PrintDeclarations(p, classes).walk();
+ 	p.println();
+ 	p.println("\f");
+ 	System.err.println("Generating definitions");
+-	new PrintHxxDefinitions(p).walk(classes);
++	new PrintHxxDefinitions(p, classes).walk();
+     }
+ 
+     private static void printCxxFile(Printer p, String headerFile,
+-				     Class[] classes) {
++				     Set<Class> classes) {
+ 	p.print("#include \"");
+ 	p.print(headerFile);
+ 	p.println("\"");
+@@ -168,7 +169,7 @@ class Main {
+ 	p.println();
+ 	p.println("\f");
+ 	System.err.println("Generating definitions");
+-	new PrintCxxDefinitions(p).walk(classes);
++	new PrintCxxDefinitions(p, classes).walk();
+     }
+ 
+     public static void main(String[] args)
+@@ -181,33 +182,35 @@ class Main {
+ 	boolean generateHeader = args[0].equals("hxx");
+ 	String headerFile = args[1];
+ 	String jarFile = args[2];
+-	HashSet explicitClasses = new HashSet();
++	HashSet<Class> explicitClasses = new HashSet();
+ 	for (int i = 3; i < args.length; i++) {
+ 	    Class klass = Class.forName(args[i], false,
+ 					Main.class.getClassLoader());
+ 	    explicitClasses.add(klass);
+ 	}
+ 
+-	HashSet jarClasses = getJarClasses(jarFile);
++	HashSet<Class> jarClasses = getJarClasses(jarFile);
+ 	visibleClasses.addAll(jarClasses);
+ 	visibleClasses.addAll(explicitClasses);
+ 
+ 	nativeClasses.addAll(getNativeClasses(jarClasses));
+ 
+-	HashSet requiredClasses = new HashSet();
++	HashSet<Class> requiredClasses = new HashSet<Class>();
+ 	requiredClasses.addAll(nativeClasses);
+ 	requiredClasses.addAll(explicitClasses);
+-	System.err.print("Required " + requiredClasses.size() + " - ");
+-	System.err.println(requiredClasses);
+-
+-	Class[] classes = new Class[requiredClasses.size()];
+-	requiredClasses.toArray(classes);
++	System.err.println("Required classes " + requiredClasses.size() + ":");
++	for (Class klass : requiredClasses) {
++	    System.err.println("  " + klass);
++	}
+ 
+ 	Printer p = new Printer(new PrintWriter(System.out));
+-	if (generateHeader)
+-	    printHxxFile(p, headerFile, classes);
+-	else
+-	    printCxxFile(p, headerFile, classes);
++	if (generateHeader) {
++	    System.err.println(".hxx classes:");
++	    printHxxFile(p, headerFile, requiredClasses);
++	} else {
++	    System.err.println(".cxx classes:");
++	    printCxxFile(p, headerFile, requiredClasses);
++	}
+ 	p.flush();
+     }
+ }
+diff --git a/frysk-sys/jnixx/PrintCxxDefinitions.java b/frysk-sys/jnixx/PrintCxxDefinitions.java
+index 032f10081..2f3072aa1 100644
+--- a/frysk-sys/jnixx/PrintCxxDefinitions.java
++++ b/frysk-sys/jnixx/PrintCxxDefinitions.java
+@@ -42,11 +42,13 @@ import java.lang.reflect.Method;
+ import java.lang.reflect.Field;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.Modifier;
++import java.util.Set;
+ 
+ class PrintCxxDefinitions extends ClassWalker {
+ 
+     private final Printer p;
+-    PrintCxxDefinitions(Printer p) {
++    PrintCxxDefinitions(Printer p, Set<Class> required) {
++	super(required);
+ 	this.p = p;
+     }
+ 
+diff --git a/frysk-sys/jnixx/PrintDeclarations.java b/frysk-sys/jnixx/PrintDeclarations.java
+index db0117d09..559fd5283 100644
+--- a/frysk-sys/jnixx/PrintDeclarations.java
++++ b/frysk-sys/jnixx/PrintDeclarations.java
+@@ -42,11 +42,13 @@ import java.lang.reflect.Field;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.Modifier;
++import java.util.Set;
+ 
+ class PrintDeclarations extends ClassWalker {
+ 
+     private final Printer p;
+-    PrintDeclarations(Printer p) {
++    PrintDeclarations(Printer p, Set<Class> required) {
++	super(required);
+ 	this.p = p;
+     }
+ 
+diff --git a/frysk-sys/jnixx/PrintHxxDefinitions.java b/frysk-sys/jnixx/PrintHxxDefinitions.java
+index 3ac6445b7..342e37f58 100644
+--- a/frysk-sys/jnixx/PrintHxxDefinitions.java
++++ b/frysk-sys/jnixx/PrintHxxDefinitions.java
+@@ -43,11 +43,13 @@ import java.lang.reflect.Field;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.Modifier;
++import java.util.Set;
+ 
+ class PrintHxxDefinitions extends ClassWalker {
+ 
+     private final Printer p;
+-    PrintHxxDefinitions(Printer p) {
++    PrintHxxDefinitions(Printer p, Set<Class> required) {
++	super(required);
+ 	this.p = p;
+     }
+ 
+diff --git a/frysk-sys/jnixx/PrintNamespaces.java b/frysk-sys/jnixx/PrintNamespaces.java
+index e566c5fbd..7b44868bf 100644
+--- a/frysk-sys/jnixx/PrintNamespaces.java
++++ b/frysk-sys/jnixx/PrintNamespaces.java
+@@ -38,10 +38,13 @@
+ 
+ package jnixx;
+ 
++import java.util.Set;
++
+ class PrintNamespaces extends ClassWalker {
+ 
+     private final Printer p;
+-    PrintNamespaces(Printer p) {
++    PrintNamespaces(Printer p, Set<Class> required) {
++	super(required);
+ 	this.p = p;
+     }
+ 

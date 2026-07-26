@@ -1,0 +1,11 @@
+--- ghc-9.8.4/compiler/cbits/genSym.c~	2024-11-28 06:03:56.000000000 +0800
++++ ghc-9.8.4/compiler/cbits/genSym.c	2025-07-25 01:04:55.510970558 +0800
+@@ -9,7 +9,7 @@
+ //
+ // The CPP is thus about the RTS version GHC is linked against, and not the
+ // version of the GHC being built.
+-#if !MIN_VERSION_GLASGOW_HASKELL(9,8,4,0)
++#if !MIN_VERSION_GLASGOW_HASKELL(9,6,7,0)
+ HsWord64 ghc_unique_counter64 = 0;
+ #endif
+ #if !MIN_VERSION_GLASGOW_HASKELL(9,3,0,0)

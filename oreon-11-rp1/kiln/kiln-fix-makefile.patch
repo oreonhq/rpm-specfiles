@@ -1,0 +1,31 @@
+diff -up kiln-0.4.0/Makefile.orig kiln-0.4.0/Makefile
+--- kiln-0.4.0/Makefile.orig	2022-10-04 17:15:44.000000000 +0200
++++ kiln-0.4.0/Makefile	2022-10-23 19:42:35.670865417 +0200
+@@ -1,7 +1,7 @@
+ .POSIX:
+ .SUFFIXES:
+ 
+-PREFIX=/usr/local
++PREFIX?=/usr/local
+ BINDIR=$(PREFIX)/bin
+ MANDIR=$(PREFIX)/share/man
+ 
+@@ -9,7 +9,7 @@ RM=rm
+ GO=go
+ GOFLAGS=
+ 
+-all: kiln docs
++all: docs
+ 
+ kiln:
+ 	$(GO) build $(GOFLAGS) -o $@
+@@ -25,8 +25,7 @@ clean:
+ 
+ install:
+ 	mkdir -p $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)/man1
+-	install -m755 kiln $(DESTDIR)$(BINDIR)/kiln
+-	install -m644 docs/kiln.1 $(DESTDIR)$(MANDIR)/man1/kiln.1
++	install -pm644 docs/kiln.1 $(DESTDIR)$(MANDIR)/man1/kiln.1
+ 
+ uninstall:
+ 	$(RM) $(DESTDIR)$(BINDIR)/kiln

@@ -1,0 +1,102 @@
+.TH bwbar 8 "Feb. 7, 2002" "Bandwidth Bar"
+
+.SH NAME
+bwbar \- create a textual and graphical readout of current bandwidth usage
+
+.SH SYNOPSIS
+.B bwbar
+.RI [
+.B --input|-i
+] [
+.B --output|-o
+] [
+.B --directory|-d
+.I directory
+] [
+.B --text-file|-t
+.I file
+] [
+.B --png-file|-p
+.I file
+] [
+.B --interval|-t
+.I seconds
+] [
+.B --width|-x
+.I pixels
+] [
+.B --height|-y
+.I pixels
+] [
+.B --border|-b
+.I pixels
+] [
+.B --kbps|-k
+] [
+.B --Mbps|-M
+] [
+.B --Gbps|-G
+] [
+.B --help|-h
+]
+.I interface
+.I max-Mbps
+.br
+
+.SH DESCRIPTION
+This manual page briefly documents the
+.B bwbar
+program.
+.PP
+.B bwbar
+is a simple daemon which creatse a readout of current bandwidth usage, generally for inclusion on a webpage. The output appear\s in both a text file and a PNG format bargraph in the specified output directory, and is based on data gathered from the spec\ified device and the specified maximum bandwidth.
+
+.SH OPTIONS
+.B
+.IP --input|-i
+Measure the input bandwidth
+.B
+.IP --output|-o
+Measure output bandwidth (default)
+.B
+.IP --directory|-d
+Specify the output directory
+.B
+.IP --text-file|-f
+Specify the name of the text-format ouput file (defaults to "ubar.txt")
+.B
+.IP --png-file|-p
+Specify the name of the PNG-format output file (defaults to "ubar.png")
+.B
+.IP --interval|-t
+Set the poll interval in seconds (defaults to 15 seconds)
+.B
+.IP --width|-x
+Set the width of the graphical bar (defaults to 600 pixels)
+.B
+.IP --height|-y
+Set the height of the graphical bar (defaults to 4 pixels)
+.B
+.IP --border|-b
+Set the border width of the graphical bar (defaults to 1 pixel)
+.B
+.IP --kbps|-k
+Set the units of bandwidth measure to kilobits/second
+.B
+.IP --Mbps|-M
+Set the units of bandwidth measure to megabits/second (default)
+.B
+.IP --Gbps|-G
+Set the units of bandwidth measure to gigabits/second
+.B
+.IP --Daemon|-D
+Run as daemon
+.B
+.IP --help|-h
+Online help
+
+.SH AUTHOR
+.B bwbar
+was written by Peter Anvin <hpa@zytor.com>.
+.PP
+This manual page was prepared by Nick Rusnov <nickrusnov@debian.org> for the Debian Project.

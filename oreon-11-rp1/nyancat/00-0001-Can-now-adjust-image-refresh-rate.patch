@@ -1,0 +1,81 @@
+From b81aac9d23756aafeba3d4b3bf56d95926755134 Mon Sep 17 00:00:00 2001
+From: Tyler Cromwell <tyler@csh.rit.edu>
+Date: Sat, 10 Jan 2015 18:32:35 -0500
+Subject: [PATCH] Can now adjust image refresh rate
+
+---
+ nyancat.1     |  3 +++
+ src/nyancat.c | 13 +++++++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/nyancat.1 b/nyancat.1
+index 4438ef5..e9ef839 100644
+--- a/nyancat.1
++++ b/nyancat.1
+@@ -30,6 +30,9 @@ Do not set the titlebar text.
+ .B \-e, \-\-no\-clear
+ Do not clear the display between frames.
+ .TP
++.B \-u, \-\-usleep
++Set how frequently the image refreshes (1 <= t <= 10).
++.TP
+ .B \-f, \-\-frames
+ Display the requested number of frames, then quit.
+ .TP
+diff --git a/src/nyancat.c b/src/nyancat.c
+index 6989623..5b59824 100644
+--- a/src/nyancat.c
++++ b/src/nyancat.c
+@@ -335,6 +335,7 @@ void usage(char * argv[]) {
+ 			" -n --no-counter \033[3mDo not display the timer\033[0m\n"
+ 			" -s --no-title   \033[3mDo not set the titlebar text\033[0m\n"
+ 			" -e --no-clear   \033[3mDo not clear the display between frames\033[0m\n"
++			" -u --usleep     \033[3mSet how frequently the image refreshes (1 <= t <= 10)\033[0m\n"
+ 			" -f --frames     \033[3mDisplay the requested number of frames, then quit\033[0m\n"
+ 			" -r --min-rows   \033[3mCrop the animation from the top\033[0m\n"
+ 			" -R --max-rows   \033[3mCrop the animation from the bottom\033[0m\n"
+@@ -369,6 +370,7 @@ int main(int argc, char ** argv) {
+ 		{"no-counter", no_argument,       0, 'n'},
+ 		{"no-title",   no_argument,       0, 's'},
+ 		{"no-clear",   no_argument,       0, 'e'},
++		{"usleep",     required_argument, 0, 'u'},
+ 		{"frames",     required_argument, 0, 'f'},
+ 		{"min-rows",   required_argument, 0, 'r'},
+ 		{"max-rows",   required_argument, 0, 'R'},
+@@ -379,9 +381,12 @@ int main(int argc, char ** argv) {
+ 		{0,0,0,0}
+ 	};
+ 
++    /* Determine the usleep time  */
++    useconds_t speed_divisor = 1;
++
+ 	/* Process arguments */
+ 	int index, c;
+-	while ((c = getopt_long(argc, argv, "eshiItnf:r:R:c:C:W:H:", long_opts, &index)) != -1) {
++	while ((c = getopt_long(argc, argv, "eshiItnu:f:r:R:c:C:W:H:", long_opts, &index)) != -1) {
+ 		if (!c) {
+ 			if (long_opts[index].flag == 0) {
+ 				c = long_opts[index].val;
+@@ -410,6 +415,10 @@ int main(int argc, char ** argv) {
+ 			case 'n':
+ 				show_counter = 0;
+ 				break;
++            case 'u':
++                if (1 <= atoi(optarg) && atoi(optarg) <= 10)
++                    speed_divisor = atoi(optarg);
++                break;
+ 			case 'f':
+ 				frame_count = atoi(optarg);
+ 				break;
+@@ -907,7 +916,7 @@ int main(int argc, char ** argv) {
+ 			i = 0;
+ 		}
+ 		/* Wait */
+-		usleep(90000);
++		usleep(90000 / speed_divisor);
+ 	}
+ 	return 0;
+ }
+-- 
+2.25.1
+

@@ -1,0 +1,12 @@
+--- a/tools/tools.gpr
++++ b/tools/tools.gpr
+@@ -120,8 +120,7 @@
+                when "Darwin" =>
+                   null;
+                when others =>
+-                  for Default_Switches ("Ada")
+-                    use Linker'Default_Switches ("Ada") & ("-s");
++                  null;
+             end case;
+          when others =>
+             null;

@@ -1,0 +1,19 @@
+Perform these steps after package installation:
+
+1. Inspect the environment file /etc/sysconfig/fcgiwrap. Set fcgiwrap daemon
+   parameters acording to your needs. See man fcgiwrap for details.
+
+2. The systemd unit files provided with this package are instantiated and must
+   be started by specifiying the desired web server user account. For example,
+   when using nginx, the fgciwrap service is enabled then started like so:
+      
+      systemctl enable fcgiwrap@nginx.socket
+      systemctl start fcgiwrap@nginx.socket
+
+   Note the socket name is used here rather than the service name. There is no
+   need to enable the service itself. Indeed one cannot enable the service on
+   older versions of systemd. This is by design.
+
+   See the systemd socket documentation for further details:
+   https://www.freedesktop.org/software/systemd/man/systemd.socket.html
+

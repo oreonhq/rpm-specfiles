@@ -1,0 +1,11 @@
+--- Newt-1.08/Newt.xs
++++ Newt-1.08/Newt.xs
+@@ -741,7 +741,7 @@ newtSetSuspendCallback(cv, data)
+ 	SV *data
+ 	CODE:
+ 		perl_suspend_cb = newSVsv(cv);
+-		newtSetSuspendCallback(suspend_cb, data);
++		newtSetSuspendCallback((newtSuspendCallback)suspend_cb, data);
+ 
+ void
+ newtResume()

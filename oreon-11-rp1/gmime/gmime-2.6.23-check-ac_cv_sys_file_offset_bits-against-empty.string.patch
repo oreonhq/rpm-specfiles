@@ -1,0 +1,23 @@
+From de4f1b044141df3ef0b1fc20be422dc667443484 Mon Sep 17 00:00:00 2001
+From: Jeffrey Stedfast <jestedfa@microsoft.com>
+Date: Sat, 11 May 2024 11:43:36 -0400
+Subject: [PATCH] Check ac_cv_sys_file_offset_bits against empty string
+
+May fix issue #158
+---
+ configure.ac | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index a2d0e6d..5e17c0e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -526,7 +526,7 @@ if test "x$enable_largefile" != "xno"; then
+         enable_largefile="yes"
+     fi
+     
+-    if test "x$ac_cv_sys_file_offset_bits" != "xno"; then
++    if test "x$ac_cv_sys_file_offset_bits" != "x"; then
+         LFS_CFLAGS="$LFS_CFLAGS -D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+         enable_largefile="yes"
+     fi

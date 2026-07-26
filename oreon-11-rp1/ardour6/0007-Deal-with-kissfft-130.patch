@@ -1,0 +1,44 @@
+From 4bdd7d1d7cdac60f17aee0c55a74f477e2e5dc9c Mon Sep 17 00:00:00 2001
+From: Nils Philippsen <nils@tiptoe.de>
+Date: Fri, 13 Oct 2023 10:10:57 +0200
+Subject: [PATCH 7/7] Deal with kissfft >= 130
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The kissfft library changed its SONAME and how the various libraries
+were organized, e.g. the functions for complex and real numbers aren’t
+in separate libraries anymore.
+
+Signed-off-by: Nils Philippsen <nils@tiptoe.de>
+(cherry picked from commit c90dc9a647e70dd30e2853923af2f1006fadf61d)
+---
+ libs/qm-dsp/wscript | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/libs/qm-dsp/wscript b/libs/qm-dsp/wscript
+index 9954b7ff42..390c8eba29 100644
+--- a/libs/qm-dsp/wscript
++++ b/libs/qm-dsp/wscript
+@@ -40,9 +40,15 @@ def configure(conf):
+                               mandatory = False,
+                               ):
+             # The external qm-dsp might be built without embedded kiss - try to link with it explicitly and check again
+-            conf.check_cxx(lib="kiss_fft_double", uselib_store="KISSFFT", mandatory=True)
+-            conf.check_cxx(lib="kiss_fftr_double", uselib_store="KISSFFTR", mandatory=True)
+-            conf.env.append_value('LIB_QMDSP', conf.env['LIB_KISSFFT'] + conf.env['LIB_KISSFFTR'])
++            if conf.check_cxx(lib="kissfft-double", uselib_store="KISSFFT", mandatory=False):
++                # kissfft ersions >= 130 have changed names (kiss_fft_double -> kissfft-double) and
++                # library organization
++                conf.env.append_value('LIB_QMDSP', conf.env['LIB_KISSFFT'])
++            else:
++                # kiss_fft <= 1.3.x
++                conf.check_cxx(lib="kiss_fft_double", uselib_store="KISS_FFT", mandatory=True)
++                conf.check_cxx(lib="kiss_fftr_double", uselib_store="KISS_FFTR", mandatory=True)
++                conf.env.append_value('LIB_QMDSP', conf.env['LIB_KISS_FFT'] + conf.env['LIB_KISS_FFTR'])
+ 
+             conf.check_cxx(msg = 'Checking qm-dsp with explicit kiss linking',
+                            features = 'cxx cxxprogram',
+-- 
+2.41.0
+

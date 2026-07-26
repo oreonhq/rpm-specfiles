@@ -1,0 +1,16 @@
+[Desktop Entry]
+Exec=equalx
+Terminal=false
+Type=Application
+StartupNotify=false
+Icon=equalx
+Categories=Qt;Office;
+X-DBUS-StartupType=Unique
+Name=EqualX
+Name[ro]=EgalX
+GenericName=LaTeX Equation Editor
+GenericName[ro]=Editor LaTeX de ecuații 
+Comment=Create equations in LaTeX
+Comment[ro]=Creează ecuații folosind LaTeX
+
+

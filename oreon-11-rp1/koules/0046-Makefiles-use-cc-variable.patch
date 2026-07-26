@@ -1,0 +1,22 @@
+diff -up koules1.4/Makefile.sdl.usecc koules1.4/Makefile.sdl
+--- koules1.4/Makefile.sdl.usecc	2024-04-21 17:17:52.079280235 -0400
++++ koules1.4/Makefile.sdl	2024-04-21 17:19:38.687196355 -0400
+@@ -123,6 +123,6 @@ dep:
+ 
+ .depend:
+ 	echo '# Program dependencies' >.depend
+-	gcc $(SDL2_gfx_CFLAGS) $(DEFINES) -MM $(patsubst %.o,%.c,$(PROGS_O)) >>.depend
++	$(CC) $(SDL2_gfx_CFLAGS) $(DEFINES) -MM $(patsubst %.o,%.c,$(PROGS_O)) >>.depend
+ 
+ include .depend
+diff -up koules1.4/Makefile.svgalib.usecc koules1.4/Makefile.svgalib
+--- koules1.4/Makefile.svgalib.usecc	2024-04-21 17:17:52.079280235 -0400
++++ koules1.4/Makefile.svgalib	2024-04-21 17:19:30.272045104 -0400
+@@ -119,6 +119,6 @@ dep:
+ 
+ .depend:
+ 	echo '# Program dependencies' >.depend
+-	gcc -I svgalib $(DEFINES) -MM $(patsubst %.o,%.c,$(PROGS_O)) >>.depend
++	$(CC) -I svgalib $(DEFINES) -MM $(patsubst %.o,%.c,$(PROGS_O)) >>.depend
+ 
+ include .depend

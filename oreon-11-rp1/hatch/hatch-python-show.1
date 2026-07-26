@@ -1,0 +1,33 @@
+.TH HATCH\-PYTHON\-SHOW "1" "December 2023" "" "User Commands"
+.SH NAME
+.B hatch\ python\ show
+\(en Show the available Python distributions
+.SH SYNOPSIS
+.B hatch\ python\ show
+.RI [ OPTIONS ]
+.P
+You may select
+.B all
+to show all compatible distributions:
+.P
+.EX
+.B hatch\ python\ show\ all
+.EE
+.SH OPTIONS
+.TP
+.B \-\-ascii
+Whether or not to only use ASCII characters
+.TP
+.B \-d\fR, \fB\-\-dir\ \fITEXT
+The directory in which distributions reside
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH "SEE ALSO"
+.BR hatch\-python\-find (1),
+.BR hatch\-python\-install (1),
+.BR hatch\-python\-remove (1),
+.BR hatch\-python\-update (1)
+.P
+.BR hatch\-python (1),
+.BR hatch (1)

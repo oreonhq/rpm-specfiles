@@ -1,0 +1,51 @@
+commit 548b82c8f035d3f24e1556bcd0c6e431183dece0
+Author: Till Hofmann <hofmann@kbsg.rwth-aachen.de>
+Date:   Thu Apr 16 10:46:57 2020 +0200
+
+    Set all libraries' SOVERSION to 0.1
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a232bd6..835d8c3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -40,6 +40,8 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+ 
+ set(ADDITIONAL_PUBLIC_COMPILE_OPTIONS)
+ 
++SET (FREEOPCUA_SOVERSION 0.1)
++
+ # Helper function to generate a pkg-config file for a single library
+ # Takes the filename of the .pc file as a parameter and replaces all
+ # placeholders in the .pc.in file with the actual values
+@@ -214,6 +216,7 @@ if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
+     target_compile_options(opcuaprotocol PUBLIC ${STATIC_LIBRARY_CXX_FLAGS})
+ endif ()
+ target_compile_options(opcuaprotocol PUBLIC ${ADDITIONAL_PUBLIC_COMPILE_OPTIONS})
++set_target_properties(opcuaprotocol PROPERTIES SOVERSION ${FREEOPCUA_SOVERSION})
+ target_link_libraries(opcuaprotocol ${ADDITIONAL_LINK_LIBRARIES})
+ target_include_directories(opcuaprotocol PUBLIC $<INSTALL_INTERFACE:include>)
+ install(TARGETS opcuaprotocol EXPORT FreeOpcUa
+@@ -291,6 +294,7 @@ SET(opcuacore_SOURCES
+ )
+ 
+ add_library(opcuacore ${opcuacore_SOURCES})
++set_target_properties(opcuacore PROPERTIES SOVERSION ${FREEOPCUA_SOVERSION})
+ 
+ if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
+     target_compile_options(opcuacore PUBLIC ${STATIC_LIBRARY_CXX_FLAGS})
+@@ -355,6 +359,7 @@ if (BUILD_CLIENT)
+     src/client/client.cpp
+     )
+ 
++    set_target_properties(opcuaclient PROPERTIES SOVERSION ${FREEOPCUA_SOVERSION})
+     if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
+         target_compile_options(opcuaclient PUBLIC ${STATIC_LIBRARY_CXX_FLAGS})
+     endif ()
+@@ -458,6 +463,7 @@ if(BUILD_SERVER)
+         target_compile_options(opcuaserver PUBLIC ${STATIC_LIBRARY_CXX_FLAGS})
+     endif ()
+     target_compile_options(opcuaserver PUBLIC ${ADDITIONAL_PUBLIC_COMPILE_OPTIONS})
++    set_target_properties(opcuaserver PROPERTIES SOVERSION ${FREEOPCUA_SOVERSION})
+     target_link_libraries(opcuaserver ${ADDITIONAL_LINK_LIBRARIES} opcuacore opcuaprotocol ${Boost_SYSTEM_LIBRARY})
+     target_include_directories(opcuaserver PUBLIC $<INSTALL_INTERFACE:include>)
+     install(TARGETS opcuaserver EXPORT FreeOpcUa

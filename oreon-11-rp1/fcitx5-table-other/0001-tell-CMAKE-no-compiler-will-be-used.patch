@@ -1,0 +1,23 @@
+From b951f9f3d63119aa998f52fe0f0b47db0a6ddfe3 Mon Sep 17 00:00:00 2001
+From: Qiyu Yan <yanqiyu@fedoraproject.org>
+Date: Tue, 30 Jul 2024 11:12:50 +0800
+Subject: [PATCH] tell CMAKE no compiler will be used
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e91e31e..12d2174 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ cmake_minimum_required(VERSION 3.8)
+-project(fcitx-table-other VERSION 5.1.6)
++project(fcitx-table-other VERSION 5.1.6 LANGUAGES NONE)
+ 
+ find_package(ECM 1.0 REQUIRED)
+ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+-- 
+2.45.2
+

@@ -1,0 +1,16 @@
+diff -up ClanLib-1.0.0/Sources/Core/IOData/Generic/datafile_inputprovider.h~ ClanLib-1.0.0/Sources/Core/IOData/Generic/datafile_inputprovider.h
+--- ClanLib-1.0.0/Sources/Core/IOData/Generic/datafile_inputprovider.h~	2006-10-27 03:55:01.000000000 +0200
++++ ClanLib-1.0.0/Sources/Core/IOData/Generic/datafile_inputprovider.h	2016-02-02 18:21:30.332236599 +0100
+@@ -142,9 +142,9 @@ protected:
+ 		void insert(const std::string &resource_id, int data_pos, int data_size)
+ 		{
+ 			cache.insert(
+-				std::make_pair<std::string const, std::pair<int, int> >(
+-				resource_id,
+-				std::make_pair<int,int>(data_pos, data_size)));
++				std::pair<std::string const, std::pair<int, int> >(
++					resource_id,
++					std::pair<int,int>(data_pos, data_size)));
+ 		}
+ 
+ 	private:

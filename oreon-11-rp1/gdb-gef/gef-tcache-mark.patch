@@ -1,0 +1,94 @@
+diff --git a/tests/commands/heap.py b/tests/commands/heap.py
+index b3bce6f..9757638 100644
+--- a/tests/commands/heap.py
++++ b/tests/commands/heap.py
+@@ -2,6 +2,8 @@
+ Heap commands test module
+ """
+ 
++import pytest
++
+ from tests.base import RemoteGefUnitTestGeneric
+ from tests.utils import (
+     ARCH,
+@@ -66,6 +68,7 @@ class HeapCommand(RemoteGefUnitTestGeneric):
+         chunklines = findlines("Chunk(addr=", res)
+         self.assertEqual(len(chunklines), 2)
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_chunks(self):
+         gdb = self._gdb
+         cmd = "heap chunks"
+@@ -147,6 +150,7 @@ class HeapCommandNonMain(RemoteGefUnitTestGeneric):
+         self._target = debug_target("heap-non-main")
+         return super().setUp()
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_chunks(self):
+         gdb = self._gdb
+         cmd = "heap chunks"
+@@ -168,6 +172,7 @@ class HeapCommandNonMain(RemoteGefUnitTestGeneric):
+         # make sure that the chunks of each arena are distinct
+         self.assertNotEqual(chunks, non_main_chunks)
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_bins_non_main(self):
+         gdb = self._gdb
+         gef = self._gef
+@@ -179,6 +184,7 @@ class HeapCommandNonMain(RemoteGefUnitTestGeneric):
+         res = gdb.execute(cmd, to_string=True)
+         self.assertIn("size=0x20", res)
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_bins_tcache(self):
+         gdb = self._gdb
+         gdb.execute("run")
+@@ -200,6 +206,7 @@ class HeapCommandMultipleHeaps(RemoteGefUnitTestGeneric):
+         self._target = debug_target("heap-multiple-heaps")
+         return super().setUp()
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_chunks_mult_heaps(self):
+         gdb = self._gdb
+ 
+@@ -257,6 +264,7 @@ class HeapCommandBins(RemoteGefUnitTestGeneric):
+         self.expected_unsorted_bin_size = 0x430 if ARCH == "i686" or is_64b() else 0x428
+         return super().setUp()
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_bins_large(self):
+         gdb = self._gdb
+         gdb.execute("run")
+@@ -266,6 +274,7 @@ class HeapCommandBins(RemoteGefUnitTestGeneric):
+         self.assertIn("Chunk(addr=", res)
+         self.assertIn(f"size={self.expected_large_bin_size:#x}", res)
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_bins_small(self):
+         gdb = self._gdb
+         cmd = "heap bins small"
+@@ -276,6 +285,7 @@ class HeapCommandBins(RemoteGefUnitTestGeneric):
+         self.assertIn("Chunk(addr=", res)
+         self.assertIn(f"size={self.expected_small_bin_size:#x}", res)
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_bins_unsorted(self):
+         gdb = self._gdb
+         gdb.execute("run")
+@@ -292,6 +302,7 @@ class HeapCommandTcache(RemoteGefUnitTestGeneric):
+         self.expected_tcache_bin_size = 0x20 if ARCH == "i686" or is_64b() else 0x18
+         return super().setUp()
+ 
++    @pytest.mark.tcache
+     def test_cmd_heap_bins_tcache_all(self):
+         gdb = self._gdb
+         gdb.execute("run")
+diff --git a/tests/pytest.ini b/tests/pytest.ini
+index 726db8e..7b86b98 100644
+--- a/tests/pytest.ini
++++ b/tests/pytest.ini
+@@ -14,3 +14,4 @@ testpaths =
+ markers =
+     slow: flag test as slow (deselect with '-m "not slow"')
+     online: flag test as requiring internet to work (deselect with '-m "not online"')
++    tcache: flag test as checking glibc tcache (deselect with '-m "not tcache"')

@@ -1,0 +1,36 @@
+From 4ad0e000970e665c626107b53dcc13b7cb11168a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 21 Jan 2026 12:05:32 +0100
+Subject: [PATCH] Adapt to Boost 1.89.0
+
+Bulding with Boost 1.90.0 failed:
+
+    src/myinit.h:16:10: fatal error: boost/geometry/multi/geometries/multi_linestring.hpp: No such file or directory
+       16 | #include <boost/geometry/multi/geometries/multi_linestring.hpp>
+	  |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Boost 1.89.0 removed depracated heades in boost/geometry/multi. This patch
+fixes it by directly including headers the depreacated multi wrappers included
+before the change.
+---
+ src/myinit.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/myinit.h b/src/myinit.h
+index d4762d5..00cc642 100644
+--- a/src/myinit.h
++++ b/src/myinit.h
+@@ -13,8 +13,8 @@
+ #include <boost/geometry/geometries/polygon.hpp>
+ #include <boost/geometry/geometries/linestring.hpp>
+ #include <boost/geometry/geometries/ring.hpp>
+-#include <boost/geometry/multi/geometries/multi_linestring.hpp>
+-#include <boost/geometry/multi/geometries/multi_polygon.hpp>
++#include <boost/geometry/geometries/multi_linestring.hpp>
++#include <boost/geometry/geometries/multi_polygon.hpp>
+ #include <boost/geometry/io/wkt/wkt.hpp>
+ #include <boost/geometry/geometries/adapted/boost_polygon.hpp>
+ #include <boost/polygon/voronoi.hpp>
+-- 
+2.52.0
+

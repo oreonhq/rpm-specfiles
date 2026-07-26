@@ -1,0 +1,91 @@
+From 2b728bdd6df8968d1dae92856ac5ebed85d71d2a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 14 May 2014 10:36:50 +0200
+Subject: [PATCH] Generate keys and certificates at test-time
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This fixes <https://rt.cpan.org/Public/Bug/Display.html?id=88998>.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL    |  2 ++
+ t/testmodule.t | 38 +++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 39 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 17fe591..b8927b2 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -10,5 +10,7 @@ WriteMakefile(
+   'VERSION_FROM' => 'SSL.pm',
+   'DISTNAME' => 'HTTP-Daemon-SSL',
+   'PREREQ_PM' => { 'HTTP::Daemon' => 1.0, 'IO::Socket::SSL' => 0.93 },
++  'BUILD_REQUIRES' => { 'HTTP::Daemon' => 1.0, 'IO::Socket::SSL' => 0.93,
++      'IO::Socket::SSL::Utils' => 0 },
+   'dist' => { COMPRESS => 'gzip', SUFFIX => 'gz', },
+ );
+diff --git a/t/testmodule.t b/t/testmodule.t
+index 6ca235a..c83d9ab 100644
+--- a/t/testmodule.t
++++ b/t/testmodule.t
+@@ -4,10 +4,11 @@
+ 
+ use HTTP::Daemon::SSL;
+ use HTTP::Status;
++use IO::Socket::SSL::Utils;
+ eval {require "t/ssl_settings.req";} ||
+ eval {require "ssl_settings.req";};
+ 
+-$numtests = 9;
++$numtests = 14;
+ $|=1;
+ $SIG{PIPE}='IGNORE';
+ 
+@@ -22,6 +23,42 @@ print "1..$numtests\n";
+ 
+ $test = 0;
+ 
++my ($ca_cert, $ca_key) = CERT_create(
++    subject => { commonName => 'Dummy IO::Socket::SSL Certificate Authority' },
++    CA => 1,
++);
++(defined $ca_cert and defined $ca_key) || print 'not ';
++&ok('authority certificate generated');
++
++my ($server_cert, $server_key) = CERT_create(
++    subject => { commonName => 'IO::Socket::SSL Dummy Server Certificate' },
++    subjectAltNames => [ [ IP => '127.0.0.1' ] ],
++    CA => 0,
++    issuer_cert => $ca_cert,
++    issuer_key => $ca_key,
++);
++(defined $server_cert and defined $server_key) || print 'not ';
++&ok('server certificate generated');
++
++eval { PEM_cert2file($ca_cert, 'certs/test-ca.pem') };
++(!$@ and -s 'certs/test-ca.pem') || print 'not ';
++&ok('authority certificate saved');
++
++PEM_cert2file($server_cert, 'certs/server-cert.pem');
++(!$@ and -s 'certs/server-cert.pem') || print 'not ';
++&ok('server certificate saved');
++
++PEM_key2file($server_key, 'certs/server-key.pem');
++(!$@ and -s 'certs/server-key.pem') || print 'not ';
++&ok('server key saved');
++
++# freeing fails now <https://bugzilla.redhat.com/show_bug.cgi?id=1097640>
++#CERT_free($ca_cert);
++#KEY_free($ca_key);
++#CERT_free($server_cert);
++#KEY_free($server_key);
++
++
+ unless (fork) {
+     sleep 1;
+ 
+-- 
+1.9.0
+

@@ -1,0 +1,27 @@
+From 0f1a73bf62dbf7f4aa752955051e1eded9a6cbe9 Mon Sep 17 00:00:00 2001
+From: Florian Weimer <fweimer@redhat.com>
+Date: Thu, 30 Nov 2023 13:49:38 +0100
+Subject: [PATCH] test: Fix type of User_equal
+
+The match function has void * arguments, not User * arguments.
+This avoids an implicit function pointer type conversion in
+test_list_find, which is not accepted by all compilers anymore.
+---
+ test.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/test.c b/test.c
+index 32fa0f3..0323c6f 100644
+--- a/test.c
++++ b/test.c
+@@ -25,7 +25,9 @@ typedef struct {
+ } User;
+ 
+ static int
+-User_equal(User *a, User *b) {
++User_equal(void *a1, void *b1) {
++  User *a = a1;
++  User *b = b1;
+   return 0 == strcmp(a->name, b->name);
+ }
+ 

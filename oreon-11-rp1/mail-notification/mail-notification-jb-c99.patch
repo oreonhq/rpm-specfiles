@@ -1,0 +1,35 @@
+Work around implicit exit function declarations in jb_openssl_check,
+jb_sasl2_check.  For C99 compatibility.
+
+Submitted upstream: <https://bugs.launchpad.net/mail-notification/+bug/1997992>
+
+diff --git a/jbsrc/lib/src/extras/jb-openssl.c b/jbsrc/lib/src/extras/jb-openssl.c
+index b51f32ce49742275..304cb3e73532cea9 100644
+--- a/jbsrc/lib/src/extras/jb-openssl.c
++++ b/jbsrc/lib/src/extras/jb-openssl.c
+@@ -59,8 +59,8 @@ jb_openssl_check (const char *minversion)
+ 			      "      + (JB_OPENSSL_MINOR << 20)\n"
+ 			      "      + (JB_OPENSSL_FIX << 12)\n"
+ 			      "      + (JB_OPENSSL_PATCH << 4))\n"
+-			      "    exit(1); /* version too old */\n"
+-			      "  exit(0); /* ok */\n"
++			      "    return 1; /* version too old */\n"
++			      "  return 0; /* ok */\n"
+ 			      "}\n",
+ 			      JB_OPENSSL_CFLAGS,
+ 			      cppflags,
+diff --git a/jbsrc/lib/src/extras/jb-sasl2.c b/jbsrc/lib/src/extras/jb-sasl2.c
+index f8c42f2dde696b14..c03de33156d1f8d6 100644
+--- a/jbsrc/lib/src/extras/jb-sasl2.c
++++ b/jbsrc/lib/src/extras/jb-sasl2.c
+@@ -54,8 +54,8 @@ jb_sasl2_check (const char *minversion)
+ 			      "  sasl_version_info(0, 0, &major, &minor, &step, &patch);\n"
+ 			      "  if ((major << 24) + (minor << 16) + (step << 8) + patch\n"
+ 			      "      < (JB_SASL2_MAJOR << 24) + (JB_SASL2_MINOR << 16) + (JB_SASL2_STEP << 8) + JB_SASL2_PATCH)\n"
+-			      "    exit(2); /* version too old */\n"
+-			      "  exit(0);\n"
++			      "    return 2; /* version too old */\n"
++			      "  return 0;\n"
+ 			      "}\n",
+ 			      JB_SASL2_CFLAGS,
+ 			      cppflags,

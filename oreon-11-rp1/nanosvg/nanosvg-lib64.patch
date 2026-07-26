@@ -1,0 +1,20 @@
+diff -up nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt.lib64 nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt
+--- nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt.lib64	2023-08-03 09:30:23.086954379 -0400
++++ nanosvg-abcd277ea45e9098bed752cf9c6875b533c0892f/CMakeLists.txt	2023-08-03 09:33:16.656952661 -0400
+@@ -37,6 +37,7 @@ write_basic_package_version_file(
+ 
+ install(TARGETS nanosvg nanosvgrast
+         EXPORT ${PROJECT_NAME}Targets
++	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+ )
+ 
+ export(EXPORT ${PROJECT_NAME}Targets 
+@@ -44,7 +45,7 @@ export(EXPORT ${PROJECT_NAME}Targets
+        NAMESPACE ${PROJECT_NAME}::
+ )
+ 
+-set(ConfigPackageLocation lib/cmake/${PROJECT_NAME})
++set(ConfigPackageLocation ${LIB_INSTALL_DIR}/cmake/${PROJECT_NAME})
+ 
+ configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"

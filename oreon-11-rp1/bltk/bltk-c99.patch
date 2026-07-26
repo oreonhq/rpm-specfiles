@@ -1,0 +1,221 @@
+Upstream builds with -std=c99, which switches to strict standards mode
+for POSIX headers.  This leads to implicit function declarations.  To
+avoid that, build with -D_DEFAULT_SOURCE as well.  This exposed a
+couple of incorrect function prototypes.  Also add a declaration for
+the param_init function, to avoid declaring it implicitly.
+
+diff --git a/include/bltk.h b/include/bltk.h
+index e1129025442dfce8..f9c5e30c413f07cb 100644
+--- a/include/bltk.h
++++ b/include/bltk.h
+@@ -526,20 +526,6 @@ extern int check_stop_file(void);
+ extern void create_fail_file(void);
+ extern void create_pass_file(void);
+ 
+-extern void sync(void);
+-extern int fsync(int fd);
+-extern char *realpath(const char *path, char *resolved_path);
+-extern int putenv(char *string);
+-extern char *strdup(const char *s);
+-extern void usleep(unsigned long usec);
+-
+-extern int getopt(int argc, char *const argv[], const char *optstring);
+-extern char *optarg;
+-extern int optind, opterr, optopt;
+-
+-extern int kill(pid_t pid, int sig);
+-extern int symlink(const char *oldpath, const char *newpath);
+-
+ extern void check_state(void);
+ 
+ extern void write_report_str(char *work_type, char *comment);
+@@ -574,4 +560,6 @@ extern int get_int_debug_var(char *name, int *var);
+ 
+ extern char *get_prog_time_str();
+ 
++extern void param_init(void);
++
+ #endif				/* __BLTK_H__ */
+diff --git a/tools/analyzer/Makefile b/tools/analyzer/Makefile
+index 68d044c63a29fbb4..d73a5b9864d32925 100644
+--- a/tools/analyzer/Makefile
++++ b/tools/analyzer/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2
+ #LDFLAGS	= -L/usr/X11R6/lib -lX11
+ 
+ BIN		= ../../bin
+diff --git a/tools/bat_drain/Makefile b/tools/bat_drain/Makefile
+index ea4898d8381c274a..10f7699197524b5f 100644
+--- a/tools/bat_drain/Makefile
++++ b/tools/bat_drain/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2
+ #LDFLAGS	= -L/usr/X11R6/lib -lX11
+ 
+ BIN		= ../../bin
+diff --git a/tools/bltk/Makefile b/tools/bltk/Makefile
+index 8a8054342d30d7e4..8ad601be08be7c6c 100644
+--- a/tools/bltk/Makefile
++++ b/tools/bltk/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2 -I../../include
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2 -I../../include
+ #LDFLAGS	= -L/usr/X11R6/lib -lX11
+ 
+ BIN		= ../../bin
+diff --git a/tools/get_realpath/Makefile b/tools/get_realpath/Makefile
+index e62558effdc81399..67cacc47c781a8d6 100644
+--- a/tools/get_realpath/Makefile
++++ b/tools/get_realpath/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2
+ #LDFLAGS	= -L/usr/X11R6/lib -lX11
+ 
+ BIN		= ../../bin
+diff --git a/tools/sudo/Makefile b/tools/sudo/Makefile
+index 3cea1d8ca8a5d832..bfc88945a2ed365f 100644
+--- a/tools/sudo/Makefile
++++ b/tools/sudo/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2
+ #LDFLAGS	= -L/usr/X11R6/lib -lX11
+ 
+ BIN		= ../../bin
+diff --git a/tools/time/Makefile b/tools/time/Makefile
+index 60074a132e59e440..a9d1d86037968125 100644
+--- a/tools/time/Makefile
++++ b/tools/time/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2
+ #LDFLAGS	= -L/usr/X11R6/lib -lX11
+ 
+ BIN		= ../../bin
+diff --git a/tools/time/bltk_time.c b/tools/time/bltk_time.c
+index efbad278ba4693a0..a9131dc17f137662 100644
+--- a/tools/time/bltk_time.c
++++ b/tools/time/bltk_time.c
+@@ -53,8 +53,6 @@
+ #include <sys/file.h>
+ #include <libgen.h>
+ 
+-extern void usleep(unsigned long usec);
+-
+ #define	MSEC_IN_SEC	1000
+ #define	MCSEC_IN_MSEC	1000
+ #define	MCSEC_IN_SEC	1000000
+diff --git a/tools/type_command/Makefile b/tools/type_command/Makefile
+index 60c48bc6213b9579..081f4e98f0ef0767 100644
+--- a/tools/type_command/Makefile
++++ b/tools/type_command/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2
+ #LDFLAGS	= -L/usr/X11R6/lib -lX11
+ 
+ BIN		= ../../bin
+diff --git a/tools/type_command/bltk_type_command.c b/tools/type_command/bltk_type_command.c
+index b21e3666e3712803..69e3a796fecbed76 100644
+--- a/tools/type_command/bltk_type_command.c
++++ b/tools/type_command/bltk_type_command.c
+@@ -54,9 +54,6 @@
+ #include <libgen.h>
+ #include <getopt.h>
+ 
+-extern int gethostname(char *name, size_t len);
+-extern void usleep(unsigned long usec);
+-
+ #define	DTIME	200
+ 
+ #define	PC_TYPE	0		/* prompt & command */
+diff --git a/tools/xse/Makefile b/tools/xse/Makefile
+index 0c728724cb1cd180..ccad500f01017154 100644
+--- a/tools/xse/Makefile
++++ b/tools/xse/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2 -I ../../include -fPIC
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2 -I ../../include -fPIC
+ LDFLAGS		= -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11 -Wl,-soname -Wl,libxse.so.0
+ 
+ LIB		= ../../lib
+diff --git a/wl_developer/Makefile b/wl_developer/Makefile
+index 280e2b0da71e9d6c..ac2fe3f678a30952 100644
+--- a/wl_developer/Makefile
++++ b/wl_developer/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2 -I../include
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2 -I../include
+ LDFLAGS		= -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11 ../lib/libxse.so.0 -Wl,-rpath,/usr/lib/bltk
+ 
+ BIN		= bin
+diff --git a/wl_game/Makefile b/wl_game/Makefile
+index 2590925621180a7e..65a68be53635ced9 100644
+--- a/wl_game/Makefile
++++ b/wl_game/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2 -I../include
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2 -I../include
+ LDFLAGS		= -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11 ../lib/libxse.so.0 -Wl,-rpath,/usr/lib/bltk
+ 
+ BIN		= bin
+diff --git a/wl_office/Makefile b/wl_office/Makefile
+index 2caa9bac068ce94f..62ff50fc654f7ed4 100644
+--- a/wl_office/Makefile
++++ b/wl_office/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2 -I../include
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2 -I../include
+ LDFLAGS		= -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11 ../lib/libxse.so.0 -Wl,-rpath,/usr/lib/bltk
+ 
+ BIN		= bin
+diff --git a/wl_player/Makefile b/wl_player/Makefile
+index f218f2b95b9d05d7..0a7238c17794cf7c 100644
+--- a/wl_player/Makefile
++++ b/wl_player/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2
+ LDFLAGS		= -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
+ 
+ BIN		= bin
+diff --git a/wl_player/bltk_wl_player_install.sh b/wl_player/bltk_wl_player_install.sh
+index 168cb981b1a35490..1afb392a58780483 100644
+--- a/wl_player/bltk_wl_player_install.sh
++++ b/wl_player/bltk_wl_player_install.sh
+@@ -293,7 +293,7 @@ then
+ {
+ #If there is a ENV variable named CFLAGS, the CFLAGS value in wl_player/Makefile
+ #will be set to this ENV variable. Since the MPlayer will inherit the ENV CFLAGS
+-#value, the compiling will failed for "-pedantic -std=c99" in CFLAGS. So we need
++#value, the compiling will failed for "-pedantic -std=c99 -D_DEFAULT_SOURCE" in CFLAGS. So we need
+ #to unset the variable here.
+ 
+ 	CFLAGS=
+diff --git a/wl_reader/Makefile b/wl_reader/Makefile
+index 9e4003327ad54e75..4338453e4bf1d0ae 100644
+--- a/wl_reader/Makefile
++++ b/wl_reader/Makefile
+@@ -1,5 +1,5 @@
+ 
+-override CFLAGS	+= -Wall -pedantic -std=c99 -g -O2 -I../include
++override CFLAGS	+= -Wall -pedantic -std=c99 -D_DEFAULT_SOURCE -g -O2 -I../include
+ LDFLAGS		= -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11 ../lib/libxse.so.0 -Wl,-rpath,/usr/lib/bltk
+ 
+ BIN		= bin

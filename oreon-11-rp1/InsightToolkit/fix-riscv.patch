@@ -1,0 +1,13 @@
+Index: InsightToolkit-4.13.3/Modules/ThirdParty/KWIML/src/itkkwiml/include/kwiml/abi.h
+===================================================================
+--- InsightToolkit-4.13.3.orig/Modules/ThirdParty/KWIML/src/itkkwiml/include/kwiml/abi.h
++++ InsightToolkit-4.13.3/Modules/ThirdParty/KWIML/src/itkkwiml/include/kwiml/abi.h
+@@ -468,7 +468,7 @@ suppression macro KWIML_ABI_NO_VERIFY wa
+ # define KWIML_ABI_ENDIAN_ID KWIML_ABI_ENDIAN_ID_LITTLE
+ 
+ /* RISC-V */
+-#elif defined(__riscv__)
++#elif defined(__riscv)
+ # define KWIML_ABI_ENDIAN_ID KWIML_ABI_ENDIAN_ID_LITTLE
+ 
+ /* Unknown CPU */

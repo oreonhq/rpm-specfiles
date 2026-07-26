@@ -1,0 +1,52 @@
+am-utils-6.2 - fix wcc attr usage in unlink3_or_rmdir3()
+
+From: Ian Kent <raven@themaw.net>
+
+The definition of the wcc post op attributes should be am_fattr3 not
+am_wcc_attr in unlink3_or_rmdir3().
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_subr.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index a383618..b88a40c 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -1058,7 +1058,8 @@ static am_nfsstat3 unlink3_or_rmdir3(am_diropargs3 *argp,
+   am_pre_op_attr *pre_op_dir = &wcc_data->before;
+   am_post_op_attr *post_op_dir = &wcc_data->after;
+   nfsfattr *fattr;
+-  am_wcc_attr *pre_op_wcc_attr, *post_op_wcc_attr;
++  am_wcc_attr *pre_op_wcc_attr;
++  am_fattr3 *post_op_wcc_attr;
+   am_node *mp, *ap;
+   int retry;
+ 
+@@ -1085,7 +1086,7 @@ static am_nfsstat3 unlink3_or_rmdir3(am_diropargs3 *argp,
+   fattr_to_wcc_attr(fattr, pre_op_wcc_attr);
+ 
+   if (mp->am_fattr.na_type != NFDIR) {
+-    fattr_to_wcc_attr(fattr, post_op_wcc_attr);
++    fattr_to_fattr3(fattr, post_op_wcc_attr);
+     res = nfs_error(ENOTDIR);
+     goto out;
+   }
+@@ -1105,14 +1106,14 @@ static am_nfsstat3 unlink3_or_rmdir3(am_diropargs3 *argp,
+      */
+     else if (retry == ENOENT)
+       retry = 0;
+-    fattr_to_wcc_attr(fattr, post_op_wcc_attr);
++    fattr_to_fattr3(fattr, post_op_wcc_attr);
+     res = nfs_error(retry);
+   } else {
+     forcibly_timeout_mp(mp);
+     /* we can't wait for the expire so use the attributes as
+      * they are now for the post op wcc attributes.
+      */
+-    fattr_to_wcc_attr(fattr, post_op_wcc_attr);
++    fattr_to_fattr3(fattr, post_op_wcc_attr);
+     res = AM_NFS3_OK;
+   }
+ 

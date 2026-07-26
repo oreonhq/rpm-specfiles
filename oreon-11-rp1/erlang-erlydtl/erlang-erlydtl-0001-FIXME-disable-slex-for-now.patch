@@ -1,0 +1,22 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 28 Nov 2025 12:03:02 +0100
+Subject: [PATCH] FIXME disable slex for now
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 5005bc8..a36b152 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -5,11 +5,6 @@
+ {erl_opts, [debug_info]}.
+ {yrl_opts, [{includefile, "include/erlydtl_preparser.hrl"}]}.
+ 
+-{project_plugins,
+-     [
+-      {slex, {git, "https://github.com/erlydtl/slex.git", {tag, "0.2.3"}}}
+-     ]}.
+-
+ {profiles,
+  [{test,
+    [{pre_hooks,

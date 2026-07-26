@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>denemo-music</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Denemo</name>
+  <summary>Denemo Denemo fonts</summary>
+  <description>
+    <p>
+      These are the Denemo.ttf fonts derived from FreeSerif.ttf and FreeSans.ttf.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://www.denemo.org/</url>
+</component>

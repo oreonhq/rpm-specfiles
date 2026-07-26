@@ -1,0 +1,56 @@
+From a387f471ab257d48bfb832bcb4bac3f895cfbdda Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 9 Aug 2017 17:55:20 +0200
+Subject: [PATCH] Obey to perl's PERL_USE_SAFE_PUTENV default
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream forces PERL_USE_SAFE_PUTENV because otherwise the code
+crashes somewhere sometimes. But forced PERL_USE_SAFE_PUTENV causes
+memory leaks.
+
+Let's try perl's default. If we are bitten by the crash, we can
+disable the t/leak.t instead.
+
+https://github.com/mschout/env-c/issues/3
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ C.xs | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+
+diff --git a/C.xs b/C.xs
+index cf1e4fc..4002bd6 100644
+--- a/C.xs
++++ b/C.xs
+@@ -27,27 +27,6 @@
+ # endif
+ #endif
+ 
+-/* in order to work around system and perl implementation bugs/leaks, we need
+- * to sometimes force PERL_USE_SAFE_PUTENV mode.
+- */
+-#ifndef PERL_USE_SAFE_PUTENV
+-   /* Threaded perl with PERL_TRACK_MEMPOOL enabled causes
+-    * "panic: free from wrong pool at exit"
+-    * starting at 5.9.4 (confirmed through 5.20.1)
+-    * see: https://rt.cpan.org/Ticket/Display.html?id=99962
+-    */
+-# if PERL_BCDVERSION >= 0x5009004 && defined(USE_ITHREADS) && defined(PERL_TRACK_MEMPOOL)
+-#  define USE_SAFE_PUTENV 1
+-# elif PERL_BCDVERSION >= 0x5008000 && PERL_BCDVERSION < 0x5019006
+-   /* FreeBSD: SIGV at exit on perls prior to 5.19.6
+-    * see: https://rt.cpan.org/Ticket/Display.html?id=49872
+-    */
+-#  if defined(__FreeBSD__)
+-#   define USE_SAFE_PUTENV 1
+-#  endif
+-# endif
+-#endif
+-
+ inline int __setenv(const char *key, const char *val, int override) {
+     int RETVAL;
+ #if !HAVE_SETENV
+-- 
+2.9.4
+

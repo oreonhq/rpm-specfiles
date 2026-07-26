@@ -1,0 +1,12 @@
+diff -up ClanLib-0.6.5/Sources/API/Lua/lua.h~ ClanLib-0.6.5/Sources/API/Lua/lua.h
+--- ClanLib-0.6.5/Sources/API/Lua/lua.h~	2014-12-17 11:39:16.000000000 +0100
++++ ClanLib-0.6.5/Sources/API/Lua/lua.h	2014-12-17 11:43:02.154064631 +0100
+@@ -47,7 +47,7 @@ public:
+ 	//: Init
+ 	static void init()
+ 	{
+-		state=lua_open();
++		state=luaL_newstate();
+ 		tolua_clanbindings_open(state);
+ 		luaopen_base(state);
+ 		initialized=true;

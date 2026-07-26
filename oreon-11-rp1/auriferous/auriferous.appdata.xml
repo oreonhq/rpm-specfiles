@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>auriferous.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Auriferous</name>
+  <summary>Game inspired by the classic Loderunner</summary>
+  <description>
+    <p>
+      Auriferous is based on the game mechanics from the classic Loderunner,
+      as such it will feel immediatelt familiar to people who have played it.
+    </p>
+    <p>
+      The goal is to collect all the gold from the caves and then head for the
+      exit. This sounds simple, but try it. The challenge: Because some bad
+      blue Monks want prevent you from that, they bite of your head if the
+      catch you, good luck.
+    </p>
+    <p>
+      The further you get the harder the caves become, often they are like
+      mazes with dangers and traps, to pass them you need a lot of skill.
+    </p>
+  </description>
+  <url type="homepage">https://apps.fedoraproject.org/packages/auriferous/</url>
+  <screenshots>
+    <screenshot type="default">https://fedorapeople.org/~jwrdegoede/auriferous-screenshot.png</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

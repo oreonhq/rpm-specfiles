@@ -1,0 +1,120 @@
+diff -rU4 alexvsbus-2025.06.15.0--orig/Makefile alexvsbus-2025.06.15.0--patched/Makefile
+--- alexvsbus-2025.06.15.0--orig/Makefile	2025-06-15 22:50:22.000000000 +0200
++++ alexvsbus-2025.06.15.0--patched/Makefile	2025-06-16 11:32:07.719888584 +0200
+@@ -18,13 +18,10 @@
+ 
+ #Add game's source files
+ CFILES := $(wildcard src/*.c)
+ 
+-#Add raylib's source files (only the modules used by the game)
+-CFILES += $(addprefix raylib/,raudio.c rcore.c utils.c)
+-
+ #Common compiler flags
+-CFLAGS := -std=c99 -ffunction-sections -Wall -O1 -fPIC -fno-strict-aliasing
++CFLAGS += -std=c99 -ffunction-sections -Wall -fPIC -fno-strict-aliasing
+ 
+ #Add compiler flags required by raylib
+ CFLAGS += -DGRAPHICS_API_OPENGL_21 -D_GNU_SOURCE
+ 
+@@ -50,9 +47,9 @@
+ 	CLEAN_FILES := $(EXECNAME) $(RES)
+ 	CFLAGS += -Wl,-subsystem,windows -Wl,--no-insert-timestamp
+ else
+ 	EXECNAME := $(PROGNAME)
+-	LIBS := -lm -lpthread -ldl -lrt
++	LIBS := -lm -lpthread -ldl -lrt -lraylib
+ 	RES :=
+ 	WINDRES :=
+ 	EXEC_PREREQS := $(CFILES) $(HEADERS)
+ 	INSTALL_PREREQ := install_unix
+Only in alexvsbus-2025.06.15.0--patched: Makefile.orig
+diff -rU4 alexvsbus-2025.06.15.0--orig/src/audio.c alexvsbus-2025.06.15.0--patched/src/audio.c
+--- alexvsbus-2025.06.15.0--orig/src/audio.c	2025-06-15 22:50:22.000000000 +0200
++++ alexvsbus-2025.06.15.0--patched/src/audio.c	2025-06-16 11:41:03.034903260 +0200
+@@ -102,15 +102,15 @@
+ 	//Try to load the BGM track in OGG format
+ 	snprintf(path, ARRAY_LENGTH(path), "%s%s.ogg", config->assets_dir, data_bgm_files[id]);
+ 	bgm = LoadMusicStream(path);
+ 
+-	if (!IsMusicReady(bgm)) {
++	if (!IsMusicValid(bgm)) {
+ 		//Try to load the BGM track in XM format
+ 		snprintf(path, ARRAY_LENGTH(path), "%s%s.xm", config->assets_dir, data_bgm_files[id]);
+ 		bgm = LoadMusicStream(path);
+ 	}
+ 
+-	if (IsMusicReady(bgm)) {
++	if (IsMusicValid(bgm)) {
+ 		bgm_loaded = true;
+ 	}
+ 
+ 	if (bgm_loaded && audio_enabled && music_enabled) {
+@@ -121,9 +121,9 @@
+ void audio_stop_sfx(int id)
+ {
+ 	if (init_failed) return;
+ 
+-	if (IsSoundReady(sfx[id])) {
++	if (IsSoundValid(sfx[id])) {
+ 		StopSound(sfx[id]);
+ 	}
+ }
+ 
+@@ -133,9 +133,9 @@
+ 
+ 	if (init_failed) return;
+ 
+ 	for (i = 0; i < NUM_SFX; i++) {
+-		if (IsSoundReady(sfx[i])) {
++		if (IsSoundValid(sfx[i])) {
+ 			StopSound(sfx[i]);
+ 		}
+ 	}
+ }
+@@ -143,9 +143,9 @@
+ void audio_play_sfx(int id)
+ {
+ 	if (init_failed) return;
+ 
+-	if (audio_enabled && sfx_enabled && IsSoundReady(sfx[id])) {
++	if (audio_enabled && sfx_enabled && IsSoundValid(sfx[id])) {
+ 		audio_stop_sfx(id);
+ 		PlaySound(sfx[id]);
+ 	}
+ }
+@@ -198,9 +198,9 @@
+ 
+ 	unload_bgm();
+ 
+ 	for (i = 0; i < NUM_SFX; i++) {
+-		if (IsSoundReady(sfx[i])) {
++		if (IsSoundValid(sfx[i])) {
+ 			StopSound(sfx[i]);
+ 			UnloadSound(sfx[i]);
+ 		}
+ 	}
+diff -rU4 alexvsbus-2025.06.15.0--orig/src/renderer.c alexvsbus-2025.06.15.0--patched/src/renderer.c
+--- alexvsbus-2025.06.15.0--orig/src/renderer.c	2025-06-15 22:50:22.000000000 +0200
++++ alexvsbus-2025.06.15.0--patched/src/renderer.c	2025-06-16 11:44:10.212030732 +0200
+@@ -50,9 +50,9 @@
+ #define STBI_NO_SIMD
+ #endif
+ 
+ #define STB_IMAGE_IMPLEMENTATION
+-#include "external/stb_image.h"
++#include <stb/stb_image.h>
+ 
+ //------------------------------------------------------------------------------
+ 
+ //From menu.c
+@@ -119,9 +119,9 @@
+ 	config = cfg;
+ 	play_ctx = pctx;
+ 	menu_ctx = mctx;
+ 
+-	vscreen.id = rlLoadFramebuffer(width, height);
++	vscreen.id = rlLoadFramebuffer();
+ 	if (vscreen.id <= 0) {
+ 		return false;
+ 	}
+ 

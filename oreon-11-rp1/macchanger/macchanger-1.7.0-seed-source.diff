@@ -1,0 +1,20 @@
+Prefer /dev/urandom as seed source.  This reverts upstream commit:
+https://github.com/alobbs/macchanger/commit/99ea3798680459fe8f5259748f2b8f917f1c952e
+
+Related discussion:
+https://github.com/alobbs/macchanger/issues/5
+
+--- macchanger-1.7.0/src/main.c	2014-01-01 10:23:39.000000000 +0100
++++ rpm/BUILD/macchanger-1.6.0/src/main.c	2014-07-03 22:53:03.649214864 +0200
+@@ -94,9 +94,8 @@ random_seed (void)
+ 	struct timeval tv;
+ 	unsigned int   seed;
+ 
+-	if ((fd = open("/dev/hwrng", O_RDONLY)) >= 0 ||
+-	    (fd = open("/dev/random", O_RDONLY)) >= 0 ||
+-	    (fd = open("/dev/urandom", O_RDONLY)) >= 0)
++	if ((fd = open("/dev/urandom", O_RDONLY)) >= 0 ||
++	    (fd = open("/dev/random", O_RDONLY)) >= 0)
+ 	{
+ 		read (fd, &seed, sizeof(seed));
+ 		close (fd);

@@ -1,0 +1,49 @@
+From 4fa20f7db90705ef30705857d404756e6ae48ad0 Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Fri, 9 Jun 2023 14:40:34 -0400
+Subject: [PATCH] avoid risky c style string functions
+
+---
+ .../libdxfrw/src/intern/drw_textcodec.cpp     |   2 +-
+ libraries/libdxfrw/src/libdwgr.cpp            |   2 +-
+ libraries/libdxfrw/src/libdxfrw.cpp           |   2 +-
+
+diff --git a/libraries/libdxfrw/src/intern/drw_textcodec.cpp b/libraries/libdxfrw/src/intern/drw_textcodec.cpp
+index e83edca303..86e324521f 100644
+--- a/src/intern/drw_textcodec.cpp
++++ b/src/intern/drw_textcodec.cpp
+@@ -75,7 +75,7 @@ void DRW_TextCodec::setVersion(const std::string &v, bool dxfFormat){
+     version = DRW::UNKNOWNV;
+     for ( auto it = DRW::dwgVersionStrings.begin(); it != DRW::dwgVersionStrings.end(); ++it )
+     {
+-        if ( std::strcmp( v.c_str(), it->first ) == 0 ) {
++        if ( std::strncmp( v.c_str(), it->first, 32) == 0 ) {
+             version = it->second;
+             setVersion( it->second, dxfFormat);
+             break;
+diff --git a/libraries/libdxfrw/src/libdwgr.cpp b/libraries/libdxfrw/src/libdwgr.cpp
+index 26a3bc1534..0f74565f35 100644
+--- a/src/libdwgr.cpp
++++ b/src/libdwgr.cpp
+@@ -237,7 +237,7 @@ bool dwgR::openFile(std::ifstream *filestr){
+     version = DRW::UNKNOWNV;
+     for ( auto it = DRW::dwgVersionStrings.begin(); it != DRW::dwgVersionStrings.end(); ++it )
+     {
+-        if ( strcmp( line, it->first ) == 0 ) {
++        if ( strncmp( line, it->first, 32) == 0 ) {
+             version = it->second;
+             break;
+         }
+diff --git a/libraries/libdxfrw/src/libdxfrw.cpp b/libraries/libdxfrw/src/libdxfrw.cpp
+index 7c3c6cbbb8..8dba53f3b9 100644
+--- a/src/libdxfrw.cpp
++++ b/src/libdxfrw.cpp
+@@ -85,7 +85,7 @@ bool dxfRW::read(DRW_Interface *interface_, bool ext){
+     filestr.close();
+     iface = interface_;
+     DRW_DBG("dxfRW::read 2\n");
+-    if (strcmp(line, line2) == 0) {
++    if (strncmp(line, line2, 21) == 0) {
+         filestr.open (fileName.c_str(), std::ios_base::in | std::ios::binary);
+         binFile = true;
+         //skip sentinel

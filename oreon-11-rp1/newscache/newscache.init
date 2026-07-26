@@ -1,0 +1,85 @@
+#!/bin/bash
+#
+# chkconfig: - 95 05
+# description: NewsCache is a free cache server for USENET News.
+# processname: newscache
+# pidfile: /var/run/newscache.pid
+#
+### BEGIN INIT INFO
+# Provides: newscache
+# Required-Start: $local_fs $remote_fs $network $named
+# Required-Stop: $local_fs $remote_fs $network
+# Short-Description: start and stop NewsCache daemon
+# Description: NewsCache is a free cache server for USENET News.
+### END INIT INFO
+
+# Source function library.
+. /etc/init.d/functions
+
+# Get config.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ "${NETWORKING}" = "no" ] && exit 1
+
+[ -f /etc/newscache.conf ] || exit 6
+
+
+RETVAL=0
+
+start() {
+	echo -n "Starting NewsCache service: "
+        daemon newscache
+        RETVAL=$?
+        [ $RETVAL -eq 0 ] && touch /var/lock/subsys/newscache
+        echo
+}
+
+stop() {
+	echo -n "Stopping NewsCache service: "
+	killproc newscache
+	RETVAL=$?
+        rm -f /var/lock/subsys/newscache
+	echo
+}
+
+reload() {
+        echo -n "Reloading NewsCache service: "
+        killproc newscache -HUP
+        RETVAL=$?
+	echo
+}
+
+restart() {
+        stop
+        start                                                                   
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status newscache
+        RETVAL=$?
+	;;
+  reload|force-reload)
+	reload
+	;;
+  restart)
+	restart
+	;;
+  condrestart|try-restart)
+	[ -f /var/lock/subsys/newscache ] && restart
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|reload|restart|condrestart}"
+	exit 3
+	;;
+esac
+
+exit $RETVAL

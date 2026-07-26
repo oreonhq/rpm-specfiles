@@ -1,0 +1,40 @@
+From fb92acc136b746426e33ac3ff900762823b2b9f2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20Wojni=C5=82owicz?=
+ <lukasz.wojnilowicz@gmail.com>
+Date: Mon, 9 Dec 2024 17:24:49 +0100
+Subject: [PATCH 3/8] Remove jemallocator
+
+---
+ aw-server/Cargo.toml  | 2 --
+ aw-server/src/main.rs | 5 -----
+ 2 files changed, 7 deletions(-)
+
+diff --git a/aw-server/Cargo.toml b/aw-server/Cargo.toml
+index a12eded..e1320b9 100644
+--- a/aw-server/Cargo.toml
++++ b/aw-server/Cargo.toml
+@@ -38,5 +38,3 @@ aw-query = { path = "../aw-query" }
+ [target.'cfg(target_os="linux")'.dependencies]
+ sd-notify = "0.4.2"
+ 
+-[target.'cfg(all(target_os="linux", target_arch="x86"))'.dependencies]
+-jemallocator = "0.5.0"
+diff --git a/aw-server/src/main.rs b/aw-server/src/main.rs
+index 2cbf39e..b744a3e 100644
+--- a/aw-server/src/main.rs
++++ b/aw-server/src/main.rs
+@@ -11,11 +11,6 @@ use aw_server::*;
+ 
+ #[cfg(target_os = "linux")]
+ use sd_notify::NotifyState;
+-#[cfg(all(target_os = "linux", target_arch = "x86"))]
+-extern crate jemallocator;
+-#[cfg(all(target_os = "linux", target_arch = "x86"))]
+-#[global_allocator]
+-static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+ 
+ /// Rust server for ActivityWatch
+ #[derive(Parser)]
+-- 
+2.51.1
+

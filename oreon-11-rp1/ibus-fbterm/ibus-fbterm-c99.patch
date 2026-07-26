@@ -1,0 +1,39 @@
+fb_io_get_fd returns a value and needs to use g_return_val_if_fail
+
+Submitted upstream: <https://github.com/fujiwarat/ibus-fbterm/pull/2>
+
+diff --git a/backend/fbio.c b/backend/fbio.c
+index 803c3efa061c4f16..75f7d848279c5f5f 100644
+--- a/backend/fbio.c
++++ b/backend/fbio.c
+@@ -206,7 +206,7 @@ fb_io_new (void)
+ int
+ fb_io_get_fd (FbIo *io)
+ {
+-    g_return_if_fail (FB_IS_IO (io));
++    g_return_val_if_fail (FB_IS_IO (io), -1);
+     return io->priv->fd;
+ }
+ 
+diff --git a/backend/fbshellman.c b/backend/fbshellman.c
+index 4d8a147ff7d90a93..8e3333bd13d1b1d8 100644
+--- a/backend/fbshellman.c
++++ b/backend/fbshellman.c
+@@ -83,7 +83,7 @@ fb_shell_manager_get_index (FbShellManager *shell_manager,
+     FbShellManagerPrivate *priv;
+     int index, temp, i;
+ 
+-    g_return_if_fail (FB_IS_SHELL_MANAGER (shell_manager));
++    g_return_val_if_fail (FB_IS_SHELL_MANAGER (shell_manager), 0);
+ 
+ #define STEP() do { \
+     if (forward) temp++; \
+@@ -269,7 +269,7 @@ fb_shell_manager_child_process_exited (FbShellManager *shell_manager,
+ FbShell *
+ fb_shell_manager_active_shell (FbShellManager *shell_manager)
+ {
+-    g_return_if_fail (FB_IS_SHELL_MANAGER (shell_manager));
++    g_return_val_if_fail (FB_IS_SHELL_MANAGER (shell_manager), NULL);
+ 
+     return shell_manager->priv->active_shell;
+ }

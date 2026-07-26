@@ -1,0 +1,67 @@
+Some comparisons are always false
+
+As these comparisons are always false, the logic cannot be detecting
+anything that might have gone wrong.
+
+We mark this as always-false and leave the fix up to upstream.
+
+diff -ru cstream-3.1.1-orig/cstream.1 cstream-3.1.1/cstream.1
+--- cstream-3.1.1-orig/cstream.1	2006-08-10 00:57:40.000000000 +0200
++++ cstream-3.1.1/cstream.1	2016-05-16 21:19:19.709948854 +0200
+@@ -41,12 +41,16 @@
+ Set the block size used for read/write to
+ .Ar num .
+ The default is 8192 bytes.
++.br
++FIXME: The buffer size logic inside cstream is broken.
+ .It Fl B Ar num
+ Buffer input up to
+ .Ar num
+ bytes before writing. The default is the blocksize. It is an error to
+ set this to anything below the blocksize. Useful when writing tapes
+ and simlilar that prefer few large writes of many small.
++.br
++FIXME: The buffer size logic inside cstream is broken.
+ .It Fl c Ar num
+ Concurrent operation. Use a seperate process for outout. This is
+ especially useful in combination with the -B option.
+diff -ru cstream-3.1.1-orig/cstream.c cstream-3.1.1/cstream.c
+--- cstream-3.1.1-orig/cstream.c	2016-05-16 20:17:34.396198943 +0200
++++ cstream-3.1.1/cstream.c	2016-05-16 21:20:26.991583833 +0200
+@@ -35,6 +35,7 @@
+ #endif
+ 
+ #include <stdio.h>
++#include <stdbool.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <ctype.h>
+@@ -792,7 +793,7 @@
+   if (o->w == 0)
+     o->w = state->b;
+ 
+-  if (state->b < state->b) {
++  if (false /* state->b < state->b FIXME logic is broken */) {
+     fprintf(stderr, "-B must not be lower than -b or -n (%d/%d)\n"
+ 	    , state->b, state->b);
+     exit(1);
+@@ -1025,7 +1026,7 @@
+   print_kmg(" ", "%.2f", rate, "B/s", stderr);
+   if (o->l)
+       fprintf(stderr, " %g lines", (double)state->n_lines);
+-  if (curbytes != -1 && state->b != state->b)
++  if (curbytes != -1 && false /* state->b != state->b FIXME broken logic */)
+     fprintf(stderr, " %.1f %%buf", (double)curbytes / (double)state->b * 100.0);
+   fprintf(stderr, "\n");
+ 
+@@ -1634,8 +1635,8 @@
+ 	  "         3 = also seperate throughput for read and write "
+ 	  "(unimplemented)\n"
+ 	  "         3 = verbose stats on every read/write\n"
+-	  "-b <n> = blocksize [default: 8192]\n"
+-	  "-B <n> = buffer (at most) <n> bytes [default: one block]\n"
++	  "-b <n> = blocksize [default: 8192] (BROKEN!)\n"
++	  "-B <n> = buffer (at most) <n> bytes [default: one block] (BROKEN!)\n"
+ 	  "-c <n> = Concurrency, writing done by a seperate process\n"
+ 	  "         0 = no concurrency, one one process\n"
+ 	  "         1 = read side buffers\n"

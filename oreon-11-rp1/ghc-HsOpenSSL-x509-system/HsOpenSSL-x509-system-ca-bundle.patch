@@ -1,0 +1,11 @@
+--- HsOpenSSL-x509-system-0.1.0.4/OpenSSL/X509/SystemStore/Unix.hs~	2001-09-09 09:46:40.000000000 +0800
++++ HsOpenSSL-x509-system-0.1.0.4/OpenSSL/X509/SystemStore/Unix.hs	2025-07-30 19:37:16.557760887 +0800
+@@ -33,7 +33,7 @@
+ -- [2] https://bugzilla.redhat.com/show_bug.cgi?id=1053882
+ defaultSystemPaths :: [(Bool, FilePath)]
+ defaultSystemPaths =
+-    [ (False, "/etc/pki/tls/certs/ca-bundle.crt"      ) -- red hat, fedora, centos
++    [ (False, "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem") -- red hat, fedora, centos
+     , (True , "/etc/ssl/certs"                        ) -- other linux, netbsd
+     , (True , "/system/etc/security/cacerts"          ) -- android
+     , (False, "/etc/ssl/cert.pem"                     ) -- openbsd/freebsd

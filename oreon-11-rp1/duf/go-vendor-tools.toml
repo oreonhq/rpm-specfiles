@@ -1,0 +1,8 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "LICENSE"
+sha256sum = "81090e71a92a18ce7f95bd3433a9523c568329be4fd47d8f0b94d490ca628d86"
+expression = "MIT AND BSD-3-Clause"

@@ -1,0 +1,78 @@
+diff -rupN iaxclient-2.1beta3/simpleclient/stresstest/file.c iaxclient-2.1beta3-new/simpleclient/stresstest/file.c
+--- iaxclient-2.1beta3/simpleclient/stresstest/file.c	2008-04-07 18:05:27.000000000 +0200
++++ iaxclient-2.1beta3-new/simpleclient/stresstest/file.c	2024-01-30 08:30:07.301340562 +0100
+@@ -65,11 +65,12 @@ void append_node(struct ogg_stream *os,
+  *
+  * To whoever came up with this convoluted scheme: please consider a change of careers.
+  */
+-int read_theora_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data)
++int read_theora_cb(OGGZ *oggz, oggz_packet *ozp, long serialno, void *data)
+ {
+ 	struct op_node        *node;
+ 	struct theora_headers *th;
+ 	long                  timestamp = 0;
++	ogg_packet            *op = &(ozp->op);
+ 
+ 	//mylog("Got theora packet, serialno=%d, size=%d, packetno=%lld, granulepos=%lld\n",
+ 	//		serialno, op->bytes, op->packetno, op->granulepos);
+@@ -115,11 +116,12 @@ int read_theora_cb(OGGZ *oggz, ogg_packe
+ 	return 0;
+ }
+ 
+-int read_speex_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data)
++int read_speex_cb(OGGZ *oggz, oggz_packet *ozp, long serialno, void *data)
+ {
+ 	struct op_node *node;
+ 	long            timestamp;
+ 	static int      cnt = 0;
++	ogg_packet      *op = &(ozp->op);
+ 
+ 	timestamp = audio_stream->page_ts + audio_stream->page_count * SPEEX_FRAME_DURATION;
+ 	audio_stream->page_count++;
+@@ -138,12 +140,13 @@ int read_speex_cb(OGGZ *oggz, ogg_packet
+ 	return 0;
+ }
+ 
+-int read_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data)
++int read_cb(OGGZ *oggz, oggz_packet *ozp, long serialno, void *data)
+ {
+ 	struct theora_headers *th;
+ 
+ 	const char theoraId[] = "\x80theora";
+ 	const char speexId[] = "Speex   ";
++	ogg_packet            *op = &(ozp->op);
+ 
+ 	if ( memcmp(op->packet, theoraId, strlen(theoraId)) == 0 )
+ 	{
+@@ -157,13 +160,13 @@ int read_cb(OGGZ *oggz, ogg_packet *op,
+ 		theora_comment_init(&(th->tc));
+ 		video_stream->data = th;
+ 
+-		read_theora_cb(oggz, op, serialno, data);
++		read_theora_cb(oggz, ozp, serialno, data);
+ 	} else if ( memcmp(op->packet, speexId, strlen(speexId)) == 0 )
+ 	{
+ 		//mylog("Detected a Speex stream with serialno=%d\n", serialno);
+ 		oggz_set_read_callback(oggz, serialno, read_speex_cb, NULL);
+ 		audio_stream->serialno = serialno;
+-		read_speex_cb(oggz, op, serialno, data);
++		read_speex_cb(oggz, ozp, serialno, data);
+ 	} else
+ 	{
+ 		mylog("Got unknown ogg packet, serialno=%d, size=%d, packetno=%d, granulepos=%d\n",
+diff -rupN iaxclient-2.1beta3/simpleclient/stresstest/file.h iaxclient-2.1beta3-new/simpleclient/stresstest/file.h
+--- iaxclient-2.1beta3/simpleclient/stresstest/file.h	2008-04-07 18:05:27.000000000 +0200
++++ iaxclient-2.1beta3-new/simpleclient/stresstest/file.h	2024-01-30 08:26:43.708245923 +0100
+@@ -39,9 +39,9 @@ struct theora_headers
+ 	int            have_headers;
+ };
+ 
+-int read_theora_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data);
+-int read_speex_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data);
+-int read_cb(OGGZ *oggz, ogg_packet *op, long serialno, void *data);
++int read_theora_cb(OGGZ *oggz, oggz_packet *ozp, long serialno, void *data);
++int read_speex_cb(OGGZ *oggz, oggz_packet *ozp, long serialno, void *data);
++int read_cb(OGGZ *oggz, oggz_packet *ozp, long serialno, void *data);
+ int read_page_cb(OGGZ *oggz, const ogg_page *og, long serialno, void *data);
+ void load_ogg_file(const char *filename);
+ 

@@ -1,0 +1,19 @@
+From: Michael Buesch <m@bues.ch>
+Date: Wed, 13 Sep 2017 18:05:19 +0200
+Subject: [PATCH] fwcutter/make: Avoid _DEFAULT_SOURCE warning
+
+Signed-off-by: Michael Buesch <m@bues.ch>
+
+diff --git a/fwcutter/Makefile b/fwcutter/Makefile
+index 264b97d..5a5b8ec 100644
+--- a/fwcutter/Makefile
++++ b/fwcutter/Makefile
+@@ -17,7 +17,7 @@ endif
+ 
+ PREFIX ?= /usr/local
+ CFLAGS		?= -Os -fomit-frame-pointer
+-CFLAGS		+= -std=c99 -Wall -pedantic -D_BSD_SOURCE
++CFLAGS		+= -std=c99 -Wall -pedantic -D_BSD_SOURCE -D_DEFAULT_SOURCE
+ LDFLAGS		?=
+ 
+ SRCS = fwcutter.c md5.c

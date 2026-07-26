@@ -1,0 +1,60 @@
+diff -up Duel3_20060225_src/Source/main.cpp~ Duel3_20060225_src/Source/main.cpp
+--- Duel3_20060225_src/Source/main.cpp~	2008-12-03 16:58:58.000000000 +0100
++++ Duel3_20060225_src/Source/main.cpp	2008-12-03 16:56:14.000000000 +0100
+@@ -119,6 +119,7 @@ volatile int sec=0;
+ int iGraphicsLoops=0;
+ int iLogicLoops=0;
+ bool bQuitGame=false;
++bool bFullScreen=true;
+ #ifdef __unix__
+ int check_and_create_dir(const char* dir);
+ char *homedir;
+@@ -240,6 +241,13 @@ int cur_song_num=rand()%3;
+ 
+ int main(int argc, const char **argv) 
+ {    
++    if (argc == 2 && !strcmp(argv[1], "-w"))
++        bFullScreen = false;
++    else if (argc != 1) {
++        printf("Usage: duel3 [-w]\nPass -w to run in windowed mode\n");
++        return 1;
++    }
++
+ #ifdef __unix__
+     homedir = getenv("HOME");
+     homedir = homedir?homedir:(char *)".";
+@@ -796,6 +804,8 @@ void loadShipDefs(char *filename)
+ 
+ int initAllegroGL(void)
+ {
++    int res;
++
+     outtext(LOGFILE,"INIT ALLEGROGL\n");
+     allegro_init();
+ 	install_allegro_gl();
+@@ -806,7 +816,10 @@ int initAllegroGL(void)
+     allegro_gl_clear_settings();
+ 	allegro_gl_set (AGL_COLOR_DEPTH, 32);
+ 	allegro_gl_set (AGL_Z_DEPTH, 16);
+-	allegro_gl_set (AGL_FULLSCREEN, TRUE);
++	if (bFullScreen)
++	    allegro_gl_set (AGL_FULLSCREEN, TRUE);
++        else
++	    allegro_gl_set (AGL_FULLSCREEN, FALSE);
+ 	allegro_gl_set (AGL_DOUBLEBUFFER, 1);
+ 	allegro_gl_set (AGL_RENDERMETHOD, 1);
+ 	allegro_gl_set (AGL_SUGGEST, AGL_COLOR_DEPTH | AGL_Z_DEPTH | AGL_DOUBLEBUFFER
+@@ -815,7 +828,12 @@ int initAllegroGL(void)
+ 
+     outtext(LOGFILE,"Setting gfx mode\n");
+ 	set_color_depth (32);
+-	if (set_gfx_mode(GFX_OPENGL_FULLSCREEN/*WINDOWED*//*FULLSCREEN*/, 800, 600, 0, 0) < 0) {
++	if (bFullScreen)
++	    res = set_gfx_mode(GFX_OPENGL_FULLSCREEN, 800, 600, 0, 0);
++        else
++	    res = set_gfx_mode(GFX_OPENGL_WINDOWED, 800, 600, 0, 0);
++
++	if (res < 0) {
+         outtext(LOGFILE,"!!Error setting gfx mode!!\n");
+ 		allegro_message ("Error setting graphics mode:\n%s\n", allegro_error);
+ 		return -1;

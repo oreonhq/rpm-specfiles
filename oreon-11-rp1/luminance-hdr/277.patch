@@ -1,0 +1,48 @@
+From 2799ead27e10aaccc76b76318e9d6f200ddb3559 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 9 Nov 2023 14:56:51 -0500
+Subject: [PATCH 1/2] Fix deprecated top-level developer_name in AppData XML
+
+Use the name element in a developer block instead, as recommended by appstreamcli 1.0.0.
+---
+ net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml b/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml
+index 92efce1cc..f72ad7d2b 100644
+--- a/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml
++++ b/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml
+@@ -39,7 +39,9 @@
+     <binary>luminance-hdr-cli</binary>
+   </provides>
+ 
+-  <developer_name>Luminance HDR Development Team</developer_name>
++  <developer>
++    <name>Luminance HDR Development Team</name>
++  </developer>
+   <update_contact>fcomida_AT_users.sourceforge.net</update_contact>
+   <url type="homepage">http://qtpfsgui.sourceforge.net/</url>
+   <url type="help">https://luminancehdr.readthedocs.io/en/latest/</url>
+
+From 7b61d2f2e9b1bccb5efdafe7395f8d3e5c5b6f6a Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 21 Mar 2024 19:21:52 -0400
+Subject: [PATCH 2/2] Add developer ID net.sourceforge.qtpfsgui in AppData
+
+---
+ net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml b/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml
+index f72ad7d2b..b126e411d 100644
+--- a/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml
++++ b/net.sourceforge.qtpfsgui.LuminanceHDR.appdata.xml
+@@ -39,7 +39,7 @@
+     <binary>luminance-hdr-cli</binary>
+   </provides>
+ 
+-  <developer>
++  <developer id="net.sourceforge.qtpfsgui">
+     <name>Luminance HDR Development Team</name>
+   </developer>
+   <update_contact>fcomida_AT_users.sourceforge.net</update_contact>

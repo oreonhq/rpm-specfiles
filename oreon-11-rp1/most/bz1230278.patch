@@ -1,0 +1,10 @@
+--- src/keyparse.c.ORIG	2007-06-22 09:37:59.000000000 +0400
++++ src/keyparse.c	2015-06-10 16:24:21.021949400 +0300
+@@ -212,6 +212,7 @@
+ 	if (!strcmp (ct->name, name))
+ 	  {
+ 	     SLtt_set_color (ct->value, name, fg, bg);
++	     SLtt_set_color (ct->value+MOST_EMBEDDED_COLOR_OFFSET, name, fg, bg);
+ 	     return 0;
+ 	  }
+ 	ct++;

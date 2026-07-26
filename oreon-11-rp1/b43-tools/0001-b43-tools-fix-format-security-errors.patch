@@ -1,0 +1,21 @@
+From: Troy Dawson <tdawson@redhat.com>
+Date: Fri, 6 Oct 2017 10:48:50 -0500
+Subject: [PATCH] b43-tools fix format security errors
+
+
+diff --git a/ssb_sprom/ssb_sprom.c b/ssb_sprom/ssb_sprom.c
+index 67aa45f..cb14703 100644
+--- a/ssb_sprom/ssb_sprom.c
++++ b/ssb_sprom/ssb_sprom.c
+@@ -678,9 +678,9 @@ static void print_banner(int forceprint)
+ 			  "Be exceedingly careful with this tool. Improper"
+ 			  " usage WILL BRICK YOUR DEVICE.\n";
+ 	if (forceprint)
+-		prdata(str);
++		prdata("%s", str);
+ 	else
+-		prinfo(str);
++		prinfo("%s", str);
+ }
+ 
+ static void print_usage(int argc, char *argv[])

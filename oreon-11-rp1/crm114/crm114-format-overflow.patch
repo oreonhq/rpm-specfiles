@@ -1,0 +1,12 @@
+diff -up crm114-20100106-BlameMichelson.src/crm_expr_syscall.c.fmt-ovfl crm114-20100106-BlameMichelson.src/crm_expr_syscall.c
+--- crm114-20100106-BlameMichelson.src/crm_expr_syscall.c.fmt-ovfl	2010-01-06 19:38:46.000000000 +0100
++++ crm114-20100106-BlameMichelson.src/crm_expr_syscall.c	2018-07-21 11:14:33.962622402 +0200
+@@ -375,7 +375,7 @@ int crm_expr_syscall ( CSL_CELL *csl, AR
+ 	      //
+ 	      if (retcode == -1 )
+ 		{
+-		  char errstr [4096];
++		  char errstr [MAX_PATTERN+47];
+ 		  sprintf (errstr,
+ 			   "The command was >%s< and returned exit code %d .",
+ 			   sys_cmd, WEXITSTATUS (retcode));

@@ -1,0 +1,12 @@
+diff --git a/src/xconnection.cpp b/src/xconnection.cpp
+index e2129db..22ef7e9 100644
+--- a/src/xconnection.cpp
++++ b/src/xconnection.cpp
+@@ -8,6 +8,7 @@
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <climits>
++#include <cstdint>
+ #include <cstring>
+ #include <iostream>
+ 

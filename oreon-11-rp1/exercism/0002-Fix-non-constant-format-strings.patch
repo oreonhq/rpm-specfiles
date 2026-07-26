@@ -1,0 +1,42 @@
+From 691a552627fe99f9b71e0872c992e0f69433a595 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 19 Jan 2025 04:38:27 -0500
+Subject: [PATCH 2/2] Fix non-constant format strings
+
+Go 1.24 now has a vet check about this that causes go test to fail: golang/go#60529
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ cli/cli.go    | 2 +-
+ cmd/submit.go | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cli/cli.go b/cli/cli.go
+index 0f82811..c93d358 100644
+--- a/cli/cli.go
++++ b/cli/cli.go
+@@ -149,7 +149,7 @@ func (c *CLI) fetchLatestRelease() error {
+ 		for k, v := range resp.Header {
+ 			msg += fmt.Sprintf("\n  %s:\n    %s", k, v)
+ 		}
+-		return fmt.Errorf(msg)
++		return fmt.Errorf("%s", msg)
+ 	}
+ 
+ 	var rel Release
+diff --git a/cmd/submit.go b/cmd/submit.go
+index eb00aa1..f2dab19 100644
+--- a/cmd/submit.go
++++ b/cmd/submit.go
+@@ -208,7 +208,7 @@ func (s *submitCmdContext) migrateLegacyMetadata(exercise workspace.Exercise) er
+ 		return err
+ 	}
+ 	if verbose, _ := s.flags.GetBool("verbose"); verbose {
+-		fmt.Fprintf(Err, migrationStatus.String())
++		fmt.Fprintf(Err, "%s", migrationStatus.String())
+ 	}
+ 	return nil
+ }
+-- 
+2.50.0
+

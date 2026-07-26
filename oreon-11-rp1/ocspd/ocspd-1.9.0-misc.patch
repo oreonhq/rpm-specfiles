@@ -1,0 +1,1009 @@
+diff -Naurp openca-ocspd-1.9.0.orig/configure.in openca-ocspd-1.9.0.new/configure.in
+--- openca-ocspd-1.9.0.orig/configure.in	2009-04-24 21:55:42.000000000 +0200
++++ openca-ocspd-1.9.0.new/configure.in	2013-11-05 13:44:49.150167062 +0100
+@@ -3,7 +3,7 @@ dnl Process this file with autoconf to p
+ 
+ dnl Autoconf boilerplate/
+ AC_INIT(src/ocspd.c)
+-AC_PREREQ( 2.50)
++AC_PREREQ(2.50)
+ AC_CONFIG_AUX_DIR(build)
+ VERSION=`cat VERSION`
+ 
+@@ -21,12 +21,12 @@ dnl         AC_PROG_LIBTOOL
+ dnl fi
+ 
+ dnl AC_CANONICAL_SYSTEM
+-AM_INIT_AUTOMAKE( $PACKAGE_NAME, $PACKAGE_MAJOR )
++AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_MAJOR)
+ 
+ dnl Options.
+-#AC_DISABLE_FAST_INSTALL
+-#AC_DISABLE_SHARED
+-#AM_MAINTAINER_MODE
++dnl AC_DISABLE_FAST_INSTALL
++dnl AC_DISABLE_SHARED
++dnl AM_MAINTAINER_MODE
+ 
+ dnl Select OS specific versions of source files.
+ case "${build_os}" in
+@@ -45,9 +45,9 @@ AM_CONDITIONAL(OCSPD_ARCH_OSX, test x$ar
+ AM_CONDITIONAL(OCSPD_ARCH_SOLARIS, test x$arch = xsolaris)
+ AM_CONDITIONAL(OCSPD_ARCH_HPUX, test x$arch = xhpux)
+ 
+-AC_CHECK_LIB(pthread, pthread_create, 
+-	[ AC_DEFINE(HAVE_LIBPTHREAD, 1, [PTHREAD Library])],
+-	[ AC_MSG_ERROR([pthread library is needed!]) ]
++AC_CHECK_LIB(pthread, pthread_create,
++	[AC_DEFINE(HAVE_LIBPTHREAD, 1, [PTHREAD Library])],
++	[AC_MSG_ERROR([pthread library is needed!])]
+ )
+ 
+ if test x$arch = xlinux ; then
+@@ -106,13 +106,6 @@ fi
+ 
+ AC_SUBST(DIST_NAME)
+ 
+-dnl Add libtool support.
+-AM_PROG_LIBTOOL
+-# AC_PROG_LIBTOOL
+-
+-dnl Automatically update the libtool script if it becomes out-of-date.
+-AC_SUBST(LIBTOOL_DEPS)
+-
+ dnl Setup dist stuff
+ AC_SUBST(ac_aux_dir)
+ 
+@@ -208,7 +201,7 @@ else
+ 	AC_MSG_RESULT([openssl lib dir         : $openssl_path (default)])
+ fi
+ 
+-AM_CONDITIONAL(OPENSSL_PREFIX, test x$openssl_prefix != x )
++AM_CONDITIONAL(OPENSSL_PREFIX, test x$openssl_prefix != x)
+ 
+ 	### Setup for OpenSSL build flags ###
+ 	dnl Now we like the version of openssl.  Let's construct
+@@ -226,7 +219,7 @@ AM_CONDITIONAL(OPENSSL_PREFIX, test x$op
+ 	   openssl_cflags=[-I${openssl_prefix}/include]
+ 	   openssl_libs=["-L${openssl_prefix}/lib -L${openssl_prefix} -lssl -lcrypto "]
+ 	   openssl_setup=yes
+-	  dnl AC_MSG_RESULT( [User specified --with-openssl-prefix])
++	  dnl AC_MSG_RESULT([User specified --with-openssl-prefix])
+ 	  dnl Check if the developer has the pkg-config macros
+ 	  dnl for the autotools on their system
+ 	  ifdef([PKG_CHECK_MODULES],
+@@ -235,22 +228,20 @@ AM_CONDITIONAL(OPENSSL_PREFIX, test x$op
+             dnl If so, we can check if the target system has
+ 	    dnl (1) pkg-config support installed as well, and
+ 	    dnl (2) has openssl 0.9.7 or greater installed
+-	    AC_CHECK_PROG( HAS_PKGCONF, pkg-config, yes, [] , $PATH)
+-	    if [[ x${HAS_PKGCONF} != x  ]]; then
+-	   	PKG_CHECK_MODULES( OPENSSL,openssl >= 0.9.7, [
+-		   AC_MSG_RESULT( 
+-		     [openssl 0.9.7 or greater found via pkgconfig]
+-		   )
++	    AC_CHECK_PROG(HAS_PKGCONF, pkg-config, yes, [] , $PATH)
++	    if [[ x${HAS_PKGCONF} != x ]]; then
++	   	PKG_CHECK_MODULES(OPENSSL,openssl >= 0.9.7, [
++		   AC_MSG_RESULT([openssl 0.9.7 or greater found via pkgconfig])
+ 		   openssl_cflags=$OPENSSL_CFLAGS
+ 		   openssl_libs=$OPENSSL_LIBS
+ 		   openssl_setup=yes
+-            fi 
++            fi
+ 		],
+-		[	
+-		AC_MSG_RESULT( [good openssl not found via pkgconfig])
++		[
++		AC_MSG_RESULT([good openssl not found via pkgconfig])
+ 		]
+ 	        ) dnl End of PKG_CHECK macro
+-	    
++
+ 	  ],
+ 	  [
+ 	    ## Skipping pkg-config macros...
+@@ -258,14 +249,14 @@ AM_CONDITIONAL(OPENSSL_PREFIX, test x$op
+ 	)dnl  End of check using pkg-config...
+ 
+ 	fi    dnl End of prefix block
+-	
++
+ 
+ 	if [[ x${openssl_setup} != xyes ]]; then
+-	   AC_MSG_RESULT( [Assuming reasonable defaults for openssl...])
++	   AC_MSG_RESULT([Assuming reasonable defaults for openssl...])
+ 	   openssl_setup=yes
+ 	fi
+-	
+-	dnl Export our openssl build settings 
++
++	dnl Export our openssl build settings
+ 	AC_SUBST(openssl_cflags)
+ 	AC_SUBST(openssl_libs)
+ 
+@@ -275,28 +266,28 @@ dnl Let's check the presence of OCSP ext
+ dnl AC_OPENSSL_OCSP
+ 
+ dnl Let's check the openssl version
+-dnl AC_EGREP_HEADER( [m/OPENSSL/gm],
++dnl AC_EGREP_HEADER([m/OPENSSL/gm],
+ dnl 	[${openssl_prefix}/include/openssl/opensslv.h],
+-dnl 	[openssl_ver="0.9.8+"], 
++dnl 	[openssl_ver="0.9.8+"],
+ dnl  	[openssl_ver="0.9.7"])
+-dnl 
++dnl
+ dnl 	if [[ openssl_ver = "0.9.8+" ]] ; then
+ dnl 		AC_DEFINE(OPENSSL_VER_00908000)
+ dnl 	else
+ dnl 		AC_DEFINE(OPENSSL_VER_00907000)
+ dnl 	fi
+-dnl 
++dnl
+    dnl      AC_MSG_RESULT([OpenSSL Detected Version: $openssl_ver]);
+-dnl 
++dnl
+ dnl 	CFLAGS=${openssl_flags}
+ 
+ dnl AC_OPENSSL_VERSION
+ 
+-dnl AM_CONDITIONAL(OPENSSL_VER_00908000, if test "x$openssl_ver" = "x0.9.8+" )
++dnl AM_CONDITIONAL(OPENSSL_VER_00908000, if test "x$openssl_ver" = "x0.9.8+")
+ dnl AC_MSG_RESULT([OpenSSL Detected Version: $openssl_ver]);
+ 
+ dnl Enable OPENLDAP Support
+-AC_ARG_ENABLE( openldap,
++AC_ARG_ENABLE(openldap,
+ [  --enable-openldap             enable openldap support (yes)],
+ [case "${enableval}" in
+   yes)	openldap=true ;;
+@@ -310,16 +301,16 @@ AM_CONDITIONAL(HAVE_OPENLDAP, test x$ope
+ 
+ if [[ x$openldap = xtrue ]]; then
+ 
+-   AC_DEFINE(HAVE_OPENLDAP, [1], [OpenLDAP] )
++   AC_DEFINE(HAVE_OPENLDAP, [1], [OpenLDAP])
+ 
+    dnl OpenLDAP prefix
+-   AC_ARG_WITH( openldap-prefix,
++   AC_ARG_WITH(openldap-prefix,
+    [  --with-openldap-prefix=DIR         openldap prefix directory],
+-   [ openldap_prefix=$withval ] , [ openldap_prefix= ] )
++   [openldap_prefix=$withval], [openldap_prefix=])
+ 
+    AC_SUBST(openldap_prefix)
+ 
+-   AC_MSG_RESULT([with openldap-prefix    : $openldap_prefix ])
++   AC_MSG_RESULT([with openldap-prefix    : $openldap_prefix])
+    if [[ x$openldap_prefix != x ]]; then
+ 	openldap_path=$openldap_prefix/lib
+ 	AC_MSG_RESULT([openldap lib dir        : $openldap_path])
+@@ -352,31 +343,31 @@ if [[ x$openldap = xtrue ]]; then
+    fi
+ fi
+ 
+-AM_CONDITIONAL(OPENLDAP_PREFIX, test x$openldap_prefix != x )
++AM_CONDITIONAL(OPENLDAP_PREFIX, test x$openldap_prefix != x)
+ 
+-dnl Export our OpenLDAP build settings 
++dnl Export our OpenLDAP build settings
+ AC_SUBST(LDAP_LIBS)
+ AC_SUBST(openldap_cflags)
+ AC_SUBST(openldap_libs)
+ 
+ dnl OCSP daemon default user
+-AC_ARG_WITH( ocspd-user,  
++AC_ARG_WITH(ocspd-user,
+ [  --with-ocspd-user=ARG              user to run processes as [ocspd]],
+-[  user=$withval  ] , [  user=ocspd ] )
++[user=$withval], [user=ocspd])
+ 
+-AC_MSG_RESULT([default ocspd user      : $user ])
++AC_MSG_RESULT([default ocspd user      : $user])
+ AC_SUBST(user)
+ 
+ dnl OCSP daemon default group
+-AC_ARG_WITH( ocspd-group,  
++AC_ARG_WITH(ocspd-group,
+ [  --with-ocspd-group=ARG             group to run processes as [daemon]],
+-[  group=$withval  ] , [  group=daemon  ] )
++[group=$withval], [group=daemon])
+ 
+-AC_MSG_RESULT([default ocspd group     : $group ])
++AC_MSG_RESULT([default ocspd group     : $group])
+ AC_SUBST(group)
+ 
+ dnl OpenSSL Engine Support
+-AC_ARG_ENABLE( openssl-engine,
++AC_ARG_ENABLE(openssl-engine,
+ [  --enable-openssl-engine      enable openssl engine support (no)],
+ [case "${enableval}" in
+   yes)	engine=true ;;
+@@ -392,10 +383,10 @@ if [[ x$engine = xtrue ]] ; then
+ 	AC_DEFINE(HAVE_ENGINE, [1], [ENGINE support for OpenSSL])
+ fi
+ 
+-dnl AC_MSG_RESULT([enable engine support    : $engine ])
++dnl AC_MSG_RESULT([enable engine support    : $engine])
+ 
+ dnl Semaphores vs Flock Support
+-AC_ARG_ENABLE( semaphores,
++AC_ARG_ENABLE(semaphores,
+ [  --enable-semaphores          use semaphores locking method (yes)],
+ [case "${enableval}" in
+   yes)	sem=true ;;
+@@ -404,7 +395,7 @@ AC_ARG_ENABLE( semaphores,
+  esac], [sem=true])
+ 
+ 
+-AC_ARG_ENABLE( flock,
++AC_ARG_ENABLE(flock,
+ [  --enable-flock               use semaphores locking method (no)],
+ [case "${enableval}" in
+   yes)	flock=true && sem=false ;;
+@@ -427,10 +418,10 @@ AM_CONDITIONAL(HAVE_FLOCK, test x$flock
+ dnl Debug option
+ AC_ARG_ENABLE(debug,
+ [  --enable-debug          enable debug messages.],
+-[ case "${enableval}" in
+-  yes)	
++[case "${enableval}" in
++  yes)
+     debug=true ;;
+-  no)	
++  no)
+     debug=false ;;
+   *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
+  esac], [debug=false])
+@@ -445,16 +436,26 @@ if [[ x${prefix} = xNONE ]]; then
+ 	prefix="/usr/local";
+ fi
+ 
++dnl Be sure we know the effective directory pathes.
++sysconfdirvalue="`eval echo ${sysconfdir}`"
++AC_SUBST(sysconfdirvalue)
++sbindirvalue="`eval echo ${sbindir}`"
++AC_SUBST(sbindirvalue)
++localstatedirvalue="`eval echo ${localstatedir}`"
++AC_SUBST(localstatedirvalue)
++piddir="${piddir-${localstatedirvalue}/run}"
++AC_SUBST(piddir)
++
+ dnl OpenCA prefix
+-AC_ARG_WITH( openca-prefix,
++AC_ARG_WITH(openca-prefix,
+ [  --with-openca-prefix=ARG    OpenCA install prefix (PREFIX/OpenCA)],
+-[ openca_prefix=$withval], [openca_prefix=${prefix}/OpenCA] )
++[openca_prefix=$withval], [openca_prefix=${prefix}/OpenCA])
+ 
+ if [[ x${openca_prefix} = x ]] ; then
+   AC_MSG_ERROR([bad value ${openca_prefix} for --with-openca-prefix])
+ fi
+ 
+-AC_MSG_RESULT([with openca-prefix      : $openca_prefix ])
++AC_MSG_RESULT([with openca-prefix      : $openca_prefix])
+ AC_SUBST(openca_prefix)
+ 
+ AC_MSG_RESULT([install prefix          : $prefix])
+@@ -467,7 +468,7 @@ AC_OUTPUT(
+ 	etc/Makefile
+ 	etc/ocspd
+ 	etc/ocspd.conf
++	etc/ocspd.sysconfig
+ 	contrib/openca-ocspd.xml
+ 	contrib/openca-ocspd-common.xml
+ )
+-
+diff -Naurp openca-ocspd-1.9.0.orig/docs/ocspd.conf.3.pod openca-ocspd-1.9.0.new/docs/ocspd.conf.3.pod
+--- openca-ocspd-1.9.0.orig/docs/ocspd.conf.3.pod	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.9.0.new/docs/ocspd.conf.3.pod	2013-11-05 13:39:12.715332386 +0100
+@@ -68,11 +68,9 @@ Following is a sample configuration file
+  
+  [ OCSPD_default ]
+ 
+- dir              = /usr/local/etc/ocspd
+- db               = $dir/index.txt
++ dir              = /etc/ocspd
+  md               = sha1
+  
+- ca_certificate    = $dir/certs/cacert.pem
+  ocspd_certificate = $dir/certs/ocspd_cert.pem
+  ocspd_key         = $dir/private/ocspd_key.pem
+  pidfile           = $dir/ocspd.pid
+@@ -100,7 +98,7 @@ Following is a sample configuration file
+  
+  ####################################################################
+  [ ocsp_response ]
+- dir                     = /usr/local/etc/ocspd
++ dir                     = /etc/ocspd
+  ocsp_add_response_certs = $dir/certs/chain_certs.pem
+  ocsp_add_response_keyid = yes
+  next_update_days        = 0
+@@ -127,7 +125,7 @@ Following is a sample configuration file
+  #              http is used)
+  #
+  # You can have the CRLs/CA certificates on a simple file
+- #    crl_url = file:///usr/local/etc/ocspd/crl.pem
++ #    crl_url = file:///etc/ocspd/crl.pem
+  #
+  # You can retrieve the CRLs/CA certificates from a web server
+  #    crl_urt = http://server/ca/cacert.der
+@@ -151,7 +149,7 @@ Following is a sample configuration file
+  [ dbms_file ]
+ 
+  # You can have the CRL on a simple file in PEM format
+- crl_url = file:///usr/local/etc/ocspd/crl.pem
++ crl_url = file:///etc/ocspd/crl.pem
+ 
+  [ HSM ]
+  # Hardware accelerators support via the ENGINE interface
+@@ -173,21 +171,10 @@ line options too ( see L<ocspd(3)>).
+ 
+ specifies the directory where everything is kept.
+ 
+-=item B<db>
+-
+-specifies the db where info about issued certificates are kept. Right
+-now the only supported file format is the one from B<L<openssl(1)>>.
+-To reload the certificate's db simply send a SIGHUP to the main process
+-( kill -s SIGHUP pid ).
+-
+ =item B<md>
+ 
+ specifies the digest to be used. Default is sha1.
+ 
+-=item B<ca_certificate>
+-
+-path to the CA's certificate.
+-
+ =item B<ocspd_certificate>
+ 
+ path to the certificate to be used by the responder.
+@@ -234,6 +221,13 @@ From version 1.5+ the server is not pre-
+ a pre-threaded one. In order to run the server needs support
+ for POSIX1.c as found in most modern UNiX systems.
+ 
++=item B<max_client_num>
++
++Size of the system socket queue: when all service threads are busy,
++up to this number of unserved requests are accepted in queue and
++will be processed as soon as a thread becomes available; additional
++connection requests will be denied. Default: 30.
++
+ =item B<chroot_dir>
+ 
+ Chroot the application into the specified directory, watch
+@@ -296,7 +290,7 @@ the days+mins.
+ specifies the URI where the CA certificate (which identifies the
+ single CA) is located. Three different protocols are implemented
+ ( file:// http:// or ldap:// ). If file is chosen, then the parameter
+-should carry the path to the CA file (i.e. file:///usr/local/etc/ca.pem).
++should carry the path to the CA file (i.e. file:///etc/ocspd/certs/ca.pem).
+ If ldap or http is chosen, you can specify the address, and the port
+ of the server where to connect to (i.e. ldap://server.addr:port).
+ 
+@@ -306,7 +300,7 @@ specifies the URI where the CRL (list of
+ actually used for building responses) is located. Three different
+ protocols are actually implemented ( file:// http:// or ldap:// ).
+ If file is chosen, then the parameter should have the path to the
+-crl file (i.e. file:///usr/local/etc/cacrl.pem). If ldap or http
++crl file (i.e. file:///etc/ocspd/crls/cacrl.pem). If ldap or http
+ is chosen, you can specify the address, and the port of the
+ server where to connect to (i.e. ldap://server.addr:port).
+ 
+diff -Naurp openca-ocspd-1.9.0.orig/etc/Makefile.am openca-ocspd-1.9.0.new/etc/Makefile.am
+--- openca-ocspd-1.9.0.orig/etc/Makefile.am	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.9.0.new/etc/Makefile.am	2013-11-05 13:39:12.715332386 +0100
+@@ -2,20 +2,23 @@
+ 
+ CHMOD = @CHMOD@
+ 
+-EXTRA_DIST = ocspd.conf.in ocspd.in
++EXTRA_DIST = ocspd.conf.in ocspd.in ocspd.sysconfig.in
+ 
+ install-data-local:
+ 	@$(NORMAL_INSTALL)
+-	$(mkinstalldirs) $(sysconfdir); \
+-	$(mkinstalldirs) $(sysconfdir)/init.d; \
+-	$(mkinstalldirs) $(sysconfdir)/ocspd; \
+-	$(mkinstalldirs) $(sysconfdir)/ocspd/certs; \
+-	$(mkinstalldirs) $(sysconfdir)/ocspd/private; \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir); \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/rc.d; \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/rc.d/init.d; \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/sysconfig; \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/ocspd; \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/ocspd/certs; \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/ocspd/crls; \
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)/ocspd/private; \
+ 	for file in *.conf ; do \
+ 	    if test -f $$file; then \
+-	      $(INSTALL_DATA) $$file $(sysconfdir)/ocspd; \
++	      $(INSTALL_DATA) $$file $(DESTDIR)$(sysconfdir)/ocspd; \
+ 	    fi \
+ 	  done ; \
+-	$(INSTALL_DATA) ocspd $(sysconfdir)/init.d ; \
+-	$(CHMOD) +x $(sysconfdir)/init.d/ocspd
+-
++	$(INSTALL_DATA) ocspd $(DESTDIR)$(sysconfdir)/rc.d/init.d ; \
++	$(CHMOD) +x $(DESTDIR)$(sysconfdir)/rc.d/init.d/ocspd; \
++	$(INSTALL_DATA) ocspd.sysconfig $(DESTDIR)$(sysconfdir)/sysconfig/ocspd
+diff -Naurp openca-ocspd-1.9.0.orig/etc/ocspd.conf.in openca-ocspd-1.9.0.new/etc/ocspd.conf.in
+--- openca-ocspd-1.9.0.orig/etc/ocspd.conf.in	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.9.0.new/etc/ocspd.conf.in	2013-11-05 13:39:12.715332386 +0100
+@@ -8,14 +8,12 @@ default_ocspd	= OCSPD_default		# The def
+ ####################################################################
+ [ OCSPD_default ]
+ 
+-dir		 = @prefix@/etc/ocspd		# Where everything is kept
+-db		 = $dir/index.txt		# database index file.
++dir		 = @sysconfdirvalue@/ocspd	# Where everything is kept
+ md	 	 = sha1
+ 
+-ca_certificate	  = $dir/certs/cacert.pem 	# The CA certificate
+ ocspd_certificate = $dir/certs/ocspd_cert.pem	# The OCSP server cert
+ ocspd_key	  = $dir/private/ocspd_key.pem	# The OCSP server key
+-pidfile		  = $dir/ocspd.pid		# Main process pid
++pidfile		  = @piddir@/ocspd.pid		# Main process pid
+ 
+ # User and Group the server will run as. It is a good idea
+ # not having servers running as root: in case of errors in
+@@ -41,6 +39,10 @@ max_req_size	 	= 8192
+ # and processors.
+ threads_num		= 150
+ 
++# Size of the system listen() queue. This allows buffering connection
++# requests for later processing when all threads are already busy.
++#max_client_num		= 30
++
+ # Max timeout for request receiving. If a request is not received
+ # within the specified number of seconds then the socket is closed
+ # in order to free unused threads. If not set, the default value
+@@ -61,7 +63,7 @@ http_proto		= 1.1
+ # error will be written in the logfile, but the server will
+ # continue to run assuming the chroot() is sufficiently isolated
+ # to prevent abuse of the machine.
+-# chdir			= @prefix@
++#chroot_dir		= @prefix@
+ 
+ # Auto Reload interval of CRL (if set to 0 or not present, to
+ # reload the CRL you'll need to send a SIGHUP (kill -1 <pid>)
+@@ -80,7 +82,7 @@ crl_check_validity = 600
+ # Reload CRL if the one loaded is expired. Set this parameter
+ # only if you are sure that the new CRL will be issued and put
+ # in the crl_url.
+-crl_reload_expired = yes
++#crl_reload_expired = yes
+ 
+ # Specifies the response section to load the server options
+ # from
+@@ -89,10 +91,10 @@ response	= ocsp_response
+ # It specifies the section to be used where options about where
+ # CRL and certificates are kept.
+ #
+-# Example section using LDAP for data retrival
++# Example section using LDAP for data retrieval
+ # dbms		= dbms_ldap
+ #
+-# Example section using FILES for data retrival
++# Example section using FILES for data retrieval
+ dbms		= dbms_file
+ 
+ # Enables the ENGINE interface for the server. If set to off then
+@@ -108,7 +110,7 @@ dbms		= dbms_file
+ 
+ ####################################################################
+ [ ocsp_response ]
+-dir		 	= @prefix@/etc/ocspd
++dir		 	= @sysconfdirvalue@/ocspd
+ 
+ # It is possible to include additional certificates in given
+ # responses. Put all the certificates you want to include in
+@@ -145,7 +147,7 @@ next_update_mins	= 5
+ 
+ [ ldap_ca_1 ]
+ # You can have the CRL on a simple file
+-# crl_url = file:///usr/local/etc/ocspd/crl.pem
++# crl_url = file://@sysconfdirvalue@/ocspd/crls/crl.pem
+ 
+ # You can have the CRL retrieved from an HTTP server
+ # crl_url = http://[user[:pwd]@]server[:port]/path_to_crl
+@@ -189,7 +191,7 @@ crl_entry_attribute = "certificateRevoca
+ ca_entry_dn = "o=Organisation, c=IT"
+ 
+ # Server Certificate to attach to the response
+-server_cert = file:///@prefix@/etc/ocspd/certs/ocspd_cert.pem
++server_cert = file://@sysconfdirvalue@/ocspd/certs/ocspd_cert.pem
+ 
+ ####################################################################
+ [ dbms_file ]
+@@ -203,25 +205,25 @@ server_cert = file:///@prefix@/etc/ocspd
+ [ first_ca ]
+ 
+ # You can have the CRL on a simple file in PEM format
+-crl_url = file:///@prefix@/etc/ocspd/crls/crl_01.pem
++crl_url = file://@sysconfdirvalue@/ocspd/crls/crl_01.pem
+ 
+ # We need the CA certificate for every supported CRL
+-ca_url  = file:///@prefix@/etc/ocspd/certs/1st_cacert.pem
++ca_url  = file://@sysconfdirvalue@/ocspd/certs/1st_cacert.pem
+ 
+ # Server Certificate to attach to the response
+-server_cert = file:///@prefix@/etc/ocspd/certs/ocspd_cert.pem
++server_cert = file://@sysconfdirvalue@/ocspd/certs/ocspd_cert.pem
+ 
+ ####################################################################
+ [ second_ca ]
+ 
+ # You can have the CRL on a simple file in PEM format
+-crl_url = file:///@prefix@/etc/ocspd/crls/crl_02.pem
++crl_url = file://@sysconfdirvalue@/ocspd/crls/crl_02.pem
+ 
+ # We need the CA certificate for every supported CRL
+-ca_url  = file:///@prefix@/etc/ocspd/certs/2nd_cacert.pem
++ca_url  = file://@sysconfdirvalue@/ocspd/certs/2nd_cacert.pem
+ 
+ # Server Certificate to attach to the response
+-server_cert = file:///@prefix@/etc/ocspd/certs/ocspd_cert.pem
++server_cert = file://@sysconfdirvalue@/ocspd/certs/ocspd_cert.pem
+ 
+ ####################################################################
+ [ HSM ]
+diff -Naurp openca-ocspd-1.9.0.orig/etc/ocspd.in openca-ocspd-1.9.0.new/etc/ocspd.in
+--- openca-ocspd-1.9.0.orig/etc/ocspd.in	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.9.0.new/etc/ocspd.in	2013-11-05 13:39:12.716332395 +0100
+@@ -1,90 +1,94 @@
+ #!/bin/sh
+ #
+-# Startup script for the OCSPD responder
++# ocspd		Startup script for the OCSPD responder
+ #
+-# chkconfig: 345 85 15
++# chkconfig: - 85 15
+ # description: OpenCA OCSP Responder
+-# processname: openca-ocspd
+-
+-prefix="@prefix@";
+-sbin="${prefix}/sbin";
+-etc="${prefix}/etc/ocspd"
++# processname: ocspd
++# pidfile: @piddir@/ocspd.pid
+ 
+ # Source function library.
+-# . /etc/rc.d/init.d/functions
+-
+-ocspd="${sbin}/ocspd";
+-conf="${etc}/ocspd.conf";
++. /etc/rc.d/init.d/functions
+ 
+-# Take a look in your apache config and set it as it is set there.
+-pidfile="${etc}/ocspd.pid";
++if [ -f /etc/sysconfig/network ]; then
++        . /etc/sysconfig/network
++fi
++
++if [ -f /etc/sysconfig/ocspd ]; then
++        . /etc/sysconfig/ocspd
++fi
++
++prog=ocspd
++exec="@sbindirvalue@/${prog}";
++config="@sysconfdirvalue@/${prog}/${prog}.conf"
++pidfile="@piddir@/${prog}.pid"
++lockfile="@localstatedirvalue@/lock/subsys/${prog}"
++
++# Check that we are root ... so non-root users stop here
++[ `id -u` = 0 ] || exit 1
++
++# Check that networking is up.
++[ "${NETWORKING}" = "yes" ] || exit 0
++
++RETVAL=0
++
++start()
++
++{
++	[ -x "${exec}" ] || exit 5
++	[ -f "${config}" ] || exit 6
++	echo -n $"Starting ${prog}: "
++	daemon --pidfile "${pidfile}" "${exec}" -d -c "${config}"	\
++		${OPTIONS} ${1}
++	RETVAL=$?
++	echo
++	[ "${RETVAL}" -eq "0" ] && touch "${lockfile}"
++	return $RETVAL
++}
+ 
+ # See how we were called.
+-case "$1" in
++case "${1}" in
+   start)
+-	echo -n "Starting OCSP Responder: "
+-	${ocspd} -c "${conf}" -d
+-	echo "Done."
++	start
++	RETVAL=$?
+ 	;;
+   start-verbose)
+-	echo -n "Starting OCSP Responder: "
+-	${ocspd} -c "${conf}" -d -v
+-	echo "Done."
++	start -v
++	RETVAL=$?
+ 	;;
+   start-debug)
+-	echo -n "Starting OCSP Responder: "
+-	${ocspd} -c "${conf}" -d -v -debug
+-	echo "Done."
++	start "-v -debug"
++	RETVAL=$?
+ 	;;
+   stop)
+-	echo -n "Shutting down OCSP Responder: "
+-	if [ -f "$pidfile" ] ; then
+-		pid=`cat $pidfile`;
+-		# if [ "x$pid" = "x" ] ; then
+-		# 	killall -15 ocspd
+-		# else
+-			kill -15 ${pid}
+-		# fi
+-		rm -f "$pidfile"
+-	else
+-		echo "Missing pidfile (already stopped?)"
+-	fi
+-	echo "Done."
++	echo -n $"Shutting down ${prog}: "
++	killproc -p "${pidfile}" "${prog}"
++	RETVAL=$?
++	echo
++	[ "${RETVAL}" -eq "0" ] && rm -f "${lockfile}"
+ 	;;
+   status)
+-	echo -n "OCSP Responder is "
+-	if ! [ -f "$pidfile" ] ; then
+-		echo "stopped."
+-	else
+-		pid=`cat $pidfile`;
+-		if test `ps -p ${pid}` ; then
+-			echo "running ( $pid ) ... "
+-		else
+-			echo "stopped."
+-		fi
+-	fi
+-	;;
+-  reload-crl)
+-	echo -n "Sending Reload CRL Signal to OCSP ... "
+-	if ! [ -f "$pidfile" ] ; then
+-		echo "stopped."
+-	else
+-		pid=`cat $pidfile`;
+-		if test `kill -HUP ${pid}` ; then
+-			echo "error."
+-		else
+-			echo "Ok."
+-		fi
+-	fi
++	status "${prog}"
++	RETVAL=$?
+ 	;;
+-  restart)
+-	$0 stop
++  reload)
++	echo -n $"Reloading CRLs: "
++	killproc -p "${pidfile}" "${prog}" -HUP
++	RETVAL=$?
++	echo
++	;;
++  restart|force-reload)
++	"${0}" stop
+ 	sleep 2
+-	$0 start
++	"${0}" start
++	;;
++  condrestart|try-restart)
++	[ -e "${lockfile}" ] && "${0}" restart
+ 	;;
+   *)
+-	echo "Usage: $0 {start|stop|status|reload-crl|restart}"
+-	exit 1
++	echo "Usage: ${0} {start|start-verbose|start-debug|stop|status|"
++	echo "		reload|force-reload|restart|condrestart|try-restart}"
++	RETVAL=2
+ esac
+ 
+-exit 0
++exit $RETVAL
+diff -Naurp openca-ocspd-1.9.0.orig/etc/ocspd.sysconfig.in openca-ocspd-1.9.0.new/etc/ocspd.sysconfig.in
+--- openca-ocspd-1.9.0.orig/etc/ocspd.sysconfig.in	1970-01-01 01:00:00.000000000 +0100
++++ openca-ocspd-1.9.0.new/etc/ocspd.sysconfig.in	2013-11-05 13:39:12.716332395 +0100
+@@ -0,0 +1,8 @@
++#	Name of daemon program.
++#OCSPD=@sbindirvalue@/ocspd
++
++#	Configuration file.
++#CONF=@sysconfdirvalue@/ocspd/ocspd.conf
++
++#	Additional command line options.
++#OPTIONS=""
+diff -Naurp openca-ocspd-1.9.0.orig/examples/index.txt openca-ocspd-1.9.0.new/examples/index.txt
+--- openca-ocspd-1.9.0.orig/examples/index.txt	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.9.0.new/examples/index.txt	1970-01-01 01:00:00.000000000 +0100
+@@ -1 +0,0 @@
+-V	020610093819Z		01	unknown	/Email=chiarap@excite.com/CN=Chiara Ponz de Leon/OU=Building A/O=OpenCA/C=IT
+diff -Naurp openca-ocspd-1.9.0.orig/examples/ocspd.conf openca-ocspd-1.9.0.new/examples/ocspd.conf
+--- openca-ocspd-1.9.0.orig/examples/ocspd.conf	2008-02-15 00:24:15.000000000 +0100
++++ openca-ocspd-1.9.0.new/examples/ocspd.conf	2013-11-05 13:39:12.716332395 +0100
+@@ -8,11 +8,9 @@ default_ocspd	= OCSPD_default		# The def
+ ####################################################################
+ [ OCSPD_default ]
+ 
+-dir		 = /usr/local/ocspd/etc/ocspd		# Where everything is kept
+-db		 = $dir/index.txt		# database index file.
++dir		 = /etc/ocspd			# Where everything is kept
+ md	 	 = sha1
+ 
+-ca_certificate	  = $dir/certs/cacert.pem 	# The CA certificate
+ ocspd_certificate = $dir/certs/ocspd_cert_2.pem	# The OCSP server cert
+ ocspd_key	  = $dir/private/ocspd_key.pem	# The OCSP server key
+ pidfile		  = $dir/ocspd.pid		# Main process pid
+@@ -81,7 +79,7 @@ dbms		= dbms_file
+ 
+ ####################################################################
+ [ ocsp_response ]
+-dir		 	= /usr/local/ocspd/etc/ocspd
++dir		 	= /etc/ocspd
+ 
+ # It is possible to include additional certificates in given
+ # responses. Put all the certificates you want to include in
+@@ -113,7 +111,7 @@ next_update_mins	= 5
+ 
+ [ ldap_ca_1 ]
+ # You can have the CRL on a simple file
+-# crl_url = file:///usr/local/etc/ocspd/crl.pem
++# crl_url = file:///etc/ocspd/crls/crl.pem
+ 
+ # You can store the CRL into an LDAP server, simply
+ # store it in certificateRevocationList;binary attribute
+@@ -166,20 +164,20 @@ ca_entry_dn = "o=Organisation, c=IT"
+ [ first_ca ]
+ 
+ # You can have the CRL on a simple file in PEM format
+-crl_url = file:////usr/local/ocspd/etc/ocspd/crls/crl_07.crl
++crl_url = file:///etc/ocspd/crls/crl_07.crl
+ 
+ # We need the CA certificate for every supported CRL
+-# ca_url  = file:////usr/local/ocspd/etc/ocspd/certs/1st_cacert.pem
+-ca_url  = file:////usr/local/ocspd/etc/ocspd/certs/cacert.pem
++# ca_url  = file:///etc/ocspd/certs/1st_cacert.pem
++ca_url  = file:///etc/ocspd/certs/cacert.pem
+ 
+ ####################################################################
+ [ second_ca ]
+ 
+ # You can have the CRL on a simple file in PEM format
+-crl_url = file:////usr/local/ocspd/etc/ocspd/crls/crl_01.crl
++crl_url = file:///etc/ocspd/crls/crl_01.crl
+ 
+ # We need the CA certificate for every supported CRL
+-ca_url  = file:////usr/local/ocspd/etc/ocspd/certs/2nd_cacert.pem
++ca_url  = file:///etc/ocspd/certs/2nd_cacert.pem
+ 
+ ####################################################################
+ [ HSM ]
+diff -Naurp openca-ocspd-1.9.0.orig/src/core.c openca-ocspd-1.9.0.new/src/core.c
+--- openca-ocspd-1.9.0.orig/src/core.c	2009-06-08 19:24:05.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/core.c	2013-11-05 13:39:12.716332395 +0100
+@@ -36,8 +36,8 @@ void handle_sigabrt ( int i );
+ 
+ /* Function Bodies */
+ 
+-int start_threaded_server ( char * bind_s, char * port_s, int nthreads,
+-			OCSPD_CONFIG * ocspd_conf ) {
++int start_threaded_server ( char * bind_s, char * port_s, int queue_len,
++			int nthreads, OCSPD_CONFIG * ocspd_conf ) {
+ 	int i;
+ 	int cycle = -1;
+ 
+@@ -55,7 +55,8 @@ int start_threaded_server ( char * bind_
+ 		exit(68);
+ 	}
+ 
+-	if( (ocspd_conf->listenfd = Listen( bind_s, atoi(port_s) )) == 0) {
++	if ((ocspd_conf->listenfd = Listen(bind_s, atoi(port_s),
++					queue_len)) == 0) {
+ 		syslog(LOG_ERR, "ERROR::BIND::Can not bind to [%s],[%d]",
+ 			bind_s, atoi(port_s));
+ 		exit(101);
+diff -Naurp openca-ocspd-1.9.0.orig/src/core.h openca-ocspd-1.9.0.new/src/core.h
+--- openca-ocspd-1.9.0.orig/src/core.h	2009-06-08 19:24:05.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/core.h	2013-11-05 13:39:12.716332395 +0100
+@@ -16,8 +16,8 @@
+ #include "general.h"
+ #include "ocsp_request.h"
+ 
+-int start_threaded_server ( char * bind_s, char * port_s, int nthreads,
+-			OCSPD_CONFIG * ocspd_conf );
++int start_threaded_server ( char * bind_s, char * port_s, int queue_len,
++			int nthreads, OCSPD_CONFIG * ocspd_conf );
+ int set_alrm_handler( void );
+ void close_server ( void );
+ void handle_sigterm ( int i );
+diff -Naurp openca-ocspd-1.9.0.orig/src/general.h openca-ocspd-1.9.0.new/src/general.h
+--- openca-ocspd-1.9.0.orig/src/general.h	2009-06-08 19:25:19.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/general.h	2013-11-05 13:39:12.716332395 +0100
+@@ -85,24 +85,14 @@ char *strchr (), *strrchr ();
+ 
+ #include <openssl/ocsp.h>
+ 
+-#define HTTP_POST		0
+-#define HTTP_GET		1
+-#define HTTP_POST_METHOD	"POST"
+-#define HTTP_GET_METHOD		"GET"
+-
+-#define OCSP_REQ_TYPE		"application/ocsp-request"
+-#define OCSP_RESP_TYPE		"application/ocsp-response"
+-
+ #define BASE_SECTION    	"ocspd"
+ #define CONFIG_FILE 		"ocspd.conf"
+ #define ENV_SECTION 		"conf_section"
+ 
+ #define ENV_DEFAULT_OCSPD	"default_ocspd"
+-#define ENV_DATABASE            "db"
+ #define ENV_OCSPD_DBMS		"dbms"
+ #define ENV_PRIVATE_KEY		"ocspd_key"
+ #define ENV_CERTIFICATE		"ocspd_certificate"
+-#define ENV_CA_CERTIFICATE	"ca_certificate"
+ #define ENV_OCSPD_PORT		"port"
+ #define ENV_OCSPD_BIND		"bind"
+ #define ENV_OCSPD_CHILD		"threads_num"
+@@ -146,20 +136,6 @@ char *strchr (), *strrchr ();
+ #define OCSP_REQ_CONTENT_TYPE	"application/ocsp-request"
+ #define OCSP_RESP_CONTENT_TYPE	"application/ocsp-response"
+ 
+-#define DB_type         0
+-#define DB_exp_date     1
+-#define DB_rev_date     2
+-#define DB_serial       3       /* index - unique */
+-#define DB_file         4       
+-#define DB_name         5       /* index - unique for active */
+-#define DB_NUMBER       6
+-
+-#define DB_TYPE_REV     'R'
+-#define DB_TYPE_EXP     'E'
+-#define DB_TYPE_VAL     'V'
+-#define DB_TYPE_SUS     'S'
+-#define DB_TYPE_UNK     'U'
+-
+ #define FORMAT_UNDEF    0
+ #define FORMAT_ASN1     1
+ #define FORMAT_TEXT     2
+diff -Naurp openca-ocspd-1.9.0.orig/src/ocspd.c openca-ocspd-1.9.0.new/src/ocspd.c
+--- openca-ocspd-1.9.0.orig/src/ocspd.c	2009-06-08 19:24:05.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/ocspd.c	2013-11-05 13:39:12.717332408 +0100
+@@ -72,7 +72,8 @@ static char *ocspd_usage[] = {
+ NULL
+ };
+ 
+-/* Staic variables */
++
++/* Static variables */
+ char *prgname = "ocspd";
+ char *version = VERSION;
+ 
+@@ -94,6 +95,7 @@ int main ( int argc, char *argv[] ) {
+ 	char *max_timeout_s = NULL;
+ 
+ 	int child_num = 5;
++	int queue_len = 30;
+ 	int verbose   = 0;
+ 	int debug     = 0;
+ 
+@@ -106,7 +108,6 @@ int main ( int argc, char *argv[] ) {
+ 	// char *keyfile = NULL;
+ 	char *configfile = NULL;
+ 	char *cert = NULL;
+-	char *cacert = NULL;
+ 	char **pp = NULL;
+ 	char *key = NULL;
+ 	char *passargin = NULL;
+@@ -448,36 +449,6 @@ bad:
+ 	}
+ 
+ 	/*****************************************************************/
+-	/* Load the CA certificate file */
+-        if ((cacert == NULL) && ((cacert=NCONF_get_string(ocspd_conf->conf,
+-                section,ENV_CA_CERTIFICATE)) == NULL))
+-                {
+-                lookup_fail(section,ENV_CA_CERTIFICATE);
+-                goto err;
+-                }
+-	if ( cacert ) {
+-		if( verbose )
+-	                syslog(LOG_INFO,"reading CA certificate file.\n");
+-	        if ((certf=BIO_new_file( cacert, "r")) == NULL) {
+-	                syslog(LOG_ERR,"unable to open CA certificate file.\n");
+-	                goto err;
+-		}
+-	        if ((ocspd_conf->cacert = PEM_read_bio_X509(certf,NULL,NULL,NULL))
+-				==NULL) {
+-	                syslog(LOG_ERR,"cannot load CA certificate.\n");
+-	                goto err;
+-		}
+-	        BIO_free( certf );
+-	}
+-        if (ocspd_conf->cacert == NULL) {
+-                syslog(LOG_ERR,"unable to load CA certificate\n");
+-                goto err;
+-        }
+-
+-	if(verbose)
+-		syslog(LOG_INFO,"OCSP Daemon setup completed");
+-
+-        /*****************************************************************/
+         /* Let's get the digest */
+         if ((ocsp_digest_name == NULL) &&
+ 	        ((ocsp_digest_name=NCONF_get_string(ocspd_conf->conf,section,
+@@ -513,6 +484,15 @@ bad:
+ 		bind_s = "0.0.0.0";
+        	}
+ 
++	/* Listen queue size */
++        if ((tmp_s = NCONF_get_string(ocspd_conf->conf,
++				section, ENV_OCSPD_QUEUE)) == NULL) {
++               	if( verbose )
++			lookup_fail(section,ENV_OCSPD_QUEUE);
++       	} else {
++		queue_len = atoi(tmp_s);
++	}
++
+ 	/* Number of child threads to be spawned */
+         if ((child_s == NULL) && ((child_s = NCONF_get_string(ocspd_conf->conf,
+ 			 section, ENV_OCSPD_CHILD)) == NULL)) {
+@@ -751,7 +731,7 @@ bad:
+ 		writePid( ppid, pidfile );
+ 	}
+ 
+-	start_threaded_server( bind_s, port_s, child_num, ocspd_conf );
++	start_threaded_server(bind_s, port_s, queue_len, child_num, ocspd_conf);
+ 
+ 	goto end;
+ 
+diff -Naurp openca-ocspd-1.9.0.orig/src/sock.c openca-ocspd-1.9.0.new/src/sock.c
+--- openca-ocspd-1.9.0.orig/src/sock.c	2009-06-08 19:24:05.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/sock.c	2013-11-05 13:39:12.717332408 +0100
+@@ -20,12 +20,11 @@
+ #include "sock.h"
+ 
+ #define SERV_PORT	4567
+-#define	LISTENQ		30
+ 
+ extern int h_errno;
+ extern OCSPD_CONFIG *ocspd_conf;
+ 
+-int Listen (char *hostname, int port) {
++int Listen (char *hostname, int port, int queue_len) {
+ 	int fd, reuse_addr;
+ 	struct sockaddr_in servaddr;
+ 	struct hostent *ht = NULL;
+@@ -81,7 +80,7 @@ int Listen (char *hostname, int port) {
+ 		return(0);
+ 	};
+ 
+-	if( listen( fd, LISTENQ ) == -1 ) {
++	if (listen(fd, queue_len) == -1) {
+ 		syslog(LOG_ERR, "FATAL ERROR::Listen::%s",
+ 			strerror( errno ));
+ 		return(0);
+diff -Naurp openca-ocspd-1.9.0.orig/src/sock.h openca-ocspd-1.9.0.new/src/sock.h
+--- openca-ocspd-1.9.0.orig/src/sock.h	2009-06-08 19:24:05.000000000 +0200
++++ openca-ocspd-1.9.0.new/src/sock.h	2013-11-05 13:39:12.717332408 +0100
+@@ -8,7 +8,7 @@
+ 
+ /* Socket Wrapping functions */
+ 
+-int Listen (char *hostname, int port);
++int Listen (char *hostname, int port, int queue_len);
+ // int Accept (int sock, int *c_sock);
+ int Accept (int listen_sockfd, SA *cliaddr, socklen_t *addrlenp);
+ ssize_t Read (int fd, void *bufptr, size_t nbytes);

@@ -1,0 +1,36 @@
+From 0bfba4730593fe0b3e82b86772ec1e5778531d09 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 14 Aug 2019 14:18:21 +0200
+Subject: [PATCH] Disable retrying connect in tests
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Tests retried a failed connect to non-existing server (TCP reset)
+until a server_selection_timeout_ms timeout was reached. That means
+every tests took 10 seconds if no server was running and the test was
+expected to be skipped.
+
+This patch disables the retry so that it fails on a first rejected
+connection and the test is skipped immediately.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/lib/MongoDBTest.pm | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/t/lib/MongoDBTest.pm b/t/lib/MongoDBTest.pm
+index 70fe936..ae5eb32 100644
+--- a/t/lib/MongoDBTest.pm
++++ b/t/lib/MongoDBTest.pm
+@@ -94,7 +94,6 @@ sub build_client {
+             ssl                         => $ssl || $ENV{MONGO_SSL},
+             socket_timeout_ms           => 120000,
+             server_selection_timeout_ms => $ENV{ATLAS_PROXY} ? 10000 : 2000,
+-            server_selection_try_once   => 0,
+             wtimeout                    => 15000,
+             compressors                 => ['zlib'],
+             retry_writes                => 1,
+-- 
+2.21.0
+

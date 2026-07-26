@@ -1,0 +1,1810 @@
+From 7cd39dc9c7f2150506587d610dfd987b22b0f186 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Fri, 26 Sep 2025 16:32:10 +0200
+Subject: [PATCH] Convert to pytest
+
+---
+ hgsvn/__init__.py                             |  31 +-
+ hgsvn/common.py                               |  24 +-
+ hgsvn/run/hgpullsvn.py                        |   2 +-
+ hgsvn/run/hgpushsvn.py                        |   2 +-
+ hgsvn/unittests/_test.py                      |   2 -
+ hgsvn/unittests/test_client_utf.py            |  88 -----
+ hgsvn/unittests/test_common.py                | 358 ------------------
+ hgsvn/unittests/test_hgclient.py              | 153 --------
+ setup.py                                      |  11 +-
+ {hgsvn/unittests => tests}/__init__.py        |   0
+ tests/test_client_utf.py                      |  77 ++++
+ tests/test_common.py                          | 304 +++++++++++++++
+ tests/test_hgclient.py                        | 145 +++++++
+ .../unittests => tests}/test_hgclient_base.py |  46 +--
+ {hgsvn/unittests => tests}/test_svnclient.py  | 195 ++++------
+ 15 files changed, 655 insertions(+), 783 deletions(-)
+ delete mode 100644 hgsvn/unittests/_test.py
+ delete mode 100644 hgsvn/unittests/test_client_utf.py
+ delete mode 100644 hgsvn/unittests/test_common.py
+ delete mode 100644 hgsvn/unittests/test_hgclient.py
+ rename {hgsvn/unittests => tests}/__init__.py (100%)
+ create mode 100644 tests/test_client_utf.py
+ create mode 100644 tests/test_common.py
+ create mode 100644 tests/test_hgclient.py
+ rename {hgsvn/unittests => tests}/test_hgclient_base.py (63%)
+ rename {hgsvn/unittests => tests}/test_svnclient.py (58%)
+
+diff --git a/hgsvn/__init__.py b/hgsvn/__init__.py
+index 3c22d8c..d0dba37 100644
+--- a/hgsvn/__init__.py
++++ b/hgsvn/__init__.py
+@@ -130,17 +130,17 @@ it can be edited manual, or new pairs can append by option
+     --branch-add=<maps pair>
+ appending and updating this file controls by option -mapbranch=<options>
+ 
+-hgpull\pushsvn automaticaly recognises current hg-branch and svn-branches, and
+-using this map can pull\push hystory tree. now pull\push stops at merge points
++hgpull/pushsvn automaticaly recognises current hg-branch and svn-branches, and
++using this map can pull/push hystory tree. now pull/push stops at merge points
+ by default, to enable this operation use option:
+-    --merge-branch=(push\pull | try<push\pull> | skip ...
++    --merge-branch=(push/pull | try<push/pull> | skip ...
+ 
+ hgpullsvn: can automaticaly open named branch as svn-branch mirror, when ones
+     map provided.
+ 
+ hgpushsvn: start of new svn-branch mirrors current hg`s one can be do now follows:
+ 	update svn+hg to desired branch base rev. 
+-	tag\switch from there svn to apropriated svn-branch name
++	tag/switch from there svn to apropriated svn-branch name
+ 	update hg to some rev in desired branch
+ 	hgpullsvn -l --branch-add=<new svn-branch>=<hg-branch>
+ 	and so current hg-branch pushes into new svn one. 
+@@ -275,7 +275,7 @@ hgsvn 0.2.6
+ hgsvn 0.2.5
+ -----------
+ !	``hgpullsvn``	now svn status tree-conflicted take care, ignoring of one causes
+-                    to loose fileadded\deleted changes
++                    to loose fileadded/deleted changes
+ 
+ hgsvn 0.2.4
+ -----------
+@@ -302,7 +302,7 @@ hgsvn 0.2.2
+         it try to found last synched rev  wich from to push in current svn branch;
+     if --hg-follow defined, then it try to switch svn to current hg branch, and 
+         find last synched revision
+-    if peg revision defined, then it switches svn to it, and start push\pull into it 
++    if peg revision defined, then it switches svn to it, and start push/pull into it
+         from current hg revision
+ 
+ hgsvn 0.2.1
+@@ -321,7 +321,7 @@ hgsvn 0.2.0
+ 
+ Improvements:
+ 
+-+   add support pull\push merge revisions, and automation of push\pull dependent branches
+++   add support pull/push merge revisions, and automation of push/pull dependent branches
+     --merge-branches = (push/pull | trypush/trypull | skip | break) - defines how to process
+         merge-points : push/pull - synchronize dependent branches
+                        skip - process them as ordinary revisions
+@@ -338,7 +338,7 @@ Improvements:
+         in contrast standart behaviour requires to pull from current svn revision
+     
+ *   ``hgpushsvn --svnignore-use`` - append node to .hgsvn/.svnignore - list of files wich is ignored 
+-                from push\pull process. ordinary there should be .hgtags
++                from push/pull process. ordinary there should be .hgtags
+ 
+ +               ``--svn-accept=<X>`` - allow override default ``svn merge --accept`` option
+                 
+@@ -645,14 +645,17 @@ __versioninfo__ = (0, 6, 0)
+ 
+ base_version = '.'.join(map(str, __versioninfo__))
+ full_version = base_version
++
+ try:
+-    import pkg_resources
++    # Python 3.8+
++    import importlib.metadata as importlib_metadata
+ except ImportError:
++    # Fallback for Python < 3.8
++    import importlib_metadata
++
++try:
++    full_version = importlib_metadata.version("hgsvn")
++except importlib_metadata.PackageNotFoundError:
+     pass
+-else:
+-    try:
+-        full_version = pkg_resources.get_distribution("hgsvn").version
+-    except pkg_resources.DistributionNotFound:
+-        pass
+ 
+ __version__ = full_version
+diff --git a/hgsvn/common.py b/hgsvn/common.py
+index ad0b8dd..b408a98 100644
+--- a/hgsvn/common.py
++++ b/hgsvn/common.py
+@@ -50,17 +50,19 @@ class _LockHeld(Exception):
+ 
+ # We import the lock logic from Mercurial if it is available, and fall back
+ # to a dummy (always successful) lock if not.
+-try:
+-    from mercurial.lock import lock as _lock
+-    try:
+-        from mercurial.error import LockHeld
+-    except ImportError:
+-        # LockHeld was defined in mercurial.lock in Mercurial < 1.2
+-        from mercurial.lock import LockHeld
++#try:
++#    from mercurial.lock import lock as _lock
++#    try:
++#        from mercurial.error import LockHeld
++#    except ImportError:
++#        # LockHeld was defined in mercurial.lock in Mercurial < 1.2
++#        from mercurial.lock import LockHeld
++#
++#except ImportError:
++#    pass
+ 
+-except ImportError:
+-    _lock = _SimpleFileLock
+-    LockHeld = _LockHeld
++_lock = _SimpleFileLock
++LockHeld = _LockHeld
+ 
+ 
+ hgsvn_private_dir = ".hgsvn"
+@@ -832,4 +834,4 @@ def hg_refresh_svn_head(svn_rev = None):
+ 
+ #just release last bookmark to deactivate it after pull/push complete
+ def hg_release_svn_head():
+-    run_hg(["bookmark", "-i"])
+\ No newline at end of file
++    run_hg(["bookmark", "-i"])
+diff --git a/hgsvn/run/hgpullsvn.py b/hgsvn/run/hgpullsvn.py
+index e879c97..cfe794c 100644
+--- a/hgsvn/run/hgpullsvn.py
++++ b/hgsvn/run/hgpullsvn.py
+@@ -477,7 +477,7 @@ def pull_svn_rev(log_entry, current_rev, svn_wc, wc_url, wc_base, options):
+                 raise
+             ui.status("\n try skip of nested repo affects", level=ui.VERBOSE)
+             nestpath = re.search(r"path '(?P<npath>\S+)'", str(e))
+-            nestrepo = re.search("repo '(?P<nrepo>\S+)'", str(e))
++            nestrepo = re.search(r"repo '(?P<nrepo>\S+)'", str(e))
+             if nestpath is None:
+                 ui.status("uncknown abort of nested repo output format");
+                 raise
+diff --git a/hgsvn/run/hgpushsvn.py b/hgsvn/run/hgpushsvn.py
+index 0cff272..3437e2a 100644
+--- a/hgsvn/run/hgpushsvn.py
++++ b/hgsvn/run/hgpushsvn.py
+@@ -623,7 +623,7 @@ def hg_push_svn(start_rev, end_rev, edit, username, password, cache, options, us
+                 # svn is unable to convert filenames containing special
+                 # chars:
+                 # http://svnbook.red-bean.com/en/1.2/svn.advanced.l10n.html
+-                match = re.search("(\d+)", line)
++                match = re.search(r"(\d+)", line)
+                 if match:
+                     svn_rev = int(match.group(1))
+                     break
+diff --git a/hgsvn/unittests/_test.py b/hgsvn/unittests/_test.py
+deleted file mode 100644
+index e292e19..0000000
+--- a/hgsvn/unittests/_test.py
++++ /dev/null
+@@ -1,2 +0,0 @@
+-from nose import SkipTest
+-from nose.tools import *
+diff --git a/hgsvn/unittests/test_client_utf.py b/hgsvn/unittests/test_client_utf.py
+deleted file mode 100644
+index a9b91ef..0000000
+--- a/hgsvn/unittests/test_client_utf.py
++++ /dev/null
+@@ -1,88 +0,0 @@
+-# coding=utf-8
+-
+-import locale
+-import os
+-import shutil
+-import subprocess
+-import tempfile
+-import unittest
+-import six
+-
+-#from hgsvn import common
+-from hgsvn import ui
+-from hgsvn import common
+-from hgsvn import shell
+-from hgsvn.shell import find_program, run_command
+-from hgsvn.run import hgpushsvn
+-from hgsvn.hgclient import hg_close, run_hg
+-from hgsvn.svnclient import run_svn
+-from . import test_hgclient_base
+-
+-from six import *
+-from nose import SkipTest
+-from nose.tools import *
+-from .test_hgclient_base import RepoTest
+-
+-#ui.verbose_level(ui.TRACECMD)#PARSEINNER
+-#ui.verbose_level(ui.PARSEINNER)
+-ui._UseTerminalWidth = 256
+-
+-class TestHgClientUTF(RepoTest):
+-    def test_hg_utf_file_stat(self):
+-        fname = u'файл-фу';
+-        self.test_file = os.path.join(self.repo_dir, fname)
+-        f = open(self.test_file, 'w')
+-        f.write('foo')
+-        f.close()
+-        res = run_hg(['st'], [fname])
+-        ui.status("hg st fname reported %s"%res, level=ui.DEBUG)
+-        res = run_hg(['st']).splitlines()
+-        ui.status("hg st reported %s"%res, level=ui.DEBUG)
+-        #self.assertEqual
+-        self.assertTrue(len(res) == 1)
+-        self.assertTrue(res[0].startswith('?'))
+-        self.assertTrue(res[0].endswith(fname))
+-
+-class TestSVNClientUTF(unittest.TestCase):
+-
+-    def setUp(self):
+-        self._wd = tempfile.mkdtemp()
+-        self._cwd = os.getcwd()
+-        if len(os.listdir(self._wd)) > 0:
+-            #shure to use empty new directory
+-            shutil.rmtree(self._wd)
+-            self._wd = tempfile.mkdtemp()
+-        os.chdir(self._wd)
+-        #ui.verbose_level(ui.TRACECMD)
+-        run_command("svnadmin", ['create', 'test.svn'])
+-        self.svn_url = 'file:///'+self._wd+'/test.svn'
+-        self.svn_url = self.svn_url.replace("\\","/")
+-        s = run_svn(['co', self.svn_url, 'test'])
+-        self.test_wd = self._wd+'/test'
+-        os.chdir(self.test_wd)
+-        ui.status("have setup test at %s" % os.getcwd(), level=ui.DEBUG)
+-
+-    def tearDown(self):
+-        ui.verbose_level(ui.DEFAULT)
+-        hg_close()
+-        os.chdir(self._cwd)
+-        try:
+-            shutil.rmtree(self._wd)
+-        except:
+-            print("warning!!! some locks leaves of dir %s"%self._wd)
+-
+-    def test_svng_utf_file_add(self):
+-        #ui.verbose_level(ui.TRACECMD)
+-        ui.verbose_level(ui.PARSE)
+-        fdb = open(self.test_wd+u'/файл-фу.txt', "w")
+-        fdb.write("file фу")
+-        fdb.close()
+-        s = run_svn(['add'], [u'файл-фу.txt']).splitlines()
+-        ui.status(s, level=ui.DEBUG)
+-        self.assertTrue(len(s) == 1)
+-        res = s[0].split()
+-        ui.status("splits:%s"%res, level=ui.DEBUG)
+-        self.assertTrue(res[0].strip() == b"A")
+-        fname = res[1].strip().decode(shell.get_encoding())
+-        ui.status("fname:%s"%fname, level=ui.DEBUG)
+-        self.assertTrue(fname == u'файл-фу.txt')
+diff --git a/hgsvn/unittests/test_common.py b/hgsvn/unittests/test_common.py
+deleted file mode 100644
+index 28a4f41..0000000
+--- a/hgsvn/unittests/test_common.py
++++ /dev/null
+@@ -1,358 +0,0 @@
+-import os
+-import posixpath
+-import shutil
+-import tempfile
+-import unittest
+-import six
+-
+-from nose import SkipTest
+-from nose.tools import *
+-
+-from hgsvn import common, shell
+-from hgsvn.errors import RunCommandError
+-from hgsvn.shell import (run_shell_command
+-    , run_command
+-    , once_or_more
+-    )
+-from hgsvn.hgclient import run_hg, hg_close, hg_init, hg_invoke
+-from hgsvn.svnclient import run_svn
+-from hgsvn import ui
+-import hgsvn.run.hgimportsvn
+-import hgsvn.run.hgpullsvn
+-from hgsvn.common import drop_nested_dirs
+-from six import *
+-
+-#ui.verbose_level(ui.TRACECMD)#PARSEINNER
+-#ui.verbose_level(ui.PARSEINNER)
+-ui._UseTerminalWidth = 256
+-
+-class TestCommands(unittest.TestCase):
+-    def setUp(self):
+-        #ui.verbose_level(ui.TRACECMD)
+-        pass
+-    
+-    def test_hg(self):
+-        #s = run_hg(['version', '-q'])
+-        s = hg_invoke(['version', '-q'])
+-        print_(s)
+-        ui.status("hg ack:%s"%s, level=ui.DEBUG);
+-        have_mercurial = s.find('Mercurial');
+-        ok_mercurial = have_mercurial > 0;
+-        eq_( ok_mercurial, True );
+-        #s1 = s.split()[0]
+-        #eq_(s1.lower(), 'mercurial')
+-
+-    def test_svn(self):
+-        s = run_svn(['--version', '-q'])
+-        ui.status("svn ack:%s"%s, level=ui.DEBUG);
+-        eq_(s.split(b'.')[0], b'1')
+-
+-class CommandsBase(unittest.TestCase):
+-    command_func = None
+-    cmd_shell = None
+-    verbose   = ui._level
+-    
+-    def run_shell(self, cmd, args=None, bulk_args=None):
+-        if len(self.cmd_shell) > 0:
+-            return self.command_func(self.cmd_shell[0], self.cmd_shell[1:]+[cmd]+args, bulk_args)
+-        else:
+-            return self.command_func(cmd, args, bulk_args)
+-    
+-    @classmethod
+-    def setUpClass(cls):
+-        if cls.command_func is None:
+-            raise SkipTest("skip testsuite base abstract")
+-            return
+-    
+-    def setUp(self):
+-        if self.command_func is None:
+-            self.skipTest("skip testsuite base abstract")
+-            return
+-
+-        ui.status("test cmd %s"%self.command_func.__name__)
+-        if os.name == "nt":
+-            self.cmd_shell = ['cmd.exe', '/C']
+-        else:
+-            self.cmd_shell = None
+-        #ui.verbose_level(ui.PARSEINNER)
+-
+-    def tearDown(self):
+-        ui.verbose_level(self.verbose)
+-        
+-    def test_echo(self):
+-        #ui.verbose_level(ui.TRACECMD)
+-        #ui.verbose_level(ui.PARSE)
+-        echo_string = 'foo'
+-        s = self.run_shell('echo', [ echo_string ] )
+-        ui.status("echo reports:%s"%s);
+-        s = ui.decode(s, shell.locale_encoding)
+-        eq_(s.rstrip(), echo_string)
+-
+-    # windos cmd cant strip quotes and spec symbols from parameters
+-    skip_escapes = (os.name == "nt")
+-   
+-    def test_echo_with_escapes(self):
+-        if self.skip_escapes:
+-            raise SkipTest #('can`t pass LineEnd in parameter by stdin')
+-        echo_string = 'foo & baz' #'foo \n"\' baz'
+-        s = self.run_shell('echo', [echo_string])
+-        ui.status("echo reports:%s"%s);
+-        s = ui.decode(s, shell.locale_encoding)
+-        eq_(s.rstrip(), echo_string)
+-
+-    def test_bulk_args(self):
+-        #ui.verbose_level(ui.TRACECMD)
+-        #ui.verbose_level(ui.PARSE)
+-        sep = b('-')
+-        args = ['a', 'b', 'c']
+-        n_args = len(args)
+-        bulk_args = ['%d' % i for i in range(3000)]
+-        out = self.run_shell('echo', [sep] + args, bulk_args)
+-        ui.status("test_bulk_args resulted:%s"%out, level = ui.DEBUG)
+-        res = ui.decode(out, shell.locale_encoding)
+-        sub_results = res.splitlines()
+-        bulk_pos = 0
+-        for s in sub_results:
+-            l = s.split()
+-            eq_(l.pop(0).strip(), "-")
+-            eq_(l[:n_args], args)
+-            n_bulk = len(l) - n_args
+-            assert n_bulk < 256
+-            eq_(l[n_args:], bulk_args[bulk_pos:bulk_pos + n_bulk])
+-            bulk_pos += n_bulk
+-        eq_(bulk_pos, len(bulk_args))
+-
+-
+-class TestShellCommands(CommandsBase):
+-    command_func = staticmethod(run_shell_command)
+-
+-class TestNonShellCommands(CommandsBase):
+-    command_func = staticmethod(run_command)
+-
+-
+-class TestLock(unittest.TestCase):
+-
+-    test_mercurial = True
+-
+-    @classmethod
+-    def setUpClass(cls):
+-        if cls.test_mercurial:
+-            try:
+-                from mercurial.lock import lock
+-            except ImportError:
+-                raise SkipTest("mercurial not installed")
+-
+-    def setUp(self):
+-        if self.test_mercurial:
+-            try:
+-                from mercurial.lock import lock
+-            except ImportError:
+-                raise SkipTest("mercurial not installed")
+-        self._test_base = tempfile.mkdtemp()
+-        common.fixup_hgsvn_dir(self._test_base)
+-
+-    def tearDown(self):
+-        shutil.rmtree(self._test_base)
+-
+-    def test_lock_set_release(self):
+-        def lock_exists():
+-            private_dir = os.path.join(self._test_base,
+-                                       common.hgsvn_private_dir)
+-            return common.hgsvn_lock_file in os.listdir(private_dir)
+-
+-        l = common.get_hgsvn_lock(self._test_base)
+-        lock_file = os.path.join(self._test_base, common.hgsvn_private_dir,
+-                                 common.hgsvn_lock_file)
+-        assert (lock_exists())
+-        l.release()
+-        assert (not lock_exists())
+-
+-    def test_locked(self):
+-        l = common.get_hgsvn_lock(self._test_base)
+-        lHeld = False
+-        try:
+-            common.get_hgsvn_lock(self._test_base)
+-        except common.LockHeld :
+-            lHeld = True
+-        assert lHeld
+-        l.release()
+-
+-
+-
+-class TestSimpleFileLock(TestLock):
+-
+-    test_mercurial = False
+-
+-    def setUp(self):
+-        self._real_lock = common._lock
+-        self._real_lock_held = common.LockHeld
+-        common._lock = common._SimpleFileLock
+-        common.LockHeld = common._LockHeld
+-        super(TestSimpleFileLock, self).setUp()
+-
+-    def tearDown(self):
+-        super(TestSimpleFileLock, self).tearDown()
+-        common._lock = self._real_lock
+-        common.LockHeld = self._real_lock_held
+-
+-
+-class TestSwitchBranch(unittest.TestCase):
+-
+-    def setUp(self):
+-        self._wd = tempfile.mkdtemp()
+-        self._cwd = os.getcwd()
+-        if len(os.listdir(self._wd)) > 0:
+-            #shure to use empty new directory
+-            shutil.rmtree(self._wd)
+-            self._wd = tempfile.mkdtemp()
+-        os.chdir(self._wd)
+-        #ui.verbose_level(ui.TRACECMD)
+-        hg_init()
+-        f = open("foo", "w")
+-        f.write("foo")
+-        f.close()
+-        run_hg(["add", "foo"])
+-        run_hg(["commit", "-m", "Initial"])
+-        #ui.status("have setup test at %s" % os.getcwd())
+-
+-    def tearDown(self):
+-        os.chdir(self._cwd)
+-        hg_close()
+-        try:
+-            shutil.rmtree(self._wd)
+-        except:
+-            print("warning!!! some locks leaves of dir %s"%self._wd)
+-
+-    def test_switch_clean_repo(self):
+-        run_hg(["branch", "test"])
+-        f = open("bar", "w")
+-        f.write("bar")
+-        f.close()
+-        run_hg(["add", "bar"])
+-        run_hg(["commit", "-m", '"bar added."'])
+-        eq_(True, common.hg_switch_branch("test", "default"))
+-
+-    def test_switch_dirty_repo(self):
+-        run_hg(["branch", "test"])
+-        f = open("bar", "w")
+-        f.write("bar")
+-        f.close()
+-        run_hg(["add", "bar"])
+-        eq_(False, common.hg_switch_branch("test", "default"))
+-
+-class TestOnceOrMore(unittest.TestCase):
+-    def setUp(self):
+-        self._counter = 0
+-
+-    def increment(self, count):
+-        self._counter += count
+-        return self._counter
+-
+-    def increment_until_3(self, count):
+-        self.increment(count)
+-        if self._counter < 3:
+-            raise Exception("Counter not high enough yet")
+-
+-    def test_no_exception(self):
+-        foo = once_or_more("Foo", False, self.increment, 1)
+-        eq_(1, self._counter)
+-        eq_(1, foo)
+-        foo = once_or_more("Foo", True, self.increment, 2)
+-        eq_(3, self._counter)
+-        eq_(3, foo)
+-
+-    @raises(Exception)
+-    def test_with_exception_no_retry(self):
+-        eq_(0, self._counter)
+-        once_or_more("Foo", False, self.increment_until_3, 1)
+-
+-    def test_with_exception_retry(self):
+-        eq_(0, self._counter)
+-        once_or_more("Foo", True, self.increment_until_3, 1)
+-        eq_(3, self._counter)
+-
+-class TestListsFunstions(unittest.TestCase):
+-    def setUp(self):
+-        self._counter = 0
+-        #ui.verbose_level(ui.PARSEINNER)
+-
+-    def tearDown(self):
+-        ui.verbose_level(ui.DEFAULT)
+-
+-    def test_drop_nested_dirs(self):
+-        x = ['a', 'a/b', 'b', 'b/c', 'ab', 'abc', 'ab\\e']
+-        drops = ['ab']
+-        y = drop_nested_dirs(x,drops)
+-        ui.status("reduction of %s - %s = %s"%(x,drops,y), level = ui.DEBUG);
+-        eq_(set(y) , set(['a','b', 'abc']))
+-        
+-class TestPullFiles(unittest.TestCase):
+-
+-    def setUp(self):
+-        self._wd = tempfile.mkdtemp()
+-        self._cwd = os.getcwd()
+-        if len(os.listdir(self._wd)) > 0:
+-            #shure to use empty new directory
+-            shutil.rmtree(self._wd)
+-            self._wd = tempfile.mkdtemp()
+-        os.chdir(self._wd)
+-        #ui.verbose_level(ui.TRACECMD)
+-        run_command("svnadmin", ['create', 'test.svn'])
+-        self.svn_url = 'file:///'+self._wd+'/test.svn'
+-        self.svn_url = self.svn_url.replace("\\","/")
+-        s = run_svn(['co', self.svn_url, 'test'])
+-        self.test_wd = self._wd+'/test'
+-        ui.status("have setup test at %s" % os.getcwd(), level=ui.DEBUG)
+-        self.test_a = self._wd+'/test/a'
+-        os.chdir(self.test_wd)
+-        os.mkdir(self.test_a)
+-        fdb = open(self.test_a+'/b.txt', "w")
+-        fdb.write("file b")
+-        fdb.close()
+-        fdc = open(self.test_a+'/c.txt', "w")
+-        fdc.write("file c")
+-        fdc.close()
+-        s = run_svn(['add', 'a'])
+-        ui.status(s, level=ui.DEBUG)
+-        s = run_svn(['ci', '-m', '"initial revision"'])
+-        ui.status(s, level=ui.DEBUG)
+-        s = run_svn(['rm', 'a/b.txt'])
+-        ui.status(s, level=ui.DEBUG)
+-        s = run_svn(['cp', 'a', 'd'])
+-        ui.status(s, level=ui.DEBUG)
+-        try:
+-            s = run_svn(['rm', 'a'])
+-            ui.status(s, level=ui.DEBUG)
+-        except (RunCommandError) as e:
+-            if e.err_have("Can't move") or e.err_have("E720032") or e.err_have("Can't remove"):
+-                run_svn(['cleanup'])
+-            else:
+-                raise
+-        #print s
+-        #s = run_shell_command("svn", ['mv', '--parents', 'a', 'f'])
+-        #s = run_svn(['mv', 'a', 'f'])
+-        s = run_svn(['ci', '-m', '"Moving directory with deleted file"'])
+-        ui.status(s, level=ui.DEBUG)
+-        os.chdir(self._wd)
+-        #run_command('hgimportsvn', [svn_url, 'test.hg'])
+-        self.test_hg = self._wd+'/test.hg'
+-
+-    def tearDown(self):
+-        ui.verbose_level(ui.DEFAULT)
+-        hg_close()
+-        os.chdir(self._cwd)
+-        try:
+-            shutil.rmtree(self._wd)
+-        except:
+-            print("warning!!! some locks leaves of dir %s"%self._wd)
+-
+-    def test_pull_deleted_file_of_removed_dir(self):
+-        os.chdir(self._wd)
+-        import_cmd = ['hgimportsvn', self.svn_url, self.test_hg]
+-        if (ui._level >= ui.DEBUG):
+-            import_cmd.append('-v')
+-        hgsvn.run.hgimportsvn.main(import_cmd)
+-        os.chdir(self.test_hg)
+-        #ui.verbose_level(ui.PARSE)
+-        hgsvn.run.hgpullsvn.main(['hgpullsvn'])
+-
+diff --git a/hgsvn/unittests/test_hgclient.py b/hgsvn/unittests/test_hgclient.py
+deleted file mode 100644
+index d07dc70..0000000
+--- a/hgsvn/unittests/test_hgclient.py
++++ /dev/null
+@@ -1,153 +0,0 @@
+-import locale
+-import os
+-import shutil
+-import subprocess
+-import tempfile
+-import unittest
+-import six
+-
+-#from hgsvn import common
+-from hgsvn import ui
+-from hgsvn import common
+-from hgsvn.shell import find_program
+-from hgsvn.run import hgpushsvn
+-from hgsvn.hgclient import hg_close, run_hg
+-from hgsvn.errors import *
+-from hgsvn.shell import run_command, run_shell_command
+-from . import test_hgclient_base
+-
+-from six import *
+-from nose import SkipTest
+-from nose.tools import *
+-from .test_hgclient_base import RepoTest
+-
+-#ui.verbose_level(ui.TRACECMD)#PARSEINNER
+-#ui.verbose_level(ui.PARSEINNER)
+-ui._UseTerminalWidth = 256
+-
+-
+-class TestHgClient(RepoTest):
+-
+-    def test_get_hg_cset(self):
+-        ret = hgpushsvn.get_hg_cset('tip')
+-        self.assertTrue(isinstance(ret, string_types))  #basestring #ret.__type__ in string_types
+-        self.assertEqual(ret, ret.strip())
+-        self.assertEqual(ret.count(':'), 1)
+-        first, last = ret.split(':')
+-        self.assertTrue(first.isdigit())
+-        self.assertTrue(last.isalnum())
+-
+-    def test_get_hg_no_cset(self):
+-        try:
+-            ret = hgpushsvn.get_hg_cset('svn.1')
+-            ui.status("hg reported:%s"%res, level = ui.DEBUG)
+-            self.assertTrue(False)
+-        except (RuntimeError, RunCommandError) as e:
+-            ui.status("hg error reported:%s"%e, level = ui.DEBUG)
+-            self.assertTrue(True)
+-        except Exception as e:
+-            ui.status("error reported:%s"%e, level = ui.DEBUG)
+-            args = ["log", "--template", '"{rev}:{node|short}"', "-r", 'svn.1']
+-            try:
+-                res = run_hg(args)
+-                ui.status("hglib log reported:%s"%res, level = ui.DEBUG)
+-                res = run_command('hg', args)
+-                ui.status("hg log reported:%s"%res, level = ui.DEBUG)
+-            except Exception as e:
+-                ui.status("error reported:%s"%e, level = ui.DEBUG)
+-            self.assertTrue(False)
+-
+-    def test_strip_hg_rev(self):
+-        self.assertEqual(hgpushsvn.strip_hg_rev('1:2'), '1')
+-        self.assertEqual(hgpushsvn.strip_hg_revid('1:2'), '2')
+-        self.assertEqual(hgpushsvn.strip_hg_revid('1:2\n'), '2')
+-
+-    def test_get_hg_changes(self):
+-        ret = hgpushsvn.get_hg_changes('tip', 'tip')
+-        self.assertTrue(isinstance(ret, tuple))
+-        self.assertEqual(len(ret), 4)
+-        added, removed, modified, copied = ret
+-        self.assertTrue(isinstance(added, list))
+-        self.assertTrue(isinstance(removed, list))
+-        self.assertTrue(isinstance(modified, list))
+-        self.assertTrue(isinstance(copied, dict))
+-        self.assertEqual(len(added), 1)
+-        self.assertEqual(len(removed), 0)
+-        self.assertEqual(len(modified), 0)
+-        self.assertEqual(len(copied), 0)
+-        rev1 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
+-        self._write_file('foo', 'bar')
+-        self._write_file('bar', 'foo', commit=True, added=True)
+-        rev2 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
+-        ret = hgpushsvn.get_hg_changes(rev1, rev2)
+-        self.assertTrue(isinstance(ret, tuple))
+-        self.assertEqual(len(ret), 4)
+-        added, removed, modified, copied = ret
+-        self.assertTrue(isinstance(added, list))
+-        self.assertTrue(isinstance(removed, list))
+-        self.assertTrue(isinstance(modified, list))
+-        self.assertEqual(len(added), 1)
+-        self.assertEqual(len(removed), 0)
+-        self.assertEqual(len(modified), 1)
+-        rev1 = rev2
+-        self._remove_file('bar', commit=True)
+-        rev2 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
+-        ret = hgpushsvn.get_hg_changes(rev1, rev2)
+-        self.assertTrue(isinstance(ret, tuple))
+-        self.assertEqual(len(ret), 4)
+-        added, removed, modified, copied = ret
+-        self.assertTrue(isinstance(added, list))
+-        self.assertTrue(isinstance(removed, list))
+-        self.assertTrue(isinstance(modified, list))
+-        self.assertEqual(len(added), 0)
+-        self.assertEqual(len(removed), 1)
+-        self.assertEqual(len(modified), 0)
+-
+-    def test_moved_file(self):
+-        self._move_file('foo', 'bar', commit=True)
+-        ret = hgpushsvn.get_hg_changes('tip', 'tip')
+-        self.assertTrue(isinstance(ret, tuple))
+-        self.assertEqual(len(ret), 4)
+-        added, removed, modified, copied = ret
+-        self.assertEqual(len(copied), 1)
+-        self.assertEqual(len(modified), 0)
+-        self.assertEqual(len(added), 0)
+-        self.assertEqual(len(removed), 1)
+-
+-    def test_get_hg_revs(self):
+-        rev = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
+-        self._write_file('foo', 'bar', commit=True)
+-        rev2 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
+-        revs = hgpushsvn.get_hg_revs(rev, 'default')
+-        self.assertTrue(isinstance(revs, list))
+-        self.assertEqual(len(revs), 2)
+-        self.assertEqual(revs[0], rev)
+-        self.assertEqual(revs[1], rev2)
+-        self._write_file('foo', 'bar2', commit=True)
+-        revs = hgpushsvn.get_hg_revs(rev, 'default')
+-        self.assertTrue(isinstance(revs, list))
+-        self.assertEqual(len(revs), 3)
+-        self.assertEqual(revs[0], rev)
+-        self.assertEqual(revs[1], rev2)
+-        # Change test file in different branch
+-        self._run_cmd(['hg', 'branch', 'testing'])
+-        self._write_file('foo', 'bar3', commit=True)
+-        revs = hgpushsvn.get_hg_revs(rev, 'default')
+-        self.assertTrue(isinstance(revs, list))
+-        self.assertEqual(len(revs), 3)
+-        self.assertEqual(revs[0], rev)
+-        self.assertEqual(revs[1], rev2)
+-
+-    def test_get_hg_cset_description(self):
+-        self._write_file('foo', 'bar', commit=True, msg='123')
+-        rev_raw = hgpushsvn.get_hg_cset('tip')
+-        rev = hgpushsvn.strip_hg_rev(rev_raw)
+-        ret = hgpushsvn.get_hg_cset_description(rev)
+-        self.assertTrue(isinstance(ret, string_types))
+-        self.assertEqual(ret, '123')
+-        self._write_file('foo', 'bar', commit=True, msg=' 123\n')
+-        rev_raw = hgpushsvn.get_hg_cset('tip')
+-        rev = hgpushsvn.strip_hg_rev(rev_raw)
+-        ret = hgpushsvn.get_hg_cset_description(rev)
+-        self.assertTrue(isinstance(ret, string_types))
+-        self.assertEqual(ret, '123')
+diff --git a/setup.py b/setup.py
+index afb7f8c..c085ce7 100644
+--- a/setup.py
++++ b/setup.py
+@@ -74,10 +74,13 @@ setup(
+ 
+     # *Next* version, not previous!
+     version = base_version,
+-    packages = find_packages(exclude=["ez_setup"]),
+-
+-    tests_require = ["nose>=1.0"] ,
+-    test_suite = "nose.collector",
++    packages = find_packages(exclude=["ez_setup", "tests", ]),
++    test_require = [
++        'pytest'
++    ],
++    extras_require = {
++        'test': [ 'pytest', ],
++    },
+ 
+     install_requires = install_requires,
+ 
+diff --git a/hgsvn/unittests/__init__.py b/tests/__init__.py
+similarity index 100%
+rename from hgsvn/unittests/__init__.py
+rename to tests/__init__.py
+diff --git a/tests/test_client_utf.py b/tests/test_client_utf.py
+new file mode 100644
+index 0000000..e167e7c
+--- /dev/null
++++ b/tests/test_client_utf.py
+@@ -0,0 +1,77 @@
++# coding=utf-8
++
++import os
++import shutil
++import tempfile
++import pytest
++
++from hgsvn import ui, shell
++from hgsvn.shell import find_program, run_command
++from hgsvn.run import hgpushsvn
++from hgsvn.hgclient import hg_close, run_hg
++from hgsvn.svnclient import run_svn
++from . import test_hgclient_base
++from .test_hgclient_base import RepoTest
++
++ui._UseTerminalWidth = 256
++
++class TestHgClientUTF(RepoTest):
++    def test_hg_utf_file_stat(self):
++        fname = u'файл-фу'
++        test_file = os.path.join(self.repo_dir, fname)
++        with open(test_file, 'w') as f:
++            f.write('foo')
++
++        res = run_hg(['st'], [fname])
++        ui.status("hg st fname reported %s" % res, level=ui.DEBUG)
++        res = run_hg(['st']).splitlines()
++        ui.status("hg st reported %s" % res, level=ui.DEBUG)
++
++        assert len(res) == 1
++        assert res[0].startswith('?')
++        assert res[0].endswith(fname)
++
++
++class TestSVNClientUTF:
++    def setup_method(self):
++        self._wd = tempfile.mkdtemp()
++        self._cwd = os.getcwd()
++        if len(os.listdir(self._wd)) > 0:
++            shutil.rmtree(self._wd)
++            self._wd = tempfile.mkdtemp()
++        os.chdir(self._wd)
++
++        run_command("svnadmin", ['create', 'test.svn'])
++        self.svn_url = 'file:///' + self._wd + '/test.svn'
++        self.svn_url = self.svn_url.replace("\\", "/")
++        run_svn(['co', self.svn_url, 'test'])
++        self.test_wd = os.path.join(self._wd, 'test')
++        os.chdir(self.test_wd)
++        ui.status("have setup test at %s" % os.getcwd(), level=ui.DEBUG)
++
++    def teardown_method(self):
++        ui.verbose_level(ui.DEFAULT)
++        hg_close()
++        os.chdir(self._cwd)
++        try:
++            shutil.rmtree(self._wd)
++        except Exception:
++            print("warning!!! some locks remain in %s" % self._wd)
++
++    def test_svng_utf_file_add(self):
++        ui.verbose_level(ui.PARSE)
++        file_path = os.path.join(self.test_wd, u'файл-фу.txt')
++        with open(file_path, "w") as fdb:
++            fdb.write("file фу")
++
++        s = run_svn(['add'], [u'файл-фу.txt']).splitlines()
++        ui.status(s, level=ui.DEBUG)
++
++        assert len(s) == 1
++        res = s[0].split()
++        ui.status("splits:%s" % res, level=ui.DEBUG)
++
++        assert res[0].strip() == b"A"
++        fname = res[1].strip().decode(shell.get_encoding())
++        ui.status("fname:%s" % fname, level=ui.DEBUG)
++        assert fname == u'файл-фу.txt'
+diff --git a/tests/test_common.py b/tests/test_common.py
+new file mode 100644
+index 0000000..96fc9ae
+--- /dev/null
++++ b/tests/test_common.py
+@@ -0,0 +1,304 @@
++import os
++import posixpath
++import shutil
++import tempfile
++import pytest
++import six
++
++from hgsvn import common, shell, ui
++from hgsvn.errors import RunCommandError
++from hgsvn.shell import run_shell_command, run_command, once_or_more
++from hgsvn.hgclient import run_hg, hg_close, hg_init, hg_invoke
++from hgsvn.svnclient import run_svn
++import hgsvn.run.hgimportsvn
++import hgsvn.run.hgpullsvn
++from hgsvn.common import drop_nested_dirs
++from six import print_, b, u
++
++ui._UseTerminalWidth = 256
++
++
++class TestCommands:
++    def test_hg(self):
++        s = hg_invoke(['version', '-q'])
++        print(s)
++        ui.status("hg ack:%s" % s, level=ui.DEBUG)
++        have_mercurial = s.find('Mercurial')
++        assert have_mercurial > -1, s
++
++    def test_svn(self):
++        s = run_svn(['--version', '-q'])
++        ui.status("svn ack:%s" % s, level=ui.DEBUG)
++        assert s.split(b'.')[0] == b'1'
++
++
++class CommandsBase:
++    command_func = None
++    cmd_shell = None
++    verbose = ui._level
++
++    def run_shell(self, cmd, args=None, bulk_args=None):
++        if self.cmd_shell:
++            return self.command_func(self.cmd_shell[0], self.cmd_shell[1:] + [cmd] + args, bulk_args)
++        return self.command_func(cmd, args, bulk_args)
++
++    @classmethod
++    def setup_class(cls):
++        if cls.command_func is None:
++            pytest.skip("skip testsuite base abstract")
++
++    def setup_method(self):
++        if self.command_func is None:
++            pytest.skip("skip testsuite base abstract")
++
++        ui.status("test cmd %s" % self.command_func.__name__)
++        if os.name == "nt":
++            self.cmd_shell = ['cmd.exe', '/C']
++        else:
++            self.cmd_shell = None
++
++    def teardown_method(self):
++        ui.verbose_level(self.verbose)
++
++    def test_echo(self):
++        echo_string = 'foo'
++        s = self.run_shell('echo', [echo_string])
++        ui.status("echo reports:%s" % s)
++        s = ui.decode(s, shell.locale_encoding)
++        assert s.rstrip() == echo_string
++
++    skip_escapes = (os.name == "nt")
++
++    def test_echo_with_escapes(self):
++        if self.skip_escapes:
++            pytest.skip("can't pass LineEnd in parameter by stdin")
++        echo_string = 'foo & baz'
++        s = self.run_shell('echo', [echo_string])
++        ui.status("echo reports:%s" % s)
++        s = ui.decode(s, shell.locale_encoding)
++        assert s.rstrip() == echo_string
++
++    def test_bulk_args(self):
++        sep = b('-')
++        args = ['a', 'b', 'c']
++        n_args = len(args)
++        bulk_args = ['%d' % i for i in range(3000)]
++        out = self.run_shell('echo', [sep] + args, bulk_args)
++        ui.status("test_bulk_args resulted:%s" % out, level=ui.DEBUG)
++        res = ui.decode(out, shell.locale_encoding)
++        sub_results = res.splitlines()
++        bulk_pos = 0
++        for s in sub_results:
++            l = s.split()
++            assert l.pop(0).strip() == "-"
++            assert l[:n_args] == args
++            n_bulk = len(l) - n_args
++            assert n_bulk < 256
++            assert l[n_args:] == bulk_args[bulk_pos:bulk_pos + n_bulk]
++            bulk_pos += n_bulk
++        assert bulk_pos == len(bulk_args)
++
++
++class TestShellCommands(CommandsBase):
++    command_func = staticmethod(run_shell_command)
++
++
++class TestNonShellCommands(CommandsBase):
++    command_func = staticmethod(run_command)
++
++
++class TestLock:
++    test_mercurial = True
++
++    @classmethod
++    def setup_class(cls):
++        if cls.test_mercurial:
++            try:
++                from mercurial.lock import lock  # noqa
++            except ImportError:
++                pytest.skip("mercurial not installed")
++
++    def setup_method(self):
++        if self.test_mercurial:
++            try:
++                from mercurial.lock import lock  # noqa
++            except ImportError:
++                pytest.skip("mercurial not installed")
++        self._test_base = tempfile.mkdtemp()
++        common.fixup_hgsvn_dir(self._test_base)
++
++    def teardown_method(self):
++        shutil.rmtree(self._test_base)
++
++    def test_lock_set_release(self):
++        def lock_exists():
++            private_dir = os.path.join(self._test_base, common.hgsvn_private_dir)
++            return common.hgsvn_lock_file in os.listdir(private_dir)
++
++        l = common.get_hgsvn_lock(self._test_base)
++        assert lock_exists()
++        l.release()
++        assert not lock_exists()
++
++    def test_locked(self):
++        l = common.get_hgsvn_lock(self._test_base)
++        lHeld = False
++        try:
++            common.get_hgsvn_lock(self._test_base)
++        except common.LockHeld:
++            lHeld = True
++        assert lHeld
++        l.release()
++
++
++class TestSimpleFileLock(TestLock):
++    test_mercurial = False
++
++    def setup_method(self):
++        self._real_lock = common._lock
++        self._real_lock_held = common.LockHeld
++        common._lock = common._SimpleFileLock
++        common.LockHeld = common._LockHeld
++        super().setup_method()
++
++    def teardown_method(self):
++        super().teardown_method()
++        common._lock = self._real_lock
++        common.LockHeld = self._real_lock_held
++
++
++class TestSwitchBranch:
++    def setup_method(self):
++        self._wd = tempfile.mkdtemp()
++        self._cwd = os.getcwd()
++        if os.listdir(self._wd):
++            shutil.rmtree(self._wd)
++            self._wd = tempfile.mkdtemp()
++        os.chdir(self._wd)
++        hg_init()
++        with open("foo", "w") as f:
++            f.write("foo")
++        run_hg(["add", "foo"])
++        run_hg(["commit", "-u" "'Example <foo@example.com>'",  "-m", "Initial"])
++
++    def teardown_method(self):
++        os.chdir(self._cwd)
++        hg_close()
++        try:
++            shutil.rmtree(self._wd)
++        except Exception:
++            print("warning!!! some locks leaves of dir %s" % self._wd)
++
++    def test_switch_clean_repo(self):
++        run_hg(["branch", "test"])
++        with open("bar", "w") as f:
++            f.write("bar")
++        run_hg(["add", "bar"])
++        run_hg(["commit", "-u", "'Example <foo@example>'", "-m", '"bar added."'])
++        assert common.hg_switch_branch("test", "default")
++
++    def test_switch_dirty_repo(self):
++        run_hg(["branch", "test"])
++        with open("bar", "w") as f:
++            f.write("bar")
++        run_hg(["add", "bar"])
++        assert not common.hg_switch_branch("test", "default")
++
++
++class TestOnceOrMore:
++    def setup_method(self):
++        self._counter = 0
++
++    def increment(self, count):
++        self._counter += count
++        return self._counter
++
++    def increment_until_3(self, count):
++        self.increment(count)
++        if self._counter < 3:
++            raise Exception("Counter not high enough yet")
++
++    def test_no_exception(self):
++        foo = once_or_more("Foo", False, self.increment, 1)
++        assert self._counter == 1
++        assert foo == 1
++        foo = once_or_more("Foo", True, self.increment, 2)
++        assert self._counter == 3
++        assert foo == 3
++
++    def test_with_exception_no_retry(self):
++        assert self._counter == 0
++        with pytest.raises(Exception):
++            once_or_more("Foo", False, self.increment_until_3, 1)
++
++    def test_with_exception_retry(self):
++        assert self._counter == 0
++        once_or_more("Foo", True, self.increment_until_3, 1)
++        assert self._counter == 3
++
++
++class TestListsFunstions:
++    def teardown_method(self):
++        ui.verbose_level(ui.DEFAULT)
++
++    def test_drop_nested_dirs(self):
++        x = ['a', 'a/b', 'b', 'b/c', 'ab', 'abc', 'ab\\e']
++        drops = ['ab']
++        y = drop_nested_dirs(x, drops)
++        ui.status("reduction of %s - %s = %s" % (x, drops, y), level=ui.DEBUG)
++        assert set(y) == set(['a', 'b', 'abc'])
++
++
++class TestPullFiles:
++    def setup_method(self):
++        self._wd = tempfile.mkdtemp()
++        self._cwd = os.getcwd()
++        if os.listdir(self._wd):
++            shutil.rmtree(self._wd)
++            self._wd = tempfile.mkdtemp()
++        os.chdir(self._wd)
++        run_command("svnadmin", ['create', 'test.svn'])
++        self.svn_url = 'file:///' + self._wd + '/test.svn'
++        self.svn_url = self.svn_url.replace("\\", "/")
++        run_svn(['co', self.svn_url, 'test'])
++        self.test_wd = self._wd + '/test'
++        ui.status("have setup test at %s" % os.getcwd(), level=ui.DEBUG)
++        self.test_a = self._wd + '/test/a'
++        os.chdir(self.test_wd)
++        os.mkdir(self.test_a)
++        with open(self.test_a + '/b.txt', "w") as fdb:
++            fdb.write("file b")
++        with open(self.test_a + '/c.txt', "w") as fdc:
++            fdc.write("file c")
++        run_svn(['add', 'a'])
++        run_svn(['ci', '-m', '"initial revision"'])
++        run_svn(['rm', 'a/b.txt'])
++        run_svn(['cp', 'a', 'd'])
++        try:
++            run_svn(['rm', 'a'])
++        except RunCommandError as e:
++            if e.err_have("Can't move") or e.err_have("E720032") or e.err_have("Can't remove"):
++                run_svn(['cleanup'])
++            else:
++                raise
++        run_svn(['ci', '-m', '"Moving directory with deleted file"'])
++        os.chdir(self._wd)
++        self.test_hg = self._wd + '/test.hg'
++
++    def teardown_method(self):
++        ui.verbose_level(ui.DEFAULT)
++        hg_close()
++        os.chdir(self._cwd)
++        try:
++            shutil.rmtree(self._wd)
++        except Exception:
++            print("warning!!! some locks leaves of dir %s" % self._wd)
++
++    def test_pull_deleted_file_of_removed_dir(self):
++        os.chdir(self._wd)
++        import_cmd = ['hgimportsvn', self.svn_url, self.test_hg]
++        if ui._level >= ui.DEBUG:
++            import_cmd.append('-v')
++        hgsvn.run.hgimportsvn.main(import_cmd)
++        os.chdir(self.test_hg)
++        hgsvn.run.hgpullsvn.main(['hgpullsvn'])
+diff --git a/tests/test_hgclient.py b/tests/test_hgclient.py
+new file mode 100644
+index 0000000..15aee28
+--- /dev/null
++++ b/tests/test_hgclient.py
+@@ -0,0 +1,145 @@
++import os
++import pytest
++import six
++
++from hgsvn import ui, common
++from hgsvn.shell import find_program, run_command, run_shell_command
++from hgsvn.run import hgpushsvn
++from hgsvn.hgclient import hg_close, run_hg
++from hgsvn.errors import *
++from .test_hgclient_base import RepoTest
++
++from six import string_types
++
++ui._UseTerminalWidth = 256
++
++
++class TestHgClient(RepoTest):
++    def test_get_hg_cset(self):
++        ret = hgpushsvn.get_hg_cset('tip')
++        assert isinstance(ret, string_types)
++        assert ret == ret.strip()
++        assert ret.count(':') == 1
++        first, last = ret.split(':')
++        assert first.isdigit()
++        assert last.isalnum()
++
++    def test_get_hg_no_cset(self):
++        try:
++            ret = hgpushsvn.get_hg_cset('svn.1')
++            ui.status("hg reported:%s" % ret, level=ui.DEBUG)
++            assert False
++        except (RuntimeError, RunCommandError) as e:
++            ui.status("hg error reported:%s" % e, level=ui.DEBUG)
++            assert True
++        except Exception as e:
++            ui.status("error reported:%s" % e, level=ui.DEBUG)
++            args = ["log", "--template", '"{rev}:{node|short}"', "-r", 'svn.1']
++            try:
++                res = run_hg(args)
++                ui.status("hglib log reported:%s" % res, level=ui.DEBUG)
++                res = run_command('hg', args)
++                ui.status("hg log reported:%s" % res, level=ui.DEBUG)
++            except Exception as e:
++                ui.status("error reported:%s" % e, level=ui.DEBUG)
++            assert False
++
++    def test_strip_hg_rev(self):
++        assert hgpushsvn.strip_hg_rev('1:2') == '1'
++        assert hgpushsvn.strip_hg_revid('1:2') == '2'
++        assert hgpushsvn.strip_hg_revid('1:2\n') == '2'
++
++    def test_get_hg_changes(self):
++        ret = hgpushsvn.get_hg_changes('tip', 'tip')
++        assert isinstance(ret, tuple)
++        assert len(ret) == 4
++        added, removed, modified, copied = ret
++        assert isinstance(added, list)
++        assert isinstance(removed, list)
++        assert isinstance(modified, list)
++        assert isinstance(copied, dict)
++        assert len(added) == 1
++        assert len(removed) == 0
++        assert len(modified) == 0
++        assert len(copied) == 0
++
++        rev1 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
++        self._write_file('foo', 'bar')
++        self._write_file('bar', 'foo', commit=True, added=True)
++        rev2 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
++        ret = hgpushsvn.get_hg_changes(rev1, rev2)
++        assert isinstance(ret, tuple)
++        assert len(ret) == 4
++        added, removed, modified, copied = ret
++        assert isinstance(added, list)
++        assert isinstance(removed, list)
++        assert isinstance(modified, list)
++        assert len(added) == 1
++        assert len(removed) == 0
++        assert len(modified) == 1
++
++        rev1 = rev2
++        self._remove_file('bar', commit=True)
++        rev2 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
++        ret = hgpushsvn.get_hg_changes(rev1, rev2)
++        assert isinstance(ret, tuple)
++        assert len(ret) == 4
++        added, removed, modified, copied = ret
++        assert isinstance(added, list)
++        assert isinstance(removed, list)
++        assert isinstance(modified, list)
++        assert len(added) == 0
++        assert len(removed) == 1
++        assert len(modified) == 0
++
++    def test_moved_file(self):
++        self._move_file('foo', 'bar', commit=True)
++        ret = hgpushsvn.get_hg_changes('tip', 'tip')
++        assert isinstance(ret, tuple)
++        assert len(ret) == 4
++        added, removed, modified, copied = ret
++        assert len(copied) == 1
++        assert len(modified) == 0
++        assert len(added) == 0
++        assert len(removed) == 1
++
++    def test_get_hg_revs(self):
++        rev = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
++        self._write_file('foo', 'bar', commit=True)
++        rev2 = hgpushsvn.strip_hg_rev(hgpushsvn.get_hg_cset('tip'))
++        revs = hgpushsvn.get_hg_revs(rev, 'default')
++        assert isinstance(revs, list)
++        assert len(revs) == 2
++        assert revs[0] == rev
++        assert revs[1] == rev2
++
++        self._write_file('foo', 'bar2', commit=True)
++        revs = hgpushsvn.get_hg_revs(rev, 'default')
++        assert isinstance(revs, list)
++        assert len(revs) == 3
++        assert revs[0] == rev
++        assert revs[1] == rev2
++
++        # Change test file in different branch
++        self._run_cmd(['hg', 'branch', 'testing'])
++        self._write_file('foo', 'bar3', commit=True)
++        revs = hgpushsvn.get_hg_revs(rev, 'default')
++        assert isinstance(revs, list)
++        assert len(revs) == 3
++        assert revs[0] == rev
++        assert revs[1] == rev2
++
++    def test_get_hg_cset_description(self):
++        self._write_file('foo', 'bar', commit=True, msg='123')
++        rev_raw = hgpushsvn.get_hg_cset('tip')
++        rev = hgpushsvn.strip_hg_rev(rev_raw)
++        ret = hgpushsvn.get_hg_cset_description(rev)
++        assert isinstance(ret, string_types)
++        assert ret == '123'
++
++        self._write_file('foo', 'bar', commit=True, msg=' 123\n')
++        rev_raw = hgpushsvn.get_hg_cset('tip')
++        rev = hgpushsvn.strip_hg_rev(rev_raw)
++        ret = hgpushsvn.get_hg_cset_description(rev)
++        assert isinstance(ret, string_types)
++        assert ret == '123'
+diff --git a/hgsvn/unittests/test_hgclient_base.py b/tests/test_hgclient_base.py
+similarity index 63%
+rename from hgsvn/unittests/test_hgclient_base.py
+rename to tests/test_hgclient_base.py
+index 2a44541..52641cb 100644
+--- a/hgsvn/unittests/test_hgclient_base.py
++++ b/tests/test_hgclient_base.py
+@@ -1,48 +1,41 @@
+ # coding=utf-8
+ 
+-import locale
+ import os
+ import shutil
+ import subprocess
+ import tempfile
+-import unittest
++import sys
++import pytest
+ import six
+ 
+-#from hgsvn import common
+ from hgsvn import ui
+ from hgsvn import common
+ from hgsvn.shell import find_program
+ from hgsvn.run import hgpushsvn
+ from hgsvn.hgclient import hg_close, run_hg
+ 
+-from six import *
+-from nose import SkipTest
+-from nose.tools import *
+-
+ if sys.version_info[0] >= 3:
+     import tracemalloc
+     tracemalloc.start(10)
+ 
+-#ui.verbose_level(ui.TRACECMD)#PARSEINNER
+-#ui.verbose_level(ui.PARSEINNER)
+-#ui.verbose_level(ui.DEBUG)
+ ui._UseTerminalWidth = 256
+ 
+-class RepoTest(unittest.TestCase):
+ 
++class RepoTest:
+     def _run_cmd(self, cmd_args):
+         useargs = cmd_args
+         useargs[0] = find_program(cmd_args[0])
+-        ui.status("run: %s"%(cmd_args), level = ui.DEBUG);
++        ui.status("run: %s" % (cmd_args,), level=ui.DEBUG)
+         p = subprocess.Popen(useargs)
+         p.wait()
+         del p
+ 
+     def _write_file(self, fname, content, commit=False, added=False,
+                     msg='test'):
+-        f = open(os.path.join(self.repo_dir, fname), 'w')
+-        f.write(content)
+-        f.close()
++        file_path = os.path.join(self.repo_dir, fname)
++        with open(file_path, 'w') as f:
++            f.write(content)
++
+         if added:
+             self._run_cmd(['hg', 'add', fname])
+         if commit:
+@@ -59,28 +52,25 @@ class RepoTest(unittest.TestCase):
+             self._run_cmd(['hg', 'commit', '-m',
+                            '"Copied %s -> %s"' % (source, dest)])
+ 
+-    def setUp(self):
+-        #ui.verbose_level(ui.TRACECMD)
++    def setup_method(self):
+         self.repo_dir = tempfile.mkdtemp()
+         self._currdir = os.getcwd()
+         os.chdir(self.repo_dir)
+         self._run_cmd(['hg', 'init'])
++
+         self.test_file = os.path.join(self.repo_dir, 'foo')
+-        f = open(self.test_file, 'w')
+-        f.write('foo')
+-        f.close()
++        with open(self.test_file, 'w') as f:
++            f.write('foo')
++
+         self._run_cmd(['hg', 'add', 'foo'])
+         self._run_cmd(['hg', 'commit', '-m', '"Initial."'])
+-        ui.status("have test setup at %s"%self.repo_dir, level = ui.DEBUG);
+-        #sumary - 
+-        #   tip: Added foo
++        ui.status("have test setup at %s" % self.repo_dir, level=ui.DEBUG)
+ 
+-    def tearDown(self):
+-        ui.status("test shutdown at %s"%self.repo_dir, level = ui.DEBUG);
+-        #ui.verbose_level(ui.DEFAULT)
++    def teardown_method(self):
++        ui.status("test shutdown at %s" % self.repo_dir, level=ui.DEBUG)
+         os.chdir(self._currdir)
+         hg_close()
+         try:
+             shutil.rmtree(self.repo_dir)
+-        except:
+-            print("warning!!! some locks leaves of dir %s"%self.repo_dir)
++        except Exception:
++            print("warning!!! some locks remain in dir %s" % self.repo_dir)
+diff --git a/hgsvn/unittests/test_svnclient.py b/tests/test_svnclient.py
+similarity index 58%
+rename from hgsvn/unittests/test_svnclient.py
+rename to tests/test_svnclient.py
+index f374238..17c2d5d 100644
+--- a/hgsvn/unittests/test_svnclient.py
++++ b/tests/test_svnclient.py
+@@ -1,30 +1,27 @@
+ # coding=utf-8
+ 
++import time
++import pytest
++import six
++
+ from hgsvn import svnclient
+ from hgsvn import common
+ from hgsvn import ui
+ 
+-from nose import SkipTest
+-from nose.tools import *
+-
+-import time
+-import six
+ from six import print_, b, u
+-import unittest
++
+ 
+ def eq_utc_timestamp(timestamp, time_tuple):
+-    eq_(time.gmtime(timestamp)[:6], time_tuple)
++    assert time.gmtime(timestamp)[:6] == time_tuple
+ 
+-#ui.verbose_level(ui.TRACECMD)
+ 
+-class TestSVNBase(unittest.TestCase):
+-    def setUp(self):
++class TestSVNBase:
++    def setup_method(self):
+         self.save_verb = ui._level
+-        #ui.verbose_level(ui.TRACECMD)
+ 
+-    def tearDown(self):
++    def teardown_method(self):
+         ui.verbose_level(self.save_verb)
+-   
++
+ 
+ class TestSVNDate(TestSVNBase):
+     """
+@@ -37,7 +34,7 @@ class TestSVNDate(TestSVNBase):
+         """
+         svn_date = "2007-05-01T18:33:32.749605Z"
+         timestamp = svnclient.svn_date_to_timestamp(svn_date)
+-        eq_(timestamp, 1178044412)
++        assert timestamp == 1178044412
+         eq_utc_timestamp(timestamp, (2007, 5, 1, 18, 33, 32))
+ 
+ 
+@@ -78,38 +75,24 @@ svn_info_xml_rev0 = """<?xml version="1.0"?>
+ </entry>
+ </info>"""
+ 
++
+ class TestSVNInfo(TestSVNBase):
+     """
+     Tests for handling SVN wc/repo information.
+     """
+ 
+-    #def test_filter(self):
+-    #    from hgsvn.svnclient import _forbidden_xml_chars, _forbidden_xml_bytes, _forbidden_xml_trans
+-    #    print_("filter: bytes: %s"%_forbidden_xml_bytes)
+-    #    print_("filter: trans: %s"%_forbidden_xml_trans)
+-    #    eq_(1, 1)
+-    
+     def test_parse(self):
+-        """
+-        Parsing the output of 'svn info --xml'.
+-        """
+-        #ui.verbose_level(ui.PARSE)
+-        #ui.status("xml is:%s"%svn_info_xml, level = ui.DEBUG)
+         d = svnclient.parse_svn_info_xml(svn_info_xml)
+-        eq_(d['url'], 'svn://svn.twistedmatrix.com/svn/Twisted/trunk')
+-        eq_(d['repos_url'], 'svn://svn.twistedmatrix.com/svn/Twisted')
+-        eq_(d['revision'], 20191)
+-        eq_(d['last_changed_rev'], 20185)
++        assert d['url'] == 'svn://svn.twistedmatrix.com/svn/Twisted/trunk'
++        assert d['repos_url'] == 'svn://svn.twistedmatrix.com/svn/Twisted'
++        assert d['revision'] == 20191
++        assert d['last_changed_rev'] == 20185
+ 
+     def test_parse_rev0(self):
+-        """
+-        Parsing the output of 'svn info --xml' for revision 0.
+-        """
+         d = svnclient.parse_svn_info_xml(svn_info_xml_rev0)
+-        eq_(d['url'], 'file:///home/foo/bar')
+-        eq_(d['repos_url'], 'file:///home/foo/bar')
+-        eq_(d['revision'], 0)
+-
++        assert d['url'] == 'file:///home/foo/bar'
++        assert d['repos_url'] == 'file:///home/foo/bar'
++        assert d['revision'] == 0
+ 
+ 
+ svn_log_xml = """<?xml version="1.0"?>
+@@ -159,15 +142,19 @@ svn_log_xml_with_empty_msg = """<?xml version="1.0"?>
+ </logentry>
+ </log>"""
+ 
+-svn_log_xml_with_invalid_chars = ('<?xml version="1.0"?>'
+-    + '\n<log>\n<logentry\n   revision="1722">\n<author>synic</author>\n'
+-    + '<date>2006-11-08T19:56:30.120180Z</date>\n'
+-    + '<msg>fixed some plugin bugs===+=\x1f\x1f\x1f---\n</msg>\n</logentry>\n</log>\n')
++svn_log_xml_with_invalid_chars = (
++    '<?xml version="1.0"?>\n<log>\n<logentry\n   revision="1722">\n'
++    '<author>synic</author>\n'
++    '<date>2006-11-08T19:56:30.120180Z</date>\n'
++    '<msg>fixed some plugin bugs===+=\x1f\x1f\x1f---\n</msg>\n</logentry>\n</log>\n'
++)
+ 
+-svn_log_xml_filtered_invalid_chars = ('<?xml version="1.0"?>'
+-    + '\n<log>\n<logentry\n   revision="1722">\n<author>synic</author>\n'
+-    + '<date>2006-11-08T19:56:30.120180Z</date>\n'
+-    + '<msg>fixed some plugin bugs===+=   ---\n</msg>\n</logentry>\n</log>\n')
++svn_log_xml_filtered_invalid_chars = (
++    '<?xml version="1.0"?>\n<log>\n<logentry\n   revision="1722">\n'
++    '<author>synic</author>\n'
++    '<date>2006-11-08T19:56:30.120180Z</date>\n'
++    '<msg>fixed some plugin bugs===+=   ---\n</msg>\n</logentry>\n</log>\n'
++)
+ 
+ svn_log_xml_with_path_restricted = """<?xml version="1.0"?>
+ <log>
+@@ -210,102 +197,73 @@ svn_log_xml_with_utf8 = u"""<?xml version="1.0" encoding="UTF-8"?>
+ </log>"""
+ 
+ 
+-
+ class TestSVNLog(TestSVNBase):
+-    """
+-    Tests for handling SVN logs.
+-    """
+-    def setUp(self):
+-        TestSVNBase.setUp(self)
+-        #global ui._UseTerminalWidth
++    def setup_method(self):
++        super().setup_method()
+         ui._UseTerminalWidth = 255
+ 
+     def test_parse(self):
+-        """
+-        Parsing an SVN log in XML format.
+-        """
+         entries = svnclient.parse_svn_log_xml(svn_log_xml)
+-        eq_(len(entries), 2)
++        assert len(entries) == 2
+         e = entries[0]
+-        eq_(e['author'], 'apitrou')
+-        eq_(e['revision'], 1777)
++        assert e['author'] == 'apitrou'
++        assert e['revision'] == 1777
+         eq_utc_timestamp(e['date'], (2007, 3, 29, 9, 37, 56))
+-        eq_(e['message'], "move dir to better-named location\n\n")
++        assert e['message'] == "move dir to better-named location\n\n"
+         paths = e['changed_paths']
+-        eq_(len(paths), 2)
++        assert len(paths) == 2
+         p = paths[0]
+-        eq_(p, {
++        assert p == {
+             'path': '/hgsvn',
+             'action': 'A',
+             'copyfrom_path': '/scripts',
+             'copyfrom_revision': 1776,
+-        })
++        }
+         p = paths[1]
+-        eq_(p, {
++        assert p == {
+             'path': '/scripts',
+             'action': 'D',
+             'copyfrom_path': None,
+             'copyfrom_revision': None,
+-        })
++        }
+         e = entries[1]
+-        eq_(e['author'], 'apitrou')
+-        eq_(e['revision'], 1776)
++        assert e['author'] == 'apitrou'
++        assert e['revision'] == 1776
+         eq_utc_timestamp(e['date'], (2007, 3, 28, 16, 51, 15))
+-        eq_(len(e['changed_paths']), 1)
++        assert len(e['changed_paths']) == 1
+ 
+     def test_parse_with_empty_msg(self):
+-        """
+-        Parsing an SVN log entry with an empty commit message.
+-        """
+         entries = svnclient.parse_svn_log_xml(svn_log_xml_with_empty_msg)
+-        eq_(len(entries), 1)
++        assert len(entries) == 1
+         e = entries[0]
+-        eq_(e['message'], "")
++        assert e['message'] == ""
+ 
+     def test_invalid_xml_filter(self):
+-        """
+-        Parsing an SVN log entry with invalid XML characters.
+-        """
+-        #ui.verbose_level(ui.PARSE)
+-        ui.status("svn xml tranlator is:%s"%svnclient._forbidden_xml_trans, level = ui.DEBUG)
+-        ui.status("svn xml utf tranlator is:%s"%svnclient._forbidden_xml_strans, level = ui.DEBUG)
+-        ui.status("svn log xml invalid:%s"%svn_log_xml_with_invalid_chars, level = ui.DEBUG)
+         filtered = svnclient.strip_forbidden_xml_chars(svn_log_xml_with_invalid_chars)
+-        eq_( filtered, svn_log_xml_filtered_invalid_chars)
++        assert filtered == svn_log_xml_filtered_invalid_chars
+ 
+     def test_parse_with_invalid_xml(self):
+-        """
+-        Parsing an SVN log entry with invalid XML characters.
+-        """
+-        #ui.verbose_level(ui.PARSE)
+-        ui.status("svn log xml invalid:%s"%svn_log_xml_with_invalid_chars, level = ui.DEBUG)
+         entries = svnclient.parse_svn_log_xml(svn_log_xml_with_invalid_chars)
+-        eq_(len(entries), 1)
++        assert len(entries) == 1
+         msg = entries[0]['message']
+         assert msg.startswith('fixed some plugin bugs===+=')
+         assert msg.strip().endswith('---')
+ 
+     def test_parse_with_utf8_xml(self):
+-        """
+-        Parsing an SVN log entry with invalid XML characters.
+-        """
+         entries = svnclient.parse_svn_log_xml(svn_log_xml_with_utf8.encode('utf-8'))
+-        ui.status("svn log xml utf8 got:%s"%entries, level = ui.DEBUG)
+-        eq_(len(entries), 2)
++        assert len(entries) == 2
+         e0 = entries[0]
+-        assert_true(e0['author'] == u"Александр")
+-        assert_true( e0['message'].startswith(u"тут продолжил гравную ветку") )
++        assert e0['author'] == u"Александр"
++        assert e0['message'].startswith(u"тут продолжил гравную ветку")
+ 
+     def test_parse_with_path_based_restrictions(self):
+-        # Stub log entries appear when there is path-based authentication
+-        # enabled on specific directories.
+         entries = svnclient.parse_svn_log_xml(svn_log_xml_with_path_restricted)
+-        eq_(len(entries), 3)
++        assert len(entries) == 3
+         msg = entries[1]['message']
+         assert msg.startswith('Added bar.')
+         keys = ('revision', 'author', 'date', 'message', 'changed_paths', 'merges')
+-        eq_(set(keys), set(entries[0]))
+-        eq_([], entries[0]['changed_paths'])
++        assert set(keys) == set(entries[0])
++        assert entries[0]['changed_paths'] == []
+ 
+ 
+ svn_status_xml = """<?xml version="1.0"?>
+@@ -366,46 +324,37 @@ svn_status_xml_with_base_dir = """<?xml version="1.0"?>
+ </target>
+ </status>"""
+ 
+-class TestSVNStatus(TestSVNBase):
+-    """
+-    Tests for handling status of an SVN working copy.
+-    """
+ 
++class TestSVNStatus(TestSVNBase):
+     def test_parse(self):
+-        """
+-        Parsing the output of 'svn st --xml'.
+-        """
+         entries = svnclient.parse_svn_status_xml(svn_status_xml)
+-        eq_(len(entries), 4)
++        assert len(entries) == 4
+         e = entries[0]
+-        eq_(e['path'], '_doc.html')
+-        eq_(e['type'], 'unversioned')
++        assert e['path'] == '_doc.html'
++        assert e['type'] == 'unversioned'
+         e = entries[1]
+-        eq_(e['path'], 'ez_setup')
+-        eq_(e['type'], 'external')
++        assert e['path'] == 'ez_setup'
++        assert e['type'] == 'external'
+         e = entries[2]
+-        eq_(e['path'], 'hgcreatesvn.py')
+-        eq_(e['type'], 'normal')
++        assert e['path'] == 'hgcreatesvn.py'
++        assert e['type'] == 'normal'
+         e = entries[3]
+-        eq_(e['path'], 'hgsvn/svnclient.py')
+-        eq_(e['type'], 'normal')
++        assert e['path'] == 'hgsvn/svnclient.py'
++        assert e['type'] == 'normal'
+ 
+     def test_parse_with_base_dir(self):
+-        """
+-        Parsing the output of 'svn st --xml' with an explicit base dir.
+-        """
+         entries = svnclient.parse_svn_status_xml(
+             svn_status_xml_with_base_dir, '/home/antoine/hgsvn')
+-        eq_(len(entries), 1)
++        assert len(entries) == 1
+         e = entries[0]
+-        eq_(e['path'], 'build')
+-        eq_(e['type'], 'unversioned')
++        assert e['path'] == 'build'
++        assert e['type'] == 'unversioned'
+ 
+ 
+ def test_get_svn_client_version():
+     version = svnclient.get_svn_client_version()
+-    assert_true(isinstance(version, tuple))
+-    assert_true(len(version) >= 2)
++    assert isinstance(version, tuple)
++    assert len(version) >= 2
+     for part in version:
+-        assert_true(isinstance(part, int))
+-    eq_(version[0], 1)
++        assert isinstance(part, int)
++    assert version[0] == 1
+-- 
+2.51.0
+

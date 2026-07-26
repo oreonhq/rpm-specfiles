@@ -1,0 +1,28 @@
+From ccffce92cdd64b2607edf0e12d5352ebb5be69fa Mon Sep 17 00:00:00 2001
+From: David Mulder <dmulder@suse.com>
+Date: Wed, 2 Mar 2022 05:10:43 -0700
+Subject: [PATCH 3/4] execl requires the exe as the first arg
+
+---
+ src/gpupdate.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/gpupdate.c b/src/gpupdate.c
+index dce3e5e..296c9ce 100644
+--- a/src/gpupdate.c
++++ b/src/gpupdate.c
+@@ -85,9 +85,9 @@ static int apply_gpo(enum Target target, const char *user)
+ 		return 1;
+ 	case 0:
+ 		if (target == Computer) {
+-			execl(exe, "--target=Computer", NULL);
++			execl(exe, exe, "--target=Computer", NULL);
+ 		} else if (target == User) {
+-			execl(exe, "--target=User", "-U", user, NULL);
++			execl(exe, exe, "--target=User", "-U", user, NULL);
+ 		}
+ 		return 3;
+ 	default:
+-- 
+2.34.1
+

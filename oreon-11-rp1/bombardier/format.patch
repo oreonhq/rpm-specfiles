@@ -1,0 +1,24 @@
+--- display.c~	2021-01-11 17:12:16.000000000 -0600
++++ display.c	2022-08-04 16:18:03.999301496 -0500
+@@ -220,10 +220,10 @@
+     int i,j;
+ 
+     gerase();
+-    if (state->text) mvprintw(gy(HEIGHT), gx(0), state->text);
++    if (state->text) mvprintw(gy(HEIGHT), gx(0), state->text, "%s");
+     memset(earth, '=', WIDTH);
+     earth[WIDTH]=0;
+-    mvprintw(gy(HEIGHT-1),gx(0),earth);
++    mvprintw(gy(HEIGHT-1),gx(0),earth,"%s");
+     if (state->willbebombed)
+     {
+         if (state->bomby-state->line-state->x/(WIDTH-1)>1) mvprintw(gy(state->bomby-2), gx(state->bombx), "_");
+@@ -258,7 +258,7 @@
+         break;
+     }
+     asprintf(&statusstr, "Blocks: %.4d/%.4d, City: %15s (%.2d), Score: %7d", state->blocks, state->numofblocks, citycompute(state->city), state->city, state->score);
+-    mvprintw(gy(HEIGHT-1), gx(WIDTH/2-strlen(statusstr)/2), statusstr);
++    mvprintw(gy(HEIGHT-1), gx(WIDTH/2-strlen(statusstr)/2), statusstr, "%s");
+     free(statusstr);
+     refresh();
+ }

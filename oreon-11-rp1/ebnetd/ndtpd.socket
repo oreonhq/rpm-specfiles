@@ -1,0 +1,9 @@
+[Unit]
+Description=Network Directory Transfer Protocol Server Activation Socket
+
+[Socket]
+ListenStream=2882
+Accept=yes
+
+[Install]
+WantedBy=sockets.target

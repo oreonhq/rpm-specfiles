@@ -1,0 +1,18 @@
+--- GabeditSrc251/src/Utils/UtilsVASP.c.leak	2021-07-27 16:54:23.000000000 +0900
++++ GabeditSrc251/src/Utils/UtilsVASP.c	2021-12-27 13:12:21.893755851 +0900
+@@ -711,7 +711,6 @@ static gboolean read_bands_vasp_xml_file
+ /********************************************************************************/
+ void read_bands_vasp_xml_file_dlg()
+ {
+-	gint* d = g_malloc(sizeof(gint));
+ 	GtkWidget* filesel = 
+  	file_chooser_open(read_bands_vasp_xml_file,
+ 			_("Read bands struture from a vasp.xml file"),
+@@ -822,7 +821,6 @@ static gboolean read_dos_vasp_xml_file(G
+ /********************************************************************************/
+ void read_dos_vasp_xml_file_dlg()
+ {
+-	gint* d = g_malloc(sizeof(gint));
+ 	GtkWidget* filesel = 
+  	file_chooser_open(read_dos_vasp_xml_file,
+ 			_("Read dos  from a vasp.xml file"),

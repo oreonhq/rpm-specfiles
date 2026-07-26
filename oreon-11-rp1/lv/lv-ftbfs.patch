@@ -1,0 +1,116 @@
+diff -pruN lv451.orig/src/console.c lv451/src/console.c
+--- lv451.orig/src/console.c	2025-01-28 12:26:51.641697956 +0900
++++ lv451/src/console.c	2025-01-28 12:27:55.617794971 +0900
+@@ -109,8 +109,8 @@ private int (*putfunc)(int) = putchar;
+ private char entry[ 1024 ];
+ private char func[ 1024 ];
+ 
+-extern char *tgetstr(), *tgoto();
+-extern int tgetent(), tgetflag(), tgetnum(), tputs();
++extern char *tgetstr(const char *, char **), *tgoto(const char *, int, int);
++extern int tgetent(char *, const char *), tgetflag(const char *), tgetnum(const char *), tputs(const char *, int, int (*)(int));
+ 
+ private char *cursor_address		= NULL;
+ private char *clear_screen		= NULL;
+@@ -314,31 +312,31 @@ public void ConsoleTermInit()
+ 
+   ptr = func;
+ 
+-  cursor_address	= tgetstr( "cm", &ptr );
+-  clear_screen		= tgetstr( "cl", &ptr );
+-  clr_eol		= tgetstr( "ce", &ptr );
+-  insert_line		= tgetstr( "al", &ptr );
+-  delete_line		= tgetstr( "dl", &ptr );
+-  enter_standout_mode	= tgetstr( "so", &ptr );
+-  exit_standout_mode	= tgetstr( "se", &ptr );
+-  enter_underline_mode	= tgetstr( "us", &ptr );
+-  exit_underline_mode	= tgetstr( "ue", &ptr );
+-  enter_bold_mode	= tgetstr( "md", &ptr );
+-  exit_attribute_mode	= tgetstr( "me", &ptr );
+-  cursor_visible	= tgetstr( "ve", &ptr );
+-  cursor_invisible	= tgetstr( "vi", &ptr );
+-  enter_ca_mode		= tgetstr( "ti", &ptr );
+-  exit_ca_mode		= tgetstr( "te", &ptr );
+-
+-  keypad_local		= tgetstr( "ke", &ptr );
+-  keypad_xmit		= tgetstr( "ks", &ptr );
+-
+-  cur_left		= tgetstr( "kl", &ptr );
+-  cur_right		= tgetstr( "kr", &ptr );
+-  cur_up		= tgetstr( "ku", &ptr );
+-  cur_down		= tgetstr( "kd", &ptr );
+-  cur_ppage		= tgetstr( "kP", &ptr );
+-  cur_npage		= tgetstr( "kN", &ptr );
++  cursor_address	= tgetstr( "cm", (char **)&ptr );
++  clear_screen		= tgetstr( "cl", (char **)&ptr );
++  clr_eol		= tgetstr( "ce", (char **)&ptr );
++  insert_line		= tgetstr( "al", (char **)&ptr );
++  delete_line		= tgetstr( "dl", (char **)&ptr );
++  enter_standout_mode	= tgetstr( "so", (char **)&ptr );
++  exit_standout_mode	= tgetstr( "se", (char **)&ptr );
++  enter_underline_mode	= tgetstr( "us", (char **)&ptr );
++  exit_underline_mode	= tgetstr( "ue", (char **)&ptr );
++  enter_bold_mode	= tgetstr( "md", (char **)&ptr );
++  exit_attribute_mode	= tgetstr( "me", (char **)&ptr );
++  cursor_visible	= tgetstr( "ve", (char **)&ptr );
++  cursor_invisible	= tgetstr( "vi", (char **)&ptr );
++  enter_ca_mode		= tgetstr( "ti", (char **)&ptr );
++  exit_ca_mode		= tgetstr( "te", (char **)&ptr );
++
++  keypad_local		= tgetstr( "ke", (char **)&ptr );
++  keypad_xmit		= tgetstr( "ks", (char **)&ptr );
++
++  cur_left		= tgetstr( "kl", (char **)&ptr );
++  cur_right		= tgetstr( "kr", (char **)&ptr );
++  cur_up		= tgetstr( "ku", (char **)&ptr );
++  cur_down		= tgetstr( "kd", (char **)&ptr );
++  cur_ppage		= tgetstr( "kP", (char **)&ptr );
++  cur_npage		= tgetstr( "kN", (char **)&ptr );
+ 
+   if( NULL == cursor_address || NULL == clear_screen || NULL == clr_eol )
+     fprintf( stderr, "lv: termcap cm, cl, ce are required\n" );
+@@ -403,7 +401,7 @@ public void ConsoleSetUp()
+ #else
+ # ifdef SIGWINCH
+   signal( SIGWINCH, WindowChangeHandler );
+-# endif 
++# endif
+   signal( SIGINT, InterruptHandler );
+ #endif /* HAVE_SIGACTION */
+ 
+@@ -419,9 +417,9 @@ public void ConsoleSetUp()
+   ttyNew.c_lflag &= ~ICANON;
+   ttyNew.c_lflag &= ~ECHO;
+   ttyNew.c_lflag &= ~IEXTEN;
+-#ifdef VDISCRD /* IBM AIX */ 
+-#define VDISCARD VDISCRD 
+-#endif 
++#ifdef VDISCRD /* IBM AIX */
++#define VDISCARD VDISCRD
++#endif
+   ttyNew.c_cc[ VDISCARD ] = -1;
+   ttyNew.c_cc[ VMIN ] = 1;
+   ttyNew.c_cc[ VTIME ] = 0;
+@@ -486,7 +484,7 @@ public void ConsoleReturnToProgram()
+     tputs( enter_ca_mode, 1, putfunc );
+ 
+ #ifdef UNIX
+-#ifdef HAVE_TERMIOS_H 
++#ifdef HAVE_TERMIOS_H
+   tcsetattr( 0, TCSADRAIN, &ttyNew );
+ #else
+   ioctl( 0, TIOCSETN, &ttyNew );
+diff -pruN lv451.orig/src/file.h lv451/src/file.h
+--- lv451.orig/src/file.h	2025-01-28 12:26:51.661698299 +0900
++++ lv451/src/file.h	2025-01-28 12:27:03.139895119 +0900
+@@ -169,8 +169,8 @@ public void FileInit();
+ # endif
+ # define IobufFeof( a )		feof( (a)->iop )
+ #else
+-public inline int IobufGetc( iobuf_t *iobuf );
+-public inline int IobufUngetc( int ch, iobuf_t *iobuf );
++public int IobufGetc( iobuf_t *iobuf );
++public int IobufUngetc( int ch, iobuf_t *iobuf );
+ public offset_t IobufFtell( iobuf_t *iobuf );
+ public int IobufFseek( iobuf_t *iobuf, offset_t off, int mode );
+ public int IobufFseeko( iobuf_t *iobuf, offset_t off, int mode );

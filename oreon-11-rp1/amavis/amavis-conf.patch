@@ -1,0 +1,338 @@
+From 760c0848cf0e0c13b33bcd0823ea5a310587d8a1 Mon Sep 17 00:00:00 2001
+From: Juan Orti Alcaine <jorti@pm.me>
+Date: Thu, 17 Jul 2025 21:02:32 +0200
+Subject: [PATCH] Fedora configuration modifications
+
+---
+ bin/amavis-mc       |  6 ++--
+ bin/amavisd-agent   |  2 +-
+ bin/amavisd-nanny   |  2 +-
+ bin/amavisd-release |  4 +--
+ bin/amavisd-signer  |  4 +--
+ bin/amavisd-submit  |  6 ++--
+ conf/amavisd.conf   | 79 ++++++++++++++++++++++++---------------------
+ 7 files changed, 55 insertions(+), 48 deletions(-)
+
+diff --git a/bin/amavis-mc b/bin/amavis-mc
+index 1c913e0..46e2013 100755
+--- a/bin/amavis-mc
++++ b/bin/amavis-mc
+@@ -73,10 +73,10 @@ use vars qw(@path @services $daemon_user @daemon_groups $pid_file $log_level
+ 
+ ### USER CONFIGURABLE:
+ 
+-$daemon_user   = 'vscan';
+-@daemon_groups = 'vscan';
++$daemon_user   = 'amavis';
++@daemon_groups = 'amavis';
+ 
+-$pid_file = '/var/amavis/amavis-mc.pid';
++$pid_file = '/run/amavisd/amavis-mc.pid';
+ 
+ $log_level = 0;
+ $syslog_ident = 'amavis-mc';
+diff --git a/bin/amavisd-agent b/bin/amavisd-agent
+index bbefbb3..fe44697 100755
+--- a/bin/amavisd-agent
++++ b/bin/amavisd-agent
+@@ -54,7 +54,7 @@ use BerkeleyDB;
+ 
+ my($dbfile) = 'snmp.db';
+ my($db_home) =  # DB databases directory
+-  defined $ENV{'AMAVISD_DB_HOME'} ? $ENV{'AMAVISD_DB_HOME'} : '/var/amavis/db';
++  defined $ENV{'AMAVISD_DB_HOME'} ? $ENV{'AMAVISD_DB_HOME'} : '/var/spool/amavisd/db';
+ 
+ my($wakeuptime) = 10;  # -w, sleep time in seconds, may be fractional
+ my($repeatcount);      # -c, repeat count (when defined)
+diff --git a/bin/amavisd-nanny b/bin/amavisd-nanny
+index f9d7f6d..ffc9d54 100755
+--- a/bin/amavisd-nanny
++++ b/bin/amavisd-nanny
+@@ -62,7 +62,7 @@ my($activettl) = 10*60; # stuck active children are sent a SIGTERM
+ 
+ my($dbfile) = 'nanny.db';
+ my($db_home) =  # DB databases directory
+-  defined $ENV{'AMAVISD_DB_HOME'} ? $ENV{'AMAVISD_DB_HOME'} : '/var/amavis/db';
++  defined $ENV{'AMAVISD_DB_HOME'} ? $ENV{'AMAVISD_DB_HOME'} : '/var/spool/amavisd/db';
+ my($wakeuptime) = 2;  # -w, sleep time in seconds, may be fractional
+ my($repeatcount);     # -c, repeat count (when defined)
+ 
+diff --git a/bin/amavisd-release b/bin/amavisd-release
+index 597c663..88ef695 100755
+--- a/bin/amavisd-release
++++ b/bin/amavisd-release
+@@ -50,7 +50,7 @@
+ # To be placed in amavisd.conf:
+ #   $interface_policy{'SOCK'} = 'AM.PDP';
+ #   $policy_bank{'AM.PDP'} = { protocol=>'AM.PDP' };
+-#   $unix_socketname = '/var/amavis/amavisd.sock';
++#   $unix_socketname = '/run/amavisd/amavisd.sock';
+ # or:
+ #   $interface_policy{'9998'} = 'AM.PDP';
+ #   $policy_bank{'AM.PDP'} = { protocol=>'AM.PDP' };
+@@ -88,7 +88,7 @@ BEGIN {
+   $log_level = 1;
+ # $socketname = '127.0.0.1:9998';
+ # $socketname = '[::1]:9998';
+-  $socketname = '/var/amavis/amavisd.sock';
++  $socketname = '/run/amavisd/amavisd.sock';
+ 
+ ### END OF USER CONFIGURABLE
+ }
+diff --git a/bin/amavisd-signer b/bin/amavisd-signer
+index 680513c..6f537f4 100755
+--- a/bin/amavisd-signer
++++ b/bin/amavisd-signer
+@@ -88,8 +88,8 @@ $VERSION = 1.001;  # 20100730
+ # Please adjust the following settings as necessary:
+ #
+ 
+-$daemon_user   = 'vscan';
+-@daemon_groups = 'vscan';
++$daemon_user   = 'amavis';
++@daemon_groups = 'amavis';
+ # $daemon_chroot_dir = '/var/amavis';   # chroot directory or undef
+ 
+ # $daemonize = 1;
+diff --git a/bin/amavisd-submit b/bin/amavisd-submit
+index 7e8cedb..5eefdd7 100755
+--- a/bin/amavisd-submit
++++ b/bin/amavisd-submit
+@@ -53,7 +53,7 @@
+ # To be placed in amavisd.conf:
+ #   $interface_policy{'SOCK'} = 'AM.PDP';
+ #   $policy_bank{'AM.PDP'} = { protocol=>'AM.PDP' };
+-#   $unix_socketname = '/var/amavis/amavisd.sock';
++#   $unix_socketname = '/run/amavisd/amavisd.sock';
+ 
+ use warnings;
+ use warnings FATAL => 'utf8';
+@@ -73,9 +73,9 @@ BEGIN {
+ ### USER CONFIGURABLE:
+ 
+   $log_level = 0;
+-  $tempbase = '/var/amavis/tmp';  # where to create a temp directory with a msg
++  $tempbase = '/run/amavisd/tmp';  # where to create a temp directory with a msg
+ 
+-  $socketname = '/var/amavis/amavisd.sock';
++  $socketname = '/run/amavisd/amavisd.sock';
+ # $socketname = '127.0.0.1:9998';
+ # $socketname = '[::1]:9998';
+ 
+diff --git a/conf/amavisd.conf b/conf/amavisd.conf
+index a612b49..d3acb42 100644
+--- a/conf/amavisd.conf
++++ b/conf/amavisd.conf
+@@ -17,25 +17,25 @@ use strict;
+                         # truncation in /proc/<pid>/stat and ps -e output
+ 
+ $max_servers = 2;            # num of pre-forked children (2..30 is common), -m
+-$daemon_user   = 'vscan';    # (no default;  customary: vscan or amavis), -u
+-@daemon_groups = 'vscan';    # (leave empty to use $daemon_user's supplementary groups), -g
++$daemon_user   = 'amavis';    # (no default;  customary: vscan or amavis), -u
++@daemon_groups = 'amavis';    # (leave empty to use $daemon_user's supplementary groups), -g
+ 
+ $mydomain = 'example.com';   # a convenient default for other settings
+ 
+-# $MYHOME = '/var/amavis';   # a convenient default for other settings, -H
++$MYHOME = '/var/spool/amavisd';   # a convenient default for other settings, -H
+ $TEMPBASE = "$MYHOME/tmp";   # working directory, needs to exist, -T
+ $ENV{TMPDIR} = $TEMPBASE;    # environment variable TMPDIR, used by SA, etc.
+-$QUARANTINEDIR = '/var/virusmails';  # -Q
++$QUARANTINEDIR = undef;  # -Q
+ # $quarantine_subdir_levels = 1;  # add level of subdirs to disperse quarantine
+ # $release_format = 'resend';     # 'attach', 'plain', 'resend'
+ # $report_format  = 'arf';        # 'attach', 'plain', 'resend', 'arf'
+ 
+ # $daemon_chroot_dir = $MYHOME;   # chroot directory or undef, -R
+ 
+-# $db_home   = "$MYHOME/db";      # dir for bdb nanny/cache/snmp databases, -D
++$db_home   = "$MYHOME/db";      # dir for bdb nanny/cache/snmp databases, -D
+ # $helpers_home = "$MYHOME/var";  # working directory for SpamAssassin, -S
+-# $lock_file = "$MYHOME/var/amavisd.lock";  # -L
+-# $pid_file  = "$MYHOME/var/amavisd.pid";   # -P
++$lock_file = "/run/amavisd/amavisd.lock";  # -L
++$pid_file  = "/run/amavisd/amavisd.pid";   # -P
+ #NOTE: create directories $MYHOME/tmp, $MYHOME/var, $MYHOME/db manually
+ 
+ $log_level = 0;              # verbosity 0..5, -d
+@@ -55,11 +55,14 @@ $enable_dkim_signing = 1;    # load DKIM signing code, keys defined by dkim_key
+ @mynetworks = qw( 127.0.0.0/8 [::1] [FE80::]/10 [FEC0::]/10
+                   10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 );
+ 
+-$unix_socketname = "$MYHOME/amavisd.sock";  # amavisd-release or amavis-milter
++$unix_socketname = "/run/amavisd/amavisd.sock";  # amavisd-release or amavis-milter
+                # option(s) -p overrides $inet_socket_port and $unix_socketname
+ 
++# The default receiving port in the Fedora and RHEL SELinux policy is 10024.
++# To allow additional ports you need to label them as 'amavisd_recv_port_t'
++# For example: semanage port -a -t amavisd_recv_port_t -p tcp 10022
+ $inet_socket_port = 10024;   # listen on this local TCP port(s)
+-# $inet_socket_port = [10024,10026];  # listen on multiple TCP ports
++# $inet_socket_port = [10022,10024];  # listen on multiple TCP ports
+ 
+ $policy_bank{'MYNETS'} = {   # mail originating from @mynetworks
+   originating => 1,  # is true in MYNETS by default, but let's make it explicit
+@@ -67,8 +70,8 @@ $policy_bank{'MYNETS'} = {   # mail originating from @mynetworks
+ };
+ 
+ # it is up to MTA to re-route mail from authenticated roaming users or
+-# from internal hosts to a dedicated TCP port (such as 10026) for filtering
+-$interface_policy{'10026'} = 'ORIGINATING';
++# from internal hosts to a dedicated TCP port (such as 10022) for filtering
++$interface_policy{'10022'} = 'ORIGINATING';
+ 
+ $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
+   originating => 1,  # declare that mail was submitted by our smtp client
+@@ -78,7 +81,7 @@ $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
+   spam_admin_maps  => ["virusalert\@$mydomain"],
+   warnbadhsender   => 1,
+   # forward to a smtpd service providing DKIM signing service
+-  forward_method => 'smtp:[127.0.0.1]:10027',
++  forward_method => 'smtp:[127.0.0.1]:10025',
+   # force MTA conversion to 7-bit (e.g. before DKIM signing)
+   smtpd_discard_ehlo_keywords => ['8BITMIME'],
+   bypass_banned_checks_maps => [1],  # allow sending any file names and types
+@@ -119,11 +122,11 @@ $sa_local_tests_only = 0;    # only tests which do not require internet access?
+ # $timestamp_fmt_mysql = 1; # if using MySQL *and* msgs.time_iso is TIMESTAMP;
+ #   defaults to 0, which is good for non-MySQL or if msgs.time_iso is CHAR(16)
+ 
+-$virus_admin               = "virusalert\@$mydomain";  # notifications recip.
++$virus_admin               = undef;                    # notifications recip.
+ 
+-$mailfrom_notify_admin     = "virusalert\@$mydomain";  # notifications sender
+-$mailfrom_notify_recip     = "virusalert\@$mydomain";  # notifications sender
+-$mailfrom_notify_spamadmin = "spam.police\@$mydomain"; # notifications sender
++$mailfrom_notify_admin     = undef;                    # notifications sender
++$mailfrom_notify_recip     = undef;                    # notifications sender
++$mailfrom_notify_spamadmin = undef;                    # notifications sender
+ $mailfrom_to_quarantine = ''; # null return path; uses original sender if undef
+ 
+ @addr_extension_virus_maps      = ('virus');
+@@ -167,13 +170,16 @@ $defang_by_ccat{CC_UNCHECKED.",3"} = 1; # ambiguous content (e.g. multipart boun
+ 
+ # $myhostname = 'host.example.com';  # must be a fully-qualified domain name!
+ 
+-# $notify_method  = 'smtp:[127.0.0.1]:10025';
+-# $forward_method = 'smtp:[127.0.0.1]:10025';  # set to undef with milter!
++# The default forwarding port in the Fedora and RHEL SELinux policy is 10025.
++# To allow additional ports you need to label them as 'amavisd_send_port_t'.
++# For example: semanage port -a -t amavisd_send_port_t -p tcp 10023
++# $notify_method  = 'smtp:[127.0.0.1]:10023';
++# $forward_method = 'smtp:[127.0.0.1]:10023';  # set to undef with milter!
+ 
+-# $final_virus_destiny      = D_DISCARD;
+-# $final_banned_destiny     = D_DISCARD;
+-# $final_spam_destiny       = D_PASS;  #!!!  D_DISCARD / D_REJECT
+-# $final_bad_header_destiny = D_PASS;
++$final_virus_destiny      = D_DISCARD;
++$final_banned_destiny     = D_BOUNCE;
++$final_spam_destiny       = D_DISCARD;  #!!!  D_DISCARD / D_REJECT
++$final_bad_header_destiny = D_BOUNCE;
+ # $bad_header_quarantine_method = undef;
+ 
+ # $os_fingerprint_method = 'p0f:*:2345';  # to query p0f-analyzer.pl
+@@ -342,8 +348,8 @@ $banned_filename_re = new_RE(
+   ['lzma', \&do_uncompress,
+            ['lzmadec', 'xz -dc --format=lzma',
+             'lzma -dc', 'unlzma -c', 'lzcat', 'lzmadec'] ],
+-  ['lrz',  \&do_uncompress,
+-           ['lrzip -q -k -d -o -', 'lrzcat -q -k'] ],
++#  ['lrz',  \&do_uncompress,
++#           ['lrzip -q -k -d -o -', 'lrzcat -q -k'] ],
+   ['lzo',  \&do_uncompress, 'lzop -d'],
+   ['lzip', \&do_uncompress, ['lzip -d'] ],
+   ['lz4',  \&do_uncompress, ['lz4c -d'] ],
+@@ -356,9 +362,9 @@ $banned_filename_re = new_RE(
+   ['arj',  \&do_unarj, ['unarj', 'arj'] ],
+   ['arc',  \&do_arc,   ['nomarch', 'arc'] ],
+   ['zoo',  \&do_zoo,   ['zoo', 'unzoo'] ],
+-  ['doc',  \&do_ole,   'ripole'],
++# ['doc',  \&do_ole,   'ripole'],  # no ripole package so far
+   ['cab',  \&do_cabextract, 'cabextract'],
+-  ['tnef', \&do_tnef_ext, 'tnef'],
++# ['tnef', \&do_tnef_ext, 'tnef'],  # use internal do_tnef() instead
+   ['tnef', \&do_tnef],
+ # ['lha',  \&do_lha,   'lha'],  # not safe, use 7z instead
+ # ['sit',  \&do_unstuff, 'unstuff'],  # not safe
+@@ -396,7 +402,8 @@ $banned_filename_re = new_RE(
+ # * By dropping the --fdpass option, this command is easily adapted for
+ #   use with a network socket (clamd running elsewhere).
+ #
+-  ['ClamAV-clamdscan', 'clamdscan', "--fdpass --stdout --no-summary {}",
++  ['ClamAV-clamdscan', 'clamdscan',
++   "--config-file=/etc/clamd.d/amavisd.conf --fdpass --stdout --no-summary {}",
+    [0], qr/:.*\sFOUND$/m, qr/^.*?: (?!Infected Archive)(.*) FOUND$/m ],
+ 
+ # ### http://www.clamav.net/ and CPAN  (memory-hungry! clamd is preferred)
+@@ -406,7 +413,7 @@ $banned_filename_re = new_RE(
+ 
+ # ### http://www.sophos.com/ (EOL 31 March 2022)
+ # ['Sophos-SSSP',  # SAV Dynamic Interface
+-#   \&ask_daemon, ["{}", 'sssp:/var/run/savdi/sssp.sock'],
++#   \&ask_daemon, ["{}", 'sssp:/run/savdi/sssp.sock'],
+ #           # or: ["{}", 'sssp:[127.0.0.1]:4010'],
+ #   qr/^DONE OK\b/m, qr/^VIRUS\b/m, qr/^VIRUS\s*(\S*)/m ],
+ 
+@@ -452,7 +459,7 @@ $banned_filename_re = new_RE(
+ #    pack('N',0).  # content size
+ #    pack('N',0),
+ #    '/var/drweb/run/drwebd.sock',
+-#  # '/var/amavis/var/run/drwebd.sock',   # suitable for chroot
++#  # '/var/amavis/run/drwebd.sock',   # suitable for chroot
+ #  # '/usr/local/drweb/run/drwebd.sock',  # FreeBSD drweb ports default
+ #  # '127.0.0.1:3000',                    # or over an inet socket
+ #   ],
+@@ -467,7 +474,7 @@ $banned_filename_re = new_RE(
+   ['KasperskyLab AVP - aveclient',
+     ['/usr/local/kav/bin/aveclient','/usr/local/share/kav/bin/aveclient',
+      '/opt/kav/5.5/kav4mailservers/bin/aveclient','aveclient'],
+-    '-p /var/run/aveserver -s {}/*',
++    '-p /run/aveserver -s {}/*',
+     [0,3,6,8], qr/\b(INFECTED|SUSPICION|SUSPICIOUS)\b/m,
+     qr/(?:INFECTED|WARNING|SUSPICION|SUSPICIOUS) (.+)/m,
+   ],
+@@ -576,12 +583,12 @@ $banned_filename_re = new_RE(
+ # ### http://www.avast.com/
+ # ['avast! Antivirus daemon',
+ #   \&ask_daemon,  # greets with 220, terminate with QUIT
+-#   ["SCAN {}\015\012QUIT\015\012", '/var/run/avast4/mailscanner.sock'],
++#   ["SCAN {}\015\012QUIT\015\012", '/run/avast4/mailscanner.sock'],
+ #   qr/\t\[\+\]/m, qr/\t\[L\]\t/m, qr/\t\[L\]\t[0-9]+\s+([^[ \t\015\012]+)/m ],
+ 
+ # ### http://www.avast.com/
+ # ['avast! Antivirus - Client/Server Version', 'avastlite',
+-#   '-a /var/run/avast4/mailscanner.sock -n {}', [0], [1],
++#   '-a /run/avast4/mailscanner.sock -n {}', [0], [1],
+ #   qr/\t\[L\]\t([^[ \t\015\012]+)/m ],
+ 
+   ['CAI InoculateIT', 'inocucmd',  # retired product
+@@ -717,8 +724,8 @@ $banned_filename_re = new_RE(
+ # ['avast! Antivirus', ['/usr/bin/avastcmd','avastcmd'],
+ #   '-a -i -n -t=A {}', [0], [1], qr/\binfected by:\s+([^ \t\n\[\]]+)/m ],
+ 
+-  ### http://www.avast.com/
+-  ['avast! Antivirus', '/bin/scan', '{}', [0], [1], qr/\t(.+)/m ],
++# ### http://www.avast.com/
++# ['avast! Antivirus', '/bin/scan', '{}', [0], [1], qr/\t(.+)/m ],
+ 
+   ### http://www.ikarus-software.com/
+   ['Ikarus AntiVirus for Linux', 'ikarus',
+@@ -822,12 +829,12 @@ $banned_filename_re = new_RE(
+ # /etc/clamd.conf, or may be controlled by your service manager / init.
+ #
+ # ['ClamAV-clamd',
+-#   \&ask_daemon, ["CONTSCAN {}\n", "/var/run/clamav/clamd.sock"],
++#   \&ask_daemon, ["CONTSCAN {}\n", "/run/clamd.amavisd/clamd.sock"],
+ #   qr/\bOK$/m, qr/\bFOUND$/m,
+ #   qr/^.*?: (?!Infected Archive)(.*) FOUND$/m ],
+ 
+ # ['ClamAV-clamd-stream',
+-#   \&ask_daemon, ["*", 'clamd:/var/run/clamav/clamd.sock'],
++#   \&ask_daemon, ["*", 'clamd:/run/clamd.amavisd/clamd.sock'],
+ #   qr/\bOK$/m, qr/\bFOUND$/m,
+ #   qr/^.*?: (?!Infected Archive)(.*) FOUND$/m ],
+ 
+-- 
+2.50.1
+

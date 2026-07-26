@@ -1,0 +1,51 @@
+diff --git a/airnef.pyw b/airnef.pyw
+index 45e57b5..572914f 100644
+--- a/airnef.pyw
++++ b/airnef.pyw
+@@ -1216,19 +1216,7 @@ def establishAppEnvironment():
+ 	# and configuration files. For Win32 if we're frozen this
+ 	# goes in the dedicated OS area for application data files
+ 	#
+-	g.appDataDir = None
+-	if g.isFrozen and g.isWin32:
+-		if os.getenv('LOCALAPPDATA'):
+-			g.appDataDir = os.path.join(os.getenv('LOCALAPPDATA'), "airnef\\appdata") # typically C:\Users\<username>\AppData\Local\airnef\appdata
+-	elif g.isOSX: # for OSX we always try to store our app data under Application Support
+-		userHomeDir = os.getenv('HOME')
+-		if userHomeDir:
+-			applicationSupportDir = os.path.join(userHomeDir, 'Library/Application Support')
+-			if os.path.exists(applicationSupportDir): # probably not necessary to check existence since every system should have this directory
+-				g.appDataDir = os.path.join(applicationSupportDir, 'airnef/appdata')
+-	if not g.appDataDir:
+-		# none of runtime-specific cases above selected an app data directory - use directory based off our app directory
+-		g.appDataDir = os.path.join(g.appDir, "appdata")
++	g.appDataDir = os.path.join(os.getenv('HOME'), '.local', 'airnef')
+ 	# create our app-specific subdirectories if necessary	
+ 	if not os.path.exists(g.appDataDir):
+ 		os.makedirs(g.appDataDir)
+diff --git a/airnefcmd.py b/airnefcmd.py
+index 1139ae4..8f38257 100644
+--- a/airnefcmd.py
++++ b/airnefcmd.py
+@@ -444,19 +444,8 @@ def establishAppEnvironment():
+ 	# and configuration files. For Win32 if we're frozen this
+ 	# goes in the dedicated OS area for application data files
+ 	#
+-	g.appDataDir = None
+-	if g.isFrozen and g.isWin32:
+-		if os.getenv('LOCALAPPDATA'):
+-			g.appDataDir = os.path.join(os.getenv('LOCALAPPDATA'), "airnef\\appdata") # typically C:\Users\<username>\AppData\Local\airnef\appdata
+-	elif g.isOSX: # for OSX we always try to store our app data under Application Support
+-		userHomeDir = os.getenv('HOME')
+-		if userHomeDir:
+-			applicationSupportDir = os.path.join(userHomeDir, 'Library/Application Support')
+-			if os.path.exists(applicationSupportDir): # probably not necessary to check existence since every system should have this directory
+-				g.appDataDir = os.path.join(applicationSupportDir, 'airnef/appdata')
+-	if not g.appDataDir:
+-		# none of runtime-specific cases above selected an app data directory - use directory based off our app directory
+-		g.appDataDir = os.path.join(g.appDir, "appdata")
++	g.appDataDir = os.path.join(os.getenv('HOME'), '.local', 'airnef')
++
+ 	# create our app-specific subdirectories if necessary
+ 	if not os.path.exists(g.appDataDir):
+ 		os.makedirs(g.appDataDir)

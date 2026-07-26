@@ -1,0 +1,11 @@
+#!/bin/sh
+#Wrapper script for lpsk31 to ensure that user configuration is present
+lpsk31bin="/usr/libexec/lpsk31-bin"
+if  [ ! -f ~/lpsk31/lpsk31rc ]
+then
+echo "Creating user configuration in ~/lpsk31/lpsk31rc"
+install -D -m 0644 /usr/share/lpsk31/lpsk31rc ~/lpsk31/lpsk31rc
+$lpsk31bin $@
+else 
+$lpsk31bin $@
+fi

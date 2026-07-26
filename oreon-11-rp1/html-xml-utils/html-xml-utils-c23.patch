@@ -1,0 +1,13 @@
+--- html-xml-utils-8.7/dtd.hash.orig	2022-02-10 09:46:47.000000000 -0700
++++ html-xml-utils-8.7/dtd.hash	2026-01-27 09:34:39.769840876 -0700
+@@ -43,8 +43,8 @@ EXPORT typedef struct _ElementType {
+ } ElementType;
+ 
+ /* lookup_element -- look up the string in the hash table */
+-EXPORT const ElementType * lookup_element(/* register const char *str,
+-					  register unsigned int len */);
++EXPORT const ElementType * lookup_element(register const char *str,
++					  register size_t len);
+ 
+ /* Different kinds of parent elements: */
+ #define PHRASE "abbr", "acronym", "b", "bdi", "bdo", "big", "cite", "code", "dfn", "em", "i", "kbd", "q", "s", "samp", "small", "span", "strong", "sub", "sup", "time", "tt", "u", "var"

@@ -1,0 +1,252 @@
+.TH 0AD "6" "Sep 24 2022" "0ad 0.0.26 Zhuangzi" "User Commands"
+
+.SH NAME
+0ad \- manual page for 0ad 0.0.26 Zhuangzi
+.SH SYNOPSIS
+.B 0ad
+[\fIoptions\fR]
+.SH DESCRIPTION
+0 A.D. (pronounced "zero ey-dee") is a free, open-source, cross-platform
+real-time strategy (RTS) game of ancient warfare. In short, it is a
+historically-based war/economy game that allows players to relive or rewrite
+the history of Western civilizations, focusing on the years between 500 B.C.
+and 500 A.D. The project is highly ambitious, involving state-of-the-art 3D
+graphics, detailed artwork, sound, and a flexible and powerful custom-built
+game engine.
+
+The game has been in development by Wildfire Games (WFG), a group of volunteer,
+hobbyist game developers, since 2001.
+.PP
+Basic gameplay:
+.TP
+\fB\-autostart\fR=...
+load a map instead of showing main menu (see below)
+.TP
+\fB\-editor\fR
+launch the Atlas scenario editor
+.TP
+\fB\-mod\fR=\fINAME\fR
+start the game using \fINAME\fR mod
+.TP
+\fB\-quickstart\fR
+load faster (disables audio and some system info logging)
+
+.PP
+Autostart:
+.TP
+\fB\-autostart\fR="\fITYPEDIR\fR/\fIMAPNAME\fR"
+enables autostart and sets \fIMAPNAME\fR; \fITYPEDIR\fR is \fIskirmishes\fR,
+\fIscenarios\fR, or \fIrandom\fR
+.TP
+\fB\-autostart-seed\fR=\fISEED\fR:\fIAI\fR
+sets randomozation seed value (default 0, use -1 for random)
+.TP
+\fB\-autostart-ai\fR=\fIPLAYER\fR:\fIAI\fR
+sets the \fIAI\fR for \fIPLAYER\fR (e.g. 2:petra)
+.TP
+\fB\-autostart-aidiff\fR=\fIPLAYER\fR:\fIDIFF\fR
+sets the \fIDIFF\fRiculty of \fIPLAYER\fR's \fIAI\fR (0: sandbox, 5: very hard)
+.TP
+\fB\-autostart-aiseed\fR=\fIAISEED\fR
+sets the seed used for the \fIAI\fR random generator (default 0, use -1 for
+random)
+.TP
+\fB\-autostart-civ\fR=\fIPLAYER\fR:\fICIV\fR
+sets \fIPLAYER\fR's civilisation to \fICIV\fR (skirmish and random maps only)
+.TP
+\fB\-autostart-team\fR=\fIPLAYER\fR:\fITEAM\fR
+sets the team for \fIPLAYER\fR (e.g. 2:2).
+.TP
+\fB\-autostart-ceasefire\fR=\fINUM\fR
+sets a ceasefire duration \fINUM\fR (default 0 minutes)
+.TP
+\fB\-autostart-nonvisual\fR
+disable any graphics and sounds
+.TP
+\fB\-autostart-victory\fR=\fISCRIPTNAME\fR
+sets the victory conditions with \fISCRIPTNAME\fR located in
+simulation/data/settings/victory_conditions/ (default conquest). When the
+first given \fISCRIPTNAME\fR is "endless", no victory conditions will apply.
+.TP
+\fB\-autostart-wonderduration\fR=\fINUM\fR
+sets the victory duration \fINUM\fR for wonder victory condition (default
+10 minutes)
+
+.TP
+\fB\-autostart-relicduration\fR=\fINUM\fR
+sets the victory duration \fINUM\fR for relic victory condition (default
+10 minutes)
+.TP
+\fB\-autostart-reliccount\fR=\fINUM\fR
+sets the number of relics for relic victory condition (default 2 relics)
+.TP
+\fB\-autostart-disable-replay\fR
+disable saving of replays
+
+.PP
+Multiplayer:
+.TP
+\fB\-autostart-playername\fR=\fINAME\fR
+sets local player \fINAME\fR (default 'anonymous')
+.TP
+\fB\-autostart-host\fR
+sets multiplayer host mode
+.TP
+\fB\-autostart-host-players\fR=\fINUMBER\fR
+sets \fINUMBER\fR of human players for multiplayer games (default 2)
+.TP
+\fB\-autostart-client\fR=\fIIP\fR
+sets multiplayer client to join host host at given \fIIP\fR address
+
+.PP
+Random maps only:
+.TP
+\fB\-autostart-size\fR=\fITILES\fR
+sets random map size in \fITILES\fR (default 192)
+.TP
+\fB\-autostart-players\fR=\fINUMBER\fI
+sets \fINUMBER\fR of players on random map (default 2)
+
+.PP
+RL client:
+.TP
+\fB\-rl-interface\fR
+Run the RL interface (see source/tools/rlclient)
+
+.PP
+Configuration:
+.TP
+\fB\-conf\fR=\fIKEY\fR:\fIVALUE\fR
+set a config value
+.TP
+\fB\-nosound\fR
+disable audio
+.TP
+\fB-noUserMod\fR
+disable loading of the user mod
+.TP
+\fB\-shadows\fR
+enable shadows
+.TP
+\fB\-vsync\fR
+enable VSync, i.e. lock FPS to monitor refresh rate
+.TP
+\fB\-xres\fR=\fIN\fR
+set screen \fIX\fR resolution to '\fIN\fR'
+.TP
+\fB\-yres\fR=\fIN\fR
+set screen \fIY\fR resolution to '\fIN\fR'
+
+.PP
+Installing modes:
+\fBPATHS\fR
+install mods located at \fIPATHS\fR. For instance:
+"./pyrogenesis mod1.pyromod mod2.zip"
+
+.PP
+Advanced / diagnostic:
+.TP
+\fB\-version\fR
+print the version of the engine and exit
+.TP
+\fB\-dumpSchema\fR
+creates a file \fIentity.rng\fR in the working directory, containing
+complete entity XML schema, used by various analysis tools
+.TP
+\fB\-entgraph\fR
+(disabled)
+.TP
+\fB\-listfiles\fR
+(disabled)
+.TP
+\fB\-profile\fR=\fINAME\fR
+(disabled)
+.TP
+\fB\-replay\fR=\fIPATH\fR
+non-visual replay of a previous game, used for analysis purposes
+\fIPATH\fR is system path to \fIcommands.txt\fR containing simulation log
+.TP
+.TP
+\fB\-replay-visual\fR=\fIPATH\fR
+visual replay of a previous game, used for analysis purposes
+\fIPATH\fR is system path to \fIcommands.txt\fR containing simulation log
+.TP
+\fB\-writableRoot\fR
+store runtime game data in root data directory
+(only use if you have write permissions on that directory)
+.TP
+\fB\-ooslog\fR
+dumps simulation state in binary and ASCII representations each turn,
+files created in sim_log within the game's log folder. \fBNOTE\fR: game will
+run much slower with this option!
+.TP
+\fB-serializationtest\fR
+checks simulation state each turn for serialization errors; on test
+failure, error is displayed and logs created in oos_log within the
+game's log folder. \fBNOTE\fR: game will run much slower with this option!
+.TP
+\fB\-rejointest\fR=\fIN\fR
+simulates a rejoin and checks simulation state each turn for serialization
+errors; this is similar to a serialization test but much faster and
+less complete. It should be enough for debugging most rejoin OOSes.
+.TP
+\fB\-unique-logs\fR
+adds unix timestamp and process id to the filename of mainlog.html,
+interestinglog.html and oos_dump.txt to prevent these files from becoming
+overwritten by another pyrogenesis process.
+.TP
+\fB\-hashtest-full\fR=\fIX\fR
+whether to enable computation of full hashes in replaymode (default true).
+Can be disabled to improve performance.
+.TP
+\fB\-hashtest-quick\fR=\fIX\fR
+whether to enable computation of quick hashes in replaymode (default false).
+Can be enabled for debugging purposes.
+
+.PP
+Archive builder:
+.TP
+\fB\-archivebuild\fR=\fIPATH\fR
+system \fIPATH\fR of the base directory containing mod data to be
+archived/precached specify all mods it depends on with \fB-mod\fR=\fINAME\fR
+.TP
+\fB\-archivebuild-output\fR=\fIPATH\fR
+system \fIPATH\fR to output of the resulting .zip archive (use with
+archivebuild)
+.TP
+\fB\-archivebuild-compress\fR
+enable deflate compression in the .zip
+(no zip compression by default since it hurts compression of release packages)
+
+.SH "EXAMPLES"
+.TP
+\fB1)\fR "Bob" will host a 2 player game on the Arcadia map:
+.nf
+-autostart="scenarios/Arcadia 02" -autostart-host -autostart-host-players=2 -autostart-playername="Bob"
+.fi
+"Alice" joins the match as player 2:
+.nf
+-autostart="scenarios/Arcadia" -autostart-client=127.0.0.1 -autostart-playername="Alice"
+.fi
+The players use the developer overlay to control players.
+.TP
+\fB2)\fR Load Alpine Lakes random map with random seed, 2 players (Athens
+and Britons), and player 2 is PetraBot:
+.nf
+-autostart="random/alpine_lakes" -autostart-seed=-1 -autostart-players=2 -autostart-civ=1:athen -autostart-civ=2:brit -autostart-ai=2:petra
+.fi
+.TP
+\fB3)\fR Observe the PetraBot on a triggerscript map:
+.nf
+ -autostart="random/jebel_barkal" -autostart-seed=-1 -autostart-players=2 -autostart-civ=1:athen -autostart-civ=2:brit -autostart-ai=1:petra -autostart-ai=2:petra -autostart-player=-1
+.fi
+
+.SH "REPORTING BUGS"
+Bugs should be reported on Trac. For information on reporting problems
+and finding logs, see http://trac.wildfiregames.com/wiki/ReportingErrors
+
+.SH COPYRIGHT
+0 A.D. is released as open source: you can freely use, copy, modify and
+distribute the game's source code and data files, as long as you include
+attribution to Wildfire Games and let anyone freely modify and distribute any
+of your own modifications to the game's files.

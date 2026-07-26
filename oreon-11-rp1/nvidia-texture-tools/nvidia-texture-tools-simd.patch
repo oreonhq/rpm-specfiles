@@ -1,0 +1,56 @@
+diff -up extern/libsquish-1.15/CMakeLists.txt.orig extern/libsquish-1.15/CMakeLists.txt
+--- extern/libsquish-1.15/CMakeLists.txt.orig	2021-02-24 10:47:15.629070541 -0300
++++ extern/libsquish-1.15/CMakeLists.txt	2021-02-24 10:48:37.453467988 -0300
+@@ -36,9 +36,13 @@ IF (CMAKE_GENERATOR STREQUAL "Xcode")
+ ELSE (CMAKE_GENERATOR STREQUAL "Xcode")
+     IF (BUILD_SQUISH_WITH_SSE2 AND NOT WIN32)
+         ADD_DEFINITIONS(-DSQUISH_USE_SSE=2 -msse2)
++    ELSE (BUILD_SQUISH_WITH_SSE2 AND NOT WIN32)
++        ADD_DEFINITIONS(-DSQUISH_USE_SSE=0)
+     ENDIF (BUILD_SQUISH_WITH_SSE2 AND NOT WIN32)
+     IF (BUILD_SQUISH_WITH_ALTIVEC AND NOT WIN32)
+         ADD_DEFINITIONS(-DSQUISH_USE_ALTIVEC=1 -maltivec)
++    ELSE (BUILD_SQUISH_WITH_ALTIVEC AND NOT WIN32)
++        ADD_DEFINITIONS(-DSQUISH_USE_ALTIVEC=0)
+     ENDIF (BUILD_SQUISH_WITH_ALTIVEC AND NOT WIN32)
+ ENDIF (CMAKE_GENERATOR STREQUAL "Xcode")
+ 
+diff -up extern/CMP_Core/source/cmp_math_vec4.h.orig extern/CMP_Core/source/cmp_math_vec4.h
+--- extern/CMP_Core/source/cmp_math_vec4.h.orig	2021-02-24 13:17:51.629327597 -0300
++++ extern/CMP_Core/source/cmp_math_vec4.h	2021-02-24 13:45:22.725513798 -0300
+@@ -322,10 +322,13 @@ public:
+ };
+ 
+ #include <stdio.h>
++#if SQUISH_USE_SSE
+ #include "xmmintrin.h"
++#endif
+ #include <math.h>
+ #include <float.h> 
+ 
++#if SQUISH_USE_SSE
+ // SSE Vec4
+ #ifdef _LINUX
+ class CMP_SSEVec4f
+@@ -419,6 +422,7 @@ public:
+     };
+ 
+ };
++#endif // SQUISH_USE_SSE
+ 
+ typedef Vec4<float>             CMP_Vec4f;
+ typedef Vec4<double>            CMP_Vec4d;
+diff -up CMakeLists.txt.orig CMakeLists.txt
+--- CMakeLists.txt.orig	2021-02-25 09:01:12.611528660 -0300
++++ CMakeLists.txt	2021-02-25 09:05:38.954201319 -0300
+@@ -24,6 +24,10 @@ IF(CMAKE_BUILD_TYPE MATCHES "debug")
+     ADD_DEFINITIONS(-D_DEBUG=1)
+ ENDIF()
+ 
++IF(BUILD_SQUISH_WITH_ALTIVEC)
++    ADD_DEFINITIONS(-maltivec)
++ENDIF(BUILD_SQUISH_WITH_ALTIVEC)
++
+ IF(NVTT_SHARED)
+     SET(NVCORE_SHARED TRUE)
+     SET(NVMATH_SHARED TRUE)

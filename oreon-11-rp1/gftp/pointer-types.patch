@@ -1,0 +1,11 @@
+--- lib/socket-connect.c~	2022-02-15 00:31:19.000000000 -0600
++++ lib/socket-connect.c	2024-02-05 13:51:28.302074119 -0600
+@@ -396,7 +396,7 @@
+       return -1;
+   }
+ 
+-  newfd = accept (*fd, saddr, &request->remote_addr_len);
++  newfd = accept (*fd, saddr, (socklen_t * restrict)&request->remote_addr_len);
+   if (newfd == -1)
+   {
+       request->logging_function (gftp_logging_error, request,

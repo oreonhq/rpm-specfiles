@@ -1,0 +1,63 @@
+diff -Nrup a/src/multial.c b/src/multial.c
+--- a/src/multial.c	2019-10-15 14:47:08.051155889 -0600
++++ b/src/multial.c	2019-11-11 08:14:15.681736772 -0700
+@@ -68,7 +68,7 @@ inline int isGap(align* ali, int seqn, i
+   return i;
+ }
+ 
+-inline int scoreLocal(int which, align* ali, int loc) {
++static inline int scoreLocal(int which, align* ali, int loc) {
+   int i, lets = 0;
+   for (i=0; i < 4; i++)
+     lets += ali->cnts[i][loc];
+@@ -546,7 +546,7 @@ inline int v (int y){
+   return 0;
+ }
+ 
+-inline int matchscore (align*a, int ai, align *b, int bi){
++static inline int matchscore (align*a, int ai, align *b, int bi){
+   
+   return
+     matchcache[v(a->cnts[0][ai] + b->cnts[0][bi]) | 
+@@ -582,7 +582,7 @@ inline int endGap2 (align* a, int ai, al
+ 		  (v(a->numseq + b->numseq - (b->cnts[CNTS_CB][bi]+a->cnts[CNTS_CB][ai])) << 18)];
+ }
+ 
+-inline int contGap(align* ali, int myw, align* other, int ow, int *sopp) {
++static inline int contGap(align* ali, int myw, align* other, int ow, int *sopp) {
+   return gapcache[(v(other->cnts[CNTS_GS][ow])) |
+ 		  (v(ali->numseq + other->cnts[CNTS_GC][ow]) << 6) |
+ 		  (v(other->cnts[CNTS_GE][ow]) << 12) |
+@@ -590,7 +590,7 @@ inline int contGap(align* ali, int myw,
+     sopp[ow];
+ }
+ 
+-inline int openGap(align* ali, int w, align* other, int ow, int *sopp, char *desc) {
++static inline int openGap(align* ali, int w, align* other, int ow, int *sopp, char *desc) {
+   int alopen, pen, sav, i;
+ 
+   alopen = ali->cnts[CNTS_GC][w] + ali->cnts[CNTS_GE][w];
+diff -Nrup a/src/order.c b/src/order.c
+--- a/src/order.c	2019-10-15 14:47:08.053155877 -0600
++++ b/src/order.c	2019-10-15 14:47:46.579937474 -0600
+@@ -458,7 +458,7 @@ inline int ismatch(char a, char b) {
+   return a == b;
+ }
+ 
+-inline int matchscore (unsigned char a, unsigned char b) {
++static inline int matchscore (unsigned char a, unsigned char b) {
+   return substmatrix[a][b];
+   /*
+     
+diff -Nrup a/src/utils/scorecontigs.c b/src/utils/scorecontigs.c
+--- a/src/utils/scorecontigs.c	2019-12-17 19:53:14.817032466 -0700
++++ b/src/utils/scorecontigs.c	2019-12-17 19:53:01.811068822 -0700
+@@ -259,7 +259,7 @@ inline int allzeroes (rangelist **ranges
+   return 1;
+ }
+ 
+-inline void print (int start, int end, int *score, int numContigs){
++static inline void print (int start, int end, int *score, int numContigs){
+   int j;
+ 
+   printf ("(%7d %7d)", start, end);

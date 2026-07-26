@@ -1,0 +1,11 @@
+diff -up kdebase-3.5.10/konsole/konsolesu.desktop.konsolesu-kdesu kdebase-3.5.10/konsole/konsolesu.desktop
+--- kdebase-3.5.10/konsole/konsolesu.desktop.konsolesu-kdesu	2008-08-19 13:17:13.000000000 -0500
++++ kdebase-3.5.10/konsole/konsolesu.desktop	2008-08-28 17:15:14.000000000 -0500
+@@ -1,6 +1,6 @@
+ [Desktop Entry]
+ Type=Application
+-Exec=konsole --type su
++Exec=kdesu konsole
+ Icon=konsole
+ DocPath=konsole/index.html
+ MimeType=application/x-konsole;

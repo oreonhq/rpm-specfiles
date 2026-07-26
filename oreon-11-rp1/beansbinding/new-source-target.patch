@@ -1,0 +1,19 @@
+diff -ru beansbinding-1.2.1/nbproject/project.properties beansbinding-1.2.1/nbproject/project.properties
+--- beansbinding-1.2.1/nbproject/project.properties	2020-05-05 16:23:27.698234045 -0400
++++ beansbinding-1.2.1/nbproject/project.properties	2020-05-05 16:24:18.547158263 -0400
+@@ -19,12 +19,12 @@
+ file.reference.el.jar=lib/el.jar
+ jar.compress=false
+ javac.classpath=
+-javac.compilerargs=-target 1.5
++javac.compilerargs=
+ # Space-separated list of extra javac options
+ #javac.compilerargs=-Xlint:unchecked
+ javac.deprecation=false
+-javac.source=1.5
+-javac.target=1.5
++javac.source=1.8
++javac.target=1.8
+ javac.test.classpath=\
+     ${javac.classpath}:\
+     ${build.classes.dir}:\

@@ -1,0 +1,43 @@
+From 1cd1415df746ecaf9603bb0afb8660d3af3ea1f1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C3=ABl=20Van=20Canneyt?= <michael@freepascal.org>
+Date: Sat, 30 Nov 2024 19:01:32 +0100
+Subject: [PATCH] * Localhost fallback in case no DNS servers found. Patch from
+ NiteHawk, fixes issue #41047
+
+---
+ packages/fcl-net/src/netdb.pp | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/fpcsrc/packages/fcl-net/src/netdb.pp b/fpcsrc/packages/fcl-net/src/netdb.pp
+index 54a63c1619c..a1237343643 100644
+--- a/fpcsrc/packages/fcl-net/src/netdb.pp
++++ b/fpcsrc/packages/fcl-net/src/netdb.pp
+@@ -2629,6 +2629,16 @@ function StrTonetpartial( IP : AnsiString) : in_addr ;
+     Initialization section
+   ---------------------------------------------------------------------}
+ 
++procedure FallbackToLocal;
++begin
++  if Length(DNSServers) = 0 then 
++  begin
++    //Writeln('No DNS servers detected/configured! Falling back to "localhost".');
++    SetLength(DNSServers, 1);
++    DNSServers[0]:=StrToNetAddr('127.0.0.1');
++  end;
++end;
++
+ Procedure InitResolver;
+ 
+ begin
+@@ -2662,6 +2672,8 @@ function StrTonetpartial( IP : AnsiString) : in_addr ;
+     GetDNsservers(EtcPath + SResolveFile2)
+ {$ENDIF OS2}
+                                          ;
++
++  FallbackToLocal; // if no nameservers found: fall back to 'localhost'
+ end;
+ 
+ Procedure DoneResolver;
+-- 
+GitLab
+

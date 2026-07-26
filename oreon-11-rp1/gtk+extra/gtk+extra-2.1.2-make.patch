@@ -1,0 +1,32 @@
+Index: configure.in
+===================================================================
+RCS file: /cvsroot/gtkextra/gtkextra-2/configure.in,v
+retrieving revision 1.15
+diff -r1.15 configure.in
+36a37,39
+> AC_SUBST(LT_CURRENT)
+> AC_SUBST(LT_REVISION)
+> AC_SUBST(LT_AGE)
+61a65,66
+> AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
+> 
+Index: gtkextra/Makefile.am
+===================================================================
+RCS file: /cvsroot/gtkextra/gtkextra-2/gtkextra/Makefile.am,v
+retrieving revision 1.17
+diff -r1.17 Makefile.am
+186a187,188
+> 
+> 
+200c202
+<         ( @GLIB_GENMARSHAL@ --prefix=gtkextra gtkextra-marshal.list --header > gtkextra-marshal.tmp \
+---
+> 	( @GLIB_GENMARSHAL@ --prefix=gtkextra gtkextra-marshal.list --header > gtkextra-marshal.tmp \
+204c206
+<         ( @GLIB_GENMARSHAL@ --prefix=gtkextra gtkextra-marshal.list --body > gtkextra-marshal.tmp \
+---
+> 	( @GLIB_GENMARSHAL@ --prefix=gtkextra gtkextra-marshal.list --body > gtkextra-marshal.tmp \
+284c286
+<         builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; export HAVE_PROGRESSBAR=1; \
+---
+> 	builddir=`pwd`; cd $(top_builddir); top_builddir=`pwd`; export HAVE_PROGRESSBAR=1; \

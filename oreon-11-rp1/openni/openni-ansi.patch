@@ -1,0 +1,15 @@
+diff -up OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7/Include/XnPlatform.h.ansi OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7/Include/XnPlatform.h
+--- OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7/Include/XnPlatform.h.ansi	2020-05-31 22:00:31.217318220 -0600
++++ OpenNI-1e9524ffd759841789dadb4ca19fb5d4ac5820e7/Include/XnPlatform.h	2020-05-31 22:01:12.855676231 -0600
+@@ -61,9 +61,9 @@
+ 	#include "Win32/XnPlatformWin32.h"
+ #elif defined(ANDROID) && defined(__arm__)
+ 	#include "Android-Arm/XnPlatformAndroid-Arm.h"
+-#elif (linux && (i386 || __x86_64__))
++#elif (__linux__ && (__i386__ || __x86_64__))
+ 	#include "Linux-x86/XnPlatformLinux-x86.h"
+-#elif (linux && __arm__)
++#elif (__linux__ && __arm__)
+ 	#include "Linux-Arm/XnPlatformLinux-Arm.h"
+ #elif _ARC
+ 	#include "ARC/XnPlatformARC.h"

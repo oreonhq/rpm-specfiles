@@ -1,0 +1,134 @@
+From e09ba53c436279588f769d6ce8852e74d58f8391 Mon Sep 17 00:00:00 2001
+From: titiger <titi_linux@megaglest.org>
+Date: Sat, 29 May 2021 02:12:38 +0200
+Subject: [PATCH] get rid of manual wxPaintEvent creation
+
+---
+ source/glest_map_editor/main.cpp | 42 +++++++++-----------------------
+ source/glest_map_editor/main.h   |  2 ++
+ 2 files changed, 14 insertions(+), 30 deletions(-)
+
+diff --git a/source/glest_map_editor/main.cpp b/source/glest_map_editor/main.cpp
+index c938ae0fc..3a799c864 100644
+--- a/source/glest_map_editor/main.cpp
++++ b/source/glest_map_editor/main.cpp
+@@ -653,32 +653,16 @@ void MainWindow::onMouseMove(wxMouseEvent &event, int x, int y) {
+ 	event.Skip();
+ }
+ 
+-void MainWindow::onPaint(wxPaintEvent &event) {
+-	//printf("onPaint map\n");
+-
++void MainWindow::refreshThings() {
+ 	if(!IsShown()) {
+-		//printf("onPaint skip map\n");
+-
+-		event.Skip();
+ 		return;
+ 	}
+-
+-//#if wxCHECK_VERSION(2, 9, 3)
+-
+-//#elif wxCHECK_VERSION(2, 9, 1)
+-//	glCanvas->setCurrentGLContext();
+-//#endif
+-
+-	//static bool contextSet = false;
+-	//if(contextSet == false) {
+-	//	contextSet = true;
+ 	glCanvas->setCurrentGLContext();
+ 	//}
+ 
+ 	//printf("lastPaintEvent.getMillis() map\n");
+ 	if(lastPaintEvent.getMillis() < 30) {
+ 		sleep(1);
+-		event.Skip();
+ 		return;
+ 	}
+ 
+@@ -693,7 +677,11 @@ void MainWindow::onPaint(wxPaintEvent &event) {
+ 	if(menuBar) menuBar->Refresh(false);
+ 
+ 	refreshMapRender();
+-	event.Skip();
++}
++void MainWindow::onPaint(wxPaintEvent &event) {
++		refreshThings();
++		event.Skip();
++		return;
+ }
+ 
+ void MainWindow::refreshMapRender() {
+@@ -825,8 +813,7 @@ void MainWindow::onMenuEditUndo(wxCommandEvent &event) {
+ 
+ 	// std::cout << "Undo Pressed" << std::endl;
+ 	if (program->undo()) {
+-		wxPaintEvent e;
+-		onPaint(e);
++		refreshThings();
+ 		setDirty();
+ 	}
+ }
+@@ -837,8 +824,7 @@ void MainWindow::onMenuEditRedo(wxCommandEvent &event) {
+ 	}
+ 
+ 	if (program->redo()) {
+-		wxPaintEvent e;
+-		onPaint(e);
++		refreshThings();
+ 		setDirty();
+ 	}
+ }
+@@ -1150,8 +1136,7 @@ void MainWindow::onMenuViewResetZoomAndPos(wxCommandEvent &event) {
+ 	}
+ 
+ 	program->resetOfset();
+-	wxPaintEvent e;
+-	onPaint(e);
++	refreshThings();
+ }
+ 
+ void MainWindow::onMenuViewGrid(wxCommandEvent &event) {
+@@ -1160,8 +1145,7 @@ void MainWindow::onMenuViewGrid(wxCommandEvent &event) {
+ 	}
+ 
+ 	menuView->Check(miViewGrid, program->setGridOnOff());    // miViewGrid event.GetId()
+-	wxPaintEvent e;
+-	onPaint(e);
++	refreshThings();
+ }
+ 
+ 
+@@ -1171,8 +1155,7 @@ void MainWindow::onMenuViewHeightMap(wxCommandEvent &event) {
+ 	}
+ 
+ 	menuView->Check(miViewHeightMap, program->setHeightMapOnOff());    // miViewGrid event.GetId()
+-	wxPaintEvent e;
+-	onPaint(e);
++	refreshThings();
+ }
+ void MainWindow::onMenuHideWater(wxCommandEvent &event) {
+ 	if(program == NULL) {
+@@ -1180,8 +1163,7 @@ void MainWindow::onMenuHideWater(wxCommandEvent &event) {
+ 	}
+ 
+ 	menuView->Check(miHideWater, program->setHideWaterOnOff());    // miViewGrid event.GetId()
+-	wxPaintEvent e;
+-	onPaint(e);
++	refreshThings();
+ }
+ void MainWindow::onMenuViewAbout(wxCommandEvent &event) {
+ 	MsgDialog(
+diff --git a/source/glest_map_editor/main.h b/source/glest_map_editor/main.h
+index b7de40849..4ed371b93 100644
+--- a/source/glest_map_editor/main.h
++++ b/source/glest_map_editor/main.h
+@@ -221,6 +221,8 @@ class MainWindow: public wxFrame {
+ 	void refreshMapRender();
+ 	void init(string fname);
+ 
++	void refreshThings();
++
+ 	void onClose(wxCloseEvent &event);
+ 
+ 	void onMouseDown(wxMouseEvent &event, int x, int y);

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Mupmate
+Comment=User interface for the Mup music publisher program
+Exec=mupmate
+Icon=/usr/share/pixmaps/mup/mup32.xpm
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;Music;Midi;

@@ -1,0 +1,11 @@
+Originally, a perl scriptlet in Dag's SPEC did this.
+
+diff -rup mon-1.2.0.orig/mon.d/Makefile mon-1.2.0/mon.d/Makefile
+--- mon-1.2.0.orig/mon.d/Makefile	2004-06-09 07:18:05.000000000 +0200
++++ mon-1.2.0/mon.d/Makefile	2008-07-13 12:44:50.000000000 +0200
+@@ -31,4 +31,4 @@
+ install:
+ 	install -d $(MONPATH)/mon.d
+ 	install rpc.monitor $(MONPATH)/mon.d/
+-	install -g uucp -m 02555 dialin.monitor.wrap $(MONPATH)/mon.d/
++	install -m 02555 dialin.monitor.wrap $(MONPATH)/mon.d/

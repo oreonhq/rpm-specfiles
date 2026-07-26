@@ -1,0 +1,51 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.ipv6fix mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.ipv6fix	2017-07-12 10:12:06.683205981 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs	2017-07-12 10:14:38.751526234 -0400
+@@ -142,6 +142,15 @@ namespace Mono.Zeroconf.Providers.Bonjou
+             
+                 sd_ref.Process();
+             }
++
++            if (hostentry.AddressList != null)
++            {
++                ServiceResolvedEventHandler handler = Resolved;
++                if (handler != null)
++                {
++                    handler(this, new ServiceResolvedEventArgs(this));
++                }
++            }
+         }
+      
+         private void OnQueryRecordReply(ServiceRef sdRef, ServiceFlags flags, uint interfaceIndex,
+@@ -150,6 +159,7 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         {
+             switch(rrtype) {
+                 case ServiceType.A:
++                case ServiceType.AAAA:
+                     IPAddress address;
+ 
+                     if(rdlen == 4) {   
+@@ -181,11 +191,6 @@ namespace Mono.Zeroconf.Providers.Bonjou
+                         hostentry.AddressList = new IPAddress [] { address };
+                     }
+                     
+-                    ServiceResolvedEventHandler handler = Resolved;
+-                    if(handler != null) {
+-                        handler(this, new ServiceResolvedEventArgs(this));
+-                    }
+-                    
+                     break;
+                 case ServiceType.TXT:
+                     if(TxtRecord != null) {
+@@ -198,7 +203,10 @@ namespace Mono.Zeroconf.Providers.Bonjou
+                     break;
+             }
+             
+-            sdRef.Deallocate();
++            if ((flags & ServiceFlags.MoreComing) != ServiceFlags.MoreComing)
++            {
++                sdRef.Deallocate();
++            }
+         }
+         
+         public bool IsResolved {

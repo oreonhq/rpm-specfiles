@@ -1,0 +1,149 @@
+From 1ee3523414cf2fa442994690bfeb1111b7a72e4a Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:46 +0200
+Subject: [PATCH 04/41] Fix a buffer overflow
+
+This fixes some buffer overflow, that are not severe, unless koules.svga
+is installed setuid root. Not by default. The first hunk is from Debian.
+---
+ koules.sndsrv.linux.c |  5 ++---
+ nas_sound.c           |  5 +++--
+ rcfiles.c             | 40 ++++++++++++++++++++++++++++++++--------
+ soundos2.c            |  3 ++-
+ 4 files changed, 39 insertions(+), 14 deletions(-)
+
+diff --git a/koules.sndsrv.linux.c b/koules.sndsrv.linux.c
+index afe4ea5..66e1dd7 100644
+--- a/koules.sndsrv.linux.c
++++ b/koules.sndsrv.linux.c
+@@ -65,10 +65,9 @@ init (int argc, char **argv)
+   for (i = 0; i < NUM_SOUNDS; i++)
+     {
+       s[0] = 0;
+-      strcat (s, argv[1]);
+-      if (s[(int) strlen (s) - 1] == '/')
++      if (argv[1][(int) strlen (argv[1]) - 1] == '/')
+ 	FILENAME[i]++;
+-      strcat (s, FILENAME[i]);
++      snprintf(s, sizeof(s), "%s%s", argv[1], FILENAME[i]);
+       FILENAME[i] = malloc ((int) strlen (s) + 1);
+       strcpy (FILENAME[i], s);
+       sound_buffer[i] = NULL;
+diff --git a/nas_sound.c b/nas_sound.c
+index bd36774..08dc306 100644
+--- a/nas_sound.c
++++ b/nas_sound.c
+@@ -175,9 +175,10 @@ playSoundFile (filename, volume)
+ 
+       /* Use the environment variable if it exists */
+       if ((str = getenv ("XGAL_SOUND_DIR")) != NULL)
+-	sprintf (fbuf, "%s/%s", str, filename);
++	snprintf (fbuf, sizeof (fbuf), "%s/%s", str, filename);
+       else
+-	sprintf (fbuf, "%s/%s", unixSoundPath, filename);
++	snprintf (fbuf, sizeof (fbuf), "%s/%s", unixSoundPath, filename);
++	fbuf[sizeof (fbuf) -1] = '\0';
+ 
+       sound_table[num_sounds].filename = strdup (fbuf);
+       num_sounds++;
+diff --git a/rcfiles.c b/rcfiles.c
+index 1f69e91..e5db74d 100644
+--- a/rcfiles.c
++++ b/rcfiles.c
+@@ -59,11 +59,17 @@ save_rc ()
+   if (client || server)
+     return;
+ #endif
++  fullname[sizeof (fullname)-1] = '\0';
+ #ifdef OS2DIVE
+-  sprintf (fullname, "%s", name);
++  snprintf (fullname, sizeof (fullname),  "%s", name);
+ #else
+-  sprintf (fullname, "%s/%s", mygetenv ("HOME"), name);
++  snprintf (fullname, sizeof (fullname), "%s/%s", mygetenv ("HOME"), name);
+ #endif
++  if (fullname[sizeof (fullname)-1] != '\0')
++    {
++      printf ("Home directory file name too long, saving of controls skipped.");
++      return;
++    }
+   if ((controls = fopen (fullname, "w")) == NULL)
+     {
+       printf ("could not open save file:%s\n"
+@@ -89,11 +95,17 @@ save_rc ()
+   fwrite (zeros, 2, sizeof (float), controls);
+ #endif
+   fclose (controls);
++  fullname[sizeof (fullname)-1] = '\0';
+ #ifdef OS2DIVE
+-  sprintf (fullname, "%s", levelsname);
++  snprintf (fullname, sizeof (fullname), "%s", levelsname);
+ #else
+-  sprintf (fullname, "%s/%s", mygetenv ("HOME"), levelsname);
++  snprintf (fullname, sizeof (fullname), "%s/%s", mygetenv ("HOME"), levelsname);
+ #endif
++  if (fullname[sizeof (fullname)-1] != '\0')
++    {
++      printf ("Home directory file name too long, saving of controls skipped.");
++      return;
++    }
+   if ((levels = fopen (fullname, "w")) == NULL)
+     {
+       printf ("could not open save file:%s\n"
+@@ -120,11 +132,17 @@ load_rc ()
+   if (client || server)
+     return;
+ #endif
++  fullname[sizeof (fullname)-1] = '\0';
+ #ifdef OS2DIVE
+-  sprintf (fullname, "%s", name);
++  snprintf (fullname, sizeof (fullname), "%s", name);
+ #else
+-  sprintf (fullname, "%s/%s", mygetenv ("HOME"), name);
++  snprintf (fullname, sizeof (fullname), "%s/%s", mygetenv ("HOME"), name);
+ #endif
++  if (fullname[sizeof (fullname)-1] != '\0')
++    {
++      printf ("Home directory file name too long, using default controls.");
++      return;
++    }
+   if ((controls = fopen (fullname, "r")) == NULL)
+     {
+       printf ("could not open save file:%s\n"
+@@ -151,11 +169,17 @@ load_rc ()
+ #endif
+   fclose (controls);
+ skip:;
++  fullname[sizeof (fullname)-1] = '\0';
+ #ifdef OS2DIVE
+-  sprintf (fullname, "%s", levelsname);
++  snprintf (fullname, sizeof (fullname), "%s", levelsname);
+ #else
+-  sprintf (fullname, "%s/%s", mygetenv ("HOME"), levelsname);
++  snprintf (fullname, sizeof (fullname), "%s/%s", mygetenv ("HOME"), levelsname);
+ #endif
++  if (fullname[sizeof (fullname)-1] != '\0')
++    {
++      printf ("Home directory file name too long, using default controls.");
++      return;
++    }
+   if ((levels = fopen (fullname, "r")) == NULL)
+     {
+       printf ("could not open save file:%s\n"
+diff --git a/soundos2.c b/soundos2.c
+index 067ebbf..42578e1 100644
+--- a/soundos2.c
++++ b/soundos2.c
+@@ -627,7 +627,8 @@ read_sound (int k)
+     printf ("Opening no.%d %s\n", k, FILENAME[k]);
+   
+ #endif /*  */
+-    sprintf (filename, "sounds/%s", FILENAME[k]);
++    snprintf (filename, sizeof (filename), "sounds/%s", FILENAME[k]);
++    filename [sizeof (filename)-1] = '\0';
+   
+     fd = open (filename, O_RDONLY);
+   
+-- 
+2.5.0
+

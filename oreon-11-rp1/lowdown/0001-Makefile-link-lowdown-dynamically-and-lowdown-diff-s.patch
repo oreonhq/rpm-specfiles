@@ -1,0 +1,29 @@
+From 22fd3221d788477c5f16828a2549c5ef8effee35 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Date: Fri, 3 Nov 2023 14:05:40 +0100
+Subject: [PATCH] Makefile: link lowdown dynamically and lowdown-diff
+ symbolically
+
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6f36358acc..4e872870f5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -177,11 +177,11 @@ installwww: www
+ 	$(INSTALL) -m 0444 lowdown.tar.gz $(WWWDIR)/snapshots
+ 	$(INSTALL) -m 0444 lowdown.tar.gz.sha512 $(WWWDIR)/snapshots
+ 
+-lowdown: liblowdown.a main.o
+-	$(CC) -o $@ main.o liblowdown.a $(LDFLAGS) $(LDADD_MD5) -lm $(LDADD)
++lowdown: liblowdown.so main.o
++	$(CC) -o $@ $+ $(LDFLAGS) $(LDADD_MD5) -lm $(LDADD)
+ 
+ lowdown-diff: lowdown
+-	ln -f lowdown lowdown-diff
++	ln -sf lowdown lowdown-diff
+ 
+ liblowdown.a: $(OBJS) $(COMPAT_OBJS)
+ 	$(AR) rs $@ $(OBJS) $(COMPAT_OBJS)

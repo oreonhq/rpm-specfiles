@@ -1,0 +1,249 @@
+%global source0_hash 3a906ad0bd8903638ff8979878b96897df5a0b0ac04b9f98360a460235c38276
+
+%bcond tests 1
+%bcond docs 1
+
+# Build with OBS-specific quirks
+%bcond obs 0
+
+Name:           mkosi
+Version:        26
+Release:        %autorelease
+Summary:        Create bespoke OS images
+
+License:        LGPL-2.1-or-later
+URL:            https://github.com/systemd/mkosi
+Source:         https://github.com/systemd/mkosi/archive/v%{version}/%{name}-%{version}.tar.gz
+
+# Keep all patches inside this ifdef to avoid breaking builds from main
+%if %{without obs}
+Patch:          0001-verity-do-not-copy-signing-cert-in-addons-portables-.patch
+%endif
+
+BuildArch:      noarch
+
+# mkosi wants the uncompressed man page to show via 'mkosi documentation'
+%global __brp_compress true
+
+%if %{with docs}
+BuildRequires:  pandoc
+%endif
+%if %{undefined suse_version}
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-pytest
+Requires:       python3
+Requires:       coreutils
+%else
+%define pythons python3
+BuildRequires:  %{python_module pip}
+BuildRequires:  %{python_module pytest}
+BuildRequires:  %{python_module wheel}
+BuildRequires:  %{pythons}
+BuildRequires:  fdupes
+BuildRequires:  python-rpm-macros
+Requires:       python3 >= 3.9
+%endif
+
+%if %{with obs}
+Requires:       %{name}-system-deps = %{version}-%{release}
+%endif
+
+%if %{defined suse_version}
+%global bash_completions_dir %{_datadir}/bash-completion/completions
+%global fish_completions_dir %{_datadir}/fish/completions
+%global zsh_completions_dir %{_datadir}/zsh/site-functions
+%endif
+
+%description
+A fancy wrapper around "dnf --installroot", "apt", "pacman", and "zypper" that
+generates disk images with a number of bells and whistles.
+
+Generated images are tailored to the purpose: GPT partitions,
+systemd-boot or grub2, images for containers, VMs, initrd, and extensions.
+
+Mkosi can boot an image via QEMU or systemd-nspawn, or simply start a shell in
+chroot, burn the image to a device, connect to a running VM via ssh, extract
+logs and coredumps, serve an image over HTTP and more.
+
+See https://mkosi.systemd.io/ for documentation.
+
+%package initrd
+Summary:       Build initrds locally using mkosi
+Requires:      %{name} = %{version}-%{release}
+Requires:      (dnf5 or dnf)
+
+%description initrd
+This package provides the CLI and the plugin for kernel-install to build
+initrds with mkosi locally.
+
+After the package is installed, the plugin can be enabled by writing
+'initrd_generator=mkosi-initrd' to '/etc/kernel/install.conf'.
+
+%package addon
+Summary:       Build PE addons locally using mkosi
+Requires:      %{name} = %{version}-%{release}
+
+%description addon
+This package provides the CLI and the plugin for kernel-install to build
+PE addons for distribution-signed unified kernel images with mkosi locally.
+
+After the package is installed, the plugin can be enabled by adding
+configuration for the addon to `/etc/mkosi-addon` or `/run/mkosi-addon`.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n %{name}-%{version}
+
+%if %{undefined suse_version}
+%generate_buildrequires
+%pyproject_buildrequires
+%endif
+
+%build
+%if %{with docs}
+tools/make-man-page.sh
+%endif
+
+%pyproject_wheel
+
+bin/mkosi completion bash >mkosi.bash
+bin/mkosi completion fish >mkosi.fish
+bin/mkosi completion zsh >mkosi.zsh
+
+%install
+%pyproject_install
+
+%if %{undefined suse_version}
+%pyproject_save_files mkosi
+%endif
+{
+  # for the main package
+  bin/mkosi dependencies | sed -e 's/^/Recommends: /'
+
+  # useful for 'summary' and 'help' verbs
+  echo "Recommends:    less"
+
+  # the mkosi-system-deps subpackage
+  echo "%package system-deps"
+  echo "Summary:       Pull in additional dependencies needed to build images"
+  bin/mkosi dependencies | sed -e 's/^/Requires: /'
+  echo "Requires:      efitools"
+  echo "Requires:      jq"
+  echo "Requires:      pesign"
+  echo "%description system-deps"
+  echo "This package pulls in all the dependencies needed to build images."
+  echo "%files system-deps"
+} >%{specpartsdir}/mkosi.specpart
+%if %{defined suse_version}
+# See comment about __brp_compress above
+export NO_BRP_STALE_LINK_ERROR=yes
+%python_expand %fdupes %{buildroot}/%{$python_sitelib}/mkosi
+%endif
+
+# Install man pages
+%if %{with docs}
+mkdir -p %{buildroot}%{_mandir}/man1
+mkdir -p %{buildroot}%{_mandir}/man7
+ln -s -t %{buildroot}%{_mandir}/man1/ \
+         ../../../..%{python3_sitelib}/mkosi/resources/man/mkosi.1 \
+         ../../../..%{python3_sitelib}/mkosi/resources/man/mkosi-sandbox.1 \
+         ../../../..%{python3_sitelib}/mkosi/resources/man/mkosi-initrd.1 \
+         ../../../..%{python3_sitelib}/mkosi/resources/man/mkosi-addon.1
+ln -s -t %{buildroot}%{_mandir}/man7/ \
+         ../../../..%{python3_sitelib}/mkosi/resources/man/mkosi.news.7
+%endif
+
+# Install the kernel-install plugins
+install -Dt %{buildroot}%{_prefix}/lib/kernel/install.d/ \
+         kernel-install/50-mkosi.install
+mkdir -p %{buildroot}%{_prefix}/lib/mkosi-initrd
+mkdir -p %{buildroot}%{_sysconfdir}/mkosi-initrd
+
+install -Dt %{buildroot}%{_prefix}/lib/kernel/install.d/ \
+         kernel-install/51-mkosi-addon.install
+mkdir -p %{buildroot}%{_prefix}/lib/mkosi-addon
+mkdir -p %{buildroot}%{_sysconfdir}/mkosi-addon
+
+# Install shell completions
+install -m0644 -D mkosi.bash %{buildroot}%{bash_completions_dir}/mkosi
+install -m0644 -D mkosi.fish %{buildroot}%{fish_completions_dir}/mkosi.fish
+install -m0644 -D mkosi.zsh %{buildroot}%{zsh_completions_dir}/_mkosi
+
+%if %{undefined suse_version}
+%files -f %pyproject_files
+%else
+%files
+%{python3_sitelib}/mkosi
+%{python3_sitelib}/mkosi-*.dist-info
+%endif
+%license LICENSES/GPL-2.0-only.txt
+%license LICENSES/LGPL-2.1-or-later.txt
+%license LICENSES/OFL-1.1.txt
+%license LICENSES/PSF-2.0.txt
+%doc README.md
+%_bindir/mkosi
+%_bindir/mkosi-sandbox
+%if %{with docs}
+%_mandir/man1/mkosi.1*
+%_mandir/man7/mkosi.news.7*
+%_mandir/man1/mkosi-sandbox.1*
+%endif
+%{bash_completions_dir}/mkosi
+%{fish_completions_dir}/mkosi.fish
+%{zsh_completions_dir}/_mkosi
+%if %{defined suse_version}
+%dir %{fish_completions_dir}
+%dir %{fish_completions_dir}/..
+%dir %{zsh_completions_dir}
+%dir %{zsh_completions_dir}/..
+%endif
+
+%files initrd
+%_bindir/mkosi-initrd
+%if %{with docs}
+%_mandir/man1/mkosi-initrd.1*
+%endif
+%_prefix/lib/kernel/install.d/50-mkosi.install
+%ghost %dir %{_prefix}/lib/mkosi-initrd
+%ghost %dir %{_sysconfdir}/mkosi-initrd
+%if %{defined suse_version}
+%dir %_prefix/lib/kernel
+%dir %_prefix/lib/kernel/install.d
+%endif
+
+%files addon
+%_bindir/mkosi-addon
+%if %{with docs}
+%_mandir/man1/mkosi-addon.1*
+%endif
+%_prefix/lib/kernel/install.d/51-mkosi-addon.install
+%ghost %dir %{_prefix}/lib/mkosi-addon
+%ghost %dir %{_sysconfdir}/mkosi-addon
+%if %{defined suse_version}
+%dir %_prefix/lib/kernel
+%dir %_prefix/lib/kernel/install.d
+%endif
+
+%check
+%if %{with tests}
+%pytest tests/ -v
+
+%if %{undefined suse_version}
+# just a smoke test for syntax or import errors
+%py3_test_envvars %{buildroot}%{_bindir}/mkosi --help >/dev/null
+%endif
+%endif
+
+%clean
+rm -rf \
+    $RPM_BUILD_ROOT \
+    mkosi.bash \
+    mkosi.zsh \
+    mkosi.fish \
+    mkosi/resources/man/*.1 \
+    mkosi/resources/man/*.7
+
+%changelog
+%autochangelog

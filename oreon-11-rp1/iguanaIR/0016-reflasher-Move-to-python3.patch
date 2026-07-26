@@ -1,0 +1,106 @@
+From ad3c951d613fd8926f2afc4ce219dee592418fad Mon Sep 17 00:00:00 2001
+From: Alec Leamas <leamas.alec@gmail.com>
+Date: Thu, 22 Aug 2019 18:42:11 +0200
+Subject: [PATCH] reflasher: Move to python3.
+
+---
+ files/python/usr/bin/iguanaIR-reflasher | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/files/python/usr/share/iguanaIR-reflasher/iguanaIR-reflasher b/files/python/usr/bin/iguanaIR-reflasher/iguanaIR-reflasher
+index 97cacc2..abfbc50 100755
+--- a/files/python/usr/share/iguanaIR-reflasher/iguanaIR-reflasher
++++ b/files/python/usr/share/iguanaIR-reflasher/iguanaIR-reflasher
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.7 -tt
++#!/usr/bin/python3
+ #
+ # **************************************************************************
+ # ** upgrade-usb ***********************************************************
+@@ -215,7 +215,7 @@ def listDevices(path = iguanaIR.IGSOCK_NAME):
+             if device != 'ctl' and \
+                not stat.S_ISLNK(os.lstat(os.path.join(path, device)).st_mode):
+                 devices.append(device)
+-    except Exception, inst:
++    except Exception as inst:
+         devices = ['0']
+         if MessageCannotlistdevice == False:
+             message(LOG_WARN,"""Guessing device "0", failed to list devices:\n  %s\n""" % inst)
+@@ -466,7 +466,7 @@ def writePagesToDevice(pages):
+         count += 1
+         if count == rebootPage:
+             sys.stdout.write('\n      Rebooting device')
+-            print deviceTransaction(iguanaIR.IG_DEV_RESET)
++            print(deviceTransaction(iguanaIR.IG_DEV_RESET))
+             if deviceVersion() != version:
+                 message(LOG_WARN, "Mid-write reboot unsuccessful.\n")
+ 
+@@ -506,7 +506,7 @@ def writeHexFile(filename, blank_pages = False, setFeatures = False):
+     pages = readPages(open(filename, 'r'))
+ 
+     if blank_pages:
+-        blanks = range(128)
++        blanks = list(range(128))
+         for page in pages:
+             blanks.remove(page['start'] / 64)
+ 
+@@ -538,7 +538,7 @@ def writeHexFile(filename, blank_pages = False, setFeatures = False):
+ def checkFileExists(path):
+     try:
+         os.stat(path)
+-    except OSError, inst:
++    except OSError as inst:
+         if inst[0] != errno.ENOENT:
+             raise
+         return False
+-- 
+2.20.1
+
+diff --git a/files/python/usr/bin/iguanaIR-reflasher b/files/python/usr/bin/iguanaIR-reflasher
+index 97cacc2..abfbc50 100755
+--- a/files/python/usr/bin/iguanaIR-reflasher
++++ b/files/python/usr/bin/iguanaIR-reflasher
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.7 -tt
++#!/usr/bin/python3
+ #
+ # **************************************************************************
+ # ** upgrade-usb ***********************************************************
+@@ -215,7 +215,7 @@ def listDevices(path = iguanaIR.IGSOCK_NAME):
+             if device != 'ctl' and \
+                not stat.S_ISLNK(os.lstat(os.path.join(path, device)).st_mode):
+                 devices.append(device)
+-    except Exception, inst:
++    except Exception as inst:
+         devices = ['0']
+         if MessageCannotlistdevice == False:
+             message(LOG_WARN,"""Guessing device "0", failed to list devices:\n  %s\n""" % inst)
+@@ -466,7 +466,7 @@ def writePagesToDevice(pages):
+         count += 1
+         if count == rebootPage:
+             sys.stdout.write('\n      Rebooting device')
+-            print deviceTransaction(iguanaIR.IG_DEV_RESET)
++            print(deviceTransaction(iguanaIR.IG_DEV_RESET))
+             if deviceVersion() != version:
+                 message(LOG_WARN, "Mid-write reboot unsuccessful.\n")
+ 
+@@ -506,7 +506,7 @@ def writeHexFile(filename, blank_pages = False, setFeatures = False):
+     pages = readPages(open(filename, 'r'))
+ 
+     if blank_pages:
+-        blanks = range(128)
++        blanks = list(range(128))
+         for page in pages:
+             blanks.remove(page['start'] / 64)
+ 
+@@ -538,7 +538,7 @@ def writeHexFile(filename, blank_pages = False, setFeatures = False):
+ def checkFileExists(path):
+     try:
+         os.stat(path)
+-    except OSError, inst:
++    except OSError as inst:
+         if inst[0] != errno.ENOENT:
+             raise
+         return False
+-- 
+2.20.1

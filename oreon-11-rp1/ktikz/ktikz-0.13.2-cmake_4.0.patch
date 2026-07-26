@@ -1,0 +1,22 @@
+diff -up ./CMakeLists.txt.orig ./CMakeLists.txt
+--- ./CMakeLists.txt.orig	2021-04-20 18:46:33.000000000 +0200
++++ ./CMakeLists.txt	2025-11-04 20:30:43.579136829 +0100
+@@ -1,5 +1,5 @@
+ project(ktikz)
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.16...4.0)
+ 
+ set(KTIKZ_VERSION "0.13.2")
+ 
+diff -up ./translations/CMakeLists.txt.orig ./translations/CMakeLists.txt
+--- ./translations/CMakeLists.txt.orig	2021-04-20 18:46:33.000000000 +0200
++++ ./translations/CMakeLists.txt	2025-11-04 20:33:26.465027907 +0100
+@@ -31,7 +31,7 @@ set(LUPDATE lupdate)
+ add_custom_target(ts)
+ find_program(SED_EXE NAMES sed)
+ if(SED_EXE)
+-	add_custom_command(TARGET ts
++	add_custom_command(TARGET ts POST_BUILD
+ 		COMMAND ${XMLPATTERNS} -output ${TIKZCOMMANDS_TR_H}_tmp ${CMAKE_CURRENT_SOURCE_DIR}/../app/extract-tikzcommands.xq
+ 		COMMAND ${SED_EXE} -e "s/amp\\;//g" ${TIKZCOMMANDS_TR_H}_tmp > ${TIKZCOMMANDS_TR_H}
+ 		COMMAND ${LUPDATE} ${CMAKE_CURRENT_SOURCE_DIR}/../app ${CMAKE_CURRENT_SOURCE_DIR}/../common ${CMAKE_CURRENT_SOURCE_DIR}/../common/utils ${CMAKE_CURRENT_BINARY_DIR}/${TIKZCOMMANDS_TR_H} -ts ${ktikz_TS_FILES}

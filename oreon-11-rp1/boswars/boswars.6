@@ -1,0 +1,82 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH BOSWARS 6 "August 12, 2007"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+boswars \- futuristic real-time strategy game
+.br
+.SH SYNOPSIS
+.B boswars
+[\fIOPTIONS\fR]
+.SH OPTIONS
+.TP
+\fB\-c\fR file.lua
+configuration start file (default stratagus.lua)
+.TP
+\fB\-d\fR datapath
+path to stratagus data
+.TP
+\fB\-e\fR
+Start editor
+.TP
+\fB\-h\fR
+Help shows this page
+.TP
+\fB\-l\fR
+Disable command log
+.TP
+\fB\-P\fR port
+Network port to use
+.TP
+\fB\-n\fR server
+Network server host preset
+.TP
+\fB\-L\fR lag
+Network lag in # frames (default 10 = 333ms)
+.TP
+\fB\-U\fR update
+Network update rate in # frames (default 5=6x per s)
+.TP
+\fB\-N\fR name
+Name of the player
+.TP
+\fB\-s\fR sleep
+Number of frames for the AI to sleep before it starts
+.TP
+\fB\-v\fR mode
+Video mode (0=default,1=640x480,2=800x600,
+3=1024x768,4=1280x960,5=1600x1200)
+.TP
+\fB\-D\fR
+Video mode depth = pixel per point (for Win32/TNT)
+.TP
+\fB\-F\fR
+Full screen video mode
+.TP
+\fB\-S\fR
+Sync speed (100 = 30 frames/s)
+.TP
+\fB\-W\fR
+Windowed video mode
+.PP
+map is relative to StratagusLibPath=datapath, use ./map for relative to the current working directory.
+
+
+.SH AUTHOR
+boswars was written by the Bos Wars and Stratagus Project.
+.PP
+This manual page was written by Cyril Brulebois <cyril.brulebois@enst\-bretagne.fr>,
+for the Debian project (and may be used by others).

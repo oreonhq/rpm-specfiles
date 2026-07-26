@@ -1,0 +1,56 @@
+From 5d39f692d55c04839be78e470820f49d53e40bcb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Fran=C3=A7ois=20Revol?= <revol@free.fr>
+Date: Wed, 27 Mar 2019 02:14:03 +0100
+Subject: [PATCH 7/8] Add check for <sys/select.h> and use it
+
+POSIX says it's required for 'fd_set', and Haiku needs it.
+---
+ configure.in | 2 +-
+ src/mms.c    | 3 +++
+ src/mmsh.c   | 3 +++
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/configure.in b/configure.in
+index 9209523..7434885 100755
+--- a/configure.in
++++ b/configure.in
+@@ -13,7 +13,7 @@ AC_PROG_LIBTOOL
+ AC_PROG_INSTALL
+ 
+ dnl Checks for header files.
+-AC_CHECK_HEADERS([sys/socket.h netinet/in.h netdb.h windows.h winsock2.h])
++AC_CHECK_HEADERS([sys/select.h sys/socket.h netinet/in.h netdb.h windows.h winsock2.h])
+ AC_CHECK_FUNCS([strndup])
+ 
+ case $host in
+diff --git a/src/mms.c b/src/mms.c
+index 579c3f0..bbeeb68 100644
+--- a/src/mms.c
++++ b/src/mms.c
+@@ -52,6 +52,9 @@
+ #endif
+ #include <string.h>
+ #include <sys/types.h>
++#ifdef HAVE_SYS_SELECT_H
++#include <sys/select.h>
++#endif
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <errno.h>
+diff --git a/src/mmsh.c b/src/mmsh.c
+index 918e0a3..cfaad94 100755
+--- a/src/mmsh.c
++++ b/src/mmsh.c
+@@ -55,6 +55,9 @@
+ #endif
+ #include <string.h>
+ #include <sys/types.h>
++#ifdef HAVE_SYS_SELECT_H
++#include <sys/select.h>
++#endif
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <errno.h>
+-- 
+2.39.2
+

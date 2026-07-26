@@ -1,0 +1,33 @@
+From 84c18b121886e22375e2163d495f75a207b96d11 Mon Sep 17 00:00:00 2001
+From: bhoover <bhoover@wecs.com>
+Date: Tue, 4 Feb 2020 17:57:42 -0500
+Subject: [PATCH] removed forward, and inadverdent typedef global
+
+---
+ src/dyndns.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/dyndns.h b/src/dyndns.h
+index dbe0f8b..4bfa9a2 100644
+--- a/src/dyndns.h
++++ b/src/dyndns.h
+@@ -377,7 +377,6 @@ typedef enum
+ /* forwards */
+ struct DYN_DNS_CLIENT;
+ struct DYNDNS_SYSTEM;
+-struct DYNDNS_INFO_TYPE;
+ struct EXP_MAPPING;
+ 
+ /** Function to prepare DNS system specific server requests
+@@ -638,7 +637,7 @@ struct EXP_MAPPING {
+ 	int		is_password;
+ 	int		is_alias;
+ 	int		is_ip_addr;
+-}EXP_MAPPING;
++};
+ 
+ /*public functions*/
+ 
+-- 
+2.24.1
+

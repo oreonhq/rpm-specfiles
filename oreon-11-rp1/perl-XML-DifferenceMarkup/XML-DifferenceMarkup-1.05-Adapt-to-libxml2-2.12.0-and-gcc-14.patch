@@ -1,0 +1,43 @@
+From a43f06d6ed9f78666a51dec8ad27881fa8fa4e6d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 23 Jan 2024 11:20:04 +0100
+Subject: [PATCH] Adapt to libxml2-2.12.0 and gcc-14
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+libxml2-2.12.0 changed a constness of xmlCtxtGetLastError() return
+value and gcc-14 started to error on mismatched constness:
+
+perl-libxml-sax.c:1411:47: error: invalid conversion from ‘const xmlError*’ {aka ‘const _xmlError*’} to ‘xmlErrorPtr’ {aka ‘_xmlError*’} [-fpermissive]
+ 1411 |     xmlErrorPtr last_err = xmlCtxtGetLastError( ctxt );
+      |                            ~~~~~~~~~~~~~~~~~~~^~~~~~~~
+      |                                               |
+      |                                               const xmlError* {aka const _xmlError*}
+
+This patch fixes it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ perl-libxml-sax.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/perl-libxml-sax.c b/perl-libxml-sax.c
+index 17b7029..56a3d59 100644
+--- a/perl-libxml-sax.c
++++ b/perl-libxml-sax.c
+@@ -1408,7 +1408,10 @@ PmmSaxError(void * ctx, const char * msg, ...)
+     SV * svMessage;
+ 
+ #if LIBXML_VERSION > 20600
+-    xmlErrorPtr last_err = xmlCtxtGetLastError( ctxt );
++#if LIBXML_VERSION > 21200
++    const
++#endif
++    xmlError * last_err = xmlCtxtGetLastError( ctxt );
+ #endif
+     dTHX;
+     dSP;
+-- 
+2.43.0
+

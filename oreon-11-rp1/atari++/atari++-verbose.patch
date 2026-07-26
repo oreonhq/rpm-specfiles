@@ -1,0 +1,47 @@
+diff -up atari++/Makefile.atari.verbose atari++/Makefile.atari
+--- atari++/Makefile.atari.verbose	2013-01-14 09:20:17.000000000 +0100
++++ atari++/Makefile.atari	2013-01-31 22:00:30.000000000 +0100
+@@ -74,6 +74,12 @@ INCLUDES	=	types.h $(foreach file,$(FILE
+ SOURCES		=	$(foreach file,$(FILES),$(file).cpp)
+ OBJECTS		=	$(foreach file,$(FILES),$(file).o)
+ 
++ifeq ($(V),1)
++SILENT=
++else
++SILENT=@
++endif
++
+ ###################################################################################
+ 
+ debug	:	
+@@ -150,25 +156,25 @@ config.status:	configure
+ 
+ %.o: %.cpp %.hpp
+ 	@ $(ECHO) "Compiling" $*.cpp
+-	@ $(CXX) $(CFLAGS) $(ADDFLAGS) $*.cpp
++	$(SILENT) $(CXX) $(CFLAGS) $(ADDFLAGS) $*.cpp
+ 
+ %.o: %.cpp
+ 	@ $(ECHO) "Compiling" $*.cpp
+-	@ $(CXX) $(CFLAGS) $(ADDFLAGS) $*.cpp
++	$(SILENT) $(CXX) $(CFLAGS) $(ADDFLAGS) $*.cpp
+ 
+ %.s: %.cpp %.hpp
+ 	@ $(ECHO) "Compiling" $*.cpp
+-	@ $(CXX) $(CFLAGS) $(ADDFLAGS) $(OPTIMIZER) $(TOASM) $*.cpp
++	$(SILENT) $(CXX) $(CFLAGS) $(ADDFLAGS) $(OPTIMIZER) $(TOASM) $*.cpp
+ 
+ %.s: %.cpp
+ 	@ $(ECHO) "Compiling" $*.cpp
+-	@ $(CXX) $(CFLAGS) $(ADDFLAGS) $(OPTIMIZER) $(TOASM) $*.cpp
++	$(SILENT) $(CXX) $(CFLAGS) $(ADDFLAGS) $(OPTIMIZER) $(TOASM) $*.cpp
+ 
+ %.asm: %.s
+ 	@ c++filt <$*.s >$*.asm
+ 
+ atari++		:	$(OBJECTS)
+-	@ $(LD) $(OBJECTS) $(LDFLAGS) $(LDLIBS) $(ADDLIBS) -o atari++
++	$(SILENT) $(LD) $(OBJECTS) $(LDFLAGS) $(LDLIBS) $(ADDLIBS) -o atari++
+ 
+ dox		:	$(SOURCES) $(INCLUDES)
+ 	doxygen Doxyfile

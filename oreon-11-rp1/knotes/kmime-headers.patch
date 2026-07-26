@@ -1,0 +1,120 @@
+diff --color -Naru knotes-24.05.2/notesagent/notesagentalarmdialog.cpp knotes-24.05.2.fix/notesagent/notesagentalarmdialog.cpp
+--- knotes-24.05.2/notesagent/notesagentalarmdialog.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/notesagent/notesagentalarmdialog.cpp	2024-10-24 19:35:36.250927379 +0200
+@@ -9,7 +9,7 @@
+ #include "notesagent_debug.h"
+ #include "notesagentnotedialog.h"
+ #include "widget/notelistwidget.h"
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <Akonadi/ItemFetchJob>
+ #include <Akonadi/ItemFetchScope>
+diff --color -Naru knotes-24.05.2/notesagent/notesagentnotedialog.cpp knotes-24.05.2.fix/notesagent/notesagentnotedialog.cpp
+--- knotes-24.05.2/notesagent/notesagentnotedialog.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/notesagent/notesagentnotedialog.cpp	2024-10-24 19:35:36.247927334 +0200
+@@ -13,7 +13,7 @@
+ 
+ #include <KSharedConfig>
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <QIcon>
+ 
+diff --color -Naru knotes-24.05.2/notesagent/notesmanager.cpp knotes-24.05.2.fix/notesagent/notesmanager.cpp
+--- knotes-24.05.2/notesagent/notesmanager.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/notesagent/notesmanager.cpp	2024-10-24 19:35:36.248927349 +0200
+@@ -21,7 +21,7 @@
+ #include <Akonadi/NoteUtils>
+ #include <Akonadi/Session>
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <KLocalizedString>
+ #include <KNotification>
+diff --color -Naru knotes-24.05.2/noteshared/src/job/createnewnotejob.cpp knotes-24.05.2.fix/noteshared/src/job/createnewnotejob.cpp
+--- knotes-24.05.2/noteshared/src/job/createnewnotejob.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/noteshared/src/job/createnewnotejob.cpp	2024-10-24 19:35:36.254927439 +0200
+@@ -17,7 +17,7 @@
+ #include <Akonadi/Item>
+ #include <Akonadi/ItemCreateJob>
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <KLocalizedString>
+ #include <KMessageBox>
+diff --color -Naru knotes-24.05.2/noteshared/src/noteutils.cpp knotes-24.05.2.fix/noteshared/src/noteutils.cpp
+--- knotes-24.05.2/noteshared/src/noteutils.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/noteshared/src/noteutils.cpp	2024-10-24 19:35:36.287927934 +0200
+@@ -12,7 +12,7 @@
+ #include <KMessageBox>
+ #include <KProcess>
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <QApplication>
+ #include <QPointer>
+diff --color -Naru knotes-24.05.2/noteshared/src/widget/notelistwidget.cpp knotes-24.05.2.fix/noteshared/src/widget/notelistwidget.cpp
+--- knotes-24.05.2/noteshared/src/widget/notelistwidget.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/noteshared/src/widget/notelistwidget.cpp	2024-10-24 19:35:36.264927589 +0200
+@@ -6,7 +6,7 @@
+ #include "notelistwidget.h"
+ #include "attributes/notedisplayattribute.h"
+ #include "noteutils.h"
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ using namespace NoteShared;
+ 
+diff --color -Naru knotes-24.05.2/src/apps/knotesapp.cpp knotes-24.05.2.fix/src/apps/knotesapp.cpp
+--- knotes-24.05.2/src/apps/knotesapp.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/src/apps/knotesapp.cpp	2024-10-24 19:35:36.343928773 +0200
+@@ -39,7 +39,7 @@
+ 
+ #include <Akonadi/ControlGui>
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <KActionCollection>
+ #include <KDNSSD/PublicService>
+diff --color -Naru knotes-24.05.2/src/kontactplugin/knotes_part.cpp knotes-24.05.2.fix/src/kontactplugin/knotes_part.cpp
+--- knotes-24.05.2/src/kontactplugin/knotes_part.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/src/kontactplugin/knotes_part.cpp	2024-10-24 19:35:36.295928054 +0200
+@@ -45,7 +45,7 @@
+ #include <Akonadi/ItemModifyJob>
+ #include <Akonadi/Session>
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <KActionCollection>
+ #include <KCheckableProxyModel>
+diff --color -Naru knotes-24.05.2/src/notes/knote.cpp knotes-24.05.2.fix/src/notes/knote.cpp
+--- knotes-24.05.2/src/notes/knote.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/src/notes/knote.cpp	2024-10-24 19:35:36.307928233 +0200
+@@ -27,7 +27,7 @@
+ 
+ #include <Debug/akonadisearchdebugdialog.h>
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <KActionCollection>
+ #include <KComboBox>
+diff --color -Naru knotes-24.05.2/src/print/knoteprintobject.cpp knotes-24.05.2.fix/src/print/knoteprintobject.cpp
+--- knotes-24.05.2/src/print/knoteprintobject.cpp	2024-06-28 23:04:36.000000000 +0200
++++ knotes-24.05.2.fix/src/print/knoteprintobject.cpp	2024-10-24 19:35:36.335928653 +0200
+@@ -9,7 +9,7 @@
+ #include "attributes/notedisplayattribute.h"
+ #include "attributes/notelockattribute.h"
+ 
+-#include <KMime/KMimeMessage>
++#include <KMime/Message>
+ 
+ #include <QLocale>
+ 

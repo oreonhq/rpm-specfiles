@@ -1,0 +1,77 @@
+From bd6f5683f6cde4212364354b3139c1d521f40f39 Mon Sep 17 00:00:00 2001
+From: Todd Zullinger <tmz@pobox.com>
+Date: Tue, 29 Dec 2020 14:18:01 -0500
+Subject: tests: t0107: support older and/or non-GNU tar
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The untar tests for various compression algorithms use shortcut options
+from GNU tar to handle decompression.  These options may not be provided
+by non-GNU tar nor even by slightly older GNU tar versions which ship on
+many systems.
+
+An example of the latter case is the --zstd option.  This was added in
+GNU tar-1.32 (2019-02-23)¹.  This version of tar is not provided by
+CentOS/RHEL, in particular.  In Debian, --zstd has been backported to
+the tar-1.30 release.
+
+Avoid the requirement on any specific implementations or versions of tar
+by piping decompressed output to tar.  This is compatible with older GNU
+tar releases as well as tar implementations from other vendors.  (It may
+also be a slight benefit that this more closely matches what the
+snapshot creation code does.)
+
+¹ Technically, the --zstd option was first released in tar-1.31
+  (2019-01-02), but this release was very short-lived and is no longer
+  listed on the GNU Tar release page.
+
+Signed-off-by: Todd Zullinger <tmz@pobox.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ tests/t0107-snapshot.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tests/t0107-snapshot.sh b/tests/t0107-snapshot.sh
+index 89b9159..0811ec4 100755
+--- a/tests/t0107-snapshot.sh
++++ b/tests/t0107-snapshot.sh
+@@ -25,7 +25,7 @@ test_expect_success 'verify gzip format' '
+ 
+ test_expect_success 'untar' '
+ 	rm -rf master &&
+-	tar -xzf master.tar.gz
++	gzip -dc master.tar.gz | tar -xf -
+ '
+ 
+ test_expect_success 'count files' '
+@@ -66,7 +66,7 @@ test_expect_success LZIP 'verify lzip format' '
+ 
+ test_expect_success LZIP 'untar' '
+ 	rm -rf master &&
+-	tar --lzip -xf master.tar.lz
++	lzip -dc master.tar.lz | tar -xf -
+ '
+ 
+ test_expect_success LZIP 'count files' '
+@@ -107,7 +107,7 @@ test_expect_success XZ 'verify xz format' '
+ 
+ test_expect_success XZ 'untar' '
+ 	rm -rf master &&
+-	tar --xz -xf master.tar.xz
++	xz -dc master.tar.xz | tar -xf -
+ '
+ 
+ test_expect_success XZ 'count files' '
+@@ -148,7 +148,7 @@ test_expect_success ZSTD 'verify zstd format' '
+ 
+ test_expect_success ZSTD 'untar' '
+ 	rm -rf master &&
+-	tar --zstd -xf master.tar.zst
++	zstd -dc master.tar.zst | tar -xf -
+ '
+ 
+ test_expect_success ZSTD 'count files' '
+-- 
+cgit v1.2.3-11-g984f
+

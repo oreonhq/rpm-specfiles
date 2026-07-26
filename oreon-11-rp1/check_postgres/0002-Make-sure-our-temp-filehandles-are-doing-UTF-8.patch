@@ -1,0 +1,28 @@
+From d3812fe7c849f2608bcfb925d711a8a58eb52c44 Mon Sep 17 00:00:00 2001
+From: Greg Sabino Mullane <greg@turnstep.com>
+Date: Tue, 31 Mar 2020 19:48:33 -0400
+Subject: [PATCH 2/4] Make sure our temp filehandles are doing UTF-8
+
+---
+ check_postgres.pl | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/check_postgres.pl b/check_postgres.pl
+index cbd8673..8646133 100755
+--- a/check_postgres.pl
++++ b/check_postgres.pl
+@@ -2972,9 +2972,11 @@ sub run_command {
+ 
+     $tempdir = tempdir(@tempdirargs);
+     ($tempfh,$tempfile) = tempfile('check_postgres_psql.XXXXXXX', SUFFIX => '.tmp', DIR => $tempdir);
++    binmode($tempfh, ':utf8');
+ 
+     ## Create another one to catch any errors
+     ($errfh,$errorfile) = tempfile('check_postgres_psql_stderr.XXXXXXX', SUFFIX => '.tmp', DIR => $tempdir);
++    binmode($errfh, ':utf8');
+ 
+     ## Mild cleanup of the query
+     $string =~ s/^\s*(.+?)\s*$/$1/s;
+-- 
+2.26.2
+

@@ -1,0 +1,25 @@
+From 63885e92f129f7f513ed1ea15230141aa8ac88dc Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 17:02:33 +0200
+Subject: [PATCH 10/15] Use lib or lib64 automatically
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ lib/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index 1418031..171601f 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ 
+ add_library(expatpp SHARED expatpp.cpp)
+ target_link_libraries(expatpp ${EXPAT_LIBRARIES})
+-INSTALL_TARGETS(/lib expatpp)
+\ No newline at end of file
++INSTALL_TARGETS(/${LIB_INSTALL_DIR} expatpp)
+\ No newline at end of file
+-- 
+1.7.11.7
+

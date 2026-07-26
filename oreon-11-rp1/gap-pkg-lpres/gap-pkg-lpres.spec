@@ -1,0 +1,90 @@
+%global source0_hash 4dddad0905b2ed77cf7ac15fd0f95fdececc82a1dfeb1ea17d9b7a97dab59740
+
+%global gap_pkgname lpres
+%global giturl       https://github.com/gap-packages/lpres
+
+Name:           gap-pkg-%{gap_pkgname}
+Version:        1.1.1
+Release:        %autorelease
+Summary:        Nilpotent quotients of L-presented groups
+
+License:        GPL-2.0-or-later
+URL:            https://gap-packages.github.io/lpres/
+VCS:            git:%{giturl}.git
+Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
+
+BuildArch:      noarch
+BuildSystem:    gap
+BuildOption(install): gap tst
+BuildOption(check): tst/testall.g
+
+BuildRequires:  gap-devel
+BuildRequires:  gap-pkg-ace-doc
+BuildRequires:  gap-pkg-autodoc
+BuildRequires:  gap-pkg-autpgrp
+BuildRequires:  gap-pkg-fga
+BuildRequires:  gap-pkg-nq-doc
+BuildRequires:  gap-pkg-polycyclic-doc
+
+Requires:       gap-pkg-fga
+Requires:       gap-pkg-polycyclic
+
+Recommends:     gap-pkg-ace
+Recommends:     gap-pkg-autpgrp
+Recommends:     gap-pkg-nq
+
+%description
+The lpres package provides a first construction of finitely L-presented groups
+and a nilpotent quotient algorithm for L-presented groups.  The features of
+this package include:
+- creating an L-presented group as a new gap object,
+- computing nilpotent quotients of L-presented groups and epimorphisms from
+  the L-presented group onto its nilpotent quotients,
+- computing the abelian invariants of an L-presented group,
+- computing finite-index subgroups and if possible their L-presentation,
+- approximating the Schur multiplier of L-presented groups.
+
+%package doc
+# The content is GPL-2.0-or-later.  The remaining licenses cover the various
+# fonts embedded in PDFs.
+# AMS: OFL-1.1-RFN
+# CM: Knuth-CTAN
+# CM-Super: GPL-1.0-or-later
+# Nimbus: AGPL-3.0-only
+# StandardSymL: GPL-1.0-or-later
+License:        GPL-2.0-or-later AND OFL-1.1-RFN AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only
+Summary:        LPRES documentation
+Requires:       %{name} = %{version}-%{release}
+Requires:       gap-pkg-polycyclic-doc
+
+%description doc
+This package contains documentation for gap-pkg-%{gap_pkgname}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{gap_upname}-%{version}
+
+%build -a
+# A second BiBTeX run is needed to resolve \cite within a reference
+cd doc
+bibtex lpres
+pdflatex lpres
+pdflatex lpres
+mv lpres.pdf manual.pdf
+cd -
+
+%files
+%doc README.md
+%license COPYING
+%dir %{gap_libdir}/pkg/%{gap_upname}/
+%{gap_libdir}/pkg/%{gap_upname}/*.g
+%{gap_libdir}/pkg/%{gap_upname}/gap/
+%{gap_libdir}/pkg/%{gap_upname}/tst/
+
+%files doc
+%docdir %{gap_libdir}/pkg/%{gap_upname}/doc/
+%{gap_libdir}/pkg/%{gap_upname}/doc/
+
+%changelog
+%autochangelog

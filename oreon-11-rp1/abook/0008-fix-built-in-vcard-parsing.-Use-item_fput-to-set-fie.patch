@@ -1,0 +1,26 @@
+From b5e4a4daec1c7842e214b50a0f267e07d9792311 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rapha=C3=ABl=20Droz?= <raphael.droz@gmail.com>
+Date: Tue, 21 Jan 2025 02:37:39 -0300
+Subject: [PATCH 8/8] fix built-in vcard parsing. Use item_fput() to set
+ fields' value
+
+---
+ filter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/filter.c b/filter.c
+index 9540409..1c327b2 100644
+--- a/filter.c
++++ b/filter.c
+@@ -1792,7 +1792,7 @@ vcard_parse_line(list_item item, char *line)
+ 			else if(0 == strcmp(key, "N"))
+ 				vcard_parse_name(item, line);
+ 			else
+-				item[i] = vcard_get_line_element(line, VCARD_VALUE);
++				item_fput(item, i, xstrdup(vcard_get_line_element(line, VCARD_VALUE)));
+ 			return;
+ 		}
+ 	}
+-- 
+2.53.0
+

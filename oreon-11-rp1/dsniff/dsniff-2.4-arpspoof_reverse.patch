@@ -1,0 +1,142 @@
+Patch by Stefan Tomanek <stefan@pico.ruhr.de> for dsniff >= 2.4b1 to add add -r
+switch to poison both directions. For some more information, please have a look to
+Debian bug ID #650749.
+
+--- dsniff-2.4/arpspoof.8			2000-11-28 08:43:43.000000000 +0100
++++ dsniff-2.4/arpspoof.8.arpspoof_reverse	2013-12-20 20:27:49.000000000 +0100
+@@ -9,7 +9,7 @@
+ .na
+ .nf
+ .fi
+-\fBarpspoof\fR [\fB-i \fIinterface\fR] [\fB-t \fItarget\fR] \fIhost\fR
++\fBarpspoof\fR [\fB\-i \fIinterface\fR] [\fB\-t \fItarget\fR] [\fB\-r\fR] \fIhost\fR
+ .SH DESCRIPTION
+ .ad
+ .fi
+@@ -26,6 +26,9 @@
+ .IP "\fB-t \fItarget\fR"
+ Specify a particular host to ARP poison (if not specified, all hosts
+ on the LAN).
++.IP "\fB\-r\fR"
++Poison both hosts (host and target) to capture traffic in both directions.
++(only valid in conjuntion with \-t)
+ .IP \fIhost\fR
+ Specify the host you wish to intercept packets for (usually the local
+ gateway).
+--- dsniff-2.4/arpspoof.c			2013-12-20 20:25:04.000000000 +0100
++++ dsniff-2.4/arpspoof.c.arpspoof_reverse	2013-12-20 20:34:31.000000000 +0100
+@@ -7,6 +7,8 @@
+  * Copyright (c) 1999 Dug Song <dugsong@monkey.org>
+  *
+  * $Id: arpspoof.c,v 1.5 2001/03/15 08:32:58 dugsong Exp $
++ *
++ * Improved 2011 by Stefan Tomanek <stefa@pico.ruhr.de>
+  */
+ 
+ #include "config.h"
+@@ -31,12 +33,13 @@
+ static struct ether_addr spoof_mac, target_mac;
+ static in_addr_t spoof_ip, target_ip;
+ static char *intf;
++static int poison_reverse;
+ 
+ static void
+ usage(void)
+ {
+ 	fprintf(stderr, "Version: " VERSION "\n"
+-		"Usage: arpspoof [-i interface] [-t target] host\n");
++		"Usage: arpspoof [-i interface] [-t target] [-r] host\n");
+ 	exit(1);
+ }
+ 
+@@ -133,18 +136,30 @@
+ static void
+ cleanup(int sig)
+ {
++	int fw = arp_find(spoof_ip, &spoof_mac);
++	int bw = poison_reverse && target_ip && arp_find(target_ip, &target_mac);
+ 	int i;
+ 	
+-	if (arp_find(spoof_ip, &spoof_mac)) {
+-		for (i = 0; i < 3; i++) {
+-			/* XXX - on BSD, requires ETHERSPOOF kernel. */
++	fprintf(stderr, "Cleaning up and re-arping targets...\n");
++	for (i = 0; i < 5; i++) {
++		/* XXX - on BSD, requires ETHERSPOOF kernel. */
++		if (fw) {
+ 			arp_send(l, ARPOP_REPLY,
+ 				 (u_int8_t *)&spoof_mac, spoof_ip,
+ 				 (target_ip ? (u_int8_t *)&target_mac : NULL),
+ 				 target_ip);
++			/* we have to wait a moment before sending the next packet */
++			sleep(1);
++		}
++		if (bw) {
++			arp_send(l, ARPOP_REPLY,
++				 (u_int8_t *)&target_mac, target_ip,
++				 (u_int8_t *)&spoof_mac,
++				 spoof_ip);
+ 			sleep(1);
+ 		}
+ 	}
++	
+ 	exit(0);
+ }
+ 
+@@ -159,8 +174,9 @@
+ 	
+ 	intf = NULL;
+ 	spoof_ip = target_ip = 0;
++	poison_reverse = 0;
+ 	
+-	while ((c = getopt(argc, argv, "i:t:h?V")) != -1) {
++	while ((c = getopt(argc, argv, "ri:t:h?V")) != -1) {
+ 		switch (c) {
+ 		case 'i':
+ 			intf = optarg;
+@@ -169,6 +185,9 @@
+ 			if ((target_ip = libnet_name2addr4(l, optarg, LIBNET_RESOLVE)) == -1)
+ 				usage();
+ 			break;
++		case 'r':
++			poison_reverse = 1;
++			break;
+ 		default:
+ 			usage();
+ 		}
+@@ -179,6 +198,11 @@
+ 	if (argc != 1)
+ 		usage();
+ 	
++	if (poison_reverse && !target_ip) {
++		errx(1, "Spoofing the reverse path (-r) is only available when specifying a target (-t).");
++		usage();
++	}
++	
+ 	if ((spoof_ip = libnet_name2addr4(l, argv[0], LIBNET_RESOLVE)) == -1)
+ 		usage();
+ 	
+@@ -192,6 +216,13 @@
+ 		errx(1, "couldn't arp for host %s",
+ 		     libnet_addr2name4(target_ip, LIBNET_DONT_RESOLVE));
+ 	
++	if (poison_reverse) {
++		if (!arp_find(spoof_ip, &spoof_mac)) {
++			errx(1, "couldn't arp for spoof host %s",
++			     libnet_addr2name4(spoof_ip, LIBNET_DONT_RESOLVE));
++		}
++	}
++	
+ 	signal(SIGHUP, cleanup);
+ 	signal(SIGINT, cleanup);
+ 	signal(SIGTERM, cleanup);
+@@ -200,6 +231,9 @@
+ 		arp_send(l, ARPOP_REPLY, NULL, spoof_ip,
+ 			 (target_ip ? (u_int8_t *)&target_mac : NULL),
+ 			 target_ip);
++		if (poison_reverse) {
++			arp_send(l, ARPOP_REPLY, NULL, target_ip, (uint8_t *)&spoof_mac, spoof_ip);
++		}
+ 		sleep(2);
+ 	}
+ 	/* NOTREACHED */

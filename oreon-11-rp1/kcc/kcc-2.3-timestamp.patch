@@ -1,0 +1,16 @@
+diff -pruN kcc.orig/Makefile kcc/Makefile
+--- kcc.orig/Makefile	2007-09-21 14:08:02.000000000 +0900
++++ kcc/Makefile	2007-09-21 14:08:53.000000000 +0900
+@@ -34,10 +34,10 @@ install.man: $(MANPATH)/$(JMANDIR)/man1/
+ 
+ $(BINPATH)/kcc: kcc.c
+ 	$(MAKE) kcc
+-	$(INSTALL) kcc $(BINPATH)
++	$(INSTALL) -p kcc $(BINPATH)
+ 
+ $(MANPATH)/$(JMANDIR)/man1/kcc.1: kcc.jman
+-	$(INSTALL) -m 644 kcc.jman $@
++	$(INSTALL) -m 644 -p kcc.jman $@
+ 
+ clean:
+ 	rm -f $(CMDS) $(OBJS) mon.out gmon.out make.log

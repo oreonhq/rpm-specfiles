@@ -1,0 +1,26 @@
+diff --git a/bin/zia-config.in b/bin/zia-config.in
+index bf070cc..7dfba77 100644
+--- a/bin/zia-config.in
++++ b/bin/zia-config.in
+@@ -95,7 +95,7 @@ while test $# -gt 0; do
+       echo "$cflags"
+       ;;
+     --libs)
+-      echo "$libs -L$prefix/lib -lzia-@VERSION@ -lutil"
++      echo "$libs -L$prefix/lib -lzia -lutil"
+       ;;
+     --libs2)
+       echo "$libs"
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 44a40fc..10b4a09 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -74,7 +74,7 @@ libzia_la_SOURCES = \
+ 
+ 
+ libzia_la_CFLAGS = $(Z_SVNVER) -I../include -I../include/unix 
+-libzia_la_LDFLAGS = -release @VERSION@
++libzia_la_LDFLAGS = -release @VERSION@ -version-info 0
+ library_includedir = $(includedir)/libzia
+ 
+ #zsdltest_SOURCES = zsdltest.c

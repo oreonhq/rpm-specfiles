@@ -1,0 +1,73 @@
+Patch by Robert Scheck <robert@fedoraproject.org> for dsniff >= 2.4b1, that
+adds further link layer offsets; inspirated from the original DLT_LINUX_SLL
+patch by Roland Kletzing <devzero@web.de>. This patch supersedes the Debian
+patch by Joerg Dorchain <joerg@dorchain.net> which adds tcpkill support for
+handling PPP interfaces. So for some further information, please also have
+a look to Debian bug ID #572516.
+
+--- dsniff-2.4/pcaputil.c		2001-03-15 09:33:04.000000000 +0100
++++ dsniff-2.4/pcaputil.c.ll_offset	2011-10-09 17:13:01.000000000 +0200
+@@ -46,12 +46,63 @@
+ 	case DLT_FDDI:
+ 		offset = 21;
+ 		break;
++#ifdef __amigaos__
++	case DLT_MIAMI:
++		offset = 16;
++		break;
++#endif
++	case DLT_RAW:
+ #ifdef DLT_LOOP
+ 	case DLT_LOOP:
+ #endif
+ 	case DLT_NULL:
+ 		offset = 4;
+ 		break;
++	case DLT_SLIP:
++#ifdef DLT_SLIP_BSDOS
++	case DLT_SLIP_BSDOS:
++#endif
++#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__bsdi__) || defined(__APPLE__)
++		offset = 16;
++#else
++		offset = 24;
++#endif
++		break;
++	case DLT_PPP:
++#ifdef DLT_PPP_BSDOS
++	case DLT_PPP_BSDOS:
++#endif
++#ifdef DLT_PPP_SERIAL
++	case DLT_PPP_SERIAL:
++#endif
++#ifdef DLT_PPP_ETHER
++	case DLT_PPP_ETHER:
++#endif
++#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__bsdi__) || defined(__APPLE__)
++		offset = 4;
++#else
++#if defined(sun) || defined(__sun)
++		offset = 8;
++#else
++		offset = 24;
++#endif
++#endif
++		break;
++#ifdef DLT_ENC
++	case DLT_ENC:
++		offset = 12;
++		break;
++#endif
++#ifdef DLT_LINUX_SLL
++	case DLT_LINUX_SLL:
++		offset = 16;
++		break;
++#endif
++#ifdef DLT_IPNET
++	case DLT_IPNET:
++		offset = 24;
++		break;
++#endif
+ 	default:
+ 		warnx("unsupported datalink type");
+ 		break;

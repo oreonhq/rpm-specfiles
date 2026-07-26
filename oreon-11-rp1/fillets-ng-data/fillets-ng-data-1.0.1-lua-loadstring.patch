@@ -1,0 +1,11 @@
+--- script/share/Pickle.lua	2007-12-01 19:03:16.000000000 +0200
++++ script/share/Pickle.lua	2022-04-27 00:22:41.072636933 +0300
+@@ -73,7 +73,7 @@
+   if type(s) ~= "string" then
+     error("can't unpickle a "..type(s)..", only strings")
+   end
+-  local tables = loadstring("return "..s)()
++  local tables = load("return "..s)()
+   return unpickle_table(tables)
+ end
+   

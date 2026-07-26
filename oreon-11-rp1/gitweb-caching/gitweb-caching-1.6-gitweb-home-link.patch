@@ -1,0 +1,12 @@
+diff -uNr gitweb.bak/gitweb/gitweb_defaults.perl gitweb/gitweb/gitweb_defaults.perl
+--- gitweb.bak/gitweb/gitweb_defaults.perl	2009-10-07 22:17:05.000000000 -0700
++++ gitweb/gitweb/gitweb_defaults.perl	2009-12-06 13:09:37.000000000 -0800
+@@ -46,7 +46,7 @@
+ $home_link = $my_uri || "/";
+ 
+ # string of the home link on top of all pages
+-$home_link_str = "++GITWEB_HOME_LINK_STR++";
++$home_link_str = $ENV{'SERVER_NAME'} ? "git://" . $ENV{'SERVER_NAME'} : "projects";
+ 
+ # name of your site or organization to appear in page titles
+ # replace this with something more descriptive for clearer bookmarks

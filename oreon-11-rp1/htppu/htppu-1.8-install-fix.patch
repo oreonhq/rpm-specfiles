@@ -1,0 +1,43 @@
+diff --git a/Makefile b/Makefile
+index 800384c..9c10272 100644
+--- a/Makefile
++++ b/Makefile
+@@ -80,24 +80,24 @@ install: all install-bin install-man
+ install-all: install install-conf
+ 
+ install-man:
+-	install -d -m 755 -o $(MAN_OWN) -g $(MAN_GRP) $(MAN_DIR)/man8
+-	install -m 444 -o $(MAN_OWN) -g $(MAN_GRP) man/conversd.8 $(MAN_DIR)/man8
++	install -dD $(MAN_DIR)/man8
++	install -p -m 644 man/conversd.8 $(MAN_DIR)/man8
+ 
+ install-bin: all
+-	install -d -m 755 -o $(OWN) -g $(GRP)	$(LOG_DIR)
+-	install -d -m 755 -o $(OWN) -g $(GRP)	$(DATA_DIR)/personals
+-	install -d -m 755 -o $(OWN) -g $(GRP)	$(SBIN_DIR)
+-	install -m 755 -o $(OWN) -g $(GRP)	conversd $(SBIN_DIR)
++	install -dD	$(LOG_DIR)
++	install -dD	$(DATA_DIR)/personals
++	install -dD	$(SBIN_DIR)
++	install -p -m 755	conversd $(SBIN_DIR)
+ 
+ install-conf:
+-	install -d -m 755 -o $(OWN) -g $(GRP)	$(CONF_DIR)
+-	install -m 640 -o $(OWN) -g $(GRP)	etc/convers.conf $(CONF_DIR)
+-	install -m 644 -o $(OWN) -g $(GRP)	etc/convers.motd $(CONF_DIR)
+-	install -m 644 -o $(OWN) -g $(GRP)	etc/convers.issue $(CONF_DIR)
+-	install -m 644 -o $(OWN) -g $(GRP)	etc/convers.help $(CONF_DIR)
+-	install -m 766 -o $(OWN) -g $(GRP)	etc/convers.news $(CONF_DIR)
+-	install -m 766 -o $(OWN) -g $(GRP)      etc/spam.txt $(CONF_DIR)
+-	install -m 766 -o $(OWN) -g $(GRP)      etc/smileys.txt $(CONF_DIR)
++	install -dD	$(CONF_DIR)
++	install -p -m 640	etc/convers.conf $(CONF_DIR)
++	install -p -m 644	etc/convers.motd $(CONF_DIR)
++	install -p -m 644	etc/convers.issue $(CONF_DIR)
++	install -p -m 644	etc/convers.help $(CONF_DIR)
++	install -p -m 644	etc/convers.news $(CONF_DIR)
++	install -p -m 644	etc/spam.txt $(CONF_DIR)
++	install -p -m 644	etc/smileys.txt $(CONF_DIR)
+ clean:
+ 	rm -rf *.o *~ */*~
+ 

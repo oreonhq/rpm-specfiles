@@ -1,0 +1,259 @@
+diff --git a/frysk-core/configure.ac b/frysk-core/configure.ac
+index 49bab9acb..69fc220b3 100644
+--- a/frysk-core/configure.ac
++++ b/frysk-core/configure.ac
+@@ -47,7 +47,7 @@ m4_include([common/frysk-common.ac])
+ AM_INIT_AUTOMAKE([subdir-objects foreign no-installinfo no-exeext no-dist])
+ AC_FIND_FILE([antlr.jar], [/usr/share/java], ANTLR_JAR)
+ AC_FIND_FILE([junit.jar], [/usr/share/java], JUNIT_JAR)
+-AC_FIND_FILE([jline-1.0.jar], [/usr/lib/java/jline1], JLINE_JAR)
++AC_FIND_FILE([jline.jar], [/usr/share/java/jline2], JLINE_JAR)
+ 
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT
+diff --git a/frysk-core/frysk/bindir/fhpd.java b/frysk-core/frysk/bindir/fhpd.java
+index 3738a2c0c..5b4d69bb7 100644
+--- a/frysk-core/frysk/bindir/fhpd.java
++++ b/frysk-core/frysk/bindir/fhpd.java
+@@ -51,8 +51,8 @@ import java.util.Observable;
+ import java.util.Observer;
+ 
+ import frysk.hpd.CLI;
+-import jline.Completor;
+-import jline.ConsoleReader;
++import jline.console.completer.Completer;
++import jline.console.ConsoleReader;
+ import frysk.util.FlowControlWriter;
+ import frysk.proc.Manager;
+ import frysk.util.CommandlineParser;
+@@ -67,9 +67,9 @@ public class fhpd {
+     private static int exitStatus;
+     private static String[] params;
+ 
+-    final static class FhpdCompletor implements Completor {
++    final static class FhpdCompleter implements Completer {
+         CLI cli;
+-        public FhpdCompletor (CLI cli) {
++        public FhpdCompleter (CLI cli) {
+             this.cli = cli;
+         }
+         public int complete (String buffer, int cursor, List candidates) {
+@@ -108,19 +108,16 @@ public class fhpd {
+                 terminal.getObservable()
+                     .addObserver(new TerminalObserver(writer));
+                 cli = new CLI("(fhpd) ", writer);
+-		reader = new ConsoleReader
+-                    (new FileInputStream(java.io.FileDescriptor.in),
+-		     printWriter,
+-		     null,
+-		     terminal);
++		reader = new ConsoleReader(new FileInputStream(java.io.FileDescriptor.in),
++					   System.out, terminal);
+ 	    } catch (IOException ioe) {
+ 		System.out.println("ERROR: Could not create a command line");
+ 		System.out.print(ioe.getMessage());
+ 		System.exit(1);
+ 		return;
+ 	    }
+-	    Completor fhpdCompletor = new FhpdCompletor(cli);
+-	    reader.addCompletor(fhpdCompletor);
++	    Completer fhpdCompleter = new FhpdCompleter(cli);
++	    reader.addCompleter(fhpdCompleter);
+ 	}
+ 	public void execute() {
+ 	    start();
+diff --git a/frysk-core/frysk/hpd/CompletionFactory.java b/frysk-core/frysk/hpd/CompletionFactory.java
+index 3796a5d60..8e75051c7 100644
+--- a/frysk-core/frysk/hpd/CompletionFactory.java
++++ b/frysk-core/frysk/hpd/CompletionFactory.java
+@@ -42,7 +42,7 @@ import java.util.List;
+ import java.util.Iterator;
+ import frysk.debuginfo.DebugInfoFrame;
+ import frysk.proc.Task;
+-import jline.FileNameCompletor;
++import jline.console.completer.FileNameCompleter;
+ import frysk.expr.ExprSearchEngine;
+ import frysk.expr.ExpressionFactory;
+ 
+@@ -99,14 +99,14 @@ class CompletionFactory {
+ 	// System.out.println("input.size()=" + input.size());
+ 	if (input.size() == 0) {
+ 	    int newOffset
+-		= new FileNameCompletor().complete("", 0, candidates);
++		= new FileNameCompleter().complete("", 0, candidates);
+ 	    if (newOffset < 0)
+ 		return -1;
+ 	    else
+ 		return newOffset + cursor;
+ 	} else {
+ 	    Input.Token incomplete = input.incompleteToken(cursor);
+-	    int newOffset = new FileNameCompletor()
++	    int newOffset = new FileNameCompleter()
+ 		.complete(incomplete.value, incomplete.end - incomplete.start,
+ 			  candidates);
+ 	    return incomplete.absolute(newOffset);
+diff --git a/frysk-core/frysk/util/ObservingTerminal.java b/frysk-core/frysk/util/ObservingTerminal.java
+index 9cd7025ba..ca14f1a28 100644
+--- a/frysk-core/frysk/util/ObservingTerminal.java
++++ b/frysk-core/frysk/util/ObservingTerminal.java
+@@ -39,13 +39,14 @@
+ package frysk.util;
+ 
+ import java.io.*;
+-import jline.ConsoleReader;
++import jline.console.ConsoleReader;
+ 
+ import frysk.sys.FileDescriptor;
+ 
+ 
+ public class ObservingTerminal
+-    extends PtyTerminal {
++    extends PtyTerminal
++{
+     public class Observable extends java.util.Observable {
+         private final ObservingTerminal terminal;
+         Observable(ObservingTerminal terminal) {
+@@ -82,35 +83,9 @@ public class ObservingTerminal
+         super(string);
+         observable = new Observable(this);
+     }
+-    
+-    public void beforeReadLine(ConsoleReader reader, String prompt,
+-                               Character mask) {
+-        inputEntered = false;
+-        observable.setChanged();
+-        observable.notifyObservers();
+-        super.beforeReadLine(reader, prompt, mask);
+-    }
+-
+-    public int readVirtualKey(InputStream in)
+-        throws IOException {
+-        int result = super.readVirtualKey(in);
+-        inputEntered = true;
+-        observable.setChanged();
+-        observable.notifyObservers();
+-        return result;
+-    }
+-
+-    
+-    public void afterReadLine(ConsoleReader reader, String prompt,
+-	    Character mask) {
+-	inputEntered = false;
+-	observable.setChanged();
+-	observable.notifyObservers();
+-	super.afterReadLine(reader, prompt, mask);
+-    }
+ 
+     public Observable getObservable() {
+         return observable;
+     }
+-               
++
+ }
+diff --git a/frysk-core/frysk/util/PtyTerminal.java b/frysk-core/frysk/util/PtyTerminal.java
+index 517dd50e9..77c10501f 100644
+--- a/frysk-core/frysk/util/PtyTerminal.java
++++ b/frysk-core/frysk/util/PtyTerminal.java
+@@ -43,6 +43,7 @@ import java.io.InputStream;
+ import java.io.IOException;
+ 
+ import jline.Terminal;
++import jline.TerminalSupport;
+ import jline.UnixTerminal;
+ 
+ import frysk.sys.FileDescriptor;
+@@ -56,7 +57,8 @@ import frysk.sys.termios.Termios;
+  * frysk.sys.termios calls. This copies UnixTerminal pretty closely.
+  */
+ public class PtyTerminal
+-  extends Terminal
++    extends TerminalSupport
++    implements Terminal
+ {
+   private final FileDescriptor fd;
+ 
+@@ -67,6 +69,7 @@ public class PtyTerminal
+ 
+   public PtyTerminal(FileDescriptor fd)
+   {
++      super(true);
+     this.fd = fd;
+ 
+     try
+@@ -148,64 +151,21 @@ public class PtyTerminal
+       termios.set(fd);
+   }
+ 
+-  public int readVirtualKey (InputStream in)
+-    throws IOException
+-  {
+-    int c = readCharacter (in);
+-
+-    // in Unix terminals, arrow keys are represented by
+-    // a sequence of 3 characters. E.g., the up arrow
+-    // key yields 27, 91, 68
+-    if (c == UnixTerminal.ARROW_START)
+-      {
+-	c = readCharacter (in);
+-	if (c == UnixTerminal.ARROW_PREFIX)
+-	  {
+-	    c = readCharacter (in);
+-	    if (c == UnixTerminal.ARROW_UP)
+-	      return CTRL_P;
+-	    else if (c == UnixTerminal.ARROW_DOWN)
+-	      return CTRL_N;
+-	    else if (c == UnixTerminal.ARROW_LEFT)
+-	      return CTRL_B;
+-	    else if (c == UnixTerminal.ARROW_RIGHT)
+-	      return CTRL_F;
+-	  }
+-      }
+-    return c;
+-  }
+-
+-  public boolean isSupported ()
+-  {
+-    return true;
+-  }
+-
+-  public boolean getEcho ()
+-  {
+-    return false;
+-  }
+-
+     public boolean isEchoEnabled() {
+ 	final Termios termios = new Termios(fd);
+ 	return termios.get(Local.ECHO_INPUT);
+     }
+ 
+-    public void disableEcho() {
+-	final Termios termios = new Termios(fd);
+-	termios.set(Local.ECHO_INPUT, false);
+-	termios.set(fd);
+-    }
+-
+-    public void enableEcho() {
++    public void setEchoEnabled(boolean enabled) {
+ 	final Termios termios = new Termios(fd);
+-	termios.set(Local.ECHO_INPUT, true);
++	termios.set(Local.ECHO_INPUT, enabled);
+ 	termios.set(fd);
+     }
+ 
+   /**
+    *	Returns the value of "stty size" width param.
+    */
+-  public int getTerminalWidth()
++  public int getWidth()
+   {
+     Size size = fd.getSize();
+     return size.getRows();
+@@ -214,7 +174,7 @@ public class PtyTerminal
+   /**
+    *	Returns the value of "stty size" height param.
+    */
+-  public int getTerminalHeight()
++  public int geteight()
+   {
+     Size size = fd.getSize();
+     return size.getColumns();

@@ -1,0 +1,220 @@
+Index: mod_auth_token-1.0.5/configure.in
+===================================================================
+--- mod_auth_token-1.0.5.orig/configure.in
++++ mod_auth_token-1.0.5/configure.in
+@@ -1,104 +1,79 @@
+-dnl Required initializer
+-AC_INIT
+-
+-dnl Automake initialization
+-AM_INIT_AUTOMAKE(mod_auth_token, 1.0)
+-
+-dnl the debug build options adds symbols to compiler output (-g for g++) 
+-AC_ARG_ENABLE(debug,
+-[  --enable-debug          turn on debugging and compile time warnings],
+-[case "${enableval}" in
+-  yes) debug=true ;;
+-  no)  debug=false ;;
+-  *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
+-esac],[debug=false])
+-AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
+-
+-dnl Find APXS binary
+-AC_MSG_CHECKING(for Apache module support via DSO through APXS)
+-AC_ARG_WITH(apxs,
+-[  --with-apxs[=FILE]   Build shared Apache module.  FILE is the optional
+-                        pathname to the Apache apxs tool; defaults to
+-                        "apxs".  (This option needs Perl installed)],
+-[
+-	if test "$withval" = "yes"; then
+-		withval=apxs
+-	fi
+-	APXS="$withval"
+-
+-	if test -f "$APXS"; then
+-		AC_SUBST(APXS)
+-		AC_MSG_RESULT(yes)
+-	else
+-		AC_MSG_RESULT(no)
+-		AC_MSG_ERROR([APXS not found at $APXS, please use --with-apxs to specify the location of the apxs binary])
+-	fi
+-],[
+-	save_IFS="$IFS"
+-	IFS=":"
+-    
+-	for i in $PATH; do
+-	if test -f "$i/apxs"; then
+-			APXS="$i/apxs"
+-		elif test -f "$i/apxs2"; then
+-			APXS="$i/apxs2"
+-		fi
+-	done
+-    
+-	IFS="$save_IFS"
+-	
+-	if test -n "$APXS"; then
+-		AC_SUBST(APXS)
+-		AC_MSG_RESULT(yes)
+-	else
+-		AC_MSG_RESULT(no)
+-		AC_MSG_ERROR([APXS not found in \$PATH, please use --with-apxs to specify the location of the apxs binary])
+-	fi
+-])
+-
+-dnl Add test for a compiler.
+-dnl AC_CHECK_COMPILERS
+-AC_PROG_CC
+-
+-CXXFLAGS=""
+-if test x$debug = xtrue; then
+-   CXXDEBUGDEFINES="-D_DEBUG"
+-   APXS_CXX_OPTIONS="-Wc,-g"
+-else 
+-   CXXDEBUGDEFINES="-D_NDEBUG"
+-   APXS_CXX_OPTIONS=""
+-fi					  
+-AC_SUBST(CXXDEBUGDEFINES)
+-AC_SUBST(APXS_CXX_OPTIONS)
+-
+-dnl Extra params for gcc
+-if test "$GCC"; then
+-   if test x$debug = xtrue; then
+-	  CXXFLAGS="$CXXFLAGS -g"
+-   else 
+-	  CXXFLAGS="$CXXFLAGS -O2"
+-   fi					  
+-fi
+-AC_SUBST(CXXFLAGS)
+-
+-AC_LIBTOOL_DLOPEN
+-AC_LIBTOOL_WIN32_DLL
+-AM_PROG_LIBTOOL
+-AC_SUBST(LIBTOOL_DEPS)
+-AC_ENABLE_SHARED(yes)
+-AC_ENABLE_STATIC(yes)
+-
+-dnl Check for functions
+-AC_CHECK_FUNCS([memmove])
+-
+-dnl Checks for programs
+-AC_PROG_INSTALL
+-
+-dnl Checks for header files
+-AC_HEADER_STDC
+-
+-dnl Checks for library functions
+-dnl AC_ARG_PROGRAM
+-
+-dnl Write config.status and the Makefile
+-AC_OUTPUT(Makefile)
++dnl Required initializer
++AC_INIT([mod_auth_token], [1.0])
++AC_CONFIG_MACRO_DIRS([m4])
++AC_CONFIG_SRCDIR([./mod_auth_token.c])
++
++dnl Automake initialization
++AM_INIT_AUTOMAKE([foreign])
++
++dnl the debug build options adds symbols to compiler output (-g for g++)
++AC_ARG_ENABLE(debug,
++[  --enable-debug          turn on debugging and compile time warnings],
++[case "${enableval}" in
++  yes) debug=true ;;
++  no)  debug=false ;;
++  *) AC_MSG_ERROR(bad value ${enableval} for --enable-debug) ;;
++esac],[debug=false])
++AM_CONDITIONAL(DEBUG, test x$debug = xtrue)
++
++dnl Find APXS binary
++AC_ARG_WITH(apxs,
++	AS_HELP_STRING(
++		[--with-apxs[=NAME]],
++		[Name or full path of the apxs executable ("apxs" by default)]),
++	[APXS="$withval"; test "$withval" = yes && APXS="apxs"]
++)
++
++AC_PATH_PROGS([APXS], [apxs2 apxs], [false])
++
++if test "$APXS" = "false"; then
++	AC_MSG_ERROR([APXS not found, please use --with-apxs to specify the location of the apxs binary])
++fi
++
++AC_SUBST([APXS_LIBEXECDIR], [`$APXS -q LIBEXECDIR`])
++
++dnl Add test for a compiler.
++dnl AC_CHECK_COMPILERS
++AC_PROG_CC
++
++# needed libs
++PKG_CHECK_MODULES(APR, [apr-1 apr-util-1])
++
++CXXFLAGS=""
++if test x$debug = xtrue; then
++   CXXDEBUGDEFINES="-D_DEBUG"
++   APXS_CXX_OPTIONS="-Wc,-g"
++else
++   CXXDEBUGDEFINES="-D_NDEBUG"
++   APXS_CXX_OPTIONS=""
++fi
++AC_SUBST(CXXDEBUGDEFINES)
++AC_SUBST(APXS_CXX_OPTIONS)
++
++dnl Extra params for gcc
++if test "$GCC"; then
++   if test x$debug = xtrue; then
++	  CXXFLAGS="$CXXFLAGS -g"
++   else
++	  CXXFLAGS="$CXXFLAGS -O2"
++   fi
++fi
++AC_SUBST(CXXFLAGS)
++
++LT_INIT([dlopen,win32-dll])
++AC_SUBST(LIBTOOL_DEPS)
++AC_ENABLE_SHARED(yes)
++AC_ENABLE_STATIC(yes)
++
++dnl Check for functions
++AC_CHECK_FUNCS([memmove])
++
++dnl Checks for programs
++AC_PROG_INSTALL
++
++dnl Checks for library functions
++dnl AC_ARG_PROGRAM
++
++dnl Write config.status and the Makefile
++AC_CONFIG_FILES([Makefile])
++AC_OUTPUT
+Index: mod_auth_token-1.0.5/Makefile.am
+===================================================================
+--- mod_auth_token-1.0.5.orig/Makefile.am
++++ mod_auth_token-1.0.5/Makefile.am
+@@ -1,12 +1,21 @@
++## Automake config
++ACLOCAL_AMFLAGS = -I m4
++
+ ## Define compiler debug flags
+-AM_CFLAGS = $(CXXDEBUGDEFINES)
++AM_CFLAGS = $(CXXDEBUGDEFINES) $(CFLAGS)
++
++## These files also need to be removed on the clean target.
++CLEANFILES = mod_auth_token.la mod_auth_token.slo
+ 
+ ## Define the source file for the module
+ noinst_SCRIPTS = mod_auth_token.so
+ 
+-mod_auth_token.so:
+-	$(APXS) $(APXS_CXX_OPTIONS) $(INCLUDES) -c mod_auth_token.c
++mod_auth_token.so: mod_auth_token.la
++
++mod_auth_token.la:
++	$(APXS) $(APXS_CXX_OPTIONS) -Wc,"$(INCLUDES) $(APR_CFLAGS) $(CFLAGS)" -Wl,"$(LDFLAGS) $(APR_LIBS)" -c mod_auth_token.c
+ 
+ ## Define install targets
+-install: mod_auth_token.so
+-	$(APXS) -i -a mod_auth_token.la
+\ No newline at end of file
++install: mod_auth_token.la
++	$(INSTALL) -Ddm 0755 $(DESTDIR)$(APXS_LIBEXECDIR)
++	$(APXS) -i -S LIBEXECDIR=$(DESTDIR)$(APXS_LIBEXECDIR) -n mod_auth_token mod_auth_token.la

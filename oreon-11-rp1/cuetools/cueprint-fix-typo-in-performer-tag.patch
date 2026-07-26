@@ -1,0 +1,22 @@
+From fa3b2f463148f5635977de6c24475d3746dc8d6d Mon Sep 17 00:00:00 2001
+From: svenper <svenper@users.noreply.github.com>
+Date: Sat, 20 Aug 2016 22:38:22 +0200
+Subject: [PATCH] Update cueprint.c
+
+---
+ src/tools/cueprint.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/tools/cueprint.c b/src/tools/cueprint.c
+index 4128f38..20256fb 100644
+--- a/src/tools/cueprint.c
++++ b/src/tools/cueprint.c
+@@ -42,7 +42,7 @@ genre:		%g\n\
+ ISRC:		%i\n\
+ message:	%m\n\
+ track number:	%n\n\
+-perfomer:	%p\n\
++performer:	%p\n\
+ title:		%t\n\
+ ISRC (CD-TEXT):	%u\n\
+ "

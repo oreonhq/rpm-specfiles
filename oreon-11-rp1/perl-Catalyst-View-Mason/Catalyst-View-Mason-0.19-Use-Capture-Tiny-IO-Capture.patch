@@ -1,0 +1,58 @@
+From a0354cfbfef1072bc35cc0cf804a4fb7e2cacbe1 Mon Sep 17 00:00:00 2001
+From: Kent Fredric <Kent Fredric>
+Date: Tue, 19 May 2015 13:20:06 +0200
+Subject: [PATCH] Use Capture::Tiny IO::Capture
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Just use a more reasonable IO redirection system (Capture::Tiny)
+instead of relying on a quirky tied glob interface.
+
+CPAN RT#102381
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/debug.t | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/t/debug.t b/t/debug.t
+index a2abcfe..e2c4af3 100644
+--- a/t/debug.t
++++ b/t/debug.t
+@@ -4,8 +4,8 @@ use strict;
+ use warnings;
+ use Test::More;
+ 
+-eval "use IO::Capture::Stderr";
+-plan skip_all => "IO::Capture::Stderr required for debug testing" if $@;
++eval "use Capture::Tiny";
++plan skip_all => "Capture::Tiny required for debug testing" if $@;
+ 
+ plan tests => 3;
+ 
+@@ -14,15 +14,15 @@ use lib "$FindBin::Bin/lib";
+ 
+ $ENV{CATALYST_DEBUG} = 1;
+ 
+-my $capture = IO::Capture::Stderr->new;
+-$capture->start;
++my $response;
++my $capture = Capture::Tiny::capture_stderr(sub{
+ 
+-use_ok('Catalyst::Test', 'TestApp');
++	use_ok('Catalyst::Test', 'TestApp');
+ 
+-my $response = request('/test');
++	$response = request('/test');
+ 
+-$capture->stop;
++});
+ 
+ ok($response->is_success, 'request ok');
+ 
+-like(join('', $capture->read), qr{\[debug\] Rendering component "/test"}, 'debug message ok');
++like($capture, qr{\[debug\] Rendering component "/test"}, 'debug message ok');
+-- 
+2.1.0
+

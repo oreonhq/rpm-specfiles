@@ -1,0 +1,43 @@
+From 4ae5c0e9fd82366c0add1c865038d96cfcf1c7e2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 19 Jun 2024 17:27:27 +0200
+Subject: [PATCH] Fix installing CMake configuration files
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+libwbxml2-config.cmake was installed into /cmake/libwbxml2 directory
+because CMAKE_INSTALL_LIBDIR was not set:
+
+    /usr/bin/cmake --install redhat-linux-build
+    -- Install configuration: ""
+    -- Installing: /home/test/fedora/libwbxml/libwbxml-0.11.10-build/BUILDROOT/usr/lib64/pkgconfig/libwbxml
+    [...]
+    -- Installing: /home/test/fedora/libwbxml/libwbxml-0.11.10-build/BUILDROOT/cmake/libwbxml2/libwbxml2-config.cmake
+    -- Installing: /home/test/fedora/libwbxml/libwbxml-0.11.10-build/BUILDROOT/cmake/libwbxml2/libwbxml2-config-version.cmake
+
+The root cause was that CMAKE_INSTALL_LIBDIR is defined by
+GNUInstallDirs module which was not included.
+
+This patch fixes it.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ cmake/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index c386b08..11a7b48 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -2,6 +2,7 @@
+ # Standard header and include paths were already defined.
+ 
+ include(CMakePackageConfigHelpers)
++include(GNUInstallDirs)
+ 
+ configure_package_config_file(
+     libwbxml2-config.cmake.in
+-- 
+2.45.2
+

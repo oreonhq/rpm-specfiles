@@ -1,0 +1,13 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 1f2bf7a..9473752 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14...3.16)
+ 
+ project(GSLTests LANGUAGES CXX)
+ 
+-set(GSL_CXX_STANDARD "14" CACHE STRING "Use c++ standard")
++set(GSL_CXX_STANDARD "17" CACHE STRING "Use c++ standard")
+ 
+ set(CMAKE_CXX_STANDARD ${GSL_CXX_STANDARD})
+ set(CMAKE_CXX_EXTENSIONS OFF)

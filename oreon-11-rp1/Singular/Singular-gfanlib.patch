@@ -1,0 +1,41 @@
+--- Singular-Release-4-4-0p4/configure.ac.orig	2024-08-15 16:32:20.955176205 -0600
++++ Singular-Release-4-4-0p4/configure.ac	2024-08-15 17:04:55.019444100 -0600
+@@ -262,8 +262,6 @@ AC_CONFIG_FILES([kernel/maps/Makefile])
+ AC_CONFIG_FILES([kernel/GBEngine/Makefile])
+ AC_CONFIG_FILES([kernel/oswrapper/Makefile])
+ 
+-AC_CONFIG_SUBDIRS([gfanlib])
+-
+ AC_CONFIG_FILES([Singular/dyn_modules/Makefile])
+ AC_CONFIG_FILES([Singular/dyn_modules/bigintm/Makefile])
+ AC_CONFIG_FILES([Singular/dyn_modules/Order/Makefile])
+--- Singular-Release-4-4-0p4/Makefile.am.orig	2024-08-15 08:29:38.000000000 -0600
++++ Singular-Release-4-4-0p4/Makefile.am	2024-08-15 17:08:43.623715288 -0600
+@@ -1,7 +1,7 @@
+ ACLOCAL_AMFLAGS = -I m4
+ 
+ SUBDIRS = resources omalloc factory \
+-libpolys gfanlib IntegerProgramming \
++libpolys IntegerProgramming \
+ kernel Singular \
+ dox emacs redhat desktop
+ 
+--- Singular-Release-4-4-0p4/Singular/dyn_modules/gfanlib/gfan.h.orig	2024-08-15 08:29:38.000000000 -0600
++++ Singular-Release-4-4-0p4/Singular/dyn_modules/gfanlib/gfan.h	2024-08-15 17:16:12.812259685 -0600
+@@ -12,7 +12,6 @@ Author: monerjan
+ 
+ #include "misc/int64vec.h"
+ 
+-#include "gfanlib/config.h"
+ #ifdef HAVE_CDDLIB_SETOPER_H
+ #include <cddlib/setoper.h>
+ #include <cddlib/cdd.h>
+--- Singular-Release-4-4-0p4/Singular/dyn_modules/gfanlib/Makefile.am.orig	2024-08-15 08:29:38.000000000 -0600
++++ Singular-Release-4-4-0p4/Singular/dyn_modules/gfanlib/Makefile.am	2024-08-15 16:32:41.226927821 -0600
+@@ -40,5 +40,5 @@ endif
+ 
+ if HAVE_GFANLIB
+ # Use objects from the libtool convenience library
+- gfanlib_la_LIBADD   += ${abs_top_builddir}/gfanlib/libgfan.la ${CDDGMPLDFLAGS}
++ gfanlib_la_LIBADD   += -lgfan
+ endif

@@ -1,0 +1,8 @@
+diff -up Kwiki-Raw-0.02/Makefile.PL.orig Kwiki-Raw-0.02/Makefile.PL
+--- Kwiki-Raw-0.02/Makefile.PL.orig	2017-05-22 11:50:33.764460001 +0200
++++ Kwiki-Raw-0.02/Makefile.PL	2017-05-22 11:51:13.683177436 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name('Kwiki-Raw');

@@ -1,0 +1,53 @@
+Return-Path: <jan.reucker@web.de>
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	by smtp.ertel.com.pl (8.13.8/8.13.8) with ESMTP id r5QH5Up2001445
+	for <dwrobel@ertelnet.rybnik.pl>; Wed, 26 Jun 2013 19:05:30 +0200
+Received: from [192.168.1.112] ([84.137.101.177]) by smtp.web.de (mrweb101)
+ with ESMTPSA (Nemesis) id 0MZlZK-1UYhTn2ICk-00LTsB; Wed, 26 Jun 2013 18:42:05
+ +0200
+Message-ID: <51CB19DB.7000808@web.de>
+Date: Wed, 26 Jun 2013 18:42:03 +0200
+From: Jan Reucker <jan.reucker@web.de>
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:17.0) Gecko/20130510 Thunderbird/17.0.6
+MIME-Version: 1.0
+To: Damian Wrobel <dwrobel@ertelnet.rybnik.pl>
+CC: Arthur Frenslich <thuromail@thuro.at>
+Subject: Re: Thuro's Werkstatt: crrcsim models license question
+References: <541426b485942d6ea644d3c76bcf6ab7@www.thuro.at> <51C2D9D4.1000600@thuro.at> <51CB10E2.9030901@ertelnet.rybnik.pl>
+In-Reply-To: <51CB10E2.9030901@ertelnet.rybnik.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID:  V03:K0:5NmI8qteAE/A/uLiDVUa8nsaj6w5EkLX0Z+vIaco+ITF24CsesS
+ ORYSD50takGK94ZcEwnzPpdFBCj0ucapU5hQ5IGeOtQ5L4yRMPfw/kdD3cBebBSEpekDhvC
+ d4TYD5YzxD7ju3iBkDY03ES/YGdbTmwYkguEL4cyxQvdGOzfKzQSv7F35yLexVYJPJGX8sY
+ 1LwKJUi5iN8wK/LkW9tUg==
+X-Spam-Status: No, score=-2.6 required=6.0 tests=BAYES_00,UNPARSEABLE_RELAY
+	autolearn=ham version=3.2.5
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on smtp.ertel.com.pl
+X-Virus-Scanned: clamav-milter 0.97 at smtp
+X-Virus-Status: Clean
+X-Greylist: Delayed for 00:12:34 by milter-greylist-4.1.1 (smtp.ertel.com.pl [62.182.231.178]); Wed, 26 Jun 2013 19:05:31 +0200 (CEST)
+
+On 26.06.2013 18:03, Damian Wrobel wrote:
+> Arthur and Jan,
+>
+> Sorry for bothering you again.
+>
+> The last question about the crrcsim-addon-models file is the license type
+> we can assume it is released on.
+>
+> I'd appreciate if I can receive a confirmation from both of you in 
+> that matter.
+> In case you don't have any preference, please consider to choose the 
+> CC-BY[3] license.
+>
+> [3] http://creativecommons.org/licenses/by/3.0/
+>
+Damian,
+
+for me CC-BY is absolutely o.k., but I don't hold the copyright for any 
+of the models. They were created by others, mostly by Arthur, and I just 
+packaged them.
+
+Kind regards,
+Jan R.

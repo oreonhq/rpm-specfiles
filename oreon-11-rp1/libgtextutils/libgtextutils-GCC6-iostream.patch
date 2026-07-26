@@ -1,0 +1,11 @@
+diff -ur libgtextutils-0.7/src/gtextutils/text_line_reader.cpp libgtextutils-0.7.new/src/gtextutils/text_line_reader.cpp
+--- libgtextutils-0.7/src/gtextutils/text_line_reader.cpp	2014-01-05 20:09:32.000000000 +0000
++++ libgtextutils-0.7.new/src/gtextutils/text_line_reader.cpp	2016-11-12 08:34:47.538675378 +0000
+@@ -44,6 +44,6 @@
+ 	if (input_stream.eof())
+ 		return false;
+ 
+-	return input_stream ;
++	return (bool)input_stream ;
+ }
+ 

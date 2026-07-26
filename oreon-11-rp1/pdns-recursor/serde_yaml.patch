@@ -1,0 +1,13 @@
+diff --git a/settings/rust/Cargo.toml b/settings/rust/Cargo.toml
+index fed8e82..4c5fdc5 100644
+--- a/settings/rust/Cargo.toml
++++ b/settings/rust/Cargo.toml
+@@ -11,7 +11,7 @@ crate-type = ["staticlib"]
+ [dependencies]
+ cxx = "1.0"
+ serde = { version = "1.0", features = ["derive"] }
+-serde_yaml = { package = "serde_yml", version = "0.0.12" }
++serde_yaml = { version = "0.9.33" }
+ ipnet = "2.8"
+ once_cell = "1.18.0"
+ base64 = "0.22"

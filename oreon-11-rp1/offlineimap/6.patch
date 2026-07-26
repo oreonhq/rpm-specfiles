@@ -1,0 +1,56 @@
+From a7ce7da1d573849ac2e1d740d8f3238e0ad8d88c Mon Sep 17 00:00:00 2001
+From: Julien Cristau <jcristau@debian.org>
+Date: Thu, 13 Sep 2018 11:57:58 +0200
+Subject: [PATCH] Use SSLContext if available so we send SNI
+
+Fixes https://github.com/imaplib2/imaplib2/issues/5
+---
+ imaplib2/imaplib2.py  | 11 ++++++++++-
+ imaplib2/imaplib2.py3 | 12 +++++++++++-
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/imaplib2/imaplib2.py b/imaplib2/imaplib2.py
+index 1fd47d2..52c5289 100755
+--- a/imaplib2/imaplib2.py
++++ b/imaplib2/imaplib2.py
+@@ -545,7 +545,16 @@ def ssl_wrap_socket(self):
+ 
+             ssl_version =  TLS_MAP[self.tls_level][self.ssl_version]
+ 
+-            self.sock = ssl.wrap_socket(self.sock, self.keyfile, self.certfile, ca_certs=self.ca_certs, cert_reqs=cert_reqs, ssl_version=ssl_version)
++            if getattr(ssl, 'HAS_SNI', False):
++                ctx = ssl.SSLContext(ssl_version)
++                ctx.verify_mode = cert_reqs
++                if self.ca_certs is not None:
++                    ctx.load_verify_locations(self.ca_certs)
++                if self.certfile or self.keyfile:
++                    ctx.load_cert_chain(self.certfile, self.keyfile)
++                self.sock = ctx.wrap_socket(self.sock, server_hostname=self.host)
++            else:
++                self.sock = ssl.wrap_socket(self.sock, self.keyfile, self.certfile, ca_certs=self.ca_certs, cert_reqs=cert_reqs, ssl_version=ssl_version)
+             ssl_exc = ssl.SSLError
+             self.read_fd = self.sock.fileno()
+         except ImportError:
+diff --git a/imaplib2/imaplib2.py3 b/imaplib2/imaplib2.py3
+index 0aeff4d..f1a7d98 100755
+--- a/imaplib2/imaplib2.py3
++++ b/imaplib2/imaplib2.py3
+@@ -492,7 +492,17 @@ class IMAP4(object):
+ 
+             ssl_version =  TLS_MAP[self.tls_level][self.ssl_version]
+ 
+-            self.sock = ssl.wrap_socket(self.sock, self.keyfile, self.certfile, ca_certs=self.ca_certs, cert_reqs=cert_reqs, ssl_version=ssl_version)
++            if getattr(ssl, 'HAS_SNI', False):
++                ctx = ssl.SSLContext(ssl_version)
++                ctx.verify_mode = cert_reqs
++                if self.ca_certs is not None:
++                    ctx.load_verify_locations(self.ca_certs)
++                if self.certfile or self.keyfile:
++                    ctx.load_cert_chain(self.certfile, self.keyfile)
++                self.sock = ctx.wrap_socket(self.sock, server_hostname=self.host)
++            else:
++                self.sock = ssl.wrap_socket(self.sock, self.keyfile, self.certfile, ca_certs=self.ca_certs, cert_reqs=cert_reqs, ssl_version=ssl_version)
++
+             ssl_exc = ssl.SSLError
+             self.read_fd = self.sock.fileno()
+         except ImportError:

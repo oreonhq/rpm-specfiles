@@ -1,0 +1,21 @@
+diff -uNr fetch-crl-3.0.23.ORIG/Makefile fetch-crl-3.0.23/Makefile
+--- fetch-crl-3.0.23.ORIG/Makefile	2025-01-28 12:24:07.242549244 +0100
++++ fetch-crl-3.0.23/Makefile	2025-01-28 12:24:37.089864940 +0100
+@@ -72,14 +72,14 @@
+ install: configure
+ 	mkdir -p $(ETC)
+ 	mkdir -p $(PREFIX)
+-	mkdir -p $(PREFIX)/sbin
++	mkdir -p $(PREFIX)/bin
+ 	mkdir -p $(PREFIX)/share
+ 	mkdir -p $(PREFIX)/share/doc
+ 	mkdir -p $(PREFIX)/share/doc/$(RELEASE)
+ 	mkdir -p $(PREFIX)/share/man
+ 	mkdir -p $(PREFIX)/share/man/man8
+-	install -m755 fetch-crl              $(PREFIX)/sbin/fetch-crl
+-	install -m755 clean-crl              $(PREFIX)/sbin/clean-crl
++	install -m755 fetch-crl              $(PREFIX)/bin/fetch-crl
++	install -m755 clean-crl              $(PREFIX)/bin/clean-crl
+ 	install -m644 fetch-crl-cron.cron    $(PREFIX)/share/doc/$(RELEASE)/fetch-crl-cron.cron
+ 	install -m644 fetch-crl-cron.init    $(PREFIX)/share/doc/$(RELEASE)/fetch-crl-cron.init
+ 	install -m644 fetch-crl-boot.init    $(PREFIX)/share/doc/$(RELEASE)/fetch-crl-boot.init

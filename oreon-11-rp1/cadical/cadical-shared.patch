@@ -1,0 +1,94 @@
+--- cadical-rel-2.2.1/configure.orig	2025-12-23 09:09:47.000000000 -0700
++++ cadical-rel-2.2.1/configure	2025-12-24 09:17:26.430079285 -0700
+@@ -587,7 +587,7 @@ fi
+ #--------------------------------------------------------------------------#
+ # Preparing make goals (@GOALS@)
+ 
+-goals="libcadical.a cadical mobical"
++goals="cadical mobical"
+ 
+ sharedlibrary="libcadical.so"
+ cadicaldynamic="cadical-dynamic"
+--- cadical-rel-2.2.1/makefile.in.orig	2025-12-23 09:09:47.000000000 -0700
++++ cadical-rel-2.2.1/makefile.in	2025-12-24 09:20:46.085403636 -0700
+@@ -12,6 +12,7 @@ CXXFLAGS=@CXXFLAGS@
+ 
+ CC=@CC@
+ CFLAGS=@CFLAGS@
++LDFLAGS=@LDFLAGS@
+ 
+ LIBS=@LIBS@
+ CONTRIB=@CONTRIB@
+@@ -62,20 +63,22 @@ all: @GOALS@
+ # Application binaries (the stand alone solver 'cadical' and the model based
+ # tester 'mobical') and the library are the main build targets.
+ 
+-cadical: cadical.o libcadical.a makefile
+-	$(COMPILE_CPP) -o $@ $< -L. libcadical.a $(LIBS)
++cadical: cadical.o libcadical.so makefile
++	$(COMPILE_CPP) -o $@ $< $(LDFLAGS) -L. -lcadical $(LIBS)
+ 
+ cadical-dynamic: cadical.o libcadical.so makefile
+ 	$(COMPILE_CPP) -o $@ $< -L. libcadical.so $(LIBS)
+ 
+-mobical: mobical.o libcadical.a makefile $(LIBS)
+-	$(COMPILE_CPP) -o $@ $< -L. libcadical.a
++mobical: mobical.o libcadical.so makefile $(LIBS)
++	$(COMPILE_CPP) -o $@ $< $(LDFLAGS) -L. -lcadical
+ 
+ libcadical.a: $(OBJ_SOLVER) $(OBJ_CONTRIB) makefile
+ 	ar rc $@ $(OBJ_SOLVER) $(OBJ_CONTRIB)
+ 
+-libcadical.so: $(OBJ_SOLVER) $(OBJ_CONTRIB) $(LIBS) makefile
+-	$(COMPILE_CPP) -shared -o $@ $(OBJ_SOLVER) $(OBJ_CONTRIB) $(LIBS)
++libcadical.so: $(OBJ_SOLVER) $(OBJ_CONTRIB) $(OBJ_C) $(LIBS) makefile
++	$(COMPILE_CPP) -shared -Wl,-h,libcadical.so.0 -o libcadical.so.0.0.0 $(LDFLAGS) $(OBJ_SOLVER) $(OBJ_CONTRIB) $(OBJ_C) $(LIBS)
++	ln -s libcadical.so.0.0.0 libcadical.so.0
++	ln -s libcadical.so.0 $@
+ 
+ #--------------------------------------------------------------------------#
+ 
+--- cadical-rel-2.2.1/test/api/run.sh.orig	2025-12-23 09:09:47.000000000 -0700
++++ cadical-rel-2.2.1/test/api/run.sh	2025-12-24 09:16:41.281136574 -0700
+@@ -28,8 +28,8 @@ die "needs to be called from a top-level
+ [ -f "$CADICALBUILD/makefile" ] || \
+   die "can not find '$CADICALBUILD/makefile' (run 'configure' first)"
+ 
+-[ -f "$CADICALBUILD/libcadical.a" ] || \
+-  die "can not find '$CADICALBUILD/libcadical.a' (run 'make' first)"
++[ -f "$CADICALBUILD/libcadical.so" ] || \
++  die "can not find '$CADICALBUILD/libcadical.so' (run 'make' first)"
+ 
+ cecho -n "$HILITE"
+ cecho "---------------------------------------------------------"
+@@ -94,7 +94,7 @@ run () {
+   rm -f $name.log $name.o $name
+   status=0
+   cmd $COMPILE$language -o $name.o -c $src
+-  cmd $COMPILE -o $name $name.o -L$CADICALBUILD $CADICALBUILD/libcadical.a
++  cmd $COMPILE -o $name $name.o -L$CADICALBUILD $CADICALBUILD/libcadical.so
+   cmd $name
+   if test $status = 0
+   then
+--- cadical-rel-2.2.1/test/contrib/run.sh.orig	2025-12-23 09:09:47.000000000 -0700
++++ cadical-rel-2.2.1/test/contrib/run.sh	2025-12-24 09:16:41.281330635 -0700
+@@ -28,8 +28,8 @@ die "needs to be called from a top-level
+ [ -f "$CADICALBUILD/makefile" ] || \
+   die "can not find '$CADICALBUILD/makefile' (run 'configure' first)"
+ 
+-[ -f "$CADICALBUILD/libcadical.a" ] || \
+-  die "can not find '$CADICALBUILD/libcadical.a' (run 'make' first)"
++[ -f "$CADICALBUILD/libcadical.so" ] || \
++  die "can not find '$CADICALBUILD/libcadical.so' (run 'make' first)"
+ 
+ cecho -n "$HILITE"
+ cecho "---------------------------------------------------------"
+@@ -88,7 +88,7 @@ run () {
+   rm -f $name.log $name.o $name
+   status=0
+   cmd $COMPILE$language -I$source -I$contrib -o $name.o -c $src
+-  cmd $COMPILE -o $name $name.o -L$CADICALBUILD $CADICALBUILD/libcadical.a
++  cmd $COMPILE -o $name $name.o -L$CADICALBUILD $CADICALBUILD/libcadical.so
+   cmd $name
+   if test $status = 0
+   then

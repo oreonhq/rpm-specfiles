@@ -1,0 +1,10 @@
+--- gnulib/lib/unistd.in.h~	2018-05-23 12:05:42.000000000 -0500
++++ gnulib/lib/unistd.in.h	2021-07-30 11:07:17.147696706 -0500
+@@ -130,6 +130,7 @@
+ # include <getopt.h>
+ #endif
+ 
++#include <config.h>
+ #ifndef _GL_INLINE_HEADER_BEGIN
+  #error "Please include config.h first."
+ #endif

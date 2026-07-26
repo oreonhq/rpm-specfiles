@@ -1,0 +1,316 @@
+From d0a8e157bca76b7686d632e15f6360e549241dbf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Mon, 29 Feb 2016 14:53:11 +0100
+Subject: [PATCH 04/10] Misc installation dirs fixes.
+
+---
+ alliance/src/attila/doc/Makefile.am              | 1 -
+ alliance/src/attila/doc/attila/Makefile.am       | 5 +----
+ alliance/src/attila/etc/Makefile.am              | 2 +-
+ alliance/src/distrib/etc/Makefile.am             | 4 ++--
+ alliance/src/documentation/Makefile.am           | 5 +----
+ alliance/src/documentation/tutorials/Makefile.am | 2 +-
+ alliance/src/dreal/etc/Makefile.am               | 2 +-
+ alliance/src/elp/etc/Makefile.am                 | 2 +-
+ alliance/src/genlib/doc/Makefile.am              | 1 -
+ alliance/src/genlib/doc/genlib/Makefile.am       | 2 +-
+ alliance/src/graal/etc/Makefile.am               | 2 +-
+ alliance/src/mbk/etc/Makefile.am                 | 2 +-
+ alliance/src/nero/doc/Makefile.am                | 1 -
+ alliance/src/nero/doc/nero/Makefile.am           | 5 +----
+ alliance/src/rds/etc/Makefile.am                 | 2 +-
+ alliance/src/scapin/etc/Makefile.am              | 2 +-
+ alliance/src/sea/etc/Makefile.am                 | 2 +-
+ alliance/src/xfsm/etc/Makefile.am                | 2 +-
+ alliance/src/xgra/etc/Makefile.am                | 2 +-
+ alliance/src/xpat/etc/Makefile.am                | 2 +-
+ alliance/src/xsch/etc/Makefile.am                | 2 +-
+ alliance/src/xvpn/etc/Makefile.am                | 2 +-
+ 22 files changed, 20 insertions(+), 32 deletions(-)
+
+diff --git a/alliance/src/attila/doc/Makefile.am b/alliance/src/attila/doc/Makefile.am
+index ff3f0f1..46665bd 100644
+--- a/alliance/src/attila/doc/Makefile.am
++++ b/alliance/src/attila/doc/Makefile.am
+@@ -1,7 +1,6 @@
+ 
+ SUBDIRS = attila man1
+ 
+-pdfdir = $(prefix)/doc/pdf
+ pdf_DATA = attila.pdf
+ 
+ EXTRA_DIST = $(pdf_DATA) \
+diff --git a/alliance/src/attila/doc/attila/Makefile.am b/alliance/src/attila/doc/attila/Makefile.am
+index d342379..86e7e1e 100644
+--- a/alliance/src/attila/doc/attila/Makefile.am
++++ b/alliance/src/attila/doc/attila/Makefile.am
+@@ -1,12 +1,9 @@
+ 
+ 
+-pkghtmldir = $(prefix)/doc/html/@PACKAGE@
++pkghtmldir = $(htmldir)/@PACKAGE@
+ pkghtml_DATA = \
+                ./attila.html \
+                ./ref_attila.html \
+                ./man_attila.html
+ 
+ EXTRA_DIST = $(pkghtml_DATA)
+-
+-install-data-hook:
+-	find $(DESTDIR)$(prefix)/doc/html/@PACKAGE@ -type f | xargs chmod g+w
+diff --git a/alliance/src/attila/etc/Makefile.am b/alliance/src/attila/etc/Makefile.am
+index b69a787..0902c40 100644
+--- a/alliance/src/attila/etc/Makefile.am
++++ b/alliance/src/attila/etc/Makefile.am
+@@ -1,4 +1,4 @@
+-etcdir = $(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA = attila.conf
+ 
+diff --git a/alliance/src/distrib/etc/Makefile.am b/alliance/src/distrib/etc/Makefile.am
+index 39d2d29..f84b52b 100644
+--- a/alliance/src/distrib/etc/Makefile.am
++++ b/alliance/src/distrib/etc/Makefile.am
+@@ -1,7 +1,7 @@
+ # $Id: Makefile.am,v 1.9 2012/05/03 15:32:24 jpc Exp $
+ 
+-etcdir=$(sysconfdir)/profile.d
++profileddir=$(sysconfdir)/profile.d
+ 
+-etc_SCRIPTS=alc_env.csh alc_env.sh
++profiled_DATA=alc_env.csh alc_env.sh
+ 
+ EXTRA_DIST=alc_env.csh.in alc_env.sh.in
+diff --git a/alliance/src/documentation/Makefile.am b/alliance/src/documentation/Makefile.am
+index f937897..5a2c299 100644
+--- a/alliance/src/documentation/Makefile.am
++++ b/alliance/src/documentation/Makefile.am
+@@ -1,9 +1,6 @@
+ 
+ SUBDIRS = tutorials
+ 
+-
+-docdir = $(prefix)/doc
+-
+ nobase_doc_DATA = overview/datapath.gif \
+                   overview/genview.gif \
+                   overview/graal.gif \
+@@ -51,7 +48,7 @@ nobase_doc_DATA = overview/datapath.gif \
+                   design-flow/xpat.gif \
+                   design-flow/xsch.gif
+ 
+-examplesdir = $(prefix)/examples
++examplesdir = $(docdir)/examples
+ 
+ nobase_examples_DATA = regression.sh \
+                        alliance-examples/go-all.sh \
+diff --git a/alliance/src/documentation/tutorials/Makefile.am b/alliance/src/documentation/tutorials/Makefile.am
+index f97c255..547c094 100644
+--- a/alliance/src/documentation/tutorials/Makefile.am
++++ b/alliance/src/documentation/tutorials/Makefile.am
+@@ -1,5 +1,5 @@
+ 
+-tutorialsdir = $(prefix)/tutorials
++tutorialsdir = $(docdir)/tutorials
+ 
+ nobase_tutorials_DATA = place_and_route/src/Makefile \
+                         place_and_route/src/amd2901/Makefile \
+diff --git a/alliance/src/dreal/etc/Makefile.am b/alliance/src/dreal/etc/Makefile.am
+index debdb76..3e3d097 100644
+--- a/alliance/src/dreal/etc/Makefile.am
++++ b/alliance/src/dreal/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.5 2002/05/08 21:07:25 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=cmos.dreal
+ 
+diff --git a/alliance/src/elp/etc/Makefile.am b/alliance/src/elp/etc/Makefile.am
+index b8ef276..c833a67 100644
+--- a/alliance/src/elp/etc/Makefile.am
++++ b/alliance/src/elp/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.5 2002/05/08 21:07:25 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=prol.elp
+ 
+diff --git a/alliance/src/genlib/doc/Makefile.am b/alliance/src/genlib/doc/Makefile.am
+index ec53916..b4e44c5 100644
+--- a/alliance/src/genlib/doc/Makefile.am
++++ b/alliance/src/genlib/doc/Makefile.am
+@@ -1,7 +1,6 @@
+ 
+ SUBDIRS = genlib
+ 
+-pdfdir = $(prefix)/doc/pdf
+ pdf_DATA = genlib.pdf
+ 
+ EXTRA_DIST = $(pdf_DATA) \
+diff --git a/alliance/src/genlib/doc/genlib/Makefile.am b/alliance/src/genlib/doc/genlib/Makefile.am
+index 448eabb..b398869 100644
+--- a/alliance/src/genlib/doc/genlib/Makefile.am
++++ b/alliance/src/genlib/doc/genlib/Makefile.am
+@@ -1,6 +1,6 @@
+ 
+ 
+-pkghtmldir = $(prefix)/doc/html/@PACKAGE@
++pkghtmldir = $(htmldir)/@PACKAGE@
+ pkghtml_DATA = \
+                ./genlib.html \
+                ./ref_genlib.html \
+diff --git a/alliance/src/graal/etc/Makefile.am b/alliance/src/graal/etc/Makefile.am
+index 3ca5068..dfec7cb 100644
+--- a/alliance/src/graal/etc/Makefile.am
++++ b/alliance/src/graal/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.6 2002/05/08 21:07:25 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=cmos.graal
+ 
+diff --git a/alliance/src/mbk/etc/Makefile.am b/alliance/src/mbk/etc/Makefile.am
+index 2e75ab1..ba1b61d 100644
+--- a/alliance/src/mbk/etc/Makefile.am
++++ b/alliance/src/mbk/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.4 2002/05/08 21:07:25 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=spimodel.cfg
+ 
+diff --git a/alliance/src/nero/doc/Makefile.am b/alliance/src/nero/doc/Makefile.am
+index 0c33137..56d01bc 100644
+--- a/alliance/src/nero/doc/Makefile.am
++++ b/alliance/src/nero/doc/Makefile.am
+@@ -1,7 +1,6 @@
+ 
+ SUBDIRS = nero man1
+ 
+-pdfdir = $(prefix)/doc/pdf
+ pdf_DATA = nero.pdf
+ 
+ EXTRA_DIST = $(pdf_DATA) \
+diff --git a/alliance/src/nero/doc/nero/Makefile.am b/alliance/src/nero/doc/nero/Makefile.am
+index 11d58e1..8e29a17 100644
+--- a/alliance/src/nero/doc/nero/Makefile.am
++++ b/alliance/src/nero/doc/nero/Makefile.am
+@@ -1,12 +1,9 @@
+ 
+ 
+-pkghtmldir = $(prefix)/doc/html/@PACKAGE@
++pkghtmldir = $(htmldir)/@PACKAGE@
+ pkghtml_DATA = \
+                ./nero.html \
+                ./ref_nero.html \
+                ./man_nero.html
+ 
+ EXTRA_DIST = $(pkghtml_DATA)
+-
+-install-data-hook:
+-	find $(DESTDIR)$(prefix)/doc/html/@PACKAGE@ -type f | xargs chmod g+w
+diff --git a/alliance/src/rds/etc/Makefile.am b/alliance/src/rds/etc/Makefile.am
+index d5cca76..fac05cd 100644
+--- a/alliance/src/rds/etc/Makefile.am
++++ b/alliance/src/rds/etc/Makefile.am
+@@ -1,5 +1,5 @@
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=cmos.rds scn6m_deep_09.rds
+ 
+diff --git a/alliance/src/scapin/etc/Makefile.am b/alliance/src/scapin/etc/Makefile.am
+index 9684d1f..ddb68bd 100644
+--- a/alliance/src/scapin/etc/Makefile.am
++++ b/alliance/src/scapin/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.5 2002/05/08 21:07:26 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=sxlib.scapin
+ 
+diff --git a/alliance/src/sea/etc/Makefile.am b/alliance/src/sea/etc/Makefile.am
+index d1f3aca..fab246b 100644
+--- a/alliance/src/sea/etc/Makefile.am
++++ b/alliance/src/sea/etc/Makefile.am
+@@ -1,4 +1,4 @@
+-etcdir = $(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA = se_defaults.mac cmos.lef
+ 
+diff --git a/alliance/src/xfsm/etc/Makefile.am b/alliance/src/xfsm/etc/Makefile.am
+index 2b35b64..63387be 100644
+--- a/alliance/src/xfsm/etc/Makefile.am
++++ b/alliance/src/xfsm/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.5 2002/05/08 21:07:26 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=xfsm.par
+ 
+diff --git a/alliance/src/xgra/etc/Makefile.am b/alliance/src/xgra/etc/Makefile.am
+index 4c9feb5..37edcd1 100644
+--- a/alliance/src/xgra/etc/Makefile.am
++++ b/alliance/src/xgra/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.1 2007/11/27 20:41:31 ludo Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=xgra.par
+ 
+diff --git a/alliance/src/xpat/etc/Makefile.am b/alliance/src/xpat/etc/Makefile.am
+index 8f2fa0d..43175c2 100644
+--- a/alliance/src/xpat/etc/Makefile.am
++++ b/alliance/src/xpat/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.6 2002/05/08 21:07:26 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=xpat.par
+ 
+diff --git a/alliance/src/xsch/etc/Makefile.am b/alliance/src/xsch/etc/Makefile.am
+index 973ab38..2d88390 100644
+--- a/alliance/src/xsch/etc/Makefile.am
++++ b/alliance/src/xsch/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.5 2002/05/08 21:07:26 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=xsch.par
+ 
+diff --git a/alliance/src/xvpn/etc/Makefile.am b/alliance/src/xvpn/etc/Makefile.am
+index ba70004..f28560a 100644
+--- a/alliance/src/xvpn/etc/Makefile.am
++++ b/alliance/src/xvpn/etc/Makefile.am
+@@ -1,6 +1,6 @@
+ # $Id: Makefile.am,v 1.5 2002/05/08 21:07:26 jpc Exp $
+ 
+-etcdir=$(prefix)/etc
++etcdir=$(sysconfdir)/alliance
+ 
+ etc_DATA=xvpn.par
+ 
+-- 
+2.5.0
+

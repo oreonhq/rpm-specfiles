@@ -1,0 +1,36 @@
+diff -Naur work.old/debmirror work/debmirror
+--- work.old/debmirror	2025-06-26 10:24:07.724556714 +0200
++++ work/debmirror	2025-06-26 10:29:10.608763077 +0200
+@@ -600,6 +600,7 @@
+ use Net::FTP;
+ use LWP::UserAgent;
+ use MIME::Base64;
++use URI ();
+ 
+ our $version="1:2.29";
+ 
+@@ -850,12 +851,12 @@
+ local $|=1 if $debug;
+ if ($passwd eq "anonymous@") {
+   if (downloads_via_http()) {
+-    say("Mirroring to $mirrordir from $download_method://$host/$remoteroot/");
++    say("Mirroring to $mirrordir from ", URI->new_abs($remoteroot, "$download_method://$host"));
+   } else {
+-    say("Mirroring to $mirrordir from $download_method://$user\@$host/$remoteroot/");
++    say("Mirroring to $mirrordir from ", URI->new_abs($remoteroot, "$download_method://$user\@$host"));
+   }
+ } else {
+-  say("Mirroring to $mirrordir from $download_method://$user:XXX\@$host/$remoteroot/");
++  say("Mirroring to $mirrordir from ", URI->new_abs($remoteroot, "$download_method://$user:XXX\@$host"));
+ }
+ say("Arches: ".join(",", @arches));
+ say("Dists: ".join(",", @dists));
+@@ -1809,7 +1810,7 @@
+ sub http_get {
+   local $| = 1;
+   my $file=shift;
+-  my $url="$download_method://${host}/${remoteroot}/${file}";
++  my $url=URI->new_abs("${remoteroot}/${file}", "$download_method://${host}");
+   my $ret=1;
+ 
+   print "$url => " if $debug;

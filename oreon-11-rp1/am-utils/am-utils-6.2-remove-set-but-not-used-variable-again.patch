@@ -1,0 +1,26 @@
+commit a87188b9f0596651ce987253a6af23aca4b08b75
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Sat Jan 17 12:42:55 2015 -0500
+
+    remove set but not used variable
+
+diff --git a/conf/transp/transp_sockets.c b/conf/transp/transp_sockets.c
+index b3ad5fc..6326007 100644
+--- a/conf/transp/transp_sockets.c
++++ b/conf/transp/transp_sockets.c
+@@ -418,7 +418,6 @@ u_long
+ get_nfs_version(char *host, struct sockaddr_in *sin, u_long nfs_version, const char *proto, u_long def)
+ {
+   CLIENT *clnt;
+-  int again = 0;
+   enum clnt_stat clnt_stat;
+   struct timeval tv;
+   int sock;
+@@ -433,7 +432,6 @@ get_nfs_version(char *host, struct sockaddr_in *sin, u_long nfs_version, const c
+       nfs_version = def;
+     else
+       nfs_version = NFS_VERS_MAX;
+-    again = 1;
+   }
+   tv.tv_sec = 2;		/* retry every 2 seconds, but also timeout */
+   tv.tv_usec = 0;

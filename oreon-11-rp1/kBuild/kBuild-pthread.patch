@@ -1,0 +1,14 @@
+Index: Config.kmk
+===================================================================
+--- ./Config.kmk	(revision 3127)
++++ ./Config.kmk	(working copy)
+@@ -340,7 +340,8 @@
+    TEMPLATE_BIN_INCS            += $(PATH_GNUMAKE_SRC)/glob /usr/local/include
+   endif
+   ifeq ($(KBUILD_TARGET),linux)
+-   TEMPLATE_BIN_LIBS            += rt
++   TEMPLATE_BIN_LIBS            += rt pthread
++   TEMPLATE_BIN_LDFLAGS         += -Wl,--as-needed
+   endif
+  endif
+ 

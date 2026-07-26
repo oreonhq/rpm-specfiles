@@ -1,0 +1,31 @@
+diff --git a/README b/README
+index 2f38386..b5b978f 100644
+--- a/README
++++ b/README
+@@ -48,6 +48,26 @@ If colorgcc colorizes the output, the compiler's STDERR will be
+ combined with STDOUT. Otherwise, colorgcc just passes the output from
+ the compiler through without modification.
+ 
++Fedora note:
++
++Here is how to use colorgcc along with ccache on a Fedora system under
++a non-root user.  Install both colorgcc and ccache.  The ccache
++modifies user $PATH via it's /etc/profile.d/ccache* scripts.
++Now do the following:
++
++    $ export PATH="/usr/lib/colorgcc:$PATH"
++    $ export CCACHE_PATH="/usr/bin"
++
++Now add entries like the following to your ~/.colorgccrc file:
++
++    g++: /usr/lib64/ccache/g++
++    gcc: /usr/lib64/ccache/gcc
++    c++: /usr/lib64/ccache/g++
++    cc: /usr/lib64/ccache/cc
++
++You should be all set.
++
++
+ Author: Jamie Moyers <jmoyers@geeks.com>
+ Started: April 20, 1999
+ Licence: GNU Public License

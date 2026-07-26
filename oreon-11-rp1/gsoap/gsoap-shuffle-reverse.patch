@@ -1,0 +1,81 @@
+diff -ur gsoap-2.8.139.orig/gsoap/samples/autotest/Makefile.am gsoap-2.8.139/gsoap/samples/autotest/Makefile.am
+--- gsoap-2.8.139.orig/gsoap/samples/autotest/Makefile.am	2025-07-14 19:28:13.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/autotest/Makefile.am	2025-09-04 10:31:56.788802352 +0200
+@@ -7,28 +7,34 @@
+ 
+ SOAP=$(top_srcdir)/gsoap/src/soapcpp2$(EXEEXT)
+ WSDL=$(top_srcdir)/gsoap/wsdl/wsdl2h$(EXEEXT)
+-WSDL_FLAGS=-d -P -t $(top_srcdir)/gsoap/samples/autotest/typemap.dat
++WSDL_FLAGS=-d -P -t $(srcdir)/typemap.dat
+ SOAP_FLAGS=-SL -T -I$(top_srcdir)/gsoap/import -I$(top_srcdir)/gsoap/custom
+-WSDLINPUT=$(top_srcdir)/gsoap/samples/autotest/examples.wsdl
+-SOAPHEADER=$(top_srcdir)/gsoap/samples/autotest/examples.h
+-SOAP_CPP_SRC=soapC.cpp soapServer.cpp
++WSDLINPUT=$(srcdir)/examples.wsdl
++SOAPHEADER=examples.h
++SOAP_CPP_SRC=soapC.cpp soapServer.cpp soapTester.cpp
+ SOAP_CPP_LIB=$(top_builddir)/gsoap/libgsoap++.a
+ 
+-$(SOAP_CPP_SRC) : $(WSDLINPUT)
++$(SOAPHEADER) : $(WSDLINPUT)
+ 	$(WSDL) $(WSDL_FLAGS) $(WSDLINPUT)
+ 	$(SOAP) $(SOAP_FLAGS) $(SOAPHEADER)
+ 
++$(SOAP_CPP_SRC) soapH.h : $(SOAPHEADER)
++
+ duration.cpp : ../../custom/duration.c
+ 	ln -s ../../custom/duration.c duration.cpp
++autotest-duration.$(OBJEXT) : soapH.h
+ 
+ long_time.cpp : ../../custom/long_time.c
+ 	ln -s ../../custom/long_time.c long_time.cpp
++autotest-long_time.$(OBJEXT) : soapH.h
+ 
+ struct_tm.cpp : ../../custom/struct_tm.c
+ 	ln -s ../../custom/struct_tm.c struct_tm.cpp
++autotest-struct_tm.$(OBJEXT) : soapH.h
+ 
+ struct_tm_date.cpp : ../../custom/struct_tm_date.c
+ 	ln -s ../../custom/struct_tm_date.c struct_tm_date.cpp
++autotest-struct_tm_date.$(OBJEXT) : soapH.h
+ 
+ #LIBS=
+ 
+@@ -37,7 +43,7 @@
+ autotest_CFLAGS=$(C_DEBUG_FLAGS) -D$(platform)
+ autotest_CPPFLAGS=$(C_DEBUG_FLAGS) -D$(platform) -I$(top_srcdir)/gsoap -I$(top_srcdir)/gsoap/plugin
+ autotest_CXXFLAGS=$(WSDL2H_EXTRA_FLAGS)
+-autotest_SOURCES=$(SOAP_CPP_SRC) soapTester.cpp duration.cpp long_time.cpp struct_tm.cpp struct_tm_date.cpp
++autotest_SOURCES=$(SOAP_CPP_SRC) duration.cpp long_time.cpp struct_tm.cpp struct_tm_date.cpp
+ autotest_LDADD=$(SOAP_CPP_LIB) $(SAMPLE_EXTRA_LIBS)
+ 
+ CLEANFILES= *~ *.h *.cpp *.xml *.log *.nsmap
+diff -ur gsoap-2.8.139.orig/gsoap/samples/databinding/Makefile.am gsoap-2.8.139/gsoap/samples/databinding/Makefile.am
+--- gsoap-2.8.139.orig/gsoap/samples/databinding/Makefile.am	2025-07-14 19:28:14.000000000 +0200
++++ gsoap-2.8.139/gsoap/samples/databinding/Makefile.am	2025-09-04 10:30:05.920807477 +0200
+@@ -7,17 +7,21 @@
+ 
+ SOAP=$(top_srcdir)/gsoap/src/soapcpp2$(EXEEXT)
+ WSDL=$(top_srcdir)/gsoap/wsdl/wsdl2h$(EXEEXT)
+-WSDL_FLAGS=-g -t $(top_srcdir)/gsoap/samples/databinding/addresstypemap.dat
++WSDL_FLAGS=-g -t $(srcdir)/addresstypemap.dat
+ SOAP_FLAGS=-0 -CS -p address -I$(top_srcdir)/gsoap/import
+-WSDLINPUT=$(top_srcdir)/gsoap/samples/databinding/address.xsd
+-SOAPHEADER=$(top_srcdir)/gsoap/samples/databinding/address.h
++WSDLINPUT=$(srcdir)/address.xsd
++SOAPHEADER=address.h
+ SOAP_CPP_SRC=addressC.cpp
+ SOAP_CPP_LIB=$(top_builddir)/gsoap/libgsoap++.a
+ 
+-$(SOAP_CPP_SRC) : $(WSDLINPUT)
++$(SOAPHEADER) : $(WSDLINPUT)
+ 	$(WSDL) $(WSDL_FLAGS) $(WSDLINPUT)
+ 	$(SOAP) $(SOAP_FLAGS) $(SOAPHEADER)
+ 
++$(SOAP_CPP_SRC) addressH.h : $(SOAPHEADER)
++
++address-address.$(OBJEXT) : addressH.h
++
+ #LIBS=
+ 
+ noinst_PROGRAMS=address

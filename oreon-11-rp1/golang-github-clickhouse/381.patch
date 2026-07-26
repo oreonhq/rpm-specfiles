@@ -1,0 +1,108 @@
+From 97975f8e41cfe0c88c71dfc8d7eab045b58b9388 Mon Sep 17 00:00:00 2001
+From: Davide Cavalca <dcavalca@fb.com>
+Date: Fri, 18 Jun 2021 06:51:47 -0700
+Subject: [PATCH] Move from github.com/cloudflare/golz4 to
+ github.com/DataDog/golz4
+
+---
+ go.mod                             | 2 +-
+ go.sum                             | 4 ++--
+ lib/binary/compress_reader_clz4.go | 4 ++--
+ lib/binary/compress_test.go        | 4 ++--
+ lib/binary/compress_writer_clz4.go | 4 ++--
+ 5 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/go.mod b/go.mod
+index 33116921c5..a1b1a80e5f 100644
+--- a/go.mod
++++ b/go.mod
+@@ -3,8 +3,8 @@ module github.com/ClickHouse/clickhouse-go
+ go 1.12
+ 
+ require (
++	github.com/DataDog/golz4 v1.1.1
+ 	github.com/bkaradzic/go-lz4 v1.0.0
+-	github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58
+ 	github.com/jmoiron/sqlx v1.2.0
+ 	github.com/pierrec/lz4 v2.0.5+incompatible
+ 	github.com/stretchr/testify v1.3.0
+diff --git a/go.sum b/go.sum
+index c3d6a6f69b..c9dd4d7ccb 100644
+--- a/go.sum
++++ b/go.sum
+@@ -1,7 +1,7 @@
++github.com/DataDog/golz4 v1.1.1 h1:cb5SN72LQ+7tjNT5DEfVC0K32gd1wBzzCoWhatYDNMU=
++github.com/DataDog/golz4 v1.1.1/go.mod h1:ZvrBUPTzHg+qfkvO1odLwv+Wlnkqr4Q2MTsnDpOeLkg=
+ github.com/bkaradzic/go-lz4 v1.0.0 h1:RXc4wYsyz985CkXXeX04y4VnZFGG8Rd43pRaHsOXAKk=
+ github.com/bkaradzic/go-lz4 v1.0.0/go.mod h1:0YdlkowM3VswSROI7qDxhRvJ3sLhlFrRRwjwegp5jy4=
+-github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58 h1:F1EaeKL/ta07PY/k9Os/UFtwERei2/XzGemhpGnBKNg=
+-github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58/go.mod h1:EOBUe0h4xcZ5GoxqC5SDxFQ8gwyZPKQoEzownBlhI80=
+ github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
+ github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+ github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
+diff --git a/lib/binary/compress_reader_clz4.go b/lib/binary/compress_reader_clz4.go
+index 2845b3b8be..1e184e31d5 100644
+--- a/lib/binary/compress_reader_clz4.go
++++ b/lib/binary/compress_reader_clz4.go
+@@ -7,7 +7,7 @@ import (
+ 	"fmt"
+ 	"io"
+ 
+-	lz4 "github.com/cloudflare/golz4"
++	lz4 "github.com/DataDog/golz4"
+ )
+ 
+ type compressReader struct {
+@@ -95,7 +95,7 @@ func (cr *compressReader) readCompressedData() (err error) {
+ 			return fmt.Errorf("Decompress read size not match")
+ 		}
+ 
+-		err = lz4.Uncompress(cr.zdata, cr.data)
++		err = lz4.Uncompress(cr.data, cr.zdata)
+ 		if err != nil {
+ 			return
+ 		}
+diff --git a/lib/binary/compress_test.go b/lib/binary/compress_test.go
+index ecc3a6de93..1b275d44ce 100644
+--- a/lib/binary/compress_test.go
++++ b/lib/binary/compress_test.go
+@@ -8,7 +8,7 @@ import (
+ 	"github.com/stretchr/testify/assert"
+ 
+ 	bklz4 "github.com/bkaradzic/go-lz4"
+-	cflz4 "github.com/cloudflare/golz4"
++	cflz4 "github.com/DataDog/golz4"
+ 	ownlz4 "github.com/ClickHouse/clickhouse-go/lib/lz4"
+ 	pilz4 "github.com/pierrec/lz4"
+ )
+@@ -64,7 +64,7 @@ func genBytes(n int) []byte {
+ func GetCfEncode(in []byte) []byte {
+ 	b := cflz4.CompressBound(in)
+ 	out := make([]byte, b)
+-	compressedSize, err := cflz4.Compress(in, out)
++	compressedSize, err := cflz4.Compress(out, in)
+ 	if err != nil {
+ 		log.Fatal(err)
+ 	}
+diff --git a/lib/binary/compress_writer_clz4.go b/lib/binary/compress_writer_clz4.go
+index 1302e16113..2bc96ed67b 100644
+--- a/lib/binary/compress_writer_clz4.go
++++ b/lib/binary/compress_writer_clz4.go
+@@ -6,7 +6,7 @@ import (
+ 	"encoding/binary"
+ 	"io"
+ 
+-	lz4 "github.com/cloudflare/golz4"
++	lz4 "github.com/DataDog/golz4"
+ 	"github.com/ClickHouse/clickhouse-go/lib/cityhash102"
+ )
+ 
+@@ -54,7 +54,7 @@ func (cw *compressWriter) Flush() (err error) {
+ 		return
+ 	}
+ 	// write the headers
+-	compressedSize, err := lz4.Compress(cw.data[:cw.pos], cw.zdata[HeaderSize:])
++	compressedSize, err := lz4.Compress(cw.zdata[:cw.pos], cw.data[HeaderSize:])
+ 	if err != nil {
+ 		return err
+ 	}

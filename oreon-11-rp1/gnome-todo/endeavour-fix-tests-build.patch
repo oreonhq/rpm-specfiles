@@ -1,0 +1,13 @@
+ --git a/tests/meson.build b/tests/meson.build
+index 6ebebe3..9c50dcf 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -14,7 +14,7 @@ tests_incs = [
+ 
+ libgtd_tests = static_library(
+            'gtd_tests',
+-              sources : sources,
++              sources : sources + [gtd_enum_types[1]],
+   include_directories : tests_incs,
+          dependencies : endeavour_deps,
+                c_args : cflags,

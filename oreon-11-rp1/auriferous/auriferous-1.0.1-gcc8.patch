@@ -1,0 +1,45 @@
+diff -up auriferous-1.0.1/auriferous/config.cpp~ auriferous-1.0.1/auriferous/config.cpp
+--- auriferous-1.0.1/auriferous/config.cpp~	2018-05-13 11:06:46.000000000 +0100
++++ auriferous-1.0.1/auriferous/config.cpp	2018-05-13 11:10:54.138493923 +0100
+@@ -207,7 +207,7 @@ void Config::prev_map()
+ }
+ void Config::deinit()
+ {
+-	ofstream out(filename);
++	ofstream out(filename.get_string());
+ 
+ 	out<<last_levelset<<endl;
+ 	out<<last_level<<endl;
+diff -up auriferous-1.0.1/auriferous/editor.cpp~ auriferous-1.0.1/auriferous/editor.cpp
+--- auriferous-1.0.1/auriferous/editor.cpp~	2018-05-13 11:06:46.000000000 +0100
++++ auriferous-1.0.1/auriferous/editor.cpp	2018-05-13 11:13:24.677148714 +0100
+@@ -523,7 +523,7 @@ void Editor::erase()
+ void Editor::save_map()
+ {
+   CL_String filename=Resources::custom_path+"levels/custom/level"+(wh->get_val()-1)+".lvl";
+-	ofstream out(filename);
++  ofstream out(filename.get_string());
+ 
+   out<<(int)(wt)<<endl<<"0"<<endl;
+ 
+@@ -544,7 +544,7 @@ void Editor::load_map()
+ 
+ 	mapfile=Resources::custom_path+"levels/custom/level"+(wh->get_val()-1)+".lvl";
+ 
+-	ifstream in(mapfile);
++	ifstream in(mapfile.get_string());
+ 	char last;
+ 	CL_String a;
+ 	int x=0, y=-1, c=-1, w=0;
+diff -up auriferous-1.0.1/auriferous/map_sample.cpp~ auriferous-1.0.1/auriferous/map_sample.cpp
+--- auriferous-1.0.1/auriferous/map_sample.cpp~	2018-05-13 11:06:46.000000000 +0100
++++ auriferous-1.0.1/auriferous/map_sample.cpp	2018-05-13 11:09:55.551083601 +0100
+@@ -237,7 +237,7 @@ void Map_Sample::read_next(int _id)
+ 	else
+ 	mapfile=Resources::datapath+"levels/"+Config::get_last_levelset()+"/level"+id+".lvl";
+ 
+-	ifstream in(mapfile);
++	ifstream in(mapfile.get_string());
+ 	char last;
+ 	bool have_p2=false;
+ 	CL_String a="";

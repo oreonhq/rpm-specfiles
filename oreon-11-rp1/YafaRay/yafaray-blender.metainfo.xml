@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 Luya Tshimbalanga <luya@fedoraproject.org> -->
+<component type="addon">
+  <id>yafaray-blender</id>
+  <name>YafaRay</name>
+  <extends>blender.desktop</extends>
+  <summary>3D renderer plugin for Blender</summary>
+  <url type="homepage">http://www.yafaray.org</url>
+  <url type="bugtracker">http://www.yafaray.org/development/bugtracker/yafaray</url>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <updatecontact>http://www.yafaray.org/community/forum</updatecontact>
+</component>

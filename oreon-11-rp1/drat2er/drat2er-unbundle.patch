@@ -1,0 +1,170 @@
+--- CMakeLists.txt.orig	2021-12-28 02:50:06.000000000 -0700
++++ CMakeLists.txt	2024-03-14 10:58:51.928449409 -0600
+@@ -13,9 +13,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMA
+ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ 
+-# Include drat-trim as a library
+-add_library(drat-trim STATIC third-party/drat-trim/drat-trim.c)
+-
+ # Build library for the main executable 
+ add_library(lib_drat2er STATIC 
+ 	src/formula.cc
+@@ -42,19 +39,9 @@ add_library(lib_drat2er STATIC
+ 	)
+ target_link_libraries(lib_drat2er drat-trim)
+ 
+-# Include the CLI11 command line parsing library
+-set(CLI11_INCLUDE_DIR third-party/cli11)
+-add_library(cli11 INTERFACE)
+-target_include_directories(cli11 INTERFACE ${CLI11_INCLUDE_DIR})
+-
+ # Build the executable for the main program
+ add_executable(drat2er src/main.cc)
+-target_link_libraries(drat2er lib_drat2er cli11)
+-
+-# Build the executable for the unit tests
+-set(CATCH_INCLUDE_DIR third-party/catch2)
+-add_library(catch INTERFACE)
+-target_include_directories(catch INTERFACE ${CATCH_INCLUDE_DIR})
++target_link_libraries(drat2er lib_drat2er)
+ 
+ set(TEST_DIRECTORY test) 
+ set(TEST_SOURCES ${TEST_DIRECTORY}/tests_main.cc
+@@ -66,8 +53,14 @@ set(TEST_SOURCES ${TEST_DIRECTORY}/tests
+ 				 ${TEST_DIRECTORY}/test_rat_eliminator.cc
+ 				 ${TEST_DIRECTORY}/test_instruction_serialization.cc)
+ add_executable(unit_tests ${TEST_SOURCES})
+-target_link_libraries(unit_tests catch lib_drat2er)
++target_link_libraries(unit_tests Catch2 Catch2Main lib_drat2er)
+ 
+ # Enable Unit testing
+ enable_testing()
+ add_test(NAME UnitTests COMMAND unit_tests)
++
++install(TARGETS drat2er lib_drat2er
++        RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
++        ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
++install(FILES include/drat2er.h include/drat_trim_interface.h
++	DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+--- include/drat2er.h.orig	1969-12-31 17:00:00.000000000 -0700
++++ include/drat2er.h	2024-03-14 11:00:58.894671200 -0600
+@@ -0,0 +1,34 @@
++// MIT License
++//
++// Copyright (c) 2018 Benjamin Kiesl
++//
++// Permission is hereby granted, free of charge, to any person obtaining a copy
++// of this software and associated documentation files (the "Software"), to 
++// deal in the Software without restriction, including without limitation the 
++// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
++// sell copies of the Software, and to permit persons to whom the Software is
++// furnished to do so, subject to the following conditions:
++//
++// The above copyright notice and this permission notice shall be included in 
++// all copies or substantial portions of the Software.
++//
++// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
++// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
++// IN THE SOFTWARE.
++
++#ifndef DRAT2ER_H
++#define DRAT2ER_H
++
++#include <string>
++
++void TransformDRATToExtendedResolution(const std::string& input_formula_file,
++                                       const std::string& input_proof_file,
++                                       const std::string& output_file,
++                                       bool is_output_drat,
++                                       bool is_verbose,
++                                       bool is_compressed);
++#endif
+--- src/drat_trim_interface.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ src/drat_trim_interface.cc	2024-03-14 10:02:51.219371543 -0600
+@@ -30,7 +30,7 @@ using std::vector;
+ 
+ extern "C" 
+ {
+-  int run_drat_trim (int argc, char** argv);
++#include <drat-trim.h>
+ }
+ 
+ namespace drat2er
+--- src/main.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ src/main.cc	2024-03-14 10:38:24.425620803 -0600
+@@ -27,7 +27,7 @@
+ #include <stdexcept>
+ #include <string>
+ #include <algorithm>
+-#include "CLI11.hpp"
++#include <CLI/CLI.hpp>
+ #include "formula.h"
+ #include "formula_parser.h"
+ #include "rat_eliminator.h"
+--- test/test_clause.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/test_clause.cc	2024-03-14 10:35:42.674880470 -0600
+@@ -1,4 +1,4 @@
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>
+ #include <vector>
+ #include "clause.h"
+ 
+--- test/test_formula.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/test_formula.cc	2024-03-14 10:35:55.649699291 -0600
+@@ -1,4 +1,4 @@
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>
+ #include <vector>
+ #include <unordered_set>
+ #include <algorithm>
+--- test/test_instruction_serialization.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/test_instruction_serialization.cc	2024-03-14 10:36:06.361549714 -0600
+@@ -1,4 +1,4 @@
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>
+ #include <vector>
+ #include "instruction_serialization.h"
+ #include "clause.h"
+--- test/test_lrat_parser.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/test_lrat_parser.cc	2024-03-14 10:36:14.650433963 -0600
+@@ -1,4 +1,4 @@
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>
+ #include <vector>
+ #include "lrat_parser.h"
+ #include "rat_clause.h"
+--- test/test_rat_clause.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/test_rat_clause.cc	2024-03-14 10:36:23.337312659 -0600
+@@ -1,4 +1,4 @@
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>
+ #include <vector>
+ #include <map>
+ #include "rat_clause.h"
+--- test/test_rat_eliminator.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/test_rat_eliminator.cc	2024-03-14 10:36:31.018205387 -0600
+@@ -1,4 +1,4 @@
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>
+ #include <vector>
+ #include "rat_eliminator.h"
+ #include "rat_clause.h"
+--- test/test_rup_clause.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/test_rup_clause.cc	2024-03-14 10:36:44.106022611 -0600
+@@ -1,4 +1,4 @@
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>
+ #include <vector>
+ #include "rup_clause.h"
+ 
+--- test/tests_main.cc.orig	2021-12-28 02:50:06.000000000 -0700
++++ test/tests_main.cc	2024-03-14 10:36:56.753845979 -0600
+@@ -1,2 +1,2 @@
+ #define CATCH_CONFIG_MAIN
+-#include "catch.hpp"
++#include <catch2/catch_all.hpp>

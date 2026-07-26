@@ -1,0 +1,17 @@
+From: Pat Riehecky <riehecky@fnal.gov>
+Date: Fri, 14 Mar 2025 13:11:16 -0500
+Subject: patch CMakeLists.txt to stop overriding build flags
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dd17367..5d49238 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,7 +35,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${GLOBAL_OUTPUT_PATH})
+ # Compiler flags.
+ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" OR
+         ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+-    set(OPT "-O3")
++    set(OPT "")
+     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wextra -Wimplicit-fallthrough -pedantic -std=c99 ${OPT}")
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -Wimplicit-fallthrough -Woverloaded-virtual -pedantic -std=c++17 -fPIC ${OPT}")
+ else()

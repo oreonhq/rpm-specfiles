@@ -1,0 +1,31 @@
+From 874a8e5cfd77bef01ad8f0eea2b0fa15d1aa04fb Mon Sep 17 00:00:00 2001
+From: Hans Ulrich Niedermann <hun@n-dimensional.de>
+Date: Mon, 23 Nov 2009 19:01:04 +0100
+Subject: [PATCH] Use additional CFLAGS if set, disable X11 build
+
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 8d0bbfa..9a80168 100644
+--- a/Makefile
++++ b/Makefile
+@@ -7,7 +7,7 @@
+ #  USE_XWIN
+ #  DOUBLEWIDE_FONT_HACK		( must run ./convert_font.sh first )
+ #  USE_SVGALIB			( do not use this )
+-CFLAGS = -O2 -Wall --pedantic -DVERSION="\"${VERSION}\"" -DUSE_XWIN -DUSE_CURSES -DUSE_SOUND -I/usr/lib/X11
++CFLAGS = $(RPM_CFLAGS) --pedantic -DVERSION="\"${VERSION}\"" -DUSE_CURSES -DUSE_SOUND
+ OBJS = snipes.o coords.o collision.o player.o mazegen.o walls.o kbd.o \
+ 	keys.o hive.o enemies.o weapons.o sound.o screen.o
+ # LIBS options
+@@ -14,7 +14,7 @@
+ #  -lncurses
+ #  -L/usr/X11R6/lib -lX11
+ #  -lvga			( do not use this )
+-LIBS = -L/usr/X11R6/lib -lX11 -lncurses
++LIBS = -lncurses
+ 
+ snipes: ${OBJS}
+ 	${CC} ${CFLAGS} -o $@ ${LIBS} ${OBJS}

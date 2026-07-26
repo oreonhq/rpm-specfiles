@@ -1,0 +1,39 @@
+From 076af42b270388f38055fdf60dccbb3001de723a Mon Sep 17 00:00:00 2001
+From: Daniel Xu <dlxu@fb.com>
+Date: Wed, 23 Jun 2021 16:13:56 -0700
+Subject: [PATCH] Check return value for mkstemp()
+
+Summary: Fix build warning. Note we don't use EXPECT()/ASSERT() family of macros b/c they can't be used in setup functions
+
+Reviewed By: htejun, lnyng
+
+Differential Revision: D29340980
+
+fbshipit-source-id: b20ce5ceb057307af9fdc2d9720c56b57418970a
+---
+ src/oomd/StatsTest.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/oomd/StatsTest.cpp b/src/oomd/StatsTest.cpp
+index a3ff931..29f7566 100644
+--- a/src/oomd/StatsTest.cpp
++++ b/src/oomd/StatsTest.cpp
+@@ -21,6 +21,7 @@
+ #include <json/reader.h>
+ #include <json/value.h>
+ #include <sys/socket.h>
++#include <exception>
+ #include <iostream>
+ #include <optional>
+ #include "oomd/StatsClient.h"
+@@ -53,7 +54,9 @@ class StatsTest : public ::testing::Test {
+  protected:
+   std::unique_ptr<Stats> get_instance() {
+     socket_path = "/tmp/oomd-XXXXXX.socket";
+-    ::mkstemps(socket_path.data(), 7);
++    if (::mkstemps(socket_path.data(), 7) == -1) {
++      throw std::runtime_error("Failed to create temp socket");
++    }
+     return Stats::get_for_unittest(socket_path);
+   }
+ };

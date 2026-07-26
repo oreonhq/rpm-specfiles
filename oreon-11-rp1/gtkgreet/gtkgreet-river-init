@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# Edit /etc/greetd/config.toml to set gtkgreet as the default session:
+# ```
+# [default_session]
+# command = "river -c /etc/gtkgreet/gtkgreet-river-init"
+# ```
+
+riverctl map normal Super+Shift E exit
+
+# set background
+riverctl spawn 'swaybg -o "*" -m fill -i /usr/share/backgrounds/default.png'
+
+# set GTK theme (requires gnome-themes-extra)
+# gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
+# gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
+
+# start greeter
+gtkgreet --layer-shell --style /etc/gtkgreet/gtkgreet.css; wayland-logout

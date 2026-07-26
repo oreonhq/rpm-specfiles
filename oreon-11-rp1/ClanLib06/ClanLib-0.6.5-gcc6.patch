@@ -1,0 +1,31 @@
+diff -up ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.h~ ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.h
+--- ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.h~	2002-02-28 23:12:56.000000000 +0100
++++ ClanLib-0.6.5/Sources/Core/IOData/Generic/datafile_inputprovider.h	2016-02-02 18:16:52.897425921 +0100
+@@ -123,9 +123,9 @@ protected:
+ 		void insert(const std::string &resource_id, int data_pos, int data_size)
+ 		{
+ 			cache.insert(
+-				std::make_pair<std::string const, std::pair<int, int> >(
+-				resource_id,
+-				std::make_pair<int,int>(data_pos, data_size)));
++				std::pair<std::string const, std::pair<int, int> >(
++					resource_id,
++					std::pair<int,int>(data_pos, data_size)));
+ 		}
+ 
+ 	private:
+diff -up ClanLib-0.6.5/Sources/GUI/gui_file_parser.cpp~ ClanLib-0.6.5/Sources/GUI/gui_file_parser.cpp
+--- ClanLib-0.6.5/Sources/GUI/gui_file_parser.cpp~	2002-02-18 23:47:38.000000000 +0100
++++ ClanLib-0.6.5/Sources/GUI/gui_file_parser.cpp	2016-02-02 18:19:43.680666476 +0100
+@@ -256,9 +256,9 @@ void CL_GUIFileParser::parse()
+ 					throw CL_Error(lexer.write_error(buf));
+ 				}
+ 				#ifdef BORLAND
+-				component_stack.top().second.options.options.insert(std::make_pair(std::string(variable_name), std::string("")));
++				component_stack.top().second.options.options.insert(std::pair(std::string(variable_name), std::string("")));
+ 				#else
+-				component_stack.top().second.options.options.insert(std::make_pair<std::string, std::string>(variable_name, ""));
++				component_stack.top().second.options.options.insert(std::pair<std::string, std::string>(variable_name, ""));
+ 				#endif
+ 				variable_name = "";
+ 				variable_value.clear();

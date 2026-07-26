@@ -1,0 +1,24 @@
+--- src/deutex.c~	2017-08-11 03:56:37.000000000 -0500
++++ src/deutex.c	2017-10-27 12:18:02.144232846 -0500
+@@ -945,7 +945,7 @@
+         DataDir = ".";
+         DoomDir = getenv("DOOMWADDIR");
+         if (DoomDir == NULL)
+-            DoomDir = ".";
++            DoomDir = DOOMDIR;
+         else
+             Phase("AA17", "Doom directory is %.128s", DoomDir);
+ 
+--- src/deutex.h~	2019-06-23 02:14:53.000000000 -0500
++++ src/deutex.h	2019-07-12 15:06:55.527591398 -0500
+@@ -83,6 +83,10 @@
+ #define PICPNG          (6)
+ #define PICJPEG         (7)
+ 
++#ifndef DOOMDIR
++#define DOOMDIR "."
++#endif
++
+ /*wad directory*/
+ struct WADDIR {                 /*same as in doom */
+     int32_t start;              /*start of entry */

@@ -1,0 +1,34 @@
+From 6705f25f14413b21e1f4589e26962dea5cc55fcd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alejandro=20S=C3=A1ez?= <asm@redhat.com>
+Date: Fri, 20 Jan 2023 17:29:05 +0100
+Subject: [PATCH] Fix typo in service.go
+
+---
+ ssh/service.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ssh/service.go b/ssh/service.go
+index 7abe39f..add0ce2 100644
+--- a/ssh/service.go
++++ b/ssh/service.go
+@@ -242,7 +242,7 @@ func (c *service) Reconnect() error {
+ func (c *service) OpenTunnel(localAddress, remoteAddress string) error {
+ 	local, err := net.Listen("tcp", localAddress)
+ 	if err != nil {
+-		return errors.Wrap(err, fmt.Sprintf("failed to listen on local: %v %v", localAddress))
++		return errors.Wrap(err, fmt.Sprintf("failed to listen on local: %v", localAddress))
+ 	}
+ 	var forwarding = NewForwarding(c.client, remoteAddress, local)
+ 	if len(c.forwarding) == 0 {
+@@ -255,7 +255,7 @@ func (c *service) OpenTunnel(localAddress, remoteAddress string) error {
+ 
+ func (c *service) connect() (err error) {
+ 	if c.client, err = ssh.Dial("tcp", c.host, c.config); err != nil {
+-		return errors.Wrap(err, fmt.Sprintf("failed to dial %v: %s", c.host))
++		return errors.Wrap(err, fmt.Sprintf("failed to dial: %v", c.host))
+ 	}
+ 	return nil
+ }
+-- 
+2.39.0
+

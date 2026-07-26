@@ -1,0 +1,37 @@
+diff --color -Nur ngircd-27.orig/contrib/ngircd.service ngircd-27/contrib/ngircd.service
+--- ngircd-27.orig/contrib/ngircd.service	2024-04-13 02:33:33.000000000 -0700
++++ ngircd-27/contrib/ngircd.service	2024-05-12 09:07:55.595471549 -0700
+@@ -12,10 +12,10 @@
+ 
+ [Service]
+ Type=notify
+-User=irc
+-Group=irc
++User=ngircd
++Group=ngircd
+ # Settings & limits:
+-CapabilityBoundingSet=CAP_SYS_CHROOT CAP_NET_BIND_SERVICE
++CapabilityBoundingSet=CAP_SYS_CHROOT CAP_NET_BIND_SERVICE CAP_KILL
+ MemoryDenyWriteExecute=yes
+ NoNewPrivileges=yes
+ PrivateDevices=yes
+@@ -27,17 +27,12 @@
+ ProtectSystem=full
+ RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ RestrictRealtime=yes
+-RuntimeDirectory=ircd
++RuntimeDirectory=ngircd
+ RuntimeDirectoryMode=750
+ StandardError=journal
+ StandardOutput=journal
+-# Try to load "default files" from any Debian package variant to keep this
+-# unit generic.
+-EnvironmentFile=-/etc/default/ngircd
+-EnvironmentFile=-/etc/default/ngircd-full
+-EnvironmentFile=-/etc/default/ngircd-full-dbg
+ # Start ngIRCd. Note: systemd doesn't allow to use $DAEMON here!
+-ExecStart=/usr/sbin/ngircd --nodaemon --syslog $PARAMS
++ExecStart=/usr/sbin/ngircd --nodaemon --syslog
+ ExecReload=/bin/kill -HUP $MAINPID
+ # Error handling:
+ # ngIRCd tries to "ping" the service manager every 3 seconds.

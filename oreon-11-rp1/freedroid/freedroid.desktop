@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Freedroid
+Comment=A Paradroid clone
+Comment[fi]=Paradroid-klooni
+Exec=freedroid
+Icon=freedroid
+Terminal=false
+Type=Application
+Categories=Game;ArcadeGame;
+StartupWMClass=freedroid

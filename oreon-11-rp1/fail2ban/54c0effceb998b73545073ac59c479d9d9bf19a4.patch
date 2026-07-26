@@ -1,0 +1,23 @@
+From 54c0effceb998b73545073ac59c479d9d9bf19a4 Mon Sep 17 00:00:00 2001
+From: sebres <info@sebres.de>
+Date: Sun, 11 Aug 2024 12:10:12 +0200
+Subject: [PATCH] filter.d/sshd.conf: amend to #3747/#3812 (new ssh version
+ would log with `_COMM=sshd-session`)
+
+---
+ config/filter.d/sshd.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/filter.d/sshd.conf b/config/filter.d/sshd.conf
+index 206b913a78..595e957f0b 100644
+--- a/config/filter.d/sshd.conf
++++ b/config/filter.d/sshd.conf
+@@ -126,7 +126,7 @@ ignoreregex =
+ 
+ maxlines = 1
+ 
+-journalmatch = _SYSTEMD_UNIT=sshd.service + _COMM=sshd
++journalmatch = _SYSTEMD_UNIT=sshd.service + _COMM=sshd + _COMM=sshd-session
+ 
+ # DEV Notes:
+ #

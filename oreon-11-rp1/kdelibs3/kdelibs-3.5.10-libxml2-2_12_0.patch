@@ -1,0 +1,10 @@
+--- kdelibs-3.5.10/kdoctools/xslt.cpp.xml2	2006-05-23 03:14:22.000000000 +0900
++++ kdelibs-3.5.10/kdoctools/xslt.cpp	2023-11-28 15:17:58.477019918 +0900
+@@ -3,6 +3,7 @@
+ #include <libxslt/transform.h>
+ #include <libxslt/xsltutils.h>
+ #include <libxml/xmlIO.h>
++#include <libxml/xmlsave.h>
+ #include <libxml/parserInternals.h>
+ #include <libxml/catalog.h>
+ #include <kdebug.h>

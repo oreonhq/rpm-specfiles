@@ -1,0 +1,13 @@
+Index: OpenImageIO-3.0.0.3/src/cmake/modules/FindLibheif.cmake
+===================================================================
+--- OpenImageIO-3.0.0.3.orig/src/cmake/modules/FindLibheif.cmake
++++ OpenImageIO-3.0.0.3/src/cmake/modules/FindLibheif.cmake
+@@ -30,7 +30,7 @@ find_library (LIBHEIF_LIBRARY heif
+               DOC "The directory where libheif libraries reside")
+ 
+ if (LIBHEIF_INCLUDE_DIR)
+-    file(STRINGS "${LIBHEIF_INCLUDE_DIR}/libheif/heif_version.h" TMP REGEX "^#define LIBHEIF_VERSION[ \t].*$")
++    file(STRINGS "${LIBHEIF_INCLUDE_DIR}/libheif/heif_version-64.h" TMP REGEX "^#define LIBHEIF_VERSION[ \t].*$")
+     string(REGEX MATCHALL "[0-9.]+" LIBHEIF_VERSION ${TMP})
+ endif ()
+ 

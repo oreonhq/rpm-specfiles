@@ -1,0 +1,22 @@
+-- This project file compiles Mine Detector.
+-- Copyright 2009 – 2024 B. Persson, Bjorn@Rombobeorn.se
+--
+-- This file is free software; you can redistribute it and/or modify it under
+-- terms of the GNU General Public License as published by the Free Software
+-- Foundation; either version 2, or (at your option) any later version.
+
+with "gtkada";
+
+project Mine_Detector is
+
+   for Main use ("mine_detector");
+
+   package Builder is
+      for Default_Switches ("Ada") use ("-gnato");
+   end Builder;
+
+   package Binder is
+      for Default_Switches ("Ada") use ("-shared");
+   end Binder;
+
+end Mine_Detector;

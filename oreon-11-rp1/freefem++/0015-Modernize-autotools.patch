@@ -1,0 +1,126 @@
+From 058203eb9346fb94cce74da35cfec8dfa8c454f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Tue, 24 Dec 2024 12:16:09 +0100
+Subject: [PATCH 15/18] Modernize autotools
+
+---
+ 3rdparty/Makefile.am        |  4 ++--
+ Makefile.am                 | 10 +++++-----
+ bin/test-driver-ff          |  2 +-
+ configure.ac                |  1 +
+ etc/config/m4/ax_lib_gsl.m4 | 12 +++++-------
+ 5 files changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/3rdparty/Makefile.am b/3rdparty/Makefile.am
+index fddea1144..6765a5511 100755
+--- a/3rdparty/Makefile.am
++++ b/3rdparty/Makefile.am
+@@ -220,8 +220,8 @@ reinstall-msmpi:
+ # FFCS: need to stop at the first error to make sure that all libraries are correctly compiled
+ compile-dir:
+ 	@echo "\n\n ****** $(COMPILEDIR) ****** \n\n";
+-	@if [ 0 -eq `egrep ':$(COMPILEDIR) *LD' WHERE-LD | wc -l` ]; then \
+-		cd $(COMPILEDIR) && $(MAKE) $(DIRTARGET); \
++	@if [ 0 -eq `@EGREP@ ':$(COMPILEDIR) *LD' WHERE-LD | wc -l` ] ;then \
++	  cd $(COMPILEDIR) && $(MAKE) $(DIRTARGET) ; \
+ 	else \
+ 		echo $(COMPILEDIR) is in WHERE- files; \
+ 	fi
+diff --git a/Makefile.am b/Makefile.am
+index eca1a052d..acf6a914b 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -317,15 +317,15 @@ ListFiles-natives: .FORCE
+ 	test `uname` != Darwin || $(MAKE)  FreeFem++-CoCoa
+ 	echo $(FF_EXAMPLES_FILES) >$@
+ 	echo ./3rdparty/fftw/Makefile ./3rdparty/fftw/Makefile.am  >>$@
+-	find .  -name '*.[ei]dp' -o -name '*.h*' -o -name '*.cpp' -o -name '*.pgm'  |egrep  '[.]/examples/examples' >>$@
+-	find .   -name '*.h*' -o -name '*.cpp'  |egrep  '[.]/examples/examples' >>$@
++	find . -name '*.[ei]dp' -o -name '*.h*' -o -name '*.cpp' -o -name '*.pgm' | @EGREP@ '[.]/examples/examples' >>$@
++	find . -name '*.h*' -o -name '*.cpp' | @EGREP@ '[.]/examples/examples' >>$@
+ List-agl-dylib: src/nw/FreeFem++
+-	otool -L src/nw/FreeFem++|egrep -v '/System/Library/|/usr/lib/'|awk '/.dylib/ {print $$1}' >$@
++	otool -L src/nw/FreeFem++| @EGREP@ -v '/System/Library/|/usr/lib/'|awk '/.dylib/ {print $$1}' >$@
+ CheckMacLib.sh: src/nw/FreeFem++
+-	echo "for i in `otool -L src/nw/FreeFem++|egrep -v '/System/Library/|/usr/lib/'|awk '/.dylib/ {printf($$1.OFS)  }'` ; do test ! -f $$i && exit 1; done; exit 0"  >$@
++	echo "for i in `otool -L src/nw/FreeFem++| @EGREP@ -v '/System/Library/|/usr/lib/'|awk '/.dylib/ {printf($$1.OFS)  }'` ; do test ! -f $$i && exit 1; done; exit 0"  >$@
+ 	chmod a+x $@
+ CheckMPIMacLib.sh: src/mpi/FreeFem++-mpi
+-	echo "for i in `otool -L src/mpi/FreeFem++-mpi|egrep -v '/System/Library/|/usr/lib/'|awk '/.dylib/ {printf($$1.OFS)  }'` ; do test ! -f $$i && exit 1; done; exit 0"  >$@
++	echo "for i in `otool -L src/mpi/FreeFem++-mpi| @EGREP@ -v '/System/Library/|/usr/lib/'|awk '/.dylib/ {printf($$1.OFS)  }'` ; do test ! -f $$i && exit 1; done; exit 0"  >$@
+ 	chmod a+x $@
+ 
+ $(FF_MAC_PREFIX)_Macos:documentation ListFiles-natives
+diff --git a/bin/test-driver-ff b/bin/test-driver-ff
+index 5d8517eca..322d1ebd3 100755
+--- a/bin/test-driver-ff
++++ b/bin/test-driver-ff
+@@ -122,7 +122,7 @@ export MPIEXEC_TIMEOUT=300
+ test -z "${COMMONPROGRAMFILES+x}" -a -z "${WINDIR+x}" && ulimit -t 60
+ ${TEST_FFPP} ${FLAGS_FFPP_B}  "$@" ${FLAGS_FFPP_A}>$log_file 2>&1
+ estatus=$?
+-FAIL_CPU_LIMIT=`tail -100 $log_file|egrep -i 'Cputime limit exceeded|MPIEXEC_TIMEOUT|Timeout after'|wc -l`
++FAIL_CPU_LIMIT=`tail -100 $log_file|grep -E -i 'Cputime limit exceeded|MPIEXEC_TIMEOUT|Timeout after'|wc -l`
+ fi
+ 
+ ## Add an error suffix in order to extract errored tests only
+diff --git a/configure.ac b/configure.ac
+index a3c23335f..cda2be84b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -43,6 +43,7 @@ fi
+ AC_CONFIG_HEADERS(config.h)
+ AC_PROG_MAKE_SET
+ dnl AM_COLOR_TESTS=always
++AC_PROG_EGREP
+ AC_PROG_RANLIB
+ inc_usr_include=""
+ ff_where_lib_conf=plugin/seq/WHERE_LIBRARY-config
+diff --git a/etc/config/m4/ax_lib_gsl.m4 b/etc/config/m4/ax_lib_gsl.m4
+index fc7fb4429..22650d408 100644
+--- a/etc/config/m4/ax_lib_gsl.m4
++++ b/etc/config/m4/ax_lib_gsl.m4
+@@ -55,7 +55,7 @@ AC_ARG_ENABLE(gsltest, [  --disable-gsltest       Do not try to compile and run
+       LIBS="$LIBS $GSL_LIBS"
+ 
+       rm -f conf.gsltest
+-      AC_TRY_RUN([
++      AC_RUN_IFELSE([AC_LANG_SOURCE([[
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -108,7 +108,7 @@ int main (void)
+      }
+ }
+ 
+-],, no_gsl=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
++]])],[],[no_gsl=yes],[echo $ac_n "cross compiling; assumed OK... $ac_c"])
+        CFLAGS="$ac_save_CFLAGS"
+        LIBS="$ac_save_LIBS"
+      fi
+@@ -130,10 +130,9 @@ int main (void)
+           echo "*** Could not run GSL test program, checking why..."
+           CFLAGS="$CFLAGS $GSL_CFLAGS"
+           LIBS="$LIBS $GSL_LIBS"
+-          AC_TRY_LINK([
++          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+ #include <stdio.h>
+-],      [ return 0; ],
+-        [ echo "*** The test program compiled, but did not run. This usually means"
++]], [[ return 0; ]])],[ echo "*** The test program compiled, but did not run. This usually means"
+           echo "*** that the run-time linker is not finding GSL or finding the wrong"
+           echo "*** version of GSL. If it is not finding GSL, you'll need to set your"
+           echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+@@ -141,8 +140,7 @@ int main (void)
+           echo "*** is required on your system"
+ 	  echo "***"
+           echo "*** If you have an old version installed, it is best to remove it, although"
+-          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],
+-        [ echo "*** The test program failed to compile or link. See the file config.log for the"
++          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],[ echo "*** The test program failed to compile or link. See the file config.log for the"
+           echo "*** exact error that occured. This usually means GSL was incorrectly installed"
+           echo "*** or that you have moved GSL since it was installed. In the latter case, you"
+           echo "*** may want to edit the gsl-config script: $GSL_CONFIG" ])
+-- 
+2.47.1
+

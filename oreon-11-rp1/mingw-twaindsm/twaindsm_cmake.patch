@@ -1,0 +1,79 @@
+diff -rupN --no-dereference twain-dsm-2.5.1/TWAIN_DSM/src/CMakeLists.txt twain-dsm-2.5.1-new/TWAIN_DSM/src/CMakeLists.txt
+--- twain-dsm-2.5.1/TWAIN_DSM/src/CMakeLists.txt	2021-11-02 13:56:17.000000000 +0100
++++ twain-dsm-2.5.1-new/TWAIN_DSM/src/CMakeLists.txt	2025-07-17 18:35:31.684160718 +0200
+@@ -1,6 +1,6 @@
+ # this is just a basic CMakeLists.txt, for more information see the cmake manpage...
+ 
+-cmake_minimum_required(VERSION 2.4)
++cmake_minimum_required(VERSION 2.8)
+ 
+ SET(OSTARGET "${OSTARGET}" CACHE STRING "woof")
+ 
+@@ -38,6 +38,9 @@ ELSEIF("${CMAKE_SYSTEM_PROCESSOR}" STREQ
+ 	ELSE()
+ 		ADD_DEFINITIONS(-Wall -Wextra -Werror -march=from-abi -mabi=32)
+ 	ENDIF()
++
++ELSEIF(MINGW)
++    ADD_DEFINITIONS(-Wall -Wextra)
+ ELSE()
+ 	ADD_DEFINITIONS(-Wall -Wextra -Werror -Wno-implicit-fallthrough)
+ ENDIF(APPLE)
+@@ -51,30 +54,39 @@ ELSEIF("${CMAKE_SYSTEM_PROCESSOR}" STREQ
+ 	ELSE()
+ 		SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic -Wl,--no-undefined -Wl,-ldl -march=from-abi -mabi=32" CACHE STRING "woof" FORCE)
+ 	ENDIF()
+-ELSE()
++ELSEIF(NOT MINGW)
+ 	SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,-Bsymbolic -Wl,--no-undefined -Wl,-ldl" CACHE STRING "woof" FORCE)
+ ENDIF(APPLE)
+ 
+-#project name
+-PROJECT(twaindsm)
+-
+ #project version
+ SET(${PROJECT_NAME}_MAJOR_VERSION 2)
+ SET(${PROJECT_NAME}_MINOR_VERSION 5)
+ SET(${PROJECT_NAME}_PATCH_LEVEL 0)
+ 
+ #build a shared library
+-ADD_LIBRARY(twaindsm SHARED dsm.cpp apps.cpp log.cpp)
+-target_link_libraries(twaindsm dl)
++IF(MINGW)
++	ADD_LIBRARY(twaindsm SHARED dsm.cpp apps.cpp log.cpp hook.cpp dsm.def)
++ELSE()
++	ADD_LIBRARY(twaindsm SHARED dsm.cpp apps.cpp log.cpp)
++	target_link_libraries(twaindsm dl)
++ENDIF()
+ 
+ #
+ SET_TARGET_PROPERTIES(twaindsm PROPERTIES
+ 					  VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL}
+ 					  SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
+ 
++IF(MINGW)
++	SET_TARGET_PROPERTIES(twaindsm PROPERTIES PREFIX "")
++ENDIF()
+ #add an install target here
+ INSTALL(FILES twain.h DESTINATION include)
+ INSTALL(TARGETS twaindsm 
+ 		LIBRARY DESTINATION lib
+-		PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++		PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
++		RUNTIME DESTINATION bin COMPONENT libraries
++		ARCHIVE DESTINATION lib COMPONENT libraries
++		LIBRARY DESTINATION lib COMPONENT libraries
++)
++
+ 
+diff -rupN twain-dsm-2.5.1/TWAIN_DSM/src/CMakeLists.txt twain-dsm-2.5.1-new/TWAIN_DSM/src/CMakeLists.txt
+--- twain-dsm-2.5.1/TWAIN_DSM/src/CMakeLists.txt	2025-07-17 18:35:31.711715731 +0200
++++ twain-dsm-2.5.1-new/TWAIN_DSM/src/CMakeLists.txt	2025-07-17 18:36:01.025482667 +0200
+@@ -1,6 +1,6 @@
+ # this is just a basic CMakeLists.txt, for more information see the cmake manpage...
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ 
+ SET(OSTARGET "${OSTARGET}" CACHE STRING "woof")
+ 

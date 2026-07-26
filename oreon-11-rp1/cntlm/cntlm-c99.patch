@@ -1,0 +1,45 @@
+Include <stdio.h> and <string.h> for printf- and string-related
+functions.  Define _DEFAULT_SOURCE during feature probing and the
+build.
+
+This avoids implicit function declarations and build failures with
+future compilers.
+
+Submitted upstream: <https://sourceforge.net/p/cntlm/bugs/79/>
+
+diff --git a/Makefile b/Makefile
+index 90479978beab1b73..e7690bcae9efc039 100644
+--- a/Makefile
++++ b/Makefile
+@@ -15,7 +15,7 @@ MANDIR=$(DESTDIR)/usr/share/man
+ NAME=cntlm
+ CC=gcc
+ VER=`cat VERSION`
+-override CFLAGS += -std=c99 -pedantic -D__BSD_VISIBLE -D_ALL_SOURCE -D_XOPEN_SOURCE=600 -D_POSIX_C_SOURCE=200112 -D_ISOC99_SOURCE -D_REENTRANT -D_BSD_SOURCE -DVERSION=\"`cat VERSION`\"
++override CFLAGS += -std=c99 -pedantic -D__BSD_VISIBLE -D_ALL_SOURCE -D_XOPEN_SOURCE=600 -D_POSIX_C_SOURCE=200112 -D_ISOC99_SOURCE -D_REENTRANT -D_BSD_SOURCE -D_DEFAULT_SOURCE -DVERSION=\"`cat VERSION`\"
+ override LDFLAGS += -lpthread
+ 
+ ifeq ($(findstring CYGWIN,$(OS)),)
+diff --git a/config/gethostname.c b/config/gethostname.c
+index 3e76762a823758be..90bad535a12536d4 100644
+--- a/config/gethostname.c
++++ b/config/gethostname.c
+@@ -1,3 +1,5 @@
++#include <stdio.h>
++#include <string.h>
+ #include <unistd.h>
+ 
+ int main(int argc, char **argv) {
+diff --git a/configure b/configure
+index 107f2d495f502f12..b77bd1812a76c081 100755
+--- a/configure
++++ b/configure
+@@ -62,7 +62,7 @@ rm -f $CONFIG
+ for i in $TESTS; do
+ 	printf "Checking $i... "
+ 	printf "#define config_$i " >> $CONFIG
+-	OUT=`$CC -D_POSIX_C_SOURCE=199506L -D_ISOC99_SOURCE -D_REENTRANT -o config/$i config/$i.c 2>&1`
++	OUT=`$CC -D_POSIX_C_SOURCE=199506L -D_ISOC99_SOURCE -D_DEFAULT_SOURCE -D_REENTRANT -o config/$i config/$i.c 2>&1`
+ 	rc=$?
+ 
+ 	if [ $rc -ne 0 ]; then # -o -n "$OUT" ]; then

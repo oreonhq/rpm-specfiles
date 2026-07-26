@@ -1,0 +1,1429 @@
+#!/usr/bin/perl
+# Copyright © 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2021 Petr Písař
+# Copyright © 2022, 2023 Petr Písař
+# This is free software.  You may redistribute copies of it under the terms of
+# the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Changelog:
+#
+# Version 33:
+# - Partially adapted to changes noticed on 2023-03-20. Linear streams should
+# work again. Some on-demand videos work, some don't. This will be refined
+# later.
+#
+# Version 32:
+# - Correct parsing pages with multiple iframe players
+# (https://ct24.ceskatelevize.cz/domaci/3424616-nove-motoraky-ceskych-drah-nejdou-nastartovat-vyprsela-platnost-softwaru).
+# - Correct parsing series pages where first IDEC field is invalid
+# (https://www.ceskatelevize.cz/porady/1126672097-otazky-vaclava-moravce/).
+# - Support options --help and --version.
+#
+# Version 31:
+# - Adapt to changes noticed from the beginning of December, 2021.
+# - Correct a grammar in a few verbose messages.
+#
+# Version 30:
+# - Adapt to changes noticed on 2021-06-25.
+# - Non-HTTPS playlist generator redirects POST requests with 301 instead of
+# 302 now. Handle the code likewise.
+# - Correct grammar in a usage text.
+#
+# Version 29:
+# - Adapt to changes effective since 2018-09-12.
+# - Stream servers changed an X509 certificate and it sends full chain now.
+# The bundled certificate was removed.
+# - Non-HTTPS playlist generator redirects POST requests to HTTPS locations.
+# Because libwww-perl does not yet support RFC 7231, the redirection was
+# implemented here.
+#
+# Version 28
+# - Adapt to changes effective since 2018-07-17 (a playlist generator requires
+# HTTPS schema now, ivys-st10-5.o2tv.cz:443 does not send an intermediate
+# certificate).
+#
+# Version 27
+# - Do not mix bottom-level Apple play-list into stream segment's content when
+# called with -s option.
+# - Add debugging to retrieving bottom-level Apple play-lists and stream
+# segments.
+#
+# Version 26
+# - Adapt to changes effective since 2017-02-13.
+#
+# Version 25
+# - Adapt to changes effective since 2016-11-22.
+#
+# Version 24
+# - Adapt to changes effective since 2015-10-16.
+# - RTMP mode removed because it's no longer provided by the servers.
+# - Encode undefined value as empty string to conform latest jQuery
+# (http://www.ceskatelevize.cz/porady/10316155327-horizont-ct24/215411058051016/).
+# - If multi-part video is encountered, user has to select one by positional
+# argument. One can use `-t' option to list the parts.
+# (http://www.ceskatelevize.cz/ivysilani/11177713200-tour-de-france-2015/215471291092002/).
+#
+# Version 23
+# - Adapt to changes effective since 2014-12-18. 
+# - Please note that the RTMP streams do not work.
+#
+# Version 22
+# - Adapt to changes in SMIL URL generator definition as needed since
+# beginning of December 2014. 
+# - Support ct24 portal links
+# (http://www.ceskatelevize.cz/ct24/svet/295620-eichler-k-australii-horsi-nez-osamely-vlk-je-zbesily-vlk/)
+#
+# Version 21
+# - Return iframe searcher as iframes have not yet been eradicted as I thought
+# (invalid http://www.ceskatelevize.cz/msfotbal/videoarchiv/nejnovejsi/279399-sestrih-utkani-nizozemsko-kostarika/).
+# - Support Apple M3U playlist URL served as a SMIL play-list.
+#
+# Version 20
+# - Catch up to major changes on the server side. Not all features are
+# available yet.
+#
+# Version 19
+# - Send `type' element not to confuse SMIL playlist genererator as it is
+# needed since 2014-05-05. 
+#
+# Version 18
+# - Fix locating JSON. The affected RTMP variant got another argument.
+#
+# Version 17
+# - Fix request for RTMP playlist generator by not sending undefined
+#   streamQuality.
+#
+# Version 16
+# - Recognize an error message in new format.
+# - Respect *_proxy environment variables.
+#
+# Version 15
+# - Implement short path when overloaded server returns SMIL URL directly.
+#
+# Version 14
+# - Adapt to server changes effective since 2014-02-13. Only RTMP is supported
+#   now. The Apple format is unsupported.
+# - Require URI::Escape Perl module.
+#
+# Version 13
+# - Rewrite SMIL playlist URL as performed by web interface since 2014-01-31.
+#
+# Version 12
+# - Search SMIL playlist generator URL from web pages as the address changes
+#   frequently.
+#
+# Version 11
+# - Implement change of SMIL playlist generator URL as spotted on 2014-01-10.
+#   Thanks to Jiri B.
+# - Set output encoding for diganostic messages according to locale as
+#   messages extracted from web pages are in Czech.
+#
+# Version 10
+# - Implement change of SMIL playlist generator URL as spotted on 2014-01-07.
+# 
+# Version 9
+# - Search for other error message if JSON could not be found. This usually
+#   says the client is not supported (not all URLs serves all formats).
+# - Improve JSON locator
+#   (http://www.ceskatelevize.cz/ivysilani/1126672097-otazky-vaclava-moravce/).
+#
+# Version 8
+# - Adapt to changes in SMIL play-list generator on the Czech Television
+# servers. Effective since 2013-05-24.
+# - New option `-v' has been added to report retrieved URLs.
+#
+# Version 7
+# - Print stream data in binaru mode. This fixes premature end-of-file on
+# DOS-like operating systems.
+#
+# Version 6
+# - Accept iframe player URL with channel name in the file name
+# - Send XML-RPC header needed for SMIL generator since 2012-05-09
+#
+# Version 5
+# - Support Apple M3U and MPEG2-TS/MPEG-4 format
+# - Improve HTML parser
+# - Remove autoStart=false option from iframe player URL to get page with
+# JSON instead of similar page with iframe again
+# (http://www.ceskatelevize.cz/porady/10316155327-horizont-ct24/)
+#
+# Version 4
+# - Support RTMP app with slashes
+# - Report URI in error messages
+#
+# Version 3:
+# - Output in rtmpdump(1) format if `-d' option is specified
+# - Do not append playpath to URL if ambigous
+#
+# Version 2:
+# - Output playpath as librtmp option if necessary
+# - Perl 5.10 support
+# - Find JSON via iframe first and fall back to direct JSON
+# - More general example entry page URL in usage output
+# - Show content provider error message if exists
+#
+
+# Procedure since 2015-10-16
+# The hash is at <http://www.ceskatelevize.cz/ct24#live> in an in-line
+# javascript:
+#
+# jQuery.extend(Drupal.settings, {[...]
+# media_ivysilani:{hash:"HEXASTRING"},[...]});
+#
+# Then GET is performed to /ivysilani/embed/iFramePlayerCT24.php?[...] with
+# hash=HEXASTRING appended to retrieve iframe HTML code. The URL comes from
+# //span[class="media-ivysilani-placeholder"]/@data-url in the entry point as
+# computed in
+# <http://www.ceskatelevize.cz/ct24/sites/all/themes/custom/ct24/js/video.js>.
+#
+# Then XMLHttpRequest POST to /ivysilani/ajax/get-client-playlist with x-addr
+# HTTP header and playlist[0][type], playlist[0][id], requestUrl, requestSource,
+# and type input form is performed.
+#
+# The x-addr value comes from the PHP page.
+# The form values come from
+# <http://imgct.ceskatelevize.cz/global/js/player/ajax-playlist-o2.js?_ts=INTEGER>
+# javascript whose address is in the PHP.
+#
+# It returns JSON:
+#
+# {"url":"http:\/\/www.ceskatelevize.cz\/ivysilani\/client-playlist\/?key=HEXASTRING2"}
+#
+# Then GET is performed to the url value. A JSON is returned:
+#
+# { [...], "playlist":[
+#   {"streamUrls":{"main":"http:\/\/80.188.65.18:80\/cdn\/[...]",[...]}
+# ] }
+# 
+# The main streamUrl returns top-level segmented M3U playlist.
+# 
+# Other code:
+# <http://www.ceskatelevize.cz/ct24/sites/all/modules/custom/media_ivysilani/js/media_ivysilani.js>
+# <http://www.ceskatelevize.cz/ct24/sites/all/themes/custom/ct24/js/ct24_live.js>
+
+# Procedure since 2023-03-20
+# From <https://www.ceskatelevize.cz/zive/ct1/> get
+# <https://player.ceskatelevize.cz/?origin=iVysilani&autoStart=true&width=100%25&parentUrl=https%3A%2F%2Fwww.ceskatelevize.cz%2Fzive%2Fct1%2F&title=Centropol+Fotbalista+roku+2022&sidp=15583573855&videoID=CT1&multimedia=1&tpl=live&skinID=3>
+# (only <https://player.ceskatelevize.cz/?sidp=15583573855&videoID=CT1> is
+# enough; sidp is a showID value in the original page)
+# which defines
+# <https://www.ceskatelevize.cz/ivysilani/ajax/get-client-playlist/> URL in
+# PLAYLIST_LEGACY_URI field of an in-line JavaScript code. 
+# To the URL a form is POSTed (sources of input values is uknown now).
+# A response returns a JSON document whose "url" value
+# <https://www.ceskatelevize.cz/ivysilani/client-playlist/?key=195c70e7f3e8273babbf66f577fabe39>
+# points to another JSON document which in
+# "playlist":[0][streamUrls][main] has a top-level HLS playlist.
+# However, because the exact https://player.ceskatelevize.cz/ and
+# .../get-client-playlist arguments are well obfuscated (i.e. I haven't yet
+# found how to retrieve them reliably), this implementation uses a heuristic
+# and POSTs .../get-client-playlist directly.
+
+use strict;
+use warnings;
+use utf8;
+use open ':locale';
+our $VERSION = 33;
+
+use LWP::UserAgent;
+use HTTP::Request::Common;
+use HTTP::Response;
+use XML::XPath;
+use URI;
+use URI::Escape;
+use JSON 2.0;
+use Getopt::Std;
+use IO::Handle;
+
+
+my $SMIL_GENERATOR_NEXT = '/ajax/getSmil.php?url=';
+my $ENTRY = 'https://www.ceskatelevize.cz/zive/ct24/';
+
+sub usage {
+    return<<EOM;
+Usage: ctstream [-v] -A [-t|-l|-f|-s] [--] ENTRY_PAGE [PART] [BITRATE]
+
+Get URLs of the Czech Television video streams for a specific ENTRY_PAGE (e.g.
+<$ENTRY>).
+
+If this is the only argument and the video has only one part, output a list of
+all available streams in format `BITRATE: URL' separated by a new line. If
+the BITRATE is given, only output a URL of the stream with the given rate.
+
+If the video has more parts, you have to specify the part number.
+
+The `-A' option must be specified. HTTP/MPEG-TS/MPEG-4 video will be retrieved.
+There exist four levels selected by these options:
+
+  -t  List URLs of top-level Apple M3U playlists for each video part. The output
+      are lines in `PART: URL' format. If the PART was specified, only URL of
+      the given video part will be printed.
+
+  -l  An Apple M3U play-list pointing to the unbound stream segments will be
+      output. This is handy if you have a player that supports the very special
+      play-list. Specification can be found at
+      <http://tools.ietf.org/html/draft-pantos-http-live-streaming>.
+
+  -f  The Apple play-list will be processed and URLs of the underlying stream
+      segmented into files will be printed. Due to nature of the play-list, the
+      locators are printed periodically, a new segment a few seconds, possibly
+      in an endless loop. Intended workflow is pipe the URLs to an HTTP client
+      which echoes the downloaded segments on a standard input of a multimedia
+      player. This is the default level. The bit rate must be specified, if
+      more bit rates are available.
+
+  -s  The stream segments will be retrieved and dumped to a standard output as
+      a continuous stream. You can pipe it to your player. The bit rate must be
+      specified if more bit rates are available.
+
+If a `-v' option is specified, additional debugging messages will be printed on
+the standard error output.
+
+Version: $VERSION.
+Copyright © 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2021 Petr Písař
+Copyright © 2022, 2023 Petr Písař
+This is free software.  You may redistribute copies of it under the terms of
+the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
+There is NO WARRANTY, to the extent permitted by law.
+EOM
+}
+
+our ($opt_A, $opt_d, $opt_t, $opt_l, $opt_f, $opt_s, $opt_v);
+$Getopt::Std::STANDARD_HELP_VERSION = 1;
+sub HELP_MESSAGE {
+    print usage();
+}
+sub VERSION_MESSAGE {
+    print "Version: $VERSION.\n";
+}
+getopts('Adtlfsv') or 
+    die usage;
+
+if ($#ARGV < 0 || $#ARGV > 2) {
+    die "Bad invocation\n\n" . usage;
+}
+$ENTRY = shift @ARGV;
+
+if (!($opt_l || $opt_s)) { $opt_f = 1; }
+
+
+# each that operates on reference to array or hash
+# Works with perl 5.10.1 too.
+sub eachref {
+    my $ref = shift;
+            
+    if (ref $ref eq 'HASH') {
+        # Built-in implementation always supports HASH
+        return sub {
+            each %$ref;
+        }
+    }
+
+    if (eval 'each @$ref' ) {
+        # Built-in Perl 5.12 implementation
+        eval 'return sub { 
+            each @$ref;
+        }'
+    } else {
+        # Manual implementation of each ARRAY (needed for Perl < 5.12)
+        my $index = -1;
+   
+        return sub {
+            $index++;
+            if ($index <= $#$ref) {
+                ($index, $$ref[$index]);
+            } else {
+                ();
+            }
+        }
+    }
+}
+
+
+# Convert nested JSON structure expressed as native hash reference into flat
+# array of key and value pairs.
+# E.g. { "x" => [ "y" => "1", "z" => undef ] }
+# becomes ( "x[0][y]", "1", "x[1][z] => '' ).
+# XXX: Since fixing <http://bugs.jquery.com/ticket/8653>, undefined value is
+# expressed as empty string instead of 'null' string.
+# This is handy when sending nested JSON structure as
+# application/x-www-form-urlencoded by HTTP::Request::Common.
+sub flatten {
+    my ($ref, $prefix) = @_;
+    my @output = ();
+    my $doeach = eachref($ref);
+    while (my ($key, $val) = &$doeach) {
+        # TODO: Escape /[[]=]/
+        my $id = (defined $prefix) ? $prefix . '[' . $key . ']' : $key;
+        if (ref $val eq 'HASH' || ref $val eq 'ARRAY') {
+            push @output, flatten($val, $id);
+        } else {
+            push @output, ($id, $val // '');
+        }
+    }
+    return @output;
+}
+
+
+# Format RTMP URL for librtmp
+sub formaturl_librtmp {
+    my ($rtmp, $app, $playpath) = @_;
+
+    my $stream_url = $rtmp;
+    if ($playpath =~ qr{/} or $app =~ qr{/}) {
+        $stream_url .= ' app=' . $app . ' playpath=' . $playpath;
+    } else {
+        $stream_url .= $app . '/' . $playpath;
+    }
+}
+
+
+# Format RTMP URL for librtmp
+sub formaturl_rtmpdump {
+    my ($rtmp, $app, $playpath) = @_;
+    
+    my $stream_url = '--rtmp ' . $rtmp;
+    if ($playpath =~ qr{/} or $app =~ qr{/}) {
+        $stream_url .= ' --app ' . $app . ' --playpath ' . $playpath;
+    } else {
+        $stream_url .= $app . '/' . $playpath;
+    }
+}
+
+
+# Find first pattern match in HTML page, HTML-unescape it and return it.
+# Otherwise return undef.
+sub htmlgrep {
+    my ($html_page, $pattern) = @_;
+    my ($text) = ($html_page =~ $pattern);
+    if (defined $text) {
+        $text =~ s/&gt;/>/g;
+        $text =~ s/&lt;/</g;
+        $text =~ s/&nbsp;/\xa0/g;
+        $text =~ s/&amp;/&/g;
+    }
+    return $text;
+}
+
+
+# Escape as URI and ampersands in additon
+sub shellescape {
+    local $_ = URI->new(shift);
+    s/&/%26/g;
+    return $_;
+}
+
+
+# Try to get JSON request data from HTML page text.
+# The page is passed as a first argument. The JSON is located by javascript
+# function identifier passed as a second argument.
+# Return the JSON data or undef.
+# Example: callSOAP({"foo);bar":1});
+sub findjson {
+    my ($text, $function) = @_;
+    htmlgrep($text, qr{
+        # Use possesive quantifiers ++, *+ for performance
+        \Q$function\E
+        \(
+        (                                       # The JSON structure is a
+            (?:                                 # sequence of quoted strings
+                "(?: [^"\\]++ | \\. )*+" | [^)] # and non-quoted
+            )*+                                 # non-parentheses.
+        )                                       #
+        \);
+    }x);
+}
+
+
+# Try to get setRequestHeader function arguments from JS page text passed as
+# argument.
+# Return list (header, value) or undef.
+sub findrequestheader {
+    local $_ = findjson(shift, 'setRequestHeader');
+    if (!defined) { return undef; }
+    return (m/'([^']*)', '([^']*)'/);
+}
+
+
+# Return URL of the only video/@src in the SMIL playlist.
+# Arguments is playlist as string, URL of the playlist, and
+# playlist as XML::XPath object.
+sub extract_url_from_m3u_smil {
+    my ($smil, $smil_url, $parser) = @_;
+
+    my $videos =
+        $parser->find('/data/smilRoot/body/video');
+    if ($videos->size <= 0) {
+        die "No videos found in SMIL playlist <" . $smil_url . ">:\n" .
+            $smil . "\n";
+    }
+    my @bitrate_url_pairs = ();
+    foreach my $video ($videos->get_nodelist) {
+        my $suffix = $video->getAttribute('src');
+        if (! defined $suffix) {
+            print STDERR q{Missing `video/@src' attribute} . "\n";
+            next;
+        }
+        # Build stream URL. This is now an HTTP URL.
+        return $suffix;
+    }
+
+    die "No video URL found.\n";
+}
+
+
+# Return array of { bitrate => INTEGER, url => URL } found in RTMP SMIL play
+# list. Arguments is playlist as string, URL of the playlist,
+# playlist as XML::XPath object and boolean signaling URL format (true for
+# rtmpdump format, false for librtmp format).
+sub extract_urls_from_rtmp_smil {
+    my ($smil, $smil_url, $parser, $opt_d) = @_;
+
+    my $videos =
+        $parser->find('/data/smilRoot/body/switchItem/video[@enabled=true()]');
+    if ($videos->size <= 0) {
+        die "No videos found in SMIL playlist <" . $smil_url . ">:\n" .
+            $smil . "\n";
+    }
+    my @bitrate_url_pairs = ();
+    foreach my $video ($videos->get_nodelist) {
+        my $suffix = $video->getAttribute('src');
+        if (! defined $suffix) {
+            print STDERR q{Missing `video/@src' attribute} . "\n";
+            next;
+        }
+        my $prefix = $video->getParentNode->getAttribute('base');
+        if (! defined $suffix) {
+            print STDERR
+                q{Missing `video/../@base' attribute for video } .
+                "`$suffix'\n";
+            next;
+        }
+        my $bitrate = $video->getAttribute('system-bitrate');
+        if (! defined $suffix) {
+            print STDERR
+                q{Missing `video/@system-bitrate' attribute for video } .
+                "`$suffix'\n";
+            next;
+        }
+
+        # Build stream URL. Because RTMP URL can be ambigous, 
+        # applications accept aditional arguments separated by space
+        # (the space must not be URI-encoded).
+        my $stream_url;
+        {
+            my $rtmp = URI->new($prefix);
+            my $app = substr($rtmp->path_query, 1);
+            $rtmp->path('/');
+            $rtmp->query(undef);
+            my $playpath = URI->new($suffix);
+            if ($opt_d) {
+                $stream_url = formaturl_rtmpdump($rtmp, $app, $playpath);
+            } else {
+                $stream_url = formaturl_librtmp($rtmp, $app, $playpath);
+            }
+        }
+
+        ## Build stream URL. This is now an HTTP URL.
+        #my $stream_url = URI->new_abs($suffix, $prefix);
+
+        # Store URL
+        push @bitrate_url_pairs, {'bitrate' => $bitrate, 'url' => $stream_url};
+    }
+
+    return @bitrate_url_pairs;
+}
+
+
+# Print segment URLs or their content found in bottom-level Apple M3U
+# play-list. This function can never return if live stream is served by
+# a server.
+# Arguments are URL of the playlist, LWP::UserAgent object, and boolean
+# signalling content of stream segments should be printed instead of their
+# URLs.
+# See <http://tools.ietf.org/html/draft-pantos-http-live-streaming>.
+sub iterate_bottom_apple_m3u {
+    my ($m3u_url, $ua, $stream_content) = @_;
+    autoflush STDOUT 1;
+    my $reload = 1;
+    my $last_segment = -1;
+    my $target_duration;
+
+    while ($reload) {
+        # Get bottom-level Apple MPEG play-list.
+        if ($opt_v) {
+            print STDERR "Getting bottom-level Apple play-list <$m3u_url>\n";
+        }
+        my $response = $ua->request(GET $m3u_url);
+        $response->is_success or
+            die "Could not get bottom-level Apple M3U play-list from <" .
+                $m3u_url . ">: " . $response->status_line . "\n";
+        if ($opt_v) {
+            print STDERR "Retrieved bottom-level Apple play-list is:\n" . 
+                "===BEGIN INPUT===\n" . $response->decoded_content .
+                "\n===END INPUT===\n";
+        }
+        my $retrieved_at = time;
+        my $duration;
+        my $sequence = 0;
+        for (split(/(\r)?\n/, $response->decoded_content)) {
+            if (! defined) { next; }
+            if (/\A#EXT-X-TARGETDURATION:(\d+)/) {
+                $target_duration = $1;
+                next;
+            }
+            if (/\A#EXT-X-MEDIA-SEQUENCE:(\d+)/) {
+                $sequence = $1;
+                next;
+            }
+            if (/\A#EXT-X-ENDLIST\b/) {
+                $reload = 0;
+                next;
+            }
+            if (/\A#EXTINF:(\d+)/) {
+                $duration = $1;
+                next;
+            }
+            if (/\A[^#]/) {
+                if (! defined $duration) {
+                    print STDERR
+                        'Stray URL in bottom-level Apple play-list from <' .
+                        $m3u_url . ">:\n" . $response->decoded_content . "\n";
+                    next;
+                }
+                if ($sequence > $last_segment) {
+                    my $segment_url = URI->new_abs($_, $m3u_url);
+                    if ($stream_content) {
+                        # Get segment content.
+                        if ($opt_v) {
+                            print STDERR "Getting segment content from <" .
+                                $segment_url . ">\n";
+                        }
+                        binmode STDOUT;
+                        $ua->set_my_handler('response_data',
+                            sub { print $_[3]; 1; }, 'm_code' => 2);
+                        my $response = $ua->request(GET $segment_url);
+                        $ua->set_my_handler('response_data',
+                            undef, 'm_code' => 2);
+                        $response->is_success or
+                            die "Could not get stream segment content from <" .
+                                $segment_url . ">: " .
+                                $response->status_line . "\n";
+                        if ($opt_v) {
+                            print STDERR "Segment content retrieved successfully.\n";
+                        }
+                    } else {
+                        print $segment_url, "\n";
+                    }
+                    $last_segment = $sequence;
+                }
+                $duration = undef;
+                $sequence++;
+                next;
+            }
+        }
+        if (! defined $target_duration || $last_segment == -1) {
+            die 'No target duration or URL found in bottom-level Apple " .
+                "play-list from <' .
+                $m3u_url . ">:\n" . $response->decoded_content . "\n";
+        }
+        if ($reload) {
+            my $sleep = $target_duration - (time - $retrieved_at);
+            if ($sleep > 0) {
+                if ($opt_v) {
+                    print STDERR "Going to sleep for $sleep seconds.\n";
+                }
+                sleep $sleep;
+            }
+        }
+    }
+}
+
+
+# Return array of { bitrate => INTEGER, url => URL } found in top-level
+# Apple M3U play-list. Returned URLs are locators of bottom-level Apple M3U
+# play-list for given bitrate. The play-list specification is on
+# <http://tools.ietf.org/html/draft-pantos-http-live-streaming>.
+# Arguments are URL of the playlist and LWP::UserAgent object.
+sub extract_urls_from_top_apple_m3u {
+    my ($m3u_url, $ua) = @_;
+    my @bitrate_url_pairs = ();
+
+    # Get top-level Apple MPEG playlist.
+    my $response = $ua->request(GET $m3u_url);
+    $response->is_success or
+        die "Could not get top-level Apple M3U play-list from <" .
+            $m3u_url . ">: " . $response->status_line . "\n";
+    my $bitrate;
+    for (split(/(\r)?\n/, $response->decoded_content)) {
+        if (! defined) { next; }
+        if (/\A#EXT-X-STREAM-INF:(?:.*,)?BANDWIDTH=(\d+)/) {
+            $bitrate = $1;
+            next;
+        }
+        if (/\A[^#]/) {
+            if (! defined $bitrate) {
+                print STDERR 'Stray URL in top-level Apple play-list from <' .
+                    $m3u_url . ">:\n" . $response->decoded_content . "\n";
+                next;
+            }
+            push @bitrate_url_pairs,
+                {'bitrate' => $bitrate, 'url' => URI->new_abs($_, $m3u_url)};
+            $bitrate = undef;
+            next;
+        }
+    }
+    if ($#bitrate_url_pairs < 0) {
+        die 'No URL found in top-level Apple play-list from <' .
+            $m3u_url . ">:\n" . $response->decoded_content . "\n";
+    }
+
+    return @bitrate_url_pairs;
+}
+
+
+# Return array of { bitrate => INTEGER, url => URL } found in Apple SMIL play
+# list. Arguments is playlist as string, URL of the playlist,
+# playlist as XML::XPath object, and LWP::UserAgent object.
+sub extract_urls_from_apple_smil {
+    my ($smil, $smil_url, $parser, $ua) = @_;
+
+    my $videos =
+        $parser->find('/data/smilRoot/body/video');
+    if ($videos->size <= 0) {
+        die "No videos found in SMIL playlist <" . $smil_url . ">:\n" .
+            $smil . "\n";
+    }
+    my @bitrate_url_pairs = ();
+    foreach my $video ($videos->get_nodelist) {
+        my $m3u_url = $video->getAttribute('src');
+        if (! defined $m3u_url) {
+            print STDERR q{Missing `video/@src' attribute} . "\n";
+            next;
+        }
+        push @bitrate_url_pairs,
+            extract_urls_from_top_apple_m3u($m3u_url, $ua);
+    }
+
+    return @bitrate_url_pairs;
+}
+
+
+# Return array of { bitrate => INTEGER, url => URL } found in
+# M3U play-list. Returned URLs are media URLs, bit-rates are dummy numbers.
+# Arguments are URL of the playlist and LWP::UserAgent object.
+sub extract_urls_from_m3u {
+    my ($m3u_url, $ua) = @_;
+    my @bitrate_url_pairs = ();
+
+    # Get the playlist.
+    my $response = $ua->request(GET $m3u_url);
+    $response->is_success or
+        die "Could get not M3U play-list from <" .
+            $m3u_url . ">: " . $response->status_line . "\n";
+    my $order = -1;
+    my $separated;
+    for (split(/(\r)?\n/, $response->decoded_content)) {
+        if (! defined) { next; }
+        if (/\A#EXTINF:/) {
+            $order++;
+            $separated = 1;
+            next;
+        }
+        if (/\A[^#]/) {
+            if (! defined $separated) {
+                print STDERR 'Stray URL in M3U play-list from <' .
+                    $m3u_url . ">:\n" . $response->decoded_content . "\n";
+                next;
+            }
+            push @bitrate_url_pairs,
+                {'bitrate' => $order, 'url' => URI->new_abs($_, $m3u_url)};
+            $separated = undef;
+            next;
+        }
+    }
+    if ($#bitrate_url_pairs < 0) {
+        die 'No URL found in M3U play-list from <' .
+            $m3u_url . ">:\n" . $response->decoded_content . "\n";
+    }
+
+    return @bitrate_url_pairs;
+}
+
+
+# Retrieve a hash code from a base URL with a user agent. It dies on error.
+sub download_hash_code {
+    my ($ua, $base_url) = @_;
+    my $hash_generator_url = URI->new_abs('/v-api/iframe-hash/', $base_url);
+    my $response = $ua->request(GET $hash_generator_url);
+    $response->is_success or
+        die "Could not get an iframe hash from ". 
+            "<$hash_generator_url>: " .  $response->status_line . "\n";
+    my $hash_code = $response->decoded_content;
+    chomp($hash_code);
+    return $hash_code;
+}
+
+
+if (!$opt_A) {
+    warn "DASH support is being implemented\n";
+}
+
+
+# Get entry HTML page
+my $ua = LWP::UserAgent->new;
+$ua->env_proxy();
+if ($opt_A) {
+    # HLS with MPEG-TS
+    $ua->agent('Mozilla/5.0 (iPad; CPU OS 10_15_5 (Ergänzendes Update) like Mac OS X) '
+        . 'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
+        'Version/12.1.1 Mobile/15E148 Safari/605.1.15'
+    );
+} else {
+    # ct24 portal does not support default user agent
+    # FLV
+    #$ua->agent('Mozilla/5.0 (X11; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0');
+    # DASH with split AVC1 and MP4A and timing
+    $ua->agent('Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0');
+}
+if ($opt_v) {
+    print STDERR "Getting <$ENTRY>\n";
+}
+my $response = $ua->request(GET $ENTRY);
+$response->is_success or
+    die "Could not get entry page from <" . $ENTRY . ">: " .
+        $response->status_line . "\n";
+my $page = $response->decoded_content;
+
+
+my $m3u_url;
+my $smil_url;
+my $smil_url_is_m3u;
+
+
+# Playlist generator parameters
+my $list_type = 'channel';
+my $list_id;
+my $request_source = 'iVysilani';
+
+# The iframe player is useless. It somehow can obtain list type, id and
+# request source, but how is not clear to me. So I just skip it and guess the
+# values based on the entry page.
+
+# Try to get an iframe player
+# <https://ct24.ceskatelevize.cz/> embeds the player within an iframe whose
+# URL requires a separeted hash code.
+# (Handled by the next block, probably obsolete:
+# <http://www.ceskatelevize.cz/art/zive/> embeds the player including the hash
+# code.
+# <http://www.ceskatelevize.cz/ivysilani/zive/ct1/> has the player in the main
+# page directly.)
+# This seems to be used by channel subdomains.
+# <https://ct24.ceskatelevize.cz/domaci/3424616-nove-motoraky-ceskych-drah-nejdou-nastartovat-vyprsela-platnost-softwaru>
+# embeds two iframes: the first one is invalid (a generic live streaming),
+# the other one contains multimediaUrl attribute (a specific stream). Prefer
+# the later one.
+# The web page is not well-formed XML, we cannot use XPath 
+# '//span[class="media-ivysilani-placeholder"]/@data-url' or
+# '//iframe/@src'.
+#my $iframe_url = htmlgrep($page,
+#    qr{(?:data-url|src)="([^"]*/embed/iFramePlayer(?:[^"]*)\.php[^"]*multimediaUrl=[^"]*)"});
+#if (!defined $iframe_url) {
+#    $iframe_url = htmlgrep($page,
+#        qr{(?:data-url|src)="([^"]*/embed/iFramePlayer(?:[^"]*)\.php[^"]*)"});
+#}
+#if (defined $iframe_url) {
+#    $iframe_url = URI->new_abs($iframe_url, $ENTRY);
+#    if ($opt_v) {
+#        print STDERR "An iframe player URL <$iframe_url> found.\n";
+#    }
+#
+#    # Try to append a separeted hash code
+#    my $hash_code = htmlgrep($page, qr{\bhash"?:"([^"]+)"});
+#    if (defined $hash_code and $hash_code ne '') {
+#        if ($opt_v) {
+#            print STDERR "A hash code $hash_code found.\n";
+#        }
+#        $iframe_url->query_form($iframe_url->query_form, 'hash', $hash_code);
+#    } else {
+#        if ($opt_v) {
+#            print STDERR "No separeted hash code found, assuming it's not needed.\n";
+#        }
+#    }
+#}
+
+# Or <https://www.ceskatelevize.cz/zive/ct1/>:
+# contains:
+#   "showID":"...",...,legacyEncoder":"CT1" in //script[id="__NEXT_DATA__"]
+# to form:
+#   <https://player.ceskatelevize.cz/?origin=iVysilani&autoStart=true&width=100%25&parentUrl=https%3A%2F%2Fwww.ceskatelevize.cz%2Fzive%2Fct1%2F&title=O+Roz%C3%A1rce+a+zaklet%C3%A9m+kr%C3%A1li&sidp=130350&videoID=CT1&multimedia=1&tpl=live&skinID=3>
+# (only <https://player.ceskatelevize.cz/?sidp=130350&videoID=CT1> is
+# enough; sidp is a showID value in the original page)
+# which defines
+# <https://www.ceskatelevize.cz/ivysilani/ajax/get-client-playlist/> URL in
+# PLAYLIST_LEGACY_URI field of an in-line JavaScript code. That URL is the 
+# AJAX generator.
+# FIXME: Mismatch if the live channel is not broadcasting. We could parse
+# __NEXT_DATA__ string as JSON and only match
+# /props/pageProps/liveBroadcast/current.
+if (!defined $list_id) {
+    my $showID = htmlgrep($page, qr{"showId":"([^"]+)"});
+   my $videoID = htmlgrep($page, qr{"legacyEncoder":"([^"]+)"});
+    #my $title = htmlgrep($page, qr{"title":"([^"]+)"});
+    if (defined $showID and defined $videoID) {
+        $videoID = uc($videoID);
+        if ($opt_v) {
+            print STDERR "A JavaScript generator with showID=$showID and " .
+                "videoID=$videoID for an iframe player URL found.\n";
+        }
+
+        ## Build an iframe player URL
+        ##my $hash_code = download_hash_code($ua, $ENTRY);
+        #$iframe_url = URI->new('https://player.ceskatelevize.cz/');
+        #$iframe_url->query_form('origin' => 'iVysilani',
+        #    'autoStart' => 'true', 'width' => '100%',
+        #    'parentUrl' => $ENTRY,
+        #    (defined $title ? ('title' => $title) : ()),
+        #    'sidp' => $showID, 'videoID' => $videoID,
+        #    'multimedia' => 1, 'tpl' => 'live', 'skinID' => 3);
+        # Set playlist generator parameters
+        if ($videoID =~ /^CT(\d+)$/) {
+            $list_type = 'channel';
+            $list_id = $1;
+            $request_source = 'iVysilani';
+        }
+    }
+}
+# Or <https://ct24.ceskatelevize.cz/>:
+# to form:
+#   <https://player.ceskatelevize.cz/?skinID=3&videoID=CT24&autoStart=true&borderRadius=false&disableAds=true&origin=ct24&tpl=live&multimedia=1&width=100%25>
+# Or <https://decko.ceskatelevize.cz/zive>:
+# (there is an //iframe/@src and playerSettings JS data structure)
+# to form:
+#   <https://player.ceskatelevize.cz/?hash=17b6974aa0aa220ef79f5fb63edc3286b6f8563b&origin=decko&autoStart=true&videoID=CT5&width=100%25>
+#
+# Or <http://www.ceskatelevize.cz/ct24> is a JavaScript mess:
+#   /ct24 contains:
+#       "legacyEncoder":"CT3" in //script[id="__NEXT_DATA__"]
+#   /_next/static/chunks/pages/_app-7816f4755ca2278b605d.js contains:
+#       src:`/ivysilani/embed/iFramePlayer.php?${$}`
+#       fetch("/v-api/iframe-hash/")
+#       {videoID:T.encoder.toLocaleUpperCase(),multimedia:"1",tpl:"live",skinID:"3"}
+#   /v-api/iframe-hash/ returns the hash
+#   <https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?hash=76b3922153381d684dc8f680e1634d9ce45df0a4&origin=iVysilani&autoStart=true&width=100%25&videoID=CT3&multimedia=1&tpl=live&skinID=3>
+#       is the desired iframe player URL.
+# This seems to be used for a live streaming.
+if (!defined $list_id) {
+    #my $videoID = htmlgrep($page, qr{"legacyEncoder":"([^"]+)"});
+    #if (defined $videoID) {
+    #    $videoID = uc($videoID);
+    #    if ($opt_v) {
+    #        print STDERR "A JavaScript generator with videoID $videoID " .
+    #            "for an iframe player URL found.\n";
+    #    }
+
+    #    # Build an iframe player URL
+    #    my $hash_code = download_hash_code($ua, $ENTRY);
+    #    $iframe_url = URI->new_abs('/ivysilani/embed/iFramePlayer.php', $ENTRY);
+    #    # Parse query values from /_next/static/chunks/pages/_app-*.js
+    #    $iframe_url->query_form('hash' => $hash_code, 'origin' => 'iVysilani',
+    #        'autoStart' => 'true', 'width' => '100%', 'videoID' => $videoID,
+    #        'multimedia' => 1, 'tpl' => 'live', 'skinID' => 3);
+    #}
+    if (defined htmlgrep($page, qr{idecs:\{CT24})) {
+        $list_type = 'channel';
+        $list_id = '24';
+        $request_source = '24';
+    }
+}
+# Or <https://sport.ceskatelevize.cz/>
+# This probably support only DRM
+if (!defined $list_id) {
+    #my $videoID = htmlgrep($page, qr{"legacyEncoder":"([^"]+)"});
+    #if (defined $videoID) {
+    #    $videoID = uc($videoID);
+    #    if ($opt_v) {
+    #        print STDERR "A JavaScript generator with videoID $videoID " .
+    #            "for an iframe player URL found.\n";
+    #    }
+
+    #    # Build an iframe player URL
+    #    my $hash_code = download_hash_code($ua, $ENTRY);
+    #    $iframe_url = URI->new_abs('/ivysilani/embed/iFramePlayer.php', $ENTRY);
+    #    # Parse query values from /_next/static/chunks/pages/_app-*.js
+    #    $iframe_url->query_form('hash' => $hash_code, 'origin' => 'iVysilani',
+    #        'autoStart' => 'true', 'width' => '100%', 'videoID' => $videoID,
+    #        'multimedia' => 1, 'tpl' => 'live', 'skinID' => 3);
+    #}
+    if (defined htmlgrep($page, qr{&quot;CT4DRM&quot;})) {
+        $list_type = 'channel';
+        $list_id = '4';
+        $request_source = 'Sport';
+    }
+}
+# Or
+# <https://www.ceskatelevize.cz/porady/1126672097-otazky-vaclava-moravce/221411030511128/>:
+#   contains:
+#       "idec":"221411030511128" in //script[id="__NEXT_DATA__"]
+#   /_next/static/chunks/pages/_app-7816f4755ca2278b605d.js contains:
+#       {IDEC:T.idec,start:`${V}`}
+#   <https://www.ceskatelevize.cz/ivysilani/embed/iFramePlayer.php?hash=4226c22cd955831bdd74f5472717dbdb53201e76&origin=iVysilani&autoStart=true&width=100%25&IDEC=221411030511128&start=0>
+#       is the desired iframe player URL.
+# But a series page
+# <https://www.ceskatelevize.cz/porady/1126672097-otazky-vaclava-moravce/> has
+# first idec invalid. One needs to prefer playableIdec field.
+# This seems to be used for a video on demand.
+if (!defined $list_id) {
+    my $idec = htmlgrep($page, qr{"idec":"([^"]+)"});
+    my $not_live = htmlgrep($page, qr{"liveEncoder":null,});
+    if (defined $idec and defined $not_live) {
+        $list_type = 'episode';
+        $list_id = $idec;
+        $request_source = 'iVysilani';
+    }
+}
+
+## Get an iframe player page if the player was found
+#if (defined $iframe_url) {
+#    if ($opt_v) {
+#        print STDERR "Getting iframe <$iframe_url>\n";
+#    }
+#    $response = $ua->request(GET $iframe_url);
+#    $response->is_success or
+#        die "Could not get iframe player from <" . $iframe_url . ">: " .
+#            $response->status_line . "\n";
+#    $page = $response->decoded_content;
+#} else {
+#    $iframe_url = $ENTRY;
+#    if ($opt_v) {
+#        print STDERR "No iframe player found, assuming an in-line player.\n";
+#    }
+#}
+
+
+## Get AJAX request data
+#my $ajax_data = findjson($page, 'getPlaylistUrl');
+#unless (defined $ajax_data && $ajax_data) {
+#    # Overloaded server returns SMIL URL directly. Check it here before
+#    # printing error message.
+#    $smil_url = htmlgrep($page,
+#        qr{(?<!//)(?:\s*)\bflashvars.playlistURL\s*=\s*'([^']+)'});
+#    if (defined $smil_url) {
+#        if ($opt_v) {
+#            print STDERR "Server provides direct URL to the SMIL playlist.\n";
+#        }
+#        goto HAVE_SMIL_URL;
+#    }
+#}
+#unless (defined $ajax_data && $ajax_data) {
+#    # Try to get error message from stream provider
+#    my $message = htmlgrep($page,
+#        qr{<div\s+class="error-message">(?:\s*<[^/>]*>)*(.*?)(?:</)}
+#    );
+#    if (defined $message) {
+#        $message =~ s{<br\s*/>}{\n}g;
+#        if ($message) {
+#            die "$message\n";
+#        }
+#    }
+#
+#    # else die in general way
+#    if ($opt_v) {
+#        print STDERR "===BEGIN INPUT===\n$page\n===END INPUT===\n";
+#    }
+#    die "Could not find AJAX data structure\n";
+#}
+## The JSON structure is the first argument of getPlaylistUrl() which has
+## variadic number of arguments.
+#$ajax_data =~ s/(?<=[{\]])(,[^,]*)*\z//; 
+#
+#
+## Build 'data' AJAX structure from AJAX script and iframe sources.
+## 'requestSource' and 'type' elements are constants defined in the iframe.
+## 'streamQuality' element is parsed from $ENTRY URL query segment, but it is
+## not used now. Moreover it can be undefined and then jQuery will not
+## transport the key with undefined value.
+## 'addCommercials' element is defined only sometimes in the iframe source and
+## not needed now.
+## XXX: Server checks for unexpected keys or values and bails out with 500. Do
+## not send undefined streamQuality or addCommercials.
+#my $requestUrl = URI->new($iframe_url)->path;
+#my $json_data = qq(
+#    {
+#        "playlist" : $ajax_data,
+#        "requestUrl" : "$requestUrl",
+#        "requestSource" : "iVysilani",
+#        "type" : "html"
+#    }
+#);
+##"type" : "flash"
+#
+#
+## Get XML-RPC header definition
+#my ($xmlrpc_header, $xmlrpc_value) = findrequestheader($page);
+#if (!defined $xmlrpc_header or !defined $xmlrpc_value) {
+#    if ($opt_v) {
+#        print STDERR "===BEGIN INPUT===\n$page\n===END INPUT===\n";
+#    }
+#    print STDERR "XML-RPC header definition not found.\n";
+#} elsif ($opt_v) {
+#    print STDERR "XML-RPC header found: <$xmlrpc_header>\n";
+#    print STDERR "XML-RPC value found: <$xmlrpc_value>\n";
+#}
+#
+#
+## Decode JSON request data
+#my $data;
+#eval { $data = decode_json($json_data) } or 
+#    die "Could not decode JSON string: $json_data: $@\n";
+#my @data = flatten($data);
+#
+#
+## Get callSOAP source URL
+#my $script_url = htmlgrep($page,
+#    qr{
+#        <script
+#        \s+
+#        (?:[^>]*?)
+#        \s+
+#        src="
+#            (
+#                [^"]*
+#                \Qajax-playlist-o2v2.js\E
+#                [^"]*
+#            )
+#        "
+#    }x);
+#unless (defined $script_url && $script_url) {
+#    if ($opt_v) {
+#        print STDERR "===BEGIN INPUT===\n$page\n===END INPUT===\n";
+#    }
+#    die "Could not find link to AJAX script\n";
+#}
+#
+#
+## Get callSOAP source 
+#if ($opt_v) {
+#    print STDERR "Getting AJAX script source <$script_url>\n";
+#}
+#$response = $ua->request(GET $script_url);
+#$response->is_success or
+#    die "Could not get AJAX script source from <" . $script_url . ">: "
+#        . $response->status_line . "\n";
+#my $script = $response->decoded_content;
+#
+#
+## Get playlist URL generator in the AJAX source
+## 'url' element of ajax() method argument delivered relative URL of SMIL URL
+## generator. Now it's computed but the result is still a constant string
+## because of constant 'baseUrl' and 'wwwServerGet' JS variables. This
+## expression parses:
+##   A : B + 'C',
+##   A : B + 'C' + (D ? 'E' : 'F'),
+##   A : B + 'C' + D,
+#if ($script !~ qr{
+#            ^\s*url\s*:
+#            \s*baseUrl\s*\+
+#            \s*'([^']+)'
+#            (?:
+#                \s*\+
+#                (?:
+#                    \s*\([^?]*\?
+#                        \s*'([^']+)'\s*:
+#                        \s*'([^']+)'\s*
+#                    \)
+#                    |
+#                    \s*\w+
+#                )
+#            )?
+#            \s*,
+#        }smx) {
+#    if ($opt_v) {
+#        print STDERR "===BEGIN INPUT===\n$script\n===END INPUT===\n";
+#    }
+#    die "Could not find playlist generator URL in the callSOAP function\n";
+#}
+#my $generator_path = '/ivysilani' . $1 . ($2//'');
+## FIXME: Parse 'data' JSON in the $script.
+
+# These data structures are probably constructed in
+# <https://ct24.ceskatelevize.cz/sites/all/themes/custom/ct24/js/video.js?rtxnn1>.
+# CT1
+#my $json_data = qq(
+#    {
+#        "playlist" : [
+#            {
+#                "type" : "channel",
+#                "id" : "1"
+#            }
+#        ],
+#        "requestUrl" : "/ivysilani/embed/iFramePlayer.php",
+#        "requestSource" : "iVysilani",
+#        "type" : "html",
+#        "canPlayDRM" : "false",
+#        "streamingProtocol": "hls"
+#    }
+#);
+# CT24
+#my $json_data = qq(
+#    {
+#        "playlist" : [
+#            {
+#                "type" : "channel",
+#                "id" : "24"
+#            }
+#        ],
+#        "requestUrl" : "/ivysilani/embed/iFramePlayer.php",
+#        "requestSource" : "24",
+#        "type" : "html",
+#        "canPlayDRM" : "false",
+#        "streamingProtocol": "hls"
+#    }
+#);
+# CTD
+#my $json_data = qq(
+#    {
+#        "playlist" : [
+#            {
+#                "type" : "channel",
+#                "id" : "5"
+#            }
+#        ],
+#        "requestUrl" : "/ivysilani/embed/iFramePlayer.php",
+#        "requestSource" : "Decko",
+#        "type" : "html",
+#        "canPlayDRM" : "false",
+#        "streamingProtocol": "hls"
+#    }
+#);
+# On-demand
+#my $json_data = qq(
+#    {
+#        "playlist" : [
+#            {
+#                "type" : "episode",
+#                "id" : "221411030511128"
+#            }
+#        ],
+#        "requestUrl" : "/ivysilani/embed/iFramePlayer.php",
+#        "requestSource" : "iVysilani",
+#        "type" : "html",
+#        "canPlayDRM" : "false",
+#        "streamingProtocol": "hls"
+#    }
+#);
+
+my $json_data = qq(
+    {
+        "playlist" : [
+            {
+                "type" : "$list_type",
+                "id" : "$list_id"
+            }
+        ],
+        "requestUrl" : "/ivysilani/embed/iFramePlayer.php",
+        "requestSource" : "$request_source",
+        "type" : "html",
+        "canPlayDRM" : "false",
+        "streamingProtocol": "hls"
+    }
+);
+
+# Decode JSON request data
+my $data;
+eval { $data = decode_json($json_data) } or 
+    die "Could not decode JSON string: $json_data: $@\n";
+my @data = flatten($data);
+
+my $generator_path = '/ivysilani/ajax/get-client-playlist/';
+
+
+# Get playlist URL
+my $generator_url = URI->new_abs($generator_path, $ENTRY);
+#$ua->default_header($xmlrpc_header => $xmlrpc_value) if defined $xmlrpc_header;
+if ($opt_v) {
+    print STDERR "Posting to playlist URL generator <$generator_url>\n";
+    print STDERR "Posting data to playlist URL generator: ", join(',', @data), "\n";
+}
+$response = $ua->request(POST $generator_url, \@data);
+if ($response->code == 301 || $response->code == 302) {
+    # Non-HTTPS POST requests receive 301 (used to be 302) redirecting to an
+    # HTTPS location and a new POST request is expected. This violates
+    # RFC 2616 and libwww-perl-6.27 does not support RFC 7231 yet
+    # <https://github.com/libwww-perl/libwww-perl/issues/42>.
+    my $new_url = $response->header('Location');
+    if (!defined $new_url) {
+        die "Playlist URL generator <$generator_url> redirects " .
+            "but does not specify a new location\n";
+    }
+    $generator_url = $new_url;
+    if ($opt_v) {
+        print STDERR "Playlist URL generator redirected to <$generator_url>\n";
+    }
+    $response = $ua->request(POST $generator_url, \@data);
+}
+$response->is_success or
+    die "Could not get playlist URL from playlist URL generator <" .
+        $generator_url . ">: " . $response->status_line . "\n" .
+        "===BEGIN OUTPUT===\n" . $response->decoded_content .
+        "\n===END OUTPUT===\n";
+my $playlist_url_data = $response->decoded_content;
+if ($opt_v) {
+    print STDERR "Playlist URL generator returned: <$playlist_url_data>\n";
+}
+
+
+my $smil_url_json;
+eval { $smil_url_json = decode_json($playlist_url_data) } or 
+    die "Could not decode JSON string with playlist URL: $playlist_url_data: $@\n";
+$smil_url = $$smil_url_json{url};
+if (!defined $smil_url) {
+    die "Could not find URL in JSON response from playlist URL generator: " .
+        $playlist_url_data . "\n";
+}
+
+# Another layer before M3U playlist URL:
+$response = $ua->request(GET $smil_url);
+$response->is_success or
+    die "Could not get <"
+        . $smil_url . ">: "
+        . $response->status_line . "\n";
+my $m3u_url_data = $response->decoded_content;
+if ($opt_v) {
+    print STDERR "Another layer before M3U URL returned:\n",
+        "===BEGIN OUTPUT===\n", $m3u_url_data, "\n===END OUTPUT===\n";
+}
+my $m3u_url_json;
+eval { $m3u_url_json = decode_json($m3u_url_data) } or 
+    die "Could not decode JSON string with M3U URL: $m3u_url_data: $@\n";
+
+
+# Video can have multiple parts
+my $PART = 0;
+if ($opt_t) {
+    # Listing parts requested
+    if (defined $ARGV[0]) {
+        $PART = shift @ARGV;
+        print $$m3u_url_json{playlist}[$PART]->{streamUrls}{main} . "\n";
+    } else {
+        my $id = 0;
+        for (@{$$m3u_url_json{playlist}}) {
+            print $id . ": " . $_->{streamUrls}{main} . "\n";
+            $id++;
+        }
+    }
+    exit;
+} else {
+    # If this is not the only part and user did not select it, die.
+    if (@{$$m3u_url_json{playlist}} > 1) {
+        if (defined $ARGV[0]) {
+            $PART = shift @ARGV;
+        } else {
+            warn "Video has multiple parts:\n";
+            my $id = 0;
+            for (@{$$m3u_url_json{playlist}}) {
+                print $id . ": " . $_->{streamUrls}{main} . "\n";
+                $id++;
+            }
+            die "Select one by adding a positional argument.\n";
+        }
+    }
+}
+
+
+$m3u_url = $$m3u_url_json{playlist}->[$PART]{streamUrls}{main};
+if (!defined $m3u_url) {
+    die "Could not find M3U URL in JSON response from M3U URL generator: " .
+        $playlist_url_data . "\n";
+}
+
+
+HAVE_SMIL_URL: # Overloaded server returns the SMIL URL directly.
+# Rewrite SMIL playlist URL for next-stage generator
+# http://code.google.com/p/dmd-xbmc/issues/detail?id=94
+$smil_url = URI::Escape::uri_unescape($smil_url);
+
+
+my $smil;
+# The iPad requires a special suffix '&rd=1' to an URL hard-coded into the
+# HTML frame. However it's easier to edit the URL here to utilize unified code
+# path.
+# There is a new step with Apple playlist. A short-cut to M3U exists by
+# appending '&rd=1' to the generator URL. But we do not use the short-cut now.
+# 
+if (!defined $m3u_url) {
+    $response = $ua->request(GET $smil_url);
+    $response->is_success or
+        die "Could not get playlist URL from second-step URL generator <"
+            . $smil_url . ">: "
+            . $response->status_line . "\n";
+    $m3u_url = $response->decoded_content;
+    if ($opt_v) {
+        print STDERR "Second-step URL generator returned:\n",
+            "===BEGIN OUTPUT===\n", $m3u_url, "\n===END OUTPUT===\n";
+    }
+
+    if ($m3u_url =~ /<smilRoot>/) {
+        $smil = $m3u_url;
+        # This is sometimes SMIL play-list with only one video URL
+        # which points to Apple M3U top play-list.
+        my $parser = XML::XPath->new('xml' => $smil) or
+            die "Could not parse SMIL playlist from <" .
+                $smil_url . ">:\n" . $smil . "\n";
+        # XXX: XML::XPath is lazy in parsing. It dies when calling find() on
+        # XML syntax error. 
+        eval {
+            $m3u_url = extract_url_from_m3u_smil($smil, $smil_url, $parser);
+        };
+        if ($@) {
+            print STDERR "Error while finding stream URLs " .
+                "in SMIL playlist from <", $smil_url, ">.\n";
+            print STDERR "===BEGIN INPUT===\n$smil\n===END INPUT===\n";
+            die "Reason: $@\n";
+        }
+
+    } else {
+        # Or the second-step generator returns two concatened URLs in plain
+        # text file.
+        $m3u_url =~ s|(.)http://.*|$1|;
+    }
+}
+
+
+# Get stream URLs
+my @bitrate_url_pairs = extract_urls_from_top_apple_m3u($m3u_url, $ua);
+
+my $BITRATE = shift @ARGV;
+if ($opt_f || $opt_s) {
+    # Select Apple M3U URL
+    if (defined $BITRATE) {
+        @bitrate_url_pairs = grep { ${$_}{'bitrate'} == $BITRATE }
+            @bitrate_url_pairs;
+    }
+    if ($#bitrate_url_pairs < 0) {
+        die "No usable video streams found in top-level Apple playlist:\n$m3u_url\n";
+    }
+    if ($#bitrate_url_pairs == 0 ) {
+        iterate_bottom_apple_m3u(${$bitrate_url_pairs[0]}{'url'}, $ua, $opt_s);
+    } else {
+        die "Multiple bit-rate play-lists not implemented yet.\n";
+    }
+} else {
+    # Output URL
+    my $video_counter = 0;
+    for my $pair (@bitrate_url_pairs) {
+        if (defined $BITRATE) {
+            if (${$pair}{'bitrate'} == $BITRATE) {
+                print "${$pair}{'url'}\n";
+                $video_counter++;
+            }
+        } else {
+            print "${$pair}{'bitrate'}: ${$pair}{'url'}\n";
+            $video_counter++;
+        }
+    }
+    if ($video_counter <= 0) {
+        die "No usable video streams found in playlist:\n$smil\n";
+    }
+}
+

@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+
+RUN=1
+
+MESSAGE="\
+Gnome Desktop doesn't allow Angband to share score and player information between users in the same device.\n\n\ 
+This is because GTK+ refuses to initialize on excecutables that use the setgid feature.\n\n\
+If you want score sharing capabilities, run the X11 version.\n\n\
+Because of this, your save files and scores will get stored in your home directory."
+
+
+if [[ "$DESKTOP_SESSION" == "gnome" ]]; then
+    zenity \
+        --title="Warning" \
+        --warning \
+        --text "$MESSAGE"
+    angband_homedir -msdl2 $@
+else
+    angband -msdl2 $@
+fi

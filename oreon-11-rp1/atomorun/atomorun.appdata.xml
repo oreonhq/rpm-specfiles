@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>atomorun.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Atomorun</name>
+  <summary>Jump and Run game</summary>
+  <description>
+    <p>
+     Atomorun is a OpenGL Jump and Run game where you have to flee an exploding
+     nuclear bomb.
+    </p>
+    <p>
+     Atomorun X-Mas Edition comes with a very beatiful christmas-story,
+     especially families will enjoy it:
+    </p>
+    <p>
+     Atomio was just walking around somewhere in the alpine region,
+     when santa crashed with his nuclear driven sleigh. Now Atomio has to run,
+     because he doesn't want to be contaminated.
+    </p>
+  </description>
+  <url type="homepage">http://atomorun.whosme.de/</url>
+  <screenshots>
+    <screenshot type="default">http://atomorun.whosme.de/pix/game_shot_1.1_pre2.jpg</screenshot>
+    <screenshot>http://atomorun.whosme.de/pix/game_shot_1.0.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">mild</content_attribute>
+  </content_rating>
+  <releases>
+    <release version="1.1" date="2003-12-20">
+    <description>
+     <p>Version 1.1_pre2 X-Mas Edition released!</p>
+    </description>
+    </release>
+  </releases>
+</component>

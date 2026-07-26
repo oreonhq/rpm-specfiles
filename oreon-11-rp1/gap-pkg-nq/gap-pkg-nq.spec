@@ -1,0 +1,82 @@
+%global source0_hash 74b16c3a7cf87c5e628a1691defef783a639c6f8ecdd722816c847a8a88ce5eb
+
+%global gap_pkgname nq
+%global giturl      https://github.com/gap-packages/nq
+
+Name:           gap-pkg-%{gap_pkgname}
+Version:        2.5.11
+Release:        %autorelease
+Summary:        Nilpotent Quotients of finitely presented groups
+
+License:        GPL-2.0-or-later
+URL:            https://gap-packages.github.io/nq/
+VCS:            git:%{giturl}.git
+Source:         %{giturl}/archive/v%{version}/%{gap_upname}-%{version}.tar.gz
+
+# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch:    %{ix86}
+BuildSystem:    gap
+BuildOption(install): bin examples gap tst
+BuildOption(check): tst/testall.g
+
+BuildRequires:  gap-devel
+BuildRequires:  gap-pkg-autodoc
+BuildRequires:  gap-pkg-polycyclic
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig(gmp)
+
+Requires:       gap-core%{?_isa}
+Requires:       gap-pkg-polycyclic
+
+%description
+This package provides access from within GAP to the ANU nilpotent quotient
+program for computing nilpotent factor groups of finitely presented groups.
+
+%package doc
+# The content is GPL-2.0-or-later.  The remaining licenses cover the various
+# fonts embedded in PDFs.
+# AMS: OFL-1.1-RFN
+# CM: Knuth-CTAN
+# CM-Super: GPL-1.0-or-later
+# Nimbus: AGPL-3.0-only
+# StandardSymL: GPL-1.0-or-later
+License:        GPL-2.0-or-later AND OFL-1.1-RFN AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only
+Summary:        NQ documentation
+BuildArch:      noarch
+Requires:       %{name} = %{version}-%{release}
+Requires:       gap-online-help
+
+%description doc
+This package contains documentation for gap-pkg-%{gap_pkgname}.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -n %{gap_upname}-%{version}
+
+%conf
+./autogen.sh
+
+%build -p
+%configure --with-gaproot=%{gap_archdir} --disable-silent-rules
+%make_build
+
+%files
+%doc CHANGES README.md
+%license LICENSE
+%dir %{gap_archdir}/pkg/%{gap_upname}/
+%{gap_archdir}/pkg/%{gap_upname}/*.g
+%{gap_archdir}/pkg/%{gap_upname}/bin/
+%{gap_archdir}/pkg/%{gap_upname}/gap/
+%{gap_archdir}/pkg/%{gap_upname}/tst/
+
+%files doc
+%docdir %{gap_archdir}/pkg/%{gap_upname}/doc/
+%docdir %{gap_archdir}/pkg/%{gap_upname}/examples/
+%{gap_archdir}/pkg/%{gap_upname}/doc/
+%{gap_archdir}/pkg/%{gap_upname}/examples/
+
+%changelog
+%autochangelog

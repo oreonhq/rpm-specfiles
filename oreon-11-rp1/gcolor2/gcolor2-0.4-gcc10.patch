@@ -1,0 +1,29 @@
+diff -ru gcolor2-0.4.orig/src/callbacks.c gcolor2-0.4/src/callbacks.c
+--- gcolor2-0.4.orig/src/callbacks.c	2005-07-12 14:06:12.000000000 -0400
++++ gcolor2-0.4/src/callbacks.c	2020-04-27 10:06:57.988405153 -0400
+@@ -12,6 +12,9 @@
+ #include <string.h>
+ #include <glib/gprintf.h>
+ 
++GtkWidget        *gcolor2;
++GtkWidget        *menu;
++GdkColor          colorvalue;
+ GtkWidget        *savedialog;
+ gchar            *colorname;
+ static GtkWidget *aboutdialog = NULL;
+diff -ru gcolor2-0.4.orig/src/callbacks.h gcolor2-0.4/src/callbacks.h
+--- gcolor2-0.4.orig/src/callbacks.h	2005-07-11 19:18:59.000000000 -0400
++++ gcolor2-0.4/src/callbacks.h	2020-04-27 10:05:55.157028236 -0400
+@@ -41,9 +41,9 @@
+                            "\302\267 Usability / user interface enhancements\n" \
+                            "\302\267 Code cleanup"
+ 
+-GtkWidget *gcolor2;
+-GtkWidget *menu;
+-GdkColor   colorvalue;
++extern GtkWidget *gcolor2;
++extern GtkWidget *menu;
++extern GdkColor   colorvalue;
+ 
+ enum
+ {

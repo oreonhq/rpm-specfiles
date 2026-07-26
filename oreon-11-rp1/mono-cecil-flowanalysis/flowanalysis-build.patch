@@ -1,0 +1,14 @@
+diff -up flowanalysis-20080409svn100264/Makefile.BAD flowanalysis-20080409svn100264/Makefile
+--- flowanalysis-20080409svn100264/Makefile.BAD	2008-04-09 16:50:55.000000000 -0400
++++ flowanalysis-20080409svn100264/Makefile	2008-04-09 16:51:20.000000000 -0400
+@@ -1,8 +1,8 @@
+ MCS = mcs
+-KEY_FILE = ../../mcs/class/mono.snk
++KEY_FILE = Cecil.FlowAnalysis.snk
+ MCS_FLAGS = -keyfile:$(KEY_FILE)
+ BUILD.DIR = bin
+-MONO.CECIL.DLL = ../../mcs/class/Mono.Cecil/Mono.Cecil.dll
++MONO.CECIL.DLL = $(LIBDIR)/mono/gac/Mono.Cecil/0.9*/Mono.Cecil.dll
+ 
+ all: init
+ 	$(MCS) $(MCS_FLAGS) @Cecil.FlowAnalysis.sources /target:library /out:$(BUILD.DIR)/Cecil.FlowAnalysis.dll /r:$(BUILD.DIR)/Mono.Cecil.dll

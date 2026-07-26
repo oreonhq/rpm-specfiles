@@ -1,0 +1,17 @@
+diff -ur k3guitune-1.01.orig/k3guitune/k3guitune.desktop k3guitune-1.01/k3guitune/k3guitune.desktop
+--- k3guitune-1.01.orig/k3guitune/k3guitune.desktop	2007-12-16 00:16:27.000000000 +1100
++++ k3guitune-1.01/k3guitune/k3guitune.desktop	2009-03-08 11:32:24.000000000 +1100
+@@ -3,10 +3,11 @@
+ Encoding=UTF-8
+ Type=Application
+ Exec=k3guitune -caption "%c" %i %m  
+-Icon=
++Icon=k3guitune
+ DocPath=k3guitune/index.html
+-Comment=
++Comment=Musical instrument tuning application
+ Comment[de]=
++Comment[tr]=Müzik Aleti Akort Etme Uygulaması
+ Terminal=0
+ Name=K3GuiTune
+ Name[de]=K3GuiTune

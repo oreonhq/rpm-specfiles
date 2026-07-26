@@ -1,0 +1,12 @@
+diff -up lbzip2-b6dc48a7b9bfe6b340ed1f6d72133608ad57144b/configure.ac.orig lbzip2-b6dc48a7b9bfe6b340ed1f6d72133608ad57144b/configure.ac
+--- lbzip2-b6dc48a7b9bfe6b340ed1f6d72133608ad57144b/configure.ac.orig	2018-12-27 01:44:09.000000000 +0100
++++ lbzip2-b6dc48a7b9bfe6b340ed1f6d72133608ad57144b/configure.ac	2020-09-19 22:42:14.239366829 +0200
+@@ -16,7 +16,7 @@
+ 
+ dnl TODO: check for GCC builtins: expect, prefetch, ctz, ctzl, ctzll
+ 
+-AC_PREREQ([2.63])
++AC_PREREQ([2.64])
+ AC_INIT([lbzip2], [2.5])
+ 
+ AC_CONFIG_SRCDIR([src/main.c])

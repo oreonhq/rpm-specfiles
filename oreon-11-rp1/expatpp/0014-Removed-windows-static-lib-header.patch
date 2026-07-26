@@ -1,0 +1,39 @@
+From 86635c3fd0d640edfa6cb5ed1feb9df8c0602cc9 Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Fri, 19 Oct 2012 10:08:07 +0200
+Subject: [PATCH 14/15] Removed windows static lib header
+
+---
+ expatpplib.h | 20 --------------------
+ 1 file changed, 20 deletions(-)
+ delete mode 100755 expatpplib.h
+
+diff --git a/expatpplib.h b/expatpplib.h
+deleted file mode 100755
+index e920813..0000000
+--- a/expatpplib.h
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#ifndef H_EXPATPPLIB
+-#define H_EXPATPPLIB
+-
+-/**
+-	\file expatpplib.h
+-	ensure expat definitions setup correctly before including expatpp.h
+-	so client projects don't have lots of hidden settings
+-*/
+-#ifdef WIN32
+-	#define XML_STATIC  // we are using a static lib build, not expat.dll
+-	#define COMPILED_FROM_DSP
+-	#define _LIB
+-#endif
+-
+-#include "expatpp.h"  
+-
+-
+-
+-
+-#endif  //  H_EXPATPPLIB
+-- 
+1.7.11.7
+

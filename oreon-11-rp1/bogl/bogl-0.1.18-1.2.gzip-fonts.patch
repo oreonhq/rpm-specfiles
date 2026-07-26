@@ -1,0 +1,210 @@
+* Tue Nov 26 2002 Adrian Havill <havill@redhat.com>
+- re-write font loader so it can load uncompressed or gzipped files
+
+--- bogl-0.1.18/bterm.c.gzip-fonts	2006-11-05 15:59:28.000000000 +0100
++++ bogl-0.1.18/bterm.c	2006-11-05 15:59:28.000000000 +0100
+@@ -186,7 +186,7 @@
+ {
+   struct bogl_font *font;
+ 
+-  font = bogl_mmap_font (font_name);
++  font = bogl_load_font (font_name);
+   if (font == NULL)
+     {
+       fprintf(stderr, "Bad font\n");
+@@ -260,7 +260,7 @@
+     return 1;
+   }
+ 
+-  if ((font = bogl_mmap_font(font_name)) == NULL) {
++  if ((font = bogl_load_font(font_name)) == NULL) {
+     fprintf(stderr, "Bad font\n");
+     return 1;
+   }
+--- bogl-0.1.18/bogl-bgf.c.gzip-fonts	2001-12-01 18:04:42.000000000 +0100
++++ bogl-0.1.18/bogl-bgf.c	2006-11-05 15:59:28.000000000 +0100
+@@ -1,44 +1,130 @@
+ 
+-#include <fcntl.h>
++#include <errno.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include <string.h>
+-#include <sys/mman.h>
+-#include <sys/stat.h>
+-#include <sys/types.h>
+-#include <unistd.h>
++#include <zlib.h>
++#include <stdint.h>
+ 
++#include "bogl-bgf.h"
+ #include "bogl.h"
+-#include "bogl-font.h"
+ 
+-struct bogl_font *bogl_mmap_font(char *file)
+-{
+-  int fd;
+-  struct stat buf;
+-  void *f;
+-  struct bogl_font *font;
+-
+-  fd = open(file, O_RDONLY);
+-  if (fd == -1)
+-    return 0;
+-
+-  if (fstat(fd, &buf))
+-    return 0;
+-
+-  f = mmap(0, buf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+-  if (f == (void *)-1)
+-    return 0;
+-
+-  if (memcmp("BGF1", f, 4))
+-    return 0;
+-
+-  font = (struct bogl_font *)malloc(sizeof(struct bogl_font));
+-  if (!font)
+-    return 0;
+-
+-  memcpy(font, f + 4, sizeof(*font));
+-  font->name = ((void *)font->name - (void *)0) + f;
+-  font->offset = ((void *)font->offset - (void *)0) + f;
+-  font->index = ((void *)font->index - (void *)0) + f;
+-  font->content = ((void *)font->content - (void *)0) + f;
++#define FONT_SIGNATURE "BGF1"
+ 
+-  return font;
++static size_t get_gz_file_size(const char *path) {
++    size_t size = 0;
++    unsigned char buffer[4] = { 0 };
++    FILE *stream = NULL;
++ 
++    stream = fopen(path, "rb");
++    if (stream == NULL) {
++	perror(path);
++	return -1;
++    }
++    if (fread(buffer, sizeof(char), 2, stream) != 2) {
++        if (ferror(stream)) {
++	    perror(path);
++	    return -1;
++	}
++    }
++    if (memcmp(buffer, "\037\213", 2) == 0) {
++        uint32_t isize = 0;
++
++        if (fseek(stream, -4L, SEEK_END) == EOF) {
++	    perror(path);
++	    return -1;
++	}
++        if (fread(buffer, sizeof(char), (size_t) 4, stream) != 4) {
++            if (ferror(stream)) {
++		perror(path);
++		return -1;
++	    }
++            else {
++                fprintf(stderr, "%s: invalid gzip file\n", path);
++                return -1;
++            }
++        }
++        isize  = buffer[0];
++        isize |= buffer[1] << 8;
++        isize |= buffer[2] << 16;
++        isize |= buffer[3] << 24;
++
++	/* FIXME: ISIZE is not a reliable indicator of size for files >4GB.
++	 * On the other hand, if you have a font >4GB, you've got issues.
++	 */
++        size = (size_t) isize;
++    }
++    else {
++        if (fseek(stream, 0L, SEEK_END) == EOF) {
++	    perror(path);
++	    return -1;
++	}
++        if ((int) (size = (size_t) ftell(stream)) == EOF) {
++	    perror(path);
++	    return -1;
++	}
++    }
++    if (fclose(stream) == EOF) {
++	perror(path);
++	return -1;
++    }
++    return size;
++}
++
++struct bogl_font *bogl_load_font(const char *path) {
++    size_t size;
++    int errnum;
++    gzFile file;
++    void *bgf;
++    struct bogl_font *font;
++
++    size = (size_t) get_gz_file_size(path);
++    if (size == (size_t) -1)
++	return NULL;
++    if ((bgf = malloc(size)) == NULL) {
++	perror(path);
++	return NULL;
++    }
++    file = gzopen(path, "rb");
++    if (file == NULL) {
++        if (errno == 0) {
++            errno = ENOMEM;       // if 0 then zlib error == Z_MEM_ERROR
++        }
++	perror(path);
++	return NULL;
++    }
++    if (gzread(file, bgf, size) == -1) {
++        const char *msg = gzerror(file, &errnum);
++
++        if (errnum == Z_ERRNO) {
++            msg = strerror(errno);
++        }
++        fprintf(stderr, "%s: %s\n", path, msg);
++	return NULL;
++    }
++    if (gzclose(file) < 0) {
++        const char *msg = gzerror(file, &errnum);
++
++        if (errnum == Z_ERRNO) {
++            msg = strerror(errno);
++        }
++        fprintf(stderr, "%s: %s\n", path, msg);
++	return NULL;
++    }
++    if (memcmp(FONT_SIGNATURE, bgf, strlen(FONT_SIGNATURE)) != 0) {
++        fprintf(stderr, "%s: not a BGF font\n", path);
++	return NULL;
++    }
++    font = (struct bogl_font *) malloc(sizeof(struct bogl_font));
++    if (font == NULL) {
++	perror(path);
++	return NULL;
++    }
++    memcpy(font, bgf + strlen(FONT_SIGNATURE), sizeof(struct bogl_font));
++    font->name    = bgf + (ptrdiff_t) font->name;
++    font->offset  = bgf + (ptrdiff_t) font->offset;
++    font->index   = bgf + (ptrdiff_t) font->index;
++    font->content = bgf + (ptrdiff_t) font->content;
++    return font;
+ }
+--- bogl-0.1.18/bogl-bgf.h.gzip-fonts	2001-12-01 18:04:42.000000000 +0100
++++ bogl-0.1.18/bogl-bgf.h	2006-11-05 15:59:28.000000000 +0100
+@@ -1,2 +1,2 @@
+ 
+-struct bogl_font *bogl_mmap_font(char *file);
++struct bogl_font *bogl_load_font(const char *file);
+--- bogl-0.1.18/Makefile.gzip-fonts	2006-11-05 15:59:44.000000000 +0100
++++ bogl-0.1.18/Makefile	2006-11-05 15:59:57.000000000 +0100
+@@ -79,7 +79,7 @@
+ 	$(CC) -DSTANDALONE_TEST $(ALLCFLAGS) bowl-boxes.c $(LIBOBJECTS) -o bowl-boxes
+ 
+ bterm: $(LIB) bterm.o bogl-term.o bogl-bgf.o
+-	$(CC) $+ $(LIB) -o bterm
++	$(CC) $+ $(LIB) -lz -o bterm
+ 
+ bdftobogl: $(LIBBOGLOBJECTS)
+ %.c: %.bdf bdftobogl

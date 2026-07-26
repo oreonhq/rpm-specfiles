@@ -1,0 +1,12 @@
+diff -up abook-0.6.1/configure.ac.orig abook-0.6.1/configure.ac
+--- abook-0.6.1/configure.ac.orig	2015-10-04 04:37:39.000000000 +0200
++++ abook-0.6.1/configure.ac	2025-01-09 12:32:06.449796137 +0100
+@@ -61,7 +61,7 @@ AC_CHECK_HEADER(wchar.h,[
+ 	AC_DEFINE(HAVE_WCHAR_H, 1, [Define if you have the <wchar.h> header file.])],
+ 	[ac_have_wchar_h=no])
+ AC_CHECK_FUNCS(mbtowc wcwidth mbrtowc mbsinit,,ac_widec_funcs=no)
+-AC_CHECK_DECLS(wcwidth)
++AC_CHECK_DECLS([wcwidth], [], [], [[#include <wchar.h>]])
+ AC_CHECK_TYPE(wchar_t,,ac_widec_funcs=no)
+ 
+ if test x$ac_widec_funcs = xyes -a x$ac_have_wchar_h = xyes; then

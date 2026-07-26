@@ -1,0 +1,17 @@
+--- libetpan-1.9.4.orig/src/low-level/imap/mailimap_types.c	2019-11-02 02:58:50.000000000 +0900
++++ libetpan-1.9.4/src/low-level/imap/mailimap_types.c	2022-11-23 14:58:47.075176654 +0900
+@@ -1389,9 +1389,12 @@ void
+ mailimap_mailbox_data_status_free(struct mailimap_mailbox_data_status * info)
+ {
+   mailimap_mailbox_free(info->st_mailbox);
+-  clist_foreach(info->st_info_list, (clist_func) mailimap_status_info_free,
++  if (info->st_info_list)
++  {
++  	clist_foreach(info->st_info_list, (clist_func) mailimap_status_info_free,
+ 		 NULL);
+-  clist_free(info->st_info_list);
++  	clist_free(info->st_info_list);
++  }
+   free(info);
+ }
+ 

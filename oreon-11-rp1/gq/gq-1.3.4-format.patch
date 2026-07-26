@@ -1,0 +1,13 @@
+diff --git a/src/gq-browser-node-dn.c b/src/gq-browser-node-dn.c
+index 77088a8..2c0760d 100644
+--- a/src/gq-browser-node-dn.c
++++ b/src/gq-browser-node-dn.c
+@@ -565,7 +565,7 @@ dn_browse_entry_expand(GqBrowserNode   * be,
+ 	       }
+ 	  }
+ 
+-	  statusbar_msg(message);
++	  statusbar_msg("%s", message);
+ 
+ #ifndef USE_TREE_VIEW
+ 	  gtk_clist_thaw(GTK_CLIST(ctree));

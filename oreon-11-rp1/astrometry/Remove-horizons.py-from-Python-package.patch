@@ -1,0 +1,23 @@
+From: Ole Streicher <olebole@debian.org>
+Date: Tue, 19 Nov 2024 09:08:06 +0100
+Subject: Remove horizons.py from Python package
+
+This file is not Python 3.13 compliant because telnetlib was removed.
+Closes: #1084555
+---
+ util/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/util/Makefile b/util/Makefile
+index 95835a1..27b6ecb 100644
+--- a/util/Makefile
++++ b/util/Makefile
+@@ -186,7 +186,7 @@ PYTHON_INSTALL := image2pnm.py addpath.py \
+ 	uniformize.py \
+ 	usnob_catalog.py usnob_get_image.py usnob_get_region.py \
+ 	find_data_file.py plotshift.py plotutils.py miscutils.py multiproc.py \
+-	ttime.py resample.py EXIF.py horizons.py \
++	ttime.py resample.py EXIF.py \
+ 	imageutils.py siap.py stages.py timingpool.py
+ 
+ # celestial_mechanics.py (needs license)

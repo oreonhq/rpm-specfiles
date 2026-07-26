@@ -1,0 +1,21 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.unreliable mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs.unreliable	2017-07-12 10:16:36.428743606 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.Bonjour/Mono.Zeroconf.Providers.Bonjour/BrowseService.cs	2017-07-12 10:18:04.737617746 -0400
+@@ -58,11 +58,16 @@ namespace Mono.Zeroconf.Providers.Bonjou
+         {
+             resolve_reply_handler = new Native.DNSServiceResolveReply(OnResolveReply);
+             query_record_reply_handler = new Native.DNSServiceQueryRecordReply(OnQueryRecordReply);
++            resolveAction = new Action<bool>(Resolve);
+         }
+ 
++        private Action<bool> resolveAction;
+         public void Resolve()
+         {
+-            Resolve(false);
++            // If people call this in a ServiceAdded eventhandler (which they generally do)
++            // We need to invoke onto another thread otherwise we block processing any more results.
++
++            resolveAction.BeginInvoke(false, null, null);
+         }
+         
+         public void Resolve(bool requery)

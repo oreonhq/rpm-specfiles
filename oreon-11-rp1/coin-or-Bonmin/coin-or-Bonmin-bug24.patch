@@ -1,0 +1,33 @@
+From 0dae6d76f0a4eed32b19a60b0c2268093eec1d59 Mon Sep 17 00:00:00 2001
+From: Stefan Vigerske <svigerske@gams.com>
+Date: Fri, 25 Jun 2021 16:40:57 +0200
+Subject: [PATCH] set honor_original_bounds=yes in Ipopt, if not set
+
+- fixes #24
+---
+ src/Interfaces/Ipopt/BonIpoptSolver.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/Interfaces/Ipopt/BonIpoptSolver.cpp b/src/Interfaces/Ipopt/BonIpoptSolver.cpp
+index 4003ba31..ff96ab76 100644
+--- a/Bonmin/src/Interfaces/Ipopt/BonIpoptSolver.cpp
++++ b/Bonmin/src/Interfaces/Ipopt/BonIpoptSolver.cpp
+@@ -267,6 +267,7 @@ namespace Bonmin
+     bool set = false;
+     double dummy_dbl;
+     int dummy_int;
++    bool dummy_bool;
+     set = Options->GetNumericValue("gamma_phi", dummy_dbl, "");
+     if(!set)
+     Options->SetNumericValue("gamma_phi", 1e-8, true, true);
+@@ -285,6 +286,10 @@ namespace Bonmin
+     set = Options->GetEnumValue("mu_oracle",dummy_int, "");
+     if(!set)
+     Options->SetStringValue("mu_oracle","probing", true, true);
++    // for the strict feasibility check in BonHeuristicDive.cpp:isNlpFeasible, see also #24
++    set = Options->GetBoolValue("honor_original_bounds",dummy_bool, "");
++    if(!set)
++    Options->SetStringValue("honor_original_bounds","yes", true, true);
+     if(!Options->GetIntegerValue("print_level",default_log_level_,"")) {
+       default_log_level_ = 1;
+       Options->SetIntegerValue("print_level",1, true, true);

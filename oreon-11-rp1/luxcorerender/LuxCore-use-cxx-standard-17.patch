@@ -1,0 +1,28 @@
+Index: LuxCore-luxcorerender_v2.6/cmake/PlatformSpecific.cmake
+===================================================================
+--- LuxCore-luxcorerender_v2.6.orig/cmake/PlatformSpecific.cmake
++++ LuxCore-luxcorerender_v2.6/cmake/PlatformSpecific.cmake
+@@ -261,7 +261,7 @@
+ 
+ IF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+ 	# Update if necessary
+-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-long-long -pedantic")
++	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wno-long-long -pedantic")
+ 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3 -mssse3")
+ 	IF(NOT CYGWIN)
+ 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+Index: LuxCore-luxcorerender_v2.6/CMakeLists.txt
+===================================================================
+--- LuxCore-luxcorerender_v2.6.orig/CMakeLists.txt
++++ LuxCore-luxcorerender_v2.6/CMakeLists.txt
+@@ -42,6 +42,10 @@ unset(CMAKE_CONFIGURATION_TYPES CACHE)
+ enable_language(C)
+ enable_language(CXX)
+ 
++# Use C++ standard 17
++set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_CXX_STANDARD_REQUIRED ON)
++
+ if (CMAKE_CONFIGURATION_TYPES)
+ 
+ 	message(STATUS "Multi-config generator detected")

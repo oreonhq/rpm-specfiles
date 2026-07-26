@@ -1,0 +1,44 @@
+diff -up epienbroek-mail-notification-9ae8768/src/mn-base-mbox-mailbox-backend.gob.maybe-uninitialized epienbroek-mail-notification-9ae8768/src/mn-base-mbox-mailbox-backend.gob
+--- epienbroek-mail-notification-9ae8768/src/mn-base-mbox-mailbox-backend.gob.maybe-uninitialized	2023-12-04 09:30:30.944060224 +0100
++++ epienbroek-mail-notification-9ae8768/src/mn-base-mbox-mailbox-backend.gob	2023-12-04 09:30:32.486079619 +0100
+@@ -269,7 +269,7 @@ class MN:Base:Mbox:Mailbox:Backend from
+     if (! uri_set)
+       {
+ 	GnomeVFSFileInfo *file_info;
+-	GnomeVFSURI *uri;
++	GnomeVFSURI *uri = NULL;
+ 	gboolean aborted;
+ 
+ 	file_info = gnome_vfs_file_info_new();
+diff -up epienbroek-mail-notification-9ae8768/src/mn-pi-mailbox-properties.gob.maybe-uninitialized epienbroek-mail-notification-9ae8768/src/mn-pi-mailbox-properties.gob
+--- epienbroek-mail-notification-9ae8768/src/mn-pi-mailbox-properties.gob.maybe-uninitialized	2023-12-04 09:31:02.152452799 +0100
++++ epienbroek-mail-notification-9ae8768/src/mn-pi-mailbox-properties.gob	2023-12-04 09:31:03.005463529 +0100
+@@ -269,7 +269,7 @@ class MN:PI:Mailbox:Properties from MN:A
+ 		  const char **server,
+ 		  int *port)
+   {
+-    MNPIMailboxConnectionType _connection_type;
++    MNPIMailboxConnectionType _connection_type = 0;
+ 
+     if (connection_type || port)
+       {
+diff -up epienbroek-mail-notification-9ae8768/src/mn-sylpheed-mailbox-backend.gob.maybe-uninitialized epienbroek-mail-notification-9ae8768/src/mn-sylpheed-mailbox-backend.gob
+--- epienbroek-mail-notification-9ae8768/src/mn-sylpheed-mailbox-backend.gob.maybe-uninitialized	2023-12-04 09:30:46.809259795 +0100
++++ epienbroek-mail-notification-9ae8768/src/mn-sylpheed-mailbox-backend.gob	2023-12-04 09:30:49.198289842 +0100
+@@ -217,7 +217,7 @@ class MN:Sylpheed:Mailbox:Backend from M
+       }
+ 
+     if (mn_reentrant_mailbox_check_aborted(MN_REENTRANT_MAILBOX(backend->mailbox), check_id))
+-      goto finish;
++      goto end;
+ 
+     result = gnome_vfs_directory_open_from_uri(&handle, backend->mailbox->vfs_uri, GNOME_VFS_FILE_INFO_FOLLOW_LINKS);
+     if (result != GNOME_VFS_OK)
+@@ -295,7 +295,6 @@ class MN:Sylpheed:Mailbox:Backend from M
+     gnome_vfs_file_info_unref(file_info);
+     close_result = gnome_vfs_directory_close(handle);
+ 
+-  finish:
+     GDK_THREADS_ENTER();
+ 
+     if (! mn_reentrant_mailbox_check_aborted(MN_REENTRANT_MAILBOX(backend->mailbox), check_id))

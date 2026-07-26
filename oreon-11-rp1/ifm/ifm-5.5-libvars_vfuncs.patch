@@ -1,0 +1,370 @@
+From 161583ebeadace01319616481479ce48a92bbbc8 Mon Sep 17 00:00:00 2001
+From: "FeRD (Frank Dana)" <ferdnyc@gmail.com>
+Date: Fri, 31 Jan 2025 21:54:20 -0500
+Subject: [PATCH] libvars: Update function-pointer sigs
+
+---
+ src/libvars/vars-buffer.c | 16 ++++++------
+ src/libvars/vars-graph.c  | 16 ++++++------
+ src/libvars/vars-hash.c   | 18 +++++++-------
+ src/libvars/vars-list.c   | 18 +++++++-------
+ src/libvars/vars-queue.c  | 18 +++++++-------
+ src/libvars/vars-scalar.c | 18 +++++++-------
+ src/libvars/vars-scalar.h |  2 +-
+ src/libvars/vars-type.c   | 18 +++++++-------
+ src/libvars/vars-type.h   | 52 +++++++++++++++++++--------------------
+ 9 files changed, 88 insertions(+), 88 deletions(-)
+
+diff --git a/src/libvars/vars-buffer.c b/src/libvars/vars-buffer.c
+index 4af3092..4ae8e0d 100644
+--- a/src/libvars/vars-buffer.c
++++ b/src/libvars/vars-buffer.c
+@@ -223,14 +223,14 @@ vb_declare(void)
+     if (vbuffer_type == NULL) {
+         vbuffer_type = v_create("BUFFER", "B");
+ 	v_create_func(vbuffer_type, (void *(*)()) vb_create);
+-        v_copy_func(vbuffer_type, (void *(*)()) vb_copy);
+-        v_read_func(vbuffer_type, (void *(*)()) vb_read);
+-        v_write_func(vbuffer_type, vb_write);
+-        v_freeze_func(vbuffer_type, vb_freeze);
+-        v_thaw_func(vbuffer_type, (void *(*)()) vb_thaw);
+-        v_print_func(vbuffer_type, vb_print);
+-        v_destroy_func(vbuffer_type, vb_destroy);
+-        v_traverse_func(vbuffer_type, vb_traverse);
++        v_copy_func(vbuffer_type, (void *(*)(void *)) vb_copy);
++        v_read_func(vbuffer_type, (void *(*)(FILE *)) vb_read);
++        v_write_func(vbuffer_type, (int (*)(void *, FILE *))vb_write);
++        v_freeze_func(vbuffer_type, (int (*)(void *, FILE *))vb_freeze);
++        v_thaw_func(vbuffer_type, (void *(*)(FILE *)) vb_thaw);
++        v_print_func(vbuffer_type, (void (*)(void *, FILE *))vb_print);
++        v_destroy_func(vbuffer_type, (void (*)(void *))vb_destroy);
++        v_traverse_func(vbuffer_type, (int (*)(void *, int (*)(void *)))vb_traverse);
+     }
+ 
+     return vbuffer_type;
+diff --git a/src/libvars/vars-graph.c b/src/libvars/vars-graph.c
+index b0c0d43..44c07df 100644
+--- a/src/libvars/vars-graph.c
++++ b/src/libvars/vars-graph.c
+@@ -452,14 +452,14 @@ vg_declare(void)
+     if (vgraph_type == NULL) {
+         vgraph_type = v_create("GRAPH", "G");
+ 	v_create_func(vgraph_type, (void *(*)()) vg_create);
+-        v_copy_func(vgraph_type, (void *(*)()) vg_copy);
+-        v_read_func(vgraph_type, (void *(*)()) vg_read);
+-        v_write_func(vgraph_type, vg_write);
+-        v_freeze_func(vgraph_type, vg_freeze);
+-        v_thaw_func(vgraph_type, (void *(*)()) vg_thaw);
+-        v_print_func(vgraph_type, vg_print);
+-        v_destroy_func(vgraph_type, vg_destroy);
+-        v_traverse_func(vgraph_type, vg_traverse);
++        v_copy_func(vgraph_type, (void *(*)(void *)) vg_copy);
++        v_read_func(vgraph_type, (void *(*)(FILE *)) vg_read);
++        v_write_func(vgraph_type, (int (*)(void *, FILE *)) vg_write);
++        v_freeze_func(vgraph_type, (int (*)(void *, FILE *)) vg_freeze);
++        v_thaw_func(vgraph_type, (void *(*)(FILE *)) vg_thaw);
++        v_print_func(vgraph_type, (void (*)(void *, FILE *)) vg_print);
++        v_destroy_func(vgraph_type, (void (*)(void *)) vg_destroy);
++        v_traverse_func(vgraph_type, (int (*)(void *, int (*)(void *))) vg_traverse);
+     }
+ 
+     return vgraph_type;
+diff --git a/src/libvars/vars-hash.c b/src/libvars/vars-hash.c
+index 20dd8b8..16fb7dd 100644
+--- a/src/libvars/vars-hash.c
++++ b/src/libvars/vars-hash.c
+@@ -379,15 +379,15 @@ vh_declare(void)
+     if (vhash_type == NULL) {
+         vhash_type = v_create("HASH", "H");
+ 	v_create_func(vhash_type, (void *(*)()) vh_create);
+-        v_copy_func(vhash_type, (void *(*)()) vh_copy);
+-        v_next_func(vhash_type, vh_next);
+-        v_read_func(vhash_type, (void *(*)()) vh_read);
+-        v_write_func(vhash_type, vh_write);
+-        v_freeze_func(vhash_type, vh_freeze);
+-        v_thaw_func(vhash_type, (void *(*)()) vh_thaw);
+-        v_print_func(vhash_type, vh_print);
+-        v_destroy_func(vhash_type, vh_destroy);
+-        v_traverse_func(vhash_type, vh_traverse);
++        v_copy_func(vhash_type, (void *(*)(void *)) vh_copy);
++        v_next_func(vhash_type, (int (*)(void *)) vh_next);
++        v_read_func(vhash_type, (void *(*)(FILE *)) vh_read);
++        v_write_func(vhash_type, (int (*)(void *, FILE *)) vh_write);
++        v_freeze_func(vhash_type, (int (*)(void *, FILE *)) vh_freeze);
++        v_thaw_func(vhash_type, (void *(*)(FILE *)) vh_thaw);
++        v_print_func(vhash_type, (void (*)(void *, FILE *)) vh_print);
++        v_destroy_func(vhash_type, (void (*)(void *)) vh_destroy);
++        v_traverse_func(vhash_type, (int (*)(void *, int (*)(void *))) vh_traverse);
+     }
+ 
+     return vhash_type;
+diff --git a/src/libvars/vars-list.c b/src/libvars/vars-list.c
+index e2ecd66..9cab94a 100644
+--- a/src/libvars/vars-list.c
++++ b/src/libvars/vars-list.c
+@@ -249,15 +249,15 @@ vl_declare(void)
+     if (vlist_type == NULL) {
+         vlist_type = v_create("LIST", "L");
+ 	v_create_func(vlist_type, (void *(*)()) vl_create);
+-        v_copy_func(vlist_type, (void *(*)()) vl_copy);
+-        v_next_func(vlist_type, vl_next);
+-        v_read_func(vlist_type, (void *(*)()) vl_read);
+-        v_write_func(vlist_type, vl_write);
+-        v_freeze_func(vlist_type, vl_freeze);
+-        v_thaw_func(vlist_type, (void *(*)()) vl_thaw);
+-        v_print_func(vlist_type, vl_print);
+-        v_destroy_func(vlist_type, vl_destroy);
+-        v_traverse_func(vlist_type, vl_traverse);
++        v_copy_func(vlist_type, (void *(*)(void *)) vl_copy);
++        v_next_func(vlist_type, (int (*)(void *)) vl_next);
++        v_read_func(vlist_type, (void *(*)(FILE *)) vl_read);
++        v_write_func(vlist_type, (int (*)(void *, FILE *)) vl_write);
++        v_freeze_func(vlist_type, (int (*)(void *, FILE *)) vl_freeze);
++        v_thaw_func(vlist_type, (void *(*)(FILE *)) vl_thaw);
++        v_print_func(vlist_type, (void (*)(void *, FILE *)) vl_print);
++        v_destroy_func(vlist_type, (void (*)(void *)) vl_destroy);
++        v_traverse_func(vlist_type, (int (*)(void *, int (*)(void *))) vl_traverse);
+     }
+ 
+     return vlist_type;
+diff --git a/src/libvars/vars-queue.c b/src/libvars/vars-queue.c
+index 6e4e6de..e849258 100644
+--- a/src/libvars/vars-queue.c
++++ b/src/libvars/vars-queue.c
+@@ -148,15 +148,15 @@ vq_declare(void)
+     if (vqueue_type == NULL) {
+         vqueue_type = v_create("QUEUE", "Q");
+ 	v_create_func(vqueue_type, (void *(*)()) vq_create);
+-        v_copy_func(vqueue_type, (void *(*)()) vq_copy);
+-        v_next_func(vqueue_type, vq_next);
+-        v_read_func(vqueue_type, (void *(*)()) vq_read);
+-        v_write_func(vqueue_type, vq_write);
+-        v_freeze_func(vqueue_type, vq_freeze);
+-        v_thaw_func(vqueue_type, (void *(*)()) vq_thaw);
+-        v_print_func(vqueue_type, vq_print);
+-        v_destroy_func(vqueue_type, vq_destroy);
+-        v_traverse_func(vqueue_type, vq_traverse);
++        v_copy_func(vqueue_type, (void *(*)(void *)) vq_copy);
++        v_next_func(vqueue_type, (int (*)(void *)) vq_next);
++        v_read_func(vqueue_type, (void *(*)(FILE *)) vq_read);
++        v_write_func(vqueue_type, (int (*)(void *, FILE *)) vq_write);
++        v_freeze_func(vqueue_type, (int (*)(void *, FILE *)) vq_freeze);
++        v_thaw_func(vqueue_type, (void *(*)(FILE *)) vq_thaw);
++        v_print_func(vqueue_type, (void (*)(void *, FILE *)) vq_print);
++        v_destroy_func(vqueue_type, (void (*)(void *)) vq_destroy);
++        v_traverse_func(vqueue_type, (int (*)(void *, int (*)(void *))) vq_traverse);
+     }
+ 
+     return vqueue_type;
+diff --git a/src/libvars/vars-scalar.c b/src/libvars/vars-scalar.c
+index a7fb032..7779efd 100644
+--- a/src/libvars/vars-scalar.c
++++ b/src/libvars/vars-scalar.c
+@@ -234,14 +234,14 @@ vs_declare(void)
+ {
+     if (vscalar_type == NULL) {
+         vscalar_type = v_create("SCALAR", "S");
+-        v_copy_func(vscalar_type, (void *(*)()) vs_copy);
+-        v_read_func(vscalar_type, (void *(*)()) vs_read);
+-        v_write_func(vscalar_type, vs_write);
+-        v_print_func(vscalar_type, vs_print);
+-        v_freeze_func(vscalar_type, vs_freeze);
+-        v_thaw_func(vscalar_type, (void *(*)()) vs_thaw);
+-        v_destroy_func(vscalar_type, vs_destroy);
+-        v_traverse_func(vscalar_type, vs_traverse);
++        v_copy_func(vscalar_type, (void *(*)(void *)) vs_copy);
++        v_read_func(vscalar_type, (void *(*)(FILE *)) vs_read);
++        v_write_func(vscalar_type, (int (*)(void *, FILE *)) vs_write);
++        v_print_func(vscalar_type, (void (*)(void *, FILE *)) vs_print);
++        v_freeze_func(vscalar_type, (int (*)(void *, FILE *)) vs_freeze);
++        v_thaw_func(vscalar_type, (void *(*)(FILE *)) vs_thaw);
++        v_destroy_func(vscalar_type, (void (*)(void *)) vs_destroy);
++        v_traverse_func(vscalar_type, (int (*)(void *, int(*)(void *)))vs_traverse);
+     }
+ 
+     return vscalar_type;
+@@ -1029,7 +1029,7 @@ vs_thaw(FILE *fp)
+ 
+ /* Traverse a scalar */
+ int
+-vs_traverse(vscalar *s, int (*func)())
++vs_traverse(vscalar *s, int (*func)(void *ptr))
+ {
+     int val;
+ 
+diff --git a/src/libvars/vars-scalar.h b/src/libvars/vars-scalar.h
+index 9b1fb37..c5ceb03 100644
+--- a/src/libvars/vars-scalar.h
++++ b/src/libvars/vars-scalar.h
+@@ -90,7 +90,7 @@ extern char *vs_sgetref(vscalar *s);
+ extern vscalar *vs_sstore(vscalar *s, char *val);
+ extern vscalar *vs_sstore_len(vscalar *s, char *base, size_t len);
+ extern vscalar *vs_thaw(FILE *fp);
+-extern int vs_traverse(vscalar *s, int (*func)());
++extern int vs_traverse(vscalar *s, int (*func)(void *ptr));
+ extern enum v_stype vs_type(vscalar *s);
+ extern void vs_undef(vscalar *s);
+ extern int vs_write(vscalar *s, FILE *fp);
+diff --git a/src/libvars/vars-type.c b/src/libvars/vars-type.c
+index 7fa63be..17fc47a 100644
+--- a/src/libvars/vars-type.c
++++ b/src/libvars/vars-type.c
+@@ -257,7 +257,7 @@ v_unknown(void *ptr)
+   @param   func Function.
+ */
+ void
+-v_copy_func(vtype *t, void *(*func)())
++v_copy_func(vtype *t, void *(*func)(void *))
+ {
+     t->copy = func;
+ }
+@@ -281,7 +281,7 @@ v_create_func(vtype *t, void *(*func)())
+   @param   func Function.
+ */
+ void
+-v_destroy_func(vtype *t, void (*func)())
++v_destroy_func(vtype *t, void (*func)(void *))
+ {
+     t->destroy = func;
+ }
+@@ -293,7 +293,7 @@ v_destroy_func(vtype *t, void (*func)())
+   @param   func Function.
+ */
+ void
+-v_freeze_func(vtype *t, int (*func)())
++v_freeze_func(vtype *t, int (*func)(void *, FILE *))
+ {
+     t->freeze = func;
+ }
+@@ -305,7 +305,7 @@ v_freeze_func(vtype *t, int (*func)())
+   @param   func Function.
+ */
+ void
+-v_next_func(vtype *t, int (*func)())
++v_next_func(vtype *t, int (*func)(void *))
+ {
+     t->next = func;
+ }
+@@ -317,7 +317,7 @@ v_next_func(vtype *t, int (*func)())
+   @param   func Function.
+ */
+ void
+-v_print_func(vtype *t, void (*func)())
++v_print_func(vtype *t, void (*func)(void *, FILE *))
+ {
+     t->print = func;
+ }
+@@ -329,7 +329,7 @@ v_print_func(vtype *t, void (*func)())
+   @param   func Function.
+ */
+ void
+-v_read_func(vtype *t, void *(*func)())
++v_read_func(vtype *t, void *(*func)(FILE *))
+ {
+     t->read = func;
+ }
+@@ -341,7 +341,7 @@ v_read_func(vtype *t, void *(*func)())
+   @param   func Function.
+ */
+ void
+-v_thaw_func(vtype *t, void *(*func)())
++v_thaw_func(vtype *t, void *(*func)(FILE *))
+ {
+     t->thaw = func;
+ }
+@@ -353,7 +353,7 @@ v_thaw_func(vtype *t, void *(*func)())
+   @param   func Function.
+ */
+ void
+-v_traverse_func(vtype *t, int (*func)())
++v_traverse_func(vtype *t, int (*func)(void *, int (*)(void *)))
+ {
+     t->traverse = func;
+ }
+@@ -365,7 +365,7 @@ v_traverse_func(vtype *t, int (*func)())
+   @param   func Function.
+ */
+ void
+-v_write_func(vtype *t, int (*func)())
++v_write_func(vtype *t, int (*func)(void *, FILE *))
+ {
+     t->write = func;
+ }
+diff --git a/src/libvars/vars-type.h b/src/libvars/vars-type.h
+index 14ed9ed..86b6902 100644
+--- a/src/libvars/vars-type.h
++++ b/src/libvars/vars-type.h
+@@ -18,27 +18,27 @@
+ 
+ /* Type definition */
+ struct v_type {
+-    char *name;                 /* Type name */
+-    char *code;                 /* Type code */
++    char *name;                        /* Type name */
++    char *code;                        /* Type code */
+ 
+-    void *(*create)();          /* Creation function */
+-    void *(*copy)();            /* Copy function */
+-    int (*next)();              /* Iteration function */
+-    void (*print)();            /* Print function */
+-    void *(*read)();            /* Read function */
+-    int (*write)();             /* Write function */
+-    int (*freeze)();            /* Freeze function */
+-    void *(*thaw)();            /* Thaw function */
+-    void *(*yamlimport)();      /* Import-YAML function */
+-    void *(*yamlexport)();      /* Export-YAML function */
+-    void (*yamlcleanup)();      /* Cleanup-YAML function */
+-    int (*traverse)();          /* Traversal function */
+-    void (*destroy)();          /* Destruction function */
++    void *(*create)();                 /* Creation function */
++    void *(*copy)(void *);             /* Copy function */
++    int (*next)(void *);               /* Iteration function */
++    void (*print)(void *, FILE *);     /* Print function */
++    void *(*read)(FILE *);             /* Read function */
++    int (*write)(void *, FILE *);      /* Write function */
++    int (*freeze)(void *, FILE *);     /* Freeze function */
++    void *(*thaw)(FILE *);             /* Thaw function */
++    void *(*yamlimport)();             /* Import-YAML function */
++    void *(*yamlexport)();             /* Export-YAML function */
++    void (*yamlcleanup)();             /* Cleanup-YAML function */
++    int (*traverse)(void *, int (*)(void *));  /* Traversal function */
++    void (*destroy)(void *);           /* Destruction function */
+ };
+ 
+ struct v_header {
+-    int magic;                  /* Magic number */
+-    struct v_type *type;        /* Variable type */
++    int magic;                         /* Magic number */
++    struct v_type *type;               /* Variable type */
+ };
+ 
+ /*! @brief Variable-type type. */
+@@ -72,16 +72,16 @@ extern char *v_ptrname(void *ptr);
+ extern vtype *v_type(void *ptr);
+ extern int v_unknown(void *ptr);
+ 
+-extern void v_copy_func(vtype *t, void *(*func)());
++extern void v_copy_func(vtype *t, void *(*func)(void *));
+ extern void v_create_func(vtype *t, void *(*func)());
+-extern void v_destroy_func(vtype *t, void (*func)());
+-extern void v_freeze_func(vtype *t, int (*func)());
+-extern void v_next_func(vtype *t, int (*func)());
+-extern void v_print_func(vtype *t, void (*func)());
+-extern void v_read_func(vtype *t, void *(*func)());
+-extern void v_thaw_func(vtype *t, void *(*func)());
+-extern void v_traverse_func(vtype *t, int (*func)());
+-extern void v_write_func(vtype *t, int (*func)());
++extern void v_destroy_func(vtype *t, void (*func)(void *));
++extern void v_freeze_func(vtype *t, int (*func)(void *, FILE *));
++extern void v_next_func(vtype *t, int (*func)(void *));
++extern void v_print_func(vtype *t, void (*func)(void *, FILE *));
++extern void v_read_func(vtype *t, void *(*func)(FILE *));
++extern void v_thaw_func(vtype *t, void *(*func)(FILE *));
++extern void v_traverse_func(vtype *t, int (*func)(void *, int (*)(void *)));
++extern void v_write_func(vtype *t, int (*func)(void *, FILE *));
+ extern void v_yaml_import_func(vtype *t, void *(*func)());
+ extern void v_yaml_export_func(vtype *t, void *(*func)());
+ extern void v_yaml_cleanup_func(vtype *t, void (*func)());
+-- 
+2.48.1
+

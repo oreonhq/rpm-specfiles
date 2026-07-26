@@ -1,0 +1,15 @@
+diff -up ORLite-Statistics-0.03/Makefile.PL.dsl ORLite-Statistics-0.03/Makefile.PL
+--- ORLite-Statistics-0.03/Makefile.PL.dsl	2023-05-09 16:10:33.761511513 +0200
++++ ORLite-Statistics-0.03/Makefile.PL	2023-05-09 16:11:46.174168341 +0200
+@@ -1,5 +1,7 @@
+-use inc::Module::Install::DSL 0.91;
++use inc::Module::Install;
+ 
+-all_from      lib/ORLite/Statistics.pm
+-requires_from lib/ORLite/Statistics.pm
+-test_requires Test::More 0.47
++all_from      'lib/ORLite/Statistics.pm';
++requires_from 'lib/ORLite/Statistics.pm';
++test_requires 'Test::More' => '0.47';
++
++WriteAll;

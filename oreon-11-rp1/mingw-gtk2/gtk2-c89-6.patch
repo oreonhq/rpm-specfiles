@@ -1,0 +1,12 @@
+diff -rupN --no-dereference gtk+-2.24.33/modules/other/gail/gailtreeview.c gtk+-2.24.33-new/modules/other/gail/gailtreeview.c
+--- gtk+-2.24.33/modules/other/gail/gailtreeview.c	2020-12-18 06:50:58.000000000 +0100
++++ gtk+-2.24.33-new/modules/other/gail/gailtreeview.c	2024-07-24 11:24:36.114736699 +0200
+@@ -995,7 +995,7 @@ gail_tree_view_ref_child (AtkObject *obj
+         gail_cell_add_state (cell, ATK_STATE_FOCUSABLE, FALSE);
+         if (focus_index == i)
+           {
+-            gailview->focus_cell = g_object_ref (cell);
++            gailview->focus_cell = ATK_OBJECT (g_object_ref (cell));
+             gail_cell_add_state (cell, ATK_STATE_FOCUSED, FALSE);
+             g_signal_emit_by_name (gailview,
+                                    "active-descendant-changed",

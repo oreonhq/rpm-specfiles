@@ -1,0 +1,172 @@
+commit 174732c1b6329e7cc61dcdcfdc47ab9aee2e37e3
+Author: Andrew Cagney <cagney@gnu.org>
+Date:   Wed Apr 13 18:17:17 2016 -0400
+
+    Use installed jline, don't bundle jline.jar
+    
+    Patch: frysk-0.4-use-installed-jline.patch
+
+diff --git a/frysk-core/Makefile.am b/frysk-core/Makefile.am
+index 7938aa8..94deefa 100644
+--- a/frysk-core/Makefile.am
++++ b/frysk-core/Makefile.am
+@@ -43,7 +43,7 @@ include common/Makefile.rules
+ include Makefile.gen
+ 
+ GEN_CLASSPATH += ../frysk-sys/frysk-sys.jar
+-GEN_CLASSPATH += ../frysk-imports/jline.jar
++GEN_CLASSPATH += $(JLINE_JAR)
+ GEN_CLASSPATH += $(ANTLR_JAR)
+ GEN_CLASSPATH += $(JUNIT_JAR)
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
+diff --git a/frysk-core/bootstrap.sh b/frysk-core/bootstrap.sh
+index ce80e1c..ffb62a8 100755
+--- a/frysk-core/bootstrap.sh
++++ b/frysk-core/bootstrap.sh
+@@ -43,7 +43,7 @@ set -e
+ 
+ # Generate everything (always run with --add-missing).
+ 
+-sh -eu ./common/Makefile.gen.sh frysk prog ANTLR_JAR JUNIT_JAR
++sh -eu ./common/Makefile.gen.sh frysk prog ANTLR_JAR JUNIT_JAR JLINE_JAR
+ 
+ echo "Running aclocal ..."
+ aclocal -I common/m4
+diff --git a/frysk-core/configure.ac b/frysk-core/configure.ac
+index 910dd0c..065bc52 100644
+--- a/frysk-core/configure.ac
++++ b/frysk-core/configure.ac
+@@ -48,6 +48,7 @@ m4_include([common/frysk-common.ac])
+ AM_INIT_AUTOMAKE([subdir-objects foreign no-installinfo no-exeext no-dist])
+ AC_FIND_FILE([antlr.jar], [/usr/share/java], ANTLR_JAR)
+ AC_FIND_FILE([junit.jar], [/usr/share/java], JUNIT_JAR)
++AC_FIND_FILE([jline-1.0.jar], [/usr/lib/java/jline1], JLINE_JAR)
+ 
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT
+diff --git a/frysk-core/frysk/util/PtyTerminal.java b/frysk-core/frysk/util/PtyTerminal.java
+index 2d6f0d9..23bb95a 100644
+--- a/frysk-core/frysk/util/PtyTerminal.java
++++ b/frysk-core/frysk/util/PtyTerminal.java
+@@ -44,6 +44,7 @@ import java.io.InputStream;
+ import java.io.IOException;
+ 
+ import jline.Terminal;
++import jline.UnixTerminal;
+ 
+ import frysk.sys.FileDescriptor;
+ import frysk.sys.Size;
+@@ -53,7 +54,7 @@ import frysk.sys.termios.Termios;
+ 
+ 
+ /** Class that implements the jline Terminal abstract class using
+- * frysk.sys.termios calls. This copies jline.PtyTerminal pretty closely.
++ * frysk.sys.termios calls. This copies UnixTerminal pretty closely.
+  */
+ public class PtyTerminal
+   extends Terminal
+@@ -156,19 +157,19 @@ public class PtyTerminal
+     // in Unix terminals, arrow keys are represented by
+     // a sequence of 3 characters. E.g., the up arrow
+     // key yields 27, 91, 68
+-    if (c == jline.PtyTerminal.ARROW_START)
++    if (c == UnixTerminal.ARROW_START)
+       {
+ 	c = readCharacter (in);
+-	if (c == jline.PtyTerminal.ARROW_PREFIX)
++	if (c == UnixTerminal.ARROW_PREFIX)
+ 	  {
+ 	    c = readCharacter (in);
+-	    if (c == jline.PtyTerminal.ARROW_UP)
++	    if (c == UnixTerminal.ARROW_UP)
+ 	      return CTRL_P;
+-	    else if (c == jline.PtyTerminal.ARROW_DOWN)
++	    else if (c == UnixTerminal.ARROW_DOWN)
+ 	      return CTRL_N;
+-	    else if (c == jline.PtyTerminal.ARROW_LEFT)
++	    else if (c == UnixTerminal.ARROW_LEFT)
+ 	      return CTRL_B;
+-	    else if (c == jline.PtyTerminal.ARROW_RIGHT)
++	    else if (c == UnixTerminal.ARROW_RIGHT)
+ 	      return CTRL_F;
+ 	  }
+       }
+@@ -185,6 +186,23 @@ public class PtyTerminal
+     return false;
+   }
+ 
++    public boolean isEchoEnabled() {
++	final Termios termios = new Termios(fd);
++	return termios.get(Local.ECHO_INPUT);
++    }
++
++    public void disableEcho() {
++	final Termios termios = new Termios(fd);
++	termios.set(Local.ECHO_INPUT, false);
++	termios.set(fd);
++    }
++
++    public void enableEcho() {
++	final Termios termios = new Termios(fd);
++	termios.set(Local.ECHO_INPUT, true);
++	termios.set(fd);
++    }
++
+   /**
+    *	Returns the value of "stty size" width param.
+    */
+@@ -202,4 +220,4 @@ public class PtyTerminal
+     Size size = fd.getSize();
+     return size.getColumns();
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/frysk-imports/Makefile.am b/frysk-imports/Makefile.am
+index c09f9cf..3066eeb 100644
+--- a/frysk-imports/Makefile.am
++++ b/frysk-imports/Makefile.am
+@@ -57,7 +57,6 @@ LIBUNWIND_ARCH_DIRS = libunwind-i386 libunwind-x86_64 libunwind-ppc32 libunwind-
+ # compiled with UNW_REMOTE_ONLY and so wouldn't be running the normal
+ # tests.
+ CHECK_SUBDIRS = \
+-	jline \
+ 	getopt \
+ 	$(LIBUNWIND_DIR)
+ 
+diff --git a/frysk-imports/bootstrap.sh b/frysk-imports/bootstrap.sh
+index 9b878e5..cb0c0a5 100755
+--- a/frysk-imports/bootstrap.sh
++++ b/frysk-imports/bootstrap.sh
+@@ -42,7 +42,6 @@
+ set -e
+ 
+ FILE_LIST="\
+-    jline/jline.jar \
+     getopt/getopt.jar \
+     "
+ 
+diff --git a/frysk-imports/configure.ac b/frysk-imports/configure.ac
+index 2652f47..4c4f209 100644
+--- a/frysk-imports/configure.ac
++++ b/frysk-imports/configure.ac
+@@ -51,7 +51,6 @@ AC_FIND_FILE([libaudit.h], [/usr/include/], LIBAUDIT_H)
+ 
+ AC_CONFIG_FILES([
+ 	Makefile
+-	jline/Makefile
+ 	getopt/Makefile])
+ 
+ # Even though "libunwind" is not built, it is still included in the
+diff --git a/frysk-sys/Makefile.am b/frysk-sys/Makefile.am
+index d5ab9bc..c0eda26 100644
+--- a/frysk-sys/Makefile.am
++++ b/frysk-sys/Makefile.am
+@@ -44,7 +44,6 @@ include Makefile.gen
+ 
+ GEN_SOURCEPATH += ../frysk-imports/
+ GEN_SOURCEPATH += $(top_srcdir)/../frysk-imports/
+-GEN_CLASSPATH += ../frysk-imports/jline.jar
+ GEN_CLASSPATH += ../frysk-imports/getopt.jar
+ GEN_CLASSPATH += $(JUNIT_JAR)
+ 

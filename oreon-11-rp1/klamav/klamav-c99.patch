@@ -1,0 +1,80 @@
+diff --git a/src/klammail/clamdmail.c b/src/klammail/clamdmail.c
+index 29d7c80bec6245f3..37a05399bb5aadaf 100755
+--- a/src/klammail/clamdmail.c
++++ b/src/klammail/clamdmail.c
+@@ -36,6 +36,7 @@
+ #include <clamav.h>
+ 
+ #include "options.h"
++#include "output.h"
+ #include "defaults.h"
+ #include "memory.h"
+ #include "../version.h"
+@@ -69,6 +70,8 @@ void help(void);
+ void printtag(void);
+ void startclamd(struct optstruct *opt);
+ 
++static int spoolstdin(char *tmpnm, int fd, int ret, char **virname, const char **bndrystore, struct optstruct *opt);
++
+ struct s_info claminfo;
+ short printinfected = 0;
+ short int mprintf_stdout;
+@@ -281,7 +284,7 @@ int clamdscan(struct optstruct *opt)
+   mexit(0);
+ }
+ 
+-int spoolstdin(char *tmpnm, int fd, int ret, char **virname, const char **bndrystore, struct optstruct *opt)
++static int spoolstdin(char *tmpnm, int fd, int ret, char **virname, const char **bndrystore, struct optstruct *opt)
+ {
+   int bytes;
+   int i, j;
+diff --git a/src/klammail/client.c b/src/klammail/client.c
+index 638278560c7e3edf..77627f37851279b7 100755
+--- a/src/klammail/client.c
++++ b/src/klammail/client.c
+@@ -39,10 +39,13 @@
+ #include "cfgparser.h"
+ #include "memory.h"
+ #include "options.h"
++#include "output.h"
+ #include "defaults.h"
+ //#include "shared.h"
+ #include <clamav.h>
+ 
++static int passfile(const char *file, int sockd, char **virname);
++
+ int client(const char *dirname, struct optstruct *opt, char **virname)
+ {
+ 	char buff[4096], cwd[200], *file, *scancmd;
+@@ -125,7 +128,7 @@ int client(const char *dirname, struct optstruct *opt, char **virname)
+     return scanret;
+ }
+ 
+-int passfile(const char *file, int sockd, char **virname)
++static int passfile(const char *file, int sockd, char **virname)
+ {
+ 
+ 	char buff[4096];
+diff --git a/src/klammail/options.c b/src/klammail/options.c
+index ffefd487f35c32ce..0a68ded9c7e01a06 100755
+--- a/src/klammail/options.c
++++ b/src/klammail/options.c
+@@ -31,6 +31,7 @@
+ #endif
+ 
+ #include "options.h"
++#include "output.h"
+ //#include "others.h"
+ //#include "shared.h"
+ #include "memory.h"
+diff --git a/src/klammail/options.h b/src/klammail/options.h
+index e42994fb6d83a820..456970c2dc4428ea 100755
+--- a/src/klammail/options.h
++++ b/src/klammail/options.h
+@@ -43,4 +43,6 @@ char *getfirstargl(const struct optstruct *opt, const char *optname, struct optn
+ char *getnextargl(struct optnode **optnode, const char *optname);
+ void free_opt(struct optstruct *opt);
+ 
++int client(const char *dirname, struct optstruct *opt, char **virname);
++
+ #endif

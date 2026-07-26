@@ -1,0 +1,18 @@
+Build with -std=gnu99 instead of -std=c99, so that <unistd.h> declares
+the usleep function, as used in catimg.c.
+
+Submitted upstream: <https://github.com/posva/catimg/pull/71>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0a4edcbe9f1e0e93..d82568e2073a524a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,7 +10,7 @@ endif()
+ # set some options
+ #set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -g -std=c99 -Wno-unused-result")
+ #set(CMAKE_BUILD_TYPE Debug)
+-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -Os -std=c99 -Wno-unused-result")
++set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -Wextra -Os -std=gnu99 -Wno-unused-result")
+ set(CMAKE_BUILD_TYPE Release)
+ 
+ set(SRC ${PROJECT_SOURCE_DIR}/src)

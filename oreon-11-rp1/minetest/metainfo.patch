@@ -1,0 +1,11 @@
+--- luanti-5.12.0/misc/org.luanti.luanti.metainfo.xml~	2025-05-23 10:43:08.000000000 -0500
++++ luanti-5.12.0/misc/org.luanti.luanti.metainfo.xml	2025-05-23 13:29:16.943043060 -0500
+@@ -138,7 +138,7 @@
+         </screenshot>
+     </screenshots>
+ 
+-    <icon type="stock">luanti</icon>
++    <icon>luanti</icon>
+ 
+     <categories>
+         <category>Game</category>

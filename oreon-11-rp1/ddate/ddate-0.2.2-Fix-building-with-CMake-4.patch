@@ -1,0 +1,42 @@
+From 0fbae46cb004c0acc48982b8e3533556d7b2edcc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 22 Jul 2025 16:06:57 +0200
+Subject: [PATCH] Fix building with CMake 4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CMake 4 removed support for CMake scripts < 3.5 and building ddate
+fails now:
+
+    $ /usr/bin/cmake -S . -B redhat-linux-build
+    CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
+      Compatibility with CMake < 3.5 has been removed from CMake.
+
+      Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+      to tell CMake that the project requires at least <min> but has been updated
+      to work with policies introduced by <max> or earlier.
+
+This patch fixes it by increasing minimal CMake version to 3.5.
+Because it builds fine with 4.0.2 it also declares that policies up to
+that version are safe to use.
+
+Resolve: https://bugzilla.redhat.com/show_bug.cgi?id=2380534
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 812572e..c0033b8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5.0...4.0.2)
+ 
+ project(ddate C)
+ 
+-- 
+2.50.1
+

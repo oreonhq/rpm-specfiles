@@ -1,0 +1,12 @@
+diff -uNr dnstracer.orig/Makefile dnstracer/Makefile
+--- dnstracer.orig/Makefile	2022-08-05 14:47:26.556959994 -0500
++++ dnstracer/Makefile	2022-08-05 14:47:45.136295890 -0500
+@@ -18,7 +18,7 @@
+ 	-rm dnstracer.o dnstracer dnstracer.8 dnstracer.core
+ 
+ dnstracer: dnstracer.c dnstracer-missing.h
+-	$(CC) -Wall -o dnstracer -DVERSION="${VERSION}" dnstracer.c
++	$(CC) -g -Wall -o dnstracer -DVERSION="${VERSION}" dnstracer.c
+ 
+ dnstracer.8: dnstracer.pod
+ 	pod2man --release="${MANDATE}" --date="${MANDATE}" \

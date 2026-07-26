@@ -1,0 +1,30 @@
+--- giac-1.9.0/src/pari.cc.orig	2022-03-16 05:38:05.000000000 -0600
++++ giac-1.9.0/src/pari.cc	2022-09-20 09:23:12.304717931 -0600
+@@ -749,7 +749,7 @@ namespace giac {
+     RET_INT=2,
+     RET_LONG=3
+   };
+-  typedef GEN (*PFGEN)(ANYARG);
++  typedef GEN (*PFGEN)(...);
+ 
+   extern const unary_function_ptr * const  at_pari;
+   static gen in_pari(const gen & args,GIAC_CONTEXT){
+@@ -884,15 +884,15 @@ namespace giac {
+ 	      break;
+ 
+ 	    case RET_INT:
+-	      m = (long)((int (*)(ANYARG))call)(_ARGS_);
++	      m = (long)((int (*)(...))call)(_ARGS_);
+ 	      res = stoi(m); break;
+ 
+ 	    case RET_LONG:
+-	      m = ((long (*)(ANYARG))call)(_ARGS_);
++	      m = ((long (*)(...))call)(_ARGS_);
+ 	      res = stoi(m); break;
+ 
+ 	    case RET_VOID:
+-	      ((void (*)(ANYARG))call)(_ARGS_);
++	      ((void (*)(...))call)(_ARGS_);
+ 	      res = gnil; break;
+ 	    }
+ 

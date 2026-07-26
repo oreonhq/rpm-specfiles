@@ -1,0 +1,24 @@
+diff -ur dhcpd-pools-3.3.dist/tests/errors dhcpd-pools-3.3/tests/errors
+--- dhcpd-pools-3.3.dist/tests/errors	2025-04-15 08:32:56.293855344 -0500
++++ dhcpd-pools-3.3/tests/errors	2025-04-28 17:43:55.247816885 -0500
+@@ -25,7 +25,7 @@
+ 	--ip-version=5 >> tests/outputs/$IAM 2>&1
+ 
+ echo '=== missing conf' >> tests/outputs/$IAM
+-dhcpd-pools -c $top_srcdir/tests/confs/complete_NXFILE -l $top_srcdir/tests/leases/complete 2>&1 | \
++dhcpd-pools --color=never -c $top_srcdir/tests/confs/complete_NXFILE -l $top_srcdir/tests/leases/complete 2>&1 | \
+ 	sed 's/: ..\/..\/tests/: .\/tests/'>> tests/outputs/$IAM
+ 
+ echo '=== missing leases' >> tests/outputs/$IAM
+diff -ur dhcpd-pools-3.3.dist/tests/expected/errors dhcpd-pools-3.3/tests/expected/errors
+--- dhcpd-pools-3.3.dist/tests/expected/errors	2025-04-28 08:17:49.977370308 -0500
++++ dhcpd-pools-3.3/tests/expected/errors	2025-04-28 17:43:55.264639421 -0500
+@@ -16,7 +16,7 @@
+ 
+ Sum of all ranges:
+ name                   max   cur     percent  touch    t+c  t+c perc
+-[1;34mAll networks             0     0        nan       0      0       nan[0m
++All networks             0     0        nan       0      0       nan
+ === missing leases
+ dhcpd-pools: parse_leases: ./tests/leases/complete_NXFILE: No such file or directory
+ === html table

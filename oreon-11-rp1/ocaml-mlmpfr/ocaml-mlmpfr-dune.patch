@@ -1,0 +1,11 @@
+--- mlmpfr-mlmpfr.4.2.1/testsuite/conversion/dune.orig	2023-12-10 13:02:38.000000000 -0700
++++ mlmpfr-mlmpfr.4.2.1/testsuite/conversion/dune	2024-12-09 14:34:48.892551918 -0700
+@@ -25,7 +25,7 @@
+ 
+ (rule
+  (alias runtest)
+- (deps conversionfunctions.output fpif_export.expected)
++ (deps conversionfunctions.exe.output fpif_export.expected)
+  (action
+   (run diff fpif_export.output fpif_export.expected)))
+ 

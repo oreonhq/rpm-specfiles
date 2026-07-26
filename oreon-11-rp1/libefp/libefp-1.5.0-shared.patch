@@ -1,0 +1,25 @@
+diff -up libefp-1.5.0/src/Makefile.sharedlib libefp-1.5.0/src/Makefile
+--- libefp-1.5.0/src/Makefile.sharedlib	2017-12-23 05:08:41.000000000 +0100
++++ libefp-1.5.0/src/Makefile	2018-09-23 00:26:27.939227753 +0200
+@@ -1,16 +1,13 @@
+-LIBEFP_A= libefp.a
++LIBEFP_SO= libefp.so.0.0.1
+ LIBEFP_O= aidisp.o balance.o clapack.o disp.o efp.o elec.o \
+ 	  electerms.o int.o log.o parse.o pol.o poldirect.o \
+ 	  stream.o swf.o util.o xr.o
+ 
+-AR= ar rc
+-RANLIB= ranlib
+-
+-$(LIBEFP_A): $(LIBEFP_O)
+-	$(AR) $@ $(LIBEFP_O)
+-	$(RANLIB) $@
++$(LIBEFP_SO): $(LIBEFP_O)
++	$(CC) $(CFLAGS) -shared -Wl,-soname,$(LIBEFP_SO) -o $@ $(LIBEFP_O) && \
++	ln -sf $(LIBEFP_SO) libefp.so
+ 
+ clean:
+-	rm -f $(LIBEFP_A) $(LIBEFP_O)
++	rm -f $(LIBEFP_SO) $(LIBEFP_O)
+ 
+ .PHONY: clean

@@ -1,0 +1,10 @@
+diff -up ./src/gnome-shell/metadata.json.in.orig ./src/gnome-shell/metadata.json.in
+--- ./src/gnome-shell/metadata.json.in.orig	2025-04-14 22:26:20.000000000 +0200
++++ ./src/gnome-shell/metadata.json.in	2025-11-02 22:46:41.655304167 +0100
+@@ -1,5 +1,5 @@
+ {
+-    "shell-version": [ "45", "46", "47", "48" ],
++    "shell-version": [ "45", "46", "47", "48", "49" ],
+     "session-modes": [ "user" ],
+     "uuid": "GPaste@gnome-shell-extensions.gnome.org",
+     "name": "GPaste",

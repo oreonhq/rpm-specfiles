@@ -1,0 +1,24 @@
+Upstream compatibility
+======================
+
+The fedora package uses a FHS compliant directory layout and does NOT
+place files below /var/milter-greylist.  Instead:
+
+* the database is located at /var/lib/milter-greylist/db
+* the sendmail socket is located at /var/run/milter-greylist/milter-greylist.sock
+* the pidfile is located at /var/run/milter-greylist.pid
+
+This might be incompatible with online documentation that refers to
+the original paths.  Hence, please use the documentation provided by
+this package where you should find actual paths.
+
+
+Postfix compatibility
+=====================
+
+You might need to give 0666 permissions to the socket file:
+
+| socket "/var/run/milter-greylist/milter-greylist.sock" 0666
+
+Alternatively, use a TCP socket and setup iptables rules to allow only
+connections from the postfix user.

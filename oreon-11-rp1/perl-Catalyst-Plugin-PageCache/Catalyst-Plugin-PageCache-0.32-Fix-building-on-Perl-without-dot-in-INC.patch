@@ -1,0 +1,8 @@
+diff -up Catalyst-Plugin-PageCache-0.32/Makefile.PL.orig Catalyst-Plugin-PageCache-0.32/Makefile.PL
+--- Catalyst-Plugin-PageCache-0.32/Makefile.PL.orig	2017-05-25 14:27:59.767156324 +0200
++++ Catalyst-Plugin-PageCache-0.32/Makefile.PL	2017-05-25 14:29:22.319679928 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install 0.87;
+ 
+ name 'Catalyst-Plugin-PageCache';

@@ -1,0 +1,17 @@
+diff -Naur godot-3.5.2-stable.old/modules/upnp/upnp.cpp godot-3.5.2-stable/modules/upnp/upnp.cpp
+--- godot-3.5.2-stable.old/modules/upnp/upnp.cpp	2024-10-08 22:55:13.094608093 +0200
++++ godot-3.5.2-stable/modules/upnp/upnp.cpp	2024-10-08 22:57:59.614737504 +0200
+@@ -145,8 +145,11 @@
+ 	}
+ 
+ 	char addr[16];
+-	int i = UPNP_GetValidIGD(devlist, urls, &data, (char *)&addr, 16);
+-
++#if MINIUPNPC_API_VERSION >= 18
++	int i = UPNP_GetValidIGD(devlist, urls, &data, (char *)&addr, 16, nullptr, 0);
++#else
++ 	int i = UPNP_GetValidIGD(devlist, urls, &data, (char *)&addr, 16);
++#endif
+ 	if (i != 1) {
+ 		FreeUPNPUrls(urls);
+ 

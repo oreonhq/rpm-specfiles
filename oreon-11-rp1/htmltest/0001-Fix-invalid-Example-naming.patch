@@ -1,0 +1,70 @@
+From fde714537e01a595f761afa3c1f3e2a56934f697 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 19 Jan 2025 18:42:30 -0500
+Subject: [PATCH] Fix invalid Example naming
+
+Go 1.24 testing now vets that examples name an actual identifier, so
+these must be renamed to match, or specify a distinct suffix.
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ issues/issue_store_test.go | 6 +++---
+ issues/issue_test.go       | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/issues/issue_store_test.go b/issues/issue_store_test.go
+index 4f65af6..f0030c7 100644
+--- a/issues/issue_store_test.go
++++ b/issues/issue_store_test.go
+@@ -81,7 +81,7 @@ func TestIssueStoreWriteLog(t *testing.T) {
+ 
+ }
+ 
+-func ExampleIssueStoreDumpIssues() {
++func ExampleIssueStore_DumpIssues() {
+ 	// Passes for dumping all issues, ignoring LogLevel
+ 	iS := NewIssueStore(LevelNone, true)
+ 	issue1 := Issue{
+@@ -107,7 +107,7 @@ func ExampleIssueStoreDumpIssues() {
+ 	// >>>>>>>>>>>>>>>>>>>>>>>>
+ }
+ 
+-func ExampleIssueStorePrintDocumentIssues() {
++func ExampleIssueStore_PrintDocumentIssues() {
+ 	iS := NewIssueStore(LevelError, false)
+ 	doc := htmldoc.Document{
+ 		SitePath: "dir/page.html",
+@@ -125,7 +125,7 @@ func ExampleIssueStorePrintDocumentIssues() {
+ 	//   test1 --- dir/page.html --> <nil>
+ }
+ 
+-func ExampleIssueStorePrintDocumentIssuesEmpty() {
++func ExampleIssueStore_PrintDocumentIssues_empty() {
+ 	iS := NewIssueStore(LevelError, false)
+ 	doc := htmldoc.Document{
+ 		SitePath: "dir/page.html",
+diff --git a/issues/issue_test.go b/issues/issue_test.go
+index be65990..4582709 100644
+--- a/issues/issue_test.go
++++ b/issues/issue_test.go
+@@ -40,7 +40,7 @@ func TestIssueSecondary(t *testing.T) {
+ 	assert.Equals(t, "issue1 secondary", issue1.secondary(), "http://example.com")
+ }
+ 
+-func ExampleIssuePrintLogLevel() {
++func ExampleIssue_print_logLevel() {
+ 	doc := htmldoc.Document{
+ 		SitePath: "dir/doc.html",
+ 	}
+@@ -83,7 +83,7 @@ func ExampleIssuePrintLogLevel() {
+ 
+ }
+ 
+-func ExampleIssuePrintLogAll() {
++func ExampleIssue_print_logAll() {
+ 	doc := htmldoc.Document{
+ 		SitePath: "dir/doc.html",
+ 	}
+-- 
+2.47.0
+

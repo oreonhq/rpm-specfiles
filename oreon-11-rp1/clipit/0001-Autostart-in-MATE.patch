@@ -1,0 +1,23 @@
+From 39179ef368fc104c891ce50fd100c626f06f26b0 Mon Sep 17 00:00:00 2001
+From: Michael Simacek <msimacek@redhat.com>
+Date: Fri, 29 Jun 2018 10:45:42 +0200
+Subject: [PATCH 1/2] Autostart in MATE
+
+---
+ data/clipit-startup.desktop.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/clipit-startup.desktop.in b/data/clipit-startup.desktop.in
+index 63d6a72..427de24 100644
+--- a/data/clipit-startup.desktop.in
++++ b/data/clipit-startup.desktop.in
+@@ -5,5 +5,5 @@ Icon=clipit-trayicon
+ Exec=clipit
+ Terminal=false
+ Type=Application
+-OnlyShowIn=GNOME;XFCE;LXDE;Unity;
++OnlyShowIn=GNOME;XFCE;LXDE;Unity;MATE;
+ X-GNOME-Autostart-enabled=true
+-- 
+2.17.1
+

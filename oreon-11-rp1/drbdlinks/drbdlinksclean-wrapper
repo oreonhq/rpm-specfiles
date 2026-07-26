@@ -1,0 +1,39 @@
+#!/bin/bash
+
+RETVAL=0
+FOUNDFILE=0
+drbdlinks=/usr/sbin/drbdlinks
+
+[ -f /etc/drbdlinks.conf ] && FOUNDFILE=1
+
+for FILE in /var/lib/drbdlinks/configs-to-clean/* /var/run/drbdlinks/configs-to-clean/*; do
+	if [ -f "$FILE" ]; then
+		FOUNDFILE=1
+		break
+	fi
+done
+
+if [ $FOUNDFILE -ne 1 ]; then
+   echo "No /etc/drbdlinks.conf file, aborting."
+   exit 1
+fi
+
+# Main drbdlinks.conf file
+if [ -f /etc/drbdlinks.conf ]; then
+	if grep -q '^mountpoint(' /etc/drbdlinks.conf; then
+		$drbdlinks stop
+		RETVAL=$?
+	else
+		echo "No mountpoint found in /etc/drbdlinks.conf, skipping."
+	fi
+fi
+
+# Clean up any supplemental config files
+for FILE in /var/lib/drbdlinks/configs-to-clean/* /var/run/drbdlinks/configs-to-clean/*; do
+	if [ -f "$FILE" ]; then
+		echo "Cleaning up '${FILE##*/}' links..."
+		$drbdlinks --config-file "$FILE" stop || RETVAL=$?
+	fi
+done
+
+exit $RETVAL

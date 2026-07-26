@@ -1,0 +1,193 @@
+diff -up ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp.keycode ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp
+--- ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp.keycode	2009-11-30 16:13:22.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.cpp	2009-11-30 16:15:11.000000000 +0100
+@@ -50,6 +50,16 @@ CL_XWindowKeyboard::CL_XWindowKeyboard(
+ {
+ 	card = _card;
+ 
++	memset(keycodes, 0, sizeof(keycodes));
++	for (int i=0; i<256; i++)
++	{
++		KeySym sym = XKeycodeToKeysym(card->get_display(), i, 0);
++		int id = map_keysym_to_id(sym);
++
++		if (id != CL_KEY_NONE_OF_THE_ABOVE)
++			keycodes[id] = i;
++	}
++
+ 	for (int j=0; j<X_KEYBOARD_BUFFERSIZE; j++) keys_return[j]=0;
+ 
+ 	buttons = new CL_InputButton_XKeyboard*[CL_NUM_KEYS];
+@@ -147,7 +157,7 @@ CL_InputButton *CL_XWindowKeyboard::get_
+ {
+ 	if (buttons[button_num] != NULL) return buttons[button_num];
+ 
+-	int translate_key = map_id_to_keysym(button_num);
++	int translate_key = map_id_to_keycode(button_num);
+ 	if (translate_key == -1) return NULL;
+ 
+ 	buttons[button_num] = 
+@@ -205,7 +205,6 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ {
+ 	switch (keysym)
+ 	{
+-	case 269025062: return CL_KEY_ESCAPE;
+ 	case XK_Select: return CL_KEY_ENTER;
+ 	case XK_BackSpace: return CL_KEY_BACKSPACE;
+ 	case XK_Tab: return CL_KEY_TAB;
+@@ -300,127 +309,9 @@ int CL_XWindowKeyboard::map_keysym_to_id
+ 	return CL_KEY_NONE_OF_THE_ABOVE;
+ }
+ 
+-int CL_XWindowKeyboard::map_id_to_keysym(int id)
++int CL_XWindowKeyboard::map_id_to_keycode(int id)
+ {
+-	switch (id)
+-	{
+-	case CL_KEY_A: return 38;
+-	case CL_KEY_B: return 56;
+-	case CL_KEY_C: return 54;
+-	case CL_KEY_D: return 40;
+-	case CL_KEY_E: return 26;
+-	case CL_KEY_F: return 41;
+-	case CL_KEY_G: return 42;
+-	case CL_KEY_H: return 43;
+-	case CL_KEY_I: return 31;
+-	case CL_KEY_J: return 44;
+-	case CL_KEY_K: return 45;
+-	case CL_KEY_L: return 46;
+-	case CL_KEY_M: return 58;
+-	case CL_KEY_N: return 57;
+-	case CL_KEY_O: return 32;
+-	case CL_KEY_P: return 33;
+-	case CL_KEY_Q: return 24;
+-	case CL_KEY_R: return 27;
+-	case CL_KEY_S: return 39;
+-	case CL_KEY_T: return 28;
+-	case CL_KEY_U: return 30;
+-	case CL_KEY_V: return 55;
+-	case CL_KEY_W: return 25;
+-	case CL_KEY_X: return 53;
+-	case CL_KEY_Y: return 29;
+-	case CL_KEY_Z: return 52;
+-
+-	case CL_KEY_0: return 19;
+-	case CL_KEY_1: return 10;
+-	case CL_KEY_2: return 11;
+-	case CL_KEY_3: return 12;
+-	case CL_KEY_4: return 13;
+-	case CL_KEY_5: return 14;
+-	case CL_KEY_6: return 15;
+-	case CL_KEY_7: return 16;
+-	case CL_KEY_8: return 17;
+-	case CL_KEY_9: return 18;
+-
+-	case CL_KEY_F1: return 67;
+-	case CL_KEY_F2: return 68;
+-	case CL_KEY_F3: return 69;
+-	case CL_KEY_F4: return 70;
+-	case CL_KEY_F5: return 71;
+-	case CL_KEY_F6: return 72;
+-	case CL_KEY_F7: return 73;
+-	case CL_KEY_F8: return 74;
+-	case CL_KEY_F9: return 75;
+-	case CL_KEY_F10: return 76;
+-	case CL_KEY_F11: return 95;
+-	case CL_KEY_F12: return 96;
+-
+-	case CL_KEY_ESCAPE: return 9; 
+-	case CL_KEY_LEFT: return 100;
+-	case CL_KEY_RIGHT: return 102;
+-	case CL_KEY_UP: return 98;
+-	case CL_KEY_DOWN: return 104;
+-	case CL_KEY_LCTRL: return 37;
+-	case CL_KEY_RCTRL: return 109;
+-	case CL_KEY_LSHIFT: return 50;
+-	case CL_KEY_RSHIFT: return 62;
+-	case CL_KEY_ALT: return 64;
+-	case CL_KEY_ALTGR: return 113;
+-	case CL_KEY_TAB: return 23;
+-	case CL_KEY_ENTER: return 36;
+-	case CL_KEY_SPACE: return 65;
+-	case CL_KEY_BACKSPACE: return 22;
+-	case CL_KEY_INSERT: return 106;
+-	case CL_KEY_DELETE: return 107;
+-	case CL_KEY_HOME: return 97;
+-	case CL_KEY_END: return 98;
+-	case CL_KEY_PAGEUP: return 99;
+-	case CL_KEY_PAGEDOWN: return 105;
+-	case CL_KEY_CAPSLOCK: return 66;
+-	case CL_KEY_NUMLOCK: return 77;
+-	case CL_KEY_SCRLOCK: return 78;
+-	case CL_KEY_PRINT: return 111;
+-	case CL_KEY_PAUSE: return 110;
+-	case CL_KEY_KP_DIV: return 112;
+-	case CL_KEY_KP_MULT: return 63;
+-	case CL_KEY_KP_MINUS: return 82;
+-	case CL_KEY_KP_PLUS: return 86;
+-	case CL_KEY_KP_ENTER: return 108;
+-	case CL_KEY_KP_DECIMAL: return 91;
+- 
+- 	/* Found these codes in /usr/X11R6/lib/X11/xkb/keycodes/xfree86
+- 	 * from an XFree86 4.0.1 installation. 
+- 	 * Tested on US 105 key keyboard. <timcr038@student.otago.ac.nz>
+- 	 */
+- 	case CL_KEY_KP_0: return 90;
+- 	case CL_KEY_KP_1: return 87;
+- 	case CL_KEY_KP_2: return 88;
+- 	case CL_KEY_KP_3: return 89;
+- 	case CL_KEY_KP_4: return 83;
+- 	case CL_KEY_KP_5: return 84;
+- 	case CL_KEY_KP_6: return 85;
+- 	case CL_KEY_KP_7: return 79;
+- 	case CL_KEY_KP_8: return 80;
+- 	case CL_KEY_KP_9: return 81;
+-
+-	case CL_KEY_GRAVE: return 49;
+-	case CL_KEY_SUBTRACT: return 20;
+-	case CL_KEY_EQUALS: return 21;
+-	case CL_KEY_LEFT_BRACKET: return 34;
+-	case CL_KEY_RIGHT_BRACKET: return 35;
+-	case CL_KEY_SEMICOLON: return 47;
+-	case CL_KEY_QUOTE: return 48;
+-	case CL_KEY_COMMA: return 59;
+-	case CL_KEY_PERIOD: return 60;
+-	case CL_KEY_DIVIDE: return 61;
+-	case CL_KEY_BACKSLASH: return 51;
+-	case CL_KEY_LWIN: return 133;
+-	case CL_KEY_RWIN: return 134;
+-	case CL_KEY_APPS: return 135;
+-	case CL_KEY_COMPOSE: return 108;
+-	}
+-	
+-	return -1;
++	return keycodes[id];
+ }
+ 
+ /***************************
+diff -up ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.h.keycode ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.h
+--- ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.h.keycode	2001-11-30 23:38:42.000000000 +0100
++++ ClanLib-0.6.5/Sources/Display/Input/X11/keyboard_x11.h	2009-11-30 16:15:41.000000000 +0100
+@@ -19,6 +19,7 @@
+ 
+ #include "API/Display/Input/inputbutton.h"
+ #include "API/Display/Input/keyboard.h"
++#include "API/Display/Input/key.h"
+ #include "Core/System/Unix/init_linux.h"
+ #include "API/Core/System/keep_alive.h"
+ #include "API/signals.h"
+@@ -64,12 +65,13 @@ public:
+ 
+ private:
+ 	static int map_keysym_to_id(int keysym);
+-	static int map_id_to_keysym(int id);
++	int map_id_to_keycode(int id);
+ 	
+ 	void on_xevent(XEvent &event);
+ 	CL_Slot slot_xevent;
+ 
+ 	char keys_return[X_KEYBOARD_BUFFERSIZE];
++	int keycodes[CL_NUM_KEYS];
+ 	
+ 	CL_InputButton_XKeyboard **buttons;
+ 	CL_XWindow_CompatibleCard *card;

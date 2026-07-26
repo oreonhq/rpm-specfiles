@@ -1,0 +1,11 @@
+--- frysk-0.4/frysk-sys/frysk/sys/proc/jni/Status.cxx.dist	2017-02-10 18:49:47.680517267 -0500
++++ frysk-0.4/frysk-sys/frysk/sys/proc/jni/Status.cxx	2017-02-10 18:49:59.424346177 -0500
+@@ -91,7 +91,7 @@
+       break;
+     }
+   }
+-  if (state == '\0')
++  if (*p == '\0')
+     return Status(env, NULL);
+ 
+   // UID

@@ -1,0 +1,13 @@
+--- include/cxxtools/char.h.orig	2021-01-31 11:10:44.447927117 +0100
++++ include/cxxtools/char.h	2021-01-31 11:11:20.397945980 +0100
+@@ -68,9 +68,7 @@
+             typedef int32_t value_type;
+ 
+             //! Constructs a character with a value of 0.
+-            Char()
+-            : _value(0)
+-            {}
++            Char() = default;
+ 
+             //! Constructs a character using the given value as base for the character value.
+             Char(value_type ch)

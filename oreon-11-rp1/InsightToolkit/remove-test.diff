@@ -1,0 +1,21 @@
+diff --git a/Modules/Nonunit/Review/test/itkVectorCentralDifferenceImageFunctionTest.cxx b/Modules/Nonunit/Review/test/itkVectorCentralDifferenceImageFunctionTest.cxx
+index 73d0975244..559354c1b7 100644
+--- a/Modules/Nonunit/Review/test/itkVectorCentralDifferenceImageFunctionTest.cxx
++++ b/Modules/Nonunit/Review/test/itkVectorCentralDifferenceImageFunctionTest.cxx
+@@ -40,11 +40,11 @@ int itkVectorCentralDifferenceImageFunctionTest(int, char* [] )
+   iter.GoToBegin();
+   unsigned int counter = 0;
+ 
+-  while ( !iter.IsAtEnd() )
+-    {
+-    iter.Set( counter++ );
+-    ++iter;
+-    }
++  //  while ( !iter.IsAtEnd() )
++  //    {
++  //    iter.Set( counter++ );
++  //    ++iter;
++  //    }
+ 
+   // set up central difference calculator
+   typedef float CoordRepType;

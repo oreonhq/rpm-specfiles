@@ -1,0 +1,9 @@
+
+Due to BZ #340751, a blitz header file has moved from /usr/include/blitz
+to ${libdir}/blitz/include/
+
+When compilling blitz programs, using pkgconfig is recommended, as blitz.pc
+has been updated to reflect the change in the includes. A file can be
+compiled like this:
+
+$ gcc file.cc `pkg-config blitz --cflags --libs`

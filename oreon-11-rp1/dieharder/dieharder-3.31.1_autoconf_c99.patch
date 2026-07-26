@@ -1,0 +1,17 @@
+Fix autoconf check to generate C99 compatible code.
+No functional upstream bug tracker so tracked here:
+https://bugzilla.redhat.com/show_bug.cgi?id=2159550
+
+diff --git a/configure.ac b/configure.ac
+index b336115..bbe39ca 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -132,7 +132,7 @@ AC_DEFUN([AC_C_ENDIAN],
+     [AC_LANG_PROGRAM([], [dnl
+         long val = 1;
+         char *c = (char *) &val;
+-        exit(*c == 1);
++        return (*c == 1);
+     ])
+   ],[
+     ac_cv_c_endian=big

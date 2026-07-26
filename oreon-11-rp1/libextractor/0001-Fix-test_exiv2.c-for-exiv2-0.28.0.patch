@@ -1,0 +1,423 @@
+From a6427e2deb24c57fd4caf1bf31940df6cd80fb8b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Robert-Andr=C3=A9=20Mauchin?= <zebob.m@gmail.com>
+Date: Sun, 26 May 2024 17:22:14 +0200
+Subject: [PATCH] Fix test_exiv2.c for exiv2 >= 0.28.0
+
+Ref: https://github.com/Exiv2/exiv2/commit/db86f8c3c149004a0479ca9e98b068a0988bb250
+---
+ src/plugins/Makefile.am                     |  2 +-
+ src/plugins/{test_exiv2.c => test_exiv2.cc} | 91 ++++++++++++---------
+ src/plugins/test_lib.h                      |  8 ++
+ 3 files changed, 60 insertions(+), 41 deletions(-)
+ rename src/plugins/{test_exiv2.c => test_exiv2.cc} (79%)
+
+diff --git a/src/plugins/Makefile.am b/src/plugins/Makefile.am
+index f32114a..a189796 100644
+--- a/src/plugins/Makefile.am
++++ b/src/plugins/Makefile.am
+@@ -312,7 +312,7 @@ libextractor_exiv2_la_LIBADD = \
+   -lexiv2 $(XLIB)
+ 
+ test_exiv2_SOURCES = \
+-  test_exiv2.c
++  test_exiv2.cc
+ test_exiv2_LDADD = \
+   $(top_builddir)/src/plugins/libtest.la
+ 
+diff --git a/src/plugins/test_exiv2.c b/src/plugins/test_exiv2.cc
+similarity index 79%
+rename from src/plugins/test_exiv2.c
+rename to src/plugins/test_exiv2.cc
+index f3dae0a..981e43c 100644
+--- a/src/plugins/test_exiv2.c
++++ b/src/plugins/test_exiv2.cc
+@@ -18,13 +18,14 @@
+      Boston, MA 02110-1301, USA.
+ */
+ /**
+- * @file plugins/test_exiv2.c
++ * @file plugins/test_exiv2.cc
+  * @brief testcase for exiv2 plugin
+  * @author Christian Grothoff
+  */
+ #include "platform.h"
+ #include "test_lib.h"
+-
++#include <exiv2/exiv2.hpp>
++#include <cstring>
+ 
+ /**
+  * Main function for the EXIV2 testcase.
+@@ -42,15 +43,20 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "North",
+-      strlen ("North") + 1,
++      std::strlen("North") + 1,
+       0
+     },
+     {
+       EXTRACTOR_METATYPE_GPS_LATITUDE,
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
++#if EXIV2_TEST_VERSION (0,28,0)
++      "28 deg 8' 17.58\" ?",
++      std::strlen("28 deg 8' 17.58\" ?") + 1,
++#else
+       "28deg 8' (18|17.585)\" ?",
+-      strlen ("28deg 8' (18|17.585)\" ?") + 1,
++      std::strlen("28deg 8' (18|17.585)\" ?") + 1,
++#endif
+       0,
+       .regex = 1
+     },
+@@ -59,15 +65,20 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "West",
+-      strlen ("West") + 1,
++      std::strlen("West") + 1,
+       0
+     },
+     {
+       EXTRACTOR_METATYPE_GPS_LONGITUDE,
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
++#if EXIV2_TEST_VERSION (0,28,0)
++      "14 deg 14' 21.71\" ?",
++      std::strlen("14 deg 14' 21.71\" ?"),
++#else
+       "14deg 14' (22|21.713)\" ?",
+-      strlen ("14deg 14' (22|21.713)\" ?"),
++      std::strlen("14deg 14' (22|21.713)\" ?"),
++#endif
+       0,
+       .regex = 1
+     },
+@@ -76,7 +87,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "PENTAX Corporation",
+-      strlen ("PENTAX Corporation") + 1,
++      std::strlen("PENTAX Corporation") + 1,
+       0
+     },
+     {
+@@ -84,7 +95,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "PENTAX Optio W30",
+-      strlen ("PENTAX Optio W30") + 1,
++      std::strlen("PENTAX Optio W30") + 1,
+       0
+     },
+     {
+@@ -92,7 +103,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "top, left",
+-      strlen ("top, left") + 1,
++      std::strlen("top, left") + 1,
+       0
+     },
+     {
+@@ -100,7 +111,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "2008:06:29 16:06:10",
+-      strlen ("2008:06:29 16:06:10") + 1,
++      std::strlen("2008:06:29 16:06:10") + 1,
+       0
+     },
+     {
+@@ -108,7 +119,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "0 EV",
+-      strlen ("0 EV") + 1,
++      std::strlen("0 EV") + 1,
+       0
+     },
+     {
+@@ -116,7 +127,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "No, compulsory",
+-      strlen ("No, compulsory") + 1,
++      std::strlen("No, compulsory") + 1,
+       0
+     },
+     {
+@@ -124,7 +135,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "18.9 mm",
+-      strlen ("18.9 mm") + 1,
++      std::strlen("18.9 mm") + 1,
+       0
+     },
+     {
+@@ -132,7 +143,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "114.0 mm",
+-      strlen ("114.0 mm") + 1,
++      std::strlen("114.0 mm") + 1,
+       0
+     },
+     {
+@@ -140,7 +151,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "64",
+-      strlen ("64") + 1,
++      std::strlen("64") + 1,
+       0
+     },
+     {
+@@ -148,7 +159,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Multi-segment",
+-      strlen ("Multi-segment") + 1,
++      std::strlen("Multi-segment") + 1,
+       0
+     },
+     {
+@@ -156,7 +167,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "F8",
+-      strlen ("F8") + 1,
++      std::strlen("F8") + 1,
+       0
+     },
+     {
+@@ -164,7 +175,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "1/320 s",
+-      strlen ("1/320 s") + 1,
++      std::strlen("1/320 s") + 1,
+       0
+     },
+     {
+@@ -172,7 +183,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Los Verdes",
+-      strlen ("Los Verdes") + 1,
++      std::strlen("Los Verdes") + 1,
+       0
+     },
+     {
+@@ -180,7 +191,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Los Verdes",
+-      strlen ("Los Verdes") + 1,
++      std::strlen("Los Verdes") + 1,
+       0
+     },
+     {
+@@ -188,7 +199,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Fuerteventura",
+-      strlen ("Fuerteventura") + 1,
++      std::strlen("Fuerteventura") + 1,
+       0
+     },
+     {
+@@ -196,7 +207,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Spain",
+-      strlen ("Spain") + 1,
++      std::strlen("Spain") + 1,
+       0
+     },
+     {
+@@ -204,7 +215,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Spain",
+-      strlen ("Spain") + 1,
++      std::strlen("Spain") + 1,
+       0
+     },
+     {
+@@ -212,7 +223,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Fuerteventura",
+-      strlen ("Fuerteventura") + 1,
++      std::strlen("Fuerteventura") + 1,
+       0
+     },
+     {
+@@ -220,7 +231,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Landschaftsbild",
+-      strlen ("Landschaftsbild") + 1,
++      std::strlen("Landschaftsbild") + 1,
+       0
+     },
+     {
+@@ -228,7 +239,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "ProCenter Rene Egli",
+-      strlen ("ProCenter Rene Egli") + 1,
++      std::strlen("ProCenter Rene Egli") + 1,
+       0
+     },
+     {
+@@ -236,7 +247,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Sand",
+-      strlen ("Sand") + 1,
++      std::strlen("Sand") + 1,
+       0
+     },
+     {
+@@ -244,7 +255,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Sport",
+-      strlen ("Sport") + 1,
++      std::strlen("Sport") + 1,
+       0
+     },
+     {
+@@ -252,7 +263,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Urlaub",
+-      strlen ("Urlaub") + 1,
++      std::strlen("Urlaub") + 1,
+       0
+     },
+     {
+@@ -260,7 +271,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Was?",
+-      strlen ("Was?") + 1,
++      std::strlen("Was?") + 1,
+       0
+     },
+     {
+@@ -268,7 +279,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Wind",
+-      strlen ("Wind") + 1,
++      std::strlen("Wind") + 1,
+       0
+     },
+     {
+@@ -276,7 +287,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Windsurfen",
+-      strlen ("Windsurfen") + 1,
++      std::strlen("Windsurfen") + 1,
+       0
+     },
+     {
+@@ -284,7 +295,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Wo?",
+-      strlen ("Wo?") + 1,
++      std::strlen("Wo?") + 1,
+       0
+     },
+     {
+@@ -292,7 +303,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "3",
+-      strlen ("3") + 1,
++      std::strlen("3") + 1,
+       0
+     },
+     {
+@@ -300,7 +311,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "50",
+-      strlen ("50") + 1,
++      std::strlen("50") + 1,
+       0
+     },
+     {
+@@ -308,7 +319,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "ES",
+-      strlen ("ES") + 1,
++      std::strlen("ES") + 1,
+       0
+     },
+     {
+@@ -316,7 +327,7 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Optio W30 Ver 1.00",
+-      strlen ("Optio W30 Ver 1.00") + 1,
++      std::strlen("Optio W30 Ver 1.00") + 1,
+       0
+     },
+     {
+@@ -324,12 +335,12 @@ main (int argc, char *argv[])
+       EXTRACTOR_METAFORMAT_UTF8,
+       "text/plain",
+       "Wo?, Wo?|Fuerteventura, Was?, Was?|Anlass]|Urlaub, Was?|Aufnahme]|Landschaftsbild, Was?|Natur]|Wind, Was?|Natur]|Sand, Wo?|Fuerteventura|ProCenter Rene Egli, Was?|Sport, Was?|Sport|Windsurfen",
+-      strlen (
++      std::strlen(
+         "Wo?, Wo?|Fuerteventura, Was?, Was?|Anlass]|Urlaub, Was?|Aufnahme]|Landschaftsbild, Was?|Natur]|Wind, Was?|Natur]|Sand, Wo?|Fuerteventura|ProCenter Rene Egli, Was?|Sport, Was?|Sport|Windsurfen")
+       + 1,
+       0
+     },
+-    { 0, 0, NULL, NULL, 0, -1 }
++    { static_cast<EXTRACTOR_MetaType>(0), static_cast<EXTRACTOR_MetaFormat>(0), NULL, NULL, 0, -1 }
+   };
+   struct ProblemSet ps[] = {
+     { "testdata/exiv2_iptc.jpg",
+@@ -340,4 +351,4 @@ main (int argc, char *argv[])
+ }
+ 
+ 
+-/* end of test_exiv2.c */
++/* end of test_exiv2.cc */
+diff --git a/src/plugins/test_lib.h b/src/plugins/test_lib.h
+index cea36fc..4664f9a 100644
+--- a/src/plugins/test_lib.h
++++ b/src/plugins/test_lib.h
+@@ -25,6 +25,10 @@
+ #ifndef TEST_LIB_H
+ #define TEST_LIB_H
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+ #include "extractor.h"
+ 
+ /**
+@@ -102,4 +106,8 @@ int
+ ET_main (const char *plugin_name,
+          struct ProblemSet *ps);
+ 
++#ifdef __cplusplus
++}
++#endif
++
+ #endif
+-- 
+2.45.1
+

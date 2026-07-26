@@ -1,0 +1,12 @@
+diff -up nco-4.6.2/src/nco/Makefile.in.install_C_headers nco-4.6.2/src/nco/Makefile.in
+--- nco-4.6.2/src/nco/Makefile.in.install_C_headers	2016-11-16 10:01:08.000000000 -0700
++++ nco-4.6.2/src/nco/Makefile.in	2016-11-16 21:40:00.542048653 -0700
+@@ -767,7 +767,7 @@ libnco_la_LDFLAGS = -release @VERSION@
+ # To my knowledge, though, only NCO programs use libnco
+ # For this reason Debian packages should not (yet) install NCO headers
+ # Remove following line until learn how to prevent Debian from installing headers
+-#include_HEADERS = $(HEADER_SRC)
++include_HEADERS = $(HEADER_SRC)
+ libnco_la_SOURCES = \
+ ${HEADER_SRC} \
+ ${NCO_GETOPT_C} \

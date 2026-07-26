@@ -1,0 +1,27 @@
+From d55a8e990dc6c8979c92898c0df4d1c9a0ff152b Mon Sep 17 00:00:00 2001
+From: Daniel Cordero <undervolt@0xdc.io>
+Date: Sat, 25 Jan 2020 10:46:14 +0000
+Subject: [PATCH] intel-undervolt.service: wanted by suspend-then-hibernate
+
+systemd doesn't use the existing suspend and hibernate targets and uses a separate target for suspend-then-hibernate. Add this target to the list of targets that undervolt runs on resume.
+---
+ intel-undervolt.service.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/intel-undervolt.service.in b/intel-undervolt.service.in
+index f06b3c3..01d48e6 100644
+--- a/intel-undervolt.service.in
++++ b/intel-undervolt.service.in
+@@ -1,10 +1,10 @@
+ [Unit]
+ Description=Intel Undervolt Service
+-After=multi-user.target suspend.target hibernate.target hybrid-sleep.target
++After=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+ 
+ [Service]
+ Type=oneshot
+ ExecStart=%BINDIR%/intel-undervolt apply
+ 
+ [Install]
+-WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target
++WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

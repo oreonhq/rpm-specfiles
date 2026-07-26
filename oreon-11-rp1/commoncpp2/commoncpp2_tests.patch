@@ -1,0 +1,75 @@
+diff -rupN commoncpp2-1.8.1/tests/dotests.sh commoncpp2-1.8.1-new/tests/dotests.sh
+--- commoncpp2-1.8.1/tests/dotests.sh	2010-10-31 17:29:17.000000000 +0100
++++ commoncpp2-1.8.1-new/tests/dotests.sh	2020-02-04 23:56:48.549867971 +0100
+@@ -2,7 +2,7 @@
+ 
+ # execute all test to make a single output
+ 
+-for t in bug1 bug2 thread1 digest tcpstr1 url1; do
++for t in bug1 bug2 digest tcpstr1 url1; do
+ 	echo $t test...
+ 	echo $t test... 1>&2
+ 	./$t
+diff -rupN commoncpp2-1.8.1/tests/output.txt commoncpp2-1.8.1-new/tests/output.txt
+--- commoncpp2-1.8.1/tests/output.txt	2010-10-31 17:29:17.000000000 +0100
++++ commoncpp2-1.8.1-new/tests/output.txt	2020-02-05 00:00:25.953602417 +0100
+@@ -4,46 +4,6 @@ Run()...
+ Final()...
+ exiting...
+ bug2 test...
+-thread1 test...
+-***********************************************
+-* Testing class Thread without syncronization *
+-***********************************************
+-Testing thread creation
+-
+-- thread should set n to 1...ok
+-
+-Testing thread is working
+-
+-- thread should change n...ok
+-- thread should change n...ok
+-
+-Testing suspend & resume
+-
+-- thread should not change n...ok
+-- thread should not change n...ok
+-- thread should change n...ok
+-- thread should change n...ok
+-
+-Testing recursive suspend & resume
+-
+-- thread should not change n...ok
+-- thread should not change n...ok
+-- thread should not change n...ok
+-- thread should not change n...ok
+-- thread should change n...ok
+-- thread should change n...ok
+-
+-Testing no suspend on resume
+-
+-- thread should change n...ok
+-- thread should change n...ok
+-
+-Testing resuspend
+-
+-- thread should not change n...ok
+-- thread should not change n...ok
+-
+-Now program should finish... :)
+ digest test...
+ 0c88028bf3aa6a6a143ed846f2be1ea4
+ tcpstr1 test...
+diff -rupN commoncpp2-1.8.1/tests/test.sh commoncpp2-1.8.1-new/tests/test.sh
+--- commoncpp2-1.8.1/tests/test.sh	2010-10-31 17:29:17.000000000 +0100
++++ commoncpp2-1.8.1-new/tests/test.sh	2020-02-04 23:56:50.946854814 +0100
+@@ -5,7 +5,9 @@ sh dotests.sh > testout.txt
+ 
+ if cmp testout.txt output.txt; then
+ 	echo Test successfully
++	exit 0
+ else
+ 	echo 'Test failed :('
+ 	echo 'Compare testout.txt (wrong) and output.txt (correct) for more information'
++	exit 1
+ fi

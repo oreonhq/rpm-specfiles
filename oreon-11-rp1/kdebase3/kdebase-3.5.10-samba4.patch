@@ -1,0 +1,35 @@
+diff -ur kdebase-3.5.10/kioslave/smb/configure.in.in kdebase-3.5.10-samba4/kioslave/smb/configure.in.in
+--- kdebase-3.5.10/kioslave/smb/configure.in.in	2005-10-10 17:04:01.000000000 +0200
++++ kdebase-3.5.10-samba4/kioslave/smb/configure.in.in	2013-03-08 18:05:37.000000000 +0100
+@@ -10,8 +10,9 @@
+ have_libsmbclient=no
+ if test "x$with_samba" != xno; then
+   have_libsmbclient=yes
+-  KDE_CHECK_HEADER(libsmbclient.h, [], [have_libsmbclient=no])
+-  KDE_CHECK_LIB(smbclient, smbc_new_context, [], [have_libsmbclient=no])
++  PKG_CHECK_MODULES([SMBCLIENT], [smbclient], [], [have_libsmbclient=no])
++  AC_SUBST(SMBCLIENT_CFLAGS)
++  AC_SUBST(SMBCLIENT_LIBS)
+ 
+   SMBCLIENT_EXTRA_LIBS=""
+   AC_CHECK_FUNC(yp_get_default_domain, [],
+diff -ur kdebase-3.5.10/kioslave/smb/Makefile.am kdebase-3.5.10-samba4/kioslave/smb/Makefile.am
+--- kdebase-3.5.10/kioslave/smb/Makefile.am	2008-08-19 20:17:00.000000000 +0200
++++ kdebase-3.5.10-samba4/kioslave/smb/Makefile.am	2013-03-08 22:47:44.000000000 +0100
+@@ -1,6 +1,6 @@
+ ## Makefile.am of kdebase/kioslave/man
+ 
+-INCLUDES=$(all_includes)
++INCLUDES=$(all_includes) $(SMBCLIENT_CFLAGS)
+ 
+ kde_module_LTLIBRARIES = kio_smb.la
+ kio_smb_la_SOURCES = kio_smb.cpp \
+@@ -12,7 +12,7 @@
+              kio_smb_internal.cpp \
+ 	     kio_smb_mount.cpp
+ 
+-kio_smb_la_LIBADD = -lkio -lsmbclient $(SMBCLIENT_EXTRA_LIBS)
++kio_smb_la_LIBADD = -lkio $(SMBCLIENT_LIBS) $(SMBCLIENT_EXTRA_LIBS)
+ 
+ kio_smb_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+ 

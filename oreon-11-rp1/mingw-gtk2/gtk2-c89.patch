@@ -1,0 +1,97 @@
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtkcellrendererspin.c gtk+-2.24.33-new/gtk/gtkcellrendererspin.c
+--- gtk+-2.24.33/gtk/gtkcellrendererspin.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/gtk/gtkcellrendererspin.c	2024-07-24 11:24:34.563736980 +0200
+@@ -207,7 +207,8 @@ gtk_cell_renderer_spin_set_property (GOb
+ 	}
+ 
+       if (obj)
+-	priv->adjustment = g_object_ref_sink (obj);
++	priv->adjustment = GTK_ADJUSTMENT (g_object_ref_sink (obj));
++
+       break;
+     case PROP_CLIMB_RATE:
+       priv->climb_rate = g_value_get_double (value);
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtkcomboboxtext.c gtk+-2.24.33-new/gtk/gtkcomboboxtext.c
+--- gtk+-2.24.33/gtk/gtkcomboboxtext.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/gtk/gtkcomboboxtext.c	2024-07-24 11:24:34.564736980 +0200
+@@ -275,7 +275,7 @@ gtk_combo_box_text_buildable_custom_tag_
+ 
+       parser_data = g_slice_new0 (ItemParserData);
+       parser_data->builder = g_object_ref (builder);
+-      parser_data->object = g_object_ref (buildable);
++      parser_data->object = (GObject *)g_object_ref (buildable);
+       parser_data->domain = gtk_builder_get_translation_domain (builder);
+       *parser = item_parser;
+       *data = parser_data;
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtklabel.c gtk+-2.24.33-new/gtk/gtklabel.c
+--- gtk+-2.24.33/gtk/gtklabel.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/gtk/gtklabel.c	2024-07-24 11:24:34.564736980 +0200
+@@ -1336,7 +1336,7 @@ gtk_label_buildable_custom_tag_start (Gt
+ 
+       parser_data = g_slice_new0 (PangoParserData);
+       parser_data->builder = g_object_ref (builder);
+-      parser_data->object = g_object_ref (buildable);
++      parser_data->object = (GObject *) g_object_ref (buildable);
+       *parser = pango_parser;
+       *data = parser_data;
+       return TRUE;
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtktoolpalette.c gtk+-2.24.33-new/gtk/gtktoolpalette.c
+--- gtk+-2.24.33/gtk/gtktoolpalette.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/gtk/gtktoolpalette.c	2024-07-24 11:24:34.565736980 +0200
+@@ -734,7 +734,7 @@ gtk_tool_palette_add (GtkContainer *cont
+ 
+   g_ptr_array_add (palette->priv->groups, info);
+   info->pos = palette->priv->groups->len - 1;
+-  info->widget = g_object_ref_sink (child);
++  info->widget = (GtkToolItemGroup *)g_object_ref_sink (child);
+ 
+   gtk_widget_set_parent (child, GTK_WIDGET (palette));
+ }
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtktreeview.c gtk+-2.24.33-new/gtk/gtktreeview.c
+--- gtk+-2.24.33/gtk/gtktreeview.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/gtk/gtktreeview.c	2024-07-24 11:24:34.567736979 +0200
+@@ -14147,7 +14147,7 @@ gtk_tree_view_set_search_entry (GtkTreeV
+ 
+   if (entry)
+     {
+-      tree_view->priv->search_entry = g_object_ref (entry);
++      tree_view->priv->search_entry = GTK_WIDGET (g_object_ref (entry));
+       tree_view->priv->search_custom_entry_set = TRUE;
+ 
+       if (tree_view->priv->search_entry_changed_id == 0)
+diff -rupN --no-dereference gtk+-2.24.33/gtk/gtkwidget.c gtk+-2.24.33-new/gtk/gtkwidget.c
+--- gtk+-2.24.33/gtk/gtkwidget.c	2024-07-24 11:24:33.451737182 +0200
++++ gtk+-2.24.33-new/gtk/gtkwidget.c	2024-07-24 11:24:34.568736979 +0200
+@@ -10686,7 +10686,7 @@ gtk_widget_buildable_custom_tag_start (G
+       AccelGroupParserData *parser_data;
+ 
+       parser_data = g_slice_new0 (AccelGroupParserData);
+-      parser_data->object = g_object_ref (buildable);
++      parser_data->object = (GObject *)g_object_ref (buildable);
+       *parser = accel_group_parser;
+       *data = parser_data;
+       return TRUE;
+diff -rupN --no-dereference gtk+-2.24.33/modules/printbackends/cups/gtkprintbackendcups.c gtk+-2.24.33-new/modules/printbackends/cups/gtkprintbackendcups.c
+--- gtk+-2.24.33/modules/printbackends/cups/gtkprintbackendcups.c	2020-12-18 06:29:40.000000000 +0100
++++ gtk+-2.24.33-new/modules/printbackends/cups/gtkprintbackendcups.c	2024-07-24 11:24:34.569736979 +0200
+@@ -3479,7 +3479,7 @@ cups_request_ppd (GtkPrinter *printer)
+   g_io_channel_set_encoding (data->ppd_io, NULL, NULL);
+   g_io_channel_set_close_on_unref (data->ppd_io, TRUE);
+ 
+-  data->printer = g_object_ref (printer);
++  data->printer = (GtkPrinterCups *) g_object_ref (printer);
+ 
+   resource = g_strdup_printf ("/printers/%s.ppd", 
+                               gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS (printer)));
+diff -rupN --no-dereference gtk+-2.24.33/tests/testentrycompletion.c gtk+-2.24.33-new/tests/testentrycompletion.c
+--- gtk+-2.24.33/tests/testentrycompletion.c	2020-12-18 06:29:42.000000000 +0100
++++ gtk+-2.24.33-new/tests/testentrycompletion.c	2024-07-24 11:24:34.569736979 +0200
+@@ -237,7 +237,7 @@ animation_timer (GtkEntryCompletion *com
+ 	{
+ 	  g_print ("removing model!\n");
+ 
+-	  old_store = g_object_ref (gtk_entry_completion_get_model (completion));
++	  old_store = GTK_LIST_STORE (g_object_ref (gtk_entry_completion_get_model (completion)));
+ 	  gtk_entry_completion_set_model (completion, NULL);
+ 	}
+       else

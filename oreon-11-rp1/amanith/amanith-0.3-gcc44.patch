@@ -1,0 +1,44 @@
+diff -up amanith/include/amanith/2d/gtesselator2d.h.BAD amanith/include/amanith/2d/gtesselator2d.h
+--- amanith/include/amanith/2d/gtesselator2d.h.BAD	2009-02-13 16:15:49.000000000 -0500
++++ amanith/include/amanith/2d/gtesselator2d.h	2009-02-13 16:16:06.000000000 -0500
+@@ -33,6 +33,7 @@
+ #include "amanith/geometry/garea.h"
+ #include "amanith/geometry/gaabox.h"
+ #include "amanith/support/gavltree.h"
++#include <cstdio>
+ 
+ /*!
+ 	\file gtesselator2d.h
+diff -up amanith/src/support/gutilities.cpp.BAD amanith/src/support/gutilities.cpp
+--- amanith/src/support/gutilities.cpp.BAD	2009-02-13 16:17:03.000000000 -0500
++++ amanith/src/support/gutilities.cpp	2009-02-13 16:17:15.000000000 -0500
+@@ -29,6 +29,7 @@
+ #include "amanith/support/gutilities.h"
+ 
+ #include <cstdlib>  // for getenv function
++#include <cstdio>
+ #include <algorithm>
+ #include <cstring>
+ // now ensure includes for ScanPath function
+diff -up amanith/plugins/jpeg/gjpegimpexp.cpp.BAD amanith/plugins/jpeg/gjpegimpexp.cpp
+--- amanith/plugins/jpeg/gjpegimpexp.cpp.BAD	2009-02-13 16:19:07.000000000 -0500
++++ amanith/plugins/jpeg/gjpegimpexp.cpp	2009-02-13 16:19:20.000000000 -0500
+@@ -32,6 +32,7 @@
+ #include "amanith/support/gutilities.h"
+ #include "amanith/2d/gpixelmap.h"
+ #include <cstdlib>
++#include <cstdio>
+ #include <cstring>
+ #include <csetjmp>
+ 
+diff -up amanith/plugins/png/gpngimpexp.cpp.BAD amanith/plugins/png/gpngimpexp.cpp
+--- amanith/plugins/png/gpngimpexp.cpp.BAD	2009-02-13 16:19:59.000000000 -0500
++++ amanith/plugins/png/gpngimpexp.cpp	2009-02-13 16:20:09.000000000 -0500
+@@ -31,6 +31,7 @@
+ #include "gpngimpexp.h"
+ #include "amanith/support/gutilities.h"
+ #include <cstdlib>
++#include <cstdio>
+ #include <cstring>
+ //#include <csetjmp>
+ 

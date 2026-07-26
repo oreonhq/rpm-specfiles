@@ -1,0 +1,11 @@
+diff -up irrlicht-1.8.4/source/Irrlicht/Makefile.ldflags irrlicht-1.8.4/source/Irrlicht/Makefile
+--- irrlicht-1.8.4/source/Irrlicht/Makefile.ldflags	2018-03-05 11:16:38.284684891 -0500
++++ irrlicht-1.8.4/source/Irrlicht/Makefile	2018-03-05 11:18:05.874827493 -0500
+@@ -73,6 +73,7 @@ ifdef PROFILE
+ CXXFLAGS += -pg
+ endif
+ CFLAGS := -O3 -fexpensive-optimizations -DPNG_THREAD_UNSAFE_OK -DPNG_NO_MMX_CODE -DPNG_NO_MNG_FEATURES
++LDFLAGS += $(RPM_LD_FLAGS)
+ 
+ sharedlib sharedlib_osx: CXXFLAGS += -fPIC
+ sharedlib sharedlib_osx: CFLAGS += -fPIC

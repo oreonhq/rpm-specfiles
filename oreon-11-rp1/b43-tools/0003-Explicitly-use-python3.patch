@@ -1,0 +1,86 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 27 Mar 2019 14:53:02 +0300
+Subject: [PATCH] Explicitly use python3
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/debug/b43-beautifier b/debug/b43-beautifier
+index 8e3b284..138450f 100755
+--- a/debug/b43-beautifier
++++ b/debug/b43-beautifier
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #  b43 firmware assembly code beautifier
+ #
+diff --git a/debug/b43-fwdump b/debug/b43-fwdump
+index 58019cd..45ecff8 100755
+--- a/debug/b43-fwdump
++++ b/debug/b43-fwdump
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #  b43 firmware state dumper
+ #
+diff --git a/debug/install.py b/debug/install.py
+index f6d576c..258a3ef 100755
+--- a/debug/install.py
++++ b/debug/install.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ #
+ # Run this script as root to install the debugging tools
+ #
+diff --git a/debug/patcher-template b/debug/patcher-template
+index cf2af18..ccba310 100755
+--- a/debug/patcher-template
++++ b/debug/patcher-template
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #  Copyright (C) 2008 Michael Buesch <m@bues.ch>
+ #
+diff --git a/disassembler/b43-ivaldump b/disassembler/b43-ivaldump
+index 95426c2..9647de5 100755
+--- a/disassembler/b43-ivaldump
++++ b/disassembler/b43-ivaldump
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #   A small script to dump the contents of a b43 initvals file
+ #
+diff --git a/disassembler/brcm80211-fwconv b/disassembler/brcm80211-fwconv
+index ac621a7..e84b166 100755
+--- a/disassembler/brcm80211-fwconv
++++ b/disassembler/brcm80211-fwconv
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #   Copyright (C) 2010  Michael Buesch <m@bues.ch>
+ #
+diff --git a/disassembler/brcm80211-ivaldump b/disassembler/brcm80211-ivaldump
+index e0f22e3..7428ad4 100755
+--- a/disassembler/brcm80211-ivaldump
++++ b/disassembler/brcm80211-ivaldump
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ #   A small script to dump the contents of a brcm80211 initvals section
+ #
+diff --git a/fwcutter/mklist.py b/fwcutter/mklist.py
+index b1357f5..1f743c2 100755
+--- a/fwcutter/mklist.py
++++ b/fwcutter/mklist.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ #
+ #  Script for creating a "struct extract" list for fwcutter_list.h
+ #

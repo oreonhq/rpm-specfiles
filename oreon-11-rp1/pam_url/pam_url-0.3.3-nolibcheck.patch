@@ -1,0 +1,18 @@
+diff -uNr a/pam_url.h b/pam_url.h
+--- a/pam_url.h	2023-10-04 21:39:59.468015142 +0200
++++ b/pam_url.h	2023-10-04 21:40:31.172698499 +0200
+@@ -29,14 +29,7 @@
+ #endif
+ 
+ #include <curl/curl.h>
+-#ifndef __CURL_CURL_H
+-	#error libcurl headers not found on this system. Giving up.
+-#endif
+-
+ #include <libconfig.h>
+-#ifndef __libconfig_h
+-	#error libconfig headers not found on this system. Giving up.
+-#endif
+ 
+ #ifndef __USE_XOPEN_EXTENDED
+ # define __USE_XOPEN_EXTENDED

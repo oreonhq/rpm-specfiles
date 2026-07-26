@@ -1,0 +1,13 @@
+[Unit]
+Description=statsd-perl
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/statsd-perl /etc/statsd-perl.js
+User=statsdpl
+Group=statsdpl
+SupplementaryGroups=
+
+[Install]
+WantedBy=multi-user.target

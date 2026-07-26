@@ -1,0 +1,9 @@
+Note for Fedora users:
+
+Fedora defaults to Wayland (instead of xorg), but glew has poor Wayland support.
+
+With 2022.02, it will no longer crash, but it will not properly render the central GLarea.
+
+As a workaround, run meshlab like this:
+
+	QT_QPA_PLATFORM=xcb meshlab

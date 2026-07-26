@@ -1,0 +1,82 @@
+From 3e43918cb80eccfbacba439dce068773758692c6 Mon Sep 17 00:00:00 2001
+From: perl-Git-CPAN-Patch Owner <perl-Git-CPAN-Patch-owner@fedoraproject.org>
+Date: Thu, 8 Oct 2020 13:19:41 +0200
+Subject: [PATCH] Make hints scripts strict-conformant
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The scripts die with ExtUtils-MakeMaker-7.48, because they are evaluated in
+WriteMakefile() scope that is strict since the new ExtUtils-MakeMaker.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ hints/aix.pl     | 2 +-
+ hints/hpux.pl    | 2 +-
+ hints/linux.pl   | 2 +-
+ hints/netbsd.pl  | 2 +-
+ hints/solaris.pl | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/hints/aix.pl b/hints/aix.pl
+index c8af2ea..f79d49e 100644
+--- a/hints/aix.pl
++++ b/hints/aix.pl
+@@ -1,6 +1,6 @@
+ # AIX
+ 
+-@options = qw(-DHAS_UT_EXTENSIONS -DHAS_UT_HOST -DHAS_UT_ADDR
++my @options = qw(-DHAS_UT_EXTENSIONS -DHAS_UT_HOST -DHAS_UT_ADDR
+ 	      -DHAS_GETUTID -DHAS_GETUTLINE -DHAS_PUTUTLINE
+ 	      -DHAS_UTMPNAME
+ 	      -DHAS_X_UT_EXIT -DHAS_X_UT_HOST -DHAS_X_UT_ADDR
+diff --git a/hints/hpux.pl b/hints/hpux.pl
+index 1302954..1a84524 100644
+--- a/hints/hpux.pl
++++ b/hints/hpux.pl
+@@ -1,6 +1,6 @@
+ # HP-UX
+ 
+-@options = qw(-DHAS_UT_EXTENSIONS -DHAS_UT_HOST -DHAS_UT_ADDR
++my @options = qw(-DHAS_UT_EXTENSIONS -DHAS_UT_HOST -DHAS_UT_ADDR
+ 	      -DHAS_GETUTID -DHAS_GETUTLINE -DHAS_PUTUTLINE
+ 	      -DHAS_UTMPNAME
+ 	      -DHAS_X_UT_EXIT -DHAS_X_UT_HOST -DHAS_X_UT_ADDR
+diff --git a/hints/linux.pl b/hints/linux.pl
+index 72e9dc1..773da9e 100644
+--- a/hints/linux.pl
++++ b/hints/linux.pl
+@@ -1,6 +1,6 @@
+ # Linux
+ 
+-@options = qw(-DHAS_UT_EXTENSIONS -DHAS_UT_HOST -DHAS_UT_ADDR
++my @options = qw(-DHAS_UT_EXTENSIONS -DHAS_UT_HOST -DHAS_UT_ADDR
+ 	      -DHAS_GETUTID -DHAS_GETUTLINE -DHAS_PUTUTLINE
+ 	      -DHAS_UTMPNAME
+ 	      -DHAS_X_UT_EXIT -DHAS_X_UT_HOST -DHAS_X_UT_ADDR
+diff --git a/hints/netbsd.pl b/hints/netbsd.pl
+index 692e900..993fd83 100644
+--- a/hints/netbsd.pl
++++ b/hints/netbsd.pl
+@@ -1,5 +1,5 @@
+ # NetBSD
+-@options = qw(-DHAS_UT_HOST -DHAS_UTMPNAME
++my @options = qw(-DHAS_UT_HOST -DHAS_UTMPNAME
+ 	      -DHAS_UTMPX -DHAS_X_UT_EXIT -DHAS_X_UT_HOST -DHAS_UTMPXNAME);
+ 
+ $self->{CCFLAGS} = join ' ', $Config{ccflags}, @options;
+diff --git a/hints/solaris.pl b/hints/solaris.pl
+index e6338b8..f80893f 100644
+--- a/hints/solaris.pl
++++ b/hints/solaris.pl
+@@ -1,6 +1,6 @@
+ # Solaris
+ 
+-@options = qw(-D__EXTENSIONS__
++my @options = qw(-D__EXTENSIONS__
+ 	      -DHAS_UT_EXTENSIONS
+ 	      -DHAS_GETUTID -DHAS_GETUTLINE -DHAS_PUTUTLINE
+ 	      -DHAS_UTMPNAME
+-- 
+2.25.4
+

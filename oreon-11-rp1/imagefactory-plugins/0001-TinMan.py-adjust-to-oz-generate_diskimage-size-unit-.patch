@@ -1,0 +1,32 @@
+From f6dddbdcdd2d46121ea3bfb9bdb61f280e6e3a25 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Tue, 23 Jan 2024 11:51:46 -0800
+Subject: [PATCH] TinMan.py: adjust to oz generate_diskimage size unit changing
+
+In https://github.com/clalancette/oz/pull/310 I'm proposing we
+change the unit of the `generate_diskimage` method's size arg
+from gibibytes to bytes. This needs adjusting to match that.
+Don't merge this unless and until that PR is merged.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ imagefactory_plugins/TinMan/TinMan.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/imagefactory_plugins/TinMan/TinMan.py b/imagefactory_plugins/TinMan/TinMan.py
+index 219a78e..8c498a2 100644
+--- a/imagefactory_plugins/TinMan/TinMan.py
++++ b/imagefactory_plugins/TinMan/TinMan.py
+@@ -336,7 +336,8 @@ class TinMan(object):
+                 try:
+                     disksize=getattr(self.guest, "disksize")
+                 except AttributeError:
+-                    disksize = 10
++                    # 10 GiB
++                    disksize = 10*1024*1024*1024
+                 self.guest.generate_diskimage(size = disksize)
+                 # TODO: If we already have a base install reuse it
+                 #  subject to some rules about updates to underlying repo
+-- 
+2.43.0
+

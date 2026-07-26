@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.geomview.geomview</id>
+  <metadata_license>LGPL-2.0-or-later</metadata_license>
+  <project_license>LGPL-2.0-or-later AND GPL-2.0-or-later</project_license>
+  <name>geomview</name>
+  <summary>Interactive 3D viewing program</summary>
+  <description>
+    <p>
+      Geomview is an interactive 3D viewing program for Unix. It lets you view
+      and manipulate 3D objects: you use the mouse to rotate, translate, zoom
+      in and out, etc.  It can be used as a standalone viewer for static
+      objects or as a display engine for other programs which produce
+      dynamically changing geometry.  It can display objects described in a
+      variety of file formats.  It comes with a wide selection of example
+      objects, and you can create your own objects too.
+    </p>
+  </description>
+  <launchable type="desktop-id">org.geomview.geomview.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://www.geomview.org/docs/html/figs/initial.png</image>
+      <caption>Geomview initial panels</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.geomview.org/docs/html/figs/fig2.png</image>
+      <caption>Geomview camera (Euclidean view)</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.geomview.org/docs/html/figs/ap.png</image>
+      <caption>Geomview appearance panel</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.geomview.org/docs/html/figs/color.png</image>
+      <caption>Geomview color chooser panel</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.geomview.org/docs/html/figs/secondlinelist.png</image>
+      <caption>Geomview files panel</caption>
+    </screenshot>
+    <screenshot>
+      <image>http://www.geomview.org/docs/html/figs/trefdodecinter.png</image>
+      <caption>Geomview camera with trefoil and dodecahedron</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>geomview-maintainers@fedoraproject.org</update_contact>
+  <url type="homepage">http://www.geomview.org/</url>
+  <url type="bugtracker">https://github.com/geomview/geomview/issues</url>
+  <url type="contact">https://sourceforge.net/projects/geomview/lists/geomview-users</url>
+  <content_rating type="oars-1.0"></content_rating>
+  <provides>
+    <binary>anytooff</binary>
+    <binary>anytoucd</binary>
+    <binary>bdy</binary>
+    <binary>bez2mesh</binary>
+    <binary>clip</binary>
+    <binary>geomview</binary>
+    <binary>hvectext</binary>
+    <binary>math2oogl</binary>
+    <binary>offconsol</binary>
+    <binary>oogl2rib</binary>
+    <binary>oogl2vrml</binary>
+    <binary>oogl2vrml2</binary>
+    <binary>polymerge</binary>
+    <binary>remotegv</binary>
+    <binary>togeomview</binary>
+    <binary>ucdtooff</binary>
+    <binary>vrml2oogl</binary>
+  </provides>
+</component>

@@ -1,0 +1,62 @@
+diff -urp fantasdic-1.0-beta7.orig/lib/fantasdic/preferences.rb fantasdic-1.0-beta7/lib/fantasdic/preferences.rb
+--- fantasdic-1.0-beta7.orig/lib/fantasdic/preferences.rb	2022-11-09 15:01:13.131855790 +0900
++++ fantasdic-1.0-beta7/lib/fantasdic/preferences.rb	2022-11-09 15:02:58.011946056 +0900
+@@ -138,7 +138,7 @@ module Fantasdic
+         include Singleton
+ 
+         def initialize
+-            unless(FileTest.exists?(Config::CONFIG_DIR))
++            unless(FileTest.exist?(Config::CONFIG_DIR))
+                 Dir.mkdir(Config::CONFIG_DIR)    
+             end
+ 
+diff -urp fantasdic-1.0-beta7.orig/pre-setup.rb fantasdic-1.0-beta7/pre-setup.rb
+--- fantasdic-1.0-beta7.orig/pre-setup.rb	2022-11-09 15:01:13.120855781 +0900
++++ fantasdic-1.0-beta7/pre-setup.rb	2022-11-09 15:02:58.011946056 +0900
+@@ -18,7 +18,7 @@ Dir.glob("po/*.po") do |file|
+     (0 ... mo_path_bits.length).each do |i|
+         path = File.join(mo_path_bits[0 .. i])
+         puts path
+-        Dir.mkdir(path) unless FileTest.exists?(path)
++        Dir.mkdir(path) unless FileTest.exist?(path)
+     end
+     
+     system("msgfmt po/#{lang}.po -o #{mo_path}/#{basename}.mo")
+diff -urp fantasdic-1.0-beta7.orig/tools/dict-server.rb fantasdic-1.0-beta7/tools/dict-server.rb
+--- fantasdic-1.0-beta7.orig/tools/dict-server.rb	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/tools/dict-server.rb	2022-11-09 15:02:58.011946056 +0900
+@@ -418,7 +418,7 @@ databases:
+         :file: '/home/mathieu/Desktop/langues/chinois/cedict_ts.u8'
+ TXT
+ 
+-    unless FileTest.exists?('config.yaml')
++    unless FileTest.exist?('config.yaml')
+         File.open('config.yaml', 'w') do |f|
+             f.puts txt
+         end
+diff -urp fantasdic-1.0-beta7.orig/tools/stardict2dictd.rb fantasdic-1.0-beta7/tools/stardict2dictd.rb
+--- fantasdic-1.0-beta7.orig/tools/stardict2dictd.rb	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/tools/stardict2dictd.rb	2022-11-09 15:02:58.011946056 +0900
+@@ -99,8 +99,8 @@ end
+ def convert_all
+     bz2_files = Dir.glob('*.bz2')
+ 
+-    Dir.mkdir('tmp/') unless FileTest.exists? 'tmp/'
+-    Dir.mkdir('output/') unless FileTest.exists? 'output/'
++    Dir.mkdir('tmp/') unless FileTest.exist? 'tmp/'
++    Dir.mkdir('output/') unless FileTest.exist? 'output/'
+     Dir.chdir('tmp/')
+ 
+     bz2_files.each do |bz2_file|
+diff -urp fantasdic-1.0-beta7.orig/win32/gen_po.rb fantasdic-1.0-beta7/win32/gen_po.rb
+--- fantasdic-1.0-beta7.orig/win32/gen_po.rb	2009-03-25 01:14:57.000000000 +0900
++++ fantasdic-1.0-beta7/win32/gen_po.rb	2022-11-09 15:02:58.011946056 +0900
+@@ -39,7 +39,7 @@ Dir.glob("po/*.po") do |file|
+     (0 ... mo_path_bits.length).each do |i|
+         path = File.join(mo_path_bits[0 .. i])
+         puts path
+-        Dir.mkdir(path) unless FileTest.exists?(path)
++        Dir.mkdir(path) unless FileTest.exist?(path)
+     end
+ 
+ 	parser = GetText::PoParser.new

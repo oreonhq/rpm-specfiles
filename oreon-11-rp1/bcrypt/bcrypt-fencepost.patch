@@ -1,0 +1,11 @@
+--- bcrypt-ORIG/rwfile.c	2002-09-12 17:03:01.000000000 -0700
++++ bcrypt-ORIG/rwfile.c	2016-06-30 12:53:08.568733251 -0700
+@@ -32,7 +32,7 @@ 
+     r = j - sz;
+ 
+   if ( r < j) {
+-    if ((*input = realloc(*input, sz + r + 1)) == NULL)
++    if ((*input = realloc(*input, sz + r + 2)) == NULL)
+       memerror();
+ 
+     memset(*input+sz, 0, r + 1);

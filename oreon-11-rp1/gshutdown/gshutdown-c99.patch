@@ -1,0 +1,25 @@
+Avoid implicit declarations of perror and g_access.  For C99
+compatibility.
+
+Submitted upstream: <https://github.com/Asher256/gshutdown/pull/2>
+
+diff --git a/src/misc.c b/src/misc.c
+index 43b6f37bd36372f4..16b154bb2db3f267 100644
+--- a/src/misc.c
++++ b/src/misc.c
+@@ -21,6 +21,7 @@
+ #include <unistd.h> /* X_OK */
+ #include <stdlib.h>
+ #include <glib.h> 
++#include <glib/gstdio.h>
+ #include "config.h"
+ #include "misc.h"
+ #include "main.h"
+@@ -30,6 +31,7 @@
+  * Run a shell command, with arguments.
+  * Return TRUE on error.
+  */
++#include <stdio.h>
+ #include <stdlib.h>    /* exit() */
+ #include <unistd.h>    /* fork() */
+ #include <sys/types.h> /* Used by fork() and stat() */

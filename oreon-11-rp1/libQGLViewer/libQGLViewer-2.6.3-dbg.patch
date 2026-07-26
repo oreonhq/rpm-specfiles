@@ -1,0 +1,14 @@
+diff -up libQGLViewer-2.6.3/QGLViewer/QGLViewer.pro.dbg libQGLViewer-2.6.3/QGLViewer/QGLViewer.pro
+--- libQGLViewer-2.6.3/QGLViewer/QGLViewer.pro.dbg	2016-02-05 10:13:04.186626319 +0100
++++ libQGLViewer-2.6.3/QGLViewer/QGLViewer.pro	2016-02-05 10:13:12.394783924 +0100
+@@ -158,10 +158,6 @@ unix {
+ 		QMAKE_COPY_FILE = $${QMAKE_COPY_FILE} -P
+ 	}
+ 
+-	# Make much smaller libraries (and packages) by removing debugging informations
+-	QMAKE_CFLAGS_RELEASE -= -g
+-	QMAKE_CXXFLAGS_RELEASE -= -g
+-
+ 	# install header
+ 	include.path = $${INCLUDE_DIR_}/QGLViewer
+ 	# Should be $$replace(TRANSLATIONS, .ts, .qm), but 'replace' only appeared in Qt 4.3

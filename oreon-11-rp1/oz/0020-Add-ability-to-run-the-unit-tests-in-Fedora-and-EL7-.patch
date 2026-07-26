@@ -1,0 +1,147 @@
+From 2eb842a0b42c1ce5214a9ffd5005391762386161 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Wed, 24 Jan 2024 17:25:41 -0800
+Subject: [PATCH 20/26] Add ability to run the unit tests in Fedora and EL7
+ containers
+
+This adds a convenient way to run the unit tests in containers -
+a "latest Fedora" container to check things work with the latest
+shiny bits, and an EL 7 (CentOS 7 plus EPEL) container to check
+things work with antique bits. This should make it possible to
+conveniently set up CI with a github action. It also should
+make it easy to run the tests on non-Fedora/RHEL-ish platforms.
+
+`make container-unittests` will build both containers and run
+the tests. `make container-clean` cleans up the containers and
+images.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ Containerfile.tests.el7    | 16 ++++++++++++++++
+ Containerfile.tests.fedora | 14 ++++++++++++++
+ Makefile                   | 19 ++++++++++++++++++-
+ README                     | 22 ++++++++++++++++++++--
+ 4 files changed, 68 insertions(+), 3 deletions(-)
+ create mode 100644 Containerfile.tests.el7
+ create mode 100644 Containerfile.tests.fedora
+
+diff --git a/Containerfile.tests.el7 b/Containerfile.tests.el7
+new file mode 100644
+index 0000000..06a9b78
+--- /dev/null
++++ b/Containerfile.tests.el7
+@@ -0,0 +1,16 @@
++# this container definition is intended *only* for running the oz test suite, it is not
++# a general-purpose oz container definition!
++
++FROM quay.io/centos/centos:7
++RUN set -exo pipefail \
++    && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
++    && yum install -y python-requests m2crypto libvirt-python python-lxml python-libguestfs pytest python-monotonic libvirt \
++    && yum clean all \
++    && rm -rf /var/cache/* /var/log/yum*
++
++COPY ./ /oz
++# the XML generation tests are inherently unreliable before Python 3.8,
++# as there was no consistent ordering of XML element attributes. See
++# https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.tostring
++RUN printf "#!/bin/sh\n/usr/sbin/libvirtd -d\ncd /oz\npy.test -vv -k 'not test_xml_generation and not modify_libvirt_xml_for_serial' tests/" > /usr/local/bin/runtests.sh && chmod ugo+x /usr/local/bin/runtests.sh
++CMD /usr/local/bin/runtests.sh
+diff --git a/Containerfile.tests.fedora b/Containerfile.tests.fedora
+new file mode 100644
+index 0000000..7dd3e41
+--- /dev/null
++++ b/Containerfile.tests.fedora
+@@ -0,0 +1,14 @@
++# this container definition is intended *only* for running the oz test suite, it is not
++# a general-purpose oz container definition!
++
++FROM quay.io/fedora/fedora:latest
++RUN set -exo pipefail \
++    && dnf install -y --setopt install_weak_deps=false --nodocs \
++    python3-requests python3-m2crypto python3-setuptools python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-monotonic \
++    libvirt-daemon libvirt-daemon-kvm libvirt-daemon-qemu libvirt-daemon-config-network systemd \
++    && dnf clean all \
++    && rm -rf /var/cache/* /var/log/dnf*
++
++COPY ./ /oz
++RUN printf "#!/bin/sh\n/usr/sbin/libvirtd -d\ncd /oz\npy.test -vv tests/" > /usr/local/bin/runtests.sh && chmod ugo+x /usr/local/bin/runtests.sh
++CMD /usr/local/bin/runtests.sh
+diff --git a/Makefile b/Makefile
+index c8d94dd..74d3d99 100644
+--- a/Makefile
++++ b/Makefile
+@@ -46,6 +46,18 @@ unittests:
+ 
+ tests: unittests
+ 
++container-unittests-fedora:
++	docker rm -f oz-tests-fedora
++	docker build -f Containerfile.tests.fedora -t oz-tests-fedora-image .
++	docker run --name oz-tests-fedora oz-tests-fedora-image
++
++container-unittests-el7:
++	docker rm -f oz-tests-el7
++	docker build -f Containerfile.tests.el7 -t oz-tests-el7-image .
++	docker run --name oz-tests-el7 oz-tests-el7-image
++
++container-unittests: container-unittests-fedora container-unittests-el7
++
+ test-coverage:
+ 	python-coverage run --source oz /usr/bin/py.test --verbose tests
+ 	python-coverage html
+@@ -57,7 +69,12 @@ pylint:
+ flake8:
+ 	flake8 --ignore=E501 oz
+ 
++container-clean:
++	docker rm -f oz-tests-fedora
++	docker rm -f oz-tests-el7
++	docker image rm -f -i oz-tests-fedora-image oz-tests-el7-image
++
+ clean:
+ 	rm -rf MANIFEST build dist usr *~ oz.spec *.pyc oz/*~ oz/*.pyc examples/*~ oz/auto/*~ man/*~ docs/*~ man/*.html $(VENV_DIR) tests/tdl/*~ tests/factory/*~ tests/results.xml htmlcov
+ 
+-.PHONY: sdist oz.spec signed-tarball signed-rpm rpm srpm deb release man2html virtualenv unittests tests test-coverage pylint clean
++.PHONY: sdist oz.spec signed-tarball signed-rpm rpm srpm deb release man2html virtualenv unittests container-unittests-fedora container-unittests-el7 container-unittests tests test-coverage pylint clean container-clean
+diff --git a/README b/README
+index 9c78c59..5f2c983 100644
+--- a/README
++++ b/README
+@@ -10,9 +10,19 @@ Once you have the RPM installed, you will need to build up TDL files to feed
+ as input into the building process.  Please see the examples directory to get
+ an idea of what a TDL file looks like.
+ 
+-Running the tests is also most easily done from a Fedora host. oz uses the
++You can run the oz unit tests in containers by installing make and docker
++(or podman-docker), then running:
++
++make container-unittests
++
++You can clean up the containers and images by running:
++
++make container-clean
++
++Otherwise, you can try running the tests directly on your host, but oz uses the
+ guestfs Python module, which is not available from pypi, and needs a running
+-libvirtd for most of the tests to run. Install all the test requirements:
++libvirtd for most of the tests to run. To install all the test requirements on
++Fedora:
+ 
+ dnf install python3-requests python3-m2crypto python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-monotonic
+ 
+@@ -23,3 +33,11 @@ yum install python-requests m2crypto libvirt-python python-lxml python-libguestf
+ then run the tests:
+ 
+ py.test tests/
++
++You can try `make virtualenv` then `make unittests` to run the tests in a
++virtualenv if you like, but this still requires at least the libguestfs library
++installed on the host, and a running libvirtd. You may also want to install
++m2crypto and libvirt libraries on the host, as otherwise pip will have to
++compile them, and you'll need their build dependencies.
++
++You can use `make pylint` and `make flake8` to run lint checks.
+-- 
+2.46.2
+

@@ -1,0 +1,104 @@
+diff -ru diafilter-1.7.6.orig/src/filters.hxx diafilter-1.7.6/src/filters.hxx
+--- diafilter-1.7.6.orig/src/filters.hxx	2018-07-20 16:27:17.613170770 +0100
++++ diafilter-1.7.6/src/filters.hxx	2018-07-20 16:27:29.972269843 +0100
+@@ -53,7 +53,7 @@
+ 
+     // XFilter
+     virtual sal_Bool SAL_CALL filter( const uno::Sequence< beans::PropertyValue >& rDescriptor );
+-    virtual void SAL_CALL cancel();
++    virtual void SAL_CALL cancel() {}
+ 
+     // XImporter
+     virtual void SAL_CALL setTargetDocument( const uno::Reference< lang::XComponent >& xDoc );
+@@ -136,7 +136,7 @@
+ 
+     // XFilter
+     virtual sal_Bool SAL_CALL filter( const uno::Sequence< beans::PropertyValue >& rDescriptor );
+-    virtual void SAL_CALL cancel();
++    virtual void SAL_CALL cancel() {}
+ 
+     // XImporter
+     virtual void SAL_CALL setTargetDocument( const uno::Reference< lang::XComponent >& xDoc );
+diff -ru diafilter-1.7.6.orig/src/basegfx/b2dsvgpolypolygon.cxx diafilter-1.7.6/src/basegfx/b2dsvgpolypolygon.cxx
+--- diafilter-1.7.6.orig/src/basegfx/b2dsvgpolypolygon.cxx	2021-08-02 19:19:10.737698665 +0100
++++ diafilter-1.7.6/src/basegfx/b2dsvgpolypolygon.cxx	2021-08-02 19:20:05.196437298 +0100
+@@ -226,8 +226,8 @@
+                 lcl_putNumberChar(rStr, fValue);
+             }
+ 
+-            inline sal_Unicode lcl_getCommand( sal_Char cUpperCaseCommand,
+-                                               sal_Char cLowerCaseCommand,
++            inline sal_Unicode lcl_getCommand( char cUpperCaseCommand,
++                                               char cLowerCaseCommand,
+                                                bool 	bUseRelativeCoordinates )
+             {
+                 return bUseRelativeCoordinates ? cLowerCaseCommand : cUpperCaseCommand;
+diff -ru diafilter-1.7.6.orig/src/comphelper/string.cxx diafilter-1.7.6/src/comphelper/string.cxx
+--- diafilter-1.7.6.orig/src/comphelper/string.cxx	2021-08-02 19:19:10.741698719 +0100
++++ diafilter-1.7.6/src/comphelper/string.cxx	2021-08-02 19:20:23.655687659 +0100
+@@ -44,7 +44,7 @@
+ namespace comphelper { namespace string {
+ 
+ ::rtl::OUString searchAndReplaceAllAsciiWithAscii(
+-    const ::rtl::OUString& _source, const sal_Char* _from, const sal_Char* _to,
++    const ::rtl::OUString& _source, const char* _from, const char* _to,
+     const sal_Int32 _beginAt )
+ {
+     sal_Int32 fromLength = strlen( _from );
+diff -ru diafilter-1.7.6.orig/src/comphelper/string.hxx diafilter-1.7.6/src/comphelper/string.hxx
+--- diafilter-1.7.6.orig/src/comphelper/string.hxx	2021-08-02 19:19:10.741698719 +0100
++++ diafilter-1.7.6/src/comphelper/string.hxx	2021-08-02 19:20:09.267492514 +0100
+@@ -81,7 +81,7 @@
+     with another ASCII pattern
+ */
+ COMPHELPER_DLLPUBLIC ::rtl::OUString searchAndReplaceAllAsciiWithAscii(
+-    const ::rtl::OUString& source, const sal_Char* from, const sal_Char* to,
++    const ::rtl::OUString& source, const char* from, const char* to,
+     const sal_Int32 beginAt = 0 );
+ 
+ /** does an in-place replacement of the first occurance of a sub string with
+@@ -105,7 +105,7 @@
+         a reference to <code>source</code>
+ */
+ COMPHELPER_DLLPUBLIC ::rtl::OUString&
+-    searchAndReplaceAsciiI( ::rtl::OUString & source, sal_Char const * asciiPattern,
++    searchAndReplaceAsciiI( ::rtl::OUString & source, char const * asciiPattern,
+                             ::rtl::OUString const & replace, sal_Int32 beginAt = 0,
+                             sal_Int32 * replacedAt = NULL );
+ 
+diff -ru diafilter-1.7.6.orig/src/diafilter.cxx diafilter-1.7.6/src/diafilter.cxx
+--- diafilter-1.7.6.orig/src/diafilter.cxx	2021-08-02 19:19:10.742698733 +0100
++++ diafilter-1.7.6/src/diafilter.cxx	2021-08-02 19:20:07.461468019 +0100
+@@ -3959,7 +3959,7 @@
+ 
+         uno::Sequence<sal_Int8> aData(64);
+         sal_Int32 nLen = xInputStream->readBytes(aData, 64);
+-        rtl::OString aTmp(reinterpret_cast<const sal_Char*>(aData.getArray()), nLen);
++        rtl::OString aTmp(reinterpret_cast<const char*>(aData.getArray()), nLen);
+         if (aTmp.indexOf(rtl::OString(RTL_CONSTASCII_STRINGPARAM("<dia:diagram "))) != -1)
+             sRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dia_DIA"));
+ 
+diff -ru diafilter-1.7.6.orig/src/services.cxx diafilter-1.7.6/src/services.cxx
+--- diafilter-1.7.6.orig/src/services.cxx	2021-08-02 19:19:10.748698814 +0100
++++ diafilter-1.7.6/src/services.cxx	2021-08-02 19:20:14.920569188 +0100
+@@ -43,7 +43,7 @@
+ 	};
+ }
+ 
+-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(sal_Char const ** ppEnvTypeName, uno_Environment **)
++extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(char const ** ppEnvTypeName, uno_Environment **)
+ {
+ 	*ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ":unsafe";
+ } 
+diff -ru diafilter-1.7.6.orig/src/shapefilter.cxx diafilter-1.7.6/src/shapefilter.cxx
+--- diafilter-1.7.6.orig/src/shapefilter.cxx	2021-08-02 19:19:10.749698828 +0100
++++ diafilter-1.7.6/src/shapefilter.cxx	2021-08-02 19:20:11.678525216 +0100
+@@ -1122,7 +1122,7 @@
+ 
+         uno::Sequence<sal_Int8> aData(64);
+         sal_Int32 nLen = xInputStream->readBytes(aData, 64);
+-        rtl::OString aTmp(reinterpret_cast<const sal_Char*>(aData.getArray()), nLen);
++        rtl::OString aTmp(reinterpret_cast<const char*>(aData.getArray()), nLen);
+         if (aTmp.indexOf(rtl::OString(RTL_CONSTASCII_STRINGPARAM("<shape "))) != -1)
+             sRet = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shape_DIA"));
+ 

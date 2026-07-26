@@ -1,0 +1,12 @@
+diff -rup a/src/app/globals.h b/src/app/globals.h
+--- a/src/app/globals.h	2016-05-09 11:17:05.278109265 +0200
++++ b/src/app/globals.h	2016-05-09 11:17:42.479877025 +0200
+@@ -37,7 +37,7 @@
+ 	#define VERSION_NAME "geomorph-0.62"
+ #endif
+  
+-#ifdef _WIN32
++#ifndef _GNU_SOURCE
+ #define get_current_dir_name() getcwd(NULL,0)
+ #endif
+ 

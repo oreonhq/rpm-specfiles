@@ -1,0 +1,29 @@
+From 78827316e4caf0389350cfe6bcb950caf94a1487 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Thu, 26 Feb 2026 05:19:07 +0000
+Subject: [PATCH 2/2] Downstream-only: do not upper-bound the version of rich
+
+Upstream limits this to the current minor version, but we must integrate
+with new releases whether upstream is ready or not. We would rather deal
+with a few possible, usually-minor test failures than a sudden failure
+to install.
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index efa6057..0258e01 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -21,7 +21,7 @@ dependencies = [
+   'pyxdg (>=0.27.0)',
+   'ruamel.yaml (>=0.17.22)',
+   'ruamel.yaml.clib (>=0.2.12)', # https://sourceforge.net/p/ruamel-yaml-clib/tickets/36/
+-  'rich (>=14.3.2,<14.4.0)',
++  'rich (>=14.3.2)',
+   'tzlocal (>=4.0)' # https://github.com/regebro/tzlocal/blob/master/CHANGES.txt
+ ]
+ 
+-- 
+2.53.0
+

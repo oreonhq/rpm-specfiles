@@ -1,0 +1,8 @@
+diff -up Kwiki-NewPage-0.12/Makefile.PL.orig Kwiki-NewPage-0.12/Makefile.PL
+--- Kwiki-NewPage-0.12/Makefile.PL.orig	2017-05-22 11:40:56.478284255 +0200
++++ Kwiki-NewPage-0.12/Makefile.PL	2017-05-22 11:41:07.738214998 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name('Kwiki-NewPage');

@@ -1,0 +1,1 @@
+OPTIONS="--logfile /var/log/keydb/keydb.log --dir /var/lib/keydb --unixsocket /var/run/keydb/keydb.sock --enable-motd no --pidfile /var/run/keydb/keydb.pid"

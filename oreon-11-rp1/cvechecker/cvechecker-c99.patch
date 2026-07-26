@@ -1,0 +1,42 @@
+commit edd6d49178b8e56cfeaf9fb72212467c0873bb1d
+Author: Sven Vermeulen <sven.vermeulen@siphos.be>
+Date:   Sat May 8 14:46:09 2021 +0200
+
+    Add declarations for functions in header files
+
+diff --git a/src/cvecheck_common.h b/src/cvecheck_common.h
+index 88c2bde5facd130f..7627c94639f0b47e 100644
+--- a/src/cvecheck_common.h
++++ b/src/cvecheck_common.h
+@@ -115,6 +115,9 @@ void string_to_cpe(struct cpe_data * cpe, char * buffer);
+ // lower_cpe_version - Generate a version that is just below the current one
+ void lower_cpe_version(char * reducedVersion, const char * currentVersion);
+ 
++// copy_cpe_bare - Copy bare information for a CPE
++int copy_cpe_bare(struct cpe_data * target, struct cpe_data * source);
++
+ // cve_to_vars - Convert the cve identifier (string) to a year/sequence combination
+ int cve_to_vars(int * year, int * sequence, char * cveId);
+ 
+diff --git a/src/mysql/mysql_impl.h b/src/mysql/mysql_impl.h
+index f93f1ed5020f5ae5..81ab778adf5b3bd8 100644
+--- a/src/mysql/mysql_impl.h
++++ b/src/mysql/mysql_impl.h
+@@ -20,6 +20,9 @@
+     return 1; \
+   };
+ 
++// add_to_mysql_database - Add the selected CPE to the database
++int add_to_mysql_database(struct workstate * ws, struct cpe_data cpe);
++
+ // mysql_dbimpl_initialize_workstate - Initialize the workstate variable
+ int mysql_dbimpl_initialize_workstate(struct workstate * ws);
+ 
+@@ -71,4 +74,7 @@ int mysql_dbimpl_add_cpe_to_database(struct workstate * ws, struct cpe_data cpe)
+ // mysql_dbimpl_supported - Check if mysql support is built in
+ int mysql_dbimpl_supported();
+ 
++// update_binmatch_files - Update the tb_binmatch table with (new) cpeids
++int update_binmatch_files(struct workstate * ws, int cpeid);
++
+ #endif

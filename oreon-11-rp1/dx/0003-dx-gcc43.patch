@@ -1,0 +1,366 @@
+From f68dee5c09b382ad1eeb32833a0e6ec1a5ec7b85 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Wed, 17 Feb 2016 15:15:48 +0100
+Subject: [PATCH 3/9] dx-gcc43
+
+---
+ src/uipp/base/Application.C           | 8 ++++----
+ src/uipp/base/Application.h           | 8 ++++----
+ src/uipp/base/IBMApplication.C        | 4 ++--
+ src/uipp/base/IBMApplication.h        | 4 ++--
+ src/uipp/dxui/Main.C                  | 2 +-
+ src/uipp/dxuilib/DXApplication.C      | 2 +-
+ src/uipp/dxuilib/DXApplication.h      | 2 +-
+ src/uipp/mb/MBApplication.C           | 2 +-
+ src/uipp/mb/MBApplication.h           | 2 +-
+ src/uipp/mb/Main.C                    | 2 +-
+ src/uipp/prompter/GARApplication.C    | 2 +-
+ src/uipp/prompter/GARApplication.h    | 2 +-
+ src/uipp/prompter/Main.C              | 2 +-
+ src/uipp/startup/Main.C               | 2 +-
+ src/uipp/startup/StartupApplication.C | 2 +-
+ src/uipp/startup/StartupApplication.h | 2 +-
+ src/uipp/tutor/Main.C                 | 2 +-
+ src/uipp/tutor/TutorApplication.C     | 2 +-
+ src/uipp/tutor/TutorApplication.h     | 2 +-
+ src/uipp/widgets/MultiText.h          | 4 ++--
+ 20 files changed, 29 insertions(+), 29 deletions(-)
+
+diff --git a/src/uipp/base/Application.C b/src/uipp/base/Application.C
+index d103e55..6162890 100644
+--- a/src/uipp/base/Application.C
++++ b/src/uipp/base/Application.C
+@@ -136,7 +136,7 @@ void Application::installDefaultResources(Widget baseWidget)
+     //this->setDefaultResources(baseWidget, Application::DefaultResources);
+ }
+ 
+-boolean Application::initializeWindowSystem(unsigned int *argcp, char **argv) 
++boolean Application::initializeWindowSystem(int *argcp, char **argv) 
+ {
+ 
+     //
+@@ -149,7 +149,7 @@ boolean Application::initializeWindowSystem(unsigned int *argcp, char **argv)
+ 	     NULL,			// command line options table
+ 	     0,				// number of entries in options table
+ #if XtSpecificationRelease > 4
+-	     (int*)argcp,
++	     argcp,
+ #else
+ 	     argcp,
+ #endif
+@@ -235,7 +235,7 @@ boolean Application::initializeWindowSystem(unsigned int *argcp, char **argv)
+     return TRUE;
+ }
+ 
+-void Application::parseCommand(unsigned int* argcp, char** argv,
++void Application::parseCommand(int* argcp, char** argv,
+                                XrmOptionDescList optlist, int optlistsize)
+ {
+     char res_file[256];
+@@ -280,7 +280,7 @@ void Application::parseCommand(unsigned int* argcp, char** argv,
+     //
+ }
+ 
+-boolean Application::initialize(unsigned int* argcp, char** argv)
++boolean Application::initialize(int* argcp, char** argv)
+ {
+     //
+     // Initialize the window system if not done already.
+diff --git a/src/uipp/base/Application.h b/src/uipp/base/Application.h
+index 527b2fc..328abef 100644
+--- a/src/uipp/base/Application.h
++++ b/src/uipp/base/Application.h
+@@ -49,7 +49,7 @@ class Application : public UIComponent, public Server
+     //
+     // The main program needs to access protected member functions.
+     //
+-    friend int main(unsigned int argc,
++    friend int main( int          argc,
+ 		     char**       argv);
+ 
+ 
+@@ -71,9 +71,9 @@ class Application : public UIComponent, public Server
+     //
+     // Initialize the window system.
+     //
+-    virtual boolean initializeWindowSystem(unsigned int *argcp, char **argv);
++    virtual boolean initializeWindowSystem(int *argcp, char **argv);
+ 
+-    virtual void parseCommand(unsigned int* argcp, char** argv,
++    virtual void parseCommand(int* argcp, char** argv,
+ 			       XrmOptionDescList optlist, int optlistsize);
+ 
+     //
+@@ -145,7 +145,7 @@ class Application : public UIComponent, public Server
+     // Initializes any Application specfic state.  This routine should 
+     // be called by main() or subclasses only.
+     //
+-    virtual boolean initialize(unsigned int* argcp, char** argv);
++    virtual boolean initialize(int* argcp, char** argv);
+ 
+     //
+     // Allow others to access our event processing mechanism
+diff --git a/src/uipp/base/IBMApplication.C b/src/uipp/base/IBMApplication.C
+index ddf1722..94b9528 100644
+--- a/src/uipp/base/IBMApplication.C
++++ b/src/uipp/base/IBMApplication.C
+@@ -349,7 +349,7 @@ int status;
+ }
+ 
+ 
+-boolean IBMApplication::initializeWindowSystem(unsigned int *argcp, char **argv)
++boolean IBMApplication::initializeWindowSystem(int *argcp, char **argv)
+ {
+ 
+     if (!this->Application::initializeWindowSystem(argcp, argv))
+@@ -375,7 +375,7 @@ boolean IBMApplication::initializeWindowSystem(unsigned int *argcp, char **argv)
+     return TRUE;
+ }
+ 
+-boolean IBMApplication::initialize(unsigned int* argcp,
++boolean IBMApplication::initialize(int*          argcp,
+ 				   char**        argv)
+ {
+     if (!this->Application::initialize(argcp,argv))
+diff --git a/src/uipp/base/IBMApplication.h b/src/uipp/base/IBMApplication.h
+index d05f340..911f789 100644
+--- a/src/uipp/base/IBMApplication.h
++++ b/src/uipp/base/IBMApplication.h
+@@ -77,7 +77,7 @@ class IBMApplication : public Application
+     //
+     // Initialize the window system.
+     //
+-    virtual boolean initializeWindowSystem(unsigned int *argcp, char **argv);
++    virtual boolean initializeWindowSystem(int *argcp, char **argv);
+ 
+     //
+     // Protected member data:
+@@ -88,7 +88,7 @@ class IBMApplication : public Application
+ 
+     HelpWin		*helpWindow;
+ 
+-    boolean initialize(unsigned int* argcp, char** argv);
++    boolean initialize(int* argcp, char** argv);
+ 
+     //
+     // Load application specific action routines
+diff --git a/src/uipp/dxui/Main.C b/src/uipp/dxui/Main.C
+index 2404ea1..87261df 100644
+--- a/src/uipp/dxui/Main.C
++++ b/src/uipp/dxui/Main.C
+@@ -48,7 +48,7 @@ extern unsigned long _etext;
+ //
+ const char *AssertMsgString = "Internal error detected at \"%s\":%d.\n";
+  
+-int main(unsigned int argc,
++int main( int          argc,
+ 	  char**       argv)
+ {
+ #if defined(HAVE_HCLXMINIT)
+diff --git a/src/uipp/dxuilib/DXApplication.C b/src/uipp/dxuilib/DXApplication.C
+index 74b7e51..b853b77 100644
+--- a/src/uipp/dxuilib/DXApplication.C
++++ b/src/uipp/dxuilib/DXApplication.C
+@@ -2248,7 +2248,7 @@ void DXApplication::installDefaultResources(Widget baseWidget)
+     this->setDefaultResources(baseWidget, _defaultDXResources);
+     this->IBMApplication::installDefaultResources(baseWidget);
+ }
+-boolean DXApplication::initialize(unsigned int* argcp,
++boolean DXApplication::initialize(int* argcp,
+ 								  char**        argv)
+ {
+ 	boolean wasSetBusy = FALSE;
+diff --git a/src/uipp/dxuilib/DXApplication.h b/src/uipp/dxuilib/DXApplication.h
+index 8ded16a..45a3436 100644
+--- a/src/uipp/dxuilib/DXApplication.h
++++ b/src/uipp/dxuilib/DXApplication.h
+@@ -372,7 +372,7 @@ class DXApplication : public IBMApplication
+     // Overrides the Application class version:
+     //   Initializes Xt Intrinsics with option list (switches).
+     //
+-    virtual boolean initialize(unsigned int* argcp,
++    virtual boolean initialize(int*       argcp,
+ 			    char**        argv);
+ 
+     //
+diff --git a/src/uipp/mb/MBApplication.C b/src/uipp/mb/MBApplication.C
+index 3de3d6a..d94bda3 100644
+--- a/src/uipp/mb/MBApplication.C
++++ b/src/uipp/mb/MBApplication.C
+@@ -117,7 +117,7 @@ InitializeSignals(void)
+ #endif       
+ }            
+ 
+-boolean MBApplication::initialize(unsigned int* argcp,
++boolean MBApplication::initialize(int*       argcp,
+ 			       char**        argv)
+ {
+     ASSERT(argcp);
+diff --git a/src/uipp/mb/MBApplication.h b/src/uipp/mb/MBApplication.h
+index b058ff7..3565d8e 100644
+--- a/src/uipp/mb/MBApplication.h
++++ b/src/uipp/mb/MBApplication.h
+@@ -51,7 +51,7 @@ class MBApplication : public IBMApplication
+     // Overrides the Application class version:
+     //   Initializes Xt Intrinsics with option list (switches).
+     //
+-    virtual boolean initialize(unsigned int* argcp,
++    virtual boolean initialize(int*       argcp,
+ 			    char**        argv);
+ 
+     static MBResource	resource;
+diff --git a/src/uipp/mb/Main.C b/src/uipp/mb/Main.C
+index 293050e..df03716 100644
+--- a/src/uipp/mb/Main.C
++++ b/src/uipp/mb/Main.C
+@@ -22,7 +22,7 @@ extern "C" void HCLXmInit();
+ //
+ const char *AssertMsgString = "Internal error detected at \"%s\":%d.\n";
+ 
+-int main(unsigned int argc,
++int main( int          argc,
+ 	  char**       argv)
+ {
+ #if defined(HAVE_HCLXMINIT)
+diff --git a/src/uipp/prompter/GARApplication.C b/src/uipp/prompter/GARApplication.C
+index 7f1638a..93a7018 100644
+--- a/src/uipp/prompter/GARApplication.C
++++ b/src/uipp/prompter/GARApplication.C
+@@ -198,7 +198,7 @@ InitializeSignals(void)
+     }
+ }            
+ 
+-boolean GARApplication::initialize(unsigned int* argcp,
++boolean GARApplication::initialize(int*      argcp,
+ 			       char**        argv)
+ {
+     ASSERT(argcp);
+diff --git a/src/uipp/prompter/GARApplication.h b/src/uipp/prompter/GARApplication.h
+index b2f835e..3d1e01e 100644
+--- a/src/uipp/prompter/GARApplication.h
++++ b/src/uipp/prompter/GARApplication.h
+@@ -129,7 +129,7 @@ class GARApplication : public IBMApplication
+     // Overrides the Application class version:
+     //   Initializes Xt Intrinsics with option list (switches).
+     //
+-    virtual boolean initialize(unsigned int* argcp,
++    virtual boolean initialize(int*       argcp,
+ 			    char**        argv);
+ 
+     CommandScope       *commandScope;   // command scope
+diff --git a/src/uipp/prompter/Main.C b/src/uipp/prompter/Main.C
+index fec2f65..12ca610 100644
+--- a/src/uipp/prompter/Main.C
++++ b/src/uipp/prompter/Main.C
+@@ -17,7 +17,7 @@ extern "C" void HCLXmInit();
+ #endif
+ 
+ 
+-int main(unsigned int argc,
++int main( int          argc,
+ 	  char**       argv)
+ {
+ #if defined(HAVE_HCLXMINIT)
+diff --git a/src/uipp/startup/Main.C b/src/uipp/startup/Main.C
+index abb00fb..f9903a5 100644
+--- a/src/uipp/startup/Main.C
++++ b/src/uipp/startup/Main.C
+@@ -14,7 +14,7 @@
+ extern "C" void HCLXmInit();
+ #endif
+ 
+-int main(unsigned int argc,
++int main( int          argc,
+ 	  char**       argv)
+ {
+ #if defined(HAVE_HCLXMINIT)
+diff --git a/src/uipp/startup/StartupApplication.C b/src/uipp/startup/StartupApplication.C
+index 66eef43..50cf0a0 100644
+--- a/src/uipp/startup/StartupApplication.C
++++ b/src/uipp/startup/StartupApplication.C
+@@ -117,7 +117,7 @@ InitializeSignals(void)
+ #endif       
+ }            
+ 
+-boolean StartupApplication::initialize(unsigned int* argcp,
++boolean StartupApplication::initialize(int*  argcp,
+ 			       char**        argv)
+ {
+     ASSERT(argcp);
+diff --git a/src/uipp/startup/StartupApplication.h b/src/uipp/startup/StartupApplication.h
+index 872b586..61f28b1 100644
+--- a/src/uipp/startup/StartupApplication.h
++++ b/src/uipp/startup/StartupApplication.h
+@@ -84,7 +84,7 @@ class StartupApplication : public IBMApplication
+     // Overrides the Application class version:
+     //   Initializes Xt Intrinsics with option list (switches).
+     //
+-    virtual boolean initialize(unsigned int* argcp, char**argv);
++    virtual boolean initialize(int* argcp, char**argv);
+ 
+     CommandScope       *commandScope;   // command scope
+ 
+diff --git a/src/uipp/tutor/Main.C b/src/uipp/tutor/Main.C
+index 6bcd8cd..c8c3663 100644
+--- a/src/uipp/tutor/Main.C
++++ b/src/uipp/tutor/Main.C
+@@ -31,7 +31,7 @@ extern "C" void HCLXmInit();
+ //
+ const char *AssertMsgString = "Internal error detected at \"%s\":%d.\n";
+  
+-int main(unsigned int argc,
++int main( int          argc,
+ 	  char**       argv)
+ {
+ #if defined(HAVE_HCLXMINIT)
+diff --git a/src/uipp/tutor/TutorApplication.C b/src/uipp/tutor/TutorApplication.C
+index a4509d6..c4aec5a 100644
+--- a/src/uipp/tutor/TutorApplication.C
++++ b/src/uipp/tutor/TutorApplication.C
+@@ -196,7 +196,7 @@ InitializeSignals(void)
+ #endif       
+ }            
+ 
+-boolean TutorApplication::initialize(unsigned int* argcp,
++boolean TutorApplication::initialize(int*    argcp,
+ 			       char**        argv)
+ {
+     ASSERT(argcp);
+diff --git a/src/uipp/tutor/TutorApplication.h b/src/uipp/tutor/TutorApplication.h
+index c3cf5ee..b6e6213 100644
+--- a/src/uipp/tutor/TutorApplication.h
++++ b/src/uipp/tutor/TutorApplication.h
+@@ -69,7 +69,7 @@ class TutorApplication : public IBMApplication
+     // Overrides the Application class version:
+     //   Initializes Xt Intrinsics with option list (switches).
+     //
+-    virtual boolean initialize(unsigned int* argcp,
++    virtual boolean initialize(int*       argcp,
+ 			    char**        argv);
+ 
+     //
+diff --git a/src/uipp/widgets/MultiText.h b/src/uipp/widgets/MultiText.h
+index 6d5ee2a..db77a76 100644
+--- a/src/uipp/widgets/MultiText.h
++++ b/src/uipp/widgets/MultiText.h
+@@ -91,7 +91,7 @@ typedef struct _XmMultiTextClassRec* XmMultiTextWidgetClass;
+ #define XmNsmoothScroll		"smoothScroll"
+ #define XmNwaitCursorCount	"waitCursorCount"
+ 
+-#if !(defined(_Xm_h) || defined(XM_H))
++#if !(defined(_Xm_h) || defined(XM_H) || defined(_XM_XM_H))
+ #define XmNmarginHeight		"marginHeight"
+ #define XmNmarginWidth		"marginWidth"
+ #define XmNwordWrap		"wordWrap"
+@@ -109,7 +109,7 @@ typedef struct _XmMultiTextClassRec* XmMultiTextWidgetClass;
+ #define XmCSmoothScroll		"SmoothScroll"
+ #define XmCWaitCursorCount	"WaitCursorCount"
+ 
+-#if !(defined(_Xm_h) || defined(XM_H))
++#if !(defined(_Xm_h) || defined(XM_H) || defined(_XM_XM_H))
+ #define XmCMarginHeight		"MarginHeight"
+ #define XmCMarginWidth		"MarginWidth"
+ #define XmCWordWrap		"WordWrap"
+-- 
+2.9.3
+

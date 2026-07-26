@@ -1,0 +1,68 @@
+# Basic quick setup of noggin on Fedora
+
+1. Install and set up FreeIPA
+
+There is a basic quick start guide for setting up FreeIPA here: https://www.freeipa.org/page/Quick_Start_Guide
+
+More comprehensive setup documentation is available from Red Hat here: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/installing_identity_management/index
+
+2. Install and configure the FreeIPA FAS plugin
+
+First, install the plugin:
+
+$ sudo dnf install freeipa-fas
+
+Next, create a privilege containing the permissions needed to manage stage users:
+
+$ sudo ipa privilege-add "Stage User Managers" --desc "Manage registering users in Noggin"
+$ sudo ipa privilege-add-permission "Stage User Managers" --permissions "System: Read Stage Users" --permissions "System: Modify Stage User" --permissions "System: Remove Stage User"
+
+Then, create a role associated with this privilege:
+
+$ sudo ipa role-add "Stage User Managers" --desc "Manage registering users in Noggin"
+$ sudo ipa role-add-privilege "Stage User Managers" --privileges "Stage User Managers"
+
+Finally, if your administrators group is called sysadmin, give people in the sysadmin group the role to manage registering users:
+
+$ sudo ipa role-add-member "Stage User Managers" --groups sysadmin
+
+3. Edit /etc/noggin/noggin.cfg to set up noggin settings as appropriate.
+
+As we set up a FreeIPA system earlier, update the FREEIPA_* items to point to your server.
+
+Take a moment to review all the settings in the file and update them as needed.
+Most settings in there should have comments documenting what they're for, or are otherwise
+obvious for what needs to be set and why.
+
+4. Install Nginx web server and set up web configuration
+
+First, install nginx:
+
+$ sudo dnf install nginx
+
+Edit /etc/nginx/conf.d/noggin.conf to set up web settings as appropriate.
+
+Most of the settings just need to be uncommented to work. However, you may need to tweak based
+on whether or not you're using HTTPS and if you are using HTTPS, where your certs are and what your domain(s) are.
+
+5. Optional: Set up Let's Encrypt for HTTPS (skip if you aren't using HTTPS or have your own certs).
+
+$ sudo dnf install certbot
+$ certbot --text --email email@example.org \
+    --domains accounts.example.org \
+    --agree-tos --renew-by-default --manual certonly
+
+Edit the web server configuration file as noted in step 5 to point to your new certificates.
+
+6. Open ports in the firewall as appropriate
+
+$ sudo firewall-cmd --add-service=http
+$ sudo firewall-cmd --add-service=https
+$ sudo firewall-cmd --runtime-to-permanent
+
+7. Enable and start nginx and noggin services
+
+$ sudo systemctl enable --now noggin.service nginx.service
+
+For more information, take a look at the official Noggin documentation: https://noggin-aaa.readthedocs.io/
+

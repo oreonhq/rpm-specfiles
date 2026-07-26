@@ -1,0 +1,21 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 12 Jul 2022 19:31:10 +0200
+Subject: [PATCH] Ignore plugins
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 24fee02..833bc2f 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -27,9 +27,7 @@
+ %% == Plugins ==
+ 
+ {plugins, [
+-    % @TODO: Folow https://github.com/markusn/coveralls-erl/pull/36 and use `coveralls` after release
+-    {coveralls, {git, "https://github.com/RoadRunnr/coveralls-erl.git", {branch, "feature/git-info"}}},
+-    rebar3_hex]
++    ]
+ }.
+ 
+ %% == Cover covervalls.io ==

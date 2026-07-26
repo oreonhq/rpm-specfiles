@@ -1,0 +1,12 @@
+--- Makefile
++++ Makefile
+@@ -3,7 +3,7 @@
+ VERSION := 0.3.0
+ 
+ # optimization cflags
+-CFLAGS += -O2 -Wall -g `pkg-config gdk-2.0 gdk-pixbuf-2.0  --cflags` -DPREFIX=\"$(PREFIX)\" -DVERSION=\"$(VERSION)\"
++CFLAGS += -Wall `pkg-config gdk-2.0 gdk-pixbuf-2.0  --cflags` -DPREFIX=\"$(PREFIX)\" -DVERSION=\"$(VERSION)\"
+ 
+ OBJS = hot-babe.o loader.o
+ CC = gcc
+

@@ -1,0 +1,12 @@
+diff -rupN iax-0.2.3/src/iax-client.h iax-0.2.3-new/src/iax-client.h
+--- iax-0.2.3/src/iax-client.h	2014-08-10 16:36:22.000000000 +0200
++++ iax-0.2.3-new/src/iax-client.h	2014-08-10 18:29:57.940182105 +0200
+@@ -21,6 +21,8 @@
+ 
+ #ifdef WIN32
+ #define socklen_t int
++#else
++#include <sys/socket.h>
+ #endif
+ 
+ #include "frame.h"

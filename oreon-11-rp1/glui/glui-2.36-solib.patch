@@ -1,0 +1,37 @@
+--- glui-2.36.orig/src/makefile	2007-08-20 22:59:54.000000000 -0500
++++ glui-2.36/src/makefile	2012-08-02 09:19:01.113539785 -0500
+@@ -18,7 +18,7 @@
+ 
+ #######################################
+ 
+-CPPFLAGS += -I./ -I./include
++CPPFLAGS += -I./ -I./include -fPIC
+ 
+ LIBGLUI = -L./lib -lglui
+ LIBGL   = -lGLU -lGL
+@@ -44,13 +44,15 @@
+ 
+ GLUI_LIB = lib/libglui.a
+ 
++GLUI_SOLIB = lib/libglui.so.0.0
++
+ GLUI_EXAMPLES = bin/example1 bin/example2 bin/example3 bin/example4 bin/example5 bin/example6
+ 
+ GLUI_TOOLS = bin/ppm2array
+ 
+ .PHONY: all setup examples tools clean depend doc doc-pdf doc-dist dist
+ 
+-all: setup $(GLUI_LIB) examples tools
++all: setup $(GLUI_LIB) examples tools $(GLUI_SOLIB)
+ 
+ setup:
+ 	mkdir -p bin
+@@ -68,7 +70,8 @@
+ 
+ $(GLUI_LIB): $(GLUI_OBJS)
+ 	ar -r $(GLUI_LIB) $(GLUI_OBJS)
+-
++$(GLUI_SOLIB): $(GLUI_OBJS)
++	$(CXX) -shared -Wl,-soname,libglui.so.0 -o libglui.so.0.0 $(GLUI_OBJS) -lc
+ .cpp.o:
+ 	$(CXX) $(CPPFLAGS) -c $<

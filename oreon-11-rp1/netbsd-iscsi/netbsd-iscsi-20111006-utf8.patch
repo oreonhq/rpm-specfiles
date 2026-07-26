@@ -1,0 +1,24 @@
+From 1cd034f5e4bd4aa074e1bf18af8bf16f88406ca6 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Tue, 29 Aug 2017 12:08:57 +0200
+Subject: [PATCH] Replace a non-ascii character with a proper wide one
+
+---
+ src/target/iscsi-target.8 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/target/iscsi-target.8 b/src/target/iscsi-target.8
+index 410b699..8c5ec9b 100644
+--- a/src/target/iscsi-target.8
++++ b/src/target/iscsi-target.8
+@@ -1,6 +1,6 @@
+ .\" $NetBSD: iscsi-target.8,v 1.2 2009/06/30 02:44:53 agc Exp $
+ .\"
+-.\" Copyright © 2006 Alistair Crooks.  All rights reserved.
++.\" Copyright Â© 2006 Alistair Crooks.  All rights reserved.
+ .\"
+ .\" Redistribution and use in source and binary forms, with or without
+ .\" modification, are permitted provided that the following conditions
+-- 
+2.13.5
+

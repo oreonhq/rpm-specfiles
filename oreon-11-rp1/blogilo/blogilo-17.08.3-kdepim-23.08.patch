@@ -1,0 +1,106 @@
+diff -ur blogilo-17.08.3-kdepim-23.04/CMakeLists.txt blogilo-17.08.3-kdepim-23.08/CMakeLists.txt
+--- blogilo-17.08.3-kdepim-23.04/CMakeLists.txt	2023-05-08 14:47:05.981674233 +0200
++++ blogilo-17.08.3-kdepim-23.08/CMakeLists.txt	2023-09-20 08:10:35.061223248 +0200
+@@ -61,11 +61,12 @@
+ find_package(KF5KIO ${KF5_VERSION} CONFIG REQUIRED)
+ find_package(KF5Notifications ${KF5_VERSION} CONFIG REQUIRED)
+ find_package(KF5TextEditTextToSpeech CONFIG REQUIRED)
++find_package(KF5TextEmoticonsWidgets CONFIG REQUIRED)
+ 
+ # Find KdepimLibs Package
+ find_package(KF5Blog ${KBLOG_LIB_VERSION} CONFIG REQUIRED)
+ find_package(KF5Libkdepim ${LIBKDEPIM_LIB_VERSION_LIB} CONFIG REQUIRED)
+-find_package(KF5PimCommon ${PIMCOMMON_LIB_VERSION_LIB} CONFIG REQUIRED)
++find_package(KPim5PimCommon ${PIMCOMMON_LIB_VERSION_LIB} CONFIG REQUIRED)
+ find_package(KF5PimTextEdit ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
+ find_package(KPim5WebEngineViewer ${MESSAGELIB_LIB_VERSION_LIB} CONFIG REQUIRED)
+ find_package(KF5IMAP ${KIMAP_LIB_VERSION} CONFIG REQUIRED)
+diff -ur blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/CMakeLists.txt blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/CMakeLists.txt
+--- blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/CMakeLists.txt	2023-05-08 15:03:05.359086581 +0200
++++ blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/CMakeLists.txt	2023-09-20 07:44:53.560564300 +0200
+@@ -29,8 +29,9 @@
+     PRIVATE
+     KF5::PimTextEdit
+     KF5::TextEditTextToSpeech
++    KF5::TextEmoticonsWidgets
+     KF5::SonnetCore
+-    KF5::PimCommon
++    KPim5::PimCommon
+     KF5::KIOWidgets
+     KF5::XmlGui
+     KF5::Completion
+diff -ur blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/composerwebengine.cpp blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/composerwebengine.cpp
+--- blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/composerwebengine.cpp	2023-05-08 14:49:17.824640489 +0200
++++ blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/composerwebengine.cpp	2023-09-20 07:57:10.967874916 +0200
+@@ -20,7 +20,6 @@
+ #include "composerwebengine.h"
+ #include "private/composerwebengine_p.h"
+ #include "composereditorwebengine_debug.h"
+-#include <kpimtextedit/emoticontexteditaction.h>
+ #include <QStandardPaths>
+ #include <QFile>
+ #include <QFileInfo>
+diff -ur blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/private/composerwebengine_p.cpp blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/private/composerwebengine_p.cpp
+--- blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/private/composerwebengine_p.cpp	2023-05-08 14:52:26.819736628 +0200
++++ blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/private/composerwebengine_p.cpp	2023-09-20 07:58:35.477649507 +0200
+@@ -29,7 +29,6 @@
+ #include "helper/listhelper_p.h"
+ #endif
+ 
+-#include <kpimtextedit/emoticontexteditaction.h>
+ #include <kpimtextedit/inserthtmldialog.h>
+ #include <kpimtextedit/selectspecialchardialog.h>
+ #include <TextEditTextToSpeech/TextToSpeech>
+@@ -323,7 +322,7 @@
+     }
+     case ComposerWebEngine::Emoticon: {
+         if (!action_add_emoticon) {
+-            action_add_emoticon = new KPIMTextEdit::EmoticonTextEditAction(q);
++            action_add_emoticon = new TextEmoticonsWidgets::EmoticonTextEditAction(q);
+             q->connect(action_add_emoticon, SIGNAL(emoticonActivated(QString)),
+                        q, SLOT(_k_slotAddEmoticon(QString)));
+         }
+diff -ur blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/private/composerwebengine_p.h blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/private/composerwebengine_p.h
+--- blogilo-17.08.3-kdepim-23.04/composereditorwebengine/src/private/composerwebengine_p.h	2017-10-29 08:12:51.000000000 +0100
++++ blogilo-17.08.3-kdepim-23.08/composereditorwebengine/src/private/composerwebengine_p.h	2023-09-20 07:57:40.049453229 +0200
+@@ -20,7 +20,7 @@
+ 
+ #include "composerwebengine.h"
+ 
+-#include <kpimtextedit/emoticontexteditaction.h>
++#include <TextEmoticonsWidgets/EmoticonTextEditAction>
+ 
+ class KToggleAction;
+ class QAction;
+@@ -28,10 +28,6 @@
+ class KFontAction;
+ class ComposerImageResizeWidget;
+ 
+-namespace KPIMTextEdit
+-{
+-class EmoticonTextEditAction;
+-}
+ namespace WebEngineViewer
+ {
+ class WebEnginePage;
+@@ -149,7 +145,7 @@
+     KSelectAction *action_format_type;
+     KSelectAction *action_font_size;
+     KFontAction *action_font_family;
+-    KPIMTextEdit::EmoticonTextEditAction *action_add_emoticon;
++    TextEmoticonsWidgets::EmoticonTextEditAction *action_add_emoticon;
+     QAction *action_insert_html;
+     QAction *action_insert_image;
+     QAction *action_insert_table;
+diff -ur blogilo-17.08.3-kdepim-23.04/src/CMakeLists.txt blogilo-17.08.3-kdepim-23.08/src/CMakeLists.txt
+--- blogilo-17.08.3-kdepim-23.04/src/CMakeLists.txt	2023-05-07 19:03:34.414344538 +0200
++++ blogilo-17.08.3-kdepim-23.08/src/CMakeLists.txt	2023-09-20 06:09:28.894112178 +0200
+@@ -71,7 +71,7 @@
+ 
+ target_link_libraries(blogilo
+     KF5::Blog
+-    KF5::PimCommon
++    KPim5::PimCommon
+     Qt5::Sql
+     KF5::Libkdepim
+     KF5::TextEditor

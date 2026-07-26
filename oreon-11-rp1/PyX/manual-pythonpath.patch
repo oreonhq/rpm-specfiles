@@ -1,0 +1,13 @@
+Description: Add back module to PYTHONPATH for building manual
+Author: Stuart Prescott <stuart@debian.org>
+--- a/manual/Makefile
++++ b/manual/Makefile
+@@ -39,7 +39,7 @@
+ figs: $(patsubst %.py, %.png, $(filter-out conf.py,$(wildcard *.py)))
+ 
+ %.pdf: %.py
+-	$(PYTHON) $^
++	PYTHONPATH=$(CURDIR)/.. $(PYTHON) $^
+ 
+ %.png: %.pdf
+ 	$(GS) -r100 -dNOPAUSE -dQUIET -dBATCH -sDEVICE=pngalpha -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -sOutputFile=$@ $^

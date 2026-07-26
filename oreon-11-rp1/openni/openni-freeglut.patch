@@ -1,0 +1,121 @@
+--- Samples/NiSimpleViewer/NiSimpleViewer.cpp~	2019-09-18 18:07:26.000000000 -0500
++++ Samples/NiSimpleViewer/NiSimpleViewer.cpp	2019-09-19 08:01:28.843106221 -0500
+@@ -25,7 +25,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ 	#include <GLUT/glut.h>
+ #else
+-	#include <GL/glut.h>
++	#include <GL/freeglut.h>
+ #endif
+ #include <math.h>
+ 
+--- Samples/NiViewer/MouseInput.cpp~	2019-09-18 18:07:26.000000000 -0500
++++ Samples/NiViewer/MouseInput.cpp	2019-09-19 08:02:37.626044533 -0500
+@@ -26,7 +26,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ 	#include <GLUT/glut.h>
+ #else
+-	#include <GL/glut.h>
++	#include <GL/freeglut.h>
+ #endif
+ 
+ // --------------------------------
+--- Samples/NiViewer/Draw.cpp~	2019-09-19 08:04:03.000000000 -0500
++++ Samples/NiViewer/Draw.cpp	2019-09-19 08:20:54.533057100 -0500
+@@ -30,7 +30,7 @@
+ 	#include <OpenGL/gl.h>
+ #else
+ 	#include <GL/gl.h>
+-	#include <GL/glut.h>
++	#include <GL/freeglut.h>
+ #endif
+ #include "Statistics.h"
+ #include "MouseInput.h"
+--- Samples/NiViewer/Menu.cpp~	2019-09-19 08:21:14.000000000 -0500
++++ Samples/NiViewer/Menu.cpp	2019-09-19 08:43:19.731785315 -0500
+@@ -26,7 +26,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ 	#include <GLUT/glut.h>
+ #else
+-	#include <GL/glut.h>
++	#include <GL/freeglut.h>
+ #endif
+ #include <stdio.h>
+ #include <string.h>
+--- Samples/NiUserTracker/SceneDrawer.cpp~	2019-09-19 08:43:41.000000000 -0500
++++ Samples/NiUserTracker/SceneDrawer.cpp	2019-09-19 08:55:28.057097409 -0500
+@@ -28,7 +28,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ 	#include <GLUT/glut.h>
+ #else
+-	#include <GL/glut.h>
++	#include <GL/freeglut.h>
+ #endif
+ #else
+ 	#include "opengles.h"
+--- Samples/NiUserSelection/SceneDrawer.h~	2013-11-12 10:30:03.000000000 -0600
++++ Samples/NiUserSelection/SceneDrawer.h	2019-09-19 09:07:09.659424865 -0500
+@@ -28,7 +28,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ #include <GLUT/glut.h>
+ #else
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #endif
+ #else
+ #include "opengles.h"
+--- Samples/NiViewer/glh/glh_glut.h~	2013-11-12 10:30:03.000000000 -0600
++++ Samples/NiViewer/glh/glh_glut.h	2019-09-19 09:07:55.501380924 -0500
+@@ -49,7 +49,7 @@
+ #ifdef MACOS
+ #include <GLUT/glut.h>
+ #else
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #endif
+ 
+ #include <glh/glh_convenience.h>
+--- Samples/NiUserTracker/main.cpp~	2019-09-19 09:08:41.000000000 -0500
++++ Samples/NiUserTracker/main.cpp	2019-09-19 09:16:35.518870848 -0500
+@@ -51,7 +51,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ 	#include <GLUT/glut.h>
+ #else
+-	#include <GL/glut.h>
++	#include <GL/freeglut.h>
+ #endif
+ #else
+ 	#include "opengles.h"
+--- Samples/NiHandTracker/NiSimpleViewer.cpp~	2019-09-19 09:17:11.000000000 -0500
++++ Samples/NiHandTracker/NiSimpleViewer.cpp	2019-09-19 09:27:18.518229261 -0500
+@@ -26,7 +26,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ #include <GLUT/glut.h>
+ #else
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #endif
+ #include <math.h>
+ #include <cassert>
+--- Samples/NiViewer/glh/glh_glut2.h~	2013-11-12 10:30:03.000000000 -0600
++++ Samples/NiViewer/glh/glh_glut2.h	2019-09-19 09:38:36.010422609 -0500
+@@ -54,7 +54,7 @@
+ #ifdef MACOS
+ #include <GLUT/glut.h>
+ #else
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #endif
+ 
+ #include <glh/glh_interactors.h>
+--- Samples/NiHandTracker/NiHandViewer.cpp~	2019-09-19 09:39:04.000000000 -0500
++++ Samples/NiHandTracker/NiHandViewer.cpp	2019-09-19 09:47:16.374748919 -0500
+@@ -25,7 +25,7 @@
+ #if (XN_PLATFORM == XN_PLATFORM_MACOSX)
+ #include <GLUT/glut.h>
+ #else
+-#include <GL/glut.h>
++#include <GL/freeglut.h>
+ #endif
+ 
+ //---------------------------------------------------------------------------

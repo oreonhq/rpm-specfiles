@@ -1,0 +1,26 @@
+diff -rupN --no-dereference qtactiveqt-everywhere-src-5.15.18/src/activeqt/control/qaxserverbase.cpp qtactiveqt-everywhere-src-5.15.18-new/src/activeqt/control/qaxserverbase.cpp
+--- qtactiveqt-everywhere-src-5.15.18/src/activeqt/control/qaxserverbase.cpp	2025-03-30 13:49:30.000000000 +0200
++++ qtactiveqt-everywhere-src-5.15.18-new/src/activeqt/control/qaxserverbase.cpp	2025-11-08 23:29:22.559420210 +0100
+@@ -1852,9 +1852,6 @@ void QAxServerBase::resize(const QSize &
+     // make sure we get a resize event even if not embedded as a control
+     if (!m_hWnd && !qt.widget->isVisible() && newSize != oldSize) {
+         QResizeEvent resizeEvent(newSize, oldSize);
+-#ifndef QT_SHARED // import from static library
+-        extern bool qt_sendSpontaneousEvent(QObject*,QEvent*);
+-#endif
+         qt_sendSpontaneousEvent(qt.widget, &resizeEvent);
+     }
+     m_currentExtent = qt.widget->size();
+@@ -4060,12 +4057,10 @@ HRESULT WINAPI QAxServerBase::SetColorSc
+ }
+ 
+ 
+-#ifdef QT_SHARED // avoid conflict with symbol in static lib
+ bool qt_sendSpontaneousEvent(QObject *o, QEvent *e)
+ {
+     return QCoreApplication::sendSpontaneousEvent(o, e);
+ }
+-#endif
+ 
+ /*
+     Tries to set the size of the control.

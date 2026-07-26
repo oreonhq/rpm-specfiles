@@ -1,0 +1,12 @@
+diff -up fig2ps-1.5/bin/fig2ps~ fig2ps-1.5/bin/fig2ps
+--- fig2ps-1.5/bin/fig2ps~	2010-02-02 23:26:20.000000000 +0100
++++ fig2ps-1.5/bin/fig2ps	2012-07-04 12:26:25.589495251 +0200
+@@ -351,7 +351,7 @@ my $job = 0;
+ 		system($viewer,$pdffile);
+ 	    }
+ 	    else {
+-		system($viewer,$pdffile);
++		system($viewer,$psfile);
+ 	    }
+ 	}
+     }

@@ -1,0 +1,11 @@
+--- grape-4.9.1/lib/grape.g.orig	2024-08-30 06:31:32.000000000 -0600
++++ grape-4.9.1/lib/grape.g	2024-09-02 17:00:43.341643758 -0600
+@@ -42,7 +42,7 @@ GRAPE_NRANGENS := 18;  # The number of r
+ GRAPE_NAUTY := true;   # Use nauty when true, else use bliss.
+ 
+ GRAPE_DREADNAUT_EXE := 
+-   ExternalFilename(DirectoriesPackagePrograms("grape"),"dreadnaut"); 
++   ExternalFilename(DirectoriesSystemPrograms(),"dreadnaut");
+    # filename of dreadnaut or dreadnautB executable
+ 
+ GRAPE_BLISS_EXE := ExternalFilename(DirectoriesSystemPrograms(),"bliss"); 

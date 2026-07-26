@@ -1,0 +1,74 @@
+From 7cc281921459899167d260b04d870e94288a046a Mon Sep 17 00:00:00 2001
+From: Alexander Urbanovich <au@time.sc>
+Date: Fri, 16 Nov 2018 21:07:31 +0300
+Subject: [PATCH] * fix atomicity of authetication errors while high
+ concurrency
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Mango/Auth/SCRAM.pm | 42 +++++++++++++++++++----------------------
+ 1 file changed, 19 insertions(+), 23 deletions(-)
+
+diff --git a/lib/Mango/Auth/SCRAM.pm b/lib/Mango/Auth/SCRAM.pm
+index 99b7711..bd8b9cf 100644
+--- a/lib/Mango/Auth/SCRAM.pm
++++ b/lib/Mango/Auth/SCRAM.pm
+@@ -37,33 +37,29 @@ sub _authenticate {
+   my $delay = Mojo::IOLoop::Delay->new;
+   my $conv_id;
+ 
+-  $delay->steps(
+-    sub {
+-      my ($d, $mango, $err, $doc) = @_;
+-      $conv_id = $doc->{conversationId};
+-      my $final_msg = $scram_client->final_msg(b64_decode $doc->{payload});
+-
+-      my $command = $self->_cmd_sasl_continue($conv_id, $final_msg);
+-      $mango->_fast($id, $db, $command, $d->begin(0));
+-    },
+-    sub {
+-      my ($d, $mango, $err, $doc) = @_;
+-      $scram_client->validate(b64_decode $doc->{payload});
+-
+-      my $command = $self->_cmd_sasl_continue($conv_id, '');
+-      $mango->_fast($id, $db, $command, $d->begin(0));
+-    },
+-    sub {
+-      my ($d, $mango, $err, $doc) = @_;
+-      $mango->emit(connection => $id)->_next;
+-    }
+-  );
++  my $end = $delay->begin;
+ 
+   my $command = $self->_cmd_sasl_start($scram_client->first_msg);
+-  $mango->_fast($id, $db, $command, $delay->begin(0));
++  $mango->_fast($id, $db, $command, sub {
++    my ($mango, $err, $doc) = @_;
++    $conv_id = $doc->{conversationId};
++    my $final_msg = $scram_client->final_msg(b64_decode $doc->{payload});
++
++    my $command = $self->_cmd_sasl_continue($conv_id, $final_msg);
++    $mango->_fast($id, $db, $command, sub {
++      my ($mango, $err, $doc) = @_;
++      $scram_client->validate(b64_decode $doc->{payload});
++  
++      my $command = $self->_cmd_sasl_continue($conv_id, '');
++      $mango->_fast($id, $db, $command, sub {
++        my ($mango, $err, $doc) = @_;
++        $mango->emit(connection => $id)->_next;
++        $end->();
++      })
++    })
++  });
+ 
+   $delay->wait;
+-  $delay->ioloop->one_tick unless $delay->ioloop->is_running;
+ }
+ 
+ sub _cmd_sasl_start {
+-- 
+2.26.3
+

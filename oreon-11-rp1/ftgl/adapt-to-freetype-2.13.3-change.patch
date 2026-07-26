@@ -1,0 +1,94 @@
+diff -ur ftgl-2.1.3~rc5.orig/src/FTContour.cpp ftgl-2.1.3~rc5/src/FTContour.cpp
+--- ftgl-2.1.3~rc5.orig/src/FTContour.cpp	2008-06-09 14:53:56.000000000 +0200
++++ ftgl-2.1.3~rc5/src/FTContour.cpp	2024-10-18 10:57:54.586242710 +0200
+@@ -163,7 +163,7 @@
+ }
+ 
+ 
+-FTContour::FTContour(FT_Vector* contour, char* tags, unsigned int n)
++FTContour::FTContour(FT_Vector* contour, unsigned char* tags, unsigned int n)
+ {
+     FTPoint prev, cur(contour[(n - 1) % n]), next(contour[0]);
+     FTPoint a, b = next - cur;
+Endast i ftgl-2.1.3~rc5/src: FTContour.cpp.orig
+diff -ur ftgl-2.1.3~rc5.orig/src/FTContour.h ftgl-2.1.3~rc5/src/FTContour.h
+--- ftgl-2.1.3~rc5.orig/src/FTContour.h	2008-06-09 14:54:17.000000000 +0200
++++ ftgl-2.1.3~rc5/src/FTContour.h	2024-10-18 10:57:54.587242713 +0200
+@@ -52,7 +52,7 @@
+          * @param pointTags
+          * @param numberOfPoints
+          */
+-        FTContour(FT_Vector* contour, char* pointTags, unsigned int numberOfPoints);
++        FTContour(FT_Vector* contour, unsigned char* pointTags, unsigned int numberOfPoints);
+ 
+         /**
+          * Destructor
+diff -ur ftgl-2.1.3~rc5.orig/src/FTVectoriser.cpp ftgl-2.1.3~rc5/src/FTVectoriser.cpp
+--- ftgl-2.1.3~rc5.orig/src/FTVectoriser.cpp	2008-06-09 14:53:36.000000000 +0200
++++ ftgl-2.1.3~rc5/src/FTVectoriser.cpp	2024-10-18 10:57:54.587242713 +0200
+@@ -166,7 +166,7 @@
+     for(int i = 0; i < ftContourCount; ++i)
+     {
+         FT_Vector* pointList = &outline.points[startIndex];
+-        char* tagList = &outline.tags[startIndex];
++        unsigned char* tagList = &outline.tags[startIndex];
+ 
+         endIndex = outline.contours[i];
+         contourLength =  (endIndex - startIndex) + 1;
+Endast i ftgl-2.1.3~rc5/src: FTVectoriser.cpp.orig
+diff -ur ftgl-2.1.3~rc5.orig/test/FTContour-Test.cpp ftgl-2.1.3~rc5/test/FTContour-Test.cpp
+--- ftgl-2.1.3~rc5.orig/test/FTContour-Test.cpp	2008-04-28 14:28:00.000000000 +0200
++++ ftgl-2.1.3~rc5/test/FTContour-Test.cpp	2024-10-18 11:11:49.303691897 +0200
+@@ -22,14 +22,14 @@
+     { 9, -2}
+ };
+ 
+-static char straightLineTags[3] =
++static unsigned char straightLineTags[3] =
+ {
+     FT_Curve_Tag_On,
+     FT_Curve_Tag_On,
+     FT_Curve_Tag_On
+ };
+ 
+-static char brokenTags[3] =
++static unsigned char brokenTags[3] =
+ {
+     FT_Curve_Tag_Conic,
+     69,
+@@ -50,7 +50,7 @@
+     { 0, 0}
+ };
+ 
+-static char simpleConicTags[3] =
++static unsigned char simpleConicTags[3] =
+ {
+     FT_Curve_Tag_Conic,
+     FT_Curve_Tag_On,
+@@ -65,7 +65,7 @@
+     { 4,  0}
+ };
+ 
+-static char doubleConicTags[4] =
++static unsigned char doubleConicTags[4] =
+ {
+     FT_Curve_Tag_On,
+     FT_Curve_Tag_On,
+@@ -81,7 +81,7 @@
+     { 4,  0}
+ };
+ 
+-static char cubicTags[4] =
++static unsigned char cubicTags[4] =
+ {
+     FT_Curve_Tag_On,
+     FT_Curve_Tag_On,
+@@ -113,7 +113,7 @@
+     { 2240,    0 },
+ };
+ 
+-static char compositeTags[18] =
++static unsigned char compositeTags[18] =
+ {
+     FT_Curve_Tag_On,
+     FT_Curve_Tag_On,

@@ -1,0 +1,28 @@
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/conflict_while_copying_dialog.rb.utf8	2019-10-25 01:20:07.000000000 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/conflict_while_copying_dialog.rb	2020-01-03 16:11:41.543997217 +0900
+@@ -13,9 +13,11 @@ module Alexandria
+       GetText.bindtextdomain(Alexandria::TEXTDOMAIN, charset: "UTF-8")
+ 
+       def initialize(parent, library, book)
++        # Don't know why, however force_encoding seems needed here to
++        # prevent crash...
+         super(parent,
+               format(_("The book '%s' already exists in '%s'. Would you like " \
+-                       "to replace it?"), book.title, library.name),
++                       "to replace it?"), book.title, library.name).dup.force_encoding("UTF-8"),
+               Gtk::Stock::DIALOG_QUESTION,
+               [[_("_Skip"), Gtk::ResponseType::CANCEL],
+                [_("_Replace"), Gtk::ResponseType::OK]],
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/ui_manager.rb.utf8	2019-10-25 01:20:07.000000000 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/ui_manager.rb	2020-01-03 16:14:53.165730869 +0900
+@@ -714,7 +714,9 @@ module Alexandria
+         iter[Columns::TITLE] = book.title
+         title = book.title.sub(REDUCE_TITLE_REGEX, '\1...')
+         iter[Columns::TITLE_REDUCED] = title
+-        iter[Columns::AUTHORS] = book.authors.join(", ")
++        # Don't know why, however force_encoding seems needed here to
++        # prevent crash...
++        iter[Columns::AUTHORS] = book.authors.dup.map!{|str| str.dup.force_encoding("UTF-8")}.join(", ")
+         iter[Columns::ISBN] = book.isbn.to_s
+         iter[Columns::PUBLISHER] = book.publisher
+         iter[Columns::PUBLISH_DATE] = book.publishing_year.to_s

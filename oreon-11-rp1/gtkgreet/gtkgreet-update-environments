@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# This script is a part of Fedora customization for greetd
+# Please, report any bugs or enhancement requests to the Fedora package maintainer
+#
+DEFAULT_ENV_FILE=/etc/greetd/environments
+XSESSION_WRAPPER=startx
+
+find_sessions() {
+    grep --no-filename '^Exec=' "$1"/*.desktop |
+        cut -d= -f2- |
+        sort -u
+}
+
+generate_environments() {
+    # gnome-session on wayland is known to be broken with greetd
+    # https://todo.sr.ht/~kennylevinsen/greetd/15
+    find_sessions "/usr/share/wayland-sessions" |
+        grep -v 'gnome-session'
+
+    # X sessions should be wrapped with startx or xinit
+    # both of those scripts require absolute path to the binary
+    find_sessions "/usr/share/xsessions" |
+        while read -r cmd; do
+            echo "$XSESSION_WRAPPER $(command -pv "$cmd")";
+        done
+}
+
+case "$1" in
+    --diff|-d)
+        generate_environments | diff -u "${2:-$DEFAULT_ENV_FILE}" -
+        ;;
+    --list|-l)
+        generate_environments;
+        ;;
+    --write|-w)
+        generate_environments >"${2:-$DEFAULT_ENV_FILE}";
+        ;;
+    --help|*)
+        cat <<EOF
+Usage:
+    --write [file], -w [file]
+        Write collected session commands into the specified file.
+        Requires write access to the file. If the value is omitted,
+        $DEFAULT_ENV_FILE will be used.
+
+    --diff [file], -d [file]
+        Show diff of collected commands with the existing file.
+        Requires read access to the file. If the value is omitted,
+        $DEFAULT_ENV_FILE will be used.
+
+    --list, -l
+        Show list of the sessions to be written into the environments file.
+
+    --help
+        Show help
+EOF
+        exit 0;
+        ;;
+esac

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Gem Drop X
+Comment=Falling blocks puzzlegame
+Exec=gemdropx
+Icon=gemdropx.png
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;BlocksGame;

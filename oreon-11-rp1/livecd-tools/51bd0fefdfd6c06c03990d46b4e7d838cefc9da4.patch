@@ -1,0 +1,42 @@
+From 51bd0fefdfd6c06c03990d46b4e7d838cefc9da4 Mon Sep 17 00:00:00 2001
+From: Michal Gawlik <michal@gawlik.dev>
+Date: Mon, 19 Sep 2022 11:08:05 +0200
+Subject: [PATCH] imgcreate/util: don't print every word on its own line
+
+split() method without any arguments will return list of words, using
+whitespaces as separator, which then logging.debug() will output on
+separate lines,
+making
+mess
+like
+this.
+
+Use splitlines() to get a list of lines and print it directly to solve
+that problem. Note rstrip is no longer needed (due to keepends=False),
+and the break must go away cause otherwise we would drop all output
+following an empty line.
+---
+ imgcreate/util.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/imgcreate/util.py b/imgcreate/util.py
+index fad6772e..a37e2d75 100644
+--- a/imgcreate/util.py
++++ b/imgcreate/util.py
+@@ -32,14 +32,12 @@ def call(*popenargs, **kwargs):
+                          stderr=subprocess.STDOUT, **kwargs)
+     rc = p.wait()
+     fp = io.open(p.stdout.fileno(), mode="r", encoding="utf-8", closefd=False)
+-    stdout = fp.read().split()
++    stdout = fp.read().splitlines(keepends=False)
+     fp.close()
+ 
+     # Log output using logging module
+     for buf in stdout:
+-        if not buf:
+-            break
+-        logging.debug("%s", buf.rstrip())
++        logging.debug("%s", buf)
+ 
+     return rc
+ 

@@ -1,0 +1,22 @@
+--- doc/intro.xml.orig	2020-02-02 05:09:45.000000000 -0700
++++ doc/intro.xml	2020-02-02 08:48:00.624233367 -0700
+@@ -81,7 +81,7 @@ The following &GAP; packages are require
+ The following &GAP; packages are not required but highly recommended:
+ 
+ <List>
+-<Item><Package>carat</Package></Item>
++<Item><Package>CaratInterface</Package></Item>
+ <Item><Package>CrystCat</Package></Item>
+ <Item><Package>GAPDoc</Package> is needed to display the online manual</Item>
+ </List> 
+--- PackageInfo.g.orig	2020-02-02 08:48:00.625233365 -0700
++++ PackageInfo.g	2020-02-02 08:48:50.373123965 -0700
+@@ -74,7 +74,7 @@ Dependencies := rec(
+                    ["polymaking",">=0.7.9"],
+                    ],
+   SuggestedOtherPackages := [
+-                   [ "Carat", ">=1.1" ],
++                   [ "CaratInterface", ">=1.1" ],
+                    ["CrystCat",">=1.1.2"],
+                    ["GAPDoc", ">= 0.99"]
+                    ],

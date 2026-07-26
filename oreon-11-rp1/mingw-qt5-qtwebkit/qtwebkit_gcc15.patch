@@ -1,0 +1,11 @@
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Source/ThirdParty/woff2/include/woff2/output.h qtwebkit-5.212.0-alpha4-new/Source/ThirdParty/woff2/include/woff2/output.h
+--- qtwebkit-5.212.0-alpha4/Source/ThirdParty/woff2/include/woff2/output.h	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Source/ThirdParty/woff2/include/woff2/output.h	2025-07-18 10:44:52.525613636 +0200
+@@ -10,6 +10,7 @@
+ #define WOFF2_WOFF2_OUT_H_
+ 
+ #include <algorithm>
++#include <cstdint>
+ #include <cstring>
+ #include <memory>
+ #include <string>

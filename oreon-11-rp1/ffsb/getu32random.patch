@@ -1,0 +1,105 @@
+Index: ffsb-6.0-rc2/ffsb_fs.c
+===================================================================
+--- ffsb-6.0-rc2.orig/ffsb_fs.c
++++ ffsb-6.0-rc2/ffsb_fs.c
+@@ -118,7 +118,7 @@ static void add_files(ffsb_fs_t *fs, str
+ 	while (condition) {
+ 		uint64_t size;
+ 		if (fs->num_weights) {
+-			int num = 1 + getrandom(&rd, fs->sum_weights);
++			int num = 1 + getu32random(&rd, fs->sum_weights);
+ 			int curop = 0;
+ 
+ 			while (fs->size_weights[curop].weight < num) {
+Index: ffsb-6.0-rc2/ffsb_tg.c
+===================================================================
+--- ffsb-6.0-rc2.orig/ffsb_tg.c
++++ ffsb-6.0-rc2/ffsb_tg.c
+@@ -101,7 +101,7 @@ void tg_get_op(ffsb_tg_t *tg, randdata_t
+ 	int num;
+ 	int fsnum;
+ 
+-	num = 1 + getrandom(rd, tg->sum_weights);
++	num = 1 + getu32random(rd, tg->sum_weights);
+ 	curop = 0;
+ 
+ 	while (tg->op_weights[curop] < num) {
+@@ -116,7 +116,7 @@ void tg_get_op(ffsb_tg_t *tg, randdata_t
+ 	 */
+ 	fsnum = tg->bindfs;
+ 	if (fsnum < 0)
+-		fsnum = getrandom(rd, tg->fc->num_filesys);
++		fsnum = getu32random(rd, tg->fc->num_filesys);
+ 
+ 	params->fs = fc_get_fs(tg->fc, fsnum);
+ }
+Index: ffsb-6.0-rc2/filelist.c
+===================================================================
+--- ffsb-6.0-rc2.orig/filelist.c
++++ ffsb-6.0-rc2/filelist.c
+@@ -157,7 +157,7 @@ struct ffsb_file *add_file(struct benchf
+ 
+ 	if (oldfile == NULL) {
+ 		char buf[FILENAME_MAX];
+-		int randdir = getrandom(rd, b->numsubdirs+1);
++		int randdir = getu32random(rd, b->numsubdirs+1);
+ 		int namesize = 0;
+ 		if (randdir == 0)
+ 			namesize = snprintf(buf, FILENAME_MAX, "%s/%s%s%d",
+@@ -301,7 +301,7 @@ static struct ffsb_file *choose_file(str
+ 	}
+ 
+ 	while (cur == NULL) {
+-		chosen = getrandom(rd, b->listsize);
++		chosen = getu32random(rd, b->listsize);
+ 		temp.num = chosen;
+ 		cur = rbtree_find(b->files, &temp);
+ 	}
+Index: ffsb-6.0-rc2/fileops.c
+===================================================================
+--- ffsb-6.0-rc2.orig/fileops.c
++++ ffsb-6.0-rc2/fileops.c
+@@ -434,7 +434,7 @@ static unsigned ffsb_createfile_core(ffs
+ 	unsigned iterations = 0;
+ 
+ 	if (fs->num_weights) {
+-		int num = 1 + getrandom(rd, fs->sum_weights);
++		int num = 1 + getu32random(rd, fs->sum_weights);
+ 		int curop = 0;
+ 
+ 		while (fs->size_weights[curop].weight < num) {
+Index: ffsb-6.0-rc2/rand.c
+===================================================================
+--- ffsb-6.0-rc2.orig/rand.c
++++ ffsb-6.0-rc2/rand.c
+@@ -135,7 +135,7 @@ void destroy_random(randdata_t *rd)
+  * we should only get byte-sized chunks of random bits and
+  * construct our random number that way with less wasteage - SR
+  */
+-uint32_t getrandom(randdata_t *state, uint32_t mod)
++uint32_t getu32random(randdata_t *state, uint32_t mod)
+ {
+ 
+     uint8_t bytes[4] = { 0, 0, 0, 0 };
+@@ -172,7 +172,7 @@ uint64_t getllrandom(randdata_t *state,
+ 
+ 	/* ULONG_MAX comes from limits.h */
+ 	if (mod < ULONG_MAX)
+-		return (uint64_t)getrandom(state, (uint32_t)mod);
++		return (uint64_t)getu32random(state, (uint32_t)mod);
+ 
+ 	high = genrand32(state);
+ 
+Index: ffsb-6.0-rc2/rand.h
+===================================================================
+--- ffsb-6.0-rc2.orig/rand.h
++++ ffsb-6.0-rc2/rand.h
+@@ -48,7 +48,7 @@ typedef struct randdata {
+ #endif
+ } randdata_t;
+ 
+-uint32_t getrandom(randdata_t *rd, uint32_t mod);
++uint32_t getu32random(randdata_t *rd, uint32_t mod);
+ uint64_t getllrandom(randdata_t *rd, uint64_t mod);
+ 
+ /* pass in thread-local state, and est. number of "uses" */

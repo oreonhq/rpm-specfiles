@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 68fcbb0..cd207ad 100644
+--- a/Makefile
++++ b/Makefile
+@@ -53,8 +53,6 @@ install: dvtm
+ 	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
+ 	@sed "s/VERSION/${VERSION}/g" < dvtm.1 > ${DESTDIR}${MANPREFIX}/man1/dvtm.1
+ 	@chmod 644 ${DESTDIR}${MANPREFIX}/man1/dvtm.1
+-	@echo installing terminfo description
+-	@TERMINFO=${TERMINFO} tic -s dvtm.info
+ 
+ uninstall:
+ 	@echo removing executable file from ${DESTDIR}${PREFIX}/bin

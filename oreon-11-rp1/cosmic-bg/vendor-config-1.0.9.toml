@@ -1,0 +1,23 @@
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/jackpot51/rust-atomicwrites"]
+git = "https://github.com/jackpot51/rust-atomicwrites"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/pop-os/libcosmic"]
+git = "https://github.com/pop-os/libcosmic"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/pop-os/smithay-clipboard?tag=sctk-0.20"]
+git = "https://github.com/pop-os/smithay-clipboard"
+tag = "sctk-0.20"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/pop-os/window_clipboard.git?tag=sctk-0.20"]
+git = "https://github.com/pop-os/window_clipboard.git"
+tag = "sctk-0.20"
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"

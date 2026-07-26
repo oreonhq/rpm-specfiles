@@ -1,0 +1,80 @@
+--- a/main.cpp~	2012-08-20 15:57:06.000000000 -0500
++++ b/main.cpp	2012-08-20 15:58:14.140799374 -0500
+@@ -9,6 +9,7 @@
+ 
+ #define ALLEGRO_STATICLINK
+ #include <allegro.h>
++#define dSINGLE
+ #include <ode/ode.h>
+ 
+ #include <aldumb.h>
+--- a/menu.cpp~	2002-12-21 07:33:57.000000000 -0600
++++ b/menu.cpp	2012-08-20 16:00:46.916795962 -0500
+@@ -19,6 +19,7 @@
+ #include "text.h"
+ #include "timer.h"
+ #include "controls.h"
++#define dSINGLE
+ #include "glode.h"
+ #include "render.h"
+ #include "options.h"
+--- a/game.cpp~	2012-08-20 16:01:10.000000000 -0500
++++ b/game.cpp	2012-08-20 16:04:34.815790847 -0500
+@@ -11,6 +11,7 @@
+ #include <allegro.h>
+ #include <alleggl.h>
+ #include <GL/glu.h>
++#define dSINGLE
+ #include <ode/ode.h>
+ #include <aldumb.h>
+ 
+--- a/ball.h~	2002-12-21 07:31:40.000000000 -0600
++++ b/ball.h	2012-08-20 16:05:54.673789131 -0500
+@@ -10,6 +10,7 @@
+ #ifndef _BALL_H_
+ #define _BALL_H_
+ 
++#define dSINGLE
+ #include <ode/ode.h>
+ 
+ class Ball
+--- a/glode.h~	2002-12-21 07:31:40.000000000 -0600
++++ b/glode.h	2012-08-20 16:07:09.156787409 -0500
+@@ -10,6 +10,7 @@
+ #ifndef _GLODE_H_
+ #define _GLODE_H_
+ 
++#define dSINGLE
+ #include <ode/ode.h>
+ 
+ void position_gl(dBodyID b);
+--- a/court.h~	2002-12-21 07:31:40.000000000 -0600
++++ b/court.h	2012-08-20 16:12:22.525780409 -0500
+@@ -10,6 +10,7 @@
+ #ifndef _COURT_H_
+ #define _COURT_H_
+ 
++#define dSINGLE
+ #include <ode/ode.h>
+ 
+ //         ____0_____
+--- a/render.cpp~	2002-12-21 07:31:40.000000000 -0600
++++ b/render.cpp	2012-08-20 16:13:24.178779052 -0500
+@@ -11,6 +11,7 @@
+ #include <allegro.h>
+ #include <alleggl.h>
+ #include <GL/gl.h>
++#define dSINGLE
+ #include <ode/ode.h>
+ 
+ #include <stdio.h>
+--- a/machine.h~	2002-12-21 07:31:40.000000000 -0600
++++ b/machine.h	2012-08-20 16:14:29.336777588 -0500
+@@ -10,6 +10,7 @@
+ #ifndef _MACHINE_H_
+ #define _MACHINE_H_
+ 
++#define dSINGLE
+ #include <ode/ode.h>
+ #include <allegro.h>
+ 

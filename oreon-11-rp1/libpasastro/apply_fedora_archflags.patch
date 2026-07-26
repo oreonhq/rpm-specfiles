@@ -1,0 +1,51 @@
+diff -U 3 -dHrN a/getdss/Makefile b/getdss/Makefile
+--- a/getdss/Makefile	2025-02-17 10:55:58.000000000 +0100
++++ b/getdss/Makefile	2025-09-28 13:01:35.788187220 +0200
+@@ -1,4 +1,4 @@
+-CPPFLAGS=-I. -O3 -fPIC $(arch_flags)
++CPPFLAGS=-I. -O3 -fPIC $(CXXFLAGS)
+ #### For Suns and similar wrong-endian computers, add -DWRONG_WAY_BYTE_ORDER.
+ OSTYPE = $(shell uname)
+ ifneq ($(findstring BSD,$(OSTYPE)),)
+@@ -19,7 +19,7 @@
+   ### Linux
+   SOName = libpasgetdss.so.1
+   SO_Name = libpasgetdss.so.1.1
+-  LDFLAGS= -shared -lc -Wl,-soname,$(SOName) $(arch_flags)    
++  LIBFLAGS= -shared -Wl,-soname,$(SOName)
+   ifeq ($(CPU_TARGET),aarch64)
+     CC = aarch64-linux-gnu-g++
+   endif
+@@ -39,7 +39,7 @@
+ all: $(SO_Name)
+ 
+ $(SO_Name):  $(OBJS)
+-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
++	$(CC) $(CPPFLAGS) $(LIBFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+ 	
+ clean:
+ 	rm -f $(OBJS) $(SO_Name)
+diff -U 3 -dHrN a/plan404/Makefile b/plan404/Makefile
+--- a/plan404/Makefile	2025-02-17 10:55:58.000000000 +0100
++++ b/plan404/Makefile	2025-09-28 13:02:17.476849188 +0200
+@@ -54,7 +54,7 @@
+ 	$(CC) $(CFLAGS) -c $< -o $@
+ 
+ $(SO_Name): $(OBJ)
+-	$(CC) $(CFLAGS) $(LIBFLAGS) -o $@ $(OBJ) $(LIBS)
++	$(CC) $(CFLAGS) $(LIBFLAGS) $(LDFLAGS) -o $@ $(OBJ) $(LIBS)
+ 
+ clean:
+ 	rm -f $(OBJ) $(SO_Name)
+diff -U 3 -dHrN a/wcs/Makefile b/wcs/Makefile
+--- a/wcs/Makefile	2025-02-17 10:55:58.000000000 +0100
++++ b/wcs/Makefile	2025-09-28 13:02:36.076358570 +0200
+@@ -48,7 +48,7 @@
+ all: $(SO_Name)
+ 
+ $(SO_Name): $(OBJS)
+-	$(CC) $(CFLAGS) $(LIBFLAGS) -o $@ $(OBJS) $(LIBS)
++	$(CC) $(CFLAGS) $(LIBFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+ 
+ cdcwcs.o:	fitsfile.h wcs.h
+ actread.o:	fitsfile.h wcscat.h wcs.h fitshead.h wcslib.h

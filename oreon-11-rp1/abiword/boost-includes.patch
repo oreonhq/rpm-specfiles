@@ -1,0 +1,10 @@
+--- plugins/collab/backends/service/xp/RealmConnection.cpp~	2026-02-17 21:16:18.000000000 -0600
++++ plugins/collab/backends/service/xp/RealmConnection.cpp	2026-02-18 11:03:53.198610187 -0600
+@@ -19,6 +19,7 @@
+ #include <boost/function.hpp>
+ #include <boost/bind.hpp>
+ #include <boost/lexical_cast.hpp>
++#include <boost/array.hpp>
+ #include "ut_assert.h"
+ #include "ut_debugmsg.h"
+ #include "ServiceAccountHandler.h"

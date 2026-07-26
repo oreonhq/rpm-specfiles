@@ -1,0 +1,11 @@
+--- kitutuki-0.9.1/kitutuki.ksh.help	2010-02-12 20:09:26.000000000 +0900
++++ kitutuki-0.9.1/kitutuki.ksh	2010-02-17 17:34:54.000000000 +0900
+@@ -234,7 +234,7 @@
+             i=$(($i + 2))
+ 
+ def kitutuki_help:
+-    if which lv > /dev/null && index -q $LANG ja || index -q $LC_ALL ja:
++    if which lv > /dev/null && index -q "$LANG" ja || index -q "$LC_ALL" ja:
+         lv $KITUTUKI_DOCDIR/usage.ja.txt 
+     else :
+         less $KITUTUKI_DOCDIR/usage.en.txt 

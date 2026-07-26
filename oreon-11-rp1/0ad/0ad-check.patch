@@ -1,0 +1,26 @@
+diff -up source/gui/tests/test_CGUIText.h.orig source/gui/tests/test_CGUIText.h
+--- source/gui/tests/test_CGUIText.h.orig	2022-09-23 16:16:46.000000000 -0300
++++ source/gui/tests/test_CGUIText.h	2022-09-26 11:32:31.318155833 -0300
+@@ -316,6 +316,11 @@ public:
+ 
+ 	void test_regression_rP26522()
+ 	{
++		if (!VfsDirectoryExists(L"mods/mod/"))
++		{
++			debug_printf("Skipping regression rP26522 tests (can't find binaries/data/mods/mod/)\n");
++			return;
++		}
+ 		TS_ASSERT_OK(g_VFS->Mount(L"", DataDir() / "mods" / "mod" / "", VFS_MOUNT_MUST_EXIST));
+ 
+ 		CGUI gui(g_ScriptContext);
+--- source/network/tests/test_StunClient.h
++++ source/network/tests/test_StunClient.h
+@@ -42,7 +42,7 @@
+ 		CStr ip;
+ 		TS_ASSERT(StunClient::FindLocalIP(ip));
+ 		// Quick validation that this looks like a valid IP address.
+-		if (ip.size() < 8 || ip.size() > 15)
++		if (ip.size() < 7 || ip.size() > 15)
+ 		{
+ 			TS_FAIL("StunClient::FindLocalIP did not return a valid IPV4 address: wrong size");
+ 			return;

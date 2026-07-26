@@ -1,0 +1,236 @@
+diff -up alienarena-7.71.4/source/game/acesrc/acebot.h.gcc10 alienarena-7.71.4/source/game/acesrc/acebot.h
+--- alienarena-7.71.4/source/game/acesrc/acebot.h.gcc10	2023-03-24 11:01:47.000000000 -0400
++++ alienarena-7.71.4/source/game/acesrc/acebot.h	2023-03-24 11:47:16.531263634 -0400
+@@ -134,12 +134,14 @@ struct botvals_s
+ 	float weapacc[10];
+ 	float awareness;
+ 	char		chatmsg[8][128];
+-} botvals;
++};
++
++extern struct botvals_s botvals;
+ 
+ extern edict_t *players[MAX_CLIENTS];		// pointers to all players in the game
+ 
+ // extern decs
+-edict_t *node_showents[MAX_NODES]; //ents created by shownode
++extern edict_t *node_showents[MAX_NODES]; //ents created by shownode
+ extern node_t nodes[MAX_NODES];
+ extern item_table_t item_table[MAX_EDICTS];
+ extern qboolean debug_mode;
+diff -up alienarena-7.71.4/source/game/acesrc/acebot_spawn.c.gcc10 alienarena-7.71.4/source/game/acesrc/acebot_spawn.c
+--- alienarena-7.71.4/source/game/acesrc/acebot_spawn.c.gcc10	2023-03-24 11:01:47.000000000 -0400
++++ alienarena-7.71.4/source/game/acesrc/acebot_spawn.c	2023-03-24 11:47:16.531263634 -0400
+@@ -88,6 +88,8 @@ with this program; if not, write to the
+ #include "game/m_player.h"
+ #include "acebot.h"
+ 
++struct botvals_s botvals;
++
+ #define MAX_BOTTMPFILE_COUNT 64 // arbitrary limit for bot .tmp files
+ 	// mostly just for checking validity of the count field in the file.
+ 
+diff -up alienarena-7.71.4/source/game/g_items.c.gcc10 alienarena-7.71.4/source/game/g_items.c
+--- alienarena-7.71.4/source/game/g_items.c.gcc10	2023-03-24 11:01:48.000000000 -0400
++++ alienarena-7.71.4/source/game/g_items.c	2023-03-24 11:47:16.531263634 -0400
+@@ -24,6 +24,14 @@ Foundation, Inc., 59 Temple Place - Suit
+ 
+ #include "g_local.h"
+ 
++#define X(name,itname,base,max,excessivemult)   \
++cvar_t *g_max##name;
++
++AMMO_TYPES
++
++#undef X
++
++
+ qboolean	Pickup_Weapon (edict_t *ent, edict_t *other);
+ void		Use_Weapon (edict_t *ent, gitem_t *inv);
+ void		Drop_Weapon (edict_t *ent, gitem_t *inv);
+diff -up alienarena-7.71.4/source/game/g_local.h.gcc10 alienarena-7.71.4/source/game/g_local.h
+--- alienarena-7.71.4/source/game/g_local.h.gcc10	2023-03-24 11:01:47.000000000 -0400
++++ alienarena-7.71.4/source/game/g_local.h	2023-03-24 11:47:16.531263634 -0400
+@@ -707,7 +707,7 @@ extern	cvar_t	*g_spawnhealth;
+ extern	cvar_t	*g_maxhealth;
+ 
+ #define X(name,itname,base,max,excessivemult)	\
+-	cvar_t *g_max##name;
++extern	cvar_t *g_max##name;
+ 
+ AMMO_TYPES
+ 
+@@ -1769,7 +1769,9 @@ struct gmapvote_s
+ {
+ 	char	mapname[32]; //ugg, end the pointer madness
+ 	int		tally;
+-} votedmap[4];
++};
++
++extern struct gmapvote_s votedmap[4];
+ 
+ extern char *winningmap;
+ 
+@@ -1787,8 +1789,8 @@ typedef struct
+ 
+ #define	MAX_IPFILTERS	1024
+ 
+-ipfilter_t	ipfilters[MAX_IPFILTERS];
+-int			numipfilters;
++extern ipfilter_t	ipfilters[MAX_IPFILTERS];
++extern int			numipfilters;
+ extern qboolean StringToFilter (char *s, ipfilter_t *f);
+ 
+ //unlagged
+diff -up alienarena-7.71.4/source/game/g_main.c.gcc10 alienarena-7.71.4/source/game/g_main.c
+--- alienarena-7.71.4/source/game/g_main.c.gcc10	2023-03-24 11:01:47.000000000 -0400
++++ alienarena-7.71.4/source/game/g_main.c	2023-03-24 11:49:35.356711964 -0400
+@@ -43,6 +43,7 @@ game_export_t	globals;
+ spawn_temp_t	st;
+ g_vote_t		playervote;
+ tactical_t		tacticalScore;
++struct gmapvote_s votedmap[4];
+ 
+ int	sm_meat_index;
+ int meansOfDeath;
+@@ -195,7 +196,6 @@ cvar_t  *g_background_music;
+ cvar_t  *sv_botkickthreshold;
+ cvar_t  *sv_custombots;
+ 
+-cvar_t  *sv_tickrate;
+ float	FRAMETIME;		// FRAMETIME in seconds, SPF
+ int		FRAMETIME_MS; 	// FRAMETIME in milliseconds, as int
+ int		NUM_CLIENT_HISTORY_FOR_CURRENT_TICKRATE;
+@@ -333,9 +333,6 @@ typedef struct zhead_s
+ 	int	size;
+ } zhead_t;
+ 
+-zhead_t		z_chain;
+-int		z_count, z_bytes;
+-
+ 
+ /*
+ =================
+diff -up alienarena-7.71.4/source/game/g_svcmds.c.gcc10 alienarena-7.71.4/source/game/g_svcmds.c
+--- alienarena-7.71.4/source/game/g_svcmds.c.gcc10	2023-03-24 11:01:48.000000000 -0400
++++ alienarena-7.71.4/source/game/g_svcmds.c	2023-03-24 11:47:16.532263651 -0400
+@@ -27,6 +27,8 @@ Foundation, Inc., 59 Temple Place - Suit
+ 
+ #include "g_local.h"
+ 
++int numipfilters;
++ipfilter_t ipfilters[MAX_IPFILTERS];
+ 
+ void	Svcmd_Test_f (void)
+ {
+diff -up alienarena-7.71.4/source/game/q_shared.c.gcc10 alienarena-7.71.4/source/game/q_shared.c
+--- alienarena-7.71.4/source/game/q_shared.c.gcc10	2023-03-24 11:01:48.000000000 -0400
++++ alienarena-7.71.4/source/game/q_shared.c	2023-03-24 11:47:16.532263651 -0400
+@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suit
+ 
+ #include "q_shared.h"
+ 
++int com_parseLine;
+ vec3_t vec3_origin = {0.0f,0.0f,0.0f};
+ 
+ //============================================================================
+diff -up alienarena-7.71.4/source/game/q_shared.h.gcc10 alienarena-7.71.4/source/game/q_shared.h
+--- alienarena-7.71.4/source/game/q_shared.h.gcc10	2023-03-24 11:01:48.000000000 -0400
++++ alienarena-7.71.4/source/game/q_shared.h	2023-03-24 11:47:16.532263651 -0400
+@@ -274,7 +274,7 @@ char *Com_ParseExt (char **data_p, qbool
+ char *Com_SkipWhiteSpace (char *data_p, qboolean *hasNewLines);
+ void Com_SkipRestOfLine (char **data_p);
+ 
+-int com_parseLine;
++extern int com_parseLine;
+ 
+ void Com_sprintf (char *dest, int size, char *fmt, ...);
+ 
+diff -up alienarena-7.71.4/source/qcommon/common.c.gcc10 alienarena-7.71.4/source/qcommon/common.c
+--- alienarena-7.71.4/source/qcommon/common.c.gcc10	2023-03-24 11:01:46.000000000 -0400
++++ alienarena-7.71.4/source/qcommon/common.c	2023-03-24 11:47:16.532263651 -0400
+@@ -69,6 +69,8 @@ cvar_t	*showtrace;
+ cvar_t	*dedicated;
+ 
+ cvar_t	*log_dest_udp;
++cvar_t	*fasttrace_verify;	// Test for CM_FastTrace
++cvar_t	*test;			// cvar to be used for testing/development purposes
+ 
+ FILE	*logfile;
+ 
+diff -up alienarena-7.71.4/source/qcommon/pmove.c.gcc10 alienarena-7.71.4/source/qcommon/pmove.c
+--- alienarena-7.71.4/source/qcommon/pmove.c.gcc10	2023-03-24 11:01:46.000000000 -0400
++++ alienarena-7.71.4/source/qcommon/pmove.c	2023-03-24 11:47:16.532263651 -0400
+@@ -24,7 +24,8 @@ Foundation, Inc., 59 Temple Place - Suit
+ 
+ #include "qcommon.h"
+ 
+-
++qboolean remoteserver_jousting;
++int remoteserver_runspeed;
+ 
+ #define	STEPSIZE	18
+ 
+diff -up alienarena-7.71.4/source/qcommon/qcommon.h.gcc10 alienarena-7.71.4/source/qcommon/qcommon.h
+--- alienarena-7.71.4/source/qcommon/qcommon.h.gcc10	2023-03-24 11:01:46.000000000 -0400
++++ alienarena-7.71.4/source/qcommon/qcommon.h	2023-03-24 11:47:16.532263651 -0400
+@@ -809,8 +809,8 @@ Common between server and client so pred
+ */
+ 
+ extern float pm_airaccelerate;
+-qboolean remoteserver_jousting;
+-int	remoteserver_runspeed;
++extern qboolean remoteserver_jousting;
++extern int remoteserver_runspeed;
+ 
+ void Pmove (pmove_t *pmove);
+ 
+@@ -1034,8 +1034,8 @@ extern	cvar_t	*host_speeds;
+ 
+ extern	cvar_t	*log_stats;
+ 
+-cvar_t *fasttrace_verify; // Test for CM_FastTrace
+-cvar_t *test; // cvar to be used for testing/development purposes
++extern	cvar_t *fasttrace_verify; // Test for CM_FastTrace
++extern	cvar_t *test; // cvar to be used for testing/development purposes
+ 
+ extern	FILE *log_stats_file;
+ 
+diff -up alienarena-7.71.4/source/server/server.h.gcc10 alienarena-7.71.4/source/server/server.h
+--- alienarena-7.71.4/source/server/server.h.gcc10	2023-03-24 11:01:46.000000000 -0400
++++ alienarena-7.71.4/source/server/server.h	2023-03-24 11:47:16.532263651 -0400
+@@ -270,7 +270,9 @@ void SV_KickClient (client_t *cl, const
+ void SV_InitGame (void);
+ void SV_Map (qboolean attractloop, char *levelstring, qboolean loadgame);
+ extern int server_port;
+-cvar_t *sv_master;
++extern cvar_t *sv_master;
++extern cvar_t *sv_tactical;
++extern cvar_t *sv_excessive;
+ 
+ //
+ // sv_phys.c
+diff -up alienarena-7.71.4/source/server/sv_init.c.gcc10 alienarena-7.71.4/source/server/sv_init.c
+--- alienarena-7.71.4/source/server/sv_init.c.gcc10	2023-03-24 11:01:46.000000000 -0400
++++ alienarena-7.71.4/source/server/sv_init.c	2023-03-24 11:47:16.532263651 -0400
+@@ -28,9 +28,7 @@ server_static_t	svs;				// persistant se
+ server_t		sv;					// local server
+ 
+ extern cvar_t	*public_server;
+-cvar_t		*sv_excessive;
+ cvar_t		*sv_playerspeed;
+-cvar_t		*sv_tactical;
+ extern float pm_maxspeed;
+ extern void SV_SetMaster_f(void);
+ 
+diff -up alienarena-7.71.4/source/server/sv_main.c.gcc10 alienarena-7.71.4/source/server/sv_main.c
+--- alienarena-7.71.4/source/server/sv_main.c.gcc10	2023-03-24 11:01:46.000000000 -0400
++++ alienarena-7.71.4/source/server/sv_main.c	2023-03-24 11:47:16.532263651 -0400
+@@ -32,6 +32,7 @@ cvar_t	*sv_paused;
+ cvar_t	*sv_timedemo;
+ 
+ cvar_t	*sv_enforcetime;
++cvar_t	*sv_master;
+ 
+ cvar_t	*timeout;				// seconds without any message
+ cvar_t	*zombietime;			// seconds to sink messages after disconnect

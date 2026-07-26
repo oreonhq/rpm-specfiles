@@ -1,0 +1,64 @@
+From 4a8766adc16d682d9659c26500c5c027de8646d1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Wed, 31 Jul 2019 12:36:12 +0200
+Subject: [PATCH 02/15] Remove remaining references to Python 2.6, 3.2 and 3.3
+
+---
+ setup.py | 9 ---------
+ tox.ini  | 7 +------
+ 2 files changed, 1 insertion(+), 15 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 9ecf8d2..b91a9c7 100644
+--- a/setup.py
++++ b/setup.py
+@@ -65,18 +65,9 @@ setup(
+         'virtualenv>=1.11', 'virtualenv-clone>=0.2.5', 'setuptools>=17.1'
+     ],
+     extras_require={
+-        ':python_version=="2.6"': [
+-            'argparse', 'pathlib', 'backports.shutil_get_terminal_size', 'shutilwhich'
+-        ],
+         ':python_version=="2.7"': [
+             'pathlib', 'backports.shutil_get_terminal_size', 'shutilwhich'
+         ],
+-        ':python_version=="3.2"': [
+-            'pathlib', 'backports.shutil_get_terminal_size', 'shutilwhich'
+-        ],
+-        ':python_version=="3.3"': [
+-            'pathlib'
+-        ],
+         ':sys_platform=="win32"': [
+             'shellingham'
+         ],
+diff --git a/tox.ini b/tox.ini
+index 6de3330..5cac4f3 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,6 +1,6 @@
+ [tox]
+ skip_missing_interpreters=True
+-envlist = py26, py27, py33, py34, py35, py36, py37, pypy
++envlist = py27, py34, py35, py36, py37, pypy
+ 
+ [testenv]
+ passenv = CI HOME
+@@ -8,15 +8,10 @@ passenv = CI HOME
+ commands = py.test -rw []
+ deps =
+     -r{toxinidir}/requirements.txt
+-    py26: pathlib>=1.0.1
+-    py26: mock
+-    py26: backports.shutil_get_terminal_size
+-    py26: shutilwhich
+     py27: pathlib>=1.0.1
+     py27: mock
+     py27: backports.shutil_get_terminal_size
+     py27: shutilwhich
+-    py33: pathlib>=1.0.1
+     pypy: shutilwhich
+     pypy: pathlib>=1.0.1
+     pypy: mock
+-- 
+2.31.1
+

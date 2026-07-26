@@ -1,0 +1,32 @@
+--- a/mysql_stubs.c	2019-11-12 14:44:56.000000000 -0700
++++ b/mysql_stubs.c	2022-01-02 10:57:29.038142103 -0700
+@@ -437,6 +437,9 @@ struct custom_operations res_ops = {
+ #if defined(custom_compare_ext_default)
+   custom_compare_ext_default,
+ #endif
++#if defined(custom_fixed_length_default)
++  custom_fixed_length_default,
++#endif
+ };
+ 
+ /*
+@@ -900,6 +903,9 @@ struct custom_operations stmt_ops = {
+ #if defined(custom_compare_ext_default)
+   custom_compare_ext_default,
+ #endif
++#if defined(custom_fixed_length_default)
++  custom_fixed_length_default,
++#endif
+ };
+ 
+ 
+@@ -1073,6 +1079,9 @@ struct custom_operations stmt_result_ops
+ #if defined(custom_compare_ext_default)
+   custom_compare_ext_default,
+ #endif
++#if defined(custom_fixed_length_default)
++  custom_fixed_length_default,
++#endif
+ };
+ 
+ value

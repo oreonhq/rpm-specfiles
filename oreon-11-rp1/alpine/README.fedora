@@ -1,0 +1,26 @@
+
+= mlock =
+If you get a notice "[Folder vulnerable - directory /var/mail must have 1777 protection]",
+you may want to install the uw-imap-utils package to get setgid mlock (BZ #427561)
+
+An example pinerc line:
+	mymaildir {localhost/ssl/novalidate-cert/user=myusername}[],
+
+Example /etc/dovecot.conf with only IMAPS:
+
+auth_verbose = yes
+verbose_ssl = yes
+mail_location = maildir:~/Maildir
+protocols = imaps
+# put cert in /etc/pki/dovecot/certs
+protocol imap {
+}
+auth default {
+mechanisms = plain
+passdb pam {
+}
+userdb passwd {
+}
+user = root
+}
+

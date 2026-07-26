@@ -1,0 +1,26 @@
+From 1e04604613026854370599037b0390dbc74e19f2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 15 May 2017 15:13:34 +0200
+Subject: [PATCH] Fix building on Perl without "." in @INC
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 052c32f..9952db4 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -1,4 +1,5 @@
+ use strict;
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name           'URL-Encode-XS';
+-- 
+2.9.4
+

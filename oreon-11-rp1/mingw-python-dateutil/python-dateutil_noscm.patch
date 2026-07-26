@@ -1,0 +1,40 @@
+diff -rupN python-dateutil-2.9.0.post0/pyproject.toml python-dateutil-2.9.0.post0-new/pyproject.toml
+--- python-dateutil-2.9.0.post0/pyproject.toml	2024-03-01 19:35:19.000000000 +0100
++++ python-dateutil-2.9.0.post0-new/pyproject.toml	2025-05-29 17:20:24.069015614 +0200
+@@ -2,8 +2,7 @@
+ requires = [
+     "setuptools; python_version != '3.3'",
+     "setuptools<40.0; python_version == '3.3'",
+-    "wheel",
+-    "setuptools_scm<8.0"
++    "wheel"
+ ]
+ build-backend = "setuptools.build_meta"
+ 
+diff -rupN python-dateutil-2.9.0.post0/setup.cfg python-dateutil-2.9.0.post0-new/setup.cfg
+--- python-dateutil-2.9.0.post0/setup.cfg	2024-03-01 19:36:13.410617600 +0100
++++ python-dateutil-2.9.0.post0-new/setup.cfg	2025-05-29 17:19:27.948415565 +0200
+@@ -38,7 +38,6 @@ classifiers =
+ 
+ [options]
+ zip_safe = True
+-setup_requires = setuptools_scm
+ install_requires = six >= 1.5
+ package_dir = 
+ 	=src
+diff -rupN python-dateutil-2.9.0.post0/setup.py python-dateutil-2.9.0.post0-new/setup.py
+--- python-dateutil-2.9.0.post0/setup.py	2024-03-01 19:35:19.000000000 +0100
++++ python-dateutil-2.9.0.post0-new/setup.py	2025-05-29 17:21:14.965657943 +0200
+@@ -47,11 +47,9 @@ README = README()  # NOQA
+ 
+ 
+ setup(
+-      use_scm_version={
+-          'write_to': 'src/dateutil/_version.py',
+-      },
+       ## Needed since doctest not supported by PyPA.
+       long_description = README,
++      version='{version}',
+       cmdclass={
+           "test": Unsupported
+       }

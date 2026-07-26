@@ -1,0 +1,439 @@
+From 57cd656514a8374f7be22e06b00c5f63cde649eb Mon Sep 17 00:00:00 2001
+From: Jaroslaw Staniek <staniek@kde.org>
+Date: Sat, 1 Feb 2020 19:45:12 +0100
+Subject: [PATCH 314/434] TRIVIAL Move Q_REQUIRED_RESULT to correct place
+
+This can fix builds for newer MSVC
+---
+ src/core/kexiinternalpart.h                   | 35 ++++++++++---------
+ src/core/kexipart.h                           |  6 ++--
+ src/core/kexistaticpart.h                     | 11 +++---
+ src/formeditor/widgetlibrary.h                |  5 +--
+ src/plugins/forms/kexiformpart.h              |  6 ++--
+ .../widgets/main/KexiMainFormWidgetsFactory.h |  6 ++--
+ .../widgets/mapbrowser/MapBrowserFactory.h    |  6 ++--
+ .../widgets/webbrowser/WebBrowserFactory.h    |  6 ++--
+ .../csv/KexiCsvImportExportPlugin.h           |  5 +--
+ src/plugins/migration/keximigrationpart.h     | 11 +++---
+ src/plugins/queries/kexiquerypart.h           |  6 ++--
+ src/plugins/reports/KexiDBReportDataSource.h  |  2 +-
+ src/plugins/reports/kexireportpart.h          |  6 ++--
+ src/plugins/reports/kexisourceselector.h      |  2 +-
+ .../scripting/kexiscripting/kexiscriptpart.h  |  8 ++---
+ src/plugins/tables/kexitablepart.h            |  6 ++--
+ src/widget/KexiFileWidgetInterface.h          |  8 ++---
+ 17 files changed, 70 insertions(+), 65 deletions(-)
+
+diff --git a/src/core/kexiinternalpart.h b/src/core/kexiinternalpart.h
+index cf2636c9d..a25eb18fb 100644
+--- a/src/core/kexiinternalpart.h
++++ b/src/core/kexiinternalpart.h
+@@ -57,24 +57,25 @@ public:
+      on widget's creation. Depending on implementation, the created widget can write its
+      state (e.g. result or status information) back to this argument.
+      Created widget will have assigned \a parent widget and \a objName name. */
+-    static QWidget* createWidgetInstance(const QString &className, const char* widgetClass,
++    static Q_REQUIRED_RESULT QWidget *createWidgetInstance(const QString &className,
++                                         const char* widgetClass,
+                                          KDbMessageHandler *msgHdr,
+                                          QWidget *parent, const char *objName = nullptr,
+-                                         QMap<QString, QString>* args = nullptr) Q_REQUIRED_RESULT;
++                                         QMap<QString, QString>* args = nullptr);
+ 
+     /*! For convenience. */
+-    static QWidget* createWidgetInstance(const QString &className,
++    static Q_REQUIRED_RESULT QWidget *createWidgetInstance(const QString &className,
+                                          KDbMessageHandler *msgHdr,
+                                          QWidget *parent, const char *objName = nullptr,
+-                                         QMap<QString, QString>* args = nullptr) Q_REQUIRED_RESULT;
++                                         QMap<QString, QString>* args = nullptr);
+ 
+     /*! Creates a new object instance using part pointed by \a className.
+      \a widgetClass is a pseudo class used in case when the part offers more
+      than one object type. */
+-    static QObject* createObjectInstance(const QString &className,
++    static Q_REQUIRED_RESULT QObject *createObjectInstance(const QString &className,
+                                          const char* objectClass, KDbMessageHandler *msgHdr,
+                                          QObject *parent, const char *objName = nullptr,
+-                                         QMap<QString, QString>* args = nullptr) Q_REQUIRED_RESULT;
++                                         QMap<QString, QString>* args = nullptr);
+ 
+     /*! Creates a new KexiWindow instance. If such instance already exists,
+      and is unique (see uniqueWindow()) it is just returned.
+@@ -83,8 +84,8 @@ public:
+      \a msgHdr is a message handler for displaying error messages.
+      The window is assigned to the main window,
+      and \a objName name is set. */
+-    static KexiWindow* createKexiWindowInstance(const QString &className,
+-            KDbMessageHandler *msgHdr, const char *objName = nullptr) Q_REQUIRED_RESULT;
++    static Q_REQUIRED_RESULT KexiWindow *createKexiWindowInstance(const QString &className,
++            KDbMessageHandler *msgHdr, const char *objName = nullptr);
+ 
+     /*! Creates a new modal dialog instance (QDialog or a subclass).
+      If such instance already exists, and is unique (see uniqueWindow())
+@@ -99,14 +100,14 @@ public:
+      so on another call the dialog will be created again.
+      The dialog is assigned to the main window,
+      and \a objName name is set. */
+-    static QDialog* createModalDialogInstance(const QString &className,
++    static Q_REQUIRED_RESULT QDialog *createModalDialogInstance(const QString &className,
+             const char* dialogClass, KDbMessageHandler *msgHdr,
+-            const char *objName = nullptr, QMap<QString, QString>* args = nullptr) Q_REQUIRED_RESULT;
++            const char *objName = nullptr, QMap<QString, QString>* args = nullptr);
+ 
+     /*! Adeded For convenience. */
+-    static QDialog* createModalDialogInstance(const QString &className,
++    static Q_REQUIRED_RESULT QDialog *createModalDialogInstance(const QString &className,
+             KDbMessageHandler *msgHdr, const char *objName = nullptr,
+-            QMap<QString, QString>* args = nullptr) Q_REQUIRED_RESULT;
++            QMap<QString, QString>* args = nullptr);
+ 
+     /*! Executes a command \a commandName (usually nonvisual) using part pointed by \a className.
+      The result can be put into the \a args. \return true on successful calling. */
+@@ -133,18 +134,18 @@ protected:
+     KexiWindow *findOrCreateKexiWindow(const char *objName);
+ 
+     /*! Reimplement this if your internal part has to return objects. */
+-    virtual QObject *createObject(const char* objectClass,
++    virtual Q_REQUIRED_RESULT QObject *createObject(const char* objectClass,
+                                   QObject * parent, const char * objName = nullptr,
+-                                  QMap<QString, QString>* args = nullptr) Q_REQUIRED_RESULT;
++                                  QMap<QString, QString>* args = nullptr);
+ 
+     /*! Reimplement this if your internal part has to return widgets
+      or QDialog objects. */
+-    virtual QWidget *createWidget(const char* widgetClass,
++    virtual Q_REQUIRED_RESULT QWidget *createWidget(const char* widgetClass,
+                                   QWidget * parent, const char * objName = nullptr,
+-                                  QMap<QString, QString>* args = nullptr) Q_REQUIRED_RESULT;
++                                  QMap<QString, QString>* args = nullptr);
+ 
+     /*! Reimplement this if your internal part has to return a view object. */
+-    virtual KexiView *createView(QWidget * parent, const char *objName = nullptr) Q_REQUIRED_RESULT;
++    virtual Q_REQUIRED_RESULT KexiView *createView(QWidget * parent, const char *objName = nullptr);
+ 
+     /*! Reimplement this if your internal part has to execute a command \a commandName
+      (usually nonvisual). Arguments are put into \a args and the result can be put into the \a args.
+diff --git a/src/core/kexipart.h b/src/core/kexipart.h
+index 812028809..a2ad86d2f 100644
+--- a/src/core/kexipart.h
++++ b/src/core/kexipart.h
+@@ -141,7 +141,7 @@ public:
+      This method is called on openInstance() once per dialog.
+      Reimplement this to return KexiWindowData subclass instance.
+      Default implemention just returns empty KexiWindowData object. */
+-    virtual KexiWindowData* createWindowData(KexiWindow *window) Q_REQUIRED_RESULT;
++    virtual Q_REQUIRED_RESULT KexiWindowData *createWindowData(KexiWindow *window);
+ 
+     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
+      used inside \a dialog. */
+@@ -222,8 +222,8 @@ protected:
+      In this case value pointed by @a ownedByWindow is set to false. Default implemenatation returns
+      owned KDbObject object (value pointed by @a ownedByWindow is set to true).
+      @a ownedByWindow is required. */
+-    virtual KDbObject *loadSchemaObject(KexiWindow *window, const KDbObject &object,
+-                                        Kexi::ViewMode viewMode, bool *ownedByWindow) Q_REQUIRED_RESULT;
++    virtual Q_REQUIRED_RESULT KDbObject *loadSchemaObject(KexiWindow *window, const KDbObject &object,
++                                        Kexi::ViewMode viewMode, bool *ownedByWindow);
+ 
+     bool loadDataBlock(KexiWindow *window, QString *dataString, const QString& dataID = QString());
+ 
+diff --git a/src/core/kexistaticpart.h b/src/core/kexistaticpart.h
+index 8459f2d6b..372467738 100644
+--- a/src/core/kexistaticpart.h
++++ b/src/core/kexistaticpart.h
+@@ -52,14 +52,15 @@ public:
+ 
+     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
+      used inside \a window. \a args arguments can be passed. */
+-    virtual KexiView *createView(QWidget *parent, KexiWindow *window, KexiPart::Item *item,
+-                                 Kexi::ViewMode viewMode,
+-                                 QMap<QString, QVariant> *args) override Q_REQUIRED_RESULT = 0;
++    virtual Q_REQUIRED_RESULT KexiView *createView(QWidget *parent, KexiWindow *window,
++                                                   KexiPart::Item *item, Kexi::ViewMode viewMode,
++                                                   QMap<QString, QVariant> *args) override = 0;
+ 
+ protected:
+     //! unused by static parts
+-    KexiView* createView(QWidget *parent, KexiWindow* window,
+-                         KexiPart::Item *item, Kexi::ViewMode viewMode = Kexi::DataViewMode) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KexiView *createView(QWidget *parent, KexiWindow *window,
++                                           KexiPart::Item *item,
++                                           Kexi::ViewMode viewMode = Kexi::DataViewMode) override;
+ };
+ 
+ }
+diff --git a/src/formeditor/widgetlibrary.h b/src/formeditor/widgetlibrary.h
+index 3671ffc21..99d76c901 100644
+--- a/src/formeditor/widgetlibrary.h
++++ b/src/formeditor/widgetlibrary.h
+@@ -86,9 +86,10 @@ public:
+      * searches the right factory and creates a widget.
+      * \return the widget or 0 if something falid
+      */
+-    QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
++    Q_REQUIRED_RESULT QWidget *createWidget(
++                          const QByteArray &classname, QWidget *parent, const char *name,
+                           Container *c,
+-                          WidgetFactory::CreateWidgetOptions options = WidgetFactory::DefaultOptions) Q_REQUIRED_RESULT;
++                          WidgetFactory::CreateWidgetOptions options = WidgetFactory::DefaultOptions);
+ 
+     bool createMenuActions(const QByteArray &c, QWidget *w, QMenu *menu,
+                            KFormDesigner::Container *container);
+diff --git a/src/plugins/forms/kexiformpart.h b/src/plugins/forms/kexiformpart.h
+index d025bb435..0921f2c53 100644
+--- a/src/plugins/forms/kexiformpart.h
++++ b/src/plugins/forms/kexiformpart.h
+@@ -94,11 +94,11 @@ public:
+                                          KexiWindow* window) const override;
+ 
+ protected:
+-    KexiWindowData* createWindowData(KexiWindow* window) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KexiWindowData *createWindowData(KexiWindow* window) override;
+ 
+-    KexiView *createView(QWidget *parent, KexiWindow *window, KexiPart::Item *item,
++    Q_REQUIRED_RESULT KexiView *createView(QWidget *parent, KexiWindow *window, KexiPart::Item *item,
+                          Kexi::ViewMode viewMode = Kexi::DataViewMode,
+-                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override Q_REQUIRED_RESULT;
++                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override;
+ 
+     virtual void initPartActions() override;
+     virtual void initInstanceActions() override;
+diff --git a/src/plugins/forms/widgets/main/KexiMainFormWidgetsFactory.h b/src/plugins/forms/widgets/main/KexiMainFormWidgetsFactory.h
+index 733b345fd..5b5045fa7 100644
+--- a/src/plugins/forms/widgets/main/KexiMainFormWidgetsFactory.h
++++ b/src/plugins/forms/widgets/main/KexiMainFormWidgetsFactory.h
+@@ -35,9 +35,9 @@ public:
+     KexiMainFormWidgetsFactory(QObject *parent, const QVariantList &);
+     virtual ~KexiMainFormWidgetsFactory();
+ 
+-    QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+-                          KFormDesigner::Container *container,
+-                          CreateWidgetOptions options = DefaultOptions) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QWidget *createWidget(const QByteArray &classname, QWidget *parent,
++                                            const char *name, KFormDesigner::Container *container,
++                                            CreateWidgetOptions options = DefaultOptions) override;
+ 
+     virtual void createCustomActions(KActionCollection* col) override;
+     virtual bool createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
+diff --git a/src/plugins/forms/widgets/mapbrowser/MapBrowserFactory.h b/src/plugins/forms/widgets/mapbrowser/MapBrowserFactory.h
+index 271387c00..4e127c88c 100644
+--- a/src/plugins/forms/widgets/mapbrowser/MapBrowserFactory.h
++++ b/src/plugins/forms/widgets/mapbrowser/MapBrowserFactory.h
+@@ -29,9 +29,9 @@ class MapBrowserFactory: public KexiDBFactoryBase
+ public:
+     MapBrowserFactory(QObject* parent, const QVariantList &args);
+     virtual ~MapBrowserFactory();
+-    QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+-                          KFormDesigner::Container *container,
+-                          CreateWidgetOptions options = DefaultOptions) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QWidget *createWidget(const QByteArray &classname, QWidget *parent,
++                                            const char *name, KFormDesigner::Container *container,
++                                            CreateWidgetOptions options = DefaultOptions) override;
+     virtual bool createMenuActions(const QByteArray &classname, QWidget *w,
+                                    QMenu *menu, KFormDesigner::Container *container);
+     virtual bool startInlineEditing(InlineEditorCreationArguments& args);
+diff --git a/src/plugins/forms/widgets/webbrowser/WebBrowserFactory.h b/src/plugins/forms/widgets/webbrowser/WebBrowserFactory.h
+index bd696a083..101f3dbdf 100644
+--- a/src/plugins/forms/widgets/webbrowser/WebBrowserFactory.h
++++ b/src/plugins/forms/widgets/webbrowser/WebBrowserFactory.h
+@@ -30,9 +30,9 @@ class WebBrowserFactory: public KexiDBFactoryBase
+ public:
+     WebBrowserFactory(QObject* parent, const QVariantList &args);
+     virtual ~WebBrowserFactory();
+-    QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+-                          KFormDesigner::Container *container,
+-                          CreateWidgetOptions options = DefaultOptions) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QWidget *createWidget(const QByteArray &classname, QWidget *parent,
++                                            const char *name, KFormDesigner::Container *container,
++                                            CreateWidgetOptions options = DefaultOptions) override;
+     virtual bool createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
+                                    KFormDesigner::Container *container) override;
+     virtual bool startInlineEditing(InlineEditorCreationArguments& args) override;
+diff --git a/src/plugins/importexport/csv/KexiCsvImportExportPlugin.h b/src/plugins/importexport/csv/KexiCsvImportExportPlugin.h
+index 30e0495e9..2b8bae972 100644
+--- a/src/plugins/importexport/csv/KexiCsvImportExportPlugin.h
++++ b/src/plugins/importexport/csv/KexiCsvImportExportPlugin.h
+@@ -32,8 +32,9 @@ public:
+     virtual ~KexiCsvImportExportPlugin();
+ 
+     /*! Reimplemented to return wizard object. */
+-    QWidget *createWidget(const char *widgetClass, QWidget *parent, const char *objName = nullptr,
+-                          QMap<QString, QString> *args = nullptr) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QWidget *createWidget(const char *widgetClass, QWidget *parent,
++                                            const char *objName = nullptr,
++                                            QMap<QString, QString> *args = nullptr) override;
+ 
+     /*! Reimplemented to execute a command \a commandName (nonvisual). The result are put into the \a args. */
+     virtual bool executeCommand(const char* commandName, QMap<QString, QString>* args = 0) override;
+diff --git a/src/plugins/migration/keximigrationpart.h b/src/plugins/migration/keximigrationpart.h
+index df12d2ec4..0f024f484 100644
+--- a/src/plugins/migration/keximigrationpart.h
++++ b/src/plugins/migration/keximigrationpart.h
+@@ -32,12 +32,13 @@ public:
+ 
+     /*! Reimplement this if your internal part has to return widgets
+      or QDialog objects. */
+-    QWidget *createWidget(const char *widgetClass, QWidget *parent, const char *objName = nullptr,
+-                          QMap<QString, QString> *args = nullptr) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QWidget *createWidget(const char *widgetClass, QWidget *parent,
++                                            const char *objName = nullptr,
++                                            QMap<QString, QString> *args = nullptr) override;
+ 
+-    QObject *createObject(const char* objectClass,
+-                          QObject * parent, const char * objName = nullptr,
+-                          QMap<QString, QString>* args = nullptr) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT QObject *createObject(const char *objectClass, QObject *parent,
++                                            const char *objName = nullptr,
++                                            QMap<QString, QString> *args = nullptr) override;
+ };
+ 
+ #endif
+diff --git a/src/plugins/queries/kexiquerypart.h b/src/plugins/queries/kexiquerypart.h
+index 9d1b3f2cb..11904df7b 100644
+--- a/src/plugins/queries/kexiquerypart.h
++++ b/src/plugins/queries/kexiquerypart.h
+@@ -134,11 +134,11 @@ public:
+                                                          const KLocalizedString &msg);
+ 
+ protected:
+-    KexiWindowData* createWindowData(KexiWindow* window) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KexiWindowData *createWindowData(KexiWindow *window) override;
+ 
+-    KexiView *createView(QWidget *parent, KexiWindow *window, KexiPart::Item *item,
++    Q_REQUIRED_RESULT KexiView *createView(QWidget *parent, KexiWindow *window, KexiPart::Item *item,
+                          Kexi::ViewMode viewMode = Kexi::DataViewMode,
+-                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override Q_REQUIRED_RESULT;
++                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override;
+ 
+     virtual void initPartActions() override;
+     virtual void initInstanceActions() override;
+diff --git a/src/plugins/reports/KexiDBReportDataSource.h b/src/plugins/reports/KexiDBReportDataSource.h
+index 8ffc26e50..27f3bc9b7 100644
+--- a/src/plugins/reports/KexiDBReportDataSource.h
++++ b/src/plugins/reports/KexiDBReportDataSource.h
+@@ -83,7 +83,7 @@ public:
+ 
+     //Utility Functions
+     virtual QStringList dataSourceNames() const override;
+-    virtual KReportDataSource* create(const QString& source) const override Q_REQUIRED_RESULT;
++    virtual Q_REQUIRED_RESULT KReportDataSource *create(const QString &source) const override;
+ 
+ private:
+     class Private;
+diff --git a/src/plugins/reports/kexireportpart.h b/src/plugins/reports/kexireportpart.h
+index 1f25bda1b..bac95aba7 100644
+--- a/src/plugins/reports/kexireportpart.h
++++ b/src/plugins/reports/kexireportpart.h
+@@ -82,11 +82,11 @@ public:
+     QString scriptCode(const QString& script) const override;
+ 
+ protected:
+-    KexiView *createView(QWidget *parent, KexiWindow *win, KexiPart::Item *item,
++    Q_REQUIRED_RESULT KexiView *createView(QWidget *parent, KexiWindow *win, KexiPart::Item *item,
+                          Kexi::ViewMode = Kexi::DataViewMode,
+-                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override Q_REQUIRED_RESULT;
++                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override;
+ 
+-    KexiWindowData* createWindowData(KexiWindow* window) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KexiWindowData *createWindowData(KexiWindow* window) override;
+ 
+     virtual void initPartActions() override;
+ 
+diff --git a/src/plugins/reports/kexisourceselector.h b/src/plugins/reports/kexisourceselector.h
+index 3aa0d27ea..0d1477c3e 100644
+--- a/src/plugins/reports/kexisourceselector.h
++++ b/src/plugins/reports/kexisourceselector.h
+@@ -41,7 +41,7 @@ public:
+     explicit KexiSourceSelector(KexiProject* project, QWidget* parent = 0);
+     ~KexiSourceSelector();
+ 
+-    KReportDataSource* createDataSource() const Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KReportDataSource *createDataSource() const;
+ 
+     QDomElement connectionData();
+ 
+diff --git a/src/plugins/scripting/kexiscripting/kexiscriptpart.h b/src/plugins/scripting/kexiscripting/kexiscriptpart.h
+index c141eb8dc..116a28f59 100644
+--- a/src/plugins/scripting/kexiscripting/kexiscriptpart.h
++++ b/src/plugins/scripting/kexiscripting/kexiscriptpart.h
+@@ -57,7 +57,7 @@ public:
+     virtual bool execute(KexiPart::Item* item, QObject* sender = 0);
+ 
+     QJSValue execute(const QString &program);
+-    
++
+     /**
+      * \return the i18n message for the passed \p englishMessage string.
+      */
+@@ -77,11 +77,11 @@ protected:
+      *
+      * @todo Port It!!!
+      */
+-    KexiView* createView(QWidget *parent,
++    Q_REQUIRED_RESULT KexiView *createView(QWidget *parent,
+                                  KexiWindow *window,
+                                  KexiPart::Item *item,
+                                  Kexi::ViewMode viewMode = Kexi::DataViewMode,
+-                                 QMap<QString, QVariant>* staticObjectArgs = nullptr) override Q_REQUIRED_RESULT;
++                                 QMap<QString, QVariant>* staticObjectArgs = nullptr) override;
+ 
+     /**
+      * Initialize the part's actions.
+@@ -99,7 +99,7 @@ private:
+     class Private;
+     /// \internal d-pointer instance.
+     Private* const d;
+-    
++
+     void registerMetaObjects();
+ 
+     QString loadData(KexiPart::Item* item);
+diff --git a/src/plugins/tables/kexitablepart.h b/src/plugins/tables/kexitablepart.h
+index 6096b45b7..5301f0081 100644
+--- a/src/plugins/tables/kexitablepart.h
++++ b/src/plugins/tables/kexitablepart.h
+@@ -125,11 +125,11 @@ public:
+     KexiLookupColumnPage* lookupColumnPage() const;
+ 
+ protected:
+-    KexiWindowData* createWindowData(KexiWindow* window) override Q_REQUIRED_RESULT;
++    Q_REQUIRED_RESULT KexiWindowData *createWindowData(KexiWindow* window) override;
+ 
+-    KexiView *createView(QWidget *parent, KexiWindow *window, KexiPart::Item *item,
++    Q_REQUIRED_RESULT KexiView *createView(QWidget *parent, KexiWindow *window, KexiPart::Item *item,
+                          Kexi::ViewMode viewMode = Kexi::DataViewMode,
+-                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override Q_REQUIRED_RESULT;
++                         QMap<QString, QVariant> *staticObjectArgs = nullptr) override;
+ 
+     virtual void initPartActions() override;
+     virtual void initInstanceActions() override;
+diff --git a/src/widget/KexiFileWidgetInterface.h b/src/widget/KexiFileWidgetInterface.h
+index 05c1d774f..1fc004d84 100644
+--- a/src/widget/KexiFileWidgetInterface.h
++++ b/src/widget/KexiFileWidgetInterface.h
+@@ -57,17 +57,17 @@ public:
+      *
+      * @todo Share this code with KReport and Kexi
+      */
+-    static KexiFileWidgetInterface *createWidget(const QUrl &startDirOrVariable,
++    static Q_REQUIRED_RESULT KexiFileWidgetInterface *createWidget(const QUrl &startDirOrVariable,
+                                                  KexiFileFilters::Mode mode,
+                                                  const QString &fileName,
+-                                                 QWidget *parent = nullptr) Q_REQUIRED_RESULT;
++                                                 QWidget *parent = nullptr);
+ 
+     /**
+      * @overload
+      */
+-    static KexiFileWidgetInterface *createWidget(const QUrl &startDirOrVariable,
++    static Q_REQUIRED_RESULT KexiFileWidgetInterface *createWidget(const QUrl &startDirOrVariable,
+                                                  KexiFileFilters::Mode mode,
+-                                                 QWidget *parent = nullptr) Q_REQUIRED_RESULT;
++                                                 QWidget *parent = nullptr);
+ 
+     /**
+      * @brief returns this object casted to QWidget pointer
+-- 
+2.35.3
+

@@ -1,0 +1,25 @@
+--- configure.orig	2024-03-15 10:12:13.943761000 -0600
++++ configure	2024-03-29 08:51:27.605321483 -0600
+@@ -740,7 +740,7 @@ then
+     exit 1
+   fi
+   # Check that the name is sane (need special handling for Microsoft)
+-  BAD_BASENAME=no; [ "`basename \"$CDD_LIB\" .a`" = "libcddgmp" ] || [ "`basename \"$CDD_LIB\" .dll.a`" = "libcddgmp" ] || BAD_BASENAME=yes
++  BAD_BASENAME=no; [ "`basename \"$CDD_LIB\" .so`" = "libcddgmp" ] || [ "`basename \"$CDD_LIB\" .dll.a`" = "libcddgmp" ] || BAD_BASENAME=yes
+   if [ "$BAD_BASENAME" = "yes" ]
+   then
+       echo "$0: ERROR: Specified CDD library should have basename 'libcddgmp'"   > /dev/stderr
+--- src/AlgebraicCore/Makefile.orig	2024-02-05 04:30:09.000000000 -0700
++++ src/AlgebraicCore/Makefile	2024-03-29 08:51:57.901805257 -0600
+@@ -101,6 +101,11 @@ $(COCOA_LIB): $(OBJS) $(SUBDIRS)
+ 	done
+ 	echo "doing ar for AlgebraicCore"
+ 	ar $(ARFLAGS) $(COCOA_LIB) $(OBJS)
++	$(COMPILE) -shared -Wl,-h,libcocoa.so.0 -o libcocoa.so.0.0.0 \
++		-Wl,--whole-archive $(COCOA_LIB) -Wl,--no-whole-archive \
++		@RPM_LD_FLAGS@ -lcddgmp -lgfan -lfrobby -lgsl -lflexiblas -lgmp
++	ln -s libcocoa.so.0.0.0 libcocoa.so.0
++	ln -s libcocoa.so.0 libcocoa.so
+ 
+ $(OBJS):  $(COCOA_ROOT)/configuration/autoconf.mk
+ 

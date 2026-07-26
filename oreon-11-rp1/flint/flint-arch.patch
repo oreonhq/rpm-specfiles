@@ -1,0 +1,31 @@
+--- flint-3.3.0/configure.orig	2025-06-11 15:09:09.000000000 -0600
++++ flint-3.3.0/configure	2025-06-12 19:26:11.441539546 -0600
+@@ -13000,7 +13000,7 @@ case $host in
+         gcc_cflags_tune=""
+         ;;
+       aarch64* | armv8*)
+-        gcc_cflags_arch="-march=armv8-a"
++        gcc_cflags_arch=""
+         gcc_cflags_tune=""
+         ;;
+       *)
+@@ -13018,7 +13018,7 @@ Please report at <https://github.com/fli
+     param_path="x86_64/broadwell"
+ 
+     have_avx512="no"
+-    have_avx2="yes"
++    have_avx2="no"
+ 
+     case $host_cpu in
+       zen)
+@@ -13111,8 +13111,8 @@ Please report at <https://github.com/fli
+         have_avx512="yes"
+         ;;
+       *)
+-        as_fn_error $? "Error in deciding flags for $host.
+-Please report at <https://github.com/flintlib/flint/issues/>" "$LINENO" 5
++        gcc_cflags_arch=""
++        param_path=""
+         ;;
+     esac
+ 

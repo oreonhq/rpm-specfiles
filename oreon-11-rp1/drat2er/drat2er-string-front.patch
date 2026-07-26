@@ -1,0 +1,14 @@
+--- src/drat_trim_interface.cc.orig	2024-03-14 10:02:51.219371543 -0600
++++ src/drat_trim_interface.cc	2024-03-14 10:41:23.695113698 -0600
+@@ -54,9 +54,9 @@ int CheckAndConvertToLRAT(const string&
+   args.push_back("-L");
+   args.push_back(output_proof_path);
+ 
+-  vector<char*> args_c_strings;
++  vector<const char*> args_c_strings;
+   for(auto& argument : args) {
+-    args_c_strings.push_back(&argument.front());
++    args_c_strings.push_back(argument.c_str());
+   }
+ 
+   return run_drat_trim(args_c_strings.size(), args_c_strings.data());

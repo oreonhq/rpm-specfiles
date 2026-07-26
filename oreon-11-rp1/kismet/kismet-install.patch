@@ -1,0 +1,282 @@
+--- Makefile.in~	2023-07-21 12:13:05.542976889 -0500
++++ Makefile.in	2023-07-21 13:03:39.725543900 -0500
+@@ -561,7 +561,7 @@
+ 	fi;
+ 
+ 	mkdir -p $(LIB)/pkgconfig
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 644 packaging/kismet.pc $(LIB)/pkgconfig/kismet.pc
++	$(INSTALL) -m 644 packaging/kismet.pc $(LIB)/pkgconfig/kismet.pc
+ 
+ 	mkdir -p $(HTTPD)
+ 	cp -r http_data/* $(HTTPD)
+@@ -575,13 +575,13 @@
+ 	@if test -f $(ETC)/$*; then \
+ 		echo "$(ETC)/$* already exists; it will not be automatically replaced."; \
+ 	else \
+-		echo install -o $(INSTUSR) -g $(INSTGRP) -m 644 conf/$* $(ETC)/$*;  \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 644 conf/$* $(ETC)/$*;  \
++		echo install -m 644 conf/$* $(ETC)/$*;  \
++		$(INSTALL) -m 644 conf/$* $(ETC)/$*;  \
+ 	fi
+ 
+ FORCECONFINSTTARGETS = $(addprefix install_force_conf_, $(CONFIGFILES))
+ ${FORCECONFINSTTARGETS}: install_force_conf_%: 
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 644 conf/$* $(ETC)/$*;  
++	$(INSTALL) -m 644 conf/$* $(ETC)/$*;  
+ 
+ configsinstall: $(CONFINSTTARGETS)
+ 	@echo
+--- Makefile.in~	2025-09-04 16:19:18.197291247 -0500
++++ Makefile.in	2025-09-04 16:29:52.764697899 -0500
+@@ -432,198 +432,198 @@
+ 	mkdir -p $(BIN)
+ 
+ 	@if test "$(BUILD_CAPTURE_LINUX_WIFI)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_LINUX_WIFI) $(BIN)/`basename $(CAPTURE_LINUX_WIFI)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_LINUX_WIFI) $(BIN)/`basename $(CAPTURE_LINUX_WIFI)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_LINUX_BLUETOOTH)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_LINUX_BLUETOOTH) $(BIN)/`basename $(CAPTURE_LINUX_BLUETOOTH)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_LINUX_BLUETOOTH) $(BIN)/`basename $(CAPTURE_LINUX_BLUETOOTH)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_OPENBSD_WIFI)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_OPENBSD_WIFI) $(BIN)/`basename $(CAPTURE_OPENBSD_WIFI)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_OPENBSD_WIFI) $(BIN)/`basename $(CAPTURE_OPENBSD_WIFI)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_OSX_COREWLAN)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_OSX_COREWLAN) $(BIN)/`basename $(CAPTURE_OSX_COREWLAN)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_OSX_COREWLAN) $(BIN)/`basename $(CAPTURE_OSX_COREWLAN)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NRF_MOUSEJACK)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_NRF_MOUSEJACK) $(BIN)/`basename $(CAPTURE_NRF_MOUSEJACK)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_NRF_MOUSEJACK) $(BIN)/`basename $(CAPTURE_NRF_MOUSEJACK)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_TI_CC_2540)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_TI_CC_2540) $(BIN)/`basename $(CAPTURE_TI_CC_2540)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_TI_CC_2540) $(BIN)/`basename $(CAPTURE_TI_CC_2540)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_TI_CC_2531)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_TI_CC_2531) $(BIN)/`basename $(CAPTURE_TI_CC_2531)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_TI_CC_2531) $(BIN)/`basename $(CAPTURE_TI_CC_2531)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_UBERTOOTH_ONE)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_UBERTOOTH_ONE) $(BIN)/`basename $(CAPTURE_UBERTOOTH_ONE)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_UBERTOOTH_ONE) $(BIN)/`basename $(CAPTURE_UBERTOOTH_ONE)`; \
+         fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NRF_51822)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_NRF_51822) $(BIN)/`basename $(CAPTURE_NRF_51822)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_NRF_51822) $(BIN)/`basename $(CAPTURE_NRF_51822)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NRF_52840)"x = "1"x; then \
+-			$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_NRF_52840) $(BIN)/`basename $(CAPTURE_NRF_52840)`; \
++			$(INSTALL) -m 4550 $(CAPTURE_NRF_52840) $(BIN)/`basename $(CAPTURE_NRF_52840)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NXP_KW41Z)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_NXP_KW41Z) $(BIN)/`basename $(CAPTURE_NXP_KW41Z)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_NXP_KW41Z) $(BIN)/`basename $(CAPTURE_NXP_KW41Z)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_RZ_KILLERBEE)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_RZ_KILLERBEE) $(BIN)/`basename $(CAPTURE_RZ_KILLERBEE)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_RZ_KILLERBEE) $(BIN)/`basename $(CAPTURE_RZ_KILLERBEE)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_BLADERF_WIPHY)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_BLADERF_WIPHY) $(BIN)/`basename $(CAPTURE_BLADERF_WIPHY)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_BLADERF_WIPHY) $(BIN)/`basename $(CAPTURE_BLADERF_WIPHY)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_HAK5_COCONUT)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_HAK5_COCONUT) $(BIN)/`basename $(CAPTURE_HAK5_COCONUT)` ; \
++		$(INSTALL) -m 4550 $(CAPTURE_HAK5_COCONUT) $(BIN)/`basename $(CAPTURE_HAK5_COCONUT)` ; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_SERIAL_RADVIEW)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_SERIAL_RADVIEW) $(BIN)/`basename $(CAPTURE_SERIAL_RADVIEW)` ; \
++		$(INSTALL) -m 4550 $(CAPTURE_SERIAL_RADVIEW) $(BIN)/`basename $(CAPTURE_SERIAL_RADVIEW)` ; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_USB_RADIACODE)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_USB_RADIACODE) $(BIN)/`basename $(CAPTURE_USB_RADIACODE)` ; \
++		$(INSTALL) -m 4550 $(CAPTURE_USB_RADIACODE) $(BIN)/`basename $(CAPTURE_USB_RADIACODE)` ; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_SDR_RTL433V2)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_SDR_RTL433V2) $(BIN)/`basename $(CAPTURE_SDR_RTL433V2)` ; \
++		$(INSTALL) -m 4550 $(CAPTURE_SDR_RTL433V2) $(BIN)/`basename $(CAPTURE_SDR_RTL433V2)` ; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_SDR_RTLADSBV2)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_SDR_RTLADSBV2) $(BIN)/`basename $(CAPTURE_SDR_RTLADSBV2)` ; \
++		$(INSTALL) -m 4550 $(CAPTURE_SDR_RTLADSBV2) $(BIN)/`basename $(CAPTURE_SDR_RTLADSBV2)` ; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_FREAKLABS_ZIGBEEV2)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_FREAKLABS_ZIGBEEV2) $(BIN)/`basename $(CAPTURE_FREAKLABS_ZIGBEEV2)` ; \
++		$(INSTALL) -m 4550 $(CAPTURE_FREAKLABS_ZIGBEEV2) $(BIN)/`basename $(CAPTURE_FREAKLABS_ZIGBEEV2)` ; \
+ 	fi;
+ 
+ commoninstall: $(INSTBINS)
+ 	mkdir -p $(ETC)
+ 	mkdir -p $(BIN)
+ 
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(PS) $(BIN)/$(PS); 
++	$(INSTALL) -m 555 $(PS) $(BIN)/$(PS); 
+ 
+ 	# Install the alias script
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 kismet_server $(BIN)/kismet_server; 
++	$(INSTALL) -m 555 kismet_server $(BIN)/kismet_server; 
+ 
+ 	# Install the compiled log tools
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_STRIP) $(BIN)/`basename $(LOGTOOL_KISMETDB_STRIP)`;
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_JSON) $(BIN)/`basename $(LOGTOOL_KISMETDB_JSON)`;
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_WIGLE) $(BIN)/`basename $(LOGTOOL_KISMETDB_WIGLE)`;
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_STATS) $(BIN)/`basename $(LOGTOOL_KISMETDB_STATS)`;
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_KML) $(BIN)/`basename $(LOGTOOL_KISMETDB_KML)`;
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_GPX) $(BIN)/`basename $(LOGTOOL_KISMETDB_GPX)`;
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_CLEAN) $(BIN)/`basename $(LOGTOOL_KISMETDB_CLEAN)`;
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(LOGTOOL_KISMETDB_PCAP) $(BIN)/`basename $(LOGTOOL_KISMETDB_PCAP)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_STRIP) $(BIN)/`basename $(LOGTOOL_KISMETDB_STRIP)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_JSON) $(BIN)/`basename $(LOGTOOL_KISMETDB_JSON)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_WIGLE) $(BIN)/`basename $(LOGTOOL_KISMETDB_WIGLE)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_STATS) $(BIN)/`basename $(LOGTOOL_KISMETDB_STATS)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_KML) $(BIN)/`basename $(LOGTOOL_KISMETDB_KML)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_GPX) $(BIN)/`basename $(LOGTOOL_KISMETDB_GPX)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_CLEAN) $(BIN)/`basename $(LOGTOOL_KISMETDB_CLEAN)`;
++	$(INSTALL) -m 555 $(LOGTOOL_KISMETDB_PCAP) $(BIN)/`basename $(LOGTOOL_KISMETDB_PCAP)`;
+ 
+ 	# Install the other tools
+-	$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) -m 555 $(TOOL_KISMET_DISCOVERY) $(BIN)/`basename $(TOOL_KISMET_DISCOVERY)`;
++	$(INSTALL) -m 555 $(TOOL_KISMET_DISCOVERY) $(BIN)/`basename $(TOOL_KISMET_DISCOVERY)`;
+ 
+ 	mkdir -p $(BIN)
+ 
+ 	@if test "$(BUILD_CAPTURE_PCAPFILE)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_PCAPFILE) $(BIN)/$(CAPTURE_PCAPFILE); \
++		$(INSTALL) $(CAPTURE_PCAPFILE) $(BIN)/$(CAPTURE_PCAPFILE); \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_KISMETDB)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_KISMETDB) $(BIN)/$(CAPTURE_KISMETDB); \
++		$(INSTALL) $(CAPTURE_KISMETDB) $(BIN)/$(CAPTURE_KISMETDB); \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_LINUX_WIFI)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_LINUX_WIFI) $(BIN)/`basename $(CAPTURE_LINUX_WIFI)`; \
++		$(INSTALL) $(CAPTURE_LINUX_WIFI) $(BIN)/`basename $(CAPTURE_LINUX_WIFI)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_LINUX_BLUETOOTH)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_LINUX_BLUETOOTH) $(BIN)/`basename $(CAPTURE_LINUX_BLUETOOTH)`; \
++		$(INSTALL) $(CAPTURE_LINUX_BLUETOOTH) $(BIN)/`basename $(CAPTURE_LINUX_BLUETOOTH)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_OPENBSD_WIFI)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_OPENBSD_WIFI) $(BIN)/`basename $(CAPTURE_OPENBSD_WIFI)`; \
++		$(INSTALL) $(CAPTURE_OPENBSD_WIFI) $(BIN)/`basename $(CAPTURE_OPENBSD_WIFI)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_OSX_COREWLAN)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) $(CAPTURE_OSX_COREWLAN) $(BIN)/`basename $(CAPTURE_OSX_COREWLAN)`; \
++		$(INSTALL) $(CAPTURE_OSX_COREWLAN) $(BIN)/`basename $(CAPTURE_OSX_COREWLAN)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_HACKRF_SWEEP)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_HACKRF_SWEEP) $(BIN)/$(CAPTURE_HACKRF_SWEEP); \
++		$(INSTALL) $(CAPTURE_HACKRF_SWEEP) $(BIN)/$(CAPTURE_HACKRF_SWEEP); \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NRF_MOUSEJACK)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_NRF_MOUSEJACK) $(BIN)/`basename $(CAPTURE_NRF_MOUSEJACK)`; \
++		$(INSTALL) $(CAPTURE_NRF_MOUSEJACK) $(BIN)/`basename $(CAPTURE_NRF_MOUSEJACK)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_TI_CC_2540)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_TI_CC_2540) $(BIN)/`basename $(CAPTURE_TI_CC_2540)`; \
++		$(INSTALL) $(CAPTURE_TI_CC_2540) $(BIN)/`basename $(CAPTURE_TI_CC_2540)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_TI_CC_2531)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_TI_CC_2531) $(BIN)/`basename $(CAPTURE_TI_CC_2531)`; \
++		$(INSTALL) $(CAPTURE_TI_CC_2531) $(BIN)/`basename $(CAPTURE_TI_CC_2531)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_UBERTOOTH_ONE)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_UBERTOOTH_ONE) $(BIN)/`basename $(CAPTURE_UBERTOOTH_ONE)`; \
++		$(INSTALL) $(CAPTURE_UBERTOOTH_ONE) $(BIN)/`basename $(CAPTURE_UBERTOOTH_ONE)`; \
+         fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NRF_51822)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_NRF_51822) $(BIN)/`basename $(CAPTURE_NRF_51822)`; \
++		$(INSTALL) $(CAPTURE_NRF_51822) $(BIN)/`basename $(CAPTURE_NRF_51822)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NRF_52840)"x = "1"x; then \
+-			$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_NRF_52840) $(BIN)/`basename $(CAPTURE_NRF_52840)`; \
++			$(INSTALL) $(CAPTURE_NRF_52840) $(BIN)/`basename $(CAPTURE_NRF_52840)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_NXP_KW41Z)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_NXP_KW41Z) $(BIN)/`basename $(CAPTURE_NXP_KW41Z)`; \
++		$(INSTALL) $(CAPTURE_NXP_KW41Z) $(BIN)/`basename $(CAPTURE_NXP_KW41Z)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_SERIAL_RADVIEW)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_SERIAL_RADVIEW) $(BIN)/`basename $(CAPTURE_SERIAL_RADVIEW)`; \
++		$(INSTALL) $(CAPTURE_SERIAL_RADVIEW) $(BIN)/`basename $(CAPTURE_SERIAL_RADVIEW)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_USB_RADIACODE)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_USB_RADIACODE) $(BIN)/`basename $(CAPTURE_USB_RADIACODE)`; \
++		$(INSTALL) $(CAPTURE_USB_RADIACODE) $(BIN)/`basename $(CAPTURE_USB_RADIACODE)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_ANTSDR_DRONEID)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_ANTSDR_DRONEID) $(BIN)/`basename $(CAPTURE_ANTSDR_DRONEID)`; \
++		$(INSTALL) $(CAPTURE_ANTSDR_DRONEID) $(BIN)/`basename $(CAPTURE_ANTSDR_DRONEID)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_RZ_KILLERBEE)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(SUIDGROUP) -m 4550 $(CAPTURE_RZ_KILLERBEE) $(BIN)/`basename $(CAPTURE_RZ_KILLERBEE)`; \
++		$(INSTALL) -m 4550 $(CAPTURE_RZ_KILLERBEE) $(BIN)/`basename $(CAPTURE_RZ_KILLERBEE)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_BLADERF_WIPHY)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_BLADERF_WIPHY) $(BIN)/`basename $(CAPTURE_BLADERF_WIPHY)`; \
++		$(INSTALL) $(CAPTURE_BLADERF_WIPHY) $(BIN)/`basename $(CAPTURE_BLADERF_WIPHY)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_HAK5_COCONUT)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_HAK5_COCONUT) $(BIN)/`basename $(CAPTURE_HAK5_COCONUT)` && \
++		$(INSTALL) $(CAPTURE_HAK5_COCONUT) $(BIN)/`basename $(CAPTURE_HAK5_COCONUT)` && \
+ 		mkdir -p $(SHARE)/firmware/ && \
+ 		cp capture_hak5_wifi_coconut/libwifiuserspace/firmware/LICENSE-ralink-mediatek.txt $(SHARE)/firmware && \
+ 		cp capture_hak5_wifi_coconut/libwifiuserspace/firmware/rt2870.bin $(SHARE)/firmware/ ; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_SDR_RTL433V2)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_SDR_RTL433V2) $(BIN)/`basename $(CAPTURE_SDR_RTL433V2)`; \
++		$(INSTALL) $(CAPTURE_SDR_RTL433V2) $(BIN)/`basename $(CAPTURE_SDR_RTL433V2)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_SDR_RTLADSBV2)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_SDR_RTLADSBV2) $(BIN)/`basename $(CAPTURE_SDR_RTLADSBV2)`; \
++		$(INSTALL) $(CAPTURE_SDR_RTLADSBV2) $(BIN)/`basename $(CAPTURE_SDR_RTLADSBV2)`; \
+ 	fi;
+ 
+ 	@if test "$(BUILD_CAPTURE_FREAKLABS_ZIGBEEV2)"x = "1"x; then \
+-		$(INSTALL) -o $(INSTUSR) -g $(INSTGRP) $(CAPTURE_FREAKLABS_ZIGBEEV2) $(BIN)/`basename $(CAPTURE_FREAKLABS_ZIGBEEV2)`; \
++		$(INSTALL) $(CAPTURE_FREAKLABS_ZIGBEEV2) $(BIN)/`basename $(CAPTURE_FREAKLABS_ZIGBEEV2)`; \
+ 	fi;
+ 
+ 	mkdir -p $(LIB)/pkgconfig

@@ -1,0 +1,21 @@
+diff -rupN OpenSceneGraph-OpenSceneGraph-3.6.5/src/osgPlugins/svg/ReaderWriterSVG.cpp OpenSceneGraph-OpenSceneGraph-3.6.5-new/src/osgPlugins/svg/ReaderWriterSVG.cpp
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/src/osgPlugins/svg/ReaderWriterSVG.cpp	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/src/osgPlugins/svg/ReaderWriterSVG.cpp	2025-07-20 16:14:45.195878846 +0200
+@@ -21,13 +21,11 @@
+ #include <osgDB/FileUtils>
+ #include <osgDB/ImageOptions>
+ 
+-extern "C" {
+-    #include <librsvg/rsvg.h>
++#include <librsvg/rsvg.h>
+ 
+-    #ifndef LIBRSVG_CHECK_VERSION
+-        #include <librsvg/rsvg-cairo.h>
+-    #endif
+-}
++#ifndef LIBRSVG_CHECK_VERSION
++    #include <librsvg/rsvg-cairo.h>
++#endif
+ 
+ class ReaderWriterSVG : public osgDB::ReaderWriter
+ {

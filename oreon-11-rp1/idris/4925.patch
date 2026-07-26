@@ -1,0 +1,243 @@
+From 71f4da9bf1aa4b3ca57d9c0b63c736b303e04780 Mon Sep 17 00:00:00 2001
+From: Vekhir <Vekhir@yahoo.com>
+Date: Sun, 17 Dec 2023 12:44:35 +0100
+Subject: [PATCH] Support mtl 2.3
+
+---
+ idris.cabal                   | 2 +-
+ src/IRTS/Compiler.hs          | 1 +
+ src/Idris/AbsSyntax.hs        | 1 +
+ src/Idris/Core/Constraints.hs | 1 +
+ src/Idris/Core/Elaborate.hs   | 1 +
+ src/Idris/Core/Evaluate.hs    | 1 +
+ src/Idris/Core/ProofState.hs  | 1 +
+ src/Idris/Core/ProofTerm.hs   | 1 +
+ src/Idris/Core/TT.hs          | 1 +
+ src/Idris/Core/Typecheck.hs   | 1 +
+ src/Idris/Coverage.hs         | 1 +
+ src/Idris/DSL.hs              | 1 +
+ src/Idris/Erasure.hs          | 1 +
+ src/Idris/Imports.hs          | 1 +
+ src/Idris/Package/Parser.hs   | 1 +
+ src/Idris/PartialEval.hs      | 1 +
+ src/Idris/Prover.hs           | 1 +
+ src/Idris/Termination.hs      | 1 +
+ 18 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/idris.cabal b/idris.cabal
+index 97eed74e69..c3f5760d0b 100644
+--- a/idris.cabal
++++ b/idris.cabal
+@@ -339,7 +339,7 @@ Library
+                 , haskeline >= 0.8 && < 0.9
+                 , ieee754 >= 0.7 && < 0.9
+                 , megaparsec >= 7.0.4 && < 10
+-                , mtl >= 2.1 && < 2.3
++                , mtl >= 2.1 && < 2.4
+                 , network >= 2.7 && < 3.1.2
+                 , optparse-applicative >= 0.13 && < 0.17
+                 , parser-combinators >= 1.0.0
+diff --git a/src/IRTS/Compiler.hs b/src/IRTS/Compiler.hs
+index cf597d92f8..4353296814 100644
+--- a/src/IRTS/Compiler.hs
++++ b/src/IRTS/Compiler.hs
+@@ -32,6 +32,7 @@ import IRTS.Simplified
+ import Prelude hiding (id, (.))
+ 
+ import Control.Category
++import Control.Monad
+ import Control.Monad.State
+ import Data.List
+ import qualified Data.Map as M
+diff --git a/src/Idris/AbsSyntax.hs b/src/Idris/AbsSyntax.hs
+index 5800511054..91e9ffd2e8 100644
+--- a/src/Idris/AbsSyntax.hs
++++ b/src/Idris/AbsSyntax.hs
+@@ -27,6 +27,7 @@ import System.Directory (canonicalizePath, doesFileExist)
+ import System.IO
+ 
+ import Control.Applicative
++import Control.Monad
+ import Control.Monad.State
+ import Prelude hiding (Applicative, Foldable, Traversable, (<$>))
+ 
+diff --git a/src/Idris/Core/Constraints.hs b/src/Idris/Core/Constraints.hs
+index 6979ab145d..b7d2dee6bf 100644
+--- a/src/Idris/Core/Constraints.hs
++++ b/src/Idris/Core/Constraints.hs
+@@ -11,6 +11,7 @@ module Idris.Core.Constraints ( ucheck ) where
+ import Idris.Core.TT (ConstraintFC(..), Err'(..), TC(..), UConstraint(..),
+                       UExp(..))
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.List (partition)
+ import qualified Data.Map.Strict as M
+diff --git a/src/Idris/Core/Elaborate.hs b/src/Idris/Core/Elaborate.hs
+index 39e724763f..bf62f87219 100644
+--- a/src/Idris/Core/Elaborate.hs
++++ b/src/Idris/Core/Elaborate.hs
+@@ -24,6 +24,7 @@ import Idris.Core.TT
+ import Idris.Core.Typecheck
+ import Idris.Core.Unify
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.List
+ 
+diff --git a/src/Idris/Core/Evaluate.hs b/src/Idris/Core/Evaluate.hs
+index ca592841f2..ba529463db 100644
+--- a/src/Idris/Core/Evaluate.hs
++++ b/src/Idris/Core/Evaluate.hs
+@@ -37,6 +37,7 @@ module Idris.Core.Evaluate(normalise, normaliseTrace, normaliseC,
+ import Idris.Core.CaseTree
+ import Idris.Core.TT
+ 
++import Control.Monad
+ import Control.Monad.State
+ import Data.List
+ import Data.Maybe (listToMaybe)
+diff --git a/src/Idris/Core/ProofState.hs b/src/Idris/Core/ProofState.hs
+index 2b4375d9df..9e249a90dd 100644
+--- a/src/Idris/Core/ProofState.hs
++++ b/src/Idris/Core/ProofState.hs
+@@ -28,6 +28,7 @@ import Idris.Core.WHNF
+ 
+ import Util.Pretty hiding (fill)
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.List
+ 
+diff --git a/src/Idris/Core/ProofTerm.hs b/src/Idris/Core/ProofTerm.hs
+index 456672479a..21250e71cc 100644
+--- a/src/Idris/Core/ProofTerm.hs
++++ b/src/Idris/Core/ProofTerm.hs
+@@ -19,6 +19,7 @@ module Idris.Core.ProofTerm(
+ import Idris.Core.Evaluate
+ import Idris.Core.TT
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ 
+ -- | A zipper over terms, in order to efficiently update proof terms.
+diff --git a/src/Idris/Core/TT.hs b/src/Idris/Core/TT.hs
+index deb1988b3c..c1ef3168d3 100644
+--- a/src/Idris/Core/TT.hs
++++ b/src/Idris/Core/TT.hs
+@@ -70,6 +70,7 @@ import qualified Prelude as S (Semigroup(..))
+ import Control.Applicative (Alternative, Applicative(..))
+ import qualified Control.Applicative as A (Alternative(..))
+ import Control.DeepSeq (($!!))
++import Control.Monad
+ import qualified Control.Monad.Fail as Fail
+ import Control.Monad.State.Strict
+ import Data.Binary hiding (get, put)
+diff --git a/src/Idris/Core/Typecheck.hs b/src/Idris/Core/Typecheck.hs
+index 4ac002312b..365c9c9929 100644
+--- a/src/Idris/Core/Typecheck.hs
++++ b/src/Idris/Core/Typecheck.hs
+@@ -14,6 +14,7 @@ module Idris.Core.Typecheck where
+ import Idris.Core.Evaluate
+ import Idris.Core.TT
+ 
++import Control.Monad
+ import Control.Monad.State
+ 
+ -- To check conversion, normalise each term wrt the current environment.
+diff --git a/src/Idris/Coverage.hs b/src/Idris/Coverage.hs
+index aab2b037c7..fbf6d894a3 100644
+--- a/src/Idris/Coverage.hs
++++ b/src/Idris/Coverage.hs
+@@ -17,6 +17,7 @@ import Idris.Delaborate
+ import Idris.Elab.Utils
+ import Idris.Error
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.Char
+ import Data.List
+diff --git a/src/Idris/DSL.hs b/src/Idris/DSL.hs
+index 58dec44856..7d3bc6a9d3 100644
+--- a/src/Idris/DSL.hs
++++ b/src/Idris/DSL.hs
+@@ -13,6 +13,7 @@ module Idris.DSL (debindApp, desugar) where
+ import Idris.AbsSyntax
+ import Idris.Core.TT
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.Generics.Uniplate.Data (transform)
+ 
+diff --git a/src/Idris/Erasure.hs b/src/Idris/Erasure.hs
+index a4c7bacffe..f83ebd21e0 100644
+--- a/src/Idris/Erasure.hs
++++ b/src/Idris/Erasure.hs
+@@ -22,6 +22,7 @@ import Prelude hiding (id, (.))
+ 
+ import Control.Arrow
+ import Control.Category
++import Control.Monad
+ import Control.Monad.State
+ import Data.IntMap (IntMap)
+ import qualified Data.IntMap as IM
+diff --git a/src/Idris/Imports.hs b/src/Idris/Imports.hs
+index 85b045e7d5..bd89fa0b82 100644
+--- a/src/Idris/Imports.hs
++++ b/src/Idris/Imports.hs
+@@ -16,6 +16,7 @@ import Idris.Core.TT
+ import Idris.Error
+ import IRTS.System (getIdrisLibDir)
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.Char (isAlpha, isDigit, toLower)
+ import Data.List (isSuffixOf)
+diff --git a/src/Idris/Package/Parser.hs b/src/Idris/Package/Parser.hs
+index 7245580d4c..e3dcbff5d0 100644
+--- a/src/Idris/Package/Parser.hs
++++ b/src/Idris/Package/Parser.hs
+@@ -19,6 +19,7 @@ import Idris.Parser.Helpers (Parser, Parsing, eol, iName, identifier,
+                              someSpace, stringLiteral)
+ 
+ import Control.Applicative
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.List (union)
+ import qualified Options.Applicative as Opts
+diff --git a/src/Idris/PartialEval.hs b/src/Idris/PartialEval.hs
+index fe349a546b..9b47fd5048 100644
+--- a/src/Idris/PartialEval.hs
++++ b/src/Idris/PartialEval.hs
+@@ -19,6 +19,7 @@ import Idris.Core.Evaluate
+ import Idris.Core.TT
+ import Idris.Delaborate
+ 
++import Control.Monad
+ import Control.Monad.State
+ 
+ -- | Data type representing binding-time annotations for partial evaluation of arguments
+diff --git a/src/Idris/Prover.hs b/src/Idris/Prover.hs
+index 6fb8e7d89c..d3f548b116 100644
+--- a/src/Idris/Prover.hs
++++ b/src/Idris/Prover.hs
+@@ -39,6 +39,7 @@ import Idris.TypeSearch (searchByType)
+ import Util.Pretty
+ 
+ import Control.DeepSeq
++import Control.Monad
+ import Control.Monad.State.Strict
+ import System.Console.Haskeline
+ import System.Console.Haskeline.History
+diff --git a/src/Idris/Termination.hs b/src/Idris/Termination.hs
+index 12e2f46dd7..8a8fa577b0 100644
+--- a/src/Idris/Termination.hs
++++ b/src/Idris/Termination.hs
+@@ -19,6 +19,7 @@ import Idris.Error
+ import Idris.Options
+ import Idris.Output (iWarn)
+ 
++import Control.Monad
+ import Control.Monad.State.Strict
+ import Data.Either
+ import Data.List

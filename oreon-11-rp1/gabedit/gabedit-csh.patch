@@ -1,0 +1,9 @@
+diff -up Gabedit214Src/utils/Others/gabeditRunGamess.csh.r Gabedit214Src/utils/Others/gabeditRunGamess.csh
+--- Gabedit214Src/utils/Others/gabeditRunGamess.csh.p	2008-04-01 13:44:26.000000000 +0200
++++ Gabedit214Src/utils/Others/gabeditRunGamess.csh	2008-05-19 20:09:58.000000000 +0200
+@@ -1,4 +1,4 @@
+-#!./csh -f
++#!/bin/csh -f
+ #  03 Feb 05 - A.R. ALLOUCHE
+ #
+ set TARGET=sockets

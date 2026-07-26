@@ -1,0 +1,14 @@
+--- alt-ergo-2.4.3-free/configure.ml.orig	2026-02-05 07:02:19.000000000 -0700
++++ alt-ergo-2.4.3-free/configure.ml	2026-02-06 15:04:00.955935950 -0700
+@@ -160,8 +160,9 @@ let datadir =
+   abs_exe_path
+   |> Filename.dirname
+   |> follow Filename.parent_dir_name
+-  |> follow "share"
+-  |> follow "alt-ergo"
++  |> follow "lib64"
++  |> follow "ocaml"
++  |> follow "alt-ergo-free"
+ 
+ let pluginsdir = datadir |> follow "plugins"
+ 

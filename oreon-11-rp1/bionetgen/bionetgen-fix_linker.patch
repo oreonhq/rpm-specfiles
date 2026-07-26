@@ -1,0 +1,10 @@
+--- a/bng2/Network3/CMakeLists.orig.txt	2022-08-06 04:53:30.000000000 +0200
++++ b/bng2/Network3/CMakeLists.txt	2022-09-08 22:22:11.875338224 +0200
+@@ -60,6 +60,6 @@
+ 
+ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+ 
+-link_libraries(libmathutils.a libmuparser.a libsundials_cvode.a libsundials_nvecserial.a)
++link_libraries(libmathutils.a libmuparser.a libsundials_cvode.a libsundials_fcvode.a libsundials_nvecserial.a)
+ 
+ add_executable(run_network ${SRC_FILES})

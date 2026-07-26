@@ -1,0 +1,34 @@
+async_sftp_transfer is a pthread start routine
+
+Use the type that pthread_create expects.
+
+Submitted upstream: <https://github.com/FabLeo451/lterm/pull/2>
+
+diff --git a/src/async.c b/src/async.c
+index 4c45f259289d495b..07b60176e1c411aa 100755
+--- a/src/async.c
++++ b/src/async.c
+@@ -134,8 +134,8 @@ async_is_transferring ()
+   return gIsTransferring;
+ }
+ 
+-int
+-async_sftp_transfer (gpointer userdata)
++void *
++async_sftp_transfer (void *userdata)
+ {
+   int i, rc;
+   int nUp, nDown;
+diff --git a/src/async.h b/src/async.h
+index 6ad2f454941ae005..16f61d5c1a4e1f1c 100755
+--- a/src/async.h
++++ b/src/async.h
+@@ -12,7 +12,7 @@ void asyncInit();
+ gpointer async_lterm_loop(gpointer data);
+ 
+ gboolean async_is_transferring ();
+-int async_sftp_transfer (gpointer userdata);
++void *async_sftp_transfer (void *userdata);
+ 
+ void lockSSH (char *caller, gboolean flagLock);
+ 

@@ -1,0 +1,8 @@
+diff -up Module-Install-AutoManifest-0.003/Makefile.PL.orig Module-Install-AutoManifest-0.003/Makefile.PL
+--- Module-Install-AutoManifest-0.003/Makefile.PL.orig	2017-05-16 17:03:41.077343853 +0200
++++ Module-Install-AutoManifest-0.003/Makefile.PL	2017-05-16 17:04:19.473183985 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ 
+ name     'Module-Install-AutoManifest';

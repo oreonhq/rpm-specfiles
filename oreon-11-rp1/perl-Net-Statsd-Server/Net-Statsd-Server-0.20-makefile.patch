@@ -1,0 +1,55 @@
+From ce15f30c21b0678c217d2c93ebb0f003d55220fd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 17 Oct 2016 13:51:23 +0200
+Subject: [PATCH] makefile
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ MANIFEST    | 10 +++++-----
+ Makefile.PL |  6 +-----
+ 2 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/MANIFEST b/MANIFEST
+index 1f71153..41d88bd 100644
+--- a/MANIFEST
++++ b/MANIFEST
+@@ -8,11 +8,11 @@ META.yml
+ Makefile.PL
+ README
+ TODO
+-bin/exampleConfig.js
+-bin/localConfig.js
+-bin/logConfig.js
+-bin/rrdConfig.js
+-bin/statsd
++exampleConfig.js
++localConfig.js
++logConfig.js
++rrdConfig.js
++bin/statsd-perl
+ debian/statsd.init
+ lib/Net/Statsd/Server.pm
+ lib/Net/Statsd/Server/Backend.pm
+diff --git a/Makefile.PL b/Makefile.PL
+index 8ba5926..4df0534 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -14,11 +14,7 @@ my %WriteMakefileArgs = (
+   },
+   "DISTNAME" => "Net-Statsd-Server",
+   "EXE_FILES" => [
+-    "bin/exampleConfig.js",
+-    "bin/localConfig.js",
+-    "bin/logConfig.js",
+-    "bin/rrdConfig.js",
+-    "bin/statsd"
++    "bin/statsd-perl"
+   ],
+   "LICENSE" => "perl",
+   "NAME" => "Net::Statsd::Server",
+-- 
+2.7.4
+

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Messiggy
+Comment=A database of celestial objects
+Encoding=UTF-8
+Icon=messiggy
+Exec=messiggy
+Terminal=false
+Type=Application
+Categories=Astronomy;Education;Science;

@@ -1,0 +1,19 @@
+commit a187041e062c5b656def30a3ec282156360003f3
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Wed Jan 21 23:28:46 2015 -0500
+
+    don't use logical && when & is meant
+
+diff --git a/amd/map.c b/amd/map.c
+index fce8273..0d404cf 100644
+--- a/amd/map.c
++++ b/amd/map.c
+@@ -752,7 +752,7 @@ umount_exported(void)
+ 	} else {
+ 	  am_unmounted(mp);
+ 	}
+-	if (!(mf->mf_flags && (MFF_UNMOUNTING|MFF_MOUNTED)))
++	if (!(mf->mf_flags & (MFF_UNMOUNTING|MFF_MOUNTED)))
+ 	  exported_ap[i] = NULL;
+       } else {
+ 	/*

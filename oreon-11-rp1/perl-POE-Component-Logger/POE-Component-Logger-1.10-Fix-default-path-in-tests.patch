@@ -1,0 +1,11 @@
+diff -up POE-Component-Logger-1.10/t/lib/Log/Dispatch/Config/Test.pm.orig POE-Component-Logger-1.10/t/lib/Log/Dispatch/Config/Test.pm
+--- POE-Component-Logger-1.10/t/lib/Log/Dispatch/Config/Test.pm.orig	2010-10-24 16:00:37.000000000 +0200
++++ POE-Component-Logger-1.10/t/lib/Log/Dispatch/Config/Test.pm	2016-08-04 17:05:38.235777597 +0200
+@@ -3,6 +3,7 @@ use warnings;
+ 
+ package t::lib::Log::Dispatch::Config::Test::Tester;
+ 
++use lib ".";
+ use base 't::lib::Log::Dispatch::Expect';
+ use Test::More;
+ 

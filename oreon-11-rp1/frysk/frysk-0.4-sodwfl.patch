@@ -1,0 +1,372 @@
+diff -up frysk-0.4/frysk-common/Makefile.rules.sodwfl frysk-0.4/frysk-common/Makefile.rules
+--- frysk-0.4/frysk-common/Makefile.rules.sodwfl	2012-02-11 21:37:13.468000053 -0500
++++ frysk-0.4/frysk-common/Makefile.rules	2012-02-11 21:37:13.635000054 -0500
+@@ -160,16 +160,9 @@ AM_CXXFLAGS = \
+ 	-I$(srcdir) \
+ 	-I$(srcdir)/../frysk-imports/include \
+ 	-I$(top_builddir) \
+-        -I$(srcdir)/../frysk-imports/elfutils/libasm \
+-        -I$(srcdir)/../frysk-imports/elfutils/libebl \
+-	-I$(srcdir)/../frysk-imports/elfutils/libelf \
+-	-I$(srcdir)/../frysk-imports/elfutils/libdw \
+-	-I$(srcdir)/../frysk-imports/elfutils/libdwfl \
++	-I/usr/include/elfutils \
+ 	-I$(srcdir)/../frysk-imports/libunwind/include \
+-	-I$(top_builddir)/../frysk-imports/libunwind-i386/include \
+-	-I$(top_builddir)/../frysk-imports/libunwind-x86_64/include \
+-	-I$(top_builddir)/../frysk-imports/libunwind-ppc64/include \
+-	-I$(top_builddir)/../frysk-imports/libunwind-ppc32/include \
++	-I$(top_builddir)/../frysk-imports/libunwind/include \
+ 	-fPIC \
+ 	$(ZZZ)
+ 
+@@ -395,12 +388,10 @@ Runner:
+ 	echo "#!/bin/sh"					>> $@.tmp
+ 	echo ""	     						>> $@.tmp
+ 	echo "# some pre-definitions"				>> $@.tmp
+-	echo "elfutils=$(frysk_imports)/elfutils"		>> $@.tmp
+ 	echo "java=\"$(JAVA) $(GEN_GCJ_NO_SIGCHLD_FLAGS)\""	>> $@.tmp
+ 	echo ""	     						>> $@.tmp
+ 	echo "# hack to hopefully find the right libstdc++.so"  >> $@.tmp
+ 	echo "export LD_LIBRARY_PATH=$(frysk_sys)\\"		>> $@.tmp
+-	echo ":\$${elfutils}/backends\\"			>> $@.tmp
+ 	echo ":/usr/lib64:/usr/lib"				>> $@.tmp
+ 	echo ""	     						>> $@.tmp
+ 	echo "# Set up classpath"				>> $@.tmp
+diff -up frysk-0.4/frysk-core/Makefile.am.sodwfl frysk-0.4/frysk-core/Makefile.am
+--- frysk-0.4/frysk-core/Makefile.am.sodwfl	2012-02-11 21:37:13.469000053 -0500
++++ frysk-0.4/frysk-core/Makefile.am	2012-02-11 21:37:57.412994059 -0500
+@@ -53,11 +53,6 @@ GEN_GCJ_LDADD_LIST += ../frysk-imports/l
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jdom.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libasm/libasm.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdwfl/libdwfl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdw/libdw.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libebl/libebl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libelf/libelf.a
+ if USE_LIBUNWIND
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+                  ../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \
+@@ -68,6 +63,7 @@ GEN_GCJ_LDADD_LIST += -lstdc++
+ # Stub bfd_getb32 and bfd_getl32 for PPC64.  Unconditionally
+ # link -lbfd_get just for simplification.
+ GEN_GCJ_LDADD_LIST += -laudit
++GEN_GCJ_LDADD_LIST += -lasm -ldw -lebl -lelf
+ 
+ # For TestExec.java
+ noinst_PROGRAMS += frysk/pkglibdir/funit-exec-alias
+diff -up frysk-0.4/frysk-gtk/Makefile.am.sodwfl frysk-0.4/frysk-gtk/Makefile.am
+--- frysk-0.4/frysk-gtk/Makefile.am.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-gtk/Makefile.am	2012-02-11 21:37:13.640000054 -0500
+@@ -51,11 +51,6 @@ GEN_GCJ_LDADD_LIST += ../frysk-sys/libfr
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a 
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a
+ GEN_GCJ_LDADD_LIST += $(FRYSK_GTK_LIBS)
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libasm/libasm.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdwfl/libdwfl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdw/libdw.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libebl/libebl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libelf/libelf.a
+ GEN_GCJ_LDADD_LIST += \
+ 	../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+ 	../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \
+@@ -64,6 +59,7 @@ GEN_GCJ_LDADD_LIST += \
+ GEN_GCJ_LDADD_LIST += -lstdc++
+ # For auditing
+ GEN_GCJ_LDADD_LIST += -laudit
++GEN_GCJ_LDADD_LIST += -lasm -ldw -lebl -lelf
+ 
+ # Hack, need to compile this entire sub-tree with JNI.
+ AM_GCJFLAGS += -fjni 
+diff -up frysk-0.4/frysk-gui/Makefile.am.sodwfl frysk-0.4/frysk-gui/Makefile.am
+--- frysk-0.4/frysk-gui/Makefile.am.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-gui/Makefile.am	2012-02-11 21:37:13.641000054 -0500
+@@ -60,11 +60,6 @@ GEN_GCJ_LDADD_LIST += ../frysk-imports/l
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a 
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a 
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jline.a 
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libasm/libasm.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdwfl/libdwfl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdw/libdw.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libebl/libebl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libelf/libelf.a
+ if USE_LIBUNWIND
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+                  ../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \
+@@ -77,6 +72,7 @@ GEN_GCJ_LDADD_LIST += -L../frysk-gtk/Egg
+ GEN_GCJ_LDADD_LIST += -L../frysk-gtk/tlwidgets
+ GEN_GCJ_LDADD_LIST += $(FRYSK_GUI_LIBS)
+ GEN_GCJ_LDADD_LIST += -laudit
++GEN_GCJ_LDADD_LIST += -lasm -ldw -lebl -lelf
+ 
+ # Skip the JUnit tests (exit with status 77) when there is no display; bug #3012.
+ #TESTS_ENVIRONMENT = ( test $$tst != TestRunner || test -n "$$DISPLAY" || exit 77 ) && 
+diff -up frysk-0.4/frysk-imports/bootstrap.sh.sodwfl frysk-0.4/frysk-imports/bootstrap.sh
+--- frysk-0.4/frysk-imports/bootstrap.sh.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-imports/bootstrap.sh	2012-02-11 21:37:13.642000054 -0500
+@@ -51,18 +51,6 @@ FILE_LIST="\
+ ./common/Makefile.gen.sh $FILE_LIST
+ 
+ (
+-    cd elfutils
+-    echo "Running aclocal ... for elfutils"
+-    aclocal -I m4
+-    echo "Running autoconf ... for elfutils"
+-    autoconf -Werror
+-    echo "Running autoheader ... for elfutils"
+-    autoheader -Werror
+-    echo "Running automake ... for elfutils"
+-    automake -Werror --add-missing 
+-)
+-
+-(
+     cd antlr
+     echo "Running autoconf ... for antlr"
+     autoconf -Werror -f
+diff -up frysk-0.4/frysk-imports/configure.ac.sodwfl frysk-0.4/frysk-imports/configure.ac
+--- frysk-0.4/frysk-imports/configure.ac.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-imports/configure.ac	2012-02-11 21:37:13.643000054 -0500
+@@ -61,6 +61,6 @@ AC_CONFIG_FILES([
+ # list of configured subdirectories so that it can be included in
+ # "make dist" (or the recursive "make distdir").
+ 
+-AC_CONFIG_SUBDIRS([elfutils libunwind libunwind-i386 libunwind-x86_64 libunwind-ppc32 libunwind-ppc64])
++AC_CONFIG_SUBDIRS([libunwind libunwind-i386 libunwind-x86_64 libunwind-ppc32 libunwind-ppc64])
+ 
+ AC_OUTPUT
+diff -up frysk-0.4/frysk-imports/Makefile.am.sodwfl frysk-0.4/frysk-imports/Makefile.am
+--- frysk-0.4/frysk-imports/Makefile.am.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-imports/Makefile.am	2012-02-11 21:37:13.655000049 -0500
+@@ -58,7 +58,6 @@ LIBUNWIND_ARCH_DIRS = libunwind-i386 lib
+ CHECK_SUBDIRS = \
+ 	jline \
+ 	junit \
+-	elfutils \
+ 	getopt \
+ 	tests \
+ 	$(LIBUNWIND_DIR)
+@@ -86,11 +85,6 @@ GEN_CLASSPATH += getopt.jar
+ GEN_CLASSPATH += junit.jar
+ GEN_GCJ_LDADD_LIST += libfrysk-getopt.a
+ GEN_GCJ_LDADD_LIST += libfrysk-junit.a
+-GEN_GCJ_LDADD_LIST += ./elfutils/libasm/libasm.a
+-GEN_GCJ_LDADD_LIST += ./elfutils/libdwfl/libdwfl.a
+-GEN_GCJ_LDADD_LIST += ./elfutils/libdw/libdw.a
+-GEN_GCJ_LDADD_LIST += ./elfutils/libebl/libebl.a
+-GEN_GCJ_LDADD_LIST += ./elfutils/libelf/libelf.a
+ GEN_GCJ_LDADD_LIST += -lstdc++
+ GEN_GCJ_LDADD_LIST += ./libunwind-i386/src/.libs/libunwind-x86.a
+ GEN_GCJ_LDADD_LIST += ./libunwind-x86_64/src/.libs/libunwind-x86_64.a
+diff -up frysk-0.4/frysk-imports/tests/Makefile.am.sodwfl frysk-0.4/frysk-imports/tests/Makefile.am
+--- frysk-0.4/frysk-imports/tests/Makefile.am.sodwfl	2012-02-11 21:37:13.470000053 -0500
++++ frysk-0.4/frysk-imports/tests/Makefile.am	2012-02-11 21:37:13.671000057 -0500
+@@ -462,7 +462,6 @@ systests_PASS_PROGRAM += frysk4217/attac
+ systests_PASS_PROGRAM += frysk4330/stopkills
+ 
+ # test if /proc/PID/maps has r-xp permissions for the VDSO entry
+-frysk4704_vdso_permissions_CFLAGS =  -I$(top_srcdir)/elfutils/libelf
+ systests_PASS_PROGRAM += frysk4704/vdso-permissions
+ 
+ # A final variable/inner class test.
+@@ -485,10 +484,6 @@ frysk4742/java.sh:
+ 		\| grep Referee > $@
+ 	chmod a+x $@
+ 
+-frysk4796_dwfltest_CFLAGS = -I$(top_srcdir)/elfutils/libdwfl \
+--I$(top_srcdir)/elfutils/libdw -I$(top_srcdir)/elfutils/libelf
+-frysk4796_dwfltest_LDADD = -ldl $(top_builddir)/elfutils/libasm/libasm.a \
+-$(top_builddir)/elfutils/libdw/libdw.a \
+-$(top_builddir)/elfutils/libebl/libebl.a \
+-$(top_builddir)/elfutils/libelf/libelf.a
++frysk4796_dwfltest_LDADD = -ldl -lasm -ldw -lebl -lelf
++frysk4796_dwfltest_CFLAGS = -I/usr/include/elfutils
+ systests_PASS_PROGRAM += frysk4796/dwfltest
+diff -up frysk-0.4/frysk-sys/lib/dwfl/cni/DwarfDie.cxx.sodwfl frysk-0.4/frysk-sys/lib/dwfl/cni/DwarfDie.cxx
+--- frysk-0.4/frysk-sys/lib/dwfl/cni/DwarfDie.cxx.sodwfl	2012-02-11 21:37:12.987000054 -0500
++++ frysk-0.4/frysk-sys/lib/dwfl/cni/DwarfDie.cxx	2012-02-11 21:37:13.676000052 -0500
+@@ -36,9 +36,10 @@
+ // modification, you must delete this exception statement from your
+ // version and license this file solely under the GPL without
+ // exception.
+-#include <libdw.h>
++
++#include <elfutils/libdw.h>
+ #include <gcj/cni.h>
+-#include <dwarf.h>
++#include <elfutils/../dwarf.h>
+ #include <stdio.h>
+ #include <alloca.h>
+ #include <stdlib.h>
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwAccess.shenum	2012-02-11 21:37:13.678000052 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_ACCESS_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwAte.shenum	2012-02-11 21:37:13.679000052 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_ATE_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwAt.shenum	2012-02-11 21:37:13.680000052 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_AT_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwDsc.shenum	2012-02-11 21:37:13.681000052 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_DSC_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwDs.shenum	2012-02-11 21:37:13.682000052 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_DS_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwEnd.shenum	2012-02-11 21:37:13.697000054 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_END_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwInl.shenum	2012-02-11 21:37:13.698000054 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_INL_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwOp.shenum	2012-02-11 21:37:13.699000054 -0500
+@@ -42,7 +42,8 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
++    /lo_user/ || /hi_user/ { next }
+     /DW_OP_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwOrd.shenum	2012-02-11 21:37:13.700000054 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_ORD_.* = / {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum.sodwfl frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum
+--- frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum.sodwfl	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-sys/lib/dwfl/DwTag.shenum	2012-02-11 21:37:13.702000054 -0500
+@@ -42,7 +42,7 @@
+ # in.
+ 
+ CC=${CC:-gcc}
+-$CC -dD -E $(dirname $0)/../../../frysk-imports/elfutils/libdw/dwarf.h | awk '
++$CC -dD -E /usr/include/dwarf.h | awk '
+     /DW_TAG_/ {
+ 	p = $1
+ 	v = gensub(",","","",$3)
+diff -up frysk-0.4/frysk-sys/lib/dwfl/jni/DwarfDie.cxx.sodwfl frysk-0.4/frysk-sys/lib/dwfl/jni/DwarfDie.cxx
+--- frysk-0.4/frysk-sys/lib/dwfl/jni/DwarfDie.cxx.sodwfl	2012-02-11 21:37:12.989000054 -0500
++++ frysk-0.4/frysk-sys/lib/dwfl/jni/DwarfDie.cxx	2012-02-11 21:37:13.703000054 -0500
+@@ -40,8 +40,8 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
+-#include <libdw.h>
+-#include <dwarf.h>
++#include <elfutils/libdw.h>
++#include <elfutils/../dwarf.h>
+ 
+ #include "jni.hxx"
+ 
+diff -up frysk-0.4/frysk-sys/Makefile.am.sodwfl frysk-0.4/frysk-sys/Makefile.am
+--- frysk-0.4/frysk-sys/Makefile.am.sodwfl	2012-02-11 21:37:12.939000054 -0500
++++ frysk-0.4/frysk-sys/Makefile.am	2012-02-11 21:37:13.704000054 -0500
+@@ -53,11 +53,6 @@ GEN_GCJ_LDADD_LIST += ../frysk-imports/l
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-junit.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-getopt.a
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libfrysk-jdom.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libasm/libasm.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdwfl/libdwfl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libdw/libdw.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libebl/libebl.a
+-GEN_GCJ_LDADD_LIST += ../frysk-imports/elfutils/libelf/libelf.a
+ if USE_LIBUNWIND
+ GEN_GCJ_LDADD_LIST += ../frysk-imports/libunwind-i386/src/.libs/libunwind-x86.a \
+                  ../frysk-imports/libunwind-x86_64/src/.libs/libunwind-x86_64.a \
+@@ -65,6 +60,8 @@ GEN_GCJ_LDADD_LIST += ../frysk-imports/l
+                  ../frysk-imports/libunwind-ppc64/src/.libs/libunwind-ppc64.a
+ endif
+ GEN_GCJ_LDADD_LIST += -lstdc++ -laudit
++GEN_GCJ_LDADD_LIST += -lasm -ldw -lebl -lelf
++
+ 
+ # Force a few dependencies
+ lib/unwind/cni/Unwind%.cxx: lib/unwind/Unwind%.java lib/unwind/cni/UnwindH.hxx
+@@ -74,12 +71,6 @@ lib/unwind/Unwind%.java: lib/unwind/Unwi
+ # Depend on these runtimes.
+ JNI_LIBRARY_LIST += -lstdc++
+ JNI_LIBRARY_LIST += -laudit
+-# Bundle in the local elfutils code.
+-JNI_ARCHIVE_LIST += ../frysk-imports/elfutils/libasm/libasm_pic.a
+-JNI_ARCHIVE_LIST += ../frysk-imports/elfutils/libdwfl/libdwfl_pic.a
+-JNI_ARCHIVE_LIST += ../frysk-imports/elfutils/libdw/libdw_pic.a
+-JNI_ARCHIVE_LIST += ../frysk-imports/elfutils/libelf/libelf_pic.a
+-JNI_ARCHIVE_LIST += ../frysk-imports/elfutils/libebl/libebl.a
+ # Bundle in the local libunwind code.
+ JNI_OBJECT_LIST += ../frysk-imports/libunwind-i386/src/{,dwarf/,mi/,x86/}.libs/*.o
+ JNI_OBJECT_LIST += ../frysk-imports/libunwind-x86_64/src/{,dwarf/,mi/,x86_64/}.libs/*.o

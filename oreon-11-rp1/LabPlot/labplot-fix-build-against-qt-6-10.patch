@@ -1,0 +1,12 @@
+diff --git a/src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp b/src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
+index 5957bb2..fcab785 100644
+--- a/src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
++++ b/src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
+@@ -27,6 +27,7 @@ extern "C" {
+ #include <QDebug> // qWarning()
+ #include <QIcon>
+ #include <QThreadPool>
++#include <QElapsedTimer>
+ 
+ /*!
+  * \class XYFourierFilterCurve

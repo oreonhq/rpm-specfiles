@@ -1,0 +1,17 @@
+Don't define 'bool', as ‘bool’ is a keyword for ‘-std=c23’ onwards
+
+diff --git a/test/dapltest/mdep/linux/dapl_mdep_user.h b/test/dapltest/mdep/linux/dapl_mdep_user.h
+index 2eeed91..6b8afb6 100755
+--- a/test/dapltest/mdep/linux/dapl_mdep_user.h
++++ b/test/dapltest/mdep/linux/dapl_mdep_user.h
+@@ -52,8 +52,10 @@
+ /* Default Device Name */
+ #define DT_MdepDeviceName    "ofa-v2-ib0"
+ 
++#if __STDC_VERSION__ < 202311L
+ /* Boolean */
+ typedef int     bool;
++#endif
+ 
+ #define true (1)
+ #define false (0)

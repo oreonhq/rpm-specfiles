@@ -1,0 +1,462 @@
+diff -ur auriferous-1.0.1.orig/auriferous/auriferous.cpp auriferous-1.0.1/auriferous/auriferous.cpp
+--- auriferous-1.0.1.orig/auriferous/auriferous.cpp	2002-05-30 14:42:29.000000000 +0200
++++ auriferous-1.0.1/auriferous/auriferous.cpp	2006-07-20 22:48:56.000000000 +0200
+@@ -53,10 +53,14 @@
+ 	//write the config to the file
+ 	Config::deinit();
+ 
++	// mouse must be hidden before calling CL_SetupDisplay::deinit(),
++	// otherwise ClanLib segfaults
++	CL_MouseCursor::hide();
++
+ 	//deinit Clanlib!
+ 	CL_SetupJPEG::deinit();
+ 	CL_SetupPNG::deinit();
+-	//CL_SetupDisplay::deinit(); //makes a "Segmentaion fault" on exit (perhaps the big alpha pics)
++	CL_SetupDisplay::deinit();
+ 	CL_SetupSound::deinit();
+ 	//CL_SetupGL::deinit();
+ 	CL_SetupCore::deinit();
+diff -ur auriferous-1.0.1.orig/auriferous/config.cpp auriferous-1.0.1/auriferous/config.cpp
+--- auriferous-1.0.1.orig/auriferous/config.cpp	2002-05-31 16:21:36.000000000 +0200
++++ auriferous-1.0.1/auriferous/config.cpp	2006-07-20 16:55:53.000000000 +0200
+@@ -224,6 +224,7 @@
+ }
+ void Config::reset()
+ {
++	const int k[18]={1,4,23,19,17,5,26,24,3,85,87,89,86,88,90,82,83,84};
+ 	music=true;
+ 	music_vol=2;
+ 	intro=true;
+@@ -231,8 +232,7 @@
+ 	full_screen=true;
+ 	speed=3;
+ 	fps=false;
+-	int k[18]={1,4,23,19,17,5,26,24,3,85,87,89,86,88,90,82,83,84};
+-	keys=k;
++	memcpy(keys, k, sizeof(int) * 18);
+ }
+ void Config::read_maxl()
+ {
+diff -ur auriferous-1.0.1.orig/auriferous/game.cpp auriferous-1.0.1/auriferous/game.cpp
+--- auriferous-1.0.1.orig/auriferous/game.cpp	2002-05-30 15:54:23.000000000 +0200
++++ auriferous-1.0.1/auriferous/game.cpp	2006-07-20 20:47:44.000000000 +0200
+@@ -37,9 +37,11 @@
+ 	CL_MouseCursor::hide();
+ 	yes=new Button(632, 400, app->menu, "Yes");
+ 	no=new Button(380, 368, app->menu, "No (continue)");
++	timer=new Timer;
+ }
+ Game::~Game()
+ {
++	delete timer;
+ }
+ void Game::run(bool players)
+ {
+@@ -49,6 +51,7 @@
+ 
+ 	while(!must_end)
+ 	{
++		timer->reset();
+ 		CL_Display::clear_display();
+ 		act_game();
+ 		show_game();
+@@ -56,6 +59,8 @@
+ 		draw_hud();
+ 		CL_Display::flip_display();			
+ 		CL_System::keep_alive();
++		while (timer->time_elapsed() < (1.0f/60.0f))
++			CL_System::sleep(1);
+ 	}
+ 
+ 	yes->set_Delete_Me();
+diff -ur auriferous-1.0.1.orig/auriferous/game.h auriferous-1.0.1/auriferous/game.h
+--- auriferous-1.0.1.orig/auriferous/game.h	2002-05-20 18:58:14.000000000 +0200
++++ auriferous-1.0.1/auriferous/game.h	2006-07-20 20:48:13.000000000 +0200
+@@ -28,6 +28,7 @@
+ class Player;
+ class Button;
+ class Map_Sample;
++class Timer;
+ 
+ class Game
+ {
+@@ -54,6 +55,9 @@
+ 
+ 	bool must_end, showmen, t;
+ 	Auriferous* app;
++	
++	/* For framerate throttling */
++	Timer *timer;
+ };
+ 
+ #endif
+diff -ur auriferous-1.0.1.orig/auriferous/global_types.h auriferous-1.0.1/auriferous/global_types.h
+--- auriferous-1.0.1.orig/auriferous/global_types.h	2002-05-30 16:06:01.000000000 +0200
++++ auriferous-1.0.1/auriferous/global_types.h	2006-07-20 15:15:37.000000000 +0200
+@@ -139,4 +139,5 @@
+ float distance(int x, int y, int _x, int _y);
+ const int frame_offset=32;
+ 
++using namespace std;
+ #endif
+diff -ur auriferous-1.0.1.orig/auriferous/mainscreen.cpp auriferous-1.0.1/auriferous/mainscreen.cpp
+--- auriferous-1.0.1.orig/auriferous/mainscreen.cpp	2002-05-30 15:54:24.000000000 +0200
++++ auriferous-1.0.1/auriferous/mainscreen.cpp	2006-07-21 23:33:12.000000000 +0200
+@@ -72,21 +72,24 @@
+ 		submenu->new_sub(TWOPLAYER);
+ 		else if(config->is_pressed()==true)
+ 		submenu->new_sub(CONFIG);
+-		else if(help->is_pressed()==true)
++		else if(help->is_pressed()==true && scr_t!=1)
+ 		{
+ 			scr_t=1;
+ 			scroll_y=0;
++			timer->reset();
+ 		}
+-		else if(story->is_pressed()==true)
++		else if(story->is_pressed()==true && scr_t!=2)
+ 		{
+ 			scr_t=2;
+ 			scroll_y=0;
++			timer->reset();
+ 		}
+-		else if(credits->is_pressed()==true)
++		else if(credits->is_pressed()==true && scr_t!=3)
+ 		{
+ 			scr_t=3;
+ 			scroll_y=0;
+ 			scroll_c=0;
++			timer->reset();
+ 		}
+ 	}
+ 	else
+@@ -147,9 +150,6 @@
+ {
+ 	switch(scr_t)
+ 	{
+-	case 0:
+-		intro();
+-	break;
+ 	case 1:
+ 		Help();
+ 	break;
+@@ -163,37 +164,53 @@
+ 	break;
+ 	}
+ 
+-	if(scr_t==0 && quit->is_activated()==true)
++	if(scr_t==0)
++	{
++	bool any_activated = false;
++
++	if(quit->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 205, "Thank's for\n using my game!\n (:");
++		any_activated = true;
+ 	}
+-	else if(scr_t==0 && editor->is_activated()==true)
++	else if(editor->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 235, "A editor for\n custom levels");
++		any_activated = true;
+ 	}
+-	else if(scr_t==0 && game->is_activated()==true)
++	else if(game->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 235, "Start a new\n singleplayer game");
++		any_activated = true;
+ 	}
+-	else if(scr_t==0 && game2->is_activated()==true)
++	else if(game2->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 235, "Start a new\n multiplayer game");
++		any_activated = true;
+ 	}
+-	else if(scr_t==0 && config->is_activated()==true)
++	else if(config->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 235, "Settings for\n Auriferous");
++		any_activated = true;
+ 	}
+-	else if(scr_t==0 && help->is_activated()==true)
++	else if(help->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 265, "Show the help");
++		any_activated = true;
+ 	}
+-	else if(scr_t==0 && story->is_activated()==true)
++	else if(story->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 205, "Tells you the\n story behind\n Auriferous");
++		any_activated = true;
+ 	}
+-	else if(scr_t==0 && credits->is_activated()==true)
++	else if(credits->is_activated()==true)
+ 	{
+ 		Resources::Cgfont()->print_center(512, 265, "The Credits");
++		any_activated = true;
++	}
++
++	if (!any_activated)
++		intro();
+ 	}
+ 
+ 	if(CL_Keyboard::get_keycode(CL_KEY_ESCAPE)==true)
+@@ -291,7 +308,7 @@
+ 	Resources::Gfont()->print_left(230, 415, "(click to continue)");
+ 
+ 
+-	if(CL_Mouse::left_pressed()==true && timer->time_elapsed()>0.8f)
++	if(CL_Mouse::left_pressed()==true && timer->time_elapsed()>0.3f)
+ 	{
+ 		Resources::Clicknormal()->play();
+ 		scroll_y++;
+@@ -316,7 +333,7 @@
+ 	Resources::Rfontg()->print_center(512, 170+scroll_c, "The Credits:");
+ 	Resources::Gfont()->print_center(512, 200+scroll_c, "Code and Graphics by funthing \n\nThanks to:\n-The Clanlib Team (#best Game SDK!#)\n-The Authors of the  Music: \n and addicted contributors\n in advance :)");
+ 
+-	if(CL_Mouse::left_pressed()==true && timer->time_elapsed()>0.8f)
++	if(CL_Mouse::left_pressed()==true && timer->time_elapsed()>0.3f)
+ 	{
+ 		Resources::Clicknormal()->play();
+ 		scr_t=0;
+@@ -347,7 +364,7 @@
+ 	}
+ 
+ 	Resources::Gfont()->print_left(230, 415, "(click to continue)");
+-	if(CL_Mouse::left_pressed()==true && timer->time_elapsed()>0.8f)
++	if(CL_Mouse::left_pressed()==true && timer->time_elapsed()>0.3f)
+ 	{
+ 		Resources::Clicknormal()->play();
+ 		scroll_y++;
+diff -ur auriferous-1.0.1.orig/auriferous/map.cpp auriferous-1.0.1/auriferous/map.cpp
+--- auriferous-1.0.1.orig/auriferous/map.cpp	2002-05-30 00:55:39.000000000 +0200
++++ auriferous-1.0.1/auriferous/map.cpp	2006-07-20 20:18:10.000000000 +0200
+@@ -44,16 +44,18 @@
+ }
+ void Map::act()
+ {
+-	list<Maptile*>::iterator it;
+-	for(it = tiles.begin(); it!=tiles.end(); ++it)
++  list<Maptile*>::iterator it = tiles.begin();
++  while (it!=tiles.end())
+   {
+-    Maptile* m=*it;
+-
+-  	if(!m->delete_me())
+-  	m->act();
+-  	else
++    /* erase invalidates the iterator, so make a copy to operate on
++       and increment it beforehand */
++    list<Maptile*>::iterator  m=it;
++    it++;
++    if(!(*m)->delete_me())
++      (*m)->act();
++    else
+     {
+-  	  tiles.erase(it);
++      tiles.erase(m);
+       tiles.sort();
+     }
+   }
+diff -ur auriferous-1.0.1.orig/auriferous/map_sample.cpp auriferous-1.0.1/auriferous/map_sample.cpp
+--- auriferous-1.0.1.orig/auriferous/map_sample.cpp	2002-05-30 15:31:01.000000000 +0200
++++ auriferous-1.0.1/auriferous/map_sample.cpp	2006-07-20 20:56:07.000000000 +0200
+@@ -62,6 +62,8 @@
+   n=false;
+ 	if(game->get_t()==true)
+ 	p2=new Player(0,0,1, this);
++	else
++	p2=NULL;
+ 
+   restart=false;
+ 
+@@ -193,19 +195,20 @@
+   {
+     read_next(id);
+     restart=true;
+-	}
++  }
+ 
+-	list<Gameobject*>::iterator it;
+-	for(it=objects.begin(); it!=objects.end(); ++it)
+-	{
+-    Gameobject *m=*it;
+-	  if(!m->delete_me())
+-	  {
+-		  m->act();
+-	  }
+-	  else
+-	  {
+-      objects.erase(it);
++  list<Gameobject*>::iterator it=objects.begin();
++  while (it!=objects.end())
++  {
++    /* erase invalidates the iterator, so make a copy to operate on
++       and increment it beforehand */
++    list<Gameobject*>::iterator g=it;
++    it++;
++    if(!(*g)->delete_me())
++      (*g)->act();
++    else
++    {
++      objects.erase(g);
+       objects.sort();
+     }
+    }
+@@ -270,7 +270,10 @@
+ 	while(!in.eof())
+ 	{
+ 		last=in.get();
+-		a=&last;
++		char buf[2];
++		buf[0] = last;
++		buf[1] = 0;
++		a=buf;
+ 
+ 		if(!in.eof())
+ 		{
+diff -ur auriferous-1.0.1.orig/auriferous/menu.cpp auriferous-1.0.1/auriferous/menu.cpp
+--- auriferous-1.0.1.orig/auriferous/menu.cpp	2002-05-29 19:50:08.000000000 +0200
++++ auriferous-1.0.1/auriferous/menu.cpp	2006-07-20 20:00:46.000000000 +0200
+@@ -54,13 +54,16 @@
+ }
+ void Menu::actshowgui()
+ {
+-  for(it = guiobjs.begin(); it!=guiobjs.end(); ++it)
++  it = guiobjs.begin();
++  while (it!=guiobjs.end())
+   {
+-    Gui *g=*it;
+-
+-	  if(g->Delete_Me()==true)
++    /* erase invalidates the iterator, so make a copy to operate on
++       and increment it beforehand */
++    list<Gui*>::iterator g=it;
++    it++;
++    if((*g)->Delete_Me()==true)
+     {
+-      guiobjs.erase(it);
++      guiobjs.erase(g);
+       guiobjs.sort();
+     }
+   }
+diff -ur auriferous-1.0.1.orig/auriferous/monk_ai.cpp auriferous-1.0.1/auriferous/monk_ai.cpp
+--- auriferous-1.0.1.orig/auriferous/monk_ai.cpp	2002-05-31 16:32:11.000000000 +0200
++++ auriferous-1.0.1/auriferous/monk_ai.cpp	2006-07-20 21:08:03.000000000 +0200
+@@ -53,7 +53,7 @@
+ 	else
+ 	{
+ 		//who's the next sacrifice? :)
+-		if(sample->map->game->get_t())
++		if(sample->p2) /* 2 player mode ? */
+ 		{
+ 			if((sample->p2->is_hunted()==false && sample->p1->is_hunted()==true) || sample->p1->is_hunted() && distance(monk->get_x(), monk->get_y(), sample->p1->get_x(), sample->p1->get_y()) <= distance(monk->get_x(), monk->get_y(), sample->p2->get_x(), sample->p2->get_y()))
+ 			{
+@@ -86,7 +86,7 @@
+ 		}
+ 		else
+ 		{
+-     	if(sample->p1->is_hunted())
++			if(sample->p1->is_hunted())
+ 			{
+ 				if(monk->move_up() && sample->p1->get_y()<monk->get_y())
+ 				up=true;
+@@ -140,7 +140,7 @@
+ 			right=true;
+ 			left=up=down=false;
+ 		}
+-		else
++		if (hp2)
+ 		if(monk->move_hleft() && monk->get_x() > sample->p2->get_x())
+ 		{
+ 			left=true;
+diff -ur auriferous-1.0.1.orig/auriferous/resources.scr auriferous-1.0.1/auriferous/resources.scr
+--- auriferous-1.0.1.orig/auriferous/resources.scr	2002-05-29 23:44:33.000000000 +0200
++++ auriferous-1.0.1/auriferous/resources.scr	2006-07-20 22:13:03.000000000 +0200
+@@ -31,15 +31,15 @@
+ 
+ 	explosion = pics/game/explosion.png (type=surface, x=0, y=0, width=128, height=128, array=8x1);
+ 
+-	atile = pics/game/aqua/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x11);	
++	atile = pics/game/aqua/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x10);	
+ 	abackground = pics/game/aqua/background.png (type=surface);
+-	itile = pics/game/ice/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x11);	
++	itile = pics/game/ice/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x10);	
+ 	ibackground = pics/game/ice/background.png (type=surface);
+-	ltile = pics/game/lava/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x11);	
++	ltile = pics/game/lava/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x10);	
+ 	lbackground = pics/game/lava/background.png (type=surface);
+-	jtile = pics/game/jungle/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x11);	
++	jtile = pics/game/jungle/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x10);	
+ 	jbackground = pics/game/jungle/background.png (type=surface);
+-	ttile = pics/game/tech/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x11);	
++	ttile = pics/game/tech/tile.png (type=surface, x=0, y=0, width=32, height=32, array=8x10);	
+ 	tbackground = pics/game/tech/background.png (type=surface);
+ }
+ section music
+diff -ur auriferous-1.0.1.orig/auriferous/submenu.cpp auriferous-1.0.1/auriferous/submenu.cpp
+--- auriferous-1.0.1.orig/auriferous/submenu.cpp	2002-05-30 00:58:26.000000000 +0200
++++ auriferous-1.0.1/auriferous/submenu.cpp	2006-07-20 16:58:18.000000000 +0200
+@@ -86,9 +86,11 @@
+ 
+ 		wait=false;
+ 		key=0;
+-		i_keys=Config::keys;
+ 		for(int i=0; i<18; i++)
+-		s_keys[i]=key_name(i_keys[i]);
++		{
++			i_keys[i]=Config::keys[i];
++			s_keys[i]=key_name(i_keys[i]);
++		}
+ 		key_buffer->clear();
+ 	}
+ 	else
+@@ -249,7 +251,7 @@
+ 			Config::set_skill(skill->get_val());
+ 			Config::set_speed(speed->get_val());
+ 			Config::set_fps(fps->is_checked());
+-			Config::keys=i_keys;
++			memcpy(Config::keys, i_keys, sizeof(int) * 18);
+ 			clean();
+ 			activ=false;
+ 			app->menu->disable_ms(false);
+diff -ur auriferous-1.0.1.orig/auriferous/submenu.h auriferous-1.0.1/auriferous/submenu.h
+--- auriferous-1.0.1.orig/auriferous/submenu.h	2002-05-29 21:02:18.000000000 +0200
++++ auriferous-1.0.1/auriferous/submenu.h	2006-07-20 16:56:29.000000000 +0200
+@@ -42,7 +42,7 @@
+ 	void act();
+ 	void clean();
+ 	void wait_key();
+-	CL_String Submenu::key_name(int k);
++	CL_String key_name(int k);
+ 
+ private:
+ 
+--- auriferous-1.0.1/auriferous/editor.cpp~	2002-05-30 16:36:43.000000000 +0200
++++ auriferous-1.0.1/auriferous/editor.cpp	2009-11-29 21:15:28.000000000 +0100
+@@ -562,7 +562,10 @@ void Editor::load_map()
+ 	while(!in.eof())
+ 	{
+ 		last=in.get();
+-		a=&last;
++		char buf[2];
++		buf[0]=last;
++		buf[1]=0;
++		a=buf;
+ 
+ 		if(!in.eof())
+ 		{
+--- auriferous-1.0.1/auriferous/player.cpp	2002-05-30 18:38:35.000000000 +0200
++++ auriferous-1.0.1.new/auriferous/player.cpp	2009-11-30 23:52:58.000000000 +0100
+@@ -344,7 +346,8 @@
+ 			if(sample->map->get_maptile(map_x(16), map_y(16))->get_type()==LADDER || sample->map->get_maptile(map_x(16), map_y(16)+32)->get_type()==LADDER)
+ 			y=sample->map->get_maptile(map_x(16), map_y(16))->get_y();
+ 		}
+-		else if(dir!=STOPPED && controller->is_up() && (sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==LADDER || sample->map->get_maptile(map_x(16), map_y())->get_type()==LADDER) && !sample->map->get_maptile(map_x(16), map_y())->is_blocking())
++		else if(dir!=STOPPED && controller->is_up() && (sample->map->get_maptile(map_x(16), map_y()+32)->get_type()==LADDER || sample->map->get_maptile(map_x(16), map_y())->get_type()==LADDER) && !sample->map->get_maptile(map_x(16), map_y())->is_blocking() &&
++		        (sample->map->get_maptile(map_x(16), map_y(-speed*timer->time_elapsed())+32)->get_type()==LADDER || sample->map->get_maptile(map_x(16), map_y(-speed*timer->time_elapsed()))->get_type()==LADDER))
+ 		{
+ 			x=sample->map->get_maptile(map_x(16), map_y(16))->get_x();
+ 			sprite->set_new(0.2f, 22, 27);

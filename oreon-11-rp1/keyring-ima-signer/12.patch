@@ -1,0 +1,52 @@
+From c3d86324f25088ad49807590301a295e5372c8f6 Mon Sep 17 00:00:00 2001
+From: Patrick Uiterwijk <patrick@puiterwijk.org>
+Date: Thu, 17 Dec 2020 22:10:38 +0100
+Subject: [PATCH] Use usize to make things compile on 32-bit
+
+Signed-off-by: Patrick Uiterwijk <patrick@puiterwijk.org>
+---
+ src/signing/keyutils.rs | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/src/signing/keyutils.rs b/src/signing/keyutils.rs
+index 63bdae7..4b7949d 100644
+--- a/src/signing/keyutils.rs
++++ b/src/signing/keyutils.rs
+@@ -77,7 +77,7 @@ pub fn keyctl_pkey_sign(
+     info: &str,
+     data: &[u8],
+     buffer: &mut Vec<u8>,
+-) -> Result<i64> {
++) -> Result<usize> {
+     let params = PKeyOpParamsKernel {
+         key_id: key.get(),
+         in_len: data.len() as u32,
+@@ -86,7 +86,7 @@ pub fn keyctl_pkey_sign(
+     };
+ 
+     let info_cstr = cstring(info).with_context(|| "Error building info cstring".to_string())?;
+-    unsafe {
++    let respsize = unsafe {
+         keyctl!(
+             libc::KEYCTL_PKEY_SIGN,
+             &params as *const PKeyOpParamsKernel,
+@@ -95,7 +95,9 @@ pub fn keyctl_pkey_sign(
+             buffer.as_mut_ptr(),
+         )
+     }
+-    .with_context(|| "Error returned during signing".to_string())
++    .with_context(|| "Error returned during signing".to_string())?;
++
++    Ok(respsize as usize)
+ }
+ 
+ type KeyringSerial = NonZeroI32;
+@@ -145,7 +147,7 @@ impl Key {
+         let sz = keyctl_pkey_sign(self.serial, &info, data, &mut buffer)
+             .with_context(|| "Error requesting signature".to_string())?;
+         unsafe {
+-            buffer.set_len(sz as usize);
++            buffer.set_len(sz);
+         }
+         Ok(buffer)
+     }

@@ -1,0 +1,435 @@
+From 8a6b983ce9389abdd75216568323cbca037f70bb Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Thu, 25 Jan 2024 08:44:09 -0800
+Subject: [PATCH 24/26] CI: use sudo, assume docker present, use
+ diff-{quality,cover}
+
+Huh. I kinda just assumed we'd be root. Guess not!
+
+Docker is already in the GHA base image, no need to install.
+
+Both linter tools report issues on the current master branch,
+which means they will always fail on exit. Using diff-quality
+gives us a check we can usefully fail on (as configured in this
+PR, it will only fail if the quality of the lines changed in
+the PR is less than 9.0).
+
+Similarly we can generate a coverage report and use diff-cover
+to fail if coverage of the PR is under 90%.
+
+This also uses a standard configuration file name for the pylint
+config (so we don't have to specify it with `--rcfile`), removes
+all non-default settings from the pylint config so it's clearer
+what we really intend to configure, and moves the flake8 config
+to a config file like pylint.
+
+We don't use pyproject.toml for configuration here because GHA's
+Ubuntu environment is just not new enough, the tools in it don't
+consistently read from pyproject.toml.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ .coveragerc                |  10 ++
+ .flake8                    |   2 +
+ .github/workflows/ci.yml   |  38 +++----
+ .pylintrc                  |  25 +++++
+ Containerfile.tests.el7    |   2 +-
+ Containerfile.tests.fedora |   4 +-
+ Makefile                   |   5 +-
+ pylint.conf                | 217 -------------------------------------
+ 8 files changed, 62 insertions(+), 241 deletions(-)
+ create mode 100644 .coveragerc
+ create mode 100644 .flake8
+ create mode 100644 .pylintrc
+ delete mode 100644 pylint.conf
+
+diff --git a/.coveragerc b/.coveragerc
+new file mode 100644
+index 0000000..c8a9df3
+--- /dev/null
++++ b/.coveragerc
+@@ -0,0 +1,10 @@
++[run]
++branch = true
++source_pkgs =
++    oz
++
++[paths]
++# this mapping is for the containers; the source tree is in /oz in the containers
++source =
++    oz/
++    /oz/oz
+diff --git a/.flake8 b/.flake8
+new file mode 100644
+index 0000000..b68fdd0
+--- /dev/null
++++ b/.flake8
+@@ -0,0 +1,2 @@
++[flake8]
++max-line-length = 200
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 4fcd212..a539973 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -11,10 +11,23 @@ jobs:
+         uses: actions/checkout@v4
+         with:
+           fetch-depth: 0
+-      - name: Install make and docker
+-        run: apt-get install make docker docker.io
++      - name: Install required packages
++        run: sudo apt-get install make flake8 pylint
++      # it's not in Ubuntu 22.04, was added in 23.04
++      - name: Install diff-cover from pip
++        run: pip install diff-cover
+       - name: Run the tests
+-        run: make container-unittests-fedora
++        run: sudo make container-unittests-fedora
++      - name: Run diff-cover
++        run: diff-cover coverage.xml  --compare-branch=origin/$GITHUB_BASE_REF --fail-under=90
++      - name: Run diff-quality (pylint)
++        # we want to run this regardless of whether previous lint steps failed
++        if: success() || failure()
++        run: diff-quality --compare-branch=origin/$GITHUB_BASE_REF --violations=pylint --fail-under=90
++      - name: Run diff-quality (flake8)
++        # we want to run this regardless of whether previous lint steps failed
++        if: success() || failure()
++        run: diff-quality --compare-branch=origin/$GITHUB_BASE_REF --violations=flake8 --fail-under=90
+   unittests-el7:
+     runs-on: ubuntu-latest
+     steps:
+@@ -22,20 +35,7 @@ jobs:
+         uses: actions/checkout@v4
+         with:
+           fetch-depth: 0
+-      - name: Install make and docker
+-        run: apt-get install make docker
++      - name: Install make
++        run: sudo apt-get install make
+       - name: Run the tests
+-        run: make container-unittests-el7
+-  lint:
+-    runs-on: ubuntu-latest
+-    steps:
+-      - name: Checkout the repo
+-        uses: actions/checkout@v4
+-        with:
+-          fetch-depth: 0
+-      - name: Install make, pylint and flake8
+-        run: apt-get install make pylint flake8
+-      - name: Run pylint
+-        run: make pylint
+-      - name: Run flake8
+-        run: make flake8
++        run: sudo make container-unittests-el7
+diff --git a/.pylintrc b/.pylintrc
+new file mode 100644
+index 0000000..27a20dd
+--- /dev/null
++++ b/.pylintrc
+@@ -0,0 +1,25 @@
++[MESSAGES CONTROL]
++disable=C0325,C0103
++
++[REPORTS]
++reports=yes
++
++[TYPECHECK]
++
++[FORMAT]
++max-line-length=200
++max-module-lines=2000
++
++[VARIABLES]
++dummy-variables-rgx=.*_unused$
++
++[BASIC]
++module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9_]+))$
++
++[DESIGN]
++max-args=20
++max-locals=30
++max-branches=30
++max-statements=100
++max-attributes=30
++min-public-methods=0
+diff --git a/Containerfile.tests.el7 b/Containerfile.tests.el7
+index 5d32a3c..fde1e5b 100644
+--- a/Containerfile.tests.el7
++++ b/Containerfile.tests.el7
+@@ -12,5 +12,5 @@ COPY ./ /oz
+ # the XML generation tests are inherently unreliable before Python 3.8,
+ # as there was no consistent ordering of XML element attributes. See
+ # https://docs.python.org/3/library/xml.etree.elementtree.html#xml.etree.ElementTree.tostring
+-RUN printf "#!/bin/sh\n/usr/sbin/libvirtd -d\ncd /oz\npy.test -vv -k 'not test_xml_generation and not modify_libvirt_xml_for_serial' tests/" > /usr/local/bin/runtests.sh && chmod ugo+x /usr/local/bin/runtests.sh
++RUN printf "#!/bin/sh\n/usr/sbin/libvirtd -d\ncd /oz\npython -m pytest -vv -k 'not test_xml_generation and not modify_libvirt_xml_for_serial' tests/" > /usr/local/bin/runtests.sh && chmod ugo+x /usr/local/bin/runtests.sh
+ CMD /usr/local/bin/runtests.sh
+diff --git a/Containerfile.tests.fedora b/Containerfile.tests.fedora
+index d231550..e842ff1 100644
+--- a/Containerfile.tests.fedora
++++ b/Containerfile.tests.fedora
+@@ -4,11 +4,11 @@
+ FROM quay.io/fedora/fedora:latest
+ RUN set -exo pipefail \
+     && dnf install -y --setopt install_weak_deps=false --nodocs \
+-    python3-requests python3-cryptography python3-setuptools python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-monotonic \
++    python3-requests python3-cryptography python3-setuptools python3-libvirt python3-lxml python3-libguestfs python3-pytest python3-coverage python3-monotonic \
+     libvirt-daemon libvirt-daemon-kvm libvirt-daemon-qemu libvirt-daemon-config-network systemd \
+     && dnf clean all \
+     && rm -rf /var/cache/* /var/log/dnf*
+ 
+ COPY ./ /oz
+-RUN printf "#!/bin/sh\n/usr/sbin/libvirtd -d\ncd /oz\npy.test -vv tests/" > /usr/local/bin/runtests.sh && chmod ugo+x /usr/local/bin/runtests.sh
++RUN printf "#!/bin/sh\n/usr/sbin/libvirtd -d\ncd /oz\npython3 -m coverage run -m pytest -vv tests/\ncoverage xml\ncoverage report" > /usr/local/bin/runtests.sh && chmod ugo+x /usr/local/bin/runtests.sh
+ CMD /usr/local/bin/runtests.sh
+diff --git a/Makefile b/Makefile
+index 4fa87eb..7f0fba7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -50,6 +50,7 @@ container-unittests-fedora:
+ 	docker rm -f oz-tests-fedora
+ 	docker build -f Containerfile.tests.fedora -t oz-tests-fedora-image .
+ 	docker run --name oz-tests-fedora oz-tests-fedora-image
++	docker cp oz-tests-fedora:/oz/coverage.xml .
+ 
+ container-unittests-el7:
+ 	docker rm -f oz-tests-el7
+@@ -64,10 +65,10 @@ test-coverage:
+ 	xdg-open htmlcov/index.html
+ 
+ pylint:
+-	pylint --rcfile=pylint.conf oz oz-install oz-customize oz-cleanup-cache oz-generate-icicle
++	pylint oz oz-install oz-customize oz-cleanup-cache oz-generate-icicle
+ 
+ flake8:
+-	flake8 --ignore=E501 oz
++	flake8 oz oz-install oz-customize oz-cleanup-cache oz-generate-icicle
+ 
+ container-clean:
+ 	docker rm -f oz-tests-fedora
+diff --git a/pylint.conf b/pylint.conf
+deleted file mode 100644
+index c27a5e4..0000000
+--- a/pylint.conf
++++ /dev/null
+@@ -1,217 +0,0 @@
+-[MASTER]
+-
+-# Specify a configuration file.
+-#rcfile=
+-
+-# Python code to execute, usually for sys.path manipulation such as
+-# pygtk.require().
+-#init-hook=
+-
+-# Add <file or directory> to the black list. It should be a base name, not a
+-# path. You may set this option multiple times.
+-ignore=CVS
+-
+-# Pickle collected data for later comparisons.
+-persistent=yes
+-
+-# List of plugins (as comma separated values of python modules names) to load,
+-# usually to register additional checkers.
+-load-plugins=
+-
+-
+-[MESSAGES CONTROL]
+-
+-# Enable the message, report, category or checker with the given id(s). You can
+-# either give multiple identifier separated by comma (,) or put this option
+-# multiple time.
+-#enable=
+-
+-# Disable the message, report, category or checker with the given id(s). You
+-# can either give multiple identifier separated by comma (,) or put this option
+-# multiple time (only on the command line, not in the configuration file where
+-# it should appear only once).
+-disable=C0325,C0103
+-
+-
+-[REPORTS]
+-
+-# Set the output format. Available formats are text, parseable, colorized, msvs
+-# (visual studio) and html
+-output-format=text
+-
+-# Put messages in a separate file for each module / package specified on the
+-# command line instead of printing them on stdout. Reports (if any) will be
+-# written in a file name "pylint_global.[txt|html]".
+-files-output=no
+-
+-# Tells whether to display a full report or only the messages
+-reports=yes
+-
+-# Python expression which should return a note less than 10 (10 is the highest
+-# note). You have access to the variables errors warning, statement which
+-# respectively contain the number of errors / warnings messages and the total
+-# number of statements analyzed. This is used by the global evaluation report
+-# (RP0004).
+-evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)
+-
+-
+-[TYPECHECK]
+-
+-# Tells whether missing members accessed in mixin class should be ignored. A
+-# mixin class is detected if its name ends with "mixin" (case insensitive).
+-ignore-mixin-members=yes
+-
+-# List of classes names for which member attributes should not be checked
+-# (useful for classes with attributes dynamically set).
+-ignored-classes=SQLObject
+-
+-# List of members which are set dynamically and missed by pylint inference
+-# system, and so shouldn't trigger E0201 when accessed.
+-generated-members=REQUEST,acl_users,aq_parent
+-
+-
+-[FORMAT]
+-
+-# Maximum number of characters on a single line.
+-max-line-length=200
+-
+-# Maximum number of lines in a module
+-max-module-lines=2000
+-
+-# String used as indentation unit. This is usually " " (4 spaces) or "\t" (1
+-# tab).
+-indent-string='    '
+-
+-
+-[VARIABLES]
+-
+-# Tells whether we should check for unused import in __init__ files.
+-init-import=no
+-
+-# A regular expression matching the beginning of the name of dummy variables
+-# (i.e. not used).
+-dummy-variables-rgx=.*_unused$
+-
+-# List of additional names supposed to be defined in builtins. Remember that
+-# you should avoid to define new builtins when possible.
+-additional-builtins=
+-
+-
+-[MISCELLANEOUS]
+-
+-# List of note tags to take in consideration, separated by a comma.
+-notes=FIXME,XXX,TODO
+-
+-
+-[BASIC]
+-
+-# List of builtins function names that should not be used, separated by a comma
+-bad-functions=filter,apply,input
+-
+-# Regular expression which should only match correct module names
+-module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9_]+))$
+-
+-# Regular expression which should only match correct module level names
+-const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
+-
+-# Regular expression which should only match correct class names
+-class-rgx=[A-Z_][a-zA-Z0-9]+$
+-
+-# Regular expression which should only match correct function names
+-function-rgx=[a-z_][a-z0-9_]{2,30}$
+-
+-# Regular expression which should only match correct method names
+-method-rgx=[a-z_][a-zA-Z0-9_]{2,30}$
+-
+-# Regular expression which should only match correct instance attribute names
+-attr-rgx=[a-z_][a-z0-9_]{2,30}$
+-
+-# Regular expression which should only match correct argument names
+-argument-rgx=[a-z_][a-zA-Z0-9_]{0,30}$
+-
+-# Regular expression which should only match correct variable names
+-variable-rgx=[a-z_][a-zA-Z0-9_]{0,30}$
+-
+-# Regular expression which should only match correct list comprehension /
+-# generator expression variable names
+-inlinevar-rgx=[A-Za-z_][A-Za-z0-9_]*$
+-
+-# Good variable names which should always be accepted, separated by a comma
+-good-names=i,j,k,ex,Run,_
+-
+-# Bad variable names which should always be refused, separated by a comma
+-bad-names=foo,bar,baz,toto,tutu,tata
+-
+-# Regular expression which should only match functions or classes name which do
+-# not require a docstring
+-no-docstring-rgx=__.*__
+-
+-
+-[SIMILARITIES]
+-
+-# Minimum lines number of a similarity.
+-min-similarity-lines=4
+-
+-# Ignore comments when computing similarities.
+-ignore-comments=yes
+-
+-# Ignore docstrings when computing similarities.
+-ignore-docstrings=yes
+-
+-
+-[IMPORTS]
+-
+-# Deprecated modules which should not be used, separated by a comma
+-deprecated-modules=regsub,string,TERMIOS,Bastion,rexec
+-
+-# Create a graph of every (i.e. internal and external) dependencies in the
+-# given file (report RP0402 must not be disabled)
+-import-graph=
+-
+-# Create a graph of external dependencies in the given file (report RP0402 must
+-# not be disabled)
+-ext-import-graph=
+-
+-# Create a graph of internal dependencies in the given file (report RP0402 must
+-# not be disabled)
+-int-import-graph=
+-
+-
+-[DESIGN]
+-
+-# Maximum number of arguments for function / method
+-max-args=20
+-
+-# Argument names that match this expression will be ignored. Default to name
+-# with leading underscore
+-ignored-argument-names=_.*
+-
+-# Maximum number of locals for function / method body
+-max-locals=30
+-
+-# Maximum number of return / yield for function / method body
+-max-returns=6
+-
+-# Maximum number of branch for function / method body
+-max-branches=30
+-
+-# Maximum number of statements in function / method body
+-max-statements=100
+-
+-# Maximum number of parents for a class (see R0901).
+-max-parents=7
+-
+-# Maximum number of attributes for a class (see R0902).
+-max-attributes=30
+-
+-# Minimum number of public methods for a class (see R0903).
+-min-public-methods=0
+-
+-# Maximum number of public methods for a class (see R0904).
+-max-public-methods=20
+-
+-
+-[CLASSES]
+-
+-# List of method names used to declare (i.e. assign) instance attributes.
+-defining-attr-methods=__init__,__new__,setUp
+-- 
+2.46.2
+

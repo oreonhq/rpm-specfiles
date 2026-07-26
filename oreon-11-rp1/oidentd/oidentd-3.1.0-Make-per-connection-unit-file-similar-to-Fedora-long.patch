@@ -1,0 +1,31 @@
+From 858fda5e503a3d61ee7fd1295e2d45b48763af65 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 13 Mar 2023 11:58:55 +0100
+Subject: [PATCH] Make per-connection unit file similar to Fedora long-term
+ unit file
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ contrib/systemd/oidentd@.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/contrib/systemd/oidentd@.service b/contrib/systemd/oidentd@.service
+index 139cb56..1826aba 100644
+--- a/contrib/systemd/oidentd@.service
++++ b/contrib/systemd/oidentd@.service
+@@ -3,7 +3,7 @@ Description=RFC 1413 compliant per-connection Ident server
+ Documentation=man:oidentd(8) man:oidentd.conf(5) man:oidentd_masq.conf(5)
+ 
+ [Service]
+-ExecStart=/usr/sbin/oidentd -I
++EnvironmentFile=/etc/sysconfig/oidentd
++ExecStart=/usr/sbin/oidentd -I --nosyslog $OIDENTD_OPTIONS
+ PrivateDevices=true
+ StandardInput=socket
+-StandardError=syslog
+-- 
+2.39.2
+

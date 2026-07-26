@@ -1,0 +1,25 @@
+From 97a19e32e30019ebd5a6cc2befbb3ad1602f4fee Mon Sep 17 00:00:00 2001
+From: Julien Rische <jrische@redhat.com>
+Date: Sat, 12 Feb 2022 00:38:45 +0100
+Subject: [PATCH] Change icon path
+
+---
+ source/MainWindow.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/source/MainWindow.vala b/source/MainWindow.vala
+index add192e..67f22ab 100644
+--- a/source/MainWindow.vala
++++ b/source/MainWindow.vala
+@@ -19,7 +19,7 @@ public class MainWindow : RenderWindow
+ 
+     protected override void shown()
+     {
+-        set_icon(FileLoader.find_file(GLib.Path.build_filename("Data", "Icon.png")));
++        set_icon("/usr/share/pixmaps/openriichi.png");
+         music = new MusicPlayer(store.audio_player);
+ 
+         Options options = new Options.from_disk();
+-- 
+2.34.1
+

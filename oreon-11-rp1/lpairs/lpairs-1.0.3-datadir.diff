@@ -1,0 +1,11 @@
+--- configure.old	2008-08-26 20:05:41.000000000 +0200
++++ configure	2008-08-26 20:06:08.000000000 +0200
+@@ -13034,7 +13034,7 @@
+ localedir=$datadir/locale
+ locdir_flag="-DLOCALEDIR=\\\"$localedir\\\""
+ 
+-inst_dir=$datadir/games/lpairs
++inst_dir=$datadir/lpairs
+ inst_flag="-DSRC_DIR=\\\"$inst_dir/\\\""
+ 
+ # Check whether --enable-install was given.

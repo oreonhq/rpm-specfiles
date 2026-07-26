@@ -1,0 +1,22 @@
+Fixes this error:
+
+In file included from /usr/include/features.h:540,
+                 from /usr/include/link.h:23,
+                 from ./h/linux.h:12,
+                 from ./h/config.h:1,
+                 from ./h/include.h:75,
+                 from o/typespec.c:30:
+./h/../h/protoize.h:76:35: error: expected identifier or ‘(’ before ‘_Generic’
+   76 | /* bsearch.c:5:OF */ extern void *bsearch (const void *key, const void *base, size_t nel, size_t keysize, int (*compar) (const void *,const void *)); /* (key, base, nel, keysize, compar) char *key; char *base; unsigned int nel; unsigned int keysize; int (*compar)(); */
+      |                                   ^~~~~~~
+
+--- gcl-2.7.1/h/protoize.h.orig	2025-03-19 08:56:47.146952854 -0600
++++ gcl-2.7.1/h/protoize.h	2026-01-16 20:33:07.885112633 -0700
+@@ -73,7 +73,6 @@ struct key {short n,allow_other_keys;
+ /* bind.c:975:OF */ extern void set_key_struct (struct key *ks, object data); /* (ks, data) struct key *ks; object data; */
+ /* bind.c:995:OF */ extern void gcl_init_bind (void); /* () */
+ /* block.c:121:OF */ extern void gcl_init_block (void); /* () */
+-/* bsearch.c:5:OF */ extern void *bsearch (const void *key, const void *base, size_t nel, size_t keysize, int (*compar) (const void *,const void *)); /* (key, base, nel, keysize, compar) char *key; char *base; unsigned int nel; unsigned int keysize; int (*compar)(); */
+ #if defined (__MINGW32__)
+ /* bzero.c:3:OF */ /*  extern void bzero (char *b, size_t length); */ /* (b, length) char *b; int length; */
+ #endif

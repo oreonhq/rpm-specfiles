@@ -1,0 +1,12 @@
+diff -rupN libmng-2.0.2/configure.ac libmng-2.0.2-new/configure.ac
+--- libmng-2.0.2/configure.ac	2013-03-05 12:59:27.000000000 +0100
++++ libmng-2.0.2-new/configure.ac	2014-01-12 20:41:38.394325143 +0100
+@@ -37,7 +37,7 @@ AC_DEFINE([MNG_VERSION_DLL],[MAJ_NR],[ b
+ dnl Checks for programs.
+ AC_PROG_CC
+ AC_ISC_POSIX
+-AM_PROG_LIBTOOL
++LT_INIT
+ AC_PROG_INSTALL
+ AC_LIBTOOL_WIN32_DLL
+ #

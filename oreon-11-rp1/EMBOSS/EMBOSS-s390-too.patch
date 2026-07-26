@@ -1,0 +1,12 @@
+diff -up EMBOSS-6.6.0/ajax/core/ajfmt.c.s390-too EMBOSS-6.6.0/ajax/core/ajfmt.c
+--- EMBOSS-6.6.0/ajax/core/ajfmt.c.s390-too	2024-02-10 07:52:47.366330309 -0500
++++ EMBOSS-6.6.0/ajax/core/ajfmt.c	2024-02-10 07:54:47.634142883 -0500
+@@ -79,7 +79,7 @@
+ 
+ #define EVF_BUF 128
+ 
+-#if defined(__x86_64__) || defined(__amd64__) || defined(__EM64T__) ||  \
++#if defined(__x86_64__) || defined(__amd64__) || defined(__EM64T__) || defined(__s390x__) ||  \
+     defined(__PPC__) && defined(_CALL_SYSV)
+ #define VALIST va_list
+ #define VA_P(x) (x)

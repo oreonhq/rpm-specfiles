@@ -1,0 +1,8 @@
+diff -up Data-AMF-0.09/Makefile.PL.orig Data-AMF-0.09/Makefile.PL
+--- Data-AMF-0.09/Makefile.PL.orig	2017-05-23 15:29:56.825217808 +0200
++++ Data-AMF-0.09/Makefile.PL	2017-05-23 15:31:19.362739593 +0200
+@@ -1,3 +1,4 @@
++BEGIN { push @INC, '.'; }
+ use inc::Module::Install;
+ name 'Data-AMF';
+ all_from 'lib/Data/AMF.pm';

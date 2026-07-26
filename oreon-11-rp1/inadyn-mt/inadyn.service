@@ -1,0 +1,11 @@
+[Unit]
+Description=Inadyn-mt, register an IP Address to a dynamic DNS provider
+After=network-online.target
+
+[Service]
+User=inadyn
+Group=inadyn
+ExecStart=/usr/sbin/inadyn
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,32 @@
+From 894221f14f975b42b8bb331868ae4d6003119695 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 17 Jul 2018 14:18:33 +0200
+Subject: [PATCH] Do not override CCFLAGS
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Use flags provided by perl.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 69d448b..f520c9f 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -12,9 +12,6 @@ $CC = 'g++';
+ 
+ my %cplusplus_opt = (
+     CC => $CC,
+-    # default includes -Wdeclaration-after-statement, which
+-    # isn't valid for C++
+-    CCFLAGS => '-fno-strict-aliasing -pipe -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64',
+     LD => '$(CC)',
+     XSOPT => '-C++'
+ );
+-- 
+2.14.4
+

@@ -1,0 +1,34 @@
+From 885b45007d3ea11f8c02f86a92180dd0d60fafe5 Mon Sep 17 00:00:00 2001
+From: Jon Burgess <jburgess777@gmail.com>
+Date: Mon, 29 Oct 2018 00:15:36 +0000
+Subject: [PATCH 2/2] Make use of emplace when pushing to frontierq
+
+---
+ src/route.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/route.cc b/src/route.cc
+index a1ccd05..3ee86e1 100644
+--- a/src/route.cc
++++ b/src/route.cc
+@@ -588,7 +588,7 @@ Router::visit(int cn)
+ #endif
+               cost[cn2] = new_cost;
+               backptr[cn2] = cn;
+-              frontierq.push(std::make_pair(cn2, new_cost));
++              frontierq.emplace(cn2, new_cost);
+             }
+         }
+       else
+@@ -600,7 +600,7 @@ Router::visit(int cn)
+                     << " cost " << new_cost << "\n";
+ #endif
+           frontier.insert(cn2);
+-          frontierq.push(std::make_pair(cn2, new_cost));
++          frontierq.emplace(cn2, new_cost);
+         }
+     }
+ }
+-- 
+2.24.1
+

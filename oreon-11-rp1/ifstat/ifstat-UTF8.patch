@@ -1,0 +1,39 @@
+diff -ruN ifstat-1.1.orig/HISTORY ifstat-1.1.new/HISTORY
+--- ifstat-1.1.orig/HISTORY	2004-01-01 12:16:12.000000000 -0200
++++ ifstat-1.1.new/HISTORY	2008-10-26 00:19:15.000000000 -0200
+@@ -1,5 +1,5 @@
+ InterFace STATistics
+-Gaël Roualland <gael.roualland@dial.oleane.com>
++GaÃ«l Roualland <gael.roualland@dial.oleane.com>
+ =============================================== 
+ 
+ Releases History:
+diff -ruN ifstat-1.1.orig/README ifstat-1.1.new/README
+--- ifstat-1.1.orig/README	2003-11-21 23:27:51.000000000 -0200
++++ ifstat-1.1.new/README	2008-10-26 00:31:26.000000000 -0200
+@@ -1,5 +1,5 @@
+ InterFace STATistics
+-Gaël Roualland <gael.roualland@dial.oleane.com>
++GaÃ«l Roualland <gael.roualland@dial.oleane.com>
+ ===============================================
+ 
+ * Introduction
+diff -ruN ifstat-1.1.orig/TODO ifstat-1.1.new/TODO
+--- ifstat-1.1.orig/TODO	2003-02-01 23:32:09.000000000 -0200
++++ ifstat-1.1.new/TODO	2008-10-26 00:23:48.000000000 -0200
+@@ -1,5 +1,5 @@
+ InterFace STATistics
+-Gaël Roualland <gael.roualland@dial.oleane.com>
++GaÃ«l Roualland <gael.roualland@dial.oleane.com>
+ ===============================================
+ 
+ To do:
+diff -ruN ifstat-1.1.orig/ifstat.1 ifstat-1.1.new/ifstat.1
+--- ifstat-1.1.orig/ifstat.1	2004-01-01 17:18:15.000000000 -0200
++++ ifstat-1.1.new/ifstat.1	2008-10-26 00:24:45.000000000 -0200
+@@ -243,4 +243,4 @@
+ \&\fIvmstat\fR\|(1), \fIiostat\fR\|(1)
+ .SH "AUTHOR"
+ .IX Header "AUTHOR"
+-Gaël Roualland, <gael.roualland@dial.oleane.com>
++GaÃ«l Roualland, <gael.roualland@dial.oleane.com>

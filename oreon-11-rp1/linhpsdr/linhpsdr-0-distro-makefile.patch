@@ -1,0 +1,58 @@
+diff --git a/Makefile.linux b/Makefile.linux
+index e8c9c89..87ed3d4 100644
+--- a/Makefile.linux
++++ b/Makefile.linux
+@@ -6,6 +6,10 @@ UNAME_S := $(shell uname -s)
+ GIT_DATE := $(firstword $(shell git --no-pager show --date=short --format="%ai" --name-only))
+ GIT_VERSION := $(shell git describe --abbrev=0 --tags)
+ 
++PREFIX=/usr/local
++BINDIR=$(DESTDIR)$(PREFIX)/bin
++DATADIR=$(DESTDIR)$(PREFIX)/share
++
+ CC=gcc
+ LINK=gcc
+ 
+@@ -273,7 +277,7 @@ actions.o
+ 
+ 
+ $(PROGRAM):  $(OBJS) $(SOAPYSDR_OBJS) $(CWDAEMON_OBJS) $(MIDI_OBJS)
+-	$(LINK) -o $(PROGRAM) $(OBJS) $(SOAPYSDR_OBJS) $(CWDAEMON_OBJS) $(MIDI_OBJS)  $(LIBS)
++	$(LINK) -o $(PROGRAM) $(LDFLAGS) $(OBJS) $(SOAPYSDR_OBJS) $(CWDAEMON_OBJS) $(MIDI_OBJS)  $(LIBS)
+ 
+ 
+ all: prebuild  $(PROGRAM) $(HEADERS) $(MIDI_HEADERS) $(SOURCES) $(SOAPYSDR_SOURCES) \
+@@ -288,12 +292,12 @@ clean:
+ 	-rm -f $(PROGRAM)
+ 
+ install: $(PROGRAM)
+-	cp $(PROGRAM) /usr/local/bin
+-	if [ ! -d /usr/share/linhpsdr ]; then mkdir /usr/share/linhpsdr; fi
+-	cp hpsdr.png /usr/share/linhpsdr
+-	cp hpsdr_icon.png /usr/share/linhpsdr
+-	cp hpsdr_small.png /usr/share/linhpsdr
+-	cp linhpsdr.desktop /usr/share/applications
++	mkdir -p $(BINDIR) $(DATADIR)/linhpsdr $(DATADIR)/applications $(DATADIR)/icons/hicolor/512x512/apps; \
++	cp -a $(PROGRAM) $(BINDIR); \
++	cp -a hpsdr.png $(DATADIR)/linhpsdr; \
++	cp -a hpsdr_icon.png $(DATADIR)/icons/hicolor/512x512/apps; \
++	cp -a hpsdr_small.png $(DATADIR)/linhpsdr; \
++	cp -a linhpsdr.desktop $(DATADIR)/applications \
+ 
+ debian:
+ 	cp $(PROGRAM) pkg/linhpsdr/usr/local/bin
+diff --git a/linhpsdr.desktop b/linhpsdr.desktop
+index a2c1162..e1d2714 100644
+--- a/linhpsdr.desktop
++++ b/linhpsdr.desktop
+@@ -1,9 +1,7 @@
+ [Desktop Entry]
+-Version=0.1
+ Type=Application
+ Terminal=false
+ Name[eb_GB]=linHPSDR
+ Exec=linhpsdr
+-Icon=/usr/share/linhpsdr/hpsdr_small.png
++Icon=hpsdr_icon
+ Name=linHPSDR
+-

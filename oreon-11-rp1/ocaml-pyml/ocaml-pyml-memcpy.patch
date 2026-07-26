@@ -1,0 +1,26 @@
+Fixes this warning:
+
+In file included from /usr/include/string.h:548,
+                 from pyml_stubs.c:9:
+In function ‘memcpy’,
+    inlined from ‘camlwrap_capsule’ at pyml_stubs.c:595:5,
+    inlined from ‘pyml_wrap_value’ at pyml_stubs.c:1200:24:
+/usr/include/bits/string_fortified.h:29:10: warning: argument 2 null where non-null expected [-Wnonnull]
+   29 |   return __builtin___memcpy_chk (__dest, __src, __len,
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   30 |                                  __glibc_objsize0 (__dest));
+      |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/bits/string_fortified.h:29:10: note: in a call to built-in function ‘__builtin___memcpy_chk’
+
+--- pyml-20231101/pyml_stubs.c.orig	2023-11-01 11:51:21.000000000 -0600
++++ pyml-20231101/pyml_stubs.c	2023-11-03 11:46:33.877483489 -0600
+@@ -592,7 +592,8 @@ camlwrap_capsule(value val, void *aux_st
+ {
+     value *v = (value *) malloc(sizeof(value) + size);
+     *v = val;
+-    memcpy((char *)v + sizeof(value), aux_str, size);
++    if (aux_str != NULL)
++        memcpy((char *)v + sizeof(value), aux_str, size);
+     caml_register_global_root(v);
+     return wrap_capsule(v, "ocaml-capsule", camldestr_capsule);
+ }

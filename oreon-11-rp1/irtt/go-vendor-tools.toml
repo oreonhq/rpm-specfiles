@@ -1,0 +1,9 @@
+[archive]
+pre_commands = [
+    ["sed", "-i", "s/1.12/1.18/", "go.mod"],
+    ["go", "mod", "tidy"],
+]
+
+
+[licensing]
+detector = "askalono"

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.proofgeneral</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>ProofGeneral</name>
+  <summary>Emacs interface to proof assistants</summary>
+  <description>
+    <p>
+      Proof General is a generic front-end for proof assistants (also known as
+      interactive theorem provers) based on Emacs.  Proof General allows one to
+      edit and submit a proof script to a proof assistant in an interactive
+      manner:
+    </p>
+    <ul>
+      <li>It tracks the goal state and allows for easy backtracking and block
+        execution</li>
+      <li>It adds toolbars and menus to Emacs for easy access to proof assistant
+        features</li>
+      <li>It integrates with Emacs Unicode support to provide output using
+        proper mathematical symbols</li>
+      <li>It includes utilities for generating Emacs tags for proof scripts,
+        allowing for easy navigation</li>
+    </ul>
+    <p>
+      Proof General supports a number of different proof assistants (Isabelle,
+      Coq, PhoX, and LEGO to name a few) and is designed to be easily
+      extendable to work with others.
+    </p>
+  </description>
+  <launchable type="desktop-id">proofgeneral.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://proofgeneral.inf.ed.ac.uk/images/pg-coq-screenshot.png</image>
+      <caption>Coq PG running in multiple frame mode, full screen shot</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://proofgeneral.inf.ed.ac.uk/images/pg-lego-screenshot.png</image>
+      <caption>Building a simple proof in LEGO with proof-by-pointing</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://proofgeneral.inf.ed.ac.uk/images/pg-isa-screenshot.png</image>
+      <caption>Replaying a domain theory proof in Isabelle's HOLCF logic</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://proofgeneral.inf.ed.ac.uk/images/pg-isar-screenshot.png</image>
+      <caption>Replaying a proof in Isar, Isabelle's declarative proof language</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://proofgeneral.inf.ed.ac.uk/images/pg-lego-console.png</image>
+      <caption>LEGO Proof General running in plain console mode</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/welcome.png</image>
+      <caption>A welcoming introduction to Proof General Eclipse</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/new-cheatsheet.png</image>
+      <caption>Cheat Sheet system to help orient new users</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/new-theory.png</image>
+      <caption>Proof Script wizard creating a new Theory file</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/eclipse-import.png</image>
+      <caption>Importing new files from a variety of sources</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/mid-theory.png</image>
+      <caption>The Proof General 'perspective', the main working environment</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/outline-view.png</image>
+      <caption>Parsed outline of a proof</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/processing.png</image>
+      <caption>Detail of Proof General processing a file</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/perthy6.png</image>
+      <caption>During a proof; editor shows code folding and tooltip help</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/prover-objects.png</image>
+      <caption>New Prover Objects browser</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/colour-prefs.png</image>
+      <caption>Extended preferences including color options</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/cvs-compare.png</image>
+      <caption>Using Eclipse's CVS plugin to compare files</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://wiki.inf.ed.ac.uk/twiki/pub/PG/PGEclipseScreenshots/error-marking.png</image>
+      <caption>Error marking and prover feedback</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>emacs-common-proofgeneral-maintainers@fedoraproject.org</update_contact>
+  <url type="homepage">https://proofgeneral.github.io/</url>
+  <url type="help">https://proofgeneral.github.io/doc/</url>
+  <url type="bugtracker">https://github.com/ProofGeneral/PG/issues</url>
+  <content_rating type="oars-1.0"></content_rating>
+  <provides>
+    <binary>coqtags</binary>
+    <binary>isartags</binary>
+    <binary>legotags</binary>
+    <binary>proofgeneral</binary>
+  </provides>
+</component>

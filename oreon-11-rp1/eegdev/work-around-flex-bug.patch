@@ -1,0 +1,32 @@
+Description: Workaround flex bug for inclusion of config.h when an embedded gnulib is present
+See https://github.com/westes/flex/issues/564
+Author: Nilesh Patra <nilesh@debian.org>
+Last-Update: 2023-08-25
+--- a/src/core/conffile.l
++++ b/src/core/conffile.l
+@@ -21,6 +21,11 @@
+ %option prefix="cff_"
+ %option header-file="conffile.lex.h"
+ %option outfile="conffile.lex.c"
++%top {
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
++}
+ %{
+ #if HAVE_CONFIG_H
+ # include <config.h>
+--- a/src/core/confline.l
++++ b/src/core/confline.l
+@@ -21,6 +21,11 @@
+ %option prefix="cfl_"
+ %option header-file="confline.lex.h"
+ %option outfile="confline.lex.c"
++%top {
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
++}
+ %{
+ #if HAVE_CONFIG_H
+ # include <config.h>

@@ -1,0 +1,103 @@
+; side conditions
+
+(program color_mark ((t term) (c color)) bool
+  (match t
+    ((apply s1 s2 t1 t2) 
+      (do (color_mark t1 c)
+          (color_mark t2 c)))
+    (default 
+      (do (match c
+            (A (ifmarked5 t t (markvar5 t)))
+            (B (ifmarked6 t t (markvar6 t)))) tt))))
+
+(program color_mark_formula ((f formula) (c color)) bool
+  (match f 
+    ((= s t1 t2) (do (color_mark t1 c) (color_mark t2 c)))
+    ((distinct s t1 t2) (do (color_mark t1 c) (color_mark t2 c)))))
+
+(program is_color_marked ((t term) (c color)) bool
+  (match t
+    ((apply s1 s2 t1 t2) 
+      (match (is_color_marked t1 c)
+        (tt (is_color_marked t2 c))
+        (ff ff)))
+    (default 
+      (match c
+        (A (ifmarked5 t tt ff))
+        (B (ifmarked6 t tt ff))))))
+        
+; introduce a color atom
+
+(declare catom_intro
+  (! fi formula
+  (! c color
+  (! f formula
+  (! r (^ (color_mark_formula f c) tt)
+  (! u' (! a' (color_atom c f)
+          (interpolant fi))
+    (interpolant fi)))))))
+
+; rules for term colorability
+
+(declare colorable (! c color (! s sort (! t (term s) type))))
+    
+; colorable let
+(declare colorable_intro
+  (! c color
+  (! s sort
+  (! t (term s)
+  (! f formula
+  (! u (colorable c s t)
+  (! u' (! v (colorable c s t) (interpolant f))
+    (interpolant f))))))))
+
+; introduce a colorable
+
+(declare colorable_base
+  (! s sort
+  (! c color
+  (! t (term s)
+  (! r (^ (is_color_marked t c) tt)
+    (colorable c s t))))))
+
+(declare colorable_apply
+  (! s1 sort
+  (! s2 sort
+  (! t (term s1)
+  (! f (term (arrow s1 s2))
+  (! c color
+  (! c1 (colorable c s1 t)
+  (! c2 (colorable c (arrow s1 s2) f)
+    (colorable c s2 (apply s1 s2 f t)))))))))))
+
+; rules for colorable atoms
+
+(declare catom_refl
+  (! s sort
+  (! t (term s)
+  (! c color
+  (! c1 (colorable c s t)
+    (color_atom c (= s t t)))))))
+
+(declare catom_symm_eq
+  (! c color
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! u (color_atom c (= s t1 t2))
+    (color_atom c (= s t2 t1))))))))
+
+(declare catom_symm_distinct
+  (! c color
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! u (color_atom c (distinct s t1 t2))
+    (color_atom c (distinct s t2 t1))))))))
+
+; this is probably not necessary
+;(declare catom_uncolor
+;  (! c color
+;  (! f formula
+;  (! u (color_atom c f)
+;    (th_holds f)))))

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Graphics;Viewer;
+Exec=katarakt %F
+GenericName=Simple PDF Viewer
+Icon=application-pdf
+MimeType=application/pdf;
+Name=katarakt
+StartupNotify=true
+Terminal=false
+Type=Application

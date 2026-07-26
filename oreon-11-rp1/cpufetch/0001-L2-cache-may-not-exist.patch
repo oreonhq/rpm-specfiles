@@ -1,0 +1,25 @@
+--- a/src/common/cpu.c
++++ b/src/common/cpu.c
+@@ -133,7 +133,8 @@ char* get_str_l1d(struct cache* cach) {
+ }
+ 
+ char* get_str_l2(struct cache* cach) {
+-  assert(cach->L2->exists);
++  if(!cach->L2->exists)
++    return NULL;
+   return get_str_cache(cach->L2->size, cach->L2->num_caches);
+ }
+ 
+--- a/src/common/printer.c
++++ b/src/common/printer.c
+@@ -733,7 +733,9 @@ bool print_cpufetch_ppc(struct cpuInfo* cpu, STYLE s, struct color** cs, struct
+   setAttribute(art, ATTRIBUTE_ALTIVEC, altivec);
+   setAttribute(art, ATTRIBUTE_L1i, l1i);
+   setAttribute(art, ATTRIBUTE_L1d, l1d);
+-  setAttribute(art, ATTRIBUTE_L2, l2);
++  if(l2 != NULL) {
++    setAttribute(art, ATTRIBUTE_L2, l2);
++  }
+   if(l3 != NULL) {
+     setAttribute(art, ATTRIBUTE_L3, l3);
+   }

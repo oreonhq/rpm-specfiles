@@ -1,0 +1,61 @@
+--- install_cxsc.in.orig	2014-02-27 08:52:29.000000000 -0700
++++ install_cxsc.in	2022-08-31 13:22:23.999225579 -0600
+@@ -84,7 +84,7 @@ UNAME_MACHINE=`(uname -m) 2>/dev/null` |
+ UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
+ UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
+ UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
+-UNAME_PROCESSOR=`(uname -p) 2>/dev/null` || UNAME_PROCESSOR=unknown
++UNAME_PROCESSOR=`(uname -m) 2>/dev/null` || UNAME_PROCESSOR=unknown
+ echo
+ echo "checking host system type....$UNAME_MACHINE"
+ echo "checking build system type...$UNAME_SYSTEM"
+@@ -108,6 +108,9 @@ then
+ elif [ "$UNAME_PROCESSOR" = "ppc64" ]
+ then 
+ 	UNAME_SYSTEM=$UNAME_PROCESSOR
++elif [ "$UNAME_PROCESSOR" = "ppc64le" ]
++then
++	UNAME_SYSTEM="ppc64"
+ elif [ "$UNAME_MACHINE" = "alpha" ]
+ then 
+ 	UNAME_SYSTEM=$UNAME_MACHINE
+--- src/asm/r_ari.h.orig	2014-01-30 10:23:52.000000000 -0700
++++ src/asm/r_ari.h	2016-12-23 15:30:58.787296856 -0700
+@@ -29,7 +29,7 @@
+ namespace cxsc {
+ 
+ 
+-#if defined(CXSC_x86_64) || defined(CXSC_x86_i)
++#if (defined(CXSC_x86_64) && CXSC_x86_64) || (defined(CXSC_x86_i) && CXSC_x86_i)
+ 
+ static u_int32_t cxscup = 0x5F80;
+ static u_int32_t cxscdown = 0x3F80;
+@@ -115,7 +115,7 @@ inline double ra_divd(double a,double b)
+    return a;
+ }
+ 
+-#elif defined(CXSC_x86)
++#elif defined(CXSC_x86) && CXSC_x86
+ 
+ static u_int16_t cxscup = 0xB3F;
+ static u_int16_t cxscdown = 0x73F;
+@@ -209,7 +209,7 @@ inline double ra_divd(double a,double b)
+    return c;
+ }
+ 
+-#elif defined(CXSC_PPC64)
++#elif defined(CXSC_PPC64) && CXSC_PPC64
+ 
+ inline double ra_addu(double a,double b) {
+    double r(0);
+--- src/dotk.inl.orig	2014-01-30 10:23:45.000000000 -0700
++++ src/dotk.inl	2016-12-23 15:31:46.601973552 -0700
+@@ -202,7 +202,7 @@ namespace cxsc {
+ 	*/
+ 	static inline void TwoProduct(const real &x, const real &y, real &a, real &b) {
+ #ifdef CXSC_USE_FMA
+-#ifdef CXSC_PPC64
++#if defined(CXSC_PPC64) && CXSC_PPC64
+ 		a = x * y;
+ 		double r;
+ 		asm volatile ("fnmsub %0, %1, %2, %3\n" : "=f" (r) : "f"(_double(x)), "f" (_double(y)), "f"(_double(a)) );

@@ -1,0 +1,27 @@
+From 547c1015793c55d5c899a4fe4afe448d305512a6 Mon Sep 17 00:00:00 2001
+From: Mario Ceresa <mrceresa@gmail.com>
+Date: Thu, 18 Oct 2012 16:13:01 +0200
+Subject: [PATCH 03/15] Include string header
+
+Signed-off-by: Mario Ceresa <mrceresa@gmail.com>
+---
+ expatpp.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/expatpp.cpp b/expatpp.cpp
+index 3eaa913..8a7c532 100755
+--- a/expatpp.cpp
++++ b/expatpp.cpp
+@@ -26,6 +26,9 @@
+ 	#define BUFSIZ 4096
+ #endif
+ 
++#include <stdio.h>
++#include <string.h>
++
+ expatpp::expatpp(bool createParser) :
+ 	mParser(0),  // in case of exception below
+ 	mHaveParsed(false)
+-- 
+1.7.11.7
+

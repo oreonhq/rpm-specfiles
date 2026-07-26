@@ -1,0 +1,127 @@
+%global source0_hash f1b91b925aa322be454f8330c6fb48b465da993d1e7e7e6fa35027ec49f3c936
+
+# python-built requires itself to build wheels.
+# To bootstrap, we copy the files to appropriate locations manually and create a minimal dist-info metadata.
+# Note that as a pure Python package, the wheel contains no pre-built binary stuff.
+%bcond_with     bootstrap
+
+%{?mingw_package_header}
+
+%global pypi_name build
+
+Name:           mingw-python-%{pypi_name}
+Summary:        MinGW Python %{pypi_name} library
+Version:        1.4.0
+Release:        2%{?dist}
+BuildArch:      noarch
+
+License:        MIT
+Url:            https://pypi.python.org/pypi/%{pypi_name}
+Source0:        %{pypi_source}
+Source1:        macros.mingw32-python3-wheel
+Source2:        macros.mingw64-python3-wheel
+
+BuildRequires:  mingw32-filesystem >= 102
+BuildRequires:  mingw32-python3
+%if %{without bootstrap}
+BuildRequires:  mingw32-python3-flit-core
+BuildRequires:  mingw32-python3-build
+%endif
+
+BuildRequires:  mingw64-filesystem >= 102
+BuildRequires:  mingw64-python3
+%if %{without bootstrap}
+BuildRequires:  mingw64-python3-flit-core
+BuildRequires:  mingw64-python3-build
+%endif
+
+%description
+MinGW Python %{pypi_name} library.
+
+%package -n mingw32-python3-%{pypi_name}
+Summary:       MinGW Python 3 %{pypi_name} library
+Requires:      mingw32-python3-installer
+Requires:      mingw32-python3-setuptools
+Requires:      mingw32-python3-wheel
+# For %%{_rpmconfigdir}/macros.d/
+Requires:      rpm
+
+%description -n mingw32-python3-%{pypi_name}
+MinGW Python 3 %{pypi_name} library.
+
+%package -n mingw64-python3-%{pypi_name}
+Summary:       MinGW Python 3 %{pypi_name} library
+Requires:      mingw64-python3-installer
+Requires:      mingw64-python3-setuptools
+Requires:      mingw64-python3-wheel
+# For %%{_rpmconfigdir}/macros.d/
+Requires:      rpm
+
+%description -n mingw64-python3-%{pypi_name}
+MinGW Python 3 %{pypi_name} library.
+
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+
+%autosetup -p1 -n %{pypi_name}-%{version}
+
+%build
+%if %{with bootstrap}
+%global distinfo %{pypi_name}-%{version}+rpmbootstrap.dist-info
+mkdir %{distinfo}
+cat > %{distinfo}/METADATA << EOF
+Metadata-Version: 2.2
+Name: %{pypi_name}
+Version: 1.4.0
+EOF
+%else
+%global distinfo %{pypi_name}-%{version}.dist-info
+%mingw32_py3_build_wheel
+%mingw64_py3_build_wheel
+%mingw32_py3_build_host_wheel
+%mingw64_py3_build_host_wheel
+%endif
+
+%install
+%if %{with bootstrap}
+mkdir -p %{buildroot}%{mingw32_python3_sitearch}
+mkdir -p %{buildroot}%{mingw64_python3_sitearch}
+cp -a src/build %{distinfo} %{buildroot}%{mingw32_python3_sitearch}/
+cp -a src/build %{distinfo} %{buildroot}%{mingw64_python3_sitearch}/
+mkdir -p %{buildroot}%{mingw32_python3_hostsitearch}
+mkdir -p %{buildroot}%{mingw64_python3_hostsitearch}
+cp -a src/build %{distinfo} %{buildroot}%{mingw32_python3_hostsitearch}/
+cp -a src/build %{distinfo} %{buildroot}%{mingw64_python3_hostsitearch}/
+%else
+%mingw32_py3_install_wheel
+%mingw64_py3_install_wheel
+%mingw32_py3_install_host_wheel
+%mingw64_py3_install_host_wheel
+%endif
+
+# Install macros
+install -Dpm 0644 %{SOURCE1} %{buildroot}%{_rpmconfigdir}/macros.d/macros.mingw32-python3-wheel
+install -Dpm 0644 %{SOURCE2} %{buildroot}%{_rpmconfigdir}/macros.d/macros.mingw64-python3-wheel
+
+%files -n mingw32-python3-%{pypi_name}
+%license LICENSE
+%{mingw32_bindir}/pyproject-build
+%{mingw32_python3_sitearch}/%{pypi_name}/
+%{mingw32_python3_sitearch}/%{distinfo}
+%{_prefix}/%{mingw32_target}/bin/pyproject-build
+%{mingw32_python3_hostsitearch}/%{pypi_name}/
+%{mingw32_python3_hostsitearch}/%{distinfo}
+%{_rpmconfigdir}/macros.d/macros.mingw32-python3-wheel
+
+%files -n mingw64-python3-%{pypi_name}
+%license LICENSE
+%{mingw64_bindir}/pyproject-build
+%{mingw64_python3_sitearch}/%{pypi_name}/
+%{mingw64_python3_sitearch}/%{distinfo}
+%{_prefix}/%{mingw64_target}/bin/pyproject-build
+%{mingw64_python3_hostsitearch}/%{pypi_name}/
+%{mingw64_python3_hostsitearch}/%{distinfo}
+%{_rpmconfigdir}/macros.d/macros.mingw64-python3-wheel
+
+%changelog
+%autochangelog

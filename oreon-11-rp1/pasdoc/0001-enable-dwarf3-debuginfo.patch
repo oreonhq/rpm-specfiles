@@ -1,0 +1,24 @@
+--- pasdoc-0.16.0--orig/source/gui/pasdoc_gui.lpi	2022-01-07 12:02:36.025958963 +0100
++++ pasdoc-0.16.0--patched/source/gui/pasdoc_gui.lpi	2022-01-07 12:03:12.783143393 +0100
+@@ -91,12 +91,19 @@
+     <Version Value="11"/>
+     <SearchPaths>
+       <SrcPath Value="$(LazarusDir)/lcl;$(LazarusDir)/lcl/interfaces/$(LCLWidgetType)"/>
+     </SearchPaths>
++    <CodeGeneration>
++      <Optimizations>
++        <OptimizationLevel Value="3"/>
++        <VariablesInRegisters Value="True"/>
++      </Optimizations>
++    </CodeGeneration>
+     <Linking>
+       <Debugging>
+-        <UseLineInfoUnit Value="False"/>
+-        <StripSymbols Value="True"/>
++        <GenerateDebugInfo Value="True"/>
++        <DebugInfoType Value="dsDwarf3"/>
++        <StripSymbols Value="False"/>
+       </Debugging>
+       <Options>
+         <Win32>
+           <GraphicApplication Value="True"/>

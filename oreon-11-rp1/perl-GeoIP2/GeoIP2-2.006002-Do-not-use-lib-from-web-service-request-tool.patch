@@ -1,0 +1,54 @@
+From 01729086bf3fa67e8ef4912aa6c727ab78a32112 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 11 Aug 2020 13:02:04 +0200
+Subject: [PATCH] Do not use lib from web-service-request tool
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Adding a relative path to @INC is insecure when running the script
+from a world-writable working directory. This patch removes the
+useless "use lib" from web-service-request.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL             | 2 +-
+ bin/web-service-request | 2 --
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 647d9fb..5b0af5b 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -42,7 +42,6 @@ my %WriteMakefileArgs = (
+     "Throwable::Error" => 0,
+     "Try::Tiny" => 0,
+     "URI" => 0,
+-    "lib" => 0,
+     "namespace::clean" => 0,
+     "strict" => 0,
+     "warnings" => 0
+@@ -60,6 +59,7 @@ my %WriteMakefileArgs = (
+     "Test::More" => "0.96",
+     "Test::Number::Delta" => 0,
+     "base" => 0,
++    "lib" => 0,
+     "utf8" => 0
+   },
+   "VERSION" => "2.006002",
+diff --git a/bin/web-service-request b/bin/web-service-request
+index 2846739..14d3726 100755
+--- a/bin/web-service-request
++++ b/bin/web-service-request
+@@ -5,8 +5,6 @@ use 5.008;
+ use strict;
+ use warnings;
+ 
+-use lib 'lib';
+-
+ use Data::Dumper;
+ use Getopt::Long;
+ use GeoIP2::WebService::Client;
+-- 
+2.25.4
+

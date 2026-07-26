@@ -1,0 +1,72 @@
+--- t/104_override_usage.t
++++ t/104_override_usage.t
+@@ -61,10 +61,25 @@ use Test::Exception;
+ \t--foo INT          A foo
+ }
+         :
++         # Note: Getopt::Long::Descriptive 0.106 not supported
++         $Getopt::Long::Descriptive::VERSION < 0.107 ?
+          qq{usage: 104_override_usage.t [-?] [long options...]
+ \t-? --[no-]usage --[no-]help       Prints this usage information.
+ \t--foo INT                         A foo
+ }
++        :
++         $Getopt::Long::Descriptive::VERSION < 0.113 ?
++         qq{usage: 104_override_usage.t [-?] [long options...]
++\t--[no-]help (or -?)  Prints this usage information.
++\t             aka --usage
++\t--foo INT    A foo
++}
++        :
++         qq{usage: 104_override_usage.t [-?] [long options...]
++    --[no-]help (or -?)  Prints this usage information.
++                 aka --usage
++    --foo INT    A foo
++}
+ 
+      ];
+ 
+--- t/107_no_auto_help.t
++++ t/107_no_auto_help.t
+@@ -60,7 +60,7 @@ END {
+ warning_like {
+     throws_ok { Class->new_with_options }
+            #usage: 107_no_auto_help.t [-?] [long options...]
+-        qr/^usage: [\d\w]+\Q.t [-?] [long options...]\E.\s+\Q-? --\E(\[no-\])?usage --(\[no-\])?\Qhelp\E\s+\QPrints this usage information.\E.\s+--configfile/ms,
++        qr/^usage: [\d\w]+\Q.t [-?] [long options...]\E.\s+(\Q-? --\E(\[no-\])?usage )?--(\[no-\])?\Qhelp\E(\Q (or -?)\E)?\s+\QPrints this usage information.\E.(\s+\Qaka --usage\E.)?\s+--configfile/ms,
+         'usage information looks good';
+     }
+     qr/^Specified configfile \'this_value_unimportant\' does not exist, is empty, or is not readable$/,
+--- t/109_help_flag.t
++++ t/109_help_flag.t
+@@ -40,7 +40,7 @@ foreach my $args ( ['--help'], ['--usage
+     local @ARGV = @$args;
+ 
+     throws_ok { MyClass->new_with_options() }
+-        qr/^usage: (?:[\d\w]+)\Q.t [-?] [long options...]\E.^\t\Q-? --\E(\[no-\])?usage --(\[no-\])?help\s+\QPrints this usage information.\E$/ms,
++        qr/^usage: (?:[\d\w]+)\Q.t [-?] [long options...]\E.^\s+(\Q-? --\E(\[no-\])?usage )?--(\[no-\])?help(\Q (or -?)\E)?\s+Prints ?(.\s+)?\Qthis usage information.\E.(\s+\Qaka --usage\E.)?$/ms,
+         'Help request detected; usage information properly printed';
+ }
+ 
+--- t/110_sort_usage_by_attr_order.t
++++ t/110_sort_usage_by_attr_order.t
+@@ -64,6 +64,18 @@ usage: 110_sort_usage_by_attr_order.t [-
+     --baz STR                         Documentation for "baz"
+ USAGE
+ }
+-$expected =~ s/^[ ]{4}/\t/xmsg;
++# Note: Getopt::Long::Descriptive 0.106 not supported
++if ( $Getopt::Long::Descriptive::VERSION >= 0.107 )
++{
++$expected = <<'USAGE';
++usage: 110_sort_usage_by_attr_order.t [-?] [long options...]
++    --[no-]help (or -?)  Prints this usage information.
++                 aka --usage
++    --foo STR    Documentation for "foo"
++    --bar STR    Documentation for "bar"
++    --baz STR    Documentation for "baz"
++USAGE
++}
++$expected =~ s/^[ ]{4}/\t/xmsg unless $Getopt::Long::Descriptive::VERSION >= 0.113;
+ is($obj->usage->text, $expected, 'Usage text has nicely sorted options');
+ 

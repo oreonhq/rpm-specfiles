@@ -1,0 +1,11 @@
+diff -up OpenLieroX/include/MathLib.h~ OpenLieroX/include/MathLib.h
+--- OpenLieroX/include/MathLib.h~	2018-02-26 15:18:19.000000000 +0100
++++ OpenLieroX/include/MathLib.h	2023-03-27 19:23:19.087180350 +0200
+@@ -22,6 +22,7 @@
+ #define __MATHLIB_H__
+ 
+ #include <cmath>
++#include <cstdint>
+ 
+ #include "CVec.h"
+ 

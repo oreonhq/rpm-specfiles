@@ -1,0 +1,13 @@
+diff -rU4 irsim-9.7.121--orig/tcltk/tclirsim.c irsim-9.7.121/tcltk/tclirsim.c
+--- irsim-9.7.121--orig/tcltk/tclirsim.c	2025-11-13 08:00:01.000000000 +0100
++++ irsim-9.7.121/tcltk/tclirsim.c	2026-02-17 11:48:48.067523780 +0100
+@@ -5,8 +5,9 @@
+ /*									*/
+ /*----------------------------------------------------------------------*/
+ 
+ #define _GNU_SOURCE
++#include <stdarg.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <signal.h>	/* Ctrl-C interrupt handling */

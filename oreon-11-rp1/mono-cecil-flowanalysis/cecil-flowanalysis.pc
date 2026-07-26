@@ -1,0 +1,8 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=@libdir@
+
+Name: cecil-flowanalysis
+Description: cecil-flowanalysis - Flowanalysis engine for Cecil
+Version: 0.1
+Libs: -r:${libdir}/mono/Cecil.FlowAnalysis/Cecil.FlowAnalysis.dll

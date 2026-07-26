@@ -1,0 +1,14 @@
+diff -up tolua++-1.0.93/include/tolua++.h~ tolua++-1.0.93/include/tolua++.h
+--- tolua++-1.0.93/include/tolua++.h~	2008-05-02 21:20:37.000000000 +0200
++++ tolua++-1.0.93/include/tolua++.h	2013-08-09 12:52:16.229145059 +0200
+@@ -43,8 +43,8 @@ extern "C" {
+ 
+ typedef int lua_Object;
+ 
+-#include "lua.h"
+-#include "lauxlib.h"
++#include <lua.h>
++#include <lauxlib.h>
+ 
+ struct tolua_Error
+ {

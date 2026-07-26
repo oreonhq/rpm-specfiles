@@ -1,0 +1,5 @@
+#
+# UID allocated at https://fedoraproject.org/wiki/PackageUserRegistry
+# 
+# Type	Name	ID	GECOS	Homedir
+u	ladvd	47	"LLDP/CDP sender for UNIX"	/run/ladvd

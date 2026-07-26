@@ -1,0 +1,39 @@
+--- lsnipes-0.9.4.orig/snipes.6
++++ lsnipes-0.9.4/snipes.6
+@@ -16,7 +16,9 @@
+ argument is of the form \fI[A-Z][1-9]\fR.  The alphabetic character specifies
+ characteristics of the level, such as whether or not diagonal shots
+ bounce off the walls.  The numeric character specifies the level of
+-difficulty.
++difficulty. More details in the
++.B LEVELS
++section below.
+ .PP
+ Use the grey arrow keys to move and the keys a, s, d, and w to fire.
+ (This works best with a QWERTY layout, of course.)  You can move
+@@ -68,6 +70,25 @@
+ -v
+ Display version number and exit.
+ 
++.SH LEVELS
++
++There are three hives for levels 1->4, four hives for 5->8 and 5 hives for
++level 9.  The maximum number of sprites for each difficulty level is 10, 25,
++40, 55, 70, 90, 110, 130 and 150.
++.PP
++The level letter determines which features are enabled:
++
++.TP -3
++.I ABCDEFGHIJKLMNOPQRSTUVWXYZ 
++       ****    ****    ******
++.B walls deadly
++           ********        **
++.B walls can be destroyed
++    * * * * * * * * * * * ***
++.B ghosts
++     **  **  **  **  **  ****
++.B bouncy shots
++
+ .SH HISTORY
+ 
+ Novell NetWare 2.x came with a pair of "network testing utility"

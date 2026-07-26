@@ -1,0 +1,133 @@
+--- orsa-0.7.0/src/liborsa/orsa_coord.cc.orig	2004-09-21 21:44:20.000000000 +0200
++++ orsa-0.7.0/src/liborsa/orsa_coord.cc	2008-09-05 12:42:25.000000000 +0200
+@@ -26,6 +26,7 @@
+ 
+ #include <cmath>
+ #include <iostream>
++#include <cstdlib>
+ 
+ using namespace std;
+ 
+--- orsa-0.7.0/src/liborsa/orsa_interaction.cc.orig	2005-01-04 23:31:25.000000000 +0100
++++ orsa-0.7.0/src/liborsa/orsa_interaction.cc	2008-09-05 12:48:19.000000000 +0200
+@@ -29,6 +29,7 @@
+ 
+ #include <cmath>
+ #include <iostream>
++#include <cstdlib>
+ 
+ using namespace std;
+ 
+--- orsa-0.7.0/src/liborsa/orsa_interaction_tree.cc.orig	2004-10-02 02:04:30.000000000 +0200
++++ orsa-0.7.0/src/liborsa/orsa_interaction_tree.cc	2008-09-05 13:06:00.000000000 +0200
+@@ -30,6 +30,7 @@
+ #include <list>
+ #include <stack>
+ #include <map>
++#include <cstring>
+ 
+ using namespace std;
+ 
+--- orsa-0.7.0/src/liborsa/orsa_units.h.orig	2005-01-05 04:54:27.000000000 +0100
++++ orsa-0.7.0/src/liborsa/orsa_units.h	2008-09-05 18:26:01.000000000 +0200
+@@ -25,6 +25,7 @@
+ #ifndef _ORSA_UNITS_H
+ #define _ORSA_UNITS_H
+ 
++#include <cstdlib>
+ #include <cmath>
+ #include <string>
+ #include <cstdio>
+--- orsa-0.7.0/src/liborsa/orsa_body.h.orig	2004-12-30 04:58:03.000000000 +0100
++++ orsa-0.7.0/src/liborsa/orsa_body.h	2008-09-05 18:30:26.000000000 +0200
+@@ -183,7 +183,7 @@
+     inline void SetVelocity(const double x, const double y, const double z) { Vector v(x,y,z); SetVelocity(v); }
+     
+     // b position - this position
+-    inline Vector Body::distanceVector(const Body & b) const { return b.position()-position(); }
++    inline Vector distanceVector(const Body & b) const { return b.position()-position(); }
+     inline double distance(const Body & b) const { return distanceVector(b).Length(); }
+     
+     // alias
+--- orsa-0.7.0/src/liborsa/orsa_file_jpl.cc.orig	2005-01-05 03:25:06.000000000 +0100
++++ orsa-0.7.0/src/liborsa/orsa_file_jpl.cc	2008-09-05 18:33:41.000000000 +0200
+@@ -22,6 +22,7 @@
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+ 
++#include <cstring>
+ #include "orsa_file.h"
+ #include "orsa_error.h"
+ #include "orsa_secure_math.h"
+--- orsa-0.7.0/src/liborsa/orsa_file.cc.orig	2005-01-11 02:01:11.000000000 +0100
++++ orsa-0.7.0/src/liborsa/orsa_file.cc	2008-09-05 18:43:03.000000000 +0200
+@@ -52,6 +52,9 @@
+ #include "config.h"
+ #endif // HAVE_CONFIG_H
+ 
++#include <cstring>
++#include <algorithm>
++
+ using namespace std;
+ 
+ namespace orsa {
+--- orsa-0.7.0/src/libxorsa/xorsa_import_astorb_objects.h.orig	2005-01-05 04:04:17.000000000 +0100
++++ orsa-0.7.0/src/libxorsa/xorsa_import_astorb_objects.h	2008-09-05 18:49:29.000000000 +0200
+@@ -600,7 +600,7 @@
+   inline XOrsaAstorbObjectItem(QListView *parent, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null) : QListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8) { };
+   
+  public:
+-  inline int XOrsaAstorbObjectItem::compare(QListViewItem *i, int col, bool ascending) const {
++  inline int compare(QListViewItem *i, int col, bool ascending) const {
+ 
+     using std::atof;
+         
+--- orsa-0.7.0/src/libxorsa/xorsa_plot_area.h.orig	2005-01-05 03:25:06.000000000 +0100
++++ orsa-0.7.0/src/libxorsa/xorsa_plot_area.h	2008-09-05 18:58:44.000000000 +0200
+@@ -57,7 +57,13 @@
+   }
+ }
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif
+ extern char *MonthNameShort[13]; // sdncal.h
++#ifdef __cplusplus
++}
++#endif // __cplusplus
+ 
+ void FineDate(QString & label, const orsa::UniverseTypeAwareTime & t, bool=true);
+ void FineDate_HMS(QString & label, const orsa::UniverseTypeAwareTime & t);
+--- orsa-0.7.0/src/libxorsa/xorsa_object_selector.cc.orig	2004-06-25 05:12:57.000000000 +0200
++++ orsa-0.7.0/src/libxorsa/xorsa_object_selector.cc	2008-09-05 19:01:33.000000000 +0200
+@@ -40,7 +40,7 @@
+   XOrsaObjectItem(QListView *parent, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null);
+   
+  public:
+-  int XOrsaObjectItem::compare(QListViewItem * i, int col, bool ascending) const;    
++  int compare(QListViewItem * i, int col, bool ascending) const;    
+   
+ };
+ 
+--- orsa-0.7.0/src/orsa/xorsa.h.orig	2004-07-13 04:21:19.000000000 +0200
++++ orsa-0.7.0/src/orsa/xorsa.h	2008-09-05 19:10:14.000000000 +0200
+@@ -62,7 +62,7 @@
+   ObjectItem(QListView *parent, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null);
+   
+  public:
+-  int ObjectItem::compare(QListViewItem * i, int col, bool ascending) const;    
++  int compare(QListViewItem * i, int col, bool ascending) const;    
+   
+ };
+ 
+--- orsa-0.7.0/src/libxorsa/xorsa_analysis.h.orig	2004-06-25 02:58:30.000000000 +0200
++++ orsa-0.7.0/src/libxorsa/xorsa_analysis.h	2008-09-07 17:26:55.000000000 +0200
+@@ -129,7 +129,7 @@
+   XOrsaPeaksListItem(QListView *parent, QString label1, QString label2 = QString::null, QString label3 = QString::null, QString label4 = QString::null, QString label5 = QString::null, QString label6 = QString::null, QString label7 = QString::null, QString label8 = QString::null);
+   
+  public:
+-  int XOrsaPeaksListItem::compare(QListViewItem * i, int col, bool ascending) const;    
++  int compare(QListViewItem * i, int col, bool ascending) const;    
+   
+ };
+ 

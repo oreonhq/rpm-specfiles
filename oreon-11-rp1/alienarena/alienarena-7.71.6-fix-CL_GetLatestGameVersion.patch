@@ -1,0 +1,69 @@
+diff -up alienarena-7.71.6/source/client/client.h.fix-CL_GetLatestGameVersion alienarena-7.71.6/source/client/client.h
+--- alienarena-7.71.6/source/client/client.h.fix-CL_GetLatestGameVersion	2024-01-25 11:57:00.912265389 -0500
++++ alienarena-7.71.6/source/client/client.h	2024-01-25 11:57:09.988401860 -0500
+@@ -604,7 +604,7 @@ void STATS_ST_Write (void);
+ // cl_updates.c
+ //
+ 
+-void CL_GetLatestGameVersion( void );
++qboolean CL_GetLatestGameVersion( void );
+ qboolean CL_ServerIsOutdated (char *server_vstring);
+ char* CL_VersionUpdateNotice( void );
+ 
+diff -up alienarena-7.71.6/source/client/cl_updates.c.fix-CL_GetLatestGameVersion alienarena-7.71.6/source/client/cl_updates.c
+--- alienarena-7.71.6/source/client/cl_updates.c.fix-CL_GetLatestGameVersion	2024-01-25 09:33:37.000000000 -0500
++++ alienarena-7.71.6/source/client/cl_updates.c	2024-01-25 11:55:43.479101094 -0500
+@@ -238,7 +238,7 @@ char *trimblanks(char *str)
+   return str;
+ }
+ 
+-void CL_GetLatestGameVersion( void )
++qboolean CL_GetLatestGameVersion( void )
+ {
+ 	char url[128];
+ 	CURL* easyhandle;
+@@ -261,18 +261,18 @@ void CL_GetLatestGameVersion( void )
+ 
+ 	Com_sprintf(url, sizeof(url), "%s", cl_latest_game_version_url->string);
+ 
+-	if (curl_easy_setopt(easyhandle, CURLOPT_URL, url) != CURLE_OK) return;
++	if (curl_easy_setopt(easyhandle, CURLOPT_URL, url) != CURLE_OK) return false;
+ 
+ 	// time out in 5s
+-	if (curl_easy_setopt(easyhandle, CURLOPT_CONNECTTIMEOUT, 5) != CURLE_OK) return;
++	if (curl_easy_setopt(easyhandle, CURLOPT_CONNECTTIMEOUT, 5) != CURLE_OK) return false;
+ 
+-	if (curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, write_data) != CURLE_OK) return;
++	if (curl_easy_setopt(easyhandle, CURLOPT_WRITEFUNCTION, write_data) != CURLE_OK) return false;
+ 
+ 	result = curl_easy_perform(easyhandle);
+ 
+ 	if (result != CURLE_OK)	{
+ 		Com_Printf("Version check failed with error %ld.\n", result);
+-		return;
++		return false;
+ 	}
+ 
+ 	(void)curl_easy_cleanup(easyhandle);
+@@ -281,6 +281,7 @@ void CL_GetLatestGameVersion( void )
+ 	trimblanks(versionstr);
+ 
+ 	update_version(versionstr);
++	return true;
+ }
+ 
+ /**
+diff -up alienarena-7.71.6/source/client/menu.c.fix-CL_GetLatestGameVersion alienarena-7.71.6/source/client/menu.c
+--- alienarena-7.71.6/source/client/menu.c.fix-CL_GetLatestGameVersion	2024-01-25 11:55:43.477101064 -0500
++++ alienarena-7.71.6/source/client/menu.c	2024-01-25 11:55:43.480101109 -0500
+@@ -1409,8 +1409,8 @@ void M_Menu_Main_f (void)
+ 	S_StartMenuMusic();
+ 	GetNews();
+ 	if (!latestGameVersionRetrieved) {
+-		CL_GetLatestGameVersion();
+-		latestGameVersionRetrieved = true;
++		latestGameVersionRetrieved = CL_GetLatestGameVersion();
++		// latestGameVersionRetrieved = true;
+ 	}
+ 	cls.key_dest = key_menu;
+ 	if (cls.state == ca_active)

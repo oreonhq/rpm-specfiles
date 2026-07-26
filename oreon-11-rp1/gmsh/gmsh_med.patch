@@ -1,0 +1,48 @@
+diff -rupN --no-dereference gmsh-4.15.0-source/src/common/CommandLine.cpp gmsh-4.15.0-source-new/src/common/CommandLine.cpp
+--- gmsh-4.15.0-source/src/common/CommandLine.cpp	2025-10-01 16:39:02.000000000 +0200
++++ gmsh-4.15.0-source-new/src/common/CommandLine.cpp	2025-11-16 12:11:30.214030834 +0100
+@@ -42,7 +42,7 @@
+ #endif
+ 
+ #if defined(HAVE_MED)
+-#include <med.h>
++#include <med/med.h>
+ #endif
+ 
+ #if defined(HAVE_POST)
+diff -rupN --no-dereference gmsh-4.15.0-source/src/fltk/helpWindow.cpp gmsh-4.15.0-source-new/src/fltk/helpWindow.cpp
+--- gmsh-4.15.0-source/src/fltk/helpWindow.cpp	2025-10-01 16:39:02.000000000 +0200
++++ gmsh-4.15.0-source-new/src/fltk/helpWindow.cpp	2025-11-16 12:11:30.214367145 +0100
+@@ -37,7 +37,7 @@
+ #endif
+ 
+ #if defined(HAVE_MED)
+-#include <med.h>
++#include <med/med.h>
+ #endif
+ 
+ static const char *help_link(Fl_Widget *w, const char *uri)
+diff -rupN --no-dereference gmsh-4.15.0-source/src/geo/GModelIO_MED.cpp gmsh-4.15.0-source-new/src/geo/GModelIO_MED.cpp
+--- gmsh-4.15.0-source/src/geo/GModelIO_MED.cpp	2025-10-01 16:39:02.000000000 +0200
++++ gmsh-4.15.0-source-new/src/geo/GModelIO_MED.cpp	2025-11-16 12:11:30.214658519 +0100
+@@ -26,7 +26,7 @@
+ #include "discreteVertex.h"
+ #include "Context.h"
+ 
+-#include <med.h>
++#include <med/med.h>
+ 
+ #if(MED_MAJOR_NUM >= 3)
+ // To avoid too many ifdefs below we use defines for the bits of the
+diff -rupN --no-dereference gmsh-4.15.0-source/src/post/PViewDataGModelIO_MED.cpp gmsh-4.15.0-source-new/src/post/PViewDataGModelIO_MED.cpp
+--- gmsh-4.15.0-source/src/post/PViewDataGModelIO_MED.cpp	2025-10-01 16:39:03.000000000 +0200
++++ gmsh-4.15.0-source-new/src/post/PViewDataGModelIO_MED.cpp	2025-11-16 12:11:30.214886156 +0100
+@@ -11,7 +11,7 @@
+ 
+ #if defined(HAVE_MED)
+ 
+-#include <med.h>
++#include <med/med.h>
+ 
+ #if(MED_MAJOR_NUM >= 3)
+ // To avoid too many ifdefs below we use defines for the bits of the

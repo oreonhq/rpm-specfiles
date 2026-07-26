@@ -1,0 +1,57 @@
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.cpp.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.cpp
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.cpp.me	2025-01-24 15:39:03.162964728 +0000
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.cpp	2025-01-24 15:39:29.602573840 +0000
+@@ -283,7 +283,7 @@ breakPointItemNew(void)
+  * Free memory associated with this break point
+  */
+ void
+-breakPointItemFree(void *payload, xmlChar * name)
++breakPointItemFree(void *payload, const xmlChar * name)
+ {
+     Q_UNUSED(name);
+     if (payload) {
+diff -up kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.h.me kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.h
+--- kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.h.me	2025-01-24 15:38:04.551614419 +0000
++++ kdewebdev-3.5.10/kxsldbg/kxsldbgpart/libxsldbg/breakpoint.h	2025-01-24 15:38:56.505811359 +0000
+@@ -486,7 +486,7 @@ extern "C" {
+  */
+ #endif
+ #endif
+-    void breakPointItemFree(void *payload, xmlChar * name);
++    void breakPointItemFree(void *payload, const xmlChar * name);
+ 
+ 
+ 
+diff -up kdewebdev-3.5.10/quanta/parsers/dtd/dtdparser.cpp.me kdewebdev-3.5.10/quanta/parsers/dtd/dtdparser.cpp
+--- kdewebdev-3.5.10/quanta/parsers/dtd/dtdparser.cpp.me	2025-01-24 15:41:04.776766486 +0000
++++ kdewebdev-3.5.10/quanta/parsers/dtd/dtdparser.cpp	2025-01-24 16:22:29.597857975 +0000
+@@ -83,23 +83,23 @@ bool DTDParser::parse(const QString &tar
+   {
+     QString errorStr = i18n("Unknown");
+ #ifndef LIBXML_2_5
+-    xmlErrorPtr errorPtr = xmlGetLastError();
++    const xmlError* errorPtr = xmlGetLastError();
+     if (errorPtr != NULL)
+     {
+-      QString s = QString::fromLatin1(errorPtr->message);
++      QString s = QString::fromLatin1((const char*)errorPtr->message);
+       if (!s.isEmpty())
+         errorStr = s;
+-      s = QString::fromLatin1(errorPtr->str1);
++      s = QString::fromLatin1((const char*)errorPtr->str1);
+       if (!s.isEmpty())
+         errorStr += "<br>" + s;
+-      s = QString::fromLatin1(errorPtr->str2);
++      s = QString::fromLatin1((const char*)errorPtr->str2);
+       if (!s.isEmpty())
+         errorStr += "<br>" + s;
+-      s = QString::fromLatin1(errorPtr->str2);
++      s = QString::fromLatin1((const char*)errorPtr->str2);
+       if (!s.isEmpty())
+         errorStr += "<br>" + s;
+       errorStr += QString("(%1, %2)").arg(errorPtr->line).arg(errorPtr->int2);
+-      xmlResetError(errorPtr);
++      xmlResetLastError();
+     }
+ #endif
+     KMessageBox::error(0, i18n("<qt>Error while parsing the DTD.<br>The error message is:<br><i>%1</i></qt>").arg(errorStr));

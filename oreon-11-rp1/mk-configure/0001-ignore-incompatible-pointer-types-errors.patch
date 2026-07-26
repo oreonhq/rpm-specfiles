@@ -1,0 +1,31 @@
+From ad294208c494d710aeaf3ccbdfffe0070e016d43 Mon Sep 17 00:00:00 2001
+From: Carlos Rodriguez-Fernandez <carlosrodrifernandez@gmail.com>
+Date: Fri, 19 Jan 2024 08:22:13 -0700
+Subject: [PATCH] ignore incompatible-pointer-types errors
+
+GCC 14 errors with incompatible-pointer-types however, it is
+unavoidable in the way mkc_check_funclib checks for functions.
+
+Signed-off-by: Carlos Rodriguez-Fernandez <carlosrodrifernandez@gmail.com>
+---
+ scripts/mkc_check_funclib.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/scripts/mkc_check_funclib.in b/scripts/mkc_check_funclib.in
+index d3369d4..2a48a89 100755
+--- a/scripts/mkc_check_funclib.in
++++ b/scripts/mkc_check_funclib.in
+@@ -74,6 +74,10 @@ check_itself (){
+     fname="$funcname"
+ 
+     cat > "$tmpc" <<EOF
++#if defined __GNUC__ && __GNUC__ >= 14
++#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
++#endif
++
+ void yylex ();
+ void yylex () {}
+ 
+-- 
+2.43.0
+

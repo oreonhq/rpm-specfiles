@@ -1,0 +1,128 @@
+--- a/CMakeLists.txt	2024-10-31 09:30:58.550279009 +0200
++++ b/CMakeLists.txt	2024-10-31 10:29:26.943169170 +0200
+@@ -199,7 +199,6 @@
+ else(MSVC)
+   string(APPEND CMAKE_CXX_FLAGS " -Wall")
+   string(APPEND CMAKE_CXX_FLAGS " -Wextra")
+-  string(APPEND CMAKE_CXX_FLAGS " -Werror")
+   string(APPEND CMAKE_CXX_FLAGS " -Wno-deprecated-declarations")
+   string(APPEND CMAKE_CXX_FLAGS " -Wunknown-pragmas")
+   string(APPEND CMAKE_CXX_FLAGS " -Wimplicit-fallthrough")
+@@ -247,57 +246,6 @@
+ message(WARNING "CMAKE_CXX_FLAGS_RELEASE is ${CMAKE_CXX_FLAGS_RELEASE}")
+ message(WARNING "==========")
+ 
+-if(NOT TARGET asmjit)
+-  # Download asmjit from github if ASMJIT_SRC_DIR is not specified.
+-  if(NOT DEFINED ASMJIT_SRC_DIR)
+-    set(ASMJIT_SRC_DIR "${FBGEMM_SOURCE_DIR}/external/asmjit"
+-      CACHE STRING "asmjit source directory from submodules")
+-  endif()
+-
+-  # Build asmjit
+-  # For MSVC shared build, asmjit needs to be shared also.
+-  if (MSVC AND (FBGEMM_LIBRARY_TYPE STREQUAL "shared"))
+-    set(ASMJIT_STATIC OFF)
+-  else()
+-    set(ASMJIT_STATIC ON)
+-  endif()
+-
+-  add_subdirectory("${ASMJIT_SRC_DIR}" "${FBGEMM_BINARY_DIR}/asmjit")
+-  set_property(TARGET asmjit PROPERTY POSITION_INDEPENDENT_CODE ON)
+-  # Add a flag required for mac build
+-  if(NOT MSVC)
+-    target_compile_options(asmjit PRIVATE "-Wno-sign-conversion")
+-  endif()
+-
+-  target_compile_options_if_supported(asmjit -Wno-deprecated-enum-enum-conversion)
+-  target_compile_options_if_supported(asmjit -Wno-deprecated-anon-enum-enum-conversion)
+-  target_compile_options_if_supported(asmjit -Wno-error=deprecated-enum-enum-conversion)
+-
+-  if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 13.0.0)
+-    # See https://github.com/pytorch/pytorch/issues/74352, https://github.com/pytorch/FBGEMM/issues/1173
+-    target_compile_options_if_supported(asmjit -Wno-deprecated-copy)
+-    target_compile_options_if_supported(asmjit -Wno-unused-but-set-variable)
+-  endif()
+-endif()
+-
+-if(NOT TARGET cpuinfo)
+-  #Download cpuinfo from github if CPUINFO_SOURCE_DIR is not specified.
+-  if(NOT DEFINED CPUINFO_SOURCE_DIR)
+-    set(CPUINFO_SOURCE_DIR "${FBGEMM_SOURCE_DIR}/external/cpuinfo"
+-      CACHE STRING "cpuinfo source directory from submodules")
+-  endif()
+-
+-  #build cpuinfo
+-  set(CPUINFO_BUILD_UNIT_TESTS OFF CACHE BOOL "Do not build cpuinfo unit tests")
+-  set(CPUINFO_BUILD_MOCK_TESTS OFF CACHE BOOL "Do not build cpuinfo mock tests")
+-  set(CPUINFO_BUILD_BENCHMARKS OFF CACHE BOOL "Do not build cpuinfo benchmarks")
+-  set(CPUINFO_LIBRARY_TYPE static CACHE STRING "Set lib type to static")
+-  #Select static runtime, needed for static build for MSVC
+-  set(CPUINFO_RUNTIME_TYPE static CACHE STRING "Set runtime to static")
+-  add_subdirectory("${CPUINFO_SOURCE_DIR}" "${FBGEMM_BINARY_DIR}/cpuinfo")
+-  set_property(TARGET cpuinfo PROPERTY POSITION_INDEPENDENT_CODE ON)
+-endif()
+-
+ target_include_directories(fbgemm_generic BEFORE
+       PUBLIC $<BUILD_INTERFACE:${FBGEMM_SOURCE_DIR}>
+       PUBLIC $<BUILD_INTERFACE:${FBGEMM_SOURCE_DIR}/include>
+@@ -365,9 +313,6 @@
+     PUBLIC $<BUILD_INTERFACE:${FBGEMM_SOURCE_DIR}/include>)
+ 
+ target_link_libraries(fbgemm
+-  $<BUILD_INTERFACE:asmjit>
+-  $<BUILD_INTERFACE:cpuinfo>)
+-add_dependencies(fbgemm
+   asmjit
+   cpuinfo)
+ 
+@@ -388,7 +333,7 @@
+ 
+ install(
+   EXPORT fbgemmLibraryConfig
+-  DESTINATION share/cmake/fbgemm
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fbgemm
+   FILE fbgemmLibraryConfig.cmake)
+ 
+ if(MSVC)
+--- a/test/CMakeLists.txt	2024-10-31 10:29:32.862153744 +0200
++++ b/test/CMakeLists.txt	2024-10-31 10:30:16.324040496 +0200
+@@ -14,30 +14,6 @@
+ set(CMAKE_C_EXTENSIONS OFF)
+ set(CMAKE_C_STANDARD_REQUIRED ON)
+ 
+-if(FBGEMM_BUILD_TESTS AND NOT TARGET gtest)
+-  #Download Googletest framework from github if
+-  #GOOGLETEST_SOURCE_DIR is not specified.
+-  if(NOT DEFINED GOOGLETEST_SOURCE_DIR)
+-    set(GOOGLETEST_SOURCE_DIR "${FBGEMM_SOURCE_DIR}/external/googletest"
+-      CACHE STRING "googletest source directory from submodules")
+-  endif()
+-
+-  #build Googletest framework
+-  #MSVC needs gtest_for_shared_crt to select right runtime lib
+-  if (MSVC AND FBGEMM_LIBRARY_TYPE STREQUAL "shared")
+-    message(WARNING "gtest_force_shared_crt is ON")
+-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-  else()
+-    message(WARNING "gtest_force_shared_crt is OFF")
+-  endif()
+-  add_subdirectory("${GOOGLETEST_SOURCE_DIR}" "${FBGEMM_BINARY_DIR}/googletest")
+-  # add flags required for mac build
+-  if(NOT MSVC)
+-    target_compile_options(gtest PRIVATE "-Wno-deprecated-copy")
+-    target_compile_options(gmock PRIVATE "-Wno-deprecated-copy")
+-  endif()
+-endif()
+-
+ if (USE_SANITIZER)
+   message(WARNING "USING SANITIZER IN TEST")
+ endif()
+@@ -78,7 +54,6 @@
+     target_link_libraries(${TESTNAME} ${OpenMP_CXX_LIBRARIES})
+   endif()
+ 
+-  add_dependencies(${TESTNAME} gtest fbgemm)
+   add_test(${TESTNAME} ${TESTNAME})
+   set_target_properties(${TESTNAME} PROPERTIES FOLDER test)
+ endmacro()

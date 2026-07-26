@@ -1,0 +1,503 @@
+From b26666fb3cc4d93181d7139b88c669e91cb00366 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 9 Jul 2024 14:15:12 +0100
+Subject: [PATCH 1/8] chore: remove unneeded compiler flags
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 441a6db8..87c22482 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,7 +54,7 @@ add_definitions(-D_POSIX_C_SOURCE=200809L)
+ # For binaries intended to run on your system only you should choose -march=native, 
+ # which will select what is available on your processor.
+ if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
+-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -mfpmath=sse -Wall -Wno-unknown-pragmas -Wno-format-truncation -s -D_POSIX_C_SOURCE=200809L -std=gnu11")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpmath=sse -D_POSIX_C_SOURCE=200809L -std=gnu11")
+ else()
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -mfpmath=sse -Wall -Wno-unknown-pragmas -D_POSIX_C_SOURCE=200809L -std=c11")
+ endif()
+-- 
+GitLab
+
+
+From 5ad23c9326aabe98733d71fe7790ea9d025f3253 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 9 Jul 2024 14:28:52 +0100
+Subject: [PATCH 2/8] feat: generate both shared and static libs
+
+---
+ v1/libtpcmisc/CMakeLists.txt | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/v1/libtpcmisc/CMakeLists.txt b/v1/libtpcmisc/CMakeLists.txt
+index c70577f4..51a7a7f9 100644
+--- a/v1/libtpcmisc/CMakeLists.txt
++++ b/v1/libtpcmisc/CMakeLists.txt
+@@ -2,19 +2,38 @@
+ set(libtpcmisc_HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)
+ 
+ # This needs to be edited each time a new .c is added
+-add_library (tpcmisc STATIC 
++set(libtpcmisc_src
+   backup.c branch.c datetime.c decpoint.c doubleutil.c 
+   filename.c halflife.c idcrypt.c ift.c iftfile.c 
+   iftsrch.c intex.c petc99.c petunits.c proginfo.c 
+   quots.c readfile.c rname.c strext.c studynr.c swap.c
+ )
+ 
++# object library, compiles source once
++add_library (tpcmisc OBJECT ${libtpcmisc_src})
++
++set_property(TARGET tpcmisc PROPERTY POSITION_INDEPENDENT_CODE 1)
++
++add_library (tpcmisc_shared SHARED $<TARGET_OBJECTS:tpcmisc>)
++add_library (tpcmisc_static STATIC $<TARGET_OBJECTS:tpcmisc>)
++
++set_target_properties(tpcmisc_shared PROPERTIES
++    VERSION 0.0.0
++    SOVERSION 0
++)
++
+ # Dependencies on other libraries
+ # none so far, and keep it that way
+ 
+ # Install the library and headers
+ install (
+-  TARGETS tpcmisc
++  TARGETS tpcmisc_shared
++  ARCHIVE 
++  DESTINATION ${LIBPATH}
++  COMPONENT libraries
++)
++install (
++  TARGETS tpcmisc_static
+   ARCHIVE 
+   DESTINATION ${LIBPATH}
+   COMPONENT libraries
+-- 
+GitLab
+
+
+From fb3959ee6f49425fb537d45087284afa87e3c5b4 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 9 Jul 2024 14:29:07 +0100
+Subject: [PATCH 3/8] chore: only build/install tpcmisc
+
+---
+ CMakeLists.txt | 154 ++++++++++++++++++++++++-------------------------
+ 1 file changed, 77 insertions(+), 77 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 87c22482..7e7e2f26 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -213,89 +213,89 @@ enable_testing()
+ 
+ # recurse into the library version 1 subdirectories
+ add_subdirectory (v1/libtpcmisc)
+-add_subdirectory (v1/libtpcsvg)
+-add_subdirectory (v1/libtpcmodel)
+-add_subdirectory (v1/libtpccurveio)
+-add_subdirectory (v1/libtpcimgio)
+-add_subdirectory (v1/libtpcimgp)
+-add_subdirectory (v1/libtpcmodext)
+-add_subdirectory (v1/libtpcrec)
+-add_subdirectory (v1/libtpcroi)
+-add_subdirectory (v1/libtpcidi)
+-
++#add_subdirectory (v1/libtpcsvg)
++#add_subdirectory (v1/libtpcmodel)
++#add_subdirectory (v1/libtpccurveio)
++#add_subdirectory (v1/libtpcimgio)
++#add_subdirectory (v1/libtpcimgp)
++#add_subdirectory (v1/libtpcmodext)
++#add_subdirectory (v1/libtpcrec)
++#add_subdirectory (v1/libtpcroi)
++#add_subdirectory (v1/libtpcidi)
++#
+ # recurse into the executable subdirectories
+-add_subdirectory (v1/analyze)
+-add_subdirectory (v1/cmfits)
+-add_subdirectory (v1/ecat)
+-add_subdirectory (v1/hrrt)
+-add_subdirectory (v1/imgcmfits)
+-add_subdirectory (v1/imginform)
+-add_subdirectory (v1/imgtools)
+-add_subdirectory (v1/input)
+-add_subdirectory (v1/mask)
+-add_subdirectory (v1/mtga)
+-add_subdirectory (v1/nifti)
+-add_subdirectory (v1/restools)
+-add_subdirectory (v1/simulations)
+-add_subdirectory (v1/suv)
+-add_subdirectory (v1/tactools)
+-add_subdirectory (v1/tacfits)
+-add_subdirectory (v1/tools)
+-add_subdirectory (v1/upet)
+-
++#add_subdirectory (v1/analyze)
++#add_subdirectory (v1/cmfits)
++#add_subdirectory (v1/ecat)
++#add_subdirectory (v1/hrrt)
++#add_subdirectory (v1/imgcmfits)
++#add_subdirectory (v1/imginform)
++#add_subdirectory (v1/imgtools)
++#add_subdirectory (v1/input)
++#add_subdirectory (v1/mask)
++#add_subdirectory (v1/mtga)
++#add_subdirectory (v1/nifti)
++#add_subdirectory (v1/restools)
++#add_subdirectory (v1/simulations)
++#add_subdirectory (v1/suv)
++#add_subdirectory (v1/tactools)
++#add_subdirectory (v1/tacfits)
++#add_subdirectory (v1/tools)
++#add_subdirectory (v1/upet)
++#
+ #add_subdirectory (v1/devel)
+ 
+ 
+ # recurse into the library version 2 subdirectories
+-add_subdirectory (v2/libtpcextensions)
+-add_subdirectory (v2/libtpcisotope)
+-add_subdirectory (v2/libtpcift)
+-add_subdirectory (v2/libtpccsv)
+-add_subdirectory (v2/libtpctac)
+-add_subdirectory (v2/libtpcabss)
+-add_subdirectory (v2/libtpcmodels)
+-add_subdirectory (v2/libtpcfileutil)
+-add_subdirectory (v2/libtpcfcmc)
+-add_subdirectory (v2/libtpcfunc)
+-add_subdirectory (v2/libtpcpar)
+-add_subdirectory (v2/libtpcli)
+-add_subdirectory (v2/libtpcstatist)
+-add_subdirectory (v2/libtpcrand)
+-add_subdirectory (v2/libtpclinopt)
+-add_subdirectory (v2/libtpcnlopt)
+-add_subdirectory (v2/libtpcbootstrap)
+-add_subdirectory (v2/libtpctacmod)
+-add_subdirectory (v2/libtpccm)
+-add_subdirectory (v2/libtpcbfm)
+-add_subdirectory (v2/libtpcdcm)
+-add_subdirectory (v2/libtpcecat)
+-add_subdirectory (v2/libtpcnifti)
+-add_subdirectory (v2/libtpcmicropet)
+-add_subdirectory (v2/libtpcimage)
+-
++#add_subdirectory (v2/libtpcextensions)
++#add_subdirectory (v2/libtpcisotope)
++#add_subdirectory (v2/libtpcift)
++#add_subdirectory (v2/libtpccsv)
++#add_subdirectory (v2/libtpctac)
++#add_subdirectory (v2/libtpcabss)
++#add_subdirectory (v2/libtpcmodels)
++#add_subdirectory (v2/libtpcfileutil)
++#add_subdirectory (v2/libtpcfcmc)
++#add_subdirectory (v2/libtpcfunc)
++#add_subdirectory (v2/libtpcpar)
++#add_subdirectory (v2/libtpcli)
++#add_subdirectory (v2/libtpcstatist)
++#add_subdirectory (v2/libtpcrand)
++#add_subdirectory (v2/libtpclinopt)
++#add_subdirectory (v2/libtpcnlopt)
++#add_subdirectory (v2/libtpcbootstrap)
++#add_subdirectory (v2/libtpctacmod)
++#add_subdirectory (v2/libtpccm)
++#add_subdirectory (v2/libtpcbfm)
++#add_subdirectory (v2/libtpcdcm)
++#add_subdirectory (v2/libtpcecat)
++#add_subdirectory (v2/libtpcnifti)
++#add_subdirectory (v2/libtpcmicropet)
++#add_subdirectory (v2/libtpcimage)
++#
+ # recurse into the executable subdirectories
+-add_subdirectory (v2/abss)
+-add_subdirectory (v2/arg)
+-add_subdirectory (v2/bfm)
+-add_subdirectory (v2/csvutils)
+-add_subdirectory (v2/dcmutils)
+-add_subdirectory (v2/halflife)
+-add_subdirectory (v2/iftutils)
+-add_subdirectory (v2/imgutils)
+-add_subdirectory (v2/input)
+-add_subdirectory (v2/llsq)
+-add_subdirectory (v2/misc)
+-add_subdirectory (v2/mtga)
+-add_subdirectory (v2/parutils)
+-add_subdirectory (v2/pk)
+-add_subdirectory (v2/sifutils)
+-add_subdirectory (v2/simimg)
+-add_subdirectory (v2/simulation)
+-add_subdirectory (v2/suv)
+-add_subdirectory (v2/taccm)
+-add_subdirectory (v2/tacfits)
+-add_subdirectory (v2/tacutils)
+-
++#add_subdirectory (v2/abss)
++#add_subdirectory (v2/arg)
++#add_subdirectory (v2/bfm)
++#add_subdirectory (v2/csvutils)
++#add_subdirectory (v2/dcmutils)
++#add_subdirectory (v2/halflife)
++#add_subdirectory (v2/iftutils)
++#add_subdirectory (v2/imgutils)
++#add_subdirectory (v2/input)
++#add_subdirectory (v2/llsq)
++#add_subdirectory (v2/misc)
++#add_subdirectory (v2/mtga)
++#add_subdirectory (v2/parutils)
++#add_subdirectory (v2/pk)
++#add_subdirectory (v2/sifutils)
++#add_subdirectory (v2/simimg)
++#add_subdirectory (v2/simulation)
++#add_subdirectory (v2/suv)
++#add_subdirectory (v2/taccm)
++#add_subdirectory (v2/tacfits)
++#add_subdirectory (v2/tacutils)
++#
+ #add_subdirectory (v1/devel)
+ 
+ 
+-- 
+GitLab
+
+
+From 8e980c5b65f7fc78f0bc981e749891d234048ff3 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 9 Jul 2024 14:48:16 +0100
+Subject: [PATCH 4/8] chore: install in correct locations
+
+also install binary and header
+---
+ v1/libtpcmisc/CMakeLists.txt | 33 ++++++++++++---------------------
+ 1 file changed, 12 insertions(+), 21 deletions(-)
+
+diff --git a/v1/libtpcmisc/CMakeLists.txt b/v1/libtpcmisc/CMakeLists.txt
+index 51a7a7f9..383a71ef 100644
+--- a/v1/libtpcmisc/CMakeLists.txt
++++ b/v1/libtpcmisc/CMakeLists.txt
+@@ -22,40 +22,31 @@ set_target_properties(tpcmisc_shared PROPERTIES
+     SOVERSION 0
+ )
+ 
++set_target_properties(tpcmisc_shared PROPERTIES
++    PUBLIC_HEADER libtpcmisc.h)
++
+ # Dependencies on other libraries
+ # none so far, and keep it that way
+ 
+ # Install the library and headers
+-install (
+-  TARGETS tpcmisc_shared
+-  ARCHIVE 
+-  DESTINATION ${LIBPATH}
+-  COMPONENT libraries
++install (TARGETS tpcmisc_shared
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )
+-install (
+-  TARGETS tpcmisc_static
+-  ARCHIVE 
+-  DESTINATION ${LIBPATH}
+-  COMPONENT libraries
++install (TARGETS tpcmisc_static
++  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ )
+ 
+-install (
+-  FILES libtpcmisc.h 
+-  DESTINATION ${LIBPATH}/include
+-  COMPONENT headers
+-)
+ 
+ # Compile executable for testing
+ add_executable (libtpcmisc test_libtpcmisc.c) 
+ # Link the executable to the libraries. 
+ target_link_libraries (libtpcmisc tpcmisc m)
++
+ # Install the executable
+-#install (
+-#  PROGRAMS 
+-#  ${CMAKE_CURRENT_BINARY_DIR}/libtpcmisc${CMAKE_EXECUTABLE_SUFFIX}
+-#  DESTINATION bin
+-#  COMPONENT librarytests
+-#)
++install (TARGETS libtpcmisc
++    DESTINATION ${CMAKE_INSTALL_BINDIR}
++)
+ 
+ # Copy test data folder
+ file(COPY test DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+-- 
+GitLab
+
+
+From 77389ee78fff1eebb274093625c8582712b60ab9 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 9 Jul 2024 14:48:46 +0100
+Subject: [PATCH 5/8] chore: remove doc installation with libs
+
+include gnu standard directories
+---
+ CMakeLists.txt | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7e7e2f26..ab035b1d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,6 +11,7 @@ message(STATUS "${PROJECT_NAME} ${tpcclib_COPYRIGHT}")
+ set(CMAKE_C_STANDARD 11)
+ 
+ # Includes, except CPack which must always be after settings
++include(GNUInstallDirs)
+ include(CheckCCompilerFlag)
+ include(InstallRequiredSystemLibraries)
+ include(CheckIncludeFiles)
+@@ -300,16 +301,16 @@ add_subdirectory (v1/libtpcmisc)
+ 
+ 
+ # "install" README and COPYING files to be included in the binary package
+-install(
+-  FILES 
+-  ${CMAKE_CURRENT_SOURCE_DIR}/readme.md 
+-  ${CMAKE_CURRENT_SOURCE_DIR}/copying.md
+-  ${CMAKE_CURRENT_SOURCE_DIR}/license.md
+-  ${CMAKE_CURRENT_SOURCE_DIR}/changelog.md
+-  DESTINATION ${LIBPATH}
+-  # go wherever libraries go
+-  COMPONENT libraries 
+-)
++#install(
++#  FILES
++#  ${CMAKE_CURRENT_SOURCE_DIR}/readme.md
++#  ${CMAKE_CURRENT_SOURCE_DIR}/copying.md
++#  ${CMAKE_CURRENT_SOURCE_DIR}/license.md
++#  ${CMAKE_CURRENT_SOURCE_DIR}/changelog.md
++#  DESTINATION ${LIBPATH}
++#  # go wherever libraries go
++#  COMPONENT libraries
++#)
+ 
+ 
+ # Add binary path to the CTest environment
+-- 
+GitLab
+
+
+From b2e9efb00f909577b6fb3d98775bd7e4842afa82 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 9 Jul 2024 14:54:45 +0100
+Subject: [PATCH 6/8] chore: stop overriding the install prefix
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ab035b1d..385731ff 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,7 +35,7 @@ endif()
+ # We do not (yet) want to automatically install to systems default binary path
+ # but instead into current working path.
+ # This MAY only work if set before or after project() !
+-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE PATH "Default install path" FORCE)
++#set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE PATH "Default install path" FORCE)
+ 
+ # Check that we are running on 64 bit system.
+ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+-- 
+GitLab
+
+
+From cce11c4ae111005ebc223ab9854f5931509184b3 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Tue, 9 Jul 2024 15:09:21 +0100
+Subject: [PATCH 7/8] fix: correct generation of both static/shared libs
+
+---
+ v1/libtpcmisc/CMakeLists.txt | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/v1/libtpcmisc/CMakeLists.txt b/v1/libtpcmisc/CMakeLists.txt
+index 383a71ef..344901de 100644
+--- a/v1/libtpcmisc/CMakeLists.txt
++++ b/v1/libtpcmisc/CMakeLists.txt
+@@ -10,31 +10,32 @@ set(libtpcmisc_src
+ )
+ 
+ # object library, compiles source once
+-add_library (tpcmisc OBJECT ${libtpcmisc_src})
++add_library (tpcmisc_obj OBJECT ${libtpcmisc_src})
++add_library (tpcmisc SHARED $<TARGET_OBJECTS:tpcmisc_obj>)
++add_library (tpcmisc_static STATIC $<TARGET_OBJECTS:tpcmisc_obj>)
+ 
+-set_property(TARGET tpcmisc PROPERTY POSITION_INDEPENDENT_CODE 1)
+-
+-add_library (tpcmisc_shared SHARED $<TARGET_OBJECTS:tpcmisc>)
+-add_library (tpcmisc_static STATIC $<TARGET_OBJECTS:tpcmisc>)
+-
+-set_target_properties(tpcmisc_shared PROPERTIES
++set_target_properties(tpcmisc PROPERTIES
+     VERSION 0.0.0
+     SOVERSION 0
++    PUBLIC_HEADER libtpcmisc.h
+ )
+ 
+-set_target_properties(tpcmisc_shared PROPERTIES
+-    PUBLIC_HEADER libtpcmisc.h)
++set_target_properties(tpcmisc_static PROPERTIES
++    OUTPUT_NAME tpcmisc
++)
+ 
+ # Dependencies on other libraries
+ # none so far, and keep it that way
+ 
+ # Install the library and headers
+-install (TARGETS tpcmisc_shared
++install (TARGETS tpcmisc
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )
++
+ install (TARGETS tpcmisc_static
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )
+ 
+ 
+-- 
+GitLab
+
+
+From 6e5c46ce2fe9112bb6512c5606349964741bd228 Mon Sep 17 00:00:00 2001
+From: "Ankur Sinha (Ankur Sinha Gmail)" <sanjay.ankur@gmail.com>
+Date: Sun, 11 Aug 2024 22:52:48 +0100
+Subject: [PATCH 8/8] chore: remove `mfpmath` flag
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 385731ff..06747879 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -55,7 +55,7 @@ add_definitions(-D_POSIX_C_SOURCE=200809L)
+ # For binaries intended to run on your system only you should choose -march=native, 
+ # which will select what is available on your processor.
+ if("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU" )
+-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpmath=sse -D_POSIX_C_SOURCE=200809L -std=gnu11")
++  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_POSIX_C_SOURCE=200809L -std=gnu11")
+ else()
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -mfpmath=sse -Wall -Wno-unknown-pragmas -D_POSIX_C_SOURCE=200809L -std=c11")
+ endif()
+-- 
+GitLab
+

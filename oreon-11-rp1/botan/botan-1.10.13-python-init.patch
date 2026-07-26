@@ -1,0 +1,9 @@
+diff -up Botan-1.10.13/src/wrap/python/__init__.py.orig Botan-1.10.13/src/wrap/python/__init__.py
+--- Botan-1.10.13/src/wrap/python/__init__.py.orig	2016-04-28 15:27:08.000000000 +0200
++++ Botan-1.10.13/src/wrap/python/__init__.py	2016-06-30 18:02:11.724997966 +0200
+@@ -1,4 +1,4 @@
+-from _botan import *
++from botan._botan import *
+ 
+ # Initialize the library when the module is imported
+ init = LibraryInitializer()

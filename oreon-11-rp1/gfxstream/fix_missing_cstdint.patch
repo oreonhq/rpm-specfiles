@@ -1,0 +1,60 @@
+diff --git a/host/BorrowedImage.h b/host/BorrowedImage.h
+index ed2890568..51ea2b6b1 100644
+--- a/host/BorrowedImage.h
++++ b/host/BorrowedImage.h
+@@ -12,6 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
++#include <cstdint>
+ #pragma once
+ 
+ namespace gfxstream {
+diff --git a/host/compressedTextureFormats/AstcCpuDecompressor.h b/host/compressedTextureFormats/AstcCpuDecompressor.h
+index 4823ee255..3af0bdc64 100644
+--- a/host/compressedTextureFormats/AstcCpuDecompressor.h
++++ b/host/compressedTextureFormats/AstcCpuDecompressor.h
+@@ -15,6 +15,7 @@
+ 
+ #include <memory>
+ #include <string>
++#include <cstdint>
+ 
+ namespace gfxstream {
+ namespace vk {
+diff --git a/host/compressedTextureFormats/AstcCpuDecompressorNoOp.cpp b/host/compressedTextureFormats/AstcCpuDecompressorNoOp.cpp
+index f0e4f32be..2258c793d 100644
+--- a/host/compressedTextureFormats/AstcCpuDecompressorNoOp.cpp
++++ b/host/compressedTextureFormats/AstcCpuDecompressorNoOp.cpp
+@@ -13,6 +13,7 @@
+ // limitations under the License.
+ 
+ #include "AstcCpuDecompressor.h"
++#include <cstdint>
+ 
+ namespace gfxstream {
+ namespace vk {
+diff --git a/host/vulkan/BufferVk.cpp b/host/vulkan/BufferVk.cpp
+index 46f454049..9b12de07e 100644
+--- a/host/vulkan/BufferVk.cpp
++++ b/host/vulkan/BufferVk.cpp
+@@ -14,6 +14,7 @@
+ 
+ #include "BufferVk.h"
+ 
++#include <cstdint>
+ #include "VkCommonOperations.h"
+ 
+ namespace gfxstream {
+diff --git a/host/vulkan/BufferVk.h b/host/vulkan/BufferVk.h
+index 9016fd745..a8a3fe3eb 100644
+--- a/host/vulkan/BufferVk.h
++++ b/host/vulkan/BufferVk.h
+@@ -14,6 +14,7 @@
+ 
+ #include <memory>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace gfxstream {
+ namespace vk {

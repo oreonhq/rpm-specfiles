@@ -1,0 +1,48 @@
+From 544410c905ce0ed2d40b33a50dcbb0796d6c91cd Mon Sep 17 00:00:00 2001
+From: Michael Pyne <mpyne@kde.org>
+Date: Sat, 5 Sep 2015 20:19:12 -0400
+Subject: [PATCH 20/31] kio_pop3: Fix "missing mimetype" warnings.
+
+The POP3 kioslave doesn't emit a mimetype before outputting date for the
+LIST and UIDL POP3 commands, which leads to warnings from KIO about
+missing mimetypes. Fixed by using a "text/plain" mimetype.
+
+Likewise the RETR command fails to output a mimetype in the case where
+the caller didn't provide a msg id to download (this should be an error
+anyways, but currently we emit an empty message instead). This is fixed
+by treating as an error, and a separate patch eliminates the
+missing-msg-id cases I was seeing from Akonadi.
+
+REVIEW:124987
+---
+ kioslave/pop3/pop3.cpp | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/kioslave/pop3/pop3.cpp b/kioslave/pop3/pop3.cpp
+index 2073095..8238a5f 100644
+--- a/kioslave/pop3/pop3.cpp
++++ b/kioslave/pop3/pop3.cpp
+@@ -812,6 +812,7 @@ void POP3Protocol::get(const KUrl & url)
+        .
+      */
+     if (result) {
++      mimeType("text/plain");
+       while (true /* !AtEOF() */ ) {
+         memset(buf, 0, sizeof(buf));
+         myReadLine(buf, sizeof(buf) - 1);
+@@ -848,6 +849,12 @@ void POP3Protocol::get(const KUrl & url)
+     m_cmd = CMD_NONE;
+   } else if (cmd == "download" || cmd == "headers") {
+     const QStringList waitingCommands = path.split(',', QString::SkipEmptyParts);
++    if ( waitingCommands.isEmpty() ) {
++      kDebug(7105) << "tried to request" << cmd << "for" << path << "with no specific item to get";
++      closeConnection();
++      error(ERR_INTERNAL, m_sServer);
++      return;
++    }
+     bool noProgress = (metaData("progress") == "off"
+                        || waitingCommands.count() > 1);
+     int p_size = 0;
+-- 
+2.5.0
+

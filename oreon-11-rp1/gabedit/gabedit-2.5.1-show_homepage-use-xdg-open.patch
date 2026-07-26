@@ -1,0 +1,19 @@
+commit 6d7d0b636b661dac5a1e74d9ed4ef4fe3d35f801
+Author: gabedit maint <gabedit-maintainer@fedoraproject.org>
+Date:   Sat Jan 18 00:15:27 2025 +0900
+
+    save
+
+diff --git a/src/Utils/UtilsInterface.c b/src/Utils/UtilsInterface.c
+index bd8c032..ab267f2 100644
+--- a/src/Utils/UtilsInterface.c
++++ b/src/Utils/UtilsInterface.c
+@@ -2051,7 +2051,7 @@ void show_homepage(GtkAboutDialog *w, const gchar *link, gpointer data)
+ 	gchar* Command = "Iexplore.exe http://gabedit.sourceforge.net/";
+ 	system(Command);
+ #else
+-	gchar* Command = "mozilla  http://gabedit.sourceforge.net/ &";
++	gchar* Command = "xdg-open  http://gabedit.sourceforge.net/ &";
+ 	if (system(Command)<0)
+ 	{
+ 		gchar* Command = "galeon http://gabedit.sourceforge.net/ &";

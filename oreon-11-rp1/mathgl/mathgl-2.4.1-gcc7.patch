@@ -1,0 +1,23 @@
+diff -urp mathgl-2.4.1/examples/wx_example.cpp mathgl-2.4.1-gcc7/examples/wx_example.cpp
+--- mathgl-2.4.1/examples/wx_example.cpp	2017-12-05 12:02:01.771791180 +0700
++++ mathgl-2.4.1-gcc7/examples/wx_example.cpp	2017-12-05 15:41:42.622938431 +0700
+@@ -53,7 +53,7 @@ IMPLEMENT_APP(testApp)
+ //-----------------------------------------------------------------------------
+ bool testApp::OnInit()
+ {
+-	testFrame* frame = new testFrame(0L, _("MathGL + wxWidgets sample"));
++	testFrame* frame = new testFrame(0L,  wxString(_("MathGL + wxWidgets sample")));
+ 	frame->Show();
+ 	return true;
+ }
+@@ -68,8 +68,8 @@ testFrame::testFrame(wxFrame *frame, con
+ 	// create a menu bar
+ 	wxMenuBar* mbar = new wxMenuBar();
+ 	wxMenu* fileMenu = new wxMenu(_T(""));
+-	fileMenu->Append(idMenuQuit, _("&Quit\tAlt-F4"), _("Quit the application"));
+-	mbar->Append(fileMenu, _("&File"));
++	fileMenu->Append(idMenuQuit,  wxString(_("&Quit\tAlt-F4")),  wxString(_("Quit the application")));
++	mbar->Append(fileMenu,  wxString(_("&File")));
+ 	SetMenuBar(mbar);
+ 	SetSize(800,620);
+ 

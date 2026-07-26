@@ -1,0 +1,30 @@
+diff -Naur fetchlog-1.4-orig/fetchlog.c fetchlog-1.4/fetchlog.c
+--- fetchlog-1.4-orig/fetchlog.c	2018-07-11 14:00:03.328216490 -0400
++++ fetchlog-1.4/fetchlog.c	2018-07-11 14:08:31.814172473 -0400
+@@ -155,7 +155,7 @@
+ 	msg[fetchlen_G-2] = '~';
+ 	len = fetchlen_G + 1;
+     }
+-    fprintf(stdout, msg);
++    fputs(msg, stdout);
+     free( msg );
+ }
+ 
+@@ -295,7 +295,7 @@
+     /* something changed meanwhile ? */
+     if( obm.mtime==nbm.mtime && obm.inode==nbm.inode && obm.last==nbm.last ) {
+ 	if( conv_G & CONV_OKMSG ) 
+-	    fprintf(stdout, OK_MESSAGE "\n");
++	    fputs(OK_MESSAGE "\n", stdout);
+ 	close( fd );
+ 	return RET_OK;
+     }
+@@ -484,7 +484,7 @@
+ 	      ((conv_G & CONV_NAGIOS3)!= 0 && fetchlen_G-opos==4 )    )  ) ) {
+ 
+ 	if( conv_G & CONV_OKMSG ) {
+-	    fprintf(stdout,OK_MESSAGE);
++	    fputs(OK_MESSAGE, stdout);
+ 	}
+ 	i = RET_OK;
+     }else{

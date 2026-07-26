@@ -1,0 +1,20 @@
+diff -up lacewing-1.10/menu.c~ lacewing-1.10/menu.c
+--- lacewing-1.10/menu.c~	2014-06-14 10:52:54.000000000 +0200
++++ lacewing-1.10/menu.c	2014-06-14 10:55:53.800976774 +0200
+@@ -154,7 +154,7 @@ char *ship_description1(int ship);
+ char *ship_description2(int ship);
+ char *upgrade_name_long(int i);
+ 
+-extern RLE_SPRITE *large_ships [12] [5];
++extern RLE_SPRITE *large_ships [16] [5];
+ 
+ struct score_list
+ {
+@@ -1718,7 +1718,6 @@ void display_ship_choice2(int ship, int
+      }
+     }
+     rectfill(menu_bmp, bx, by, bx + 49, by + 49, col);
+-//    if (i + j * 3 < 11)
+     draw_rle_sprite(menu_bmp, large_ships [i + j * 4] [sprite_drawn], bx, by);
+   }
+  }

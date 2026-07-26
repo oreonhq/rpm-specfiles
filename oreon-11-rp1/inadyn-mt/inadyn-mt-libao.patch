@@ -1,0 +1,74 @@
+--- a/src/waveout.c	2016-05-06 18:22:48.000000000 -0500
++++ b/src/waveout.c	2016-08-05 10:28:06.931486567 -0500
+@@ -62,6 +62,8 @@
+ 
+ #include <dlfcn.h>
+ 
++#define LIBAO_SONAME "libao.so.4"
++
+ static int	is_no_aolib=0;
+ 
+ #endif
+@@ -443,7 +445,7 @@
+ 
+ 	if (!(is_init)) {
+ 
+-		((FUNC_1) (get_func_addr(&aolib_handle,"libao.so","ao_initialize",ao_initialize_ptr)))();
++		((FUNC_1) (get_func_addr(&aolib_handle,LIBAO_SONAME,"ao_initialize",ao_initialize_ptr)))();
+ 
+ #ifndef NO_DYN_LOAD
+ 
+@@ -474,7 +476,7 @@
+ 
+ 	else
+ 
+-		((FUNC_1) (get_func_addr(&aolib_handle,"libao.so","ao_shutdown",ao_shutdown_ptr)))();
++		((FUNC_1) (get_func_addr(&aolib_handle,LIBAO_SONAME,"ao_shutdown",ao_shutdown_ptr)))();
+ 
+ 
+ 	return 0;
+@@ -527,7 +529,7 @@
+ 
+ 	/* -- Setup for default driver -- */
+ 
+-	if ((driver=((FUNC_2) (get_func_addr(&aolib_handle,"libao.so","ao_default_driver_id",ao_default_driver_id_ptr)))())==-1) {
++	if ((driver=((FUNC_2) (get_func_addr(&aolib_handle,LIBAO_SONAME,"ao_default_driver_id",ao_default_driver_id_ptr)))())==-1) {
+ 
+ 		DBG_PRINTF((LOG_CRIT, "C:" MODULE_TAG "ao_default_driver_id() returned NO DRIVER (%s) in play_wave_open_os...\n",libao_err_name(errno)));
+ 	}
+@@ -535,7 +537,7 @@
+ 
+ 		ao_info	*driver_info=NULL;
+ 
+-		if (!(driver_info=((FUNC_8) (get_func_addr(&aolib_handle,"libao.so","ao_driver_info",ao_driver_info_ptr)))(driver)))
++		if (!(driver_info=((FUNC_8) (get_func_addr(&aolib_handle,LIBAO_SONAME,"ao_driver_info",ao_driver_info_ptr)))(driver)))
+ 
+ 			DBG_PRINTF((LOG_CRIT, "C:" MODULE_TAG "ao_driver_info returned NULL (%s) in play_wave_open_os...\n",libao_err_name(errno)));
+ 		else
+@@ -553,7 +555,7 @@
+ 		else
+ 			format.matrix="L,R";
+ 
+-		device=((FUNC_3) (get_func_addr(&aolib_handle,"libao.so","ao_open_live",ao_open_live_ptr)))(driver,(ao_sample_format *) &format,NULL);
++		device=((FUNC_3) (get_func_addr(&aolib_handle,LIBAO_SONAME,"ao_open_live",ao_open_live_ptr)))(driver,(ao_sample_format *) &format,NULL);
+ 
+ 		if (device==NULL) {
+ 
+@@ -576,7 +578,7 @@
+ 			}
+ 			else {
+ 
+-				if (!(((FUNC_4) (get_func_addr(&aolib_handle,"libao.so","ao_play",ao_play_ptr)))(device,p_wave_play->wave_buff[p_wave_play->cur_buffer],bytes_read))) {
++				if (!(((FUNC_4) (get_func_addr(&aolib_handle,LIBAO_SONAME,"ao_play",ao_play_ptr)))(device,p_wave_play->wave_buff[p_wave_play->cur_buffer],bytes_read))) {
+ 
+ 					DBG_PRINTF((LOG_CRIT, "C:" MODULE_TAG "ao_play failed (%s) in play_wave_open_os...\n",libao_err_name(errno)));
+ 				}
+@@ -595,7 +597,7 @@
+ 
+ 		wait_done_playing(p_wave_play);
+ 
+-		if (!(((FUNC_5) (get_func_addr(&aolib_handle,"libao.so","ao_close",ao_close_ptr)))(device))) {
++		if (!(((FUNC_5) (get_func_addr(&aolib_handle,LIBAO_SONAME,"ao_close",ao_close_ptr)))(device))) {
+ 
+ 			DBG_PRINTF((LOG_CRIT, "C:" MODULE_TAG "ao_close failed (%s) in play_wave_open_os...\n",libao_err_name(errno)));
+ 		}

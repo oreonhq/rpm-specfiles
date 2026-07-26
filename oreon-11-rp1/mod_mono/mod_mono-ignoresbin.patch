@@ -1,0 +1,28 @@
+diff --git a/configure.in.orig b/configure.in
+index 0e48cde..2683f00 100644
+--- a/configure.in.orig
++++ b/configure.in
+@@ -145,7 +145,6 @@ if test -z "$APXS"; then
+   		/usr/local/apache2/bin	\
+   		/usr/local/apache/sbin	\
+ 		/usr/local/apache/bin	\
+-		/usr/sbin		\
+ 		/usr/bin
+   do
+ 	AC_MSG_CHECKING(for apxs2 in $mydir)
+@@ -191,7 +190,6 @@ if test -z "$APRCONFIG"; then
+   		/usr/local/apache2/bin	\
+   		/usr/local/apache/sbin	\
+ 		/usr/local/apache/bin	\
+-		/usr/sbin		\
+ 		/usr/bin
+   do
+ 	AC_MSG_CHECKING(for apr-1-config in $mydir)
+@@ -256,7 +254,6 @@ if test -z "$APUCONFIG"; then
+   		/usr/local/apache2/bin	\
+   		/usr/local/apache/sbin	\
+ 		/usr/local/apache/bin	\
+-		/usr/sbin		\
+ 		/usr/bin
+   do
+ 	AC_MSG_CHECKING(for apu-1-config in $mydir)

@@ -1,0 +1,29 @@
+am-utils-6.2 - fix mountd version used when mount is nfs v4
+
+From: Ian Kent <raven@themaw.net>
+
+If we are trying to mount the exports of a type host map entry and the
+mounts are NFS v4 make sure mountd version 3 is used in the same way it
+is used for NFS v3 mounts.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/amfs_host.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/amd/amfs_host.c b/amd/amfs_host.c
+index a3468ecd..a363c5cc 100644
+--- a/amd/amfs_host.c
++++ b/amd/amfs_host.c
+@@ -346,8 +346,9 @@ amfs_host_mount(am_node *am, mntfs *mf)
+   host = mf->mf_server->fs_host;
+   sin = *mf->mf_server->fs_ip;
+   plog(XLOG_INFO, "amfs_host_mount: NFS version %d", (int) mf->mf_server->fs_version);
+-#ifdef HAVE_FS_NFS3
+-  if (mf->mf_server->fs_version == NFS_VERSION3)
++#if defined(HAVE_FS_NFS3) || defined(HAVE_FS_NFS4)
++  if (mf->mf_server->fs_version == NFS_VERSION3 ||
++      mf->mf_server->fs_version == NFS_VERSION4)
+     mnt_version = AM_MOUNTVERS3;
+   else
+ #endif /* HAVE_FS_NFS3 */

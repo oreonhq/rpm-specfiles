@@ -1,0 +1,85 @@
+From 0778a64d9535dc1b04495cf6b8b206ee68509004 Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Fri, 9 Jun 2023 16:02:24 -0400
+Subject: [PATCH] libdxfrw: parseDWG specified override
+
+---
+ libraries/libdxfrw/src/drw_objects.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/libraries/libdxfrw/src/drw_objects.h b/libraries/libdxfrw/src/drw_objects.h
+index 8960d4537d..1e04abf01a 100644
+--- a/src/drw_objects.h
++++ b/src/drw_objects.h
+@@ -158,7 +158,7 @@ class DRW_Dimstyle : public DRW_TableEntry {
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+     //V12
+@@ -256,7 +256,7 @@ class DRW_LType : public DRW_TableEntry {
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+     void update();
+ 
+ public:
+@@ -293,7 +293,7 @@ class DRW_Layer : public DRW_TableEntry {
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+     UTF8STRING lineType;            /*!< line type, code 6 */
+@@ -362,7 +362,7 @@ class DRW_Textstyle : public DRW_TableEntry {
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+     double height;          /*!< Fixed text height (0 not set), code 40 */
+@@ -407,7 +407,7 @@ class DRW_Vport : public DRW_TableEntry {
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+     DRW_Coord lowerLeft;     /*!< Lower left corner, code 10 & 20 */
+@@ -463,7 +463,7 @@ class DRW_ImageDef : public DRW_TableEntry {//
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+ //    std::string handle;       /*!< entity identifier, code 5 */
+@@ -502,7 +502,7 @@ class DRW_PlotSettings : public DRW_TableEntry {
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+     UTF8STRING plotViewName;/*!< Plot view name, code 6 */
+@@ -529,7 +529,7 @@ class DRW_AppId : public DRW_TableEntry {
+     }
+ 
+ protected:
+-    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0);
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ };
+ 
+ namespace DRW {

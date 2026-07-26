@@ -1,0 +1,39 @@
+am-utils-6.2 - fix Linux NFS recognition of umounts
+
+From: Ian Kent <raven@themaw.net>
+
+Recent Linux NFS uses a simulated attibute cache change detection
+method based on ctime. Consequenty the amd use of mtime for this
+doesn't work properly for some kernel versions.
+
+The problem seen with some kernel versions is a failure to recognize
+umounts.
+
+Updating the parent ctime in step with mtime during umount appears
+to fix the problem.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/autil.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/amd/autil.c b/amd/autil.c
+index cd9514d..efd18ef 100644
+--- a/amd/autil.c
++++ b/amd/autil.c
+@@ -709,10 +709,13 @@ am_unmounted(am_node *mp)
+     --mp->am_parent->am_fattr.na_nlink;
+ 
+   /*
+-   * Update mtime of parent node
++   * Update mtime and ctime of parent node (as ctime is needed for some
++   * Linux NFS kernel versions to properly recognize attribute changes).
+    */
+-  if (mp->am_parent && mp->am_parent->am_al->al_mnt)
++  if (mp->am_parent && mp->am_parent->am_al->al_mnt) {
+     clocktime(&mp->am_parent->am_fattr.na_mtime);
++    mp->am_parent->am_fattr.na_ctime = mp->am_parent->am_fattr.na_mtime;
++  }
+ 
+   if (mp->am_parent && (mp->am_flags & AMF_REMOUNT)) {
+     char *fname = xstrdup(mp->am_name);

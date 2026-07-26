@@ -1,0 +1,113 @@
+diff --git a/textio/txInput.c b/textio/txInput.c
+index 0e84a62..b54c105 100644
+--- a/textio/txInput.c
++++ b/textio/txInput.c
+@@ -1221,7 +1221,7 @@ TxGetLine(
+  * ----------------------------------------------------------------------------
+  */
+ 
+-#if defined(SYSV) || defined(CYGWIN)
++#if (defined(SYSV) || defined(CYGWIN)) && !defined(__linux__)
+ 
+ void
+ txGetTermState(
+@@ -1230,7 +1230,7 @@ txGetTermState(
+     ioctl( fileno( stdin ), TCGETA, buf);
+ }
+ 
+-#elif defined (__OpenBSD__) || defined(EMSCRIPTEN)
++#elif defined(__linux__) || defined (__OpenBSD__) || defined(EMSCRIPTEN)
+ 
+ void
+ txGetTermState(
+@@ -1269,18 +1269,18 @@ txGetTermState(
+ 
+ void
+ txSetTermState(
+-#if defined(SYSV) || defined(CYGWIN)
++#if (defined(SYSV) || defined(CYGWIN)) && !defined(__linux__)
+     struct termio *buf
+-#elif defined (__OpenBSD__) || defined(EMSCRIPTEN)
++#elif defined(__linux__) || defined (__OpenBSD__) || defined(EMSCRIPTEN)
+     struct termios *buf
+ #else
+     txTermState *buf
+ #endif /* SYSV */
+     )
+ {
+-#if defined(SYSV) || defined(CYGWIN)
++#if (defined(SYSV) || defined(CYGWIN)) && !defined(__linux__)
+     ioctl( fileno(stdin), TCSETAF, buf );
+-#elif defined (__OpenBSD__) || defined(EMSCRIPTEN)
++#elif defined(__linux__) || defined (__OpenBSD__) || defined(EMSCRIPTEN)
+     (void) tcsetattr( fileno(stdin), TCSANOW, buf );
+ #else
+     /* set the current terminal characteristics */
+@@ -1309,9 +1309,9 @@ txSetTermState(
+ 
+ void
+ txInitTermRec(
+-#if defined(SYSV) || defined(CYGWIN)
++#if (defined(SYSV) || defined(CYGWIN)) && !defined(__linux__)
+     struct termio *buf
+-#elif defined (__OpenBSD__) || defined(EMSCRIPTEN)
++#elif defined(__linux__) || defined (__OpenBSD__) || defined(EMSCRIPTEN)
+     struct termios *buf
+ #else
+     txTermState *buf
+@@ -1333,9 +1333,9 @@ txInitTermRec(
+ 
+ 
+ 
+-#if defined(SYSV) || defined(CYGWIN)
++#if (defined(SYSV) || defined(CYGWIN)) && !defined(__linux__)
+ struct termio closeTermState;
+-#elif defined (__OpenBSD__) || defined(EMSCRIPTEN)
++#elif defined(__linux__) || defined (__OpenBSD__) || defined(EMSCRIPTEN)
+ struct termios closeTermState;
+ #else
+ static txTermState closeTermState;
+@@ -1362,14 +1362,14 @@ static bool haveCloseState = FALSE;
+ void
+ txSaveTerm(void)
+ {
+-#if defined(SYSV) || defined(CYGWIN)
++#if (defined(SYSV) || defined(CYGWIN)) && !defined(__linux__)
+     ioctl( fileno( stdin ), TCGETA, &closeTermState);
+     txEraseChar = closeTermState.c_cc[VERASE];
+     txKillChar =  closeTermState.c_cc[VKILL];
+     TxEOFChar = closeTermState.c_cc[VEOF];
+     TxInterruptChar = closeTermState.c_cc[VINTR];
+     haveCloseState = TRUE;
+-#elif defined (__OpenBSD__) || defined(EMSCRIPTEN)
++#elif defined(__linux__) || defined (__OpenBSD__) || defined(EMSCRIPTEN)
+     (void) tcgetattr( fileno( stdin ), &closeTermState);
+     txEraseChar = closeTermState.c_cc[VERASE];
+     txKillChar =  closeTermState.c_cc[VKILL];
+@@ -1410,9 +1410,9 @@ txSaveTerm(void)
+ void
+ TxSetTerminal(void)
+ {
+-#if defined(SYSV) || defined(CYGWIN)
++#if (defined(SYSV) || defined(CYGWIN)) && !defined(__linux__)
+     struct termio buf;
+-#elif defined (__OpenBSD__) || defined(EMSCRIPTEN)
++#elif defined(__linux__) || defined (__OpenBSD__) || defined(EMSCRIPTEN)
+     struct termios buf;
+ #else
+     txTermState buf;
+diff --git a/utils/magsgtty.h b/utils/magsgtty.h
+index d2e68d7..204d575 100644
+--- a/utils/magsgtty.h
++++ b/utils/magsgtty.h
+@@ -21,7 +21,9 @@
+ #define _MAGIC__UTILS__MAGSGTTY_H
+ 
+ /* maybe this can be #ifndef HAVE_TERMIO_H */
+-#if !defined(SYSV) && !defined(CYGWIN)
++#if defined(__linux__)
++#include <termios.h>
++#elif !defined(SYSV) && !defined(CYGWIN)
+ 
+ # ifdef	ALPHA
+ # undef MAX

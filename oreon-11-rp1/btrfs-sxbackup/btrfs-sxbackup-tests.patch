@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index 73e7e5c..d38160a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -24,6 +24,7 @@ setup(
+     license='GNU GPL',
+     url='https://github.com/masc3d/btrfs-sxbackup',
+     packages=['btrfs_sxbackup'],
++    test_suite='btrfs_sxbackup.tests',
+     description='Incremental btrfs snapshot backups with push/pull support via SSH',
+     long_description=open('README.rst').read(),
+     classifiers=[

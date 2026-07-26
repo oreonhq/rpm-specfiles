@@ -1,0 +1,89 @@
+diff -up GabeditSrc250/src/Display/PovrayGL.c.strlen GabeditSrc250/src/Display/PovrayGL.c
+--- GabeditSrc250/src/Display/PovrayGL.c.strlen	2017-07-12 00:13:34.302930668 +0200
++++ GabeditSrc250/src/Display/PovrayGL.c	2017-07-12 00:14:52.286542837 +0200
+@@ -1671,7 +1671,8 @@ static void exportPOVRay(GtkWidget* Win,
+ 		gint i;
+ 		if(tmp) l = strlen(tmp);
+ 		for(i=l-1;i>=1;i--) if(tmp[i]=='.') tmp[i]='\0';
+-		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
++		if(!dirName) dirName = g_strdup(g_get_current_dir());
++		if(dirName && dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 		{
+ 			fileNamePOV = g_strdup_printf("%s%s%s.pov",dirName, G_DIR_SEPARATOR_S,tmp);
+ 			fileNameIMG = g_strdup_printf("%s%s%s.png",dirName, G_DIR_SEPARATOR_S,tmp);
+diff -up GabeditSrc250/src/Geometry/Povray.c.strlen GabeditSrc250/src/Geometry/Povray.c
+--- GabeditSrc250/src/Geometry/Povray.c.strlen	2017-07-12 00:13:34.302930668 +0200
++++ GabeditSrc250/src/Geometry/Povray.c	2017-07-12 00:15:41.326298949 +0200
+@@ -1267,7 +1267,8 @@ static void exportPOVRay(GtkWidget* Win,
+ 		gint i;
+ 		if(tmp) l = strlen(tmp);
+ 		for(i=l-1;i>=1;i--) if(tmp[i]=='.') tmp[i]='\0';
+-		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
++		if(!dirName) dirName = g_strdup(g_get_current_dir());
++		if(dirName && dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 		{
+ 			fileNamePOV = g_strdup_printf("%s%s%s.pov",dirName, G_DIR_SEPARATOR_S,tmp);
+ 			fileNameIMG = g_strdup_printf("%s%s%s.png",dirName, G_DIR_SEPARATOR_S,tmp);
+diff -up GabeditSrc250/src/SemiEmpirical/SemiEmpiricalDlg.c.strlen GabeditSrc250/src/SemiEmpirical/SemiEmpiricalDlg.c
+--- GabeditSrc250/src/SemiEmpirical/SemiEmpiricalDlg.c.strlen	2017-07-10 13:52:53.000000000 +0200
++++ GabeditSrc250/src/SemiEmpirical/SemiEmpiricalDlg.c	2017-07-12 00:13:34.303930663 +0200
+@@ -1328,6 +1328,7 @@ static void runSemiEmpirical(GtkWidget*
+ 	{
+ 		gchar* dirName = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER(buttonDirSelector));
+ 		gchar* tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryFileName)));
++		if(!dirName) dirName = g_strdup(g_get_home_dir());
+ 		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 			fileName = g_strdup_printf("%s%s%s",dirName, G_DIR_SEPARATOR_S,tmp);
+ 		else
+@@ -4493,7 +4494,8 @@ static void semiEmpiricalMDConfo(GtkWidg
+ 	{
+ 		dirName = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER(buttonDirSelector));
+ 		gchar* tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryFileNameGeom)));
+-		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
++		if(!dirName) dirName = g_strdup(g_get_current_dir());
++		if(dirName && dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 			fileNameGeom = g_strdup_printf("%s%s%s",dirName, G_DIR_SEPARATOR_S,tmp);
+ 		else
+ 			fileNameGeom = g_strdup_printf("%s%s",dirName, tmp);
+@@ -4511,7 +4513,8 @@ static void semiEmpiricalMDConfo(GtkWidg
+ 	{
+ 		if(!dirName) dirName = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER(buttonDirSelector));
+ 		gchar* tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryFileNameTraj)));
+-		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
++		if(!dirName) dirName = g_strdup(g_get_current_dir());
++		if(dirName && dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 			fileNameTraj = g_strdup_printf("%s%s%s",dirName, G_DIR_SEPARATOR_S,tmp);
+ 		else
+ 			fileNameTraj = g_strdup_printf("%s%s",dirName, tmp);
+@@ -4523,7 +4526,8 @@ static void semiEmpiricalMDConfo(GtkWidg
+ 	{
+ 		if(!dirName) dirName = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER(buttonDirSelector));
+ 		gchar* tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryFileNameProp)));
+-		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
++		if(!dirName) dirName = g_strdup(g_get_current_dir());
++		if(dirName && dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 			fileNameProp = g_strdup_printf("%s%s%s",dirName, G_DIR_SEPARATOR_S,tmp);
+ 		else
+ 			fileNameProp = g_strdup_printf("%s%s",dirName, tmp);
+@@ -4825,10 +4829,11 @@ static void semiEmpiricalMD(GtkWidget* W
+ 	if(stepSize>5) stepSize = 5.0;
+ 
+ 	dirName = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER(buttonDirSelector));
++	if(!dirName) dirName = g_strdup(g_get_current_dir());
+ 	if(GTK_TOGGLE_BUTTON (buttonSaveTraj)->active)
+ 	{
+ 		gchar* tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryFileNameTraj)));
+-		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
++		if(dirName && dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 			fileNameTraj = g_strdup_printf("%s%s%s",dirName, G_DIR_SEPARATOR_S,tmp);
+ 		else
+ 			fileNameTraj = g_strdup_printf("%s%s",dirName, tmp);
+@@ -4838,7 +4843,7 @@ static void semiEmpiricalMD(GtkWidget* W
+ 	if(GTK_TOGGLE_BUTTON (buttonSaveProp)->active)
+ 	{
+ 		gchar* tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(entryFileNameProp)));
+-		if(dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
++		if(dirName && dirName[strlen(dirName)-1] != G_DIR_SEPARATOR)
+ 			fileNameProp = g_strdup_printf("%s%s%s",dirName, G_DIR_SEPARATOR_S,tmp);
+ 		else
+ 			fileNameProp = g_strdup_printf("%s%s",dirName, tmp);

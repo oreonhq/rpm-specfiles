@@ -1,0 +1,39 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,6 @@
+ cmake_minimum_required(VERSION 3.10)
+-project(ipcgull)
++project(ipcgull VERSION 0.1)
++include(GNUInstallDirs)
+ 
+ set(CMAKE_CXX_STANDARD 17)
+ 
+@@ -42,13 +43,25 @@
+ if (BUILD_SHARED)
+     add_library(ipcgull_shared SHARED $<TARGET_OBJECTS:ipcgull>)
+     target_link_libraries(ipcgull_shared PUBLIC $<TARGET_PROPERTY:ipcgull,LINK_LIBRARIES>)
+-    set_target_properties(ipcgull_shared PROPERTIES OUTPUT_NAME ipcgull)
++    set_target_properties(ipcgull_shared PROPERTIES
++        VERSION ${PROJECT_VERSION}
++        SOVERSION ${PROJECT_EPOCH}
++    )
++    install(TARGETS ipcgull_shared LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ endif()
+ 
+ if (BUILD_STATIC)
+     add_library(ipcgull_static STATIC $<TARGET_OBJECTS:ipcgull>)
+     target_link_libraries(ipcgull_static PUBLIC $<TARGET_PROPERTY:ipcgull,LINK_LIBRARIES>)
+     set_target_properties(ipcgull_static PROPERTIES OUTPUT_NAME ipcgull)
++    install(TARGETS ipcgull_static ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
++endif()
++
++if (BUILD_SHARED OR BUILD_STATIC)
++    install(
++        DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/include/ipcgull
++        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++)
+ endif()
+ 
+ if (${BUILD_TESTS})
+
+

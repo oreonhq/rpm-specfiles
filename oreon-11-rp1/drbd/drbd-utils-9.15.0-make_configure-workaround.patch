@@ -1,0 +1,20 @@
+diff -uNr drbd-utils-9.15.0.orig/Makefile.in drbd-utils-9.15.0/Makefile.in
+--- drbd-utils-9.15.0.orig/Makefile.in	2020-09-21 13:28:25.000000000 +0200
++++ drbd-utils-9.15.0/Makefile.in	2020-10-24 20:13:14.409000000 +0200
+@@ -284,9 +284,13 @@
+ 
+ configure.ac: ;
+ configure: configure.ac
+-	aclocal
+-	autoheader
+-	autoconf
++	#aclocal
++	#autoheader
++	#autoconf
++	# Fedore specific workaround: Some builds are failing on missing
++	# aclocal even though this goal is not supposed to run, given that
++	# 'configure' in in the tarball.
++	@printf "\nRe-make of configure script is required for some reason. Not done, but maybe worth some investigation.\n\n"
+ 
+ config.status: configure
+ 	@printf "\nYou need to call ./configure with appropriate arguments (again).\n\n"; exit 1

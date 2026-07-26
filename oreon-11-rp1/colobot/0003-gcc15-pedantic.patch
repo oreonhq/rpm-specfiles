@@ -1,0 +1,22 @@
+diff -rU4 colobot-0.2.2--orig/src/app/main.cpp colobot-0.2.2--patched/src/app/main.cpp
+--- colobot-0.2.2--orig/src/app/main.cpp	2024-12-23 21:22:56.000000000 +0100
++++ colobot-0.2.2--patched/src/app/main.cpp	2025-01-16 16:37:26.533045992 +0100
+@@ -101,11 +101,8 @@
+  - src/script - link with the CBot library
+ */
+ 
+ //! Entry point to the program
+-extern "C"
+-{
+-
+ int main(int argc, char *argv[])
+ {
+     CLogger logger; // single instance of logger
+     logger.AddOutput(stderr);
+@@ -201,6 +198,4 @@
+     logger.Info("Exiting with code %d\n", code);
+ 
+     return code;
+ }
+-
+-} // extern "C"

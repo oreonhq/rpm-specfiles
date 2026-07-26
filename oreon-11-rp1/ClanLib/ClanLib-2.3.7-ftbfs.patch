@@ -1,0 +1,24 @@
+diff -up ClanLib-2.3.7/Sources/API/GL/opengl_defines.h~ ClanLib-2.3.7/Sources/API/GL/opengl_defines.h
+--- ClanLib-2.3.7/Sources/API/GL/opengl_defines.h~	2012-01-31 14:05:43.000000000 +0100
++++ ClanLib-2.3.7/Sources/API/GL/opengl_defines.h	2019-02-12 20:03:50.318693860 +0100
+@@ -68,8 +68,6 @@ typedef double GLdouble;
+ typedef double GLclampd;
+ typedef void GLvoid;
+ typedef char GLchar;
+-typedef ptrdiff_t GLintptr;
+-typedef ptrdiff_t GLsizeiptr;
+ typedef struct __CLsync *CLsync;
+ 
+ typedef void * CLDEBUGPROCARB;
+diff -up ClanLib-2.3.7/Sources/API/GL1/opengl1_defines.h~ ClanLib-2.3.7/Sources/API/GL1/opengl1_defines.h
+--- ClanLib-2.3.7/Sources/API/GL1/opengl1_defines.h~	2013-01-15 16:23:53.000000000 +0100
++++ ClanLib-2.3.7/Sources/API/GL1/opengl1_defines.h	2019-02-12 23:09:29.268058408 +0100
+@@ -64,8 +64,6 @@ typedef double GLdouble;
+ typedef double GLclampd;
+ typedef void GLvoid;
+ typedef char GLchar;
+-typedef ptrdiff_t GLintptr;
+-typedef ptrdiff_t GLsizeiptr;
+ 
+ #else
+ typedef unsigned long GLenum;

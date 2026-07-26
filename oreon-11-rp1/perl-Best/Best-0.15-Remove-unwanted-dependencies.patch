@@ -1,0 +1,28 @@
+From da4a1d23f04e3265483108886e10a14c112034e9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 18 Mar 2016 11:17:29 +0100
+Subject: [PATCH] Remove unwanted dependencies
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 02bcb59..7ab5bed 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -9,7 +9,4 @@ all_from      ('lib/Best.pm');
+ clean_files   (qw(t/5*.t t/6*.t));
+ build_requires('Test::More'      => 0,
+                'Test::Exception' => 0);
+-sign;
+-
+-auto_install;
+ WriteAll;
+-- 
+2.5.0
+

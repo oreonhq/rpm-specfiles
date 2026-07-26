@@ -1,0 +1,49 @@
+diff --git a/src/linlogbook.cpp b/src/linlogbook.cpp
+index f29cd1a..75a9ec6 100644
+--- a/src/linlogbook.cpp
++++ b/src/linlogbook.cpp
+@@ -668,7 +668,7 @@ void LinLogBook::clearInput()
+ void LinLogBook::searchCallsign()
+ {
+   int column;
+-  if (editQso <= 0)
++  if (editQso == 0)
+     return;
+   QString s = QLatin1String("CALL like '") + findCallsign->text() + QLatin1String("%'");
+   editQso->setFilter(s);
+@@ -708,7 +708,7 @@ void LinLogBook::searchCallsign()
+ void LinLogBook::saveInput()
+ {
+   bool ok;
+-  if (editQso <= 0)
++  if (editQso == 0)
+     return;
+   int rows = editQso->rowCount();
+   if (rows == 0)
+@@ -825,7 +825,7 @@ void LinLogBook::deleteAllEntries()
+ {
+   QSqlQuery qy;
+ 
+-  if (editQso <= 0)
++  if (editQso == 0)
+     return;
+   int rows = editQso->rowCount();
+   if (rows <= 0)
+@@ -942,7 +942,7 @@ void LinLogBook::prepareViews()
+ 
+ void LinLogBook::startServer()
+ {
+-  if (qsoServer <= 0)
++  if (qsoServer == 0)
+   {
+     qsoServer = new LinLogBookServer;
+     connect(qsoServer, SIGNAL(qsoElement(QString)), this, SLOT(setDataFromServer(QString)));
+@@ -959,7 +959,7 @@ void LinLogBook::startServer()
+ 
+ void LinLogBook::stopServer()
+ {
+-  if (qsoServer > 0)
++  if (qsoServer != 0)
+   {
+     qsoServer->close();
+     serverStatus.setText(tr("Server is not running"));

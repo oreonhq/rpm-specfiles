@@ -1,0 +1,21 @@
+diff -up ZipArchive-4.1.1/ZipArchive/ZipCrc32Cryptograph.h~ ZipArchive-4.1.1/ZipArchive/ZipCrc32Cryptograph.h
+--- ZipArchive-4.1.1/ZipArchive/ZipCrc32Cryptograph.h~	2012-07-29 11:29:32.000000000 +0200
++++ ZipArchive-4.1.1/ZipArchive/ZipCrc32Cryptograph.h	2012-07-29 11:36:05.209224077 +0200
+@@ -82,7 +82,7 @@ public:
+ 	/**
+ 		Returns the CRC table.
+ 	*/
+-	static const unsigned long* GetCRCTable()
++	static const unsigned int* GetCRCTable()
+ 	{
+ 			return zarch_get_crc_table();
+ 	}
+@@ -103,7 +103,7 @@ private:
+ 	void CryptUpdateKeys(char c);
+ 	DWORD CryptCRC32(DWORD l, char c)
+ 	{
+-		const unsigned long* CRC_TABLE = zarch_get_crc_table();
++		const unsigned int* CRC_TABLE = zarch_get_crc_table();
+ 		return CRC_TABLE[(l ^ c) & 0xff] ^ (l >> 8);
+ 	}
+ 	void CryptEncode(char &c)

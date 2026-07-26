@@ -1,0 +1,11 @@
+--- vultures/vultures_tileconfig.parser.y.orig	2015-07-10 00:06:02.382474891 -0500
++++ vultures/vultures_tileconfig.parser.y	2015-07-10 00:07:14.338620147 -0500
+@@ -176,7 +176,7 @@
+                     $$.tiles[$$.length - 1] = vultures_get_tile_index(TT_FLOOR, $2, 0);
+                     free($2);
+                     if ($$.tiles[$$.length - 1] == -1)
+-                        YYERROR
++                        YYERROR;
+                 }
+                 ;
+ 

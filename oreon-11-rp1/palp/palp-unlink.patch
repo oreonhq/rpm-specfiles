@@ -1,0 +1,19 @@
+diff -up palp-2.1/cws.c.orig palp-2.1/cws.c
+--- palp-2.1/cws.c.orig	2012-05-16 06:08:23.000000000 -0600
++++ palp-2.1/cws.c	2020-02-11 12:27:58.028217444 -0700
+@@ -1,3 +1,4 @@
++#include <unistd.h>
+ #include "Global.h"
+ #include "LG.h"
+ #include "Rat.h"
+@@ -1725,9 +1726,7 @@ void Conv(int narg, char* fn[])
+ /*uses latte instead of Aux_Complete_Poly for counting points*/
+ void td_Print_EL(EqList *_E, int *n, int suppress_c, const char *comment){
+   int i,j;
+-  char command[100];
+-  sprintf(command,"rm zzL.tmp");
+-  system(command);
++  unlink("zzL.tmp");
+   outFILE=fopen("zzL.tmp","w");
+   fprintf(outFILE,"%d %d  %s\n",_E->ne,(*n)+1,comment);
+   for(i=0;i<_E->ne;i++) {

@@ -1,0 +1,11 @@
+diff -up coldet/src/box.h~ coldet/src/box.h
+--- coldet/src/box.h~	2001-02-23 19:08:22.000000000 +0100
++++ coldet/src/box.h	2011-02-13 19:52:56.049850991 +0100
+@@ -25,6 +25,7 @@
+ #define H_BOX
+ 
+ #include <vector>
++#include <cstddef>
+ #include "math3d.h"
+ #include "sysdep.h"
+ 

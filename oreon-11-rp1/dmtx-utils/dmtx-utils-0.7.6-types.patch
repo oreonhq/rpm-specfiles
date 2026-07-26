@@ -1,0 +1,63 @@
+From 5f54d01f30c53154c4ebf7b0127c6ac7c6881372 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 24 Jan 2024 13:12:34 +0100
+Subject: [PATCH] fix parameter type for MagickQueryFormats()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+GCC 14 is more sctrict about pointers now and complains about using
+"unsigned long *" where "size_t *" is expected. Update the definitions of
+local variables to match the ImageMagick API.
+
+...
+make[2]: Entering directory '/builddir/build/BUILD/dmtx-utils-0.7.6/dmtxread'
+gcc -DHAVE_CONFIG_H -I. -I..  -Wshadow -Wall -pedantic   -I/usr/include/ImageMagick-7 -fopenmp -DMAGICKCORE_HDRI_ENABLE=1 -DMAGICKCORE_QUANTUM_DEPTH=16 -DMAGICKCORE_CHANNEL_MASK_DEPTH=32 -D_MAGICK_CONFIG_H -O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m32 -march=i686 -mtune=generic -msse2 -mfpmath=sse -mstackrealign -fasynchronous-unwind-tables -fstack-clash-protection  -c -o dmtxread-dmtxread.o `test -f 'dmtxread.c' || echo './'`dmtxread.c
+make[2]: Leaving directory '/builddir/build/BUILD/dmtx-utils-0.7.6/dmtxread'
+dmtxread.c: In function ‘ListImageFormats’:
+dmtxread.c:730:35: error: passing argument 2 of ‘MagickQueryFormats’ from incompatible pointer type [-Wincompatible-pointer-types]
+  730 |    list = MagickQueryFormats("*", &totalCount);
+      |                                   ^~~~~~~~~~~
+      |                                   |
+      |                                   long unsigned int *
+In file included from /usr/include/ImageMagick-7/MagickWand/MagickWand.h:91,
+                 from dmtxread.h:41,
+                 from dmtxread.c:25:
+/usr/include/ImageMagick-7/MagickWand/magick-property.h:41:37: note: expected ‘size_t *’ {aka ‘unsigned int *’} but argument is of type ‘long unsigned int *’
+   41 |   **MagickQueryFormats(const char *,size_t *);
+      |                                     ^~~~~~~~
+make[2]: *** [Makefile:492: dmtxread-dmtxread.o] Error 1
+---
+ dmtxread/dmtxread.c   | 2 +-
+ dmtxwrite/dmtxwrite.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/dmtxread/dmtxread.c b/dmtxread/dmtxread.c
+index f26cc15..3d02372 100644
+--- a/dmtxread/dmtxread.c
++++ b/dmtxread/dmtxread.c
+@@ -724,7 +724,7 @@ ListImageFormats(void)
+    int i, idx;
+    int row, rowCount;
+    int col, colCount;
+-   unsigned long totalCount;
++   size_t totalCount;
+    char **list;
+ 
+    list = MagickQueryFormats("*", &totalCount);
+diff --git a/dmtxwrite/dmtxwrite.c b/dmtxwrite/dmtxwrite.c
+index 014bffa..3ef4547 100644
+--- a/dmtxwrite/dmtxwrite.c
++++ b/dmtxwrite/dmtxwrite.c
+@@ -455,7 +455,7 @@ ListImageFormats(void)
+    int i, idx;
+    int row, rowCount;
+    int col, colCount;
+-   unsigned long totalCount;
++   size_t totalCount;
+    char **list;
+ 
+    list = MagickQueryFormats("*", &totalCount);
+-- 
+2.43.0
+

@@ -1,0 +1,30 @@
+Include <term.h> during the terminal library check for function
+prototypes.  Otherwise this configure check always fails if the
+compiler does not accept implicit function declarations.
+
+Submitted upstream:
+
+  <https://lists.gnu.org/archive/html/bug-gcal/2022-12/msg00000.html>
+
+diff --git gcal-4.1/configure.ac gcal-4.1/configure.ac
+index f339765122b8fae0..a9c3993e81501713 100644
+--- gcal-4.1/configure.ac
++++ gcal-4.1/configure.ac
+@@ -319,7 +319,7 @@ if test "$gcal_cv_use_term" = yes; then
+   AC_MSG_CHECKING(for working terminal libraries)
+   SAVE_LIBS=$LIBS
+   LIBS="$LIBS $TTYLIBS"
+-  AC_TRY_LINK(,
++  AC_TRY_LINK([#include <term.h>],
+     [tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);],
+     [gcal_ttylibs_ok=yes])
+   if test "$gcal_ttylibs_ok" = yes; then
+@@ -334,7 +334,7 @@ if test "$gcal_cv_use_term" = yes; then
+         [TTYLIBS="-ltermcap"])
+       AC_MSG_CHECKING(for working terminal libraries again)
+       LIBS="$LIBS $TTYLIBS"
+-      AC_TRY_LINK(,
++      AC_TRY_LINK([#include <term.h>],
+         [tgetent(0); tgetflag(0); tgetnum(0); tgetstr(0);],
+         [gcal_ttylibs_ok=yes])
+       if test "$gcal_ttylibs_ok" = yes; then

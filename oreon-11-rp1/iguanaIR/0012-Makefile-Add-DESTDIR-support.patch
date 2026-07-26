@@ -1,0 +1,59 @@
+From 4d692f097e5c556f47404c97a5ce2c0b2180ee3a Mon Sep 17 00:00:00 2001
+From: Alec Leamas <leamas.alec@gmail.com>
+Date: Thu, 1 Sep 2016 03:17:27 +0200
+Subject: [PATCH 12/13] Makefile: Add DESTDIR support
+
+---
+ Makefile | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index c6a7f7a..4db147a 100755
+--- a/Makefile
++++ b/Makefile
+@@ -8,7 +8,7 @@
+ #
+ 
+ 
+-driver          = iguanaIR
++driver          = iguanair
+ 
+ all:  $(driver).so
+ 
+@@ -18,7 +18,13 @@ PLUGINDIR       ?= $(shell pkg-config --variable=plugindir lirc-driver)
+ CONFIGDIR       ?= $(shell pkg-config --variable=configdir lirc-driver)
+ PLUGINDOCS      ?= $(shell pkg-config --variable=plugindocs lirc-driver)
+ 
+-include $(PLUGINDOCS)/plugindocs.mk
++PLUGINDOCS_MK   = $(PLUGINDOCS)/plugindocs.mk
++MODPROBE_CONF   = 60-blacklist-kernel-iguanair.conf
++
++ifneq ($(wildcard $(PLUGINDOCS_MK)),)
++	include $(PLUGINDOCS_MK)
++endif
++
+ 
+ $(driver).o: $(driver).c
+ 
+@@ -26,11 +32,14 @@ $(driver).so: $(driver).o
+ 	gcc --shared -fpic $(LDFLAGS) -o $@ $<
+ 
+ install: $(driver).so
+-	install $< $(PLUGINDIR)
+-	install $(driver).conf $(CONFIGDIR)
+-	install $(driver).html $(PLUGINDOCS)
+-	install -m 644 60-blacklist-kernel-iguanair.conf /etc/modprobe.d
++	install -pDm 755 $< $(DESTDIR)$(PLUGINDIR)/$<
++	install -pDm 644 $(driver).html $(DESTDIR)$(PLUGINDOCS)/$(driver).html
++	install -pDm 644 $(driver).conf $(DESTDIR)$(CONFIGDIR)/$(driver).conf
++	install -pDm 644 $(MODPROBE_CONF) \
++	    $(DESTDIR)/etc/modprobe.d/$(MODPROBE_CONF)
++ifneq ($(wildcard $(PLUGINDOCS_MK)),)
+ 	$(MAKE) update
++endif
+ 
+ clean:
+ 	rm -f *.o *.so
+-- 
+2.5.5
+

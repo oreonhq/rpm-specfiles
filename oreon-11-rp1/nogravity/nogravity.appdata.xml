@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>nogravity.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>NoGravity</name>
+  <summary>Space Shooter in 3D</summary>
+  <description>
+    <p>
+     No Gravity is a fantastic and futuristic universe made of five
+     intergalactic worlds. An arcade type game with great playability,
+     where it is easy to plunge into space battles against spacefighters,
+     space stations and more!
+    </p>
+    <p>
+     Year 8002. System OOLRO 3, where the oldest and most powerful empire
+     ever exists : The KROSSO empire, which consists of thousands of
+     colonies. The celebrations of the eighth millenium have just ended and
+     the good days seem to be over. A few cases of an unknown sickness have
+     been found. Rumors are spreading of the possibility of a mind disease.
+    </p>
+    <p>
+     Fifty-five hard hitting missions plus ten training exercises will help
+     you to enter this real time textured 3D environment. Missions set not
+     only in deep space, but also inside enemy structures will have you
+     patrolling high risk sectors, on reconnaissance in enemy space,
+     escorting friendly ships or defending your space stations and even
+     sneaking in to sabotage enemy weapons.
+    </p>
+  </description>
+  <url type="homepage">http://www.nogravitythegame.com/classic/</url>
+  <screenshots>
+    <screenshot type="default">http://www.nogravitythegame.com/classic/jpg02.jpg</screenshot>
+    <screenshot>http://www.nogravitythegame.com/classic/jpg03.jpg</screenshot>
+    <screenshot>http://www.nogravitythegame.com/classic/jpg08.jpg</screenshot>
+    <screenshot>http://www.nogravitythegame.com/classic/jpg09.jpg</screenshot>
+  </screenshots>
+  <updatecontact>jwrdegoede_at_fedoraproject.org</updatecontact>
+</component>

@@ -1,0 +1,22 @@
+[Unit]
+Description=Monotone DVCS Server
+After=local-fs.target
+After=network-online.target
+
+[Service]
+User=monotone
+Group=monotone
+PermissionsStartOnly=yes
+Environment=MONOTONE_PPFILE=/etc/monotone/passphrase.lua
+Environment=MONOTONE_KEYDIR=/etc/monotone/private-keys
+Environment=MONOTONE_CONFDIR=/etc/monotone
+Environment=MONOTONE_DBFILE=/var/lib/monotone/server.mtn
+EnvironmentFile=-/etc/sysconfig/monotone
+ExecStartPre=/usr/libexec/monotone-server-initdb
+ExecStartPre=/usr/libexec/monotone-server-migratedb
+ExecStartPre=/usr/libexec/monotone-server-genkey
+PIDFile=/run/monotone/monotone-server.pid
+ExecStart=/usr/sbin/monotone-server --confdir=${MONOTONE_CONFDIR} --db=${MONOTONE_DBFILE} --keydir=${MONOTONE_KEYDIR} --rcfile=${MONOTONE_PPFILE} --pid-file=/run/monotone/monotone-server.pid serve
+
+[Install]
+WantedBy=multi-user.target

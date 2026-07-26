@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Cylindrix
+GenericName=Cylindrix
+Comment=3D combat
+Exec=cylindrix
+Icon=cylindrix
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;ActionGame;

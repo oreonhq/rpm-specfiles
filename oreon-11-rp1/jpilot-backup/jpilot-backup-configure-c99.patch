@@ -1,0 +1,42 @@
+Avoid calling the undeclared exit function.  This improves
+compatibility with future compilers which reject implicit function
+declarations by default.
+
+Fixed slightly differently here:
+
+commit e5de89bd0766d28ecbc84add404cafaf824ca15e
+Author: Pascal J <pascal.jaeger@leimstift.de>
+Date:   Sat Dec 10 20:47:49 2022 +0100
+
+    Fix configure.in for clang16
+    
+    See also: https://bugs.gentoo.org/870535
+
+<https://github.com/juddmon/jpilot/commit/e5de89bd0766d28ecbc84add404cafaf824ca15e>
+
+diff --git a/configure b/configure
+index fbeb1a2121459ae4..54c6c6e0024a41c0 100755
+--- a/configure
++++ b/configure
+@@ -20132,7 +20132,7 @@ int
+ main ()
+ {
+ 
+-   exit(0);
++   return 0;
+ 
+   ;
+   return 0;
+diff --git a/configure.in b/configure.in
+index c53b167b540c614c..c1116f73efbffd70 100644
+--- a/configure.in
++++ b/configure.in
+@@ -111,7 +111,7 @@ LIBS="$LIBS $PILOT_LIBS"
+ 
+ dnl *** check for pi-version.h
+ AC_TRY_COMPILE([#include <pi-version.h>], [
+-   exit(0);
++   return 0;
+ ], ,
+  AC_MSG_ERROR([pilot-link header pi-version.h not found])
+ )

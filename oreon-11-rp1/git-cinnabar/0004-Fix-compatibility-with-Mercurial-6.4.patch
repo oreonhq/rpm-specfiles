@@ -1,0 +1,59 @@
+From 6121c016551b9881190b77f8ac8e3e7da48d33c5 Mon Sep 17 00:00:00 2001
+From: Aleksei Bavshin <alebastr89@gmail.com>
+Date: Thu, 18 Jan 2024 20:33:09 -0800
+Subject: [PATCH 4/5] Fix compatibility with Mercurial 6.4
+
+`mercurial.sshpeer.instance` has been renamed to `make_peer` in
+49750:f075a9463ee7.
+`path` argument was changed to take `mercurial.utils.urlutil.path`
+object in 49757:5f71fff8dc74.
+---
+ cinnabar/hg/repo.py | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/cinnabar/hg/repo.py b/cinnabar/hg/repo.py
+index e11ef6f5..5acb7835 100644
+--- a/cinnabar/hg/repo.py
++++ b/cinnabar/hg/repo.py
+@@ -95,9 +95,18 @@ try:
+         url,
+     )
+     try:
+-        from mercurial.sshpeer import instance as sshpeer
++        from mercurial.sshpeer import make_peer
++        from mercurial.utils.urlutil import path as make_path
++
++        def sshpeer(ui, path, create, **kwargs):
++            path = make_path(ui, rawloc=path)
++            return make_peer(ui, path, create, **kwargs)
++
+     except ImportError:
+-        from mercurial.sshrepo import instance as sshpeer
++        try:
++            from mercurial.sshpeer import instance as sshpeer
++        except ImportError:
++            from mercurial.sshrepo import instance as sshpeer
+     try:
+         from mercurial.utils import procutil
+     except ImportError:
+@@ -1279,14 +1288,10 @@ if changegroup:
+         if quotecommand:
+             procutil.quotecommand = override_quotecommand
+ 
+-        class override_url(object):
++        class override_url(url):
+             def __init__(self, *args, **kwargs):
+-                self.scheme = b'ssh'
+-                self.host = b'localhost'
+-                self.port = None
+-                self.path = path
+-                self.user = b'user'
+-                self.passwd = None
++                super().__init__(b'ssh://user@localhost/')
++                self.path = self._origpath = path
+         urlutil.url = override_url
+ 
+         repo = sshpeer(ui, path, False)
+-- 
+2.43.0
+

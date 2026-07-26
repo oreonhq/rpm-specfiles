@@ -1,0 +1,71 @@
+From eec92849ca4e6e937e24e98b9e45b26aae9fb329 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 25 Jul 2025 14:59:01 +0200
+Subject: [PATCH] Fix building with CMake 4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CMake 4 removed support for CMake scripts < 3.5 and building dnf-plugins-extras
+fails now:
+
+    $ /usr/bin/cmake -S . -B redhat-linux-build
+    CMake Warning (dev) at CMakeLists.txt:1 (PROJECT):
+      cmake_minimum_required() should be called prior to this top-level project()
+      call.  Please see the cmake-commands(7) manual for usage documentation of
+      both commands.
+    This warning is for project developers.  Use -Wno-dev to suppress it.
+
+    CMake Error at CMakeLists.txt:2 (CMAKE_MINIMUM_REQUIRED):
+      Compatibility with CMake < 3.5 has been removed from CMake.
+
+      Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+      to tell CMake that the project requires at least <min> but has been updated
+      to work with policies introduced by <max> or earlier.
+
+This patch fixes it by increasing minimal CMake version to 3.5.
+
+It also fixes a warning about the order of cmake_minimum_required()
+and project() calls.
+
+To enable more current policies (4.0.2) it disables CMP0148 policy
+which deprecated PythonInterp CMake module in 3.27.0 (3 years ago). We
+will move from PythonInterp to FindPython3 once we are fine with
+removing support for Python2.
+
+Resolve: https://bugzilla.redhat.com/show_bug.cgi?id=2380547
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ CMakeLists.txt          | 3 ++-
+ dnf-plugins-extras.spec | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f8a0300..c63c0fe 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,7 @@
++CMAKE_MINIMUM_REQUIRED (VERSION 3.5.0...4.0.2)
+ PROJECT (dnf-plugins-extras NONE)
+-CMAKE_MINIMUM_REQUIRED (VERSION 2.4)
+ 
++cmake_policy(SET CMP0148 OLD)
+ FIND_PACKAGE (PythonInterp 3 EXACT REQUIRED)
+ 
+ EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "from sys import stdout; from sysconfig import get_path; stdout.write(get_path('purelib'))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)
+diff --git a/dnf-plugins-extras.spec b/dnf-plugins-extras.spec
+index 005e1dc..e313964 100644
+--- a/dnf-plugins-extras.spec
++++ b/dnf-plugins-extras.spec
+@@ -13,7 +13,7 @@ URL:            https://github.com/rpm-software-management/%{name}
+ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+ 
+ BuildArch:      noarch
+-BuildRequires:  cmake
++BuildRequires:  cmake >= 3.5.0
+ BuildRequires:  gettext
+ BuildRequires:  python3-devel
+ BuildRequires:  python3-dnf >= %{dnf_lowest_compatible}
+-- 
+2.50.1
+

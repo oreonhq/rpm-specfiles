@@ -1,0 +1,5 @@
+# this is the custom for cron jobs
+addFilter(r"E: executable-marked-as-config-file /etc/cron.daily/apt-cacher-ng")
+# apt-cacher-ng run with limited privilieges
+addFilter(r"W: non-standard-uid .*")
+addFilter(r"W: non-standard-gid .*")

@@ -1,0 +1,57 @@
+From a729d15f2f4f162f0ef91f589777ed3bbbbc6e56 Mon Sep 17 00:00:00 2001
+From: Neel Chauhan <neel@neelc.org>
+Date: Tue, 24 Sep 2024 12:33:59 -0400
+Subject: [PATCH 1/3] Add Fedora CPack option
+
+---
+ accel-pppd/CMakeLists.txt | 2 +-
+ cmake/cpack.cmake         | 8 ++++++++
+ contrib/accel-ppp.service | 2 +-
+ 3 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/accel-pppd/CMakeLists.txt b/accel-pppd/CMakeLists.txt
+index b274d856..b67e892a 100644
+--- a/accel-pppd/CMakeLists.txt
++++ b/accel-pppd/CMakeLists.txt
+@@ -188,7 +188,7 @@ set_property(TARGET accel-pppd PROPERTY INSTALL_RPATH_USE_LINK_PATH FALSE)
+ set_property(TARGET accel-pppd PROPERTY INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/accel-ppp)
+ 
+ INSTALL(TARGETS accel-pppd
+-	RUNTIME DESTINATION sbin
++	RUNTIME DESTINATION bin
+ )
+ 
+ INSTALL(FILES accel-ppp.conf.5 DESTINATION share/man/man5)
+diff --git a/cmake/cpack.cmake b/cmake/cpack.cmake
+index ee2a0391..f17bcaa3 100644
+--- a/cmake/cpack.cmake
++++ b/cmake/cpack.cmake
+@@ -94,4 +94,12 @@ IF(CPACK_TYPE STREQUAL Centos9)
+         INCLUDE(${CMAKE_HOME_DIRECTORY}/cmake/centos/centos.cmake)
+ ENDIF()
+ 
++IF(CPACK_TYPE STREQUAL Fedora)
++        SET(CPACK_RPM_PACKAGE_LICENSE "GPL")
++        SET(CPACK_RPM_PACKAGE_URL "http://accel-ppp.org")
++        SET(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "/usr/bin")
++	SET(CPACK_RPM_PACKAGE_REQUIRES "glibc >= 2.34, openssl-libs >= 3.0.1, pcre2 >= 10.40")
++        INCLUDE(${CMAKE_HOME_DIRECTORY}/cmake/centos/centos.cmake)
++ENDIF()
++
+ INCLUDE(CPack)
+diff --git a/contrib/accel-ppp.service b/contrib/accel-ppp.service
+index ca7986f8..d6964dd2 100644
+--- a/contrib/accel-ppp.service
++++ b/contrib/accel-ppp.service
+@@ -3,7 +3,7 @@ Description=Accel-PPP
+ After=network.target
+ 
+ [Service]
+-ExecStart=/usr/sbin/accel-pppd -d -p /var/run/accel-pppd.pid -c /etc/accel-ppp.conf
++ExecStart=/usr/bin/accel-pppd -d -p /var/run/accel-pppd.pid -c /etc/accel-ppp.conf
+ StandardOutput=null
+ ExecReload=/bin/kill -SIGUSR1 $MAINPID
+ PIDFile=/var/run/accel-pppd.pid
+-- 
+2.53.0
+

@@ -1,0 +1,1024 @@
+diff -urpN pads-1.2.orig/config.h.in pads-1.2/config.h.in
+--- pads-1.2.orig/config.h.in	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/config.h.in	2008-07-07 15:41:50.000000000 -0400
+@@ -24,6 +24,9 @@
+ /* Define to 1 if you have the <pcre.h> header file. */
+ #undef HAVE_PCRE_H
+ 
++/* PRELUDE */
++#undef HAVE_PRELUDE
++
+ /* Define to 1 if you have the <signal.h> header file. */
+ #undef HAVE_SIGNAL_H
+ 
+diff -urpN pads-1.2.orig/configure.in pads-1.2/configure.in
+--- pads-1.2.orig/configure.in	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/configure.in	2008-07-07 15:42:55.000000000 -0400
+@@ -97,6 +97,26 @@ AC_CHECK_LIB(pcap, pcap_open_live,
+     AC_MSG_ERROR([Cannot find PCAP libraries!!]))
+ 
+ ##
++# Configure prelude
++##
++AC_ARG_WITH(prelude,
++AS_HELP_STRING([--with-prelude],[enable prelude IDS support]),
++use_prelude=$withval,
++use_prelude=no)
++if test x$use_prelude = xno ; then
++    have_prelude=no;
++else
++    AC_CHECK_LIB(prelude, prelude_init, have_prelude=yes, have_prelude=no)
++    if test x$have_prelude = xno ; then
++       AC_MSG_ERROR([Prelude explicitly required and prelude library not found])
++    else
++       AC_DEFINE(HAVE_PRELUDE,1,[Have Prelude Libraries])
++       LIBS="$LIBS -lprelude"
++    fi
++fi
++AM_CONDITIONAL(HAVE_PRELUDE, test x$have_prelude = xyes)
++
++##
+ # Checks for header files.
+ ##
+ AC_CHECK_HEADERS([stdio.h stdarg.h signal.h time.h unistd.h])
+diff -urpN pads-1.2.orig/doc/pads.conf.8 pads-1.2/doc/pads.conf.8
+--- pads-1.2.orig/doc/pads.conf.8	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/doc/pads.conf.8	2008-07-07 15:41:50.000000000 -0400
+@@ -77,6 +77,9 @@ can be specified as an argument.
+ This output plugin writes PADS data to a FIFO file.  Optionally, a FIFO
+ filename can be specified as an argument.
+ 
++.IP "output prelude: <profilename>"
++This output plugin writes PADS data as IDMEF alerts via prelude. Optionally you can add a profile name if you want something different than the default of pads.
++
+ .SH SEE ALSO
+ pads(8)
+ 
+diff -urpN pads-1.2.orig/etc/pads.conf pads-1.2/etc/pads.conf
+--- pads-1.2.orig/etc/pads.conf	2008-07-02 09:24:19.000000000 -0400
++++ pads-1.2/etc/pads.conf	2008-07-07 15:41:50.000000000 -0400
+@@ -75,3 +75,11 @@ output csv: /etc/pads-assets.csv
+ # This output plugin writes PADS data to a FIFO file.  Optionally, a FIFO
+ # filename can be specified as an argument.
+ #output fifo:  pads.fifo
++
++# output:  prelude
++# -------------------------
++# This output plugin writes PADS data as IDMEF alerts via prelude.  Optionally
++# you can add a profile name if you want something different than the default
++# of pads.
++#
++#output prelude: pads
+diff -urpN pads-1.2.orig/src/configuration.h pads-1.2/src/configuration.h
+--- pads-1.2.orig/src/configuration.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/configuration.h	2008-07-07 15:41:50.000000000 -0400
+@@ -26,6 +26,8 @@
+  * $Id: pads-1.2-prelude.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#ifndef CONFIGURATION_HEADER
++#define CONFIGURATION_HEADER
+ 
+ /* DEFINES ----------------------------------------- */
+ #ifdef LINUX
+@@ -40,8 +42,7 @@
+ 
+ /* INCLUDES ---------------------------------------- */
+ #include "global.h"
+-
+-#include <stdio.h>
++#include "configuration.h"
+ #include "bstring/bstrlib.h"
+ 
+ /* PROTOTYPES -------------------------------------- */
+@@ -51,3 +52,6 @@ int conf_module_plugin (bstring value, i
+ 
+ /* External Prototypes */
+ int activate_output_plugin (bstring name, bstring args);
++
++#endif
++
+diff -urpN pads-1.2.orig/src/output/Makefile.am pads-1.2/src/output/Makefile.am
+--- pads-1.2.orig/src/output/Makefile.am	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/output/Makefile.am	2008-07-07 15:41:50.000000000 -0400
+@@ -6,4 +6,8 @@ liboutput_a_SOURCES = output.c output.h 
+                       output-csv.c output-csv.h \
+                       output-fifo.c output-fifo.h
+ 
++if HAVE_PRELUDE 
++liboutput_a_SOURCES +=  output-prelude.c output-prelude.h
++endif
++
+ INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/lib
+diff -urpN pads-1.2.orig/src/output/output.c pads-1.2/src/output/output.c
+--- pads-1.2.orig/src/output/output.c	2008-06-30 17:54:33.000000000 -0400
++++ pads-1.2/src/output/output.c	2008-07-07 15:41:50.000000000 -0400
+@@ -29,6 +29,7 @@
+ #include "output-screen.h"
+ #include "output-csv.h"
+ #include "output-fifo.h"
++#include "output-prelude.h"
+ #include "storage.h"
+ 
+ /* Local Variables */
+@@ -43,7 +44,7 @@ static OutputPluginList *output_plugin_l
+  * INPUT	: None!
+  * RETURN	: None!
+  * ---------------------------------------------------------- */
+-void init_output()
++int init_output(void)
+ {
+ 
+     /* Load Screen Plug-in */
+@@ -55,6 +56,11 @@ void init_output()
+     /* Load FIFO Plug-in */
+     setup_output_fifo();
+ 
++    /* Load Prelude Plug-in */
++    if (setup_output_prelude() < 0)
++	return -1;
++
++    return 0;
+ }
+ 
+ /* ----------------------------------------------------------
+diff -urpN pads-1.2.orig/src/output/output.h pads-1.2/src/output/output.h
+--- pads-1.2.orig/src/output/output.h	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/output/output.h	2008-07-07 15:41:50.000000000 -0400
+@@ -71,7 +71,7 @@ typedef struct _OutputPluginList
+ } OutputPluginList;
+ 
+ /* PROTOTYPES -------------------------------------- */
+-void init_output();
++int init_output(void);
+ int register_output_plugin (OutputPlugin *plugin);
+ int activate_output_plugin (bstring name, bstring args);
+ int print_asset (struct in_addr ip_addr, u_int16_t port, unsigned short proto);
+diff -urpN pads-1.2.orig/src/output/output-prelude.c pads-1.2/src/output/output-prelude.c
+--- pads-1.2.orig/src/output/output-prelude.c	1969-12-31 19:00:00.000000000 -0500
++++ pads-1.2/src/output/output-prelude.c	2008-07-07 15:41:50.000000000 -0400
+@@ -0,0 +1,513 @@
++/*************************************************************************
++ * output-prelude.c
++ *
++ * This module contains the output mechanism for PADS to send IDMEF alerts
++ * via the prelude library
++ *
++ * Copyright (C) 2008 Steve Grubb <sgrubb@redhat.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ *
++ **************************************************************************/
++#include "output-prelude.h"
++#include "util.h"
++#include "pads.h"	// For argc/v and gc
++#include <arpa/inet.h>
++#include <libprelude/prelude.h>
++
++#define ANALYZER_MODEL "pads"
++#define ANALYZER_CLASS "PVS"
++#define ANALYZER_MANUFACTURER "http://passive.sourceforge.net"
++#define PRELUDE_FAIL_CHECK  if (ret < 0) goto err;
++static prelude_client_t *client = NULL;
++static char *profile = NULL;
++
++static int setup_analyzer(idmef_analyzer_t *analyzer)
++{
++        int ret;
++        prelude_string_t *string;
++
++        ret = idmef_analyzer_new_model(analyzer, &string);
++        PRELUDE_FAIL_CHECK;
++        prelude_string_set_dup(string, ANALYZER_MODEL);
++
++        ret = idmef_analyzer_new_class(analyzer, &string);
++        PRELUDE_FAIL_CHECK;
++        prelude_string_set_dup(string, ANALYZER_CLASS);
++
++        ret = idmef_analyzer_new_manufacturer(analyzer, &string);
++        PRELUDE_FAIL_CHECK;
++        prelude_string_set_dup(string, ANALYZER_MANUFACTURER);
++
++        ret = idmef_analyzer_new_version(analyzer, &string);
++        PRELUDE_FAIL_CHECK;
++        prelude_string_set_dup(string, PACKAGE_VERSION);
++
++        return 0;
++
++ err:
++        log_message("%s: IDMEF error: %s.\n",
++                prelude_strsource(ret), prelude_strerror(ret));
++
++        return -1;
++}
++
++static int init_prelude(void)
++{
++        int ret;
++        prelude_client_flags_t flags;
++
++        ret = prelude_thread_init(NULL);
++        ret = prelude_init(&prog_argc, prog_argv);
++        if (ret < 0) {
++                log_message("Unable to initialize the Prelude library: %s.\n",
++                        prelude_strerror(ret));
++                return -1;
++        }
++        ret = prelude_client_new(&client, profile ? profile : ANALYZER_MODEL);
++        if (!client) {
++                log_message("Unable to create a prelude client object: %s.\n",
++                        prelude_strerror(ret));
++                return -1;
++        }
++        ret = setup_analyzer(prelude_client_get_analyzer(client));
++        if (ret < 0) {
++                log_message("Unable to setup analyzer: %s\n",
++                        prelude_strerror(ret));
++
++                prelude_client_destroy(client,
++                                        PRELUDE_CLIENT_EXIT_STATUS_FAILURE);
++                return -1;
++        }
++        flags = prelude_client_get_flags(client);
++        flags |= PRELUDE_CLIENT_FLAGS_ASYNC_TIMER;
++        ret = prelude_client_set_flags(client, flags);
++        if (ret < 0) {
++                log_message("Unable to set prelude client flags: %s\n",
++                        prelude_strerror(ret));
++
++                prelude_client_destroy(client,
++                                        PRELUDE_CLIENT_EXIT_STATUS_FAILURE);
++                return -1;
++        }
++        ret = prelude_client_start(client);
++        if (ret < 0) {
++                log_message("Unable to start prelude client: %s\n",
++                        prelude_strerror(ret));
++
++                prelude_client_destroy(client,
++                                        PRELUDE_CLIENT_EXIT_STATUS_FAILURE);
++                return -1;
++        }
++        return 0;
++}
++
++static int new_alert_common(idmef_message_t **idmef, idmef_alert_t **alert)
++{
++        int ret;
++        idmef_time_t *ctime;
++
++        ret = idmef_message_new(idmef);
++        PRELUDE_FAIL_CHECK;
++
++        ret = idmef_message_new_alert(*idmef, alert);
++        PRELUDE_FAIL_CHECK;
++
++        idmef_alert_set_analyzer(*alert,
++                        idmef_analyzer_ref(prelude_client_get_analyzer(client)),
++                        IDMEF_LIST_PREPEND);
++
++        // Set time this was created
++        ret = idmef_time_new_from_gettimeofday(&ctime);
++        PRELUDE_FAIL_CHECK;
++        idmef_alert_set_detect_time(*alert, ctime);
++        idmef_alert_set_create_time(*alert, ctime);
++
++        return 0;
++ err:
++        syslog(LOG_ERR, "%s: IDMEF error: %s.\n",
++               prelude_strsource(ret), prelude_strerror(ret));
++        idmef_message_destroy(*idmef);
++        return -1;
++}
++
++static int set_classification(idmef_alert_t *alert, const char *text)
++{
++        int ret;
++        idmef_classification_t *classification;
++        prelude_string_t *str;
++
++        ret = idmef_alert_new_classification(alert, &classification);
++        PRELUDE_FAIL_CHECK;
++        ret = prelude_string_new(&str);
++        PRELUDE_FAIL_CHECK;
++        ret = prelude_string_set_ref(str, text);
++        PRELUDE_FAIL_CHECK;
++        idmef_classification_set_text(classification, str);
++
++        return 0;
++ err:
++        return -1;
++}
++
++static int do_assessment(idmef_alert_t *alert,
++		idmef_impact_severity_t severity,
++		idmef_impact_type_t type, const char *descr)
++{
++        int ret;
++        idmef_assessment_t *assessment;
++        idmef_impact_t *impact;
++
++        ret = idmef_alert_new_assessment(alert, &assessment);
++        PRELUDE_FAIL_CHECK;
++        ret = idmef_assessment_new_impact(assessment, &impact);
++        PRELUDE_FAIL_CHECK;
++        idmef_impact_set_severity(impact, severity);
++        idmef_impact_set_type(impact, type);
++        if (descr) {
++               prelude_string_t *str;
++               ret = idmef_impact_new_description(impact, &str);
++               prelude_string_set_ref(str, descr);
++        }
++        idmef_impact_set_completion(impact, IDMEF_IMPACT_COMPLETION_SUCCEEDED);
++        return 0;
++ err:
++        return -1;
++}
++
++// FIXME: handle ipv6 addresses
++static int fill_in_node_addr(idmef_node_t *node, struct in_addr *addr)
++{
++        int ret;
++        prelude_string_t *str;
++	char buf[INET6_ADDRSTRLEN+1];
++
++	inet_ntop(AF_INET, addr, buf, sizeof(buf));
++
++        /* Setup the address string */
++        ret = prelude_string_new(&str);
++        PRELUDE_FAIL_CHECK;
++        ret = prelude_string_set_dup(str, buf);
++        PRELUDE_FAIL_CHECK;
++
++        /* Now record IP address */
++        idmef_address_t *my_addr;
++        ret = idmef_address_new(&my_addr);
++        PRELUDE_FAIL_CHECK;
++        idmef_address_set_category(my_addr, IDMEF_ADDRESS_CATEGORY_IPV4_ADDR);
++        idmef_address_set_address(my_addr, str);
++        idmef_node_set_address(node, my_addr, 0);
++
++        return 0;
++ err:
++        return -1;
++}
++
++// FIXME: handle ipv6 addresses
++static int fill_in_node_mac(idmef_node_t *node, ArpAsset *a)
++{
++        int ret;
++        prelude_string_t *str, *mac_str;
++	char buf[INET6_ADDRSTRLEN+1];
++
++	inet_ntop(AF_INET, &a->ip_addr, buf, sizeof(buf));
++
++        /* Setup the address string */
++        ret = prelude_string_new(&str);
++        PRELUDE_FAIL_CHECK;
++        ret = prelude_string_set_dup(str, buf);
++        PRELUDE_FAIL_CHECK;
++
++        /* Now record IP address */
++        idmef_address_t *my_addr;
++        ret = idmef_address_new(&my_addr);
++        PRELUDE_FAIL_CHECK;
++        idmef_address_set_category(my_addr, IDMEF_ADDRESS_CATEGORY_IPV4_ADDR);
++        idmef_address_set_address(my_addr, str);
++        idmef_node_set_address(node, my_addr, 0);
++
++        /* Now record MAC address */
++        idmef_address_t *mac_addr;
++        ret = idmef_address_new(&mac_addr);
++        PRELUDE_FAIL_CHECK;
++        ret = prelude_string_new(&mac_str);
++        PRELUDE_FAIL_CHECK;
++        idmef_address_set_category(mac_addr, IDMEF_ADDRESS_CATEGORY_MAC);
++        ret = prelude_string_set_dup(mac_str, hex2mac(a->mac_addr));
++        PRELUDE_FAIL_CHECK;
++        idmef_address_set_address(mac_addr, mac_str);
++        idmef_node_set_address(node, mac_addr, 0);
++        return 0;
++ err:
++        return -1;
++}
++
++
++static int asset_alert(Asset *a, idmef_message_t *idmef,
++                idmef_alert_t *alert, const char *msg,
++                idmef_impact_severity_t severity, char *descr)
++{
++        int ret;
++        idmef_source_t *source;
++        idmef_target_t *target;
++	idmef_node_t *node, *node2;
++	idmef_service_t *service;
++        idmef_impact_type_t impact;
++        prelude_string_t *name, *str;
++	idmef_additional_data_t *data;
++
++        /* Fill in information about the event's source */
++        ret = idmef_alert_new_source(alert, &source, -1);
++        PRELUDE_FAIL_CHECK;
++	ret = idmef_source_new_node(source, &node);
++        PRELUDE_FAIL_CHECK;
++	idmef_node_set_category(node, IDMEF_NODE_CATEGORY_UNKNOWN);
++	ret = fill_in_node_addr(node, &a->ip_addr);
++	PRELUDE_FAIL_CHECK;
++
++	// Describe the service
++	ret = idmef_source_new_service(source, &service);
++	PRELUDE_FAIL_CHECK;
++	idmef_service_set_iana_protocol_number(service, a->proto);
++	idmef_service_set_ip_version(service, 4);
++	idmef_service_set_port(service, ntohs(a->port));
++	ret = prelude_string_new(&name);
++	PRELUDE_FAIL_CHECK;
++	ret = prelude_string_set_dup(name, (char *)bdata(a->service));
++	PRELUDE_FAIL_CHECK;
++	if (bdata(a->application) != NULL) {
++		ret = idmef_alert_new_additional_data(alert, &data,
++			IDMEF_LIST_APPEND);
++		PRELUDE_FAIL_CHECK;
++		ret = idmef_additional_data_new_meaning(data, &str);
++		PRELUDE_FAIL_CHECK;
++		prelude_string_set_ref(str, "Application");
++		idmef_additional_data_set_type(data,
++				IDMEF_ADDITIONAL_DATA_TYPE_STRING);
++		idmef_additional_data_set_string_dup(data,
++				(char *)bdata(a->application));
++	}
++
++        /* Fill in information about the target of the event */
++        ret = idmef_alert_new_target(alert, &target, -1);
++        PRELUDE_FAIL_CHECK;
++
++	/* FIXME: I assume that the target is the whole network */
++	ret = idmef_target_new_node(target, &node2);
++        PRELUDE_FAIL_CHECK;
++	idmef_node_set_category(node, IDMEF_NODE_CATEGORY_UNKNOWN);
++
++        /* Describe event */
++        ret = set_classification(alert, msg);
++        PRELUDE_FAIL_CHECK;
++
++        /* Assess impact */
++        impact = IDMEF_IMPACT_TYPE_OTHER;
++        ret = do_assessment(alert, severity, impact, descr);
++        PRELUDE_FAIL_CHECK;
++
++        prelude_client_send_idmef(client, idmef);
++        idmef_message_destroy(idmef);
++
++        return 0;
++ err:
++        syslog(LOG_ERR, "asset_alert: IDMEF error: %s.\n",
++                prelude_strerror(ret));
++        idmef_message_destroy(idmef);
++        return -1;
++}
++
++
++static int arp_alert(ArpAsset *a, idmef_message_t *idmef,
++                idmef_alert_t *alert, const char *msg,
++                idmef_impact_severity_t severity, char *descr)
++{
++        int ret;
++        idmef_source_t *source;
++        idmef_target_t *target;
++	idmef_node_t *node, *node2;
++        idmef_impact_type_t impact;
++        prelude_string_t *str;
++	idmef_additional_data_t *data;
++
++        /* Fill in information about the event's source */
++        ret = idmef_alert_new_source(alert, &source, -1);
++        PRELUDE_FAIL_CHECK;
++	ret = idmef_source_new_node(source, &node);
++        PRELUDE_FAIL_CHECK;
++	idmef_node_set_category(node, IDMEF_NODE_CATEGORY_UNKNOWN);
++	ret = fill_in_node_mac(node, a);
++	PRELUDE_FAIL_CHECK;
++
++	if (bdata(a->mac_resolved) != NULL) {
++		ret = idmef_alert_new_additional_data(alert, &data,
++			IDMEF_LIST_APPEND);
++		PRELUDE_FAIL_CHECK;
++		ret = idmef_additional_data_new_meaning(data, &str);
++		PRELUDE_FAIL_CHECK;
++		prelude_string_set_ref(str, "Vendor");
++		idmef_additional_data_set_type(data,
++				IDMEF_ADDITIONAL_DATA_TYPE_STRING);
++		idmef_additional_data_set_string_dup(data,
++				(char *)bdata(a->mac_resolved));
++	}
++
++        /* Fill in information about the target of the event */
++        ret = idmef_alert_new_target(alert, &target, -1);
++        PRELUDE_FAIL_CHECK;
++
++	/* FIXME: I assume that the target is the whole network */
++	ret = idmef_target_new_node(target, &node2);
++        PRELUDE_FAIL_CHECK;
++	idmef_node_set_category(node, IDMEF_NODE_CATEGORY_UNKNOWN);
++
++        /* Describe event */
++        ret = set_classification(alert, msg);
++        PRELUDE_FAIL_CHECK;
++
++        /* Assess impact */
++        impact = IDMEF_IMPACT_TYPE_OTHER;
++        ret = do_assessment(alert, severity, impact, descr);
++        PRELUDE_FAIL_CHECK;
++
++        prelude_client_send_idmef(client, idmef);
++        idmef_message_destroy(idmef);
++
++        return 0;
++ err:
++        syslog(LOG_ERR, "arp_alert: IDMEF error: %s.\n",
++                prelude_strerror(ret));
++        idmef_message_destroy(idmef);
++        return -1;
++}
++
++/* ----------------------------------------------------------
++ * FUNCTION	: setup_output_screen
++ * DESCRIPTION	: This function will register the output
++ *		: plugin.
++ * INPUT	: None!
++ * RETURN	: 0 - Success
++ *		: -1 - Error
++ * ---------------------------------------------------------- */
++int
++setup_output_prelude (void)
++{
++    OutputPlugin *plugin;
++
++
++    if (init_prelude() < 0)
++	return -1;
++
++    /* Allocate and setup plugin data record. */
++    plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
++    plugin->name = bfromcstr("prelude");
++    plugin->init = init_output_prelude;
++    plugin->print_asset = print_asset_prelude;
++    plugin->print_arp = print_arp_asset_prelude;
++    plugin->print_stat = NULL;
++    plugin->end = end_output_prelude;
++
++    /* Register plugin with input module. */
++    if ((register_output_plugin(plugin)) == -1) {
++	if (plugin != NULL)
++	    free(plugin);
++	log_message("warning:  'register_output_plugin' in function 'setup_output_prelude' failed.");
++    }
++
++    return 0;
++}
++
++/* ----------------------------------------------------------
++ * FUNCTION	: init_output_prelude
++ * DESCRIPTION	: This output module will initialize the prelude
++ *		: subsystem.
++ * INPUT	: None
++ * RETURN	: 0 - Success
++ *		: -1 - Error
++ * --------------------------------------------------------- */
++int
++init_output_prelude (bstring args)
++{
++    verbose_message("Initializing PRELUDE output processor.");
++    profile = strdup((char *)bdata(args));
++    return 0;
++}
++
++/* ----------------------------------------------------------
++ * FUNCTION	: print_asset_prelude
++ * DESCRIPTION	: This function will send asset events to prelude
++ * INPUT	: 0 - Port
++ *		: 1 - IP Address
++ *		: 2 - Service
++ *		: 3 - Application
++ * RETURN	: 0 - Success
++ *		: -1 - Error
++ * ---------------------------------------------------------- */
++int
++print_asset_prelude (Asset *rec)
++{
++    idmef_message_t *idmef;
++    idmef_alert_t *alert;
++
++    if (new_alert_common(&idmef, &alert) >= 0){ 
++	asset_alert(rec, idmef, alert, 
++		"New Network Asset Detected", IDMEF_IMPACT_SEVERITY_LOW,
++		"A service that was not previously known has been used.");
++    }
++    return 0;
++}
++
++
++/* ----------------------------------------------------------
++ * FUNCTION	: print_arp_asset_prelude
++ * DESCRIPTION	: This function will send ARP asset events to prelude
++ * INPUT	: 0 - IP Address
++ *		: 1 - MAC Address
++ * RETURN	: 0 - Success
++ *		: -1 - Error
++ * ---------------------------------------------------------- */
++int
++print_arp_asset_prelude (ArpAsset *rec)
++{
++    idmef_message_t *idmef;
++    idmef_alert_t *alert;
++
++    if (new_alert_common(&idmef, &alert) >= 0){ 
++	arp_alert(rec, idmef, alert, 
++		"New MAC Address Detected", IDMEF_IMPACT_SEVERITY_INFO,
++		"A network card that was not previously known has been used.");
++    }
++    return 0;
++}
++
++/* ----------------------------------------------------------
++ * FUNCTION	: end_output_prelude
++ * DESCRIPTION	: This function will free the resources used
++ *		: by the prelude output module.
++ * INPUT	: None!
++ * RETURN	: None!
++ * ---------------------------------------------------------- */
++int
++end_output_prelude ()
++{
++    verbose_message("Ending PRELUDE Output Processor.");
++
++    if (client)
++        prelude_client_destroy(client, PRELUDE_CLIENT_EXIT_STATUS_SUCCESS);
++    free(profile);
++
++    return 0;
++}
++
+diff -urpN pads-1.2.orig/src/output/output-prelude.h pads-1.2/src/output/output-prelude.h
+--- pads-1.2.orig/src/output/output-prelude.h	1969-12-31 19:00:00.000000000 -0500
++++ pads-1.2/src/output/output-prelude.h	2008-07-07 15:41:50.000000000 -0400
+@@ -0,0 +1,54 @@
++/*************************************************************************
++ * output-prelude.h
++ *
++ * This module contains the output mechanism for PADS to send IDMEF alerts
++ * via the prelude library. 
++ *
++ * Copyright (C) 2008 Steve Grubb <sgrubb@redhat.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++ *
++ **************************************************************************/
++#ifndef OUTPUT_PRELUDE_HEADER
++#define OUTPUT_PRELUDE_HEADER
++
++/* DEFINES ----------------------------------------- */
++#ifdef LINUX
++#ifndef __FAVOR_BSD
++#define __FAVOR_BSD
++#endif
++#ifndef _BSD_SOURCE
++#define _BSD_SOURCE
++#endif
++#endif /* ifdef LINUX */
++
++
++/* INCLUDES ---------------------------------------- */
++#include "output.h"
++
++
++/* PROTOTYPES -------------------------------------- */
++#ifdef HAVE_PRELUDE
++int setup_output_prelude (void);
++#else
++#define setup_output_prelude() 0
++#endif
++int init_output_prelude (bstring args);
++int print_asset_prelude (Asset *rec);
++int print_arp_asset_prelude (ArpAsset *rec);
++int end_output_prelude (void);
++
++#endif
++
+diff -urpN pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-07-02 09:24:53.000000000 -0400
++++ pads-1.2/src/pads.c	2008-07-07 15:41:50.000000000 -0400
+@@ -43,6 +43,18 @@ int prog_argc;
+ 
+ /* Function Declarations */
+ static int process_cmdline (int argc, char *argv[]);
++static void set_processor (pcap_t *this_handle);
++static void print_header(void);
++static void print_usage(void);
++static void print_version(void);
++static int  init_pads(void);
++static int  main_pads(void);
++
++static void sig_term_handler(int signal);
++static void sig_int_handler(int signal);
++static void sig_quit_handler(int signal);
++static void sig_hup_handler(int signal);
++
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION     : process_pkt
+@@ -68,7 +80,7 @@ process_pkt (u_char *args, const struct 
+  * INPUT        : PCAP Handle
+  * RETURN       : None!
+  * ---------------------------------------------------------- */
+-void
++static void
+ set_processor (pcap_t *this_handle)
+ {
+     int datalink;
+@@ -100,7 +112,7 @@ set_processor (pcap_t *this_handle)
+  * FUNCTION     : print_header
+  * DESCRIPTION  : Prints initial header.
+  * ---------------------------------------------------------- */
+-void
++static void
+ print_header ()
+ {
+     printf("pads - Passive Asset Detection System\n");
+@@ -113,7 +125,7 @@ print_header ()
+  * FUNCTION    : print_usage
+  * DESCRIPTION    : Prints the Program Usage
+  * ---------------------------------------------------------- */
+-void
++static void
+ print_usage()
+ {
+     printf("Usage:\n"
+@@ -148,7 +160,7 @@ print_usage()
+  * DESCRIPTION  : This function will print version
+  *              : version information.
+  * ---------------------------------------------------------- */
+-void
++static void
+ print_version (void)
+ {
+     printf("Build:\n");
+@@ -162,7 +174,7 @@ print_version (void)
+ }
+ 
+ /* ----------------------------------------------------------
+- * FUNCTION     : init_pads
++ * FUNCTION     : init_gc
+  * DESCRIPTION  : This function will initialize PADS.
+  * ---------------------------------------------------------- */
+ void init_gc(void)
+@@ -185,8 +197,9 @@ void init_gc(void)
+ /* ----------------------------------------------------------
+  * FUNCTION     : init_pads
+  * DESCRIPTION  : This function will initialize PADS.
++ * RETURN       : 0 success, -1 failure
+  * ---------------------------------------------------------- */
+-void
++static int
+ init_pads (void)
+ {
+     /* Init global config to known state */
+@@ -199,7 +212,8 @@ init_pads (void)
+         print_header();
+ 
+     /* Initialize Output Module */
+-    init_output();
++    if (init_output() < 0)
++        return -1;
+ 
+     /* Process the configuration file. */
+     if (gc.conf_file) {
+@@ -230,7 +244,10 @@ init_pads (void)
+ 
+     /* Daemon Mode:  fork child process */
+     if (gc.daemon_mode) {
+-        daemonize();
++        verbose_message("[-] Daemonizing...\n");
++        if (daemon(0, 0) < 0) {
++            err_message("Daemonize failed");
++        }
+         init_pid_file(gc.pid_file, gc.priv_user, gc.priv_group);
+     }
+ 
+@@ -239,17 +256,21 @@ init_pads (void)
+     (void) signal(SIGINT, sig_int_handler);
+     (void) signal(SIGQUIT, sig_quit_handler);
+     (void) signal(SIGHUP, sig_hup_handler);
++
++    return 0;
+ }
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION     : main_pads
+  * DESCRIPTION  : This is the main function for PADS.
++ * RETURN       : 0 success, -1 failure
+  * ---------------------------------------------------------- */
+-void
++static int
+ main_pads (void)
+ {
+     /* Initialize */
+-    init_pads();
++    if (init_pads() < 0)
++        return -1;
+ 
+     if (gc.pcap_file) {
+         /* Read from PCAP file specified by '-r' switch. */
+@@ -324,6 +345,7 @@ main_pads (void)
+ 
+     /* End */
+     end_pads();
++    return 0;
+ }
+ 
+ /* ----------------------------------------------------------
+@@ -490,25 +512,25 @@ process_cmdline (int argc, char *argv[])
+  * initialized in 'init_pads' and will perform a function
+  * based on the signal.
+  * ---------------------------------------------------------- */
+-void
++static void
+ sig_term_handler(int signal)
+ {
+     end_pads();
+ }
+ 
+-void
++static void
+ sig_int_handler(int signal)
+ {
+     end_pads();
+ }
+ 
+-void
++static void
+ sig_quit_handler(int signal)
+ {
+     end_pads();
+ }
+ 
+-void
++static void
+ sig_hup_handler(int signal)
+ {
+     /* The HUP signal has not been implemented yet. */
+@@ -526,9 +548,7 @@ main(int argc, char *argv[])
+     prog_argv = argv;
+ 
+     /* Main Program */
+-    main_pads();
+-
+-    return(0);
++    return main_pads();
+ }
+ 
+ /* vim:expandtab:cindent:smartindent:ts=4:tw=0:sw=4:
+diff -urpN pads-1.2.orig/src/pads.h pads-1.2/src/pads.h
+--- pads-1.2.orig/src/pads.h	2008-06-29 20:16:30.000000000 -0400
++++ pads-1.2/src/pads.h	2008-07-07 15:41:50.000000000 -0400
+@@ -25,6 +25,8 @@
+  * $Id: pads-1.2-prelude.patch,v 1.1 2008/08/13 17:35:11 sgrubb Exp $
+  *
+  **************************************************************************/
++#ifndef PADS_HEADER
++#define PADS_HEADER
+ 
+ /* DEFINES ----------------------------------------- */
+ #ifdef LINUX
+@@ -51,25 +53,19 @@
+ /* TYPEDEFS ---------------------------------------- */
+ typedef void (*proc_t)(const struct pcap_pkthdr *, const u_char *);
+ 
++extern char **prog_argv;
++extern int prog_argc;
++extern GC gc;
++
+ 
+ /* PROTOTYPES -------------------------------------- */
+ void process_pkt(u_char *args, const struct pcap_pkthdr* pkthdr, const u_char* packet);
+-void set_processor (pcap_t *this_handle);
+-void print_header(void);
+-void print_usage(void);
+-void print_version(void);
+-void init_pads(void);
+-void main_pads(void);
+ void end_pads(void);
+ 
+-void sig_term_handler(int signal);
+-void sig_int_handler(int signal);
+-void sig_quit_handler(int signal);
+-void sig_hup_handler(int signal);
+-
+ /* packet.h LLC prototypes */
+ void process_eth (const struct pcap_pkthdr* pkthdr, const u_char* packet);
+ void process_sll (const struct pcap_pkthdr* pkthdr, const u_char* packet);
+ 
+ /* vim:expandtab:cindent:smartindent:ts=4:tw=0:sw=4:
+  */
++#endif
+diff -urpN pads-1.2.orig/src/util.c pads-1.2/src/util.c
+--- pads-1.2.orig/src/util.c	2008-07-07 13:56:10.000000000 -0400
++++ pads-1.2/src/util.c	2008-07-07 15:41:50.000000000 -0400
+@@ -75,38 +75,6 @@ chomp (char *string, int size)
+ }
+ 
+ /* ----------------------------------------------------------
+- * FUNCTION     : daemonize
+- * DESCRIPTION  : This function will place the application in
+- *              : the background.
+- * INPUT        : None!
+- * RETURN       : None!
+- * ---------------------------------------------------------- */
+-void
+-daemonize ()
+-{
+-    pid_t pid;
+-
+-    if (!gc.daemon_mode)
+-        printf("[-] Daemonizing...\n");
+-
+-    pid = fork();
+-    if (pid > 0) {
+-        /* Parent */
+-        exit(0);
+-    } else if (pid < 0) {
+-        /* Error */
+-        err_message("fork");
+-        exit(0);
+-    } else {
+-        /* Child */
+-        setsid();
+-        close(0);
+-        close(1);
+-        close(2);
+-    }
+-}
+-
+-/* ----------------------------------------------------------
+  * FUNCTION     : init_pid_file
+  * DESCRIPTION  : This function will generate a file
+  *              : containing the application's PID.
+diff -urpN pads-1.2.orig/src/util.h pads-1.2/src/util.h
+--- pads-1.2.orig/src/util.h	2008-07-07 13:56:10.000000000 -0400
++++ pads-1.2/src/util.h	2008-07-07 15:41:50.000000000 -0400
+@@ -39,12 +39,27 @@
+ /* PROTOTYPES -------------------------------------- */
+ void strip_comment (char *string);
+ int chomp (char *string, int size);
+-void daemonize (void);
+ void init_pid_file (bstring pid_file, bstring user, bstring group);
+ char *copy_argv(register char **argv);
+-void log_message (const char *msg, ...);
+-void err_message (const char *msg, ...);
+-void verbose_message (const char *msg, ...);
++void log_message (const char *msg, ...)
++#ifdef __GNUC__
++        __attribute__ ((format (printf, 1, 2)));
++#else
++        ;
++#endif
++void err_message (const char *msg, ...)
++#ifdef __GNUC__
++        __attribute__ ((format (printf, 1, 2)));
++#else
++        ;
++#endif
++void verbose_message (const char *msg, ...)
++#ifdef __GNUC__
++        __attribute__ ((format (printf, 1, 2)));
++#else
++        ;
++#endif
++
+ #ifndef HAVE_STRLCPY
+ size_t strlcpy(char *dst, const char *src, size_t size);
+ #endif

@@ -1,0 +1,358 @@
+From 9a0ff230c0defce25fc066eaf2a8423bcfe4f58a Mon Sep 17 00:00:00 2001
+From: Hillwood Yang <hillwood@opensuse.org>
+Date: Fri, 31 Oct 2025 20:00:25 +0800
+Subject: [PATCH 1/2] feat: Support ffmpeg 7
+
+FFmpeg 5.1 deprecated the use of `AVCodecContext->channels` and
+`AVCodecContext->channel_layout` in favor of `AVChannelLayout`
+
+Log:
+- encoder.c: switch from `channels/channel_layout` to `ch_layout`
+  for codec context, frame, and buffer size calculations.
+- daudioencoderinterface.cpp / daudioencoderinterface_p.h:
+  add support for `swr_alloc_set_opts2` and `av_channel_layout_default`
+  when using newer libswresample/libavutil APIs.
+- dplaylistmodel.cpp: query audio channel count from `ch_layout.nb_channels`
+  when available.
+---
+ .../camera/libcam/libcam_encoder/encoder.c    | 46 +++++++++++++++++++
+ .../ffmpeg/daudioencoderinterface.cpp         | 41 +++++++++++++++++
+ .../ffmpeg/daudioencoderinterface_p.h         | 11 +++++
+ .../multimedia/player/dplaylistmodel.cpp      |  8 ++++
+ 4 files changed, 106 insertions(+)
+
+diff --git a/src/multimedia/camera/libcam/libcam_encoder/encoder.c b/src/multimedia/camera/libcam/libcam_encoder/encoder.c
+index 203cab2..ab70b5e 100644
+--- a/src/multimedia/camera/libcam/libcam_encoder/encoder.c
++++ b/src/multimedia/camera/libcam/libcam_encoder/encoder.c
+@@ -759,12 +759,21 @@ static encoder_audio_context_t *encoder_audio_init(encoder_context_t *encoder_ct
+ 	audio_codec_data->codec_context->flags |= audio_defaults->flags;
+ 
+ 	audio_codec_data->codec_context->sample_rate = encoder_ctx->audio_samprate;
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++	audio_codec_data->codec_context->ch_layout.nb_channels = encoder_ctx->audio_channels;
++
++	if(encoder_ctx->audio_channels < 2)
++		av_channel_layout_from_mask(&audio_codec_data->codec_context->ch_layout, AV_CH_LAYOUT_MONO);
++	else
++		av_channel_layout_from_mask(&audio_codec_data->codec_context->ch_layout, AV_CH_LAYOUT_STEREO);
++#else
+ 	audio_codec_data->codec_context->channels = encoder_ctx->audio_channels;
+ 
+ 	if(encoder_ctx->audio_channels < 2)
+ 		audio_codec_data->codec_context->channel_layout = AV_CH_LAYOUT_MONO;
+ 	else
+ 		audio_codec_data->codec_context->channel_layout = AV_CH_LAYOUT_STEREO;
++#endif
+ 
+ 	audio_codec_data->codec_context->cutoff = 0; /*automatic*/
+ 
+@@ -927,8 +936,13 @@ static encoder_audio_context_t *encoder_audio_init(encoder_context_t *encoder_ct
+ 
+ 	audio_codec_data->frame->nb_samples = frame_size;
+ 	audio_codec_data->frame->format = audio_defaults->sample_format;
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++	audio_codec_data->frame->ch_layout.nb_channels = audio_codec_data->codec_context->ch_layout.nb_channels;
++	av_channel_layout_copy(&audio_codec_data->frame->ch_layout, &audio_codec_data->codec_context->ch_layout);
++#else
+ audio_codec_data->frame->channels = audio_codec_data->codec_context->channels;
+ 	audio_codec_data->frame->channel_layout = audio_codec_data->codec_context->channel_layout;
++#endif
+ 
+ 	/*set codec data in encoder context*/
+ 	enc_audio_ctx->codec_data = (void *) audio_codec_data;
+@@ -1541,11 +1555,19 @@ static int libav_send_encode(AVCodecContext *avctx, AVFrame *frame)
+ 
+ 		if (avctx->codec_type == AVMEDIA_TYPE_AUDIO && frame->nb_samples != avctx->frame_size) 
+ 			fprintf(stderr, "ENCODER: audio samples differ from frame size\n");
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++		if (avctx->codec_type == AVMEDIA_TYPE_AUDIO && frame->ch_layout.nb_channels <= 0)
++		{ 
++			fprintf(stderr, "ENCODER: no audio channels set in frame\n");
++			frame->ch_layout.nb_channels = avctx->ch_layout.nb_channels;
++		}
++#else
+ 		if (avctx->codec_type == AVMEDIA_TYPE_AUDIO && frame->channels <= 0)
+ 		{ 
+ 			fprintf(stderr, "ENCODER: no audio channels set in frame\n");
+ 			frame->channels = avctx->channels;
+ 		}
++#endif
+         ret = getLoadLibsInstance()->m_avcodec_send_frame(avctx, frame);
+   		if (ret < 0)
+ 		{
+@@ -1825,7 +1847,11 @@ int encoder_encode_audio(encoder_context_t *encoder_ctx, void *audio_data)
+ 
+         int buffer_size = getAvutil()->m_av_samples_get_buffer_size(
+ 			NULL,
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++			audio_codec_data->codec_context->ch_layout.nb_channels,
++#else
+ 			audio_codec_data->codec_context->channels,
++#endif
+ 			audio_codec_data->codec_context->frame_size,
+ 			audio_codec_data->codec_context->sample_fmt,
+ 			align);
+@@ -1834,7 +1860,11 @@ int encoder_encode_audio(encoder_context_t *encoder_ctx, void *audio_data)
+ 		{
+ 			fprintf(stderr, "ENCODER: (encoder_encode_audio) PCM av_samples_get_buffer_size error (%d): chan(%d) nb_samp(%d) samp_fmt(%d)\n",
+ 				buffer_size,
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++				audio_codec_data->codec_context->ch_layout.nb_channels,
++#else
+ 				audio_codec_data->codec_context->channels,
++#endif
+ 				audio_codec_data->codec_context->frame_size,
+ 				audio_codec_data->codec_context->sample_fmt);
+ 
+@@ -1868,7 +1898,11 @@ int encoder_encode_audio(encoder_context_t *encoder_ctx, void *audio_data)
+ 
+         int buffer_size = getAvutil()->m_av_samples_get_buffer_size(
+ 			NULL,
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++			audio_codec_data->codec_context->ch_layout.nb_channels,
++#else
+ 			audio_codec_data->codec_context->channels,
++#endif
+ 			audio_codec_data->frame->nb_samples,
+ 			audio_codec_data->codec_context->sample_fmt,
+ 			align);
+@@ -1877,7 +1911,11 @@ int encoder_encode_audio(encoder_context_t *encoder_ctx, void *audio_data)
+ 		{
+ 			fprintf(stderr, "ENCODER: (encoder_encode_audio) av_samples_get_buffer_size error (%d): chan(%d) nb_samp(%d) samp_fmt(%d)\n",
+ 				buffer_size,
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++				audio_codec_data->codec_context->ch_layout.nb_channels,
++#else
+ 				audio_codec_data->codec_context->channels,
++#endif
+ 				audio_codec_data->frame->nb_samples,
+ 				audio_codec_data->codec_context->sample_fmt);
+ 
+@@ -1888,7 +1926,11 @@ int encoder_encode_audio(encoder_context_t *encoder_ctx, void *audio_data)
+ 		/*set the data pointers in frame*/
+         ret = getLoadLibsInstance()->m_avcodec_fill_audio_frame(
+ 			audio_codec_data->frame,
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++			audio_codec_data->codec_context->ch_layout.nb_channels,
++#else
+ 			audio_codec_data->codec_context->channels,
++#endif
+ 			audio_codec_data->codec_context->sample_fmt,
+ 			(const uint8_t *) audio_data,
+ 			buffer_size,
+@@ -1898,7 +1940,11 @@ int encoder_encode_audio(encoder_context_t *encoder_ctx, void *audio_data)
+ 		{
+ 			fprintf(stderr, "ENCODER: (encoder_encode_audio) avcodec_fill_audio_frame error (%d): chan(%d) nb_samp(%d) samp_fmt(%d) buff(%d bytes)\n",
+ 				ret,
++#if LIBAVUTIL_VER_AT_LEAST(57,28)
++				audio_codec_data->codec_context->ch_layout.nb_channels,
++#else
+ 				audio_codec_data->codec_context->channels,
++#endif
+ 				audio_codec_data->frame->nb_samples,
+ 				audio_codec_data->codec_context->sample_fmt,
+ 				buffer_size);
+diff --git a/src/multimedia/ffmpeg/daudioencoderinterface.cpp b/src/multimedia/ffmpeg/daudioencoderinterface.cpp
+index 26bf74b..9d1511a 100644
+--- a/src/multimedia/ffmpeg/daudioencoderinterface.cpp
++++ b/src/multimedia/ffmpeg/daudioencoderinterface.cpp
+@@ -229,6 +229,20 @@ bool DAudioEncoderInterface::openInputAudioCtx()
+     }
+ 
+     // audio converter, convert other fmt to requireAudioFmt
++#if LIBSWRESAMPLE_VERSION_INT >= AV_VERSION_INT(4, 5, 100)
++    d->d_av_channel_layout_default(d->ch_layout, d->audioInCodecCtx->ch_layout.nb_channels);
++    if (d->d_swr_alloc_set_opts2(&d->audioConverter,
++                                                d->ch_layout,
++                                                AV_SAMPLE_FMT_FLTP,   // aac encoder only receive this format
++                                                d->sampleRate,
++                                                d->ch_layout,
++                                                (AVSampleFormat)d->audioInStream->codecpar->format,
++                                                d->audioInStream->codecpar->sample_rate,
++                                                0, nullptr) < 0) {
++        qCritical("Could not set audio conversion.");
++        return false;
++    }
++#else
+     d->audioConverter = d->d_swr_alloc_set_opts(nullptr,
+                                                 d->d_av_get_default_channel_layout(d->channels),
+                                                 AV_SAMPLE_FMT_FLTP,   // aac encoder only receive this format
+@@ -237,6 +251,7 @@ bool DAudioEncoderInterface::openInputAudioCtx()
+                                                 (AVSampleFormat)d->audioInStream->codecpar->format,
+                                                 d->audioInStream->codecpar->sample_rate,
+                                                 0, nullptr);
++#endif
+     d->d_swr_init(d->audioConverter);
+     //FIFO buffer
+     d->audioFifo = d->d_av_audio_fifo_alloc(AV_SAMPLE_FMT_FLTP,
+@@ -278,14 +293,23 @@ bool DAudioEncoderInterface::openOutputAudioCtx()
+     }
+ 
+     d->audioOutCodecCtx = d->d_avcodec_alloc_context3(audioOutCodec);
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++    d->audioOutCodecCtx->ch_layout.nb_channels = d->ch_layout->nb_channels;
++    av_channel_layout_default(&d->audioOutCodecCtx->ch_layout, d->ch_layout->nb_channels);
++#else
+     d->audioOutCodecCtx->channels = d->channels;
+     d->audioOutCodecCtx->channel_layout = d->d_av_get_default_channel_layout(d->channels);
++#endif
+     d->audioOutCodecCtx->sample_rate = d->sampleRate;
+     d->audioOutCodecCtx->sample_fmt = audioOutCodec->sample_fmts[0];   //for aac , there is AV_SAMPLE_FMT_FLTP =8
+     d->audioOutCodecCtx->bit_rate = d->bitRateAdaptation();
+     d->audioOutCodecCtx->time_base.num = 1;
+     d->audioOutCodecCtx->time_base.den = d->audioOutCodecCtx->sample_rate;
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++    qInfo() << d->audioOutCodecCtx->ch_layout.nb_channels << d->audioOutCodecCtx->sample_rate << d->audioOutCodecCtx->sample_fmt << d->audioOutCodecCtx->time_base.num << d->audioOutCodecCtx->time_base.den;
++#else
+     qInfo() << d->audioOutCodecCtx->channels << d->audioOutCodecCtx->channel_layout << d->audioOutCodecCtx->sample_rate << d->audioOutCodecCtx->sample_fmt << d->audioOutCodecCtx->time_base.num << d->audioOutCodecCtx->time_base.den;
++#endif
+     if (d->audioOutFormatCtx->oformat->flags & AVFMT_GLOBALHEADER) {
+         d->audioOutCodecCtx->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+     }
+@@ -423,7 +447,11 @@ void DAudioEncoderInterface::encodeWork()
+         }
+         // encoding
+         uint8_t **cSamples = nullptr;
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++        ret = d->d_av_samples_alloc_array_and_samples(&cSamples, nullptr, d->audioOutCodecCtx->ch_layout.nb_channels,
++#else
+         ret = d->d_av_samples_alloc_array_and_samples(&cSamples, nullptr, d->audioOutCodecCtx->channels,
++#endif
+                                                       inputFrame->nb_samples, AV_SAMPLE_FMT_FLTP, 0);
+         if (ret < 0) {
+             qCritical("Fail to alloc samples by av_samples_alloc_array_and_samples.");
+@@ -450,8 +478,13 @@ void DAudioEncoderInterface::encodeWork()
+         while (d->d_av_audio_fifo_size(d->audioFifo) >= d->audioOutCodecCtx->frame_size) {
+             AVFrame *outputFrame = d->d_av_frame_alloc();
+             outputFrame->nb_samples = d->audioOutCodecCtx->frame_size;
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++            outputFrame->ch_layout.nb_channels = d->audioInCodecCtx->ch_layout.nb_channels;
++            d->d_av_channel_layout_default(&outputFrame->ch_layout, d->audioInCodecCtx->ch_layout.nb_channels);
++#else
+             outputFrame->channels = d->audioInCodecCtx->channels;
+             outputFrame->channel_layout = d->d_av_get_default_channel_layout(d->audioInCodecCtx->channels);
++#endif
+             outputFrame->format = AV_SAMPLE_FMT_FLTP;
+             outputFrame->sample_rate = d->audioOutCodecCtx->sample_rate;
+ 
+@@ -538,12 +571,20 @@ bool DAudioEncoderInterface::loadFunction()
+     d->d_avcodec_receive_packet = reinterpret_cast<decltype(avcodec_receive_packet) *>(d->libavcodec.resolve("avcodec_receive_packet"));
+     d->d_avcodec_free_context = reinterpret_cast<decltype(avcodec_free_context) *>(d->libavcodec.resolve("avcodec_free_context"));
+ 
++#if LIBSWRESAMPLE_VERSION_INT >= AV_VERSION_INT(4, 5, 100)
++    d->d_swr_alloc_set_opts2 = reinterpret_cast<decltype(swr_alloc_set_opts2) *>(d->libswresample.resolve("swr_alloc_set_opts2"));
++#else
+     d->d_swr_alloc_set_opts = reinterpret_cast<decltype(swr_alloc_set_opts) *>(d->libswresample.resolve("swr_alloc_set_opts"));
++#endif
+     d->d_swr_init = reinterpret_cast<decltype(swr_init) *>(d->libswresample.resolve("swr_init"));
+     d->d_swr_convert = reinterpret_cast<decltype(swr_convert) *>(d->libswresample.resolve("swr_convert"));
+     d->d_swr_free = reinterpret_cast<decltype(swr_free) *>(d->libswresample.resolve("swr_free"));
+ 
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++    d->d_av_channel_layout_default = reinterpret_cast<decltype(av_channel_layout_default) *>(d->libavutil.resolve("av_channel_layout_default"));
++#else
+     d->d_av_get_default_channel_layout = reinterpret_cast<decltype(av_get_default_channel_layout) *>(d->libavutil.resolve("av_get_default_channel_layout"));
++#endif
+     d->d_av_audio_fifo_alloc = reinterpret_cast<decltype(av_audio_fifo_alloc) *>(d->libavutil.resolve("av_audio_fifo_alloc"));
+     d->d_av_frame_alloc = reinterpret_cast<decltype(av_frame_alloc) *>(d->libavutil.resolve("av_frame_alloc"));
+     d->d_av_samples_alloc_array_and_samples = reinterpret_cast<decltype(av_samples_alloc_array_and_samples) *>(d->libavutil.resolve("av_samples_alloc_array_and_samples"));
+diff --git a/src/multimedia/ffmpeg/daudioencoderinterface_p.h b/src/multimedia/ffmpeg/daudioencoderinterface_p.h
+index ebcf2ac..ea77c4a 100644
+--- a/src/multimedia/ffmpeg/daudioencoderinterface_p.h
++++ b/src/multimedia/ffmpeg/daudioencoderinterface_p.h
+@@ -74,14 +74,22 @@ class DAudioEncoderInterfacePrivate : public QObject
+     decltype(av_packet_unref) *d_av_packet_unref { nullptr };
+     decltype(avcodec_free_context) *d_avcodec_free_context { nullptr };
+ 
++#if LIBSWRESAMPLE_VERSION_INT >= AV_VERSION_INT(4, 5, 100)
++    decltype(swr_alloc_set_opts2) *d_swr_alloc_set_opts2 { nullptr };
++#else
+     decltype(swr_alloc_set_opts) *d_swr_alloc_set_opts { nullptr };
++#endif
+     decltype(swr_init) *d_swr_init { nullptr };
+     decltype(swr_convert) *d_swr_convert { nullptr };
+     decltype(swr_free) *d_swr_free { nullptr };
+ 
+     decltype(av_audio_fifo_alloc) *d_av_audio_fifo_alloc { nullptr };
+     decltype(av_frame_alloc) *d_av_frame_alloc { nullptr };
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++    decltype(av_channel_layout_default) *d_av_channel_layout_default { nullptr };
++#else
+     decltype(av_get_default_channel_layout) *d_av_get_default_channel_layout { nullptr };
++#endif
+     decltype(av_samples_alloc_array_and_samples) *d_av_samples_alloc_array_and_samples { nullptr };
+     decltype(av_audio_fifo_space) *d_av_audio_fifo_space { nullptr };
+     decltype(av_audio_fifo_write) *d_av_audio_fifo_write { nullptr };
+@@ -109,6 +117,9 @@ class DAudioEncoderInterfacePrivate : public QObject
+     QUrl outFilePath { "outAudioFile.aac" };
+     int sampleRate { 48000 };
+     int bitRate { 0 };
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++    AVChannelLayout *ch_layout { nullptr };
++#endif
+     DAudioRecorder::AChannelsID channels { DAudioRecorder::CHANNELS_ID_STEREO };
+     AVCodecID codec { AV_CODEC_ID_NONE };
+ 
+diff --git a/src/multimediawidgets/engine/multimedia/player/dplaylistmodel.cpp b/src/multimediawidgets/engine/multimedia/player/dplaylistmodel.cpp
+index f292fa7..5fd9ece 100644
+--- a/src/multimediawidgets/engine/multimedia/player/dplaylistmodel.cpp
++++ b/src/multimediawidgets/engine/multimedia/player/dplaylistmodel.cpp
+@@ -330,7 +330,11 @@ struct ModeMovieInfo DPlaylistModel::parseFromFile(const QFileInfo &fi, bool *ok
+         mi.aCodeID   = audio_dec_ctx->codec_id;
+         mi.aCodeRate = audio_dec_ctx->bit_rate;
+         mi.aDigit    = audio_dec_ctx->format;
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++        mi.channels  = audio_dec_ctx->ch_layout.nb_channels;
++#else
+         mi.channels  = audio_dec_ctx->channels;
++#endif
+         mi.sampling  = audio_dec_ctx->sample_rate;
+ 
+ #ifdef USE_TEST
+@@ -1668,7 +1672,11 @@ ModeMovieInfo ModeMovieInfo::parseFromFile(const QFileInfo &fi, bool *ok)
+     mi.aCodeID   = dec_ctx->codec_id;
+     mi.aCodeRate = dec_ctx->bit_rate;
+     mi.aDigit    = dec_ctx->format;
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 24, 100)
++    mi.channels  = dec_ctx->ch_layout.nb_channels;
++#else
+     mi.channels  = dec_ctx->channels;
++#endif
+     mi.sampling  = dec_ctx->sample_rate;
+ 
+     AVDictionaryEntry *tag = NULL;
+
+From f5d62fafcadcedc8cdfeaf8d78cd1abceb173edf Mon Sep 17 00:00:00 2001
+From: Hillwood Yang <hillwood@opensuse.org>
+Date: Fri, 31 Oct 2025 20:01:36 +0800
+Subject: [PATCH 2/2] fix: Drop set_vulkan_compute method
+
+The ncnn 20250916 has dropped set_vulkan_compute method
+
+Log: fix build on ncnn 20250916
+---
+ src/ocr/ppocr/ppocr.cpp | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/ocr/ppocr/ppocr.cpp b/src/ocr/ppocr/ppocr.cpp
+index 8a6d0aa..81585fd 100644
+--- a/src/ocr/ppocr/ppocr.cpp
++++ b/src/ocr/ppocr/ppocr.cpp
+@@ -337,11 +337,11 @@ void PaddleOCRApp::rec(const std::vector<cv::Mat> &detectImg)
+         input.substract_mean_normalize(mean_vals, norm_vals);
+         auto outIndexes = recNet->output_indexes();
+         ncnn::Extractor extractor = recNet->create_extractor();
+-        if (recNet->opt.use_vulkan_compute) {
+-            if (maxThreadsUsed > 1 && i % maxThreadsUsed != 1) {
+-                extractor.set_vulkan_compute(false);
+-            }
+-        }
++//        if (recNet->opt.use_vulkan_compute) {
++//            if (maxThreadsUsed > 1 && i % maxThreadsUsed != 1) {
++//                extractor.set_vulkan_compute(false);
++//            }
++//        }
+ 
+         extractor.input(0, input);
+         ncnn::Mat out;

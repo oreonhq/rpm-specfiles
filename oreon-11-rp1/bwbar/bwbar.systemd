@@ -1,0 +1,11 @@
+[Unit]
+Description=Bandwith Usage Monitor
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/bwbar
+ExecStart=/usr/bin/bwbar $OPTIONS
+#User=BWBAR_USER
+
+[Install]
+WantedBy=multi-user.target

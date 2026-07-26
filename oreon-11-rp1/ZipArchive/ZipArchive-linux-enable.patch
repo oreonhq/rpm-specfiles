@@ -1,0 +1,11 @@
+--- ZipArchive-4.1.1.orig/ZipArchive/_platform.h	2011-06-28 09:45:36.000000000 +0200
++++ ZipArchive-4.1.1/ZipArchive/_platform.h	2011-12-11 22:10:53.000000000 +0100
+@@ -29,7 +29,7 @@
+ /************************************ BLOCK START ***********************************/
+ 
+ //#define _ZIP_IMPL_MFC
+-//#define _ZIP_SYSTEM_LINUX
++#define _ZIP_SYSTEM_LINUX
+ 
+ // simplified endianess detection
+ #ifdef __APPLE__

@@ -1,0 +1,7 @@
+[Unit]
+Description=Apgd Random Passwords Generator Server
+After=local-fs.target
+
+[Service]
+ExecStart=/usr/sbin/apgd -M sncl -EO -a 0 -r /usr/share/dict/words -m 8 -x 8 -t
+StandardInput=socket

@@ -1,0 +1,51 @@
+From 41e15de6de2caef6bfadafcaf3dbb60c0531079c Mon Sep 17 00:00:00 2001
+From: Michal Gawlik <michal@gawlik.dev>
+Date: Fri, 16 Sep 2022 14:00:05 +0200
+Subject: [PATCH] imgcreate/kickstart: parse kickstart directly when it's a
+ local file
+
+Let's suppose we have a kickstart file which includes another file
+using relative path, and both are stored in a subdirectory relative to
+$PWD:
+
+  subdir/a.ks  # contains '%include b.ks'
+  subdir/b.ks
+
+Now when trying to build ISO with --config=subdir/a.ks, it gets copied
+to $PWD/.kstmp.<PID>. This breaks the %include command, cause b.ks is in
+the $PWD/subdir, not in $PWD where temporary copy of a.ks is.
+
+To avoid overcomplicating solution, let's open the file directly when it
+appears to exist on local file system, without using urlgrabber; and try
+to download it only when it does not exist. This solves the issue, cause
+pykickstart is able to correctly figure out subdirs and relative
+includes when it gets the original file location.
+---
+ imgcreate/kickstart.py | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/imgcreate/kickstart.py b/imgcreate/kickstart.py
+index b3832e0f..20827759 100644
+--- a/imgcreate/kickstart.py
++++ b/imgcreate/kickstart.py
+@@ -50,10 +50,16 @@ def read_kickstart(path):
+     version = ksversion.makeVersion()
+     ks = ksparser.KickstartParser(version)
+     try:
+-        tmpks = '.kstmp.{}'.format(os.getpid())
+-        ksfile = urlgrabber.urlgrab(path, filename=tmpks)
+-        ks.readKickstart(tmpks)
+-        os.unlink (tmpks)
++        # If kickstart file exists on the local filesystem, open it directly
++        # so pykickstart knows how to handle relative %include. Otherwise,
++        # treat as URL and download to temporary file before parsing.
++        if os.path.exists(path):
++            ks.readKickstart(path)
++        else:
++            tmpks = '.kstmp.{}'.format(os.getpid())
++            ksfile = urlgrabber.urlgrab(path, filename=tmpks)
++            ks.readKickstart(tmpks)
++            os.unlink(tmpks)
+ # Fallback to e.args[0] is a workaround for bugs in urlgragger and pykickstart.
+     except IOError as e:
+         raise errors.KickstartError("Failed to read kickstart file "

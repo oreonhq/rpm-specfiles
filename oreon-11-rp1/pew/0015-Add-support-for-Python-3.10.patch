@@ -1,0 +1,32 @@
+From 1b7da40c0d28a541f8fdf5c710b82a23fe82a8e7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tadej=20Jane=C5=BE?= <tadej.j@nez.si>
+Date: Fri, 1 Oct 2021 12:18:08 +0200
+Subject: [PATCH 15/15] Add support for Python 3.10
+
+---
+ tox.ini | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tox.ini b/tox.ini
+index 4481075..d0a559e 100644
+--- a/tox.ini
++++ b/tox.ini
+@@ -1,6 +1,6 @@
+ [tox]
+ skip_missing_interpreters=True
+-envlist = py{36,37,38,39}-{linux,windows}, pypy3
++envlist = py{36,37,38,39,310}-{linux,windows}, pypy3
+ 
+ [gh-actions]
+ python =
+@@ -8,6 +8,7 @@ python =
+     3.7: py37
+     3.8: py38
+     3.9: py39
++    3.10: py310
+ 
+ [gh-actions:env]
+ PLATFORM =
+-- 
+2.31.1
+

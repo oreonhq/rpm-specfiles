@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Mirror Magic
+Comment=Puzzle game where you steer a beam of light using mirrors
+Exec=mirrormagic
+Icon=mirrormagic
+Terminal=false
+StartupNotify=false
+Type=Application
+Categories=Game;LogicGame;
+Keywords=Game;Puzzle;Deflektor;Mindbender;

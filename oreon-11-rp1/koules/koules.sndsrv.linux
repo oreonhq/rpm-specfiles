@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if pactl stat
+then
+	exec padsp "$0".bin "$@"
+else
+	exec "$0".bin "$@"
+fi

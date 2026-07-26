@@ -1,0 +1,32 @@
+Include <unistd.h> to obtain a declaration of the syscall function.
+Implicit function declarations are likely to be rejected by future
+compilers by default.
+
+Submitted upstream: <https://github.com/filebench/filebench/pull/160>
+
+diff --git a/configure b/configure
+index a1bbead0e08a719d..47f62465365aee10 100755
+--- a/configure
++++ b/configure
+@@ -7642,6 +7642,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+ 	#include <syscall.h>
++	#include <unistd.h>
+ int
+ main ()
+ {
+diff --git a/configure.ac b/configure.ac
+index 387638236684a995..1a17cbb1f83e2172 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -412,7 +412,8 @@ AC_TRY_COMPILE([
+ # check for I/O priority system calls
+ AC_MSG_CHECKING(for I/O priority system calls)
+ AC_TRY_COMPILE([
+-	#include <syscall.h>],
++	#include <syscall.h>
++	#include <unistd.h>],
+   	[(void)syscall(__NR_ioprio_set, 0, 0, 0);
+ 	],[
+ 	    AC_DEFINE(HAVE_IOPRIO, 1, [ Define if you have I/O priority syscalls. ])

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>IBM Plex Sans</target>
+    <match>
+      <family>IBM Plex Sans Condensed</family>
+      <prepend-keyword>SemiCondensed</prepend-keyword>
+    </match>
+    <like>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>

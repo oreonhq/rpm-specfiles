@@ -1,0 +1,78 @@
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf/Mono.Zeroconf.Providers/ProviderFactory.cs.namecollision mono-zeroconf-0.9.0/src/Mono.Zeroconf/Mono.Zeroconf.Providers/ProviderFactory.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf/Mono.Zeroconf.Providers/ProviderFactory.cs.namecollision	2017-07-12 10:30:23.961195982 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf/Mono.Zeroconf.Providers/ProviderFactory.cs	2017-07-12 10:32:41.732819957 -0400
+@@ -91,23 +91,26 @@ namespace Mono.Zeroconf.Providers
+             }
+             
+             foreach(string directory in directories) {
+-                foreach(string file in Directory.GetFiles(directory, "Mono.Zeroconf.Providers.*.dll")) {
+-                    if(Path.GetFileName(file) != Path.GetFileName(this_asm_path)) {
+-                        Assembly provider_asm = Assembly.LoadFile(file);
+-                        foreach(Attribute attr in provider_asm.GetCustomAttributes(false)) {
+-                            if(attr is ZeroconfProviderAttribute) {
+-                                Type type = (attr as ZeroconfProviderAttribute).ProviderType;
+-                                IZeroconfProvider provider = (IZeroconfProvider)Activator.CreateInstance(type);
+-                                try {
+-                                    provider.Initialize();
+-                                    providers_list.Add(provider);
+-                                } catch (Exception e) {
+-                                    Console.WriteLine (e);
++                try {
++                    foreach(string file in Directory.GetFiles(directory, "Mono.Zeroconf.Providers.*.dll")) {
++                        if(Path.GetFileName(file) != Path.GetFileName(this_asm_path)) {
++                            Assembly provider_asm = Assembly.LoadFile(file);
++                            foreach(Attribute attr in provider_asm.GetCustomAttributes(false)) {
++                                if(attr is ZeroconfProviderAttribute) {
++                                    Type type = (attr as ZeroconfProviderAttribute).ProviderType;
++                                    IZeroconfProvider provider = (IZeroconfProvider)Activator.CreateInstance(type);
++                                    try {
++                                        provider.Initialize();
++                                        providers_list.Add(provider);
++                                    } catch (Exception e) {
++                                        Console.WriteLine (e);
++                                    }
+                                 }
+                             }
+                         }
+                     }
+                 }
++                catch {}
+             }
+             
+             if(providers_list.Count == 0) {
+diff -up mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs.namecollision mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs
+--- mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs.namecollision	2017-07-12 10:27:24.701557197 -0400
++++ mono-zeroconf-0.9.0/src/Mono.Zeroconf.Providers.AvahiDBus/Mono.Zeroconf.Providers.AvahiDBus/RegisterService.cs	2017-07-12 10:30:13.129461409 -0400
+@@ -38,6 +38,9 @@ namespace Mono.Zeroconf.Providers.AvahiD
+         private IAvahiEntryGroup entry_group;
+         
+         public event RegisterServiceEventHandler Response;
++
++        private string originalName;
++        private int retryNameModifier = 2;
+      
+         public RegisterService ()
+         {
+@@ -95,12 +98,20 @@ namespace Mono.Zeroconf.Providers.AvahiD
+             switch (state) {
+                 case EntryGroupState.Collision:
+                     if (!OnResponse (ErrorCode.Collision)) {
+-                        throw new ApplicationException ();
++                        if (originalName == null) {
++                            originalName = Name;
++                        }
++                        Name = originalName + " (" + retryNameModifier + ")";
++                        retryNameModifier++;
++                        Console.WriteLine("ZeroConf had a name collision, trying: " + Name);
++                        Register();
++                        // throw new ApplicationException ();
+                     }
+                     break;
+                 case EntryGroupState.Failure:
+                     if (!OnResponse (ErrorCode.Failure)) {
+-                        throw new ApplicationException ();
++                        Console.WriteLine("Mono.ZeroConf failed to register name with AvahiDBus");
++                        // throw new ApplicationException ();
+                     }
+                     break;
+                 case EntryGroupState.Established:

@@ -1,0 +1,15 @@
+Index: domoticz-2025.2/CMakeLists.txt
+===================================================================
+--- domoticz-2025.2.orig/CMakeLists.txt
++++ domoticz-2025.2/CMakeLists.txt
+@@ -803,8 +803,8 @@
+   set(RESOLV_LIBRARIES -lresolv)
+ endif()
+ 
+-target_link_libraries(domoticz ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${MINIZIP_LIBRARIES} ${RESOLV_LIBRARIES} ${CURL_LIBRARIES} pthread ${MQTT_LIBRARIES} ${LUA_LIBRARIES} ${CMAKE_DL_LIBS} ${TELLDUS_LIBRARIES})
+-target_link_libraries(domoticztester ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${MINIZIP_LIBRARIES} ${RESOLV_LIBRARIES} ${CURL_LIBRARIES} pthread ${MQTT_LIBRARIES} ${LUA_LIBRARIES} ${CMAKE_DL_LIBS} ${TELLDUS_LIBRARIES})
++target_link_libraries(domoticz ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${MINIZIP_LIBRARIES} ${RESOLV_LIBRARIES} ${CURL_LIBRARIES} pthread -lpythonVER ${MQTT_LIBRARIES} ${LUA_LIBRARIES} ${CMAKE_DL_LIBS} ${TELLDUS_LIBRARIES})
++target_link_libraries(domoticztester ${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${MINIZIP_LIBRARIES} ${RESOLV_LIBRARIES} ${CURL_LIBRARIES} pthread -lpythonVER ${MQTT_LIBRARIES} ${LUA_LIBRARIES} ${CMAKE_DL_LIBS} ${TELLDUS_LIBRARIES})
+ 
+ IF(EXECINFO_LIBRARIES)
+   target_link_libraries(domoticz ${EXECINFO_LIBRARIES})

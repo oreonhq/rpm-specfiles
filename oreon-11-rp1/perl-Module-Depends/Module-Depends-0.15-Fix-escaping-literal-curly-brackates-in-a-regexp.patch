@@ -1,0 +1,34 @@
+From d60c404d7a242b843d90b9802c282d3374bfb413 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 22 May 2017 14:12:46 +0200
+Subject: [PATCH] Fix escaping literal curly brackates in a regexp
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Literal '{' in a regexp must be escaped since 5.26.0
+
+CPAN RT#119324
+CPAN RT#115053
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/depends.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/depends.t b/t/depends.t
+index bfff844..5fe94f2 100644
+--- a/t/depends.t
++++ b/t/depends.t
+@@ -44,7 +44,7 @@ like(
+ $notthere->dist_dir('t/empty')->find_modules;
+ like(
+     $notthere->error,
+-    qr{^No {Build,Makefile}.PL found },
++    qr{^No \{Build,Makefile\}.PL found },
+     "fails on empty dir"
+ );
+ 
+-- 
+2.9.4
+

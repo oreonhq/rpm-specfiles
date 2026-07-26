@@ -1,0 +1,19 @@
+[archive]
+
+[licensing]
+detector = "trivy"
+exclude_files = ["vendor/github.com/liquidweb/liquidweb-cli/COPYRIGHT", "vendor/github.com/liquidweb/liquidweb-go/COPYRIGHT", "vendor/github.com/miekg/dns/COPYRIGHT"]
+[[licensing.licenses]]
+path = "vendor/github.com/BurntSushi/toml/COPYING"
+sha256sum = "d21cb1c60785d6d3a84a7059323ccafc45c645b1bbda281c76a62d66ad2d7dc3"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/go-errors/errors/LICENSE.MIT"
+sha256sum = "4c1b2259f160d975ec6594b602be5db4e6c0c06afe312ca3cd7cff91b75c7c26"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/gopkg.in/yaml.v2/LICENSE.libyaml"
+sha256sum = "a94710b55e03b5285f77d048c5ba61bb9d6ee04a06c0eb90e68821e11b0c707a"
+expression = "MIT"

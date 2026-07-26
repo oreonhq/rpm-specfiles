@@ -1,0 +1,89 @@
+--- a/appdata/orthorobot
++++ b/appdata/orthorobot
+@@ -0,0 +1,13 @@
++#!/bin/sh
++if [ $# -ne 0 ]
++then
++ if [ "$1" == "-h" ]||[ "$1" == "--help" ]
++ then
++  man 6 orthorobot
++  exit
++ fi
++ echo "Invalid option(s): $*" 1>&2
++ echo Usage: `basename $0` [-h] 1>&2
++ exit 1
++fi
++love /usr/share/orthorobot/orthorobot.love
+--- a/appdata/orthorobot.6
++++ b/appdata/orthorobot.6
+@@ -0,0 +1,15 @@
++.TH orthorobot 6 "VERSION" "Ortho Robot"
++.SH NAME
++orthorobot - Ortho Robot v VERSION
++.SH SYNOPSIS
++A perspective based puzzle game
++.SH DESCRIPTION
++Literally bridging the gap between 2D and 3D games, Ortho Robot is a
++perspective based puzzle game, where you flatten the view to move
++across gaps. This game is made with LOVE. You can find more games and
++information about the author(s) at http://stabyourself.net
++.SH OPTIONS
++.BR \-h ", " \-\-help
++Show manpage.
++.SH SEE ALSO
++.BR love(6)
+--- a/appdata/orthorobot.appdata.xml
++++ b/appdata/orthorobot.appdata.xml
+@@ -0,0 +1,41 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!-- Copyright 2016 Jeremy Newton -->
++<component type="desktop">
++ <id>orthorobot.desktop</id>
++ <metadata_license>CC-BY-SA-3.0</metadata_license>
++ <project_license>WTFPL</project_license>
++ <name>Ortho Robot</name>
++ <summary>A perspective based puzzle game</summary>
++ <description>
++  <p>
++   Literally bridging the gap between 2D and 3D games, Ortho Robot is a
++   perspective based puzzle game, where you flatten the view to move
++   across gaps. This game is made with LÖVE.
++  </p>
++ </description>
++ <screenshots>
++  <screenshot type="default">
++   <image>http://stabyourself.net/images/screenshots/orthorobot-1.png</image>
++   <caption>The main menu</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://stabyourself.net/images/screenshots/orthorobot-2.png</image>
++   <caption>Gameplay instructions</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://stabyourself.net/images/screenshots/orthorobot-3.png</image>
++   <caption>Level selection</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://stabyourself.net/images/screenshots/orthorobot-4.png</image>
++   <caption>Example gameplay 1</caption>
++  </screenshot>
++  <screenshot>
++   <image>http://stabyourself.net/images/screenshots/orthorobot-5.png</image>
++   <caption>Example gameplay 2</caption>
++  </screenshot>
++ </screenshots>
++ <url type="homepage">http://stabyourself.net/orthorobot/</url>
++ <url type="bugtracker">http://github.com/Stabyourself/orthorobot/issues</url>
++ <update_contact>alexjnewt_at_hotmail.com</update_contact>
++</component>
+--- a/appdata/orthorobot.desktop
++++ b/appdata/orthorobot.desktop
+@@ -0,0 +1,8 @@
++[Desktop Entry]
++Name=orthorobot
++Comment=A perspective based puzzle game
++Exec=orthorobot
++Type=Application
++Categories=Game;LogicGame;
++Terminal=false
++Icon=orthorobot

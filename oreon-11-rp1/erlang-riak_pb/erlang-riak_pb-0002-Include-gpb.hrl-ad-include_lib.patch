@@ -1,0 +1,18 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 13 Feb 2026 09:31:17 +0100
+Subject: [PATCH] Include gpb.hrl ad include_lib
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 78b3f45..8063022 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -26,6 +26,7 @@
+ {gpb_opts, [{module_name_suffix, "_pb"},
+             {msg_name_to_lower, true},
+             {defaults_for_omitted_optionals, true},
++            include_as_lib,
+             {i, "src"}]}.
+ 
+ {provider_hooks, [

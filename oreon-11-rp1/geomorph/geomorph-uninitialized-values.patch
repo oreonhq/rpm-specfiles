@@ -1,0 +1,263 @@
+diff -rup a/src/hf/hf.c b/src/hf/hf.c
+--- a/src/hf/hf.c	2016-05-13 12:20:56.786947210 +0200
++++ b/src/hf/hf.c	2016-05-13 12:47:20.020264979 +0200
+@@ -243,10 +243,10 @@ which can be expressed with integers as
+     Y = (6969 * R + 23434 * G + 2365 * B)/32768
+ */
+ 	unsigned long int r,g,b,y;
+-	pix8_rgb *pix8;
+-	pix16_rgb *pix16;
+-	pix8_rgba *pix8a;
+-	pix16_rgba *pix16a;
++	pix8_rgb *pix8 = 0;
++	pix16_rgb *pix16 = 0;
++	pix8_rgba *pix8a = 0;
++	pix16_rgba *pix16a = 0;
+ 	gint i;
+ 	unsigned char *new_img, *new_img8;
+ 	unsigned short int *new_img16;
+diff -rup a/src/hf/hf_calc.c b/src/hf/hf_calc.c
+--- a/src/hf/hf_calc.c	2016-05-13 12:20:56.786947210 +0200
++++ b/src/hf/hf_calc.c	2016-05-13 12:52:09.633382187 +0200
+@@ -322,7 +322,7 @@ void generalized_merge (gpointer map, gi
+ //	The size of a square map of radius R is (2*R+1) * (2*R+1)
+ 
+ 	gint i,j,ix,iy, k, l, radius_x, radius_y,lx;
+-	glong val;
++	glong val = 0;
+ 	gdouble ratio, dval=0.0;
+ 	gboolean if_val = TRUE;
+ 	static gdouble dmax = (gdouble) MAX_HF_VALUE;
+@@ -548,7 +548,7 @@ void interpolated_merge (gpointer map,
+ 
+ 	gint i,j, k, l, radius_x, radius_y,lx, return_gint = 0;
+ 	unsigned char return_uns_char = 0;
+-	glong val;
++	glong val = 0;
+ 	gboolean if_val=TRUE;
+ 	hf_type return_hf_type = 0;
+ 	gdouble ratio, dx, dy, ix, iy, return_gdouble = 0.0, dval = 0.0;
+@@ -2008,6 +2008,9 @@ void hf_subtract(hf_type *hf1, hf_type *
+ 			ratio = ((gdouble) MAX_HF_VALUE) / (gdouble) (max-min); 
+ //		printf("MIN: %ld; MAX: %ld; Ratio: %7.4f\n",min,max,ratio);
+ 	}
++	else {
++		return;
++	}
+ 	for (i=0; i<length; i++) {
+ 		switch (behaviour) {
+ 			case OVERFLOW_ZERO:
+diff -rup a/src/hf/img_process.c b/src/hf/img_process.c
+--- a/src/hf/img_process.c	2016-05-13 12:20:56.788947199 +0200
++++ b/src/hf/img_process.c	2016-05-13 12:43:45.304660858 +0200
+@@ -374,7 +374,7 @@ gdouble *create_pixel_kernel (gint radiu
+ }
+ 
+ gdouble *create_tent_kernel (gint radius, gdouble value_offset, gdouble scale, gboolean not_inverted) {
+-	gdouble *kernel, somme, dradius, di;
++	gdouble *kernel, somme, dradius, di = 0.0;
+ 	gint i, j, x, y, size;
+ 	size = 1 + 2*radius;
+ 	if (scale<=0.0)
+@@ -592,8 +592,8 @@ void hf_convolveb (hf_struct_type *hf, g
+ // printf("W: %s... %f\n",if_weight?"TRUE":"FALSE",weight);
+ 	for (i=0; i<hf->max_y; i++) {
+ 		ii = i*hf->max_x;
+-		value = *(hf->hf_buf + ii+j) ;
+ 		for (j=0; j<hf->max_x; j++) {
++			value = *(hf->hf_buf + ii+j) ;
+ 			test = TRUE;
+ 			y0 = i - radius;
+ 			x0 = j - radius;
+@@ -799,6 +799,7 @@ gpointer init_blocks (gpointer buf, gint
+ 			printf(_("Unexpected option in %s; contact the programmer!"),
+ 			"init_blocks");
+ 			printf("\n");
++			return 0;
+ 	}
+ 	blocks = (gpointer) x_malloc(nblocks * nblocks * size, "gpointer (blocks in init_blocks)");
+ 	for (i=0; i<nblocks; i++) {
+@@ -831,6 +831,7 @@ gpointer init_blocks (gpointer buf, gint
+ 					printf(_("Unexpected option in %s; contact the programmer!"),
+ 					"init_blocks");
+ 					printf("\n");
++					return 0;
+ 			}
+ 		}	// End k and l loops
+ 		value = value / (gdouble) (radius * radius);
+@@ -851,6 +852,7 @@ gpointer init_blocks (gpointer buf, gint
+ 				printf(_("Unexpected option in %s; contact the programmer!"),
+ 				"init_blocks");
+ 				printf("\n");
++				return 0;
+ 		}
+ 	  }	// End j loop
+ 	}	// End i loop
+@@ -941,6 +941,7 @@ void smooth_buf (gpointer buf, gint max_
+ 						printf(_("Unexpected option in %s; contact the programmer!"),
+ 						"smooth_buf");
+ 						printf("\n");
++						return;
+ 				}
+ 				*(hf_values + index) = *(hf_values + index) + 		value * *(filter->values + indexf) ;
+ 				*(hf_weight+index) = *(hf_weight+index) +  *(filter->values+ indexf);
+diff -rup a/src/hf/img_process_dialog.c b/src/hf/img_process_dialog.c
+--- a/src/hf/img_process_dialog.c	2016-05-13 12:20:56.787947205 +0200
++++ b/src/hf/img_process_dialog.c	2016-05-13 12:44:36.785326179 +0200
+@@ -867,7 +867,7 @@ void calc_smooth (hf_wrapper_struct *hfw
+ 		case TILING_YES:
+ 			wrap = TRUE;
+ 			break;
+-		case TILING_NO:
++		default:
+ 			wrap = FALSE;
+ 	}
+ 
+@@ -1017,7 +1017,7 @@ void calc_sharpen (hf_wrapper_struct *hf
+ 		case TILING_YES:
+ 			wrap = TRUE;
+ 			break;
+-		case TILING_NO:
++		default:
+ 			wrap = FALSE;
+ 	}
+ 
+@@ -1317,7 +1317,7 @@ void calc_terrace (hf_wrapper_struct *hf
+ 		case TILING_YES:
+ 			wrap = TRUE;
+ 			break;
+-		case TILING_NO:
++		default:
+ 			wrap = FALSE;
+ 	}
+ 	if (hfw->hf_options->img->terrace_apply_postprocess )
+@@ -2637,7 +2637,7 @@ void calc_lift_edges (hf_wrapper_struct
+ 		case TILING_YES:
+ 			wrap = TRUE;
+ 			break;
+-		case TILING_NO:
++		default:
+ 			wrap = FALSE;
+ 	}
+ 
+diff -rup a/src/utils/config_rc_file.c b/src/utils/config_rc_file.c
+--- a/src/utils/config_rc_file.c	2016-05-13 12:20:56.785947216 +0200
++++ b/src/utils/config_rc_file.c	2016-05-13 12:35:08.040958542 +0200
+@@ -349,12 +349,13 @@ int put_option (option_file_type *option
+ 			for (j=0; j<options->option_block[i].nb_options; j++) {
+ //				printf("OPTION_LABEL: %s; ",current_options->option_block[i].option_list[j].label);
+ 	  			if (!strcmp(options->option_block[i].option_list[j].label,
+-					option_label)) 
++					option_label)) {
+ 					// Tilt!
+ 					if (options->option_block[i].option_list[j].value)
+ 						x_free (options->option_block[i].option_list[j].value);
+ 					options->option_block[i].option_list[j].value = value;
+ 					return TRUE;
++				}
+ 			}
+ 		} // end else
+ 	}
+@@ -447,7 +448,7 @@ void load_options (FILE *fp, option_file
+ 			option_file_type *allowed_options) {
+ 
+ //	Load options from a file without executing them
+-	int current_allowed_block;
++	int current_allowed_block = 0;
+ 	char buf[BUFLEN];
+ 	char *buf_ptr;
+ 	char *rbracket,*lbracket;
+diff -rup a/src/utils/utils.c b/src/utils/utils.c
+--- a/src/utils/utils.c	2016-05-13 12:20:56.785947216 +0200
++++ b/src/utils/utils.c	2016-05-13 12:25:06.826561258 +0200
+@@ -448,7 +448,7 @@ void my_msg(gchar * message, gint flag_e
+ 			label = gtk_label_new(_("SORRY!"));
+ 			pixmap_widget = create_widget_from_xpm(GTK_WIDGET(dialog),fleur_xpm);
+ 			break;
+-		case INFO:
++		default:
+ 			label = gtk_label_new(_("INFORMATION"));
+ 			pixmap_widget = create_widget_from_xpm(GTK_WIDGET(dialog),info_xpm);
+ 	}
+diff -rup a/src/app/document.c b/src/app/document.c
+--- a/src/app/document.c	2016-05-13 12:54:04.049643986 +0200
++++ b/src/app/document.c	2016-05-13 13:06:20.046957021 +0200
+@@ -308,18 +308,22 @@ doc_wrapper *doc_prepare_to_load(gchar *
+ 	}
+ //	printf("IDX: %d\n", doc_type_index);
+ 	if (doc_type_index < 0) {
+-		buf = (gchar *) x_malloc(strlen(buf)+strlen(_("File extension <<%s>> unknown or non-existent"))+1, "gchar (buf)");
+-		sprintf(buf,_("File extension <<%s>> unknown or non-existent"),fname);
+-		my_msg(buf,WARNING);
+-		x_free(buf);
++		buf = (gchar *) x_malloc(strlen(_("File extension <<%s>> unknown or non-existent"))+1, "gchar (buf)");
++		if ( buf ) {
++			sprintf(buf,_("File extension <<%s>> unknown or non-existent"),fname);
++			my_msg(buf,WARNING);
++			x_free(buf);
++		}
+ 		return NULL;
+ 	}
+ 	if (!filexists(path_n_file)) {
+ 		utf8 = g_filename_to_utf8 (path_n_file, -1, NULL, NULL, NULL);
+ 		buf = (gchar *) x_malloc(strlen(_("File %s not found or unreadable!"))+strlen(utf8)+1, "gchar (buf - File not found MSG)");
+-		sprintf(buf,_("File %s not found or unreadable!"),utf8);
+-		my_msg(buf,WARNING);
+-		x_free(buf);
++		if ( buf ) {
++			sprintf(buf,_("File %s not found or unreadable!"),utf8);
++			my_msg(buf,WARNING);
++			x_free(buf);
++		}
+ 		free(utf8);
+ 		return NULL;
+ 	    }
+diff -rup a/src/hf/craters.c b/src/hf/craters.c
+--- a/src/hf/craters.c	2016-05-13 12:54:04.051643974 +0200
++++ b/src/hf/craters.c	2016-05-13 13:00:18.482259531 +0200
+@@ -86,7 +86,7 @@ gint get_depth (draw_crater_struct *dcs,
+ 		case PEAK_CRATER:
+ 			depth = 15;
+ 			break;
+-		case IRREGULAR_CRATER:
++		default:
+ 			depth = 12;
+ 		}
+ 	else
+@@ -114,7 +114,7 @@ gint *get_sqrmap (draw_crater_struct *dc
+ 	case PEAK_CRATER:
+ 		map = peak_crater;
+ 		break;
+-	case IRREGULAR_CRATER:
++	default:
+ 		map = irregular_crater;
+ 	}
+ 	noise = ((gfloat) dcs->radial_noise) / 100.0;
+diff -rup a/src/hf/line.c b/src/hf/line.c
+--- a/src/hf/line.c	2016-05-13 12:54:04.049643986 +0200
++++ b/src/hf/line.c	2016-05-13 13:01:45.518705267 +0200
+@@ -398,10 +398,10 @@ void draw_n_transform_all_segments (line
+ 
+ 	ddist =  sqrt( pow(dx ,2.0) + pow(dy, 2.0) ) ;
+ 
+-	if (ddist>0) {
++	//if (ddist>0) {
+ 		cos =  dx / ddist;
+ 		sin = dy / ddist;
+-	}
++	//}
+ 
+ 	for (l->cur_seg=0; l->cur_seg<l->max_seg; l->cur_seg++) {
+ 		memcpy(&s, l->segments+l->cur_seg, sizeof(segment_struct));
+diff -rup a/src/hf/voronoi.c b/src/hf/voronoi.c
+--- a/src/hf/voronoi.c	2016-05-13 12:54:04.050643980 +0200
++++ b/src/hf/voronoi.c	2016-05-13 13:03:12.837149207 +0200
+@@ -690,6 +690,8 @@ void hf_voronoi (hf_struct_type *hf, vor
+ 		break;
+ 	default:
+ 		scaled_cell_size = vs->cell_size;
++		scaled_min_width = vs->min_width;
++		scaled_max_width = vs->max_width;
+ 	}
+ 	
+ 	srand(vs->seed);

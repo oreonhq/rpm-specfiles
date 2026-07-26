@@ -1,0 +1,242 @@
+--- dd2-0.2.1/src/menu.c.highscore	2004-07-02 17:36:33.000000000 +0200
++++ dd2-0.2.1/src/menu.c	2006-11-18 20:01:04.000000000 +0100
+@@ -17,6 +17,7 @@
+     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+ */
++#include<string.h>
+ #include"SDL.h"
+ #include"SDL_mixer.h"
+ #include"menu.h"
+--- dd2-0.2.1/src/main.c.highscore	2004-07-02 17:40:48.000000000 +0200
++++ dd2-0.2.1/src/main.c	2006-11-18 20:01:04.000000000 +0100
+@@ -17,6 +17,13 @@
+     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+ */
++#ifndef WIN32
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE /* this must be done before the first include of unistd.h */
++#endif
++#include<unistd.h>
++#endif
++#include<string.h>
+ #include<stdlib.h>
+ #include<stdio.h>
+ #include"main.h"
+@@ -44,7 +51,7 @@
+ Uint32 tick, ntick;
+ float scroll=0,scroll2=0;
+ 
+-bool pause;
++bool paused;
+ Uint32 pause_tick;
+ 
+ extern bool boss;
+@@ -130,7 +137,7 @@
+ 					{
+ 						writeCString(gfx, screen, 98, 20, "game paused", 0);
+ 						SDL_Flip(screen);
+-						pause=pause ? false : true;
++						paused=paused ? false : true;
+ 						pause_tick=SDL_GetTicks()+200;
+ 						continue;
+ 					}
+@@ -156,7 +163,7 @@
+ 				control_player(&player[1]);
+ 		}
+ 
+-		if(pause)
++		if(paused)
+ 			continue;
+ 		
+ 		/* frame rate calculation */
+@@ -270,8 +277,19 @@
+     char buffer[512];
+ 	SDL_VideoInfo *vi;
+ 	unsigned char bpp=8;
++	FILE *scoreFile;
+ 
+ #ifndef WIN32
++	gid_t realgid;
++
++	scoreFile = fopen("/var/games/dd2-hiscore", "r+");
++	realgid = getgid();
++
++        if (setresgid(-1, realgid, realgid) != 0) {
++            perror("Could not drop setgid privileges.  Aborting.");
++            exit(1);
++        }
++	
+ 	if(argc==2)
+ 		if(argv[1][0]=='-' && argv[1][1]=='v') {
+ 			printf("%s v%s\nCopyright (c) 2003,2004 Juan J. Martinez <jjm@usebox.net>\n", PACKAGE, VERSION);
+@@ -292,11 +310,12 @@
+ 	sprintf(buffer,"%s/dd2.cfg",DD2_DATA);
+ 	if(!loadCFG(buffer,&conf))
+ 		fprintf(stderr,"unable to read configuration, using defaults\n");
+-#endif
+-
++		
+ 	/* read hi-scores */
+ 	sprintf(buffer,"%s/dd2-hiscore",DD2_DATA);
+-	if(!loadScore(buffer,hiscore))
++	scoreFile = fopen(buffer, "r+");
++#endif
++	if(!loadScore(scoreFile,hiscore))
+ 		fprintf(stderr,"unable to read hi-scores, using defaults\n");
+ 
+ 	/* don't init sound if it's not needed */
+@@ -393,7 +412,7 @@
+ 		player[0].joy=(int)conf.control[0]==JOYSTICK;
+ 		player[1].joy=(int)conf.control[1]==JOYSTICK;
+ 
+-		pause=0;
++		paused=0;
+ 		pause_tick=0;
+ 		boss=0;
+ 		gameLoop();
+@@ -462,10 +481,8 @@
+ 	saveCFG(buffer,&conf);
+ 
+ 	/* save hi-scores */
+-	sprintf(buffer,"%s/dd2-hiscore",DD2_DATA);
+-	if(!saveScore(buffer,hiscore))
+-		fprintf(stderr,"unable to save hi-scores\ndo you have permissions to write into %s?\n"
+-			,buffer);
+-
++	if(!saveScore(scoreFile,hiscore))
++		fprintf(stderr,"unable to save hi-scores\n");
++	
+ 	return 0;
+ }
+--- dd2-0.2.1/src/control.c.highscore	2006-11-18 20:04:24.000000000 +0100
++++ dd2-0.2.1/src/control.c	2006-11-18 20:04:32.000000000 +0100
+@@ -22,13 +22,13 @@
+ #include "control.h"
+ #include "SDL_plus.h"
+ 
+-extern bool pause;
++extern bool paused;
+ 
+ void control_player_joy(SDL_Joystick *joy, pDesc *p)
+ {
+ 	int x,y,but;
+ 	
+-	if(pause)
++	if(paused)
+ 		return;
+ 
+ 	SDL_JoystickUpdate();
+@@ -68,7 +68,7 @@
+ 
+ 	keys=SDL_GetKeyState(NULL);	
+ 
+-	if(pause)
++	if(paused)
+ 		return;
+ 	
+ 	if(keys[p->keys[0]]) {
+--- dd2-0.2.1/src/data/Makefile.am.highscore	2004-05-17 16:41:00.000000000 +0200
++++ dd2-0.2.1/src/data/Makefile.am	2006-11-18 20:01:04.000000000 +0100
+@@ -3,7 +3,3 @@
+ efx6.wav efx7.wav efx8.wav gfx.bmp dd2.cfg game.act dd2-hiscore
+ EXTRA_DIST = bgm1.xm bgm2.xm efx1.wav efx2.wav efx3.wav efx4.wav efx5.wav \
+ efx6.wav efx7.wav efx8.wav gfx.bmp dd2.cfg game.act dd2-hiscore
+-
+-install-data-hook:
+-	chmod a+rw $(pkgdatadir)/dd2-hiscore
+-
+--- dd2-0.2.1/src/data/Makefile.in.highscore	2004-07-02 17:43:12.000000000 +0200
++++ dd2-0.2.1/src/data/Makefile.in	2006-11-18 20:01:04.000000000 +0100
+@@ -140,7 +140,6 @@
+ 
+ install-data-am: install-pkgdataDATA
+ 	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+ install-data: install-data-am
+ 
+ install-am: all-am
+@@ -190,10 +189,6 @@
+ mostlyclean-generic distclean-generic clean-generic \
+ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+ 
+-
+-install-data-hook:
+-	chmod a+rw $(pkgdatadir)/dd2-hiscore
+-
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+--- dd2-0.2.1/src/cfg.c.highscore	2004-06-10 20:07:23.000000000 +0200
++++ dd2-0.2.1/src/cfg.c	2006-11-18 20:01:04.000000000 +0100
+@@ -88,9 +88,8 @@
+ }
+ 
+ int
+-loadScore(char *path, score *hisc)
++loadScore(FILE *f, score *hisc)
+ {
+-	FILE *f;
+ 	int i,j;
+ 	score swp;
+ 
+@@ -101,19 +100,15 @@
+ 		hisc[i].score=10000-(i*1000);
+ 	}
+ 
+-	f=fopen(path,"rt");
+ 	if(!f)
+ 		return 0;
+ 
+ 	for(i=0;i<10;i++)
+ 		if(fscanf(f,"%8[^:]:%i:%i\n", hisc[i].name, &hisc[i].stage,
+ 			&hisc[i].score)!=3) {
+-				fclose(f);
+ 				return 0;
+ 		}
+ 
+-	fclose(f);
+-
+ 	/* it's needed the score is ordered */
+ 	for(i=0;i<9;i++)
+ 		for(j=i;j<10;j++) {
+@@ -134,14 +129,14 @@
+ }
+ 
+ int
+-saveScore(char *path, score *hisc)
++saveScore(FILE *f, score *hisc)
+ {
+-	FILE *f;
+ 	int i;
+ 
+-	f=fopen(path,"wt");
+ 	if(!f)
+ 		return 0;
++		
++	rewind(f);
+ 
+ 	for(i=0;i<10;i++)
+ 		fprintf(f,"%s:%i:%i\n", hisc[i].name, hisc[i].stage,
+--- dd2-0.2.1/src/cfg.h.highscore	2004-05-17 11:02:40.000000000 +0200
++++ dd2-0.2.1/src/cfg.h	2006-11-18 20:01:04.000000000 +0100
+@@ -20,6 +20,8 @@
+ #ifndef _CFG_H_
+ #define _CFG_H_
+ 
++#include <stdio.h>
++
+ #define NO_SOUND	0
+ #define SOUND_LOW	1
+ #define SOUND_MED	2
+@@ -45,7 +47,7 @@
+ int loadCFG(char *path, cfg *c);
+ int saveCFG(char *path, cfg *c);
+ 
+-int loadScore(char *path, score *hisc);
+-int saveScore(char *path, score *hisc);
++int loadScore(FILE *f, score *hisc);
++int saveScore(FILE *f, score *hisc);
+ 
+ #endif

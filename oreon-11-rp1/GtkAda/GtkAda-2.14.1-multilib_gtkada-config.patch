@@ -1,0 +1,24 @@
+--- src/tools/gtkada-config.in~	2010-09-25 16:58:19.000000000 +0200
++++ src/tools/gtkada-config.in	2010-09-25 16:58:19.000000000 +0200
+@@ -1,11 +1,20 @@
+ #!/bin/sh
+ # @configure_input@
+ 
++case `uname --machine` in
++   x86_64|ppc64|ppc64le|s390x|sparc64|aarch64)
++      lib=lib64
++      ;;
++   *)
++      lib=lib
++      ;;
++esac
++
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ bindir=@bindir@
+ includedir=@includedir@/gtkada
+-libdir=@libdir@
++libdir=${prefix}/${lib}
+ libdir_static=${libdir}/@libsubdir_static@
+ libdir_shared=${libdir}/@libsubdir_shared@
+ alidir_static=${libdir}/@alisubdir_static@

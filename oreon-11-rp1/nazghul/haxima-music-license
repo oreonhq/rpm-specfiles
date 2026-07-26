@@ -1,0 +1,84 @@
+Return-Path: <feedback@mfiles.co.uk>
+Received: from util6.math.uh.edu ([unix socket])
+	 by util6.math.uh.edu (Cyrus v2.3.7-Invoca-RPM-2.3.7-4) with LMTPA;
+	 Thu, 17 Dec 2009 04:52:18 -0600
+X-Sieve: CMU Sieve 2.3
+Received: from mx1.math.uh.edu ([129.7.128.32])
+	by util6.math.uh.edu with esmtp (Exim 4.43)
+	id 1NLDxy-0008Pi-CQ
+	for tibbs@math.uh.edu; Thu, 17 Dec 2009 04:52:18 -0600
+Received: from moutng.kundenserver.de ([212.227.17.8])
+	by mx1.math.uh.edu with esmtp (Exim 4.69)
+	(envelope-from <feedback@mfiles.co.uk>)
+	id 1NLDxv-0006y8-A1
+	for tibbs@math.uh.edu; Thu, 17 Dec 2009 04:52:18 -0600
+Received: from JimPC (host86-165-195-20.range86-165.btcentralplus.com [86.165.195.20])
+	by mrelayeu.kundenserver.de (node=mrbap1) with ESMTP (Nemesis)
+	id 0Lio0b-1Ntilp2afV-00dWnc; Thu, 17 Dec 2009 11:52:01 +0100
+Message-ID: <2C619E963CF3401BB32032F212A7F762@JimPC>
+From: "mfiles support" <feedback@mfiles.co.uk>
+To: "Tom \"spot\" Callaway" <tcallawa@redhat.com>
+Cc: "Jason L Tibbitts III" <tibbs@math.uh.edu>
+References: <ufa8wf7jlz5.fsf@v18.math.uh.edu><76432666144C45539E87A009D49750EC@JimPC> <ufafx9ex6zs.fsf@v18.math.uh.edu> <6E68A539DB5F4EDFA5CF7EF7CADA1A52@JimPC> <4AEB4F1A.9010803@redhat.com> <536292CA2BB04016964A01B8A908EC2B@JimPC> <4AEEEC78.3040607@redhat.com>
+In-Reply-To: <4AEEEC78.3040607@redhat.com>
+Subject: Re: mfiles content - Haxima music license question
+Date: Thu, 17 Dec 2009 10:51:57 -0000
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="----=_NextPart_000_01D0_01CA7F06.F43907B0"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Windows Mail 6.0.6002.18005
+X-MimeOLE: Produced By Microsoft MimeOLE V6.0.6002.18005
+X-Provags-ID: V01U2FsdGVkX19IxeXyDJiG2v2euCH2grbLR/PFv3uFWhXAwkT
+ T0R07Qa0gk8djlExWGi0ZabtAo+ogg6M7ROWTAJnjABpanQUzO
+ W5OlEdV9p3wlI3NSFBhtg==
+X-Spam-Score: -2.6 (--)
+
+Tom, Jason,
+ 
+Apologies for the long delay - I've had many things happening this past few weeks.
+ 
+I agree to these midi files being licensed under CC2 - i.e. Attribution Share Alike
+ 
+Is that all you need from me?
+
+Jim Paterson
+jim@mfiles.co.uk
+mfiles - the music files
+http://www.mfiles.co.uk 
+ 
+----- Original Message -----
+From: "Tom "spot" Callaway" <tcallawa@redhat.com>
+To: "mfiles support" <feedback@mfiles.co.uk>
+Cc: "Jason L Tibbitts III" <tibbs@math.uh.edu>
+Sent: Monday, November 02, 2009 2:28 PM
+Subject: Re: mfiles content - Haxima music license question
+
+> On 11/02/2009 09:24 AM, mfiles support wrote:
+>> Tom,
+>>
+>> Thanks for your response.
+>>
+>> Both you and Jason have steered me towards the Creative Commons
+>> licences, but I am still struggling to understand which of the 6 options
+>> you are specifically asking me to accept.
+>>
+>> At the time of the original request from Gordon, my understanding
+>> (and assumption) was equivalent to No.6 on the CC list:
+>> "Attribution Non-Commercial No Derivatives".
+>>
+>> I *think* you are asking to chose 1, 2 or 3 because you want
+>> commercial use. Is that correct?
+>
+> That is correct.
+>
+>> If I do not agree to 1, 2 or 3 then what happens?
+>
+> Fedora will be unable to use/distribute your music files, and will have
+> to either remove the Haxima game entirely, or replace the music with
+> other files under an acceptable license.
+>
+> Thanks,
+>
+> ~tom
+

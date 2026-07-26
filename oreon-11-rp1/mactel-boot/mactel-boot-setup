@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ x`df -T /boot/efi | tail -n +2 | awk '{print $2}'` != x"hfsplus" ]; then
+   exit
+fi
+
+if [ -f /boot/efi/EFI/redhat/grub.efi ]; then
+    DIR=redhat
+    LOADER=grub.efi
+    CONFIG=grub.conf
+    TARGET=boot.conf
+elif [ -f /boot/efi/EFI/redhat/grub2-efi/grub.efi ]; then
+    DIR=redhat/grub2-efi
+    LOADER=grub.efi
+    CONFIG=grub.cfg
+    TARGET=boot.cfg
+elif [ -f /boot/efi/EFI/fedora/grubx64.efi ]; then
+    DIR=fedora
+    LOADER=grubx64.efi
+    CONFIG=grub.cfg
+    TARGET=boot.cfg
+else
+    exit
+fi
+
+SYSDIR=/boot/efi/System/Library/Coreservices
+ln -f /boot/efi/EFI/$DIR/$LOADER $SYSDIR/boot.efi
+ln -sf ../../../EFI/$DIR/$CONFIG $SYSDIR/$TARGET
+hfs-bless /boot/efi/EFI/$DIR/$LOADER
+
+if [ -f /usr/share/pixmaps/bootloader/fedora.vol ]; then
+    cp /usr/share/pixmaps/bootloader/fedora.vol /boot/efi/EFI/$DIR/.disk_label
+fi
+
+if [ -f /usr/share/pixmaps/bootloader/fedora.icns ]; then
+   cp /usr/share/pixmaps/bootloader/fedora.icns /boot/efi/.VolumeIcon.icns;
+fi;
+

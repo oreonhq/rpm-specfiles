@@ -1,0 +1,13 @@
+diff -up grafX2-v2.8/src/buttons.c.fix-coords grafX2-v2.8/src/buttons.c
+--- grafX2-v2.8/src/buttons.c.fix-coords	2022-12-29 13:31:49.481534657 -0500
++++ grafX2-v2.8/src/buttons.c	2022-12-29 13:32:19.046832561 -0500
+@@ -761,8 +761,8 @@ const T_Lookup Lookup_AutoRes[] = {
+ };
+ 
+ const T_Lookup Lookup_Coords[] = {
++  {"Absolute",0},
+   {"Relative",1},
+-  {"Absolute",2},
+   {NULL,-1},
+ };
+ 

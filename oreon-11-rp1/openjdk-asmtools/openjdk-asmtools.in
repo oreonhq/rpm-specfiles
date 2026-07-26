@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+set -e
+
+# openjdk-asmtools launch script
+
+# JPackage Project <http://www.jpackage.org/>
+# Source functions library
+
+source /usr/share/java-utils/java-functions
+
+: ${MAIN_CLASS:=org.openjdk.asmtools.Main}
+
+set_javacmd
+
+# all dependencies must be on classpath
+set_classpath openjdk-asmtools
+
+run @SCD@  "$@"

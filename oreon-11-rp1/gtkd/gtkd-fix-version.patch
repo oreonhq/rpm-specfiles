@@ -1,0 +1,37 @@
+From bb567a1345749036ac1f1228c802376082abede5 Mon Sep 17 00:00:00 2001
+From: Matthias Klumpp <matthias@tenstral.net>
+Date: Fri, 31 Oct 2025 03:44:52 +0100
+Subject: [PATCH] Update GtkD version in makefile to tagged version
+
+Also, move the variables to the top, so they are easier to find & update
+when a new release is tagged.
+
+Resolves: #362
+---
+ GNUmakefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/GNUmakefile b/GNUmakefile
+index 30057e943..674806165 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -3,6 +3,9 @@ prefix?=/usr/local
+ pkgconfigdir?=$(libdir)/pkgconfig
+ PKG_CONFIG?=pkg-config
+ 
++GTKD_VERSION=3.11.0
++SO_VERSION=0
++
+ OS=$(shell uname || uname -s)
+ ARCH=$(shell uname -m || arch)
+ 
+@@ -78,9 +81,6 @@ ADRDOX?=adrdox
+ 
+ #######################################################################
+ 
+-GTKD_VERSION=3.10.0
+-SO_VERSION=0
+-
+ MAJOR =  $(word 1,$(subst ., ,$(GTKD_VERSION)))
+ MINOR =  $(word 2,$(subst ., ,$(GTKD_VERSION)))
+ BUGFIX = $(word 3,$(subst ., ,$(GTKD_VERSION)))

@@ -1,0 +1,11 @@
+--- blobwars-2.00/Makefile-orig 2015-11-21 20:18:19.000000000 -0200
++++ blobwars-2.00/Makefile      2019-07-05 19:28:10.098307496 -0300
+@@ -21,7 +21,7 @@
+ CXXFLAGS += `pkg-config --cflags sdl2 SDL2_mixer SDL2_image SDL2_ttf SDL2_net` -DVERSION=$(VERSION) -DRELEASE=$(RELEASE) -DUSEPAK=$(USEPAK)
+ CXXFLAGS += -DPAKNAME=\"$(PAKNAME)\" -DPAKLOCATION=\"$(DATADIR)\" -DUNIX -DGAMEPLAYMANUAL=\"$(DOCDIR)index.html\" -Wall
+ CXXFLAGS += -DLOCALEDIR=\"$(LOCALEDIR)\" -DMEDAL_SERVER_HOST=\"$(MEDAL_SERVER_HOST)\" -DMEDAL_SERVER_PORT=$(MEDAL_SERVER_PORT)
+-CXXFLAGS += $(CFLAGS) -Werror
++CXXFLAGS += $(CFLAGS)
+ LIBS = `pkg-config --libs sdl2 SDL2_mixer SDL2_image SDL2_ttf SDL2_net` -lz
+ PAKLIBS = -lz
+

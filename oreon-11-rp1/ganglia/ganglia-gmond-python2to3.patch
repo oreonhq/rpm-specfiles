@@ -1,0 +1,176 @@
+diff --git a/gmond/modules/python/mod_python.c b/gmond/modules/python/mod_python.c
+index ed5a401..484429e 100644
+--- a/gmond/modules/python/mod_python.c
++++ b/gmond/modules/python/mod_python.c
+@@ -29,6 +29,10 @@
+ *
+ * Author: Brad Nicholes (bnicholes novell.com)
+ *         Jon Carey (jcarey novell.com)
++*
++* Modified for Python3 support, based on code at https://docs.python.org/3.5/howto/cporting.html
++* Tom Crane (T.Crane@rhul.ac.uk), June 2024.
++*
+ ******************************************************************************/
+ 
+ #include <Python.h>
+@@ -51,12 +55,23 @@
+ /*
+  * Backward compatibility for 2.1 to 2.4
+  */
++#if PY_MAJOR_VERSION < 3
+ #if PY_MINOR_VERSION < 5
+ #define Py_ssize_t int
+ #if PY_MINOR_VERSION < 3
+ #define PyInt_AsUnsignedLongMask PyInt_AsLong
+ #endif
+ #endif
++#endif
++
++#if PY_MAJOR_VERSION >= 3
++# define PyInt_AsLong(x) (PyLong_AsLong((x)))
++# define PyInt_Check(x) (PyLong_Check((x)))
++# define PyString_Check(x) (PyUnicode_Check((x)))
++# define PyString_AsString(x) (PyUnicode_AsUTF8((x)))
++# define PyInt_AsUnsignedLongMask(x) (PyLong_AsUnsignedLongMask((x)))
++# define PyString_FromString(x) (PyUnicode_FromString((x)))
++#endif
+ 
+ /*
+  * Declare ourselves so the configuration routines can find and know us.
+@@ -540,7 +555,57 @@ static PyMethodDef GangliaMethods[] = {
+     {NULL, NULL, 0, NULL}
+ };
+ 
++struct module_state {
++  PyObject *error;
++};
++
++#if PY_MAJOR_VERSION >= 3
++#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
++#else
++#define GETSTATE(m) (&_state)
++static struct module_state _state;
++#endif
++
++static PyObject *
++error_out(PyObject *m) {
++  struct module_state *st = GETSTATE(m);
++  PyErr_SetString(st->error, "something bad happened");
++  return NULL;
++}
++
++#if PY_MAJOR_VERSION >= 3
++
++static int ganglia_traverse(PyObject *m, visitproc visit, void *arg) {
++  Py_VISIT(GETSTATE(m)->error);
++  return 0;
++}
++
++static int ganglia_clear(PyObject *m) {
++  Py_CLEAR(GETSTATE(m)->error);
++  return 0;
++}
++
++
++static struct PyModuleDef moduledef = {
++  PyModuleDef_HEAD_INIT,
++  "ganglia",
++  NULL,
++  sizeof(struct module_state),
++  GangliaMethods,
++  NULL,
++  ganglia_traverse,
++  ganglia_clear,
++  NULL
++};
++
++#define INITERROR return NULL
++
++PyMODINIT_FUNC PyInit_metric_init(apr_pool_t *p)
++#else
++#define INITERROR return
++
+ static int pyth_metric_init (apr_pool_t *p)
++#endif
+ {
+     DIR *dp;
+     struct dirent *entry;
+@@ -563,29 +628,41 @@ static int pyth_metric_init (apr_pool_t *p)
+ 
+     if (!path) {
+         err_msg("[PYTHON] Missing python module path.\n");
+-        return -1;
++        INITERROR;
+     }
+ 
+     if (access(path, F_OK))
+     {
+         /* 'path' does not exist */
+         err_msg("[PYTHON] Can't open the python module path %s.\n", path);
+-        return -1;
++        INITERROR;
+     }
+ 
+     if (access(path, R_OK))
+     {
+         /* Don't have read access to 'path' */
+         err_msg("[PYTHON] Can't read from the python module path %s.\n", path);
+-        return -1;
++        INITERROR;
+     }
+ 
+     /* Init Python environment */
+ 
+     /* Set up the python path to be able to load module from our module path */
+     Py_Initialize();
+-    Py_InitModule("ganglia", GangliaMethods);
++#if PY_MAJOR_VERSION >= 3
++    PyObject *module = PyModule_Create(&moduledef);
++#else
++    PyObject *module = Py_InitModule("ganglia", GangliaMethods);
++#endif
++    if (module == NULL)
++        INITERROR;
++    struct module_state *st = GETSTATE(module);
+ 
++    st->error = PyErr_NewException("ganglia.Error", NULL, NULL);
++    if (st->error == NULL) {
++        Py_DECREF(module);
++        INITERROR;
++    }
+     PyObject *sys_path = PySys_GetObject("path");
+     PyObject *addpath = PyString_FromString(path);
+     PyList_Append(sys_path, addpath);
+@@ -598,7 +675,7 @@ static int pyth_metric_init (apr_pool_t *p)
+         /* Error: Cannot open the directory - Shouldn't happen */
+         /* Log? */
+         err_msg("[PYTHON] Can't open the python module path %s.\n", path);
+-        return -1;
++        INITERROR;
+     }
+ 
+     i = 0;
+@@ -712,7 +789,11 @@ static int pyth_metric_init (apr_pool_t *p)
+     memset (mi, 0, sizeof(*mi));
+ 
+     python_module.metrics_info = (Ganglia_25metric *)metric_info->elts;
++#if PY_MAJOR_VERSION >= 3
++    return module;
++#else
+     return 0;
++#endif
+ }
+ 
+ static apr_status_t pyth_metric_cleanup ( void *data)
+@@ -832,7 +913,11 @@ static g_val_t pyth_metric_handler( int metric_index )
+ mmodule python_module =
+ {
+     STD_MMODULE_STUFF,
++#if PY_MAJOR_VERSION >= 3
++    (int (*)(apr_pool_t *))PyInit_metric_init,
++#else
+     pyth_metric_init,
++#endif
+     NULL,
+     NULL, /* defined dynamically */
+     pyth_metric_handler,

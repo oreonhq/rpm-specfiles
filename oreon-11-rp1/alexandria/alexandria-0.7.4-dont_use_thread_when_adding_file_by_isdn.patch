@@ -1,0 +1,22 @@
+--- alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/new_book_dialog.rb.up28263	2019-10-25 01:20:07.000000000 +0900
++++ alexandria-book-collection-manager-0.7.4/lib/alexandria/ui/new_book_dialog.rb	2020-01-03 12:36:21.720395196 +0900
+@@ -345,8 +345,8 @@ module Alexandria
+         @button_add.sensitive = false
+         notify_start_add_by_isbn
+         GLib::Idle.add do
+-          @find_thread = Thread.new do
+-            log.info { "New @find_thread #{Thread.current}" }
++          #@find_thread = Thread.new do
++            #log.info { "New @find_thread #{Thread.current}" }
+             begin
+               # MAJOR HACK, add this again...
+               Alexandria::BookProviders.instance.add_observer(self)
+@@ -372,7 +372,7 @@ module Alexandria
+               Alexandria::BookProviders.instance.delete_observer(self)
+               notify_end_add_by_isbn
+             end
+-          end
++          #end
+ 
+           false
+         end

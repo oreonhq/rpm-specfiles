@@ -1,0 +1,47 @@
+== For desktop ==
+
+Install via:
+
+    dnf install minetest
+
+You will get client, server and the game data.
+
+To run the game use the command 'minetest' or choose Minetest from
+applications menu.
+
+To start simple single-user game leave the Server field blank. The
+local Minetest server will be created automatically on the specified
+port. Local server configuration and data will be saved in ~/.minetest
+folder.
+
+To connect to the existing Minetest server specify the server name (or
+IP) and port number. Server name might be 'localhost' as well.
+
+See https://minetest.net for more details.
+
+== For server ==
+
+Install via:
+
+    dnf install minetest-server
+
+You can optionally install minetest game via:
+
+    dnf install minetest-data-game
+
+To run the system-wide Minetest server use the command
+
+    systemctl start minetest.service
+
+To make Minetest server run on boot use
+
+    systemctl enable minetest.service
+
+Minetest server uses configuration file /etc/minetest.conf. It listens
+to the port 30000 and stores the data in /var/lib/minetest. This can
+be changed by editing the systemd unit.
+
+Minetest-server also provides the rsyslog configuration file. You need
+to restart the rsyslog daemon after minetest installation for this
+file to take effect. After rsyslog restart minetest logs will be put
+in /var/log/minetest.log

@@ -1,0 +1,9 @@
+diff -up diskscan-0.21/CMakeLists.txt.orig diskscan-0.21/CMakeLists.txt
+--- diskscan-0.21/CMakeLists.txt.orig	2025-07-18 18:07:05.406108596 +0200
++++ diskscan-0.21/CMakeLists.txt	2025-07-18 18:07:18.301644962 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.2)
++cmake_minimum_required(VERSION 3.5..4.0)
+ project(diskscan
+         VERSION 0.21)
+ 

@@ -1,0 +1,74 @@
+From c6c7f532c3fb08a13cba7636725bec9dfb14a48a Mon Sep 17 00:00:00 2001
+From: serge-sans-paille <serge.guelton@telecom-bretagne.eu>
+Date: Wed, 29 Oct 2025 00:08:46 +0100
+Subject: [PATCH 2/4] [PATCH] no eyeballs
+
+---
+ offlineimap/imaplibutil.py | 8 --------
+ pyproject.toml             | 1 -
+ requirements.txt           | 1 -
+ setup.py                   | 1 -
+ 4 files changed, 11 deletions(-)
+
+diff --git a/offlineimap/imaplibutil.py b/offlineimap/imaplibutil.py
+index a519aa2..2de4946 100644
+--- a/offlineimap/imaplibutil.py
++++ b/offlineimap/imaplibutil.py
+@@ -23,7 +23,6 @@ import errno
+ import zlib
+ from sys import exc_info
+ from hashlib import sha512, sha384, sha256, sha224, sha1
+-import rfc6555
+ from offlineimap import OfflineImapError
+ from offlineimap.ui import getglobalui
+ from offlineimap.imaplib2 import IMAP4, IMAP4_SSL, InternalDate
+@@ -79,13 +78,6 @@ class UsefulIMAPMixIn:
+     def open_socket(self):
+         """open_socket()
+         Open socket choosing first address family available."""
+-        if self.af == socket.AF_UNSPEC:
+-            # happy-eyeballs!
+-            return rfc6555.create_connection((self.host, self.port))
+-        else:
+-            return self._open_socket_for_af(self.af)
+-
+-    def _open_socket_for_af(self, af):
+         for res in socket.getaddrinfo(self.host, self.port, af, socket.SOCK_STREAM):
+             af, socktype, proto, canonname, sa = res
+             try:
+diff --git a/pyproject.toml b/pyproject.toml
+index 22807be..8022726 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,6 @@
+ [project]
+ dependencies = [
+     "distro",
+-    "rfc6555",
+     "urllib3~=1.25.9"
+ ]
+ name = "offlineimap"
+diff --git a/requirements.txt b/requirements.txt
+index 5ab7ee9..b54ed58 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,3 @@
+ # Requirements
+-rfc6555
+ distro; python_version > "3.6"
+ urllib3~=1.25.9
+diff --git a/setup.py b/setup.py
+index 6e4f54f..ba1adc5 100644
+--- a/setup.py
++++ b/setup.py
+@@ -85,7 +85,6 @@ setup(name="offlineimap",
+       setup_requires=['setuptools>=18.5', 'wheel'],
+       license=copyright + ", Licensed under the GPL version 2",
+       install_requires=['distro',
+-                        'rfc6555',
+                         'urllib3~=1.25.9'],
+       extras_require={'kerberos':'gssapi[kerberos]',
+                       'keyring':'keyring[keyring]',
+-- 
+2.51.0
+

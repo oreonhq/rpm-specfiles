@@ -1,0 +1,11 @@
+--- a/tests/Makefile.am	2017-10-03 14:30:28.017436406 -0400
++++ b/tests/Makefile.am	2017-10-03 14:33:07.632158699 -0400
+@@ -19,7 +19,7 @@
+ jrf_DEPENDENCIES = ../src/libfastbit.la
+ jrf_LDADD = ../src/libfastbit.la
+ #
+-EXDIR=../examples
++EXDIR=../examples/.libs
+ TESTDIR=$(PWD)/tmp
+ #
+ IBISEXE=$(EXDIR)/ibis$(EXEEXT)

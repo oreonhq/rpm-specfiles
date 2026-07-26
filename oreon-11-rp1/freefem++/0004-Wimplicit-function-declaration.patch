@@ -1,0 +1,77 @@
+From c0abd11baa6fa9e5c100f000b72d2260581471d6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Sat, 6 May 2017 09:42:37 +0200
+Subject: [PATCH 04/18] Wimplicit-function-declaration
+
+---
+ src/medit/bbfile.c |  2 +-
+ src/medit/sproto.h | 11 +++++++++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/src/medit/bbfile.c b/src/medit/bbfile.c
+index 253b23b6c..1ad5e2103 100644
+--- a/src/medit/bbfile.c
++++ b/src/medit/bbfile.c
+@@ -27,7 +27,7 @@ extern "C" {
+ #include "medit.h"
+ #include "extern.h"
+ #include "sproto.h"
+-#include "eigenv.h"
++#include <eigenv.h>
+ 
+ int EatLine(FILE *in) {
+   int k, c;
+diff --git a/src/medit/sproto.h b/src/medit/sproto.h
+index ee75f1c43..08e8e822f 100644
+--- a/src/medit/sproto.h
++++ b/src/medit/sproto.h
+@@ -36,6 +36,7 @@ int animParticle(pScene sc, pMesh mesh);
+ 
+ /* bbfile.c */
+ int EatLine(FILE *in);
++int EatSpace (FILE *in);
+ 
+ /* camera.c */
+ double Azimuth(pCamera);
+@@ -56,6 +57,7 @@ void copyClip(pClip);
+ int pasteClip(pClip);
+ void resetClip(pScene, pClip, pMesh);
+ pClip createClip(pScene, pMesh);
++void tiltClip(pScene sc,pClip clip);
+ void updateCube(pCube, pMesh);
+ pCube createCube(pScene, pMesh);
+ void tiltClip(pScene sc, pClip clip);
+@@ -112,9 +114,12 @@ int EatLine(FILE *in);
+ int inmsh2(pMesh mesh);
+ int bbfile(pMesh);
+ int loadMesh(pMesh);
++int loadMesh_popen(pMesh);	//pour popen
++int loadMesh_popen_bin(pMesh mesh);
+ int saveMesh(pScene, pMesh, char *, ubyte);
+-int loadSol(pMesh mesh, char *filename, int numsol);
+-int loadMesh_popen(pMesh);    // pour popen
++int loadSol (pMesh mesh, char *filename, int numsol);
++int loadSol_popen(pMesh mesh,char *filename,int numsol);
++int loadSol_popen_bin(pMesh mesh,char *filename,int numsol);
+ 
+ /* inout_morice.c */
+ int loadSol_popen(pMesh, char *, int);
+@@ -127,6 +132,7 @@ int loadSol_popen_bin(pMesh, char *, int);
+ GLuint listTriaIso(pScene, pMesh);
+ GLuint listQuadIso(pScene, pMesh);
+ GLuint listTetraIso(pScene, pMesh);
++int tetraIsoPOVray(pScene sc, pMesh mesh);
+ 
+ /* items.c */
+ void drawAxis(pScene, int);
+@@ -298,6 +304,7 @@ void mouseStatus(int button, int state, int x, int y);
+ /* stream.c */
+ double sizeTetra(pMesh, int);
+ double sizeHexa(pMesh, int);
++double sizeQuad(pMesh mesh, int k);
+ double sizeTria(pMesh, int);
+ int locateTria(pMesh mesh, int nsdep, int base, float *p, double *cb);
+ int locateTetra(pMesh mesh, int nsdep, int base, float *p, double *cb);
+-- 
+2.47.1
+

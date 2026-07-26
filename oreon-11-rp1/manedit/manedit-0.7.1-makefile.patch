@@ -1,0 +1,88 @@
+--- manedit-0.7.1/manedit/Makefile.install.FreeBSD.fedora	2006-08-26 12:00:00.000000000 +0900
++++ manedit-0.7.1/manedit/Makefile.install.FreeBSD	2006-10-30 16:52:26.000000000 +0900
+@@ -11,7 +11,7 @@
+ #	PREFIX
+ #
+ 
+-INSTALL      = install -o root -g wheel
++INSTALL      = install -c -p
+ INSTBINFLAGS = -m 0755
+ INSTMANFLAGS = -m 0444
+ INSTDATFLAGS = -m 0644
+@@ -22,14 +22,14 @@
+ MKDIR      = mkdir
+ MKDIRFLAGS = -p
+ 
+-MAN          = $(BIN).1.bz2
++MAN          = $(BIN).1
+ ICON         = $(BIN).xpm
+ MANVIEW_ICON = manview.xpm
+ 
+ BIN_DIR   = $(PREFIX)/bin
+-ICONS_DIR = $(PREFIX)/share/$(BIN)/icons
++ICONS_DIR = $(PREFIX)/share/pixmaps
+ DATA_DIR  = $(PREFIX)/share/$(BIN)
+-MAN_DIR   = $(PREFIX)/man/man1
++MAN_DIR   = $(PREFIX)/share/man/man1
+ 
+ install:
+ 	$(INSTALL) -d $(INSTBINFLAGS) $(BIN_DIR)
+--- manedit-0.7.1/manedit/Makefile.fedora	2006-08-26 12:00:00.000000000 +0900
++++ manedit-0.7.1/manedit/Makefile	2006-10-30 16:46:52.000000000 +0900
+@@ -19,8 +19,9 @@
+ #   absolutly sure that requires modification.
+ #
+ PREFIX ?= /usr
+-LOCALBASE ?= /usr/local
+-X11BASE ?= /usr/X11R6
++LOCALBASE ?= /usr/local/share
++X11BASE ?= /usr/share
++MANBASE ?= /usr/share
+ 
+ 
+ # ########################################################################
+@@ -54,10 +55,9 @@
+ GTK_CFLAGS = `$(GTK_CONFIG) --cflags`
+ CFLAGS += $(GTK_CFLAGS) -O2 -Wall \
+           -DPREFIX=\"$(PREFIX)\" \
+-          -DLOCALBASE=\"$(LOCALBASE)\" -DX11BASE=\"$(X11BASE)\"
+-
+-CPPFLAGS = -D__cplusplus -Dc_plusplus
++          -DLOCALBASE=\"$(LOCALBASE)\" -DX11BASE=\"$(X11BASE)\" -DMANBASE=\"$(MANBASE)\"
+ 
++CPPFLAGS = 
+ 
+ # ########################################################################
+ # Dependant Libraries:
+@@ -91,6 +91,10 @@
+ #
+ INC =
+ 
++####################################################################
++
++CFLAGS += $(OPTFLAGS)
++LIB += $(LDFLAGS)
+ 
+ # ########################################################################
+ # Program Source and Header Files:
+@@ -116,7 +120,7 @@
+ # Build Rules:
+ #
+ $(BIN): $(OBJ_C) $(OBJ_CPP)
+-	$(CC) $(OBJ_C) $(OBJ_CPP) -o $(BIN) $(LIB) $(LIB_DIR)
++	$(CPP) $(OBJ_C) $(OBJ_CPP) -o $(BIN) $(LIB) $(LIB_DIR)
+ 
+ all: $(BIN) $(BIN).1.out
+ 
+@@ -138,8 +142,8 @@
+ # Manual Page Build/Subs Rule:
+ #
+ $(BIN).1.out: $(BIN).1
+-	$(SED) 's|%%PREFIX%%|$(PREFIX)|g ; \
+-		s|%%LOCALBASE%%|${LOCALBASE}|g ; \
+-		s|%%X11BASE%%|${X11BASE}|g' $(BIN).1 > $(BIN).1.out
++	$(SED)  -e 's|%%PREFIX%%|$(PREFIX)|g'  \
++		-e 's|%%LOCALBASE%%|${LOCALBASE}|g' \
++		-e 's|%%X11BASE%%|${X11BASE}|g' $(BIN).1 > $(BIN).1.out
+ 
+ # ########################################################################

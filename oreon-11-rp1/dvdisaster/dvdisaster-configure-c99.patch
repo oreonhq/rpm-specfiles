@@ -1,0 +1,47 @@
+Update the non-autoconf-based configure script not to rely on implicit
+declarations for printf, by including <stdio.h>.
+
+diff --git a/scripts/bash-based-configure b/scripts/bash-based-configure
+index f68ecab0b0eb2220..2fac2fe80cc22e6f 100644
+--- a/scripts/bash-based-configure
++++ b/scripts/bash-based-configure
+@@ -1170,6 +1170,7 @@ function REQUIRE_MOTIF()
+ 
+    cat >conftest.c <<EOF
+ #include <Xm/Xm.h>
++#include <stdio.h>
+ int main()
+ {  printf("%d.%d.%d\n",XmVERSION,XmREVISION,XmUPDATE_LEVEL);
+ }
+@@ -1197,6 +1198,7 @@ EOF
+ 
+    cat >conftest.c <<EOF
+ #include <Xm/Xm.h>
++#include <stdio.h>
+ int main()
+ {  printf("%s\n",LesstifVERSION_STRING);
+ }
+@@ -1354,6 +1356,7 @@ EOF
+    CFG_LIBS="$CFG_LIBS $CFG_GLIB2_LIBS"
+ 
+    cat >conftest.c <<EOF
++#include <stdio.h>
+ #include <glib.h>
+ int main(int argc, char *argv[])
+ { g_malloc(1024); 
+@@ -1856,6 +1859,7 @@ function CHECK_ENDIAN()
+    # Try automatic detection
+ 
+    cat > conftest.c <<EOF
++#include <stdio.h>
+ int main()
+ {  if(sizeof(int)==4)
+    {  char *c = "1234";
+@@ -1924,6 +1928,7 @@ function CHECK_BITNESS()
+    # Try automatic detection
+ 
+    cat > conftest.c <<EOF
++#include <stdio.h>
+ int main()
+ {  switch(sizeof(char*))
+    {  case 4: printf("32\n"); break;

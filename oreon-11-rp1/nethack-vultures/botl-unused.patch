@@ -1,0 +1,12 @@
+--- slashem/src/botl.c.orig	2025-02-11 05:03:24.000381730 -0600
++++ slashem/src/botl.c	2025-02-11 05:24:29.504852036 -0600
+@@ -587,7 +587,9 @@
+ 	(Stunned ? RAW_STAT_STUNNED : 0) |
+ 	(Hallucination ? RAW_STAT_HALLUCINATION : 0) |
+ 	(Slimed ? RAW_STAT_SLIMED : 0)), flgs);
++#if 0 /* This doesn't look like it is used */
+     (*raw_handler)(reconfig, rv - botl_raw_values, botl_raw_values);
++#endif
+ }
+ 
+ void bot_reconfig()

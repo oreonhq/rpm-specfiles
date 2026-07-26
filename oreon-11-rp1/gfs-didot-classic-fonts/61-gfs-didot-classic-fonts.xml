@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>GFS Didot Classic</target>
+    <family>GFS DidotClassic</family>
+    <like>
+      <family>GFS Didot</family>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

@@ -1,0 +1,14 @@
+diff -ur ClanLib-0.6.5.orig/Sources/Display/Input/X11/joystick_linux.cpp ClanLib-0.6.5/Sources/Display/Input/X11/joystick_linux.cpp
+--- ClanLib-0.6.5.orig/Sources/Display/Input/X11/joystick_linux.cpp	2001-03-06 17:09:22.000000000 +0200
++++ ClanLib-0.6.5/Sources/Display/Input/X11/joystick_linux.cpp	2020-07-26 21:43:25.853942329 +0300
+@@ -52,8 +52,8 @@
+ {
+ 	cl_assert(fd == -1); // do not call init twice!
+ 
+-	char devname[10];
+-	sprintf( devname, "/dev/js%d", number );
++	char devname[24];
++	sprintf( devname, "/dev/input/js%d", number );
+ 	fd = open( devname, O_RDONLY | O_NONBLOCK );
+ 	if (fd == -1) return false; // no joystick available
+ 

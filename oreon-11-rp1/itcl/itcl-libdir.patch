@@ -1,0 +1,22 @@
+--- Makefile.in	2024-11-28 01:27:27.000000000 +0700
++++ Makefile.in.libdir	2025-08-15 13:58:57.973690672 +0700
+@@ -84,8 +84,8 @@ mandir		= @mandir@
+ DESTDIR		=
+ 
+ PKG_DIR		= $(PACKAGE_NAME)$(PACKAGE_VERSION)
+-pkgdatadir	= $(datadir)/$(PKG_DIR)
+-pkglibdir	= $(libdir)/$(PKG_DIR)
++pkgdatadir	= $(datadir)/tcl@TCL_VERSION@/$(PKG_DIR)
++pkglibdir	= $(libdir)/tcl@TCL_VERSION@/$(PKG_DIR)
+ pkgincludedir	= $(includedir)/$(PKG_DIR)
+ 
+ top_builddir	= @abs_top_builddir@
+@@ -445,7 +445,7 @@ install-lib-binaries: binaries
+ 	    echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
+ 	    $(INSTALL_DATA) pkgIndex.tcl "$(DESTDIR)$(pkglibdir)"; \
+ 	fi
+-	$(INSTALL_DATA) itclConfig.sh "$(DESTDIR)$(pkglibdir)"
++	$(INSTALL_DATA) itclConfig.sh "$(DESTDIR)$(libdir)"
+ 
+ #========================================================================
+ # Install binary executables (e.g. .exe files and dependent .dll files)

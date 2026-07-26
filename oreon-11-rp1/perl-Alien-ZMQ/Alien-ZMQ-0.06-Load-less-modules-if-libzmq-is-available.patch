@@ -1,0 +1,63 @@
+From b6bffbfd0a3066428d097be10c3267b30df3fbd9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 6 Mar 2015 16:58:01 +0100
+Subject: [PATCH] Load less modules if libzmq is available
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+
+diff --git a/inc/My/Build.pm b/inc/My/Build.pm
+index d9ca6c7..8d2e9cd 100644
+--- a/inc/My/Build.pm
++++ b/inc/My/Build.pm
+@@ -3,13 +3,8 @@ package My::Build;
+ use warnings FATAL => 'all';
+ use strict;
+ 
+-use Archive::Tar;
+ use Cwd qw/realpath/;
+-use Digest::SHA qw/sha1_hex/;
+-use File::Path qw/remove_tree/;
+ use File::Spec::Functions qw/catdir catfile/;
+-use IPC::Run qw/run/;
+-use LWP::Simple qw/getstore RC_OK/;
+ use Module::Build;
+ 
+ use base 'Module::Build';
+@@ -151,6 +146,13 @@ END
+ 
+ sub install_zeromq {
+     my $self = shift;
++
++    require Archive::Tar;
++    require Digest::SHA; Digest::SHA->import(qw/sha1_hex/);
++    require File::Path; File::Path->import(qw/remove_tree/);
++    require IPC::Run; IPC::Run->import(qw/run/);
++    require LWP::Simple; LWP::Simple->import(qw/getstore RC_OK/);
++
+     my $cb = $self->cbuilder;
+ 
+     my $version = $self->notes('zmq-version');
+@@ -158,7 +160,7 @@ sub install_zeromq {
+     my $archive = "zeromq-$version.tar.gz";
+ 
+     print "Downloading libzmq $version source archive from download.zeromq.org...\n";
+-    getstore("http://download.zeromq.org/$archive", $archive) == RC_OK
++    getstore("http://download.zeromq.org/$archive", $archive) == RC_OK()
+         or die "Failed to download libzmq source archive";
+ 
+     print "Verifying...\n";
+@@ -181,7 +183,7 @@ sub install_zeromq {
+ 
+     print "Patching...\n";
+     for my $patch (glob("$basedir/files/zeromq-$version-*.patch")) {
+-	run [qw/patch -p1/], '<', $patch or die "Failed to patch libzmq";
++	run([qw/patch -p1/], '<', $patch) or die "Failed to patch libzmq";
+     }
+ 
+     print "Configuring...\n";
+-- 
+2.1.0
+

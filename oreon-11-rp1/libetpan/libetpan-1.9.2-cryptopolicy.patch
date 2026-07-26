@@ -1,0 +1,11 @@
+diff -Naur libetpan-1.9.2-orig/src/data-types/mailstream_ssl.c libetpan-1.9.2/src/data-types/mailstream_ssl.c
+--- libetpan-1.9.2-orig/src/data-types/mailstream_ssl.c	2018-12-18 00:18:48.000000000 +0100
++++ libetpan-1.9.2/src/data-types/mailstream_ssl.c	2018-12-24 20:12:06.870080101 +0100
+@@ -622,7 +622,6 @@
+   gnutls_certificate_set_retrieve_function(xcred, mailstream_gnutls_client_cert_cb);
+ #endif
+   gnutls_set_default_priority(session);
+-  gnutls_priority_set_direct(session, "NORMAL", NULL);
+ 
+   gnutls_record_disable_padding(session);
+   gnutls_dh_set_prime_bits(session, 512);

@@ -1,0 +1,79 @@
+From bb46af2ae75aa0b670f33f17f3141c9bf563bece Mon Sep 17 00:00:00 2001
+From: Dave Dykstra <2129743+DrDaveD@users.noreply.github.com>
+Date: Fri, 17 Oct 2025 15:51:44 -0500
+Subject: [PATCH] fuse2fs: open read-only when image is not writable
+
+This opens the image read-only when the image is not writable. If it is then found that a journal recovery is needed, an error is returned then.
+
+The ret value is set to 2 after the option checks so that if there's an error resulting in "goto out" it won't print an error about unrecognized options.
+
+Signed-off-by: Dave Dykstra <2129743+DrDaveD@users.noreply.github.com>
+---
+ misc/fuse2fs.c | 32 ++++++++++++++++++++++++++++----
+ 1 file changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/misc/fuse2fs.c b/misc/fuse2fs.c
+index d209bc790..96b7de26e 100644
+--- a/misc/fuse2fs.c
++++ b/misc/fuse2fs.c
+@@ -4459,9 +4459,24 @@ int main(int argc, char *argv[])
+ 	err = ext2fs_open2(fctx.device, options, flags, 0, 0, unix_io_manager,
+ 			   &global_fs);
+ 	if (err) {
+-		err_printf(&fctx, "%s.\n", error_message(err));
+-		err_printf(&fctx, "%s\n", _("Please run e2fsck -fy."));
+-		goto out;
++		if ((err == EACCES) || (err == EPERM)) {
++			if (fctx.ro) {
++				dbg_printf(&fctx, "%s: %s\n", __func__,
++ _("Permission denied with writable, trying without.\n"));
++			} else {
++				dbg_printf(&fctx, "%s: %s\n", __func__,
++ _("No write access, opening read-only.\n"));
++				fctx.ro = 1;
++			}
++			flags &= ~EXT2_FLAG_RW;
++			err = ext2fs_open2(fctx.device, options, flags, 0, 0, 
++					   unix_io_manager, &global_fs);
++		}
++		if (err) {
++			err_printf(&fctx, "%s.\n", error_message(err));
++			err_printf(&fctx, "%s\n", _("Please run e2fsck -fy."));
++			goto out;
++		}
+ 	}
+ 	fctx.fs = global_fs;
+ 	global_fs->priv_data = &fctx;
+@@ -4504,6 +4519,8 @@ int main(int argc, char *argv[])
+ 		goto out;
+ 	}
+ 
++	ret = 2;
++
+ 	if (ext2fs_has_feature_shared_blocks(global_fs->super))
+ 		fctx.ro = 1;
+ 
+@@ -4513,6 +4530,11 @@ int main(int argc, char *argv[])
+  _("Mounting read-only without recovering journal."));
+ 			fctx.ro = 1;
+ 			global_fs->flags &= ~EXT2_FLAG_RW;
++		} else if (fctx.ro && !(flags & EXT2_FLAG_RW)) {
++			err_printf(&fctx, "%s\n",
++ _("Journal needs recovery but filesystem could not be opened read-write."));
++			err_printf(&fctx, "%s\n", _("Please run e2fsck -fy."));
++			goto out;
+ 		} else {
+ 			log_printf(&fctx, "%s\n", _("Recovering journal."));
+ 			err = ext2fs_run_ext3_journal(&global_fs);
+@@ -4578,8 +4600,10 @@ int main(int argc, char *argv[])
+ 	if (fctx.no_default_opts == 0)
+ 		fuse_opt_add_arg(&args, extra_args);
+ 
+-	if (fctx.ro)
++	if (fctx.ro) {
++		/* This is in case ro was implied above and not passed in */
+ 		fuse_opt_add_arg(&args, "-oro");
++	}
+ 
+ 	if (fctx.fakeroot) {
+ #ifdef HAVE_MOUNT_NODEV

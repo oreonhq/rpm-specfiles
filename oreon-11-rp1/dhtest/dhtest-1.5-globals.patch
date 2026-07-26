@@ -1,0 +1,29 @@
+From 7dd981f6bd72ce83866b83ee801fb7a0ce467ce4 Mon Sep 17 00:00:00 2001
+From: Petr Mensik <pemensik@redhat.com>
+Date: Mon, 2 Mar 2020 15:54:22 +0100
+Subject: [PATCH] Declare global variables external
+
+Stop creating two globals variables in both dhtest.o and functions.o.
+Use the variable from dhtest instead, like all others.
+---
+ functions.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/functions.c b/functions.c
+index fe2fcd8..3d1e486 100644
+--- a/functions.c
++++ b/functions.c
+@@ -64,8 +64,8 @@ extern struct udphdr *uh_g;
+ extern struct dhcpv4_hdr *dhcph_g;
+ extern u_int8_t *dhopt_pointer_g;
+ 
+-struct arp_hdr *arp_hg;
+-struct icmp_hdr *icmp_hg;
++extern struct arp_hdr *arp_hg;
++extern struct icmp_hdr *icmp_hg;
+ 
+ extern u_char dhmac[ETHER_ADDR_LEN];
+ extern u_char dmac[ETHER_ADDR_LEN];
+-- 
+2.21.1
+

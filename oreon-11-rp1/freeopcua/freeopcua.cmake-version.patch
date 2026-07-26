@@ -1,0 +1,9 @@
+diff --color -urN freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/CMakeLists.txt freeopcua-cmake-version/CMakeLists.txt
+--- freeopcua-bd13aee2455c1d137bee45f7d2aedea8dd30115c/CMakeLists.txt	2021-01-07 16:02:50.000000000 +0100
++++ freeopcua-cmake-version/CMakeLists.txt	2025-10-19 10:53:14.444930119 +0200
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5...4.0)
+ 
+ #It seems Cmake does not set default bild type so we force it
+ if( NOT CMAKE_BUILD_TYPE )

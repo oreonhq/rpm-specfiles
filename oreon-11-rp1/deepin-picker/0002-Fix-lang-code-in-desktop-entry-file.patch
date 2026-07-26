@@ -1,0 +1,33 @@
+From 2e3c649f2ce47e77d4e7f5ef097e919454c1994d Mon Sep 17 00:00:00 2001
+From: Robin Lee <cheeselee@fedoraproject.org>
+Date: Wed, 5 Jan 2022 20:54:27 +0800
+Subject: [PATCH 2/2] Fix lang code in desktop entry file
+
+---
+ deepin-picker.desktop | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/deepin-picker.desktop b/deepin-picker.desktop
+index c389f51..9847717 100644
+--- a/deepin-picker.desktop
++++ b/deepin-picker.desktop
+@@ -84,7 +84,6 @@ Name[ar]=منتقي الألوان ديبين
+ Name[ast]=Deepin Picker
+ Name[bg]=Deepin Picker
+ Name[bn]=ডিপিন পিকার
+-Name[bn]=གཏིང་ཟབ་ཚོས་ལེན་ཆས།
+ Name[ca]=Selector del Deepin
+ Name[cs]=Sběrač barev
+ Name[da]=Deepin pipette
+@@ -110,7 +109,7 @@ Name[sq]=Zgjedhësi Deepin
+ Name[sr]=Дипин Пипета
+ Name[tr]=Deepin Renk Seçici
+ Name[uk]=Піпетка Deepin
+-Name[uk]=Deepin رەڭ ئالغۇچى
++Name[ug]=Deepin رەڭ ئالغۇچى
+ Name[zh_CN]=深度取色器
+ Name[zh_TW]=Deepin 取色器
+ Name[zh_HK]=Deepin 取色器
+-- 
+2.31.1
+

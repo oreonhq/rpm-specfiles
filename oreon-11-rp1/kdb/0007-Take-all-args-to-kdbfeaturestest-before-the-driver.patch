@@ -1,0 +1,66 @@
+From 20fb7f0d2631420a25b8ee0cd23090c8573c10bc Mon Sep 17 00:00:00 2001
+From: jordi fita i mas <jfita@infoblitz.com>
+Date: Sat, 25 Apr 2020 22:54:13 +0200
+Subject: [PATCH 07/22] Take all args to kdbfeaturestest before the driver
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Summary:
+kdbfeaturetest gave the following error when trying to test buffered
+cursors:
+
+    > .//kdbfeaturestest --buffered-cursors --test cursors sqlite /tmp/cursor.test
+    DRIVERS:  ("org.kde.kdb.postgresql", "org.kde.kdb.sqlite")
+    org.kde.kdb.core: loading "org.kde.kdb.--buffered-cursors"
+    KDbResult: CODE=10 MESSAGE="Could not find database driver \"org.kde.kdb.--buffered-cursors\"." SERVER_ERROR_CODE=0
+    main: "cursors" test: ERROR
+
+kdbfeaturetest’s main tries to remove all arguments from args[] before
+using the first remaining string as the driver’s name, but the code that
+removes --buffered-cursors and --query-parameters was below the one for
+the driver. Therefore, it assumed that either of the two, since they
+where still in args, was the driver’s name.
+
+I just moved the two calls to take those parameters above the driver.
+
+FIXED-IN:3.2.1
+
+Reviewers: staniek, piggz
+
+Subscribers: Kexi-Devel-list
+
+Tags: #kdb
+
+Differential Revision: https://phabricator.kde.org/D29184
+---
+ tests/features/main.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tests/features/main.cpp b/tests/features/main.cpp
+index 1c834862..b7ce115a 100644
+--- a/tests/features/main.cpp
++++ b/tests/features/main.cpp
+@@ -245,6 +245,9 @@ int main(int argc, char** argv)
+         }
+     }
+ 
++    const bool bufCursors = takeOption(args, "buffered-cursors");
++    QString queryParams = takeOptionWithArg(args, "query-params");
++
+     drv_id = args.first();
+     if (!drv_id.contains('.')) {
+         drv_id.prepend(QLatin1String("org.kde.kdb."));
+@@ -273,9 +276,6 @@ int main(int argc, char** argv)
+                  << driver->metaData()->mimeTypes();
+     }
+ 
+-    const bool bufCursors = takeOption(args, "buffered-cursors");
+-    QString queryParams = takeOptionWithArg(args, "query-params");
+-
+     //open connection
+     if (args.count() >= 2)
+         db_name = args[1];
+-- 
+2.31.1
+

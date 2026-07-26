@@ -1,0 +1,91 @@
+--- FANN-2.2.0-Source/src/fann_error.c.old	2014-01-01 09:20:54.068451736 +0100
++++ FANN-2.2.0-Source/src/fann_error.c	2014-01-01 09:33:30.184789643 +0100
+@@ -119,36 +119,36 @@
+ 	case FANN_E_NO_ERROR:
+ 		break;
+ 	case FANN_E_CANT_OPEN_CONFIG_R:
+-		vsprintf(errstr, "Unable to open configuration file \"%s\" for reading.\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Unable to open configuration file \"%s\" for reading.\n", ap);
+ 		break;
+ 	case FANN_E_CANT_OPEN_CONFIG_W:
+-		vsprintf(errstr, "Unable to open configuration file \"%s\" for writing.\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Unable to open configuration file \"%s\" for writing.\n", ap);
+ 		break;
+ 	case FANN_E_WRONG_CONFIG_VERSION:
+-		vsprintf(errstr,
++		vsnprintf(errstr, FANN_ERRSTR_MAX,
+ 				 "Wrong version of configuration file, aborting read of configuration file \"%s\".\n",
+ 				 ap);
+ 		break;
+ 	case FANN_E_CANT_READ_CONFIG:
+-		vsprintf(errstr, "Error reading \"%s\" from configuration file \"%s\".\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Error reading \"%s\" from configuration file \"%s\".\n", ap);
+ 		break;
+ 	case FANN_E_CANT_READ_NEURON:
+-		vsprintf(errstr, "Error reading neuron info from configuration file \"%s\".\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Error reading neuron info from configuration file \"%s\".\n", ap);
+ 		break;
+ 	case FANN_E_CANT_READ_CONNECTIONS:
+-		vsprintf(errstr, "Error reading connections from configuration file \"%s\".\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Error reading connections from configuration file \"%s\".\n", ap);
+ 		break;
+ 	case FANN_E_WRONG_NUM_CONNECTIONS:
+-		vsprintf(errstr, "ERROR connections_so_far=%d, total_connections=%d\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "ERROR connections_so_far=%d, total_connections=%d\n", ap);
+ 		break;
+ 	case FANN_E_CANT_OPEN_TD_W:
+-		vsprintf(errstr, "Unable to open train data file \"%s\" for writing.\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Unable to open train data file \"%s\" for writing.\n", ap);
+ 		break;
+ 	case FANN_E_CANT_OPEN_TD_R:
+-		vsprintf(errstr, "Unable to open train data file \"%s\" for writing.\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Unable to open train data file \"%s\" for writing.\n", ap);
+ 		break;
+ 	case FANN_E_CANT_READ_TD:
+-		vsprintf(errstr, "Error reading info from train data file \"%s\", line: %d.\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Error reading info from train data file \"%s\", line: %d.\n", ap);
+ 		break;
+ 	case FANN_E_CANT_ALLOCATE_MEM:
+ 		sprintf(errstr, "Unable to allocate memory.\n");
+@@ -166,25 +166,26 @@
+ 		sprintf(errstr, "Unable to use the selected training algorithm.\n");
+ 		break;
+ 	case FANN_E_TRAIN_DATA_SUBSET:
+-		vsprintf(errstr, "Subset from %d of length %d not valid in training set of length %d.\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Subset from %d of length %d not valid in training set of length %d.\n", ap);
+ 		break;
+ 	case FANN_E_INDEX_OUT_OF_BOUND:
+-		vsprintf(errstr, "Index %d is out of bound.\n", ap);
++		vsnprintf(errstr, FANN_ERRSTR_MAX, "Index %d is out of bound.\n", ap);
+ 		break;
+ 	case FANN_E_SCALE_NOT_PRESENT: 
+ 		sprintf(errstr, "Scaling parameters not present.\n");
+ 		break;
+     case FANN_E_INPUT_NO_MATCH:
+-    	vsprintf(errstr, "The number of input neurons in the ann (%d) and data (%d) don't match\n", ap);
++    	vsnprintf(errstr, FANN_ERRSTR_MAX, "The number of input neurons in the ann (%d) and data (%d) don't match\n", ap);
+     	break;
+     case FANN_E_OUTPUT_NO_MATCH:
+-     	vsprintf(errstr, "The number of output neurons in the ann (%d) and data (%d) don't match\n", ap);
++     	vsnprintf(errstr, FANN_ERRSTR_MAX, "The number of output neurons in the ann (%d) and data (%d) don't match\n", ap);
+      	break; 
+ 	}
+ 	va_end(ap);
+ 
+ 	if(errdat != NULL)
+ 	{
++		/* possible memory leak, previous errdat->errstr not freed */
+ 		errdat->errstr = errstr;
+ 		error_log = errdat->error_log;
+ 	}
+@@ -197,6 +198,10 @@
+ 	{
+ 		fprintf(error_log, "FANN Error %d: %s", errno_f, errstr);
+ 	}
++	if (errdat == NULL)
++	{
++		free(errstr);
++	}
+ }
+ 
+ /* INTERNAL FUNCTION

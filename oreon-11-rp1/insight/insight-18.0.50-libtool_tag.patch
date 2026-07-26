@@ -1,0 +1,12 @@
+diff -Naurp insight-18.0.50.20260306.orig/gdb/Makefile.in insight-18.0.50.20260306.new/gdb/Makefile.in
+--- insight-18.0.50.20260306.orig/gdb/Makefile.in	2026-03-06 16:30:00.495441622 +0100
++++ insight-18.0.50.20260306.new/gdb/Makefile.in	2026-03-06 16:36:52.600356786 +0100
+@@ -143,7 +143,7 @@ MAKEINFO_CMD = $(MAKEINFO) $(MAKEINFOFLA
+ MAKEHTML = $(MAKEINFO_CMD) --html
+ MAKEHTMLFLAGS =
+ 
+-LIBTOOL = @LIBTOOL@
++LIBTOOL = @LIBTOOL@ --tag=CXX
+ 
+ # Set this up with gcc if you have gnu ld and the loader will print out
+ # line numbers for undefined references.

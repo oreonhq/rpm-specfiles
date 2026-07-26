@@ -1,0 +1,31 @@
+.TH HATCH\-DEP\-SHOW\-REQUIREMENTS "1" "October 2022" "" "User Commands"
+.SH NAME
+.B hatch\ dep\ show\ requirements
+\(en Enumerate dependencies as a list of requirements
+.SH SYNOPSIS
+.B hatch\ dep\ show\ requirements
+.RI [ OPTIONS ]
+.SH OPTIONS
+.TP
+.B \-p\fR, \fB\-\-project\-only
+Whether or not to exclude environment dependencies
+.TP
+.B \-e\fR, \fB\-\-env\-only
+Whether or not to exclude project dependencies
+.TP
+.B \-f\fR, \fB\-\-feature\ \fITEXT
+Whether or not to only show the dependencies of the
+specified features
+.TP
+.B \-\-all
+Whether or not to include the dependencies of all
+features
+.TP
+.B \-h\fR, \fB\-\-help
+Show a help message and exit
+.SH "SEE ALSO"
+.BR hatch\-dep\-show\-table (1)
+.P
+.BR hatch\-dep\-show (1),
+.BR hatch\-dep (1),
+.BR hatch (1)

@@ -1,0 +1,48 @@
+Avoid an implicit function declaration during link tests, by supplying
+a fake prototype.  Do not rely on implicit ints.  These language
+features were removed in C99, and future compilers will not support
+them by default.
+
+Submitted upstream: <https://rt.cpan.org/Public/Bug/Display.html?id=145911>
+
+diff --git a/Makefile.PL b/Makefile.PL
+index f520c9f48e41ae1a..064c86b66989e2f9 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -336,6 +336,9 @@ sub have_library {
+     printf("checking for %s() in -l%s... ", $func, $lib) if $func ne "blank";
+     printf("looking for -l%s... ", $lib) if $func eq "blank";
+ 
++    # Use a fake prototype to avoid an implicit function declaration.
++    # The chosen prototype matches what autoconf uses, so it is likely
++    # to keep working even if it is not the right prototype.
+     my $result;
+     if ($lib ne 'diffmark') {
+         my $libs = $is_Win32 ? " $lib.lib  " : "-l$lib";
+@@ -343,21 +346,23 @@ sub have_library {
+             $result = try_link(<<"SRC");
+ #include <windows.h>
+ #include <winsock.h>
+-blank() { return 0; }
++int blank() { return 0; }
++char ${func}(void);
+ int t() { ${func}(); return 0; }
+ SRC
+             unless ($result) {
+                 $result = try_link(<<"SRC");
+ #include <windows.h>
+ #include <winsock.h>
+-blank() { return 0; }
++int blank() { return 0; }
+ int t() { void ((*p)()); p = (void ((*)()))${func}; return 0; }
+ SRC
+             }
+         }
+         else {
+             $result = try_link(<<"SRC");
+-blank() { return 0; }
++int blank() { return 0; }
++char ${func}(void);
+ int t() { ${func}(); return 0; }
+ SRC
+         }

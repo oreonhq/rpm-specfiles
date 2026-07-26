@@ -1,0 +1,47 @@
+diff -rupN --no-dereference pyqt_builder-1.19.1/pyqtbuild/bindings.py pyqt_builder-1.19.1-new/pyqtbuild/bindings.py
+--- pyqt_builder-1.19.1/pyqtbuild/bindings.py	2024-12-18 17:51:37.000000000 +0100
++++ pyqt_builder-1.19.1-new/pyqtbuild/bindings.py	2025-12-23 08:01:28.672361116 +0100
+@@ -184,6 +184,10 @@ int main(int, char **)
+                 path_parts.insert(0, qt_bin_dir)
+                 os.environ['PATH'] = os.pathsep.join(path_parts)
+ 
++        if self.project.py_platform == 'win32' and sys.platform != 'win32':
++            # Cross compiling, omit running output
++            return True
++
+         self.project.run_command([test_exe, out_file], fatal=False)
+ 
+         if original_path is not None:
+diff -rupN --no-dereference pyqt_builder-1.19.1/pyqtbuild/builder.py pyqt_builder-1.19.1-new/pyqtbuild/builder.py
+--- pyqt_builder-1.19.1/pyqtbuild/builder.py	2025-10-23 22:02:55.000000000 +0200
++++ pyqt_builder-1.19.1-new/pyqtbuild/builder.py	2025-12-23 08:01:28.672743483 +0100
+@@ -462,8 +462,9 @@ macx {
+         # TODO: is this still necessary for Python v3.8?
+         if not buildable.static:
+             pro_lines.extend(['win32 {',
+-                    '    LIBS += -L{}'.format(
+-                            self.qmake_quote(project.py_pylib_dir)),
++                    '    LIBS += -L{libdir} -l{lib}'.format(
++                            libdir=self.qmake_quote(project.py_pylib_dir),
++                            lib=self.qmake_quote(project.py_pylib_lib)),
+                     '}'])
+ 
+         # Add any installables from the buildable.
+diff -rupN --no-dereference pyqt_builder-1.19.1/pyqtbuild/project.py pyqt_builder-1.19.1-new/pyqtbuild/project.py
+--- pyqt_builder-1.19.1/pyqtbuild/project.py	2024-12-18 17:51:37.000000000 +0100
++++ pyqt_builder-1.19.1-new/pyqtbuild/project.py	2025-12-23 08:01:28.672992464 +0100
+@@ -59,13 +59,7 @@ class PyQtProject(Project):
+         if self.py_platform == 'win32':
+             pylib_dir = os.path.join(sys.base_prefix, 'libs')
+ 
+-            debug_suffix = '_d' if self.py_debug else ''
+-
+-            # See if we are using the limited API.
+-            if self.py_debug or self.link_full_dll:
+-                pylib_lib = f'python{major}{minor}{debug_suffix}'
+-            else:
+-                pylib_lib = f'python{major}{debug_suffix}'
++            pylib_lib = f'python{major}.{minor}'
+ 
+             # Assume Python is a DLL on Windows.
+             pylib_shlib = pylib_lib

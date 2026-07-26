@@ -1,0 +1,120 @@
+--- cryptokit-release1201/src/config/flags.ml.orig	2024-07-08 01:47:56.000000000 -0600
++++ cryptokit-release1201/src/config/flags.ml	2024-12-10 11:54:35.061354790 -0700
+@@ -47,7 +47,7 @@ let () = Configurator.main ~name:"crypto
+   let library_flags =
+     []
+     |> append_if (zlib && (system = "win32" || system = "win64")) "zlib.lib"
+-    |> append_if (zlib && system <> "win32" && system <> "win64") "-lz"
++    |> append_if (zlib && system <> "win32" && system <> "win64") "-lz-ng"
+     |> append_if (system = "win32" || system = "win64") "advapi32.lib"
+     |> append_if (system = "mingw" || system = "mingw64") "-ladvapi32"
+   in
+--- cryptokit-release1201/src/stubs-zlib.c.orig	2024-07-08 01:47:56.000000000 -0600
++++ cryptokit-release1201/src/stubs-zlib.c	2024-12-10 11:57:50.011859426 -0700
+@@ -14,7 +14,7 @@
+ /* Stub code to interface with Zlib */
+ 
+ #ifdef HAVE_ZLIB
+-#include <zlib.h>
++#include <zlib-ng.h>
+ #endif
+ 
+ #include <caml/mlvalues.h>
+@@ -28,11 +28,11 @@ static const value * caml_zlib_error_exn
+ 
+ #ifdef HAVE_ZLIB
+ 
+-#define ZStream_val(v) (*((z_streamp *)Data_custom_val(v)))
++#define ZStream_val(v) (*((zng_stream **)Data_custom_val(v)))
+ 
+ static void caml_zlib_error(char * fn, value vzs)
+ {
+-  char * msg;
++  const char * msg;
+   CAMLparam1(vzs);
+   CAMLlocal4(s1, s2, tuple, bucket);
+ 
+@@ -67,9 +67,9 @@ static struct custom_operations caml_zli
+ 
+ static value caml_zlib_new_stream(void)
+ {
+-  value res = caml_alloc_custom(&caml_zlib_stream_ops, sizeof(z_streamp), 0, 1);
++  value res = caml_alloc_custom(&caml_zlib_stream_ops, sizeof(zng_stream *), 0, 1);
+ 
+-  ZStream_val(res) = caml_stat_alloc(sizeof(z_stream));
++  ZStream_val(res) = caml_stat_alloc(sizeof(zng_stream));
+   ZStream_val(res)->zalloc = NULL;
+   ZStream_val(res)->zfree = NULL;
+   ZStream_val(res)->opaque = NULL;
+@@ -82,7 +82,7 @@ CAMLprim
+ value caml_zlib_deflateInit(value vlevel, value expect_header)
+ {
+   value vzs = caml_zlib_new_stream();
+-  if (deflateInit2(ZStream_val(vzs),
++  if (zng_deflateInit2(ZStream_val(vzs),
+                    Int_val(vlevel),
+                    Z_DEFLATED,
+                    Bool_val(expect_header) ? MAX_WBITS : -MAX_WBITS,
+@@ -100,7 +100,7 @@ value caml_zlib_deflate(value vzs, value
+                       value dstbuf, value dstpos, value dstlen,
+                       value vflush)
+ {
+-  z_stream * zs = ZStream_val(vzs);
++  zng_stream * zs = ZStream_val(vzs);
+   int retcode;
+   long used_in, used_out;
+   value res;
+@@ -109,7 +109,7 @@ value caml_zlib_deflate(value vzs, value
+   zs->avail_in = Long_val(srclen);
+   zs->next_out = &Byte_u(dstbuf, Long_val(dstpos));
+   zs->avail_out = Long_val(dstlen);
+-  retcode = deflate(zs, caml_zlib_flush_table[Int_val(vflush)]);
++  retcode = zng_deflate(zs, caml_zlib_flush_table[Int_val(vflush)]);
+   if (retcode < 0) caml_zlib_error("Zlib.deflate", vzs);
+   used_in = Long_val(srclen) - zs->avail_in;
+   used_out = Long_val(dstlen) - zs->avail_out;
+@@ -125,7 +125,7 @@ value caml_zlib_deflate(value vzs, value
+ CAMLprim
+ value caml_zlib_deflateEnd(value vzs)
+ {
+-  if (deflateEnd(ZStream_val(vzs)) != Z_OK)
++  if (zng_deflateEnd(ZStream_val(vzs)) != Z_OK)
+     caml_zlib_error("Zlib.deflateEnd", vzs);
+   return Val_unit;
+ }
+@@ -134,7 +134,7 @@ CAMLprim
+ value caml_zlib_inflateInit(value expect_header)
+ {
+   value vzs = caml_zlib_new_stream();
+-  if (inflateInit2(ZStream_val(vzs),
++  if (zng_inflateInit2(ZStream_val(vzs),
+                    Bool_val(expect_header) ? MAX_WBITS : -MAX_WBITS) != Z_OK)
+     caml_zlib_error("Zlib.inflateInit", vzs);
+   return vzs;
+@@ -145,7 +145,7 @@ value caml_zlib_inflate(value vzs, value
+                       value dstbuf, value dstpos, value dstlen,
+                       value vflush)
+ {
+-  z_stream * zs = ZStream_val(vzs);
++  zng_stream * zs = ZStream_val(vzs);
+   int retcode;
+   long used_in, used_out;
+   value res;
+@@ -154,7 +154,7 @@ value caml_zlib_inflate(value vzs, value
+   zs->avail_in = Long_val(srclen);
+   zs->next_out = &Byte_u(dstbuf, Long_val(dstpos));
+   zs->avail_out = Long_val(dstlen);
+-  retcode = inflate(zs, caml_zlib_flush_table[Int_val(vflush)]);
++  retcode = zng_inflate(zs, caml_zlib_flush_table[Int_val(vflush)]);
+   if (retcode < 0 || retcode == Z_NEED_DICT)
+     caml_zlib_error("Zlib.inflate", vzs);
+   used_in = Long_val(srclen) - zs->avail_in;
+@@ -171,7 +171,7 @@ value caml_zlib_inflate(value vzs, value
+ CAMLprim
+ value caml_zlib_inflateEnd(value vzs)
+ {
+-  if (inflateEnd(ZStream_val(vzs)) != Z_OK)
++  if (zng_inflateEnd(ZStream_val(vzs)) != Z_OK)
+     caml_zlib_error("Zlib.inflateEnd", vzs);
+   return Val_unit;
+ }

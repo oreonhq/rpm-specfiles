@@ -1,0 +1,53 @@
+diff --git a/Makefile b/Makefile
+index 591b768..fad88d1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,16 +2,12 @@
+ # Makefile for ampr-ripd
+ #
+ 
+-BASEDIR = /usr
++BASEDIR = $(DESTDIR)/usr
+ SBINDIR = $(BASEDIR)/sbin
+ ifneq ($(OPENWRT_BUILD),1)
+ 	MANDIR = $(BASEDIR)/share/man/man1
+ endif
+-SCACHEDIR = /var/lib/ampr-ripd
+-
+-# no need to run ampr-ripd as root
+-OWN = daemon
+-GRP = daemon
++SCACHEDIR = $(DESTDIR)/var/lib/ampr-ripd
+ 
+ ifndef CC
+ 	CC = gcc
+@@ -27,11 +23,11 @@ endif
+ # Full debug
+ DOPT = -D HAVE_DEBUG
+ 
+-COPT = -Wall -O2
+-LOPT =
++CFLAGS = -Wall -O2
++LDFLAGS =
+ 
+ ampr-ripd:	ampr-ripd.c
+-	$(CC) $(COPT) $(DOPT) $(LOPT) -o ampr-ripd ampr-ripd.c
++	$(CC) $(CFLAGS) $(DOPT) $(LDFLAGS) -o ampr-ripd ampr-ripd.c
+ 
+ all:	ampr-ripd
+ 
+@@ -39,9 +35,8 @@ clean:
+ 	rm -f ampr-ripd
+ 
+ install:	ampr-ripd
+-	strip ampr-ripd
+-	install -m 755 -o $(OWN) -g $(GRP) -d          $(SCACHEDIR)
+-	install -m 755 -o $(OWN) -g $(GRP) ampr-ripd   $(SBINDIR)
+-	ifneq ($(OPENWRT_BUILD),1)
+-		install -m 644 -o $(OWN) -g $(GRP) ampr-ripd.1 $(MANDIR)
+-	endif
++	install -m 755 -p -D -d          $(SCACHEDIR)
++	install -m 755 -p -D ampr-ripd   $(SBINDIR)/ampr-ripd
++ifneq ($(OPENWRT_BUILD),1)
++	install -m 644 -p -D ampr-ripd.1 $(MANDIR)/ampr-ripd.1
++endif

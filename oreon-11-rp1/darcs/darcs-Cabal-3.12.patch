@@ -1,0 +1,10 @@
+--- darcs-2.18.5/Setup.hs~	2001-09-09 09:46:40.000000000 +0800
++++ darcs-2.18.5/Setup.hs	2026-02-01 14:43:10.593045265 +0800
+@@ -17,6 +17,7 @@
+ import Distribution.Simple.Utils
+     (copyFiles, createDirectoryIfMissingVerbose, rawSystemStdout,
+      rewriteFileEx)
++import Distribution.Types.LocalBuildInfo (buildDir)
+ import Distribution.Verbosity ( Verbosity, silent )
+ import Distribution.Text ( display )
+ 

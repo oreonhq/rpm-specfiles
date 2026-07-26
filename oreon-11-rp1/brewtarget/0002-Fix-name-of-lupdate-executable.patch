@@ -1,0 +1,26 @@
+From 944c4985d88e61bceb09273264c456aca54584bc Mon Sep 17 00:00:00 2001
+From: Sandro <devel@penguinpee.nl>
+Date: Thu, 21 Nov 2024 10:24:29 +0100
+Subject: [PATCH 2/3] Fix name of lupdate executable
+
+Fedora also uses lupdate-qt5, lupdate-qt6, etc.
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 79525bbc..b38002ae 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1249,7 +1249,7 @@ lupdate_name = 'lupdate'
+ if host_machine.system() == 'windows'
+    lupdate_name = 'lupdate-qt6'
+ elif host_machine.system() == 'linux'
+-   lupdate_name = 'lupdate'
++   lupdate_name = 'lupdate-qt6'
+ endif
+ lupdate_executable = find_program(lupdate_name, required : true)
+ 
+-- 
+2.47.0
+

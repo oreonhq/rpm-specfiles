@@ -1,0 +1,25 @@
+From f91a325296534b62866f5516a42639c010620853 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <neal@gompa.dev>
+Date: Thu, 5 Feb 2026 06:26:47 -0500
+Subject: [PATCH] meson: Fix glfw dependency request to use correct pkgconfig
+ name
+
+GLFW's actual pkgconfig module is "glfw3", so use the right name
+so it can be found.
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index f3c81aed14a..d828de50bf1 100644
+--- a/meson.build
++++ b/meson.build
+@@ -150,7 +150,7 @@ else
+ 
+   lib_sdl3 = dependency('sdl3', required: get_option('native_sdl3'))
+   lib_sdl2 = dependency('sdl2', required: get_option('native_sdl2'))
+-  lib_glfw = dependency('glfw', required: get_option('native_glfw'))
++  lib_glfw = dependency('glfw3', required: get_option('native_glfw'))
+   if lib_sdl3.found()
+     compiler_args += ['-DDXVK_WSI_SDL3']
+   endif

@@ -1,0 +1,122 @@
+--- auriferous-1.0.1/auriferous/Makefile.in~	2006-07-22 07:20:58.000000000 +0200
++++ auriferous-1.0.1/auriferous/Makefile.in	2006-07-22 07:20:58.000000000 +0200
+@@ -357,32 +357,32 @@
+ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+ 
+ install-data-local:
+-	$(mkinstalldirs) @datadir@/auriferous/
+-	$(INSTALL_DATA) resources.scr @datadir@/auriferous/resources.scr
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/
+-	$(INSTALL_DATA) pics/game/*.png @datadir@/auriferous/pics/game/
+-	$(mkinstalldirs) @datadir@/auriferous/pics/menu/
+-	$(INSTALL_DATA) pics/menu/*.tga @datadir@/auriferous/pics/menu/
+-	$(INSTALL_DATA) pics/menu/*.png @datadir@/auriferous/pics/menu/
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/aqua/
+-	$(INSTALL_DATA) pics/game/aqua/* @datadir@/auriferous/pics/game/aqua
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/jungle/
+-	$(INSTALL_DATA) pics/game/jungle/* @datadir@/auriferous/pics/game/jungle
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/tech/
+-	$(INSTALL_DATA) pics/game/tech/* @datadir@/auriferous/pics/game/tech
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/lava/
+-	$(INSTALL_DATA) pics/game/lava/* @datadir@/auriferous/pics/game/lava
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/ice/
+-	$(INSTALL_DATA) pics/game/ice/* @datadir@/auriferous/pics/game/ice
+-	$(mkinstalldirs) @datadir@/auriferous/pics/menu/intro/
+-	$(INSTALL_DATA) pics/menu/intro/* @datadir@/auriferous/pics/menu/intro
+-	$(mkinstalldirs) @datadir@/auriferous/sound
+-	$(INSTALL_DATA) sound/*.wav @datadir@/auriferous/sound/
+-	$(mkinstalldirs) @datadir@/auriferous/music
+-	$(INSTALL_DATA) music/*.ogg @datadir@/auriferous/music
+-	$(mkinstalldirs) @datadir@/auriferous/levels
+-	$(mkinstalldirs) @datadir@/auriferous/levels/default/
+-	$(INSTALL_DATA) levels/default/*.lvl @datadir@/auriferous/levels/default/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/
++	$(INSTALL_DATA) resources.scr $(DESTDIR)@datadir@/auriferous/resources.scr
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/
++	$(INSTALL_DATA) pics/game/*.png $(DESTDIR)@datadir@/auriferous/pics/game/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/menu/
++	$(INSTALL_DATA) pics/menu/*.tga $(DESTDIR)@datadir@/auriferous/pics/menu/
++	$(INSTALL_DATA) pics/menu/*.png $(DESTDIR)@datadir@/auriferous/pics/menu/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/aqua/
++	$(INSTALL_DATA) pics/game/aqua/* $(DESTDIR)@datadir@/auriferous/pics/game/aqua
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/jungle/
++	$(INSTALL_DATA) pics/game/jungle/* $(DESTDIR)@datadir@/auriferous/pics/game/jungle
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/tech/
++	$(INSTALL_DATA) pics/game/tech/* $(DESTDIR)@datadir@/auriferous/pics/game/tech
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/lava/
++	$(INSTALL_DATA) pics/game/lava/* $(DESTDIR)@datadir@/auriferous/pics/game/lava
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/ice/
++	$(INSTALL_DATA) pics/game/ice/* $(DESTDIR)@datadir@/auriferous/pics/game/ice
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/menu/intro/
++	$(INSTALL_DATA) pics/menu/intro/* $(DESTDIR)@datadir@/auriferous/pics/menu/intro
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/sound
++	$(INSTALL_DATA) sound/*.wav $(DESTDIR)@datadir@/auriferous/sound/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/music
++	$(INSTALL_DATA) music/*.ogg $(DESTDIR)@datadir@/auriferous/music
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/levels
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/levels/default/
++	$(INSTALL_DATA) levels/default/*.lvl $(DESTDIR)@datadir@/auriferous/levels/default/
+ 
+ .PHONY: files
+ 
+--- auriferous-1.0.1/auriferous/Makefile.am~	2006-07-22 07:20:48.000000000 +0200
++++ auriferous-1.0.1/auriferous/Makefile.am	2006-07-22 07:20:48.000000000 +0200
+@@ -1,32 +1,32 @@
+ bin_PROGRAMS=auriferous
+ auriferous_SOURCES=map_sample.cpp map_sample.h game.cpp game.h timer.cpp  timer.h auriferous.cpp auriferous.h beam.cpp beam.h button.cpp button.h checker.cpp checker.h config.cpp config.h controller.cpp controller.h editor.cpp editor.h effects.cpp effects.h explosion.cpp explosion.h gameobject.cpp gameobject.h global_types.cpp global_types.h gui.cpp gui.h jukebox.cpp jukebox.h mainscreen.cpp mainscreen.h map.cpp map.h maptile.cpp maptile.h menu.cpp menu.h monk.cpp monk.h monk_ai.cpp monk_ai.h player.cpp player.h resources.cpp resources.h sprite.cpp sprite.h submenu.cpp submenu.h tool.cpp tool.h wheel.cpp wheel.h arrow.cpp arrow.h maptile_normal.h maptile_normal.cpp maptile_empty.h maptile_empty.cpp maptile_bar.h maptile_concrete.h maptile_hideout.h maptile_ladder.h maptile_move.h maptile_once.h maptile_slime.h maptile_teleporter.h maptile_water.h maptile_bar.cpp maptile_concrete.cpp maptile_hideout.cpp maptile_ladder.cpp maptile_move.cpp maptile_once.cpp maptile_slime.cpp maptile_teleporter.cpp maptile_water.cpp  maptile_door.h maptile_door.cpp tool_bomb.cpp tool_bomb.h tool_befudlementgas.cpp tool_befudlementgas.h tool_gold.h tool_gold.cpp tool_key.h tool_key.cpp bomb.h bomb.cpp tool_abomb.h tool_abomb.cpp tool_bbomb.h tool_bbomb.cpp tool_jackhammer.cpp tool_pickaxe.cpp tool_slimebucket.cpp tool_life.cpp tool_exploder.cpp tool_syringe.cpp tool_acid.cpp tool_trap.cpp tool_lasertripmine.cpp tool_jackhammer.h tool_pickaxe.h tool_slimebucket.h tool_life.h tool_exploder.h tool_syringe.h tool_acid.h tool_trap.h tool_lasertripmine.h gas_cloud.cpp gas_cloud.h cbomb.cpp cbomb.h acid.cpp acid.h lasertripmine.h lasertripmine.cpp slime.h slime.cpp debris.cpp debris.h trap.h trap.cpp
+ install-data-local:
+-	$(mkinstalldirs) @datadir@/auriferous/
+-	$(INSTALL_DATA) resources.scr @datadir@/auriferous/resources.scr
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/
+-	$(INSTALL_DATA) pics/game/*.png @datadir@/auriferous/pics/game/
+-	$(mkinstalldirs) @datadir@/auriferous/pics/menu/
+-	$(INSTALL_DATA) pics/menu/*.tga @datadir@/auriferous/pics/menu/
+-	$(INSTALL_DATA) pics/menu/*.png @datadir@/auriferous/pics/menu/
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/aqua/
+-	$(INSTALL_DATA) pics/game/aqua/* @datadir@/auriferous/pics/game/aqua
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/jungle/
+-	$(INSTALL_DATA) pics/game/jungle/* @datadir@/auriferous/pics/game/jungle
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/tech/
+-	$(INSTALL_DATA) pics/game/tech/* @datadir@/auriferous/pics/game/tech
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/lava/
+-	$(INSTALL_DATA) pics/game/lava/* @datadir@/auriferous/pics/game/lava
+-	$(mkinstalldirs) @datadir@/auriferous/pics/game/ice/
+-	$(INSTALL_DATA) pics/game/ice/* @datadir@/auriferous/pics/game/ice
+-	$(mkinstalldirs) @datadir@/auriferous/pics/menu/intro/
+-	$(INSTALL_DATA) pics/menu/intro/* @datadir@/auriferous/pics/menu/intro
+-	$(mkinstalldirs) @datadir@/auriferous/sound
+-	$(INSTALL_DATA) sound/*.wav @datadir@/auriferous/sound/
+-	$(mkinstalldirs) @datadir@/auriferous/music
+-	$(INSTALL_DATA) music/*.ogg @datadir@/auriferous/music
+-	$(mkinstalldirs) @datadir@/auriferous/levels
+-	$(mkinstalldirs) @datadir@/auriferous/levels/default/
+-	$(INSTALL_DATA) levels/default/*.lvl @datadir@/auriferous/levels/default/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/
++	$(INSTALL_DATA) resources.scr $(DESTDIR)@datadir@/auriferous/resources.scr
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/
++	$(INSTALL_DATA) pics/game/*.png $(DESTDIR)@datadir@/auriferous/pics/game/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/menu/
++	$(INSTALL_DATA) pics/menu/*.tga $(DESTDIR)@datadir@/auriferous/pics/menu/
++	$(INSTALL_DATA) pics/menu/*.png $(DESTDIR)@datadir@/auriferous/pics/menu/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/aqua/
++	$(INSTALL_DATA) pics/game/aqua/* $(DESTDIR)@datadir@/auriferous/pics/game/aqua
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/jungle/
++	$(INSTALL_DATA) pics/game/jungle/* $(DESTDIR)@datadir@/auriferous/pics/game/jungle
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/tech/
++	$(INSTALL_DATA) pics/game/tech/* $(DESTDIR)@datadir@/auriferous/pics/game/tech
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/lava/
++	$(INSTALL_DATA) pics/game/lava/* $(DESTDIR)@datadir@/auriferous/pics/game/lava
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/game/ice/
++	$(INSTALL_DATA) pics/game/ice/* $(DESTDIR)@datadir@/auriferous/pics/game/ice
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/pics/menu/intro/
++	$(INSTALL_DATA) pics/menu/intro/* $(DESTDIR)@datadir@/auriferous/pics/menu/intro
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/sound
++	$(INSTALL_DATA) sound/*.wav $(DESTDIR)@datadir@/auriferous/sound/
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/music
++	$(INSTALL_DATA) music/*.ogg $(DESTDIR)@datadir@/auriferous/music
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/levels
++	$(mkinstalldirs) $(DESTDIR)@datadir@/auriferous/levels/default/
++	$(INSTALL_DATA) levels/default/*.lvl $(DESTDIR)@datadir@/auriferous/levels/default/
+ 
+ 
+ .PHONY: files

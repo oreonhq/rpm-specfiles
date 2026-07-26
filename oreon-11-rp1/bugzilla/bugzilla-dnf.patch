@@ -1,0 +1,30 @@
+diff -up ./Bugzilla/Install/Requirements.pm.dnf ./Bugzilla/Install/Requirements.pm
+--- ./Bugzilla/Install/Requirements.pm.dnf	2019-02-14 20:47:13.396609293 +0100
++++ ./Bugzilla/Install/Requirements.pm	2019-02-14 20:49:04.733906799 +0100
+@@ -298,7 +298,7 @@ sub OPTIONAL_MODULES {
+     },
+     {
+       package => 'JSON-RPC',
+-      module  => 'JSON::RPC',
++      module  => 'JSON::RPC::Legacy::Server::CGI',
+       version => 0,
+       feature => ['jsonrpc', 'rest'],
+     },
+@@ -657,7 +657,7 @@ sub print_module_instructions {
+     && !ON_ACTIVESTATE
+     && !$check_results->{hide_all})
+   {
+-    print install_string('install_all', {perl => $^X});
++    # print install_string('install_all', {perl => $^X});
+   }
+   if (!$check_results->{pass}) {
+     print colored(install_string('installation_failed'), COLOR_ERROR), "\n\n";
+@@ -811,7 +811,7 @@ sub install_command {
+     $package = $module->{package};
+   }
+   else {
+-    $command = "$^X install-module.pl \%s";
++    $command = "dnf install \"perl(\%s)\"";
+ 
+     # Non-Windows installations need to use module names, because
+     # CPAN doesn't understand package names.

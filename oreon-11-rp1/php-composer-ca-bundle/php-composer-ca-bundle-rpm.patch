@@ -1,0 +1,24 @@
+diff -up ./src/CaBundle.php.rpm ./src/CaBundle.php
+--- ./src/CaBundle.php.rpm	2021-01-12 13:54:38.000000000 +0100
++++ ./src/CaBundle.php	2021-01-12 13:55:35.957422992 +0100
+@@ -125,7 +125,7 @@ class CaBundle
+      */
+     public static function getBundledCaBundlePath()
+     {
+-        $caBundleFile = __DIR__.'/../res/cacert.pem';
++        $caBundleFile = '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem'; // System CA, always
+ 
+         // cURL does not understand 'phar://' paths
+         // see https://github.com/composer/ca-bundle/issues/10
+diff -up ./tests/CaBundleTest.php.rpm ./tests/CaBundleTest.php
+--- ./tests/CaBundleTest.php.rpm	2021-01-12 13:55:35.957422992 +0100
++++ ./tests/CaBundleTest.php	2021-01-12 13:56:54.872069486 +0100
+@@ -97,7 +97,7 @@ class CaBundleTest extends TestCase
+     public function testOpenBaseDir(): void
+     {
+         $oldValue = ini_get('open_basedir') ?: '';
+-        ini_set('open_basedir', dirname(__DIR__));
++        ini_set('open_basedir', '/usr/share/php:' . dirname(__DIR__));
+         $certFilePath = CaBundle::getSystemCaRootBundlePath();
+         $validResult = CaBundle::validateCaFile($certFilePath, null);
+         $this->assertTrue($validResult);

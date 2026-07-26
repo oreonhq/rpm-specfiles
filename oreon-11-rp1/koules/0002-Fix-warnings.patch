@@ -1,0 +1,87 @@
+From 650a8f6eae37cf71e53c2290a8d558f2a78ef126 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:45 +0200
+Subject: [PATCH 02/41] Fix warnings
+
+This is from Debian and makes koules compile a bit more cleanly.
+---
+ koules.sndsrv.linux.c | 2 +-
+ rcfiles.c             | 1 +
+ xlib/init.c           | 1 +
+ xlib/interface.c      | 3 ++-
+ xlib/text.c           | 1 +
+ 5 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/koules.sndsrv.linux.c b/koules.sndsrv.linux.c
+index c2c47f6..afe4ea5 100644
+--- a/koules.sndsrv.linux.c
++++ b/koules.sndsrv.linux.c
+@@ -181,7 +181,7 @@ read_sound (int k)
+ void
+ do_everything (int dsp, int is_pcsp)
+ {
+-  char            k;
++  signed char     k;
+   int             i, j;
+   int             terminate = -1;	/* Which Sound to Terminate                              */
+   int             playing[16];	/* Sound numbers that we are playing                     */
+diff --git a/rcfiles.c b/rcfiles.c
+index ccc60df..1f69e91 100644
+--- a/rcfiles.c
++++ b/rcfiles.c
+@@ -20,6 +20,7 @@
+ /* Changes for joystick "accelerate by deflection"         *
+  *  (c) 1997 by Ludvik Tesar (Ludv\'{\i}k Tesa\v{r})       *
+  ************************LT*********************************/
++#include <errno.h>
+ #include "koules.h"
+ #ifdef XSUPPORT
+ static CONST char *name = ".xkoules-controls";
+diff --git a/xlib/init.c b/xlib/init.c
+index 5ef7ba0..e9684fc 100644
+--- a/xlib/init.c
++++ b/xlib/init.c
+@@ -30,6 +30,7 @@
+ #include "../framebuffer.h"
+ 
+ #include <sys/time.h>
++#include <time.h>
+ #include <unistd.h>
+ #include "../mygetopt.h"
+ #include <sys/signal.h>
+diff --git a/xlib/interface.c b/xlib/interface.c
+index bc3bf34..da68ab2 100644
+--- a/xlib/interface.c
++++ b/xlib/interface.c
+@@ -14,6 +14,7 @@
+ *----------------------------------------------------------*
+ *  interface.c interface xlib graphics functions           *
+ ***********************************************************/
++#include <stdint.h>
+ #include <X11/Xlib.h>
+ #include <X11/keysym.h>
+ #include <X11/keysymdef.h>
+@@ -154,7 +155,7 @@ CopyToScreen (CONST VScreenType source)
+ 	  {
+ 	    register unsigned char *data = (unsigned char *) source.vbuff,
+ 	                   *end = (unsigned char *) source.vbuff + MAPWIDTH * (MAPHEIGHT + 20);
+-	    register unsigned long *out = (unsigned long *) source.ximage->data;
++	    register uint32_t *out = (uint32_t *) source.ximage->data;
+ 	    while (data < end)
+ 	      {
+ 		*out = rpixels[*data];
+diff --git a/xlib/text.c b/xlib/text.c
+index 83c4d29..18aceb7 100644
+--- a/xlib/text.c
++++ b/xlib/text.c
+@@ -4,6 +4,7 @@
+ 
+ #ifdef MITSHM
+ #include <stdlib.h>
++#include <string.h>
+ #include "inlstring.h"		/* include inline string operations */
+ #include "interface.h"
+ 
+-- 
+2.5.0
+

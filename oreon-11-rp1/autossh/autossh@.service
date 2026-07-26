@@ -1,0 +1,13 @@
+[Unit]
+Description=autossh: %I
+Documentation=file:///usr/share/doc/autossh/README.service man:autossh(1)
+After=network.target
+
+[Service]
+User=autossh
+Environment="AUTOSSH_GATETIME=0"
+EnvironmentFile=/etc/autossh/%i.conf
+ExecStart=/usr/bin/autossh $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

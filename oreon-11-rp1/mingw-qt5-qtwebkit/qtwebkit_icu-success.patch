@@ -1,0 +1,54 @@
+diff -rupN --no-dereference qtwebkit-5.212.0-alpha4/Source/WebCore/editing/TextIterator.cpp qtwebkit-5.212.0-alpha4-new/Source/WebCore/editing/TextIterator.cpp
+--- qtwebkit-5.212.0-alpha4/Source/WebCore/editing/TextIterator.cpp	2020-03-04 18:16:37.000000000 +0100
++++ qtwebkit-5.212.0-alpha4-new/Source/WebCore/editing/TextIterator.cpp	2025-07-18 10:44:49.674104608 +0200
+@@ -2050,10 +2050,10 @@ inline SearchBuffer::SearchBuffer(const
+ 
+     UErrorCode status = U_ZERO_ERROR;
+     usearch_setAttribute(searcher, USEARCH_ELEMENT_COMPARISON, comparator, &status);
+-    ASSERT(status == U_ZERO_ERROR);
++    ASSERT(U_SUCCESS(status));
+ 
+     usearch_setPattern(searcher, m_targetCharacters, targetLength, &status);
+-    ASSERT(status == U_ZERO_ERROR);
++    ASSERT(U_SUCCESS(status));
+ 
+     // The kana workaround requires a normalized copy of the target string.
+     if (m_targetRequiresKanaWorkaround)
+@@ -2065,9 +2065,9 @@ inline SearchBuffer::~SearchBuffer()
+     // Leave the static object pointing to a valid string.
+     UErrorCode status = U_ZERO_ERROR;
+     usearch_setPattern(WebCore::searcher(), &newlineCharacter, 1, &status);
+-    ASSERT(status == U_ZERO_ERROR);
++    ASSERT(U_SUCCESS(status));
+     usearch_setText(WebCore::searcher(), &newlineCharacter, 1, &status);
+-    ASSERT(status == U_ZERO_ERROR);
++    ASSERT(U_SUCCESS(status));
+ 
+     unlockSearcher();
+ }
+@@ -2275,13 +2275,13 @@ inline size_t SearchBuffer::search(size_
+ 
+     UErrorCode status = U_ZERO_ERROR;
+     usearch_setText(searcher, m_buffer.data(), size, &status);
+-    ASSERT(status == U_ZERO_ERROR);
++    ASSERT(U_SUCCESS(status));
+ 
+     usearch_setOffset(searcher, m_prefixLength, &status);
+-    ASSERT(status == U_ZERO_ERROR);
++    ASSERT(U_SUCCESS(status));
+ 
+     int matchStart = usearch_next(searcher, &status);
+-    ASSERT(status == U_ZERO_ERROR);
++    ASSERT(U_SUCCESS(status));
+ 
+ nextMatch:
+     if (!(matchStart >= 0 && static_cast<size_t>(matchStart) < size)) {
+@@ -2316,7 +2316,7 @@ nextMatch:
+         || ((m_options & AtWordStarts) && !isWordStartMatch(matchStart, matchedLength))
+         || ((m_options & AtWordEnds) && !isWordEndMatch(matchStart, matchedLength))) {
+         matchStart = usearch_next(searcher, &status);
+-        ASSERT(status == U_ZERO_ERROR);
++        ASSERT(U_SUCCESS(status));
+         goto nextMatch;
+     }
+ 

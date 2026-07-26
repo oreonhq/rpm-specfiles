@@ -1,0 +1,14 @@
+diff -ur GTorrentViewer-0.2b.orig/configure GTorrentViewer-0.2b/configure
+--- GTorrentViewer-0.2b.orig/configure	2022-11-25 10:59:57.070030177 +0100
++++ GTorrentViewer-0.2b/configure	2022-11-25 11:01:15.931236749 +0100
+@@ -3486,8 +3486,8 @@
+   for (i = 0; i < 256; i++)
+     if (XOR (islower (i), ISLOWER (i))
+ 	|| toupper (i) != TOUPPER (i))
+-      exit(2);
+-  exit (0);
++      return 2;
++  return 0;
+ }
+ _ACEOF
+ rm -f conftest$ac_exeext

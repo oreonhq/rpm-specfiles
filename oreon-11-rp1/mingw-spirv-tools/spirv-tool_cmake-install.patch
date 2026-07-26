@@ -1,0 +1,12 @@
+diff -rupN --no-dereference SPIRV-Tools-vulkan-sdk-1.4.328.1/CMakeLists.txt SPIRV-Tools-vulkan-sdk-1.4.328.1-new/CMakeLists.txt
+--- SPIRV-Tools-vulkan-sdk-1.4.328.1/CMakeLists.txt	2025-09-22 22:06:52.000000000 +0200
++++ SPIRV-Tools-vulkan-sdk-1.4.328.1-new/CMakeLists.txt	2025-12-04 22:22:37.111735801 +0100
+@@ -276,7 +276,7 @@ endif()
+ if(ENABLE_SPIRV_TOOLS_INSTALL)
+   if(WIN32 AND NOT MINGW)
+     macro(spvtools_config_package_dir TARGET PATH)
+-      set(${PATH} ${TARGET}/cmake)
++      set(${PATH} ${CMAKE_INSTALL_LIBDIR}/cmake/${TARGET})
+     endmacro()
+   else()
+     macro(spvtools_config_package_dir TARGET PATH)

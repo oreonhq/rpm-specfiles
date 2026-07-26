@@ -1,0 +1,25 @@
+From bd2a339a510f0da021d3adededdfa98006f03001 Mon Sep 17 00:00:00 2001
+From: Vladimir Vuksan <44271-vvuksan-fastly@users.noreply.drupalcode.org>
+Date: Mon, 5 May 2025 10:30:48 -0400
+Subject: [PATCH 2/2] Validate that the supplied timezone is a valid timezone
+
+---
+ header.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/header.php b/header.php
+index 729fe27..a50c41b 100644
+--- a/header.php
++++ b/header.php
+@@ -1,7 +1,7 @@
+ <?php
+ session_start();
+ 
+-if (isset($_GET['tz'])) {
++if (isset($_GET['tz']) && in_array($_GET['tz'], timezone_identifiers_list())) {
+   $_SESSION['tz'] = $_GET['tz'];
+ }
+ 
+-- 
+2.51.0
+

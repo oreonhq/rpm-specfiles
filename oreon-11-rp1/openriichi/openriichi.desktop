@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.5
+Name=OpenRiichi
+GenericName=Japanese Mahjong 3D game
+GenericName[fr]=Jeu de mah-jong japonais en 3D
+Exec=openriichi
+Icon=openriichi
+Terminal=false
+Categories=Game
+Type=Application
+Keywords=multiplayer

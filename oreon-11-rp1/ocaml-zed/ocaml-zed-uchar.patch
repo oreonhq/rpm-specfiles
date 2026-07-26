@@ -1,0 +1,28 @@
+--- zed-3.2.2/dune-project.orig	2023-06-20 09:56:43.000000000 -0600
++++ zed-3.2.2/dune-project	2023-06-25 12:40:35.423065845 -0600
+@@ -29,7 +29,6 @@ cursor management facilities.")
+    (>= 4.02.3))
+   react
+   result
+-  uchar
+   uutf
+   (uucp
+    (>= 2.0.0))
+--- zed-3.2.2/src/dune.orig	2023-06-20 09:56:43.000000000 -0600
++++ zed-3.2.2/src/dune	2023-06-25 12:41:01.318702996 -0600
+@@ -4,4 +4,4 @@
+  (wrapped false)
+  (flags
+   (:standard -safe-string))
+- (libraries react result uchar uutf uucp uuseg))
++ (libraries react result uutf uucp uuseg))
+--- zed-3.2.2/zed.opam.orig	2023-06-20 09:56:43.000000000 -0600
++++ zed-3.2.2/zed.opam	2023-06-25 12:40:47.021903104 -0600
+@@ -19,7 +19,6 @@ depends: [
+   "ocaml" {>= "4.02.3"}
+   "react"
+   "result"
+-  "uchar"
+   "uutf"
+   "uucp" {>= "2.0.0"}
+   "uuseg"

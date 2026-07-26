@@ -1,0 +1,11 @@
+[Unit]
+Description = F6FBB Packet Radio BBS
+After = network.target
+
+[Service]
+Type = simple
+Environment=NON_INTERACTIVE=1
+ExecStart = /usr/sbin/fbb -f -l -
+
+[Install]
+WantedBy = multi-user.target

@@ -1,0 +1,10 @@
+--- singular-4.3.2/Singular/LIB/polymake.lib.orig	2023-09-06 02:51:20.000000000 -0600
++++ singular-4.3.2/Singular/LIB/polymake.lib	2024-02-01 08:44:42.076075304 -0700
+@@ -226,7 +226,6 @@ EXAMPLE: example triangulations;   shows
+         if ((p2t[i]=="}") and (p2t[i+1]=="}"))
+         {
+           np2t=np2t+"))";
+-          i++;
+         }
+         else
+         {

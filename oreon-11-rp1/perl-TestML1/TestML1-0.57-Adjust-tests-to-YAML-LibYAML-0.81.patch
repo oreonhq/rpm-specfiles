@@ -1,0 +1,49 @@
+From 8a6b463d2d4a5db56be821816a997186e4a53bb1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 30 Jan 2020 17:14:02 +0100
+Subject: [PATCH] Adjust tests to YAML-LibYAML-0.81
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+YAML-LibYAML-0.81 sets $YAML::XS::LoadBlessed to false to make the
+YAML parser more secure. That breaks t/compile.t test that then
+misses Perl class names in the YAML tree:
+
+    not ok 16 - semicolons.tml - TestML1::Compiler::Lite
+    #   Failed test 'semicolons.tml - TestML1::Compiler::Lite'
+    #   at t/compile.t line 50.
+    # +---+------------------------------------------+---+--------------------+
+    # | Ln|Got                                       | Ln|Expected            |
+    # +---+------------------------------------------+---+--------------------+
+    # *  1|'--- !!perl/hash:TestML1::Function        *  1|'---                *
+    # |  2|namespace:                                |  2|namespace:          |
+    # *  3|  TestML: !!perl/hash:TestML1::Str        *  3|  TestML:           *
+    # |  4|    value: 0.1.0                          |  4|    value: 0.1.0    |
+
+This patch sets the $YAML::XS::LoadBlessed switch back to true in the
+tests. A future-friendly fix should probably regenerate the testing
+YAML files and disable $YAML::XS::LoadBlessed explictly.
+
+<https://github.com/ingydotnet/testml1-pm/issues/1>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/compile.t | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/t/compile.t b/t/compile.t
+index 94eb88c..91b0773 100644
+--- a/t/compile.t
++++ b/t/compile.t
+@@ -39,6 +39,7 @@ test('testml/semicolons.tml', 'TestML1::Compiler::Lite');
+ sub test {
+     my ($file, $compiler) = @_;
+     (my $filename = $file) =~ s!(.*)/!!;
++    local $YAML::XS::LoadBlessed = 1;
+     my $runtime = TestML1::Runtime->new(base => "$t/$1");
+     my $testml = $runtime->read_testml_file($filename);
+     my $ast1 = $compiler->new->compile($testml);
+-- 
+2.21.1
+

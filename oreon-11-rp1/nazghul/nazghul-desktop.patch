@@ -1,0 +1,14 @@
+--- haxima.orig/haxima.desktop	2007-01-26 16:42:48.000000000 -0600
++++ haxima/haxima.desktop	2009-04-14 11:21:43.000000000 -0500
+@@ -4,8 +4,8 @@
+ GenericName=Role Playing Game
+ Comment=An old school role playing game
+ Exec=haxima
+-Icon=haxima.png
++Icon=haxima
+ Terminal=false
+ Type=Application
+-Categories=Application;Game;
+-Version=1.002
++Categories=Game;RolePlaying;
++Version=1.0

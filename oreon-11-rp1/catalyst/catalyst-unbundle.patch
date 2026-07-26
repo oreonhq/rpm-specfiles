@@ -1,0 +1,26 @@
+diff --git a/thirdparty/conduit/CMakeLists.txt b/thirdparty/conduit/CMakeLists.txt
+index 7a1105d..f7ae7c1 100644
+--- a/thirdparty/conduit/CMakeLists.txt
++++ b/thirdparty/conduit/CMakeLists.txt
+@@ -9,6 +9,3 @@ add_subdirectory(blueprint)
+ 
+ #-------------------------------------------------------------------------
+ # Add subdirectories for third-party dependencies of conduit
+-add_subdirectory(libyaml)
+-add_subdirectory(libb64)
+-add_subdirectory(rapidjson)
+diff --git a/thirdparty/conduit/conduit/CMakeLists.txt b/thirdparty/conduit/conduit/CMakeLists.txt
+index e3debc4..37407b8 100644
+--- a/thirdparty/conduit/conduit/CMakeLists.txt
++++ b/thirdparty/conduit/conduit/CMakeLists.txt
+@@ -99,8 +99,7 @@ target_link_libraries(conduit
+     catalyst::core
+     catalyst::conduit_headers
+   PRIVATE
+-    libyaml
+-    b64
+-    rapidjson)
++    yaml
++    b64)
+ add_library(catalyst::conduit ALIAS conduit)
+ c_install_targets(conduit)

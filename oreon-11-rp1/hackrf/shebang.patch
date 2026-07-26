@@ -1,0 +1,16 @@
+From dc44e1de25477a394509e0c70233d8fa70eb52d7 Mon Sep 17 00:00:00 2001
+From: "Steven A. Falco" <stevenfalco@gmail.com>
+Date: Fri, 2 Dec 2022 14:34:13 -0500
+Subject: Fix shebangs
+
+
+diff --git a/hardware/lollipop/lollipop_logic.py b/hardware/lollipop/lollipop_logic.py
+index 4fea2c6e..886d5fd4 100755
+--- a/hardware/lollipop/lollipop_logic.py
++++ b/hardware/lollipop/lollipop_logic.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # -*- coding: utf-8 -*-
+ #
+ # Copyright (C) 2012 Jared Boone

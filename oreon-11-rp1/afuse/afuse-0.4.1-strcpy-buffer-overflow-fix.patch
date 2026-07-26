@@ -1,0 +1,22 @@
+diff -up afuse-0.4.1/src/afuse.c.strcpy-buffer-overflow-fix afuse-0.4.1/src/afuse.c
+--- afuse-0.4.1/src/afuse.c.strcpy-buffer-overflow-fix	2013-02-12 21:36:47.000000000 -0500
++++ afuse-0.4.1/src/afuse.c	2021-02-24 13:31:58.884245692 -0500
+@@ -1853,8 +1853,16 @@ static int afuse_opt_proc(void *data, co
+ int main(int argc, char *argv[])
+ {
+ 	struct fuse_args args = FUSE_ARGS_INIT(argc, argv);
+-	char *temp_dir_name = my_malloc(strlen(TMP_DIR_TEMPLATE));
+-	strcpy(temp_dir_name, TMP_DIR_TEMPLATE);
++	size_t buflen = strlen(TMP_DIR_TEMPLATE);
++	// need one more for the null terminator
++	buflen++;
++	char *temp_dir_name = my_malloc(buflen);
++	if (buflen > 0) {
++		strncpy(temp_dir_name, TMP_DIR_TEMPLATE, buflen - 1);
++		temp_dir_name[buflen - 1] = '\0';
++	}
++
++	// strcpy(temp_dir_name, TMP_DIR_TEMPLATE);
+ 
+ 	if (fuse_opt_parse(&args, &user_options, afuse_opts, afuse_opt_proc) ==
+ 	    -1)

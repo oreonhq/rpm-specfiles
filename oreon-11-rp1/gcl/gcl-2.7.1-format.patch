@@ -1,0 +1,11 @@
+--- gcl-2.7.1/h/object.h.orig	2024-12-26 22:56:17.038649990 -0700
++++ gcl-2.7.1/h/object.h	2025-04-11 15:17:53.747981042 -0600
+@@ -471,7 +471,7 @@ ufmax(ufixnum a,ufixnum b) {
+   return a>=b ? a : b;
+ }
+ 
+-INLINE int
++INLINE int __attribute__((format(gnu_printf,2,3)))
+ oemsg(int fd,const char *s,...) {
+   va_list args;
+   ufixnum n=0;

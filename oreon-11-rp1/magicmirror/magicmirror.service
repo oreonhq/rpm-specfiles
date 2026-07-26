@@ -1,0 +1,16 @@
+[Unit]
+Description=MagicMirror²
+Documentation=https://docs.magicmirror.builders
+After=network-online.target
+
+[Service]
+WorkingDirectory=/usr/lib/node_modules/magicmirror
+ExecStartPre=/usr/bin/node js/check_config.js
+ExecStart=/usr/bin/node serveronly
+User=magicmirror
+Group=magicmirror
+Restart=always
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

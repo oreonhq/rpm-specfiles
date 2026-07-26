@@ -1,0 +1,25 @@
+From 11c7b59fdea616d8d38e0cc40088987bb92b3d73 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?I=C3=B1aki=20=C3=9Acar?= <iucar@fedoraproject.org>
+Date: Sat, 27 Apr 2024 00:41:14 +0200
+Subject: [PATCH] asdf
+
+---
+ src/Makevars.common | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Rhtslib/src/Makevars.common b/Rhtslib/src/Makevars.common
+index 65b667c..3483bb7 100644
+--- a/Rhtslib/src/Makevars.common
++++ b/Rhtslib/src/Makevars.common
+@@ -7,7 +7,7 @@ TESTFILES=*.sam *.bam *.vcf *.bcf *.cram *.fa *.fa.fai *.gff *.bed
+ 
+ ## Preprocessor and linker options. Make sure the Rhtslib::pkgconfig() function
+ ## (defined in R/zzz.R) produces the same PKG_CPPFLAGS and PKG_LIBS values.
+-PKG_CPPFLAGS=-D_FILE_OFFSET_BITS=64 -I"${INCLUDE_DIR}"
++PKG_CPPFLAGS=-D_FILE_OFFSET_BITS=64 -I"${HTSLIB_SOURCE_DIR}"
+ PKG_LIBS="${USRLIB_DIR}/libhts.a"
+ 
+ .PHONY: all htslib mk-include-dir mk-usrlib-dir mk-testdata-dir populate-include-dir populate-usrlib-dir populate-testdata-dir clean
+-- 
+2.44.0
+

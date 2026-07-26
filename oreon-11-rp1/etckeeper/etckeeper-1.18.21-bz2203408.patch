@@ -1,0 +1,11 @@
+--- a/post-install.d/50vcs-commit	2023-12-05 10:45:18.967497833 +0100
++++ b/post-install.d/50vcs-commit	2023-12-05 10:46:00.848138455 +0100
+@@ -6,7 +6,7 @@
+ # Parent process is etckeeper
+ # (Only procps ps is currently supported, others will fail,
+ # so this may end up empty.)
+-ETCKEEPER_PID=$( ps --no-headers -o ppid "${PPID}" 2>/dev/null | sed 's/^ *//' )
++ETCKEEPER_PID=$( ps --no-headers -o ppid "$$" 2>/dev/null | sed 's/^ *//' )
+ 
+ # Find the parent of etckeeper and get the command line of the process
+ if ! [ -z "${ETCKEEPER_PID}" ]; then

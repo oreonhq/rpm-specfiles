@@ -1,0 +1,59 @@
+diff -Naur fillets-ng-1.0.1-orig/src/gengine/SysVideo.cpp fillets-ng-1.0.1-new/src/gengine/SysVideo.cpp
+--- fillets-ng-1.0.1-orig/src/gengine/SysVideo.cpp	2004-10-11 20:43:40.000000000 +0300
++++ fillets-ng-1.0.1-new/src/gengine/SysVideo.cpp	2021-12-12 00:14:58.946357835 +0200
+@@ -11,7 +11,7 @@
+ #include "Log.h"
+ 
+ #include "SDL.h"
+-#if !defined(HAVE_X11) && !defined(WIN32)
++#if !defined(WIN32)
+     void
+ SysVideo::setCaption(const std::string &title)
+ {
+@@ -47,38 +47,7 @@
+  * @param title utf-8 string
+  * @return true for success
+  */
+-#if defined(HAVE_X11) && !defined(DISABLE_X11) && defined(unix)
+-#include <X11/Xutil.h>
+-bool
+-sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
+-{
+-    bool result = false;
+-#ifdef X_HAVE_UTF8_STRING
+-    if (info->subsystem == SDL_SYSWM_X11) {
+-        info->info.x11.lock_func();
+-
+-        XTextProperty titleprop;
+-        char *text_list = const_cast<char*>(title.c_str());
+-        int error = Xutf8TextListToTextProperty(info->info.x11.display,
+-                &text_list, 1, XUTF8StringStyle, &titleprop);
+-        if (!error) {
+-            XSetWMName(info->info.x11.display, info->info.x11.wmwindow,
+-                    &titleprop);
+-            XFree(titleprop.value);
+-            result = true;
+-        }
+-        else {
+-            LOG_DEBUG(ExInfo("not supported conversion")
+-                    .addInfo("error", error)
+-                    .addInfo("title", title));
+-        }
+-
+-        info->info.x11.unlock_func();
+-    }
+-#endif
+-    return result;
+-}
+-#elif defined(WIN32)
++#if defined(WIN32)
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+ bool
+@@ -106,5 +75,5 @@
+     return false;
+ }
+ #endif
+-#endif // HAVE_X11 || WIN32
++#endif // WIN32
+ 

@@ -1,0 +1,32 @@
+diff -up tolua++-1.0.93/config_linux.py.lua51 tolua++-1.0.93/config_linux.py
+--- tolua++-1.0.93/config_linux.py.lua51	2005-11-30 23:31:27.000000000 +0100
++++ tolua++-1.0.93/config_linux.py	2013-08-03 12:26:16.260951919 +0200
+@@ -4,7 +4,7 @@
+ 
+ # Compiler flags (based on Debian's installation of lua)
+ #LINKFLAGS = ['-g']
+-CCFLAGS = ['-I/usr/include/lua50', '-O2', '-ansi', '-Wall']
++CCFLAGS = ['-I/usr/include/lua51', '-O2', '-ansi', '-Wall']
+ #CCFLAGS = ['-I/usr/include/lua50', '-g']
+ 
+ # this is the default directory for installation. Files will be installed on
+@@ -18,5 +18,5 @@ CCFLAGS = ['-I/usr/include/lua50', '-O2'
+ prefix = '/usr/local'
+ 
+ # libraries (based on Debian's installation of lua)
+-LIBS = ['lua50', 'lualib50', 'dl', 'm']
++LIBS = ['lua-5.1', 'dl', 'm']
+ 
+diff -up tolua++-1.0.93/custom.py.lua51 tolua++-1.0.93/custom.py
+--- tolua++-1.0.93/custom.py.lua51	2013-08-03 12:23:41.400953222 +0200
++++ tolua++-1.0.93/custom.py	2013-08-03 12:23:41.400953222 +0200
+@@ -0,0 +1,9 @@
++CCFLAGS = ['-O2', '-ansi']
++#LIBPATH = ['/usr/local/lib']
++LIBS = ['lua-5.1', 'dl', 'm']
++prefix = '/usr'
++build_dev=1
++tolua_bin = 'tolua++'
++tolua_lib = 'tolua++-5.1'
++TOLUAPP = 'tolua++-5.1'
++

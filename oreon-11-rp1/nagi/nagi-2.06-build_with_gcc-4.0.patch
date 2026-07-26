@@ -1,0 +1,79 @@
+--- src/Makefile.common	2002-11-01 12:32:28.000000000 +0200
++++ src/Makefile.common	2005-01-03 18:13:52.000000000 +0200
+@@ -59,7 +59,6 @@
+ #CFLAGS += -pg
+ CFLAGS += -O2 
+ #CFLAGS += -finline-functions
+-CFLAGS += -fwritable-strings
+ 
+ # Warnings
+ CFLAGS += -Wall -Winline -Wshadow -Wstrict-prototypes
+diff -aurE old/nagi-2.07b/src/initialise.c src/initialise.c
+--- src/initialise.c	2005-01-03 18:10:35.000000000 +0200
++++ src/initialise.c	2005-01-03 17:59:10.000000000 +0200
+@@ -89,6 +89,7 @@
+ 	u8 env_value[50];
+ #endif
+ 	INI *ini_nagi;
++	char tmp[512];
+ 
+ 	memset( &state, 0, sizeof(AGI_STATE) );
+ 	state.word_13f = 0x0F;
+@@ -103,7 +104,8 @@
+ 
+ 	// read nagi.ini
+ 	dir_preset_change(DIR_PRESET_NAGI);
+-	ini_nagi = ini_open("/etc/nagi/nagi.ini");
++	strcpy(tmp, "/etc/nagi/nagi.ini");
++	ini_nagi = ini_open(tmp);
+ 	config_load(config_nagi, ini_nagi);
+ 	ini_close(ini_nagi);
+ 
+diff -aurE old/nagi-2.07b/src/sys/agi_file.c src/sys/agi_file.c
+--- src/sys/agi_file.c	2002-11-01 12:32:28.000000000 +0200
++++ src/sys/agi_file.c	2005-01-03 18:02:43.000000000 +0200
+@@ -121,12 +121,15 @@
+ 
+ 
+ 
+-FILE *fopen_nocase(u8 *name)
++FILE *fopen_nocase(u8 *orig_name)
+ {
+ #ifdef RAD_LINUX
+ 	DIR *dir;
+ 	struct dirent *fileent;
+ 	FILE *ret;
++	char name[512];
++
++	strcpy(name, orig_name);
+ 	
+ 	dir = opendir(".");
+ 	string_lower(name);
+diff -aurE old/nagi-2.07b/src/sys/memory.c src/sys/memory.c
+--- src/sys/memory.c	2002-11-01 12:32:28.000000000 +0200
++++ src/sys/memory.c	2005-01-03 13:02:46.000000000 +0200
+@@ -84,7 +84,7 @@
+ 	}
+ 	
+ 	return_ptr = mem_ptr;
+-	(u8 *)mem_ptr += size;
++	mem_ptr = (u8 *)mem_ptr + size;
+ 	update_var8();
+ 	if (mem_ptr > mem_max)
+ 		mem_max = mem_ptr;
+diff -aurE old/nagi-2.07b/src/version/standard.c src/version/standard.c
+--- src/version/standard.c	2005-01-03 18:10:35.000000000 +0200
++++ src/version/standard.c	2005-01-03 17:59:49.000000000 +0200
+@@ -792,9 +792,11 @@
+ 	INI *ini_standard;
+ 	LIST *list_game;
+ 	GAMEINFO *game_selected;
++	char tmp[512];
+ 	
+ 	dir_preset_change(DIR_PRESET_NAGI);
+-	ini_standard = ini_open("/etc/nagi/standard.ini");
++	strcpy(tmp, "/etc/nagi/standard.ini");
++	ini_standard = ini_open(tmp);
+ 	text_init();
+ 
+ 	// read in standard parameters

@@ -1,0 +1,86 @@
+From c54061f80a13c8457ac8d2e790a2b8e06092807c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 4 Jun 2014 15:37:05 +0200
+Subject: [PATCH] Wait until test server can accept connections
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This fixes a race when TTP::Server::Simple::background() returns
+before the server is ready to accept connections.
+
+<https://rt.cpan.org/Public/Bug/Display.html?id=96200>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/02-create.t   |  3 ++-
+ t/03-verify.t   |  3 ++-
+ t/CAPCServer.pm | 12 ++++++++++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/t/02-create.t b/t/02-create.t
+index cb4aa50..5ee6420 100644
+--- a/t/02-create.t
++++ b/t/02-create.t
+@@ -9,7 +9,7 @@ BEGIN {
+     plan skip_all => "Test::WWW::Mechanize required for tests" if $@;
+ }
+ 
+-plan tests => 4;
++plan tests => 5;
+ 
+ # Bring in testing hierarchy
+ use lib './t';
+@@ -25,6 +25,7 @@ use constant PORT => 13432;
+ my $server = CAPCServer->new(PORT);
+ my $pid = $server->background;
+ ok($pid, 'HTTP Server started') or die "Can't start the server";
++ok($server->is_ready, 'HTTP Server is ready');
+ 
+ sub cleanup { kill(9, $pid) };
+ $SIG{__DIE__} = \&cleanup;
+diff --git a/t/03-verify.t b/t/03-verify.t
+index 79bde20..3f84c89 100644
+--- a/t/03-verify.t
++++ b/t/03-verify.t
+@@ -9,7 +9,7 @@ BEGIN {
+     plan skip_all => "Test::WWW::Mechanize required for tests" if $@;
+ }
+ 
+-plan tests => 7;
++plan tests => 8;
+ 
+ # Bring in testing hierarchy
+ use lib './t';
+@@ -25,6 +25,7 @@ use constant PORT => 13432;
+ my $server = CAPCServer->new(PORT);
+ my $pid = $server->background;
+ ok($pid, 'HTTP Server started') or die "Can't start the server";
++ok($server->is_ready, 'HTTP Server is ready');
+ 
+ sub cleanup { kill(9, $pid) };
+ $SIG{__DIE__} = \&cleanup;
+diff --git a/t/CAPCServer.pm b/t/CAPCServer.pm
+index c7b243e..09055b2 100644
+--- a/t/CAPCServer.pm
++++ b/t/CAPCServer.pm
+@@ -16,4 +16,16 @@ sub handle_request
+     return $webapp->run;
+ }
+ 
++pipe (my($rpipe, $wpipe));
++
++sub after_setup_listener
++{
++    $wpipe->printflush("ready\n");
++}
++
++sub is_ready
++{
++    return ("ready\n" eq <$rpipe>);
++}
++
+ 1;
+-- 
+1.9.3
+

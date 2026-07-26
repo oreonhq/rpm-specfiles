@@ -1,0 +1,35 @@
+am-utils-6.2 - dont include linux/mount.h
+
+From: Ian Kent <raven@themaw.net>
+
+Updates to glibc to add support for fsconfig() et. al. have introduced
+conflicts between sys/mount.h and the corresponding kernel header
+linux/mount.h.
+
+But sys/mount.h and linux/mount.h provide very close to the same
+definitions except that sys/mount.h has some additional function
+declarations.
+
+So add a macro define to the amd include file to stop its inclusion
+of linux/mount.h when including linux/fs.h so that sys/mount.h is
+used instead.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ include/mount_headers1.h |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/mount_headers1.h b/include/mount_headers1.h
+index 7d518a06..af9a90ee 100644
+--- a/include/mount_headers1.h
++++ b/include/mount_headers1.h
+@@ -160,6 +160,9 @@
+ #  endif /* HAVE_LINUX_LIST_H */
+ #  include <linux/fs.h>
+ # else
++#  ifdef HAVE_SYS_MOUNT_H
++#    define _LINUX_MOUNT_H
++#  endif /* HAVE_SYS_MOUNT_H */
+ #  include <linux/fs.h>
+ # endif/* (!__GLIBC__ || __GLIBC__ < 2) */
+ #endif /* HAVE_LINUX_FS_H */

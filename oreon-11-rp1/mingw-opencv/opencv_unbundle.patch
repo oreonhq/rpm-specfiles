@@ -1,0 +1,25 @@
+diff -rupN --no-dereference opencv-4.12.0/CMakeLists.txt opencv-4.12.0-new/CMakeLists.txt
+--- opencv-4.12.0/CMakeLists.txt	2025-07-02 09:54:13.000000000 +0200
++++ opencv-4.12.0-new/CMakeLists.txt	2025-12-13 11:14:05.364928138 +0100
+@@ -197,14 +197,14 @@ OCV_OPTION(OPENCV_ENABLE_NONFREE "Enable
+ 
+ # 3rd party libs
+ OCV_OPTION(OPENCV_FORCE_3RDPARTY_BUILD   "Force using 3rdparty code from source" OFF)
+-OCV_OPTION(BUILD_ZLIB               "Build zlib from source"             (WIN32 OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
+-OCV_OPTION(BUILD_TIFF               "Build libtiff from source"          (WIN32 OR ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
+-OCV_OPTION(BUILD_OPENJPEG           "Build OpenJPEG from source"         (WIN32 OR ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
+-OCV_OPTION(BUILD_JASPER             "Build libjasper from source"        (WIN32 OR ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
+-OCV_OPTION(BUILD_JPEG               "Build libjpeg from source"          (WIN32 OR ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
+-OCV_OPTION(BUILD_PNG                "Build libpng from source"           (WIN32 OR ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
++OCV_OPTION(BUILD_ZLIB               "Build zlib from source"             (APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
++OCV_OPTION(BUILD_TIFF               "Build libtiff from source"          (ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
++OCV_OPTION(BUILD_OPENJPEG           "Build OpenJPEG from source"         (ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
++OCV_OPTION(BUILD_JASPER             "Build libjasper from source"        (ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
++OCV_OPTION(BUILD_JPEG               "Build libjpeg from source"          (ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
++OCV_OPTION(BUILD_PNG                "Build libpng from source"           (ANDROID OR APPLE OR OPENCV_FORCE_3RDPARTY_BUILD) )
+ OCV_OPTION(BUILD_OPENEXR            "Build openexr from source"          (OPENCV_FORCE_3RDPARTY_BUILD) )
+-OCV_OPTION(BUILD_WEBP               "Build WebP from source"             (((WIN32 OR ANDROID OR APPLE) AND NOT WINRT) OR OPENCV_FORCE_3RDPARTY_BUILD) )
++OCV_OPTION(BUILD_WEBP               "Build WebP from source"             (((ANDROID OR APPLE) AND NOT WINRT) OR OPENCV_FORCE_3RDPARTY_BUILD) )
+ OCV_OPTION(BUILD_TBB                "Download and build TBB from source" (ANDROID OR OPENCV_FORCE_3RDPARTY_BUILD) )
+ OCV_OPTION(BUILD_IPP_IW             "Build IPP IW from source"           (NOT MINGW OR OPENCV_FORCE_3RDPARTY_BUILD) IF (X86_64 OR X86) AND NOT WINRT )
+ OCV_OPTION(BUILD_ITT                "Build Intel ITT from source"

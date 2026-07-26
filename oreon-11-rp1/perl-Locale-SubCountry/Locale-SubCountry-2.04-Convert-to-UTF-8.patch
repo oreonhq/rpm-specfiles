@@ -1,0 +1,56 @@
+From 5794bfa9b2395eb9e01fe80342a3387b7941146d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 7 Mar 2017 13:58:01 +0100
+Subject: [PATCH] Convert to UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Petr P√≠sa≈ô <ppisar@redhat.com>
+---
+ Changes | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Changes b/Changes
+index 536fd32..c8bd5b7 100644
+--- a/Changes
++++ b/Changes
+@@ -30,7 +30,7 @@ Revision history for Perl CPAN module Locale::SubCountry
+     Improved documentation
+     Updated France, all regions reorganised in January 2016
+     Updated Italy, all regions reorganised in January 2015
+-    Distrito Federal renamed to Ciudad de MÈxico, in Mexico
++    Distrito Federal renamed to Ciudad de M√©xico, in Mexico
+ 
+ 1.65 25 Apr 2016
+     Fixed #110905, wrong code for Sulawesi Barat
+@@ -106,7 +106,7 @@ Revision history for Perl CPAN module Locale::SubCountry
+ 
+ 1.49 18 Apr 2012
+     Fixed errors in XML coding
+-    Fixed the Brazilian state RondÙnia, fix for RT bug 73830
++    Fixed the Brazilian state Rond√¥nia, fix for RT bug 73830
+     Added 3 new Indonesian provinces, fix for RT bug 74763
+     Added 'use utf8' to Data.pm, fix for RT bug 73829
+     Added Metro Manila in Philippines, fixed some other provinces, fix for RT bug 69678
+@@ -115,7 +115,7 @@ Revision history for Perl CPAN module Locale::SubCountry
+     Added South Sudan as a new country
+     Removed states from Sudan
+     Added New Caledonia, Palau, San Marino, Guernsey, Jersey, Saint Martin,
+-      Saint BarthÈlemy, Sint Maarten, Isle Of Man
++      Saint Barth√©lemy, Sint Maarten, Isle Of Man
+ 
+ 1.47 29 Apr 2011
+     Converted tests to use Test::Simple in main.t
+@@ -201,7 +201,7 @@ Revision history for Perl CPAN module Locale::SubCountry
+         Nauru
+         Seychelles
+ 
+-    For Cape Verde, changed Calheta de S„o Miguel to S„o Miguel
++    For Cape Verde, changed Calheta de S√£o Miguel to S√£o Miguel
+     For Venezuela, changed Distrito Federal to Distrito Capital
+     Added districts for Honduras
+ 
+-- 
+2.7.4
+

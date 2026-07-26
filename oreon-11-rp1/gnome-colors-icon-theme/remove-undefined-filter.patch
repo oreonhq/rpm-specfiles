@@ -1,0 +1,13 @@
+diff --git a/gnome-colors-common/scalable/places/user-trash.svg b/gnome-colors-common/scalable/places/user-trash.svg
+index b6e6fa7..fd82887 100644
+--- a/gnome-colors-common/scalable/places/user-trash.svg
++++ b/gnome-colors-common/scalable/places/user-trash.svg
+@@ -698,7 +698,7 @@
+      inkscape:label="Layer 1"
+      inkscape:groupmode="layer">
+     <g
+-       style="opacity:1;display:inline;filter:url(#filter3625);enable-background:new"
++       style="opacity:1;display:inline;enable-background:new"
+        id="g3757"
+        transform="translate(-696,-50.000002)">
+       <path

@@ -1,0 +1,14 @@
+diff -up IQmol3-3.1.4/resources/iqmol.desktop.fixdesktop IQmol3-3.1.4/resources/iqmol.desktop
+--- IQmol3-3.1.4/resources/iqmol.desktop.fixdesktop	2024-02-22 10:09:22.000000000 +0000
++++ IQmol3-3.1.4/resources/iqmol.desktop	2024-07-26 16:51:31.721329823 +0000
+@@ -4,8 +4,8 @@ Type=Application
+ GenericName=Molecular Editor
+ Comment=Build, visualize and animate molecules
+ Terminal=false
+-Exec=/usr/local/bin/iqmol
+-Icon=/usr/share/icons/hicolor/512x512/apps/iqmol.png
++Exec=IQmol
++Icon=IQmol
+ StartupNotify=true
+ Categories=Education;Science;Chemistry;Physics;Biology;
+ Name[en]=IQmol

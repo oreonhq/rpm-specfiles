@@ -1,0 +1,27 @@
+--- a/src/vpux_driver_compiler/src/vpux_compiler_l0/CMakeLists.txt	2025-04-14 23:36:56.812899341 -0700
++++ b/src/vpux_driver_compiler/src/vpux_compiler_l0/CMakeLists.txt	2025-04-16 09:58:44.751662645 -0700
+@@ -80,12 +85,12 @@
+             COMPONENT ${CID_COMPONENT})
+ else()
+     install(TARGETS ${TARGET_NAME}
+-            LIBRARY DESTINATION cid/lib
++            LIBRARY DESTINATION lib64
+             COMPONENT ${CID_COMPONENT})
+ endif()
+ 
+ install(
+         FILES
+             "${InferenceEngineVPUXPlugin_SOURCE_DIR}/src/vpux_driver_compiler/include/npu_driver_compiler.h"
+-        DESTINATION cid
++        DESTINATION include
+         COMPONENT ${CID_COMPONENT})
+--- a/src/vpux_driver_compiler/CMakeLists.txt	2025-04-14 21:03:09.221779635 -0700
++++ b/src/vpux_driver_compiler/CMakeLists.txt	2025-04-14 23:36:46.771479407 -0700
+@@ -12,6 +12,7 @@
+ ov_cpack_add_component(${CID_COMPONENT})
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
++include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../vpux_compiler/include)
+ 
+ add_subdirectory(src)
+ add_subdirectory(test)

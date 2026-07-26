@@ -1,0 +1,13 @@
+--- runtime-decompiler/src/plugins/JasmDecompilerWrapper.json	2018-11-12 15:25:47.000000000 +0100
++++ runtime-decompiler/src/plugins/JasmDecompilerWrapper.json	2019-01-16 12:13:37.317778036 +0100
+@@ -1,8 +1,8 @@
+ {
+   "Name": "jasm",
+-  "WrapperURL": "file://${XDG_CONFIG_HOME}/plugins/JasmDecompilerWrapper.java",
++  "WrapperURL": "file:/etc/java-runtime-decompiler/plugins/JasmDecompilerWrapper.java",
+   "DependencyURL": [
+-    "file://${HOME}/.m2/repository/org/openjdk/asmtools/9.0.b12-ea/asmtools-9.0.b12-ea.jar"
++    "file:/usr/share/java/openjdk-asmtools/asmtools.jar"
+   ],
+   "DecompilerDownloadURL": "https://github.com/openjdk/asmtools"
+ }

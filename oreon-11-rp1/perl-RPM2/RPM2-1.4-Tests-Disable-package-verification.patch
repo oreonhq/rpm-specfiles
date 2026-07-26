@@ -1,0 +1,52 @@
+From cc3b02366221bf2756c88682d03a4a31b3309a45 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 29 Sep 2025 13:33:25 +0200
+Subject: [PATCH] Tests: Disable package verification
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Because the testing RPM packages are not signed and RPM 6 started to
+enforce package verification using RPM policies, the test run under
+root attempting to install the unsiged package failed like this:
+
+    # Failed test 48 in /usr/libexec/perl-RPM2/test.pl at line 160
+    #  /usr/libexec/perl-RPM2/test.pl line 160 is: skip( ( $< == 0 ) ? undef : ': must be root to create RPM transaction.',  ( $< == 0 ) ? $t->run() : undef );
+    ok 49
+    ok 50
+    not ok 51
+    # Failed test 51 in /usr/libexec/perl-RPM2/test.pl at line 171
+    #  /usr/libexec/perl-RPM2/test.pl line 171 is: skip( ( $< == 0 ) ? undef : ': package not added as not root.',  ( $< == 0 ) ? scalar(@pkg) == 1 : undef );
+    ok 52
+    not ok 53
+    # Failed test 53 in /usr/libexec/perl-RPM2/test.pl at line 180
+    #  /usr/libexec/perl-RPM2/test.pl line 180 is: skip( ( $< == 0 ) ? undef : ': package not erased as not root.', ( $< == 0 ) ? $t->add_erase($pkg[0]) : undef );
+    not ok 54
+    # Failed test 54 in /usr/libexec/perl-RPM2/test.pl at line 182
+    #  /usr/libexec/perl-RPM2/test.pl line 182 is: skip( ( $< == 0 ) ? undef : ': no transaction as not root.', ( $< == 0 ) ? ($t->element_count() == 1) : undef );
+
+Passing _RPMVSF_NOSIGNATURES and _RPMVSF_NODIGESTS to transaction
+constructor does not help. One needs to filter reporting the verification
+problems from the transaction (1<<9 is RPMPROB_FILTER_VERIFY).
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ test.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test.pl b/test.pl
+index 858b002..4fa9992 100644
+--- a/test.pl
++++ b/test.pl
+@@ -156,7 +156,7 @@ ok($t->order());
+ my @rpms = $t->elements();
+ ok($rpms[0] eq  $pkg->as_nvre());
+ ok(scalar(@rpms) == 1);
+-skip( ( $< == 0 ) ? undef : ': must be root to create RPM transaction.',  ( $< == 0 ) ? $t->run() : undef );
++skip( ( $< == 0 ) ? undef : ': must be root to create RPM transaction.',  ( $< == 0 ) ? $t->run('', 1<<9) : undef );
+ $t = undef;
+ # See if we can find the rpm in the database now...
+ $db = RPM2->open_rpm_db();
+-- 
+2.51.0
+

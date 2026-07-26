@@ -1,0 +1,21 @@
+# Originally from Jóhann B. Guðmundsson
+# <https://bugzilla.redhat.com/show_bug.cgi?id=914421>
+#
+# Fixed documentation reference, switched to non-forked mode
+# and added options handling by Lubomir Rintel <lkundrak@v3.sk>
+
+[Unit]
+Description=NetBSD iSCSI Target
+Documentation=man:iscsi-target(8)
+DefaultDependencies=no
+Conflicts=shutdown.target
+After=network.target
+Before=remote-fs-pre.target
+
+[Service]
+PIDFile=/var/run/iscsi-target.pid
+EnvironmentFile=-/etc/sysconfig/netbsd-iscsi
+ExecStart=/usr/bin/iscsi-target -D ${NETBSD_ISCSI_OPTS}
+
+[Install]
+WantedBy=multi-user.target

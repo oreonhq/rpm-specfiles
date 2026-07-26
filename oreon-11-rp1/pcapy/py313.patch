@@ -1,0 +1,11 @@
+--- pcapobj.cc~	2023-10-24 10:41:46.702472299 -0500
++++ pcapobj.cc	2023-10-24 10:43:00.250137205 -0500
+@@ -411,7 +411,7 @@
+   arglist = Py_BuildValue("Os#", hdr, packetdata, *len);
+ #endif
+ 
+-  result = PyEval_CallObject(pctx->pyfunc,arglist);
++  result = PyObject_CallObject(pctx->pyfunc,arglist);
+ 
+   Py_XDECREF(arglist);
+   if (result)

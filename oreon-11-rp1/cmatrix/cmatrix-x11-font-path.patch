@@ -1,0 +1,59 @@
+diff -rup a/configure.ac b/configure.ac
+--- a/configure.ac	2019-03-27 15:36:28.000000000 +0100
++++ b/configure.ac	2020-11-26 12:18:10.789106711 +0100
+@@ -112,20 +112,23 @@ if test "x$enable_fonts" != xfalse; then
+   fi
+ 
+   AC_PATH_PROG(MKFONTDIR, mkfontdir, "", $PATH:/usr/bin:/usr/bin/X11:/usr/local/bin/X11:/usr/X11R6/bin:/usr/local/bin:/sbin:/usr/sbin)
+-  AC_CHECK_FILES([/usr/lib/X11/fonts/misc /usr/X11R6/lib/X11/fonts/misc])
++  AC_CHECK_FILES([/usr/lib/X11/fonts/misc /usr/X11R6/lib/X11/fonts/misc /usr/share/X11/fonts/misc])
+ 
+   if test "x$ac_cv_file__usr_lib_X11_fonts_misc" = "xno"; then
+       if test "x$ac_cv_file__usr_X11R6_lib_X11_fonts_misc" = "xno"; then
++          if test "x$ac_cv_file__usr_share_X11_fonts_misc" = "xno"; then
+ 	  AC_MSG_WARN([ 
+ 
+ *** You do not appear to have an X window fonts directory in the standard
+-*** locations (/usr/lib/X11/fonts/misc or /usr/X11R6/lib/X11/fonts/misc). The
+-*** mtx.pcf font will not be installed.  This means you will probably not
+-*** be able to use the mtx fonts in your x terminals, and hence be unable
+-*** to use the -x command line switch.  Sorry about that...
++*** locations (/usr/lib/X11/fonts/misc or /usr/X11R6/lib/X11/fonts/misc 
++*** or /usr/share/X11/fonts/misc). The mtx.pcf font will not be installed
++*** This means you will probably not be able to use the mtx fonts in your
++*** x terminals, and hence be unable to use the -x command line switch.
++*** Sorry about that...
+ ])
+ 	  fi
+       fi
++        fi
+ fi
+ 
+ dnl Parse any configure options
+diff -rup a/Makefile.am b/Makefile.am
+--- a/Makefile.am	2019-03-27 15:36:28.000000000 +0100
++++ b/Makefile.am	2020-11-26 12:21:59.701060016 +0100
+@@ -28,16 +28,21 @@ install-data-local:
+ 		if test -d /usr/lib/X11/fonts/misc; then \
+ 	    		echo " Installing X window matrix fonts in /usr/lib/X11/fonts/misc..."; \
+ 	    		$(INSTALL_DATA) $(srcdir)/mtx.pcf /usr/lib/X11/fonts/misc; \
+-	    		$(INSTALL_DATA) $(srcdir)/mtx.pcf /usr/lib/X11/fonts/misc; \
+ 	    		echo " Running mkfontdir /usr/lib/X11/fonts/misc..."; \
+ 	    		$(MKFONTDIR) /usr/lib/X11/fonts/misc; \
+ 	    		echo " Done.  If this is the first time you have installed CMatrix you will"; \
+ 	    		echo " probably have to restart X window in order to use the mtx.pcf font."; \
++		elif test -d /usr/share/X11/fonts/misc; then \
++	    		echo " Installing X window matrix fonts in /usr/share/X11/fonts/misc..."; \
++	    		$(INSTALL_DATA) $(srcdir)/mtx.pcf /usr/share/X11/fonts/misc; \
++	    		echo " Running mkfontdir /usr/share/X11/fonts/misc..."; \
++	    		$(MKFONTDIR) /usr/share/X11/fonts/misc; \
++	    		echo " Done.  If this is the first time you have installed CMatrix you will"; \
++	    		echo " probably have to restart X window in order to use the mtx.pcf font."; \
+ 		else \
+ 			if test -d /usr/X11R6/lib/X11/fonts/misc; then \
+ 	    			echo " Installing X window matrix fonts in /usr/X11R6/lib/X11/fonts/misc..."; \
+ 	    			$(INSTALL_DATA) $(srcdir)/mtx.pcf /usr/X11R6/lib/X11/fonts/misc; \
+-	    			$(INSTALL_DATA) $(srcdir)/mtx.pcf /usr/X11R6/lib/X11/fonts/misc; \
+ 	    			echo " Running mkfontdir /usr/X11R6/lib/X11/fonts/misc..."; \
+ 	    			$(MKFONTDIR) /usr/X11R6/lib/X11/fonts/misc; \
+ 	    			echo " Done.  If this is the first time you have installed CMatrix you will"; \

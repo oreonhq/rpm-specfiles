@@ -1,0 +1,43 @@
+From 5d1872fe78eeff8f0b9e22b1d5656297e1d60855 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 11 Sep 2013 00:03:50 +0200
+Subject: [PATCH 25/41] Fix warning about ambigious if-else-s
+
+---
+ xlib/shmbitmap.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/xlib/shmbitmap.c b/xlib/shmbitmap.c
+index 145cbdf..2f9b84c 100644
+--- a/xlib/shmbitmap.c
++++ b/xlib/shmbitmap.c
+@@ -138,7 +138,7 @@ putmaskcompiledclip (CONST int nx, CONST int ny, CONST int nw, CONST int nh, CON
+ 	  x += count;
+ 	  count = *dp++;
+ 	  /* __memcpy gives severe bug here */
+-	  if (y >= ny)
++	  if (y >= ny) {
+ 	    if (x >= nx)
+ 	      if (x + count > __clipx2 + 1)
+ 		{
+@@ -147,7 +147,7 @@ putmaskcompiledclip (CONST int nx, CONST int ny, CONST int nw, CONST int nh, CON
+ 		}
+ 	      else
+ 		__memcpyb (vp, dp, count);
+-	    else if (x + count > __clipx1)
++	    else if (x + count > __clipx1) {
+ 	      if (x + count > __clipx2 + 1)
+ 		__memcpyb (vp + __clipx1 - x,
+ 			   dp + __clipx1 - x,
+@@ -156,6 +156,8 @@ putmaskcompiledclip (CONST int nx, CONST int ny, CONST int nw, CONST int nh, CON
+ 		__memcpy (vp + __clipx1 - x,
+ 			  dp + __clipx1 - x,
+ 			  count - __clipx1 + x);
++            }
++          }
+ 	  x += count;
+ 	  vp += count;
+ 	  dp += count;
+-- 
+2.5.0
+

@@ -1,0 +1,23 @@
+From ca2c0e8e248cf21555cdb9469bf17f16d2d697bb Mon Sep 17 00:00:00 2001
+From: Jeremy Linton <jlinton@redhat.com>
+Date: Thu, 23 Jan 2025 14:33:32 -0600
+Subject: [PATCH] Fixup fedora pkgconfig
+
+Signed-off-by: Jeremy Linton <jlinton@redhat.com>
+---
+ m4rie.pc.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/m4rie.pc.in b/m4rie.pc.in
+index 92ad028..8e6f761 100644
+--- a/m4rie.pc.in
++++ b/m4rie.pc.in
+@@ -8,4 +8,5 @@ Description: Dense linear algebra over GF(2^e).
+ Version: @PACKAGE_VERSION@
+ Requires: m4ri >= 20240729
+ Libs: -L${libdir} -lm4rie
++Libs.private: -lm4ri -lm @OPENMP_CFLAGS@ @M4RI_CFLAGS@
+ Cflags: -I${includedir}
+-- 
+2.48.1
+

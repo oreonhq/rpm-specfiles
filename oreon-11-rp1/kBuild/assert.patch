@@ -1,0 +1,18 @@
+Description: Use assert ehen kHlpAssertBreakpoint is not available
+Author: Gianfranco Costamagna <locutusofborg@debian.org>
+Last-Update: 2020-11-10
+
+Index: kbuild/src/lib/kStuff/include/k/kHlpAssert.h
+===================================================================
+--- kbuild.orig/src/lib/kStuff/include/k/kHlpAssert.h
++++ kbuild/src/lib/kStuff/include/k/kHlpAssert.h
+@@ -60,7 +60,8 @@
+ #elif defined(__GNUC__) && (K_ARCH == K_ARCH_SPARC_64)
+ # define kHlpAssertBreakpoint() do { __asm__ __volatile__ ("illtrap 0"); } while (0) /*??*/
+ #else
+-# error "Port Me"
++#include <assert.h> 
++# define kHlpAssertBreakpoint(cond) assert(cond)
+ #endif
+ 
+ /** @def K_FUNCTION

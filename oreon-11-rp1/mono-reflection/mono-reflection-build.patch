@@ -1,0 +1,20 @@
+diff -up mono-reflection-201105123git04d1df/Makefile.build mono-reflection-201105123git04d1df/Makefile
+--- mono-reflection-201105123git04d1df/Makefile.build	2011-05-12 16:16:13.291241832 -0400
++++ mono-reflection-201105123git04d1df/Makefile	2011-05-12 16:16:07.841309263 -0400
+@@ -0,0 +1,16 @@
++MCS = mcs
++KEY_FILE = Mono.Reflection.snk
++MCS_FLAGS = -keyfile:$(KEY_FILE)
++BUILD.DIR = bin
++
++all: init
++	$(MCS) $(MCS_FLAGS) @Mono.Reflection.sources /target:library /out:$(BUILD.DIR)/Mono.Reflection.dll
++
++init:
++	mkdir -p $(BUILD.DIR)
++	find Mono.Reflection -name "*.cs" > Mono.Reflection.sources
++
++clean:
++	rm -fr $(BUILD.DIR)
++
++rebuild: clean all

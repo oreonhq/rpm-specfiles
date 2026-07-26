@@ -1,0 +1,78 @@
+From 87faa08f9a1d3f55e3430a68acb0f898adc75a2d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Fri, 7 Feb 2020 08:51:41 +0100
+Subject: [PATCH 13/13] GCC-10 fixes
+
+---
+ alliance/src/elp/src/elp.c        | 1 -
+ alliance/src/elp/src/elp.h        | 3 ++-
+ alliance/src/elp/src/elp_y.y      | 1 -
+ alliance/src/nero/src/MDRGrid.cpp | 1 +
+ alliance/src/pat/src/Makefile.am  | 1 +
+ 5 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/alliance/src/elp/src/elp.c b/alliance/src/elp/src/elp.c
+index d279e6cfc..e516f1ee6 100644
+--- a/alliance/src/elp/src/elp.c
++++ b/alliance/src/elp/src/elp.c
+@@ -33,7 +33,6 @@ double elpVoltage[elpVOLTNUM]                                              ;
+ double elpCapa[elpTRANSNUM][elpCAPANUM]                                    ;
+ double elpGeneral[elpGENERALNUM]           = {0.0,0.0,1000.0}              ;
+ char   elpLang                             = elpDEFLANG                    ;
+-int    elpyylineno                                                            ;
+ 
+ /*****************************************************************************/
+ /*                        function elpenv()                                  */
+diff --git a/alliance/src/elp/src/elp.h b/alliance/src/elp/src/elp.h
+index b1d4930f1..b1f284aed 100644
+--- a/alliance/src/elp/src/elp.h
++++ b/alliance/src/elp/src/elp.h
+@@ -106,7 +106,8 @@ extern double elpGeneral[elpGENERALNUM] ;
+ #define elpACM        0  /* methode de calcul des capacites dynamiques */
+ #define elpTEMP       1  /* temperature de simulation et d'analyse     */
+ #define elpSLOPE      2  /* front sur les connecteurs d'entree         */
+-
++extern int  yylineno ;
++extern int  elpyylineno ;
+ 
+ /* les fonctions externes */
+ extern int elpenv() ;
+diff --git a/alliance/src/elp/src/elp_y.y b/alliance/src/elp/src/elp_y.y
+index 904ce7f02..fb5db214a 100644
+--- a/alliance/src/elp/src/elp_y.y
++++ b/alliance/src/elp/src/elp_y.y
+@@ -100,7 +100,6 @@ elpvar    :
+           ;
+ %%
+ 
+-extern int  yylineno ;
+ extern char yytext[] ;
+ 
+ void yyerror()
+diff --git a/alliance/src/nero/src/MDRGrid.cpp b/alliance/src/nero/src/MDRGrid.cpp
+index b7e9fb9f3..f8095ab3b 100644
+--- a/alliance/src/nero/src/MDRGrid.cpp
++++ b/alliance/src/nero/src/MDRGrid.cpp
+@@ -17,6 +17,7 @@
+ 
+ 
+ # include  "MDefs.h"
++template class TMatrix<char>;
+ 
+ 
+ 
+diff --git a/alliance/src/pat/src/Makefile.am b/alliance/src/pat/src/Makefile.am
+index d8875fb83..f93af2822 100644
+--- a/alliance/src/pat/src/Makefile.am
++++ b/alliance/src/pat/src/Makefile.am
+@@ -28,6 +28,7 @@ pat_decl_y.c pat_decl_y.h : $(srcdir)/pat_decl_y.y
+ 	    && sed -e "s/yy/pat_decl_y_/g" -e "s/YY/PAT_DECL_Y_/g" y.tab.c \
+ 	     | sed -e "s/int[        ]*pat_decl_y_char;/extern int pat_decl_y_char;/" \
+ 	     | sed -e "s/int[        ]*pat_decl_y_nerrs;/extern int pat_decl_y_nerrs;/" \
++	     | sed -e "s/^PAT_DECL_Y_STYPE pat_decl_y_lval;//" \
+ 	     > pat_decl_y.c \
+ 	    && sed -e "s/yy/pat_decl_y_/g" -e "s/YY/PAT_DECL_Y_/g" y.tab.h > pat_decl_y.h
+ 
+-- 
+2.24.1
+

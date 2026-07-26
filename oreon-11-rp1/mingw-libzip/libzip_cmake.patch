@@ -1,0 +1,14 @@
+diff -rupN --no-dereference libzip-1.11.4/lib/CMakeLists.txt libzip-1.11.4-new/lib/CMakeLists.txt
+--- libzip-1.11.4/lib/CMakeLists.txt	2025-05-23 15:55:07.000000000 +0200
++++ libzip-1.11.4-new/lib/CMakeLists.txt	2025-05-29 17:16:38.526138623 +0200
+@@ -177,6 +177,10 @@ endif()
+ if(SHARED_LIB_VERSIONNING)
+   # MACHO_*_VERSION can be removed when SOVERSION gets increased. Cf #405
+   set_target_properties(zip PROPERTIES VERSION 5.5 SOVERSION 5 MACHO_CURRENT_VERSION 6.5 MACHO_COMPATIBILITY_VERSION 6)
++if(MINGW)
++  get_target_property(ZIP_SOVERSION zip SOVERSION)
++  set_target_properties(zip PROPERTIES SUFFIX "-${ZIP_SOVERSION}${CMAKE_SHARED_LIBRARY_SUFFIX}")
++endif(MINGW)
+ endif()
+ 
+ target_link_libraries(zip PRIVATE ZLIB::ZLIB)

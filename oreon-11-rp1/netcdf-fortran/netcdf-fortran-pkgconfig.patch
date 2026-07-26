@@ -1,0 +1,26 @@
+diff -up netcdf-fortran-4.5.2/nf-config.in.pkgconfig netcdf-fortran-4.5.2/nf-config.in
+--- netcdf-fortran-4.5.2/nf-config.in.pkgconfig	2020-02-23 17:12:57.278057384 -0700
++++ netcdf-fortran-4.5.2/nf-config.in	2020-02-23 17:14:11.419048337 -0700
+@@ -5,20 +5,18 @@
+ 
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+-libdir=@libdir@
+ includedir=@includedir@
+-fmoddir=@fmoddir@
+ 
+ cc="@CC@"
+ fc="@FC@"
+ cflags="-I${includedir} @CPPFLAGS@" 
+-fflags="-I${includedir} @MOD_FLAG@${fmoddir}"
++fflags=`pkg-config netcdf-fortran --cflags`
+ has_dap="@HAS_DAP@"
+ has_nc2="@HAS_NC2@"
+ has_nc4="@HAS_NC4@"
+ has_f90="@HAS_F90@"
+ has_f03="@HAS_F03@"
+-flibs="-L${libdir} @NC_FLIBS@"
++flibs=`pkg-config netcdf-fortran --libs`
+ version="@PACKAGE_NAME@ @PACKAGE_VERSION@"
+ 
+ usage()

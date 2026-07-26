@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>Go</target>
+    <match>
+      <family>Go Medium</family>
+      <prepend-keyword>Medium</prepend-keyword>
+    </match>
+    <axis>
+      <name>weight</name>
+      <step>
+        <name>Regular</name>
+        <value>80</value>
+      </step>
+      <step>
+        <name>Medium</name>
+        <value>100</value>
+      </step>
+      <step>
+        <name>SemiBold</name>
+        <value>180</value>
+        <match>
+          <keyword>Bold</keyword>
+        </match>
+      </step>
+    </axis>
+    <like>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

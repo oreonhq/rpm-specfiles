@@ -1,0 +1,37 @@
+From 6ccca91dfed80592aaedb97ef0408d4af24a1c18 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Tue, 13 Sep 2022 12:47:56 +0200
+Subject: [PATCH] Don't skip ghostscript-9.56.{0,1}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fedora backported a fix.
+
+https://github.com/PhilterPaper/Perl-PDF-Builder/issues/184
+https://bugzilla.redhat.com/show_bug.cgi?id=2123391
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/tiff.t | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/t/tiff.t b/t/tiff.t
+index b0b9dd4..6bb3e35 100644
+--- a/t/tiff.t
++++ b/t/tiff.t
+@@ -141,9 +141,9 @@ if      (can_run("gswin64c")) {
+ # check if reasonably recent version
+ $gs = check_version($gs, '-v', 'Ghostscript ([0-9.]+)', '9.25.0');
+ # use $gsX instead of $gs in selected tests if GS excluded version (error) found
+-$gsX = exclude_version($gs, '-v', 'Ghostscript ([0-9.]+)', 
+-         ['9.56.0','9.56.1', ]);
+-#$gsX = $gs;  # if want to keep tests changed, but not exclude
++#$gsX = exclude_version($gs, '-v', 'Ghostscript ([0-9.]+)',
++#         ['9.56.0','9.56.1', ]);
++$gsX = $gs;  # if want to keep tests changed, but not exclude
+ 
+ # $convert undef if not installed, can't parse format, version too low
+ # will skip "No Ghostscript"
+-- 
+2.37.3
+

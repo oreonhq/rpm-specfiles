@@ -1,0 +1,200 @@
+From 62eb2ae4b93c1c221386f31692b37dd6af363305 Mon Sep 17 00:00:00 2001
+From: Jonathan Wakely <jwakely@redhat.com>
+Date: Tue, 16 Dec 2025 14:31:40 +0000
+Subject: [PATCH 1/2] Remove all -std=c++11 options from build files
+
+---
+ Makefile                                     | 2 +-
+ bear-engine/test/entity-count/CMakeLists.txt | 2 +-
+ cmake-helper/compiler-defaults.cmake         | 1 -
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 8a43e723..609b9d65 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ CFLAGS=-Wall -Wno-sign-compare -fdiagnostics-color=always -fext-numeric-literals
+-CXXFLAGS= $(CFLAGS) -std=c++11
++CXXFLAGS= $(CFLAGS)
+ LDFLAGS=
+ 
+ CMAKE_BUILD_TYPE=
+diff --git a/bear-engine/test/entity-count/CMakeLists.txt b/bear-engine/test/entity-count/CMakeLists.txt
+index 69b0903a..48d4e797 100644
+--- a/bear-engine/test/entity-count/CMakeLists.txt
++++ b/bear-engine/test/entity-count/CMakeLists.txt
+@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
+ 
+ set( BEAR_ROOT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../../" )
+ set(CMAKE_CXX_FLAGS
+-  "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -pedantic -fdiagnostics-color=always")
++  "${CMAKE_CXX_FLAGS} -Wall -pedantic -fdiagnostics-color=always")
+ 
+ # The engine comes with some CMake scripts to ease its configuration and usage.
+ # These scripts are in the directory below and must be assigned to
+diff --git a/cmake-helper/compiler-defaults.cmake b/cmake-helper/compiler-defaults.cmake
+index 54f0be2f..d02604d4 100644
+--- a/cmake-helper/compiler-defaults.cmake
++++ b/cmake-helper/compiler-defaults.cmake
+@@ -2,7 +2,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
+   if(NOT WIN32 AND NOT APPLE)
+     add_definitions(
+       -Wall
+-      -std=c++11
+       -pedantic
+       -Wmissing-field-initializers
+       -Wuninitialized
+
+From 3c822ea591cdd84a7b197ca162501cd2a9dfad63 Mon Sep 17 00:00:00 2001
+From: Jonathan Wakely <jwakely@redhat.com>
+Date: Tue, 16 Dec 2025 14:33:03 +0000
+Subject: [PATCH 2/2] Replace old boost/filesystem/convenience.hpp header
+
+This is not present in recent Boost releases.
+
+Some of these headers include Boost.Filesystem headers and don't seem to
+use anything from them. I didn't try to clean that up.
+---
+ .../src/engine/resource_pool/code/directory_resource_pool.cpp   | 2 +-
+ .../core/src/engine/system/code/default_game_filesystem.cpp     | 2 +-
+ .../core/src/engine/system/code/freedesktop_game_filesystem.cpp | 2 +-
+ bear-factory/animation-editor/src/bf/code/animation_editor.cpp  | 2 +-
+ bear-factory/animation-editor/src/bf/code/configuration.cpp     | 2 +-
+ bear-factory/bear-editor/src/bf/code/path_configuration.cpp     | 2 +-
+ bear-factory/bear-editor/src/bf/impl/scan_dir.tpp               | 2 +-
+ bear-factory/bear-editor/src/bf/item_class_pool.hpp             | 2 +-
+ bear-factory/level-editor/src/bf/code/configuration.cpp         | 2 +-
+ bear-factory/model-editor/src/bf/code/configuration.cpp         | 2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/bear-engine/core/src/engine/resource_pool/code/directory_resource_pool.cpp b/bear-engine/core/src/engine/resource_pool/code/directory_resource_pool.cpp
+index 1dcb2388..cf736bd0 100644
+--- a/bear-engine/core/src/engine/resource_pool/code/directory_resource_pool.cpp
++++ b/bear-engine/core/src/engine/resource_pool/code/directory_resource_pool.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include <fstream>
+ #include <claw/exception.hpp>
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff --git a/bear-engine/core/src/engine/system/code/default_game_filesystem.cpp b/bear-engine/core/src/engine/system/code/default_game_filesystem.cpp
+index 99ea2f82..7b311788 100644
+--- a/bear-engine/core/src/engine/system/code/default_game_filesystem.cpp
++++ b/bear-engine/core/src/engine/system/code/default_game_filesystem.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include <claw/logger.hpp>
+ #include <claw/system_info.hpp>
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff --git a/bear-engine/core/src/engine/system/code/freedesktop_game_filesystem.cpp b/bear-engine/core/src/engine/system/code/freedesktop_game_filesystem.cpp
+index b1c92fe9..1cf01e15 100644
+--- a/bear-engine/core/src/engine/system/code/freedesktop_game_filesystem.cpp
++++ b/bear-engine/core/src/engine/system/code/freedesktop_game_filesystem.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include <claw/logger.hpp>
+ #include <claw/system_info.hpp>
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ 
+ /*----------------------------------------------------------------------------*/
+ /**
+diff --git a/bear-factory/animation-editor/src/bf/code/animation_editor.cpp b/bear-factory/animation-editor/src/bf/code/animation_editor.cpp
+index 06cca49f..021570bd 100644
+--- a/bear-factory/animation-editor/src/bf/code/animation_editor.cpp
++++ b/bear-factory/animation-editor/src/bf/code/animation_editor.cpp
+@@ -27,7 +27,7 @@
+ #include <claw/logger.hpp>
+ 
+ #include <limits>
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <boost/filesystem/path.hpp>
+ 
+ /*----------------------------------------------------------------------------*/
+diff --git a/bear-factory/animation-editor/src/bf/code/configuration.cpp b/bear-factory/animation-editor/src/bf/code/configuration.cpp
+index b2d603a8..f8ab6208 100644
+--- a/bear-factory/animation-editor/src/bf/code/configuration.cpp
++++ b/bear-factory/animation-editor/src/bf/code/configuration.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include "bf/path_configuration.hpp"
+ 
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <fstream>
+ #include <sstream>
+ 
+diff --git a/bear-factory/bear-editor/src/bf/code/path_configuration.cpp b/bear-factory/bear-editor/src/bf/code/path_configuration.cpp
+index 1dbfe148..c6a85917 100644
+--- a/bear-factory/bear-editor/src/bf/code/path_configuration.cpp
++++ b/bear-factory/bear-editor/src/bf/code/path_configuration.cpp
+@@ -18,7 +18,7 @@
+ #include <claw/system_info.hpp>
+ #include <claw/configuration_file.hpp>
+ 
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <fstream>
+ #include <sstream>
+ #include <limits>
+diff --git a/bear-factory/bear-editor/src/bf/impl/scan_dir.tpp b/bear-factory/bear-editor/src/bf/impl/scan_dir.tpp
+index 80502f1a..478d7519 100644
+--- a/bear-factory/bear-editor/src/bf/impl/scan_dir.tpp
++++ b/bear-factory/bear-editor/src/bf/impl/scan_dir.tpp
+@@ -13,7 +13,7 @@
+  */
+ 
+ #include <boost/filesystem/path.hpp>
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/directory.hpp>
+ #include <queue>
+ 
+ /*----------------------------------------------------------------------------*/
+diff --git a/bear-factory/bear-editor/src/bf/item_class_pool.hpp b/bear-factory/bear-editor/src/bf/item_class_pool.hpp
+index 3e087e45..67de778d 100644
+--- a/bear-factory/bear-editor/src/bf/item_class_pool.hpp
++++ b/bear-factory/bear-editor/src/bf/item_class_pool.hpp
+@@ -14,7 +14,7 @@
+ #ifndef __BF_ITEM_CLASS_POOL_HPP__
+ #define __BF_ITEM_CLASS_POOL_HPP__
+ 
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <map>
+ 
+ #include "bf/item_class.hpp"
+diff --git a/bear-factory/level-editor/src/bf/code/configuration.cpp b/bear-factory/level-editor/src/bf/code/configuration.cpp
+index 3f3d2d89..96962ab3 100644
+--- a/bear-factory/level-editor/src/bf/code/configuration.cpp
++++ b/bear-factory/level-editor/src/bf/code/configuration.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include "bf/path_configuration.hpp"
+ 
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <fstream>
+ #include <sstream>
+ 
+diff --git a/bear-factory/model-editor/src/bf/code/configuration.cpp b/bear-factory/model-editor/src/bf/code/configuration.cpp
+index 970935f3..c340d4d3 100644
+--- a/bear-factory/model-editor/src/bf/code/configuration.cpp
++++ b/bear-factory/model-editor/src/bf/code/configuration.cpp
+@@ -15,7 +15,7 @@
+ 
+ #include "bf/path_configuration.hpp"
+ 
+-#include <boost/filesystem/convenience.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <fstream>
+ #include <sstream>
+ 

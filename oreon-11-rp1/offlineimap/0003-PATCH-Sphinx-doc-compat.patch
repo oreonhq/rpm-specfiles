@@ -1,0 +1,23 @@
+From 2efba336e3b4924acc758e1ea9f202961fe85f4a Mon Sep 17 00:00:00 2001
+From: serge-sans-paille <serge.guelton@telecom-bretagne.eu>
+Date: Wed, 29 Oct 2025 00:11:15 +0100
+Subject: [PATCH 3/4] [PATCH] Sphinx doc compat
+
+---
+ docs/doc-src/conf.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/docs/doc-src/conf.py b/docs/doc-src/conf.py
+index 95cfb51..20789fa 100644
+--- a/docs/doc-src/conf.py
++++ b/docs/doc-src/conf.py
+@@ -198,4 +198,5 @@ latex_documents = [
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'http://docs.python.org/': None}
++intersphinx_mapping = {'python': ('http://docs.python.org/', None)}
++
+-- 
+2.51.0
+

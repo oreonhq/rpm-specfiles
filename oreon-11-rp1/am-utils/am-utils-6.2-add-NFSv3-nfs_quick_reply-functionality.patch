@@ -1,0 +1,241 @@
+am-utils-6.2 - add NFSv3 nfs_quick_reply() functionality
+
+From: Ian Kent <raven@themaw.net>
+
+The implementation of the NFS v3 server does not use the hack needed
+by the nfs_quick_reply() function.
+
+Now that saving the current transort for later use by nfs_quick_reply()
+avoids concurrency races it should be ok to use it.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_prot_svc.c |   13 +++++
+ amd/nfs_subr.c     |  137 +++++++++++++++++++++++++++++++++++++++++-----------
+ 2 files changed, 120 insertions(+), 30 deletions(-)
+
+diff --git a/amd/nfs_prot_svc.c b/amd/nfs_prot_svc.c
+index cbde172..29b7551 100644
+--- a/amd/nfs_prot_svc.c
++++ b/amd/nfs_prot_svc.c
+@@ -180,7 +180,7 @@ nfs_program_2(struct svc_req *rqstp, SVCXPRT *transp)
+     xdr_result = (xdrproc_t) xdr_diropres;
+     local = (nfssvcproc_t) nfsproc_lookup_2_svc;
+     /*
+-     * Cheap way to pass transp down to amfs_auto_lookuppn so it can
++     * Cheap way to pass transp down to amfs_auto_lookup so it can
+      * be stored in the am_node structure and later used for
+      * quick_reply().
+      */
+@@ -327,6 +327,8 @@ nfs_program_3(struct svc_req *rqstp, register SVCXPRT *transp)
+   xdrproc_t _xdr_argument, _xdr_result;
+   nfssvcproc_t local;
+ 
++  current_transp = NULL;
++
+   switch (rqstp->rq_proc) {
+   case AM_NFS3_NULL:
+     _xdr_argument = (xdrproc_t) xdr_void;
+@@ -350,6 +352,12 @@ nfs_program_3(struct svc_req *rqstp, register SVCXPRT *transp)
+     _xdr_argument = (xdrproc_t) xdr_am_LOOKUP3args;
+     _xdr_result = (xdrproc_t) xdr_am_LOOKUP3res;
+     local = (nfssvcproc_t) (char *(*)(char *, struct svc_req *)) am_nfs3_lookup_3_svc;
++    /*
++     * Cheap way to pass transp down to amfs_auto_lookup so it can
++     * be stored in the am_node structure and later used for
++     * quick_reply().
++     */
++    current_transp = transp;
+     break;
+ 
+   case AM_NFS3_ACCESS:
+@@ -476,6 +484,9 @@ nfs_program_3(struct svc_req *rqstp, register SVCXPRT *transp)
+   }
+ 
+   result = (*local) (&argument, rqstp);
++
++  current_transp = NULL;
++
+   if (result != NULL && !svc_sendreply(transp, (xdrproc_t) _xdr_result, result)) {
+     svcerr_systemerr (transp);
+   }
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index 07d960d..a383618 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -87,6 +87,9 @@ struct am_fh3 {
+ };
+ 
+ /* forward declarations */
++static int nfs_quick_reply2(am_node *mp, int error);
++static int nfs_quick_reply3(am_node *mp, int error);
++
+ /* converting am-filehandles to mount-points */
+ static am_node *fh_to_mp3(am_nfs_fh *fhp, int *rp, int vop);
+ static am_node *fh_to_mp(am_nfs_fh *fhp);
+@@ -255,46 +258,65 @@ nfsproc_lookup_2_svc(nfsdiropargs *argp, struct svc_req *rqstp)
+   return &res;
+ }
+ 
+-
+ void
+ nfs_quick_reply(am_node *mp, int error)
+ {
+-  SVCXPRT *transp = mp->am_transp;
+-  nfsdiropres res;
+-  xdrproc_t xdr_result = (xdrproc_t) xdr_diropres;
++  int ret;
+ 
+   /*
+-   * If there's a transp structure then we can reply to the client's
+-   * nfs lookup request.
++   * If there's no transp structure then we can't reply to the
++   * client's nfs lookup request.
+    */
+-  if (transp) {
+-    if (error == 0) {
+-      /*
+-       * Construct a valid reply to a lookup request.  Same
+-       * code as in nfsproc_lookup_2_svc() above.
+-       */
+-      mp_to_fh(mp, &res.dr_u.dr_drok_u.drok_fhandle);
+-      res.dr_u.dr_drok_u.drok_attributes = mp->am_fattr;
+-      res.dr_status = NFS_OK;
+-    } else
+-      /*
+-       * Return the error that was passed to us.
+-       */
+-      res.dr_status = nfs_error(error);
++  if (!mp->am_transp)
++    return;
++
++  if (nfs_dispatcher == nfs_program_2)
++    ret = nfs_quick_reply2(mp, error);
++  else
++    ret = nfs_quick_reply3(mp, error);
++
++  if (!ret)
++    svcerr_systemerr(mp->am_transp);
++
++  /*
++   * Free up transp.  It's only used for one reply.
++   */
++  put_nfs_xprt(mp->am_transp);
++  mp->am_transp = NULL;
++  dlog("Quick reply sent for %s", mp->am_al->al_mnt->mf_mount);
++}
+ 
++
++static int
++nfs_quick_reply2(am_node *mp, int error)
++{
++  SVCXPRT *transp = mp->am_transp;
++  nfsdiropres res;
++  xdrproc_t xdr_result = (xdrproc_t) xdr_diropres;
++  int ret;
++
++  if (error == 0) {
+     /*
+-     * Send off our reply
++     * Construct a valid reply to a lookup request.  Same
++     * code as in nfsproc_lookup_2_svc() above.
+      */
+-    if (!svc_sendreply(transp, (XDRPROC_T_TYPE) xdr_result, (SVC_IN_ARG_TYPE) & res))
+-      svcerr_systemerr(transp);
+-
++    mp_to_fh(mp, &res.dr_u.dr_drok_u.drok_fhandle);
++    res.dr_u.dr_drok_u.drok_attributes = mp->am_fattr;
++    res.dr_status = NFS_OK;
++  } else
+     /*
+-     * Free up transp.  It's only used for one reply.
++     * Return the error that was passed to us.
+      */
+-    put_nfs_xprt(mp->am_transp);
+-    mp->am_transp = NULL;
+-    dlog("Quick reply sent for %s", mp->am_al->al_mnt->mf_mount);
+-  }
++    res.dr_status = nfs_error(error);
++
++  /*
++   * Send off our reply
++   */
++  ret = svc_sendreply(transp,
++                     (XDRPROC_T_TYPE) xdr_result,
++                     (SVC_IN_ARG_TYPE) & res);
++
++  return ret;
+ }
+ 
+ 
+@@ -890,6 +912,8 @@ mp_to_fh(am_node *mp, am_nfs_fh *fhp)
+     /* dlog("mp_to_fh: old filehandle: %d", fp->u.s.fhh_id); */
+   }
+ }
++
++
+ void
+ mp_to_fh3(am_node *mp, am_nfs_fh3 *fhp)
+ {
+@@ -1257,6 +1281,61 @@ am_nfs3_lookup_3_svc(am_LOOKUP3args *argp, struct svc_req *rqstp)
+   return &result;
+ }
+ 
++
++static int
++nfs_quick_reply3(am_node *mp, int error)
++{
++  SVCXPRT *transp = mp->am_transp;
++  xdrproc_t xdr_result = (xdrproc_t) xdr_am_LOOKUP3res;
++  am_LOOKUP3res  result;
++  am_post_op_attr *post_op_dir;
++  am_post_op_attr *post_op_obj;
++  int ret;
++
++  if (error) {
++    /*
++     * Return the error that was passed to us.
++     */
++    post_op_dir->attributes_follow = 0;
++    result.status = nfs_error(error);
++  } else {
++    post_op_dir = &result.res_u.ok.dir_attributes;
++    post_op_obj = &result.res_u.ok.obj_attributes;
++    am_fattr3 *fattr3;
++    nfsfattr *fattr;
++
++    /*
++     * Construct a valid reply to a lookup request.  Same
++     * code as in am_nfs3_lookup_3_svc() above.
++     */
++
++    /* dir attributes */
++    post_op_dir->attributes_follow = 1;
++    fattr3 = &post_op_dir->am_post_op_attr_u.attributes;
++    parent_fattr_to_fattr3(mp, fattr3);
++
++    mp_to_fh3(mp, &result.res_u.ok.object);
++
++    /* mount attributes */
++    post_op_obj->attributes_follow = 1;
++    fattr = &mp->am_fattr;
++    fattr3 = &post_op_obj->am_post_op_attr_u.attributes;
++    fattr_to_fattr3(fattr, fattr3);
++
++    result.status = AM_NFS3_OK;
++  }
++
++  /*
++   * Send off our reply
++   */
++  ret = svc_sendreply(transp,
++                     (XDRPROC_T_TYPE) xdr_result,
++                     (SVC_IN_ARG_TYPE) &result);
++
++  return ret;
++}
++
++
+ am_ACCESS3res *
+ am_nfs3_access_3_svc(am_ACCESS3args *argp, struct svc_req *rqstp)
+ {

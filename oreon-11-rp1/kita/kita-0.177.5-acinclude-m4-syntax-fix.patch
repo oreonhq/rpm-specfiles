@@ -1,0 +1,12 @@
+--- kita-0.177.5/admin/acinclude.m4.in.orig	2024-02-17 23:34:27.838640796 +0900
++++ kita-0.177.5/admin/acinclude.m4.in	2024-02-17 23:43:48.907445209 +0900
+@@ -2629,8 +2629,8 @@ AC_TRY_LINK(
+ LIBS="$ac_save_LIBS"
+ CXXFLAGS="$ac_save_CXXFLAGS"
+ AC_LANG_RESTORE
+-fi
+ ])
++fi
+ 
+ if eval "test ! \"`echo $kde_cv_qt_jpeg`\" = no"; then
+   AC_MSG_RESULT(yes)

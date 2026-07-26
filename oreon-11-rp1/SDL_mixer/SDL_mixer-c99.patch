@@ -1,0 +1,26 @@
+For declarations of Mix_QuitFluidSynth, Mix_InitFluidSynth.
+
+This code was removed upstream in:
+
+commit a65a84adb8a898a1479e026c3e3520b8ce95b728
+Author: Sam Lantinga <slouken@libsdl.org>
+Date:   Tue Oct 17 02:33:47 2017 -0700
+
+    Rewrote music.c to support any number of decode libraries using a compiled-in plugin interface
+    Mix_LoadWAV_RW() can now load sound formats that were previously available only as music.
+    
+    This is still work in progress. Testing and project updates need to happen on other platforms.
+
+
+diff --git a/mixer.c b/mixer.c
+index 2f28384474b9d4d1..f87d29a8bd3320bf 100644
+--- a/mixer.c
++++ b/mixer.c
+@@ -35,6 +35,7 @@
+ #include "load_ogg.h"
+ #include "load_flac.h"
+ #include "dynamic_flac.h"
++#include "dynamic_fluidsynth.h"
+ #include "dynamic_mod.h"
+ #include "dynamic_mp3.h"
+ #include "dynamic_ogg.h"

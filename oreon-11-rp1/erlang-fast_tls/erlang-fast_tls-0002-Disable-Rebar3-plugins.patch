@@ -1,0 +1,28 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 2 Jun 2024 17:06:08 +0200
+Subject: [PATCH] Disable Rebar3 plugins
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config.script b/rebar.config.script
+index b91a385..1b2894e 100644
+--- a/rebar.config.script
++++ b/rebar.config.script
+@@ -159,17 +159,9 @@ Rules = [
+ 	  Rebar2DepsFilter, []},
+ 	 {[deps], IsRebar3,
+ 	  Rebar3DepsFilter, []},
+-	 {[plugins], IsRebar3,
+-	  AppendList([{pc, "~> 1.15.0"}]), []},
+ 	 {[provider_hooks], IsRebar3,
+ 	  AppendList([{pre, [
+-			     {compile, {pc, compile}},
+-			     {clean, {pc, clean}}
+ 			    ]}]), []},
+-	 {[plugins], os:getenv("COVERALLS") == "true",
+-	  AppendList([{coveralls, {git,
+-	                           "https://github.com/processone/coveralls-erl.git",
+-	                           {branch, "addjsonfile"}}} ]), []},
+ 	 {[erl_opts], IsRebar3,
+ 	  AppendList([{d, 'REBAR3'}]), []},
+ 	 {[deps], os:getenv("USE_GLOBAL_DEPS") /= false,

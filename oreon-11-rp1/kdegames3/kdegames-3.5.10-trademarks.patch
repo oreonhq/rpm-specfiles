@@ -1,0 +1,1641 @@
+diff -ur kdegames-3.5.10/doc/katomic/index.docbook kdegames-3.5.10-trademarks/doc/katomic/index.docbook
+--- kdegames-3.5.10/doc/katomic/index.docbook	2006-01-19 17:36:48.000000000 +0100
++++ kdegames-3.5.10-trademarks/doc/katomic/index.docbook	2008-08-29 13:25:56.000000000 +0200
+@@ -50,8 +50,8 @@
+ <title>Introduction</title>
+ <para>
+ <application>Atomic Entertainment</application> is a small game which resembles
+-<application>Sokoban</application>. The object of the game is to build chemical
+-molecules on a <application>Sokoban</application> like board.</para>
++<application>BoxPush</application>. The object of the game is to build chemical
++molecules on a <application>BoxPush</application> like board.</para>
+ </chapter>
+ 
+ 
+diff -ur kdegames-3.5.10/doc/ksokoban/index.docbook kdegames-3.5.10-trademarks/doc/ksokoban/index.docbook
+--- kdegames-3.5.10/doc/ksokoban/index.docbook	2006-07-22 10:10:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/doc/ksokoban/index.docbook	2008-08-29 13:25:56.000000000 +0200
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+-  <!ENTITY kappname "&ksokoban;">
++  <!ENTITY kappname "<application>KBoxPush</application>">
+   <!ENTITY package "kdegames">
+   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+   <!ENTITY % addindex "IGNORE">
+@@ -8,7 +8,7 @@
+ 	
+ <book lang="&language;">
+ <bookinfo>
+-<title>The &ksokoban; Handbook</title>
++<title>The <application>KBoxPush</application> Handbook</title>
+ 
+ <authorgroup>
+ <author>
+@@ -33,8 +33,8 @@
+ 
+ <abstract>
+ <para>
+-&ksokoban; is a &kde; implementation of the Japanese warehouse keeper
+-game <quote>sokoban</quote>.
++<application>KBoxPush</application> is a &kde; implementation of the Japanese warehouse keeper
++box pushing game.
+ </para>
+ </abstract>
+ 
+@@ -42,8 +42,8 @@
+ <keyword>KDE</keyword>
+ <keyword>kdegames</keyword>
+ <keyword>game</keyword>
+-<keyword>sokoban</keyword>
+-<keyword>ksokoban</keyword>
++<keyword>boxpush</keyword>
++<keyword>kboxpush</keyword>
+ </keywordset>
+ </bookinfo>
+ 
+@@ -51,8 +51,8 @@
+ <title>Introduction</title>
+ 
+ <para>
+-The first sokoban game was created in 1982 by Hiroyuki Imabayashi at
+-the Japanese company Thinking Rabbit, Inc.  <quote>Sokoban</quote> is
++The first BoxPush game was created in 1982 by Hiroyuki Imabayashi at
++the Japanese company Thinking Rabbit, Inc.  The original name is
+ japanese for <quote>warehouse keeper</quote>.  The idea is that you
+ are a warehouse keeper trying to push crates to their proper locations
+ in a warehouse.
+@@ -72,7 +72,7 @@
+ 
+ <para>
+ To make the game more fun for small kids (below 10 years or so), some
+-collections with easier levels are also included in &ksokoban;. These
++collections with easier levels are also included in <application>KBoxPush</application>. These
+ are marked <emphasis>(easy)</emphasis> in the level collection menu.
+ Of course, these levels can be fun for adults too, for example if you
+ don't want to expose yourself to too much mental strain.
+@@ -138,11 +138,11 @@
+ <title>Loading external levels</title>
+ 
+ <para>
+-&ksokoban; has the ability to load external sokoban levels from text
++<application>KBoxPush</application> has the ability to load external levels from text
+ files.  You can load levels using the menu entry
+ <menuchoice><guimenu>Game</guimenu> <guimenuitem>Load
+ Levels...</guimenuitem> </menuchoice>, or by specifying the level file
+-&URL; as a command line argument when starting &ksokoban; from a
++&URL; as a command line argument when starting <application>KBoxPush</application> from a
+ shell.
+ </para>
+ 
+@@ -193,7 +193,7 @@
+ <chapter id="menu-reference">
+ <title>Menu Reference</title>
+ 
+-<para>This is a complete guide to the menus of &ksokoban;.</para>
++<para>This is a complete guide to the menus of <application>KBoxPush</application>.</para>
+ 
+ <sect1 id="game-menu">
+ <title>The <guimenu>Game</guimenu> Menu</title>
+@@ -250,7 +250,7 @@
+ <guisubmenu>Level Collection</guisubmenu>
+ </menuchoice></term>
+ <listitem>
+-<para><action>Change to a different set of levels.</action> &ksokoban;
++<para><action>Change to a different set of levels.</action> <application>KBoxPush</application>
+ comes with several level sets, and you can load more that you can find
+ on the internet.</para>
+ </listitem>
+@@ -286,7 +286,7 @@
+ <guimenuitem>Quit</guimenuitem>
+ </menuchoice></term>
+ <listitem>
+-<para><action>Exit</action> &ksokoban;.</para>
++<para><action>Exit</action> <application>KBoxPush</application>.</para>
+ </listitem>
+ </varlistentry>
+ </variablelist>
+@@ -354,7 +354,7 @@
+ <guisubmenu>Set Bookmark</guisubmenu>
+ </menuchoice></term>
+ <listitem>
+-<para>&ksokoban; allows you to <action>set bookmarks with a level at a
++<para><application>KBoxPush</application> allows you to <action>set bookmarks with a level at a
+ particular state.</action> You might use this to save yourself
+ repeating the same initial steps in a level.</para>
+ <para>You can have up to ten bookmarks at a time, and access them via the
+@@ -389,9 +389,9 @@
+ <title>Credits and License</title>
+ 
+ <para>
+-&ksokoban; is copyright &copy; 1998-2000 by &Anders.Widell;
++<application>KBoxPush</application> is copyright &copy; 1998-2000 by &Anders.Widell;
+ &Anders.Widell.mail;.  For
+-the latest info on &ksokoban;, see the &ksokoban; home page at
++the latest info on <application>KBoxPush</application>, see the <application>KBoxPush</application> home page at
+ <ulink url="http://hem.passagen.se/awl/ksokoban/">
+ http://hem.passagen.se/awl/ksokoban/</ulink>
+ </para>
+@@ -404,8 +404,8 @@
+ </para>
+ 
+ <para>
+-All the currently included sokoban levels were created by David W.
+-Skinner <email>sasquatch@bentonrea.com</email>. See his sokoban page
++All the currently included levels were created by David W.
++Skinner <email>sasquatch@bentonrea.com</email>. See his page
+ at <ulink url="http://users.bentonrea.com/~sasquatch/sokoban/">
+ http://users.bentonrea.com/~sasquatch/sokoban/</ulink>
+ </para>
+diff -ur kdegames-3.5.10/doc/ktron/index.docbook kdegames-3.5.10-trademarks/doc/ktron/index.docbook
+--- kdegames-3.5.10/doc/ktron/index.docbook	2006-07-22 10:10:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/doc/ktron/index.docbook	2008-08-29 13:25:56.000000000 +0200
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" ?>
+ <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+-  <!ENTITY kappname "&ktron;">
++  <!ENTITY kappname "<application>KSnakeDuel</application>">
+   <!ENTITY package "kdegames">
+   <!ENTITY % addindex "IGNORE">
+   <!ENTITY % English "INCLUDE">
+@@ -8,7 +8,7 @@
+ 
+ <book lang="&language;">
+ <bookinfo>
+-<title>The &ktron; Handbook</title>
++<title>The <application>KSnakeDuel</application> Handbook</title>
+ 
+ <authorgroup>
+ <author>
+@@ -57,7 +57,7 @@
+ 
+ <abstract>
+ <para>
+-&ktron; is a simple <quote>Tron</quote> clone for &kde;, which you can
++<application>KSnakeDuel</application> is a simple <quote>SnakeDuel</quote> clone for &kde;, which you can
+ play alone or against a friend.
+ </para>
+ </abstract>
+@@ -65,9 +65,9 @@
+ <keywordset>
+ <keyword>KDE</keyword>
+ <keyword>kdegames</keyword>
+-<keyword>KTron</keyword>
++<keyword>KSnakeDuel</keyword>
+ <keyword>game</keyword>
+-<keyword>tron</keyword>
++<keyword>snakeduel</keyword>
+ </keywordset>
+ </bookinfo>
+ 
+@@ -75,9 +75,9 @@
+ <title>Introduction</title>
+ 
+ <para>
+-&ktron; is a simple Tron-Clone for the
++<application>KSnakeDuel</application> is a simple SnakeDuel-Clone for the
+ <ulink url="http://www.kde.org">K Desktop Environment</ulink>. You can play
+-&ktron; against the computer or a friend.
++<application>KSnakeDuel</application> against the computer or a friend.
+ </para>
+ 
+ <para>
+@@ -88,7 +88,7 @@
+ </chapter>
+ 
+ <chapter id="playing-ktron">
+-<title>Playing &ktron;</title>
++<title>Playing <application>KSnakeDuel</application></title>
+ 
+ <sect1 id="playing-ktron-rules">
+ <title>Rules</title>
+@@ -353,7 +353,7 @@
+ </row>
+ <row>
+ <entry><keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
+-<entry>Quit &ktron;</entry>
++<entry>Quit <application>KSnakeDuel</application></entry>
+ </row>
+ <row>
+ <entry><keycap>F1</keycap></entry>
+@@ -395,7 +395,7 @@
+ <varlistentry>
+ <term><guilabel>Show winner by changing color</guilabel></term>
+ <listitem><para>Enable this box to improve visualizing that the game is over
+-by making &ktron; change the color of the loser's trail to the color of
++by making <application>KSnakeDuel</application> change the color of the loser's trail to the color of
+ the winner.</para></listitem>
+ </varlistentry>
+ 
+@@ -508,7 +508,7 @@
+ <title>Credits and License</title>
+ 
+ <para>
+-&ktron; 
++<application>KSnakeDuel</application> 
+ </para>
+ <para>Program Copyright 1999 &Matthias.Kiefer;
+ &Matthias.Kiefer.mail;
+@@ -538,7 +538,7 @@
+ <title>Installation</title>
+ 
+ <sect1 id="getting-ktron">
+-<title>How to obtain &ktron;</title>
++<title>How to obtain <application>KSnakeDuel</application></title>
+ 
+ &install.intro.documentation;
+ 
+@@ -548,8 +548,8 @@
+ <title>Requirements</title>
+ 
+ <para>
+-In order to successfully compile &ktron;, you need &kde; 3.0. All
+-required libraries as well as &ktron; itself can be found on &kde-ftp;.</para>
++In order to successfully compile <application>KSnakeDuel</application>, you need &kde; 3.0. All
++required libraries as well as <application>KSnakeDuel</application> itself can be found on &kde-ftp;.</para>
+ </sect1>
+ 
+ <sect1 id="compilation">
+diff -ur kdegames-3.5.10/katomic/katomic.desktop kdegames-3.5.10-trademarks/katomic/katomic.desktop
+--- kdegames-3.5.10/katomic/katomic.desktop	2008-08-19 20:12:02.000000000 +0200
++++ kdegames-3.5.10-trademarks/katomic/katomic.desktop	2008-08-29 13:25:56.000000000 +0200
+@@ -20,54 +20,54 @@
+ Type=Application
+ Exec=katomic %i %m -caption "%c"
+ DocPath=katomic/index.html
+-GenericName=Sokoban-like Logic Game
+-GenericName[be]=Лагічная гульня тыпу Sokoban
++GenericName=BoxPush-like Logic Game
++GenericName[be]=Лагічная гульня тыпу BoxPush
+ GenericName[bg]=Логическа игра с атоми
+ GenericName[bn]=সোকোবান-এর মত যুক্তির খেলা
+-GenericName[bs]=Logička igra nalik na Sokoban
+-GenericName[ca]=Joc de lògica similar al Sokoban
+-GenericName[cs]=Logická hra jako Sokoban
+-GenericName[cy]=Gêm Resymeg sy'n debyg i Sokoban
+-GenericName[da]=Sokoban-lignende logisk spil
+-GenericName[de]=Logikspiel (ähnlich Sokoban)
+-GenericName[el]=Παιχνίδι λογικής παρόμοιο με το Sokoban
+-GenericName[eo]=Logikludo simila al Sokoban
+-GenericName[es]=Juego de lógica similar al Sokoban
+-GenericName[et]=Sokobani moodi loogikamäng
+-GenericName[eu]=Sokoban-en antzeko joko logikoa
+-GenericName[fi]=Sokoban-tyylinen Logiikkapeli
+-GenericName[fr]=Jeu de logique dans le style de Sokoban
+-GenericName[ga]=Cluiche Loighce Mar Sokoban
+-GenericName[he]=חיקוי Sokoban, משחק לוגי
+-GenericName[hr]=Logička igra poput Sokobana
+-GenericName[hu]=Sokoban-szerű logikai
+-GenericName[is]=Leikur sem líkist Sokoban
+-GenericName[it]=Gioco di logica simile a Sokoban
++GenericName[bs]=Logička igra nalik na BoxPush
++GenericName[ca]=Joc de lògica similar al BoxPush
++GenericName[cs]=Logická hra jako BoxPush
++GenericName[cy]=Gêm Resymeg sy'n debyg i BoxPush
++GenericName[da]=BoxPush-lignende logisk spil
++GenericName[de]=Logikspiel (ähnlich BoxPush)
++GenericName[el]=Παιχνίδι λογικής παρόμοιο με το BoxPush
++GenericName[eo]=Logikludo simila al BoxPush
++GenericName[es]=Juego de lógica similar al BoxPush
++GenericName[et]=BoxPushi moodi loogikamäng
++GenericName[eu]=BoxPush-en antzeko joko logikoa
++GenericName[fi]=BoxPush-tyylinen Logiikkapeli
++GenericName[fr]=Jeu de logique dans le style de BoxPush
++GenericName[ga]=Cluiche Loighce Mar BoxPush
++GenericName[he]=חיקוי BoxPush, משחק לוגי
++GenericName[hr]=Logička igra poput BoxPusha
++GenericName[hu]=BoxPush-szerű logikai
++GenericName[is]=Leikur sem líkist BoxPush
++GenericName[it]=Gioco di logica simile a BoxPush
+ GenericName[ja]=倉庫番のような論理ゲーム
+-GenericName[km]=ល្បែង​តក្ក​ដូច Sokoban
++GenericName[km]=ល្បែង​តក្ក​ដូច BoxPush
+ GenericName[ko]=소코반 같은 전략 게임
+-GenericName[lt]=Sokoban tipo loginis žaidimas
+-GenericName[lv]=Sokoban līdzīga loģiskā spēle
++GenericName[lt]=BoxPush tipo loginis žaidimas
++GenericName[lv]=BoxPush līdzīga loģiskā spēle
+ GenericName[mk]=Логичка игра слична на Сокобан
+-GenericName[nb]=Sokoban-lignende logikkspill
+-GenericName[nds]=Sokoban-liek Logikspeel
++GenericName[nb]=BoxPush-lignende logikkspill
++GenericName[nds]=BoxPush-liek Logikspeel
+ GenericName[ne]=सोकोबान जस्तै युक्तिसंगत खेल
+-GenericName[nl]=Sokoban-achtig logisch spel
+-GenericName[nn]=Sokoban-liknande logikkspel
+-GenericName[pl]=Gra logiczna typu Sokoban
+-GenericName[pt]=Jogo de Lógica tipo Sokoban
+-GenericName[pt_BR]=Jogo Lógico parecido com Sokoban
++GenericName[nl]=BoxPush-achtig logisch spel
++GenericName[nn]=BoxPush-liknande logikkspel
++GenericName[pl]=Gra logiczna typu BoxPush
++GenericName[pt]=Jogo de Lógica tipo BoxPush
++GenericName[pt_BR]=Jogo Lógico parecido com BoxPush
+ GenericName[ru]=Забавные атомы
+-GenericName[se]=Sokoban-lágan logihkkaspeallu
+-GenericName[sk]=Logická hra ako Sokoban
+-GenericName[sl]=Logična igra podobna Sokobanu
+-GenericName[sr]=Логичка игра налик на Sokoban
+-GenericName[sr@Latn]=Logička igra nalik na Sokoban
+-GenericName[sv]=Sokoban-liknande logiskt spel
++GenericName[se]=BoxPush-lágan logihkkaspeallu
++GenericName[sk]=Logická hra ako BoxPush
++GenericName[sl]=Logična igra podobna BoxPushu
++GenericName[sr]=Логичка игра налик на BoxPush
++GenericName[sr@Latn]=Logička igra nalik na BoxPush
++GenericName[sv]=BoxPush-liknande logiskt spel
+ GenericName[ta]=சோகோபான் போன்ற லாஜிக் விளையாட்டு
+ GenericName[uk]=Гра на логіку подібна до Сокобану
+-GenericName[wa]=Djeu di lodjike rishonnant a sokoban
+-GenericName[zh_TW]=倉庫番(sokoban)式的智力遊戲
++GenericName[wa]=Djeu di lodjike rishonnant a BoxPush
++GenericName[zh_TW]=倉庫番(BoxPush)式的智力遊戲
+ X-KDE-StartupNotify=true
+ X-DCOP-ServiceType=Multi
+ Categories=Qt;KDE;Game;StrategyGame;
+diff -ur kdegames-3.5.10/ksokoban/AUTHORS kdegames-3.5.10-trademarks/ksokoban/AUTHORS
+--- kdegames-3.5.10/ksokoban/AUTHORS	2005-09-10 10:18:19.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/AUTHORS	2008-08-29 13:25:56.000000000 +0200
+@@ -1,36 +1,15 @@
+ ------------------------------------------------------------------------
+-ksokoban is written by:
++KBoxPush is written by:
+ 
+ Anders Widell <awl@hem.passagen.se>
+ 
+ ------------------------------------------------------------------------
+-The levels were taken from:
+-
+-xsokoban 3.3c for X-windows
+-	www:	http://xsokoban.lcs.mit.edu/xsokoban.html
+-	author:	Andrew Myers <andru@lcs.mit.edu>
+-
+-MacSokoban 3.0.3 for Macintosh
+-	www:	http://www.lysator.liu.se/~ingemar/games.html
+-	author:	Ingemar Ragnemalm <ingemar@lysator.liu.se>
+-
+-Sokoban 2.4 for Macintosh
+-	www:	http://members.aol.com/SokobanMac/
+-	author:	Scott Lindhurst <scottl@alumni.Princeton.EDU>
+-
+-------------------------------------------------------------------------
+-The levels originally come from:
+-
+-Original               the 50 original sokoban levels
+-                       made by Thinking rabbit Inc. in Japan
+-Extra                  some more levels from xsokoban
+-Still more             by J. Franklin Mentzer <wryter@aol.com>
+-MacTommy inventions    by a guy called Tommy in Pennsylvania
+-Yoshio's autogenerated by Yoshio Murase <yoshio@asahi.email.ne.jp>
+-                       see http://www.ne.jp/asahi/ai/yoshio/sokoban/main.htm
+-For the kids           by Ross (W.R.) Brown <ross@bnr.ca>
+-Simple Sokoban         simplified original levels
+-		       by Phil Shapiro <pshapiro@his.com>
+-Dimitri & Yorick       by Jacques Duthen <duthen@club-internet.fr>
++The included level sets (Sasquatch, Mas Sasquatch, Sasquatch III,
++Sasquatch IV and Microban) are the work of:
++David W. Skinner <sasquatch@bentonrea.com>
++http://users.bentonrea.com/~sasquatch/sokoban/
++From the web page:
++> These sets may be freely distributed provided they remain unchanged
++> and credited with my name and email address.
+ 
+ ------------------------------------------------------------------------
+diff -ur kdegames-3.5.10/ksokoban/Bookmark.cpp kdegames-3.5.10-trademarks/ksokoban/Bookmark.cpp
+--- kdegames-3.5.10/ksokoban/Bookmark.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/Bookmark.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/Bookmark.h kdegames-3.5.10-trademarks/ksokoban/Bookmark.h
+--- kdegames-3.5.10/ksokoban/Bookmark.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/Bookmark.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/data/ksokoban.desktop kdegames-3.5.10-trademarks/ksokoban/data/ksokoban.desktop
+--- kdegames-3.5.10/ksokoban/data/ksokoban.desktop	2008-08-19 20:12:03.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/data/ksokoban.desktop	2008-08-29 13:30:09.000000000 +0200
+@@ -1,64 +1,64 @@
+ [Desktop Entry]
+-Name=KSokoban
+-Name[af]=Ksokoban
+-Name[be]=Сакабан
++Name=KBoxPush
++Name[af]=KBoxPush
++Name[be]=KBoxPush
+ Name[bn]=কে-সোকোবান
+ Name[hi]=के-शोकोबॉन
+-Name[mk]=КСокобан
+-Name[nb]=Sokoban
++Name[mk]=KBoxPush
++Name[nb]=KBoxPush
+ Name[ne]=केडीई सोकोबान
+-Name[pl]=Sokoban
+-Name[sv]=Ksokoban
+-Name[ta]=Kசோகோபான் 
+-Name[tg]=KСокобан
+-Name[zh_TW]=KSokoban 倉庫番
+-Name[zu]=I-KSokoban
+-GenericName=Sokoban Game
+-GenericName[be]=Гульня Сакабан
++Name[pl]=KBoxPush
++Name[sv]=KBoxPush
++Name[ta]=KBoxPush
++Name[tg]=KBoxPush
++Name[zh_TW]=KBoxPush 倉庫番
++Name[zu]=I-KBoxPush
++GenericName=BoxPush Game
++GenericName[be]=Гульня BoxPush
+ GenericName[bg]=Логическа игра
+ GenericName[bn]=সোকোবান খেলা
+-GenericName[bs]=Igra Sokoban
+-GenericName[ca]=Joc Sokoban
+-GenericName[cs]=Hra Sokoban
+-GenericName[cy]=Gêm Sokoban
+-GenericName[da]=Sokoban spil
+-GenericName[de]=Sokoban Spiel
+-GenericName[el]=Παιχνίδι Sokoban
+-GenericName[eo]=Sokobana ludo
+-GenericName[es]=Juego Sokoban
+-GenericName[et]=Sokoban
+-GenericName[eu]=Sokoban jokoa
+-GenericName[fa]=بازی Sokoban
+-GenericName[fi]=Sokoban
+-GenericName[fr]=Jeu Sokoban
+-GenericName[ga]=Cluiche Sokoban
+-GenericName[he]=משחק Sokoban
+-GenericName[hr]=Sokoban
+-GenericName[hu]=Sokoban
+-GenericName[is]=Sokoban leikur
+-GenericName[it]=Gioco del Sokoban
++GenericName[bs]=Igra BoxPush
++GenericName[ca]=Joc BoxPush
++GenericName[cs]=Hra BoxPush
++GenericName[cy]=Gêm BoxPush
++GenericName[da]=BoxPush spil
++GenericName[de]=BoxPush Spiel
++GenericName[el]=Παιχνίδι BoxPush
++GenericName[eo]=BoxPusha ludo
++GenericName[es]=Juego BoxPush
++GenericName[et]=BoxPush
++GenericName[eu]=BoxPush jokoa
++GenericName[fa]=بازی BoxPush
++GenericName[fi]=BoxPush
++GenericName[fr]=Jeu BoxPush
++GenericName[ga]=Cluiche BoxPush
++GenericName[he]=משחק BoxPush
++GenericName[hr]=BoxPush
++GenericName[hu]=BoxPush
++GenericName[is]=BoxPush leikur
++GenericName[it]=Gioco del BoxPush
+ GenericName[ja]=倉庫番ゲーム
+ GenericName[km]=ល្បែង​សូកូបាន
+-GenericName[lt]=Sokoban žaidimas
+-GenericName[lv]=Sokoban spēle
+-GenericName[mk]=Игра Сокобан
+-GenericName[nb]=Sokoban-spill
+-GenericName[nds]=Sokoban-Speel
++GenericName[lt]=BoxPush žaidimas
++GenericName[lv]=BoxPush spēle
++GenericName[mk]=Игра BoxPush
++GenericName[nb]=BoxPush-spill
++GenericName[nds]=BoxPush-Speel
+ GenericName[ne]=सोकोबान खेल
+-GenericName[nl]=Sokobanspel
+-GenericName[nn]=Sokoban-spel
+-GenericName[pl]=Sokoban
+-GenericName[pt]=Jogo de Sokoban
+-GenericName[pt_BR]=Jogo de Sokoban
+-GenericName[ru]=Сокобан
+-GenericName[se]=Sokoban-speallu
+-GenericName[sk]=Hra Sokoban
+-GenericName[sl]=Igra Sokobana
+-GenericName[sr]=Игра Sokoban-а
+-GenericName[sr@Latn]=Igra Sokoban-a
+-GenericName[sv]=Sokoban-spel
++GenericName[nl]=BoxPushspel
++GenericName[nn]=BoxPush-spel
++GenericName[pl]=BoxPush
++GenericName[pt]=Jogo de BoxPush
++GenericName[pt_BR]=Jogo de BoxPush
++GenericName[ru]=BoxPush
++GenericName[se]=BoxPush-speallu
++GenericName[sk]=Hra BoxPush
++GenericName[sl]=Igra BoxPusha
++GenericName[sr]=Игра BoxPush-а
++GenericName[sr@Latn]=Igra BoxPush-a
++GenericName[sv]=BoxPush-spel
+ GenericName[ta]=சொகோபான் விளையாட்டு
+-GenericName[uk]=Гра Sokoban
++GenericName[uk]=Гра BoxPush
+ GenericName[zh_TW]=倉庫番遊戲
+ DocPath=ksokoban/index.html
+ Exec=ksokoban %i %m -caption "%c"
+diff -ur kdegames-3.5.10/ksokoban/History.cpp kdegames-3.5.10-trademarks/ksokoban/History.cpp
+--- kdegames-3.5.10/ksokoban/History.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/History.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/History.h kdegames-3.5.10-trademarks/ksokoban/History.h
+--- kdegames-3.5.10/ksokoban/History.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/History.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/HtmlPrinter.cpp kdegames-3.5.10-trademarks/ksokoban/HtmlPrinter.cpp
+--- kdegames-3.5.10/ksokoban/HtmlPrinter.cpp	2005-09-10 10:18:19.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/HtmlPrinter.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -81,7 +81,7 @@
+   printf ("\
+ <html>\n\
+ <head>\n\
+-<title>ksokoban level</title>\n\
++<title>KBoxPush level</title>\n\
+ </head>\n\
+ <body background=background.gif>\n\
+ ");
+diff -ur kdegames-3.5.10/ksokoban/ImageData.cpp kdegames-3.5.10-trademarks/ksokoban/ImageData.cpp
+--- kdegames-3.5.10/ksokoban/ImageData.cpp	2007-05-14 09:39:12.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/ImageData.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/ImageData.h kdegames-3.5.10-trademarks/ksokoban/ImageData.h
+--- kdegames-3.5.10/ksokoban/ImageData.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/ImageData.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/InternalCollections.h kdegames-3.5.10-trademarks/ksokoban/InternalCollections.h
+--- kdegames-3.5.10/ksokoban/InternalCollections.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/InternalCollections.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998-2000  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/LevelCollection.h kdegames-3.5.10-trademarks/ksokoban/LevelCollection.h
+--- kdegames-3.5.10/ksokoban/LevelCollection.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/LevelCollection.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998,1999  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/LevelMap.cpp kdegames-3.5.10-trademarks/ksokoban/LevelMap.cpp
+--- kdegames-3.5.10/ksokoban/LevelMap.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/LevelMap.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/LevelMap.h kdegames-3.5.10-trademarks/ksokoban/LevelMap.h
+--- kdegames-3.5.10/ksokoban/LevelMap.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/LevelMap.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/main.cpp kdegames-3.5.10-trademarks/ksokoban/main.cpp
+--- kdegames-3.5.10/ksokoban/main.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/main.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998-2000  Anders Widell  <awl@passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+@@ -42,7 +42,7 @@
+ int
+ main (int argc, char **argv)
+ {
+-  KAboutData aboutData("ksokoban", I18N_NOOP("KSokoban"),
++  KAboutData aboutData("ksokoban", I18N_NOOP("KBoxPush"),
+ 		       version, description, KAboutData::License_GPL,
+ 		       "(c) 1998-2001  Anders Widell", 0,
+ 		       "http://hem.passagen.se/awl/ksokoban/");
+@@ -50,7 +50,7 @@
+ 		      "awl@passagen.se",
+ 		      "http://hem.passagen.se/awl/");
+   aboutData.addCredit("David W. Skinner",
+-		      I18N_NOOP("For contributing the Sokoban levels included in this game"),
++		      I18N_NOOP("For contributing the BoxPush levels included in this game"),
+ 		      "sasquatch@bentonrea.com",
+ 		      "http://users.bentonrea.com/~sasquatch/");
+   KCmdLineArgs::init(argc, argv, &aboutData);
+diff -ur kdegames-3.5.10/ksokoban/MainWindow.cpp kdegames-3.5.10-trademarks/ksokoban/MainWindow.cpp
+--- kdegames-3.5.10/ksokoban/MainWindow.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/MainWindow.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/MainWindow.h kdegames-3.5.10-trademarks/ksokoban/MainWindow.h
+--- kdegames-3.5.10/ksokoban/MainWindow.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/MainWindow.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/Map.cpp kdegames-3.5.10-trademarks/ksokoban/Map.cpp
+--- kdegames-3.5.10/ksokoban/Map.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/Map.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/MapDelta.cpp kdegames-3.5.10-trademarks/ksokoban/MapDelta.cpp
+--- kdegames-3.5.10/ksokoban/MapDelta.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/MapDelta.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/MapDelta.h kdegames-3.5.10-trademarks/ksokoban/MapDelta.h
+--- kdegames-3.5.10/ksokoban/MapDelta.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/MapDelta.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/Map.h kdegames-3.5.10-trademarks/ksokoban/Map.h
+--- kdegames-3.5.10/ksokoban/Map.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/Map.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/ModalLabel.cpp kdegames-3.5.10-trademarks/ksokoban/ModalLabel.cpp
+--- kdegames-3.5.10/ksokoban/ModalLabel.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/ModalLabel.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <awl@hem.passagen.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/ModalLabel.h kdegames-3.5.10-trademarks/ksokoban/ModalLabel.h
+--- kdegames-3.5.10/ksokoban/ModalLabel.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/ModalLabel.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/Move.cpp kdegames-3.5.10-trademarks/ksokoban/Move.cpp
+--- kdegames-3.5.10/ksokoban/Move.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/Move.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/Move.h kdegames-3.5.10-trademarks/ksokoban/Move.h
+--- kdegames-3.5.10/ksokoban/Move.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/Move.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/MoveSequence.cpp kdegames-3.5.10-trademarks/ksokoban/MoveSequence.cpp
+--- kdegames-3.5.10/ksokoban/MoveSequence.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/MoveSequence.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/MoveSequence.h kdegames-3.5.10-trademarks/ksokoban/MoveSequence.h
+--- kdegames-3.5.10/ksokoban/MoveSequence.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/MoveSequence.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/NEWS kdegames-3.5.10-trademarks/ksokoban/NEWS
+--- kdegames-3.5.10/ksokoban/NEWS	2005-09-10 10:18:19.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/NEWS	2008-08-29 13:25:56.000000000 +0200
+@@ -52,17 +52,17 @@
+ * Internationalisation
+ 
+ -------------------------------------------------------------------------------
+-version 0.1.2: ksokoban imported to CVS. Date 1998-08-30
++version 0.1.2: imported to CVS. Date 1998-08-30
+ 
+ -------------------------------------------------------------------------------
+ version 0.1.1: bugfix release. Date 1998-08-25
+ 
+-* BUGFIX: ksokoban now ignores mouseclicks while a move is in progress.
++* BUGFIX: now ignores mouseclicks while a move is in progress.
+ 	  Previously such a click would cause a memory leak and a corrupted
+ 	  undo/redo history (or a failed assertion if debugging was turned on).
+ 	  Thanks to Natali Giuliano <natali@stone.trew.it> for reporting this.
+ 
+-* ksokoban should now work with older zlib & Qt libraries.
++* should now work with older zlib & Qt libraries.
+   I have tested it with zlib 1.0.3 and Qt 1.33
+ 
+ * Detects the old gcc 2.7 and turns off optimisations if it is found.
+diff -ur kdegames-3.5.10/ksokoban/PathFinder.cpp kdegames-3.5.10-trademarks/ksokoban/PathFinder.cpp
+--- kdegames-3.5.10/ksokoban/PathFinder.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/PathFinder.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/PathFinder.h kdegames-3.5.10-trademarks/ksokoban/PathFinder.h
+--- kdegames-3.5.10/ksokoban/PathFinder.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/PathFinder.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/PlayField.cpp kdegames-3.5.10-trademarks/ksokoban/PlayField.cpp
+--- kdegames-3.5.10/ksokoban/PlayField.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/PlayField.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/PlayField.h kdegames-3.5.10-trademarks/ksokoban/PlayField.h
+--- kdegames-3.5.10/ksokoban/PlayField.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/PlayField.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/Queue.h kdegames-3.5.10-trademarks/ksokoban/Queue.h
+--- kdegames-3.5.10/ksokoban/Queue.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/Queue.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/README kdegames-3.5.10-trademarks/ksokoban/README
+--- kdegames-3.5.10/ksokoban/README	2005-09-10 10:18:19.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/README	2008-08-29 13:25:56.000000000 +0200
+@@ -1,12 +1,12 @@
+-ksokoban 0.2.2 - a Sokoban game for KDE
++KBoxPush 0.2.2 - a BoxPush game for KDE
+ 
+ copyright 1998 Anders Widell  <d95-awi@nada.kth.se>
+ 
+-ksokoban is free software; you can redistribute it and/or modify it
++KBoxPush is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License. See the file
+ COPYING for details.
+ 
+-See http://hem.passagen.se/awl/ksokoban/ for later versions of ksokoban.
++See http://hem.passagen.se/awl/ksokoban/ for later versions of KBoxPush.
+ See the file AUTHORS for details about where the levels come from.
+ 
+ ------------------------------------------------------------------------
+diff -ur kdegames-3.5.10/ksokoban/StaticImage.cpp kdegames-3.5.10-trademarks/ksokoban/StaticImage.cpp
+--- kdegames-3.5.10/ksokoban/StaticImage.cpp	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/StaticImage.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ksokoban/StaticImage.h kdegames-3.5.10-trademarks/ksokoban/StaticImage.h
+--- kdegames-3.5.10/ksokoban/StaticImage.h	2005-10-10 16:56:05.000000000 +0200
++++ kdegames-3.5.10-trademarks/ksokoban/StaticImage.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /*
+- *  ksokoban - a Sokoban game for KDE
++ *  ksokoban - a BoxPush game for KDE
+  *  Copyright (C) 1998  Anders Widell  <d95-awi@nada.kth.se>
+  *
+  *  This program is free software; you can redistribute it and/or modify
+diff -ur kdegames-3.5.10/ktron/ktron.cpp kdegames-3.5.10-trademarks/ktron/ktron.cpp
+--- kdegames-3.5.10/ktron/ktron.cpp	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/ktron.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /* ****************************************************************************
+-   This file is part of the game 'KTron'
++   This file is part of the game 'KSnakeDuel'
+ 
+   Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+@@ -42,10 +42,10 @@
+ /**
+  * Constuctor
+  */ 
+-KTron::KTron(QWidget *parent, const char *name) : KMainWindow(parent, name) {
++KSnakeDuel::KSnakeDuel(QWidget *parent, const char *name) : KMainWindow(parent, name) {
+   playerPoints[0]=playerPoints[1]=0;
+ 
+-  tron=new Tron(this, "Tron");
++  tron=new SnakeDuel(this, "SnakeDuel");
+   connect(tron,SIGNAL(gameEnds(Player)),SLOT(changeStatus(Player)));
+   setCentralWidget(tron);
+   tron->setMinimumSize(200,180);
+@@ -54,7 +54,7 @@
+   statusBar()->insertItem("abcdefghijklmnopqrst: 0  ",ID_STATUS_BASE+1);
+   statusBar()->insertItem("abcdefghijklmnopqrst: 0  ",ID_STATUS_BASE+2);
+ 
+-  // We match up keyboard events ourselves in Tron::keyPressEvent()
++  // We match up keyboard events ourselves in SnakeDuel::keyPressEvent()
+   // We must disable the actions, otherwise we don't get the keyPressEvent's
+   KAction *act;
+   act = new KAction(i18n("Player 1 Up"), Key_R, 0, 0, actionCollection(), "Pl1Up");
+@@ -90,7 +90,7 @@
+   loadSettings();
+ }
+ 
+-void KTron::loadSettings() {
++void KSnakeDuel::loadSettings() {
+    playerName[0]=Settings::namePlayer1();
+    if ( playerName[0].isEmpty() )
+        playerName[0] = i18n("Player 1");
+@@ -101,7 +101,7 @@
+    updateStatusbar();
+ }
+ 
+-void KTron::updateStatusbar(){
++void KSnakeDuel::updateStatusbar(){
+   for(int i=0;i<2;i++){
+     Player player;
+     player=(i==0?One:Two);
+@@ -118,7 +118,7 @@
+   }
+ }
+ 
+-void KTron::changeStatus(Player player) {
++void KSnakeDuel::changeStatus(Player player) {
+   // if player=Nobody, then new game
+   if(player==Nobody){
+     playerPoints[0]=playerPoints[1]=0;
+@@ -143,18 +143,18 @@
+     showWinner(Two);
+ }
+ 
+-void KTron::showWinner(Player winner){
++void KSnakeDuel::showWinner(Player winner){
+   if(tron->isComputer(Both) || (winner != One && winner != Two))
+     return;
+ 
+-  QString loserName = i18n("KTron");
++  QString loserName = i18n("KSnakeDuel");
+   int loser = Two;
+   if(winner == Two)
+     loser = One;
+   if(!tron->isComputer(((Player)loser)))
+     loserName = playerName[loser];
+   
+-  QString winnerName = i18n("KTron");
++  QString winnerName = i18n("KSnakeDuel");
+   if(!tron->isComputer(winner))
+     winnerName = playerName[winner];
+   
+@@ -169,7 +169,7 @@
+   tron->newGame();
+ }
+ 
+-void KTron::paletteChange(const QPalette &/*oldPalette*/){
++void KSnakeDuel::paletteChange(const QPalette &/*oldPalette*/){
+    update();
+    tron->updatePixmap();
+    tron->update();
+@@ -178,7 +178,7 @@
+ /**
+  * Show Settings dialog.
+  */
+-void KTron::showSettings(){
++void KSnakeDuel::showSettings(){
+   if(KConfigDialog::showDialog("settings"))
+     return;
+   
+diff -ur kdegames-3.5.10/ktron/ktron.desktop kdegames-3.5.10-trademarks/ktron/ktron.desktop
+--- kdegames-3.5.10/ktron/ktron.desktop	2008-08-19 20:12:02.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/ktron.desktop	2008-08-29 13:25:56.000000000 +0200
+@@ -3,64 +3,64 @@
+ Exec=ktron -caption "%c" %i %m
+ Icon=ktron
+ DocPath=ktron/index.html
+-GenericName=Tron-like Game
+-GenericName[be]=Гульня Трон
++GenericName=SnakeDuel-like Game
++GenericName[be]=Гульня SnakeDuel
+ GenericName[bg]=Логическа игра
+ GenericName[bn]=ট্রন-জাতীয় খেলা
+-GenericName[br]=C'hoari doare Tron
+-GenericName[bs]=Igra nalik na Tron
+-GenericName[ca]=Joc a l'estil Tron
+-GenericName[cs]=Hra podobná Tronu
+-GenericName[cy]=Gêm sy'n debyg i Tron
+-GenericName[da]=Tron-lignende spil
+-GenericName[de]=Tron-ähnliches Spiel
+-GenericName[el]=Παιχνίδι παρόμοιο με το Tron
+-GenericName[eo]="Tron"-simila ludo
+-GenericName[es]=Juego similar a Tron
+-GenericName[et]=Tron
+-GenericName[eu]=Tron-en antzeko jokoa
+-GenericName[fa]=بازی شبیهTron
+-GenericName[fi]=Tron-tyylinen peli
+-GenericName[fr]=Jeu dans le style de Tron
+-GenericName[he]=משחק חיקוי Tron
+-GenericName[hr]=Igra poput Trona
+-GenericName[hu]=Tron-szerű
+-GenericName[is]=Leikur sem líkist Tron
+-GenericName[it]=Gioco simile a Tron
++GenericName[br]=C'hoari doare SnakeDuel
++GenericName[bs]=Igra nalik na SnakeDuel
++GenericName[ca]=Joc a l'estil SnakeDuel
++GenericName[cs]=Hra podobná SnakeDuelu
++GenericName[cy]=Gêm sy'n debyg i SnakeDuel
++GenericName[da]=SnakeDuel-lignende spil
++GenericName[de]=SnakeDuel-ähnliches Spiel
++GenericName[el]=Παιχνίδι παρόμοιο με το SnakeDuel
++GenericName[eo]="SnakeDuel"-simila ludo
++GenericName[es]=Juego similar a SnakeDuel
++GenericName[et]=SnakeDuel
++GenericName[eu]=SnakeDuel-en antzeko jokoa
++GenericName[fa]=بازی شبیهSnakeDuel
++GenericName[fi]=SnakeDuel-tyylinen peli
++GenericName[fr]=Jeu dans le style de SnakeDuel
++GenericName[he]=משחק חיקוי SnakeDuel
++GenericName[hr]=Igra poput SnakeDuela
++GenericName[hu]=SnakeDuel-szerű
++GenericName[is]=Leikur sem líkist SnakeDuel
++GenericName[it]=Gioco simile a SnakeDuel
+ GenericName[ja]=トロンのようなゲーム
+-GenericName[km]=ល្បែង​ដូច Tron
+-GenericName[lv]=Tron līdzīga spēle
+-GenericName[mk]=Игра слична на Tron
+-GenericName[nb]=Tron-lignende spill
+-GenericName[nds]=Tron-liek Speel
++GenericName[km]=ល្បែង​ដូច SnakeDuel
++GenericName[lv]=SnakeDuel līdzīga spēle
++GenericName[mk]=Игра слична на SnakeDuel
++GenericName[nb]=SnakeDuel-lignende spill
++GenericName[nds]=SnakeDuel-liek Speel
+ GenericName[ne]=ट्रोन जस्तै खेल
+-GenericName[nl]=Tron-achtig spel
+-GenericName[nn]=Tron-liknande spel
+-GenericName[pl]=Gra typu Tron
+-GenericName[pt]=Jogo tipo Tron
+-GenericName[pt_BR]=Jogo parecido com Tron
+-GenericName[ru]=Трон
+-GenericName[se]=Tron-lágan speallu
+-GenericName[sk]=Hra typu Tron
+-GenericName[sl]=Igra podobna Tronu
+-GenericName[sr]=Игра налик на Tron
+-GenericName[sr@Latn]=Igra nalik na Tron
+-GenericName[sv]=Tron-liknande spel
++GenericName[nl]=SnakeDuel-achtig spel
++GenericName[nn]=SnakeDuel-liknande spel
++GenericName[pl]=Gra typu SnakeDuel
++GenericName[pt]=Jogo tipo SnakeDuel
++GenericName[pt_BR]=Jogo parecido com SnakeDuel
++GenericName[ru]=SnakeDuel
++GenericName[se]=SnakeDuel-lágan speallu
++GenericName[sk]=Hra typu SnakeDuel
++GenericName[sl]=Igra podobna SnakeDuelu
++GenericName[sr]=Игра налик на SnakeDuel
++GenericName[sr@Latn]=Igra nalik na SnakeDuel
++GenericName[sv]=SnakeDuel-liknande spel
+ GenericName[ta]=ட்ரோன் போன்ற விளையாட்டு
+-GenericName[uk]=Гра схожа на гру "Трон"
+-GenericName[zh_TW]=類似 Tron 遊戲
++GenericName[uk]=Гра схожа на гру "SnakeDuel"
++GenericName[zh_TW]=類似 SnakeDuel 遊戲
+ Terminal=false
+-Name=KTron
+-Name[af]=Ktron
+-Name[be]=Трон
++Name=KSnakeDuel
++Name[af]=KSnakeDuel
++Name[be]=KSnakeDuel
+ Name[bn]=কে-ট্রন
+ Name[hi]=के-ट्रान
+-Name[nb]=Tron
++Name[nb]=KSnakeDuel
+ Name[ne]=केडीई ट्रोन
+-Name[sv]=Ktron
++Name[sv]=KSnakeDuel
+ Name[ta]=Kட்ரான்
+-Name[tg]=KТрон
+-Name[zu]=I-KTron
++Name[tg]=KSnakeDuel
++Name[zu]=I-KSnakeDuel
+ X-KDE-StartupNotify=true
+ X-DCOP-ServiceType=Multi
+ Categories=Qt;KDE;Game;ArcadeGame;
+diff -ur kdegames-3.5.10/ktron/ktron.h kdegames-3.5.10-trademarks/ktron/ktron.h
+--- kdegames-3.5.10/ktron/ktron.h	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/ktron.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /* ***************************************************************************
+-  This file is part of the game 'KTron'
++  This file is part of the game 'KSnakeDuel'
+ 
+   Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+@@ -31,21 +31,21 @@
+ 
+ class KAccel;
+ class KSelectAction;
+-class Tron;
++class SnakeDuel;
+ 
+ /**
+- * @short The main window of KTron
++ * @short The main window of KSnakeDuel
+  */
+-class KTron : public KMainWindow {
++class KSnakeDuel : public KMainWindow {
+ 
+ Q_OBJECT
+ 
+ public:
+-  KTron(QWidget *parent=0, const char *name=0);
++  KSnakeDuel(QWidget *parent=0, const char *name=0);
+ 
+ private:
+   KAccel *accel;
+-  Tron *tron;
++  SnakeDuel *tron;
+   QString playerName[2];
+   int playerPoints[2];
+   void updateStatusbar();
+diff -ur kdegames-3.5.10/ktron/main.cpp kdegames-3.5.10-trademarks/ktron/main.cpp
+--- kdegames-3.5.10/ktron/main.cpp	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/main.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /******************************************************************************
+-   This file is part of the game 'KTron'
++   This file is part of the game 'KSnakeDuel'
+ 
+   Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+@@ -34,7 +34,7 @@
+ 
+ int main(int argc, char* argv[])
+ {
+-  KAboutData aboutData( "ktron", I18N_NOOP("KTron"), 
++  KAboutData aboutData( "ktron", I18N_NOOP("KSnakeDuel"), 
+     KTRON_VERSION, description, KAboutData::License_GPL, notice);
+   aboutData.addAuthor("Matthias Kiefer",I18N_NOOP("Original author"), "matthias.kiefer@gmx.de");
+   aboutData.addAuthor("Benjamin Meyer",I18N_NOOP("Various improvements"), "ben+ktron@meyerhome.net");
+@@ -47,10 +47,10 @@
+   KImageIO::registerFormats();
+ 
+   if(a.isRestored()){
+-     RESTORE(KTron)
++     RESTORE(KSnakeDuel)
+   }
+   else {
+-     KTron *ktron = new KTron();
++     KSnakeDuel *ktron = new KSnakeDuel();
+      a.setMainWidget(ktron);
+      ktron->show();
+   }
+diff -ur kdegames-3.5.10/ktron/player.cpp kdegames-3.5.10-trademarks/ktron/player.cpp
+--- kdegames-3.5.10/ktron/player.cpp	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/player.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /********************************************************************************** 
+-  This file is part of the game 'KTron'
++  This file is part of the game 'KSnakeDuel'
+ 
+   Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+diff -ur kdegames-3.5.10/ktron/player.h kdegames-3.5.10-trademarks/ktron/player.h
+--- kdegames-3.5.10/ktron/player.h	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/player.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /* ********************************************************************************
+-  This file is part of the kde-game 'KTron'
++  This file is part of the kde-game 'KSnakeDuel'
+ 
+   Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+diff -ur kdegames-3.5.10/ktron/README kdegames-3.5.10-trademarks/ktron/README
+--- kdegames-3.5.10/ktron/README	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/README	2008-08-29 13:25:56.000000000 +0200
+@@ -1,6 +1,6 @@
+ Hello!
+ 
+-KTron is a simple tron-clone for the K Desktop Environment.
++KSnakeDuel is a simple snake duel game for the K Desktop Environment.
+ I think it's just nothing to say about the game:
+ avoid running into walls, your own tail, and that of your opponent.
+ 
+@@ -14,15 +14,15 @@
+ 
+ Copyright:
+ 
+-KTron
++KSnakeDuel
+ 
+ Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+-KTron is free software; you can redistribute it and/or modify	
++KSnakeDuel is free software; you can redistribute it and/or modify	
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 or any later version.
+ 
+-KTron is distributed in the hope that it will be useful,
++KSnakeDuel is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+diff -ur kdegames-3.5.10/ktron/TODO kdegames-3.5.10-trademarks/ktron/TODO
+--- kdegames-3.5.10/ktron/TODO	2005-09-10 10:18:12.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/TODO	2008-08-29 13:25:56.000000000 +0200
+@@ -1,8 +1,8 @@
+-KTron in general does everything I wanted it to do. :-)
++KSnakeDuel in general does everything I wanted it to do. :-)
+ 
+ Plans for the future are:
+ - possibility to create, load, save playfield with walls
+-- real cool would be to play KTron over the internet
++- real cool would be to play KSnakeDuel over the internet
+ 
+ ------------------
+ Matthias Kiefer
+diff -ur kdegames-3.5.10/ktron/tron.cpp kdegames-3.5.10-trademarks/ktron/tron.cpp
+--- kdegames-3.5.10/ktron/tron.cpp	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/tron.cpp	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /****************************************************************************
+-  This file is part of the game 'KTron'
++  This file is part of the game 'KSnakeDuel'
+ 
+   Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+@@ -41,7 +41,7 @@
+  * init-functions
+  **/
+ 
+-Tron::Tron(QWidget *parent,const char *name)
++SnakeDuel::SnakeDuel(QWidget *parent,const char *name)
+   : QWidget(parent,name)
+ {
+   pixmap=0;
+@@ -63,7 +63,7 @@
+   QTimer::singleShot(15000, this,SLOT(showBeginHint()));
+ }
+ 
+-void Tron::loadSettings(){
++void SnakeDuel::loadSettings(){
+   setPalette(Settings::color_Background());
+ 
+   // Size
+@@ -107,7 +107,7 @@
+   setComputerplayer(Two, Settings::computerplayer2());
+ }
+ 
+-Tron::~Tron()
++SnakeDuel::~SnakeDuel()
+ {
+   if(playfield)
+     {
+@@ -119,7 +119,7 @@
+ 
+ }
+ 
+-void Tron::createNewPlayfield()
++void SnakeDuel::createNewPlayfield()
+ {
+   if(playfield)
+     delete [] playfield;
+@@ -143,7 +143,7 @@
+   //lookForward=min/4;
+ }
+ 
+-void Tron::newGame()
++void SnakeDuel::newGame()
+ {
+   players[0].score=0;
+   players[1].score=0;
+@@ -153,7 +153,7 @@
+   QTimer::singleShot(15000,this,SLOT(showBeginHint()));
+ }
+ 
+-void Tron::reset()
++void SnakeDuel::reset()
+ {
+   gamePaused=false;
+   stopGame();
+@@ -188,7 +188,7 @@
+     emit gameReset();
+ }
+ 
+-void Tron::computerStart()
++void SnakeDuel::computerStart()
+ {
+    if(isComputer(Both))
+    {
+@@ -201,14 +201,14 @@
+ **                   	??? functions										 **
+ ** *************************************************************** */
+ 
+-void Tron::startGame()
++void SnakeDuel::startGame()
+ {
+    gameEnded=false;
+    beginHint=false;
+    timer->start(velocity);
+ }
+ 
+-void Tron::stopGame()
++void SnakeDuel::stopGame()
+ {
+    timer->stop();
+    gameEnded=true;
+@@ -216,7 +216,7 @@
+    players[1].last_dir = Directions::None;
+ }
+ 
+-void Tron::togglePause() // pause or continue game
++void SnakeDuel::togglePause() // pause or continue game
+ {
+   if(!gameEnded)
+   {
+@@ -235,7 +235,7 @@
+   }
+ }
+ 
+-void Tron::showWinner(Player player)
++void SnakeDuel::showWinner(Player player)
+ {
+    int i,j;
+ 
+@@ -282,7 +282,7 @@
+ **                    paint functions										 **
+ ** *************************************************************** */
+ 
+-void Tron::updatePixmap()
++void SnakeDuel::updatePixmap()
+ {
+   int i,j;
+ 
+@@ -302,7 +302,7 @@
+   QPainter p;
+   p.begin(pixmap);
+ 
+-  // alle Pixel pr�fen und evt. zeichnen
++  // alle Pixel pr�fen und evt. zeichnen
+   for(i=0;i<fieldWidth;i++)
+      for(j=0;j<fieldHeight;j++)
+      {
+@@ -328,7 +328,7 @@
+ }
+ 
+ // draw new player rects
+-void Tron::paintPlayers()
++void SnakeDuel::paintPlayers()
+ {
+    QPainter p;
+    p.begin(this);
+@@ -342,7 +342,7 @@
+    p.end();
+ }
+ 
+-void Tron::drawRect(QPainter & p, int x, int y)
++void SnakeDuel::drawRect(QPainter & p, int x, int y)
+ {
+    int xOffset=x*rectSize+(width()-fieldWidth*rectSize)/2;
+    int yOffset=y*rectSize+(height()-fieldHeight*rectSize)/2;
+@@ -364,7 +364,7 @@
+    }
+    else
+    {
+-      kdDebug() << "No player defined in Tron::drawRect(...)" << endl;
++      kdDebug() << "No player defined in SnakeDuel::drawRect(...)" << endl;
+       return;
+    }
+ 
+@@ -422,12 +422,12 @@
+ **                    config functions										 **
+ ** *************************************************************** */
+ 
+-void Tron::setActionCollection(KActionCollection *a)
++void SnakeDuel::setActionCollection(KActionCollection *a)
+ {
+    actionCollection = a;
+ }
+ 
+-void Tron::setBackgroundPix(QPixmap pix)
++void SnakeDuel::setBackgroundPix(QPixmap pix)
+ {
+     bgPix=pix;
+ 
+@@ -438,7 +438,7 @@
+     }
+ }
+ 
+-void Tron::setVelocity(int newVel)            // set new velocity
++void SnakeDuel::setVelocity(int newVel)            // set new velocity
+ {
+   velocity=(10-newVel)*15;
+ 
+@@ -446,7 +446,7 @@
+     timer->changeInterval(velocity);
+ }
+ 
+-void Tron::setComputerplayer(Player player, bool flag) {
++void SnakeDuel::setComputerplayer(Player player, bool flag) {
+   if(player==One)
+     players[0].setComputer(flag);
+   else if(player==Two)
+@@ -456,7 +456,7 @@
+       QTimer::singleShot(1000,this,SLOT(computerStart()));
+ }
+ 
+-bool Tron::isComputer(Player player)
++bool SnakeDuel::isComputer(Player player)
+ {
+    if(player==One)
+      return players[0].computer;
+@@ -475,7 +475,7 @@
+ **                    moving functions										 **
+ ** *************************************************************** */
+ 
+-bool Tron::crashed(int playerNr,int xInc, int yInc) const
++bool SnakeDuel::crashed(int playerNr,int xInc, int yInc) const
+ {
+   bool flag;
+   int newX=players[playerNr].xCoordinate+xInc;
+@@ -490,7 +490,7 @@
+   return flag;
+ }
+ 
+-void Tron::switchDir(int playerNr,Directions::Direction newDirection)
++void SnakeDuel::switchDir(int playerNr,Directions::Direction newDirection)
+ {
+   if(playerNr!=0 && playerNr != 1)
+   {
+@@ -513,7 +513,7 @@
+   players[playerNr].dir=newDirection;
+ }
+ 
+-void Tron::updateDirections(int playerNr)
++void SnakeDuel::updateDirections(int playerNr)
+ {
+    if(playerNr==-1 || playerNr==0)
+    {
+@@ -581,7 +581,7 @@
+ **                    			Events										 **
+ ** *************************************************************** */
+ 
+-void Tron::paintEvent(QPaintEvent *e)
++void SnakeDuel::paintEvent(QPaintEvent *e)
+ {
+    bitBlt(this,e->rect().topLeft(),pixmap,e->rect());
+ 
+@@ -629,13 +629,13 @@
+    }
+ }
+ 
+-void Tron::resizeEvent(QResizeEvent *)
++void SnakeDuel::resizeEvent(QResizeEvent *)
+ {
+     createNewPlayfield();
+     reset();
+ }
+ 
+-void Tron::keyPressEvent(QKeyEvent *e)
++void SnakeDuel::keyPressEvent(QKeyEvent *e)
+ {
+   KKey key(e);
+   if(!players[1].computer)
+@@ -718,7 +718,7 @@
+   }
+ }
+ 
+-void Tron::keyReleaseEvent(QKeyEvent * e)
++void SnakeDuel::keyReleaseEvent(QKeyEvent * e)
+ {
+   KKey key(e);
+ 
+@@ -785,7 +785,7 @@
+ }
+ 
+ // if playingfield loses keyboard focus, pause game
+-void Tron::focusOutEvent(QFocusEvent *)
++void SnakeDuel::focusOutEvent(QFocusEvent *)
+ {
+    if(!gameEnded && !gamePaused)
+    {
+@@ -797,12 +797,12 @@
+ **     				slots										 **
+ ** *************************************************************** */
+ 
+-void Tron::unblockGame()
++void SnakeDuel::unblockGame()
+ {
+   gameBlocked=false;
+ }
+ 
+-void Tron::showBeginHint()
++void SnakeDuel::showBeginHint()
+ {
+    if(gameEnded)
+    {
+@@ -816,12 +816,12 @@
+ }
+ 
+ // doMove() is called from QTimer
+-void Tron::doMove()
++void SnakeDuel::doMove()
+ {
+    int i;
+    for(i=0;i<2;i++)
+    {
+-      // �berpr�fen, ob Acceleratortaste gedr�ckt wurde...
++      // �berpr�fen, ob Acceleratortaste gedr�ckt wurde...
+       if(players[i].accelerated)
+       {
+          updateDirections(i);
+@@ -1067,7 +1067,7 @@
+ 
+ // This part is partly ported from
+ // xtron-1.1 by Rhett D. Jacobs <rhett@hotel.canberra.edu.au>
+-void Tron::think(int playerNr)
++void SnakeDuel::think(int playerNr)
+ {
+ if(Settings::skill() != Settings::EnumSkill::Easy)
+ {
+@@ -1598,7 +1598,7 @@
+  }
+ }
+ 
+-void Tron::changeDirection(int playerNr,int dis_right,int dis_left)
++void SnakeDuel::changeDirection(int playerNr,int dis_right,int dis_left)
+ {
+    Directions::Direction currentDir=players[playerNr].dir;
+    Directions::Direction sides[2];
+diff -ur kdegames-3.5.10/ktron/tron.h kdegames-3.5.10-trademarks/ktron/tron.h
+--- kdegames-3.5.10/ktron/tron.h	2005-10-10 16:56:04.000000000 +0200
++++ kdegames-3.5.10-trademarks/ktron/tron.h	2008-08-29 13:25:56.000000000 +0200
+@@ -1,5 +1,5 @@
+ /* ********************************************************************************
+-  This file is part of the game 'KTron'
++  This file is part of the game 'KSnakeDuel'
+ 
+   Copyright (C) 1998-2000 by Matthias Kiefer <matthias.kiefer@gmx.de>
+ 
+@@ -43,13 +43,13 @@
+ /**
+ * @short The playingfield
+ */
+-class Tron : public QWidget
++class SnakeDuel : public QWidget
+ {
+   Q_OBJECT
+ 
+ public:
+-  Tron(QWidget *parent=0, const char *name=0);
+-  ~Tron();
++  SnakeDuel(QWidget *parent=0, const char *name=0);
++  ~SnakeDuel();
+   void setActionCollection(KActionCollection*);
+   void updatePixmap();
+   void setBackgroundPix(QPixmap);
+@@ -77,7 +77,7 @@
+   void gameReset();
+ 
+ protected:
+-  /** bitBlt�s the rect that has to be updated from the
++  /** bitBlt�s the rect that has to be updated from the
+   * bufferpixmap on the screen and writes eventually text
+   */
+   void paintEvent(QPaintEvent *);
+@@ -136,7 +136,7 @@
+   void createNewPlayfield();
+   /** paints players at current player coordinates */
+   void paintPlayers();
+-  /** draws a rect in current TronStyle at position x,y of the playingfield */
++  /** draws a rect in current SnakeDuelStyle at position x,y of the playingfield */
+   void drawRect(QPainter & p, int x, int y);
+   /** emits gameEnds(Player) and displays the winner by changing color*/
+   void showWinner(Player winner);
+@@ -162,7 +162,7 @@
+   
+ private slots:
+     /**
+-    * This is the main function of KTron.
++    * This is the main function of KSnakeDuel.
+     * It checkes if an accelerator is pressed and than moves this player
+     * forward. Then it checkes if a crash occurred.
+     * If no crash happen it moves both players forward and checks again
+diff -ur kdegames-3.5.10/README kdegames-3.5.10-trademarks/README
+--- kdegames-3.5.10/README	2005-09-10 10:18:37.000000000 +0200
++++ kdegames-3.5.10-trademarks/README	2008-08-29 13:25:56.000000000 +0200
+@@ -38,6 +38,9 @@
+ * kbounce
+     Claim areas and don't get disturbed.
+ 
++* kboxpush
++    Move all storage boxes into the cabinet.
++
+ * keneloba
+     Push pieces of your opponent out of the board (an Abalone type game).
+ 
+@@ -89,15 +92,12 @@
+ * ksnake
+     Don't bite yourself, eat apples!
+ 
+-* ksokoban
+-    Move all storage boxes into the cabinet.
++* ksnakeduel
++    Like ksnake, but without fruits.
+ 
+ * kspaceduel
+     Two player game with shooting spaceships flying around a sun.
+ 
+-* ktron
+-    Like ksnake, but without fruits.
+-
+ * ktuberling
+     Kids game: make your own potato (NO french fries!)
+ 

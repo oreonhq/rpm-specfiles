@@ -1,0 +1,23 @@
+From a932e8363b42d3dd48527600d01584de7da0fba3 Mon Sep 17 00:00:00 2001
+From: Igor Gnatenko <ignatenko@redhat.com>
+Date: Sat, 9 Apr 2016 19:17:32 +0200
+Subject: [PATCH 2/5] scripts: install to bin, not sbin
+
+Signed-off-by: Igor Gnatenko <ignatenko@redhat.com>
+---
+ scripts/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 952df2e..1afc3e4 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ SET ( SCRIPT_SRC mkThumbs mkSlideshow )
+ 
+-INSTALL ( FILES ${SCRIPT_SRC} DESTINATION sbin )
++INSTALL ( FILES ${SCRIPT_SRC} DESTINATION bin )
+ 
+-- 
+2.7.3
+

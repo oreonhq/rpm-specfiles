@@ -1,0 +1,16 @@
+diff -rupN --no-dereference libsurvive-440518bb7b0015a235f2e209b3fb454b2cf13ea2/libs/cnmatrix/cmake/FindEigen3.cmake libsurvive-440518bb7b0015a235f2e209b3fb454b2cf13ea2-new/libs/cnmatrix/cmake/FindEigen3.cmake
+--- libsurvive-440518bb7b0015a235f2e209b3fb454b2cf13ea2/libs/cnmatrix/cmake/FindEigen3.cmake	2025-03-28 14:05:46.000000000 +0100
++++ libsurvive-440518bb7b0015a235f2e209b3fb454b2cf13ea2-new/libs/cnmatrix/cmake/FindEigen3.cmake	2025-10-15 18:39:58.407915154 +0200
+@@ -41,7 +41,11 @@ if(NOT Eigen3_FIND_VERSION)
+ endif()
+ 
+ macro(_eigen3_check_version)
+-  file(READ "${EIGEN3_INCLUDE_DIR}/Eigen/src/Core/util/Macros.h" _eigen3_version_header)
++  if(EXISTS "${EIGEN3_INCLUDE_DIR}/Eigen/Version")
++    file(READ "${EIGEN3_INCLUDE_DIR}/Eigen/Version" _eigen3_version_header)
++  else()
++    file(READ "${EIGEN3_INCLUDE_DIR}/Eigen/src/Core/util/Macros.h" _eigen3_version_header)
++  endif()
+ 
+   string(REGEX MATCH "define[ \t]+EIGEN_WORLD_VERSION[ \t]+([0-9]+)" _eigen3_world_version_match "${_eigen3_version_header}")
+   set(EIGEN3_WORLD_VERSION "${CMAKE_MATCH_1}")

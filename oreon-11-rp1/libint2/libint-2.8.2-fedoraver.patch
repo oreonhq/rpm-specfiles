@@ -1,0 +1,22 @@
+diff -up libint-2.8.2/CMakeLists.txt.fedoraver libint-2.8.2/CMakeLists.txt
+--- libint-2.8.2/CMakeLists.txt.fedoraver	2024-02-21 23:21:55.000000000 +0000
++++ libint-2.8.2/CMakeLists.txt	2024-02-22 09:49:10.871180865 +0000
+@@ -16,7 +16,7 @@ if (LIBINT_BUILDID)
+ else(LIBINT_BUILDID)
+     set(LIBINT_EXT_VERSION ${LIBINT_VERSION})
+ endif(LIBINT_BUILDID)
+-set(MAX_AM_ERI "")  # patch here in export tarball w/highest 4-center, 0-deriv ERI AM in numbers
++set(MAX_AM_ERI "7")  # patch here in export tarball w/highest 4-center, 0-deriv ERI AM in numbers
+ 
+ # Add module directory and modules =====================================================================================
+ 
+diff -up libint-2.8.2/src/configuration.cc.cmake.in.fedoraver libint-2.8.2/src/configuration.cc.cmake.in
+--- libint-2.8.2/src/configuration.cc.cmake.in.fedoraver	2024-02-21 23:21:54.000000000 +0000
++++ libint-2.8.2/src/configuration.cc.cmake.in	2024-02-22 09:50:11.307111838 +0000
+@@ -23,5 +23,5 @@
+    @return the semicolon-separated strings from CMake components */
+ const char* configuration_accessor() {
+   // return "@Libint2_CONFIG_COMPONENTS@";
+-  return "(nyi)";
++  return "ss;multipole_nn_d0;multipole_mm_d0;multipole_ll_d0;multipole_kk_d0;multipole_ii_d0;multipole_hh_d0;multipole_gg_d0;multipole_ff_d0;multipole_dd_d0;onebody_kk_d0;onebody_ii_d0;onebody_hh_d0;onebody_gg_d0;onebody_ff_d0;onebody_dd_d0;onebody_kk_d1;onebody_ii_d1;onebody_hh_d1;onebody_gg_d1;onebody_ff_d1;onebody_dd_d1;onebody_hh_d2;onebody_gg_d2;onebody_ff_d2;onebody_dd_d2;eri_kkkk_d0;eri_iiii_d0;eri_hhhh_d0;eri_gggg_d0;eri_ffff_d0;eri_dddd_d0;eri_kkkk_d1;eri_iiii_d1;eri_hhhh_d1;eri_gggg_d1;eri_ffff_d1;eri_dddd_d1;eri_gggg_d2;eri_ffff_d2;eri_dddd_d2;eri_kkQ_d0;eri_kkO_d0;eri_kkN_d0;eri_kkM_d0;eri_kkL_d0;eri_kkK_d0;eri_iiQ_d0;eri_iiO_d0;eri_iiN_d0;eri_iiM_d0;eri_iiL_d0;eri_iiK_d0;eri_iiI_d0;eri_hhQ_d0;eri_hhO_d0;eri_hhN_d0;eri_hhM_d0;eri_hhL_d0;eri_hhK_d0;eri_hhI_d0;eri_hhH_d0;eri_ggQ_d0;eri_ggO_d0;eri_ggN_d0;eri_ggM_d0;eri_ggL_d0;eri_ggK_d0;eri_ggI_d0;eri_ggH_d0;eri_ggG_d0;eri_ffQ_d0;eri_ffO_d0;eri_ffN_d0;eri_ffM_d0;eri_ffL_d0;eri_ffK_d0;eri_ffI_d0;eri_ffH_d0;eri_ffG_d0;eri_ffF_d0;eri_ddQ_d0;eri_ddO_d0;eri_ddN_d0;eri_ddM_d0;eri_ddL_d0;eri_ddK_d0;eri_ddI_d0;eri_ddH_d0;eri_ddG_d0;eri_ddF_d0;eri_ddD_d0;eri_kkK_d1;eri_iiK_d1;eri_iiI_d1;eri_hhK_d1;eri_hhI_d1;eri_hhH_d1;eri_ggK_d1;eri_ggI_d1;eri_ggH_d1;eri_ggG_d1;eri_ffK_d1;eri_ffI_d1;eri_ffH_d1;eri_ffG_d1;eri_ffF_d1;eri_ddK_d1;eri_ddI_d1;eri_ddH_d1;eri_ddG_d1;eri_ddF_d1;eri_ddD_d1;eri_hhH_d2;eri_ggH_d2;eri_ggG_d2;eri_ffH_d2;eri_ffG_d2;eri_ffF_d2;eri_ddH_d2;eri_ddG_d2;eri_ddF_d2;eri_ddD_d2;eri_kkq_d0;eri_kko_d0;eri_kkn_d0;eri_kkm_d0;eri_kkl_d0;eri_kkk_d0;eri_iiq_d0;eri_iio_d0;eri_iin_d0;eri_iim_d0;eri_iil_d0;eri_iik_d0;eri_iii_d0;eri_hhq_d0;eri_hho_d0;eri_hhn_d0;eri_hhm_d0;eri_hhl_d0;eri_hhk_d0;eri_hhi_d0;eri_hhh_d0;eri_ggq_d0;eri_ggo_d0;eri_ggn_d0;eri_ggm_d0;eri_ggl_d0;eri_ggk_d0;eri_ggi_d0;eri_ggh_d0;eri_ggg_d0;eri_ffq_d0;eri_ffo_d0;eri_ffn_d0;eri_ffm_d0;eri_ffl_d0;eri_ffk_d0;eri_ffi_d0;eri_ffh_d0;eri_ffg_d0;eri_fff_d0;eri_ddq_d0;eri_ddo_d0;eri_ddn_d0;eri_ddm_d0;eri_ddl_d0;eri_ddk_d0;eri_ddi_d0;eri_ddh_d0;eri_ddg_d0;eri_ddf_d0;eri_ddd_d0;eri_kkk_d1;eri_iik_d1;eri_iii_d1;eri_hhk_d1;eri_hhi_d1;eri_hhh_d1;eri_ggk_d1;eri_ggi_d1;eri_ggh_d1;eri_ggg_d1;eri_ffk_d1;eri_ffi_d1;eri_ffh_d1;eri_ffg_d1;eri_fff_d1;eri_ddk_d1;eri_ddi_d1;eri_ddh_d1;eri_ddg_d1;eri_ddf_d1;eri_ddd_d1;eri_hhh_d2;eri_ggh_d2;eri_ggg_d2;eri_ffh_d2;eri_ffg_d2;eri_fff_d2;eri_ddh_d2;eri_ddg_d2;eri_ddf_d2;eri_ddd_d2;eri_QQ_d0;eri_OO_d0;eri_NN_d0;eri_MM_d0;eri_LL_d0;eri_KK_d0;eri_II_d0;eri_HH_d0;eri_GG_d0;eri_FF_d0;eri_DD_d0;eri_KK_d1;eri_II_d1;eri_HH_d1;eri_GG_d1;eri_FF_d1;eri_DD_d1;eri_HH_d2;eri_GG_d2;eri_FF_d2;eri_DD_d2;eri_qq_d0;eri_oo_d0;eri_nn_d0;eri_mm_d0;eri_ll_d0;eri_kk_d0;eri_ii_d0;eri_hh_d0;eri_gg_d0;eri_ff_d0;eri_dd_d0;eri_kk_d1;eri_ii_d1;eri_hh_d1;eri_gg_d1;eri_ff_d1;eri_dd_d1;eri_hh_d2;eri_gg_d2;eri_ff_d2;eri_dd_d2;g12_hhhh_d0;g12_gggg_d0;g12_ffff_d0;g12_dddd_d0;g12_hhhh_d1;g12_gggg_d1;g12_ffff_d1;g12_dddd_d1";
+ }

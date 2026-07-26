@@ -1,0 +1,18 @@
+[archive]
+
+[licensing]
+detector = "askalono"
+[[licensing.licenses]]
+path = "vendor/github.com/miekg/dns/COPYRIGHT"
+sha256sum = "66550c0ad5ca7ec1e08683e5f872cc45c741f311eee3b8ee484206ecbf9c740d"
+expression = "BSD-3-Clause"
+
+[[licensing.licenses]]
+path = "vendor/github.com/sean-/seed/LICENSE"
+sha256sum = "a9acefe76ede3dc382f2b449f968571f796a3bedc8eb0ef53dd4ef41083f3fd3"
+expression = "MIT"
+
+[[licensing.licenses]]
+path = "vendor/github.com/shopspring/decimal/LICENSE"
+sha256sum = "b92ba0f6ee02f2309628bfdadb123668a17c016e475ba477b857d33470d9d625"
+expression = "MIT"

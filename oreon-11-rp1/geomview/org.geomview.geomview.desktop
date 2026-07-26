@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=geomview
+Comment=An interactive 3D viewing program
+Exec=geomview
+Icon=geomview
+MimeType=application/x-geomview;model/vrml;
+Type=Application
+Categories=Education;Graphics;Math;Science;

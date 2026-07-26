@@ -1,0 +1,32 @@
+diff -up stevedekorte-io-6a5f734/libs/iovm/source/IoState_inline.h.gcc43 stevedekorte-io-6a5f734/libs/iovm/source/IoState_inline.h
+--- stevedekorte-io-6a5f734/libs/iovm/source/IoState_inline.h.gcc43	2008-03-30 06:16:50.000000000 +0200
++++ stevedekorte-io-6a5f734/libs/iovm/source/IoState_inline.h	2010-01-15 12:27:55.000000000 +0100
+@@ -2,6 +2,9 @@
+ //metadoc State copyright Steve Dekorte 2002
+ //metadoc State license BSD revised
+ 
++#ifndef __IOSTATE_INLINE_H
++#define __IOSTATE_INLINE_H
++
+ #ifdef IOSTATE_C
+ #define IO_IN_C_FILE
+ #endif
+@@ -58,7 +61,7 @@ IOINLINE int ISFALSE(IoObject *self)
+ 	return self == IOSTATE->ioNil || self == IOSTATE->ioFalse;
+ }
+ 
+-IOINLINE IoObject *IOBOOL(IoObject *self, int b)
++static inline IoObject *IOBOOL(IoObject *self, int b)
+ {
+ 	return b ? IOTRUE(self) : IOFALSE(self);
+ }
+@@ -321,6 +324,8 @@ IOINLINE int IoState_stopStatusNumber(Io
+ }
+ 
+ 
++#endif /* IO_DECLARE_INLINES */
++
+ #undef IO_IN_C_FILE
+-#endif
+ 
++#endif

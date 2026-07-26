@@ -1,0 +1,20 @@
+--- kdebase-3.4.0/applnk/kde-essential.menu.tn	2005-04-25 16:18:40.000000000 +0200
++++ kdebase-3.4.0/applnk/kde-essential.menu	2005-04-25 16:18:58.000000000 +0200
+@@ -2,6 +2,7 @@
+   "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+ 
+ <Menu>
++	<Name>Applications</Name>
+         <!-- The following menus are hidden by default -->
+ 	<Menu>
+ 		<Name>Settings</Name>
+--- kdebase-3.5.1/applnk/kde-settings.menu.orig	2006-02-21 16:30:54.000000000 +0100
++++ kdebase-3.5.1/applnk/kde-settings.menu	2006-02-21 16:31:45.000000000 +0100
+@@ -29,6 +29,7 @@
+ 		<Directory>kde-settings-looknfeel.directory</Directory>
+ 		<Include>
+ 			<Category>X-KDE-settings-looknfeel</Category>
++			<Category>X-KDE-LookNFeel</Category>
+ 		</Include>
+ 	</Menu>
+ 	<Menu>

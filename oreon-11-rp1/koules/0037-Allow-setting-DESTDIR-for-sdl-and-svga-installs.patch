@@ -1,0 +1,98 @@
+From baa026a924f8ac72056952b01e0e7e3bfb9d2ab0 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Mon, 9 Nov 2015 09:30:12 +0100
+Subject: [PATCH 37/41] Allow setting DESTDIR for sdl and svga installs
+
+Convenience for packagers.
+---
+ Makefile.sdl     | 24 ++++++++++++------------
+ Makefile.svgalib | 24 ++++++++++++------------
+ 2 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/Makefile.sdl b/Makefile.sdl
+index f1c694b..80f650f 100644
+--- a/Makefile.sdl
++++ b/Makefile.sdl
+@@ -75,25 +75,25 @@ koules.sdl: $(PROGS_O)
+ 	$(CC) $(OPTIMIZE1) $(CFLAGS) $(LFLAGS) -o koules.sdl $(PROGS_O) $(LIBS) -lm
+ 
+ install:: $(PROG) $(SOUNDSERVER)
+-	@echo "Koules directory is " $(BINDIR)
++	@echo "Koules directory is " $(DESTDIR)$(BINDIR)
+ 	@:
+-	@echo "Instalin man page to " $(MANDIR)
+-	$(INSTALL) -c $(INSTMANFLAGS) koules.sdl.6 $(MANDIR);
++	@echo "Instalin man page to " $(DESTDIR)$(MANDIR)
++	$(INSTALL) -c $(INSTMANFLAGS) koules.sdl.6 $(DESTDIR)$(MANDIR);
+ 	@:
+-	@echo "Creating directory " $(BINDIR)
+-	@if [ ! -d $(BINDIR) ]; then mkdir $(BINDIR); fi
+-	$(INSTALL) -c -s $(INSTBINFLAGS) koules.sdl $(BINDIR)
++	@echo "Creating directory " $(DESTDIR)$(BINDIR)
++	@if [ ! -d $(DESTDIR)$(BINDIR) ]; then mkdir $(DESTDIR)$(BINDIR); fi
++	$(INSTALL) -c -s $(INSTBINFLAGS) koules.sdl $(DESTDIR)$(BINDIR)
+ 	@:
+ 	@if [ "$(INSTALLSOUND)" = "True" ]; 				\
+ 	 then								\
+-		echo "Creating directory " $(SOUNDDIR); 		\
+-		if [ ! -d $(SOUNDDIR) ]; then mkdir $(SOUNDDIR); fi;    \
+-		echo "Copying sound server to directory " $(SOUNDDIR); \
+-		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(SOUNDDIR); \
+-		echo "Copying sound files into directory " $(SOUNDDIR); \
++		echo "Creating directory " $(DESTDIR)$(SOUNDDIR); 		\
++		if [ ! -d $(DESTDIR)$(SOUNDDIR) ]; then mkdir $(DESTDIR)$(SOUNDDIR); fi;    \
++		echo "Copying sound server to directory " $(DESTDIR)$(SOUNDDIR); \
++		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(DESTDIR)$(SOUNDDIR); \
++		echo "Copying sound files into directory " $(DESTDIR)$(SOUNDDIR); \
+ 		cd ./sounds; set -x;					\
+ 		for file in *.raw; do					\
+-		    $(INSTALL) -c $(INSTDATFLAGS) $$file $(SOUNDDIR);	\
++		    $(INSTALL) -c $(INSTDATFLAGS) $$file $(DESTDIR)$(SOUNDDIR);	\
+ 		done;   						\
+ 	 fi
+ 	@echo "Don't forget to remove your old koules from /usr/games/koules "
+diff --git a/Makefile.svgalib b/Makefile.svgalib
+index fd233e7..47809df 100644
+--- a/Makefile.svgalib
++++ b/Makefile.svgalib
+@@ -71,25 +71,25 @@ koules.svga: $(PROGS_O)
+ 	$(CC) $(OPTIMIZE1) $(CFLAGS) $(LFLAGS) -o koules.svga $(PROGS_O) $(LIBS) -lm
+ 
+ install:: $(PROG) $(SOUNDSERVER)
+-	@echo "Koules directory is " $(BINDIR)
++	@echo "Koules directory is " $(DESTDIR)$(BINDIR)
+ 	@:
+-	@echo "Instalin man page to " $(MANDIR)
+-	$(INSTALL) -c $(INSTMANFLAGS) koules.svga.6 $(MANDIR);
++	@echo "Instalin man page to " $(DESTDIR)$(MANDIR)
++	$(INSTALL) -c $(INSTMANFLAGS) koules.svga.6 $(DESTDIR)$(MANDIR);
+ 	@:
+-	@echo "Creating directory " $(BINDIR)
+-	@if [ ! -d $(BINDIR) ]; then mkdir $(BINDIR); fi
+-	$(INSTALL) -c -s $(INSTBINFLAGS) koules.svga $(BINDIR)
++	@echo "Creating directory " $(DESTDIR)$(BINDIR)
++	@if [ ! -d $(DESTDIR)$(BINDIR) ]; then mkdir $(DESTDIR)$(BINDIR); fi
++	$(INSTALL) -c -s $(INSTBINFLAGS) koules.svga $(DESTDIR)$(BINDIR)
+ 	@:
+ 	@if [ "$(INSTALLSOUND)" = "True" ]; 				\
+ 	 then								\
+-		echo "Creating directory " $(SOUNDDIR); 		\
+-		if [ ! -d $(SOUNDDIR) ]; then mkdir $(SOUNDDIR); fi;    \
+-		echo "Copying sound server to directory " $(SOUNDDIR); \
+-		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(SOUNDDIR); \
+-		echo "Copying sound files into directory " $(SOUNDDIR); \
++		echo "Creating directory " $(DESTDIR)$(SOUNDDIR); 		\
++		if [ ! -d $(DESTDIR)$(SOUNDDIR) ]; then mkdir $(DESTDIR)$(SOUNDDIR); fi;    \
++		echo "Copying sound server to directory " $(DESTDIR)$(SOUNDDIR); \
++		$(INSTALL) -c -s $(INSTBIN1FLAGS) $(SOUNDSERVER) $(DESTDIR)$(SOUNDDIR); \
++		echo "Copying sound files into directory " $(DESTDIR)$(SOUNDDIR); \
+ 		cd ./sounds; set -x;					\
+ 		for file in *.raw; do					\
+-		    $(INSTALL) -c $(INSTDATFLAGS) $$file $(SOUNDDIR);	\
++		    $(INSTALL) -c $(INSTDATFLAGS) $$file $(DESTDIR)$(SOUNDDIR);	\
+ 		done;   						\
+ 	 fi
+ 	@echo "Don't forget to remove your old koules from /usr/games/koules "
+-- 
+2.5.0
+

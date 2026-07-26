@@ -1,0 +1,15 @@
+[Unit]
+Description=Controls sshftp access to the globus-gridftp-server
+After=remote_fs.target network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=-/etc/sysconfig/globus-gridftp-sshftp
+ExecStartPre=/bin/sh -c "[ -f /etc/gridftp-sshftp ] || /usr/sbin/globus-gridftp-server-enable-sshftp -out /etc/gridftp-sshftp"
+ExecStartPre=/bin/sh -c "[ -d /etc/grid-security ] || mkdir /etc/grid-security"
+ExecStart=/bin/sh -c "[ -f /etc/grid-security/sshftp ] || ln -s /etc/gridftp-sshftp /etc/grid-security/sshftp"
+ExecStop=/bin/sh -c "[ -h /etc/grid-security/sshftp ] && rm /etc/grid-security/sshftp || :; [ -f /etc/grid-security/sshftp ] && mv /etc/grid-security/sshftp /etc/grid-security/sshftp.save || :"
+
+[Install]
+WantedBy=multi-user.target

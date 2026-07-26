@@ -1,0 +1,166 @@
+From: Ian Campbell <ijc@debian.org>
+Date: Fri, 1 May 2020 13:38:13 +0800
+Subject: Compatibility with `argparse-manpage`
+
+* Refactor construction of `argparse.ArgumentParser` into a `get_argparser()`
+  function in each binary.
+* Set `prog` property (the default uses `sys.arg[0]` which breaks with
+  `argparse-manpage`, arguably this is an `argparse-manpage` bug).
+* Set the `man_short_description` property based on the first line of the
+  description. This is used as a summary in the `NAME` section of the man page.
+
+Forwarded: https://github.com/cheshirekow/cmake_format/pull/305
+---
+ cmakelang/annotate.py        | 19 ++++++++++++++-----
+ cmakelang/format/__main__.py | 13 ++++++++++---
+ cmakelang/genparsers.py      | 23 +++++++++++++++--------
+ cmakelang/lint/__main__.py   | 19 +++++++++++++------
+ 4 files changed, 52 insertions(+), 22 deletions(-)
+
+diff --git a/cmakelang/annotate.py b/cmakelang/annotate.py
+index c8f387f..0019e39 100644
+--- a/cmakelang/annotate.py
++++ b/cmakelang/annotate.py
+@@ -107,17 +107,26 @@ def setup_argparser(arg_parser):
+   arg_parser.add_argument('infilepaths', nargs='*')
+ 
+ 
++def get_argparser():
++  argparser = argparse.ArgumentParser(
++      prog='cmake-annotate',
++      description=__doc__,
++      formatter_class=argparse.RawDescriptionHelpFormatter,
++      usage=USAGE_STRING)
++
++  setattr(argparser, 'man_short_description', __doc__.strip().splitlines()[0])
++
++  setup_argparser(argparser)
++  return argparser
++
++
+ def main():
+   """Parse arguments, open files, start work."""
+ 
+   # set up main logger, which logs everything. We'll leave this one logging
+   # to the console
+   logging.basicConfig(level=logging.INFO)
+-  arg_parser = argparse.ArgumentParser(
+-      description=__doc__,
+-      formatter_class=argparse.RawDescriptionHelpFormatter,
+-      usage=USAGE_STRING)
+-  setup_argparser(arg_parser)
++  arg_parser = get_argparser()
+   args = arg_parser.parse_args()
+ 
+   assert (len(args.infilepaths) == 1
+diff --git a/cmakelang/format/__main__.py b/cmakelang/format/__main__.py
+index bbcbf98..da0b9e6 100644
+--- a/cmakelang/format/__main__.py
++++ b/cmakelang/format/__main__.py
+@@ -566,15 +566,22 @@ def onefile_main(infile_path, args, argparse_dict):
+     shutil.move(tempfile_path, infile_path)
+ 
+ 
+-def inner_main():
+-  """Parse arguments, open files, start work."""
+-
++def get_argparser():
+   arg_parser = argparse.ArgumentParser(
++      prog='cmake-format',
+       description=__doc__,
+       formatter_class=argparse.RawDescriptionHelpFormatter,
+       usage=USAGE_STRING)
+ 
++  setattr(arg_parser, 'man_short_description', __doc__.strip().splitlines()[0])
++
+   setup_argparser(arg_parser)
++  return arg_parser
++
++def inner_main():
++  """Parse arguments, open files, start work."""
++
++  arg_parser = get_argparser()
+   try:
+     import argcomplete
+     argcomplete.autocomplete(arg_parser)
+diff --git a/cmakelang/genparsers.py b/cmakelang/genparsers.py
+index 410f541..adaf313 100644
+--- a/cmakelang/genparsers.py
++++ b/cmakelang/genparsers.py
+@@ -1,7 +1,6 @@
+ # -*- coding: utf-8 -*-
+ """
+-Parse cmake listfiles, find function and macro declarations, and generate
+-parsers for them.
++Parse cmake listfiles, find function and macro declarations, and generate parsers for them.
+ """
+ from __future__ import print_function, unicode_literals
+ 
+@@ -214,6 +213,19 @@ def setup_argparse(argparser):
+   argparser.add_argument('infilepaths', nargs='*')
+ 
+ 
++def get_argparser():
++  argparser = argparse.ArgumentParser(
++      prog='cmake-genparsers',
++      description=__doc__,
++      formatter_class=argparse.RawDescriptionHelpFormatter,
++      usage=USAGE_STRING)
++
++  setattr(argparser, 'man_short_description', __doc__.strip().splitlines()[0])
++
++  setup_argparse(argparser)
++  return argparser
++
++
+ USAGE_STRING = """
+ cmake-genparsers [-h] [-o OUTFILE_PATH] infilepath [infilepath ...]
+ """
+@@ -223,12 +235,7 @@ def main():
+   """Parse arguments, open files, start work."""
+   logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+ 
+-  argparser = argparse.ArgumentParser(
+-      description=__doc__,
+-      formatter_class=argparse.RawDescriptionHelpFormatter,
+-      usage=USAGE_STRING)
+-
+-  setup_argparse(argparser)
++  argparser = get_argparser()
+   args = argparser.parse_args()
+   logging.getLogger().setLevel(getattr(logging, args.log_level.upper()))
+ 
+diff --git a/cmakelang/lint/__main__.py b/cmakelang/lint/__main__.py
+index a172290..0c8e883 100644
+--- a/cmakelang/lint/__main__.py
++++ b/cmakelang/lint/__main__.py
+@@ -94,16 +94,23 @@ cmake-lint [-h]
+ """
+ 
+ 
+-def inner_main():
+-  """Parse arguments, open files, start work."""
+-  logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+-
+-  argparser = argparse.ArgumentParser(
++def get_argparser():
++  arg_parser = argparse.ArgumentParser(
++      prog='cmake-lint',
+       description=__doc__,
+       formatter_class=argparse.RawDescriptionHelpFormatter,
+       usage=USAGE_STRING)
+ 
+-  setup_argparse(argparser)
++  setattr(arg_parser, 'man_short_description', __doc__.strip().splitlines()[0])
++
++  setup_argparse(arg_parser)
++  return arg_parser
++
++def inner_main():
++  """Parse arguments, open files, start work."""
++  logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
++
++  argparser = get_argparser()
+   try:
+     import argcomplete
+     argcomplete.autocomplete(argparser)

@@ -1,0 +1,15 @@
+--- README
++++ README
+@@ -119,10 +119,10 @@
+     perlsec
+ 
+ AUTHOR
+-    Ævar Arnfjörð Bjarmason <avar@cpan.org>
++    Ã†var ArnfjÃ¶rÃ° Bjarmason <avar@cpan.org>
+ 
+ LICENSE
+-    Copyright 2007-2010 Ævar Arnfjörð Bjarmason.
++    Copyright 2007-2010 Ã†var ArnfjÃ¶rÃ° Bjarmason.
+ 
+     This program is free software; you can redistribute it and/or modify it
+     under the same terms as Perl itself.

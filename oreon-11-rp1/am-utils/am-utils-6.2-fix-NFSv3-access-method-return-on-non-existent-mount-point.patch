@@ -1,0 +1,32 @@
+am-utils-6.2 - fix NFSv3 access method return on non-existent mount point
+
+From: Ian Kent <raven@themaw.net>
+
+When the NFS v3 access method is called and there is no mount point
+corresponding to the path ESTALE needs to be returned the kernel NFS
+client so an NFS lookup will be done and the mount point re-mounted.
+
+If there is no map entry to mount the NFS v3 lookup method can then
+return the failure.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ amd/nfs_subr.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/amd/nfs_subr.c b/amd/nfs_subr.c
+index ef07a4a..85cf98c 100644
+--- a/amd/nfs_subr.c
++++ b/amd/nfs_subr.c
+@@ -1239,9 +1239,9 @@ am_nfs3_access_3_svc(am_ACCESS3args *argp, struct svc_req *rqstp)
+   if (!mp) {
+     post_op_obj = &result.res_u.fail.obj_attributes;
+     post_op_obj->attributes_follow = 0;
+-    result.status = nfs_error(ENOENT);
++    result.status = nfs_error(ESTALE);
+     if (amuDebug(D_TRACE))
+-      plog(XLOG_DEBUG, "access_3: ENOENT");
++      plog(XLOG_DEBUG, "access_3: ESTALE");
+   } else {
+     nfsfattr *fattr = &mp->am_fattr;
+     am_fattr3 *fattr3;

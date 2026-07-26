@@ -1,0 +1,35 @@
+From fd59d8b9bf05f4b0e7b681623156b99d41a8f6a7 Mon Sep 17 00:00:00 2001
+From: Ryan Pavlik <ryan.pavlik@collabora.com>
+Date: Wed, 5 May 2021 14:38:23 -0500
+Subject: [PATCH] Disambiguate the type of atomic_fetch_xxx
+
+---
+ src/percetto.cc | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/src/percetto.cc b/src/percetto.cc
+index ed092f3..39237b0 100644
+--- a/src/percetto.cc
++++ b/src/percetto.cc
+@@ -283,8 +283,9 @@ class PercettoDataSource
+                 std::end(s_percetto.categories[i]->ext->strings),
+                 std::begin(tags));
+       if (IsCategoryEnabled(s_percetto.categories[i]->ext->name, tags, config)) {
+-        std::atomic_fetch_or(&s_percetto.categories[i]->sessions,
+-                             1ul << args.internal_instance_index);
++        std::atomic_fetch_or<std::uint_fast32_t>(
++            &s_percetto.categories[i]->sessions,
++            1ul << args.internal_instance_index);
+       }
+     }
+     UpdateGroupCategories();
+@@ -295,7 +296,8 @@ class PercettoDataSource
+   void OnStop(const DataSourceBase::StopArgs& args) override {
+     int count = s_percetto.category_count.load(std::memory_order_acquire);
+     for (int i = 0; i < count; i++) {
+-      std::atomic_fetch_and(&s_percetto.categories[i]->sessions,
++      std::atomic_fetch_and<std::uint_fast32_t>(
++          &s_percetto.categories[i]->sessions,
+           ~(1ul << args.internal_instance_index));
+     }
+     UpdateGroupCategories();

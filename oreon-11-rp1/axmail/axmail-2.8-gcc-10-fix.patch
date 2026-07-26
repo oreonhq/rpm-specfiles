@@ -1,0 +1,10 @@
+diff --git a/utils.h b/utils.h
+index 183113c..69380a5 100644
+--- a/utils.h
++++ b/utils.h
+@@ -12,4 +12,4 @@ extern int anycntrls(char *s1);
+ extern void panic(const char *fmt, ...);
+ extern void syserr(const char *fmt, ...);
+ /* n1uro */
+-char callsign[20];
++extern char callsign[20];

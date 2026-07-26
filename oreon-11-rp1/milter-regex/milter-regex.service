@@ -1,0 +1,13 @@
+[Unit]
+Description = Regular expression based mail filter
+After = network.target
+Before = postfix.service sendmail.service
+
+[Service]
+Type = forking
+Environment = OPTIONS=
+EnvironmentFile = -/etc/sysconfig/milter-regex
+ExecStart = /usr/sbin/milter-regex $OPTIONS
+
+[Install]
+WantedBy = multi-user.target

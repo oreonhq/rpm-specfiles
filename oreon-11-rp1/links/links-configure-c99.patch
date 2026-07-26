@@ -1,0 +1,135 @@
+Most of the issues are historic problems in autoconf 2.13, but the
+memrchr change is package-specific and needs to be upstreamed.
+
+Furthermore, upstream still seems to be using autoconf 2.13 for
+new releases, so until they switch, we'll have to keep patching this
+downstream.
+
+diff --git a/configure b/configure
+index 477d84bfd3092e41..3562cc6a3d9a09b0 100755
+--- a/configure
++++ b/configure
+@@ -995,7 +995,7 @@ cat > conftest.$ac_ext << EOF
+ #line 998 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:1003: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+@@ -1258,8 +1258,8 @@ else
+ #define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
+ #define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
+ int main () { int i; for (i = 0; i < 256; i++)
+-if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
+-exit (0); }
++if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) return 2;
++return 0; }
+ 
+ EOF
+ if { (eval echo configure:1268: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -2044,7 +2044,7 @@ for ac_kw in inline __inline__ __inline; do
+ #include "confdefs.h"
+ 
+ int main() {
+-} $ac_kw foo() {
++} $ac_kw int foo() {
+ ; return 0; }
+ EOF
+ if { (eval echo configure:2053: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+@@ -2311,12 +2311,12 @@ else
+ #include "confdefs.h"
+ #include <stdio.h>
+ #include <sys/types.h>
+-main()
++int main(void)
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(unsigned short));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:2325: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -2351,12 +2351,12 @@ else
+ #include "confdefs.h"
+ #include <stdio.h>
+ #include <sys/types.h>
+-main()
++int main(void)
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(unsigned));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:2365: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -2391,12 +2391,12 @@ else
+ #include "confdefs.h"
+ #include <stdio.h>
+ #include <sys/types.h>
+-main()
++int main(void)
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(unsigned long));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:2405: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -2432,12 +2432,12 @@ else
+ #include "confdefs.h"
+ #include <stdio.h>
+ #include <sys/types.h>
+-main()
++int main(void)
+ {
+   FILE *f=fopen("conftestval", "w");
+-  if (!f) exit(1);
++  if (!f) return 1;
+   fprintf(f, "%d\n", sizeof(unsigned long long));
+-  exit(0);
++  return 0;
+ }
+ EOF
+ if { (eval echo configure:2446: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+@@ -4033,6 +4033,7 @@ else
+   cat > conftest.$ac_ext <<EOF
+ #line 4037 "configure"
+ #include "confdefs.h"
++#define _GNU_SOURCE
+ #include <string.h>
+ int main() {
+ char * volatile str = ""; volatile int l = 1; return !!memrchr(str, 0, l);
+@@ -8933,6 +8934,8 @@ cat > conftest.$ac_ext <<EOF
+ #line 8932 "configure"
+ #include "confdefs.h"
+ 
++char ${x_direct_test_function}(void);
++
+ int main() {
+ ${x_direct_test_function}()
+ ; return 0; }
+diff --git a/configure.in b/configure.in
+index 3475e7f9b87d33bd..8791324cd9ec0a9a 100644
+--- a/configure.in
++++ b/configure.in
+@@ -406,7 +406,8 @@ fi
+ 
+ AC_HAVE_FUNCS(memrchr)
+ AC_CACHE_CHECK([for memrchr], ac_cv_have_memrchr,
+-	AC_TRY_LINK([#include <string.h>], [char * volatile str = ""; volatile int l = 1; return !!memrchr(str, 0, l);], ac_cv_have_memrchr=yes, ac_cv_have_memrchr=no)
++	AC_TRY_LINK([#define _GNU_SOURCE
++#include <string.h>], [char * volatile str = ""; volatile int l = 1; return !!memrchr(str, 0, l);], ac_cv_have_memrchr=yes, ac_cv_have_memrchr=no)
+ )
+ if test "$ac_cv_have_memrchr" = yes; then
+ 	AC_DEFINE(HAVE_MEMRCHR)

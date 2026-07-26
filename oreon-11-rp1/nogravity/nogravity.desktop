@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=NoGravity
+Comment=Space shooter in 3D
+Exec=nogravity
+Icon=nogravity
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Game;ActionGame;
+Keywords=Game;Arcade;Space;3D;

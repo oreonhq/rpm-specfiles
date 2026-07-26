@@ -1,0 +1,171 @@
+From 6fd84ff6a952ab8a35e6e701ddac23a4c39d9fae Mon Sep 17 00:00:00 2001
+From: Dongxu Li <dongxuli2011@gmail.com>
+Date: Sun, 28 May 2023 05:09:16 -0400
+Subject: [PATCH] drw_entities: coding style: initialize class members
+
+---
+ libraries/libdxfrw/src/drw_base.h     | 29 ++++++++----------
+ libraries/libdxfrw/src/drw_entities.h | 43 +++++++++++----------------
+ 2 files changed, 30 insertions(+), 42 deletions(-)
+
+diff --git a/libraries/libdxfrw/src/drw_base.h b/libraries/libdxfrw/src/drw_base.h
+index 474adcfbb9..c0c52e9760 100644
+--- a/src/drw_base.h
++++ b/src/drw_base.h
+@@ -147,7 +147,6 @@ class DebugPrinter {
+     virtual void printB(int i){(void)i;}
+     virtual void printHL(int c, int s, int h){(void)c;(void)s;(void)h;}
+     virtual void printPT(double x, double y, double z){(void)x;(void)y;(void)z;}
+-    DebugPrinter()=default;
+     virtual ~DebugPrinter()=default;
+ };
+ 
+@@ -214,9 +213,12 @@ class DRW_Coord {
+ 
+ /*!< convert to unitary vector */
+     void unitize(){
+-        double dist;
+-        dist = hypot(hypot(x, y), z);
+-        if (dist > 0.0) {
++#if __cplusplus < 201703
++        double dist = std::hypot(std::hypot(x, y), z);
++#else
++        double dist = std::hypot(x, y, z);
++#endif
++        if (std::isnormal(dist)) {
+             x= x/dist;
+             y= y/dist;
+             z= z/dist;
+@@ -284,9 +286,6 @@ class DRW_Variant {
+             content.s = &sdata;
+     }
+ 
+-    ~DRW_Variant() {
+-    }
+-
+     void addString(int c, UTF8STRING s) {vType = STRING; sdata = s; content.s = &sdata; vCode=c;}
+     void addInt(int c, int i) {vType = INTEGER; content.i = i; vCode=c;}
+     void addDouble(int c, double d) {vType = DOUBLE; content.d = d; vCode=c;}
+@@ -317,8 +316,8 @@ class DRW_Variant {
+ public:
+     DRW_VarContent content;
+ private:
+-    enum TYPE vType;
+-    int vCode;            /*!< dxf code of this value*/
++    enum TYPE vType = INVALID;
++    int vCode = 0;            /*!< dxf code of this value*/
+ 
+ };
+ 
+@@ -327,14 +326,10 @@ class DRW_Variant {
+ *  Class to handle dwg handles
+ *  @author Rallaz
+ */
+-class dwgHandle{
+-public:
+-    dwgHandle(): code(0), size(0), ref(0){}
+-
+-    ~dwgHandle(){}
+-    duint8 code;
+-    duint8 size;
+-    duint32 ref;
++struct dwgHandle{
++    duint8 code = 0;
++    duint8 size = 0;
++    duint32 ref = 0;
+ };
+ 
+ //! Class to convert between line width and integer
+diff --git a/libraries/libdxfrw/src/drw_entities.h b/libraries/libdxfrw/src/drw_entities.h
+index 2af14a3bd5..d4296b65a5 100644
+--- a/src/drw_entities.h
++++ b/src/drw_entities.h
+@@ -168,8 +168,8 @@ class DRW_Entity {
+ 
+ 	duint8 xDictFlag = 0;
+ 	dint32 numReactors = 0; //
+-    duint32 objSize;  //RL 32bits object data size in bits
+-    dint16 oType;
++    duint32 objSize = 0;  //RL 32bits object data size in bits
++    dint16 oType = 0;
+ 
+ private:
+ 	void init(DRW_Entity const& rhs);
+@@ -189,20 +189,18 @@ class DRW_Point : public DRW_Entity {
+ public:
+     DRW_Point() {
+         eType = DRW::POINT;
+-        basePoint.z = extPoint.x = extPoint.y = 0;
+         extPoint.z = 1;
+-        thickness = 0;
+     }
+ 
+-    virtual void applyExtrusion() override {}
++    void applyExtrusion() override {}
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    virtual bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+     DRW_Coord basePoint;      /*!<  base point, code 10, 20 & 30 */
+-    double thickness;         /*!< thickness, code 39 */
++    double thickness = 0.;         /*!< thickness, code 39 */
+     DRW_Coord extPoint;       /*!<  Dir extrusion normal vector, code 210, 220 & 230 */
+     // TNick: we're not handling code 50 - Angle of the X axis for
+     // the UCS in effect when the point was drawn
+@@ -223,7 +221,7 @@ class DRW_Line : public DRW_Point {
+ 
+ protected:
+     bool parseCode(int code, dxfReader *reader) override;
+-    virtual bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
++    bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0) override;
+ 
+ public:
+     DRW_Coord secPoint;        /*!< second point, code 11, 21 & 31 */
+@@ -687,14 +685,9 @@ class DRW_Vertex : public DRW_Point {
+ public:
+     DRW_Vertex() {
+         eType = DRW::VERTEX;
+-        stawidth = endwidth = bulge = 0;
+-        vindex1 = vindex2 = vindex3 = vindex4 = 0;
+-        flags = identifier = 0;
+     }
+     DRW_Vertex(double sx, double sy, double sz, double b) {
+-        stawidth = endwidth = 0;
+-        vindex1 = vindex2 = vindex3 = vindex4 = 0;
+-        flags = identifier = 0;
++        eType = DRW::VERTEX;
+         basePoint.x = sx;
+         basePoint.y =sy;
+         basePoint.z =sz;
+@@ -707,17 +700,17 @@ class DRW_Vertex : public DRW_Point {
+     bool parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs=0, double el=0);
+ 
+ public:
+-    double stawidth;          /*!< Start width, code 40 */
+-    double endwidth;          /*!< End width, code 41 */
+-    double bulge;             /*!< bulge, code 42 */
+-
+-    int flags;                 /*!< vertex flag, code 70, default 0 */
+-    double tgdir;           /*!< curve fit tangent direction, code 50 */
+-    int vindex1;             /*!< polyface mesh vertex index, code 71, default 0 */
+-    int vindex2;             /*!< polyface mesh vertex index, code 72, default 0 */
+-    int vindex3;             /*!< polyface mesh vertex index, code 73, default 0 */
+-    int vindex4;             /*!< polyface mesh vertex index, code 74, default 0 */
+-    int identifier;           /*!< vertex identifier, code 91, default 0 */
++    double stawidth = 0.;          /*!< Start width, code 40 */
++    double endwidth = 0.;          /*!< End width, code 41 */
++    double bulge = 0.;             /*!< bulge, code 42 */
++
++    int flags = 0;                 /*!< vertex flag, code 70, default 0 */
++    double tgdir = 0.;           /*!< curve fit tangent direction, code 50 */
++    int vindex1 = 0;             /*!< polyface mesh vertex index, code 71, default 0 */
++    int vindex2 = 0;             /*!< polyface mesh vertex index, code 72, default 0 */
++    int vindex3 = 0;             /*!< polyface mesh vertex index, code 73, default 0 */
++    int vindex4 = 0;             /*!< polyface mesh vertex index, code 74, default 0 */
++    int identifier = 0;           /*!< vertex identifier, code 91, default 0 */
+ };
+ 
+ //! Class to handle polyline entity

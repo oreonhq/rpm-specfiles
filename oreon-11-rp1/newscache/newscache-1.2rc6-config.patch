@@ -1,0 +1,177 @@
+--- newscache.conf	2005-09-19 20:43:51.000000000 +0400
++++ newscache.conf.OK	2005-09-19 20:43:02.000000000 +0400
+@@ -67,7 +67,7 @@
+ Groupname news
+ 
+ # Put in here the local newscache administrator
+-Admin tom@infosys.tuwien.ac.at
++Admin root@localhost
+ 
+ ################################################################
+ ## Client-access configuration 
+@@ -128,46 +128,55 @@
+     Authentication unix::::debug
+     # all authenticated clients are able to use the xdebug command
+   }
+-  Client .tuwien.ac.at {
+-    allow read post
+-    # list all, except for alt.* newsgroups, allow users to 
+-    # read at.* and to post to at.*
+-    List *,!alt.*
+-    Read at.*
+-    PostTo at.*
+-    # allow users to gain additional privileges by
+-    # authenticating based on a password file
+-    # the format of the file is username:password:read:postto
+-    Authentication file:/usr/local/etc/tuwien.pass
+-  }
+-  Client 192.168.0.0/255.255.0.0 {
+-    allow read post
+-    # deny access to all newsgroups
+-    List !*
+-    Read !*
+-    PostTo !*
+-    # allow users to gain additional privileges by
+-    # authenticating using standard passwd semantics
+-    # allow to read * and to post to at.* after successful
+-    # authentication
+-    Authentication unix:*:at.*
+-  }
+-  Client 192.169.0.0/255.255.0.0 {
+-    allow read
+-    # deny access to all newsgroups
+-    List at.*
+-    Read at.*
+-    PostTo !*
+-    Authentication unix:*:*:*:debug,post
+-    # allow users to gain additional privileges by
+-    # authenticating using standard passwd semantics
+-    # allow to read * and to post to * and can use the xdebug 
+-    # command after successful authentication. 
+-    # Unauthenticated clients can only read from at.* groups.
+-  }
+-  Client .aol.com {
+-    allow none
+-  }
++#  Client .mydomain.com {
++#    allow
++#    List
++#    Read
++#    PostTo
++#    Authentication pam:*:*:*:read,post
++#    # PAMServicename newscache
++#  }
++
++#  Client .tuwien.ac.at {
++#    allow read post
++#    # list all, except for alt.* newsgroups, allow users to 
++#    # read at.* and to post to at.*
++#    List *,!alt.*
++#    Read at.*
++#    PostTo at.*
++#    # allow users to gain additional privileges by
++#    # authenticating based on a password file
++#    # the format of the file is username:password:read:postto
++#    Authentication file:/usr/local/etc/tuwien.pass
++#  }
++#  Client 192.168.0.0/255.255.0.0 {
++#    allow read post
++#    # deny access to all newsgroups
++#    List !*
++#    Read !*
++#    PostTo !*
++#    # allow users to gain additional privileges by
++#    # authenticating using standard passwd semantics
++#    # allow to read * and to post to at.* after successful
++#    # authentication
++#    Authentication unix:*:at.*
++#  }
++#  Client 192.169.0.0/255.255.0.0 {
++#    allow read
++#    # deny access to all newsgroups
++#    List at.*
++#    Read at.*
++#    PostTo !*
++#    Authentication unix:*:*:*:debug,post
++#    # allow users to gain additional privileges by
++#    # authenticating using standard passwd semantics
++#    # allow to read * and to post to * and can use the xdebug 
++#    # command after successful authentication. 
++#    # Unauthenticated clients can only read from at.* groups.
++#  }
++#  Client .aol.com {
++#    allow none
++#  }
+   Default {
+     allow none
+   }
+@@ -206,29 +215,36 @@
+ #   To switch off, prepend the command with not-
+ #   Support commands: listgroup, over
+ NewsServerList {
+-  Server news.tuwien.ac.at nntp {
+-    Retries 3
++  Server news.example.com nntp {
+     Read *
+     PostTo *
++    Retries 3
+     GroupTimeout 150
+-    User joe
+-    Password secret
+-    BindFrom 192.168.100.1
+     Options cached 
+-    Commands not-over
+-  }
+-  Server news.wu-wien.ac.at nntp {
+-    Retries 1
+-    Read at.wu-wien.*
+-    PostTo .none.
+-    GroupTimeout 300
+-    BindFrom somehost.tuwien.ac.at
+-    Options offline not-setpostflag
+-  }
+-  NoServer {
+-    Read au.*,z-netz.*,maus.*,fido*
+-    PostTo au.*
+   }
++#  Server news.tuwien.ac.at nntp {
++#    Retries 3
++#    Read *
++#    PostTo *
++#    GroupTimeout 150
++#    User joe
++#    Password secret
++#    BindFrom 192.168.100.1
++#    Options cached 
++#    Commands not-over
++#  }
++#  Server news.wu-wien.ac.at nntp {
++#    Retries 1
++#    Read at.wu-wien.*
++#    PostTo .none.
++#    GroupTimeout 300
++#    BindFrom somehost.tuwien.ac.at
++#    Options offline not-setpostflag
++#  }
++#  NoServer {
++#    Read au.*,z-netz.*,maus.*,fido*
++#    PostTo au.*
++#  }
+ }
+ 
+ ################################################################
+@@ -265,7 +281,7 @@
+ # All the log files go here, if syslogd is not being used. This
+ # depends on how NewsCache has been configured. By default,
+ # NewsCache uses syslogd.
+-LogDirectory /home/services/newscache/log
++#LogDirectory /var/log
+ 
+ # Log Style
+ # All combination of these options are valid:
+@@ -284,4 +300,4 @@
+ # Each newsgroup listed in this file will be prefetched, 
+ # whenever one of its articles is read by a user or whenever 
+ # updatenews is executed.
+-PrefetchFile /home/services/newscache/etc/prefetch
++#PrefetchFile /etc/prefetch

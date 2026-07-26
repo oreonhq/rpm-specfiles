@@ -1,0 +1,36 @@
+diff -Burp flex-2.5.4/flex.skl flex-2.5.4-new/flex.skl
+--- flex-2.5.4/flex.skl	2006-01-13 17:00:08.000000000 +0100
++++ flex-2.5.4-new/flex.skl	2006-01-13 17:02:17.000000000 +0100
+@@ -1536,3 +1536,13 @@ int main()
+ 	return 0;
+ 	}
+ #endif
++
++/* Some people want warning-free code, and under certain #define
++   conditions, gcc will warn for unusedness of some functions.  This
++   function is provided merely to silent these warnings.  It's not
++   static itself, so it will clutter exports, but it has at least
++   urandom name so that clashes won't occur.*/
++void _yy_dummy_uses_of_static_functions_b2f4_517d_02ff_b30c_3e5a_47d7_aaa3_3b5d_()
++{
++  yy_flex_realloc ((void*)0, 0);
++}
+diff -Burp flex-2.5.4/skel.c flex-2.5.4-new/skel.c
+--- flex-2.5.4/skel.c	2006-01-13 17:00:08.000000000 +0100
++++ flex-2.5.4-new/skel.c	2006-01-13 17:02:28.000000000 +0100
+@@ -1541,5 +1541,15 @@ const char *skel[] = {
+   "	return 0;",
+   "	}",
+   "#endif",
++  "",
++  "/* Some people want warning-free code, and under certain #define",
++  "   conditions, gcc will warn for unusedness of some functions.  This",
++  "   function is provided merely to silent these warnings.  It's not",
++  "   static itself, so it will clutter exports, but it has at least",
++  "   urandom name so that clashes won't occur.*/",
++  "void _yy_dummy_uses_of_static_functions_b2f4_517d_02ff_b30c_3e5a_47d7_aaa3_3b5d_()",
++  "{",
++  "  yy_flex_realloc ((void*)0, 0);",
++  "}",
+   0
+ };

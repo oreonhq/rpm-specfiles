@@ -1,0 +1,21 @@
+Using the bcm43xx-fwcutter tool to install Broadcom firmware in Fedora.
+-----------------------------------------------------------------------
+
+To use the bcm43xx driver which is part of the Fedora kernel, you need
+to extract the firmware which is part of the official MacOS, Windows,
+or Linux drivers.
+
+If your Fedora installation is dual-booting with MacOS or Windows, then
+you probably already have a suitable driver available. Otherwise, the
+README file contains a number of links from which you can download 
+drivers. It shouldn't matter which one you use -- the kernel's bcm43xx
+driver ought to work with all of them.
+
+Having obtained the file from which you wish to extract the firmware,
+run this command as root. Replace '<DRIVERFILE>' with the actual name
+of the file, of course:
+
+   bcm43xx-fwcutter -w /lib/firmware <DRIVERFILE>
+
+This will save the various firmware files into the /lib/firmware
+directory, from where the kernel can load them when necessary.

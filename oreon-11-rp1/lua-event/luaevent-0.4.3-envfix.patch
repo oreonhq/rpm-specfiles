@@ -1,0 +1,62 @@
+diff -up luaevent-0.4.3/src/buffer_event.c.envfix luaevent-0.4.3/src/buffer_event.c
+--- luaevent-0.4.3/src/buffer_event.c.envfix	2015-01-15 14:49:36.518753869 -0500
++++ luaevent-0.4.3/src/buffer_event.c	2015-01-15 14:51:15.407216159 -0500
+@@ -40,7 +40,11 @@ int is_buffer_event(lua_State* L, int id
+ static void handle_callback(le_bufferevent* le_ev, short what, int callbackIndex) {
+ 	lua_State* L = le_ev->base->loop_L;
+ 	le_weak_get(L, le_ev);
++#if LUA_VERSION_NUM > 501
++	lua_getuservalue(L, -1);
++#else
+ 	lua_getfenv(L, -1);
++#endif
+ 	lua_rawgeti(L, -1, callbackIndex);
+ 	lua_remove(L, -2);
+ 	lua_pushvalue(L, -2);
+@@ -97,7 +101,11 @@ static int buffer_event_push(lua_State*
+ 	lua_rawseti(L, -2, READ_BUFFER_LOCATION);
+ 	event_buffer_push(L, ev->ev->output);
+ 	lua_rawseti(L, -2, WRITE_BUFFER_LOCATION);
++#if LUA_VERSION_NUM > 501
++	lua_setuservalue(L, -2);
++#else
+ 	lua_setfenv(L, -2);
++#endif
+ 	ev->base = base;
+ 	return 1;
+ }
+@@ -113,7 +121,11 @@ static int buffer_event_gc(lua_State* L)
+ 		ev->ev = NULL;
+ 		/* Also clear out the associated input/output event_buffers
+ 		 * since they would have already been freed.. */
++#if LUA_VERSION_NUM > 501
++		lua_getuservalue(L, -1);
++#else
+ 		lua_getfenv(L, 1);
++#endif
+ 		lua_rawgeti(L, -1, READ_BUFFER_LOCATION);
+ 		lua_rawgeti(L, -2, WRITE_BUFFER_LOCATION);
+ 		read = event_buffer_check(L, -2);
+@@ -133,14 +145,22 @@ static int buffer_event_gc(lua_State* L)
+ 
+ static int buffer_event_get_read(lua_State* L) {
+ 	(void)buffer_event_get(L, 1);
++#if LUA_VERSION_NUM > 501
++	lua_getuservalue(L, -1);
++#else
+ 	lua_getfenv(L, 1);
++#endif
+ 	lua_rawgeti(L, -1, READ_BUFFER_LOCATION);
+ 	return 1;
+ }
+ 
+ static int buffer_event_get_write(lua_State* L) {
+ 	(void)buffer_event_get(L, 1);
++#if LUA_VERSION_NUM > 501
++	lua_getuservalue(L, -1);
++#else
+ 	lua_getfenv(L, 1);
++#endif
+ 	lua_rawgeti(L, -1, WRITE_BUFFER_LOCATION);
+ 	return 1;
+ }

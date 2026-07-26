@@ -1,0 +1,38 @@
+From fccfe682f9e246ce4a222ae8bc553a9034693ad0 Mon Sep 17 00:00:00 2001
+From: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+Date: Sun, 31 Mar 2024 20:54:28 -0400
+Subject: [PATCH 1/2] Skip tests that require module mode
+
+Signed-off-by: Elliott Sales de Andrade <quantum.analyst@gmail.com>
+---
+ gopls/internal/cache/session_test.go     | 1 +
+ gopls/internal/licenses/licenses_test.go | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/gopls/internal/cache/session_test.go b/gopls/internal/cache/session_test.go
+index 1b7472af6..e15ad30bd 100644
+--- a/gopls/internal/cache/session_test.go
++++ b/gopls/internal/cache/session_test.go
+@@ -19,6 +19,7 @@ import (
+ )
+ 
+ func TestZeroConfigAlgorithm(t *testing.T) {
++	t.Skip("Needs GO111MODULE=on")
+ 	testenv.NeedsExec(t) // executes the Go command
+ 	t.Setenv("GOPACKAGESDRIVER", "off")
+ 
+diff --git a/gopls/internal/licenses/licenses_test.go b/gopls/internal/licenses/licenses_test.go
+index c31b4e9e6..81ff4c6a7 100644
+--- a/gopls/internal/licenses/licenses_test.go
++++ b/gopls/internal/licenses/licenses_test.go
+@@ -13,6 +13,7 @@ import (
+ )
+ 
+ func TestLicenses(t *testing.T) {
++	t.Skip("Needs GO111MODULE=on")
+ 	if runtime.GOOS != "linux" && runtime.GOOS != "darwin" {
+ 		t.Skip("generating licenses only works on Unixes")
+ 	}
+-- 
+2.49.0
+

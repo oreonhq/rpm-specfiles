@@ -1,0 +1,12 @@
+diff -up ./ccd.pc.in.pkgconfig ./ccd.pc.in
+--- ./ccd.pc.in.pkgconfig	2020-04-18 13:59:50.548416479 -0400
++++ ./ccd.pc.in	2020-04-18 14:00:11.487751430 -0400
+@@ -3,7 +3,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/ccd
+ 
+ Name: @PROJECT_NAME@
+ Description: @CCD_PKGCONFIG_DESCRIPTION@

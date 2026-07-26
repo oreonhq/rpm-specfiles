@@ -1,0 +1,1080 @@
+From ca162aba2b52e50b29ef107eb60f54ecb9f0442d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Terje=20R=C3=B8sten?= <terjeros@gmail.com>
+Date: Mon, 14 Oct 2024 20:25:28 +0200
+Subject: [PATCH 2/3] 2to3 pass
+
+---
+ .../apache_status/apache_status.py            | 38 +++++++++----------
+ gmond/python_modules/cpu/cpu_stats.py         | 12 +++---
+ gmond/python_modules/db/DBUtil.py             | 13 ++++---
+ gmond/python_modules/db/mysql.py              | 11 +++---
+ gmond/python_modules/db/redis.py              |  6 +--
+ gmond/python_modules/db/riak.py               | 18 ++++-----
+ gmond/python_modules/disk/diskfree.py         |  2 +-
+ gmond/python_modules/disk/diskstat.py         |  4 +-
+ gmond/python_modules/disk/multidisk.py        |  4 +-
+ gmond/python_modules/example/example.py       |  6 +--
+ gmond/python_modules/example/spfexample.py    |  4 +-
+ gmond/python_modules/memcached/memcached.py   | 20 +++++-----
+ gmond/python_modules/memory/mem_stats.py      |  4 +-
+ .../python_modules/network/multi_interface.py | 12 +++---
+ gmond/python_modules/network/netstats.py      | 16 ++++----
+ gmond/python_modules/network/tcpconn.py       |  8 ++--
+ gmond/python_modules/network/traffic1.py      | 18 ++++-----
+ gmond/python_modules/nfs/nfsstats.py          |  6 +--
+ gmond/python_modules/process/procstat.py      | 34 ++++++++---------
+ gmond/python_modules/ssl/entropy.py           |  2 +-
+ gmond/python_modules/varnish/varnish.py       | 12 +++---
+ gmond/python_modules/vm_stats/vm_stats.py     | 12 +++---
+ gmond/python_modules/xen/xenstats.py          |  2 +-
+ 23 files changed, 133 insertions(+), 131 deletions(-)
+
+diff --git a/gmond/python_modules/apache_status/apache_status.py b/gmond/python_modules/apache_status/apache_status.py
+index 580e893..fba14ee 100755
+--- a/gmond/python_modules/apache_status/apache_status.py
++++ b/gmond/python_modules/apache_status/apache_status.py
+@@ -4,7 +4,7 @@
+ import os
+ import threading
+ import time
+-import urllib2
++import urllib.request, urllib.error, urllib.parse
+ import traceback
+ import re
+ import copy
+@@ -44,7 +44,7 @@ Scoreboard = {
+     NAME_PREFIX + 'idle'            : {'key': 'I', 'desc': 'Idle cleanup of worker'},
+     NAME_PREFIX + 'open_slot'       : {'key': '.', 'desc': 'Open slot with no current process'},
+     }
+-Scoreboard_bykey = dict([(v["key"], k) for (k, v) in Scoreboard.iteritems()])
++Scoreboard_bykey = dict([(v["key"], k) for (k, v) in Scoreboard.items()])
+ 
+ SSL_REGEX = re.compile('^(cache type:) (.*)(<b>)(?P<shared_mem>[0-9]+)(</b> bytes, current sessions: <b>)(?P<current_sessions>[0-9]+)(</b><br>subcaches: <b>)(?P<num_subcaches>[0-9]+)(</b>, indexes per subcache: <b>)(?P<indexes_per_subcache>[0-9]+)(</b><br>)(.*)(<br>index usage: <b>)(?P<index_usage>[0-9]+)(%</b>, cache usage: <b>)(?P<cache_usage>[0-9]+)(%</b><br>total sessions stored since starting: <b>)(?P<sessions_stored>[0-9]+)(</b><br>total sessions expired since starting: <b>)(?P<sessions_expired>[0-9]+)(</b><br>total \(pre-expiry\) sessions scrolled out of the cache: <b>)(?P<sessions_scrolled_outof_cache>[0-9]+)(</b><br>total retrieves since starting: <b>)(?P<retrieves_hit>[0-9]+)(</b> hit, <b>)(?P<retrieves_miss>[0-9]+)(</b> miss<br>total removes since starting: <b>)(?P<removes_hit>[0-9]+)(</b> hit, <b>)(?P<removes_miss>[0-9]+)')
+ # Good for Apache 2.2
+@@ -67,17 +67,17 @@ def get_metrics():
+ 
+     if (time.time() - METRICS['time']) > METRICS_CACHE_MAX:
+ 
+-        metrics = dict([(k, 0) for k in Scoreboard.keys()])
++        metrics = dict([(k, 0) for k in list(Scoreboard.keys())])
+ 
+         # This is the short server-status. Lacks SSL metrics
+         try:
+-            req = urllib2.Request(SERVER_STATUS_URL + "?auto")
++            req = urllib.request.Request(SERVER_STATUS_URL + "?auto")
+ 
+             # Download the status file
+             if sys.version_info < (2, 6):
+-                res = urllib2.urlopen(req)
++                res = urllib.request.urlopen(req)
+             else:
+-                res = urllib2.urlopen(req, timeout=2)
++                res = urllib.request.urlopen(req, timeout=2)
+ 
+             for line in res:
+                 split_line = line.rstrip().split(": ")
+@@ -96,20 +96,20 @@ def get_metrics():
+                         metric_name = long_metric_name
+                     metrics[metric_name] = split_line[1]
+ 
+-        except urllib2.URLError:
++        except urllib.error.URLError:
+             traceback.print_exc()
+ 
+         # If we are collecting SSL metrics we'll do
+         if COLLECT_SSL:
+ 
+             try:
+-                req2 = urllib2.Request(SERVER_STATUS_URL)
++                req2 = urllib.request.Request(SERVER_STATUS_URL)
+ 
+                 # Download the status file
+                 if sys.version_info < (2, 6):
+-                    res = urllib2.urlopen(req2)
++                    res = urllib.request.urlopen(req2)
+                 else:
+-                    res = urllib2.urlopen(req2, timeout=2)
++                    res = urllib.request.urlopen(req2, timeout=2)
+ 
+                 for line in res:
+                     regMatch = SSL_REGEX.match(line)
+@@ -119,7 +119,7 @@ def get_metrics():
+                             #print SSL_NAME_PREFIX + key + "=" + linebits[key]
+                             metrics[SSL_NAME_PREFIX + key] = linebits[key]
+ 
+-            except urllib2.URLError:
++            except urllib.error.URLError:
+                 traceback.print_exc()
+ 
+         LAST_METRICS = copy.deepcopy(METRICS)
+@@ -138,7 +138,7 @@ def get_value(name):
+ 
+     try:
+         result = metrics['data'][name]
+-    except StandardError:
++    except Exception:
+         result = 0
+ 
+     return result
+@@ -159,7 +159,7 @@ def get_delta(name):
+     try:
+         delta = multiplier * (float(curr_metrics['data'][name]) - float(last_metrics['data'][name])) / (curr_metrics['time'] - last_metrics['time'])
+         if delta < 0:
+-            print name + " is less 0"
++            print(name + " is less 0")
+             delta = 0
+     except KeyError:
+         delta = 0.0
+@@ -169,7 +169,7 @@ def get_delta(name):
+ 
+ def create_desc(prop):
+     d = Desc_Skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -177,8 +177,8 @@ def create_desc(prop):
+ def metric_init(params):
+     global descriptors, Desc_Skel, SERVER_STATUS_URL, COLLECT_SSL
+ 
+-    print '[apache_status] Received the following parameters'
+-    print params
++    print('[apache_status] Received the following parameters')
++    print(params)
+ 
+     if "metric_group" not in params:
+         params["metric_group"] = "apache"
+@@ -265,7 +265,7 @@ def metric_init(params):
+                 "description": "Uptime",
+                 }))
+ 
+-    for k, v in Scoreboard.iteritems():
++    for k, v in Scoreboard.items():
+         descriptors.append(create_desc({
+                     "name"        : k,
+                     "call_back"   : get_value,
+@@ -404,9 +404,9 @@ if __name__ == '__main__':
+             for d in descriptors:
+                 v = d['call_back'](d['name'])
+                 if d['name'] == NAME_PREFIX + "rps":
+-                    print 'value for %s is %.4f' % (d['name'], v)
++                    print('value for %s is %.4f' % (d['name'], v))
+                 else:
+-                    print 'value for %s is %s' % (d['name'], v)
++                    print('value for %s is %s' % (d['name'], v))
+             time.sleep(15)
+     except KeyboardInterrupt:
+         os._exit(1)
+diff --git a/gmond/python_modules/cpu/cpu_stats.py b/gmond/python_modules/cpu/cpu_stats.py
+index 5a8ebb8..16d6165 100644
+--- a/gmond/python_modules/cpu/cpu_stats.py
++++ b/gmond/python_modules/cpu/cpu_stats.py
+@@ -75,7 +75,7 @@ def get_value(name):
+ 
+     try:
+         result = metrics['data'][name][0]
+-    except StandardError:
++    except Exception:
+         result = 0
+ 
+     return result
+@@ -97,7 +97,7 @@ def get_delta(name):
+     try:
+         delta = (float(curr_metrics['data'][name][0]) - float(last_metrics['data'][name][0])) / (curr_metrics['time'] - last_metrics['time'])
+         if delta < 0:
+-            print name + " is less 0"
++            print(name + " is less 0")
+             delta = 0
+     except KeyError:
+         delta = 0.0
+@@ -124,7 +124,7 @@ def get_softirq_delta(name):
+     try:
+         delta = (float(curr_metrics['data']['softirq'][index]) - float(last_metrics['data']['softirq'][index])) / (curr_metrics['time'] - last_metrics['time'])
+         if delta < 0:
+-            print name + " is less 0"
++            print(name + " is less 0")
+             delta = 0
+     except KeyError:
+         delta = 0.0
+@@ -134,7 +134,7 @@ def get_softirq_delta(name):
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -279,6 +279,6 @@ if __name__ == '__main__':
+     while True:
+         for d in descriptors:
+             v = d['call_back'](d['name'])
+-            print '%s = %s' % (d['name'], v)
+-        print 'Sleeping 15 seconds'
++            print('%s = %s' % (d['name'], v))
++        print('Sleeping 15 seconds')
+         time.sleep(5)
+diff --git a/gmond/python_modules/db/DBUtil.py b/gmond/python_modules/db/DBUtil.py
+index 2504c24..66f8a78 100644
+--- a/gmond/python_modules/db/DBUtil.py
++++ b/gmond/python_modules/db/DBUtil.py
+@@ -51,7 +51,7 @@ except:
+                 args = tuple()
+             else:
+                 args = self.default_factory,
+-            return type(self), args, None, None, self.items()
++            return type(self), args, None, None, list(self.items())
+         def copy(self):
+             return self.__copy__()
+         def __copy__(self):
+@@ -59,7 +59,7 @@ except:
+         def __deepcopy__(self, memo):
+             import copy
+             return type(self)(self.default_factory,
+-                              copy.deepcopy(self.items()))
++                              copy.deepcopy(list(self.items())))
+         def __repr__(self):
+             return 'defaultdict(%s, %s)' % (self.default_factory,
+                                             dict.__repr__(self))
+@@ -77,7 +77,7 @@ def is_hex(s):
+ def longish(x):
+         if len(x):
+                 try:
+-                        return long(x)
++                        return int(x)
+                 except ValueError:
+                         if(x.endswith(',')):
+                            return longish(x[:-1])
+@@ -92,7 +92,7 @@ def longish(x):
+ def hexlongish(x):
+         if len(x):
+                 try:
+-                        return long(str(x), 16)
++                        return int(str(x), 16)
+                 except ValueError:
+                         return longish(x[:-1])
+         else:
+@@ -101,7 +101,7 @@ def hexlongish(x):
+ def parse_innodb_status(innodb_status_raw, innodb_version="1.0"):
+         def sumof(status):
+                 def new(*idxs):
+-                        return sum(map(lambda x: longish(status[x]), idxs))
++                        return sum([longish(status[x]) for x in idxs])
+                 return new
+ 
+         innodb_status = defaultdict(int)
+@@ -280,5 +280,6 @@ if __name__ == '__main__':
+                 cursor.close()
+ 
+                 conn.close()
+-        except MySQLdb.OperationalError, (errno, errmsg):
++        except MySQLdb.OperationalError as xxx_todo_changeme:
++                (errno, errmsg) = xxx_todo_changeme.args
+                 raise
+diff --git a/gmond/python_modules/db/mysql.py b/gmond/python_modules/db/mysql.py
+index 7b5ab59..065a6cd 100644
+--- a/gmond/python_modules/db/mysql.py
++++ b/gmond/python_modules/db/mysql.py
+@@ -154,7 +154,7 @@ def update_stats(get_innodb=True, get_master=True, get_slave=True):
+             cursor.execute("SHOW SLAVE STATUS")
+             res = cursor.fetchone()
+             if res:
+-                for (k,v) in res.items():
++                for (k,v) in list(res.items()):
+                     slave_status[k.lower()] = v
+             else:
+                 get_slave = False
+@@ -165,7 +165,8 @@ def update_stats(get_innodb=True, get_master=True, get_slave=True):
+         cursor.close()
+ 
+         conn.close()
+-    except MySQLdb.OperationalError, (errno, errmsg):
++    except MySQLdb.OperationalError as xxx_todo_changeme:
++        (errno, errmsg) = xxx_todo_changeme.args
+         logging.error('error updating stats')
+         logging.error(errmsg)
+         return False
+@@ -1097,9 +1098,9 @@ def metric_init(params):
+ 
+     for stats_descriptions in (innodb_stats_descriptions, master_stats_descriptions, misc_stats_descriptions, slave_stats_descriptions):
+         for label in stats_descriptions:
+-            if mysql_stats.has_key(label):
++            if label in mysql_stats:
+                 format = '%u'
+-                if stats_descriptions[label].has_key('value_type'):
++                if 'value_type' in stats_descriptions[label]:
+                     if stats_descriptions[label]['value_type'] == "float":
+                         format = '%f'
+ 
+@@ -1165,7 +1166,7 @@ if __name__ == '__main__':
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+         if not options.quiet:
+-            print ' %s: %s %s [%s]' % (d['name'], v, d['units'], d['description'])
++            print(' %s: %s %s [%s]' % (d['name'], v, d['units'], d['description']))
+ 
+         if options.gmetric:
+             if d['value_type'] == 'uint':
+diff --git a/gmond/python_modules/db/redis.py b/gmond/python_modules/db/redis.py
+index 4e682b7..9101b49 100755
+--- a/gmond/python_modules/db/redis.py
++++ b/gmond/python_modules/db/redis.py
+@@ -83,7 +83,7 @@ def metric_handler(name):
+                           v = cps
+                   #logging.debug("submittincg metric %s is %s" % (n, int(v)))
+                   metric_handler.info[n] = int(v)  # TODO Use value_type.
+-        except Exception, e:
++        except Exception as e:
+             #logging.debug("caught exception %s" % e)
+             pass
+         s.close()
+@@ -121,7 +121,7 @@ def metric_init(params={}):
+         "db0": {"units": "keys"},
+     }
+     metric_handler.descriptors = {}
+-    for name, updates in metrics.iteritems():
++    for name, updates in metrics.items():
+         descriptor = {
+             "name": name,
+             "call_back": metric_handler,
+@@ -135,7 +135,7 @@ def metric_init(params={}):
+         }
+         descriptor.update(updates)
+         metric_handler.descriptors[name] = descriptor
+-    return metric_handler.descriptors.values()
++    return list(metric_handler.descriptors.values())
+ 
+ 
+ def metric_cleanup():
+diff --git a/gmond/python_modules/db/riak.py b/gmond/python_modules/db/riak.py
+index 908b480..499a04f 100755
+--- a/gmond/python_modules/db/riak.py
++++ b/gmond/python_modules/db/riak.py
+@@ -24,7 +24,7 @@ import os
+ import sys
+ import threading
+ import time
+-import urllib2
++import urllib.request, urllib.error, urllib.parse
+ import traceback
+ import json
+ 
+@@ -37,7 +37,7 @@ Debug = False
+ 
+ def dprint(f, *v):
+     if Debug:
+-        print >>sys.stderr, "DEBUG: " + f % v
++        print("DEBUG: " + f % v, file=sys.stderr)
+ 
+ 
+ def floatable(str):
+@@ -84,18 +84,18 @@ class UpdateMetricThread(threading.Thread):
+ 
+     def update_metric(self):
+         try:
+-            req = urllib2.Request(url=self.url)
+-            res = urllib2.urlopen(req)
++            req = urllib.request.Request(url=self.url)
++            res = urllib.request.urlopen(req)
+             stats = res.read()
+             dprint("%s", stats)
+             json_stats = json.loads(stats)
+-            for (key, value) in json_stats.iteritems():
++            for (key, value) in json_stats.items():
+                 dprint("%s = %s", key, value)
+                 if value == 'undefined':
+                     self.metric[self.mp + '_' + key] = 0
+                 else:
+                     self.metric[self.mp + '_' + key] = value
+-        except urllib2.URLError:
++        except urllib.error.URLError:
+             traceback.print_exc()
+         else:
+             res.close()
+@@ -116,7 +116,7 @@ def metric_init(params):
+     if "metrix_prefix" not in params:
+         params["metrix_prefix"] = "riak"
+ 
+-    print params
++    print(params)
+ 
+     # initialize skeleton of descriptors
+     Desc_Skel = {
+@@ -1035,7 +1035,7 @@ def metric_init(params):
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -1057,7 +1057,7 @@ if __name__ == '__main__':
+         while True:
+             for d in descriptors:
+                 v = d['call_back'](d['name'])
+-                print ('value for %s is ' + d['format']) % (d['name'],  v)
++                print(('value for %s is ' + d['format']) % (d['name'],  v))
+             time.sleep(5)
+     except KeyboardInterrupt:
+         time.sleep(0.2)
+diff --git a/gmond/python_modules/disk/diskfree.py b/gmond/python_modules/disk/diskfree.py
+index 70d5d41..8f7442d 100644
+--- a/gmond/python_modules/disk/diskfree.py
++++ b/gmond/python_modules/disk/diskfree.py
+@@ -152,4 +152,4 @@ if __name__ == '__main__':
+     }
+     descriptors = metric_init(PARAMS)
+     for d in descriptors:
+-        print (('%s = %s') % (d['name'], d['format'])) % (d['call_back'](d['name']))
++        print((('%s = %s') % (d['name'], d['format'])) % (d['call_back'](d['name'])))
+diff --git a/gmond/python_modules/disk/diskstat.py b/gmond/python_modules/disk/diskstat.py
+index 4cde607..79962ca 100644
+--- a/gmond/python_modules/disk/diskstat.py
++++ b/gmond/python_modules/disk/diskstat.py
+@@ -532,7 +532,7 @@ if __name__ == '__main__':
+         for d in descriptors:
+             v = d['call_back'](d['name'])
+             if not options.quiet:
+-                print ' %s: %s %s [%s]' % (d['name'], v, d['units'], d['description'])
++                print(' %s: %s %s [%s]' % (d['name'], v, d['units'], d['description']))
+ 
+             if options.gmetric:
+                 if d['value_type'] == 'uint':
+@@ -544,5 +544,5 @@ if __name__ == '__main__':
+                     (options.gmetric_bin, options.gmond_conf, v, d['units'], value_type, d['name'], d['slope'])
+                 os.system(cmd)
+ 
+-        print 'Sleeping 15 seconds'
++        print('Sleeping 15 seconds')
+         time.sleep(15)
+diff --git a/gmond/python_modules/disk/multidisk.py b/gmond/python_modules/disk/multidisk.py
+index 5dff161..b26bf59 100644
+--- a/gmond/python_modules/disk/multidisk.py
++++ b/gmond/python_modules/disk/multidisk.py
+@@ -118,7 +118,7 @@ def metric_init(params):
+             continue
+ 
+         if ganglia.get_debug_msg_level() > 1:
+-            print 'Discovered device %s' % line[1]
++            print('Discovered device %s' % line[1])
+ 
+         descriptors.append(Init_Metric(line, 'disk_total', int(1200),
+             'double', 'GB', 'both', '%.3f',
+@@ -140,4 +140,4 @@ if __name__ == '__main__':
+     metric_init(None)
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+-        print 'value for %s is %f' % (d['name'],  v)
++        print('value for %s is %f' % (d['name'],  v))
+diff --git a/gmond/python_modules/example/example.py b/gmond/python_modules/example/example.py
+index c35d40d..82faa30 100644
+--- a/gmond/python_modules/example/example.py
++++ b/gmond/python_modules/example/example.py
+@@ -54,8 +54,8 @@ def metric_init(params):
+     global Constant_Value
+     random.seed()
+ 
+-    print '[pyexample] Received the following parameters'
+-    print params
++    print('[pyexample] Received the following parameters')
++    print(params)
+ 
+     if 'RandomMax' in params:
+         Random_Max = int(params['RandomMax'])
+@@ -97,4 +97,4 @@ if __name__ == '__main__':
+     metric_init(params)
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+-        print 'value for %s is %u' % (d['name'], v)
++        print('value for %s is %u' % (d['name'], v))
+diff --git a/gmond/python_modules/example/spfexample.py b/gmond/python_modules/example/spfexample.py
+index 0baf97e..31e0af4 100644
+--- a/gmond/python_modules/example/spfexample.py
++++ b/gmond/python_modules/example/spfexample.py
+@@ -133,5 +133,5 @@ if __name__ == '__main__':
+     d = metric_init(params)
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+-        print 'value for %s is %s' % (d['name'], str(v))
+-    print d
++        print('value for %s is %s' % (d['name'], str(v)))
++    print(d)
+diff --git a/gmond/python_modules/memcached/memcached.py b/gmond/python_modules/memcached/memcached.py
+index 7db7616..8bdb57c 100644
+--- a/gmond/python_modules/memcached/memcached.py
++++ b/gmond/python_modules/memcached/memcached.py
+@@ -19,7 +19,7 @@ Debug = False
+ 
+ def dprint(f, *v):
+     if Debug:
+-        print >>sys.stderr, "DEBUG: " + f % v
++        print("DEBUG: " + f % v, file=sys.stderr)
+ 
+ 
+ def floatable(str):
+@@ -86,7 +86,7 @@ class UpdateMetricThread(threading.Thread):
+                     rfd, wfd, xfd = select.select([sock], [], [], self.timeout)
+ 
+                     if not rfd:
+-                        print >>sys.stderr, "ERROR: select timeout"
++                        print("ERROR: select timeout", file=sys.stderr)
+                         break
+ 
+                     for fd in rfd:
+@@ -94,19 +94,19 @@ class UpdateMetricThread(threading.Thread):
+                             try:
+                                 data = fd.recv(8192)
+                                 msg += data
+-                            except (IOError, OSError), e:
++                            except (IOError, OSError) as e:
+                                 if e.errno != errno.EINTR:
+                                     raise
+ 
+                     if msg.find("END"):
+                         break
+-                except select.error, e:
++                except select.error as e:
+                     if e[0] != errno.EINTR:
+                         raise
+ 
+             sock.close()
+-        except socket.error, e:
+-            print >>sys.stderr, "ERROR: %s" % e
++        except socket.error as e:
++            print("ERROR: %s" % e, file=sys.stderr)
+ 
+         for m in msg.split("\r\n"):
+             d = m.split(" ")
+@@ -140,7 +140,7 @@ class UpdateMetricThread(threading.Thread):
+ def metric_init(params):
+     global descriptors, Desc_Skel, _Worker_Thread, Debug
+ 
+-    print '[memcached] memcached protocol "stats"'
++    print('[memcached] memcached protocol "stats"')
+     if "type" not in params:
+         params["type"] = "memcached"
+ 
+@@ -150,7 +150,7 @@ def metric_init(params):
+         elif params["type"] == "Tokyo Tyrant":
+             params["metrix_prefix"] = "tt"
+ 
+-    print params
++    print(params)
+ 
+     # initialize skeleton of descriptors
+     Desc_Skel = {
+@@ -362,7 +362,7 @@ def metric_init(params):
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -391,7 +391,7 @@ if __name__ == '__main__':
+         while True:
+             for d in descriptors:
+                 v = d['call_back'](d['name'])
+-                print ('value for %s is ' + d['format']) % (d['name'], v)
++                print(('value for %s is ' + d['format']) % (d['name'], v))
+             time.sleep(5)
+     except KeyboardInterrupt:
+         time.sleep(0.2)
+diff --git a/gmond/python_modules/memory/mem_stats.py b/gmond/python_modules/memory/mem_stats.py
+index 932a85b..b0cdc16 100644
+--- a/gmond/python_modules/memory/mem_stats.py
++++ b/gmond/python_modules/memory/mem_stats.py
+@@ -43,7 +43,7 @@ def metrics_handler(name):
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -384,4 +384,4 @@ if __name__ == '__main__':
+     metric_init({})
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+-        print 'value for %s is %f' % (d['name'], v)
++        print('value for %s is %f' % (d['name'], v))
+diff --git a/gmond/python_modules/network/multi_interface.py b/gmond/python_modules/network/multi_interface.py
+index 456704b..e4b1b04 100644
+--- a/gmond/python_modules/network/multi_interface.py
++++ b/gmond/python_modules/network/multi_interface.py
+@@ -74,7 +74,7 @@ net_stats_file = "/proc/net/dev"
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -242,7 +242,7 @@ def get_aggregates(name):
+         try:
+             delta = (float(curr_metrics['data'][iface][index]) - float(last_metrics['data'][iface][index])) / (curr_metrics['time'] - last_metrics['time'])
+             if delta < 0:
+-                print name + " is less 0"
++                print(name + " is less 0")
+                 delta = 0
+         except KeyError:
+             delta = 0.0
+@@ -300,7 +300,7 @@ def get_delta(name):
+     try:
+         delta = (float(curr_metrics['data'][iface][index]) - float(last_metrics['data'][iface][index])) / (curr_metrics['time'] - last_metrics['time'])
+         if delta < 0:
+-            print name + " is less 0"
++            print(name + " is less 0")
+             delta = 0
+     except KeyError:
+         delta = 0.0
+@@ -320,8 +320,8 @@ if __name__ == '__main__':
+         while True:
+             for d in descriptors:
+                 v = d['call_back'](d['name'])
+-                print ('value for %s is ' + d['format']) % (d['name'],  v)
++                print(('value for %s is ' + d['format']) % (d['name'],  v))
+             time.sleep(5)
+-    except StandardError:
+-        print sys.exc_info()[0]
++    except Exception:
++        print(sys.exc_info()[0])
+         os._exit(1)
+diff --git a/gmond/python_modules/network/netstats.py b/gmond/python_modules/network/netstats.py
+index 66c378d..ba0c56f 100644
+--- a/gmond/python_modules/network/netstats.py
++++ b/gmond/python_modules/network/netstats.py
+@@ -82,7 +82,7 @@ def get_value(name):
+ 
+     try:
+         result = float(curr_metrics['data'][group][metric])
+-    except StandardError:
++    except Exception:
+         result = 0
+ 
+     return result
+@@ -101,7 +101,7 @@ def get_delta(name):
+     try:
+         delta = (float(curr_metrics['data'][group][metric]) - float(last_metrics['data'][group][metric])) / (curr_metrics['time'] - last_metrics['time'])
+         if delta < 0:
+-            print name + " is less 0"
++            print((name + " is less 0"))
+             delta = 0
+     except KeyError:
+         delta = 0.0
+@@ -117,7 +117,7 @@ def get_tcploss_percentage(name):
+     try:
+         pct = 100 * (float(curr_metrics['data']['tcpext']["tcploss"]) - float(last_metrics["data"]['tcpext']["tcploss"])) / (float(curr_metrics['data']['tcp']['outsegs']) + float(curr_metrics['data']['tcp']['insegs']) - float(last_metrics['data']['tcp']['insegs']) - float(last_metrics['data']['tcp']['outsegs']))
+         if pct < 0:
+-            print name + " is less 0"
++            print((name + " is less 0"))
+             pct = 0
+     except KeyError:
+         pct = 0.0
+@@ -135,7 +135,7 @@ def get_tcpattemptfail_percentage(name):
+     try:
+         pct = 100 * (float(curr_metrics['data']['tcp']["attemptfails"]) - float(last_metrics["data"]['tcp']["attemptfails"])) / (float(curr_metrics['data']['tcp']['outsegs']) + float(curr_metrics['data']['tcp']['insegs']) - float(last_metrics['data']['tcp']['insegs']) - float(last_metrics['data']['tcp']['outsegs']))
+         if pct < 0:
+-            print name + " is less 0"
++            print((name + " is less 0"))
+             pct = 0
+     except Exception:
+         pct = 0.0
+@@ -151,7 +151,7 @@ def get_retrans_percentage(name):
+     try:
+         pct = 100 * (float(curr_metrics['data']['tcp']["retranssegs"]) - float(last_metrics['data']['tcp']["retranssegs"])) / (float(curr_metrics['data']['tcp']['outsegs']) + float(curr_metrics['data']['tcp']['insegs']) - float(last_metrics['data']['tcp']['insegs']) - float(last_metrics['data']['tcp']['outsegs']))
+         if pct < 0:
+-            print name + " is less 0"
++            print((name + " is less 0"))
+             pct = 0
+     except KeyError:
+         pct = 0.0
+@@ -163,7 +163,7 @@ def get_retrans_percentage(name):
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in list(prop.items()):
+         d[k] = v
+     return d
+ 
+@@ -266,6 +266,6 @@ if __name__ == '__main__':
+     while True:
+         for d in descriptors:
+             v = d['call_back'](d['name'])
+-            print '%s = %s' % (d['name'], v)
+-        print 'Sleeping 15 seconds'
++            print('%s = %s' % (d['name'], v))
++        print('Sleeping 15 seconds')
+         time.sleep(15)
+diff --git a/gmond/python_modules/network/tcpconn.py b/gmond/python_modules/network/tcpconn.py
+index 71bcc0f..b97d0ed 100644
+--- a/gmond/python_modules/network/tcpconn.py
++++ b/gmond/python_modules/network/tcpconn.py
+@@ -68,7 +68,7 @@ def TCP_Connections(name):
+     global _WorkerThread
+ 
+     if _WorkerThread is None:
+-        print 'Error: No netstat data gathering thread created for metric %s' % name
++        print('Error: No netstat data gathering thread created for metric %s' % name)
+         return 0
+ 
+     if not _WorkerThread.running and not _WorkerThread.shuttingdown:
+@@ -233,7 +233,7 @@ class NetstatThread(threading.Thread):
+         if self.popenChild != None:
+             try:
+                 self.popenChild.wait()
+-            except OSError, e:
++            except OSError as e:
+                 if e.errno == 10:  # No child processes
+                     pass
+ 
+@@ -274,7 +274,7 @@ class NetstatThread(threading.Thread):
+ 
+             try:
+                 self.popenChild.wait()
+-            except OSError, e:
++            except OSError as e:
+                 if e.errno == 10:  # No child process
+                     continue
+ 
+@@ -361,7 +361,7 @@ if __name__ == '__main__':
+         try:
+             for d in _descriptors:
+                 v = d['call_back'](d['name'])
+-                print 'value for %s is %u' % (d['name'],  v)
++                print('value for %s is %u' % (d['name'],  v))
+             time.sleep(5)
+         except KeyboardInterrupt:
+             os._exit(1)
+diff --git a/gmond/python_modules/network/traffic1.py b/gmond/python_modules/network/traffic1.py
+index 9e2b252..9f1078f 100644
+--- a/gmond/python_modules/network/traffic1.py
++++ b/gmond/python_modules/network/traffic1.py
+@@ -16,7 +16,7 @@ Debug = False
+ 
+ def dprint(f, *v):
+     if Debug:
+-        print >> sys.stderr, "DEBUG: " + f % v
++        print("DEBUG: " + f % v, file=sys.stderr)
+ 
+ 
+ class UpdateTrafficThread(threading.Thread):
+@@ -76,7 +76,7 @@ class UpdateTrafficThread(threading.Thread):
+             dprint("%s", ">>update_metric")
+             self.stats = {}
+             _stats = a[1].split()
+-            for name, index in self.stats_tab.iteritems():
++            for name, index in self.stats_tab.items():
+                 self.stats[name + '_' + self.target_device] = int(_stats[index])
+             self.stats["time"] = time.time()
+             dprint("%s", self.stats)
+@@ -84,7 +84,7 @@ class UpdateTrafficThread(threading.Thread):
+             if "time" in self.stats_prev:
+                 dprint("%s: %d = %d - %d", "DO DIFF", self.stats["time"] - self.stats_prev["time"], self.stats["time"], self.stats_prev["time"])
+                 d = self.stats["time"] - self.stats_prev["time"]
+-                for name, cur in self.stats.iteritems():
++                for name, cur in self.stats.items():
+                     self.metric[name] = float(cur - self.stats_prev[name]) / d
+ 
+             self.stats_prev = self.stats.copy()
+@@ -104,8 +104,8 @@ class UpdateTrafficThread(threading.Thread):
+ def metric_init(params):
+     global Desc_Skel, _Worker_Thread, Debug
+ 
+-    print '[traffic1] Received the following parameters'
+-    print params
++    print('[traffic1] Received the following parameters')
++    print(params)
+ 
+     Desc_Skel = {
+         'name'        : 'XXX',
+@@ -172,7 +172,7 @@ def metric_init(params):
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -195,11 +195,11 @@ if __name__ == '__main__':
+         while True:
+             for d in descriptors:
+                 v = d['call_back'](d['name'])
+-                print ('value for %s is ' + d['format']) % (d['name'], v)
++                print(('value for %s is ' + d['format']) % (d['name'], v))
+             time.sleep(5)
+     except KeyboardInterrupt:
+         time.sleep(0.2)
+         os._exit(1)
+-    except StandardError:
+-        print sys.exc_info()[0]
++    except Exception:
++        print(sys.exc_info()[0])
+         os._exit(1)
+diff --git a/gmond/python_modules/nfs/nfsstats.py b/gmond/python_modules/nfs/nfsstats.py
+index a383101..618b1be 100644
+--- a/gmond/python_modules/nfs/nfsstats.py
++++ b/gmond/python_modules/nfs/nfsstats.py
+@@ -273,11 +273,11 @@ def metric_init(params):
+ 
+         # Parse our defined params list in order to ensure list will not exceed max_plimit
+         n = 0
+-        names_keys = configtable[i]['names'].keys()
++        names_keys = list(configtable[i]['names'].keys())
+         keys_to_remove = []
+         for _tmpkey in names_keys:
+             _tmplist = names_keys
+-            param_pos = re.split("{(\d+)\}", configtable[i]['names'][_tmpkey].values()[0])[1]
++            param_pos = re.split("{(\d+)\}", list(configtable[i]['names'][_tmpkey].values())[0])[1]
+             if int(param_pos) > int(max_plimit):
+                 keys_to_remove.append(_tmpkey)
+             n += 1
+@@ -388,7 +388,7 @@ def debug(level, text):
+     if level > verboselevel:
+         return
+     if sys.stderr.isatty():
+-        print text
++        print(text)
+     else:
+         syslog.syslog(text)
+ 
+diff --git a/gmond/python_modules/process/procstat.py b/gmond/python_modules/process/procstat.py
+index 93ff9a9..aad5229 100644
+--- a/gmond/python_modules/process/procstat.py
++++ b/gmond/python_modules/process/procstat.py
+@@ -144,7 +144,7 @@ def get_pgid(proc):
+     logging.debug('getting pgid for process: ' + proc)
+     ERROR = 0
+ 
+-    if pgid_list.has_key(proc) and os.path.exists('/proc/' + pgid_list[proc][0]):
++    if proc in pgid_list and os.path.exists('/proc/' + pgid_list[proc][0]):
+         return pgid_list[proc]
+ 
+     val = PROCESSES[proc]
+@@ -245,14 +245,14 @@ def test(params):
+ 
+     PROCESSES = params
+ 
+-    for proc, val in PROCESSES.items():
++    for proc, val in list(PROCESSES.items()):
+         print('')
+-        print(' Testing ' + proc + ': ' + val)
++        print((' Testing ' + proc + ': ' + val))
+ 
+         try:
+             (ppid, pgid) = get_pgid(proc)
+-        except Exception, e:
+-            print(' failed getting pgid: ' + str(e))
++        except Exception as e:
++            print((' failed getting pgid: ' + str(e)))
+             continue
+ 
+         pids = get_pgroup(ppid, pgid)
+@@ -262,7 +262,7 @@ def test(params):
+         for pid in pids:
+             # Read from binary file containing command line arguments
+             args = file('/proc/' + pid + '/cmdline', 'rt').readline().replace('\0', ' ')
+-            print(' ' + pid + ' ' + args)
++            print((' ' + pid + ' ' + args))
+ 
+     logging.debug('success testing')
+ 
+@@ -279,7 +279,7 @@ def update_stats():
+     else:
+         last_update = cur_time
+ 
+-    for proc, val in PROCESSES.items():
++    for proc, val in list(PROCESSES.items()):
+         logging.debug(' updating for ' + proc)
+ 
+         # setup storage lists
+@@ -292,7 +292,7 @@ def update_stats():
+         # Update CPU utilization
+         try:
+             (ppid, pgid) = get_pgid(proc)
+-        except Exception, e:
++        except Exception as e:
+             logging.warning(' failed getting pgid: ' + str(e))
+             stats[proc]['cpu'] = 0.0
+             stats[proc]['mem'] = 0
+@@ -391,7 +391,7 @@ def metric_init(params):
+     time_max = 60
+     for label in descriptions:
+         for proc in PROCESSES:
+-            if stats[proc].has_key(label):
++            if label in stats[proc]:
+ 
+                 d = {
+                     'name': 'procstat_' + proc + '_' + label,
+@@ -435,12 +435,12 @@ def display_proc_stat(pid):
+         # Display them
+         i = 0
+         for f in fields:
+-            print '%15s: %s' % (f, stat[i])
++            print('%15s: %s' % (f, stat[i]))
+             i += 1
+ 
+     except:
+-        print('failed to get /proc/' + pid + '/stat')
+-        print(traceback.print_exc(file=sys.stdout))
++        print(('failed to get /proc/' + pid + '/stat'))
++        print((traceback.print_exc(file=sys.stdout)))
+ 
+ 
+ def display_proc_statm(pid):
+@@ -454,12 +454,12 @@ def display_proc_statm(pid):
+         # Display them
+         i = 0
+         for f in fields:
+-            print '%15s: %s' % (f, statm[i])
++            print('%15s: %s' % (f, statm[i]))
+             i += 1
+ 
+     except:
+-        print('failed to get /proc/' + pid + '/statm')
+-        print(traceback.print_exc(file=sys.stdout))
++        print(('failed to get /proc/' + pid + '/statm'))
++        print((traceback.print_exc(file=sys.stdout)))
+ 
+ 
+ def metric_cleanup():
+@@ -504,7 +504,7 @@ if __name__ == '__main__':
+         update_stats()
+ 
+         print('')
+-        print(' waiting ' + str(MAX_UPDATE_TIME) + ' seconds')
++        print((' waiting ' + str(MAX_UPDATE_TIME) + ' seconds'))
+         time.sleep(MAX_UPDATE_TIME)
+ 
+     metric_init(params)
+@@ -512,7 +512,7 @@ if __name__ == '__main__':
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+         if not options.quiet:
+-            print ' %s: %s %s [%s]' % (d['name'], d['format'] % v, d['units'], d['description'])
++            print(' %s: %s %s [%s]' % (d['name'], d['format'] % v, d['units'], d['description']))
+ 
+         if options.gmetric:
+             if d['value_type'] == 'uint':
+diff --git a/gmond/python_modules/ssl/entropy.py b/gmond/python_modules/ssl/entropy.py
+index 8337981..71193c6 100644
+--- a/gmond/python_modules/ssl/entropy.py
++++ b/gmond/python_modules/ssl/entropy.py
+@@ -53,4 +53,4 @@ if __name__ == '__main__':
+     metric_init({})
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+-        print 'value for %s is %u' % (d['name'],  v)
++        print('value for %s is %u' % (d['name'],  v))
+diff --git a/gmond/python_modules/varnish/varnish.py b/gmond/python_modules/varnish/varnish.py
+index f8c0723..b1a8573 100755
+--- a/gmond/python_modules/varnish/varnish.py
++++ b/gmond/python_modules/varnish/varnish.py
+@@ -51,7 +51,7 @@ METRICS_CACHE_MAX = 5
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -92,7 +92,7 @@ def get_value(name):
+     name = name[len(NAME_PREFIX):]  # remove prefix from name
+     try:
+         result = metrics['data'][name]
+-    except StandardError:
++    except Exception:
+         result = 0
+ 
+     return result
+@@ -109,9 +109,9 @@ def get_delta(name):
+     try:
+         delta = float(curr_metrics['data'][name] - last_metrics['data'][name]) / (curr_metrics['time'] - last_metrics['time'])
+         if delta < 0:
+-            print "Less than 0"
++            print("Less than 0")
+             delta = 0
+-    except StandardError:
++    except Exception:
+         delta = 0
+ 
+     return delta
+@@ -1038,6 +1038,6 @@ if __name__ == '__main__':
+     descriptors = metric_init(PARAMS)
+     while True:
+         for d in descriptors:
+-            print (('%s = %s') % (d['name'], d['format'])) % (d['call_back'](d['name']))
+-        print 'Sleeping 15 seconds'
++            print((('%s = %s') % (d['name'], d['format'])) % (d['call_back'](d['name'])))
++        print('Sleeping 15 seconds')
+         time.sleep(15)
+diff --git a/gmond/python_modules/vm_stats/vm_stats.py b/gmond/python_modules/vm_stats/vm_stats.py
+index ed663de..2e1e8b8 100644
+--- a/gmond/python_modules/vm_stats/vm_stats.py
++++ b/gmond/python_modules/vm_stats/vm_stats.py
+@@ -69,7 +69,7 @@ def get_value(name):
+ 
+     try:
+         result = metrics['data'][name]
+-    except StandardError:
++    except Exception:
+         result = 0
+ 
+     return result
+@@ -86,7 +86,7 @@ def get_delta(name):
+     try:
+         delta = (float(curr_metrics['data'][name]) - float(last_metrics['data'][name])) / (curr_metrics['time'] - last_metrics['time'])
+         if delta < 0:
+-            print name + " is less 0"
++            print(name + " is less 0")
+             delta = 0
+     except KeyError:
+         delta = 0.0
+@@ -112,7 +112,7 @@ def get_vmeff(name):
+ 
+         delta = 100 * (float(curr_metrics['data']['pgsteal_normal']) - float(last_metrics['data']['pgsteal_normal'])) / pgscan_diff
+         if delta < 0:
+-            print name + " is less 0"
++            print(name + " is less 0")
+             delta = 0
+     except KeyError:
+         delta = 0.0
+@@ -122,7 +122,7 @@ def get_vmeff(name):
+ 
+ def create_desc(skel, prop):
+     d = skel.copy()
+-    for k, v in prop.iteritems():
++    for k, v in prop.items():
+         d[k] = v
+     return d
+ 
+@@ -734,6 +734,6 @@ if __name__ == '__main__':
+     while True:
+         for d in descriptors:
+             v = d['call_back'](d['name'])
+-            print '%s = %s' % (d['name'],  v)
+-        print 'Sleeping 15 seconds'
++            print('%s = %s' % (d['name'],  v))
++        print('Sleeping 15 seconds')
+         time.sleep(15)
+diff --git a/gmond/python_modules/xen/xenstats.py b/gmond/python_modules/xen/xenstats.py
+index 67a6c21..bdb3750 100755
+--- a/gmond/python_modules/xen/xenstats.py
++++ b/gmond/python_modules/xen/xenstats.py
+@@ -128,4 +128,4 @@ if __name__ == '__main__':
+     metric_init('init')
+     for d in descriptors:
+         v = d['call_back'](d['name'])
+-        print 'value for %s is %u' % (d['name'],  v)
++        print('value for %s is %u' % (d['name'],  v))
+-- 
+2.47.0
+

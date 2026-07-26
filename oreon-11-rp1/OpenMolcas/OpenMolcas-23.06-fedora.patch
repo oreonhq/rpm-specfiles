@@ -1,0 +1,192 @@
+diff -up OpenMolcas-v23.06-1cda3772686cbf99a4af695929a12d563c795ca2/CMakeLists.txt.fedora OpenMolcas-v23.06-1cda3772686cbf99a4af695929a12d563c795ca2/CMakeLists.txt
+--- OpenMolcas-v23.06-1cda3772686cbf99a4af695929a12d563c795ca2/CMakeLists.txt.fedora	2023-06-12 11:58:03.000000000 +0000
++++ OpenMolcas-v23.06-1cda3772686cbf99a4af695929a12d563c795ca2/CMakeLists.txt	2023-06-15 14:01:58.621033421 +0000
+@@ -419,17 +419,7 @@ message ("-- ADDRMODE: ${ADDRMODE}")
+ # platform settings
+ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+   add_compile_definitions (_LINUX_)
+-  if (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86" OR
+-      ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i686")
+-    set (PLATFORM "LINUX")
+-  elseif (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+-    set (PLATFORM "LINUX64")
+-  elseif (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "ia64")
+-    set (PLATFORM "LINUX64_IA")
+-  elseif (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "ppc_64" OR
+-          ${CMAKE_SYSTEM_PROCESSOR} STREQUAL "ppc64le")
+-    set (PLATFORM "PPC64")
+-  endif ()
++  set (PLATFORM "LINUX")
+ elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+   add_compile_definitions (_LINUX_ _DARWIN_ _DARWIN_C_SOURCE)
+   set (CMAKE_MACOSX_RPATH 0)
+@@ -457,7 +447,11 @@ endif ()
+ #                                                                              #
+ ################################################################################
+ 
+-include (${PROJECT_SOURCE_DIR}/cmake/compilers.cmake)
++# Disable in Fedora
++#include (${PROJECT_SOURCE_DIR}/cmake/compilers.cmake)
++set (CXXCID ${CMAKE_CXX_COMPILER_ID})
++set (CCID ${CMAKE_C_COMPILER_ID})
++set (FCID ${CMAKE_Fortran_COMPILER_ID})
+ 
+ # Generate the actual flags used in the build
+ #============================================
+@@ -646,6 +640,8 @@ if (HDF5)
+       message ("-- HDF5 not found, it will be deactivated")
+     endif ()
+   endif ()
++else()
++  message("HDF5 support not enabled")
+ endif ()
+ 
+ # BLAS/LAPACK settings
+@@ -867,66 +863,14 @@ if (LINALG STREQUAL "OpenBLAS")
+   message ("-- Using OpenBLAS LAPACK+BLAS libraries")
+ 
+   # find out what OPENBLASROOT is
+-  mark_as_advanced (CLEAR OPENBLASROOT)
+-  if (OPENBLASROOT STREQUAL "")
+-    set (OPENBLASROOT $ENV{OPENBLASROOT} CACHE PATH "OpenBLAS root directory." FORCE)
+-    if (NOT OPENBLASROOT)
+-      message (FATAL_ERROR
+-               "You must set environment variable OPENBLASROOT, "
+-               "or specify -DOPENBLASROOT=/path/to/openblas_dir "
+-               "when running cmake.")
+-    endif ()
+-  endif ()
+-  # at this point, OPENBLASROOT should be defined and not empty
+-  message ("-- OPENBLASROOT = ${OPENBLASROOT}")
+-
+-  # here we check if OPENBLASROOT has changed after it was last used
+-  # succesfully, if so then we need to reprocess the checks here.
+-  if (NOT OPENBLASROOT STREQUAL OPENBLASROOT_LAST)
+-    # we need to redo the library search later, because OPENBLASROOT
+-    # changed since the last time we defined it.
+-    unset (LIBOPENBLAS CACHE)
+-    # check if the configuration header is available
+-    set (OPENBLAS_CONFIG "${OPENBLASROOT}/include/openblas_config.h")
+-    if (NOT EXISTS ${OPENBLAS_CONFIG})
+-      # for system-wide OpenBLAS installations the config path might be different
+-      # so try with an alternative path
+-      set (OPENBLAS_CONFIG "${OPENBLASROOT}/include/openblas/openblas_config.h")
+-    endif ()
+-    if (NOT EXISTS ${OPENBLAS_CONFIG})
+-      message (FATAL_ERROR
+-               "Could not find OpenBLAS config header in: ${OPENBLASROOT} "
+-               "(tried ${OPENBLASROOT}/include/openblas_config.h and "
+-               "please check if the OPENBLASROOT variable points to a "
+-               "valid OpenBLAS installation directory.")
+-    endif ()
+-    # check if the OpenBLAS installation was configured with 64bit integer support
+-    message ("-- Checking OpenBLAS for 64-bit integer interface...")
+-    include (CheckSymbolExists)
+-    unset (OPENBLAS_WITH_ILP64 CACHE)
+-    check_symbol_exists ("OPENBLAS_USE64BITINT" ${OPENBLAS_CONFIG} OPENBLAS_WITH_ILP64)
+-    if (ADDRMODE EQUAL 64 AND NOT OPENBLAS_WITH_ILP64)
+-      message (FATAL_ERROR
+-               "OpenBLAS was not configured for 64-bit integer interface, "
+-               "please build OpenBLAS with INTERFACE64=1 defined.")
+-    endif ()
+-    # save the last location to check if it changed between configurations
+-    set (OPENBLASROOT_LAST ${OPENBLASROOT} CACHE INTERNAL "last value." FORCE)
+-  endif ()
+-
+   # search for the OpenBLAS library
+   find_library (LIBOPENBLAS
+-    NAMES openblas
+-    PATHS ${OPENBLASROOT}
+-    PATH_SUFFIXES lib
+-    NO_DEFAULT_PATH
++    NAMES flexiblas64
+   )
+ 
+   if (NOT LIBOPENBLAS)
+     message (FATAL_ERROR
+-             "OpenBLAS library not found, please check that "
+-             "the OPENBLASROOT variable is set and points to "
+-             "a valid OpenBLAS installation directory.")
++             "OpenBLAS library not found, something is wrong.")
+   endif ()
+ 
+   # here we check if LIBOPENBLAS has changed after it was processed
+@@ -2534,8 +2478,8 @@ add_custom_target (only_objs
+ )
+ 
+ # set up proper RPATH for executables, use RUNPATH if on Linux
+-set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+-set (CMAKE_INSTALL_RPATH_USE_LINK_PATH "TRUE")
++#set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
++#set (CMAKE_INSTALL_RPATH_USE_LINK_PATH "TRUE")
+ 
+ # build the standard programs
+ foreach (prog ${progs})
+@@ -2720,11 +2664,11 @@ endif ()
+ # find the molcas.driver script or use a dummy driver
+ if (DEFINED EXTRA_DIR)
+   set (MOLCAS_DRIVER "${EXTRA_DIR}/sbin/molcas.driver")
+-  execute_process (
+-    COMMAND ${OPENMOLCAS_DIR}/sbin/install_driver.sh ${MOLCAS_DRIVER}
+-    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+-    RESULT_VARIABLE INSTALL_DRIVER_RC
+-  )
++#  execute_process (
++#    COMMAND ${OPENMOLCAS_DIR}/sbin/install_driver.sh ${MOLCAS_DRIVER}
++#    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
++#    RESULT_VARIABLE INSTALL_DRIVER_RC
++#  )
+   if (INSTALL_DRIVER_RC)
+     message (FATAL_ERROR "Failed to install the Molcas driver.")
+   endif ()
+@@ -2768,10 +2712,10 @@ endif ()
+ # install git hooks
+ if (EXISTS ${GIT})
+   foreach (BASE_DIR ${basedirs})
+-    execute_process (
+-      COMMAND ${OPENMOLCAS_DIR}/sbin/install_hooks.sh ${BASE_DIR}
+-      WORKING_DIRECTORY ${BASE_DIR}
+-    )
++#    execute_process (
++#      COMMAND ${OPENMOLCAS_DIR}/sbin/install_hooks.sh ${BASE_DIR}
++#      WORKING_DIRECTORY ${BASE_DIR}
++#    )
+   endforeach ()
+ endif ()
+ 
+@@ -2779,12 +2723,12 @@ endif ()
+ if (DEFINED EXTRA_DIR)
+   file (WRITE ${PROJECT_BINARY_DIR}/xbin.cfg "PLATFORM = ${PLATFORM}\n")
+ 
+-  execute_process (
+-    COMMAND "${MOLCAS_DRIVER}" getemil
+-    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+-    ERROR_VARIABLE GETEMIL_DESCRIBE_ERROR
+-    RESULT_VARIABLE GETEMIL_DESCRIBE_RC
+-  )
++#  execute_process (
++#    COMMAND "${MOLCAS_DRIVER}" getemil
++#    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
++#    ERROR_VARIABLE GETEMIL_DESCRIBE_ERROR
++#    RESULT_VARIABLE GETEMIL_DESCRIBE_RC
++#  )
+   if (GETEMIL_DESCRIBE_RC)
+     message (FATAL_ERROR "Failed to fetch Molcas binary: ${GETEMIL_DESCRIBE_ERROR}")
+   endif ()
+@@ -2849,11 +2793,11 @@ if (Python_FOUND)
+   find_program (XMLLINT "xmllint")
+   mark_as_advanced (FORCE XMLLINT)
+   if (XMLLINT)
+-    execute_process (
+-      COMMAND ${XMLLINT} ${PROJECT_BINARY_DIR}/data/keyword.xml "-noout"
+-      ERROR_VARIABLE XMLLINT_ERROR
+-      RESULT_VARIABLE XMLLINT_RESULT
+-    )
++#    execute_process (
++#      COMMAND ${XMLLINT} ${PROJECT_BINARY_DIR}/data/keyword.xml "-noout"
++#      ERROR_VARIABLE XMLLINT_ERROR
++#      RESULT_VARIABLE XMLLINT_RESULT
++#    )
+     if (XMLLINT_ERROR)
+       message (FATAL_ERROR "Extracted XML file is malformed: ${XMLLINT_ERROR}")
+     endif ()

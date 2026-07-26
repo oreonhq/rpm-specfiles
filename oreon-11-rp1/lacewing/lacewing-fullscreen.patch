@@ -1,0 +1,383 @@
+--- lacewing-1.10/main.c.fullscreen	2006-02-28 23:01:57.000000000 +0100
++++ lacewing-1.10/main.c	2006-02-28 23:03:21.000000000 +0100
+@@ -245,7 +245,7 @@
+ 
+    set_color_depth(8);
+ 
+-   if (set_gfx_mode(GFX_AUTODETECT, 640, 480, 0, 0) != 0)
++   if (set_gfx_mode(options.windowed, 640, 480, 0, 0) != 0)
+    {
+       set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
+       allegro_message("Unable to set 640x480 mode\n%s\n", allegro_error);
+--- lacewing-1.10/menu.c.fullscreen	2006-02-28 23:01:57.000000000 +0100
++++ lacewing-1.10/menu.c	2006-02-28 23:05:23.000000000 +0100
+@@ -61,6 +61,7 @@
+ #define KP_WAIT_SHORT 5
+ 
+ extern struct optionstruct options;
++extern RGB palet [256];
+ 
+ enum
+ {
+@@ -124,6 +125,7 @@
+ int menu_index;
+ int menu_index_max;
+ int menu_index_min;
++int last_main_menu_index;
+ int keypress_wait;
+ int last_key;
+ int check_key(int scode);
+@@ -327,6 +329,7 @@
+  which_menu = MENU_MAIN;
+  menu_index_max = 4;
+  menu_index_min = 0;
++ last_main_menu_index = menu_index = 0;
+  keypress_wait = KP_WAIT_LONG;
+ 
+  do
+@@ -604,7 +610,7 @@
+   char ostr [50];
+   char istr [10];
+ 
+-  for (i = 0; i < 32; i ++)
++  for (i = 0; i < 33; i ++)
+   {
+ 
+    col = COLOUR_GREEN6;
+@@ -663,114 +669,121 @@
+        strcat(ostr, itoa(options.ambience_volume, istr, 10));
+      break;
+     case 4:
++     strcpy(ostr, "Full Screen - ");
++     if (options.windowed == GFX_AUTODETECT_WINDOWED)
++      strcat(ostr, "Off");
++       else
++        strcat(ostr, "On");
++     break;
++    case 5:
+      strcpy(ostr, "Video Sync - ");
+      if (options.run_vsync == 0)
+       strcat(ostr, "Off");
+        else
+         strcat(ostr, "On");
+      break;
+-    case 5:
++    case 6:
+      strcpy(ostr, "Test Speakers");
+      break;
+-    case 6:
++    case 7:
+      strcpy(ostr, "Test Keys");
+      break;
+-    case 7:
++    case 8:
+      strcpy(ostr, "");
+      break;
+-    case 8:
++    case 9:
+      col = COLOUR_GREY6;
+      strcpy(ostr, "Player 1 Keys");
+      break;
+-    case 9:
++    case 10:
+      strcpy(ostr, "Forwards - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_THRUST]));
+      break;
+-    case 10:
++    case 11:
+      strcpy(ostr, "Left - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_LEFT]));
+      break;
+-    case 11:
++    case 12:
+      strcpy(ostr, "Right - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_RIGHT]));
+      break;
+-    case 12:
++    case 13:
+      strcpy(ostr, "Brake - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_BRAKE]));
+      break;
+-    case 13:
++    case 14:
+      strcpy(ostr, "Fire Cannon - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_FIRE1]));
+      break;
+-    case 14:
++    case 15:
+      strcpy(ostr, "Fire Secondary - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_FIRE2]));
+      break;
+-    case 15:
++    case 16:
+      strcpy(ostr, "Upgrade - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_UPGRADE]));
+      break;
+-    case 16:
++    case 17:
+      strcpy(ostr, "Slide Left - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_LEFT1]));
+      break;
+-    case 17:
++    case 18:
+      strcpy(ostr, "Slide Right - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_RIGHT1]));
+      break;
+-    case 18:
++    case 19:
+      strcpy(ostr, "Toggle Linked Fire - ");
+      strcat(ostr, scancode_to_keyname(player[0].keys [CMD_LINK]));
+      break;
+-    case 19:
++    case 20:
+      col = COLOUR_GREY6;
+      strcpy(ostr, "Player 2 Keys");
+      break;
+-    case 20:
++    case 21:
+      strcpy(ostr, "Forwards - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_THRUST]));
+      break;
+-    case 21:
++    case 22:
+      strcpy(ostr, "Left - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_LEFT]));
+      break;
+-    case 22:
++    case 23:
+      strcpy(ostr, "Right - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_RIGHT]));
+      break;
+-    case 23:
++    case 24:
+      strcpy(ostr, "Brake - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_BRAKE]));
+      break;
+-    case 24:
++    case 25:
+      strcpy(ostr, "Fire Cannon - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_FIRE1]));
+      break;
+-    case 25:
++    case 26:
+      strcpy(ostr, "Fire Secondary - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_FIRE2]));
+      break;
+-    case 26:
++    case 27:
+      strcpy(ostr, "Upgrade - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_UPGRADE]));
+      break;
+-    case 27:
++    case 28:
+      strcpy(ostr, "Slide Left - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_LEFT1]));
+      break;
+-    case 28:
++    case 29:
+      strcpy(ostr, "Slide Right - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_RIGHT1]));
+      break;
+-    case 29:
++    case 30:
+      strcpy(ostr, "Toggle Linked Fire - ");
+      strcat(ostr, scancode_to_keyname(player[1].keys [CMD_LINK]));
+      break;
+-    case 30:
++    case 31:
+      strcpy(ostr, "");
+ //     strcat(ostr, scancode_to_keyname(player[1].keys [CMD_LINK])
+      break;
+-    case 31:
++    case 32:
+      strcpy(ostr, "Exit");
+      break;
+ 
+@@ -798,10 +811,10 @@
+  {
+ //  case 5:
+ //  case 6:
+-  case 7:
+   case 8:
+-  case 19:
+-  case 30:
++  case 9:
++  case 20:
++  case 31:
+    return 1;
+  }
+ 
+@@ -1076,6 +1089,7 @@
+ 
+ void menu_trigger(void)
+ {
++ static char must_change_video_mode = FALSE;
+ 
+  keypress_wait = KP_WAIT_LONG;
+ 
+@@ -1116,13 +1130,25 @@
+    }
+    break;
+   case MENU_OPTIONS:
+-   if (menu_index == 31)
++   if (menu_index == 32)
+    {
+     play_sound(WAV_MENU2);
++    if (must_change_video_mode)
++    {
++     if (set_gfx_mode(options.windowed, 640, 480, 0, 0) != 0)
++     {
++      set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
++      allegro_message("Error switching fullscreen / windowed mode\n%s\n",
++       allegro_error);
++      exit(1);
++     }
++     set_palette(palet);
++     must_change_video_mode = FALSE;
++    }
+     change_menu(MENU_MAIN);
+     break;
+    }
+-   if (menu_index < 9)
++   if (menu_index < 10)
+    {
+     switch(menu_index)
+     {
+@@ -1148,18 +1174,26 @@
+       play_sound(WAV_MENU1);
+       return;
+      case 4:
++      if (options.windowed == GFX_AUTODETECT_WINDOWED)
++       options.windowed = GFX_AUTODETECT_FULLSCREEN;
++        else
++         options.windowed = GFX_AUTODETECT_WINDOWED;
++      play_sound(WAV_MENU1);
++      must_change_video_mode = TRUE;
++      return;
++     case 5:
+       if (options.run_vsync == 1)
+        options.run_vsync = 0;
+         else
+          options.run_vsync = 1;
+       play_sound(WAV_MENU1);
+       return;
+-     case 5:
++     case 6:
+       test_speakers();
+       ticked = 0;
+ // test speakers
+       return;
+-     case 6:
++     case 7:
+       play_sound(WAV_MENU2);
+       jam_keys();
+       return;
+@@ -1268,7 +1302,7 @@
+   if (option_index() == -1)
+    return;
+ 
+-  if (menu_index < 20)
++  if (menu_index < 21)
+    player[0].keys [option_index()] = inputted;
+     else
+      player[1].keys [option_index()] = inputted;
+@@ -1282,35 +1316,35 @@
+ {
+   switch(menu_index)
+   {
+-   case 9:
+-   case 20:
+-    return CMD_THRUST;
+    case 10:
+    case 21:
+-    return CMD_LEFT;
++    return CMD_THRUST;
+    case 11:
+    case 22:
+-    return CMD_RIGHT;
++    return CMD_LEFT;
+    case 12:
+    case 23:
+-    return CMD_BRAKE;
++    return CMD_RIGHT;
+    case 13:
+    case 24:
+-    return CMD_FIRE1;
++    return CMD_BRAKE;
+    case 14:
+    case 25:
+-    return CMD_FIRE2;
++    return CMD_FIRE1;
+    case 15:
+    case 26:
+-    return CMD_UPGRADE;
++    return CMD_FIRE2;
+    case 16:
+    case 27:
+-    return CMD_LEFT1;
++    return CMD_UPGRADE;
+    case 17:
+    case 28:
+-    return CMD_RIGHT1;
++    return CMD_LEFT1;
+    case 18:
+    case 29:
++    return CMD_RIGHT1;
++   case 19:
++   case 30:
+     return CMD_LINK;
+   }
+ 
+@@ -1373,6 +1409,8 @@
+ 
+ void change_menu(int to_which)
+ {
++ if (which_menu == MENU_MAIN)
++  last_main_menu_index = menu_index;
+ 
+  which_menu = to_which;
+  keypress_wait = KP_WAIT_LONG;
+@@ -1383,7 +1421,7 @@
+   case MENU_MAIN:
+     game.type = GAME_SINGLE;
+     which_menu = MENU_MAIN;
+-    menu_index = 0;
++    menu_index = last_main_menu_index;
+     menu_index_max = 4;
+     menu_index_min = 0;
+     save_config();
+@@ -1391,7 +1429,7 @@
+   case MENU_OPTIONS:
+     which_menu = MENU_OPTIONS;
+     menu_index = 1;
+-    menu_index_max = 31;
++    menu_index_max = 32;
+     menu_index_min = 1;
+     break;
+   case MENU_DUEL:
+@@ -2827,6 +2865,7 @@
+  options.run_vsync = get_config_int("Options", "Run_vsync", 0);
+  options.sound_volume = get_config_int("Options", "Sound_volume", 100);
+  options.ambience_volume = get_config_int("Options", "Ambience_volume", 100);
++ options.windowed = get_config_int("Options", "Windowed", GFX_AUTODETECT_FULLSCREEN);
+ 
+  for (i = 0; i < NO_CMDS; i ++)
+  {
+@@ -2905,6 +2944,7 @@
+  set_config_int("Options", "Run_vsync", options.run_vsync);
+  set_config_int("Options", "Sound_volume", options.sound_volume);
+  set_config_int("Options", "Ambience_volume", options.ambience_volume);
++ set_config_int("Options", "Windowed", options.windowed);
+ 
+  for (i = 0; i < NO_CMDS; i ++)
+  {
+--- lacewing-1.10/config.h.fullscreen	2006-02-28 23:01:57.000000000 +0100
++++ lacewing-1.10/config.h	2006-02-28 23:01:57.000000000 +0100
+@@ -792,6 +792,7 @@
+  int run_vsync; // on or off
+  int sound_volume; // sound fx volume; if 0 sound effects not played
+  int ambience_volume; // if 0 ambience not played
++ int windowed; // GFX_AUTODETECT_FULLSCREEN or GFX_AUTODETECT_WINDOWED
+ };
+ 
+ struct starstruct

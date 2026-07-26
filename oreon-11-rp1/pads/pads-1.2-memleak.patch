@@ -1,0 +1,280 @@
+diff -urp pads-1.2.orig/src/identification.c pads-1.2/src/identification.c
+--- pads-1.2.orig/src/identification.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/identification.c	2008-06-30 16:12:11.000000000 -0400
+@@ -96,7 +96,7 @@ int parse_raw_signature (bstring line, i
+     struct bstrList *raw_sig;
+     struct bstrList *title = NULL;
+     Signature *sig;
+-    bstring pcre_string;
++    bstring pcre_string = NULL;
+     const char *err;            /* PCRE */
+     int erroffset;              /* PCRE */
+     int ret = 0;
+@@ -117,10 +117,12 @@ int parse_raw_signature (bstring line, i
+     } else if (raw_sig->qty > 3) {
+         pcre_string = bstrcpy(raw_sig->entry[2]);
+         for (i = 3; i < raw_sig->qty; i++) {
+-            if ((bconcat(pcre_string, bfromcstr(","))) == BSTR_ERR)
++            bstring tmp = bfromcstr(",");
++            if ((bconcat(pcre_string, tmp)) == BSTR_ERR)
+                 ret = -1;
+             if ((bconcat(pcre_string, raw_sig->entry[i])) == BSTR_ERR)
+                 ret = -1;
++            bdestroy(tmp);
+         }
+     } else {
+         pcre_string = bstrcpy(raw_sig->entry[2]);
+@@ -129,8 +131,10 @@ int parse_raw_signature (bstring line, i
+     /* Split Title */
+     if (raw_sig->entry[1] != NULL && ret != -1)
+         title = bsplit(raw_sig->entry[1], '/');
+-    if (title == NULL)
++    if (title == NULL) {
++            bdestroy(pcre_string);
+             return -1;
++    }
+ 
+     if (title->qty < 3)
+         ret = -1;
+@@ -139,6 +143,7 @@ int parse_raw_signature (bstring line, i
+     if (ret != -1) {
+         sig = (Signature*)malloc(sizeof(Signature));
+         sig->next = NULL;
++        sig->regex = NULL;
+         if (raw_sig->entry[0] != NULL)
+             sig->service = bstrcpy(raw_sig->entry[0]);
+         if (title->entry[1] != NULL)
+@@ -280,6 +285,7 @@ int pcre_identify (struct in_addr ip_add
+         if (rc != -1) {
+             app = get_app_name(list, payload, ovector, rc);
+             update_asset(ip_addr, port, proto, list->service, app);
++            bdestroy(app);
+             return 1;
+         }
+ 
+@@ -359,7 +365,7 @@ bstring get_app_name (Signature *sig,
+     }
+     sub[z] = '\0';
+ 
+-    retval = bstrcpy(bfromcstr(sub));
++    retval = bfromcstr(sub);
+     return retval;
+ 
+ }
+@@ -388,6 +394,7 @@ void end_identification()
+             bdestroy(signature_list->title.ver);
+         if (signature_list->title.misc != NULL)
+             bdestroy(signature_list->title.misc);
++        pcre_free(signature_list->regex);
+ 
+         /* Free Record */
+         if (signature_list != NULL)
+diff -urp pads-1.2.orig/src/output/output.c pads-1.2/src/output/output.c
+--- pads-1.2.orig/src/output/output.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/output/output.c	2008-06-30 16:12:11.000000000 -0400
+@@ -31,8 +31,8 @@
+ #include "output-fifo.h"
+ #include "storage.h"
+ 
+-/* Global Variables */
+-OutputPluginList *output_plugin_list;
++/* Local Variables */
++static OutputPluginList *output_plugin_list = NULL;
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: init_output()
+@@ -77,6 +77,7 @@ int register_output_plugin (OutputPlugin
+     list = (OutputPluginList*)malloc(sizeof(OutputPluginList));
+     list->plugin = plugin;
+     list->active = 0;
++    list->next = NULL;
+ 
+     /* Place plugin in data structure. */
+     if (output_plugin_list == NULL) {
+diff -urp pads-1.2.orig/src/output/output-csv.c pads-1.2/src/output/output-csv.c
+--- pads-1.2.orig/src/output/output-csv.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/output/output-csv.c	2008-06-30 16:12:11.000000000 -0400
+@@ -46,7 +46,7 @@ setup_output_csv (void)
+ 
+     /* Allocate and setup plugin data record. */
+     plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
+-    plugin->name = bstrcpy(bfromcstr("csv"));
++    plugin->name = bfromcstr("csv");
+     plugin->init = init_output_csv;
+     plugin->print_asset = print_asset_csv;
+     plugin->print_arp = print_arp_asset_csv;
+@@ -83,7 +83,7 @@ init_output_csv (bstring filename)
+     if (filename != NULL)
+ 	output_csv_conf.filename = bstrcpy(filename);
+     else
+-	output_csv_conf.filename = bstrcpy(bfromcstr("assets.csv"));
++	output_csv_conf.filename = bfromcstr("assets.csv");
+ 
+     /* Check to see if *filename exists. */
+     if ((fp = fopen((char *)bdata(output_csv_conf.filename), "r")) == NULL) {
+diff -urp pads-1.2.orig/src/output/output-fifo.c pads-1.2/src/output/output-fifo.c
+--- pads-1.2.orig/src/output/output-fifo.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/output/output-fifo.c	2008-06-30 16:12:11.000000000 -0400
+@@ -71,7 +71,7 @@ setup_output_fifo (void)
+ 
+     /* Allocate and setup plugin data record. */
+     plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
+-    plugin->name = bstrcpy(bfromcstr("fifo"));
++    plugin->name = bfromcstr("fifo");
+     plugin->init = init_output_fifo;
+     plugin->print_asset = print_asset_fifo;
+     plugin->print_arp = print_arp_asset_fifo;
+@@ -102,7 +102,7 @@ init_output_fifo (bstring fifo_file)
+ 
+     /* Make sure report_file isn't NULL. */
+     if (fifo_file == NULL)
+-	fifo_file = bstrcpy(bfromcstr("pads.fifo"));
++	fifo_file = bfromcstr("pads.fifo");
+ 
+     output_fifo_conf.filename = bstrcpy(fifo_file);
+ 
+diff -urp pads-1.2.orig/src/output/output-screen.c pads-1.2/src/output/output-screen.c
+--- pads-1.2.orig/src/output/output-screen.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/output/output-screen.c	2008-06-30 16:12:11.000000000 -0400
+@@ -43,7 +43,7 @@ setup_output_screen (void)
+ 
+     /* Allocate and setup plugin data record. */
+     plugin = (OutputPlugin*)malloc(sizeof(OutputPlugin));
+-    plugin->name = bstrcpy(bfromcstr("screen"));
++    plugin->name = bfromcstr("screen");
+     plugin->init = init_output_screen;
+     plugin->print_asset = print_asset_screen;
+     plugin->print_arp = print_arp_asset_screen;
+diff -urp pads-1.2.orig/src/packet.c pads-1.2/src/packet.c
+--- pads-1.2.orig/src/packet.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/packet.c	2008-06-30 16:12:11.000000000 -0400
+@@ -211,8 +211,13 @@ void process_tcp (const struct pcap_pkth
+ 
+ 		/* Check to see if this is a known asset. */
+ 		if(check_tcp_asset(ip_src, tcph->th_sport)) {
++		    bstring serv, app;
++		    serv = bfromcstr("unknown");
++		    app = bfromcstr("unknown");
+ 		    add_asset(ip_src, tcph->th_sport,
+-			    IPPROTO_TCP, bfromcstr("unknown"), bfromcstr("unknown"), 0);
++			    IPPROTO_TCP, serv, app, 0);
++		    bdestroy(serv);
++		    bdestroy(app);
+ 		} else {
+ 		    /* Record connection for statistical purposes. */
+ 		    print_stat(ip_src, tcph->th_sport, IPPROTO_TCP);
+@@ -269,8 +274,13 @@ void process_icmp (const struct pcap_pkt
+ 
+     if (icmp->icmp_type == ICMP_ECHOREPLY) {
+ 	if(check_icmp_asset(ip_src)) {
+-	    add_asset(ip_src, 0, IPPROTO_ICMP, bfromcstr("ICMP"), bfromcstr("ICMP"), 0);
++	    bstring serv, app;
++	    serv = bfromcstr("ICMP");
++	    app = bfromcstr("ICMP");
++	    add_asset(ip_src, 0, IPPROTO_ICMP, serv, app, 0);
+ 	    print_asset(ip_src, 0, IPPROTO_ICMP);
++	    bdestroy(serv);
++	    bdestroy(app);
+ 	}
+     }
+ 
+diff -urp pads-1.2.orig/src/pads.c pads-1.2/src/pads.c
+--- pads-1.2.orig/src/pads.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/pads.c	2008-06-30 16:23:31.000000000 -0400
+@@ -165,9 +165,33 @@ print_version (void)
+  * FUNCTION     : init_pads
+  * DESCRIPTION  : This function will initialize PADS.
+  * ---------------------------------------------------------- */
++void init_gc(void)
++{
++    gc.handle = NULL;
++    gc.dev = NULL;
++    gc.pcap_filter = NULL;
++    gc.conf_file = NULL;
++    gc.report_file = NULL;
++    gc.fifo_file = NULL;
++    gc.pcap_file = NULL;
++    gc.dump_file = NULL;
++    gc.pid_file = NULL;
++    gc.sig_file = NULL;
++    gc.mac_file = NULL;
++    gc.priv_user = NULL;
++    gc.priv_group = NULL;
++}
++
++/* ----------------------------------------------------------
++ * FUNCTION     : init_pads
++ * DESCRIPTION  : This function will initialize PADS.
++ * ---------------------------------------------------------- */
+ void
+ init_pads (void)
+ {
++    /* Init global config to known state */
++    init_gc();
++
+     /* Process the command line parameters. */
+     process_cmdline(prog_argc, prog_argv);
+ 
+@@ -179,15 +203,22 @@ init_pads (void)
+         init_configuration(gc.conf_file);
+ 
+     } else {
+-        /* Default Output Plugins:  These plugins are activated if a configuration
+-         * file is not specified. */
++        bstring name, args;
++        /* Default Output Plugins:  These plugins are activated if a
++         *  configuration file is not specified. */
+ 
+         /* output:  screen */
+-        if ((activate_output_plugin(bfromcstr("screen"), bfromcstr(""))) == -1)
++        name = bfromcstr("screen");
++        args = bfromcstr("");
++        if ((activate_output_plugin(name, args)) == -1)
+             log_message("warning:  'activate_output_plugin' in function 'init_pads' failed.");
++        bdestroy(name);
++        bdestroy(args);
+         /* output:  csv */
+-        if ((activate_output_plugin(bfromcstr("csv"), gc.report_file)) == -1)
++        name = bfromcstr("csv");
++        if ((activate_output_plugin(name, gc.report_file)) == -1)
+             log_message("warning:  'activate_output_plugin' in function 'init_pads' failed.");
++        bdestroy(name);
+     }
+ 
+     /* Initialize Modules */
+diff -urp pads-1.2.orig/src/storage.c pads-1.2/src/storage.c
+--- pads-1.2.orig/src/storage.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/storage.c	2008-06-30 16:12:11.000000000 -0400
+@@ -29,8 +29,8 @@
+ #include "storage.h"
+ #include "mac-resolution.h"
+ 
+-Asset *asset_list;
+-ArpAsset *arp_asset_list;
++static Asset *asset_list = NULL;
++static ArpAsset *arp_asset_list = NULL;
+ 
+ /* ----------------------------------------------------------
+  * FUNCTION	: check_tcp_asset
+@@ -343,7 +343,9 @@ short update_asset (struct in_addr ip_ad
+ 		&& port == list->port
+ 		&& proto == list->proto) {
+ 	    /* Found! */
++	    bdestroy(list->service);
+ 	    list->service = bstrcpy(service);
++	    bdestroy(list->application);
+ 	    list->application = bstrcpy(application);
+ 	    return 0;
+ 
+diff -urp pads-1.2.orig/src/util.c pads-1.2/src/util.c
+--- pads-1.2.orig/src/util.c	2008-06-30 13:56:52.000000000 -0400
++++ pads-1.2/src/util.c	2008-06-30 16:26:24.000000000 -0400
+@@ -120,7 +120,7 @@ init_pid_file (bstring pid_file, bstring
+     struct passwd *this_user;
+ 
+     /* Default PID File */
+-    if (gc.pid_file->slen >= 0)
++    if (gc.pid_file == NULL || gc.pid_file->slen == 0)
+         gc.pid_file = bfromcstr("/var/run/pads.pid");
+ 
+     /* Create PID File */

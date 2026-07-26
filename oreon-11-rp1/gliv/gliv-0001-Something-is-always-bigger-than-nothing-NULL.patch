@@ -1,0 +1,27 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Sun, 21 Jul 2013 18:43:26 +0400
+Subject: [PATCH] Something is always bigger than nothing (NULL)
+
+https://bugzilla.redhat.com/865114
+
+Backtrace:
+
+https://bugzilla.redhat.com/attachment.cgi?id=625155
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/files_list.c b/src/files_list.c
+index f0ff8fe..60fd15e 100644
+--- a/src/files_list.c
++++ b/src/files_list.c
+@@ -304,6 +304,10 @@ G_GNUC_PURE static gint filename_compar(gconstpointer a, gconstpointer b)
+     ptr1 = (const gchar *) a;
+     ptr2 = (const gchar *) b;
+ 
++    /* Something is always bigger than nothing (NULL) */
++    if (ptr1 && !ptr2)
++	    return 1;
++
+     if (ptr1[0] != ptr2[0])
+         /* Comparing an absolute filename, and a relative one. */
+         return ptr1[0] == '/' ? -1 : 1;

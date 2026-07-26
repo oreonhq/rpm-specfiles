@@ -1,0 +1,79 @@
+diff --git a/gears.pp b/gears.pp
+index 457cd4f..48d1315 100644
+--- a/gears.pp
++++ b/gears.pp
+@@ -133,12 +133,14 @@ Const
+ 	Save_Unit_Base = Save_Game_Directory + 'GHU';
+ 	Save_Campaign_Base = Save_Game_Directory + 'RPG';
+ }
++	RPM_Data_Dir = __RPM_DATA_DIR__;
++
+ 	Design_DirName = 'Design';
+-	Design_Directory = Design_DirName + OS_Dir_Separator;
++	Design_Directory = RPM_Data_Dir + OS_Dir_Separator + Design_DirName + OS_Dir_Separator;
+ 	PC_Equipment_File = Design_Directory + 'PC_Equipment.txt';
+ 	Mek_Equipment_File = Design_Directory + 'Mek_Equipment.txt';
+ 	Series_DirName = 'Series';
+-	Series_Directory = Series_DirName + OS_Dir_Separator;
++	Series_Directory = RPM_Data_Dir + OS_Dir_Separator + Series_DirName + OS_Dir_Separator;
+ 	Archetypes_File = Series_Directory + 'ANPCdefault.txt';
+ 	Adventure_File_Base = Series_Directory + 'ADV_';
+ 	STC_Item_File = Series_Directory + 'STCdefault.txt';
+@@ -146,7 +148,7 @@ Const
+ 	Jobs_File = Series_Directory + 'RCJobs.txt';
+ 	Monsters_File = Series_Directory + 'WMONdefault.txt';
+ 	Data_DirName = 'GameData';
+-	Data_Directory = Data_DirName + OS_Dir_Separator;
++	Data_Directory = RPM_Data_Dir + OS_Dir_Separator + Data_DirName + OS_Dir_Separator;
+ 	MetaTerrain_File_Base = Data_Directory + 'meta';
+ 	Trait_Chatter_Base = Data_Directory + 'TC_';
+ 	Standard_Message_File = Data_Directory + 'messages.txt';
+@@ -166,7 +168,7 @@ Const
+ 	NPC_Chatter_File = Data_Directory + 'taunts.txt';
+ 
+ 	Doc_DirName = 'doc';
+-	Doc_Directory = Doc_DirName + OS_Dir_Separator;
++	Doc_Directory = RPM_Data_Dir + OS_Dir_Separator + Doc_DirName + OS_Dir_Separator;
+ 	Mecha_Help_File = Doc_Directory + 'man_umek.txt';
+ 	FieldHQ_Help_File = Doc_Directory + 'man_mecha.txt';
+ 	Chara_Help_File = Doc_Directory + 'man_chara.txt';
+@@ -174,7 +176,7 @@ Const
+ 
+ {$IFDEF SDLMODE}
+ 	Graphics_DirName = 'Image';
+-	Graphics_Directory = Graphics_Dirname + OS_Dir_Separator;
++	Graphics_Directory = RPM_Data_Dir + OS_Dir_Separator + Graphics_Dirname + OS_Dir_Separator;
+ {$ENDIF}
+ 
+ 	STARTUP_OK: Boolean = True;
+@@ -1264,11 +1266,11 @@ begin
+ 	end;
+ 
+ 	{ Check to make sure all the other directories can be found. }
+-	Startup_OK := DirectoryExists( Design_DirName );
+-	Startup_OK := Startup_OK and DirectoryExists( Series_DirName );
+-	Startup_OK := Startup_OK and DirectoryExists( Data_DirName );
++	Startup_OK := DirectoryExists( Design_Directory );
++	Startup_OK := Startup_OK and DirectoryExists( Series_Directory );
++	Startup_OK := Startup_OK and DirectoryExists( Data_Directory );
+ {$IFDEF SDLMODE}
+-	Startup_OK := Startup_OK and DirectoryExists( Graphics_DirName );
++	Startup_OK := Startup_OK and DirectoryExists( Graphics_Directory );
+ {$ENDIF}
+ end;
+ 
+diff --git a/sdlgfx.pp b/sdlgfx.pp
+index 6b8fc8b..c1610bc 100644
+--- a/sdlgfx.pp
++++ b/sdlgfx.pp
+@@ -1486,8 +1485,8 @@ initialization
+ 	Cursor_Sprite := ConfirmSprite( 'cursor.png' , '' , 8 , 16 );
+ 
+ 	TTF_Init;
+-	Game_Font := TTF_OpenFont( 'Image' + OS_Dir_Separator + 'VeraBd.ttf' , BigFontSize );
+-	Info_Font := TTF_OpenFont( 'Image' + OS_Dir_Separator + 'VeraMoBd.ttf' , SmallFontSize );
++	Game_Font := TTF_OpenFont( Graphics_Directory + 'VeraBd.ttf' , BigFontSize );
++	Info_Font := TTF_OpenFont( Graphics_Directory + 'VeraMoBd.ttf' , SmallFontSize );
+ 
+ 	Text_Messages := LoadStringList( Standard_Message_File );
+ 	Console_History := Nil;

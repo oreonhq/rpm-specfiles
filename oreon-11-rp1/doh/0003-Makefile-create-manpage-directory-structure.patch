@@ -1,0 +1,24 @@
+From 4ac0dc935de5bd00c3ddd55080f16f4a43577a05 Mon Sep 17 00:00:00 2001
+From: Carl George <carlwgeorge@gmail.com>
+Date: Fri, 28 Mar 2025 18:14:25 -0500
+Subject: [PATCH] Makefile: create manpage directory structure
+
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile b/Makefile
+index 848b43d..61e97db 100644
+--- a/Makefile
++++ b/Makefile
+@@ -12,6 +12,7 @@ $(TARGET): $(OBJS)
+ install:
+ 	install -d $(DESTDIR)$(BINDIR)
+ 	install -m 0755 $(TARGET) $(DESTDIR)$(BINDIR)
++	install -d $(DESTDIR)$(MANDIR)/man1
+ 	install -m 0644 $(MANUAL) $(DESTDIR)$(MANDIR)/man1/
+ 
+ clean:
+-- 
+2.49.0
+

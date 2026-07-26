@@ -1,0 +1,16 @@
+From: Martin Cox <me@mar.tin.cx>
+Date: Thu, 28 Dec 2017 14:34:54 +0000
+Subject: [PATCH] Add recent otp versions to rebar.config.
+
+Signed-off-by: Randy Barlow <randy@electronsweatshop.com>
+
+diff --git a/rebar.config b/rebar.config
+index c057570..fa1bdc4 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -1,5 +1,3 @@
+-{minimum_otp_vsn, "20"}.
+-
+ {erl_opts, [warnings_as_errors,
+             {parse_transform, lager_transform},
+             debug_info,

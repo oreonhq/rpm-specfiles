@@ -1,0 +1,58 @@
+diff -up frysk-0.4/frysk-core/frysk/debuginfo/TestGccInterface.java.fix-duplicates frysk-0.4/frysk-core/frysk/debuginfo/TestGccInterface.java
+--- frysk-0.4/frysk-core/frysk/debuginfo/TestGccInterface.java.fix-duplicates	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/debuginfo/TestGccInterface.java	2009-06-19 15:48:11.000000000 -0400
+@@ -77,7 +77,7 @@ public class TestGccInterface extends Te
+     }
+ 
+     public void testSimpleInterface() {
+-	CompositeType type = getType("FunitSimpleInterfaceTest", "inter");
++	CompositeType type = getType("FunitSimpleInterfaceMain", "inter");
+ 
+ 	String expected;
+ 	if (BuildCompiler.supports_AT_INTERFACE()) {
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterface.java.fix-duplicates frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterface.java
+--- frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterface.java.fix-duplicates	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterface.java	2009-06-19 15:48:11.000000000 -0400
+@@ -37,6 +37,8 @@
+ // version and license this file solely under the GPL without
+ // exception.
+ 
++package frysk.pkglibdir;
++
+ public interface FunitSimpleInterface {
+ 
+     void simpleMethod();
+diff -up frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterfaceMain.java.fix-duplicates frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterfaceMain.java
+--- frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterfaceMain.java.fix-duplicates	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-core/frysk/pkglibdir/FunitSimpleInterfaceMain.java	2009-06-19 15:48:11.000000000 -0400
+@@ -37,10 +37,12 @@
+ // version and license this file solely under the GPL without
+ // exception.
+ 
+-public class FunitSimpleInterfaceTest implements FunitSimpleInterface{
++package frysk.pkglibdir;
++
++public class FunitSimpleInterfaceMain implements FunitSimpleInterface{
+ 
+     public static void main(String[] args) {
+-	FunitSimpleInterface inter = new FunitSimpleInterfaceTest();
++	FunitSimpleInterface inter = new FunitSimpleInterfaceMain();
+ 	// Crash
+ 	Object o = null;
+ 	o.toString();
+diff -up frysk-0.4/frysk-core/Makefile.am.fix-duplicates frysk-0.4/frysk-core/Makefile.am
+--- frysk-0.4/frysk-core/Makefile.am.fix-duplicates	2008-06-09 14:03:07.000000000 -0400
++++ frysk-0.4/frysk-core/Makefile.am	2009-06-19 15:48:11.000000000 -0400
+@@ -317,12 +317,6 @@ frysk/pkgdatadir/test-core-x86:
+ 	mkdir -p `dirname $@`
+ 	ln -s -f @abs_top_builddir@/../frysk-sys/$@ $@
+ 
+-#FunitSimpleInterfaceTest
+-pkglib_PROGRAMS += frysk/pkglibdir/FunitSimpleInterfaceTest
+-frysk/pkglibdir/FunitSimpleInterfaceTest:
+-	gcj -o $@ -g --main=FunitSimpleInterfaceTest $(srcdir)/frysk/pkglibdir/FunitSimpleInterfaceTest.java $(srcdir)/frysk/pkglibdir/FunitSimpleInterface.java
+-
+-
+ # The following links two files into one executable
+ pkglib_PROGRAMS += frysk/pkglibdir/funit-scopes-multi-file
+ frysk_pkglibdir_funit_scopes_multi_file_SOURCES =

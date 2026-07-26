@@ -1,0 +1,78 @@
+Include <arpa/inet.h> for inet_addr and inet_ntop.  . Include
+<netax25/axlib.h> for ax25_aton_entry.  Replace implicit ints with
+explicit ints.
+
+This changes avoid build failures with future compilers.
+
+Submitted upstream: <https://github.com/n2ygk/aprsdigi/pull/11>
+
+diff --git a/aprsdigi.c b/aprsdigi.c
+index c75c8fce7cb79853..23869e889c29c2ec 100644
+--- a/aprsdigi.c
++++ b/aprsdigi.c
+@@ -45,6 +45,7 @@ static char copyr[] = "Copyright (c) 1996,1997,1999,2001,2002,2003,2004,2009,201
+ #include <sys/un.h>
+ #include <net/if.h>
+ #include <netinet/if_ether.h>
++#include <arpa/inet.h>
+ #include <netinet/in.h>
+ #include <sys/ioctl.h>
+ #include <unistd.h>
+diff --git a/fiforead.c b/fiforead.c
+index 87e1549e8a1e734a..14db7d6eacd6cfeb 100644
+--- a/fiforead.c
++++ b/fiforead.c
+@@ -20,6 +20,7 @@ int Verbose = 1;
+ 
+ static void die(char *s);
+ 
++int
+ main(int argc, char **argv)
+ {
+   struct sockaddr_un mysun,remsun;
+diff --git a/fifowrite.c b/fifowrite.c
+index b72c0c6072e80e4e..e0a4ddd8a32c2b64 100644
+--- a/fifowrite.c
++++ b/fifowrite.c
+@@ -20,6 +20,7 @@ int Verbose = 1;
+ 
+ static void die(char *s);
+ 
++int
+ main(int argc, char **argv)
+ {
+   struct sockaddr_un mysun;
+diff --git a/testmcast.c b/testmcast.c
+index f7e65a57e8866ce9..b11cfae381227f7c 100644
+--- a/testmcast.c
++++ b/testmcast.c
+@@ -6,6 +6,7 @@
+ #include <sys/socket.h>
+ #include <net/if.h>
+ #include <netinet/if_ether.h>
++#include <arpa/inet.h>
+ #include <netinet/in.h>
+ #include <sys/ioctl.h>
+ #include <unistd.h>
+@@ -33,6 +34,7 @@ die(char *p, char *s)
+   exit(1);
+ }
+ 
++int
+ main(int argc,char **argv)
+ {
+   struct sockaddr_in sin;
+diff --git a/testparse.c b/testparse.c
+index 0bf471f73e79fcbb..36fcf3db7bc0b9ff 100644
+--- a/testparse.c
++++ b/testparse.c
+@@ -27,7 +27,8 @@ static void print_it(FILE *f,
+ 	      int len);
+ static void drop_unused_digis(struct ax_calls *);
+ 
+-main()
++int
++main(void)
+ {
+   unsigned char buf[2048],*bp;
+   int buflen, *lp = &buflen;

@@ -1,0 +1,21 @@
+diff -Naur ExtUtils-AutoInstall-0.63.orig/lib/ExtUtils/AutoInstall.pm ExtUtils-AutoInstall-0.63/lib/ExtUtils/AutoInstall.pm
+--- ExtUtils-AutoInstall-0.63.orig/lib/ExtUtils/AutoInstall.pm	2005-09-12 15:16:09.000000000 +0200
++++ ExtUtils-AutoInstall-0.63/lib/ExtUtils/AutoInstall.pm	2014-04-04 18:27:58.840550357 +0200
+@@ -878,9 +878,14 @@
+     }
+ 
+     $args{test}{TESTS} ||= 't/*.t';
+-    $args{test}{TESTS} = join(' ', grep {
+-        !exists($DisabledTests{$_})
+-    } map { glob($_) } split(/\s+/, $args{test}{TESTS}));
++
++    # Only expand the list of tests if we absolutely have to to avoid
++    # blowing over command line limits.
++    if( keys %DisabledTests ) {
++	$args{test}{TESTS} = join(' ', grep {
++	    !exists($DisabledTests{$_})
++	} map { glob($_) } split(/\s+/, $args{test}{TESTS}));
++    }
+ 
+     my $missing = join(',', @Missing);
+     my $config  = join(',',

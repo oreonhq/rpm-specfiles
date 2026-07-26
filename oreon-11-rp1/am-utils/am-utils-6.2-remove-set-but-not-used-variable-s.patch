@@ -1,0 +1,38 @@
+commit 79bb90caf12d2713b4736c3820135f0f00424f10
+Author: Christos Zoulas <christos@zoulas.com>
+Date:   Sat Jan 17 12:29:03 2015 -0500
+
+    remove set but not used variable
+
+diff --git a/hlfsd/hlfsd.c b/hlfsd/hlfsd.c
+index 686bb63..701abcd 100644
+--- a/hlfsd/hlfsd.c
++++ b/hlfsd/hlfsd.c
+@@ -144,7 +144,6 @@ main(int argc, char *argv[])
+   int opterrs = 0;
+   int retry;
+   int soNFS;			/* NFS socket */
+-  int s = -99;
+   mntent_t mnt;
+   nfs_args_t nfs_args;
+   am_nfs_handle_t anh;
+@@ -449,17 +448,16 @@ main(int argc, char *argv[])
+    * set this signal handler.
+    */
+   if (amuDebug(D_DAEMON)) {
+-    s = -99;
+     while (stoplight != SIGUSR2) {
+       plog(XLOG_INFO, "parent waits for child to setup (stoplight=%d)", stoplight);
+ #ifdef HAVE_SIGSUSPEND
+       {
+ 	sigset_t mask;
+ 	sigemptyset(&mask);
+-	s = sigsuspend(&mask);	/* wait for child to set up */
++	(void)sigsuspend(&mask);	/* wait for child to set up */
+       }
+ #else /* not HAVE_SIGSUSPEND */
+-      s = sigpause(0);		/* wait for child to set up */
++      (void)sigpause(0);		/* wait for child to set up */
+ #endif /* not HAVE_SIGSUSPEND */
+       sleep(1);
+     }

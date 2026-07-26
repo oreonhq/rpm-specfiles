@@ -1,0 +1,28 @@
+From 03fa0e92467f56028944e04478b19845c03daafd Mon Sep 17 00:00:00 2001
+From: Mahendra Narvariya <mahendra84@users.sourceforge.net>
+Date: Thu, 19 Nov 2015 14:03:40 +0100
+Subject: [PATCH 6/8] Fix possible NULL Pointer deref in mmsh.c
+
+---
+ src/mmsh.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/mmsh.c b/src/mmsh.c
+index dc17c9d..918e0a3 100755
+--- a/src/mmsh.c
++++ b/src/mmsh.c
+@@ -603,6 +603,11 @@ mmsh_t *mmsh_connect (mms_io_t *io, void *data, const char *url, int bandwidth)
+    */
+   this = calloc(1, sizeof(mmsh_t));
+ 
++  if (!this) {
++    lprintf("error, calloc failed\n");
++    return NULL;
++  }
++
+   this->url             = strdup(url);
+   if ((proxy_env = getenv("http_proxy")) != NULL)
+     this->proxy_url = strdup(proxy_env);
+-- 
+2.39.2
+

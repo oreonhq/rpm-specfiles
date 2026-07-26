@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>IBM Plex Mono</target>
+    <like>
+      <family>monospace</family>
+    </like>
+  </group>
+</fontconfig>

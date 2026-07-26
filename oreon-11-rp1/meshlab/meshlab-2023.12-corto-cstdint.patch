@@ -1,0 +1,11 @@
+diff -up meshlab-MeshLab-2023.12/src/external/downloads/nexus-master/src/corto/include/corto/tunstall.h.cstdint meshlab-MeshLab-2023.12/src/external/downloads/nexus-master/src/corto/include/corto/tunstall.h
+--- meshlab-MeshLab-2023.12/src/external/downloads/nexus-master/src/corto/include/corto/tunstall.h.cstdint	2024-01-02 10:15:35.522856588 -0500
++++ meshlab-MeshLab-2023.12/src/external/downloads/nexus-master/src/corto/include/corto/tunstall.h	2024-01-02 10:15:42.950962336 -0500
+@@ -19,6 +19,7 @@ If not, see <http://www.gnu.org/licenses
+ #ifndef CRT_TUNSTALL_H
+ #define CRT_TUNSTALL_H
+ 
++#include <cstdint>
+ #include <vector>
+ 
+ 

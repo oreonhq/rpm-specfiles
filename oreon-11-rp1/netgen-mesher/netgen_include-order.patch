@@ -1,0 +1,49 @@
+diff -rupN --no-dereference netgen-6.2.2601/libsrc/csg/vscsg.cpp netgen-6.2.2601-new/libsrc/csg/vscsg.cpp
+--- netgen-6.2.2601/libsrc/csg/vscsg.cpp	2026-01-14 10:54:29.000000000 +0100
++++ netgen-6.2.2601-new/libsrc/csg/vscsg.cpp	2026-01-18 10:30:32.389987145 +0100
+@@ -1,11 +1,11 @@
+ #include <mystdlib.h>
+-#include "incopengl.hpp"
+ 
+ #include <myadt.hpp>
+ #include <meshing.hpp>
+ #include <csg.hpp>
+ #include <stlgeom.hpp>
+ 
++#include "incopengl.hpp"
+ #include <visual.hpp>
+ 
+ #include "vscsg.hpp"
+diff -rupN --no-dereference netgen-6.2.2601/libsrc/visualization/vsfieldlines.cpp netgen-6.2.2601-new/libsrc/visualization/vsfieldlines.cpp
+--- netgen-6.2.2601/libsrc/visualization/vsfieldlines.cpp	2026-01-14 10:54:29.000000000 +0100
++++ netgen-6.2.2601-new/libsrc/visualization/vsfieldlines.cpp	2026-01-18 10:30:32.390362370 +0100
+@@ -1,7 +1,6 @@
+ #ifndef NOTCL
+ 
+ #include <mystdlib.h>
+-#include <incopengl.hpp>
+ 
+ 
+ #include <myadt.hpp>
+@@ -9,6 +8,7 @@
+ #include <csg.hpp>
+ #include <stlgeom.hpp>
+ 
++#include <incopengl.hpp>
+ #include <visual.hpp>
+ #include <meshing/fieldlines.hpp>
+ 
+diff -rupN --no-dereference netgen-6.2.2601/ng/ngappinit.cpp netgen-6.2.2601-new/ng/ngappinit.cpp
+--- netgen-6.2.2601/ng/ngappinit.cpp	2026-01-14 10:54:29.000000000 +0100
++++ netgen-6.2.2601-new/ng/ngappinit.cpp	2026-01-18 10:30:32.390600554 +0100
+@@ -7,9 +7,9 @@
+ #undef USE_TK_STUBS
+ 
+ #include <mystdlib.h> 
++#include <core/mpi_wrapper.hpp>
+ #include <inctcl.hpp>
+ #include <meshing.hpp>
+-#include <core/mpi_wrapper.hpp>
+ 
+ #include "../libsrc/interface/writeuser.hpp"
+ 

@@ -1,0 +1,12 @@
+diff -up overgod-1.0/display.h~ overgod-1.0/display.h
+--- overgod-1.0/display.h~	2005-09-10 21:32:02.000000000 +0200
++++ overgod-1.0/display.h	2014-06-16 16:04:49.787192227 +0200
+@@ -280,6 +280,8 @@ BMP_SHIELD_DR4,
+ BMP_SHIELD_DR5,
+ BMP_SHIELD_DR6,
+ BMP_SHIELD_DR7,
++BMP_SHIELD_DR8,
++BMP_SHIELD_DL1,
+ BMP_SHIELD_DL2,
+ BMP_SHIELD_DL3,
+ BMP_SHIELD_DL4,

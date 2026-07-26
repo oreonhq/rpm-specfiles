@@ -1,0 +1,341 @@
+diff -rup a/src/app/document.c b/src/app/document.c
+--- a/src/app/document.c	2016-05-13 09:12:36.758355984 +0200
++++ b/src/app/document.c	2016-05-13 09:31:11.707792847 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "globals.h"
+ #include "doc.h"
+ #include "../icons/attention.xpm"
+diff -rup a/src/fourier/fourier_dialog.c b/src/fourier/fourier_dialog.c
+--- a/src/fourier/fourier_dialog.c	2016-05-13 09:12:36.761355963 +0200
++++ b/src/fourier/fourier_dialog.c	2016-05-13 09:19:57.951324501 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "fourier_dialog.h"
+ #include "../hf/hf.h"
+ #include "../hf/hf_calc.h"
+diff -rup a/src/hf/camera.c b/src/hf/camera.c
+--- a/src/hf/camera.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/camera.c	2016-05-13 09:26:33.587616841 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include <GL/gl.h>
+ #include <GL/glu.h>
+ #include <gtk/gtk.h>
+diff -rup a/src/hf/dialog_utilities.c b/src/hf/dialog_utilities.c
+--- a/src/hf/dialog_utilities.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/dialog_utilities.c	2016-05-13 09:28:49.642724552 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "dialog_utilities.h"
+ #include "hf.h"
+ #include "hf_calc.h"
+diff -rup a/src/hf/draw.c b/src/hf/draw.c
+--- a/src/hf/draw.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/draw.c	2016-05-13 09:26:15.821733355 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "draw.h"
+ #include "waves.h"
+ #define MULT_SIZE 2
+diff -rup a/src/hf/erode.c b/src/hf/erode.c
+--- a/src/hf/erode.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/erode.c	2016-05-13 09:27:50.636111534 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf.h"
+ #include "hf_calc.h"
+ #include "erode.h"
+diff -rup a/src/hf/erode_dialog.c b/src/hf/erode_dialog.c
+--- a/src/hf/erode_dialog.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/erode_dialog.c	2016-05-13 09:25:51.589894614 +0200
+@@ -20,6 +20,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include <unistd.h>
+ 
+ #include "img_process_dialog.h"
+diff -rup a/src/hf/fault.c b/src/hf/fault.c
+--- a/src/hf/fault.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/fault.c	2016-05-13 09:27:30.812241545 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+  #include "line.h"
+  #include "fault.h"
+  #include "hf.h"
+diff -rup a/src/hf/gl_preview.c b/src/hf/gl_preview.c
+--- a/src/hf/gl_preview.c	2016-05-13 09:12:36.758355984 +0200
++++ b/src/hf/gl_preview.c	2016-05-13 09:25:03.149227455 +0200
+@@ -30,6 +30,7 @@ in Linux Magazine France, n. 33-34.
+  /* 2005-11: change library from gtkglarea to gtkglext
+  */
+ 
++#include <string.h>
+ #include <locale.h>
+ #include <GL/gl.h>
+ #include <GL/glu.h>
+diff -rup a/src/hf/hf.c b/src/hf/hf.c
+--- a/src/hf/hf.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/hf.c	2016-05-13 09:27:10.098377393 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf.h"
+ #include "hf_calc.h"
+ #include "camera.h"
+diff -rup a/src/hf/hf_calc.c b/src/hf/hf_calc.c
+--- a/src/hf/hf_calc.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/hf_calc.c	2016-05-13 09:23:59.590664172 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include <math.h>
+ #include "hf.h"
+ #include "hf_calc.h"
+diff -rup a/src/hf/hf_filters_dialog.c b/src/hf/hf_filters_dialog.c
+--- a/src/hf/hf_filters_dialog.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/hf_filters_dialog.c	2016-05-13 09:23:03.399050271 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf_filters_dialog.h"
+ #include "hf_wrapper.h"
+ 
+diff -rup a/src/hf/hf_wrapper.c b/src/hf/hf_wrapper.c
+--- a/src/hf/hf_wrapper.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/hf_wrapper.c	2016-05-13 09:30:09.060203708 +0200
+@@ -22,6 +22,7 @@
+  // Modified 2005-01-09 for removing double buffering, not required with GTK2
+  // Modified 2006-01-01 for cleaning the file / code structure
+  
++#include <string.h>
+ #include "globals.h"
+ #include "hf_wrapper.h"
+ #include "hf_dialog_options.h"
+diff -rup a/src/hf/img_process.c b/src/hf/img_process.c
+--- a/src/hf/img_process.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/img_process.c	2016-05-13 09:21:37.901637732 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include <math.h>
+ #include "img_process.h"
+ #include "hf.h"
+diff -rup a/src/hf/img_process_dialog.c b/src/hf/img_process_dialog.c
+--- a/src/hf/img_process_dialog.c	2016-05-13 09:12:36.758355984 +0200
++++ b/src/hf/img_process_dialog.c	2016-05-13 09:21:14.256800199 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "img_process_dialog.h"
+ #include "wind.h"
+ #include "wind_dialog.h"
+diff -rup a/src/hf/line.c b/src/hf/line.c
+--- a/src/hf/line.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/line.c	2016-05-13 09:29:07.012610635 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "line.h"
+ #include "hf.h"
+ #include "hf_calc.h"
+diff -rup a/src/hf/render.c b/src/hf/render.c
+--- a/src/hf/render.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/render.c	2016-05-13 09:29:49.210333890 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "render.h"
+ #include "../utils/utils.h"
+ #include "../utils/menus_n_tools.h"
+diff -rup a/src/hf/subdiv1_dialog.c b/src/hf/subdiv1_dialog.c
+--- a/src/hf/subdiv1_dialog.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/subdiv1_dialog.c	2016-05-13 09:22:32.967259371 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf_wrapper.h"
+ #include "dialog_utilities.h"
+ 
+diff -rup a/src/hf/subdiv2_dialog.c b/src/hf/subdiv2_dialog.c
+--- a/src/hf/subdiv2_dialog.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/subdiv2_dialog.c	2016-05-13 09:23:26.471891735 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf_wrapper.h"
+ #include "dialog_utilities.h"
+ 
+diff -rup a/src/hf/surfadd_dialog.c b/src/hf/surfadd_dialog.c
+--- a/src/hf/surfadd_dialog.c	2016-05-13 09:12:36.758355984 +0200
++++ b/src/hf/surfadd_dialog.c	2016-05-13 09:20:43.401012212 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf_wrapper.h"
+ #include "dialog_utilities.h"
+ // #include "hf_filters_dialog.h"
+diff -rup a/src/hf/uniform_dialog.c b/src/hf/uniform_dialog.c
+--- a/src/hf/uniform_dialog.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/uniform_dialog.c	2016-05-13 09:21:57.977499789 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf_wrapper.h"
+ #include "dialog_utilities.h"
+ 
+diff -rup a/src/hf/voronoi.c b/src/hf/voronoi.c
+--- a/src/hf/voronoi.c	2016-05-13 09:12:36.759355977 +0200
++++ b/src/hf/voronoi.c	2016-05-13 09:30:26.716087916 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf.h"
+ #include "img_process.h"
+ #include "voronoi.h"
+diff -rup a/src/hf/voronoi_dialog.c b/src/hf/voronoi_dialog.c
+--- a/src/hf/voronoi_dialog.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/voronoi_dialog.c	2016-05-13 09:30:38.286012037 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "voronoi.h"
+ #include "hf.h"
+ #include "img_process_dialog.h"
+diff -rup a/src/hf/waves.c b/src/hf/waves.c
+--- a/src/hf/waves.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/waves.c	2016-05-13 09:23:40.551794990 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "waves.h"
+ #include "img_process.h"
+ #include <math.h>
+diff -rup a/src/hf/wind.c b/src/hf/wind.c
+--- a/src/hf/wind.c	2016-05-13 09:12:36.760355970 +0200
++++ b/src/hf/wind.c	2016-05-13 09:28:15.981945309 +0200
+@@ -18,6 +18,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "hf.h"
+ #include "hf_calc.h"
+ #include "wind.h"
+diff -rup a/src/utils/menus_n_tools.c b/src/utils/menus_n_tools.c
+--- a/src/utils/menus_n_tools.c	2016-05-13 09:12:36.758355984 +0200
++++ b/src/utils/menus_n_tools.c	2016-05-13 09:18:13.407042836 +0200
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include <stdlib.h>
++#include <string.h>
+ #include <gtk/gtk.h>
+ #include "utils.h"
+ #include "x_alloc.h"
+diff -rup a/src/utils/readpng.c b/src/utils/readpng.c
+--- a/src/utils/readpng.c	2016-05-13 09:12:36.758355984 +0200
++++ b/src/utils/readpng.c	2016-05-13 09:18:30.102928117 +0200
+@@ -19,6 +19,7 @@
+  */
+ 
+ #include <stdlib.h>
++#include <string.h>
+ #include <png.h>
+ #include "utils.h"
+ 
+diff -rup a/src/utils/scale_buttons.c b/src/utils/scale_buttons.c
+--- a/src/utils/scale_buttons.c	2016-05-13 09:12:36.758355984 +0200
++++ b/src/utils/scale_buttons.c	2016-05-13 09:18:56.743745065 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ #include "scale_buttons.h"
++#include <string.h>
+ #include "utils.h"
+ #include "x_alloc.h"
+ 
+diff -rup a/src/app/doctype.c b/src/app/doctype.c
+--- a/src/app/doctype.c	2016-05-13 09:36:01.049895256 +0200
++++ b/src/app/doctype.c	2016-05-13 09:38:51.248779042 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "doc.h"
+ 
+ extern gint TOOLS_X, TOOLS_Y, CREATION_X, CREATION_Y, MAIN_BAR_X, MAIN_BAR_Y;
+diff -rup a/src/fourier/fourier.c b/src/fourier/fourier.c
+--- a/src/fourier/fourier.c	2016-05-13 09:36:01.052895237 +0200
++++ b/src/fourier/fourier.c	2016-05-13 09:37:20.440374590 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "fourier.h"
+ #include "fft.h"
+ #include <complex.h>
+diff -rup a/src/hf/wind_dialog.c b/src/hf/wind_dialog.c
+--- a/src/hf/wind_dialog.c	2016-05-13 09:36:01.051895243 +0200
++++ b/src/hf/wind_dialog.c	2016-05-13 09:38:30.854912791 +0200
+@@ -19,6 +19,7 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+  */
+ 
++#include <string.h>
+ #include "img_process_dialog.h"
+ #include "hf_wrapper.h"
+ #include "wind_dialog.h"

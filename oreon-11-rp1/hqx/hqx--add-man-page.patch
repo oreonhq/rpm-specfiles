@@ -1,0 +1,58 @@
+From 3c9df651b5ac70b4ce8edba3172efc5e584ca43e Mon Sep 17 00:00:00 2001
+From: suve <veg@svgames.pl>
+Date: Sun, 21 Nov 2021 16:30:00 +0100
+Subject: [PATCH 1/2] Add a man page
+
+---
+ debian/hqx.1 | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 debian/hqx.1
+
+diff --git a/debian/hqx.1 b/debian/hqx.1
+new file mode 100644
+index 0000000..e3f1ee4
+--- /dev/null
++++ b/debian/hqx.1
+@@ -0,0 +1,20 @@
++.TH "HQX" 1 "2021-11-21" "" "User Commands"
++.
++.SH NAME
++\fBhqx\fR \- high quality upscaling program for pixel-art
++.
++.SH SUMMARY
++.SY hqx
++[\-s \fISCALE\fR]
++.I INPUT OUTPUT
++.YS
++.
++.SH DESCRIPTION
++\fBhqx\fR is a high quality pixel-art upscaling program, utilizing
++hqx, one of the pixel art scaling algorithms developed by Maxim Stepin.
++.
++.SH OPTIONS
++.TP
++\fB\-s\fR \fISCALE\fR
++Scale factor to use. Supported values are \fB2\fR, \fB3\fR and \fB4\fR.
++If omitted, defaults to 4.
+
+From 645ae6bad7b19213dc51a3dec77b7a47412322ab Mon Sep 17 00:00:00 2001
+From: suve <veg@svgames.pl>
+Date: Sun, 21 Nov 2021 16:36:00 +0100
+Subject: [PATCH 2/2] Install the man page during "make install"
+
+---
+ Makefile.am | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile.am b/Makefile.am
+index 34432db..a9f643b 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -7,6 +7,7 @@ EXTRA_DIST = README.md
+ 
+ bin_PROGRAMS = hqx
+ lib_LTLIBRARIES = libhqx.la
++man_MANS = debian/hqx.1
+ 
+ libhqx_la_SOURCES = \
+   src/init.c \

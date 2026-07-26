@@ -1,0 +1,40 @@
+From 66cc17d130d15d13efc5e22b2a155e426678c536 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Sat, 10 Jul 2021 13:37:11 +0200
+Subject: [PATCH 3/3] mdb-provider: Pass MdbHandle to the mdb_set_date_fmt()
+ call
+
+mdbtools >= 0.9.0 require a MdbHandle to be passed to the
+mdb_set_date_fmt() call. Move the call to directly after mdb_open()
+(when we first get the handle) and pass the handle to it.
+
+Note this change means that the mdb-provider will now no longer
+compile with older mdbtools versions.
+---
+ providers/mdb/gda-mdb-provider.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/providers/mdb/gda-mdb-provider.c b/providers/mdb/gda-mdb-provider.c
+index c82a37aee..17660b75d 100644
+--- a/providers/mdb/gda-mdb-provider.c
++++ b/providers/mdb/gda-mdb-provider.c
+@@ -93,7 +93,6 @@ gda_mdb_provider_class_init (GdaMdbProviderClass *klass)
+ static void
+ gda_mdb_provider_init (GdaMdbProvider *myprv, GdaMdbProviderClass *klass)
+ {
+-	mdb_set_date_fmt ("%Y-%m-%d %H:%M:%S");
+ }
+ 
+ static void
+@@ -301,6 +300,8 @@ gda_mdb_provider_open_connection (GdaServerProvider *provider, GdaConnection *cn
+ 		return FALSE;
+ 	}
+ 
++	mdb_set_date_fmt (cdata->mdb, "%Y-%m-%d %H:%M:%S");
++
+ 	/* open virtual connection */
+         if (! GDA_SERVER_PROVIDER_CLASS (parent_class)->open_connection (GDA_SERVER_PROVIDER (provider), cnc, params,
+ 									 NULL, NULL, NULL, NULL)) {
+-- 
+2.31.1
+

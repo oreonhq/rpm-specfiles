@@ -1,0 +1,31 @@
+--- singular-4.3.1/emacs/.emacs-singular.orig	2022-07-06 03:32:37.000000000 -0600
++++ singular-4.3.1/emacs/.emacs-singular	2022-09-20 17:41:04.430333595 -0600
+@@ -185,7 +185,7 @@
+ 		  "" "/")))
+ 
+ ;; add global menus for Singular, Emacs version
+-(unless (fboundp 'add-submenu)
++(unless (boundp 'current-menubar)
+   (setq singular-start-map (make-sparse-keymap))
+   (define-key singular-start-map [menu-bar singular]
+     (cons "Singular" (make-sparse-keymap "Singular")))
+@@ -197,7 +197,7 @@
+   (use-local-map singular-start-map))
+ 
+ ;; add global menus for Singular, XEmacs version
+-(when (fboundp 'add-submenu)
++(when (boundp 'current-menubar)
+   (add-submenu nil
+ 	       '("Singular"
+ 		 ["Start default" singular t]
+--- singular-4.3.1/resources/feResource.cc.orig	2022-07-06 03:32:37.000000000 -0600
++++ singular-4.3.1/resources/feResource.cc	2022-09-20 17:41:04.430333595 -0600
+@@ -76,7 +76,7 @@ VAR feResourceConfig_s feResourceConfigs
+   {"RootDir",   'r',    feResDir,   "SINGULAR_ROOT_DIR",    "%b/..",                (char *)""},
+   {"DataDir",   'D',    feResDir,   "SINGULAR_DATA_DIR",    "%b/../share/",          (char *)""},
+   {"DefaultDir",'d',    feResDir,   "SINGULAR_DEFAULT_DIR",  SINGULAR_DEFAULT_DIR,  (char *)""},
+-  {"InfoFile",  'i',    feResFile,  "SINGULAR_INFO_FILE",   "%D/info/singular.info", (char *)""},
++  {"InfoFile",  'i',    feResFile,  "SINGULAR_INFO_FILE",   "%D/info/singular.info.gz", (char *)""},
+   {"IdxFile",   'x',    feResFile,  "SINGULAR_IDX_FILE",    "%D/singular/singular.idx",  (char *)""},
+   {"HtmlDir",   'h',    feResDir,   "SINGULAR_HTML_DIR",    DATA_TO_HTML_DIR,       (char *)""},
+   {"ManualUrl", 'u',    feResUrl,   "SINGULAR_URL",         "https://www.singular.uni-kl.de/Manual/",    (char *)""},

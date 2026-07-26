@@ -1,0 +1,7 @@
+Alias /git-caching /var/www/gitweb-caching
+
+<Directory /var/www/gitweb-caching>
+  Options +ExecCGI
+  AddHandler cgi-script .cgi
+  DirectoryIndex gitweb.cgi
+</Directory>

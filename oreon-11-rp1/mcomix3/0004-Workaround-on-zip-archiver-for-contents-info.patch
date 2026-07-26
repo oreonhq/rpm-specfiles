@@ -1,0 +1,29 @@
+From 8fcab042bb7c7c8d012a07515e276a3b5e7df5da Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Sat, 17 Aug 2024 12:53:56 +0900
+Subject: [PATCH] Workaround on zip archiver for contents info
+
+---
+ mcomix/mcomix/archive/zip_py.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/mcomix/mcomix/archive/zip_py.py b/mcomix/mcomix/archive/zip_py.py
+index f579759..41fd8ac 100644
+--- a/mcomix/mcomix/archive/zip_py.py
++++ b/mcomix/mcomix/archive/zip_py.py
+@@ -38,7 +38,11 @@ class ZipArchive(archive_base.NonUnicodeArchive):
+             else:
+                 # zipfile use cp437 to decode non-utf8 filename
+                 # revert to bytes before guessing encode
+-                fn_bytes = info.filename.encode('cp437')
++                try:
++                  fn_bytes = info.filename.encode('cp437')
++                except UnicodeEncodeError:
++                  # try as it is
++                  fn_bytes = info.filename
+                 self._contents_info[self._unicode_filename(fn_bytes)] = info
+ 
+         self.is_encrypted = self._has_encryption()
+-- 
+2.46.0
+

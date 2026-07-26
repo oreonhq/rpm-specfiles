@@ -1,0 +1,109 @@
+diff -U3 -r inkscape-psd-0.1.1.orig/psd_import/p2s_gradient.py inkscape-psd-0.1.1/psd_import/p2s_gradient.py
+--- inkscape-psd-0.1.1.orig/psd_import/p2s_gradient.py	2012-10-19 22:36:05.000000000 -0500
++++ inkscape-psd-0.1.1/psd_import/p2s_gradient.py	2019-08-27 10:21:42.954090728 -0500
+@@ -185,7 +185,7 @@
+         if lctn >= d_clrs[-1]['Lctn']:
+             return d_clrs[-1]['Clr ']
+ 
+-        for i in xrange(1, len(d_clrs)):
++        for i in range(1, len(d_clrs)):
+             if lctn < d_clrs[i]['Lctn']:
+                 a = d_clrs[i - 1]['Clr ']
+                 b = d_clrs[i]['Clr ']
+@@ -210,7 +210,7 @@
+         if lctn >= d_trns[-1]['Lctn']:
+             return d_trns[-1]['Opct']['value'] / 100.0
+ 
+-        for i in xrange(1, len(d_trns)):
++        for i in range(1, len(d_trns)):
+             if lctn < d_trns[i]['Lctn']:
+                 a = d_trns[i - 1]['Opct']['value'] / 100.0
+                 b = d_trns[i]['Opct']['value'] / 100.0
+diff -U3 -r inkscape-psd-0.1.1.orig/psd_import/psd_descriptor.py inkscape-psd-0.1.1/psd_import/psd_descriptor.py
+--- inkscape-psd-0.1.1.orig/psd_import/psd_descriptor.py	2012-10-19 22:36:06.000000000 -0500
++++ inkscape-psd-0.1.1/psd_import/psd_descriptor.py	2019-08-27 10:21:42.037091617 -0500
+@@ -32,7 +32,7 @@
+ 
+         result = {}
+ 
+-        for i in xrange(item_count):
++        for i in range(item_count):
+             key = self.read_descriptor_id()
+             item_type = self.read_raw(4)
+ 
+@@ -82,7 +82,7 @@
+     def read_di_VlLs(self):
+         count = self.read_int(4)
+         results = []
+-        for i in xrange(count):
++        for i in range(count):
+             item_type = self.read_raw(4)
+             results.append(self.read_descriptor_item(item_type))
+         return results
+diff -U3 -r inkscape-psd-0.1.1.orig/psd_import/psd_primitive.py inkscape-psd-0.1.1/psd_import/psd_primitive.py
+--- inkscape-psd-0.1.1.orig/psd_import/psd_primitive.py	2012-10-19 22:36:06.000000000 -0500
++++ inkscape-psd-0.1.1/psd_import/psd_primitive.py	2019-08-27 10:21:42.484091184 -0500
+@@ -26,7 +26,7 @@
+     def read_psd_unicode(self, alignment=4):
+         """Read a PSD-format Unicode string."""
+         length = self.read_int(4)
+-        string = u''.join(unichr(self.read_int(2)) for i in xrange(length))
++        string = ''.join(chr(self.read_int(2)) for i in range(length))
+ 
+         if alignment is not None:
+             self.skip_padding(length * 2, alignment)
+diff -U3 -r inkscape-psd-0.1.1.orig/psd_import/psdreader.py inkscape-psd-0.1.1/psd_import/psdreader.py
+--- inkscape-psd-0.1.1.orig/psd_import/psdreader.py	2012-10-19 22:36:06.000000000 -0500
++++ inkscape-psd-0.1.1/psd_import/psdreader.py	2019-08-27 10:21:42.248091413 -0500
+@@ -29,11 +29,11 @@
+ 
+ 
+ def dump_hex(buf):
+-    for i in xrange(0,len(buf),16):
++    for i in range(0,len(buf),16):
+         chunk = buf[i:i+16]
+-        hex_bytes = ' '.join(map(lambda x: '%02x' % ord(x), chunk))
+-        ascii_chars = ''.join(map(lambda x: '.' if ord(x) < 32 or ord(x) >= 128
+-            else x, chunk))
++        hex_bytes = ' '.join(['%02x' % ord(x) for x in chunk])
++        ascii_chars = ''.join(['.' if ord(x) < 32 or ord(x) >= 128
++            else x for x in chunk])
+         sys.stderr.write(hex_bytes + '   ' + ascii_chars + '\n')
+     sys.stderr.write('---\n')
+ 
+@@ -111,7 +111,7 @@
+         layer_count = abs(self.read_int(2))
+ 
+         self.psd['layers'] = \
+-                [self.read_layer_record() for _ in xrange(layer_count)]
++                [self.read_layer_record() for _ in range(layer_count)]
+ 
+         # Skip all channel image data
+         self.skip_to(end_pos)
+@@ -129,7 +129,7 @@
+         channel_count = self.read_uint(2)
+ 
+         layer['channels'] = []
+-        for i in xrange(channel_count):
++        for i in range(channel_count):
+             channel = {
+                 'id': self.read_int(2),
+                 'length': self.read_int(4),
+diff -U3 -r inkscape-psd-0.1.1.orig/psd_import_main.py inkscape-psd-0.1.1/psd_import_main.py
+--- inkscape-psd-0.1.1.orig/psd_import_main.py	2012-10-19 23:08:14.000000000 -0500
++++ inkscape-psd-0.1.1/psd_import_main.py	2019-08-27 10:21:43.312090380 -0500
+@@ -44,7 +44,7 @@
+     id_uses = {}
+     def choose_id(s):
+         if s in id_uses:
+-            result = u'%s_%d' % (s, id_uses[s])
++            result = '%s_%d' % (s, id_uses[s])
+             id_uses[s] += 1
+         else:
+             result = s
+@@ -227,4 +227,4 @@
+         sys.exit(0)
+ 
+     svg = process_psd(psd)
+-    print(etree.tostring(svg))
++    print((etree.tostring(svg)))

@@ -1,0 +1,13 @@
+diff --git a/bontmia b/bontmia
+index a1d9fc0..1075b1f 100755
+--- a/bontmia
++++ b/bontmia
+@@ -270,7 +270,7 @@ make_hard-link_copy_of_last_backup()
+ 		unlock_destination
+ 		exit 1
+ 	    }
+-	    cp -lR "${last_backup}/"* "${tmpdir}/unfinished_backup/${this_backup}" >/dev/null 2>&1 || {
++	    cp -al "${last_backup}/"* "${tmpdir}/unfinished_backup/${this_backup}" >/dev/null 2>&1 || {
+ 		echo "    WARNING: The last backup had NO files!"
+ 		echo "             Or tmpdir is not on the same volume as destination"
+ 	    }

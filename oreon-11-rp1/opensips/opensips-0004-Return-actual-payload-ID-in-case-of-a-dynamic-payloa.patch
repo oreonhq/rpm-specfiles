@@ -1,0 +1,29 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Fri, 11 Jan 2013 14:40:08 +0400
+Subject: [PATCH] Return actual payload ID in case of a dynamic payload
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/modules/sipmsgops/codecs.c b/modules/sipmsgops/codecs.c
+index b5a6a7a6b..af74e927e 100644
+--- a/modules/sipmsgops/codecs.c
++++ b/modules/sipmsgops/codecs.c
+@@ -28,6 +28,7 @@
+ #include "codecs.h"
+ #include "../../route.h"
+ #include "../../mod_fix.h"
++#include "../../ut.h"
+ 
+ #define MAX_STREAMS 64
+ 
+@@ -526,7 +527,9 @@ static int stream_process(struct sip_msg * msg, struct sdp_stream_cell *cell,
+ 
+ 				if(op == FIND)
+ 				{
+-					ret = 1;
++					str2sint(&(payload->rtp_payload), &ret);
++					if( (ret >= 0) && (ret <= 34) ) /* if a fixed payload ID then just return 1 */
++						ret = 1;
+ 					goto end;
+ 				}
+ 

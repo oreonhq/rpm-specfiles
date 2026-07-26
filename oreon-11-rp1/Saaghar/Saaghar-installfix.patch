@@ -1,0 +1,18 @@
+diff -up ./Saaghar.pro.installfix ./Saaghar.pro
+--- ./Saaghar.pro.installfix	2017-02-19 00:50:59.923682092 +0330
++++ ./Saaghar.pro	2017-02-19 00:51:12.539911555 +0330
+@@ -182,14 +182,6 @@ DEFINES += PREFIX=\\\"$${PREFIX}\\\"
+ }
+ 
+ utilities.path = $${RESOURCES_PATH}
+-utilities.files += \
+-    $$PWD/AUTHORS \
+-    $$PWD/CHANGELOG \
+-    $$PWD/GPLv3 \
+-    $$PWD/GPLv2Fa \
+-    $$PWD/README.md \
+-    $$PWD/TODO \
+-    $$PWD/LICENSE
+ 
+ include($$PWD/src/src.pri)
+ include($$PWD/locale/locale.pri)

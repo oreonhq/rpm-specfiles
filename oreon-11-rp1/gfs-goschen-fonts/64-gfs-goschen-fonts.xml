@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>GFS Göschen</target>
+    <family>GFS Goschen</family>
+    <like>
+      <family>serif</family>
+    </like>
+  </group>
+</fontconfig>
+

@@ -1,0 +1,365 @@
+From 944e6340fe5a1e17a4e44d9de25c78131bfb4cb5 Mon Sep 17 00:00:00 2001
+From: sand1024 <sand72@mail.ru>
+Date: Sun, 25 May 2025 14:13:04 +0300
+Subject: [PATCH] Ordinate Dimensions (#2131)
+
+* small fixes for weird build errors for Linux and MacOS
+
+* support of Ordinate dimensions (entities, dxf read/write, actions).
+Initial support for dimstyles etc (WIP).
+
+* Revert "small fixes for weird build errors for Linux and MacOS"
+
+This reverts commit 0e50d0047849bea409122bfe3069bd2abce6cc4f.
+
+* small fixes for weird build errors for Linux and MacOS
+
+* small fixes for weird build errors for Linux and MacOS
+
+* redundant virtual modifiers cleanup
+
+* select window - dimensions fix
+
+* code cleanup
+
+* readme update
+
+* dimensions related refactoring and cleanup, fix !!! for RS_DimAligned crash on hover (due to missed detach() in clone()).
+
+* merge cleanup
+
+* initial support of tolerance (WIP)
+
+* merge
+
+* merge
+
+---------
+
+Co-authored-by: sand1024 <sand1024@gmail.com>
+Co-authored-by: Dongxu Li <dongxuli2011@gmail.com>
+---
+ libraries/libdxfrw/src/drw_entities.cpp       |   49 +-
+ libraries/libdxfrw/src/drw_entities.h         |   47 +-
+ libraries/libdxfrw/src/drw_interface.h        |    2 +
+ libraries/libdxfrw/src/libdxfrw.cpp           |   70 +-
+ libraries/libdxfrw/src/libdxfrw.h             |    1 +
+
+diff --git a/libraries/libdxfrw/src/drw_entities.cpp b/libraries/libdxfrw/src/drw_entities.cpp
+index 165fe9e0dc..972250ba0a 100644
+--- a/src/drw_entities.cpp
++++ b/src/drw_entities.cpp
+@@ -1121,6 +1121,54 @@ bool DRW_Insert::parseDwg(DRW::Version version, dwgBuffer *buf, duint32 bs){
+     return buf->isGood();
+ }
+ 
++void DRW_Entity::init(DRW_Entity const& rhs) {
++}
++
++bool DRW_Tolerance::parseCode(int code, dxfReader* reader) {
++    switch (code) {
++        case 10:
++            insertionPoint.x = reader->getDouble();
++            break;
++        case 20:
++            insertionPoint.y = reader->getDouble();
++            break;
++        case 30:
++            insertionPoint.z = reader->getDouble();
++            break;
++        case 11:
++            xAxisDirectionVector.x = reader->getDouble();
++            break;
++        case 21:
++            xAxisDirectionVector.y = reader->getDouble();
++            break;
++        case 31:
++            xAxisDirectionVector.z = reader->getDouble();
++            break;
++        case 210:
++            extPoint.x = reader->getDouble();
++            break;
++        case 220:
++            extPoint.y = reader->getDouble();
++            break;
++        case 230:
++            extPoint.z = reader->getDouble();
++            break;
++        case 1:
++            text = reader->getUtf8String();
++            break;
++        case 3:
++            dimStyleName = reader->getUtf8String();
++            break;
++        default:
++            return DRW_Entity::parseCode(code, reader);
++    }
++}
++
++bool DRW_Tolerance::parseDwg(DRW::Version v, dwgBuffer* buf, duint32 bs) {
++    DRW_DBG("PARSING TOLERANCE FROM DWG IS NOT SUPPORTED!!!");
++    return true;
++}
++
+ void DRW_LWPolyline::applyExtrusion(){
+     if (haveExtrusion) {
+         calculateAxis(extPoint);
+@@ -1325,7 +1373,6 @@ bool DRW_Text::parseCode(int code, dxfReader *reader){
+     default:
+         return DRW_Line::parseCode(code, reader);
+     }
+-
+     return true;
+ }
+ 
+diff --git a/libraries/libdxfrw/src/drw_entities.h b/libraries/libdxfrw/src/drw_entities.h
+index 889806f9f7..42f4d6b6e5 100644
+--- a/src/drw_entities.h
++++ b/src/drw_entities.h
+@@ -75,7 +75,7 @@ namespace DRW {
+ //        SURFACE, //encrypted proprietary data can be four types
+ //        TABLE,
+         TEXT,
+-//        TOLERANCE,
++        TOLERANCE,
+         TRACE,
+         UNDERLAY,
+         VERTEX,
+@@ -520,6 +520,40 @@ class DRW_Insert : public DRW_Point {
+     dwgHandle seqendH; //RLZ: on implement attrib remove this handle from obj list (see pline/vertex code)
+ };
+ 
++//! Class to handle insert entries
++/*!
++*  Class to handle insert entries
++*/
++class DRW_Tolerance : public DRW_Entity {
++    SETENTFRIENDS
++public:
++    DRW_Tolerance():DRW_Entity() {
++        eType = DRW::TOLERANCE;
++        extPoint.z = 1;
++        extPoint.x = extPoint.y = 0;
++        dimStyleName = "STANDARD";
++    }
++    DRW_Tolerance(const DRW_Tolerance& p):DRW_Entity(p) {
++        this->eType = DRW::TOLERANCE;
++        this->text = p.text;
++        this->dimStyleName = p.dimStyleName;
++        this->insertionPoint = p.insertionPoint;
++        this->xAxisDirectionVector = p.xAxisDirectionVector;
++        this->extPoint = p.extPoint;
++    }
++    void applyExtrusion() override {}
++protected:
++    bool parseCode(int code, dxfReader *reader) override;
++    bool parseDwg(DRW::Version v, dwgBuffer *buf, duint32 bs=0) override;
++
++public:
++    UTF8STRING text;           /*  String representing the visual representation of the tolerance, code 1*/
++    UTF8STRING dimStyleName;    /*!< block name, code 3 */
++    DRW_Coord insertionPoint;       /*!< insertion point, code 10,20,30 */
++    DRW_Coord xAxisDirectionVector;   /*X-axis direction vector (in WCS), code 11,21,31*/
++    DRW_Coord extPoint;       /*!<  Dir extrusion normal vector, code 210, 220 & 230 */
++};
++
+ //! Class to handle lwpolyline entity
+ /*!
+ *  Class to handle lwpolyline entity
+@@ -550,7 +584,7 @@ class DRW_LWPolyline : public DRW_Entity {
+     }
+ 	// TODO rule of 5
+ 
+-     void applyExtrusion() override;
++    void applyExtrusion() override;
+     void addVertex (DRW_Vertex2D v) {
+ 		std::shared_ptr<DRW_Vertex2D> vert = std::make_shared<DRW_Vertex2D>(v);
+         vertlist.push_back(vert);
+@@ -992,6 +1026,7 @@ class DRW_Dimension : public DRW_Entity {
+         defPoint.z = extPoint.x = extPoint.y = 0;
+         textPoint.z = rot = 0;
+         clonePoint.x = clonePoint.y = clonePoint.z = 0;
++        hdir = 0;
+     }
+ 
+     DRW_Dimension(const DRW_Dimension& d): DRW_Entity(d) {
+@@ -1015,7 +1050,7 @@ class DRW_Dimension : public DRW_Entity {
+         arcPoint = d.arcPoint;
+         circlePoint = d.circlePoint;
+         length = d.length;
+-        //RLZ needed a def value for this: hdir = ???
++        hdir = d.hdir;
+     }
+     virtual ~DRW_Dimension() {}
+ 
+@@ -1049,6 +1084,8 @@ class DRW_Dimension : public DRW_Entity {
+     std::string getName(){return name;}                   /*!< Name of the block that contains the entities, code 2 */
+     void setName(const std::string s) {name = s;}
+ //    int getType(){ return type;}                      /*!< Dimension type, code 70 */
++    double getHDir() const {return hdir;}
++    void setHDir(const double h) {hdir = h;}
+ 
+ protected:
+     DRW_Coord getPt2() const {return clonePoint;}
+@@ -1081,7 +1118,7 @@ class DRW_Dimension : public DRW_Entity {
+     double rot;                /*!< rotation angle of the dimension text, code 53 */
+     DRW_Coord extPoint;        /*!<  extrusion normal vector, code 210, 220 & 230 */
+ 
+-    double hdir;               /*!< horizontal direction for the dimension, code 51, default ? */
++    double     hdir;               /*!< horizontal direction for the dimension, code 51, default ? */
+     DRW_Coord clonePoint;      /*!< Insertion point for clones (Baseline & Continue), code 12, 22 & 32 (OCS) */
+     DRW_Coord def1;            /*!< Definition point 1for linear & angular, code 13, 23 & 33 (WCS) */
+     DRW_Coord def2;            /*!< Definition point 2, code 14, 24 & 34 (WCS) */
+@@ -1404,4 +1441,4 @@ class DRW_Viewport : public DRW_Point {
+ //DRW::ShadowMode shadow;    /*!< shadow mode, code 284 */
+ //bool haveExtrusion;        /*!< set to true if the entity have extrusion*/
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff --git a/libraries/libdxfrw/src/drw_interface.h b/libraries/libdxfrw/src/drw_interface.h
+index 3cd2006b66..65dd83dae6 100644
+--- a/src/drw_interface.h
++++ b/src/drw_interface.h
+@@ -125,6 +125,8 @@ class DRW_Interface {
+     /** Called for every Text entity. */
+     virtual void addText(const DRW_Text& data) = 0;
+ 
++    virtual void addTolerance(const DRW_Tolerance& tol) = 0;
++
+     /**
+      * Called for every aligned dimension entity. 
+      */
+diff --git a/libraries/libdxfrw/src/libdxfrw.cpp b/libraries/libdxfrw/src/libdxfrw.cpp
+index 16fe71a6ce..7b950747bf 100644
+--- a/src/libdxfrw.cpp
++++ b/src/libdxfrw.cpp
+@@ -1220,7 +1220,7 @@ bool dxfRW::writeDimension(DRW_Dimension *ent) {
+         writer->writeDouble(11, ent->getTextPoint().x);
+         writer->writeDouble(21, ent->getTextPoint().y);
+         writer->writeDouble(31, ent->getTextPoint().z);
+-        if ( !(ent->type & 32))
++        if ( !(ent->type & 32)) // fixme - sand - ordinate type support !!!??
+             ent->type = ent->type +32;
+         writer->writeInt16(70, ent->type);
+         if ( !(ent->getText().empty()) )
+@@ -1231,8 +1231,11 @@ bool dxfRW::writeDimension(DRW_Dimension *ent) {
+         if ( ent->getTextLineFactor() != 1)
+             writer->writeDouble(41, ent->getTextLineFactor());
+         writer->writeUtf8String(3, ent->getStyle());
+-        if ( ent->getTextLineFactor() != 0)
++        if ( ent->getTextLineFactor() != 0) // fixme - sand - double value equality??
+             writer->writeDouble(53, ent->getDir());
++        if ( ent->getHDir() != 0)
++            writer->writeDouble(51, ent->getHDir());
++
+         writer->writeDouble(210, ent->getExtrusion().x);
+         writer->writeDouble(220, ent->getExtrusion().y);
+         writer->writeDouble(230, ent->getExtrusion().z);
+@@ -2500,44 +2503,46 @@ bool dxfRW::processEntities(bool isblock) {
+         if (nextentity == "ENDSEC" || nextentity == "ENDBLK") {
+             return true;  //found ENDSEC or ENDBLK terminate
+         }
+-        else if (nextentity == "POINT") {
+-            processed = processPoint();
+-        } else if (nextentity == "LINE") {
++        if (nextentity == "LINE") {
+             processed = processLine();
+-        } else if (nextentity == "CIRCLE") {
++        }  else if (nextentity == "CIRCLE") {
+             processed = processCircle();
+         } else if (nextentity == "ARC") {
+             processed = processArc();
+-        } else if (nextentity == "ELLIPSE") {
+-            processed = processEllipse();
+-        } else if (nextentity == "TRACE") {
+-            processed = processTrace();
+-        } else if (nextentity == "SOLID") {
+-            processed = processSolid();
+-        } else if (nextentity == "INSERT") {
+-            processed = processInsert();
++        } else if (nextentity == "POINT") {
++            processed = processPoint();
+         } else if (nextentity == "LWPOLYLINE") {
+             processed = processLWPolyline();
+         } else if (nextentity == "POLYLINE") {
+             processed = processPolyline();
+-        } else if (nextentity == "TEXT") {
++        }else if (nextentity == "TEXT") {
+             processed = processText();
+         } else if (nextentity == "MTEXT") {
+             processed = processMText();
+         } else if (nextentity == "HATCH") {
+             processed = processHatch();
+-        } else if (nextentity == "SPLINE") {
++        } else if (nextentity == "DIMENSION") {
++            processed = processDimension();
++        } else if (nextentity == "INSERT") {
++            processed = processInsert();
++        } else if (nextentity == "TOLERANCE") {
++            processed = processTolerance();
++        } else if (nextentity == "SOLID") {
++            processed = processSolid();
++        }else if (nextentity == "SPLINE") {
+             processed = processSpline();
+-        } else if (nextentity == "3DFACE") {
+-            processed = process3dface();
++        }else if (nextentity == "LEADER") {
++            processed = processLeader();
++        } else if (nextentity == "ELLIPSE") {
++            processed = processEllipse();
+         } else if (nextentity == "VIEWPORT") {
+             processed = processViewport();
+         } else if (nextentity == "IMAGE") {
+             processed = processImage();
+-        } else if (nextentity == "DIMENSION") {
+-            processed = processDimension();
+-        } else if (nextentity == "LEADER") {
+-            processed = processLeader();
++        } else if (nextentity == "TRACE") {
++            processed = processTrace();
++        } else if (nextentity == "3DFACE") {
++            processed = process3dface();
+         } else if (nextentity == "RAY") {
+             processed = processRay();
+         } else if (nextentity == "XLINE") {
+@@ -2892,6 +2897,27 @@ bool dxfRW::processVertex(DRW_Polyline *pl) {
+     return setError(DRW::BAD_READ_ENTITIES);
+ }
+ 
++bool dxfRW::processTolerance() {
++    DRW_DBG("dxfRW::processTolerance\n");
++    int code;
++    DRW_Tolerance tol;
++    while (reader->readRec(&code)) {
++        DRW_DBG(code); DRW_DBG("\n");
++        if (0 == code) {
++            nextentity = reader->getString();
++            DRW_DBG(nextentity); DRW_DBG("\n");
++            iface->addTolerance(tol);
++            return true;  //found new entity or ENDSEC, terminate
++        }
++
++        if (!tol.parseCode(code, reader)) {
++            return setError( DRW::BAD_CODE_PARSED);
++        }
++    }
++
++    return setError(DRW::BAD_READ_ENTITIES);
++}
++
+ bool dxfRW::processText() {
+     DRW_DBG("dxfRW::processText");
+     int code;
+diff --git a/libraries/libdxfrw/src/libdxfrw.h b/libraries/libdxfrw/src/libdxfrw.h
+index 01fefd64ee..406a552804 100644
+--- a/src/libdxfrw.h
++++ b/src/libdxfrw.h
+@@ -111,6 +111,7 @@ class dxfRW {
+     bool processLWPolyline();
+     bool processPolyline();
+     bool processVertex(DRW_Polyline* pl);
++    bool processTolerance();
+     bool processText();
+     bool processMText();
+     bool processHatch();

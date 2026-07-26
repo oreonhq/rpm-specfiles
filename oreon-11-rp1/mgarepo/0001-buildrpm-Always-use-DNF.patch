@@ -1,0 +1,60 @@
+From 796bc537b648f521279eff0e46237147f841b214 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa13@gmail.com>
+Date: Sat, 8 Oct 2016 09:43:07 -0400
+Subject: [PATCH] buildrpm: Always use DNF
+
+---
+ MgaRepo/commands/buildrpm.py | 2 --
+ MgaRepo/rpmutil.py           | 9 ++-------
+ 2 files changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/MgaRepo/commands/buildrpm.py b/MgaRepo/commands/buildrpm.py
+index a9230e4..a6b1398 100644
+--- a/MgaRepo/commands/buildrpm.py
++++ b/MgaRepo/commands/buildrpm.py
+@@ -12,7 +12,6 @@ Options:
+     -I         Don't automatically try install missing build dependencies
+     -L         Disable rpmlint check of packages built
+     -P USER    Define the RPM packager information to USER
+-    -d         Use DNF
+     -q         Quiet build output
+     -s         Jump to specific build stage (--short-circuit)
+     -l         Use subversion log to build rpm %changelog
+@@ -27,7 +26,6 @@ def parse_options():
+     parser.add_option("-I", dest="installdeps", action="store_false", default=True)
+     parser.add_option("-L", dest="rpmlint", action="store_false", default=True)
+     parser.add_option("-P", dest="packager", default="")
+-    parser.add_option("-d", "--dnf", dest="use_dnf", action="store_true", default=False)
+     parser.add_option("-q", "--quiet", dest="verbose", action="store_false", default=True)
+     parser.add_option("-s", "--short-circuit", dest="short_circuit", action="store_true", default=False)
+     parser.add_option("-l", dest="svnlog", action="store_true", default=False)
+diff --git a/MgaRepo/rpmutil.py b/MgaRepo/rpmutil.py
+index 0fe6f81..273f266 100644
+--- a/MgaRepo/rpmutil.py
++++ b/MgaRepo/rpmutil.py
+@@ -373,7 +373,6 @@ def build_rpm(build_cmd="b",
+         short_circuit=False,
+         packager = None,
+         installdeps = True,
+-        use_dnf = False,
+         svnlog = False,
+         fullnames = True,
+         macros = [],
+@@ -441,12 +440,8 @@ def build_rpm(build_cmd="b",
+             else:
+                 if verbose:
+                     print("Installing missing build dependencies")
+-                if use_dnf:
+-                    pkg_mgr_base = ["dnf"]
+-                    pkg_mgr_builddep = pkg_mgr_base + ["--assume-yes", "--setopt=install_weak_deps=False", "builddep"]
+-                else:
+-                    pkg_mgr_base = ["urpmi"]
+-                    pkg_mgr_builddep = pkg_mgr_base + ["--auto", "--buildrequires", "--no-recommends"]
++                pkg_mgr_base = ["dnf"]
++                pkg_mgr_builddep = pkg_mgr_base + ["--assume-yes", "--setopt=install_weak_deps=False", "builddep"]
+                 if os.getuid() != 0:
+                     print("Trying to obtain privileges for installing build dependencies:")
+                     sudocheck = ["sudo", "-l"] + pkg_mgr_base
+-- 
+2.7.4
+

@@ -1,0 +1,2 @@
+#Type  Name   ID  GECOS                     Home directory  Shell
+u      guacd  -   "Guacamole proxy daemon"  /var/lib/guacd  /sbin/nologin

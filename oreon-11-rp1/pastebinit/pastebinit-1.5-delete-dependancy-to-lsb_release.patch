@@ -1,0 +1,25 @@
+diff -purN pastebinit-1.5.orig/pastebinit pastebinit-1.5/pastebinit
+--- pastebinit-1.5.orig/pastebinit	2016-03-01 16:52:32.000000000 +1100
++++ pastebinit-1.5/pastebinit	2018-07-04 14:03:16.430998637 +1000
+@@ -34,20 +34,7 @@ else:
+     from urllib.request import FancyURLopener
+ 
+ # Set the default pastebin
+-defaultPB = "pastebin.com"
+-
+-# Now try to override it with a distributor pastebin
+-try:
+-    import platform
+-    release = platform.linux_distribution()[0].lower()
+-    if release == 'debian':
+-        defaultPB = "paste.debian.net"
+-    elif release == 'fedora':
+-        defaultPB = "fpaste.org"
+-    elif release == 'ubuntu':
+-        defaultPB = "paste.ubuntu.com"
+-except ImportError:
+-    pass
++defaultPB = "http://fpaste.org"
+ 
+ try:
+     import getopt

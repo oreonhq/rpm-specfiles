@@ -1,0 +1,14 @@
+Submitted upstream: <https://tracker.ardour.org/view.php?id=9554>
+
+diff -ur Ardour-6.9.0.orig/libs/pbd/wscript Ardour-6.9.0/libs/pbd/wscript
+--- Ardour-6.9.0.orig/libs/pbd/wscript	2021-08-13 18:20:07.000000000 +0200
++++ Ardour-6.9.0/libs/pbd/wscript	2023-11-28 15:57:41.939474880 +0100
+@@ -123,7 +123,7 @@
+             define_name='HAVE_GETMNTENT', execute = False, mandatory=False)
+     conf.check_cc(
+             msg="Checking for function 'localtime_r' in time.h",
+-            fragment = "#include <time.h>\n int main(void) { return localtime_r(NULL, NULL); }\n",
++            fragment = "#include <time.h>\n int main(void) { return localtime_r(NULL, NULL) == 0; }\n",
+             define_name='HAVE_LOCALTIME_R', execute = False, mandatory=False)
+ 
+     # Boost headers

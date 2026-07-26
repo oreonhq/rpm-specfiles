@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>flcluster.desktop</id>
+  <name>flcluster</name>
+  <summary>A management tool for accessing dxcluster nodes</summary>
+  <developer_name>Dave Freese</developer_name>
+  <description>
+  <p>
+   flcluster can connect to and display data from DX cluster servers. The three most common server types are AR-Cluster, CC-Cluster, and DX Spider. The program is designed to work stand alone or as a helper application to fldigi. It can move call, mode, and frequency data from a spotted QSO to the appropriate fldigi controls. It can query fldigi for the same items when generating a spot report.
+  </p>
+</description>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <url type="homepage">http://www.w1hkj.com/</url>
+  <project_group>none</project_group>
+  <screenshots>
+    <screenshot type="default">
+      <image height="416" width="681">http://www.w1hkj.com/flcluster-help/flcluster.png</image>
+    </screenshot>
+  </screenshots>
+  <update_contact>hobbes1069@gmail.com</update_contact>
+</component>

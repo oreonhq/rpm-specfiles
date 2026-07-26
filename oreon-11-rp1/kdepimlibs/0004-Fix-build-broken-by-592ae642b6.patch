@@ -1,0 +1,24 @@
+From 4210646e4b5ac93170e9234a408f0a8efdfb396f Mon Sep 17 00:00:00 2001
+From: Christophe Giboudeaux <cgiboudeaux@gmx.com>
+Date: Thu, 2 Jul 2015 18:29:10 +0200
+Subject: [PATCH 04/31] Fix build broken by 592ae642b6
+
+---
+ includes/tests/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/includes/tests/CMakeLists.txt b/includes/tests/CMakeLists.txt
+index cd9e773..e4ee625 100644
+--- a/includes/tests/CMakeLists.txt
++++ b/includes/tests/CMakeLists.txt
+@@ -34,6 +34,7 @@ include_directories(
+   ${CMAKE_BINARY_DIR}/akonadi
+   ${CMAKE_BINARY_DIR}/akonadi/contact
+   ${CMAKE_BINARY_DIR}/akonadi/calendar
++  ${CMAKE_BINARY_DIR}/akonadi/kabc
+   ${CMAKE_BINARY_DIR}/akonadi/kcal
+   ${CMAKE_BINARY_DIR}/akonadi/kmime
+   ${CMAKE_BINARY_DIR}/akonadi/notes
+-- 
+2.5.0
+

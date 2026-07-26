@@ -1,0 +1,11 @@
+--- bchunk-1.2.2/Makefile.orig	2017-11-13 21:10:04.000000000 -0200
++++ bchunk-1.2.2/Makefile	2018-03-27 23:26:52.852694609 -0300
+@@ -3,7 +3,7 @@
+ # For systems with GCC (Linux, and others with GCC installed):
+ CC = gcc
+ LD = gcc
+-CFLAGS = -Wall -Wstrict-prototypes -O2
++#CFLAGS = -Wall -Wstrict-prototypes -O2
+ 
+ # For systems with a legacy CC:
+ #CC = cc

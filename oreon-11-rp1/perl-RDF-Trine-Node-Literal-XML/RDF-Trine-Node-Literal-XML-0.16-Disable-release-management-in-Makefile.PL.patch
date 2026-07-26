@@ -1,0 +1,41 @@
+From d9b1f43c88579df7a60e39edff99be448ca141c8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 2 May 2019 15:31:15 +0200
+Subject: [PATCH] Disable release management in Makefile.PL
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We do not these features for building an RPM package.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 8dbeb60..4085f42 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -20,18 +20,8 @@ requires		'Scalar::Util'				=> 0;
+ requires		'XML::LibXML'				=> 0;
+ requires		'Error'					=> 0;
+ 
+-author_tests('xt');
+-
+ use XML::LibXML;
+ use Carp;
+ croak "You need libxml2 of at least 2.6.27 for canonicalisation to work properly" unless (XML::LibXML::LIBXML_VERSION >= 20627);
+ 
+-auto_set_repository;
+-auto_set_bugtracker;
+-
+-
+-write_doap_changes;
+-
+-sign;
+-
+ WriteAll;
+-- 
+2.20.1
+

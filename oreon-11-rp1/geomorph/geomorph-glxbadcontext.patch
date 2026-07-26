@@ -1,0 +1,14 @@
+diff -rup a/src/hf/gl_preview.c b/src/hf/gl_preview.c
+--- a/src/hf/gl_preview.c	2012-09-22 02:59:07.000000000 +0200
++++ b/src/hf/gl_preview.c	2016-05-09 11:53:21.455670602 +0200
+@@ -525,8 +525,8 @@ GtkWidget* create_glarea (gpointer gl_pr
+   gtk_widget_set_gl_capability (glarea,
+ 				glconfig,
+ 				NULL,
+-				DIRECT_RENDERING,
+-				GDK_GL_RGBA_TYPE);
++				(gboolean) 1,
++				DIRECT_RENDERING|GDK_GL_RGBA_TYPE);
+ 
+ // 2012.09.01 Replaced gtk_widget_set_events by gtk_widget_add_events
+   gtk_widget_add_events(GTK_WIDGET(glarea),

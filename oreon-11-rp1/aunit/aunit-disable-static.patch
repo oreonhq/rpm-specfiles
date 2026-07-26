@@ -1,0 +1,21 @@
+--- a/lib/gnat/aunit.gpr
++++ b/lib/gnat/aunit.gpr
+@@ -22,7 +22,7 @@
+    for Object_Dir use Obj_Dir;
+ 
+    for Library_Name use "aunit";
+-   for Library_Kind use "static";
++   for Library_Kind use "relocatable";
+ 
+    --------------
+    -- Compiler --
+--- a/lib/gnat/aunit.gpr
++++ b/lib/gnat/aunit.gpr
+@@ -22,6 +22,7 @@
+    for Object_Dir use Obj_Dir;
+ 
+    for Library_Name use "aunit";
++   for Library_Version use "lib" & Project'Library_Name & ".so." & external("VERSION");
+    for Library_Kind use "relocatable";
+ 
+    --------------

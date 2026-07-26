@@ -1,0 +1,18 @@
+Subject: [PATCH] Remove divan dependency
+---
+Index: crates/atuin-history/Cargo.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/crates/atuin-history/Cargo.toml b/crates/atuin-history/Cargo.toml
+--- a/crates/atuin-history/Cargo.toml	(revision 84589cab15253300984bfaca1392795c39d137fc)
++++ b/crates/atuin-history/Cargo.toml	(revision 06270dbb301d825e5d78539179e8c134a31e4888)
+@@ -22,7 +22,6 @@
+ unicode-segmentation = "1.11.0"
+ 
+ [dev-dependencies]
+-divan = "0.1.14"
+ rand = { workspace = true }
+ 
+ [[bench]]

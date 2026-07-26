@@ -1,0 +1,163 @@
+From 5fb20e6c8438037d3ddfe9732dffb91c86c28cd0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 14 Oct 2022 12:30:42 +0200
+Subject: [PATCH] Implement system installation
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This largely reverts:
+
+commit aa66d03ca2bdca5bdfc28bea1ebd89d0ffe2879c
+Author: Graham Ollis <plicease@cpan.org>
+Date:   Thu Sep 28 06:35:42 2017 -0400
+
+    revert system install support; add caveats
+
+We can do it because our system autconf uses system perl.
+
+https://github.com/PerlAlien/Alien-autoconf/issues/2
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ alienfile             | 98 +++++++++++++++++++++----------------------
+ lib/Alien/autoconf.pm |  8 ----
+ 2 files changed, 49 insertions(+), 57 deletions(-)
+
+diff --git a/alienfile b/alienfile
+index f7aa273..b48920b 100644
+--- a/alienfile
++++ b/alienfile
+@@ -1,50 +1,50 @@
+ use alienfile;
+-#use File::Which qw( which );
+-#use Capture::Tiny qw( capture );
+-#use List::Util qw( all );
+-#use Sort::Versions qw( versioncmp );
++use File::Which qw( which );
++use Capture::Tiny qw( capture );
++use List::Util qw( all );
++use Sort::Versions qw( versioncmp );
+ 
+-#configure {
+-#  requires 'File::Which';
+-#  requires 'Capture::Tiny';
+-#  requires 'Sort::Versions';
+-#};
++configure {
++  requires 'File::Which';
++  requires 'Capture::Tiny';
++  requires 'Sort::Versions';
++};
+ 
+ probe sub {
+   my($build) = @_;
+ 
+-#  my %tools;
+-#
+-#  foreach my $tool (qw( autoconf autoheader autom4te autoreconf autoscan autoupdate ifnames ))
+-#  {
+-#    $tools{$tool} = 0;
+-#    my $exe = which $tool;
+-#    if($exe)
+-#    {
+-#      my(undef, undef, $stdout) = capture {
+-#        `$tool --version`;
+-#      };
+-#
+-#      if($stdout =~ /GNU Autoconf/ && $stdout =~ /([0-9\.]+)$/)
+-#      {
+-#        my $version = $1;
+-#        if(versioncmp($version, '2.69') >= 0)
+-#        {
+-#          $tools{$tool} = $version;
+-#        }
+-#      }
+-#    }
+-#  }
+-#
+-#  if(all { $_ != 0 } values %tools)
+-#  {
+-#    my($version) = values %tools;
+-#    if(all { $_ == $version } values %tools)
+-#    {
+-#      $build->install_prop->{my_version} = $version;
+-#      return 'system';
+-#    }
+-#  }
++  my %tools;
++
++  foreach my $tool (qw( autoconf autoheader autom4te autoreconf autoscan autoupdate ifnames ))
++  {
++    $tools{$tool} = 0;
++    my $exe = which $tool;
++    if($exe)
++    {
++      my(undef, undef, $stdout) = capture {
++        `$tool --version`;
++      };
++
++      if($stdout =~ /GNU Autoconf/ && $stdout =~ /([0-9\.]+)$/)
++      {
++        my $version = $1;
++        if(versioncmp($version, '2.69') >= 0)
++        {
++          $tools{$tool} = $version;
++        }
++      }
++    }
++  }
++
++  if(all { $_ != 0 } values %tools)
++  {
++    my($version) = values %tools;
++    if(all { $_ == $version } values %tools)
++    {
++      $build->install_prop->{my_version} = $version;
++      return 'system';
++    }
++  }
+ 
+   'share';
+ };
+@@ -146,11 +146,11 @@ share {
+   );
+ };
+ 
+-#sys {
+-#
+-#  gather sub {
+-#    my($build) = @_;
+-#    $build->runtime_prop->{version} = $build->install_prop->{my_version};
+-#  };
+-#
+-#};
++sys {
++
++  gather sub {
++    my($build) = @_;
++    $build->runtime_prop->{version} = $build->install_prop->{my_version};
++  };
++
++};
+diff --git a/lib/Alien/autoconf.pm b/lib/Alien/autoconf.pm
+index c696cd9..e229593 100644
+--- a/lib/Alien/autoconf.pm
++++ b/lib/Alien/autoconf.pm
+@@ -75,14 +75,6 @@ to use the helpers because they will use the correct incantation on Windows.
+ 
+ =back
+ 
+-=head1 CAVEATS
+-
+-This module is currently configured to I<always> do a share install.  This is because C<system> installs for this alien are not reliable.  Please see
+-this issue for details: L<https://github.com/plicease/Alien-autoconf/issues/2>.  The good news is that most of the time you shouldn't need this module
+-I<unless> you are building another alien from source.  If your system provides the package that is targeted by the upstream alien I recommend using
+-that.  If you are packaging system packages for your platform then I recommend making sure the upstream alien uses the system library so you won't need
+-to install this module.
+-
+ =head1 SEE ALSO
+ 
+ =over 4
+-- 
+2.37.3
+

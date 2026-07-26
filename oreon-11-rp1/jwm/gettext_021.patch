@@ -1,0 +1,17 @@
+Description: Fix build with gettext 0.23
+Author: Santiago Vila <sanvila@debian.org>
+Bug-Debian: https://bugs.debian.org/1092228
+Last-Update: 2025-01-13
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -479,7 +479,7 @@
+ ############################################################################
+ AM_ICONV
+ AM_GNU_GETTEXT([external])
+-AM_GNU_GETTEXT_VERSION([0.20])
++AM_GNU_GETTEXT_REQUIRE_VERSION([0.21])
+ LDFLAGS="$LDFLAGS $LIBINTL $LIBICONV"
+ 
+ ############################################################################
+

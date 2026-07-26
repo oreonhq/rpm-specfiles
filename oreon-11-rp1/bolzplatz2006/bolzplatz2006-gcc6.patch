@@ -1,0 +1,86 @@
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/BuildInFont.h~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/BuildInFont.h
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/BuildInFont.h~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/BuildInFont.h	2016-02-19 18:39:17.094842705 +0100
+@@ -18,9 +18,9 @@ s32 BuildInFontData[] =
+ 	{
+ 	0x20764d42, 0x0, 0x760000, 0x280000, 0x800000,
+ 	0x800000, 0x10000, 0x4, 0x20000000, 0xb630000, 0xb630000,
+-	0x100000, 0x100000, 0x0, 0x0, 0xff0000ff, 0xffff00ff,
+-	0xffff00ff, 0xffff00ff, 0xffff00ff, 0xffff00ff, 0xffff00ff, 0xffff00ff,
+-	0xffff00ff, 0xffff00ff, 0xffff00ff, 0xffff00ff, 0xffff00ff, 0xffff00ff,
++	0x100000, 0x100000, 0x0, 0x0, (s32)0xff0000ff, (s32)0xffff00ff,
++	(s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff,
++	(s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff, (s32)0xffff00ff,
+ 	0xff, 0x0, 0x0, 0x0, 0x0, 0x0,
+ 	0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+ 	0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/C3DSMeshFileLoader.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/C3DSMeshFileLoader.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/C3DSMeshFileLoader.cpp~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/C3DSMeshFileLoader.cpp	2016-02-19 18:41:53.975962025 +0100
+@@ -116,7 +116,7 @@ IAnimatedMesh* C3DSMeshFileLoader::creat
+ 
+ 	file->read(&data.header, sizeof(ChunkHeader));
+ 	if (data.header.id != 0x4D4D)
+-		return false;
++		return NULL;
+ 
+ 	CurrentMaterial.Material = video::SMaterial();
+ 	CurrentMaterial.Name = "";
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CDMFLoader.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CDMFLoader.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CDMFLoader.cpp~	2006-03-21 15:26:52.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CDMFLoader.cpp	2016-02-19 18:43:11.952021332 +0100
+@@ -94,14 +94,14 @@ IAnimatedMesh* CDMFLoader::createMesh(ir
+ 	u32 i;
+     
+ 	if (!file) 
+-		return false;
++		return NULL;
+ 
+     StringList dmfRawFile;
+     
+     //Load stringlist
+     dmfRawFile.LoadFromFile(file);
+     if (dmfRawFile.size()<1) 
+-		return false;
++		return NULL;
+     
+     //begin logging with
+     //fprintf(flog,"DMF Loader version %1.1f log file\nTrying to load: %s\n",DMFloader_vers,file->getFileName());
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COCTLoader.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COCTLoader.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COCTLoader.cpp~	2006-03-21 15:26:52.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/COCTLoader.cpp	2016-02-19 18:43:58.865055400 +0100
+@@ -113,7 +113,7 @@ IAnimatedMesh* COCTLoader::createMesh(ir
+ 
+ 	u32 i;
+ 
+-	if (!file) return false;
++	if (!file) return NULL;
+ 
+ 	octHeader header;
+ 	file->read(&header, sizeof(octHeader));
+diff -up bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CFileList.cpp~ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CFileList.cpp
+--- bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CFileList.cpp~	2006-03-21 15:26:50.000000000 +0100
++++ bolzplatz2006-1.0.3/libsrc/irrlicht-0.14-patched/CFileList.cpp	2016-02-19 18:45:59.065137474 +0100
+@@ -5,11 +5,6 @@
+ #include "CFileList.h"
+ #include "IrrCompileConfig.h"
+ 
+-namespace irr
+-{
+-namespace io
+-{
+-
+ #ifdef LINUX
+ #include <dirent.h>
+ #include <stdio.h>
+@@ -28,6 +23,10 @@ namespace io
+ #include <direct.h>
+ #endif
+ 
++namespace irr
++{
++namespace io
++{
+ 
+ CFileList::CFileList()
+ {

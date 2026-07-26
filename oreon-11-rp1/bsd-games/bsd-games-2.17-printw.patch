@@ -1,0 +1,20 @@
+--- bsd-games-2.17/canfield/canfield/canfield.c.orig	2004-12-07 05:34:21.000000000 -0800
++++ bsd-games-2.17/canfield/canfield/canfield.c	2022-11-27 10:08:16.000000000 -0800
+@@ -1647,7 +1647,7 @@
+ 		return;
+ 	clear();
+ 	for (cp = basicinstructions; *cp != 0; cp++)
+-		printw(*cp);
++		printw("%s", *cp);
+ 	refresh();
+ 	getch();
+ 	clear();
+@@ -1660,7 +1660,7 @@
+ 		return;
+ 	clear();
+ 	for (cp = bettinginstructions; *cp != 0; cp++)
+-		printw(*cp);
++		printw("%s", *cp);
+ 	refresh();
+ 	getch();
+ }

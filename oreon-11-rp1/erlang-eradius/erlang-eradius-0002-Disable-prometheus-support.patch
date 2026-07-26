@@ -1,0 +1,125 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Tue, 12 Jul 2022 19:39:38 +0200
+Subject: [PATCH] Disable prometheus support
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index 833bc2f..113cfd2 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -8,7 +8,7 @@
+ {profiles, [
+ 	    {test, [
+ 		    {erl_opts, [nowarn_export_all]},
+-                    {project_app_dirs, ["applications/*", "src/*", "."]},
++                    {project_app_dirs, ["src/*", "."]},
+ 		    {deps, [{meck, "0.9.0"}]}
+ 		   ]}
+ 	   ]}.
+diff --git a/src/eradius_counter.erl b/src/eradius_counter.erl
+index 9e92255..a11111e 100644
+--- a/src/eradius_counter.erl
++++ b/src/eradius_counter.erl
+@@ -86,53 +86,19 @@ aggregate({Servers, {ResetTS, Nass}}) ->
+ %% @doc Set Value for the given prometheus boolean metric by the given Name with
+ %% the given values
+ set_boolean_metric(Name, Labels, Value) ->
+-    case code:is_loaded(prometheus) of
+-        {file, _} ->
+-            try
+-                prometheus_boolean:set(Name, Labels, Value)
+-            catch _:_ ->
+-                prometheus_boolean:declare([{name, server_status}, {labels, [server_ip, server_port]},
+-                                            {help, "Status of an upstream RADIUS Server"}]),
+-                prometheus_boolean:set(Name, Labels, Value)
+-            end;
+-        _ ->
+-            ok
+-    end.
++    % TODO no support for Prometheus in Fedora so far
++    ok.
+ 
+ %% @doc Update the given histogram metric value
+ %% NOTE: We use prometheus_histogram collector here instead of eradius_counter ets table because
+ %% it is much easy to use histograms in this way. As we don't need to manage buckets and do
+ %% the other histogram things in eradius, but prometheus.erl will do it for us
+ observe(Name, {{ClientName, ClientIP, _}, {ServerName, ServerIP, ServerPort}} = MetricsInfo, Value, Help) ->
+-    case code:is_loaded(prometheus) of
+-        {file, _} ->
+-            try
+-                prometheus_histogram:observe(Name, [ServerIP, ServerPort, ServerName, ClientName, ClientIP], Value)
+-            catch _:_ ->
+-                    Buckets = application:get_env(eradius, histogram_buckets, [10, 30, 50, 75, 100, 1000, 2000]),
+-                    prometheus_histogram:declare([{name, Name}, {labels, [server_ip, server_port, server_name, client_name, client_ip]},
+-                                                  {duration_unit, milliseconds},
+-                                                  {buckets, Buckets}, {help, Help}]),
+-                    observe(Name, MetricsInfo, Value, Help)
+-            end;
+-        _ ->
+-            ok
+-    end.
++    % TODO no support for Prometheus in Fedora so far
++    ok.
+ observe(Name, #nas_prop{server_ip = ServerIP, server_port = ServerPort, nas_ip = NasIP, nas_id = NasId} = Nas, Value, ServerName, Help) ->
+-    case code:is_loaded(prometheus) of
+-        {file, _} ->
+-            try
+-                prometheus_histogram:observe(Name, [inet:ntoa(ServerIP), ServerPort, ServerName, inet:ntoa(NasIP), NasId], Value)
+-            catch _:_ ->
+-                    Buckets = application:get_env(eradius, histogram_buckets, [10, 30, 50, 75, 100, 1000, 2000]),
+-                    prometheus_histogram:declare([{name, Name}, {labels, [server_ip, server_port, server_name, nas_ip, nas_id]},
+-                                                  {duration_unit, milliseconds},
+-                                                  {buckets, Buckets}, {help, Help}]),
+-                    observe(Name, Nas, Value, ServerName, Help)
+-            end;
+-        _ ->
+-            ok
+-    end.
++    % TODO no support for Prometheus in Fedora so far
++    ok.
+ 
+ %% helper to be called from the aggregator to fetch this nodes values
+ %% @private
+diff --git a/test/eradius_metrics_SUITE.erl b/test/eradius_metrics_SUITE.erl
+index 11e2f2c..7d05ffa 100644
+--- a/test/eradius_metrics_SUITE.erl
++++ b/test/eradius_metrics_SUITE.erl
+@@ -154,20 +154,6 @@ check_total_requests(bad, N) ->
+     ok = check_metric(requests_total, [{server_name, bad}], N),
+     ok = check_metric(replies_total, [{server_name, bad}], N).
+ 
+-check_metric_multi({bad_type, accreq}, Id, Labels, _) ->
+-    case eradius_prometheus_collector:fetch_counter(Id, Labels) of
+-        [] ->
+-            ok;
+-        _ ->
+-            {error, Id, Labels}
+-    end;
+-check_metric_multi(accreq, Id, Labels, Count) ->
+-    case eradius_prometheus_collector:fetch_counter(Id, Labels) of
+-        [{Count, _} | _] ->
+-            ok;
+-        _ ->
+-            {error, Id, Count}
+-    end;
+ check_metric_multi(_, _, _, _) ->
+     ok.
+ 
+@@ -177,15 +163,9 @@ check_metric(_, _, _, _) ->
+     ok.
+ 
+ check_metric(server_status, Value, Labels) ->
+-    ?equal(Value, prometheus_boolean:value(server_status, Labels)),
+     ok;
+ check_metric(Id, Labels, Count) ->
+-    case eradius_prometheus_collector:fetch_counter(Id, Labels) of
+-        [{Count, _}] ->
+-            ok;
+-        _ ->
+-            {error, Id, Count}
+-    end.
++    ok.
+ 
+ send_request(Command, IP, Port, Attrs, Opts) ->
+     ok = eradius_dict:load_tables([dictionary]),

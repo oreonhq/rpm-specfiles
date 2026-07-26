@@ -1,0 +1,27 @@
+From 69c5281b9193149e3fa6d7fceac49de4eb57ab30 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ralf=20Cors=C3=A9pius?= <corsepiu@fedoraproject.org>
+Date: Fri, 20 May 2016 05:16:44 +0200
+Subject: [PATCH 11/11] Use setenv instead of set (RHBZ#1337691)
+
+---
+ alliance/src/distrib/etc/alc_env.csh.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/alliance/src/distrib/etc/alc_env.csh.in b/alliance/src/distrib/etc/alc_env.csh.in
+index 4051fba..37c3b00 100644
+--- a/alliance/src/distrib/etc/alc_env.csh.in
++++ b/alliance/src/distrib/etc/alc_env.csh.in
+@@ -21,8 +21,8 @@
+ 
+ # Where the Alliance CAD is installed
+  setenv ALLIANCE_TOP         "@prefix@"
+- set  SYSCONF_TOP            "@sysconfdir@/alliance"
+- set  CELLS_TOP              "@datadir@/alliance/cells"
++ setenv SYSCONF_TOP          "@sysconfdir@/alliance"
++ setenv CELLS_TOP            "@datadir@/alliance/cells"
+ 
+ 
+ # Alliance environment variables.
+-- 
+2.5.5
+

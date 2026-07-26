@@ -1,0 +1,42 @@
+--- HiGHS-1.11.0/CMakeLists.txt.orig	2025-06-05 19:10:03.348124466 -0600
++++ HiGHS-1.11.0/CMakeLists.txt	2025-06-05 19:13:50.649049342 -0600
+@@ -380,20 +380,6 @@ if(NOT FAST_BUILD)
+ endif()
+ 
+ include(CheckCXXCompilerFlag)
+-if (NOT HIGHS_COVERAGE AND NOT APPLE)
+-  if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(ppc64|powerpc64)")
+-      check_cxx_compiler_flag("-mpopcntd" COMPILER_SUPPORTS_POPCNTD)
+-      if(COMPILER_SUPPORTS_POPCNTD)
+-          # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mpopcntd")
+-          add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-mpopcntd>")
+-      endif()
+-  else()
+-      check_cxx_compiler_flag("-mpopcnt" COMPILER_SUPPORTS_POPCNT)
+-      if(COMPILER_SUPPORTS_POPCNT)
+-          add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-mpopcnt>")
+-      endif()
+-  endif()
+-endif()
+ 
+ option(DEBUGSOL "check the debug solution" OFF)
+ 
+--- HiGHS-1.11.0/highs/util/HighsHash.h.orig	2025-06-05 18:22:05.000000000 -0600
++++ HiGHS-1.11.0/highs/util/HighsHash.h	2025-06-05 19:13:13.795265102 -0600
+@@ -103,7 +103,16 @@ struct HighsHashHelpers {
+ 
+   static int log2i(uint32_t n) { return 31 - __builtin_clz(n); }
+ 
++#if defined(__i686__) || defined(__x86_64__)
++  static int __attribute__ ((target ("default"))) popcnt(uint64_t x) {
++    return __builtin_popcountll(x);
++  }
++  static int __attribute__ ((target ("popcnt"))) popcnt(uint64_t x) {
++    return __builtin_popcountll(x);
++  }
++#else
+   static int popcnt(uint64_t x) { return __builtin_popcountll(x); }
++#endif
+ 
+ #elif defined(HIGHS_HAVE_BITSCAN_REVERSE)
+   static int log2i(uint64_t n) {

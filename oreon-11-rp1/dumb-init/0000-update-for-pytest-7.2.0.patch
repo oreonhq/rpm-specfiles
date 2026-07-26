@@ -1,0 +1,55 @@
+diff -U4 -r dumb-init-1.2.5--orig/testing/__init__.py dumb-init-1.2.5--patched/testing/__init__.py
+--- dumb-init-1.2.5--orig/testing/__init__.py	2020-12-10 19:55:42.000000000 +0100
++++ dumb-init-1.2.5--patched/testing/__init__.py	2022-11-12 02:42:07.751248222 +0100
+@@ -7,11 +7,8 @@
+ from contextlib import contextmanager
+ from subprocess import PIPE
+ from subprocess import Popen
+ 
+-from py._path.local import LocalPath
+-
+-
+ # these signals cause dumb-init to suspend itself
+ SUSPEND_SIGNALS = frozenset([
+     signal.SIGTSTP,
+     signal.SIGTTOU,
+@@ -48,16 +45,17 @@
+ 
+ def child_pids(pid):
+     """Return a list of direct child PIDs for the given PID."""
+     children = set()
+-    for p in LocalPath('/proc').listdir():
++    for p in os.listdir('/proc'):
+         try:
+-            stat = open(p.join('stat').strpath).read()
++            with open(os.path.join('/proc', p, 'stat')) as f:
++                stat = f.read()
+             m = re.match(r'^\d+ \(.+?\) [a-zA-Z] (\d+) ', stat)
+             assert m, stat
+             ppid = int(m.group(1))
+             if ppid == pid:
+-                children.add(int(p.basename))
++                children.add(int(p))
+         except OSError:
+             # Happens when the process exits after listing it, or between
+             # opening stat and reading it.
+             pass
+@@ -75,14 +73,15 @@
+ 
+ 
+ def is_alive(pid):
+     """Return whether a process is running with the given PID."""
+-    return LocalPath('/proc').join(str(pid)).isdir()
++    return os.path.isdir(os.path.join('/proc', str(pid)))
+ 
+ 
+ def process_state(pid):
+     """Return a process' state, such as "stopped" or "running"."""
+-    status = LocalPath('/proc').join(str(pid), 'status').read()
++    with open(os.path.join('/proc', str(pid), 'status')) as f:
++        status = f.read()
+     m = re.search(r'^State:\s+[A-Z] \(([a-z]+)\)$', status, re.MULTILINE)
+     return m.group(1)
+ 
+ 
+Only in dumb-init-1.2.5--patched/testing: __init__.py.orig

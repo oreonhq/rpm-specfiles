@@ -1,0 +1,4 @@
+#Type Name     ID             GECOS                 Home directory Shell
+g hitch -
+u hitch - "hitch ssl/tls proxy" /var/lib/hitch /sbin/nologin
+

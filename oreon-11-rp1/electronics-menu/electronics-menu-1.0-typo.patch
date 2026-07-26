@@ -1,0 +1,19 @@
+--- Electronics.directory.orig	2007-12-08 01:08:04.000000000 +0100
++++ Electronics.directory	2013-04-07 10:57:53.633220462 +0200
+@@ -1,6 +1,6 @@
+ [Desktop Entry]
+ Type=Directory
+-Verson=1.0
++Version=1.0
+ Name=Electronics
+ Name[ca]=Electrònica
+ Name[cs]=Elektronika
+@@ -9,7 +9,7 @@
+ Name[es]=Electrónica
+ Name[eu]=Elektronika
+ Name[fi]=Elektroniikka
+-Name[fr]=Electronique
++Name[fr]=Électronique
+ Name[hu]=Elektronika
+ Name[it]=Elettronica
+ Name[ja]=電子工学

@@ -1,0 +1,364 @@
+From 0ae7ba046f14cef9857fd6c05d9072455097441f Mon Sep 17 00:00:00 2001
+From: Mystro256 <alexjnewt at hotmail dot com>
+Date: Tue, 12 Jun 2018 10:06:50 -0400
+Subject: [PATCH] Love 11 support
+
+---
+ Canvas.lua            |  8 ++++----
+ ColorMixer.lua        | 22 +++++++++++-----------
+ CreditsController.lua |  4 ++--
+ GalleryController.lua |  4 ++--
+ GameController.lua    |  2 +-
+ ImageTools.lua        |  6 +++---
+ Palette.lua           | 16 ++++++++--------
+ Preferences.lua       |  2 +-
+ Sound.lua             |  2 +-
+ TitleController.lua   |  6 +++---
+ conf.lua              |  2 +-
+ main.lua              |  2 +-
+ mymath.lua            | 15 ++++++---------
+ 13 files changed, 44 insertions(+), 47 deletions(-)
+
+diff --git a/Canvas.lua b/Canvas.lua
+index f7db8ec..38fd430 100644
+--- a/Canvas.lua
++++ b/Canvas.lua
+@@ -11,7 +11,7 @@ function Canvas:initialize()
+ 
+ 	self.tool = 2
+ 	self.brush_dir = 1
+-	self.color = { 224, 24, 24, 255 }
++	self.color = { 0.878, 0.094, 0.094, 1 }
+ 	self.width = 120
+ 	self.height =  160
+ 
+@@ -39,7 +39,7 @@ function Canvas:reset()
+ 
+ 	local c = love.graphics.getCanvas()
+ 	love.graphics.setCanvas(self.canvas)
+-	love.graphics.clear(241, 232, 199, 255)
++	love.graphics.clear(0.945, 0.910, 0.780, 1)
+ 	love.graphics.setCanvas(c)
+ end
+ 
+@@ -117,7 +117,7 @@ function Canvas:update(dt)
+ 			self.brush_dir = 1
+ 		end
+ 
+-		love.graphics.setColor(255, 255, 255, 255)
++		love.graphics.setColor(1, 1, 1, 1)
+ 		love.graphics.setCanvas(oldCanvas)
+ 	end
+ 
+@@ -164,7 +164,7 @@ function Canvas:gui()
+ 		end
+ 	end
+ 
+-	love.graphics.setColor(255, 255, 255)
++	love.graphics.setColor(1, 1, 1)
+ end
+ 
+ function Canvas:swap()
+diff --git a/ColorMixer.lua b/ColorMixer.lua
+index fca17a9..79bbd31 100644
+--- a/ColorMixer.lua
++++ b/ColorMixer.lua
+@@ -1,10 +1,10 @@
+ local ColorMixer = class("ColorMixer", Entity)
+ 
+ ColorMixer.static.COLORS = {
+-	{ 255, 255, 255 }, { 0, 0, 0 },
+-	{ 192,0,0 }, { 255,160,0 },
+-	{ 255,255,0 }, { 0,128,0 },
+-	{ 0,0,192 }, { 128,0,128 }
++	{ 1, 1, 1 }, { 0, 0, 0 },
++	{ 0.75,0,0 }, { 1,0.625,0 },
++	{ 1,1,0 }, { 0,0.5,0 },
++	{ 0,0,0.75 }, { 0.5,0,0.5 }
+ }
+ 
+ function ColorMixer:initialize(slot, color)
+@@ -13,7 +13,7 @@ function ColorMixer:initialize(slot, color)
+ 	self.slot = slot
+ 	self:reset()
+ 
+-	local h, s, v = math.rgbtohsv(color[1], color[2], color[3], 255)
++	local h, s, v = math.rgbtohsv(color[1], color[2], color[3], 1)
+ 	local hasHue = false
+ 	if s > 0 then hasHue = true end
+ 	self:updateColor(color, hasHue)
+@@ -47,8 +47,8 @@ function ColorMixer:updateColor(color, hasHue)
+ 		return
+ 	end
+ 
+-	local oh, os, ov = math.rgbtohsv(self.mycolor[1], self.mycolor[2], self.mycolor[3], 255)
+-	local nh, ns, nv = math.rgbtohsv(color[1], color[2], color[3], 255)
++	local oh, os, ov = math.rgbtohsv(self.mycolor[1], self.mycolor[2], self.mycolor[3], 1)
++	local nh, ns, nv = math.rgbtohsv(color[1], color[2], color[3], 1)
+ 
+ 	local h, s, v
+ 	if self.hasHue and hasHue then
+@@ -63,7 +63,7 @@ function ColorMixer:updateColor(color, hasHue)
+ 	s = (2*os + ns) / 3
+ 	v = (2*ov + nv) / 3
+ 
+-	local r, g, b = math.hsvtorgb(h, s, v, 255)
++	local r, g, b = math.hsvtorgb(h, s, v, 1)
+ 	self.mycolor = { r, g, b }
+ 	self.hasHue = self.hasHue or hasHue
+ end
+@@ -123,13 +123,13 @@ end
+ function ColorMixer:gui()
+ 	local mx, my = Mouse.static:getPosition()
+ 
+-	love.graphics.setColor(0, 0, 0, 200)
++	love.graphics.setColor(0, 0, 0, 0.784)
+ 	love.graphics.rectangle("fill", 0, 0, 180, HEIGHT)
+ 	love.graphics.rectangle("fill", 300, 0, 180, HEIGHT)
+ 	love.graphics.rectangle("fill", 180, 0, 120, 10)
+ 	love.graphics.rectangle("fill", 180, 170, 120, HEIGHT-170)
+ 
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 1)
+ 	for i=1, #ColorMixer.static.COLORS do
+ 		local x = (i % 4) * 40
+ 		local y = math.floor((i-1) / 4) * 64
+@@ -155,7 +155,7 @@ function ColorMixer:gui()
+ 		end
+ 	end
+ 
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 1)
+ 
+ 	love.graphics.draw(self.reset_button, 115, 215, 0, 1, 1, 16, 16)
+ 	love.graphics.draw(self.submit_button, 201, 202)
+diff --git a/CreditsController.lua b/CreditsController.lua
+index b5152ad..25ce41f 100644
+--- a/CreditsController.lua
++++ b/CreditsController.lua
+@@ -71,9 +71,9 @@ function CreditsController:gui()
+ 	local mx, my = Mouse.static:getPosition()
+ 	local offset = math.cos(self.time*10)*2
+ 
+-	love.graphics.setColor(53, 30, 24)
++	love.graphics.setColor(0.208, 0.118, 0.094)
+ 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 1)
+ 
+ 	love.graphics.push()
+ 	love.graphics.translate(0, -self.scroll)
+diff --git a/GalleryController.lua b/GalleryController.lua
+index 0941dcb..35dd180 100644
+--- a/GalleryController.lua
++++ b/GalleryController.lua
+@@ -111,9 +111,9 @@ function GalleryController:gui()
+ 
+ 	local offset = math.cos(self.time*10)*2
+ 
+-	love.graphics.setColor(53, 30, 24)
++	love.graphics.setColor(0.208, 0.118, 0.094)
+ 	love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+-	love.graphics.setColor(255, 255, 255, 255)
++	love.graphics.setColor(1, 1, 1, 1)
+ 
+ 	love.graphics.push()
+ 	love.graphics.translate(0, -self.scroll)
+diff --git a/GameController.lua b/GameController.lua
+index 5063d5a..a4ebd34 100644
+--- a/GameController.lua
++++ b/GameController.lua
+@@ -135,7 +135,7 @@ function GameController:getCustomerImage()
+ 	local canvas = love.graphics.newCanvas(120, 160)
+ 	local c = love.graphics.getCanvas()
+ 	love.graphics.setCanvas(canvas)
+-	love.graphics.clear(241, 232, 199, 255)
++	love.graphics.clear(0.945, 0.910, 0.780, 1)
+ 	love.graphics.setCanvas(c)
+ 
+ 	local w, h = self.customer.image:getDimensions()
+diff --git a/ImageTools.lua b/ImageTools.lua
+index b985e05..a04ec90 100644
+--- a/ImageTools.lua
++++ b/ImageTools.lua
+@@ -20,9 +20,9 @@ function ImageTools.histogram(data, steps)
+ 	for iy = 0, h-1 do
+ 		for ix = 0, w-1 do
+ 			local r, g, b = data:getPixel(ix, iy)
+-			local ir = math.floor(r / 256 * steps)
+-			local ig = math.floor(g / 256 * steps)
+-			local ib = math.floor(b / 256 * steps)
++			local ir = math.floor(r * steps)
++			local ig = math.floor(g * steps)
++			local ib = math.floor(b * steps)
+ 			hist[ir][ig][ib] = hist[ir][ig][ib] + 1
+ 		end
+ 	end
+diff --git a/Palette.lua b/Palette.lua
+index d4afd6b..e7cad36 100644
+--- a/Palette.lua
++++ b/Palette.lua
+@@ -8,10 +8,10 @@ function Palette:initialize(x, y)
+ 	Entity.initialize(self, x, y, 2)
+ 
+ 	self.colors = {
+-		{255, 255, 255},
+-		{48, 213, 48},
+-		{63, 127, 193},
+-		{224, 54, 54}
++		{1, 1, 1},
++		{48/255, 213/255, 48/255},
++		{63/255, 127/255, 193/255},
++		{224/255, 54/255, 54/255}
+ 	}
+ 
+ 	self.selection = 1
+@@ -88,7 +88,7 @@ function Palette:gui()
+ 	love.graphics.draw(self.image_mix, self.x+35, self.y+20)
+ 
+ 	if self.state == 2 then
+-		love.graphics.setColor(0, 0, 0, 200)
++		love.graphics.setColor(0, 0, 0, 0.784)
+ 		love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+ 	end
+ 
+@@ -96,9 +96,9 @@ function Palette:gui()
+ 		local x = self.x + Palette.static.PAINT_POS[i][1]
+ 		local y = self.y + Palette.static.PAINT_POS[i][2]
+ 
+-		love.graphics.setColor(255, 255, 255)
++		love.graphics.setColor(1, 1, 1)
+ 		if i == self.selection then
+-			love.graphics.setColor(255, 255, 255)
++			love.graphics.setColor(1, 1, 1)
+ 			love.graphics.draw(self.paint_highlights._image, self.paint_highlights._quads[i], x-1, y)
+ 		end
+ 
+@@ -106,7 +106,7 @@ function Palette:gui()
+ 		love.graphics.draw(self.paint._image, self.paint._quads[i], x, y)
+ 	end
+ 
+-	love.graphics.setColor(255, 255, 255)
++	love.graphics.setColor(1, 1, 1)
+ end
+ 
+ return Palette
+diff --git a/Preferences.lua b/Preferences.lua
+index 9ab61b2..12b802d 100644
+--- a/Preferences.lua
++++ b/Preferences.lua
+@@ -6,7 +6,7 @@ Preferences.static.path = "preferences"
+ 
+ function Preferences.static:load()
+ 	self.data = {}
+-	if love.filesystem.exists(self.path) == false then
++	if love.filesystem.getInfo(self.path) == nil then
+ 		print("Preference file \"".. self.path .. "\" not found")
+ 		return
+ 	end
+diff --git a/Sound.lua b/Sound.lua
+index a800c26..4e8cc88 100644
+--- a/Sound.lua
++++ b/Sound.lua
+@@ -12,7 +12,7 @@ function Sound.music(name)
+ 	if music ~= nil then
+ 		music:stop()
+ 	end
+-	music = love.audio.newSource("data/music/" .. name)
++	music = love.audio.newSource("data/music/" .. name, "stream")
+ 	music:setVolume(0.5)
+ 	music:setLooping(true)
+ 	love.audio.play(music)
+diff --git a/TitleController.lua b/TitleController.lua
+index 4a0413a..b7bd4f9 100644
+--- a/TitleController.lua
++++ b/TitleController.lua
+@@ -80,12 +80,12 @@ function TitleController:gui()
+ 		love.graphics.print(v, 32+self.offsets[i], 22+i*28)
+ 
+ 		if self.active[i] then
+-			love.graphics.setColor(255, 255, 255)
++			love.graphics.setColor(1, 1, 1)
+ 			love.graphics.print(v, 32+self.offsets[i], 20+i*28)
+ 		else
+-			love.graphics.setColor(128, 128, 128)
++			love.graphics.setColor(0.5, 0.5, 0.5)
+ 			love.graphics.print(v, 32+self.offsets[i], 20+i*28)
+-			love.graphics.setColor(255, 255, 255)
++			love.graphics.setColor(1, 1, 1)
+ 		end
+ 	end
+ 
+diff --git a/conf.lua b/conf.lua
+index dc26893..98e45e0 100644
+--- a/conf.lua
++++ b/conf.lua
+@@ -1,6 +1,6 @@
+ function love.conf(t)
+     t.identity = "dk.tangramgames.90secondportraits"
+-    t.version = "0.10.0"
++    t.version = "11.0"
+     t.console = false
+     t.accelerometerjoystick = false
+     t.gammacorrect = false
+diff --git a/main.lua b/main.lua
+index e513605..a54f067 100644
+--- a/main.lua
++++ b/main.lua
+@@ -116,7 +116,7 @@ function love.run()
+ 		Mouse.static:clear()
+ 		Keyboard.static:clear()
+ 
+-		if love.window and love.graphics and love.window.isCreated() then
++		if love.window and love.graphics and love.window.isOpen() then
+ 			love.graphics.clear()
+ 			love.graphics.origin()
+ 			love.graphics.push()
+diff --git a/mymath.lua b/mymath.lua
+index 999ee74..84c6de0 100644
+--- a/mymath.lua
++++ b/mymath.lua
+@@ -17,7 +17,7 @@ function math.gauss()
+ end
+ 
+ function math.rgbtohsv(r, g, b, a)
+-  r, g, b, a = r / 255, g / 255, b / 255, a / 255
++  r, g, b, a = r, g, b, a
+   local max, min = math.max(r, g, b), math.min(r, g, b)
+   local h, s, v
+   v = max
+@@ -58,7 +58,7 @@ function math.hsvtorgb(h, s, v, a)
+   elseif i == 5 then r, g, b = v, p, q
+   end
+ 
+-  return r * 255, g * 255, b * 255, a * 255
++  return r, g, b, a
+ end
+ 
+ function math.huemid(a, b)
+@@ -91,9 +91,6 @@ function math.subset(t, n)
+ end
+ 
+ function math.rgbtoyuv(r, g, b)
+-	r = r / 255
+-	g = g / 255
+-	b = b / 255
+ 
+ 	local y = 0.299 * r + 0.587 * g + 0.114 * b
+ 	local u = 0.492 * (b - y)
+@@ -104,8 +101,8 @@ end
+ 
+ function math.rgbdistance(r1, g1, b1, r2, g2, b2)
+ 	local rmean = (r1 + r2) / 2
+-	local r = r1 - r2
+-	local g = g1 - g2
+-	local b = b1 - b2
+-	return math.sqrt((2 + rmean/256) * r^2 + 4*g^2 + (2 + (255 - rmean)/256)*b^2)
++	local r = r1*255 - r2*255
++	local g = g1*255 - g2*255
++	local b = b1*255 - b2*255
++	return math.sqrt((2 + rmean) * r^2 + 4*g^2 + (2 + (1 - rmean))*b^2)
+ end
+-- 
+2.14.4
+

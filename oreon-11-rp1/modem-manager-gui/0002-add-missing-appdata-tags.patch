@@ -1,0 +1,19 @@
+--- modem-manager-gui-0.0.19.1/appdata/modem-manager-gui.appdata.xml.in	2018-04-06 16:43:09.000000000 +0200
++++ modem-manager-gui-0.0.19.1/appdata/modem-manager-gui.appdata--patched.xml.in	2020-02-02 09:35:47.979414562 +0100
+@@ -59,9 +59,15 @@
+   <category>System</category>
+   <category>Utility</category>
+   <category>Network</category>
+   <category>TelephonyTools</category>
+-​ </categories>
++</categories>
++  <content_rating type="oars-1.1">
++    <content_attribute id="social-chat">intense</content_attribute>
++  </content_rating>
++  <releases>
++    <release version="0.0.19.1" date="2018-04-06" />
++  </releases>
+  <kudos>
+   <kudo>AppMenu</kudo>
+   <kudo>Notifications</kudo>
+   <kudo>ModernToolkit</kudo>

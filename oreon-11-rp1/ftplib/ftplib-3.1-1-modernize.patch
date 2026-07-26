@@ -1,0 +1,30 @@
+--- ftplib-3.1-1/src/Makefile.BAD	2007-06-04 12:13:23.000000000 -0500
++++ ftplib-3.1-1/src/Makefile	2007-06-04 12:14:57.000000000 -0500
+@@ -18,6 +18,8 @@ CFLAGS = -Wall $(DEBUG) -I. $(INCLUDES) 
+ LDFLAGS = -L.
+ DEPFLAGS =
+ 
++LIBDIR = /usr/lib
++
+ all : $(TARGETS)
+ 
+ clean :
+@@ -29,15 +31,9 @@ clobber : clean
+ 	rm -f libftp.so.*
+ 
+ install : all
+-	install qftp /usr/local/bin
+-	install -m 644 libftp.so.$(SOVERSION) /usr/local/lib
+-	install -m 644 ftplib.h /usr/local/include
+-	(cd /usr/local/lib && \
+-	 ln -sf libftp.so.$(SOVERSION) libftp.so.$(SONAME) && \
+-	 ln -sf libftp.so.$(SONAME) libftp.so)
+-	-(cd /usr/local/bin && \
+-	  for f in ftpdir ftpget ftplist ftprm ftpsend; \
+-	  do ln -s qftp $$f; done)
++	install qftp $(DESTDIR)/usr/bin
++	install -m 644 libftp.so.$(SOVERSION) $(DESTDIR)$(LIBDIR)
++	install -m 644 ftplib.h $(DESTDIR)/usr/include
+ 
+ depend :
+ 	$(CC) $(CFLAGS) -M $(SOURCES) > .depend

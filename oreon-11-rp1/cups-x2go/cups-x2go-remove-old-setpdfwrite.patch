@@ -1,0 +1,26 @@
+diff -urNB cups-x2go-3.0.1.3-orig/cups-x2go cups-x2go-3.0.1.3/cups-x2go
+--- cups-x2go-3.0.1.3-orig/cups-x2go	2021-06-16 15:29:09.140522370 +0200
++++ cups-x2go-3.0.1.3/cups-x2go	2021-06-16 15:36:38.715007753 +0200
+@@ -42,8 +42,8 @@
+ my $printdsa = "/root/.ssh/id_dsa-x2goprint";
+ 
+ # PS2PDF command
+-my $ps2pdf = "/usr/bin/gs -q -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile=- -dAutoRotatePages=/PageByPage -dAutoFilterColorImages=false -dColorImageFilter=/FlateEncode -dPDFSETTINGS=/prepress -dDoNumCopies -c .setpdfwrite -f \"%s\"";
+-#my $ps2pdf = "/usr/bin/gs -q -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile=- -dAutoRotatePages=/PageByPage -dAutoFilterColorImages=false -dColorImageFilter=/FlateEncode -dPDFSETTINGS=/prepress -dDoNumCopies -c .setpdfwrite -f /usr/bin/margin-offset.ps \"%s\"";
++my $ps2pdf = "/usr/bin/gs -q -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile=- -dAutoRotatePages=/PageByPage -dAutoFilterColorImages=false -dColorImageFilter=/FlateEncode -dPDFSETTINGS=/prepress -dDoNumCopies -c 3000000 setvmthreshold -f \"%s\"";
++#my $ps2pdf = "/usr/bin/gs -q -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile=- -dAutoRotatePages=/PageByPage -dAutoFilterColorImages=false -dColorImageFilter=/FlateEncode -dPDFSETTINGS=/prepress -dDoNumCopies -c 3000000 setvmthreshold -f /usr/bin/margin-offset.ps \"%s\"";
+ 
+ ## loglevel for cups-x2go, possible values: emerg, alert, crit, err, warning, notice, info, debug
+ my $strloglevel = "notice";
+diff -urNB cups-x2go-3.0.1.3-orig/cups-x2go.conf cups-x2go-3.0.1.3/cups-x2go.conf
+--- cups-x2go-3.0.1.3-orig/cups-x2go.conf	2021-06-16 15:29:09.140522370 +0200
++++ cups-x2go-3.0.1.3/cups-x2go.conf	2021-06-16 15:36:57.162232833 +0200
+@@ -15,7 +15,7 @@
+ 
+ ## command to generate PDF file
+ ## CAUTION: this command MUST output the resulting PDF File to standard output.
+-#ps2pdf = /usr/bin/gs -q -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile=- -dAutoRotatePages=/PageByPage -dAutoFilterColorImages=false -dColorImageFilter=/FlateEncode -dPDFSETTINGS=/prepress -dDoNumCopies -c .setpdfwrite -f \"%s\"
++#ps2pdf = /usr/bin/gs -q -dCompatibilityLevel=1.4 -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite -sOutputFile=- -dAutoRotatePages=/PageByPage -dAutoFilterColorImages=false -dColorImageFilter=/FlateEncode -dPDFSETTINGS=/prepress -dDoNumCopies -c 3000000 setvmthreshold -f \"%s\"
+ 
+ ## loglevel for cups-x2go, possible values: emerg, alert, crit, err, warning, notice, info, debug
+ #loglevel = notice

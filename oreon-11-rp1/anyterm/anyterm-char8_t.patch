@@ -1,0 +1,42 @@
+Index: libpbe/include/charset/char_t.hh
+===================================================================
+diff --git a/libpbe/include/charset/char_t.hh b/libpbe/include/charset/char_t.hh
+--- a/libpbe/include/charset/char_t.hh	(revision 20469)
++++ b/libpbe/include/charset/char_t.hh	(revision 20470)
+@@ -36,12 +36,11 @@
+ // Defined-size character types
+ // ----------------------------
+ //
+-// The built-in types char and wchar_t have different numbers of bits on
+-// different platforms.  C++0x will probably have new char types of determined
+-// sizes; this file provides three typedefs, char8_t, char16_t and char32_t 
+-// that do the same sort of thing.  These map to char and wchar_t when 
+-// appropriate, and to an unsigned integer of the appropriate size (using 
+-// Boost.Integer) otherwise.
++// C++20 finally has char8_t, char16_t and char32_t.
++// C++11 had char16_t and char32_t.
++// 
++// This file conditionally defines those types when they do not exist 
++// in the language.
+ //
+ // The specialised template class char_t<N> provides a typedef 'type' for an
+ // N-bit character.
+@@ -62,11 +61,16 @@
+   typedef wchar_t type;
+ };
+ 
++#define HAVE_BUILTIN_CHAR8_T __cplusplus >= 202002L
++#if ! HAVE_BUILTIN_CHAR8_T
++
+ typedef char_t<8>::type  char8_t;
+ 
+-#define HAVE_BUILTIN_CHAR_T __cplusplus >= 201100L
+-#if ! HAVE_BUILTIN_CHAR_T
++#endif
+ 
++#define HAVE_BUILTIN_CHAR1632_T __cplusplus >= 201100L
++#if ! HAVE_BUILTIN_CHAR1632_T
++
+ typedef char_t<16>::type char16_t;
+ typedef char_t<32>::type char32_t;
+ 

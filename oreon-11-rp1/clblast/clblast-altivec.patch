@@ -1,0 +1,33 @@
+--- include/clblast_c.h.orig	2018-07-14 04:29:06.000000000 -0600
++++ include/clblast_c.h	2018-09-05 19:25:32.645451973 -0600
+@@ -21,6 +21,8 @@
+ #else
+   #include <CL/opencl.h>
+ #endif
++#undef vector
++#undef bool
+ 
+ // Exports library functions under Windows when building a DLL. See also:
+ // https://msdn.microsoft.com/en-us/library/a90k134d.aspx
+--- include/clblast.h.orig	2018-07-14 04:29:06.000000000 -0600
++++ include/clblast.h	2018-09-05 19:25:20.700470968 -0600
+@@ -26,6 +26,8 @@
+ #else
+   #include <CL/opencl.h>
+ #endif
++#undef vector
++#undef bool
+ 
+ // Exports library functions under Windows when building a DLL. See also:
+ // https://msdn.microsoft.com/en-us/library/a90k134d.aspx
+--- src/clpp11.hpp.orig	2018-07-14 04:29:06.000000000 -0600
++++ src/clpp11.hpp	2018-09-05 19:18:44.972378306 -0600
+@@ -54,6 +54,8 @@
+ #else
+   #include <CL/opencl.h>
+ #endif
++#undef vector
++#undef bool
+ 
+ // Android support (missing C++11 functions to_string, stod, and stoi)
+ #ifdef __ANDROID__

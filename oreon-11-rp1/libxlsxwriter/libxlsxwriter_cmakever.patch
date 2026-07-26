@@ -1,0 +1,12 @@
+diff -rupN libxlsxwriter-RELEASE_1.1.7/CMakeLists.txt libxlsxwriter-RELEASE_1.1.7-new/CMakeLists.txt
+--- libxlsxwriter-RELEASE_1.1.7/CMakeLists.txt	2024-04-06 01:08:20.000000000 +0200
++++ libxlsxwriter-RELEASE_1.1.7-new/CMakeLists.txt	2025-07-17 13:38:48.409524460 +0200
+@@ -107,7 +107,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 1)
+ if(MSVC)
+     cmake_minimum_required(VERSION 3.4)
+ else()
+-    cmake_minimum_required(VERSION 3.1)
++    cmake_minimum_required(VERSION 3.5)
+ endif()
+ 
+ SET(XLSX_PROJECT_NAME "xlsxwriter" CACHE STRING "Optional project and binary name")

@@ -1,0 +1,9 @@
+import:
+- package: github.com/hashicorp/go-cleanhttp
+  version: ad28ea4487f05916463e2423a55166280e8254b5
+- package: github.com/circonus-labs/circonusllhist
+  version: a20e1eabe49e252ce392fa4f983c315867f6e5cd
+- package: github.com/hashicorp/go-retryablehttp
+  version: 6e85be8fee1dcaa02c0eaaac2df5a8fbecf94145
+package: github.com/circonus-labs/circonus-gometrics
+

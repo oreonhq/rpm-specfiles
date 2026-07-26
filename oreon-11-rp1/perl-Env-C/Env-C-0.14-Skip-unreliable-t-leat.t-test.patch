@@ -1,0 +1,30 @@
+From cda1f8167d248a25b8ad0942c6b69b60e6756cc0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Thu, 10 Aug 2017 08:30:23 +0200
+Subject: [PATCH] Skip unreliable t/leat.t test
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+https://github.com/mschout/env-c/issues/3
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/leak.t | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/t/leak.t b/t/leak.t
+index 7094a82..6e044d8 100644
+--- a/t/leak.t
++++ b/t/leak.t
+@@ -7,6 +7,8 @@ use strict;
+ use Test::More;
+ use Env::C;
+ 
++plan skip_all => 'This test is fragile, there are inherent leaks in glibc';
++
+ if (Env::C::using_safe_putenv()) {
+     plan skip_all => "perl leaks with PERL_USE_SAFE_PUTENV";
+ }
+-- 
+2.9.4
+

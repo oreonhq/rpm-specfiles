@@ -1,0 +1,82 @@
+am-utils-6.2 - fix fedora mock build fail
+
+From: Ian Kent <raven@themaw.net>
+
+NFSv4 really needs to be used here but fedora mock builds don't seem
+to be able to see the kernel modules. And when NFSv4 is a module, and
+has not been used yet, the test fails.
+
+So use the existing hack to ensure NFSv4 is seen as supported for both
+check_fs_mntent.m4 and check_mount_type.m4 in m4/macros.
+
+Signed-off-by: Ian Kent <raven@themaw.net>
+---
+ m4/macros/check_fs_mntent.m4  |   23 +++++++++++++----------
+ m4/macros/check_mount_type.m4 |   18 ++++++++++++++++++
+ 2 files changed, 31 insertions(+), 10 deletions(-)
+
+diff --git a/m4/macros/check_fs_mntent.m4 b/m4/macros/check_fs_mntent.m4
+index 45ac4974..de3d9a91 100644
+--- a/m4/macros/check_fs_mntent.m4
++++ b/m4/macros/check_fs_mntent.m4
+@@ -141,18 +141,21 @@ do
+     break
+   fi
+ 
+-  if test "$ac_fs_tmp" = "nfs3" -a "$ac_cv_header_linux_nfs_mount_h" = "yes"
++  if test $ac_fs_tmp = "nfs3" -o $ac_fs_tmp = "nfs4"
+   then
+-    # hack hack hack
+-    # in 6.1, which has fallback to v2/udp, we might want
+-    # to always use version 4.
+-    # in 6.0 we do not have much choice
+-    #
+-    let nfs_mount_version="`grep NFS_MOUNT_VERSION /usr/include/linux/nfs_mount.h | awk '{print $''3;}'`"
+-    if test $nfs_mount_version -ge 4
++    if test "$ac_cv_header_linux_nfs_mount_h" = "yes"
+     then
+-      eval "ac_cv_fs_$ac_fs_name=yes"
+-      break
++      # hack hack hack
++      # in 6.1, which has fallback to v2/udp, we might want
++      # to always use version 4.
++      # in 6.0 we do not have much choice
++      #
++      let nfs_mount_version="`grep NFS_MOUNT_VERSION /usr/include/linux/nfs_mount.h | awk '{print $''3;}'`"
++      if test $nfs_mount_version -ge 4
++      then
++        eval "ac_cv_fs_$ac_fs_name=yes"
++        break
++      fi
+     fi
+   fi
+ 
+diff --git a/m4/macros/check_mount_type.m4 b/m4/macros/check_mount_type.m4
+index 88f85323..69354221 100644
+--- a/m4/macros/check_mount_type.m4
++++ b/m4/macros/check_mount_type.m4
+@@ -155,6 +155,24 @@ do
+     break
+   fi
+ 
++  if test $ac_fs_tmp = "nfs4"
++  then
++    if test "$ac_cv_header_linux_nfs_mount_h" = "yes"
++    then
++      # hack hack hack
++      # in 6.1, which has fallback to v2/udp, we might want
++      # to always use version 4.
++      # in 6.0 we do not have much choice
++      #
++      let nfs_mount_version="`grep NFS_MOUNT_VERSION /usr/include/linux/nfs_mount.h | awk '{print $''3;}'`"
++      if test $nfs_mount_version -ge 4
++      then
++        eval "ac_cv_mount_type_$ac_fs_name=\\\"$ac_fs_tmp\\\""
++        break
++      fi
++    fi
++  fi
++
+   # run a test program for bsdi3
+   AC_RUN_IFELSE(
+   [AC_LANG_SOURCE(

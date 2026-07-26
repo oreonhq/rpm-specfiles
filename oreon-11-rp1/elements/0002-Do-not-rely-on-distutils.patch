@@ -1,0 +1,27 @@
+From 7cf71bafaba57fa8b7f43a2c2e1df056157c5996 Mon Sep 17 00:00:00 2001
+From: Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com>
+Date: Tue, 28 May 2024 13:42:17 +0000
+Subject: Do not rely on distutils
+
+---
+ cmake/ElementsLocations.cmake | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/cmake/ElementsLocations.cmake b/cmake/ElementsLocations.cmake
+index d2201c72..688bfa52 100644
+--- a/cmake/ElementsLocations.cmake
++++ b/cmake/ElementsLocations.cmake
+@@ -183,9 +183,8 @@ if(SQUEEZED_INSTALL)
+   find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+ 
+   execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
+-                  "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"
++                  "from sysconfig import get_path; print(get_path('platlib').replace(get_path('data') + '/',''))"
+                   OUTPUT_VARIABLE PYTHON_INSTALL_SUFFIX
+-                  ERROR_QUIET
+                   OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+   set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the python binary files" FORCE)
+-- 
+2.45.1
+

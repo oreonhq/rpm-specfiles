@@ -1,0 +1,7 @@
+import:
+- package: github.com/golang/protobuf
+  subpackages:
+  - proto
+  version: 6a1fa9404c0aebf36c879bc50152edcc953910d2
+package: github.com/denverdino/aliyungo
+

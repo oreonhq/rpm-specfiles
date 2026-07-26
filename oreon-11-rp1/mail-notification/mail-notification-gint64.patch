@@ -1,0 +1,38 @@
+--- src/mn-gmime-stream-vfs.gob	2013-12-31 19:31:59.000000000 +0400
++++ src/mn-gmime-stream-vfs.gob-OK	2025-08-05 00:58:29.281322491 +0300
+@@ -152,8 +152,8 @@
+     return 0;
+   }
+ 
+-  override (GMime:Stream) off_t
+-    seek (GMimeStream *stream, off_t offset, GMimeSeekWhence whence)
++  override (GMime:Stream) gint64
++    seek (GMimeStream *stream, gint64 offset, GMimeSeekWhence whence)
+   {
+     Self *self = SELF(stream);
+     off_t real = stream->position;
+@@ -197,13 +197,13 @@
+     return real;
+   }
+ 
+-  override (GMime:Stream) off_t
++  override (GMime:Stream) gint64
+     tell (GMimeStream *stream)
+   {
+     return stream->position;
+   }
+ 
+-  override (GMime:Stream) ssize_t
++  override (GMime:Stream) gint64
+     length (GMimeStream *stream)
+   {
+     Self *self = SELF(stream);
+@@ -223,7 +223,7 @@
+   }
+ 
+   override (GMime:Stream) GMimeStream *
+-    substream (GMimeStream *stream, off_t start, off_t end)
++    substream (GMimeStream *stream, gint64 start, gint64 end)
+   {
+     Self *self;
+ 

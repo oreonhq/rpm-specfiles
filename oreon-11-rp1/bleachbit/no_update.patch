@@ -1,0 +1,14 @@
+Description: Do not check for updates on the Internet, updates will be provided via repositories.
+Origin: Debian
+Forwarded: not-needed
+--- a/bleachbit/Options.py
++++ b/bleachbit/Options.py
+@@ -270,7 +270,7 @@
+         # set defaults
+         self.__set_default("auto_hide", True)
+         self.__set_default("check_beta", False)
+-        self.__set_default("check_online_updates", True)
++        self.__set_default("check_online_updates", False)
+         self.__set_default("dark_mode", True)
+         self.__set_default("debug", False)
+         self.__set_default("delete_confirmation", True)

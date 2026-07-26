@@ -1,0 +1,27 @@
+diff --color -Nur ngircd-27.orig/doc/sample-ngircd.conf.tmpl ngircd-27/doc/sample-ngircd.conf.tmpl
+--- ngircd-27.orig/doc/sample-ngircd.conf.tmpl	2024-05-11 16:18:32.156364779 -0700
++++ ngircd-27/doc/sample-ngircd.conf.tmpl	2024-05-11 16:19:47.972042211 -0700
+@@ -49,6 +49,7 @@
+ 	# "0.0.0.0" or (if compiled with IPv6 support) "::,0.0.0.0"
+ 	# so the server listens on all IP addresses of the system by default.
+ 	;Listen = 127.0.0.1,192.168.0.1
++	Listen = 127.0.0.1
+ 
+ 	# Text file with the "message of the day" (MOTD). This message will
+ 	# be shown to all users connecting to the server: Default: a built-in
+@@ -82,6 +83,7 @@
+ 	# of the group or the numerical ID. ATTENTION: For this to work the
+ 	# server must have been started with root privileges!
+ 	;ServerGID = 65534
++	ServerGID = ngircd
+ 
+ 	# User ID under which the server should run; you can use the name
+ 	# of the user or the numerical ID. ATTENTION: For this to work the
+@@ -89,6 +91,7 @@
+ 	# the configuration and MOTD files must be readable by this user,
+ 	# otherwise RESTART and REHASH won't work!
+ 	;ServerUID = 65534
++	ServerUID = ngircd
+ 
+ [Limits]
+ 	# Define some limits and timeouts for this ngIRCd instance. Default

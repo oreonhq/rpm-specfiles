@@ -1,0 +1,28 @@
+From 05079ede371c5dd282532c46f1605128fc85891c Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sun, 18 Nov 2018 23:05:50 +0100
+Subject: [PATCH] perl/imap-proxy: avoid calling a noop on an empty handle
+
+---
+ perl.d/imap-proxy | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/perl.d/imap-proxy b/perl.d/imap-proxy
+index e7298ae..426306a 100755
+--- a/perl.d/imap-proxy
++++ b/perl.d/imap-proxy
+@@ -125,9 +125,11 @@ while (1)
+     #
+     #  Send a "still alive" message to our remote IMAP-server.
+     #
+-    $handle->noop();
+-
+-    if ( !$handle )
++    if ( $handle )
++    {
++        $handle->noop();
++    }
++    else
+     {
+         $handle = Lumail::imap_connect();
+     }

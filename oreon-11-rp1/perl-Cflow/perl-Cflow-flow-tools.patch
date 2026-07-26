@@ -1,0 +1,26 @@
+diff -up Cflow-1.053/Makefile.PL.flow-tools Cflow-1.053/Makefile.PL
+--- Cflow-1.053/Makefile.PL.flow-tools	2017-04-12 11:17:56.305479722 -0600
++++ Cflow-1.053/Makefile.PL	2017-04-12 11:18:37.101280928 -0600
+@@ -42,18 +42,10 @@ sub find_argus_or_flow_tools {
+ sub find_flow_tools {
+    my($ver, $dir);
+    my($libdir, $incdir);
+-   if (-f '../../lib/libft.a') {
+-      $dir = '../../lib';
+-      $incdir = "-I$dir -I$dir/..";
+-      $libdir = "-L$dir";
+-   }
+-   if ("$libdir") {
+-      print "Found flow-tools... using \"-DOSU $incdir $libdir -lft -lz\".\n";
+-      return { CCFLAGS => $Config{ccflags} . ' -DOSU',
+-	       INC     => join(' ', $incdir),
+-	       LIBS    => [ join(' ', $libdir, '-lnsl -lft -lz') ] }
+-   }
+-   return undef
++   print "Found flow-tools... using \"-DOSU $incdir $libdir -lft\".\n";
++   return { CCFLAGS => $Config{ccflags} . ' -DOSU',
++	    INC     => join(' ', $incdir),
++	    LIBS    => [ join(' ', $libdir, '-lft') ] }
+ }
+ 
+ sub find_argus {

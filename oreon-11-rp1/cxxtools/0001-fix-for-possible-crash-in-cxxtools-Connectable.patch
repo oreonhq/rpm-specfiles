@@ -1,0 +1,27 @@
+From 7e87a946ed0551360e4afef560f963485e3a9e8c Mon Sep 17 00:00:00 2001
+Message-ID: <7e87a946ed0551360e4afef560f963485e3a9e8c.1740659600.git.git@grubix.eu>
+From: =?UTF-8?q?Tommi=20M=C3=A4kitalo?= <tommi@tntnet.org>
+Date: Thu, 27 Feb 2025 13:19:46 +0100
+Subject: [PATCH] fix for possible crash in cxxtools::Connectable
+
+Accessing the first element of a empty list is not allowed
+---
+ src/connectable.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/connectable.cpp b/src/connectable.cpp
+index 995b5c38..dfc8f7f3 100644
+--- src/connectable.cpp
++++ src/connectable.cpp
+@@ -45,7 +45,7 @@ void Connectable::clear()
+     {
+         Connection* c = &_connections.front();
+         c->close();
+-        if (&_connections.front() == c)
++        if (!_connections.empty() && &_connections.front() == c)
+         {
+             // this should not really happen but just in case we do not want to loop endlessly
+             log_fatal("connection " << static_cast<void*>(c) << " was not removed from " << static_cast<void*>(this));
+-- 
+2.48.1.749.g66b74ae094
+

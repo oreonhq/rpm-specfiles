@@ -1,0 +1,24 @@
+diff -up enlightenment-0.25.0/data/desktop/enlightenment_askpass.desktop.fixme enlightenment-0.25.0/data/desktop/enlightenment_askpass.desktop
+--- enlightenment-0.25.0/data/desktop/enlightenment_askpass.desktop.fixme	2021-12-29 13:13:05.163621108 -0500
++++ enlightenment-0.25.0/data/desktop/enlightenment_askpass.desktop	2021-12-29 13:14:05.016008028 -0500
+@@ -5,7 +5,7 @@ Comment=Enlightenment Password Request
+ Comment[fr]=Demande de mot de passe pour Enlightenment
+ Comment[it]=Richiesta password per Enlightenment
+ Icon=enlightenment-askpass
+-OnlyShowIn=Enlightenment;
++OnlyShowIn=X-Enlightenment;
+ Exec=enlightenment_askpass
+ Terminal=false
+ Categories=System
+diff -up enlightenment-0.25.0/data/desktop/enlightenment_filemanager.desktop.fixme enlightenment-0.25.0/data/desktop/enlightenment_filemanager.desktop
+--- enlightenment-0.25.0/data/desktop/enlightenment_filemanager.desktop.fixme	2021-12-26 06:45:13.000000000 -0500
++++ enlightenment-0.25.0/data/desktop/enlightenment_filemanager.desktop	2021-12-29 13:13:05.163621108 -0500
+@@ -39,7 +39,7 @@ Comment[ru]=Файловый менед�
+ Comment[sr]=Управник датотека Просвећења
+ Comment[tr]=Enlightenment tarafından sağlanan dosya yöneticisi
+ Icon=system-file-manager
+-OnlyShowIn=Enlightenment;
++OnlyShowIn=X-Enlightenment;
+ Exec=enlightenment_filemanager %U
+ Terminal=false
+ MimeType=inode/directory;

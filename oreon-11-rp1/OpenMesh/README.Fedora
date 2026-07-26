@@ -1,0 +1,4 @@
+Due to generic names of the OpenMesh executables, they are not available
+in the default bindir. To access the executable, supply the name with the
+om_ prefix.
+

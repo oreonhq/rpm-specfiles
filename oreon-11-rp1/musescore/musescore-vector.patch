@@ -1,0 +1,11 @@
+--- MuseScore-4.6.0-beta/src/engraving/style/style.cpp.orig	2025-08-29 10:44:55.000000000 -0600
++++ MuseScore-4.6.0-beta/src/engraving/style/style.cpp	2025-09-19 11:41:40.039946972 -0600
+@@ -43,7 +43,7 @@ using namespace mu::engraving;
+ 
+ const PropertyValue& MStyle::value(Sid idx) const
+ {
+-    if (idx == Sid::NOSTYLE) {
++    if (idx == Sid::NOSTYLE || size_t(idx) >= m_values.size()) {
+         static PropertyValue dummy;
+         return dummy;
+     }

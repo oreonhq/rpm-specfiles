@@ -1,0 +1,21 @@
+From 9650e8bb3c6ef5cf65db444865f9c155890e42f1 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Sun, 18 Nov 2018 23:06:16 +0100
+Subject: [PATCH] perl/imap-proxy: croak early on bad params
+
+---
+ perl.d/Lumail.pm | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/perl.d/Lumail.pm b/perl.d/Lumail.pm
+index 9ae65ca..2232d9b 100644
+--- a/perl.d/Lumail.pm
++++ b/perl.d/Lumail.pm
+@@ -64,6 +64,7 @@ sub imap_connect
+         $host = $1;
+         $ssl  = 0;
+     }
++    die "No imap_server specified." unless $1;
+ 
+     my $handle = Net::IMAP::Client->new(
+         server          => $host,

@@ -1,0 +1,19 @@
+Description: Initialize TheoraStreamParameter::colorspace.
+ Avoid warning from valgrind about making decisions based on uninitialized
+ values by making sure to initialize TheoraStreamParameter::colorspace to
+ unspecified when creating a new object.
+Author: Petter Reinholdtsen <pere@hungry.com>
+Forwarded: no
+Reviewed-By: Petter Reinholdtsen <pere@hungry.com>
+Last-Update: 2016-05-24
+
+--- oggvideotools-0.9.orig/src/ovt_theora/theoraStreamParameter.cpp
++++ oggvideotools-0.9/src/ovt_theora/theoraStreamParameter.cpp
+@@ -5,6 +5,7 @@
+ #include "log.h"
+ 
+ TheoraStreamParameter::TheoraStreamParameter()
++  : colorspace(unspecified)
+ {
+ }
+ 

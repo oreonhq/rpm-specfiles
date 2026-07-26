@@ -1,0 +1,26 @@
+
+ORGANIZATION=Internet Systems Consortium
+
+all: man html
+
+ronn: genreport.ronn
+
+man: genreport.1
+
+html: genreport.html genreport.md.html
+
+clean:
+	rm -f genreport.1 genreport.html genreport.md.html
+
+genreport.ronn: genreport.md mkronn.sed
+	sed -f mkronn.sed genreport.md > genreport.ronn
+
+genreport.1: genreport.ronn Makefile.doc
+	ronn --roff --pipe --manual="genreport(1)" --organization="$(ORGANIZATION)" genreport.ronn > $@
+
+genreport.html: genreport.ronn
+	ronn --html --pipe --manual="genreport(1)" --organization="$(ORGANIZATION)" genreport.ronn > $@
+
+genreport.md.html: genreport.md
+	markdown genreport.md > genreport.md.html
+

@@ -1,0 +1,12 @@
+diff -up Authen-PAM-0.16/Makefile.PL.orig Authen-PAM-0.16/Makefile.PL
+--- Authen-PAM-0.16/Makefile.PL.orig	2017-05-15 16:02:18.933440522 +0200
++++ Authen-PAM-0.16/Makefile.PL	2017-05-15 16:17:41.513263075 +0200
+@@ -10,7 +10,7 @@ sub configure {
+ 
+     # returns a reference to anonymous hash which is then interpreted as
+     # additional options to the WriteMakeFile
+-    $options = require "pam.cfg";
++    $options = require "./pam.cfg";
+ 
+     if ( $Config{'osname'} eq 'solaris' && $Config{'osvers'} eq '2.6') {
+       print "Adding a workaround for a bug in the Solaris 2.6 pam library\n";

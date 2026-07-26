@@ -1,0 +1,11 @@
+--- runtime/Clib/csocket.c.orig	2023-12-25 11:15:19.184826296 -0700
++++ runtime/Clib/csocket.c	2023-12-25 11:16:07.937221378 -0700
+@@ -2906,7 +2906,7 @@ bgl_make_datagram_server_socket(int port
+    int s;
+    struct addrinfo hints, *servinfo, *p;
+    int rv;
+-   char service[ 10 ];
++   char service[ 12 ];
+    obj_t sock, buf, inb, iport;
+    FILE *fs;
+    int fam = bgl_symbol_to_family(family);

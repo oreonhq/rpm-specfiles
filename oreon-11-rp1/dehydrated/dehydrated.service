@@ -1,0 +1,6 @@
+[Unit]
+Description=dehydrated client for signing certificates with an ACME server
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/dehydrated-cron

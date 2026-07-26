@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 021f285..65274f3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,7 @@
+ 
+ default: build/debug/mujs build/debug/mujs-pp
+ 
+-SOVERSION = 1
++SOVERSION = 0.1
+ 
+ CFLAGS = -std=c99 -pedantic -Wall -Wextra -Wno-unused-parameter
+ 

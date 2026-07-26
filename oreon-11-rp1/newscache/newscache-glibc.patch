@@ -1,0 +1,33 @@
+diff --git a/too/deep/socket++-1.12.13/socket++/fork.cpp b/too/deep/socket++-1.12.13/socket++/fork.cpp
+index fd8b8a2..fe997e4 100644
+--- a/too/deep/socket++-1.12.13/socket++/fork.cpp
++++ b/too/deep/socket++-1.12.13/socket++/fork.cpp
+@@ -122,13 +122,13 @@ void Fork::ForkProcess::infanticide_reason (pid_t pid, int status)
+ 
+   if (WIFSTOPPED (status))
+     cerr << "process " << pid << " gets "
+-      << SYS_SIGLIST [WSTOPSIG (status)] << endl;
++      << strsignal (WSTOPSIG (status)) << endl;
+   else if (WIFEXITED (status))
+     cerr << "process " << pid << " exited with status "
+       << WEXITSTATUS (status) << endl;
+   else if (WIFSIGNALED (status))
+     cerr << "process " << pid << " got "
+-      << SYS_SIGLIST [WTERMSIG (status)] << endl;
++      << strsignal (WTERMSIG (status)) << endl;
+ }
+ 
+ void Fork::ForkProcess::reaper_nohang (int signo)
+diff --git a/too/deep/socket++-1.12.13/socket++/sockstream.cpp b/too/deep/socket++-1.12.13/socket++/sockstream.cpp
+index cf8fa15..1f4a107 100644
+--- a/too/deep/socket++-1.12.13/socket++/sockstream.cpp
++++ b/too/deep/socket++-1.12.13/socket++/sockstream.cpp
+@@ -127,7 +127,7 @@ using namespace std;
+ const char* sockerr::errstr () const
+ {
+ #ifndef WIN32
+-  return SYS_ERRLIST [err];
++  return strerror (err);
+ #else
+ 	return 0; // TODO
+ #endif

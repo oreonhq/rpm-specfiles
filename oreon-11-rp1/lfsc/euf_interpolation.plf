@@ -1,0 +1,287 @@
+; f is the B-premise set for A-path t1...t2
+(declare bps_A 
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! f formula
+  (! fi formula
+    type))))))
+    
+(declare bps_A_derived
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! f formula
+  (! fi formula
+    type))))))
+    
+; f is the B-premise set for c-ended chain t1...t2
+(declare bps
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! c color
+  (! f formula
+  (! fi formula
+    type)))))))
+    
+; f is the partial interpolant for B-chain t1...t2
+(declare pti_B
+  (! s sort
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! f formula
+    type)))))
+    
+(declare pti_B_derived
+  (! s sort
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! f formula
+    type)))))
+
+; f is the partial interpolant for the c-ended chain t1...t2
+(declare pti
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! c color
+  (! f formula
+    type))))))
+
+; bps_A rules
+
+(declare baseA
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! c1 (color_atom A (= s t1 t2))
+    (bps_A s t1 t2 true true))))))
+    
+(declare simpA
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! t3 (term s)
+  (! f formula
+  (! fi formula
+  (! b (bps_A s t1 t2 f fi)
+  (! u (color_atom A (= s t2 t3))
+    (bps_A s t1 t3 f fi))))))))))
+
+(declare drvA
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! t3 (term s)
+  (! f formula
+  (! fi formula
+  (! fc formula
+  (! fci formula
+  (! b (bps_A s t1 t2 f fi)
+  (! bc (bps_A_derived s t2 t3 fc fci)
+  (! u (colorable A s t3)
+    (bps_A s t1 t3 (and f fc) (and fi fci))))))))))))))
+    
+(declare congA0
+  (! s sort
+  (! f (term s)
+    (bps_A_derived s f f true true))))
+    
+(declare congA
+  (! s1 sort
+  (! s2 sort
+  (! t1 (term s1)
+  (! t2 (term s1)
+  (! f1 (term (arrow s1 s2))
+  (! f2 (term (arrow s1 s2))
+  (! c color
+  (! f formula
+  (! fi formula
+  (! fc formula
+  (! fci formula
+  (! u1 (bps_A_derived (arrow s1 s2) f1 f2 fc fci)
+  (! u2 (bps s1 t1 t2 c f fi)
+    (bps_A_derived s2 (apply s1 s2 f1 t1) (apply s1 s2 f2 t2) (and fc f) (and fci fi))))))))))))))))
+
+; for optimization
+(declare congA_t
+  (! s1 sort
+  (! s2 sort
+  (! f1 (term (arrow s1 s2))
+  (! f2 (term (arrow s1 s2))
+  (! fc formula
+  (! fci formula
+  (! b (bps_A_derived (arrow s1 s2) f1 f2 fc fci)
+  (! t  (term s1)
+    (bps_A_derived s2 (apply s1 s2 f1 t) (apply s1 s2 f2 t) fc fci))))))))))
+
+; bps rules
+
+(declare bps_baseA 
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! f formula
+  (! fi formula
+  (! b (bps_A s t1 t2 f fi)
+    (bps s t1 t2 A f fi))))))))
+
+(declare bps_baseB
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! f formula
+  (! b (pti_B s t1 t2 f)
+    (bps s t1 t2 B (= s t1 t2) f)))))))
+
+(declare bps_appA
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! t3 (term s)
+  (! f1 formula
+  (! f1i formula
+  (! f2 formula
+  (! f2i formula
+  (! b1 (bps s t1 t2 B f1 f1i)
+  (! b2 (bps_A s t2 t3 f2 f2i)
+    (bps s t1 t3 A (and f1 f2) (and f1i f2i)))))))))))))
+    
+(declare bps_appB
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! t3 (term s)
+  (! f1 formula
+  (! f1i formula
+  (! f2i formula
+  (! b1 (bps s t1 t2 A f1 f1i)
+  (! b2 (pti_B s t2 t3 f2i)
+    (bps s t1 t3 B (and f1 (= s t2 t3)) (and f1i f2i))))))))))))
+
+; rules for B partial interpolants
+
+(declare baseB
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! u (color_atom B (= s t1 t2))
+    (pti_B s t1 t2 true))))))
+    
+(declare simpB
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! t3 (term s)
+  (! f formula
+  (! i (pti_B s t1 t2 f)
+  (! u (color_atom B (= s t2 t3))
+    (pti_B s t1 t3 f)))))))))
+    
+(declare drvB
+  (! s sort 
+  (! t1 (term s) 
+  (! t2 (term s) 
+  (! t3 (term s)
+  (! f formula
+  (! fc formula
+  (! i (pti_B s t1 t2 f)
+  (! u (pti_B_derived s t2 t3 fc)
+  (! c (colorable B s t3)
+    (pti_B s t1 t3 (and f fc))))))))))))
+
+(declare congB0
+  (! s sort
+  (! f (term s)
+    (pti_B_derived s f f true))))
+    
+(declare congB
+  (! s1 sort
+  (! s2 sort
+  (! f1 (term (arrow s1 s2))
+  (! f2 (term (arrow s1 s2))
+  (! t1 (term s1)
+  (! t2 (term s1)
+  (! c color
+  (! f formula
+  (! fc formula
+  (! u1 (pti_B_derived (arrow s1 s2) f1 f2 fc)
+  (! u2 (pti s1 t1 t2 c f)
+    (pti_B_derived s2 (apply s1 s2 f1 t1) (apply s1 s2 f2 t2) (and fc f))))))))))))))
+
+; for optimization
+(declare congB_t
+  (! s1 sort
+  (! s2 sort
+  (! f1 (term (arrow s1 s2))
+  (! f2 (term (arrow s1 s2))
+  (! fc formula
+  (! b (pti_B_derived (arrow s1 s2) f1 f2 fc)
+  (! t (term s1)
+    (pti_B_derived s2 (apply s1 s2 f1 t) (apply s1 s2 f2 t) fc)))))))))
+
+; rules for partial interpolants
+
+(declare pti_baseA
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! f formula
+  (! fi formula
+  (! i (bps_A s t1 t2 f fi)
+    (pti s t1 t2 A (and (impl f (= s t1 t2)) fi)))))))))
+
+(declare pti_baseB
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! f formula
+  (! i (pti_B s t1 t2 f)
+    (pti s t1 t2 B f)))))))
+    
+(declare pti_appA
+  (! s sort
+  (! t1 (term s) 
+  (! t2 (term s)
+  (! t3 (term s)
+  (! f1 formula
+  (! f2 formula
+  (! f2i formula
+  (! i1 (pti s t1 t2 B f1)
+  (! i2 (bps_A s t2 t3 f2 f2i)
+    (pti s t1 t3 A (and f1 (and (impl f2 (= s t2 t3)) f2i)))))))))))))
+    
+(declare pti_appB
+  (! s sort
+  (! t1 (term s) 
+  (! t2 (term s)
+  (! t3 (term s)
+  (! f1 formula
+  (! f2 formula
+  (! i1 (pti s t1 t2 A f1)
+  (! i2 (pti_B s t2 t3 f2)
+    (pti s t1 t3 B (and f1 f2)))))))))))
+    
+; rules for interpolants
+
+(declare interpolant_introB
+  (! s sort
+  (! t1 (term s) 
+  (! t2 (term s)
+  (! c color
+  (! f formula
+  (! i (pti s t1 t2 c f)
+  (! u (color_atom B (distinct s t1 t2))
+    (interpolant f)))))))))
+        
+(declare interpolant_introA
+  (! s sort
+  (! t1 (term s)
+  (! t2 (term s)
+  (! c color
+  (! f formula
+  (! fi formula
+  (! b (bps s t1 t2 c f fi)
+  (! u (color_atom A (distinct s t1 t2))
+    (interpolant (and fi (not f))))))))))))

@@ -1,0 +1,60 @@
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/CMakeModules/CheckAtomicOps.cmake OpenSceneGraph-OpenSceneGraph-3.6.5-new/CMakeModules/CheckAtomicOps.cmake
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/CMakeModules/CheckAtomicOps.cmake	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/CMakeModules/CheckAtomicOps.cmake	2025-07-20 16:14:40.107443030 +0200
+@@ -25,6 +25,9 @@ ELSE()
+ 
+        SET(_OPENTHREADS_ATOMIC_USE_BSD_ATOMIC 1)
+ 
++    ELSEIF (MINGW)
++      SET(_OPENTHREADS_ATOMIC_USE_GCC_BUILTINS 1)
++      SET(_OPENTHREADS_ATOMIC_USE_WIN32_INTERLOCKED 0)
+     ELSE()
+        INCLUDE(CheckCXXSourceRuns)
+ 
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/CMakeModules/FindPoppler-glib.cmake OpenSceneGraph-OpenSceneGraph-3.6.5-new/CMakeModules/FindPoppler-glib.cmake
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/CMakeModules/FindPoppler-glib.cmake	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/CMakeModules/FindPoppler-glib.cmake	2025-07-20 16:14:40.107713131 +0200
+@@ -8,7 +8,7 @@ IF(PKG_CONFIG_FOUND)
+     PKG_CHECK_MODULES(CAIRO cairo)
+     PKG_CHECK_MODULES(POPPLER poppler-glib)
+ 
+-    IF (POPPLER_FOUND)
++    IF (POPPLER_FOUND AND NOT MINGW)
+ 
+         INCLUDE(CheckCXXSourceRuns)
+ 
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/src/osg/DisplaySettings.cpp OpenSceneGraph-OpenSceneGraph-3.6.5-new/src/osg/DisplaySettings.cpp
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/src/osg/DisplaySettings.cpp	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/src/osg/DisplaySettings.cpp	2025-07-20 16:14:40.108041545 +0200
+@@ -22,9 +22,6 @@
+ #include <algorithm>
+ #include <string.h>
+ 
+-using namespace osg;
+-using namespace std;
+-
+ #if defined(WIN32) && !defined(__CYGWIN__)
+ #include<windows.h>
+ extern "C" { OSG_EXPORT DWORD NvOptimusEnablement=0x00000001; }
+@@ -32,6 +29,9 @@ extern "C" { OSG_EXPORT DWORD NvOptimusE
+ extern "C" { int NvOptimusEnablement=0x00000001; }
+ #endif
+ 
++using namespace osg;
++using namespace std;
++
+ void DisplaySettings::setNvOptimusEnablement(int value)
+ {
+     NvOptimusEnablement = value;
+diff -rupN --no-dereference OpenSceneGraph-OpenSceneGraph-3.6.5/src/osgViewer/GraphicsWindowWin32.cpp OpenSceneGraph-OpenSceneGraph-3.6.5-new/src/osgViewer/GraphicsWindowWin32.cpp
+--- OpenSceneGraph-OpenSceneGraph-3.6.5/src/osgViewer/GraphicsWindowWin32.cpp	2020-01-31 12:03:07.000000000 +0100
++++ OpenSceneGraph-OpenSceneGraph-3.6.5-new/src/osgViewer/GraphicsWindowWin32.cpp	2025-07-20 16:14:40.108247574 +0200
+@@ -1101,7 +1101,7 @@ bool Win32WindowingSystem::changeScreenS
+     // Start by testing if the change would be successful (without applying it)
+     //
+ 
+-    unsigned int result = ::ChangeDisplaySettingsEx(displayDevice.DeviceName, &deviceMode, NULL, CDS_TEST, NULL);
++    int result = ::ChangeDisplaySettingsEx(displayDevice.DeviceName, &deviceMode, NULL, CDS_TEST, NULL);
+     if (result==DISP_CHANGE_SUCCESSFUL)
+     {
+         result = ::ChangeDisplaySettingsEx(displayDevice.DeviceName, &deviceMode, NULL, 0, NULL);

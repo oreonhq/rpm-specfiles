@@ -1,0 +1,13 @@
+diff --git a/scripts/remove.sh b/scripts/remove.sh
+index 8cfbbdf..496b55d 100755
+--- a/scripts/remove.sh
++++ b/scripts/remove.sh
+@@ -9,7 +9,7 @@ SYSREPOCTL_GET_PATH
+ 
+ # functions
+ function UNINSTALL_MODULE_QUIET() {
+-    "$SYSREPOCTL" -u $1 &> /dev/null
++    "$SYSREPOCTL" -u $1 -f &> /dev/null
+ }
+ 
+ function DISABLE_FEATURE() {

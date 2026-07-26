@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.vectorgraphics.asymptote</id>
+  <metadata_license>LGPL-3.0-or-later</metadata_license>
+  <project_license>LGPL-3.0-or-later</project_license>
+  <name>xasy</name>
+  <summary>Asymptote graphical interface</summary>
+  <description>
+    <p>
+      Asymptote is a powerful descriptive vector graphics language for
+      technical drawings, inspired by MetaPost but with an improved C++-like
+      syntax.  Asymptote provides for figures the same high-quality level of
+      typesetting that LaTeX does for scientific text.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.vectorgraphics.asymptote.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://asymptote.sourceforge.io/gallery/CDlabel.svg</image>
+      <caption>CD label</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://asymptote.sourceforge.io/gallery/binarytreetest.svg</image>
+      <caption>Binary tree test</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://asymptote.sourceforge.io/gallery/limit.svg</image>
+      <caption>Limit</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://asymptote.sourceforge.io/gallery/worldmap.svg</image>
+      <caption>World map</caption>
+    </screenshot>
+  </screenshots>
+  <update_contact>asymptote-maintainers@fedoraproject.org</update_contact>
+  <url type="homepage">https://asymptote.sourceforge.io/</url>
+  <url type="bugtracker">https://github.com/vectorgraphics/asymptote/issues</url>
+  <url type="help">https://sourceforge.net/p/asymptote/discussion/409349</url>
+  <content_rating type="oars-1.1"></content_rating>
+  <provides>
+    <binary>asy</binary>
+    <binary>xasy</binary>
+  </provides>
+</component>

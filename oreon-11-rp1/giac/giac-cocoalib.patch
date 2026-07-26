@@ -1,0 +1,163 @@
+--- configure.ac.orig	2020-04-30 01:52:40.000000000 -0600
++++ configure.ac	2020-10-27 17:05:31.732729921 -0600
+@@ -272,7 +272,7 @@ AC_ARG_ENABLE([cocoa],
+ 	[if test "$enableval" = "no"; then CONFIG_COCOA="no"; fi], [])
+ 
+ if test "$CONFIG_COCOA" = "yes"; then
+-	AC_CHECK_HEADER(CoCoA/io.H, [], [CONFIG_COCOA="no"])
++	AC_CHECK_HEADER(CoCoA/BigInt.H, [], [CONFIG_COCOA="no"])
+   fi
+ if test "$CONFIG_COCOA" = "yes"; then
+ 	save_LIBS="$LIBS"
+--- configure.orig	2020-04-30 01:52:40.000000000 -0600
++++ configure	2020-10-27 17:06:22.817658796 -0600
+@@ -16662,8 +16662,8 @@ fi
+ 
+ 
+ if test "$CONFIG_COCOA" = "yes"; then
+-	ac_fn_cxx_check_header_mongrel "$LINENO" "CoCoA/io.H" "ac_cv_header_CoCoA_io_H" "$ac_includes_default"
+-if test "x$ac_cv_header_CoCoA_io_H" = xyes; then :
++	ac_fn_cxx_check_header_mongrel "$LINENO" "CoCoA/BigInt.H" "ac_cv_header_CoCoA_BigInt_H" "$ac_includes_default"
++if test "x$ac_cv_header_CoCoA_BigInt_H" = xyes; then :
+ 
+ else
+   CONFIG_COCOA="no"
+--- src/TmpFGLM.C.orig	2019-11-03 11:23:52.000000000 -0700
++++ src/TmpFGLM.C	2020-11-06 09:58:43.358885872 -0700
+@@ -109,14 +109,14 @@ namespace CoCoADortmund
+   void FGLMBasisConversion(vector<RingElem>& NewGB, const vector<RingElem>& OldGB, const PPOrdering& NewOrdering)
+   {
+     if (OldGB.empty())
+-      CoCoA_ERROR(ERR::nonstandard, "FGLMBasisConversion: empty Groebner Basis vector");
++      CoCoA_THROW_ERROR(ERR::nonstandard, "FGLMBasisConversion: empty Groebner Basis vector");
+ 
+     // Check if generated ideal is zero-dimensional
+     //    const ideal I(AsSparsePolyRing(owner(OldGB.front())), OldGB);
+     const ideal I(SparsePolyRing(static_cast<const SparsePolyRingBase*>
+ 				(owner(OldGB.front()).myRawPtr())), OldGB);
+     if (!IsZeroDim(I))
+-      CoCoA_ERROR(ERR::nonstandard, "FGLMBasisConversion: ideal must be 0-dimensional");
++      CoCoA_THROW_ERROR(ERR::nonstandard, "FGLMBasisConversion: ideal must be 0-dimensional");
+ 
+     // Initialization of objects needed for computation
+     //    const SparsePolyRing Kx = AsSparsePolyRing(owner(OldGB.front()));
+--- src/TmpLESystemSolver.C.orig	2019-11-03 11:20:03.000000000 -0700
++++ src/TmpLESystemSolver.C	2020-11-06 09:38:58.349024036 -0700
+@@ -29,6 +29,7 @@
+ #include "CoCoA/matrix.H"
+ #include "CoCoA/ring.H"
+ #include "CoCoA/error.H"
++#include "CoCoA/MachineInt.H"
+ 
+ // #include <vector> // Included by DenseMatrix.H
+ using std::vector;
+@@ -50,7 +51,11 @@ namespace CoCoADortmund
+ 
+     for (size_t row = 0; row < NumRowsMSource; ++row)
+       for (size_t col = 0; col < NumColsMSource; ++col)
+-        SetEntry(MTarget, row, col, MSource(row, col));
++      {
++        const MachineInt rowInt(static_cast<unsigned long>(row));
++        const MachineInt colInt(static_cast<unsigned long>(col));
++        SetEntry(MTarget, row, col, MSource(rowInt, colInt));
++      }
+   }
+ 
+   // Solve the linear system M*x = b by using Gauss' algorithm
+@@ -60,22 +65,23 @@ namespace CoCoADortmund
+     const size_t NumColsM = NumCols(M);
+     const size_t NumRowsb = NumRows(b);
+     const size_t NumColsb = NumCols(b);
++    const MachineInt zInt(0);
+ 	
+     // Dimension check
+     if (NumRowsM != NumRowsb)
+-      CoCoA_ERROR(ERR::BadMatrixSize, "mySolve: M and b must have same number of rows.");
++      CoCoA_THROW_ERROR(ERR::BadMatrixSize, "mySolve: M and b must have same number of rows.");
+     if (NumColsM != NumRows(x0))
+-      CoCoA_ERROR(ERR::BadMatrixSize, "mySolve: M and x0 must have same number of columns.");
++      CoCoA_THROW_ERROR(ERR::BadMatrixSize, "mySolve: M and x0 must have same number of columns.");
+     if (NumCols(x0) != 1)
+-      CoCoA_ERROR(ERR::BadMatrixSize, "mySolve: NumCols(x0) > 1.");
++      CoCoA_THROW_ERROR(ERR::BadMatrixSize, "mySolve: NumCols(x0) > 1.");
+     if (NumColsb != 1)
+-      CoCoA_ERROR(ERR::BadMatrixSize, "mySolve: NumCols(b) > 1.");
++      CoCoA_THROW_ERROR(ERR::BadMatrixSize, "mySolve: NumCols(b) > 1.");
+ 	
+     // Field check; should we also check if BaseRing(M) = BaseRing(b) = BaseRing(x0)?
+     // ring K(BaseRing(M));
+     ring K(RingOf(M));
+     if (!IsField(K))
+-      CoCoA_ERROR(ERR::NotField, "mySolve: Gauss' algorithm over non-fields not yet implemented.");
++      CoCoA_THROW_ERROR(ERR::NotField, "mySolve: Gauss' algorithm over non-fields not yet implemented.");
+ 		
+     // Create working copies of M and b
+     matrix MCopy(NewDenseMat(K, NumRowsM, NumColsM));
+@@ -91,13 +97,17 @@ namespace CoCoADortmund
+     size_t row = 0;
+     for (size_t col = 0; col < NumColsM && row < NumRowsM; ++col)
+     {
++      const MachineInt rowInt(static_cast<unsigned long>(row));
++      const MachineInt colInt(static_cast<unsigned long>(col));
++
+       // Check if current column contains an element != 0
+-      if (IsZero(MCopy(row, col)))
++      if (IsZero(MCopy(rowInt, colInt)))
+       {
+         size_t i = row+1;
+         for ( ; i < NumRowsM; ++i)
+         {
+-          if (!IsZero(MCopy(i, col)))
++          const MachineInt iInt(static_cast<unsigned long>(i));
++          if (!IsZero(MCopy(iInt, colInt)))
+           {
+             // Switch MCopy and bCopy rows
+             MCopy->mySwapRows(i, row);
+@@ -113,13 +123,14 @@ namespace CoCoADortmund
+       positions.push_back(make_pair(row, col));
+ 
+       // Found an element != 0 in current column; apply elemination
+-      c = MCopy(row, col);
++      c = MCopy(rowInt, colInt);
+ 
+       for (size_t i = row+1; i < NumRowsM; ++i)
+       {
+         // Transform MCopy and bCopy
+-        bCopy->myAddRowMul(i, row, -MCopy(i, col)/c);
+-        MCopy->myAddRowMul(i, row, -MCopy(i, col)/c);
++        const MachineInt iInt(static_cast<unsigned long>(i));
++        bCopy->myAddRowMul(i, row, -MCopy(iInt, colInt)/c);
++        MCopy->myAddRowMul(i, row, -MCopy(iInt, colInt)/c);
+       }
+ 
+       ++row;
+@@ -128,7 +139,8 @@ namespace CoCoADortmund
+     // row = rank(MCopy); check if a solution for the equation system exists
+     for (size_t i = row; i < NumRowsb; ++i)
+     {
+-      if (!IsZero(bCopy(i, 0)))
++      const MachineInt iInt(static_cast<unsigned long>(i));
++      if (!IsZero(bCopy(iInt, zInt)))
+         return false;
+     }
+ 	
+@@ -138,13 +150,16 @@ namespace CoCoADortmund
+     while (!positions.empty())
+     {
+       const size_t i = positions.back().first, j = positions.back().second;
++      const MachineInt iInt(static_cast<unsigned long>(i));
++      const MachineInt jInt(static_cast<unsigned long>(j));
+ 
+-      RingElem x(bCopy(i, 0));
++      RingElem x(bCopy(iInt, zInt));
+       for (size_t k = j + 1; k < NumColsM; ++k)
+       {
+-        x -= MCopy(i, k) * x0Tmp(k, 0);
++        const MachineInt kInt(static_cast<unsigned long>(k));
++        x -= MCopy(iInt, kInt) * x0Tmp(kInt, zInt);
+       }
+-      SetEntry(x0Tmp, j, 0, x/MCopy(i, j));
++      SetEntry(x0Tmp, j, 0, x/MCopy(iInt, jInt));
+ 
+       positions.pop_back();
+     }

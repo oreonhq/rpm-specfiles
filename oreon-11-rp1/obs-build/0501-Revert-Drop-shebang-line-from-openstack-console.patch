@@ -1,0 +1,40 @@
+From 1a72d8927d8b2e3ab6789407d5dee4345777373f Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa13@gmail.com>
+Date: Mon, 18 Nov 2019 00:39:15 -0500
+Subject: [PATCH] Revert "Drop shebang line from openstack-console"
+
+This is a bad fix to this problem. It's just better to
+force it to Python 3 in this case.
+
+This reverts commit e4809dbb4fdedac89c1e0b1f86bd02478e12007f.
+---
+ build-vm-openstack | 2 +-
+ openstack-console  | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/build-vm-openstack b/build-vm-openstack
+index 2bc4527..54bbd1c 100644
+--- a/build-vm-openstack
++++ b/build-vm-openstack
+@@ -270,7 +270,7 @@ vm_startup_openstack() {
+         sleep 1
+     done
+ 
+-    if ! python $BUILD_DIR/openstack-console "${WS_URL}" ; then
++    if ! $BUILD_DIR/openstack-console "${WS_URL}" ; then
+         $NOVACLIENT delete $OPENSTACK_BUILD_ID
+         cleanup_and_exit 3
+     else
+diff --git a/openstack-console b/openstack-console
+index 0a11141..3565f9e 100644
+--- a/openstack-console
++++ b/openstack-console
+@@ -1,3 +1,5 @@
++#!/usr/bin/python
++
+ ################################################################
+ #
+ # Copyright (c) 2017 SUSE Linux Products GmbH
+-- 
+2.21.0
+

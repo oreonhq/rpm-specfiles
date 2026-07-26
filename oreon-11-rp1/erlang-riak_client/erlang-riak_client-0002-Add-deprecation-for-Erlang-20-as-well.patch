@@ -1,0 +1,23 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 6 Sep 2018 14:42:05 +0300
+Subject: [PATCH] Add deprecation for Erlang 20+ as well
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/rebar.config b/rebar.config
+index e66e001..7d62280 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -7,11 +7,7 @@
+     warnings_as_errors,
+     {platform_define, "^[0-9]+", namespaced_types},
+     {platform_define, "(?=^[0-9]+)(?!^17)", deprecated_now},
+-    {platform_define, "^19", deprecated_19},
+-    {platform_define, "^20", deprecated_19},
+-    {platform_define, "^21", deprecated_19},
+-    {platform_define, "^22", deprecated_19},
+-    {platform_define, "^23", deprecated_19}
++    {platform_define, "^19|2", deprecated_19}
+ ]}.
+ 
+ {deps, [
