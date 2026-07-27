@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   3%{?dist}
+Release:   4%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -83,8 +83,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
-export CFLAGS="${CFLAGS} -fno-analyzer"
-export CXXFLAGS="${CXXFLAGS} -fno-analyzer"
+# mingw_*_env clobbers CFLAGS so set MINGW* flags. also block gnulib from stuffing -fanalyzer into WARN_CFLAGS
+export MINGW32_CFLAGS="%{mingw32_cflags} -fno-analyzer"
+export MINGW32_CXXFLAGS="%{mingw32_cflags} -fno-analyzer"
+export MINGW64_CFLAGS="%{mingw64_cflags} -fno-analyzer"
+export MINGW64_CXXFLAGS="%{mingw64_cflags} -fno-analyzer"
+export gl_cv_warn_c__fanalyzer=no
+export gl_cv_warn_cxx__fanalyzer=no
 export lt_cv_to_host_file_cmd=func_convert_file_noop
 export lt_cv_to_tool_file_cmd=func_convert_file_noop
 %mingw_configure            \
@@ -96,6 +101,8 @@ export lt_cv_to_tool_file_cmd=func_convert_file_noop
     --without-emacs         \
     --disable-openmp        \
     --disable-dependency-tracking
+# belt and suspenders for nested gnulib Makefiles
+find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fanalyzer//g'
 %mingw_make_build
 
 
