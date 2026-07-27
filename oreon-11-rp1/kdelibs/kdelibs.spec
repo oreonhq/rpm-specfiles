@@ -35,7 +35,7 @@
 %else
 %define udisks udisks
 %endif
-%if 0%{?rhel} == 6 || (0%{?oreon} >= 11)
+%if 0%{?rhel} == 6
 %define hal 1
 %else
 %define upower 1
