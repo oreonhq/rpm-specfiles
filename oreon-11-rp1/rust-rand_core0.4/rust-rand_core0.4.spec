@@ -14,6 +14,7 @@ Summary:        Core random number generator traits and tools for implementation
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/rand_core
 Source:         %{crates_source}
+Patch:          0001-drop-deny-warnings-from-doctests.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 
