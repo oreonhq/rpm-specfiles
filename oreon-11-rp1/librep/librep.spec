@@ -1,12 +1,12 @@
-%global source0_hash b02bc354702fa9d7ffcf76bdfcba040394a05f673aaf205e054dbdfbc4b1cbb6
+%global source0_hash 48a19679ac7c0530a89657de18ffe49c5759a5ff70fc844928b0e5d00395acae
 
 Name:           librep
 Version:        0.92.7
 Release:        29%{?dist}
 Summary:        A lightweight Lisp environment
 License:        GPL-2.0-or-later
-URL:            http://sawfish.wikia.com/
-Source0:        http://download.tuxfamily.org/%{name}/%{name}_%{version}.tar.bz2
+URL:            https://github.com/SawfishWM/librep
+Source0:        https://deb.debian.org/debian/pool/main/libr/librep/librep_%{version}.orig.tar.xz
 Patch0:         librep-configure-c99.patch
 Patch1:         gh_new_procedure.patch
 BuildRequires:  gcc
