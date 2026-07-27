@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   9%{?dist}
+Release:   10%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -78,7 +78,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
-# mingw*_env wipes exports before configure, pass cache vars as args
 %mingw_configure            \
     --disable-java          \
     --disable-native-java   \
@@ -93,13 +92,34 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no
 find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fanalyzer//g'
-# namespacing recipe compiles every .c then rm .lo, races with -j and rebuilds forever
-# build those config.h once serial (intl first, libgettextpo needs libintl.h), then drop prereqs
-%mingw_make -j1 -C libtextstyle/lib config.h
-%mingw_make -j1 -C gettext-runtime/intl
-%mingw_make -j1 -C gettext-tools/libgettextpo config.h
-find build_win* \( -path '*/libtextstyle/lib/Makefile' -o -path '*/libgettextpo/Makefile' \) -print0 2>/dev/null \
-  | xargs -0 -r sed -i 's/^config\.h:.*/config.h:/'
+python3 - <<'PY'
+from pathlib import Path
+import re
+for makefile in Path(".").rglob("Makefile"):
+    p = str(makefile).replace("\\", "/")
+    if "/build_win" not in p:
+        continue
+    if not (p.endswith("libtextstyle/lib/Makefile") or p.endswith("libgettextpo/Makefile")):
+        continue
+    text = makefile.read_text()
+    orig = text
+    text = re.sub(
+        r"^config\.h: \$\(BUILT_SOURCES\) libtextstyle\.sym$",
+        r"config.h: | $(BUILT_SOURCES) libtextstyle.sym",
+        text,
+        flags=re.M,
+    )
+    text = re.sub(
+        r"^config\.h: \$\(BUILT_SOURCES\)$",
+        r"config.h: | $(BUILT_SOURCES)",
+        text,
+        flags=re.M,
+    )
+    text = re.sub(r'rm -f \$\$of `[^`]*`', r"rm -f $$of", text)
+    if text != orig:
+        makefile.write_text(text)
+        print("patched", makefile)
+PY
 %mingw_make_build
 
 
