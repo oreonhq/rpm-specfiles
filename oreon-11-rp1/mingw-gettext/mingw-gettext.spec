@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   4%{?dist}
+Release:   6%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -31,13 +31,6 @@ BuildRequires: mingw64-gcc-c++
 BuildRequires: mingw64-binutils
 BuildRequires: mingw64-win-iconv
 BuildRequires: mingw64-termcap
-
-# Possible extra BRs.  These are used if available, but
-# not required just for building.
-#BuildRequires: mingw32-dlfcn
-#BuildRequires: mingw32-libxml2
-#BuildRequires: mingw32-expat
-#BuildRequires: mingw32-glib2
 
 
 %description
@@ -83,7 +76,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
-# mingw_*_env clobbers CFLAGS so set MINGW* flags. also block gnulib from stuffing -fanalyzer into WARN_CFLAGS
+# mingw_*_env clobbers CFLAGS, so put -fno-analyzer on MINGW* flags.
+# also stop gnulib from stuffing -fanalyzer into WARN_CFLAGS.
 export MINGW32_CFLAGS="%{mingw32_cflags} -fno-analyzer"
 export MINGW32_CXXFLAGS="%{mingw32_cflags} -fno-analyzer"
 export MINGW64_CFLAGS="%{mingw64_cflags} -fno-analyzer"
@@ -101,7 +95,6 @@ export lt_cv_to_tool_file_cmd=func_convert_file_noop
     --without-emacs         \
     --disable-openmp        \
     --disable-dependency-tracking
-# belt and suspenders for nested gnulib Makefiles
 find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fanalyzer//g'
 %mingw_make_build
 
