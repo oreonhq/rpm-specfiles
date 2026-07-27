@@ -44,6 +44,7 @@ BuildRequires: mingw64-termcap
 MinGW Windows Gettext library
 
 
+%if 0%{?mingw_build_win32} == 1
 # Win32
 %package -n mingw32-gettext
 Summary:         GNU libraries and utilities for producing multi-lingual messages
@@ -57,6 +58,7 @@ Requires:       mingw32-gettext = %{version}-%{release}
 
 %description -n mingw32-gettext-static
 Static version of the MinGW Windows Gettext library.
+%endif
 
 # Win64
 %package -n mingw64-gettext
@@ -122,18 +124,19 @@ rm -rf %{buildroot}%{mingw64_libdir}/gettext
 
 # Drop all .la files and .a files
 find %{buildroot} -name "*.la" -delete
-rm %{buildroot}%{mingw32_libdir}/libgettextlib.a
-rm %{buildroot}%{mingw32_libdir}/libgettextsrc.a
-rm %{buildroot}%{mingw64_libdir}/libgettextlib.a
-rm %{buildroot}%{mingw64_libdir}/libgettextsrc.a
+rm -f %{buildroot}%{mingw32_libdir}/libgettextlib.a
+rm -f %{buildroot}%{mingw32_libdir}/libgettextsrc.a
+rm -f %{buildroot}%{mingw64_libdir}/libgettextlib.a
+rm -f %{buildroot}%{mingw64_libdir}/libgettextsrc.a
 
 # Drop javaversion.class since it's a binary blob (RHBZ#2294881)
-rm %{buildroot}%{mingw32_datadir}/gettext/javaversion.class
-rm %{buildroot}%{mingw64_datadir}/gettext/javaversion.class
+rm -f %{buildroot}%{mingw32_datadir}/gettext/javaversion.class
+rm -f %{buildroot}%{mingw64_datadir}/gettext/javaversion.class
 
 %mingw_find_lang %{name} --all-name
 
 
+%if 0%{?mingw_build_win32} == 1
 # Win32
 %files -n mingw32-gettext -f mingw32-%{name}.lang
 %license COPYING
@@ -182,6 +185,8 @@ rm %{buildroot}%{mingw64_datadir}/gettext/javaversion.class
 %{mingw32_libdir}/libgettextpo.a
 %{mingw32_libdir}/libintl.a
 %{mingw32_libdir}/libtextstyle.a
+
+%endif
 
 # Win64
 %files -n mingw64-gettext -f mingw64-%{name}.lang
