@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   8%{?dist}
+Release:   9%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -94,8 +94,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     gl_cv_warn_cxx__fanalyzer=no
 find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fanalyzer//g'
 # namespacing recipe compiles every .c then rm .lo, races with -j and rebuilds forever
-# build those config.h once serial, then drop prereqs so make never remakes them
+# build those config.h once serial (intl first, libgettextpo needs libintl.h), then drop prereqs
 %mingw_make -j1 -C libtextstyle/lib config.h
+%mingw_make -j1 -C gettext-runtime/intl
 %mingw_make -j1 -C gettext-tools/libgettextpo config.h
 find build_win* \( -path '*/libtextstyle/lib/Makefile' -o -path '*/libgettextpo/Makefile' \) -print0 2>/dev/null \
   | xargs -0 -r sed -i 's/^config\.h:.*/config.h:/'
