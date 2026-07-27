@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   7%{?dist}
+Release:   8%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -92,12 +92,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     lt_cv_to_tool_file_cmd=func_convert_file_noop \
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no
-# stop namespacing config.h remake thrashing the whole lib on header touch
-find build_win* \( -path '*/libtextstyle/lib/Makefile' -o -path '*/libgettextpo/Makefile' \) -print0 2>/dev/null \
-  | xargs -0 -r sed -i \
-    -e 's/^config\.h: \$(BUILT_SOURCES) libtextstyle\.sym$/config.h: libtextstyle.sym | \$(BUILT_SOURCES)/' \
-    -e 's/^config\.h: \$(BUILT_SOURCES)$/config.h: | \$(BUILT_SOURCES)/'
 find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fanalyzer//g'
+# namespacing recipe compiles every .c then rm .lo, races with -j and rebuilds forever
+# build those config.h once serial, then drop prereqs so make never remakes them
+%mingw_make -j1 -C libtextstyle/lib config.h
+%mingw_make -j1 -C gettext-tools/libgettextpo config.h
+find build_win* \( -path '*/libtextstyle/lib/Makefile' -o -path '*/libgettextpo/Makefile' \) -print0 2>/dev/null \
+  | xargs -0 -r sed -i 's/^config\.h:.*/config.h:/'
 %mingw_make_build
 
 
