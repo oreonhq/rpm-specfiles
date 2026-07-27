@@ -1,0 +1,10 @@
+--- libc-0.1.12/Cargo.toml	1970-01-01T00:00:00+00:00
++++ libc-0.1.12/Cargo.toml	2026-07-27T00:00:00.000000+00:00
+@@ -4,7 +4,6 @@
+ version = "0.1.12"
+ authors = ["The Rust Project Developers"]
+ license = "MIT/Apache-2.0"
+-readme = "README.md"
+ repository = "https://github.com/rust-lang/libc"
+ homepage = "https://github.com/rust-lang/libc"
+ documentation = "http://doc.rust-lang.org/libc"

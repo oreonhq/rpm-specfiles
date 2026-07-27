@@ -14,6 +14,9 @@ Summary:        A library for types and bindings to native C functions often fou
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/libc
 Source:         %{crates_source}
+# Manually created patch for downstream crate metadata changes
+# * remove reference to readme file that is not included in published crates
+Patch:          libc-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
