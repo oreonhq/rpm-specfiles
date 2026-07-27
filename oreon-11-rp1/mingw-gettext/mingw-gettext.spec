@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d1fb86e260cfe7da6031f94d2e44c0da55903dbae0a2fa0fae78c91ae1b56f00
 
 %ifarch aarch64
 %global mingw_build_win32 0
@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   6%{?dist}
+Release:   7%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -18,12 +18,14 @@ Source0:        https://mirrors.kernel.org/gnu/gettext/gettext-%{version}.tar.xz
 BuildArch: noarch
 
 BuildRequires: make
+%if 0%{?mingw_build_win32} == 1
 BuildRequires: mingw32-filesystem >= 95
 BuildRequires: mingw32-gcc
 BuildRequires: mingw32-gcc-c++
 BuildRequires: mingw32-binutils
 BuildRequires: mingw32-win-iconv
 BuildRequires: mingw32-termcap
+%endif
 
 BuildRequires: mingw64-filesystem >= 95
 BuildRequires: mingw64-gcc
@@ -76,16 +78,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
-# mingw_*_env clobbers CFLAGS, so put -fno-analyzer on MINGW* flags.
-# also stop gnulib from stuffing -fanalyzer into WARN_CFLAGS.
-export MINGW32_CFLAGS="%{mingw32_cflags} -fno-analyzer"
-export MINGW32_CXXFLAGS="%{mingw32_cflags} -fno-analyzer"
-export MINGW64_CFLAGS="%{mingw64_cflags} -fno-analyzer"
-export MINGW64_CXXFLAGS="%{mingw64_cflags} -fno-analyzer"
-export gl_cv_warn_c__fanalyzer=no
-export gl_cv_warn_cxx__fanalyzer=no
-export lt_cv_to_host_file_cmd=func_convert_file_noop
-export lt_cv_to_tool_file_cmd=func_convert_file_noop
+# mingw*_env wipes exports before configure, pass cache vars as args
 %mingw_configure            \
     --disable-java          \
     --disable-native-java   \
@@ -94,7 +87,16 @@ export lt_cv_to_tool_file_cmd=func_convert_file_noop
     --enable-threads=win32  \
     --without-emacs         \
     --disable-openmp        \
-    --disable-dependency-tracking
+    --disable-dependency-tracking \
+    lt_cv_to_host_file_cmd=func_convert_file_noop \
+    lt_cv_to_tool_file_cmd=func_convert_file_noop \
+    gl_cv_warn_c__fanalyzer=no \
+    gl_cv_warn_cxx__fanalyzer=no
+# stop namespacing config.h remake thrashing the whole lib on header touch
+find build_win* \( -path '*/libtextstyle/lib/Makefile' -o -path '*/libgettextpo/Makefile' \) -print0 2>/dev/null \
+  | xargs -0 -r sed -i \
+    -e 's/^config\.h: \$(BUILT_SOURCES) libtextstyle\.sym$/config.h: libtextstyle.sym | \$(BUILT_SOURCES)/' \
+    -e 's/^config\.h: \$(BUILT_SOURCES)$/config.h: | \$(BUILT_SOURCES)/'
 find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fanalyzer//g'
 %mingw_make_build
 
@@ -102,34 +104,35 @@ find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fan
 %install
 %mingw_make_install
 
+%if 0%{?mingw_build_win32} == 1
 rm -f %{buildroot}%{mingw32_datadir}/locale/locale.alias
 rm -f %{buildroot}%{mingw32_libdir}/charset.alias
 
-rm -f %{buildroot}%{mingw64_datadir}/locale/locale.alias
-rm -f %{buildroot}%{mingw64_libdir}/charset.alias
-
-# Remove documentation - already available in base gettext-devel.
 rm -rf %{buildroot}%{mingw32_mandir}
 rm -rf %{buildroot}%{mingw32_docdir}
 rm -rf %{buildroot}%{mingw32_infodir}
+
+rm -rf %{buildroot}%{mingw32_libdir}/gettext
+
+rm -f %{buildroot}%{mingw32_libdir}/libgettextlib.a
+rm -f %{buildroot}%{mingw32_libdir}/libgettextsrc.a
+
+rm -f %{buildroot}%{mingw32_datadir}/gettext/javaversion.class
+%endif
+
+rm -f %{buildroot}%{mingw64_datadir}/locale/locale.alias
+rm -f %{buildroot}%{mingw64_libdir}/charset.alias
 
 rm -rf %{buildroot}%{mingw64_mandir}
 rm -rf %{buildroot}%{mingw64_docdir}
 rm -rf %{buildroot}%{mingw64_infodir}
 
-# Drop some useless tools
-rm -rf %{buildroot}%{mingw32_libdir}/gettext
 rm -rf %{buildroot}%{mingw64_libdir}/gettext
 
-# Drop all .la files and .a files
 find %{buildroot} -name "*.la" -delete
-rm -f %{buildroot}%{mingw32_libdir}/libgettextlib.a
-rm -f %{buildroot}%{mingw32_libdir}/libgettextsrc.a
 rm -f %{buildroot}%{mingw64_libdir}/libgettextlib.a
 rm -f %{buildroot}%{mingw64_libdir}/libgettextsrc.a
 
-# Drop javaversion.class since it's a binary blob (RHBZ#2294881)
-rm -f %{buildroot}%{mingw32_datadir}/gettext/javaversion.class
 rm -f %{buildroot}%{mingw64_datadir}/gettext/javaversion.class
 
 %mingw_find_lang %{name} --all-name
