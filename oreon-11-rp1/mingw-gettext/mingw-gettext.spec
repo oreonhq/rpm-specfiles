@@ -91,7 +91,6 @@ export lt_cv_to_tool_file_cmd=func_convert_file_noop
     --disable-java          \
     --disable-native-java   \
     --disable-csharp        \
-    --disable-shared        \
     --enable-static         \
     --enable-threads=win32  \
     --without-emacs         \
