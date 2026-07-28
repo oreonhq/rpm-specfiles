@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   15%{?dist}
+Release:   16%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -107,14 +107,17 @@ for p in root.rglob("*"):
 if nren < 7:
     raise SystemExit(f"error.c rename count low: {nren}")
 
-pat_err = re.compile(r"(^|[^A-Za-z0-9])error\.(c|lo|o|obj|Tpo|Plo)\b", re.M)
+pat_err_objext = re.compile(r"(^|[^A-Za-z0-9])error\.\$\(\s*OBJEXT\s*\)", re.M)
+pat_err = re.compile(r"(^|[^A-Za-z0-9])error\.(c|lo|o|obj|Tpo|Po|Plo)\b", re.M)
 nsub = 0
 for p in root.rglob("Makefile.in"):
     t = p.read_text()
-    nt, c = pat_err.subn(lambda m: m.group(1) + "errfn." + m.group(2), t)
-    if c:
+    nt = t
+    nt, c0 = pat_err_objext.subn(lambda m: m.group(1) + "errfn.$(OBJEXT)", nt)
+    nt, c = pat_err.subn(lambda m: m.group(1) + "errfn." + m.group(2), nt)
+    if c0 or c:
         p.write_text(nt)
-        nsub += c
+        nsub += c0 + c
 if nsub < 50:
     raise SystemExit(f"Makefile.in error rename subs low: {nsub}")
 
