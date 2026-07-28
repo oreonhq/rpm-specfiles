@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   10%{?dist}
+Release:   11%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -87,39 +87,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     --without-emacs         \
     --disable-openmp        \
     --disable-dependency-tracking \
+    --disable-namespacing   \
     lt_cv_to_host_file_cmd=func_convert_file_noop \
     lt_cv_to_tool_file_cmd=func_convert_file_noop \
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no
-find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i 's/ -fanalyzer//g'
-python3 - <<'PY'
-from pathlib import Path
-import re
-for makefile in Path(".").rglob("Makefile"):
-    p = str(makefile).replace("\\", "/")
-    if "/build_win" not in p:
-        continue
-    if not (p.endswith("libtextstyle/lib/Makefile") or p.endswith("libgettextpo/Makefile")):
-        continue
-    text = makefile.read_text()
-    orig = text
-    text = re.sub(
-        r"^config\.h: \$\(BUILT_SOURCES\) libtextstyle\.sym$",
-        r"config.h: | $(BUILT_SOURCES) libtextstyle.sym",
-        text,
-        flags=re.M,
-    )
-    text = re.sub(
-        r"^config\.h: \$\(BUILT_SOURCES\)$",
-        r"config.h: | $(BUILT_SOURCES)",
-        text,
-        flags=re.M,
-    )
-    text = re.sub(r'rm -f \$\$of `[^`]*`', r"rm -f $$of", text)
-    if text != orig:
-        makefile.write_text(text)
-        print("patched", makefile)
-PY
+find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i \
+    -e 's/ -fanalyzer//g' \
+    -e 's/^HAVE_GLOBAL_SYMBOL_PIPE =.*/HAVE_GLOBAL_SYMBOL_PIPE =/' \
+    -e 's/^NAMESPACING =.*/NAMESPACING =/'
 %mingw_make_build
 
 
