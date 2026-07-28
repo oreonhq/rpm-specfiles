@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   20%{?dist}
+Release:   21%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -78,14 +78,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 
 %build
-%mingw_configure            \
-    --disable-java          \
-    --disable-native-java   \
-    --disable-csharp        \
-    --enable-static         \
-    --enable-threads=win32  \
-    --without-emacs         \
-    --disable-openmp
+%mingw_configure \
+    --disable-java \
+    --disable-native-java \
+    --disable-csharp \
+    --enable-static \
+    --enable-threads=win32 \
+    --without-emacs \
+    --disable-openmp \
+    gl_cv_warn_c__fanalyzer=no \
+    gl_cv_warn_cxx__fanalyzer=no \
+    lt_cv_to_host_file_cmd=func_convert_file_noop \
+    lt_cv_to_tool_file_cmd=func_convert_file_noop
 %mingw_make_build
 
 
