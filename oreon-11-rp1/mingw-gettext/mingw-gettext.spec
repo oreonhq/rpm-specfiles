@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   21%{?dist}
+Release:   22%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -86,10 +86,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     --enable-threads=win32 \
     --without-emacs \
     --disable-openmp \
+    --disable-namespacing \
+    --disable-more-warnings \
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no \
     lt_cv_to_host_file_cmd=func_convert_file_noop \
     lt_cv_to_tool_file_cmd=func_convert_file_noop
+for d in build_win32 build_win64; do
+  [ -d "$d" ] || continue
+  find "$d" -name Makefile -print0 | xargs -0 -r sed -i \
+    -e 's/^HAVE_GLOBAL_SYMBOL_PIPE *=.*/HAVE_GLOBAL_SYMBOL_PIPE =/' \
+    -e 's/^NAMESPACING *=.*/NAMESPACING =/'
+done
 %mingw_make_build
 
 
