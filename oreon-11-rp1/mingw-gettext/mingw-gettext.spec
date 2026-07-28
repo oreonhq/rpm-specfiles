@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   11%{?dist}
+Release:   12%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -92,10 +92,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     lt_cv_to_tool_file_cmd=func_convert_file_noop \
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no
-find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i \
+find build_win* \( -name Makefile -o -name Makefile.in \) -print0 2>/dev/null | xargs -0 -r sed -i -E \
     -e 's/ -fanalyzer//g' \
-    -e 's/^HAVE_GLOBAL_SYMBOL_PIPE =.*/HAVE_GLOBAL_SYMBOL_PIPE =/' \
-    -e 's/^NAMESPACING =.*/NAMESPACING =/'
+    -e 's/^[[:space:]]*HAVE_GLOBAL_SYMBOL_PIPE[[:space:]]*[:?]?=[[:space:]]*.*/HAVE_GLOBAL_SYMBOL_PIPE =/' \
+    -e 's/^[[:space:]]*NAMESPACING[[:space:]]*[:?]?=[[:space:]]*.*/NAMESPACING =/'
 %mingw_make_build
 
 
