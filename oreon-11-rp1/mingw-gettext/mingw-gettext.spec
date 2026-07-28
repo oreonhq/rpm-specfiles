@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   12%{?dist}
+Release:   13%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -76,6 +76,27 @@ Static version of the MinGW Windows Gettext library.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n gettext-%{version}
+python3 - <<'PY'
+import pathlib, re
+pat = re.compile(
+    r"\} > config\.h && \\\n"
+    r"\tif test -n \".*HAVE_GLOBAL_SYMBOL_PIPE.*\"; then \\\n"
+    r"(?:.*\n)*?\tfi\n",
+    re.M,
+)
+for rel in (
+    "libtextstyle/lib/Makefile.in",
+    "libtextstyle/lib/Makefile.am",
+    "gettext-tools/libgettextpo/Makefile.in",
+    "gettext-tools/libgettextpo/Makefile.am",
+):
+    p = pathlib.Path(rel)
+    t = p.read_text()
+    n, c = pat.subn("} > config.h\n", t, count=1)
+    if c != 1:
+        raise SystemExit(f"namespacing strip failed: {rel}")
+    p.write_text(n)
+PY
 
 %build
 %mingw_configure            \
@@ -92,10 +113,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     lt_cv_to_tool_file_cmd=func_convert_file_noop \
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no
-find build_win* \( -name Makefile -o -name Makefile.in \) -print0 2>/dev/null | xargs -0 -r sed -i -E \
-    -e 's/ -fanalyzer//g' \
-    -e 's/^[[:space:]]*HAVE_GLOBAL_SYMBOL_PIPE[[:space:]]*[:?]?=[[:space:]]*.*/HAVE_GLOBAL_SYMBOL_PIPE =/' \
-    -e 's/^[[:space:]]*NAMESPACING[[:space:]]*[:?]?=[[:space:]]*.*/NAMESPACING =/'
+find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i -e 's/ -fanalyzer//g'
 %mingw_make_build
 
 
