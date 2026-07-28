@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   16%{?dist}
+Release:   17%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -97,29 +97,37 @@ for rel in (
     p.write_text(n)
 
 nren = 0
-for p in root.rglob("*"):
+for p in list(root.rglob("*")):
     if not p.is_file():
         continue
-    if p.name != "error.c" and not p.name.endswith("-error.c"):
+    if not p.name.endswith("error.c"):
         continue
     p.rename(p.with_name(p.name[: -len("error.c")] + "errfn.c"))
     nren += 1
 if nren < 7:
     raise SystemExit(f"error.c rename count low: {nren}")
 
-pat_err_objext = re.compile(r"(^|[^A-Za-z0-9])error\.\$\(\s*OBJEXT\s*\)", re.M)
-pat_err = re.compile(r"(^|[^A-Za-z0-9])error\.(c|lo|o|obj|Tpo|Po|Plo)\b", re.M)
+pat_err_objext = re.compile(r"error\.\$\(\s*OBJEXT\s*\)", re.M)
+pat_err = re.compile(r"error\.(c|lo|o|obj|Tpo|Po|Plo)\b", re.M)
 nsub = 0
 for p in root.rglob("Makefile.in"):
     t = p.read_text()
     nt = t
-    nt, c0 = pat_err_objext.subn(lambda m: m.group(1) + "errfn.$(OBJEXT)", nt)
-    nt, c = pat_err.subn(lambda m: m.group(1) + "errfn." + m.group(2), nt)
+    nt, c0 = pat_err_objext.subn("errfn.$(OBJEXT)", nt)
+    nt, c = pat_err.subn(lambda m: "errfn." + m.group(1), nt)
     if c0 or c:
         p.write_text(nt)
         nsub += c0 + c
 if nsub < 50:
     raise SystemExit(f"Makefile.in error rename subs low: {nsub}")
+
+bad = 0
+for p in root.rglob("Makefile.in"):
+    t = p.read_text()
+    bad += len(re.findall(r"error\.\$\(\s*OBJEXT\s*\)", t))
+    bad += len(re.findall(r"error\.(c|lo|o|obj|Tpo|Po|Plo)\b", t))
+if bad:
+    raise SystemExit(f"error rename incomplete: {bad}")
 
 repls = [
     (
