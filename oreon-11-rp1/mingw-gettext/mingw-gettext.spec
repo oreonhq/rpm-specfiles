@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   14%{?dist}
+Release:   15%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -78,7 +78,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n gettext-%{version}
 python3 - <<'PY'
 import pathlib, re
-pat = re.compile(
+root = pathlib.Path(".")
+pat_ns = re.compile(
     r"\} > config\.h && \\\n"
     r"\tif test -n \".*HAVE_GLOBAL_SYMBOL_PIPE.*\"; then \\\n"
     r"(?:.*\n)*?\tfi\n",
@@ -88,12 +89,71 @@ for rel in (
     "libtextstyle/lib/Makefile.in",
     "gettext-tools/libgettextpo/Makefile.in",
 ):
-    p = pathlib.Path(rel)
+    p = root / rel
     t = p.read_text()
-    n, c = pat.subn("} > config.h\n", t, count=1)
+    n, c = pat_ns.subn("} > config.h\n", t, count=1)
     if c != 1:
         raise SystemExit(f"namespacing strip failed: {rel}")
     p.write_text(n)
+
+nren = 0
+for p in root.rglob("*"):
+    if not p.is_file():
+        continue
+    if p.name != "error.c" and not p.name.endswith("-error.c"):
+        continue
+    p.rename(p.with_name(p.name[: -len("error.c")] + "errfn.c"))
+    nren += 1
+if nren < 7:
+    raise SystemExit(f"error.c rename count low: {nren}")
+
+pat_err = re.compile(r"(^|[^A-Za-z0-9])error\.(c|lo|o|obj|Tpo|Plo)\b", re.M)
+nsub = 0
+for p in root.rglob("Makefile.in"):
+    t = p.read_text()
+    nt, c = pat_err.subn(lambda m: m.group(1) + "errfn." + m.group(2), t)
+    if c:
+        p.write_text(nt)
+        nsub += c
+if nsub < 50:
+    raise SystemExit(f"Makefile.in error rename subs low: {nsub}")
+
+repls = [
+    (
+        "#define GLWTHREAD_ONCE_INIT { -1, 0, -1 }",
+        "#define GLWTHREAD_ONCE_INIT { -1, 0, -1, {0} }",
+    ),
+    (
+        "#define GLWTHREAD_MUTEX_INIT { GLWTHREAD_INITGUARD_INIT }",
+        "#define GLWTHREAD_MUTEX_INIT { GLWTHREAD_INITGUARD_INIT, 0, {0} }",
+    ),
+    (
+        "#define GLWTHREAD_RECMUTEX_INIT { GLWTHREAD_INITGUARD_INIT, 0, 0 }",
+        "#define GLWTHREAD_RECMUTEX_INIT { GLWTHREAD_INITGUARD_INIT, 0, 0, {0} }",
+    ),
+    (
+        "#define GLWTHREAD_RWLOCK_INIT { GLWTHREAD_INITGUARD_INIT }",
+        "#define GLWTHREAD_RWLOCK_INIT { GLWTHREAD_INITGUARD_INIT, {0}, {0}, {0}, 0 }",
+    ),
+]
+nh = 0
+for name in (
+    "windows-once.h",
+    "windows-mutex.h",
+    "windows-recmutex.h",
+    "windows-rwlock.h",
+):
+    for p in root.rglob(name):
+        t = p.read_text()
+        nt = t
+        for a, b in repls:
+            if a in nt:
+                nt = nt.replace(a, b)
+        if nt != t:
+            p.write_text(nt)
+            nh += 1
+if nh < 4:
+    raise SystemExit(f"windows INIT header patch count low: {nh}")
 PY
 
 %build
@@ -111,7 +171,9 @@ PY
     lt_cv_to_tool_file_cmd=func_convert_file_noop \
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no
-find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i -e 's/ -fanalyzer//g'
+find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i \
+    -e 's/ -fanalyzer//g' \
+    -e 's/ -Wno-error/ -Wno-missing-field-initializers -Wno-error/g'
 %mingw_make_build
 
 
