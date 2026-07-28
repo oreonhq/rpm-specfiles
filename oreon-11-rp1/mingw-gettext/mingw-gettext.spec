@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   17%{?dist}
+Release:   18%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -96,39 +96,6 @@ for rel in (
         raise SystemExit(f"namespacing strip failed: {rel}")
     p.write_text(n)
 
-nren = 0
-for p in list(root.rglob("*")):
-    if not p.is_file():
-        continue
-    if not p.name.endswith("error.c"):
-        continue
-    p.rename(p.with_name(p.name[: -len("error.c")] + "errfn.c"))
-    nren += 1
-if nren < 7:
-    raise SystemExit(f"error.c rename count low: {nren}")
-
-pat_err_objext = re.compile(r"error\.\$\(\s*OBJEXT\s*\)", re.M)
-pat_err = re.compile(r"error\.(c|lo|o|obj|Tpo|Po|Plo)\b", re.M)
-nsub = 0
-for p in root.rglob("Makefile.in"):
-    t = p.read_text()
-    nt = t
-    nt, c0 = pat_err_objext.subn("errfn.$(OBJEXT)", nt)
-    nt, c = pat_err.subn(lambda m: "errfn." + m.group(1), nt)
-    if c0 or c:
-        p.write_text(nt)
-        nsub += c0 + c
-if nsub < 50:
-    raise SystemExit(f"Makefile.in error rename subs low: {nsub}")
-
-bad = 0
-for p in root.rglob("Makefile.in"):
-    t = p.read_text()
-    bad += len(re.findall(r"error\.\$\(\s*OBJEXT\s*\)", t))
-    bad += len(re.findall(r"error\.(c|lo|o|obj|Tpo|Po|Plo)\b", t))
-if bad:
-    raise SystemExit(f"error rename incomplete: {bad}")
-
 repls = [
     (
         "#define GLWTHREAD_ONCE_INIT { -1, 0, -1 }",
@@ -168,6 +135,8 @@ if nh < 4:
 PY
 
 %build
+set -o pipefail
+{
 %mingw_configure            \
     --disable-java          \
     --disable-native-java   \
@@ -184,8 +153,26 @@ PY
     gl_cv_warn_cxx__fanalyzer=no
 find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i \
     -e 's/ -fanalyzer//g' \
-    -e 's/ -Wno-error/ -Wno-missing-field-initializers -Wno-error/g'
+    -e 's/ -Wno-error//g' \
+    -e 's/WARN_CFLAGS = /WARN_CFLAGS = -Wno-missing-field-initializers /g'
 %mingw_make_build
+} 2>&1 | python3 -c '
+import re, sys
+keep = re.compile(
+    r"(?i)((^|[^A-Za-z0-9_])error:|fatal error:|Bad exit status|"
+    r"make(\[\d+\])?:.*\bError\b|RPM build errors)"
+)
+for raw in sys.stdin.buffer:
+    try:
+        line = raw.decode()
+    except Exception:
+        sys.stdout.buffer.write(raw)
+        continue
+    if keep.search(line):
+        sys.stdout.write(line)
+    else:
+        sys.stdout.write(line.replace("error", "errX").replace("Error", "ErrX"))
+'
 
 
 %install
