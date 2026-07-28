@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   13%{?dist}
+Release:   14%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -86,9 +86,7 @@ pat = re.compile(
 )
 for rel in (
     "libtextstyle/lib/Makefile.in",
-    "libtextstyle/lib/Makefile.am",
     "gettext-tools/libgettextpo/Makefile.in",
-    "gettext-tools/libgettextpo/Makefile.am",
 ):
     p = pathlib.Path(rel)
     t = p.read_text()
