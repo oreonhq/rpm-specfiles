@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   18%{?dist}
+Release:   20%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -76,67 +76,8 @@ Static version of the MinGW Windows Gettext library.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n gettext-%{version}
-python3 - <<'PY'
-import pathlib, re
-root = pathlib.Path(".")
-pat_ns = re.compile(
-    r"\} > config\.h && \\\n"
-    r"\tif test -n \".*HAVE_GLOBAL_SYMBOL_PIPE.*\"; then \\\n"
-    r"(?:.*\n)*?\tfi\n",
-    re.M,
-)
-for rel in (
-    "libtextstyle/lib/Makefile.in",
-    "gettext-tools/libgettextpo/Makefile.in",
-):
-    p = root / rel
-    t = p.read_text()
-    n, c = pat_ns.subn("} > config.h\n", t, count=1)
-    if c != 1:
-        raise SystemExit(f"namespacing strip failed: {rel}")
-    p.write_text(n)
-
-repls = [
-    (
-        "#define GLWTHREAD_ONCE_INIT { -1, 0, -1 }",
-        "#define GLWTHREAD_ONCE_INIT { -1, 0, -1, {0} }",
-    ),
-    (
-        "#define GLWTHREAD_MUTEX_INIT { GLWTHREAD_INITGUARD_INIT }",
-        "#define GLWTHREAD_MUTEX_INIT { GLWTHREAD_INITGUARD_INIT, 0, {0} }",
-    ),
-    (
-        "#define GLWTHREAD_RECMUTEX_INIT { GLWTHREAD_INITGUARD_INIT, 0, 0 }",
-        "#define GLWTHREAD_RECMUTEX_INIT { GLWTHREAD_INITGUARD_INIT, 0, 0, {0} }",
-    ),
-    (
-        "#define GLWTHREAD_RWLOCK_INIT { GLWTHREAD_INITGUARD_INIT }",
-        "#define GLWTHREAD_RWLOCK_INIT { GLWTHREAD_INITGUARD_INIT, {0}, {0}, {0}, 0 }",
-    ),
-]
-nh = 0
-for name in (
-    "windows-once.h",
-    "windows-mutex.h",
-    "windows-recmutex.h",
-    "windows-rwlock.h",
-):
-    for p in root.rglob(name):
-        t = p.read_text()
-        nt = t
-        for a, b in repls:
-            if a in nt:
-                nt = nt.replace(a, b)
-        if nt != t:
-            p.write_text(nt)
-            nh += 1
-if nh < 4:
-    raise SystemExit(f"windows INIT header patch count low: {nh}")
-PY
 
 %build
-set -o pipefail
-{
 %mingw_configure            \
     --disable-java          \
     --disable-native-java   \
@@ -144,35 +85,8 @@ set -o pipefail
     --enable-static         \
     --enable-threads=win32  \
     --without-emacs         \
-    --disable-openmp        \
-    --disable-dependency-tracking \
-    --disable-namespacing   \
-    lt_cv_to_host_file_cmd=func_convert_file_noop \
-    lt_cv_to_tool_file_cmd=func_convert_file_noop \
-    gl_cv_warn_c__fanalyzer=no \
-    gl_cv_warn_cxx__fanalyzer=no
-find build_win* -name Makefile -print0 2>/dev/null | xargs -0 -r sed -i \
-    -e 's/ -fanalyzer//g' \
-    -e 's/ -Wno-error//g' \
-    -e 's/WARN_CFLAGS = /WARN_CFLAGS = -Wno-missing-field-initializers /g'
+    --disable-openmp
 %mingw_make_build
-} 2>&1 | python3 -c '
-import re, sys
-keep = re.compile(
-    r"(?i)((^|[^A-Za-z0-9_])error:|fatal error:|Bad exit status|"
-    r"make(\[\d+\])?:.*\bError\b|RPM build errors)"
-)
-for raw in sys.stdin.buffer:
-    try:
-        line = raw.decode()
-    except Exception:
-        sys.stdout.buffer.write(raw)
-        continue
-    if keep.search(line):
-        sys.stdout.write(line)
-    else:
-        sys.stdout.write(line.replace("error", "errX").replace("Error", "ErrX"))
-'
 
 
 %install
