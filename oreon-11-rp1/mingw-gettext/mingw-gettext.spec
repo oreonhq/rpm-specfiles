@@ -8,7 +8,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   22%{?dist}
+Release:   23%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -88,6 +88,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     --disable-openmp \
     --disable-namespacing \
     --disable-more-warnings \
+    ac_cv_header_stdcountof_h=no \
     gl_cv_warn_c__fanalyzer=no \
     gl_cv_warn_cxx__fanalyzer=no \
     lt_cv_to_host_file_cmd=func_convert_file_noop \
