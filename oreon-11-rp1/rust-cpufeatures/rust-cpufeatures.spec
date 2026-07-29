@@ -14,8 +14,10 @@ Summary:        Lightweight runtime CPU feature detection for aarch64 and x86
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/cpufeatures
 Source:         %{crates_source}
+Patch:          cpufeatures-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  (crate(libc) >= 0.2.155 with crate(libc) < 0.3.0~)
 
 %global _description %{expand:
 Lightweight runtime CPU feature detection for aarch64, loongarch64, and
