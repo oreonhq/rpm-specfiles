@@ -1,7 +1,12 @@
 --- dirs-sys-0.3.7/Cargo.toml	1970-01-01T00:00:01+00:00
 +++ dirs-sys-0.3.7/Cargo.toml	2026-01-01T00:00:00+00:00
-@@ -22,6 +22,3 @@
- default-features = false
+@@ -17,11 +17,5 @@
+ readme = "README.md"
+ license = "MIT OR Apache-2.0"
+ repository = "https://github.com/dirs-dev/dirs-sys-rs"
+-[target."cfg(target_os = \"redox\")".dependencies.redox_users]
+-version = "0.4"
+-default-features = false
  [target."cfg(unix)".dependencies.libc]
  version = "0.2"
 -[target."cfg(windows)".dependencies.winapi]
