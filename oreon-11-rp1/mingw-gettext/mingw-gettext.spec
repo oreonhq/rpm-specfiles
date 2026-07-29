@@ -1,14 +1,10 @@
 %global source0_hash d1fb86e260cfe7da6031f94d2e44c0da55903dbae0a2fa0fae78c91ae1b56f00
 
-%ifarch aarch64
-%global mingw_build_win32 0
-%endif
-
 %{?mingw_package_header}
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   23%{?dist}
+Release:   24%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
