@@ -4,7 +4,7 @@
 
 Name:      mingw-gettext
 Version:   0.26
-Release:   24%{?dist}
+Release:   25%{?dist}
 Summary:   GNU libraries and utilities for producing multi-lingual messages
 
 License:   GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -94,6 +94,14 @@ for d in build_win32 build_win64; do
   find "$d" -name Makefile -print0 | xargs -0 -r sed -i \
     -e 's/^HAVE_GLOBAL_SYMBOL_PIPE *=.*/HAVE_GLOBAL_SYMBOL_PIPE =/' \
     -e 's/^NAMESPACING *=.*/NAMESPACING =/'
+  find "$d" -name Makefile -print0 | while IFS= read -r -d '' mf; do
+    objs=$(grep -oE '[A-Za-z0-9_+.-]*localename-unsafe\.(lo|o)' "$mf" | sort -u)
+    [ -n "$objs" ] || continue
+    grep -q 'localename-unsafe.*CFLAGS += -O0' "$mf" && continue
+    for o in $objs; do
+      printf '%s: CFLAGS += -O0\n' "$o"
+    done >> "$mf"
+  done
 done
 %mingw_make_build
 
