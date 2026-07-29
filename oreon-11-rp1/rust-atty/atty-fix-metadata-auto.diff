@@ -1,6 +1,11 @@
 --- atty-0.2.14/Cargo.toml	1970-01-01T00:00:01+00:00
 +++ atty-0.2.14/Cargo.toml	2026-01-01T00:00:00+00:00
-@@ -27,8 +27,5 @@
+@@ -22,13 +22,8 @@
+ keywords = ["terminal", "tty", "isatty"]
+ license = "MIT"
+ repository = "https://github.com/softprops/atty"
+-[target."cfg(target_os = \"hermit\")".dependencies.hermit-abi]
+-version = "0.1.6"
  [target."cfg(unix)".dependencies.libc]
  version = "0.2"
  default-features = false
