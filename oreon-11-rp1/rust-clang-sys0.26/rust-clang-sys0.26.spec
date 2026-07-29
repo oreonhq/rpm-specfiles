@@ -18,6 +18,7 @@ Patch0:         clang-sys-fix-metadata-auto.diff
 Patch1:         clang-sys-glob03.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  clang-devel >= 3.5
 
 %global _description %{expand:
 Rust bindings for libclang.}
@@ -27,6 +28,7 @@ Rust bindings for libclang.}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+Requires:       clang-devel >= 3.5
 
 %description    devel %{_description}
 
@@ -258,6 +260,7 @@ use the "libloading" feature of the "%{crate}" crate.
 %package     -n %{name}+runtime-devel
 Summary:        %{summary}
 BuildArch:      noarch
+Requires:       clang-libs
 
 %description -n %{name}+runtime-devel %{_description}
 
