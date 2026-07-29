@@ -14,6 +14,8 @@ Summary:        Rust bindings for libclang.
 License:        Apache-2.0
 URL:            https://crates.io/crates/clang-sys
 Source:         %{crates_source}
+Patch0:         clang-sys-fix-metadata-auto.diff
+Patch1:         clang-sys-glob03.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
