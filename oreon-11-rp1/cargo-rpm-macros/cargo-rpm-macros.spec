@@ -17,6 +17,7 @@ Source:         %{url}/archive/v%{version}.tar.gz
 # the -V flag is not known in Fedora.
 # Also strip non-Linux [target.*] dependency tables during %%cargo_prep so
 # offline cargo resolve does not require windows/redox/wasm/etc crates.
+# Prefer %%{crate_version} for %%{crate_instdir} when set (cargo +metadata).
 Patch:          0001-Temporarily-accept-cargo_prep-V-flag-for-spec-compat.patch
 
 BuildArch:      noarch

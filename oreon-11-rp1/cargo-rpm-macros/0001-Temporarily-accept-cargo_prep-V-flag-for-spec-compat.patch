@@ -1,5 +1,14 @@
 --- a/macros.d/macros.cargo	2025-12-09 18:56:21.000000000 +0200
-+++ b/macros.d/macros.cargo	2026-07-30 10:04:07.730465480 +0300
++++ b/macros.d/macros.cargo	2026-07-30 16:35:44.084514263 +0300
+@@ -43,7 +43,7 @@
+ #
+ # Installed crates are namespaced by both their name and version to ensure
+ # parallel installability.
+-%crate_instdir %{cargo_registry}/%{crate}-%{version_no_tilde}
++%crate_instdir %{cargo_registry}/%{crate}-%{?crate_version}%{!?crate_version:%{version_no_tilde}}
+ 
+ # __cargo_is_lib: function-like macro that returns successfully if the crate in
+ #       the current working directory is a "library" crate
 @@ -81,7 +81,8 @@
  #   -v <directory> - use vendored sources from <directory> instead of
  #                    %%cargo_registry

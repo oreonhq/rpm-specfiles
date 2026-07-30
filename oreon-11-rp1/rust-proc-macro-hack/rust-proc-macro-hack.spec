@@ -6,6 +6,7 @@
 
 %global crate proc-macro-hack
 %global crate_version 0.5.20+deprecated
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-proc-macro-hack
 Version:        0.5.20
