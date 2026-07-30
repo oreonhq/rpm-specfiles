@@ -15,6 +15,8 @@ Source:         %{url}/archive/v%{version}.tar.gz
 # The %%cargo_prep macro in RHEL / ELN accepts a -V flag. Using the same spec
 # file for both Fedora and ELN would cause spec file parsing errors because
 # the -V flag is not known in Fedora.
+# Also strip non-Linux [target.*] dependency tables during %%cargo_prep so
+# offline cargo resolve does not require windows/redox/wasm/etc crates.
 Patch:          0001-Temporarily-accept-cargo_prep-V-flag-for-spec-compat.patch
 
 BuildArch:      noarch
@@ -27,7 +29,7 @@ BuildRequires:  python3-pytest
 Obsoletes:      rust-packaging < 24
 Provides:       rust-packaging = %{version}-%{release}
 
-Requires:       cargo2rpm >= 0.3.2
+Requires:       cargo2rpm >= 0.3.3-3
 
 Requires:       cargo
 Requires:       gawk

@@ -4,7 +4,7 @@
 
 Name:           cargo2rpm
 Version:        0.3.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Translation layer between cargo and RPM
 License:        MIT
 URL:            https://codeberg.org/rust2rpm/cargo2rpm
