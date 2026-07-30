@@ -1,6 +1,14 @@
 --- nom-4.2.3/Cargo.toml	1970-01-01T00:00:01+00:00
 +++ nom-4.2.3/Cargo.toml	2026-01-01T00:00:00+00:00
-@@ -25,11 +25,6 @@
+@@ -17,7 +17,6 @@
+ include = ["CHANGELOG.md", "LICENSE", ".gitignore", ".travis.yml", "Cargo.toml", "src/*.rs", "tests/*.rs", "build.rs"]
+ description = "A byte-oriented, zero-copy, parser combinators library"
+ documentation = "https://docs.rs/nom"
+-readme = "README.md"
+ keywords = ["parser", "parser-combinators", "parsing", "streaming", "bit"]
+ categories = ["parsing"]
+ license = "MIT"
+@@ -25,11 +24,6 @@
  [package.metadata.docs.rs]
  all-features = true
  features = ["alloc", "std", "regexp", "regexp_macros", "verbose-errors"]
@@ -12,7 +20,7 @@
  [[test]]
  name = "arithmetic"
  
-@@ -92,29 +87,6 @@
+@@ -92,29 +86,6 @@
  [[test]]
  name = "test1"
  
@@ -42,7 +50,7 @@
  [dependencies.lazy_static]
  version = "^1.0"
  optional = true
-@@ -126,11 +98,6 @@
+@@ -126,11 +97,6 @@
  [dependencies.regex]
  version = "^1.0"
  optional = true
