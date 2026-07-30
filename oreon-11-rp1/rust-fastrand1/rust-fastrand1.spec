@@ -14,6 +14,7 @@ Summary:        A simple and fast random number generator
 License:        Apache-2.0 OR MIT
 URL:            https://crates.io/crates/fastrand
 Source:         %{crates_source}
+Patch:          fastrand-fix-metadata-auto.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
