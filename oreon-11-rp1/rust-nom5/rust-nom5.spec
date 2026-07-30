@@ -14,6 +14,7 @@ Summary:        A byte-oriented, zero-copy, parser combinators library
 License:        MIT
 URL:            https://crates.io/crates/nom
 Source:         %{crates_source}
+Patch:          nom-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
