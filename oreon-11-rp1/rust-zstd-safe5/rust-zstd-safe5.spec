@@ -6,6 +6,7 @@
 
 %global crate zstd-safe
 %global crate_version 5.0.2+zstd.1.5.2
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-zstd-safe5
 Version:        5.0.2

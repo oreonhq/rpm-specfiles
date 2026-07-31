@@ -6,6 +6,7 @@
 
 %global crate zstd-sys
 %global crate_version 2.0.16+zstd.1.5.7
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-zstd-sys
 Version:        2.0.16

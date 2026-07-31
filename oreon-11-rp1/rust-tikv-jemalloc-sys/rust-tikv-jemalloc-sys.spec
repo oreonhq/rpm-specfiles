@@ -6,6 +6,7 @@
 
 %global crate tikv-jemalloc-sys
 %global crate_version 0.6.1+5.3.0-1-ge13ca993e8ccb9ba9847cc330696e02839f328f7
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-tikv-jemalloc-sys
 Version:        0.6.1

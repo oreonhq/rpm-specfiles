@@ -6,6 +6,7 @@
 
 %global crate libgit2-sys
 %global crate_version 0.18.7+1.9.6
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-libgit2-sys
 Version:        0.18.7

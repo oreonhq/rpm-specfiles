@@ -6,6 +6,7 @@
 
 %global crate toml_edit
 %global crate_version 0.23.10+spec-1.0.0
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-toml_edit0.23
 Version:        0.23.10

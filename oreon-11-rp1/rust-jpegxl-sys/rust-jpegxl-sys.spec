@@ -7,6 +7,7 @@
 
 %global crate jpegxl-sys
 %global crate_version 0.12.0+libjxl-0.11.1
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-jpegxl-sys
 Version:        0.12.0

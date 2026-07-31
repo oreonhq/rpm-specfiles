@@ -6,6 +6,7 @@
 
 %global crate curl-sys
 %global crate_version 0.4.90+curl-8.21.0
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-curl-sys
 Version:        0.4.90

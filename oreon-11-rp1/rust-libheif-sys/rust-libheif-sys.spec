@@ -6,6 +6,7 @@
 
 %global crate libheif-sys
 %global crate_version 5.1.1+1.21.2
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-libheif-sys
 Version:        5.1.1

@@ -8,6 +8,7 @@
 
 %global crate cargo-c
 %global crate_version 0.10.21+cargo-0.95.0
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-cargo-c
 Version:        0.10.21

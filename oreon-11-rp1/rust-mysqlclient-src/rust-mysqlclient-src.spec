@@ -6,6 +6,7 @@
 
 %global crate mysqlclient-src
 %global crate_version 0.2.2+9.5.0
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-mysqlclient-src
 Version:        0.2.2

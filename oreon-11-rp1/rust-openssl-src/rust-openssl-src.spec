@@ -6,6 +6,7 @@
 
 %global crate openssl-src
 %global crate_version 300.6.1+3.6.3
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-openssl-src
 Version:        300.6.1

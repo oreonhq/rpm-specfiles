@@ -6,6 +6,7 @@
 
 %global crate toml_datetime
 %global crate_version 0.7.5+spec-1.1.0
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-toml_datetime0.7
 Version:        0.7.5

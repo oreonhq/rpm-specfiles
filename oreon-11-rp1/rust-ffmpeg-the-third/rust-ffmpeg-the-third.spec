@@ -6,6 +6,7 @@
 
 %global crate ffmpeg-the-third
 %global crate_version 3.0.2+ffmpeg-7.1
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-ffmpeg-the-third
 Version:        3.0.2

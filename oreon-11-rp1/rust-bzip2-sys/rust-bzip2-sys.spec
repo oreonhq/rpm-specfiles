@@ -6,6 +6,7 @@
 
 %global crate bzip2-sys
 %global crate_version 0.1.13+1.0.8
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-bzip2-sys
 Version:        0.1.13

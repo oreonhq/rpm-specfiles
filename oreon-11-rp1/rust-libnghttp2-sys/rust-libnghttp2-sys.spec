@@ -6,6 +6,7 @@
 
 %global crate libnghttp2-sys
 %global crate_version 0.1.13+1.68.1
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-libnghttp2-sys
 Version:        0.1.13

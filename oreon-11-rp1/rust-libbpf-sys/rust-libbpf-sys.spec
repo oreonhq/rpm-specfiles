@@ -6,6 +6,7 @@
 
 %global crate libbpf-sys
 %global crate_version 1.6.2+v1.6.2
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-libbpf-sys
 Version:        1.6.2

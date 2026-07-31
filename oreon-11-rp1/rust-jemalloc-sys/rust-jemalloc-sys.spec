@@ -6,6 +6,7 @@
 
 %global crate jemalloc-sys
 %global crate_version 0.5.4+5.3.0-patched
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-jemalloc-sys
 Version:        0.5.4

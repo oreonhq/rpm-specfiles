@@ -6,6 +6,7 @@
 
 %global crate pq-src
 %global crate_version 0.3.11+libpq-18.3
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-pq-src
 Version:        0.3.11

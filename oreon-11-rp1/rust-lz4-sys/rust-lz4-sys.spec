@@ -6,6 +6,7 @@
 
 %global crate lz4-sys
 %global crate_version 1.11.1+lz4-1.10.0
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-lz4-sys
 Version:        1.11.1

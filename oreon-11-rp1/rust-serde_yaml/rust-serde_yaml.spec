@@ -6,6 +6,7 @@
 
 %global crate serde_yaml
 %global crate_version 0.9.34+deprecated
+%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-serde_yaml
 Version:        0.9.34
