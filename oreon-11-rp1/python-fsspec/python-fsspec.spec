@@ -46,17 +46,16 @@ interface.}
 %package -n     python3-%{srcname}
 Summary:        %{summary}
 
-Obsoletes:      python3-fsspec+gcs < 2026.1.0-3
-Obsoletes:      python3-fsspec+gs < 2026.1.0-3
-
 %description -n python3-%{srcname} %{_description}
 
 %pyproject_extras_subpkg -n python3-%{srcname} arrow
 %pyproject_extras_subpkg -n python3-%{srcname} dask
 %pyproject_extras_subpkg -n python3-%{srcname} entrypoints
 %pyproject_extras_subpkg -n python3-%{srcname} fuse
+%pyproject_extras_subpkg -n python3-%{srcname} gcs
 %pyproject_extras_subpkg -n python3-%{srcname} git
 %pyproject_extras_subpkg -n python3-%{srcname} github
+%pyproject_extras_subpkg -n python3-%{srcname} gs
 %pyproject_extras_subpkg -n python3-%{srcname} hdfs
 %pyproject_extras_subpkg -n python3-%{srcname} http
 %pyproject_extras_subpkg -n python3-%{srcname} libarchive
@@ -74,7 +73,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Skipped extras:
 # - abfs and adl: Don't have adlfs
 # - dropbox: Don't have dropboxdrivefs
-# - gcs,gs: Don't have gscfs
 # - gui: Don't have panel
 # - oci: Don't have ocifs
 # - s3: Don't have s3fs
