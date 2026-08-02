@@ -5,7 +5,7 @@
 
 Name:           abseil-cpp
 Version:        20260107.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        C++ Common Libraries
 
 # The entire source is Apache-2.0, except:
@@ -31,11 +31,16 @@ Source:        https://github.com/abseil/abseil-cpp/archive/refs/tags/%{version}
 # Work around failure to compile with GCC 16,
 # https://github.com/abseil/abseil-cpp/issues/1992.
 Patch:          0001-Omit-the-bind-block-in-test-Test-Mutex-FunctorCondit.patch
+# Build all TESTONLY libs with ABSL_BUILD_TEST_HELPERS without compiling
+# hundreds of unit test binaries (tmpfs blowups).
+Patch:          0002-build-all-testonly-libs-with-TEST_HELPERS.patch
 
 BuildRequires:  cmake
 # The default make backend would work just as well; ninja is observably faster
 BuildRequires:  ninja-build
 BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  gtest-devel
 
 # The contents of absl/time/internal/cctz are derived from
 # https://github.com/google/cctz (https://src.fedoraproject.org/rpms/cctz), but
@@ -48,9 +53,8 @@ BuildRequires:  gcc-c++
 #   “[…] we have no plans to change this decision, but we reserve the right to
 #   change our minds.”
 Provides:       bundled(cctz)
-Obsoletes:      %{name}-testing < %{version}-%{release}
 
-# LTO plus hundreds of compiled unit tests routinely exhaust mock tmpfs.
+# LTO plus heavy builds routinely exhaust mock tmpfs.
 %global _lto_cflags %{nil}
 %global _smp_mflags -j2
 
@@ -69,9 +73,19 @@ Abseil is not meant to be a competitor to the standard library; we've just
 found that many of these utilities serve a purpose within our code base,
 and we now want to provide those resources to the C++ community as a whole.
 
+%package testing
+Summary:        Libraries needed for running tests on the installed %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+Provides:       bundled(cctz)
+
+%description testing
+%{summary}.
+
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name}-testing%{?_isa} = %{version}-%{release}
 
 # Some of the headers from CCTZ are part of the -devel subpackage. See the
 # corresponding virtual Provides in the base package for full details.
@@ -85,13 +99,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -S gendiff
 
 %build
-# Tests and test-helper shared libs stay off so mock tmpfs is not filled by
-# hundreds of gtest targets (see prior abseil-cpp-testing %%files failures).
+# TEST_HELPERS on, TESTING off. Patch builds non-PUBLIC TESTONLY libs
+# (like absl_test_instance_tracker) without compiling all unit tests.
 %cmake \
   -GNinja \
+  -DABSL_USE_EXTERNAL_GOOGLETEST:BOOL=ON \
+  -DABSL_FIND_GOOGLETEST:BOOL=ON \
   -DABSL_ENABLE_INSTALL:BOOL=ON \
   -DABSL_BUILD_TESTING:BOOL=OFF \
-  -DABSL_BUILD_TEST_HELPERS:BOOL=OFF \
+  -DABSL_BUILD_TEST_HELPERS:BOOL=ON \
   -DCMAKE_BUILD_TYPE:STRING=None \
   -DCMAKE_CXX_STANDARD:STRING=17
 %cmake_build
@@ -197,6 +213,22 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libabsl_tracing_internal.so.%{lib_version}
 %{_libdir}/libabsl_utf8_for_code_point.so.%{lib_version}
 %{_libdir}/libabsl_vlog_config_internal.so.%{lib_version}
+
+%files testing
+%{_libdir}/libabsl_exception_safety_testing.so.%{lib_version}
+%{_libdir}/libabsl_atomic_hook_test_helper.so.%{lib_version}
+%{_libdir}/libabsl_spinlock_test_common.so.%{lib_version}
+%{_libdir}/libabsl_test_instance_tracker.so.%{lib_version}
+%{_libdir}/libabsl_hash_generator_testing.so.%{lib_version}
+%{_libdir}/libabsl_stack_consumption.so.%{lib_version}
+%{_libdir}/libabsl_log_internal_test_actions.so.%{lib_version}
+%{_libdir}/libabsl_log_internal_test_helpers.so.%{lib_version}
+%{_libdir}/libabsl_log_internal_test_matchers.so.%{lib_version}
+%{_libdir}/libabsl_scoped_mock_log.so.%{lib_version}
+%{_libdir}/libabsl_status_matchers.so.%{lib_version}
+%{_libdir}/libabsl_pow10_helper.so.%{lib_version}
+%{_libdir}/libabsl_per_thread_sem_test_common.so.%{lib_version}
+%{_libdir}/libabsl_time_internal_test_util.so.%{lib_version}
 
 %files devel
 %{_includedir}/absl

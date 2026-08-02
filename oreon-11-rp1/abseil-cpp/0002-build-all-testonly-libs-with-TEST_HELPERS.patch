@@ -1,0 +1,11 @@
+--- a/CMake/AbseilHelpers.cmake
++++ b/CMake/AbseilHelpers.cmake
+@@ -91,7 +91,7 @@
+ 
+   if(ABSL_CC_LIB_TESTONLY AND
+       NOT ((BUILD_TESTING AND ABSL_BUILD_TESTING) OR
+-        (ABSL_BUILD_TEST_HELPERS AND ABSL_CC_LIB_PUBLIC)))
++        ABSL_BUILD_TEST_HELPERS))
+     return()
+   endif()
+ 
