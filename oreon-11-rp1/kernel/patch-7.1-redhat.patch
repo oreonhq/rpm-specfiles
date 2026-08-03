@@ -1228,6 +1228,7 @@ diff --git a/drivers/firmware/efi/libstub/secureboot.c b/drivers/firmware/efi/li
 +	return mode;
  }
 diff --git a/drivers/firmware/efi/secureboot.c b/drivers/firmware/efi/secureboot.c
+new file mode 100644
 --- /dev/null
 +++ b/drivers/firmware/efi/secureboot.c
 @@ -0,0 +1,38 @@
@@ -1444,6 +1445,7 @@ diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
  obj-$(CONFIG_VIDEO_ISL7998X) += isl7998x.o
  obj-$(CONFIG_VIDEO_KS0127) += ks0127.o
 diff --git a/drivers/media/i2c/imx471.c b/drivers/media/i2c/imx471.c
+new file mode 100644
 --- /dev/null
 +++ b/drivers/media/i2c/imx471.c
 @@ -0,0 +1,957 @@
@@ -2921,6 +2923,7 @@ diff --git a/sound/soc/codecs/rt722-sdca.h b/sound/soc/codecs/rt722-sdca.h
  	bool fu1e_dapm_mute;
  	bool fu1e_mixer_mute[4];
 diff --git a/tools/testing/selftests/bpf/DENYLIST.rhel b/tools/testing/selftests/bpf/DENYLIST.rhel
+new file mode 100644
 --- /dev/null
 +++ b/tools/testing/selftests/bpf/DENYLIST.rhel
 @@ -0,0 +1,76 @@

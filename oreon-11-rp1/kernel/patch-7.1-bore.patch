@@ -50,7 +50,8 @@ diff --git a/include/linux/sched.h b/include/linux/sched.h
  
  #ifdef CONFIG_SCHED_CORE
 diff --git a/include/linux/sched/bore.h b/include/linux/sched/bore.h
---- a/include/linux/sched/bore.h
+new file mode 100644
+--- /dev/null
 +++ b/include/linux/sched/bore.h
 @@ -0,0 +1,41 @@
 +#ifndef _KERNEL_SCHED_BORE_H
@@ -236,7 +237,8 @@ diff --git a/kernel/sched/Makefile b/kernel/sched/Makefile
  obj-y += build_utility.o
 +obj-$(CONFIG_SCHED_BORE) += bore.o
 diff --git a/kernel/sched/bore.c b/kernel/sched/bore.c
---- a/kernel/sched/bore.c
+new file mode 100644
+--- /dev/null
 +++ b/kernel/sched/bore.c
 @@ -0,0 +1,434 @@
 +/*
