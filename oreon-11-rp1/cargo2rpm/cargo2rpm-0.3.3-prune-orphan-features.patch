@@ -1,0 +1,226 @@
+--- a/cargo2rpm/target.py	2026-08-03 10:20:26.034412193 +0200
++++ b/cargo2rpm/target.py	2026-08-03 10:20:26.126792877 +0200
+@@ -277,11 +277,164 @@
+     return "".join(out)
+ 
+ 
++def _dep_crate_from_header(header: str) -> tuple[bool, str | None]:
++    """Return (is_deps_table, crate_or_None_for_inline)."""
++    m = re.search(r"(?:^|\.)(?:dev-|build-)?dependencies(?:\.(.+))?$", header)
++    if not m:
++        return False, None
++    named = m.group(1)
++    if named is None:
++        return True, None
++    return True, named.strip("'\"")
++
++
++def collect_package_deps(text: str) -> set[str]:
++    """Crate names still declared as package deps after target stripping."""
++    deps: set[str] = set()
++    lines = text.splitlines()
++    i = 0
++    while i < len(lines):
++        sm = re.match(r"^\[(.+)\]\s*$", lines[i])
++        if not sm:
++            i += 1
++            continue
++        is_deps, named = _dep_crate_from_header(sm.group(1))
++        i += 1
++        if not is_deps:
++            continue
++        if named:
++            deps.add(named)
++            while i < len(lines) and not re.match(r"^\[", lines[i]):
++                i += 1
++            continue
++        while i < len(lines) and not re.match(r"^\[", lines[i]):
++            km = re.match(r"^([A-Za-z0-9_-]+)\s*=", lines[i])
++            if km:
++                deps.add(km.group(1))
++            i += 1
++    return deps
++
++
++def _feature_names(text: str) -> set[str]:
++    names: set[str] = set()
++    lines = text.splitlines()
++    i = 0
++    in_features = False
++    while i < len(lines):
++        sm = re.match(r"^\[(.+)\]\s*$", lines[i])
++        if sm:
++            in_features = sm.group(1) == "features"
++            i += 1
++            continue
++        if in_features:
++            km = re.match(r"^([A-Za-z0-9_-]+)\s*=", lines[i])
++            if km:
++                names.add(km.group(1))
++        i += 1
++    return names
++
++
++_RE_FEATURE_REF = re.compile(r"^(?:dep:)?([A-Za-z0-9_-]+)\??(?:/.*)?$")
++
++
++def _keep_feature_entry(entry: str, *, deps: set[str], features: set[str]) -> bool:
++    e = entry.strip().strip('"').strip("'")
++    if not e:
++        return False
++    if e in features:
++        return True
++    m = _RE_FEATURE_REF.match(e)
++    if not m:
++        return True
++    pkg = m.group(1)
++    if pkg in features:
++        return True
++    return pkg in deps
++
++
++def prune_orphan_feature_deps(text: str) -> str:
++    """Drop feature enables that point at crates removed with foreign targets."""
++    deps = collect_package_deps(text)
++    features = _feature_names(text)
++    lines = text.splitlines(keepends=True)
++    out: list[str] = []
++    i = 0
++    in_features = False
++    while i < len(lines):
++        line = lines[i]
++        sm = re.match(r"^\[(.+)\]\s*$", line.rstrip("\r\n"))
++        if sm:
++            in_features = sm.group(1) == "features"
++            out.append(line)
++            i += 1
++            continue
++        if not in_features:
++            out.append(line)
++            i += 1
++            continue
++        m = re.match(
++            r"^([A-Za-z0-9_-]+)\s*=\s*\[(.*)\]\s*$",
++            line.rstrip("\r\n"),
++        )
++        if m:
++            name, body = m.group(1), m.group(2).strip()
++            entries = []
++            if body:
++                entries = [a or b for a, b in re.findall(r'"([^"]*)"|\'([^\']*)\'', body)]
++            kept = [
++                f'"{e}"'
++                for e in entries
++                if _keep_feature_entry(e, deps=deps, features=features)
++            ]
++            if line.endswith("\r\n"):
++                nl = "\r\n"
++            elif line.endswith("\n"):
++                nl = "\n"
++            else:
++                nl = ""
++            out.append(f"{name} = [{', '.join(kept)}]{nl}")
++            i += 1
++            continue
++        m = re.match(r"^([A-Za-z0-9_-]+)\s*=\s*\[\s*$", line.rstrip("\r\n"))
++        if m:
++            name = m.group(1)
++            block = [line]
++            i += 1
++            entries: list[str] = []
++            while i < len(lines):
++                block.append(lines[i])
++                if re.match(r"^\s*\]\s*$", lines[i].rstrip("\r\n")):
++                    i += 1
++                    break
++                em = re.match(r'^\s*"([^"]*)"\s*,?\s*$', lines[i].rstrip("\r\n"))
++                if em:
++                    entries.append(em.group(1))
++                i += 1
++            kept = [
++                e for e in entries if _keep_feature_entry(e, deps=deps, features=features)
++            ]
++            indent = "    "
++            for bl in block[1:-1]:
++                im = re.match(r"^(\s*)", bl)
++                if im and im.group(1):
++                    indent = im.group(1)
++                    break
++            out.append(f"{name} = [\n")
++            for e in kept:
++                out.append(f'{indent}"{e}",\n')
++            out.append("]\n")
++            continue
++        out.append(line)
++        i += 1
++    return "".join(out)
++
++
+ def strip_foreign_targets_file(path: str) -> bool:
+     """Rewrite Cargo.toml in place. Returns True if changed."""
+     p = Path(path)
+     original = p.read_text(encoding="utf-8")
+     updated = strip_foreign_target_tables(original)
++    updated = prune_orphan_feature_deps(updated)
+     if updated == original:
+         return False
+     p.write_text(updated, encoding="utf-8")
+--- a/cargo2rpm/tests/test_target.py	2026-08-03 10:20:26.038029531 +0200
++++ b/cargo2rpm/tests/test_target.py	2026-08-03 10:20:26.227600983 +0200
+@@ -5,6 +5,7 @@
+     dependency_applies_to_host,
+     extract_target_from_header,
+     host_cfgs,
++    prune_orphan_feature_deps,
+     strip_foreign_target_tables,
+ )
+ 
+@@ -109,3 +110,48 @@
+     assert "dragonfly" not in out
+     assert "instant" not in out
+     assert "errno-dragonfly" not in out
++
++
++def test_prune_orphan_feature_deps_after_wasm_strip():
++    text = """[package]
++name = "chrono"
++version = "0.4.45"
++
++[features]
++default = ["clock", "std", "oldtime"]
++clock = ["iana-time-zone", "now"]
++now = ["std"]
++oldtime = []
++std = ["alloc"]
++alloc = []
++wasmbind = ["wasm-bindgen", "js-sys"]
++winapi = ["windows-link"]
++
++[dependencies.num-traits]
++version = "0.2"
++
++[target."cfg(unix)".dependencies.iana-time-zone]
++version = "0.1"
++optional = true
++
++[target."cfg(all(target_arch = \"wasm32\", not(target_os = \"wasi\")))".dependencies.wasm-bindgen]
++version = "0.2"
++optional = true
++
++[target."cfg(all(target_arch = \"wasm32\", not(target_os = \"wasi\")))".dependencies.js-sys]
++version = "0.3"
++optional = true
++
++[target."cfg(windows)".dependencies.windows-link]
++version = "0.2"
++optional = true
++"""
++    out = strip_foreign_target_tables(text)
++    out = prune_orphan_feature_deps(out)
++    assert "wasm-bindgen" not in out
++    assert "js-sys" not in out
++    assert "windows-link" not in out
++    assert "wasmbind = [" in out
++    assert "winapi = []" in out or "winapi = [\n]" in out
++    assert "iana-time-zone" in out
++    assert '"clock"' in out

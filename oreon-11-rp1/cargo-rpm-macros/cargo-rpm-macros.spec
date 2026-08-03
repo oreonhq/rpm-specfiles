@@ -30,7 +30,7 @@ BuildRequires:  python3-pytest
 Obsoletes:      rust-packaging < 24
 Provides:       rust-packaging = %{version}-%{release}
 
-Requires:       cargo2rpm >= 0.3.3-3
+Requires:       cargo2rpm >= 0.3.3-4
 
 Requires:       cargo
 Requires:       gawk
