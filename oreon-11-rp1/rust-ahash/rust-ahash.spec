@@ -14,6 +14,7 @@ Summary:        A non-cryptographic hash function using AES-NI for high performa
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/ahash
 Source:         %{crates_source}
+Patch:          ahash-fix-metadata-auto.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

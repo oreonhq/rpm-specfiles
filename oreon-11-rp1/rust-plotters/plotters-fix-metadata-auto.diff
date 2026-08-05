@@ -1,6 +1,17 @@
 --- plotters-0.3.7/Cargo.toml	1970-01-01T00:00:01+00:00
 +++ plotters-0.3.7/Cargo.toml	2026-01-01T00:00:00+00:00
-@@ -222,16 +222,10 @@
+@@ -197,10 +197,6 @@
+ version = "1.0.82"
+ 
+ [features]
+-ab_glyph = [
+-    "dep:ab_glyph",
+-    "once_cell",
+-]
+ all_elements = [
+     "errorbar",
+     "candlestick",
+@@ -222,16 +218,10 @@
  colormaps = []
  datetime = ["chrono"]
  default = [
@@ -20,10 +31,24 @@
      "full_palette",
      "colormaps",
  ]
-@@ -257,68 +251,6 @@
-     "pathfinder_geometry",
+@@ -243,81 +233,12 @@
+     "bitmap_backend",
+     "plotters-svg/bitmap_encoder",
  ]
- 
+-fontconfig-dlopen = ["font-kit/source-fontconfig-dlopen"]
+ full_palette = []
+ histogram = []
+ line_series = []
+ point_series = []
+ surface_series = []
+ svg_backend = ["plotters-svg"]
+-ttf = [
+-    "font-kit",
+-    "ttf-parser",
+-    "lazy_static",
+-    "pathfinder_geometry",
+-]
+-
 -[target.'cfg(all(target_arch = "wasm32", not(target_os = "wasi")))'.dependencies.wasm-bindgen]
 -version = "0.2.89"
 -
@@ -85,7 +110,6 @@
 -
 -[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies.rand_xorshift]
 -version = "0.3.0"
--
+ 
  [lints.rust.deprecated]
  level = "allow"
- priority = 0

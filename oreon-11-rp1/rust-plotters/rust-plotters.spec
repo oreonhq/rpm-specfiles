@@ -52,18 +52,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+ab_glyph-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+ab_glyph-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "ab_glyph" feature of the "%{crate}" crate.
-
-%files       -n %{name}+ab_glyph-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+all_elements-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -232,18 +220,6 @@ use the "evcxr_bitmap" feature of the "%{crate}" crate.
 %files       -n %{name}+evcxr_bitmap-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+fontconfig-dlopen-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+fontconfig-dlopen-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "fontconfig-dlopen" feature of the "%{crate}" crate.
-
-%files       -n %{name}+fontconfig-dlopen-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+full_palette-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -314,18 +290,6 @@ This package contains library source intended for building other packages which
 use the "svg_backend" feature of the "%{crate}" crate.
 
 %files       -n %{name}+svg_backend-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+ttf-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+ttf-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "ttf" feature of the "%{crate}" crate.
-
-%files       -n %{name}+ttf-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

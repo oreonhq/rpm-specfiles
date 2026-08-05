@@ -145,30 +145,6 @@ use the "proc-macro" feature of the "%{crate}" crate.
 %files       -n %{name}+proc-macro-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+quote-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+quote-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "quote" feature of the "%{crate}" crate.
-
-%files       -n %{name}+quote-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+test-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+test-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "test" feature of the "%{crate}" crate.
-
-%files       -n %{name}+test-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+visit-devel
 Summary:        %{summary}
 BuildArch:      noarch

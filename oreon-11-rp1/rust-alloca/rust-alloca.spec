@@ -74,6 +74,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cargo_install
+rm -f %{buildroot}%{_bindir}/alloca
 
 %if %{with check}
 %check

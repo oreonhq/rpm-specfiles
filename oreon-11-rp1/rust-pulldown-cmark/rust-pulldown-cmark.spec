@@ -86,6 +86,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cargo_install
+rm -f %{buildroot}%{_bindir}/pulldown-cmark
 
 %if %{with check}
 %check

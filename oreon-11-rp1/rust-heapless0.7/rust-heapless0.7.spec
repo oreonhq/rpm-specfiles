@@ -14,6 +14,7 @@ Summary:        `static` friendly data structures that don't require dynamic mem
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/heapless
 Source:         %{crates_source}
+Patch:          heapless-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

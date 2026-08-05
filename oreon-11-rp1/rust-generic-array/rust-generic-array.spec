@@ -49,30 +49,6 @@ use the "alloc" feature of the "%{crate}" crate.
 %files       -n %{name}+alloc-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+arbitrary-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+arbitrary-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "arbitrary" feature of the "%{crate}" crate.
-
-%files       -n %{name}+arbitrary-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+as-slice-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+as-slice-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "as-slice" feature of the "%{crate}" crate.
-
-%files       -n %{name}+as-slice-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+as_slice-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -109,18 +85,6 @@ use the "bytecheck-0_8" feature of the "%{crate}" crate.
 %files       -n %{name}+bytecheck-0_8-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+bytemuck-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+bytemuck-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "bytemuck" feature of the "%{crate}" crate.
-
-%files       -n %{name}+bytemuck-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+compat-0_14-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -131,54 +95,6 @@ This package contains library source intended for building other packages which
 use the "compat-0_14" feature of the "%{crate}" crate.
 
 %files       -n %{name}+compat-0_14-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+const-default-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+const-default-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "const-default" feature of the "%{crate}" crate.
-
-%files       -n %{name}+const-default-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+faster-hex-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+faster-hex-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "faster-hex" feature of the "%{crate}" crate.
-
-%files       -n %{name}+faster-hex-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+generic_array-0_14-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+generic_array-0_14-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "generic_array-0_14" feature of the "%{crate}" crate.
-
-%files       -n %{name}+generic_array-0_14-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+hybrid-array-0_4-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+hybrid-array-0_4-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "hybrid-array-0_4" feature of the "%{crate}" crate.
-
-%files       -n %{name}+hybrid-array-0_4-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+internals-devel
@@ -227,42 +143,6 @@ This package contains library source intended for building other packages which
 use the "serde" feature of the "%{crate}" crate.
 
 %files       -n %{name}+serde-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_core-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_core-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_core" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_core-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+subtle-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+subtle-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "subtle" feature of the "%{crate}" crate.
-
-%files       -n %{name}+subtle-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+zeroize-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+zeroize-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "zeroize" feature of the "%{crate}" crate.
-
-%files       -n %{name}+zeroize-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep
