@@ -1,1 +1,2 @@
-/webkitgtk-*
+/webkitgtk-*.tar.*
+!/webkitgtk-keys.gpg
