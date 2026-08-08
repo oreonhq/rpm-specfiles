@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash ad34fbc90ffc5e3676c7d316f402095cee3739d2e382985dd3da158cc0a2398e
 
 %global stable_kf6 stable
 
 
 Name:          arianna
-Version:       26.03.80
+Version:       26.04.3
 Release:       1%{?dist}
 Summary:       EPub Reader for mobile devices
 # Complete license breakdown can be found in the "LICENSE-BREAKDOWN" file.

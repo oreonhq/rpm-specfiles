@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 419c3cfe15f2f3093c4255d84a24708dd7ad28da2ce80cfee3521f761ba6937e
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-pa
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Plasma applet for audio volume management using PulseAudio
 

@@ -1,12 +1,12 @@
-%global source0_hash a2eec2a981ed9da6cffc955cc21a50dcbc77141cbb840d915f92d1897442d239
+%global source0_hash 595135e16456ed2e86ebdf6919b181426cea2e7449ed7d32905dac52050d22de
 
 %global framework kstatusnotifieritem
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 Summary:        Implementation of Status Notifier Items
 

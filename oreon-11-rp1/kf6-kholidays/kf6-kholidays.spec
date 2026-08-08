@@ -1,13 +1,13 @@
-%global source0_hash 84ce2acd5565a9510d74945ea2311f8c099cb031393255d1c8d399665d57b914
+%global source0_hash 6960e2040c148d878466f40c1c3bdcfa8c84fff456f4c8ce7456065bd0745d6c
 
 %global		framework kholidays
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	The KHolidays Library
 

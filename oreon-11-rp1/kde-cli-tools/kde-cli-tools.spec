@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 9b93730cbea9eecd2b17c84603c1496d18d08749d2861f87a7552f463d7aecb0
 
 %global stable_kf6 stable
 
 
 Name:    kde-cli-tools
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 Summary: Tools based on KDE Frameworks 5 to better interact with the system

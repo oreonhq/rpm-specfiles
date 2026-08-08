@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 47a29bd37b8aebe46b5f7fa011a511dbe0252813bcd02fe4ffaeffa64f4418cf
 
 %global stable_kf6 stable
 
@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 
 Name:    kiten
 Summary: Japanese Reference/Study Tool
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND BSD-3-Clause AND CC-BY-SA-3.0 AND CC-BY-SA-4.0

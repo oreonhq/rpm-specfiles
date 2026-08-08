@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 51901b4407fb5d6c7ae43df4ef224b0672339a7d3834a7bc470feb2f169bb3b6
 
 %global stable_kf6 stable
 
 
 Name:    kalgebra
 Summary: 2D and 3D Graph Calculator
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later

@@ -1,14 +1,14 @@
-%global source0_hash 5ad0228aa4872f6238b93827e99d263aebcc7e0bfc4f28ba3cf39c0fd2add7a9
+%global source0_hash 07f279845b3cd6e675513afb81f3c6274b2f6757edc149d163116b3c50dfa0df
 
 %global framework kuserfeedback
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
 Summary: Framework for collecting user feedback for apps via telemetry and surveys
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 
 License: MIT AND CC0-1.0 AND BSD-3-Clause

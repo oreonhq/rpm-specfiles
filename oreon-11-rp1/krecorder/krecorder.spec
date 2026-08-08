@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash af7a5e67773006e252616ca165405654d649089787bc646b493f91ad2580a260
 
 # 
 ExcludeArch: %{ix86}
 
 Name:           krecorder
-Version:        26.04.1
+Version:        26.04.3
 Release:        1%{?dist}
 License:        BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later
 Summary:        Convergent KDE audio recording application

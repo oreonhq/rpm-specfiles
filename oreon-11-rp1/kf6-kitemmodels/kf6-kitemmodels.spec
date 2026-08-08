@@ -1,12 +1,12 @@
-%global source0_hash f5aec7198b161562616c139ed037e562e7ae6822b839f67c8c2e2f97678fc58e
+%global source0_hash e03c5dbfc97fa298de9be58bfeb686518a52ae1236389fbc2436ff84165e7e2b
 
 %global		framework kitemmodels
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with item models
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d67d2fa3ba6d96ef73e0335ccd99661c6cd479e99bffc1e3b21ddb23ac21148e
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:          qrca
-Version:       26.03.80
+Version:       26.04.3
 Release:       1%{?dist}
 License:       CC0-1.0 AND BSD-3-Clause AND BSD-2-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later
 Summary:       QR code scanner for KDE Plasma

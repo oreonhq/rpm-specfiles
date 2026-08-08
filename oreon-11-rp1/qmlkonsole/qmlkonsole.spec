@@ -1,16 +1,16 @@
-%global source0_hash 2cc6dec1115af4291593bcff14c1bc588f4c67bed6812132fc1ae7bce9e409df
+%global source0_hash a0ae39d11c0c7acd1eb5cca4ea34e440ed59af7c570ff9664d3aaf8d2b528500
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:           qmlkonsole
-Version: 26.03.80
+Version: 26.04.3
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 Summary:        Terminal app for Plasma Mobile
 Url:            https://invent.kde.org/plasma-mobile/qmlkonsole
-Source0:        https://invent.kde.org/plasma-mobile/qmlkonsole/-/archive/v26.03.80/qmlkonsole-v26.03.80.tar.gz#/qmlkonsole-26.03.80.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/qmlkonsole-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash af366baba8694e16226844a94b4772a63a7e8d8d43e4c1950215eb163b4ca590
 
 %global stable_kf6 stable
 
 
 Name:    kdecoration
 Summary: A plugin-based library to create window decorations
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License: LGPL-3.0-only AND LGPL-2.1-only AND CC0-1.0

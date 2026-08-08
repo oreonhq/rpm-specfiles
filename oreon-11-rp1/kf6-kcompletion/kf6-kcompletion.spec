@@ -1,13 +1,13 @@
-%global source0_hash 006864dcba5d5fc87b4ca5dcc1239538657a5d052057bae5d3bc3e71eaba0551
+%global source0_hash 8aa9cbc36139adfa8e3b2c744cc94714afe154d21cef8a3a2d5f4d311be7cc3c
 
 %global framework kcompletion
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 addon with auto completion widgets and classes
 # BSD-3-Clause is in the LICENSES folder but goes unused.

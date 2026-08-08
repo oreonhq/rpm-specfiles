@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash 35fe9e822c6a61608ea194ec9b949b49c44b2b3b77a877454847a305d7963252
 
 %global stable_kf6 stable
 %global maj_ver_kf6 26
-%global min_ver_kf6 03
-%global bug_ver_kf6 80
+%global min_ver_kf6 04
+%global bug_ver_kf6 3
 
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    dolphin-plugins
 Summary: Dolphin plugins
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

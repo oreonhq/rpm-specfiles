@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 453fc075cc01aeac980ecdf3064874a69c357d46c60457bc42fb979a9567a0ba
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    blinken 
 Summary: Memory Enhancement Game 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

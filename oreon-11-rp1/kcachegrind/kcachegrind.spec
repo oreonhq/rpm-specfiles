@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5a071482af4c999081eca0da798c457db33cfc791c133859e8c9877cebd22577
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kcachegrind
 Summary: GUI to profilers such as Valgrind
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 and GFDL - review is highly recommended.

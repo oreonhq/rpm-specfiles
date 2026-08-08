@@ -1,12 +1,12 @@
-%global source0_hash 29b043480c45d3e51c57cac74fd83589cc7729c907a6585b72880cbf07feaf82
+%global source0_hash f46aeca80707e774fcffe8aa82e464a81056ce84f613347a5c9cc24c1c9a8432
 
 %global 	framework kguiaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtGui
 

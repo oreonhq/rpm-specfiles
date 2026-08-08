@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash cfd53172f168b5a80cba7ab85e7b929f6d7c7e0fa80ed0d48da140b5a7d698e3
 
 %global stable_kf6 stable
 
 
 Name:    powerdevil
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Manages the power consumption settings of a Plasma Shell
 

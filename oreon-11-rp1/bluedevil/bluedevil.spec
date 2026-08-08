@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8a3bb7d3005b0a01af171bdb41bececd5848de75c4a4d68d399a49c517791652
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    bluedevil
 Summary: Bluetooth stack for KDE
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

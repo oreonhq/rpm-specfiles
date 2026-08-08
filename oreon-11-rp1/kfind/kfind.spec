@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 21b79c83b60bd142f20edf2cf380c377c0fcaa2a34b727401905ab69621c27d8
 
 %global stable_kf6 stable
 
 
 Name:    kfind
 Summary: KDE Find File Utility
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Documentation is GFDL, rest GPLv2+

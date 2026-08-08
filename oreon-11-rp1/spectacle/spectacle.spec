@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5c61ffd9b37ca6384b754d44a051c8f979ab77984f92e7ddf3a1c15156d65665
 
 # For direct library dependencies
 %if "%{__isa_bits}" == "64"
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 Name:    spectacle
 Summary: Screenshot capture utility
 Epoch:   1
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.
@@ -30,9 +30,6 @@ Source1:        https://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{v
 ## upstream patches
 
 ## Upstreamable patches
-
-# Submitted upstream, but the fix wasn't working. Maybe it'll be fixed in 6.6.4/6.7
-Patch0: tesseract.patch
 
 ## downstream patches
 
@@ -83,15 +80,14 @@ BuildRequires: pkgconfig(xcb-cursor)
 BuildRequires: pkgconfig(xcb-image)
 BuildRequires: pkgconfig(xcb-util)
 BuildRequires: pkgconfig(xcb-xfixes)
+BuildRequires: pkgconfig(tesseract)
 
 # for systemd-related macros
 BuildRequires:  systemd-devel
 
 # Animated tray icon: https://pagure.io/fedora-kde/SIG/issue/601
 Recommends:     qt6-qtimageformats%{?_isa}
-# 6.6.0: Scanning capabilities
-# Cf. https://bugs.kde.org/show_bug.cgi?id=516162
-Recommends:     (libtesseract.so.5.5%{?lib64_suffix} or libtesseract.so.5.3.4%{?lib64_suffix})
+Requires:       tesseract
 
 # f26+ upgrade path
 %if 0%{?fedora} > 25

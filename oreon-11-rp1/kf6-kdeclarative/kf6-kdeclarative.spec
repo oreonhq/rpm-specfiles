@@ -1,13 +1,13 @@
-%global source0_hash b14e81143aed25ee62413f9c2b3742c558f5b6a1da6c5b92ca9a95bb6341e964
+%global source0_hash 988638fdf810d97d14144c2129655d9d0600006d7dcb06787b04c12d5269c969
 
 %global framework kdeclarative
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon for Qt declarative
 

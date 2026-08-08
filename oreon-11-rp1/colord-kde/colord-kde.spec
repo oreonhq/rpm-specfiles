@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f788b2702b7599a908a62dc871bfc9c150d40943307abdde3e76b4a0a86c2f24
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           colord-kde
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 Summary:        Colord support for KDE
 

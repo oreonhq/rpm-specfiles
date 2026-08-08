@@ -1,13 +1,13 @@
-%global source0_hash 77f51f7586e8b457534d95dd241280e8b7475915c656e661dc37b1e8a773c595
+%global source0_hash b0a9ae34b389c6460adad5323d21bb9e43638acb58da9685f8dc8d821c38a4d8
 
 %global		framework kcodecs
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with string manipulation methods
 License:	BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT AND MPL-1.1

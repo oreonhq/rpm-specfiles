@@ -1,14 +1,14 @@
-%global source0_hash c4e348fa5ac990a77b3926105c62bc4f2dddaf8d7554c43ee4f18de3d16a3699
+%global source0_hash c2be01e1aaf2ab14ba6f05582d7c4a29e144dd96258d86b208f58c34bfa83672
 
 %global framework purpose
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-purpose
 Summary: Framework for providing abstractions to get the developer's purposes fulfilled
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later

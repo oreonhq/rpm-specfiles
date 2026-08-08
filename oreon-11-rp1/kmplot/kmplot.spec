@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 259f72cce949cc3166275f2d2266db3432263ea2c5a7af0e2a9cf3b5a2c8a0de
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    kmplot
 Summary: Mathematical Function Plotter 
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

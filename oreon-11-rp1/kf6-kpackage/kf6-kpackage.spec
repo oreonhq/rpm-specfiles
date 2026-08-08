@@ -1,13 +1,13 @@
-%global source0_hash 5fa4b07f729c3ff6b7f362d318374810fa55b13a922d2b240462eb8efc1045e8
+%global source0_hash 2d04bcbc3492229cfc240884b04e7b220fa2022019c8f9d87f9f7814ea94c382
 
 %global framework kpackage
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 library to load and install packages as plugins
 

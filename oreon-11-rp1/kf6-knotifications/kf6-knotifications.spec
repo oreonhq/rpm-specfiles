@@ -1,13 +1,13 @@
-%global source0_hash eeb067fab001dd24735ad56e8ec4808fca76e5ecdf003cf614246c9abe1c3e19
+%global source0_hash e5d3b284ccc907f190d3ab10995a0ae7fa0f505088acc69edc7adfcc6a8140d6
 
 %global framework knotifications
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 solution with abstraction for system notifications
 

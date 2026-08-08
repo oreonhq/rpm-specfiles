@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b1101a10cee699cc2cfcebdda2c7fd0d0b444998a50886845ae057acddca6c79
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@ Name:    khelpcenter
 Summary: Show documentation for KDE applications
 # Override khelpcenter subpackage from kde-runtime-15.04 (no longer built)
 Epoch:   1
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 or GPLv3 - review is highly recommended.

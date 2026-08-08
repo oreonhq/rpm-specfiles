@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9e64ac80a01ed904110b88232e509c7ae920d6d8b1202880ff557e5c621919af
 
 %global stable_kf6 stable
 
@@ -13,7 +13,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-%{base_name}
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Plasma and Qt widget style and window decorations for Plasma
 

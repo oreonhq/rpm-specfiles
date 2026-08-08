@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 03ea97b57856df1bab618595b8777e519d8e244c6f2d9d77fdafcf553c7d5885
 
 %global stable_kf6 stable
 
@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-nano
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND MIT
 URL:     https://invent.kde.org/plasma/plasma-nano

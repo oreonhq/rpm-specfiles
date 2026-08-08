@@ -1,13 +1,13 @@
-%global source0_hash e7ba1601a159ea79f424a4d53647415393f90dbeda1e3216d023eeb5420837d3
+%global source0_hash b40c195ba7e6674898a64f4e3e25e0235dd79682f39395409469274acb580ac0
 
 %global framework kglobalaccel
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration module for global shortcuts
 

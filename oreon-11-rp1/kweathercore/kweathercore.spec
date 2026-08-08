@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 5b46b0841757ee498fd3c55ad3d01d5e3d3f40d0c8039b3b2e16a9e459dd9b4b
 
 Name:           kweathercore
-Version:        26.04.2
+Version:        26.04.3
 Release:        1%{?dist}
 License:        LGPL-2.0-or-later
 Summary:        Library to facilitate retrieval of weather information

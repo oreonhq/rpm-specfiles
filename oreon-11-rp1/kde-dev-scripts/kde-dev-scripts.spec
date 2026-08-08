@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 4697a368b66c292cb7d1c8a91b8e851cdd0b61a4e64bbfab0471f75c518a4d1f
 
 %global stable_kf6 stable
 
 
 Name:    kde-dev-scripts
 Summary: KDE SDK scripts
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND BSD-2-Clause

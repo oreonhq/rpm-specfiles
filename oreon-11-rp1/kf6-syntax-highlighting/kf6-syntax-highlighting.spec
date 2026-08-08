@@ -1,12 +1,12 @@
-%global source0_hash cbff001b9f00d032feb254313ecfee9a6e0a0b3c5a8c82a7e0806c5f1915a545
+%global source0_hash b9d90a03b4e9a48170a14f7a4a79c44f0aae9f14e1b94b7b1fc75d5c3fb31d3a
 
 %global framework syntax-highlighting
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Syntax highlighting engine for Kate syntax definitions
 License:        MIT AND BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND LGPL-2.0-or-later

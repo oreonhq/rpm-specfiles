@@ -1,13 +1,13 @@
-%global source0_hash d2a533bbf3d7f257e9306009bc32bdea41346cbd8e82d06c188879d5f0460380
+%global source0_hash c5d361d90861b4cd3db861568da5279ae2b1cb953e874126c15abbd7138378e5
 
 %global		framework kquickcharts
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:		kf6-%{framework}
 Summary:	A QtQuick module providing high-performance charts
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 
 License:	BSD-2-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only AND MIT

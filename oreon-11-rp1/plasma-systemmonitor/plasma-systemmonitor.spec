@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 80694f9d683a3720116197f7899e47a0b10f01a46a66af65ee079e2145897a8d
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-systemmonitor
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: An application for monitoring system resources
 

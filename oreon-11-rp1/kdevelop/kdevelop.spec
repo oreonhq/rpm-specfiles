@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a940a83b0752578fb04b700b8d274044e23543a68850cbc448dbdcb874ae75f4
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@
 Name:           kdevelop
 Summary:        Integrated Development Environment for C++/C
 Epoch:          9
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.kdevelop.org/

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 329bd9bc50504eb6bd7d431f7db6725287832550d60f7189ef8d0201092753c7
 
 %undefine __cmake_in_source_build
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    signon-kwallet-extension
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: KWallet integration for Sign-on framework
 

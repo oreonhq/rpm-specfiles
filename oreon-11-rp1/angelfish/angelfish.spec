@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1283ea5dda7715267b8f66ed0bea214f69db80cbe010ac89b87962351f52f099
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 %bcond adblock 0
 
 Name:           angelfish
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 Summary:        Plasma Mobile minimal web browser
 

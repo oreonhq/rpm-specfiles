@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash cb95426cba170f994761e509e342d523e53a62a80a252248b38efcbe8abff623
 
 %global stable_kf6 stable
 
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 
 Name:    kate
 Summary: Advanced Text Editor
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # kwrite LGPLv2+

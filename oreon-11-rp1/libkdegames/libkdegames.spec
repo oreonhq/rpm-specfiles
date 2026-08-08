@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash fb9a2199c1d7d5ad827584edb063dd96e41aa8a937980d641e1ffa122d1eccc3
 
 Name:    libkdegames
 Summary: Common code and data for many KDE games
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # libKF5KDEGames is LGPLv2, libKF5KDEGamesPrivate is GPLv2+

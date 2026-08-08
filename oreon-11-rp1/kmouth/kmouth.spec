@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a608105dd8f519c53d81ffc8a9e6578b31e310b6c9333c42d369507b8d5fe1c1
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kmouth
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: A program that speaks for you 
 

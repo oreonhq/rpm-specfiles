@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 54e65b1170499ccc567f9bb7586809d4739ea728efcf1bc877d1709db6e7347a
 
 %global stable_kf6 stable
 
@@ -12,7 +12,7 @@
 
 Name:    plasma-integration
 Summary: Qt Platform Theme integration plugin for Plasma
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

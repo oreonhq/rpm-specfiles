@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d3843061584f25269771b2cf72ba4a930f6b21e3da697b0ef9d569a99e995c67
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    ksshaskpass
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: A ssh-add helper that uses kwallet and kpassworddialog
 

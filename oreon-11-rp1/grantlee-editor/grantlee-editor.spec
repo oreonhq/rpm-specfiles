@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 1e1f3b086c4701f70ef6d733ec575eb4db386c152582a54e7e6fb3aeb41aeba4
 
 Name:    grantlee-editor
 Summary: KMail Theme Editor
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d5caeecca1b62a72d6cd9c09526294b1c5cde4a25bbb147da7721a8fccf2317e
 
 %global stable_kf6 stable
 
@@ -9,7 +9,7 @@
 Name:    k3b
 Summary: CD/DVD/Blu-ray burning application
 Epoch:   1
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

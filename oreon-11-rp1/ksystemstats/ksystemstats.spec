@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 919f2436ff8da8ff6ea7d2c007bdaf6bcd8a2f096d0544ba450124ffac56dc94
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    ksystemstats
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Plugin based system monitoring daemon for Plasma
 

@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 28efd897d46825e9ab66b050a8076663d6a74a286fd4a1f8183fc12695b2f4d5
 
 %global stable_kf6 stable
 
 
 Name:    kontact
 Summary: Personal Information Manager
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # code (generally) GPLv2, docs GFDL

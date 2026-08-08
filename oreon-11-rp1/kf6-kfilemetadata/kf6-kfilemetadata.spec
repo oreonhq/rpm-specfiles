@@ -1,13 +1,13 @@
-%global source0_hash 27f68558259394ad84d357aa316821672ee66481fa851ddf2a6109f668a6c6a3
+%global source0_hash 015be4aa6986642d3f13903b47c1aae7183d3218888dc4353afe1b1e9dd64c1e
 
 %global framework kfilemetadata
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:           kf6-%{framework}
 Summary:        A Tier 2 KDE Framework for extracting file metadata
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 
 License:        BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

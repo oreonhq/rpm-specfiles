@@ -1,13 +1,13 @@
-%global source0_hash 6c005f06c5f8c4ac349238abf14999bb917215a8f7b8c51364e2fdd12e9e6355
+%global source0_hash 8748d01f401cb16a34adbdf568b2bde2cc1820f82c38249fdec11b66d9da97d1
 
 %global framework qqc2-desktop-style
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL

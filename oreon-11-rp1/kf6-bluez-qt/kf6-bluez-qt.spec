@@ -1,14 +1,14 @@
-%global source0_hash 3e22c1f71f3d93f572c2a1126edc2aa16151f8bad10f9f1ddb7e41dd372aee70
+%global source0_hash ae4410142170e84df104ef9723c7307de1d5ab68b2874c4ccdb0af99e00ae806
 
 %global framework bluez-qt
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
  
 Name:           kf6-%{framework}
 Summary:        A Qt wrapper for Bluez
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
  
 License:        CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only

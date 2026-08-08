@@ -1,10 +1,10 @@
-%global source0_hash cef8d4129225c95b3a4f35909723ee67e677f55e5d8812bcf3ccf165d0901b57
+%global source0_hash 0ce9b6178894ebb49cbfedaeba63c21e1e27de0811e03ddad57c3e79ccb7c730
 
 %global stable_kf6 stable
 
 
 Name:           plasma-phonebook
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 License:        CC0 and GPLv2 and GPLv3 and GPLv3+ and LGPLv2+
 Summary:        Convergent Plasma Mobile phonebook application

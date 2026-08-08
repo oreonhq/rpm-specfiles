@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 45b6e7c933bc63688ebfa643a75c7f0b8d827577a977b597931d9af9bbbcc1cf
 
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    messagelib
-Version: 26.04.2
+Version: 26.04.3
 Release: 2%{?dist}
 Summary: KDE Message libraries
 

@@ -1,13 +1,13 @@
-%global source0_hash a60746aca1ce6cfd2fbd20144bc4869d2b00d04b597aedab3dd37a345fb03bb4
+%global source0_hash f4fe731aad56ae010c2b42f2bd56d4499339bb0839ae2251035132f1a3708df2
 
 %global		framework kdnssd
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 integration module for DNS-SD services (Zeroconf)
 License:	BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later

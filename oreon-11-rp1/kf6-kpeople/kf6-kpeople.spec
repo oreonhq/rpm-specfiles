@@ -1,13 +1,13 @@
-%global source0_hash 586407310370f9a7fe88773c90e83e227bec7f5f6f860df6540d69db425581d6
+%global source0_hash a5bcf11a6cbca46d4bf83399fe9c0c3c9aaf228be81b05ba966a4ba51256fd0a
 
 %global framework kpeople
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 library for contact and people aggregation
 

@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 300e313205d6eb83ac9ba134f9d333741e96ed1518342cd63d06a0234ed3d9dc
 
 %global stable_kf6 stable
 
 
 Name:    kaddressbook
 Summary: Contact Manager
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later

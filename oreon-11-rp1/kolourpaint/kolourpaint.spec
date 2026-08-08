@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fece103c529290212cc7a66e9f22e894eb034d04579332a17d7f6c0e8eda6069
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kolourpaint
 Summary: An easy-to-use paint program 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: BSD - review is highly recommended.

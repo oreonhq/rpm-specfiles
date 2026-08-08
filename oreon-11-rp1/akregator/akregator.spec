@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash c59d7d6899e34b1a9c58089cd139838a7be22e358ff036532c8700871c182910
 
 %global stable_kf6 stable
 
 
 Name:    akregator
 Summary: Feed Reader
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later

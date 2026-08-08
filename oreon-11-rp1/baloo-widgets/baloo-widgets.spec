@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash fa5288d216d3ed9ed0926385dbc0b266b60317a60c231a6dccaff4bcd810d9fc
 
 %global stable_kf6 stable
 
 
 Name:    baloo-widgets
 Summary: Widgets for Baloo
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # # KDE e.V. may determine that future LGPL versions are accepted

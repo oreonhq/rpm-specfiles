@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 2781f7d920186c9e73fb269f5962ee2224d1308b191ccb3d20f081722ac82387
 
 %global stable_kf6 stable
 
 
 Name:           kio-gdrive
-Version:        26.04.1
+Version:        26.04.3
 Release:        1%{?dist}
 Summary:        An Google Drive KIO slave for KDE
 

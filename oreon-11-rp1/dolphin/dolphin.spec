@@ -1,21 +1,21 @@
-%global source0_hash 59b4a0656ade61029a185c7348544fb515b2d654c1f268a0f739bd157df5a3db
+%global source0_hash d18579587f841ca5a571c3614bda0beed6e53bf5ded4d456009e187cbb9d0b44
 
 %global stable_kf6 stable
 %global maj_ver_kf6 26
-%global min_ver_kf6 03
-%global bug_ver_kf6 80
+%global min_ver_kf6 04
+%global bug_ver_kf6 3
 
 
 %global tests 1
 
 Name:           dolphin
 Summary:        KDE File Manager
-Version:        26.03.80
+Version:        26.04.3
 Release:        4%{?dist}
 
 License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/system/dolphin
-Source0:        https://invent.kde.org/system/dolphin/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/dolphin-%{version}.tar.xz
 
 # Upstream
 

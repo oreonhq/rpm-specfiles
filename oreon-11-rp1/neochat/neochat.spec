@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7813106878bde5286f45c005647048217b2e46444c8ac2ef76480a2de88e7f0f
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name: neochat
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause

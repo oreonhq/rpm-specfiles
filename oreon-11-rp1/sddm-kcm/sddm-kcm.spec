@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e29498674bf54140dfec8480186cdd0da515a2e6292c733208adeb4175512969
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    sddm-kcm
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: SDDM KDE configuration module
 

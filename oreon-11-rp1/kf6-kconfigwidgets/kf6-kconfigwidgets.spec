@@ -1,13 +1,13 @@
-%global source0_hash 404ed0606dfb13cc44c36deaf5f880eeec75018ae878125dabf83f32efeb0a7f
+%global source0_hash f795386fb06b8922325075a8fa9f817c3d25e04bbfdcf60b13ad714c7c54e987
 
 %global framework kconfigwidgets
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon for creating configuration dialogs
 

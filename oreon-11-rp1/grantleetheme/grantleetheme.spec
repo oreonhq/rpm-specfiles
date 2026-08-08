@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 28f9333b8a7327c65c513afbd9d9a411b799ff5883b4c9aaafc22ace79d94702
 
 Name:    grantleetheme
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: KDE PIM library for Grantlee template system
 

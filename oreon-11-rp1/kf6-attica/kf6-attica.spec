@@ -1,13 +1,13 @@
-%global source0_hash 8f3d3d61ec8a7456db8a75caa801a2e5f5e046728bd240a003e71b8813093ae4
+%global source0_hash 652e28562ed6798f834843b45f5cd3ea5833f0ee3c2607cfe3d021b57c6e7618
 
 %global		framework attica
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks Tier 1 Addon with Open Collaboration Services API
 License:	CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

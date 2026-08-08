@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash 498744228f225176624fafbab283815b6872351f6d15bb935e2d02c1a644dd43
 
 Name:    kdepim-runtime
 Summary: KDE PIM Runtime Environment
 Epoch:   1
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: AGPL-3.0-or-later AND BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

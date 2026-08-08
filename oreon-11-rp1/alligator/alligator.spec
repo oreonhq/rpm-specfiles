@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 21c6bac672903c48c978c1f13aae5afc58f845f76d54b8d2c0bae66e8b3fcaa3
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           alligator
-Version:        26.03.80
+Version:        26.04.3
 Release:        2%{?dist}
 # Automatically converted from old format: GPLv2 or GPLv3 - review is highly recommended.
 License:        GPL-2.0-only OR GPL-3.0-only

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash efdf9f14f7fa917863effd47b0c7ebd0b49687e9205049ff8cb868405f16334c
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@
 %endif
 
 Name:    kaccounts-integration
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: Small system to administer web accounts across the KDE desktop
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later

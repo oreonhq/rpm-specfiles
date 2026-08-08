@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d79114a42fc3582962bec85ac2d877217708a9491d51f731b166c36c87ed1a23
 
 %global stable_kf6 stable
 
@@ -25,7 +25,7 @@ ExcludeArch: %{ix86}
 
 Name:    kalzium
 Summary: Periodic Table of Elements
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

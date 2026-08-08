@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dabd48e172cf78f4b42de7423de56ed474d241abb080b4d2b632c5d4d4e8dbaf
 
 %global stable_kf6 stable
 
@@ -9,7 +9,7 @@ ExcludeArch: %{ix86}
 Name:    gwenview
 Summary: An image viewer
 Epoch:   1
-Version: 26.03.80
+Version: 26.04.3
 Release: 4%{?dist}
 
 # app + lib: GPL-2.0-or-later

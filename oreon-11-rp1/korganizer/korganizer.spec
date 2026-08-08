@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 89a11d44aa4c46fe3e3ca64f2b38fd806cfcdb23262c63cc764c5e6ab9e04d48
 
 %global stable_kf6 stable
 
 
 Name:    korganizer
 Summary: Personal Organizer
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

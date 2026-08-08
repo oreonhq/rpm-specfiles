@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e38925ff514ca8fc219762a0d82b62920f4df62cab025af95035ff5af429df4b
 
 %global stable_kf6 stable
 
@@ -14,7 +14,7 @@ ExcludeArch: %{ix86}
 
 Name:    kwalletmanager5
 Summary: Manage KDE passwords
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

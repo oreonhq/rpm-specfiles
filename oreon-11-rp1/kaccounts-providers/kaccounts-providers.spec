@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 7b364e75a562052932d8b2e8faecb7cd8716a35e7177e409e36e3e631e1f6775
 
 %global stable_kf6 stable
 
 
 Name:    kaccounts-providers
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: Additional service providers for KAccounts framework
 # Automatically converted from old format: GPLv2 - review is highly recommended.

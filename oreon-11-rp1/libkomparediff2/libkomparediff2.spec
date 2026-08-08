@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash dd77529a93ac3f9aefe571961e8f7ab14c416f3164a524c6588284bcc1ac817b
 
 # enable tests
 %global tests 1
 
 Name:    libkomparediff2
 Summary: Library to compare files and strings
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Library: GPLv2+ (some files LGPLv2+), CMake scripts: BSD

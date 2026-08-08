@@ -1,12 +1,12 @@
-%global source0_hash 9ea3792b2f1c43d5551437260803fdd676c903e2768f4aac4186054e5b22d4ca
+%global source0_hash 94ff8745ce65507986a05bffbab905bfd894936e8f53b4b6e2d9b3a96cb2d6f4
 
 %global framework	kdbusaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:			kf6-%{framework}
-Version:		6.27.0
+Version:		6.28.0
 Release:        1%{?dist}
 Summary:		KDE Frameworks 6 Tier 1 addon with various classes on top of QtDBus
 License:		CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only

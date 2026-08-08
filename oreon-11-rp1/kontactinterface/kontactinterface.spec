@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash ec67aad623d3d80bfad1157a7be863d8f7a0eed3e8c620c59c5cd7ff276bb76a
 
 Name:    kontactinterface
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: The Kontact Interface Library
 

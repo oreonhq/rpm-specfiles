@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 2063c6df5e2dd216d244bd30e9eef7fc94fae97f0420ddc20e2ddaf958213ba7
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    kdesdk-thumbnailers
 Summary: Thumbnailers for KDE
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

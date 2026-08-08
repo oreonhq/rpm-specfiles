@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 21f82c93a8ccb68d3bb7781a9a7607555fff9e3ae47651ebb0a08bf492a91f69
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:          francis
-Version:       26.03.80
+Version:       26.04.3
 Release:       1%{?dist}
 License:       BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 Summary:       Time tracking app for KDE Plasma

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d80699575c08824af81fc0e2adc1c48c5e9aa466a9b80bc296e0394936736e0a
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 
 Name:    polkit-kde
 Summary: PolicyKit integration for KDE Desktop
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND CC0-1.0

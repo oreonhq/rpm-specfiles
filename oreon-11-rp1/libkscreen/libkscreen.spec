@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash f40bfbd83147a7c7ff387ffe5053cc2ea000bdb21555a0b3d06da3c59d7b4977
 
 %undefine __cmake_in_source_build
 
 %global stable_plasma stable
-%global plasma_ver 6.7.1
+%global plasma_ver 6.7.4
 
 Name:           libkscreen
 Version:        %{plasma_ver}

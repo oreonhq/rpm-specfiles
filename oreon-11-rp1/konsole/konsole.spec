@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fe54d0297c24a52b2ec8ebf45bf75b22736f65301663846b8f3539044943e1ac
 
 %global stable_kf6 stable
 
@@ -13,7 +13,7 @@
 
 Name:    konsole
 Summary: KDE Terminal emulator
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

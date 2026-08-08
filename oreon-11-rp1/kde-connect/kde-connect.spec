@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 505b58b52630a662a8f6a2c50c58eda1de66779762c31d5ea5247b48bba52561
 
 %global stable_kf6 stable
 
@@ -6,7 +6,7 @@
 %global base_name kdeconnect-kde
 
 Name:    kde-connect
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Summary: KDE Connect client for communication with smartphones

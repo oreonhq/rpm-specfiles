@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 7abd2c0e88779f18eff35ebb4f72f6447e25c0db6867a1edf94536052a1ae952
 
 %global stable_kf6 stable
 
 
 Name:    kmail
 Summary: Mail client
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)

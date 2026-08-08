@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b3dde0893625bf6866e40e4295344c647d4968b3f47711d15ac1c134196e4014
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kio-admin
-Version:        26.04.1
+Version:        26.04.3
 Release:        1%{?dist}
 Summary:        Manage files as administrator using the admin:// KIO protocol
 License:        (GPL-2.0-only or GPL-3.0-only) and BSD-3-Clause and CC0-1.0 and FSFAP

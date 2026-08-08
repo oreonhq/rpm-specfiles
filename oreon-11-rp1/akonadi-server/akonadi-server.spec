@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 196c1c27c122d0ca4ec320c89ef835fec3ec73d042617a76f067e5c649cfe824
 
 %global stable_kf6 stable
 
@@ -9,7 +9,7 @@
 
 Name:    akonadi-server
 Summary: PIM Storage Service
-Version: 26.03.80
+Version: 26.04.3
 Release: 4%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT

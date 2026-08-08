@@ -1,15 +1,15 @@
-%global source0_hash none
+%global source0_hash db7a7dba71aaca1e5218733b80f90a998d84e2ab36e4d62d0e3ea00376c5802d
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 2
+%global bug_ver_kf6 4
 
 %global _lto_cflags %{nil}
 %undefine _include_minidebuginfo
 
 Name:    kwin
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: KDE Window manager
 

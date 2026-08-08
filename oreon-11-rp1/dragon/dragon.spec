@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 263fff59c7ef58cfe887bfae7c953ae223fce14be4f8556565b43adc7026799e
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    dragon
 Summary: Media player
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # code: KDE e.V. may determine that future GPL versions are accepted

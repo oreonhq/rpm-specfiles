@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 88ed9119b777c7107657b47b68af34a2c2de422f709d1409b7c2d7721463e247
 
 %global stable_kf6 stable
 
@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-%{base_name}
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: A dedicated KDE search application built on top of Baloo
 

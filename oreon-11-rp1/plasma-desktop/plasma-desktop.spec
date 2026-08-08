@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash c2f0c2b7ab70cbd99ef17ffad4c3117dab12ef6a71790da33e39688386474962
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 2
+%global bug_ver_kf6 4
 
 
 %global scim 1
@@ -13,7 +13,7 @@
 
 Name:    plasma-desktop
 Summary: Plasma Desktop shell
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

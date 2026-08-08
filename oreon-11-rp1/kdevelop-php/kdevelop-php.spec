@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash d25d4ec3c20fa6d4569ab6f0beb6b18bd33b35914957348a1d5ea8e09f4a1693
 
 %global stable_kf6 stable
 
 
 Name:           kdevelop-php
 Summary:        Php language and documentation plugins for KDevelop
-Version:        26.04.1
+Version:        26.04.3
 Release:        1%{?dist}
 
 # Most files LGPLv2+/GPLv2+

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d0bab9b0182480a41fe0c677a1f5d4d1c3088e0f3aa6883a0bc25423d94ecfd0
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-workspace-wallpapers
-Version:        6.7.2
+Version:        6.7.4
 Release: 2%{?dist}
 Summary: Additional wallpapers for Plasma workspace
 # Automatically converted from old format: LGPLv3 - review is highly recommended.

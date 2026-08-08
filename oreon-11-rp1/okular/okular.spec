@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a6e4a571acd3b70bb67eec476834b009f710540b793091f51f707b53b6facbca
 
 ## uncomment to enable bootstrap mode
 #global bootstrap 1
@@ -16,7 +16,7 @@
 
 Name:    okular
 Summary: A document viewer
-Version: 26.03.80
+Version: 26.04.3
 Release: 2%{?dist}
 
 License: GPL-2.0-only

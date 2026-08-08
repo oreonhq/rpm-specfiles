@@ -1,12 +1,12 @@
-%global source0_hash 6fe86f0c0ff41044f44d1f37f9ae001b8d2c1a5a8bc06c41c43ed574138af5be
+%global source0_hash edf83069f25f8edf759d07502a6f8302c8c064cd562651deedefe6393fefcace
 
 %global framework kiconthemes
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration module with icon themes
 

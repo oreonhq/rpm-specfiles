@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash ef53918510a4b9d32a5ea524c84cb66212d3f70067bf7217ef4355b081eb9b04
 
 %global stable_kf6 stable
 
 
 Name:    kgpg
 Summary: Manage GPG encryption keys
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)

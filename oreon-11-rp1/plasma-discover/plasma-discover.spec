@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f8b809c9aaa25c1d636b0bdf144d87a3ee659d5d80f26961d3116a627fef859d
 
 %global stable_kf6 stable
 
@@ -13,7 +13,7 @@
 
 Name:    plasma-discover
 Summary: KDE and Plasma resources management GUI
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

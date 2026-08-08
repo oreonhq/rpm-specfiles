@@ -1,12 +1,12 @@
-%global source0_hash a8a0c5103cb43dc62952aab76bb7e576e8643dbb31672e2ac2988279ab571700
+%global source0_hash 9af5746db7e25e2aac69c19a9cc9758fc7e7b4cbbcf2b6b6a6c93bd7c642e80f
 
 %global framework kdesu
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration with su
 

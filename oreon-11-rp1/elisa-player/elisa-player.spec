@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 361e4f5bfe373f340e18e80fe35b8d7c1b6c8f65970b867a2e27e81103ce25d5
 
 %global stable_kf6 stable
 
@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:       elisa-player
-Version:    26.03.80
+Version:    26.04.3
 Release:    1%{?dist}
 Summary:    Elisa music player
 

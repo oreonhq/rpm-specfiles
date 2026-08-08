@@ -1,12 +1,12 @@
-%global source0_hash 69026ef8607cb6257e4d1f0e46e451130ef7ba67994a83e4f9a6c46eefd5a3f3
+%global source0_hash 024914031fba7a9b79982d02736b21399d9a0d09ad81323d58e17d6b2216c7b0
 
 %global framework kdoctools
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 addon for generating documentation
 

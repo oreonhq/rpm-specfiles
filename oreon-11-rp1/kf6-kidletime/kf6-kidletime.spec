@@ -1,4 +1,4 @@
-%global source0_hash 2cb0196ee3bb1b60be9bad14b4d04dfaf53b3d0017cd459083035c715910551b
+%global source0_hash 0ada459a4ccdf75d17329bfa4ee42c2c6e7b3ead1ec4b427f82bed063b970ff5
 
 # Disable X11 for RHEL
 %bcond x11 %[%{undefined rhel}]
@@ -6,10 +6,10 @@
 %global		framework kidletime
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 integration module for idle time detection
 License:	CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT

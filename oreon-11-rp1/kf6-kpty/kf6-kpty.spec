@@ -1,12 +1,12 @@
-%global source0_hash ad06bfda8df019bb2b33567ce3df539bcc107e0dfe004281e5ff9ae4617c6ecc
+%global source0_hash 5a08d641e43fa8fd071d759d84e930251aa111973b362edce14d49032aa731d1
 
 %global framework kpty
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 module providing Pty abstraction
 

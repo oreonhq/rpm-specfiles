@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 2cb3ad260a0fc07533b1e0e9e294da2ec9be83095a901140e9fab16fa17a550d
 
 %global stable_kf6 stable
 
 
 Name:       kwayland
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary:    Qt-style API to interact with the wayland-client API
 

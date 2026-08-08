@@ -1,14 +1,14 @@
-%global source0_hash b2f8d7e720187ea8159653cb3c8caf0d03fb5f3d7ecef1b2b80ac0b2a77b4367
+%global source0_hash bd350755be56da3d3ff4c65d9f62859782c9c1d75311a4830b3683f6ccb1c431
 
 %undefine __cmake_in_source_build
 
 %global framework kplotting
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon for plotting
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later

@@ -1,13 +1,13 @@
-%global source0_hash fc201b02c277a35ce81414b1de7e6f851e46b0b5d43beb784936a4a6dc6167d0
+%global source0_hash 158f47746806c3dd87a09091eaa46ffee286cd658f9e26b4422656b66176627a
 
 %global framework kio
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for filesystem abstraction
 

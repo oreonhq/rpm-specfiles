@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e357e5e890bd95a1a44d0d5be8ba8eec8745e018dd4e5291f778b962d1f15ee0
 
 %global _python3_include %(%{__python3} -Ic "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
 %global _python3_lib /usr/%{_lib}/lib%(basename %{_python3_include}).so
@@ -9,7 +9,7 @@ ExcludeArch: %{ix86}
 
 Name:    kig
 Summary: Interactive Geometry 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-or-later

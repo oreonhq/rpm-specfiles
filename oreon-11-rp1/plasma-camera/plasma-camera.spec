@@ -1,10 +1,10 @@
-%global source0_hash 031c8f00095c174214ab8ffb1d807662df551966d72c3e367dccab2c3098eaac
+%global source0_hash 44b8f2033a5aed4978b8bdc0157b08c8332fb790064247beb4aa6949cdd00fe9
 
 %global stable_kf6 stable
 
 
 Name:          plasma-camera
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 License:       BSD-3-Clause AND GPL-2.0-or-later AND CC0-1.0 AND GPL-3.0-or-later
 Summary:       Camera application for Plasma Mobile

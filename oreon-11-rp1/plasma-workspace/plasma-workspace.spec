@@ -1,17 +1,17 @@
-%global source0_hash 89419e0532a8b33fda721e750c8f480c38828d5c14523952430dffcce0adc606
+%global source0_hash 21ec3c002929eb65377a1ae0eb105b9ab6f608049dac5493e188f51bd50398d5
 
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.7
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 2
+%global bug_ver_kf6 4
 
 
 %bcond kf6_pim 1
 
 Name:    plasma-workspace
 Summary: Plasma workspace, applications and applets
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 # Automatically converted from old format: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT - review is highly recommended.

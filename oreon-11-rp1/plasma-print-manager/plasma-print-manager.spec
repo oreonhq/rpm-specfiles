@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4bce095c6dc9607b20551b0ea5c5ebcb56a49510ee0c02d344572604d7416868
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-print-manager
 Summary: Printer management for KDE
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

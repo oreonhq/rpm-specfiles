@@ -1,13 +1,13 @@
-%global source0_hash 8c19df7ba5940c36ff15051703acd3a16c664b4a570817b6770fafc7ab59d6de
+%global source0_hash dc479d74def4e2d3e96f320f19285dcf88ec3ec6d39229f14ecb362983e305bd
 
 %global framework knewstuff
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 module for downloading application assets
 License: BSD-2-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

@@ -1,13 +1,13 @@
-%global source0_hash beb0a50a22230fdd94164a5d6e53ea7f4cbc97b86cbab3ff2a592ea8663efa41
+%global source0_hash 9afe5ca9d1c4bd06479b2619326ec6f1e3c3998859dceaae3da9a4b7318d5a21
 
 %global framework kcmutils
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon with extra API to write KConfigModules
 

@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash fea7cd107ddc2199e8c104eba00eb8469ffaaccd67ce4e403917971d23e4c675
 
 Name:    kmailtransport
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: The KMailTransport Library
 

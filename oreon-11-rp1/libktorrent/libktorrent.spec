@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash d059d3f82a4fca9292cd97d1138e30c22b5875d0a9a593a4211d2f02552e8361
 
 Name:           libktorrent
 Summary:        Torrent downloading library for KDE 6 applications
-Version:        26.04.2
+Version:        26.04.3
 Release:        1%{?dist}
 # CC0 is only for CI tooling, BSD3 for cmake macros, MIT for win32 support code
 License:        GPL-2.0-or-later

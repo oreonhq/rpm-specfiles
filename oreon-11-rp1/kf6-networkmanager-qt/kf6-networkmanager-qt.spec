@@ -1,11 +1,11 @@
-%global source0_hash a8193895b420d576fac228388ba8fd1b24d6f229c43b7963e2ed581ef82cad9a
+%global source0_hash 30604204bb00115f515146d05f981aa1f9824e14c0c537a1ec397581ac5d912e
 
 %undefine __cmake_in_source_build
 
 %global framework networkmanager-qt
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 %ifarch aarch64
 %global _lto_cflags %{nil}
@@ -13,7 +13,7 @@
 %endif
 
 Name:           kf6-%{framework}
-Version:        6.27.0
+Version:        6.28.0
 Release:        1%{?dist}
 Summary:        A Tier 1 KDE Frameworks 6 module that wraps NetworkManager DBus API
 License:        LGPL-2.0-or-later AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND CC0-1.0

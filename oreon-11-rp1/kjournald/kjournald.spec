@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6a97ac76c006dcd0ccdb33933ab71c611b79cc9ae20666deb8074a8ac43993ce
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:          kjournald
-Version:       26.04.1
+Version:       26.04.3
 Release:       1%{?dist}
 Summary:       Framework for interacting with systemd-journald
 

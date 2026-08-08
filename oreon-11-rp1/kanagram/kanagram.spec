@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ef08ea3ed240c2a163e2b2abf1a19fcfbda079c8f000f9dd1e14fab44851fd0d
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kanagram
 Summary: Letter Order Game 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

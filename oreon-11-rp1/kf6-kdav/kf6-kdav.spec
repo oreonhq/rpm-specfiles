@@ -1,13 +1,13 @@
-%global source0_hash e0af4190960d65f5c8475f01213ea4e68a07763ffeaa6766de4b7f50529e0498
+%global source0_hash ebc481902d89c427da7bad85debb375cb00d92c1d881ba330bd9f1ab8cb37f92
 
 %global framework kdav
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: A DAV protocol implementation with KJobs
 

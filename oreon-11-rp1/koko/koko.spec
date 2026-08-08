@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fd910b82d0f08e3c39ac8a3588b5a78516d0731c6a36a7d9302644e3bdf55ac4
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@
 ExcludeArch: %{ix86}
 
 Name:           koko
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ and GPLv3 and LGPLv2 and LGPLv2+ and CC0 and BSD - review is highly recommended.
 License:        GPL-2.0-or-later AND GPL-3.0-only AND LicenseRef-Callaway-LGPLv2 AND LicenseRef-Callaway-LGPLv2+ AND CC0-1.0 AND LicenseRef-Callaway-BSD

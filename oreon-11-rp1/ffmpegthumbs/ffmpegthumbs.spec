@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a6d7a12a57f24113789203413d40a4355ce4c0aff516384ecd2c548ce42f389b
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    ffmpegthumbs
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: KDE ffmpegthumbnailer service
 

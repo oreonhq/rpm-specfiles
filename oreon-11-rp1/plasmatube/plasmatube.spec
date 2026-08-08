@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 91a997e40f7c21da2ed081050cdde8b007626627b8d1d74c20ad6b8a17e1a597
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           plasmatube
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 License:        GPL-3.0-or-later AND GPL-2.0-or-later AND CC0-1.0 AND CC-BY-SA-4.0
 Summary:        YouTube video player based on QtMultimedia and youtube-dl

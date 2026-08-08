@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9c97c3efd821e8bd214f1d393e1f9b26242aab9b8099146d37eaaddf09d91070
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-sdk
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Development tools for Plasma 6
 

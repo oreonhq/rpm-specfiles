@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e13af35e2bc7991d407f70abdc42c3ab7a3789b28bb02e241ae6cee789880f6d
 
 %global stable_kf6 stable
 
@@ -14,7 +14,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kde-partitionmanager
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 Summary:        KDE Partition Manager
 

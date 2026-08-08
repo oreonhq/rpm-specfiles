@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 6e5f628d5b92db7efca91fbff1c1647e94654b43d09e862276a3cc78cf92559a
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:          kde-inotify-survey
-Version:       26.03.80
+Version:       26.04.3
 Release:       1%{?dist}
 Summary:       Monitors inotify limits and lets the user know when exceeded
 

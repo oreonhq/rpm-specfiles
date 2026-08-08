@@ -1,13 +1,13 @@
-%global source0_hash 404e064114c95eca0ef759b96ca4e0ba5f9b8bc563138574358270963f3f5554
+%global source0_hash b3e7dc0ad758a994f5171c6fb9a4bbf59bb51bdf7e0fecf0df6a3b55f2e5bd6b
 
 %global framework kunitconversion
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 addon for unit conversions
 

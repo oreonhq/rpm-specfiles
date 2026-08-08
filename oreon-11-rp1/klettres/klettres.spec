@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7e52d8215df8cd47c91b64f70df474658b783258060aa61e7fffa25b1b1150c1
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    klettres
 Summary: Learn the alphabet and read some syllables in different languages
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

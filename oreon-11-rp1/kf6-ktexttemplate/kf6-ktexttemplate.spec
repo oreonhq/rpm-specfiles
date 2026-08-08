@@ -1,12 +1,12 @@
-%global source0_hash 18a92b802b1c3130ff22087f9e048807bdf39c4147835e9aaa1be18408b9361b
+%global source0_hash a184163f7d5d2ac4cd4a71d04bee830020332552bfa9eb5159ced57b20edd527
 
 %global		framework ktexttemplate
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 Name:		kf6-%{framework}
-Version:	6.27.0
+Version:	6.28.0
 Release:        1%{?dist}
 Summary:	Separates the structure of documents from their data
 License:	CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later

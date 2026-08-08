@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 31dc88f924a5f5c979f09275ccc897cb0001bda45604561c8f18eb35b2e38b5a
 
 %global stable_kf6 stable
 
@@ -12,7 +12,7 @@
 %endif
 
 Name:    plasma-breeze
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: Artwork, styles and assets for the Breeze visual style for the Plasma Desktop
 

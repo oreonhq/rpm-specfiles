@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e73cff30b504240ce0257326aa376ad7473cbc25f195bb92f383c78dd8ca8268
 
 %undefine __cmake_in_source_build
 %global base_name kdesdk-kio
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kdesdk-kioslaves
 Summary: KDESDK KIOslaves
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 and GPLv2+ - review is highly recommended.

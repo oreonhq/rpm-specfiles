@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8dc64ad30f7484940c1bbead7c51bb4a2be3b1e56e716da6f19334e0fa3745b8
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kclock
-Version:        26.03.80
+Version:        26.04.3
 Release:        2%{?dist}
 License:        LGPL-2.1-or-later AND LGPL-2.0-or-later AND GPL-3.0-or-later AND CC-BY-4.0 AND GPL-2.0-or-later
 Summary:        Clock app for Plasma Mobile

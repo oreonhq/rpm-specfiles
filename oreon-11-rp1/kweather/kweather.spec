@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3d22d401742715333c2566fdb3902f82d561ee1e75f677fe958e9f161cf9021a
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kweather
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

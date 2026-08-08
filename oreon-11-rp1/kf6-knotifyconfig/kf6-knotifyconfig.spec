@@ -1,13 +1,13 @@
-%global source0_hash 81861316d615e7e5ff07143c1d58d9b52cadc5e02ab38c8f2677c01f71e51f26
+%global source0_hash 142cb399c5b55ed0d85f752f8fbb3db3f5930cbfa09737fdb17af6c2dfa073f6
 
 %global framework knotifyconfig
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 module for KNotify configuration
 

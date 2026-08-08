@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash a32e24b267e8528d0253bc8df18bdc00e676560a43b796533e1b1406f4eef4db
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 %global framework extra-cmake-modules
@@ -15,7 +15,7 @@
 
 Name:    extra-cmake-modules
 Summary: Additional modules for CMake build system
-Version: 6.27.0
+Version: 6.28.0
 Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD

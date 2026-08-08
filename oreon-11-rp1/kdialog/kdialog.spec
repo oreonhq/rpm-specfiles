@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash e8b6dd4f54b6b9d0051a5014af069332327717c0e36bbc36430eddcbb76f226e
 
 %global stable_kf6 stable
 
 
 Name:    kdialog
 Summary: Nice dialog boxes from shell scripts
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ and GFDL - review is highly recommended.

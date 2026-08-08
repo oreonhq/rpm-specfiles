@@ -1,13 +1,13 @@
-%global source0_hash a82f9d2e4a1faa71f633092c29a959e2dee1a172cd25465cf4a04c5388a05022
+%global source0_hash b105b6e2457491969019a4d87e98c03accf07148dc56e26210372d59aa9a4488
 
 %global framework kapidox
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 4 scripts and data for building API documentation
 

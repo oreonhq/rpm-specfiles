@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8018fec69668aac35e5ab7ce4e51ce04de6ab7f56a3996322b016f41c31d5a01
 
 %if 0%{?fedora}
 %global p7zip 1
@@ -10,7 +10,7 @@ ExcludeArch: %{ix86}
 
 Name:    ark
 Summary: Archive manager
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # icons are LGPL-3.0-only

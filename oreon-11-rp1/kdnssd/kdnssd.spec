@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 82c091819ac42188b7032138068759a56cf66fc06f3a9a3fe0195f9ecf943edb
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    kdnssd
 Summary: KDE Network Monitor for DNS-SD services (Zeroconf)
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND LGPL-2.0-only

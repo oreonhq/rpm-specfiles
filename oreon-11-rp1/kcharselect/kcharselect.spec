@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 376a31bf03ea2d6a231fdc012c793f608f48c0172e3543b84a44e0e9b87a6651
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kcharselect
 Summary: Character selector 
-Version: 26.03.80
+Version: 26.04.3
 Release: 2%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

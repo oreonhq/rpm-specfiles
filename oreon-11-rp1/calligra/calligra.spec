@@ -1,4 +1,4 @@
-%global source0_hash 193ce06bf7dc3225a8961123aa131c245d49519154bf095804dacaee06197685
+%global source0_hash 4c7fff9af90d7a5a2d3c5683b1fdc936c627459cd2f2cdb4fc3837822c52b345
 
 %bcond pstoedit 1
 # used only in RDF; Soprano has not been updated since Qt4
@@ -10,7 +10,7 @@
 #global external_lilypond_fonts 1
 
 Name:    calligra 
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: An integrated office suite
 

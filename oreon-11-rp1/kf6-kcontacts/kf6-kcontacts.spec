@@ -1,13 +1,13 @@
-%global source0_hash dd8d6dd045b0fd71c7ce3fc18bb15b77ec8316e57f4d83ddae67f3a62b796efb
+%global source0_hash 389d6128f18bee9113844615f535eeb870605f6fce968ca5c18d85a22478b8a2
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 %global framework kcontacts
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release: 1%{?dist}
 Summary: The KContacts Library
 

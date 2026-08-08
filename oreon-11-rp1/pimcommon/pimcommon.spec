@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 2a04a6e2514d98dea977ebb4c6f091ca6bb99404136cbee0011f19ffb711b2cf
 
 Name:    pimcommon
-Version: 26.04.2
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: PIM common libraries
 

@@ -1,13 +1,13 @@
-%global source0_hash 75a43775ef03cb0c577c70d9605203789b3c75b786efa17a2e8c286d0c55fb93
+%global source0_hash d7f4048860ef00bc5d135e284dc6b1307d03199c2c13020994b17e38e3741f5c
 
 %global framework kbookmarks
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon for bookmarks manipulation
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-only AND LicenseRef-KDE-Accepted-LGPL

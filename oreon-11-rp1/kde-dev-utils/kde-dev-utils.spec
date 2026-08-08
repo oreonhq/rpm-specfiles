@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fd03e4a4e9749206053d81b71d3a3b47081df3c570cb8ec4f4bf18e8eb28a2d6
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kde-dev-utils
 Summary: Utilities for developers using KDE
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: LGPL-2.0-only AND LGPL-3.0-only

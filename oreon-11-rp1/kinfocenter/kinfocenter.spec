@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b82f7fae6941ab9e0327a0579ada51b12ad3c5a4fa5fcd8272c70aea09a1ff23
 
 %global stable_kf6 stable
 
@@ -6,7 +6,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kinfocenter
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: KDE Info Center
 

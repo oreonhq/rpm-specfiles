@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 04b9b641eb6fdcd07c77299c1f0c4c4803a36014e5cca8f326e28e3a5a31e43c
 
 %global stable_kf6 stable
 
@@ -10,7 +10,7 @@
 ExcludeArch: %{ix86}
 
 Name:           audiotube
-Version:        26.03.80
+Version:        26.04.3
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash d8d761c78c4ea51eb7e2b9342f10fbe0b46d4cedfeeeb5150c9d387b2eb79d03
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 2
+%global bug_ver_kf6 4
 %global qt6_minver 6.6.0
 %global kf6_minver 6.5.0
 
@@ -13,7 +13,7 @@
 %global _hardened_build 1
 
 Name:           plasma-setup
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary:        Initial setup for systems using KDE Plasma
 License:        (GPL-2.0-or-later or GPL-3.0-or-later) and GPL-2.0-or-later and GPL-3.0-or-later and (LGPL-2.0-or-later or LGPL-3.0-or-later) and (LGPL-2.1-or-later or LGPL-3.0-or-later) and LGPL-2.1-or-later and BSD-2-Clause and CC0-1.0
@@ -21,13 +21,6 @@ URL:            https://invent.kde.org/plasma/%{name}
 
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
-
-# Backported changes
-
-# Proposed changes
-# https://invent.kde.org/plasma/plasma-setup/-/merge_requests/101
-# https://bugzilla.redhat.com/show_bug.cgi?id=2453216
-Patch503:       101.patch
 
 # Downstream only changes
 Patch1001:      plasma-setup-load-oreon-wallpaper.patch

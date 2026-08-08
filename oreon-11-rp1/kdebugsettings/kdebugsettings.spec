@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 13ee5dbf92fbb9d7a037e7af0d4d8e8282191545bedc4843434ca9a38caedee9
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kdebugsettings
 Summary: Configure debug output from Qt6 applications
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

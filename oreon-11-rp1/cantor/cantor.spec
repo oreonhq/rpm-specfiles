@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f0e9734410070b6ecb54dfe042862405b4ef01d65533c0be0386d13b9fdf7250
 
 %global stable_kf6 stable
 
@@ -29,7 +29,7 @@
 
 Name:    cantor
 Summary: KDE Frontend to Mathematical Software
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

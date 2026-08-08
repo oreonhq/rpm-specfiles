@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d5736efad2344a6936ee18367e0cd2c1b0f98cbb6ed89106144a0a7d5047ecf7
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kturtle
 Summary: Educational Programming Environment 
-Version: 26.04.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

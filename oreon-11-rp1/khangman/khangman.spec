@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c5be0a733e910682d0d67a6db3236be2cbad42da16c3e7c1a77096ab3d2b81f0
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    khangman
 Summary: Hangman game 
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

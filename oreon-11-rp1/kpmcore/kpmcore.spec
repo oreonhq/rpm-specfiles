@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 08018d9465fccaf9f56ee8178f2aa3419d6bcfef667308bb558e387516216e6d
 
 %global kf6min 5.240.0
 %global qt6min 6.5.0
 %global sover 13
 
 Name:           kpmcore
-Version:        26.04.2
+Version:        26.04.3
 Release:        1%{?dist}
 Summary:        Library for managing partitions by KDE programs
 License:        GPL-3.0-or-later AND MIT AND CC-BY-4.0 AND CC0-1.0

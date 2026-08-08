@@ -1,13 +1,13 @@
-%global source0_hash 0c2ce39f110e12ff0882c725bee7455b9085489c12d31eb4b3164b150fb8de24
+%global source0_hash fbdbab6dfdc16be97440a6e8032f30d1571eb72489c3d36801df6fb419dd4563
 
 %global framework kparts
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for KParts
 

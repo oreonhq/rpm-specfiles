@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash cecbbb130ef203b3bc53b758bb0635b4c9843a914056d7268554e3693c589cbc
 
 %global stable_kf6 stable
 %global majmin_ver_kf6 26.03
@@ -6,7 +6,7 @@
 
 Name:    parley
 Summary: Vocabulary Trainer
-Version: 26.03.80
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bb4b955e2f52a832f221d3fb7182cebf920653a0ad1e3201abd29f134d4c33f3
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    xdg-desktop-portal-kde
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 Summary: KDE backend implementation for xdg-desktop-portal
 

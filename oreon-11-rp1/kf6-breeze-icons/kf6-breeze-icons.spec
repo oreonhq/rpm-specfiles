@@ -1,4 +1,4 @@
-%global source0_hash bc8c2337802837ff1809269a8e4c4311b93e7e90c78ab4fe2a86cf5300ffd414
+%global source0_hash 45de8138ead0f3ff24de886fbe61d588ecd7f66dde6f8cf6f2906279254d094d
 
 # If KF7 still provides these icons, then their installation should then
 # be disabled in KF6 builds.
@@ -9,12 +9,12 @@
 %global framework breeze-icons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.27
+%global majmin_ver_kf6 6.28
 
 
 Name:    kf6-%{framework}
 Summary: Breeze icon theme library
-Version: 6.27.0
+Version: 6.28.0
 Release:        1%{?dist}
 
 # skladnik.svg is CC-BY-SA-4.0

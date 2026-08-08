@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 8f187850ea0cd46e545b33787619fa28f682388e4b828d090a0692874a7c9955
 
 %global stable_kf6 stable
 
 
 Name:    libplasma
 Summary: Plasma is the foundation of the KDE user interface (v6)
-Version:        6.7.2
+Version:        6.7.4
 Release: 1%{?dist}
 
 # LicenseRef-QtCommercial is optional upstream; omitted here.
