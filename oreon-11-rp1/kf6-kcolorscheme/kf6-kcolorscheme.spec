@@ -18,9 +18,9 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
 BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  pkgconfig(xkbcommon)

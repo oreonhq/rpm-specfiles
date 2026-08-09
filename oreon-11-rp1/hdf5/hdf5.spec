@@ -1,3 +1,4 @@
+%global source2_hash 284992575afb8755dd4ede8f75e2b83ac8d39644551665d94f7a0339f9eebca5
 %global source0_hash d4d4705cac2ca9da36179f523fd9f998f5e42caf8228c2458fa0f50a01bc769a
 
 # No more Java on i686
@@ -23,7 +24,7 @@ Source0: https://github.com/HDFGroup/hdf5/archive/hdf5_%{version}/hdf5-%{version
 
 Source1: h5comp
 # For man pages
-Source2: http://ftp.us.debian.org/debian/pool/main/h/hdf5/hdf5_1.14.4.3+repack-1~exp3.debian.tar.xz
+Source2: http://deb.debian.org/debian/pool/main/h/hdf5/hdf5_1.14.5+repack-3.debian.tar.xz
 # Fix java build
 Patch0: hdf5-build.patch
 # Get size of __float128
@@ -179,6 +180,7 @@ HDF5 parallel openmpi static libraries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -a 2 -n %{name}-%{name}_%{version} -p1
 

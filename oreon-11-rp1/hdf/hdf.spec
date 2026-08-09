@@ -149,7 +149,7 @@ cd build-static
 # Java requires shared libraries, fortran requires static
 
 # Temporary workaround for compiling on GCC-10
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
 export FCFLAGS="%{build_fflags} -fallow-argument-mismatch"
 export FFLAGS="%{build_fflags} -fallow-argument-mismatch"
 %endif

@@ -6,7 +6,7 @@
 %ifarch aarch64 armv7hl armv8l ppc64le s390x riscv64
 %bcond_with mingw
 %else
-%bcond_without mingw
+%bcond_with mingw
 %endif
 %else
 %bcond_with mingw

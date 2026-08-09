@@ -1,4 +1,4 @@
-%global source0_hash f451b24722828d43e8e032d2419467050ddce7bb72e4ac45559a5c114b9ba161
+%global source0_hash f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b
 
 %global srcname polib
 

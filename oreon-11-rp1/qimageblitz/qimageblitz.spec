@@ -39,9 +39,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %setup -q
 %patch -P100 -p1
+# cmake4 needs an explicit minimum
+sed -i '1i cmake_minimum_required(VERSION 3.5)' CMakeLists.txt
 
 %build
-%cmake %{?_cmake_skip_rpath}
+%cmake %{?_cmake_skip_rpath} -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
 
 %install

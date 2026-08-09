@@ -7,7 +7,7 @@ Summary: A C++ interface for cfitsio
 
 License: CFITSIO
 URL: http://heasarc.gsfc.nasa.gov/docs/software/fitsio/ccfits
-Source0: https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/ccfits/CCfits-2.7.tar.gz
+Source0: https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/ccfits/v2.7/CCfits-2.7.tar.gz
 Patch0: CCfits-removerpath.patch
 Patch1: cfitsio-path.patch
 

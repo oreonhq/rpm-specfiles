@@ -43,7 +43,6 @@ Requires: webserver
 Requires: which
 
 # for building docs
-BuildRequires: latexmk
 BuildRequires: make
 BuildRequires: perl-generators
 BuildRequires: perl(constant)
@@ -61,20 +60,6 @@ BuildRequires: perl(Pod::Simple)
 BuildRequires: perl(strict)
 BuildRequires: perl(warnings)
 BuildRequires: python3-sphinx
-BuildRequires: texlive-collection-latexrecommended
-BuildRequires: texlive-collection-basic
-BuildRequires: tex(fncychap.sty)
-BuildRequires: tex(framed.sty)
-BuildRequires: tex(multirow.sty)
-BuildRequires: tex(tgtermes.sty)
-BuildRequires: tex(threeparttable.sty)
-BuildRequires: tex(titlesec.sty)
-BuildRequires: tex(wrapfig.sty)
-BuildRequires: tex(capt-of.sty)
-BuildRequires: tex(eqparbox.sty)
-BuildRequires: tex(needspace.sty)
-BuildRequires: tex(tabulary.sty)
-BuildRequires: tex(upquote.sty)
 
 %package doc
 Summary: Bugzilla documentation
@@ -190,7 +175,7 @@ grep -rl '/usr/lib/sendmail\b' contrib docs \
 
 %build
 # Build docs
-docs/makedocs.pl --with-pdf
+docs/makedocs.pl
 # Remove the execute bit from files that don't start with #!
 for file in `find -type f -perm /111`; do
   if head -1 $file | grep -E -v '^\#!' &>/dev/null; then
@@ -261,7 +246,6 @@ popd > /dev/null)
 %defattr(-,root,apache,-)
 %{bzinstallprefix}/bugzilla/docs/en/html
 %{bzinstallprefix}/bugzilla/docs/en/images
-%{bzinstallprefix}/bugzilla/docs/en/pdf
 %{bzinstallprefix}/bugzilla/docs/en/txt
 %{bzinstallprefix}/bugzilla/docs/en/rst
 %{bzinstallprefix}/bugzilla/docs/style.css

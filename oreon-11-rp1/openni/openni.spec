@@ -1,4 +1,4 @@
-%global source0_hash 2de0a0beb3879f4fe9a7effa97403363a1a2bfb771d37908905290faf686bda3
+%global source0_hash fd1c15c6334bb9d69733bd69c76f19f5544cce65f61bc7710085c63d167a6e52
 
 %global commit 1e9524ffd759841789dadb4ca19fb5d4ac5820e7
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
@@ -27,7 +27,7 @@ URL:            http://www.openni.org
 # rm -rf Platform/Win32 Platform/Android Platform/ARC
 # cd ..
 # tar czf openni-%{version}-%{shortcommit}-fedora.tar.gz OpenNI-%{commit}
-Source0:        openni-%{version}-%{shortcommit}-fedora.tar.gz
+Source0:        https://github.com/OpenNI/OpenNI/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 Source1:        libopenni.pc
 Patch0:         openni-1.5.7.10-willow.patch
 Patch1:         openni-1.5.7.10-fedora.patch
@@ -98,6 +98,7 @@ The %{name}-examples package contains example programs for OpenNI.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n OpenNI-%{commit}
+rm -rf Platform/Win32 Platform/Android Platform/ARC
 %patch -P0 -p1 -b .willow
 %patch -P1 -p1 -b .fedora
 %patch -P2 -p1 -b .disable-sse

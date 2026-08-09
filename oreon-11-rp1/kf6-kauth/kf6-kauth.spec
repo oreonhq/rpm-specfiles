@@ -25,9 +25,8 @@ BuildRequires:  polkit-qt6-1-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qttools-devel
 BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6WindowSystem)
-
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
 Requires:  kf6-filesystem
 
 %description

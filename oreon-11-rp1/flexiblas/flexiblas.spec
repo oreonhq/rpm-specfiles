@@ -1,3 +1,4 @@
+%global _smp_mflags -j1
 %global source0_hash none
 
 %bcond system_lapack 0
@@ -306,7 +307,6 @@ find %{buildroot}%{_sysconfdir}/%{name}*.d/* -type f \
     -exec sh -c 'mv $0 $(dirname $0)/$(basename $0 | tr [A-Z] [a-z])' {} \;
 
 %check
-%global _smp_mflags -j1
 # limit the number of threads
 # MAX_CORES=10; CORES=$(nproc)
 # export OMP_NUM_THREADS=$((CORES > MAX_CORES ? MAX_CORES : CORES))

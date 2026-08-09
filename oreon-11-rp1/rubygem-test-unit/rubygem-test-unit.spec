@@ -1,3 +1,4 @@
+%global source1_hash c05e7356f4173236cc1491cad216ac8945bdcb10b0f274039054c2fed0d59136
 %global source0_hash 6133a9754b3aad7a422e23c1d746f6165074df45dd5740a6ededa5902304561b
 
 %global	gem_name	test-unit
@@ -20,7 +21,7 @@ License:	((BSD-2-Clause OR Ruby) AND Python-2.0.1) AND (BSD-2-Clause OR Ruby)
 URL:		http://test-unit.github.io/
 
 Source0:	http://rubygems.org/gems/%{gem_name}-%{version}.gem
-Source1:	%{gem_name}-%{version}-tests.tar.gz
+Source1:	https://github.com/test-unit/test-unit/archive/refs/tags/%{version}.tar.gz
 # Source1 is created by bash %%SOURCE2
 Source2:	test-unit-create-missing-files.sh
 
@@ -55,8 +56,13 @@ This package contains documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
-%setup -q -n %{gem_name}-%{version} -a 1
+%setup -q -n %{gem_name}-%{version}
+tar -xzf %{SOURCE1}
+rm -rf test
+mv %{gem_name}-%{version}/test .
+rm -rf %{gem_name}-%{version}
 
 mv ../%{gem_name}-%{version}.gemspec .
 
