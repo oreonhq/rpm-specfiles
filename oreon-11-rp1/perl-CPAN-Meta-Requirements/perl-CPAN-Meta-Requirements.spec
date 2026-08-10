@@ -5,7 +5,7 @@
 
 Name:           perl-CPAN-Meta-Requirements
 Version:        2.145
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Set of version requirements for a CPAN dist
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-Meta-Requirements
@@ -31,7 +31,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(Test::More) >= 0.88
 # Extra Tests (not run when bootstrapping due to circular build dependencies)
-%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test} || (0%{?oreon} >= 11)
+%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test}
 BuildRequires:  findutils
 BuildRequires:  glibc-langpack-en
 BuildRequires:  perl(blib)
@@ -89,7 +89,7 @@ perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 UNINST=0
 
 %check
 make test AUTHOR_TESTING=1
-%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test} || (0%{?oreon} >= 11)
+%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test}
 LANG=en_US make test TEST_FILES="$(echo $(find xt/ -name '*.t'))"
 %endif
 

@@ -4,7 +4,7 @@
 # python3-zope-interface, which requires this package.  Build in bootstrap
 # mode to avoid the circular dependency.
 %bcond_with bootstrap
-%bcond_without docs
+%bcond_with docs
 
 # Install doc subpackage files into the main package doc directory
 %global _docdir_fmt %{name}

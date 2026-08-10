@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d282fa6481a5b85f71e36e8bad4cfa938cc8eaac4c42ffa27f9203ac634813f4
 
 Name:           libfakekey
 Version:        0.3
@@ -7,8 +7,8 @@ Release:        %autorelease
 Summary:        Library for converting characters to X key-presses
 
 License:        LGPL-2.0-or-later
-URL:            https://git.yoctoproject.org/cgit/cgit.cgi/libfakekey
-Source:         %{url}/snapshot/libfakekey-%{version}.tar.bz2
+URL:            https://git.yoctoproject.org/libfakekey
+Source:         https://sources.voidlinux.org/libfakekey-%{version}/libfakekey-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  make

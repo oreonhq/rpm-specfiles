@@ -1,4 +1,5 @@
-%global source0_hash fcc6a14f8478a14061d0caa66703810c0b4fc851c63afde10a117b700dc1fcba
+%global source1_hash fcc6a14f8478a14061d0caa66703810c0b4fc851c63afde10a117b700dc1fcba
+%global source0_hash 8892439e5570091965aaffe30b08631fdf7ca7f81f6495b4648f0950d7ea7963
 
 # Parallel build broken
 %global _smp_mflags -j1
@@ -21,7 +22,7 @@ URL:            https://github.com/libkml/libkml
 Source0:        https://github.com/libkml/libkml/archive/%{version}/libkml-%{version}.tar.gz
 # TODO: Port to minizip-2.x, meanwhile bundle version 1.3.0
 # wget -O minizip-1.3.0.tar.gz http://sourceforge.net/projects/libkml-files/files/1.3.0/minizip.tar.gz/download
-Source1:        minizip-1.3.0.tar.gz
+Source1:        https://downloads.sourceforge.net/project/libkml-files/1.3.0/minizip.tar.gz#/minizip-1.3.0.tar.gz
 
 ## See https://github.com/libkml/libkml/pull/239
 Patch0:         0001-Fix-build-failure-due-to-failure-to-convert-pointer-.patch
@@ -154,6 +155,7 @@ MinGW Windows Python 3 %{name} library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -a1
 

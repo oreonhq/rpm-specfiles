@@ -105,8 +105,8 @@ find . -name "*.jar" -delete
 ln -s $(build-classpath hamcrest/core) java/lib/hamcrest-core.jar
 ln -s $(build-classpath junit) java/lib/junit.jar
 # Fix test output
-junit_ver=$(sed -n '/<version>/{s/^.*>\([0-9]\.[0-9.]*\)<.*/\1/;p;q}' /usr/share/maven-poms/junit.pom)
-sed -i -e "s/JUnit version .*/JUnit version $junit_ver/" java/test/testfiles/JUnit-*.txt
+# junit output prints literal "version (number)" on newer java stacks
+sed -i -e "s/JUnit version .*/JUnit version version (number)/" java/test/testfiles/JUnit-*.txt
 %endif
 ln -s $(build-classpath slf4j/api) java/lib/slf4j-api-1.7.33.jar
 ln -s $(build-classpath slf4j/nop) java/lib/ext/slf4j-nop-1.7.33.jar

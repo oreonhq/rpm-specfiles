@@ -1,0 +1,25 @@
+From cf3cba84a7aecdbe596e21c71a506b2ce580c28d Mon Sep 17 00:00:00 2001
+From: Maxwell G <maxwell@gtmx.me>
+Date: Thu, 18 Jun 2026 20:20:04 -0500
+Subject: [PATCH 1/2] Fix curl beta version parsing
+
+---
+ yt_dlp/downloader/external.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/yt_dlp/downloader/external.py b/yt_dlp/downloader/external.py
+index 2f127c0..2c62f1d 100644
+--- a/yt_dlp/downloader/external.py
++++ b/yt_dlp/downloader/external.py
+@@ -209,7 +209,7 @@ def available(cls, path=None):
+             return False
+ 
+         cls.exe = path
+-        cls._curl_version = version_tuple(parts[1])
++        cls._curl_version = version_tuple(parts[1], lenient=True)
+         return path
+ 
+     def _make_cmd(self, tmpfilename, info_dict):
+-- 
+2.54.0
+

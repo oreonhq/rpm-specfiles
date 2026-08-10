@@ -48,10 +48,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags}
 
 %install
-DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}"
 %find_lang %{name} --all-name --with-man --with-qt
 
 %files -f %{name}.lang

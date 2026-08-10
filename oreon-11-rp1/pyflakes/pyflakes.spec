@@ -1,4 +1,4 @@
-%global source0_hash 535cb795da5d1672783d0c6e43649880e9b2be4d79456a743d4711029ede00d8
+%global source0_hash 926142efed6834d8dec696b57eec42fbc2aa1c293222e2e97894ca2738fc3bd9
 
 %global desc %{expand: \
 Pyflakes is similar to PyChecker in scope, but differs in that it does\

@@ -1,4 +1,5 @@
 %global source0_hash 9f289d4a27cb94eaa4ecf91cdcdb2508ba38db655ba3f43e018f88e1750b8915
+%global pypi_name wrapt
 
 Name:           python-wrapt
 Version:        2.1.2
@@ -9,15 +10,9 @@ License:        BSD-2-Clause
 URL:            https://github.com/GrahamDumpleton/wrapt
 Source:         %{url}/archive/%{version}/wrapt-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l wrapt
-
 BuildRequires:  gcc
-
-# We bypass tox and instead use pytest directly; this is simpler and avoids the
-# need to patch out coverage analysis.
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-# See also [tool.uv.dev-dependencies] in pyproject.toml.
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  %{py3_dist pytest}
 
 %global common_description %{expand:
@@ -29,25 +24,28 @@ wrappers and decorator functions.}
 
 %package -n python3-wrapt
 Summary:        %{summary}
-
-# We stopped building documentation for Fedora 42; this can be removed after
-# Fedora 44.
 Obsoletes:      python-wrapt-doc < 1.16.0-8
 
 %description -n python3-wrapt %{common_description}
 
-%install -a
-# Including this file in binary distributions is not likely to be useful to
-# users; it is in the debugsource RPM anyway. It is not immediately obvious
-# what to suggest that upstream should do to avoid this.
-rm '%{buildroot}%{python3_sitearch}/wrapt/_wrappers.c'
-sed -r -i 's@^.*/wrapt/_wrappers\.c$@# &@' %{pyproject_files}
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n wrapt-%{version} -p1
 
-%check -a
-# This file contains mypy typechecking tests:
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files wrapt
+rm -f '%{buildroot}%{python3_sitearch}/wrapt/_wrappers.c'
+sed -r -i 's@^.*/wrapt/_wrappers\.c$@# &@' %{pyproject_files} || :
+
+%check
 ignore="${ignore-} --ignore=tests/conftest.py"
-
 %pytest ${ignore-} -v
 WRAPT_DISABLE_EXTENSIONS=true %pytest ${ignore-} -v
 

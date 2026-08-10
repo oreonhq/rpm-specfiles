@@ -18,6 +18,7 @@ Summary:        Most comprehensive OpenSSL module in the Lua universe
 License:        MIT
 URL:            https://github.com/wahern/%{luapkgname}
 Source0:        https://github.com/wahern/%{luapkgname}/archive/rel-%{version}/%{name}-%{version}.tar.gz
+Patch0:         luaossl-lua55.patch
 
 Patch1:         openssl-3-compat.patch
 
@@ -61,7 +62,7 @@ for the Lua Programming Language
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q -n %{luapkgname}-rel-%{version}
+%autosetup -p1 -n %{luapkgname}-rel-%{version}
 
 %patch -P1 -p1
 

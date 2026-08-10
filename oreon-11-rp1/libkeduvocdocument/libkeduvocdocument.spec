@@ -69,7 +69,7 @@ export CTEST_OUTPUT_ON_FAILURE=1
 # FIXME/TODO: make macros better to not have to do this when using xvfb-run
 echo "%ctest" > ./rpm-check.sh
 chmod +x ./rpm-check.sh
-xvfb-run -a \
+xvfb-run -f ${XDG_RUNTIME_DIR:-/tmp}/.%{name}-xvfb.auth -a \
 ./rpm-check.sh
 %endif
 

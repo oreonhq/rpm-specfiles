@@ -1,13 +1,13 @@
-%global source0_hash 60476b5e7ad764142cf69af1f827e9f7af8883eae3cbd3faa6d1a42d635ee282
+%global source0_hash e5c96840ba21e7afa6e0635b21cc117552898b14628d9555f2a600c77884747d
 
 Name:    ksanecore
 Summary: Library providing logic to interface scanners
-Version: 25.12.3
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD and LGPLv2.1-only and LGPLv3.0-only
 URL:     https://invent.kde.org/libraries/ksanecore
-Source0: http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0: https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: cmake
 BuildRequires: extra-cmake-modules

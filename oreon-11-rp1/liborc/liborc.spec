@@ -1,4 +1,4 @@
-%global source0_hash 584dfe2a4202946178fd8fc7d1239be7805b9ed4596ab2042dee739e7880992b
+%global source0_hash 4214bfc8e01316305e915a3bd7d2675bf3b95d79243aa5fb6c471ea0765add8e
 
 Summary: Library for producing small, fast columnar storage for Hadoop workloads
 Name:    liborc

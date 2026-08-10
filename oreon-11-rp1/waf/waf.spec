@@ -1,4 +1,4 @@
-%global source0_hash e42a4cf7f7d57939a02490a1135a63845c4752eed35653b566132ddf2070bb7f
+%global source0_hash 4a47a431b86d5c42fa23b8474aaf752384dcaed65fe9e6aa1f518c103d38a7d1
 
 Name:           waf
 Version:        2.1.9
@@ -11,7 +11,7 @@ URL:            https://waf.io/
 # Original tarfile can be found at
 # https://waf.io/waf-%%{version}.tar.bz2
 # We remove waf logos, licensed CC BY-NC
-Source:         waf-%{version}.stripped.tar.bz2
+Source:         https://waf.io/waf-%{version}.tar.bz2
 Source1:        unpack_wafdir.py
 # also search for waflib in /usr/share/waf
 Patch0:         waf-2.0.18-libdir.patch

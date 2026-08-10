@@ -5,7 +5,7 @@
 Name:    libkdcraw
 Summary: A C++ interface around LibRaw library
 Version: 25.12.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later
 URL:     https://invent.kde.org/graphics/%{name}
@@ -20,7 +20,7 @@ BuildRequires: gettext
 BuildRequires: kf6-rpm-macros
 BuildRequires: extra-cmake-modules
 BuildRequires: cmake(Qt6Gui)
-BuildRequires: pkgconfig(libraw) >= 0.15
+BuildRequires: pkgconfig(libraw) >= 0.22
 
 Requires: kf6-filesystem
 

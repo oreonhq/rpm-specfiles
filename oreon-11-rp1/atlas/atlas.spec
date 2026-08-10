@@ -352,7 +352,7 @@ test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "o
 
 cp %{SOURCE2} doc
 tar -xJf %{SOURCE12} debian/archdefs
-find debian/archdefs -type f \( -name '*.tgz' -o -name '*.tar.bz2' \) -exec cp -t CONFIG/ARCHS/ {} +
+find debian/archdefs -type f \( -name '*.tgz' -o -name '*.tar.bz2' \) -exec cp -n -t CONFIG/ARCHS/ '{}' +
 rm -rf debian
 
 %ifarch %{arm}

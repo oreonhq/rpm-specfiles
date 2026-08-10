@@ -54,3 +54,12 @@ ln -sfr %{buildroot}%{nodejs_sitelib}/%{npm_name}/bin/yarn.js %{buildroot}%{_bin
 sed -e "s|^#!/usr/bin/env node$|#!/usr/bin/node|" \
     -i %{buildroot}%{nodejs_sitelib}/%{npm_name}/bin/yarn.js
 
+%files
+%doc README.md
+%license LICENSE
+%{_bindir}/yarnpkg
+%{_bindir}/yarn
+%{nodejs_sitelib}/%{npm_name}/
+
+%changelog
+%autochangelog

@@ -86,17 +86,6 @@ use the "test" feature of the "%{crate}" crate.
 %files       -n %{name}+test-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+wincon-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+wincon-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "wincon" feature of the "%{crate}" crate.
-
-%files       -n %{name}+wincon-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }

@@ -1,13 +1,13 @@
-%global source0_hash none
+%global source0_hash 7c7ed8474958337e4df5bb57ea5176ad0365004cbb98b621765bc4606a10d86b
 
 Name:           cln
-Version:        1.3.6
+Version:        1.3.7
 Release:        10%{?dist}
 Summary:        Class Library for Numbers
 
 License:        GPL-2.0-or-later
 URL:            http://www.ginac.de/CLN/
-Source0:        http://www.ginac.de/CLN/%{name}-%{version}.tar.bz2
+Source0:        https://www.ginac.de/CLN/%{name}-%{version}.tar.bz2
 
 BuildRequires:  gcc-c++
 BuildRequires:  gmp-devel

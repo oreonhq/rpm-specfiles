@@ -4,7 +4,7 @@
 
 # Not (yet) in EPEL10:
 # mingw{32,64}-{expat,libcharset,minizip}
-%bcond mingw %{undefined el10}
+%bcond_with mingw
 
 Name:           freexl
 Version:        2.0.0

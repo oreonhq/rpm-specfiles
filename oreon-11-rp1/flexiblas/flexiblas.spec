@@ -1,3 +1,4 @@
+%global _lto_cflags %{nil}
 %global _smp_mflags -j1
 %global source0_hash none
 

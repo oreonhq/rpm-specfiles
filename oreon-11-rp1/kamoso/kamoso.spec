@@ -97,7 +97,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.kamoso.appdata.xml
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.kamoso.desktop
 %if 0%{?tests}
-xvfb-run -a bash -c "%ctest"
+xvfb-run -f ${XDG_RUNTIME_DIR:-/tmp}/.%{name}-xvfb.auth -a bash -c "%ctest"
 %endif
 
 

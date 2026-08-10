@@ -8,7 +8,7 @@ Summary: Library for parsing and evaluating OSM opening hours expressions
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/libraries/%{name}
 
-Source0: https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0: https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++

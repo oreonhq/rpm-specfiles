@@ -87,7 +87,10 @@ cd build
 make VERBOSE=1 DESTDIR=$RPM_BUILD_ROOT install
 cd ..
 
-chrpath --delete ${RPM_BUILD_ROOT}%{_libdir}/lib*.so.*
+for f in ${RPM_BUILD_ROOT}%{_libdir}/lib*.so.*; do
+  [ -e "$f" ] || continue
+  chrpath --delete "$f" || :
+done
 
 
 %files

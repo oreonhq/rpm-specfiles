@@ -50,6 +50,7 @@ BuildRequires: cmake(Qt6Core5Compat)
 BuildRequires: cmake(Qt6Qml)
 
 BuildRequires: cmake(Plasma)
+BuildRequires: cmake(KF6Declarative)
 
 BuildRequires: cmake(packagekitqt6)
 

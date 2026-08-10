@@ -33,13 +33,6 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %{summary}.
 
 
-%package        doc
-Summary:        Developer Documentation files for %{name}
-Obsoletes:      kweathercore-docs < 0.8.0-4
-BuildArch:      noarch
-
-%description    doc
-Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -69,12 +62,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_libdir}/cmake/KWeatherCore/
 %{_kf6_libdir}/libKWeatherCore.so
 %{_kf6_archdatadir}/mkspecs/modules/qt_KWeatherCore.pri
-%{_qt6_docdir}/KWeatherCore.tags
-
-%files doc
-%{_qt6_docdir}/KWeatherCore.qch
-
-
 %changelog
 %autochangelog
 

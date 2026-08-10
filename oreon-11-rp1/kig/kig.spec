@@ -1,7 +1,7 @@
 %global source0_hash e357e5e890bd95a1a44d0d5be8ba8eec8745e018dd4e5291f778b962d1f15ee0
 
-%global _python3_include %(%{__python3} -Ic "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
-%global _python3_lib /usr/%{_lib}/lib%(basename %{_python3_include}).so
+%global _python3_include %(%{__python3} -c "import sysconfig; print(sysconfig.get_path('include'))")
+%global _python3_lib %{_libdir}/libpython%{python3_version}.so
 
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
@@ -80,7 +80,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if 0%{?fedora} || 0%{?rhel} >= 9
   -DBoostPython_LIBRARIES="%{_python3_lib};%{_libdir}/libboost_python%{python3_version_nodots}.so"
 %else
-  -DBoostPython_LIBRARIES="%{_python3_lib};%{_libdir}/libboost_python3.so"
+  -DBoostPython_LIBRARIES="%{_python3_lib};%{_libdir}/libboost_python%{python3_version_nodots}.so"
 %endif
 
 %cmake_build

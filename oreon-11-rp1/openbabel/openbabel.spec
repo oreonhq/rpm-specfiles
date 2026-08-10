@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c97023ac6300d26176c97d4ef39957f06e68848d64f1a04b0b284ccff2744f02
 
 %{!?perl_vendorarch:%global perl_vendorarch %(eval "`perl -V:installvendorarch`"; echo $installvendorarch)}
 
@@ -20,7 +20,7 @@ Release: 47%{?dist}
 Summary: Chemistry software file format converter
 License: GPL-2.0-only
 URL: https://openbabel.org/
-Source0: https://github.com/openbabel/openbabel/archive/openbabel-openbabel-%(echo %{version} | tr '.' '-').tar.gz
+Source0: https://github.com/openbabel/openbabel/archive/refs/tags/openbabel-%(echo %{version} | tr '.' '-').tar.gz
 Source1: obgui.desktop
 Source2: openbabel-inchi-license-lgpl-2.1.txt
 

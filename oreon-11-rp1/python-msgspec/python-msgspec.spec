@@ -1,4 +1,4 @@
-%global source0_hash 1412dd9e1f1fbd12420a4dd25419a2e8772bf35416bbc6d43c5fd7dde3b74fdd
+%global source0_hash 33961077a37830c54fa3108bd226a9d7a09b91ff82ef7b976a371039b54b6bc7
 
 %global debug_package %{nil}
 %global pypi_name msgspec

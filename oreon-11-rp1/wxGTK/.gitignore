@@ -1,1 +1,4 @@
-/wxGTK-*
+/wxGTK-*.tar.*
+/wxWidgets-*.tar.*
+!/*.patch
+!/wx-config

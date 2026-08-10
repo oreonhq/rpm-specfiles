@@ -49,7 +49,7 @@ Summary:       Library files for kjournald
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n kjournald-26.04.1
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 # Building on Qt 6.9.1 crashed the qml compiler. This is a (...temporary?) workaround.

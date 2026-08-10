@@ -51,11 +51,6 @@ Requires:       cmake(QGpgmeQt6)
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package        doc
-Summary:        Developer Documentation files for %{name}
-BuildArch:      noarch
-%description    doc
-Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
@@ -83,11 +78,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_libdir}/cmake/KPim6Libkleo/
 %{_kf6_datadir}/KPim6Libkleo/
 %{_includedir}/KPim6/Libkleo/
-%{_qt6_docdir}/*.tags
- 
-%files doc
-%{_qt6_docdir}/*.qch
-
 %changelog
 %autochangelog
 

@@ -51,7 +51,7 @@ BuildRequires: cmake(KF6JobWidgets)
 BuildRequires: cmake(KF6KCMUtils)
 BuildRequires: cmake(KF6KIO)
 BuildRequires: cmake(KF6KirigamiAddons)
-BuildRequires: cmake(KF6ModemManagerQt)
+BuildRequires: cmake(KF6ModemManagerQt) >= 6.28.0
 BuildRequires: cmake(KF6NetworkManagerQt)
 BuildRequires: cmake(KF6Notifications)
 BuildRequires: cmake(KF6Package)

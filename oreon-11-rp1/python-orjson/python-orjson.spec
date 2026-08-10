@@ -1,4 +1,4 @@
-%global source0_hash dd9ddbf66815c2fd7ba078ac80a616bd511f70bb204a16708e1af2b8e57ceaff
+%global source0_hash 662ca58f2bc067ad91f88ffc8f657f2a95f61f6019ea01c00871b047020cbd18
 
 # SPDX-License-Identifier: MIT
 # License text: https://spdx.org/licenses/MIT.html
@@ -38,7 +38,7 @@ URL:            https://github.com/ijl/orjson
 # corresponding MIT license text), and some of which looks like it might have
 # at best unclear license status. Since the benchmark data is potentially
 # problematic, we would need to filter the GitHub archives with a script.
-Source0:        orjson-%{version}-filtered.tar.xz
+Source0:        https://github.com/ijl/orjson/archive/%{version}/orjson-%{version}.tar.gz
 # ./get_source ${COMMIT} (or ${TAG})
 Source1:        get_source
 
@@ -110,6 +110,7 @@ Provides:       bundled(yyjson) = 0.9.0
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n orjson-%{version}
+rm -rf data
 %cargo_prep
 
 # Remove unwind feature, which is not useful here: the comment above it says
