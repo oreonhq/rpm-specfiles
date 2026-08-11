@@ -2,7 +2,7 @@
 
 Name:    kmbox
 Version: 25.12.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: The KMbox Library
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later
@@ -40,7 +40,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{name}-%{version}
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 %install
@@ -55,10 +55,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/KPim6/KMbox
 %{_kf6_libdir}/cmake/KPim6Mbox/
 %{_kf6_libdir}/libKPim6Mbox.so
-%{_qt6_docdir}/*.tags
 
 %files doc
-%{_qt6_docdir}/*.qch
 
 %changelog
 %autochangelog

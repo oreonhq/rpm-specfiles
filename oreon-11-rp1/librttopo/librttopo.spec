@@ -1,10 +1,10 @@
-%global source0_hash 2e2fcabb48193a712a6c76ac9a9be2a53f82e32f91a2bc834d9f1b4fa9cd879f
+%global source0_hash 60b49acb493c1ab545116fb0b0d223ee115166874902ad8165eb39e9fd98eaa9
 
 %bcond mingw    %{defined fedora}
 
 Name:           librttopo
 Version:        1.1.0
-Release:        19%{?dist}
+Release:        20%{?dist}
 Summary:        Create and manage SQL/MM topologies
 
 License:        GPL-2.0-or-later

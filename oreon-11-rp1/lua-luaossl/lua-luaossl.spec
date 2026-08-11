@@ -12,7 +12,7 @@
 
 Name:           lua-%{luapkgname}
 Version:        20200709
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Most comprehensive OpenSSL module in the Lua universe
 
 License:        MIT
@@ -28,7 +28,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  lua
 BuildRequires:  lua-devel
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 # BuildRequires:  compat-lua
 BuildRequires:  compat-lua-devel
 %endif
@@ -38,7 +38,7 @@ Requires:       lua(abi) = %{luaver}
 %description
 luaossl is a comprehensive binding to OpenSSL for Lua 5.1, 5.2, and later.
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 %package -n lua%{luacompatver}-%{luapkgname}
 Summary:        Most comprehensive OpenSSL module in the Lua universe
 Requires:       lua(abi) = %{luacompatver}
@@ -51,7 +51,7 @@ luaossl is a comprehensive binding to OpenSSL for Lua 5.1, 5.2, and later.
 Summary:        Documentation for OpenSSL Lua module
 BuildArch:      noarch
 Requires:       %{name} = %{version}
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 Requires:       lua%{luacompatver}-%{luapkgname} = %{version}
 %endif
 
@@ -64,14 +64,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -p1 -n %{luapkgname}-rel-%{version}
 
-%patch -P1 -p1
-
 %build
 export CFLAGS="%{?optflags} -fPIC"
 export LDFLAGS="%{?build_ldflags}"
 make LUA_APIS="%{luaver}" %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir}
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 make LUA_APIS="%{luacompatver}" %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} CFLAGS="$CFLAGS -I%{_includedir}/lua-%{luacompatver}"
 %endif
 
@@ -80,7 +78,7 @@ make DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir} install%{luaver}
 install -d -m 0755 %{buildroot}%{_pkgdocdir}
 install -p -m 0644 doc/luaossl.pdf %{buildroot}%{_pkgdocdir}/luaossl.pdf
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 make DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir} install%{luacompatver}
 %endif
 
@@ -90,7 +88,7 @@ make DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir} install%{luacompat
 %{lualibdir}/_openssl.so
 %license LICENSE
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 %files -n lua%{luacompatver}-%{luapkgname}
 %{luacompatpkgdir}/openssl
 %{luacompatpkgdir}/openssl.lua

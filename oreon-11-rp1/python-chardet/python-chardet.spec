@@ -70,20 +70,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n chardet-%{commit}
 rm -rf tests
 
-%generate_buildrequires -p
+%generate_buildrequires
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
+%pyproject_buildrequires
 
 
-%build -p
+%build
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
+%pyproject_wheel
 
 
-%install -a
+%install
+%pyproject_install
+%pyproject_save_files -l chardet
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE2}'
-
-
-# We cannot run the upstream tests because they would require data files with
-# problematic license status.
 
 
 %files -n python3-chardet -f %{pyproject_files}

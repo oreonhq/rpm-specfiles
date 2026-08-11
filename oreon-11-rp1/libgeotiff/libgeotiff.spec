@@ -1,6 +1,6 @@
 %global source0_hash c598d04fdf2ba25c4352844dafa81dde3f7fd968daa7ad131228cd91e9d3dc47
 
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 %bcond_with mingw
 %else
 %bcond_without mingw
@@ -8,7 +8,7 @@
 
 Name:          libgeotiff
 Version:       1.7.4
-Release:       5%{?dist}
+Release:       6%{?dist}
 
 Summary:       GeoTIFF format library
 License:       MIT

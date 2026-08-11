@@ -5,7 +5,7 @@
 
 Name:           abseil-cpp
 Version:        20260107.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        C++ Common Libraries
 
 # The entire source is Apache-2.0, except:

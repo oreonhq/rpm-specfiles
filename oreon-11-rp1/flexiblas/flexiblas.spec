@@ -1,5 +1,5 @@
 %global _lto_cflags %{nil}
-%global _smp_mflags -j1
+%global _smp_mflags -j4
 %global source0_hash none
 
 %bcond system_lapack 0
@@ -28,7 +28,7 @@
 
 Name:           flexiblas
 Version:        %{major_version}.%{minor_version}.%{patch_version}
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A BLAS/LAPACK wrapper library with runtime exchangeable backends
 
 # LGPL-3.0-or-later

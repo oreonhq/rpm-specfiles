@@ -1,4 +1,4 @@
-%global source0_hash 94b7cd8f9b1fb63341abf166d66d1264aa5136f6fc0f72d28ff9f8af1fcf3c0b
+%global source0_hash a0d7a444d4603fb3d62fa25ef678e544ef39fa7b3c9bd5d22f1a8c526152cdde
 
 # Testsuite needs root-privileges.
 %bcond_with     testsuite

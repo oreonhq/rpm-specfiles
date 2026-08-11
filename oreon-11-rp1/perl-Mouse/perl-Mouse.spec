@@ -3,10 +3,10 @@
 Name:           perl-Mouse
 Summary:        Moose minus the antlers
 Version:        2.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mouse
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Mouse-v%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SY/SYOHEX/Mouse-v%{version}.tar.gz
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

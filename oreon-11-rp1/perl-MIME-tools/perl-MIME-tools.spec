@@ -3,10 +3,10 @@
 Summary:	Modules for parsing and creating MIME entities in Perl
 Name:		perl-MIME-tools
 Version:	5.517
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/MIME-tools
-Source0:	https://cpan.metacpan.org/modules/by-module/MIME/MIME-tools-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/D/DS/DSKOLL/MIME-tools-%{version}.tar.gz
 Patch0:		MIME-tools-5.510-UTF8.patch
 BuildArch:	noarch
 # ================ Module Build ======================

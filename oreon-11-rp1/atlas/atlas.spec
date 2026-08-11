@@ -9,7 +9,7 @@ Version:        3.10.3
 %if "%{?enable_native_atlas}" != "0"
 %define dist .native
 %endif
-Release:        32%{?dist}
+Release:        33%{?dist}
 Summary:        Automatically Tuned Linear Algebra Software
 
 License:        BSD-3-Clause
@@ -363,7 +363,7 @@ sed -i -e 's,MYFLAGS =,MYFLAGS = -fpermissive,' CONFIG/src/Makefile
 # Generate lapack library
 mkdir lapacklib
 cd lapacklib
-ar x %{_libdir}/liblapack_pic.a
+ar x %{_libdir}/liblapack.a
 # Remove functions that have ATLAS implementations
 rm -f cgelqf.f.o cgels.f.o cgeqlf.f.o cgeqrf.f.o cgerqf.f.o cgesv.f.o cgetrf.f.o cgetri.f.o cgetrs.f.o clarfb.f.o clarft.f.o clauum.f.o cposv.f.o cpotrf.f.o cpotri.f.o cpotrs.f.o ctrtri.f.o dgelqf.f.o dgels.f.o dgeqlf.f.o dgeqrf.f.o dgerqf.f.o dgesv.f.o dgetrf.f.o dgetri.f.o dgetrs.f.o dlamch.f.o dlarfb.f.o dlarft.f.o dlauum.f.o dposv.f.o dpotrf.f.o dpotri.f.o dpotrs.f.o dtrtri.f.o ieeeck.f.o ilaenv.f.o lsame.f.o sgelqf.f.o sgels.f.o sgeqlf.f.o sgeqrf.f.o sgerqf.f.o sgesv.f.o sgetrf.f.o sgetri.f.o sgetrs.f.o slamch.f.o slarfb.f.o slarft.f.o slauum.f.o sposv.f.o spotrf.f.o spotri.f.o spotrs.f.o strtri.f.o xerbla.f.o zgelqf.f.o zgels.f.o zgeqlf.f.o zgeqrf.f.o zgerqf.f.o zgesv.f.o zgetrf.f.o zgetri.f.o zgetrs.f.o zlarfb.f.o zlarft.f.o zlauum.f.o zposv.f.o zpotrf.f.o zpotri.f.o zpotrs.f.o ztrtri.f.o 
 # Create new library

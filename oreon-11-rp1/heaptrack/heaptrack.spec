@@ -2,7 +2,7 @@
 
 Name:    heaptrack
 Version: 1.5.0
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: A heap memory profiler for Linux
 
 License: Apache-2.0 AND BSD-3-Clause AND BSL-1.0 AND GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND MIT
@@ -63,7 +63,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{name}-%{version} -p1
 
 %build
-%cmake_kf6 \
+%cmake_kf6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DHEAPTRACK_USE_QT6=1 \
 %if "%{?_lib}" == "lib64"
   %{?_cmake_lib_suffix64}

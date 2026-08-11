@@ -8,40 +8,19 @@ Summary:        The little ASGI library that shines
 License:        BSD-3-Clause
 URL:            https://www.starlette.io/
 Source:         https://github.com/encode/starlette/archive/%{version}/starlette-%{version}.tar.gz
-
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x full
-BuildOption(install):   -l starlette
+Patch:          python-starlette-CVE-2026-48710.patch
 
 BuildArch:      noarch
 
-# The file requirements.txt pins exact versions and contains many unwanted
-# dependencies, e.g. linters and typecheckers (see
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters).
-# It’s easier to maintain BuildRequires for testing manually than to heavily
-# patch or process the requirements file.
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  %{py3_dist pytest}
 BuildRequires:  %{py3_dist trio}
 BuildRequires:  %{py3_dist typing_extensions}
 
 %global common_description %{expand:
 Starlette is a lightweight ASGI framework/toolkit, which is ideal for building
-async web services in Python.
-
-It is production-ready, and gives you the following:
-
-  • A lightweight, low-complexity HTTP web framework.
-  • WebSocket support.
-  • In-process background tasks.
-  • Startup and shutdown events.
-  • Test client built on requests.
-  • CORS, GZip, Static Files, Streaming responses.
-  • Session and Cookie support.
-  • 100%% test coverage.
-  • 100%% type annotated codebase.
-  • Few hard dependencies.
-  • Compatible with asyncio and trio backends.
-  • Great overall performance against independent benchmarks.}
+async web services in Python.}
 
 %description %{common_description}
 
@@ -52,7 +31,21 @@ Summary:        %{summary}
 
 %pyproject_extras_subpkg -n python3-starlette full
 
-%check -a
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n starlette-%{version} -p1
+
+%generate_buildrequires
+%pyproject_buildrequires -x full
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files starlette
+
+%check
 %pytest -v
 
 %files -n python3-starlette -f %{pyproject_files}

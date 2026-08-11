@@ -7,16 +7,17 @@
 Summary: Library for accessing MusicBrainz servers
 Name: libmusicbrainz5
 Version: 5.1.0
-Release: 29%{?dist}
+Release: 30%{?dist}
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2
 URL: http://www.musicbrainz.org/
-Source0:        libmusicbrainz-%{version}.tar.gz
+Source0:        https://github.com/metabrainz/libmusicbrainz/releases/download/release-%{version}/libmusicbrainz-%{version}.tar.gz
 # Filed upstream as http://tickets.musicbrainz.org/browse/LMB-41
 Patch0:        doxygen.patch
 Patch1:        0001-Don-t-emit-errors-unless-compiled-for-debug.patch
 Patch2:        0002-libxml2-2-12.patch
-Patch3:        libmusicbrainz5-cmake-wildcards.patch
+Patch3:        0003-src-CMakelists.txt-do-not-use-wildcards-for-dependen.patch
+Patch4:        0004-Bump-minimum-CMake-version.patch
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires: cmake
@@ -47,6 +48,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch 1 -p1 -b .silence-warnings
 %patch 2 -p1 -b .libxml2
 %patch 3 -p1 -b .cmake-wildcards
+%patch 4 -p1 -b .cmake-min
 
 # omit "Generated on ..." timestamps that induce multilib conflicts
 # this is *supposed* to be the doxygen default in fedora these days, but

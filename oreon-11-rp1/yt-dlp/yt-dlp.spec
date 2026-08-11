@@ -32,7 +32,7 @@ BuildRequires:  %{py3_dist pytest}
 %endif
 
 # Needed for docs
-BuildRequires:  pandoc
+BuildRequires:  pandoc-cli
 BuildRequires:  make
 
 Requires:       yt-dlp+default = %{?epoch:%{epoch}:}%{version}-%{release}

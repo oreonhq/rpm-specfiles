@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 118%{?dist}
+Release: 119%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -7602,7 +7602,7 @@ rm -f dummy.*
 %endif
 
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118112
-export CFLAGS="$RPM_OPT_FLAGS -std=gnu17 -fno-strict-aliasing -Werror=format-security"
+export CFLAGS="$RPM_OPT_FLAGS -std=gnu17 -fno-strict-aliasing -Werror=format-security -Wno-error=int-conversion -Wno-error=incompatible-pointer-types -Wno-error=implicit-int -Wno-error=implicit-function-declaration"
 
 # -std=gnu++17 until icu is properly C++20 compatible
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9

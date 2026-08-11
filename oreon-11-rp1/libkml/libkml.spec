@@ -14,7 +14,7 @@
 
 Name:           libkml
 Version:        1.3.0
-Release:        56%{?dist}
+Release:        57%{?dist}
 Summary:        Reference implementation of OGC KML 2.2
 
 License:        BSD-3-Clause
@@ -163,7 +163,7 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 # Build bundled minizip
 pushd minizip
 (
-%cmake -DBUILD_SHARED_LIBS=OFF
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_SHARED_LIBS=OFF
 %cmake_build
 )
 
@@ -176,7 +176,7 @@ pushd minizip
 popd
 
 # Native build
-%cmake -DWITH_SWIG=ON -DWITH_PYTHON=ON \
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DWITH_SWIG=ON -DWITH_PYTHON=ON \
 %if %{with java}
   -DWITH_JAVA=ON -DJNI_INSTALL_DIR=%{_libdir}/%{name} \
 %endif

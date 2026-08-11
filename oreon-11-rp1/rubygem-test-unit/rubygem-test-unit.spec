@@ -1,5 +1,5 @@
 %global source1_hash c05e7356f4173236cc1491cad216ac8945bdcb10b0f274039054c2fed0d59136
-%global source0_hash 6133a9754b3aad7a422e23c1d746f6165074df45dd5740a6ededa5902304561b
+%global source0_hash 3c89d5ff0690a16bef9946156c4624390402b9d54dfcf4ce9cbd5b06bead1e45
 
 %global	gem_name	test-unit
 
@@ -12,7 +12,7 @@ Name:		rubygem-%{gem_name}
 # changes default progress style
 # (For 3.5.8 and 3.5.9, F-38 and below reverted this change)
 Version:	3.7.7
-Release:	2%{?dist}
+Release:	3%{?dist}
 # SPDX confirmed
 # lib/test/unit/diff.rb is under (BSD-2-Clause OR Ruby) AND Python-2.0.1
 # lib/test-unit.rb changed to BSD-2-Clause or Ruby (from 3.3.7)

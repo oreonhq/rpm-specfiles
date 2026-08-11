@@ -1,1 +1,4 @@
-/python-bcrypt-*
+*.tar.*
+*.tar
+*.tgz
+*.whl

@@ -15,6 +15,8 @@ License:        MIT
 URL:            https://crates.io/crates/clap
 Source:         %{crates_source}
 Patch:          clap-fix-metadata-auto.diff
+Patch:          0001-Replace-atty-with-std-io-IsTerminal.patch
+Patch:          0001-Fix-dangerous_implicit_autorefs-error-in-crate_autho.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 

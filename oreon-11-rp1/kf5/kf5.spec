@@ -1,6 +1,6 @@
 Name:    kf5
 Version: 5.116.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 5
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -28,7 +28,7 @@ Filesystem for KDE Frameworks 5.
 
 %package rpm-macros
 Summary: RPM macros for KDE Frameworks 5
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 Requires: cmake >= 3
 Requires: qt5-rpm-macros >= 5.11
 %else
@@ -59,7 +59,7 @@ mkdir -p %{buildroot}%{_datadir}/qlogging-categories5/
 mkdir -p %{buildroot}%{_docdir}/qt5
 mkdir -p %{buildroot}%{_libexecdir}/kf5
 mkdir -p %{buildroot}%{_datadir}/locale/tok
-%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10)
+%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11)
 mkdir -p %{buildroot}%{_prefix}/{lib,%{_lib}}/kconf_update_bin
 mkdir -p %{buildroot}%{_datadir}/{config.kcfg,kconf_update}
 mkdir -p %{buildroot}%{_datadir}/kpackage/{genericqml,kcms}
