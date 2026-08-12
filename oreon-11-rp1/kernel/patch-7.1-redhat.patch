@@ -35,7 +35,7 @@ diff --git a/Makefile b/Makefile
  ifdef mixed-build
  # ===========================================================================
  # We're called with mixed targets (*config and build targets).
-@@ -1423,6 +1434,8 @@
+@@ -1421,6 +1432,8 @@
  # Generate some files
  # ---------------------------------------------------------------------------
  
@@ -44,7 +44,7 @@ diff --git a/Makefile b/Makefile
  # KERNELRELEASE can change from a few different places, meaning version.h
  # needs to be updated, so this check is forced on all builds
  
-@@ -2088,6 +2101,23 @@
+@@ -2086,6 +2099,23 @@
  
  ifdef CONFIG_MODULES
  
