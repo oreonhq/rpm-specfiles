@@ -59,9 +59,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P 1 -p1 -b .ldflags
 %patch -P 2 -p1 -b .narrowing
 # Fix for freetype 2.13.3
-%if 0%{?fedora} > 40 || 0%{?rhel} > 10
 %patch -P 3 -p1 -b .freetype-2.13.3
-%endif
 
 %build
 %configure \

@@ -47,7 +47,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %pyproject_install
-%pyproject_save_files -l python_multipart
+%pyproject_save_files -l python_multipart multipart
 
 %check
 %pytest

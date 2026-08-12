@@ -1,7 +1,7 @@
 %global source0_hash da0c616a71c82150397259516b2ea7558dbd31a5b4a217423ec9666b3a0fcfb7
 
 Name:           R-Rcpp
-Version:        %R_rpm_version 1.1.1
+Version:        1.1.1
 Release:        %autorelease
 Summary:        Seamless R and C++ Integration
 
@@ -10,8 +10,8 @@ Summary:        Seamless R and C++ Integration
 #               - Rcpp/inst/include/Rcpp/macros/config.hpp
 #               - Rcpp/inst/include/Rcpp/macros/cat.hpp
 License:        GPL-2.0-or-later AND BSL-1.0
-URL:            %{cran_url}
-Source:         %{cran_source}
+URL:            https://cran.r-project.org/package=Rcpp
+Source0:        https://cran.r-project.org/src/contrib/Archive/Rcpp/Rcpp_%{version}.tar.gz
 
 BuildRequires:  R-devel
 BuildRequires:  dos2unix

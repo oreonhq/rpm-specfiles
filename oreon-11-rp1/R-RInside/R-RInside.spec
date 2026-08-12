@@ -1,13 +1,13 @@
 %global source0_hash 0703843a3f1460c571650138e5846d96552d6541766c7df72c609cd3aaca1f24
 
 Name:           R-RInside
-Version:        %R_rpm_version 0.2.19
+Version:        0.2.19
 Release:        %autorelease
 Summary:        C++ Classes to Embed R in C++ (and C) Applications
 
 License:        GPL-2.0-or-later
-URL:            %{cran_url}
-Source:         %{cran_source}
+URL:            https://cran.r-project.org/package=RInside
+Source0:        https://cran.r-project.org/src/contrib/RInside_%{version}.tar.gz
 # Adapt RInsideLdFlags function to Fedora packaging (no static
 # library, shared library moved to default library path)
 Patch:          %{name}-LdFlags.patch

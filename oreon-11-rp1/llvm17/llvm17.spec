@@ -1,4 +1,4 @@
-%global source0_hash 807f069c54dc20cb47b21c1f6acafdd9c649f3ae015609040d6182cab01140f4
+%global source0_hash b638167da139126ca11917b6880207cc6e8f9d1cbb1a48d87d017f697ef78188
 
 %bcond_with snapshot_build
 
@@ -95,7 +95,7 @@
 
 Name:		%{pkg_name}
 Version:	%{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:~rc%{rc_ver}}%{?llvm_snapshot_version_suffix:~%{llvm_snapshot_version_suffix}}
-Release:	9%{?dist}
+Release:        10%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	Apache-2.0 WITH LLVM-exception OR NCSA

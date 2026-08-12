@@ -23,6 +23,7 @@ Requires:       zeek-core%{?_isa} = %{version}-%{release}
 Requires:       zeek-zkg%{?_isa} = %{version}-%{release}
 
 BuildRequires:  bison
+BuildRequires:  bind-devel
 BuildRequires:  chrpath
 BuildRequires:  cmake
 BuildRequires:  flex

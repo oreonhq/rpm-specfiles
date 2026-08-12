@@ -2,12 +2,12 @@
 
 Name:		lhapdf
 Version:	6.5.6
-Release:	1%{?dist}
+Release:        2%{?dist}
 Summary:	Les Houches Accord PDF Interface
 
 License:	GPL-3.0-only
 URL:		https://lhapdf.hepforge.org/
-Source0:	https://www.hepforge.org/archive/lhapdf/LHAPDF-%{version}.tar.gz
+Source0:	https://lhapdf.hepforge.org/downloads/?f=LHAPDF-%{version}.tar.gz#/LHAPDF-%{version}.tar.gz
 #		PDFs used during testing
 Source1:	https://lhapdfsets.web.cern.ch/current/CT10nlo.tar.gz
 Source2:	https://lhapdfsets.web.cern.ch/current/MSTW2008nlo68cl.tar.gz

@@ -84,17 +84,6 @@ use the "serde" feature of the "%{crate}" crate.
 %files       -n %{name}+serde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+yoke-derive-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+yoke-derive-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "yoke-derive" feature of the "%{crate}" crate.
-
-%files       -n %{name}+yoke-derive-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+zerofrom-devel
 Summary:        %{summary}

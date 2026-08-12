@@ -1,11 +1,11 @@
-%global source0_hash 9842f90744246d7c63564c3c668b83d66a92d2c6a3adf5d22bb7202e147281f5
+%global source0_hash 08b9a31375c338001694f07d0945064900734074bb86e2300eacec9421360a5a
 
 %undefine __cmake_in_source_build
 %undefine __cmake3_in_source_build
 
 Name: scitokens-cpp
 Version: 1.4.1
-Release: 1%{?dist}
+Release:        2%{?dist}
 Summary: C++ Implementation of the SciTokens Library
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
@@ -16,7 +16,7 @@ URL: https://github.com/scitokens/scitokens-cpp
 # git submodule update --init
 # git submodule foreach --recursive "git archive --prefix=scitokens-cpp-0.3.3/\$path/ --output=\$sha1.tar HEAD && tar --concatenate --file=$(pwd)/scitokens-cpp-0.3.3.tar \$sha1.tar && rm \$sha1.tar"
 # gzip "scitokens-cpp-0.3.3.tar"
-Source0: https://github.com/scitokens/scitokens-cpp/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0: https://github.com/scitokens/scitokens-cpp/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # Fix build failure with GCC10.1 and Werror (upstream pull request)
 # https://github.com/kazuho/picojson/pull/131
 #Patch0: %{name}-paren.patch

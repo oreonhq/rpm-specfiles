@@ -14,6 +14,7 @@ Summary:        Plotters SVG backend
 License:        MIT
 URL:            https://crates.io/crates/plotters-svg
 Source:         %{crates_source}
+Patch0:         0001-smoke-tests-without-plotters.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 

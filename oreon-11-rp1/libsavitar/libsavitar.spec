@@ -1,4 +1,4 @@
-%global source0_hash 968a5c8306448ebe8129449b097d76eedd9e7ddfd1e68888a71975897374d281
+%global source0_hash ed44dd42426ba4f592c2d83f652af5c2c60a1f619d16d31afa0babc2a0c997ce
 
 Name:           libsavitar
 Version:        5.3.0

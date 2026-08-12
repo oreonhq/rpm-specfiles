@@ -17,7 +17,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.11.1
-Release:        22%{?dist}
+Release:        23%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -283,6 +283,7 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
 %cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
     -DCMAKE_C_COMPILER:FILEPATH=%{_bindir}/gcc \
     -DCMAKE_CXX_COMPILER:FILEPATH=%{_bindir}/g++ \
+    -DCMAKE_DEPENDS_USE_COMPILER=FALSE \
     -DCMAKE_BUILD_TYPE=None \
     -DSHIBOKEN_PYTHON_LIBRARIES=`pkgconf python3-embed --libs` \
     -DBUILD_TESTS=OFF \

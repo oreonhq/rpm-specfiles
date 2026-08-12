@@ -14,7 +14,7 @@
 
 Name:           libkml
 Version:        1.3.0
-Release:        57%{?dist}
+Release:        58%{?dist}
 Summary:        Reference implementation of OGC KML 2.2
 
 License:        BSD-3-Clause

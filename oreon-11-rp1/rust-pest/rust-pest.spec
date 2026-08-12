@@ -97,6 +97,18 @@ use the "std" feature of the "%{crate}" crate.
 %files       -n %{name}+std-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+memchr-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+memchr-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "memchr" feature of the "%{crate}" crate.
+
+%files       -n %{name}+memchr-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1

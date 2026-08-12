@@ -26,7 +26,7 @@ BuildRequires:  /usr/bin/node
 BuildRequires:  /usr/bin/npm
 BuildRequires:  python-sphinx-doc
 BuildRequires:  python3-docs
-BuildRequires:  yarnpkg
+BuildRequires:  python3-nodeenv
 
 %global _description %{expand:Furo is a Sphinx theme, which is:
 - Intentionally minimal --- the most important thing is the content, not the
@@ -106,8 +106,8 @@ sed -e 's|\("https://docs\.python\.org/3", \)None|\1"%{_docdir}/python3-docs/htm
 
 %build
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-export YARN_CACHE_FOLDER="$PWD/.package-cache"
-yarn install --offline
+# node_modules comes from Source1 vendor tarball
+npm run build
 nodeenv --node=system --prebuilt --clean-src $PWD/.nodeenv
 %pyproject_wheel
 

@@ -61,29 +61,7 @@ use the "json" feature of the "%{crate}" crate.
 %files       -n %{name}+json-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+json-write-devel
-Summary:        %{summary}
-BuildArch:      noarch
 
-%description -n %{name}+json-write-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "json-write" feature of the "%{crate}" crate.
-
-%files       -n %{name}+json-write-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+schemars-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+schemars-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "schemars" feature of the "%{crate}" crate.
-
-%files       -n %{name}+schemars-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+serde-devel
 Summary:        %{summary}
@@ -97,17 +75,6 @@ use the "serde" feature of the "%{crate}" crate.
 %files       -n %{name}+serde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+serde_json-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_json-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_json" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_json-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+unstable-schema-devel
 Summary:        %{summary}

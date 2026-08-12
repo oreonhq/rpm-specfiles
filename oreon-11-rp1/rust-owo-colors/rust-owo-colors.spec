@@ -49,29 +49,7 @@ use the "alloc" feature of the "%{crate}" crate.
 %files       -n %{name}+alloc-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+supports-color-devel
-Summary:        %{summary}
-BuildArch:      noarch
 
-%description -n %{name}+supports-color-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "supports-color" feature of the "%{crate}" crate.
-
-%files       -n %{name}+supports-color-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+supports-color-2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+supports-color-2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "supports-color-2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+supports-color-2-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+supports-colors-devel
 Summary:        %{summary}

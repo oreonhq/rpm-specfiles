@@ -4,7 +4,7 @@
 
 Name:         davix
 Version:      0.8.10
-Release:      6%{?dist}
+Release:        7%{?dist}
 Summary:      Toolkit for HTTP-based file management
 License:      LGPL-2.1-or-later AND LGPL-2.0-or-later AND BSD-2-Clause AND MIT AND Apache-2.0 AND curl
 URL:          https://dmc-docs.web.cern.ch/dmc-docs/davix.html
@@ -93,6 +93,7 @@ rm -rf doc/sphinx/_themes/sphinx_rtd_theme
 
 %build
 %cmake \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 %if 0%{?fedora} || 0%{?rhel} >= 9
   -DEMBEDDED_LIBCURL=FALSE \
 %endif

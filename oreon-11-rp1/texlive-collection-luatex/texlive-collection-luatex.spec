@@ -54,7 +54,7 @@
 %global source53_hash 05a7893e7a224a2c9955154fb9da92e77da90239687fe597a6e41ff5b0e85eda
 %global source54_hash 592b6c62a213e62dff5d6566488e9771e175d4e82b413f6b13a9c19c116d3ab5
 %global source55_hash 19abb6f4b8227ee22853c38e8aba79710fbe228de89aca5687faab7ce3b572b2
-%global source56_hash a3986c54066c2d9c6269a493c541fc52bb56910a76a693b70ac2729c0f70eb05
+%global source56_hash 5f49299baf85e91ccd61f0686c74b2337b3a5613201da22b271401ad3c0d4fb2
 %global source57_hash 107d589d41dc254ca1a01fc13156f2d5d70dd8d6edf2afecd5085fe7be20ddde
 %global source58_hash dacd0c1359817f8f7c3215702faa3b9c44ce418d5d6b9053a6a3e0258ae6a65b
 %global source59_hash 4aec2064a61eace7d80547d8be303e0c465ff32b489f4f0e06cf7edf6b342cb9
@@ -246,7 +246,7 @@
 Name:           texlive-collection-luatex
 Epoch:          12
 Version:        svn78670
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        LuaTeX packages
 
 License:        LPPL-1.3c

@@ -14,6 +14,7 @@ Summary:        Serde-compatible spanned Value
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/serde_spanned
 Source:         %{crates_source}
+Patch0:         0001-fix-doctest-no-toml.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 

@@ -134,6 +134,18 @@ use the "printing" feature of the "%{crate}" crate.
 %files       -n %{name}+printing-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+quote-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+quote-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "quote" feature of the "%{crate}" crate.
+
+%files       -n %{name}+quote-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+proc-macro-devel
 Summary:        %{summary}
 BuildArch:      noarch

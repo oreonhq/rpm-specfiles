@@ -120,17 +120,6 @@ use the "std" feature of the "%{crate}" crate.
 %files       -n %{name}+std-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+twox-hash-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+twox-hash-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "twox-hash" feature of the "%{crate}" crate.
-
-%files       -n %{name}+twox-hash-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+yoke-devel
 Summary:        %{summary}
@@ -144,17 +133,6 @@ use the "yoke" feature of the "%{crate}" crate.
 %files       -n %{name}+yoke-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+zerovec-derive-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+zerovec-derive-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "zerovec-derive" feature of the "%{crate}" crate.
-
-%files       -n %{name}+zerovec-derive-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }

@@ -5,7 +5,7 @@
 
 Name:           patchelf
 Version:        0.18.0
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        A utility for patching ELF binaries
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
@@ -41,6 +41,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm src/elf.h
 
 %build
+autoreconf -fi
 %configure
 %make_build
 

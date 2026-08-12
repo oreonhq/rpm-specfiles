@@ -6,7 +6,7 @@
 
 Name:           trafficserver
 Version:        10.1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Fast, scalable and extensible HTTP/1.1 and HTTP/2 caching proxy server
 
 License:        Apache-2.0
@@ -135,10 +135,8 @@ rm -r lib/yamlcpp
 
 # This is not working properly with cmake for an unclear reason; linking fails
 %define _lto_cflags %{nil}
-# GCC 16 is finding something maybe bad but impossible to debu
-%if 0%{?fedora} >= 44
-%define  _pkg_extra_cxxflags -Wno-error=maybe-uninitialized
-%endif
+# GCC 16 maybe-uninitialized noise in bundled swoc under -Werror
+export CXXFLAGS="%{build_cxxflags} -Wno-error=maybe-uninitialized"
 
 %cmake \
     -DCMAKE_BUILD_TYPE=Release \

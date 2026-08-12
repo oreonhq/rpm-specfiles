@@ -123,6 +123,18 @@ use the "stream-wrapper" feature of the "%{crate}" crate.
 %files       -n %{name}+stream-wrapper-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+block-buffer-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+block-buffer-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "block-buffer" feature of the "%{crate}" crate.
+
+%files       -n %{name}+block-buffer-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+zeroize-devel
 Summary:        %{summary}
 BuildArch:      noarch

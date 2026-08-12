@@ -1,4 +1,4 @@
-%global source0_hash 2eda2a93592480a295fa338118aaf28cdcf24b7c6980740a1df94810652fc368
+%global source0_hash 3cf7411b573eda2de2aec9761bd6b539a5d5d67739761357f5f773d1490db0fb
 
 Name:           libarcus
 Version:        5.3.0
