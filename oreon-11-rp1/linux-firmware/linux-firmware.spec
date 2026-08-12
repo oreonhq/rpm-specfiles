@@ -7,7 +7,7 @@
 
 Name:		linux-firmware
 Version:	20260810
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Firmware files used by the Linux kernel
 License:	GPL-1.0-or-later AND GPL-2.0-or-later AND MIT AND LicenseRef-Callaway-Redistributable-no-modification-permitted
 URL:		http://www.kernel.org/
@@ -668,6 +668,8 @@ end
 %dir %{_firmwarepath}/qcom
 %{_firmwarepath}/qcom/glymur/
 %{_firmwarepath}/qcom/kaanapali/
+%{_firmwarepath}/qcom/eliza/
+%{_firmwarepath}/qcom/hawi/
 %{_firmwarepath}/qcom/shikra/*
 %{_firmwarepath}/a300_p*
 %{_firmwarepath}/qcom/*.fw*

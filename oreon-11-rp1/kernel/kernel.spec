@@ -178,7 +178,7 @@ Summary: The Linux kernel
 %define specversion 7.1.8
 %define patchversion 7.1
 %define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
-%define pkgrelease 200
+%define pkgrelease 201
 %define kversion 7
 %define tarfile_release 7.1.8
 # This is needed to do merge window version magic
