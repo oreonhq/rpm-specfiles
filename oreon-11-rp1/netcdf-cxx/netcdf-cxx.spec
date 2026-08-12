@@ -8,7 +8,7 @@ Summary:        Legacy netCDF C++ library
 # Automatically converted from old format: NetCDF - review is highly recommended.
 License:        BSD-3-Clause
 URL:            http://www.unidata.ucar.edu/software/netcdf/
-Source0:        ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-cxx-%{version}.tar.gz
+Source0:        https://downloads.unidata.ucar.edu/netcdf-cxx/%{version}/netcdf-cxx-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc-c++

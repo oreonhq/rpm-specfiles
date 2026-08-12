@@ -43,6 +43,7 @@ Patch8:         libkml_test_strcmp.patch
 Patch9:         libkml_mingw.patch
 # Increase minimum cmake version
 Patch10:        libkml_cmakever.patch
+Patch11:        libkml-boost-intrusive-ptr.patch
 
 BuildRequires:  cmake
 BuildRequires:  curl-devel

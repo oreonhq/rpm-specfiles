@@ -18,12 +18,12 @@ Source:         %{pypi_source flexcache}
 # https://github.com/hgrecco/flexcache/issues/4
 Patch:          %{url}/pull/5.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l flexcache
 # We remove flexcache.testsuite manually in %%install.
-BuildOption(check):     -e 'flexcache.testsuite*'
 
 BuildArch:      noarch
+
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
 
 # See the test extra in pyproject.toml. We list test dependencies manually
 # since we do not want pytest-cov
@@ -43,18 +43,23 @@ Summary:        %{summary}
 
 %description -n python3-flexcache %{common_description}
 
-%install -a
-# Upstream probably doesn’t want to install flexcache.testsuite, but we don’t
-# know how to suggest a fix given “[BUG] options.packages.find.exclude not
-# taking effect when include_package_data = True”,
-# https://github.com/pypa/setuptools/issues/3260.
-#
-# Still, we don’t want to install the test suite, so we just remove the files
-# manually for now.
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n flexcache-%{version} -p1
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l flexcache
 rm -rvf '%{buildroot}%{python3_sitelib}/flexcache/testsuite'
 sed -r -i '/\/flexcache\/testsuite/d' %{pyproject_files}
 
-%check -a
+%check
 %pytest
 
 %files -n python3-flexcache -f %{pyproject_files}

@@ -1,6 +1,6 @@
 %global source0_hash 43be2dd349daffe016dd1400c5d11285828c22fea35ca5109f21f3ed50605080
 
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 %bcond_with mingw
 %else
 %bcond_without mingw

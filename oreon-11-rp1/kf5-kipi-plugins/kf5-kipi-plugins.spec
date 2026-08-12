@@ -13,7 +13,7 @@ Release: 6%{?dist}
 License: GPL-2.0-or-later
 URL:     https://apps.kde.org/kipi_plugins/
 
-Source0:        http://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
 
 ## upstream patches
 

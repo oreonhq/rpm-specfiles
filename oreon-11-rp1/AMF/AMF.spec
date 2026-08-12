@@ -1,4 +1,4 @@
-%global source0_hash 37fd9af6e2b8a10da4b9005e6cb48f6b23e010b47297bb6b9e4f9af3e91573d7
+%global source0_hash bf80ee4a77a731c5a2351b4dd74f524a18806a70099ba66a8058d91aac1150b5
 
 Name:           AMF
 Epoch:          1
@@ -9,9 +9,7 @@ License:        MIT
 URL:            https://gpuopen.com/advanced-media-framework/
 BuildArch:      noarch
 
-# Releases include headers only and we miss documents and samples; so get a
-# full tarball without Thirdparty folder.
-Source0:        %{name}-cleaned-%{version}.tar.gz
+Source0:        https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}-tarball.sh
 
 %description
@@ -47,7 +45,8 @@ that is available in the main %{name}-devel package in Markdown format.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1
+%autosetup -n %{name}-%{version}
+rm -rf Thirdparty
 
 %install
 mkdir -p %{buildroot}%{_includedir}/%{name}

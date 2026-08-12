@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bd09adb4feac11fe49d1604f296618866702be610c86e2d513b561d877de6b18
 
 # -*- sh-shell: rpm -*-
 #
@@ -33,12 +33,12 @@
 
 Name:		libarrow
 Version:	23.0.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A toolbox for accelerated data interchange and in-memory processing
 License:	Apache-2.0
 URL:		https://arrow.apache.org/
 Requires:	%{name}-doc = %{version}-%{release}
-Source0:	https://downloads.apache.org/arrow/arrow-%{version}/apache-arrow-%{version}.tar.gz
+Source0:	https://archive.apache.org/dist/arrow/arrow-%{version}/apache-arrow-%{version}.tar.gz
 Patch:		0001-python-pyarrow-tests-read_record_patch.py.patch
 Patch:		0002-python-pyarrow-tests-test_ipc.py.patch
 
@@ -710,6 +710,7 @@ Development files for python3-pyarrow
 #--------------------------------------------------------------------
 
 %prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n apache-arrow-%{version}
 # We do not need to (nor can we) build for an old version of numpy:
 sed -r -i 's/(oldest-supported-)(numpy)/\2/' python/pyproject.toml

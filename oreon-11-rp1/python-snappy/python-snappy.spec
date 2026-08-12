@@ -1,10 +1,10 @@
 %global source0_hash 40216c1badfb2d38ac781ecb162a1d0ec40f8ee9747e610bcfefdfa79486cee3
 
-%global pypi_name python-snappy
+%global pypi_name python_snappy
 
 Name:           python-snappy
 Version:        0.7.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Python library for the snappy compression library from Google
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

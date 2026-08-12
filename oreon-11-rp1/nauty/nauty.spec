@@ -1,4 +1,4 @@
-%global source0_hash 9fc4edae04f88a0f5883985be3b39cf7f898fd6cc96e96b9ee25452743cc1b5b
+%global source0_hash 1e7f595d42411ae2b1423af31f78fea94d0932e5e1abed01eeba04d90505c824
 
 Name:           nauty
 Version:        2.9.3
@@ -16,7 +16,7 @@ Summary:        Graph canonical labeling and automorphism group computation
 # CM-Super: GPL-1.0-or-later
 License:        Apache-2.0 AND LicenseRef-Fedora-Public-Domain AND Knuth-CTAN AND GPL-1.0-or-later
 URL:            https://pallini.di.uniroma1.it/
-Source:         https://pallini.di.uniroma1.it/%{name}%{nautytarver}.tar.gz
+Source:         https://deb.debian.org/debian/pool/main/n/nauty/nauty_2.9.3.orig.tar.gz
 
 # Debian patch to fix the gt_numorbits declaration
 Patch:          %{name}-fix-gt_numorbits.patch

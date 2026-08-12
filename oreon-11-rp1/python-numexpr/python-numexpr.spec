@@ -1,9 +1,9 @@
-%global source0_hash 4be00b1086c7b7a5c32e31558122b7b80243fe098579b170967da83f3152b48b
+%global source0_hash 7cb4c2d5d686f366e1121c287f48c3964ae3ec2ecc559d64a12bb315beebbf9a
 
 Summary:        Fast numerical array expression evaluator for Python and NumPy
 Name:           python-numexpr
 Version:        2.14.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 URL:            https://github.com/pydata/numexpr
 License:        MIT
 Source0:        https://github.com/pydata/numexpr/archive/v%{version}/numexpr-%{version}.tar.gz

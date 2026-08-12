@@ -51,7 +51,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup
 
 %build
-%cmake_kf6 -DQT_MAJOR_VERSION=6
+%cmake_kf6 -DBUILD_QCH=OFF -DQT_MAJOR_VERSION=6
 %cmake_build
 
 %install
@@ -72,10 +72,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/*
 %{_kf6_libdir}/cmake/*
 %{_kf6_libdir}/*.so
-%{_qt6_docdir}/*.tags
- 
+
 %files doc
-%{_qt6_docdir}/*.qch
 
 %changelog
 %autochangelog

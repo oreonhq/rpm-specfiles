@@ -12,8 +12,9 @@ License:        PSF-2.0
 URL:            https://github.com/pycompression/python-zlib-ng
 Source:         %{url}/archive/v%{version}/python-zlib-ng-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l zlib_ng
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
+
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(zlib-ng)
@@ -58,21 +59,27 @@ Summary:        %{summary}
 
 %description -n python3-zlib-ng %{common_description}
 
-%prep -a
-# Remove bundled zlib-ng library if present (not in GitHub archive because it
-# is a git submodule, so this is just an extra precaution).
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n python-zlib-ng-%{version} -p1
 rm -rvf src/zlib_ng/zlib-ng
 
-%generate_buildrequires -p
+%generate_buildrequires
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
+%pyproject_buildrequires
 
-%build -p
+%build
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 export CFLAGS="${CFLAGS} $(pkgconf --cflags zlib-ng)"
 export LDFLAGS="${LDFLAGS} $(pkgconf --libs zlib-ng)"
 export PYTHON_ZLIB_NG_LINK_DYNAMIC='1'
+%pyproject_wheel
 
-%check -a
+%install
+%pyproject_install
+%pyproject_save_files -l zlib_ng
+
+%check
 # Note that it is *not* safe to run tests in parallel (pytest-xdist, -n auto)
 # due to filesystem race conditions.
 %pytest -v -k "${k-}" tests/

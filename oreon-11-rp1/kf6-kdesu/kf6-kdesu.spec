@@ -53,9 +53,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if 0%{?rhel} || 0%{?fedora} >= 42
     -DKDESU_USE_SUDO_DEFAULT:BOOL=TRUE
 %endif
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags}
+%cmake_build
+
 %install
-DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}"
+%cmake_install
 %find_lang kdesu6_qt --all-name
 
 %files -f kdesu6_qt.lang

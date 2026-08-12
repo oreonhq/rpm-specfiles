@@ -76,6 +76,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %global _vpath_builddir %{_target_platform}
 %{cmake} .. \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DQJSON_BUILD_TESTS:BOOL=ON \
   -DQT4_BUILD:BOOL=ON
 
@@ -84,6 +85,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if 0%{?qt5}
 %global _vpath_builddir %{_target_platform}-qt5
 %{cmake} .. \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DQJSON_BUILD_TESTS:BOOL=ON \
   -DQT4_BUILD:BOOL=OFF
 

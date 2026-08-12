@@ -1,11 +1,11 @@
-%global source0_hash 5da5d293a1fcc8e7e18ca3e423a7d8fd0cb1a68b5120f5746efecd1f9c68161f
+%global source0_hash ccdcb8c3f4e0080923d7e818f0e4a202db26c46415eaef361387c20995b8959f
 
 %global posttag g
 %global debian_release 16
 
 Name:       man2html
 Version:    1.6
-Release:    41.%{posttag}%{?dist}
+Release:    42.%{posttag}%{?dist}
 Summary:    Convert man pages to HTML - CGI scripts
 
 # man2html.c and debian/sources/man2html.cgi.c are man2html
@@ -14,7 +14,7 @@ Summary:    Convert man pages to HTML - CGI scripts
 License:    GPL-2.0-or-later AND GPL-1.0-or-later AND man2html
 
 URL:        http://www.kapiti.co.nz/michael/vhman2html.html
-Source0:    http://primates.ximian.com/~flucifredi/man/man-%{version}%{posttag}.tar.gz
+Source0:    https://deb.debian.org/debian/pool/main/m/man2html/man2html_%{version}%{posttag}.orig.tar.gz
 # Debian CGI scripts
 Source1:    https://ftp.debian.org/debian/pool/main/m/man2html/man2html_%{version}%{posttag}-%{debian_release}.debian.tar.xz
 # Apache configuration file

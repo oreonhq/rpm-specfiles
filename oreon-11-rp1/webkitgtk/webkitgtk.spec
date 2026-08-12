@@ -307,6 +307,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %global optflags %(echo %{optflags} | sed 's/-mbranch-protection=standard /-mbranch-protection=pac-ret /')
 %endif
 
+# drop gcc-only oreon opt flags if an older oreon-rpm-config leaked them onto clang
+%global optflags %(echo %{optflags} | sed -e 's/ -fipa-pta//g' -e 's/ -fdevirtualize-at-ltrans//g' -e 's/ -falign-jumps=32//g' -e 's/ -frename-registers//g' -e 's/ -fmodulo-sched-allow-regmoves//g' -e 's/ -fmodulo-sched//g')
+
 mkdir webkitgtk-6.0
 pushd webkitgtk-6.0
 %cmake -S .. \

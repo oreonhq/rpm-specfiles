@@ -4,16 +4,16 @@
 
 Name:    kf5-%{framework}
 Version: 5.116.0
-Release: 6%{?dist}
+Release: 8%{?dist}
 Summary: KDE Frameworks 5 Tier 3 functional module with JavaScript interpreter
 
 # Automatically converted from old format: GPLv2+ and BSD - review is highly recommended.
 License: GPL-2.0-or-later AND LicenseRef-Callaway-BSD
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/portingAids/%{framework}-%{version}.tar.xz
+%global majmin 5.116
+%global stable stable
+Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules >= %{majmin}
 BuildRequires:  kf5-kdoctools-devel >= %{majmin}

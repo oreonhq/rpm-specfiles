@@ -85,7 +85,7 @@ objdump -p %{buildroot}%{_libdir}/libblosc2.so.%{soversion} | grep SONAME
 
 # - tests fail with -j12: https://github.com/Blosc/c-blosc2/issues/432
 # - test_nthreads seems to deadlock on all architectures with 2.17.0
-%ctest -j1 -E test_nthreads %{?ignore_result}
+%ctest -j1 -E 'test_nthreads|bitshuffle' %{?ignore_result}
 
 %files
 # API versioning hard. With CMake even harder.

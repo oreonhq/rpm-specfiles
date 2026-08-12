@@ -9,7 +9,7 @@ Release: 5%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later
 URL:     https://invent.kde.org/graphics/%{base_name}
-Source0: http://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
+Source0: https://download.kde.org/stable/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: gettext

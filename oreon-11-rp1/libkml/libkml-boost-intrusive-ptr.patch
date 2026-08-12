@@ -1,0 +1,16 @@
+--- a/src/kml/base/referent.h
++++ b/src/kml/base/referent.h
+@@ -71,6 +71,15 @@ void intrusive_ptr_release(kmlbase::Referent* r);
+ 
+ } // end namespace kmlbase
+ 
++namespace boost {
++inline void intrusive_ptr_add_ref(kmlbase::Referent* r) {
++  kmlbase::intrusive_ptr_add_ref(r);
++}
++inline void intrusive_ptr_release(kmlbase::Referent* r) {
++  kmlbase::intrusive_ptr_release(r);
++}
++}
++
+ #endif  // KML_BASE_REFERENT_H__

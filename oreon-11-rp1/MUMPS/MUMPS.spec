@@ -48,7 +48,7 @@
 
 # Workarounf for GCC-10
 # https://gcc.gnu.org/gcc-10/porting_to.html
-%if 0%{?fedora} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
 %global build_fflags %{build_fflags} -fallow-argument-mismatch
 %endif
 

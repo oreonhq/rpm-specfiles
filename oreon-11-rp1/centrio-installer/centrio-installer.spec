@@ -2,7 +2,7 @@
 
 Name:           centrio-installer
 Version:        2.0
-Release:        23%{?dist}
+Release:        24%{?dist}
 Summary:        Oreon live installer
 License:        GPL-2.0-or-later
 URL:            https://github.com/oreonhq/centrio

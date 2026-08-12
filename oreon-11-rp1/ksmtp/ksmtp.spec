@@ -56,7 +56,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find ./po -type f -name libksmtp5.po -execdir mv {} libksmtp6.po \;
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 %install
@@ -72,10 +72,8 @@ find ./po -type f -name libksmtp5.po -execdir mv {} libksmtp6.po \;
 %{_kf6_libdir}/libKPim6SMTP.so
 %{_kf6_libdir}/cmake/KPim6SMTP/
 %{_includedir}/KPim6/KSMTP/
-%{_qt6_docdir}/*.tags
 
 %files doc
-%{_qt6_docdir}/*.qch
 
 %changelog
 %autochangelog

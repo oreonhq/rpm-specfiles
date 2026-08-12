@@ -17,7 +17,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.11.1
-Release:        21%{?dist}
+Release:        22%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -272,6 +272,8 @@ export C_INCLUDE_PATH="${_gcc_incdir}${C_INCLUDE_PATH:+:${C_INCLUDE_PATH}}"
 export CPLUS_INCLUDE_PATH="${_gcc_incdir}${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
 export CMAKE_BUILD_PARALLEL_LEVEL=1
 export NINJAFLAGS="-j1"
+export MAKEFLAGS=-j1
+export MAX_JOBS=1
 mkdir -p "$(pwd)/tmp-pyside6-build"
 export TMPDIR="$(pwd)/tmp-pyside6-build"
 
@@ -307,7 +309,7 @@ mkdir build_history/$TODAY
 echo $PWD/%{__cmake_builddir}/sources > build_history/$TODAY/build_dir.txt
 export PYTHONPATH=$PWD/%{__cmake_builddir}/sources
 
-%cmake_build
+%cmake_build -- -j1
 %if 0%{?docs}
 # build api documentation
 cd redhat-linux-build
@@ -353,8 +355,15 @@ mv %{buildroot}%{_bindir}/shiboken_tool.py %{buildroot}%{python3_sitelib}/shibok
 # Install shiboken6
 mv redhat-linux-build/sources/shiboken6_generator/generator/shiboken6 %{buildroot}%{python3_sitelib}/shiboken6_generator
 
-# cmake configs already point at %{_datadir}/PySide6/{typesystems,glue}
-# old sed doubled /share/PySide6 when path already had it
+# scrub any doubled share/PySide6 paths in cmake configs
+for f in %{buildroot}%{_libdir}/cmake/PySide6/*.cmake \
+         %{buildroot}%{_libdir}/cmake/PySide6/*.cmake.* \
+         %{buildroot}%{python3_sitearch}/PySide6/PySide6Config*.cmake \
+         %{buildroot}%{python3_sitearch}/PySide6/*.cmake; do
+  [ -f "$f" ] || continue
+  sed -i -e 's|/share/PySide6/share/PySide6|/share/PySide6|g' \
+         -e 's|%{_datadir}/PySide6/share/PySide6|%{_datadir}/PySide6|g' "$f" || :
+done
 
 # Fix all Python shebangs recursively
 # -p preserves timestamps

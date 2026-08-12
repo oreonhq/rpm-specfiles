@@ -1,4 +1,4 @@
-%global source0_hash 72a3dcb7f8308e2074e915f81ebfae24d68f5efa19e798ce80f9c524b6d9a4da
+%global source0_hash 32e6908d0e88de273386f662069b96185c6fc17d9dafc8030b5e400fb95fd6a5
 
 %global srcname toolz
 %global desc Toolz provides a set of utility functions for iterators, functions, and\
@@ -30,7 +30,7 @@ suitable for most developers.
 
 Name:           python-%{srcname}
 Version:        1.0.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        A functional standard library for Python
 
 # The project is released under the BSD-3-Clause license.

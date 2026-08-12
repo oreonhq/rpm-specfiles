@@ -7,7 +7,7 @@
 
 %_oreon_opt_cflags_gcc -fipa-pta -funroll-loops -falign-functions=32 -falign-loops=32 -falign-jumps=32 -ffunction-sections -fdata-sections -frename-registers -fno-semantic-interposition -fdevirtualize-at-ltrans -fmodulo-sched -fmodulo-sched-allow-regmoves
 %_oreon_opt_cflags_clang -funroll-loops -falign-functions=32 -falign-loops=32 -ffunction-sections -fdata-sections -fno-semantic-interposition
-%_oreon_opt_cflags %[ "%{toolchain}" == "clang" ? "%{_oreon_opt_cflags_clang}" : "%{_oreon_opt_cflags_gcc}" ]
+%_oreon_opt_cflags %{expand:%{?_oreon_opt_cflags_%{toolchain}}%{!?_oreon_opt_cflags_%{toolchain}:%{_oreon_opt_cflags_gcc}}}
 
 %_distro_extra_cflags %{?x86_64:%{_oreon_opt_cflags}}
 %_distro_extra_cxxflags %{?x86_64:%{_oreon_opt_cflags}}

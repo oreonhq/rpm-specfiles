@@ -4,15 +4,15 @@
 
 Name:    kf5-%{framework}
 Version: 5.116.0
-Release: 5%{?dist}
+Release: 7%{?dist}
 Summary: KDE Frameworks 5 Tier 3 solution for multi-language application scripting
 
 License: LGPL-2.1-or-later AND CC0-1.0
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/portingAids/%{framework}-%{version}.tar.xz
+%global majmin 5.116
+%global stable stable
+Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules >= %{majmin}
 BuildRequires:  kf5-kcompletion-devel >= %{majmin}

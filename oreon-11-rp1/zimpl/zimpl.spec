@@ -107,7 +107,7 @@ rm -fr %{buildroot}%{_datadir}/licenses
 %check
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 cd check
-sh check.sh ../%{_vpath_builddir}/bin/zimpl
+sh check.sh %{buildroot}%{_bindir}/zimpl
 cd -
 %endif
 

@@ -9,6 +9,9 @@ License:        Apache-2.0
 URL:            https://github.com/aio-libs/frozenlist
 Source:         %{pypi_source frozenlist}
 
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
+
 # Downstream-only: Build normal wheels in-place
 #
 # Upstream wants to build only editable wheels in-place, building normal
@@ -27,8 +30,6 @@ Patch:          0001-Downstream-only-Build-normal-wheels-in-place.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2416992
 Patch:          %{url}/pull/723.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l frozenlist
 
 BuildRequires:  gcc-c++
 
@@ -45,15 +46,23 @@ Summary:        %{summary}
 
 %description -n python3-frozenlist %{common_description}
 
-%prep -a
-# Remove Cython-generated sources; we must ensure they are regenerated.
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n frozenlist-%{version} -p1
 find . -type f -name '*.c' -print -delete
-
-# Patch out coverage-related pytest options:
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 sed -r -i 's/^([[:blank:]]*)(.*[-_]cov)/\1# \2/' pytest.ini
 
-%check -a
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l frozenlist
+
+%check
 %pytest -v
 
 %files -n python3-frozenlist -f %{pyproject_files}

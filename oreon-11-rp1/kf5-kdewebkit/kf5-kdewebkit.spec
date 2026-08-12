@@ -4,16 +4,16 @@
 
 Name:    kf5-%{framework}
 Version: 5.116.0
-Release: 6%{?dist}
+Release: 8%{?dist}
 Summary: KDE Frameworks 5 Tier 3 integration module for QtWebKit
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/portingAids/%{framework}-%{version}.tar.xz
+%global majmin 5.116
+%global stable stable
+Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
 
 # Temporary revert commit that introduces a dependency on kf6 extra-cmake-modules
 Patch0: revert_feature_summary_ecm.patch

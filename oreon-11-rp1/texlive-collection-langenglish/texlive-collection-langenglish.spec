@@ -125,7 +125,7 @@
 %global source124_hash d0352700bbb2c742ad2249a70fec5cd33f6871f64d312fa73a73036751a7f0e4
 %global source125_hash d3d4e56dd7acb07dbff6d575cc8f54a26ce8f7bd8ff554c5216f522c601b9c97
 %global source126_hash 8e4a7389bc6526dba1af67fcbb4bcc8a38ec7fff486bdd7bd936b185d28edc8c
-%global source127_hash 7f573272eccf35cdc10634261766e8051cdaf392b432b7116764dcf65eeb93b4
+%global source127_hash 718eccf2b6b4d22a355707a5ff041b99cb9d78290045e535058d5908a4f06392
 %global source128_hash c8b29105129a5a5a21bbefdd3d6990401408d548dc02d56c3151f96873a6e3ce
 %global source129_hash eddb327fc72ac2cd35343734b2248745a22b61b9d1085d48790674d7d6d03a99
 %global source130_hash b5764de3a6148c97710b697ef5701df7af8d46ec68591add29ee842902ad9a38
@@ -147,7 +147,7 @@
 Name:           texlive-collection-langenglish
 Epoch:          12
 Version:        svn78607
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        US and UK English
 
 License:        LPPL-1.3c

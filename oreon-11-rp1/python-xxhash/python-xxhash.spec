@@ -13,8 +13,9 @@ License:        BSD-2-Clause
 URL:            https://github.com/ifduyue/python-xxhash
 Source:         %{pypi_source xxhash}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l xxhash
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
+
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(libxxhash) >= 0.8.2
@@ -29,19 +30,26 @@ Summary:        %{summary}
 
 %description -n python3-xxhash %{common_description}
 
-%prep -a
-# Remove bundled xxhash library
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n xxhash-%{version} -p1
 rm -rvf deps
 
-%build -p
-# Normally, no extra flags are required to link the xxhash shared library, but
-# we are prepared:
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
 export CFLAGS="${CFLAGS} $(pkgconf --cflags libxxhash)"
 export LDFLAGS="${LDFLAGS} $(pkgconf --libs-only-L libxxhash)"
 export LDFLAGS="${LDFLAGS} $(pkgconf --libs-only-other libxxhash)"
 export XXHASH_LINK_SO='1'
+%pyproject_wheel
 
-%check -a
+%install
+%pyproject_install
+%pyproject_save_files -l xxhash
+
+%check
 cd tests
 %{py3_test_envvars} %{python3} -m unittest discover
 

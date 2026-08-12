@@ -2,13 +2,13 @@
 
 Name:           perl-Template-Toolkit
 Version:        3.106
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Template processing system
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://www.template-toolkit.org/
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Template-Toolkit-%{version}.tar.gz
 # No 225 version available
-Source1:        http://tt2.org/download/TT_v224_html_docs.tar.gz
+Source1:        https://web.archive.org/web/2020/https://tt2.org/download/TT_v224_html_docs.tar.gz
 
 BuildRequires:  make
 BuildRequires:  gcc

@@ -1,4 +1,4 @@
-%global source0_hash 9e893863ad3933731b266adf97405fb53b61617d740d58e795d8df893945e6cf
+%global source0_hash bced3f716ba36da32ec0cecadfbdfaa8640416e0955acd1154e4899aad9dd6f3
 
 %global debug_package %{nil}
 
@@ -9,13 +9,13 @@
 Name:           CImg
 Epoch:          1
 Version:        3.7.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C++ Template Image Processing Toolkit
 # CImg.h: Dual licensed
 # plugins/cimgmatlab.h: LGPLv3
 License:        ( CECILL-2.0 OR CECILL-C ) AND LGPL-3.0-only
 URL:            https://github.com/dtschump/CImg
-Source0:        https://cimg.eu/files/CImg_%{version}.zip
+Source0:        https://github.com/GreycLab/CImg/archive/v.%{version}/CImg-%{version}.zip
 # This package has no dependencies actually, these below are 
 # for %%check only.
 BuildRequires:  gcc-c++
@@ -57,7 +57,7 @@ developing applications that use %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q
+%setup -q -n CImg-v.%{version}
 sed -i 's|$(X11PATH)/lib|$(X11PATH)/%{_lib}|g' examples/Makefile
 %if %{with flexiblas}
 sed -i 's|-lblas -llapack|-lflexiblas|g' examples/Makefile

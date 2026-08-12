@@ -12,7 +12,7 @@ Name:		rubygem-%{gem_name}
 # changes default progress style
 # (For 3.5.8 and 3.5.9, F-38 and below reverted this change)
 Version:	3.7.7
-Release:	3%{?dist}
+Release:	4%{?dist}
 # SPDX confirmed
 # lib/test/unit/diff.rb is under (BSD-2-Clause OR Ruby) AND Python-2.0.1
 # lib/test-unit.rb changed to BSD-2-Clause or Ruby (from 3.3.7)
@@ -69,7 +69,7 @@ mv ../%{gem_name}-%{version}.gemspec .
 %build
 gem build %{gem_name}-%{version}.gemspec
 %gem_install
-cp -a %{gem_name}-%{version}/test ./%{gem_instdir}
+cp -a test ./%{gem_instdir}
 
 #find . -name \*.gem | xargs chmod 0644
 find . -type f | xargs chmod ugo+r

@@ -1,4 +1,4 @@
-%global source0_hash 3cb03fc701d957ba69467e629d62311992e7fd25608b2dd12840471b39cfaa93
+%global source0_hash 3bd0f02f89ef68f63948723820cf49804155452bd1020bc2f512beb8579171b5
 %global source1_hash 900a9d4fb8f2318866d55ae1b18f26cb7ae52cf2450bf0765639d68e4d00dc6e
 %global source2_hash b643e81876e95e4c65462fa3be55a72724d91d8bf2a8440f98b10518e83283e6
 %global source3_hash 85efbb9be8c7622ff1962e99e03c89633c9e62d9df41648c927fd55fd23280d0
@@ -562,7 +562,7 @@
 Name:           texlive-collection-pictures
 Epoch:          12
 Version:        svn78823
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Graphics, pictures, diagrams
 
 License:        LPPL-1.3c

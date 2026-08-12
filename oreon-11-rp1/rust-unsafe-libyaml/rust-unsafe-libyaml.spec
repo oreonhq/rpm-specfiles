@@ -33,6 +33,7 @@ use the "%{crate}" crate.
 
 %files          devel
 %license %{crate_instdir}/LICENSE-MIT
+%license %{crate_instdir}/LICENSE-APACHE
 %doc %{crate_instdir}/README.md
 %{crate_instdir}/
 

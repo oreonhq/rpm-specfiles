@@ -145,7 +145,7 @@
 %global source144_hash 4ae9526bca9961e9d4c8d7a1e5975a2a79816314235ff8770f0d70c2cd7ca3c6
 %global source145_hash bb2526d7007b15444d2d7413ae39288018f74a60bc7cccfc7ad6f15100309f22
 %global source146_hash 3bcce333ef3d7dc70eb72227cdc1b353d0fe0552a97a9722990fb807fb510e54
-%global source147_hash 7ee24e0ff530fbe0cc86c7eceb07c45efe730d3434da4ae6252015fbc62ba048
+%global source147_hash f09f785d2c54d25a7709e97da3d137427856520853e47052e7de7602b1672728
 %global source148_hash d3eb5b937136311b8abd0a41655c0f1c9b51b0c719504af65c51318c46f0e8f2
 %global source149_hash 0b1bb874ddfb7e42a0915c052f720a0039ceab107df478b6e7d87a772ed9fbbb
 %global source150_hash 6ad0065bf3f8c14558b7342fe2f153cc245e6163a91e7b14680d19b2897cd23b
@@ -3285,7 +3285,7 @@
 Name:           texlive-collection-latexextra
 Epoch:          12
 Version:        svn78847
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        LaTeX additional packages
 
 License:        LPPL-1.3c

@@ -16,9 +16,9 @@ Source1:        furo-%{version}-vendor.tar.xz
 Source2:        furo-%{version}-vendor-licenses.txt
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): docs/requirements.txt
-BuildOption(install): -L furo
+
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
 
 BuildRequires:  make
 BuildRequires:  nodejs-devel
@@ -89,7 +89,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n furo-%{version} -a1
 cp -p %{SOURCE2} .
 
-%conf
 # Don't ship version control files
 find . -name .gitignore -delete
 
@@ -102,13 +101,19 @@ sed -e 's|\("https://docs\.python\.org/3", \)None|\1"%{_docdir}/python3-docs/htm
     -e 's|\("https://www\.sphinx-doc\.org/en/master", \)None|\1"%{_docdir}/python-sphinx-doc/html/objects.inv"|' \
     -i docs/conf.py
 
-%build -p
+%generate_buildrequires
+%pyproject_buildrequires docs/requirements.txt
+
+%build
 export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 export YARN_CACHE_FOLDER="$PWD/.package-cache"
 yarn install --offline
 nodeenv --node=system --prebuilt --clean-src $PWD/.nodeenv
+%pyproject_wheel
 
-%install -a
+%install
+%pyproject_install
+%pyproject_save_files -L furo
 # Build documentation
 %{py3_test_envvars} sphinx-build -b html docs html
 rm -rf html/{.buildinfo,.doctrees}

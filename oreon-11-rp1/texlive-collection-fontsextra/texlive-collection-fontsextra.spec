@@ -1,4 +1,4 @@
-%global source0_hash 92f43cadab879e154c790c01bccddee6ce303d5ebe2b509965b686e5752b42d3
+%global source0_hash ed6e634997737fba89e2d4c425c6b51af9abb74d254a46db2dd172166e984ae6
 %global source1_hash 900a9d4fb8f2318866d55ae1b18f26cb7ae52cf2450bf0765639d68e4d00dc6e
 %global source2_hash e8f8042bf36bf6e19be037ec3a5ef491c4c9de7c14ea1a25a909e78d9bbef00e
 %global source3_hash 79de231ad5cd8a9632dac0711036a9425d6ec6e1982b62e221f4ca5f87e4b41e
@@ -833,7 +833,7 @@
 Name:           texlive-collection-fontsextra
 Epoch:          12
 Version:        svn78246
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Additional fonts
 
 License:        LPPL-1.3c

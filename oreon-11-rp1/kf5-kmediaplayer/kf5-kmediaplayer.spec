@@ -5,16 +5,16 @@
 
 Name:    kf5-%{framework}
 Version: 5.116.0
-Release: 5%{?dist}
+Release: 7%{?dist}
 Summary: KDE Frameworks 5 Tier 3 module with interface for media player features
 
 # The project has no SPDX tags on files. The LICENSE file points to X11 License, soooooo...
 License: X11
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/portingAids/%{framework}-%{version}.tar.xz
+%global majmin 5.116
+%global stable stable
+Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules >= %{majmin}
 BuildRequires:  kf5-kparts-devel >= %{majmin}

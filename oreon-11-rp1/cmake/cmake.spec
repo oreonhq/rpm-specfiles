@@ -97,6 +97,8 @@
 Name:           %{orig_name}%{?name_suffix}
 Version:        %{pkg_version}
 Release:        %{baserelease}%{?dist}
+Provides:       cmake3 = %{version}-%{release}
+Provides:       cmake3%{?_isa} = %{version}-%{release}
 Summary:        Cross-platform make system
 
 # most sources are BSD

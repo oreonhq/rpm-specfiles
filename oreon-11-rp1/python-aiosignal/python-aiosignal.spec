@@ -16,10 +16,11 @@ Patch:          0001-Downstream-only-patch-out-coverage-options.patch
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 Patch:          0002-Downstream-only-do-not-fail-on-warnings.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l aiosignal
 
 BuildArch:      noarch
+
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
 
 BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(pytest-asyncio)
@@ -36,7 +37,21 @@ Obsoletes:      python-aiosignal-doc < 1.3.1-15
 
 %description -n python3-aiosignal %{common_description}
 
-%check -a
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -n aiosignal-%{version} -p1
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l aiosignal
+
+%check
 %pytest
 
 %files -n python3-aiosignal -f %{pyproject_files}

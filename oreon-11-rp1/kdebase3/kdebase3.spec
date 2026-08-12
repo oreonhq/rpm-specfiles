@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 77aa9d8f28c532f2e7a5157a7f4ba8df1001f00fa1cb72cb70b388b3d0e16b61
 
 %global debug_package %{nil}
 
@@ -24,12 +24,12 @@
 Name:    kdebase3
 Summary: KDE 3 core files
 Version: 3.5.10
-Release: 85%{?dist}
+Release: 86%{?dist}
 
 # programs: GPLv2, libs: LGPLv2
 License: GPL-2.0-only
 Url: http://www.kde.org
-Source0: ftp://ftp.kde.org/pub/kde/stable/%{version}/src/kdebase-%{version}.tar.bz2
+Source0: https://download.kde.org/stable/%{version}/src/kdebase-%{version}.tar.bz2
 
 Source1: konsole.desktop
 
@@ -236,6 +236,7 @@ Protocol handlers (KIOslaves) for personal information management, including:
 %endif
 
 %prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n kdebase-%{version}
 %patch -P0 -p1 -b .redhat-pam
 %patch -P1 -p1 -b .redhat-startkde

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5ecf094ec6b12d5413dfb851d8c3590c354058aee556e32e408bdfbf8c357d57
 
 %global major 7
 %global minor 9
@@ -7,14 +7,14 @@
 
 Name:           opencascade
 Version:        7.9.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        SDK intended for development of applications dealing with 3D CAD data
 
 # https://dev.opencascade.org/resources/licensing
 License:        LGPL-2.1-only WITH OCCT-exception-1.0
 URL:            https://www.opencascade.com/content/overview
 
-Source0:        https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/V%{ver_under};sf=tgz#/%{name}-%{version}.tgz
+Source0:        https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/V%{ver_under}.tar.gz#/%{name}-%{version}.tgz
 Source1:        DRAWEXE.1
 Source2:        opencascade-draw.desktop
 Source3:        occ-256.png
@@ -154,7 +154,8 @@ Requires:       vtk-devel
 OpenCASCADE CAE platform library development files
 
 %prep
-%autosetup -p1 -n occt-V%{ver_under}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -n OCCT-%{ver_under}
 
 # Sources are marked executable for no good reason...
 find ./src -type f -exec chmod -x {} \;

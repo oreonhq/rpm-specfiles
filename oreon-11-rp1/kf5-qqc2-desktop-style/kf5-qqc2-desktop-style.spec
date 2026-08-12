@@ -8,7 +8,7 @@ Release: 5%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: LGPL-2.0-or-later AND (LGPL-3.0-only OR GPL-2.0-or-later) AND (LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
-Source:  https://download.kde.org/%{stable_kf5}/frameworks/%{majmin_ver_kf5}/%{framework}-%{version}.tar.xz
+Source:  https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
 
 ## upstream patches
 

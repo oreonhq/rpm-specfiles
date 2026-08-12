@@ -1,9 +1,9 @@
-%global source0_hash 4528011d0c7b55f12cb344ddf2929b7ea1a0cae2ee51e118acbab4b5090cefcc
+%global source0_hash a00cfc749c6afd0b77741730fb3e08958c6714fb06cb8dfb29489a4bd93d0aa7
 %global source1_hash 5202c52a364afc0b310a2fff71082d37351590f6339f1a42eacb8a974df7a200
 %global source2_hash none
 %global source3_hash fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0
 
-%global DATE 20260606
+%global DATE 20260808
 %global gcc_tree gcc-16-%{DATE}
 %global gitrev d776f42bb910ebccf652b010b80c22bcca736f7f
 %global gcc_version 16.1.1
@@ -183,7 +183,7 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0:        https://gcc.gnu.org/pub/gcc/snapshots/LATEST-16/gcc-16-%{DATE}.tar.xz
+Source0:        https://gcc.gnu.org/pub/gcc/snapshots/16-%{DATE}/gcc-16-%{DATE}.tar.xz
 Source1:        https://codeload.github.com/MentorEmbedded/nvptx-tools/tar.gz/%{nvptx_tools_gitrev}#/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
 %global isl_version 0.24
 Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2

@@ -1,6 +1,6 @@
 Name:    kf5
 Version: 5.116.0
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 5
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -28,13 +28,8 @@ Filesystem for KDE Frameworks 5.
 
 %package rpm-macros
 Summary: RPM macros for KDE Frameworks 5
-%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 Requires: cmake >= 3
 Requires: qt5-rpm-macros >= 5.11
-%else
-Requires: cmake3
-Requires: qt5-qtbase-devel >= 5.11
-%endif
 %if 0%{?rhel} == 8
 # This is where cmake-related macros live, e.g. %%cmake_build, %%cmake_install
 # at least until fixed upstream, https://bugzilla.redhat.com/show_bug.cgi?id=1858941
@@ -59,14 +54,12 @@ mkdir -p %{buildroot}%{_datadir}/qlogging-categories5/
 mkdir -p %{buildroot}%{_docdir}/qt5
 mkdir -p %{buildroot}%{_libexecdir}/kf5
 mkdir -p %{buildroot}%{_datadir}/locale/tok
-%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11)
 mkdir -p %{buildroot}%{_prefix}/{lib,%{_lib}}/kconf_update_bin
 mkdir -p %{buildroot}%{_datadir}/{config.kcfg,kconf_update}
 mkdir -p %{buildroot}%{_datadir}/kpackage/{genericqml,kcms}
 mkdir -p %{buildroot}%{_datadir}/knsrcfiles/
 mkdir -p %{buildroot}%{_datadir}/solid/{actions,devices}
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/plasma-workspace/{env,shutdown}
-%endif
 install -Dpm644 %{_sourcedir}/macros.kf5 %{buildroot}%{_rpmconfigdir}/macros.d/macros.kf5
 sed -i \
   -e "s|@@KF5_VERSION@@|%{version}|g" \
@@ -88,7 +81,6 @@ sed -i \
 %{_datadir}/qlogging-categories5/
 %{_docdir}/qt5/
 %{_datadir}/locale/tok
-%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10)
 %{_sysconfdir}/xdg/plasma-workspace/
 %{_prefix}/lib/kconf_update_bin/
 %{_prefix}/%{_lib}/kconf_update_bin/
@@ -97,7 +89,6 @@ sed -i \
 %{_datadir}/kpackage/
 %{_datadir}/knsrcfiles/
 %{_datadir}/solid/
-%endif
 
 %files rpm-macros
 %{_rpmconfigdir}/macros.d/macros.kf5

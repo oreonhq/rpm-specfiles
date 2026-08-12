@@ -1,4 +1,4 @@
-%global source0_hash 0995891a6d7fabc9883bc238ececa1185702491e5b66b6f52ff0d2a396507b8c
+%global source0_hash 1df2463f94ebd926f402e7bcd92bf4a16f7a35732080a607fe4716888f1edbb5
 
 # There are no ELF objects in this package, so turn off debuginfo generation.
 %global debug_package %{nil}

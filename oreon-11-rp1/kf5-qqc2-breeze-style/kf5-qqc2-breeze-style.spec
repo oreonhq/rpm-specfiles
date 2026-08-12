@@ -16,7 +16,7 @@ Summary:  Qt5QuickControls2 breeze style
 
 License:  LGPL-2.0-or-later AND (LGPL-2.1-only OR LGPL-3.0-only) AND (LGPL-3.0-only OR GPL-2.0-or-later)
 URL:      https://invent.kde.org/plasma/%{component}
-Source:   https://download.kde.org/%{stable_kf5}/plasma/%{version}/%{component}-%{version}.tar.xz
+Source:   https://download.kde.org/stable/plasma/%{version}/%{component}-%{version}.tar.xz
 
 ## upstream patches
 

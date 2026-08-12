@@ -12,7 +12,7 @@
 
 Name:           lua-%{luapkgname}
 Version:        20200709
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Most comprehensive OpenSSL module in the Lua universe
 
 License:        MIT

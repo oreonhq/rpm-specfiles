@@ -6,7 +6,8 @@ Release:        %autorelease
 Summary:        NTLMv1 authentication library
 License:        LGPL-2.0-or-later
 URL:            https://gitlab.com/gsasl/libntlm/
-Source0:        https://download.savannah.nongnu.org/releases/libntlm/libntlm-%{version}.tar.gz
+Source0:        https://download-mirror.savannah.gnu.org/releases/libntlm/libntlm-%{version}.tar.gz
+# https://download.savannah.nongnu.org/releases/libntlm/libntlm-%{version}.tar.gz
 BuildRequires:  pkgconfig
 BuildRequires:  gcc
 BuildRequires:  make

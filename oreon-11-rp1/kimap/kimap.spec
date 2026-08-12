@@ -49,7 +49,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find ./po -type f -name libkimap5.po -execdir mv {} libkimap6.po \;
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 %install
@@ -65,10 +65,8 @@ find ./po -type f -name libkimap5.po -execdir mv {} libkimap6.po \;
 %{_includedir}/KPim6/KIMAP/
 %{_kf6_libdir}/libKPim6IMAP.so
 %{_kf6_libdir}/cmake/KPim6IMAP/
-%{_qt6_docdir}/*.tags
 
 %files doc
-%{_qt6_docdir}/*.qch
 
 %changelog
 %autochangelog

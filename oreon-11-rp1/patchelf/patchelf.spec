@@ -1,11 +1,11 @@
-%global source0_hash 64de10e4c6b8b8379db7e87f58030f336ea747c0515f381132e810dbf84a86e7
+%global source0_hash 1451d01ee3a21100340aed867d0b799f46f0b1749680028d38c3f5d0128fb8a7
 
 # hardening breaks the set-interpreter-long test on i686, x86_64, ppc64le, s390x
 %undefine _hardened_build
 
 Name:           patchelf
 Version:        0.18.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        A utility for patching ELF binaries
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

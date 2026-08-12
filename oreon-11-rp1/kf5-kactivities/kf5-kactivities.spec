@@ -5,14 +5,14 @@
 Name:    kf5-%{framework}
 Summary: A KDE Frameworks 5 Tier 3 to organize user work into separate activities
 Version: 5.116.0
-Release: 5%{?dist}
+Release: 7%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global majmin 5.116
+%global stable stable
+Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
 
 BuildRequires:  boost-devel
 BuildRequires:  extra-cmake-modules >= %{majmin}

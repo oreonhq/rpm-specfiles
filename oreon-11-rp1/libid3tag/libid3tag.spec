@@ -1,4 +1,4 @@
-%global source0_hash 3b65150454818e3e46d113891e0e0c335516315c51f80d87565f6124b892bff4
+%global source0_hash 0561009778513a95d91dac33cee8418d6622f710450a7cb56a74636d53b588cb
 
 Name:           libid3tag
 Version:        0.16.3

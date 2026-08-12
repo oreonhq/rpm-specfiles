@@ -15,7 +15,7 @@
 %global source14_hash 4020cb3a86f89e5da9328884e8dda130587e9f82cb86f7a48165bab9b991f301
 %global source15_hash 9fb69276f2ed6ad01d0197e5ed30815e9699c3739ad54bf6db181f1ead89b456
 %global source16_hash e4f0f0358aa61a4a9c7cf537b9450009a990bdcb6284975160391cf637fc6cf4
-%global source17_hash 0f4df9cb4ea373e551ee0351fab87c81c1b92933a3212be036e8ae495dd16070
+%global source17_hash 08ce36c65154b5520ece8f60200770704fb679b9fa25b197d88659c5481d46c9
 %global source18_hash c63eedceca4c39e74eb3043ee6edb83d98d1325fdbfa2f5623ccf4f2a9efc482
 %global source19_hash 1bc9681c81d3f7ddce5511e0dbf1cff025e6e6e2940273de271db6dc4e424d2c
 %global source20_hash bc027ff608e5ffcc40e8383234f11bbb48e80ecdf72f68716497f655b988a341
@@ -310,7 +310,7 @@
 Name:           texlive-collection-bibtexextra
 Epoch:          12
 Version:        svn78803
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        BibTeX additional styles
 
 License:        LPPL-1.3c

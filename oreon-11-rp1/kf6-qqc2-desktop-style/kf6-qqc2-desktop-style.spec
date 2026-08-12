@@ -21,7 +21,7 @@ BuildRequires: cmake
 BuildRequires: cmake(Qt6LinguistTools)
 BuildRequires: kf6-rpm-macros
 BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6Kirigami2)
+BuildRequires: cmake(KF6KirigamiPlatform)
 BuildRequires: cmake(KF6IconThemes)
 BuildRequires: cmake(KF6ColorScheme)
 BuildRequires: pkgconfig(Qt6Gui)
@@ -48,10 +48,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags}
+%cmake_build
 
 %install
-DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}"
+%cmake_install
 %find_lang %{name} --all-name --with-man --with-qt
 
 %files -f %{name}.lang

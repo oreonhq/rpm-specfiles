@@ -1,8 +1,8 @@
-%global source0_hash dbabd6967130a443003eef8d5df46e518e7c929c56fc0aab6caa135508b874ce
+%global source0_hash 1c2b0032a539033313b5be2e48ddd0ae94c84faf21d93956d53562eef4614868
 
 Name:           libxdg-basedir
 Version:        1.2.0
-Release:        37%{?dist}
+Release:        38%{?dist}
 Summary:        Implementation of the XDG Base Directory Specifications
 
 License:        MIT
@@ -48,7 +48,7 @@ developing applications that use %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q
+%setup -q -n %{name}-libxdg-basedir-%{version}
 
 %patch -P0 -p1
 %patch -P1 -p1
