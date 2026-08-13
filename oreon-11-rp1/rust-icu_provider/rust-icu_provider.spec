@@ -60,18 +60,6 @@ use the "baked" feature of the "%{crate}" crate.
 %files       -n %{name}+baked-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+databake-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+databake-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "databake" feature of the "%{crate}" crate.
-
-%files       -n %{name}+databake-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+deserialize_bincode_1-devel
 Summary:        %{summary}
 BuildArch:      noarch

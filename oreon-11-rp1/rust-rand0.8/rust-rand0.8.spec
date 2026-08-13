@@ -112,6 +112,18 @@ use the "nightly" feature of the "%{crate}" crate.
 %files       -n %{name}+nightly-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+rand_chacha-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+rand_chacha-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "rand_chacha" feature of the "%{crate}" crate.
+
+%files       -n %{name}+rand_chacha-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+serde1-devel
 Summary:        %{summary}
 BuildArch:      noarch

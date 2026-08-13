@@ -38,7 +38,7 @@
 # no longer build testsuite (takes time and not really being used)
 %bcond_with testsuite
 
-%if %{?fedora} >= 38
+%if 0%{?fedora} >= 38
 %global _ghcdynlibdir %{ghclibdir}
 %endif
 

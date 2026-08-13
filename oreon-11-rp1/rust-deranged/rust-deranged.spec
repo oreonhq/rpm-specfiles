@@ -85,18 +85,6 @@ use the "num" feature of the "%{crate}" crate.
 %files       -n %{name}+num-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+num-traits-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+num-traits-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "num-traits" feature of the "%{crate}" crate.
-
-%files       -n %{name}+num-traits-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+powerfmt-devel
 Summary:        %{summary}
 BuildArch:      noarch
