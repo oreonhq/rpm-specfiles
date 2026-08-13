@@ -72,6 +72,7 @@
 # A great many of these tests (over 20%) fail. Any help in understanding these
 # well enough to fix them or report them upstream is welcome.
 %bcond python_aio_tests    0
+%bcond google_auth_tests   0
 
 %ifnarch s390x
 # There are currently a significant number of failures like:
@@ -286,7 +287,9 @@ BuildRequires:  python3-protobuf < 4
 BuildRequires:  python3dist(protobuf) >= 3.12.0
 
 # grpcio_status (src/python/grpcio_status/setup.py) install_requires:
+%if %{with google_auth_tests}
 BuildRequires:  python3dist(googleapis-common-protos) >= 1.5.5
+%endif
 
 # Several packages have dependencies on grpcio or grpcio_tools—and grpcio-tests
 # depends on all of the other Python packages—which are satisfied within this
@@ -298,7 +301,9 @@ BuildRequires:  python3dist(googleapis-common-protos) >= 1.5.5
 BuildRequires:  python3dist(oauth2client) >= 1.4.7
 
 # grpcio_tests (src/python/grpcio_tests/setup.py) install_requires:
+%if %{with google_auth_tests}
 BuildRequires:  python3dist(google-auth) >= 1.17.2
+%endif
 
 # grpcio_tests (src/python/grpcio_tests/setup.py) install_requires:
 BuildRequires:  python3dist(requests) >= 2.14.2
@@ -1800,4 +1805,3 @@ fi
 
 %changelog
 %autochangelog
-

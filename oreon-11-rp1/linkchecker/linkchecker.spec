@@ -20,7 +20,6 @@ BuildRequires:  python3dist(polib)
 
 # For the tests (subset of [tool.hatch.envs.test])
 BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-xdist)
 BuildRequires:  python3dist(pyopenssl)
 
 %description
@@ -56,7 +55,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pyproject_save_files linkcheck
 
 %check
-%pytest -n auto
+%pytest
 
 %files -f %{pyproject_files}
 %doc README.rst doc/changelog.txt doc/upgrading.txt

@@ -49,30 +49,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+anstream-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+anstream-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "anstream" feature of the "%{crate}" crate.
-
-%files       -n %{name}+anstream-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+anstyle-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+anstyle-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "anstyle" feature of the "%{crate}" crate.
-
-%files       -n %{name}+anstyle-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+color-devel
 Summary:        %{summary}
 BuildArch:      noarch

@@ -65,7 +65,7 @@ Provides:       perl(CPAN::Meta::Requirements) = %{six_digit_version}
 %global __provides_exclude ^perl\\(CPAN::Meta::Requirements\\)$
 %endif
 
-Provides:       perl(CPAN::Meta::Requirements::Range)
+Provides:       perl(CPAN::Meta::Requirements::Range) = %{version}
 %description
 A CPAN::Meta::Requirements object models a set of version constraints like
 those specified in the META.yml or META.json files in CPAN distributions. It

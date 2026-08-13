@@ -7,13 +7,8 @@
 # Since grpc is a challenging package, it’s helpful to maintain the ability to
 # break this dependency.
 
-%if 0%{?rhel}
 %bcond grpcio 0
-%bcond tests 0
-%else
-%bcond grpcio 1
 %bcond tests 1
-%endif
 
 %bcond pytest_localserver %[ %{undefined el10} && %{undefined el9} ]
 
