@@ -1622,8 +1622,8 @@
 %global source1621_hash e492de192e921268bf2e53d9e4a2e9dde526ae735d6ac8708fb54fc735bdf1eb
 %global source1622_hash dbdeb081a09c6af52fdbed370196f348846d5a5224a4689c27a8d4da730f9cc9
 %global source1623_hash 19be2fe5af9d7aa2345f86300784a0abafc7a5e951c59bf76c6d6d5e1e02fd91
-%global source1624_hash 4cc75a3663876e1749fb2d58ee78b6bc27d7065a53685729b73e935c36f36052
-%global source1625_hash bf7e0c2e75e36f013601e64af8cb993166d080e9164cd029ed404877aa592600
+%global source1624_hash c67948c247c91754b06d8e6c67b99eb8c2aab06d284e8d0713c4136ed89e7e41
+%global source1625_hash 9962103adcafd8475a94169afcbbf243089e3155e91f4c82b535b09205e8cb4c
 %global source1626_hash e1d4e91a6795ff74f83f0122e423612c60476f2841182b32c1f98c55d380c5ec
 %global source1627_hash 4444f6070d857e3f389ae99d1f2437122520a86cce52807bbb40fce04bcd80ce
 %global source1628_hash d0694bb3515e56f160a9594d9fe366332b6ce823c5a1b3a1be8588d6a09d4876
@@ -4919,8 +4919,8 @@ Source1620:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/
 Source1621:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ktbox.doc.tar.xz
 Source1622:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ktv-texdata.tar.xz
 Source1623:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ktv-texdata.doc.tar.xz
-Source1624:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l3backend-dev.tar.xz
-Source1625:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l3backend-dev.doc.tar.xz
+Source1624:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final/archive/l3backend-dev.tar.xz
+Source1625:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final/archive/l3backend-dev.doc.tar.xz
 Source1626:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l3kernel-dev.tar.xz
 Source1627:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l3kernel-dev.doc.tar.xz
 Source1628:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/labbook.tar.xz

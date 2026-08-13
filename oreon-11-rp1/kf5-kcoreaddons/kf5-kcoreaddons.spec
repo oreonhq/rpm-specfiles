@@ -81,8 +81,8 @@ cat *.lang > all.lang
 export CTEST_OUTPUT_ON_FAILURE=1
 xvfb-run -a \
 dbus-launch --exit-with-session \
-time \
-%make_build test ARGS="--output-on-failure --timeout 300" -C %{_target_platform} ||:
+/usr/bin/time \
+%make_build test ARGS="--output-on-failure --timeout 300" -C %{_target_platform}
 %endif
 
 %if 0%{?rhel} && 0%{?rhel} < 8

@@ -7,6 +7,7 @@
 
 %global _lto_cflags %{nil}
 %global _smp_mflags -j1
+%global __cmake_builddir b
 
 # needed to ship deploy_lib template files
 %global _python_bytecompile_errors_terminate_build 0

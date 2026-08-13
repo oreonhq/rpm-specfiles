@@ -3,6 +3,7 @@
 # bcond_without for production builds:
 # - performance build (disable for quick build)
 %bcond_without perfbuild
+%global bootstrap 1
 
 # not for production builds
 %if %{without perfbuild}
