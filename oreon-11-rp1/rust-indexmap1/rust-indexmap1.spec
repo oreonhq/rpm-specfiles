@@ -37,6 +37,18 @@ use the "%{crate}" crate.
 %doc %{crate_instdir}/README.md
 %{crate_instdir}/
 
+%package     -n %{name}+default-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+default-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "default" feature of the "%{crate}" crate.
+
+%files       -n %{name}+default-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+arbitrary-devel
 Summary:        %{summary}
 BuildArch:      noarch

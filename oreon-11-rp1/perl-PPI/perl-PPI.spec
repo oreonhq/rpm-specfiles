@@ -70,10 +70,10 @@ Requires:       perl(Task::Weaken)
 # Filter out redundant unversioned provides
 %global __provides_exclude ^perl\\(PPI::.+\\)$
 
-Provides:       perl(PPI)
-Provides:       perl(PPI::Util)
-Provides:       perl(PPI::Dumper)
-Provides:       perl(PPI::Document)
+Provides:       perl(PPI) = %{version}
+Provides:       perl(PPI::Util) = %{version}
+Provides:       perl(PPI::Dumper) = %{version}
+Provides:       perl(PPI::Document) = %{version}
 %description
 Parse, analyze and manipulate Perl (without perl).
 

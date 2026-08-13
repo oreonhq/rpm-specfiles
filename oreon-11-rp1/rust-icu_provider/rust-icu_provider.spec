@@ -60,18 +60,6 @@ use the "baked" feature of the "%{crate}" crate.
 %files       -n %{name}+baked-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+bincode-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+bincode-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "bincode" feature of the "%{crate}" crate.
-
-%files       -n %{name}+bincode-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+databake-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -120,18 +108,6 @@ use the "deserialize_postcard_1" feature of the "%{crate}" crate.
 %files       -n %{name}+deserialize_postcard_1-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+erased-serde-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+erased-serde-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "erased-serde" feature of the "%{crate}" crate.
-
-%files       -n %{name}+erased-serde-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+export-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -168,18 +144,6 @@ use the "logging" feature of the "%{crate}" crate.
 %files       -n %{name}+logging-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+postcard-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+postcard-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "postcard" feature of the "%{crate}" crate.
-
-%files       -n %{name}+postcard-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+serde-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -190,30 +154,6 @@ This package contains library source intended for building other packages which
 use the "serde" feature of the "%{crate}" crate.
 
 %files       -n %{name}+serde-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_json-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_json-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_json" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_json-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+stable_deref_trait-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+stable_deref_trait-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "stable_deref_trait" feature of the "%{crate}" crate.
-
-%files       -n %{name}+stable_deref_trait-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+std-devel

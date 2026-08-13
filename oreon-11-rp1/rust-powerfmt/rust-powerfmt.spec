@@ -75,18 +75,6 @@ use the "macros" feature of the "%{crate}" crate.
 %files       -n %{name}+macros-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+powerfmt-macros-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+powerfmt-macros-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "powerfmt-macros" feature of the "%{crate}" crate.
-
-%files       -n %{name}+powerfmt-macros-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+std-devel
 Summary:        %{summary}
 BuildArch:      noarch

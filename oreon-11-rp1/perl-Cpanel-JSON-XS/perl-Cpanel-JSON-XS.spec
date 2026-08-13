@@ -120,7 +120,7 @@ Suggests:	perl(YAML::XS)
 # Avoid unwanted provides and dependencies
 %{?perl_default_filter}
 
-Provides:       perl(Cpanel::JSON::XS)
+Provides:       perl(Cpanel::JSON::XS) = %{version}
 %description
 This module converts Perl data structures to JSON and vice versa. Its
 primary goal is to be correct and its secondary goal is to be fast. To

@@ -10,11 +10,9 @@ License:        MIT
 URL:            https://github.com/sayanarijit/expandvars
 Source:         %{pypi_source expandvars}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l expandvars
-
 BuildArch:      noarch
 
+BuildRequires:  python3-devel
 # Most of the dependencies in the “test” extra and almost everything tox.ini
 # pertain to linting and coverage analysis. Rather than working around all of
 # these, it is simpler to BR and invoke pytest manually.
@@ -36,11 +34,22 @@ Summary:        %{summary}
 
 %description -n python3-expandvars %{common_description}
 
-%prep -a
+%prep
+%autosetup -n expandvars-%{version}
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 sed -r -i "s/--cov[^[:blank:]'\"]*[[:blank:]]*//g" pyproject.toml
 
-%check -a
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l expandvars
+
+%check
 %pytest
 
 %files -n python3-expandvars -f %{pyproject_files}

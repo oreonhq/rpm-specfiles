@@ -979,7 +979,26 @@ echo '===== Building C (core) and C++ components =====' 2>&1
     -DgRPC_BUILD_GRPC_PYTHON_PLUGIN:BOOL=ON \
     -DgRPC_BUILD_GRPC_RUBY_PLUGIN:BOOL=ON \
     -GNinja
-%cmake_build
+%cmake_build --target \
+    address_sorting \
+    gpr \
+    grpc \
+    grpc++ \
+    grpc++_alts \
+    grpc++_error_details \
+    grpc++_reflection \
+    grpc++_unsecure \
+    grpc_plugin_support \
+    grpc_unsecure \
+    grpcpp_channelz \
+    grpc_cpp_plugin \
+    grpc_csharp_plugin \
+    grpc_node_plugin \
+    grpc_objective_c_plugin \
+    grpc_php_plugin \
+    grpc_python_plugin \
+    grpc_ruby_plugin \
+    grpc_cli
 # ~~~~ Python ~~~~
 
 echo '===== Building Python grpcio package =====' 2>&1
