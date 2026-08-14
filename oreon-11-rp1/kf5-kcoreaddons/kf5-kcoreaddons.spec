@@ -79,10 +79,7 @@ cat *.lang > all.lang
 %check
 %if 0%{?tests}
 export CTEST_OUTPUT_ON_FAILURE=1
-xvfb-run -a \
-dbus-launch --exit-with-session \
-/usr/bin/time \
-%make_build test ARGS="--output-on-failure --timeout 300" -C %{_target_platform}
+xvfb-run -a dbus-launch --exit-with-session /usr/bin/time %{__make} %{?_smp_mflags} test ARGS="--output-on-failure --timeout 300" -C %{_target_platform}
 %endif
 
 %if 0%{?rhel} && 0%{?rhel} < 8

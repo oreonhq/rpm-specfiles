@@ -64,6 +64,18 @@ use the "ansi-parsing" feature of the "%{crate}" crate.
 %files       -n %{name}+ansi-parsing-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+unicode-width-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+unicode-width-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "unicode-width" feature of the "%{crate}" crate.
+
+%files       -n %{name}+unicode-width-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+windows-console-colors-devel
 Summary:        %{summary}
 BuildArch:      noarch

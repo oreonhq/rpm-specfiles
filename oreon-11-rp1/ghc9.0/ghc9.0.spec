@@ -25,7 +25,7 @@
 %global xhtml_ver 3000.2.2.1
 
 # bootstrap needs 8.8+
-%global ghcboot_major 9.0
+%global ghcboot_major 8.10
 %global ghcboot ghc%{ghcboot_major}
 
 # locked together since disabling haddock causes no manuals built
@@ -129,7 +129,7 @@ Patch35: https://gitlab.haskell.org/ghc/ghc/-/merge_requests/12885.patch
 
 BuildRequires: %{ghcboot}-compiler
 # for ABI hash checking
-%if %{with abicheck}
+%if %{with abicheck} && ! 0%{?bootstrap}
 BuildRequires: %{name}
 %endif
 BuildRequires: ghc-rpm-macros-extra

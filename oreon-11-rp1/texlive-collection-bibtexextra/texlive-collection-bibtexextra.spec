@@ -4531,7 +4531,6 @@ popd
 
 %files -n texlive-biblatex-sbl
 %license lppl1.3c.txt
-%{_texmf_main}/makeindex/biblatex-sbl/
 %{_texmf_main}/tex/latex/biblatex-sbl/
 %doc %{_texmf_main}/doc/latex/biblatex-sbl/
 

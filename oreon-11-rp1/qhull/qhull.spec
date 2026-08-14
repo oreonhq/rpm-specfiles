@@ -35,6 +35,12 @@ the points to stdout.  It also generates Delaunay triangulations, Voronoi
 diagrams, furthest-site Voronoi diagrams, and halfspace intersections
 about a point.
 
+%package -n libqhull
+Summary: libqhull
+
+%description -n libqhull
+%{summary}
+
 %package -n libqhull_r
 Summary: libqhull_r
 
@@ -49,6 +55,7 @@ Summary: libqhull_p
 
 %package devel
 Summary: Development files for qhull
+Requires: lib%{name}%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: lib%{name}_r%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: lib%{name}_p%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: %{name}%{?_isa} = %{epoch}:%{version}-%{release}
@@ -70,7 +77,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 mkdir -p build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=%{_lib} -DLINK_APPS_SHARED=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_SKIP_RPATH=ON -DCMAKE_SKIP_INSTALL_RPATH=ON
+cmake .. -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=%{_lib} -DLIB_INSTALL_DIR=%{_libdir} -DLINK_APPS_SHARED=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_SKIP_RPATH=ON -DCMAKE_SKIP_INSTALL_RPATH=ON
 make VERBOSE=1 %{?_smp_mflags}
 # These items are deprecated as of 8.0.2
 make VERBOSE=1 %{?_smp_mflags} libqhull qhull_p
@@ -95,6 +102,11 @@ done
 %license COPYING.txt
 %{_bindir}/*
 %{_mandir}/man1/*
+
+%files -n libqhull
+%{_libdir}/libqhull.so.*
+
+%ldconfig_scriptlets -n libqhull
 
 %files -n libqhull_r
 %{_libdir}/libqhull_r.so.*

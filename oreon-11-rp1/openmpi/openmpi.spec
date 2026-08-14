@@ -29,7 +29,7 @@
 %bcond_with java
 %endif
 
-%if %{defined rhel} || (0%{?oreon} >= 11)
+%if %{defined rhel}
 %bcond_with orangefs
 %bcond_with sphinx
 %else

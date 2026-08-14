@@ -156,18 +156,6 @@ use the "sync" feature of the "%{crate}" crate.
 %files       -n %{name}+sync-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+writeable-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+writeable-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "writeable" feature of the "%{crate}" crate.
-
-%files       -n %{name}+writeable-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+zerotrie-devel
 Summary:        %{summary}
 BuildArch:      noarch

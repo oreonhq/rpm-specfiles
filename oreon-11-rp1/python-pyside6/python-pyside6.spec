@@ -367,6 +367,9 @@ for f in %{buildroot}%{_libdir}/cmake/PySide6/*.cmake \
          -e 's|%{_datadir}/PySide6/share/PySide6|%{_datadir}/PySide6|g' "$f" || :
 done
 
+mkdir -p %{buildroot}%{_datadir}/PySide6/share
+ln -snf .. %{buildroot}%{_datadir}/PySide6/share/PySide6
+
 # Fix all Python shebangs recursively
 # -p preserves timestamps
 # -n prevents creating ~backup files
