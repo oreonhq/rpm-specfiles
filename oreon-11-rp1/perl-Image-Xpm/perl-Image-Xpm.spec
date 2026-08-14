@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Load, create, manipulate and save xpm image files in Perl
 License:        GPL-1.0-or-later
 URL:            https://metacpan.org/release/Image-Xpm
-Source0:        https://cpan.metacpan.org/authors/id/S/SU/SUMMER/Image-Xpm-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SR/SREZIC/Image-Xpm-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-generators

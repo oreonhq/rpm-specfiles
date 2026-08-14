@@ -76,6 +76,18 @@ use the "getrandom" feature of the "%{crate}" crate.
 %files       -n %{name}+getrandom-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+libc-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+libc-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "libc" feature of the "%{crate}" crate.
+
+%files       -n %{name}+libc-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+log-devel
 Summary:        %{summary}
 BuildArch:      noarch

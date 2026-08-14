@@ -3,11 +3,7 @@
 # Main Django, i.e. whether this is the main Django version in the distribution
 # that owns /usr/bin/django-admin and other unique paths
 # based on Python packaging, see e.g. python3.14
-%if 0%{?fedora} >= 44
 %bcond main_django 1
-%else
-%bcond main_django 0
-%endif
 
 %if 0%{?python3_version_nodots} >= 314
 # some tests currently fail

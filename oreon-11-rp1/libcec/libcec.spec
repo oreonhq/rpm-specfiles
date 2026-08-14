@@ -12,7 +12,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  p8-platform-devel
-BuildRequires:  udev-devel
+BuildRequires:  libudev-devel
 BuildRequires:  lockdev-devel
 BuildRequires:  swig
 BuildRequires:  python3-devel
