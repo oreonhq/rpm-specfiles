@@ -281,8 +281,8 @@ LLVM's modified googletest sources.
 # Build libLLVM.so first.  This ensures that when libLLVM.so is linking, there
 # are no other compile jobs running.  This will help reduce OOM errors on the
 # builders without having to artificially limit the number of concurrent jobs.
-%cmake_build --target LLVM
-%cmake_build
+%cmake_build --target LLVM > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: build stopped/ { print; fflush() }') 2>&1
+%cmake_build > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: build stopped/ { print; fflush() }') 2>&1
 
 %install
 %cmake_install

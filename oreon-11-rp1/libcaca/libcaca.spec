@@ -30,6 +30,7 @@ Patch0: libcaca-0.99.beta16-multilib.patch
 Patch1: libcaca-0.99.beta20-c99.patch
 # https://github.com/cacalabs/libcaca/pull/66
 Patch2: libcaca-0.99.beta20-CVE-2022-0856.patch
+Patch3: libcaca-ruby34.patch
 
 Buildrequires: doxygen
 BuildRequires: gcc-c++

@@ -7653,11 +7653,7 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $i
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $i
 done
 
-%make_build -s world STRIPPROG=/bin/true STRIP=/bin/true > ../texlive-world.log 2>&1 || {
-  echo "make world failed, last 300 lines:"
-  tail -n 300 ../texlive-world.log
-  exit 1
-}
+%make_build -s world STRIPPROG=/bin/true STRIP=/bin/true > >(awk '/fatal error:|error:|undefined reference|collect2:|No rule to make target|make\[[0-9]+\]: \*\*\*/ { print; fflush() }') 2>&1
 
 %install
 # make directories

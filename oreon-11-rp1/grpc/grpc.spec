@@ -979,6 +979,8 @@ echo '===== Building C (core) and C++ components =====' 2>&1
     -DgRPC_BUILD_GRPC_PYTHON_PLUGIN:BOOL=ON \
     -DgRPC_BUILD_GRPC_RUBY_PLUGIN:BOOL=ON \
     -GNinja
+exec 3>&1 4>&2
+exec > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: build stopped|Traceback/ { print; fflush() }' >&3) 2>&1
 %cmake_build --target \
     address_sorting \
     gpr \
@@ -1081,7 +1083,7 @@ do
       -O1 --skip-build --root "${PYROOT}" --prefix %{_prefix}
   popd >/dev/null
 done
-
+exec 1>&3 2>&4
 
 %install
 # ~~~~ C (core) and C++ (cpp) ~~~~

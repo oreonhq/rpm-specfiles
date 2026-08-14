@@ -1,14 +1,14 @@
 --- a/src/kml/base/referent.h	2015-12-21 09:23:05.000000000 -0800
 +++ b/src/kml/base/referent.h	2026-08-12 14:46:44.436600072 -0700
-@@ -25,6 +25,8 @@
+@@ -26,6 +26,8 @@
  #ifndef KML_BASE_REFERENT_H__
  #define KML_BASE_REFERENT_H__
  
 +#include <type_traits>
 +
- namespace kmlbase {
- 
- class Referent {
+ // This file contains the implementation of the Referent class which holds
+ // the reference counter used by boost::intrusive_ptr.  The Referent class
+ // is a base class of all KML DOM Elements and also the base TempFile
 @@ -72,4 +74,17 @@
  
  } // end namespace kmlbase
