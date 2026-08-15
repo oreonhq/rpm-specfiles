@@ -63,8 +63,5 @@ find ./po -type f -name akonadinotes5.po -execdir mv {} akonadinotes6.po \;
 %{_kf6_libdir}/cmake/KPim6AkonadiNotes/
 %{_kf6_libdir}/libKPim6AkonadiNotes.so
 
-%files doc
-%{_qt6_docdir}/*.qch
-
 %changelog
 %autochangelog

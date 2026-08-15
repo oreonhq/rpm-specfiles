@@ -348,10 +348,10 @@ Installing this package causes %{name}-*-prof packages corresponding to
 %prep
 %setup -q -n ghc-%{version} %{?with_testsuite:-b1}
 %ifarch x86_64
-%setup -q -T -D -a2
+%setup -q -T -D -a2 -n ghc-%{version}
 %endif
 %ifarch aarch64
-%setup -q -T -D -a3
+%setup -q -T -D -a3 -n ghc-%{version}
 %endif
 
 echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -

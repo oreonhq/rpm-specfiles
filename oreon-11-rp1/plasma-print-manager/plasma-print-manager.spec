@@ -108,7 +108,6 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.Configure
 
 %files -f %{name}.lang
 %license LICENSES/*
-%{_bindir}/kde-print-queue
 %{_bindir}/configure-printer
 %{_kf6_qmldir}/org/kde/plasma/printmanager/
 %{_kf6_datadir}/qlogging-categories6/pmlogs.categories

@@ -174,7 +174,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_{mobile_info,mob
 %{_kf6_datadir}/plasma/layout-templates/org.kde.plasma.mobile.defaultNavigationPanel/metadata.json
 %{_kf6_datadir}/plasma/layout-templates/org.kde.plasma.mobile.defaultStatusBar/contents/layout.js
 %{_kf6_datadir}/plasma/layout-templates/org.kde.plasma.mobile.defaultStatusBar/metadata.json
-%{_kf6_qmldir}/org/kde/plasma/mm/*
 %{_kf6_qmldir}/org/kde/plasma/private/mobileshell
 %{_kf6_qmldir}/org/kde/plasma/quicksetting
 %{_kf6_qmldir}/org/kde/plasma/mobileinitialstart
