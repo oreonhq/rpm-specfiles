@@ -1,29 +1,23 @@
---- a/src/kml/base/referent.h	2015-12-21 09:23:05.000000000 -0800
-+++ b/src/kml/base/referent.h	2026-08-12 14:46:44.436600072 -0700
-@@ -26,6 +26,8 @@
- #ifndef KML_BASE_REFERENT_H__
- #define KML_BASE_REFERENT_H__
- 
-+#include <type_traits>
+--- a/src/kml/dom/kml_ptr.h
++++ b/src/kml/dom/kml_ptr.h
+@@ -29,1 +29,20 @@
++namespace kmlbase {
++class Referent;
++void intrusive_ptr_add_ref(Referent* r);
++void intrusive_ptr_release(Referent* r);
++}
 +
- // This file contains the implementation of the Referent class which holds
- // the reference counter used by boost::intrusive_ptr.  The Referent class
- // is a base class of all KML DOM Elements and also the base TempFile
-@@ -72,4 +74,17 @@
- 
- } // end namespace kmlbase
- 
 +namespace boost {
 +template <typename T>
-+inline typename std::enable_if<std::is_base_of<kmlbase::Referent, T>::value>::type
-+intrusive_ptr_add_ref(T* r) {
-+  kmlbase::intrusive_ptr_add_ref(r);
++inline void intrusive_ptr_add_ref(T* r) {
++  kmlbase::intrusive_ptr_add_ref(
++      reinterpret_cast<kmlbase::Referent*>(r));
 +}
 +template <typename T>
-+inline typename std::enable_if<std::is_base_of<kmlbase::Referent, T>::value>::type
-+intrusive_ptr_release(T* r) {
-+  kmlbase::intrusive_ptr_release(r);
++inline void intrusive_ptr_release(T* r) {
++  kmlbase::intrusive_ptr_release(
++      reinterpret_cast<kmlbase::Referent*>(r));
 +}
 +}
 +
- #endif  // KML_BASE_REFERENT_H__
+ #include "boost/intrusive_ptr.hpp"

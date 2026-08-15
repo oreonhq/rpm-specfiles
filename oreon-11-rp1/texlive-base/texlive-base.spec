@@ -7516,7 +7516,10 @@ tar xf %{SOURCE0}
 %patch -P30 -p1 -b .out_of_memory
 %if %{with poppler}
 %patch -P31 -p1 -b .poppler-xpdf-fix
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?oreon} >= 11
+%patch -P34 -p1 -b .poppler22
+%patch -P35 -p1 -b .poppler-crash-fix
+%elif 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %patch -P34 -p1 -b .poppler22
 %patch -P35 -p1 -b .poppler-crash-fix
 %endif
@@ -7605,7 +7608,9 @@ rm -f dummy.*
 export CFLAGS="$RPM_OPT_FLAGS -std=gnu17 -fno-strict-aliasing -Werror=format-security -Wno-error=int-conversion -Wno-error=incompatible-pointer-types -Wno-error=implicit-int -Wno-error=implicit-function-declaration"
 
 # -std=gnu++17 until icu is properly C++20 compatible
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?oreon} >= 11
+export CXXFLAGS="$RPM_OPT_FLAGS -std=gnu++17 -fno-strict-aliasing -Werror=format-security"
+%elif 0%{?fedora} >= 36 || 0%{?rhel} > 9
 export CXXFLAGS="$RPM_OPT_FLAGS -std=gnu++17 -fno-strict-aliasing -Werror=format-security"
 %else
 export CXXFLAGS="$RPM_OPT_FLAGS -std=c++11 -fno-strict-aliasing -Werror=format-security"

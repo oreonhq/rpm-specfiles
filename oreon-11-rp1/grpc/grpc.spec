@@ -1001,6 +1001,9 @@ exec > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: 
     grpc_python_plugin \
     grpc_ruby_plugin \
     grpc_cli
+%if %{with core_tests}
+%cmake_build
+%endif
 # ~~~~ Python ~~~~
 
 echo '===== Building Python grpcio package =====' 2>&1

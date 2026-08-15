@@ -284,7 +284,6 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
 %cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
     -DCMAKE_C_COMPILER:FILEPATH=%{_bindir}/gcc \
     -DCMAKE_CXX_COMPILER:FILEPATH=%{_bindir}/g++ \
-    -DCMAKE_DEPENDS_USE_COMPILER=FALSE \
     -DCMAKE_BUILD_TYPE=None \
     -DSHIBOKEN_PYTHON_LIBRARIES=`pkgconf python3-embed --libs` \
     -DBUILD_TESTS=OFF \
