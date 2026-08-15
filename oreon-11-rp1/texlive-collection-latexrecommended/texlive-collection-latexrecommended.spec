@@ -15,7 +15,7 @@
 %global source14_hash cd6661b64d1859851b451b0d2461da77a8b3839056ba6210d4b1a35da4209edb
 %global source15_hash 8e087fa81bd22570f549b6f6e8c45b31f1559c8a273607d3e1561079228a6e1e
 %global source16_hash 9da1055ba06b778fe2b33e4cf5164f002e9cbb0237804f24e3f7247e843b4922
-%global source17_hash c2df3c1c7d108b7b79b2abe86bc6ee9b712e0592229cc307c18c93e9cb0fd8a1
+%global source17_hash ac2320a5ad8aa3205404f1952c08b152775856594c962dc97b77cb17d68b45a4
 %global source18_hash fdb6b5ed86dbfde569099e238a37746de99552fdf549de7aab9e12bca2099209
 %global source19_hash 0a11029ce6b683c815ff9ac1f35d04e42f19bd464c4b4dd35db1fac1446f608c
 %global source20_hash 3a257e260e6f7ee5ec7fbe07cd09a80d559e7fa4073956804498cc60eb670df2
@@ -143,7 +143,7 @@
 Name:           texlive-collection-latexrecommended
 Epoch:          12
 Version:        svn78568
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        LaTeX recommended packages
 
 License:        LPPL-1.3c

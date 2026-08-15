@@ -7,7 +7,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Implementation of Status Notifier Items
 
 License:        CC0-1.0 AND LGPL-2.0-or-later
@@ -21,7 +21,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xkbcommon)
 

@@ -1,7 +1,7 @@
-%global source0_hash 15e4c7ff51fa3f3d9373b3f8fc9fb87a9ddddb260103161e08c249ce8dbfbfa0
+%global source0_hash 7bad7bfc07672635ba0ead6ab66f031f2b3a800be021d5b0c069997cdc83f58b
 
 Name:    akonadi-mime
-Version: 25.12.3
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: The Akonadi Mime Library
 
@@ -52,10 +52,6 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version} -p1
-
-# Remove together with move-translations.patch once released
-find ./po -type f -name libakonadi-kmime5.po -execdir mv {} libakonadi-kmime6.po \;
-find ./po -type f -name libakonadi-kmime5-serializer.po -execdir mv {} libakonadi-kmime6-serializer.po \;
 
 %build
 %cmake_kf6

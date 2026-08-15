@@ -2,13 +2,13 @@
 
 Name:    akonadi-notes
 Version: 24.08.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: The Akonadi Notes Library
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/pim/%{name}
 
-Source0:        http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  cyrus-sasl-devel
@@ -62,7 +62,6 @@ find ./po -type f -name akonadinotes5.po -execdir mv {} akonadinotes6.po \;
 %{_includedir}/KPim6/AkonadiNotes/
 %{_kf6_libdir}/cmake/KPim6AkonadiNotes/
 %{_kf6_libdir}/libKPim6AkonadiNotes.so
-%{_qt6_docdir}/*.tags
 
 %files doc
 %{_qt6_docdir}/*.qch

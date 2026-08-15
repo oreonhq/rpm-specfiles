@@ -200,6 +200,7 @@ Source105:      grpc_cli-totext.1
 Source106:      grpc_cli-tojson.1
 Source107:      grpc_cli-tobinary.1
 Source108:      grpc_cli-help.1
+Patch1000:      grpc-spinlock-test-bound.patch
 
 # ~~~~ C (core) and C++ (cpp) ~~~~
 
@@ -979,6 +980,11 @@ echo '===== Building C (core) and C++ components =====' 2>&1
     -DgRPC_BUILD_GRPC_PYTHON_PLUGIN:BOOL=ON \
     -DgRPC_BUILD_GRPC_RUBY_PLUGIN:BOOL=ON \
     -GNinja
+awk '/^build .*\.o:/{sub(/^build /, ""); sub(/:.*$/, ""); print}' \
+    %{_vpath_builddir}/build.ninja |
+  while read -r object; do
+    mkdir -p "$(dirname "%{_vpath_builddir}/$object")"
+  done
 exec 3>&1 4>&2
 exec > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: build stopped|Traceback/ { print; fflush() }' >&3) 2>&1
 %cmake_build --target \

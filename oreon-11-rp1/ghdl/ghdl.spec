@@ -1,4 +1,5 @@
-%global source0_hash 1e5ee8ea4a6a1f7249a44134c67ad466dd68d7bbbadbf1da2bd860756cbd531f
+%global source0_hash 438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e
+%global source100_hash 1e5ee8ea4a6a1f7249a44134c67ad466dd68d7bbbadbf1da2bd860756cbd531f
 
 %global ghdlver 5.1.1
 %global ghdldate 20250618
@@ -23,9 +24,7 @@
 
 %bcond_with gnatwae
 
-%global DATE 20250808
-%global gitrev f833458d29b4fa40ffce6cf3b37ab9a30a864901
-%global gcc_version 15.2.1
+%global gcc_version 15.2.0
 %global gcc_major 15
 # Note, gcc_release must be integer, if you want to add suffixes to
 # %%{release}, append them after %%{gcc_release} on Release: line.
@@ -41,17 +40,11 @@
 Summary: A VHDL simulator, using the GCC technology
 Name: ghdl
 Version: %{ghdlver}
-Release: 1.%{ghdlgitrev}%{?dist}
+Release: 2.%{ghdlgitrev}%{?dist}
 # Automatically converted from old format: GPLv2+ and GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD - review is highly recommended.
 License: GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-Callaway-GPLv3+-with-exceptions AND LicenseRef-Callaway-GPLv2+-with-exceptions AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-BSD
 URL: http://ghdl.free.fr/
-# The source for this package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-# git clone --depth 1 git://gcc.gnu.org/git/gcc.git gcc-dir.tmp
-# git --git-dir=gcc-dir.tmp/.git fetch --depth 1 origin %%{gitrev}
-# git --git-dir=gcc-dir.tmp/.git archive --prefix=%%{name}-%%{version}-%%{DATE}/ %%{gitrev} | xz -9e > %%{name}-%%{version}-%%{DATE}.tar.xz
-# rm -rf gcc-dir.tmp
-Source0: gcc-%{gcc_version}-%{DATE}.tar.xz
+Source0: https://ftp.gnu.org/gnu/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz
 %global isl_version 0.16.1
 
 Patch0: gcc15-hack.patch
@@ -193,8 +186,9 @@ that tracks signal updates and schedules processes.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; }
 
-%setup -q -n gcc-%{gcc_version}-%{DATE} -a 100
+%setup -q -n gcc-%{gcc_version} -a 100
 %patch -P 0 -p0 -b .hack~
 %patch -P 3 -p0 -b .libgomp-omp_h-multilib~
 %patch -P 4 -p0 -b .libtool-no-rpath~
@@ -395,7 +389,7 @@ CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 make %{?_smp_mflags}
 
 pushd gcc/vhdl
-gnatmake -c -aI%{_builddir}/gcc-%{gcc_version}-%{DATE}/gcc/vhdl ortho_gcc-main \
+gnatmake -c -aI%{_builddir}/gcc-%{gcc_version}/gcc/vhdl ortho_gcc-main \
   -cargs -g -Wall -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 \
 %ifarch %{ix86} x86_64
   -mtune=generic \

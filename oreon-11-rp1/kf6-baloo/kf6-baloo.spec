@@ -9,7 +9,7 @@
 Name:    kf6-%{framework}
 Summary: A Tier 3 KDE Frameworks 6 module that provides indexing and search functionality
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND bzip2-1.0.6
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -26,16 +26,16 @@ Patch100: baloo-5.67.0-baloofile_config.patch
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6FileMetaData)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IdleTime)
-BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6FileMetaData) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IdleTime) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(KF6Solid) >= %{version}
 
 BuildRequires:  lmdb-devel
 BuildRequires:  qt6-qtbase-devel
@@ -150,4 +150,3 @@ cat baloo_file6.lang baloo_file_extractor6.lang \
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

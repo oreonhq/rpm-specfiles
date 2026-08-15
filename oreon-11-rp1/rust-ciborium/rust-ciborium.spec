@@ -14,6 +14,7 @@ Summary:        serde implementation of CBOR using ciborium-basic
 License:        Apache-2.0
 URL:            https://crates.io/crates/ciborium
 Source:         %{crates_source}
+Patch:          ciborium-negative-nan-tests.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 

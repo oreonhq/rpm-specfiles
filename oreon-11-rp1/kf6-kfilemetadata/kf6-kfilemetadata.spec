@@ -8,7 +8,7 @@
 Name:           kf6-%{framework}
 Summary:        A Tier 2 KDE Framework for extracting file metadata
 Version:        6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License:        BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -20,11 +20,11 @@ BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Codecs)
-BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Codecs) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
 BuildRequires:  cmake(QMobipocket6)
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  libattr-devel

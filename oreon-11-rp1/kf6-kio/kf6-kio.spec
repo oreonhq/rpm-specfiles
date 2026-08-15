@@ -8,7 +8,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for filesystem abstraction
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
@@ -34,30 +34,30 @@ BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
+BuildRequires:  cmake(KF6Solid) >= %{version}
 BuildRequires:  switcheroo-control
-BuildRequires:  cmake(KF6ColorScheme)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6DocTools) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
 BuildRequires:  qt6-qtbase-private-devel
-BuildRequires:  cmake(KF6Bookmarks)
-BuildRequires:  cmake(KF6Completion)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6JobWidgets)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6Wallet)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(KF6Bookmarks) >= %{version}
+BuildRequires:  cmake(KF6Completion) >= %{version}
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6ItemViews) >= %{version}
+BuildRequires:  cmake(KF6JobWidgets) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
+BuildRequires:  cmake(KF6Notifications) >= %{version}
+BuildRequires:  cmake(KF6Wallet) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6XmlGui) >= %{version}
 
 BuildRequires:  libacl-devel
 %if !0%{?flatpak}
@@ -73,7 +73,7 @@ BuildRequires:  qt6-qtbase-devel
 BuildRequires:  cmake(Qt6UiPlugin)
 BuildRequires:  cmake(Qt6Qml)
 
-BuildRequires:  cmake(KF6KDED)
+BuildRequires:  cmake(KF6KDED) >= %{version}
 BuildRequires:  cmake(Qt6Core5Compat)
 
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}

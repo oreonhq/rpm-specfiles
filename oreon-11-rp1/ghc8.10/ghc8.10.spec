@@ -1,4 +1,6 @@
-%global source0_hash none
+%global source0_hash e3eef6229ce9908dfe1ea41436befb0455fefb1932559e860ad4c606b0d03c9d
+%global source2_hash b6ed67049a23054a8042e65c9976d5e196e5ee4e83b29b2ee35c8a22ab1e5b73
+%global source3_hash fad2417f9b295233bf8ade79c0e6140896359e87be46cb61cd1d35863d9d0e55
 
 # bcond_without for production builds:
 # - performance build (disable for quick build)
@@ -16,6 +18,7 @@
 
 %global ghc_major 8.10
 %global ghc_name ghc%{ghc_major}
+%global ghc_default_provides 1
 
 %global base_ver 4.14.3.0
 %global xhtml_ver 3000.2.2.1
@@ -52,7 +55,7 @@ Version: 8.10.7
 # Since library subpackages are versioned:
 # - release can only be reset if *all* library versions get bumped simultaneously
 #   (sometimes after a major release)
-Release: 15%{?dist}
+Release: 16%{?dist}
 Summary: Glasgow Haskell Compiler
 
 License: BSD-3-Clause AND HaskellReport
@@ -60,6 +63,12 @@ URL: https://haskell.org/ghc/
 Source0: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz
 %if %{with testsuite}
 Source1: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-testsuite.tar.xz
+%endif
+%ifarch x86_64
+Source2: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-x86_64-fedora27-linux.tar.xz
+%endif
+%ifarch aarch64
+Source3: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-aarch64-deb10-linux.tar.xz
 %endif
 Source5: ghc-pkg.man
 Source6: haddock.man
@@ -115,22 +124,7 @@ Patch35: https://gitlab.haskell.org/ghc/ghc/-/merge_requests/12885.patch
 # see also deprecated ghc_arches defined in ghc-srpm-macros
 # /usr/lib/rpm/macros.d/macros.ghc-srpm
 
-# needs 8.6+
-BuildRequires: %{ghcboot}-compiler
-# for ABI hash checking
-%if %{with abicheck}
-BuildRequires: %{name}
-%endif
 BuildRequires: ghc-rpm-macros-extra
-BuildRequires: %{ghcboot}-binary-devel
-BuildRequires: %{ghcboot}-bytestring-devel
-BuildRequires: %{ghcboot}-containers-devel
-BuildRequires: %{ghcboot}-directory-devel
-BuildRequires: %{ghcboot}-pretty-devel
-BuildRequires: %{ghcboot}-process-devel
-BuildRequires: %{ghcboot}-stm-devel
-BuildRequires: %{ghcboot}-template-haskell-devel
-BuildRequires: %{ghcboot}-transformers-devel
 BuildRequires: alex
 BuildRequires: binutils-gold
 BuildRequires: gmp-devel
@@ -236,6 +230,7 @@ install the main ghc package.
 Summary: Makes %{name} default ghc
 Requires: %{name}-compiler%{?_isa} = %{version}-%{release}
 Conflicts: ghc-compiler
+Provides: ghc-compiler = %{version}-%{release}
 
 %description compiler-default
 The package contains symlinks to make %{name} the default GHC compiler.
@@ -329,8 +324,10 @@ This package provides the User Guide and Haddock manual.
 Summary: GHC development libraries meta package
 License: BSD-3-Clause AND HaskellReport
 Requires: %{name}-compiler = %{version}-%{release}
+Requires: %{name}-compiler-default = %{version}-%{release}
 Obsoletes: %{name}-libraries < %{version}-%{release}
 Provides: %{name}-libraries = %{version}-%{release}
+Provides: ghc-devel = %{version}-%{release}
 %{?ghc_packages_list:Requires: %(echo %{ghc_packages_list} | sed -e "s/\([^ ]*\)-\([^ ]*\)/%{name}-\1-devel = \2-%{release},/g")}
 
 %description devel
@@ -350,6 +347,20 @@ Installing this package causes %{name}-*-prof packages corresponding to
 
 %prep
 %setup -q -n ghc-%{version} %{?with_testsuite:-b1}
+%ifarch x86_64
+%setup -q -T -D -a2
+%endif
+%ifarch aarch64
+%setup -q -T -D -a3
+%endif
+
+echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
+%ifarch x86_64
+echo "%{source2_hash}  %{SOURCE2}" | sha256sum -c -
+%endif
+%ifarch aarch64
+echo "%{source3_hash}  %{SOURCE3}" | sha256sum -c -
+%endif
 
 %patch -P1 -p1 -b .orig
 %patch -P3 -p1 -b .orig
@@ -439,6 +450,14 @@ autoreconf
 export CC=%{_bindir}/gcc
 export LD=%{_bindir}/ld.gold
 
+bootstrap_dir=$PWD/ghc-bootstrap
+pushd ghc-%{version}
+./configure --prefix=$bootstrap_dir
+make install
+popd
+bootstrap_ghc=$bootstrap_dir/bin/ghc
+bootstrap_ghc_pkg=$bootstrap_dir/bin/ghc-pkg
+
 # only needed for ghc < 8.8
 %ifarch %{ghc_unregisterized_arches}
 %if 0%{?fedora} < 33
@@ -468,10 +487,10 @@ ln -s /usr/bin/ghc-pkg ghc-pkg-unregisterised-wrapper
 %if 0%{?fedora} < 33 && 0%{?rhel} < 9
   GHC=$PWD/ghc-unregisterised-wrapper \
 %else
-  GHC=%{_bindir}/ghc-%{ghcboot_major} \
+  GHC=$bootstrap_ghc \
 %endif
 %else
-  GHC=%{_bindir}/ghc-%{ghcboot_major} \
+  GHC=$bootstrap_ghc \
 %endif
 %{nil}
 
@@ -639,10 +658,11 @@ $GHC --info
 
 # check the ABI hashes
 %if %{with abicheck}
-if [ "%{version}" = "$(ghc-%{version} --numeric-version)" ]; then
+bootstrap_ghc_pkg=$PWD/ghc-bootstrap/bin/ghc-pkg
+if [ "%{version}" = "$($PWD/ghc-bootstrap/bin/ghc --numeric-version)" ]; then
   echo "Checking package ABI hashes:"
   for i in %{ghc_packages_list}; do
-    old=$(ghc-pkg-%{ghc_version} field $i id --simple-output || :)
+    old=$($bootstrap_ghc_pkg field $i id --simple-output || :)
     if [ -n "$old" ]; then
       new=$(/usr/lib/rpm/ghc-pkg-wrapper %{buildroot}%{ghclibdir} field $i id --simple-output)
       if [ "$old" != "$new" ]; then
@@ -661,7 +681,8 @@ if [ "%{version}" = "$(ghc-%{version} --numeric-version)" ]; then
      exit 1
   fi
 else
-  echo "ABI hash checks skipped: GHC changed from $(ghc-%{ghc_version} --numeric-version) to %{version}"
+  echo "ABI hash checks skipped: bootstrap GHC version does not match %{version}"
+  exit 1
 fi
 %endif
 

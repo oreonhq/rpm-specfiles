@@ -8,7 +8,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 addon with auto completion widgets and classes
 # BSD-3-Clause is in the LICENSES folder but goes unused.
 License:        CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later
@@ -22,9 +22,9 @@ BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6Codecs) >= %{version}
 
 %description
 KCompletion provides widgets with advanced completion support as well as a

@@ -1,4 +1,5 @@
-%global source0_hash 92a680125c75bb9d419d36335bdce78510ff74d3b892b3573729a19cae18752d
+%global source0_hash 023c9bb69a98ddb897bc15dd0e526f98817f20acb6cf34068a8382d850003b64
+%global kf6_version 6.28.0
 
 # uncomment to enable bootstrap mode
 #global bootstrap 1
@@ -9,7 +10,7 @@
 
 Name:    libkeduvocdocument
 Summary: Library to parse, convert, and manipulate KVTML files
-Version: 25.12.3
+Version: 26.04.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -24,9 +25,9 @@ BuildRequires: make
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake(Qt6Xml)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6I18n) >= %{kf6_version}
+BuildRequires:  cmake(KF6Archive) >= %{kf6_version}
+BuildRequires:  cmake(KF6KIO) >= %{kf6_version}
 
 %if 0%{?tests}
 BuildRequires: xorg-x11-server-Xvfb

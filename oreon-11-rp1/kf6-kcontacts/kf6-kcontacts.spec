@@ -8,7 +8,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release: 1%{?dist}
+Release:        2%{?dist}
 Summary: The KContacts Library
 
 # The following licenses are present in LICENSES but go unused: BSD-3-Clause, MIT, Unicode-DFS-2016
@@ -22,9 +22,9 @@ BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
 BuildRequires:  kf6-kcodecs-devel
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  cmake(Qt6Quick)

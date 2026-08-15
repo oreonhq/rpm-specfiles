@@ -1,0 +1,46 @@
+--- handlebars-4.5.0/Cargo.toml
++++ handlebars-4.5.0/Cargo.toml
+@@ -96,43 +96,30 @@
+ [dependencies.walkdir]
+ version = "2.2.3"
+ optional = true
+-
+-[dev-dependencies.criterion]
+-version = "0.3"
+ 
+ [dev-dependencies.env_logger]
+ version = "0.9"
+ 
+ [dev-dependencies.serde_derive]
+ version = "1.0.75"
+ 
+ [dev-dependencies.tempfile]
+ version = "3.0.0"
+ 
+ [dev-dependencies.time]
+ version = "0.3.7"
+ features = [
+     "serde",
+     "formatting",
+     "parsing",
+ ]
+-
+-[dev-dependencies.tiny_http]
+-version = "0.11"
+ 
+ [features]
+ default = []
+ dir_source = ["walkdir"]
+ no_logging = []
+ script_helper = ["rhai"]
+ string_helpers = ["heck"]
+-
+-[target."cfg(unix)".dev-dependencies.pprof]
+-version = "0.10"
+-features = [
+-    "flamegraph",
+-    "prost-codec",
+-]
+ 
+ [badges.maintenance]
+ status = "actively-developed"

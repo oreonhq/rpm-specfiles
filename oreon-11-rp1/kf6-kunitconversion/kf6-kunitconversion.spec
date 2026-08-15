@@ -8,7 +8,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: KDE Frameworks 6 Tier 2 addon for unit conversions
 
 License: CC0-1.0 AND LGPL-2.0-or-later
@@ -20,7 +20,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6I18n) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 

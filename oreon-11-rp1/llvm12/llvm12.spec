@@ -50,7 +50,7 @@
 
 Name:		%{pkg_name}
 Version:	%{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:~rc%{rc_ver}}
-Release:	12%{?dist}
+Release:	13%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	NCSA

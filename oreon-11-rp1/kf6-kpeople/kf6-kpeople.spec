@@ -8,7 +8,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: KDE Frameworks 6 Tier 3 library for contact and people aggregation
 
 License: CC0-1.0 AND LGPL-2.1-or-later
@@ -20,13 +20,13 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
-BuildRequires:  cmake(KF6Codecs)
-BuildRequires:  cmake(KF6Contacts)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6Codecs) >= %{version}
+BuildRequires:  cmake(KF6Contacts) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6ItemViews) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
@@ -88,4 +88,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

@@ -8,7 +8,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -20,14 +20,14 @@ BuildRequires: gcc-c++
 BuildRequires: cmake
 BuildRequires: cmake(Qt6LinguistTools)
 BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6KirigamiPlatform)
-BuildRequires: cmake(KF6IconThemes)
-BuildRequires: cmake(KF6ColorScheme)
+BuildRequires: cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires: cmake(KF6KirigamiPlatform) >= %{version}
+BuildRequires: cmake(KF6IconThemes) >= %{version}
+BuildRequires: cmake(KF6ColorScheme) >= %{version}
 BuildRequires: pkgconfig(Qt6Gui)
 BuildRequires: pkgconfig(Qt6Quick)
 BuildRequires: pkgconfig(Qt6Widgets)
-BuildRequires: cmake(KF6Sonnet)
+BuildRequires: cmake(KF6Sonnet) >= %{version}
 BuildRequires: pkgconfig(xkbcommon)
 
 # Doesn't need qtbase-private-devel, but private stuff from qtdeclarative

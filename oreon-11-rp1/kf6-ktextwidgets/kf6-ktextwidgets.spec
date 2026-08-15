@@ -7,7 +7,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon with advanced text editing widgets
 
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -24,15 +24,15 @@ BuildRequires:  qt6-qtbase-devel
 BuildRequires:  cmake(Qt6UiPlugin)
 BuildRequires:  cmake(Qt6TextToSpeech)
 BuildRequires:  cmake(Qt6QmlIntegration)
-BuildRequires:  cmake(KF6Completion)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6Sonnet)
-BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6Completion) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
+BuildRequires:  cmake(KF6Sonnet) >= %{version}
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
 
 BuildRequires:  pkgconfig(xkbcommon)
 

@@ -5,7 +5,7 @@
 
 Name:    kio-extras
 Version: 26.04.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Additional components to increase the functionality of KIO Framework
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

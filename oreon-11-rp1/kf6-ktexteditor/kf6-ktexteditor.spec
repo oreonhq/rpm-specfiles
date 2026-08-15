@@ -12,7 +12,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: KDE Frameworks 6 Tier 3 with advanced embeddable text editor
 
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND MIT
@@ -24,21 +24,21 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Parts)
-BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6Archive) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6GuiAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6IconThemes) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
+BuildRequires:  cmake(KF6Parts) >= %{version}
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  pkgconfig(Qt6TextToSpeech)
 BuildRequires:  pkgconfig(Qt6Widgets)
 BuildRequires:  pkgconfig(Qt6PrintSupport)
 BuildRequires:  pkgconfig(Qt6Qml)
 BuildRequires:  pkgconfig(Qt6Xml)
-BuildRequires:  cmake(KF6SyntaxHighlighting)
+BuildRequires:  cmake(KF6SyntaxHighlighting) >= %{version}
 BuildRequires:  pkgconfig(libgit2) >= 0.22.0
 BuildRequires:  pkgconfig(editorconfig)
 BuildRequires:  pkgconfig(xkbcommon)
@@ -119,4 +119,3 @@ rm -f %{buildroot}%{_kf6_datadir}/katepart5/script/README.md
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

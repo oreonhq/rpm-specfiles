@@ -7,7 +7,7 @@
 +void intrusive_ptr_release(Referent* r);
 +}
 +
-+namespace boost {
++namespace kmldom {
 +template <typename T>
 +inline void intrusive_ptr_add_ref(T* r) {
 +  kmlbase::intrusive_ptr_add_ref(

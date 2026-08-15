@@ -14,7 +14,7 @@
 %endif
 
 %bcond_without compat_build
-%bcond check 0
+%bcond check 1
 
 %global llvm_libdir %{_libdir}/%{name}
 %global build_llvm_libdir %{buildroot}%{llvm_libdir}
@@ -71,7 +71,7 @@
 
 Name:		%{pkg_name}
 Version:	%{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:~rc%{rc_ver}}
-Release:	8%{?dist}
+Release:	9%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	NCSA
@@ -92,6 +92,7 @@ Patch1:		0001-XFAIL-missing-abstract-variable.ll-test-on-ppc64le.patch
 Patch2:		0001-Disable-CrashRecoveryTest.DumpStackCleanup-test-on-a.patch
 Patch3:                 gcc12.patch
 Patch4:                 test-go-py-pipes.patch
+Patch5:                 smallvector-cstdint.patch
 
 BuildRequires:	gcc
 BuildRequires:	gcc-c++

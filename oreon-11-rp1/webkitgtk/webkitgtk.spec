@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bc0f4dd7c105b0b78420eb15e581a6c87086a19c7133e9058970086e5cb0eb31
 
 ## NOTE: Lots of files in various subdirectories have the same name (such as
 ## "LICENSE") so this short macro allows us to distinguish them by using their
@@ -21,7 +21,7 @@
 %endif
 
 Name:           webkitgtk
-Version:        2.53.3
+Version:        2.53.4
 Release:        %autorelease
 Summary:        GTK web content engine library
 

@@ -7,7 +7,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: The Syndication Library
 
 # Qt-Commercial-exception-1.0 is also found in the LICENSES folder, but is unused except for tests which we don't use anyway
@@ -19,12 +19,12 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Codecs) >= %{version}
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  cmake
 BuildRequires:  qt6-qtbase-devel
 
-BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6KIO) >= %{version}
 Requires:  kf6-filesystem
 
 %description

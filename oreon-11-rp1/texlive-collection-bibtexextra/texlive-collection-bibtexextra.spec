@@ -310,7 +310,7 @@
 Name:           texlive-collection-bibtexextra
 Epoch:          12
 Version:        svn78803
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        BibTeX additional styles
 
 License:        LPPL-1.3c
@@ -4765,6 +4765,7 @@ popd
 
 %files -n texlive-gbt7714
 %license lppl1.3c.txt
+%{_texmf_main}/bibtex/bib/gbt7714/
 %{_texmf_main}/bibtex/bst/gbt7714/
 %{_texmf_main}/tex/latex/gbt7714/
 %doc %{_texmf_main}/doc/bibtex/gbt7714/

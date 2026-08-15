@@ -18,7 +18,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.11.1
-Release:        23%{?dist}
+Release:        24%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -302,6 +302,12 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
     -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     -DCMAKE_MODULE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     -DCMAKE_SHARED_LINKER_FLAGS:STRING="${LDFLAGS}"
+
+find %{__cmake_builddir}/sources/pyside6/PySide6 -type d -path '*/CMakeFiles/*.dir' -print0 | while IFS= read -r -d '' d; do
+    module=${d##*/}
+    module=${module%.dir}
+    mkdir -p "$d/PySide6/$module"
+done
 
 # Generate a build_history entry (for tests) manually, since we're performing
 # a cmake build.

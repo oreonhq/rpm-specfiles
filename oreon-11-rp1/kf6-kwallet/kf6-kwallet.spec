@@ -7,7 +7,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for password management
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
@@ -19,7 +19,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 BuildRequires:  cmake(Qca-qt6)
 BuildRequires:  cmake(Qt6Core5Compat)
 
-BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
@@ -29,19 +29,19 @@ BuildRequires:  qt6-qtbase-devel
 
 BuildRequires:  cmake(Qt6Core5Compat)
 
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6Config) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6DBusAddons) >= %{version}
+BuildRequires:  cmake(KF6DocTools) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6Notifications) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
+BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
+BuildRequires:  cmake(KF6WindowSystem) >= %{version}
+BuildRequires:  cmake(KF6Crash) >= %{version}
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6ColorScheme) >= %{version}
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  cmake(Gpgmepp)
 BuildRequires:  pkgconfig(libsecret-1)

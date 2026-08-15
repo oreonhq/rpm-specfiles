@@ -7,7 +7,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration with su
 
 License: CC0-1.0 AND GPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -20,10 +20,10 @@ BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6Pty)
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6Service) >= %{version}
+BuildRequires:  cmake(KF6Pty) >= %{version}
 #BuildRequires:  libX11-devel
 BuildRequires:  qt6-qtbase-devel
 Requires:  kf6-filesystem

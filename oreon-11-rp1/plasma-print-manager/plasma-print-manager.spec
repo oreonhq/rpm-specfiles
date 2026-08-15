@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 Name:    plasma-print-manager
 Summary: Printer management for KDE
 Version:        6.7.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{base_name}
@@ -104,7 +104,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %check
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.ConfigurePrinter.desktop
-desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.PrintQueue.desktop
 
 
 %files -f %{name}.lang
@@ -116,7 +115,6 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.PrintQueu
 %{_kf6_datadir}/knotifications6/printmanager.notifyrc
 %{_kf6_datadir}/applications/kcm_printer_manager.desktop
 %{_kf6_datadir}/applications/org.kde.ConfigurePrinter.desktop
-%{_kf6_datadir}/applications/org.kde.PrintQueue.desktop
 %{_kf6_metainfodir}/org.kde.print-manager.metainfo.xml
 %{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_printer_manager.so
 
@@ -809,4 +807,3 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.PrintQueu
 
 * Tue Aug 07 2012 Rex Dieter <rdieter@fedoraproject.org> 0.1.0-1
 - first try
-

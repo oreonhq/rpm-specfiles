@@ -13,7 +13,7 @@
 %global llvm_libdir %{_libdir}/%{name}
 %global build_llvm_libdir %{buildroot}%{llvm_libdir}
 #global rc_ver 2
-%global baserelease 14
+%global baserelease 15
 %global llvm_srcdir llvm-%{version}%{?rc_ver:rc%{rc_ver}}.src
 %global maj_ver 11
 %global min_ver 1
@@ -211,6 +211,7 @@ LLVM's modified googletest sources.
 
 # force off shared libs as cmake macros turns it on.
 %cmake  -G Ninja \
+	-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DLLVM_PARALLEL_LINK_JOBS=1 \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \

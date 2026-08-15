@@ -9,7 +9,7 @@
 Name:    kf6-purpose
 Summary: Framework for providing abstractions to get the developer's purposes fulfilled
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -25,22 +25,21 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: cmake
 BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Kirigami2)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Notifications)
+BuildRequires: cmake(KF6Config) >= %{version}
+BuildRequires: cmake(KF6CoreAddons) >= %{version}
+BuildRequires: cmake(KF6I18n) >= %{version}
+BuildRequires: cmake(KF6KIO) >= %{version}
+BuildRequires: cmake(KF6Kirigami2) >= %{version}
+BuildRequires: cmake(KF6Notifications) >= %{version}
 BuildRequires: cmake(KAccounts6)
 BuildRequires: pkgconfig(Qt6Network)
 BuildRequires: pkgconfig(Qt6Qml)
 
 BuildRequires: accounts-qml-module-qt6
 Requires:      accounts-qml-module-qt6
-BuildRequires: cmake(KF6Declarative)
+BuildRequires: cmake(KF6Declarative) >= %{version}
 Requires:      kf6-kdeclarative
-BuildRequires: cmake(KF6Prison)
+BuildRequires: cmake(KF6Prison) >= %{version}
 Requires:      kf6-prison
 BuildRequires: kf6-kitemmodels
 Requires:      qt6qml(org.kde.kitemmodels)
@@ -115,4 +114,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

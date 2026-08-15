@@ -8,7 +8,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 library to load and install packages as plugins
 
 License:        CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -22,9 +22,9 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  kf6-karchive-devel
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6DocTools) >= %{version}
 BuildRequires:  qt6-qtbase-devel
 Requires:  kf6-filesystem
 

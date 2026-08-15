@@ -8,7 +8,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: A DAV protocol implementation with KJobs
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -24,13 +24,10 @@ BuildRequires:  kf6-rpm-macros
 
 BuildRequires:  cmake(Qt6Gui)
 
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6I18n) >= %{version}
+BuildRequires:  cmake(KF6CoreAddons) >= %{version}
+BuildRequires:  cmake(KF6KIO) >= %{version}
 BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6KIO)
 
 Requires:  kf6-filesystem
 
@@ -85,4 +82,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

@@ -14,7 +14,7 @@
 Name:    kf6-ksvg
 Summary: Components for handling SVGs
 Version: 6.28.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -33,12 +33,12 @@ BuildRequires: cmake(Qt6)
 BuildRequires: cmake(Qt6Quick)
 BuildRequires: cmake(Qt6Svg)
 BuildRequires: pkgconfig(xkbcommon)
-BuildRequires: cmake(KF6Archive)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6GuiAddons)
-BuildRequires: cmake(KF6Kirigami2)
-BuildRequires: cmake(KF6ColorScheme)
+BuildRequires: cmake(KF6Archive) >= %{version}
+BuildRequires: cmake(KF6Config) >= %{version}
+BuildRequires: cmake(KF6CoreAddons) >= %{version}
+BuildRequires: cmake(KF6GuiAddons) >= %{version}
+BuildRequires: cmake(KF6Kirigami2) >= %{version}
+BuildRequires: cmake(KF6ColorScheme) >= %{version}
 
 %description
 %{summary}.

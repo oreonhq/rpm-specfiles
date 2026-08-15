@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 050922ecaaca5781fdf6631ea92bc715183f202f9d2f15147226f023414f619a
 
 # We are building with clang for faster/lower memory LTO builds.
 # See https://docs.fedoraproject.org/en-US/packaging-guidelines/#_compiler_macros
@@ -13,12 +13,12 @@
 %endif
 
 %bcond_without compat_build
-%bcond check 0
+%bcond check 1
 
 #global rc_ver 4
 %global maj_ver 14
 %global min_ver 0
-%global patch_ver 5
+%global patch_ver 6
 %if !%{maj_ver} && 0%{?rc_ver}
 %global abi_revision 2
 %endif
@@ -73,7 +73,7 @@
 
 Name:		%{pkg_name}
 Version:	%{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:~rc%{rc_ver}}
-Release:	13%{?dist}
+Release:	1%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	NCSA
