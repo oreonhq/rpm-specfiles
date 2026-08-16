@@ -376,7 +376,7 @@
 %global source375_hash e6fccc7ed017d8d9f412f5791eb315693dc47fcdbd76592405611287c42e0bf6
 %global source376_hash 2f11f610c94b2eb3f9509beb923bfff8a9eaa33155aa079593da3364fa9b1c42
 %global source377_hash 5092e421231213819d8174cbc6709533fc307f97537ce43392929e06be59a114
-%global source378_hash 4c4dd8eccec8ce682109a402534275db53d41a4550477579e6c8e60eb3f6310d
+%global source378_hash 299d0a460c4933392a77d690fcca3ad043a481ecb02c1229ff33b000b9e76dcc
 %global source379_hash c54aba2ac0142d70559588eb82c66942c8702d4be455a36ecbbcd2709154765a
 %global source380_hash 5905d38831e37b24314b391d13d42b26b7326c13762728244ce5bffb1af78290
 %global source381_hash f8bb65e117cf3dc7053c9e4e56f394a27c1d61aa243e308341ff1680bdc6d168
@@ -617,7 +617,7 @@
 Name:           texlive-collection-mathscience
 Epoch:          12
 Version:        svn78771
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Mathematics, natural sciences, computer science packages
 
 License:        LPPL-1.3c

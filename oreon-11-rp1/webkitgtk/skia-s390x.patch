@@ -28,7 +28,7 @@ index c321fb77c0ae..a0a01cccd58a 100644
  #include "include/core/SkTypes.h"
  #include "include/private/SkEncodedInfo.h"
  #include "modules/skcms/skcms.h"
-+#include "src/core/SkEndian.h"
++#include "src/base/SkEndian.h"
  #include "src/codec/SkColorPalette.h"
  #include "src/core/SkColorData.h"
  

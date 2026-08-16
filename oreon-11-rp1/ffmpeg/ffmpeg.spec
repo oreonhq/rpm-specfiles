@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b072aed6871998cce9b36e7774033105ca29e33632be5b6347f3206898e0756a
 
 %global source2_key_fpr FCF986EA15E6E293A5644F10B4322F04D67658D8
 
@@ -96,20 +96,19 @@
 # FIXME: GCC says there's incompatible pointer casts going on in libavdevice...
 %global build_type_safety_c 2
 
-%global av_codec_soversion 61
-%global av_device_soversion 61
-%global av_filter_soversion 10
-%global av_format_soversion 61
-%global av_util_soversion 59
-%global postproc_soversion 58
-%global swresample_soversion 5
-%global swscale_soversion 8
+%global av_codec_soversion 62
+%global av_device_soversion 62
+%global av_filter_soversion 11
+%global av_format_soversion 62
+%global av_util_soversion 60
+%global swresample_soversion 6
+%global swscale_soversion 9
 
 Name:           ffmpeg
 %global pkg_name %{name}%{?pkg_suffix}
 
-Version:        7.1.2
-Release:        5%{?dist}
+Version:        8.1
+Release:        6%{?dist}
 Summary:        A complete solution to record, convert and stream audio and video
 License:        GPL-3.0-or-later
 URL:            https://ffmpeg.org/
@@ -126,12 +125,6 @@ Patch1:        ffmpeg-codec-choice.patch
 # Allow to build with fdk-aac-free
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1501522#c112
 Patch2:        ffmpeg-allow-fdk-aac-free.patch
-# Support building with EVC base profile libraries
-Patch3:         https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/20329.patch#/ffmpeg-support-evc-base-libraries.patch
-
-# Backport fix for CVE-2025-22921
-Patch10:        https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7f9c7f9849a2155224711f0ff57ecdac6e4bfb57#/ffmpeg-CVE-2025-22921.patch
-
 # Add first_dts getter to libavformat for Chromium
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=2240127
 # Reference: https://crbug.com/1306560
@@ -143,7 +136,6 @@ Requires:       libavdevice%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavfilter%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavformat%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavutil%{?pkg_suffix}%{_isa} = %{version}-%{release}
-Requires:       libpostproc%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libswresample%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libswscale%{?pkg_suffix}%{_isa} = %{version}-%{release}
 
@@ -326,7 +318,6 @@ Requires:       libavdevice%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavfilter%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavformat%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavutil%{?pkg_suffix}%{_isa} = %{version}-%{release}
-Requires:       libpostproc%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libswresample%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libswscale%{?pkg_suffix}%{_isa} = %{version}-%{release}
 
@@ -364,7 +355,6 @@ Requires:       libavdevice%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavfilter%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavformat%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavutil%{?pkg_suffix}-devel = %{version}-%{release}
-Requires:       libpostproc%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libswresample%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libswscale%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       pkgconfig
@@ -451,7 +441,6 @@ Requires:       libavcodec%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavfilter%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavformat%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavutil%{?pkg_suffix}-devel = %{version}-%{release}
-Requires:       libpostproc%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libswresample%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libswscale%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavdevice%{?pkg_suffix}%{_isa} = %{version}-%{release}
@@ -478,7 +467,6 @@ Summary:        FFmpeg audio and video filtering library
 Requires:       libavcodec%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavformat%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libavutil%{?pkg_suffix}%{_isa} = %{version}-%{release}
-Requires:       libpostproc%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libswresample%{?pkg_suffix}%{_isa} = %{version}-%{release}
 Requires:       libswscale%{?pkg_suffix}%{_isa} = %{version}-%{release}
 
@@ -497,7 +485,6 @@ Summary:        Development files for FFmpeg's audio/video filter library
 Requires:       libavcodec%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavformat%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavutil%{?pkg_suffix}-devel = %{version}-%{release}
-Requires:       libpostproc%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libswresample%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libswscale%{?pkg_suffix}-devel = %{version}-%{release}
 Requires:       libavfilter%{?pkg_suffix} = %{version}-%{release}
@@ -598,41 +585,6 @@ This subpackage contains the headers for FFmpeg libavutil.
 %{_libdir}/pkgconfig/libavutil.pc
 %{_libdir}/libavutil.so
 %{_mandir}/man3/libavutil.3*
-
-%dnl --------------------------------------------------------------------------------
-
-%package -n libpostproc%{?pkg_suffix}
-Summary:        FFmpeg post-processing library
-Requires:       libavutil%{?pkg_suffix}%{_isa} = %{version}-%{release}
-
-%description -n libpostproc%{?pkg_suffix}
-A library with video postprocessing filters, such as deblocking and
-deringing filters, noise reduction, automatic contrast and brightness
-correction, linear/cubic interpolating deinterlacing.
-
-%files -n libpostproc%{?pkg_suffix}
-%license COPYING.GPLv2 LICENSE.md
-%{_libdir}/libpostproc.so.%{postproc_soversion}{,.*}
-
-%dnl --------------------------------------------------------------------------------
-
-%package -n libpostproc%{?pkg_suffix}-devel
-Summary:        Development files for the FFmpeg post-processing library
-Requires:       libavutil%{?pkg_suffix}-devel = %{version}-%{release}
-Requires:       libpostproc%{?pkg_suffix}%{_isa} = %{version}-%{release}
-Requires:       pkgconfig
-
-%description -n libpostproc%{?pkg_suffix}-devel
-A library with video postprocessing filters, such as deblocking and
-deringing filters, noise reduction, automatic contrast and brightness
-correction, linear/cubic interpolating deinterlacing.
-
-This subpackage contains the headers for FFmpeg libpostproc.
-
-%files -n libpostproc%{?pkg_suffix}-devel
-%{_includedir}/%{name}/libpostproc
-%{_libdir}/pkgconfig/libpostproc.pc
-%{_libdir}/libpostproc.so
 
 %dnl --------------------------------------------------------------------------------
 
@@ -737,10 +689,11 @@ This build includes the full range of codecs offered by ffmpeg.
 %dnl --------------------------------------------------------------------------------
 
 %prep
+test "%{source0_hash}" = "none" || { h=$(sha256sum "%{SOURCE0}" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%autosetup -S git_am -n ffmpeg-7.1.2
+%autosetup -S git_am -n ffmpeg-%{version}
 install -m 0644 %{SOURCE20} enable_decoders
 install -m 0644 %{SOURCE21} enable_encoders
 # fix -O3 -g in host_cflags
@@ -948,7 +901,6 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --enable-nvenc \
 %endif
     --disable-openssl \
-    --enable-postproc \
     --enable-pthreads \
     --enable-sdl2 \
     --enable-shared \
@@ -1047,6 +999,9 @@ rm -rf %{buildroot}%{_bindir}
 rm -rf %{buildroot}%{_datadir}
 %endif
 %changelog
+* Sun Aug 16 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-6
+- Restore FFmpeg 8.1 ABI and Chromium first DTS API
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-5
 - Rebuild
 

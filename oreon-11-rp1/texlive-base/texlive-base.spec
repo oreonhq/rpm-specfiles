@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 119%{?dist}
+Release: 120%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -7658,7 +7658,7 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $i
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $i
 done
 
-%make_build -s world STRIPPROG=/bin/true STRIP=/bin/true > >(awk '/fatal error:|error:|undefined reference|collect2:|No rule to make target|make\[[0-9]+\]: \*\*\*/ { print; fflush() }') 2>&1
+%make_build world STRIPPROG=/bin/true STRIP=/bin/true
 
 %install
 # make directories

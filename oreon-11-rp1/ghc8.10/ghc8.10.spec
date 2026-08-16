@@ -55,7 +55,7 @@ Version: 8.10.7
 # Since library subpackages are versioned:
 # - release can only be reset if *all* library versions get bumped simultaneously
 #   (sometimes after a major release)
-Release: 16%{?dist}
+Release: 17%{?dist}
 Summary: Glasgow Haskell Compiler
 
 License: BSD-3-Clause AND HaskellReport
@@ -447,6 +447,7 @@ autoreconf
 %endif
 
 %ghc_set_gcc_flags
+export CFLAGS="$CFLAGS -std=gnu17"
 export CC=%{_bindir}/gcc
 export LD=%{_bindir}/ld.gold
 
