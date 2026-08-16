@@ -163,7 +163,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake_kf6
-%cmake_build
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS}
 
 
 %install

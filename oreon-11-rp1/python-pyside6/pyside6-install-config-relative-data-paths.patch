@@ -1,0 +1,15 @@
+diff --git a/sources/pyside6/libpyside/CMakeLists.txt b/sources/pyside6/libpyside/CMakeLists.txt
+index 0b71cb8..9df09d4 100644
+--- a/sources/pyside6/libpyside/CMakeLists.txt
++++ b/sources/pyside6/libpyside/CMakeLists.txt
+@@ -162,8 +162,8 @@ configure_package_config_file(
+ 
+ # Install-tree configuration (for downstream CMake projects using a regular cmake install)
+ set(PYSIDE_PYTHONPATH "${PYTHON_SITE_PACKAGES}/PySide6")
+-set(PYSIDE_TYPESYSTEMS "${CMAKE_INSTALL_PREFIX}/share/PySide6${pyside6_SUFFIX}/typesystems")
+-set(PYSIDE_GLUE "${CMAKE_INSTALL_PREFIX}/share/PySide6${pyside6_SUFFIX}/glue")
++set(PYSIDE_TYPESYSTEMS "share/PySide6${pyside6_SUFFIX}/typesystems")
++set(PYSIDE_GLUE "share/PySide6${pyside6_SUFFIX}/glue")
+ set(PYSIDE_SOVERSION "${pyside6_library_so_version}")
+ 
+ configure_package_config_file(

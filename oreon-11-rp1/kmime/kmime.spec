@@ -1,7 +1,7 @@
-%global source0_hash fce3c603cac3fec9a3f0e101c49785c32ace07b8f60b52739b638d329f43826d
+%global source0_hash a118b0d3b3ad2ebb35f73c675cffff575cd1b36ff5875d4f9fd4bce884bbae8a
 
 Name:    kmime
-Version: 25.12.3
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: The KMime Library
 

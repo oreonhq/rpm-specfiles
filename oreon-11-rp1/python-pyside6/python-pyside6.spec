@@ -37,6 +37,8 @@ Patch0:        0001-Revert-Modify-headers-installation-for-CMake-builds.patch
 Patch1:        0001-Always-link-to-python-libraries.patch
 Patch2:        0001-Fix-installation.patch
 Patch3:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
+Patch4:         pyside6-create-object-directories.patch
+Patch5:         pyside6-install-config-relative-data-paths.patch
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build
@@ -303,12 +305,6 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
     -DCMAKE_MODULE_LINKER_FLAGS:STRING="${LDFLAGS}" \
     -DCMAKE_SHARED_LINKER_FLAGS:STRING="${LDFLAGS}"
 
-find %{__cmake_builddir}/sources/pyside6/PySide6 -type d -path '*/CMakeFiles/*.dir' -print0 | while IFS= read -r -d '' d; do
-    module=${d##*/}
-    module=${module%.dir}
-    mkdir -p "$d/PySide6/$module"
-done
-
 # Generate a build_history entry (for tests) manually, since we're performing
 # a cmake build.
 TODAY=$(date -Id)
@@ -361,19 +357,6 @@ mv %{buildroot}%{_bindir}/shiboken_tool.py %{buildroot}%{python3_sitelib}/shibok
 
 # Install shiboken6
 mv redhat-linux-build/sources/shiboken6_generator/generator/shiboken6 %{buildroot}%{python3_sitelib}/shiboken6_generator
-
-# scrub any doubled share/PySide6 paths in cmake configs
-for f in %{buildroot}%{_libdir}/cmake/PySide6/*.cmake \
-         %{buildroot}%{_libdir}/cmake/PySide6/*.cmake.* \
-         %{buildroot}%{python3_sitearch}/PySide6/PySide6Config*.cmake \
-         %{buildroot}%{python3_sitearch}/PySide6/*.cmake; do
-  [ -f "$f" ] || continue
-  sed -i -e 's|/share/PySide6/share/PySide6|/share/PySide6|g' \
-         -e 's|%{_datadir}/PySide6/share/PySide6|%{_datadir}/PySide6|g' "$f" || :
-done
-
-mkdir -p %{buildroot}%{_datadir}/PySide6/share
-ln -snf .. %{buildroot}%{_datadir}/PySide6/share/PySide6
 
 # Fix all Python shebangs recursively
 # -p preserves timestamps

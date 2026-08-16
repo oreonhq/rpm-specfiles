@@ -176,7 +176,7 @@ mv src/3rdparty/zlib src/3rdparty/zlib.UNUSED ||:
   -DWITH_DESIGNER_PLUGIN:BOOL=OFF \
   -DBUILD_MARBLE_TOOLS=ON
 
-%cmake_build
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS}
 
 
 %install
@@ -1108,4 +1108,3 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/{marble_geojson,marbl
 
 * Tue Aug 30 2011 Rex Dieter <rdieter@fedoraproject.org> 1:4.7.0-10
 - first try
-

@@ -13,7 +13,7 @@
 %global use_system_libicu 1
 %global use_system_libwebp 1
 %global use_system_opus 1
-%global use_system_ffmpeg 1
+%global use_system_ffmpeg 0
 # libvpx is exclusive with VA-API support (libva) which is enabled by default
 %global use_system_libvpx 0
 %global use_system_snappy 1
@@ -209,8 +209,8 @@ BuildRequires: pkgconfig(opus) >= 1.3.1
 BuildRequires: pkgconfig(libavutil) >= 58.29.100
 BuildRequires: pkgconfig(libavcodec) >= 60.31.102
 BuildRequires: pkgconfig(libavformat) >= 60.16.100
-BuildRequires: pkgconfig(openh264)
 %endif
+BuildRequires: pkgconfig(openh264)
 %if %{?use_system_libvpx}
 BuildRequires: pkgconfig(vpx) >= 1.10.0
 %endif
@@ -539,8 +539,8 @@ cp -p src/3rdparty/chromium/LICENSE LICENSE.Chromium
 system_libs=()
 %if %{?use_system_ffmpeg}
 system_libs+=(ffmpeg)
-system_libs+=(openh264)
 %endif
+system_libs+=(openh264)
 # Use system libraries
 src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-libraries ${system_libs[@]}
 

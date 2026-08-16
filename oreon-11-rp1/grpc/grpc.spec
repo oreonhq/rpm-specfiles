@@ -467,6 +467,7 @@ Patch:		grpc-1.48.4-core-tsi-ssl_transport_security.cc.patch
 
 # OpenSSL 4 build fixes
 Patch:          0001-Update-OpenSSL-API-usage-for-compatibility.patch
+Patch:          grpc-python-parallel-absolute-paths.patch
 
 Requires:       grpc-data = %{version}-%{release}
 
@@ -980,14 +981,7 @@ echo '===== Building C (core) and C++ components =====' 2>&1
     -DgRPC_BUILD_GRPC_PYTHON_PLUGIN:BOOL=ON \
     -DgRPC_BUILD_GRPC_RUBY_PLUGIN:BOOL=ON \
     -GNinja
-awk '/^build .*\.o:/{sub(/^build /, ""); sub(/:.*$/, ""); print}' \
-    %{_vpath_builddir}/build.ninja |
-  while read -r object; do
-    mkdir -p "$(dirname "%{_vpath_builddir}/$object")"
-  done
-exec 3>&1 4>&2
-exec > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: build stopped|Traceback/ { print; fflush() }' >&3) 2>&1
-%cmake_build --target \
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS} --target \
     address_sorting \
     gpr \
     grpc \
@@ -1008,7 +1002,7 @@ exec > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: 
     grpc_ruby_plugin \
     grpc_cli
 %if %{with core_tests}
-%cmake_build
+cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS}
 %endif
 # ~~~~ Python ~~~~
 
@@ -1092,7 +1086,6 @@ do
       -O1 --skip-build --root "${PYROOT}" --prefix %{_prefix}
   popd >/dev/null
 done
-exec 1>&3 2>&4
 
 %install
 # ~~~~ C (core) and C++ (cpp) ~~~~
@@ -1641,11 +1634,12 @@ tls_key_export
 EOF
 } | xargs -r chmod -v a-x
 
+%{__python3} tools/run_tests/start_port_server.py
+
 find %{_vpath_builddir} -type f -perm /0111 -name '*_test' | sort |
   while read -r testexe
   do
     echo "==== $(date -u --iso-8601=ns): $(basename "${testexe}") ===="
-    %{__python3} tools/run_tests/start_port_server.py
 
 %if %{without gdb}
     # There is a history of some tests failing by hanging. We use “timeout” so

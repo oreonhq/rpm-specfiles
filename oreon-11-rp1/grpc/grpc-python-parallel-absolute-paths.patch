@@ -1,0 +1,24 @@
+diff --git a/src/python/grpcio/_parallel_compile_patch.py b/src/python/grpcio/_parallel_compile_patch.py
+index 5c140df..dc623f0 100644
+--- a/src/python/grpcio/_parallel_compile_patch.py
++++ b/src/python/grpcio/_parallel_compile_patch.py
+@@ -43,6 +43,7 @@ def _parallel_compile(self,
+                       extra_postargs=None,
+                       depends=None):
+     # setup the same way as distutils.ccompiler.CCompiler
++    working_directory = os.getcwd()
+     # https://github.com/python/cpython/blob/31368a4f0e531c19affe2a1becd25fc316bc7501/Lib/distutils/ccompiler.py#L564
+     macros, objects, extra_postargs, pp_opts, build = self._setup_compile(
+         str(output_dir), macros, include_dirs, sources, depends, extra_postargs)
+@@ -52,6 +53,11 @@ def _parallel_compile(self,
+             src, ext = build[obj]
+         except KeyError:
+             return
++        if not os.path.isabs(obj):
++            obj = os.path.join(working_directory, obj)
++        if not os.path.isabs(src):
++            src = os.path.join(working_directory, src)
++        self.mkpath(os.path.dirname(obj))
+         self._compile(obj, src, ext, cc_args, extra_postargs, pp_opts)
+ 
+     # run compilation of individual files in parallel

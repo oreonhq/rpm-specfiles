@@ -1,5 +1,5 @@
 %global source2_hash 284992575afb8755dd4ede8f75e2b83ac8d39644551665d94f7a0339f9eebca5
-%global source0_hash d4d4705cac2ca9da36179f523fd9f998f5e42caf8228c2458fa0f50a01bc769a
+%global source0_hash 09ee1c671a87401a5201c06106650f62badeea5a3b3941e9b1e2e1e08317357f
 
 # No more Java on i686
 %ifarch %{java_arches}

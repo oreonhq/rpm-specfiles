@@ -341,12 +341,12 @@ popd
 
 pushd webkitgtk-6.0
 export NINJA_STATUS="[1/2][%f/%t %es] "
-%cmake_build %limit_build -m 3072 > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: build stopped/ { print; fflush() }') 2>&1
+cmake --build "%{_vpath_builddir}" %limit_build -m 3072
 popd
 
 pushd webkit2gtk-4.1
 export NINJA_STATUS="[2/2][%f/%t %es] "
-%cmake_build %limit_build -m 3072 > >(awk '/FAILED:|fatal error:|error:|undefined reference|collect2:|ninja: build stopped/ { print; fflush() }') 2>&1
+cmake --build "%{_vpath_builddir}" %limit_build -m 3072
 popd
 
 %install

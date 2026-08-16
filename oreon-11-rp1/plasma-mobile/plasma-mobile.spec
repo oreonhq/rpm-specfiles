@@ -167,6 +167,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_{mobile_info,mob
 %{_kf6_datadir}/plasma/mobileinitialstart
 %{_kf6_datadir}/applications/*.desktop
 %{_kf6_datadir}/knotifications6/plasma_mobile_quicksetting*.notifyrc
+%{_kf6_datadir}/qlogging-categories6/plasmamobile.categories
 %{_kf6_datadir}/kwin/effects/mobiletaskswitcher
 %{_kf6_datadir}/kwin/scripts/convergentwindows/contents/ui/main.qml
 %{_kf6_datadir}/kwin/scripts/convergentwindows/metadata.json

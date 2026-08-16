@@ -14,6 +14,7 @@ Summary:        Rust crate for the Fuchsia cryptographically secure pseudorandom
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/fuchsia-cprng
 Source:         %{crates_source}
+Patch:          fuchsia-cprng-test-zircon-call.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 

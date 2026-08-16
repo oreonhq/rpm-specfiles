@@ -1,0 +1,25 @@
+diff --git a/src/lib.rs b/src/lib.rs
+index 62d89f3..a5e430d 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -16,11 +16,20 @@ pub fn cprng_draw(buffer: &mut [u8]) {
+     unsafe { zx_cprng_draw(buffer.as_mut_ptr(), buffer.len()) };
+ }
+ 
++#[cfg(not(test))]
+ #[link(name = "zircon")]
+ extern "C" {
+     fn zx_cprng_draw(buffer: *mut u8, length: usize);
+ }
+ 
++#[cfg(test)]
++unsafe fn zx_cprng_draw(buffer: *mut u8, length: usize) {
++    let buffer = core::slice::from_raw_parts_mut(buffer, length);
++    for (index, byte) in buffer.iter_mut().enumerate() {
++        *byte = index.wrapping_mul(37).wrapping_add(1) as u8;
++    }
++}
++
+ #[cfg(test)]
+ mod tests {
+     use super::*;

@@ -109,11 +109,13 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.Configure
 %files -f %{name}.lang
 %license LICENSES/*
 %{_bindir}/configure-printer
+%{_bindir}/plasma-print-queue
 %{_kf6_qmldir}/org/kde/plasma/printmanager/
 %{_kf6_datadir}/qlogging-categories6/pmlogs.categories
 %{_kf6_datadir}/knotifications6/printmanager.notifyrc
 %{_kf6_datadir}/applications/kcm_printer_manager.desktop
 %{_kf6_datadir}/applications/org.kde.ConfigurePrinter.desktop
+%{_kf6_datadir}/applications/org.kde.plasma.printqueue.desktop
 %{_kf6_metainfodir}/org.kde.print-manager.metainfo.xml
 %{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_printer_manager.so
 
