@@ -18,6 +18,7 @@ Source:         %{pypi_source %{srcname}}
 BuildArch:      noarch
 
 BuildRequires:  tomcli
+BuildRequires:	python3dist(trustme) >= 1
 
 %description %{common_description}
 

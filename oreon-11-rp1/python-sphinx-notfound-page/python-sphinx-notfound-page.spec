@@ -24,6 +24,7 @@ Patch:         https://patch-diff.githubusercontent.com/raw/readthedocs/sphinx-n
 Patch:         https://patch-diff.githubusercontent.com/raw/readthedocs/sphinx-notfound-page/pull/250.patch
 
 BuildArch:      noarch
+BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 
 %description
 %desc

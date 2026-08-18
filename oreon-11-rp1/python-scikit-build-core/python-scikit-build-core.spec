@@ -19,6 +19,9 @@ URL:            https://github.com/scikit-build/scikit-build-core
 Source:         %{pypi_source scikit_build_core}
 
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(cattrs) >= 22.2
+BuildRequires:	python3dist(pytest-subprocess) >= 1.5
+BuildRequires:	python3dist(pytest-xdist) >= 3.1
 # Testing dependences
 BuildRequires:  cmake
 BuildRequires:  ninja-build

@@ -17,6 +17,8 @@ Patch:          0002-Remove-hatch-fancy-pypi-readme-build-system-dependency.patc
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(furo)
+BuildRequires:	python3dist(sphinx-notfound-page)
 
 %global common_description %{expand:
 Use this package if you want to verify that a PyCA cryptography certificate is

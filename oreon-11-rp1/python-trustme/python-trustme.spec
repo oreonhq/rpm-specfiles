@@ -27,6 +27,8 @@ which nobody trusts.  But you can trust it.  Trust me.}
 %package -n python3-trustme
 Summary:        %{summary}
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(service-identity)
+BuildRequires:	python3dist(sphinxcontrib-trio)
 
 %description -n python3-trustme %{common_description}
 

@@ -13,6 +13,7 @@ Source0:        %{pypi_source}
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(pikepdf)
 # required to run the test suite
 BuildRequires:  cairo
 BuildRequires:  gdk-pixbuf2

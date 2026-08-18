@@ -1,5 +1,4 @@
-%global source0_hash 5da0e19907c1649a2f4b5d2abdb733674ae1a58d7436916a5fba1eb2f33f395f
-
+%global source0_hash ae63b0098764803dd42b7b2a6487cbfb3c0ae7b22eb01a2570dbce49316ad279
 %ifarch %{ix86}
 %bcond openmpi 0
 %else

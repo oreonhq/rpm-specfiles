@@ -14,6 +14,9 @@ Patch:          0c98447.patch
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(execnet) >= 2.1
+BuildRequires:	python3dist(setproctitle)
+BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 
 %global _description %{expand:
 The pytest-xdist plugin extends pytest with new test execution modes,

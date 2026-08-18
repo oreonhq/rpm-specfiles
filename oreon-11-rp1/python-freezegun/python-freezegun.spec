@@ -25,6 +25,7 @@ mocking the datetime module.
 Summary:            %{sum}
 
 BuildRequires:      python3-devel
+BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 
 %{?python_provide:%python_provide python3-freezegun}
 

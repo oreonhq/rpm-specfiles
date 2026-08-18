@@ -24,6 +24,7 @@ matching elements in an XML or HTML document.
 %package -n python3-%{modname}
 Summary:        %{summary}
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 
 %description -n python3-%{modname} %{_description}
 

@@ -30,6 +30,7 @@ Summary:        Zope Event Publication (Python 3)
 
 BuildRequires:  make
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 %if %{with docs}
 BuildRequires:  python3-docs
 BuildRequires:  %{py3_dist sphinx}

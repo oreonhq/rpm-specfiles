@@ -37,6 +37,8 @@ Patch:          0001-Downstream-temporarily-loosen-version-bounds-on-some.patch
 
 BuildRequires:  python3-devel
 BuildRequires:  tomcli
+BuildRequires:	python3dist(orjson) >= 3.11.3
+BuildRequires:	python3dist(pytest-xdist) >= 3.7
 
 %global msgspec_enabled 0
 %if %{with msgspec}

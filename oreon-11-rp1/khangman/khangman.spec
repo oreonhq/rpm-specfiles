@@ -21,6 +21,7 @@ BuildRequires: extra-cmake-modules
 BuildRequires: gettext
 BuildRequires: kf6-rpm-macros
 BuildRequires: libappstream-glib
+BuildRequires:	libkeduvocdocument-devel >= 26.04
 
 BuildRequires: cmake(Qt6Core)
 BuildRequires: cmake(Qt6Qml)

@@ -18,6 +18,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-fortran
 BuildRequires:  cmake(GTest)
+BuildRequires:	python3dist(scikit-build-core) >= 0.11
 %if %{with python}
 BuildRequires:  python3-devel
 BuildRequires:  tomcli

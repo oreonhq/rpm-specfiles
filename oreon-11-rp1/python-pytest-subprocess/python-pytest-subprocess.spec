@@ -14,6 +14,7 @@ Patch:          https://github.com/aklajnert/pytest-subprocess/commit/be30d9a94b
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(anyio)
 
 %global _description %{expand:
 The plugin adds the fake_subprocess fixture. It can be used it to register

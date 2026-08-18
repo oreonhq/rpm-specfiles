@@ -20,6 +20,7 @@ Patch:          158.patch
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 # Tests
 BuildRequires:  procps-ng
 

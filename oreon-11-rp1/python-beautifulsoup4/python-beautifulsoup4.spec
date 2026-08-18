@@ -26,6 +26,7 @@ BuildArch:      noarch
 %if %{with tests}
 BuildRequires:  python3-html5lib
 BuildRequires:  python3-lxml
+BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 %endif
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools

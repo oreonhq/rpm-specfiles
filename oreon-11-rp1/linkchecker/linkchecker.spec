@@ -12,6 +12,7 @@ Source:         %pypi_source LinkChecker
 BuildArch:      noarch
 
 BuildRequires:  gettext
+BuildRequires:	python3dist(beautifulsoup4) >= 4.8.1
 
 BuildRequires:  python3-devel
 

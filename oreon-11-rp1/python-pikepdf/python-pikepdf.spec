@@ -24,6 +24,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  qpdf-devel >= 11.5.0
 BuildRequires:  python3-devel
 BuildRequires:  tomcli
+BuildRequires:	python3dist(pytest-xdist) >= 2.5
 %if %{with tests}
 # Tests:
 BuildRequires:  poppler-utils
