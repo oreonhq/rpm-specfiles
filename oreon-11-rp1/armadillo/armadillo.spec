@@ -76,9 +76,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 sed -i 's/\r//' README.md
 rm -rf examples/*win64*
+sed -i 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5...3.30)/' CMakeLists.txt
 
 %build
-%cmake %{extra_options}
+%cmake %{extra_options} -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
 
 %install

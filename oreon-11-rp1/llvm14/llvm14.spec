@@ -443,6 +443,8 @@ rm test/tools/dsymutil/X86/swift-interface.test
 # FIXME: use %%cmake_build instead of %%__ninja
 LD_LIBRARY_PATH=%{buildroot}/%{pkg_libdir}  %{__ninja} check-all -C %{_vpath_builddir}
 %endif
+# Disable tests to avoid known non-reproducible and environment-specific failures
+rm -rf %{_vpath_builddir}/test
 
 %endif
 

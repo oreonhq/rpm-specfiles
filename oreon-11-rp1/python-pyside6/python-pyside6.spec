@@ -270,7 +270,7 @@ CXXFLAGS="${CXXFLAGS//-flto=auto/}"; CXXFLAGS="${CXXFLAGS//-ffat-lto-objects/}"
 LDFLAGS="${LDFLAGS//-flto=auto/}"; LDFLAGS="${LDFLAGS//-ffat-lto-objects/}"
 _incfix="-I${_gcc_incdir} -idirafter ${_gcc_incdir}"
 export CFLAGS="${_incfix} ${CFLAGS}"
-export CXXFLAGS="${_incfix} ${CXXFLAGS}"
+export CXXFLAGS="${_incfix} ${CXXFLAGS} -std=c++17"
 export C_INCLUDE_PATH="${_gcc_incdir}${C_INCLUDE_PATH:+:${C_INCLUDE_PATH}}"
 export CPLUS_INCLUDE_PATH="${_gcc_incdir}${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
 export CMAKE_BUILD_PARALLEL_LEVEL=1

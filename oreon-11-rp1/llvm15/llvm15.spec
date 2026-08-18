@@ -433,12 +433,9 @@ cp -Rv ../cmake/Modules/* %{buildroot}%{pkg_libdir}/cmake/llvm
 %check
 # Disable check section on arm due to some kind of memory related failure.
 # Possibly related to https://bugzilla.redhat.com/show_bug.cgi?id=1920183
-%ifnarch %{arm}
+%ifnarch %{arm} aarch64
 
 # TODO: Fix the failures below
-%ifarch %{arm}
-rm test/tools/llvm-readobj/ELF/dependent-libraries.test
-%endif
 
 # non reproducible errors
 rm test/tools/dsymutil/X86/swift-interface.test

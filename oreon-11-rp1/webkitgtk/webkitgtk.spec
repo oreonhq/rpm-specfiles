@@ -13,7 +13,7 @@
 %bcond_without docs
 
 # Clang is preferred: https://skia.org/docs/user/build/#supported-and-preferred-compilers
-%global toolchain clang
+
 
 # We run out of memory if building with LTO enabled on i686.
 %ifarch %{ix86}

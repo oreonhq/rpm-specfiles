@@ -1,6 +1,7 @@
 %global source0_hash 1283ea5dda7715267b8f66ed0bea214f69db80cbe010ac89b87962351f52f099
 
 %global stable_kf6 stable
+%global _ldflags %{?_ldflags} -lavformat
 
 
 # adblock requires rust and corrosion
@@ -63,6 +64,7 @@ BuildRequires:  cmake(Qt6WebEngineQuick)
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6QmlPrivate)
 BuildRequires:  cmake(Qt6CorePrivate)
+BuildRequires:  ffmpeg-devel
 
 %if %{with adblock}
 BuildRequires:  cmake(Corrosion)

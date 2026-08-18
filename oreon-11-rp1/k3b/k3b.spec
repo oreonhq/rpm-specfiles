@@ -56,7 +56,7 @@ BuildRequires: cmake(KF6Service)
 BuildRequires: cmake(KF6Solid)
 BuildRequires: cmake(KF6WidgetsAddons)
 BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KCddb6)
+BuildRequires: cmake(KCddb6)\nBuildRequires: cmake(KF6Completion)
 
 BuildRequires: ffmpeg-free-devel
 BuildRequires: lame-devel

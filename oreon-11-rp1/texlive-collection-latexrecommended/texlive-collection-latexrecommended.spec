@@ -2318,6 +2318,4 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 %{_texmf_main}/tex/xelatex/xunicode/
 %doc %{_texmf_main}/doc/xelatex/xunicode/
 
-%changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:svn78568-3
-- Import
+%autochangelog

@@ -132,6 +132,7 @@ BuildRequires: hscolour
 %if %{with systemlibffi}
 BuildRequires: libffi-devel
 %else
+BuildRequires: gcc
 BuildRequires: gcc-c++
 %endif
 BuildRequires: make

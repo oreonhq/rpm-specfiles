@@ -46,6 +46,7 @@ BuildRequires:  libxml2-devel
 BuildRequires:  perl-interpreter
 BuildRequires:  perl-generators
 BuildRequires:  xapian-core-devel
+BuildRequires:  ffmpeg-devel
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 # Package doesn't build on arches that qtwebengine is not built on.
