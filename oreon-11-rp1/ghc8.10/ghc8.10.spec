@@ -64,9 +64,7 @@ Source0: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz
 %if %{with testsuite}
 Source1: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-testsuite.tar.xz
 %endif
-%ifarch x86_64
-Source2: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-x86_64-fedora27-linux.tar.xz
-%endif
+
 %ifarch aarch64
 Source3: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-aarch64-deb10-linux.tar.xz
 %endif
@@ -348,9 +346,7 @@ Installing this package causes %{name}-*-prof packages corresponding to
 
 %prep
 %setup -q -n ghc-%{version} %{?with_testsuite:-b1}
-%ifarch x86_64
-%setup -q -T -D -a2 -n ghc-%{version}
-%endif
+
 %ifarch aarch64
 %setup -q -T -D -a3 -n ghc-%{version}
 %endif

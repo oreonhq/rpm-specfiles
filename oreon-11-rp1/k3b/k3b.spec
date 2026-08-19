@@ -31,6 +31,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: libappstream-glib
 BuildRequires: extra-cmake-modules
 BuildRequires: kf6-rpm-macros
+BuildRequires:	cmake(KCddb6)\nBuildRequires:
 
 BuildRequires: cmake(Qt6Gui)
 BuildRequires: cmake(Qt6Core5Compat)

@@ -3292,7 +3292,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/collection-latexextra.tar.xz
+Source0:        https://mirror.ctan.org/systems/texlive/tlnet/archive/collection-latexextra.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz

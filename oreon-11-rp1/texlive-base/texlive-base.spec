@@ -1033,6 +1033,7 @@ Patch51:        texlive-base-ftbfs-gcc16.patch
 
 # Can't do this because it causes everything else to be noarch
 # BuildArch: noarch
+BuildRequires: coreutils
 BuildRequires: make
 BuildRequires: gcc gcc-c++
 BuildRequires: xz libXaw-devel libXi-devel ncurses-devel bison flex file perl(Digest::MD5) texinfo gcc-c++

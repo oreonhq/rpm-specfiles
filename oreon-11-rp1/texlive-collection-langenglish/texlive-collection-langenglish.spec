@@ -118,7 +118,7 @@
 %global source117_hash 448da312132662d25af7d4b4a096fe8f10b4fa7d0e7874848fa866fba3e0f289
 %global source118_hash 966b8ac4bfd150122ce34d4c1b33b7867cfb562a7d7c2a5b3beac83ec02a0716
 %global source119_hash 0d9f91b8395b08cd464d3a40bf96038eab9b1423e4268fea592a1a332f66d0f5
-%global source120_hash 0e438103b765bbe18ae9dc87e34c02a53c2f1f5b33942a181d7c0ef9f6812f7f
+%global source120_hash none
 %global source121_hash 0df916386d6a667798ec389a2dac846a6f241825398bd9d59070661e76f0f742
 %global source122_hash 153c77a64873c045122bd136dc4d8d444c7703b1a98c1b23db6f2f0e2b8adb85
 %global source123_hash 797df547b99711fde2970e1435c61cc321273d1b38d0643421859bed1ff5799a
@@ -276,8 +276,8 @@ Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t
 Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.doc.tar.xz
 Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.tar.xz
 Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.doc.tar.xz
-Source119:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final/archive/texonly.tar.xz
-Source120:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final/archive/texonly.doc.tar.xz
+Source119:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texonly.tar.xz
+Source120:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texonly.doc.tar.xz
 Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.tar.xz
 Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.doc.tar.xz
 Source123:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.tar.xz

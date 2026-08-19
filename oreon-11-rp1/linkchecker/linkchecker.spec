@@ -1,4 +1,5 @@
 %global source0_hash fb7e8facda7749c2fa5fa5dc241c0adc302da3d31d588964a2570db501aa49e5
+%define python3dist(name) python3-%{name}
 
 Name:           linkchecker
 

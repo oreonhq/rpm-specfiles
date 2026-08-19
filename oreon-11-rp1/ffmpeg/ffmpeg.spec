@@ -156,6 +156,17 @@ BuildRequires:  lame-devel
 BuildRequires:  libgcrypt-devel
 BuildRequires:  libklvanc-devel
 BuildRequires:  libmysofa-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  gnupg2
+BuildRequires:  gsm-devel
+BuildRequires:  lzo-devel
+BuildRequires:  ladspa-devel
+BuildRequires:  lame-devel
+BuildRequires:  libgcrypt-devel
+BuildRequires:  libklvanc-devel
+BuildRequires:  libmysofa-devel
 BuildRequires:  libX11-devel
 BuildRequires:  libXext-devel
 BuildRequires:  libXv-devel
@@ -205,10 +216,8 @@ BuildRequires:  pkgconfig(libjxl) >= 0.7.0
 BuildRequires:  pkgconfig(libmodplug)
 %endif
 BuildRequires:  pkgconfig(libopenjp2)
-BuildRequires:  pkgconfig(libopenmpt)
-%if %{with placebo}
+BuildRequires:  pkgconfig(libopenmpt) >= 0.2.6557
 BuildRequires:  pkgconfig(libplacebo) >= 4.192.0
-%endif
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(libqrencode)
 %if 0%{?with_ffmpeg_iso_extras}
@@ -265,6 +274,8 @@ BuildRequires:  pkgconfig(zlib)
 BuildRequires:  pkgconfig(zvbi-0.2)
 BuildRequires:  texinfo
 BuildRequires:  xvidcore-devel
+BuildRequires:  clang
+BuildRequires:  binutils
 
 %if %{with dc1394}
 BuildRequires:  pkgconfig(libavc1394)

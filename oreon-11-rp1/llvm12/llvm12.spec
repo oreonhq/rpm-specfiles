@@ -184,6 +184,8 @@ LLVM's modified googletest sources.
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q -n %{llvm_srcdir}
 %autopatch -M 99 -p2
+# Fix missing cstdint include in X86MCTargetDesc.h
+sed -i '|#include "llvm/Support/Error.h"|a #include <cstdint>' lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h
 %if %{defined el9}
 %patch -P101 -p2 -b .orig
 %endif

@@ -236,7 +236,7 @@ LLVM's modified googletest sources.
 %endif
 %endif
 	\
-	-DLLVM_TARGETS_TO_BUILD=%{targets_to_build} \
+	-DLLVM_TARGETS_TO_BUILD="AMDGPU;all" \
 	-DLLVM_ENABLE_LIBCXX:BOOL=OFF \
 	-DLLVM_ENABLE_ZLIB:BOOL=ON \
 	-DLLVM_ENABLE_FFI:BOOL=ON \

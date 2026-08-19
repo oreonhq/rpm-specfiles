@@ -301,6 +301,10 @@ LLVM's modified googletest sources.
 # Build libLLVM.so first.  This ensures that when libLLVM.so is linking, there
 # are no other compile jobs running.  This will help reduce OOM errors on the
 # builders without having to artificially limit the number of concurrent jobs.
+%ifarch aarch64 x86_64
+# Limit ninja jobs to avoid OOM on memory-constrained builders
+export NINJAFLAGS="-j4"
+%endif
 %cmake_build --target LLVM
 %cmake_build
 

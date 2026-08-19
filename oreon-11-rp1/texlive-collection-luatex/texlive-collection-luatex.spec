@@ -256,7 +256,7 @@ BuildArch:      noarch
 Source0:        http://mirror.ctan.org/systems/texlive/tlnet/archive/collection-luatex.tar.xz
 
 # License texts
-Source1:        texlive-licenses.tar.xz
+Source1:        http://mirror.ctan.org/systems/texlive/tlnet/archive/texlive-licenses.tar.xz
 
 Source2:        http://mirror.ctan.org/systems/texlive/tlnet/archive/addliga.tar.xz
 Source3:        http://mirror.ctan.org/systems/texlive/tlnet/archive/addliga.doc.tar.xz

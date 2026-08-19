@@ -77,7 +77,7 @@ Source0:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.
 %if %{with testsuite}
 Source1:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-testsuite.tar.xz
 %endif
-Source2:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz.sig
+Source2:        ghc-%{version}-src.tar.xz.sig
 Source5:        ghc-pkg.man
 Source6:        haddock.man
 Source7:        runghc.man

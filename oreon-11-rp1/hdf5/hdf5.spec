@@ -1,4 +1,4 @@
-%global source2_hash 284992575afb8755dd4ede8f75e2b83ac8d39644551665d94f7a0339f9eebca5
+%global source2_hash none
 %global source0_hash 09ee1c671a87401a5201c06106650f62badeea5a3b3941e9b1e2e1e08317357f
 
 # No more Java on i686
@@ -24,7 +24,7 @@ Source0: https://github.com/HDFGroup/hdf5/archive/hdf5_%{version}/hdf5-%{version
 
 Source1: h5comp
 # For man pages
-Source2: http://deb.debian.org/debian/pool/main/h/hdf5/hdf5_1.14.5+repack-3.debian.tar.xz
+Source2: https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.6.tar.gz
 # Fix java build
 Patch0: hdf5-build.patch
 # Get size of __float128

@@ -89,10 +89,8 @@ BuildRequires: perl(Expect)
 BuildRequires: python3-inotify
 %endif
 
-%if 23 < 0%{?fedora} || 7 < 0%{?rhel}
 # needed by i18n test-cases
 BuildRequires: glibc-all-langpacks
-%endif
 
 Requires: %{name}-common = %{version}-%{release}
 
