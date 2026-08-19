@@ -87,7 +87,7 @@ sed -i 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5
 
 %check
 %cmake %{extra_options} -DBUILD_SMOKE_TEST=ON
-make -C "%{_vpath_builddir}"
+
 %ctest
 
 %if (0%{?rhel} && 0%{?rhel} <= 7)

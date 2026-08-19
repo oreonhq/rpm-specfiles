@@ -253,19 +253,19 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/collection-luatex.tar.xz
+Source0:        http://mirror.ctan.org/systems/texlive/tlnet/archive/collection-luatex.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/addliga.tar.xz
-Source3:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/addliga.doc.tar.xz
-Source4:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/addtoluatexpath.tar.xz
-Source5:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/addtoluatexpath.doc.tar.xz
-Source6:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/auto-pst-pdf-lua.tar.xz
-Source7:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/auto-pst-pdf-lua.doc.tar.xz
-Source8:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/barracuda.tar.xz
-Source9:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/barracuda.doc.tar.xz
+Source2:        http://mirror.ctan.org/systems/texlive/tlnet/archive/addliga.tar.xz
+Source3:        http://mirror.ctan.org/systems/texlive/tlnet/archive/addliga.doc.tar.xz
+Source4:        http://mirror.ctan.org/systems/texlive/tlnet/archive/addtoluatexpath.tar.xz
+Source5:        http://mirror.ctan.org/systems/texlive/tlnet/archive/addtoluatexpath.doc.tar.xz
+Source6:        http://mirror.ctan.org/systems/texlive/tlnet/archive/auto-pst-pdf-lua.tar.xz
+Source7:        http://mirror.ctan.org/systems/texlive/tlnet/archive/auto-pst-pdf-lua.doc.tar.xz
+Source8:        http://mirror.ctan.org/systems/texlive/tlnet/archive/barracuda.tar.xz
+Source9:        http://mirror.ctan.org/systems/texlive/tlnet/archive/barracuda.doc.tar.xz
 Source10:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/bezierplot.tar.xz
 Source11:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/bezierplot.doc.tar.xz
 Source12:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/blopentype.tar.xz

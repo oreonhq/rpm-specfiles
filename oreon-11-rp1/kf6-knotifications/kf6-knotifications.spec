@@ -59,7 +59,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{framework}-%{version} -p1
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_PYTHON_BINDINGS=OFF
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose

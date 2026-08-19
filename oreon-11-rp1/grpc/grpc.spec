@@ -1827,5 +1827,4 @@ fi
 %{python3_sitelib}/grpcio_testing-%{pyversion}-py%{python3_version}.egg-info/
 
 
-%changelog
-%autochangelog
+
