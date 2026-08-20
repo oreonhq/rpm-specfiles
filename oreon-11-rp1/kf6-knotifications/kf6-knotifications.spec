@@ -40,11 +40,6 @@ BuildRequires:  cmake(PySide6)
 KDE Frameworks 6 Tier 3 solution with abstraction for system
 notifications.
 
-%package        -n python3-%{name}
-Summary:        Qt for Python bindings for %{name}
-%description    -n python3-%{name}
-The package contains the pyside6 bindings library for %{name}
-
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -78,28 +73,11 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 %{_libdir}/qt6/qml/org/kde/notification/libknotificationqmlplugin.so
 %{_libdir}/qt6/qml/org/kde/notification/qmldir
 
-%files -n python3-%{name}
-%{python3_sitearch}/KNotifications.cpython-%{python3_version_nodots}*.so
-
 %files devel
 %{_kf6_includedir}/KNotifications/
 %{_kf6_libdir}/libKF6Notifications.so
 %{_kf6_libdir}/cmake/KF6Notifications/
 
 
-%changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
 

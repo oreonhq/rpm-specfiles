@@ -268,12 +268,12 @@ Source8:        http://mirror.ctan.org/systems/texlive/tlnet/archive/barracuda.t
 Source9:        http://mirror.ctan.org/systems/texlive/tlnet/archive/barracuda.doc.tar.xz
 Source10:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/bezierplot.tar.xz
 Source11:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/bezierplot.doc.tar.xz
-Source12:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/blopentype.tar.xz
+Source12:        http://mirror.ctan.org/systems/texlive/tlnet/archive/blopentype.tar.xz
 Source13:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/blopentype.doc.tar.xz
 Source14:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/char2path.tar.xz
 Source15:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/char2path.doc.tar.xz
-Source16:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/chickenize.tar.xz
-Source17:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/chickenize.doc.tar.xz
+Source16:        http://mirror.ctan.org/systems/texlive/tlnet/archive/chickenize.tar.xz
+Source17:        http://mirror.ctan.org/systems/texlive/tlnet/archive/chickenize.doc.tar.xz
 Source18:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/chinese-jfm.tar.xz
 Source19:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/chinese-jfm.doc.tar.xz
 Source20:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/cloze.tar.xz
@@ -282,7 +282,7 @@ Source22:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/com
 Source23:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/combofont.doc.tar.xz
 Source24:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/countwords.tar.xz
 Source25:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/countwords.doc.tar.xz
-Source26:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/cstypo.tar.xz
+Source26:        http://mirror.ctan.org/systems/texlive/tlnet/archive/cstypo.tar.xz
 Source27:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/cstypo.doc.tar.xz
 Source28:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ctablestack.tar.xz
 Source29:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ctablestack.doc.tar.xz
@@ -293,7 +293,7 @@ Source33:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/emo
 Source34:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/emojicite.tar.xz
 Source35:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/emojicite.doc.tar.xz
 Source36:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/enigma.tar.xz
-Source37:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/enigma.doc.tar.xz
+Source37:        http://mirror.ctan.org/systems/texlive/tlnet/archive/enigma.doc.tar.xz
 Source38:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fancymag.tar.xz
 Source39:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fancymag.doc.tar.xz
 Source40:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/farbe.tar.xz

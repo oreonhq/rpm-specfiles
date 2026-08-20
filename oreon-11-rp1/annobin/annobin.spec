@@ -237,14 +237,12 @@ BuildRequires: gcc-c++ gcc-plugin-devel
 #
 # The following implements the above:
 
-%global gcc_vr %(gcc --version | head -n 1 | sed -e 's|.*(Red\ Hat\ ||g' -e 's|)$||g')
-
-# We need the major version of gcc.
-%global gcc_major %(echo "%{gcc_vr}" | cut -f1 -d".")
-%global gcc_next  %(v="%{gcc_major}"; echo $((++v)))
+%global gcc_vr %(gcc -dumpversion 2>/dev/null || echo 0)
+%global gcc_major %(echo "%{gcc_vr}" | cut -d. -f1)
+%global gcc_next  %(v="%{gcc_major}"; echo $((v+1)))
 
 # Needed when building the srpm.
-%if 0%{?gcc_major} == 0
+%if "0%{?gcc_major}" == "0"
 %global gcc_major 0
 %endif
 
@@ -536,6 +534,4 @@ make check
 
 #---------------------------------------------------------------------------------
 
-%changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13.08-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

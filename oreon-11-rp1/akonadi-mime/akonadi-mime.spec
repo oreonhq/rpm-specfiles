@@ -75,7 +75,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/KPim6/AkonadiMime/
 %{_kf6_libdir}/cmake/KPim6AkonadiMime/
 %{_kf6_libdir}/libKPim6AkonadiMime.so
-%{_qt6_docdir}/*.tags
+
 
 %files doc
 %{_qt6_docdir}/*.qch

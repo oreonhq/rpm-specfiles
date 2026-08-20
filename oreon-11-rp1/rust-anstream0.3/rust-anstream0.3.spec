@@ -14,7 +14,7 @@ Summary:        A simple cross platform library for writing colored text to a te
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/anstream
 Source:         %{crates_source}
-Patch:          anstream-fix-metadata-auto.diff
+
 
 BuildRequires:  cargo-rpm-macros >= 24
 

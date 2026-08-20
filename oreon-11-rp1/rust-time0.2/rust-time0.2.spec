@@ -14,7 +14,7 @@ Summary:        Date and time library. Fully interoperable with the standard lib
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/time
 Source:         %{crates_source}
-Patch:          time-fix-metadata-auto.diff
+
 
 BuildRequires:  cargo-rpm-macros >= 24
 

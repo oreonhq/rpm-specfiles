@@ -174,7 +174,8 @@ mv src/3rdparty/zlib src/3rdparty/zlib.UNUSED ||:
   -DMARBLE_DATA_PATH:PATH="%{_datadir}/marble/data" \
   -DMARBLE_PRI_INSTALL_DIR:PATH="%{_qt6_archdatadir}/mkspecs/modules" \
   -DWITH_DESIGNER_PLUGIN:BOOL=OFF \
-  -DBUILD_MARBLE_TOOLS=ON
+     -DBUILD_MARBLE_TOOLS=ON \
+     -DBUILD_DOC:BOOL=OFF
 
 cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS}
 

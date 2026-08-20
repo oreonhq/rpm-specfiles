@@ -99,7 +99,7 @@ applications.
 %endif
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 # note:
 # picocli is a gradle project, we need to transform it to maven.
 # here, we create a parent pom according to maven project aggregation. (see 

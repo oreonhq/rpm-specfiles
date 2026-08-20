@@ -1,5 +1,4 @@
-%global source0_hash e2ceb59e5137365aa121376c50b305bca6902eee49fa61b49c89197bd4269dfd
-
+%global source0_hash f25be30e93f8406c696febc8bbe7a5dc57cb4cb9de4d9843ba95a0e7bef2c899
 %global version         23.9.6
 %global version_ %(tr . _ <<< %{version})
 

@@ -14,6 +14,7 @@ Source: http://prdownloads.sourceforge.net/libdbi/%{name}-%{version}.tar.gz
 # -> fixed in upstream (see http://sourceforge.net/p/libdbi/mailman/message/31868578/)
 #    but upstream haven't realeased new version yet
 Patch1: libdbi-aarch64.patch
+Source1: http://prdownloads.sourceforge.net/libdbi/libdbi-aarch64.patch
 
 BuildRequires: openjade docbook-style-dsssl
 BuildRequires: gcc

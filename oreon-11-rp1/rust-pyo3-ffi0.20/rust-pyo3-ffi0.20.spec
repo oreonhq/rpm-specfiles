@@ -16,6 +16,7 @@ URL:            https://crates.io/crates/pyo3-ffi
 Source:         %{crates_source}
 
 BuildRequires:  cargo-rpm-macros >= 24
+python@3.12
 
 %global _description %{expand:
 Python-API bindings for the PyO3 ecosystem}

@@ -1,5 +1,4 @@
-%global source0_hash b9f1234567890abcdef1234567890abcdef12345678
-
+%global source0_hash b638167da139126ca11917b6880207cc6e8f9d1cbb1a48d87d017f697ef78188
 %bcond_with snapshot_build
 
 %if %{with snapshot_build}

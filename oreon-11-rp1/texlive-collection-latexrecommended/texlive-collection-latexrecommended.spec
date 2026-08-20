@@ -150,7 +150,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://texlive.info/tlnet-archive/2025/08/15/tlnet/archive/collection-latexrecommended.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/collection-latexrecommended.tar.xz
 
 Source1:        texlive-licenses.tar.xz
 

@@ -1412,7 +1412,7 @@ cd llvm/utils/lit
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
 %endif
 
-%global projects clang;clang-tools-extra;lld WebAssembly
+%global projects clang;clang-tools-extra;lld
 %global runtimes compiler-rt;openmp
 
 %if %{with lldb}

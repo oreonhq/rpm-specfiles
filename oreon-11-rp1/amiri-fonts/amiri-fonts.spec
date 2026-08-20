@@ -63,7 +63,7 @@ This package contains Quran Colored type of Amiri fonts.
 تحتوي هذه الحزمة على نوع القرآن الملون من الخطوط الأميرية.
 }
 
-Source0:  https://github.com/alif-type/amiri/releases/download/%{version}/Amiri-%{version}.zip
+Source0:  https://github.com/alif-type/amiri/releases/download/v%{version}/Amiri-%{version}.zip
 Source10: 67-%{fontpkgname0}.conf
 Source11: 67-%{fontpkgname1}.conf
 Source12: 67-%{fontpkgname2}.conf

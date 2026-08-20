@@ -11,6 +11,8 @@ URL:            https://github.com/requests/requests-kerberos
 Source:         %{url}/archive/v%{version}/requests-kerberos-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:	python3dist(pyspnego)
+BuildRequires:	python3dist(pyspnego[kerberos])
 
 %global _description %{expand:
 Requests is an HTTP library, written in Python, for human beings. This library

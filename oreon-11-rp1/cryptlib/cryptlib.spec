@@ -11,7 +11,7 @@ Summary:    Security library and toolkit for encryption and authentication servi
 
 License:    Sleepycat and OpenSSL and BSD-3-Clause   
 URL:        https://github.com/cryptlib/cryptlib      
-Source0:    https://senderek.ie/fedora/cl349_fedora.zip     
+Source0:    https://github.com/cryptlib/cryptlib/archive/refs/tags/v3.4.9.tar.gz     
 Source1:    https://senderek.ie/fedora/cl349_fedora.zip.sig
 # for security reasons a public signing key should always be stored in distgit
 # and never be used with a URL to make impersonation attacks harder

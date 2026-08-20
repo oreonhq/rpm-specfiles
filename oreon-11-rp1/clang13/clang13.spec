@@ -104,6 +104,8 @@ BuildRequires:	gcc
 BuildRequires:	gcc-c++
 BuildRequires:	cmake
 BuildRequires:	ninja-build
+BuildRequires:	llvm13-devel = 13.0.1
+BuildRequires:	llvm13-static = 13.0.1
 %if %{with compat_build}
 BuildRequires:	llvm%{maj_ver}-devel = %{version}
 BuildRequires:	llvm%{maj_ver}-static = %{version}

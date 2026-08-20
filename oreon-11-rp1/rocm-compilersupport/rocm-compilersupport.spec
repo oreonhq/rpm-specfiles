@@ -154,6 +154,7 @@ Source0:        %{url}/archive/refs/tags/rocm-%{rocm_version}.tar.gz#/rocm-compi
 Source1:        rocm-compilersupport.prep.in
 
 # Subject: [PATCH] [gold] Fix compilation (#130334)
+BuildRequires: rocm-cmake
 Patch1:         %{url}/commit/b0baa1d8bd68a2ce2f7c5f2b62333e410e9122a1.patch
 # Link comgr with static versions of llvm's libraries
 Patch2:         0001-comgr-link-with-static-llvm.patch
