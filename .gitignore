@@ -1,4 +1,9 @@
 # remove all tarballs kept in most packages but keep tarballs only for oreon-specific packages
+oreon-10/**/*.tar.gz
+oreon-10/**/*.tar.bz2
+oreon-10/**/*.tar.xz
+oreon-10/**/*.tar.zstd
+oreon-10/**/*.tar.Z
 oreon-11-rp1/**/*.tar.gz
 oreon-11-rp1/**/*.tar.bz2
 oreon-11-rp1/**/*.tar.xz
