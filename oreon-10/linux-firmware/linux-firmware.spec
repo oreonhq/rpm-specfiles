@@ -723,8 +723,4 @@ end
 %{_firmwarepath}/tdmb*
 %{_firmwarepath}/v4l-cx2*
 
-%changelog
-* Mon Jul  6 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260622-4
-- 20260622
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260309-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

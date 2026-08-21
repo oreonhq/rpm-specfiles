@@ -6,8 +6,8 @@
 %global released_kernel 1
 
 # define buildid .local
-%define specversion 7.2.0
-%define tarfile_release 7.2.0
+%define specversion 7.2
+%define tarfile_release 7.2
 # This is needed to do merge window version magic
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
@@ -121,12 +121,4 @@ rm -rf %{buildroot}/usr/tmp-headers
 %defattr(-,root,root)
 %{_prefix}/*-linux-gnu/*
 
-%changelog
-* Mon Jul 27 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.5-200
-- Linux v7.1.5
-* Sat Jul  5 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.3-200
-- Linux v7.1.3
-* Sat Jun 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.1-200
-- Linux v7.1.1
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.6-200
-- Import
+%autochangelog
