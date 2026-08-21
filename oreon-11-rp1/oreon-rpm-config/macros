@@ -255,7 +255,6 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 	--infodir=%{_infodir} %{?*}
 
 %make_build \
-  %{?__oreon_hwcaps_make_pre:%{__oreon_hwcaps_make_pre} &&} \
   %{__make} %{_make_output_sync} %{?_smp_mflags} %{_make_verbose}
 
 #==============================================================================
@@ -322,7 +321,6 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 
 %__spec_install_post\
     %{?__debug_package:%{__debug_install_post}}\
-    %{__oreon_hwcaps_post_install}\
     %{__arch_install_post}\
     %{__os_install_post}\
 %{nil}

@@ -1,6 +1,5 @@
 %global source0_hash none
 %global source_date_epoch_from_changelog 0
-%global __oreon_hwcaps_post_install %{nil}
 %global __spec_install_post %{?__debug_package:%{__debug_install_post}}%{nil}
 
 #                        TO WHOM IT MAY CONCERN
@@ -52,9 +51,6 @@ Source155: macros.ldconfig
 Source156: macros.vpath
 Source157: macros.shell-completions
 Source158: macros.rpmautospec
-Source159: macros.oreon-opt
-Source160: macros.oreon-hwcaps
-Source161: oreon-hwcaps-post-install
 
 Source201: brp-mangle-shebangs
 
@@ -133,7 +129,6 @@ install -p -m 444 -t %{buildroot}%{rrcdir} redhat-hardened-*
 install -p -m 444 -t %{buildroot}%{rrcdir} redhat-annobin-*
 install -p -m 755 -t %{buildroot}%{rrcdir} config.*
 install -p -m 755 -t %{buildroot}%{rrcdir} dist.sh
-install -p -m 755 -t %{buildroot}%{rrcdir} oreon-hwcaps-post-install
 install -p -m 755 -t %{buildroot}%{rrcdir} brp-*
 install -p -m 755 -t %{buildroot}%{rrcdir} find-*
 
@@ -156,7 +151,6 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 
 %files
 %dir %{rrcdir}
-%{rrcdir}/oreon-hwcaps-post-install
 %{rrcdir}/brp-ldconfig
 %{rrcdir}/brp-mangle-shebangs
 %{rrcdir}/brp-strip-lto
@@ -173,8 +167,6 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 %{_rpmconfigdir}/macros.d/macros.dwz
 %{_rpmconfigdir}/macros.d/macros.fedora-misc
 %{_rpmconfigdir}/macros.d/macros.ldconfig
-%{_rpmconfigdir}/macros.d/macros.oreon-hwcaps
-%{_rpmconfigdir}/macros.d/macros.oreon-opt
 %{_rpmconfigdir}/macros.d/macros.rpmautospec
 %{_rpmconfigdir}/macros.d/macros.shell-completions
 %{_rpmconfigdir}/macros.d/macros.vpath
