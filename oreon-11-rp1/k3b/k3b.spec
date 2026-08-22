@@ -31,8 +31,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: libappstream-glib
 BuildRequires: extra-cmake-modules
 BuildRequires: kf6-rpm-macros
-BuildRequires:	cmake(KCddb6)\nBuildRequires:
-
+BuildRequires:	cmake(KCddb6)
 BuildRequires: cmake(Qt6Gui)
 BuildRequires: cmake(Qt6Core5Compat)
 
@@ -57,7 +56,7 @@ BuildRequires: cmake(KF6Service)
 BuildRequires: cmake(KF6Solid)
 BuildRequires: cmake(KF6WidgetsAddons)
 BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KCddb6) cmake(KF6Completion)
+BuildRequires: cmake(KF6Completion)
 
 BuildRequires: ffmpeg-free-devel
 BuildRequires: lame-devel
@@ -1020,5 +1019,4 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.k3b.deskt
 - remove mp3 plugin build options
 - add i18n package
 - clean up for kde 3.2/FC2 target
-
 
