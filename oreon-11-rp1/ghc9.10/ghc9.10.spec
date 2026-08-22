@@ -265,8 +265,6 @@ install the main ghc package.
 Summary: Makes %{name} default ghc
 Requires: %{name}-compiler%{?_isa} = %{version}-%{release}
 Conflicts: ghc-compiler
-Conflicts: ghc8.10-compiler-default
-Conflicts: ghc9.0-compiler-default
 Conflicts: ghc9.2-compiler-default
 Conflicts: ghc9.4-compiler-default
 Conflicts: ghc9.6-compiler-default
