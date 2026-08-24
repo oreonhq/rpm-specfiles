@@ -1,4 +1,4 @@
-%global source0_hash 3449d64b0cf71578b2c7e3ddc048d4af3661f44a83941ea074a7813f3a59ffa3
+%global source0_hash 4c3a2b4abe17e42e739a8384df1a06b32fed215786dc000008a4385e74f92014
 
 Name:		chmlib
 Summary:	Library for dealing with ITSS/CHM format files
@@ -8,17 +8,14 @@ Release:	%autorelease
 License:	LGPL-2.1-or-later AND GPL-2.0-or-later
 Url:		http://www.jedrea.com/chmlib/
 VCS:		git:https://github.com/jedwing/CHMLib.git
-Source0:	http://www.jedrea.com/chmlib/%{name}-%{version}.tar.bz2
+Source0:	https://github.com/jedwing/CHMLib/archive/refs/heads/master.tar.gz
 # backported from upstream
-Patch1:		chmlib-0001-Patch-to-fix-integer-types-problem-by-Goswin-von-Bre.patch
 # backported from upstream
-Patch2:		chmlib-0002-Fix-for-extract_chmLib-confusing-empty-files-with-di.patch
 # Submitted upstream https://github.com/jedwing/CHMLib/pull/10
 Patch3:		chm_http-port-shortopt.patch
 # Submitted upstream https://github.com/jedwing/CHMLib/pull/11
 Patch4:		chm_http-bind-localhost.patch
 # Submitted upstream https://github.com/jedwing/CHMLib/pull/12
-Patch5:		chm_http-output-server-address.patch
 Patch6: chmlib-c99.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -42,7 +39,7 @@ Files needed for developing apps using chmlib.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1
+%autosetup -p1 -n CHMLib-master
 rm -f libtool
 mv configure.in configure.ac
 autoreconf -ivf

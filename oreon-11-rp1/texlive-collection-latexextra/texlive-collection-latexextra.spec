@@ -4547,8 +4547,8 @@ Source1248:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/f
 Source1249:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fundus-calligra.tar.xz
 Source1250:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fundus-calligra.doc.tar.xz
 Source1251:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fundus-cyr.tar.xz
-Source1252:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2024/tlnet-final/archive/fundus-sueterlin.tar.xz
-Source1253:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2024/tlnet-final/archive/fundus-sueterlin.doc.tar.xz
+Source1252:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fundus-sueterlin.tar.xz
+Source1253:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fundus-sueterlin.doc.tar.xz
 Source1254:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/futharksymb.tar.xz
 Source1255:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/futharksymb.doc.tar.xz
 Source1256:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fvextra.tar.xz

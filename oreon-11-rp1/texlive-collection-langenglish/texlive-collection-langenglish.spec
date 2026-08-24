@@ -276,8 +276,8 @@ Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t
 Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.doc.tar.xz
 Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.tar.xz
 Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.doc.tar.xz
-Source119:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texonly.tar.xz
-Source120:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texonly.doc.tar.xz
+Source119:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/texonly.tar.xz
+Source120:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/texonly.doc.tar.xz
 Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.tar.xz
 Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.doc.tar.xz
 Source123:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.tar.xz
