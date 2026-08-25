@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 121%{?dist}
+Release: 122%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -1047,7 +1047,7 @@ BuildRequires: xpdf-devel >= 4.03
 BuildRequires: glib2-devel fontconfig-devel
 %endif
 BuildRequires: zziplib-devel libicu-devel cairo-devel harfbuzz-devel perl-generators pixman-devel graphite2-devel
-%if 0%{?fedora} || 0%{?rhel} >= 8
+%if 0%{?oreon} >= 11 || 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires: libgs-devel
 BuildRequires: ghostscript
 %else
