@@ -1049,6 +1049,7 @@ BuildRequires: glib2-devel fontconfig-devel
 BuildRequires: zziplib-devel libicu-devel cairo-devel harfbuzz-devel perl-generators pixman-devel graphite2-devel
 %if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires: libgs-devel
+BuildRequires: ghostscript
 %else
 BuildRequires: ghostscript-devel
 %endif
