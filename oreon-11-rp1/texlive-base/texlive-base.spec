@@ -7606,7 +7606,7 @@ rm -f dummy.*
 %endif
 
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118112
-export CFLAGS="$RPM_OPT_FLAGS -std=gnu17 -fno-strict-aliasing -Werror=format-security -Wno-error=int-conversion -Wno-error=incompatible-pointer-types -Wno-error=implicit-int -Wno-error=implicit-function-declaration"
+export CFLAGS="$RPM_OPT_FLAGS -std=gnu17 -fno-strict-aliasing -Werror=format-security -Wno-error=int-conversion -Wno-error=incompatible-pointer-types -Wno-error=implicit-int -Wno-error=implicit-function-declaration -Wno-error=discarded-qualifiers"
 
 # -std=gnu++17 until icu is properly C++20 compatible
 %if 0%{?oreon} >= 11
