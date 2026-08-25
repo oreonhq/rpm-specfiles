@@ -7606,7 +7606,7 @@ rm -f dummy.*
 %endif
 
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118112
-export CFLAGS="$RPM_OPT_FLAGS -std=gnu17 -fno-strict-aliasing -Werror=format-security -Wno-error=int-conversion -Wno-error=incompatible-pointer-types -Wno-error=implicit-int -Wno-error=implicit-function-declaration"
+export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Werror=format-security -Wno-error=int-conversion -Wno-error=incompatible-pointer-types -Wno-error=implicit-int -Wno-error=implicit-function-declaration"
 
 # -std=gnu++17 until icu is properly C++20 compatible
 %if 0%{?oreon} >= 11
@@ -7659,7 +7659,7 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $i
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $i
 done
 
-%make_build -j1 world STRIPPROG=/bin/true STRIP=/bin/true
+%make_build world STRIPPROG=/bin/true STRIP=/bin/true
 
 %install
 # make directories
