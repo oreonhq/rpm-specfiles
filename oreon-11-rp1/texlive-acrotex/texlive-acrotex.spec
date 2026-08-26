@@ -1,4 +1,4 @@
-%global source0_hash ec054fde139651b0c3be678b5de3ea9e6d2e586df479c962785f947adc486a0c
+%global source0_hash 8fd2f487ce40f9dcdae5cd003bf9b12b96d7fe6364d0f59e256966f9d252cac45d4a0a11affed62482c61ef12d09f2b80dd15d271326443a1c72fb79e05b7e24
 
 %global tl_version 2025
 %global revision 330
@@ -16,8 +16,10 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.r330.tar.xz
-Source1:	https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.doc.r330.tar.xz
+%global source1_hash 9ffeb5569f32b177408851ed3a42d19af98cafdd70656d027e4afaba987c947b954d9607fbd4bc5f4c8a35bdfce92d216191ff89ef19f2e9f3d5ce6576d4bd2a
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.doc.tar.xz
 # License texts
 Source2:        texlive-licenses.tar.xz
 
@@ -57,7 +59,7 @@ and the eq2db package for converting an exerquiz quiz for
 processing by a ASP server-side script.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE2}

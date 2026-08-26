@@ -14,17 +14,24 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-binextra.r80064.tar.xz
+%global source2_hash 6eabd7281d79ff0ad19080350dfcca8ee3a33ddfa6d17827a7851cc53f09f627729c8d715a1dfe50e0c079add44331a07d543cb8b6a57000efa6d73c30f2ffe0
+%global source3_hash c61bc0d70cadcc4382dae55cdc1af076882801321a2de16f164223267732e476e41f949f566808c928f446d69aa22bd9965adb155c97905e32b93808810c76c0
+%global source4_hash f8cb6152ef1429684ebc92c37fc2fd414527ebf6d847d248f10dd50cb4e7d91f7bd0f7a5ba487dc5c5d87c288e7b5a862721985f4be983536666d58a9c3fcdb1
+%global source5_hash 05ab867635e1a4a4970ce81ec01a4287822b5de6bf6fa9b4b54d939be49af559509d0889ef732c1e6e4938c4ca2e027574d51b8ea6448e2736f307b860e0002f
+%global source6_hash 7e5310672cea8c86394cb61f2cf8c4930fb56070bfe12083a7cb1ee8b7ea6786c5582ec0f5ed95b1d4ec88eebb0e3035a446a9a846ad0a96533ac4256d5b1d27
+%global source7_hash 2e66b1364c2fceecd750758c0c0348f9da7b7d490825d54a1dccf61e07a7d07ad1a62c9078e797b209570a946d643c926e92ff8bde5f8b0dfb36d1d66910dc39
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-binextra.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctan_chk.r36304.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctan_chk.doc.r36304.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.r76790.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.doc.r76790.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.r78653.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.doc.r78653.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctan_chk.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctan_chk.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.doc.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-a2ping
@@ -205,7 +212,7 @@ xdvipskmaps provides OpenType font support for xdvipsk. It generates map files
 containing information about OpenType fonts used in DVI files.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

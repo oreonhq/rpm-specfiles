@@ -14,12 +14,14 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-fontutils.r61207.tar.xz
+%global source2_hash ff7ad395329dd1cc5d21d5459916d0f10a8c03399d733048bce0a8aaa4e3a955f3ad3dbb228319d4bfb96e0694069002507bc294ed81fda5a48ad93f8cd82589
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-fontutils.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvipsconfig.r13293.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvipsconfig.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-accfonts
@@ -63,7 +65,7 @@ underneath the page material--very useful for measuring and eliminating paper
 feed errors!
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

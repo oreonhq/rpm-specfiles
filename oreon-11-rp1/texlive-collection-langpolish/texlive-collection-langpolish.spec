@@ -14,40 +14,70 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langpolish.r54074.tar.xz
+%global source2_hash 6c5bdaa1aeddea30a828d1b4dacfc3730b864b81089643c69de9fdb6dc1583b5b21aca5dfa4ecec57555a3e81e670db600572a94af7a37918ccb9efecd3eb7be
+%global source3_hash 36f9e8c91120da8a100597e5869fa5559a8f93ed95ac987b916257c64af5d3e1a4429a0173e53dae96579f148697e095999ab41b2ac8fe0a75a5e13073a1f0ad
+%global source4_hash 1e5629a2e6e6099a319d8b8a1efec83262780c70a57c482f66a33a48722bcdb18fb891a96b6b6f29c54d71ce581dd1c82decdd22ad74d6ef61765fec3f8c3614
+%global source5_hash 29fba5bb48aeb2353616cfe9a8dd4fff90c164c10779b8115958733470fd47dc40a567212c62315110a5a7a51363c9f917c4984583d40177037d6b0803ce66fe
+%global source6_hash 3d0bef5ca5c37f1cae98bd0555d714ed4408b6fde4ffcfa78cf2512114c9aa09b81b23bc6d76705f64dd08ea493add2027e7af997357ff5c4cc360deae11ba92
+%global source7_hash f5503008430e969a604973e4481f8ab51269a2c3570f757787eb7a1a9d11b8508ec7ca1709a21b9e2299059a9c8ca20e5806093bd24166eb44e167c06e4fd0ee
+%global source8_hash e752e4b53191a9c5b46d1aa5797d491b98ab2585873e9a9a1471aa89accd898cadc5a9332ab36828b4baa6a3d3d69b311794e1948b788db755dc8f066a68550b
+%global source9_hash 9c1c0279f18a37b2a500e415364dd4404a7dca8b6e0f85b053db5511826eb401865984ee3471fbe607e4cfa605ab50c08e6c11b166dd629e84d9f07db4af7114
+%global source10_hash d7265e7c76e29763641a5cd208427902fdb2c347f09578f199d403795210a173301a2a069921302a0ac1c124c618defadaced5c1cf96e001def8185a21b297aa
+%global source11_hash c61289a35103ecfab025169d432be2b3c7f2fd4ff1eb094b345feae6c9a30bd2cee70e0402eb6c2ea330254cf00d04c02649a40d6bd011f9cc612521c88b94a6
+%global source12_hash abc5162a490b9646649dfdf50779ab12632eb3ddc6d1c2bae93a4bb00ef1f9387bc8d873a7b5c062b92a999c9d62b74e64b1688dd3582255f7386958649ee009
+%global source13_hash dfcd842a6ca4d628848b1c705f6f0cf21f3358d303eef745ef822bb3f4d3c402a5477242483f938a3e9e1ed004346dcfc95cb262c5d32af1f2f5d3e174f1c8fc
+%global source14_hash b8c6455556eb60c3b8e6b9f79663ab315f22fa7dec10894577003bef994939095401736a134e8a6b06798b451d7f6be60fc782e0b92b9152c3fcc4fa0e9c37c3
+%global source15_hash bb0d16d92272c6233284fbcd94864c381ce60343e5b9ac23a04871a515f36c18d5eca92e7ad4f80b1335348f62baa703671984db2c85d5a35d84f725f699db9a
+%global source16_hash efde952f17a904492b2c36e49801514b97ac5302b406beca7680a893051bc3821e70cdaad8d01dab479476298154c5ce2db99d43b04cf51cbcc5e16358c9b9f0
+%global source17_hash 91ec6d489652477c1ac1f21baa2879814b9081e67dff6c770df1601c5113ad333b003cb2ecb9ceaf2b30398f4b8d2ea57b61f7d872159eaa22137bebcdaefb5b
+%global source18_hash 2001e894d897357e8a214634328497e4aa7a80cdc6fb39ea16cce31a94898c3753ff380f04a12f2450dc46067f851c40d4bb33e8e3f00aaccf5cac72aa5b085d
+%global source19_hash 18b9546576957553b477a1c5a90e6780770f18d6aced92b17017c44770b6bfa9c3cf928500a9e56c6c67f45d375bc12ad8ebc97eb1589f3cf7b5b3ed2f7b55c6
+%global source20_hash 0441621561c2c4208d083f84eaf47573de94248cc1aaf027061de636c1a65f35a307260eaf390257bd02acac34b42963f96030ee27c83650deb11234edec89bf
+%global source21_hash 7387592a338e7ba10942e4ed96364e36ca325040bff02cd69bf0f98d471775d38bd63e54bad494f64874e2fd0462762595c5796d7453aa6909fccc2d9d6bd27c
+%global source22_hash 6b6fc20f5ec1269d318813b1ad34020e2b5341ed8891c11d2eda6b84884b3782e992dd9dde16d14b2030f2b57e1146fb6da6e761a35b12a3d88e8d865285668d
+%global source23_hash 07ca34ae47976c65deba5443052001406390befb6dc675af7651141505f088e2f67f39648f14a94f70788eda79221efb05c2246d1991811e697e88c7408f6cf6
+%global source24_hash a61b861cdac25c0d8c7d48f67abb9eed88458d0d55e8afb706adabfbed0d1e7c7159fcf000b8012885f82f849ee965bf6a2607f1b67f2d9191f59f8538147230
+%global source25_hash 23005895f708b07162b2b251be125b70dfa8ef6add8ef7c5dbab2c5a2e211f65fce8432cbf3ee324a9b72c2296d5dfffaaf5a52d77425e4d6fc3c042397d6bec
+%global source26_hash fd22d5a6c34e5ab7859bbb515d54e822eb5167853abba3e25d5137df1bc34f0bad9892c16f7ed5dfded8b90651551e1ed84a00d561c561ba18f50fa04e7bc7af
+%global source27_hash eb14d312f74c46b46a4b2b0cd142492d3b549d3f58db2908301a5d43a001f4d5cd6d252881ac1ed4f56606289d3e8b17dfc3e3fb2c66b2b69c68b1db7e652df1
+%global source28_hash 1f76e8b6790c7474df16ad5d35d16a6706a4f53fab0c551da1bbc910d83015fc2c7866c73f2dfb73dcb1d13a612515672e26a8687901bb6c20efa27609e7b939
+%global source29_hash 0cd4c549c7b00939dec5055705658f76f6ebbe5de70e082652b761673ba5a249924fb862a319512a9a124b9cdaae8906c74439bba97be8825d4d1ffc70642c8f
+%global source30_hash cd438089d90faa0e9144d23adb78ce91d85b80ce084cb92511cc23882c675cb654cb704aebeb623bb29c70b764c8a0ab19915607664895c457c583f376c1088e
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langpolish.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.r77682.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.doc.r77682.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.r44371.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.doc.r44371.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.r58602.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.doc.r58602.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.r54074.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.doc.r54074.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-polish.r78069.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.r63289.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.doc.r63289.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.r77050.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.doc.r77050.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.r58661.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.doc.r58661.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.r78101.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.doc.r78101.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.r23552.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.doc.r23552.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qpxqtx.r45797.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qpxqtx.doc.r45797.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tap.r31731.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tap.doc.r31731.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.r67718.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.doc.r67718.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.r78337.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.doc.r78337.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.r15878.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.doc.r15878.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.doc.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.doc.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.doc.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-polish.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.doc.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.doc.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.doc.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.doc.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.doc.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qpxqtx.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qpxqtx.doc.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tap.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tap.doc.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.doc.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.doc.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-collection-latex
@@ -326,7 +356,7 @@ fi
 :
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

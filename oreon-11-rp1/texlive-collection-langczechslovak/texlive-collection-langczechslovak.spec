@@ -14,30 +14,50 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langczechslovak.r54074.tar.xz
+%global source2_hash 0cc0f07fafefa6d7ea1ae1b2ce143dbec124fe96b36221f1b5a847fd0b789d1974b5990ebd93b8ac0607f63956948bede25c7e690784ca7e9638f48139585a32
+%global source3_hash 1575fbe0d70725e975cdb0c1c5ca685985d91f23e4a997af4a0db21905ac34962f69653ffe4084065bda70cfbba0f0a1f0885d3afc19e98d0045ebb68cb545c3
+%global source4_hash b14b98d2cb66a3f8f5d8a313d9208a700d1c3664a5bd23f5baf0d9aa2e3acf3891a0536871988e7579020570999ea05a9dcd60a404cd6670e3c1cf8110d9094e
+%global source5_hash da1d663125b913e3480ad147ac1f5c1befa00110e71bbd2d42384db03fe0f0db3133b49e26d1a336b49c10018990763d42ef49b64440c9138d9d938057ac90e0
+%global source6_hash c5f35424e63c3cf16eb2a71380917e1e8e33d1ebf62a4472b989c4e4df8b9f84d45bb6220e92eeb614aa40d0bdf977a47a905389072d066dc93b009856deff17
+%global source7_hash 300c9fa3a5b23001c03c2bd2e0db994e2f9168068afb39185064a70b85d5da9a62ca652959b2dc8a71735cbbe96d029b10fed51bb22ba6a386d9b555905925e4
+%global source8_hash 2b1769ccc09de03c868bde8246c0d90a4e799e45d15c183fab121fa4356cbda85251e422e5d7ba6914027e640259d4a9acd55ada2689fe04935901ce86b3d10d
+%global source9_hash 41e82154a95a69cf29d6a55faebeae61a02a558cb8b4a906ca4931f446fbb5741e85cb72b5c89302d518d0b27520f1efb2ae61147846ead5fb150ece6dd98a13
+%global source10_hash bb2ff88687d3a87d6f2c9679738deed9c4a207b3ccfc246f6d1e88ac8a5b29129db7a5804efdd6d4eb81c21b113a24c8bb7c776ccf568e7a9bb1800d9c42a4f2
+%global source11_hash cc0f0d0e2af2c210cb7888e90d668016dba4cfce3ae90faf0597a7f8c2058dfe56b92b71d185705c7d3b19d53b989724a9106ab56664fd2e6f4e95da5c0a48b8
+%global source12_hash e84c12eed94f459a7769527197f8b4b2f638297eec5d41bc7e4e3cc86c593cf957158946eb495947ff557ff323a085212b61cb3233972238d3afa2fff54e367b
+%global source13_hash d6b32a80d6f70c3490d6c0dbd4f52cb9e2bb17ea9d15340e0b0f829d4eeb7317dccc22cfa79af70c4f6862b58f182cad9a136800375708774620aee4cfafbfa2
+%global source14_hash a25bd09502b1a0b9699ea5f9a0e8b3a0d3405de49d27502a7020cd62fdd33b06ff0ba4fe50e2e56244862f07ce4b70162a5d8ee7c20f49e503590a9941721c3e
+%global source15_hash dc967aae970e535c5dea48264c30f01d5ff3521851abd718905b78497c3d95d403c4f1ec8633cd2a7a55fe0a6bc1e1523391b214fbb8a0e2ed03737b09080e40
+%global source16_hash 10de238b8152907ec04834d6b4737cebb13bd6567c9867e19e2003d123299c733012569cd64a66d31a79894f9b37c1fc409cd5b76ed10832762988fc318875e5
+%global source17_hash 228d83ed83c79cec5356964bbe47cd589ee1e2a418c7110c3487bf91f8e340be979d067358168b523d5a8b9750f1430ba2ca1450c9c604a2de27067f48bf5293
+%global source18_hash cf07c907cc07b76d8c6872852791e260fa6c2ff83186cb19886bc74408773d24d3961ab6087780dddaec91d982548bd04ce987a8908d939eff6ef4d198639b55
+%global source19_hash 6ea6d73a840dadc62897a21bb5c68ac2b18c40168a65fd48aaa3c6cb381b6ce57bba7f9392896c5e23b65cc0f453838b8d764cdefea3778b769124ad97cf1844
+%global source20_hash fcfdf84d0d565511b8db4be1d73cef719364f842031d48cbd947117c7bb953f7b2a049849223540a4b2c512a6910635c540b9a629d4769cc43ff99b0ab04d1bf
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langczechslovak.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.r30261.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.doc.r30261.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.r30292.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.doc.r30292.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.r69910.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.doc.r69910.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cs.r79618.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.r77112.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.doc.r77112.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.r64149.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.doc.r64149.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-czech.r78069.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-slovak.r78069.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.r55643.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.doc.r55643.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.r79461.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.doc.r79461.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.r77067.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.doc.r77067.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.doc.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.doc.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cs.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.doc.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.doc.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-czech.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-slovak.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.doc.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.doc.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-collection-basic
@@ -263,7 +283,7 @@ fi
 :
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

@@ -14,37 +14,64 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langspanish.r72203.tar.xz
+%global source2_hash a1203a09f77e3753fc28d632abc1c7d686085cd016acbab38a767b85a815d0dd05006e49b11524deb85bb8a20a3a8f413917529842f850d4efbe80b38c216ee2
+%global source3_hash 4c4cd96889c2f1db9766099de6d149963579d27256f44d555023e205ca09617b570237e7eec2b5523c61af4d1124683ade9eeed4a5fb96f140423176ef163cad
+%global source4_hash 728d847331f1a00766cfc2818691516234b153182f31ad2da024ec3194cc384a41ca89cc67ce66447191188dfe088d1dc4c8af3b2e6952931ec7eb58737c4bca
+%global source5_hash 3184373d85b1e9bd76588318372ced328d2ce7f6d4f45bc5634671a88314d1ed18cedd968e59dd5203b4d77e6d3576f36a654b1a8bbdaa106d47cbdfb825e452
+%global source6_hash 1c8aef52e0eaba8a55e6c0bdaca4ef47012012a85d38ed268207227063d042f2f0b2cbafa3d1e4d71432e3ea6effd2a781ab0aefc536276de36a95d0dc834b68
+%global source7_hash a60ed8ffc43cb56aeafab8d09e8235eea9482ff8cdabc00da68938d980b20a7067da3286fa8ce19eddf9276b51e78dd944545cb8bb891bc13c31cffbab39544e
+%global source8_hash bfdad727600b708fbcd643f9a78f256252cf54d3addb9d94744cd390950cbec7fb5a87c04b80b7e1863a49e4933eb1411fc00374737c600481f48296f0b06e3e
+%global source9_hash 913182c436b45fde4fe288260325e0d7173773c0bab06f370ab47c1eb483ff50d29539b084de137a34395dd85663217e17b088648d512b2fc3d76644f9cb5561
+%global source10_hash 33f66e4f928591188289f07e003cac10229735e69ee7390020748e119930ea7b74ad69e5eea991d8e34325ac4d548ce0b843a00b3ca50b9e6fae3e96526a4ad8
+%global source11_hash 5b5d0ebda1bde2c1c67fd4853a41bb10956487fa5ad2686d6814dbdd51f68dde2a3d294797b7b1602d587a44ea6acbd8260ab9965efab81d91eb9d9fdb93da69
+%global source12_hash aa81a1a75029fe02ba5b5e44d9092721686626757c18793147d221e6909a298feb25568db22684dff0f012b1e9b1a13773029b7bf57f322c9f3a589f9b4429da
+%global source13_hash 57489ea5726a482cadd57ee3d77bc758b976acb0ceb28bf959921d1d64ef1ebd44ef9ef5db175be41e7bfaf755aa83f0c48aa501d7d0bd7e126e68f884347218
+%global source14_hash 0fbd0bbba635dd482d844e2987e997b6c3c170527645bd1932548701f998e74e6d863285c226b5040e560eb0b28066b797c37617da6939633e9f9830347c53a7
+%global source15_hash bb0eb72cd85cd0c6201bf327ddd0afc8af85542943f9ad4d2d6decb7f7a297935a2f399316d5244df2a66700694d2bee470e8d00afab25fd3e629a2037478338
+%global source16_hash 73cecbb031be2d421c25a7d6a5c04d08e30d83a88b4132682d434a879da915f1d4af56980f1bf04f7df5a3e881ecdd940a058a2dcf89b5e9f48c378eb322da06
+%global source17_hash a6886d54c0f5e1915ff9efbc4974ab1ef7f6dc026d67a0596ed47ac9e94da098e690bc70d5ed3e45a4d8cbd0f877f0cd6cd3a3757288dfc2df284e9c040b7c1e
+%global source18_hash b1546b0864e8ec408c48d88edab390d1343f91ec5a0dcb53eb924684ffbd39936913b9f6b8aec2182d7b6137a1ae2a31bbd7e4ba525bc577396676f4af725752
+%global source19_hash b71748fb67ea3bbf60102bcaa6990c9fbc024bbb1a7031dce7f91bf7764b9a589dc694fedeb884318781a9cbdc571f9080ab60b68022d2641c4308b46cf3e22f
+%global source20_hash ab9965189096647e8af9aa58a937fa15595bed32055b3819bfd12334cf60e01d18b12563de8169ea28e3c0a7768864e51631c29bbbe47d45e09ffb2b87c5d524
+%global source21_hash a45f2db2445e2daec8b31e995669a189c1d201f457e06de7fc2a85ad85686b31fcf70040e7840e1168e29b2e5caf796c45b6ce934780fa5982d0750438263606
+%global source22_hash 71cb48ffcd2d87148ca3acec4dd2bcbb0c9278c1fce9eced94d50d719eedc851418737db4288678e4958955b38fae3a9b75ff292d57b9522f657774700c0c9fc
+%global source23_hash 8f8f4c094cd2fb2938b3b83f54cd921f8eb40bad9f4e98b804533a885bd331ec4ac13231a1a6dba317fd8eef8d208e32aca749b341ddbcf166bee30858052571
+%global source24_hash e6e227782f6703c47fa4e0a3747e9bc2f7031f172cc50ff1b14ca718161d347d4796d2690ee45abde3c7a93a27cea230e8d18e7995aab235f1614fcc9f4c0e49
+%global source25_hash 9028d94dfc187fed4b2edd47dc154d8d00bb4248cc7462a8f4681988d00fcd8f15ffcc39188c681f18dfd66fda264407e0ad957ba3287f5fd81eb8da670b7576
+%global source26_hash 0f7e36cff9bcadf07f3adb084ed2e4c4346dc49b738553f6a0c4dd470f5979aa3d1eb307fd90e5da1638ed65ea6413dd0a5c0b21e2965a6269477d6f772618a1
+%global source27_hash 3525bb6835d5f68a8f4ff9edd2e745e8d1a5f3db64245511077ff25c54da1dccc9ffa35522c3677ae330a84b69763e1c61c300774d688c2911021287ab3ae1ea
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langspanish.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antique-spanish-units.r69568.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antique-spanish-units.doc.r69568.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-catalan.r30259.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-catalan.doc.r30259.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-galician.r30270.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-galician.doc.r30270.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.r79461.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.doc.r79461.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/es-tex-faq.r15878.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/es-tex-faq.doc.r15878.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-catalan.r78069.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-galician.r78069.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.r78069.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.doc.r78069.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-spanish.r15878.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-spanish.doc.r15878.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo-spanish.r75712.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo-spanish.doc.r75712.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-esmx.r36866.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-esmx.doc.r36866.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.r79461.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.doc.r79461.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-es.r74874.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-es.doc.r74874.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.r78678.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.doc.r78678.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antique-spanish-units.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antique-spanish-units.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-catalan.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-catalan.doc.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-galician.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-galician.doc.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.doc.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/es-tex-faq.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/es-tex-faq.doc.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-catalan.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-galician.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.doc.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-spanish.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-spanish.doc.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo-spanish.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo-spanish.doc.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-esmx.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-esmx.doc.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.doc.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-es.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-es.doc.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-antique-spanish-units
@@ -321,7 +348,7 @@ fi
 :
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

@@ -12,7 +12,7 @@ Summary:        Support package for XML/SGML typesetting
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.r69742.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.tar.xz
 BuildRequires:  tar
 Provides:       texlive-passivetex-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-passivetex-doc <= 11:%{version}
@@ -28,7 +28,7 @@ Provides:       tex(unicode.sty)
 Support package for XML/SGML typesetting.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || true
 
 %build

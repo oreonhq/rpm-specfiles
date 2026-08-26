@@ -117,8 +117,8 @@
 %global source116_hash 5a115efdc23385c82552a7c8fb220de6ef48041c76bd012975c92263b0301016c363543a41d6bb3ca50795f285345ba9af93eb5aed65f79848cca99b02dc12d2
 %global source117_hash d2418ef6b672e82c08b2f7b7f0089a9dea1f514db584662351135b511912faab828956fc252cd854fd2bb1243bc0e1af428e294eb92935cb63b38e73078858d9
 %global source118_hash 787b12bc92a17a00fd8278138d0e36d94be377fc23401c4bd677c372dc1d19b4b88c12395366b8ba5d766fbd7bc364588986d7528572510a43ba48ee0330b787
-%global source119_hash 0d9f91b8395b08cd464d3a40bf96038eab9b1423e4268fea592a1a332f66d0f5
-%global source120_hash none
+%global source119_hash 2ebb1b613395a51712137d8bdd951d1fa06b2667434e669042d8ac7d40a775fe106d04002881cd5a2eebd4896edbe292a4e807b820990c323d586aace89233c5
+%global source120_hash 2ebb1b613395a51712137d8bdd951d1fa06b2667434e669042d8ac7d40a775fe106d04002881cd5a2eebd4896edbe292a4e807b820990c323d586aace89233c5
 %global source121_hash aa23cc9e4fc796d516514cafec0b71ad62058f99397d49be72cb1d487c4bc4aa3b6b0bb4ffb3ee7d3f9d892fe6b96defe7c31675cf616a3e5619074df3071f67
 %global source122_hash 33154c515d8c1b17e5a831c1d29970fcc519b65344c5ffd5f187f5a3147106d559cc40180d3bd53f88fa500d21f4c271d286478e90a0c5eb63e1a1868000668d
 %global source123_hash c3823aef85c3d989c489011d6148d0f9b1eda6fdf35150276f3780f38a39620a22654295b0e2ad29e455d2dec887458e20f232b534973cb02f6426dbf44f8d1b
@@ -154,150 +154,150 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langenglish.r79965.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langenglish.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amiweb2c-guide.r56878.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amiweb2c-guide.doc.r56878.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amscls-doc.r46110.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amscls-doc.doc.r46110.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amslatex-primer.r79618.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amslatex-primer.doc.r79618.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/around-the-bend.r15878.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/around-the-bend.doc.r15878.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ascii-chart.r20536.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ascii-chart.doc.r20536.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/asy-overview.r72484.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/asy-overview.doc.r72484.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/biblatex-cheatsheet.r44685.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/biblatex-cheatsheet.doc.r44685.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/components.r63184.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/components.doc.r63184.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/comprehensive.r78693.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/comprehensive.doc.r78693.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dickimaw.r79618.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dickimaw.doc.r79618.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/docsurvey.r70729.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/docsurvey.doc.r70729.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dtxtut.r69587.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dtxtut.doc.r69587.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/first-latex-doc.r15878.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/first-latex-doc.doc.r15878.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fontinstallationguide.r59755.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fontinstallationguide.doc.r59755.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/forest-quickstart.r55688.tar.xz
-Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/forest-quickstart.doc.r55688.tar.xz
-Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/guide-to-latex.r45712.tar.xz
-Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/guide-to-latex.doc.r45712.tar.xz
-Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/happy4th.r25020.tar.xz
-Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/happy4th.doc.r25020.tar.xz
-Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-english.r78069.tar.xz
-Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/impatient.r54080.tar.xz
-Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/impatient.doc.r54080.tar.xz
-Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/intro-scientific.r79618.tar.xz
-Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/intro-scientific.doc.r79618.tar.xz
-Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-errata.r58682.tar.xz
-Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-errata.doc.r58682.tar.xz
-Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-hint.r78243.tar.xz
-Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-hint.doc.r78243.tar.xz
-Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-pdf.r78242.tar.xz
-Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-pdf.doc.r78242.tar.xz
-Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-english.r15878.tar.xz
-Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-english.doc.r15878.tar.xz
-Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-brochure.r40612.tar.xz
-Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-brochure.doc.r40612.tar.xz
-Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-course.r68681.tar.xz
-Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-course.doc.r68681.tar.xz
-Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-doc-ptr.r77050.tar.xz
-Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-doc-ptr.doc.r77050.tar.xz
-Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-for-undergraduates.r70199.tar.xz
-Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-for-undergraduates.doc.r70199.tar.xz
-Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-graphics-companion.r29235.tar.xz
-Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-graphics-companion.doc.r29235.tar.xz
-Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-refsheet.r45076.tar.xz
-Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-refsheet.doc.r45076.tar.xz
-Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-veryshortguide.r79618.tar.xz
-Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-veryshortguide.doc.r79618.tar.xz
-Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-web-companion.r29349.tar.xz
-Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-web-companion.doc.r29349.tar.xz
-Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo.r79327.tar.xz
-Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo.doc.r79327.tar.xz
-Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex4wp.r68096.tar.xz
-Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex4wp.doc.r68096.tar.xz
-Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat.r15878.tar.xz
-Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat.doc.r15878.tar.xz
-Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcourse-rug.r39026.tar.xz
-Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcourse-rug.doc.r39026.tar.xz
-Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexfileinfo-pkgs.r79618.tar.xz
-Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexfileinfo-pkgs.doc.r79618.tar.xz
-Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-english.r79618.tar.xz
-Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-english.doc.r79618.tar.xz
-Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/macros2e.r77050.tar.xz
-Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/macros2e.doc.r77050.tar.xz
-Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/math-into-latex-4.r44131.tar.xz
-Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/math-into-latex-4.doc.r44131.tar.xz
-Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maths-symbols.r37763.tar.xz
-Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maths-symbols.doc.r37763.tar.xz
-Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memdesign.r48664.tar.xz
-Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memdesign.doc.r48664.tar.xz
-Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memoirchapterstyles.r79618.tar.xz
-Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memoirchapterstyles.doc.r79618.tar.xz
-Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metafont-beginners.r29803.tar.xz
-Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metafont-beginners.doc.r29803.tar.xz
-Source89:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metapost-examples.r15878.tar.xz
-Source90:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metapost-examples.doc.r15878.tar.xz
-Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/patgen2-tutorial.r58841.tar.xz
-Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/patgen2-tutorial.doc.r58841.tar.xz
-Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pictexsum.r24965.tar.xz
-Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pictexsum.doc.r24965.tar.xz
-Source95:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plain-doc.r28424.tar.xz
-Source96:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plain-doc.doc.r28424.tar.xz
-Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-en.r74874.tar.xz
-Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-en.doc.r74874.tar.xz
-Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/short-math-guide.r46126.tar.xz
-Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/short-math-guide.doc.r46126.tar.xz
-Source101:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/simplified-latex.r20620.tar.xz
-Source102:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/simplified-latex.doc.r20620.tar.xz
-Source103:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svg-inkscape.r32199.tar.xz
-Source104:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svg-inkscape.doc.r32199.tar.xz
-Source105:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tamethebeast.r15878.tar.xz
-Source106:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tamethebeast.doc.r15878.tar.xz
-Source107:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tds.r64477.tar.xz
-Source108:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tds.doc.r64477.tar.xz
-Source109:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-font-errors-cheatsheet.r79618.tar.xz
-Source110:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-font-errors-cheatsheet.doc.r79618.tar.xz
-Source111:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-nutshell.r70375.tar.xz
-Source112:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-nutshell.doc.r70375.tar.xz
-Source113:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-overview.r41403.tar.xz
-Source114:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-overview.doc.r41403.tar.xz
-Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.r72067.tar.xz
-Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.doc.r72067.tar.xz
-Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.r68950.tar.xz
-Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.doc.r68950.tar.xz
-Source119:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/texonly.r76924.tar.xz
-Source120:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/texonly.doc.r76924.tar.xz
-Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.r79618.tar.xz
-Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.doc.r79618.tar.xz
-Source123:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.r79618.tar.xz
-Source124:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.doc.r79618.tar.xz
-Source125:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc3-examples.r65496.tar.xz
-Source126:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc3-examples.doc.r65496.tar.xz
-Source127:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlmgrbasics.r79665.tar.xz
-Source128:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlmgrbasics.doc.r79665.tar.xz
-Source129:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/typstfun.r70018.tar.xz
-Source130:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/typstfun.doc.r70018.tar.xz
-Source131:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undergradmath.r57286.tar.xz
-Source132:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undergradmath.doc.r57286.tar.xz
-Source133:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/visualfaq.r79618.tar.xz
-Source134:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/visualfaq.doc.r79618.tar.xz
-Source135:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/webguide.r77050.tar.xz
-Source136:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/webguide.doc.r77050.tar.xz
-Source137:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wrapstuff-doc-en.r71835.tar.xz
-Source138:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wrapstuff-doc-en.doc.r71835.tar.xz
-Source139:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/yet-another-guide-latex2e.r77842.tar.xz
-Source140:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/yet-another-guide-latex2e.doc.r77842.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amiweb2c-guide.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amiweb2c-guide.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amscls-doc.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amscls-doc.doc.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amslatex-primer.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amslatex-primer.doc.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/around-the-bend.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/around-the-bend.doc.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ascii-chart.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ascii-chart.doc.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/asy-overview.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/asy-overview.doc.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/biblatex-cheatsheet.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/biblatex-cheatsheet.doc.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/components.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/components.doc.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/comprehensive.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/comprehensive.doc.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dickimaw.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dickimaw.doc.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/docsurvey.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/docsurvey.doc.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dtxtut.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dtxtut.doc.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/first-latex-doc.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/first-latex-doc.doc.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fontinstallationguide.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fontinstallationguide.doc.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/forest-quickstart.tar.xz
+Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/forest-quickstart.doc.tar.xz
+Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/guide-to-latex.tar.xz
+Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/guide-to-latex.doc.tar.xz
+Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/happy4th.tar.xz
+Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/happy4th.doc.tar.xz
+Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-english.tar.xz
+Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/impatient.tar.xz
+Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/impatient.doc.tar.xz
+Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/intro-scientific.tar.xz
+Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/intro-scientific.doc.tar.xz
+Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-errata.tar.xz
+Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-errata.doc.tar.xz
+Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-hint.tar.xz
+Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-hint.doc.tar.xz
+Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-pdf.tar.xz
+Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-pdf.doc.tar.xz
+Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-english.tar.xz
+Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-english.doc.tar.xz
+Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-brochure.tar.xz
+Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-brochure.doc.tar.xz
+Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-course.tar.xz
+Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-course.doc.tar.xz
+Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-doc-ptr.tar.xz
+Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-doc-ptr.doc.tar.xz
+Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-for-undergraduates.tar.xz
+Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-for-undergraduates.doc.tar.xz
+Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-graphics-companion.tar.xz
+Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-graphics-companion.doc.tar.xz
+Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-refsheet.tar.xz
+Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-refsheet.doc.tar.xz
+Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-veryshortguide.tar.xz
+Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-veryshortguide.doc.tar.xz
+Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-web-companion.tar.xz
+Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-web-companion.doc.tar.xz
+Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo.tar.xz
+Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo.doc.tar.xz
+Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex4wp.tar.xz
+Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex4wp.doc.tar.xz
+Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat.tar.xz
+Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat.doc.tar.xz
+Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcourse-rug.tar.xz
+Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcourse-rug.doc.tar.xz
+Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexfileinfo-pkgs.tar.xz
+Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexfileinfo-pkgs.doc.tar.xz
+Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-english.tar.xz
+Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-english.doc.tar.xz
+Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/macros2e.tar.xz
+Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/macros2e.doc.tar.xz
+Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/math-into-latex-4.tar.xz
+Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/math-into-latex-4.doc.tar.xz
+Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maths-symbols.tar.xz
+Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maths-symbols.doc.tar.xz
+Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memdesign.tar.xz
+Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memdesign.doc.tar.xz
+Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memoirchapterstyles.tar.xz
+Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/memoirchapterstyles.doc.tar.xz
+Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metafont-beginners.tar.xz
+Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metafont-beginners.doc.tar.xz
+Source89:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metapost-examples.tar.xz
+Source90:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metapost-examples.doc.tar.xz
+Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/patgen2-tutorial.tar.xz
+Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/patgen2-tutorial.doc.tar.xz
+Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pictexsum.tar.xz
+Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pictexsum.doc.tar.xz
+Source95:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plain-doc.tar.xz
+Source96:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plain-doc.doc.tar.xz
+Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-en.tar.xz
+Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-en.doc.tar.xz
+Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/short-math-guide.tar.xz
+Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/short-math-guide.doc.tar.xz
+Source101:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/simplified-latex.tar.xz
+Source102:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/simplified-latex.doc.tar.xz
+Source103:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svg-inkscape.tar.xz
+Source104:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svg-inkscape.doc.tar.xz
+Source105:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tamethebeast.tar.xz
+Source106:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tamethebeast.doc.tar.xz
+Source107:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tds.tar.xz
+Source108:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tds.doc.tar.xz
+Source109:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-font-errors-cheatsheet.tar.xz
+Source110:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-font-errors-cheatsheet.doc.tar.xz
+Source111:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-nutshell.tar.xz
+Source112:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-nutshell.doc.tar.xz
+Source113:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-overview.tar.xz
+Source114:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-overview.doc.tar.xz
+Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.tar.xz
+Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.doc.tar.xz
+Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.tar.xz
+Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.doc.tar.xz
+Source119:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.r76924.tar.xz
+Source120:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.doc.r76924.tar.xz
+Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.tar.xz
+Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.doc.tar.xz
+Source123:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.tar.xz
+Source124:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.doc.tar.xz
+Source125:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc3-examples.tar.xz
+Source126:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc3-examples.doc.tar.xz
+Source127:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlmgrbasics.tar.xz
+Source128:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlmgrbasics.doc.tar.xz
+Source129:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/typstfun.tar.xz
+Source130:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/typstfun.doc.tar.xz
+Source131:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undergradmath.tar.xz
+Source132:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undergradmath.doc.tar.xz
+Source133:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/visualfaq.tar.xz
+Source134:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/visualfaq.doc.tar.xz
+Source135:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/webguide.tar.xz
+Source136:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/webguide.doc.tar.xz
+Source137:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wrapstuff-doc-en.tar.xz
+Source138:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wrapstuff-doc-en.doc.tar.xz
+Source139:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/yet-another-guide-latex2e.tar.xz
+Source140:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/yet-another-guide-latex2e.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-amiweb2c-guide
@@ -1447,147 +1447,147 @@ fi
 :
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
-test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
-test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
-test "%{source7_hash}" = "none" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_hash}" || { echo "oreon: Source7 hash mismatch" >&2; exit 1; }; }
-test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
-test "%{source9_hash}" = "none" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_hash}" || { echo "oreon: Source9 hash mismatch" >&2; exit 1; }; }
-test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; }
-test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
-test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
-test "%{source13_hash}" = "none" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source13_hash}" || { echo "oreon: Source13 hash mismatch" >&2; exit 1; }; }
-test "%{source14_hash}" = "none" || { f="%{SOURCE14}"; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source14_hash}" || { echo "oreon: Source14 hash mismatch" >&2; exit 1; }; }
-test "%{source15_hash}" = "none" || { f="%{SOURCE15}"; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source15_hash}" || { echo "oreon: Source15 hash mismatch" >&2; exit 1; }; }
-test "%{source16_hash}" = "none" || { f="%{SOURCE16}"; test -f "$f" || { echo "oreon: missing Source16 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source16_hash}" || { echo "oreon: Source16 hash mismatch" >&2; exit 1; }; }
-test "%{source17_hash}" = "none" || { f="%{SOURCE17}"; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source17_hash}" || { echo "oreon: Source17 hash mismatch" >&2; exit 1; }; }
-test "%{source18_hash}" = "none" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source18_hash}" || { echo "oreon: Source18 hash mismatch" >&2; exit 1; }; }
-test "%{source19_hash}" = "none" || { f="%{SOURCE19}"; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source19_hash}" || { echo "oreon: Source19 hash mismatch" >&2; exit 1; }; }
-test "%{source20_hash}" = "none" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_hash}" || { echo "oreon: Source20 hash mismatch" >&2; exit 1; }; }
-test "%{source21_hash}" = "none" || { f="%{SOURCE21}"; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source21_hash}" || { echo "oreon: Source21 hash mismatch" >&2; exit 1; }; }
-test "%{source22_hash}" = "none" || { f="%{SOURCE22}"; test -f "$f" || { echo "oreon: missing Source22 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source22_hash}" || { echo "oreon: Source22 hash mismatch" >&2; exit 1; }; }
-test "%{source23_hash}" = "none" || { f="%{SOURCE23}"; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source23_hash}" || { echo "oreon: Source23 hash mismatch" >&2; exit 1; }; }
-test "%{source24_hash}" = "none" || { f="%{SOURCE24}"; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source24_hash}" || { echo "oreon: Source24 hash mismatch" >&2; exit 1; }; }
-test "%{source25_hash}" = "none" || { f="%{SOURCE25}"; test -f "$f" || { echo "oreon: missing Source25 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source25_hash}" || { echo "oreon: Source25 hash mismatch" >&2; exit 1; }; }
-test "%{source26_hash}" = "none" || { f="%{SOURCE26}"; test -f "$f" || { echo "oreon: missing Source26 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source26_hash}" || { echo "oreon: Source26 hash mismatch" >&2; exit 1; }; }
-test "%{source27_hash}" = "none" || { f="%{SOURCE27}"; test -f "$f" || { echo "oreon: missing Source27 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source27_hash}" || { echo "oreon: Source27 hash mismatch" >&2; exit 1; }; }
-test "%{source28_hash}" = "none" || { f="%{SOURCE28}"; test -f "$f" || { echo "oreon: missing Source28 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source28_hash}" || { echo "oreon: Source28 hash mismatch" >&2; exit 1; }; }
-test "%{source29_hash}" = "none" || { f="%{SOURCE29}"; test -f "$f" || { echo "oreon: missing Source29 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source29_hash}" || { echo "oreon: Source29 hash mismatch" >&2; exit 1; }; }
-test "%{source30_hash}" = "none" || { f="%{SOURCE30}"; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source30_hash}" || { echo "oreon: Source30 hash mismatch" >&2; exit 1; }; }
-test "%{source31_hash}" = "none" || { f="%{SOURCE31}"; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source31_hash}" || { echo "oreon: Source31 hash mismatch" >&2; exit 1; }; }
-test "%{source32_hash}" = "none" || { f="%{SOURCE32}"; test -f "$f" || { echo "oreon: missing Source32 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source32_hash}" || { echo "oreon: Source32 hash mismatch" >&2; exit 1; }; }
-test "%{source33_hash}" = "none" || { f="%{SOURCE33}"; test -f "$f" || { echo "oreon: missing Source33 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source33_hash}" || { echo "oreon: Source33 hash mismatch" >&2; exit 1; }; }
-test "%{source34_hash}" = "none" || { f="%{SOURCE34}"; test -f "$f" || { echo "oreon: missing Source34 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source34_hash}" || { echo "oreon: Source34 hash mismatch" >&2; exit 1; }; }
-test "%{source35_hash}" = "none" || { f="%{SOURCE35}"; test -f "$f" || { echo "oreon: missing Source35 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source35_hash}" || { echo "oreon: Source35 hash mismatch" >&2; exit 1; }; }
-test "%{source36_hash}" = "none" || { f="%{SOURCE36}"; test -f "$f" || { echo "oreon: missing Source36 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source36_hash}" || { echo "oreon: Source36 hash mismatch" >&2; exit 1; }; }
-test "%{source37_hash}" = "none" || { f="%{SOURCE37}"; test -f "$f" || { echo "oreon: missing Source37 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source37_hash}" || { echo "oreon: Source37 hash mismatch" >&2; exit 1; }; }
-test "%{source38_hash}" = "none" || { f="%{SOURCE38}"; test -f "$f" || { echo "oreon: missing Source38 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source38_hash}" || { echo "oreon: Source38 hash mismatch" >&2; exit 1; }; }
-test "%{source39_hash}" = "none" || { f="%{SOURCE39}"; test -f "$f" || { echo "oreon: missing Source39 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source39_hash}" || { echo "oreon: Source39 hash mismatch" >&2; exit 1; }; }
-test "%{source40_hash}" = "none" || { f="%{SOURCE40}"; test -f "$f" || { echo "oreon: missing Source40 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source40_hash}" || { echo "oreon: Source40 hash mismatch" >&2; exit 1; }; }
-test "%{source41_hash}" = "none" || { f="%{SOURCE41}"; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source41_hash}" || { echo "oreon: Source41 hash mismatch" >&2; exit 1; }; }
-test "%{source42_hash}" = "none" || { f="%{SOURCE42}"; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source42_hash}" || { echo "oreon: Source42 hash mismatch" >&2; exit 1; }; }
-test "%{source43_hash}" = "none" || { f="%{SOURCE43}"; test -f "$f" || { echo "oreon: missing Source43 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source43_hash}" || { echo "oreon: Source43 hash mismatch" >&2; exit 1; }; }
-test "%{source44_hash}" = "none" || { f="%{SOURCE44}"; test -f "$f" || { echo "oreon: missing Source44 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source44_hash}" || { echo "oreon: Source44 hash mismatch" >&2; exit 1; }; }
-test "%{source45_hash}" = "none" || { f="%{SOURCE45}"; test -f "$f" || { echo "oreon: missing Source45 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source45_hash}" || { echo "oreon: Source45 hash mismatch" >&2; exit 1; }; }
-test "%{source46_hash}" = "none" || { f="%{SOURCE46}"; test -f "$f" || { echo "oreon: missing Source46 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source46_hash}" || { echo "oreon: Source46 hash mismatch" >&2; exit 1; }; }
-test "%{source47_hash}" = "none" || { f="%{SOURCE47}"; test -f "$f" || { echo "oreon: missing Source47 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source47_hash}" || { echo "oreon: Source47 hash mismatch" >&2; exit 1; }; }
-test "%{source48_hash}" = "none" || { f="%{SOURCE48}"; test -f "$f" || { echo "oreon: missing Source48 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source48_hash}" || { echo "oreon: Source48 hash mismatch" >&2; exit 1; }; }
-test "%{source49_hash}" = "none" || { f="%{SOURCE49}"; test -f "$f" || { echo "oreon: missing Source49 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source49_hash}" || { echo "oreon: Source49 hash mismatch" >&2; exit 1; }; }
-test "%{source50_hash}" = "none" || { f="%{SOURCE50}"; test -f "$f" || { echo "oreon: missing Source50 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source50_hash}" || { echo "oreon: Source50 hash mismatch" >&2; exit 1; }; }
-test "%{source51_hash}" = "none" || { f="%{SOURCE51}"; test -f "$f" || { echo "oreon: missing Source51 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source51_hash}" || { echo "oreon: Source51 hash mismatch" >&2; exit 1; }; }
-test "%{source52_hash}" = "none" || { f="%{SOURCE52}"; test -f "$f" || { echo "oreon: missing Source52 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source52_hash}" || { echo "oreon: Source52 hash mismatch" >&2; exit 1; }; }
-test "%{source53_hash}" = "none" || { f="%{SOURCE53}"; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source53_hash}" || { echo "oreon: Source53 hash mismatch" >&2; exit 1; }; }
-test "%{source54_hash}" = "none" || { f="%{SOURCE54}"; test -f "$f" || { echo "oreon: missing Source54 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source54_hash}" || { echo "oreon: Source54 hash mismatch" >&2; exit 1; }; }
-test "%{source55_hash}" = "none" || { f="%{SOURCE55}"; test -f "$f" || { echo "oreon: missing Source55 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source55_hash}" || { echo "oreon: Source55 hash mismatch" >&2; exit 1; }; }
-test "%{source56_hash}" = "none" || { f="%{SOURCE56}"; test -f "$f" || { echo "oreon: missing Source56 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source56_hash}" || { echo "oreon: Source56 hash mismatch" >&2; exit 1; }; }
-test "%{source57_hash}" = "none" || { f="%{SOURCE57}"; test -f "$f" || { echo "oreon: missing Source57 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source57_hash}" || { echo "oreon: Source57 hash mismatch" >&2; exit 1; }; }
-test "%{source58_hash}" = "none" || { f="%{SOURCE58}"; test -f "$f" || { echo "oreon: missing Source58 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source58_hash}" || { echo "oreon: Source58 hash mismatch" >&2; exit 1; }; }
-test "%{source59_hash}" = "none" || { f="%{SOURCE59}"; test -f "$f" || { echo "oreon: missing Source59 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source59_hash}" || { echo "oreon: Source59 hash mismatch" >&2; exit 1; }; }
-test "%{source60_hash}" = "none" || { f="%{SOURCE60}"; test -f "$f" || { echo "oreon: missing Source60 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source60_hash}" || { echo "oreon: Source60 hash mismatch" >&2; exit 1; }; }
-test "%{source61_hash}" = "none" || { f="%{SOURCE61}"; test -f "$f" || { echo "oreon: missing Source61 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source61_hash}" || { echo "oreon: Source61 hash mismatch" >&2; exit 1; }; }
-test "%{source62_hash}" = "none" || { f="%{SOURCE62}"; test -f "$f" || { echo "oreon: missing Source62 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source62_hash}" || { echo "oreon: Source62 hash mismatch" >&2; exit 1; }; }
-test "%{source63_hash}" = "none" || { f="%{SOURCE63}"; test -f "$f" || { echo "oreon: missing Source63 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source63_hash}" || { echo "oreon: Source63 hash mismatch" >&2; exit 1; }; }
-test "%{source64_hash}" = "none" || { f="%{SOURCE64}"; test -f "$f" || { echo "oreon: missing Source64 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source64_hash}" || { echo "oreon: Source64 hash mismatch" >&2; exit 1; }; }
-test "%{source65_hash}" = "none" || { f="%{SOURCE65}"; test -f "$f" || { echo "oreon: missing Source65 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source65_hash}" || { echo "oreon: Source65 hash mismatch" >&2; exit 1; }; }
-test "%{source66_hash}" = "none" || { f="%{SOURCE66}"; test -f "$f" || { echo "oreon: missing Source66 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source66_hash}" || { echo "oreon: Source66 hash mismatch" >&2; exit 1; }; }
-test "%{source67_hash}" = "none" || { f="%{SOURCE67}"; test -f "$f" || { echo "oreon: missing Source67 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source67_hash}" || { echo "oreon: Source67 hash mismatch" >&2; exit 1; }; }
-test "%{source68_hash}" = "none" || { f="%{SOURCE68}"; test -f "$f" || { echo "oreon: missing Source68 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source68_hash}" || { echo "oreon: Source68 hash mismatch" >&2; exit 1; }; }
-test "%{source69_hash}" = "none" || { f="%{SOURCE69}"; test -f "$f" || { echo "oreon: missing Source69 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source69_hash}" || { echo "oreon: Source69 hash mismatch" >&2; exit 1; }; }
-test "%{source70_hash}" = "none" || { f="%{SOURCE70}"; test -f "$f" || { echo "oreon: missing Source70 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source70_hash}" || { echo "oreon: Source70 hash mismatch" >&2; exit 1; }; }
-test "%{source71_hash}" = "none" || { f="%{SOURCE71}"; test -f "$f" || { echo "oreon: missing Source71 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source71_hash}" || { echo "oreon: Source71 hash mismatch" >&2; exit 1; }; }
-test "%{source72_hash}" = "none" || { f="%{SOURCE72}"; test -f "$f" || { echo "oreon: missing Source72 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source72_hash}" || { echo "oreon: Source72 hash mismatch" >&2; exit 1; }; }
-test "%{source73_hash}" = "none" || { f="%{SOURCE73}"; test -f "$f" || { echo "oreon: missing Source73 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source73_hash}" || { echo "oreon: Source73 hash mismatch" >&2; exit 1; }; }
-test "%{source74_hash}" = "none" || { f="%{SOURCE74}"; test -f "$f" || { echo "oreon: missing Source74 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source74_hash}" || { echo "oreon: Source74 hash mismatch" >&2; exit 1; }; }
-test "%{source75_hash}" = "none" || { f="%{SOURCE75}"; test -f "$f" || { echo "oreon: missing Source75 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source75_hash}" || { echo "oreon: Source75 hash mismatch" >&2; exit 1; }; }
-test "%{source76_hash}" = "none" || { f="%{SOURCE76}"; test -f "$f" || { echo "oreon: missing Source76 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source76_hash}" || { echo "oreon: Source76 hash mismatch" >&2; exit 1; }; }
-test "%{source77_hash}" = "none" || { f="%{SOURCE77}"; test -f "$f" || { echo "oreon: missing Source77 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source77_hash}" || { echo "oreon: Source77 hash mismatch" >&2; exit 1; }; }
-test "%{source78_hash}" = "none" || { f="%{SOURCE78}"; test -f "$f" || { echo "oreon: missing Source78 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source78_hash}" || { echo "oreon: Source78 hash mismatch" >&2; exit 1; }; }
-test "%{source79_hash}" = "none" || { f="%{SOURCE79}"; test -f "$f" || { echo "oreon: missing Source79 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source79_hash}" || { echo "oreon: Source79 hash mismatch" >&2; exit 1; }; }
-test "%{source80_hash}" = "none" || { f="%{SOURCE80}"; test -f "$f" || { echo "oreon: missing Source80 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source80_hash}" || { echo "oreon: Source80 hash mismatch" >&2; exit 1; }; }
-test "%{source81_hash}" = "none" || { f="%{SOURCE81}"; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source81_hash}" || { echo "oreon: Source81 hash mismatch" >&2; exit 1; }; }
-test "%{source82_hash}" = "none" || { f="%{SOURCE82}"; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source82_hash}" || { echo "oreon: Source82 hash mismatch" >&2; exit 1; }; }
-test "%{source83_hash}" = "none" || { f="%{SOURCE83}"; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source83_hash}" || { echo "oreon: Source83 hash mismatch" >&2; exit 1; }; }
-test "%{source84_hash}" = "none" || { f="%{SOURCE84}"; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source84_hash}" || { echo "oreon: Source84 hash mismatch" >&2; exit 1; }; }
-test "%{source85_hash}" = "none" || { f="%{SOURCE85}"; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source85_hash}" || { echo "oreon: Source85 hash mismatch" >&2; exit 1; }; }
-test "%{source86_hash}" = "none" || { f="%{SOURCE86}"; test -f "$f" || { echo "oreon: missing Source86 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source86_hash}" || { echo "oreon: Source86 hash mismatch" >&2; exit 1; }; }
-test "%{source87_hash}" = "none" || { f="%{SOURCE87}"; test -f "$f" || { echo "oreon: missing Source87 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source87_hash}" || { echo "oreon: Source87 hash mismatch" >&2; exit 1; }; }
-test "%{source88_hash}" = "none" || { f="%{SOURCE88}"; test -f "$f" || { echo "oreon: missing Source88 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source88_hash}" || { echo "oreon: Source88 hash mismatch" >&2; exit 1; }; }
-test "%{source89_hash}" = "none" || { f="%{SOURCE89}"; test -f "$f" || { echo "oreon: missing Source89 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source89_hash}" || { echo "oreon: Source89 hash mismatch" >&2; exit 1; }; }
-test "%{source90_hash}" = "none" || { f="%{SOURCE90}"; test -f "$f" || { echo "oreon: missing Source90 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source90_hash}" || { echo "oreon: Source90 hash mismatch" >&2; exit 1; }; }
-test "%{source91_hash}" = "none" || { f="%{SOURCE91}"; test -f "$f" || { echo "oreon: missing Source91 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source91_hash}" || { echo "oreon: Source91 hash mismatch" >&2; exit 1; }; }
-test "%{source92_hash}" = "none" || { f="%{SOURCE92}"; test -f "$f" || { echo "oreon: missing Source92 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source92_hash}" || { echo "oreon: Source92 hash mismatch" >&2; exit 1; }; }
-test "%{source93_hash}" = "none" || { f="%{SOURCE93}"; test -f "$f" || { echo "oreon: missing Source93 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source93_hash}" || { echo "oreon: Source93 hash mismatch" >&2; exit 1; }; }
-test "%{source94_hash}" = "none" || { f="%{SOURCE94}"; test -f "$f" || { echo "oreon: missing Source94 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source94_hash}" || { echo "oreon: Source94 hash mismatch" >&2; exit 1; }; }
-test "%{source95_hash}" = "none" || { f="%{SOURCE95}"; test -f "$f" || { echo "oreon: missing Source95 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source95_hash}" || { echo "oreon: Source95 hash mismatch" >&2; exit 1; }; }
-test "%{source96_hash}" = "none" || { f="%{SOURCE96}"; test -f "$f" || { echo "oreon: missing Source96 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source96_hash}" || { echo "oreon: Source96 hash mismatch" >&2; exit 1; }; }
-test "%{source97_hash}" = "none" || { f="%{SOURCE97}"; test -f "$f" || { echo "oreon: missing Source97 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source97_hash}" || { echo "oreon: Source97 hash mismatch" >&2; exit 1; }; }
-test "%{source98_hash}" = "none" || { f="%{SOURCE98}"; test -f "$f" || { echo "oreon: missing Source98 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source98_hash}" || { echo "oreon: Source98 hash mismatch" >&2; exit 1; }; }
-test "%{source99_hash}" = "none" || { f="%{SOURCE99}"; test -f "$f" || { echo "oreon: missing Source99 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source99_hash}" || { echo "oreon: Source99 hash mismatch" >&2; exit 1; }; }
-test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; }
-test "%{source101_hash}" = "none" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source101_hash}" || { echo "oreon: Source101 hash mismatch" >&2; exit 1; }; }
-test "%{source102_hash}" = "none" || { f="%{SOURCE102}"; test -f "$f" || { echo "oreon: missing Source102 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source102_hash}" || { echo "oreon: Source102 hash mismatch" >&2; exit 1; }; }
-test "%{source103_hash}" = "none" || { f="%{SOURCE103}"; test -f "$f" || { echo "oreon: missing Source103 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source103_hash}" || { echo "oreon: Source103 hash mismatch" >&2; exit 1; }; }
-test "%{source104_hash}" = "none" || { f="%{SOURCE104}"; test -f "$f" || { echo "oreon: missing Source104 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source104_hash}" || { echo "oreon: Source104 hash mismatch" >&2; exit 1; }; }
-test "%{source105_hash}" = "none" || { f="%{SOURCE105}"; test -f "$f" || { echo "oreon: missing Source105 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source105_hash}" || { echo "oreon: Source105 hash mismatch" >&2; exit 1; }; }
-test "%{source106_hash}" = "none" || { f="%{SOURCE106}"; test -f "$f" || { echo "oreon: missing Source106 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source106_hash}" || { echo "oreon: Source106 hash mismatch" >&2; exit 1; }; }
-test "%{source107_hash}" = "none" || { f="%{SOURCE107}"; test -f "$f" || { echo "oreon: missing Source107 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source107_hash}" || { echo "oreon: Source107 hash mismatch" >&2; exit 1; }; }
-test "%{source108_hash}" = "none" || { f="%{SOURCE108}"; test -f "$f" || { echo "oreon: missing Source108 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source108_hash}" || { echo "oreon: Source108 hash mismatch" >&2; exit 1; }; }
-test "%{source109_hash}" = "none" || { f="%{SOURCE109}"; test -f "$f" || { echo "oreon: missing Source109 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source109_hash}" || { echo "oreon: Source109 hash mismatch" >&2; exit 1; }; }
-test "%{source110_hash}" = "none" || { f="%{SOURCE110}"; test -f "$f" || { echo "oreon: missing Source110 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source110_hash}" || { echo "oreon: Source110 hash mismatch" >&2; exit 1; }; }
-test "%{source111_hash}" = "none" || { f="%{SOURCE111}"; test -f "$f" || { echo "oreon: missing Source111 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source111_hash}" || { echo "oreon: Source111 hash mismatch" >&2; exit 1; }; }
-test "%{source112_hash}" = "none" || { f="%{SOURCE112}"; test -f "$f" || { echo "oreon: missing Source112 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source112_hash}" || { echo "oreon: Source112 hash mismatch" >&2; exit 1; }; }
-test "%{source113_hash}" = "none" || { f="%{SOURCE113}"; test -f "$f" || { echo "oreon: missing Source113 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source113_hash}" || { echo "oreon: Source113 hash mismatch" >&2; exit 1; }; }
-test "%{source114_hash}" = "none" || { f="%{SOURCE114}"; test -f "$f" || { echo "oreon: missing Source114 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source114_hash}" || { echo "oreon: Source114 hash mismatch" >&2; exit 1; }; }
-test "%{source115_hash}" = "none" || { f="%{SOURCE115}"; test -f "$f" || { echo "oreon: missing Source115 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source115_hash}" || { echo "oreon: Source115 hash mismatch" >&2; exit 1; }; }
-test "%{source116_hash}" = "none" || { f="%{SOURCE116}"; test -f "$f" || { echo "oreon: missing Source116 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source116_hash}" || { echo "oreon: Source116 hash mismatch" >&2; exit 1; }; }
-test "%{source117_hash}" = "none" || { f="%{SOURCE117}"; test -f "$f" || { echo "oreon: missing Source117 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source117_hash}" || { echo "oreon: Source117 hash mismatch" >&2; exit 1; }; }
-test "%{source118_hash}" = "none" || { f="%{SOURCE118}"; test -f "$f" || { echo "oreon: missing Source118 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source118_hash}" || { echo "oreon: Source118 hash mismatch" >&2; exit 1; }; }
-test "%{source119_hash}" = "none" || { f="%{SOURCE119}"; test -f "$f" || { echo "oreon: missing Source119 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source119_hash}" || { echo "oreon: Source119 hash mismatch" >&2; exit 1; }; }
-test "%{source120_hash}" = "none" || { f="%{SOURCE120}"; test -f "$f" || { echo "oreon: missing Source120 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source120_hash}" || { echo "oreon: Source120 hash mismatch" >&2; exit 1; }; }
-test "%{source121_hash}" = "none" || { f="%{SOURCE121}"; test -f "$f" || { echo "oreon: missing Source121 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source121_hash}" || { echo "oreon: Source121 hash mismatch" >&2; exit 1; }; }
-test "%{source122_hash}" = "none" || { f="%{SOURCE122}"; test -f "$f" || { echo "oreon: missing Source122 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source122_hash}" || { echo "oreon: Source122 hash mismatch" >&2; exit 1; }; }
-test "%{source123_hash}" = "none" || { f="%{SOURCE123}"; test -f "$f" || { echo "oreon: missing Source123 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source123_hash}" || { echo "oreon: Source123 hash mismatch" >&2; exit 1; }; }
-test "%{source124_hash}" = "none" || { f="%{SOURCE124}"; test -f "$f" || { echo "oreon: missing Source124 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source124_hash}" || { echo "oreon: Source124 hash mismatch" >&2; exit 1; }; }
-test "%{source125_hash}" = "none" || { f="%{SOURCE125}"; test -f "$f" || { echo "oreon: missing Source125 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source125_hash}" || { echo "oreon: Source125 hash mismatch" >&2; exit 1; }; }
-test "%{source126_hash}" = "none" || { f="%{SOURCE126}"; test -f "$f" || { echo "oreon: missing Source126 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source126_hash}" || { echo "oreon: Source126 hash mismatch" >&2; exit 1; }; }
-test "%{source127_hash}" = "none" || { f="%{SOURCE127}"; test -f "$f" || { echo "oreon: missing Source127 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source127_hash}" || { echo "oreon: Source127 hash mismatch" >&2; exit 1; }; }
-test "%{source128_hash}" = "none" || { f="%{SOURCE128}"; test -f "$f" || { echo "oreon: missing Source128 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source128_hash}" || { echo "oreon: Source128 hash mismatch" >&2; exit 1; }; }
-test "%{source129_hash}" = "none" || { f="%{SOURCE129}"; test -f "$f" || { echo "oreon: missing Source129 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source129_hash}" || { echo "oreon: Source129 hash mismatch" >&2; exit 1; }; }
-test "%{source130_hash}" = "none" || { f="%{SOURCE130}"; test -f "$f" || { echo "oreon: missing Source130 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source130_hash}" || { echo "oreon: Source130 hash mismatch" >&2; exit 1; }; }
-test "%{source131_hash}" = "none" || { f="%{SOURCE131}"; test -f "$f" || { echo "oreon: missing Source131 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source131_hash}" || { echo "oreon: Source131 hash mismatch" >&2; exit 1; }; }
-test "%{source132_hash}" = "none" || { f="%{SOURCE132}"; test -f "$f" || { echo "oreon: missing Source132 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source132_hash}" || { echo "oreon: Source132 hash mismatch" >&2; exit 1; }; }
-test "%{source133_hash}" = "none" || { f="%{SOURCE133}"; test -f "$f" || { echo "oreon: missing Source133 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source133_hash}" || { echo "oreon: Source133 hash mismatch" >&2; exit 1; }; }
-test "%{source134_hash}" = "none" || { f="%{SOURCE134}"; test -f "$f" || { echo "oreon: missing Source134 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source134_hash}" || { echo "oreon: Source134 hash mismatch" >&2; exit 1; }; }
-test "%{source135_hash}" = "none" || { f="%{SOURCE135}"; test -f "$f" || { echo "oreon: missing Source135 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source135_hash}" || { echo "oreon: Source135 hash mismatch" >&2; exit 1; }; }
-test "%{source136_hash}" = "none" || { f="%{SOURCE136}"; test -f "$f" || { echo "oreon: missing Source136 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source136_hash}" || { echo "oreon: Source136 hash mismatch" >&2; exit 1; }; }
-test "%{source137_hash}" = "none" || { f="%{SOURCE137}"; test -f "$f" || { echo "oreon: missing Source137 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source137_hash}" || { echo "oreon: Source137 hash mismatch" >&2; exit 1; }; }
-test "%{source138_hash}" = "none" || { f="%{SOURCE138}"; test -f "$f" || { echo "oreon: missing Source138 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source138_hash}" || { echo "oreon: Source138 hash mismatch" >&2; exit 1; }; }
-test "%{source139_hash}" = "none" || { f="%{SOURCE139}"; test -f "$f" || { echo "oreon: missing Source139 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source139_hash}" || { echo "oreon: Source139 hash mismatch" >&2; exit 1; }; }
-test "%{source140_hash}" = "none" || { f="%{SOURCE140}"; test -f "$f" || { echo "oreon: missing Source140 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source140_hash}" || { echo "oreon: Source140 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; if test ${#%{source1_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; if test ${#%{source2_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; if test ${#%{source3_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; if test ${#%{source4_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
+test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; if test ${#%{source5_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
+test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; if test ${#%{source6_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
+test "%{source7_hash}" = "none" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; if test ${#%{source7_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source7_hash}" || { echo "oreon: Source7 hash mismatch" >&2; exit 1; }; }
+test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; if test ${#%{source8_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
+test "%{source9_hash}" = "none" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; if test ${#%{source9_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source9_hash}" || { echo "oreon: Source9 hash mismatch" >&2; exit 1; }; }
+test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; if test ${#%{source10_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; }
+test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; if test ${#%{source11_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
+test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; if test ${#%{source12_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
+test "%{source13_hash}" = "none" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; if test ${#%{source13_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source13_hash}" || { echo "oreon: Source13 hash mismatch" >&2; exit 1; }; }
+test "%{source14_hash}" = "none" || { f="%{SOURCE14}"; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; if test ${#%{source14_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source14_hash}" || { echo "oreon: Source14 hash mismatch" >&2; exit 1; }; }
+test "%{source15_hash}" = "none" || { f="%{SOURCE15}"; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; if test ${#%{source15_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source15_hash}" || { echo "oreon: Source15 hash mismatch" >&2; exit 1; }; }
+test "%{source16_hash}" = "none" || { f="%{SOURCE16}"; test -f "$f" || { echo "oreon: missing Source16 $f" >&2; exit 1; }; if test ${#%{source16_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source16_hash}" || { echo "oreon: Source16 hash mismatch" >&2; exit 1; }; }
+test "%{source17_hash}" = "none" || { f="%{SOURCE17}"; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; if test ${#%{source17_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source17_hash}" || { echo "oreon: Source17 hash mismatch" >&2; exit 1; }; }
+test "%{source18_hash}" = "none" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; if test ${#%{source18_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source18_hash}" || { echo "oreon: Source18 hash mismatch" >&2; exit 1; }; }
+test "%{source19_hash}" = "none" || { f="%{SOURCE19}"; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; if test ${#%{source19_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source19_hash}" || { echo "oreon: Source19 hash mismatch" >&2; exit 1; }; }
+test "%{source20_hash}" = "none" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; if test ${#%{source20_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source20_hash}" || { echo "oreon: Source20 hash mismatch" >&2; exit 1; }; }
+test "%{source21_hash}" = "none" || { f="%{SOURCE21}"; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; if test ${#%{source21_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source21_hash}" || { echo "oreon: Source21 hash mismatch" >&2; exit 1; }; }
+test "%{source22_hash}" = "none" || { f="%{SOURCE22}"; test -f "$f" || { echo "oreon: missing Source22 $f" >&2; exit 1; }; if test ${#%{source22_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source22_hash}" || { echo "oreon: Source22 hash mismatch" >&2; exit 1; }; }
+test "%{source23_hash}" = "none" || { f="%{SOURCE23}"; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; if test ${#%{source23_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source23_hash}" || { echo "oreon: Source23 hash mismatch" >&2; exit 1; }; }
+test "%{source24_hash}" = "none" || { f="%{SOURCE24}"; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; if test ${#%{source24_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source24_hash}" || { echo "oreon: Source24 hash mismatch" >&2; exit 1; }; }
+test "%{source25_hash}" = "none" || { f="%{SOURCE25}"; test -f "$f" || { echo "oreon: missing Source25 $f" >&2; exit 1; }; if test ${#%{source25_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source25_hash}" || { echo "oreon: Source25 hash mismatch" >&2; exit 1; }; }
+test "%{source26_hash}" = "none" || { f="%{SOURCE26}"; test -f "$f" || { echo "oreon: missing Source26 $f" >&2; exit 1; }; if test ${#%{source26_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source26_hash}" || { echo "oreon: Source26 hash mismatch" >&2; exit 1; }; }
+test "%{source27_hash}" = "none" || { f="%{SOURCE27}"; test -f "$f" || { echo "oreon: missing Source27 $f" >&2; exit 1; }; if test ${#%{source27_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source27_hash}" || { echo "oreon: Source27 hash mismatch" >&2; exit 1; }; }
+test "%{source28_hash}" = "none" || { f="%{SOURCE28}"; test -f "$f" || { echo "oreon: missing Source28 $f" >&2; exit 1; }; if test ${#%{source28_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source28_hash}" || { echo "oreon: Source28 hash mismatch" >&2; exit 1; }; }
+test "%{source29_hash}" = "none" || { f="%{SOURCE29}"; test -f "$f" || { echo "oreon: missing Source29 $f" >&2; exit 1; }; if test ${#%{source29_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source29_hash}" || { echo "oreon: Source29 hash mismatch" >&2; exit 1; }; }
+test "%{source30_hash}" = "none" || { f="%{SOURCE30}"; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; if test ${#%{source30_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source30_hash}" || { echo "oreon: Source30 hash mismatch" >&2; exit 1; }; }
+test "%{source31_hash}" = "none" || { f="%{SOURCE31}"; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; if test ${#%{source31_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source31_hash}" || { echo "oreon: Source31 hash mismatch" >&2; exit 1; }; }
+test "%{source32_hash}" = "none" || { f="%{SOURCE32}"; test -f "$f" || { echo "oreon: missing Source32 $f" >&2; exit 1; }; if test ${#%{source32_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source32_hash}" || { echo "oreon: Source32 hash mismatch" >&2; exit 1; }; }
+test "%{source33_hash}" = "none" || { f="%{SOURCE33}"; test -f "$f" || { echo "oreon: missing Source33 $f" >&2; exit 1; }; if test ${#%{source33_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source33_hash}" || { echo "oreon: Source33 hash mismatch" >&2; exit 1; }; }
+test "%{source34_hash}" = "none" || { f="%{SOURCE34}"; test -f "$f" || { echo "oreon: missing Source34 $f" >&2; exit 1; }; if test ${#%{source34_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source34_hash}" || { echo "oreon: Source34 hash mismatch" >&2; exit 1; }; }
+test "%{source35_hash}" = "none" || { f="%{SOURCE35}"; test -f "$f" || { echo "oreon: missing Source35 $f" >&2; exit 1; }; if test ${#%{source35_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source35_hash}" || { echo "oreon: Source35 hash mismatch" >&2; exit 1; }; }
+test "%{source36_hash}" = "none" || { f="%{SOURCE36}"; test -f "$f" || { echo "oreon: missing Source36 $f" >&2; exit 1; }; if test ${#%{source36_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source36_hash}" || { echo "oreon: Source36 hash mismatch" >&2; exit 1; }; }
+test "%{source37_hash}" = "none" || { f="%{SOURCE37}"; test -f "$f" || { echo "oreon: missing Source37 $f" >&2; exit 1; }; if test ${#%{source37_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source37_hash}" || { echo "oreon: Source37 hash mismatch" >&2; exit 1; }; }
+test "%{source38_hash}" = "none" || { f="%{SOURCE38}"; test -f "$f" || { echo "oreon: missing Source38 $f" >&2; exit 1; }; if test ${#%{source38_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source38_hash}" || { echo "oreon: Source38 hash mismatch" >&2; exit 1; }; }
+test "%{source39_hash}" = "none" || { f="%{SOURCE39}"; test -f "$f" || { echo "oreon: missing Source39 $f" >&2; exit 1; }; if test ${#%{source39_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source39_hash}" || { echo "oreon: Source39 hash mismatch" >&2; exit 1; }; }
+test "%{source40_hash}" = "none" || { f="%{SOURCE40}"; test -f "$f" || { echo "oreon: missing Source40 $f" >&2; exit 1; }; if test ${#%{source40_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source40_hash}" || { echo "oreon: Source40 hash mismatch" >&2; exit 1; }; }
+test "%{source41_hash}" = "none" || { f="%{SOURCE41}"; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; if test ${#%{source41_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source41_hash}" || { echo "oreon: Source41 hash mismatch" >&2; exit 1; }; }
+test "%{source42_hash}" = "none" || { f="%{SOURCE42}"; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; if test ${#%{source42_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source42_hash}" || { echo "oreon: Source42 hash mismatch" >&2; exit 1; }; }
+test "%{source43_hash}" = "none" || { f="%{SOURCE43}"; test -f "$f" || { echo "oreon: missing Source43 $f" >&2; exit 1; }; if test ${#%{source43_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source43_hash}" || { echo "oreon: Source43 hash mismatch" >&2; exit 1; }; }
+test "%{source44_hash}" = "none" || { f="%{SOURCE44}"; test -f "$f" || { echo "oreon: missing Source44 $f" >&2; exit 1; }; if test ${#%{source44_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source44_hash}" || { echo "oreon: Source44 hash mismatch" >&2; exit 1; }; }
+test "%{source45_hash}" = "none" || { f="%{SOURCE45}"; test -f "$f" || { echo "oreon: missing Source45 $f" >&2; exit 1; }; if test ${#%{source45_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source45_hash}" || { echo "oreon: Source45 hash mismatch" >&2; exit 1; }; }
+test "%{source46_hash}" = "none" || { f="%{SOURCE46}"; test -f "$f" || { echo "oreon: missing Source46 $f" >&2; exit 1; }; if test ${#%{source46_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source46_hash}" || { echo "oreon: Source46 hash mismatch" >&2; exit 1; }; }
+test "%{source47_hash}" = "none" || { f="%{SOURCE47}"; test -f "$f" || { echo "oreon: missing Source47 $f" >&2; exit 1; }; if test ${#%{source47_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source47_hash}" || { echo "oreon: Source47 hash mismatch" >&2; exit 1; }; }
+test "%{source48_hash}" = "none" || { f="%{SOURCE48}"; test -f "$f" || { echo "oreon: missing Source48 $f" >&2; exit 1; }; if test ${#%{source48_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source48_hash}" || { echo "oreon: Source48 hash mismatch" >&2; exit 1; }; }
+test "%{source49_hash}" = "none" || { f="%{SOURCE49}"; test -f "$f" || { echo "oreon: missing Source49 $f" >&2; exit 1; }; if test ${#%{source49_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source49_hash}" || { echo "oreon: Source49 hash mismatch" >&2; exit 1; }; }
+test "%{source50_hash}" = "none" || { f="%{SOURCE50}"; test -f "$f" || { echo "oreon: missing Source50 $f" >&2; exit 1; }; if test ${#%{source50_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source50_hash}" || { echo "oreon: Source50 hash mismatch" >&2; exit 1; }; }
+test "%{source51_hash}" = "none" || { f="%{SOURCE51}"; test -f "$f" || { echo "oreon: missing Source51 $f" >&2; exit 1; }; if test ${#%{source51_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source51_hash}" || { echo "oreon: Source51 hash mismatch" >&2; exit 1; }; }
+test "%{source52_hash}" = "none" || { f="%{SOURCE52}"; test -f "$f" || { echo "oreon: missing Source52 $f" >&2; exit 1; }; if test ${#%{source52_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source52_hash}" || { echo "oreon: Source52 hash mismatch" >&2; exit 1; }; }
+test "%{source53_hash}" = "none" || { f="%{SOURCE53}"; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; if test ${#%{source53_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source53_hash}" || { echo "oreon: Source53 hash mismatch" >&2; exit 1; }; }
+test "%{source54_hash}" = "none" || { f="%{SOURCE54}"; test -f "$f" || { echo "oreon: missing Source54 $f" >&2; exit 1; }; if test ${#%{source54_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source54_hash}" || { echo "oreon: Source54 hash mismatch" >&2; exit 1; }; }
+test "%{source55_hash}" = "none" || { f="%{SOURCE55}"; test -f "$f" || { echo "oreon: missing Source55 $f" >&2; exit 1; }; if test ${#%{source55_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source55_hash}" || { echo "oreon: Source55 hash mismatch" >&2; exit 1; }; }
+test "%{source56_hash}" = "none" || { f="%{SOURCE56}"; test -f "$f" || { echo "oreon: missing Source56 $f" >&2; exit 1; }; if test ${#%{source56_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source56_hash}" || { echo "oreon: Source56 hash mismatch" >&2; exit 1; }; }
+test "%{source57_hash}" = "none" || { f="%{SOURCE57}"; test -f "$f" || { echo "oreon: missing Source57 $f" >&2; exit 1; }; if test ${#%{source57_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source57_hash}" || { echo "oreon: Source57 hash mismatch" >&2; exit 1; }; }
+test "%{source58_hash}" = "none" || { f="%{SOURCE58}"; test -f "$f" || { echo "oreon: missing Source58 $f" >&2; exit 1; }; if test ${#%{source58_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source58_hash}" || { echo "oreon: Source58 hash mismatch" >&2; exit 1; }; }
+test "%{source59_hash}" = "none" || { f="%{SOURCE59}"; test -f "$f" || { echo "oreon: missing Source59 $f" >&2; exit 1; }; if test ${#%{source59_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source59_hash}" || { echo "oreon: Source59 hash mismatch" >&2; exit 1; }; }
+test "%{source60_hash}" = "none" || { f="%{SOURCE60}"; test -f "$f" || { echo "oreon: missing Source60 $f" >&2; exit 1; }; if test ${#%{source60_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source60_hash}" || { echo "oreon: Source60 hash mismatch" >&2; exit 1; }; }
+test "%{source61_hash}" = "none" || { f="%{SOURCE61}"; test -f "$f" || { echo "oreon: missing Source61 $f" >&2; exit 1; }; if test ${#%{source61_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source61_hash}" || { echo "oreon: Source61 hash mismatch" >&2; exit 1; }; }
+test "%{source62_hash}" = "none" || { f="%{SOURCE62}"; test -f "$f" || { echo "oreon: missing Source62 $f" >&2; exit 1; }; if test ${#%{source62_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source62_hash}" || { echo "oreon: Source62 hash mismatch" >&2; exit 1; }; }
+test "%{source63_hash}" = "none" || { f="%{SOURCE63}"; test -f "$f" || { echo "oreon: missing Source63 $f" >&2; exit 1; }; if test ${#%{source63_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source63_hash}" || { echo "oreon: Source63 hash mismatch" >&2; exit 1; }; }
+test "%{source64_hash}" = "none" || { f="%{SOURCE64}"; test -f "$f" || { echo "oreon: missing Source64 $f" >&2; exit 1; }; if test ${#%{source64_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source64_hash}" || { echo "oreon: Source64 hash mismatch" >&2; exit 1; }; }
+test "%{source65_hash}" = "none" || { f="%{SOURCE65}"; test -f "$f" || { echo "oreon: missing Source65 $f" >&2; exit 1; }; if test ${#%{source65_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source65_hash}" || { echo "oreon: Source65 hash mismatch" >&2; exit 1; }; }
+test "%{source66_hash}" = "none" || { f="%{SOURCE66}"; test -f "$f" || { echo "oreon: missing Source66 $f" >&2; exit 1; }; if test ${#%{source66_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source66_hash}" || { echo "oreon: Source66 hash mismatch" >&2; exit 1; }; }
+test "%{source67_hash}" = "none" || { f="%{SOURCE67}"; test -f "$f" || { echo "oreon: missing Source67 $f" >&2; exit 1; }; if test ${#%{source67_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source67_hash}" || { echo "oreon: Source67 hash mismatch" >&2; exit 1; }; }
+test "%{source68_hash}" = "none" || { f="%{SOURCE68}"; test -f "$f" || { echo "oreon: missing Source68 $f" >&2; exit 1; }; if test ${#%{source68_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source68_hash}" || { echo "oreon: Source68 hash mismatch" >&2; exit 1; }; }
+test "%{source69_hash}" = "none" || { f="%{SOURCE69}"; test -f "$f" || { echo "oreon: missing Source69 $f" >&2; exit 1; }; if test ${#%{source69_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source69_hash}" || { echo "oreon: Source69 hash mismatch" >&2; exit 1; }; }
+test "%{source70_hash}" = "none" || { f="%{SOURCE70}"; test -f "$f" || { echo "oreon: missing Source70 $f" >&2; exit 1; }; if test ${#%{source70_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source70_hash}" || { echo "oreon: Source70 hash mismatch" >&2; exit 1; }; }
+test "%{source71_hash}" = "none" || { f="%{SOURCE71}"; test -f "$f" || { echo "oreon: missing Source71 $f" >&2; exit 1; }; if test ${#%{source71_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source71_hash}" || { echo "oreon: Source71 hash mismatch" >&2; exit 1; }; }
+test "%{source72_hash}" = "none" || { f="%{SOURCE72}"; test -f "$f" || { echo "oreon: missing Source72 $f" >&2; exit 1; }; if test ${#%{source72_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source72_hash}" || { echo "oreon: Source72 hash mismatch" >&2; exit 1; }; }
+test "%{source73_hash}" = "none" || { f="%{SOURCE73}"; test -f "$f" || { echo "oreon: missing Source73 $f" >&2; exit 1; }; if test ${#%{source73_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source73_hash}" || { echo "oreon: Source73 hash mismatch" >&2; exit 1; }; }
+test "%{source74_hash}" = "none" || { f="%{SOURCE74}"; test -f "$f" || { echo "oreon: missing Source74 $f" >&2; exit 1; }; if test ${#%{source74_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source74_hash}" || { echo "oreon: Source74 hash mismatch" >&2; exit 1; }; }
+test "%{source75_hash}" = "none" || { f="%{SOURCE75}"; test -f "$f" || { echo "oreon: missing Source75 $f" >&2; exit 1; }; if test ${#%{source75_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source75_hash}" || { echo "oreon: Source75 hash mismatch" >&2; exit 1; }; }
+test "%{source76_hash}" = "none" || { f="%{SOURCE76}"; test -f "$f" || { echo "oreon: missing Source76 $f" >&2; exit 1; }; if test ${#%{source76_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source76_hash}" || { echo "oreon: Source76 hash mismatch" >&2; exit 1; }; }
+test "%{source77_hash}" = "none" || { f="%{SOURCE77}"; test -f "$f" || { echo "oreon: missing Source77 $f" >&2; exit 1; }; if test ${#%{source77_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source77_hash}" || { echo "oreon: Source77 hash mismatch" >&2; exit 1; }; }
+test "%{source78_hash}" = "none" || { f="%{SOURCE78}"; test -f "$f" || { echo "oreon: missing Source78 $f" >&2; exit 1; }; if test ${#%{source78_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source78_hash}" || { echo "oreon: Source78 hash mismatch" >&2; exit 1; }; }
+test "%{source79_hash}" = "none" || { f="%{SOURCE79}"; test -f "$f" || { echo "oreon: missing Source79 $f" >&2; exit 1; }; if test ${#%{source79_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source79_hash}" || { echo "oreon: Source79 hash mismatch" >&2; exit 1; }; }
+test "%{source80_hash}" = "none" || { f="%{SOURCE80}"; test -f "$f" || { echo "oreon: missing Source80 $f" >&2; exit 1; }; if test ${#%{source80_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source80_hash}" || { echo "oreon: Source80 hash mismatch" >&2; exit 1; }; }
+test "%{source81_hash}" = "none" || { f="%{SOURCE81}"; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; if test ${#%{source81_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source81_hash}" || { echo "oreon: Source81 hash mismatch" >&2; exit 1; }; }
+test "%{source82_hash}" = "none" || { f="%{SOURCE82}"; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; if test ${#%{source82_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source82_hash}" || { echo "oreon: Source82 hash mismatch" >&2; exit 1; }; }
+test "%{source83_hash}" = "none" || { f="%{SOURCE83}"; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; if test ${#%{source83_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source83_hash}" || { echo "oreon: Source83 hash mismatch" >&2; exit 1; }; }
+test "%{source84_hash}" = "none" || { f="%{SOURCE84}"; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; if test ${#%{source84_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source84_hash}" || { echo "oreon: Source84 hash mismatch" >&2; exit 1; }; }
+test "%{source85_hash}" = "none" || { f="%{SOURCE85}"; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; if test ${#%{source85_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source85_hash}" || { echo "oreon: Source85 hash mismatch" >&2; exit 1; }; }
+test "%{source86_hash}" = "none" || { f="%{SOURCE86}"; test -f "$f" || { echo "oreon: missing Source86 $f" >&2; exit 1; }; if test ${#%{source86_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source86_hash}" || { echo "oreon: Source86 hash mismatch" >&2; exit 1; }; }
+test "%{source87_hash}" = "none" || { f="%{SOURCE87}"; test -f "$f" || { echo "oreon: missing Source87 $f" >&2; exit 1; }; if test ${#%{source87_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source87_hash}" || { echo "oreon: Source87 hash mismatch" >&2; exit 1; }; }
+test "%{source88_hash}" = "none" || { f="%{SOURCE88}"; test -f "$f" || { echo "oreon: missing Source88 $f" >&2; exit 1; }; if test ${#%{source88_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source88_hash}" || { echo "oreon: Source88 hash mismatch" >&2; exit 1; }; }
+test "%{source89_hash}" = "none" || { f="%{SOURCE89}"; test -f "$f" || { echo "oreon: missing Source89 $f" >&2; exit 1; }; if test ${#%{source89_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source89_hash}" || { echo "oreon: Source89 hash mismatch" >&2; exit 1; }; }
+test "%{source90_hash}" = "none" || { f="%{SOURCE90}"; test -f "$f" || { echo "oreon: missing Source90 $f" >&2; exit 1; }; if test ${#%{source90_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source90_hash}" || { echo "oreon: Source90 hash mismatch" >&2; exit 1; }; }
+test "%{source91_hash}" = "none" || { f="%{SOURCE91}"; test -f "$f" || { echo "oreon: missing Source91 $f" >&2; exit 1; }; if test ${#%{source91_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source91_hash}" || { echo "oreon: Source91 hash mismatch" >&2; exit 1; }; }
+test "%{source92_hash}" = "none" || { f="%{SOURCE92}"; test -f "$f" || { echo "oreon: missing Source92 $f" >&2; exit 1; }; if test ${#%{source92_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source92_hash}" || { echo "oreon: Source92 hash mismatch" >&2; exit 1; }; }
+test "%{source93_hash}" = "none" || { f="%{SOURCE93}"; test -f "$f" || { echo "oreon: missing Source93 $f" >&2; exit 1; }; if test ${#%{source93_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source93_hash}" || { echo "oreon: Source93 hash mismatch" >&2; exit 1; }; }
+test "%{source94_hash}" = "none" || { f="%{SOURCE94}"; test -f "$f" || { echo "oreon: missing Source94 $f" >&2; exit 1; }; if test ${#%{source94_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source94_hash}" || { echo "oreon: Source94 hash mismatch" >&2; exit 1; }; }
+test "%{source95_hash}" = "none" || { f="%{SOURCE95}"; test -f "$f" || { echo "oreon: missing Source95 $f" >&2; exit 1; }; if test ${#%{source95_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source95_hash}" || { echo "oreon: Source95 hash mismatch" >&2; exit 1; }; }
+test "%{source96_hash}" = "none" || { f="%{SOURCE96}"; test -f "$f" || { echo "oreon: missing Source96 $f" >&2; exit 1; }; if test ${#%{source96_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source96_hash}" || { echo "oreon: Source96 hash mismatch" >&2; exit 1; }; }
+test "%{source97_hash}" = "none" || { f="%{SOURCE97}"; test -f "$f" || { echo "oreon: missing Source97 $f" >&2; exit 1; }; if test ${#%{source97_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source97_hash}" || { echo "oreon: Source97 hash mismatch" >&2; exit 1; }; }
+test "%{source98_hash}" = "none" || { f="%{SOURCE98}"; test -f "$f" || { echo "oreon: missing Source98 $f" >&2; exit 1; }; if test ${#%{source98_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source98_hash}" || { echo "oreon: Source98 hash mismatch" >&2; exit 1; }; }
+test "%{source99_hash}" = "none" || { f="%{SOURCE99}"; test -f "$f" || { echo "oreon: missing Source99 $f" >&2; exit 1; }; if test ${#%{source99_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source99_hash}" || { echo "oreon: Source99 hash mismatch" >&2; exit 1; }; }
+test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; if test ${#%{source100_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; }
+test "%{source101_hash}" = "none" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; if test ${#%{source101_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source101_hash}" || { echo "oreon: Source101 hash mismatch" >&2; exit 1; }; }
+test "%{source102_hash}" = "none" || { f="%{SOURCE102}"; test -f "$f" || { echo "oreon: missing Source102 $f" >&2; exit 1; }; if test ${#%{source102_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source102_hash}" || { echo "oreon: Source102 hash mismatch" >&2; exit 1; }; }
+test "%{source103_hash}" = "none" || { f="%{SOURCE103}"; test -f "$f" || { echo "oreon: missing Source103 $f" >&2; exit 1; }; if test ${#%{source103_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source103_hash}" || { echo "oreon: Source103 hash mismatch" >&2; exit 1; }; }
+test "%{source104_hash}" = "none" || { f="%{SOURCE104}"; test -f "$f" || { echo "oreon: missing Source104 $f" >&2; exit 1; }; if test ${#%{source104_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source104_hash}" || { echo "oreon: Source104 hash mismatch" >&2; exit 1; }; }
+test "%{source105_hash}" = "none" || { f="%{SOURCE105}"; test -f "$f" || { echo "oreon: missing Source105 $f" >&2; exit 1; }; if test ${#%{source105_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source105_hash}" || { echo "oreon: Source105 hash mismatch" >&2; exit 1; }; }
+test "%{source106_hash}" = "none" || { f="%{SOURCE106}"; test -f "$f" || { echo "oreon: missing Source106 $f" >&2; exit 1; }; if test ${#%{source106_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source106_hash}" || { echo "oreon: Source106 hash mismatch" >&2; exit 1; }; }
+test "%{source107_hash}" = "none" || { f="%{SOURCE107}"; test -f "$f" || { echo "oreon: missing Source107 $f" >&2; exit 1; }; if test ${#%{source107_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source107_hash}" || { echo "oreon: Source107 hash mismatch" >&2; exit 1; }; }
+test "%{source108_hash}" = "none" || { f="%{SOURCE108}"; test -f "$f" || { echo "oreon: missing Source108 $f" >&2; exit 1; }; if test ${#%{source108_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source108_hash}" || { echo "oreon: Source108 hash mismatch" >&2; exit 1; }; }
+test "%{source109_hash}" = "none" || { f="%{SOURCE109}"; test -f "$f" || { echo "oreon: missing Source109 $f" >&2; exit 1; }; if test ${#%{source109_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source109_hash}" || { echo "oreon: Source109 hash mismatch" >&2; exit 1; }; }
+test "%{source110_hash}" = "none" || { f="%{SOURCE110}"; test -f "$f" || { echo "oreon: missing Source110 $f" >&2; exit 1; }; if test ${#%{source110_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source110_hash}" || { echo "oreon: Source110 hash mismatch" >&2; exit 1; }; }
+test "%{source111_hash}" = "none" || { f="%{SOURCE111}"; test -f "$f" || { echo "oreon: missing Source111 $f" >&2; exit 1; }; if test ${#%{source111_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source111_hash}" || { echo "oreon: Source111 hash mismatch" >&2; exit 1; }; }
+test "%{source112_hash}" = "none" || { f="%{SOURCE112}"; test -f "$f" || { echo "oreon: missing Source112 $f" >&2; exit 1; }; if test ${#%{source112_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source112_hash}" || { echo "oreon: Source112 hash mismatch" >&2; exit 1; }; }
+test "%{source113_hash}" = "none" || { f="%{SOURCE113}"; test -f "$f" || { echo "oreon: missing Source113 $f" >&2; exit 1; }; if test ${#%{source113_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source113_hash}" || { echo "oreon: Source113 hash mismatch" >&2; exit 1; }; }
+test "%{source114_hash}" = "none" || { f="%{SOURCE114}"; test -f "$f" || { echo "oreon: missing Source114 $f" >&2; exit 1; }; if test ${#%{source114_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source114_hash}" || { echo "oreon: Source114 hash mismatch" >&2; exit 1; }; }
+test "%{source115_hash}" = "none" || { f="%{SOURCE115}"; test -f "$f" || { echo "oreon: missing Source115 $f" >&2; exit 1; }; if test ${#%{source115_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source115_hash}" || { echo "oreon: Source115 hash mismatch" >&2; exit 1; }; }
+test "%{source116_hash}" = "none" || { f="%{SOURCE116}"; test -f "$f" || { echo "oreon: missing Source116 $f" >&2; exit 1; }; if test ${#%{source116_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source116_hash}" || { echo "oreon: Source116 hash mismatch" >&2; exit 1; }; }
+test "%{source117_hash}" = "none" || { f="%{SOURCE117}"; test -f "$f" || { echo "oreon: missing Source117 $f" >&2; exit 1; }; if test ${#%{source117_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source117_hash}" || { echo "oreon: Source117 hash mismatch" >&2; exit 1; }; }
+test "%{source118_hash}" = "none" || { f="%{SOURCE118}"; test -f "$f" || { echo "oreon: missing Source118 $f" >&2; exit 1; }; if test ${#%{source118_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source118_hash}" || { echo "oreon: Source118 hash mismatch" >&2; exit 1; }; }
+test "%{source119_hash}" = "none" || { f="%{SOURCE119}"; test -f "$f" || { echo "oreon: missing Source119 $f" >&2; exit 1; }; if test ${#%{source119_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source119_hash}" || { echo "oreon: Source119 hash mismatch" >&2; exit 1; }; }
+test "%{source120_hash}" = "none" || { f="%{SOURCE120}"; test -f "$f" || { echo "oreon: missing Source120 $f" >&2; exit 1; }; if test ${#%{source120_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source120_hash}" || { echo "oreon: Source120 hash mismatch" >&2; exit 1; }; }
+test "%{source121_hash}" = "none" || { f="%{SOURCE121}"; test -f "$f" || { echo "oreon: missing Source121 $f" >&2; exit 1; }; if test ${#%{source121_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source121_hash}" || { echo "oreon: Source121 hash mismatch" >&2; exit 1; }; }
+test "%{source122_hash}" = "none" || { f="%{SOURCE122}"; test -f "$f" || { echo "oreon: missing Source122 $f" >&2; exit 1; }; if test ${#%{source122_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source122_hash}" || { echo "oreon: Source122 hash mismatch" >&2; exit 1; }; }
+test "%{source123_hash}" = "none" || { f="%{SOURCE123}"; test -f "$f" || { echo "oreon: missing Source123 $f" >&2; exit 1; }; if test ${#%{source123_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source123_hash}" || { echo "oreon: Source123 hash mismatch" >&2; exit 1; }; }
+test "%{source124_hash}" = "none" || { f="%{SOURCE124}"; test -f "$f" || { echo "oreon: missing Source124 $f" >&2; exit 1; }; if test ${#%{source124_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source124_hash}" || { echo "oreon: Source124 hash mismatch" >&2; exit 1; }; }
+test "%{source125_hash}" = "none" || { f="%{SOURCE125}"; test -f "$f" || { echo "oreon: missing Source125 $f" >&2; exit 1; }; if test ${#%{source125_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source125_hash}" || { echo "oreon: Source125 hash mismatch" >&2; exit 1; }; }
+test "%{source126_hash}" = "none" || { f="%{SOURCE126}"; test -f "$f" || { echo "oreon: missing Source126 $f" >&2; exit 1; }; if test ${#%{source126_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source126_hash}" || { echo "oreon: Source126 hash mismatch" >&2; exit 1; }; }
+test "%{source127_hash}" = "none" || { f="%{SOURCE127}"; test -f "$f" || { echo "oreon: missing Source127 $f" >&2; exit 1; }; if test ${#%{source127_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source127_hash}" || { echo "oreon: Source127 hash mismatch" >&2; exit 1; }; }
+test "%{source128_hash}" = "none" || { f="%{SOURCE128}"; test -f "$f" || { echo "oreon: missing Source128 $f" >&2; exit 1; }; if test ${#%{source128_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source128_hash}" || { echo "oreon: Source128 hash mismatch" >&2; exit 1; }; }
+test "%{source129_hash}" = "none" || { f="%{SOURCE129}"; test -f "$f" || { echo "oreon: missing Source129 $f" >&2; exit 1; }; if test ${#%{source129_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source129_hash}" || { echo "oreon: Source129 hash mismatch" >&2; exit 1; }; }
+test "%{source130_hash}" = "none" || { f="%{SOURCE130}"; test -f "$f" || { echo "oreon: missing Source130 $f" >&2; exit 1; }; if test ${#%{source130_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source130_hash}" || { echo "oreon: Source130 hash mismatch" >&2; exit 1; }; }
+test "%{source131_hash}" = "none" || { f="%{SOURCE131}"; test -f "$f" || { echo "oreon: missing Source131 $f" >&2; exit 1; }; if test ${#%{source131_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source131_hash}" || { echo "oreon: Source131 hash mismatch" >&2; exit 1; }; }
+test "%{source132_hash}" = "none" || { f="%{SOURCE132}"; test -f "$f" || { echo "oreon: missing Source132 $f" >&2; exit 1; }; if test ${#%{source132_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source132_hash}" || { echo "oreon: Source132 hash mismatch" >&2; exit 1; }; }
+test "%{source133_hash}" = "none" || { f="%{SOURCE133}"; test -f "$f" || { echo "oreon: missing Source133 $f" >&2; exit 1; }; if test ${#%{source133_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source133_hash}" || { echo "oreon: Source133 hash mismatch" >&2; exit 1; }; }
+test "%{source134_hash}" = "none" || { f="%{SOURCE134}"; test -f "$f" || { echo "oreon: missing Source134 $f" >&2; exit 1; }; if test ${#%{source134_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source134_hash}" || { echo "oreon: Source134 hash mismatch" >&2; exit 1; }; }
+test "%{source135_hash}" = "none" || { f="%{SOURCE135}"; test -f "$f" || { echo "oreon: missing Source135 $f" >&2; exit 1; }; if test ${#%{source135_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source135_hash}" || { echo "oreon: Source135 hash mismatch" >&2; exit 1; }; }
+test "%{source136_hash}" = "none" || { f="%{SOURCE136}"; test -f "$f" || { echo "oreon: missing Source136 $f" >&2; exit 1; }; if test ${#%{source136_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source136_hash}" || { echo "oreon: Source136 hash mismatch" >&2; exit 1; }; }
+test "%{source137_hash}" = "none" || { f="%{SOURCE137}"; test -f "$f" || { echo "oreon: missing Source137 $f" >&2; exit 1; }; if test ${#%{source137_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source137_hash}" || { echo "oreon: Source137 hash mismatch" >&2; exit 1; }; }
+test "%{source138_hash}" = "none" || { f="%{SOURCE138}"; test -f "$f" || { echo "oreon: missing Source138 $f" >&2; exit 1; }; if test ${#%{source138_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source138_hash}" || { echo "oreon: Source138 hash mismatch" >&2; exit 1; }; }
+test "%{source139_hash}" = "none" || { f="%{SOURCE139}"; test -f "$f" || { echo "oreon: missing Source139 $f" >&2; exit 1; }; if test ${#%{source139_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source139_hash}" || { echo "oreon: Source139 hash mismatch" >&2; exit 1; }; }
+test "%{source140_hash}" = "none" || { f="%{SOURCE140}"; test -f "$f" || { echo "oreon: missing Source140 $f" >&2; exit 1; }; if test ${#%{source140_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source140_hash}" || { echo "oreon: Source140 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

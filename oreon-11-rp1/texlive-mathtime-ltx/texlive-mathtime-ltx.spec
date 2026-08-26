@@ -1,4 +1,4 @@
-%global source0_hash 5b297f364f5343fd199baaea9006465f98bdddd937f385f168e5237fc9816c2b
+%global source0_hash 9dca857d4bad0d8275e5dedf5b33127a5412ded11a40b91ca460b349134ea77d536d4a6b8acaf32274a8b44bbc2fb79af61287418fb7198356754cd776c9f130
 
 %global tl_version 2025
 %global revision 362
@@ -16,8 +16,10 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.r362.tar.xz
-Source1:	https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.doc.r362.tar.xz
+%global source1_hash 640d1c83978e58782a50732cb25d2e78ae7af7855e3b6c43fefff0aeb039432ca3aeb3b9dba54b7d9ef452917d7f2ee928aa02ffe6b074c8cc902c422690bb71
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.doc.tar.xz
 # License texts
 Source2:        texlive-licenses.tar.xz
 
@@ -32,7 +34,7 @@ Requires:	texlive-kpathsea
 LaTeX macros for using MathTime and MathTime Plus.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE2}

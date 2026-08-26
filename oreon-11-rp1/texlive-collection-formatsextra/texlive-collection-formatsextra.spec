@@ -14,25 +14,40 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-formatsextra.r72250.tar.xz
+%global source2_hash af2cbe945ac3495e94fbf69797c05d9a7cd8c3874148c54c602a4a152c669638cf7a861949a3cc2d08aa21f378b57beffddf2d13e3afc1157c74472c348f5405
+%global source3_hash 298b2e796736f7598a83a2d4fee53f48e78d0c8b255cc09c686371a3a05a4d36736cef96d812281cfd3fe1024af433f32e117c1c60d7559809220ed8dd5e56a9
+%global source4_hash 54da97daf172e3dae434e75425b80d1c617ddc9991f6ee804cd812e2c4bd70b49eb1a01318e243c10998870877d4f76e084b5ef0b0eaa89afa66f77a124a7c02
+%global source5_hash 76ca0658f861a8562cbcd146f68fd3ff33d7c5f6aef6afcc7737d127b725fd3382537d23c748d86b9a5851b205c9374c6891ef181a20f3513b3ba9c9463fe10e
+%global source6_hash 81af373d208f14c4d4ac7d624db3ff0ac63ad32796143e08cc93cc2dc184bde592fa083435a934ccad10a1f018e260bfc1ee844ead1b540242fa76ed9ad63473
+%global source7_hash bd07f654ad56219136e2f9e7612b87892bf8c6d0c8f2e41434a7fabb8b159bc43f79444301383adf560f1985f64e639dd496dad6d3ea97ccbd85fcee4d7a36e0
+%global source8_hash 31eb2aa643ec37d68d902f4de7be391e7da3af61bde93e78beb1e6df1c6367fcfe00f88e29c8cc878b9cd40f2e3a45f9e46bf24ca3a5608aeae09be491130fef
+%global source9_hash 8fdc06f22bc9d25b61cb7b3b151919b7d2d6cf3d78f3cfe5a11284d9246acb858410ccab56996cd521eb98518be9c232a4c8e0f8ebbe52d7e93c510e3a0ac070
+%global source10_hash 96f9d64c8f668f67afe20dad97d1cd3cfec19df3300204831fbfe0d245c1e15d8d0cea48bb94fb002cfa18db45d3ade730848908b0d77b867fff7557b0fb826f
+%global source11_hash 2253d07d753a5c20c29c2ebb97446453d2c0912c9f26b2e3bd78676e7c3c2ee82953e188e62253c80da538546481da58602b5478b2b8ccb3a6f7554ee41d228b
+%global source12_hash 7dce0f9b7781ca89ba93c1607acc0b440ffcf482a1927d0709aa0e914531e250a4f1ef24b64ee63008351c7b206fc092f9211966fb92bb6e0214f296da872677
+%global source13_hash c337900dc35cf0e02667d0eed6ac28aafc5336fa39bd7cd90dcf910ab27ebb741abe0ad7b0182fa8018c945cf9d4951db062d1ecfa9a9758e6e9940a0af0b0b3
+%global source14_hash 65d5b1c2f5b49f3ceba1fab6021ea4445aec25f302145586331468d727a9cfd992e444b0e53f3aae132308492f15d8f76c5c18cdcb405d9d06dcef6a443a4e23
+%global source15_hash a4693b80da94c5644e85c43b93a73ca385097fd2b395856d497e5a138b54063d98d59a8957937d2e2e6ef8948f59d0b1cf74defe50de0b7c5c0fe3c1da83c9a6
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-formatsextra.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.r21933.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.doc.r21933.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lambda.r45756.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.r79618.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.doc.r79618.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.r33046.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.doc.r33046.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.r45777.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.doc.r45777.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.r69742.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.r69742.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.doc.r69742.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.r69742.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.doc.r69742.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lambda.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.doc.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.doc.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.doc.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.doc.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-aleph
@@ -238,7 +253,7 @@ provides the user with a suitable set of commands for such a task. It is also
 more robust than plain TeX and LaTeX.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

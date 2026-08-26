@@ -14,35 +14,60 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langcjk.r78607.tar.xz
+%global source2_hash 363f7fd337e5a34737608a2bc37521bb526ce726f5c9b5b4d08416e534448306002bc7af1be3f5e6fefcaba16ffc2260c4dea8a486d44dbccad577fb04d6da5b
+%global source3_hash 2350e99bfd047ea514586894d20bd37dc778c74fd4c1848063ba7d53cb59ed5df36cd20fd51140ede8af7f32ed7efc44e1d4f3db4a0baaa7d1439941ed5297a9
+%global source4_hash 9561381312a2e3fcd6a03da1082e9bdb5a2c30e241078adbb70d06060a21674fc8a40c5cb81ce87d31ff99c168d73e9b4074cb3a6114439d5a441dd0054cc682
+%global source5_hash b13712912e479dab68cab9027042be8cb11047ebf9c034f532c857e83d28f19dfea5a1748685cfe1847c7372f2d0982f79736525694d937c88962c5262094585
+%global source6_hash a8c6b2d4d0899b841ccc32b378855d61bdaa65d5f68fd408df3894d386bcde18f384410f34e6f33ee2a5ce770e1e663a05ab038d9b7483012a3cb414739c3705
+%global source7_hash cb44aa3386cd79f05980e5402adcbbf9f8b67fa76bdd5b293063fe9810520edbdf243656cfb54fe17d6ca43d405e6b16e8012eda63bae3cb3d8fc0f7755e2551
+%global source8_hash cb9383b6d3fe9ffd5926d10dddcb1ea758aabda232f015b22f61dc8a9b316193b30ca2d8e2b849b1c03d92e0073bba6d90cc5b3b50f47b28a745dff2f7229486
+%global source9_hash 27a4c150b3b5e3fa23e0df55289154d44e3eaa55330544e426cdd3126f8ce0308abcc17fa5a011e12d83460616cad039cc483f08d7254b64d4dae933db6273d9
+%global source10_hash ff08a32b6283fc7ca0454e0071ce1d90b7a6fbf8989ca3eb4cc1f804f002f920890b083e5aa81a9455f57659a4df52b6c4677096621d9dffefa37c318e79a0f9
+%global source11_hash ef98234e6c6609dc9ea6f60027c3dad1f417d677d5177525945330122b9b513a90bd296ba86a1d96eadb52792b5d162264578118872d5a7b1794b4a1a7fe06a4
+%global source12_hash 541f27a2119bd0694a9afe8dcf39649a6ae57ca66bfeb9493dd130b7815088463a258a5528e590ab78bdcd2ab1d92cc9fd559c9223a120b155d56609d3e9d762
+%global source13_hash 10f6dda7da061830718627aa6f3dd570930899ee59928f5380fc6b91263e2f53ced551ba9c85db7b44273d5b15f0459f9fa89bf5aadcfe578a60f2acb93cd2fa
+%global source14_hash a806538598cae0365968ab20936631a052dc65f9f6056c39197f7b1c7a5aad717a7a8b72ed2a1af347f8ce91f27d7dcd74b758db8f01fc7810a8d658990bcc28
+%global source15_hash 5f65927546348815b07c93003a2b0922403d274bfa3d1665d4649c9dbc737df924958c2fd61c1d06cd5e7c1862aff392c8d1e9d827f4ae79e70d9b76467f651d
+%global source16_hash 48f469ebeed1e7c43124ce4576636d9a13c4cfa6ce548734ef8dc8c449b048353a2fcb78019817ea47f5a72d830e6efafe2682e6c97b208491ae025a4aaa7bae
+%global source17_hash 7e5d4e6a42ae1c41cb26109b036e125beb9111c0a5230ac9c1c7bbe91a4d0eec83ef94373c0fb8220b07a41d37af78d1f6966e0bb217661786a2678332e04c1c
+%global source18_hash db0be3360dc3d6373866c9d27900f8dba9353bcf92d219f9f0b82532e2855210230a06b87d1ab6eef7e1f96c54e46884e6827395affb9375120b7cf8d2fbb99b
+%global source19_hash 6a9958bc6ddf6d167b9d77a513d04f0077c9a8581109c51166410d60d5a243758da62b40bdf5cb1488a50b9ba76ca89261a2d31c3819d8b2738b4a7023ac3f90
+%global source20_hash 40e4c9c5f2195021cde4859da7b137de0cdf0c96b83f7ddbf724c682e1dd07276cb83bf4004b2b7cb5f90b6033da54940b3c58aeb2ca231b9ce449ee32d3a3d8
+%global source21_hash bd810a93bcb3849456c28a28456db65e75a74921412d93f22564c8f87342f4dab8edfbd531a530374a678ad3624bc593736116736b387b5d43960e8143af4a73
+%global source22_hash 792911a9a80ed0613db8a1daab226f3e8ad747d6f695524a03882a12d9c6ebe6634d20c7e17851961aef0bcbde23dc59765abe0387a512e1790c0fd51292cfe2
+%global source23_hash be4b89820c7a11dbcaab46f380efe28281d49498eef66040c65723bcf5600e9311db45dd47055f8ef8aa27406f02883add6fefb5d9817f3f65693a2221159574
+%global source24_hash 552365f862e319bf2d649e5aba40ca4d252b2986782a1f1c4bc8f2902ffb2f2fe73973c183bd465588506a073c6bb919cfdac438fa9275e2bc9e7a6bdcd956c9
+%global source25_hash e94ec8794d6f47d3de1c437a7171d2bb0d68c752ebcdf101790b77b32430ed440eb9d814f1821fcd6cc4d04a9b4ae412b989cb5b0a6c91dcc4b9610c611be785
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langcjk.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adobemapping.r66552.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/c90.r60830.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/c90.doc.r60830.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.r60865.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.doc.r60865.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.r41119.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.doc.r41119.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dnp.r54074.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.r69751.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.doc.r69751.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.r77682.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.doc.r77682.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/garuda-c90.r60832.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/norasi-c90.r60831.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.r77682.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.doc.r77682.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.r54958.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.doc.r54958.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.r80059.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.doc.r80059.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.r77682.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.doc.r77682.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.r77682.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.doc.r77682.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adobemapping.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/c90.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/c90.doc.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.doc.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.doc.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dnp.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.doc.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.doc.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/garuda-c90.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/norasi-c90.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.doc.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.doc.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.doc.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.doc.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-adobemapping
@@ -281,7 +306,7 @@ Provides:       tex(zxjafont.sty) = %{tl_version}
 Set up Japanese font families for XeLaTeX
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

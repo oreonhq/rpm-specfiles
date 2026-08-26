@@ -7,7 +7,7 @@ Release:        1%{?dist}
 Summary:        Typeset parallel texts in two columns
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.r79618.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.tar.xz
 BuildArch:      noarch
 BuildRequires:  texlive-base
 Requires:       texlive-base
@@ -18,7 +18,7 @@ Provides:       tex(parallel.sty)
 Provides an environment for typesetting text in two parallel columns.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T
 tar xf %{SOURCE0}
 

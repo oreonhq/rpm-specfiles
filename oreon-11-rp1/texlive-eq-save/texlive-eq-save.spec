@@ -1,4 +1,4 @@
-%global source0_hash a7f586060a95044a638f3138e6446c895a95af8481ce67c94e7f9319892ea7ad
+%global source0_hash 161f156bc9b96a06adc6083c4a9a64f38b91a712ecc6bcd8efe3c2d0cb08c1b5c261abe05856bd781baa0a92c86ffdb0e9b0631bc500447c33359fcefdd88cea
 
 %global tl_version 2025
 %global revision 299
@@ -16,8 +16,10 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.r299.tar.xz
-Source1:	https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.doc.r299.tar.xz
+%global source1_hash 83aaa87b0d21a16c13b18faacaf353d9ab8fcffd638148209824e05219e8c4eb804caf1c9dc8f73abfea632130b730da1dfb30cf6c89475093d6c0e2ff9843ad
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.doc.tar.xz
 # License texts
 Source2:        texlive-licenses.tar.xz
 
@@ -34,7 +36,7 @@ documents so the student can return later to continue with quiz
 results restored.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE2}

@@ -12,8 +12,8 @@ Summary:        TeX fonts from the American Mathematical Society
 License:        OFL-1.1
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.r77682.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.doc.r77682.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.doc.tar.xz
 BuildRequires:  tar
 Provides:       texlive-amsfonts-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-amsfonts-doc <= 11:%{version}
@@ -23,8 +23,8 @@ An extended set of fonts for use in mathematics from the American Mathematical
 Society. Split from texlive-collection-basic for oreon bootstrap.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; if test ${#%{source1_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 
 %build
 

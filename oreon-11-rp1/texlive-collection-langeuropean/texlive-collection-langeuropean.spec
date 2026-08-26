@@ -14,126 +14,242 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langeuropean.r79350.tar.xz
+%global source2_hash 7acac8416e424db754f1e02844e175dc76c694d46efa30e1e29d855cbe3ffff1a50b95c38e2de2e88944bb11920cdf2295254b3855b5d6e13bfb930665cda8c2
+%global source3_hash 83b050d9bcfd2d4b7ff54458a559401ecf5abfb020c39b7b7c29f3fe9cc656980a63354df549ff4b93ec4ffb382e60578d5657c268ffb7282dfa5e45fc66539f
+%global source4_hash fc96fc03fe38dedddf4f284372dc5b98d25f021de74ef0edc28a35d158fafce7ba2ce203fa24518b77a08d2aa50ef5efa5e04162f6f9c6eb5b5ba69608f3eaff
+%global source5_hash 76fb2e29058298c1dd17a0398ee689f381f1cdb5c626323f2cc4712eb7207e2ff0610a4099d69c1fe41fdbcddbca4e80ac414bdce0a131f67de1307ff8da7aeb
+%global source6_hash 5f4a1f1f8b48e5083c1aa84db9e5aec69446e141671b114b905d48a09bc018e78b74c1a14730781133f98c7eec1746ed382f0b1ba765b4af1e3de24c71a00a47
+%global source7_hash 425609718f28a29b4be04027e65fd07b38d1e01da433de703bb86458f6b1928edb2e3992a6ff18610246b640c00391ed56908490ca9dcae26d91e7021fa09f32
+%global source8_hash 5fa80d92372b641f310fb9ec9c881000a5cb86b189b95db25a391f8d5a345c7a5b1a5ae044dd9dd5e7a2e8ea3821da439378021a946c9ef62b60a198ccdb796c
+%global source9_hash d2d0e24754163c2c0001b421e9bcf9635963758f5bea3e1732d36ab82ba996dab117686fdf68c5d9ddf6f5cc5ee409e0bbe84a8552d8ab6b44d289bc3dad3edf
+%global source10_hash 6f03d6984d248451ce8d9781a6949a6d811e15878b72bff2415e5c84a104bec75a5176d5aaceca982a33f51074334cfe80aeaf0c54e0218a45d055a3b8b7f6ba
+%global source11_hash 2ca1ba6a4ace7ced845c18c7d6670c7b9bef48554615f60023bcedf84ec837dbceab64252fee2a0c619c306641ae977bc295ba6cd2a58ff0b5e4cfd22a4fb610
+%global source12_hash 85c6d1360db9c7825b9891da93f70b6e78d06edc23be8aef2dd7f8479b9afb266a9decabd89f804449399387793d01d328ce4a27fc5649319f52967bf8fe286f
+%global source13_hash cac9cb3e06fc6f6facf24ab9f69d6b5c5d7bf83fee097378b5457dfa1839d3106d70149d04bc438bd7a1b8dc2a165e1f630f541b23577b0183a8198c6f739ac5
+%global source14_hash f5d21052e4c2da9ca3263b12d42a97a6f901657e6b90bd925a771354559245b0433ec46f4370b9864a6388d1e40aa9eb7dab251dea89a7eba864e3fb887df316
+%global source15_hash afa3aea5b500530e4b6d91477340eb54b8c0f841affb869d3235571203c474bc64cb0ef7032b7f6a7838e7a0a3b56f4977aff78ad2fb914b7f17402e903020b8
+%global source16_hash 03357f8b0c101e5e186fa4211a971e625f6970a3129a2594a611c74b77b36a27a288d2da518d21e6e2e5d98bb82802b2115d47e31e6258f01c003be854090baf
+%global source17_hash ca732f4b6ccb9ae27f99aaabc99037d9f3d04bc170b9a8bb189a81b6bc9f55fd757c5755bf51ff423850f6b45c88a5645f75a462fc9d9e9b989fa04c1a2cc7c1
+%global source18_hash 8bbefe78d6a9aad3d8d7fda63144d245cbe52381f30e58de9425d9e147fd1213ae47203a22b4e9d552ecc713485f1d174f7bf46ae7b43f8c9247921a7d2e8ed3
+%global source19_hash 0d0d0a0dafcfef50aa495c28da2ba3b51aa3e57a4f5aa0679b90f37c4f993ccc2c8facb9301249b9b89065009c60f15fd630db7824eeef5af416bf73c54059a1
+%global source20_hash b823e6236f586bd4f18ca7f40bd5665e020444ba785ea106b396fb5dba80afb4bba465a1ac9054efc409496c82a8041a275602144205641b457bfb4fbe1d1019
+%global source21_hash 4bfa5e267d16913c9ae7602bbe906f855f77cccd49815d8b7f4e504abfb76d5cea58051bc407464d0a85ba0a26f2c19b1e1c1b8a9873f7e54ae157090b781155
+%global source22_hash 92949af26b8c5bd9db39743c66f645be90cd24ca1a99fd0f836cb986da908b0575fbacd1e70552b5fb41722c502b6e9917557fe650d510a61112247b45b806e8
+%global source23_hash c0d261c15fc7004de08859888545e9ad5fbf35bd79995117e2c9095e9573d83772e5aa1dbc0ca0eb7b982394e71f31d205dfadd99a7c1f3e422955db4845f766
+%global source24_hash 46aca093e061948272d2a54ff9f95b94b101582f0ec9d795668983c37b518be3c3d76d2c8e6901126d3dd7342db003589bacce9a40cfd573263a953bbedbfc48
+%global source25_hash bc859f01f52ad51da7df9d458e507b62eb69e40e1dc39362ff32ea8ee8890acce8ce49120fce967f321c9d674f4334c62c9bf2b3f8017288b724ecfe3943d667
+%global source26_hash ff9ff05bb88820fd52a0650b5d824831c2f58e39d745b35f68422f4d904504934aecfcdcdbb1e846517ec35a7b22e134eef71b46f3819ce5ec4119de36fd09c4
+%global source27_hash 9febb4056f41de0011d75009e0bfedf4227d869591ba661380d6a7bcd2ecb6a8ded2e1e933ef4c2a9ac31bb1b604bf975a9181ebd2fd3f188f4a2a01a8f445c2
+%global source28_hash bbdd05e7106494f23892f3455ad224d3deb1881f5a73720e2c73e7401514fed324484416def64e2e8fd7c2416b521fb2d4527585d2302a220330925c296afecb
+%global source29_hash c31f7efd7415f3439635b293c9aad2cfc2632352534e579c0f8d3e74443fb7aa88a95e19735a7b65137d81899ad9d2ad8bbdb28c5da2ff05a2be9dbad552b0f8
+%global source30_hash a64ff7b7aab3a3f440a8f3491a8809931d6f9d4c3b65b35a5ab10d46cedeac1746c9b6701c31abb50ab7ff8477b65222cec73342c33d008d1132c83e9fb89cdf
+%global source31_hash 791544c5062ea0744d3e353ad380551cb674267fc268a0f21b649b896db2a23101969244b8f862c6c6785fb806a9d8a576eedbe1cce19117e05e210c0560feec
+%global source32_hash b277fcc4c1cc58650722016eb9489fca635f7faed3788a93cceddb48ea25e6168b575b2554f616916f3f201100d69233b34c66871f085fa470473f47fe0c553a
+%global source33_hash bbb2654b2ccef7a91d536a9a66f309f457459fc5c9d72ead212d10bbb2f8d8410128886fa388b5572e0ba4227ff54b421d0ef40a954c4be7c4dc902da3178166
+%global source34_hash 83e8aa3c7e8e018f79c848ebd884f0d0a07c87953611342b5a9f25df1241ddd931ede31a03b1670922049948a6f9ebc88676de0a4be9e144a3f99e22fb857fd7
+%global source35_hash 76dac9c2b95699a42018ad370afc1236668a37a71707a6c1a8fff1921df9edf30730f71337c1128f64b7448a0bd3f99e432ddbc1219534884e8476a8c7fdf338
+%global source36_hash c061ca1ec358e4d8df05e0adadd5d87695cf3b9f86cab52eaa0e08b1f5b1fedb66febe32107e74c1926fa4d697b056d7d3f119db525b90ff7e7bde30fd015508
+%global source37_hash 7284141fbecedad06cfef78f50b4c13ebb3af76ced474c456a364c97943b51b9a233ecf6797e561ab0936ef7d082adc80daea0de4e961baab60e494bd72f7061
+%global source38_hash 14d720627c4733b17439371ff76253ac49a5749f57039521a6570bdf7ba2ff2c7a6bb967d8755787f672a9c21ceeb1c1f1cd435c0808b7c643a6c37c1d9e31d3
+%global source39_hash fdc1380eab3f7850d651b81a50579b409bfc3cd7dd7f4c478a9bf013350921c216ab54c2e5bbae379f85570a6b03997207a2f3aeb521247cd864dd18f7cf794e
+%global source40_hash f1f2f26b5466d10e995d76f7003c202650e3976b82b431d2bae768a582bc0c5662fc120739c49fcfd1226da3595c8a6b2e8c952a491718c45e69770c09d542a9
+%global source41_hash 86433fa646eb6b2f7ee0ba54f1dafa73b81bd98012859c59408883cc76ec876720ef526cb2f526bd4a8385c0371f9bb01ae6d604661deabb4ec920172986adf0
+%global source42_hash 72fe6338ef6f172a23790402a632881906689117e7227b6f2f2fb6129fca9a7d44c42ddd48e8286252f3b5fce9dc34439594882c1f80f33557ef5ef70afe4993
+%global source43_hash a2fa0cc72a205fcc25c2baeb7717a573bf8f2db5438e49c9de8a90e8da37d4f267ff30f08f8bb79f08756f5d227acddba8c069c8a5c257adf95c3afac271927f
+%global source44_hash c2ed9093ab202be8ade1abfdf257c21347ddaaabb6fa933f69464a8074082be5ff552dfc76ddbc06b5f1904fca5e053bf5cf90093307f6b427f7fa721d7df8a6
+%global source45_hash 1d999a967433f30950f04659265ced6462bcec778ea2878ca7fc7f05e823d9008b49f9a3e136265eefa192ad0aced05d3161691fede729e9e28ad038fd1ca7ad
+%global source46_hash c0a4570e8a53c6add9e35d8fd44e30b6d252c31695a49f62a4564832f94af9bc89db9c1062c14d1184fce5bea4d6916242fd13b9d36510b9fffbb4f9ca3fe536
+%global source47_hash 81927ea97549ea2d227b135bc33fc181437e467ba304b428ac0d8fe220dd49c46d483cc13f23d58e6cb93d1457125d1e0a4df2451b39e17d844f24e387116647
+%global source48_hash ae90b12a3c59dd52a8a87d2bc68b64ed9e957888e3498bbaef08faca749ca23b7c103639b16571edb848cfb88bab2c531b058fb0908290f026797ca4d97e74f5
+%global source49_hash b21f5f23a84f0c779f7ab062aeda7c3fa6b586d96e276741500ee6f5d06ff2a282f8a94e349a1fd4336a364c164f6eb17b254df4258f0b3a303767950707ecb2
+%global source50_hash 469f520355f3098c2ee4a62d2839df8c0ed3215a45ed2b9030897212a20fae816df6e4ad5a02fbe8fadc034bd4158393b46e823f31c58c982744520d3003f90e
+%global source51_hash ef17be5de84042c7f723d647d48481edbfdc01d4faef9842c71b651c1702e6ba148031a627599b7c0f27f5e3ba1605c6bb4f8da89ca383e3065781f52b731b9c
+%global source52_hash 3dc4c5e4a21b59dddf26bab24a3244c0d2ee3d5aff826f4aa6d2db7fd8b4237c10fed7a6925c81aecce380912662f3bf581afe9fa2eb29354c5c53f5fc930bf0
+%global source53_hash c91a2c61580678f8639f8b0631a67901eb61c7f2b84f1d94c71e5d280de588511bd6aabcf40878efc5e819d81419ba6e943de172eb4405ce52cb0f862ad50976
+%global source54_hash 41e5d322cd44d8e6d107ea028c3043c6c178d6de492b0537fd44357922598b3014de6a7ad18b37822aeea4bd51bbe17b155bf01abcb4538ed0cf4268db5654d5
+%global source55_hash 289feb736ccae0f92d42979ec864464a478035869a4ca20c4e1426eaeaaf073f26f3196016055ab7d38fe033536ea8f09f23c5d559885006b367bf623745c626
+%global source56_hash 02916936992e00e7aa884b46b6f786dd0fe5a0aaa6e2c6c4e28fe72de7fe5260fca7cdd37efc4a775a8d172e3993c98df7cec3d1ad08f01487f7cb0c8f2d179a
+%global source57_hash 06931a6b9987a7affd4632ea5cc79028a2a88c584523c03ce79c2a15268947fb1103137da158886c7957e0a7c938ca69c1c5c7d88104c892cae611c914f6fb93
+%global source58_hash 921e7843a2628b97b3a2051435620000122c4fddead77367fabd011517a184b852b87964638d52630818faa905a1acc84f401ce2af8928143c768caac400406d
+%global source59_hash 468ee5cc95573f48415fc22babefd9c83548315e40761f4bbbdfd86adbcba26d55c5f1c0b0c0eefdd31877648d262bd9a8302a4252a0b85809751a577790a318
+%global source60_hash e2f696c4ade89a1ad4f859797901c9592ecd031684bc79bcc032b491585925328d1bc40f99e3cfa5d6b2d6f31df51ba07dd17298f7bfdb4fe7be9337bc6ccf73
+%global source61_hash ee68a2f0c41dac79d00a4103804ad735b5bdc78bad660d5933e61e88290a2dea17a695ea45129a672cdb301e1c89e4fc319173df1fbfd87f944abbe46f7f1dd0
+%global source62_hash 1325b4c8c0ff8c1e53d27b5696da419f99852bd6c272176bab4e03f91bb6a715de51d24317b9cec1af50ee0ae2b34c03c51afe9cedb8903a1e8f74bbee3cc06f
+%global source63_hash c4280453d1f133fa8bb9d60c25755497787a76d1e87056e4e4932632fd48db48a1fd76856efaa26e5888d456333284e85ab9a9037ec218fc6b4127782bf9959c
+%global source64_hash b99e3bb1e577ee5bef01e195eb6f5577941853608b1ff9f4874b818802ab5e165721df0a8663a4a2993eaf21bc541bf4365234d0b5f47c085b0b9e5a2a57a9a4
+%global source65_hash 88d6372772fc53762fa727fe53db7367433acca5a60af0b1997a161221937f08d216afcadad4fd965e7b775a07b68ea55aab6fa583f072c9fd64180b6b5927b7
+%global source66_hash ac3d7d67fc68a3aa63c90b4bc625eb2dacb47d804d59c54a52f0fb973f25c5e9f16f343ae052bad34a7fdcc7eef8ffcc62dbe538c09a4d852845489684a20aa3
+%global source67_hash 3fc12f2c4e1e44eed7b946ab109d4a3005317990b2c4e402fd06c4f08afb209819291aff3146958d5389c284b1bf17b45536e3f2a26adf79437b6006cc724fdd
+%global source68_hash 9008c19bae250136f5f61364560d3d1077d81365936634e0ed22843d13c516e92fd67ded637f373aa1f3f2e2d9f1a72d1b6732ad7ce2da6d8328cb1651fd5198
+%global source69_hash c6c32e9038d177a99b0cdf3aa86344771ae086337eecf3632f91a9585d6d7714a26ba977065945b38630a0fca05eb1fce574b4bb09d93679ebfe47bece7e742c
+%global source70_hash e0a77801b4f104bf3ffa03db61b8cdd51824c8ee1e6dd40c120f604c62390777110f90b0eaf39c7a392296159bac68e182d1aef32375ed9733ca9d63d9a57867
+%global source71_hash bb37e815c555a58107c83ce2d12775852122c208d04f2c721a0e5ffc223e3149c01dffb241df1058b66edb05b80f85397c20469ac8346b1cccfa6b9682c5d546
+%global source72_hash 4cd1c07016710d79b3ef6e0ba480394aef9a1dbb534c139adceb8405c9870de995d5e9af8803d2e2eb01ffac8a524e62e224dbdbc4d847efe0b6d7632cbe58f7
+%global source73_hash 27acd3ef5b5a24654b26f04cf0415478dd56b4dea90c491c39f3a2589e47ab35350641dd51b3049bc6e609f882dbdd04dd927e6653434817fdca705ff4fac2b1
+%global source74_hash 0707b2f9bba508427a9ac564a9d8406c8696249c49cd5d8094c0a0ecc65db443322ae49e8b147159d3813396758b2cb03afcb9ddd1687b86597fbdb90190cf92
+%global source75_hash e9f2e7f188abd5355a7f6a1873f33dea5f3d9f0fe26c10c5f77acfb8780e06cd789e1ebdaaa2445e9cd88fe7c946b260490b97b04f06adb1413798d79612b3d1
+%global source76_hash 68578a19e863a679a45d14a43c1b65f48ec4c83cc3d13cbb3c4d92f8daafba20d853c708028abf00d5ff2ac9844345a1836c3d4b15cbbfe1ab9fe5232abea5b6
+%global source77_hash c963ff535e0dd7f389c6acb81e04c0159a425b4f6855a21b0c6a203b46cec7086d28a77cde61573485f64b1557535702a2582b6031472e2934f12b5188b8d9ce
+%global source78_hash c8057f70ad5f929cf14be69c20ce7aad8c00ba55309c8a4e17e786db5ce769dc41de175ab53116d92c6ae267585f18ec0bac9e6e4c4bdcce1e65e67450e59a5e
+%global source79_hash a81b22eab8aa4e8a8fe8ca3715e33d71e271440e4032abdf412ec6d4d453252c8d7601d2a49ff0c371221db355264e5f12e62ffb78423d2d7a63dc26d9ca61f9
+%global source80_hash 19878db2775d3dad30321d175eba2f6f35858c02994ce8e7e00d3cd41e22f798f4ce6a2e86eb7b70f5bbe8cda759ff92bd65a2950f3d07f4a996daf4d78da74b
+%global source81_hash db2aad0b8f68892ccfcab929e5e248016031f2723d1cc3b3d10c9e16b3af694e3fb482c2b52d12de381585c6eb807cc9281956e058a6a4569d5c5d84bc87141b
+%global source82_hash ed4a1dbb549795509b843ae7b14fc4ad6fea1b6519aafc775d9facee523f9e1acde2e8d5ccc3761ac7cad58136949026051d0d53ae022d5909066d6622d81679
+%global source83_hash 993d1f4346a5ba77c23b615c52f4043f8e73ba3fadffce00d9653bd3c75b1ca6d5ec6874aeb2ae8222bc5bab2010109a2b4dc0c7d874c8577a3596c936f83b15
+%global source84_hash e0fbfdff4a606d1702a505581885a9db4928f2ec5c35077492478cbb568fe6c8fa23eae0fe792279cd9ec6a6516e3a0d9c41ec18b67b434d5dc4d669d3a1662b
+%global source85_hash ce4ae8c8912de4b80f71f22097d806ce26a8779ef87a6887e84a1c1b838800e3885049c70bcf1e01088c3765131c30a5e66493c1d352ced169c8c1b175644a1b
+%global source86_hash 9080822fda2e31f8f53f65dcd269af52ded32f284492ee1e20c539c2756cac868ea07031482e8f5aa2fb4282d92e3fdc7c38d4c1b2ae19a5fc3c73298f57f798
+%global source87_hash a3c2edcb1df6087bed0ed1b84603b9efc4d4b9f159410c1a600ce247d7aab95e3d8e8fc400d8f77e4b7048b923e3a42e96a9bca73c0ebddf0a9a4e1482db95c8
+%global source88_hash 24f4dcf3a955e6556d687560391b65f6417e2ee88e0ed3eccf8bdb629fa405d177a85dd947ff76b4d614ca417d765d8abd33e6a7df463c0088ba2380f89df852
+%global source89_hash 859bdc09a249117ebdf23798284044ed2ef073d00643ce3370626e3e93f7bcf1b3f9d9d724b3dd5a71d0f1e85abb253bd550bafb237a1ec146ad88311ef1ca5c
+%global source90_hash 6edeccb96458ed2f31ad0b909b1a68de28e2e2be5c5b23999e466e48ec891e695d4d9c16b91d7a10e8bbf0c4c85a882212d2cc70c9638820838b81c1cded6ba4
+%global source91_hash 669c8602f7a33a6f78ec91d17fbc7576a820d249e08a9a914e2620bf021ac8291b68c26feedd3d8b5797c7ff84e496784cb36e509d5828b3426ff29542b41b58
+%global source92_hash c28157280dad4ac8ce003a8a68c546dda74dc51fd137280b883e3249306f1dca58611986a275ec43af71e1038c0b10f473577321cd8bbe325a29aff2c7237fcc
+%global source93_hash 81c4e9c64b6b74e01e92cdde42b4a2cf52372ae9beee2d4e02875c23a58981adca758ac36a3b30d3cfbc926810da3b23c732f5e8c7783a2cf87381c5cf63cdfb
+%global source94_hash 5b3a5431a816e53c7eae7229ad99a523ca2d397bd2135eba5bf87bdacd9d3e51910c5e54d6dc79338c91c6e4aab645a9968d06e1d40f0039559b5f5244a673f6
+%global source95_hash 2d50e0f15f5787eee430acd76697e98b90799ddffff601790e39dabeb8f5ed52e63c6d39076f8e34b40e596d4af1b96a2a2badc76635db4946636e214b572f5f
+%global source96_hash 7835080a255432e1bc022c480185737c817e0cb1782fb52f9475e6cd86efdcd60c9f58d38bd24830d560303fbe8456a81dd7c774288818bc25393658c70ecb11
+%global source97_hash c2cd1b54daf74e78e6087159fa827ece77f2dc835eda81e03fce861581e812536292f3f0b70b8bb77107c0a4032d12006e870303156a3f3c7cb653020ed9b97c
+%global source98_hash ae7a5e3bea2bd62a0cdbbfbde7e0d9e06554fa4b3bb825b45febed42556fa101fd2e6c611ad9fc1cc87ed5c92540977780fde47ae78a89dd37b70f89c94b5e8d
+%global source99_hash c8635db5888817d392706b8b65aa5158a4973cf236dad7fe31a9545857daab15a6c1f2f82ab06e71e50a4af94824b17ac89c394a759721e192966a1f78433d47
+%global source100_hash 29fc8b6a2645f241e8af437de3a295be8d56a088bd7c7666c35b14f104f242e68ecef2757d62a393400d9f337eb685e48ebac06769259c723d634312a7288ab9
+%global source101_hash 0369a6bad93a533394453750846f7b7f503aebea3edcf47ee58fd7458d6289353b6c7da00f8480c7a86834c86465f8200e4c606e160f8b18d6240b00e004ae6d
+%global source102_hash 9f867e2c2d9e0d50b718a90337856676f61960867db45802797bfceca56f7b992d6b01cad71694f0b7ec8cfe049fbe7019a23594fa9ff6ed64563fc050a52690
+%global source103_hash 1252d1100e8b136c8cbfc9b3ef267b98255559e980f96e4966cbf77ad1a6dafb787e7e03fe14e609e7786e4338de93a37be293172bc8ae1d8aa548c4c9033893
+%global source104_hash db4c10c6892446c01ba58606b8f099073d6375ce144b68156fd0c29977de0e886790e4839b85639cc05a1eb42a2a8380d57928af0a406c996e318a771cd8f2f3
+%global source105_hash a0c6005c6e0f35802591bd75084658d3dc220e37ef47019b31a7bd233985980692033c50ad923627100df117c0f7e1bb3663f6bb0bc88ca67d180fe25d331bde
+%global source106_hash 3d05b533c3618c8583fda08e7682baa41bba5c422f40fce20eeace0523ae6bc99f83ca0762544f38a86f980f99b3b5f58e2fe1817bcac1188196beb0808cd0a0
+%global source107_hash 84d74207f2dceb9453217ad235af031a448b222207c156415acfcbfcd6e2ebb6a88669f3a2662f99f004c22a1bf0cf1d8bef9ae21fe70d7993334e052e44ecae
+%global source108_hash d5b05705c81e0d04477cb56571710c8416251b8c3e2349fb4623794994dfb3ebe416a14828590bd5d0861b7edf633c497d70037dd982139fe5d4a1aa452acc2d
+%global source109_hash 01d207fe9d77df0a225cd5fe718f118bc755c1e23c9dcb2bc4e0b4c2983205469baeeefcc195b150cc54f4540ea71d96cfc393fe61a32f7e85d5c9b5944c5938
+%global source110_hash 653fea96310508e8a30c76821d1cd83dbf579052fecbb8c859d40cb39926d24ae0141b4788901b34b4839615b33d5995eed2b6a27f6abcae981b9d47b6ebeb34
+%global source111_hash cd7065dc6a916941a0fd05ea342d29499b6f7496d1934e06c49e7ea1a99c5be5cd515bbcbc2b5935ff8132adcc7b94e653d55de967700410ace55697f6fc156e
+%global source112_hash fb9c9f00433ba959ad8f7b5acc93b1e7b0db1cffec96b7c988eeaaae89ceecc815071a1e21f78d36279e529f4e9095602b1887d3c5d4164494be502cf4a19873
+%global source113_hash 61ceb0b55cdf94ebadff3b81d6a1327adc877737016ac611d6e0bc3e0e4f76ab34122ab97f83239b0e0982ce17a4220392cb42f73486c1abee0d7febea9287e1
+%global source114_hash 3e231cf63ff0971d116a22ac1a491c6cd085b17550c6397168e71a5a4eace9cc8ea89d63adafc343602bbb9738822b4fc0cd48f8ba48c5c07bae2e465a35879e
+%global source115_hash c1c2c8320b53b4048b2ee4141c33b8532e9ca07d87c1aebcf3745edac74d4ca6e4bf545483c62bfe9de81fdc60356ec56c695c1c4f08c64e276ea182d0012e78
+%global source116_hash b1e0ec4717d0b837d44672edaa4fa27139dafb5723a242563404107040a452fe70a8970e640225f06ba12d40528f6236d2ccf4dbaf763e2b54d4ae399a35b0d5
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langeuropean.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/armtex.r69418.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/armtex.doc.r69418.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-albanian.r77682.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-albanian.doc.r77682.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-bosnian.r77682.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-bosnian.doc.r77682.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-breton.r79363.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-breton.doc.r79363.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-croatian.r77682.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-croatian.doc.r77682.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-danish.r77682.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-danish.doc.r77682.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-dutch.r77682.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-dutch.doc.r77682.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-estonian.r38064.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-estonian.doc.r38064.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-finnish.r77682.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-finnish.doc.r77682.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-friulan.r77682.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-friulan.doc.r77682.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-hungarian.r79912.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-hungarian.doc.r79912.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-icelandic.r51551.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-icelandic.doc.r51551.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-irish.r77682.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-irish.doc.r77682.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-kurmanji.r30279.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-kurmanji.doc.r30279.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latin.r76176.tar.xz
-Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latin.doc.r76176.tar.xz
-Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latvian.r71108.tar.xz
-Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latvian.doc.r71108.tar.xz
-Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-lithuanian.r66513.tar.xz
-Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-lithuanian.doc.r66513.tar.xz
-Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-macedonian.r39587.tar.xz
-Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-macedonian.doc.r39587.tar.xz
-Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-norsk.r77682.tar.xz
-Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-norsk.doc.r77682.tar.xz
-Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-occitan.r39608.tar.xz
-Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-occitan.doc.r39608.tar.xz
-Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-piedmontese.r30282.tar.xz
-Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-piedmontese.doc.r30282.tar.xz
-Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romanian.r77682.tar.xz
-Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romanian.doc.r77682.tar.xz
-Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romansh.r77682.tar.xz
-Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romansh.doc.r77682.tar.xz
-Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-samin.r77682.tar.xz
-Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-samin.doc.r77682.tar.xz
-Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-scottish.r77682.tar.xz
-Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-scottish.doc.r77682.tar.xz
-Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovenian.r77682.tar.xz
-Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovenian.doc.r77682.tar.xz
-Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-swedish.r77682.tar.xz
-Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-swedish.doc.r77682.tar.xz
-Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-turkish.r51560.tar.xz
-Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-turkish.doc.r51560.tar.xz
-Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-welsh.r77682.tar.xz
-Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-welsh.doc.r77682.tar.xz
-Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finbib.r76790.tar.xz
-Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gloss-occitan.r52593.tar.xz
-Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gloss-occitan.doc.r52593.tar.xz
-Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hrlatex.r79618.tar.xz
-Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hrlatex.doc.r79618.tar.xz
-Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huaz.r77576.tar.xz
-Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huaz.doc.r77576.tar.xz
-Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hulipsum.r77317.tar.xz
-Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hulipsum.doc.r77317.tar.xz
-Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-albanian.r78069.tar.xz
-Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-croatian.r78069.tar.xz
-Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-danish.r79618.tar.xz
-Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-dutch.r79618.tar.xz
-Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-estonian.r78069.tar.xz
-Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-finnish.r78069.tar.xz
-Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-friulan.r78069.tar.xz
-Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-hungarian.r78069.tar.xz
-Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-hungarian.doc.r78069.tar.xz
-Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-icelandic.r79618.tar.xz
-Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-irish.r78069.tar.xz
-Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-kurmanji.r78069.tar.xz
-Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-latin.r79618.tar.xz
-Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-latvian.r78069.tar.xz
-Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-lithuanian.r78069.tar.xz
-Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-macedonian.r78069.tar.xz
-Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-norwegian.r78069.tar.xz
-Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-occitan.r78069.tar.xz
-Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-piedmontese.r78069.tar.xz
-Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-romanian.r78069.tar.xz
-Source89:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-romansh.r78069.tar.xz
-Source90:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-slovenian.r78069.tar.xz
-Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-swedish.r78069.tar.xz
-Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-turkish.r78069.tar.xz
-Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-uppersorbian.r78069.tar.xz
-Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-welsh.r78069.tar.xz
-Source95:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kaytannollista-latexia.r79894.tar.xz
-Source96:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kaytannollista-latexia.doc.r79894.tar.xz
-Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lithuanian.r66461.tar.xz
-Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lithuanian.doc.r66461.tar.xz
-Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-dutch.r15878.tar.xz
-Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-dutch.doc.r15878.tar.xz
-Source101:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-estonian.r79461.tar.xz
-Source102:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-estonian.doc.r79461.tar.xz
-Source103:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-finnish.r79461.tar.xz
-Source104:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-finnish.doc.r79461.tar.xz
-Source105:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovenian.r79461.tar.xz
-Source106:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovenian.doc.r79461.tar.xz
-Source107:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-turkish.r79461.tar.xz
-Source108:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-turkish.doc.r79461.tar.xz
-Source109:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nevelok.r39029.tar.xz
-Source110:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nevelok.doc.r39029.tar.xz
-Source111:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rojud.r56895.tar.xz
-Source112:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rojud.doc.r56895.tar.xz
-Source113:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/swebib.r76924.tar.xz
-Source114:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/swebib.doc.r76924.tar.xz
-Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/turkmen.r79618.tar.xz
-Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/turkmen.doc.r79618.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/armtex.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/armtex.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-albanian.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-albanian.doc.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-bosnian.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-bosnian.doc.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-breton.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-breton.doc.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-croatian.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-croatian.doc.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-danish.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-danish.doc.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-dutch.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-dutch.doc.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-estonian.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-estonian.doc.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-finnish.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-finnish.doc.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-friulan.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-friulan.doc.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-hungarian.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-hungarian.doc.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-icelandic.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-icelandic.doc.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-irish.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-irish.doc.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-kurmanji.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-kurmanji.doc.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latin.tar.xz
+Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latin.doc.tar.xz
+Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latvian.tar.xz
+Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-latvian.doc.tar.xz
+Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-lithuanian.tar.xz
+Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-lithuanian.doc.tar.xz
+Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-macedonian.tar.xz
+Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-macedonian.doc.tar.xz
+Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-norsk.tar.xz
+Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-norsk.doc.tar.xz
+Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-occitan.tar.xz
+Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-occitan.doc.tar.xz
+Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-piedmontese.tar.xz
+Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-piedmontese.doc.tar.xz
+Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romanian.tar.xz
+Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romanian.doc.tar.xz
+Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romansh.tar.xz
+Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-romansh.doc.tar.xz
+Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-samin.tar.xz
+Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-samin.doc.tar.xz
+Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-scottish.tar.xz
+Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-scottish.doc.tar.xz
+Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovenian.tar.xz
+Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovenian.doc.tar.xz
+Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-swedish.tar.xz
+Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-swedish.doc.tar.xz
+Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-turkish.tar.xz
+Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-turkish.doc.tar.xz
+Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-welsh.tar.xz
+Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-welsh.doc.tar.xz
+Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finbib.tar.xz
+Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gloss-occitan.tar.xz
+Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gloss-occitan.doc.tar.xz
+Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hrlatex.tar.xz
+Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hrlatex.doc.tar.xz
+Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huaz.tar.xz
+Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huaz.doc.tar.xz
+Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hulipsum.tar.xz
+Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hulipsum.doc.tar.xz
+Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-albanian.tar.xz
+Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-croatian.tar.xz
+Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-danish.tar.xz
+Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-dutch.tar.xz
+Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-estonian.tar.xz
+Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-finnish.tar.xz
+Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-friulan.tar.xz
+Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-hungarian.tar.xz
+Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-hungarian.doc.tar.xz
+Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-icelandic.tar.xz
+Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-irish.tar.xz
+Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-kurmanji.tar.xz
+Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-latin.tar.xz
+Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-latvian.tar.xz
+Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-lithuanian.tar.xz
+Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-macedonian.tar.xz
+Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-norwegian.tar.xz
+Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-occitan.tar.xz
+Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-piedmontese.tar.xz
+Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-romanian.tar.xz
+Source89:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-romansh.tar.xz
+Source90:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-slovenian.tar.xz
+Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-swedish.tar.xz
+Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-turkish.tar.xz
+Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-uppersorbian.tar.xz
+Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-welsh.tar.xz
+Source95:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kaytannollista-latexia.tar.xz
+Source96:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kaytannollista-latexia.doc.tar.xz
+Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lithuanian.tar.xz
+Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lithuanian.doc.tar.xz
+Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-dutch.tar.xz
+Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-dutch.doc.tar.xz
+Source101:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-estonian.tar.xz
+Source102:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-estonian.doc.tar.xz
+Source103:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-finnish.tar.xz
+Source104:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-finnish.doc.tar.xz
+Source105:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovenian.tar.xz
+Source106:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovenian.doc.tar.xz
+Source107:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-turkish.tar.xz
+Source108:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-turkish.doc.tar.xz
+Source109:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nevelok.tar.xz
+Source110:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nevelok.doc.tar.xz
+Source111:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rojud.tar.xz
+Source112:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rojud.doc.tar.xz
+Source113:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/swebib.tar.xz
+Source114:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/swebib.doc.tar.xz
+Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/turkmen.tar.xz
+Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/turkmen.doc.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-armtex
@@ -1707,7 +1823,7 @@ fi
 :
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}

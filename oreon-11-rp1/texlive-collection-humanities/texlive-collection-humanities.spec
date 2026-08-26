@@ -14,127 +14,244 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-humanities.r79758.tar.xz
+%global source2_hash 1e06f07576666fb7b54c78d930f66fef78571469bffc3ef448687c8bbb0d23d41761e17c8ec1293bb6527e31fc70413df1b7de5c9a06514e6aa8242ed90deb09
+%global source3_hash ad8f2e42a4a31368000909c5841fddc189bc2331b47f2c64b16ec509bd662a1b82df3ea8b712f0bdf1c40f123ac28221179b4352e20631d9fb776c0b2939bc4c
+%global source4_hash 9733edc421691d61eda442c8d7c7a6ab1e05811847b68b3736e44fb90a155810c298353d01ddfc0e2611d4a1644e2361626040dbebc1bb304dba07bf55d2685b
+%global source5_hash b6202bb0f2df2351d0b27d167b2f5ab6ba7108b8f760d1b86e1bb89c520fe279f94b2e60add2b6efaaf73f14509572a684920ada2b6f59b75247542b6c3838a3
+%global source6_hash ba3c4e41b566d0a26bd9f0d11d8e776fe04a18aac451435ff0283ff273971138407753bd6806f34708c5a2f0c1b2581c71de46bbc2e0c8063c9838b3d946f2ca
+%global source7_hash 6fd81f90d0c94644231e911ab44827b77864842a3fa91127fb53114179488e5ffd66a404a1b5afee513e0cd3f4c83f38cae547e6dd6484403926c4c46b5cdec7
+%global source8_hash 5ae9356781549cb5ecbdfa33085ede0fdbcb7f131d55484153484c777f88e23cf965507afde803e7bc5b775aeb416b9ee767815b5dbec444a3d21be18c7445f4
+%global source9_hash a904b4c9c0c8f3ff1feaaad8d1650b383ff0110bcf463f004938c51bce84ffc860082bf3e598922eedf0aeaa664ef0379ea3304f6dc5b681679d9545026c6bf4
+%global source10_hash 3af7da247ff7f9708ef076a3fe110979e7ff07be0afb08597feeda9ae31e60a66eb2bbbb5da015e10566e83a116cc9f2efa56fe91a57717230fb35bd004c209d
+%global source11_hash 08393d76bca59dcbd715cc443ffbf7a1e15894ac6a2963d0ce770c96974c14d42283fd9237c215fe454ec4403a21387ba9dee52ea1bd93b83ab4a13fbc65157c
+%global source12_hash 148a4c17ce567327825b8a846b7e5972493c7b661f51f71ba55bbb4979c90ffefddeccfa2a324b88386ba66527757f2deb62381a0e1291a7eb1df381e19d11d3
+%global source13_hash eb1e327c7cd6f3ad5e06cd48787a5394e488669888fe5a1603168a719b6eacc6ee88095af3b0f2456eca96f7a6fb0d6299ab667f4df0636900c0f4b0bd48be94
+%global source14_hash d61da72538a7d83ee902081aefc23f3addf2fd6e5fa7ebb207fdac16546d13602c50419682e842df8f36a899c2c0aba0aaf615bf64202135dd9f470f5391838d
+%global source15_hash fc28e1dc8614d836637350a20478a0e8a03121909cb42bfd1cf4caf8e7adc01a4ac3eba08e82c389c41a567cd00f191ecd8938ac40a0a226e2fbdac047ecb733
+%global source16_hash b3906f5edd65487c0c973d72543baee38cfab1d9f53cf260e90d60f82b29a85eeca3931aac40f32276769f86aab21a8cbcd68979d00fc570298806f5153e1056
+%global source17_hash dd0bf879c497f840d266f5c625e77b64d88757300a9c6e855676116e51626c24317b5a122f719d788411c997882c1a282fecdcd5c6207b2feb06f3558dc37871
+%global source18_hash 582f86d63318543ab785575ebc59be6ed2ce38fcb6c32d26f5eaf2a7e601ca76f8c4c66285187996d9840b1dde0dd8dd3b9de5801e6776b02d0e903de1d38d60
+%global source19_hash aee4c29230fd7c6f1e063ef5011f23bc1432dd772b930a4b0c8b033a4cbbbfcb4fd5df7b46e841db8b851052d8adb9de5dec571c743f7f5b8f13214fb81cb2c6
+%global source20_hash 75095bca5c801cd8a4931c778d133148dab6874d4c05d1e1d69cbac6427ddc1b5cff7343445dc9a0932d7d3269aa41b11777baaf32f3dd973785aedefaeb643a
+%global source21_hash 4fb033b386109509fff21b4c5f8bce1c069546d4aece30aed5e37fdbb38b4201f77dfbd617027c0c117d8bc5caf7c81fd53cbed661885963d10f43c57752883a
+%global source22_hash c15ba71a0c37a05df2d334bba94797d70c345af0d443dee2ca02be4e52bcd2e130b9a5d5c1904c1c72a8cf423d5d67b84c6ea7b8517380d3cc57700b81535cb8
+%global source23_hash a1af1af4e137425e0359c96fd9001fec6da403ad9478d5a9024648a200082d98cf9e93ccf310dd0257d8179d996b422b58d513ad42380316304aeadac6a0fc7b
+%global source24_hash 4103aa370bc8314433b5cc9242390340467591bc38e2f5b820f9d35a1951bb9fe9e384b1d3c64a0434b3c3dc87c42463a0af5d9ff872180bc2b7a08d4b40c080
+%global source25_hash c59cfa6957a21c5e74d9a15b7621536170137447111f9a88295e79aa7a29dcbb3d1f1f1367afd7243d2506b864a53df41b0e10419592a5e4e12af8e1e90216d4
+%global source26_hash 963ca793d2d6b0fd0c32d32a9db848b96fd5201868c6bc8d3b88ba62838e398a588e187c41434d328a8651a0f31640c9ce5f14ec4218b6025b6bc50cbc33f67f
+%global source27_hash 21d7faef59a965bacef6c00e9c656da6d9117716609073764c1f191db4f36efccace8506de9fde1777c8410689077ef2682bb149fcb78faac1b17b50548834fc
+%global source28_hash d617c13bc755330b3b4d62d2345ac135210c5c598cf88489b59b350864dc894da6d66f4c0911d051dc14cb3027b2d14653d50e8010946c40d4150c0cfcb511c0
+%global source29_hash 3bfadf293561df4efe0739acd28258a94a164019d6cdc30b36273aedb3840161d57c615b7eb2f83c9cee1f5e10be98841f883b8dbf610e011353404240f55eb6
+%global source30_hash 2014fc075fab46dc109a290838b9aa5e52bd0a33c370bf822ad6fb74a8d492b58b5ec1adcdf1d0532cf8a53ed3de3eec80a87e550508675e2bebc048f3e89bde
+%global source31_hash 13b1ea6059e50c1b13ce83b7723f88a78b349d442494898002bb0069efdb209055b3bdc04de73ba70fed1adc63ba87a4185526724624fd3cce15a23ddd2c4927
+%global source32_hash f5e09cb98551cf83dc00e188948ec63eadb6975b1ee22f1d3854825d65c9d382b40a0cb2128ee9e66d9d02a936686d1a6b0ad4773196a236b9bf089bfbc8296b
+%global source33_hash 63e4ee4ffc0576252d18e10e3c9241cc3454f9a48627045f48d24d2fb9401ad0de37487314776567017ac085782b5dcb311ba3990ecb8b74da08cb8d84d0222d
+%global source34_hash f82d96ea63af1f77da2a557a7fa0e5b400c2a6ce2ccdf02756e05c4f0a059ac384581723217f56970a68ad61929b537a5d4a9290af5679c91545333621db6883
+%global source35_hash bb48ca0f3adfdac7b0c7f31e7e7ebb53c0b61e5f8236957dd13433e0d1f9038a9d344a6b7e8fef238e23bca74ab946a466736e0620c6e187c2291e7739ff2316
+%global source36_hash 98692f781fead4dc292648153ca18a05d03f2c44174bce8b2f72e85fd1e98cb5ef0fb67c12f33dc982f1d04958873ea4e78f486fadb0c94544ecb66180ee52bf
+%global source37_hash 7e37c0c2e8443aedd6462251f603e2eef9cbacc45d980d79bf42cdc64b7ab0a5d81f50ae65251c17115265c45e641a5930de640099f04dc8112155f68ce9adf0
+%global source38_hash b7bee17f7a69ef44a06d2915b26ceea2e63d386be25029fdaf19b3626fba28d4005afe3ec7275d75e6007efa76eb486daff54dd36ae1d44e77ca8e7bfe448c59
+%global source39_hash 82a7ac9c378e2c034f3c7bf142d9978fa9f276dad8300f009b0ae9d1c45b519dd02e7729c9aa72d39f36f2cdc070684fa5e44784a281c38d26c29f77704365e6
+%global source40_hash 08426bab6c0627e945d620a338c6081a8a21d80567d4a4b686617d0d57c99b1e148f5e5c3406a0337ee4ad61bd795dca353c28b0f33d397c5b47515969fa5951
+%global source41_hash 4d19c663f73791712d9c24361d8e2a0c2faf25bdac15dcce48825f02468f6a798eff7e147f531368bcc8d7e2a1938202b5614e2434cd46866f359f8349564adc
+%global source42_hash 4d6fd00247c6c915956679674dd029048cb96ac3bc97606c0a299bbaff24a4cbb9440d557eb2945151720265ecb27bf15c638c003e1039dafee56471dfa03945
+%global source43_hash ede48ff67dacf107baf50be345b042a7b64c815442875281241b7de4c3be56ec40c969e40ec69669f31058bbbe9b27c51cae25938d93bec99a8c57dfb8e9cb75
+%global source44_hash 3b78fab41ed9af5a657987448a60b2005edb40f8ae7bb3b5efe7c5250230acc8a1b930a61efba2808ab78c3b07d0c76d49a7734b33a8e2a5c302caf752dbf5ce
+%global source45_hash f67ec5e21d7fbd843fb1d87893d835c1f98583ea5bdbcaf2455c6f7fbaddd7010daf02da7b2444273983432cd5c5f6efe4bded6116130f5301b0de3e26cf55f3
+%global source46_hash 511130814ed94c7f0829802a0c3e8e613b0c4aae50854f6e06779448f430e78c8712142fe04d3662b799a488d90944072847dd223b01b642de78c1f98649e79a
+%global source47_hash 1c439e351102ae3f768ae38404cc5d98403028fb6fa6088cd53eea40593ee03c10d20955f3fadef41f41af6d23f139ba356a9b06ed735644b67d3f42a076e0af
+%global source48_hash 16d4b14025e142be2c0d21509041d99ee2eb9b4b765abfa3102cf79759c79e79f43191f8ba1fcea3d8c7269bdeb6feb0a9efafb1f1ea195b58ed97a307386bdf
+%global source49_hash 0cc3548f9a640e3c6756298ff609bc5458f30fe096fb8557881356624dcfc6f81068af21731df3c5635381ef98c9b30c1f297213b8489e2bab8840c78f723ed8
+%global source50_hash b465117d5634dc4eeaefbc2c12a4d0fb892f4a27ed66057938701fe51e4dedfb5b7f28d796145d89a59b2667cf61c7175803f72e5970cf81244329130d173136
+%global source51_hash 7e7fa49106457f13aed11bcf80a1e38f000f5161e9a67bdbb174371db63a3953109f26da3cef8781d2c13abb4b86d5cb0c2b1b41e6f2cd3584512bed1a67cf6a
+%global source52_hash b8068fd9cac47601ba4c6ce1282d29f66e19bf059ebb4b2ee41d0c7137916b62410f75443989f77fe8394a7bfb5444f84f8080c0c7d97c32e87b891f58e5cf25
+%global source53_hash 92276a48a53e1994e46a6f4d26519178abe78e32d1ff2d0fa421b510e46603f13c22a011e7ff52be59ffcf3d2452482124fc9debd4b8fdabda2e196e6559fc64
+%global source54_hash f9bf7792ac09a6b5a69ae642e0becbcb1ed0c2eea3254b31da62bb9b7e3e161c24109e0bcacc8b89e3d03426710378f04e13a05be467115eaea2be028f8e5812
+%global source55_hash 6a348acfd0e0701954195210bc717666308743f5f282b9efb7a253ab860a0372ed383cc2c8811527eeb2ed72c46be95cfb9e133d156fe8b906b67ed5140437af
+%global source56_hash 686dbb33df2670af909a80863943a8870ecef128679ab679f3d90d1747042b752c9aea15660c962b0f02418233d4d152e64357d5b57884a2fc2371acb3d90a52
+%global source57_hash fe424a7db4be743168c4b1016fc25c95d33cf9d66767b39db0e79a5ba1bb667c76b9b5f10b23a08449362a3fef281d60f0b53e2b0f196846efe9f4765f3f08c6
+%global source58_hash 449cffd6dd9cb9e6b91434788c051b21b0bfc74d8203de777f08307c7cb883472c436a146fbc16b1c10e42389ce9a961a3c3b9d20fac9563bc7edad7dd6d5b4b
+%global source59_hash c6941d669a2dd43a90adea97b657d3df0c261976ca1916ee09b16c288462dec644bd84581a9cfafffaa8a9426a5ad7cd4c91f52a291652fae1d612b537a9f94c
+%global source60_hash a1ae1dd7e25701c8d2e703d3eec317d0e318226bb2500e2791ddc65cd9407f3a323b765b1681fa1ec662ae0aacda787c9dcffd178e8937103c638980db19e1b0
+%global source61_hash 9049df1119fe10f90e4ae230279ec2828d06aee13987977c77745e7752462d54c35cd1426c9745108bf10ec170cf4e9fedddadcb1740735b31555609c5480546
+%global source62_hash 5b5f0814c7d2e9e59ad3858e8a643043b9de85a4d199fba95f4b59605594bfd8cd735de587eafbe5d25c1c130bf761d174a78572e53e151066ed4ed5ef4eb22b
+%global source63_hash 6d0de896d9e743a32ad9b50210597554add05fb7353962f26be18c19ff303d15259af123282fc6894987558662f429b8e9e0fa355f201b3137f4f3963188c34d
+%global source64_hash f2454ca4af4802969873f387928f22e034febf0f135587e888d3ca1b0d1492df8ea1ec4138903192fc6a3000665dc90cfd95d38e8ca90e6b181485445c104ce4
+%global source65_hash 089d4453e755ba67abeb226d57e63fa688bb79e8862a5b4f280301137fab4df4cb897ffbff13597865fdd31f413d3dfb05158c7c9996fc2f502605bac99178ca
+%global source66_hash 6e592585309e31930c0a7a119b5a8a3f0c6f5f0f9b6f11731fd2daa14fc750de2159d4d20076a4b6941d37c5dfccdae1a9b641e733b4f3db1ac5501339e6f163
+%global source67_hash 0f279f63f59126dddbe6c9bcc99c1acbb38b0c2dcae1cf6922c0044ce763b2593988f23214bd054dc758bfd1e20caf2d6234501f9fc9c782ffdf935b79ea3b3b
+%global source68_hash 406e846ebe7ed721218368cd00a021edc41af41f1ccb5989925abad92d4cbf4d604abac8144945599530c85917d9404141052ba9891b778d1006b7d339499041
+%global source69_hash 6efbea453691fe2af7f436e79e1a486abf5dda14e2457ca3c1c2bda9c8461016d4436eee82a18b079a2491e1c4eb2f7dcbaeaf8fe8b8c7846e744f02da8e3b6f
+%global source70_hash 725c80a8133637d9caaf1fe28d99d6d1994a0c01693310ef971e373009fce34c3575cde714f9b8d1c15acbb1620000c59b01cf7c5a2322e8f029461b2d0dc5a7
+%global source71_hash 5819f47565f3c258c7c1b0c4a565ada7b7d0b29c47ef18fd005085f6da8ff0d53d75a7a6a8ae187d3eceec8c66ad879853e76d1424828f2ab96c2319ca4baf0d
+%global source72_hash c375a62dd5d220adfcb99ec42ecf8aeb75161d5c1ef542578a1911d3b3e343144716c26f518df448583ed4443242c1e66479f7c34cf074bd4d257d1a4e8c7358
+%global source73_hash 870712c7c61ba66e7a45e04e6e5ae4be8f6adf70d00dc26f7d18c2b12165bdf9f0a724987e4ae6995047ad79ca5081ac3091eb063e11edc45bf9af288385515b
+%global source74_hash 1a09e6dbde9c24d88e21fffe24ead7ee7567a2c7bccd2ef33e49eb1bc8eff2befb3828a87616872f63d1d8eeba21814cefc8bbe756b17f887558449aaccb1668
+%global source75_hash cf284387780c9b2f4a79ebdd781388525aeb2a03ad9d85048061a6c43728bb6f2f4fc840ebb499a44a3fdf612ff4a20f36c17a377f959be813b4ee4d12288fb7
+%global source76_hash 0465e183077f7daa57d2bbc5f1a76afa72770718d2dc969ebc3078b213738f5ae3919f3ebbee04ae54ff7b8ad6e35630fb22293b5cdac31ee5bf31680433ad15
+%global source77_hash 80ea19243537e769c49a3411e036c5811b19586fda3878894126a151af4ddff46a554db7bc07f488f692fe9efd0934149c8c94cde75b92c880bfcc28218ae5a1
+%global source78_hash 86e91b884be131df6b4da6441a9fbeb872e0f345eed49005ef74d58eb3ef8a2724da98cc810a51b58d45047d77545ac6b9512612b5946ba29d443dd14bbdb263
+%global source79_hash befa46f8ef7c4c89e18339ececbd53341aa50d6bfc8927001d17395cba42db0f0ca3414619c746c78e4f5f4f9cb1f6db813defc7b89299f5b29e9c0866852c82
+%global source80_hash 062e3017f077a7717ac74884ec17f1e776280dca3508cc62abfddbcd73c30150089e9fb3f2ffbac1624b1e709640dbbb229722bb41f2bb9c66aa41c4c9d889e1
+%global source81_hash e8bb2d40bb5817e68943e683f1440276cd68b976ac2d0c6c19b0168cac81a3b2e431aeca1922ecd613c9157d506453f6de43ac352ebc546683e1e8e2bfbcfafc
+%global source82_hash e9bba80cd6fcd7b1e7b0e46fe594b3e25986dac5fe39d329ed4b8e15bc6b542e033a392abcad4e0c67d5401066703a1a89658ebc612d2adcf846de81b34fb78f
+%global source83_hash e8e3ffc366be12ec5273c85a352a6c44ee22af072fdc9e63db390c0d3435e390c28ca83279a1a54f95af991890b7e47ba896612407ed605e229ec184cb1e5096
+%global source84_hash eb9fb0ce2891008b639530bdc906b37ba7090f9a4b73d911a308e353882f992da6ff27af124d191283d75d5371adbf749d7813703f4962ae4141b7830f998fb4
+%global source85_hash b89abcb1d2fadb4ee2eb14c7b0ec469a610bbcd8868c1162b964456d00d7aaab3118f91a3bd5da4c6c8ffda707e0edf24d158d075b42c929109b4a2f15f19f05
+%global source86_hash 034795568410f28105e50f9d0097ed3bba502bc495a88129a7fa61e57da111462ac519702012a4ab9b6c7fc01920b3d21e5c4747098b3f5941048aabc541801c
+%global source87_hash da9168bd66986e901cf61c9311c792d26496494ae00a83c429fcf489a59e7e657b967f3d666cfb1ecc60be2a9257e194e870954431045fb5e4a8539e9aaf26fd
+%global source88_hash 9138482d740e9ed83c1a18eb497d6b06cbd75ae11ff0f2663fe973311ca7dbace1758d89c23cfb3f7d44b728f2c113d19f3d82ff1274b44c175d38e7ccfe7bcb
+%global source89_hash 1961e563535b3f22124605bf9fbea028243aeb88a396b6bd3741ec4e1c43fa06bdfbd7c58564f5400e0541d1ee53193669646f2fea937123248d7129be393082
+%global source90_hash 9f381007c2526f51483d7c190cd7cf86cb399e95475841900ffa8f522d3da71f4f451b42562783d756e252e513ca1f9e9e8586517057a8f6b881cbbecb5c3987
+%global source91_hash c16142acf0c3f9e4f347c9ceff7a6c29557c0c2c4d2232ce9df146279b3cd4e1019e703479f426709a3feeb6ac46fb91f7dcee8cad35b19c83c9893661322f96
+%global source92_hash 5d5761fc11721b029cb12cf40e7e1f12ae791ebce9382cb6d120cefc11ae54c46e68d5724de25f294cdbda0221f99ce7d5940b54d4e7eca1a50e131b0c29647d
+%global source93_hash 5dc05f3b10714a44179340c7bda1af04b80b146b75a90fd91dc4a6ecd7f8b1dfcbbc59d34be1178252b923fa18f52f0fe80ef15fbc6c4e71a8073e648befc755
+%global source94_hash 366aa5059888426c74dc7686a8bb2c6d730331bf959d20ddc608f6934add247e3066c07fbf099d8849f9104a6c07e72fcea059ec00960b0e1074c30bac9e75a3
+%global source95_hash 54613a88ac48e09c608ce999adc88430e02b65580f443450eb1dbeb179064c49e1ddca990e5616b79ef4f6e6bd069362899e663bea37cf7bc443534756676b03
+%global source96_hash 6e39e34a7c293f503949da66f1d5ebc65ae0388dc56e87992e9fc4daff1a250196afe68150be14ee2ec3242393ce9e5ea7b681cba31b7ed1c2d58526f6506554
+%global source97_hash 550c21bcd8af04041f1fac11f2be3ae2a1f01265ad6bf31243569820c7b8d83f32ccd0cdbcc4d5a7a5905ae9aa0512a449a1b2d6923affceb344152e6c12d72d
+%global source98_hash d14dd76c4b1abd9ff7adbef7e4c3bc1f732156dc2d989787bed7382e0288c44dcde18ce05143e6af03ebe83c753bd2b6682cb4f56c73934ca4209a114eb9e3ef
+%global source99_hash ed723ffc17a98c8d4a8c960f56a3550ea74db84fdd06d26b08b5c46b12310fdb9b7b7719ffa25e8ddd21f17642f5f64f1c96327066a131c468cee8ff185cb199
+%global source100_hash 974795ca0b4a286077e38f4b3b120cf9fe243d450b87b8397adec2c5425b865cdfbe70b86b815d513edb6ae7051d9ad3003fcd6a15b5b02b624dcd4ee0534164
+%global source101_hash 9aa4407d1b317442dd76f762af5b673460bbbcec89e47835521688085183e00ba9dbb70dc9e86a95235bd9a32da701c846ceb2985dc70894ca8abe334428a532
+%global source102_hash d73410293db8858f8b76b2bbce50c6ecd4d08da328d5c9edbd6deb2f2e79c78d6cc0868147db2d0b8c1942bc3e178b8195712366f749b6eda216b25317cc7d66
+%global source103_hash 93eeebe83ed4315a637a3bc971ad90b9bea287f92e70bf0038c3363b9cf8590dd1cff3dbaea1a5debaf53771313957a8d531ce84a8926b2e02c41c346b3f6410
+%global source104_hash 8472bc96265ea7fd3be748f147238b6852079ba002f9c7548f5a5e8cb0f34a8155a799635ee5e31b22bb30554795a6fd08e62312b25ce83e727e10f6ccd13f37
+%global source105_hash 82df4a8fa154a09cd8231c21f3a450a089796306e8275b17291bfc903ef00b316a1ae0a4175637294ecbed0dd6eeffa7baf134d60352284aa07e0a1a0224c205
+%global source106_hash 1652260a3e946a8847ceb7f937893bad27a24737d9b3573466f7369ce9cdbf900af0ef6c7f0bf3033200664da736e8232c3fbf6db61bb7d51acec1010d13a3e0
+%global source107_hash 922ce1569fce889bc4608e9a5da4a45b7c3d2e80303ac36167efe6767c266844664de00384447e288da70383fe91261e5914394a6fdf8644349f785600271e5e
+%global source108_hash 695d16e6630efa10363d6c94f410cdf11947dd0c0e59987cdf01e0c699c53c994a702b3802b8830e38b6f5b0ce654af5710ef93b094fbc08954eb8d9bc5d2915
+%global source109_hash f2fce885e0aa65d42413ad7ba26a38ff787fed8c1ac5d6434e949e229d4f728a055a6a2ed80f36fe94f6fdf11cac3bafbd2a945cb9bf2ec0b436eacbe1ba58aa
+%global source110_hash 2f8f254fb1b41efbb210dd3e88bc6e26b1d554c6ba1b87227a5b956105229aa5bd7074bcad6e02bd914c122d4496cc4185b34f998fd3d8334c2b2a7ee1a7e953
+%global source111_hash 27ffcc0c826ddd1f434a47ea4302c4456835adcc3c66ca5329da9191e28ebe4eb5ae375fa7048fc539e57b9bd02c0903bd135a3c38ba87d52d8547d5960d4fb2
+%global source112_hash 6153417c5d2677a56adf031c5f2f27e4c2bf204c0acef1cc5cd49355370aa336814bad7d2be00e95d22bcf73b9b69105a255d15f29ed650511c0eccc3c9bda07
+%global source113_hash 8c507ec7719b92f2cf82527c7799b073ff2679cf820528b489eb7d8c83d28d098033760cf092bceb9ee7e28fec15eb580122c080b982dbb12e0e65176121e84c
+%global source114_hash d15e3a433549b27d590a7630f80a92872dd3e1693b45516dba488c19e7285a5c5f520fe052767e4665767f613c08e05d20e2696c0e57c2751ec3f29fa6ed85a0
+%global source115_hash 77d537cd007e44c7663906ab474bf52a259e1e6da4e539fb92c5779b83844ded4af4ffb9a052475ee6b932df6bd886d89de944dea468dcef105f6a58c32fb772
+%global source116_hash 5f78d2d61050d9ed84d56136fe59b4674f4e03a536015e3ebc3b9500dd8a08878164ce9fb1aa9ca9a1262a000149061f3fe22f10cfd68941316aa186b81fe923
+%global source117_hash 7b4ca312ea917329260eb0a19bd504ac2f3ddfb5f066806296b164fc541bfe26e6ed1c03ffac5b52af6b19fb4ba1e77b5228ac4b4db0c2ee8f2394fc0f888d09
+
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-humanities.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adtrees.r51618.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adtrees.doc.r51618.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref.r75257.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref.doc.r75257.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-lds.r25526.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-lds.doc.r25526.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-mouth.r25527.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-mouth.doc.r25527.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-parse.r22054.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-parse.doc.r22054.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/covington.r77216.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/covington.doc.r77216.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dramatist.r35866.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dramatist.doc.r35866.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvgloss.r79618.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvgloss.doc.r79618.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ecltree.r79618.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ecltree.doc.r79618.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edfnotes.r79618.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edfnotes.doc.r79618.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edmac.r72250.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edmac.doc.r72250.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledform.r38114.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledform.doc.r38114.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledmac.r79618.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledmac.doc.r79618.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex.r77682.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex.doc.r77682.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex-glossonly.r69914.tar.xz
-Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex-glossonly.doc.r69914.tar.xz
-Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e.r77682.tar.xz
-Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e.doc.r77682.tar.xz
-Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e-next.r72692.tar.xz
-Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e-next.doc.r72692.tar.xz
-Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmverse.r29803.tar.xz
-Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmverse.doc.r29803.tar.xz
-Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/interlinear.r72106.tar.xz
-Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/interlinear.doc.r72106.tar.xz
-Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jura.r15878.tar.xz
-Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jura.doc.r15878.tar.xz
-Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juraabbrev.r15878.tar.xz
-Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juraabbrev.doc.r15878.tar.xz
-Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juramisc.r79618.tar.xz
-Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juramisc.doc.r79618.tar.xz
-Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jurarsp.r15878.tar.xz
-Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jurarsp.doc.r15878.tar.xz
-Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/langnames.r69101.tar.xz
-Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/langnames.doc.r69101.tar.xz
-Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ledmac.r41811.tar.xz
-Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ledmac.doc.r41811.tar.xz
-Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexikon.r79618.tar.xz
-Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexikon.doc.r79618.tar.xz
-Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexref.r36026.tar.xz
-Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexref.doc.r36026.tar.xz
-Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ling-macros.r42268.tar.xz
-Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ling-macros.doc.r42268.tar.xz
-Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguex.r79618.tar.xz
-Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguex.doc.r79618.tar.xz
-Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguistix.r79010.tar.xz
-Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguistix.doc.r79010.tar.xz
-Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturg.r79618.tar.xz
-Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturg.doc.r79618.tar.xz
-Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturgy-cw.r76053.tar.xz
-Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturgy-cw.doc.r76053.tar.xz
-Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metrix.r76924.tar.xz
-Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metrix.doc.r76924.tar.xz
-Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nnext.r56575.tar.xz
-Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nnext.doc.r56575.tar.xz
-Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/opbible.r79618.tar.xz
-Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/opbible.doc.r79618.tar.xz
-Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.r79618.tar.xz
-Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.doc.r79618.tar.xz
-Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parrun.r15878.tar.xz
-Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parrun.doc.r15878.tar.xz
-Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/phonrule.r43963.tar.xz
-Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/phonrule.doc.r43963.tar.xz
-Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plari.r15878.tar.xz
-Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plari.doc.r15878.tar.xz
-Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/play.r79618.tar.xz
-Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/play.doc.r79618.tar.xz
-Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poemscol.r56082.tar.xz
-Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poemscol.doc.r56082.tar.xz
-Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetry.r77682.tar.xz
-Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetry.doc.r77682.tar.xz
-Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetrytex.r76924.tar.xz
-Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetrytex.doc.r76924.tar.xz
-Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qobitree.r79618.tar.xz
-Source89:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qobitree.doc.r79618.tar.xz
-Source90:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qtree.r15878.tar.xz
-Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qtree.doc.r15878.tar.xz
-Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/reledmac.r79618.tar.xz
-Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/reledmac.doc.r79618.tar.xz
-Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rrgtrees.r79618.tar.xz
-Source95:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rrgtrees.doc.r79618.tar.xz
-Source96:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rtklage.r15878.tar.xz
-Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rtklage.doc.r15878.tar.xz
-Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay.r27223.tar.xz
-Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay.doc.r27223.tar.xz
-Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay-pkg.r44965.tar.xz
-Source101:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay-pkg.doc.r44965.tar.xz
-Source102:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sides.r76924.tar.xz
-Source103:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sides.doc.r76924.tar.xz
-Source104:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stage.r62929.tar.xz
-Source105:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stage.doc.r62929.tar.xz
-Source106:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/textglos.r30788.tar.xz
-Source107:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/textglos.doc.r30788.tar.xz
-Source108:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/thalie.r65249.tar.xz
-Source109:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/thalie.doc.r65249.tar.xz
-Source110:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/theatre.r79121.tar.xz
-Source111:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/theatre.doc.r79121.tar.xz
-Source112:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tree-dvips.r21751.tar.xz
-Source113:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tree-dvips.doc.r21751.tar.xz
-Source114:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/verse.r79919.tar.xz
-Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/verse.doc.r79919.tar.xz
-Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xyling.r15878.tar.xz
-Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xyling.doc.r15878.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adtrees.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adtrees.doc.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref.doc.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-lds.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-lds.doc.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-mouth.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-mouth.doc.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-parse.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bibleref-parse.doc.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/covington.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/covington.doc.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dramatist.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dramatist.doc.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvgloss.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvgloss.doc.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ecltree.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ecltree.doc.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edfnotes.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edfnotes.doc.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edmac.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/edmac.doc.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledform.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledform.doc.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledmac.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eledmac.doc.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex.doc.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex-glossonly.tar.xz
+Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expex-glossonly.doc.tar.xz
+Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e.tar.xz
+Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e.doc.tar.xz
+Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e-next.tar.xz
+Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gb4e-next.doc.tar.xz
+Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmverse.tar.xz
+Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmverse.doc.tar.xz
+Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/interlinear.tar.xz
+Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/interlinear.doc.tar.xz
+Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jura.tar.xz
+Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jura.doc.tar.xz
+Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juraabbrev.tar.xz
+Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juraabbrev.doc.tar.xz
+Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juramisc.tar.xz
+Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/juramisc.doc.tar.xz
+Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jurarsp.tar.xz
+Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jurarsp.doc.tar.xz
+Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/langnames.tar.xz
+Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/langnames.doc.tar.xz
+Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ledmac.tar.xz
+Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ledmac.doc.tar.xz
+Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexikon.tar.xz
+Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexikon.doc.tar.xz
+Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexref.tar.xz
+Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lexref.doc.tar.xz
+Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ling-macros.tar.xz
+Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ling-macros.doc.tar.xz
+Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguex.tar.xz
+Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguex.doc.tar.xz
+Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguistix.tar.xz
+Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/linguistix.doc.tar.xz
+Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturg.tar.xz
+Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturg.doc.tar.xz
+Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturgy-cw.tar.xz
+Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liturgy-cw.doc.tar.xz
+Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metrix.tar.xz
+Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metrix.doc.tar.xz
+Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nnext.tar.xz
+Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nnext.doc.tar.xz
+Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/opbible.tar.xz
+Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/opbible.doc.tar.xz
+Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.tar.xz
+Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.doc.tar.xz
+Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parrun.tar.xz
+Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parrun.doc.tar.xz
+Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/phonrule.tar.xz
+Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/phonrule.doc.tar.xz
+Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plari.tar.xz
+Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plari.doc.tar.xz
+Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/play.tar.xz
+Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/play.doc.tar.xz
+Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poemscol.tar.xz
+Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poemscol.doc.tar.xz
+Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetry.tar.xz
+Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetry.doc.tar.xz
+Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetrytex.tar.xz
+Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/poetrytex.doc.tar.xz
+Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qobitree.tar.xz
+Source89:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qobitree.doc.tar.xz
+Source90:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qtree.tar.xz
+Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qtree.doc.tar.xz
+Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/reledmac.tar.xz
+Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/reledmac.doc.tar.xz
+Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rrgtrees.tar.xz
+Source95:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rrgtrees.doc.tar.xz
+Source96:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rtklage.tar.xz
+Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rtklage.doc.tar.xz
+Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay.tar.xz
+Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay.doc.tar.xz
+Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay-pkg.tar.xz
+Source101:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/screenplay-pkg.doc.tar.xz
+Source102:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sides.tar.xz
+Source103:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sides.doc.tar.xz
+Source104:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stage.tar.xz
+Source105:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stage.doc.tar.xz
+Source106:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/textglos.tar.xz
+Source107:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/textglos.doc.tar.xz
+Source108:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/thalie.tar.xz
+Source109:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/thalie.doc.tar.xz
+Source110:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/theatre.tar.xz
+Source111:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/theatre.doc.tar.xz
+Source112:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tree-dvips.tar.xz
+Source113:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tree-dvips.doc.tar.xz
+Source114:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/verse.tar.xz
+Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/verse.doc.tar.xz
+Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xyling.tar.xz
+Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xyling.doc.tar.xz
 
 # Patches
 Patch0:         texlive-rtklage-scrpage2-obsolete-fixes.patch
@@ -1180,7 +1297,7 @@ and hence they can be modified without unwanted side effects. The macros are
 based on the xy-pic package.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; if test ${#%{source0_hash}} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Extract license files
 tar -xf %{SOURCE1}
