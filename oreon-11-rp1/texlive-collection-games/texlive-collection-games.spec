@@ -1,4 +1,4 @@
-%global source0_hash 4eb5f854b5d91a141f91bf19c4639bb2114cad5ece7f43425fb8f46d337cacb4
+%global source0_hash 76079fa4ba5089f72df8facaec979b3c943efa5f23405ca2596d79027c6764fb819b825c0a226cd009fb82c4b935adb78d4dea25dc5895d77064ba21f8c04c29
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,46 +14,46 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-games.r76381.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-games.r80072.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bartel-chess-fonts.r20619.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bartel-chess-fonts.doc.r20619.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess.r20582.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess.doc.r20582.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess-problem-diagrams.r74591.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess-problem-diagrams.doc.r74591.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessboard.r77677.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessboard.doc.r77677.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessfss.r77677.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessfss.doc.r77677.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chinesechess.r76924.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chinesechess.doc.r76924.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crossword.r73579.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crossword.doc.r73579.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crosswrd.r16896.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crosswrd.doc.r16896.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bartel-chess-fonts.r78101.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bartel-chess-fonts.doc.r78101.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess.r78101.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess.doc.r78101.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess-problem-diagrams.r78101.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chess-problem-diagrams.doc.r78101.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessboard.r79618.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessboard.doc.r79618.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessfss.r79618.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chessfss.doc.r79618.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chinesechess.r78101.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chinesechess.doc.r78101.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crossword.r79069.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crossword.doc.r79069.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crosswrd.r79618.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/crosswrd.doc.r79618.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/customdice.r64089.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/customdice.doc.r64089.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/egameps.r15878.tar.xz
 Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/egameps.doc.r15878.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eigo.r76251.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eigo.doc.r76251.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eigo.r78101.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eigo.doc.r78101.tar.xz
 Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gamebook.r24714.tar.xz
 Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gamebook.doc.r24714.tar.xz
 Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gamebooklib.r67772.tar.xz
 Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gamebooklib.doc.r67772.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/go.r28628.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/go.doc.r28628.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/go.r78101.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/go.doc.r78101.tar.xz
 Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hanoi.r25019.tar.xz
 Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/havannah.r36348.tar.xz
 Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/havannah.doc.r36348.tar.xz
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hexboard.r62102.tar.xz
 Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hexboard.doc.r62102.tar.xz
-Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hexgame.r15878.tar.xz
-Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hexgame.doc.r15878.tar.xz
+Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hexgame.r79618.tar.xz
+Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hexgame.doc.r79618.tar.xz
 Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hmtrump.r54512.tar.xz
 Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hmtrump.doc.r54512.tar.xz
 Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/horoscop.r56021.tar.xz
@@ -64,16 +64,16 @@ Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ji
 Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jigsaw.doc.r71923.tar.xz
 Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/labyrinth.r33454.tar.xz
 Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/labyrinth.doc.r33454.tar.xz
-Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/logicpuzzle.r34491.tar.xz
-Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/logicpuzzle.doc.r34491.tar.xz
+Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/logicpuzzle.r78101.tar.xz
+Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/logicpuzzle.doc.r78101.tar.xz
 Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mahjong.r76924.tar.xz
 Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mahjong.doc.r76924.tar.xz
 Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mathador.r76924.tar.xz
 Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mathador.doc.r76924.tar.xz
-Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maze.r76924.tar.xz
-Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maze.doc.r76924.tar.xz
-Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multi-sudoku.r75941.tar.xz
-Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multi-sudoku.doc.r75941.tar.xz
+Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maze.r79180.tar.xz
+Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/maze.doc.r79180.tar.xz
+Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multi-sudoku.r78101.tar.xz
+Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multi-sudoku.doc.r78101.tar.xz
 Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musikui.r47472.tar.xz
 Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musikui.doc.r47472.tar.xz
 Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nimsticks.r64118.tar.xz
@@ -86,12 +86,12 @@ Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ot
 Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/othelloboard.doc.r23714.tar.xz
 Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pas-crosswords.r32313.tar.xz
 Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pas-crosswords.doc.r32313.tar.xz
-Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf-go.r74578.tar.xz
-Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf-go.doc.r74578.tar.xz
-Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/playcards.r67342.tar.xz
-Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/playcards.doc.r67342.tar.xz
-Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psgo.r15878.tar.xz
-Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psgo.doc.r15878.tar.xz
+Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf-go.r78101.tar.xz
+Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf-go.doc.r78101.tar.xz
+Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/playcards.r79618.tar.xz
+Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/playcards.doc.r79618.tar.xz
+Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psgo.r79618.tar.xz
+Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psgo.doc.r79618.tar.xz
 Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quizztex.r75977.tar.xz
 Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quizztex.doc.r75977.tar.xz
 Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/realtranspose.r76924.tar.xz
@@ -100,24 +100,24 @@ Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/re
 Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/reverxii.doc.r63753.tar.xz
 Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rouequestions.r67670.tar.xz
 Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rouequestions.doc.r67670.tar.xz
-Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rpgicons.r77702.tar.xz
-Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rpgicons.doc.r77702.tar.xz
-Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/schwalbe-chess.r73582.tar.xz
-Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/schwalbe-chess.doc.r73582.tar.xz
+Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rpgicons.r78857.tar.xz
+Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/rpgicons.doc.r78857.tar.xz
+Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/schwalbe-chess.r78101.tar.xz
+Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/schwalbe-chess.doc.r78101.tar.xz
 Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/scrabble.r77114.tar.xz
 Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/scrabble.doc.r77114.tar.xz
 Source89:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sgame.r30959.tar.xz
 Source90:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sgame.doc.r30959.tar.xz
-Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skak.r77677.tar.xz
-Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skak.doc.r77677.tar.xz
-Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skaknew.r20031.tar.xz
-Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skaknew.doc.r20031.tar.xz
+Source91:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skak.r79618.tar.xz
+Source92:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skak.doc.r79618.tar.xz
+Source93:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skaknew.r79618.tar.xz
+Source94:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/skaknew.doc.r79618.tar.xz
 Source95:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/soup.r50815.tar.xz
 Source96:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/soup.doc.r50815.tar.xz
-Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudoku.r67189.tar.xz
-Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudoku.doc.r67189.tar.xz
-Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudokubundle.r15878.tar.xz
-Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudokubundle.doc.r15878.tar.xz
+Source97:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudoku.r79618.tar.xz
+Source98:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudoku.doc.r79618.tar.xz
+Source99:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudokubundle.r79618.tar.xz
+Source100:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sudokubundle.doc.r79618.tar.xz
 Source101:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tangramtikz.r75123.tar.xz
 Source102:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tangramtikz.doc.r75123.tar.xz
 Source103:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/thematicpuzzle.r75984.tar.xz
@@ -132,14 +132,14 @@ Source111:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t
 Source112:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/twoxtwogame.doc.r70423.tar.xz
 Source113:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wargame.r72903.tar.xz
 Source114:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wargame.doc.r72903.tar.xz
-Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/weiqi.r76924.tar.xz
-Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/weiqi.doc.r76924.tar.xz
-Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wordle.r72059.tar.xz
-Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wordle.doc.r72059.tar.xz
-Source119:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xq.r35211.tar.xz
-Source120:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xq.doc.r35211.tar.xz
-Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xskak.r77677.tar.xz
-Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xskak.doc.r77677.tar.xz
+Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/weiqi.r78101.tar.xz
+Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/weiqi.doc.r78101.tar.xz
+Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wordle.r79377.tar.xz
+Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/wordle.doc.r79377.tar.xz
+Source119:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xq.r78101.tar.xz
+Source120:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xq.doc.r78101.tar.xz
+Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xskak.r79618.tar.xz
+Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xskak.doc.r79618.tar.xz
 
 # AppStream metadata for font components
 Source123:        skaknew.metainfo.xml

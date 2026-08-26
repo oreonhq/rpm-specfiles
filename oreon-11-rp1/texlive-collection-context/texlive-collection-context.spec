@@ -1,4 +1,4 @@
-%global source0_hash e7a6af40e0222b8321dc2d9f5a4b4d13c3a515a74cf19ea18e93ab351b05f7b0
+%global source0_hash 8eed418d43e1f14d4bc867313bbfd5e2acaf6afbed4f7e376666db21e2bff2598190a00caee4b34998f86ccc8511c8ef9ea9b13a1c616ba87b0dd96ce6c9e982
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -35,28 +35,28 @@ Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/co
 Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-gnuplot.doc.r75301.tar.xz
 Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-handlecsv.r76721.tar.xz
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-handlecsv.doc.r76721.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-letter.r60787.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-letter.doc.r60787.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-letter.r77841.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-letter.doc.r77841.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-mathsets.r47085.tar.xz
 Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-mathsets.doc.r47085.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-notes-zh-cn.r76286.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-notes-zh-cn.doc.r76286.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-notes-zh-cn.r78640.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-notes-zh-cn.doc.r78640.tar.xz
 Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-pocketdiary.r73164.tar.xz
 Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-pocketdiary.doc.r73164.tar.xz
 Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-simpleslides.r67070.tar.xz
 Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-simpleslides.doc.r67070.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-squares.r70128.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-squares.doc.r70128.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-sudoku.r76924.tar.xz
-Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-sudoku.doc.r76924.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-squares.r77881.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-squares.doc.r77881.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-sudoku.r77880.tar.xz
+Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-sudoku.doc.r77880.tar.xz
 Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-transliterator.r61127.tar.xz
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-transliterator.doc.r61127.tar.xz
 Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-typescripts.r76524.tar.xz
 Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-typescripts.doc.r76524.tar.xz
 Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-vim.r62071.tar.xz
 Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-vim.doc.r62071.tar.xz
-Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-visualcounter.r47085.tar.xz
-Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-visualcounter.doc.r47085.tar.xz
+Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-visualcounter.r79994.tar.xz
+Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/context-visualcounter.doc.r79994.tar.xz
 Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/jmn.r45751.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base

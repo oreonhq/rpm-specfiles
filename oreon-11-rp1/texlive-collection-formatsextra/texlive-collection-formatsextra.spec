@@ -1,4 +1,4 @@
-%global source0_hash 69dc1da45c044aa6de1642235c56902b9d7458a40aba0f750c14cd2e61fa7ae7
+%global source0_hash 6844080cc444109ce84e69882a15f7738c6c6acabcc3373267bbd3ae55f4daf2ebb17fa53740f327a48708039eaafcffa0dad89a8b5fe996ced38c92dc5c54fe
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -22,8 +22,8 @@ Source1:        texlive-licenses.tar.xz
 Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.r21933.tar.xz
 Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.doc.r21933.tar.xz
 Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lambda.r45756.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.r71991.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.doc.r71991.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.r79618.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.doc.r79618.tar.xz
 Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.r33046.tar.xz
 Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.doc.r33046.tar.xz
 Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.r45777.tar.xz

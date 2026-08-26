@@ -1,4 +1,4 @@
-%global source0_hash 2f607e1f1ad0b3f0a6b43dbef392a1a2f500e041fbea3dae6bf4de696444e128
+%global source0_hash c375a62dd5d220adfcb99ec42ecf8aeb75161d5c1ef542578a1911d3b3e343144716c26f518df448583ed4443242c1e66479f7c34cf074bd4d257d1a4e8c7358
 
 Name:           texlive-parallel
 Epoch:          12
@@ -7,7 +7,7 @@ Release:        1%{?dist}
 Summary:        Typeset parallel texts in two columns
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.r77682.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.r79618.tar.xz
 BuildArch:      noarch
 BuildRequires:  texlive-base
 Requires:       texlive-base

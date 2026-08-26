@@ -1,4 +1,4 @@
-%global source0_hash 3b267df17594e5c26f2a9a75051f1cf235e39dc848837bee302f930304b73954
+%global source0_hash 21e3f7cec40bed8bfa215c2f455b565cc69ae32e4a8cdb8e699b854170bdee00d21fb80c2f6f3a8723d9925de53af6728ebcace4b4c2905e6f432e669f54851a
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,7 +14,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-binextra.r77772.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-binextra.r80064.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
@@ -23,8 +23,8 @@ Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cta
 Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctan_chk.doc.r36304.tar.xz
 Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.r76790.tar.xz
 Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.doc.r76790.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.r77772.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.doc.r77772.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.r78653.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.doc.r78653.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-a2ping

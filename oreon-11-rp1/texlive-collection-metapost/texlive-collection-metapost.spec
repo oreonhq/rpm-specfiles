@@ -1,4 +1,4 @@
-%global source0_hash 66cb52d01d91bd18f010066a7beff2700f1b0f7e29b516cc87ebd4b5b36ecf8f
+%global source0_hash 039445d3317551f8cc0f1bf1ec9b8aa9e8510465020a400e931ccbeffaaaaa88e28a755c437266f6836293cbca02b443a5bbd646a7f558cf43e5384705645ddf
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,7 +14,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-metapost.r73627.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-metapost.r78867.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
@@ -25,8 +25,8 @@ Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bbc
 Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bbcard.doc.r19440.tar.xz
 Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/blockdraw_mp.r15878.tar.xz
 Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/blockdraw_mp.doc.r15878.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bpolynomial.r15878.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bpolynomial.doc.r15878.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bpolynomial.r79618.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bpolynomial.doc.r79618.tar.xz
 Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cmarrows.r24378.tar.xz
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cmarrows.doc.r24378.tar.xz
 Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/drv.r29349.tar.xz
@@ -37,46 +37,46 @@ Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/em
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/emp.doc.r23483.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/epsincl.r29349.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/epsincl.doc.r29349.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expressg.r29349.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expressg.doc.r29349.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expressg.r79618.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/expressg.doc.r79618.tar.xz
 Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/exteps.r19859.tar.xz
 Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/exteps.doc.r19859.tar.xz
 Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/featpost.r35346.tar.xz
 Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/featpost.doc.r35346.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmf.r17259.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmf.doc.r17259.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmp-auto.r30223.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmp-auto.doc.r30223.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fiziko.r61944.tar.xz
-Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fiziko.doc.r61944.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmf.r77682.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmf.doc.r77682.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmp-auto.r77682.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feynmp-auto.doc.r77682.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fiziko.r78681.tar.xz
+Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fiziko.doc.r78681.tar.xz
 Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/garrigues.r15878.tar.xz
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/garrigues.doc.r15878.tar.xz
-Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmp.r21691.tar.xz
-Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmp.doc.r21691.tar.xz
+Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmp.r77682.tar.xz
+Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gmp.doc.r77682.tar.xz
 Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hatching.r23818.tar.xz
 Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hatching.doc.r23818.tar.xz
 Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hershey-mp.r70885.tar.xz
 Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hershey-mp.doc.r70885.tar.xz
-Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huffman.r67071.tar.xz
-Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huffman.doc.r67071.tar.xz
+Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huffman.r79290.tar.xz
+Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/huffman.doc.r79290.tar.xz
 Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexmp.r55643.tar.xz
 Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexmp.doc.r55643.tar.xz
-Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mcf2graph.r76506.tar.xz
-Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mcf2graph.doc.r76506.tar.xz
-Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metago.r15878.tar.xz
-Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metago.doc.r15878.tar.xz
+Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mcf2graph.r79502.tar.xz
+Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mcf2graph.doc.r79502.tar.xz
+Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metago.r79618.tar.xz
+Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metago.doc.r79618.tar.xz
 Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metaobj.r15878.tar.xz
 Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metaobj.doc.r15878.tar.xz
-Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metaplot.r15878.tar.xz
-Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metaplot.doc.r15878.tar.xz
+Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metaplot.r79618.tar.xz
+Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metaplot.doc.r79618.tar.xz
 Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metapost-colorbrewer.r48753.tar.xz
 Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metapost-colorbrewer.doc.r48753.tar.xz
 Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metauml.r49923.tar.xz
 Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/metauml.doc.r49923.tar.xz
 Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mfpic.r28444.tar.xz
 Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mfpic.doc.r28444.tar.xz
-Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mfpic4ode.r75712.tar.xz
-Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mfpic4ode.doc.r75712.tar.xz
+Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mfpic4ode.r79618.tar.xz
+Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mfpic4ode.doc.r79618.tar.xz
 Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/minim-hatching.r70885.tar.xz
 Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/minim-hatching.doc.r70885.tar.xz
 Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mp-geom2d.r77019.tar.xz
@@ -89,10 +89,10 @@ Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mp
 Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mparrows.doc.r39729.tar.xz
 Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpattern.r15878.tar.xz
 Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpattern.doc.r15878.tar.xz
-Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpchess.r73149.tar.xz
-Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpchess.doc.r73149.tar.xz
-Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpcolornames.r23252.tar.xz
-Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpcolornames.doc.r23252.tar.xz
+Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpchess.r78101.tar.xz
+Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpchess.doc.r78101.tar.xz
+Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpcolornames.r79618.tar.xz
+Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpcolornames.doc.r79618.tar.xz
 Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpgraphics.r29776.tar.xz
 Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpgraphics.doc.r29776.tar.xz
 Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpkiviat.r75712.tar.xz
@@ -101,8 +101,8 @@ Source80:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mp
 Source81:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mptrees.doc.r70887.tar.xz
 Source82:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/piechartmp.r19440.tar.xz
 Source83:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/piechartmp.doc.r19440.tar.xz
-Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/repere.r66998.tar.xz
-Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/repere.doc.r66998.tar.xz
+Source84:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/repere.r79906.tar.xz
+Source85:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/repere.doc.r79906.tar.xz
 Source86:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/roex.r45818.tar.xz
 Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/roundrect.r39796.tar.xz
 Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/roundrect.doc.r39796.tar.xz

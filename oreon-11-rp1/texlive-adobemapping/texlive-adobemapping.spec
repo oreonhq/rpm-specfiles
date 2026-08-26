@@ -1,4 +1,4 @@
-%global source0_hash a387389a11bd1220be3016ef74342bb9a4e1e888cee21379f3aadac786da1da1
+%global source0_hash 363f7fd337e5a34737608a2bc37521bb526ce726f5c9b5b4d08416e534448306002bc7af1be3f5e6fefcaba16ffc2260c4dea8a486d44dbccad577fb04d6da5b
 %global source1_hash none
 
 %global _texdir /usr/share/texlive

@@ -1,5 +1,5 @@
-%global source0_hash 83dc49aa4c113c8a0569e780616126252780fb134e1b409281a0445cce1a3b35
-%global source1_hash 2111baa763d9406fb709ec3418ddc9dfc62b427ea51bad4cdbee6723d9adbb81
+%global source0_hash f363ae3399fa129cdb34825c81df24458468aa3a3bc629223c12e0b13894e5662d1d3774a48049f64a5a55edeb957b7a5da5cf033da9fbd4c733467dcdcacb62
+%global source1_hash c758b54d0c97c715c0ce2dff07ab7c85144bf782c515b553414505811ce0413f979a34201df5b6b7cc4e9c0a7a0d0e7cb1b7e742a8ebf4174cdacfd2f1ed84d3
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Bidi functions for LuaTeX
 License:        LPPL-1.3c AND MIT
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.r78654.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.doc.r78654.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.r79256.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.doc.r79256.tar.xz
 BuildRequires:  tar
 Provides:       texlive-luabidi-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-luabidi-doc <= 11:%{version}

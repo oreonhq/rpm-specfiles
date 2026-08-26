@@ -1,4 +1,4 @@
-%global source0_hash 48d63489bb223880d5dd142090e36db0d43439e62728342f9d78c80102134602
+%global source0_hash f381a48cd6aa89fef6ec477a781355ca4a75bc5a143a34edb93e0bb01eed68c959fd4c5cf45588b1cb032fef01e238c72ac49cd0e3bb06ef36c451f155c932ca
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,7 +14,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langcyrillic.r69727.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langcyrillic.r78950.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
@@ -29,45 +29,45 @@ Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bab
 Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-serbian.doc.r64571.tar.xz
 Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-serbianc.r64588.tar.xz
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-serbianc.doc.r64588.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-ukrainian.r56674.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-ukrainian.doc.r56674.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-ukrainian.r79184.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-ukrainian.doc.r79184.tar.xz
 Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/churchslavonic.r67474.tar.xz
 Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/churchslavonic.doc.r67474.tar.xz
 Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cmcyr.r68681.tar.xz
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cmcyr.doc.r68681.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cyrplain.r45692.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cyrplain.r79618.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/disser.r43417.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/disser.doc.r43417.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eskd.r15878.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eskd.doc.r15878.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eskd.r79618.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eskd.doc.r79618.tar.xz
 Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eskdx.r29235.tar.xz
 Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/eskdx.doc.r29235.tar.xz
 Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gost.r76790.tar.xz
 Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gost.doc.r76790.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-belarusian.r73410.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-bulgarian.r73410.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-churchslavonic.r73410.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-mongolian.r74203.tar.xz
-Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-russian.r73410.tar.xz
-Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-serbian.r73410.tar.xz
-Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-ukrainian.r73410.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-belarusian.r78069.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-bulgarian.r78069.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-churchslavonic.r78069.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-mongolian.r78069.tar.xz
+Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-russian.r78069.tar.xz
+Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-serbian.r78069.tar.xz
+Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-ukrainian.r78069.tar.xz
 Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lcyw.r15878.tar.xz
 Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lcyw.doc.r15878.tar.xz
-Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lh.r15878.tar.xz
-Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lh.doc.r15878.tar.xz
-Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lhcyr.r77050.tar.xz
+Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lh.r77838.tar.xz
+Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lh.doc.r77838.tar.xz
+Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lhcyr.r77838.tar.xz
 Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-bulgarian.r77050.tar.xz
 Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-bulgarian.doc.r77050.tar.xz
-Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-mongol.r15878.tar.xz
-Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-mongol.doc.r15878.tar.xz
-Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-russian.r55643.tar.xz
-Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-russian.doc.r55643.tar.xz
+Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-mongol.r79461.tar.xz
+Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-mongol.doc.r79461.tar.xz
+Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-russian.r79461.tar.xz
+Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-russian.doc.r79461.tar.xz
 Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-ukr.r55643.tar.xz
 Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-ukr.doc.r55643.tar.xz
 Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnhyphn.r69727.tar.xz
 Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnhyphn.doc.r69727.tar.xz
-Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mongolian-babel.r15878.tar.xz
-Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mongolian-babel.doc.r15878.tar.xz
+Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mongolian-babel.r79618.tar.xz
+Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mongolian-babel.doc.r79618.tar.xz
 Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/montex.r29349.tar.xz
 Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/montex.doc.r29349.tar.xz
 Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mpman-ru.r15878.tar.xz
@@ -76,7 +76,7 @@ Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nu
 Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/numnameru.doc.r44895.tar.xz
 Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pst-eucl-translation-bg.r19296.tar.xz
 Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pst-eucl-translation-bg.doc.r19296.tar.xz
-Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ruhyphen.r21081.tar.xz
+Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ruhyphen.r79618.tar.xz
 Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/russ.r25209.tar.xz
 Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/russ.doc.r25209.tar.xz
 Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/serbian-apostrophe.r23799.tar.xz
@@ -87,14 +87,14 @@ Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/se
 Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/serbian-def-cyr.doc.r23734.tar.xz
 Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/serbian-lig.r53127.tar.xz
 Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/serbian-lig.doc.r53127.tar.xz
-Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t2.r47870.tar.xz
-Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t2.doc.r47870.tar.xz
+Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t2.r79618.tar.xz
+Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t2.doc.r79618.tar.xz
 Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-ru.r58426.tar.xz
 Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-ru.doc.r58426.tar.xz
 Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-sr.r54594.tar.xz
 Source75:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-sr.doc.r54594.tar.xz
-Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ukrhyph.r21081.tar.xz
-Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ukrhyph.doc.r21081.tar.xz
+Source76:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ukrhyph.r79618.tar.xz
+Source77:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ukrhyph.doc.r79618.tar.xz
 Source78:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecyrmongolian.r53160.tar.xz
 Source79:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecyrmongolian.doc.r53160.tar.xz
 BuildRequires:  texlive-base

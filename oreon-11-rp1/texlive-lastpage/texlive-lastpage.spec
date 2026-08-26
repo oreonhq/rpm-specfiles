@@ -1,5 +1,5 @@
-%global source0_hash 6e968d2b8fcb2d82ef404a54f39a3bd43714f45cb14986a16f726c39a17af0e4
-%global source1_hash f6452b5d6ccb03501476e4004e616147b8e3f0451741d94a38cd2390a3bd72a8
+%global source0_hash 11dabad848e1d7412f475893a0d615c207bb7fa280e09bf9325dd2aa942a5a15a0b19045a0cef9b3ea37e234fb3cf0b585c35f7c775634d143e7aba48cf17ec4
+%global source1_hash 4913af89c0b4e744c8f0031f69ad272ae995d8122e12c1cc41b66d7e81afbfd16cec7d94fa17c2eb5c0bbb3fe93f2ca0ab0de2ace31e660c4748325435e857e4
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
 Name:           texlive-lastpage

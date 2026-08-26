@@ -1,4 +1,4 @@
-%global source0_hash a3423afcd442b0891c35182cd7606fbcb999866f1dbf5755662825033d92fd09
+%global source0_hash 8d69c4697c25bce7949926b383cb49177a6e47f89198c55cafbeb63b911c1471de66e964dfc6d23eef32c49faece37bfba83e88bf0b4f5216edec8bb2f34e514
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,7 +14,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langchinese.r77432.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langchinese.r79450.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
@@ -31,31 +31,31 @@ Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/as
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/asymptote-manual-zh-cn.doc.r15878.tar.xz
 Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cns.r45677.tar.xz
 Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cns.doc.r45677.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctex.r77677.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctex.doc.r77677.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctex.r79993.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctex.doc.r79993.tar.xz
 Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctex-faq.r15878.tar.xz
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctex-faq.doc.r15878.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/exam-zh.r76834.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/exam-zh.doc.r76834.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/exam-zh.r79883.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/exam-zh.doc.r79883.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fandol.r37889.tar.xz
 Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fandol.doc.r37889.tar.xz
 Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fduthesis.r67231.tar.xz
 Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fduthesis.doc.r67231.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hanzibox.r77677.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hanzibox.doc.r77677.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-chinese.r74115.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hanzibox.r79715.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hanzibox.doc.r79715.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-chinese.r78069.tar.xz
 Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/impatient-cn.r54080.tar.xz
 Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/impatient-cn.doc.r54080.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/install-latex-guide-zh-cn.r77681.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/install-latex-guide-zh-cn.doc.r77681.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/install-latex-guide-zh-cn.r79570.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/install-latex-guide-zh-cn.doc.r79570.tar.xz
 Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-notes-zh-cn.r15878.tar.xz
 Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-notes-zh-cn.doc.r15878.tar.xz
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-chinese.r73160.tar.xz
 Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-chinese.doc.r73160.tar.xz
-Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatex-cn.r77432.tar.xz
-Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatex-cn.doc.r77432.tar.xz
-Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lxgw-fonts.r77677.tar.xz
-Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lxgw-fonts.doc.r77677.tar.xz
+Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatex-cn.r79914.tar.xz
+Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatex-cn.doc.r79914.tar.xz
+Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lxgw-fonts.r79609.tar.xz
+Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lxgw-fonts.doc.r79609.tar.xz
 Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nanicolle.r56224.tar.xz
 Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nanicolle.doc.r56224.tar.xz
 Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/njurepo.r50492.tar.xz
@@ -64,34 +64,34 @@ Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pg
 Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgfornament-han.doc.r72640.tar.xz
 Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qyxf-book.r75712.tar.xz
 Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qyxf-book.doc.r75712.tar.xz
-Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sjtutex.r76924.tar.xz
-Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sjtutex.doc.r76924.tar.xz
-Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/suanpan-l3.r76924.tar.xz
-Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/suanpan-l3.doc.r76924.tar.xz
-Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-zh-cn.r74098.tar.xz
-Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-zh-cn.doc.r74098.tar.xz
+Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sjtutex.r78164.tar.xz
+Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sjtutex.doc.r78164.tar.xz
+Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/suanpan-l3.r79954.tar.xz
+Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/suanpan-l3.doc.r79954.tar.xz
+Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-zh-cn.r78073.tar.xz
+Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-zh-cn.doc.r78073.tar.xz
 Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texproposal.r43151.tar.xz
 Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texproposal.doc.r43151.tar.xz
 Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlmgr-intro-zh-cn.r59100.tar.xz
 Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlmgr-intro-zh-cn.doc.r59100.tar.xz
 Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/upzhkinsoku.r47354.tar.xz
 Source58:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/upzhkinsoku.doc.r47354.tar.xz
-Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.r77677.tar.xz
-Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.doc.r77677.tar.xz
+Source59:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.r79618.tar.xz
+Source60:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.doc.r79618.tar.xz
 Source61:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xtuthesis.r47049.tar.xz
 Source62:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xtuthesis.doc.r47049.tar.xz
-Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlineskip.r51142.tar.xz
-Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlineskip.doc.r51142.tar.xz
-Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlipsum.r54994.tar.xz
-Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlipsum.doc.r54994.tar.xz
-Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.r22207.tar.xz
-Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.doc.r22207.tar.xz
+Source63:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlineskip.r79618.tar.xz
+Source64:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlineskip.doc.r79618.tar.xz
+Source65:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlipsum.r79461.tar.xz
+Source66:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhlipsum.doc.r79461.tar.xz
+Source67:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.r79618.tar.xz
+Source68:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.doc.r79618.tar.xz
 Source69:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.r40728.tar.xz
 Source70:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.doc.r40728.tar.xz
-Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.r77677.tar.xz
-Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.doc.r77677.tar.xz
-Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhspacing.r41145.tar.xz
-Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhspacing.doc.r41145.tar.xz
+Source71:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.r79618.tar.xz
+Source72:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.doc.r79618.tar.xz
+Source73:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhspacing.r79618.tar.xz
+Source74:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhspacing.doc.r79618.tar.xz
 
 # AppStream metadata for font components
 Source75:        fandol.metainfo.xml

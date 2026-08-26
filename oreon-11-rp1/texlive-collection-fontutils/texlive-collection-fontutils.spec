@@ -1,4 +1,4 @@
-%global source0_hash 09aa821181ce68c6a8380fede39029e12c9b6df58976eccca6cdf0f567eb7354
+%global source0_hash 430c95b7e104cb837b7424ebb17ab7ee1aefd99d70aaceefff8a1924fa949329aebe0d5a28b939fabf28d3c5dfc2dcb466147e1396514d5dcf4f64af231db8a7
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$

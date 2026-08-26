@@ -1,4 +1,4 @@
-%global source0_hash 635bb36d94a29ef47c53dcee1296cb28c007a520659aa41c1f3c086c386ab8df
+%global source0_hash d9acc852d934360f8d5c8a2cfa08a9809b971f20fd6c7bb7fc5aca5318e86c5e1b68c6d2c06399a19cdea5af1358cecab64e3365b319a6dcac19659197c0f919
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,7 +14,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-music.r76267.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-music.r80083.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
@@ -31,10 +31,10 @@ Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dd
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ddphonism.doc.r75201.tar.xz
 Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/figbas.r28943.tar.xz
 Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/figbas.doc.r28943.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fretplot.r76337.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fretplot.doc.r76337.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gchords.r29803.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gchords.doc.r29803.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fretplot.r78741.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fretplot.doc.r78741.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gchords.r79618.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gchords.doc.r79618.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gtrcrd.r32484.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gtrcrd.doc.r32484.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/guitar.r32258.tar.xz
@@ -53,28 +53,28 @@ Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/li
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/liederbuch.doc.r76924.tar.xz
 Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musical.r54758.tar.xz
 Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musical.doc.r54758.tar.xz
-Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musicography.r68220.tar.xz
-Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musicography.doc.r68220.tar.xz
+Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musicography.r77682.tar.xz
+Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musicography.doc.r77682.tar.xz
 Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musixguit.r21649.tar.xz
 Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musixguit.doc.r21649.tar.xz
 Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musixtex-fonts.r65517.tar.xz
 Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/musixtex-fonts.doc.r65517.tar.xz
 Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/octave.r76790.tar.xz
 Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/octave.doc.r76790.tar.xz
-Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/piano.r21574.tar.xz
-Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/piano.doc.r21574.tar.xz
+Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/piano.r79662.tar.xz
+Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/piano.doc.r79662.tar.xz
 Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/recorder-fingering.r76924.tar.xz
 Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/recorder-fingering.doc.r76924.tar.xz
-Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songbook.r18136.tar.xz
-Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songbook.doc.r18136.tar.xz
+Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songbook.r79618.tar.xz
+Source49:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songbook.doc.r79618.tar.xz
 Source50:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songproj.r76924.tar.xz
 Source51:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songproj.doc.r76924.tar.xz
-Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songs.r51494.tar.xz
-Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songs.doc.r51494.tar.xz
+Source52:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songs.r79618.tar.xz
+Source53:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/songs.doc.r79618.tar.xz
 Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undar-digitacion.r69742.tar.xz
 Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undar-digitacion.doc.r69742.tar.xz
-Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpiano.r61719.tar.xz
-Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpiano.doc.r61719.tar.xz
+Source56:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpiano.r77682.tar.xz
+Source57:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpiano.doc.r77682.tar.xz
 BuildRequires:  texlive-base
 BuildRequires:  python3-rpm-macros
 BuildRequires:  python3-devel

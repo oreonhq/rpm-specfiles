@@ -1,5 +1,5 @@
-%global source0_hash 030413280971d17decff54f02ac44749010eb127fa684033e811417e391eb84d
-%global source1_hash 95c51411a1789104ae9af10578783078bda28e82216219d6e6b9d451a2b80b58
+%global source0_hash 377a23e36c9f5cdcd9de36b338defcea19bce677c80e542777aeb05529c2b3b4a0a92e2c750a20c4ba21aee484968c9b6aecfeb202729a1b7a63fbb93755632e
+%global source1_hash 823ae73016fc6b40ea5d45e033aa12963d866c5406fc421462a48137d6737b64c98f470ac0710f595812136107dfc6a7c1884d94f342cf228120e3c7db460960
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Enhanced theorem environment
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.r77682.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.doc.r77682.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.r79618.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.doc.r79618.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ntheorem-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ntheorem-doc <= 11:%{version}

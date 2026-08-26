@@ -1,5 +1,5 @@
-%global source0_hash abeb5f245a822605b877131a4b7db563ec5172b9593461484874a7959e71171a
-%global source1_hash 564b851409b7cfdc94ead90a1213a410afdf530fd03d58ae6afffe76e753058d
+%global source0_hash 672a92354c56341678ff3080ef978e8b152c8670283bc725474ccbac30a8149767bfaaca673a800d5098e0bb949ee2d8f9fa20c4da58b6c62fe163a10c916205
+%global source1_hash f1df290a202826297921a646d17cb6bc14ed463769cd52140cbcfdb8576d1f296a25d2951c8770c6b57f46e88a712b8076a596064068263c4a5682570bd6abf2
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Bug fix for longtable
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.r17533.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.doc.r17533.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.r79618.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.doc.r79618.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ltabptch-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ltabptch-doc <= 11:%{version}

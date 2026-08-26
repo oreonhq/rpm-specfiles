@@ -1,5 +1,5 @@
-%global source0_hash 67eef9a82be4a94e1d7f3072132bb3031c43c4d75e16b51b294e6170985f12a0
-%global source1_hash 9fdfe3b2e9f350fb6f30c02606d4c10e35b41a845ee56d7845ef11bda62b7bbf
+%global source0_hash 9a4d446bcf36576330da37435d8b9aadb07a3892febc219cddc51053302a48d546c4da251a818262dcce30c81b6fe8bcfe0484f8802ee427661c3fb792a47153
+%global source1_hash 6be2bce2a777f869b88d3f574837b70b6a0b959f23db092554a1879e9f278f341696e8f4d5d80853366685739f7929d9bc1003a5382d9bd961260413d4855e63
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Adjust behaviour of the ends of footnotes
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finstrut.r21719.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finstrut.doc.r21719.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finstrut.r79618.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finstrut.doc.r79618.tar.xz
 BuildRequires:  tar
 Provides:       texlive-finstrut-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-finstrut-doc <= 11:%{version}

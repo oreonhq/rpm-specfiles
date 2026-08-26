@@ -1,4 +1,4 @@
-%global source0_hash 0a952e5446a534f04c5497d4a7c529816c016b98f16aaf689e333e52f1dadddf
+%global source0_hash 800991b6bb8ac7772ad030ad665b812abd9b294498f7b7678be721ccc87d54607e267bd189a0591ebead2c6ecb64047e5b5581c374f067c3b1575b6d442cc6c9
 %global source1_hash 900a9d4fb8f2318866d55ae1b18f26cb7ae52cf2450bf0765639d68e4d00dc6e
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
@@ -20,35 +20,35 @@ Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/col
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-greek.r68532.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-greek.doc.r68532.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-greek.r78101.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-greek.doc.r78101.tar.xz
 Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/begingreek.r63255.tar.xz
 Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/begingreek.doc.r63255.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/betababel.r15878.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/betababel.doc.r15878.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/betababel.r79618.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/betababel.doc.r79618.tar.xz
 Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cbfonts.r54080.tar.xz
 Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cbfonts.doc.r54080.tar.xz
 Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cbfonts-fd.r54080.tar.xz
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cbfonts-fd.doc.r54080.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsbaskerville.r19440.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsbaskerville.doc.r19440.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsporson.r18651.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsporson.doc.r18651.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greek-fontenc.r68877.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greek-fontenc.doc.r68877.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsbaskerville.r79618.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsbaskerville.doc.r79618.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsporson.r79618.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gfsporson.doc.r79618.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greek-fontenc.r77682.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greek-fontenc.doc.r77682.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greek-inputenc.r66634.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greek-inputenc.doc.r66634.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greekdates.r75878.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greekdates.doc.r75878.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greekdates.r79618.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greekdates.doc.r79618.tar.xz
 Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greektex.r28327.tar.xz
 Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greektex.doc.r28327.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greektonoi.r39419.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greektonoi.doc.r39419.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-ancientgreek.r74823.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-greek.r73410.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-greek.doc.r73410.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ibycus-babel.r15878.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ibycus-babel.doc.r15878.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greektonoi.r79618.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/greektonoi.doc.r79618.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-ancientgreek.r78069.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-greek.r78069.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-greek.doc.r78069.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ibycus-babel.r79618.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ibycus-babel.doc.r79618.tar.xz
 Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ibygrk.r15878.tar.xz
 Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ibygrk.doc.r15878.tar.xz
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kerkis.r56271.tar.xz
@@ -63,8 +63,8 @@ Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ta
 Source42:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/talos.doc.r61820.tar.xz
 Source43:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/teubner.r68074.tar.xz
 Source44:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/teubner.doc.r68074.tar.xz
-Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xgreek.r73620.tar.xz
-Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xgreek.doc.r73620.tar.xz
+Source45:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xgreek.r79601.tar.xz
+Source46:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xgreek.doc.r79601.tar.xz
 Source47:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/yannisgr.r22613.tar.xz
 Source48:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/yannisgr.doc.r22613.tar.xz
 BuildRequires:  texlive-base

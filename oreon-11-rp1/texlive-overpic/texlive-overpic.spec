@@ -1,5 +1,5 @@
-%global source0_hash 23e3f8e5afff9f4284f46020fb1e57fd747a4c96d4ecbc2ec0e0761253f2993d
-%global source1_hash b37495750fb57edaa7ed277fe7c2425b81f4543d58af2f003f0e6e160f410e91
+%global source0_hash 1f065ad736fff812c7298c871ca2608c492b89688128ceba5cf31667eed98b49ba01fdc3b1ee6a44ec5a653ff6b29237936fc8154d0988594718100c9150c6ce
+%global source1_hash 4089d5d57ed8c8d99c8dada0d7297b97b05ae0a914400d9ae68551080c3dbb3dc4294854db99e543e80f829cdf72dc6eb11b8d4f4d3487deec386fcbd7b8324f
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Combine LaTeX commands over included graphics
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.r77682.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.doc.r77682.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.r79813.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.doc.r79813.tar.xz
 BuildRequires:  tar
 Provides:       texlive-overpic-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-overpic-doc <= 11:%{version}

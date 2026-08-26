@@ -1,5 +1,5 @@
-%global source0_hash d49a5892022e6dfe4e00bfea0876ded20a061d0e8d13448aeebb7bc8d544ac34
-%global source1_hash 9cc126e9dc4f10ab1823c348a2b210a546e2c673ad1249405271015d5d46b8d7
+%global source0_hash 3d033ee164d52f7085bffdc12f2062be7e94a644d9ed731b4d1b97a3a46838dabadcf6687063e165c65fc938a51a4adf8078339b720a305175d6cd6a3b889f07
+%global source1_hash 510449d17b09d9207b76e732b5d426121888cf653f29bb3be8872b74a243596ac339f09d11a14a4a3007f8818171aab28727cd1713ee35c8908d2d168a57d9b0
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
 Name:           texlive-datetime

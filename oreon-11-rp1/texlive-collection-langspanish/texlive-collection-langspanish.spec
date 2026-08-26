@@ -1,4 +1,4 @@
-%global source0_hash 19a4c713d46783a3147f32ffa083a666e0706e3193ae4483ed7906a2b6891e2e
+%global source0_hash 9832d0e4f367ae73c292fd9d8894527c373c0db762ebf683667bee96f3431f1b6b70e3b2425bf6bbd8ca0a1f9e633ce8022b8747465e670523aecc607f7577ca
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -25,26 +25,26 @@ Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bab
 Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-catalan.doc.r30259.tar.xz
 Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-galician.r30270.tar.xz
 Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-galician.doc.r30270.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.r59367.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.doc.r59367.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.r79461.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-spanish.doc.r79461.tar.xz
 Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/es-tex-faq.r15878.tar.xz
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/es-tex-faq.doc.r15878.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-catalan.r73410.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-galician.r73410.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.r75447.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.doc.r75447.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-catalan.r78069.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-galician.r78069.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.r78069.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-spanish.doc.r78069.tar.xz
 Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-spanish.r15878.tar.xz
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l2tabu-spanish.doc.r15878.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo-spanish.r75712.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex2e-help-texinfo-spanish.doc.r75712.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-esmx.r36866.tar.xz
 Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-esmx.doc.r36866.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.r35050.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.doc.r35050.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.r79461.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-spanish.doc.r79461.tar.xz
 Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-es.r74874.tar.xz
 Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/quran-es.doc.r74874.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.r74997.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.doc.r74997.tar.xz
+Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.r78678.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-es.doc.r78678.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-antique-spanish-units

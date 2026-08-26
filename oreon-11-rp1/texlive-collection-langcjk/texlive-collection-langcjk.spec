@@ -1,4 +1,4 @@
-%global source0_hash 06e687ac2ba729eadd8e805087eee84cddb81c6baf06a4b278e42fff38bcc6dd
+%global source0_hash 00ba0bf08b9a5ff9300b1a5ef7041fff139c9543dad9bac6b4d09619aaba66b9b347417a3bca02a4c474a785315810742a18080cb918b9f9445b7775e9ff0321
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,7 +14,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langcjk.r65824.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langcjk.r78607.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
@@ -29,20 +29,20 @@ Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk
 Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dnp.r54074.tar.xz
 Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.r69751.tar.xz
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.doc.r69751.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.r77677.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.doc.r77677.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.r77682.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.doc.r77682.tar.xz
 Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/garuda-c90.r60832.tar.xz
 Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/norasi-c90.r60831.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.r77677.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.doc.r77677.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.r77682.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.doc.r77682.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.r54958.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.doc.r54958.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.r77677.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.doc.r77677.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.r77677.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.doc.r77677.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.r77677.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.doc.r77677.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.r80059.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.doc.r80059.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.r77682.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.doc.r77682.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.r77682.tar.xz
+Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.doc.r77682.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-adobemapping

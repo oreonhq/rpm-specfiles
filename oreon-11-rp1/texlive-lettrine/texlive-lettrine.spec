@@ -1,5 +1,5 @@
-%global source0_hash d3cc16bff3c44d548e0b73eadcd3a9719659013ba110cf6a18b3eaafc25e1f27
-%global source1_hash 8e086db6d42cf0f047b1d0d68ee7bcde00ceb441a9212a290497c3e3328b4a54
+%global source0_hash 0d5ed318e8c77bbea56b2033df902d86f2a585c8ec1870fb184167a23ba9d5f871af32bdd0e6576ad1de2efa745b340cb55312e13cd9bf75778d167d96821620
+%global source1_hash 8364779804341cd337b651097db3b4ecbc6eef5f8d7c9ea39a001f98b7e576161d3b8100010f167f21eff539c66f57eab80c51bba7eab382c8778f798e1fc977
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
 Name:           texlive-lettrine

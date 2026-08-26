@@ -1,4 +1,4 @@
-%global source0_hash b5a675718c024368095f0409fa1dd053d6cf95704109a835d00084882d2413d7
+%global source0_hash 7eb0c67ec373c29b1fdd820c20ab3912e92bf834b9ebfb8c556105cb509d44b818f088c0a9e232e9507f302e9c2d9c1129160483314318a1f9d95634cbcdfce5
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -19,25 +19,25 @@ Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/col
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-portuges.r77468.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-portuges.doc.r77468.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-portuges.r77682.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-portuges.doc.r77682.tar.xz
 Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beamer-tut-pt.r15878.tar.xz
 Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beamer-tut-pt.doc.r15878.tar.xz
 Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cursolatex.r24139.tar.xz
 Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cursolatex.doc.r24139.tar.xz
 Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feupphdteses.r30962.tar.xz
 Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feupphdteses.doc.r30962.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-portuguese.r74203.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-via-exemplos.r77105.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-via-exemplos.doc.r77105.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-portuguese.r78069.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-via-exemplos.r80001.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-via-exemplos.doc.r80001.tar.xz
 Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-ptbr.r15878.tar.xz
 Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-ptbr.doc.r15878.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-portuguese.r55643.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-portuguese.doc.r55643.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-portuguese.r79461.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-portuguese.doc.r79461.tar.xz
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/numberpt.r76924.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/numberpt.doc.r76924.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ordinalpt.r15878.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ordinalpt.doc.r15878.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ordinalpt.r79618.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ordinalpt.doc.r79618.tar.xz
 Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ptlatexcommands.r67125.tar.xz
 Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ptlatexcommands.doc.r67125.tar.xz
 Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tabularray-abnt.r76924.tar.xz

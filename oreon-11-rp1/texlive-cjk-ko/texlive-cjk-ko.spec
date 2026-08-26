@@ -1,5 +1,5 @@
-%global source0_hash ad13e4c43a061214b64da767edcba51ba709729d6d9adf832c7fc961420791fd
-%global source1_hash 21e39b86719287b67c483d6e5d09a3c513d264576828801617db35b7daebe9ea
+%global source0_hash 4252436af26489464f4865a91902518a6af47e4d176b12e04cfbe4573ad8303df2f613920dd9bfbd0842bb13cbf847bc7ce6c274218a38cf719ba82573d6b7a6
+%global source1_hash 4bc8c11c2f1240590d5576d69acc7fab41df8b75dd71448351d079d318f3e28ec9ec8f11165fad5d60d548274de7c7aaeb132a5f4e87966d5bb005fb968980ea
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Extension of CJK package for Korean typesetting
 License:        GPL-2.0-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.r79618.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.r79618.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.tar.xz
 BuildRequires:  tar
 Provides:       texlive-cjk-ko-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-cjk-ko-doc <= 11:%{version}

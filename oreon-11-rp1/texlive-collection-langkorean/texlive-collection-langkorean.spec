@@ -1,4 +1,4 @@
-%global source0_hash 90518b77b2aca5f3991da31ba5ef7d7e9a4078dc1cf3bc2e781c6f2dbc0a672d
+%global source0_hash 2d93df728d34137c8f9a884aa2871a2980e806672006f2c5f0c5f79412d5789c6f94958363cfc9a78b5a97a7d76bbb6cb157b2cb2a8a283f7afdfd838fa24883
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -21,10 +21,10 @@ Source1:        texlive-licenses.tar.xz
 
 Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/baekmuk.r56915.tar.xz
 Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/baekmuk.doc.r56915.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.r70300.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.r70300.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-oblivoir.r76503.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-oblivoir.doc.r76503.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.r79846.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.r79846.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-oblivoir.r79618.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-oblivoir.doc.r79618.tar.xz
 Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-plain.r63689.tar.xz
 Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-plain.doc.r63689.tar.xz
 Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-utf.r63690.tar.xz
@@ -33,8 +33,8 @@ Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ls
 Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-korean.doc.r73814.tar.xz
 Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nanumtype1.r29558.tar.xz
 Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nanumtype1.doc.r29558.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pmhanguljamo.r76924.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pmhanguljamo.doc.r76924.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pmhanguljamo.r78114.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pmhanguljamo.doc.r78114.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uhc.r16791.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uhc.doc.r16791.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unfonts-core.r56291.tar.xz

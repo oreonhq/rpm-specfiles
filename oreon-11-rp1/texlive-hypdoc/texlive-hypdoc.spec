@@ -1,5 +1,5 @@
-%global source0_hash a82da717521644f01ef3a23879af30c25c22cd47a451c065a3ed65ad965b1834
-%global source1_hash ad2af8a4edc95ee8bf26f8076522454a5153fab2246eec24d5478bd148420168
+%global source0_hash 4a68820f9df7fdc39e5f253c6b0826a4d847cea8e7b6c262f76c5632e5f52935fbcf2eb53406c523237c4ec9157ee6f5389eb7f2324f76620a3ab077d0a53b37
+%global source1_hash 1b2c55e41f128ede05f6c685df9a29100ca05fbc60bdbc9e04f5296090cd46fd052744eb61293a79ec6206030ee649d6bc5ca16be2663154348acf7606466099
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Hyper extensions for doc.sty
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.r68661.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.doc.r68661.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.r79461.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.doc.r79461.tar.xz
 BuildRequires:  tar
 Provides:       texlive-hypdoc-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-hypdoc-doc <= 11:%{version}

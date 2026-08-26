@@ -1,5 +1,5 @@
-%global source0_hash 49c8ccace7f9095b88b7d3b21f3483d0ea530d9381839e923d0838d5dbfee60e
-%global source1_hash 1854843900a7e22b3363a56a95c31302a06657d6add95bb9875cdf8390b34b04
+%global source0_hash 68fff717d021971424e40595db094183a80a5698a084e6cfee9e5132cec17fed6b1b7b42a111fa3325bde59f8357f4112435eae11e9ccc1d07d6475b1fd2e638
+%global source1_hash 49031f2c2b863d6275a35f23936486b10f5a692f06289fef5353d75868c99e36b1523d3a1cb66aa5e7753332701382f102847df557d4404c9abf85634b148147
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
 Name:           texlive-zhnumber

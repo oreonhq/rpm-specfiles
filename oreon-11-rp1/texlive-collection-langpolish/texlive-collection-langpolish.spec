@@ -1,4 +1,4 @@
-%global source0_hash 0121edec861cf142322affaa10d49e73506e753b15aa0ff71cc0e68a530cf3aa
+%global source0_hash fc0d08f70aeb83869109290e6d1585d513097dcd4e17791752ecd3d26ac202838afb5931f78ceaeeaf72c63b18fe9183edd650c075d03188f24cb2caded178de
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -19,23 +19,23 @@ Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/col
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.r62680.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.doc.r62680.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.r77682.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.doc.r77682.tar.xz
 Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.r44371.tar.xz
 Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.doc.r44371.tar.xz
 Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.r58602.tar.xz
 Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.doc.r58602.tar.xz
 Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.r54074.tar.xz
 Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.doc.r54074.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-polish.r73410.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-polish.r78069.tar.xz
 Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.r63289.tar.xz
 Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.doc.r63289.tar.xz
 Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.r77050.tar.xz
 Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.doc.r77050.tar.xz
 Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.r58661.tar.xz
 Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.doc.r58661.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.r60322.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.doc.r60322.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.r78101.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.doc.r78101.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.r23552.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.doc.r23552.tar.xz
 Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qpxqtx.r45797.tar.xz
@@ -44,8 +44,8 @@ Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ta
 Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tap.doc.r31731.tar.xz
 Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.r67718.tar.xz
 Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.doc.r67718.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.r74803.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.doc.r74803.tar.xz
+Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.r78337.tar.xz
+Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.doc.r78337.tar.xz
 Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.r15878.tar.xz
 Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.doc.r15878.tar.xz
 BuildRequires:  texlive-base

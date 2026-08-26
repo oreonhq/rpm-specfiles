@@ -1,5 +1,5 @@
-%global source0_hash b53ea53e6f01a674f1ff28275be0b504f8a96b8a89c85de7dd5a87cbbdf8d42e
-%global source1_hash ad8f1294623a19d0877381bd78f83562813e918e578aaf8b52662c210e3a04a7
+%global source0_hash 26faae5989ce0b1d2f1dedafc3d9c43f86de8a37f0c0ee1a0ed05d4d23e43c0a3dffcd15a64799ff1dacffe69e1c4283cadbfd5e418e25ebbe900f432517e0c0
+%global source1_hash 1b44781faf2fe617b805ba672a203dc93942acceff5c274e61c9a47e3b8d9bb9fc8258d9fd1eb89ff3dcc2496b0b17a33dfb63c7e1f197be0283313a916bfc1c
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Generate changebars in LaTeX documents
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.r77682.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.doc.r77682.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.doc.tar.xz
 BuildRequires:  tar
 Provides:       texlive-changebar-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-changebar-doc <= 11:%{version}

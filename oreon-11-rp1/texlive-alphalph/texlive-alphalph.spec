@@ -1,5 +1,5 @@
-%global source0_hash b47b23d6400d2e1f4bb162adf9b9a7ca9a6150000f3aa5647a675ecb02a283e9
-%global source1_hash 3e1c098e1eeeadbb674444478c176230707ada053907cb1735bf13600c4b709f
+%global source0_hash 0b3f1b6efb00c1120326b9b8313d1bc55eb232e7f7d10acaab9425bd164ffa0552c6b63c6282983bdb9845d8a59553bd577b2ce7c377bd2e31c79baa4fde0534
+%global source1_hash 1006dbb99d7fabd4a9910a92c49e0cd5b94607582fa05bbff71c8b1555bb5ddfb0e99ba101fb03665145c4b7f553fa8e1f9adda9b0b0eaa7d937ef55e5a79fd8
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Convert numbers to letters
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.r79461.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.doc.r79461.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.doc.tar.xz
 BuildRequires:  tar
 Provides:       texlive-alphalph-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-alphalph-doc <= 11:%{version}

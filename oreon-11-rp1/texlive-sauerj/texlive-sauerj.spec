@@ -1,5 +1,5 @@
-%global source0_hash 11c06f5fde06832973d900828d144c6d0d7c8d162e1d6c6e969e104b485d3dab
-%global source1_hash 5e092554c4fbdf6e5c2908cf8e1b61a0d4669fd88471d25a80148052f6dbc43f
+%global source0_hash 642f893b494b05299c66a02b3a8af218f60a179ec009843a96f4b12435616c1c6f570ff57ae439e3e8cfa1bb08fe56f15d259b599c35addadd0abcb806b8e1d6
+%global source1_hash 3f8e0c256bb6b9200114f541f38c6b681574f32e7a0e87afc4a84de54982ba32e4638470af4d7e582380323e237e757a74aff501f8160859794d3cb102c2fc3f
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        A bundle of utilities by Jonathan Sauer
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.r15878.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.doc.r15878.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.r79618.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.doc.r79618.tar.xz
 BuildRequires:  tar
 Provides:       texlive-sauerj-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-sauerj-doc <= 11:%{version}

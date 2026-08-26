@@ -1,45 +1,45 @@
-%global source0_hash b89049b511756599b6f004b7f8fc5df05e27b1e2ac87afd247cc6e2a4a43b6cb
+%global source0_hash f944ce8811b92e0d4df114f660567e3d1522e83051e0dce222f92af8085e93e876ad00614c45e2658e56fb7137343526a93c4066450d8fd7d41b00075d6b9293
 %global source1_hash 900a9d4fb8f2318866d55ae1b18f26cb7ae52cf2450bf0765639d68e4d00dc6e
-%global source2_hash 8fa7a956504020982f0eeace49c2dc65ba7d19f178403030474d85c5709582b1
-%global source3_hash 951d028c383fc255043727ff2571410959642dbefbc3fa4a61c42bd2af604cea
-%global source4_hash ebedd3dc7ece433d366d848ea8bd9cd2642a0f49c000c46a2ed1dde5b1cebc1c
-%global source5_hash ada5920f0d16ea3fb6b523decb0447564c4537b2b770a9bdbb837b3ec68a3992
-%global source6_hash 4451bd870e03212ea3c531156371d6cdab3a2b81e80aea7c40f8c076824740a0
-%global source7_hash 526d8abdab83128a80bd2c163b4f12e0679482e7493aafaed68cec80ec2770b9
-%global source8_hash bb85425c214b1056b5f0b8f3bf1478b81e89bd7d290d61c7c73289b534786897
-%global source9_hash 84f0d011f0cb75aae92ff40c4d004738477d59a8dfa33abbb3441f64e6878edc
-%global source10_hash c069cae12bb8bf51b31044a981d93d8cb47dc06627175f1320515d2c187d28c5
-%global source11_hash e45a1162c691ee9a02d6ddff491bca444360b98bc38cf926a1b24dc1ae9143c1
-%global source12_hash f4792b640008ccc637a4d0cbaab2d90b58cfc96f7f73c3d9b02f2f4481cc59e3
-%global source13_hash 1cfc94bf7b3fac9aecd1032f052be8d818b680541df3f5138cddb66615522103
-%global source14_hash 6d0323de249a462a8386bc8aa4a1a2b36dc18def339e460ef9e743a28d671875
-%global source15_hash e853ea53389bdedf98ec83867a4d738c35af767df870783396722b0a0c50c3ec
-%global source16_hash 711fa92c9559c7563fd2e359cb39a988e843d2499953742f95a29439e09e6b87
-%global source17_hash 270a8d4423774acfbc903036699fd689a76384260d75827e2ef3f9ad6e35e3d3
-%global source18_hash 7f2fddb30c1c8a84ace60246f3adecf645c40a03b83209380d5a78ec92e228d0
-%global source19_hash b36948a2ef6226f2eea6c79ee71e581b1069fce462e08a4973b18f120e045ea8
-%global source20_hash fe8136043cf4f3a9b2750066e031fee12e0a2d15724aa484abd0b4ca1fbf6f8b
-%global source21_hash 1a4925b47f9d8bd6b7fe8696cb52543a181aa89dca4a4bc8bdd6650ed50c6076
-%global source22_hash 604c0057aa73e47bbfddea397e1b77cb8a1a60f40ffdc547cbeb0adbbc40552e
-%global source23_hash 5ed1bfe91b72a15d44f2f762d13390775b887524625f11a7b4f212dc8cc7acfa
-%global source24_hash 39a2c498d55f19448ed7ac26c2143943669a0e4d99e8b804ba975889c3d86ec8
-%global source25_hash 0c08809797d548a331e2dcaa09f7d0989d032a0bf441ca5008aa0d67241d3abd
-%global source26_hash 47f476f35cb04419e7d12667ac6e1a656f5bb2a9496821030490fc132ad85f5b
-%global source27_hash 5fac7dbcc4f8aae032705f1b63f95abbfc646267e384d4e594cd8b4b9b3b0781
-%global source28_hash 122ca4e9e646f137c076ab7e07fe9d53464e97d370cbc47424fc1b361ba2926c
-%global source29_hash c20f4fe5992b8b27ef1ec558b701cc53d12060a6efe3198186c3a1bd28251c68
-%global source30_hash 4925597c59230ffc8ef44a080783e585df4dbd6684b319ad640ea899e485ef87
-%global source31_hash c5386d17116b6a51601a25081675cc5dfb9bc8734240131fe698b5ffff8214a2
-%global source32_hash 29e84a4395b61f9dc1a96b334cc1e58524173c8f9139c9b43b9a61a23df74205
-%global source33_hash 78f1d71a706d96bc9f793ce9ffb71f919805fda1903ca881368cd8d117a42187
-%global source34_hash 7fb50b0fe6f5fb9e63e5147804fa27853dc1d9f2319921404730447b201cde9f
-%global source35_hash d42eae30f6636140f32330c773f89cc16a6fd28607fe747be629ce71706b99f5
-%global source36_hash 7dd9f8d9e53ecd1dac44ac5de0cf9fea5e390688f790206dddc3bc9676a74b69
-%global source37_hash fbd384854be6d648b81856f10029834c5aed59dd3b610d699ae3fbeebd38b883
-%global source38_hash 916af1b44d0cbcd536910362194a657938c641d18a0fec667f1491de69fb0bbd
-%global source39_hash 80bdf4104f2e126051b88d02fc5a69aa110313cbdc1d6640715565d018a1eeb4
-%global source40_hash 5d1d3516a96246cfbace7457628e285a24df3b3ad77ea9d619bf8c46451ae6d6
-%global source41_hash ada105278f37f41d904807856028ab4bc4b3961a75e06496a280a2ff57975d3d
+%global source2_hash be514397b9844ae4a4f2e4f8c79d78e8b3b434bacffc18ccde3cbca462bfc49cbf7affd75b70fb013266c00f8f9be8636729ee18ee1274b0241ad74293751450
+%global source3_hash d92f76ffd3049776bd0f8e80ce9cf7d46a55a5988eaccb9c8982f63b80490af1983a5600724501f6431f401b22a9a34d8f9dca20c6f2b8ccf85ddef0a65a063b
+%global source4_hash e65b2096ca183ca21d8ff987489223bc98750fcbaf4f9f9a9996f5153a76c5587d1ad77693234d02f80753b8b8cb86fd957514f82065bd7aab9eb64bad9003a3
+%global source5_hash 39ccdee82d86f01e11aaeb53844639b4f976677c0baef7675817fafe4263e8e44cfec144f6fce265c9c80d9a9373a2f46ac8a55b7f20923c680eaddd0222a045
+%global source6_hash 49be492e62fcd615b08bb6a32767cac54a9535ab859d2a27d1c84788d4e168df2a10133e5408ab1bd3a802ffa8465a61c4144cd9cbafc6fa98f995cb7af89381
+%global source7_hash ab7cabd369cdde5c2e5108b4d75d71bfa5e6b44d7ecc2eda25509078f26bfbc8515dd10a6dd82adab979170e12552fbecffca1f5bd3a1105db21b31097ec5f12
+%global source8_hash a967804b42bcc11e766d5b74de28c54d167625d2b108a34bc5e49351533ddcfe3334e4a7a34966f8d159bbde6a80f84b4d216553ce03fbcfb7a4b6267574538f
+%global source9_hash bcf6617cf66af91312aea98f6c4a034f3af4ada14687414e7c3572e319fa4bd957dd25ebf557078297950d8ba8fd02229c5ad53464077feda462263b52536f29
+%global source10_hash e6dc0988bd10dcefd63db2a57999637b63187d8a234c46dcb148e9dfe8388800e61237d7b58d271b735d2658d40c1f81016b5018e239d556fb9615d35b4129a0
+%global source11_hash 2bf47c879c6ed0fc539763c899d8db261135f1a0ef0052904d03a72663cff38d40d2fe7b0daacaf2d54771c7b9eb5e98b73ef71d2a733899d458803f8caee723
+%global source12_hash 70b4b5bbdc2b554ca8eb69dc0607e535cc8c068e793592c13ddab4b90caee504856b66c59f6a6e3f9aa83175829e74e136f16cc59e534020068d760cbd5394e4
+%global source13_hash 2a7a3ff52a4cfb9fa0eb317a22341dfd8719ec85ea0dbf7a62224c6dc9aa4374faad6e178947a1f832bf6618b22775adbd2adbd16dbda621698c9027596fbd38
+%global source14_hash b868b5c542eee6d5b0b61a1dbcd308d0be6a2cc4d766193cee10315babb65d374e5455b5939c2a1958bb6f521fa8a3d1fc56b7df1d6dfef1ff88b2f01f6632ad
+%global source15_hash 4a3dcd5e9aef4b141eddeea7065aef324b557f8fba430b4692dafd8245214575b29092eaa3bb5f684e2ec8216e0f4de04398f233973f3bd4252c0ae66dae1f09
+%global source16_hash 5fedc5bd4ac2313c920b23addb5753f6f90ec5def0b9f7e8fa6b31248c01a5246331f0d266d367d806931f61e824925099d9bf61f805f81c21385007f7f832b3
+%global source17_hash 3d63e17a5899452abda47a1dbf19630100384eacec9f7bbda564f10c49e3a93fe3fa59b6256df96704cbddcb7361c1a2887706c26e1167abacfe30c5e8ea6bf3
+%global source18_hash 8474e12b06d1f0c4cf10932d0d85510de8953b82196eba930fcffbfb28e259a5591186260b3aa85c40185445d73babb7e9d553c21a0bd8cfd99c3eeecc1af927
+%global source19_hash 97fb658eba1a7ec0aaeb2bda9505e400cf2310fd361cad78b78c26b058b28e4a870577574cdf96baac72480af1189a67d31eae6e75598943f0046d70630d9dcb
+%global source20_hash dc110200707c395dd61dcf30ed32b8eb4dd648fbb98eaa897e473ff683fe79af05464028a4b0a4685c9c17ebf61f19c592825f2a778d512ad68e1a57925a033f
+%global source21_hash 77ad574e0786d7cd8e7d731fa7666a6a531b29a914759ecbb9b5d6e5f62e9ec9027aae7e3b9ffd62bd918bb0354c41e865779b044381bc1b7256528eddb34754
+%global source22_hash b62aafbcc01a338ddaac050c2806042203fbffec82def3cfa15587b9b254915b8718f085dde74e88dffc9e5b2e94ed17d9c06a82f8fc03382cd9ae66422e4a89
+%global source23_hash e7f3e55f33d45e741c4163700c11f6f412b2f4bf857316280f52e8ca948922679b3616964ed59b9b06131b777a391a4f8bfc281c2c9c299e13ee23d776de66a3
+%global source24_hash 76181d60fb7c52af3d87b44a3f3147d45a6fe28030c160ba41c98bcfa8be5cd6c4dc449806530186ba6e52233543ed808e18c248557b1d5b9ce2305a506361d8
+%global source25_hash e3a4d5ef49f75ed4901c09b24741ff1bbfb59b81bbe260a09438c0c52b8b82d3a6fff11abdc003e2d7d5f56e773829cbc5aeccd4f07361bf28c1f67557ffdc22
+%global source26_hash 47d50b1966dc5a3adf4921c297d9ed5917035e917098154fc08d1c72ebd0ba70ebfa41735c7ae52c5087d62242bcfa9b0b49914c6da4f392e2d4c56a6d72807d
+%global source27_hash 91962f359e8b2f668130a6511e7fafad26a0c4c14a46f715172aa28723f743e08c50be666cadafd7a591f2283daec4fdd45039afc714115077667b66e67cedb5
+%global source28_hash 2acee2480197b0cac8cb98f27c1fa37faec6a011ca8159a554bce7c3b72b18d8c708ea63d3553f43ec35181e1da1a9b184e16c3dc7663f574fedcdfab1e9c73b
+%global source29_hash 58fa5c8d9cae0b2177e634e92644ffbe8219fb0a676a9bc1492a3c296b3d70560ad42ab2e90056fde0368ade64408b212bbe2288591d6bfe81323b24d309f9c5
+%global source30_hash 85bf069952c740b2f446d8fc26eae08d219efffd02ccaf01caee9e8b730c7fdb55cd8461ae8b873230dfb3900f298b01f18c260e551cf7184d5847ba0212f314
+%global source31_hash 0ea2516cda50be1f49f17904c6941ae48e99d33d0834f03a2d414245f7d8d7bcdd879c7a73c4e31caac7179508e80bb15266c658e8adfe07f43b9985c5294899
+%global source32_hash 8cc8477bb125e5a8254283e54cddb5ce1a8d1b968b89bf5ba6f2d28c1d91cdbaac61d47322db0803c2a6d82ecbe00da65be511e5898136e94640e9cb414f9302
+%global source33_hash cd639b246b25876061d90538dc7b70f4057b1cb222c98654e54093ed97d4643ffb0fc0929cfd6b8fc71a86ffcc76cc78eb84c38b3838aa6ae993ff501263a375
+%global source34_hash 797e0566127d23302d5713031b7edc0a8dd8041b0911219c1a5d80e91a49ec80b59fbe2f7ed16253b8976a52f045ae0878807a4eab1913314e91de12f9bd26d8
+%global source35_hash bb60c588186061ea9489ca7c2778d0cb2ddc9d6628d39433938596b3a5ba6d688cce7fed1840a7fb281ea3379df897303d6e1bd33cc5d2bc46e7395416739627
+%global source36_hash e82eca90c5c9ac70d928a2c67682714b9a3ede07ca0c32dae2d0f05066b287f41c18fce279a188238efaf5dd2671d0efe49a2349c060300730324807a5e3ac04
+%global source37_hash d4d6898be8567beeb3d44004a15ffdea9e3cae97a9f24b6ee9e5baee9249b25928d7760a92e14d2506ab5dc1f334894883658feb3a85327849adc8a275067be7
+%global source38_hash 0c394588c34207f1c72757649512d76f5e6d4fd44b1d230e09c127fb42b6291aca79b98b045d26220919e14af21d5d3a03293b6ac30029028285e4af0f7130f4
+%global source39_hash e24648470bf5cb30bf1c42ff0712fc8d1af08f90d3fc86d44d7a389f1ab5708f27bdc5c7999a90eb328bdd355f7e22aadfece0818971d13e53e2c29f53be4433
+%global source40_hash 9a288afe4b904243e56135c1cd9f799c8f28fcad95592107804de1f19d56279b04cc91cb381e3ff4b2d0775bbf8c0a9f30551173c3fbbe6b82935a725a83446b
+%global source41_hash a9bedf80877e52292dd8583d984b1dad19205194145a4de021eb927ec9f0a9ec9bd77fe9c2e2060e54cbf53c653c3fcd938be18e5ecff157b544ec8221adcc3b
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -75,8 +75,8 @@ Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/et
 Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/etex-pkg.doc.r77682.tar.xz
 Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/graphics-def.r76719.tar.xz
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/graphics-def.doc.r76719.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyph-utf8.r78069.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyph-utf8.doc.r78069.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyph-utf8.r79618.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyph-utf8.doc.r79618.tar.xz
 Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-base.r78076.tar.xz
 Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphenex.r57387.tar.xz
 Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ifplatform.r77682.tar.xz
@@ -87,18 +87,18 @@ Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kn
 Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/knuth-local.r57963.tar.xz
 Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lua-alt-getopt.r78415.tar.xz
 Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lua-alt-getopt.doc.r78415.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mflogo.r77682.tar.xz
-Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mflogo.doc.r77682.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mflogo.r79618.tar.xz
+Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mflogo.doc.r79618.tar.xz
 Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/modes.r77365.tar.xz
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/modes.doc.r77365.tar.xz
 Source34:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/plain.r75712.tar.xz
 Source35:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-ini-files.r78524.tar.xz
 Source36:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-ini-files.doc.r78524.tar.xz
-Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-common.r78660.tar.xz
-Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-common.doc.r78660.tar.xz
-Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-msg-translations.r78661.tar.xz
-Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unicode-data.r76413.tar.xz
-Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unicode-data.doc.r76413.tar.xz
+Source37:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-common.r79648.tar.xz
+Source38:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-common.doc.r79648.tar.xz
+Source39:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-msg-translations.r79983.tar.xz
+Source40:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unicode-data.r79913.tar.xz
+Source41:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unicode-data.doc.r79913.tar.xz
 
 # Patches
 Patch0:        etex-addlanguage-fix-bz1215257.patch

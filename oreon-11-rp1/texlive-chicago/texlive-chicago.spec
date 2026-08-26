@@ -1,4 +1,4 @@
-%global source0_hash 854babad2223760c6711edba1e266a587be07bd71799bfb536753af7fc55792c
+%global source0_hash f654b51046e241ef76efe76bb5c60bbbb49296c2f32e71c764222c7c006be258cc7b8a89247bf56df7757cac1af733298e72b4d4f8e6022c351cf60a50734453
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist

@@ -1,4 +1,4 @@
-%global source0_hash 1496b0d01f599d67c9551aca2698d8ada911fcdbfd2cf6e1b1a986cdc0a6572b
+%global source0_hash 2984c8c78e2ed0bb020c3fe46fd936becb43a76092953a1319ccb6275bee8c59a7dafd0d8bcd562889a6a00a15948ced427c0f6aac4e7d8f7772e1b7dae4759b
 
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
@@ -14,7 +14,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langitalian.r72943.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langitalian.r79075.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
@@ -37,17 +37,17 @@ Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fa
 Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fancyhdr-it.doc.r21912.tar.xz
 Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixltxhyph.r73227.tar.xz
 Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixltxhyph.doc.r73227.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/frontespizio.r24054.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/frontespizio.doc.r24054.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-italian.r73410.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/itnumpar.r15878.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/itnumpar.doc.r15878.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/frontespizio.r79618.tar.xz
+Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/frontespizio.doc.r79618.tar.xz
+Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-italian.r78069.tar.xz
+Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/itnumpar.r79618.tar.xz
+Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/itnumpar.doc.r79618.tar.xz
 Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex4wp-it.r36000.tar.xz
 Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex4wp-it.doc.r36000.tar.xz
 Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/layaureo.r19087.tar.xz
 Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/layaureo.doc.r19087.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-italian.r57038.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-italian.doc.r57038.tar.xz
+Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-italian.r79461.tar.xz
+Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-italian.doc.r79461.tar.xz
 Source31:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psfrag-italian.r15878.tar.xz
 Source32:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psfrag-italian.doc.r15878.tar.xz
 Source33:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-it.r58653.tar.xz

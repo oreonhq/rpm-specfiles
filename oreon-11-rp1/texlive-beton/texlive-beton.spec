@@ -1,5 +1,5 @@
-%global source0_hash 26edcf42839432a7bac8bb5f4314cb322fb73319792c63827f351f86083c8ddf
-%global source1_hash a3180c5ac498572d04d681de7894b34698fceb9cff90e5d82fdd4496427d4f4e
+%global source0_hash da4f0e59282c05ffe1d8e0794ae3c038f0c3c6ce86d916595940645b87b36bfc090a433bf009c124b0b8a98eb195e0048cd14714733279b70b3eb93aa572bec6
+%global source1_hash 1d2cf44f44ee6ac7a65d09e12ccaada04d3493d59413985288df7ce968ac1c35febb1d85bd5abddc4600657caa010b319b3186ec7d1134c052b41832aa5b7ed8
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Use Concrete fonts
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.r77682.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.doc.r77682.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.doc.tar.xz
 BuildRequires:  tar
 Provides:       texlive-beton-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-beton-doc <= 11:%{version}

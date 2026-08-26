@@ -52,10 +52,10 @@
 %global source51_hash 9eb00a9652f22411f9ae0123bd2bda62af617f39ed3eb8266c4ca38ff0783722a3d1eb05a0fe1ef6a238a3132ade65c5ebd882309f154ca416e2191b9db44c4c
 %global source52_hash 97c2e670751fac22de2be4f8783a5b6dda002f3138fbf9e5a760e04f1541aeadf632ff245286ac93c9db0676c89c96142a31c00104d0c656a5af7f99dafc855a
 %global source53_hash e670330348fcd35afd9aa85a0036923f1715d1a63e2a92b792e9bc7b03cbc4fc362ab196343c9ec4848346d4847aaaa44d3ac8c587044bc3f6a463ff6381bb99
-%global source54_hash 4fc1641cbc963d9b3db961a390ba35ef8c64f2ed385b997eacace4bb9cb01af8d84d97df6b27aea447eeb50da13ec38905882c4a817e16de86b5429067bf91b0
-%global source55_hash c5c08bb0ccdf91f9ac0667930e8ab8bbcbef7502cedc1a4bf77cf04bf36595c6bd2b0c158d7090f5aa5317f7d2c91eba9ea6bb10e4af395343467ee5b8df6939
-%global source56_hash 003f2bc68d6a36f9f5c9fdab48f2c84559ca11e00ef5b4590353c67b6e9d581a887d278bb28fd0278e87aa8c7dc515525d066bd70691026c0075194a324aefd8
-%global source57_hash 301092b52ac0c0811fd4e2207d46a263fd6bbdda8283789055fe27093db55937f51fd98693c1bb795642267d495f5b522812f7fb55f0611b9646eeeee29f469e
+%global source54_hash ffd9d0d1369537304d775884585b579b8581ca4ce77e24322040a097d0c3e2156b8f51173fef793559274c1e4e6bcd433057f91882a528b41e6d623202aaf632
+%global source55_hash 6761fb6799d024b76cafa16333d136a1a006abc46e84bf50db873e190dff2de4834788140ac94e198d0635e1b8f05e60b798c803cb78751dd10ce5b9b8841823
+%global source56_hash ad3f3fe4e1c327bbf22ec8579df584d37b6e964575bf162c8c9d3ee6c2ceccfe5d21422547573e7198e1eb370f8d967b683413f56205e72245c00469de5f556f
+%global source57_hash 3ce6f6825c1d33be285b45c4c34bd0a42278792535bb7330b2790b752630111e32adb1bdcbc5a6849829f6557400a217fe9f442f3286e0025fb1da69e4039704
 %global source58_hash c753f664bed21f6a1727b0a2624a93c429682e6344a038471b163584317b762bdb75767076422133d12f03e7d9142685649080e46ff242752d3bdaa5753eb8c8
 %global source59_hash 90dcfb604da0fe3398471969cef3115f51b4df911d2a4878d3bd9000a2959e4e3b0ecd744f10356fca949edd7375128b4b8e74aa5f52ec1d3214698f7ab8b932
 %global source60_hash 3fb817722464b3d292ac331b9bfb5fd94c4a666bcb1dabbcddb809dc157b089399c9c3df2291f212307a8e3d5a7392a7321485cfdf0a3e1b0dcb23bff8a90490
@@ -66,8 +66,8 @@
 %global source65_hash f08f5d97b2333d362ae51e58dfe930e96551827a334ff97ccf79f2fbe07bdebe945b5884acd2d46f98e67febb5e69313adc5b11b9c5f8a223d26fdc504d52cb6
 %global source66_hash d3b7c10e0db17f32f9c9120bd39d99ce0c6f1905711244341248c66477a7e48b77f108cd486c686149379d626f40cae7e152c67b140101786f0beebced5281f8
 %global source67_hash 46d55147e8cad3403e1eec816b3d16613d95b69baf5ca3b0ff6cb0eccc5b1cec6752e25a9614d1a1d1937c8fcec36b34648523135f97bf7eb9f5c6d7b41580a2
-%global source68_hash b9bdddefb279df216e134534f5e97faf1375513079b209bed404c027b00e0f2ba810d6bc1b66955f92804af10e64a93c060cb517f6eee5f5b013a28edf84fc0c
-%global source69_hash 213a2d9a7ae5811b2d9ed7de9465b8efa372c70d3796d4e17fbc9e95322705678ea324884e9a55d6841861a9a0bdca622c7ce9d8bbcdb06e69172fc5955d920b
+%global source68_hash d368625d4ab3cf741ebc9addf57ec54451a198890493425950f2a219db456e80410ec788ae2be34b53c75b78fcb79a840d843b84cd0fc6575cb41a44d5f4801e
+%global source69_hash 49dbb66a1ea648a34535f612fdcbcf489c5252b8307708f02dfc16f3b020aefcb1ac9d6dbe23cc50bde33b7abcd1696729693dcc00dd572e7f510c548022bcbb
 %global source70_hash e5b845d322576324201f2ef87ed5c8d5dc6c55a0fe129fd293923b056ee5e896978c155b0386be5a03a3becc7f211d18669b2c35283f4daab6d04de5650dcf50
 %global source71_hash f7728629c01bb64cb75ee2ddd67b4e83e01e81a0f848b747a903f7dffb47682ad9b33d79891f7d05cd9352e38c7dc6ab70f95b12a71273f21a268715f3cc7792
 %global source72_hash 8dc998562742e65727a8053c6b42e1ffd6bc6f618d873145b8d71b6243adfce41afebd8dfe68733b9977eb3def7ec837c3c264ec2350b40bf917d013ce7a1960
@@ -130,8 +130,8 @@
 %global source129_hash 6084d2c8a9aaee02815448559927b43b5cb733080cf5411ab49553198aae7178c41dd52d1e98e9cffbd19241389d15850a6b6e1aaeda315a2bcdf2fd35e5f80b
 %global source130_hash 0b390717c538a8c44cc7e8214908149c3705d5cb453d7776015eed27638ed0c0d16ea0b5be5abf2b6bec6e410b849f35796f574923303ebc883c75f7221f7634
 %global source131_hash dba85f4e58f7a7d8f1f81d0051a0305cdf51e7bd1ad4220cebed513871c6a3d816d9a6048cdce352f48527da2b04700b94210eedce5104af289dd0508fc72f63
-%global source132_hash 07b8f990c11d6c6b9531006804ddb96273abdc3638f936359027a7ca459a1ff237e41d673d4380e17f518e6d1bcdfe59185dd645668e05c991543c3055a1cc94
-%global source133_hash 7cc4d23ccefc0a17bc5beaafc4da7a4a1160baaf3790b8ecf031cd0d7be753604bef6a5f84d873dabe87cf2595b4c1a054e67b9724c98e30b33ed426e1db459f
+%global source132_hash 3cbdc43079c1aba73178c598d7ab666d342e912eb15c909f768f4cf2a0f8aa190ef089fdca1ad331edbfd8c753f2ac758b4a330111fd743470310ea9dd256285
+%global source133_hash afd61a22f253228a78fc346d236b33edcae4b3211d18bb5b32f4897cfaeb057b5031a59d728d9956f0f70ea1193e48aec68fc40e2a4718f32bda94e9aa1da93d
 %global source134_hash fe3a71bf749678191ffa50d1a95d5c7034a8d517e78b20f85214f730f51e73bc8faa9b091309b02c1b4ad3009d3da62e845cf26de00367b9c07de0c9d4579999
 %global source135_hash 47e54888f2793279cff8d45c7f3d6fcbc8a6d394d5855d9f581783a1ba3f103c300aa7ffcba9185de877fa5ce6d83312a1b4b6cac4dfc88ebd5f22c968b9a72d
 %global source136_hash 7f2558dc265746f143520c2c6f3bf2ed05ac8c54988e573519321a7fb5a2a991220d0eb8906893f77964dc01f0e3f16b783dcd20f809042a11d29cd137f557fd
@@ -196,8 +196,8 @@
 %global source195_hash 76343a2593280c1a58d4e6acdcd3fbdc8e0a8a2caf43f50b5108bbfb20b3ec4a04eee401b3c4fbc6f4a072e3d01fbbbf1088d2e798f6253a45996c17b240b6c3
 %global source196_hash f9bb13ce722cc896a2be1c5c13bbe588db13973cd9d530cdf7e0e9216f35b5e1c82871a35dddce31dc7a252dc85611c38437a135efe211b7ee58a500903229ef
 %global source197_hash 5c7ff12b5adf1ee6ec90f772e052993424f6b5bc6e210e360ddca7df38fce3d911644ecff4b070862bd9b7b2a5c31a99e3b7a40ef829d7ee9eb4a69a6ff9f9cb
-%global source198_hash 094db3ce2345f3cdd37f9432c647cc41dbbe6b3309b929cb7a9764de98a32b1122eb8d87bb68d524163fb02e860985507473c2a82308cbf214ed3e30897994a1
-%global source199_hash 8d5ad952ad2e74999de0924f5dcb14690913b12540313f2953920e0867a75472d9d70ef25c06b648c9e4d73d625fbb4f4db798e4dfc1595049453a6549a838ac
+%global source198_hash 91aab772cb6d75b559b02820b1e72784cb90bb47fab196ef9d0bd6f7777ed5fa6365aeff5abdd3809de5f3e5d175e6dad83d0e484e50b050b74abb1fb127c8f9
+%global source199_hash 1958061b31edb64cd1e2fbecbe9d4f0907ccb43f820b7142f18e82e3c407cd54f7b71b8fb834b26b53c32d783429474f3280ff389c059ca7ce2a79ed0b0eb449
 %global source200_hash 476dac5b149811659c663751478f9f224e209dd63954cb88baadcc94c70a4861673512e01c4a5f30097d242f56f1a6edbf4fc225f8b561e49a4e60b02020488e
 %global source201_hash 0fc82d9b448c85eb3d77a7943b9243720f41894f062d9723b3dd56f2d3e9cd8fcb87a3d57f387f1c87b3ea132fee2e0e08962d9044aa7c756f0db979f4c06a3c
 %global source202_hash 81cc5e3936c13bfa0247fa5a01d424641ce7f54a2c57b224cceee2d59be89d6809bed72a5c4f9fa8bd337b93481e7afa10c22fa0f85a8e6230671ae5d4cf4647
@@ -253,7 +253,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.uib.no/systems/texlive/tlnet/archive/collection-luatex.r78670.tar.xz
+Source0:        https://ctan.uib.no/systems/texlive/tlnet/archive/collection-luatex.r79926.tar.xz
 
 # License texts
 Source1:        https://ctan.uib.no/systems/texlive/tlnet/archive/texlive-licenses.tar.xz
@@ -286,8 +286,8 @@ Source26:        http://mirror.ctan.org/systems/texlive/tlnet/archive/cstypo.r41
 Source27:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/cstypo.doc.r41986.tar.xz
 Source28:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ctablestack.r78101.tar.xz
 Source29:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ctablestack.doc.r78101.tar.xz
-Source30:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ekdosis.r69568.tar.xz
-Source31:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ekdosis.doc.r69568.tar.xz
+Source30:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ekdosis.r79618.tar.xz
+Source31:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ekdosis.doc.r79618.tar.xz
 Source32:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/emoji.r77682.tar.xz
 Source33:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/emoji.doc.r77682.tar.xz
 Source34:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/emojicite.r76924.tar.xz
@@ -308,12 +308,12 @@ Source48:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/int
 Source49:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/interpreter.doc.r78415.tar.xz
 Source50:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kanaparser.r48052.tar.xz
 Source51:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kanaparser.doc.r48052.tar.xz
-Source52:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkluaverb.r77516.tar.xz
-Source53:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkluaverb.doc.r77516.tar.xz
-Source54:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkran.r78190.tar.xz
-Source55:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkran.doc.r78190.tar.xz
-Source56:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kksymbols.r78727.tar.xz
-Source57:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kksymbols.doc.r78727.tar.xz
+Source52:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkluaverb.r79443.tar.xz
+Source53:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkluaverb.doc.r79443.tar.xz
+Source54:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkran.r80036.tar.xz
+Source55:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kkran.doc.r80036.tar.xz
+Source56:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kksymbols.r80035.tar.xz
+Source57:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/kksymbols.doc.r80035.tar.xz
 Source58:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ligtype.r78793.tar.xz
 Source59:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ligtype.doc.r78793.tar.xz
 Source60:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/linebreaker.r77682.tar.xz
@@ -324,10 +324,10 @@ Source64:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lpa
 Source65:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lparse.doc.r78101.tar.xz
 Source66:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lt3luabridge.r76924.tar.xz
 Source67:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lt3luabridge.doc.r76924.tar.xz
-Source68:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-list-hyphen.r78839.tar.xz
-Source69:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-list-hyphen.doc.r78839.tar.xz
-Source70:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-placeholders.r70850.tar.xz
-Source71:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-placeholders.doc.r70850.tar.xz
+Source68:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-list-hyphen.r80068.tar.xz
+Source69:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-list-hyphen.doc.r80068.tar.xz
+Source70:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-placeholders.r79056.tar.xz
+Source71:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-placeholders.doc.r79056.tar.xz
 Source72:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-tinyyaml.r73671.tar.xz
 Source73:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-tinyyaml.doc.r73671.tar.xz
 Source74:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua-typo.r77682.tar.xz
@@ -348,8 +348,8 @@ Source88:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lua
 Source89:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacensor.doc.r71922.tar.xz
 Source90:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacode.r78415.tar.xz
 Source91:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacode.doc.r78415.tar.xz
-Source92:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacolor.r77682.tar.xz
-Source93:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacolor.doc.r77682.tar.xz
+Source92:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacolor.r79461.tar.xz
+Source93:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacolor.doc.r79461.tar.xz
 Source94:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacomplex.r68883.tar.xz
 Source95:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luacomplex.doc.r68883.tar.xz
 Source96:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luagcd.r76790.tar.xz
@@ -368,8 +368,8 @@ Source108:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lu
 Source109:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luainputenc.doc.r77682.tar.xz
 Source110:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luakeys.r78101.tar.xz
 Source111:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luakeys.doc.r78101.tar.xz
-Source112:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luakeyval.r76992.tar.xz
-Source113:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luakeyval.doc.r76992.tar.xz
+Source112:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luakeyval.r79472.tar.xz
+Source113:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luakeyval.doc.r79472.tar.xz
 Source114:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualatex-math.r77682.tar.xz
 Source115:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualatex-math.doc.r77682.tar.xz
 Source116:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualatex-truncate.r78632.tar.xz
@@ -378,20 +378,20 @@ Source118:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lu
 Source119:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualibs.doc.r78415.tar.xz
 Source120:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualinalg.r76924.tar.xz
 Source121:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualinalg.doc.r76924.tar.xz
-Source122:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualineno.r77766.tar.xz
-Source123:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualineno.doc.r77766.tar.xz
+Source122:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualineno.r79471.tar.xz
+Source123:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lualineno.doc.r79471.tar.xz
 Source124:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamathalign.r77682.tar.xz
 Source125:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamathalign.doc.r77682.tar.xz
 Source126:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamaths.r76924.tar.xz
 Source127:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamaths.doc.r76924.tar.xz
-Source128:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamml.r78219.tar.xz
-Source129:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamml.doc.r78219.tar.xz
+Source128:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamml.r79442.tar.xz
+Source129:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamml.doc.r79442.tar.xz
 Source130:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamodulartables.r68893.tar.xz
 Source131:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamodulartables.doc.r68893.tar.xz
-Source132:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamplib.r78841.tar.xz
-Source133:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamplib.doc.r78841.tar.xz
-Source134:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luaoptions.r78101.tar.xz
-Source135:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luaoptions.doc.r78101.tar.xz
+Source132:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamplib.r80032.tar.xz
+Source133:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luamplib.doc.r80032.tar.xz
+Source134:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luaoptions.r79068.tar.xz
+Source135:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luaoptions.doc.r79068.tar.xz
 Source136:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luapackageloader.r54779.tar.xz
 Source137:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luapackageloader.doc.r54779.tar.xz
 Source138:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luaplot.r68918.tar.xz
@@ -426,8 +426,8 @@ Source166:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lu
 Source167:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/luaxml.doc.r78101.tar.xz
 Source168:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lutabulartools.r73345.tar.xz
 Source169:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/lutabulartools.doc.r73345.tar.xz
-Source170:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/marginalia.r77235.tar.xz
-Source171:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/marginalia.doc.r77235.tar.xz
+Source170:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/marginalia.r79952.tar.xz
+Source171:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/marginalia.doc.r79952.tar.xz
 Source172:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/minim.r73816.tar.xz
 Source173:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/minim.doc.r73816.tar.xz
 Source174:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/minim-math.r73816.tar.xz
@@ -438,8 +438,8 @@ Source178:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/mi
 Source179:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/minim-pdf.doc.r77682.tar.xz
 Source180:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/minim-xmp.r73816.tar.xz
 Source181:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/minim-xmp.doc.r73816.tar.xz
-Source182:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/newpax.r78415.tar.xz
-Source183:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/newpax.doc.r78415.tar.xz
+Source182:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/newpax.r78945.tar.xz
+Source183:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/newpax.doc.r78945.tar.xz
 Source184:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/nodetree.r76924.tar.xz
 Source185:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/nodetree.doc.r76924.tar.xz
 Source186:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/odsfile.r78415.tar.xz
@@ -454,18 +454,18 @@ Source194:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/pe
 Source195:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/penlight.doc.r73362.tar.xz
 Source196:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/penlightplus.r74000.tar.xz
 Source197:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/penlightplus.doc.r74000.tar.xz
-Source198:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/piton.r78751.tar.xz
-Source199:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/piton.doc.r78751.tar.xz
+Source198:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/piton.r79971.tar.xz
+Source199:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/piton.doc.r79971.tar.xz
 Source200:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/placeat.r45145.tar.xz
 Source201:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/placeat.doc.r45145.tar.xz
-Source202:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/plantuml.r75196.tar.xz
-Source203:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/plantuml.doc.r75196.tar.xz
+Source202:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/plantuml.r79512.tar.xz
+Source203:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/plantuml.doc.r79512.tar.xz
 Source204:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/pyluatex.r78739.tar.xz
 Source205:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/pyluatex.doc.r78739.tar.xz
 Source206:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/scikgtex.r66764.tar.xz
 Source207:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/scikgtex.doc.r66764.tar.xz
-Source208:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/seatingchart.r76924.tar.xz
-Source209:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/seatingchart.doc.r76924.tar.xz
+Source208:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/seatingchart.r79764.tar.xz
+Source209:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/seatingchart.doc.r79764.tar.xz
 Source210:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/selnolig.r77682.tar.xz
 Source211:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/selnolig.doc.r77682.tar.xz
 Source212:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/semesterplannerlua.r71322.tar.xz
@@ -490,8 +490,8 @@ Source230:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/ts
 Source231:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/tsvtemplate.doc.r65333.tar.xz
 Source232:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/typewriter.r73877.tar.xz
 Source233:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/typewriter.doc.r73877.tar.xz
-Source234:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/unibidi-lua.r78655.tar.xz
-Source235:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/unibidi-lua.doc.r78655.tar.xz
+Source234:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/unibidi-lua.r79055.tar.xz
+Source235:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/unibidi-lua.doc.r79055.tar.xz
 Source236:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/uninormalize.r78101.tar.xz
 Source237:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/uninormalize.doc.r78101.tar.xz
 Source238:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/yamlvars.r73922.tar.xz

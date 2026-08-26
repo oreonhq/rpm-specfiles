@@ -1,5 +1,5 @@
-%global source0_hash 4b631606bc8314bce494eddf3ae4a23188861ccdc00abb8234e140c4849f0ade
-%global source1_hash e649b7f51782c320db80951cabd4528150f44eee92524c07625cdda98e1733cd
+%global source0_hash 03b616664e33bbe6dcf54e6cfe86fce58d4e08175c2b1d7dc37d493f61dfd0797ed0abcadafbd591c08c33b117dcee4362f82bf39787fd388dccb2117462dd0a
+%global source1_hash 5fac17dce996635271c4c4aa9204a7915d9f370d4257b6ed3cf9a6e6b6ca9c9a840c72728063a35b7151405c96b0c1b0a2309ed34665199a29d7ddc43e0becb4
 
 %global _texdir /usr/share/texlive
 %global _texmf_main %{_texdir}/texmf-dist
@@ -12,8 +12,8 @@ Summary:        Create PostScript and PDF graphics in TeX
 License:        LPPL-1.3c AND GPL-2.0-only AND GFDL-1.3-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.r78101.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.doc.r78101.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.r79866.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.doc.r79866.tar.xz
 BuildRequires:  tar
 Provides:       texlive-pgf-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-pgf-doc <= 11:%{version}
