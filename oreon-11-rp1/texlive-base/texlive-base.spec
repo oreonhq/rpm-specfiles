@@ -7530,7 +7530,7 @@ tar xf %{SOURCE0}
 %endif
 %endif
 
-%if 0%{?fedora} >= 38 || 0%{?rhel} > 9
+%if 0%{?oreon} >= 11 || 0%{?fedora} >= 38 || 0%{?rhel} > 9
 %patch -P37 -p1 -b .libpaper2
 %endif
 
