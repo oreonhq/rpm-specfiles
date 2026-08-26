@@ -552,7 +552,7 @@ Source228:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/h
 Source229:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/harvmac.tar.xz
 Source230:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/harvmac.doc.tar.xz
 Source231:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hep-bibliography.tar.xz
-Source232:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/hep-bibliography.doc.tar.xz
+Source232:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hep-bibliography.doc.tar.xz
 Source233:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/historische-zeitschrift.tar.xz
 Source234:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/historische-zeitschrift.doc.tar.xz
 Source235:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/icite.tar.xz

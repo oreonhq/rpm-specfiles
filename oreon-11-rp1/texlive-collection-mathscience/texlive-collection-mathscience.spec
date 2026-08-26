@@ -985,7 +985,7 @@ Source354:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/m
 Source355:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/miller.tar.xz
 Source356:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/miller.doc.tar.xz
 Source357:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mismath.tar.xz
-Source358:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/mismath.doc.tar.xz
+Source358:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mismath.doc.tar.xz
 Source359:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mohelper.tar.xz
 Source360:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mohelper.doc.tar.xz
 Source361:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/moremath.tar.xz
