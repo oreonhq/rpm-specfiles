@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 122%{?dist}
+Release: 123%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -7636,7 +7636,7 @@ export XPDF_LIBS="-lxpdfcore -lfofi -lgoo -lsplash $GLIB_LIBS $PAPER_LIBS $FONTC
 --with-system-gd --with-system-t1lib --with-system-teckit --with-system-freetype2 --with-system-zziplib \
 --with-system-cairo --with-system-icu --with-system-harfbuzz --with-system-graphite2 --with-system-libgs --with-system-pixman \
 --with-system-libpaper --with-system-potrace --with-pic --with-xdvi-x-toolkit=xaw --with-system-mpfr --with-system-gmp \
---enable-shared --enable-compiler-warnings=max --without-cxx-runtime-hack \
+--enable-shared --enable-compiler-warnings=no --without-cxx-runtime-hack \
 --disable-native-texlive-build --disable-t1utils --enable-psutils --disable-biber --disable-ptexenc --disable-largefile \
 %if %{with poppler}
 --with-system-poppler --with-system-xpdf \
@@ -7660,7 +7660,7 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $i
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $i
 done
 
-%make_build world STRIPPROG=/bin/true STRIP=/bin/true
+%make_build world V=0 STRIPPROG=/bin/true STRIP=/bin/true
 
 %install
 # make directories
