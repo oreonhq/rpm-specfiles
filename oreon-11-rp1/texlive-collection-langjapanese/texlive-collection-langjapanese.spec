@@ -1102,9 +1102,9 @@ Requires:       texlive-firstaid
 Requires:       texlive-hyphen-base
 Requires:       texlive-knuth-lib
 Requires:       texlive-l3kernel
-Requires:       texlive-l3backend-dev
+Requires:       texlive-l3kernel-dev
 Requires:       texlive-l3kernel
-Requires:       texlive-l3backend-dev
+Requires:       texlive-l3kernel-dev
 Requires:       texlive-latex
 Requires:       texlive-latex-base-dev
 Requires:       texlive-latex-firstaid-dev

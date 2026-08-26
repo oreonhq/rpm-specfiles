@@ -1250,7 +1250,7 @@
 %global source1249_hash 7e60245a3f189287781554d0da56293cc985cd1ee93a329609bbe560f73f699a0e10a06b4f126a21beb3177f9e5a991127f42a4999ab27d5d03d453f14afb67e
 %global source1250_hash 9455459c45e22a5473eb8247260358446b86e6441d44c6f6f25698de31796cfba1db9cba5b177c3542f9e828765dd8ff7d9638f8a846d4f1c312750ae5d7f974
 %global source1251_hash e1d6a9407ff24969b417c7711c7b06235d94db62ec8a26d37c9e4d373b9ad778906fa703b2b94c33f615deee9a7b1d4e0d58739e8e85e758cd4cfc785abed2d7
-%global source1252_hash 5c3c3e090cd484147f93df21dc32ed849e998eb647cf12af741a1000290d8cb8
+%global source1252_hash 6f68bc819af6231cf1f4cb1e234308004cd5f2ad3ac130f198f443b6b979ee2f
 %global source1253_hash 43319ef7ac05145578bd1673a3ad33d955547c8d847df977378600163a5df750
 %global source1254_hash 9888a77cec4d14f8712b4351dc3e628f7c061f3841c93d0a05f819e89f15c870fc4b3407013e98921e4771d3e84f8bfb6cb36f43f11632815540a225a5f6e151
 %global source1255_hash 53fd357ed4f3994b46aff7e607d29274a4bf33a4ecb863add3d93a01e666632aff14364d59182844b36f98684c7f131dc5671c1fd7fb8a5c16b2d1b6dcea7960
@@ -1622,8 +1622,6 @@
 %global source1621_hash 862f587f37c1ab5149de6f19ee7ee69c7acc977b393bf557368b3058c4b8aef33ae055bbbb2f31f4aaa1110a692142adb4ec9609cb372f9492441866b9d96d8d
 %global source1622_hash c2f3e86494993e6e56f131b9e7105ee2d15179b96580982ae7fba9e32c3e9889159ae767d96d95111f2eb052bd61f0c3c15406ae3af70b359e3b5ce081a6978a
 %global source1623_hash d930db31105dbcfe3df4184422115d82fda7efa93d00eb8f9fefa0eff3893602fb4db9e7be26d2a44c0b3cb56e8e9810f61bc660c15e49c23880c3f0cd44025b
-%global source1624_hash a4130aa9a6f2d17c2690e5fe155e563f08d8a2c17925e9b8ea5ae2c1ba71ffbdc696fdebe396711d6a6e270883f51020da9a7ae858750ab4ac8687c34a9b4ccb
-%global source1625_hash 3a965e5859bd98e5dacc5d0fc6e94594f2b61626793b54c671b4739214de3dd830700cf58000f69e8aeeb3644a0906119bffcf1c4a0fde9ac1db253b45af024b
 %global source1626_hash 1646591632e90c3bd1d670788e26ba079fc0823bc47df8a25d39c7a4952751f70c45306c09ae5c1deeee1c13447520efb950e17f535f51539941846a723f1b44
 %global source1627_hash 68896612c7a7722035d25526973ceae92d5ccdbb465c07307ec8aeaf22b25c9350cb7e2bf02c6ef75399ecb28ca48f96dd8b188f16fe4196f588cd67270880e8
 %global source1628_hash 92bd582cc729bcd3cea6979771e934d5a4a194536ff89a475309d3999ab0a2ab70d5ba5be6f0353e97498ab4e971e3209df9a3ca4ac99a8c9de27586a0f4a3b0
@@ -4547,8 +4545,8 @@ Source1248:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/
 Source1249:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fundus-calligra.tar.xz
 Source1250:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fundus-calligra.doc.tar.xz
 Source1251:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fundus-cyr.tar.xz
-Source1252:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fundus-sueterlin.r26030.tar.xz
-Source1253:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/fundus-sueterlin.doc.r26030.tar.xz
+Source1252:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/fundus-sueterlin.r26030.tar.xz
+Source1253:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/fundus-sueterlin.doc.r26030.tar.xz
 Source1254:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/futharksymb.tar.xz
 Source1255:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/futharksymb.doc.tar.xz
 Source1256:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fvextra.tar.xz
@@ -4919,8 +4917,6 @@ Source1620:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/
 Source1621:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ktbox.doc.tar.xz
 Source1622:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ktv-texdata.tar.xz
 Source1623:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ktv-texdata.doc.tar.xz
-Source1624:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final/archive/l3backend-dev.tar.xz
-Source1625:        https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2025/tlnet-final/archive/l3backend-dev.doc.tar.xz
 Source1626:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l3kernel-dev.tar.xz
 Source1627:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/l3kernel-dev.doc.tar.xz
 Source1628:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/labbook.tar.xz
@@ -7410,7 +7406,7 @@ Requires:       texlive-komacv-rg
 Requires:       texlive-korigamik
 Requires:       texlive-ktbox
 Requires:       texlive-ktv-texdata
-Requires:       texlive-l3backend-dev
+Requires:       texlive-l3kernel-dev
 Requires:       texlive-l3build
 Requires:       texlive-l3kernel-dev
 Requires:       texlive-labbook
@@ -22358,25 +22354,12 @@ command \get to extract a collection whose argument is a comma-separated set of
 exercise index numbers. While the package was designed for teachers
 constructing tables of exercises, it plainly has more general application.
 
-%package -n texlive-l3backend-dev
-Summary:        LaTeX3 backend drivers (dev)
-Version:        svn77954
-License:        LPPL-1.3c
-Requires:       texlive-base
-Requires:       texlive-kpathsea
-
-%description -n texlive-l3backend-dev
-This is a pre-release version of the l3backend package. It accompanies the
-pre-testing kernel code (latex-base-dev), and is intended for testing by
-knowledgeable users.
-
 %package -n texlive-l3kernel-dev
 Summary:        Development pre-release of l3kernel
 Version:        svn78876
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-Requires:       texlive-l3backend-dev
 Requires:       texlive-lua-uni-algos
 
 %description -n texlive-l3kernel-dev
@@ -38645,8 +38628,6 @@ test "%{source1620_hash}" = "none" || { f="%{SOURCE1620}"; test -f "$f" || { ech
 test "%{source1621_hash}" = "none" || { f="%{SOURCE1621}"; test -f "$f" || { echo "oreon: missing Source1621 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1621_hash}" || { echo "oreon: Source1621 hash mismatch" >&2; exit 1; }; }
 test "%{source1622_hash}" = "none" || { f="%{SOURCE1622}"; test -f "$f" || { echo "oreon: missing Source1622 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1622_hash}" || { echo "oreon: Source1622 hash mismatch" >&2; exit 1; }; }
 test "%{source1623_hash}" = "none" || { f="%{SOURCE1623}"; test -f "$f" || { echo "oreon: missing Source1623 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1623_hash}" || { echo "oreon: Source1623 hash mismatch" >&2; exit 1; }; }
-test "%{source1624_hash}" = "none" || { f="%{SOURCE1624}"; test -f "$f" || { echo "oreon: missing Source1624 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1624_hash}" || { echo "oreon: Source1624 hash mismatch" >&2; exit 1; }; }
-test "%{source1625_hash}" = "none" || { f="%{SOURCE1625}"; test -f "$f" || { echo "oreon: missing Source1625 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1625_hash}" || { echo "oreon: Source1625 hash mismatch" >&2; exit 1; }; }
 test "%{source1626_hash}" = "none" || { f="%{SOURCE1626}"; test -f "$f" || { echo "oreon: missing Source1626 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1626_hash}" || { echo "oreon: Source1626 hash mismatch" >&2; exit 1; }; }
 test "%{source1627_hash}" = "none" || { f="%{SOURCE1627}"; test -f "$f" || { echo "oreon: missing Source1627 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1627_hash}" || { echo "oreon: Source1627 hash mismatch" >&2; exit 1; }; }
 test "%{source1628_hash}" = "none" || { f="%{SOURCE1628}"; test -f "$f" || { echo "oreon: missing Source1628 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1628_hash}" || { echo "oreon: Source1628 hash mismatch" >&2; exit 1; }; }
@@ -47762,11 +47743,6 @@ popd
 %license gpl2.txt
 %{_texmf_main}/tex/latex/ktv-texdata/
 %doc %{_texmf_main}/doc/latex/ktv-texdata/
-
-%files -n texlive-l3backend-dev
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex-dev/l3backend/
-%doc %{_texmf_main}/doc/latex-dev/l3backend/
 
 %files -n texlive-l3kernel-dev
 %license lppl1.3c.txt
