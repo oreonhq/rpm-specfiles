@@ -3297,7 +3297,7 @@ Source0:        https://mirror.ctan.org/systems/texlive/tlnet/archive/collection
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/2up.tar.xz
+Source2:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/2up.r55076.tar.xz
 Source3:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/2up.doc.tar.xz
 Source4:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/a0poster.tar.xz
 Source5:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/a0poster.doc.tar.xz
