@@ -500,7 +500,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 123%{?dist}
+Release: 124%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -7853,6 +7853,8 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/
 # rm -f %%{buildroot}%%{_bindir}/tlmgr
 # rm -f %%{buildroot}%%{_texdir}/tlpkg/installer/config.guess
 rm -f %{buildroot}%{_texmf_main}/scripts/texlive/tlmgr.pl.orig
+rm -f %{buildroot}%{_texmf_main}/web2c/texmfcnf.lua.orig
+rm -f %{buildroot}%{_texdir}/texlive-catalogue-only.tlpdb
 rm -f %{buildroot}%{_texmf_main}/scripts/texlive/tl-errmess.vbs
 rm -f %{buildroot}%{_texmf_main}/scripts/texlive/tlmgrgui.pl
 rm -f %{buildroot}%{_texmf_main}/scripts/texlive/uninstall-win32.pl
