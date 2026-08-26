@@ -12,8 +12,8 @@ Summary:        Generate changebars in LaTeX documents
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/changebar.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-changebar-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-changebar-doc <= 11:%{version}

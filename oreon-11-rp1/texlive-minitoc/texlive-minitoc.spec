@@ -12,8 +12,8 @@ Summary:        Produce a table of contents for each chapter, part or section
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/minitoc.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/minitoc.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/minitoc.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/minitoc.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-minitoc-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-minitoc-doc <= 11:%{version}

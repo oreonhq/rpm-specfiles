@@ -12,8 +12,8 @@ Summary:        Correct placement of accents in sans-serif maths
 License:        OFL-1.1
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sansmathaccent.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sansmathaccent.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sansmathaccent.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sansmathaccent.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-sansmathaccent-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-sansmathaccent-doc <= 11:%{version}

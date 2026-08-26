@@ -12,8 +12,8 @@ Summary:        Section numbering and table of contents control
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tocvsec2.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tocvsec2.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tocvsec2.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tocvsec2.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-tocvsec2-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-tocvsec2-doc <= 11:%{version}

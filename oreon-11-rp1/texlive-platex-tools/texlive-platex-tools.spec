@@ -12,8 +12,8 @@ Summary:        pLaTeX utility tools
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/platex-tools.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/platex-tools.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/platex-tools.r72097.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/platex-tools.doc.r72097.tar.xz
 BuildRequires:  tar
 Provides:       texlive-platex-tools-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-platex-tools-doc <= 11:%{version}

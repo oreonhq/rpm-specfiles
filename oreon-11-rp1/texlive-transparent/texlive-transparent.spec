@@ -12,8 +12,8 @@ Summary:        Using a color stack for transparency with pdfTeX
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/transparent.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/transparent.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/transparent.r79461.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/transparent.doc.r79461.tar.xz
 BuildRequires:  tar
 Provides:       texlive-transparent-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-transparent-doc <= 11:%{version}

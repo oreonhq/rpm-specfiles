@@ -12,8 +12,8 @@ Summary:        A bundle of utilities by Jonathan Sauer
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.r15878.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/sauerj.doc.r15878.tar.xz
 BuildRequires:  tar
 Provides:       texlive-sauerj-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-sauerj-doc <= 11:%{version}

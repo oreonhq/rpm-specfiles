@@ -16,8 +16,8 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.tar.xz
-Source1:	https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.r362.tar.xz
+Source1:	https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.doc.r362.tar.xz
 # License texts
 Source2:        texlive-licenses.tar.xz
 

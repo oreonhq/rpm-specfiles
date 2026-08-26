@@ -12,8 +12,8 @@ Summary:        Bug fix for longtable
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.r17533.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ltabptch.doc.r17533.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ltabptch-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ltabptch-doc <= 11:%{version}

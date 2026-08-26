@@ -13,8 +13,8 @@ Summary:        TeX Live infrastructure scripts (bootstrap CTAN drop)
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-scripts.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-scripts.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-scripts.r79200.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-scripts.doc.r79200.tar.xz
 BuildRequires:  tar
 Provides:       texlive-texlive-scripts = %{epoch}:%{version}-%{release}
 Provides:       tex-texlive-scripts = %{epoch}:%{version}-%{release}

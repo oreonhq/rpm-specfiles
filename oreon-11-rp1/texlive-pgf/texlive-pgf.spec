@@ -12,8 +12,8 @@ Summary:        Create PostScript and PDF graphics in TeX
 License:        LPPL-1.3c AND GPL-2.0-only AND GFDL-1.3-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.r78101.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pgf.doc.r78101.tar.xz
 BuildRequires:  tar
 Provides:       texlive-pgf-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-pgf-doc <= 11:%{version}

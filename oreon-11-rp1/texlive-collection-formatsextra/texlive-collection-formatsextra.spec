@@ -14,25 +14,25 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-formatsextra.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-formatsextra.r72250.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.doc.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lambda.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.doc.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.doc.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.doc.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.doc.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.doc.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.r21933.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.doc.r21933.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lambda.r45756.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.r71991.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.doc.r71991.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.r33046.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.doc.r33046.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.r45777.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.doc.r45777.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.r69742.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.r69742.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.doc.r69742.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.r69742.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.doc.r69742.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-aleph

@@ -12,8 +12,8 @@ Summary:        Add reference-page-list to citations
 License:        GPL-2.0-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/citeref.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/citeref.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/citeref.r47407.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/citeref.doc.r47407.tar.xz
 BuildRequires:  tar
 Provides:       texlive-citeref-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-citeref-doc <= 11:%{version}

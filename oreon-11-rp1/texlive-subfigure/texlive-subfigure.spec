@@ -12,8 +12,8 @@ Summary:        Deprecated package for subfigures
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/subfigure.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/subfigure.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/subfigure.r79618.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/subfigure.doc.r79618.tar.xz
 BuildRequires:  tar
 Provides:       texlive-subfigure-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-subfigure-doc <= 11:%{version}

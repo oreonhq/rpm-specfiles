@@ -12,8 +12,8 @@ Summary:        Tables of signs and variations using PGF/TikZ
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tkz-tab.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tkz-tab.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tkz-tab.r79618.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tkz-tab.doc.r79618.tar.xz
 BuildRequires:  tar
 Provides:       texlive-tkz-tab-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-tkz-tab-doc <= 11:%{version}

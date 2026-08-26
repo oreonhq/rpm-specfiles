@@ -12,8 +12,8 @@ Summary:        St Mary Road symbols for theoretical computer science
 License:        LicenseRef-Public-Domain
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stmaryrd.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stmaryrd.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stmaryrd.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/stmaryrd.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-stmaryrd-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-stmaryrd-doc <= 11:%{version}

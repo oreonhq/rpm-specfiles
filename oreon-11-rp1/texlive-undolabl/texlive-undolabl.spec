@@ -12,8 +12,8 @@ Summary:        Override existing labels
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undolabl.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undolabl.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undolabl.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/undolabl.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-undolabl-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-undolabl-doc <= 11:%{version}

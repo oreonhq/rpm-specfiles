@@ -12,8 +12,8 @@ Summary:        Catch an external file into a macro
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/catchfile.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/catchfile.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/catchfile.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/catchfile.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-catchfile-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-catchfile-doc <= 11:%{version}

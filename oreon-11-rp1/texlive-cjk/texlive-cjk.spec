@@ -12,8 +12,8 @@ Summary:        CJK language support macros
 License:        GPL-2.0-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.r60865.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.doc.r60865.tar.xz
 BuildRequires:  tar
 Provides:       texlive-cjk-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-cjk-doc <= 11:%{version}

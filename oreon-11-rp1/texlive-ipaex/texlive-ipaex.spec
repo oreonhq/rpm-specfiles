@@ -12,8 +12,8 @@ Summary:        IPAex fonts for Japanese
 License:        IPA
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ipaex.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ipaex.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ipaex.r61719.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ipaex.doc.r61719.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ipaex-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ipaex-doc <= 11:%{version}

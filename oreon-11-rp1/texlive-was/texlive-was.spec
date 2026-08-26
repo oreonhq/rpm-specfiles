@@ -12,8 +12,8 @@ Summary:        A collection of small packages by Walter Schmidt
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/was.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/was.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/was.r64691.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/was.doc.r64691.tar.xz
 BuildRequires:  tar
 Provides:       texlive-was-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-was-doc <= 11:%{version}

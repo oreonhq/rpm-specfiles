@@ -12,8 +12,8 @@ Summary:        Hyper extensions for doc.sty
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.r68661.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hypdoc.doc.r68661.tar.xz
 BuildRequires:  tar
 Provides:       texlive-hypdoc-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-hypdoc-doc <= 11:%{version}

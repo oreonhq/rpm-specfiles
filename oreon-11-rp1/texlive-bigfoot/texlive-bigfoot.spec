@@ -12,8 +12,8 @@ Summary:        Footnotes for critical editions (provides perpage)
 License:        GPL-2.0-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bigfoot.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bigfoot.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bigfoot.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bigfoot.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-bigfoot-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-bigfoot-doc <= 11:%{version}

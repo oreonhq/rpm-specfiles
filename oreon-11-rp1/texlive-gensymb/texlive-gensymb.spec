@@ -12,8 +12,8 @@ Summary:        Generic symbols for LaTeX and plain TeX
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gensymb.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gensymb.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gensymb.r77682.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gensymb.doc.r77682.tar.xz
 BuildRequires:  tar
 Provides:       texlive-gensymb-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-gensymb-doc <= 11:%{version}

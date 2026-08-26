@@ -12,8 +12,8 @@ Summary:        Advanced font selection for platex
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/japanese-otf.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/japanese-otf.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/japanese-otf.r79618.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/japanese-otf.doc.r79618.tar.xz
 BuildRequires:  tar
 Provides:       texlive-japanese-otf-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-japanese-otf-doc <= 11:%{version}
