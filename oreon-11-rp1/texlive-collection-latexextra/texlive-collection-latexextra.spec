@@ -1,7 +1,7 @@
 %global source0_hash a4fddc01b5a823872b2415840ee03d782539e022f9e6732365e1a4367f9b4e5f2801dc282a18684eb7b9eaf37fd6f0a4a778ff80865896215f415d4b441ea50a
 %global source1_hash 900a9d4fb8f2318866d55ae1b18f26cb7ae52cf2450bf0765639d68e4d00dc6e
 %global source2_hash 6408d1d99a97df71640bcdde4133edc2e5861bbcdc8c5e1be98d5704f7ecf9c043c5538ea19ac4952d811e3677ee0698bdd477eadbd1068725bdb210787d9dbc
-%global source3_hash 3375cfbd95412f2fde2bdb9171b1c081890a52168d0c6d0f0dfb0ad914117c79291a56bc97602627a698509635765fd5e6e95387a006039178e440a8bea24837
+%global source3_hash 3da61b35536acc15e64678d2b763053139fd3fa784d69b20dc0bd92e29df8bdf2e51df9fa2864ea5b3bfc0852555b484a039e0c4fb0ddaab563f65bb951e76c3
 %global source4_hash 7f799eb034d9a85845bc42b733bf8c33241c81c8eafc8876d43665dc48b61fe1579584ff433d9d75386f0f62c8c5e7cd71d1acddf736e13c9402ed091a09ca3a
 %global source5_hash 252b0d6466e77a9cc71e9a044f6ae646607c5d7470fac5ae119fac9258f781e24d2f03e3eec316e5169e040311d25fa658e223407333ac91993218b2b47839c0
 %global source6_hash 91c5a73d70369a514a068900295b6e5f5ce65c8261a30906d63c177265348c344a42fa5639c66de179eb1c7ab47b876c49d9a277dd69e3187852dfb64400a272
@@ -3298,7 +3298,7 @@ Source0:        https://mirror.ctan.org/systems/texlive/tlnet/archive/collection
 Source1:        texlive-licenses.tar.xz
 
 Source2:        https://ctan.uib.no/systems/texlive/tlnet/archive/2up.r55076.tar.xz
-Source3:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/2up.doc.tar.xz
+Source3:        https://ctan.uib.no/systems/texlive/tlnet/archive/2up.doc.r55076.tar.xz
 Source4:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/a0poster.tar.xz
 Source5:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/a0poster.doc.tar.xz
 Source6:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/a4wide.tar.xz

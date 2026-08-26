@@ -253,7 +253,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        http://mirror.ctan.org/systems/texlive/tlnet/archive/collection-luatex.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/collection-luatex.r78670.tar.xz
 
 # License texts
 Source1:        http://mirror.ctan.org/systems/texlive/tlnet/archive/texlive-licenses.tar.xz
@@ -268,7 +268,7 @@ Source8:        https://ctan.uib.no/systems/texlive/tlnet/archive/barracuda.r637
 Source9:        http://mirror.ctan.org/systems/texlive/tlnet/archive/barracuda.doc.tar.xz
 Source10:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/bezierplot.tar.xz
 Source11:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/bezierplot.doc.tar.xz
-Source12:        http://mirror.ctan.org/systems/texlive/tlnet/archive/blopentype.tar.xz
+Source12:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/blopentype.r69080.tar.xz
 Source13:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/blopentype.doc.tar.xz
 Source14:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/char2path.tar.xz
 Source15:        https://texlive.info/tlnet-archive/2026/08/15/tlnet/archive/char2path.doc.tar.xz
