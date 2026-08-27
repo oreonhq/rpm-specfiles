@@ -2318,4 +2318,5 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 %{_texmf_main}/tex/xelatex/xunicode/
 %doc %{_texmf_main}/doc/xelatex/xunicode/
 
+%changelog
 %autochangelog

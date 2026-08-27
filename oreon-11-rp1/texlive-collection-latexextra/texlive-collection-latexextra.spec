@@ -1250,8 +1250,6 @@
 %global source1249_hash 7e60245a3f189287781554d0da56293cc985cd1ee93a329609bbe560f73f699a0e10a06b4f126a21beb3177f9e5a991127f42a4999ab27d5d03d453f14afb67e
 %global source1250_hash 9455459c45e22a5473eb8247260358446b86e6441d44c6f6f25698de31796cfba1db9cba5b177c3542f9e828765dd8ff7d9638f8a846d4f1c312750ae5d7f974
 %global source1251_hash e1d6a9407ff24969b417c7711c7b06235d94db62ec8a26d37c9e4d373b9ad778906fa703b2b94c33f615deee9a7b1d4e0d58739e8e85e758cd4cfc785abed2d7
-%global source1252_hash 5c3c3e090cd484147f93df21dc32ed849e998eb647cf12af741a1000290d8cb8
-%global source1253_hash 43319ef7ac05145578bd1673a3ad33d955547c8d847df977378600163a5df750
 %global source1254_hash 9888a77cec4d14f8712b4351dc3e628f7c061f3841c93d0a05f819e89f15c870fc4b3407013e98921e4771d3e84f8bfb6cb36f43f11632815540a225a5f6e151
 %global source1255_hash 53fd357ed4f3994b46aff7e607d29274a4bf33a4ecb863add3d93a01e666632aff14364d59182844b36f98684c7f131dc5671c1fd7fb8a5c16b2d1b6dcea7960
 %global source1256_hash 71b919cc6ec2d22e2093296fea01f14e412ba6ca3212af508034a1a5d4a592217124c14636e7d8794f3919935bae5f1239a8761ca57904bed6f30e3667b99dff
@@ -4545,8 +4543,6 @@ Source1248:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/
 Source1249:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fundus-calligra.tar.xz#/fundus-calligra.or11.tar.xz
 Source1250:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fundus-calligra.doc.tar.xz#/fundus-calligra.doc.or11.tar.xz
 Source1251:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fundus-cyr.tar.xz#/fundus-cyr.or11.tar.xz
-Source1252:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/fundus-sueterlin.r26030.tar.xz#/fundus-sueterlin.r26030.or11.20260826.tar.xz
-Source1253:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/fundus-sueterlin.doc.r26030.tar.xz#/fundus-sueterlin.doc.r26030.or11.20260826.tar.xz
 Source1254:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/futharksymb.tar.xz#/futharksymb.or11.tar.xz
 Source1255:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/futharksymb.doc.tar.xz#/futharksymb.doc.or11.tar.xz
 Source1256:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fvextra.tar.xz#/fvextra.or11.tar.xz
@@ -7218,7 +7214,6 @@ Requires:       texlive-fullwidth
 Requires:       texlive-functional
 Requires:       texlive-fundus-calligra
 Requires:       texlive-fundus-cyr
-Requires:       texlive-fundus-sueterlin
 Requires:       texlive-futharksymb
 Requires:       texlive-fvextra
 Requires:       texlive-fwlw
@@ -19155,19 +19150,6 @@ Requires:       texlive-kpathsea
 The package supports the use of the Washington Cyrillic fonts with LaTeX (Note
 that standard LaTeX has support, too, as encoding OT2). The package is
 distributed as part of the fundus bundle.
-
-%package -n texlive-fundus-sueterlin
-Summary:        Sutterlin
-Version:        svn26030
-License:        LPPL-1.3c
-Requires:       texlive-base
-Requires:       texlive-kpathsea
-Provides:       texlive-fundus-sueterlin-doc = %{epoch}:%{version}-%{release}
-Obsoletes:      texlive-fundus-sueterlin-doc <= 11:%{version}
-
-%description -n texlive-fundus-sueterlin
-The package supports use, in LaTeX, of the Metafont emulation of the Sueterlin
-handwriting fonts The package is distributed as part of the fundus bundle..
 
 %package -n texlive-futharksymb
 Summary:        Macros for entering futhark runes
@@ -38256,8 +38238,6 @@ test "%{source1248_hash}" = "none" || { f="%{SOURCE1248}"; test -f "$f" || { ech
 test "%{source1249_hash}" = "none" || { f="%{SOURCE1249}"; test -f "$f" || { echo "oreon: missing Source1249 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1249_hash}" || { echo "oreon: Source1249 hash mismatch" >&2; exit 1; }; }
 test "%{source1250_hash}" = "none" || { f="%{SOURCE1250}"; test -f "$f" || { echo "oreon: missing Source1250 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1250_hash}" || { echo "oreon: Source1250 hash mismatch" >&2; exit 1; }; }
 test "%{source1251_hash}" = "none" || { f="%{SOURCE1251}"; test -f "$f" || { echo "oreon: missing Source1251 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1251_hash}" || { echo "oreon: Source1251 hash mismatch" >&2; exit 1; }; }
-test "%{source1252_hash}" = "none" || { f="%{SOURCE1252}"; test -f "$f" || { echo "oreon: missing Source1252 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1252_hash}" || { echo "oreon: Source1252 hash mismatch" >&2; exit 1; }; }
-test "%{source1253_hash}" = "none" || { f="%{SOURCE1253}"; test -f "$f" || { echo "oreon: missing Source1253 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1253_hash}" || { echo "oreon: Source1253 hash mismatch" >&2; exit 1; }; }
 test "%{source1254_hash}" = "none" || { f="%{SOURCE1254}"; test -f "$f" || { echo "oreon: missing Source1254 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1254_hash}" || { echo "oreon: Source1254 hash mismatch" >&2; exit 1; }; }
 test "%{source1255_hash}" = "none" || { f="%{SOURCE1255}"; test -f "$f" || { echo "oreon: missing Source1255 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1255_hash}" || { echo "oreon: Source1255 hash mismatch" >&2; exit 1; }; }
 test "%{source1256_hash}" = "none" || { f="%{SOURCE1256}"; test -f "$f" || { echo "oreon: missing Source1256 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source1256_hash}" || { echo "oreon: Source1256 hash mismatch" >&2; exit 1; }; }
@@ -41544,8 +41524,6 @@ tar -xf %{SOURCE1248} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1249} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1250} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1251} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE1252} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE1253} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1254} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1255} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1256} -C %{buildroot}%{_texmf_main}
@@ -46803,11 +46781,6 @@ popd
 %files -n texlive-fundus-cyr
 %license lppl1.3c.txt
 %{_texmf_main}/tex/latex/fundus-cyr/
-
-%files -n texlive-fundus-sueterlin
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/fundus-sueterlin/
-%doc %{_texmf_main}/doc/latex/fundus-sueterlin/
 
 %files -n texlive-futharksymb
 %license mit.txt

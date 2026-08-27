@@ -117,8 +117,6 @@
 %global source116_hash 5a115efdc23385c82552a7c8fb220de6ef48041c76bd012975c92263b0301016c363543a41d6bb3ca50795f285345ba9af93eb5aed65f79848cca99b02dc12d2
 %global source117_hash d2418ef6b672e82c08b2f7b7f0089a9dea1f514db584662351135b511912faab828956fc252cd854fd2bb1243bc0e1af428e294eb92935cb63b38e73078858d9
 %global source118_hash 787b12bc92a17a00fd8278138d0e36d94be377fc23401c4bd677c372dc1d19b4b88c12395366b8ba5d766fbd7bc364588986d7528572510a43ba48ee0330b787
-%global source119_hash 339238d68007bff100d6cb0044af382d0448843381e8252583f8f6927eacb1c979ed89b53ace32f97caacf697bbe739b7f4a45ac10bfa3cdd18c9c2763868944
-%global source120_hash 93a1777b3736794db11095dccf44812f58184b2bc7aba52da34539b1742597a654bce5b8a2e83c8bfc8f6bdcd19f10bd75e406177b1be840bbb3716e1f197f89
 %global source121_hash aa23cc9e4fc796d516514cafec0b71ad62058f99397d49be72cb1d487c4bc4aa3b6b0bb4ffb3ee7d3f9d892fe6b96defe7c31675cf616a3e5619074df3071f67
 %global source122_hash 33154c515d8c1b17e5a831c1d29970fcc519b65344c5ffd5f187f5a3147106d559cc40180d3bd53f88fa500d21f4c271d286478e90a0c5eb63e1a1868000668d
 %global source123_hash c3823aef85c3d989c489011d6148d0f9b1eda6fdf35150276f3780f38a39620a22654295b0e2ad29e455d2dec887458e20f232b534973cb02f6426dbf44f8d1b
@@ -276,8 +274,6 @@ Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t
 Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.doc.tar.xz#/tex-vpat.doc.or11.tar.xz
 Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.tar.xz#/texbytopic.or11.tar.xz
 Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.doc.tar.xz#/texbytopic.doc.or11.tar.xz
-Source119:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.r76924.tar.xz#/texonly.r76924.or11.20260826.tar.xz
-Source120:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.doc.r76924.tar.xz#/texonly.doc.r76924.or11.20260826.tar.xz
 Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.tar.xz#/titlepages.or11.tar.xz
 Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.doc.tar.xz#/titlepages.doc.or11.tar.xz
 Source123:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.tar.xz#/tlc2.or11.tar.xz
@@ -360,7 +356,6 @@ Requires:       texlive-tex-nutshell
 Requires:       texlive-tex-overview
 Requires:       texlive-tex-vpat
 Requires:       texlive-texbytopic
-Requires:       texlive-texonly
 Requires:       texlive-titlepages
 Requires:       texlive-tlc2
 Requires:       texlive-tlc3-examples
@@ -1258,19 +1253,6 @@ need to know. A printed copy of the book, slightly updated, may be had (for a
 modest price) from DANTE. The original edition is available from Lulu. See the
 package home page for details.
 
-%package -n texlive-texonly
-Summary:        A sample document in Plain TeX
-Version:        svn76924
-License:        LPPL-1.3c
-Requires:       texlive-base
-Requires:       texlive-kpathsea
-Provides:       texlive-texonly-doc = %{epoch}:%{version}-%{release}
-Obsoletes:      texlive-texonly-doc <= 11:%{version}
-
-%description -n texlive-texonly
-A file written with TeX, not using any packages or sty-files, to be compiled
-with TeX or pdfTeX only, not with LaTeX et al.
-
 %package -n texlive-titlepages
 Summary:        Sample titlepages, and how to code them
 Version:        svn19457
@@ -1566,8 +1548,6 @@ test "%{source115_hash}" = "none" || { f="%{SOURCE115}"; test -f "$f" || { echo 
 test "%{source116_hash}" = "none" || { f="%{SOURCE116}"; test -f "$f" || { echo "oreon: missing Source116 $f" >&2; exit 1; }; h_expected="%{source116_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source116_hash}" || { echo "oreon: Source116 hash mismatch" >&2; exit 1; }; }
 test "%{source117_hash}" = "none" || { f="%{SOURCE117}"; test -f "$f" || { echo "oreon: missing Source117 $f" >&2; exit 1; }; h_expected="%{source117_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source117_hash}" || { echo "oreon: Source117 hash mismatch" >&2; exit 1; }; }
 test "%{source118_hash}" = "none" || { f="%{SOURCE118}"; test -f "$f" || { echo "oreon: missing Source118 $f" >&2; exit 1; }; h_expected="%{source118_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source118_hash}" || { echo "oreon: Source118 hash mismatch" >&2; exit 1; }; }
-test "%{source119_hash}" = "none" || { f="%{SOURCE119}"; test -f "$f" || { echo "oreon: missing Source119 $f" >&2; exit 1; }; h_expected="%{source119_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source119_hash}" || { echo "oreon: Source119 hash mismatch" >&2; exit 1; }; }
-test "%{source120_hash}" = "none" || { f="%{SOURCE120}"; test -f "$f" || { echo "oreon: missing Source120 $f" >&2; exit 1; }; h_expected="%{source120_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source120_hash}" || { echo "oreon: Source120 hash mismatch" >&2; exit 1; }; }
 test "%{source121_hash}" = "none" || { f="%{SOURCE121}"; test -f "$f" || { echo "oreon: missing Source121 $f" >&2; exit 1; }; h_expected="%{source121_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source121_hash}" || { echo "oreon: Source121 hash mismatch" >&2; exit 1; }; }
 test "%{source122_hash}" = "none" || { f="%{SOURCE122}"; test -f "$f" || { echo "oreon: missing Source122 $f" >&2; exit 1; }; h_expected="%{source122_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source122_hash}" || { echo "oreon: Source122 hash mismatch" >&2; exit 1; }; }
 test "%{source123_hash}" = "none" || { f="%{SOURCE123}"; test -f "$f" || { echo "oreon: missing Source123 $f" >&2; exit 1; }; h_expected="%{source123_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source123_hash}" || { echo "oreon: Source123 hash mismatch" >&2; exit 1; }; }
@@ -1715,8 +1695,6 @@ tar -xf %{SOURCE115} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE116} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE117} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE118} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE119} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE120} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE121} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE122} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE123} -C %{buildroot}%{_texmf_main}
@@ -1991,10 +1969,6 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 %files -n texlive-texbytopic
 %license fdl.txt
 %doc %{_texmf_main}/doc/plain/texbytopic/
-
-%files -n texlive-texonly
-%license lppl1.3c.txt
-%doc %{_texmf_main}/doc/plain/texonly/
 
 %files -n texlive-titlepages
 %license lppl1.3c.txt
