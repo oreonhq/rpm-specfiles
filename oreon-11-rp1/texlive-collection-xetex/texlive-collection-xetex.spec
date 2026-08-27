@@ -1092,7 +1092,7 @@ test "%{source87_hash}" = "none" || { f="%{SOURCE87}"; test -f "$f" || { echo "o
 test "%{source88_hash}" = "none" || { f="%{SOURCE88}"; test -f "$f" || { echo "oreon: missing Source88 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source88_hash}" || { echo "oreon: Source88 hash mismatch" >&2; exit 1; }; }
 # Extract license files
 tar -xf %{SOURCE1}
-cp licenses/*.txt .
+:
 
 %build
 # Nothing to build

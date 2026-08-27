@@ -1816,7 +1816,7 @@ test "%{source134_hash}" = "none" || { f="%{SOURCE134}"; test -f "$f" || { echo 
 test "%{source135_hash}" = "none" || { f="%{SOURCE135}"; test -f "$f" || { echo "oreon: missing Source135 $f" >&2; exit 1; }; h=$(sha512sum "$f" | cut -d' ' -f1); test "$h" = "%{source135_hash}" || { echo "oreon: Source135 hash mismatch" >&2; exit 1; }; }
 test "%{source136_hash}" = "none" || { f="%{SOURCE136}"; test -f "$f" || { echo "oreon: missing Source136 $f" >&2; exit 1; }; h=$(sha512sum "$f" | cut -d' ' -f1); test "$h" = "%{source136_hash}" || { echo "oreon: Source136 hash mismatch" >&2; exit 1; }; }
 tar -xf %{SOURCE1}
-cp licenses/*.txt .
+:
 
 %build
 # Nothing to build
