@@ -47719,6 +47719,7 @@ popd
 
 %files -n texlive-l3kernel-dev
 %license lppl1.3c.txt
+%{_texmf_main}/dvips/l3kernel-dev/
 %{_texmf_main}/tex/latex-dev/l3kernel/
 %doc %{_texmf_main}/doc/latex-dev/l3kernel/
 
