@@ -12,8 +12,8 @@ Summary:        Bidi functions for LuaTeX
 License:        LPPL-1.3c AND MIT
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.tar.xz#/luabidi.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luabidi.doc.tar.xz#/luabidi.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-luabidi-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-luabidi-doc <= 11:%{version}

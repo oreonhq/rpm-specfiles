@@ -12,8 +12,8 @@ Summary:        Create tabular cells spanning multiple rows
 License:        LPPL-1.3c OR LPPL-1.0
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multirow.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multirow.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multirow.tar.xz#/multirow.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/multirow.doc.tar.xz#/multirow.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-multirow-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-multirow-doc <= 11:%{version}

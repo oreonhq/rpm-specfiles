@@ -12,8 +12,8 @@ Summary:        Provide file name info for the current TeX file
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/currfile.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/currfile.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/currfile.tar.xz#/currfile.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/currfile.doc.tar.xz#/currfile.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-currfile-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-currfile-doc <= 11:%{version}

@@ -34,30 +34,30 @@ BuildArch:      noarch
 %global source19_hash 6ea6d73a840dadc62897a21bb5c68ac2b18c40168a65fd48aaa3c6cb381b6ce57bba7f9392896c5e23b65cc0f453838b8d764cdefea3778b769124ad97cf1844
 %global source20_hash fcfdf84d0d565511b8db4be1d73cef719364f842031d48cbd947117c7bb953f7b2a049849223540a4b2c512a6910635c540b9a629d4769cc43ff99b0ab04d1bf
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langczechslovak.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langczechslovak.tar.xz#/collection-langczechslovak.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.doc.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.doc.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.doc.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cs.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.doc.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.doc.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-czech.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-slovak.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.doc.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.doc.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.doc.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.tar.xz#/babel-czech.or11.tar.xz
+Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-czech.doc.tar.xz#/babel-czech.doc.or11.tar.xz
+Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.tar.xz#/babel-slovak.or11.tar.xz
+Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-slovak.doc.tar.xz#/babel-slovak.doc.or11.tar.xz
+Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.tar.xz#/cnbwp.or11.tar.xz
+Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cnbwp.doc.tar.xz#/cnbwp.doc.or11.tar.xz
+Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cs.tar.xz#/cs.or11.tar.xz
+Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.tar.xz#/csbulletin.or11.tar.xz
+Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/csbulletin.doc.tar.xz#/csbulletin.doc.or11.tar.xz
+Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.tar.xz#/cstex.or11.tar.xz
+Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cstex.doc.tar.xz#/cstex.doc.or11.tar.xz
+Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-czech.tar.xz#/hyphen-czech.or11.tar.xz
+Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-slovak.tar.xz#/hyphen-slovak.or11.tar.xz
+Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.tar.xz#/lshort-czech.or11.tar.xz
+Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-czech.doc.tar.xz#/lshort-czech.doc.or11.tar.xz
+Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.tar.xz#/lshort-slovak.or11.tar.xz
+Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-slovak.doc.tar.xz#/lshort-slovak.doc.or11.tar.xz
+Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.tar.xz#/texlive-cz.or11.tar.xz
+Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-cz.doc.tar.xz#/texlive-cz.doc.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-collection-basic

@@ -18,8 +18,8 @@ BuildArch:      noarch
 # Main collection source
 %global source1_hash 83aaa87b0d21a16c13b18faacaf353d9ab8fcffd638148209824e05219e8c4eb804caf1c9dc8f73abfea632130b730da1dfb30cf6c89475093d6c0e2ff9843ad
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.tar.xz#/eq-save.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/eq-save.doc.tar.xz#/eq-save.doc.or11.tar.xz
 # License texts
 Source2:        texlive-licenses.tar.xz
 

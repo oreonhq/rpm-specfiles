@@ -12,8 +12,8 @@ Summary:        Automatic CJK pinyin annotations
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.tar.xz#/xpinyin.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpinyin.doc.tar.xz#/xpinyin.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-xpinyin-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-xpinyin-doc <= 11:%{version}

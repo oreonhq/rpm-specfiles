@@ -12,8 +12,8 @@ Summary:        Scientific Times-like font with OpenType math
 License:        OFL-1.1
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xits.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xits.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xits.tar.xz#/xits.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xits.doc.tar.xz#/xits.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-xits-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-xits-doc <= 11:%{version}

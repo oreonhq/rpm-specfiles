@@ -12,8 +12,8 @@ Summary:        The makecmds package
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/makecmds.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/makecmds.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/makecmds.tar.xz#/makecmds.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/makecmds.doc.tar.xz#/makecmds.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-makecmds-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-makecmds-doc <= 11:%{version}

@@ -12,8 +12,8 @@ Summary:        Combine LaTeX commands over included graphics
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.tar.xz#/overpic.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/overpic.doc.tar.xz#/overpic.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-overpic-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-overpic-doc <= 11:%{version}

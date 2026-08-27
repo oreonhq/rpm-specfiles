@@ -12,8 +12,8 @@ Summary:        Convert numbers to letters
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.tar.xz#/alphalph.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/alphalph.doc.tar.xz#/alphalph.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-alphalph-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-alphalph-doc <= 11:%{version}

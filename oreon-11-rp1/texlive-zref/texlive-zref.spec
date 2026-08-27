@@ -12,8 +12,8 @@ Summary:        A new reference scheme for LaTeX
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zref.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zref.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zref.tar.xz#/zref.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zref.doc.tar.xz#/zref.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-zref-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-zref-doc <= 11:%{version}

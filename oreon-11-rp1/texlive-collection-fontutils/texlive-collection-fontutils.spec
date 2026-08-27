@@ -16,12 +16,12 @@ BuildArch:      noarch
 # Main collection source
 %global source2_hash ff7ad395329dd1cc5d21d5459916d0f10a8c03399d733048bce0a8aaa4e3a955f3ad3dbb228319d4bfb96e0694069002507bc294ed81fda5a48ad93f8cd82589
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-fontutils.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-fontutils.tar.xz#/collection-fontutils.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvipsconfig.tar.xz
+Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dvipsconfig.tar.xz#/dvipsconfig.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-accfonts

@@ -12,8 +12,8 @@ Summary:        Subversion keywords as package macros
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svn-prov.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svn-prov.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svn-prov.tar.xz#/svn-prov.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/svn-prov.doc.tar.xz#/svn-prov.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-svn-prov-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-svn-prov-doc <= 11:%{version}

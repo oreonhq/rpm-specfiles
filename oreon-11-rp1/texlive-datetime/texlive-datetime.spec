@@ -10,8 +10,8 @@ Summary:        Change format of dates and times
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/datetime.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/datetime.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/datetime.tar.xz#/datetime.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/datetime.doc.tar.xz#/datetime.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-datetime-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-datetime-doc <= 11:%{version}

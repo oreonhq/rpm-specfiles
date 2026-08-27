@@ -12,8 +12,8 @@ Summary:        Extending etoolbox patching commands
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpatch.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpatch.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpatch.tar.xz#/xpatch.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xpatch.doc.tar.xz#/xpatch.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-xpatch-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-xpatch-doc <= 11:%{version}

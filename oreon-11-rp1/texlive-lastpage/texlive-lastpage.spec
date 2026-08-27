@@ -10,8 +10,8 @@ Summary:        Reference last page for Page N of M
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lastpage.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lastpage.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lastpage.tar.xz#/lastpage.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lastpage.doc.tar.xz#/lastpage.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-lastpage-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-lastpage-doc <= 11:%{version}

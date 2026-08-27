@@ -12,8 +12,8 @@ Summary:        Use Concrete fonts
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.tar.xz#/beton.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beton.doc.tar.xz#/beton.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-beton-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-beton-doc <= 11:%{version}

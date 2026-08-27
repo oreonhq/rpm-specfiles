@@ -12,8 +12,8 @@ Summary:        A suite of tools for typesetting algorithms in pseudo-code
 License:        LGPL-2.1-only
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/algorithms.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/algorithms.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/algorithms.tar.xz#/algorithms.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/algorithms.doc.tar.xz#/algorithms.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-algorithms-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-algorithms-doc <= 11:%{version}

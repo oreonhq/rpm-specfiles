@@ -10,8 +10,8 @@ Summary:        Typeset Chinese representations of numbers
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.tar.xz#/zhnumber.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhnumber.doc.tar.xz#/zhnumber.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-zhnumber-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-zhnumber-doc <= 11:%{version}

@@ -12,8 +12,8 @@ Summary:        Improved colour support under pdfTeX (legacy stub)
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pdfcolmk.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pdfcolmk.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pdfcolmk.tar.xz#/pdfcolmk.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pdfcolmk.doc.tar.xz#/pdfcolmk.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-pdfcolmk-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-pdfcolmk-doc <= 11:%{version}

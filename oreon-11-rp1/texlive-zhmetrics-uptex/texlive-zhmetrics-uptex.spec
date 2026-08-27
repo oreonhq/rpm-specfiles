@@ -12,8 +12,8 @@ Summary:        Chinese font metrics for upTeX
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.tar.xz#/zhmetrics-uptex.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics-uptex.doc.tar.xz#/zhmetrics-uptex.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-zhmetrics-uptex-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-zhmetrics-uptex-doc <= 11:%{version}

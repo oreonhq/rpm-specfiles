@@ -12,8 +12,8 @@ Summary:        TeX fonts from the American Mathematical Society
 License:        OFL-1.1
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.tar.xz#/amsfonts.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.doc.tar.xz#/amsfonts.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-amsfonts-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-amsfonts-doc <= 11:%{version}

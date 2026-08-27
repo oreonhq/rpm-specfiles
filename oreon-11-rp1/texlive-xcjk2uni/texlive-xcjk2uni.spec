@@ -12,8 +12,8 @@ Summary:        Convert CJK characters to Unicode
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.tar.xz#/xcjk2uni.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.doc.tar.xz#/xcjk2uni.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-xcjk2uni-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-xcjk2uni-doc <= 11:%{version}

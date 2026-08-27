@@ -12,8 +12,8 @@ Summary:        Mathematical symbol font for Adobe MinionPro
 License:        OFL-1.1
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnsymbol.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnsymbol.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnsymbol.tar.xz#/mnsymbol.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mnsymbol.doc.tar.xz#/mnsymbol.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-mnsymbol-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-mnsymbol-doc <= 11:%{version}

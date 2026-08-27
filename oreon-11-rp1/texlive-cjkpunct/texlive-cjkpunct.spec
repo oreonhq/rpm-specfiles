@@ -12,8 +12,8 @@ Summary:        Adjust location and spacing of CJK punctuation
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.tar.xz#/cjkpunct.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.doc.tar.xz#/cjkpunct.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-cjkpunct-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-cjkpunct-doc <= 11:%{version}

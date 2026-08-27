@@ -12,8 +12,8 @@ Summary:        Allow URL breaks at any alphanumerical character
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xurl.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xurl.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xurl.tar.xz#/xurl.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xurl.doc.tar.xz#/xurl.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-xurl-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-xurl-doc <= 11:%{version}

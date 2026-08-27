@@ -12,8 +12,8 @@ Summary:        Basic resource management for LuaTeX code
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexbase.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexbase.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexbase.tar.xz#/luatexbase.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexbase.doc.tar.xz#/luatexbase.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-luatexbase-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-luatexbase-doc <= 11:%{version}

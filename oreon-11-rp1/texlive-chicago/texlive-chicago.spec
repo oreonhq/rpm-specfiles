@@ -11,7 +11,7 @@ Summary:        Chicago bibliography style
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chicago.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/chicago.tar.xz#/chicago.or11.tar.xz
 BuildRequires:  tar
 Provides:       tex(chicago.bst)
 Provides:       tex(chicago.sty)

@@ -12,8 +12,8 @@ Summary:        Extension of CJK package for Korean typesetting
 License:        GPL-2.0-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.tar.xz#/cjk-ko.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.tar.xz#/cjk-ko.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-cjk-ko-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-cjk-ko-doc <= 11:%{version}

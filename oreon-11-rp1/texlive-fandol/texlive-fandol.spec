@@ -12,8 +12,8 @@ Summary:        Four basic fonts for CJK typesetting
 License:        GPL-3.0-or-later
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fandol.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fandol.doc.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fandol.tar.xz#/fandol.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fandol.doc.tar.xz#/fandol.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-fandol-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-fandol-doc <= 11:%{version}

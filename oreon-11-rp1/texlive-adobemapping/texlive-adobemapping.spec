@@ -12,7 +12,7 @@ Summary:        Adobe CMap resources for CJK fonts
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adobemapping.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adobemapping.tar.xz#/adobemapping.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-adobemapping-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-adobemapping-doc <= 11:%{version}
