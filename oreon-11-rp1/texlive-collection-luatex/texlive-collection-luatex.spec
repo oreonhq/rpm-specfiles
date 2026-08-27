@@ -1217,7 +1217,7 @@ checking.
 
 %package -n texlive-lua-placeholders
 Summary:        Specifying placeholders for demonstration purposes
-Version:        svn70850
+Version:        svn79056
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
@@ -3293,8 +3293,8 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 %files -n texlive-lua-placeholders
 %license lppl1.3c.txt
 %{_texmf_main}/scripts/lua-placeholders/
-%{_texmf_main}/tex/lualatex/lua-placeholders/
-%doc %{_texmf_main}/doc/lualatex/lua-placeholders/
+%{_texmf_main}/tex/luatex/lua-placeholders/
+%doc %{_texmf_main}/doc/luatex/lua-placeholders/
 
 %files -n texlive-lua-tinyyaml
 %license mit.txt

@@ -117,9 +117,8 @@
 %global source116_hash 5a115efdc23385c82552a7c8fb220de6ef48041c76bd012975c92263b0301016c363543a41d6bb3ca50795f285345ba9af93eb5aed65f79848cca99b02dc12d2
 %global source117_hash d2418ef6b672e82c08b2f7b7f0089a9dea1f514db584662351135b511912faab828956fc252cd854fd2bb1243bc0e1af428e294eb92935cb63b38e73078858d9
 %global source118_hash 787b12bc92a17a00fd8278138d0e36d94be377fc23401c4bd677c372dc1d19b4b88c12395366b8ba5d766fbd7bc364588986d7528572510a43ba48ee0330b787
-%global source119_hash d5cc7fa675c48aba93ce37012747898a6ac74c2babdda47e9734f841d4c7cbe5cca628f6723326bf89d6d3480f1bcbc6260a4f83a5fd1d5d2b5ea873001b1aa4
+%global source119_hash 339238d68007bff100d6cb0044af382d0448843381e8252583f8f6927eacb1c979ed89b53ace32f97caacf697bbe739b7f4a45ac10bfa3cdd18c9c2763868944
 %global source120_hash 93a1777b3736794db11095dccf44812f58184b2bc7aba52da34539b1742597a654bce5b8a2e83c8bfc8f6bdcd19f10bd75e406177b1be840bbb3716e1f197f89
-%global source120_hash 2ebb1b613395a51712137d8bdd951d1fa06b2667434e669042d8ac7d40a775fe106d04002881cd5a2eebd4896edbe292a4e807b820990c323d586aace89233c5
 %global source121_hash aa23cc9e4fc796d516514cafec0b71ad62058f99397d49be72cb1d487c4bc4aa3b6b0bb4ffb3ee7d3f9d892fe6b96defe7c31675cf616a3e5619074df3071f67
 %global source122_hash 33154c515d8c1b17e5a831c1d29970fcc519b65344c5ffd5f187f5a3147106d559cc40180d3bd53f88fa500d21f4c271d286478e90a0c5eb63e1a1868000668d
 %global source123_hash c3823aef85c3d989c489011d6148d0f9b1eda6fdf35150276f3780f38a39620a22654295b0e2ad29e455d2dec887458e20f232b534973cb02f6426dbf44f8d1b
@@ -277,8 +276,8 @@ Source115:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/t
 Source116:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-vpat.doc.tar.xz#/tex-vpat.doc.or11.tar.xz
 Source117:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.tar.xz#/texbytopic.or11.tar.xz
 Source118:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texbytopic.doc.tar.xz#/texbytopic.doc.or11.tar.xz
-Source119:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.r76924.tar.xz#/texonly.r76924.or11.tar.xz
-Source120:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.doc.r76924.tar.xz#/texonly.doc.r76924.or11.tar.xz
+Source119:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.r76924.tar.xz#/texonly.r76924.or11.20260826.tar.xz
+Source120:        https://texlive.info/tlnet-archive/2026/02/09/tlnet/archive/texonly.doc.r76924.tar.xz#/texonly.doc.r76924.or11.20260826.tar.xz
 Source121:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.tar.xz#/titlepages.or11.tar.xz
 Source122:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/titlepages.doc.tar.xz#/titlepages.doc.or11.tar.xz
 Source123:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tlc2.tar.xz#/tlc2.or11.tar.xz
