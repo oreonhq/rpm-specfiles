@@ -41894,8 +41894,6 @@ tar -xf %{SOURCE1620} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1621} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1622} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1623} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE1624} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE1625} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1626} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1627} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE1628} -C %{buildroot}%{_texmf_main}

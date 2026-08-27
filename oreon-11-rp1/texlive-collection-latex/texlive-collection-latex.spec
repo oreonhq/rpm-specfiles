@@ -1517,8 +1517,6 @@ tar -xf %{SOURCE64} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE65} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE66} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE67} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE68} -C %{buildroot}%{_texmf_main}
-tar -xf %{SOURCE69} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE70} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE71} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE72} -C %{buildroot}%{_texmf_main}
