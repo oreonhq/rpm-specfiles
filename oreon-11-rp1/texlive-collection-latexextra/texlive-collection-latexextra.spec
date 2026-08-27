@@ -36986,6 +36986,7 @@ vertically. The package facilities work with TeX (output via dvips or
 
 
 %prep
+set +x
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -40261,6 +40262,7 @@ test "%{source3275_hash}" = "none" || { f="%{SOURCE3275}"; test -f "$f" || { ech
 test "%{source3276_hash}" = "none" || { f="%{SOURCE3276}"; test -f "$f" || { echo "oreon: missing Source3276 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source3276_hash}" || { echo "oreon: Source3276 hash mismatch" >&2; exit 1; }; }
 test "%{source3277_hash}" = "none" || { f="%{SOURCE3277}"; test -f "$f" || { echo "oreon: missing Source3277 $f" >&2; exit 1; }; h=$(sha512sum "$f" | awk '{print $1}'); test "$h" = "%{source3277_hash}" || { echo "oreon: Source3277 hash mismatch" >&2; exit 1; }; }
 test "%{source3278_hash}" = "none" || { f="%{SOURCE3278}"; test -f "$f" || { echo "oreon: missing Source3278 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3278_hash}" || { echo "oreon: Source3278 hash mismatch" >&2; exit 1; }; }
+set -x
 
 # Extract license files
 tar -xf %{SOURCE1}
