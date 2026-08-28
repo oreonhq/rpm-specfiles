@@ -20,6 +20,7 @@ Patch:          158.patch
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(tox)
 BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 # Tests
 BuildRequires:  procps-ng
@@ -78,4 +79,3 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %changelog
 %autochangelog
-
