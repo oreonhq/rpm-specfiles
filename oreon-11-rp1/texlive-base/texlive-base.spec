@@ -8293,7 +8293,7 @@ mkdir -p %{buildroot}%{_rpmmacrodir}
 cp -a %{SOURCE1} %{buildroot}%{_rpmmacrodir}/macros.texlive
 
 # install texlive.tlpdb
-cp %{SOURCE2} %{buildroot}%{_texdir}
+cp %{SOURCE2} %{buildroot}%{_texdir}/texlive.tlpdb
 # make a symlink so texdoc is happy
 pushd %{buildroot}%{_texdir}/tlpkg
 ln -s ../texlive.tlpdb .
