@@ -29,6 +29,7 @@ BuildRequires: cmake(Qt6Test)
 BuildRequires: cmake(Qt6Core5Compat)
 BuildRequires: cmake(Qt6OpenGLWidgets)
 BuildRequires: cmake(Qt6WebEngineWidgets)
+BuildRequires: qt6-qtwebengine-devel >= 6.11.1-5
 
 BuildRequires: cmake(Analitza6)
 BuildRequires: cmake(KF6I18n)
@@ -770,4 +771,3 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.kalgebram
 
 * Tue Aug 30 2011 Rex Dieter <rdieter@fedoraproject.org> 4.7.0-10
 - first try
-

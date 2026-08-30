@@ -43,6 +43,7 @@ BuildRequires: cmake(KF6QuickCharts)
 BuildRequires: cmake(KF6KirigamiAddons)
 BuildRequires: cmake(KF6QQC2DesktopStyle)
 BuildRequires: cmake(Qt6WebEngineQuick)
+BuildRequires: qt6-qtwebengine-devel >= 6.11.1-5
 BuildRequires: cmake(KF6Crash)
 BuildRequires: cmake(KF6Baloo)
 BuildRequires: cmake(KF6ColorScheme)

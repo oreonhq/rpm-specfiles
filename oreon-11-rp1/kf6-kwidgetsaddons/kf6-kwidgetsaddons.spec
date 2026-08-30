@@ -32,6 +32,7 @@ BuildRequires:  python3-wheel
 BuildRequires:  clang-devel
 BuildRequires:  cmake(Shiboken6)
 BuildRequires:  cmake(PySide6)
+BuildRequires:  python3-pyside6-devel >= 6.11.1-25
 
 Requires:	kf6-filesystem
 
@@ -100,4 +101,3 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
-

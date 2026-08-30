@@ -360,9 +360,10 @@ do
   if [ "$mpi-%{_arch}" != mpich-aarch64 -a "$mpi-%{_arch}" != mpich-ppc64le ]
   then
     module load mpi/$mpi-%{_arch}
-    make -j1 -C $mpi check > $mpi-check.log 2>&1 || {
+    logfile="%{_tmppath}/hdf5-${mpi}-check.log"
+    make -j1 -C $mpi check > "$logfile" 2>&1 || {
       status=$?
-      cat $mpi-check.log
+      cat "$logfile"
       test $fail -eq 0 || exit $status
     }
     module purge
