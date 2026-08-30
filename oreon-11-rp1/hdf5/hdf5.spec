@@ -244,7 +244,7 @@ ln -s ../configure .
   --with-fmoddir=%{_fmoddir}
 sed -i -e 's| -shared | -Wl,--as-needed\0|g' libtool
 sed -r -i 's|^prefix=/usr|prefix=%{buildroot}/usr|' java/test/junit.sh
-%make_build LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
+%make_build V=0 VERBOSE=0 LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
 popd
 
 #MPI builds
@@ -270,7 +270,7 @@ do
     --with-default-plugindir=%{_libdir}/$mpi/hdf5/plugin \
     --with-fmoddir=${MPI_FORTRAN_MOD_DIR}
   sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
-  %make_build LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
+  %make_build V=0 VERBOSE=0 LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
   module purge
   popd
 done
