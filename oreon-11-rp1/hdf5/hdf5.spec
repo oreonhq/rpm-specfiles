@@ -1,4 +1,3 @@
-%global source2_hash none
 %global source0_hash 09ee1c671a87401a5201c06106650f62badeea5a3b3941e9b1e2e1e08317357f
 
 # No more Java on i686
@@ -23,8 +22,6 @@ Source0: https://github.com/HDFGroup/hdf5/archive/hdf5_%{version}/hdf5-%{version
 %global plugin_dir %{_libdir}/hdf5/plugin
 
 Source1: h5comp
-# For man pages
-Source2: https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5_1.14.6.tar.gz
 # Fix java build
 Patch0: hdf5-build.patch
 # Get size of __float128
@@ -180,9 +177,7 @@ HDF5 parallel openmpi static libraries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -a 2 -n %{name}-%{name}_%{version} -p1
+%autosetup -n %{name}-%{name}_%{version} -p1
 
 %build
 %if %{with java}
@@ -324,17 +319,6 @@ cat >%{buildroot}%{_rpmmacrodir}/macros.hdf5 <<EOF
 %%_hdf5_plugin_dir %{plugin_dir}
 EOF
 
-# Install man pages from debian
-mkdir -p %{buildroot}%{_mandir}/man1
-cp -p debian/man/*.1 %{buildroot}%{_mandir}/man1/
-rm %{buildroot}%{_mandir}/man1/*gif*
-for mpi in %{?mpi_list}
-do
-  mkdir -p %{buildroot}%{_libdir}/$mpi/share/man/man1
-  cp -p debian/man/h5p[cf]c.1 %{buildroot}%{_libdir}/$mpi/share/man/man1/
-done
-rm %{buildroot}%{_mandir}/man1/h5p[cf]c*.1
-
 %if %{with java}
 # Java
 mkdir -p %{buildroot}%{_libdir}/%{name}
@@ -417,18 +401,6 @@ fi
 %{_libdir}/libhdf5hl_fortran.so.%{so_version}*
 %{_libdir}/libhdf5_hl.so.%{so_version}*
 %{_libdir}/libhdf5_hl_cpp.so.%{so_version}*
-%{_mandir}/man1/h5copy.1*
-%{_mandir}/man1/h5diff.1*
-%{_mandir}/man1/h5dump.1*
-%{_mandir}/man1/h5import.1*
-%{_mandir}/man1/h5jam.1*
-%{_mandir}/man1/h5ls.1*
-%{_mandir}/man1/h5mkgrp.1*
-%{_mandir}/man1/h5perf_serial.1*
-%{_mandir}/man1/h5repack.1*
-%{_mandir}/man1/h5repart.1*
-%{_mandir}/man1/h5stat.1*
-%{_mandir}/man1/h5unjam.1*
 
 %files devel
 %{_rpmmacrodir}/macros.hdf5
@@ -441,11 +413,6 @@ fi
 %{_libdir}/*.so
 %{_libdir}/*.settings
 %{_fmoddir}/*.mod
-%{_mandir}/man1/h5c++.1*
-%{_mandir}/man1/h5cc.1*
-%{_mandir}/man1/h5debug.1*
-%{_mandir}/man1/h5fc.1*
-%{_mandir}/man1/h5redeploy.1*
 
 %files static
 %{_libdir}/*.a
@@ -491,8 +458,6 @@ fi
 %{_libdir}/mpich/bin/h5pfc
 %{_libdir}/mpich/lib/lib*.so
 %{_libdir}/mpich/lib/lib*.settings
-%{_libdir}/mpich/share/man/man1/h5pcc.1*
-%{_libdir}/mpich/share/man/man1/h5pfc.1*
 
 %files mpich-static
 %{_libdir}/mpich/lib/*.a
@@ -533,8 +498,6 @@ fi
 %{_libdir}/openmpi/bin/h5pfc
 %{_libdir}/openmpi/lib/lib*.so
 %{_libdir}/openmpi/lib/lib*.settings
-%{_libdir}/openmpi/share/man/man1/h5pcc.1*
-%{_libdir}/openmpi/share/man/man1/h5pfc.1*
 
 %files openmpi-static
 %{_libdir}/openmpi/lib/*.a
