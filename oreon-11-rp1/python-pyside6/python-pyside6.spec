@@ -38,7 +38,6 @@ Patch1:        0001-Always-link-to-python-libraries.patch
 Patch2:        0001-Fix-installation.patch
 Patch3:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
 Patch4:         pyside6-create-object-directories.patch
-Patch5:         pyside6-install-config-relative-data-paths.patch
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build

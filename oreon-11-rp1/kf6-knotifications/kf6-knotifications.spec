@@ -79,5 +79,5 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 %{_kf6_libdir}/cmake/KF6Notifications/
 
 
+%changelog
 %autochangelog
-

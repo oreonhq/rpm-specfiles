@@ -1,8 +1,8 @@
-%global source0_hash 088e88b85686374da855215351e0e5248464921c8b546531d91b8dcef952ff93
+%global source0_hash ff39d6616f9d56a318cbb4e029bd42960f8a115579bdce7785e0af6f1fe5ee59
 
 Name:    kmbox
-Version: 25.12.3
-Release: 2%{?dist}
+Version: 26.04.3
+Release: 1%{?dist}
 Summary: The KMbox Library
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later

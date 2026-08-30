@@ -333,7 +333,11 @@ fail=0
 %else
 fail=1
 %endif
-make -C build check || exit $fail
+make -j1 -C build check > build-check.log 2>&1 || {
+  status=$?
+  cat build-check.log
+  test $fail -eq 0 || exit $status
+}
 %ifarch %{ix86} ppc64le s390x
 # i686: t_bigio test segfaults - https://github.com/HDFGroup/hdf5/issues/2510
 # ppc64le - t_pmulti_dset is flaky on ppc64le
@@ -356,7 +360,11 @@ do
   if [ "$mpi-%{_arch}" != mpich-aarch64 -a "$mpi-%{_arch}" != mpich-ppc64le ]
   then
     module load mpi/$mpi-%{_arch}
-    make -C $mpi check || exit $fail
+    make -j1 -C $mpi check > $mpi-check.log 2>&1 || {
+      status=$?
+      cat $mpi-check.log
+      test $fail -eq 0 || exit $status
+    }
     module purge
   fi
 done
