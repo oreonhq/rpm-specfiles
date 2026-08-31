@@ -40,36 +40,36 @@ BuildArch:      noarch
 %global source25_hash 291825c3461b397deb825266c7ee4316c5d04b8db1a29759378409de55c20d81552e31260468f4fa6a9a04f04705422714a8ec70a866c87fca2f4f1e189e0e4e
 %global source26_hash e27dfa0b36341bcd02ba63a8b543f1a6c55c674745cc790543ea2cfded80e536e5901f184a3af62b92b4534c738a06bf4fd5cbd4dfb4da865d13991279309aac
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langportuguese.tar.xz#/collection-langportuguese.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-langportuguese.tar.xz#/collection-langportuguese.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-portuges.tar.xz#/babel-portuges.or11.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-portuges.doc.tar.xz#/babel-portuges.doc.or11.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beamer-tut-pt.tar.xz#/beamer-tut-pt.or11.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/beamer-tut-pt.doc.tar.xz#/beamer-tut-pt.doc.or11.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cursolatex.tar.xz#/cursolatex.or11.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cursolatex.doc.tar.xz#/cursolatex.doc.or11.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feupphdteses.tar.xz#/feupphdteses.or11.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/feupphdteses.doc.tar.xz#/feupphdteses.doc.or11.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-portuguese.tar.xz#/hyphen-portuguese.or11.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-via-exemplos.tar.xz#/latex-via-exemplos.or11.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latex-via-exemplos.doc.tar.xz#/latex-via-exemplos.doc.or11.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-ptbr.tar.xz#/latexcheat-ptbr.or11.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/latexcheat-ptbr.doc.tar.xz#/latexcheat-ptbr.doc.or11.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-portuguese.tar.xz#/lshort-portuguese.or11.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-portuguese.doc.tar.xz#/lshort-portuguese.doc.or11.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/numberpt.tar.xz#/numberpt.or11.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/numberpt.doc.tar.xz#/numberpt.doc.or11.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ordinalpt.tar.xz#/ordinalpt.or11.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ordinalpt.doc.tar.xz#/ordinalpt.doc.or11.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ptlatexcommands.tar.xz#/ptlatexcommands.or11.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ptlatexcommands.doc.tar.xz#/ptlatexcommands.doc.or11.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tabularray-abnt.tar.xz#/tabularray-abnt.or11.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tabularray-abnt.doc.tar.xz#/tabularray-abnt.doc.or11.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xypic-tut-pt.tar.xz#/xypic-tut-pt.or11.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xypic-tut-pt.doc.tar.xz#/xypic-tut-pt.doc.or11.tar.xz
+Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/babel-portuges.tar.xz#/babel-portuges.or11.tar.xz
+Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/babel-portuges.doc.tar.xz#/babel-portuges.doc.or11.tar.xz
+Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/beamer-tut-pt.tar.xz#/beamer-tut-pt.or11.tar.xz
+Source5:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/beamer-tut-pt.doc.tar.xz#/beamer-tut-pt.doc.or11.tar.xz
+Source6:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cursolatex.tar.xz#/cursolatex.or11.tar.xz
+Source7:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cursolatex.doc.tar.xz#/cursolatex.doc.or11.tar.xz
+Source8:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/feupphdteses.tar.xz#/feupphdteses.or11.tar.xz
+Source9:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/feupphdteses.doc.tar.xz#/feupphdteses.doc.or11.tar.xz
+Source10:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/hyphen-portuguese.tar.xz#/hyphen-portuguese.or11.tar.xz
+Source11:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/latex-via-exemplos.tar.xz#/latex-via-exemplos.or11.tar.xz
+Source12:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/latex-via-exemplos.doc.tar.xz#/latex-via-exemplos.doc.or11.tar.xz
+Source13:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/latexcheat-ptbr.tar.xz#/latexcheat-ptbr.or11.tar.xz
+Source14:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/latexcheat-ptbr.doc.tar.xz#/latexcheat-ptbr.doc.or11.tar.xz
+Source15:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lshort-portuguese.tar.xz#/lshort-portuguese.or11.tar.xz
+Source16:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lshort-portuguese.doc.tar.xz#/lshort-portuguese.doc.or11.tar.xz
+Source17:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/numberpt.tar.xz#/numberpt.or11.tar.xz
+Source18:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/numberpt.doc.tar.xz#/numberpt.doc.or11.tar.xz
+Source19:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ordinalpt.tar.xz#/ordinalpt.or11.tar.xz
+Source20:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ordinalpt.doc.tar.xz#/ordinalpt.doc.or11.tar.xz
+Source21:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ptlatexcommands.tar.xz#/ptlatexcommands.or11.tar.xz
+Source22:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ptlatexcommands.doc.tar.xz#/ptlatexcommands.doc.or11.tar.xz
+Source23:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tabularray-abnt.tar.xz#/tabularray-abnt.or11.tar.xz
+Source24:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tabularray-abnt.doc.tar.xz#/tabularray-abnt.doc.or11.tar.xz
+Source25:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xypic-tut-pt.tar.xz#/xypic-tut-pt.or11.tar.xz
+Source26:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xypic-tut-pt.doc.tar.xz#/xypic-tut-pt.doc.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-babel-portuges

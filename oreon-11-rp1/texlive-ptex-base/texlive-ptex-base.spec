@@ -12,8 +12,8 @@ Summary:        Plain TeX format and docs for pTeX base
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ptex-base.tar.xz#/ptex-base.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ptex-base.doc.tar.xz#/ptex-base.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ptex-base.tar.xz#/ptex-base.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ptex-base.doc.tar.xz#/ptex-base.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ptex-base-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ptex-base-doc <= 11:%{version}

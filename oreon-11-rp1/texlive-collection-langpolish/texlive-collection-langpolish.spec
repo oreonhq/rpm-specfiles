@@ -44,40 +44,40 @@ BuildArch:      noarch
 %global source29_hash 0cd4c549c7b00939dec5055705658f76f6ebbe5de70e082652b761673ba5a249924fb862a319512a9a124b9cdaae8906c74439bba97be8825d4d1ffc70642c8f
 %global source30_hash cd438089d90faa0e9144d23adb78ce91d85b80ce084cb92511cc23882c675cb654cb704aebeb623bb29c70b764c8a0ab19915607664895c457c583f376c1088e
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langpolish.tar.xz#/collection-langpolish.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-langpolish.tar.xz#/collection-langpolish.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.tar.xz#/babel-polish.or11.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/babel-polish.doc.tar.xz#/babel-polish.doc.or11.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.tar.xz#/bredzenie.or11.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bredzenie.doc.tar.xz#/bredzenie.doc.or11.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.tar.xz#/cc-pl.or11.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cc-pl.doc.tar.xz#/cc-pl.doc.or11.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.tar.xz#/gustlib.or11.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/gustlib.doc.tar.xz#/gustlib.doc.or11.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hyphen-polish.tar.xz#/hyphen-polish.or11.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.tar.xz#/lshort-polish.or11.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-polish.doc.tar.xz#/lshort-polish.doc.or11.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.tar.xz#/mwcls.or11.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mwcls.doc.tar.xz#/mwcls.doc.or11.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.tar.xz#/pl.or11.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pl.doc.tar.xz#/pl.doc.or11.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.tar.xz#/polski.or11.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/polski.doc.tar.xz#/polski.doc.or11.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.tar.xz#/przechlewski-book.or11.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/przechlewski-book.doc.tar.xz#/przechlewski-book.doc.or11.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qpxqtx.tar.xz#/qpxqtx.or11.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/qpxqtx.doc.tar.xz#/qpxqtx.doc.or11.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tap.tar.xz#/tap.or11.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tap.doc.tar.xz#/tap.doc.or11.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.tar.xz#/tex-virtual-academy-pl.or11.tar.xz
-Source26:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tex-virtual-academy-pl.doc.tar.xz#/tex-virtual-academy-pl.doc.or11.tar.xz
-Source27:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.tar.xz#/texlive-pl.or11.tar.xz
-Source28:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-pl.doc.tar.xz#/texlive-pl.doc.or11.tar.xz
-Source29:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.tar.xz#/utf8mex.or11.tar.xz
-Source30:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/utf8mex.doc.tar.xz#/utf8mex.doc.or11.tar.xz
+Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/babel-polish.tar.xz#/babel-polish.or11.tar.xz
+Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/babel-polish.doc.tar.xz#/babel-polish.doc.or11.tar.xz
+Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/bredzenie.tar.xz#/bredzenie.or11.tar.xz
+Source5:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/bredzenie.doc.tar.xz#/bredzenie.doc.or11.tar.xz
+Source6:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cc-pl.tar.xz#/cc-pl.or11.tar.xz
+Source7:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cc-pl.doc.tar.xz#/cc-pl.doc.or11.tar.xz
+Source8:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/gustlib.tar.xz#/gustlib.or11.tar.xz
+Source9:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/gustlib.doc.tar.xz#/gustlib.doc.or11.tar.xz
+Source10:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/hyphen-polish.tar.xz#/hyphen-polish.or11.tar.xz
+Source11:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lshort-polish.tar.xz#/lshort-polish.or11.tar.xz
+Source12:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lshort-polish.doc.tar.xz#/lshort-polish.doc.or11.tar.xz
+Source13:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/mwcls.tar.xz#/mwcls.or11.tar.xz
+Source14:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/mwcls.doc.tar.xz#/mwcls.doc.or11.tar.xz
+Source15:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/pl.tar.xz#/pl.or11.tar.xz
+Source16:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/pl.doc.tar.xz#/pl.doc.or11.tar.xz
+Source17:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/polski.tar.xz#/polski.or11.tar.xz
+Source18:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/polski.doc.tar.xz#/polski.doc.or11.tar.xz
+Source19:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/przechlewski-book.tar.xz#/przechlewski-book.or11.tar.xz
+Source20:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/przechlewski-book.doc.tar.xz#/przechlewski-book.doc.or11.tar.xz
+Source21:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/qpxqtx.tar.xz#/qpxqtx.or11.tar.xz
+Source22:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/qpxqtx.doc.tar.xz#/qpxqtx.doc.or11.tar.xz
+Source23:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tap.tar.xz#/tap.or11.tar.xz
+Source24:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tap.doc.tar.xz#/tap.doc.or11.tar.xz
+Source25:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tex-virtual-academy-pl.tar.xz#/tex-virtual-academy-pl.or11.tar.xz
+Source26:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tex-virtual-academy-pl.doc.tar.xz#/tex-virtual-academy-pl.doc.or11.tar.xz
+Source27:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/texlive-pl.tar.xz#/texlive-pl.or11.tar.xz
+Source28:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/texlive-pl.doc.tar.xz#/texlive-pl.doc.or11.tar.xz
+Source29:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/utf8mex.tar.xz#/utf8mex.or11.tar.xz
+Source30:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/utf8mex.doc.tar.xz#/utf8mex.doc.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-collection-latex

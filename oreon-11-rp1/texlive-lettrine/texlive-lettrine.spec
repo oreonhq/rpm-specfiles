@@ -10,8 +10,8 @@ Summary:        Typeset dropped capitals
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lettrine.tar.xz#/lettrine.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lettrine.doc.tar.xz#/lettrine.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lettrine.tar.xz#/lettrine.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lettrine.doc.tar.xz#/lettrine.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-lettrine-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-lettrine-doc <= 11:%{version}

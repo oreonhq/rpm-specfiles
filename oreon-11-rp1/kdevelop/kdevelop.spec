@@ -73,7 +73,8 @@ BuildRequires:  pkgconfig(shared-mime-info)
 # kdevplatform
 BuildRequires:  boost-devel
 # kdevplatform/documentation
-BuildRequires:  cmake(Qt6WebEngineWidgets) BuildRequires:  qt6-qtwebengine-devel
+BuildRequires:  cmake(Qt6WebEngineWidgets)
+BuildRequires:  qt6-qtwebengine-devel
 
 # app/plasma
 BuildRequires:  cmake(Plasma)

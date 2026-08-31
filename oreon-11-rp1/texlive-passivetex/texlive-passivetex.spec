@@ -12,7 +12,7 @@ Summary:        Support package for XML/SGML typesetting
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.tar.xz#/passivetex.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/passivetex.tar.xz#/passivetex.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-passivetex-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-passivetex-doc <= 11:%{version}

@@ -12,8 +12,8 @@ Summary:        Fonts for use with upTeX
 License:        BSD AND LicenseRef-Public-Domain AND Copyright-only
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uptex-fonts.tar.xz#/uptex-fonts.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uptex-fonts.doc.tar.xz#/uptex-fonts.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/uptex-fonts.tar.xz#/uptex-fonts.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/uptex-fonts.doc.tar.xz#/uptex-fonts.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-uptex-fonts-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-uptex-fonts-doc <= 11:%{version}

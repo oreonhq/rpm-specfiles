@@ -39,35 +39,35 @@ BuildArch:      noarch
 %global source24_hash 552365f862e319bf2d649e5aba40ca4d252b2986782a1f1c4bc8f2902ffb2f2fe73973c183bd465588506a073c6bb919cfdac438fa9275e2bc9e7a6bdcd956c9
 %global source25_hash e94ec8794d6f47d3de1c437a7171d2bb0d68c752ebcdf101790b77b32430ed440eb9d814f1821fcd6cc4d04a9b4ae412b989cb5b0a6c91dcc4b9610c611be785
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langcjk.tar.xz#/collection-langcjk.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-langcjk.tar.xz#/collection-langcjk.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/adobemapping.tar.xz#/adobemapping.or11.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/c90.tar.xz#/c90.or11.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/c90.doc.tar.xz#/c90.doc.or11.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.tar.xz#/cjk.or11.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk.doc.tar.xz#/cjk.doc.or11.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.tar.xz#/cjkpunct.or11.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjkpunct.doc.tar.xz#/cjkpunct.doc.or11.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/dnp.tar.xz#/dnp.or11.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.tar.xz#/evangelion-jfm.or11.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/evangelion-jfm.doc.tar.xz#/evangelion-jfm.doc.or11.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.tar.xz#/fixjfm.or11.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fixjfm.doc.tar.xz#/fixjfm.doc.or11.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/garuda-c90.tar.xz#/garuda-c90.or11.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/norasi-c90.tar.xz#/norasi-c90.or11.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.tar.xz#/pxtatescale.or11.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pxtatescale.doc.tar.xz#/pxtatescale.doc.or11.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.tar.xz#/xcjk2uni.or11.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xcjk2uni.doc.tar.xz#/xcjk2uni.doc.or11.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.tar.xz#/xecjk.or11.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xecjk.doc.tar.xz#/xecjk.doc.or11.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.tar.xz#/zitie.or11.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zitie.doc.tar.xz#/zitie.doc.or11.tar.xz
-Source24:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.tar.xz#/zxjafont.or11.tar.xz
-Source25:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zxjafont.doc.tar.xz#/zxjafont.doc.or11.tar.xz
+Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/adobemapping.tar.xz#/adobemapping.or11.tar.xz
+Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/c90.tar.xz#/c90.or11.tar.xz
+Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/c90.doc.tar.xz#/c90.doc.or11.tar.xz
+Source5:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjk.tar.xz#/cjk.or11.tar.xz
+Source6:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjk.doc.tar.xz#/cjk.doc.or11.tar.xz
+Source7:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjkpunct.tar.xz#/cjkpunct.or11.tar.xz
+Source8:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjkpunct.doc.tar.xz#/cjkpunct.doc.or11.tar.xz
+Source9:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/dnp.tar.xz#/dnp.or11.tar.xz
+Source10:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/evangelion-jfm.tar.xz#/evangelion-jfm.or11.tar.xz
+Source11:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/evangelion-jfm.doc.tar.xz#/evangelion-jfm.doc.or11.tar.xz
+Source12:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/fixjfm.tar.xz#/fixjfm.or11.tar.xz
+Source13:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/fixjfm.doc.tar.xz#/fixjfm.doc.or11.tar.xz
+Source14:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/garuda-c90.tar.xz#/garuda-c90.or11.tar.xz
+Source15:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/norasi-c90.tar.xz#/norasi-c90.or11.tar.xz
+Source16:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/pxtatescale.tar.xz#/pxtatescale.or11.tar.xz
+Source17:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/pxtatescale.doc.tar.xz#/pxtatescale.doc.or11.tar.xz
+Source18:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xcjk2uni.tar.xz#/xcjk2uni.or11.tar.xz
+Source19:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xcjk2uni.doc.tar.xz#/xcjk2uni.doc.or11.tar.xz
+Source20:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xecjk.tar.xz#/xecjk.or11.tar.xz
+Source21:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xecjk.doc.tar.xz#/xecjk.doc.or11.tar.xz
+Source22:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zitie.tar.xz#/zitie.or11.tar.xz
+Source23:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zitie.doc.tar.xz#/zitie.doc.or11.tar.xz
+Source24:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zxjafont.tar.xz#/zxjafont.or11.tar.xz
+Source25:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zxjafont.doc.tar.xz#/zxjafont.doc.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-adobemapping

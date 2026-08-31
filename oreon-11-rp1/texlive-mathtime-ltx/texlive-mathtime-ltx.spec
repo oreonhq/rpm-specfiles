@@ -18,8 +18,8 @@ BuildArch:      noarch
 # Main collection source
 %global source1_hash 640d1c83978e58782a50732cb25d2e78ae7af7855e3b6c43fefff0aeb039432ca3aeb3b9dba54b7d9ef452917d7f2ee928aa02ffe6b074c8cc902c422690bb71
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.tar.xz#/mathtime-ltx.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.doc.tar.xz#/mathtime-ltx.doc.or11.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.r362.tar.xz#/mathtime-ltx.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/mathtime-ltx.doc.r362.tar.xz#/mathtime-ltx.doc.or11.tar.xz
 # License texts
 Source2:        texlive-licenses.tar.xz
 

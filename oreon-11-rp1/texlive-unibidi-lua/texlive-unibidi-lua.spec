@@ -12,8 +12,8 @@ Summary:        Unicode bidi algorithm for LuaTeX
 License:        MIT
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unibidi-lua.tar.xz#/unibidi-lua.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unibidi-lua.doc.tar.xz#/unibidi-lua.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/unibidi-lua.tar.xz#/unibidi-lua.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/unibidi-lua.doc.tar.xz#/unibidi-lua.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-unibidi-lua-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-unibidi-lua-doc <= 11:%{version}

@@ -21,17 +21,17 @@ BuildArch:      noarch
 %global source6_hash 7e5310672cea8c86394cb61f2cf8c4930fb56070bfe12083a7cb1ee8b7ea6786c5582ec0f5ed95b1d4ec88eebb0e3035a446a9a846ad0a96533ac4256d5b1d27
 %global source7_hash 2e66b1364c2fceecd750758c0c0348f9da7b7d490825d54a1dccf61e07a7d07ad1a62c9078e797b209570a946d643c926e92ff8bde5f8b0dfb36d1d66910dc39
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-binextra.tar.xz#/collection-binextra.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-binextra.tar.xz#/collection-binextra.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctan_chk.tar.xz#/ctan_chk.or11.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ctan_chk.doc.tar.xz#/ctan_chk.doc.or11.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.tar.xz#/hook-pre-commit-pkg.or11.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/hook-pre-commit-pkg.doc.tar.xz#/hook-pre-commit-pkg.doc.or11.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.tar.xz#/xdvipsk-support.or11.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xdvipsk-support.doc.tar.xz#/xdvipsk-support.doc.or11.tar.xz
+Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ctan_chk.tar.xz#/ctan_chk.or11.tar.xz
+Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ctan_chk.doc.tar.xz#/ctan_chk.doc.or11.tar.xz
+Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/hook-pre-commit-pkg.tar.xz#/hook-pre-commit-pkg.or11.tar.xz
+Source5:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/hook-pre-commit-pkg.doc.tar.xz#/hook-pre-commit-pkg.doc.or11.tar.xz
+Source6:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xdvipsk-support.tar.xz#/xdvipsk-support.or11.tar.xz
+Source7:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xdvipsk-support.doc.tar.xz#/xdvipsk-support.doc.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-a2ping

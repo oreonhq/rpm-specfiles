@@ -1,5 +1,5 @@
-%global source0_hash c218dfde1b249e1466a12b7f7fef7764b7e644c58dbc5a700409711ce8871b36debd6cf730431ded663933c9d617ac836328ed5738d0b436bf8d486cb5d6eb22
-%global source1_hash e4bda7d1f2e3f4bc783e44cd031222d6db03fe2bcc892b6ab0307117e9fd0d686b8fd90cb61963400cc6178db25fe8cec1c9fe3e7b6feeb56e41348d3e8b0813
+%global source0_hash d5c2bb72026aef59cac3fbd7533385d0cc8fba5a511dc4456dbe6b178cd26a541849acf918e158bd28d72d680f9cd26400b40cf31b053e892532cfd8266bae52
+%global source1_hash 168039c29bf2434b1a7ee35f3a0a37bd9e7b7d7ab05d825c0a0dee43f573f01872f5000a3e19a06365fd610fe5e525be6896d486d2b6463da7ccfcb7270425ed
 
 %global source_date 20260301
 %global _texdir /usr/share/texlive
@@ -13,8 +13,8 @@ Summary:        TeX Live infrastructure scripts (bootstrap CTAN drop)
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-scripts.tar.xz#/texlive-scripts.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/texlive-scripts.doc.tar.xz#/texlive-scripts.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/texlive-scripts.tar.xz#/texlive-scripts.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/texlive-scripts.doc.tar.xz#/texlive-scripts.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-texlive-scripts = %{epoch}:%{version}-%{release}
 Provides:       tex-texlive-scripts = %{epoch}:%{version}-%{release}

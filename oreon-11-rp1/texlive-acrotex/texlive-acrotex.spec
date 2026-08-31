@@ -18,8 +18,8 @@ BuildArch:      noarch
 # Main collection source
 %global source1_hash 9ffeb5569f32b177408851ed3a42d19af98cafdd70656d027e4afaba987c947b954d9607fbd4bc5f4c8a35bdfce92d216191ff89ef19f2e9f3d5ce6576d4bd2a
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.tar.xz#/acrotex.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.doc.tar.xz#/acrotex.doc.or11.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.r330.tar.xz#/acrotex.or11.tar.xz
+Source1:        https://ctan.math.illinois.edu/systems/texlive/tlcontrib/archive/acrotex.doc.r330.tar.xz#/acrotex.doc.or11.tar.xz
 # License texts
 Source2:        texlive-licenses.tar.xz
 

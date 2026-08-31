@@ -12,8 +12,8 @@ Summary:        Typeset Japanese with LuaTeX
 License:        BSD
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexja.tar.xz#/luatexja.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/luatexja.doc.tar.xz#/luatexja.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/luatexja.tar.xz#/luatexja.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/luatexja.doc.tar.xz#/luatexja.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-luatexja-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-luatexja-doc <= 11:%{version}

@@ -1,4 +1,4 @@
-%global source0_hash adaf4dfe5df39c1f3aadaaa5950d7ea4a0438a055a179392242a0d094590d3df
+%global source0_hash ed087f83ee789c1ea5f39c464c55a5c9d4008deb0efe900814f2df262b82c36e
 
 %global make_opts DEBUG_BUILD=1 DISABLE_RAR=1 LOCAL_FLAGS="%{optflags}" -f makefile.gcc
 # the last build right now is 16.02-32
@@ -20,10 +20,7 @@ Summary:        A file archiver
 # => this is LGPL-2.1-or-later from the text in that file
 License:        LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND LicenseRef-Fedora-Public-Domain
 URL:            https://7-zip.org
-# strip the source with strip-rar-support.sh
-# Source:         https://github.com/ip7z/7zip/archive/%%{version}/%%{name}-%%{version}.tar.gz
-Source:         %{name}-%{version}.tar.zst
-Source:         strip-rar-support.sh
+Source0:        https://www.7-zip.org/a/7z2501-src.tar.xz#/%{name}-%{version}.tar.xz
 Patch:          https://github.com/ip7z/7zip/pull/33.patch#/7z-dont-echo-password.diff
 # patch where 7z.so is loaded from so we don't need to do shenanigans like having the 7z binary
 # there and invoking via a wrapper
@@ -76,7 +73,12 @@ Summary:        Standalone version of 7-Zip console that supports all formats
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1
+%setup -q -c
+sed -i 's/\r$//' CPP/7zip/UI/Console/UserInputUtils.cpp CPP/7zip/UI/Common/ArchiveCommandLine.cpp
+%autopatch -p1
+
+rm -rf CPP/7zip/Archive/Rar
+rm -f CPP/7zip/Compress/Rar* CPP/7zip/Crypto/Rar* DOC/unRarLicense.txt
 
 # avoid failures due to new warnings in latest GCC
 sed -i -e 's|-Werror||' CPP/7zip/7zip_gcc.mak

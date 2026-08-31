@@ -7,7 +7,7 @@ Release:        1%{?dist}
 Summary:        Typeset parallel texts in two columns
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/parallel.tar.xz#/parallel.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/parallel.tar.xz#/parallel.or11.tar.xz
 BuildArch:      noarch
 BuildRequires:  texlive-base
 Requires:       texlive-base

@@ -12,8 +12,8 @@ Summary:        Display the value of a LaTeX counter in formatting
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fmtcount.tar.xz#/fmtcount.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/fmtcount.doc.tar.xz#/fmtcount.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/fmtcount.tar.xz#/fmtcount.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/fmtcount.doc.tar.xz#/fmtcount.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-fmtcount-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-fmtcount-doc <= 11:%{version}

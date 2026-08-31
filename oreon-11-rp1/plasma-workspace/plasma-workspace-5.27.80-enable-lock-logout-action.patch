@@ -14,9 +14,8 @@ Kiosk mode.
 diff --git a/containmentactions/contextmenu/menu.cpp b/containmentactions/contextmenu/menu.cpp
 --- a/containmentactions/contextmenu/menu.cpp
 +++ b/containmentactions/contextmenu/menu.cpp
-@@ -87,8 +87,6 @@
+@@ -87,7 +87,5 @@
          disabled.insert(QStringLiteral("configure shortcuts"));
-         disabled.insert(QStringLiteral("_open_terminal"));
          disabled.insert(QStringLiteral("_run_command"));
 -        disabled.insert(QStringLiteral("_lock_screen"));
 -        disabled.insert(QStringLiteral("_logout"));

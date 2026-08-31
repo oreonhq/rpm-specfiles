@@ -288,7 +288,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # https://bugzilla.redhat.com/show_bug.cgi?id=1456261
 export CC=clang
 export CXX=clang++
-export CXXFLAGS="-stdlib=libc++"
 %global _dwz_max_die_limit_x86_64 250000000
 %global _dwz_max_die_limit_aarch64 250000000
 

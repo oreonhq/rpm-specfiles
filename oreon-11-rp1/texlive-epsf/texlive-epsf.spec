@@ -12,8 +12,8 @@ Summary:        Simple macros for EPS inclusion
 License:        Public Domain
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/epsf.tar.xz#/epsf.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/epsf.doc.tar.xz#/epsf.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/epsf.tar.xz#/epsf.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/epsf.doc.tar.xz#/epsf.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-epsf-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-epsf-doc <= 11:%{version}

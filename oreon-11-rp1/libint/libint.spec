@@ -125,8 +125,12 @@ ulimit -s unlimited
 
 # The generated library is already highly optimized for performance,
 # so it's safe to use a lower level of compiler optimization here.
-oflags=`echo %{optflags} | sed "s|-O2|-O1|g"`
-make CFLAGS="${oflags}" CXXFLAGS="${oflags}" %{?_smp_mflags}
+oflags=`echo %{optflags} | sed -E 's/(^| )-O(0|1|2|3|s|fast)( |$)/\1-O1\3/g'`
+make V=0 CFLAGS="${oflags}" CXXFLAGS="${oflags}" %{?_smp_mflags} > build.log 2>&1 || {
+  status=$?
+  cat build.log
+  exit $status
+}
 
 # Build documentation
 cd doc/progman

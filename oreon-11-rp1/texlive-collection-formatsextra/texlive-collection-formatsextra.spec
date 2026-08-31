@@ -29,25 +29,25 @@ BuildArch:      noarch
 %global source14_hash 65d5b1c2f5b49f3ceba1fab6021ea4445aec25f302145586331468d727a9cfd992e444b0e53f3aae132308492f15d8f76c5c18cdcb405d9d06dcef6a443a4e23
 %global source15_hash a4693b80da94c5644e85c43b93a73ca385097fd2b395856d497e5a138b54063d98d59a8957937d2e2e6ef8948f59d0b1cf74defe50de0b7c5c0fe3c1da83c9a6
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-formatsextra.tar.xz#/collection-formatsextra.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-formatsextra.tar.xz#/collection-formatsextra.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.tar.xz#/antomega.or11.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/antomega.doc.tar.xz#/antomega.doc.or11.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lambda.tar.xz#/lambda.or11.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.tar.xz#/mxedruli.or11.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/mxedruli.doc.tar.xz#/mxedruli.doc.or11.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.tar.xz#/omega.or11.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/omega.doc.tar.xz#/omega.doc.or11.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.tar.xz#/otibet.or11.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/otibet.doc.tar.xz#/otibet.doc.or11.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/passivetex.tar.xz#/passivetex.or11.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.tar.xz#/psizzl.or11.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/psizzl.doc.tar.xz#/psizzl.doc.or11.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.tar.xz#/startex.or11.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/startex.doc.tar.xz#/startex.doc.or11.tar.xz
+Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/antomega.tar.xz#/antomega.or11.tar.xz
+Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/antomega.doc.tar.xz#/antomega.doc.or11.tar.xz
+Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lambda.tar.xz#/lambda.or11.tar.xz
+Source5:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/mxedruli.tar.xz#/mxedruli.or11.tar.xz
+Source6:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/mxedruli.doc.tar.xz#/mxedruli.doc.or11.tar.xz
+Source7:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/omega.tar.xz#/omega.or11.tar.xz
+Source8:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/omega.doc.tar.xz#/omega.doc.or11.tar.xz
+Source9:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/otibet.tar.xz#/otibet.or11.tar.xz
+Source10:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/otibet.doc.tar.xz#/otibet.doc.or11.tar.xz
+Source11:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/passivetex.tar.xz#/passivetex.or11.tar.xz
+Source12:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/psizzl.tar.xz#/psizzl.or11.tar.xz
+Source13:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/psizzl.doc.tar.xz#/psizzl.doc.or11.tar.xz
+Source14:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/startex.tar.xz#/startex.or11.tar.xz
+Source15:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/startex.doc.tar.xz#/startex.doc.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-aleph

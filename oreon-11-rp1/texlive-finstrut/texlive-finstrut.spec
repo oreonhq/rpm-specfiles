@@ -12,8 +12,8 @@ Summary:        Adjust behaviour of the ends of footnotes
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finstrut.tar.xz#/finstrut.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/finstrut.doc.tar.xz#/finstrut.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/finstrut.tar.xz#/finstrut.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/finstrut.doc.tar.xz#/finstrut.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-finstrut-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-finstrut-doc <= 11:%{version}

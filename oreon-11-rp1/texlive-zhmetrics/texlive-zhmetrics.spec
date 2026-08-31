@@ -12,8 +12,8 @@ Summary:        TFM subfont metrics for Chinese
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.tar.xz#/zhmetrics.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zhmetrics.doc.tar.xz#/zhmetrics.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zhmetrics.tar.xz#/zhmetrics.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/zhmetrics.doc.tar.xz#/zhmetrics.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-zhmetrics-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-zhmetrics-doc <= 11:%{version}

@@ -12,8 +12,8 @@ Summary:        String manipulation for LaTeX
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xstring.tar.xz#/xstring.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xstring.doc.tar.xz#/xstring.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xstring.tar.xz#/xstring.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/xstring.doc.tar.xz#/xstring.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-xstring-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-xstring-doc <= 11:%{version}

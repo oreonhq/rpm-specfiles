@@ -12,8 +12,8 @@ Summary:        A range of footnote options
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/footmisc.tar.xz#/footmisc.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/footmisc.doc.tar.xz#/footmisc.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/footmisc.tar.xz#/footmisc.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/footmisc.doc.tar.xz#/footmisc.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-footmisc-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-footmisc-doc <= 11:%{version}

@@ -12,8 +12,8 @@ Summary:        Hooks for standard TeX token registers
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/everyhook.tar.xz#/everyhook.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/everyhook.doc.tar.xz#/everyhook.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/everyhook.tar.xz#/everyhook.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/everyhook.doc.tar.xz#/everyhook.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-everyhook-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-everyhook-doc <= 11:%{version}

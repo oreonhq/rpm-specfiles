@@ -12,8 +12,8 @@ Summary:        Create commutative diagrams with TikZ
 License:        GPL-3.0-or-later OR LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tikz-cd.tar.xz#/tikz-cd.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/tikz-cd.doc.tar.xz#/tikz-cd.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tikz-cd.tar.xz#/tikz-cd.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/tikz-cd.doc.tar.xz#/tikz-cd.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-tikz-cd-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-tikz-cd-doc <= 11:%{version}

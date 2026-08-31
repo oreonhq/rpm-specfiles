@@ -12,8 +12,8 @@ Summary:        Enhanced theorem environment
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.tar.xz#/ntheorem.or11.tar.xz
-Source1:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/ntheorem.doc.tar.xz#/ntheorem.doc.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ntheorem.tar.xz#/ntheorem.or11.tar.xz
+Source1:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ntheorem.doc.tar.xz#/ntheorem.doc.or11.tar.xz
 BuildRequires:  tar
 Provides:       texlive-ntheorem-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ntheorem-doc <= 11:%{version}

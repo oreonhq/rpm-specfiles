@@ -37,33 +37,33 @@ BuildArch:      noarch
 %global source22_hash 9cf9a73ba3c2190da7999c3b770e92d8afb43c640d651173c126e930155e9f87f371392accd4eadae8922ee846a5e02c0eeab845561dea943b34b185164bba3c
 %global source23_hash 6173d49bb64c9b162763ff08af445e518fa650fcc13e02f5c72454d335285d9c82347cf79f945fae94429f3a9d15f9c9b58ff1d175c8f59ea7b75766cd279303
 
-Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-langkorean.tar.xz#/collection-langkorean.or11.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-langkorean.tar.xz#/collection-langkorean.or11.tar.xz
 
 # License texts
 Source1:        texlive-licenses.tar.xz
 
-Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/baekmuk.tar.xz#/baekmuk.or11.tar.xz
-Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/baekmuk.doc.tar.xz#/baekmuk.doc.or11.tar.xz
-Source4:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.tar.xz#/cjk-ko.or11.tar.xz
-Source5:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/cjk-ko.doc.tar.xz#/cjk-ko.doc.or11.tar.xz
-Source6:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-oblivoir.tar.xz#/kotex-oblivoir.or11.tar.xz
-Source7:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-oblivoir.doc.tar.xz#/kotex-oblivoir.doc.or11.tar.xz
-Source8:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-plain.tar.xz#/kotex-plain.or11.tar.xz
-Source9:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-plain.doc.tar.xz#/kotex-plain.doc.or11.tar.xz
-Source10:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-utf.tar.xz#/kotex-utf.or11.tar.xz
-Source11:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/kotex-utf.doc.tar.xz#/kotex-utf.doc.or11.tar.xz
-Source12:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-korean.tar.xz#/lshort-korean.or11.tar.xz
-Source13:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/lshort-korean.doc.tar.xz#/lshort-korean.doc.or11.tar.xz
-Source14:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nanumtype1.tar.xz#/nanumtype1.or11.tar.xz
-Source15:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/nanumtype1.doc.tar.xz#/nanumtype1.doc.or11.tar.xz
-Source16:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pmhanguljamo.tar.xz#/pmhanguljamo.or11.tar.xz
-Source17:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/pmhanguljamo.doc.tar.xz#/pmhanguljamo.doc.or11.tar.xz
-Source18:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uhc.tar.xz#/uhc.or11.tar.xz
-Source19:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/uhc.doc.tar.xz#/uhc.doc.or11.tar.xz
-Source20:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unfonts-core.tar.xz#/unfonts-core.or11.tar.xz
-Source21:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unfonts-core.doc.tar.xz#/unfonts-core.doc.or11.tar.xz
-Source22:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unfonts-extra.tar.xz#/unfonts-extra.or11.tar.xz
-Source23:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/unfonts-extra.doc.tar.xz#/unfonts-extra.doc.or11.tar.xz
+Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/baekmuk.tar.xz#/baekmuk.or11.tar.xz
+Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/baekmuk.doc.tar.xz#/baekmuk.doc.or11.tar.xz
+Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjk-ko.tar.xz#/cjk-ko.or11.tar.xz
+Source5:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/cjk-ko.doc.tar.xz#/cjk-ko.doc.or11.tar.xz
+Source6:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/kotex-oblivoir.tar.xz#/kotex-oblivoir.or11.tar.xz
+Source7:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/kotex-oblivoir.doc.tar.xz#/kotex-oblivoir.doc.or11.tar.xz
+Source8:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/kotex-plain.tar.xz#/kotex-plain.or11.tar.xz
+Source9:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/kotex-plain.doc.tar.xz#/kotex-plain.doc.or11.tar.xz
+Source10:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/kotex-utf.tar.xz#/kotex-utf.or11.tar.xz
+Source11:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/kotex-utf.doc.tar.xz#/kotex-utf.doc.or11.tar.xz
+Source12:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lshort-korean.tar.xz#/lshort-korean.or11.tar.xz
+Source13:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lshort-korean.doc.tar.xz#/lshort-korean.doc.or11.tar.xz
+Source14:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/nanumtype1.tar.xz#/nanumtype1.or11.tar.xz
+Source15:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/nanumtype1.doc.tar.xz#/nanumtype1.doc.or11.tar.xz
+Source16:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/pmhanguljamo.tar.xz#/pmhanguljamo.or11.tar.xz
+Source17:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/pmhanguljamo.doc.tar.xz#/pmhanguljamo.doc.or11.tar.xz
+Source18:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/uhc.tar.xz#/uhc.or11.tar.xz
+Source19:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/uhc.doc.tar.xz#/uhc.doc.or11.tar.xz
+Source20:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/unfonts-core.tar.xz#/unfonts-core.or11.tar.xz
+Source21:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/unfonts-core.doc.tar.xz#/unfonts-core.doc.or11.tar.xz
+Source22:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/unfonts-extra.tar.xz#/unfonts-extra.or11.tar.xz
+Source23:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/unfonts-extra.doc.tar.xz#/unfonts-extra.doc.or11.tar.xz
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-collection-langcjk

@@ -361,7 +361,7 @@ do
   then
     module load mpi/$mpi-%{_arch}
     logfile="%{_tmppath}/hdf5-${mpi}-check.log"
-    make -j1 -C $mpi check > "$logfile" 2>&1 || {
+    make -j1 -C $mpi check-p > "$logfile" 2>&1 || {
       status=$?
       cat "$logfile"
       test $fail -eq 0 || exit $status
