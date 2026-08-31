@@ -1,12 +1,14 @@
-%global source0_hash f2c116fecbf9b6b84d5dc9a77f4d4ea97922732078f91b79ae16561dba31b5ba
+%global source0_hash none
 
 Name:           oreon-system-manager
-Version:        0.2.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        Oreon system management GUI
 License:        GPL-3.0-or-later
 URL:            https://github.com/oreonhq/oreon-system-manager
-Source0:        https://github.com/oreonhq/oreon-system-manager/archive/refs/tags/v%{version}.tar.gz#/oreon-system-manager-%{version}.tar.gz
+# Source0:        https://github.com/oreonhq/oreon-system-manager/archive/refs/tags/v%{version}.tar.gz#/oreon-system-manager-%{version}.tar.gz
+# teporary source0 for testing before tag below
+Source0:        https://github.com/oreonhq/oreon-system-manager/archive/refs/heads/feat/improvements.zip
 
 BuildRequires:  cargo-rpm-macros
 BuildRequires:  gcc
