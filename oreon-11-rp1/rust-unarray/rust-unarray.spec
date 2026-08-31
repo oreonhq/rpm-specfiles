@@ -16,6 +16,7 @@ URL:            https://crates.io/crates/unarray
 Source:         %{crates_source}
 
 BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  crate(proptest/default) >= 1.0
 
 %global _description %{expand:
 Utilities for working with uninitialized arrays}

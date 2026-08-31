@@ -73,19 +73,11 @@ rm -rf src/minizip
  -DSWIG_EXECUTABLE=SWIG_EXECUTABLE-NOTFOUND
 %endif
 
-%if ((0%{?el} >= 9) || (0%{?fedora} >= 33))
 %cmake_build
-%else
-%make_build
-%endif
 
 %install
 
-%if ((0%{?el} >= 9) || (0%{?fedora} >= 33))
 %cmake_install
-%else
-%make_install
-%endif
 
 %if 0%{?el7}
 %post -p /sbin/ldconfig

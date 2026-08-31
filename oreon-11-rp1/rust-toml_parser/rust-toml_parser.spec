@@ -6,7 +6,7 @@
 
 %global crate toml_parser
 %global crate_version 1.1.2+spec-1.1.0
-%global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
+%global crate_instdir %{cargo_registry}/%{crate}-%{version}
 
 Name:           rust-toml_parser
 Version:        1.1.2

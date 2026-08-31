@@ -814,8 +814,6 @@ sed -r -i \
 
 echo '===== Preparing gtest/gmock =====' 2>&1
 %if %{without system_gtest}
-BuildRequires: cmake(gtest)
-BuildRequires: pkgconfig(gmock)
 # Copy in the needed gtest/gmock implementations.
 %setup -q -T -D -b 1 -n grpc-%{srcversion}
 rm -rvf 'third_party/googletest'
@@ -1827,6 +1825,5 @@ fi
 %files -n python3-grpcio-testing
 %{python3_sitelib}/grpc_testing/
 %{python3_sitelib}/grpcio_testing-%{pyversion}-py%{python3_version}.egg-info/
-
 
 

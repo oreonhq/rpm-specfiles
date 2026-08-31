@@ -99,18 +99,6 @@ use the "bit-set" feature of the "%{crate}" crate.
 %files       -n %{name}+bit-set-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+bit-vec-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+bit-vec-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "bit-vec" feature of the "%{crate}" crate.
-
-%files       -n %{name}+bit-vec-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+default-code-coverage-devel
 Summary:        %{summary}
 BuildArch:      noarch

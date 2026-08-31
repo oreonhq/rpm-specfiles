@@ -56,11 +56,8 @@ BuildRequires:  /usr/bin/bibtex
 BuildRequires:  /usr/bin/pdflatex
 %endif
 
-%if 0%{?fedora} > 17 || 0%{?rhel} > 6
-# Required to build documentation
 BuildRequires:  texlive-collection-latexrecommended
 BuildRequires:  texlive-bibtex
-%endif
 
 %description
 LIBINT computes the Coulomb and exchange integrals, which in electronic

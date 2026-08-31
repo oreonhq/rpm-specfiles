@@ -49,18 +49,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+jiff-tzdb-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+jiff-tzdb-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "jiff-tzdb" feature of the "%{crate}" crate.
-
-%files       -n %{name}+jiff-tzdb-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+perf-inline-devel
 Summary:        %{summary}
 BuildArch:      noarch
