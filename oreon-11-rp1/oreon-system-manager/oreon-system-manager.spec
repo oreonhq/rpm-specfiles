@@ -1,4 +1,5 @@
-%global source0_hash none
+%global commit 81e8241ce0f01bac1bc90a2df5f427fda6c331f5
+%global source0_hash 085b5bfdaac952cd5a3acc95d83349464738365499da8536d50364e7af54b460
 
 Name:           oreon-system-manager
 Version:        0.1.1
@@ -6,9 +7,7 @@ Release:        1%{?dist}
 Summary:        Oreon system management GUI
 License:        GPL-3.0-or-later
 URL:            https://github.com/oreonhq/oreon-system-manager
-# Source0:        https://github.com/oreonhq/oreon-system-manager/archive/refs/tags/v%{version}.tar.gz#/oreon-system-manager-%{version}.tar.gz
-# teporary source0 for testing before tag below
-Source0:        https://github.com/oreonhq/oreon-system-manager/archive/refs/heads/feat/improvements.zip
+Source0:        https://github.com/oreonhq/oreon-system-manager/archive/%{commit}.tar.gz#/oreon-system-manager-%{commit}.tar.gz
 
 BuildRequires:  cargo-rpm-macros
 BuildRequires:  gcc
@@ -31,7 +30,7 @@ GTK4 GUI for package, repo, driver, and container management on Oreon.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n oreon-system-manager-%{version}
+%autosetup -n oreon-system-manager-%{commit}
 %cargo_prep
 
 %generate_buildrequires
