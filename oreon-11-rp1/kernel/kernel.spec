@@ -797,7 +797,7 @@ BuildRequires: dwarves
 BuildRequires: python3
 BuildRequires: python3-devel
 BuildRequires: python3-pyyaml
-BuildRequires: kernel-rpm-macros >= 205-31
+BuildRequires: kernel-rpm-macros >= 205
 # glibc-static is required for a consistent build environment (specifically
 # CONFIG_CC_CAN_LINK_STATIC=y).
 BuildRequires: glibc-static
