@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 990f46d49525d6ab5dc4249f8684c6deeaf54de6fec63a187e9fb382cc0ffdff
 
 %global sover 22
 
@@ -10,6 +10,10 @@ Summary:        Libraries for the Unidata network Common Data Form
 License:        BSD-3-Clause
 URL:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:        https://github.com/Unidata/netcdf-c/archive/v%{version}/%{name}-%{version}.tar.gz
+
+%ifarch aarch64
+%global _lto_cflags %{nil}
+%endif
 
 BuildRequires:  libtool
 BuildRequires:  make

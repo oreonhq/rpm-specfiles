@@ -60,6 +60,7 @@ Patch:      0001-Increase-sleep-for-tests.patch
 
 # place in correct locations
 Patch:      0002-chore-undo-changes-to-standard-dirs.patch
+Patch:      dcmtk-3.6.9-serialize-tls-certificate-tests.patch
 
 BuildRequires: gcc
 BuildRequires: gcc-c++

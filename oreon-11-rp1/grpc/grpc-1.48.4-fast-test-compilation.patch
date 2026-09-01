@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d068c654e..658fa1840 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -22127,3 +22127,13 @@ generate_pkgconfig(
+   "-lgrpc++_unsecure"
+   ""
+   "grpc++_unsecure.pc")
++
++if(gRPC_BUILD_TESTS)
++  get_property(grpc_all_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
++  foreach(grpc_target IN LISTS grpc_all_targets)
++    if(grpc_target MATCHES "test|benchmark|bm_")
++      get_target_property(grpc_target_type ${grpc_target} TYPE)
++      if(grpc_target_type MATCHES "EXECUTABLE|LIBRARY")
++        target_compile_options(${grpc_target} PRIVATE -O0)
++      endif()
++    endif()
++  endforeach()
++endif()

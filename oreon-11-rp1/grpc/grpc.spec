@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0c3faa83e39d4f1ab55fe1476362b9ac3b81632a46dce7fd4d50271bce816b53
 
 # We need to use C++17 to link against the system abseil-cpp, since it was
 # compiled with C++17 (an intentional abseil-cpp design decision).
@@ -468,6 +468,7 @@ Patch:		grpc-1.48.4-core-tsi-ssl_transport_security.cc.patch
 # OpenSSL 4 build fixes
 Patch:          0001-Update-OpenSSL-API-usage-for-compatibility.patch
 Patch:          grpc-python-parallel-absolute-paths.patch
+Patch:          grpc-1.48.4-fast-test-compilation.patch
 
 Requires:       grpc-data = %{version}-%{release}
 
@@ -1825,5 +1826,4 @@ fi
 %files -n python3-grpcio-testing
 %{python3_sitelib}/grpc_testing/
 %{python3_sitelib}/grpcio_testing-%{pyversion}-py%{python3_version}.egg-info/
-
 

@@ -1,0 +1,11 @@
+diff --git a/dcmtls/tests/CMakeLists.txt b/dcmtls/tests/CMakeLists.txt
+index c477a03..30404c5 100644
+--- a/dcmtls/tests/CMakeLists.txt
++++ b/dcmtls/tests/CMakeLists.txt
+@@ -6,3 +6,6 @@ DCMTK_TARGET_LINK_MODULES(dcmtls_tests dcmnet dcmtls)
+ 
+ # This macro parses tests.cc and registers all tests
+ DCMTK_ADD_TESTS(dcmtls)
++
++set_tests_properties(dcmtls_scp_tls dcmtls_scp_pool_tls
++  PROPERTIES RESOURCE_LOCK dcmtls_test_certificate)

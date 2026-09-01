@@ -1,4 +1,4 @@
-%global source0_hash 60ee8da33b1736dd436d6f34cc733e397aed60fb7007eddd3db5197060e10111
+%global source0_hash cee2a64abc193cc96c7ff1208b709335e9a4d1316ce84b91501102166d814c9a
 
 %global pypi_name WSGIProxy2
 %global package_name wsgiproxy
@@ -10,7 +10,7 @@ Summary:        WSGI Proxy that supports several HTTP backends
 
 License:        MIT
 URL:            https://github.com/gawel/WSGIProxy2/
-Source0:        https://pypi.python.org/packages/source/W/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/W/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
  
 %global _description\

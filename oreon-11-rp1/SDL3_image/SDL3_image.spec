@@ -94,7 +94,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   -DSDLIMAGE_PNG=ON \
   -DSDLIMAGE_PNG_LIBPNG=ON \
   -DSDLIMAGE_PNG_SAVE=ON \
-  -DSDLIMAGE_PNG_SHARED=ON \
+  -DSDLIMAGE_PNG_SHARED=OFF \
   -DSDLIMAGE_PNM=ON \
   -DSDLIMAGE_QOI=ON \
   -DSDLIMAGE_RELOCATABLE=OFF \

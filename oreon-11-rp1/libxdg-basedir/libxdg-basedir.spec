@@ -16,6 +16,8 @@ Patch3:         libxdg-basedir-home-undef.patch
 BuildRequires:  valgrind
 %endif
 BuildRequires:  libtool
+BuildRequires:  autoconf
+BuildRequires:  automake
 
 %description
 The XDG Base Directory Specification defines where should user files 
@@ -56,6 +58,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P3 -p1
 
 %build
+autoreconf -fi
 %configure --disable-static
 make %{?_smp_mflags}
 make doxygen-run
