@@ -35,9 +35,6 @@ Source1:        get_source
 
 %endif
 
-BuildSystem:            pyproject
-BuildOption(install):   -l cramjam
-
 BuildRequires:  tomcli >= 0.8.0
 BuildRequires:  cargo-rpm-macros >= 24
 
@@ -118,12 +115,18 @@ done
 
 %cargo_prep
 
-%generate_buildrequires -a
+%generate_buildrequires
+%pyproject_buildrequires -x testing
 %cargo_generate_buildrequires
 
-%build -p
+%build
 %cargo_license_summary
 %{cargo_license} > LICENSES.dependencies
+%pyproject_wheel
+
+%install
+%pyproject_install -l cramjam
+%pyproject_save_files cramjam
 
 %check -a
 %if %{with tests}

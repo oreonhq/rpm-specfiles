@@ -50,17 +50,6 @@ Source:         %{forgeurl}/archive/v%{version}/pyzmq-%{version}.tar.gz
 BuildRequires:  python3-devel
 BuildRequires:  pyproject-rpm-macros
 
-# https://scikit-build-core.readthedocs.io/en/latest/configuration/index.html
-                        -Ccmake.define.PYZMQ_LIBZMQ_RPATH:BOOL=OFF
-                        -Ccmake.define.PYZMQ_NO_BUNDLE=ON
-                        -Clogging.level=INFO
-                        -Cbuild.verbose=true
-                        -Ccmake.build-type="RelWithDebInfo"}
-# - The cffi backend does not apply when we build with Cython.
-                        -e 'zmq.backend.cffi*'
-                        %{?!with_gevent:-e 'zmq.green*'}
-                        }
-
 BuildRequires:  gcc
 # This package contains no C++ code, but there are some checks in
 # CMakeLists.txt that need a C++ compiler.

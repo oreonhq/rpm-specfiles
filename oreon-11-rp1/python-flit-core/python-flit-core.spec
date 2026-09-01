@@ -18,7 +18,7 @@ Summary:        PEP 517 build backend for packages using Flit
 License:        BSD-3-Clause AND BSD-2-Clause
 
 URL:            https://flit.pypa.io/
-Source:        https://files.pythonhosted.org/packages/source/f/flit-core/flit-core-3.12.0.tar.gz
+Source:        https://files.pythonhosted.org/packages/source/f/flit_core/flit_core-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
 

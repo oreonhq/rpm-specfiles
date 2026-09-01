@@ -1,4 +1,4 @@
-%global source0_hash ad6078e2edb6766d1334ec3dee072ac6a7f95b1e32ce10def8ff7f0f02d56589
+%global source0_hash aa8c27231070b135c025e567a9cd7eda03f4df71352ffaac740cb6a75f0f81a5
 
 %bcond tests 1
 
@@ -9,7 +9,7 @@ environment.
 
 Name:           python-webob
 Summary:        WSGI request and response object
-Version:        1.8.9
+Version:        1.8.11
 Release:        7%{?dist}
 License:        MIT
 URL:            https://webob.org

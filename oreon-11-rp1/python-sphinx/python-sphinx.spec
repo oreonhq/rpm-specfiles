@@ -55,17 +55,12 @@ Patch:        https://github.com/sphinx-doc/sphinx/pull/13883.patch
 # By removing the dependencies, we minimize the stuff that's pulled into
 # the buildroots of 700+ of packages.
 #
-# This is a downstream-only change - rejected upstream.
-# https://github.com/sphinx-doc/sphinx/pull/11747
-Patch:        https://github.com/sphinx-doc/sphinx/pull/13883.patch
-
 # Compatibility with Python 3.14
 Patch:      https://github.com/sphinx-doc/sphinx/commit/8962398b761c3d85a.patch
 Patch:      https://github.com/sphinx-doc/sphinx/commit/e01e42f5fc738815b.patch
 Patch:      https://github.com/sphinx-doc/sphinx/pull/13527.patch
 # Compatibility with docutils 0.22+
 Patch:      https://github.com/sphinx-doc/sphinx/pull/13610.patch
-Patch:      https://github.com/sphinx-doc/sphinx/pull/13883.patch
 
 BuildArch:     noarch
 

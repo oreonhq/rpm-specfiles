@@ -29,6 +29,7 @@ BuildRequires:  cmake(sdl3) >= 3.2.4
 BuildRequires:  gcc
 BuildRequires:  libjxl-devel
 BuildRequires:  libpng-devel
+BuildRequires:  libpng-static
 BuildRequires:  libtiff-devel
 BuildRequires:  make
 BuildRequires:  perl
