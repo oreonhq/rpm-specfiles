@@ -19,6 +19,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(aom)
 BuildRequires:  pkgconfig(dav1d)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libpng)
@@ -64,7 +65,7 @@ patch -p1 --fuzz=0 -d ext/libargparse < ext/libargparse.patch
 
 %cmake \
   -GNinja \
-  -DAVIF_CODEC_AOM=OFF \
+  -DAVIF_CODEC_AOM=SYSTEM \
   -DAVIF_CODEC_RAV1E=OFF \
   -DAVIF_CODEC_SVT=OFF \
   -DAVIF_CODEC_DAV1D=SYSTEM \

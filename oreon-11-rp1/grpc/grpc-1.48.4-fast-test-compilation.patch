@@ -2,7 +2,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index d068c654e..658fa1840 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -22127,3 +22127,13 @@ generate_pkgconfig(
+@@ -22127,3 +22127,15 @@ generate_pkgconfig(
    "-lgrpc++_unsecure"
    ""
    "grpc++_unsecure.pc")

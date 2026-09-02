@@ -134,7 +134,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's/setup.py install --prefix=$(DESTDIR)$(prefix)/setup.py install --root $(DESTDIR) --prefix=$(prefix)/' Makefile*
 
 %build
-autoreconf -fi
+aclocal
+autoconf -f
+automake --add-missing --copy --foreign
 %configure --with-udev-rules
 %make_build
 

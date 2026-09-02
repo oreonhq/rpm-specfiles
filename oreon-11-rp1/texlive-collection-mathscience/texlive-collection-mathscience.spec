@@ -624,7 +624,7 @@ License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
 # Main collection source
-Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-mathscience.tar.xz
+Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-mathscience.tar.xz?oreon_snapshot=20260829
 
 # License texts
 Source1:        texlive-licenses.tar.xz
