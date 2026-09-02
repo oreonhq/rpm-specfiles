@@ -532,7 +532,7 @@ createdb --owner "$SENTRY_PYTHON_TEST_POSTGRES_USER" "$SENTRY_PYTHON_TEST_POSTGR
 # `sentry.release` to log attributes, as otherwise it is not set
 # (it is not a git repository, so `sentry_sdk.utils.get_git_revision`
 # does not return a git revision used as release).
-DJANGO_SETTINGS_MODULE=tests.integrations.django.myapp.settings SENTRY_RELEASE=%{version} %tox -e %{toxenvs_csv} -- -- ${deselect-} ${ignore-}
+DJANGO_SETTINGS_MODULE=tests.integrations.django.myapp.settings SENTRY_RELEASE=%{version} %tox -p no -e %{toxenvs_csv} -- -- ${deselect-} ${ignore-}
 
 # Terminate redis-server.
 %{_bindir}/redis-cli shutdown nosave force now

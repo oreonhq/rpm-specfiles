@@ -402,7 +402,7 @@ test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "ore
 _opencv_legal_scrub() {
   find "$1" -iname '*lena*' -delete
   find "$1" -iname '*lenna*' -delete
-  rm -rf "$1/modules/xfeatures2d"
+  find "$1" -type d -name xfeatures2d -prune -exec rm -rf {} +
 }
 _opencv_extra_scrub() {
   find "$1" -iname '*lena*' -delete
