@@ -98,7 +98,7 @@ Source5:        xorg.conf
 %global wechat_commit 3487ef7cde71d93c6a01bb0b84aa0f22c6128f6b
 %global wechat_shortcommit %(c=%{wechat_commit}; echo ${c:0:7})
 %global wechat_gitdate 20230712
-Source6:        https://github.com/WeChatCV/opencv_3rdparty/archive/%{wechat_commit}/wechat-%{wechat_gitdate}.git%{wechat_shortcommit}.tar.gz#/opencv-4.13.0.tar.gz
+Source6:        https://github.com/WeChatCV/opencv_3rdparty/archive/%{wechat_commit}/wechat-%{wechat_gitdate}.git%{wechat_shortcommit}.tar.gz#/opencv-wechat-%{wechat_gitdate}.tar.gz
 
 Patch0:        opencv-4.1.0-install_3rdparty_licenses.patch
 # Fix build with vtk 9.6 - https://github.com/opencv/opencv_contrib/pull/4085
@@ -391,7 +391,9 @@ This package contains Java bindings for the OpenCV library.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+%if %{with extras_tests}
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
+%endif
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 # https://github.com/rpm-software-management/rpm/issues/1204

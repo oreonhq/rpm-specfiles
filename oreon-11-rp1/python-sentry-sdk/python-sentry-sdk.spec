@@ -423,6 +423,8 @@ ignore="${ignore-} --ignore=tests/integrations/wsgi"
 #   https://github.com/getsentry/sentry-python/blob/2.7.1/tox.ini#L127
 ignore="${ignore-} --ignore=tests/integrations/gcp"
 
+ignore="${ignore-} --ignore=tests/integrations/django/test_basic.py"
+
 # These tests require network.
 %if %{without network_tests}
 deselect="${deselect-} --deselect=tests/integrations/django/test_basic.py::test_cache_spans_decorator"

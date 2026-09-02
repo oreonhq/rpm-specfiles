@@ -31,6 +31,7 @@ BuildRequires: desktop-file-utils >= 0.2.92
 BuildRequires: gcc
 # for translations
 BuildRequires: gettext-devel
+BuildRequires: gettext
 # for autosetup
 BuildRequires: git-core
 # for translations
