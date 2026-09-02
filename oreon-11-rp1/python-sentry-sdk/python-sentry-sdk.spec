@@ -504,6 +504,8 @@ defined_toxenvs=$(echo "%toxenvs_excluded" "%toxenvs" | xargs -n1 | sort -u)
 tox_ini_toxenvs=$(cat tox.ini | sed -r -n 's/[[:blank:]]*(.*):[[:blank:]]*TESTPATH=.*/%{default_toxenv}-\1/p' | xargs -n1 | sort -u)
 diff <(echo "$defined_toxenvs") <(echo "$tox_ini_toxenvs")
 
+sed -i '/^\[testenv\]$/a pass_env = SENTRY_RELEASE' tox.ini
+
 # Start redis-server, which is required for some integration tests.
 %{_bindir}/redis-server --bind 127.0.0.1 --port 6379 &
 REDIS_SERVER_PID=$!
@@ -514,6 +516,7 @@ export SENTRY_PYTHON_TEST_POSTGRES_USER=sentry_test_user
 export SENTRY_PYTHON_TEST_POSTGRES_PASSWORD=sentry_test_password
 export SENTRY_PYTHON_TEST_POSTGRES_NAME=sentry_test_name
 export SENTRY_PYTHON_TEST_POSTGRES_PORT=$PGTESTS_PORT
+export SENTRY_RELEASE=%{version}
 # Use `SELECT 1 ... | grep -q 1` guards to keep this block idempotent (useful when iterating locally or
 # re-running builds without a fully clean chroot), while still failing hard on real PostgreSQL errors.
 psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='$SENTRY_PYTHON_TEST_POSTGRES_USER'" | grep -q 1 || \

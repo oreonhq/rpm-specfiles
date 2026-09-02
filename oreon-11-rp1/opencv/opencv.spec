@@ -409,9 +409,8 @@ _opencv_extra_scrub() {
   find "$1" -iname '*lenna*' -delete
   find "$1" \( -iname 'len*.*' -o -iname '*lena*.png' -o -iname '*lena*.jpg' \) -delete
 }
-_opencv_legal_scrub opencv-%{version}
-_opencv_legal_scrub opencv_contrib-%{version}
-%{?with_extras_tests:_opencv_extra_scrub opencv_extra-%{version}}
+_opencv_legal_scrub .
+%{?with_extras_tests:_opencv_extra_scrub .}
 
 # we don't use pre-built contribs except quirc
 pushd 3rdparty
