@@ -139,6 +139,7 @@ aclocal -I /usr/share/gettext/m4
 autoconf -f
 automake --add-missing --copy --foreign
 %configure --with-udev-rules
+touch po/Makefile.in
 %make_build
 
 %install
