@@ -12,7 +12,7 @@
 # Disable integration tests by default,
 # as there is a bunch of failures on non-Debian systems currently.
 # Additionally, these tests take a long time to run.
-%bcond check 1_integration
+%bcond check_integration 1
 
 Name:           apt
 Version:        3.1.16

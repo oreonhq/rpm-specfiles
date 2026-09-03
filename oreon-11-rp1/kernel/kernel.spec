@@ -120,7 +120,7 @@ Summary: The Linux kernel
 %global signkernel 0
 %endif
 
-%global sbat_suffix fedora
+%global sbat_suffix oreon
 
 # Sign modules on all arches
 %global signmodules 1
@@ -151,7 +151,7 @@ Summary: The Linux kernel
 # kernel package name (should only be used to define %%{name})
 %global package_name kernel
 %global gemini 0
-# Include Fedora files
+# Include Oreon files
 %global include_fedora 1
 # Include RHEL files
 %global include_rhel 1
@@ -232,7 +232,7 @@ Summary: The Linux kernel
 %define with_arm64_16k %{?_with_arm64_16k:    1} %{?!_with_arm64_16k:    0}
 # kernel-64k (aarch64 kernel with 64K page_size)
 %define with_arm64_64k %{?_without_arm64_64k: 0} %{?!_without_arm64_64k: 1}
-# we default reatime builds to off for fedora and on for rhel/centos/eln
+# We default reatime builds to off for Oreon and on for rhel/centos/eln
 %if 0%{?fedora} || (0%{?oreon} >= 11)
 # kernel-rt (x86_64 and aarch64 only PREEMPT_RT enabled kernel)
 %define with_realtime  %{?_with_realtime:  1} %{?!_with_realtime:  0}
@@ -335,7 +335,7 @@ Summary: The Linux kernel
 %endif
 
 %ifarch aarch64
-# dtbloader sub-package requires stubble which is only in Fedora for now
+# dtbloader sub-package requires stubble which is only in Oreon for now
 %if 0%{?fedora} || (0%{?oreon} >= 11)
 %define with_dtbloader %{?_without_dtbloader: 0} %{?!_without_dtbloader: 1}
 %else
@@ -607,7 +607,7 @@ Summary: The Linux kernel
 %endif
 
 %if 0%{?fedora} || (0%{?oreon} >= 11)
-# This is not for Fedora
+# This is not for Oreon
 %define with_zfcpdump 0
 %define with_selftests 0
 %endif
@@ -971,6 +971,7 @@ Source10: oreonsecurebootca.cer
 Source13: oreonsecureboot501.cer
 Source14: oreonsecureboot302.cer
 
+%define signing_key_filename kernel-signing.cer
 %ifarch ppc64le
 %define signing_key_filename kernel-signing-ppc.cer
 %endif
@@ -1126,7 +1127,7 @@ Source491: %{name}-x86_64-automotive-debug-rhel.config
 # Sources for kernel-tools
 Source2002: kvm_stat.logrotate
 
-# Some people enjoy building customized kernels from the dist-git in Fedora and
+# Some people enjoy building customized kernels from the dist-git in Oreon and
 # use this to override configuration options. One day they may all use the
 # source tree, but in the mean time we carry this to support the legacy workflow
 Source3000: merge.py
@@ -2039,7 +2040,7 @@ exit 1
 
 %if %{with_automotive}
 %if 0%{?fedora} || (0%{?oreon} >= 11)
-%{log_msg "Cannot build automotive with a fedora baseline, must be rhel/centos/eln"}
+%{log_msg "Cannot build automotive with an Oreon baseline, must be rhel/centos/eln"}
 exit 1
 %endif
 %endif
@@ -3142,16 +3143,12 @@ BuildKernel() {
     # prune junk from kernel-debuginfo
     find $RPM_BUILD_ROOT/usr/src/kernels -name "*.mod.c" -delete
 
-    # Red Hat UEFI Secure Boot CA cert, which can be used to authenticate the kernel
+    # Oreon UEFI Secure Boot CA cert, which can be used to authenticate the kernel
     %{log_msg "Install certs"}
     mkdir -p $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer
 %if %{signkernel}
     install -m 0644 %{secureboot_ca_0} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/kernel-signing-ca.cer
-    %ifarch s390x ppc64le
-    if [ -x /usr/bin/rpm-sign ]; then
-        install -m 0644 %{secureboot_key_0} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/%{signing_key_filename}
-    fi
-    %endif
+    install -m 0644 %{secureboot_key_0} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/%{signing_key_filename}
 %endif
 
     install -m 0644 %{ima_signing_cert} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/%{ima_cert_name}
@@ -3161,13 +3158,7 @@ BuildKernel() {
         # Save the signing keys so we can sign the modules in __modsign_install_post
         cp certs/signing_key.pem certs/signing_key.pem.sign${Variant:++${Variant}}
         cp certs/signing_key.x509 certs/signing_key.x509.sign${Variant:++${Variant}}
-        %ifarch s390x ppc64le
-        if [ ! -x /usr/bin/rpm-sign ]; then
-            install -m 0644 certs/signing_key.x509.sign${Variant:++${Variant}} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/kernel-signing-ca.cer
-            openssl x509 -in certs/signing_key.pem.sign${Variant:++${Variant}} -outform der -out $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/%{signing_key_filename}
-            chmod 0644 $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/%{signing_key_filename}
-        fi
-        %endif
+        install -m 0644 certs/signing_key.x509.sign${Variant:++${Variant}} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/kernel-module-signing.cer
     fi
 %endif
 
