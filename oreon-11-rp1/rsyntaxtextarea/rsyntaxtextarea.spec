@@ -1,9 +1,9 @@
-%global source0_hash cce3d959bdfeeda2ee5be2c43e4b5f56f5ebaf952686fb3b43c024f2741b9bbc
+%global source0_hash f1835b6a1de514eebc7187eecdc25892261d5e68293b053adf986acd4e94ef5f
 
 %global upname RSyntaxTextArea
 
 Name:           rsyntaxtextarea
-Version:        4.0.1
+Version:        3.6.0
 Release:        1%{?dist}
 Summary:        A syntax highlighting, code folding text editor for Java Swing applications
 

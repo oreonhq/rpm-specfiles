@@ -1,7 +1,7 @@
-%global source0_hash 842b3df026e48c5056feb45bf3a4b298c9172cfde5cd6f2ceedc7cda50977e8f
+%global source0_hash 4db53b1fde9abecbb74d91230d32ab626d94f6badfc575d6db9194a49df29968
 
 Name:           python-docutils
-Version:        0.23
+Version:        0.22.4
 Release:        %autorelease
 Summary:        System for processing plaintext documentation
 

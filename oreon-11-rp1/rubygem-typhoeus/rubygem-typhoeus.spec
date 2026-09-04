@@ -1,10 +1,10 @@
-%global source0_hash bacc41c23e379547e29801dc235cd1699b70b955a1ba3d32b2b877aa844c331d
+%global source0_hash fff9880d5dc35950e7706cf132fd297f377c049101794be1cf01c95567f642d4
 
 %global gem_name typhoeus
 
 Name: rubygem-%{gem_name}
-Version: 1.6.0
-Release: 1%{?dist}
+Version: 1.4.0
+Release: 16%{?dist}
 Summary: Parallel HTTP library on top of libcurl multi
 License: MIT
 URL: https://github.com/typhoeus/typhoeus

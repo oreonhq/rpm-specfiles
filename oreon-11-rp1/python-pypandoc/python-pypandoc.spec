@@ -1,7 +1,7 @@
-%global source0_hash 6fcd5739c2eefec86723df9b6ae4eac2c3918d8bf22b7209adcb5cd1c23d20c1
+%global source0_hash dbee3c16fdbbc63bcfec7cea79ae3e29d5dd49cae2dfd30905378ee85c0f9645
 
 Name:           python-pypandoc
-Version:        1.17
+Version:        1.16.2
 Release:        %autorelease
 Summary:        Thin wrapper for pandoc
 

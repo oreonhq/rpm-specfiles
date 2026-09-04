@@ -1,15 +1,15 @@
-%global source0_hash 5bd4d6f6241e7014ef090985ec6f4c3e9745f6de0828ddd58bc1efdd138f4545
+%global source0_hash c83e698e759ab0063331ff84ca39c4673b03318f4ddcbe8e90177dd01e4c721a
 
 # Generated from afm-0.2.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name afm
 
 Name: rubygem-%{gem_name}
-Version: 1.0.0
-Release: 1%{?dist}
+Version: 0.2.2
+Release: 24%{?dist}
 Summary: Reading Adobe Font Metrics (afm) files
 License: MIT
 URL: http://github.com/halfbyte/afm
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: rubygem(minitest)

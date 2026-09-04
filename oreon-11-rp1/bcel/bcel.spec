@@ -1,7 +1,7 @@
-%global source0_hash 08fafd3ef0cdb6a477be0c2bb3a62a87fe404b5b45bc1466996e7a656ce5872a
+%global source0_hash 8ee16c601567363b484183f1816738d337ae93413cd2aa052e59f0003513151e
 
 Name:           bcel
-Version:        6.12.0
+Version:        6.10.0
 Release:        %autorelease
 Summary:        Byte Code Engineering Library
 License:        Apache-2.0
@@ -9,7 +9,7 @@ URL:            https://commons.apache.org/proper/commons-bcel/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/bcel/source/bcel-%{version}-src.tar.gz
+Source0:        http://archive.apache.org/dist/commons/bcel/source/bcel-%{version}-src.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.commons:commons-lang3)

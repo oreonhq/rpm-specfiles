@@ -1,11 +1,11 @@
-%global source0_hash 2a05cb17114cbbed17e5b05bcef702f82fcae39fbf5fd285beaea746876afdec
+%global source0_hash b43ed466bf04741a09326b0f398bb3ff4321f1547ace673265a3c6886e4ff310
 
 %global srcname envisage
 #global commit 872c66885d64a22502fe3efceecec99c11a1c8ff
 #global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           python-%{srcname}
-Version:        8.0.1
+Version:        7.0.4
 Release:        %autorelease
 Summary:        Extensible application framework
 

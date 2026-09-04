@@ -1,11 +1,11 @@
-%global source0_hash 0d9ecb141de720e2fd4f7a275a4a83a961ffeb6717483d940021ffa1c46f665c
+%global source0_hash cee2a64abc193cc96c7ff1208b709335e9a4d1316ce84b91501102166d814c9a
 
 %global pypi_name WSGIProxy2
 %global package_name wsgiproxy
 
 Name:           python-%{pypi_name}
-Version:        0.5.1
-Release:        1%{?dist}
+Version:        0.4.6
+Release:        25%{?dist}
 Summary:        WSGI Proxy that supports several HTTP backends
 
 License:        MIT

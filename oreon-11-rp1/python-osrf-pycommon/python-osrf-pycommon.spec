@@ -1,11 +1,11 @@
-%global source0_hash 441afd5c3476474a1e5760070fec18860992a4659e84a6a4b59e49217d7cc6af
+%global source0_hash be3aa5ae07c8709ee51ec8dd8dc0a5e4f36ced16e437f953edd8739bf1be460f
 
 %global srcname osrf_pycommon
 %global pkgname osrf-pycommon
 
 Name:           python-%{pkgname}
-Version:        2.1.7
-Release:        1%{?dist}
+Version:        2.1.5
+Release:        7%{?dist}
 Summary:        Commonly needed Python modules used by software developed at OSRF
 
 # The entire source code is ASL 2.0 except parts of osrf_pycommon/terminal_color/windows.py which is BSD

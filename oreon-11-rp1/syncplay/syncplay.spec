@@ -1,7 +1,7 @@
-%global source0_hash f9d4e4b6d273f08e0c8df3171805c405d8b5d141d4d54f88f391cb645788f6a3
+%global source0_hash 6aef1e8351bccb97e6833fcae04c80f9d01b290b627f70df3e3870555c40deaa
 
 Name:           syncplay
-Version:        1.7.6
+Version:        1.7.5
 Release:        %autorelease
 Summary:        Synchronize playback of various video players via internet
 
@@ -40,6 +40,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 %pyproject_install
 %pyproject_save_files %{name}
+
 # Install desktop files
 desktop-file-install \
   --dir %{buildroot}%{_datadir}/applications \

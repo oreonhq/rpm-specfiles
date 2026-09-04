@@ -1,9 +1,9 @@
-%global source0_hash fde7df6f038f757777d549425183c0a05c295a3e88767df9f736230967f7aa02
+%global source0_hash none
 
 %bcond_with     groovy
 Name:           maven-script-interpreter
-Version:        1.7
-Release:        1%{?dist}
+Version:        1.3
+Release:        15%{?dist}
 Summary:        Maven Script Interpreter
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

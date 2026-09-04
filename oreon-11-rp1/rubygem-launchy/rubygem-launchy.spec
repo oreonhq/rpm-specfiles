@@ -1,10 +1,10 @@
-%global source0_hash 72b847b5cc961589dde2c395af0108c86ff0119f42d4648d25b5440ebb10059e
+%global source0_hash 42f52ce12c6fe079bac8a804c66522a0eefe176b845a62df829defe0e37214a4
 
 %global gem_name launchy
 
 Name: rubygem-%{gem_name}
-Version: 3.1.1
-Release: 1%{?dist}
+Version: 2.4.3
+Release: 22%{?dist}
 Summary: Helper class for cross-platform launching of applications
 License: ISC
 URL: http://github.com/copiousfreetime/launchy

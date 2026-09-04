@@ -1,4 +1,4 @@
-%global source0_hash bb6ff310bba8b1130ffe675347f668f7234d022ba3d51edea5ea7e2ea9523897
+%global source0_hash 1ba25e01d3a4c5a5cfa676bf6c28499f9f15c9d4879c4f7759b7595f0352fc27
 
 %global pypi_name PyKMIP
 %global sname pykmip
@@ -12,8 +12,8 @@
 %endif
 
 Name:           python-%{sname}
-Version:        0.10.0
-Release:        1%{?dist}
+Version:        0.8.0
+Release:        28%{?dist}
 Summary:        Python implementation of the Key Management Interoperability Protocol
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

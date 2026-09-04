@@ -1,11 +1,11 @@
-%global source0_hash eb836e155fff00dba2feddece25f2ef89cf49bb5b75812f3ebeb5cd6e8c8449b
+%global source0_hash 0df83daa1cb0021bab858ff6812d836c9712dea59a5172be1888bb554c3a89a2
 
 %global pypi_name pypubsub
 %global src_name Pypubsub
 
 Name:           python-pypubsub
-Version:        4.0.7
-Release:        1%{?dist}
+Version:        4.0.3
+Release:        30%{?dist}
 Summary:        Python Publish-Subscribe Package
 
 License:        BSD-2-Clause

@@ -1,8 +1,8 @@
-%global source0_hash 7e578125ec9bc6050861aa93f2d59f1d8d085595d6551c2c90b6f4fad8d3a9f1
+%global source0_hash f9248c99a7c15b7d2f90715df93610353a485827bc06eefb6566d23f6400f126
 %global pypi_name pytest_xdist
 
 Name:           python-pytest-xdist
-Version:        3.8.0
+Version:        3.7.0
 Release:        %autorelease
 Summary:        pytest plugin for distributed testing and loop-on-failing modes
 

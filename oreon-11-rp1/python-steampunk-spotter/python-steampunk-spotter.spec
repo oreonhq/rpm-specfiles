@@ -1,4 +1,4 @@
-%global source0_hash 2e2a3697689f48f9ee9d4b27796a4c998d61e7244d7bae73b8a3e7c1bb160ac0
+%global source0_hash 60df721bbfc8a4e265d1eb4770926fefd1dad9e152b86cb9ace90c5217ef0276
 
 %{?!python3_pkgversion:%global python3_pkgversion 3}
 
@@ -6,7 +6,7 @@
 %bcond check 1
 
 Name:           python-%{srcname}
-Version:        6.4.1
+Version:        5.11.0
 Release:        %autorelease
 Summary:        Scan, analyze, enhance, and provide insights for your playbooks using Spotter
 License:        Apache-2.0

@@ -1,9 +1,9 @@
-%global source0_hash 53793e696fce0642b815cd6a07b61b46851207a4c25ba00dc92f2af5a3d79679
+%global source0_hash bab02db4299c1efd487d690a23b2a016b99a1e9e50149c5f911399d4141f8891
 
 %global srcname flask-cors
 
 Name:           python-%{srcname}
-Version:        6.0.5
+Version:        6.0.2
 Release:        %autorelease
 Summary:        Cross Origin Resource Sharing (CORS) support for Flask
 License:        MIT

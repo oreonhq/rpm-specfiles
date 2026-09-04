@@ -1,8 +1,8 @@
-%global source0_hash 24ad087f38031b2fe60bf22811b9550887afe1cfdea80672d6573387c3025583
+%global source0_hash 9f97e4c808f656ce22739eec43a7c1741f645b7decef37d4fb048edb33e8caad
 
 Name:           odfpy
-Version:        1.4.2
-Release:        1%{?dist}
+Version:        1.4.1
+Release:        18%{?dist}
 Summary:        Python library for manipulating OpenDocument files
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

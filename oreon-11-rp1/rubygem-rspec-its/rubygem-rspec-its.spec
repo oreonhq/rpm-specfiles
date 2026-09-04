@@ -1,10 +1,10 @@
-%global source0_hash a88e8bc38149f2835e93533591ec4f5c829aacbfd41269a2e6f9f5b82f5260df
+%global source0_hash c404314f933ffd5ef6e2cfa87167e272477a7007467db5ec59c96ad1679c51f6
 
 %global gem_name rspec-its
 
 Name: rubygem-%{gem_name}
-Version: 2.0.0
-Release: 1%{?dist}
+Version: 1.3.1
+Release: 4%{?dist}
 Summary: Provides "its" method formerly part of rspec-core
 License: MIT
 URL: https://github.com/rspec/rspec-its

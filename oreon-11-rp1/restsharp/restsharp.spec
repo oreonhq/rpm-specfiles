@@ -1,4 +1,4 @@
-%global source0_hash 82e7316a9746e6fa7e4c98c8f9cd64a7e7a53c40512d6b8b1a17be3db9e5175c
+%global source0_hash 1ace876278078ea2b40220c049179a551c5dc8fafcc0f2fb9218d1529e74d879
 
 %global libname RestSharp
 
@@ -6,8 +6,8 @@
 %global debug_package %{nil}
 
 Name:           restsharp
-Version:        114.0.0
-Release:        1%{?dist}
+Version:        105.2.3
+Release:        31%{?dist}
 Summary:        Simple REST and HTTP API Client
 
 # Main license is Apache 2.0, but MIT/X11 for Extensions/MonoHttp and SimpleJson

@@ -1,11 +1,11 @@
-%global source0_hash 169cede8b9ea5f21c975ea92f7618c0d777d9d983afc06f2ddd39b3dd571d660
+%global source0_hash 29346c2d8364c19effb548b7a8952bf187545b99b70d1ddde76bd6c69046d27c
 
 # Generated from vault-0.12.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name vault
 
 Name: rubygem-%{gem_name}
-Version: 0.20.1
-Release: 1%{?dist}
+Version: 0.18.2
+Release: 7%{?dist}
 Summary: A Ruby API client for interacting with a Vault server
 License: MPL-2.0
 URL: https://github.com/hashicorp/vault-ruby

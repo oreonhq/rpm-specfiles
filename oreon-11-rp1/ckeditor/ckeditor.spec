@@ -1,15 +1,15 @@
-%global source0_hash 752c1a0f74ae2bfce830aa03324677b59c63b3e79d564953a9c3ab63189b37f8
+%global source0_hash 80ba0d373ba2f8fdb3148aa347e8c6ad11749b8cf4a4979e37946b3425f2c8bf
 
 Name:          ckeditor
-Version:       4.25.2-lts
-Release:       1%{?dist}
+Version:       4.22.1
+Release:       9%{?dist}
 Summary:       WYSIWYG text editor to be used inside web pages
 
 # Automatically converted from old format: GPLv2+ or LGPLv2+ or MPLv1.1 - review is highly recommended.
 License:       GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+ OR LicenseRef-Callaway-MPLv1.1
 URL:           http://ckeditor.com/
 
-Source0:       https://download.cksource.com/CKEditor/CKEditor/CKEditor%20%{version}/ckeditor_%{version}_standard.tar.gz
+Source0:       http://download.cksource.com/CKEditor/CKEditor/CKEditor%20%{version}/ckeditor_%{version}_standard.tar.gz
 
 BuildArch:     noarch
 BuildRequires: web-assets-devel

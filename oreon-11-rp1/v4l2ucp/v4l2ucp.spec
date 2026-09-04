@@ -1,13 +1,13 @@
-%global source0_hash dc30459622a2c38726124fb0d9fe74be50d90b797d979273f78f78aa722fa5de
+%global source0_hash 4c488bd804e8272da28857da27ebd37b17770160d31ceaccfe719e0a912a13b9
 
 Name:           v4l2ucp
-Version:        2.0.2
-Release:        1%{?dist}
+Version:        2.0.1
+Release:        37%{?dist}
 Summary:        Video4linux universal control panel
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://v4l2ucp.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/v4l2ucp/v4l2ucp-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/v4l2ucp/v4l2ucp-%{version}.tar.gz
 Patch0:         v4l2ucp-1.3-libv4l.patch
 Patch1:         v4l2ucp-2.0.1-desktop.patch
 Patch2:         v4l2ucp-2.0.1-better-textinput.patch

@@ -1,8 +1,8 @@
-%global source0_hash 2333da6c1cb99e81179fea1527590f34aa216abe00376099d0915b32397deb2d
+%global source0_hash c7a9309394c3d533dc954e4e6e78590644da4eee5259becba692780ee392cc76
 
 Name:           jboss-parent
-Version:        53
-Release:        1%{?dist}
+Version:        20
+Release:        27%{?dist}
 Summary:        JBoss Parent POM
 License:        CC0-1.0
 URL:            http://www.jboss.org/
@@ -55,8 +55,5 @@ sed -i 's/\r//' LICENSE
 %license LICENSE
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 53-1
-- Update to 53
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20-27
 - Prepare for Oreon 11 (RP1)

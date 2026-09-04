@@ -1,11 +1,11 @@
-%global source0_hash 928cea744b2eb0a05c7e97429e0fcb1a0ef8e0b02824271c61ff9cb2c9fe340c
+%global source0_hash 4daf74afd63c1701a6c817d87e4fc58f595037ccbc1d302bc45cdcd3f6e7d5fc
 
 # Generated from hashicorp-checkpoint-0.1.4.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name hashicorp-checkpoint
 
 Name: rubygem-%{gem_name}
-Version: 0.1.6
-Release: 1%{?dist}
+Version: 0.1.5
+Release: 19%{?dist}
 Summary: Internal HashiCorp service to check version information
 License: MPL-2.0
 URL: http://www.hashicorp.com

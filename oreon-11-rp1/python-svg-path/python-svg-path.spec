@@ -1,9 +1,9 @@
-%global source0_hash e3745f9741aefe017f2580a09dbf759eccf0972867a60ba7f8b8c0973bd7be94
+%global source0_hash ef46901a99bacdad339b6157b2349f3791627bde12b62946837fbe6ebd17104d
 
 %global modname svg.path
 
 Name:               python-svg-path
-Version:            7.1
+Version:            6.3
 Release:            %autorelease
 Summary:            SVG path objects and parser
 

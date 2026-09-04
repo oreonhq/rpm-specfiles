@@ -1,4 +1,4 @@
-%global source0_hash 0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
+%global source0_hash 12279874bba6d5e4d2728cef814b19197dbb10d7a7837a869bab65da943b7f5a
 
 %{?scl:%scl_package rubygem-%{gem_name}}
 %{!?scl:%global pkg_name %{name}}
@@ -8,8 +8,8 @@
 Summary: Ruby library to determine the monospace display width of a string
 Name: %{?scl_prefix}rubygem-%{gem_name}
 
-Version: 3.2.0
-Release: 1%{dist}
+Version: 2.6.0
+Release: 4%{dist}
 License: MIT
 URL: https://github.com/janlelis/unicode-display_width
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem

@@ -12,7 +12,7 @@
 # https://github.com/coreos/butane
 %global goipath         github.com/coreos/butane
 %global gomodulesmode   GO111MODULE=on
-Version:                0.29.0
+Version:                0.27.0
 
 %gometa -f
 

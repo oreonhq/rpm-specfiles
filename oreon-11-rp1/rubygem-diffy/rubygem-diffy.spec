@@ -1,10 +1,10 @@
-%global source0_hash 79384ab5ca82d0e115b2771f0961e27c164c456074bd2ec46b637ebf7b6e47e3
+%global source0_hash 36b42ffbe5138ddc56182107c24ad8d6b066ecfd2876829f391e3a4993d89ae1
 
 %global gem_name diffy
 
 Name:          rubygem-%{gem_name}
-Version:       3.4.4
-Release:       1%{?dist}
+Version:       3.4.2
+Release:       7%{?dist}
 Summary:       A convenient way to diff string in ruby
 License:       MIT
 URL:           http://github.com/samg/diffy

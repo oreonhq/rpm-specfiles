@@ -1,4 +1,4 @@
-%global source0_hash 5630c24cdeb33b131612f7eb4b1a9934234754f9f388ff8617458d0be6f239a1
+%global source0_hash 6113262f6e92c5bd474f2875fa1b01054c4ad5040f6b0da7c03c98821d9ae303
 
 %{?mingw_package_header}
 
@@ -6,13 +6,13 @@
 %global openmp 0
 
 Name:           mingw-%{mingw_pkg_name}
-Version:        3.3.11
-Release:        1%{?dist}
+Version:        3.3.8
+Release:        20%{?dist}
 Summary:        MinGW Fast Fourier Transform library
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.fftw.org
-Source0:        https://www.fftw.org/fftw-%{version}.tar.gz
+Source0:        http://www.fftw.org/fftw-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires:  mingw32-filesystem >= 95

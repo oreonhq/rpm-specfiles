@@ -1,4 +1,4 @@
-%global source0_hash 562b362f04a83940d1882049488c0c3c4f9dd5d1c2129d1af5b00cfa24493007
+%global source0_hash 3f4c8981b3a4829066b396abc0da270e5c7e674b5d190e92532a06951a07e98e
 
 %global date 2024-03-24
 %global git 7098bdd27548
@@ -7,7 +7,7 @@
 %global rel 11
 
 # WARNING: You should probably never touch those fields
-Version:	2026-04-11-be35975ac877
+Version:	1
 Name:		dtv-scan-tables
 Summary:	Digital TV scan tables
 Release:	%{rel}.%(echo %{date} | tr -d -)git%{git}%{?dist}.3

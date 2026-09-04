@@ -1,8 +1,8 @@
-%global source0_hash 9595c721dfe33580f0a55fed382792c6100395b1cb12158867f2f1ad31adc924
+%global source0_hash 3aad74e13db23da34c248f99fd87e9b193e00aad2b68bc9f578ce0241cb9db7f
 
 Name:       spectre-meltdown-checker
-Version:    26.36.0602723
-Release:    1%{?dist}
+Version:    0.46
+Release:    8%{?dist}
 
 Summary:    Spectre & Meltdown vulnerability/mitigation checker for Linux
 # Automatically converted from old format: GPLv3 - review is highly recommended.

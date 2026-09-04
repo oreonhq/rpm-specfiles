@@ -1,4 +1,4 @@
-%global source0_hash ac9ea0c0ea8d32fb4e271348e609963ac78882f34b73836c2a02b3622e666658
+%global source0_hash 5408253274e33d9d27d4a98c46d2998266fd51cba58a7eb9d08f50e57ed23592
 
 # Generated from ansi-1.4.3.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name ansi
@@ -8,8 +8,8 @@
 %global enable_checks 0
 
 Name: rubygem-%{gem_name}
-Version: 1.6.0
-Release: 1%{?dist}
+Version: 1.5.0
+Release: 24%{?dist}
 Summary: ANSI at your fingertips!
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD

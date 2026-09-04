@@ -1,10 +1,10 @@
-%global source0_hash 5fe1bf72a3b6f65ebeb0ee5c62c6fbd4cf4e180f06e7213f02ac60847ca094e7
+%global source0_hash adfbe09decee22deea2dc7a6b60698766306d3e74e9af0e03199de80b029a3eb
 
 %global gem_name multi_test
 
 Name: rubygem-%{gem_name}
-Version: 2.0.0
-Release: 1%{?dist}
+Version: 0.1.2
+Release: 21%{?dist}
 Summary: Wafter-thin gem to disable autorun of various testing libraries
 License: MIT
 URL: http://cukes.info

@@ -1,10 +1,10 @@
-%global source0_hash 153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
+%global source0_hash db6e57956f6ecc6134683b4c87467d6dd792323c7f0eea7b93f66bd284adbc3d
 
 # Generated from minitest-1.4.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name minitest
 
 Name: rubygem-%{gem_name}
-Version: 6.0.6
+Version: 6.0.2
 Release: 1%{?dist}
 Summary: minitest provides a complete suite of testing facilities
 # README.rdoc

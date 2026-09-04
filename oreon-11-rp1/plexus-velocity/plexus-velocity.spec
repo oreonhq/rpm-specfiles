@@ -1,8 +1,8 @@
-%global source0_hash c421c18a1dfef57ab72e0b1cc9c5d526523cca7e50332df5a71f2a51d0701fb8
+%global source0_hash d0b5cff1ebafed63b7ffa4d5f3534eaa6c8415575a48b28a860d72a8f91f3576
 
 Name:           plexus-velocity
-Version:        2.4.0
-Release:        1%{?dist}
+Version:        2.2.1
+Release:        4%{?dist}
 Summary:        Plexus Velocity Component
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

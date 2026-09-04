@@ -1,4 +1,4 @@
-%global source0_hash b49b78cc7ec0b252bfbd74cef0187121b18e4f5a0c57e3b9c3d8fc15090af3b4
+%global source0_hash 1e9606e65a3f2063460961d68515dee07bdaca0859305a8d3e6604168175fef1
 
 # Created by pyp2rpm-3.3.2
 %global pypi_name tempora
@@ -6,7 +6,7 @@
 %bcond docs 0
 
 Name:           python-%{pypi_name}
-Version:        5.12.0
+Version:        5.8.0
 Release:        %autorelease
 Summary:        Objects and routines pertaining to date and time (tempora)
 

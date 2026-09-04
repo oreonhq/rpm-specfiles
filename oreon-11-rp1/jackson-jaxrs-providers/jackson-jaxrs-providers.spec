@@ -3,8 +3,8 @@
 %bcond_without  jp_minimal
 
 Name:           jackson-jaxrs-providers
-Version:        2.22.2
-Release:        1%{?dist}
+Version:        2.18.2
+Release:        6%{?dist}
 Summary:        Jackson JAX-RS providers
 License:        Apache-2.0
 

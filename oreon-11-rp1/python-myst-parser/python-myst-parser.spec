@@ -1,9 +1,9 @@
-%global source0_hash e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+%global source0_hash 472eacf90753abcd65739fd1b88f9eb41b14008968f53da23882c4331f36b2b6
 
 %bcond_without check
 
 Name:           python-myst-parser
-Version:        5.1.0
+Version:        4.0.1
 Release:        1%{?dist}
 Summary:        A commonmark compliant parser, with bridges to docutils and sphinx
 License:        MIT

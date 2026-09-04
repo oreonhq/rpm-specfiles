@@ -1,14 +1,14 @@
-%global source0_hash e6cf46db0b503e9929407ec6aa3fcd2becc9e2ca945b4ff787c98c8db63a1134
+%global source0_hash a9ab6de0b497f6e13efc2cbe45a4fe06982145d786674c24274c3ed909ecc8cb
 
 Name:           media-player-info
-Version:        24
-Release:        1%{?dist}
+Version:        23
+Release:        20%{?dist}
 Summary:        Data files describing media player capabilities
 
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.freedesktop.org/wiki/Software/media-player-info
-Source0:        https://www.freedesktop.org/software/media-player-info/%{name}-%{version}.tar.gz
+Source0:        http://www.freedesktop.org/software/media-player-info/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 
 BuildRequires: make
@@ -49,8 +49,5 @@ make %{?_smp_mflags}
 
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 24-1
-- Update to 24
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 23-20
 - Prepare for Oreon 11 (RP1)

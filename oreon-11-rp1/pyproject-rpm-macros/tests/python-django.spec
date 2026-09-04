@@ -1,8 +1,8 @@
 %global source0_hash 5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2
 
 Name:           python-django
-Version:        6.1.1
-Release:        1%{?dist}
+Version:        3.0.7
+Release:        0%{?dist}
 Summary:        A high-level Python Web framework
 License:        BSD-3-Clause
 URL:            https://www.djangoproject.com/

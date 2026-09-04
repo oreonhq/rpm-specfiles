@@ -1,12 +1,12 @@
-%global source0_hash 09bd2d3042ffdb6d6cda1772f73597377a8952f185281c5acba480cc6c0c7483
+%global source0_hash 1829ef96ac1cf1a62772bd855177c4e343336e1d78baccbbbe678f2f262b33bb
 
 %global srcname metar
 %global summary Coded METAR and SPECI weather reports parser for Python
 %global packagezipfile python-metar-20250512git-d87ebdf.zip
 
 Name: python-%{srcname}
-Version: 2.0.1
-Release: 1git%{?dist}
+Version: 1.11.0
+Release: 20250516git%{?dist}
 Summary: %{summary}
 
 # This software uses the BSD-Source-Code license

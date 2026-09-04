@@ -1,12 +1,12 @@
-%global source0_hash 84dddea4c8ad1c9e54dccd91bb20f1b7886f825e3fde985be849bea78c7dd427
+%global source0_hash 7b66046b4693e7631aad299e5a55d0255962608cd03372f559745c575aa8c920
 
 %global libreportver 2.0.18-1
 
 Summary:  A python library for handling exceptions
 Name: python-meh
 Url: https://github.com/rhinstaller/python-meh
-Version: 0.53
-Release: 1%{?dist}
+Version: 0.52
+Release: 12%{?dist}
 # This is a Red Hat maintained package which is specific to
 # our distribution.  Thus the source is only available from
 # within this srpm.

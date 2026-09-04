@@ -1,9 +1,9 @@
-%global source0_hash e5314533af2bcc420f4743ac245327457e03ba46be620658a813399d3bbcd3bc
+%global source0_hash 5a0fa6d2fbca121f02240facd1caa05ad50193152766692e5057b98c926f772b
 
 %bcond_with tests
 
 Name:           python-pygments-pytest
-Version:        2.5.0
+Version:        2.4.0
 Release:        %autorelease
 Summary:        A pygments lexer for pytest output
 License:        MIT

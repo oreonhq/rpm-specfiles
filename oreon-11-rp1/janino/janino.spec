@@ -1,7 +1,7 @@
-%global source0_hash 41379b2d5f310e6808ef047101a742a1ad31503bbd78a2fbe9b8ca7cf851f46c
+%global source0_hash 039f73b7bfa99124b8e94871b90a0807774f03b1a653a845b475009062d2173b
 
 Name:           janino
-Version:        3.1.12
+Version:        3.1.10
 Release:        %autorelease
 Summary:        Super-small, super-fast Java compiler
 License:        BSD-3-Clause

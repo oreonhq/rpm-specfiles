@@ -1,11 +1,11 @@
-%global source0_hash 1882247e6766615c8220b4392bf1d27f6ebb63d8e28267587cef1fb0bf37f278
+%global source0_hash 381aee04fcc9effbe5fa7cc703d8f5f20293722f987ded4f958f77514cd29373
 
 # Generated from faraday-0.8.7.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name faraday
 
 Name: rubygem-%{gem_name}
-Version: 2.14.3
-Release: 1%{?dist}
+Version: 1.0.1
+Release: 19%{?dist}
 Summary: HTTP/REST API client library
 License: MIT
 URL: https://lostisland.github.io/faraday

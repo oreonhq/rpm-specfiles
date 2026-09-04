@@ -3,8 +3,8 @@
 %global srcname requests_file
 
 Name:           python-requests-file
-Version:        3.0.1
-Release:        1%{?dist}
+Version:        3.0.0
+Release:        2%{?dist}
 Summary:        Transport adapter for using file:// URLs with python-requests
 
 License:        Apache-2.0

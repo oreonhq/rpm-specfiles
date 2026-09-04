@@ -13,7 +13,7 @@
 
 %global github_owner     php-cache
 %global github_name      tag-interop
-%global github_version   2.0.0
+%global github_version   1.0.0
 %global github_commit    c7496dd81530f538af27b4f2713cde97bc292832
 
 %global composer_vendor  cache
@@ -29,7 +29,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       1%{?github_release}%{?dist}
+Release:       20%{?github_release}%{?dist}
 Summary:       Framework interoperable interfaces for tags
 
 License:       MIT

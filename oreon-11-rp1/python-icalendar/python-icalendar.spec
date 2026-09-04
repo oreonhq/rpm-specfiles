@@ -1,8 +1,8 @@
-%global source0_hash dc211532733d1d2f6b713fdcd66f5397dea64abca10d9bdca99220e57fd4fab2
+%global source0_hash 707c73edab0a6a719ff00af32e6a3aa84751626dbfc011daeac09e8e40ed6ab2
 
 Name:           python-icalendar
-Version:        7.3.0
-Release:        1%{?dist}
+Version:        6.3.1
+Release:        6%{?dist}
 Summary:        Parser/generator of iCalendar files following the RFC 2445
 
 License:        BSD-2-Clause

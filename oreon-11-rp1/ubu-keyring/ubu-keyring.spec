@@ -1,8 +1,8 @@
-%global source0_hash 652d6b53b7fd676e7d45e99076ebd44624d477f3883c1bcb7bcf6f2855cdf7c4
+%global source0_hash aecd455ae15561371d6e454f121f079f0641d5e1b579a5563a2bc363fc74aa2e
 
 Name:           ubu-keyring
-Version:        2026.08.18
-Release:        1%{?dist}
+Version:        2023.11.28.1
+Release:        6%{?dist}
 Summary:        GnuPG keys of the Ubuntu archive
 
 License:        LicenseRef-Fedora-Public-Domain

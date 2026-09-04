@@ -1,10 +1,10 @@
-%global source0_hash 3c50314a47f1ce5a57942312bb395fcc8d4f6ac988d51c14a8c6c60df1b7e4f7
+%global source0_hash abdff0c86f018a7853babd67c05ceee38179ae1f9271cdbad197faabbc8ddb77
 
 %bcond tests 1
 %global forgeurl https://github.com/daizutabi/mkapi
 
 Name:           python-mkapi
-Version:        4.5.0
+Version:        4.4.5
 Release:        %autorelease
 Summary:        Plugin for MkDocs to generate API documentation
 

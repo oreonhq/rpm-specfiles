@@ -1,10 +1,10 @@
-%global source0_hash 7ebae8c729d663df2139f80da860647c742db9a36775dac7cc7b55a990189f45
+%global source0_hash 6cd48f237b835d0da4934048bbcf35b626dcfe270938871a8a7362daabc74e96
 
 %global srcname colcon-powershell
 
 Name:           python-%{srcname}
-Version:        0.5.0
-Release:        1%{?dist}
+Version:        0.4.0
+Release:        10%{?dist}
 Summary:        Extension for colcon to provide PowerShell scripts
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

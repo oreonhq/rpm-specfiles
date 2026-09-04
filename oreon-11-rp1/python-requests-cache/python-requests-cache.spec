@@ -1,10 +1,10 @@
-%global source0_hash 79b72d5ac5143992d1836ad78f4d8e65666061dd44e220548caab3723089826b
+%global source0_hash db1c709ca343cc1cd5b6c8b1a5387298eceed02306a6040760db538c885e3838
 
 %global pypi_name requests-cache
 %global mod_name requests_cache
 
 Name:           python-%{pypi_name}
-Version:        1.3.3
+Version:        1.2.0
 Release:        %autorelease
 Summary:        Persistent cache for requests library
 

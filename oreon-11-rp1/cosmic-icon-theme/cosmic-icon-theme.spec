@@ -1,4 +1,4 @@
-%global source0_hash d2d104f938aa544b5e1f286e93eb44908d06f9cf57799e48b36ad09d85fec268
+%global source0_hash 7e09400f6caab8a9d9dae3a8fb6f052f3a9f131651d2c33d2f170e5196f86b6c
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 
@@ -10,7 +10,7 @@
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-icon-theme
-Version: 1.7.0
+Version: 1.0.9
 Release:        %autorelease
 Summary:        Icon theme for the COSMIC Desktop Environment
 

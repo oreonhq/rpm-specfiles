@@ -1,4 +1,4 @@
-%global source0_hash 4537ba157c6eab9022d0a48bb6e6ca5a736ced8cc7121e1276322fb104dd3718
+%global source0_hash 04737d6e1d87794d9d5da35fa9a0a9914455b17fc7d6f49c630d35d53d54dd36
 
 # Copyright (c) 2000-2005, JPackage Project
 # All rights reserved.
@@ -50,7 +50,7 @@
 
 Summary:        JDBC driver for PostgreSQL
 Name:           postgresql-jdbc
-Version:        42.7.13
+Version:        42.7.8
 Release:        %autorelease
 License:        BSD-2-Clause
 URL:            https://jdbc.postgresql.org/

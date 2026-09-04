@@ -1,4 +1,4 @@
-%global source0_hash 8f61b34a3b2741970c38ece4591eb98a392729c2c07c6d767504f547bf9f4180
+%global source0_hash c5e83a13af5864027af13f5d10ef29b9b7e9f5bc6d8e13d7791855667fd19c33
 
 %global with_docs 1
 %global with_check 1
@@ -13,8 +13,8 @@
 %endif
 
 Name:           python-%{srcname}
-Version:        6.12.0
-Release:        1%{?dist}
+Version:        6.4.0
+Release:        12%{?dist}
 Summary:        Static file serving for Python web apps
 
 License:        MIT

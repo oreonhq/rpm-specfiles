@@ -1,4 +1,4 @@
-%global source0_hash 587753c3684d3152940dc3231eaa9412fed593294ff557b9e3e09b055974de0c
+%global source0_hash d0904ba7c043f42d213a14a468637075b1879f251ebac97abb7d1b55377a1f1c
 
 %global pypi_name geoip2
 %global srcname GeoIP2-python
@@ -7,7 +7,7 @@
 %global test_data_rls b5ff09ebb67d959ae68118a058fe344a6994b046
 
 Name:           python-%{pypi_name}
-Version:        5.3.0
+Version:        5.2.0
 Release:        %autorelease
 Summary:        MaxMind GeoIP2 API
 

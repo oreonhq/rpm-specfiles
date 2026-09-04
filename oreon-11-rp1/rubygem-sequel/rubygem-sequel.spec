@@ -1,10 +1,10 @@
-%global source0_hash ae5996d1196775427916a2fa36e02f99762ead9affb8ea9b1aec2c0b16bdb3a3
+%global source0_hash cb0329b62287a01db68eead46759c14497a3fae01b174e2c41da108a9e9b4a12
 
 %global gem_name sequel
 
 Name: rubygem-%{gem_name}
-Version: 5.108.0
-Release: 1%{?dist}
+Version: 5.100.0
+Release: 8%{?dist}
 Summary: The Database Toolkit for Ruby
 License: MIT
 URL: http://sequel.jeremyevans.net

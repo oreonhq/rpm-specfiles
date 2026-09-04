@@ -1,4 +1,4 @@
-%global source0_hash b75ed8dcb1446d06f5b885de7629ffd1f88f26b4f3630ace21d108084938b473
+%global source0_hash 64cae94edd83bbb0c2c49b15f2cb8192c3f8492af6bc468211d1e8b8496f5791
 
 %global modname uritemplate
 %global altname uritemplate.py
@@ -6,8 +6,8 @@
 %global _docdir_fmt %{name}
 
 Name:           python-%{modname}
-Version:        4.2.0
-Release:        1%{?dist}
+Version:        4.1.1
+Release:        18%{?dist}
 Summary:        Simple python library to deal with URI Templates (RFC 6570)
 
 License:        BSD-3-Clause OR Apache-2.0

@@ -1,10 +1,10 @@
-%global source0_hash 14e842d2041ae3cf11f2e82f1b3454e0283050cc38599ed87d116e005097e470
+%global source0_hash f0463bc04d2546325eaba1da15f8e45763ed2a52b47c0331c721f1c85470c9ca
 
 %global srcname httplib2
 
 Name:           python-%{srcname}
-Version:        0.32.0
-Release:        1%{?dist}
+Version:        0.22.0
+Release:        8%{?dist}
 Summary:        Comprehensive HTTP client library
 License:        MIT
 URL:            https://pypi.python.org/pypi/httplib2

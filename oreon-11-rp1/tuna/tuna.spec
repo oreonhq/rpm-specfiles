@@ -1,10 +1,10 @@
-%global source0_hash d184f08f11b3c8dbe3d95343c1b695dc17df0fa2f162b20b34715b83df505ee0
+%global source0_hash c41acab31a716783273c55aa4fe82bf21e586ad570ee6e7fbf5b3e34bce4a506
 
 %bcond oscilloscope %{undefined rhel}
 
 Name: tuna
-Version: 0.21
-Release: 1%{?dist}
+Version: 0.20
+Release: 3%{?dist}
 License: GPL-2.0-only AND LGPL-2.1-only
 Summary: Application tuning GUI & command line utility
 Source:        https://www.kernel.org/pub/software/utils/%{name}/%{name}-%{version}.tar.xz

@@ -1,4 +1,4 @@
-%global source0_hash c5d3f4195b3456e210da63cc23ef88f42a5b771643e47ef79b8f6b067e662abe
+%global source0_hash 8fa2653d827ecb5ace6a2c566a72711babe6855d10ca27df8f477cd99dec4f6e
 
 %global desc \
 The KIWI boxed plugin provides support for self contained building \
@@ -7,7 +7,7 @@ of images based on fast booting VM images.
 %global srcname kiwi_boxed_plugin
 
 Name:           kiwi-boxed-plugin
-Version:        0.2.58
+Version:        0.2.57
 Release:        1%{?dist}
 URL:            https://github.com/OSInside/kiwi-boxed-plugin
 Summary:        KIWI - Boxed Build Plugin

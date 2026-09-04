@@ -1,4 +1,4 @@
-%global source0_hash 6f63fe94c6e0bd56b0883b3358e6787140fc644d1fe71f2c953c134d064fb0f7
+%global source0_hash f66c4e3446d419813de1bfd011f6dab3d96de9369388727fed434a63e7d8edbd
 
 %global srcname ansicolor
 %global desc %{srcname} is a library to produce ANSI color output, colored highlighting\
@@ -22,8 +22,8 @@ and diffing.
 %endif
 
 Name:           python-%{srcname}
-Version:        0.3.3
-Release:        1%{?dist}
+Version:        0.2.4
+Release:        37%{?dist}
 Summary:        A library to produce ANSI color output
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

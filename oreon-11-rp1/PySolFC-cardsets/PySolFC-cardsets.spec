@@ -1,11 +1,11 @@
-%global source0_hash 0ed537636ebef3751d9bf5df41a51cb50220a8b17739c2e811c2bbadc2aeaca6
+%global source0_hash 4e1f53ebc517dc069d273f2248ecd43eb88a048098dbee97343091e8f43937d4
 
 %define mainversion 2.0
 %define extra 0.2.0
 
 Name:           PySolFC-cardsets
-Version:        3.1
-Release:        1%{?dist}
+Version:        3.0
+Release:        6%{?dist}
 Summary:        Various cardsets for PySolFC
 License:        GPL-2.0-or-later
 URL:            https://pysolfc.sourceforge.io/

@@ -1,10 +1,10 @@
-%global source0_hash fceeaa7b8c8ae535c52d6dacc5a3d2b7a33e6cdee4e558e300ddd12892d82192
+%global source0_hash 1ea7d25cb0ccafc8f7c7ab56e49aad27cf67c15091c3fad6418808c4d3ab6cd8
 
 %global srcname colcon-package-information
 
 Name:           python-%{srcname}
-Version:        0.4.1
-Release:        1%{?dist}
+Version:        0.4.0
+Release:        8%{?dist}
 Summary:        Extension for colcon to output package information
 
 License:        Apache-2.0

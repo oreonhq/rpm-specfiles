@@ -1,11 +1,11 @@
-%global source0_hash e797a7c9b01e567307e317c576b49ab4168017e63eea4dba9ce3cb587e2f22c2
+%global source0_hash 35fce2ca8242da8775c83b6ba9c1bcaad6751d9eb73c1abaa8403475ab89a560
 
 # Generated from rails-html-sanitizer-1.0.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name rails-html-sanitizer
 
 Name: rubygem-%{gem_name}
-Version: 1.7.1
-Release: 1%{?dist}
+Version: 1.6.2
+Release: 3%{?dist}
 Summary: This gem is responsible to sanitize HTML fragments in Rails applications
 License: MIT
 URL: https://github.com/rails/rails-html-sanitizer

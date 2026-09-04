@@ -1,11 +1,11 @@
-%global source0_hash 6cc4b5880ba1c3991292579d0451af0f44814f5a1a13d7823317a09705eb15d4
+%global source0_hash a1be9df1e5d787f62ff89e5a96c9a78e2e3b989cef7bf698f22cd5efd699d391
 
 # Generated from cucumber-expressions-6.0.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name cucumber-cucumber-expressions
 
 Name: rubygem-%{gem_name}
-Version: 20.1.0
-Release: 1%{?dist}
+Version: 17.1.0
+Release: 5%{?dist}
 Summary: A simpler alternative to Regular Expressions
 License: MIT
 URL: https://github.com/cucumber/cucumber-expressions

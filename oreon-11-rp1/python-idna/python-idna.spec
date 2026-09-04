@@ -1,9 +1,9 @@
-%global source0_hash 5e0811a4383b21dc5838069f801c4fb62113b7447663d2530d2bd6e77b49bf15
+%global source0_hash 795dafcc9c04ed0c1fb032c2aa73654d8e8c5023a7df64a53f39190ada629902
 
 %global srcname idna
 
 Name:           python-%{srcname}
-Version:        3.19
+Version:        3.11
 Release:        %autorelease
 Summary:        Internationalized Domain Names in Applications (IDNA)
 

@@ -1,9 +1,9 @@
-%global source0_hash ab700375e77a5213e8def1f61c2d83ca1b50ff9b56b541992dc54784c1274c52
+%global source0_hash a6b89933b91a7cce566a999f29914e97e7e6d0002dff7fe2636d9b0028fcfa6d
 
 %bcond_without tests
 
 Name:           python-mock
-Version:        5.2.0
+Version:        4.0.3
 Release:        %autorelease
 Summary:        Deprecated, use unittest.mock from the standard library instead
 

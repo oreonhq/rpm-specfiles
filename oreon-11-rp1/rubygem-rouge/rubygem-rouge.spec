@@ -1,11 +1,11 @@
-%global source0_hash b77c632842ab7f5147940212f0345808cccfbce864fd5b631d7d12a35ac85452
-%global source1_hash 41e05c2ca61d0a523edfd9b556553de7011c172715e498e4985316bfbcafe395
+%global source0_hash dba5896715c0325c362e895460a6d350803dbf6427454f49a47500f3193ea739
+%global source1_hash d1ea0cc4108007d4b7ebd86fadfe16fc2f4a9cdbf46b9d4eb5bd73758d90252b
 
 %global gem_name rouge
 
 Name:           rubygem-%{gem_name}
-Version:        5.1.0
-Release:        1%{?dist}
+Version:        4.7.0
+Release:        2%{?dist}
 Summary:        Pure-ruby colorizer based on pygments
 # From LICENSE file
 # SPDX confirmed
@@ -106,8 +106,5 @@ find spec -name \*_spec.rb -print0 | \
 %{gem_libdir}/%{gem_name}/demos
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.0-1
-- Update to 5.1.0
-
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.7.0-2
 - Import

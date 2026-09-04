@@ -1,11 +1,11 @@
-%global source0_hash 727c2a74d913cd0cb601d3675800672b7b5a6b0c61349805c0582431a12f2f45
+%global source0_hash 16bc9a793337abd54b5c17d588ba45665b4ff44cffb9aca66704190643608270
 
 # Generated from apipie-rails-0.0.13.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name apipie-rails
 
 Name: rubygem-%{gem_name}
-Version: 1.5.1
-Release: 1%{?dist}
+Version: 1.4.2
+Release: 3%{?dist}
 Summary: Rails REST API documentation tool
 # The project itself is MIT
 # For ASL 2.0, see https://github.com/Apipie/apipie-rails/issues/66

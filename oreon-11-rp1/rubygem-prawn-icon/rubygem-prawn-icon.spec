@@ -1,10 +1,10 @@
-%global source0_hash a56522a7aa15eb8b9d4be1e3d879536cba4d8a0a8b1ee7e622976023f4bfe3b5
+%global source0_hash b3c1d88823ae0648691ca6053e8c9a2863b306824a1ed71a4c38128f97203311
 
 %global gem_name prawn-icon
 
 Name: rubygem-%{gem_name}
-Version: 4.1.0
-Release: 1%{?dist}
+Version: 3.1.0
+Release: 9%{?dist}
 Summary: Provides icon fonts for PrawnPDF
 # Automatically converted from old format: Ruby or GPLv2 or GPLv3 - review is highly recommended.
 License: Ruby OR GPL-2.0-only OR GPL-3.0-only

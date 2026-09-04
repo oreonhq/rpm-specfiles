@@ -1,4 +1,4 @@
-%global source0_hash b2ba6a4dea487a7ebcd53248d3476aca449d30db12a2dde5e0c5ca9624fd77e5
+%global source0_hash 8e8358c4a05c304f1fccf7ff96f036e7243a189e9e42e90851993c558cfe9ee3
 
 %bcond_without tests
 
@@ -6,7 +6,7 @@
 %global sum  Python module for analyzing image file headers and returning image sizes
 
 Name:           python-%{pypi_name}
-Version:        2.0.1
+Version:        2.0.0
 Release:        1%{?dist}
 Summary:        %{sum}
 

@@ -1,9 +1,9 @@
-%global source0_hash 58f6a9388c15bc349e8fa0b5cca122592215a649a7dbf1a0408a949f19dd70fe
+%global source0_hash bba1007767f995ab652af49b94b50419a6b2e3595b0c7c9324d063c4f6c2e7da
 
 # SPDX-License-Identifier: MIT
 
-Version: 2.300
-Release: 1%{?dist}
+Version: 2.200
+Release: 14%{?dist}
 URL:     http://scripts.sil.org/SILYi_home
 
 %global foundry           SIL

@@ -1,11 +1,11 @@
-%global source0_hash 5507d69b42ac7211e5db57b42f427376b2cf3e3ab9a72b9239f4fc243566869d
+%global source0_hash 82d0399bce74d162fba75b3568ad47bf48ed2c5e028b72026bdc2f678903de7d
 
 # main package is archful to run tests everywhere but produces noarch packages
 %global         debug_package %{nil}
 
 Summary:        Pure-Python library for parsing and analyzing ELF files
 Name:           pyelftools
-Version:        0.33
+Version:        0.32
 Release:        %autorelease
 # elftools/construct is MIT
 License:        Unlicense AND MIT

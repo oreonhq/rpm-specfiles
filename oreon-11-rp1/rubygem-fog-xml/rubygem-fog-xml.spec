@@ -1,11 +1,11 @@
-%global source0_hash 52b9fea10701461dd3eaf9d9839702169b418dbbf50426786b9b74fade373bd6
+%global source0_hash 81c454aaf1e2bd2c359e42aa9386c51820aadcc862fa9e86f61ff7248858deef
 
 # Generated from fog-xml-0.1.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name fog-xml
 
 Name: rubygem-%{gem_name}
-Version: 0.1.5
-Release: 1%{?dist}
+Version: 0.1.4
+Release: 11%{?dist}
 Summary: XML parsing for fog providers
 License: MIT
 URL: https://github.com/fog/fog-xml

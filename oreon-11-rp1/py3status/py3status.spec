@@ -1,9 +1,9 @@
-%global source0_hash f66bd0aba3a5b46a2d29b9fac004842b81822c750ee39ca96ea627d8111927ad
+%global source0_hash 0117543796804211447176b3dad24cb6a9041aebc94e9ae1b0aa21486baf7032
 
 %bcond_without test
 
 Name:           py3status
-Version:        3.64
+Version:        3.63
 Release:        %autorelease
 Summary:        An extensible i3status wrapper written in python
 

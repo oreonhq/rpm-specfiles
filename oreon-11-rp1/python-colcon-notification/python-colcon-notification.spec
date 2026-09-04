@@ -1,10 +1,10 @@
-%global source0_hash 2b0b8d0dfc94c95e0cf47cf6d206ce11e116808875409e21d06fefef82b353aa
+%global source0_hash f82c6e3bcd558a9fbf4bf0b1cd0dab6a1f50c056b7b4db85c56878797d0489c2
 
 %global srcname colcon-notification
 
 Name:           python-%{srcname}
-Version:        0.3.1
-Release:        1%{?dist}
+Version:        0.3.0
+Release:        8%{?dist}
 Summary:        Extension for colcon to provide status notifications
 
 License:        Apache-2.0

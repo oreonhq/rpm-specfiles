@@ -1,10 +1,10 @@
-%global source0_hash 0c0e96974250008c28ce854c2e0bad7ef75690c9c50f2c4ffeafb2f1ce4876b7
+%global source0_hash b11e4ac4d7e4793449deff3fb90c8ba85e223343670eec0ae5c5c8e94f479f34
 
 %global pypi_name textfsm
 
 Name:           python-%{pypi_name}
-Version:        2.1.0
-Release:        1%{?dist}
+Version:        1.1.3
+Release:        12%{?dist}
 Summary:        Python module for parsing semi-structured text into python tables
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

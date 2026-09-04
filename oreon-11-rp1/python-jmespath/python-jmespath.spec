@@ -3,8 +3,8 @@
 %global pypi_name jmespath
 
 Name:           python-%{pypi_name}
-Version:        1.1.0
-Release:        1%{?dist}
+Version:        1.0.1
+Release:        14%{?dist}
 Summary:        JSON Matching Expressions
 
 License:        MIT

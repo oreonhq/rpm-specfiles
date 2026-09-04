@@ -1,7 +1,7 @@
-%global source0_hash 8f666ab82e436eab58d5d83929b504887789127a28203c73bfc0b9d457135423
+%global source0_hash 746c43c5a278ff133132fca858701ae2495fec104c930878f07b59ce92d02e75
 
 Name:           python-starlette
-Version:        1.6.0
+Version:        0.52.1
 Release:        %autorelease
 Summary:        The little ASGI library that shines
 

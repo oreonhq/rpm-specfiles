@@ -1,11 +1,11 @@
-%global source0_hash ea97d5c2b587bd038d7f4a32483b1a08c7a04770b1391180117530541918b18b
+%global source0_hash 2bff06c2afd09911e10e8ab8126ae0eeb3d13b7fed5db66bf7e021682cc2d9f0
 
 # Avoid unwanted/unavailable dependencies in RHEL builds.
 # Turn the tests off when bootstrapping Python, because pytest requires attrs
 %bcond tests %{undefined rhel}
 
 Name:           python-attrs
-Version:        26.1.0
+Version:        25.4.0
 Release:        %autorelease
 Summary:        Python attributes without boilerplate
 
@@ -58,8 +58,5 @@ sed -i "/attrs\[tests-mypy\]/d" pyproject.toml
 %doc README.md
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.1.0-1
-- Update to 26.1.0
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.4.0-1
 - Prepare for Oreon 11 (RP1)

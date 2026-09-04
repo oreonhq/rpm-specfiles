@@ -1,8 +1,8 @@
-%global source0_hash d31aee370ded51bc2bf8ad375fcd8b4cf3b7587306c0e05cffb45026ea9b9c40
+%global source0_hash 3c1f0ef71d887717e890a195811569535991863fa21da0c23c176d58f1732ebe
 
 Name:           python-varlink
-Version:        32.1.0
-Release:        1%{?dist}
+Version:        31.0.0
+Release:        18%{?dist}
 Summary:        Python implementation of Varlink
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
@@ -54,8 +54,5 @@ export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %{python3_sitelib}/*
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 32.1.0-1
-- Update to 32.1.0
-
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 31.0.0-18
 - Import

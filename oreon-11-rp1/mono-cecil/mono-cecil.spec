@@ -1,4 +1,4 @@
-%global source0_hash fc9297f09e3b7b808b203318b167de1695f947099aad14f97b149e3051b0df8e
+%global source0_hash 932d8d55d9a9ed88a5db217669c1bc7fe32a9ad1ecad329ff80b795f56a98492
 
 %if 0%{?rhel}%{?el6}%{?el7}
 # see https://fedorahosted.org/fpc/ticket/395
@@ -10,8 +10,8 @@
 %global debug_package %{nil}
 
 Name:           mono-cecil
-Version:        0.11.6
-Release:        1%{?dist}
+Version:        0.10.4
+Release:        15%{?dist}
 Summary:        Library to generate and inspect programs and libraries in the ECMA CIL form
 License:        MIT
 URL:            http://www.mono-project.com/Cecil

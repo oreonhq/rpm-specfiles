@@ -1,8 +1,8 @@
-%global source0_hash 0033f2dfa89ae5f700b77875c6989172e6f4bf1170a3227f066e63c5b6e6f83f
+%global source0_hash 135c41ce48a7f994c15abe050949e6ce70f3e164f0dc81ceb56c4d9e3106b9f2
 
 Name: python-beaker
-Version: 1.14.1
-Release: 1%{?dist}
+Version: 1.12.1
+Release: 14%{?dist}
 Summary: WSGI middleware layer to provide sessions
 # Automatically converted from old format: BSD and MIT - review is highly recommended.
 License: LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT

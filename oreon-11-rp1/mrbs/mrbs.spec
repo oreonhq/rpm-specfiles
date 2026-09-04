@@ -1,8 +1,8 @@
-%global source0_hash e9a690ba0e971f230bef09f1e05e2b489bf119419f6531744ea0b08906cdefff
+%global source0_hash ec93b7c5e36245f6561e4d04ab106e11efd32aa2f52f2a82fa927d81862d6f80
 
 Name:           mrbs
-Version:        1.12.2
-Release:        1%{?dist}
+Version:        1.11.5
+Release:        4%{?dist}
 Summary:        Meeting Room Booking System
 
 License:        GPL-2.0-only

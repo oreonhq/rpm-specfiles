@@ -1,12 +1,12 @@
-%global source0_hash c65ab61427c77c38d397bfc431f71d86fd355b453a536496ec3fcb41bd10087d
+%global source0_hash 1da3e9f137d4d4708427483ba2bd51407c0e0c287545ec504a6e5bf471854ef7
 
 # Created by pyp2rpm-3.2.2
 %global pypi_name python-bitcoinlib
 %global srcname bitcoinlib
 
 Name:           python-%{srcname}
-Version:        0.12.2
-Release:        1%{?dist}
+Version:        0.12.0
+Release:        14%{?dist}
 Summary:        The Swiss Army Knife of the Bitcoin protocol
 
 License:        LGPL-3.0-or-later

@@ -1,8 +1,8 @@
-%global source0_hash 6e70a28453be17a0db78e5499c2ff1132579a5fbee6d5fb13eee5b2b75d39a82
+%global source0_hash f66012278f534e955203c3e8f2ffe03a5c5296c53943d6a4cd9aa52046b5da1c
 
 Name:          sugar-memorize
-Version:       59
-Release:       1%{?dist}
+Version:       58
+Release:       13%{?dist}
 Summary:       Memorize for Sugar
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later

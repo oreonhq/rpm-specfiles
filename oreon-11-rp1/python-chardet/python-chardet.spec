@@ -9,7 +9,7 @@
 %global commit 2fa72d84fdb9cb926eb1e7e40230a33b1dd81bb8
 
 Name:           python-chardet
-Version:        7.6.0
+Version:        6.0.0.post1
 Release:        %autorelease
 Summary:        Python character encoding detector
 
@@ -93,8 +93,5 @@ install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE2}'
 
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.6.0-1
-- Update to 7.6.0
-
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.0.0.post1-1
 - Import

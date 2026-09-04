@@ -1,7 +1,7 @@
 %global source0_hash 75a8b99c28a5dad50dd7f8ccdd447a121ddb3892da9e53d1ca5cca3106d58d65
 
 Name:           python-sphinx-theme-alabaster
-Version:        1.0.0
+Version:        0.7.16
 Release:        %autorelease -b 3
 Summary:        Configurable sidebar-enabled Sphinx theme
 
@@ -63,8 +63,5 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-1
-- Update to 1.0.0
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.16-1
 - Prepare for Oreon 11 (RP1)

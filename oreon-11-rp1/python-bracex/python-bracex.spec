@@ -1,11 +1,11 @@
-%global source0_hash 7f951941d3d9264a7e2623e55328c1c8a7f829c70b8ba0dc3825c3ed038bea23
+%global source0_hash 094669fec4cf3cc39bcc476d7f909f6d4b9e998d877a0f1b8a81bc99d656b451
 
 # Created by pyp2rpm-3.3.5
 %global pypi_name bracex
 
 Name:           python-%{pypi_name}
-Version:        3.0.1
-Release:        1%{?dist}
+Version:        2.5
+Release:        7%{?dist}
 Summary:        Bash style brace expander
 
 License:        MIT

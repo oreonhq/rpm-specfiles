@@ -1,13 +1,13 @@
-%global source0_hash c602dfedfa5863b4b75e8bc0b390007e54d437b23b36a6298f301484bd4c0312
-%global source1_hash 4c93ea9c1f636451729a840978f1667a53886af37ba854fdcce109721c63d43e
+%global source0_hash 2066d1909b2ea93916ce092da1c0ee4808ea3ef8407c94b4f14f5b7eb263d28e
+%global source1_hash f7a48b2b545acfaa77b2d607ae28747404ce02baefee16396c5d2d7a8ef34b5e
 
 # for other future directories from http://www.unicode.org/Public
 %global unicodedir %{_datadir}/unicode
 %global ucddir %{unicodedir}/ucd
 
 Name:           unicode-ucd
-Version:        18.0.0
-Release:        1%{?dist}
+Version:        17.0.0
+Release:        2%{?dist}
 Summary:        Unicode Character Database
 
 # http://www.unicode.org/terms_of_use.html in ReadMe.txt redirects to:
@@ -68,8 +68,5 @@ cp %{SOURCE2} .
 
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18.0.0-1
-- Update to 18.0.0
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.0.0-2
 - Prepare for Oreon 11 (RP1)

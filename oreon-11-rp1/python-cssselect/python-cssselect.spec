@@ -1,10 +1,10 @@
-%global source0_hash e372fd82588ec11ce94ec7e3a1659617feb3f17306df404197e2574d13536d71
+%global source0_hash e8792e44640e1852e02e7ae94ad261ca411fdbcf81150d18ad51afe8732164a4
 %global modname cssselect
 
 %bcond_without tests
 
 Name:           python-cssselect
-Version:        1.5.0
+Version:        1.3.0
 Release:        %autorelease
 Summary:        Parses CSS3 Selectors and translates them to XPath 1.0
 

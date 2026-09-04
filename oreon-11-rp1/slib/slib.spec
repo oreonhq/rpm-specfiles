@@ -1,12 +1,12 @@
-%global source0_hash 7906d8e201dc18e97945a61ac62ce792ec939b67d0bcc23073e0011ac2561a04
+%global source0_hash c2f8eb98e60530df53211985d4b403b6e97a7a969833c1a6d1bf83561da0c781
 
 Summary:      Platform independent library for scheme
 Name:         slib
-Version:      3c2
+Version:      3c1
 Release:      %autorelease
 License:      LicenseRef-SLIB
 BuildArch:    noarch
-Source0:      https://groups.csail.mit.edu/mac/ftpdir/scm/slib-%{version}.zip
+Source0:      http://groups.csail.mit.edu/mac/ftpdir/scm/slib-%{version}.zip
 URL:          http://swissnet.ai.mit.edu/~jaffer/SLIB.html
 
 %description

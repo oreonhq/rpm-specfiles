@@ -1,4 +1,4 @@
-%global source0_hash 2169c05252c0efbe897f346f0683326ec25854beab1d0c6430df6e903a57b315
+%global source0_hash 940272a72ac27d16a1db69aafef820684012cc3553ffe9875d5cd2e3a9cb69dc
 
 %global pypi_name dbf
 %global sum Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf
@@ -10,9 +10,10 @@ returned as unicode, and codepage settings in tables are honored. Memos and Null
 fields are supported.
 
 Name:           python-%{pypi_name}
-Version:        0.99.11
-Release:        1%{?dist}
+Version:        0.99.3
+Release:        13%{?dist}
 Summary:        %{sum}
+
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://pypi.python.org/pypi/%{pypi_name}

@@ -1,11 +1,11 @@
-%global source0_hash 426f003af1af7ca9aa307baaccc5029c00ff8a886a249c3937753bd2709b4173
+%global source0_hash none
 
 %global modname 3.1.6
 
 Summary: Open source Church presentation and lyrics projection application
 Name: OpenLP
-Version: 3.1.7
-Release: 1%{?dist}
+Version: 3.1.6
+Release: 10%{?dist}
 Source0: https://get.openlp.org/%{version}/OpenLP-%{version}.tar.gz
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only

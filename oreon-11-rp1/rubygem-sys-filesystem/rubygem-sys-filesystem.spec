@@ -1,9 +1,9 @@
-%global source0_hash e2a7183e147e9b95aaa1217d65b3e3b479861c554acd18ec36aebb91398b45f6
+%global source0_hash 390919de89822ad6d3ba3daf694d720be9d83ed95cdf7adf54d4573c98b17421
 
 %global gem_name sys-filesystem
 
 Name:           rubygem-%{gem_name}
-Version:        1.6.0
+Version:        1.4.3
 Release:        %autorelease
 Summary:        Interface for gathering filesystem information
 

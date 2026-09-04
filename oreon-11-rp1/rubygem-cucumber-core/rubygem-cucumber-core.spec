@@ -1,11 +1,11 @@
-%global source0_hash 38473d0c1c2633d469e117df10bfb8ea21adbc97c83cabe49e1b68bf2c4a4a8b
+%global source0_hash 1b13f9d81708dae89a17a3ee915b3e8e8f2303b480d0978278d61e474001d700
 
 # Generated from cucumber-core-1.4.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name cucumber-core
 
 Name: rubygem-%{gem_name}
-Version: 19.0.0
-Release: 1%{?dist}
+Version: 10.1.0
+Release: 13%{?dist}
 Summary: Core library for the Cucumber BDD app
 License: MIT
 URL: https://cucumber.io

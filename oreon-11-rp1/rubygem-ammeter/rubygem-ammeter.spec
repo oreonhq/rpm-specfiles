@@ -1,11 +1,11 @@
-%global source0_hash 59805315dcc392a76b358978cb3007dd140b9500e984986b1588837d986d11f9
+%global source0_hash 505762f3e49225dc22afbf3fdf3d5d4747924315435e979a9dead1e18da49aad
 
 # Generated from ammeter-0.2.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name ammeter
 
 Name: rubygem-%{gem_name}
-Version: 1.1.7
-Release: 1%{?dist}
+Version: 1.1.5
+Release: 11%{?dist}
 Summary: Write specs for your Rails 3+ generators
 License: MIT
 URL: https://github.com/alexrothenberg/%{gem_name}

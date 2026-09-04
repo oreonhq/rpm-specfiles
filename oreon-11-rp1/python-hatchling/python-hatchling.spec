@@ -1,7 +1,7 @@
 %global source0_hash 793c31816d952cee405b83488ce001c719f325d9cda69f1fc4cd750527640ea6
 
 Name:           python-hatchling
-Version:        1.32.0
+Version:        1.29.0
 Release:        %autorelease
 Summary:        The build backend used by Hatch
 

@@ -1,11 +1,11 @@
-%global source0_hash 7aa7baad2a9b0768ff0c1a39c2fc3f2e551f999282ab423f25105c84af075ea8
+%global source0_hash 6d4b4589f7f8ed2201e857a9f0c80a5c3c19548c5b7b5df55794299fd981aa0b
 
 # Generated from daemon_controller-0.2.5.gem by gem2rpm -*- rpm-spec -*-
 %define gem_name daemon_controller
 
 Name: rubygem-%{gem_name}
-Version: 3.0.2
-Release: 1%{?dist}
+Version: 1.2.0
+Release: 26%{?dist}
 Summary: A library for implementing daemon management capabilities
 License: MIT
 URL: https://github.com/FooBarWidget/daemon_controller

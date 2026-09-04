@@ -5,8 +5,8 @@
 Name:           jaxen
 Summary:        An XPath engine written in Java
 Epoch:          0
-Version:        2.0.6
-Release:        1%{?dist}
+Version:        1.2.0
+Release:        23%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 
@@ -94,8 +94,5 @@ cp -pr src/java/samples/* %{buildroot}%{_datadir}/%{name}/samples
 
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.6-1
-- Update to 2.0.6
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-23
 - Prepare for Oreon 11 (RP1)

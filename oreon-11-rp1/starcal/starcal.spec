@@ -1,10 +1,10 @@
-%global source0_hash 880a960f1895afe42162c9d8e469a2caed4217e45463570f7771cdcb39151d60
+%global source0_hash 41a7da3767957727e33543a12b04b8f7ce1550f6925cd60ab43cd64f6c23493f
 
 %global pkg_name %{name}3
 
 Name:           starcal
-Version:        3.2.5
-Release:        1%{?dist}
+Version:        3.2.2
+Release:        6%{?dist}
 Summary:        A full-featured international calendar written in Python
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -1,10 +1,10 @@
-%global source0_hash 48e093060ffcb7d68f68f10cddfeb5ac4baf7c69853a9dcb1602d704bd91b450
+%global source0_hash 4612319f543128d057995332d8f49a37116025766b7854e2c743f704965040d2
 
 %global gem_name opennebula
 
 Name:           rubygem-%{gem_name}
-Version:        7.4.0
-Release:        1%{?dist}
+Version:        6.4.2
+Release:        9%{?dist}
 Summary:        OpenNebula Client API
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

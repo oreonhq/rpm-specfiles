@@ -13,8 +13,8 @@ I’ve converted the 3.4 implementation into a single file, entitytrans.py which
 so far seems to work (all tests pass on 2.7, 3.3, and 3.4).
 
 Name:           python-%{pypi_name}
-Version:        0.9.2
-Release:        1%{?dist}
+Version:        0.9.1
+Release:        25%{?dist}
 Summary:        Python parser for the CommonMark Markdown spec
 
 # Automatically converted from old format: BSD - review is highly recommended.

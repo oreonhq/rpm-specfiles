@@ -1,10 +1,10 @@
-%global source0_hash c1e8e3da7704df6cde5cd5dee6b72da79a8101687b44b5b09e55f6baa870c915
+%global source0_hash 066f5e775359dda1c8e4b152f49ce6e2ea1f1e36738c08333af1bb3abc697bf5
 
 %global pypi_name coveralls
 
 Name:           python-%{pypi_name}
-Version:        4.1.0
-Release:        1%{?dist}
+Version:        4.0.1
+Release:        5%{?dist}
 Summary:        Coveralls.io provides seamless integration with coverage.py
 
 LICENSE:        MIT

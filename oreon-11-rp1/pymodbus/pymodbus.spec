@@ -1,4 +1,4 @@
-%global source0_hash c9107fea58ea8ab8b9a29de3c34e0b4b2421a85bedc8a4900c91f1eed081bcc5
+%global source0_hash da62335eed74bd626d1862d6e1d4dd069d0162764d326a4becdd8234325be61f
 
 %global sum A Modbus Protocol Stack in Python
 %global desc Pymodbus is a full Modbus protocol implementation using twisted for its \
@@ -23,8 +23,8 @@ Server Features \
     * A number of backing contexts (database, redis, a slave device)
 
 Name: pymodbus
-Version: 3.15.0
-Release: 1%{?dist}
+Version: 3.9.2
+Release: 5%{?dist}
 Summary: %{sum}
 
 License: BSD-3-Clause

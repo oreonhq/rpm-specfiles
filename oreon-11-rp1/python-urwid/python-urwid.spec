@@ -5,7 +5,7 @@
 %global srcname urwid
 
 Name:          python-%{srcname}
-Version:       4.1.1
+Version:       3.0.4
 Release:       %autorelease
 Summary:       Console user interface library
 
@@ -62,8 +62,5 @@ find examples -type f -exec chmod 0644 \{\} \;
 %doc README.rst examples docs
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.1-1
-- Update to 4.1.1
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.4-1
 - Prepare for Oreon 11 (RP1)

@@ -1,10 +1,10 @@
-%global source0_hash 98c8e1a8a124577c9bf2785533cb058f135534761a48de9acd499ef50f3c4353
+%global source0_hash 06abe2d73597523694542dc609f0c69780d99112070439fed99b5c261b7cba37
 
 %bcond_without check
 
 Name:           cargo2rpm
-Version:        0.4.0
-Release:        1%{?dist}
+Version:        0.3.3
+Release:        4%{?dist}
 Summary:        Translation layer between cargo and RPM
 License:        MIT
 URL:            https://codeberg.org/rust2rpm/cargo2rpm

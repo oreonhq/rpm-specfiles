@@ -1,4 +1,4 @@
-%global source0_hash f85d81da7bea87f98eabd5753935fbf81501ca83d8c40f5f90dca2d29bbf2827
+%global source0_hash 3a906ad0bd8903638ff8979878b96897df5a0b0ac04b9f98360a460235c38276
 
 %bcond tests 1
 %bcond docs 1
@@ -7,7 +7,7 @@
 %bcond obs 0
 
 Name:           mkosi
-Version:        27
+Version:        26
 Release:        %autorelease
 Summary:        Create bespoke OS images
 

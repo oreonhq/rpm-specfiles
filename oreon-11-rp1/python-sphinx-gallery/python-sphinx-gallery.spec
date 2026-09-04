@@ -1,9 +1,9 @@
-%global source0_hash 32a325040138cc8e14822e56d910194b2641d03fcfe7af969cd2b2da470059fc
+%global source0_hash fe360676582b8a3dab584572480c456729e35a3927abc727d46e4ca84c4e8bd2
 
 %global srcname sphinx-gallery
 
 Name:           python-%{srcname}
-Version:        0.21.0
+Version:        0.20.0
 Release:        %autorelease
 Summary:        Sphinx extension to automatically generate an examples gallery
 

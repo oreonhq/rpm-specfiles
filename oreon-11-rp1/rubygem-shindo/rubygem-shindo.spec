@@ -1,11 +1,11 @@
-%global source0_hash b7fdbbe94df5848a7028fb85bf1a77ec2bfdd8b26ddef8b5774f8d47d4788cf1
+%global source0_hash 2149ed7efc3097ae65eb5a2a1e22ee86efbdaef56fb81136211b3d10618fd862
 
 # Generated from shindo-0.3.4.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name shindo
 
 Name: rubygem-%{gem_name}
-Version: 0.3.11
-Release: 1%{?dist}
+Version: 0.3.10
+Release: 12%{?dist}
 Summary: Simple depth first Ruby testing
 License: MIT
 URL: http://github.com/geemus/shindo

@@ -1,7 +1,7 @@
-%global source0_hash e2055559a4a8833d4ca4ce6ca61ccd397e49964d4d383396257c6debeb970493
+%global source0_hash 805c7dcff0b23415dda4e6e2a5db5aee7f7bf7c2cace5c211e3c921d9291de25
 
 Name:           python-tinydb
-Version:        4.9.0
+Version:        4.8.0
 Release:        %autorelease
 Summary:        TinyDB is a tiny, document oriented database
 

@@ -1,11 +1,11 @@
-%global source0_hash 57e7e6f69295c8f922511488eeb79680729e14bb8eb382d5cad83aa11345c36c
+%global source0_hash 588e27868e4a0ed70ae4a7a5b0f3bca4cec5e5c49dbd7e41349c0883182bf2fe
 
 # Created by pyp2rpm-1.0.1
 %global pypi_name kazoo
 
 Name:           python-%{pypi_name}
-Version:        2.11.0
-Release:        1%{?dist}
+Version:        2.8.0
+Release:        21%{?dist}
 Summary:        Higher level Python Zookeeper client
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

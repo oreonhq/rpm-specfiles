@@ -1,10 +1,10 @@
-%global source0_hash 26237d3a7268143b5ffc6c1354ab93d0a4b81366573c749b6316e6f6f7733c0c
+%global source0_hash b87031f946b730e4802fda0054971f292f755aee81e7a21c0a71669c646a1c32
 
 %global gem_name prawn-svg
 
 Name: rubygem-%{gem_name}
-Version: 0.40.3
-Release: 1%{?dist}
+Version: 0.36.2
+Release: 4%{?dist}
 Summary: SVG renderer for Prawn PDF library
 License: MIT
 URL: http://github.com/mogest/prawn-svg

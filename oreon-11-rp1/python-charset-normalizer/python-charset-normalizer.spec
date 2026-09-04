@@ -1,7 +1,7 @@
 %global source0_hash 5bfb2fc7b4cb63254fc58302223cd3d654766cac56ae6aac29ca37911ba5b3ab
 
 Name:           python-charset-normalizer
-Version:        3.5.1
+Version:        3.4.6
 Release:        %autorelease
 Summary:        The Real First Universal Charset Detector
 # SPDX

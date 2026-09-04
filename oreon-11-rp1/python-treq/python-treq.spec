@@ -1,12 +1,12 @@
-%global source0_hash 43e728e12aca2d897c626cf07dc7b4392749b73de050a7d66e086cb3a6e15da9
+%global source0_hash 25dde3a55ae85ec2f2c56332c99aef255ab14f997d0d00552ebff13538a9804a
 
 %global pypi_name treq
 
 %bcond doc 1
 
 Name:           python-%{pypi_name}
-Version:        26.7.0
-Release:        1%{?dist}
+Version:        25.5.0
+Release:        3%{?dist}
 Summary:        A requests-like API built on top of twisted.web's Agent
 
 License:        MIT

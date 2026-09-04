@@ -1,10 +1,10 @@
-%global source0_hash 7cb5ad838099d14472a25db2779ce852a358b399fd33fc48b95f5882c4e9d81f
+%global source0_hash 182e18c7b414e44670b0d8329f82f9787d58649a5c3bd6ec2b433a9918b2f3a1
 
 %global gem_name memfs
 
 Name: rubygem-%{gem_name}
-Version: 2.0.0
-Release: 1%{?dist}
+Version: 1.0.0
+Release: 26%{?dist}
 Summary: Fake file system that can be used for tests
 License: MIT
 URL: http://github.com/simonc/memfs

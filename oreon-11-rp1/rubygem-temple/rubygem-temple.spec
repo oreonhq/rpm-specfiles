@@ -1,11 +1,11 @@
-%global source0_hash 369fe560adb6534674ce232899c2232df614bcb29c5359b05efedff7a57ed9c0
+%global source0_hash a4e2fc2f6776ae2eb4e5b76a0a80b6847d2f806b0ab808f2aa416992ee16e326
 
 # Generated from temple-0.4.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name temple
 
 Name: rubygem-%{gem_name}
-Version: 0.10.7
-Release: 1%{?dist}
+Version: 0.10.2
+Release: 6%{?dist}
 Summary: Template compilation framework in Ruby
 License: MIT
 URL: https://github.com/judofyr/temple

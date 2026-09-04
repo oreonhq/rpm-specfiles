@@ -1,7 +1,7 @@
-%global source0_hash e6a2e075b15ada78ba9c9b9901af55b83196c7c9ebd57a62b396da425d7584de
+%global source0_hash ff4791d5d9d3b96f942b38b901b3053f20a141b3e51747430dd38762929b1798
 
 Name:           ongres-stringprep
-Version:        2.4
+Version:        2.2
 Release:        %autorelease
 Summary:        RFC 3454 Preparation of Internationalized Strings in pure Java
 License:        BSD-2-Clause

@@ -3,8 +3,8 @@
 %global srcname d2to1
 
 Name: python-%{srcname}
-Version: 0.2.12.post1
-Release: 1.post1%{?dist}
+Version: 0.2.12
+Release: 41.post1%{?dist}
 Summary: Allows using distutils2-like setup.cfg files with setup.py
 License: BSD-3-Clause
 

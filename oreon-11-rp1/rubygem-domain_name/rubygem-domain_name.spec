@@ -1,11 +1,11 @@
-%global source0_hash 4fac7f8e0a77dc85ec02f6534fdeff38e143d434ab8a86528fe68ca5bc45a042
+%global source0_hash 5f693b2215708476517479bf2b3802e49068ad82167bcd2286f899536a17d933
 
 %global	gem_name	domain_name
 
 Summary:	Domain Name manipulation library for Ruby
 Name:		rubygem-%{gem_name}
-Version:	0.6.20260902
-Release:	1%{?dist}
+Version:	0.6.20240107
+Release:	7%{?dist}
 
 # See LICENSE.txt
 # BSD-2-Clause: overall

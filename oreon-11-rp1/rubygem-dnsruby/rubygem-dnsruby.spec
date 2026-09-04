@@ -1,11 +1,11 @@
-%global source0_hash 7a83736c768e62b4915e2032ed4b97f9245d515e0e4efa67e424acb218296593
+%global source0_hash 8864735947b049f4185c609cb691c03a4e5a22b4ef0ead364029314558a4729d
 
 %global gem_name dnsruby
 
 Summary: Ruby DNS(SEC) implementation
 Name: rubygem-%{gem_name}
-Version: 1.74.0
-Release: 1%{?dist}
+Version: 1.70.0
+Release: 9%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
 URL: https://github.com/alexdalitz/dnsruby

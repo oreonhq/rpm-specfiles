@@ -1,11 +1,11 @@
-%global source0_hash 40a47c7a164c7f981ce3787b4b37f7e411fb43231dcde543d70094075dacfef9
+%global source0_hash 86409f21a6a31148d2c1c17bf5f2d904eb5ef455f9dc67c49fbd0c10ab18fd5a
 
 %global pkgname xinit
 
 Summary:    X.Org X11 X Window System xinit startup scripts
 Name:       xorg-x11-%{pkgname}
-Version:    1.4.4
-Release:    1%{?dist}
+Version:    1.4.3
+Release:    4%{?dist}
 License:    X11-distribute-modifications-variant AND MIT-open-group
 URL:        https://www.x.org
 

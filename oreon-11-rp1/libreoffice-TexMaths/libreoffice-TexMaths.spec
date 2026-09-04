@@ -1,15 +1,15 @@
-%global source0_hash c4545539b17caa042110a356bf6f02631061a990e234b328670cb2ec8eecb9be
+%global source0_hash none
 
 %global extname TexMaths
 
 Name:           libreoffice-%{extname}
-Version:        0.52.6
-Release:        1%{?dist}
+Version:        0.52.4
+Release:        2%{?dist}
 Summary:        A LaTex Equation Editor for LibreOffice
 
 License:        GPL-2.0-or-later
 URL:            http://roland65.free.fr/texmaths/
-Source0:        https://downloads.sourceforge.net/texmaths/%{extname}-%{version}.oxt
+Source0:        http://downloads.sourceforge.net/texmaths/%{extname}-%{version}.oxt
 
 BuildRequires: libreoffice-sdk
 # Needs the draw component

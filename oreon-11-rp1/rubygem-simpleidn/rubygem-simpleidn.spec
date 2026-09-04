@@ -1,10 +1,10 @@
-%global source0_hash 12ca730bed2f3db04d11e9bfd1bca3e11fb37f55b21eb2e9793fb5814bf54d03
+%global source0_hash 35dda985b761dff5751fefa7fba02e477427c975d47b11c4c4ffaf01afe1c719
 
 %global gem_name simpleidn
 
 Name: rubygem-%{gem_name}
-Version: 0.3.0
-Release: 1%{?dist}
+Version: 0.2.1
+Release: 11%{?dist}
 Summary: Punycode ACE to unicode UTF-8 (and vice-versa) string conversion
 License: MIT
 URL: https://github.com/mmriis/simpleidn

@@ -1,4 +1,4 @@
-%global source0_hash 76e3292d6236a026f3f512b34f4bd8b26daf517bcabda58e178ee18567815bef
+%global source0_hash 3e5cfdb9a4ce0c08e78587cc5c6152d404d98575e242840d9254183e220ff4a8
 
 %global srcname filelock
 
@@ -10,7 +10,7 @@
 %bcond_without tests
 
 Name:           python-%{srcname}
-Version:        3.32.5
+Version:        3.20.3
 Release:        %autorelease
 Summary:        A platform independent file lock
 

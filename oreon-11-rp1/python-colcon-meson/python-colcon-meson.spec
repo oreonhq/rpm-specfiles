@@ -1,9 +1,9 @@
-%global source0_hash 0323c5469fa9776fbaa99baf266c86f813ceb58782471d3ff0f6b6cf631b2bb6
+%global source0_hash 4076f1368ea0ed88ff9c19255b5215cf59e92662df040e32698205ab66cc168d
 
 %global srcname colcon-meson
 
 Name:           python-%{srcname}
-Version:        0.6.1
+Version:        0.5.0
 Release:        1%{?dist}
 Summary:        Extension for colcon to support Meson packages
 

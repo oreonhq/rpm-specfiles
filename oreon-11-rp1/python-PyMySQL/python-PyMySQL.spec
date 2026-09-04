@@ -1,8 +1,8 @@
 %global source0_hash 4961d3e165614ae65014e361811a724e2044ad3ea3739de9903ae7c21f539f03
 
 Name:           python-PyMySQL
-Version:        1.2.0
-Release:        1%{?dist}
+Version:        1.1.2
+Release:        3%{?dist}
 Summary:        Pure-Python MySQL client library
 
 License:        MIT

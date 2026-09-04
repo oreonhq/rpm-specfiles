@@ -1,6 +1,6 @@
 %global source0_hash 524e2a7001d1cf23449c443293b6e21aa654a1a238a52b6edce7f12d0cd98ba1
 
-%global baseversion 46
+%global baseversion 4.6
 %global zipversion 46
 %global zipname taglist
 #used for pre-releases:
@@ -9,11 +9,11 @@
 Summary:          The taglist plugin for VIM editor
 Name:             vim-%{zipname}
 Version:          %{baseversion}
-Release:          1%{?dist}
+Release:          30%{?dist}
 
 License:          Vim
 URL:              http://vim-taglist.sourceforge.net/
-Source:           https://sourceforge.net/projects/vim-taglist/files/vim-taglist/4.6/taglist_46.zip
+Source:           http://sourceforge.net/projects/vim-taglist/files/vim-taglist/4.6/taglist_46.zip
 Source1:          %{name}.metainfo.xml
 
 Requires:         vim-common

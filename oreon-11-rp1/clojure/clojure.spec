@@ -1,4 +1,4 @@
-%global source0_hash 652c4f0f572675fec969a29872dfbe98bdead4c16ed5d9650e9e3d6810c4d1a3
+%global source0_hash e40bcc54013381416d7de40c2b8ea7959e51dffb357bc2c234df5f6a6e734e84
 
 %global project     clojure
 %global groupId     org.clojure
@@ -8,8 +8,8 @@
 
 Name:           clojure
 Epoch:          1
-Version:        1.12.6
-Release:        1%{?dist}
+Version:        1.12.4
+Release:        3%{?dist}
 Summary:        A dynamic programming language that targets the Java Virtual Machine
 
 License:        EPL-1.0

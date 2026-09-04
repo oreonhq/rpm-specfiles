@@ -1,4 +1,4 @@
-%global source0_hash d246c57ba380b4fa680b783997ff189c51b9f4dd12edf4b719a1f2d84a2e1d2e
+%global source0_hash 478e15a38a57678e4bd2cd55994ea1edece2d10bb6bf0a3de8f0b2dd8df35485
 
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 # define icons directories...
@@ -7,7 +7,7 @@
 %define _iconsscaldir  %{_iconsbasedir}/scalable/apps
 
 Name:		byobu
-Version:	7.19
+Version:	6.14
 Release:	%autorelease
 Summary:	Light-weight, configurable window manager built upon GNU screen
 

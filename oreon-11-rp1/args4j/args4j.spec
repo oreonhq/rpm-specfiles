@@ -1,8 +1,8 @@
-%global source0_hash b338c81c7012b546fcb84dbd0ca1b427537cfb8a3764edcd30a47c2bfa80f597
+%global source0_hash b4305ca1ff31d3492dd93770f302242c2bf536b440bca24b2580646b184a3733
 
 Name:           args4j
-Version:        2.37
-Release:        1%{?dist}
+Version:        2.33
+Release:        32%{?dist}
 Summary:        Java command line arguments parser
 License:        MIT
 URL:            https://args4j.kohsuke.org

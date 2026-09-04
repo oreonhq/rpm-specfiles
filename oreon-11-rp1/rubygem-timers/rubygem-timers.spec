@@ -1,11 +1,11 @@
-%global source0_hash a92f43cbec26219b17a52c86501557486569bd5d01975cbca4315203cfc0ade7
+%global source0_hash f45ca1b8ce6b26e29226c2144c512801a9019c3e781054d878c205cb0fd8500d
 
 # Generated from timers-1.1.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name timers
 
 Name: rubygem-%{gem_name}
-Version: 4.4.0
-Release: 1%{?dist}
+Version: 4.0.1
+Release: 21%{?dist}
 Summary: Pure Ruby one-shot and periodic timers
 License: MIT
 URL: https://github.com/celluloid/timers

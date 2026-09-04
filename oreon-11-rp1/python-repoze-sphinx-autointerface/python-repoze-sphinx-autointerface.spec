@@ -1,11 +1,11 @@
-%global source0_hash 908d25e6c8d120624c31a842eb93336fe4527ac364fc46e172f33fe2204ce31c
+%global source0_hash b0a9e07949826863711542f072df519e0a20c70935dc8102552c1eafd7a689b0
 
 %global pkgname repoze.sphinx.autointerface
 %global srcname %(tr . - <<< %{pkgname})
 
 Name:           python-%{srcname}
-Version:        1.1.0
-Release:        1%{?dist}
+Version:        1.0.0
+Release:        12%{?dist}
 Summary:        Auto-generate Sphinx API docs from Zope interfaces
 
 License:        BSD-3-Clause-Modification

@@ -1,4 +1,4 @@
-%global source0_hash d3c132d905099fa3468bb5cb273c2bdf5a7a92dce987c93b198820b3a7b57228
+%global source0_hash d227a9626d16504b4074ffedd53161bca8e1831179044fc6d6de7e61418fc766
 
 # When bootstrapping Python, we cannot test this yet
 # RHEL does not include the test dependencies
@@ -8,7 +8,7 @@
 %bcond extradeps %{undefined rhel}
 
 Name:           python-requests
-Version:        2.34.2
+Version:        2.33.1
 Release:        %autorelease
 Summary:        HTTP library, written in Python, for human beings
 

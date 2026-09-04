@@ -1,9 +1,9 @@
-%global source0_hash 5a34ea7fb81838c34ef4a9eab26a22f43afbb1e939b3cde7dedd3bf5171bdfb2
+%global source0_hash 24a6cbcc1d3027acb55a1c496183b760105f9dec35b853cbe2d932dbe97b4da9
 
 Name:           auto
 Summary:        Collection of source code generators for Java
-Version:        1.11.1
-Release:        1%{?dist}
+Version:        1.6.1
+Release:        17%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 

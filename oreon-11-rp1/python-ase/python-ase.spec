@@ -1,4 +1,4 @@
-%global source0_hash 10e3d0d3dad738a35e9a966a39ab71a8e05b37c1c36b41443e793214c2331d6d
+%global source0_hash 1e5b71e26f49076ec096b87019dedbf92dbad2c5f4283ffb6e31b30746d8ff32
 
 # Warning:
 # Anyone editing this spec file please make sure the same spec file
@@ -18,8 +18,8 @@ ase-3.23 requires pyproject.toml setuptools support
 %global upstream_name ase
 
 Name:			python-ase
-Version:		3.29.0
-Release:		1%{?dist}
+Version:		3.25.0
+Release:		5%{?dist}
 Summary:		Atomic Simulation Environment
 
 # The entire source code is LGPLv2+ except:

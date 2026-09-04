@@ -1,4 +1,4 @@
-%global source0_hash ac9207651788bd5ca557f24328701d4ec71712dea0e758c73fc7100b5cd9dc55
+%global source0_hash afbf3850b2197ab4ceb7785bee462e063bd498488c185112477cbe4197e70aad
 
 # Circular test dependency on conda-build
 %bcond bootstrap 0
@@ -6,7 +6,7 @@
 %global srcname conda_index
 
 Name:           python-conda-index
-Version:        0.13.0
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Create repodata.json for collections of conda packages
 License:        BSD-3-Clause

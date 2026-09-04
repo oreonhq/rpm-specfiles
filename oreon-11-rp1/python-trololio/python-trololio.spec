@@ -1,4 +1,4 @@
-%global source0_hash 39309509b585f47ea972b9904c40d1c1bf1050e12f667935779150022195b98f
+%global source0_hash e7f69aaa0c46ddf61fce1a8c29755fdee3c02a34ed34f4bd5c6e8c37ca77ee94
 
 # Created by pyp2rpm-3.3.2
 %global pypi_name trololio
@@ -21,8 +21,8 @@ It addresses the differences listed in Trollius and Tulip: \
 * Synchronizes debug environnement variables.
 
 Name:           python-%{pypi_name}
-Version:        1.0b
-Release:        1%{?dist}
+Version:        1.0
+Release:        28%{?dist}
 Summary:        %{sum}
 
 License:        MIT

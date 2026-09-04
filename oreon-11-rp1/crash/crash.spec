@@ -1,4 +1,4 @@
-%global source0_hash 3c1df8c77f4637b6a0336c79c70ac68f86dac86c1a87b9a59cd93ede8838beaf
+%global source0_hash 73dcdc633ec75ea2fc5329a1c3760407cceb9171428f4d0b885874f943a16797
 %global source1_hash bdc1da4a033280ac752e7d34b0418efaa45bed093235cb88e62ea961752a37f8
 
 #
@@ -6,8 +6,8 @@
 #
 Summary: Kernel analysis utility for live systems, netdump, diskdump, kdump, LKCD or mcore dumpfiles
 Name: crash
-Version: 9.0.2
-Release: 1%{?dist}
+Version: 9.0.1
+Release: 6%{?dist}
 License: GPL-3.0-only
 Source0:        https://github.com/crash-utility/crash/archive/refs/tags/%{version}.tar.gz#/crash-%{version}.tar.gz
 Source1: https://mirrors.kernel.org/gnu/gdb/gdb-16.2.tar.gz

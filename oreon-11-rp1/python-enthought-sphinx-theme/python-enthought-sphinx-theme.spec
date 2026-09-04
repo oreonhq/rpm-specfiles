@@ -1,10 +1,10 @@
-%global source0_hash bafb6fdb070523155ea2b1b7e17ae6e1340cb8543ae0f2a004ce520ed5b62220
+%global source0_hash 3f0d7bcdcea6d6267a816bc62360a7c632ade149054932ec8e40423e74016b40
 
 %global srcname enthought-sphinx-theme
 %global modname enthought_sphinx_theme
 
 Name:           python-%{srcname}
-Version:        0.7.5
+Version:        0.7.3
 Release:        %autorelease
 Summary:        Sphinx theme for Enthought projects
 
@@ -44,6 +44,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 %pyproject_install
 %pyproject_save_files -l %{modname}
+
 #check
 # No tests
 

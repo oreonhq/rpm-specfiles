@@ -1,7 +1,7 @@
-%global source0_hash f487c39d2913f371eb42dab078559a902da69acca38a9ebec7640a6581535ba3
+%global source0_hash none
 
 Name:       mathjax
-Version:    4.1.3
+Version:    2.7.4
 Release:    %autorelease
 Summary:    JavaScript library to render math in the browser
 License:    Apache-2.0

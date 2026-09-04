@@ -1,10 +1,10 @@
-%global source0_hash e376d70713900c4cdd4987b7f4eefef6d747ab9cacdbd5bb5a8dcc7b4ad57cc5
+%global source0_hash 40abf9fc402e13467f96fa5b284c0c0e4184e8b8976a76dfc3175db4ddde8ef4
 
 %global srcname catkin_lint
 
 Name:           python-%{srcname}
-Version:        1.6.25
-Release:        1%{?dist}
+Version:        1.6.22
+Release:        14%{?dist}
 Summary:        Check catkin packages for common errors
 
 # Automatically converted from old format: BSD - review is highly recommended.

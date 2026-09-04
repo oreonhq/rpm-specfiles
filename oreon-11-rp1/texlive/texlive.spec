@@ -15,7 +15,7 @@
 # Instead, I think the cleaner approach is to package them individually, unless their numbers explode.
 #
 
-%global tl_version 2026
+%global tl_version 2025
 
 Name:           texlive
 Epoch:          12
@@ -64,8 +64,5 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026-1
-- Update to 2026
-
 * Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:2025-1
 - Import TeX Live 2025 split from f44 for Oreon 11

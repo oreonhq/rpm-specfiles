@@ -1,7 +1,7 @@
-%global source0_hash 212778c6282810216e4fdd25bcda79040dc52e42299f79008b57dac9a3c35ab2
+%global source0_hash 7ecf6730abf5abe06cb8229bc5230cfad1c91627d87a330d0f4119426b53eae0
 
 Name:       barman
-Version:    3.20.0
+Version:    3.17.0
 Release:    %autorelease
 Summary:    Backup and Recovery Manager for PostgreSQL
 License:    GPL-3.0-only

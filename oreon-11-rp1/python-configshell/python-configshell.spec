@@ -7,8 +7,8 @@ Name:           python-configshell
 License:        Apache-2.0
 Summary:        A framework to implement simple but nice CLIs
 Epoch:          1
-Version:        2.0.3
-Release:        1%{?dist}
+Version:        2.0.2
+Release:        5%{?dist}
 URL:            https://github.com/open-iscsi/configshell-fb
 Source:        https://github.com/open-iscsi/configshell-fb/archive/refs/tags/v2.0.2.tar.gz#/configshell-fb-2.0.2.tar.gz
 BuildArch:      noarch

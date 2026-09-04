@@ -1,11 +1,11 @@
-%global source0_hash 8eba5d49bbdedfe58c2adcd9eed32658bd1a58e6418581a32c7f4d16eb49c70f
+%global source0_hash 3f57055e9caa26338e353ee8c1107882ad36f60f300a3e65f33d5fbb12cf8846
 %global source1_hash 8cf7cfdf1bb976f8b60c7bd06439902d2c132412235c288af4b68a7a74378a78
 
 %global module pyasn1
 %global modules_version 0.4.1
 
 Name:           python-pyasn1
-Version:        0.6.4
+Version:        0.6.2
 Release:        1%{?dist}
 Summary:        ASN.1 tools for Python
 License:        BSD-2-Clause

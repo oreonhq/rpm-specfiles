@@ -1,8 +1,8 @@
-%global source0_hash 9f006dba0dd762538f95569bcfe63d2a82fb98afa2e431339104c6227e8fb204
+%global source0_hash 04324ba391c5dd79abaff9ecbbd06cfda979e15806438da780bde60ef64af43e
 
 Name:           websvn
-Version:        2.8.8
-Release:        1%{?dist}
+Version:        2.8.4
+Release:        6%{?dist}
 Summary:        Online subversion repository browser
 
 License:        GPL-2.0-or-later

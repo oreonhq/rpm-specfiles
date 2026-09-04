@@ -1,9 +1,9 @@
-%global source0_hash dc2e25c3f38e37e07905f86694b894be4a790e21dfd719c872d5416d0b3c9e61
+%global source0_hash e68023b0bfdb8cf6d9436f850029900964e9977305763ba12be9c3474ea13175
 
 %global srcname jwcrypto
 
 Name:           python-%{srcname}
-Version:        1.6.0
+Version:        1.4.2
 Release:        %autorelease
 Summary:        Implements JWK, JWS, JWE specifications using python-cryptography
 

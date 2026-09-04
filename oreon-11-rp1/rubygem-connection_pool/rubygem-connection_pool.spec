@@ -1,11 +1,11 @@
-%global source0_hash 33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
+%global source0_hash 13a8fc3921ce4df8e04fb65f1037251decb08d74757b41163688bd1c1feccd39
 
 # Generated from connection_pool-2.2.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name connection_pool
 
 Name: rubygem-%{gem_name}
-Version: 3.0.2
-Release: 1%{?dist}
+Version: 2.2.5
+Release: 13%{?dist}
 Summary: Generic connection pool for Ruby
 License: MIT
 URL: https://github.com/mperham/connection_pool

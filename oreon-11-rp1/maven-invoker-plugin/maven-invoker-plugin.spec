@@ -1,10 +1,10 @@
-%global source0_hash 69001daaba185861778514f83eaf34778b289cdd32550b096866f05a4342e691
+%global source0_hash 4363982f723ce2a04f06ce440e376b8daf518480077a668a8ba80424d8d1312e
 
 %bcond_with     groovy
 
 Name:           maven-invoker-plugin
-Version:        3.10.1
-Release:        1%{?dist}
+Version:        3.9.0
+Release:        4%{?dist}
 Summary:        Maven Invoker Plugin
 
 License:        Apache-2.0

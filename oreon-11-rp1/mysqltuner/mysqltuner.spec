@@ -1,12 +1,12 @@
-%global source0_hash 2f8589190a16996f3b695c27de84d09c6702f440469680b292450bdc3eb6321f
+%global source0_hash dcd789c25f450ab128c050525705396f183a57b117eabdba470653f2ab9dd53e
 
 # https://fedoraproject.org/wiki/Packaging:SourceURL#Github
 #%global commit 1333ea9395a381b38535bc1fa05733a32b21f138
 #%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           mysqltuner
-Version:        2.9.2
-Release:        1%{?dist}
+Version:        2.7.0
+Release:        2%{?dist}
 Summary:        MySQL configuration assistant
 
 License:        GPL-3.0-or-later

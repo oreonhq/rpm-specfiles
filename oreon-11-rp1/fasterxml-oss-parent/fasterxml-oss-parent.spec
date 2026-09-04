@@ -3,8 +3,8 @@
 %global srcname oss-parent
 
 Name:          fasterxml-oss-parent
-Version:       79
-Release:       1%{?dist}
+Version:       62
+Release:       6%{?dist}
 Summary:       FasterXML parent pom
 License:       Apache-2.0
 
@@ -60,8 +60,5 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE NOTICE
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 79-1
-- Update to 79
-
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 62-6
 - Prepare for Oreon 11 (RP1)

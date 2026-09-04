@@ -1,8 +1,8 @@
-%global source0_hash e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+%global source0_hash d6f1c43d00d79bc17e8d2be3eb579170acbaf0d8cbf6b4524447d96c2b8be957
 
 Name:           python-oletools
-Version:        0.60.2
-Release:        1%{?dist}
+Version:        0.56.2
+Release:        26%{?dist}
 Summary:        Tools to analyze Microsoft OLE2 files
 
 # oletools/*.py: BSD

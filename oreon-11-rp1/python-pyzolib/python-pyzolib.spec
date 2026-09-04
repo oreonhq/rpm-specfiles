@@ -1,8 +1,8 @@
-%global source0_hash 35f949964615a1d0dead0711212dc73d0f0b8a323e27e9cab3b26d14649ad006
+%global source0_hash 2f4d61920d7eeb6ff4709241d8779bc65d2bdf30d6e7ecdfbd1021297293be33
 
 Name:           python-pyzolib
-Version:        0.3.4
-Release:        1%{?dist}
+Version:        0.3.3
+Release:        40%{?dist}
 Summary:        Utilities for the Pyzo environment
 
 # Automatically converted from old format: BSD - review is highly recommended.

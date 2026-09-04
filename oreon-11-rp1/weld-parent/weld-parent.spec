@@ -1,8 +1,8 @@
-%global source0_hash 64a6fa9709776b34f366446745296efe221042bc340c9931bdd882c39d949f84
+%global source0_hash e013b6525b10994fb9be6c3559d5b7e32c7d12df7bfb38d03c5cda729a1836e9
 
 Name:           weld-parent
-Version:        58
-Release:        1%{?dist}
+Version:        46
+Release:        13%{?dist}
 Summary:        Parent POM for Weld
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
@@ -40,8 +40,5 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -f .mfiles
 
 %changelog
-* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 58-1
-- Update to 58
-
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 46-13
 - Import

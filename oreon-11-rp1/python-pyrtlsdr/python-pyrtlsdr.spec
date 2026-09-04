@@ -1,9 +1,9 @@
-%global source0_hash 777426e0cfe447162ea2aab05aeab28ff6c5d20b47f0e7d05d984994f113263f
+%global source0_hash 5c8d74aa01ca4e29d3298a6414ed5ac9ad77d432b4f4f216c07996426f5ddc2a
 
 %global srcname pyrtlsdr
 Name:             python-%{srcname}
-Version:          0.5.0
-Release:          1%{?dist}
+Version:          0.3.0
+Release:          15%{?dist}
 Summary:          Python binding for librtlsdr
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:          GPL-3.0-only

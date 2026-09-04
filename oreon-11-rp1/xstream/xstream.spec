@@ -1,4 +1,4 @@
-%global source0_hash 2fc18347d4d3f3aa08d3619e86fff9a789239a429a5106459f9226080338574c
+%global source0_hash 3e2aad11ed25f53b6c128b5696638bdddbc2ff8ed099718ffa428bb2b865af05
 
 %bcond_without activation
 %bcond_without cglib
@@ -14,8 +14,8 @@
 %bcond_with xpp3
 
 Name:           xstream
-Version:        1.4.21
-Release:        1%{?dist}
+Version:        1.4.20
+Release:        11%{?dist}
 Summary:        Java XML serialization library
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

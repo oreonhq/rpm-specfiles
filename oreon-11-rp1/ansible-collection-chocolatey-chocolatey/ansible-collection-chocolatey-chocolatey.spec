@@ -1,8 +1,8 @@
-%global source0_hash 1b41080bc9c0c8e04765696c6d9565d156b435f81ce2af28ffec407632798a3b
+%global source0_hash d157639c8c938443e390ce95bd4cc5c371b1aad6c986e18b7d50bde1713f39da
 
 Name:           ansible-collection-chocolatey-chocolatey
-Version:        1.6.0
-Release:        1%{?dist}
+Version:        1.5.3
+Release:        5%{?dist}
 Summary:        Ansible collection for Chocolatey
 
 License:        GPL-3.0-or-later
