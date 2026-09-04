@@ -5,7 +5,7 @@
 %global framework kplotting
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.28
+%global majmin_ver_kf6 6.29
 
 Name:           kf6-%{framework}
 Version:        6.29.0

@@ -9,7 +9,7 @@
 %global framework breeze-icons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.28
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-%{framework}

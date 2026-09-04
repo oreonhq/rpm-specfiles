@@ -3,7 +3,7 @@
 %global framework ksvg
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.28
+%global majmin_ver_kf6 6.29
 
 %ifarch aarch64
 # Smaller aarch64 VMs OOM (cc1plus Killed, bogus assembler errors) with flto + high -j

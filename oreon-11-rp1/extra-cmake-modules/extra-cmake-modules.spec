@@ -1,7 +1,7 @@
 %global source0_hash a32e24b267e8528d0253bc8df18bdc00e676560a43b796533e1b1406f4eef4db
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.28
+%global majmin_ver_kf6 6.29
 
 
 %global framework extra-cmake-modules

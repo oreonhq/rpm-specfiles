@@ -3,7 +3,7 @@
 %global framework ktexteditor
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.28
+%global majmin_ver_kf6 6.29
 
 %ifarch aarch64
 %global _lto_cflags %{nil}
