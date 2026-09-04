@@ -1,10 +1,10 @@
-%global source0_hash 41faf1f90e2ca5cd577fa07ffefe90286e432df51ccef2822d0de6d013922f04
+%global source0_hash 60fbade541b2474c38e9bd4da260bfdf8148033ee767181466920f9f5d5e5c85
 
 %global srcname sphinx-hoverxref
 %global sum Sphinx extension to add tooltips on cross references
 
 Name:           python-%{srcname}
-Version:        1.4.1
+Version:        1.4.2
 Release:        %autorelease
 Summary:        %{sum}
 BuildArch:      noarch

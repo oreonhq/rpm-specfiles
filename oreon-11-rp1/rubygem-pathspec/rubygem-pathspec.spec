@@ -1,10 +1,10 @@
-%global source0_hash 7b0c49f3e8efea77002326aaf0674d66f7c1b507cf31f7273e9931ac860a141c
+%global source0_hash 89e186d2aeb8b8237b2ad8ed04bf47907b7acd475afff290d3f271b5f84c4d24
 
 %global gem_name pathspec
 
 Name:           rubygem-%{gem_name}
-Version:        0.2.1
-Release:        18%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Use to match path patterns such as gitignore
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

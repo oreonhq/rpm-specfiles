@@ -1,10 +1,10 @@
-%global source0_hash 4aa89d181e37f834d3c69efb4f774b58eb93fc87841cdc38a070d0a4e7aa1360
+%global source0_hash 11b16acfc4baf7a0f463c21a6212005e04e25f5554d4d9f24d97f3492dfda0df
 
 %global gem_name cookiejar	
 
 Name: rubygem-%{gem_name}
-Version: 0.3.3
-Release: 20%{?dist}
+Version: 0.3.4
+Release: 1%{?dist}
 Summary: Parsing and returning cookies in Ruby
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD	

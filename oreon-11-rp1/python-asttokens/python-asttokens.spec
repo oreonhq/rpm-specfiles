@@ -1,7 +1,7 @@
-%global source0_hash 7d2d623b2c0e172ca7cdb93bf38e0672c90a0b131f31e71bafdbde298d4f26f8
+%global source0_hash 00b9bd2b10625d235e14d79a7ed77ad2e621c51bdfca03a5426a9c37636ca884
 
 Name:           python-asttokens
-Version:        3.0.1
+Version:        3.0.2
 Release:        %autorelease
 Summary:        Module to annotate Python abstract syntax trees with source code positions
 

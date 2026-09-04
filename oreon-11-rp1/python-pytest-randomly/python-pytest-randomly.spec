@@ -1,9 +1,9 @@
-%global source0_hash dc0ad4fc1ff37344b37026063b9587596052215c670094439d68e0eab72cd684
+%global source0_hash 1ca0b4bb6772ef8499459cf34a4e39910d157e49f49f0fa57e6dbe15143d7f9a
 
 %bcond_without check
 
 Name:           python-pytest-randomly
-Version:        4.0.1
+Version:        5.0.0
 Release:        1%{?dist}
 Summary:        Pytest plugin to randomly order tests and control random.seed
 License:        MIT

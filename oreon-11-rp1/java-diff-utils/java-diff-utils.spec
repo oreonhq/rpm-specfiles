@@ -1,7 +1,7 @@
-%global source0_hash dfca1a2bbe0c3a80e8129131863f50d2b022be520f5b2356552ac02a0da2b24a
+%global source0_hash 860162748b8e3db9302e65c0aacce4da7931fa4aca31d560b1ab991421ebabdd
 
 Name:           java-diff-utils
-Version:        4.12
+Version:        4.17
 Release:        %{autorelease}
 Summary:        Java library for performing diff operations
 

@@ -1,10 +1,10 @@
-%global source0_hash 93312a6318fc7ec14d2455c399e25d9d533b7dc4abae33b77afb394a0446b4ab
+%global source0_hash f2e0b2adfa98cc5f0b4766f35d2666c7d040452d91e93fc47401e85f85bbecbd
 
 %global pypi_name django-authority
 
 Name:           python-%{pypi_name}
-Version:        0.11
-Release:        35%{?dist}
+Version:        0.14
+Release:        1%{?dist}
 Summary:        A Django app for generic per-object permissions and custom permission checks
 
 # Automatically converted from old format: BSD - review is highly recommended.

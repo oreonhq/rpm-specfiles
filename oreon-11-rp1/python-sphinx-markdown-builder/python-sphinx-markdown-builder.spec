@@ -1,8 +1,8 @@
-%global source0_hash 3db94918c25955eed834037140a4f012e8f01919331e86344b2bb2b164d51915
+%global source0_hash 3a5175543fd68371f96aca9806a3b6e62c407a51a23802ef9a0863eec1f42b20
 
 Summary:        Sphinx extension for rendering markdown builder
 Name:           python-sphinx-markdown-builder
-Version:        0.6.9
+Version:        0.6.11
 Release:        %autorelease
 License:        MIT
 URL:            https://github.com/liran-funaro/sphinx-markdown-builder

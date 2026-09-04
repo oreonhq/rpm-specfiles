@@ -1,4 +1,4 @@
-%global source0_hash df42bcec3204b70c49cbba5d1d3f15696f80157285e4f577dbff64e4ff13b51c
+%global source0_hash 9c169dda2977bc6bd5d365cb5993aebcf3cef971ca713f9b6dea43b795369b03
 
 %global srcname geopandas
 
@@ -8,7 +8,7 @@
 %bcond bootstrap 0
 
 Name:           python-%{srcname}
-Version:        1.1.3
+Version:        1.1.4
 Release:        %autorelease
 Summary:        Geographic Pandas extensions
 

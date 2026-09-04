@@ -1,4 +1,4 @@
-%global source0_hash 130c9f5f681cd9678d0efc99772a1e145590ff7ca2f26f30d4edf8e592a35162
+%global source0_hash 5202d9cf41b2ca3a4ab51a4fb700a3ec6b95b9c0fa020a6807a5839fa7e57aa7
 
 # NOTE: Building documentation requires python-sphinx-book-theme, which
 # introduces a circular dependency: python-linkify-it-py ->
@@ -8,7 +8,7 @@
 %global giturl  https://github.com/tsutsu3/linkify-it-py
 
 Name:           python-linkify-it-py
-Version:        2.1.0
+Version:        2.2.0
 Release:        %autorelease
 Summary:        Link recognition library with full Unicode support
 

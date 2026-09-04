@@ -1,8 +1,8 @@
-%global source0_hash 958a5bb2f28c3120c89c68cc242abd8e72e2dac9aaf9be36b7c7a6217dcf4669
+%global source0_hash 23f0366e4f5b5b91b151e10bd8134fed65ee8fc1e6688fc634e53e4eb7697ac4
 
 Name:           python-pypresence
-Version:        4.3.0
-Release:        13%{?dist}
+Version:        4.6.2
+Release:        1%{?dist}
 Summary:        A Discord Rich Presence Client in Python 
 License:        MIT
 URL:            https://qwertyquerty.github.io/pypresence/html/index.html

@@ -3,7 +3,7 @@
 %bcond_without tests
 
 Name:           python-more-itertools
-Version:        10.5.0
+Version:        11.1.0
 Release:        %autorelease
 Summary:        More routines for operating on Python iterables, beyond itertools
 License:        MIT
@@ -49,5 +49,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc README.rst
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11.1.0-1
+- Update to 11.1.0
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.5.0-1
 - Prepare for Oreon 11 (RP1)

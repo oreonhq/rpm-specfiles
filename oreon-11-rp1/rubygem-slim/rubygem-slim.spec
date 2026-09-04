@@ -1,11 +1,11 @@
-%global source0_hash 54e6583a00bcb75a5cc681c053dbdca4117f4425d62cea81c8dbafab5096e65a
+%global source0_hash d1b5a575fcfa904a5eb66ec0a8f48a2363c7b9c57d50debb42dbab31524ef5e3
 
 # Generated from slim-1.2.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name slim
 
 Name: rubygem-%{gem_name}
-Version: 5.1.1
-Release: 6%{?dist}
+Version: 5.2.2
+Release: 1%{?dist}
 Summary: Slim is a template language
 License: MIT
 URL: http://github.com/slim-template/slim/

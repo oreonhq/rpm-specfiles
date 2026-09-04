@@ -1,9 +1,9 @@
-%global source0_hash a14e388a4680a149ba0422ee2680ec1b457dfc41ced889933600cc973aefd463
+%global source0_hash 4509dc1fc8b34595fdb5f39b8a628c714af4d6d72eb4a7ca0c726c3e5d944173
 
 %global pkgname django-reversion
 Name:           python-django-reversion
-Version:        4.0.0
-Release:        18%{?dist}
+Version:        6.3.0
+Release:        1%{?dist}
 Summary:        Version control extension for the Django web framework
 
 # Automatically converted from old format: BSD - review is highly recommended.

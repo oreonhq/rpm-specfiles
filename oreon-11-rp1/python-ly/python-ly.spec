@@ -1,8 +1,8 @@
-%global source0_hash cf1780fe53d367efc1f2642cb77c57246106ea7517f8c2d1126f0a36ee26567a
+%global source0_hash 18ef058b4d0fa235768b6669041174370f553d6c84eb7a4495f95bb315e0f18a
 
 Name:           python-ly
-Version:        0.9.9
-Release:        7%{?dist}
+Version:        0.9.10
+Release:        1%{?dist}
 Summary:        Tool and library for manipulating LilyPond files
 
 License:        GPL-2.0-or-later

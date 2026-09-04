@@ -1,10 +1,10 @@
-%global source0_hash bd049b867079b22e3ca9021cfd80fa8096ce481588747803b6bebf0c355012a4
+%global source0_hash 97fc85c55b5b44013568fbaa955d9d5a4c8b7e8bad50026499db1abd4b347d29
 
 %global srcname pytest-flake8-path
 
 Name:           python-%{srcname}
-Version:        1.5.0
-Release:        11%{?dist}
+Version:        1.7.0
+Release:        1%{?dist}
 Summary:        A pytest fixture for testing flake8 plugins
 
 License:        MIT

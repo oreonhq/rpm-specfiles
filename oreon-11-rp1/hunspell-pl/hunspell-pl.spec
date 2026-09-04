@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 03f2616f11de380a28bb9a10cfa957378116a0d1240756e48e3da9e98600abc8
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -8,7 +8,7 @@
 
 Name: hunspell-pl
 Summary: Polish hunspell dictionaries
-Version: 25.2.3
+Version: 20260901
 Release: 1%{?dist}
 License: LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-1.1
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/pl_PL
@@ -39,5 +39,8 @@ install -pm 0644 dictionaries/pl_PL/pl_PL.dic %{buildroot}%{_datadir}/%{dict_dir
 
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260901-1
+- Update to 20260901
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
 - Import

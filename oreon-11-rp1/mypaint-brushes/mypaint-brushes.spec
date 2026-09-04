@@ -1,10 +1,10 @@
-%global source0_hash fef66ffc241b7c5cd29e9c518e933c739618cb51c4ed4d745bf648a1afc3fe70
+%global source0_hash 7984a74edef94571d872d0629b224abaa956a36f632f5c5516b33d22e49eb566
 
 %global mypaint_data_version 1.0
 
 Name: mypaint-brushes
 Epoch: 1
-Version: 1.3.1
+Version: 2.0.2
 Release: %autorelease
 Summary: Brushes to be used with the MyPaint library
 
@@ -62,5 +62,8 @@ make %{?_smp_mflags}
 
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.2-1
+- Update to 2.0.2
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1-1
 - Prepare for Oreon 11 (RP1)

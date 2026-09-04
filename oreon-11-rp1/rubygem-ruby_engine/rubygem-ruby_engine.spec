@@ -1,10 +1,10 @@
-%global source0_hash d52586605c627ce837838a346134539fb594c7430142398f0f77f9fed0660d73
+%global source0_hash ca2ae7def8cfcdc2bfb6a186d36d5d59c8b403245dc0256c3802b767fa278aaa
 
 %global gem_name ruby_engine
 
 Name:           rubygem-%{gem_name}
-Version:        2.0.0
-Release:        11%{?dist}
+Version:        2.0.3
+Release:        1%{?dist}
 Summary:        Adds the RubyEngine pseudo-constant
 
 License:        MIT

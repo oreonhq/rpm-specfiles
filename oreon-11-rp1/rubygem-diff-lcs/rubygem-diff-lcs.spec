@@ -1,4 +1,4 @@
-%global source0_hash 49b934001c8c6aedb37ba19daec5c634da27b318a7a3c654ae979d6ba1929b67
+%global source0_hash 708a5d52ec2945b50f8f53a181174aa1ef2c496edf81c05957fe956dabb363d5
 
 %global gem_name diff-lcs
 
@@ -7,8 +7,8 @@
 %{!?_with_bootstrap: %global bootstrap 0}
 
 Name: rubygem-%{gem_name}
-Version: 1.5.0
-Release: 10%{?dist}
+Version: 2.0.0
+Release: 1%{?dist}
 Summary: Provide a list of changes between two sequenced collections
 License: MIT OR Artistic-2.0 OR GPL-2.0-or-later
 URL: https://github.com/halostatue/diff-lcs
@@ -96,5 +96,8 @@ popd
 %{gem_instdir}/spec
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0-1
+- Update to 2.0.0
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-10
 - Prepare for Oreon 11 (RP1)

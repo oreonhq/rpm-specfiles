@@ -1,8 +1,8 @@
-%global source0_hash 60557f93d091ac0b22717059b3b67986d2a2f34259e8111eea7ec38c043bd3e8
+%global source0_hash bb02528cf77839bbc2cf141c085b21eae08e34670d9aa5c3659931aeea2d883c
 
 Name:           ansible-collection-containers-podman
-Version:        1.16.3
-Release:        10%{?dist}
+Version:        1.20.2
+Release:        1%{?dist}
 Summary:        Podman Ansible collection for Podman containers
 
 License:        GPL-3.0-or-later

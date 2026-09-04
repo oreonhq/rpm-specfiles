@@ -1,8 +1,8 @@
 %global source0_hash 84e7a56680cd0f1866f98e89bb9ae8d05bd9f87892e6e50dafc63415dbee3122
 
 Name:           jackson-core
-Version:        2.18.2
-Release:        6%{?dist}
+Version:        2.22.2
+Release:        1%{?dist}
 Summary:        Core part of Jackson
 License:        Apache-2.0
 

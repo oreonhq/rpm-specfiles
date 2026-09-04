@@ -1,9 +1,9 @@
-%global source0_hash 5005696304065f9d44c301e035078e87d8d848e0f86ba9f6a5c54fc0cc827e2e
+%global source0_hash 05dd422ec0689183b7ff80c9610594156777a0f8e7d1205dce09fbbfe338f86f
 
 %global modname toot
 
 Name:           %{modname}
-Version:        0.51.1
+Version:        0.52.1
 Release:        %autorelease
 Summary:        A CLI and TUI tool for interacting with Mastodon
 

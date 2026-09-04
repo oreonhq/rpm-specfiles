@@ -1,12 +1,11 @@
-%global source0_hash 0c39471e9efcf7651c56561f7de670b1fb5adf8ca517c3afe121985b5b4035b1
+%global source0_hash c780d558bb4dedfdd0a340f066fd3cb3e555076c7eb791ed765e496d3fdbcd3e
 
 %global pypi_name django-tastypie
 %global sum A flexible and capable API layer for Django
 Name:           python-%{pypi_name}
-Version:        0.14.7
+Version:        0.15.1
 Release:        %autorelease
 Summary:        %{sum}
-
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/toastdriven/django-tastypie/

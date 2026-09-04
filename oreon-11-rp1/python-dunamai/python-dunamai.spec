@@ -1,4 +1,4 @@
-%global source0_hash 31ce2979c99a2897df5b03b49b11483a00e90559745042c82e8c2238ce32a37e
+%global source0_hash 6d858b877d3f6b6305261e544faf1f2a19efdb43867d497eef615d9cb050e66c
 
 # Run breezy/bazaar integration tests?
 # Useful to disable when breezy is broken with new Python version.
@@ -12,7 +12,7 @@ continuous integration and releasing new versions of your software simply by
 creating a tag.}
 
 Name:           python-dunamai
-Version:        1.26.0
+Version:        1.26.2
 Release:        %{autorelease}
 Summary:        Dynamic version generation
 

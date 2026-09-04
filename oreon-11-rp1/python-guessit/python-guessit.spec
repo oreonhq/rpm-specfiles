@@ -1,10 +1,10 @@
-%global source0_hash 3c80554f0ed8ec361c9536dbce05ebfb38b4dbe879712957198731f32858a11b
+%global source0_hash 2314f5676ce51ed95400d8095731c110c98f8c91862fadeddd5bf72f5278a783
 
 %global srcname guessit
 
 Name: python-%{srcname}
-Version: 3.8.0
-Release: 12%{?dist}
+Version: 4.4.0
+Release: 1%{?dist}
 Summary: Library to extract as much information as possible from a video filename
 # Automatically converted from old format: LGPLv3 - review is highly recommended.
 License: LGPL-3.0-only
@@ -55,7 +55,6 @@ for lib in `find %{buildroot}%{python3_sitelib} -name "*.py"`; do
 done
 
 %pyproject_save_files -l %{srcname}
-
 # Checks disabled because they require access to the Internet
 #%%check
 #%%pytest

@@ -1,4 +1,4 @@
-%global source0_hash 1350e970e5dab58bca465f9997b02582a814d602ec355d7eeaa41cad19f6f198
+%global source0_hash 8a7ed2437fe39d6949963c1dd01dcaa88a4e8cb76d407b3bbbc5bf8f4f18babe
 
 # Building the documentation requires packages not available from Fedora:
 # altair, coconut, sphinx-book-theme
@@ -7,7 +7,7 @@
 %global giturl  https://github.com/executablebooks/MyST-NB
 
 Name:           myst-nb
-Version:        1.3.0
+Version:        1.4.0
 Release:        %autorelease
 Summary:        Jupyter Notebook Sphinx reader
 

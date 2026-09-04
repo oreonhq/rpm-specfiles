@@ -1,11 +1,11 @@
-%global source0_hash 886f3e3dd2733fd7acda9b295e412e624ee594f68340567d8d4022f378acf324
+%global source0_hash e999a1c5197d6e0a2abfe0cb5dee509725e29aa720c9bad169cd75961741c9b3
 
 %global srcname represent
 %global sum Create __repr__ automatically or declaratively
 
 Name:           python-%{srcname}
-Version:        2.1.0
-Release:        9%{?dist}
+Version:        2.2.0
+Release:        1%{?dist}
 Summary:        %{sum}
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}

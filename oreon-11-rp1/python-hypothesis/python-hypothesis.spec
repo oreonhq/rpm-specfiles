@@ -28,7 +28,7 @@
 %endif
 
 Name:           python-hypothesis
-Version:        6.123.0
+Version:        6.167.1
 Release:        %autorelease
 Summary:        Library for property based testing
 

@@ -1,10 +1,10 @@
-%global source0_hash c22b94ab6e9d27be47733002bd143b3b79d1e8c030cba0b18691cbc1b5907d7f
+%global source0_hash 823df091e2d694bb4fba83ff921e590be3c106494eaac9c8a8c150b617e8b827
 
 %global modname crank
 
 Name:               python-crank
-Version:            0.8.1
-Release:            34%{?dist}
+Version:            0.9.0
+Release:            1%{?dist}
 Summary:            Generalization of dispatch mechanism for use across frameworks
 
 License:            MIT

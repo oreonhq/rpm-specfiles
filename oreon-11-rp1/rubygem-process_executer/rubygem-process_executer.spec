@@ -1,10 +1,10 @@
-%global source0_hash c73eb646d450044241c973a8360f6326e33ec5ad933f7acf503f6f3579873a71
+%global source0_hash 02e93624eb984c94282a892084781d8343d39198b983a25753c862c228f1786e
 
 # Generated from process_executer-1.1.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name process_executer
 
 Name: rubygem-%{gem_name}
-Version: 4.0.2
+Version: 4.1.1
 Release: %autorelease
 Summary: An API for executing commands in a sub process
 License: MIT

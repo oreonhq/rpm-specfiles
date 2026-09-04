@@ -1,8 +1,8 @@
 %global source0_hash 94b05d8c19eed87fdb0cf4f2344e6f86ad674bb226e0462498b3e95de37bfa4a
 
 Name:           xmlstreambuffer
-Version:        2.1.0
-Release:        11%{?dist}
+Version:        2.1.0-M1
+Release:        1%{?dist}
 Summary:        Stream Based Representation for XML Infoset
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

@@ -1,10 +1,10 @@
-%global source0_hash cb32bcf7a88761edc925bd76a1cd2f2f91c574d565ce1063e0b6f6c3d744647e
+%global source0_hash 005887f0289b5b4a457fe78c1da185af9a30f4e8a892d0367c8f7f6053a4d1e0
 
 %global srcname colcon-output
 
 Name:           python-%{srcname}
-Version:        0.2.13
-Release:        14%{?dist}
+Version:        0.2.14
+Release:        1%{?dist}
 Summary:        Extension for colcon to customize the output in various ways
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

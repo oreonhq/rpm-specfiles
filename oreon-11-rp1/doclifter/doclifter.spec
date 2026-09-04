@@ -1,8 +1,8 @@
-%global source0_hash 481ace9720a8f752d26b9ba047a95885bcce0b863b30e561efb1deaf5144dad5
+%global source0_hash b788551280d351b36c210b8a96b3c6777da566509d7aa978282aa5d51b72a500
 
 Name:           doclifter
-Version:        2.20
-Release:        12%{?dist}
+Version:        2.22
+Release:        1%{?dist}
 Summary:        Translates documents written in troff macros to DocBook
 
 # Automatically converted from old format: BSD - review is highly recommended.

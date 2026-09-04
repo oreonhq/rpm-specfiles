@@ -1,15 +1,15 @@
-%global source0_hash 0ee7c6a4f5388ef98bcc67312456dd774a4ee2720c93c28be893bedec143d1e2
+%global source0_hash bd0b8e54e7c2d7685927e8d6286466359b6f16b18cb0df47b508e8d73c777246
 
 %global gem_name simplecov-html
 %global rubyabi 1.9.1
 
 Summary:       Default HTML formatter for SimpleCov
 Name:          rubygem-%{gem_name}
-Version:       0.10.0
-Release:       21%{?dist}
+Version:       0.13.2
+Release:       1%{?dist}
 License:       MIT
 URL:           https://github.com/colszowka/simplecov-html
-Source0:       http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:       https://rubygems.org/gems/%{gem_name}-%{version}.gem
 %if 0%{?fedora} >= 19 || 0%{?rhel} > 6
 Requires:      ruby(release)
 %else

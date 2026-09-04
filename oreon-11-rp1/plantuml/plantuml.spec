@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 7327666d99e74c91da7c9eb238cf8dc91dfc34f1923e9b51c7f8ee8f610824b9
 
 Name:           plantuml
-Version:        1.2026.2
+Version:        1.2026.7
 Release:        %autorelease
 Epoch:          1
 Summary:        Program to generate UML diagram from a text description

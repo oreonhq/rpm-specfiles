@@ -1,4 +1,4 @@
-%global source0_hash 191e9fa1c6924b9e88b48747ed05383c22ef023ece8ba0d09b3634189204a55f
+%global source0_hash 6320fbf6d31ce0a36d5aa315f6581a9872b5dfaf92060cc13d0f3b879596f66e
 
 # Enable Python dependency generation
 %{?python_enable_dependency_generator}
@@ -7,8 +7,8 @@
 %global srcname freeipa
 
 Name:           python-%{srcname}
-Version:        1.0.8
-Release:        10%{?dist}
+Version:        1.0.10
+Release:        1%{?dist}
 Summary:        Lightweight FreeIPA client
 
 License:        MIT

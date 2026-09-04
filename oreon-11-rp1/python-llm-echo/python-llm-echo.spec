@@ -4,8 +4,8 @@
 
 Summary:        Debug plugin for python-llm
 Name:           python-llm-echo
-Version:        0.3~a3
-Release:        2%{?dist}
+Version:        0.5a0
+Release:        1%{?dist}
 License:        Apache-2.0
 URL:            https://github.com/simonw/llm-echo
 Source:         https://github.com/simonw/llm-echo/archive/%{pypi_version}/llm-echo-%{pypi_version}.tar.gz

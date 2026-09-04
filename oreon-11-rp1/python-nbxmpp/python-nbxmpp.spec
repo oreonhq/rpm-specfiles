@@ -1,8 +1,8 @@
-%global source0_hash 77a8b7823cd09405a0eed92b99d4366431517f8ce0296032d6037eeaa223b92c
+%global source0_hash e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
 Name:           python-nbxmpp
-Version:        4.5.4
-Release:        7%{?dist}
+Version:        7.4.0
+Release:        1%{?dist}
 Summary:        Python library for non-blocking use of Jabber/XMPP
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only

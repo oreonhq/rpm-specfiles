@@ -1,10 +1,10 @@
-%global source0_hash e15d2f1bab8b3cf18161773b96f34f0199ef483034c577da2731c3a3290cfe76
+%global source0_hash 780315afa93ff19a76df85f0a7db2a2984763ef7728f81383513974f4061366a
 
 %bcond doc 0
 
 Name:           python-pyproject-metadata
-Version:        0.11.0
-Release:        2%{?dist}
+Version:        0.12.1
+Release:        1%{?dist}
 Summary:        PEP 621 metadata parsing
 License:        MIT
 URL:            https://github.com/FFY00/python-pyproject-metadata

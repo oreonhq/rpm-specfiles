@@ -1,9 +1,9 @@
-%global source0_hash ec50accc911054c42398adaea9e54b42fdc68fe90686383366e77b38c692be00
+%global source0_hash e42c4f70489b7e9867607d8f96d0edddd48c2f8d069c932034b1af29bdc833ba
 
 %global gem_name snmp
 
 Name:           rubygem-%{gem_name}
-Version:        1.3.3
+Version:        1.3.4
 Release:        %autorelease
 Summary:        A Ruby implementation of SNMP (the Simple Network Management Protocol)
 License:        MIT

@@ -1,12 +1,12 @@
-%global source0_hash ded769f69a0491bd1e002ce949a332ae5a47a60ce733adb8a724802c8fdfe02b
+%global source0_hash 6d459ca40d3775220ad7a2886a7c367a0d966b47cc0b97f27fb6be0439e361c9
 
 %?python_enable_dependency_generator
 %global srcname conda-content-trust
 %global pkgname conda_content_trust
 
 Name:           python-%{srcname}
-Version:        0.2.0
-Release:        7%{?dist}
+Version:        0.3.2
+Release:        1%{?dist}
 Summary:        Signing and verification tools for conda
 
 License:        BSD-3-Clause

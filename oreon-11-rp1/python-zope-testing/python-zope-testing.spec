@@ -1,4 +1,4 @@
-%global source0_hash 7b34133a8f4a7135f3732fa5ba31d9968e9b9029881157d2a24493356d7fd54a
+%global source0_hash 0de47f3c1a96cbec15ae7a1607d5a142ec39e501728055434358c2f4cf0f21a9
 
 %global _without_tests 1
 %global modname zope.testing
@@ -10,7 +10,7 @@
 %bcond tests 1
 
 Name:           python-zope-testing
-Version:        6.0
+Version:        6.2
 Release:        %autorelease
 Summary:        Zope Testing Framework
 License:        ZPL-2.1

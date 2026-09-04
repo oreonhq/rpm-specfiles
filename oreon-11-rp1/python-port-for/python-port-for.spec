@@ -1,10 +1,10 @@
-%global source0_hash 1d0c175479947ebcdaf7fb91d9c9ccce04914f065459f7150e93f3919ebc182c
+%global source0_hash 2855613b9a77b372dba522f975affce1318588c423987f114597437c1acef0a5
 
 %global pypi_name port-for
 %global name_with_underscore port_for
 
 Name:           python-%{pypi_name}
-Version:        0.7.4
+Version:        1.0.0
 Release:        %autorelease
 Summary:        Utility that helps with local TCP ports management
 

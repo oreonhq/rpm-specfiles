@@ -1,10 +1,10 @@
-%global source0_hash fe526c7a2e234f2f08ce3d8f58611ba37bb0495940510767697c034288ba61c3
+%global source0_hash 49c789c21305bed13d90d7500877b50d62db1e8e4d6f7715178e556319ddbda9
 
 %global projectname       scheherazade
 BuildArch: noarch
 
-Version:    3.300
-Release:    8%{?dist}
+Version:    4.500
+Release:    1%{?dist}
 URL:        https://software.sil.org/%{projectname}/
 
 %global foundry           SIL
@@ -57,5 +57,8 @@ rm -rf documentation/source documentation/pdf
 %fontfiles -a
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.500-1
+- Update to 4.500
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.300-8
 - Import

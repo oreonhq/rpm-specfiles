@@ -1,9 +1,9 @@
-%global source0_hash 46bed4611fb53edc731aadeb64b28308bcb848f4cc150c60c948d078f7108721
+%global source0_hash 18727ebda8e63a6d4bd28a290e8b46852e9f14473debb5cc40a0a2dccfadf15f
 
 %define modname zope_deprecation
 
 Name:           python-zope-deprecation
-Version:        5.1
+Version:        6.0
 Release:        %autorelease
 Summary:        Zope 3 Deprecation Infrastructure
 

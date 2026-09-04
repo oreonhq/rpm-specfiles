@@ -1,12 +1,12 @@
-%global source0_hash 5dd241cf37a44818f407badce8b610e47ebd1d73c3d0847ca16a1d4ee78884ed
+%global source0_hash 05f555117268d3837374f45d1806e9accf6bf65fa796e24dd6509858d61cc299
 
 %global bouncycastleJdk 18
 %global bouncycastleVer 1.83
 
 Epoch:          1
 Name:           apache-sshd
-Version:        2.16.0
-Release:        4%{?dist}
+Version:        2.19.0
+Release:        1%{?dist}
 Summary:        Apache SSHD
 
 # One file has ISC licensing:

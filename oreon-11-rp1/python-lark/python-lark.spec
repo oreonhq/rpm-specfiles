@@ -1,7 +1,7 @@
 %global source0_hash ca807d0162cd16cef15a8feecb862d7319e7a09bdb13aef927968e45040fed80
 
 Name:           python-lark
-Version:        1.2.2
+Version:        1.3.1
 Release:        %autorelease
 Summary:        Lark is a modern general-purpose parsing library for Python
 # License breakdown:

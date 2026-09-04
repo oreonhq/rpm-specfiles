@@ -1,4 +1,4 @@
-%global source0_hash 9194f6513955d0fd7300f67158175064460197abab1a92fa127a67a4b0b71530
+%global source0_hash dcb085896c28aaec5518cbc08c0ee2b4e60ada7ac929d82639f6189851a6129a
 
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
@@ -8,12 +8,12 @@
 
 Name:    qwt
 Summary: Qt Widgets for Technical Applications
-Version: 6.2.0
-Release: 11%{?dist}
+Version: 6.3.0
+Release: 1%{?dist}
 
 License: LGPL-2.1-or-later WITH Qwt-exception-1.0
 URL:     http://qwt.sourceforge.net
-Source:  http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source:  https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 
 ## upstream patches
 

@@ -1,10 +1,10 @@
-%global source0_hash 85418c186ac26a9f3cc15d255cd40bb145f8681d0fca044768dd50fa05c8aafe
+%global source0_hash 3806b2ba5cbdffca341e5df4b8fb70d0278d862f9cdb28da917ad28f0587087c
 
 %global srcname pytest-benchmark
 
 Name: python-%{srcname}
-Version: 5.1.0
-Release: 5%{?dist}
+Version: 5.3.0
+Release: 1%{?dist}
 Summary: A py.test fixture for benchmarking code
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD

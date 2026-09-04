@@ -1,8 +1,8 @@
-%global source0_hash a2c8a0c2efe8a978ce51ce800461eb9e8931f12cc7ba4b7faa3082b69ba7f12c
+%global source0_hash 88a7c42ad2e03d8b96dc72d95e451f2d875ff0f43103a8eb8ac8242133bdcb05
 
 Summary: Linux kernel and C library user-space interface documentation
 Name: man-pages
-Version: 6.13
+Version: 6.19
 Release: %autorelease
 # List of all licenses - each with an example of a man-page that uses it
 # (complete list of all man-pages per license would be too long)
@@ -32,8 +32,8 @@ URL: http://www.kernel.org/doc/man-pages/
 # gpg --no-default-keyring --keyring ./man-pages.gpg \
 # 	--verify man-pages-%%{version}.tar.sign man-pages-%%{version}.tar.xz
 # Verify "Good signature from" for the stored key.
-Source0:        http://www.kernel.org/pub/linux/docs/man-pages/man-pages-%{version}.tar.xz
-Source1:        http://www.kernel.org/pub/linux/docs/man-pages/man-pages-%{version}.tar.sign
+Source0:        https://www.kernel.org/pub/linux/docs/man-pages/man-pages-%{version}.tar.xz
+Source1:        https://www.kernel.org/pub/linux/docs/man-pages/man-pages-%{version}.tar.sign
 
 BuildRequires: make
 Requires(post): %{_sbindir}/update-alternatives

@@ -9,7 +9,7 @@
 #%%global commit_date 20240320
 
 Name:           gnome-shell-extension-dash-to-dock
-Version:        103
+Version:        106
 Release:        %autorelease
 #Release:        %%autorelease -e %%{commit_date}git%%{commit_short}
 Summary:        Dock for the Gnome Shell by micxgx@gmail.com
@@ -95,5 +95,8 @@ fi
 
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 106-1
+- Update to 106
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 103-1
 - Prepare for Oreon 11 (RP1)

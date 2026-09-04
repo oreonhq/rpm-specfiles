@@ -6,7 +6,7 @@
 %global pkgname qrcode
 
 Name:           python-%{pkgname}
-Version:        8.0
+Version:        8.2
 Release:        %autorelease
 Summary:        Python QR Code image generator
 

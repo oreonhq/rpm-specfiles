@@ -1,8 +1,8 @@
-%global source0_hash be8d8554d40e981d1b93b5ff82497c9ad2259f59f675b38f1b5e84624c07fade
+%global source0_hash 360193cecc93f906d8383a8fb5c1f3a7eed35e6ced0e118a64ee56ae13c88cac
 
 Name:       setxkbmap
-Version:    1.3.4
-Release:    7%{?dist}
+Version:    1.3.5
+Release:    1%{?dist}
 Summary:    X11 keymap client
 
 License:    HPND

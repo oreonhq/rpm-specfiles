@@ -1,8 +1,8 @@
 %global source0_hash 9b6bfdaea317c0cb26949e2b81c7c5f5d616ef77b47f327673c2ac7283507340
 
 Name:           jackson-bom
-Version:        2.18.2
-Release:        6%{?dist}
+Version:        2.22.2
+Release:        1%{?dist}
 Summary:        Bill of materials POM for Jackson projects
 License:        Apache-2.0
 

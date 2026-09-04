@@ -1,11 +1,11 @@
-%global source0_hash a700604b0ec191c62c1228b20af4912e7e478eff4636b12284fb0f8395cc0415
+%global source0_hash 0b15487b6329cbe692870d1e8306f5f87371904c833c0b4a063596532b5e8c01
 
 %global __python %{__python3}
 %global modname marshmallow
 %global _docdir_fmt %{name}
 
 Name:           python-%{modname}
-Version:        3.25.0
+Version:        4.3.1
 Release:        %autorelease
 Summary:        Python library for converting complex datatypes to and from primitive types
 License:        MIT

@@ -1,15 +1,15 @@
-%global source0_hash ce3eb9a45cfcb0a068291e0cb1169cd34c47b77c8b29a586c4ad5544e6e88064
+%global source0_hash 077ac92cc16efc5904eb90492a18153b5e6ca5398046d8a249a7c96a9ea24ae6
 
 # Generated from vcr-1.10.0.gem by gem2rpm -*- rpm-spec -*-
 %define gem_name vcr
 
 Summary: Record test suite HTTP interactions and replay during future test runs
 Name: rubygem-%{gem_name}
-Version: 2.3.0
-Release: 26%{?dist}
+Version: 6.4.0
+Release: 1%{?dist}
 License: MIT
 URL: http://github.com/myronmarston/vcr
-Source0: http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Requires: ruby(rubygems)
 Requires: ruby(release)
 BuildRequires: rubygems-devel

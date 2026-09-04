@@ -1,17 +1,17 @@
-%global source0_hash 8017e13e562bc2cb8f8fdeed472fd538e054204c87078d18c3dbf8a91bef0fce
+%global source0_hash afc09011af09587d456824679b27afdbb42622c004e0ad505bf23c67244d6b79
 
 # This package depends on automagic byte compilation
 
 %global debug_package %{nil}
 
 Name:          sugar-pippy
-Version:       75
-Release:       16%{?dist}
+Version:       76
+Release:       1%{?dist}
 Summary:       Pippy for Sugar
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           http://wiki.laptop.org/go/Pippy
-Source0:       http://download.sugarlabs.org/sources/sucrose/fructose/Pippy/Pippy-%{version}.tar.bz2
+Source0:       https://download.sugarlabs.org/sources/sucrose/fructose/Pippy/Pippy-%{version}.tar.bz2
 
 BuildRequires: python3-devel
 BuildRequires: gobject-introspection-devel

@@ -1,11 +1,11 @@
-%global source0_hash 5d3ee40b3a6567fe460601f3f4a3e199a98de37434ebfa242d751d0c79181255
+%global source0_hash 96159be799bfa73cdb721b840e9802126e4e03dfc26863db73647204c727f21e
 
 %global gem_name docile
 
 Summary:       Docile keeps your Ruby DSLs tame and well-behaved
 Name:          rubygem-%{gem_name}
-Version:       1.1.5
-Release:       25%{?dist}
+Version:       1.4.1
+Release:       1%{?dist}
 License:       MIT
 URL:           https://ms-ati.github.com/docile/
 Source0:       https://rubygems.org/gems/%{gem_name}-%{version}.gem

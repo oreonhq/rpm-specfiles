@@ -1,8 +1,8 @@
-%global source0_hash 83624b850fd0727f0cc3a574e17471cd003e1d85c46af91854bdab67299058fa
+%global source0_hash dffdec88deb6da8437a86d82340e213c3a616933807fe3fd5978f0c8c325e5e2
 
 Name:           podman-compose
-Version:        1.5.0
-Release:        5%{?dist}
+Version:        1.6.0
+Release:        1%{?dist}
 Summary:        Run docker-compose.yml using podman
 License:        GPL-2.0-only
 URL:            https://github.com/containers/podman-compose

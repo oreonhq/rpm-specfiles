@@ -1,9 +1,9 @@
-%global source0_hash aa0f5964b111481272f90b7c2fabc0263fc7ef9c935c9dfb47648efeaa3e79d1
+%global source0_hash 1e774edbe95c67aae93974416e0d452d6b5fc2c737196a67dd7e5ab548344486
 
 %global gem_name puppet-lint
 
 Name: rubygem-%{gem_name}
-Version: 4.3.0
+Version: 5.1.1
 Release: %autorelease
 Summary: Ensure your Puppet manifests conform with the Puppetlabs style guide
 License: MIT

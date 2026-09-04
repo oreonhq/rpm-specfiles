@@ -1,11 +1,11 @@
-%global source0_hash e515712e48df1f687a1d7c380fd7b07b8558faa26464474da64183a7426fa93b
+%global source0_hash 8acc7953a7b911ca44588bf08737bc16719f431a1cc3091a292bca7317925c1d
 
 # Generated from rails-dom-testing-1.0.5.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name rails-dom-testing
 
 Name: rubygem-%{gem_name}
-Version: 2.2.0
-Release: 4%{?dist}
+Version: 2.3.0
+Release: 1%{?dist}
 Summary: Dom and Selector assertions for Rails applications
 License: MIT
 URL: https://github.com/rails/rails-dom-testing

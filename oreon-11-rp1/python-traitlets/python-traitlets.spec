@@ -1,9 +1,9 @@
-%global source0_hash 6eef7dce88bdb4ebb0ba11b209d65b6f8e47d84c9c9bff351ecbbe681c55f413
+%global source0_hash 879dbc2df9c2fb98a820b01590253e4a04175ed6ae9104cb96cea520897a1c0b
 
 %global srcname traitlets
 
 Name:           python-%{srcname}
-Version:        5.14.3
+Version:        5.16.1
 Release:        %autorelease
 Summary:        A lightweight derivative of Enthought Traits for configuring Python objects
 

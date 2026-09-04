@@ -1,10 +1,10 @@
-%global source0_hash d5ea2ed61a720a220f1914778208e718a0c7ed2a484b6d357ba695aa7001390f
+%global source0_hash e041cb195f464dc10e49ab130f78c8b5956cd9a4f4f6df84e0c183b87c135f33
 
 # Generated from rchardet-1.8.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name rchardet
 
 Name: rubygem-%{gem_name}
-Version: 1.10.0
+Version: 1.10.2
 Release: %autorelease
 Summary: Character encoding auto-detection in Ruby
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

@@ -1,4 +1,4 @@
-%global source0_hash cb0cd67e225b9f0f3c50da36e3c4a79f7f4afdde14a94cd54e567210183e6a9f
+%global source0_hash e7d8ef08d15ce56b1064bf67447720050d9b23b14ace909c622be72af4633cc0
 
 # ansible-core is built for alternative Python stacks in RHEL which do not have
 # the necessary test deps packaged.
@@ -9,7 +9,7 @@
 %endif
 
 Name:           ansible-collection-community-docker
-Version:        5.0.6
+Version:        5.2.2
 Release:        1%{?dist}
 Summary:        Ansible modules and plugins for working with Docker
 

@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 7c281aaa120eb289bfdf6aac47e4f0d6b8ba87e218ff82d88f834fdda4fbacb4
 
 Name:           jackson-databind
-Version:        2.18.2
-Release:        6%{?dist}
+Version:        2.22.2
+Release:        1%{?dist}
 Summary:        General data-binding package for Jackson (2.x)
 License:        Apache-2.0 and LGPL-2.0-or-later
 

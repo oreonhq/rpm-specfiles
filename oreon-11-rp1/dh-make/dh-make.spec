@@ -1,10 +1,10 @@
-%global source0_hash c180ac7cc139202645563e91cb209ab62efac5d41a6ed2db4a4730cb71a58275
+%global source0_hash 015dd19a7a7db60887e6c620292b3bce1a0f9a70f0a6fba1adc9c490f4b93f7d
 
 Name:           dh-make
 # Squeeze
-Version:        2.202503
+Version:        2.202601
 
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Tool that converts source archives into Debian package source
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -1,16 +1,16 @@
-%global source0_hash 5f524962c588087ae3642b45628c3aae147bf8c148ab1b1312578ece599b34f9
+%global source0_hash 10c2edac888a16cffdd7d7d523ac685fa7ecc4afc529acbf20ba9ef5bf47738d
 
 %global gem_name hoe
 %undefine _changelog_trimtime
 
 Summary:    	Hoe is a simple rake/rubygems helper for project Rakefiles
 Name:       	rubygem-%{gem_name}
-Version:    	4.6.1
+Version:    	4.7.1
 Release:    	1%{?dist}
 # SPDX confirmed
 License:    	MIT
 URL:        	https://github.com/seattlerb/hoe
-Source0:    	http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:    	https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # Rescue Hoe.spec task when Manifest.txt
 # seattlerb-Bugs-28571
 Patch0:		rubygem-hoe-3.0.6-rescue-missing-Manifest.patch

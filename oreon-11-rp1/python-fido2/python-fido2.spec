@@ -1,9 +1,9 @@
-%global source0_hash 4a85e7cdd985fe94e32006b4f94e7e31c898a257277d7a92728b88e1795a8d42
+%global source0_hash de3d0be4530213c085c3398b57c8e463fc88091c53ef4dffde6f81512f7f6ed7
 
 %global srcname fido2
 
 Name:           python-%{srcname}
-Version:        2.0.0
+Version:        2.2.1
 Release:        %autorelease
 Summary:        Functionality for FIDO 2.0, including USB device communication
 

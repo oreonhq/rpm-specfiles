@@ -16,8 +16,8 @@ referencing-based Schema Registry.}
 
 Name:           python-%{pypi_name}
 Summary:        JSON Schema meta-schemas and vocabularies, exposed as a Registry
-Version:        2024.10.1
-Release:        7%{?dist}
+Version:        2025.9.1
+Release:        1%{?dist}
 License:        MIT
 URL:            https://github.com/python-jsonschema/jsonschema-specifications
 Source0:        https://files.pythonhosted.org/packages/source/j/jsonschema_specifications/jsonschema_specifications-2024.10.1.tar.gz
@@ -111,5 +111,8 @@ rm -rf docs/build/html/.{doctrees,buildinfo}
 %endif
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2025.9.1-1
+- Update to 2025.9.1
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2024.10.1-7
 - Prepare for Oreon 11 (RP1)

@@ -1,9 +1,9 @@
-%global source0_hash a7dd79401855ad952920c49dde0febc396da6619b67ec6a3f4f36d665a9a0d12
+%global source0_hash 0629ef7738773582739647201f2ed6fdcb95dbd81643c0f070a0a189b4ed2f46
 
 %bcond tests %{undefined rhel}
 
 Name:           python-respx
-Version:        0.22.0
+Version:        0.23.1
 Release:        %autorelease
 Summary:        Utility for mocking out the HTTPX and HTTP Core libraries
 

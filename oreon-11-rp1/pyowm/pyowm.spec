@@ -1,12 +1,12 @@
-%global source0_hash 5fd2754281d73b2fa1d135ae904e1c74b79c9c451d7817aec0ff33119db5969d
+%global source0_hash a1ddefe7c3d79ab81f0c3cd84fb53a40dc7e5bdcd20c1cea491e5ad5d45c8eec
 
 %global pypi_name pyowm
 # needs api key for tests
 %global with_tests 0
 
 Name:           pyowm
-Version:        2.6.1
-Release:        32%{?dist}
+Version:        3.5.0
+Release:        1%{?dist}
 Summary:        A Python wrapper around the OpenWeatherMap web API
 
 License:        MIT

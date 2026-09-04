@@ -1,11 +1,11 @@
-%global source0_hash dd4f5ab362dbc72b687240bba9d2dd841d5dfe888a285797533f85c03ea548fe
+%global source0_hash fd974500b83684cbe4760e4ea1749ed520df55e4aa10aa994d26dc0579f20867
 
 # Generated from fog-json-1.0.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name fog-json
 
 Name: rubygem-%{gem_name}
-Version: 1.2.0
-Release: 17%{?dist}
+Version: 1.4.0
+Release: 1%{?dist}
 Summary: JSON parsing for fog providers
 License: MIT
 URL: http://github.com/fog/fog-json

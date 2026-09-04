@@ -1,4 +1,4 @@
-%global source0_hash ad8c70e6e3f8926cb8a92619b832b4ea5299e2831c14284663184e200546fa6c
+%global source0_hash cebb93773d334f778e023a7ee352a8d6e13ab1bd3b863a4d4a59dec897df43ac
 
 %if 0%{?fedora} || 0%{?rhel} > 7
 # Enable python3 build by default
@@ -13,8 +13,8 @@
 %global srcname docker
 
 Name:           python-%{srcname}
-Version:        7.1.0
-Release:        10%{?dist}
+Version:        7.2.0
+Release:        1%{?dist}
 Summary:        A Python library for the Docker Engine API
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

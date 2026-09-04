@@ -1,7 +1,7 @@
-%global source0_hash 4aab34faaba6f0d5bd9d1e93ea3e85a9021f3ab1d010c166c1569fe7bf4d98da
+%global source0_hash 26338ee8f6a6d9ba24ef067e875424b90efdfd6cd6f827f174151c8f2b77a555
 
 Name:           yle-dl
-Version:        20250730
+Version:        20260716
 Release:        %autorelease
 Summary:        Download videos from Yle servers
 

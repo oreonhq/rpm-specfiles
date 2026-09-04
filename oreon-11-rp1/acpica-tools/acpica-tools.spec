@@ -1,9 +1,9 @@
-%global source0_hash 4376bf16787a321e39dd3d88523314985d5e7fa6e3123f790390d26496d63615
-%global source1_hash 25db846049e5aa047252c57b4446182bc9a8c062ba4c44d2fbb4e674f25e1a39
+%global source0_hash 5fcef9f0d00ffaffaaa82aa49c5ea9687986e8a7bd60929e298cc99a6741ae24
+%global source1_hash e7bc47d40c1836dc65af8521d2f900850f3f0fdac7ea780ba59ac644d8625f5c
 
 Name:           acpica-tools
-Version:        20251212
-Release:        4%{?dist}
+Version:        20260408
+Release:        1%{?dist}
 Summary:        ACPICA tools for the development and debug of ACPI tables
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.
@@ -206,5 +206,8 @@ fi
 
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260408-1
+- Update to 20260408
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20251212-4
 - Prepare for Oreon 11 (RP1)

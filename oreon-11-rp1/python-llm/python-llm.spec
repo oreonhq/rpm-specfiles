@@ -1,12 +1,12 @@
-%global source0_hash 7c95ab264f1b4ba612c696801bef5b33cb0c974203cd391f46e163dddd358335
+%global source0_hash 8c339769bcae30030f72c306c4e983c7ba2a97fa9fe7905b4a94a2a890f57cb3
 
 %bcond_without  tests
 %bcond_without  docs
 
 Summary:        Tool and Python library for interacting with Large Language Models
 Name:           python-llm
-Version:        0.28
-Release:        3%{?dist}
+Version:        0.34
+Release:        1%{?dist}
 License:        Apache-2.0
 URL:            https://github.com/simonw/llm
 Source:         https://github.com/simonw/llm/archive/%{version}/llm-%{version}.tar.gz

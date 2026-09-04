@@ -1,8 +1,8 @@
 %global source0_hash a26d3e3116289bb08216e0d0f7d925fcef0b0194eedfa0c944bcaaa106c4b631
 
 Name:           python-installer
-Version:        0.7.0
-Release:        14%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        A library for installing Python wheels
 
 # SPDX
@@ -61,5 +61,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.1-1
+- Update to 1.0.1
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.0-14
 - Prepare for Oreon 11 (RP1)

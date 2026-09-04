@@ -1,7 +1,7 @@
 %global source0_hash 0210e2ae8a21a9137c0d470578cb0e595af87edaa6ebf12ff176f14a02e0e645
 
 Name:           python-pathspec
-Version:        1.0.4
+Version:        1.1.1
 Release:        %autorelease
 Summary:        Utility library for gitignore style pattern matching of file paths
 

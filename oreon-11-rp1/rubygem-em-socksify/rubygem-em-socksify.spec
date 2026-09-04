@@ -1,10 +1,10 @@
-%global source0_hash 2a9feb13e65efc89434008e99dda9d80e11f9aa1a294dda60a2c400134896b89
+%global source0_hash 7d8d08a7a8acc1263173433a6b5540edd80a8a36e35a066b650c929a3a3974ed
 
 %global gem_name em-socksify
 
 Name: rubygem-%{gem_name}
-Version: 0.3.0
-Release: 33%{?dist}
+Version: 0.3.3
+Release: 1%{?dist}
 Summary: Transparent proxy support for any EventMachine protocol
 License: MIT
 URL: https://github.com/igrigorik/em-socksify

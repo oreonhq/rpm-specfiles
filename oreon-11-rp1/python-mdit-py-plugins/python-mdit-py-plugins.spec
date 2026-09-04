@@ -1,9 +1,9 @@
-%global source0_hash ebf41856b3876473dd9adabee689d9a79105a4ef7ede09891b7d8ef1015e0ae5
+%global source0_hash cc58c0cd7264b3b1972773f14126666462047fbfffaa4ba59a287ee5e6858165
 
 %bcond_without check
 
 Name:           python-mdit-py-plugins
-Version:        0.4.2
+Version:        0.6.1
 Release:        1%{?dist}
 Summary:        Collection of plugins for markdown-it-py
 License:        MIT

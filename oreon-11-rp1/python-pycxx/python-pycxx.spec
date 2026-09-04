@@ -1,4 +1,4 @@
-%global source0_hash 59cfdb3955034e23c9e21d1ec7c0f87f404a71d1fd23d6844bd769666f3c54a8
+%global source0_hash 4140ca17c39e7f3d8c9a426d12126a037a27dc148e50d3f98f0d334513fcbbb2
 
 %global modname pycxx
 
@@ -14,8 +14,8 @@
 %endif
 
 Name:           python-%{modname}
-Version:        7.1.10
-Release:        10%{?dist}
+Version:        7.2.0
+Release:        1%{?dist}
 Summary:        Write Python extensions in C++
 
 License:        BSD-3-Clause
@@ -25,7 +25,7 @@ BuildArch:      noarch
 
 BuildRequires:  python3-setuptools
 
-Source0:        http://downloads.sourceforge.net/cxx/%{modname}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/cxx/%{modname}-%{version}.tar.gz
 # Patch0:  remove unnecessary 'Src/' directory from include path in sources
 Patch0:         %{name}-7-change-include-paths.patch
 

@@ -1,7 +1,7 @@
 %global source0_hash 1c7255e871504d3df00ebb73ffbd78455b085b4707c84a3fbdabdfd9f9d1daa6
 
 Name:           stratis-cli
-Version:        3.8.3
+Version:        3.9.1
 Release:        %autorelease
 Summary:        Command-line tool for interacting with the Stratis daemon
 

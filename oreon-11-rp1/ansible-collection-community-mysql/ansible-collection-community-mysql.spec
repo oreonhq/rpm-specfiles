@@ -1,4 +1,4 @@
-%global source0_hash dc9a2d3ff46ab47b9c722fc7299caf9d5f31d30df23f488373af83ad219c1dfa
+%global source0_hash d04e826c494c176d1a9563a4f55de84568492281d68030b262acb2ab83296d8c
 
 %if %{defined fedora}
 %bcond_without tests
@@ -7,7 +7,7 @@
 %endif
 
 Name:           ansible-collection-community-mysql
-Version:        4.0.1
+Version:        5.0.2
 Release:        %autorelease
 Summary:        MySQL collection for Ansible
 

@@ -1,10 +1,10 @@
-%global source0_hash 4ea0262bc8c733d3ee4a7ff8971bf0065c2148bff170644fe5d194f07694532a
+%global source0_hash aea34d7a6798df63eb76e17c64815b45527723b90dd42667d924c87dfe13070a
 
 %global pypi_name geojson
 
 Name:       python-%{pypi_name}
-Version:    3.2.0
-Release:    4%{?dist}
+Version:    3.3.0
+Release:    1%{?dist}
 Summary:    Encoder/decoder for simple GIS features
 
 License:    LicenseRef-Callaway-BSD

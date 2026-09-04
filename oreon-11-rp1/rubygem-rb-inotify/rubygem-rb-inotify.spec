@@ -1,10 +1,10 @@
-%global source0_hash 050062d4f31d307cca52c3f6a7f4b946df8de25fc4bd373e1a5142e41034a7ca
+%global source0_hash a0a700441239b0ff18eb65e3866236cd78613d6b9f78fea1f9ac47a85e47be6e
 
 %global gem_name rb-inotify
 
 Name: rubygem-%{gem_name}
-Version: 0.10.1
-Release: 13%{?dist}
+Version: 0.11.1
+Release: 1%{?dist}
 Summary: A Ruby wrapper for Linux inotify, using FFI
 License: MIT
 URL: https://github.com/guard/rb-inotify

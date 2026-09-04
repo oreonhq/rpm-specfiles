@@ -1,11 +1,11 @@
-%global source0_hash f9919c65ec0d5263078551cc232fdee3c2a95947cecd46a044a5b751c96de819
+%global source0_hash 5c74ffbe62c182ffb29cecf456562183ad3f3b8c39dc26f61f78f2fdcbd6d3d9
 
 %bcond check 0
 %global srcname OBD
 
 Name:          python-%{srcname}
-Version:       0.7.2
-Release:       12%{?dist}
+Version:       0.7.3
+Release:       1%{?dist}
 Summary:       OBD-II serial module for reading engine data
 License:       GPL-2.0-or-later
 URL:           https://github.com/brendan-w/%{name}

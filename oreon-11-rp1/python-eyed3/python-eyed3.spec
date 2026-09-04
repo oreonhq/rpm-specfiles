@@ -1,10 +1,10 @@
-%global source0_hash 93b18e9393376a45114f9409d7cca119fb6f4f9a37d4b697b500af48b4c5cf0f
+%global source0_hash 8c0052e8d9285169da24c4fda86a0a5d699f4dc0d001210142602ceb1c28b8ad
 
 %global srcname eyed3
 
 Name:           python-%{srcname}
-Version:        0.9.7
-Release:        15%{?dist}
+Version:        0.9.9
+Release:        1%{?dist}
 Summary:        Python audio data toolkit (ID3 and MP3)
 License:        GPL-3.0-or-later
 URL:            https://github.com/nicfit/eyeD3

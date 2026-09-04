@@ -1,11 +1,11 @@
-%global source0_hash 157d26663b7e0cf450f9b16a4d9835527c82b5008633fd9eb62927b06f9a7e33
+%global source0_hash ead62a1c6bb613de1f5469975a9dd11ba2ced7322a6c8837cdde9db33dcbeac5
 
 # Generated from cucumber-tag-expressions-4.0.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name cucumber-tag-expressions
 
 Name: rubygem-%{gem_name}
-Version: 4.0.2
-Release: 11%{?dist}
+Version: 11.0.1
+Release: 1%{?dist}
 Summary: Cucumber tag expressions for ruby
 License: MIT
 URL: https://cucumber.io/docs/cucumber/api/#tag-expressions

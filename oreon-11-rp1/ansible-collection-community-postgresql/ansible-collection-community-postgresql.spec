@@ -1,10 +1,10 @@
-%global source0_hash 5e178a05a2c9c54915b51a8c2e7989ace752d2231985baee6cd600c85b75632b
+%global source0_hash 1727285652fe0231f64fa43800d07c9151a361223a003c5d302772057aa619bb
 
 %bcond tests %{undefined rhel}
 
 Name:           ansible-collection-community-postgresql
-Version:        3.0.0
-Release:        9%{?dist}
+Version:        4.2.0
+Release:        1%{?dist}
 Summary:        Manage PostgreSQL with Ansible
 
 # See the license files in the repo root and file headers

@@ -1,8 +1,8 @@
-%global source0_hash e727d9c76aa6811ebf8e68fbe5eb4488e3c6b89082703cfe68c6765050301f54
+%global source0_hash 0eceada151aceac9197b783f1825a6c41115c7a39ab9e200e45d8e928b74e798
 
 Name:           python-colored
-Version:        2.2.4
-Release:        11%{?dist}
+Version:        2.3.2
+Release:        1%{?dist}
 Summary:        Library for color and formatting in terminal
 
 License:        MIT

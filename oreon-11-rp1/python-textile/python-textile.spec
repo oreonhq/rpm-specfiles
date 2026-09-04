@@ -1,10 +1,10 @@
-%global source0_hash f2b0fa67769051a406020d2fa4d247d16967080aae407139f888c196eb23de6b
+%global source0_hash 89428d848712b041cf4e354c0a6332339810d519a5c3109cb42a0c594f882a0d
 
 %global srcname textile
 
 Name:           python-%{srcname}
-Version:        4.0.3
-Release:        8%{?dist}
+Version:        4.0.4
+Release:        1%{?dist}
 Summary:        A Humane Web Text Generator
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

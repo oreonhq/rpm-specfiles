@@ -1,10 +1,10 @@
-%global source0_hash 61c7246b34d6e5544c8a1fa4dae396d10e16ceb23371a31db22e0a2993d01432
+%global source0_hash 8d73c88cab7c98b7926710299c1162bec7ce253f9b9c5f0a2ca8037f9f240234
 
 %global pkgname flufl-lock
 
 Name:           python-%{pkgname}
-Version:        8.0.2
-Release:        9%{?dist}
+Version:        9.1.0
+Release:        1%{?dist}
 Summary:        NFS-safe file locking with timeouts for POSIX systems
 
 License:        Apache-2.0

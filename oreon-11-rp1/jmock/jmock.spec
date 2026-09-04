@@ -1,8 +1,8 @@
-%global source0_hash 9a93b325a59e776a157316e194b97090047e22ac120be8d37f347c4034564bc2
+%global source0_hash 20429c231052c04e10a740770c136846344fd3bdfe14b5448629764cf20a98bc
 
 Name:           jmock
-Version:        2.12.0
-Release:        22%{?dist}
+Version:        2.13.1
+Release:        1%{?dist}
 Summary:        Java library for testing code with mock objects
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD

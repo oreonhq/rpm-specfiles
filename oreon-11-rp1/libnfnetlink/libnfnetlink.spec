@@ -1,12 +1,12 @@
-%global source0_hash f270e19de9127642d2a11589ef2ec97ef90a649a74f56cf9a96306b04817b51a
+%global source0_hash b064c7c3d426efb4786e60a8e6859b82ee2f2c5e49ffeea640cfe4fe33cbc376
 
 Name:           libnfnetlink
-Version:        1.0.1
-Release:        32%{?dist}
+Version:        1.0.2
+Release:        1%{?dist}
 Summary:        Netfilter netlink userspace library
 License:        GPL-2.0-or-later
 URL:            http://netfilter.org
-Source0:        http://netfilter.org/projects/libnfnetlink/files/%{name}-%{version}.tar.bz2
+Source0:        https://netfilter.org/projects/libnfnetlink/files/%{name}-%{version}.tar.bz2
 BuildRequires:	kernel-headers
 BuildRequires:  automake autoconf libtool pkgconfig
 BuildRequires: make

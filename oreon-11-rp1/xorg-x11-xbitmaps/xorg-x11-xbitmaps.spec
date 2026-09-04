@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 895722f136e21e728c52f2d99fd2dae95018b9ddad1bac1f29d61bcd6593721d
 
 %global pkgname xbitmaps
 
@@ -6,8 +6,8 @@
 
 Summary: X.Org X11 application bitmaps
 Name: xorg-x11-%{pkgname}
-Version: 1.1.3
-Release: 6%{?dist}
+Version: 1.1.4
+Release: 1%{?dist}
 License: HPND AND ICU
 URL: http://www.x.org
 BuildArch: noarch

@@ -1,8 +1,8 @@
-%global source0_hash 12eaa00c3438f8f648f10a05ed4219657a73cc2c46956cd47cbf6d02ad72c68c
+%global source0_hash 248b260176593225c603c3800170bf342f033ed376aedb153169022b4581faa2
 
 Name:           configsnap
-Version:        0.20.1
-Release:        15%{?dist}
+Version:        0.21.1
+Release:        1%{?dist}
 Summary:        Record and compare system state
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0

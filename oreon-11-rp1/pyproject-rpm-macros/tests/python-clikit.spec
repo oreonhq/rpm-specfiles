@@ -2,7 +2,7 @@
 
 %global pypi_name clikit
 Name:           python-%{pypi_name}
-Version:        0.3.1
+Version:        0.6.2
 Release:        1%{?dist}
 Summary:        Builds beautiful and testable command line interfaces
 

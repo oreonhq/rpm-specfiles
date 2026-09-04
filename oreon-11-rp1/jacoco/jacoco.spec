@@ -1,8 +1,8 @@
-%global source0_hash afa7325ed5d602da29b3f5aa9f2f04af6331de72e659f0dde44186fda414927a
+%global source0_hash 15af5111ddbea7cd8b31ce7e4d7acdc18fe2afba2222b4ddbb585d30bfbe6b15
 
 Name:           jacoco
-Version:        0.8.11
-Release:        7%{?dist}
+Version:        0.8.15
+Release:        1%{?dist}
 Summary:        Java Code Coverage for Eclipse
 License:        EPL-2.0
 URL:            http://www.eclemma.org/jacoco/

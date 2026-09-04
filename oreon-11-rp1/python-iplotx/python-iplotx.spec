@@ -1,4 +1,4 @@
-%global source0_hash 712bba15f0b1458c7d10c2c4105a8709329123ddf9b80bda815d139f642b2346
+%global source0_hash 186d0a9284bbccf52354c8131e64d184b4da40ccefd386b5f2fb72e13406f090
 
 # NOTE: We do not build documentation due to missing dependencies:
 # - cogent3
@@ -7,7 +7,7 @@
 %global giturl  https://github.com/fabilab/iplotx
 
 Name:           python-iplotx
-Version:        1.7.1
+Version:        1.8.0
 Release:        %autorelease
 Summary:        Visualize networks and trees
 

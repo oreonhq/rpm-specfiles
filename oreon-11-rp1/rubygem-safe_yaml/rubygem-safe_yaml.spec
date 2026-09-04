@@ -1,4 +1,4 @@
-%global source0_hash 248193992ef1730a0c9ec579999ef2256a2b3a32a9bd9d708a1e12544a489ec2
+%global source0_hash a6ac2d64b7eb027bdeeca1851fe7e7af0d668e133e8a88066a0c6f7087d9f848
 
 %global gem_name safe_yaml
 # Although there are tests
@@ -7,8 +7,8 @@
 
 Summary:       Parse YAML safely
 Name:          rubygem-%{gem_name}
-Version:       1.0.4
-Release:       23%{?dist}
+Version:       1.0.5
+Release:       1%{?dist}
 License:       MIT
 URL:           http://dtao.github.com/safe_yaml/
 Source0:       https://rubygems.org/gems/%{gem_name}-%{version}.gem

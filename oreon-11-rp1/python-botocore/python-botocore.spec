@@ -5,7 +5,7 @@
 
 Name:           python-%{pypi_name}
 # NOTICE - Updating this package requires updating python-boto3
-Version:        1.42.70
+Version:        1.43.88
 Release:        1%{?dist}
 Summary:        Low-level, data-driven core of boto 3
 

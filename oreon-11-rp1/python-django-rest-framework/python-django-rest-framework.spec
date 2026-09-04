@@ -1,11 +1,11 @@
-%global source0_hash 05736d1744ea8bf7ff74cb02dd1fad18f80430b9da8576db2cf6545072ce3c07
+%global source0_hash 6070ab8d59b3cbf7508faf00c16a8a87227b8a01fba6ae7970c90752585b0b10
 
 %global pypi_name djangorestframework
 
 # Some test dependencies are missing
 %bcond_with tests
 Name:           python-django-rest-framework
-Version:        3.16.1
+Version:        3.18.0
 Release:        %autorelease
 Summary:        Web APIs for Django, made easy
 

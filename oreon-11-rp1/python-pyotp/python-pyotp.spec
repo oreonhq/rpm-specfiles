@@ -1,9 +1,9 @@
-%global source0_hash 346b6642e0dbdde3b4ff5a930b664ca82abfa116356ed48cc42c7d6590d36f63
+%global source0_hash d01e9703443616b03c57c700b5cbffd56a1f929c1b0f8f03131bc78c1fca9d3f
 
 %global srcname pyotp
 
 Name:           python-%{srcname}
-Version:        2.9.0
+Version:        2.10.0
 Release:        %autorelease
 Summary:        Python One Time Password library
 BuildArch:      noarch

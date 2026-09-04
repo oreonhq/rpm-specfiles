@@ -1,11 +1,11 @@
-%global source0_hash b48424f9c73f326a87aafaaa2517945c489a1d3b2248b1c7dd475ded75f7a3c3
+%global source0_hash fe431ca96a61f7c87a5177a43c9fe0a50eafe174c1d108421e38bb5165ea4814
 
 # Generated from ruby-dbus-0.7.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name ruby-dbus
 
 Name: rubygem-%{gem_name}
-Version: 0.22.1
-Release: 9%{?dist}
+Version: 0.25.0
+Release: 1%{?dist}
 Summary: Ruby module for interaction with D-Bus
 # MIT: lib/dbus/core_ext/*
 License: LGPL-2.1-or-later AND MIT

@@ -1,8 +1,8 @@
-%global source0_hash eab1e6a471a8212572e586e2aaf34ddbecdec4b8e3aec8084aaea1ba3e020d24
+%global source0_hash ae6e1899b1caf1647037b4474c6235f2858e00554b6b164ead90e9655b74e602
 
 Name:           irclog2html
-Version:        4.0.0
-Release:        5%{?dist}
+Version:        4.1.0
+Release:        1%{?dist}
 Summary:        A script to convert IRC logs to HTML and other formats
 
 License:        GPL-2.0-or-later

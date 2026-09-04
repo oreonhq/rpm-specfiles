@@ -1,12 +1,12 @@
-%global source0_hash 9b4929fca5c6703880d95f201e470b7f19262ff63e991b3ac4ea3257f712f5ec
+%global source0_hash 9d732a4e0fef1cd4eaeefd4a0093f183c5981f6c843711ceae6a63419404996b
 
 Summary: Examines C/C++ source code for security flaws
 Name: flawfinder
-Version: 2.0.11
-Release: 16%{?dist}
+Version: 2.0.20
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
-Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0: https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 URL: http://www.dwheeler.com/flawfinder/
 
 BuildArch: noarch

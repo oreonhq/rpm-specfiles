@@ -1,7 +1,7 @@
-%global source0_hash 21a95d6fcb0f02800bfba9e955d0c80dd6980239ccdff96209d682bf8c0973b6
+%global source0_hash 1f548021beb8465a586db420b0dedfd621fdba3983c2c193eafc7444a6504fe7
 
 Name:           mariadb-java-client
-Version:        3.5.7
+Version:        3.5.10
 Release:        %autorelease
 Summary:        Connects applications developed in Java to MariaDB and MySQL databases
 License:        LGPL-2.1-or-later

@@ -1,10 +1,10 @@
-%global source0_hash 7a0d25b4ae4897f1723e7b78c3b68074b2138fe3a850f7957e9322db04bc4ac1
+%global source0_hash c3132a0ed9032dfe5d256ab74a0870e75a39d148e6e4a7e46c26fcda9001db10
 
 %bcond blender 1
 %bcond skimage 1
 
 Name:           python-trimesh
-Version:        4.11.3
+Version:        5.1.0
 Release:        %autorelease
 Summary:        Import, export, process, analyze and view triangular meshes
 

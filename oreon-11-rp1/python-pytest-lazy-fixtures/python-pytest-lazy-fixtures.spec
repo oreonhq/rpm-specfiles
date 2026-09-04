@@ -1,10 +1,10 @@
-%global source0_hash c494b52d798890033d64b28687a4d52807c8b0f606d56316e139df0cbe116c57
+%global source0_hash 8684abfd4914ea01f1e2f7b24524739344421d8f3f12286fb3100fb5681e1181
 
 %global pypi_name pytest-lazy-fixtures
 %global package_dir_name pytest_lazy_fixtures
 
 Name:           python-%{pypi_name}
-Version:        1.1.4
+Version:        1.4.1
 Release:        %autorelease
 Summary:        Library to use fixtures in @pytest.mark.parametrize
 

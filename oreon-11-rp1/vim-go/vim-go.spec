@@ -1,4 +1,4 @@
-%global source0_hash fc9a3f5a3e4c3e5de9cd6e23f9b2b4df75a3403655665c4bc5887da057ceb747
+%global source0_hash 4c2b7facf78b20c9186f1070b7acff4cf7cf85fdf55fc255199cfef026bc5803
 
 %global vimfiles_root %{_datadir}/vim/vimfiles
 %global appdata_dir %{_datadir}/appdata
@@ -7,8 +7,8 @@
 %global debug_package %{nil}
 
 Name:           vim-go
-Version:        1.28
-Release:        9%{?dist}
+Version:        1.29
+Release:        1%{?dist}
 Summary:        Go development plugin for Vim
 
 # Automatically converted from old format: BSD - review is highly recommended.

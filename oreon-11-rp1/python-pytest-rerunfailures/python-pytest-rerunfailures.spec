@@ -1,4 +1,4 @@
-%global source0_hash 2f86533ed18abf79ac01cad569b4bed6dd8eafcf9df37f2fca06c40ce4fdda00
+%global source0_hash a77d9ed50f0b26ee0480f4e5092cb5b2ae9f069f45fe13f603d264353ce36c65
 
 %global srcname pytest-rerunfailures
 
@@ -6,8 +6,8 @@
 %bcond_without tests
 
 Name:           python-%{srcname}
-Version:        15.0
-Release:        7%{?dist}
+Version:        16.6.1
+Release:        1%{?dist}
 Summary:        A py.test plugin that re-runs failed tests to eliminate flakey failures
 
 License:        MPL-2.0

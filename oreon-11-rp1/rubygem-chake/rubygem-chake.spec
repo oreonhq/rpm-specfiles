@@ -1,10 +1,10 @@
-%global source0_hash 1b105e769ce0fd90108096db59b767691d69f67e5e9b28776f2b3b9cdd8a7c55
+%global source0_hash 1869ee3d0d93c2419d49e265474512dfcb055d22d200ee83474a06863d7609bd
 
 %global gem_name chake
 
 Name: rubygem-%{gem_name}
-Version: 0.21.2
-Release: 14%{?dist}
+Version: 0.93.2
+Release: 1%{?dist}
 Summary: Serverless configuration management tool for chef
 License: MIT
 URL: https://gitlab.com/terceiro/chake

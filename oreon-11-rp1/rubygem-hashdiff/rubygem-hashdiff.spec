@@ -1,11 +1,11 @@
-%global source0_hash 2cd4d04f5080314ecc8403c4e2e00dbaa282dff395e2d031bc16c8d501bdd6db
+%global source0_hash 9c079dbc513dfc8833ab59c0c2d8f230fa28499cc5efb4b8dd276cf931457cd1
 
 # Generated from hashdiff-0.3.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name hashdiff
 
 Name: rubygem-%{gem_name}
-Version: 1.0.1
-Release: 13%{?dist}
+Version: 1.2.1
+Release: 1%{?dist}
 Summary: Hashdiff is a diff lib to compute the smallest difference between two hashes
 License: MIT
 URL: https://github.com/liufengyun/hashdiff

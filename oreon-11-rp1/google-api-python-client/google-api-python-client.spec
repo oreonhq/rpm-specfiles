@@ -6,7 +6,7 @@
 Name:           google-api-python-client
 Summary:        %{sum}
 Epoch:          2
-Version:        2.192.0
+Version:        2.200.0
 Release:        %autorelease
 
 License:        Apache-2.0

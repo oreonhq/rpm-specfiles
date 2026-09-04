@@ -1,11 +1,11 @@
-%global source0_hash 414ca1446ef8292d91bd2ad7f39ac9d6ce78a7fc4f22101c86b63b227d93ca0c
+%global source0_hash 795b6877bf9c99cf1250f59c69f63e6cc659708bdadce0f880c8678efa383aa7
 
 # Generated from fog-libvirt-0.0.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name fog-libvirt
 
 Name: rubygem-%{gem_name}
-Version: 0.13.1
-Release: 4%{?dist}
+Version: 0.15.0
+Release: 1%{?dist}
 Summary: Module for the 'fog' gem to support libvirt
 License: MIT
 URL: http://github.com/fog/fog-libvirt

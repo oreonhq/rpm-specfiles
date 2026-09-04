@@ -1,10 +1,10 @@
-%global source0_hash d815f05b8173a4cbc9a043bed698434baef3e32a4159e4fb38c3d4127b02ce24
+%global source0_hash 00b7b765918873634d667771028a27bcd68777adc9195f8193441968dd3531a7
 
 %global collection_namespace ansible
 %global collection_name utils
 
 Name:           ansible-collection-%{collection_namespace}-%{collection_name}
-Version:        6.0.1
+Version:        6.1.0
 Release:        1%{?dist}
 Summary:        Ansible Network Collection for Common Code
 

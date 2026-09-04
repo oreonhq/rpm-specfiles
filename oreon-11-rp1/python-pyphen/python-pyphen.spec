@@ -1,11 +1,11 @@
-%global source0_hash b6e62db6576b1a3a0d536a9716773978d86e1bf0cc694fdd9b81e688f1d0c13d
+%global source0_hash 1ef18f4adb1f4592d87c0074d6816452aa52472aa496535b2112de04f7858eee
 
 %global srcname Pyphen
 %global modname pyphen
 
 Name:           python-pyphen
-Version:        0.13.2
-Release:        15%{?dist}
+Version:        0.18.1
+Release:        1%{?dist}
 Summary:        Pure Python module to hyphenate text
 # Automatically converted from old format: GPLv2+ or LGPLv2+ or MPLv1.1 - review is highly recommended.
 License:        GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+ OR LicenseRef-Callaway-MPLv1.1

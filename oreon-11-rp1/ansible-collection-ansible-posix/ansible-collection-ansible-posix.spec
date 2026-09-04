@@ -1,4 +1,4 @@
-%global source0_hash 395c9ce60bcca70470307e696a8c6fd912e6a8f072a4cc61be14d7a997dfdcf4
+%global source0_hash ca7d929194959d905f3a18f1ae25ed2d911af6bf1194c917a3215402ec33ff4f
 
 %if %{undefined rhel}
 %bcond_without tests
@@ -7,8 +7,8 @@
 %endif
 
 Name:           ansible-collection-ansible-posix
-Version:        2.1.0
-Release:        3%{?dist}
+Version:        2.2.2
+Release:        1%{?dist}
 Summary:        Ansible Collection targeting POSIX and POSIX-ish platforms
 
 # plugins/module_utils/mount.py: Python Software Foundation License version 2

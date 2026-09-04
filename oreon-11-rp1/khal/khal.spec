@@ -1,11 +1,11 @@
-%global source0_hash 68fea8cd704e387e81b669c90322a8dafb4374f5876b07170c9c6e23415a3ee0
+%global source0_hash 2b51679d80662b2d65e757c509813bd72b496043d789839bfd970f0026da687d
 
 # Invoke with "--with tests" to enable tests
 # Currently disabled by default as it requires network by default
 %bcond_with tests
 
 Name:       khal
-Version:    0.13.0
+Version:    0.14.1
 Release:    %autorelease
 Summary:    CLI calendar application
 

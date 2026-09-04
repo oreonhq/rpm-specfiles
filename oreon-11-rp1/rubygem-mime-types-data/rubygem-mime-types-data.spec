@@ -1,11 +1,11 @@
-%global source0_hash e90f027e54346bbbf7bd993a97e9cb7270cd4fe41c535ef84bf5d1aefe1e7ede
+%global source0_hash cd8811e1fb89d836499ba0582368a10ee74cef929ba956d1d5ddca045e6a730f
 
 # Generated from mime-types-data-3.2016.0521.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mime-types-data
 
 Name: rubygem-%{gem_name}
-Version: 3.2023.0218.1
-Release: 7%{?dist}
+Version: 3.2026.0701
+Release: 1%{?dist}
 Summary: A registry for information about MIME media type definitions
 License: MIT
 URL: https://github.com/mime-types/mime-types-data/

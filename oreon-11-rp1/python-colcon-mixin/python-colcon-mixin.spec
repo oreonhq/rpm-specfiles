@@ -1,10 +1,10 @@
-%global source0_hash da53181e0a6736f8f44e8a1bace8a9b4847a201a8c17b72f526b3dbaf568951e
+%global source0_hash 659493ede4aa49de4c22fdfc87ecc1af24383d51b8c162f0c51d310dec6549f7
 
 %global srcname colcon-mixin
 
 Name:           python-%{srcname}
-Version:        0.2.3
-Release:        14%{?dist}
+Version:        0.3.0
+Release:        1%{?dist}
 Summary:        Extension for colcon to read CLI mixins from files
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

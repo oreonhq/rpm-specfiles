@@ -1,4 +1,4 @@
-%global source0_hash 7b664f60818a16afa8cc9f1dd6d9b17f944e0ce94e50787d76f81bc7a8648cce
+%global source0_hash 4f6b7f34c22c5ce137e7ee280dcb1984ade0d500b6dab591d4a4d84252d18de9
 
 %global pypi_name lesscpy
 
@@ -7,8 +7,8 @@
 %endif
 
 Name:           python-%{pypi_name}
-Version:        0.14.0
-Release:        24%{?dist}
+Version:        0.15.2
+Release:        1%{?dist}
 Summary:        Lesscss compiler
 
 License:        MIT

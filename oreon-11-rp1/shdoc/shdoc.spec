@@ -1,7 +1,7 @@
-%global source0_hash e963e6dafdef0a214be80de3326659e0f71583b112759dd9cb0bcd2da6870c26
+%global source0_hash c1297f3e7560b40d70b88a4eb0492c098f1cf09f5273645ebf70a703bc6676b9
 
 Name:    shdoc
-Version: 1.2
+Version: 1.4
 Release: %autorelease
 Summary: Documentation generator for bash/zsh/sh for generating documentation in Markdown
 

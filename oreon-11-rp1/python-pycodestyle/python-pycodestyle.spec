@@ -1,8 +1,8 @@
-%global source0_hash 231f65fbf5558e342cbad275245accb8a988d637cbeaf66508dd890f3d2d60fa
+%global source0_hash ffcf4dc55f1e5fbdc6dd6acf5db0fd07ded534ae376eee23a742e1410b48d9ae
 
 Name:           python-pycodestyle
 # WARNING: When updating pycodestyle, check not to break flake8!
-Version:        2.12.1
+Version:        2.14.0
 Release:        %autorelease
 Summary:        Python style guide checker
 License:        MIT

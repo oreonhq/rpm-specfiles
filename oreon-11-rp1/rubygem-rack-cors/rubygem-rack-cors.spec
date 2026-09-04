@@ -1,10 +1,10 @@
-%global source0_hash 4702644ac6d63ebbddff372a3cd4cd573513287e3524b5a5415f678970057a4b
+%global source0_hash 7b95be61db39606906b61b83bd7203fa802b0ceaaad8fcb2fef39e097bf53f68
 
 %global gem_name rack-cors
 
 Name:           rubygem-%{gem_name}
-Version:        1.1.1
-Release:        15%{?dist}
+Version:        3.0.0
+Release:        1%{?dist}
 Summary:        Middleware for enabling Cross-Origin Resource Sharing in Rack apps
 
 License:        MIT

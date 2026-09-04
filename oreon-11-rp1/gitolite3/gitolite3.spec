@@ -1,4 +1,4 @@
-%global source0_hash 46cd120323bb45fae24e202eb90fdfc77b51bc7a8ed085b0fa6936c3594145ee
+%global source0_hash 9c354234446680d3a890c5cf754679541fe6e41419ab02fbf4fe8cc3989a6b33
 
 %global perl_vendorlib %(eval $(perl -V:vendorlib); echo $vendorlib)
 # RHEL uses %%{_prefix}/com for %%{_sharedstatedir} instead of /var/lib
@@ -10,8 +10,8 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.6.14
-Release:        3%{?dist}
+Version:        3.6.15
+Release:        1%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 License:        GPL-2.0-only AND CC-BY-SA-1.0

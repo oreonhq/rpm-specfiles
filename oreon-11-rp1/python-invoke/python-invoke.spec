@@ -1,4 +1,4 @@
-%global source0_hash 44a8c1c036855d7f75a947d00892934316e095dcb81f2637b12f11fadf29882d
+%global source0_hash dd36db4cc608682500f950ee7926ab91243d2a304131f73bf4edb337bb898467
 
 %global __pytest %{expand:expect <(echo '
     spawn /usr/bin/pytest {*}$argv
@@ -8,8 +8,8 @@
 ') --}
 
 Name:           python-invoke
-Version:        2.2.0
-Release:        13%{?dist}
+Version:        3.0.3
+Release:        1%{?dist}
 Summary:        A Python task execution tool and library
 
 License:        BSD-2-Clause

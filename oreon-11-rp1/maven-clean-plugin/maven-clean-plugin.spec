@@ -1,8 +1,8 @@
-%global source0_hash fbdbe1121da3397c6a50892346c3239c8b1c3c78df2fe3e57a4d1609782cbab6
+%global source0_hash d5ea0ea62d29ae3ecfff21ea02a4df51d4610511d78bf01e877945b0a0bd605f
 
 Name:           maven-clean-plugin
-Version:        3.3.2
-Release:        9%{?dist}
+Version:        3.5.0
+Release:        1%{?dist}
 Summary:        Maven Clean Plugin
 License:        Apache-2.0
 URL:            http://maven.apache.org/plugins/maven-clean-plugin/

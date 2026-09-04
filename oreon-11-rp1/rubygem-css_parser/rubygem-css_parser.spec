@@ -1,10 +1,10 @@
-%global source0_hash eb730f2d26591a843e52bd3d0efd76abdfeec8bad728e0b2ac821fc10bb018e6
+%global source0_hash eaf0e9283fd581d06e815235ceef4f0910c0b394c606355dbc69f93e84443885
 
 %global gem_name css_parser
 
 Name: rubygem-%{gem_name}
-Version: 1.17.1
-Release: 5%{?dist}
+Version: 3.0.0
+Release: 1%{?dist}
 Summary: Ruby CSS parser
 License: MIT
 URL: https://github.com/premailer/css_parser

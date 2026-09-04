@@ -1,11 +1,11 @@
-%global source0_hash 0a8512ecf6a8fe14928707f7d2766680c955b3a2224de198c1e25c837cd36f82
+%global source0_hash 19b710e59d3985e85bc1292a3c60d63695b4f6aa5248c406fb00c46fec003280
 
 # Generated from color-1.4.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name color
 
 Name: rubygem-%{gem_name}
-Version: 1.8
-Release: 21%{?dist}
+Version: 2.2.0
+Release: 1%{?dist}
 Summary: Color management with Ruby
 License: MIT
 URL: https://github.com/halostatue/color

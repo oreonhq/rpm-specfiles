@@ -1,10 +1,10 @@
-%global source0_hash a9f86143c6a2538b88f6d7d0c2b7d4991a63014cbaa5aa0c5dd9ecb14be229ee
+%global source0_hash 3a3b4cd5480b7390e1ea9bfb0fd3ed0260d2a10b395d6b9a8eff723764cc2faa
 
 %bcond tests %{undefined rhel}
 
 Name:           ansible-collection-community-crypto
-Version:        2.22.1
-Release:        5%{?dist}
+Version:        3.3.0
+Release:        1%{?dist}
 Summary:        The community.crypto collection for Ansible
 
 # See the LICENSES directory and the summary in the README

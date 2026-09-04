@@ -1,4 +1,4 @@
-%global source0_hash be398ebf99e2ce851e73f232ce9ac9bcf550b34f67dd96e96e32b4d23ae273d1
+%global source0_hash 1c81fda73abb89df1672f36aa18883ede66343acec6eaef7314036df7470925a
 
 # Some tests fail. Pass --with all_tests to retry
 %bcond_with all_tests
@@ -6,7 +6,7 @@
 %global forgeurl https://codeberg.org/allauth/django-allauth
 
 Name:           python-django-allauth
-Version:        65.8.1
+Version:        65.19.2
 Release:        %autorelease
 Summary:        Integrated set of Django authentication apps
 License:        MIT

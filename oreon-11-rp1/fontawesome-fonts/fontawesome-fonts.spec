@@ -1,9 +1,9 @@
-%global source0_hash fdebdf3f1b8641a4b665c61f1f48e482b140a817ce619113559201b8a1fcdd51
+%global source0_hash d5a20554faa1ad30148b05f090a556e23495c446435c8dfc1624d3c0e3c2640b
 
 Name:		fontawesome-fonts
 Summary:	Support files for the FontAwesome fonts
 Epoch:		1
-Version:	6.7.2
+Version:	7.3.1
 Release:	%autorelease
 
 License:	MIT
@@ -133,5 +133,8 @@ sed -e 's,updatecontact,update_contact,g' \
 %{_datadir}/fontawesome/
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.3.1-1
+- Update to 7.3.1
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:6.7.2-1
 - Import

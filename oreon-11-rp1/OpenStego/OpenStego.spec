@@ -1,4 +1,4 @@
-%global source0_hash 19fa16e466fcacab2b4bb4b4f8431f0881967990165be05110489e22cce26abd
+%global source0_hash 6eb7d1a1e6eb294ab3d2ef38d3c4e0c321b4f9e4a92c209eec86af3c6cbe2668
 
 # New versions 0.8+ are built with gradle build system, which is not present in Fedora
 
@@ -9,8 +9,8 @@
 %global         shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           OpenStego
-Version:        0.7.4
-Release:        19%{?dist}
+Version:        0.8.6
+Release:        1%{?dist}
 Summary:        Free Steganography solution
 Summary(fr):    Solution libre pour la steganographie
 

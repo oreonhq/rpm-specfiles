@@ -1,10 +1,10 @@
-%global source0_hash 9b1b1c09bff2fe1c4d61e3d17b04f2aaf5abb879a48272c85f4654d8a3fddd8c
+%global source0_hash 6c3c64450a5de34314867cfbb505a5837729a2639fa88885cde634cb76750a33
 
 %global gem_name puppet-resource_api
 
 Name: rubygem-%{gem_name}
-Version: 1.8.18
-Release: 6%{?dist}
+Version: 2.0.1
+Release: 1%{?dist}
 Summary: This library provides a simple way to write new native resources for puppet
 License: Apache-2.0
 URL: https://github.com/puppetlabs/puppet-resource_api

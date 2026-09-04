@@ -1,7 +1,7 @@
 %global source0_hash b145a1ccfbde15985a517341dbd6510d391dfc21919c649669ebc977d91aa57f
 
 Name:           latexmk
-Version:        4.88
+Version:        488
 Release:        %autorelease
 Summary:        A make-like utility for LaTeX files
 
@@ -63,5 +63,8 @@ rm -f extra-scripts/*.bat
 %license COPYING
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 488-1
+- Update to 488
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.88-1
 - Prepare for Oreon 11 (RP1)

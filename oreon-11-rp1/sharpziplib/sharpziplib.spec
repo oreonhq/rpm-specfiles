@@ -1,4 +1,4 @@
-%global source0_hash 086c52dd98de17ffcc9f42310bf166a69718c829b413b9ea831fb296e2216a69
+%global source0_hash 92678f2b5e4ec2ca6df598ef6d3bbf57f0176ada2e4901f689d844f7744fe9c6
 
 %global libname SharpZipLib
 
@@ -8,8 +8,8 @@
 %bcond_with brokentests
 
 Name:           sharpziplib
-Version:        1.3.3
-Release:        10%{?dist}
+Version:        1.4.2
+Release:        1%{?dist}
 Summary:        Zip, GZip, Tar and BZip2 library
 
 # - as stated on the homepage, license is aka GNU Classpath exception:

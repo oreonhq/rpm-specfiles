@@ -1,10 +1,10 @@
-%global source0_hash 90891fdd50b53919ca334c8c1031eada1215e78d226d5795e523d6123a2717d0
+%global source0_hash 75bdfeaa17e4af168fae2c262867b2992087aef39d8580965cb90d37a7d093c2
 
 %global gem_name mustache
 
 Name: rubygem-%{gem_name}
-Version: 1.1.1
-Release: 14%{?dist}
+Version: 1.1.3
+Release: 1%{?dist}
 Summary: Mustache is a framework-agnostic way to render logic-free views
 License: MIT
 URL: https://github.com/mustache/mustache

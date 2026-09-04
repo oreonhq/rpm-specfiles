@@ -1,9 +1,9 @@
-%global source0_hash b743856643a808a9c626c248775d7be538d4a5c11232c476a216f31a09904f31
+%global source0_hash 55808105bf8d78818a610e5c7b018abd831b6e2ac8beeb2146a450dabd7a7970
 
 %global _docdir_fmt %{name}
 
 Name:           ansible-collection-ansible-netcommon
-Version:        8.2.1
+Version:        8.6.2
 Release:        %autorelease
 Summary:        Ansible Network Collection for Common Code
 

@@ -1,4 +1,4 @@
-%global source0_hash 322168b14f937a5d11362988ecac2a4952d3d8e3a2cbeb2319584631226d5b3a
+%global source0_hash e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 
 # Unset -s on python shebang - ensure that extensions installed with pip
 # to user locations are seen and properly loaded
@@ -7,8 +7,8 @@
 %global srcname nbformat
 
 Name:           python-%{srcname}
-Version:        5.10.4
-Release:        6%{?dist}
+Version:        5.11.1
+Release:        1%{?dist}
 Summary:        The Jupyter Notebook format
 
 # Automatically converted from old format: BSD - review is highly recommended.

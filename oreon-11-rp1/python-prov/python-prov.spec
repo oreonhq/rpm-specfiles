@@ -1,12 +1,12 @@
-%global source0_hash a6dfd797acc400dd793c215eff01c49f599ee7a61dab173a5d2b537362a90c75
+%global source0_hash a85080c89d3f72a397b7714f81f4423ac11e6baca7776ec60fac0e850ad8c9b7
 
 %{?python_enable_dependency_generator}
 
 %global modname prov
 
 Name:           python-%{modname}
-Version:        2.0.0
-Release:        14%{?dist}
+Version:        3.1.0
+Release:        1%{?dist}
 Summary:        W3C Provenance Data Model supporting PROV-JSON and PROV-XML import/export
 
 License:        MIT

@@ -1,11 +1,11 @@
-%global source0_hash c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
+%global source0_hash 6daed104481007752a76905000e71c0093c591c8ef3017d1b18222c277fc52e3
 
 BuildArch: noarch
 BuildRequires: /usr/bin/makeotfexe
 BuildRequires: fontforge
 
-Version:   0.133
-Release:   16%{?dist}
+Version:   0.140
+Release:   1%{?dist}
 License:   GPL-2.0-only
 URL:       http://culmus.sourceforge.net
 

@@ -3,8 +3,8 @@
 %global pypi_name jsonpointer
 
 Name:           python-%{pypi_name}
-Version:        2.4
-Release:        9%{?dist}
+Version:        3.1.1
+Release:        1%{?dist}
 Summary:        Resolve JSON Pointers in Python
 
 License:        BSD-3-Clause
@@ -48,5 +48,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_bindir}/jsonpointer
 
 %changelog
+* Fri Sep 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.1-1
+- Update to 3.1.1
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4-9
 - Prepare for Oreon 11 (RP1)

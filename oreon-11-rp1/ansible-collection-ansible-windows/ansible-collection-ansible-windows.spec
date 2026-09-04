@@ -1,4 +1,4 @@
-%global source0_hash 02a3c477a2fb7ea4838ed739f386420b74caa4b366ef4eb1f13f15bc34bfef54
+%global source0_hash d7ed697e6a69681dd9669ec7dd7797b28d90aff100e7ef85bd05f1299335b18f
 
 %if %{defined fedora}
 %bcond_without tests
@@ -7,7 +7,7 @@
 %endif
 
 Name:           ansible-collection-ansible-windows
-Version:        3.3.0
+Version:        3.8.0
 Release:        %autorelease
 Summary:        Windows core collection for Ansible
 

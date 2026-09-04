@@ -1,10 +1,10 @@
-%global source0_hash 359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061
+%global source0_hash cc8d57cfa71d74ff8c28a7726734d53a851d02fad9e3a5581fb807f989f702f0
 
 %global modname binaryornot
 %global sum A pure Python package to check if a file is binary or text
 
 Name:               python-binaryornot
-Version:            0.4.4
+Version:            0.6.0
 Release:            %autorelease
 Summary:            %{sum}
 

@@ -1,7 +1,7 @@
-%global source0_hash a231629d166b58b0d557fc453374374d1fe0f3aff205b34bd8196e62ec285c55
+%global source0_hash b4c5adc5189e792ec8d286f370d1328c7ec5532ba1b01f68999ed00db0138dc5
 
 Name:           python-geopy
-Version:        2.4.1
+Version:        2.5.0
 Release:        %autorelease
 Summary:        Geocoding library for Python
 

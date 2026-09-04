@@ -1,10 +1,10 @@
-%global source0_hash 123e894118b8a599fd80d3ec1a6d4cc7ce4e5882b1317a7e1ba69b56e95f991f
+%global source0_hash 4202482733d85cedd04e59fcb2f89f4e4c7c385a78d3c3c23c30446843a37452
 
 %global modname bleach
 
 Name:           python-%{modname}
-Version:        6.2.0
-Release:        9%{?dist}
+Version:        6.4.0
+Release:        1%{?dist}
 Summary:        An easy whitelist-based HTML-sanitizing tool
 
 License:        Apache-2.0

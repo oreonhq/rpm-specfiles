@@ -1,11 +1,11 @@
-%global source0_hash 188da5d0c598779cc1ece82057c1b0a9d5a25f6ba32c95c913cc6e1e5994bbbe
+%global source0_hash 3ff6a8f4caf006f19c8340c55a1224ed10629747d9498316b6941f2d3a4509d1
 
 %global commit 4194967f02db8e9f85e8bab6f3803029a4d9a243
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           koan
-Version:        3.0.1
-Release:        20%{?dist}
+Version:        3.3.1
+Release:        1%{?dist}
 Summary:        Kickstart over a network
 
 License:        GPL-2.0-or-later

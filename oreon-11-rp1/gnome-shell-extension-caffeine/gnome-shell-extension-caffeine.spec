@@ -1,10 +1,10 @@
-%global source0_hash b2d4edf05e4ecd9f442471023aa805c75a53febed40d99140135735c2be36e0a
+%global source0_hash ecb4091ddc5069e580e2294f91ffb2e53b60470eb4a3a1193fee1c5805ced234
 
 %global extdir		caffeine@patapon.info
 %global gschemadir	%{_datadir}/glib-2.0/schemas
 
 Name:		gnome-shell-extension-caffeine
-Version:	58
+Version:	60
 Release:	%autorelease
 Summary:	Disable the screen saver and auto suspend in gnome shell
 

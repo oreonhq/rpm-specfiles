@@ -1,11 +1,11 @@
-%global source0_hash c7fe1ba37ec11ae35fa5c7fb9b5ba4633ca3ca0cf68b352705a3c96d3a278438
+%global source0_hash e43b74365631cab4f6d5e4228f812927efc9cb2c71e62976edcb252ee948d589
 
 %{!?_pkgdocdir:%global _pkgdocdir %{_docdir}/%{name}-%{version}}
 %global gem_name pathutil
 
 Name:		rubygem-%{gem_name}
-Version:	0.14.0
-Release:	20%{?dist}
+Version:	0.16.2
+Release:	1%{?dist}
 Summary:	Faster pure Ruby implementation of Pathname with extra bits
 
 License:	MIT

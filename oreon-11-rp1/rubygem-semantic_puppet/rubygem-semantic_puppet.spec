@@ -1,12 +1,12 @@
-%global source0_hash 52d108d08e1a5d95c00343cb3a4936fb1deecff2be612ec39c9cb66be5a8b859
+%global source0_hash 15ff5b48d7f856549eb66b927a8894d3668b211970c9d7dc07dd4db57f5c7a96
 
 %global gem_name semantic_puppet
 
 %global with_test 1
 
 Name:          rubygem-%{gem_name}
-Version:       1.1.0
-Release:       6%{?dist}
+Version:       1.1.1
+Release:       1%{?dist}
 Summary:       Useful tools for working with Semantic Versions
 License:       Apache-2.0
 URL:           https://github.com/puppetlabs/semantic_puppet

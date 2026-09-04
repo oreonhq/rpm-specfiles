@@ -1,9 +1,9 @@
-%global source0_hash 2082ad2c38f438aa89ddc3028d52b312e8242ad9e678b63c0af107746264c11d
+%global source0_hash 7bdb669eb8c1a2133fcf18970b3057921a47201eb71879b6413f41e1ad64afd8
 
 %bcond tests 1
 
 Name:           python-soupsieve
-Version:        2.8.3
+Version:        2.9.2
 Release:        %autorelease
 Summary:        CSS selector library
 

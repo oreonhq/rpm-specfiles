@@ -1,9 +1,9 @@
-%global source0_hash 39485aa5106e7319f7d09a407f25b6e8bc13d6ed73df95a2320db594a58a325f
+%global source0_hash 61cd2ed1c1da8916e2a5324ae5ab4a74d40ae3a91621616ad60181eb325fa000
 
 %global srcname wikitcms
 
 Name:           python-%{srcname}
-Version:        2.6.22
+Version:        2.6.23
 Release:        %{autorelease}
 Summary:        Fedora QA wiki test management Python library
 

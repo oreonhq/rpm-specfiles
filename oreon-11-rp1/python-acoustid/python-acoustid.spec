@@ -1,11 +1,11 @@
-%global source0_hash 5f4f487191c19ebb908270b1b7b5297f132da332b1568b96a914574c079ed177
+%global source0_hash bb0ecae40109c0aa80f709e33c66c83ec36b2fd84658f9fad056a34538f79e8a
 
 %global oname   pyacoustid
 
 Summary:        Python bindings for Chromaprint acoustic fingerprinting and the Acoustid API
 Name:           python-acoustid
-Version:        1.3.0
-Release:        12%{?dist}
+Version:        1.3.1
+Release:        1%{?dist}
 License:        MIT
 URL:            http://pypi.python.org/pypi/pyacoustid
 Source0:        https://files.pythonhosted.org/packages/source/p/%{oname}/%{oname}-%{version}.tar.gz

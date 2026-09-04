@@ -1,12 +1,12 @@
-%global source0_hash 6bcf8b0e656b6ae9977bdc1351ef211d0383252d2f759a59ef4bcf254542fc46
+%global source0_hash dcebf61c246f08e15a4de34e386ebe8233791e868564a470c3fe77c00eed5e56
 
 # Generated from mime-types-1.16.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mime-types
 
 Summary: The mime-types library provides a library
 Name: rubygem-%{gem_name}
-Version: 3.4.1
-Release: 9%{?dist}
+Version: 3.7.0
+Release: 1%{?dist}
 License: MIT
 URL: https://github.com/mime-types/ruby-mime-types/
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem

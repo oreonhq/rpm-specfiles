@@ -1,4 +1,4 @@
-%global source0_hash 60aa625068115a2879e4d5d3966cd9734a665e600797d1c6c2145e514f9d10b9
+%global source0_hash a478716a9cc813521fc2ad9ee000748543d7834bf874c2fc9c689607603ec8a7
 
 %global srcname pipdeptree
 
@@ -8,7 +8,7 @@ packages in form of a dependency tree. It works for packages installed\
 globally on a machine as well as in a virtualenv.
 
 Name:           python-%{srcname}
-Version:        2.30.0
+Version:        4.2.3
 Release:        %autorelease
 Summary:        Command line utility to show dependency tree of packages
 

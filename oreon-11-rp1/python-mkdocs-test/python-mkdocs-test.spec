@@ -1,10 +1,10 @@
-%global source0_hash f4f3463a3c80d4998917101d38a1dae62913b60ba8603ebc21440876c939d526
+%global source0_hash cd99604f4f654c387bb473ad37a81673a95a71878de69d1e1587f49cdee9d7a3
 
 %bcond tests 1
 %global forgeurl https://github.com/fralau/mkdocs-test
 
 Name:           python-mkdocs-test
-Version:        0.5.3
+Version:        0.6.0
 Release:        %autorelease
 Summary:        Test framework for MkDocs projects
 

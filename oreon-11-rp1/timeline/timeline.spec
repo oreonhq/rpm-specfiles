@@ -1,13 +1,13 @@
-%global source0_hash 5c9e46bb79c52ed49a11e773c4164446d3f274814c5961a2e5fad75a680ac550
+%global source0_hash 7d6474d3e429ceceaa75fccc9191f663811ae53d0241f7107371432d11331ca2
 
 Name:		timeline
-Version:	2.11.0
-Release:	4%{?dist}
+Version:	2.12.0
+Release:	1%{?dist}
 Summary:	Displays and navigates events on a timeline
 
 License:	GPL-3.0-only
 URL:		http://thetimelineproj.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/thetimelineproj/%{name}-%{version}.zip
+Source0:	https://downloads.sourceforge.net/thetimelineproj/%{name}-%{version}.zip
 Source1:	timeline.desktop
 Patch0:		paths.patch
 BuildArch:	noarch

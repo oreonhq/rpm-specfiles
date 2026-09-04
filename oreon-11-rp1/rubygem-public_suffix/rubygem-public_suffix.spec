@@ -1,11 +1,11 @@
-%global source0_hash 26ee4fbce33ada25eb117ac71f2c24bf4d8b3414ab6b34f05b4708a3e90f1c6b
+%global source0_hash 1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
 
 # Generated from public_suffix-2.0.5.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name public_suffix
 
 Name: rubygem-%{gem_name}
-Version: 5.0.0
-Release: 8%{?dist}
+Version: 7.0.5
+Release: 1%{?dist}
 Summary: Domain name parser based on the Public Suffix List
 # MPLv2.0: %%{gem_instdir}/data/list.txt
 License: MIT AND MPL-2.0

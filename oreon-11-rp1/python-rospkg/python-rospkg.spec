@@ -1,10 +1,10 @@
-%global source0_hash 9341c8af5f547888ab484ee61b53d8447b6a52081222d2d5257757ab374c657f
+%global source0_hash 2c4109a02367d56b1e4ceeb86c6faed4bb423643580b3274fcaa2a22a1a3380a
 
 %global srcname rospkg
 
 Name:           python-%{srcname}
-Version:        1.6.0
-Release:        6%{?dist}
+Version:        1.6.1
+Release:        1%{?dist}
 Summary:        Utilities for ROS package, stack, and distribution information
 
 License:        BSD-3-Clause

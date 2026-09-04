@@ -1,4 +1,4 @@
-%global source0_hash 7ad5efc6813883e8d4753217ab8205e9ac73f5c60cdbf5305385f3306cebf025
+%global source0_hash 9e15717db526f71b95f236621a56946b99a9d7353ae03c987ccca13bbb2e3b7f
 
 Name:          buildstream-plugins
 Summary:       A collection of plugins for the BuildStream project
@@ -8,7 +8,7 @@ URL:           https://buildstream.build/
 BuildArch:     noarch
 ExcludeArch:   %{ix86}
 
-Version:       2.7.0
+Version:       2.8.0
 Release:       %autorelease
 Source0:       https://github.com/apache/buildstream-plugins/archive/%{version}/buildstream-plugins-%{version}.tar.gz
 

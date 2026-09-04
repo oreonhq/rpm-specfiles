@@ -6,7 +6,7 @@
 %bcond tests 1
 
 Name:           python-pygments
-Version:        2.19.1
+Version:        2.21.0
 Release:        %autorelease
 Summary:        Syntax highlighting engine written in Python
 

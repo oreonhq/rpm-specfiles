@@ -1,7 +1,7 @@
-%global source0_hash 8a1db8f51af79a63f999fad138af94def6742c5ff1519d0dc263f2af3903639b
+%global source0_hash cb51d235483ab63f0cc44d3c07ec28ddbd65e7e278891731ced380d9d4972c95
 
 Name:           python-exoscale
-Version:        0.16.1
+Version:        0.16.4
 Release:        1%{?dist}
 Summary:        Python bindings for Exoscale API
 

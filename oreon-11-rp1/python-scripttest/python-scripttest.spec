@@ -1,7 +1,7 @@
-%global source0_hash 4501effbc43f56a6bd004757109ac8d5ac65e5ff571b0cb1d7bf2126546dee53
+%global source0_hash 99c406d3ee3f8e0e9cf82de5d6735975e879354297b20aa782bed6b6db337cf5
 
 Name:           python-scripttest
-Version:        2.0.post1
+Version:        3.0
 Release:        %autorelease
 Summary:        Helper to test command-line scripts
 

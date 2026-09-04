@@ -1,13 +1,13 @@
-%global source0_hash 46ee5ac6a9552864ba2d447f87964dd3bd759ed8a7990bd28b1c404cdbdfe7ab
+%global source0_hash 0696eef10cbcbcfbf4c422d02ec31bb6d2f1245b5296a9def18eba5a59071830
 
 %global debug_package %{nil}
 
 Summary:       An additive synthesizer using JACK
 Name:          Add64
-Version:       3.9.3
-Release:       20%{?dist}
-URL:           http://sourceforge.net/projects/add64
-Source0:       http://downloads.sourceforge.net/project/add64/%{name}-%{version}.tar.bz2
+Version:       4.1.0
+Release:       1%{?dist}
+URL:           https://sourceforge.net/projects/add64
+Source0:       https://downloads.sourceforge.net/project/add64/%{name}-%{version}.tar.bz2
 Source1:       %{name}.desktop
 # icon taken from screenshot
 Source2:       add64.png

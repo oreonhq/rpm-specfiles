@@ -10,8 +10,8 @@ extensions, and UDF.
 
 Summary:        A pure python ISO9660 read and write library
 Name:           python-%{srcname}
-Version:        1.15.0
-Release:        6%{?dist}
+Version:        1.20.0
+Release:        1%{?dist}
 License:        LGPL-2.0-only
 URL:            https://github.com/clalancette/%{srcname}
 Source0:        https://github.com/clalancette/pycdlib/archive/refs/tags/v1.15.0.tar.gz#/pycdlib-1.15.0.tar.gz

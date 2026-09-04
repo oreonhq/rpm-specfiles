@@ -1,10 +1,10 @@
-%global source0_hash b2a4e61802e0a5518bc8293058adedbb6b0d51c08c125d1322b1af7c7cbca4c1
+%global source0_hash 2445f8b5bf87ba105d239cb230878646e29dbc6a6cae10037ba0550d8fe7fc73
 
 %global pypi_name Scrapy
 %global pkg_name scrapy
 Name:		python-scrapy
-Version:	2.14.1
-Release:	2%{?dist}
+Version:	2.18.0
+Release:	1%{?dist}
 Summary:	A high-level Python Screen Scraping framework
 # Automatically converted from old format: BSD - review is highly recommended.
 License:	LicenseRef-Callaway-BSD

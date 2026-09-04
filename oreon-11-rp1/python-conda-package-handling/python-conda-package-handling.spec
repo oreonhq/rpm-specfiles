@@ -1,11 +1,11 @@
-%global source0_hash a68d23d795704f1b687559b89c98e73d0dbebcab077592c60bffc1dc408b72e9
+%global source0_hash 348d1a92412c1d57c14fea0c6bc7f3c3223959020533b6a03bcce11303aaa798
 
 %?python_enable_dependency_generator
 %global srcname conda-package-handling
 %global pkgname conda_package_handling
 
 Name:           python-%{srcname}
-Version:        2.4.0
+Version:        2.6.0
 Release:        %autorelease
 Summary:        Create and extract conda packages of various formats
 

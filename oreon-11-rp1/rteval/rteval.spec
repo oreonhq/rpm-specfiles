@@ -1,8 +1,8 @@
-%global source0_hash 4f48cdbc04516592e659c40145b500cd25a0638a3d148e1722864e02522669d5
+%global source0_hash 5781ddc9de0557b60434dc903042798906ecb64a24ea8572cc152164c8e113f1
 
 Name:		rteval
-Version:	3.10
-Release:	5%{?dist}
+Version:	3.13
+Release:	1%{?dist}
 Summary:	Utility to evaluate system suitability for RT Linux
 
 Group:		Development/Tools

@@ -1,7 +1,7 @@
-%global source0_hash 94bc100c32862e09817f019fc9c44ded625fe52a5f338b3168117fcf84c178a7
+%global source0_hash 32877daad8301be0cae338ed799a65a0196d1cbee680453aecba9f79c89a9a54
 
 Name:           python-async-lru
-Version:        2.1.0
+Version:        2.3.0
 Release:        %autorelease
 Summary:        Simple lru_cache for asyncio
 # SPDX

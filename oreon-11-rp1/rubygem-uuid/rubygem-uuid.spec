@@ -1,10 +1,10 @@
-%global source0_hash 97da1c55aa3e14850e773c3638974b836ec3dd1095b70da3e41f903dac020113
+%global source0_hash aec0cf592053cd6e07c13c1ef94c440aba705f22eb1ee767b39631f2760124d7
 
 %global gem_name uuid
 
 Name:           rubygem-%{gem_name}
-Version:        2.3.7
-Release:        25%{?dist}
+Version:        2.3.9
+Release:        1%{?dist}
 Summary:        UUID generator based on RFC 4122
 
 # Automatically converted from old format: MIT or CC-BY-SA - review is highly recommended.

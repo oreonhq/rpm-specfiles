@@ -1,15 +1,15 @@
-%global source0_hash c78227427eb6b40499d657f2996ec6841f5135468693e55e3d2c976c706f86e4
+%global source0_hash 25825ef13f0b2e74694d769817dad6ab8e90131dabdaa666e522fea105521e78
 
 %global gem_name simplecov
 %global rubyabi 1.9.1
 
 Summary:       Code coverage analysis tool for Ruby 1.9
 Name:          rubygem-%{gem_name}
-Version:       0.13.0
-Release:       20%{?dist}
+Version:       1.1.1
+Release:       1%{?dist}
 License:       MIT
 URL:           http://github.com/colszowka/simplecov
-Source0:       http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:       https://rubygems.org/gems/%{gem_name}-%{version}.gem
 %if 0%{?fedora} >= 19 || 0%{?rhel} > 6
 Requires:      ruby(release)
 %else

@@ -1,10 +1,10 @@
-%global source0_hash a64b2bf2925bb995dc94acb6a82c51e916acb90e21c0f0cab48282f86378dbd1
+%global source0_hash 7f6c63ed762584ce55e5fa015f311adaf1a0d86b04973c988aabaea1a6adead6
 
 %global pypi_name sybil
 
 Name:           python-%{pypi_name}
-Version:        9.1.0
-Release:        6%{?dist}
+Version:        10.1.0
+Release:        1%{?dist}
 Summary:        Automated testing for the examples in your documentation
 
 License:        MIT

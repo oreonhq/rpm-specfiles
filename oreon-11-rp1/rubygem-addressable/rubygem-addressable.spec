@@ -1,11 +1,11 @@
-%global source0_hash 798f6af3556641a7619bad1dce04cdb6eb44b0216a991b0396ea7339276f2b47
+%global source0_hash 7fdf6ac3660f7f4e867a0838be3f6cf722ace541dd97767fa42bc6cfa980c7af
 
 # Generated from addressable-2.5.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name addressable
 
 Name: rubygem-%{gem_name}
-Version: 2.8.6
-Release: 8%{?dist}
+Version: 2.9.0
+Release: 1%{?dist}
 Summary: URI Implementation
 License: Apache-2.0
 URL: https://github.com/sporkmonger/addressable

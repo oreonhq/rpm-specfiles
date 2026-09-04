@@ -1,8 +1,8 @@
-%global source0_hash 02370e037950fee2e15f61d163b9b5c641e2438a4b110ff112f948ceff57d36a
+%global source0_hash 27b2e4f29bc64d202970fb359cde2dd2dd0edf9bb9fbbe6585449dd2da2182d9
 
 Name:           jfreechart
-Version:        1.5.4
-Release:        11%{?dist}
+Version:        1.5.6
+Release:        1%{?dist}
 Summary:        A 2D chart library for Java applications (JavaFX, Swing or server-side)
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+

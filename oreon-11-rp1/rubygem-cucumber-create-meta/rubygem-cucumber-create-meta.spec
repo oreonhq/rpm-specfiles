@@ -1,11 +1,11 @@
-%global source0_hash d117510c4b0da92cb76550e78046f8a2e965f7bf552d634c49b80d9b004566c4
+%global source0_hash f939306cf020b5522c390329705ea4249f54624c901e61a1fb86baaf0051dc48
 
 # Generated from cucumber-create-meta-6.0.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name cucumber-create-meta
 
 Name: rubygem-%{gem_name}
-Version: 6.0.1
-Release: 12%{?dist}
+Version: 6.0.4
+Release: 1%{?dist}
 Summary: Produce the meta message for Cucumber Ruby
 License: MIT
 URL: https://github.com/cucumber/create-meta-ruby

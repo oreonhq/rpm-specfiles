@@ -1,7 +1,7 @@
-%global source0_hash b3619436e1e1e3cba15856839666edcb769fce97b47f5bba5e2789b03eed3156
+%global source0_hash 0faeba6d5d5276d5b59ce71809b2f16d18a3d66b07791007714e09d60e8ad8ad
 
 Name:           python-bidict
-Version:        0.23.1
+Version:        0.24.1
 Release:        %autorelease
 Summary:        Bidirectional mapping library for Python
 

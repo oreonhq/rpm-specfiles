@@ -1,11 +1,11 @@
-%global source0_hash 7200a38a1c0081aa81b7a9757e7a299db75bc58cf1fd45ca7919a91627d227d6
+%global source0_hash 2430bec28fb0cebacb5875b1009cf9d8bc3c303ccb810c4c8b062a4b51457637
 
 # Generated from jbuilder-1.5.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name jbuilder
 
 Name: rubygem-%{gem_name}
-Version: 2.13.0
-Release: 3%{?dist}
+Version: 2.15.1
+Release: 1%{?dist}
 Summary: Create JSON structures via a Builder-style DSL
 License: MIT
 URL: https://github.com/rails/jbuilder

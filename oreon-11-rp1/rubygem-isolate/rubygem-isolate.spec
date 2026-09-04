@@ -1,11 +1,11 @@
-%global source0_hash c5998030cbe6baf07a0434294d5feb62c68f5d9147e3e99c3d02e45b46be813c
+%global source0_hash 4c5846c27c8250bfb2b924375d5ba1a48359d4d8ddd92db3faba3ea2ad7430ce
 
 %global	gem_name	isolate
 Summary:	Very simple RubyGems sandbox
 
 Name:		rubygem-%{gem_name}
-Version:	4.1.0
-Release:	3%{?dist}
+Version:	4.1.1
+Release:	1%{?dist}
 # SPDX confirmed
 License:	MIT
 URL:		http://github.com/jbarnette/isolate

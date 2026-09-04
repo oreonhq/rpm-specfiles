@@ -1,10 +1,10 @@
-%global source0_hash 3616ce99ccb242361ce7f2b19bf9ff3e6bc1d98b927c7edc29af8ca617ba6cd3
+%global source0_hash 9a8d484be2fd4096a0e90a0cd3e449a05bc3aa33f8ac9e4d6dcef6ac1455b6ec
 
 %global gem_name childprocess
 
 Name: rubygem-%{gem_name}
-Version: 4.1.0
-Release: 13%{?dist}
+Version: 5.1.0
+Release: 1%{?dist}
 Summary: A gem for controlling external programs running in the background
 License: MIT
 URL: http://github.com/enkessler/childprocess

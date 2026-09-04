@@ -13,7 +13,7 @@
 
 %global github_owner     php-cache
 %global github_name      integration-tests
-%global github_version   0.17.0
+%global github_version   2.0.0
 %global github_commit    eda2e6b8bc5abcd623c8047e2345cda38dd6479e
 
 %global composer_vendor  cache
@@ -32,7 +32,7 @@
 
 Name:          php-%{composer_vendor}-%{composer_project}
 Version:       %{github_version}
-Release:       13%{?github_release}%{?dist}
+Release:       1%{?github_release}%{?dist}
 Summary:       Integration tests for PSR-6 and PSR-16 cache implementations
 
 License:       MIT

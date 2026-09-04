@@ -1,4 +1,4 @@
-%global source0_hash 88727037138f759a3952f6391ae3751536f04ad8be6023607620ea49695a3a83
+%global source0_hash daece55f03d76d0674f481b0c1b73ad877229b721386a14adbe9c9991c9f3025
 
 %global pypi_name pluginlib
 %global sum  A framework for creating and importing plugins in Python
@@ -8,8 +8,8 @@ Pluginlib makes creating plugins for your project simple.
 %bcond_without python3
 
 Name:           python-%{pypi_name}
-Version:        0.9.4
-Release:        7%{?dist}
+Version:        0.11.0
+Release:        1%{?dist}
 Summary:        %{sum}
 
 License:        MPL-2.0

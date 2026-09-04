@@ -1,11 +1,11 @@
-%global source0_hash 195d87111a4f984b787fc076f7a4ad512791f0908a5a4c2a7a084ac059715201
+%global source0_hash 98652e80ecec143c60f78f0e6b341631ca9a7560edd8dddfc864c02902618a39
 
 %global modname DNS
 %global distname py3dns
 
 Name:               python3-py3dns
-Version:            4.0.0
-Release:            13%{?dist}
+Version:            4.0.2
+Release:            1%{?dist}
 Summary:            Python3 DNS library
 
 # Automatically converted from old format: Python - review is highly recommended.

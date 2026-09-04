@@ -1,4 +1,4 @@
-%global source0_hash 3a8f2de7fea9397ee6ea39a9ad4f7f242c1c044e498b7fca1c407f54ffcfd11a
+%global source0_hash df99eceb5702e71f2dadeabbe76ee33cd8c4107c5bfb665226e8ebc39bfb88fe
 
 # tests require a running Redis server
 %bcond tests 0
@@ -7,7 +7,7 @@
 %global modname django_redis
 
 Name:           python-%{pypi_name}
-Version:        6.0.0
+Version:        7.0.0
 Release:        %autorelease
 Summary:        Full featured redis cache backend for Django
 

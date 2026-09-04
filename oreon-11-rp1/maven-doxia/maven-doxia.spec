@@ -1,9 +1,9 @@
-%global source0_hash 46932b1aea6ee980aee484e96e4e9eedc0d2a7b192b9ed42b16a9903556fe96c
+%global source0_hash 92605d9a075cc6d2cf38a65464b39aba5079018c54bd7d9d25b935d5f009d4e9
 
 Name:           maven-doxia
 Epoch:          0
-Version:        2.0.0
-Release:        5%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Content generation framework
 License:        Apache-2.0
 

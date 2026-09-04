@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6aa15cf24e8a5c8fa178b902d73c6a16f9546157b701ec0c2321ebed576740f6
 
 %global upstream_name manpages-l10n
 
@@ -32,7 +32,7 @@ Name:           man-pages-l10n
 # Bumping epoch as a consequence of replacing man-pages-ru standalone package that has higher version (Obsoletes/Provides not needed)
 # This is part of the Fedora 39 Change: https://fedoraproject.org/wiki/Changes/ManPagesRuRetirement
 Epoch:          3
-Version:        4.29.1
+Version:        4.31.0
 Release:        %autorelease
 Summary:        Translated man pages from the Linux Documentation Project and other software projects
 

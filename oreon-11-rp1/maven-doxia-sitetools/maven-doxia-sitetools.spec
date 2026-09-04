@@ -1,12 +1,12 @@
-%global source0_hash 97e7d88575b0918ed257c4e25be274d430e8573d3b92b38a1f4378bc19bbc085
+%global source0_hash 8454eea04a7f19865c4c7204335e7ac86796066581f3acb581a7d3837fd68193
 
 # Break a circular dependency:
 # maven-doxia-sitetools -> l10n-maven-plugin -> maven-reporting-impl
 %bcond bootstrap 0
 
 Name:           maven-doxia-sitetools
-Version:        2.0.0
-Release:        5%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Doxia content generation framework
 License:        Apache-2.0
 URL:            https://maven.apache.org/doxia/

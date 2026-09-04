@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 692a6c7307a60bfd4320459351983ea81cfff35b6badc80fc895f5bed288446e
 
 %{?python_enable_dependency_generator}
 
 Name:           pywbem
-Version:        1.7.3
+Version:        1.10.0a0
 Epoch:          1
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        Python WBEM client interface and related utilities
 License:        LGPL-2.1-or-later
 URL:            https://github.com/pywbem/pywbem

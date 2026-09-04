@@ -1,9 +1,9 @@
-%global source0_hash a8f1dd2902d01ba5d9de15f698cb3944c54e1029c0e3c881f85ed3a38afd3602
+%global source0_hash d716a01b585d00f1a87cbd2c37be06af5df2828d96566e0d3b01acfd2613f57f
 
 %global srcname colcon-core
 
 Name:           python-%{srcname}
-Version:        0.20.1
+Version:        0.21.1
 Release:        1%{?dist}
 Summary:        Command line tool to build sets of software packages
 
