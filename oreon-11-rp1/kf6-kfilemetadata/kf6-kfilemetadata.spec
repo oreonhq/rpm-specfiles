@@ -1,4 +1,4 @@
-%global source0_hash 015be4aa6986642d3f13903b47c1aae7183d3218888dc4353afe1b1e9dd64c1e
+%global source0_hash c8a4bbbb3e6876caa9357a151afbd66e06336f7a4a27b54a94497cf4cafa96ac
 
 %global framework kfilemetadata
 

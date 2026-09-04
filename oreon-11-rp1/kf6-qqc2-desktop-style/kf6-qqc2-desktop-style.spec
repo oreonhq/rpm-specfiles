@@ -1,4 +1,4 @@
-%global source0_hash 8748d01f401cb16a34adbdf568b2bde2cc1820f82c38249fdec11b66d9da97d1
+%global source0_hash dfb815380b4297c28ef9e4bc8e3ab350b6fbf7b78e0677c3e2e3d4ca319ae336
 
 %global framework qqc2-desktop-style
 

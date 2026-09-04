@@ -1,4 +1,4 @@
-%global source0_hash 91808c6de080ab5b506721c1f78ad5772bcb1f70bba7262c275ccd98de8b6b38
+%global source0_hash 87014461a9a8ae8f110864a9ccd3002080fe395b5ff164b11f0c6ed01f1c426b
 
 %undefine __cmake_in_source_build
 %global framework kimageformats

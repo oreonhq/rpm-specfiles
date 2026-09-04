@@ -1,4 +1,4 @@
-%global source0_hash 8aa9cbc36139adfa8e3b2c744cc94714afe154d21cef8a3a2d5f4d311be7cc3c
+%global source0_hash b039608f79f445a6ccc383ce57bd240699e334613814374006c8a01dc6bc1250
 
 %global framework kcompletion
 

@@ -1,4 +1,4 @@
-%global source0_hash d7f4048860ef00bc5d135e284dc6b1307d03199c2c13020994b17e38e3741f5c
+%global source0_hash 9e9ec69110c2427a262c9afb0fc46a8bea7387a8386d7b51b80a9805b8327aa4
 
 %global framework kbookmarks
 

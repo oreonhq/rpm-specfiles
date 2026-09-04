@@ -1,4 +1,4 @@
-%global source0_hash 5adbdf9c82b1ecbb92bda6498ea1b8f88c08f9ec57dbff70d582e2453bf16b12
+%global source0_hash d2717dcf501707b14736faecf7a2d3381f09fc3e4b7a1b77fc298e4aa9f8368e
 
 %global		framework kwindowsystem
 

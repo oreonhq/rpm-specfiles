@@ -1,4 +1,4 @@
-%global source0_hash fbdbab6dfdc16be97440a6e8032f30d1571eb72489c3d36801df6fb419dd4563
+%global source0_hash 379d6b0fa84eb9614f7677e93b43c5ff52481e19ac83a7a158233810a39e75a7
 
 %global framework kparts
 

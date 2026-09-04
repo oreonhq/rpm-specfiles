@@ -1,4 +1,4 @@
-%global source0_hash a13fcc9c861a90a540e5f93028fa7fae48f4c8643dadd287f3d54f5f24fab3da
+%global source0_hash 062cdb2ed80ee1fdba5dddd3e267f90259460d1e91871d340da80c44ae458609
 
 %global framework kjobwidgets
 

@@ -1,4 +1,4 @@
-%global source0_hash 652e28562ed6798f834843b45f5cd3ea5833f0ee3c2607cfe3d021b57c6e7618
+%global source0_hash b980fc74c3657efb840322ef35956c0caec07d9efa576cd52d86488937dcc815
 
 %global		framework attica
 

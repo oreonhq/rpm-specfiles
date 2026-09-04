@@ -1,4 +1,4 @@
-%global source0_hash e5d3b284ccc907f190d3ab10995a0ae7fa0f505088acc69edc7adfcc6a8140d6
+%global source0_hash 883e0139fcbc692070287e47de5368c78eb91c8bdbb52fb6f8398183f6aace8f
 
 %global framework knotifications
 

@@ -1,4 +1,4 @@
-%global source0_hash 742891c3c1dfcd6c9eaa2b1664cfe7e9b311187eec7ecd9d8812829dce8485c9
+%global source0_hash 4af60497e5331b41a3b34e194c1fb4293cd5eae7b50b5ecf5959a9718b223b47
 
 %global framework modemmanager-qt
 

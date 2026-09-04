@@ -1,4 +1,4 @@
-%global source0_hash f4fe731aad56ae010c2b42f2bd56d4499339bb0839ae2251035132f1a3708df2
+%global source0_hash c48b0c7a06bbcc27e181d9d6f7aeafc2c8bcd4d828497a1e4ddeb252f6fd9674
 
 %global		framework kdnssd
 

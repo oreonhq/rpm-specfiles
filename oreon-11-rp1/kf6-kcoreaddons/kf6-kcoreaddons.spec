@@ -1,4 +1,4 @@
-%global source0_hash a713febee2f43bc31986d6c27d846ccab556fc7bc7c1919c3a662495720b431a
+%global source0_hash 771f7fee754a356fa284d0ad7b8b159b890cbbfac082e49ce441b43d4943027e
 
 %global		framework kcoreaddons
 

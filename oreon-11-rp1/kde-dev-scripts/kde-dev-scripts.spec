@@ -1,4 +1,4 @@
-%global source0_hash 4697a368b66c292cb7d1c8a91b8e851cdd0b61a4e64bbfab0471f75c518a4d1f
+%global source0_hash 4c962c5377c136dd551b822f96c997e0d93b02237381f5f695e7a974824271dd
 
 %global stable_kf6 stable
 

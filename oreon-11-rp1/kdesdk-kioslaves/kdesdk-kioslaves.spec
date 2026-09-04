@@ -1,4 +1,4 @@
-%global source0_hash e73cff30b504240ce0257326aa376ad7473cbc25f195bb92f383c78dd8ca8268
+%global source0_hash bf2b24006229689a38be796d67590efa5677d6ee4439351919fd6071c30166f2
 
 %undefine __cmake_in_source_build
 %global base_name kdesdk-kio

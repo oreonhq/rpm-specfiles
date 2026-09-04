@@ -1,4 +1,4 @@
-%global source0_hash dc479d74def4e2d3e96f320f19285dcf88ec3ec6d39229f14ecb362983e305bd
+%global source0_hash 30e59a8f2c592177b255034c6320da9f3211377e97a8fdbe16be8bef3a356567
 
 %global framework knewstuff
 

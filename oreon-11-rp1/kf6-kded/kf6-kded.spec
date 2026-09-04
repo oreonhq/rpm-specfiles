@@ -1,4 +1,4 @@
-%global source0_hash 31ba5c920b199dd13fff634001d22c993df3d639a8df989e0a55ec1d13a8279f
+%global source0_hash cb0d1ebc1e96cd90dbd6733e875e1f66e6d99fad9c40cbd3c41c5c3b3e11b882
 
 %global framework kded
 

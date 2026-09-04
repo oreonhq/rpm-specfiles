@@ -1,4 +1,4 @@
-%global source0_hash 5d5d293cbaefc1d3074f3d3860cea0e55fc0d776b471e0f65744dcaa04b793b7
+%global source0_hash 5a88985dc522ca3287f13ed989609a93871996d4e8c5b0a41594e2d3a2fe8f2a
 
 Name:           plasma-pass
 Version: 1.3.1

@@ -1,4 +1,4 @@
-%global source0_hash d9151195b748361a12d7aeafd8df531d2f45b55d202d7fa5f47c3a11d59877d6
+%global source0_hash 0ebde9435d0c0badecec2f96daef972de7b5600d92dddbfc1f5f81c01cfff87c
 
 %global framework kservice
 

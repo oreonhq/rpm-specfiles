@@ -1,4 +1,4 @@
-%global source0_hash d580e6038ab3fb8a8755c953abd27a55894c2ae05e72cdef9bca1cf4e265a325
+%global source0_hash 1c9cf9e9d286c1682cecba41d2a44898009da3d01d54c3403c40c4868d8c19dc
 
 %global framework ksvg
 

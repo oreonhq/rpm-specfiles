@@ -1,4 +1,4 @@
-%global source0_hash 7fdc1db8a5b4c41c7b7487e5e45bc68b0c56a45f182a6362d8bd55ae5f5cc474
+%global source0_hash be01225efe9063e4c4a23dae47ebafed437f1cd06d73ab2de77dfb99e35785b8
 
 %global framework frameworkintegration
 

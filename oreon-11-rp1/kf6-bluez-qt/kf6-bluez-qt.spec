@@ -1,4 +1,4 @@
-%global source0_hash ae4410142170e84df104ef9723c7307de1d5ab68b2874c4ccdb0af99e00ae806
+%global source0_hash 15e2ae85d0e3e205cd17c3c5f079d2263abc4a341fbf223b2561510f69382a2b
 
 %global framework bluez-qt
 

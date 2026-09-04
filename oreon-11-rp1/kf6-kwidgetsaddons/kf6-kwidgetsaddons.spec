@@ -1,4 +1,4 @@
-%global source0_hash 6bb6a22e40bc8cfaeda08276b771488294ad417e7802b27bdc455202afdabd7d
+%global source0_hash 76285d03cdc06f0647afbbc89f31ab5aa766cbc3c6eb177e3f8a0441444e3068
 
 %global		framework kwidgetsaddons
 

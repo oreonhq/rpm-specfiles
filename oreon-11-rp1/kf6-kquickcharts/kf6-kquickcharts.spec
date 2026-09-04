@@ -1,4 +1,4 @@
-%global source0_hash c5d361d90861b4cd3db861568da5279ae2b1cb953e874126c15abbd7138378e5
+%global source0_hash a72a2188605ad765b0f3dd5aae2c9c8863fa0b27a0010a0a7756f92cff53d380
 
 %global		framework kquickcharts
 

@@ -1,4 +1,4 @@
-%global source0_hash 9afe5ca9d1c4bd06479b2619326ec6f1e3c3998859dceaae3da9a4b7318d5a21
+%global source0_hash 762943ea8eff8c27a5b89bc483aef0af5955b716270b0820e0addae2c38392a6
 
 %global framework kcmutils
 

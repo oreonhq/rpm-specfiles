@@ -1,4 +1,4 @@
-%global source0_hash edf83069f25f8edf759d07502a6f8302c8c064cd562651deedefe6393fefcace
+%global source0_hash 233de4cd2fef5b7b4ce1e317196407d25300b767614a93e160b45ac34710223d
 
 %global framework kiconthemes
 

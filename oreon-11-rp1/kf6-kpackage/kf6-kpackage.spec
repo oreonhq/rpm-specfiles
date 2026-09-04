@@ -1,4 +1,4 @@
-%global source0_hash 2d04bcbc3492229cfc240884b04e7b220fa2022019c8f9d87f9f7814ea94c382
+%global source0_hash aee3405475bfed6187abc483df6baf48e89b2b2505ee0acc1c8d37728fb9c786
 
 %global framework kpackage
 

@@ -1,4 +1,4 @@
-%global source0_hash 94ff8745ce65507986a05bffbab905bfd894936e8f53b4b6e2d9b3a96cb2d6f4
+%global source0_hash a3d2de669bfad5de3f86cc8c6448a02f7567e4ad04aa6099ccfaa2df5f07e8f8
 
 %global framework	kdbusaddons
 

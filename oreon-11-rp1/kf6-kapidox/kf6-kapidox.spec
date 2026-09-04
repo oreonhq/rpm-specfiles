@@ -1,4 +1,4 @@
-%global source0_hash b105b6e2457491969019a4d87e98c03accf07148dc56e26210372d59aa9a4488
+%global source0_hash 838d31fa327b6a4ea502536b60f2b2a42f08ef5383248c0c32d481bc01a44725
 
 %global framework kapidox
 

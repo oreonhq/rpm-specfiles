@@ -1,4 +1,4 @@
-%global source0_hash 2b474a0a0ca1d59111ab864d4f05100e0056b5204d52dfbab6776ca0fbfdd402
+%global source0_hash 9e6355cf1264756d3b38254181e46e3103e531f0f1613ae1c158d4f9e541576e
 
 %global		framework kitemviews
 

@@ -1,4 +1,4 @@
-%global source0_hash ddcc14c0c40e24f4c0dc04246b87d11b650e6fd8be2cb00e4f2cc2ee9e605702
+%global source0_hash decb363261fe5f6df984fa0cfa42243aca9eea352045b18ffe1b86a0bd5b1736
 
 %global framework kcrash
 

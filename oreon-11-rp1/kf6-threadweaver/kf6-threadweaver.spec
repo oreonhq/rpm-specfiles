@@ -1,4 +1,4 @@
-%global source0_hash ab4a7e1a2ff4ee9e3ebb73097fb93beda6857f08d1c4ab7d15af17c383ffaf7e
+%global source0_hash 0d61797f9400acea7c94a0998e21954685f2de0b2c57760b85186560819fd5cc
 
 %global framework threadweaver
 

@@ -1,4 +1,4 @@
-%global source0_hash b40c195ba7e6674898a64f4e3e25e0235dd79682f39395409469274acb580ac0
+%global source0_hash 71f4b08dfa993a1cfaccee004401234ba21754d48955733fc9be13ccc940b444
 
 %global framework kglobalaccel
 

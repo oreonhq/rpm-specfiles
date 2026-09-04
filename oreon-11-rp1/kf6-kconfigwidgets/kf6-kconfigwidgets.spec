@@ -1,4 +1,4 @@
-%global source0_hash f795386fb06b8922325075a8fa9f817c3d25e04bbfdcf60b13ad714c7c54e987
+%global source0_hash 449d7b4df04209669b8ad00c74fbf7e0d14cb103fbfa12a642995057cc56b35d
 
 %global framework kconfigwidgets
 

@@ -1,4 +1,4 @@
-%global source0_hash a5bcf11a6cbca46d4bf83399fe9c0c3c9aaf228be81b05ba966a4ba51256fd0a
+%global source0_hash cb8900532f6c1ba6a4711b3d98e4d2b1c23bf2deb5588262f35554344fe574ca
 
 %global framework kpeople
 

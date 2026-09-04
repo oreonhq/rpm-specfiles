@@ -1,4 +1,4 @@
-%global source0_hash f46aeca80707e774fcffe8aa82e464a81056ce84f613347a5c9cc24c1c9a8432
+%global source0_hash 6d0c4a4ddc7d4833ae537b1bf146896beba76135ec4b8bcf2a9525e33e39b3a4
 
 %global 	framework kguiaddons
 

@@ -1,4 +1,4 @@
-%global source0_hash 024914031fba7a9b79982d02736b21399d9a0d09ad81323d58e17d6b2216c7b0
+%global source0_hash 1e1cb8bbf53e4f0482a916e1db9e202c8a8e8f4f2264dbcf98e837876ef83fae
 
 %global framework kdoctools
 

@@ -1,4 +1,4 @@
-%global source0_hash 9af5746db7e25e2aac69c19a9cc9758fc7e7b4cbbcf2b6b6a6c93bd7c642e80f
+%global source0_hash 9c128248f6259ed8f6be8ab9fd670ab10efa9ab6b500429b98f7df25d169c312
 
 %global framework kdesu
 

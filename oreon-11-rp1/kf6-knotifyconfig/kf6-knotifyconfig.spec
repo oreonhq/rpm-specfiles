@@ -1,4 +1,4 @@
-%global source0_hash 142cb399c5b55ed0d85f752f8fbb3db3f5930cbfa09737fdb17af6c2dfa073f6
+%global source0_hash f0e75a0fa498fb0eccd5540257177e47da212095eb0b5ed4fc66935d42375b4e
 
 %global framework knotifyconfig
 

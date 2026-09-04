@@ -1,4 +1,4 @@
-%global source0_hash 595135e16456ed2e86ebdf6919b181426cea2e7449ed7d32905dac52050d22de
+%global source0_hash b2c9375edc219425b2ffc90b443e686fc48699a0ee0408b6a4e55a5f345dde2e
 
 %global framework kstatusnotifieritem
 

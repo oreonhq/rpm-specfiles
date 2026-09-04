@@ -1,4 +1,4 @@
-%global source0_hash fb4d90ee46a2f6202e53cdd5af8f77069c380955e3f340881f2f36ec8312079b
+%global source0_hash 40a7ec156aa1842216e1377b327efe173a737c0e6434b1dda66d2b098a307824
 
 %global framework kauth
 

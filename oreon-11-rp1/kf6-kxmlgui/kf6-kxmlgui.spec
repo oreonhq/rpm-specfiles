@@ -1,4 +1,4 @@
-%global source0_hash e40b86ebb9f1be00255cd4835ab0b0ac8650c47d0eb17a47d9df7d4b5658df58
+%global source0_hash 3e143362bf0f646cecf39fc0a59eb322de7fd8379966ae46eeecf41e4cf2719b
 
 %global framework kxmlgui
 

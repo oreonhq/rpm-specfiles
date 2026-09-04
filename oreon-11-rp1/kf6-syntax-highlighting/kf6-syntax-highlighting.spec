@@ -1,4 +1,4 @@
-%global source0_hash b9d90a03b4e9a48170a14f7a4a79c44f0aae9f14e1b94b7b1fc75d5c3fb31d3a
+%global source0_hash 924c4cfab4043ede9a40bc55721a62515c7b83c6b84c0bdcc29cd3cdf89b09b4
 
 %global framework syntax-highlighting
 

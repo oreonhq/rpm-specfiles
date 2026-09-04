@@ -1,4 +1,4 @@
-%global source0_hash 988638fdf810d97d14144c2129655d9d0600006d7dcb06787b04c12d5269c969
+%global source0_hash 2051e7a9c357106617ae0c666d2c4331c59f3b07b54a55a1063e7af705d82100
 
 %global framework kdeclarative
 

@@ -1,4 +1,4 @@
-%global source0_hash c4c1fccbe6e04acc8d5891df4eca20a4b6be24c032a10e92839a41c1bb847cc4
+%global source0_hash 163129f8d3e768cd531d21277c7a643600634eb01a5ea275a9170cdef51ac125
 
 %global framework krunner
 

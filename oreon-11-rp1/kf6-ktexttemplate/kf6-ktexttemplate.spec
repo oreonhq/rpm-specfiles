@@ -1,4 +1,4 @@
-%global source0_hash a184163f7d5d2ac4cd4a71d04bee830020332552bfa9eb5159ced57b20edd527
+%global source0_hash 6ca3b4be8a76fff109297a5c6b1d23f5d55fa4b4110575d4c3287ee8b10619a9
 
 %global		framework ktexttemplate
 

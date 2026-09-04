@@ -1,4 +1,4 @@
-%global source0_hash 45de8138ead0f3ff24de886fbe61d588ecd7f66dde6f8cf6f2906279254d094d
+%global source0_hash 2948a313ffe35895b846dde5a93302a1fcd587ad8dfb860b8757629209586fe4
 
 # If KF7 still provides these icons, then their installation should then
 # be disabled in KF6 builds.

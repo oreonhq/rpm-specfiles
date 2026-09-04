@@ -1,4 +1,4 @@
-%global source0_hash 158f47746806c3dd87a09091eaa46ffee286cd658f9e26b4422656b66176627a
+%global source0_hash 9f06313cd7d6cdde8db43067126d650fc5cc904b6f0b89159274a03e4805a91a
 
 %global framework kio
 

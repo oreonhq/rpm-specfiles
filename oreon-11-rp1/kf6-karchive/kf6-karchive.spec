@@ -1,4 +1,4 @@
-%global source0_hash ff36137e6b171906b4bde4006558739c5d7771dc30b9a037b65e62b2674a1b13
+%global source0_hash 3d66cd9d71fbbebc3cea68757111002666b366898b01178b6fa7203715574287
 
 %global framework karchive
 
