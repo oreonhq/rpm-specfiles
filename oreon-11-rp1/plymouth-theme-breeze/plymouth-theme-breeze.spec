@@ -6,7 +6,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plymouth-theme-breeze
-Version: 6.6.4
+Version: 6.7.4
 Release: 1%{?dist}
 Summary: Breeze theme for Plymouth
 
@@ -55,4 +55,7 @@ install -D -m644 -p %{SOURCE10} \
 %{_prefix}/lib/dracut/dracut.conf.d/10-plymouth-theme-breeze.conf
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
+- Latest upstream release
+
 %autochangelog

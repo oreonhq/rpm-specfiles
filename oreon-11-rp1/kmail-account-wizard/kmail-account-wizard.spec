@@ -5,7 +5,7 @@ ExcludeArch: %{ix86}
 
 Name:    kmail-account-wizard
 Summary: KMail Account Wizard
-Version: 25.12.3
+Version: 26.08.0
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -78,4 +78,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
 %{_metainfodir}/org.kde.accountwizard.appdata.xml
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

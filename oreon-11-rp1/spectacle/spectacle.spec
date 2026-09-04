@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 Name:    spectacle
 Summary: Screenshot capture utility
 Epoch:   1
-Version:        6.7.4
+Version:        24.12.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.
@@ -142,6 +142,9 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.spectacle
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1:24.12.3-1
+- Latest upstream release
+
 * Fri Mar 27 2026 Steve Cossette <farchord@gmail.com> - 1:6.6.3-2
 - Readd the tesseract patch, upstream's patch aint working
 

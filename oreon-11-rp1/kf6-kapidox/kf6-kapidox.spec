@@ -7,7 +7,7 @@
 
 
 Name:    kf6-%{framework}
-Version: 6.28.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 4 scripts and data for building API documentation
 
@@ -74,6 +74,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 

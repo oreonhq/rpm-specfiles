@@ -1,7 +1,7 @@
 %global source0_hash fea7cd107ddc2199e8c104eba00eb8469ffaaccd67ce4e403917971d23e4c675
 
 Name:    kmailtransport
-Version: 26.04.3
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: The KMailTransport Library
 
@@ -85,5 +85,8 @@ find ./po -type f -name libmailtransport5.po -execdir mv {} libmailtransport6.po
 %files doc
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog
 

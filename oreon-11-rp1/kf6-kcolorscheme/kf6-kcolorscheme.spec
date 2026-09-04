@@ -7,7 +7,7 @@
 
 
 Name:    kf6-%{framework}
-Version: 6.28.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: Classes to read and interact with KColorScheme
 License: BSD-2-Clause and CC0-1.0 and LGPL-2.0-or-later and LGPL-2.1-only and LGPL-3.0-only and (LGPL-2.1-only OR LGPL-3.0-only)
@@ -63,6 +63,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

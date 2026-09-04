@@ -14,7 +14,7 @@ ExcludeArch: %{ix86}
 
 Name:    kwalletmanager5
 Summary: Manage KDE passwords
-Version: 26.04.3
+Version: 26.08.0
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -108,5 +108,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.kw
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
 - Import

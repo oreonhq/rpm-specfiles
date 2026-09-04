@@ -9,8 +9,8 @@
 
 Name:    akonadi-server
 Summary: PIM Storage Service
-Version: 26.04.3
-Release: 4%{?dist}
+Version: 26.08.0
+Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://invent.kde.org/pim/akonadi
@@ -262,6 +262,9 @@ fi
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-4
 - Remove RPM_BUILD_NCPUS and CMAKE_BUILD_PARALLEL_LEVEL OOM workarounds
 

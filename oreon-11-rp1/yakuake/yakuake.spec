@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    yakuake
-Version: 25.12.3
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: A drop-down terminal emulator
 
@@ -92,4 +92,7 @@ desktop-file-validate  %{buildroot}%{_kf6_datadir}/applications/org.kde.yakuake.
 %{_kf6_datadir}/dbus-1/services/org.kde.yakuake.service
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

@@ -14,7 +14,7 @@
 
 Name:    kf6-%{framework}
 Summary: Breeze icon theme library
-Version: 6.28.0
+Version: 6.29.0
 Release:        1%{?dist}
 
 # skladnik.svg is CC-BY-SA-4.0
@@ -198,6 +198,9 @@ gtk-update-icon-cache --force %{_datadir}/icons/breeze-dark &>/dev/null || :
 %endif
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
 

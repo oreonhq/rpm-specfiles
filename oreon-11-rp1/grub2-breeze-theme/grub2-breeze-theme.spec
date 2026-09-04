@@ -6,7 +6,7 @@
 ExcludeArch: %{ix86}
 
 Name:           grub2-breeze-theme
-Version: 6.6.4
+Version: 6.7.4
 Release: 1%{?dist}
 Summary:        Breeze theme for GRUB
 
@@ -61,4 +61,7 @@ find breeze/ -type f -and -not -iname \*.license -print0 \
 %{_grubthemedir}/breeze
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
+- Latest upstream release
+
 %autochangelog

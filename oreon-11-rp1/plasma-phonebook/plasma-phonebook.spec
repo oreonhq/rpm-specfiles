@@ -4,7 +4,7 @@
 
 
 Name:           plasma-phonebook
-Version: 26.04.3
+Version: 26.08.0
 Release: 1%{?dist}
 License:        CC0 and GPLv2 and GPLv3 and GPLv3+ and LGPLv2+
 Summary:        Convergent Plasma Mobile phonebook application
@@ -68,6 +68,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_qt6_plugindir}/kpeople/actions/phonebook_kpeople_plugin.so
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

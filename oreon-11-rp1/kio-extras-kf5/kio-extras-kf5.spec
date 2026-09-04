@@ -8,8 +8,8 @@
 %endif
 
 Name:    kio-extras-kf5
-Version: 24.02.2
-Release: 9%{?dist}
+Version: 26.08.0
+Release: 1%{?dist}
 Summary: Additional components to increase the functionality of KIO Framework
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -172,4 +172,7 @@ time make test -C %{_target_platform} ARGS="--output-on-failure --timeout 10" ||
 %{_kf5_libdir}/cmake/KioArchive/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

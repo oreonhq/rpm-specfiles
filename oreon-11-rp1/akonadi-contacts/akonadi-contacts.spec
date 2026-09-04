@@ -1,7 +1,7 @@
 %global source0_hash 575bb419a6bfde2bb3eaceda9636878492f8601fe87c767721f9cea5c250898f
 
 Name:    akonadi-contacts
-Version: 25.12.3
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: The Akonadi Contacts Library
 
@@ -90,4 +90,7 @@ find ./po -type f -name akonadicontact5-serializer.po -execdir mv {} akonadicont
 %{_qt6_docdir}/*.qch
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

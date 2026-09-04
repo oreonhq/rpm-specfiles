@@ -4,7 +4,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kirigami-gallery
-Version: 25.12.3
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: Gallery application built using Kirigami
 License: LGPL-2.1-or-later
@@ -68,4 +68,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kirigami2.gal
 %{_kf6_bindir}/kirigami2gallery
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

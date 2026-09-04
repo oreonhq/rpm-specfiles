@@ -7,8 +7,8 @@
 
 
 Name:    kf6-%{framework}
-Version: 6.28.0
-Release:        2%{?dist}
+Version: 6.29.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 integration module for global shortcuts
 
 # The following are in the LICENSES folder but go unused: LGPL-2.1-only, LGPL-3.0-only, LicenseRef-KDE-Accepted-LGPL
@@ -81,6 +81,9 @@ rm -fv %{buildroot}%{_prefix}/lib/systemd/user/plasma-kglobalaccel.service
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

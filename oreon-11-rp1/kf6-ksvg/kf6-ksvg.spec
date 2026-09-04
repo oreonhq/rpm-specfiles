@@ -13,8 +13,8 @@
 
 Name:    kf6-ksvg
 Summary: Components for handling SVGs
-Version: 6.28.0
-Release:        2%{?dist}
+Version: 6.29.0
+Release:        1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -74,6 +74,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
 - aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
 

@@ -7,8 +7,8 @@
 
 
 Name:    kf6-%{framework}
-Version: 6.28.0
-Release:        2%{?dist}
+Version: 6.29.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 2 solution with abstraction for system notifications
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -80,4 +80,7 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 %autochangelog

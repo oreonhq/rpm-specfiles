@@ -7,7 +7,7 @@
 
 
 Name:    kf6-%{framework}
-Version: 6.28.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 module to perform actions as privileged user
 # LGPL-2.0-or-later is also in the project's LICENSES, but is unused according to reuse.
@@ -71,6 +71,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

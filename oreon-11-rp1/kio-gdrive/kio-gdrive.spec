@@ -4,7 +4,7 @@
 
 
 Name:           kio-gdrive
-Version:        26.04.3
+Version:        26.08.0
 Release:        1%{?dist}
 Summary:        An Google Drive KIO slave for KDE
 
@@ -71,5 +71,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 %{_datadir}/purpose/purpose_gdrive_config.qml
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
 - Import

@@ -7,8 +7,8 @@
 %global framework kcontacts
 
 Name:    kf6-%{framework}
-Version: 6.28.0
-Release:        2%{?dist}
+Version: 19.08.3
+Release:        1%{?dist}
 Summary: The KContacts Library
 
 # The following licenses are present in LICENSES but go unused: BSD-3-Clause, MIT, Unicode-DFS-2016
@@ -92,5 +92,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %exclude %{_qt6_docdir}/*/*.index
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 19.08.3-1
+- Latest upstream release
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.26.0-1
 - Import

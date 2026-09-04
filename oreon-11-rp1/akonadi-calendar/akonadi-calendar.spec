@@ -4,7 +4,7 @@
 ExcludeArch: %{ix86}
 
 Name:    akonadi-calendar
-Version: 25.12.3
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: The Akonadi Calendar Library
 
@@ -116,4 +116,7 @@ find ./po -type f -name libakonadi-calendar5-serializer.po -execdir mv {} libako
 %{_qt6_docdir}/*.qch
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

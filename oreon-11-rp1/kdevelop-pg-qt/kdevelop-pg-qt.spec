@@ -3,7 +3,7 @@
 Name:           kdevelop-pg-qt
 Summary:        A parser generator
 Version:        2.4.0
-Release:        3%{?dist}
+Release:        1%{?dist}
 License:        LGPL-2.0-only AND GPL-3.0-or-later AND CC0-1.0 AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH Bison-exception-2.2) AND BSD-3-Clause
 URL:            http://techbase.kde.org/Development/KDevelop-PG-Qt_Introduction
 Source0:        https://download.kde.org/stable/kdevelop-pg-qt/%{version}/src/%{name}-%{version}.tar.xz
@@ -57,6 +57,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/cmake/KDevelopPGQt/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 2.4.0-1
+- Latest upstream release
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

@@ -1,7 +1,7 @@
 %global source0_hash 598a5f8f28785148c7e527802398011660dbd72e1c4c5628d291679069d00530
 
 Name:           plasma-settings
-Version: 26.04.3
+Version: 26.08.0
 Release: 1%{?dist}
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
 Summary:        Convergent Plasma Mobile settings application
@@ -71,6 +71,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.mo
 %{_kf6_datadir}/plasma-settings/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

@@ -10,8 +10,8 @@
 
 Name:           dolphin
 Summary:        KDE File Manager
-Version:        26.04.3
-Release:        4%{?dist}
+Version:        26.08.0
+Release:        1%{?dist}
 
 License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/system/dolphin
@@ -173,6 +173,9 @@ xvfb-run -a bash -c "%ctest" || :
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

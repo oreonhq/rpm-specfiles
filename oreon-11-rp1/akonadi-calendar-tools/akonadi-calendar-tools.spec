@@ -2,7 +2,7 @@
 
 Name:    akonadi-calendar-tools
 Summary: Akonadi Calendar Tools
-Version: 25.12.3
+Version: 26.08.0
 Release: 1%{?dist}
 
 # code (generally) GPLv2, docs GFDL
@@ -63,4 +63,7 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/konsolekalendar.d
 %{_kf6_datadir}/icons/hicolor/*/apps/konsolekalendar.*
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

@@ -1,7 +1,7 @@
 %global source0_hash ec67aad623d3d80bfad1157a7be863d8f7a0eed3e8c620c59c5cd7ff276bb76a
 
 Name:    kontactinterface
-Version: 26.04.3
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: The Kontact Interface Library
 
@@ -76,5 +76,8 @@ find ./po -type f -name kontactinterfaces5.po -execdir mv {} kontactinterfaces6.
 %files doc
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog
 

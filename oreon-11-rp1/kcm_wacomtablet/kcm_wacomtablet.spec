@@ -5,7 +5,7 @@ ExcludeArch: %{ix86}
 
 Name:    kcm_wacomtablet
 Summary: KDE Control module for Wacom Graphictablets
-Version: 6.6.4
+Version: 6.7.4
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -88,4 +88,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_qt6_plugindir}/plasma5support/dataengine/plasma_engine_wacomtablet.so
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
+- Latest upstream release
+
 %autochangelog

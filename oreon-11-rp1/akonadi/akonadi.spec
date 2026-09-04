@@ -11,8 +11,8 @@
 
 Summary: PIM Storage Service Libraries
 Name:    akonadi
-Version: 1.13.0
-Release: 131%{?dist}
+Version: 26.08.0
+Release: 1%{?dist}
 
 License: LGPL-2.0-or-later
 URL:     http://community.kde.org/KDE_PIM/Akonadi 
@@ -108,4 +108,7 @@ test "$(pkg-config --modversion akonadi)" = "%{version}"
 %{_datadir}/dbus-1/interfaces/org.freedesktop.Akonadi.*.xml
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

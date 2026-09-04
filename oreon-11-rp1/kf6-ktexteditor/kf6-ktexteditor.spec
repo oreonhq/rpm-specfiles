@@ -11,8 +11,8 @@
 %endif
 
 Name:    kf6-%{framework}
-Version: 6.28.0
-Release:        2%{?dist}
+Version: 6.29.0
+Release:        1%{?dist}
 Summary: KDE Frameworks 6 Tier 3 with advanced embeddable text editor
 
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND MIT
@@ -102,6 +102,9 @@ rm -f %{buildroot}%{_kf6_datadir}/katepart5/script/README.md
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
 - aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
 

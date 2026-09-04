@@ -7,7 +7,7 @@
 
 
 Name:		kf6-%{framework}
-Version:	6.28.0
+Version:	19.08.3
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 KCalendarCore Library
 License:	BSD-3-Clause AND LGPL-2.0-or-later AND LGPL-3.0-or-later
@@ -84,6 +84,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 19.08.3-1
+- Latest upstream release
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

@@ -2,7 +2,7 @@
 
 Name:    kglobalacceld
 Summary: Daemon providing Global Keyboard Shortcut functionality
-Version: 6.6.4
+Version: 6.7.4
 Release: 1%{?dist}
 
 License: CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -76,4 +76,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/cmake/KGlobalAccelD/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
+- Latest upstream release
+
 %autochangelog

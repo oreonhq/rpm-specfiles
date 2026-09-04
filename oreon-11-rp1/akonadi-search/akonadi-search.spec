@@ -1,7 +1,7 @@
 %global source0_hash 75eca6c38ab9db5882a6a72af0f2fe0f96d94864198b4a4cf89d774807121d09
 
 Name:    akonadi-search
-Version: 25.12.3
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: The Akonadi Search library and indexing agent
 
@@ -114,4 +114,7 @@ cd ../../..
 %{_qt6_docdir}/*.qch
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 %autochangelog

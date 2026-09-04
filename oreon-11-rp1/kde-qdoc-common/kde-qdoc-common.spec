@@ -2,7 +2,7 @@
 
 Name:           kde-qdoc-common
 Version:        1.0.0
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        Common files for KDE's API documentation (using QDoc)
 BuildArch:      noarch
 
@@ -45,4 +45,7 @@ rm -f LICENSES/LicenseRef-Qt-Commercial.txt
 %{_qt6_docdir}/kde-qdoc-common
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1.0.0-1
+- Latest upstream release
+
 %autochangelog

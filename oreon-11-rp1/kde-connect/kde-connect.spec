@@ -6,7 +6,7 @@
 %global base_name kdeconnect-kde
 
 Name:    kde-connect
-Version: 26.04.3
+Version: 26.08.0
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Summary: KDE Connect client for communication with smartphones
@@ -201,6 +201,9 @@ done
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
+- Latest upstream release
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

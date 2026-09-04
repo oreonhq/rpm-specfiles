@@ -9,8 +9,8 @@ ExcludeArch: %{ix86}
 Name:    gwenview
 Summary: An image viewer
 Epoch:   1
-Version: 26.04.3
-Release: 4%{?dist}
+Version: 26.08.0
+Release: 1%{?dist}
 
 # app + lib: GPL-2.0-or-later
 # lib/jlibjpeg: IJG
@@ -141,6 +141,9 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.gwenview.
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1:26.08.0-1
+- Latest upstream release
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-4
 - Rebuild
 

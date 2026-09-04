@@ -15,7 +15,7 @@
 
 Name:    extra-cmake-modules
 Summary: Additional modules for CMake build system
-Version: 6.28.0
+Version: 6.29.0
 Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
@@ -92,6 +92,9 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_vpath_builddir} ||:
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Wed Jun 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.27.0-1
 - 6.27.0
 

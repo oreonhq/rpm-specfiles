@@ -7,8 +7,8 @@
 %global majmin_ver_kf6 6.28
 
 Name:           kf6-%{framework}
-Version:        6.28.0
-Release:        2%{?dist}
+Version:        6.29.0
+Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for QtGui
 
 License:        LGPLv2+
@@ -82,6 +82,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/cmake/KF6ImageFormats/
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
 - Rebuild
 

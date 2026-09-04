@@ -7,8 +7,8 @@
 
 
 Name:    kf6-%{framework}
-Version: 6.28.0
-Release:        2%{?dist}
+Version: 6.29.0
+Release:        1%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -63,6 +63,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_plugindir}/kirigami/platform/org.kde.desktop.so
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
+- Latest upstream release
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-5
 - BR cmake(Qt6LinguistTools) for ecm_install_po_files_as_qm
 - Source URLs https

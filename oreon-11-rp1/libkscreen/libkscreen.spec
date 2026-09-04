@@ -6,7 +6,7 @@
 %global plasma_ver 6.7.4
 
 Name:           libkscreen
-Version:        %{plasma_ver}
+Version:        6.7.4
 Release: 1%{?dist}
 Summary:        KDE screen management library
 
@@ -88,6 +88,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
+- Latest upstream release
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-4
 - Package versioned .so, zsh completion; turn off QCH (no qt6 help install)
 

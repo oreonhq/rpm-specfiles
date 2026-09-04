@@ -11,8 +11,8 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-print-manager
 Summary: Printer management for KDE
-Version:        6.7.4
-Release: 2%{?dist}
+Version:        23.08.5
+Release: 1%{?dist}
 
 License: BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{base_name}
@@ -126,6 +126,9 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.Configure
 %{_kf6_qtplugindir}/plasma/applets/org.kde.plasma.printmanager.so
 
 %changelog
+* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 23.08.5-1
+- Latest upstream release
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 
