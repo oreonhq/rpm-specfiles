@@ -139,6 +139,8 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.ark.deskt
 %{_kf6_datadir}/icons/hicolor/*/apps/ark.*
 %{_mandir}/man1/ark.1*
 
+/usr/share/kconf_update/ark_move_dirhistory_to_state_config.py
+/usr/share/kconf_update/ark_move_dirhistory_to_state_config.upd
 %files libs
 %{_kf6_libdir}/libkerfuffle.so.*
 %{_kf6_plugindir}/parts/arkpart.so

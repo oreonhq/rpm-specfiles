@@ -32,6 +32,7 @@ Source11:       akonadiserverrc.sqlite
 %define mysql_conf_timestamp 20170512
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  python3-devel
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  desktop-file-utils
