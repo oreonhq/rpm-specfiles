@@ -14,7 +14,7 @@ Summary: A drop-down terminal emulator
 # KDE e.V. may determine that future GPL versions are accepted
 License: GPL-2.0-only OR GPL-3.0-only
 URL: https://kde.org/applications/system/org.kde.yakuake
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0: https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream fixes
 
@@ -92,7 +92,4 @@ desktop-file-validate  %{buildroot}%{_kf6_datadir}/applications/org.kde.yakuake.
 %{_kf6_datadir}/dbus-1/services/org.kde.yakuake.service
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
-- Latest upstream release
-
 %autochangelog

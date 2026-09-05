@@ -18,7 +18,7 @@ URL:     https://invent.kde.org/network/kio-extras
 
 %global srcname %{name}
 
-Source0: http://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{srcname}-%{version}.tar.xz
+Source0: https://download.kde.org/stable/release-service/%{version}/src/%{srcname}-%{version}.tar.xz
 
 ## upstramable patches
 
@@ -172,7 +172,4 @@ time make test -C %{_target_platform} ARGS="--output-on-failure --timeout 10" ||
 %{_kf5_libdir}/cmake/KioArchive/
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
-- Latest upstream release
-
 %autochangelog

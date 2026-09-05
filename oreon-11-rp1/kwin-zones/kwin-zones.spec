@@ -1,7 +1,7 @@
 %global source0_hash 25a66c7dad0dd0936b51d5aeff358d7664f549e264c2b7cd37c17cb26e8636a0
 
 Name:          kwin-zones
-Version:       1.0.12
+Version:       1.0.11
 Release:       1%{?dist}
 Summary:       Wayland ext-zones for KWin
 
@@ -58,7 +58,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_qmldir}/org/kde/zones/
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1.0.12-1
-- Latest upstream release
-
 %autochangelog

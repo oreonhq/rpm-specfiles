@@ -11,8 +11,8 @@ Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/system/wacomtablet
-Source0: http://download.kde.org/%{stable_kf6}/plasma/%{version}/wacomtablet-%{version}.tar.xz
-Source1: http://download.kde.org/%{stable_kf6}/plasma/%{version}/wacomtablet-%{version}.tar.xz.sig
+Source0: https://download.kde.org/stable/plasma/%{version}/wacomtablet-%{version}.tar.xz
+Source1: https://download.kde.org/stable/plasma/%{version}/wacomtablet-%{version}.tar.xz.sig
 
 ## upstream patches
 
@@ -88,7 +88,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_qt6_plugindir}/plasma5support/dataengine/plasma_engine_wacomtablet.so
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
-- Latest upstream release
-
 %autochangelog

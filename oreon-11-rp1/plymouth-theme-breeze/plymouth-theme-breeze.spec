@@ -14,8 +14,8 @@ Summary: Breeze theme for Plymouth
 License: GPL-3.0-only
 URL:     https://invent.kde.org/plasma/%{base_name}
 
-Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
+Source0: https://download.kde.org/stable/plasma/%{version}/%{base_name}-%{version}.tar.xz
+Source1: https://download.kde.org/stable/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
 
 Source10: plymouth-theme-breeze.conf
 
@@ -55,7 +55,4 @@ install -D -m644 -p %{SOURCE10} \
 %{_prefix}/lib/dracut/dracut.conf.d/10-plymouth-theme-breeze.conf
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
-- Latest upstream release
-
 %autochangelog

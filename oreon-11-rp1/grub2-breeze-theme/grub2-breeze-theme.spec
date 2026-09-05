@@ -13,8 +13,8 @@ Summary:        Breeze theme for GRUB
 License:        BSD-2-Clause AND CC-BY-SA-4.0 AND GPL-2.0-or-later WITH Font-exception-2.0 AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)
 URL:            https://invent.kde.org/plasma/%{base_name}.git
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/plasma/%{version}/%{base_name}-%{version}.tar.xz
+Source1:        https://download.kde.org/stable/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
 
 Source10: README.fedora
 
@@ -61,7 +61,4 @@ find breeze/ -type f -and -not -iname \*.license -print0 \
 %{_grubthemedir}/breeze
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.7.4-1
-- Latest upstream release
-
 %autochangelog

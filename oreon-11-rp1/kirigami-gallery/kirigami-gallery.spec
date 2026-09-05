@@ -10,7 +10,7 @@ Summary: Gallery application built using Kirigami
 License: LGPL-2.1-or-later
 URL:     https://apps.kde.org/en/kirigami2.gallery
 
-Source:  https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:  https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches
 
@@ -68,7 +68,4 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kirigami2.gal
 %{_kf6_bindir}/kirigami2gallery
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
-- Latest upstream release
-
 %autochangelog
