@@ -1,4 +1,4 @@
-%global source0_hash 04a4c1d1679b3ba6f9ff09d2f28ffb22faef458f38904b9222ef252b7e151258
+%global source0_hash a571d157d242b71560f46c30fc06e4b9de03065080caf0974da24b00e82d05a8
 
 %global         base_name breeze-grub
 

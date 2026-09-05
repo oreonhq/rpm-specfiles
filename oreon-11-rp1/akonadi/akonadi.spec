@@ -80,7 +80,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n akonadi-%{version}
 
 %build
-%cmake -DCMAKE_BUILD_TYPE:STRING="Release"
+%cmake -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
 
 %install
@@ -108,10 +108,4 @@ test "$(pkg-config --modversion akonadi)" = "%{version}"
 %{_datadir}/dbus-1/interfaces/org.freedesktop.Akonadi.*.xml
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1.13.0-1
-- Latest upstream release
-
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
-- Latest upstream release
-
 %autochangelog
