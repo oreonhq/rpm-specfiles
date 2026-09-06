@@ -400,7 +400,7 @@ basearch=sparc64
 sed -i '/^\# ifndef OPENSSL_NO_STATIC_ENGINE/i\
 # if %%{?with_engine:!__has_include(<openssl/engine.h>) &&} !defined(OPENSSL_NO_ENGINE)\
 #  define OPENSSL_NO_ENGINE\
-# endif' $RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration.h
+# endif' $RPM_BUILD_ROOT/usr/include/openssl/configuration.h
 
 %ifarch %{multilib_arches}
 # Do an configuration.h switcheroo to avoid file conflicts on systems where you
