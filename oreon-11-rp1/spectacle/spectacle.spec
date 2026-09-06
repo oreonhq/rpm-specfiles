@@ -24,8 +24,8 @@ URL:     https://www.kde.org/applications/graphics/spectacle/
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz.sig
 
 ## upstream patches
 

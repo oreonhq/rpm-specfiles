@@ -1,4 +1,4 @@
-%global source0_hash ebc481902d89c427da7bad85debb375cb00d92c1d881ba330bd9f1ab8cb37f92
+%global source0_hash b645d5d17c967fd09c3d7abdfc262740a95870dd66bd3e5f4c0382da097d8510
 
 %global framework kdav
 

@@ -1,4 +1,4 @@
-%global source0_hash 362c9d376c4ff451d42777f8f8f9f21f2042cecb117f1b5cf2da77b10a43c9df
+%global source0_hash 7ce707aa3609a318bd65533b3fc0a8cbcb1713372a8b769bf09876f51652686e
 
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")

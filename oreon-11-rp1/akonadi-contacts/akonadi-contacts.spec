@@ -1,4 +1,4 @@
-%global source0_hash 575bb419a6bfde2bb3eaceda9636878492f8601fe87c767721f9cea5c250898f
+%global source0_hash 0a05013b252b77f47c16ba1878e6d4a5f05dcc0a82cb98d7024f308ad8b5a349
 
 Name:    akonadi-contacts
 Version: 26.08.0

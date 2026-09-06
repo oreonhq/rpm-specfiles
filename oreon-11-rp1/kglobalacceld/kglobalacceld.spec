@@ -1,4 +1,4 @@
-%global source0_hash c0a7ebc420c11206ffc0bea1cc4b51654fc2d235b07ccb3c5f0ae9713049d12c
+%global source0_hash 538f883e7b04397d0c5b1756e750117022fe6a03a43ba890f65d62e2cf45e783
 
 Name:    kglobalacceld
 Summary: Daemon providing Global Keyboard Shortcut functionality

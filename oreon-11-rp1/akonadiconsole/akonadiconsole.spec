@@ -1,4 +1,4 @@
-%global source0_hash 1effdb62375b66435de8b75cfe1429eeda5facc546d9b192e8a8affeea216bba
+%global source0_hash b8f352fe688cca9dd5712238f44a8fc57878709bf280adee4ab38a3f9de1f54d
 
 Name:    akonadiconsole
 Summary: Akonadi developer tool

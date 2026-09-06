@@ -1,4 +1,4 @@
-%global source0_hash 7bad7bfc07672635ba0ead6ab66f031f2b3a800be021d5b0c069997cdc83f58b
+%global source0_hash 91c8df4def9631b119d5fcbdd0d98cb708ac2b18ceedaa2f42868f2fd8b2617c
 
 Name:    akonadi-mime
 Version: 26.08.0

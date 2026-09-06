@@ -1,4 +1,4 @@
-%global source0_hash a9aaf58f3b802c8341bba1ceb95054f915059ea447f59ffc7b933cca71b12ac9
+%global source0_hash 3adb4f9189b4b91d57b78d0a894868d8382451134bcfcc4f235027f23db13b3d
 
 # uncomment to enable bootstrap mode
 #global bootstrap 1
@@ -16,7 +16,7 @@ Summary: Additional components to increase the functionality of KIO Framework
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/network/kio-extras
 
-%global srcname %{name}
+%global srcname kio-extras
 
 Source0: https://download.kde.org/stable/release-service/%{version}/src/%{srcname}-%{version}.tar.xz
 

@@ -1,4 +1,4 @@
-%global source0_hash 3415a89bfc387e2de4a30f6e80f106d8c4a6a91013e5759b5167e0d11142af50
+%global source0_hash 2f5d2519ee3bb75e176c85087004a2e1fb993b644518afbcf3fe91a93b87d6f7
 
 Name:    akonadi-calendar-tools
 Summary: Akonadi Calendar Tools

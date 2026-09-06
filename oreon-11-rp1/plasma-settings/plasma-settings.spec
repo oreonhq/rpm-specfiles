@@ -1,4 +1,4 @@
-%global source0_hash 598a5f8f28785148c7e527802398011660dbd72e1c4c5628d291679069d00530
+%global source0_hash ee2e913bbb2117bb24aebcf60c0542d1f9df3f2f48c13e5463d92ce4b8f45ed1
 
 Name:           plasma-settings
 Version: 26.08.0

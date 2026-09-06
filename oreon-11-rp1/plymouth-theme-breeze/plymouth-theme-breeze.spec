@@ -1,4 +1,4 @@
-%global source0_hash 52a4ccb2af5d63c6d046c6208485118f8db51eaf51c6b875f73f266d39302f1a
+%global source0_hash 2fde45a96cfe1d730a4e99dcc891567197532d2184ec82c718d38892c739b6ac
 
 %global         base_name breeze-plymouth
 

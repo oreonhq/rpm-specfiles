@@ -1,4 +1,4 @@
-%global source0_hash 75eca6c38ab9db5882a6a72af0f2fe0f96d94864198b4a4cf89d774807121d09
+%global source0_hash 22cad63d16449f2496374edf866a38bd62187006d0835e3cd1df0e6333e4d61a
 
 Name:    akonadi-search
 Version: 26.08.0

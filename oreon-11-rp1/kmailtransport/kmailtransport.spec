@@ -1,4 +1,4 @@
-%global source0_hash fea7cd107ddc2199e8c104eba00eb8469ffaaccd67ce4e403917971d23e4c675
+%global source0_hash 76f24f7ffd037e431e8813cd4404d0f0b61c4a0c4fda18d92855a8cae7ea7706
 
 Name:    kmailtransport
 Version: 26.08.0

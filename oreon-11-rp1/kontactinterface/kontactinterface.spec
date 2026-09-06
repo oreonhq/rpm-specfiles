@@ -1,4 +1,4 @@
-%global source0_hash ec67aad623d3d80bfad1157a7be863d8f7a0eed3e8c620c59c5cd7ff276bb76a
+%global source0_hash 70e37fb8fd13a89e8f34ed34b69d8d7720d6e169d21f982dce4d77d8856951cd
 
 Name:    kontactinterface
 Version: 26.08.0
