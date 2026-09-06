@@ -130,11 +130,13 @@ popd
 %if %{with check}
 # Tests are randomly failing when run in parallel
 %global _smp_build_ncpus 1
-# aarch64 mock: torture_ssh_bind races and PTY default-mode CRLF does not always match what this OpenSSH snapshot does (check_channel_output sees 0 not 1)
+# The direct-tcpip server test requires a separately reachable test endpoint,
+# which is unavailable in the isolated build environment.  On aarch64 also
+# skip the known bind race and PTY/OpenSSH snapshot mismatch.
 %ifarch aarch64
-%ctest -E 'torture_forwarded_tcpip_callback|torture_request_pty_modes'
+%ctest -E 'torture_server_direct_tcpip|torture_forwarded_tcpip_callback|torture_request_pty_modes'
 %else
-%ctest
+%ctest -E 'torture_server_direct_tcpip'
 %endif
 %endif
 
