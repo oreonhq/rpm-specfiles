@@ -402,18 +402,18 @@ engine_condition='!__has_include(<openssl/engine.h>) && '
 %else
 engine_condition=''
 %endif
-sed -i "/^# ifndef OPENSSL_NO_STATIC_ENGINE/i\\# if ${engine_condition}!defined(OPENSSL_NO_ENGINE)\\n#  define OPENSSL_NO_ENGINE\\n# endif" "$RPM_BUILD_ROOT%{_includedir}/openssl/configuration.h"
+sed -i "/^# ifndef OPENSSL_NO_STATIC_ENGINE/i\\# if ${engine_condition}!defined(OPENSSL_NO_ENGINE)\\n#  define OPENSSL_NO_ENGINE\\n# endif" "$RPM_BUILD_ROOT%{_prefix}/include/openssl/configuration.h"
 
 %ifarch %{multilib_arches}
 # Do an configuration.h switcheroo to avoid file conflicts on systems where you
 # can have both a 32- and 64-bit version of the library, and they each need
 # their own correct-but-different versions of opensslconf.h to be usable.
 install -m644 %{SOURCE10} \
-	$RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration-${basearch}.h
-cat $RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration.h >> \
-	$RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration-${basearch}.h
+	$RPM_BUILD_ROOT%{_prefix}/include/openssl/configuration-${basearch}.h
+cat $RPM_BUILD_ROOT%{_prefix}/include/openssl/configuration.h >> \
+	$RPM_BUILD_ROOT%{_prefix}/include/openssl/configuration-${basearch}.h
 install -m644 %{SOURCE9} \
-	$RPM_BUILD_ROOT/%{_prefix}/include/openssl/configuration.h
+	$RPM_BUILD_ROOT%{_prefix}/include/openssl/configuration.h
 %endif
 ln -s /etc/crypto-policies/back-ends/openssl_fips.config $RPM_BUILD_ROOT%{_sysconfdir}/pki/tls/fips_local.cnf
 
