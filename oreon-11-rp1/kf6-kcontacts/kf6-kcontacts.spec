@@ -1,4 +1,4 @@
-%global source0_hash 389d6128f18bee9113844615f535eeb870605f6fce968ca5c18d85a22478b8a2
+%global source0_hash 08f8bfe83c5d4516b5c76877ac51aba8e7001242cd56d1e2a987bc8410af53fd
 
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.29

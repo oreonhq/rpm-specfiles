@@ -69,6 +69,8 @@ BuildRequires:  pkgconfig(shared-mime-info)
 BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtsvg-devel
+# ECM's KDEInstallDirs6 query requires the Qt 6 host qtpaths tool even for KF5 builds.
+BuildRequires:  qt6-qtbase-devel
 BuildRequires:  taglib-devel > 1.11
 BuildRequires:  zlib-devel
 

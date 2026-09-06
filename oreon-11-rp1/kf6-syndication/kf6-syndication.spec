@@ -1,4 +1,4 @@
-%global source0_hash 24db750155b69e3f858997cad0655a2f230f85d587c1063166113bc7690fd7b8
+%global source0_hash f5a00d13eaf0401e9e4f3ffccda4876e2bcf84fb8dc2613a5d087971b377df1f
 
 %global framework syndication
 

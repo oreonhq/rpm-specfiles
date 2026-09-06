@@ -109,7 +109,7 @@ cat baloo_file6.lang baloo_file_extractor6.lang \
 %{_kf6_bindir}/balooshow6
 %{_kf6_bindir}/balooctl6
 %{_kf6_datadir}/qlogging-categories6/%{framework}*
-
+/usr/share/config.kcfg/baloosettings.kcfg
 %files file -f %{name}-file.lang
 %config(noreplace) %{_kf6_sysconfdir}/xdg/autostart/baloo_file.desktop
 %{_userunitdir}/kde-baloo.service

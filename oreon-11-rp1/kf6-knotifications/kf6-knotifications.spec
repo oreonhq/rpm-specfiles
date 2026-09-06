@@ -58,11 +58,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
-%find_lang_kf6 knotifications6_qt
 # We own the folder
 mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 
-%files -f knotifications6_qt.lang
+%files
 %doc README.md
 %license LICENSES/*.txt
 %{_kf6_datadir}/qlogging-categories6/%{framework}.*

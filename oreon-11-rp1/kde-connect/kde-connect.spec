@@ -184,7 +184,8 @@ done
 %{_kf6_plugindir}/kfileitemaction/kdeconnectfileitemaction.so
 %{_kf6_plugindir}/kio/kdeconnect.so
 %{_qt6_archdatadir}/qml/org/kde/kdeconnect/
-
+/usr/share/remoteview/kdeconnect-network.desktop
+/usr/share/solid/actions/solid_kdeconnect.desktop
 %files -n kdeconnectd
 %{_kf6_libdir}/udev/rules.d/40-kdeconnect-uinput.rules
 %{_sysconfdir}/xdg/autostart/org.kde.kdeconnect.daemon.desktop

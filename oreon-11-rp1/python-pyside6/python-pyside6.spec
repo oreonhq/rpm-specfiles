@@ -1,24 +1,16 @@
-%global source0_hash none
-
-# Do not force clang as the C++ compiler for generated wrappers. Clang 16+ hits
-# -Wcast-function-type-mismatch on thousands of shiboken-generated PyMethodDef lines.
-# Libclang is still used for API parsing (LLVM_INSTALL_DIR / CMAKE_PREFIX_PATH).
-%global toolchain gcc
-
-%global _lto_cflags %{nil}
-%global _smp_mflags -j1
-%global __cmake_builddir b
+# explicitely set clang as toolchain to avoid gcc usage
+%global toolchain clang
 
 # needed to ship deploy_lib template files
 %global _python_bytecompile_errors_terminate_build 0
 
 %global pypi_name pyside6
 %global camel_name PySide6
-%global qt6ver 6.11.1
+%global qt6ver 6.11.2
 
 Name:           python-%{pypi_name}
-Version:        6.11.1
-Release:        25%{?dist}
+Version:        6.11.2
+Release:        1%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -29,20 +21,16 @@ Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name
 %global docs 0
 %global qt_module qtbase
 %global  majmin %(echo %{version} | cut -d. -f1-2)
-Source1:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
-# Optional doc-only qtbase submodule tarball when %%docs is enabled (see Fedora python-pyside6).
+#Source1:	https://download.qt.io/official_releases/qt/%{majmin}/%{qt6ver}/submodules/%{qt_module}-everywhere-src-%{qt6ver}.tar.xz
 
-# Shipped in SRPM (avoid src.fedoraproject.org fetch flakiness in mock)
-Patch0:        0001-Revert-Modify-headers-installation-for-CMake-builds.patch
-Patch1:        0001-Always-link-to-python-libraries.patch
-Patch2:        0001-Fix-installation.patch
-Patch3:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
-Patch4:         pyside6-create-object-directories.patch
+# Upstream post-6.11.1 fixes for header install paths (PYSIDE-3306)
+Patch:          0001-Fix-header-installation-path-to-follow-filesystem-st.patch
+Patch:          0001-Fix-header-packaging-and-include-path-regressions.patch
+Patch:          0001-Always-link-to-python-libraries.patch
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build
 BuildRequires:  gcc
-BuildRequires:  gcc-c++
 BuildRequires:  git
 BuildRequires:  clang-devel
 BuildRequires:  clang-tools-extra
@@ -124,7 +112,6 @@ BuildRequires:  cmake(Qt6Charts) >= %{qt6ver}
 BuildRequires:  cmake(Qt6SpatialAudio) >= %{qt6ver}
 BuildRequires:  cmake(Qt6DataVisualization) >= %{qt6ver}
 BuildRequires:  cmake(Qt6Graphs) >= %{qt6ver}
-BuildRequires:  qt6-qtgraphs-devel >= %{qt6ver}
 BuildRequires:  cmake(Qt6Bluetooth) >= %{qt6ver}
 BuildRequires:  cmake(Qt6WebChannel) >= %{qt6ver}
 %ifarch %{qt6_qtwebengine_arches}
@@ -137,7 +124,6 @@ BuildRequires:  cmake(Qt6WebView) >= %{qt6ver}
 %endif
 BuildRequires:  cmake(Qt6WebSockets) >= %{qt6ver}
 BuildRequires:  cmake(Qt6HttpServer) >= %{qt6ver}
-BuildRequires:  qt6-qthttpserver-devel >= %{qt6ver}
 BuildRequires:  cmake(Qt63DCore) >= %{qt6ver}
 BuildRequires:  cmake(Qt63DRender) >= %{qt6ver}
 BuildRequires:  cmake(Qt63DInput) >= %{qt6ver}
@@ -153,8 +139,7 @@ BuildRequires:  qt6-assistant >= %{qt6ver}
 BuildRequires:  qt6-designer >= %{qt6ver}
 BuildRequires:  qt6-doctools >= %{qt6ver}
 
-# Tests / configure use a headless Wayland compositor (xwayland-run provides wlheadless-run)
-BuildRequires:  xwayland-run
+# Tests use a fake graphical environment
 BuildRequires:  /usr/bin/wlheadless-run
 BuildRequires:  mesa-dri-drivers
 
@@ -166,8 +151,6 @@ provides access to the complete Qt 6+ framework.
 %package -n     python%{python3_pkgversion}-%{pypi_name}
 Provides:       python%{python3_pkgversion}-%{camel_name} = %{version}-%{release}
 Summary:        %{summary}
-Requires:       qt6-qtgraphs%{?_isa} >= %{qt6ver}
-Requires:       qt6-qthttpserver%{?_isa} >= %{qt6ver}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{camel_name}}
 
@@ -238,7 +221,6 @@ Summary: Qt API Documentation in HTML and QCH format
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n pyside-setup-everywhere-src-%{qt6ver}
 # https://build.opensuse.org/package/view_file/KDE:Qt6/python3-pyside6/python3-pyside6.spec?expand=1
 # Restore 6.6.1 RPATH value. rpmlint will complain otherwise
@@ -251,40 +233,10 @@ tar xf %{SOURCE1}
 %endif
 
 %build
-# Compile generated C++ with GCC. The %%toolchain macro is not always wired into
-# upstream CMake, so set CC/CXX explicitly (clang was producing -Wcast-function-type noise).
-export CC=%{_bindir}/gcc
-export CXX=%{_bindir}/g++
-# %%_lto_cflags is only part of the picture. Default %%{build_*flags} still carry
-# -flto=auto, and LTO plus Qt CMake -isystem wiring breaks #include_next from
-# libstdc++ cstddef to the compiler stddef.h. Strip LTO and force the gcc fixed-
-# header dir into both the environment and the CMake cache (Ninja ignores fresh
-# CXXFLAGS after configure unless the cache carries them).
-_gcc_incdir="$(%{_bindir}/gcc -print-file-name=include)"
-export CFLAGS="%{build_cflags}"
-export CXXFLAGS="%{build_cxxflags}"
-export LDFLAGS="%{build_ldflags}"
-CFLAGS="${CFLAGS//-flto=auto/}"; CFLAGS="${CFLAGS//-ffat-lto-objects/}"
-CXXFLAGS="${CXXFLAGS//-flto=auto/}"; CXXFLAGS="${CXXFLAGS//-ffat-lto-objects/}"
-LDFLAGS="${LDFLAGS//-flto=auto/}"; LDFLAGS="${LDFLAGS//-ffat-lto-objects/}"
-_incfix="-I${_gcc_incdir} -idirafter ${_gcc_incdir}"
-export CFLAGS="${_incfix} ${CFLAGS}"
-export CXXFLAGS="${_incfix} ${CXXFLAGS} -std=c++17"
-export C_INCLUDE_PATH="${_gcc_incdir}${C_INCLUDE_PATH:+:${C_INCLUDE_PATH}}"
-export CPLUS_INCLUDE_PATH="${_gcc_incdir}${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
-export CMAKE_BUILD_PARALLEL_LEVEL=1
-export NINJAFLAGS="-j1"
-export MAKEFLAGS=-j1
-export MAX_JOBS=1
-mkdir -p "$(pwd)/tmp-pyside6-build"
-export TMPDIR="$(pwd)/tmp-pyside6-build"
-
 # https://src.fedoraproject.org/rpms/polyclipping/c/02c70e17ef9e9fcdfbc65021418a3e332e465b20?branch=rawhide
 # Prior to Fedora 43, %%cmake set the nonstandard -DLIB_SUFFIX=... variable.
-# cmake %["%%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""]
-%cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
-    -DCMAKE_C_COMPILER:FILEPATH=%{_bindir}/gcc \
-    -DCMAKE_CXX_COMPILER:FILEPATH=%{_bindir}/g++ \
+# cmake %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""]
+%cmake_qt6 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
     -DCMAKE_BUILD_TYPE=None \
     -DSHIBOKEN_PYTHON_LIBRARIES=`pkgconf python3-embed --libs` \
     -DBUILD_TESTS=OFF \
@@ -297,24 +249,19 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
     -DFULLDOCSBUILD:BOOL=ON \
     -DDOC_OUTPUT_FORMAT=qthelp \
 %endif
-    -DNO_QT_TOOLS=yes \
-    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
-    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
-    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
-    -DCMAKE_MODULE_LINKER_FLAGS:STRING="${LDFLAGS}" \
-    -DCMAKE_SHARED_LINKER_FLAGS:STRING="${LDFLAGS}"
+    -DNO_QT_TOOLS=yes
 
 # Generate a build_history entry (for tests) manually, since we're performing
 # a cmake build.
 TODAY=$(date -Id)
 mkdir build_history/$TODAY
-echo $PWD/%{__cmake_builddir}/sources > build_history/$TODAY/build_dir.txt
-export PYTHONPATH=$PWD/%{__cmake_builddir}/sources
+echo $PWD/%{_vpath_builddir}/sources > build_history/$TODAY/build_dir.txt
+export PYTHONPATH=$PWD/%{_vpath_builddir}/sources
 
-%cmake_build -- -j1
+%cmake_build
 %if 0%{?docs}
 # build api documentation
-cd redhat-linux-build
+cd %{_vpath_builddir}
 ninja apidoc
 %endif
 
@@ -323,7 +270,7 @@ ninja apidoc
 %cmake_install
 %if 0%{?docs}
 # install api documentation
-cd redhat-linux-build
+cd %{_vpath_builddir}
 ninja apidocinstall
 %endif
 
@@ -331,8 +278,8 @@ ninja apidocinstall
 #
 # Copy CMake configuration files from the BINARY dir back to the SOURCE dir so
 # setuptools can find them.
-cp %{__cmake_builddir}/sources/shiboken6/shibokenmodule/{*.py,*.txt} sources/shiboken6/shibokenmodule/
-cp %{__cmake_builddir}/sources/pyside6/PySide6/*.py sources/pyside6/PySide6/
+cp %{_vpath_builddir}/sources/shiboken6/shibokenmodule/{*.py,*.txt} sources/shiboken6/shibokenmodule/
+cp %{_vpath_builddir}/sources/pyside6/PySide6/*.py sources/pyside6/PySide6/
 %{__python3} setup.py --qtpaths=/usr/%{_lib}/qt6/bin/qtpaths install_scripts --install-dir=%{buildroot}%{_bindir}
 for name in PySide6 shiboken6 shiboken6_generator; do
   mkdir -p %{buildroot}%{python3_sitearch}/$name-%{version}-py%{python3_version}.egg-info
@@ -355,7 +302,7 @@ mkdir -p %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
 mv %{buildroot}%{_bindir}/shiboken_tool.py %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
 
 # Install shiboken6
-mv redhat-linux-build/sources/shiboken6_generator/generator/shiboken6 %{buildroot}%{python3_sitelib}/shiboken6_generator
+mv %{_vpath_builddir}/sources/shiboken6_generator/generator/shiboken6 %{buildroot}%{python3_sitelib}/shiboken6_generator
 
 # Fix all Python shebangs recursively
 # -p preserves timestamps
@@ -419,5 +366,136 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %{_docdir}/
 %endif
 
+%global source0_hash none
+
 %changelog
-%autochangelog
+* Tue Aug 25 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.2-1
+- 6.11.2
+
+* Wed Jul 22 2026 Python Maint <python-maint@redhat.com> - 6.11.1-6
+- Rebuilt for Python 3.15.0b4 ABI change
+
+* Thu Jul 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 6.11.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_45_Mass_Rebuild
+
+* Mon Jun 08 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.1-4
+- Remove cmake config path sed and replace patches with upstream cherry-picks
+
+* Wed Jun 03 2026 Python Maint <python-maint@redhat.com> - 6.11.1-3
+- Rebuilt for Python 3.15
+
+* Thu May 14 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.1-2
+- Remove cmake config file fix
+
+* Wed May 13 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.1-1
+- Update to 6.11.1
+
+* Thu Apr 16 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.0-2
+- Restore shiboken6_generator
+
+* Wed Apr 15 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.0-1
+- Update to 6.11.0
+
+* Thu Apr 02 2026 Jan Grulich <jgrulich@redhat.com> - 6.10.3-1
+- 6.10.3
+
+* Tue Feb 10 2026 Jan Grulich <jgrulich@redhat.com> - 6.10.2-1
+- 6.10.2
+
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 6.10.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Tue Dec 02 2025 Jan Grulich <jgrulich@redhat.com> - 6.10.1-2
+- Fix cmake config files
+
+* Mon Dec 01 2025 Jan Grulich <jgrulich@redhat.com> - 6.10.1-1
+- 6.10.1
+
+* Sat Nov 22 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.2-4
+- Rebuild (qt6)
+
+* Tue Sep 30 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.2-3
+- Rebuild (qt6)
+
+* Fri Sep 19 2025 Python Maint <python-maint@redhat.com> - 6.9.2-2
+- Rebuilt for Python 3.14.0rc3 bytecode
+
+* Mon Sep 01 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.2-1
+- 6.9.2
+
+* Fri Aug 15 2025 Python Maint <python-maint@redhat.com> - 6.9.1-4
+- Rebuilt for Python 3.14.0rc2 bytecode
+
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 6.9.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Sun Jun 08 2025 Python Maint <python-maint@redhat.com> - 6.9.1-2
+- Rebuilt for Python 3.14
+
+* Fri Jun 06 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.1-1
+- 6.9.1
+
+* Tue Jun 03 2025 Python Maint <python-maint@redhat.com> - 6.9.0-2
+- Rebuilt for Python 3.14
+
+* Wed Apr 02 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.0-1
+- 6.9.0
+
+* Tue Mar 25 2025 Jan Grulich <jgrulich@redhat.com> - 6.8.2.1-3
+- Rebuild (qt6)
+
+* Sun Mar 16 2025 Marie Loise Nolden <loise@kde.org> - 6.8.2.1-2
+- fix build due to %cmake macro change after removal of -DLIB_SUFFIX in rawhide
+- prepare documentation build
+
+* Fri Feb 07 2025 Marie Loise Nolden <loise@kde.org> - 6.8.2.1-1
+- 6.8.2.1
+
+* Mon Feb 03 2025 Jan Grulich <jgrulich@redhat.com> - 6.8.1.1-3
+- Rebuild (qt6)
+
+* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 6.8.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Sun Jan 05 2025 Marie Loise Nolden <loise@kde.org> - 6.8.1-1
+- 6.8.1.1
+
+* Sun Dec 08 2024 Jan Grulich <jgrulich@redhat.com> - 6.8.0-2
+- Rebuild (qt6.8.1)
+
+* Tue Oct 15 2024 Jan Grulich <jgrulich@redhat.com> - 6.8.0-1
+- 6.8.0
+
+* Mon Oct 14 2024 Jan Grulich <jgrulich@redhat.com> - 6.7.2-5
+- Rebuild (qt6)
+
+* Fri Aug 09 2024 Federico Pellegrin <fede@evolware.org> - 6.7.2-4
+- Fix pyside6-tools dependencies on python3-pyside
+
+* Wed Jul 31 2024 LuK1337 <priv.luk@gmail.com> - 6.7.2-3
+- unbreak python console scripts
+
+* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 6.7.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sat Jul 06 2024 LuK1337 <priv.luk@gmail.com> - 6.7.2-1
+- 6.7.2
+
+* Tue Jun 18 2024 LuK1337 <priv.luk@gmail.com> - 6.7.1-3
+- fix Python 3.13 build
+
+* Sat Jun 08 2024 Python Maint <python-maint@redhat.com> - 6.7.1-2
+- Rebuilt for Python 3.13
+
+* Wed May 29 2024 LuK1337 <priv.luk@gmail.com> - 6.7.1-1
+- 6.7.1
+
+* Fri Apr 12 2024 Jan Grulich <jgrulich@redhat.com> - 6.7.0-1
+- 6.7.0
+
+* Sun Mar 24 2024 Marie Loise Nolden <loise@kde.org> - 6.6.2-2
+- add  -DFORCE_LIMITED_API=no for freecad building (thanks to nvwarr@hotmail.com) (in rhbz #2266591)
+- set toolchain to clang for correct build (rhbz #2271188)
+
+* Mon Feb 19 2024 Marie Loise Nolden <loise@kde.org> - 6.6.2-1
+- Initial package

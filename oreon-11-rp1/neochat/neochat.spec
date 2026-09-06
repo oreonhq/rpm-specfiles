@@ -130,7 +130,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_libdir}/qt6/plugins/kf6/purpose/neochatshareplugin.so
 %{_mandir}/man1/neochat.1*
 %{_kf6_datadir}/dbus-1/services/org.kde.neochat.service
-
+/usr/share/config.kcfg/neochatconfig.kcfg
 %changelog
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
 - Latest upstream release

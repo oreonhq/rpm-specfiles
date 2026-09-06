@@ -157,7 +157,7 @@ done
 %{_kf6_datadir}/knotifications6/akonadi_sendlater_agent.notifyrc
 %{_kf6_bindir}/ktnef
 %{_kf6_datadir}/applications/org.kde.ktnef.desktop
-
+/usr/share/knotifications6/kontact.notifyrc
 %files libs
 %{_kf6_libdir}/libkmailprivate.so.*
 %{_kf6_qtplugindir}/pim6/kcms/kmail/*

@@ -97,7 +97,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/%{framework}*
 %{_kf6_datadir}/xdg-desktop-portal/portals/kwallet.portal
 %{_mandir}/man1/kwallet-query.1*
-
+/usr/share/config.kcfg/kwalletsettings.kcfg
 %files libs
 %{_kf6_libdir}/libKF6Wallet.so.*
 %{_libdir}/libKF6WalletBackend.so.*

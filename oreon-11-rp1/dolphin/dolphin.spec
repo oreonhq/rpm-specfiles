@@ -154,7 +154,8 @@ xvfb-run -a bash -c "%ctest" || :
 %{_kf6_datadir}/zsh/site-functions/_dolphin
 %{_kf6_datadir}/icons/hicolor/scalable/apps/org.kde.dolphin.svg
 %{_kf6_libdir}/kconf_update_bin/dolphin_update_splitviewsettings
-
+/usr/share/kconf_update/dolphin_tab_key_shortcut_for_focus_other_view.py
+/usr/share/kconf_update/dolphin_tab_key_shortcut_for_focus_other_view.upd
 %files libs
 %{_kf6_libdir}/libdolphinprivate.so.*
 %{_kf6_libdir}/libdolphinvcs.so.*
