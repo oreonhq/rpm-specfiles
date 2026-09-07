@@ -182,7 +182,7 @@ Summary: The Linux kernel
 %define kversion 7
 %define tarfile_release 7.2.3
 # This is needed to do merge window version magic
-%define patchlevel 1
+%define patchlevel 2
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
