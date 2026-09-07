@@ -545,6 +545,10 @@ Patch2105: 43cb4631c1f42dbfce78288b8ae30b5840ed59b3.patch
 # Fix for s390x vector miscompilation (rhbz#2430017)
 Patch2106: 0001-SystemZ-Fix-code-in-widening-vector-multiplication-1.patch
 
+# Backport the compiler-rt fix for Linux headers that no longer ship scc.h.
+# https://github.com/llvm/llvm-project/pull/194116
+Patch2206: 0001-compiler-rt-Remove-linux-scc.h.patch
+
 %if 0%{?rhel} == 8
 %global python3_pkgversion 3.12
 %global __python3 /usr/bin/python3.12
@@ -3976,6 +3980,4 @@ fi
 
 #endregion files
 
-%changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:~%{rc_ver}}%{?llvm_snapshot_version_suffix:~%{llvm_snapshot_version_suffix}}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
