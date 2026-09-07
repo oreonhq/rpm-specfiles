@@ -17,7 +17,6 @@ packages:
 rules:
   - .*kunit.*: modules-internal
     exact_pkg: True
-    ignore_deps: True
   - .*test[^/]*.ko: modules-internal
 
   - arch/.*: modules-core
@@ -74,6 +73,7 @@ rules:
   - drivers/gpu/drm/imagination/.*: modules-core
   - drivers/gpu/drm/lima/.*: modules-core
   - drivers/gpu/drm/mxsfb/.*: modules-core
+  - drivers/gpu/drm/nouveau/.*: modules-core
   - drivers/gpu/drm/panfrost/.*: modules-core
   - drivers/gpu/drm/qxl/.*: modules-core
   - drivers/gpu/drm/scheduler/.*: modules-core

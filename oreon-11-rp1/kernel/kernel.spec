@@ -1,4 +1,4 @@
-%global source0_hash 338d72daa951985dd4a3580561f5d276ac80f2230e1707fe683dc0e66bf123f9
+%global source0_hash 8ba259e8e7b13ec6ef0941c8a39ad90b24bd4a4d6c0010ba6bafb794550ecd03
 
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
@@ -174,19 +174,19 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.3.0
-%define specversion 7.3.0
-%define patchversion 7.3
+%define specrpmversion 7.2.3
+%define specversion 7.2.3
+%define patchversion 7.2
 %define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
-%define pkgrelease 0.rc1.260904gbc35965f6940.22
+%define pkgrelease 201
 %define kversion 7
-%define tarfile_release 7.3-rc1-269-gbc35965f6940
+%define tarfile_release 7.2.3
 # This is needed to do merge window version magic
-%define patchlevel 3
+%define patchlevel 1
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 0.rc1.260904gbc35965f6940.22%{?buildid}%{?dist}
+%define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
-%define kabiversion 7.3.0
+%define kabiversion 7.2.3
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
 # fatal kernel package build error
@@ -962,7 +962,7 @@ BuildRequires: systemd-ukify
 # exact git commit you can run
 #
 # xzcat -qq ${TARBALL} | git get-tar-commit-id
-Source0: linux-%{tarfile_release}.tar.xz
+Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
