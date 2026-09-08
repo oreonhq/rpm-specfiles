@@ -1,15 +1,15 @@
-%global source0_hash 4f234594aea692e3c1bfaa969965039aaf7483bdfc5862b31d614a59e6718abf
+%global source0_hash 9379585ea9d30a00811f4590760208d3412e2ea6dbd9562b07fba6872f275664
 
 %global         majorminor      1.0
 
 Name:           gstreamer1-rtsp-server
-Version:        1.26.7
-Release:        2%{?dist}
+Version:        1.28.3
+Release:        1%{?dist}
 Summary:        GStreamer RTSP server library
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-only
 URL:            http://gstreamer.freedesktop.org/
-Source0:        http://gstreamer.freedesktop.org/src/gst-rtsp/gst-rtsp-server-%{version}.tar.xz
+Source0:        https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-%{version}.tar.xz
 
 BuildRequires:  meson >= 0.48.0
 BuildRequires:  gcc
@@ -86,5 +86,8 @@ chrpath --delete %{buildroot}%{_libdir}/libgstrtspserver-%{majorminor}.so*
 %endif
 
 %changelog
+* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
+- Update to 1.28.3
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-1
 - Prepare for Oreon 11 (RP1)

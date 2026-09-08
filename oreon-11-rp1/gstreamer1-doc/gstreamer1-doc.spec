@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash 2def433a2e37dbde812ef11b54f7f9356db295adcd0c3098adf7801134a6c36b
 
 %global         majorminor      1.0
 
 Name:           gstreamer1-doc
-Version:        1.28.1
+Version:        1.28.3
 Release:        1%{?dist}
 BuildArch:      noarch
 Summary:        GStreamer documentation
@@ -26,6 +26,7 @@ Source0:        https://gstreamer.freedesktop.org/src/gstreamer-docs/gstreamer-d
 GStreamer documentation.
 
 %prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n gstreamer-docs-%{version}
 
 %install

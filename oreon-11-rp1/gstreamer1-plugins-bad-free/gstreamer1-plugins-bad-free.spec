@@ -1,4 +1,4 @@
-%global source0_hash a0ab17dddd4c029ecd7a423c30badd5a3c7599ea42707016d1d57545f5723ccf
+%global source0_hash 4213f43ddb875bb141e5040e97735579d74665bec3d17b51052aade395b83f00
 
 %global         majorminor 1.0
 %global         _gobject_introspection  1.31.1
@@ -32,8 +32,8 @@
 %endif
 
 Name:           gstreamer1-plugins-bad-free
-Version:        1.26.7
-Release:        10%{?dist}
+Version:        1.28.3
+Release:        1%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -175,7 +175,7 @@ BuildRequires:  pkgconfig(zxing)
 
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Provides:       gstreamer1-vaapi = %{version}-%{release}
-Obsoletes:      gstreamer1-vaapi < 1.26.10-3
+Obsoletes:      gstreamer1-vaapi < 1.28.3-1
 
 # mpeg2enc, mplex used to be shipped in -freeworld
 Conflicts: gstreamer1-plugins-bad-freeworld < 1:1.26.3-3
@@ -935,6 +935,9 @@ EOF
 
 
 %changelog
+* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
+- Update to 1.28.3
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
 - Remove commented git snapshot lines that expanded macros in comments
 

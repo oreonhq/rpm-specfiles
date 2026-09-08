@@ -1,4 +1,4 @@
-%global source0_hash 82af18a1f3e4a060db61d2630fbb975269b80b55bb2fdcfddfab5c6440d30781
+%global source0_hash 47f78f500cbd900f758f9ba74288fda0e2ca5a7855096025641e121ffec40a5d
 
 %global         majorminor      1.0
 
@@ -32,8 +32,8 @@
 %endif
 
 Name:           gstreamer1-plugins-good
-Version:        1.26.7
-Release:        7%{?dist}
+Version:        1.28.3
+Release:        1%{?dist}
 Summary:        GStreamer plugins with good code and licensing
 
 License:        CC0-1.0 AND GPL-2.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND xlock AND MIT AND BSD-3-Clause AND CC-BY-3.0 
@@ -41,9 +41,9 @@ URL:            http://gstreamer.freedesktop.org/
 
 %if 0%{?gitrel}
 # Git snapshot workflow disabled (use release tarball).
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
+Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
 %else
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
+Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
 %endif
 
 # Register as an AppStream component to be visible in the software center
@@ -376,6 +376,9 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -fv {} ';'
 
 
 %changelog
+* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
+- Update to 1.28.3
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26.7-7
 - Rebuild id3 tag plugin against taglib 2 SONAME
 

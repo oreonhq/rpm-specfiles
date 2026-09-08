@@ -8,7 +8,7 @@
 %global pango_version 1.56.0
 %global cairo_version 1.18.0
 %global gdk_pixbuf_version 2.30.0
-%global gstreamer_version 1.24.0
+%global gstreamer_version 1.28.0
 %global harfbuzz_version 8.4
 %global wayland_protocols_version 1.31
 %global wayland_version 1.21.0
@@ -97,6 +97,7 @@ BuildRequires:  pkgconfig(glib-2.0) >= %{glib2_version}
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(graphene-gobject-1.0)
 BuildRequires:  pkgconfig(gstreamer-player-1.0) >= %{gstreamer_version}
+BuildRequires:  pkgconfig(gstreamer-play-1.0) >= %{gstreamer_version}
 BuildRequires:  pkgconfig(harfbuzz) >= %{harfbuzz_version}
 BuildRequires:  pkgconfig(json-glib-1.0)
 BuildRequires:  pkgconfig(libjpeg)

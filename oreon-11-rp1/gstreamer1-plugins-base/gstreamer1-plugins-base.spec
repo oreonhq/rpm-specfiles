@@ -1,4 +1,4 @@
-%global source0_hash 969e3cbf05dfab92cf37e94840fbe398517d7ba3275331d1c216a2e30a7208d0
+%global source0_hash 27880f3d87efa3bb5aa5f99f7ef6e4be7c95229f44eee928c1633d32e87d0099
 
 %bcond cdparanoia %{undefined rhel}
 %bcond libvisual %{undefined rhel}
@@ -6,17 +6,17 @@
 %global         majorminor      1.0
 
 Name:           gstreamer1-plugins-base
-Version:        1.26.7
-Release:        7%{?dist}
+Version:        1.28.3
+Release:        1%{?dist}
 Summary:        GStreamer streaming media framework base plugins
 
 License:        LGPL-2.1-or-later
 URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # Git snapshot workflow disabled (use release tarball).
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
+Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
 %else
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
+Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
 %endif
 Patch0:         0001-missing-plugins-Remove-the-mpegaudioversion-field.patch
 
@@ -510,6 +510,9 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/gst-play-1.0
 %endif
 
 %changelog
+* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
+- Update to 1.28.3
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
 - Remove commented git snapshot lines that expanded macros in comments
 

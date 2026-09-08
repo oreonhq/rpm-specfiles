@@ -1,7 +1,7 @@
-%global source0_hash bfa91aaca38d0fd8addcdd559e35b7541e3f32a5f410194ec4ba18040defee9b
+%global source0_hash 28fcd45d9ace261d4bda896466d5326af6efd2fcf0a20f24502094b5a9955bdf
 
 Name:           gstreamer1-plugin-libav
-Version:        1.28.1
+Version:        1.28.3
 Release:        1%{?dist}
 Summary:        GStreamer FFmpeg/LibAV plugin
 License:        LGPLv2+

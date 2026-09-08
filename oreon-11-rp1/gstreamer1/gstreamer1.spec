@@ -1,4 +1,4 @@
-%global source0_hash 18a5e214114dc501407697dd458514bba62cadd5414c60f793cf70141a4d0bb3
+%global source0_hash 5e84ecb942e136944eb9812f19cff7bcf05a85637482a32da55b892914c397d1
 
 %global         majorminor      1.0
 
@@ -18,8 +18,8 @@
 %endif
 
 Name:           gstreamer1
-Version:        1.26.7
-Release:        2%{?dist}
+Version:        1.28.3
+Release:        1%{?dist}
 Summary:        GStreamer streaming media framework runtime
 
 License:        LGPL-2.1-or-later
@@ -27,9 +27,9 @@ URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/gstreamer
 # cd gstreamer; git reset --hard %%{gitcommit}; ./autogen.sh; make; make distcheck
-Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
+Source0:        https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
 %else
-Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
+Source0:        https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
 %endif
 ## For GStreamer RPM provides
 Patch0:         0001-gst-inspect-add-mode-to-output-RPM-requires-format.patch
@@ -212,5 +212,8 @@ install -m0644 -D %{SOURCE2} $RPM_BUILD_ROOT%{_rpmconfigdir}/fileattrs/gstreamer
 
 
 %changelog
+* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
+- Update to 1.28.3
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-1
 - Prepare for Oreon 11 (RP1)
