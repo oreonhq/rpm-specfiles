@@ -11,7 +11,7 @@
 %global         _gobject_introspection  1.31.1
 %global 	__python %{__python3}
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon} >= 11
 %bcond_without unwind
 %else
 %bcond_with unwind
@@ -52,7 +52,7 @@ BuildRequires:  libcap-devel
 BuildRequires:  libunwind-devel
 %endif
 BuildRequires:  elfutils-devel
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 BuildRequires:  bash-completion-devel
 %else
 BuildRequires: bash-completion
