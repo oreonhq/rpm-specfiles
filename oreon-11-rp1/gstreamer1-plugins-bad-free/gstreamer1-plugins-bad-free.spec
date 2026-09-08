@@ -96,6 +96,7 @@ BuildRequires:  pkgconfig(libusb-1.0)
 BuildRequires:  pkgconfig(libva)
 BuildRequires:  pkgconfig(libva-drm)
 BuildRequires:  pkgconfig(libva-x11)
+BuildRequires:  pkgconfig(libvmaf)
 BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(libwebpmux)
 BuildRequires:  pkgconfig(openssl)
@@ -455,6 +456,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D voaacenc=disabled \
     -D wasapi=disabled -D wasapi2=disabled \
     -D wpe=disabled \
+    -D wpe2=disabled \
     -D x11=disabled \
     -D x265=disabled \
     %{nil}
@@ -699,7 +701,9 @@ EOF
 %{_libdir}/gstreamer-%{majorminor}/libgstsndfile.so
 %{_libdir}/gstreamer-%{majorminor}/libgstsoundtouch.so
 %{_libdir}/gstreamer-%{majorminor}/libgstsrtp.so
+%{_libdir}/gstreamer-%{majorminor}/libgsthip.so
 %{_libdir}/gstreamer-%{majorminor}/libgstva.so
+%{_libdir}/gstreamer-%{majorminor}/libgstvmaf.so
 %{_libdir}/gstreamer-%{majorminor}/libgstvulkan.so
 %{_libdir}/gstreamer-%{majorminor}/libgstwaylandsink.so
 %{_libdir}/gstreamer-%{majorminor}/libgstwebp.so
@@ -806,6 +810,7 @@ EOF
 %{_libdir}/libgstcodecparsers-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstcodecs-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstcuda-%{majorminor}.so.0{,.*}
+%{_libdir}/libgsthip.so.0{,.*}
 %{_libdir}/libgstdxva-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstinsertbin-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstisoff-%{majorminor}.so.0{,.*}
@@ -831,6 +836,8 @@ EOF
 %{_libdir}/girepository-1.0/GstBadAudio-1.0.typelib
 %{_libdir}/girepository-1.0/GstCodecs-1.0.typelib
 %{_libdir}/girepository-1.0/GstCuda-1.0.typelib
+%{_libdir}/girepository-1.0/GstHip-1.0.typelib
+%{_libdir}/girepository-1.0/GstHipGL-1.0.typelib
 %{_libdir}/girepository-1.0/GstDxva-1.0.typelib
 %{_libdir}/girepository-1.0/GstInsertBin-1.0.typelib
 %{_libdir}/girepository-1.0/GstMpegts-1.0.typelib
@@ -854,6 +861,8 @@ EOF
 %{_datadir}/gir-1.0/GstBadAudio-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCodecs-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCuda-%{majorminor}.gir
+%{_datadir}/gir-1.0/GstHip-%{majorminor}.gir
+%{_datadir}/gir-1.0/GstHipGL-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstDxva-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstInsertBin-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstMpegts-%{majorminor}.gir
@@ -871,6 +880,7 @@ EOF
 %{_libdir}/libgstbasecamerabinsrc-%{majorminor}.so
 %{_libdir}/libgstbadaudio-%{majorminor}.so
 %{_libdir}/libgstcuda-%{majorminor}.so
+%{_libdir}/libgsthip.so
 %{_libdir}/libgstcodecparsers-%{majorminor}.so
 %{_libdir}/libgstcodecs-%{majorminor}.so
 %{_libdir}/libgstdxva-%{majorminor}.so
@@ -897,6 +907,7 @@ EOF
 %{_includedir}/gstreamer-%{majorminor}/gst/basecamerabinsrc
 %{_includedir}/gstreamer-%{majorminor}/gst/codecparsers
 %{_includedir}/gstreamer-%{majorminor}/gst/cuda/
+%{_includedir}/gstreamer-%{majorminor}/gst/hip/
 %{_includedir}/gstreamer-%{majorminor}/gst/insertbin
 %{_includedir}/gstreamer-%{majorminor}/gst/interfaces/photography*
 %{_includedir}/gstreamer-%{majorminor}/gst/isoff/
@@ -916,6 +927,8 @@ EOF
 %{_libdir}/pkgconfig/gstreamer-analytics-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-bad-audio-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-cuda-%{majorminor}.pc
+%{_libdir}/pkgconfig/gstreamer-hip-%{majorminor}.pc
+%{_libdir}/pkgconfig/gstreamer-hip-gl-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-codecparsers-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-insertbin-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-mpegts-%{majorminor}.pc
