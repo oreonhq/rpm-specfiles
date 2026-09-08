@@ -659,7 +659,6 @@ EOF
 %{_libdir}/gstreamer-%{majorminor}/libgstinsertbin.so
 %{_libdir}/gstreamer-%{majorminor}/libgstmse.so
 %{_libdir}/gstreamer-%{majorminor}/libgstunixfd.so
-%{_libdir}/gstreamer-%{majorminor}/libgsty4mdec.so
 
 # System (Linux) specific plugins
 %{_libdir}/gstreamer-%{majorminor}/libgstbluez.so
