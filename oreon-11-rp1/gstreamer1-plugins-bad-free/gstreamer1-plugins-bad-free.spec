@@ -439,6 +439,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D lcevcencoder=disabled \
     -D libde265=disabled \
     -D magicleap=disabled \
+    -D mpeghdec=disabled \
     -D neon=disabled \
     -D nvcomp=disabled \
     -D nvdswrapper=disabled \
