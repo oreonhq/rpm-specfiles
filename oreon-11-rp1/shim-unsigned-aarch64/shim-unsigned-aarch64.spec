@@ -35,7 +35,7 @@ ExclusiveArch:	aarch64
 License:	BSD-2-Clause AND OpenSSL
 URL:		https://github.com/rhboot/shim
 Source0:        https://github.com/rhboot/shim/releases/download/%{version}%{?dashpre}/shim-%{version}%{?dotpre}.tar.bz2
-Source1:        fedora-ca-20200709.cer
+Source1:        oreonsecurebootca.cer
 %if 0%{?dbxfile}
 Source2:	%{dbxfile}
 %endif
