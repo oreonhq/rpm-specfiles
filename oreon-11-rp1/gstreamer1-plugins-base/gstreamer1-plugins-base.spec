@@ -324,6 +324,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/gst-play-1.0
 %{_includedir}/gstreamer-%{majorminor}/gst/allocators/allocators.h
 %{_includedir}/gstreamer-%{majorminor}/gst/allocators/allocators-prelude.h
 %{_includedir}/gstreamer-%{majorminor}/gst/allocators/gstdmabuf.h
+%{_includedir}/gstreamer-%{majorminor}/gst/allocators/gstudmabufallocator.h
 %{_includedir}/gstreamer-%{majorminor}/gst/allocators/gstdrmdumb.h
 %{_includedir}/gstreamer-%{majorminor}/gst/allocators/gstfdmemory.h
 %{_includedir}/gstreamer-%{majorminor}/gst/allocators/gstphysmemory.h
@@ -437,6 +438,7 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/gst-play-1.0
 %{_includedir}/gstreamer-%{majorminor}/gst/video/gstvideoaggregator.h
 %{_includedir}/gstreamer-%{majorminor}/gst/video/gstvideocodecalphameta.h
 %{_includedir}/gstreamer-%{majorminor}/gst/video/gstvideodecoder.h
+%{_includedir}/gstreamer-%{majorminor}/gst/video/gstvideodmabufpool.h
 %{_includedir}/gstreamer-%{majorminor}/gst/video/gstvideoencoder.h
 %{_includedir}/gstreamer-%{majorminor}/gst/video/gstvideofilter.h
 %{_includedir}/gstreamer-%{majorminor}/gst/video/gstvideometa.h
