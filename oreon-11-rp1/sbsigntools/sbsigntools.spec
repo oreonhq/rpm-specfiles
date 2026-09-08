@@ -58,8 +58,7 @@ BuildRequires: libuuid-devel
 BuildRequires: openssl
 %endif
 BuildRequires: openssl-devel
-%if 0%{?fedora} >= 41
-# https://fedoraproject.org/wiki/Changes/OpensslDeprecateEngine
+%if 0%{?fedora} >= 41 || 0%{?oreon} >= 11
 BuildRequires: openssl-devel-engine
 %endif
 Provides: bundled(ccan-array_size)
