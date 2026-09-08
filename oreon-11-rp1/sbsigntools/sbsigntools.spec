@@ -1,4 +1,4 @@
-%global source0_hash b43a33c755cd0dd3d0610a8234810771b6cea6af24f11c09f533138dca80e06f
+%global source0_hash fa93920ef80a406115c1de6f7764ffa4c34e3d1bd7890b9145c36de899a258f5
 
 %bcond check 0
 %define _warning_options -Wall -Werror=format-security -Wno-deprecated-declarations -Wno-maybe-uninitialized
@@ -30,12 +30,10 @@ Summary:       Signing utility for UEFI secure boot
 # MIT:
 #   lib/ccan/ccan/time
 License:       GPL-3.0-or-later AND LicenseRef-Fedora-Public-Domain AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT
-URL:           https://build.opensuse.org/package/show/home:jejb1:UEFI/sbsigntools
-# upstream tarballs don't include bundled ccan
-# run sbsigntools-mktarball.sh
-Source0:       %{name}-%{version}.tar.xz
+URL:           https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git
+Source0:       https://deb.debian.org/debian/pool/main/s/sbsigntool/sbsigntool_%{version}.orig.tar.gz#/%{name}-%{version}.tar.gz
 Source1:       %{name}-mktarball.sh
-# don't fetch ccan or run git from autogen.sh, already done by mktarball.sh
+# don't fetch ccan or run git from autogen.sh
 Patch0:        %{name}-no-git.patch
 # add Fedora gnu-efi path and link statically against libefi.a/libgnuefi.a
 Patch1:        %{name}-gnuefi.patch
@@ -88,7 +86,7 @@ Tools to add signatures to EFI binaries and Drivers.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q
+%setup -q -n sbsigntool-%{version}
 %patch -p 1 -P 0
 %patch -p 1 -P 1
 %patch -p 1 -P 2
