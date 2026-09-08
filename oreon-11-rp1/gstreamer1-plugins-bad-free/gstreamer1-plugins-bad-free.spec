@@ -10,6 +10,11 @@
 %else
 %bcond_without aom
 %endif
+%ifarch x86_64
+%bcond_without vmaf
+%else
+%bcond_with vmaf
+%endif
 %bcond extras %{defined fedora}
 %bcond opencv %{defined fedora}
 %bcond openh264 %{defined fedora}
@@ -96,7 +101,9 @@ BuildRequires:  pkgconfig(libusb-1.0)
 BuildRequires:  pkgconfig(libva)
 BuildRequires:  pkgconfig(libva-drm)
 BuildRequires:  pkgconfig(libva-x11)
+%if %{with vmaf}
 BuildRequires:  pkgconfig(libvmaf)
+%endif
 BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(libwebpmux)
 BuildRequires:  pkgconfig(openssl)
@@ -427,6 +434,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D zbar=disabled \
     -D zxing=disabled \
 %endif
+%if %{without vmaf}
+    -D vmaf=disabled \
+%endif
     -D aja=disabled \
     -D androidmedia=disabled \
     -D amfcodec=disabled \
@@ -702,7 +712,9 @@ EOF
 %{_libdir}/gstreamer-%{majorminor}/libgstsrtp.so
 %{_libdir}/gstreamer-%{majorminor}/libgsthip.so
 %{_libdir}/gstreamer-%{majorminor}/libgstva.so
+%if %{with vmaf}
 %{_libdir}/gstreamer-%{majorminor}/libgstvmaf.so
+%endif
 %{_libdir}/gstreamer-%{majorminor}/libgstvulkan.so
 %{_libdir}/gstreamer-%{majorminor}/libgstwaylandsink.so
 %{_libdir}/gstreamer-%{majorminor}/libgstwebp.so
@@ -829,11 +841,11 @@ EOF
 %endif
 %{_libdir}/libgstwayland-%{majorminor}.so.0{,.*}
 
-# libgstcodecparsers remains; GstCodecParsers-*.typelib/.gir not built since upstream dropped GI there (1.26+)
 %{_libdir}/girepository-1.0/CudaGst-1.0.typelib
 %{_libdir}/girepository-1.0/GstAnalytics-1.0.typelib
 %{_libdir}/girepository-1.0/GstBadAudio-1.0.typelib
 %{_libdir}/girepository-1.0/GstCodecs-1.0.typelib
+%{_libdir}/girepository-1.0/GstCodecParsers-1.0.typelib
 %{_libdir}/girepository-1.0/GstCuda-1.0.typelib
 %{_libdir}/girepository-1.0/GstHip-1.0.typelib
 %{_libdir}/girepository-1.0/GstHipGL-1.0.typelib
@@ -859,6 +871,7 @@ EOF
 %{_datadir}/gir-1.0/GstAnalytics-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstBadAudio-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCodecs-%{majorminor}.gir
+%{_datadir}/gir-1.0/GstCodecParsers-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCuda-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstHip-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstHipGL-%{majorminor}.gir
