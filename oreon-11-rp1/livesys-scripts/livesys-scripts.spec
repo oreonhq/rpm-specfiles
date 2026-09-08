@@ -1,17 +1,13 @@
-%global source0_hash none
+%global source0_hash a1c60837b5fdb42e05081c903050ad2e0282f5a4a36b566f12d8d3a7fa8c0469
 
 Name:           livesys-scripts
-Version:        0.8.0
-Release:        4%{?dist}
+Version:        0.9.7
+Release:        1%{?dist}
 Summary:        Scripts for auto-configuring live media during boot
 
 License:        GPL-3.0-or-later
 URL:            https://pagure.io/livesys-scripts
-Source0:        https://gitlab.com/rhinstaller/livesys-scripts/-/archive/v%{version}/livesys-scripts-%{version}.tar.gz
-# https://pagure.io/livesys-scripts/pull-request/28
-# https://bugzilla.redhat.com/show_bug.cgi?id=2240823
-# Fix installer launch on i3
-Patch0:         0001-livesys-i3-restore-the-hack-to-fix-the-installer.patch
+Source0:        https://pagure.io/livesys-scripts/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  make
@@ -64,5 +60,4 @@ touch %{buildroot}%{_sharedstatedir}/livesys/livesys-session-late-extra
 
 
 %changelog
-* Wed Apr 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.0-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog
