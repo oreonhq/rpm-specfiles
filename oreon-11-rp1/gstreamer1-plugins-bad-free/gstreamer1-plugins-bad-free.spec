@@ -451,6 +451,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D svthevcenc=disabled \
     -D svtjpegxs=disabled \
     -D tinyalsa=disabled \
+    -D tflite=disabled \
     -D voaacenc=disabled \
     -D wasapi=disabled -D wasapi2=disabled \
     -D wpe=disabled \
