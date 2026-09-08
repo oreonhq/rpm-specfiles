@@ -7,7 +7,7 @@ Summary:        Scripts for auto-configuring live media during boot
 
 License:        GPL-3.0-or-later
 URL:            https://pagure.io/livesys-scripts
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://tarballs.oreonhq.com/livesys-scripts-%{version}.tar.gz
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  make
