@@ -15,7 +15,7 @@
 Name:    kf6-%{framework}
 Summary: Breeze icon theme library
 Version: 6.29.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # skladnik.svg is CC-BY-SA-4.0
 # folder-edit-sign-encrypt.svg is LGPL-2.1-or-later
@@ -66,23 +66,9 @@ Obsoletes:   breeze-icon-theme < 6.3.0-2
 # anaconda icon split out into fedora-only subpackage
 Obsoletes:   breeze-icon-theme < 6.13.0-2
 Conflicts:   breeze-icon-theme < 6.13.0-2
+Obsoletes:   breeze-icon-theme-fedora < %{version}-%{release}
 %description -n breeze-icon-theme
 %{summary}.
-
-%if 0%{?fedora}
-%package -n breeze-icon-theme-fedora
-Summary:     Breeze icon theme Fedora specific icons
-License:     LGPL-3.0-or-later
-BuildArch:   noarch
-Requires:    breeze-icon-theme = %{version}-%{release}
-# This is for Fedora only
-Requires:    fedora-release-common
-Supplements: (breeze-icon-theme and fedora-release-kde)
-Obsoletes:   breeze-icon-theme < 6.13.0-2
-Conflicts:   breeze-icon-theme < 6.13.0-2
-%description -n breeze-icon-theme-fedora
-%{summary}.
-%endif
 
 %endif
 
@@ -113,9 +99,8 @@ developing applications that use %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{framework}-%{version} -p1
 
-# Move Fedora installer icon out of normal breeze installs
-mkdir -p icons-fedora/apps/48
-mv icons/apps/48/org.fedoraproject.AnacondaInstaller.svg icons-fedora/apps/48
+# fedora anaconda icon stays out of oreon icon theme
+rm -f icons/apps/48/org.fedoraproject.AnacondaInstaller.svg
 
 
 %build
@@ -138,11 +123,6 @@ du -s .
 
 # %%ghost icon.cache
 touch %{buildroot}%{_kf6_datadir}/icons/{breeze,breeze-dark}/icon-theme.cache
-
-%if 0%{?fedora}
-install -pm 0644 icons-fedora/apps/48/org.fedoraproject.AnacondaInstaller.svg %{buildroot}%{_kf6_datadir}/icons/breeze/apps/48
-ln -sr %{buildroot}%{_kf6_datadir}/icons/breeze/apps/48/org.fedoraproject.AnacondaInstaller.svg %{buildroot}%{_kf6_datadir}/icons/breeze-dark/apps/48/org.fedoraproject.AnacondaInstaller.svg
-%endif
 
 ## trigger-based scriptlets
 %transfiletriggerin -n breeze-icon-theme -- %{_datadir}/icons/breeze
@@ -181,14 +161,6 @@ gtk-update-icon-cache --force %{_datadir}/icons/breeze-dark &>/dev/null || :
 %{_datadir}/icons/breeze-dark/index.theme
 %{_datadir}/icons/breeze-dark/*/
 %exclude %{_datadir}/icons/breeze/breeze-icons.rcc
-%if 0%{?fedora}
-%exclude %{_datadir}/icons/breeze*/apps/*/org.fedoraproject.AnacondaInstaller.svg
-%endif
-
-%if 0%{?fedora}
-%files -n breeze-icon-theme-fedora
-%{_datadir}/icons/breeze*/apps/*/org.fedoraproject.AnacondaInstaller.svg
-%endif
 
 %endif
 
@@ -198,14 +170,4 @@ gtk-update-icon-cache --force %{_datadir}/icons/breeze-dark &>/dev/null || :
 %endif
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
