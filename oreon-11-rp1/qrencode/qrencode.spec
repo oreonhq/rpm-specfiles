@@ -1,5 +1,5 @@
 %global source0_hash 5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c
-%global source1_hash 5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c
+%global source1_hash none
 
 # Recent so-version, so we do not bump accidentally.
 %global so_ver      4
@@ -22,9 +22,9 @@ Summary:        Generate QR 2D barcodes
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/fukuchi/libqrencode
 # fukuchi.org upstream tarball is gone; GitHub tag archive unpacks as libqrencode-<version>/.
-Source0:        http://fukuchi.org/works/qrencode/qrencode-%{version}.tar.bz2
+Source0:        https://github.com/fukuchi/libqrencode/archive/v%{version}/libqrencode-%{version}.tar.gz
 %if 0%{?bootstrap}
-Source1:        http://fukuchi.org/works/qrencode/qrencode-%{version_old}.tar.bz2
+Source1:        https://github.com/fukuchi/libqrencode/archive/v%{version_old}/libqrencode-%{version_old}.tar.gz
 %endif
 
 BuildRequires: make
@@ -61,8 +61,8 @@ applications that use qrencode.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{ print $1 }'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{ print $1 }'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -n libqrencode-%{version} -p1
 
 %if 0%{?bootstrap}

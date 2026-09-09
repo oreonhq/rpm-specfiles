@@ -1,7 +1,4 @@
-%global source0_hash none
-
-# first two digits of version
-%global release_version %(echo %{version} | awk -F. '{print $1"."$2}')
+%global source0_hash 6b452e4750590a2b5617adc40026f28d2f4903de15f1250e1d1c40bfd68ed55e
 
 %ifarch %{valgrind_arches}
 %global has_valgrind 1
@@ -11,6 +8,7 @@
 
 Name:           libsecret
 Version:        0.21.7
+%global release_version 0.21
 Release:        %autorelease
 Summary:        Library for storing and retrieving passwords and other secrets
 
