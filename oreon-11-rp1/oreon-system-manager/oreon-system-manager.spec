@@ -1,9 +1,9 @@
-%global commit 81e8241ce0f01bac1bc90a2df5f427fda6c331f5
-%global source0_hash 085b5bfdaac952cd5a3acc95d83349464738365499da8536d50364e7af54b460
+%global commit 0ece2e11960fed2b0aada10ea73efbda4773055c
+%global source0_hash 2de662c4c84b16e9ab6a13165d9efc60b5ee996b2ab283091aa5c575b5ce6636
 
 Name:           oreon-system-manager
 Version:        0.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Oreon system management GUI
 License:        GPL-3.0-or-later
 URL:            https://github.com/oreonhq/oreon-system-manager
