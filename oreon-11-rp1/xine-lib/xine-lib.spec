@@ -9,7 +9,7 @@
     %global     _without_gcrypt      1
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global _without_fame 1
 %endif
 
