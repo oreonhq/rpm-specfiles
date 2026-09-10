@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source3_key_fpr 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4
 
 # Start: prod settings
 # all bcond 1 for production builds:
@@ -77,7 +78,8 @@ Source0:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.
 %if %{with testsuite}
 Source1:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-testsuite.tar.xz
 %endif
-Source2:        ghc-%{version}-src.tar.xz.sig
+Source2:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz.sig
+Source3:        gpgkey-588764FBE22D19C4.gpg
 Source5:        ghc-pkg.man
 Source6:        haddock.man
 Source7:        runghc.man
@@ -412,7 +414,8 @@ Installing this package causes %{name}-*-prof packages corresponding to
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %if %{with perfbuild}
-%%{gpgverify} --keyring='%%{SOURCE3}' --signature='%%{SOURCE2}' --data='%%{SOURCE0}'
+test -z "%{source3_key_fpr}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source3_key_fpr}" || { echo "oreon: Source3 key fingerprint mismatch" >&2; exit 1; }; }
+%{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE2}' --data='%{SOURCE0}'
 %endif
 %setup -q -n ghc-%{version} %{?with_testsuite:-b1}
 ( cd hadrian
