@@ -942,6 +942,7 @@ Summary:       Python3 bindings for clang
 Requires:      %{pkg_name_clang}-devel%{?_isa} = %{version}-%{release}
 Requires:      python(abi) = %{python3_version}
 Provides:      python%{python3_pkgversion}-clang(major) = %{maj_ver}
+Provides:      python3-clang(major) = %{maj_ver}
 %if 0%{?rhel} == 8
 # Became python3.12-clang in LLVM 19
 Obsoletes: python3-clang < 18.9
