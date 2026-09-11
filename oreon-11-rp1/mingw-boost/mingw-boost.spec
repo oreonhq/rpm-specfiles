@@ -19,7 +19,7 @@ Summary:        MinGW Windows port of Boost C++ Libraries
 # Automatically converted from old format: Boost - review is highly recommended.
 License:        BSL-1.0
 URL:            http://www.boost.org
-Source0:        https://sourceforge.net/projects/%%{name1}/files/%{name1}/%{version}/%{toplev_dirname}.tar.bz2
+Source0:        https://sourceforge.net/projects/%{name1}/files/%{name1}/%{version}/%{toplev_dirname}.tar.bz2
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=828856
 # https://bugzilla.redhat.com/show_bug.cgi?id=828857

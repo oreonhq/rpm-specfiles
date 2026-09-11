@@ -1,4 +1,4 @@
-%global source0_hash 55e9ca9d360cc7525042cf6b5a77f40ec702f7afcde8dbef27dcf69e4cc43f2d
+%global source0_hash 9f791935def0c456f34be1f9480d6319c1d9fc14d38a2848486fdc68fdaca8ff
 
 %?python_enable_dependency_generator
 %global srcname pytest-mpi

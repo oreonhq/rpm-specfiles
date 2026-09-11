@@ -35,6 +35,9 @@ Source1:        get_source
 
 %endif
 
+BuildSystem:    pyproject
+BuildOption(install): --assert-license cramjam
+
 BuildRequires:  tomcli >= 0.8.0
 BuildRequires:  cargo-rpm-macros >= 24
 

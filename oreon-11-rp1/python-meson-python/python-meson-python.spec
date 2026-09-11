@@ -91,7 +91,7 @@ sed -r -i "s/^  '(wheel)/#&/" pyproject.toml
 
 
 %generate_buildrequires
-%pyproject_buildrequires -w %{?with_tests:-x test}
+%pyproject_buildrequires %{?with_tests:-g test}
 
 
 %build

@@ -10,7 +10,7 @@ Summary:    Cross-compiled GNU arbitrary precision library
 # Automatically converted from old format: LGPLv3+ or GPLv2+ - review is highly recommended.
 License:    LGPL-3.0-or-later OR GPL-2.0-or-later
 URL:        http://gmplib.org/
-Source0:    ftp://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
+Source0:    https://ftp.gnu.org/pub/gnu/gmp/gmp-%{version}.tar.xz
 # https://gmplib.org/repo/gmp/rev/8e7bb4ae7a18
 Patch0: gmp-6.3.0-c23.patch
 

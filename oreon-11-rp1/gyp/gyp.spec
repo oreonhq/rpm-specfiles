@@ -1,4 +1,4 @@
-%global source0_hash 1ea6db1064a3cf11565baf35edd39a2e83b954104934b5f67f7717701f075972
+%global source0_hash 4e377f8479d489a82adddedad69673427613a127e1b78acbf47fee9ecf2cd831
 
 %global		revision	fcd686f1
 %{expand:	%%global	archivename	gyp-%{version}%{?revision:-git%{revision}}}
@@ -19,15 +19,8 @@ Summary:	Generate Your Projects
 
 License:	BSD-3-Clause
 URL:		https://gyp.gsrc.io
-# No released tarball avaiable. so the tarball was generated
-# from svn as following:
-#
-# 1. git clone https://chromium.googlesource.com/external/gyp
-# 2. cd gyp
-# 3. version=$(grep version= setup.py|cut -d\' -f2)
-# 4. revision=$(git log --oneline|head -1|cut -d' ' -f1)
-# 5. tar -a --exclude-vcs -cf /tmp/gyp-$version-git$revision.tar.xz *
-Source0:	%{archivename}.tar.xz
+# No released tarball avaiable. Use the googlesource archive of the pinned commit.
+Source0:	https://chromium.googlesource.com/external/gyp/+archive/%{revision}.tar.gz#/%{archivename}.tar.gz
 Source1:	pyproject.toml
 Patch0:		gyp-rpmoptflags.patch
 Patch1:		gyp-ninja-build.patch

@@ -1,4 +1,4 @@
-%global source0_hash 8592c169f36840c8b9176a0b33236802a21f5b137b17d69aacd27a98e4c7ef7b
+%global source0_hash c965ef6137477013c7c33a196aa64c577f9f2bd5f9e94cc58bda2e6e32aa9dea
 
 %global common_description %{expand:
 Jedi is a static analysis tool for Python that can be used in IDEs/editors. Its
