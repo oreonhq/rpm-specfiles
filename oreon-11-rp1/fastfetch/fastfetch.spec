@@ -1,7 +1,7 @@
-%global source0_hash 001dd608ebe0d8b651069983690cc93fe7f3e41ac11a50fc591b22c2fe97d9a4
+%global source0_hash c268cfcd230cc7ed5447fb34ed21bf4977315c7104356a39388b6ba784ad11b0
 
 Name:           fastfetch
-Version:        2.60.0
+Version:        2.68.1
 Release:        1%{?dist}
 Summary:        Fast neofetch-like system information tool
 
@@ -22,11 +22,7 @@ BuildRequires:  sqlite-devel
 BuildRequires:  ImageMagick-devel
 BuildRequires:  zlib-devel
 BuildRequires:  libglvnd-devel
-%if 0%{?fedora} > 42
 BuildRequires:  mesa-libGL-devel
-%else
-BuildRequires:  mesa-libOSMesa-devel
-%endif
 BuildRequires:  glib2-devel
 BuildRequires:  ocl-icd-devel
 BuildRequires:  rpm-devel
