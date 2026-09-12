@@ -344,8 +344,6 @@ Recommends:     python3dist(pyarrow) >= 10.0.1
 # Access data in the cloud
 BuildRequires:  python3dist(fsspec) >= 2022.11
 Recommends:     python3dist(fsspec) >= 2022.11
-BuildRequires:  python3dist(gcsfs) >= 2022.11
-Recommends:     python3dist(gcsfs) >= 2022.11
 # python-pandas-gbq is not currently packaged:
 # BuildRequires:  python3dist(pandas-gbq) >= 0.19
 # Recommends:     python3dist(pandas-gbq) >= 0.19
