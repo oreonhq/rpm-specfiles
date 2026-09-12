@@ -674,9 +674,10 @@ export PYTHONHASHSEED="$(
 # 32-bit platforms (%%if 0%%{?__isa_bits} == 32) it may be necessary to limit
 # the number of concurrent tests to e.g. 8 in order to prevent memory
 # exhaustion.
-%pytest -v '%{buildroot}%{python3_sitearch}/pandas' \
+%pytest -q '%{buildroot}%{python3_sitearch}/pandas' \
     -o cache_dir="$PWD/pytest-cache" \
     --no-strict-data-files \
+    --tb=short \
     -m "${m-}" \
     -k "${k-}" \
     -n 1 \
