@@ -48,7 +48,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if 0%{?epel} && 0%{?epel} <= 10
 %autosetup -n runner -a1 -p1
 %else
-%autosetup -C -a1 -p1
+%autosetup -a1 -p1
 %endif
 
 %generate_buildrequires

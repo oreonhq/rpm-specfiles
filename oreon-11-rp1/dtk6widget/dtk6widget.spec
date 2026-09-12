@@ -48,7 +48,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 This package contains development files for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 sed -i 's|/dtk@DTK_VERSION_MAJOR@/DWidget||' misc/DtkWidget.pc.in
 
 %build

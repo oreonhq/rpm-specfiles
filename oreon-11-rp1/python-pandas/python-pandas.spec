@@ -495,7 +495,7 @@ sed -i 's/Cython~=3.0.5/Cython>=3.0.5/' pyproject.toml
 
 
 %build
-%pyproject_wheel
+%{pyproject_wheel: -C"build-dir=meson-build"}
 
 
 %install

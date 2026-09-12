@@ -43,7 +43,7 @@ This package contains development files for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -C
+%autosetup -p1
 # comply with dtkcore in Fedora and dtk6core in Arch Linux
 sed -i 's|/etc/os-version|/etc/dde-version|' src/dsysinfo.cpp
 

@@ -36,7 +36,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains development files for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %cmake \

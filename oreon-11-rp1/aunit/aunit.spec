@@ -90,7 +90,7 @@ This package contains the documentation in HTML and PDF, and some examples.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -C -p1
+%autosetup -p1
 
 # Version information in this file is used during the build.
 echo '%{version}' > ./version_information

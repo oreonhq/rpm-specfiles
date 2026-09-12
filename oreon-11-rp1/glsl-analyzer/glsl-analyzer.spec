@@ -32,7 +32,7 @@ Language server for GLSL (OpenGL Shading Language).
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -C
+%autosetup -p1
 sed -i 's/b.run(&.{ "git", "describe", "--tags", "--always" })/"%{version}"/' build.zig
 
 tar -xf %{SOURCE1} -C tests/glsl-samples --strip-components=1
