@@ -670,6 +670,7 @@ end
 %{_firmwarepath}/qcom/kaanapali/
 %{_firmwarepath}/qcom/eliza/
 %{_firmwarepath}/qcom/hawi/
+%{_firmwarepath}/qcom/nord/
 %{_firmwarepath}/qcom/shikra/*
 %{_firmwarepath}/a300_p*
 %{_firmwarepath}/qcom/*.fw*
