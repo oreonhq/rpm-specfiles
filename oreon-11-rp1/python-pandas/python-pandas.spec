@@ -18,7 +18,7 @@
 
 Name:           python-pandas
 Version:        2.3.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python library providing high-performance data analysis tools
 
 # Drop support for i686 in preparation for `libarrow`
@@ -98,6 +98,8 @@ Patch:          0007-Replace-deprecated-xarray.cftime_range.patch
 # Fix build with Cython 3.2
 # Resolved upstream: https://github.com/pandas-dev/pandas/pull/62832
 Patch:          0008-Fix-Cython-3.2-build.patch
+# numexpr >= 2.13.1 supports bool +/* so the fallback warning is gone
+Patch:          0009-TST-numexpr-2.13-bool-arith-warning.patch
 
 %global _description %{expand:
 pandas is an open source, BSD-licensed library providing
