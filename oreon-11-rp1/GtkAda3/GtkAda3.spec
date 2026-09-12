@@ -143,7 +143,7 @@ Paketet %{name}-doc innehåller dokumentationen till GTKada för GTK+ 3.x.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1
+%autosetup -p1 -n %{upstream_name}-%{upstream_commit}
 
 # The substitutions below are scoped to specific lines to increase the chance of
 # detecting code changes at this point. Sed should exit with exit code 0 if the
