@@ -18,7 +18,7 @@
 
 Name:           python-pandas
 Version:        2.3.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Python library providing high-performance data analysis tools
 
 # Drop support for i686 in preparation for `libarrow`
@@ -100,7 +100,7 @@ Patch:          0007-Replace-deprecated-xarray.cftime_range.patch
 Patch:          0008-Fix-Cython-3.2-build.patch
 # numexpr >= 2.13.1 supports bool +/* so the fallback warning is gone
 Patch:          0009-TST-numexpr-2.13-bool-arith-warning.patch
-# pie logscale no longer emits the ignore-log UserWarning
+# mpl 3.10 dropped pie log and sharex/sharey-with-ax UserWarnings
 Patch:          0010-TST-pie-logscale-pytest-warns.patch
 
 %global _description %{expand:
