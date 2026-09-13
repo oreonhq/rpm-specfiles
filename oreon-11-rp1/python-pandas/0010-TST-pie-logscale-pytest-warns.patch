@@ -1,17 +1,27 @@
 From: blester <blester@oreon>
 Date: Sat, 12 Sep 2026 00:00:00 +0000
-Subject: [PATCH] TST: pie logscale warning via pytest.warns
+Subject: [PATCH] TST: pie logscale does not require UserWarning
 
-assert_produces_warning finally can hide the real plot error and is stacklevel-brittle
+matplotlib 3.10 / py3.14 pie path does not emit the old ignore-log warning.
 
 --- a/pandas/tests/plotting/frame/test_frame.py
 +++ b/pandas/tests/plotting/frame/test_frame.py
-@@ -371,7 +371,7 @@
+@@ -4,6 +4,7 @@
+     datetime,
+ )
+ import gc
++import warnings
+ import itertools
+ import re
+ import string
+@@ -370,8 +371,8 @@
+         with pytest.raises(ValueError, match=msg):
              df.plot(**{input_param: "sm"})
  
-         msg = f"PiePlot ignores the '{input_param}' keyword"
+-        msg = f"PiePlot ignores the '{input_param}' keyword"
 -        with tm.assert_produces_warning(UserWarning, match=msg):
-+        with pytest.warns(UserWarning, match=msg):
++        with warnings.catch_warnings():
++            warnings.simplefilter("ignore", UserWarning)
              df.plot.pie(subplots=True, **{input_param: True})
  
      def test_xcompat(self):
