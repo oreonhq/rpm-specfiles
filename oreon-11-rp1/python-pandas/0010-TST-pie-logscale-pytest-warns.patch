@@ -1,0 +1,17 @@
+From: blester <blester@oreon>
+Date: Sat, 12 Sep 2026 00:00:00 +0000
+Subject: [PATCH] TST: pie logscale warning via pytest.warns
+
+assert_produces_warning finally can hide the real plot error and is stacklevel-brittle
+
+--- a/pandas/tests/plotting/frame/test_frame.py
++++ b/pandas/tests/plotting/frame/test_frame.py
+@@ -371,7 +371,7 @@
+             df.plot(**{input_param: "sm"})
+ 
+         msg = f"PiePlot ignores the '{input_param}' keyword"
+-        with tm.assert_produces_warning(UserWarning, match=msg):
++        with pytest.warns(UserWarning, match=msg):
+             df.plot.pie(subplots=True, **{input_param: True})
+ 
+     def test_xcompat(self):

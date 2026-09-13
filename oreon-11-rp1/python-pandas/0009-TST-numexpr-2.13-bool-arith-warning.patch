@@ -4,8 +4,8 @@ Subject: [PATCH] TST: numexpr 2.13+ supports bool +/*
 
 numexpr >= 2.13.1 does bool arith itself so pandas does not warn on fallback.
 
---- a/b/pandas/tests/test_expressions.py	2025-09-29 15:12:09.000000000 -0700
-+++ b/pandas/tests/test_expressions.py	2026-09-12 17:01:56.332528228 -0700
+--- a/pandas/tests/test_expressions.py
++++ b/pandas/tests/test_expressions.py
 @@ -4,6 +4,7 @@
  import numpy as np
  import pytest
@@ -31,7 +31,7 @@ numexpr >= 2.13.1 does bool arith itself so pandas does not warn on fallback.
          n = 10
          df = DataFrame(
              {
-@@ -343,36 +345,50 @@
+@@ -343,36 +345,47 @@
              # raises TypeError
              return
  
@@ -67,14 +67,11 @@ numexpr >= 2.13.1 does bool arith itself so pandas does not warn on fallback.
 -                tm.assert_frame_equal(r, e)
 +        msg = "operator is not supported by numexpr"
 +        ne = import_optional_dependency("numexpr", errors="ignore")
-+        ne_ver = "0"
-+        if ne is not None:
-+            ne_ver = str(getattr(ne, "__version__", "0")).split("+")[0].split("-")[0]
 +        warning = (
 +            UserWarning
 +            if ne
 +            and op_str in {"+", "*"}
-+            and Version(ne_ver) < Version("2.13.1")
++            and Version(ne.__version__) < Version("2.13.1")
 +            else None
 +        )
 +        with monkeypatch.context() as m:
