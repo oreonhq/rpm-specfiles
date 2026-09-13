@@ -18,7 +18,7 @@
 
 Name:           python-pandas
 Version:        2.3.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Python library providing high-performance data analysis tools
 
 # Drop support for i686 in preparation for `libarrow`
@@ -102,6 +102,7 @@ Patch:          0008-Fix-Cython-3.2-build.patch
 Patch:          0009-TST-numexpr-2.13-bool-arith-warning.patch
 # mpl 3.10 dropped pie log and sharex/sharey-with-ax UserWarnings
 Patch:          0010-TST-pie-logscale-pytest-warns.patch
+Patch:          0011-TST-subplots-ax-userwarning.patch
 
 %global _description %{expand:
 pandas is an open source, BSD-licensed library providing
