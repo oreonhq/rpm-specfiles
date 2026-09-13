@@ -6,7 +6,7 @@
 
 Name:           wl-clipboard
 Version:        2.2.1%{?commitdate:^git%{commitdate}.%{shortcommit}}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Command-line copy/paste utilities for Wayland
 
 License:        GPL-3.0-or-later
