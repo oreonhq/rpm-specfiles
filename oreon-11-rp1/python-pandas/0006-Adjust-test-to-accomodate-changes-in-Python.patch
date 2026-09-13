@@ -4,8 +4,8 @@ Subject: [PATCH] Adjust test to accomodate changes in Python
 
 TypeError wording on Python 3.14. ~bool always warns on 3.14.
 
---- a/pandas/tests/computation/test_eval.py
-+++ b/pandas/tests/computation/test_eval.py
+--- a/b/pandas/tests/computation/test_eval.py	2025-09-29 15:12:09.000000000 -0700
++++ b/pandas/tests/computation/test_eval.py	2026-09-12 17:14:29.383009845 -0700
 @@ -7,7 +7,10 @@
  import numpy as np
  import pytest
@@ -36,9 +36,7 @@ TypeError wording on Python 3.14. ~bool always warns on 3.14.
              ]
          )
          if is_scalar(rhs) and op in skip_these:
-@@ -564,8 +567,10 @@
-     def test_scalar_unary(self, engine, parser):
-         msg = "bad operand type for unary ~: 'float'"
+@@ -566,6 +569,8 @@
          warn = None
          if PY312 and not (engine == "numexpr" and parser == "pandas"):
              warn = DeprecationWarning
