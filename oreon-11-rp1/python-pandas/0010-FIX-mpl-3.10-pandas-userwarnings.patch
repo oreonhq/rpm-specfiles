@@ -1,33 +1,103 @@
 From: blester <blester@oreon>
-Date: Sun, 13 Sep 2026 00:00:00 +0000
+Date: Mon, 14 Sep 2026 00:00:00 +0000
 Subject: [PATCH] emit pandas UserWarnings mpl 3.10 / py3.14 still need
 
-find_stack_level falls back to co_filename when getfile blows up.
-pie still warns from _validate_log_kwd (logx is keyword-only on MPLPlot
-so it is not sitting in PiePlot **kwargs).
-scatter warns when cmap is unused (mpl 3.10 stopped).
-create_subplots uses get_figure(root=True) so sharex/sharey and
-figure-cleared warnings still fire.
+py3.14 warnings.warn stack walk skips extra frames so stacklevel from
+find_stack_level can overshoot and the warning never records.
+skip_file_prefixes on pandas dirs except tests. catch_warnings(action=)
+applies always in the record context. mpl 3.10 get_figure(root=True).
 
---- a/pandas/util/_exceptions.py
-+++ b/pandas/util/_exceptions.py
-@@ -47,9 +47,12 @@
-     try:
-         n = 0
-         while frame:
--            filename = inspect.getfile(frame)
-+            try:
-+                filename = inspect.getfile(frame)
-+            except (TypeError, OSError):
-+                filename = frame.f_code.co_filename
-             if filename.startswith(pkg_dir) and not filename.startswith(test_dir):
-                 frame = frame.f_back
-                 n += 1
-             else:
-                 break
+diff --git a/pandas/_testing/_warnings.py b/pandas/_testing/_warnings.py
+index c9a2879..b199076 100644
+--- a/pandas/_testing/_warnings.py
++++ b/pandas/_testing/_warnings.py
+@@ -92,8 +92,7 @@ def assert_produces_warning(
+     """
+     __tracebackhide__ = True
+ 
+-    with warnings.catch_warnings(record=True) as w:
+-        warnings.simplefilter(filter_level)
++    with warnings.catch_warnings(record=True, action=filter_level) as w:
+         try:
+             yield w
+         finally:
+diff --git a/pandas/plotting/_matplotlib/core.py b/pandas/plotting/_matplotlib/core.py
+index 3a1e589..b117e89 100644
+--- a/pandas/plotting/_matplotlib/core.py
++++ b/pandas/plotting/_matplotlib/core.py
+@@ -25,7 +25,10 @@ import numpy as np
+ from pandas._libs import lib
+ from pandas.errors import AbstractMethodError
+ from pandas.util._decorators import cache_readonly
+-from pandas.util._exceptions import find_stack_level
++from pandas.util._exceptions import (
++    find_stack_level,
++    warn_pandas,
++)
+ 
+ from pandas.core.dtypes.common import (
+     is_any_real_numeric_dtype,
+@@ -72,6 +75,7 @@ from pandas.plotting._matplotlib.timeseries import (
+     use_dynamic_x,
+ )
+ from pandas.plotting._matplotlib.tools import (
++    _figure_of,
+     create_subplots,
+     flatten_axes,
+     format_date_labels,
+@@ -580,7 +584,7 @@ class MPLPlot(ABC):
+             fig = self.plt.figure(figsize=self.figsize)
+             axes = fig.add_subplot(111)
+         else:
+-            fig = self.ax.get_figure()
++            fig = _figure_of(self.ax)
+             if self.figsize is not None:
+                 fig.set_size_inches(self.figsize)
+             axes = self.ax
+@@ -1401,6 +1405,13 @@ class ScatterPlot(PlanePlot):
+         c = self.c
+         if self.colormap is not None:
+             cmap = mpl.colormaps.get_cmap(self.colormap)
++            if not color_by_categorical and (
++                isinstance(c_values, str) or not is_integer_dtype(c_values)
++            ):
++                warn_pandas(
++                    "No data for colormapping provided via 'c'. "
++                    "Parameters 'cmap' will be ignored"
++                )
+         # cmap is only used if c_values are integers, otherwise UserWarning.
+         # GH-53908: additionally call isinstance() because is_integer_dtype
+         # returns True for "b" (meaning "blue" and not int8 in this context)
+@@ -2066,11 +2077,7 @@ class PiePlot(MPLPlot):
+     ) -> bool | None | Literal["sym"]:
+         super()._validate_log_kwd(kwd=kwd, value=value)
+         if value is not False:
+-            warnings.warn(
+-                f"PiePlot ignores the '{kwd}' keyword",
+-                UserWarning,
+-                stacklevel=find_stack_level(),
+-            )
++            warn_pandas(f"PiePlot ignores the '{kwd}' keyword")
+         return False
+ 
+     def _validate_color_args(self, color, colormap) -> None:
+diff --git a/pandas/plotting/_matplotlib/tools.py b/pandas/plotting/_matplotlib/tools.py
+index 98441c5..ec64629 100644
 --- a/pandas/plotting/_matplotlib/tools.py
 +++ b/pandas/plotting/_matplotlib/tools.py
-@@ -36,6 +36,16 @@
+@@ -9,7 +9,10 @@ from matplotlib import ticker
+ import matplotlib.table
+ import numpy as np
+ 
+-from pandas.util._exceptions import find_stack_level
++from pandas.util._exceptions import (
++    find_stack_level,
++    warn_pandas,
++)
+ 
+ from pandas.core.dtypes.common import is_list_like
+ from pandas.core.dtypes.generic import (
+@@ -36,6 +39,16 @@ if TYPE_CHECKING:
      )
  
  
@@ -44,8 +114,25 @@ figure-cleared warnings still fire.
  def do_adjust_figure(fig: Figure) -> bool:
      """Whether fig has constrained_layout enabled."""
      if not hasattr(fig, "get_constrained_layout"):
-@@ -249,7 +259,7 @@
-                     stacklevel=find_stack_level(),
+@@ -236,20 +249,16 @@ def create_subplots(
+             if squeeze:
+                 ax = flatten_axes(ax)
+             if layout is not None:
+-                warnings.warn(
+-                    "When passing multiple axes, layout keyword is ignored.",
+-                    UserWarning,
+-                    stacklevel=find_stack_level(),
++                warn_pandas(
++                    "When passing multiple axes, layout keyword is ignored."
+                 )
+             if sharex or sharey:
+-                warnings.warn(
++                warn_pandas(
+                     "When passing multiple axes, sharex and sharey "
+-                    "are ignored. These settings must be specified when creating axes.",
+-                    UserWarning,
+-                    stacklevel=find_stack_level(),
++                    "are ignored. These settings must be specified when creating axes."
                  )
              if ax.size == naxes:
 -                fig = ax.flat[0].get_figure()
@@ -53,7 +140,7 @@ figure-cleared warnings still fire.
                  return fig, ax
              else:
                  raise ValueError(
-@@ -257,7 +267,7 @@
+@@ -257,7 +266,7 @@ def create_subplots(
                      "same as the output plot"
                  )
  
@@ -62,9 +149,17 @@ figure-cleared warnings still fire.
          # if ax is passed and a number of subplots is 1, return ax as it is
          if naxes == 1:
              if squeeze:
-@@ -271,7 +281,8 @@
-                 UserWarning,
-                 stacklevel=find_stack_level(),
+@@ -265,13 +274,12 @@ def create_subplots(
+             else:
+                 return fig, flatten_axes(ax)
+         else:
+-            warnings.warn(
++            warn_pandas(
+                 "To output multiple subplots, the figure containing "
+-                "the passed axes is being cleared.",
+-                UserWarning,
+-                stacklevel=find_stack_level(),
++                "the passed axes is being cleared."
              )
 -            fig.clear()
 +            if fig is not None:
@@ -72,38 +167,46 @@ figure-cleared warnings still fire.
  
      nrows, ncols = _get_layout(naxes, layout=layout, layout_type=layout_type)
      nplots = nrows * ncols
---- a/pandas/plotting/_matplotlib/core.py
-+++ b/pandas/plotting/_matplotlib/core.py
-@@ -74,6 +74,7 @@
- from pandas.plotting._matplotlib.tools import (
-+    _figure_of,
-     create_subplots,
-     flatten_axes,
-     format_date_labels,
-     get_all_lines,
-     get_xlim,
-@@ -580,7 +581,7 @@
-             fig = self.plt.figure(figsize=self.figsize)
-             axes = fig.add_subplot(111)
-         else:
--            fig = self.ax.get_figure()
-+            fig = _figure_of(self.ax)
-             if self.figsize is not None:
-                 fig.set_size_inches(self.figsize)
-             axes = self.ax
-@@ -1401,6 +1402,15 @@
-         c = self.c
-         if self.colormap is not None:
-             cmap = mpl.colormaps.get_cmap(self.colormap)
-+            if not color_by_categorical and (
-+                isinstance(c_values, str) or not is_integer_dtype(c_values)
-+            ):
-+                warnings.warn(
-+                    "No data for colormapping provided via 'c'. "
-+                    "Parameters 'cmap' will be ignored",
-+                    UserWarning,
-+                    stacklevel=find_stack_level(),
-+                )
-         # cmap is only used if c_values are integers, otherwise UserWarning.
-         # GH-53908: additionally call isinstance() because is_integer_dtype
-         # returns True for "b" (meaning "blue" and not int8 in this context)
+diff --git a/pandas/util/_exceptions.py b/pandas/util/_exceptions.py
+index 5f50838..937f8a8 100644
+--- a/pandas/util/_exceptions.py
++++ b/pandas/util/_exceptions.py
+@@ -47,7 +47,10 @@ def find_stack_level() -> int:
+     try:
+         n = 0
+         while frame:
+-            filename = inspect.getfile(frame)
++            try:
++                filename = inspect.getfile(frame)
++            except (TypeError, OSError):
++                filename = frame.f_code.co_filename
+             if filename.startswith(pkg_dir) and not filename.startswith(test_dir):
+                 frame = frame.f_back
+                 n += 1
+@@ -60,6 +63,26 @@ def find_stack_level() -> int:
+     return n
+ 
+ 
++def warn_pandas(message, category=UserWarning):
++    import pandas as pd
++
++    pkg_dir = os.path.dirname(pd.__file__)
++    prefixes = []
++    try:
++        names = os.listdir(pkg_dir)
++    except OSError:
++        names = []
++    for name in names:
++        if name == "tests":
++            continue
++        path = os.path.join(pkg_dir, name)
++        if os.path.isdir(path):
++            prefixes.append(path + os.sep)
++        elif name.endswith(".py"):
++            prefixes.append(path)
++    warnings.warn(message, category, skip_file_prefixes=tuple(prefixes))
++
++
+ @contextlib.contextmanager
+ def rewrite_warning(
+     target_message: str,
