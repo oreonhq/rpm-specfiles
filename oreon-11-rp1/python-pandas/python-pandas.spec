@@ -19,7 +19,7 @@
 
 Name:           python-pandas
 Version:        2.3.3
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        Python library providing high-performance data analysis tools
 
 # Drop support for i686 in preparation for `libarrow`

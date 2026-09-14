@@ -1,31 +1,13 @@
 From: blester <blester@oreon>
 Date: Mon, 14 Sep 2026 00:00:00 +0000
-Subject: [PATCH] emit pandas UserWarnings mpl 3.10 / py3.14 still need
+Subject: [PATCH] mpl 3.10 get_figure(root=True) and py3.14 warning stack
 
-py3.14 warnings.warn stack walk skips extra frames so stacklevel from
-find_stack_level can overshoot and the warning never records.
-skip_file_prefixes on pandas dirs except tests. catch_warnings(action=)
-applies always in the record context. mpl 3.10 get_figure(root=True).
+get_figure(root=True) for mpl 3.10. warn_pandas uses skip_file_prefixes
+so py3.14 still records pandas UserWarnings. no fake unused-cmap warn.
 
-diff --git a/pandas/_testing/_warnings.py b/pandas/_testing/_warnings.py
-index c9a2879..b199076 100644
---- a/pandas/_testing/_warnings.py
-+++ b/pandas/_testing/_warnings.py
-@@ -92,8 +92,7 @@ def assert_produces_warning(
-     """
-     __tracebackhide__ = True
- 
--    with warnings.catch_warnings(record=True) as w:
--        warnings.simplefilter(filter_level)
-+    with warnings.catch_warnings(record=True, action=filter_level) as w:
-         try:
-             yield w
-         finally:
-diff --git a/pandas/plotting/_matplotlib/core.py b/pandas/plotting/_matplotlib/core.py
-index 3a1e589..b117e89 100644
 --- a/pandas/plotting/_matplotlib/core.py
 +++ b/pandas/plotting/_matplotlib/core.py
-@@ -25,7 +25,10 @@ import numpy as np
+@@ -25,7 +25,10 @@
  from pandas._libs import lib
  from pandas.errors import AbstractMethodError
  from pandas.util._decorators import cache_readonly
@@ -37,7 +19,7 @@ index 3a1e589..b117e89 100644
  
  from pandas.core.dtypes.common import (
      is_any_real_numeric_dtype,
-@@ -72,6 +75,7 @@ from pandas.plotting._matplotlib.timeseries import (
+@@ -72,6 +75,7 @@
      use_dynamic_x,
  )
  from pandas.plotting._matplotlib.tools import (
@@ -45,7 +27,7 @@ index 3a1e589..b117e89 100644
      create_subplots,
      flatten_axes,
      format_date_labels,
-@@ -580,7 +584,7 @@ class MPLPlot(ABC):
+@@ -580,7 +584,7 @@
              fig = self.plt.figure(figsize=self.figsize)
              axes = fig.add_subplot(111)
          else:
@@ -54,21 +36,7 @@ index 3a1e589..b117e89 100644
              if self.figsize is not None:
                  fig.set_size_inches(self.figsize)
              axes = self.ax
-@@ -1401,6 +1405,13 @@ class ScatterPlot(PlanePlot):
-         c = self.c
-         if self.colormap is not None:
-             cmap = mpl.colormaps.get_cmap(self.colormap)
-+            if not color_by_categorical and (
-+                isinstance(c_values, str) or not is_integer_dtype(c_values)
-+            ):
-+                warn_pandas(
-+                    "No data for colormapping provided via 'c'. "
-+                    "Parameters 'cmap' will be ignored"
-+                )
-         # cmap is only used if c_values are integers, otherwise UserWarning.
-         # GH-53908: additionally call isinstance() because is_integer_dtype
-         # returns True for "b" (meaning "blue" and not int8 in this context)
-@@ -2066,11 +2077,7 @@ class PiePlot(MPLPlot):
+@@ -2066,11 +2070,7 @@
      ) -> bool | None | Literal["sym"]:
          super()._validate_log_kwd(kwd=kwd, value=value)
          if value is not False:
@@ -81,11 +49,9 @@ index 3a1e589..b117e89 100644
          return False
  
      def _validate_color_args(self, color, colormap) -> None:
-diff --git a/pandas/plotting/_matplotlib/tools.py b/pandas/plotting/_matplotlib/tools.py
-index 98441c5..ec64629 100644
 --- a/pandas/plotting/_matplotlib/tools.py
 +++ b/pandas/plotting/_matplotlib/tools.py
-@@ -9,7 +9,10 @@ from matplotlib import ticker
+@@ -9,7 +9,10 @@
  import matplotlib.table
  import numpy as np
  
@@ -97,7 +63,7 @@ index 98441c5..ec64629 100644
  
  from pandas.core.dtypes.common import is_list_like
  from pandas.core.dtypes.generic import (
-@@ -36,6 +39,16 @@ if TYPE_CHECKING:
+@@ -36,6 +39,16 @@
      )
  
  
@@ -114,7 +80,7 @@ index 98441c5..ec64629 100644
  def do_adjust_figure(fig: Figure) -> bool:
      """Whether fig has constrained_layout enabled."""
      if not hasattr(fig, "get_constrained_layout"):
-@@ -236,20 +249,16 @@ def create_subplots(
+@@ -236,20 +249,16 @@
              if squeeze:
                  ax = flatten_axes(ax)
              if layout is not None:
@@ -140,7 +106,7 @@ index 98441c5..ec64629 100644
                  return fig, ax
              else:
                  raise ValueError(
-@@ -257,7 +266,7 @@ def create_subplots(
+@@ -257,7 +266,7 @@
                      "same as the output plot"
                  )
  
@@ -149,7 +115,7 @@ index 98441c5..ec64629 100644
          # if ax is passed and a number of subplots is 1, return ax as it is
          if naxes == 1:
              if squeeze:
-@@ -265,13 +274,12 @@ def create_subplots(
+@@ -265,13 +274,12 @@
              else:
                  return fig, flatten_axes(ax)
          else:
@@ -167,11 +133,9 @@ index 98441c5..ec64629 100644
  
      nrows, ncols = _get_layout(naxes, layout=layout, layout_type=layout_type)
      nplots = nrows * ncols
-diff --git a/pandas/util/_exceptions.py b/pandas/util/_exceptions.py
-index 5f50838..937f8a8 100644
 --- a/pandas/util/_exceptions.py
 +++ b/pandas/util/_exceptions.py
-@@ -47,7 +47,10 @@ def find_stack_level() -> int:
+@@ -47,7 +47,10 @@
      try:
          n = 0
          while frame:
@@ -183,7 +147,7 @@ index 5f50838..937f8a8 100644
              if filename.startswith(pkg_dir) and not filename.startswith(test_dir):
                  frame = frame.f_back
                  n += 1
-@@ -60,6 +63,26 @@ def find_stack_level() -> int:
+@@ -60,6 +63,26 @@
      return n
  
  
