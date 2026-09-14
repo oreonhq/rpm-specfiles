@@ -1,19 +1,30 @@
 From: blester <blester@oreon>
-Date: Sat, 12 Sep 2026 00:00:00 +0000
-Subject: [PATCH] TST: numexpr 2.13+ supports bool +/*
+Date: Sun, 13 Sep 2026 00:00:00 +0000
+Subject: [PATCH] TST: only expect numexpr bool arith warning before 2.13.1
 
-numexpr 2.14 does bool arith so pandas does not warn on fallback.
+numexpr 2.13.1+ does bool +/*. pandas then does not fallback or warn.
+same as pandas 2.3.x PR 62452.
 
 --- a/pandas/tests/test_expressions.py
 +++ b/pandas/tests/test_expressions.py
-@@ -1,5 +1,6 @@
- import operator
- import re
-+import warnings
- 
+@@ -4,6 +4,8 @@
  import numpy as np
  import pytest
-@@ -324,7 +325,7 @@
+ 
++from pandas.compat._optional import import_optional_dependency
++
+ from pandas import option_context
+ import pandas._testing as tm
+ from pandas.core.api import (
+@@ -12,6 +14,7 @@
+     Series,
+ )
+ from pandas.core.computation import expressions as expr
++from pandas.util.version import Version
+ 
+ 
+ @pytest.fixture
+@@ -324,7 +327,7 @@
      @pytest.mark.parametrize(
          "op_str,opname", [("+", "add"), ("*", "mul"), ("-", "sub")]
      )
@@ -22,7 +33,7 @@ numexpr 2.14 does bool arith so pandas does not warn on fallback.
          n = 10
          df = DataFrame(
              {
-@@ -343,36 +344,34 @@
+@@ -343,36 +346,47 @@
              # raises TypeError
              return
  
@@ -56,31 +67,44 @@ numexpr 2.14 does bool arith so pandas does not warn on fallback.
 -                r = f(df, True)
 -                e = fe(df, True)
 -                tm.assert_frame_equal(r, e)
++        msg = "operator is not supported by numexpr"
++        ne = import_optional_dependency("numexpr", errors="ignore")
++        warning = (
++            UserWarning
++            if ne
++            and op_str in {"+", "*"}
++            and Version(ne.__version__) < Version("2.13.1")
++            else None
++        )
 +        with monkeypatch.context() as m:
 +            m.setattr(expr, "_MIN_ELEMENTS", 5)
 +            with option_context("compute.use_numexpr", True):
-+                with warnings.catch_warnings():
-+                    warnings.simplefilter("ignore", UserWarning)
++                with tm.assert_produces_warning(warning, match=msg):
 +                    r = f(df, df)
 +                    e = fe(df, df)
 +                    tm.assert_frame_equal(r, e)
 +
++                with tm.assert_produces_warning(warning, match=msg):
 +                    r = f(df.a, df.b)
 +                    e = fe(df.a, df.b)
 +                    tm.assert_series_equal(r, e)
 +
++                with tm.assert_produces_warning(warning, match=msg):
 +                    r = f(df.a, True)
 +                    e = fe(df.a, True)
 +                    tm.assert_series_equal(r, e)
 +
++                with tm.assert_produces_warning(warning, match=msg):
 +                    r = f(False, df.a)
 +                    e = fe(False, df.a)
 +                    tm.assert_series_equal(r, e)
 +
++                with tm.assert_produces_warning(warning, match=msg):
 +                    r = f(False, df)
 +                    e = fe(False, df)
 +                    tm.assert_frame_equal(r, e)
 +
++                with tm.assert_produces_warning(warning, match=msg):
 +                    r = f(df, True)
 +                    e = fe(df, True)
 +                    tm.assert_frame_equal(r, e)

@@ -1,0 +1,122 @@
+From: blester <blester@oreon>
+Date: Sun, 13 Sep 2026 00:00:00 +0000
+Subject: [PATCH] emit pandas UserWarnings mpl 3.10 / py3.14 still need
+
+find_stack_level uses co_filename so py3.14 frames still count.
+pie warns from PiePlot.__init__ when the user passed logx/logy/loglog.
+scatter warns when cmap is unused (mpl 3.10 stopped).
+create_subplots uses get_figure(root=True) so sharex/sharey and
+figure-cleared warnings still fire.
+
+--- a/pandas/util/_exceptions.py
++++ b/pandas/util/_exceptions.py
+@@ -47,7 +47,7 @@
+     try:
+         n = 0
+         while frame:
+-            filename = inspect.getfile(frame)
++            filename = frame.f_code.co_filename
+             if filename.startswith(pkg_dir) and not filename.startswith(test_dir):
+                 frame = frame.f_back
+                 n += 1
+@@ -57,7 +57,7 @@
+         # See note in
+         # https://docs.python.org/3/library/inspect.html#inspect.Traceback
+         del frame
+-    return n
++    return n if n else 1
+ 
+ 
+ @contextlib.contextmanager
+--- a/pandas/plotting/_matplotlib/tools.py
++++ b/pandas/plotting/_matplotlib/tools.py
+@@ -36,6 +36,16 @@
+     )
+ 
+ 
++def _figure_of(ax):
++    get_figure = getattr(ax, "get_figure", None)
++    if get_figure is None:
++        return None
++    try:
++        return get_figure(root=True)
++    except TypeError:
++        return get_figure()
++
++
+ def do_adjust_figure(fig: Figure) -> bool:
+     """Whether fig has constrained_layout enabled."""
+     if not hasattr(fig, "get_constrained_layout"):
+@@ -249,7 +259,7 @@
+                     stacklevel=find_stack_level(),
+                 )
+             if ax.size == naxes:
+-                fig = ax.flat[0].get_figure()
++                fig = _figure_of(ax.flat[0])
+                 return fig, ax
+             else:
+                 raise ValueError(
+@@ -257,7 +267,7 @@
+                     "same as the output plot"
+                 )
+ 
+-        fig = ax.get_figure()
++        fig = _figure_of(ax)
+         # if ax is passed and a number of subplots is 1, return ax as it is
+         if naxes == 1:
+             if squeeze:
+@@ -271,7 +281,8 @@
+                 UserWarning,
+                 stacklevel=find_stack_level(),
+             )
+-            fig.clear()
++            if fig is not None:
++                fig.clear()
+ 
+     nrows, ncols = _get_layout(naxes, layout=layout, layout_type=layout_type)
+     nplots = nrows * ncols
+--- a/pandas/plotting/_matplotlib/core.py
++++ b/pandas/plotting/_matplotlib/core.py
+@@ -1401,6 +1401,15 @@
+         c = self.c
+         if self.colormap is not None:
+             cmap = mpl.colormaps.get_cmap(self.colormap)
++            if not color_by_categorical and (
++                isinstance(c_values, str) or not is_integer_dtype(c_values)
++            ):
++                warnings.warn(
++                    "No data for colormapping provided via 'c'. "
++                    "Parameters 'cmap' will be ignored",
++                    UserWarning,
++                    stacklevel=find_stack_level(),
++                )
+         # cmap is only used if c_values are integers, otherwise UserWarning.
+         # GH-53908: additionally call isinstance() because is_integer_dtype
+         # returns True for "b" (meaning "blue" and not int8 in this context)
+@@ -2053,6 +2062,13 @@
+     _layout_type = "horizontal"
+ 
+     def __init__(self, data, kind=None, **kwargs) -> None:
++        for kwd in ("logx", "logy", "loglog"):
++            if kwargs.get(kwd, False):
++                warnings.warn(
++                    f"PiePlot ignores the '{kwd}' keyword",
++                    UserWarning,
++                    stacklevel=find_stack_level(),
++                )
+         data = data.fillna(value=0)
+         if (data < 0).any().any():
+             raise ValueError(f"{self._kind} plot doesn't allow negative values")
+@@ -2065,12 +2081,6 @@
+         value: bool | None | Literal["sym"],
+     ) -> bool | None | Literal["sym"]:
+         super()._validate_log_kwd(kwd=kwd, value=value)
+-        if value is not False:
+-            warnings.warn(
+-                f"PiePlot ignores the '{kwd}' keyword",
+-                UserWarning,
+-                stacklevel=find_stack_level(),
+-            )
+         return False
+ 
+     def _validate_color_args(self, color, colormap) -> None:
