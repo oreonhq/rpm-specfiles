@@ -1,4 +1,5 @@
 %global source0_hash 1e262a8eedefc1a258f6009554fca7153f1af9dcce1bae5d7f06ce10bf1bda37
+%global source1_hash 4c4a2a1fcb2712baf8871684f0ac3b53a767c24ead8fdafc5384783ed7be4b06
 
 # We need to break some cycles with optional dependencies for bootstrapping;
 # given that a conditional is needed, we take the opportunity to omit as many
@@ -18,7 +19,7 @@
 
 Name:           python-pandas
 Version:        2.3.3
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Python library providing high-performance data analysis tools
 
 # Drop support for i686 in preparation for `libarrow`
@@ -82,6 +83,8 @@ License:        BSD-3-Clause AND (Apache-2.0 OR BSD-2-Clause) AND (BSD-3-Clause 
 URL:            https://pandas.pydata.org/
 # The GitHub archive contains tests; the PyPI sdist does not.
 Source0:        https://github.com/pandas-dev/pandas/archive/v%{version}/pandas-%{version}.tar.gz
+# github archive strips csv/xml/kml/pickle via export-ignore
+Source1:        pandas-%{version}-testdata.tar.gz
 # https://github.com/pandas-dev/pandas/pull/57389
 Patch:          0001-TST-Ensure-Matplotlib-is-always-cleaned-up.patch
 # Fix big-endian issues:
@@ -235,7 +238,6 @@ Provides:       bundled(python3dist(xarray))
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  git-core
 
 BuildRequires:  python3-devel
 
@@ -471,18 +473,11 @@ These are the tests for python3-pandas. This package:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -n pandas-%{version} -p1
 
-# github archive honors export-ignore and drops csv/xml/kml/pickle fixtures
-if [ ! -f pandas/tests/io/data/xml/books.xml ]; then
-  git clone --depth 1 --branch v%{version} https://github.com/pandas-dev/pandas.git .pdata
-  find .pdata/pandas/tests -type f ! -name '*.py' ! -name '*.pyc' ! -name '*.pyo' | while read -r f; do
-    rel=${f#.pdata/}
-    mkdir -p "$(dirname "$rel")"
-    cp -a "$f" "$rel"
-  done
-  rm -rf .pdata
-fi
+tar -x -z -f %{SOURCE1}
+test -f pandas/tests/io/data/xml/books.xml
 
 # Let versioneer know what version this is
 echo '__version__="%{version}"' > _version_meson.py
