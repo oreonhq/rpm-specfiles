@@ -1,27 +1,17 @@
-%global source0_hash none
-
-%global tag_version release-%(echo "%version" | tr '~' '-' | tr '.' '-')
-#%%global is_official 0%%(echo %%{tag_version} | grep -qE 'alpha|beta|final'; echo $?)
-#%%global is_official 0
-%global is_official 0
+%global source0_hash d9b99299f3fbd3070b357612f4a4c4c64bff59ad7f05b4e636efdf1b60fe69f6
 
 Name:       cldr-emoji-annotation
 Version:    48.2
 Release:    %autorelease
-%if 0%{?fedora:1}%{?rhel:0}
-Epoch:      1
-%endif
-# Annotation files are in Unicode license
+%global tag_version release-%(echo %{version} | tr '~' '-' | tr '.' '-')
 Summary:    Emoji annotation files in CLDR
 License:    Unicode-DFS-2016
 URL:        https://unicode.org/cldr
-%if %is_official
-Source0:        https://github.com/unicode-org/cldr/archive/refs/tags/%{tag_version}.zip#/cldr-%{tag_version}.zip
-%else
-%endif
-#Patch0:     %%{name}-HEAD.patch
+VCS:        git:https://github.com/unicode-org/cldr.git
+Source0:    https://github.com/unicode-org/cldr/archive/refs/tags/%{tag_version}.tar.gz#/cldr-%{tag_version}.tar.gz
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: libxml2
 BuildArch:  noarch
 Requires:  %{name}-dtd
 
@@ -50,11 +40,7 @@ when building programs that use cldr-emoji-annotations.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%if %is_official
-%autosetup -c -n cldr-%{tag_version}
-%else
 %autosetup -n cldr-%{tag_version}
-%endif
 
 
 %install
@@ -108,13 +94,8 @@ done
 
 
 %files
-%if %is_official
-%doc README-common.md
-%license LICENSE
-%else
 %doc README.md
 %license LICENSE
-%endif
 %{_datadir}/unicode/cldr/common/annotations
 %{_datadir}/unicode/cldr/common/annotationsDerived
 
