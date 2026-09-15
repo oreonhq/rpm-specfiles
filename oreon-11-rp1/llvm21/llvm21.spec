@@ -236,8 +236,13 @@ end
 # LLVM libraries with Clang 20, and then the runtimes build would use the
 # just-built Clang 19. Runtimes that link against LLVM libraries would then
 # try to make Clang 19 perform LTO involving LLVM 20 bitcode.
+# oreon does not have clang 21 yet, bootstrap with llvm20
+%if 0%{?oreon} >= 11
+%global host_clang_maj_ver %{compat_maj_ver}
+%else
 %if %{with compat_build}
 %global host_clang_maj_ver %{maj_ver}
+%endif
 %endif
 
 %if %{defined host_clang_maj_ver}
