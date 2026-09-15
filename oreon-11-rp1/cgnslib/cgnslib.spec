@@ -29,8 +29,8 @@ BuildRequires:  hdf5-devel
 BuildRequires:  libXmu-devel
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  mesa-libGLU-devel
-BuildRequires:  tcl-devel < 1:9
-BuildRequires:  tk-devel < 1:9
+BuildRequires:  tcl8-devel
+BuildRequires:  tk8-devel
 BuildRequires:  zlib-devel
 Requires:       hdf5%{?_isa} = %{_hdf5_version}
 Requires:       %{name}-common = %{version}-%{release}

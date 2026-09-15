@@ -19,6 +19,7 @@ BuildRequires:  cmake >= 3.13
 BuildRequires:  gcc-c++
 BuildRequires:  hdf5-devel
 BuildRequires:  cmake(Imath)
+BuildRequires:  imath-devel
 BuildRequires:  pkgconfig(zlib)
 
 %description

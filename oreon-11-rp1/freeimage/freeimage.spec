@@ -17,8 +17,7 @@ Summary:        Multi-format image decoder library
 License:        GPL-2.0-only OR GPL-3.0-only OR MPL-1.0
 URL:            http://freeimage.sourceforge.net/
 %if 0%{?svn_rev:1}
-# Visit https://sourceforge.net/p/freeimage/svn/%{svn_rev}/tarball?path=/FreeImage/trunk
-Source:        freeimage-svn-r%{svn_rev}-FreeImage-trunk.zip
+Source:        https://sourceforge.net/p/freeimage/svn/%{svn_rev}/tarball?path=/FreeImage/trunk#/freeimage-svn-r%{svn_rev}-FreeImage-trunk.zip
 %else
 Source:        http://downloads.sourceforge.net/%{name}/FreeImage%(echo %{version} | sed 's|\.||g').zip
 %endif
@@ -55,12 +54,8 @@ BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  libwebp-devel
 BuildRequires:  LibRaw-devel
-%if 0%{?fedora} > 34
 BuildRequires:  openexr-devel
 BuildRequires:  imath-devel
-%else
-BuildRequires:  OpenEXR-devel
-%endif
 BuildRequires:  openjpeg2-devel
 
 %description
