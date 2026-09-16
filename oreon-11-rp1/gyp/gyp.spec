@@ -1,5 +1,6 @@
-%global source0_hash 4e377f8479d489a82adddedad69673427613a127e1b78acbf47fee9ecf2cd831
+%global source0_hash 0262e6fae2f2ee546ad4c1d99e0006c39c2911c935978c066b13334820c2063a
 
+%global		gitcommit	fcd686f1880fa52a1ee78d3e98af1b88cb334528
 %global		revision	fcd686f1
 %{expand:	%%global	archivename	gyp-%{version}%{?revision:-git%{revision}}}
 %if 0%{?rhel} && 0%{?rhel} <= 6
@@ -19,8 +20,7 @@ Summary:	Generate Your Projects
 
 License:	BSD-3-Clause
 URL:		https://gyp.gsrc.io
-# No released tarball avaiable. Use the googlesource archive of the pinned commit.
-Source0:	https://chromium.googlesource.com/external/gyp/+archive/%{revision}.tar.gz#/%{archivename}.tar.gz
+Source0:	https://github.com/chromium/gyp/archive/%{gitcommit}.tar.gz#/%{archivename}.tar.gz
 Source1:	pyproject.toml
 Patch0:		gyp-rpmoptflags.patch
 Patch1:		gyp-ninja-build.patch
@@ -63,7 +63,7 @@ irreconcilable differences.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -c -n %{archivename}
+%autosetup -p1 -n gyp-%{gitcommit}
 for i in $(find pylib -name '*.py'); do
 	sed -e '\,#![ \t]*/.*python,{d}' $i > $i.new && touch -r $i $i.new && mv $i.new $i
 done
