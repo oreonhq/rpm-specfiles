@@ -107,7 +107,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # First, carefully adjust the pins of build and runtime dependencies,
 # then remove all the >= specifiers from tests deps, whatever they are,
 # finally, remove undesired test dependencies.
-sed -ri -e 's/"(filelock|platformdirs|pyproject-api|cachetools|hatch-vcs)>=.*/"\1",/g' \
+sed -ri -e 's/"(filelock|platformdirs|pyproject-api|cachetools|hatch-vcs|packaging|virtualenv)>=.*/"\1",/g' \
         -e 's/"(hatchling)>=.*/"\1>=1.13",/g' \
         -e 's/"(pluggy)>=.*/"\1>=1.5",/g' \
         -e '/^test = \[/,/^\]/ { s/>=[^;"]+// }' \
