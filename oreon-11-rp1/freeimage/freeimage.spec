@@ -1,4 +1,4 @@
-%global source0_hash 999cec8e3a787d5d4a277587d5f5788913fe3e5450e90d06d8373ded71dde055
+%global source0_hash 881a886e3afd0c5802b78bbe01b6697015cc13e5e82f47d2a276478eefbd0858
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1676717
 %undefine _ld_as_needed
