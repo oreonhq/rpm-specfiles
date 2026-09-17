@@ -6,13 +6,13 @@
 %global nmlibdir %{_prefix}/lib/NetworkManager
 
 Name:           nvme-cli
-Version:        2.16
-Release:        2%{?dist}
+Version:        3.0-b.5
+Release:        1%{?dist}
 Summary:        NVMe management command line interface
 
 License:        GPL-2.0-only
 URL:            https://github.com/linux-nvme/nvme-cli
-Source0:        https://github.com/linux-nvme/nvme-cli/archive/refs/tags/v2.16.tar.gz#/nvme-cli-2.16.tar.gz
+Source0:        https://github.com/linux-nvme/nvme-cli/archive/refs/tags/v2.16.tar.gz#/nvme-cli-3.0-b.5.tar.gz
 Source1:        99-nvme-nbft-connect.sh
 Source2:        99-nvme-nbft-no-ignore-carrier.conf
 

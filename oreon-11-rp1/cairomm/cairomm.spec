@@ -10,7 +10,7 @@
 
 Name:           cairomm
 Summary:        C++ API for the cairo graphics library
-Version:        1.14.5
+Version:        1.18.1
 Release:        %autorelease
 
 URL:            https://www.cairographics.org
@@ -44,12 +44,12 @@ SourceLicense:  %{shrink:
                 }
 
 %global src_base https://www.cairographics.org/releases
-Source0:        https://www.cairographics.org/releases/cairomm-1.14.5.tar.xz
+Source0:        https://www.cairographics.org/releases/cairomm-1.18.1.tar.xz
 # No keyring with authorized GPG signing keys is published
 # (https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/331), but we
 # are able to verify the signature using the key for Kjell Ahlstedt from
 # https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/290.
-Source1:        https://www.cairographics.org/releases/cairomm-1.14.5.tar.xz.asc
+Source1:        https://www.cairographics.org/releases/cairomm-1.18.1.tar.xz.asc
 Source2:        https://gitlab.freedesktop.org/freedesktop/freedesktop/uploads/0ac64e9582659f70a719d59fb02cd037/gpg_key.pub
 
 # Fix outdated FSF mailing address in COPYING

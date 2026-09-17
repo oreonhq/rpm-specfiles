@@ -1,7 +1,7 @@
 %global source0_hash 60ce2cfdc146fcb81c621cb8b45874d2eb1d4693105d048f60e31b8f3468be90
 
 Name:           paho-c
-Version:        1.3.15
+Version:        1.3.16
 Release:        %autorelease
 Summary:        MQTT C Client
 License:        BSD-3-Clause AND EPL-2.0

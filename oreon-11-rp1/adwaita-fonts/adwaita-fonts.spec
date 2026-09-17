@@ -6,7 +6,7 @@ BuildArch:      noarch
 BuildRequires:  meson
 BuildRequires:  fonts-rpm-macros
 
-Version: 50.0
+Version: 51.0
 Release: %autorelease
 License: OFL-1.1
 URL:     https://gitlab.gnome.org/GNOME/adwaita-fonts.git

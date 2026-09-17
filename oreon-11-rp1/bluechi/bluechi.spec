@@ -11,7 +11,7 @@
 %endif
 
 Name:		bluechi
-Version:	1.2.2
+Version:	1.3.0
 Release:	1%{?dist}
 Summary:	A systemd service controller for multi-nodes environments
 License:	LGPL-2.1-or-later AND CC0-1.0

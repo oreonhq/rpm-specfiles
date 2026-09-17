@@ -6,8 +6,8 @@
 
 Summary: X Fixes library
 Name: libXfixes
-Version: 6.0.1
-Release: 7%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 6.0.2
+Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT AND HPND-sell-variant
 URL: http://www.x.org
 

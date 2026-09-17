@@ -7,7 +7,7 @@
 %global selinuxtype targeted
 
 Name:           nagios
-Version:        4.5.11
+Version:        4.5.14
 Release:        1%{?dist}
 
 Summary: Host/service/network monitoring program

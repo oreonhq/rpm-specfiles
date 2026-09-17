@@ -5,8 +5,8 @@
 
 Summary:        A Python interface to the HDF5 library
 Name:           h5py
-Version:        3.15.1
-Release:        3%{?dist}
+Version:        3.16.0
+Release:        1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.h5py.org/

@@ -3,8 +3,8 @@
 %global _hardened_build 1
 
 Name:             bird
-Version:          3.2.0
-Release:          3%{?dist}
+Version:          3.3.2
+Release:          1%{?dist}
 Summary:          BIRD Internet Routing Daemon
 
 License:          GPL-2.0-or-later

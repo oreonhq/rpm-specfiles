@@ -3,8 +3,8 @@
 %define service tar_scm
 
 Name:           obs-service-%{service}
-Version:        0.10.41
-Release:        5%{?dist}
+Version:        0.13.0
+Release:        1%{?dist}
 Summary:        An OBS source service: checkout or update a tarball from svn/git/hg
 License:        GPL-2.0-or-later
 URL:            https://github.com/openSUSE/%{name}

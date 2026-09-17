@@ -2,7 +2,7 @@
 
 Name:              netatalk
 Epoch:             5
-Version:           4.4.1
+Version:           4.5.1
 Release:           1%{?dist}
 Summary:           Open Source Apple Filing Protocol(AFP) File Server
 # Automatically converted from old format: GPL+ and GPLv2 and GPLv2+ and LGPLv2+ and BSD and FSFUL and MIT - review is highly recommended.
@@ -12,9 +12,6 @@ URL:               http://netatalk.sourceforge.net
 Source0:           https://download.sourceforge.net/netatalk/netatalk-%{version}.tar.xz
 Source1:           netatalk.pam-system-auth
 
-Patch0:            netatalk-AfpErr2name.patch
-
-# Per i686 leaf package policy 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -361,7 +358,8 @@ rm -rf %{buildroot}%{_pkgdocdir}/DOCKER.txt
 %{_unitdir}/papd.service
 %{_unitdir}/timelord.service
 %endif
-
+%{_bindir}/misc/
+%{_bindir}/nbp/
 %files doc
 %license COPYING COPYRIGHT
 %doc %{_pkgdocdir}/manual

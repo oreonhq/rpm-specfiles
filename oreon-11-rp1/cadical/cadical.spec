@@ -4,7 +4,7 @@
 
 Name:           cadical
 Epoch:          1
-Version:        2.2.1
+Version:        3.0.1
 Release:        %autorelease
 Summary:        Simplified SAT solver
 

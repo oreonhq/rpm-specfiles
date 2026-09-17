@@ -5,7 +5,7 @@
 
 Summary: Intel MPI benchmarks
 Name:    intel-mpi-benchmarks
-Version: 2021.8
+Version: 2021.11
 Release: %autorelease
 License: BSD-3-Clause
 URL:     https://software.intel.com/en-us/articles/intel-mpi-benchmarks

@@ -1,12 +1,12 @@
 %global source0_hash 1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9
 
 Name:           jpegxl
-Version:        0.11.1
-Release:        9%{?dist}
+Version:        0.12.0
+Release:        1%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
-Source0:        https://github.com/libjxl/libjxl/archive/v%{version}/%{name}-%{version}.tar.gz#/jpegxl-0.11.1.tar.gz
+Source0:        https://github.com/libjxl/libjxl/archive/v%{version}/%{name}-%{version}.tar.gz#/jpegxl-0.12.0.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

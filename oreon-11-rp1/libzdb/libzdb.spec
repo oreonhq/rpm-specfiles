@@ -1,8 +1,8 @@
 %global source0_hash 5b4633fc2a16880f776197f4045f62ef8db5062f63030fa221011d4b85d736cb
 
 Name:           libzdb
-Version:        3.4.1
-Release:        3%{?dist}
+Version:        3.6.0
+Release:        1%{?dist}
 Summary:        Small, easy to use Database Connection Pool Library
 # Automatically converted from old format: GPLv3+ and MIT - review is highly recommended.
 License:        GPL-3.0-or-later AND LicenseRef-Callaway-MIT

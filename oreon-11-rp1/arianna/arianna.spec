@@ -4,7 +4,7 @@
 
 
 Name:          arianna
-Version:       26.04.3
+Version:       26.08.1
 Release:       1%{?dist}
 Summary:       EPub Reader for mobile devices
 # Complete license breakdown can be found in the "LICENSE-BREAKDOWN" file.

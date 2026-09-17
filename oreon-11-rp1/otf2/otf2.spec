@@ -7,8 +7,8 @@
 # writing of non-sionlib traces.
 
 Name:           otf2
-Version:        3.1.1
-Release:        6%{?dist}
+Version:        3.2
+Release:        1%{?dist}
 Summary:        Open Trace Format 2 library
 
 License:        BSD-3-Clause

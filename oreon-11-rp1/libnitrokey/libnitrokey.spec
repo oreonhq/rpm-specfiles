@@ -1,8 +1,8 @@
 %global source0_hash 2b432ccc6b9c924feb32e8adf0c115d83a2f8017df8e5d4cc238cc4d77d77fec
 
 Name:           libnitrokey
-Version:        3.7
-Release:        10%{?dist}
+Version:        3.8
+Release:        1%{?dist}
 Summary:        Communicate with Nitrokey stick devices in a clean and easy manner
 
 License:        LGPL-3.0-or-later

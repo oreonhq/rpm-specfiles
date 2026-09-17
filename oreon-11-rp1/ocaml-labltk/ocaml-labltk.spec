@@ -11,8 +11,8 @@ ExcludeArch: %{ix86}
 %global giturl https://github.com/garrigue/labltk
 
 Name:          ocaml-labltk
-Version:       8.06.15
-Release:       6%{?dist}
+Version:       8.06.16
+Release:       1%{?dist}
 
 Summary:       Tcl/Tk interface for OCaml
 
@@ -20,7 +20,7 @@ License:       LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:           https://garrigue.github.io/labltk/
 VCS:           git:%{giturl}.git
-Source0:        https://github.com/garrigue/labltk/archive/refs/tags/8.06.15.tar.gz#/labltk-8.06.15.tar.gz
+Source0:        https://github.com/garrigue/labltk/archive/refs/tags/8.06.16.tar.gz#/labltk-8.06.16.tar.gz
 
 # This adds debugging (-g) everywhere.
 Patch1:        labltk-8.06.11-enable-debugging.patch

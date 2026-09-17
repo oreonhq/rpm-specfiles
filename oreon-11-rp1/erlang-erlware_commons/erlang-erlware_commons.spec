@@ -3,7 +3,7 @@
 %global realname erlware_commons
 
 Name:     erlang-%{realname}
-Version:  1.8.1
+Version:  1.9.1
 Release:  %autorelease
 Summary:  Extension to Erlang's standard library
 License:  MIT

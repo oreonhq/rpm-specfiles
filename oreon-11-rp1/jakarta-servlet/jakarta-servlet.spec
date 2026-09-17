@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jakarta-servlet
-Version:        5.0.0
+Version:        6.1.0
 Release:        %autorelease
 Summary:        Jakarta Servlet
 # most of the project is EPL-2.0 or GPLv2 w/exceptions,
@@ -14,7 +14,7 @@ URL:            https://jakarta.ee/specifications/servlet/5.0/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz#/jakarta-servlet-5.0.0.tar.gz
+Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz#/jakarta-servlet-6.1.0.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -24,7 +24,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.0.0-37
+Obsoletes:      %{name}-javadoc < 6.1.0-37
 Provides:       glassfish-servlet-api = %{version}-%{release}
 
 %description
@@ -33,8 +33,8 @@ and responses.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n servlet-5.0.0-RELEASE
-%autosetup -p1 -n servlet-5.0.0-RELEASE
+%setup -q -n servlet-6.1.0-RELEASE
+%autosetup -p1 -n servlet-6.1.0-RELEASE
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent . api

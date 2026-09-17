@@ -2,19 +2,17 @@
 
 Summary: Windows MetaFile Library
 Name: libwmf
-Version: 0.2.13
-Release: 9%{?dist}
+Version: 0.2.16
+Release: 1%{?dist}
 #libwmf is under the LGPLv2+, however...
 #1. The tarball contains an old version of the urw-fonts under GPL+.
 #   Those fonts are not installed
 #2. The header of the command-line wmf2plot utility places it under the GPLv2+.
 #   wmf2plot is neither built or install
 License: LGPL-2.1-or-later AND GPL-2.0-or-later AND GPL-1.0-or-later
-Source:        https://github.com/caolanm/libwmf/archive/refs/tags/v%{version}.tar.gz#/libwmf-0.2.13.tar.gz
+Source:        https://github.com/caolanm/libwmf/archive/refs/tags/v%{version}.tar.gz#/libwmf-0.2.16.tar.gz
 
 URL: https://github.com/caolanm/libwmf
-
-Patch0: 1f87c35bc2a36fdca760a4577761d30d9cc876e2.patch
 
 Provides: bundled(gd) = 2.0.0
 
@@ -51,7 +49,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 f=README ; iconv -f iso-8859-2 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 
-%patch -P 0 -p1
 
 %build
 autoreconf -i -f -Ipatches

@@ -8,8 +8,8 @@
 
 Name:           CImg
 Epoch:          1
-Version:        3.7.4
-Release:        2%{?dist}
+Version:        4.0.5
+Release:        1%{?dist}
 Summary:        C++ Template Image Processing Toolkit
 # CImg.h: Dual licensed
 # plugins/cimgmatlab.h: LGPLv3

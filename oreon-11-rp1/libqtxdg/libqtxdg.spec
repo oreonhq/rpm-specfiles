@@ -2,9 +2,9 @@
 
 Name:           libqtxdg
 Summary:        QtXdg, a Qt6 implementation of XDG standards
-Version:        4.3.0
+Version:        4.4.0
 
-Release:        4%{?dist}
+Release:        1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://lxqt-project.org

@@ -8,8 +8,8 @@
 %global so_version %{so_major_version}.3.0
 
 Name:           libfishsound
-Version:        1.0.0
-Release:        35%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        Simple programming interface for Xiph.Org codecs
 
 License:        BSD-3-Clause

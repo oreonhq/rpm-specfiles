@@ -2,7 +2,7 @@
 
 Summary:        C library for reading MaxMind DB files
 Name:           libmaxminddb
-Version:        1.13.3
+Version:        1.14.0
 Release:        1%{?dist}
 # BSD-3-Clause (src/maxminddb-compat-util.h) and Apache-2.0 (the rest)
 License:        Apache-2.0 AND BSD-3-Clause

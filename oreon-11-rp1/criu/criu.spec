@@ -14,16 +14,14 @@
 %undefine _annotated_build
 
 Name: criu
-Version: 4.2
-Release: 16%{?dist}
+Version: 4.2.1
+Release: 1%{?dist}
 Summary: Tool for Checkpoint/Restore in User-space
 License: GPL-2.0-only AND LGPL-2.1-only AND MIT
 URL: http://criu.org/
 Source0:        https://github.com/checkpoint-restore/criu/archive/refs/tags/v%{version}.tar.gz#/criu-%{version}.tar.gz
 Patch0: 0001-rseq-use-kernel-rseq.h-when-glibc-detects-it.patch
-Patch1: 0001-tty-fix-compiler-error.patch
 
-# Add protobuf-c as a dependency.
 # We use this patch because the protobuf-c package name
 # in RPM and DEB is different.
 Patch99: criu.pc.patch
@@ -120,7 +118,6 @@ This script can help to workaround the so called "PID mismatch" problem.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 %patch -P 0 -p1
-%patch -P 1 -p1
 %patch -P 99 -p1
 
 %build

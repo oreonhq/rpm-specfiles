@@ -3,7 +3,7 @@
 %bcond check 0
 
 Name:           cargo-rpm-macros
-Version:        28.4
+Version:        28.5
 Release:        %autorelease
 Summary:        RPM macros and generators for building Rust packages with cargo
 License:        MIT

@@ -8,11 +8,11 @@
 
 Name: hunspell-it
 Summary: Italian hunspell dictionaries
-Version: 25.2.3
+Version: 26.8.0.3
 Release: %autorelease
 License: GPL-3.0-only
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/it_IT
-Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_26.8.0.3.orig.tar.xz#/libreoffice-dictionaries-26.8.0.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem

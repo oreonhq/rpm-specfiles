@@ -1,8 +1,8 @@
 %global source0_hash 0243b7c36b5f9e930c62778acd52deb188deeca704a5e195337018435d9e7bb5
 
 Name:           genius
-Version:        1.0.27
-Release:        3%{?dist}
+Version:        1.0.29
+Release:        1%{?dist}
 Summary:        An arbitrary precision integer and multiple precision floatingpoint calculator
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

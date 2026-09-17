@@ -2,7 +2,7 @@
 
 Name:           frobby
 Summary:        Computations with monomial ideals
-Version:        0.9.7
+Version:        0.9.9
 Release:        %autorelease
 
 # GPL-2.0-or-later: the frobby code

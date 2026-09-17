@@ -1,14 +1,14 @@
 %global source0_hash 07618e71c4d9a6b6b3dc1986540486ee310a9838ba754926c7d14a17d8fccf3d
 
 Name:           libnetfilter_cthelper
-Version:        1.0.0
-Release:        32%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        User-space infrastructure for connection tracking helpers
 License:        GPL-2.0-only
 URL:            http://www.netfilter.org/projects/libnetfilter_cthelper/index.html
 Source0:        http://www.netfilter.org/projects/libnetfilter_cthelper/files/libnetfilter_cthelper-%{version}.tar.bz2
 BuildRequires:  gcc
-BuildRequires:  libmnl-devel >= 1.0.0, pkgconfig, kernel-headers
+BuildRequires:  libmnl-devel >= 1.0.1, pkgconfig, kernel-headers
 BuildRequires: make
 
 %description
@@ -18,7 +18,7 @@ infrastructure available since the Linux kernel 3.6.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       libmnl-devel >= 1.0.0
+Requires:       libmnl-devel >= 1.0.1
 Requires:       kernel-headers
 
 %description    devel

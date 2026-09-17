@@ -1,8 +1,8 @@
 %global source0_hash 523d7f7a2225f4d2cc9772c44bcc661518d99ccc478bd0d099b0b157917304b1
 
 Name:		jgmenu
-Version:	4.5.0
-Release:	4%{?dist}
+Version:	4.7.0
+Release:	1%{?dist}
 Summary:	Simple X11 application menu
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later

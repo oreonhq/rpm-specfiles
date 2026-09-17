@@ -1,8 +1,8 @@
 %global source0_hash 46d02e0d465ab2dee783d516b46ec7c491987c00a74822c43a86572fb7dcb359
 
 Name:           alchemyquest
-Version:        0.5.2
-Release:        21%{?dist}
+Version:        0.5.4
+Release:        1%{?dist}
 Summary:        Reflection game
 # Code is GPLv2+ and graphics are CC-BY-SA
 # Automatically converted from old format: GPLv2+ and CC-BY-SA - review is highly recommended.

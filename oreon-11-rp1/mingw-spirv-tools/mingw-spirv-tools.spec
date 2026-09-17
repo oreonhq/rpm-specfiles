@@ -7,8 +7,8 @@
 
 Name:          mingw-%{pkgname}
 Epoch:         1
-Version:       1.4.328.1
-Release:       2%{?dist}
+Version:       1.4.357.0
+Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname}
 
 License:       Apache-2.0

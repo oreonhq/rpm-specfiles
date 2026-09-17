@@ -1,7 +1,7 @@
 %global source0_hash d1db5a74b79d8ce86c353dc3df9d2fd5c01dd6515784e8a8c11ebdc6c5120d2c
 
 Name:		dt-schema
-Version:	2026.04
+Version:	2026.06
 Release:	1%{?dist}
 Summary:	Tooling for devicetree validation using YAML and jsonschema
 License:	BSD-2-Clause

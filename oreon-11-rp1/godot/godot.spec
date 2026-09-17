@@ -15,7 +15,7 @@
 %define rdnsname org.godotengine.Godot
 
 Name:           godot
-Version:        4.6.1
+Version:        4.7.2
 Release:        1%{?dist}
 Summary:        Multi-platform 2D and 3D game engine with a feature-rich editor
 %if 0%{?mageia}

@@ -1,13 +1,13 @@
 %global source0_hash 9b6bfdaea317c0cb26949e2b81c7c5f5d616ef77b47f327673c2ac7283507340
 
 Name:           jackson-bom
-Version:        2.18.2
-Release:        6%{?dist}
+Version:        2.22.2
+Release:        1%{?dist}
 Summary:        Bill of materials POM for Jackson projects
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-bom
-Source0:        https://github.com/FasterXML/jackson-bom/archive/refs/tags/jackson-bom-2.18.2.tar.gz#/jackson-bom-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-bom/archive/refs/tags/jackson-bom-2.22.2.tar.gz#/jackson-bom-2.22.2.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local

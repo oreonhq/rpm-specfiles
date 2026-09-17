@@ -3,8 +3,8 @@
 %global extname TexMaths
 
 Name:           libreoffice-%{extname}
-Version:        0.52.4
-Release:        2%{?dist}
+Version:        0.52.6
+Release:        1%{?dist}
 Summary:        A LaTex Equation Editor for LibreOffice
 
 License:        GPL-2.0-or-later

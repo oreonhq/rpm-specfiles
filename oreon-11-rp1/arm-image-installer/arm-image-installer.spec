@@ -1,8 +1,8 @@
 %global source0_hash 3092f98f9d23db8ec9262a4fbd5960193617a5430f3b037e793422a2aa3c6e90
 
 Name:		arm-image-installer
-Version:	5.3
-Release:	3%{?dist}
+Version:	5.4
+Release:	1%{?dist}
 Summary:	Writes binary image files to any specified block device
 License:	GPL-2.0-or-later
 URL:		https://github.com/fedora-arm/arm-image-installer/

@@ -1,8 +1,8 @@
 %global source0_hash 902badc747aee1eb1a3a5556ff3fd9d83d2aa987d24e058024064df8a4b6b71f
 
 Name:           clifm
-Version:        1.26.3
-Release:        3%{?dist}
+Version:        1.28
+Release:        1%{?dist}
 Summary:        Shell-like, command line terminal file manager
 
 # source is pretty evently split between these

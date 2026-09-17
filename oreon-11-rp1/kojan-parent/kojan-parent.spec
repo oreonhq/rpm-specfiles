@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           kojan-parent
-Version:        6
+Version:        9
 Release:        %autorelease
 Summary:        Maven parent POM for io.kojan
 License:        Apache-2.0

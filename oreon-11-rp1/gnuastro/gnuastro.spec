@@ -1,7 +1,7 @@
 %global source0_hash f97e775ffb5981c63f8adfbe958fcebf9147c13f0e7e96407dddfdf33b3f7702
 
 Name: gnuastro
-Version: 0.23
+Version: 0.24
 Release: %autorelease
 Summary: GNU Astronomy Utilities
 
@@ -18,7 +18,7 @@ Patch0: gnuastro-dont-override-cflags.patch
 # https://savannah.gnu.org/bugs/?67289
 Patch1: gnuastro-skip-test.patch
 # https://savannah.gnu.org/bugs/?67232
-Patch2: gnuastro-i686.patch
+
 Patch3: gnuastro-skip-test2.patch
 
 ExcludeArch: %{ix86}
@@ -129,7 +129,23 @@ make check
 %{_bindir}/astwarp
 %{_datadir}/%{name}/
 %{_mandir}/man1/ast*.1.*
-
+%{_bindir}/arithmetic/
+%{_bindir}/buildprog/
+%{_bindir}/convertt/
+%{_bindir}/convolve/
+%{_bindir}/cosmiccal/
+%{_bindir}/crop/
+%{_bindir}/fits/
+%{_bindir}/match/
+%{_bindir}/mkcatalog/
+%{_bindir}/mkprof/
+%{_bindir}/noisechisel/
+%{_bindir}/query/
+%{_bindir}/script/
+%{_bindir}/segment/
+%{_bindir}/statistics/
+%{_bindir}/table/
+%{_bindir}/warp/
 %files devel
 %{_libdir}/libgnuastro.so
 %{_libdir}/libgnuastro_make.so

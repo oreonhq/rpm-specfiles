@@ -7,13 +7,13 @@
 %global build_programs 0
 
 Name:           mingw-libjpeg-turbo
-Version:        3.1.3
+Version:        3.2.0
 Release:        1%{?dist}
 Summary:        MinGW Windows Libjpeg-turbo library
 
 License:        Zlib AND BSD-3-Clause AND MIT AND IJG
 URL:            https://github.com/libjpeg-turbo/libjpeg-turbo
-Source0:        https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.3/libjpeg-turbo-3.1.3.tar.gz
+Source0:        https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.2.0/libjpeg-turbo-3.2.0.tar.gz
 #Patch1:         libjpeg-turbo-CET.patch
 
 BuildArch:      noarch

@@ -9,8 +9,8 @@
 %global test_compositor cage
 
 Name:           neovim-qt
-Version:        0.2.19
-Release:        3%{?dist}
+Version:        0.2.20
+Release:        1%{?dist}
 Summary:        Qt GUI for Neovim
 
 # src/gui/shellwidget/konsole_wcwidth.cpp: HPND-Markus-Kuhn

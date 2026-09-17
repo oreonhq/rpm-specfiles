@@ -17,8 +17,8 @@
 %define _lto_cflags %{nil}
 
 Name:		blis
-Version:	2.0
-Release:	5%{?dist}
+Version:	2.1
+Release:	1%{?dist}
 Summary:	BLAS-like Library Instantiation Software Framework
 License:	BSD-3-Clause
 URL:		https://github.com/flame/blis
@@ -27,7 +27,7 @@ Source0:	https://github.com/flame/blis/archive/%commit/%name-%shortcommit.tar.gz
 %else
 Source0:	https://github.com/flame/blis/archive/%version/%name-%version.tar.gz
 %endif
-Patch1:         0001-Update-Haswell-gemmsup-fix-for-gcc-16-and-later.-891.patch
+
 BuildRequires:	perl
 BuildRequires:	binutils gcc
 BuildRequires:	python3-devel gcc-gfortran chrpath
@@ -128,7 +128,6 @@ BLIS architecture macros.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q %{?commit: -n %name-%commit}
-%patch -P1 -p1 -b .gcc16
 
 %build
 case %_arch in

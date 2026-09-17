@@ -1,8 +1,8 @@
 %global source0_hash e8815251b370fae2379d5ec49f0d93052063768f35aae18b14c494054e9cabe4
 
 Name:           klog
-Version:        2.4.2
-Release:        2%{?dist}
+Version:        2.6
+Release:        1%{?dist}
 Summary:        A Ham radio logging program for KDE
 
 License:        GPL-2.0-or-later

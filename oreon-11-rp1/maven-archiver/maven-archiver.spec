@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-archiver
-Version:        3.6.2
+Version:        3.6.6
 Release:        %autorelease
 Summary:        Maven Archiver
 License:        Apache-2.0
@@ -28,7 +28,7 @@ BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.6.2-7
+Obsoletes:      %{name}-javadoc < 3.6.6-7
 
 %description
 The Maven Archiver is used by other Maven plugins

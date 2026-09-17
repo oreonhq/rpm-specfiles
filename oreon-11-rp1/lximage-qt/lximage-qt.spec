@@ -1,8 +1,8 @@
 %global source0_hash e03e6b01dac55e50ac1a1381f21fb2c9b16a39ef5fc42542f7b9ea22e39cb416
 
 Name:           lximage-qt
-Version:        2.3.0
-Release:        2%{?dist}
+Version:        2.4.0
+Release:        1%{?dist}
 Summary:        The image viewer and screenshot tool for LXQt
 License:        GPL-2.0-or-later
 URL:            https://lxqt-project.org/

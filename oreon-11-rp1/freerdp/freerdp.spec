@@ -26,8 +26,8 @@
 
 Name:           freerdp
 Epoch:          2
-Version:        3.26.0
-Release:        4%{?dist}
+Version:        3.31.1
+Release:        1%{?dist}
 Summary:        Free implementation of the Remote Desktop Protocol (RDP)
 
 # The effective license is Apache-2.0 but:
@@ -40,7 +40,7 @@ URL:            http://www.freerdp.com/
 
 # The license of the winpr/libwinpr/crt/unicode_builtin.c file is not allowed.
 # See: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/498
-Source0:        https://github.com/FreeRDP/FreeRDP/archive/%{version}/FreeRDP-%{version}.tar.gz#/freerdp-3.26.0.tar.gz
+Source0:        https://github.com/FreeRDP/FreeRDP/archive/%{version}/FreeRDP-%{version}.tar.gz#/freerdp-3.31.1.tar.gz
 
 # Fix TestNTLM with OpenSSL without legacy provider
 Patch0:         https://github.com/FreeRDP/FreeRDP/commit/e9b95a5a3cf6a182837773b92c825f48df953821.patch#/FreeRDP-e9b95a5.patch
@@ -352,7 +352,8 @@ find %{buildroot} -name "*.a" -delete
 %{_libdir}/pkgconfig/uwac0.pc
 }
 %{_libdir}/pkgconfig/rdtk0.pc
-
+%{_includedir}/config/
+%{_includedir}/freerdp/
 %files server
 %{_bindir}/freerdp-proxy
 %{_bindir}/freerdp-shadow-cli

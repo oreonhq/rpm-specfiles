@@ -2,8 +2,8 @@
 
 Summary: Text mode Mail Client
 Name: neomutt
-Version: 20260105
-Release: 2%{?dist}
+Version: 20260616
+Release: 1%{?dist}
 Epoch: 6
 Url: https://neomutt.org/
 

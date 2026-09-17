@@ -6,7 +6,7 @@
 %global p1_utils_ver 1.0.26
 
 Name:      erlang-%{srcname}
-Version:   1.2.14
+Version:   1.2.23
 Release:   %autorelease
 BuildArch: noarch
 

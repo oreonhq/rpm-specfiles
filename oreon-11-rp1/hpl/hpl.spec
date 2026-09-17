@@ -17,8 +17,8 @@
 
 Name:           hpl
 URL:            http://www.netlib.org/benchmark/hpl/
-Version:        2.2
-Release:        23%{?dist}
+Version:        2.3
+Release:        1%{?dist}
 # Automatically converted from old format: BSD with advertising - review is highly recommended.
 License:        LicenseRef-Callaway-BSD-with-advertising
 Requires:       %{name}-common = %{version}-%{release}

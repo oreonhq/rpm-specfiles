@@ -6,8 +6,8 @@
 %global appname io.github.antimicrox.antimicrox
 
 Name:         antimicrox
-Version:      3.5.1
-Release:      3%{?dist}
+Version:      3.6.1
+Release:      1%{?dist}
 Summary:      Graphical program used to map keyboard buttons and mouse controls to a gamepad
 
 License:  GPL-3.0-or-later AND Zlib AND LGPL-3.0-or-later AND LGPL-2.1-or-later
@@ -16,7 +16,6 @@ URL:      https://github.com/AntiMicroX/%{name}
 %global archivename %{name}-%{version}
 
 Source0:        %{url}/archive/%{version}/%{archivename}.tar.gz
-Patch0:         isnan.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

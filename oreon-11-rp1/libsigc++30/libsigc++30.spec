@@ -1,8 +1,8 @@
 %global source0_hash c3d23b37dfd6e39f2e09f091b77b1541fbfa17c4f0b6bf5c89baef7229080e17
 
 Name:           libsigc++30
-Version:        3.6.0
-Release:        7%{?dist}
+Version:        3.8.1
+Release:        1%{?dist}
 Summary:        Typesafe signal framework for C++
 
 License:        LGPL-2.1-or-later

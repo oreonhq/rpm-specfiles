@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 Name:           libheinz
-Version:        3.0.0
+Version:        4.1.0
 Release:        %autorelease
 Summary:        C++ base library of Heinz Maier-Leibnitz Zentrum
 

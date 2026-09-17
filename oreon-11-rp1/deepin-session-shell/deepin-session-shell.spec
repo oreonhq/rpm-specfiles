@@ -1,7 +1,7 @@
 %global source0_hash 2f9b0ccce912babb60e69bc2ebdbc6202296c6fdd9697f137933e22788b72cce
 
 Name:           deepin-session-shell
-Version:        6.0.52
+Version:        6.0.67
 Release:        %autorelease
 Summary:        Deepin Desktop Environment - session-shell module
 License:        GPL-3.0-or-later
@@ -107,7 +107,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_datadir}/dsg/configs/org.deepin.dde.session-shell/
 %{_datadir}/lightdm/lightdm.conf.d/50-deepin.conf
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
-
+%{_datadir}/dsg/configs/snipe/
 %files devel
 %{_includedir}/dde-session-shell/
 %{_libdir}/cmake/DdeSessionShell/

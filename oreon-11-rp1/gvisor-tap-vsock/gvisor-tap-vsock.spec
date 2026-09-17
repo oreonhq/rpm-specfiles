@@ -27,7 +27,7 @@ Epoch: 6
 # If that's what you're reading, Version must be 0, and will be updated by Packit for
 # copr and koji builds.
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 0.8.8
+Version: 0.8.9
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND MIT
 %if %{defined autorelease}
 Release: %autorelease
@@ -42,7 +42,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Go replacement for libslirp and VPNKit
 URL: https://github.com/containers/%{name}
 # All SourceN files fetched from upstream
-Source0:        https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.8.tar.gz#/gvisor-tap-vsock-0.8.8.tar.gz
+Source0:        https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.8.tar.gz#/gvisor-tap-vsock-0.8.9.tar.gz
 BuildRequires: gcc
 BuildRequires: glib2-devel
 BuildRequires: glibc-devel

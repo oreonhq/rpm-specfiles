@@ -1,7 +1,7 @@
 %global source0_hash e50f323418eb451587891102b6014730e1aa936e763c47f2ae166a4745d1bed2
 
 Name:           libaec
-Version:        1.1.6
+Version:        1.1.7
 Release:        1%{?dist}
 Summary:        Adaptive Entropy Coding library
 License:        LicenseRef-Callaway-BSD

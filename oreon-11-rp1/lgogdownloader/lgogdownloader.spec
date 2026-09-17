@@ -1,8 +1,8 @@
 %global source0_hash 7e35739e1de947ebd2de342875ccf16b0044c3c0ad16adb2e06109aa902f414a
 
 Name:		lgogdownloader
-Version:	3.16
-Release:	7%{?dist}
+Version:	3.19
+Release:	1%{?dist}
 Summary:	GOG.com download client
 
 License:	WTFPL

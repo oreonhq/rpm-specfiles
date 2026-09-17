@@ -3,7 +3,7 @@
 %bcond check 1
 
 Name:           hyfetch
-Version:        2.0.5
+Version:        2.1.0
 Release:        %autorelease
 Summary:        Customizable Linux System Information Script
 

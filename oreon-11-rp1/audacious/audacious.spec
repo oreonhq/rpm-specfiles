@@ -6,8 +6,8 @@
 %bcond_without meson
 
 Name: audacious
-Version: 4.5.1
-Release: 3%{?dist}
+Version: 4.6.1
+Release: 1%{?dist}
 
 %global tar_ver %{version}
 

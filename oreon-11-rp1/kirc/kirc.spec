@@ -1,7 +1,7 @@
 %global source0_hash a45172198873fb34c64150262be4515a7be268a5c00566c79f03a8ea2dd7900e
 
 Name:           kirc
-Version:        0.3.2
+Version:        1.2.2
 Release:        %autorelease
 Summary:        Tiny IRC client written in POSIX C99
 

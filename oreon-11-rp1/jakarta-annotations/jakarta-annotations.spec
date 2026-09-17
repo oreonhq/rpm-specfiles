@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jakarta-annotations
-Version:        1.3.5
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Jakarta Annotations
 License:        EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0
@@ -11,7 +11,7 @@ URL:            https://jakarta.ee/specifications/annotations/1.3/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/common-annotations-api/archive/%{version}/common-annotations-api-%{version}.tar.gz#/jakarta-annotations-1.3.5.tar.gz
+Source0:        https://github.com/jakartaee/common-annotations-api/archive/%{version}/common-annotations-api-%{version}.tar.gz#/jakarta-annotations-3.0.0.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -21,7 +21,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.3.5-41
+Obsoletes:      %{name}-javadoc < 3.0.0-41
 Provides:       glassfish-annotation-api = %{version}-%{release}
 
 %description
@@ -31,8 +31,8 @@ programming that applies across a variety of Java technologies.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n common-annotations-api-1.3.5
-%autosetup -p1 -n common-annotations-api-1.3.5
+%setup -q -n common-annotations-api-3.0.0
+%autosetup -p1 -n common-annotations-api-3.0.0
 
 # remove unnecessary dependency on parent POM
 # org.eclipse.ee4j:project is not packaged and isn't needed

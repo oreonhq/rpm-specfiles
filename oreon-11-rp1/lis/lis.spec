@@ -1,8 +1,8 @@
 %global source0_hash a674d645013e99f9239e95358f524836b074c2c285885d5a68155bb4e6e6c1a6
 
 Name:		lis
-Version:	2.0.21
-Release:	13%{?dist}
+Version:	2.1.11
+Release:	1%{?dist}
 Summary:	A library for solving linear equations and eigenvalue problems
 License:	BSD
 URL:		http://www.ssisc.org/lis/index.en.html

@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           lxqt-themes
-Version:        2.3.0
-Release:        2%{?dist}
+Version:        2.4.0
+Release:        1%{?dist}
 Summary:        LXQt standard themes
 
 License:        LGPL-2.0-or-later

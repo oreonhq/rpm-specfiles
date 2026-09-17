@@ -3,8 +3,8 @@
 %global octpkg general
 
 Name:           octave-%{octpkg}
-Version:        2.1.1
-Release:        19%{?dist}
+Version:        2.1.4
+Release:        1%{?dist}
 Summary:        General tools for Octave, string dictionary, parallel computing
 # Automatically converted from old format: GPLv3+ and BSD and Public Domain - review is highly recommended.
 License:        GPL-3.0-or-later AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-Public-Domain

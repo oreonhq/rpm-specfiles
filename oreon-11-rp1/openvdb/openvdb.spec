@@ -1,7 +1,7 @@
 %global source0_hash 4d6a91df5f347017496fe8d22c3dbb7c4b5d7289499d4eb4d53dd2c75bb454e1
 
 # Use soversion
-%global soversion 13.0
+%global soversion 13.1
 
 # Set to 1 to enable testsuite. Fails everywhere with GCC 8+.
 %bcond tests 0
@@ -25,7 +25,7 @@ It is developed and maintained by Academy Software Foundation for use in
 volumetric applications typically encountered in feature film production.}
 
 Name:           openvdb
-Version:        13.0.0
+Version:        13.1.0
 Release:        %autorelease
 Summary:        C++ library for sparse volumetric data discretized on three-dimensional grids
 License:        Apache-2.0

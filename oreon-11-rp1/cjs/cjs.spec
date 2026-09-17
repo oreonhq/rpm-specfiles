@@ -7,8 +7,8 @@
 
 Name:          cjs
 Epoch:         1
-Version:       128.1
-Release:       4%{?dist}
+Version:       140.1
+Release:       1%{?dist}
 Summary:       Javascript Bindings for Cinnamon
 
 # Automatically converted from old format: MIT and (MPLv1.1 or GPLv2+ or LGPLv2+) - review is highly recommended.
@@ -19,7 +19,6 @@ License:       LicenseRef-Callaway-MIT AND (LicenseRef-Callaway-MPLv1.1 OR GPL-2
 # Stack printer (gjs/stack.c)
 URL:           https://github.com/linuxmint/%{name}
 Source0:       %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:        pkconfig.patch
 
 ExcludeArch:   %{ix86}
 

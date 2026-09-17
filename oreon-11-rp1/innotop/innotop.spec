@@ -1,7 +1,7 @@
 %global source0_hash cfedf31ba5617a5d53ff0fedc86a8578f805093705a5e96a5571d86f2d8457c0
 
 Name:           innotop
-Version:        1.15.2
+Version:        1.16.0
 Release:        %autorelease
 Summary:        A MySQL and InnoDB monitor program
 BuildArch:      noarch

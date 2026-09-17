@@ -2,7 +2,7 @@
 
 Summary:        Dynamic Kernel Module Support Framework
 Name:           dkms
-Version:        3.3.0
+Version:        3.4.3
 Release:        %autorelease
 License:        GPL-2.0-or-later
 URL:            https://github.com/dkms-project/%{name}

@@ -1,7 +1,7 @@
 %global source0_hash 3faab2ddfc69b43eec95527ee696d385bda9b6167b81424dbb5a1dc6c4863188
 
 Name:           novelwriter
-Version:        2.7.4
+Version:        26.1.2
 Release:        %autorelease
 Summary:        Plain text editor designed for writing novels
 

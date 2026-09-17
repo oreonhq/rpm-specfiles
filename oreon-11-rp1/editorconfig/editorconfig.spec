@@ -17,7 +17,7 @@ editors.}
 
 Name:           editorconfig
 Summary:        Parser for EditorConfig files written in C
-Version:        0.12.10
+Version:        0.12.11
 Release:        1%{?dist}
 
 # The entire source is BSD-2-Clause, except:
@@ -34,7 +34,7 @@ Release:        1%{?dist}
 # license of the binary RPMs.
 License:        BSD-2-Clause AND BSD-3-Clause AND BSD-1-Clause
 URL:            https://github.com/editorconfig/editorconfig-core-c
-Source0:        https://github.com/editorconfig/editorconfig-core-c/archive/refs/tags/v0.12.10.tar.gz#/editorconfig-core-c-0.12.10.tar.gz
+Source0:        https://github.com/editorconfig/editorconfig-core-c/archive/refs/tags/v0.12.10.tar.gz#/editorconfig-core-c-0.12.11.tar.gz
 
 # Downstream-only: Do not compile with -Werror
 #

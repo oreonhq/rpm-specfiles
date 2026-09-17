@@ -9,7 +9,7 @@
 %global _docdir_fmt %{name}-devel
 
 Name:           cli11
-Version:        2.6.2
+Version:        2.7.2
 Release:        %autorelease
 Summary:        Command line parser for C++11
 

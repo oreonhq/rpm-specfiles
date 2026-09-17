@@ -5,7 +5,7 @@
 
 Name:    kfind
 Summary: KDE Find File Utility
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 
 # Documentation is GFDL, rest GPLv2+

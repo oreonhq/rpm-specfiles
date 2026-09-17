@@ -1,7 +1,7 @@
 %global source0_hash e5f82dd90001ed53200b2383bcfd520b1d8ee06d6a2a75b39d37d68daef20c88
 
 Name:           fpart
-Version:        1.7.0
+Version:        1.7.1
 Release:        %autorelease
 Summary:        Helps you sort file trees and pack them into bags
 # main source is BSD-2-Clause

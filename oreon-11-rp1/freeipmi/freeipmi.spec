@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:             freeipmi
-Version:          1.6.15
+Version:          1.6.19
 Release:          %autorelease
 Summary:          IPMI remote console and system management software
 License:          GPL-3.0-or-later
@@ -20,7 +20,6 @@ BuildRequires:    libtool
 
 # https://lists.gnu.org/archive/html/freeipmi-devel/2025-02/msg00000.html
 # https://github.com/chu11/freeipmi-mirror/commit/ececf09d6128cbff65e9048f19d191e87f111059
-Patch0:           c23.patch
 
 %description
 The FreeIPMI project provides "Remote-Console" (out-of-band) and

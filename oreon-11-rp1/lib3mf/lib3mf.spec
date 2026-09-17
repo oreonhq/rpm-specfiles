@@ -1,7 +1,7 @@
 %global source0_hash 96e85e278fc5474123e3c47237dd42faaf1fdf8e182541a84af7fe84ddd3cbde
 
 Name:           lib3mf
-Version:        2.2.0
+Version:        2.5.0-alpha
 Release:        %autorelease
 Summary:        Implementation of the 3D Manufacturing Format file standard
 # lib3mf is BSD-2-Clause

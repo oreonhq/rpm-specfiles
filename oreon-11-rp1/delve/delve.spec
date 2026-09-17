@@ -79,7 +79,6 @@ done
 %doc Documentation/*
 %{_bindir}/dlv
 
-
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26.2-1
 - Import

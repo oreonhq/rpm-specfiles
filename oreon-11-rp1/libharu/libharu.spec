@@ -1,10 +1,10 @@
 %global source0_hash 0ed3eacf3ceee18e40b6adffbc433f1afbe3c93500291cd95f1477bffe6f24fc
 
 Name:           libharu
-Version:        2.4.5
+Version:        2.4.6
 # NOTE - sover is major.minor so minor updates will require rebuilds of dependent packages 
 %global sover %(v=%{version}; echo ${v%.*})
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        C library for generating PDF files
 License:        zlib-acknowledgement
 URL:            http://libharu.org

@@ -1,8 +1,8 @@
 %global source0_hash 2aa00c29553290281574dca369c663a555ea55d7a86fbeafd223ae49de133486
 
 Name:           disorderfs
-Version:        0.5.11
-Release:        14%{?dist}
+Version:        0.6.2
+Release:        1%{?dist}
 Summary:        FUSE filesystem that introduces non-determinism
 URL:            https://salsa.debian.org/reproducible-builds/%{name}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

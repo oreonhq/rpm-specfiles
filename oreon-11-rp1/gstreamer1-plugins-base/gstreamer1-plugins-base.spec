@@ -6,7 +6,7 @@
 %global         majorminor      1.0
 
 Name:           gstreamer1-plugins-base
-Version:        1.28.3
+Version:        1.29.2
 Release:        1%{?dist}
 Summary:        GStreamer streaming media framework base plugins
 

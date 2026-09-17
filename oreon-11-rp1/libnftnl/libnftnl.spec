@@ -3,14 +3,14 @@
 %global source2_key_fpr 8C5F7146A1757A65E2422A94D70D1A666ACF2B21
 
 Name:           libnftnl
-Version:        1.3.1
-Release:        2%{?dist}
+Version:        1.3.2
+Release:        1%{?dist}
 Summary:        Library for low-level interaction with nftables Netlink's API over libmnl
 
 License:        GPL-2.0-or-later
 URL:            https://netfilter.org/projects/libnftnl/
-Source0:        https://netfilter.org/projects/libnftnl//files/libnftnl-1.3.1.tar.xz
-Source1:        libnftnl-1.3.1.tar.xz.sig
+Source0:        https://netfilter.org/projects/libnftnl//files/libnftnl-1.3.2.tar.xz
+Source1:        libnftnl-1.3.2.tar.xz.sig
 Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 
 BuildRequires:  libmnl-devel

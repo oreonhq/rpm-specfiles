@@ -1,7 +1,7 @@
 %global source0_hash caa2fa959e389f4374d9e2df3af5c633452c12dd80442cba2e89cb7ff2b93c5b
 
 Name: libopenmpt
-Version: 0.8.6
+Version: 0.8.9
 Release: 1%{?dist}
 
 %global tar_root %{name}-%{version}+release.autotools

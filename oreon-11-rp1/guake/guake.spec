@@ -1,8 +1,8 @@
 %global source0_hash 6f8d01602ca26f654d7e7d1aebd8cf60e25e7c97d649d18360ebf01111df9f3d
 
 Name:           guake
-Version:        3.7.0
-Release:        26%{?dist}
+Version:        3.10.1
+Release:        1%{?dist}
 Summary:        Drop-down terminal for GNOME
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

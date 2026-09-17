@@ -15,8 +15,8 @@
 %bcond check_integration 1
 
 Name:           apt
-Version:        3.1.16
-Release:        2%{?dist}
+Version:        3.3.3
+Release:        1%{?dist}
 Summary:        Command-line package manager for Debian packages
 
 License:        GPL-2.0-or-later

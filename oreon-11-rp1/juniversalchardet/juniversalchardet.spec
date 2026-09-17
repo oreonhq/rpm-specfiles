@@ -1,8 +1,8 @@
 %global source0_hash b904cc95b943b3c1a64dcabeb26c145dd5c267478451534784008b3e697ccc03
 
 Name:           juniversalchardet
-Version:        2.4.0
-Release:        18%{?dist}
+Version:        2.5.0
+Release:        1%{?dist}
 Summary:        Java character encoding detection
 
 # Choice of licenses offered in each source file

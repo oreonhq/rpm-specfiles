@@ -4,8 +4,8 @@
 ExcludeArch: %{ix86}
 
 Name:           ocaml-postgresql
-Version:        5.3.2
-Release:        3%{?dist}
+Version:        5.4.0
+Release:        1%{?dist}
 Summary:        OCaml library for accessing PostgreSQL databases
 
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception

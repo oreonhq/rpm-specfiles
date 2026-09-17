@@ -1,7 +1,7 @@
 %global source0_hash d9271bce09c127d9866e25c011582ddc75ab988958a04bc4d8553a3b8f30e370
 
 Name:           dash
-Version:        0.5.13.1
+Version:        0.5.13.5
 Release:        %autorelease
 Summary:        Small and fast POSIX-compliant shell
 # BSD-3-Clause: DASH in general

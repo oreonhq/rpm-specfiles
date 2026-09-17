@@ -3,8 +3,8 @@
 %global octpkg jnifti
 
 Name:           octave-%{octpkg}
-Version:        0.5
-Release:        19%{?dist}
+Version:        0.6
+Release:        1%{?dist}
 Summary:        Fast NIfTI-1/2 reader and NIfTI-to-JNIfTI converter for MATLAB/Octave
 # Automatically converted from old format: GPLv3+ or ASL 2.0 - review is highly recommended.
 License:        GPL-3.0-or-later OR Apache-2.0

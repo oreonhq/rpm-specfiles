@@ -3,8 +3,8 @@
 %?mingw_package_header
 
 Name:           mingw-libsigc++20
-Version:        2.10.3
-Release:        16%{?dist}
+Version:        2.10.8
+Release:        1%{?dist}
 Summary:        MinGW Windows port of the typesafe signal framework for C++
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

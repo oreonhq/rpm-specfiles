@@ -7,7 +7,7 @@ ExcludeArch: %{ix86}
 %global testurl https://github.com/ocaml/opam-repository
 
 Name:           opam
-Version:        2.5.0
+Version:        2.5.2
 Release:        %autorelease
 Summary:        Source-based package manager for OCaml
 

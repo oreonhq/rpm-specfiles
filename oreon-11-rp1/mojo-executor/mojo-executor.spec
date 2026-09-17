@@ -3,7 +3,7 @@
 %global giturl  https://github.com/mojo-executor/mojo-executor
 
 Name:           mojo-executor
-Version:        2.4.1
+Version:        2.4.1-m2-m2
 Release:        %autorelease
 Summary:        Execute other plugins within a maven plugin
 

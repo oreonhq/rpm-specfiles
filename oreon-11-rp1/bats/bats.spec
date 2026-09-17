@@ -3,7 +3,7 @@
 %global         upstreamname  bats-core
 
 Name:           bats
-Version:        1.13.0
+Version:        1.14.0
 Release:        %autorelease
 Summary:        Bash Automated Testing System
 

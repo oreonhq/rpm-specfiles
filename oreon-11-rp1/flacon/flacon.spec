@@ -4,8 +4,8 @@
 %bcond_with tests
 
 Name:          flacon
-Version:       12.0.0
-Release:       4%{?dist}
+Version:       13.0.2
+Release:       1%{?dist}
 Summary:       Audio File Encoder
 
 License:       LGPL-2.1-or-later

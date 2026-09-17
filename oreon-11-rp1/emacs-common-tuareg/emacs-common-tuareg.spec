@@ -17,8 +17,8 @@
 %endif
 
 Name:           emacs-common-%{pkg}
-Version:        3.0.1
-Release:        14%{?dist}
+Version:        3.1.0
+Release:        1%{?dist}
 Summary:        Emacs mode for editing OCaml code
 
 License:        GPL-2.0-or-later

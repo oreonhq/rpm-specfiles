@@ -1,8 +1,8 @@
 %global source0_hash df0ce97dbf1dc71fe440d5cec896fcd355d66d38e5fb19411d5d1efb28fd40ad
 
 Name:          libfm-qt
-Version:       2.3.1
-Release:       2%{?dist}
+Version:       2.4.0
+Release:       1%{?dist}
 Summary:       Companion library for PCManFM
 License:       GPL-2.0-or-later
 URL:           https://lxqt-project.org

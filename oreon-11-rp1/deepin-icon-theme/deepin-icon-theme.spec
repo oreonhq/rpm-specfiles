@@ -4,7 +4,7 @@
 %global start_logo start-here
 
 Name:           deepin-icon-theme
-Version:        2025.03.27
+Version:        2026.02.27
 Release:        %autorelease
 Summary:        Icons for the Deepin Desktop Environment
 License:        GPL-3.0-or-later

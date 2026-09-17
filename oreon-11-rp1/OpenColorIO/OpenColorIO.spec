@@ -1,8 +1,8 @@
 %global source0_hash 2d8f2c47c40476d6e8cea9d878f6601d04f6d5642b47018eaafa9e9f833f3690
 
 Name:           OpenColorIO
-Version:        2.4.2
-Release:        8%{?dist}
+Version:        2.5.2
+Release:        1%{?dist}
 Summary:        Enables color transforms and image display across graphics apps
 
 # Automatically converted from old format: BSD - review is highly recommended.

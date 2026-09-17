@@ -1,8 +1,8 @@
 %global source0_hash f15e88b268e2244b75a6a986bb6fffbef7b72e77c412e974e8415c7156052213
 
 Name:		pam-ssh-auth-info
-Version:	1.8.20230906
-Release:	8%{?dist}
+Version:	2.0.20250421
+Release:	1%{?dist}
 Summary:	PAM SSH Authentication Information Module
 # GPL-3.0-or-later: * line_tokens_match_test.h
 # LGPL-3.0-or-later: pam_*.c *.h

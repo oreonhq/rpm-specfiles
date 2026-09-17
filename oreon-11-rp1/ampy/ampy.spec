@@ -1,7 +1,7 @@
 %global source0_hash c01756204d5efb762e260efbac609b55816c4cb01897f236161a486c342250a8
 
 Name:           ampy
-Version:        1.0.5
+Version:        1.0.7
 Release:        %autorelease
 Summary:        Command line tool to interact with a MicroPython board over a serial connection
 

@@ -11,7 +11,7 @@ implementations of the core cryptographic processing for IPsec, which provides
 industry-leading performance on a range of Intel Processors.}
 
 Name:               intel-ipsec-mb
-Version:            2.0.2
+Version:            3.0.0-rc1
 Release:            1%{?dist}
 Summary:            IPsec cryptography library optimized for Intel Architecture
 

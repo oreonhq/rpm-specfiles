@@ -5,14 +5,14 @@
 %{!?_modulesloaddir:%global _modulesloaddir %{_usr}/lib/modules-load.d}
 
 Name: fuse-overlayfs
-Version: 1.16
+Version: 1.18
 Release: %autorelease
 ExclusiveArch: %{arm64} ppc64le s390x x86_64 riscv64
 License: GPL-3.0-or-later
 Summary: FUSE overlay+shiftfs implementation for rootless containers
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/containers/fuse-overlayfs/archive/refs/tags/v1.16.tar.gz#/fuse-overlayfs-1.16.tar.gz
+Source0:        https://github.com/containers/fuse-overlayfs/archive/refs/tags/v1.16.tar.gz#/fuse-overlayfs-1.18.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

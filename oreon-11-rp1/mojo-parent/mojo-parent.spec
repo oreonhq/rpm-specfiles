@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           mojo-parent
-Version:        85
+Version:        97
 Release:        %autorelease
 Summary:        Codehaus MOJO parent project pom file
 License:        Apache-2.0

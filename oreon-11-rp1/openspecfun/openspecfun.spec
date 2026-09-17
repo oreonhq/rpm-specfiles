@@ -4,8 +4,8 @@
 
 Summary:        Library providing a collection of special mathematical functions
 Name:           openspecfun
-Version:        0.5.3
-Release:        25%{?dist}
+Version:        0.5.7
+Release:        1%{?dist}
 # Automatically converted from old format: MIT and Public Domain - review is highly recommended.
 License:        LicenseRef-Callaway-MIT AND LicenseRef-Callaway-Public-Domain
 Source0:        https://github.com/JuliaLang/openspecfun/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz

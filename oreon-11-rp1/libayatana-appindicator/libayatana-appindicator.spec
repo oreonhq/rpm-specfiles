@@ -39,7 +39,7 @@ Based on KSNI it also works in KDE and will fallback to generic
 Systray support if none of those are available.}
 
 Name:           libayatana-appindicator
-Version:        0.5.94
+Version:        0.6.0
 Release:        %autorelease
 Summary:        %{_summary}
 

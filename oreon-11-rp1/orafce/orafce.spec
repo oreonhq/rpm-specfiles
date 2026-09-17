@@ -3,8 +3,8 @@
 %global githubversion 4_9_0
 
 Name:		orafce
-Version:	4.9.0
-Release:	4%{?dist}
+Version:	4.16.9
+Release:	1%{?dist}
 Summary:	Implementation of some Oracle functions into PostgreSQL
 # Automatically converted from old format: BSD - review is highly recommended.
 License:	LicenseRef-Callaway-BSD

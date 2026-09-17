@@ -8,8 +8,8 @@
 
 Name:           clojure
 Epoch:          1
-Version:        1.12.4
-Release:        3%{?dist}
+Version:        1.12.6
+Release:        1%{?dist}
 Summary:        A dynamic programming language that targets the Java Virtual Machine
 
 License:        EPL-1.0

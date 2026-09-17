@@ -4,7 +4,7 @@
 %global _deepin_version 25
 
 Name:           deepin-desktop-base
-Version:        2025.11.25
+Version:        2026.09.04
 Release:        %autorelease
 Summary:        Base component for Deepin
 License:        GPL-3.0-or-later

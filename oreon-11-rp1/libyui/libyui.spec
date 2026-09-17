@@ -31,8 +31,8 @@
 %define devqtgraph  libyui-qt-graph-devel
 
 Name:     %{libname}
-Version:  4.2.16
-Release:  28%{?dist}
+Version:  4.6.2
+Release:  1%{?dist}
 Summary:  GUI-abstraction library
 
 License:  (LGPLv2 or LGPLv3) and MIT

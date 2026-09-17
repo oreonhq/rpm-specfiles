@@ -1,7 +1,7 @@
 %global source0_hash a6377cfe47cbdc69db1e009e0f788e437e7ab53845a00b336864d2e77d687682
 
 Name:           kefir
-Version:        0.4.1
+Version:        0.5.1
 Release:        %{autorelease}
 Summary:        An implementation of C17 language compiler from scratch
 

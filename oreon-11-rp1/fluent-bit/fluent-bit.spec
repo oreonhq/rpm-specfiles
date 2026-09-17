@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name: fluent-bit
-Version: 4.2.2
+Version: 5.1.2
 Release: %autorelease
 Summary: Fluent Bit is a super fast, lightweight, and highly scalable logging and metrics processor and forwarder.
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

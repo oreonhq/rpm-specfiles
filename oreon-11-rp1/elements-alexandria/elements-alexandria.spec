@@ -2,8 +2,8 @@
 
 Summary:        A lightweight C++ utility library
 Name:           elements-alexandria
-Version:        2.32.0
-Release:        6%{?dist}
+Version:        2.33.0
+Release:        1%{?dist}
 # Automatically converted from old format: LGPLv3+ - review is highly recommended.
 License:        LGPL-3.0-or-later
 URL:            https://github.com/astrorama/Alexandria

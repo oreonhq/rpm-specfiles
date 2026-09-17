@@ -10,8 +10,8 @@ ExcludeArch: %{ix86}
 %global giturl  https://github.com/camlp5/camlp5
 
 Name:           ocaml-camlp5
-Version:        8.04.00
-Release:        4%{?dist}
+Version:        8.05.02
+Release:        1%{?dist}
 Summary:        Preprocessor and pretty printer for OCaml
 
 License:        BSD-3-Clause

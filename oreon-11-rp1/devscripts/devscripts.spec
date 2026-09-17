@@ -1,7 +1,7 @@
 %global source0_hash bd57069293354cb973b4a09b5f980f15382082680e1eb0bd90d32c555330a211
 
 Name:           devscripts
-Version:        2.26.5
+Version:        2.26.11
 Release:        1%{?dist}
 Summary:        Scripts for Debian Package maintainers
 BuildArch:      noarch

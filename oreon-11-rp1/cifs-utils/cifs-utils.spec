@@ -6,7 +6,7 @@
 %global bash_completion_dir %(pkg-config --variable=completionsdir bash-completion || echo /etc/bash_completion.d)
 
 Name:            cifs-utils
-Version:         7.5
+Version:         7.7
 Release:         %autorelease
 Summary:         Utilities for mounting and managing CIFS mounts
 

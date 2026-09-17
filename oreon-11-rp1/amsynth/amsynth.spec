@@ -1,8 +1,8 @@
 %global source0_hash 95679abc3f5e4ea3d45c964cba4f2b2617c3f87e55f54988fc33ec023a873efb
 
 Name:           amsynth
-Version:        1.13.4
-Release:        5%{?dist}
+Version:        2.0.0
+Release:        1%{?dist}
 Summary:        A classic synthesizer with dual oscillators
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

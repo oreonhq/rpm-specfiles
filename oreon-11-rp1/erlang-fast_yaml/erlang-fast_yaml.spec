@@ -4,7 +4,7 @@
 %global p1_utils_ver 1.0.28
 
 Name: erlang-%{srcname}
-Version: 1.0.39
+Version: 1.0.40
 Release: %autorelease
 License: Apache-2.0
 Summary: An Erlang wrapper for libyaml "C" library

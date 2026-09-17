@@ -3,7 +3,7 @@
 %global _docdir_fmt %{name}
 
 Name:		gappa
-Version:	1.7.0
+Version:	1.8.3
 Release:	%autorelease
 Summary:	Prove programs with floating-point or fixed-point arithmetic
 

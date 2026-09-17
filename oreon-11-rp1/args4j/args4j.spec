@@ -1,8 +1,8 @@
 %global source0_hash b4305ca1ff31d3492dd93770f302242c2bf536b440bca24b2580646b184a3733
 
 Name:           args4j
-Version:        2.33
-Release:        32%{?dist}
+Version:        2.37
+Release:        1%{?dist}
 Summary:        Java command line arguments parser
 License:        MIT
 URL:            https://args4j.kohsuke.org
@@ -16,11 +16,9 @@ BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 
 # Fix build on Java 11/17
-Patch0: 0001-Remove-usage-of-internal-sun-class-removed-in-Java-9.patch
 
-# Stopped shipping these unused subpackages in F34
-Obsoletes: %{name}-tools < 2.33-13
-Obsoletes: %{name}-parent < 2.33-13
+Obsoletes: %{name}-tools < 2.37-13
+Obsoletes: %{name}-parent < 2.37-13
 
 %description
 args4j is a small Java class library that makes it easy
@@ -42,7 +40,6 @@ This package contains the API documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{name}-site-%{version}
-%patch -P0 -p1
 
 # removing bundled stuff
 find -name '*.class' -exec rm -f '{}' \;

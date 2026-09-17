@@ -1,7 +1,7 @@
 %global source0_hash 4f2185dd52897e4242908358493cbe6d4d5cae9dbb6f82a95c0a700c755a90f7
 
 Name:           mathicgb
-Version:        1.2
+Version:        1.4
 Release:        %autorelease
 Summary:        Groebner basis computations
 

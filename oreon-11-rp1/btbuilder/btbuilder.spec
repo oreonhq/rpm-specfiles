@@ -2,14 +2,14 @@
 
 Summary: Turn based role-playing game builder and engine
 Name: btbuilder
-Version: 0.5.19
-Release: 16%{?dist}
+Version: 0.5.20
+Release: 1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License: GPL-3.0-or-later
 Url: http://www.identicalsoftware.com/btbuilder
 Source: http://www.identicalsoftware.com/btbuilder/%{name}-%{version}.tgz
 # https://github.com/dulsi/btbuilder/pull/6
-Patch0: btbuilder-boost190.patch
+
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: boost-devel

@@ -4,7 +4,7 @@
 %global collection_name utils
 
 Name:           ansible-collection-%{collection_namespace}-%{collection_name}
-Version:        6.0.1
+Version:        6.1.1
 Release:        1%{?dist}
 Summary:        Ansible Network Collection for Common Code
 

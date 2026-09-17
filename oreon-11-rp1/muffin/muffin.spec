@@ -1,7 +1,7 @@
 %global source0_hash af1aa8e68699895a841415c007c7f3f48efc06f07c50d219d30f8131a981248e
 
 Name:          muffin
-Version:       6.6.3
+Version:       6.7.6-unstable
 Release:       1%{?dist}
 Summary:       Window and compositing manager based on Clutter
 

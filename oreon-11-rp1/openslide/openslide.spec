@@ -1,7 +1,7 @@
 %global source0_hash cc227c44316abb65fb28f1c967706eb7254f91dbfab31e9ae6a48db6cf4ae562
 
 Name:		openslide
-Version:	4.0.0
+Version:	4.0.1
 Release:	%autorelease
 Summary:	C library for reading virtual slides
 
@@ -9,7 +9,6 @@ License:	LGPL-2.1-only
 URL:		https://openslide.org/
 Source0:	https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 # https://github.com/openslide/openslide/pull/706
-Patch0:		libtiff-partial-tile.patch
 
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(cairo)

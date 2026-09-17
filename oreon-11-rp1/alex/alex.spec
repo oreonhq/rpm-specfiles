@@ -6,7 +6,7 @@
 %bcond tests 1
 
 Name:           alex
-Version:        3.5.4.0
+Version:        3.5.4.2
 Release:        %autorelease
 Summary:        Tool for generating lexical analysers in Haskell
 

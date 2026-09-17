@@ -4,7 +4,7 @@
 %global p1_utils_ver 1.0.26
 
 Name:       erlang-%{srcname}
-Version:    1.0.13
+Version:    1.0.16
 Release:    %autorelease
 License:    Apache-2.0
 Summary:    Native zlib driver for Erlang

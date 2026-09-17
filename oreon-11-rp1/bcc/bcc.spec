@@ -20,12 +20,12 @@
 
 
 Name:           bcc
-Version:        0.35.0
-Release:        12%{?dist}
+Version:        0.37.0
+Release:        1%{?dist}
 Summary:        BPF Compiler Collection (BCC)
 License:        Apache-2.0
 URL:            https://github.com/iovisor/bcc
-Source0:        https://github.com/iovisor/bcc/archive/refs/tags/v0.35.0.tar.gz#/bcc-0.35.0.tar.gz
+Source0:        https://github.com/iovisor/bcc/archive/refs/tags/v0.35.0.tar.gz#/bcc-0.37.0.tar.gz
 # Fix build with clang 21
 Patch0:        https://github.com/iovisor/bcc/pull/5369.patch
 # Fix build with llvm 22

@@ -3,8 +3,8 @@
 # -*-Mode: rpm-spec -*-
 
 Name:     neatvnc
-Version:  0.9.0
-Release:  7%{?dist}
+Version:  1.0.1
+Release:  1%{?dist}
 Summary:  Liberally licensed VNC server library
 # main source is ISC
 # include/sys/queue.h is BSD
@@ -15,7 +15,6 @@ Source:   %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 # Backport to fix i686 builds
 # From: https://github.com/any1/neatvnc/commit/e0e0ce5c579cafc763992f1c1bb964eb95999fb7
-Patch:    0001-server-Use-correct-type-for-length-in-compress.patch
 
 BuildRequires: gcc
 BuildRequires: git-core

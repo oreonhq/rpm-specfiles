@@ -1,7 +1,7 @@
 %global source0_hash 0b4b7ee51f6ae6a135386a864e717249e7833cad70c6e1f515d7cf6cd07f5130
 
 Name:           cpeditor
-Version:        7.0.1
+Version:        7.1.1
 Release:        %autorelease
 Summary:        The Missing Editor for Competitive Programmers
 

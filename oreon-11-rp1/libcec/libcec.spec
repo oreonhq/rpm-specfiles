@@ -2,7 +2,7 @@
 
 Summary:        Library for controlling CEC-enabled devices over HDMI
 Name:           libcec
-Version:        7.1.1
+Version:        8.1.7
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://libcec.pulse-eight.com/

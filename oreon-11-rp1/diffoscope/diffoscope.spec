@@ -1,7 +1,7 @@
 %global source0_hash f4444beef3a43f0d69cca5681119af65a1de9830a59b603a64aeab13b4e71992
 
 Name:          diffoscope
-Version:       312
+Version:       329
 Release:       %autorelease
 Summary:       In-depth comparison of files, archives, and directories
 License:       GPL-3.0-or-later

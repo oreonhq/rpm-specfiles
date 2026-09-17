@@ -3,7 +3,7 @@
 %bcond_with tests # disable tests by default due to missing bats-assert and bats-support
 
 Name:           diff-so-fancy
-Version:        1.4.4
+Version:        1.4.12
 Release:        %autorelease
 Summary:        Good-lookin' diffs
 

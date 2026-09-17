@@ -8,11 +8,11 @@
 
 Name: hunspell-sv
 Summary: Swedish hunspell dictionaries
-Version: 25.2.3
-Release: 2%{?dist}
+Version: 26.8.0.3
+Release: 1%{?dist}
 License: LGPL-3.0-only
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/sv_SE
-Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_26.8.0.3.orig.tar.xz#/libreoffice-dictionaries-26.8.0.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell

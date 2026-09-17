@@ -2,8 +2,8 @@
 
 %global debug_package %{nil}
 Name:   ibus-speech-to-text
-Version:  0.7.0
-Release:  2%{?dist}
+Version:  1.0.0
+Release:  1%{?dist}
 Summary:  A speech to text IBus Input Method using VOSK
 ExcludeArch: %{ix86}
 License:  GPL-3.0-or-later

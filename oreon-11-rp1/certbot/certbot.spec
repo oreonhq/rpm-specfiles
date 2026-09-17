@@ -18,8 +18,8 @@
 %endif
 
 Name:           certbot
-Version:        5.2.2
-Release:        3%{?dist}
+Version:        5.8.0
+Release:        1%{?dist}
 Summary:        A free, automated certificate authority client
 
 License:        Apache-2.0

@@ -4,8 +4,8 @@
 
 Summary: Chinese Man Pages from Chinese Man Pages Project
 Name: man-pages-zh-CN
-Version: 1.6.3.6
-Release: 13%{?dist}
+Version: 1.6.4.5
+Release: 1%{?dist}
 License: GFDL-1.2-no-invariants-or-later
 #Vendor: From CMPP (Chinese Man Pages Project)
 URL: https://github.com/man-pages-zh/

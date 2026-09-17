@@ -1,7 +1,7 @@
 %global source0_hash 700325b4787b86bb3738bc80b3d81c2b4a80a0f9ba545c4656ee096775b47947
 
 Name:           memtailor
-Version:        1.3
+Version:        1.4
 Release:        %autorelease
 Summary:        C++ library of special-purpose memory allocators
 

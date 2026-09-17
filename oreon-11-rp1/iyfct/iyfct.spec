@@ -5,7 +5,7 @@
 %global gitdate 20180819
 
 Name:           iyfct
-Version:        1.0.2
+Version:        1.02
 Release:        %{gitdate}git.%{shortcommit}%{?dist}.18
 Summary:        Side scrolling endless runner game
 

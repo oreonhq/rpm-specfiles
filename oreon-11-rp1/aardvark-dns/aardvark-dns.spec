@@ -25,7 +25,7 @@ Epoch: 2
 # If that's what you're reading, Version must be 0, and will be updated by Packit for
 # copr and koji builds.
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 1.17.0
+Version: 2.1.0
 # The `AND` needs to be uppercase in the License for SPDX compatibility
 License: Apache-2.0 AND MIT AND Zlib
 Release: %autorelease
@@ -37,7 +37,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Authoritative DNS server for A/AAAA container records
 URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
-Source0:        https://github.com/containers/aardvark-dns/archive/refs/tags/v1.17.0.tar.gz#/aardvark-dns-1.17.0.tar.gz
+Source0:        https://github.com/containers/aardvark-dns/archive/refs/tags/v1.17.0.tar.gz#/aardvark-dns-2.1.0.tar.gz
 
 Source1:        https://github.com/containers/aardvark-dns/releases/download/v1.17.0/aardvark-dns-v1.17.0-vendor.tar.gz
 BuildRequires: cargo

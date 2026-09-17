@@ -10,7 +10,7 @@
 %global selinuxtype targeted
 %global with_selinux 1
 Name: credcheck
-Version: 4.4
+Version: 5.0
 Release: %autorelease 
 Summary: PostgreSQL extension for credential checking
 License: PostgreSQL

@@ -1,8 +1,8 @@
 %global source0_hash 9e25e61104bdbe73ccde056db920303ef8cf1ac632f3365e0bd099cc7fee71a1
 
 Name:    hotspot
-Version: 1.5.1
-Release: 8%{?dist}
+Version: 1.6.0
+Release: 1%{?dist}
 Summary: The Linux perf GUI for performance analysis
 
 License: GPL-2.0-or-later

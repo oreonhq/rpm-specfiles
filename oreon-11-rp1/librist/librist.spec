@@ -6,8 +6,8 @@
 %bcond_with tests
 
 Name:           librist
-Version:        0.2.7
-Release:        11%{?dist}
+Version:        0.2.20
+Release:        1%{?dist}
 Summary:        Library for Reliable Internet Stream Transport (RIST) protocol
 
 # Everything used is BSD-2-Clause except getopt-shim, which is ISC as well

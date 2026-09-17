@@ -3,8 +3,8 @@
 %global octpkg mmclab
 
 Name:           mmc
-Version:        1.7.9
-Release:        17%{?dist}
+Version:        2019.4
+Release:        1%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://mcx.space/mmc

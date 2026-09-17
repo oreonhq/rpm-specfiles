@@ -1,7 +1,7 @@
 %global source0_hash 53ef974ac657a0b4b9d7424a65b7f92e6ca26c15e8356f4146ae8bb9cae2db44
 
 Name:           drm_info
-Version:        2.9.0
+Version:        2.10.0
 Release:        %autorelease
 Summary:        Small utility to dump info about DRM devices
 

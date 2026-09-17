@@ -3,8 +3,8 @@
 %global libzen_version  0.4.41
 
 Name:           libmediainfo
-Version:        25.10
-Release:        2%{?dist}
+Version:        26.05
+Release:        1%{?dist}
 Summary:        Library for supplies technical and tag information about a video or audio file
 
 License:        BSD-2-Clause

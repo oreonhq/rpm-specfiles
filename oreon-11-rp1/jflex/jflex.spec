@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           jflex
-Version:        1.7.0
+Version:        1.9.1
 Release:        %autorelease
 Summary:        Fast Scanner Generator
 License:        BSD-3-Clause
@@ -11,7 +11,7 @@ URL:            https://jflex.de/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://jflex.de/release/jflex-1.7.0.tar.gz
+Source0:        https://jflex.de/release/jflex-1.9.1.tar.gz
 Source4:        %{name}.1
 
 %if %{with bootstrap}
@@ -26,7 +26,7 @@ BuildRequires:  mvn(org.apache.ant:ant)
 BuildRequires:  jflex
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.7.0-44
+Obsoletes:      %{name}-javadoc < 1.9.1-44
 
 %description
 JFlex is a lexical analyzer generator (also known as scanner

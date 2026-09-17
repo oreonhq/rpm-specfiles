@@ -4,7 +4,7 @@
 %global __provides_exclude_from ^%{_libdir}/deepin-aiassistant/.*\\.so$
 
 Name:           deepin-calendar
-Version:        6.5.31
+Version:        6.6.0
 Release:        %autorelease
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPL-3.0-or-later

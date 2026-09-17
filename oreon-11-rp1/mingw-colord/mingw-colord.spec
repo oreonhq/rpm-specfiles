@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-colord
-Version:        1.2.9
-Release:        28%{?dist}
+Version:        1.4.8
+Release:        1%{?dist}
 Summary:        Color libraries and data files for MinGW
 
 # Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.

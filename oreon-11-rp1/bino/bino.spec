@@ -1,7 +1,7 @@
 %global source0_hash 843cac2c951dd933e55987717223a45462d3fb0f332fc6311e173d8dabe66e5c
 
 Name:           bino
-Version:        2.6
+Version:        2.8
 Release:        %autorelease
 Summary:        3D video player
 

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           kdsoap
-Version:        2.2.0
+Version:        2.3.0
 Release:        %autorelease
 Summary:        A Qt-based client-side and server-side SOAP component
 
@@ -72,7 +72,7 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n kdsoap-2.2.0
+%autosetup -n kdsoap-2.3.0
 
 %build
 %global _vpath_builddir %{_target_platform}-qt5

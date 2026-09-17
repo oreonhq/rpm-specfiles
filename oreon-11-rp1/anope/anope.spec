@@ -12,8 +12,8 @@
 
 Summary:        IRC services designed for flexibility and ease of use
 Name:           anope
-Version:        2.1.4
-Release:        6%{?dist}
+Version:        2.1.27
+Release:        1%{?dist}
 # Anope itself is GPL-2.0-only but uses other source codes, breakdown:
 # BSD-3-Clause: include/pstdint.h and modules/encryption/enc_sha256.cpp
 # MIT: src/siphash.cpp
@@ -37,9 +37,9 @@ Source18:       anope-memoserv.conf
 Source19:       anope-modules.conf
 Source20:       anope-nickserv.conf
 Source21:       anope-operserv.conf
-Patch0:         https://github.com/anope/anope/commit/87a8af0ad71a11c248ba94c9ba20668dcb0fe831.patch#/anope-2.1.4-paths1.patch
-Patch1:         https://github.com/anope/anope/commit/c08aaa86d1ada72ad6e185837f9c179693b60c22.patch#/anope-2.1.4-paths2.patch
-Patch2:         https://github.com/anope/anope/commit/5fdc6373275de9c0844c6507509c153ce69fa0c1.patch#/anope-2.1.4-paths3.patch
+Patch0:         https://github.com/anope/anope/commit/87a8af0ad71a11c248ba94c9ba20668dcb0fe831.patch#/anope-2.1.27-paths1.patch
+Patch1:         https://github.com/anope/anope/commit/c08aaa86d1ada72ad6e185837f9c179693b60c22.patch#/anope-2.1.27-paths2.patch
+Patch2:         https://github.com/anope/anope/commit/5fdc6373275de9c0844c6507509c153ce69fa0c1.patch#/anope-2.1.27-paths3.patch
 BuildRequires:  cmake
 %if 0%{?rhel} && 0%{?rhel} < 8
 BuildRequires:  cmake3

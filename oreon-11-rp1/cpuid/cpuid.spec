@@ -1,7 +1,7 @@
 %global source0_hash 31ccfc03f93dd8848a6798f274fa03791f5c3bfbb1a767fe2086a69ce3727acb
 
 Name:           cpuid
-Version:        20250419
+Version:        20260503
 Release:        %autorelease
 Summary:        Dumps information about the CPU(s)
 

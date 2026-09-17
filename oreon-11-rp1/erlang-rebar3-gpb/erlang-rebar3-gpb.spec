@@ -3,7 +3,7 @@
 %global realname rebar3_gpb_plugin
 
 Name:		erlang-rebar3-gpb
-Version:	2.23.8
+Version:	3.0.1
 Release:	%autorelease
 Summary:	A protobuf compiler for Rebar3
 License:	MIT

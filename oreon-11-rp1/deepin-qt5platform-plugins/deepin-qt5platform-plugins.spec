@@ -4,7 +4,7 @@
 %global __provides_exclude_from ^%{_qt5_plugindir}/.*\\.so$
 
 Name:           deepin-qt5platform-plugins
-Version:        5.7.5
+Version:        6.7.49
 Release:        %autorelease
 Summary:        Qt platform integration plugins for Deepin Desktop Environment
 License:        LGPL-3.0-or-later

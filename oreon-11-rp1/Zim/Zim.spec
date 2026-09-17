@@ -1,7 +1,7 @@
 %global source0_hash 4adf09eb3f077138fe55bf26f13e6c4d993616fe424a799d1ba6be098ce4eb05
 
 Name:           Zim
-Version:        0.76.3
+Version:        0.77.2
 Release:        %autorelease
 Summary:        Desktop wiki & notekeeper
 

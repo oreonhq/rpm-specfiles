@@ -9,7 +9,7 @@
 %global giturl  https://github.com/mojohaus/javacc-maven-plugin
 
 Name:           javacc-maven-plugin
-Version:        3.2.0
+Version:        3.2.1
 Release:        %autorelease
 Summary:        JavaCC Maven Plugin
 
@@ -18,7 +18,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 URL:            https://www.mojohaus.org/javacc-maven-plugin/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/mojohaus/javacc-maven-plugin/archive/refs/tags/javacc-maven-plugin-3.2.0.tar.gz#/javacc-maven-plugin-3.2.0.tar.gz
+Source0:        https://github.com/mojohaus/javacc-maven-plugin/archive/refs/tags/javacc-maven-plugin-3.2.1.tar.gz#/javacc-maven-plugin-3.2.1.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}
@@ -53,7 +53,7 @@ Maven Plugin for processing JavaCC grammar files.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n javacc-maven-plugin-javacc-maven-plugin-3.2.0
+%autosetup -p1 -n javacc-maven-plugin-javacc-maven-plugin-3.2.1
 
 %conf
 cp -p %{SOURCE1} .

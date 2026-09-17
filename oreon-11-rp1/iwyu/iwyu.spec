@@ -14,7 +14,7 @@
 %undefine _include_frame_pointers
 
 Name: iwyu
-Version: 0.25
+Version: 0.26
 Release: %autorelease
 
 License: NCSA

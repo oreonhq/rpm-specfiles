@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 # Name of the package without any prefixes
 %global majorname mysql
-%global package_version 8.4.9
+%global package_version 8.4.11
 %global majorversion %(echo %{package_version} | cut -d'.' -f1-2 )
 %global pkgnamepatch mysql
 
@@ -27,7 +27,7 @@ ExcludeArch: %{ix86}
 # The last version on which the full testsuite has been run
 # In case of further rebuilds of that version, don't require full testsuite to be run
 # run only "main" suite
-%global last_tested_version 8.4.9
+%global last_tested_version 8.4.11
 # Set to 1 to force run the testsuite even if it was already tested in current version
 %global force_run_testsuite 0
 
@@ -101,7 +101,7 @@ ExcludeArch: %{ix86}
 
 Name:             %{majorname}%{majorversion}
 Version:          %{package_version}
-Release:          5%{?with_debug:.debug}%{?dist}
+Release:          1%{?with_debug:.debug}%{?dist}
 Summary:          MySQL client programs and shared libraries
 URL:              http://www.mysql.com
 
@@ -1102,7 +1102,32 @@ popd
 %{_libdir}/mysql/plugin/test_services_plugin_registry.so
 %{_libdir}/mysql/plugin/test_udf_services.so
 %{_libdir}/mysql/plugin/udf_example.so
-
+%{_libdir}/mysql/binlog/
+%{_libdir}/mysql/gtid/
+%{_libdir}/mysql/plugin/audit_null/
+%{_libdir}/mysql/plugin/auth/
+%{_libdir}/mysql/plugin/clone/
+%{_libdir}/mysql/plugin/connection_control/
+%{_libdir}/mysql/plugin/daemon_example/
+%{_libdir}/mysql/plugin/ddl_rewriter/
+%{_libdir}/mysql/plugin/fulltext/
+%{_libdir}/mysql/plugin/group_replication/
+%{_libdir}/mysql/plugin/keyring/
+%{_libdir}/mysql/plugin/keyring_udf/
+%{_libdir}/mysql/plugin/password_validation/
+%{_libdir}/mysql/plugin/pfs_table_plugin/
+%{_libdir}/mysql/plugin/replication_observers_example/
+%{_libdir}/mysql/plugin/rewrite_example/
+%{_libdir}/mysql/plugin/rewriter/
+%{_libdir}/mysql/plugin/semisync/
+%{_libdir}/mysql/plugin/test_plugins/
+%{_libdir}/mysql/plugin/test_service_sql_api/
+%{_libdir}/mysql/plugin/test_services/
+%{_libdir}/mysql/plugin/udf_services/
+%{_libdir}/mysql/plugin/version_token/
+%{_libdir}/mysql/plugin/x/
+%{_libdir}/mysql/serialization/
+%{_libdir}/mysql/utils/
 %files -n %{pkgname}-test-data
 %attr(-,mysql,mysql) %{_datadir}/mysql-test
 %exclude %{_datadir}/mysql-test/%{skiplist}

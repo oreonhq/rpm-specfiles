@@ -4,8 +4,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           mod_auth_cas
-Version:        1.2
-Release:        12%{?dist}
+Version:        1.3
+Release:        1%{?dist}
 Summary:        Apache CAS Authentication Module for the JASIG/Apereo CAS Server
 
 License:        Apache-2.0

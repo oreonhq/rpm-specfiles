@@ -1,7 +1,7 @@
 %global source0_hash 92e22178b3aba63be4cb2bf8953991bdf52ad3e5ec26212143b2df46d16e82d7
 
 Name:           egl-x11
-Version:        1.0.5
+Version:        1.0.6
 Release:        %autorelease
 Summary:        NVIDIA XLib and XCB EGL Platform Library
 License:        Apache-2.0

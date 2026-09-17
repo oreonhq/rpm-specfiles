@@ -25,18 +25,18 @@
 %bcond_without annocheck
 
 Name:           dnsmasq
-Version:        2.92
-Release:        5%{?extraversion:.%{extraversion}}%{?dist}
+Version:        2.93
+Release:        1%{?extraversion:.%{extraversion}}%{?dist}
 Summary:        A lightweight DHCP/caching DNS server
 
 # SPDX identifiers already
 License:        GPL-2.0-only OR GPL-3.0-only
 URL:            http://www.thekelleys.org.uk/dnsmasq/
 VCS:            git:%{forgeurl0}
-Source0:        https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz
+Source0:        https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.93.tar.xz
 Source1:        %{name}.service
 Source2:        dnsmasq-systemd-sysusers.conf
-Source3:        https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz.asc
+Source3:        https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.93.tar.xz.asc
 # GPG public key
 %if 0%{?testrelease} || 0%{?releasecandidate}
 Source4:        https://www.thekelleys.org.uk/srkgpg.txt
@@ -52,7 +52,7 @@ Patch2:         dnsmasq-2.81-configuration.patch
 Patch3:         dnsmasq-2.78-fips.patch
 Patch7:         dnsmasq-2.90-dbus-interfaces.patch
 # https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q1/018378.html
-Patch8:         https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=f603a4f920e6953b11667d424956fd47373870e9#/dnsmasq-2.92-dnssec-wildcard.patch
+Patch8:         https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=f603a4f920e6953b11667d424956fd47373870e9#/dnsmasq-2.93-dnssec-wildcard.patch
 # https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q1/018383.html
 Patch9:         https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=1269f074f86bb959863012063060a3a082d37dc4#/dnsmasq-2.93-dnssec-rrsig-owner.patch
 

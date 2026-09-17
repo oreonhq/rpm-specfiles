@@ -1,8 +1,8 @@
 %global source0_hash 988fd6b232dafa04b8b8198723efeaccdb3c6aa9c1c7936219d5791a8b7a8646
 
 Name:    bubblewrap
-Version: 0.11.0
-Release: 4%{?dist}
+Version: 0.12.0
+Release: 1%{?dist}
 Summary: Core execution tool for unprivileged containers
 
 License: LGPL-2.0-or-later

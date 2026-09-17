@@ -1,8 +1,8 @@
 %global source0_hash 4805a135a868cf2a8ce966e5cdb7e99b96137be8276cd9b01b7ed3b5f235efcf
 
 Name: bombardier
-Version: 0.8.4
-Release: 3%{?dist}
+Version: 0.8.8
+Release: 1%{?dist}
 Summary: The GNU Bombing utility
 
 License: GPL-2.0-or-later        

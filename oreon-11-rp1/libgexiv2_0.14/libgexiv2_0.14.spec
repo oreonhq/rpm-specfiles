@@ -1,7 +1,7 @@
 %global source0_hash 606c28aaae7b1f3ef5c8eabe5e7dffd7c5a1c866d25b7671fb847fe287a72b8b
 
 Name:           libgexiv2_0.14
-Version:        0.14.6
+Version:        0.14.7
 Release:        %autorelease
 Summary:        Gexiv2 is a GObject-based wrapper around the Exiv2 library
 

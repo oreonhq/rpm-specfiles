@@ -6,8 +6,8 @@
 %endif
 
 Name: btrbk
-Version: 0.32.6
-Release: 11%{?dist}
+Version: 0.32.7
+Release: 1%{?dist}
 Summary: Tool for creating snapshots and remote backups of btrfs sub-volumes
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License: GPL-3.0-or-later

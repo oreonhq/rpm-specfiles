@@ -1,8 +1,8 @@
 %global source0_hash 4541581d34981aff3be8aee1ddf2b79172bfc18f16223007a880b8053abb0cc4
 
 Name:          lnav
-Version:       0.13.2
-Release:       2%{?dist}
+Version:       0.14.1
+Release:       1%{?dist}
 Summary:       Curses-based tool for viewing and analyzing log files
 # Automatically converted from old format: BSD - review is highly recommended.
 License:       LicenseRef-Callaway-BSD

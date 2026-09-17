@@ -5,7 +5,7 @@
 
 Name:    kalgebra
 Summary: 2D and 3D Graph Calculator
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later

@@ -1,7 +1,7 @@
 %global source0_hash 852defe7743c12984c632f9882c21384382a58fd34b740a154b04451f7ffc896
 
 Name:           borgmatic
-Version:        2.1.3
+Version:        2.1.7
 Release:        %autorelease
 Summary:        Simple Python wrapper script for borgbackup
 

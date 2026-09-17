@@ -1,8 +1,8 @@
 %global source0_hash f65e73bdfadbb53734cf8b4d165adad13c2cc2d8447187c0a6be048e9e0db0d5
 
 Name:           kapow
-Version:        1.6.4
-Release:        3%{?dist}
+Version:        1.7.1
+Release:        1%{?dist}
 Summary:        A punch clock program
 
 License:        GPL-3.0-or-later

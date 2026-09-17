@@ -5,7 +5,7 @@
 
 Name:           %{archive_name}
 Epoch:          1
-Version:        26.1.1
+Version:        26.8.0
 Release:        1%{?dist}
 Summary:        Best practices checker for Ansible
 

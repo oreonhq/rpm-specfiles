@@ -3,8 +3,8 @@
 %global srcname oss-parent
 
 Name:          fasterxml-oss-parent
-Version:       62
-Release:       6%{?dist}
+Version:       80
+Release:       1%{?dist}
 Summary:       FasterXML parent pom
 License:       Apache-2.0
 

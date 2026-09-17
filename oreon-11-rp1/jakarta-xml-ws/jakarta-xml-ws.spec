@@ -3,8 +3,8 @@
 %global srcname jax-ws-api
 
 Name:           jakarta-xml-ws
-Version:        4.0.0
-Release:        12%{?dist}
+Version:        4.0.3
+Release:        1%{?dist}
 Summary:        Jakarta XML Web Services API
 # spec and enterprise-ws-spec is under EPL-2.0 but it is not shipped
 # Automatically converted from old format: BSD - review is highly recommended.

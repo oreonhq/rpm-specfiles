@@ -1,7 +1,7 @@
 %global source0_hash bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
 
 Name:           fmt
-Version:        11.2.0
+Version:        12.2.0
 Release:        1%{?dist}
 
 License:        MIT

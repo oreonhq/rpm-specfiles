@@ -1,7 +1,7 @@
 %global source0_hash 8d9c4fcd584c468d27e0f23c36836587284452094c4b1c404c20c4b810462dcb
 
 Name:           pari
-Version:        2.17.3
+Version:        2.17.4
 Release:        %autorelease
 Summary:        Number Theory-oriented Computer Algebra System
 

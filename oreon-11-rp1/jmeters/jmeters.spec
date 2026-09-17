@@ -2,8 +2,8 @@
 
 Summary:       Multichannel audio level meter
 Name:          jmeters
-Version:       0.4.1
-Release:       32%{?dist}
+Version:       0.4.5
+Release:       1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:       GPL-2.0-only
 URL:           http://kokkinizita.linuxaudio.org/linuxaudio/

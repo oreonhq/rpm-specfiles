@@ -1,7 +1,7 @@
 %global source0_hash 3d9d6f8727e9a496cad881a404f85bc576396d0e094437a6b379d83fbc096a4f
 
 Name:           exaile
-Version:        4.2.1
+Version:        4.2.2
 Release:        1%{?dist}
 Summary:        Simple but powerful Amarok-style music player for GTK users
 License:        GPL-2.0-or-later

@@ -6,9 +6,9 @@
 
 Name: gnucash
 Summary: Finance management application
-Version: 5.14
+Version: 5.16
 URL: https://gnucash.org/
-Release: 3%{?dist}
+Release: 1%{?dist}
 License: GPL-2.0-or-later
 Source: https://downloads.sourceforge.net/sourceforge/gnucash/gnucash-%{version}.tar.bz2
 

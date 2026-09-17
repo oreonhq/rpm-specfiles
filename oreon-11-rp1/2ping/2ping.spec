@@ -1,7 +1,7 @@
 %global source0_hash b56beb1b7da1ab23faa6d28462bcab9785021011b3df004d5d3c8a97ed7d70d8
 
 Name:           2ping
-Version:        4.5.1
+Version:        4.6.1
 Release:        %autorelease
 Summary:        Bi-directional ping utility
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

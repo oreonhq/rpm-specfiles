@@ -1,7 +1,7 @@
 %global source0_hash ffaa53147c88db491545f5c26b461eeabe7c6a2fbc6b845e07c61b2f1adb50e5
 
 Name:          human-theme-gtk
-Version:       3.0.0
+Version:       3.2.0
 Release:       1%{?dist}
 Summary:       Human theme for GTK
 Summary(fr):   Thème Human pour GTK

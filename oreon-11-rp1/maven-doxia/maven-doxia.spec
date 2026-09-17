@@ -2,8 +2,8 @@
 
 Name:           maven-doxia
 Epoch:          0
-Version:        2.0.0
-Release:        5%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Content generation framework
 License:        Apache-2.0
 

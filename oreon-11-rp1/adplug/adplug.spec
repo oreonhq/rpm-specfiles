@@ -5,8 +5,8 @@
 
 %define adplugdbver 2006-07-07
 Name:           adplug
-Version:        2.3.3
-Release:        15%{?dist}
+Version:        2.4
+Release:        1%{?dist}
 Summary:        Software library for AdLib (OPL2/3) emulation
 URL:            https://adplug.github.io/
 Source0:        https://github.com/adplug/adplug/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2

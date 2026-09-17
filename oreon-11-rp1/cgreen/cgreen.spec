@@ -1,7 +1,7 @@
 %global source0_hash 209041133af7581df0f8c57b1225ddd94587988bb2c2cd7cb85bf5fe7f8090b0
 
 Name:           cgreen
-Version:        1.6.3
+Version:        1.7.0
 Release:        1%{?dist}
 Summary:        Modern unit test and mocking framework for C and C++
 License:        ISC

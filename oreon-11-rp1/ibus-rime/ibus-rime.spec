@@ -1,8 +1,8 @@
 %global source0_hash 46022d7577dd2d0e10ff1c66a7c61c78b6f01bd80ceccb37106fba9c2bf1e63a
 
 Name:           ibus-rime
-Version:        1.6.0
-Release:        2%{?dist}
+Version:        1.6.1
+Release:        1%{?dist}
 Summary:        Rime Input Method Engine for IBus
 Summary(zh):    中州韻輸入法引擎
 

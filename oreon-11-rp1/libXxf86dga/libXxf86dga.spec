@@ -6,17 +6,17 @@
 
 Summary: X.Org X11 libXxf86dga runtime library
 Name: libXxf86dga
-Version: 1.1.6
-Release: 7%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.1.7
+Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.6.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.7.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.6.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.7.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

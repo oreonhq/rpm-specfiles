@@ -1,7 +1,7 @@
 %global source0_hash 2ceb75eab4235c2c7e93dafc3ef3268ad368ca5de40892bf8cffdd510f29d9d8
 
 Name:           SDL3_image
-Version:        3.4.0
+Version:        3.4.6
 Release:        %autorelease
 Summary:        Image loading library for SDL
 License:        Zlib AND (HPND-Pbmplus AND Zlib) AND MIT AND (MIT OR Unlicense) AND LicenseRef-Fedora-Public-Domain

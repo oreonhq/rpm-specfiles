@@ -1,7 +1,7 @@
 %global source0_hash 0e6cf25663cc220e3e3e2bc013fe957c3e4a44f900b5ee6a7609cd501021652d
 
 Name:           j4-dmenu-desktop
-Version:        3.1
+Version:        3.2
 Release:        %autorelease
 Summary:        Generic menu for desktop managers
 # Automatically converted from old format: GPLv3 - review is highly recommended.

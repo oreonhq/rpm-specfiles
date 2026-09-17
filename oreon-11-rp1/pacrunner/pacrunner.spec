@@ -1,8 +1,8 @@
 %global source0_hash 707c201e74c2706eda96be89e55c6b4e0b8acbe35601b70df67fea0b43d624f1
 
 Name:		pacrunner
-Version:	0.16
-Release:	16%{?dist}
+Version:	0.19
+Release:	1%{?dist}
 Summary:	Proxy configuration dæmon
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:	GPL-2.0-only

@@ -1,8 +1,8 @@
 %global source0_hash 5fe9ad709a726416cec986886503e0526419742e288c4e43f63c1c22026d1e8a
 
 Name:           json-fortran
-Version:        8.3.0
-Release:        10%{?dist}
+Version:        9.3.1
+Release:        1%{?dist}
 Summary:        A Modern Fortran JSON API
 # Automatically converted from old format: MIT and BSD - review is highly recommended.
 License:        LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD

@@ -1,8 +1,8 @@
 %global source0_hash e18c01841be3b149b79df38a67b59c51247ec40df0740b972eb724a3a3c72869
 
 Name:           lwtools
-Version:        4.24
-Release:        3%{?dist}
+Version:        4.25
+Release:        1%{?dist}
 Summary:        Cross-development tool chain for Motorola 6809 and Hitachi 6309
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

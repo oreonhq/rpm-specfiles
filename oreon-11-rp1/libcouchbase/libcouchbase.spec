@@ -2,8 +2,8 @@
 
 Summary: Client and protocol library for the Couchbase project
 Name: libcouchbase
-Version: 3.3.18
-Release: 3%{?dist}
+Version: 3.3.19
+Release: 1%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
 BuildRequires: gcc, gcc-c++

@@ -13,8 +13,8 @@
 %endif
 
 Name:          geos
-Version:       3.14.1
-Release:       2%{?dist}
+Version:       3.15.0
+Release:       1%{?dist}
 Summary:       GEOS is a C++ port of the Java Topology Suite
 
 License:       LGPL-2.1-only
@@ -80,7 +80,7 @@ MinGW Windows GEOS library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n geos-3.14.1
+%autosetup -p1 -n geos-3.15.0
 
 
 %build
@@ -142,7 +142,7 @@ rm -f %{buildroot}%{mingw64_bindir}/geos-config
 %files -n mingw32-%{name}
 %license COPYING
 %{mingw32_bindir}/geosop.exe
-%{mingw32_bindir}/libgeos-3.14.1.dll
+%{mingw32_bindir}/libgeos-3.15.0.dll
 %{mingw32_bindir}/libgeos_c-1.dll
 %{mingw32_includedir}/geos/
 %{mingw32_includedir}/geos_c.h
@@ -155,7 +155,7 @@ rm -f %{buildroot}%{mingw64_bindir}/geos-config
 %files -n mingw64-%{name}
 %license COPYING
 %{mingw64_bindir}/geosop.exe
-%{mingw64_bindir}/libgeos-3.14.1.dll
+%{mingw64_bindir}/libgeos-3.15.0.dll
 %{mingw64_bindir}/libgeos_c-1.dll
 %{mingw64_includedir}/geos/
 %{mingw64_includedir}/geos_c.h

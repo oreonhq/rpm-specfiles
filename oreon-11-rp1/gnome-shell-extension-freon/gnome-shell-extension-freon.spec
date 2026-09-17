@@ -4,7 +4,7 @@
 
 Name:           gnome-shell-extension-freon
 Epoch:          2
-Version:        60
+Version:        61
 %global srcversion EGO-%{version}
 Release:        %autorelease
 Summary:        GNOME Shell extension to display system temperature, voltage, and fan speed

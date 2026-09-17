@@ -1,8 +1,8 @@
 %global source0_hash 8137ff21f8f818faf0de634e531dfe3ebec5e161f6be3b02e0d89ccf3796c45e
 
 Name:		consolation
-Version:	0.0.7
-Release:	17%{?dist}
+Version:	0.0.10
+Release:	1%{?dist}
 Summary:	Copy-paste for the Linux console
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

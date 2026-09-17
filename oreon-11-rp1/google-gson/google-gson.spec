@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           google-gson
-Version:        2.12.1
+Version:        2.14.0
 Release:        %autorelease
 Summary:        Java lib for conversion of Java objects into JSON representation
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
@@ -12,7 +12,7 @@ URL:            https://github.com/google/gson
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/google/gson/archive/gson-parent-%{version}.tar.gz#/google-gson-2.12.1.tar.gz
+Source0:        https://github.com/google/gson/archive/gson-parent-%{version}.tar.gz#/google-gson-2.14.0.tar.gz
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -22,7 +22,7 @@ BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(javax.annotation:jsr250-api)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.12.1-3
+Obsoletes:      %{name}-javadoc < 2.14.0-3
 
 %description
 Gson is a Java library that can be used to convert a Java object into its
@@ -32,8 +32,8 @@ pre-existing objects that you do not have source-code of.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n gson-gson-parent-2.12.1
-%autosetup -p1 -n gson-gson-parent-2.12.1
+%setup -q -n gson-gson-parent-2.14.0
+%autosetup -p1 -n gson-gson-parent-2.14.0
 
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :spotless-maven-plugin

@@ -4,8 +4,8 @@
 %global alpha 0
 
 Name:           flrig
-Version:        2.0.10
-Release:        3%{?dist}
+Version:        2.0.12
+Release:        1%{?dist}
 Summary:        Transceiver control program
 
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later AND GPL-3.0-only

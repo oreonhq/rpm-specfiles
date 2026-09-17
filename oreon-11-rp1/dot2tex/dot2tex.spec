@@ -1,7 +1,7 @@
 %global source0_hash e7205ed17edf7e8a7a816f13da5c74fd8b88e1ad42cc3975a6943a32f59ad55b
 
 Name:           dot2tex
-Version:        2.11.3
+Version:        2.12.0
 Release:        %autorelease
 Summary:        A Graphviz to LaTeX converter
 License:        MIT

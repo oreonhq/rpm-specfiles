@@ -5,8 +5,8 @@
 
 Summary:        Email filter with virus scanner and spamassassin support
 Name:           amavis
-Version:        2.14.0
-Release:        4%{?dist}
+Version:        2.15.0
+Release:        1%{?dist}
 # LDAP schema is GFDL-1.2-or-later, some helpers are BSD-2-Clause, core is GPL-2.0-or-later
 License:        GPL-2.0-or-later AND BSD-2-Clause AND GFDL-1.2-or-later
 URL:            https://gitlab.com/amavis/amavis

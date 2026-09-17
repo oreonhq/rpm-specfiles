@@ -1,8 +1,8 @@
 %global source0_hash 13cf719c5babbad3ee12d807676cd25df8bc84068b7f6f2179a56877ea7d47b4
 
 Name: esorex
-Version: 3.13.7
-Release: 9%{?dist}
+Version: 3.14a2
+Release: 1%{?dist}
 Summary: Recipe Execution Tool of the European Southern Observatory 
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

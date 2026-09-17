@@ -18,7 +18,7 @@
 %global forgeurl0 https://github.com/NetworkConfiguration/openresolv
 
 Name:           openresolv
-Version:        3.13.2
+Version:        3.17.4
 Release:        %autorelease
 Summary:        DNS management framework
 # Automatically converted from old format: BSD - review is highly recommended.

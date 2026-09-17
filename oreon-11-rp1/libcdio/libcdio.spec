@@ -1,7 +1,7 @@
 %global source0_hash 53e83d284667535a767fd2d31edad1a6701591960459df373a10f1f21e80a7ed
 
 Name: libcdio
-Version: 2.3.0
+Version: 2.4.0
 Release: 1%{?dist}
 Summary: CD-ROM input and control library
 # include/cdio/ecma_167.h and lib/driver/netbsd.c and lib/udf/udf_fs.c are BSD-2-Clause

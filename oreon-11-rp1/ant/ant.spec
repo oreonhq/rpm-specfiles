@@ -41,7 +41,7 @@
 %global ant_home %{_datadir}/ant
 
 Name:           ant
-Version:        1.10.15
+Version:        1.10.18
 Release:        %autorelease
 Summary:        Java build tool
 Summary(it):    Tool per la compilazione di programmi java
@@ -95,9 +95,9 @@ Requires:       %{name}-jdk-binding
 Suggests:       %{name}-openjdk25 = %{version}-%{release}
 
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1:1.10.15-21
+Obsoletes:      %{name}-javadoc < 1:1.10.18-21
 # TODO Remove in Fedora 47
-Obsoletes:      %{name}-openjdk21 < 1:1.10.15-38
+Obsoletes:      %{name}-openjdk21 < 1:1.10.18-38
 
 %description
 Apache Ant is a Java library and command-line tool whose mission is to
@@ -331,8 +331,8 @@ Documentation pour %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n apache-ant-1.10.15
-%autosetup -p1 -n apache-ant-1.10.15
+%setup -q -n apache-ant-1.10.18
+%autosetup -p1 -n apache-ant-1.10.18
 
 # clean jar files
 find . -name "*.jar" | xargs -t rm

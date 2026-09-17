@@ -1,8 +1,8 @@
 %global source0_hash b90e96aa904c0a7d00eb1988d5a34a85b69f0bfb3cc322891ef64207f1173b1f
 
 Name: cockpit-session-recording
-Version: 20
-Release: 4%{?dist}
+Version: 21
+Release: 1%{?dist}
 Summary: Cockpit Session Recording
 License: LGPL-2.1-or-later
 URL:     https://github.com/Scribery/%{name}

@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-resources-plugin
-Version:        3.3.1
+Version:        3.5.0
 Release:        %autorelease
 Summary:        Maven Resources Plugin
 License:        Apache-2.0
@@ -36,7 +36,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.3.1-18
+Obsoletes:      %{name}-javadoc < 3.5.0-18
 
 %description
 The Resources Plugin handles the copying of project resources

@@ -1,8 +1,8 @@
 %global source0_hash dbcf99a869da402d5f538e435ab7fd4992b2b255c9939e546f1905c3e6e80ff9
 
 Name:     FAudio
-Version:  25.05
-Release:  4%{?dist}
+Version:  26.09
+Release:  1%{?dist}
 Summary:  FNA is a reimplementation of the Microsoft XNA Game Studio 4.0 Refresh libraries
 
 License:  zlib

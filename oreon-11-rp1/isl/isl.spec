@@ -3,7 +3,7 @@
 
 Summary: Integer point manipulation library
 Name: isl
-Version: 0.16.1
+Version: 0.28
 License: MIT
 URL: https://libisl.sourceforge.io/
 
@@ -19,7 +19,7 @@ URL: https://libisl.sourceforge.io/
 #
 # % global buildid .local
 
-Release: 24%{?buildid}%{?dist}
+Release: 1%{?buildid}%{?dist}
 
 BuildRequires:  gcc
 BuildRequires: gmp-devel

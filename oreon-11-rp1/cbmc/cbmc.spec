@@ -6,7 +6,7 @@
 %define utils_version 1.3
 
 Name:           cbmc
-Version:        6.8.0
+Version:        6.11.0
 Release:        1%{?dist}
 Summary:        Bounded Model Checker for ANSI-C and C++ programs
 

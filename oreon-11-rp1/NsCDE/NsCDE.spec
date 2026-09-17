@@ -2,17 +2,17 @@
 
 # NsCDE desktop files don't validate, but they are also only used by NsCDE
 #
-# + for f in /builddir/build/BUILDROOT/NsCDE-2.2-1.fc38.x86_64/usr/share/applications/*.desktop
-# + desktop-file-validate /builddir/build/BUILDROOT/NsCDE-2.2-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop
-# /builddir/build/BUILDROOT/NsCDE-2.2-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "nscde_fvwmclnt 'Exec exec $[infostore.appmgr]'" for key "Exec" in group "Desktop Entry" contains a reserved character ''' outside of a quote
-# /builddir/build/BUILDROOT/NsCDE-2.2-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "nscde_fvwmclnt 'Exec exec $[infostore.appmgr]'" for key "Exec" in group "Desktop Entry" contains a reserved character '$' outside of a quote
-# /builddir/build/BUILDROOT/NsCDE-2.2-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "nscde_fvwmclnt 'Exec exec $[infostore.appmgr]'" for key "Exec" in group "Desktop Entry" contains a reserved character ''' outside of a quote
-# /builddir/build/BUILDROOT/NsCDE-2.2-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "NsCDE;" for key "OnlyShowIn" in group "Desktop Entry" contains an unregistered value "NsCDE"; values extending the format should start with "X-"
+# + for f in /builddir/build/BUILDROOT/NsCDE-2.3-1.fc38.x86_64/usr/share/applications/*.desktop
+# + desktop-file-validate /builddir/build/BUILDROOT/NsCDE-2.3-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop
+# /builddir/build/BUILDROOT/NsCDE-2.3-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "nscde_fvwmclnt 'Exec exec $[infostore.appmgr]'" for key "Exec" in group "Desktop Entry" contains a reserved character ''' outside of a quote
+# /builddir/build/BUILDROOT/NsCDE-2.3-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "nscde_fvwmclnt 'Exec exec $[infostore.appmgr]'" for key "Exec" in group "Desktop Entry" contains a reserved character '$' outside of a quote
+# /builddir/build/BUILDROOT/NsCDE-2.3-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "nscde_fvwmclnt 'Exec exec $[infostore.appmgr]'" for key "Exec" in group "Desktop Entry" contains a reserved character ''' outside of a quote
+# /builddir/build/BUILDROOT/NsCDE-2.3-1.fc38.x86_64/usr/share/applications/nscde-appmgr.desktop: error: value "NsCDE;" for key "OnlyShowIn" in group "Desktop Entry" contains an unregistered value "NsCDE"; values extending the format should start with "X-"
 # error: Bad exit status from /var/tmp/rpm-tmp.guZ5LT (%check)
 %bcond check 1
 
 Name:           NsCDE
-Version:        2.2
+Version:        2.3
 Release:        %autorelease
 Summary:        Modern and functional CDE desktop based on FVWM
 

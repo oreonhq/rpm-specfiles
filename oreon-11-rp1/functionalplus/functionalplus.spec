@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:           functionalplus
-Version:        0.2.24
+Version:        0.2.28
 Release:        %autorelease
 Summary:        Functional Programming Library for C++
 

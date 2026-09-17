@@ -1,11 +1,11 @@
 %global source0_hash 7770af0bbc0063f9580a6a5c8e7c51f1788f171d7da0b352e48a1e60943a8c3c
 
 %global git 0
-%global gittag 5.0-RC3
+%global gittag 5.0-RC4-RC3
 
 Name:           ffms2
-Version:        5.0
-Release:        8%{?dist}
+Version:        5.0-RC4-RC4
+Release:        1%{?dist}
 # src/index/vsutf16.h is LGPL-2.1-or-later
 # the rest is MIT-licensed
 License:        MIT AND LGPL-2.1-or-later

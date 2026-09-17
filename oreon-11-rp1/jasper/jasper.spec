@@ -6,12 +6,12 @@
 
 Summary: Implementation of the JPEG-2000 standard, Part 1
 Name:    jasper
-Version: 4.2.8
-Release: 2%{?dist}
+Version: 4.2.9
+Release: 1%{?dist}
 
 License: JasPer-2.0
 URL:     http://www.ece.uvic.ca/~frodo/jasper/
-Source0:        https://github.com/jasper-software/%{name}/archive/refs/tags/version-%{version}.tar.gz#/jasper-4.2.8.tar.gz
+Source0:        https://github.com/jasper-software/%{name}/archive/refs/tags/version-%{version}.tar.gz#/jasper-4.2.9.tar.gz
 
 # architecture related patches
 Patch100: jasper-2.0.2-test-ppc64-disable.patch

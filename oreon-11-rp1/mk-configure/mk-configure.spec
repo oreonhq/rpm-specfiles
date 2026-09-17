@@ -1,8 +1,8 @@
 %global source0_hash 2dd844694aad36b7900824c8c2e31345ad0b8dcbf366a9086f6b981714eaa8b9
 
 Name: mk-configure
-Version: 0.38.3
-Release: 8%{?dist}
+Version: 0.40.0
+Release: 1%{?dist}
 Summary: A build system on top of bmake
 License: BSD-2-Clause AND BSD-4-Clause AND ISC
 # Licenses listed in the doc/LICENSE file
@@ -11,7 +11,6 @@ URL: https://github.com/cheusov/mk-configure/
 Source0: https://github.com/cheusov/mk-configure/archive/%{version}/%{name}-%{version}.tar.gz
 Source1: mkcmake.macros
 
-Patch0: 0001-ignore-incompatible-pointer-types-errors.patch
 Patch1: prototype-fix.patch
 
 BuildRequires: autoconf

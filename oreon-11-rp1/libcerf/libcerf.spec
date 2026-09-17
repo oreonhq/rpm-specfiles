@@ -1,9 +1,9 @@
 %global source0_hash 7cbece26ad94bd375eb81fee2b540d0ef68bbeb0994358e57bd588173f96b8ec
 
 Name:           libcerf
-Version:        3.3
+Version:        3.8
 %global         sover 3
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        A library that provides complex error functions
 
 License:        MIT

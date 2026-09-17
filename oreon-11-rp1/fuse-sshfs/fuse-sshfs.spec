@@ -3,8 +3,8 @@
 %global source2_key_fpr 9C113099DF707BD240A192D4C6E054D074D5DD2B
 
 Name:           fuse-sshfs
-Version:        3.7.5
-Release:        3%{?dist}
+Version:        3.7.6
+Release:        1%{?dist}
 Summary:        FUSE-Filesystem to access remote filesystems via SSH
 License:        GPL-2.0-only
 URL:            https://github.com/libfuse/sshfs

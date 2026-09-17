@@ -1,7 +1,7 @@
 %global source0_hash 7eb2c34b407056b8719e665114043a3a4be199a5fc1628b1cb853ef8cae81384
 
 Name:           gencolormap
-Version:        2.3
+Version:        2.6
 Release:        %autorelease
 Summary:        Tools to generate color maps for visualization
 

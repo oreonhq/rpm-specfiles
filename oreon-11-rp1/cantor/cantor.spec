@@ -29,7 +29,7 @@
 
 Name:    cantor
 Summary: KDE Frontend to Mathematical Software
-Version: 26.04.3
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

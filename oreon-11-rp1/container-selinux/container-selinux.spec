@@ -37,12 +37,12 @@ Epoch: 4
 # Keep Version in upstream specfile at 0. It will be automatically set
 # to the correct value by Packit for copr and koji builds.
 # IGNORE this comment if you're looking at it in dist-git.
-Version: 2.247.0
+Version: 2.251.0
 Release: %autorelease
 License: GPL-2.0-only
 URL: https://github.com/containers/%{name}
 Summary: SELinux policies for container runtimes
-Source0:        https://github.com/containers/container-selinux/archive/refs/tags/v2.247.0.tar.gz#/container-selinux-2.247.0.tar.gz
+Source0:        https://github.com/containers/container-selinux/archive/refs/tags/v2.247.0.tar.gz#/container-selinux-2.251.0.tar.gz
 
 BuildArch: noarch
 BuildRequires: make

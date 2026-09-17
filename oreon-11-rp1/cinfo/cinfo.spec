@@ -1,8 +1,8 @@
 %global source0_hash 1456473841fb477372723472449f53caafe5b8ad4f23f14b644da77f7f7e313c
 
 Name:           cinfo
-Version:        0.5.10
-Release:        5%{?dist}
+Version:        0.5.12
+Release:        1%{?dist}
 Summary:        Fast and minimal system information tool
 
 License:        GPL-3.0-only

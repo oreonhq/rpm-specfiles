@@ -1,7 +1,7 @@
 %global source0_hash 62f7413ffda92b9c221484489049bb38abfb19ba49dcf181dc9cf25be09de367
 
 Name:           cambalache
-Version:        0.99.8
+Version:        1.0.3
 Release:        %autorelease
 Summary:        User interface maker
 

@@ -8,8 +8,8 @@
 
 Summary: Application Whitelisting Daemon
 Name: fapolicyd
-Version: 1.4.3
-Release: 2%{?dist}
+Version: 2.0.1
+Release: 1%{?dist}
 License: GPL-3.0-or-later
 URL: https://github.com/linux-application-whitelisting/fapolicyd
 Source0:        https://github.com/linux-application-whitelisting/fapolicyd/releases/download/v%{version}/fapolicyd-%{version}.tar.gz

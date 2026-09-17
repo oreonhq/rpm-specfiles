@@ -4,7 +4,7 @@
 
 Name:        gpac
 Summary:     MPEG-4 multimedia framework
-Version:     26.02.0
+Version:     26.07.0
 Release:     1%{?dist}
 License:     LGPL-2.0-or-later
 URL:         https://gpac.io/
@@ -179,7 +179,8 @@ rm %{buildroot}%{_includedir}/gpac/00_doxy.h
 %{_libdir}/gpac/gm_sdl_out.so
 %{_libdir}/gpac/gm_validator.so
 %{_libdir}/gpac/gm_x11_out.so
-
+%{_libdir}/gpac/internal/
+%{_libdir}/gpac/modules/
 %files doc
 %doc share/doc/html-libgpac/*
 

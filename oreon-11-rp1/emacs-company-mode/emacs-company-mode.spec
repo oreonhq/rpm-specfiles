@@ -8,7 +8,7 @@
 %global giturl  https://github.com/company-mode/company-mode
 
 Name:           emacs-%{srcname}
-Version:        1.0.2
+Version:        1.1.0
 Release:        %autorelease
 Summary:        Modular in-buffer completion framework for Emacs
 

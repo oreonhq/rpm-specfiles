@@ -1,7 +1,7 @@
 %global source0_hash 07600d6745f5199ad210c7f39e934dcd9716b54615e44ccf1f830001a0da3597
 
-Version:        3.0.4
-Release:        17%{?dist}
+Version:        3.0.5
+Release:        1%{?dist}
 URL:            https://github.com/RedHatBrand/overpass/
 
 %global         fontlicense     OFL-1.1 or LGPL-2.0-or-later
@@ -33,7 +33,7 @@ titling text.}
 
 This package provide monospace version of overpass fonts.}
 
-Source0:        https://github.com/RedHatBrand/Overpass/archive/refs/tags/%{version}.tar.gz#/overpass-fonts-3.0.4.tar.gz
+Source0:        https://github.com/RedHatBrand/Overpass/archive/refs/tags/%{version}.tar.gz#/overpass-fonts-3.0.5.tar.gz
 
 Source10: 60-%{fontpkgname0}.conf
 Source11: 60-%{fontpkgname1}.conf

@@ -4,7 +4,7 @@
 %bcond hyprland_session 0
 
 Name:           lxqt-wayland-session
-Version:        0.3.2
+Version:        0.4.1
 Release:        1%{?dist}
 Summary:        Wayland session files for LXQt
 # See "LICENSE" for a breakdown of license usage

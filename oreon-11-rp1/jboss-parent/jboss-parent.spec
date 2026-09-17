@@ -1,8 +1,8 @@
 %global source0_hash c7a9309394c3d533dc954e4e6e78590644da4eee5259becba692780ee392cc76
 
 Name:           jboss-parent
-Version:        20
-Release:        27%{?dist}
+Version:        53
+Release:        1%{?dist}
 Summary:        JBoss Parent POM
 License:        CC0-1.0
 URL:            http://www.jboss.org/

@@ -4,8 +4,8 @@
 %global _debconfigdir %{_prefix}/lib/debbuild
 
 Name:           debbuild
-Version:        20.04.0
-Release:        19%{?dist}
+Version:        24.12.0
+Release:        1%{?dist}
 Summary:        Build Debian-compatible .deb packages from RPM .spec files
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

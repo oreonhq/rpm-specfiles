@@ -1,8 +1,8 @@
 %global source0_hash fd38ef21339daf81d6af4a630ba3b2de51a1b42c181843ee77635a5a661fe73c
 
 Name:           ngircd
-Version:        27
-Release:        7%{?dist}
+Version:        28
+Release:        1%{?dist}
 Summary:        Next Generation IRC Daemon
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

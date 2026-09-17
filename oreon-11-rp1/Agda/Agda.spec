@@ -25,9 +25,9 @@
 %global subpkgs %{apnormalize} %{fmlist} %{ListLike} %{murmurhash} %{nonemptyvector} %{nonemptycontainers} %{peano} %{pqueue} %{processextras} %{showcombinators} %{genericdata} %{vectorhashtables}
 
 Name:           %{pkg_name}
-Version:        2.8.0
+Version:        2.8.0.2
 # can only be reset when all subpkgs bumped
-Release:        59%{?dist}
+Release:        1%{?dist}
 Summary:        A dependently typed functional programming language and proof assistant
 
 License:        MIT AND BSD-3-Clause

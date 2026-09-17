@@ -3,8 +3,8 @@
 %global _hardened_build 1
 
 Name:           onionshare
-Version:        2.5
-Release:        16%{?dist}
+Version:        2.6.5
+Release:        1%{?dist}
 Summary:        Securely and anonymously share files of any size
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

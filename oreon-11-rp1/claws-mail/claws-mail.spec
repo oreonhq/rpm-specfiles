@@ -27,8 +27,8 @@ Obsoletes: claws-mail-plugin-gdata < 4.2.0-1
 %endif
 
 Name:           claws-mail
-Version:        4.3.1
-Release:        7%{?dist}
+Version:        4.4.0
+Release:        1%{?dist}
 Summary:        Email client and news reader based on GTK+
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later

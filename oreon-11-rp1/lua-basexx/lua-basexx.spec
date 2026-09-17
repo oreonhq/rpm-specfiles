@@ -9,8 +9,8 @@
 %global luapkgname basexx
 
 Name:           lua-%{luapkgname}
-Version:        0.4.0
-Release:        17%{?dist}
+Version:        0.4.1
+Release:        1%{?dist}
 Summary:        BaseXX encoding and decoding library for Lua
 
 License:        MIT

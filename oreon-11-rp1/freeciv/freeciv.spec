@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           freeciv
-Version:        3.2.4
+Version:        3.2.6
 Release:        1%{?dist}
 Summary:        A multi-player strategy game
 

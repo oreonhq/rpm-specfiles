@@ -3,8 +3,8 @@
 %global srcname interceptor-api
 
 Name:           jakarta-interceptors
-Version:        2.0.0
-Release:        18%{?dist}
+Version:        2.2.0
+Release:        1%{?dist}
 Summary:        Jakarta Interceptors
 # Automatically converted from old format: EPL-2.0 or GPLv2 with exceptions - review is highly recommended.
 License:        EPL-2.0 OR LicenseRef-Callaway-GPLv2-with-exceptions

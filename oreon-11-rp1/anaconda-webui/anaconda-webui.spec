@@ -1,8 +1,8 @@
 %global source0_hash e5b56ff90c86d7d7ac2c4a540c37ab38942b6f27a62b43204d2db0099153cb6a
 
 Name:           anaconda-webui
-Version:        68
-Release:        2%{?dist}
+Version:        84
+Release:        1%{?dist}
 Summary:        Anaconda installer Web interface
 License:        LGPL-2.1-or-later AND MIT
 URL:            https://github.com/rhinstaller/%{name}

@@ -1,8 +1,8 @@
 %global source0_hash f00b244759eff2c4f54b80a40673440ce951b6ddfa5eee1f46124297e056f69c
 
 Name:           dftd4
-Version:        3.7.0
-Release:        11%{?dist}
+Version:        4.2.0
+Release:        1%{?dist}
 Summary:        Generally Applicable Atomic-Charge Dependent London Dispersion Correction
 License:        LGPL-3.0-or-later
 URL:            https://dftd4.readthedocs.io/

@@ -7,7 +7,7 @@
 %global _lto_cflags %nil
 
 Name:          cp2k
-Version:       2025.1
+Version:       2026.2
 Release:       %autorelease
 Summary:       Ab Initio Molecular Dynamics
 License:       GPL-2.0-or-later

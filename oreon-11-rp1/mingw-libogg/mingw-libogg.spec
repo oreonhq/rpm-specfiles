@@ -3,8 +3,8 @@
 %?mingw_package_header
 
 Name:           mingw-libogg
-Version:        1.3.3
-Release:        19%{?dist}
+Version:        1.3.6
+Release:        1%{?dist}
 Summary:        The Ogg bitstream file format library
 
 # Automatically converted from old format: BSD - review is highly recommended.

@@ -1,8 +1,8 @@
 %global source0_hash efbcaa658066e60bb7dde6c3ebe0b7147aeb466130461cb4784085d103490706
 
 Name: libdatovka
-Version: 0.7.2
-Release: 2%{?dist}
+Version: 0.7.4
+Release: 1%{?dist}
 Summary: Client library for accessing SOAP services of ISDS (Czech Data Boxes)
 
 # Automatically converted from old format: LGPLv3+ and GPLv3+ - review is highly recommended.

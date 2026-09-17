@@ -12,13 +12,13 @@
 %{?aud_plugin_dep}
 
 Name: audacious-plugins
-Version: 4.5.1
-Release: 5%{?dist}
+Version: 4.6.1
+Release: 1%{?dist}
 
 %global tar_ver %{version}
 
 # Minimum audacious/audacious-plugins version in inter-package dependencies.
-%global aud_ver 4.5
+%global aud_ver 4.6
 Requires: audacious%{?_isa} >= %{aud_ver}
 
 Summary: Plugins for the Audacious audio player
@@ -116,7 +116,7 @@ Provides:  audacious-plugins-freeworld = %{version}-%{release}
 Obsoletes: audacious-plugins-freeworld-aac < 4.4.2-4
 Provides:  audacious-plugins-freeworld-aac = %{version}-%{release}
 # added 2025-12-20
-Obsoletes: audacious-plugins-ffaudio < 4.5.1-3
+Obsoletes: audacious-plugins-ffaudio < 4.6.1-3
 Provides:  audacious-plugins-ffaudio = %{version}-%{release}
 
 # plugin .so files

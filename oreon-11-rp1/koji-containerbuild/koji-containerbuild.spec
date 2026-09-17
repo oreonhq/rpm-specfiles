@@ -11,12 +11,12 @@
 %global owner release-engineering
 %global project koji-containerbuild
 
-%global commit 1.0.1
+%global commit 1.4.0
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           %{project}
-Version:        1.0.1
-Release:        15%{?dist}
+Version:        1.4.0
+Release:        1%{?dist}
 Summary:        Koji support for building layered container images
 
 # Automatically converted from old format: LGPLv2 - review is highly recommended.

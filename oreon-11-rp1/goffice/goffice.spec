@@ -1,8 +1,8 @@
 %global source0_hash 66bfd7e31d2f6756d5a62c3670383cbba02b3cb4c1042950192a801b72a3c9ab
 
 Name:           goffice         
-Version:        0.10.57
-Release:        4%{?dist}
+Version:        0.10.61
+Release:        1%{?dist}
 Summary:        G Office support libraries
 License:        GPL-2.0-only AND GPL-3.0-only
 URL:            http://projects.gnome.org/gnumeric/index.shtml

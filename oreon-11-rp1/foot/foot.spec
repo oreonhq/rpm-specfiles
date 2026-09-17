@@ -5,7 +5,7 @@
 %global fcft_minver 3.3.1
 
 Name:           foot
-Version:        1.26.1
+Version:        1.28.0
 Release:        1%{?dist}
 Summary:        Fast, lightweight and minimalistic Wayland terminal emulator
 

@@ -2,7 +2,7 @@
 
 Summary:       X11 utility to view and edit application resources
 Name:          editres
-Version:       1.0.9
+Version:       1.1.1
 Release:       %autorelease
 License:       MIT
 URL:           https://www.x.org

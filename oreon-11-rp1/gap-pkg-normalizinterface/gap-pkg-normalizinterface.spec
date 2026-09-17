@@ -5,7 +5,7 @@
 %global giturl      https://github.com/gap-packages/NormalizInterface
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.4.1
+Version:        1.5.1
 Release:        %autorelease
 Summary:        GAP wrapper for Normaliz
 

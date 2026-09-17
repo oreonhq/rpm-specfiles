@@ -1,11 +1,11 @@
 %global source0_hash e8739813ed75b4ed699b3da82c7227d666e7e1d65d11e26cc425ac41d77e54cc
 
-# This is the commit corresponding to the untagged 23.07 release
+# This is the commit corresponding to the untagged 2601.1.17 release
 # https://github.com/Mellanox/mlnx-tools/issues/60
 %global commit 54a51a79b3f161577e7226c30c3a5c01183fb956
 
 Name:           mlnx-tools
-Version:        23.07
+Version:        2601.1.17
 Release:        %autorelease
 Summary:        Mellanox userland tools and scripts
 

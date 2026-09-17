@@ -1,15 +1,13 @@
 %global source0_hash b7ff8b9b8c26a811103ea22cce542ec93d7a15f4c66afb4e244096d58f7f52d0
 
 Name: QXlsx
-Version:  1.4.10
-Release:  7%{?dist}
+Version:  1.5.1
+Release:  1%{?dist}
 Summary:  Excel/XLSX file reader/writer library for Qt
 
 License: MIT
 URL: https://github.com/QtExcel/QXlsx
 Source0: %{url}/archive/v%{version}/QtXslx-%{version}.tar.gz
-
-Patch0:  qxlsx-fix-build-against-qt-6-10.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -34,7 +32,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %setup -q
 
-%patch -P0 -p1 -b .fix-build-against-qt-6-10
 
 %build
 

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:    buildbox
-Version: 1.4.0
+Version: 1.4.25
 Release: %autorelease
 Summary: Building blocks to execute actions conforming to the Remote Execution API
 

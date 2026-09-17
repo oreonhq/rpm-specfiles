@@ -1,7 +1,7 @@
 %global source0_hash 7740026745ae1ba4a5dd90e71a06c324f31b53dda90e066d09aff308a233fab8
 
 Name:           foomuuri
-Version:        0.32
+Version:        0.33
 Release:        1%{?dist}
 Summary:        Multizone bidirectional nftables firewall
 License:        GPL-2.0-or-later

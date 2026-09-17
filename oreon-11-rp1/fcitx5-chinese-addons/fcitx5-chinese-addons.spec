@@ -9,7 +9,7 @@
 %endif
 
 Name:           fcitx5-chinese-addons
-Version:        5.1.12
+Version:        5.1.14
 Release:        %autorelease
 Summary:        Chinese related addon for fcitx5
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

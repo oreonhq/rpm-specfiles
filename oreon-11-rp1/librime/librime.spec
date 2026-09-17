@@ -1,8 +1,8 @@
 %global source0_hash 8718e37c5ee059433f5a1b3232f3b8efad47135ff3e5016094beb9f18342ffb2
 
 Name:           librime
-Version:        1.16.1
-Release:        2%{?dist}
+Version:        1.17.0
+Release:        1%{?dist}
 Summary:        Rime Input Method Engine Library
 
 License:        GPL-3.0-only

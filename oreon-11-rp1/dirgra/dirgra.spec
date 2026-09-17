@@ -1,7 +1,7 @@
 %global source0_hash c12bf9809eecfcce28ca99776011702ca1df942fc1c4eb73699848e27279958a
 
 Name:           dirgra
-Version:        0.4
+Version:        0.6
 Release:        %autorelease
 Summary:        Simple Directed Graph
 License:        EPL-1.0

@@ -1,7 +1,7 @@
 %global source0_hash e2e46a022c89392d193b81fdded1775b9bdb944b040696690b460f02e30025da
 
 Name:           deja-dup
-Version:        50.0
+Version:        50.2
 Release:        1%{?dist}
 Summary:        Simple backup tool and frontend for duplicity
 

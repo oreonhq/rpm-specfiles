@@ -3,7 +3,7 @@
 %global giturl  https://github.com/eprover/eprover
 
 Name:		E
-Version:	3.2.5
+Version:	3.5.1
 Release:	%autorelease
 Summary:	Equational Theorem Prover
 

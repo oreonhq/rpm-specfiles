@@ -5,7 +5,7 @@
 
 Name:    kontact
 Summary: Personal Information Manager
-Version: 26.08.0
+Version: 26.08.1
 Release: 1%{?dist}
 
 # code (generally) GPLv2, docs GFDL

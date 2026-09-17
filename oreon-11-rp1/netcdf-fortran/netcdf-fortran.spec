@@ -1,8 +1,8 @@
 %global source0_hash 44cc7b5626b0b054a8503b8fe7c1b0ac4e0a79a69dad792c212454906a9224ca
 
 Name:           netcdf-fortran
-Version:        4.6.2
-Release:        3%{?dist}
+Version:        4.6.4
+Release:        1%{?dist}
 Summary:        Fortran libraries for NetCDF-4
 
 License:        BSD-3-Clause AND Apache-2.0

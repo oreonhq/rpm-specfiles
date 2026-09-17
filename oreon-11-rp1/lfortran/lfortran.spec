@@ -1,8 +1,8 @@
 %global source0_hash df52fc660c457c197f1ed56cc56b07a8822a9a5a7493e9cfb034f60f0106f05f
 
-Version:        0.59.0
+Version:        0.66.0
 Name:           lfortran
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        A modern Fortran compiler
 
 # Main code is BSD-3-Clause

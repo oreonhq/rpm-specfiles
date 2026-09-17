@@ -3,7 +3,7 @@
 %global abi 8
 
 Name:           libdvdread
-Version:        7.0.1
+Version:        7.1.1
 Release:        1%{?dist}
 Summary:        A library for reading DVD video discs based on Ogle code
 # msvc/contrib/dirent/dirent.c is HPND-Kevlin-Henney, but is not included in the build

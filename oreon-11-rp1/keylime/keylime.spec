@@ -7,18 +7,17 @@
 %global selinuxtype targeted
 
 Name:    keylime
-Version: 7.14.1
+Version: 7.14.3
 Release: %autorelease
 Summary: Open source TPM software for Bootstrapping and Maintaining Trust
 
 URL:            https://github.com/keylime/keylime
-Source0:        https://github.com/keylime/keylime/archive/refs/tags/v%{version}.tar.gz#/keylime-7.14.1.tar.gz
+Source0:        https://github.com/keylime/keylime/archive/refs/tags/v%{version}.tar.gz#/keylime-7.14.3.tar.gz
 # The selinux policy for keylime is distributed via this repo: https://github.com/RedHat-SP-Security/keylime-selinux
 Source1:        https://github.com/RedHat-SP-Security/%{name}-selinux/archive/refs/tags/v%{policy_version}.tar.gz#/keylime-selinux-%{policy_version}.tar.gz
 Source2:        %{name}.sysusers
 Source3:        %{name}.tmpfiles
 
-Patch: 0001-Fix-timestamp-conversion-to-use-UTC-timezone.patch
 Patch: 0002-Fix-efivar-availability-check-in-test_create_mb_poli.patch
 
 # Main program: Apache-2.0

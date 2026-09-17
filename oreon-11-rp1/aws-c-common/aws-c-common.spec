@@ -5,8 +5,8 @@ Core c99 package for AWS SDK for C. Includes cross-platform primitives,
 configuration, data structures, and error handling.}
 
 Name:           aws-c-common
-Version:        0.12.2
-Release:        5%{?dist}
+Version:        1.0.0
+Release:        1%{?dist}
 Summary:        Core c99 package for AWS SDK for C
 
 License:        Apache-2.0

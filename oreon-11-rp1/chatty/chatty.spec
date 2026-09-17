@@ -5,7 +5,7 @@
 %global libcmatrix_version 0.0.3
 
 Name:    chatty
-Version: 0.8.8
+Version: 0.8.9
 Release: %{autorelease}
 Summary: A libpurple messaging client
 
@@ -21,7 +21,6 @@ Source1: https://source.puri.sm/Librem5/libcmatrix/-/archive/v%{libcmatrix_versi
 # project, to be used in other packages.
 Patch0:  0001-hacky-hack.patch
 # https://gitlab.gnome.org/World/Chatty/-/merge_requests/1481
-Patch1:  1481.patch
 
 ExcludeArch:    %{ix86}
 

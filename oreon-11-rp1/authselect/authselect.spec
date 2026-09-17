@@ -4,13 +4,13 @@
 %define _empty_manifest_terminate_build 0
 
 Name:           authselect
-Version:        1.7.1
+Version:        1.8.0
 Release:        %autorelease
 Summary:        Configures authentication and identity sources from supported profiles
 URL:            https://github.com/authselect/authselect
 
 License:        GPL-3.0-or-later
-Source0:        https://github.com/authselect/authselect/archive/refs/tags/1.7.1.tar.gz#/authselect-1.7.1.tar.gz
+Source0:        https://github.com/authselect/authselect/archive/refs/tags/1.8.0.tar.gz#/authselect-1.8.0.tar.gz
 
 %global makedir %{_builddir}/%{name}-%{version}
 

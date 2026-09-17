@@ -2,12 +2,12 @@
 
 Summary: Automated Testing Framework
 Name:    atf
-Version: 0.23
-Release: 4%{?dist}
+Version: 0.25
+Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://github.com/freebsd/atf
-Source0:        https://github.com/freebsd/atf/archive/refs/tags/atf-0.23.tar.gz#/atf-0.23.tar.gz
+Source0:        https://github.com/freebsd/atf/archive/refs/tags/atf-0.25.tar.gz#/atf-0.25.tar.gz
 Source1: README.Fedora
 
 %global _testsdir %{_libexecdir}/atf/tests

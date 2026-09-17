@@ -1,7 +1,7 @@
 %global source0_hash 948d7d36ef263ba91b63d791f9a9b19148123fedbb5a075375f97510abde102d
 
 Name:           electron-cash
-Version:        4.4.3
+Version:        4.4.6
 Release:        1%{?dist}
 Summary:        A lightweight Bitcoin Cash client
 

@@ -1,8 +1,8 @@
 %global source0_hash 5b9991557cc2764a8281a24aa726a645287eb075cde0f0ae7c737965264a119c
 
 Name:           celluloid
-Version:        0.29
-Release:        3%{?dist}
+Version:        0.30
+Release:        1%{?dist}
 Summary:        A simple GTK+ frontend for mpv
 
 License:        GPL-3.0-or-later

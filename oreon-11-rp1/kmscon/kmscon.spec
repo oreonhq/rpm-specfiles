@@ -1,7 +1,7 @@
 %global source0_hash 14975a8c1ddcc163b1afecd2207c9fd2e05b88e8a00246701fabf9dffce52ee9
 
 Name:           kmscon
-Version:        9.3.5
+Version:        10.0.3
 Release:        1%{?dist}
 Summary:        Linux KMS/DRM based virtual Console Emulator
 License:        MIT

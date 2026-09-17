@@ -3,8 +3,8 @@
 %bcond qt5 %[%{undefined rhel} || 0%{?rhel} < 10]
 
 Name:           libportal
-Version:        0.9.1
-Release:        4%{?dist}
+Version:        0.11.0
+Release:        1%{?dist}
 Summary:        Flatpak portal library
 # doc/urlmap.js is LGPL-2.1-or-later
 # everything else is LGPL-3.0-only
@@ -13,7 +13,6 @@ Url:            https://github.com/flatpak/libportal
 Source:        https://github.com/flatpak/libportal/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 # https://github.com/flatpak/libportal/pull/200
-Patch0:         libportal-fix-build-with-qt-6_9.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

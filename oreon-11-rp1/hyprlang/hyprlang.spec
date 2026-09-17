@@ -1,7 +1,7 @@
 %global source0_hash cd7395eaeb1eee90ebeba9c1330a7635709dd0900ebbe349a7aa5702ba4d613f
 
 Name:           hyprlang
-Version:        0.6.4
+Version:        0.6.8
 Release:        %autorelease
 Summary:        The official implementation library for the hypr config language
 

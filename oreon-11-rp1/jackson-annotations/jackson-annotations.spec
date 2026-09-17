@@ -1,13 +1,13 @@
 %global source0_hash dcfe3d203c5ebfec618300c23ebe317450e579a3659012ce57c577ff9045432b
 
 Name:           jackson-annotations
-Version:        2.18.2
-Release:        6%{?dist}
+Version:        2.19.4
+Release:        1%{?dist}
 Summary:        Core annotations for Jackson data processor
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-annotations
-Source0:        https://github.com/FasterXML/jackson-annotations/archive/refs/tags/jackson-annotations-2.18.2.tar.gz#/jackson-annotations-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-annotations/archive/refs/tags/jackson-annotations-2.19.4.tar.gz#/jackson-annotations-2.19.4.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local

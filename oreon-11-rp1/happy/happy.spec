@@ -5,7 +5,7 @@
 
 %{?haskell_setup}
 
-%global happylib_ver 2.1.7
+%global happylib_ver 2.2.1
 
 %global happylib happy-lib-%{happylib_ver}
 
@@ -15,7 +15,7 @@
 %bcond tests 0
 
 Name:           happy
-Version:        2.1.7
+Version:        2.2.1
 # can only be reset when subpkg bumped
 Release:        1%{?dist}
 Summary:        Parser Generator for Haskell

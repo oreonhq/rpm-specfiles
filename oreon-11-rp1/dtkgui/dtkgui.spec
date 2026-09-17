@@ -1,7 +1,7 @@
 %global source0_hash 559682e5440212113af6effa724cd960a87b14f295e949dde80f15dde0f72a2a
 
 Name:           dtkgui
-Version:        5.7.30
+Version:        6.7.49
 Release:        %autorelease
 Summary:        Deepin dtkgui
 License:        LGPL-3.0-or-later

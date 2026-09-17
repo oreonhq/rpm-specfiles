@@ -1,9 +1,9 @@
 %global source0_hash 378656548628172838fc8c7b8f4ac4e18b9e73f9a884c4197ad1c67f560112d7
 
 Name:           ALL
-Version:        0.9.3
+Version:        0.9.4
 %global         sover 0
-Release:        10%{?dist}
+Release:        1%{?dist}
 Summary:        A Load Balancing Library (ALL)
 
 # stb_arr.h is public domain

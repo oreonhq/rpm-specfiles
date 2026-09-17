@@ -1,8 +1,8 @@
 %global source0_hash a9ab6de0b497f6e13efc2cbe45a4fe06982145d786674c24274c3ed909ecc8cb
 
 Name:           media-player-info
-Version:        23
-Release:        20%{?dist}
+Version:        24
+Release:        1%{?dist}
 Summary:        Data files describing media player capabilities
 
 # Automatically converted from old format: BSD - review is highly recommended.

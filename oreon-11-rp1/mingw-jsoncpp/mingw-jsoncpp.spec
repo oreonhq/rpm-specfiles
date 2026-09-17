@@ -14,8 +14,8 @@ generate. \
 %{nil}
 
 Name:           mingw-%{pkgname}
-Version:        1.8.4
-Release:        21%{?dist}
+Version:        1.9.8
+Release:        1%{?dist}
 Summary:        JSON library implemented in C++
 
 # Automatically converted from old format: Public Domain or MIT - review is highly recommended.

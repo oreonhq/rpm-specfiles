@@ -1,13 +1,12 @@
 %global source0_hash none
 
 Name:           groonga
-Version:        15.0.9
+Version:        16.1.0
 Release:        %autorelease
 Summary:        An Embeddable Fulltext Search Engine
 License:        LGPL-2.1-only
 URL:            https://github.com/groonga/groonga
 Source0:        %{url}/releases/download/v%{version}/groonga-%{version}.tar.gz
-Patch:          0001-lib-grn_arrow.hpp.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

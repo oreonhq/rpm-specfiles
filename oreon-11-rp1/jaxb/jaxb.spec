@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jaxb
-Version:        4.0.5
+Version:        4.0.9
 Release:        %autorelease
 Summary:        JAXB Reference Implementation
 License:        BSD-3-Clause
@@ -11,7 +11,7 @@ URL:            https://github.com/eclipse-ee4j/jaxb-ri
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/jaxb-ri/archive/refs/tags/4.0.5-RI.tar.gz#/jaxb-4.0.5.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-ri/archive/refs/tags/4.0.9-RI.tar.gz#/jaxb-4.0.9.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -112,7 +112,7 @@ JAXB schema generator. The tool to generate XML schema based on java classes.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n jaxb-ri-4.0.5-RI
+%autosetup -p1 -n jaxb-ri-4.0.9-RI
 
 pushd jaxb-ri
 

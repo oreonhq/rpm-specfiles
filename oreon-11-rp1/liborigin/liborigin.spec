@@ -4,8 +4,8 @@
 %undefine __cmake_in_source_build
 
 Name:           liborigin
-Version:        3.0.3
-Release:        6%{?dist}
+Version:        3.0.4
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Library for reading OriginLab OPJ project files
 

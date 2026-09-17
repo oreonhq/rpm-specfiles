@@ -1,8 +1,8 @@
 %global source0_hash a9dbee323351d109b7aee074a9cb89ca3e7bcf8ad8edef1851f4cf359bd50843
 
 Name:           libsigc++20
-Version:        2.12.1
-Release:        7%{?dist}
+Version:        3.8.1
+Release:        1%{?dist}
 Summary:        Typesafe signal framework for C++
 
 License:        LGPL-2.1-or-later

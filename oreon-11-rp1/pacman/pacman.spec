@@ -12,7 +12,7 @@
 %global _docdir_fmt %{name}
 
 Name:           pacman
-Version:        7.0.0
+Version:        7.1.0
 Release:        %autorelease
 Source0:        https://gitlab.archlinux.org/pacman/pacman/-/archive/v%{version}/pacman-v%{version}.tar.gz
 Source1:        https://www.archlinux.org/mirrorlist/all

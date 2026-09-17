@@ -4,7 +4,7 @@
 %bcond tests 0
 
 Name:           cmark
-Version:        0.31.1
+Version:        0.31.2
 Release:        %autorelease
 Summary:        CommonMark parsing and rendering
 

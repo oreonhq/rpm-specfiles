@@ -1,8 +1,8 @@
 %global source0_hash 71a8394dc78f84c9eebe4e99d80cd2bfbe09bc37574fa7571a391dcc850d9ab3
 
 Name:           media-downloader
-Version:        5.3.2
-Release:        3%{?dist}
+Version:        5.6.6
+Release:        1%{?dist}
 Summary:        GUI frontend to multiple CLI based downloading programs
 License:        GPL-2.0-or-later
 URL:            https://github.com/mhogomchungu/media-downloader

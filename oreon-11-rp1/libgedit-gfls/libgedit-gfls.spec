@@ -1,7 +1,7 @@
 %global source0_hash fef85c08abff129199ba59444825d602c3aad8346cba48677a58a6421daad46d
 
 Name:           libgedit-gfls
-Version:        0.3.1
+Version:        0.4.2
 Release:        %autorelease
 Summary:        Gedit Technology File Loading and Saving library
 

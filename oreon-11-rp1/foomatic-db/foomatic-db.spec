@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global dbver_rel 4.0
+%global dbver_rel 20240504
 # When you change dbver_snap, rebuild also foomatic against this build to pick up new IEEE 1284 Device IDs.
 # The postscriptdriver tags get put onto foomatic, because that's there the actual CUPS driver lives.
 %global dbver_snap 20260531
@@ -8,7 +8,7 @@
 Summary: Database of printers and printer drivers
 Name: foomatic-db
 Version: %{dbver_rel}
-Release: 83.%{dbver_snap}%{?dist}
+Release: 1.%{dbver_snap}%{?dist}
 # GPL-2.0-or-later non-PPD files and some PPDs
 # MIT for ppds
 License: GPL-2.0-or-later AND MIT

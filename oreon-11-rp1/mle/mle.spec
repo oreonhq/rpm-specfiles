@@ -2,8 +2,8 @@
 
 Summary:         A small, flexible, terminal-based text editor
 Name:            mle
-Version:         1.7.2
-Release:         9%{?dist}
+Version:         1.8.1
+Release:         1%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:         Apache-2.0
 URL:             https://github.com/adsr/mle

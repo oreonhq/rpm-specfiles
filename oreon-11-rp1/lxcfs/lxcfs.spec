@@ -1,7 +1,7 @@
 %global source0_hash 386339ba4cde289b0f6df4fe7a614caa1e45dd91bc0200b4aff6c51bf9d5ef9e
 
 Name:		  lxcfs
-Version:	  6.0.6
+Version:	  7.0.0
 Release:	  1%{?dist}
 Summary:	  FUSE based filesystem for LXC
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

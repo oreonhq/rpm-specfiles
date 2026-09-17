@@ -5,7 +5,7 @@
 %endif
 
 Name:           not-ocamlfind
-Version:        0.14
+Version:        0.15
 Release:        %autorelease
 Summary:        Front-end to ocamlfind that adds a few new commands
 

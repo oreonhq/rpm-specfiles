@@ -1,15 +1,15 @@
 %global source0_hash none
 
 Name:             jtidy
-Version:          1.0
-Release:          0.50.20100930svn1125%{?dist}
+Version:          1.0.3
+Release:          1.50.20100930svn1125%{?dist}
 Epoch:            2
 Summary:          HTML syntax checker and pretty printer
 License:          zlib
 URL:              http://jtidy.sourceforge.net/
 # svn export -r1125 https://jtidy.svn.sourceforge.net/svnroot/jtidy/trunk/jtidy/ jtidy
 # tar caf jtidy.tar.xz jtidy
-Source0:        https://github.com/jtidy/jtidy/archive/refs/tags/r1107.tar.gz#/jtidy-1.0.tar.gz
+Source0:        https://github.com/jtidy/jtidy/archive/refs/tags/r1107.tar.gz#/jtidy-1.0.3.tar.gz
 Source1:        jtidy.jtidy.script
 
 Patch0:           javac-1.8.patch

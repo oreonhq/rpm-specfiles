@@ -1,8 +1,8 @@
 %global source0_hash 47d4b2a5cf4f17f52550aa65b34030fbd1a242e1a233f248a5871620e0ff4c11
 
 Name:           libaccounts-glib
-Version:        1.25
-Release:        24%{?dist}
+Version:        1.27
+Release:        1%{?dist}
 Summary:        Accounts framework for Linux and POSIX based platforms
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2
@@ -12,7 +12,7 @@ License:        LicenseRef-Callaway-LGPLv2
 %global ver_str VERSION_%{version}
 
 URL:            https://gitlab.com/accounts-sso/libaccounts-glib
-Source0:        https://gitlab.com/accounts-sso/libaccounts-glib/-/archive/VERSION_1.25/libaccounts-glib-VERSION_1.25.tar.gz
+Source0:        https://gitlab.com/accounts-sso/libaccounts-glib/-/archive/VERSION_1.27/libaccounts-glib-VERSION_1.27.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  meson >= 0.48.0

@@ -6,7 +6,7 @@
 %global fontconf 64-%{fontname}
 
 Name: google-roboto-fonts
-Version: 2.138
+Version: 3.016
 Release: %autorelease
 Summary: Google Roboto fonts
 

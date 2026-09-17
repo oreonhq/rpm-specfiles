@@ -6,8 +6,8 @@
 
 Summary: Core X11 protocol client library
 Name: libX11
-Version: 1.8.12
-Release: 3%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.8.13
+Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT AND X11
 URL: http://www.x.org
 
@@ -124,7 +124,7 @@ make %{?_smp_mflags} check
 %{_libdir}/pkgconfig/x11-xcb.pc
 %{_mandir}/man3/*.3*
 %{_mandir}/man5/*.5*
-
+%{_datadir}/X11/extensions/
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.12-3
 - Prepare for Oreon 11 (RP1)

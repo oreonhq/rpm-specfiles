@@ -24,8 +24,8 @@
 %bcond_without xinerama
 
 Name:           conky
-Version:        1.22.2
-Release:        3%{?dist}
+Version:        1.24.2
+Release:        1%{?dist}
 Summary:        A system monitor for X
 
 License:        GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT-open-group AND BSD-3-Clause

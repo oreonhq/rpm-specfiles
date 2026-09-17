@@ -5,8 +5,8 @@
 %global pkgname imath
 
 Name:          mingw-%{pkgname}
-Version:       3.2.2
-Release:       2%{?dist}
+Version:       3.2.3
+Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 
 License:       BSD-3-Clause

@@ -4,8 +4,8 @@
 
 Summary:        MinGW Windows port of the LibTIFF library
 Name:           mingw-libtiff
-Version:        4.7.1
-Release:        2%{?dist}
+Version:        4.7.2
+Release:        1%{?dist}
 License:        libtiff
 URL:            http://www.simplesystems.org/libtiff/
 Source:        https://download.osgeo.org/libtiff/tiff-%{version}.tar.xz

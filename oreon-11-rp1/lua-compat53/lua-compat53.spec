@@ -19,8 +19,8 @@
 %global luapkgname compat53
 
 Name:           lua-%{luapkgname}
-Version:        0.7
-Release:        17%{?dist}
+Version:        0.15.1
+Release:        1%{?dist}
 Summary:        Compatibility module providing Lua-5.3-style APIs for Lua %{luacompatver}
 
 License:        MIT

@@ -6,8 +6,8 @@
 %global minlibver 0.4.0
 
 Name:           openshot
-Version:        3.4.0
-Release:        2%{?dist}
+Version:        4.0.0
+Release:        1%{?dist}
 Summary:        Create and edit videos and movies
 License:        GPL-3.0-or-later and Apache-2.0 and MIT and CC-BY-SA-4.0
 URL:            http://www.openshot.org

@@ -2,7 +2,7 @@
 
 Summary: Matroska container manipulation utilities
 Name: mkvtoolnix
-Version: 97.0
+Version: 102.0
 Release: %autorelease
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 Source0: https://mkvtoolnix.download/sources/mkvtoolnix-%{version}.tar.xz

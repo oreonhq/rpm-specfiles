@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-parent
-Version:        43
+Version:        49
 Release:        %autorelease
 Summary:        Apache Maven parent POM
 License:        Apache-2.0

@@ -1,7 +1,7 @@
 %global source0_hash a19bc5087fd97026d93cb4b45d51638d1a25202a5e1fbc3905799f424cfa6134
 
 Name: libgpg-error
-Version: 1.59
+Version: 1.61
 Release: 1%{?dist}
 Summary: Library for error values used by GnuPG components
 URL: https://www.gnupg.org/related_software/libgpg-error/

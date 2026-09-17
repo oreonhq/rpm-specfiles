@@ -5,7 +5,7 @@
 %global source101_hash 3543108bb93f27ef00cd1c4381ac9a5b160ab8a1481a8a1df6359d0799fc18c5
 
 Name: pcs
-Version: 0.12.2
+Version: 0.12.3.1
 Release: 1%{?dist}
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 # https://fedoraproject.org/wiki/Licensing:Main?rd=Licensing#Good_Licenses
@@ -67,7 +67,7 @@ BuildArch: noarch
 %endif
 
 # part after the last slash is recognized as filename in look-aside cache
-Source0:        https://github.com/ClusterLabs/pcs/archive/refs/tags/v0.12.2.tar.gz#/pcs-0.12.2.tar.gz
+Source0:        https://github.com/ClusterLabs/pcs/archive/refs/tags/v0.12.2.tar.gz#/pcs-0.12.3.1.tar.gz
 
 Source41:        https://github.com/ondrejmular/pyagentx/archive/refs/tags/v0.4.pcs.2.tar.gz#/pyagentx-0.4.pcs.2.tar.gz
 Source42:        https://github.com/konradhalas/dacite/archive/refs/tags/v1.9.2.tar.gz#/dacite-1.9.2.tar.gz

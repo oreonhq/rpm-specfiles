@@ -2,10 +2,10 @@
 
 # SPDX-License-Identifier: MIT
 %global forgeurl    https://github.com/kemie/Bellota-Font/
-Version:            4.1
+Version:            5.0
 %forgemeta
 
-Release: 18%{?dist}
+Release: 1%{?dist}
 URL:     %{forgeurl}
 
 %global foundry           kemie

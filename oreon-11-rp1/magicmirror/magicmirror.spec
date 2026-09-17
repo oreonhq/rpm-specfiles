@@ -5,7 +5,7 @@
 %global forgeurl https://github.com/MagicMirrorOrg/MagicMirror
 
 Name:           magicmirror
-Version:        2.26.0
+Version:        2.37.0
 Release:        %autorelease
 Summary:        Modular smart mirror platform
 
@@ -15,7 +15,7 @@ URL:            http://magicmirror.builders
 # Use the GitHub tarball due to https://github.com/MichMich/MagicMirror/issues/2876
 Source0:        %{forgeurl}/archive/v%{version}/%{srcname}-%{version}.tar.gz
 # Created with nodejs-packaging >= 2021.06-7 running:
-#   nodejs-packaging-bundler MagicMirror 2.26.0 MagicMirror-2.26.0.tar.gz
+#   nodejs-packaging-bundler MagicMirror 2.37.0 MagicMirror-2.37.0.tar.gz
 Source1:        %{srcname}-%{version}-nm-prod.tgz
 Source2:        %{srcname}-%{version}-nm-dev.tgz
 Source3:        %{srcname}-%{version}-bundled-licenses.txt

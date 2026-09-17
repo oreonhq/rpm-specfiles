@@ -2,11 +2,11 @@
 
 %global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
-%define libselinuxver 3.10-1
+%define libselinuxver 3.11-1
 
 Summary: SELinux Translation Daemon
 Name: mcstrans
-Version: 3.10
+Version: 3.11
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Url: https://github.com/SELinuxProject/selinux/wiki
@@ -14,7 +14,7 @@ Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{ve
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz.asc
 Source2:        https://github.com/perfinion.gpg
 Source3:        secolor.conf.8
-# fedora-selinux/selinux: git format-patch -N 3.10 -- mcstrans
+# fedora-selinux/selinux: git format-patch -N 3.11 -- mcstrans
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
 # Patch list end

@@ -10,7 +10,7 @@
 %bcond_without vendored_js
 
 Name:           appstream-generator
-Version:        0.10.1
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Fast AppStream metadata generator
 
@@ -25,7 +25,6 @@ Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}-nodemodules.tar.gz
 
 # Backports from upstream
-Patch0001:      0001-tests-Combine-results-and-registry-tests-to-make-the.patch
 
 BuildRequires:  gcc-c++ >= 14.0
 BuildRequires:  pkgconfig(glib-2.0) >= %{glib2_minver}

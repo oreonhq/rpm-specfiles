@@ -12,8 +12,8 @@
 %endif
 
 Name:           freeipa-%{plugin_name}
-Version:        1.1.1
-Release:        7%{?dist}
+Version:        1.2.0
+Release:        1%{?dist}
 Summary:        Fedora Account System extension for FreeIPA
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

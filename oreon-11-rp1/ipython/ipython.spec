@@ -16,7 +16,7 @@
 %endif
 
 Name:           ipython
-Version:        9.10.0
+Version:        9.17.1
 Release:        %autorelease
 Summary:        An enhanced interactive Python shell
 
@@ -27,7 +27,7 @@ Summary:        An enhanced interactive Python shell
 # which are MIT licensed
 License:        BSD-3-Clause AND MIT
 URL:            http://ipython.org/
-Source0:        https://files.pythonhosted.org/packages/source/i/ipython/ipython-9.10.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/i/ipython/ipython-9.17.1.tar.gz
 
 # Unset -s on python shebang - ensure that packages installed with pip
 # to user locations are seen and properly loaded.

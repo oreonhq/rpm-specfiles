@@ -3,7 +3,7 @@
 %global __cmake_in_source_build 1
 %define _hardened_build 1
 Name: ettercap
-Version: 0.8.4
+Version: 0.8.4.1
 Release: 1%{?dist}
 Summary: Network traffic sniffer/analyser, NCURSES interface version
 License: GPL-2.0-or-later

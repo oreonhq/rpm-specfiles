@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 Name:           cppzmq
-Version:        4.10.0
+Version:        4.11.0
 Release:        %autorelease
 Summary:        Header-only C++ binding for libzmq
 

@@ -1,7 +1,7 @@
 %global source0_hash 29ff034ae1d87ba21bb4432978a5242f5a119a78e6e84ebafbb41f632b7a62c5
 
 Name:           lem
-Version:        2025.03.13
+Version:        2026-05-01
 Release:        %autorelease
 Summary:        A tool for semantic definition language
 

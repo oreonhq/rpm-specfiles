@@ -36,8 +36,8 @@
 %global mirplatforminput_sover 10
 
 Name:           mir
-Version:        2.25.1
-Release:        5%{?dist}
+Version:        2.29.0
+Release:        1%{?dist}
 Summary:        Next generation Wayland display server toolkit
 
 # mircommon is LGPL-2.1-only/LGPL-3.0-only, everything else is GPL-2.0-only/GPL-3.0-only

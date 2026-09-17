@@ -3,8 +3,8 @@
 Summary: NFS utilities and supporting clients and daemons for the kernel NFS server
 Name: nfs-utils
 URL: http://linux-nfs.org/
-Version: 2.8.7
-Release: 0%{?dist}
+Version: 2.9.2
+Release: 1%{?dist}
 Epoch: 1
 
 # group all 32bit related archs
@@ -386,7 +386,9 @@ rm -f %{_sysconfdir}/nfsmount.conf.d/10-nfsv4.conf
 %{_pkgdir}/*/nfs-utils.service
 %{_pkgdir}/*/proc-fs-nfsd.mount
 %{_pkgdir}/*/nfsroot-generator
-
+%{_includedir}/nfs/
+%{_includedir}/rpcsvc/
+%{_includedir}/sys/
 %files -n libnfsidmap
 %doc support/nfsidmap/AUTHORS support/nfsidmap/README support/nfsidmap/COPYING
 %config(noreplace) %{_sysconfdir}/idmapd.conf

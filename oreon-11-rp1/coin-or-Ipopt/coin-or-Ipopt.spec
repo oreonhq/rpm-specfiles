@@ -28,7 +28,7 @@
 
 Name:  coin-or-%{module}
 Summary: Interior Point OPTimizer
-Version: 3.14.16
+Version: 3.14.20
 Release: %autorelease
 License: EPL-2.0
 URL:  https://coin-or.github.io/%{module}/

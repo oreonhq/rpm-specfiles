@@ -1,8 +1,8 @@
 %global source0_hash daf53fe96783043ca33151a3851d054a826fab8d9a173e6bcbbedd4a7eabf5b1
 
 Name:           ensmallen
-Version:        2.22.1
-Release:        3%{?dist}
+Version:        3.11.1
+Release:        1%{?dist}
 Summary:        Header-only C++ library for efficient mathematical optimization
 
 License:        BSD-3-Clause

@@ -1,7 +1,7 @@
 %global source0_hash 3af673876fd21ce5d8089cd2057bb304cd6dc4510e7d94a5d55a53a5e57b681f
 
 Name:           linux-sysinfo-snapshot
-Version:        3.7.9.7
+Version:        3.8.0.0
 Release:        %autorelease
 Summary:        System information snapshot tool for Mellanox adapters
 

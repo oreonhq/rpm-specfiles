@@ -1,8 +1,8 @@
 %global source0_hash ac5d66550b7c06e6ee4b84c3bc46da2a86450b62f51fe433ab683ec22ef9b514
 
 Name:           mxparser
-Version:        1.2.2
-Release:        15%{?dist}
+Version:        1.2.3
+Release:        1%{?dist}
 Summary:        Parser of xpp3_min 1.1.7 with merged changes of the Plexus fork
 License:        xpp
 URL:            https://github.com/x-stream/%{name}

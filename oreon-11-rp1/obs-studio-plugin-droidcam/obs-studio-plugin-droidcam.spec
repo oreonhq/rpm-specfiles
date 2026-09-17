@@ -1,7 +1,7 @@
 %global source0_hash fd72d7e2a5911b3820c5e4690c681b92cdd3755dd1a624b6cd7ae063452a3082
 
 Name:           obs-studio-plugin-droidcam
-Version:        2.4.3
+Version:        2.5.1
 Release:        %autorelease
 Summary:        Use your phone as a camera in OBS Studio
 
