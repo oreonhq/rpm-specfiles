@@ -28,7 +28,7 @@
 %bcond bootstrap 0
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.8.23
+Version:        1.8.22
 Release:        %autorelease
 Summary:        GAP browser for 2-dimensional arrays of data
 

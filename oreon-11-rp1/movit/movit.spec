@@ -9,8 +9,8 @@
 %endif
 
 Name:           movit
-Version:        1.7.2
-Release:        1%{?dist}
+Version:        1.7.1
+Release:        8%{?dist}
 Summary:        GPU video filter library
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

@@ -4,7 +4,7 @@
 
 Summary:	A GIF to PNG converter
 Name:		gif2png
-Version:	3.0.5
+Version:	2.5.14
 Release:	%autorelease
 # Automatically converted from old format: BSD - review is highly recommended.
 License:	LicenseRef-Callaway-BSD

@@ -1,7 +1,7 @@
 %global source0_hash b2233b9f30b7099db2bad9d6b7e7f7e1003a73ce24353b92b8e904d5b44fedf7
 
 Name:           ack
-Version:        3.10.0
+Version:        3.9.0
 Release:        %autorelease
 Summary:        A Grep-like source code search tool
 # SPDX migration

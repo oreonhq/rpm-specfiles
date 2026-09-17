@@ -3,8 +3,8 @@
 %bcond_with bootstrap
 
 Name:           jakarta-mail1
-Version:        2.2.0-M1
-Release:        1%{?dist}
+Version:        1.6.7
+Release:        9%{?dist}
 Summary:        Jakarta Mail API
 License:        EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0
 URL:            https://github.com/eclipse-ee4j/mail

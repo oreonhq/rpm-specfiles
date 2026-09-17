@@ -1,8 +1,8 @@
 %global source0_hash 5ef21d70e4e2a58579c433d52656e889046278ce1a734adec3c52405f199ed3a
 
 Name:           ikiwiki
-Version:        3.20260201
-Release:        1%{?dist}
+Version:        3.20250501
+Release:        3%{?dist}
 Summary:        A wiki compiler
 
 # ikiwiki is licensed under GPLv2+, the Python code in plugins/ under

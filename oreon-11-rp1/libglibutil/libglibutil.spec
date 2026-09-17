@@ -1,8 +1,8 @@
 %global source0_hash ab4728157b68f84492512c7a451fe193924ae2aac3aa851de06eb3fd5acdc714
 
 Name: libglibutil
-Version: 1.0.82
-Release: 1%{?dist}
+Version: 1.0.80
+Release: 2%{?dist}
 Summary: Library of glib utilities
 License: BSD
 URL: https://github.com/sailfishos/libglibutil

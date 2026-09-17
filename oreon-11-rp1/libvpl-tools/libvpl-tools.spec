@@ -1,7 +1,7 @@
 %global source0_hash f93bfef2c0e869750e094bb0c29d5b1652704b09272c6406842688cf634e1584
 
 Name:           libvpl-tools
-Version:        1.6.0
+Version:        1.5.0
 Release:        %autorelease
 Summary:        Intel Video Processing Library (Intel VPL) Tools
 License:        MIT

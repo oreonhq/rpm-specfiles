@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: MIT
 
 Epoch:   1
-Version: 2017-06-01-serif-cjk-1-1
-Release: 1%{?dist}
+Version: 2.004
+Release: 11%{?dist}
 URL:     https://github.com/googlefonts/noto-cjk
 
 %global foundry           Google

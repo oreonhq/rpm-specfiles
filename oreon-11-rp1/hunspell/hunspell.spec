@@ -4,8 +4,8 @@
 
 Name:      hunspell
 Summary:   A spell checker and morphological analyzer library
-Version:   1.7.3
-Release:   1%{?dist}
+Version:   1.7.2
+Release:   11%{?dist}
 Source:        https://github.com/hunspell/hunspell/releases/download/v%{version}/hunspell-%{version}.tar.gz
 URL:       https://github.com/hunspell/hunspell
 License:   LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-1.1
@@ -21,6 +21,8 @@ BuildRequires: words
 BuildRequires: make
 Requires:  hunspell-en-US
 Requires:  hunspell-filesystem = %{version}-%{release}
+
+Patch0: 0001-Resolves-rhbz-2158548-allow-longer-words-for-hunspel.patch
 
 %description
 Hunspell is a spell checker and morphological analyzer library and program
@@ -45,6 +47,7 @@ packages.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
+%patch -P0 -p1 -b .rhbz2158548
 
 %build
 autoreconf -vfi

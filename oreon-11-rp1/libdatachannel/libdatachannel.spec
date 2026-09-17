@@ -3,8 +3,8 @@
 %define soversion() %(echo "%1" | awk -F. '{print $1"."$2}')
 
 Name:           libdatachannel
-Version:        0.24.5
-Release:        1%{?dist}
+Version:        0.23.1
+Release:        3%{?dist}
 Summary:        WebRTC network library featuring Data Channels, Media Transport, and WebSockets
 
 License:        MPL-2.0

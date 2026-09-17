@@ -1,14 +1,16 @@
 %global source0_hash 870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f
 
 Name:           libxshmfence
-Version:        1.3.3
-Release:        1%{?dist}
+Version:        1.3.2
+Release:        8%{?dist}
 Summary:        X11 shared memory fences
 
 License:        HPND-sell-variant
 URL:            https://www.x.org/
 Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Patch0:         0001-alloc-Allow-disabling-memfd-usage-at-runtime-with-XS.patch
 
+# upstream tarball has broken libtool because libtool is never not broken
 BuildRequires:  autoconf automake libtool xorg-x11-util-macros
 BuildRequires:  pkgconfig(xproto)
 BuildRequires: make

@@ -1,7 +1,7 @@
 %global source0_hash b9f5a9f66b042d059420cd7e6f951d14405476401827399204b6a23d1fec2fcf
 
 Name:           glinf
-Version:        1.1
+Version:        1.0
 Release:        %autorelease
 Summary:        Print information about OpenGL or OpenGLES contexts
 

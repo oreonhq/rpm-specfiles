@@ -1,8 +1,8 @@
 %global source0_hash 8dde863f352ece4d61deeee4d850753316d84261b7f2c5aef8307af477f8b2bf
 
 Name:           certwatch
-Version:        1.3
-Release:        1%{?dist}
+Version:        1.2
+Release:        21%{?dist}
 Summary:        SSL/TLS certificate expiry warning generator
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

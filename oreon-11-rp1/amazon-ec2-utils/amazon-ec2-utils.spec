@@ -1,7 +1,7 @@
 %global source0_hash 4fd0c06dfa6959d6e0b197ce4f5eddb9f07822d8d9810d1ae7e886d7fd055df6
 
 Name:           amazon-ec2-utils
-Version:        2.3.0
+Version:        2.2.0
 Release:        %autorelease
 Summary:        Utilities and settings for Amazon EC2
 License:        MIT AND CC-BY-SA-4.0

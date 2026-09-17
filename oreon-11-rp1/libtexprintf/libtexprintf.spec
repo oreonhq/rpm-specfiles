@@ -1,8 +1,8 @@
 %global source0_hash c50a44e33eba551526ff553c0af0bdd3f3a219d8ed60f11fcd9d7b30cd028af1
 
 Name:           libtexprintf
-Version:        1.31
-Release:        1%{?dist}
+Version:        1.25
+Release:        7%{?dist}
 Summary:        Formatted Output with tex-like syntax support
 
 License:        GPL-3.0-only
@@ -10,6 +10,7 @@ URL:            https://github.com/bartp5/libtexprintf
 Source:         %{url}/archive/v%{version}/%{name}-v%{version}.tar.gz
 # Ensure printf command has a format specifier
 # https://github.com/bartp5/libtexprintf/pull/24
+Patch:          clean-printf.patch
 
 BuildRequires:  automake
 BuildRequires:  gcc

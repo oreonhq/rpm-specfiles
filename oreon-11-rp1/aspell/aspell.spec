@@ -2,8 +2,8 @@
 
 Summary: Spell checker
 Name: aspell
-Version: 0.60.8.2
-Release: 1%{?dist}
+Version: 0.60.8.1
+Release: 7%{?dist}
 Epoch: 12
 # LGPLv2+ .. common/gettext.h
 # LGPLv2  .. modules/speller/default/phonet.hpp,
@@ -19,7 +19,9 @@ Patch0: aspell-0.60.7-fileconflict.patch
 Patch1: aspell-0.60.7-pspell_conf.patch
 Patch2: aspell-0.60.7-mp.patch
 # https://github.com/GNUAspell/aspell/commit/ee6cbb1.patch
+Patch3: aspell-0.60.8-gcc15.patch
 
+# IMPORTANT
 # This package has been deprecated since Fedora 39
 # The reason behind this was that there were no upstream releases for 4 years
 # and there are other variants like hunspell or enchant which had active upstream
@@ -59,6 +61,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P0 -p1 -b .fc
 %patch -P1 -p1 -b .mlib
 %patch -P2 -p1 -b .ai
+%patch -P3 -p1 -b .gcc15
 
 iconv -f iso-8859-2 -t utf-8 < manual/aspell.info > manual/aspell.info.aux
 mv manual/aspell.info.aux manual/aspell.info

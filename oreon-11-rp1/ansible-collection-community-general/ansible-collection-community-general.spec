@@ -1,7 +1,7 @@
 %global source0_hash b8d3eed58eb99d949a1d92a24b116c2e0e14a8760083fe10f88bbcf041bbff04
 
 Name:           ansible-collection-community-general
-Version:        13.4.0
+Version:        12.4.0
 Release:        1%{?dist}
 Summary:        Modules and plugins supported by Ansible community
 

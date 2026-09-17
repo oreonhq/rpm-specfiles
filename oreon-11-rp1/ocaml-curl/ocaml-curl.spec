@@ -6,8 +6,8 @@ ExcludeArch: %{ix86}
 %global giturl  https://github.com/ygrek/ocurl
 
 Name:           ocaml-curl
-Version:        20220125
-Release:        1%{?dist}
+Version:        0.10.0
+Release:        4%{?dist}
 Summary:        OCaml Curl library (ocurl)
 License:        MIT
 

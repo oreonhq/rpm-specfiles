@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:           kweather
-Version:        26.08.1
+Version:        26.04.3
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

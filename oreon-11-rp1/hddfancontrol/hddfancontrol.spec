@@ -3,7 +3,7 @@
 %global pypi_name hddfancontrol
 
 Name:           %{pypi_name}
-Version:        2.1.2
+Version:        1.6.2
 Release:        %autorelease
 Summary:        Control system fan speed by monitoring hard drive temperature
 

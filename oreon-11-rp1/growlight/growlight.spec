@@ -1,7 +1,7 @@
 %global source0_hash 9c8a5854ba30aa66a7b806b75f00784942f29711dbde0787a29f06583e6ec7a3
 
 Name:          growlight
-Version:       1.2.41
+Version:       1.2.38
 Release:       %autorelease
 Summary:       Disk manipulation and system setup tool
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -4,7 +4,7 @@
 %global xfceversion 4.20
 
 Name:           Thunar
-Version:        4.20.10
+Version:        4.20.7
 Release:        %autorelease
 Summary:        Thunar File Manager
 

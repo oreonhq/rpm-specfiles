@@ -2,15 +2,15 @@
 
 %global _artwork_version 1.7.5
 
-%global cinnamon_desktop_version 6.7.5-unstable
-%global csd_version 6.7.5-unstable
-%global cinnamon_menus_version 6.7.5-unstable
+%global cinnamon_desktop_version 6.6.0
+%global csd_version 6.6.0
+%global cinnamon_menus_version 6.6.0
 %global redhat_menus_version 1.8
 
 Summary: Utilities to configure the Cinnamon desktop
 Name:    cinnamon-control-center
-Version: 6.7.5-unstable
-Release: 1%{?dist}
+Version: 6.6.0
+Release: 3%{?dist}
 # The following files contain code from
 # ISC for panels/network/rfkill.h
 # And MIT for wacom/calibrator/calibrator.c
@@ -119,11 +119,7 @@ install -pm 0644 mint-artwork/%{_datadir}/mint-artwork/sounds/* %{buildroot}/%{_
 %{_libdir}/cinnamon-control-center-1/panels/libdisplay.so
 %{_libdir}/cinnamon-control-center-1/panels/libnetwork.so
 %{_libdir}/cinnamon-control-center-1/panels/libwacom-properties.so
-%{_libdir}/cinnamon-control-center-1/panels/color/
-%{_libdir}/cinnamon-control-center-1/panels/common/
-%{_libdir}/cinnamon-control-center-1/panels/display/
-%{_libdir}/cinnamon-control-center-1/panels/network/
-%{_libdir}/cinnamon-control-center-1/panels/wacom/
+
 %files filesystem
 %dir %{_datadir}/cinnamon-control-center/
 %dir %{_datadir}/cinnamon-control-center/sounds/

@@ -7,7 +7,7 @@
 %global pkgver %{pkg_name}-%{version}
 %{?haskell_setup}
 
-%global cabalinstallsolver cabal-install-solver-3.18.1.0
+%global cabalinstallsolver cabal-install-solver-3.12.1.0
 %global openbrowser open-browser-0.4.0.0
 
 %global subpkgs %{cabalinstallsolver} %{openbrowser}
@@ -15,9 +15,9 @@
 # testsuite missing deps: Cabal-QuickCheck Cabal-tests Cabal-tree-diff tasty-expected-failure tasty-golden tree-diff Cabal-described
 
 Name:           %{pkg_name}
-Version:        3.18.1.0
+Version:        3.12.1.0
 # can only be reset when all subpkgs bumped
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The command-line interface for Cabal and Hackage
 
 License:        BSD-3-Clause

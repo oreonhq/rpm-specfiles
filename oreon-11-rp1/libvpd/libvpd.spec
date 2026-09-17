@@ -1,8 +1,8 @@
 %global source0_hash 864fcfcd5e23a2ba4ae419d20531f8b8d5d0e1ef91415872e2b57b09ba48f799
 
 Name:		libvpd
-Version:	2.2.11
-Release:	1%{?dist}
+Version:	2.2.10
+Release:	5%{?dist}
 Summary:	VPD Database access library for lsvpd
 
 License:	LGPL-2.0-or-later

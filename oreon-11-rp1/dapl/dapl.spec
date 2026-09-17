@@ -1,8 +1,8 @@
 %global source0_hash 40982b43c5e2f1d5b007add9917bc461fdffb95bd52f589de95b15aa59a9d0b6
 
 Name: dapl
-Version: 2.1.10
-Release: 1%{?dist}
+Version: 2.1.9
+Release: 28%{?dist}
 Summary: Library providing access to the DAT 2.0 API
 # Automatically converted from old format: GPLv2 or BSD or CPL - review is highly recommended.
 License: GPL-2.0-only OR LicenseRef-Callaway-BSD OR CPL-1.0

@@ -3,7 +3,7 @@
 %global __provides_exclude_from ^%{_libdir}/fcitx5/.*\\.so$
 
 Name:       fcitx5-hangul
-Version:    5.1.11
+Version:    5.1.9
 Release:    %autorelease
 Summary:    Hangul Wrapper for Fcitx5
 # data/symbol.txt is licensed under BSE license

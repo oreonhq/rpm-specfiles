@@ -4,8 +4,8 @@
 %global fontconf 63-%{fontname}.conf
 
 Name:           adobe-source-serif-pro-fonts
-Version:        4.005R
-Release:        1%{?dist}
+Version:        4.005
+Release:        10%{?dist}
 Summary:        Typeface for setting text in many sizes, weights, and languages
 
 # Automatically converted from old format: OFL - review is highly recommended.

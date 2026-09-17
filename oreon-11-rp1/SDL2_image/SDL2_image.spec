@@ -1,8 +1,8 @@
 %global source0_hash 2213b56fdaff2220d0e38c8e420cbe1a83c87374190cba8c70af2156097ce30a
 
 Name:           SDL2_image
-Version:        2.8.12
-Release:        1%{?dist}
+Version:        2.8.8
+Release:        4%{?dist}
 Summary:        Image loading library for SDL
 
 # IMG_png.c is LGPLv2+ and zlib, rest is just zlib

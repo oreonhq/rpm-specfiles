@@ -1,7 +1,7 @@
 %global source0_hash 806271fa5bf31de0600315e8720004a8f529954480e991ca84a9868dc1cae97e
 
 Name:           bitwise
-Version:        0.70
+Version:        0.50
 Release:        %autorelease
 Summary:        Terminal based bit manipulator in ncurses
 

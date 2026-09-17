@@ -4,8 +4,8 @@
 %global repo onedrive
 
 Name:           onedrive
-Version:        2.5.11
-Release:        1%{?dist}
+Version:        2.5.10
+Release:        2%{?dist}
 Summary:        OneDrive Free Client written in D
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only

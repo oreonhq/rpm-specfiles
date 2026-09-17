@@ -1,8 +1,8 @@
 %global source0_hash 6b7f7993f82796854d5036572b879ffaaf7e0b619d12abdb318ce14757bdda91
 
 Name:               girara
-Version:            2026.07.18
-Release:            1%{?dist}
+Version:            0.4.5
+Release:            4%{?dist}
 Summary:            Simple user interface library
 License:            Zlib
 URL:                https://pwmt.org/projects/%{name}/

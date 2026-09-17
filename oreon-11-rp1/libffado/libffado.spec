@@ -14,7 +14,7 @@
 
 Summary:        Free firewire audio driver library
 Name:           libffado
-Version:        2.5.0
+Version:        2.4.9
 Release:        %autorelease
 # Automatically converted from old format: GPLv2 or GPLv3 - review is highly recommended.
 License:        GPL-2.0-only OR GPL-3.0-only

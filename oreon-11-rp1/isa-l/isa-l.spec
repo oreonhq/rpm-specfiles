@@ -1,7 +1,7 @@
 %global source0_hash 7a194ff80d0f7e20615c497654e8a51b0184d0c79e2e265c7f555f52a26a05a4
 
 Name:		isa-l
-Version:	2.32.1
+Version:	2.32.0
 Release:	1%{?dist}
 Summary:	Intel(R) Intelligent Storage Acceleration Library
 

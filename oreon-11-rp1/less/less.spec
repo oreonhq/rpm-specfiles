@@ -3,8 +3,8 @@
 
 Summary: A text file browser similar to more, but better
 Name: less
-Version: 704
-Release: 1%{?dist}
+Version: 692
+Release: 3%{?dist}
 # less dual license GPL-3.0-only OR BSD-2-Clause
 # lesspipe GPL-2.0-or-later
 License: (GPL-3.0-only OR BSD-2-Clause) AND GPL-2.0-or-later

@@ -1,8 +1,8 @@
 %global source0_hash 111ade20cc545e8dfd7ce4e293bd6b31cd1678a989b6a730bd2fa2acc6254818
 
 Name:           nethogs
-Version:        0.9.0
-Release:        1%{?dist}
+Version:        0.8.8
+Release:        4%{?dist}
 Summary:        A tool resembling top for network traffic
 
 License:        GPL-1.0-or-later

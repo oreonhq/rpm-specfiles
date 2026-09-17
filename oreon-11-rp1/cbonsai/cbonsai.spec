@@ -1,8 +1,8 @@
 %global source0_hash 38531a5f5584185d63b7bcd4a308cad9f61cd829b676c221d254bdcb39c67427
 
 Name:           cbonsai
-Version:        1.4.2
-Release:        1%{?dist}
+Version:        1.3.1
+Release:        11%{?dist}
 Summary:        Grow bonsai trees in your terminal
 
 License:        GPL-3.0-only

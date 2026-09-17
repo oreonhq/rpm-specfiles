@@ -6,8 +6,8 @@
 
 Summary: X.Org X11 libXext runtime library
 Name: libXext
-Version: 1.3.7
-Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.3.6
+Release: 6%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT-open-group AND X11 AND HPND AND HPND-sell-variant AND SMLNJ AND MIT AND ISC AND HPND-doc AND HPND-doc-sell
 URL: http://www.x.org
 

@@ -3,7 +3,7 @@
 %global apiversion 0.0
 
 Name: libstaroffice
-Version: 0.0.8
+Version: 0.0.7
 Release: %autorelease
 Summary: A library for import of binary StarOffice documents
 

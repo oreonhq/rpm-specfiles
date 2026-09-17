@@ -3,7 +3,7 @@
 %global upname bubblemail-gnome-shell
 
 Name:           gnome-shell-extension-bubblemail
-Version:        30
+Version:        27
 Release:        1%{?dist}
 Summary:        GNOME Shell indicator for new and unread mail using Bubblemail 
 

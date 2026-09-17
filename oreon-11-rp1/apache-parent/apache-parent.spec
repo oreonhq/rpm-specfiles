@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           apache-parent
-Version:        39
+Version:        35
 Release:        %autorelease
 Summary:        Parent POM file for Apache projects
 License:        Apache-2.0

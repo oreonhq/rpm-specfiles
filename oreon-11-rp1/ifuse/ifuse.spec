@@ -1,7 +1,7 @@
 %global source0_hash 3550702ef94b2f5f16c7db91c6b3282b2aed1340665834a03e47458e09d98d87
 
 Name:          ifuse
-Version:       1.2.1
+Version:       1.1.4
 Release:       %autorelease
 Summary:       Mount Apple iPhone and iPod touch devices
 License:       LGPL-2.1-or-later

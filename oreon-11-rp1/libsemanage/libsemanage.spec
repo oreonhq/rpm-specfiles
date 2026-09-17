@@ -2,18 +2,18 @@
 
 %global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
-%define libsepolver 3.11-1
-%define libselinuxver 3.11-1
+%define libsepolver 3.10-1
+%define libselinuxver 3.10-1
 
 Summary: SELinux binary policy manipulation library
 Name: libsemanage
-Version: 3.11
+Version: 3.10
 Release: 1%{?dist}
 License: LGPL-2.1-or-later
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz.asc
 Source2:        https://github.com/perfinion.gpg
-# git format-patch -N 3.11 -- libsemanage
+# git format-patch -N 3.10 -- libsemanage
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
 # Patch list end

@@ -1,8 +1,8 @@
 %global source0_hash 30ab4cc0f36aedd3f454cec2468d7b8a5820f12de1dd9e69d2e65d7299716d09
 
 Name:           pcmanfm-qt
-Version:        2.4.1
-Release:        1%{?dist}
+Version:        2.3.0
+Release:        2%{?dist}
 Summary:        LXQt file manager PCManFM
 
 License:        GPL-2.0-or-later

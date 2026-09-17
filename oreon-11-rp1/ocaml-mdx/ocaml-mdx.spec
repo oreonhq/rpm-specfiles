@@ -6,8 +6,8 @@ ExcludeArch: %{ix86}
 %global giturl  https://github.com/realworldocaml/mdx
 
 Name:           ocaml-mdx
-Version:        2.6.0
-Release:        1%{?dist}
+Version:        2.5.1
+Release:        4%{?dist}
 Summary:        Executable code blocks inside markdown files
 
 License:        ISC

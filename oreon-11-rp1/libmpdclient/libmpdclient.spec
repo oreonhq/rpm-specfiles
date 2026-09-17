@@ -2,8 +2,8 @@
 
 Summary:       Library for interfacing Music Player Daemon
 Name:          libmpdclient
-Version:       2.27
-Release:       1%{?dist}
+Version:       2.23
+Release:       2%{?dist}
 License:       BSD-2-Clause OR BSD-3-Clause
 URL:           https://www.musicpd.org/
 Source0:       %{url}download/libmpdclient/2/libmpdclient-%{version}.tar.xz

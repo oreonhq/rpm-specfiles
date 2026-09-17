@@ -1,8 +1,8 @@
 %global source0_hash 2921cdc344f1acee04bcd6ea1e29565c1308263006e134a9ee38cf9c9d6fe75e
 
 Name:       mkfontscale
-Version:    1.2.4
-Release:    1%{?dist}
+Version:    1.2.3
+Release:    4%{?dist}
 Summary:    Tool to generate legacy X11 font system index files
 
 License:    MIT-open-group AND X11 AND MIT AND HPND-sell-variant

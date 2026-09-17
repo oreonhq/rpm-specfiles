@@ -15,7 +15,7 @@
 %global giturl  https://github.com/scipopt/papilo/
 
 Name:           papilo
-Version:        3.0.1
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Parallel presolve for integer and linear optimization
 

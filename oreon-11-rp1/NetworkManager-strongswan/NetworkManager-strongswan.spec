@@ -18,8 +18,8 @@
 # https://github.com/strongswan/strongswan/tree/master/src/frontends/gnome
 
 Name:      NetworkManager-strongswan
-Version:   1.6.6
-Release:   1%{?dist}
+Version:   1.6.0
+Release:   12%{?dist}
 Summary:   NetworkManager strongSwan IPSec VPN plug-in
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:   GPL-2.0-or-later

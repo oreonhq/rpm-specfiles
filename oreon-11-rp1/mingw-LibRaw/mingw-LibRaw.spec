@@ -5,8 +5,8 @@
 %global pkgname LibRaw
 
 Name:          mingw-%{pkgname}
-Version:       0.22.2
-Release:       1%{?dist}
+Version:       0.21.5
+Release:       2%{?dist}
 Summary:       Library for reading RAW files obtained from digital photo cameras
 
 # LibRaw base package is dual licensed (actually triple licensed LGPLv2+, CDDL, LibRaw Software License)

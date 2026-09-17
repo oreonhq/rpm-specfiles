@@ -3,7 +3,7 @@
 %global commit  e5d5465de4a4aa5804a43cefed69f0ae5c4b427c
 
 Name:           g4music
-Version:        4.6.2
+Version:        4.6
 Release:        %autorelease
 Summary:        Fast fluent lightweight music player written in GTK4
 

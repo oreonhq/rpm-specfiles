@@ -5,7 +5,7 @@
 %global git_date 20230313
 
 Name:		erlang-%{realname}
-Version:	2.1.2
+Version:	2.0.11
 Release:	%autorelease -s %{git_date}git%{sub %git_commit 0 7}
 Summary:	Erlang mmap interface
 License:	Apache-2.0

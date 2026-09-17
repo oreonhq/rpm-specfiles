@@ -1,8 +1,8 @@
 %global source0_hash 90c5d943820c70cef37eb41a382a6ea4f5dd7fd95efef13b2b5520d320f5d067
 
 Name:           entr
-Version:        5.8
-Release:        1%{?dist}
+Version:        5.7
+Release:        3%{?dist}
 Summary:        Run arbitrary commands when files change
 
 # The entire source code is ISC except missing/sys/event.h which is BSD-2-Clause

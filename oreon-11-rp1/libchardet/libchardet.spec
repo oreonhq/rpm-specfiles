@@ -1,8 +1,8 @@
 %global source0_hash 95d2d372e571ecf680627598a3525ff2354fef1d35d97514f126468133965d50
 
 Name:           libchardet
-Version:        1.0.6
-Release:        1%{?dist}
+Version:        1.0.5
+Release:        23%{?dist}
 Summary:        Mozilla's universal character set detector
 # Automatically converted from old format: MPLv1.1 or LGPLv2+ or GPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-MPLv1.1 OR LicenseRef-Callaway-LGPLv2+ OR GPL-2.0-or-later

@@ -1,8 +1,8 @@
 %global source0_hash ff63a08e2ba82b7fa027de6d4a4f34f4e7cc00152d28f37d6dbe29547e38ec89
 
 Name:           libphidget22
-Version:        1.26.20260828
-Release:        1%{?dist}
+Version:        1.23.20250925
+Release:        2%{?dist}
 Summary:        Drivers and API for Phidget devices
 
 # libphidget is LGPL-3.0-or-later

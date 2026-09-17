@@ -43,11 +43,11 @@ Name: %{?scl_prefix}gdb
 # See timestamp of source gnulib installed into gnulib/ .
 %global snapgnulib 20220501
 %global tarname gdb-%{version}
-Version: 17.2
+Version: 17.1
 
 # The release always contains a leading reserved number, start it at 1.
 # `upstream' is not a part of `name' to stay fully rpm dependencies compatible for the testing.
-Release: 1%{?dist}
+Release: 6%{?dist}
 
 License: GPL-3.0-or-later AND BSD-3-Clause AND FSFAP AND LGPL-2.1-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain AND GFDL-1.3-or-later AND LGPL-2.0-or-later WITH GCC-exception-2.0 AND GPL-3.0-or-later WITH GCC-exception-3.1 AND GPL-2.0-or-later WITH GNU-compiler-exception AND MIT
 # Do not provide URL for snapshots as the file lasts there only for 2 days.
@@ -191,7 +191,9 @@ Patch008: gdb-index-generation-fixes.patch
 
 # Backport of upstream commit f08ffbbf2691bad2d5df660ee644647687775f0c
 # Can be dropped on a rebase to gdb 17.2 or 18.1
+Patch009: gdb-rhbz2435950-skip-revert.patch
 
+# Backport of upstream commit c1da013915e from Kevin Buettner
 # (RHBZ 2413405).
 Patch010: gdb-rhbz2413405-gcore-unreadable-pages.patch
 

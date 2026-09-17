@@ -14,8 +14,8 @@
 %global soversion 2
 
 Name:           mopac
-Version:        23.2.5
-Release:        1%{?dist}
+Version:        23.2.2
+Release:        2%{?dist}
 Summary:        A semiempirical quantum chemistry program
 License:        Apache-2.0
 URL:            http://openmopac.net

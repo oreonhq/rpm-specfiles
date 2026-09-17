@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           apache-commons-cli
-Version:        1.11.0
+Version:        1.10.0
 Release:        %autorelease
 Summary:        Command Line Interface Library for Java
 License:        Apache-2.0

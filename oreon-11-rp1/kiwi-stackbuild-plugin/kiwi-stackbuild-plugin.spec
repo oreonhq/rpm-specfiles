@@ -8,8 +8,8 @@ image root directory.
 %global srcname kiwi_stackbuild_plugin
 
 Name:           kiwi-stackbuild-plugin
-Version:        1.0.14
-Release:        1%{?dist}
+Version:        1.0.11
+Release:        6%{?dist}
 URL:            https://github.com/OSInside/kiwi-stackbuild-plugin
 Summary:        KIWI - Stack Build Plugin
 License:        GPL-3.0-or-later

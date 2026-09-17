@@ -3,8 +3,8 @@
 %global somajor 1
 
 Name:           libucontext
-Version:        1.5.2
-Release:        1%{?dist}
+Version:        1.5
+Release:        2%{?dist}
 Summary:        ucontext implementation featuring glibc-compatible ABI
 
 License:        ISC

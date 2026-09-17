@@ -1,9 +1,9 @@
 %global source0_hash fe68b564944b52f078f93d9fca93cbc578351ae526b7109f8d7a893a1195e9b9
 
-%global upstream_version        1.3.0
+%global upstream_version        1.1.1
 
 Name:                   libxchange
-Version:                1.3.0
+Version:                1.1.1
 Release:                %autorelease
 Summary:                Structured data representation and JSON support for C/C++
 License:                Unlicense

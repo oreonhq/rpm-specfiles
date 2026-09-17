@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-assembly-plugin
-Version:        3.8.0
+Version:        3.7.1
 Release:        %autorelease
 Summary:        Maven Assembly Plugin
 License:        Apache-2.0
@@ -43,7 +43,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.8.0-12
+Obsoletes:      %{name}-javadoc < 3.7.1-12
 
 %description
 A Maven plugin to create archives of your project's sources, classes,

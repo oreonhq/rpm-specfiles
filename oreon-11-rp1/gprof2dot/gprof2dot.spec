@@ -26,7 +26,7 @@ features:\
 %{nil}
 
 Name:           gprof2dot
-Version:        2025.04.14
+Version:        1.0
 Release:       	%{fedorarel}%{?dist}
 Summary:        Generate dot graphs from the output of several profilers
 
@@ -36,9 +36,9 @@ URL:            https://github.com/jrfonseca/gprof2dot
 Source0:        https://github.com/jrfonseca/gprof2dot/archive/%{githash}/%{name}-%{version}-D%{gitdate_num}git%{githash}.tar.gz
 BuildArch:      noarch
 
-Obsoletes:      python2-%{name} < 2025.04.14-0.17
-Obsoletes:      python3-%{name} < 2025.04.14-0.17
-Obsoletes:      %{name}-python3 < 2025.04.14-0.17
+Obsoletes:      python2-%{name} < 1.0-0.17
+Obsoletes:      python3-%{name} < 1.0-0.17
+Obsoletes:      %{name}-python3 < 1.0-0.17
 BuildRequires:  python3
 BuildRequires:  graphviz
 

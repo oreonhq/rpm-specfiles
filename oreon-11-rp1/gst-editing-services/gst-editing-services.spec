@@ -5,7 +5,7 @@
 #global shortcommit %%(c=%%{gitcommit}; echo ${c:0:5})
 
 Name:		gst-editing-services
-Version:        1.28.7
+Version:        1.28.1
 Release:        1%{?dist}
 Summary:	Gstreamer editing services
 

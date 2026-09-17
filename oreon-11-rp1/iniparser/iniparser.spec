@@ -1,8 +1,8 @@
 %global source0_hash 67575ed032a544d5359610e5f697af786371bbc3eb01311218ef8adfd3e5e329
 
 Name:          iniparser
-Version:       4.3.0
-Release:       1%{?dist}
+Version:       4.2.6
+Release:       4%{?dist}
 Summary:       C library for parsing "INI-style" files
 
 License:       MIT

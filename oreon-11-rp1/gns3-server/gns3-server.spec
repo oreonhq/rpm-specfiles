@@ -7,7 +7,7 @@
 %global __requires_exclude_from ^%{python3_sitelib}/gns3server/compute/docker/resources/.*$
 
 Name:           gns3-server
-Version:        3.0.6
+Version:        2.2.57
 Release:        1%{?dist}
 Summary:        Graphical Network Simulator 3
 

@@ -5,7 +5,7 @@
 %define gtk3_version 3.15.9
 
 Name:           gucharmap
-Version:        18.0.0
+Version:        17.0.2
 Release:        1%{?dist}
 Summary:        Unicode character picker and font browser
 

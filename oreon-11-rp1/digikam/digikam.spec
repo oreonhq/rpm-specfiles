@@ -15,8 +15,8 @@ ExclusiveArch: %{qt5_qtwebengine_arches}
 
 Name:    digikam
 Summary: A digital camera accessing & photo management application
-Version: 9.1.0
-Release: 1%{?beta}%{?dist}
+Version: 9.0.0
+Release: 5%{?beta}%{?dist}
 
 License: GPL-2.0-or-later
 URL:     http://www.digikam.org/

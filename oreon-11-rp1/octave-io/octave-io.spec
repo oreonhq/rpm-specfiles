@@ -3,8 +3,8 @@
 %global octpkg io
 
 Name:           octave-%{octpkg}
-Version:        2.7.2
-Release:        1%{?dist}
+Version:        2.7.0
+Release:        4%{?dist}
 Summary:        Input/Output in external formats
 # Automatically converted from old format: GPLv3+ and BSD - review is highly recommended.
 License:        GPL-3.0-or-later AND LicenseRef-Callaway-BSD

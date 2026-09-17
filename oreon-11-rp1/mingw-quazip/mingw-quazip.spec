@@ -5,8 +5,8 @@
 %global pkgname quazip
 
 Name:          mingw-%{pkgname}
-Version:       1.7.2
-Release:       1%{?dist}
+Version:       1.5
+Release:       2%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 
 BuildArch:     noarch

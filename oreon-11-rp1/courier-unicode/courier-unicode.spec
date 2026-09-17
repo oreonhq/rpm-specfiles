@@ -2,8 +2,8 @@
 
 Summary: A library implementing algorithms related to the Unicode Standard
 Name: courier-unicode
-Version: 2.6.0
-Release: 1%{?dist}
+Version: 2.2.6
+Release: 9%{?dist}
 License: GPL-3.0-only
 URL: http://www.courier-mta.org/unicode/
 Source0: https://downloads.sourceforge.net/project/courier/%{name}/%{version}/%{name}-%{version}.tar.bz2

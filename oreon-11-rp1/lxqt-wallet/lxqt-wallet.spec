@@ -3,8 +3,8 @@
 %global srcname lxqt_wallet
 
 Name:           %(echo %{srcname} |tr _ - )
-Version:        4.1.0
-Release:        1%{?dist}
+Version:        4.0.2
+Release:        4%{?dist}
 Summary:        Create a kwallet like functionality for LXQt
 
 License:        BSD-2-Clause

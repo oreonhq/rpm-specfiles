@@ -4,7 +4,7 @@
 %global p1_utils_ver 1.0.28
 
 Name:       erlang-%{srcname}
-Version:    1.0.20
+Version:    1.0.19
 Release:    %autorelease
 License:    Apache-2.0
 Summary:    Index tree for MQTT topic filters

@@ -4,8 +4,8 @@
 # RPM repository.
 
 Name:           libmtp
-Version:        1.1.23
-Release:        1%{?dist}
+Version:        1.1.22
+Release:        5%{?dist}
 Summary:        Software library for MTP media players
 URL:            http://libmtp.sourceforge.net/
 
@@ -26,7 +26,9 @@ BuildRequires:  libgcrypt-devel
 BuildRequires:  chrpath
 
 # https://github.com/libmtp/libmtp/pull/356
-
+Patch0:         0001-doc-Don-t-document-internal-endian-macros.patch
+# https://github.com/libmtp/libmtp/issues/346
+Patch1:         0001-disabled-foxconn-487-e111-id.-https-github.com-libmt.patch
 
 %description
 This package provides a software library for communicating with MTP

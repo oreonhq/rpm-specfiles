@@ -1,14 +1,14 @@
 %global source0_hash f2360feb5a32ace226c583df4faf6eff74145c81264aaea11e17a1af2f6f101a
 
 Name:           game-music-emu
-Version:        0.6.5
-Release:        1%{?dist}
+Version:        0.6.4
+Release:        3%{?dist}
 Provides:       libgme%{?_isa} = %{version}-%{release}
 Summary:        Video game music file emulation/playback library
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/libgme/game-music-emu
-Source0:        https://github.com/libgme/game-music-emu/archive/refs/tags/0.6.5.tar.gz#/game-music-emu-0.6.5.tar.gz
+Source0:        https://github.com/libgme/game-music-emu/archive/refs/tags/0.6.4.tar.gz#/game-music-emu-0.6.4.tar.gz
 
 
 BuildRequires:  gcc

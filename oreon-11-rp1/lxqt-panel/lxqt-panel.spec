@@ -2,8 +2,8 @@
 
 Name:          lxqt-panel
 Summary:       Main panel bar for LXQt desktop suite
-Version:       2.4.1
-Release:       1%{?dist}
+Version:       2.3.2
+Release:       2%{?dist}
 License:       LGPL-2.1-or-later
 URL:           https://lxqt-project.org/
 Source0:       https://github.com/lxqt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz

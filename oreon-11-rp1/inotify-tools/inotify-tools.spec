@@ -1,8 +1,8 @@
 %global source0_hash 1dfa33f80b6797ce2f6c01f454fd486d30be4dca1b0c5c2ea9ba3c30a5c39855
 
 Name:           inotify-tools
-Version:        4.25.9.0
-Release:        1%{?dist}
+Version:        4.23.9.0
+Release:        6%{?dist}
 Summary:        Command line utilities for inotify
 
 # GPL-2.0-only: the project as a whole
@@ -11,6 +11,7 @@ Summary:        Command line utilities for inotify
 License:        GPL-2.0-only AND GPL-2.0-only WITH Linux-syscall-note AND LGPL-2.1-or-later
 URL:            https://github.com/inotify-tools/inotify-tools
 Source0:        https://github.com/inotify-tools/inotify-tools/archive/%{version}/inotify-tools-%{version}.tar.gz
+Patch0:         too-many-args.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  autoconf

@@ -1,7 +1,7 @@
 %global source0_hash 7dbb9ab37df9df47ae2fdbb644916c986728291749bcd5ad8bcaa26f1e15f002
 
 Name:           libwacom
-Version:        2.20.0
+Version:        2.18.0
 Release:        1%{?dist}
 Summary:        Tablet Information Client Library
 Requires:       %{name}-data

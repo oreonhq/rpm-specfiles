@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           libjaylink
-Version:        0.5.0
-Release:        1%{?dist}
+Version:        0.3.0
+Release:        10%{?dist}
 Summary:        Library for SEGGER J-Link and compatible devices
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

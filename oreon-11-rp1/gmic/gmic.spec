@@ -11,7 +11,7 @@
 
 Summary: GREYC's Magic for Image Computing
 Name:    gmic
-Version: 4.0.5
+Version: 3.7.4
 %global shortver %(foo=%{version}; echo ${foo//./})
 Release: %autorelease
 Source0: https://gmic.eu/files/source/%{name}_%{version}.tar.gz

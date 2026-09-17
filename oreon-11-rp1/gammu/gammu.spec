@@ -4,15 +4,16 @@
 %bcond_without tests
 
 Name:           gammu
-Version:        1.45.0
-Release:        1%{?dist}
+Version:        1.42.0
+Release:        21%{?dist}
 Summary:        Command Line utility to work with mobile phones
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://wammu.eu/gammu/
 Source0:        https://github.com/gammu/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-
+Patch0:         gammu-1.3.7-udev.patch
+Patch1:         a37e5d8054f863fa71e38e244dd4da13eee6e251.patch
 
 BuildRequires:  gcc
 BuildRequires:  cmake3
@@ -102,6 +103,8 @@ developing applications that use %{name}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
+%patch -P0 -p1 -b .udev
+%patch -P1 -p1
 
 %build
 # TODO: Please submit an issue to upstream (rhbz#2380612)

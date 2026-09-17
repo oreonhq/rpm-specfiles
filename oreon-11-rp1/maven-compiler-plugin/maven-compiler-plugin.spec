@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           maven-compiler-plugin
-Version:        3.16.0
+Version:        3.12.1
 Release:        %autorelease
 Summary:        Maven Compiler Plugin
 License:        Apache-2.0
@@ -38,7 +38,7 @@ BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.mockito:mockito-core)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.16.0-13
+Obsoletes:      %{name}-javadoc < 3.12.1-13
 
 %description
 The Compiler Plugin is used to compile the sources of your project.

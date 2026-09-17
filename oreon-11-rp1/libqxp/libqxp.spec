@@ -3,7 +3,7 @@
 %global apiversion 0.0
 
 Name: libqxp
-Version: 0.0.3
+Version: 0.0.2
 Release: %autorelease
 Summary: Library for import of QuarkXPress documents
 

@@ -3,7 +3,7 @@
 Name:           lazarus
 Summary:        Lazarus Component Library and IDE for Free Pascal
 
-Version:        4.8
+Version:        4.6
 
 %global baserelease 1
 Release:        %{baserelease}%{?dist}

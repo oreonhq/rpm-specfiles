@@ -12,13 +12,13 @@
 
 
 Name:           jsoncpp
-Version:        1.9.8
-Release:        1%{?dist}
+Version:        1.9.6
+Release:        3%{?dist}
 Summary:        JSON library implemented in C++
 
 License:        LicenseRef-Fedora-Public-Domain OR MIT
 URL:            https://github.com/open-source-parsers/%{name}
-Source0:        https://github.com/open-source-parsers/jsoncpp/archive/1.9.8.tar.gz#/jsoncpp-1.9.8.tar.gz
+Source0:        https://github.com/open-source-parsers/jsoncpp/archive/1.9.6.tar.gz#/jsoncpp-1.9.6.tar.gz
 
 BuildRequires:  cmake >= 3.1
 BuildRequires:  gcc

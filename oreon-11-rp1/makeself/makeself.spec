@@ -1,8 +1,8 @@
 %global source0_hash 3af5218dfb80d20a156d3c50fa0d510c7b244d9676813659f8d220bc95405f07
 
 Name:           makeself
-Version:        2.7.1
-Release:        1%{?dist}
+Version:        2.6.0
+Release:        2%{?dist}
 BuildArch:      noarch
 Summary:        Make self-extractable archives on Unix
 

@@ -1,8 +1,8 @@
 %global source0_hash 96c2f551c3d9a09cdbc2d6cc242e64b3a9c811df7f29410d5b85871ec2ad2799
 
 Name:          marknote
-Version:       1.6.0
-Release:       1%{?dist}
+Version:       1.4.1
+Release:       2%{?dist}
 License:       BSD-3-Clause AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.1-or-later AND LGPL-3.0-only
 Summary:       A simple markdown note management app for KDE
 URL:           https://apps.kde.org/%{name}/

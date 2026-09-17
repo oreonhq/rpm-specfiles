@@ -1,8 +1,8 @@
 %global source0_hash a50c265a8630e61606567d153d3c70025aa958a28473a2411585b96894be7720
 
 Name: cpl
-Version: 7.4
-Release: 1%{?dist}
+Version: 7.3.2
+Release: 12%{?dist}
 Summary: ESO library for automated astronomical data-reduction tasks
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

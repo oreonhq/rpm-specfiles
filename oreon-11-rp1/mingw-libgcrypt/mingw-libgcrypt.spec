@@ -5,8 +5,8 @@
 %global run_tests 0
 
 Name:           mingw-libgcrypt
-Version:        1.12.4
-Release:        1%{?dist}
+Version:        1.10.3
+Release:        6%{?dist}
 Summary:        MinGW Windows gcrypt encryption library
 
 # Automatically converted from old format: LGPLv2+ and GPLv2+ - review is highly recommended.

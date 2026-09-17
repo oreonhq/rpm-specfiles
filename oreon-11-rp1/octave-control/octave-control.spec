@@ -3,7 +3,7 @@
 %global octpkg control
 
 Name:           octave-%{octpkg}
-Version:        4.2.3
+Version:        4.2.1
 Release:        1%{?dist}
 Summary:        Computer-Aided Control System Design (CACSD) Tools for Octave
 License:        GPL-3.0-or-later

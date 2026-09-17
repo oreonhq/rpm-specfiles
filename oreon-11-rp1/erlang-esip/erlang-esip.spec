@@ -7,7 +7,7 @@
 %global stun_ver 1.2.14
 
 Name: erlang-%{srcname}
-Version: 1.0.60
+Version: 1.0.54
 Release: %autorelease
 License: Apache-2.0
 Summary: ProcessOne SIP server component in Erlang

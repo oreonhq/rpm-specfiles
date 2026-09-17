@@ -9,12 +9,12 @@
 %bcond_with mingw
 
 Name:           flatbuffers
-Version:        25.12.19-2026-02-06-03fffb2-2026-02-06-03fffb2
+Version:        25.12.19
 # The .so version is equal to the project version since upstream offers no ABI
 # stability guarantees. We manually repeat it here and and use the macro in the
 # file lists as a reminder to avoid undetected .so version bumps. See
 # https://github.com/google/flatbuffers/issues/7759.
-%global so_version 25.12.19-2026-02-06-03fffb2-2026-02-06-03fffb2
+%global so_version 25.12.19
 Release:        %autorelease
 Summary:        Memory efficient serialization library
 

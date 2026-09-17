@@ -18,9 +18,9 @@
 %bcond tests 0
 
 Name:           %{pkg_name}
-Version:        1.52.4
+Version:        1.43.2
 # can only be reset when subpkg bumped
-Release:        1%{?dist}
+Release:        18%{?dist}
 Summary:        Command-line interface for the hledger accounting system
 
 License:        GPL-3.0-or-later

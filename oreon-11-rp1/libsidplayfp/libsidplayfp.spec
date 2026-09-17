@@ -1,8 +1,8 @@
 %global source0_hash 42c28b9ef57998ad66bbbb3dfab00c6684715c643d9ccc9ac8da4d7cf296dd00
 
 Name:           libsidplayfp
-Version:        3.1.1
-Release:        1%{?dist}
+Version:        2.15.0
+Release:        2%{?dist}
 Summary:        SID chip music module playing library
 # Zlib (src/utils/MD5/), GPL-2.0-only (src/builders/exsid-builder/) and GPL-2.0-or-later (the rest)
 License:        GPL-2.0-or-later AND GPL-2.0-only AND Zlib

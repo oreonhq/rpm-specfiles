@@ -1,8 +1,8 @@
 %global source0_hash b5a27a425e16b7e0057cd15b298162eb41ff3f2bcf5b967053e8926a457a3243
 
 Name:           CuraEngine_grpc_definitions
-Version:        0.1.0-beta.1-beta.1
-Release:        1%{?dist}
+Version:        0.1.0
+Release:        16%{?dist}
 Summary:        gRPC Proto Definitions for CuraEngine
 License:        MIT
 URL:            https://github.com/Ultimaker/CuraEngine_grpc_definitions

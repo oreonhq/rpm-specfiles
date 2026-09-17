@@ -1,8 +1,8 @@
 %global source0_hash 47228f0c07dfb2fbf51e35eb60f12c22113ef6923a0e23fcae3b2a4efee5ed29
 
 Name: libmbim
-Version: 1.34.0
-Release: 1%{?dist}
+Version: 1.32.0
+Release: 3%{?dist}
 Summary: Support library for the Mobile Broadband Interface Model protocol
 License: LGPL-2.1-or-later
 URL: https://gitlab.freedesktop.org/mobile-broadband/libmbim/

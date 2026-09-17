@@ -6,7 +6,7 @@
 %global json_version 3.0
 
 Name:           osmium-tool
-Version:        1.19.1
+Version:        1.19.0
 Release:        %autorelease
 Summary:        Command line tool for working with OpenStreetMap data
 

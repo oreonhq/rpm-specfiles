@@ -1,8 +1,8 @@
 %global source0_hash f270e19de9127642d2a11589ef2ec97ef90a649a74f56cf9a96306b04817b51a
 
 Name:           libnfnetlink
-Version:        1.0.2
-Release:        1%{?dist}
+Version:        1.0.1
+Release:        32%{?dist}
 Summary:        Netfilter netlink userspace library
 License:        GPL-2.0-or-later
 URL:            http://netfilter.org

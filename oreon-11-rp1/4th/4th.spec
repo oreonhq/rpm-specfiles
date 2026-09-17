@@ -1,8 +1,8 @@
 %global source0_hash f822f7dd8cfb0b1744a62d653c6efe933578ae1789ec60a088509a38bca4b4fc
 
 Name:           4th
-Version:        3.64.2
-Release:        1%{?dist}
+Version:        3.62.5
+Release:        23%{?dist}
 Summary:        A Forth compiler
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

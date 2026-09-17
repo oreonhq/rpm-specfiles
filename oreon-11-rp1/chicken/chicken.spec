@@ -4,7 +4,7 @@
 
 %global bootstrap 1
 
-%global shortversion 6.0.0
+%global shortversion 5.4.0
 %global libver 11
 
 Name:           chicken

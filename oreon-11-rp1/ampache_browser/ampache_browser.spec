@@ -9,8 +9,8 @@ Name: ampache_browser
 # is likely to break API users due to not finding files any longer.
 %global vername %{name}_1
 
-Version: 1.0.9
-Release: 1%{?dist}
+Version: 1.0.8
+Release: 5%{?dist}
 Summary: C++ and Qt based client library for Ampache access
 
 License: GPL-3.0-only

@@ -1,7 +1,7 @@
 %global source0_hash 6e74696bdcccb1b0ace57e040758ca10b02c8c2df4c465e1b63cfbb689a3dba4
 
 Name:		libmetal
-Version:	2026.04.0
+Version:	2025.10.0
 Release:	%autorelease
 Summary:	An abstraction layer across user-space Linux, baremetal, and RTOS environments 
 License:	BSD-3-Clause OR Apache-2.0 OR GPL-2.0-only

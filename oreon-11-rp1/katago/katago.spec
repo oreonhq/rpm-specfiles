@@ -12,7 +12,7 @@ handicap games reasonably, and handle many board sizes and rules all with the
 same neural net.}
 
 Name:           katago
-Version:        1.18.2
+Version:        1.14.1
 Release:        %autorelease
 Summary:        GTP engine and self-play learning in Go
 

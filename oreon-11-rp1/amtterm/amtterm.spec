@@ -3,8 +3,8 @@
 Name:         amtterm
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:      GPL-2.0-or-later
-Version:      1.7
-Release:      1%{?dist}
+Version:      1.6
+Release:      26%{?dist}
 Summary:      Serial-over-lan (sol) client for Intel AMT
 URL:          http://www.kraxel.org/blog/linux/amtterm/
 Source:       http://www.kraxel.org/releases/%{name}/%{name}-%{version}.tar.gz

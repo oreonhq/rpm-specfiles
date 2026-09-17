@@ -1,7 +1,7 @@
 %global source0_hash ca9bda2bd82f010bfa00b2b074aeeb7ece8b857e3a299e0fc620ed37312fc06f
 
 Name:           openapi-python-client
-Version:        0.29.1
+Version:        0.28.3
 Release:        %autorelease
 Summary:        Generate modern Python clients from OpenAPI
 

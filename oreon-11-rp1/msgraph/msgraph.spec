@@ -7,7 +7,7 @@
 %global somajor 1
 
 Name:           msgraph
-Version:        0.3.5
+Version:        0.3.4
 Release:        %autorelease
 Summary:        Library to access MS Graph API for Microsoft 365
 

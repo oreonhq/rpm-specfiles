@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           chapel
-Version:        2.9.0
-%global shortversion 2.9
+Version:        2.6.0
+%global shortversion 2.6
 Release:        %{autorelease}
 Summary:        A Productive Parallel Programming Language
 
@@ -25,7 +25,8 @@ URL:            https://chapel-lang.org
 Source:         https://github.com/chapel-lang/chapel/archive/%{version}/chapel-%{version}.tar.gz
 # https://github.com/chapel-lang/chapel/pull/27877
 # Ensure code compiles as intended
-
+Patch:          strict-aliasing.patch
+# Unsupported architecture
 ExcludeArch:    %{ix86}
 
 BuildRequires:  bash

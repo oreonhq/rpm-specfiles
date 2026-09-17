@@ -6,8 +6,8 @@
 %global git_tag %{version}
 
 Name:           gns3-gui
-Version:        3.0.6
-Release:        1%{?dist}
+Version:        2.2.57
+Release:        2%{?dist}
 Summary:        GNS3 graphical user interface
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -1,8 +1,8 @@
 %global source0_hash 154acbb56f374e9b88a30d55180d2da776e1742d252ae216d94e9c0b4cef28bd
 
 Name:		libzdnn
-Version:	1.1.2
-Release:	1%{?dist}
+Version:	1.0.1
+Release:	8%{?dist}
 Summary:	Driver library for the IBM Z Neural Network Processing Assist Facility
 
 License:	Apache-2.0

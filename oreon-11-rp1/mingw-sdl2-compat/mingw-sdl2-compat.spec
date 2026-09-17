@@ -6,7 +6,7 @@
 %global sdl3_minver 3.4.0
 
 Name:           mingw-%{origname}
-Version:        2.32.72
+Version:        2.32.64
 Release:        1%{?dist}
 Summary:        MinGW Windows port of SDL 2.0 runtime compatibility library using SDL 3.0
 # License of SDL-2.0 headers

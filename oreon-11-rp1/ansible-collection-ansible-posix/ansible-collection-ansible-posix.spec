@@ -7,8 +7,8 @@
 %endif
 
 Name:           ansible-collection-ansible-posix
-Version:        2.2.2
-Release:        1%{?dist}
+Version:        2.1.0
+Release:        3%{?dist}
 Summary:        Ansible Collection targeting POSIX and POSIX-ish platforms
 
 # plugins/module_utils/mount.py: Python Software Foundation License version 2

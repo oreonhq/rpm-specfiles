@@ -4,8 +4,8 @@
 %undefine _include_frame_pointers
 
 Name: argyllcms
-Version: 3.5.0
-Release: 1%{?dist}
+Version: 3.4.1
+Release: 4%{?dist}
 
 # Main code - AGPL-3.0-or-later
 # spectro, xml - GPL-2.0-or-later
@@ -156,9 +156,7 @@ mv %{buildroot}%{_bindir}/com.argyllcms.metainfo.xml %{buildroot}%{_metainfodir}
 %{_bindir}/viewgam
 %{_bindir}/xicclu
 %{_metainfodir}/com.argyllcms.metainfo.xml
-%{_bindir}/amd64/
-%{_bindir}/arm64/
-%{_bindir}/x86/
+
 %files doc
 %license doc/DocLicense.txt
 %doc doc/*.html doc/*.jpg doc/SG*.txt

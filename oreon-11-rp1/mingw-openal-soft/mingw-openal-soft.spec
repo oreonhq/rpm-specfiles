@@ -8,8 +8,8 @@
 %bcond_with qtgui
 
 Name:           mingw-%{pkgname}
-Version:        1.25.2
-Release:        1%{?dist}
+Version:        1.25.0
+Release:        2%{?dist}
 Summary:        Open Audio Library
 
 # See native spec

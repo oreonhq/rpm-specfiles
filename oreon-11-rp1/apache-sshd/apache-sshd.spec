@@ -5,8 +5,8 @@
 
 Epoch:          1
 Name:           apache-sshd
-Version:        2.19.0
-Release:        1%{?dist}
+Version:        2.16.0
+Release:        4%{?dist}
 Summary:        Apache SSHD
 
 # One file has ISC licensing:

@@ -3,8 +3,8 @@
 %global api_ver 5.0
 
 Name:           libxml++50
-Version:        5.6.1
-Release:        1%{?dist}
+Version:        5.4.0
+Release:        5%{?dist}
 Summary:        C++ wrapper for the libxml2 XML parser library
 License:        LGPL-2.1-or-later
 URL:            https://libxmlplusplus.github.io/libxmlplusplus/

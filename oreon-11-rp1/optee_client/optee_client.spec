@@ -1,7 +1,7 @@
 %global source0_hash 2ef152f25b682e59c3684d6d73d7c5a138495615f6b045e95266eb3d0bc0d04e
 
 Name:      optee_client
-Version:   4.10.0-rc1
+Version:   4.9.0
 Release:   1%{?dist}
 Summary:   OP-TEE Client API and supplicant
 License:   BSD

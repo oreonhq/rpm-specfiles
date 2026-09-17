@@ -1,8 +1,8 @@
 %global source0_hash 71dbafdc8d29518aede79269d027d80b4192633e7a614c89ed76aeb0e0bd1dd4
 
 Name:           bibletime
-Version:        3.2.0
-Release:        1%{?dist}
+Version:        3.1.1
+Release:        3%{?dist}
 Summary:        An easy to use Bible study tool
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only

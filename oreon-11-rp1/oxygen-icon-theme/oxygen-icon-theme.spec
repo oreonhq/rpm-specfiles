@@ -11,8 +11,8 @@
 Name:    oxygen-icon-theme
 Summary: Oxygen icon theme
 Epoch:   1
-Version: 6.2.0
-Release: 1%{?dist}
+Version: 6.1.0
+Release: 4%{?dist}
 
 # http://techbase.kde.org/Policies/Licensing_Policy
 License: LGPL-3.0-or-later

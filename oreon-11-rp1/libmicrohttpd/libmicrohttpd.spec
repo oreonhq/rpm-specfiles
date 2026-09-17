@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           libmicrohttpd
-Version:        1.0.10
-Release:        1%{?dist}
+Version:        1.0.2
+Release:        3%{?dist}
 Epoch:          1
 Summary:        Lightweight library for embedding a webserver in applications
 

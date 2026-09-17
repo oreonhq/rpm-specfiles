@@ -13,7 +13,7 @@ vendors without requiring that applications have specific knowledge of the
 hardware they are targeting.}
 
 Name:           openvr
-Version:        2.15.6
+Version:        2.12.14
 Release:        %autorelease
 Summary:        OpenVR SDK
 License:        BSD-3-Clause
@@ -208,12 +208,6 @@ chrpath -d %{buildroot}%{_bindir}/* %{buildroot}%{_libdir}/%{name}/drivers/*.so
 %{_datadir}/%{name}/
 %{_libdir}/%{name}/
 %endif
-%{_bindir}/androidarm64/
-%{_bindir}/linux32/
-%{_bindir}/linux64/
-%{_bindir}/linuxarm64/
-%{_bindir}/osx32/
-%{_bindir}/win32/
-%{_bindir}/win64/
+
 %changelog
 %autochangelog

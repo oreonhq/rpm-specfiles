@@ -3,7 +3,7 @@
 %bcond_without mingw
 
 Name:           liblerc
-Version:        4.2.0
+Version:        4.1.0
 Release:        1%{?dist}
 Summary:        Library for Limited Error Raster Compression
 

@@ -1,7 +1,7 @@
 %global source0_hash 16863784fbff832a690f404a981ee93017f11875795115b633bffb750172960c
 
 Name:           dtkcore
-Version:        6.7.49
+Version:        5.7.30
 Release:        %autorelease
 Summary:        Deepin tool kit core modules
 License:        LGPL-3.0-or-later

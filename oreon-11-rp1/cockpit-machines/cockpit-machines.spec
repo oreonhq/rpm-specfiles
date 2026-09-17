@@ -6,7 +6,7 @@
 # Copyright (C) 2021 Red Hat, Inc.
 
 Name:           cockpit-machines
-Version:        356
+Version:        349.1
 Release:        1%{?dist}
 Summary:        Cockpit user interface for virtual machines
 License:        LGPL-2.1-or-later AND MIT

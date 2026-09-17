@@ -6,8 +6,8 @@
 
 Name:          mingw-%{pkgname}
 # NOTE: sync SOVER in cfitsio_build.patch with the one in configure.in
-Version:       4.7.0
-Release:       1%{?dist}
+Version:       4.6.3
+Release:       2%{?dist}
 Summary:       MinGW Windows CFITSIO library
 
 License:       CFITSIO

@@ -1,7 +1,7 @@
 %global source0_hash 914e265faf56a5ff4ffc3b957df181222e5cacab6b5a744ed72696041bf5f0c1
 
 Name:       dino
-Version:    0.5.1
+Version:    0.5.0
 Release:    %autorelease
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

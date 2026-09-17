@@ -2,8 +2,8 @@
 
 Name:           nemo
 Summary:        File manager for Cinnamon
-Version:        6.6.4
-Release:        1%{?dist}
+Version:        6.6.3
+Release:        3%{?dist}
 # Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/linuxmint/%{name}

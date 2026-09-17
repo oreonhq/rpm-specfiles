@@ -12,8 +12,8 @@
 %endif
 
 Name:		greenboot-rs
-Version:	0.16.4
-Release:	1%{?dist}
+Version:	0.16.3
+Release:	0%{?dist}
 Summary:	Generic Health Check Framework for systemd
 # Aggregated license of statically linked dependencies as per %%cargo_license_summary
 License:	BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)

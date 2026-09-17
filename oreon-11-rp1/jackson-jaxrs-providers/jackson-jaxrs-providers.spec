@@ -3,13 +3,13 @@
 %bcond_without  jp_minimal
 
 Name:           jackson-jaxrs-providers
-Version:        2.22.2
-Release:        1%{?dist}
+Version:        2.18.2
+Release:        6%{?dist}
 Summary:        Jackson JAX-RS providers
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-jaxrs-providers
-Source0:        https://github.com/FasterXML/jackson-jaxrs-providers/archive/refs/tags/jackson-jaxrs-providers-2.22.2.tar.gz#/jackson-jaxrs-providers-2.22.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-jaxrs-providers/archive/refs/tags/jackson-jaxrs-providers-2.18.2.tar.gz#/jackson-jaxrs-providers-2.18.2.tar.gz
 
 BuildArch:      noarch
 %if 0%{?fedora} || 0%{?rhel} >= 10

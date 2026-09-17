@@ -1,7 +1,7 @@
 %global source0_hash cf478b7a5673a456b3aa09df2a875aae8a023511a14ef901970666b93c28ebb9
 
 Name:           btrfs-assistant
-Version:        2.3.1
+Version:        2.2
 Release:        %autorelease
 Summary:        GUI management tool to make managing a Btrfs filesystem easier
 
@@ -10,7 +10,9 @@ URL:            https://gitlab.com/%{name}/%{name}
 Source0:        https://gitlab.com/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.gz
 
 # https://gitlab.com/btrfs-assistant/btrfs-assistant/-/merge_requests/87
-
+Patch0:         btrfs-assistant-no-error-on-warn.patch
+# https://gitlab.com/btrfs-assistant/btrfs-assistant/-/commit/95e413ddadce43b9d3cd87300190b35026a597c6
+Patch1:         btrfs-assistant-fix-restore-subvolume-button.patch
 
 Requires:       hicolor-icon-theme
 Requires:       polkit

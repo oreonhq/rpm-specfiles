@@ -2,7 +2,7 @@
 
 Name:       keychain
 Summary:    Agent manager for OpenSSH, ssh.com, Sun SSH, and GnuPG
-Version:    3.0.4
+Version:    2.9.8
 Release:    %autorelease
 License:    GPL-2.0-only
 URL:        https://github.com/danielrobbins/keychain

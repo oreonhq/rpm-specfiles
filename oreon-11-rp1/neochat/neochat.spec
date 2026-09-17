@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name: neochat
-Version: 26.08.1
+Version: 26.08.0
 Release: 1%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause

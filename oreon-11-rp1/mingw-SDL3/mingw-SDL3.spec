@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name:           mingw-SDL3
-Version:        3.4.16
+Version:        3.4.0
 Release:        1%{?dist}
 Summary:        MinGW Windows port of SDL3 cross-platform multimedia library
 

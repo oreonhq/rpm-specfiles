@@ -1,8 +1,8 @@
 %global source0_hash 89bae1a05731f4aaafb04066ea0186e181117b74fcfbf89d686cf205459220b7
 
 Name:       git-extras
-Version:    7.5.0
-Release:    1%{?dist}
+Version:    7.3.0
+Release:    4%{?dist}
 Summary:    Little git extras
 
 License:    MIT

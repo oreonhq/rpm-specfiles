@@ -5,8 +5,8 @@
 %global cl_hpp_ver 2025.07.22
 
 Name:           opencl-headers
-Version:        2026.05.29
-Release:        1%{?dist}
+Version:        3.0
+Release:        2%{?dist}
 Summary:        OpenCL (Open Computing Language) header files
 
 License:        Apache-2.0
@@ -61,7 +61,6 @@ sed -e 's|@CMAKE_INSTALL_PREFIX@|%{_prefix}|' -e 's|@OPENCLHPP_INCLUDEDIR_PC@|%{
 %{_includedir}/CL/opencl.hpp
 %{_datadir}/pkgconfig/OpenCL-Headers.pc
 %{_datadir}/pkgconfig/OpenCL-CLHPP.pc
-%{_datadir}/pkgconfig/bare/
-%{_datadir}/pkgconfig/sdk/
+
 %changelog
 %autochangelog

@@ -1,8 +1,8 @@
 %global source0_hash 7e3db35c6f856d04da69036fdeb93e6874f7059004f21cdeea013691bc6528c4
 
 Name:           pavucontrol-qt
-Version:        2.4.0
-Release:        1%{?dist}
+Version:        2.2.0
+Release:        3%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://lxqt-project.org/
 Source0:        https://github.com/lxqt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz

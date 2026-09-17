@@ -9,7 +9,7 @@
 Name:    k3b
 Summary: CD/DVD/Blu-ray burning application
 Epoch:   1
-Version: 26.08.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later

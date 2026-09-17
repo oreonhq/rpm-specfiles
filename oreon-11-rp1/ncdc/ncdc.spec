@@ -4,8 +4,8 @@
 %bcond_without geoip
 
 Name:           ncdc
-Version:        1.25
-Release:        1%{?dist}
+Version:        1.24.1
+Release:        3%{?dist}
 Summary:        Modern and lightweight direct connect client
 
 License:        MIT

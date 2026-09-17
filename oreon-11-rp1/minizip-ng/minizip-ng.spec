@@ -14,7 +14,7 @@
 %global minizip_ng_obsoletes 3.0.7-5
 
 Name:           minizip-ng
-Version:        4.2.2
+Version:        4.0.10
 Release:        1%{?dist}
 Summary:        Minizip-ng contrib in zlib-ng with the latest bug fixes and advanced features
 

@@ -1,7 +1,7 @@
 %global source0_hash 2f1e54336ed6cc3dbab5ad5279f2520eae1a90fc80852ab005a8250a5a15d1ac
 
 Name:           hyprwayland-scanner
-Version:        0.4.6
+Version:        0.4.2
 Release:        %autorelease
 Summary:        A Hyprland implementation of wayland-scanner, in and for C++
 

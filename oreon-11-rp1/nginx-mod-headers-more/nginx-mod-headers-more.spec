@@ -4,8 +4,8 @@
 %global origname %{nginx_modname}-nginx-module
 
 Name:           nginx-mod-headers-more
-Version:        0.40
-Release:        1%{?dist}
+Version:        0.39
+Release:        6%{?dist}
 Summary:        This module allows adding, setting, or clearing specified input/output headers
 
 License:        BSD-2-Clause

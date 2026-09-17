@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-source-plugin
-Version:        3.4.0
+Version:        3.3.0
 Release:        %autorelease
 Summary:        Plugin creating source JAR
 License:        Apache-2.0
@@ -32,7 +32,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-archiver)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.4.0-18
+Obsoletes:      %{name}-javadoc < 3.3.0-18
 
 %description
 The Maven Source Plugin creates a JAR archive of the

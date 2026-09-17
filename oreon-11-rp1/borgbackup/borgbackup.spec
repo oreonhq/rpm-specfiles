@@ -3,8 +3,8 @@
 %global srcname borgbackup
 
 Name:           %{srcname}
-Version:        1.4.5
-Release:        1%{?dist}
+Version:        1.4.3
+Release:        3%{?dist}
 Summary:        A deduplicating backup program with compression and authenticated encryption
 # zlib:         src/borg/algorithms/{crc32_clmul.c, crc32_slice_by_8.c}
 # Apache-2.0:   src/borg/cache_sync/{sysdep.h, unpack.h, unpack_template.h, unpack_define.h}

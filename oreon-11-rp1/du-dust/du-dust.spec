@@ -3,7 +3,7 @@
 %bcond check 1
 
 Name:           du-dust
-Version:        1.2.6
+Version:        1.2.4
 Release:        %autorelease
 Summary:        More intuitive version of du
 

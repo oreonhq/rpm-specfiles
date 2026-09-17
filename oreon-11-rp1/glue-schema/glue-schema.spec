@@ -1,8 +1,8 @@
 %global source0_hash 708d73e6e3ebd2f552c44f854845f71bc1bcc6d5f9b2023f0f98120bc33563b9
 
 Name:		glue-schema
-Version:	2.1.1
-Release:	1%{?dist}
+Version:	2.1.0
+Release:	8%{?dist}
 Summary:	LDAP schema files for the GLUE 1.3 and GLUE 2.0 Schema
 License:	Apache-2.0
 URL:		https://github.com/EGI-Foundation/%{name}

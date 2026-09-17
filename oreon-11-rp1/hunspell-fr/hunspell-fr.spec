@@ -8,9 +8,9 @@
 
 Name: hunspell-fr
 Summary: French hunspell dictionaries
-Version: 7.7
-Release: 1%{?dist}
-Source:        https://deb.debian.org/debian/pool/main/h/hunspell-fr/hunspell-fr_7.7.orig.tar.xz
+Version: 7.0
+Release: 2%{?dist}
+Source:        https://deb.debian.org/debian/pool/main/h/hunspell-fr/hunspell-fr_7.0.orig.tar.xz
 URL: https://grammalecte.net/
 License: MPL-2.0
 BuildArch: noarch

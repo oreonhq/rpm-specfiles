@@ -32,7 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 Name:           objenesis
-Version:        3.6
+Version:        3.5
 Release:        %autorelease
 Summary:        A library for instantiating Java objects
 License:        Apache-2.0
@@ -40,7 +40,7 @@ URL:            https://objenesis.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/easymock/%{name}/archive/%{version}.tar.gz#/objenesis-3.6.tar.gz
+Source0:        https://github.com/easymock/%{name}/archive/%{version}.tar.gz#/objenesis-3.5.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

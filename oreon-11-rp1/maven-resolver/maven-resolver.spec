@@ -4,7 +4,7 @@
 
 Name:           maven-resolver
 Epoch:          1
-Version:        1.9.27
+Version:        1.9.24
 Release:        %autorelease
 Summary:        Apache Maven Artifact Resolver library
 License:        Apache-2.0

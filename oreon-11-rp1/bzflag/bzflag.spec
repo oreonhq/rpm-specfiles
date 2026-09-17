@@ -2,8 +2,8 @@
 
 Summary: 3D multi-player tank battle game
 Name: bzflag
-Version: 2.4.30
-Release: 1%{?dist}
+Version: 2.4.28
+Release: 4%{?dist}
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2
 URL: http://bzflag.org

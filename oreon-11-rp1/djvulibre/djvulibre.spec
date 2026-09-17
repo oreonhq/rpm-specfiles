@@ -1,8 +1,8 @@
 %global source0_hash fcd009ea7654fde5a83600eb80757bd3a76998e47d13c66b54c8db849f8f2edc
 
 Name:           djvulibre
-Version:        3.5.30
-Release:        1%{?dist}
+Version:        3.5.28
+Release:        2%{?dist}
 Summary:        DjVu viewers, encoders, and libraries
 License:        GPL-2.0-or-later
 URL:            https://djvu.sourceforge.net/

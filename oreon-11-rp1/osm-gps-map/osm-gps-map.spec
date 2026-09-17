@@ -1,8 +1,8 @@
 %global source0_hash ddec11449f37b5dffb4bca134d024623897c6140af1f9981a8acc512dbf6a7a5
 
 Name:           osm-gps-map
-Version:        1.2.1
-Release:        1%{?dist}
+Version:        1.2.0
+Release:        3%{?dist}
 Summary:        Gtk+ widget for displaying OpenStreetMap tiles
 
 License:        GPL-2.0-or-later

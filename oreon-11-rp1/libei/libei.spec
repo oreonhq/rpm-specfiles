@@ -6,8 +6,8 @@
 # Here there are packaged as libei, libeis and liboeffis plus respective subpackages.
 
 Name:           libei
-Version:        1.6.0
-Release:        1%{?dist}
+Version:        1.5.0
+Release:        2%{?dist}
 Summary:        Library for Emulated Input
 
 License:        MIT

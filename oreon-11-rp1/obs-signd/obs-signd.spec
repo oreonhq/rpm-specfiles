@@ -14,7 +14,7 @@ Name:             obs-signd
 Summary:          The OBS sign daemon
 License:          GPL-2.0-only
 URL:              https://github.com/openSUSE/obs-sign
-Version:          2.8.5
+Version:          2.8.4
 Release:          %autorelease
 #Release:          %%{baserelease}%%{?snapshotrel}%%{?dist}
 Source0:          https://github.com/openSUSE/%{shortname}/archive/refs/tags/%{version}.tar.gz#/%{shortname}-%{version}.tar.gz

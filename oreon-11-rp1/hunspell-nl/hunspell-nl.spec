@@ -8,11 +8,11 @@
 
 Name: hunspell-nl
 Summary: Dutch hunspell dictionaries
-Version: 26.8.0.3
-Release: 1%{?dist}
+Version: 25.2.3
+Release: 17%{?dist}
 License: BSD-3-Clause OR CC-BY-3.0
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/nl_NL
-Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_26.8.0.3.orig.tar.xz#/libreoffice-dictionaries-26.8.0.3.tar.xz
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell

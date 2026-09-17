@@ -4,8 +4,8 @@
 
 Summary:         Library for reading, mastering and writing optical discs
 Name:            libburn
-Version:         1.5.8
-Release:         1%{?dist}
+Version:         1.5.6
+Release:         8%{?dist}
 License:         GPL-2.0-or-later
 URL:             https://libburnia-project.org/
 Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.tar.gz
@@ -13,7 +13,7 @@ Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{versio
 Source2:         https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Patch0:          libburn-0.6.16-multilib.patch
 Patch1:          libburn-1.5.4-rpath.patch
-Patch2:          https://dev.lovelyhq.com/libburnia/libburn/commit/d537f9dd35282df834a311ead5f113af67d223b3.patch#/libburn-1.5.8-c23.patch
+Patch2:          https://dev.lovelyhq.com/libburnia/libburn/commit/d537f9dd35282df834a311ead5f113af67d223b3.patch#/libburn-1.5.6-c23.patch
 BuildRequires:   gnupg2
 BuildRequires:   gcc, make, intltool, gettext
 %if 0%{?rhel} && "%{name}" != "%{pkgname}"

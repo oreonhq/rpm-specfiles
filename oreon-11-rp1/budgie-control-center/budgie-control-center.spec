@@ -13,7 +13,7 @@
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
 
 Name:          budgie-control-center
-Version:       2.1.3
+Version:       2.1.0
 Release:       1%{?dist}
 Summary:       A fork of GNOME Control Center for the Budgie 10 Series
 

@@ -3,8 +3,8 @@
 %global pypi_name conu
 
 Name:           %{pypi_name}
-Version:        1.0.0
-Release:        1%{?dist}
+Version:        0.7.1
+Release:        31%{?dist}
 Summary:        library which makes it easy to write tests for your containers
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

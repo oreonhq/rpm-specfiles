@@ -2,8 +2,8 @@
 
 Name: gtk-gnutella
 Summary: GUI based Gnutella Client
-Version: 1.3.1
-Release: 1%{?dist}
+Version: 1.2.3
+Release: 5%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL: http://gtk-gnutella.sourceforge.net

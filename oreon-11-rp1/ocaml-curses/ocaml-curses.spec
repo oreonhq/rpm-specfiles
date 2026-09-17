@@ -4,14 +4,14 @@
 ExcludeArch: %{ix86}
 
 Name:           ocaml-curses
-Version:        1.0.12
-Release:        1%{?dist}
+Version:        1.0.11
+Release:        18%{?dist}
 Summary:        OCaml bindings for ncurses
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:            https://github.com/mbacarella/curses
 VCS:            git:%{url}.git
-Source0:        https://github.com/mbacarella/curses/archive/refs/tags/1.0.12.tar.gz#/curses-1.0.12.tar.gz
+Source0:        https://github.com/mbacarella/curses/archive/refs/tags/1.0.11.tar.gz#/curses-1.0.11.tar.gz
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-dune >= 2.7

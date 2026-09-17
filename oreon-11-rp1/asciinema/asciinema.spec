@@ -1,7 +1,7 @@
 %global source0_hash f44feaa1bc150e7964635dc4714fd86089a968587fed81dccf860ee7b64617ca
 
 Name:           asciinema
-Version:        3.2.1
+Version:        3.0.0
 Release:        %autorelease
 Summary:        Terminal session recorder, streamer and player
 
@@ -57,6 +57,7 @@ Source:         https://github.com/asciinema/asciinema/archive/v%{version}/ascii
 # update dependencies” at https://github.com/asciinema/asciinema/pull/698.
 #
 # In this minimal downstream patch, only Cargo.toml is adjusted.
+Patch:          0001-Update-tokio-tungstenite-from-0.26-to-0.28.patch
 
 BuildRequires:  cargo-rpm-macros
 

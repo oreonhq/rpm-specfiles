@@ -4,8 +4,8 @@
 
 Summary: ELF utils that can check files for security relevant properties
 Name: pax-utils
-Version: 1.3.11
-Release: 1%{?dist}
+Version: 1.3.10
+Release: 2%{?dist}
 # http://packages.gentoo.org/package/app-misc/pax-utils
 URL: https://wiki.gentoo.org/wiki/Hardened/PaX_Utilities
 #Source0: https://distfiles.gentoo.org/distfiles/%{name}-%{version}.tar.xz

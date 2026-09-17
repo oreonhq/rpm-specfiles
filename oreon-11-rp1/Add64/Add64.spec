@@ -4,8 +4,8 @@
 
 Summary:       An additive synthesizer using JACK
 Name:          Add64
-Version:       4.1.0
-Release:       1%{?dist}
+Version:       3.9.3
+Release:       20%{?dist}
 URL:           http://sourceforge.net/projects/add64
 Source0:       http://downloads.sourceforge.net/project/add64/%{name}-%{version}.tar.bz2
 Source1:       %{name}.desktop

@@ -3,8 +3,8 @@
 %global debug_package %{nil}
 
 Name:               greenboot
-Version:            0.15.9
-Release:            1%{?dist}
+Version:            0.15.8
+Release:            4%{?dist}
 Summary:            Generic Health Check Framework for systemd
 License:            LGPL-2.1-or-later
 
@@ -13,7 +13,7 @@ License:            LGPL-2.1-or-later
 %global repo_tag    v%{version}
 
 URL:                https://github.com/%{repo_owner}/%{repo_name}
-Source0:        https://github.com/%{repo_owner}/%{repo_name}/archive/refs/tags/%{repo_tag}.tar.gz#/greenboot-0.15.9.tar.gz
+Source0:        https://github.com/%{repo_owner}/%{repo_name}/archive/refs/tags/%{repo_tag}.tar.gz#/greenboot-0.15.8.tar.gz
 
 ExcludeArch: s390x {%ix86}
 BuildRequires:      systemd-rpm-macros

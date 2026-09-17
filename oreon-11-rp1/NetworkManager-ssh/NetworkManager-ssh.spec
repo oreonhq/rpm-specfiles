@@ -3,7 +3,7 @@
 Summary:   NetworkManager VPN plugin for SSH tunnels
 Name:      NetworkManager-ssh
 Epoch:     1
-Version:   1.4.5
+Version:   1.4.4
 Release:   1%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://github.com/danfruehauf/NetworkManager-ssh

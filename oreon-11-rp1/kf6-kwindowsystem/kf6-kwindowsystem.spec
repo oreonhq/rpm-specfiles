@@ -3,11 +3,11 @@
 %global		framework kwindowsystem
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.30
+%global majmin_ver_kf6 6.29
 
 
 Name:		kf6-%{framework}
-Version:	6.30.0
+Version:	6.29.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 integration module with classes for windows management
 License:	CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT

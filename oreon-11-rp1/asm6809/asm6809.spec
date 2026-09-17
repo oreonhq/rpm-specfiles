@@ -1,8 +1,8 @@
 %global source0_hash 6051624597d94d69a68a08e194cfe18cbdb12f829c80d92b84f641794b8b09bb
 
 Name:           asm6809
-Version:        2.17
-Release:        1%{?dist}
+Version:        2.16
+Release:        4%{?dist}
 Summary:        Multiple pass 6809 & 6309 cross assembler
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

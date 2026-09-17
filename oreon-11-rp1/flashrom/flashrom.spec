@@ -3,8 +3,8 @@
 %global source2_key_fpr 6E6EF9A0BA478006E2776E4CC037BB413134D111
 
 Name:		flashrom
-Version:	1.8.0
-Release:	1%{?dist}
+Version:	1.6.0
+Release:	3%{?dist}
 Summary:	Simple program for reading/writing flash chips content
 License:	GPL-2.0-only
 URL:		https://flashrom.org

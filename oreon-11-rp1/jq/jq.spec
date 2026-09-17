@@ -3,7 +3,7 @@
 %bcond check 1
 
 Name:           jq
-Version:        1.8.2
+Version:        1.8.1
 Release:        %autorelease
 Summary:        Command-line JSON processor
 

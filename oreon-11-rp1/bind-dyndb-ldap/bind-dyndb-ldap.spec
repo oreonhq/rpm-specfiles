@@ -20,14 +20,15 @@
 %endif
 
 Name:           bind-dyndb-ldap
-Version:        12.0
-Release:        1%{?dist}
+Version:        11.11
+Release:        12%{?dist}
 Summary:        LDAP back-end plug-in for BIND
 
 License:        GPL-2.0-or-later
 URL:            https://releases.pagure.org/bind-dyndb-ldap
 Source0:        https://releases.pagure.org/bind-dyndb-ldap/bind-dyndb-ldap-%{VERSION}.tar.bz2
 # https://pagure.io/bind-dyndb-ldap/pull-request/244
+Patch1:         bind-dyndb-ldap-11.10-check-pr244.patch
 
 BuildRequires:  bind-devel >= %{bind_version}, bind-lite-devel >= %{bind_version}
 BuildRequires:  krb5-devel

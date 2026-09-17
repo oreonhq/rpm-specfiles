@@ -2,8 +2,8 @@
 
 Name:          lxqt-archiver
 Summary:       A simple & lightweight desktop-agnostic Qt file archiver
-Version:       1.4.0
-Release:       1%{?dist}
+Version:       1.3.0
+Release:       3%{?dist}
 License:       GPL-2.0-or-later
 URL:           https://lxqt.github.io/
 Source0:       https://github.com/lxqt/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz

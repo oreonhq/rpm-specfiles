@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name: mingw-libunistring
-Version: 1.4.2
-Release: 1%{?dist}
+Version: 0.9.10
+Release: 18%{?dist}
 Summary: MinGW port of GNU Unicode string library
 License: GPL-2.0-or-later OR LGPL-3.0-or-later
 Url: http://www.gnu.org/software/libunistring/

@@ -1,7 +1,7 @@
 %global source0_hash 494abfce781418259b1e9d8888c73af4de4b6f3be36cc75d9baa8baa0f2a7a39
 
 Name:           mm-common
-Version:        1.0.8
+Version:        1.0.7
 Release:        %autorelease
 Summary:        Common build files of the C++ bindings
 

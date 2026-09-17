@@ -1,7 +1,7 @@
 %global source0_hash 21877e912a63c69253538dc8ba6ae3beb1c89f35222e8381d14320f6537cec89
 
 Name:          mg
-Version:       20260719
+Version:       20260227
 Release:       1%{?dist}
 Summary:       Tiny Emacs-like editor
 License:       LicenseRef-Fedora-Public-Domain

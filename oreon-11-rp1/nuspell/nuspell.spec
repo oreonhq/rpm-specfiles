@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           nuspell
-Version:        5.1.9
-Release:        1%{?dist}
+Version:        5.1.7
+Release:        4%{?dist}
 Summary:        Fast and safe spellchecking C++ library and command-line tool
 License:        LGPL-3.0-or-later
 URL:            https://nuspell.github.io

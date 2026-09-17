@@ -6,8 +6,8 @@
 %global srcname obs-service-source_validator
 
 Name:           osc-source_validator
-Version:        0.47
-Release:        1%{?dist}
+Version:        0.42
+Release:        3%{?dist}
 License:        GPL-2.0-or-later
 Summary:        OBS source service to validate sources
 URL:            https://github.com/openSUSE/obs-service-source_validator

@@ -3,7 +3,7 @@
 %bcond check 1
 
 Name:           kaidan
-Version:        0.16.0
+Version:        0.15.0
 Release:        %autorelease
 Summary:        A XMPP client based on KDE Framework
 License:        GPL-3.0-or-later AND MIT AND Apache-2.0 AND CC-BY-SA-4.0 AND LGPL-2.0-or-later

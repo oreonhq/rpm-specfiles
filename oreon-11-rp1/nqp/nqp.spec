@@ -1,7 +1,7 @@
 %global source0_hash 074147578bfc0d2f91a6702270517803ff4e960e9f175dfe14b00eee6febc0c6
 
 Name:           nqp
-Version:        2026.08
+Version:        2025.12
 Release:        %autorelease
 Summary:        Perl 6 compiler implementation that runs on MoarVM
 License:        Artistic-2.0

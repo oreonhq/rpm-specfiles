@@ -3,8 +3,8 @@
 %global forgeurl	https://github.com/cage-kiosk/cage
 
 Name:			cage
-Version:		0.3.1
-Release:		1%{?dist}
+Version:		0.2.1
+Release:		3%{?dist}
 Summary:		A Wayland kiosk
 
 License:		MIT

@@ -2,7 +2,7 @@
 
 Summary:       The NetBSD make(1) tool
 Name:          bmake
-Version:       20260824
+Version:       20230711
 Release:       %autorelease
 License:       BSD-3-Clause AND BSD-4-Clause-UC AND BSD-2-Clause
 URL:           https://ftp.netbsd.org/pub/NetBSD/misc/sjg/

@@ -3,7 +3,7 @@
 %global repo dde-account-faces
 
 Name:           deepin-account-faces
-Version:        1.0.19
+Version:        1.0.16
 Release:        %autorelease
 Summary:        Account faces for Linux Deepin
 # migrated to SPDX

@@ -12,8 +12,8 @@
 
 Name: keepalived
 Summary: High Availability monitor built upon LVS, VRRP and service pollers
-Version: 2.3.4
-Release: 1%{?dist}
+Version: 2.2.8
+Release: 10%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.keepalived.org/
 

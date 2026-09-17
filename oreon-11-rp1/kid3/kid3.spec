@@ -9,7 +9,7 @@
 %global __provides_exclude_from ^%{_libdir}/kid3/plugins/.*\\.so$
 
 Name:           kid3
-Version:        3.10.1
+Version:        3.9.7
 Release:        1%{?dist}
 Summary:        Efficient KDE ID3 tag editor
 

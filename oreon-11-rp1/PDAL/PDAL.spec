@@ -11,8 +11,8 @@
 
 Summary:	Point Data Abstraction Library
 Name:		PDAL
-Version:	2.10.2
-Release:	1%{?dist}
+Version:	2.9.3
+Release:	3%{?dist}
 # The code is licensed BSD except for:
 # - filters/private/csf/* and plugins/i3s/lepcc/* are ASL 2.0
 # - vendor/arbiter/*, plugins/nitf/io/nitflib.h and plugins/oci/io/OciWrapper.* are Expat/MIT

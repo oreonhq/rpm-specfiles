@@ -21,8 +21,8 @@
 %global FULLTESTS 0
 
 Name:           mpi4py
-Version:        4.1.2
-Release:        1%{?dist}
+Version:        4.1.1
+Release:        2%{?dist}
 Summary:        Python bindings of the Message Passing Interface (MPI)
 
 License:        BSD-2-Clause

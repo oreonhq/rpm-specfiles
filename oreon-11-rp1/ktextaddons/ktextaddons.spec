@@ -1,7 +1,7 @@
 %global source0_hash b52356be07215f0ace0b8e2a6df8bcd8f3572ef5c0aff89631b043b10adb0c8a
 
 Name:          ktextaddons
-Version:       2.1.2
+Version:       2.0.1
 Release:       1%{?dist}
 Summary:       Various text handling addons
 

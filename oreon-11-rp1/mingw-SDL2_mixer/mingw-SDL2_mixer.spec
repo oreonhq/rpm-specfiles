@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-SDL2_mixer
-Version:        2.8.2
-Release:        1%{?dist}
+Version:        2.8.1
+Release:        3%{?dist}
 Summary:        MinGW Windows port of Simple DirectMedia Layer's Sample Mixer Library
 
 License:        Zlib

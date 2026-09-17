@@ -2,8 +2,8 @@
 
 Name:           lxqt-menu-data
 Summary:        Menu files for LXQt Panel, Configuration Center and PCManFM-Qt/libfm-qt
-Version:        2.4.0
-Release:        1%{?dist}
+Version:        2.3.0
+Release:        2%{?dist}
 BuildArch:      noarch
 License:        LGPL-2.1-or-later
 URL:            https://lxqt-project.org/

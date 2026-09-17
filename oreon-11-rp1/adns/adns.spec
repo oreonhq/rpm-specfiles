@@ -1,8 +1,8 @@
 %global source0_hash 7138b3789b7506bd683f451d4f7d853077a91803b7b35d86ec667f0f9cd401cd
 
 Name:		adns
-Version:	1.7.0
-Release:	1%{?dist}
+Version:	1.6.1
+Release:	6%{?dist}
 
 Summary:	Advanced, easy to use, asynchronous-capable DNS client library
 

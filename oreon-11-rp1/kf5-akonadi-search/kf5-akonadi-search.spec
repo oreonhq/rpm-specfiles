@@ -11,8 +11,8 @@
 %endif
 
 Name:    kf5-%{framework}
-Version: 26.08.1
-Release: 1%{?dist}
+Version: 23.08.5
+Release: 5%{?dist}
 Summary: The Akonadi Search library and indexing agent
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

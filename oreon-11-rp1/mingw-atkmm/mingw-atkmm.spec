@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-atkmm
-Version:        2.28.5
-Release:        1%{?dist}
+Version:        2.28.4
+Release:        5%{?dist}
 Summary:        MinGW Windows C++ interface for the ATK library
 
 License:        LGPL-2.0-or-later

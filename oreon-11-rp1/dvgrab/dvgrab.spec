@@ -6,8 +6,8 @@
 
 Summary:        Utility to capture video from a DV camera
 Name:           dvgrab
-Version:        3.5.2
-Release:        1.%{date}git%{shortcommit}%{?dist}
+Version:        3.5
+Release:        39.%{date}git%{shortcommit}%{?dist}
 License:        GPL-2.0-or-later
 URL:            http://www.kinodv.org/
 Source:         https://github.com/ddennedy/dvgrab/archive/%{commit}/dvgrab-%{commit}.tar.gz

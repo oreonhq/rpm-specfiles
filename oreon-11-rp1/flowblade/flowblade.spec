@@ -11,8 +11,8 @@
 
 Name:           flowblade
 %if 0%{?usesnapshot}
-Version:        2.24.2
-Release:        1%{?dist}
+Version:        2.14.0.2
+Release:        8%{?dist}
 %else
 Version:        2.24
 Release:        4%{?dist}

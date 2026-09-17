@@ -17,7 +17,7 @@ Plan9, Windows (using Cygwin), iOS, and Emscripten.
 }
 
 Name:           chibi-scheme
-Version:        0.12.0
+Version:        0.10.0
 Release:        %autorelease
 Summary:        Minimal Scheme implementation for use as an extension language
 

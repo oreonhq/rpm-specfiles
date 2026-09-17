@@ -1,8 +1,8 @@
 %global source0_hash 80ba0d373ba2f8fdb3148aa347e8c6ad11749b8cf4a4979e37946b3425f2c8bf
 
 Name:          ckeditor
-Version:       4.25.2-lts
-Release:       1%{?dist}
+Version:       4.22.1
+Release:       9%{?dist}
 Summary:       WYSIWYG text editor to be used inside web pages
 
 # Automatically converted from old format: GPLv2+ or LGPLv2+ or MPLv1.1 - review is highly recommended.

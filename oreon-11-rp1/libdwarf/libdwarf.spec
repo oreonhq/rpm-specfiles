@@ -2,7 +2,7 @@
 
 Name:          libdwarf
 Epoch:         1
-Version:       2.3.2
+Version:       2.3.1
 Release:       %autorelease
 Summary:       Library to access the DWARF Debugging file format 
 
@@ -92,15 +92,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/dwarfdump/dwarfdump.conf
 %{_mandir}/man1/dwarfdump.1.gz
 %{_mandir}/man1/dwarfgen.1.gz
-%{_bindir}/attr_form/
-%{_bindir}/buildDW_LNAME/
-%{_bindir}/buildopstab/
-%{_bindir}/builduritable/
-%{_bindir}/checkDW_LANG/
-%{_bindir}/dwarfexample/
-%{_bindir}/gennames/
-%{_bindir}/tag_attr/
-%{_bindir}/tag_tree/
+
+
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.1-1
 - Prepare for Oreon 11 (RP1)

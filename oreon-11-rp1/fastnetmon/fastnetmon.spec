@@ -12,8 +12,8 @@
 %global  date 20220528
 
 Name:              fastnetmon
-Version:           1.2.9
-Release:           1.%{date}git%{shortcommit0}%{?dist}
+Version:           1.2.1
+Release:           32.%{date}git%{shortcommit0}%{?dist}
 
 Summary:           DDoS detection tool with sFlow, Netflow, IPFIX and port mirror support
 # Automatically converted from old format: GPLv2 - review is highly recommended.

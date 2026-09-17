@@ -3,10 +3,10 @@
 # header-only library
 %global debug_package %{nil}
 
-%global apiversion 3.2
+%global apiversion 3.0
 
 Name: mdds
-Version: 3.2.1
+Version: 3.0.0
 Release: %autorelease
 Summary: A collection of multi-dimensional data structures and indexing algorithms
 
@@ -14,6 +14,7 @@ License: MIT
 URL: https://gitlab.com/mdds/mdds
 Source0:        https://gitlab.com/mdds/mdds/-/archive/%{version}/mdds-%{version}.tar.bz2
 # https://gitlab.com/mdds/mdds/-/merge_requests/94
+Patch0:  include.patch
 
 BuildRequires: make
 BuildRequires: boost-devel

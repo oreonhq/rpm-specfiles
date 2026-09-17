@@ -3,13 +3,13 @@
 %global tarball_name xkbcommon
 
 Name:           libxkbcommon
-Version:        1.13.2
-Release:        1%{?gitdate:.%{gitdate}}%{?dist}
+Version:        1.13.1
+Release:        2%{?gitdate:.%{gitdate}}%{?dist}
 Summary:        X.Org X11 XKB parsing library
 License:        MIT AND X11 AND MIT-CMU
 URL:            http://www.x.org
 
-Source0:        https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/%{tarball_name}-%{version}.tar.gz#/libxkbcommon-1.13.2.tar.gz
+Source0:        https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/%{tarball_name}-%{version}.tar.gz#/libxkbcommon-1.13.1.tar.gz
 BuildRequires:  gcc
 BuildRequires:  git meson
 BuildRequires:  byacc flex bison

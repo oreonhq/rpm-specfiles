@@ -1,7 +1,7 @@
 %global source0_hash 32f3ff627612cd2d2d3ed8cb3d8a128f05079bdf5aa906b5c8bb5941707bd833
 
 Name:           fooyin
-Version:        0.12.6
+Version:        0.10.1
 Release:        %autorelease
 Summary:        A customizable music player
 

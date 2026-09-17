@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: MIT
 
 Name:    ibm-plex-fonts
-Version: 6.4.2
-Release: 1%{?dist}
+Version: 6.4.0
+Release: 5%{?dist}
 Summary: IBM Plex, the new IBM set of coordinated grotesque corporate fonts
 
 License: OFL-1.1

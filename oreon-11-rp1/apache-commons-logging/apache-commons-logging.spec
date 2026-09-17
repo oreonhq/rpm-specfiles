@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           apache-commons-logging
-Version:        1.4.0
+Version:        1.3.5
 Release:        %autorelease
 Summary:        Apache Commons Logging
 License:        Apache-2.0

@@ -2,8 +2,8 @@
 
 Summary: Run OCI containers with bubblewrap
 Name: bwrap-oci
-Version: 0.2
-Release: 1%{?dist}
+Version: 0.1.2
+Release: 27%{?dist}
 Source0: %{url}/archive/%{name}-%{version}.tar.gz
 License: LGPL-2.0-or-later
 URL: https://github.com/projectatomic/bwrap-oci

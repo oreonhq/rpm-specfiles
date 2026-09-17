@@ -4,7 +4,7 @@
 %global srcname JCTools
 
 Name:           jctools
-Version:        4.0.7
+Version:        4.0.5
 Release:        %autorelease
 Summary:        Java Concurrency Tools for the JVM
 License:        Apache-2.0
@@ -12,7 +12,7 @@ URL:            https://github.com/JCTools/JCTools
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/JCTools/JCTools/archive/v4.0.5/JCTools-4.0.7.tar.gz#/jctools-4.0.7.tar.gz
+Source0:        https://github.com/JCTools/JCTools/archive/v4.0.5/JCTools-4.0.5.tar.gz#/jctools-4.0.5.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -40,7 +40,7 @@ currently missing from the JDK:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n JCTools-4.0.7
+%autosetup -p1 -n JCTools-4.0.5
 
 # drop some failure-prone tests (race conditions?)
 rm jctools-core/src/test/java/org/jctools/queues/MpqSanityTestMpscCompound.java

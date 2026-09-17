@@ -1,8 +1,8 @@
 %global source0_hash 3658ac21cc33e79e72bed070454e49c543017991cb6c37f4253c85e9176869d1
 
 Name:           dhcpdump
-Version:        2.00
-Release:        1%{?dist}
+Version:        1.9
+Release:        8%{?dist}
 Summary:        Parse DHCP packets
 
 License:        BSD-2-Clause

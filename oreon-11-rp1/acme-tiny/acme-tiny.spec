@@ -9,8 +9,8 @@
 %endif
 
 Name:		acme-tiny
-Version:	5.0.3
-Release:	1%{?dist}
+Version:	5.0.1
+Release:	14%{?dist}
 Summary:	Tiny auditable script to issue, renew Let's Encrypt certificates
 
 License:	MIT

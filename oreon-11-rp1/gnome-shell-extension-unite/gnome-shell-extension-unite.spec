@@ -7,8 +7,8 @@
 %global giturl		https://github.com/hardpixel/%{gitname}
 
 Name:		gnome-shell-extension-unite
-Version:	85
-Release:	1%{?dist}
+Version:	8
+Release:	21%{?dist}
 Summary:	GNOME Shell Extension Unite by hardpixel
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

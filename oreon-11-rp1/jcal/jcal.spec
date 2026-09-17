@@ -1,8 +1,8 @@
 %global source0_hash e8983ecad029b1007edc98458ad13cd9aa263d4d1cf44a97e0a69ff778900caa
 
 Name:           jcal
-Version:        0.6.0
-Release:        1%{?dist}
+Version:        0.4.1
+Release:        33%{?dist}
 Summary:        Unix cal-like interface to libjalali
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

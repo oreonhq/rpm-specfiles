@@ -1,7 +1,7 @@
 %global source0_hash ab3525d8bad576db911d4ba1b586f303dd988660b3b8980022c1795fd574b165
 
 Name:           hyprland-protocols
-Version:        0.7.1
+Version:        0.4.0
 Release:        %autorelease
 Summary:        Wayland protocol extensions for Hyprland
 BuildArch:      noarch

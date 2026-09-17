@@ -1,8 +1,8 @@
 %global source0_hash 2fe772da383a935645ced07a07b51942ca178d38129df3bf685890bc3c1752cf
 
 Name:           mlpack
-Version:        4.8.0
-Release:        1%{?dist}
+Version:        4.6.2
+Release:        6%{?dist}
 Summary:        Fast, header-only C++ machine learning library
 
 # The source in src/mlpack/core/std_backport/ is available under 

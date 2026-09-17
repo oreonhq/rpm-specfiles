@@ -1,7 +1,7 @@
 %global source0_hash 232658736984365ad71ac76adf94d125ee0df1f570a6c69ce3a34f892be14150
 
 Name:           lmfit
-Version:        11.0
+Version:        10.0
 %global         sover 10
 Release:        %autorelease
 Summary:        Levenberg-Marquardt least-squares minimization and curve fitting

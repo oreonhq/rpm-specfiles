@@ -5,13 +5,13 @@
 Name:           jaxen
 Summary:        An XPath engine written in Java
 Epoch:          0
-Version:        2.0.6
-Release:        1%{?dist}
+Version:        1.2.0
+Release:        23%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 
 URL:            https://github.com/jaxen-xpath/jaxen
-Source0:        https://github.com/jaxen-xpath/jaxen/archive/refs/tags/v1.2.0.tar.gz#/jaxen-2.0.6.tar.gz
+Source0:        https://github.com/jaxen-xpath/jaxen/archive/refs/tags/v1.2.0.tar.gz#/jaxen-1.2.0.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

@@ -1,8 +1,8 @@
 %global source0_hash 338c6174e5c8652eaa34f956be3451f7491a4416ab489aef63151f802b00bf93
 
 Name:    liblogging
-Version: 1.0.8
-Release: 1%{?dist}
+Version: 1.0.6
+Release: 22%{?dist}
 Summary: An easy to use logging library
 License: BSD-2-Clause
 URL:     http://www.liblogging.org/

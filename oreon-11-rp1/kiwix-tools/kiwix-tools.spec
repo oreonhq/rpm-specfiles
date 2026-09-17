@@ -1,7 +1,7 @@
 %global source0_hash 07307243811d814367500209e73c3a36a7ac1096a04e8b6f608eb0727c0fed54
 
 Name: kiwix-tools
-Version: 3.8.2
+Version: 3.8.1
 Release: %autorelease
 
 License: GPL-3.0-or-later

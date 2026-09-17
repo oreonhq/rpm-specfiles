@@ -8,8 +8,8 @@
 
 Summary:	Free implementation of the server-side SMTP protocol as defined by RFC 5321
 Name:		opensmtpd
-Version:	7.9.0p0
-Release:	1%{?dist}
+Version:	7.8.0p0
+Release:	2%{?dist}
 
 License:	ISC
 URL:		http://www.opensmtpd.org/

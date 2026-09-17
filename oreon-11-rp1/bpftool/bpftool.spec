@@ -1,8 +1,8 @@
 %global source0_hash 786dd16887fa97649eb6abed42c56aa45fd4592c8bd3a7aa4d4e7ca5d1b5f2fb
 
 Name:           bpftool
-Version:        7.7.0
-Release:        1%{?dist}
+Version:        7.6.0
+Release:        3%{?dist}
 Summary:        Inspection and simple manipulation of eBPF programs and maps
 
 %global libname libbpf

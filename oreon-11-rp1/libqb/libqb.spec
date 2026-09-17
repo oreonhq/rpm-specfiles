@@ -3,8 +3,8 @@
 %bcond_with check
 
 Name:           libqb
-Version:        2.0.10
-Release:        1%{?dist}
+Version:        2.0.9
+Release:        2%{?dist}
 Summary:        Library providing high performance logging, tracing, ipc, and poll
 
 License:        LGPL-2.1-or-later

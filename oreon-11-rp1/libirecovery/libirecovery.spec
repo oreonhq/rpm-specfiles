@@ -1,7 +1,7 @@
 %global source0_hash 74448348f8a68b654015fe1952fdc4e0781db20dcf4e1d85ec97d6f91e95eb14
 
 Name:           libirecovery
-Version:        1.3.1
+Version:        1.2.0
 Release:        %autorelease
 Summary:        Library and utility to talk to iBoot/iBSS via USB
 

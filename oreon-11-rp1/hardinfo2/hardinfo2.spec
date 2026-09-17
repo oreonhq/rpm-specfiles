@@ -6,7 +6,7 @@
 %endif
 
 Name:           hardinfo2
-Version:        2.3.1
+Version:        2.2.16
 Release:        %autorelease
 Summary:        System Information and Benchmark for Linux Systems
 

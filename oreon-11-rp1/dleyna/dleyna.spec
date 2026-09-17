@@ -1,8 +1,8 @@
 %global source0_hash 39e95ff24e11610523ac14f59453c93e833f68f85af16b5badc699e8d564316c
 
 Name:    dleyna
-Version: 0.8.5
-Release: 1%{?dist}
+Version: 0.8.3
+Release: 9%{?dist}
 Summary: Services and D-Bus APIs for UPnP access
 
 License: LGPL-2.1-or-later

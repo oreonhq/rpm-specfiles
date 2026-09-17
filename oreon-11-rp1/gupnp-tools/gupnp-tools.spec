@@ -1,8 +1,8 @@
 %global source0_hash 4c92f2d1a3d454ec1f5fb05ef08ca34df9c743af64c8b5965c35884d46cb005c
 
 Name:          gupnp-tools
-Version:       0.12.4
-Release:       1%{?dist}
+Version:       0.12.2
+Release:       3%{?dist}
 Summary:       A collection of dev tools utilising GUPnP and GTK+
 
 License:       GPL-2.0-or-later

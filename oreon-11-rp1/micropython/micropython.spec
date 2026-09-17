@@ -11,8 +11,8 @@
 %global _warning_options %_warning_options -Wformat
 
 Name:           micropython
-Version:        1.29.0
-Release:        1%{?dist}
+Version:        1.27.0
+Release:        2%{?dist}
 Summary:        Implementation of Python 3 with very low memory footprint
 
 # micorpython itself is MIT

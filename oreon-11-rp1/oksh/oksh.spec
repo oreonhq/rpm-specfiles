@@ -1,7 +1,7 @@
 %global source0_hash 3b30d5a1183b829590cc020d8ab87f22d288e98dc3fdf12feb7159536beaa950
 
 Name:           oksh
-Version:        7.9
+Version:        7.8
 Release:        %autorelease
 Summary:        Portable OpenBSD ksh, based on the Public Domain Korn Shell
 

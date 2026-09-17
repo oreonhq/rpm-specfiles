@@ -10,8 +10,8 @@
 
 Name:           guayadeque
 %if 0%{?usesnapshot}
-Version:        0.7.5
-Release:        1.7.beta6.git%{shortcommit0}%{dist}
+Version:        0.6.2
+Release:        0.7.beta6.git%{shortcommit0}%{dist}
 %else
 Version:        0.7.5
 Release:        4%{?dist}

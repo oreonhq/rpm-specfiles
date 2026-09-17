@@ -1,7 +1,7 @@
 %global source0_hash b2d01e832f5debe3327726b15ef9094bfd1b1f2d47dfa3655436ef48526edfe8
 
 Name:    libcamera-apps
-Version: 1.13.0
+Version: 1.11.1
 Release: 1%{?dist}
 Summary: A small suite of libcamera-based apps
 License: BSD

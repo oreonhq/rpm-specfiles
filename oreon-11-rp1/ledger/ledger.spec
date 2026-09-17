@@ -3,12 +3,13 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:             ledger
-Version:          3.4.1
+Version:          3.3.2
 Release:          %autorelease
 Summary:          A powerful command-line double-entry accounting system
 License:          BSD-3-Clause
 URL:              https://ledger-cli.org/
 Source0:          https://github.com/ledger/ledger/archive/v%{version}.tar.gz
+Patch0:           ledger-boost190.patch
 
 BuildRequires:    boost-devel
 BuildRequires:    cmake

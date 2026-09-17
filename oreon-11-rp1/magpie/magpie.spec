@@ -11,14 +11,16 @@
 %global magpie_abi_version magpie-0
 
 Name:          magpie
-Version:       0.9.4
-Release:       1%{?dist}
+Version:       0.9.3
+Release:       6%{?dist}
 Summary:       Window manager for Budgie Desktop
 
 License:       GPL-2.0-or-later
 URL:           https://github.com/BuddiesOfBudgie/magpie
 Source0:       %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 
+Patch0:        Add-API-replacing-gsd-powers-use-of-libgnome-rr.patch
+Patch1:        Create-the-new-X11-scaling-dbus-interface-that-GSD-4.patch
 
 BuildRequires: pkgconfig(gobject-introspection-1.0) >= 1.41.0
 BuildRequires: pkgconfig(sm)

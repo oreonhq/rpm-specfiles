@@ -1,7 +1,7 @@
 %global source0_hash 387c97b373c3164ab5abbbc2b210bf94b5567057abe44ee1e8b4d4e725bd422c
 
 Name:    dosbox-staging
-Version: 0.83.0
+Version: 0.82.2
 Release: %autorelease
 Summary: Modern continuation of DOSBox with advanced features
 URL:     https://www.dosbox-staging.org/

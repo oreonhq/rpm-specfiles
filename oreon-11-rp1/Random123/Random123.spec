@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:       Random123
-Version:    1.14.0-rc2-rc2
+Version:    1.14.0
 Release:    %autorelease
 Summary:    Library of random number generators
 

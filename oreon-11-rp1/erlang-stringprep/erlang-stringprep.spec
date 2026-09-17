@@ -4,7 +4,7 @@
 %global p1_utils_ver 1.0.28
 
 Name: erlang-%{srcname}
-Version: 1.0.34
+Version: 1.0.33
 Release: %autorelease
 License: Apache-2.0 and TCL
 Summary: A framework for preparing Unicode strings to help input and comparison

@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           dtkwidget
-Version:        6.7.49
+Version:        5.7.30
 Release:        %autorelease
 Summary:        Deepin tool kit widget modules
 License:        LGPL-3.0-or-later

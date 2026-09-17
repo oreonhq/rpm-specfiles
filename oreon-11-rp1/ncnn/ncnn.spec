@@ -1,7 +1,7 @@
 %global source0_hash 7d463f1e5061facd02b8af5e792e059088695cdcfcc152c8f4892f6ffe5eab1a
 
 Name:           ncnn
-Version:        20260526
+Version:        20250916
 Release:        %autorelease
 Summary:        A high-performance neural network inference framework
 

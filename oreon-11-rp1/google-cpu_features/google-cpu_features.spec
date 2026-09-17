@@ -6,7 +6,7 @@
 ExcludeArch: s390x
 
 Name:    google-cpu_features
-Version: 0.11.0
+Version: 0.10.1
 Release: %autorelease
 Summary: A cross-platform C library to retrieve CPU features at runtime
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

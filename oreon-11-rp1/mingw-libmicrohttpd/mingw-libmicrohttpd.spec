@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-libmicrohttpd
-Version:        1.0.10
-Release:        1%{?dist}
+Version:        0.9.73
+Release:        13%{?dist}
 Summary:        MinGW package for libmicrohttpd
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

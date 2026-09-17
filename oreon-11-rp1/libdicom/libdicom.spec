@@ -1,7 +1,7 @@
 %global source0_hash 3b8c05ceb6bf667fed997f23b476dd32c3dc6380eee1998185c211d86a7b4918
 
 Name:           libdicom
-Version:        1.3.0
+Version:        1.2.0
 Release:        %autorelease
 Summary:        C library and tools for reading DICOM data sets
 

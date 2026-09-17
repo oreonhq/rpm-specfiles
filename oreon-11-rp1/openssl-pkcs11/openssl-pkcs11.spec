@@ -1,7 +1,7 @@
 %global source0_hash d25dd9cff1b623e12d51b6d2c100e26063582d25c9a6f57c99d41f2da9567086
 
-Version: 0.4.21
-Release: 1%{?dist}
+Version: 0.4.13
+Release: 4%{?dist}
 
 # Define the directory where the OpenSSL engines are installed
 %global enginesdir %{_libdir}/engines-3

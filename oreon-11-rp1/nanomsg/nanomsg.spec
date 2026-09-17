@@ -1,8 +1,8 @@
 %global source0_hash 3ffeafa9335245a23a99827e8d389bfce5100610f44ebbe4bfaf47e8192d5939
 
 Name:           nanomsg
-Version:        1.2.5
-Release:        1%{?dist}
+Version:        1.2.2
+Release:        2%{?dist}
 Summary:        Socket library that provides several common communication patterns
 
 License:        MIT

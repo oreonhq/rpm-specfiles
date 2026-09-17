@@ -1,7 +1,7 @@
 %global source0_hash a77c3ba82804668bb289362b37d181cfa7cbe47922ce099bcec87d0cc4c546c6
 
 Name:    libcamera
-Version: 0.7.2
+Version: 0.7.0
 Release: 1%{?dist}
 Summary: A library to support complex camera ISPs
 # see .reuse/dep5 and COPYING for details

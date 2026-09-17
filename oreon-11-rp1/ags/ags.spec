@@ -8,9 +8,9 @@
 
 Name: ags
 Summary: Engine for creating and running videogames of adventure (quest) genre
-Version: 3.6.2.21
+Version: 3.6.2.16
 URL:     http://www.adventuregamestudio.co.uk/site/ags/
-Release: 1%{?dist}
+Release: 3%{?dist}
 Source0: https://github.com/adventuregamestudio/ags/archive/%{fver}/ags-%{fver}.tar.gz
 Patch0: ags-use-system-libraries.patch
 Patch1: ags-build-tests-with-cxx17.patch

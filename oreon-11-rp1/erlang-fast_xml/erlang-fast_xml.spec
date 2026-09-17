@@ -4,7 +4,7 @@
 %global p1_utils_ver 1.0.28
 
 Name: erlang-%{srcname}
-Version: 1.1.60
+Version: 1.1.57
 Release: %autorelease
 License: Apache-2.0
 Summary: Fast Expat based Erlang XML parsing and manipulation library

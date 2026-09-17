@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-gdb
-Version:        17.2
-Release:        1%{?dist}
+Version:        17.1
+Release:        2%{?dist}
 Summary:        MinGW Windows port of the GDB debugger
 
 # Same License tag as the native gdb package has:

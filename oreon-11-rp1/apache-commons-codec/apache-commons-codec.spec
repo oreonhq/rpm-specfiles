@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           apache-commons-codec
-Version:        1.22.1
+Version:        1.19.0
 Release:        %autorelease
 Summary:        Implementations of common encoders and decoders
 License:        Apache-2.0

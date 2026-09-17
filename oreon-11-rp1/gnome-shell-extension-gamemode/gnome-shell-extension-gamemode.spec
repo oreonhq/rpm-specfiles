@@ -1,7 +1,7 @@
 %global source0_hash c328921048c09236c14b2bf9773cb4d82c71288aa07ce7e0781e7d154794e179
 
 Name:           gnome-shell-extension-gamemode
-Version:        21.0
+Version:        11.0
 Release:        %autorelease
 Summary:        GameMode integration for GNOME Shell
 License:        LGPL-2.1-only

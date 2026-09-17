@@ -1,7 +1,7 @@
 %global source0_hash 893e3c5a24b408ac312a0318b70f38f427f297646e323f31e79d3a06a92c1543
 
 Name:           intel-gmmlib
-Version:        22.10.2
+Version:        22.10.0
 Release:        %autorelease
 Summary:        Intel Graphics Memory Management Library
 

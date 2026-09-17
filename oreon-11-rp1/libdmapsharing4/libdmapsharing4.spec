@@ -1,8 +1,8 @@
 %global source0_hash 3659f63f29e11d6d6ae78b53d7cc6be3f3adeff9c00c67cc50ad19c6af699f7a
 
 Name: libdmapsharing4
-Version: 3.9.14
-Release: 1%{?dist}
+Version: 3.9.13
+Release: 10%{?dist}
 Summary: A DMAP client and server library
 
 License: LGPL-2.1-or-later

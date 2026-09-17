@@ -4,12 +4,13 @@
 %bcond test 0
 
 Name:           libpkgmanifest
-Version:        0.6.0
+Version:        0.5.9
 Release:        1%{?dist}
 Summary:        Library for working with RPM manifests
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/libpkgmanifest
 Source0:        https://github.com/rpm-software-management/libpkgmanifest/archive/v%{version}/%{name}-%{version}.tar.gz
+Patch0:         0001-build-Turn-compiler-warnings-into-errors-only-for-ou.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

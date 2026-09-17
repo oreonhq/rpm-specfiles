@@ -1,7 +1,7 @@
 %global source0_hash 7b653d8cb3c620cc80118184ccab9c02f7e9a4bf9d1e4b190dae2d5681a0bca4
 
 Name:           libunicode
-Version:        0.9.3
+Version:        0.7.0
 Release:        %autorelease
 Summary:        Modern C++20 Unicode Library
 License:        Apache-2.0

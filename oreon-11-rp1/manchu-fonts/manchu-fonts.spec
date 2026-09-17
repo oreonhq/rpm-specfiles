@@ -2,8 +2,8 @@
 
 # SPDX-License-Identifier: MIT
 
-Version: 2005_2005_2.006
-Release: 1%{?dist}
+Version: 2.006
+Release: 32%{?dist}
 URL:     http://sourceforge.net/projects/manchufont/
 
 %global foundry           Manchu
@@ -19,7 +19,7 @@ A Manchu OpenType (TrueType-flavored) font
 which allows you write and read Manchu script articles correctly.
 }
 
-Source0:  http://sourceforge.net/projects/manchufont/files/ManchuFont2005%20%28Obsolete%29/ManchuFont2005%20v2.006/Manchu_Font_2005_2005_2.006.zip
+Source0:  http://sourceforge.net/projects/manchufont/files/ManchuFont2005%20%28Obsolete%29/ManchuFont2005%20v2.006/Manchu_Font_2005_2.006.zip
 Source10: 66-%{fontpkgname}.conf
 
 %fontpkg

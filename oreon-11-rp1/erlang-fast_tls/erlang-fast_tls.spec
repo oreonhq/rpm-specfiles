@@ -4,7 +4,7 @@
 %global p1_utils_ver 1.0.28
 
 Name: erlang-%{srcname}
-Version: 1.1.26
+Version: 1.1.25
 Release: %autorelease
 License: Apache-2.0
 Summary: TLS / SSL native driver for Erlang / Elixir

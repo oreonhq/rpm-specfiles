@@ -6,17 +6,17 @@
 
 Summary: X.Org X11 libXvMC runtime library
 Name: libXvMC
-Version: 1.0.15
-Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.0.13
+Release: 9%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.15.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.13.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.15.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.13.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

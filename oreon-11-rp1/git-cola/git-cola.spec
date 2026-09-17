@@ -1,7 +1,7 @@
 %global source0_hash 56a0504db954bbd4b1480e1cc7bd58a82c31e857a1080cdb9bd2c664ad6ba3ab
 
 Name:           git-cola
-Version:        4.19.0
+Version:        4.17.1
 Release:        %autorelease
 Summary:        A sleek and powerful git GUI
 

@@ -1,8 +1,8 @@
 %global source0_hash d295aa20d711c313a9e229dbd15ba14026f0c1a50d57ae8b0823cc561b23745f
 
 Name: libtracefs
-Version: 1.8.3
-Release: 1%{?dist}
+Version: 1.8.1
+Release: 4%{?dist}
 License: LGPL-2.1-or-later AND GPL-2.0-or-later AND GPL-2.0-only
 Summary: Library for access kernel tracefs
 

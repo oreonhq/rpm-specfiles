@@ -1,7 +1,7 @@
 %global source0_hash b5cdb57fcbde6b39e314d7a040466a863f25625f112057e6d369a9ea5049dc1f
 
 Name:           libformfactor
-Version:        0.5.1
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Efficient computation of scattering form factors of arbitrary polyhedra
 # the library is under GPL-3.0-or-later

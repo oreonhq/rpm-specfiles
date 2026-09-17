@@ -1,7 +1,7 @@
 %global source0_hash dd3c5606375d67272097564fd1426b0ffdb3f2b83ef23c12f57ee772977b3a0d
 
 Name:          awf-gtk3
-Version:       4.2.0
+Version:       4.0.0
 Release:       1%{?dist}
 Summary:       Theme preview application for GTK 3
 Summary(fr):   Application d'aperçu de thème pour GTK 3

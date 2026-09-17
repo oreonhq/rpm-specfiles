@@ -4,8 +4,8 @@
 %global lib_version 2601.0.0
 
 Name:           abseil-cpp
-Version:        20260817.0
-Release:        1%{?dist}
+Version:        20260107.1
+Release:        5%{?dist}
 Summary:        C++ Common Libraries
 
 # The entire source is Apache-2.0, except:

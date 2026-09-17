@@ -3,8 +3,8 @@
 %global dxbc_spirv_commit 31b74bfb99c39ddaaaf6490cfce30046c38913e4
 
 Name:           dxvk-native
-Version:        3.1.1
-Release:        1%{?dist}
+Version:        2.7.1
+Release:        2%{?dist}
 Summary:        Vulkan-based D3D8~D3D11 implementation for Linux
 # dxvk-native and dxbc-spirv
 SourceLicense:  Zlib and MIT

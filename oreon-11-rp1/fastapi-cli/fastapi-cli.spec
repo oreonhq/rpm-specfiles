@@ -1,7 +1,7 @@
 %global source0_hash f2e5380ed202c862733c02ae723c5c4f4541b4f7ce964eaa373b181d8cffa091
 
 Name:           fastapi-cli
-Version:        0.0.32
+Version:        0.0.24
 Release:        %autorelease
 Summary:        Run and manage FastAPI apps from the command line with FastAPI CLI
 

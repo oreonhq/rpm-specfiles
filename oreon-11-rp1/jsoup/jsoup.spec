@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jsoup
-Version:        1.23.2
+Version:        1.21.1
 Release:        %autorelease
 Summary:        Java library for working with real-world HTML
 License:        MIT
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://github.com/jhy/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jsoup-1.23.2.tar.gz
+Source0:        https://github.com/jhy/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jsoup-1.21.1.tar.gz
 # The sources contain non-free scraped web pages as test data
 BuildRequires:  jurand
 %if %{with bootstrap}

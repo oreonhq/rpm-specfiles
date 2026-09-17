@@ -3,7 +3,7 @@
 %global __provides_exclude_from ^%{_libdir}/fcitx5/.*\\.so$
 
 Name:           fcitx5-rime
-Version:        5.1.16
+Version:        5.1.13
 Release:        %autorelease
 Summary:        RIME support for Fcitx
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

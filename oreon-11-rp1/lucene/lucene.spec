@@ -1,7 +1,7 @@
 %global source0_hash b5cac76c4a6945bdcf25857f187168147fde3402b33a6b1a3b1c00361719982c
 
 Name:           lucene
-Version:        10.5.1
+Version:        10.3.2
 Release:        %autorelease
 Epoch:          0
 Summary:        High-performance, full-featured text search engine

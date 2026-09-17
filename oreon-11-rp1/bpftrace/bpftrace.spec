@@ -9,8 +9,8 @@
 %endif
 
 Name:           bpftrace
-Version:        0.27.0
-Release:        1%{?dist}
+Version:        0.24.2
+Release:        3%{?dist}
 Summary:        High-level tracing language for Linux eBPF
 License:        Apache-2.0
 
@@ -57,7 +57,7 @@ and predecessor tracers such as DTrace and SystemTap
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n bpftrace-0.27.0
+%autosetup -p1 -n bpftrace-0.24.2
 
 
 %build

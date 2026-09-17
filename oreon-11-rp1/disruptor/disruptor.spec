@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           disruptor
-Version:        4.0.0
+Version:        3.4.4
 Release:        %autorelease
 Summary:        Concurrent Programming Framework
 License:        Apache-2.0
@@ -22,7 +22,7 @@ BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 4.0.0-29
+Obsoletes:      %{name}-javadoc < 3.4.4-29
 
 %description
 A High Performance Inter-Thread Messaging Library.

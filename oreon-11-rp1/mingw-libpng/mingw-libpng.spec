@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name:           mingw-libpng
-Version:        1.6.58
+Version:        1.6.55
 Release:        1%{?dist}
 Summary:        MinGW Windows Libpng library
 

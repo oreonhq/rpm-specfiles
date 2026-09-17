@@ -5,7 +5,7 @@ ExcludeArch: %{ix86}
 
 Name:    kget
 Summary: Download manager
-Version: 26.08.1
+Version: 25.12.3
 Release: 1%{?dist}
 
 # Automatically converted from old format: GPLv2+ and GFDL - review is highly recommended.

@@ -4,8 +4,8 @@
 %define libver 1
 
 Name: dwarves
-Version: 1.32
-Release: 1%{?dist}
+Version: 1.30
+Release: 3%{?dist}
 License: GPL-2.0-only
 Summary: Debugging Information Manipulation Tools (pahole & friends)
 URL: http://acmel.wordpress.com

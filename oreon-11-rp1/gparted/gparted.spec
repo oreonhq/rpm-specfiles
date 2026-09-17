@@ -2,7 +2,7 @@
 
 Summary:	Gnome Partition Editor
 Name:		gparted
-Version:	1.8.1
+Version:	1.7.0
 Release:	%autorelease
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later

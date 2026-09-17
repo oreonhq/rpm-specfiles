@@ -2,8 +2,8 @@
 
 Summary: Examines C/C++ source code for security flaws
 Name: flawfinder
-Version: 2.0.20
-Release: 1%{?dist}
+Version: 2.0.11
+Release: 16%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz

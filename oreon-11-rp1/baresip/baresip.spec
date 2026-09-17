@@ -2,7 +2,7 @@
 
 Summary:        Modular SIP user-agent with audio and video support
 Name:           baresip
-Version:        4.11.0
+Version:        4.6.0
 Release:        1%{?dist}
 License:        BSD-3-Clause
 URL:            https://github.com/baresip/baresip
@@ -16,7 +16,7 @@ Patch0:         https://github.com/baresip/baresip/commit/c09b9ff1d11edf9609c8f9
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  libre-devel >= 4.11.0
+BuildRequires:  libre-devel >= 4.6.0
 %if 0%{?fedora} || 0%{?rhel} >= 9
 BuildRequires:  openssl-devel
 Recommends:     %{name}-pipewire%{?_isa} = %{version}-%{release}

@@ -5,8 +5,8 @@
 
 Name:           libvpl
 Epoch:          1
-Version:        2023.4.0
-Release:        1%{?dist}
+Version:        2.16.0
+Release:        2%{?dist}
 Summary:        Intel Video Processing Library
 License:        MIT
 URL:            https://intel.github.io/libvpl/latest/index.html
@@ -96,7 +96,7 @@ rm -fr %{buildroot}%{_datadir}/vpl/licensing
 %{_libdir}/cmake/vpl/VPLConfigVersion.cmake
 %{_libdir}/libvpl.so
 %{_libdir}/pkgconfig/vpl.pc
-%{_libdir}/cmake/vpl/preview/
+
 %files samples
 %dir %{_datadir}/vpl
 %{_datadir}/vpl/examples

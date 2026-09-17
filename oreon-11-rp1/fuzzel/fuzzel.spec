@@ -1,7 +1,7 @@
 %global source0_hash 8af4e28c235d63e3de83b1507f5f3017fdfbab2e70fb486ff0c8d98ced4c7ae5
 
 Name:           fuzzel
-Version:        1.15.0
+Version:        1.14.0
 Release:        %autorelease
 Summary:        App launcher and fuzzy finder for Wayland, inspired by rofi
 

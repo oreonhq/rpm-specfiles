@@ -1,7 +1,7 @@
 %global source0_hash 6bfee304cf291bc744a70c50d136527c459242909901df7f4cf5137691b886e0
 
 Name: libkiwix
-Version: 14.2.1
+Version: 14.1.1
 Release: %autorelease
 
 License: GPL-3.0-or-later

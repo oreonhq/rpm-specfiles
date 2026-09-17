@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 Name:           dtkcommon
-Version:        6.7.49
+Version:        6.7.32
 Release:        %autorelease
 Summary:        A public project for building DTK Library
 License:        BSD-3-Clause

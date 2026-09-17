@@ -18,7 +18,7 @@
 %bcond_with pocl
 
 Name:           clblast
-Version:        1.7.0
+Version:        1.6.3
 Release:        %autorelease
 Summary:        Tuned OpenCL BLAS routines
 

@@ -1,6 +1,6 @@
 %global source0_hash 54a0e036421ef81556d5a573f13e123166e8fa9679e9a0877f5ef0c472128553
 
-Version:	1.5.0
+Version:	1.4.1
 Release: %autorelease
 %global _hardened_build 1
 

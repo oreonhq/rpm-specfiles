@@ -11,8 +11,8 @@
 
 Summary: A portable x86 assembler which uses Intel-like syntax
 Name: nasm
-Version: 3.02
-Release: 1%{?dist}
+Version: 3.01
+Release: 2%{?dist}
 License: BSD-2-Clause
 URL: http://www.nasm.us
 Source0:        https://www.nasm.us/pub/nasm/releasebuilds/%{version}/%{name}-%{version}.tar.xz

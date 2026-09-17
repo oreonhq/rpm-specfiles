@@ -3,8 +3,8 @@
 %global shortname naxsi
 
 Name:           nginx-mod-naxsi
-Version:        1.7
-Release:        1%{?dist}
+Version:        1.6
+Release:        14%{?dist}
 Summary:        nginx web application firewall module
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only

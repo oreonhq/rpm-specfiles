@@ -5,7 +5,7 @@
 %global origname sdl12-compat
 
 Name:           mingw-%{origname}
-Version:        1.2.76
+Version:        1.2.74
 Release:        1%{?dist}
 Summary:        MinGW Windows port of SDL 1.2 runtime compatibility library using SDL 2.0
 # mp3 decoder code is MIT-0/PD

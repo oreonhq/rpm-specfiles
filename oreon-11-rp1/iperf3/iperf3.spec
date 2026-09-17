@@ -1,8 +1,8 @@
 %global source0_hash 84640ea0f43831850434e50134d0554b7a94f97fb02e2488ffbe252c9fb05a56
 
 Name:           iperf3
-Version:        3.21
-Release:        1%{?dist}
+Version:        3.20
+Release:        2%{?dist}
 Summary:        Measurement tool for TCP/UDP bandwidth performance
 
 # src/cjson.{c,h} and src/net.{c,h} are MIT
@@ -13,7 +13,7 @@ Summary:        Measurement tool for TCP/UDP bandwidth performance
 # src/portable_endian.h is LicenseRef-Fedora-Public-Domain
 License:        BSD-3-Clause-LBNL AND MIT AND dtoa AND BSD-3-Clause AND NCSA AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/esnet/iperf
-Source0:        https://github.com/esnet/iperf/archive/refs/tags/3.21.tar.gz#/iperf-3.21.tar.gz
+Source0:        https://github.com/esnet/iperf/archive/refs/tags/3.20.tar.gz#/iperf-3.20.tar.gz
 BuildRequires:  libuuid-devel
 BuildRequires:  gcc
 BuildRequires:  lksctp-tools-devel

@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           cjson
-Version:        1.7.19
-Release:        1%{?dist}
+Version:        1.7.18
+Release:        6%{?dist}
 Summary:        Ultralightweight JSON parser in ANSI C
 
 # several files in tests/ are Apache-2.0 but are not packaged

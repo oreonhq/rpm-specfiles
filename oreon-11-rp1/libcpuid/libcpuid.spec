@@ -1,8 +1,8 @@
 %global source0_hash 81f2f40da5d66b8220476e116cb40bca4e6a62c0d22bdeeb8e3856cf14607007
 
 Name:           libcpuid
-Version:        0.8.2
-Release:        1%{?dist}
+Version:        0.8.1
+Release:        5%{?dist}
 Summary:        Provides CPU identification for x86 and ARM
 License:        BSD-2-Clause
 URL:            https://github.com/anrieff/libcpuid

@@ -4,8 +4,8 @@
 %define extra 0.2.0
 
 Name:           PySolFC-cardsets
-Version:        3.1
-Release:        1%{?dist}
+Version:        3.0
+Release:        6%{?dist}
 Summary:        Various cardsets for PySolFC
 License:        GPL-2.0-or-later
 URL:            https://pysolfc.sourceforge.io/

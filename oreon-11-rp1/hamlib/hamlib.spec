@@ -10,8 +10,8 @@
 %global shorthash %(c=%{githash}; echo ${c:0:10})
 
 Name:           hamlib
-Version:        4.7.2
-Release:        1%{?dist}
+Version:        4.6.5
+Release:        3%{?dist}
 Summary:        Run-time library to control radio transceivers and receivers
 
 License:        GPL-2.0-or-later and LGPL-2.0-or-later

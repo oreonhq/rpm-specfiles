@@ -3,8 +3,8 @@
 %global project_name FcitxQt5
 
 Name:           fcitx-qt5
-Version:        1.2.7
-Release:        1%{?dist}
+Version:        1.2.6
+Release:        31%{?dist}
 Summary:        Fcitx IM module for Qt5
 
 # The entire source code is GPLv2+ except

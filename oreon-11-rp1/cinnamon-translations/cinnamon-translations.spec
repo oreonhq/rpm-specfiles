@@ -3,8 +3,8 @@
 %global _trans_version 2018.12.11
 
 Name:           cinnamon-translations
-Version:        6.7.0-unstable
-Release:        1%{?dist}
+Version:        6.6.2
+Release:        3%{?dist}
 Summary:        Translations for Cinnamon and Nemo
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

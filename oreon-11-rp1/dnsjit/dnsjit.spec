@@ -5,7 +5,7 @@
 %global url_files https://www.dns-oarc.net/files/%{name}
 
 Name:           dnsjit
-Version:        1.6.0
+Version:        1.5.1
 Release:        %autorelease
 Summary:        Engine for capturing, parsing and replaying DNS
 Group:          Productivity/Networking/DNS/Utilities

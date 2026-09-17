@@ -1,7 +1,7 @@
 %global source0_hash 39f29a83744b6332948dc5a3cd30eb3e8bd30fd99b5156d7b1949626d939cf69
 
 Name:           gio-qt
-Version:        0.0.16
+Version:        0.0.12
 Release:        %autorelease
 Summary:        Gio wrapper for Qt applications 
 License:        LGPL-3.0-or-later

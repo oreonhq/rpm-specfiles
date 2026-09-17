@@ -10,7 +10,7 @@
 #global external_lilypond_fonts 1
 
 Name:    calligra 
-Version: 26.08.1
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: An integrated office suite
 

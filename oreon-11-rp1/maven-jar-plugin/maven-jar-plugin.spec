@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-jar-plugin
-Version:        3.5.1
+Version:        3.3.0
 Release:        %autorelease
 Summary:        Maven JAR Plugin
 License:        Apache-2.0
@@ -32,7 +32,7 @@ BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.5.1-17
+Obsoletes:      %{name}-javadoc < 3.3.0-17
 
 %description
 Builds a Java Archive (JAR) file from the compiled

@@ -7,7 +7,7 @@
 %global soversion 0.5
 
 Name:           libipuz
-Version:        0.5.5
+Version:        0.5.4
 Release:        %autorelease
 Summary:        Library for parsing .ipuz puzzle files
 

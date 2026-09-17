@@ -7,8 +7,8 @@
 %endif
 
 Name:           debconf
-Version:        1.5.92.git
-Release:        1%{?dist}
+Version:        1.5.91
+Release:        7%{?dist}
 Summary:        Debian configuration management system
 
 # Automatically converted from old format: BSD - review is highly recommended.

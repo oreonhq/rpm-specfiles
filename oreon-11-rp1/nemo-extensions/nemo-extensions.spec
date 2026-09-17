@@ -5,8 +5,8 @@
 %global cjs_version 6.4.0
 
 Name:           nemo-extensions
-Version:        6.7.1-unstable
-Release:        1%{?dist}
+Version:        6.6.0
+Release:        3%{?dist}
 Summary:        Extensions for Nemo
 
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
@@ -20,7 +20,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  gpgme-devel
 BuildRequires:  pkgconfig(cryptui-0.0) 
 BuildRequires:  pkgconfig(gcr-3)
-BuildRequires:  pkgconfig(libnemo-extension) >= 6.7.1-unstable
+BuildRequires:  pkgconfig(libnemo-extension) >= 6.6.0
 BuildRequires:  python3-devel
 BuildRequires:  pkgconfig(pygobject-3.0)
 BuildRequires:  gnome-common
@@ -80,7 +80,7 @@ License:     GPL-2.0-or-later
 Obsoletes:   python2-nemo < %{version}-%{release}
 Obsoletes:   python3-nemo < %{version}-%{release}
 Provides:    python3-nemo = %{version}-%{release}
-Requires:    nemo >= 6.7.1-unstable
+Requires:    nemo >= 6.6.0
 Requires:    python3-gobject-base
 
 %description -n nemo-python

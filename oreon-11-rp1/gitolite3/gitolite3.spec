@@ -10,8 +10,8 @@
 
 Name:           gitolite3
 Epoch:          1
-Version:        3.6.15
-Release:        1%{?dist}
+Version:        3.6.14
+Release:        3%{?dist}
 Summary:        Highly flexible server for git directory version tracker
 
 License:        GPL-2.0-only AND CC-BY-SA-1.0

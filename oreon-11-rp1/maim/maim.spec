@@ -1,8 +1,8 @@
 %global source0_hash 6111555224a277b3698b465c24cef758c2cb7ef101ad22f0308ecd56ccd6c1e7
 
 Name:			maim
-Version:		5.8.2
-Release:		1%{?dist}
+Version:		5.8.1
+Release:		4%{?dist}
 Summary:		Command-line screen capture tool
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

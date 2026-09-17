@@ -1,7 +1,7 @@
 %global source0_hash ff97fdfb7f561d3e6813b4f6a2145259e7c2eff43cc0e63f3fd031d0b6266032
 
 Name:          gssdp
-Version:       1.6.6
+Version:       1.6.4
 Release:       %autorelease
 Summary:       Resource discovery and announcement over SSDP
 

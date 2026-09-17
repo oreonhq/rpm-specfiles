@@ -3,13 +3,13 @@
 %global forgeurl https://github.com/libimobiledevice/libplist
 
 Name:     libplist
-Version:  2.7.0
+Version:  2.6.0
 Release:  %autorelease
 Summary:  Library for manipulating Apple Binary and XML Property Lists
 
 License:  LGPL-2.0-or-later
 URL:      https://www.libimobiledevice.org/
-Source:        https://github.com/libimobiledevice/libplist/releases/download/2.7.0/libplist-2.7.0.tar.bz2
+Source:        https://github.com/libimobiledevice/libplist/releases/download/2.6.0/libplist-2.6.0.tar.bz2
 # cython: Fix build with cython 3.1+
 Patch:        https://github.com/libimobiledevice/libplist/commit/d7fe479707af57aeedf7e41c08e7fb698cd2e2a3.patch
 
@@ -40,7 +40,7 @@ Requires: python3
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n libplist-2.7.0
+%autosetup -p1 -n libplist-2.6.0
 
 %build
 export PYTHON_VERSION="%{python3_version}"

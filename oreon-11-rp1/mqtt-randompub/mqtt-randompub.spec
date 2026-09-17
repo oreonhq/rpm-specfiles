@@ -3,7 +3,7 @@
 %global pypi_name mqtt-randompub
 
 Name:           %{pypi_name}
-Version:        0.5.1
+Version:        0.3.0
 Release:        %autorelease
 Summary:        Tool for generating MQTT messages on various topics
 

@@ -2,8 +2,8 @@
 
 Summary:        Binding to libunbound for Lua
 Name:           lua-unbound
-Version:        1.1.0
-Release:        1%{?dist}
+Version:        1.0.0
+Release:        12%{?dist}
 License:        MIT
 URL:            https://www.zash.se/luaunbound.html
 Source0:        https://code.zash.se/dl/luaunbound/luaunbound-%{version}.tar.gz

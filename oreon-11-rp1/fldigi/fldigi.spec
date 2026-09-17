@@ -4,8 +4,8 @@
 %global alpha 0
 
 Name:           fldigi
-Version:        4.2.13
-Release:        1%{?dist}
+Version:        4.2.10
+Release:        3%{?dist}
 Summary:        Digital modem program for Linux
 
 License:        GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-3.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND GPL-2.0-only AND BSL-1.0 AND MIT-0 AND LGPL-3.0-only AND GPL-1.0-only AND Apache-2.0

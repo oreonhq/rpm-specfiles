@@ -4,7 +4,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kirigami-gallery
-Version: 26.08.1
+Version: 26.08.0
 Release: 1%{?dist}
 Summary: Gallery application built using Kirigami
 License: LGPL-2.1-or-later

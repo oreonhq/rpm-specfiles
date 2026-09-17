@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 
 Name:    kiten
 Summary: Japanese Reference/Study Tool
-Version: 26.08.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND BSD-3-Clause AND CC-BY-SA-3.0 AND CC-BY-SA-4.0

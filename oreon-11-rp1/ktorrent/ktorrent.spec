@@ -11,8 +11,8 @@
 ExcludeArch: %{ix86}
 
 Name:    ktorrent
-Version: 26.08.1
-Release: 1%{?dist}
+Version: 26.04.3
+Release: 2%{?dist}
 Summary: A BitTorrent program
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND (GPL-2.0-only OR GPL-3.0-only)
@@ -67,7 +67,7 @@ BuildRequires: cmake(KF6Completion)
 BuildRequires: cmake(KF6Archive)
 
 BuildRequires: boost-devel
-%global majmin 26.08
+%global majmin 26.04
 BuildRequires: cmake(KTorrent6) >= %{majmin}
 BuildRequires: cmake(Phonon4Qt6)
 BuildRequires: pkgconfig(libmaxminddb)

@@ -7,8 +7,8 @@
 %bcond mpich %{undefined flatpak}
 
 Name:           cgnslib
-Version:        4.5.2
-Release:        1%{?dist}
+Version:        4.5.1
+Release:        3%{?dist}
 Summary:        Computational Fluid Dynamics General Notation System
 License:        Zlib
 URL:            http://www.cgns.org/

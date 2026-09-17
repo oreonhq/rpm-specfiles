@@ -5,8 +5,8 @@
 %global enable_tests 0
 
 Name:       marked
-Version:    18.0.13
-Release:    1%{?dist}
+Version:    2.0.0
+Release:    13%{?dist}
 Summary:    A markdown parser for Node.js built for speed
 License:    MIT
 URL:        https://github.com/markedjs/%{name}

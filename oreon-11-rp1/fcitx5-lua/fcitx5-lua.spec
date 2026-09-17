@@ -3,7 +3,7 @@
 %global __provides_exclude_from ^%{_libdir}/fcitx5/.*\\.so$
 
 Name:           fcitx5-lua
-Version:        5.0.18
+Version:        5.0.16
 Release:        %autorelease
 Summary:        Lua support for fcitx
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

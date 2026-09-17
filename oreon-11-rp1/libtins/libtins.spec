@@ -1,8 +1,8 @@
 %global source0_hash 6ff5fe1ada10daef8538743dccb9c9b3e19d05d028ffdc24838e62ff3fc55841
 
 Name:           libtins
-Version:        4.6
-Release:        1%{?dist}
+Version:        4.5
+Release:        9%{?dist}
 Summary:        A high-level, multiplatform C++ network packet sniffing and crafting library
 
 License:        BSD

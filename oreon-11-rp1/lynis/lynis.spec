@@ -3,8 +3,8 @@
 %global bashcompdir %(pkg-config --variable=completionsdir bash-completion)
 
 Name:           lynis
-Version:        3.1.7
-Release:        1%{?dist}
+Version:        3.1.6
+Release:        2%{?dist}
 Summary:        Security and system auditing tool
 License:        GPL-3.0-only
 URL:            https://cisofy.com/lynis/

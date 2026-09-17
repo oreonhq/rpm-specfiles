@@ -4,7 +4,7 @@
 
 Name:           deepin-wayland-protocols
 Epoch:          1
-Version:        1.10.0.32
+Version:        1.10.0.31
 Release:        %autorelease
 Summary:        Deepin Specific Protocols for Wayland
 License:        LGPL-2.1-or-later AND MIT-CMU AND BSD-3-Clause

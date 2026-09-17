@@ -7,7 +7,7 @@
 %global giturl  https://github.com/executablebooks/MyST-NB
 
 Name:           myst-nb
-Version:        1.4.0
+Version:        1.3.0
 Release:        %autorelease
 Summary:        Jupyter Notebook Sphinx reader
 

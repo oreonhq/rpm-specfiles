@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jansi
-Version:        2.4.3
+Version:        2.4.2
 Release:        %autorelease
 Summary:        Generate and interpret ANSI escape sequences in Java
 License:        Apache-2.0
@@ -11,7 +11,7 @@ URL:            https://fusesource.github.io/jansi/
 ExclusiveArch:  %{java_arches}
 
 # ./generate-tarball.sh
-Source0:        https://github.com/fusesource/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jansi-2.4.3.tar.gz
+Source0:        https://github.com/fusesource/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jansi-2.4.2.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
 # Change the location of the native artifact to where Fedora wants it
 Patch:          %{name}-jni.patch

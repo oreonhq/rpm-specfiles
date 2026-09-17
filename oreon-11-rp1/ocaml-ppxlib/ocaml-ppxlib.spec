@@ -4,7 +4,7 @@
 
 Name:           ocaml-ppxlib
 Epoch:          1
-Version:        0.38.0
+Version:        0.37.0
 Release:        %autorelease
 Summary:        Base library and tools for ppx rewriters
 

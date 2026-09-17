@@ -1,8 +1,8 @@
 %global source0_hash 0a3f07fee5fa073aa4cb0e672b27273b252ae93382f84fcb3443dffa8d8050a0
 
 Name:           numberstation
-Version:        1.5.0
-Release:        1%{?dist}
+Version:        1.4.0
+Release:        4%{?dist}
 Summary:        TOTP Authenticator application
 License:        GPL-3.0-or-later
 URL:            https://sr.ht/~martijnbraam/%{name}/

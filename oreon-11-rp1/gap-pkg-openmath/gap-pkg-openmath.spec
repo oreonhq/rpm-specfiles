@@ -13,7 +13,7 @@
 %global giturl      https://github.com/gap-packages/openmath
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        11.5.5
+Version:        11.5.3
 Release:        %autorelease
 Summary:        Import and export of OpenMath objects for GAP
 

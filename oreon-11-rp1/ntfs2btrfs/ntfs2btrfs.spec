@@ -7,7 +7,7 @@
 %bcond ix86 0
 
 Name:           ntfs2btrfs
-Version:        20260810
+Version:        20250616
 Release:        %autorelease
 Summary:        Conversion tool from NTFS to Btrfs
 

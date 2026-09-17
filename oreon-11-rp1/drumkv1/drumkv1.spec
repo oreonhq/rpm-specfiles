@@ -4,8 +4,8 @@
 
 Summary:       An old-school drum-kit sampler
 Name:          drumkv1
-Version:       1.5.0
-Release:       1%{?dist}
+Version:       0.9.91
+Release:       4%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           https://%{name}.sourceforge.io

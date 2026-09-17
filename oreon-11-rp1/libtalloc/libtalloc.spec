@@ -3,7 +3,7 @@
 %global source2_key_fpr 9147A339719518EE9011BCB54793916113084025
 
 Name:            libtalloc
-Version:         2.5.0
+Version:         2.4.4
 Release:         %autorelease
 Summary:         The talloc library
 License:         LGPL-3.0-or-later

@@ -1,12 +1,12 @@
 %global source0_hash 0e9646ff153f4445d85bfaac1b0d77d86df9c639f84888f15ee7b0f1fa892b58
 
 Name:          bolt
-Version:       0.9.11
+Version:       0.9.10
 Release:       %autorelease
 Summary:       Thunderbolt device manager
 License:       LGPL-2.1-or-later
 URL:           https://gitlab.freedesktop.org/bolt/bolt
-Source0:        https://gitlab.freedesktop.org/bolt/bolt/-/archive/0.9.11/bolt-0.9.11.tar.gz
+Source0:        https://gitlab.freedesktop.org/bolt/bolt/-/archive/0.9.10/bolt-0.9.10.tar.gz
 Patch0:        0001-test-test-unix-skip-unix-domain-socket-test.patch
 
 BuildRequires: gcc

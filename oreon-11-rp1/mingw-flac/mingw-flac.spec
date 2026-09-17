@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-flac
-Version:        1.5.0
-Release:        1%{?dist}
+Version:        1.4.3
+Release:        4%{?dist}
 Summary:        Encoder/decoder for the Free Lossless Audio Codec
 
 License:        BSD-3-Clause AND GPL-2.0-or-later AND GFDL-1.1-or-later

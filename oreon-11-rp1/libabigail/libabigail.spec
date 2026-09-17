@@ -7,8 +7,8 @@
 %global tarball_name %{name}-%{version}
 
 Name: libabigail
-Version: 2.10
-Release: 1%{?dist}
+Version: 2.9
+Release: 2%{?dist}
 Summary: Set of ABI analysis tools
 
 License: Apache-2.0 WITH LLVM-exception

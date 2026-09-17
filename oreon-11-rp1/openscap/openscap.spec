@@ -1,8 +1,8 @@
 %global source0_hash 96ebe697aafc83eb297a8f29596d57319278112467c46e6aaf3649b311cf8fba
 
 Name:           openscap
-Version:        1.4.4
-Release:        1%{?dist}
+Version:        1.4.3
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Set of open source libraries enabling integration of the SCAP line of standards
 License:        LGPL-2.1-or-later

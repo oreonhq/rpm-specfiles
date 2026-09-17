@@ -1,7 +1,7 @@
 %global source0_hash 7b5b384d5fb76a641d00af0626ed2115fb255ea371d9bef11f8500286a7b09e5
 
 Name:           chafa
-Version:        1.18.2
+Version:        1.14.5
 Release:        %autorelease
 %global sum     Image-to-text converter for terminal
 Summary:        %{sum}

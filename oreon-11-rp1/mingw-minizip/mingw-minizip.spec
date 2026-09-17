@@ -5,7 +5,7 @@
 %global pkgname minizip
 
 Name:          mingw-%{pkgname}
-Version:       4.2.2
+Version:       4.1.0
 Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 

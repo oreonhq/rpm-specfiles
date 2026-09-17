@@ -1,8 +1,8 @@
 %global source0_hash 31e40d30b5624352681a0eb4e155708679b0349e084913e419f5b3c2c668ac76
 
 Name: libgbinder
-Version: 1.1.52
-Release: 1%{?dist}
+Version: 1.1.43
+Release: 2%{?dist}
 Summary: Binder client library
 License: BSD
 URL: https://github.com/mer-hybris/libgbinder

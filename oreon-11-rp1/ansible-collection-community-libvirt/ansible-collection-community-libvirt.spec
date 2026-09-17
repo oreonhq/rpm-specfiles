@@ -11,7 +11,7 @@
 %endif
 
 Name:           ansible-collection-%{collection_namespace}-%{collection_name}
-Version:        2.3.0
+Version:        2.1.0
 Release:        1%{?dist}
 Summary:        Manages virtual machines supported by libvirt
 License:        GPL-3.0-or-later

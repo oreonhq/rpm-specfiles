@@ -1,7 +1,7 @@
 %global source0_hash f5c8fd0fcb57b1c926594d0e57f356432ee08678bef1d40d088f0830f0cbdd0a
 
 Name:           nbd
-Version:        3.27.1
+Version:        3.25
 Release:        %autorelease
 Summary:        Network Block Device user-space tools (TCP version)
 # SPDX migration

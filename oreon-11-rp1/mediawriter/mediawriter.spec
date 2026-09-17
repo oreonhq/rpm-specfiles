@@ -1,8 +1,8 @@
 %global source0_hash aa5ab3c74f227475ae1ea93adac4e62f41673411d7d08eb86f23088aa8925131
 
 Name:           mediawriter
-Version:        5.3.2
-Release:        1%{?dist}
+Version:        5.2.9
+Release:        2%{?dist}
 Summary:        Fedora Media Writer
 
 License:        LGPL-2.0-or-later AND GPL-2.0-or-later

@@ -5,8 +5,8 @@
 %global mingw_pkg_name sparsehash
 
 Name:           mingw-%{mingw_pkg_name}
-Version:        2.0.4
-Release:        1%{?dist}
+Version:        2.0.3
+Release:        16%{?dist}
 Summary:        MinGW Extremely memory-efficient C++ hash_map implementation
 
 # Automatically converted from old format: BSD - review is highly recommended.

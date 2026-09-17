@@ -3,11 +3,11 @@
 %global framework kauth
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.30
+%global majmin_ver_kf6 6.29
 
 
 Name:    kf6-%{framework}
-Version: 6.30.0
+Version: 6.29.0
 Release:        1%{?dist}
 Summary: KDE Frameworks 6 module to perform actions as privileged user
 # LGPL-2.0-or-later is also in the project's LICENSES, but is unused according to reuse.

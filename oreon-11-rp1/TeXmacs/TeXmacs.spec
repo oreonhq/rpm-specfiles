@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           TeXmacs
-Version:        2.1.5
+Version:        2.1.4
 Release:        %autorelease
 Summary:        Structured WYSIWYG scientific text editor
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

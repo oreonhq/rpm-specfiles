@@ -1,7 +1,7 @@
 %global source0_hash 4d76a358358d67c5945684f2f10b3b08fb80e924371bf3ebf8b15cd2e321d05d
 
 Name:           libraqm
-Version:        0.11.0
+Version:        0.10.1
 Release:        1%{?dist}
 License:        MIT
 Summary:        Complex text layout library

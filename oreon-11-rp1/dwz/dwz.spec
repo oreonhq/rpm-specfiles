@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name: dwz
-Version: 0.17
-Release: 1%{?dist}
+Version: 0.16
+Release: 3%{?dist}
 Summary: DWARF optimization and duplicate removal tool
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND GPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND LGPL-2.0-or-later
 URL: https://sourceware.org/dwz/

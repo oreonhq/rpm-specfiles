@@ -6,17 +6,17 @@
 
 Summary: X.Org X11 libXinerama runtime library
 Name: libXinerama
-Version: 1.1.6
-Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.1.5
+Release: 10%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT AND MIT-open-group AND X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.6.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.5.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.6.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.5.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

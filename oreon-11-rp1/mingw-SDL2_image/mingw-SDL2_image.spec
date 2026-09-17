@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-SDL2_image
-Version:        2.8.12
-Release:        1%{?dist}
+Version:        2.8.8
+Release:        4%{?dist}
 Summary:        MinGW Windows port of the Image loading library for SDL2
 
 License:        LGPL-2.0-or-later

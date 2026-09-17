@@ -1,7 +1,7 @@
 %global source0_hash 783fd8bb2ebba09713e5d7c183d454f4a4393e828af5763f768b48afabc54386
 
 Name:           homebank
-Version:        5.10.3
+Version:        5.10
 Release:        %{autorelease}
 Summary:        Free easy personal accounting for all  
 License:        GPL-2.0-or-later
@@ -30,8 +30,8 @@ Documentation files for homebank
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-# workaround for 5.10.3 difference between .tar.gz and the actual 5.10.0 dir
-# this workarnoud should be remove from 5.10.3.x onwards
+# workaround for 5.10 difference between .tar.gz and the actual 5.10.0 dir
+# this workarnoud should be remove from 5.10.x onwards
 %autosetup -n %{name}-%{version}.0
 chmod -x NEWS
 chmod -x ChangeLog

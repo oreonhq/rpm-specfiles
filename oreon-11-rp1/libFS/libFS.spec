@@ -6,8 +6,8 @@
 
 Summary: X.Org X11 libFS runtime library
 Name: libFS
-Version: 1.0.10
-Release: 1%{?dist}
+Version: 1.0.9
+Release: 9%{?dist}
 License: MIT
 URL: http://www.x.org
 

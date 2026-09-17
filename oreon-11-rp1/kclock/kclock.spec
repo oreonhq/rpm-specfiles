@@ -11,8 +11,8 @@
 ExcludeArch: %{ix86}
 
 Name:           kclock
-Version:        26.08.1
-Release:        1%{?dist}
+Version:        26.04.3
+Release:        2%{?dist}
 License:        LGPL-2.1-or-later AND LGPL-2.0-or-later AND GPL-3.0-or-later AND CC-BY-4.0 AND GPL-2.0-or-later
 Summary:        Clock app for Plasma Mobile
 Url:            https://apps.kde.org/kclock/

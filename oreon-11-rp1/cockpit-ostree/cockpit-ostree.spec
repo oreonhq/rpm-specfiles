@@ -2,7 +2,7 @@
 
 Name: cockpit-ostree
 Epoch: 1
-Version: 226
+Version: 222
 Release: 1%{?dist}
 BuildArch: noarch
 Summary: Cockpit user interface for rpm-ostree

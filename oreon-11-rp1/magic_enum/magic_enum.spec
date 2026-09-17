@@ -7,7 +7,7 @@ Magic Enum is a header-only C++17 library that provides static reflection for
 enums, working with any enum type without any macro or boilerplate code.}
 
 Name:           magic_enum
-Version:        0.9.8
+Version:        0.9.5
 Release:        %autorelease
 Summary:        Static reflection for enums for modern C++
 

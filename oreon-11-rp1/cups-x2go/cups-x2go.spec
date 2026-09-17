@@ -1,8 +1,8 @@
 %global source0_hash ee0f80775a69ae8af360d8ef33ea66fd60ed720cef6e793afdacf748dad4caec
 
 Name:           cups-x2go
-Version:        3.0.1.4
-Release:        1%{?dist}
+Version:        3.0.1.3
+Release:        25%{?dist}
 Summary:        CUPS backend for printing from X2Go
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

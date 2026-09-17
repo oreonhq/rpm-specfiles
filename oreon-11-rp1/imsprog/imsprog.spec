@@ -1,7 +1,7 @@
 %global source0_hash 7ab6057f826402381e1298602e2c53065e7511fe1c304e9569bf7daa92f9fd08
 
 Name: imsprog
-Version: 1.9.1
+Version: 1.8.2
 Release: 1%dist
 
 Summary: I2C, SPI and MicroWire EEPROM/Flash chip programmer for CH341a/CH347t devices

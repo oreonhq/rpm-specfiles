@@ -3,8 +3,8 @@
 # SPDX-License-Identifqier: MIT
 %global forgeurl https://github.com/mitradranirban/fonts-mukti
 
-Version:   3.5.0
-Release:   1%{?dist}
+Version:   3.4.3
+Release:   5%{?dist}
 
 %forgemeta
 

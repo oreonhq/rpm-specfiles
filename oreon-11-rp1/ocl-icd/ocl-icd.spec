@@ -1,13 +1,13 @@
 %global source0_hash 1a302b71b7304cca5a36f69d017b1af2b762cc4c2dd1c0c0e2fc1933db25c9cc
 
 Name:           ocl-icd
-Version:        2.3.5
+Version:        2.3.4
 Release:        %autorelease
 Summary:        OpenCL Library (Installable Client Library) Bindings
 License:        BSD-2-Clause
 URL:            https://github.com/OCL-dev/%{name}/
 
-Source0:        https://github.com/OCL-dev/ocl-icd//archive/refs/tags/v2.3.4/ocl-icd-2.3.5.tar.gz#/ocl-icd-2.3.5.tar.gz
+Source0:        https://github.com/OCL-dev/ocl-icd//archive/refs/tags/v2.3.4/ocl-icd-2.3.4.tar.gz#/ocl-icd-2.3.4.tar.gz
 
 BuildRequires:  asciidoc
 BuildRequires:  automake

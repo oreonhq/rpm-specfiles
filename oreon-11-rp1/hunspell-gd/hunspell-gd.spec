@@ -8,11 +8,11 @@
 
 Name: hunspell-gd
 Summary: Scots Gaelic hunspell dictionaries
-Version: 26.8.0.3
-Release: 1%{?dist}
+Version: 25.2.3
+Release: 29%{?dist}
 License: GPL-2.0-or-later AND GPL-3.0-or-later
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/gd_GB
-Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_26.8.0.3.orig.tar.xz#/libreoffice-dictionaries-26.8.0.3.tar.xz
+Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
 
 Requires: hunspell-filesystem

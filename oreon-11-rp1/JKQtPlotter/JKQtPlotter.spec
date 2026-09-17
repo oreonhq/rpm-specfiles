@@ -7,7 +7,7 @@
 %bcond_without qt5
 
 Name:           JKQtPlotter
-Version:        5.0.0-beta2-beta2
+Version:        5.0.0
 Release:        %autorelease -p -s %{gitdate}git%{shortcommit}
 Summary:        An extensive Qt6 Plotter framework
 License:        LGPL-2.1-or-later AND OFL-1.1

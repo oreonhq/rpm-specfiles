@@ -11,8 +11,8 @@
 %global modulename mysql
 
 Name:           mysql-selinux
-Version:        1.0.18
-Release:        1%{?dist}
+Version:        1.0.14
+Release:        3%{?dist}
 
 License:        GPL-3.0-only
 URL:            https://github.com/devexp-db/mysql-selinux

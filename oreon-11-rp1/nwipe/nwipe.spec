@@ -1,7 +1,7 @@
 %global source0_hash 1038386b0c745ce418a43bf09ecf3a4ff17072961f4a3be0e940dfa45b10e9e4
 
 Name:           nwipe
-Version:        0.42
+Version:        0.39
 Release:        %autorelease
 Summary:        Securely erase disks using a variety of recognized methods
 

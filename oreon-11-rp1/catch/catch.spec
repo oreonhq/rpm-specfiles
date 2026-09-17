@@ -1,7 +1,7 @@
 %global source0_hash be23a52b85cf04cd9587612147a10b023d59ed9757fa1843cc99e615d6c0893c
 
 Name:           catch
-Version:        3.16.0
+Version:        3.15.1
 Release:        1%{?dist}
 Summary:        Modern C++ unit test and micro-benchmark framework
 License:        BSL-1.0

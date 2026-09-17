@@ -3,7 +3,7 @@
 %global repo dde-polkit-agent
 
 Name:           deepin-polkit-agent
-Version:        6.0.24
+Version:        6.0.7
 Release:        %autorelease
 Summary:        Deepin Polkit Agent
 License:        GPL-3.0-or-later

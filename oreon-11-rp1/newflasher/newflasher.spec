@@ -1,7 +1,7 @@
 %global source0_hash 3d20e7c35231dff2fc9282e59c1ece7a89a9243657e6399bdd6dd530f1588a63
 
 Name:           newflasher
-Version:        60
+Version:        59
 Release:        %autorelease
 Summary:        Flash tool for new Sony flash tool protocol (Xperia XZ Premium and further)
 

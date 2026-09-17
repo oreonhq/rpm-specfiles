@@ -2,8 +2,8 @@
 
 # SPDX-License-Identifier: MIT
 
-Version: 2.003R
-Release: 1%{?dist}
+Version: 2.003
+Release: 5%{?dist}
 URL:     https://github.com/adobe-fonts/source-han-serif/
 
 %global foundry           Adobe

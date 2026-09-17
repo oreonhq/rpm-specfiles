@@ -1,7 +1,7 @@
 %global source0_hash 63d42eb63fe48198b39344af49949e5e424cc62ce8d722781fdad4a4fa3426e6
 
 Name: bitmap
-Version: 1.1.2
+Version: 1.1.1
 Release: %autorelease
 Summary: Bitmaps editor and converter utilities for the X Window System
 Url: http://www.x.org

@@ -1,7 +1,7 @@
 %global source0_hash f29590054abfc12dd8a3249a8356496b12e08a30fc8a723dd781f7742f6f37eb
 
 Name:           8088_bios
-Version:        1.0.2
+Version:        0.9.9
 Release:        %autorelease
 Summary:        BIOS for Intel 8088 based computers
 

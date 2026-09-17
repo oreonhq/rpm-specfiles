@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-orc
-Version:        0.4.44
-Release:        1%{?dist}
+Version:        0.4.40
+Release:        4%{?dist}
 Summary:        Cross compiled Oil Run-time Compiler
 
 # Automatically converted from old format: BSD - review is highly recommended.

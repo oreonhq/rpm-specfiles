@@ -2,7 +2,7 @@
 
 Name:          lxqt-config
 Summary:       Config tools for LXQt desktop suite
-Version:       2.4.0
+Version:       2.3.1
 Release:       1%{?dist}
 License:       LGPL-2.1-only
 URL:           https://lxqt-project.org/

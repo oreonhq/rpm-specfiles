@@ -1,8 +1,8 @@
 %global source0_hash 74eacb0eb944db6d32f3e97ba9243e76fda3a99539a911ac1ee6fae8393bb0c6
 
 Name:           fips
-Version:        3.5.0
-Release:        1%{?dist}
+Version:        3.4.0
+Release:        22%{?dist}
 Summary:        OpenGL-based FITS image viewer
 License:        LGPL-3.0-or-later
 Url:            https://github.com/matwey/fips3

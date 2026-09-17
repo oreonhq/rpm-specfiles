@@ -1,8 +1,8 @@
 %global source0_hash 5c5eb1bfb35c2f7bf688852979e722a2aa42455b2a6c46623fcdbb6e6c5715da
 
 Name:           fonts-compare
-Version:        1.7.0
-Release:        1%{?dist}
+Version:        1.6.0
+Release:        3%{?dist}
 Summary:        Tool to compare fonts for a language
 
 License:        GPL-2.0-or-later

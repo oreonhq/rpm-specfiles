@@ -3,7 +3,7 @@
 %bcond_without docs
 
 Name:     open62541
-Version:  1.5.8
+Version:  1.5.0
 Release:  1%{?dist}
 Summary:  OPC UA implementation
 License:  MPL-2.0

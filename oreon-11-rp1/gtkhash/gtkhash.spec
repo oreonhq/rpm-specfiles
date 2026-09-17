@@ -13,8 +13,8 @@
 %bcond caja %{undefined flatpak}
 
 Name:           gtkhash
-Version:        1.5
-Release:        1%{?dist}
+Version:        1.4
+Release:        15%{?dist}
 Summary:        GTK+ utility for computing message digests or checksums
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -49,10 +49,10 @@ BuildRequires: make
 Provides:       gtkhash3 = %{version}-%{release}
 Obsoletes:      gtkhash3 < 1.1.1
 %if %{without nautilus}
-Obsoletes:      %{name}-nautilus <= 1.5
+Obsoletes:      %{name}-nautilus <= 1.4
 %endif
 %if %{without nemo}
-Obsoletes:      %{name}-nemo <= 1.5
+Obsoletes:      %{name}-nemo <= 1.4
 %endif
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval

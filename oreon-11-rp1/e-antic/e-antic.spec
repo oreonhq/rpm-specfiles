@@ -3,7 +3,7 @@
 %global giturl  https://github.com/flatsurf/e-antic
 
 Name:           e-antic
-Version:        2.1.1
+Version:        2.1.0
 Release:        %autorelease
 Summary:        Real Embedded Algebraic Number Theory In C
 

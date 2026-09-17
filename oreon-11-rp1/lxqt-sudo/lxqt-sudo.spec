@@ -1,8 +1,8 @@
 %global source0_hash 6d71440f299f6ffc76b94821f85be9a6bca202292b821498e122d98fad473479
 
 Name:          lxqt-sudo
-Version:       2.4.0
-Release:       1%{?dist}
+Version:       2.3.0
+Release:       2%{?dist}
 Summary:       GUI frontend for sudo/su
 License:       LGPL-2.1-only
 URL:           https://lxqt-project.org/

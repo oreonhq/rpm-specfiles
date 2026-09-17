@@ -1,7 +1,7 @@
 %global source0_hash 0937b21cd7d0c600e907871784181a2d152a6f8a619ff092d760c26f796e4315
 
 Name: libzim
-Version: 9.8.2
+Version: 9.4.1
 Release: %autorelease
 
 License: GPL-2.0-only AND Apache-2.0 AND BSD-3-Clause

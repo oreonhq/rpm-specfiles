@@ -4,7 +4,7 @@
 %global __provides_exclude_from ^%{_qt5_plugindir}/.*\.so$
 
 Name:           deepin-qt5integration
-Version:        6.7.49
+Version:        5.7.5
 Release:        %autorelease
 Summary:        Qt platform theme integration plugins for DDE
 License:        LGPL-3.0-or-later

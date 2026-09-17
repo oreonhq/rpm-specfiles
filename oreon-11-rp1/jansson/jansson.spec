@@ -1,17 +1,17 @@
 %global source0_hash c739578bf6b764aa0752db9a2fdadcfe921c78f1228c7ec0bb47fa804c55d17b
 
 %global forgeurl https://github.com/akheron/jansson
-Version:        2.15.1
+Version:        2.14
 %forgemeta
 
 Name:		jansson
-Release:	1%{?dist}
+Release:	4%{?dist}
 Summary:	C library for encoding, decoding and manipulating JSON data
 
 # src/lookup3.h is LicenseRef-Fedora-Public-Domain
 License:	MIT AND LicenseRef-Fedora-Public-Domain
 URL:		%{forgeurl}
-Source0:        https://github.com/akheron/jansson/archive/refs/tags/v2.14.tar.gz#/jansson-2.15.1.tar.gz
+Source0:        https://github.com/akheron/jansson/archive/refs/tags/v2.14.tar.gz#/jansson-2.14.tar.gz
 
 # Fix the tests.
 # Upstream commit 0677666f65b988b2dd44d02966a08fea490d5883

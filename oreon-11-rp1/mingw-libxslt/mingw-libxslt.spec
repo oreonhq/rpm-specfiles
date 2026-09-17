@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-libxslt
-Version:        1.1.45
-Release:        1%{?dist}
+Version:        1.1.43
+Release:        5%{?dist}
 Summary:        MinGW Windows Library providing the Gnome XSLT engine
 
 License:        MIT
@@ -12,7 +12,8 @@ URL:            https://gitlab.gnome.org/GNOME/libxslt
 Source0:        https://gitlab.gnome.org/GNOME/libxslt/-/archive/v%{version}/libxslt-v%{version}.tar.bz2
 # Proposed fix for CVE-2025-7424
 # https://gitlab.gnome.org/GNOME/libxslt/-/issues/139#note_2479564
-
+Patch0:         gnome-libxslt-bug-139-apple-fix.patch
+# Backport fix for CVE-2025-11731
 Patch1:         https://gitlab.gnome.org/GNOME/libxslt/-/commit/fe508f201efb9ea37bfbe95413b8b28251497de3.patch
 # Backport proposed fix for CVE-2025-10911
 Patch2:         https://gitlab.gnome.org/GNOME/libxslt/-/merge_requests/77.patch

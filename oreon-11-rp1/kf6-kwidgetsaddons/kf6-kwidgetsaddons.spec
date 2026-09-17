@@ -3,10 +3,10 @@
 %global		framework kwidgetsaddons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.30
+%global majmin_ver_kf6 6.29
 
 Name:		kf6-%{framework}
-Version:	6.30.0
+Version:	6.29.0
 Release:        1%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtWidgets
 License:	BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later

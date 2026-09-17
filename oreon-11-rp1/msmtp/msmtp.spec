@@ -1,7 +1,7 @@
 %global source0_hash 2dfe1dbbb397d26fe0b0b6b2e9cd2efdf9d72dd42d18e70d7f363ada2652d738
 
 Name:		msmtp
-Version:	1.8.34
+Version:	1.8.25
 Release:	%autorelease
 Summary:	SMTP client
 License:	GPL-3.0-or-later

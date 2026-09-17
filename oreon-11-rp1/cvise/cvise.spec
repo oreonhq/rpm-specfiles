@@ -1,8 +1,8 @@
 %global source0_hash 7e3e473843aa79afb98f581d2e100efa47db80df3a961565b691d7b4a4ebd14b
 
 Name: cvise
-Version: 2.12.0
-Release: 1%{?dist}
+Version: 2.11.0
+Release: 2%{?dist}
 Summary: Super-parallel Python port of the C-Reduce
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
@@ -70,9 +70,6 @@ export CXXFLAGS="$RPM_OPT_FLAGS -Wno-error=restrict"
 %{_libexecdir}/cvise/strlex
 %{_libexecdir}/cvise/topformflat
 %{_datadir}/cvise
-%{_libexecdir}/cvise/pass_groups/
-%{_libexecdir}/cvise/passes/
-%{_libexecdir}/cvise/tests/
-%{_libexecdir}/cvise/utils/
+
 %changelog
 %autochangelog

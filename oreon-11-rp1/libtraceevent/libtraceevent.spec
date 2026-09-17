@@ -6,8 +6,8 @@
 #%%global shortcommit %%(c=%%{commit}; echo ${c:0:7})
 
 Name: libtraceevent
-Version: 1.9.0
-Release: 1%{?dist}
+Version: 1.8.4
+Release: 5%{?dist}
 License: LGPL-2.1-only AND LGPL-2.1-or-later AND GPL-2.0-only AND GPL-2.0-or-later
 Summary: Library to parse raw trace event formats
 

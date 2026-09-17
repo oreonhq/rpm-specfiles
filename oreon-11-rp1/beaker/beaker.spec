@@ -5,8 +5,8 @@
 %bcond docs %[ 0%{?fedora} || 0%{?rhel} < 10 ]
 
 Name:           %{upstream_name}
-Version:        29.3
-Release:        1%{?dist}
+Version:        29.2
+Release:        6%{?dist}
 Summary:        Full-stack software and hardware integration testing system
 License:        GPL-2.0-or-later
 URL:            https://beaker-project.org/

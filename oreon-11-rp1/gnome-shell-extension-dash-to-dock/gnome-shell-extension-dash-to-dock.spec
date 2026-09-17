@@ -9,7 +9,7 @@
 #%%global commit_date 20240320
 
 Name:           gnome-shell-extension-dash-to-dock
-Version:        106
+Version:        103
 Release:        %autorelease
 #Release:        %%autorelease -e %%{commit_date}git%%{commit_short}
 Summary:        Dock for the Gnome Shell by micxgx@gmail.com
@@ -17,9 +17,9 @@ Summary:        Dock for the Gnome Shell by micxgx@gmail.com
 License:        GPL-2.0-or-later
 URL:            https://micheleg.github.io/dash-to-dock
 %if 0%{?commit:1}
-Source0:        https://github.com/micheleg/dash-to-dock/archive/refs/tags/%{commit}.tar.gz#/gnome-shell-extension-dash-to-dock-106.tar.gz
+Source0:        https://github.com/micheleg/dash-to-dock/archive/refs/tags/%{commit}.tar.gz#/gnome-shell-extension-dash-to-dock-103.tar.gz
 %else
-Source0:        https://github.com/micheleg/dash-to-dock/archive/extensions.gnome.org-v103.tar.gz#/gnome-shell-extension-dash-to-dock-106.tar.gz
+Source0:        https://github.com/micheleg/dash-to-dock/archive/extensions.gnome.org-v103.tar.gz#/gnome-shell-extension-dash-to-dock-103.tar.gz
 %endif
 Source1:        stylesheet.css
 

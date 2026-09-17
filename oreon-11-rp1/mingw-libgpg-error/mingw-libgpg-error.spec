@@ -3,8 +3,8 @@
 %?mingw_package_header
 
 Name:           mingw-libgpg-error
-Version:        1.61
-Release:        1%{?dist}
+Version:        1.55
+Release:        2%{?dist}
 Summary:        MinGW Windows GnuPGP error library
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.

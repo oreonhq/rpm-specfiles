@@ -3,8 +3,8 @@
 %global soversion 10
 
 Name:           libopenshot-audio
-Version:        1.0.0
-Release:        1%{?dist}
+Version:        0.5.0
+Release:        2%{?dist}
 Summary:        Audio library used by OpenShot
 
 License:        GPL-3.0-or-later

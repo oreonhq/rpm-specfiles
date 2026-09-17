@@ -15,13 +15,13 @@
 %bcond bootstrap 0
 
 Name:           libheif
-Version:        1.23.4
+Version:        1.21.2
 Release:        %autorelease
 Summary:        HEIF and AVIF file format decoder and encoder
 
 License:        LGPL-3.0-or-later and MIT
 URL:            https://github.com/strukturag/libheif
-Source0:        https://github.com/strukturag/libheif/archive/refs/tags/v1.21.2.tar.gz#/libheif-1.23.4.tar.gz
+Source0:        https://github.com/strukturag/libheif/archive/refs/tags/v1.21.2.tar.gz#/libheif-1.21.2.tar.gz
 Patch0:         libheif-no-hevc-tests.patch
 
 BuildRequires:  cmake

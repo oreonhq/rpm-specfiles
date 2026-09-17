@@ -1,8 +1,8 @@
 %global source0_hash 85b9b104d256c985e6e244b4227d447897fac429071cc114e5cc819dae848852
 
 Name: Box2D
-Version:  3.1.1
-Release:  1%{?dist}
+Version:  2.4.2
+Release:  7%{?dist}
 Summary: A 2D Physics Engine for Games
 
 License: Zlib

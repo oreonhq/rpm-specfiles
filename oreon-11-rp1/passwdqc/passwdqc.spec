@@ -2,8 +2,8 @@
 
 Summary: A password/passphrase strength checking and policy enforcement toolset
 Name: passwdqc
-Version: 2.1.0
-Release: 1%{?dist}
+Version: 2.0.3
+Release: 9%{?dist}
 # Two manual pages (pam_passwdqc.8 and passwdqc.conf.5) are under the
 # 3-clause BSD-style license as specified within the files themselves.
 # The rest of the files in this package fall under the terms of

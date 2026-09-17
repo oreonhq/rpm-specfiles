@@ -1,7 +1,7 @@
 %global source0_hash 4690a35aa933b192751dd590a6b4f53fef3aa950246371112ad6e872f6b26ecb
 
 Name:           kdiff3
-Version:        1.12.6
+Version:        1.12.4
 Release:        1%{?dist}
 Summary:        Compare + merge 2 or 3 files or directories
 

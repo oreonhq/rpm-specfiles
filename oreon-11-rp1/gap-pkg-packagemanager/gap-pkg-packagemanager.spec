@@ -5,7 +5,7 @@
 %global giturl      https://github.com/gap-packages/PackageManager
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.6.4
+Version:        1.6.3
 Release:        %autorelease
 Summary:        Basic package manager for GAP
 

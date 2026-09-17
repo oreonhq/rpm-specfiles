@@ -1,7 +1,7 @@
 %global source0_hash 754fac793547789e52b8b449416a2d141fb2e473c77cc7fffb8b20870a846daa
 
 Name: fheroes2
-Version: 1.1.17
+Version: 1.1.14
 Release: %autorelease
 Summary: Free implementation of the popular game engine
 # ./src/thirdparty/libsmacker is under LGPL-2.1-or-later

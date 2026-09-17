@@ -1,7 +1,7 @@
 %global source0_hash 7a2ccafc87803b6c42009019e0786cb1307f492c2d61d2fcb0be5dcfdd0049da
 
 Name:           bfs
-Version:        4.1.4
+Version:        4.1
 Release:        %autorelease
 Summary:        A breadth-first version of the UNIX find command
 

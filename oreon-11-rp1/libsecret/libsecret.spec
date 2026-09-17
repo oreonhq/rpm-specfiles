@@ -7,7 +7,7 @@
 %bcond_without gnutls
 
 Name:           libsecret
-Version:        0.21.8.2
+Version:        0.21.7
 %global release_version 0.21
 Release:        %autorelease
 Summary:        Library for storing and retrieving passwords and other secrets

@@ -1,7 +1,7 @@
 %global source0_hash 209b417f506a38f5d61d01537e3236d4570db44c21e589afb3a76df74a9faac3
 
 Name:           oscillatord
-Version:        3.10.0
+Version:        3.8.4
 Release:        %autorelease
 Summary:        Daemon for disciplining an oscillator
 

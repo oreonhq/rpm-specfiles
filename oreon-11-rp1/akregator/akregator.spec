@@ -5,7 +5,7 @@
 
 Name:    akregator
 Summary: Feed Reader
-Version: 26.08.1
+Version: 26.04.3
 Release: 1%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later

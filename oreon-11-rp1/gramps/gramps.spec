@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           gramps
-Version:        6.0.8
-Release:        1%{?dist}
+Version:        6.0.6
+Release:        2%{?dist}
 Summary:        Genealogical Research and Analysis Management Programming System
 
 License: GPL-2.0-or-later

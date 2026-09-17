@@ -1,8 +1,8 @@
 %global source0_hash 666482b6ed1d4ca4317db2345c46dc0fc54a39c8cfd14e34f1a83595864b0ae4
 
 Name:           lua-sql
-Version:        2.8.1
-Release:        1%{?dist}
+Version:        2.5.0
+Release:        15%{?dist}
 Summary:        Database connectivity for the Lua programming language
 
 License:        MIT

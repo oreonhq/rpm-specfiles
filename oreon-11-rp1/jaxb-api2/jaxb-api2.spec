@@ -1,7 +1,7 @@
 %global source0_hash 27c8f940f86f47cbc4e8e28a47645fde957ee0491ace4389ac4c1943077fa79e
 
 Name:           jaxb-api2
-Version:        4.0.0-RC3
+Version:        2.3.3
 Release:        %autorelease
 Summary:        Jakarta XML Binding API
 License:        BSD
@@ -17,7 +17,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 
 # TODO Remove in Fedora 47
-Obsoletes:      %{name}-javadoc < 4.0.0-RC3-15
+Obsoletes:      %{name}-javadoc < 2.3.3-15
 
 %description
 The Jakarta XML Binding provides an API and tools that automate the mapping

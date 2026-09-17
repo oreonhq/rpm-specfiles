@@ -5,7 +5,7 @@
 %endif
 
 Name:           hmat-oss
-Version:        1.11.1
+Version:        1.11.0
 Release:        %autorelease
 Summary:        A hierarchical matrix C/C++ library
 License:        GPL-2.0-or-later

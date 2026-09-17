@@ -3,7 +3,7 @@
 %global source2_key_fpr 4E421C6554B89766DF9B7A37E12AB207C8755905
 
 Name:    haruna
-Version: 1.8.1
+Version: 1.7.1
 Release: %autorelease
 Summary: Open source video player built with Qt/QML and libmpv
 

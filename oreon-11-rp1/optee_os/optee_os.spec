@@ -4,8 +4,8 @@
 %global debug_package %{nil}
 
 Name:      optee_os
-Version:   4.10.0-rc1
-Release:   1%{?dist}
+Version:   4.9.0
+Release:   2%{?dist}
 Summary:   Trusted side of the TEE
 
 # The TEE core of optee_os is provided under the BSD 2-Clause license. But

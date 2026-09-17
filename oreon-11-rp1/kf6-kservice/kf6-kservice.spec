@@ -3,11 +3,11 @@
 %global framework kservice
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.30
+%global majmin_ver_kf6 6.29
 
 Name:    kf6-%{framework}
 Summary: KDE Frameworks 6 Tier 3 solution for advanced plugin and service introspection
-Version: 6.30.0
+Version: 6.29.0
 Release:        1%{?dist}
 
 # The following licenses are in the LICENSES folder but go unused: GPL-2.0-only, GPL-2.0-or-later, GPL-3.0-only, LicenseRef-KDE-Accepted-GPL

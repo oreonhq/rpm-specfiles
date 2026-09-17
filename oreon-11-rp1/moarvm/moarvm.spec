@@ -1,7 +1,7 @@
 %global source0_hash 23291b5fa7557c80d4ad3254d8e8bd51b3380989a1575b3d264dbe72a1cad1c0
 
 Name:           moarvm
-Version:        2026.08
+Version:        2025.12
 Release:        %autorelease
 Summary:        Metamodel On A Runtime Virtual Machine
 License:        Artistic-2.0

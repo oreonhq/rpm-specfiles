@@ -1,7 +1,7 @@
 %global source0_hash bbf67d51446a98eb8fc98c9c6de49a2605c709d3a14ba39f09a09f8e57527099
 
 Name:		CharLS
-Version:	2.4.4
+Version:	2.4.3
 Release:	%autorelease
 Summary:	An optimized implementation of the JPEG-LS standard
 License:	BSD-3-Clause

@@ -1,7 +1,7 @@
 %global source0_hash c07aeb35cccf959ec1dc2e8f9a71a9d8bdd643879ef0a8d37926499541da1685
 
 Name:           geoclue2
-Version:        2.8.2
+Version:        2.8.0
 Release:        %autorelease
 Summary:        Geolocation service
 

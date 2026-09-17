@@ -5,7 +5,7 @@
 
 Name:           elementary-screenshot
 Summary:        Screenshot tool designed for elementary
-Version:        8.0.1-debian-debian
+Version:        8.0.1
 Release:        %autorelease
 License:        LGPL-3.0-only
 

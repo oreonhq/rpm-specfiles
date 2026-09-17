@@ -5,14 +5,14 @@
 %global syn syn123
 
 Name: mpg123
-Version: 1.33.7
+Version: 1.32.10
 Release: %autorelease
 
 Summary: Real time MPEG 1.0/2.0/2.5 audio player/decoder for layers 1, 2 and 3
 License: GPL-2.0-or-later
 URL: https://mpg123.org
 
-Source0:        https://mpg123.org/download/mpg123-1.33.7.tar.bz2
+Source0:        https://mpg123.org/download/mpg123-1.32.10.tar.bz2
 
 BuildRequires: autoconf
 BuildRequires: automake

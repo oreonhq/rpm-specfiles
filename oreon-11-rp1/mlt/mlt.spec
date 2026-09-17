@@ -29,8 +29,8 @@
 %bcond_with  ndi
 
 Name:           mlt
-Version:        7.40.0
-Release:        1%{?dist}
+Version:        7.36.1
+Release:        4%{?dist}
 Summary:        Toolkit for broadcasters, video editors, media players, transcoders
 
 # mlt/src/win32/fnmatch.{c,h} are BSD-licensed.

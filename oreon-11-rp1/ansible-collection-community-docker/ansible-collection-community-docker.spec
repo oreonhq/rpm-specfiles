@@ -9,7 +9,7 @@
 %endif
 
 Name:           ansible-collection-community-docker
-Version:        5.3.0
+Version:        5.0.6
 Release:        1%{?dist}
 Summary:        Ansible modules and plugins for working with Docker
 

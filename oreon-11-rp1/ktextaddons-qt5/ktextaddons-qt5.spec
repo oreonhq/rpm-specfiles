@@ -1,8 +1,8 @@
 %global source0_hash 64b80602e84b25e9164620af3f6341fa865b85e826ab8f5e02061ae24a277b20
 
 Name:          ktextaddons-qt5
-Version:       2.1.2
-Release:       1%{?dist}
+Version:       1.5.4
+Release:       6%{?dist}
 Summary:       Various text handling addons
 
 License:       CC0-1.0 AND LGPL-2.0-or-later AND GPL-2.0-or-later AND BSD-3-Clause

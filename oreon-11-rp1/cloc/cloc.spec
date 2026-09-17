@@ -1,7 +1,7 @@
 %global source0_hash 8099b6275c124f662690f2db3581cd2ad4e9ad4e08332288719838ded00d1da5
 
 Name:           cloc
-Version:        2.10
+Version:        2.08
 Release:        1%{?dist}
 Summary:        Count lines of code
 License:        GPL-2.0-or-later

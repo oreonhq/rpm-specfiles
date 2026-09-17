@@ -3,7 +3,7 @@
 %global         majorminor      1.0
 
 Name:           gstreamer1-rtsp-server
-Version:        1.29.2
+Version:        1.28.3
 Release:        1%{?dist}
 Summary:        GStreamer RTSP server library
 

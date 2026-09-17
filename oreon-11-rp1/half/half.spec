@@ -26,8 +26,8 @@
 %global debug_package %{nil}
 
 Name:           half
-Version:        2.2.1
-Release:        1%{?dist}
+Version:        2.2.0
+Release:        10%{?dist}
 Summary:        A C++ half-precision floating point type
 License:        MIT
 

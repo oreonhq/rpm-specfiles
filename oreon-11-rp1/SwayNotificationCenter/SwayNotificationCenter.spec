@@ -3,7 +3,7 @@
 %global alt_pkg_name swaync
 
 Name:       SwayNotificationCenter
-Version:    0.12.6
+Version:    0.12.5
 Release:    %autorelease
 Summary:    Simple notification daemon with GTK GUI for SwayWM
 License:    GPL-3.0-only
@@ -114,11 +114,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man1/swaync-client.1*
 %{_mandir}/man1/swaync.1*
 %{_mandir}/man5/swaync.5*
-%{_datadir}/bash-completion/completions/bash/
-%{_datadir}/bash-completion/completions/fish/
-%{_datadir}/bash-completion/completions/zsh/
-%{_datadir}/dbus-1/services/dbus/
-%{_datadir}/dbus-1/services/systemd/
+
 %files bash-completion
 %{_datadir}/bash-completion/completions/swaync
 %{_datadir}/bash-completion/completions/swaync-client

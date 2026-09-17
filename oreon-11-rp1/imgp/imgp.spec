@@ -1,7 +1,7 @@
 %global source0_hash 4cc3dcbe669ff6b97641ce0c6c332e63934d829a0700fd87171d5be5b1b89305
 
 Name:       imgp
-Version:    3.0
+Version:    2.9
 Release:    %autorelease
 Summary:    Multi-core batch image resizer and rotator
 

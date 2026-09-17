@@ -1,8 +1,8 @@
 %global source0_hash e8efeef741c604a816534d5b9dfd600378a884ea3b330e4e448975f74f78355c
 
 Name:           asio-grpc
-Version:        3.7.0
-Release:        1%{?dist}
+Version:        2.8.0
+Release:        8%{?dist}
 Summary:        Asynchronous gRPC with Asio/unified executors
 License:        Apache-2.0
 URL:            https://github.com/Tradias/asio-grpc

@@ -6,7 +6,7 @@
 %global pkgname moonscript
 
 Name:           lua-%{pkgname}
-Version:        0.7.0
+Version:        0.6.0
 Release:        %autorelease
 Summary:        A little language that compiles to Lua
 
@@ -73,7 +73,6 @@ make test
 %{_bindir}/moon-tags
 %{lua_pkgdir}/moon
 %{lua_pkgdir}/moonscript
-%{_bindir}/binaries/
-%{_bindir}/util/
+
 %changelog
 %autochangelog

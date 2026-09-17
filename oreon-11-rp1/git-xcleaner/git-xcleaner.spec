@@ -1,8 +1,8 @@
 %global source0_hash e9a7ad466fb6eb453983cafd73289d1b0e0c62ddc305b05df3a479441c3fbbbc
 
 Name:           git-xcleaner
-Version:        4.0
-Release:        1%{?dist}
+Version:        3.1
+Release:        3%{?dist}
 
 Summary:        Interactive git branch removal TUI
 

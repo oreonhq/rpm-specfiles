@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           objectweb-asm
-Version:        9.10.1
+Version:        9.7.1
 Release:        %autorelease
 Summary:        Java bytecode manipulation and analysis framework
 License:        BSD-3-Clause
@@ -33,7 +33,7 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.ow2.asm:asm)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 9.10.1-9
+Obsoletes:      %{name}-javadoc < 9.7.1-9
 
 %description
 ASM is an all purpose Java bytecode manipulation and analysis

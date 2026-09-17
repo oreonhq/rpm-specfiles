@@ -17,8 +17,8 @@
 %endif
 
 Name:           ansible-collection-community-rabbitmq
-Version:        1.7.0
-Release:        1%{?dist}
+Version:        1.6.0
+Release:        3%{?dist}
 Summary:        RabbitMQ collection for Ansible
 
 # plugins/module_utils/_version.py: Python Software Foundation License version 2

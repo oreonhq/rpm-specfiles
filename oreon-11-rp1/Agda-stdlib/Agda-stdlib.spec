@@ -5,7 +5,7 @@
 %global Agda_version 2.8.0
 
 Name:           Agda-stdlib
-Version:        2.4-rc1
+Version:        2.3
 Release:        %autorelease
 Summary:        Agda standard libraries
 

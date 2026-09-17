@@ -7,7 +7,7 @@
 
 Name:           ccdciel
 %if "%{?gittag}"
-Version:        0.9.97
+Version:        0.9.93
 %else
 Version:        0.9.79^%{date}%{shortcommit}
 %endif

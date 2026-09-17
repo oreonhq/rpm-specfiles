@@ -1,7 +1,7 @@
 %global source0_hash 3af225496fe363a8534a9780fb46ae1bd17baefd80cf4ba7430a19cddd73eb1a
 
 Name:           ncmpc
-Version:        0.54
+Version:        0.52
 Release:        %autorelease
 Summary:        A curses client for the Music Player Daemon (MPD)
 

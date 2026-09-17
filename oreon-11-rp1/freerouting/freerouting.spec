@@ -1,8 +1,8 @@
 %global source0_hash ab42a9f73e37ef3fc792b5817762ae2232c61d16732cc9b9d9633e5feefc1163
 
 Name:           freerouting
-Version:        1.3.2
-Release:        1%{?dist}
+Version:        1.3.1
+Release:        23%{?dist}
 Summary:        Circuit Board Routing Tool
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

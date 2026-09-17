@@ -1,7 +1,7 @@
 %global source0_hash b70576ee89adb5f0be404b0d4e714623b10d6d9d1a041ebdf11f8a423f95be1d
 
 Name:           open-vmdk
-Version:        3.0.1
+Version:        0.3.12
 Release:        1%{?dist}
 Summary:        Tools to create OVA files from raw disk images
 License:        Apache-2.0

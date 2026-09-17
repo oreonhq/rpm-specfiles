@@ -3,7 +3,7 @@
 %bcond_with devel
 
 # This spec file has been automatically updated
-Version:	1.4.2
+Version:	1.0
 Release: %{?autorelease}%{!?autorelease:1%{?dist}}
 Name: libunistring1.0
 Summary: Compatibility version of GNU Unicode string library
@@ -23,7 +23,7 @@ This portable C library implements Unicode string types in three flavours:
 (iteration, formatted output, width, word breaks, line breaks, normalization,
 case folding and regular expressions).
 
-This package contains the libunistring library version 1.4.2 and is
+This package contains the libunistring library version 1.0 and is
 intended for compatibility reasons only.  Users are advised to update
 to a newer version of libunistring.
 
@@ -37,7 +37,7 @@ Provides: deprecated()
 %description devel
 Development files for programs using libunistring.
 
-This package contains the libunistring library version 1.4.2 and is
+This package contains the libunistring library version 1.0 and is
 intended for compatibility reasons only.  Users are advised to update
 to a newer version of libunistring.
 %endif

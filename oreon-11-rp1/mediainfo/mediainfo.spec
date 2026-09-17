@@ -3,8 +3,8 @@
 %global libzen_version  0.4.41
 
 Name:           mediainfo
-Version:        26.05
-Release:        1%{?dist}
+Version:        25.10
+Release:        2%{?dist}
 Summary:        Supplies technical and tag information about a video or audio file (CLI)
 
 License:        BSD-2-Clause

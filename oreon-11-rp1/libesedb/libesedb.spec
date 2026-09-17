@@ -1,8 +1,8 @@
 %global source0_hash 07250741dff8a1ea1f5e38c02f1b9a1ae5e9fa52d013401067338842883a5b9f
 
 Name:           libesedb
-Version:        20260704
-Release:        1%{?dist}
+Version:        20240420
+Release:        7%{?dist}
 Summary:        Library to access the Extensible Storage Engine (ESE) Database File (EDB) format
 License:        LGPL-3.0-or-later
 URL:            https://github.com/libyal/libesedb
@@ -16,7 +16,7 @@ Windows Mail, Exchange, Active Directory, etc.}
 
 %global         gituser         libyal
 %global         gitname         libesedb
-%global         gitdate         20260704
+%global         gitdate         20240420
 %global         commit          24ae2ff47365adb5f1dcdce315ac7dd16b972836
 %global         shortcommit     %(c=%{commit}; echo ${c:0:7})
 
@@ -43,24 +43,24 @@ BuildRequires:  python%{python3_pkgversion}-setuptools
 # if with_python3
 %endif
 
-Provides: bundled(libbfio)      = 20260704
-Provides: bundled(libcdata)     = 20260704
-Provides: bundled(libcerror)    = 20260704
-Provides: bundled(libcfile)     = 20260704
-Provides: bundled(libclocale)   = 20260704
-Provides: bundled(libcnotify)   = 20260704
-Provides: bundled(libcpath)     = 20260704
-Provides: bundled(libcsplit)    = 20260704
-Provides: bundled(libcthreads)  = 20260704
-Provides: bundled(libfcache)    = 20260704
-Provides: bundled(libfdata)     = 20260704
-Provides: bundled(libfdatetime) = 20260704
-Provides: bundled(libfguid)     = 20260704
-Provides: bundled(libfmapi)     = 20260704
-Provides: bundled(libfvalue)    = 20260704
-Provides: bundled(libfwnt)      = 20260704
-Provides: bundled(libmapidb)    = 20260704
-Provides: bundled(libuna)       = 20260704
+Provides: bundled(libbfio)      = 20240420
+Provides: bundled(libcdata)     = 20240420
+Provides: bundled(libcerror)    = 20240420
+Provides: bundled(libcfile)     = 20240420
+Provides: bundled(libclocale)   = 20240420
+Provides: bundled(libcnotify)   = 20240420
+Provides: bundled(libcpath)     = 20240420
+Provides: bundled(libcsplit)    = 20240420
+Provides: bundled(libcthreads)  = 20240420
+Provides: bundled(libfcache)    = 20240420
+Provides: bundled(libfdata)     = 20240420
+Provides: bundled(libfdatetime) = 20240420
+Provides: bundled(libfguid)     = 20240420
+Provides: bundled(libfmapi)     = 20240420
+Provides: bundled(libfvalue)    = 20240420
+Provides: bundled(libfwnt)      = 20240420
+Provides: bundled(libmapidb)    = 20240420
+Provides: bundled(libuna)       = 20240420
 
 %description
 %{common_description}

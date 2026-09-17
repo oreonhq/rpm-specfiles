@@ -1,8 +1,8 @@
 %global source0_hash 9ef830a9dd0e25a2f603691f30da90976fa1af7456b06ef04f63f4f299e04e9f
 
 Name:           licensecheck
-Version:        3.3.10
-Release:        1%{?dist}
+Version:        3.3.9
+Release:        8%{?dist}
 Summary:        Simple license checker for source files
 
 License:        AGPL-3.0-or-later

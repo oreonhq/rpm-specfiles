@@ -3,8 +3,8 @@
 %bcond_without tests
 
 Name:           kakoune
-Version:        2026.05.21
-Release:        1%{?dist}
+Version:        2025.06.03
+Release:        3%{?dist}
 Summary:        mawww's experiment for a better code editor
 
 License:        Unlicense

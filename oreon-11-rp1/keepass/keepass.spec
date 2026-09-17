@@ -1,7 +1,7 @@
 %global source0_hash a174f0194dc51f72065fe561d6d58bae93841c6561007c5ceb4250e1212d44b6
 
 Name:           keepass
-Version:        2.61.1
+Version:        2.61
 Release:        %autorelease
 Summary:        Password manager
 

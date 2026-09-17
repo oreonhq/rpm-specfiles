@@ -1,7 +1,7 @@
 %global source0_hash a0f93995ceeb121196b9a25e9318bbb80c0b9c24072893f443538fe51165cdec
 
 Name:		ndctl
-Version:	85
+Version:	84
 Release:	1%{?dist}
 Summary:	Manage "libnvdimm" subsystem devices (Non-volatile Memory)
 License:	GPL-2.0-only AND LGPL-2.1-only AND CC0-1.0 AND MIT

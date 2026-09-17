@@ -1,7 +1,7 @@
 %global source0_hash 58c7737dd27e1a69b326afa2fca99f9921557fd17dc47cd6acb144245496a5d4
 
 Name:           jacktrip
-Version:        3.0.1
+Version:        2.7.2
 Release:        %autorelease
 Summary:        A system for high-quality audio network performance over the Internet
 

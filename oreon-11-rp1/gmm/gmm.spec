@@ -1,7 +1,7 @@
 %global source0_hash 15eb1943011b92665aab3b02ecf3cede1cf89ea15a9006f81f2ba2cd662aa02b
 
 Name:    gmm
-Version: 5.5
+Version: 5.4.4
 Release: %autorelease
 Summary: A generic C++ template library for sparse, dense and skyline matrices
 License: LGPL-3.0-or-later AND BSD-3-Clause

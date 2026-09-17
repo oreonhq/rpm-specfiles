@@ -14,8 +14,8 @@
 %global __requires_exclude %{__requires_exclude}|libm.so(LIBC)(64bit)
 
 Name:		faust
-Version:	2.88.0
-Release:	1%{?dist}
+Version:	2.83.1
+Release:	2%{?dist}
 Summary:	Compiled language for real-time audio signal processing
 # Examples are BSD
 # The rest is GPLv2+

@@ -3,8 +3,8 @@
 %bcond_with tests
 
 Name:           adb-enhanced
-Version:        2.11.0
-Release:        1%{?dist}
+Version:        2.5.24
+Release:        8%{?dist}
 Summary:        Tool for Android testing and development
 
 License:        Apache-2.0

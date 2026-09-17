@@ -3,8 +3,8 @@
 %{?mingw_package_header}
 
 Name:           mingw-curl
-Version:        8.22.0
-Release:        1%{?dist}
+Version:        8.18.0
+Release:        2%{?dist}
 Summary:        MinGW Windows port of curl and libcurl
 
 License:        MIT

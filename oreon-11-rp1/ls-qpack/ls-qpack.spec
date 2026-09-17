@@ -1,8 +1,8 @@
 %global source0_hash db1a83102bb7d2d946a910cb11a9d69c1c5b9fd9a40249c22c411fb9c429fe16
 
 Name:           ls-qpack
-Version:        2.7.0
-Release:        1%{?dist}
+Version:        2.6.2
+Release:        3%{?dist}
 Summary:        QPACK compression library for use with HTTP/3
 
 License:        MIT

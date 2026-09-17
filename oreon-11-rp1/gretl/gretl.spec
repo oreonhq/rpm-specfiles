@@ -1,7 +1,7 @@
 %global source0_hash 179695deb91939eda0f5a4010ae854adea783b689da5590056da05ceeabdaf64
 
 Name: gretl	
-Version: 2026b
+Version: 2026a
 Release: 1%{?dist}
 Summary: A tool for econometric analysis
 

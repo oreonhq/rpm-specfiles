@@ -3,8 +3,8 @@
 %global develdocdir %{_docdir}/%{name}-devel
 
 Name:           libevent
-Version:        2.1.13
-Release:        1%{?dist}
+Version:        2.1.12
+Release:        17%{?dist}
 Summary:        Abstract asynchronous event notification library
 
 # arc4random.c, which is used in build, is ISC. The rest is BSD-3-Clause.

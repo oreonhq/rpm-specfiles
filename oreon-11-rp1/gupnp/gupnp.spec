@@ -5,8 +5,8 @@
 %global gssdp_version 1.6.2
 
 Name:          gupnp
-Version:       1.6.10
-Release:       1%{?dist}
+Version:       1.6.9
+Release:       5%{?dist}
 Summary:       A framework for creating UPnP devices & control points
 
 License:       LGPL-2.1-or-later

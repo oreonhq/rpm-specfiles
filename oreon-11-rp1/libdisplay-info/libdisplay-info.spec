@@ -7,7 +7,7 @@
 %global sover 3
 
 Name:           libdisplay-info
-Version:        0.4.0
+Version:        0.3.0
 Release:        1%{?dist}
 Summary:        EDID and DisplayID library
 
@@ -15,8 +15,8 @@ Summary:        EDID and DisplayID library
 # test/data: CC-BY-4.0, MIT (see test/data/README.md).
 License:        MIT
 URL:            https://gitlab.freedesktop.org/emersion/libdisplay-info
-Source0:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.4.0/downloads/libdisplay-info-0.4.0.tar.xz
-Source1:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.4.0/downloads/libdisplay-info-0.4.0.tar.xz.sig
+Source0:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz
+Source1:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz.sig
 # 0FDE7BE0E88F5E48: emersion <contact@emersion.fr>
 Source2:        gpgkey-0FDE7BE0E88F5E48.gpg
 

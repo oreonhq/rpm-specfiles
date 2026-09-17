@@ -12,9 +12,9 @@
 
 Name:           GoldenCheetah
 %if 0%{?usesnapshot}
-Version:        3.7-SP1
+Version:        3.6
 # Release:        0.19.%%{commitdate}git%%{shortcommit0}%%{?dist}
-Release:        1.36.RC4%%{?dist}
+Release:        0.36.RC4%%{?dist}
 %else
 Version:        3.7.1
 Release:        3%{?dist}

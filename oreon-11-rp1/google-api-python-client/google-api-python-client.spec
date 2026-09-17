@@ -6,12 +6,12 @@
 Name:           google-api-python-client
 Summary:        %{sum}
 Epoch:          2
-Version:        2.200.0
+Version:        2.192.0
 Release:        %autorelease
 
 License:        Apache-2.0
 URL:            https://github.com/googleapis/google-api-python-client
-Source0:        https://github.com/googleapis/google-api-python-client/archive/refs/tags/v2.192.0.tar.gz#/google-api-python-client-2.200.0.tar.gz
+Source0:        https://github.com/googleapis/google-api-python-client/archive/refs/tags/v2.192.0.tar.gz#/google-api-python-client-2.192.0.tar.gz
 
 BuildArch:      noarch
 

@@ -1,7 +1,7 @@
 %global source0_hash bcbf05252b392b8837eec9ba9855ff6ddab571f9795917c7139215ae4b2cf1bc
 
 Name:           hyprutils
-Version:        0.14.2
+Version:        0.7.1
 Release:        %autorelease
 Summary:        Hyprland utilities library used across the ecosystem
 

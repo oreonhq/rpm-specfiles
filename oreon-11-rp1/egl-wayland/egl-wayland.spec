@@ -4,7 +4,7 @@
 %global shortcommit0 3acc518
 
 Name:           egl-wayland
-Version:        1.1.22
+Version:        1.1.21
 Release:        %autorelease
 Summary:        EGLStream-based Wayland external platform
 License:        MIT

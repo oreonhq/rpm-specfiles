@@ -2,8 +2,8 @@
 
 Name: opencryptoki
 Summary: Implementation of the PKCS#11 (Cryptoki) specification v3.0 and partially v3.1
-Version: 3.27.0
-Release: 1%{?dist}
+Version: 3.26.0
+Release: 2%{?dist}
 License: CPL-1.0
 URL: https://github.com/opencryptoki/opencryptoki
 Source0:        https://github.com/opencryptoki/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz

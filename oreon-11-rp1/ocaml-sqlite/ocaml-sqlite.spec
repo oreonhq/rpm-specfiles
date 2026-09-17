@@ -6,8 +6,8 @@ ExcludeArch: %{ix86}
 %global giturl  https://github.com/mmottl/sqlite3-ocaml
 
 Name:           ocaml-sqlite
-Version:        5.4.2
-Release:        1%{?dist}
+Version:        5.3.1
+Release:        4%{?dist}
 Summary:        OCaml library for accessing SQLite3 databases
 License:        MIT
 

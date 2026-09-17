@@ -4,17 +4,17 @@
 
 Summary: Network diagnostic tool combining 'traceroute' and 'ping'
 Name: mtr
-Version: 0.96
-Release: 1%{?dist}
+Version: 0.95
+Release: 14%{?dist}
 Epoch: 2
 License: GPL-2.0-only
 URL: https://www.bitwizard.nl/mtr/
 Source0:        https://github.com/traviscross/mtr/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1: net-x%{name}.desktop
 # https://github.com/traviscross/mtr/issues/469
-Patch0: https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch#/mtr-0.96-snprintf-sizes.patch
+Patch0: https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch#/mtr-0.95-snprintf-sizes.patch
 # https://github.com/traviscross/mtr/issues/232, https://github.com/traviscross/mtr/pull/484
-Patch1: https://github.com/traviscross/mtr/commit/74d312d7e67d002e184b37c7f278597ab06bf8e7.patch#/mtr-0.96-socket-binding.patch
+Patch1: https://github.com/traviscross/mtr/commit/74d312d7e67d002e184b37c7f278597ab06bf8e7.patch#/mtr-0.95-socket-binding.patch
 
 BuildRequires: gcc make ncurses-devel libcap-devel jansson-devel
 BuildRequires: autoconf automake libtool git

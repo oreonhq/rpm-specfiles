@@ -1,7 +1,7 @@
 %global source0_hash 0707312d52a981be8dde2087ee389bbb9419953711b7a9a47c18088f58cc48b6
 
 Name:           mmtests
-Version:        2.0-rc4
+Version:        0.27
 Release:        %autorelease
 Summary:        Configurable test framework
 

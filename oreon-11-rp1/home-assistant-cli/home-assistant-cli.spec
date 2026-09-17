@@ -1,8 +1,8 @@
 %global source0_hash f971ac78a74922f4555ee7f77e327d8008819a8a83db1ad8037c0601e74a40ba
 
 Name:           home-assistant-cli
-Version:        1.0.0
-Release:        1%{?dist}
+Version:        0.9.6
+Release:        18%{?dist}
 Summary:        Command-line tool for Home Assistant
 
 License:        Apache-2.0

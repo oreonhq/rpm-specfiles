@@ -17,7 +17,7 @@ uboot-tools
 EOF)
 
 Name:           genimage
-Version:        20
+Version:        19
 
 Release:        %autorelease
 Summary:        Flexible filesystem and disk image generator

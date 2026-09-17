@@ -3,8 +3,8 @@
 %global the_so_name mosquitto.so
 
 Name:           lua-mosquitto
-Version:        0.4.1
-Release:        1%{?dist}
+Version:        0.3
+Release:        16%{?dist}
 License:        MIT
 Summary:        Lua bindings to libmosquitto
 Url:            https://github.com/flukso/%{name}/

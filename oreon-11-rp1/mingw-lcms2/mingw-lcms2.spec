@@ -6,9 +6,9 @@
 #global prerelease rc3
 
 Name:           mingw-%{mingw_pkg_name}
-Version:        2.19.1
+Version:        2.14
 #Release:        0.2.%{prerelease}%{?dist}
-Release:        1%{?dist}
+Release:        9%{?dist}
 Summary:        MinGW Color Management Engine
 License:        MIT
 URL:            http://www.littlecms.com/

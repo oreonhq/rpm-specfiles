@@ -3,8 +3,8 @@
 %global octpkg interval
 
 Name:           octave-%{octpkg}
-Version:        3.2.2
-Release:        1%{?dist}
+Version:        3.2.1
+Release:        15%{?dist}
 Summary:        Interval arithmetic for Octave
 # The source code is GPLv3+ except src/crlibm/ which is LGPLv2+
 # Automatically converted from old format: GPLv3+ and LGPLv2+ - review is highly recommended.

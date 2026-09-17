@@ -5,7 +5,7 @@
 
 Summary:        Utility to clone and restore a partition
 Name:           partclone
-Version:        0.3.50
+Version:        0.3.47
 Release:        1%{?dist}
 # Partclone itself is GPL-2.0-or-later but uses other source codes, breakdown:
 # GPL-3.0-or-later: fail-mbr/fail-mbr.S

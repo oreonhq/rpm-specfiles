@@ -4,8 +4,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           koan
-Version:        3.3.1
-Release:        1%{?dist}
+Version:        3.0.1
+Release:        20%{?dist}
 Summary:        Kickstart over a network
 
 License:        GPL-2.0-or-later

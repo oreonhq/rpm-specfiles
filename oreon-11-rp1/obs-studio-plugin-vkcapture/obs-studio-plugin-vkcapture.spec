@@ -10,8 +10,8 @@
 %global srcname obs-vkcapture
 
 Name:           obs-studio-plugin-vkcapture
-Version:        1.5.6
-Release:        1%{?dist}
+Version:        1.5.1
+Release:        5%{?dist}
 Summary:        OBS plugin for Vulkan/OpenGL game capture
 
 License:        GPL-2.0-or-later and Zlib

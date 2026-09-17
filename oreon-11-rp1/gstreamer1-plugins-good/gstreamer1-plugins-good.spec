@@ -32,7 +32,7 @@
 %endif
 
 Name:           gstreamer1-plugins-good
-Version:        1.29.2
+Version:        1.28.3
 Release:        1%{?dist}
 Summary:        GStreamer plugins with good code and licensing
 

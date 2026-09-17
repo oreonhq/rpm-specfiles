@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name:           mingw-harfbuzz
-Version:        14.4.0
+Version:        13.0.1
 Release:        1%{?dist}
 Summary:        MinGW Windows Harfbuzz library
 

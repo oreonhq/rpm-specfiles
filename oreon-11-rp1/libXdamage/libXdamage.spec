@@ -2,8 +2,8 @@
 
 Summary: X Damage extension library
 Name: libXdamage
-Version: 1.1.7
-Release: 1%{?dist}
+Version: 1.1.6
+Release: 7%{?dist}
 License: HPND-sell-variant
 URL: http://www.x.org
 

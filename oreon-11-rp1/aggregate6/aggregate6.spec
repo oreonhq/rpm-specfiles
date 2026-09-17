@@ -2,8 +2,8 @@
 
 Summary:        Tool to compress an unsorted list of IPv4 and IPv6 prefixes
 Name:           aggregate6
-Version:        1.0.15
-Release:        1%{?dist}
+Version:        1.0.14
+Release:        8%{?dist}
 License:        BSD-2-Clause
 URL:            https://github.com/job/aggregate6
 Source0:        https://github.com/job/aggregate6/archive/%{version}/%{name}-%{version}.tar.gz

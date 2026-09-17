@@ -5,7 +5,7 @@
 
 Summary:       Cryptographic library
 Name:          bee2
-Version:       2.2.4
+Version:       2.2.0
 Release:       1%{?dist}
 License:       GPL-3.0-only and GPL-3.0-or-later
 Url:           http://apmi.bsu.by/resources/tools.html

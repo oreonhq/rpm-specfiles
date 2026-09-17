@@ -3,7 +3,7 @@
 %global realname bear
 
 Name:		erlang-%{realname}
-Version:	1.1.1
+Version:	1.1
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	A set of statistics functions for erlang

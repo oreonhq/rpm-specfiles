@@ -4,8 +4,8 @@
 
 Name:          fpdns
 Epoch:         1
-Version:       20190131
-Release:       1.%{gittag}%{?dist}
+Version:       0.10.0
+Release:       21.%{gittag}%{?dist}
 Summary:       Fingerprint DNS servers
 License:       BSD-3-Clause
 URL:           https://github.com/kirei/fpdns

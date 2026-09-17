@@ -11,8 +11,8 @@
 
 Summary: Printer Application Framework (PAPPL)
 Name: pappl
-Version: 1.4.12
-Release: 1%{?dist}
+Version: 1.4.9
+Release: 4%{?dist}
 License: Apache-2.0 WITH LLVM-exception
 Source:        https://github.com/michaelrsweet/pappl/releases/download/v%{version}/pappl-%{version}.tar.gz
 Url: https://www.msweet.org/pappl

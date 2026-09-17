@@ -3,8 +3,8 @@
 %global pkg ansible
 
 Name:           emacs-%{pkg}
-Version:        0.4.3
-Release:        1%{?dist}
+Version:        0.4.2
+Release:        3%{?dist}
 Summary:        Ansible minor mode
 
 License:        GPL-2.0-or-later

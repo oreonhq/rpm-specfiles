@@ -10,8 +10,8 @@
 %global bootstrap 0
 
 Name:           mingw-crt
-Version:        14.0.0
-Release:        1%{?dist}
+Version:        13.0.0
+Release:        3%{?dist}
 Summary:        MinGW Windows cross-compiler runtime
 
 License:        LicenseRef-Fedora-Public-Domain AND ZPL-2.1

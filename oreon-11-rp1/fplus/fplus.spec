@@ -32,8 +32,8 @@
 Summary:        Functional Programming Library for C++
 Name:           fplus
 License:        BSL-1.0
-Version:        0.2.28
-Release:        1%{?dist}
+Version:        0.2.25
+Release:        6%{?dist}
 
 URL:            https://github.com/Dobiasd/FunctionalPlus
 Source0:        %{url}/archive/v%{version}.tar.gz#/FunctionalPlus-%{version}.tar.gz

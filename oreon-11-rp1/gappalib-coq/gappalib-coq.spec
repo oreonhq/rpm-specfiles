@@ -10,7 +10,7 @@
 %global giturl  https://gitlab.inria.fr/gappa/coq
 
 Name:           gappalib-coq
-Version:        1.11.0
+Version:        1.8.0
 Release:        %autorelease
 Summary:        Coq support library for gappa
 

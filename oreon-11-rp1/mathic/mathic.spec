@@ -1,7 +1,7 @@
 %global source0_hash c505e176dd9888e62a3ae428232cea25faa31a6654f12c09e69fd4e1e39ea0ef
 
 Name:           mathic
-Version:        1.5
+Version:        1.2
 Release:        %autorelease
 Summary:        Data structures for Groebner basis computations
 

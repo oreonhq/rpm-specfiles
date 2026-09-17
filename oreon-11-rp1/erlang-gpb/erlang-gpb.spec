@@ -3,7 +3,7 @@
 %global realname gpb
 
 Name:		erlang-%{realname}
-Version:	5.0.0
+Version:	4.21.7
 Release:	%autorelease
 BuildArch:	noarch
 Summary:	A Google Protobuf implementation for Erlang

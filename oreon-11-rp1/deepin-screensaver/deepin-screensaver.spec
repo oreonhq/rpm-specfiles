@@ -1,7 +1,7 @@
 %global source0_hash 2cf93c7a2dcd706df9e9051009d59a4696a3b959ab1a83351d1708d6f5e018b3
 
 Name:           deepin-screensaver
-Version:        6.5.11
+Version:        6.5.4
 Release:        %autorelease
 Summary:        Screensaver Tool
 License:        GPL-3.0-or-later

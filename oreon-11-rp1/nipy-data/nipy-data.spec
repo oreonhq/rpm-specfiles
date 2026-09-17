@@ -1,8 +1,8 @@
 %global source0_hash 84f8330d492174fdccd6e5b991794abad1b0c91c3a035d0e0a01e192c57a36d8
 
 Name:           nipy-data
-Version:        0.3
-Release:        1%{?dist}
+Version:        0.2
+Release:        25%{?dist}
 Summary:        Test data and brain templates for nipy
 
 # from main nipy repository

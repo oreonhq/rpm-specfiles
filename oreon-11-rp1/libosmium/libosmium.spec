@@ -8,7 +8,7 @@
 %define debug_package %{nil}
 
 Name:           libosmium
-Version:        2.23.1
+Version:        2.23.0
 Release:        %autorelease
 Summary:        Fast and flexible C++ library for working with OpenStreetMap data
 

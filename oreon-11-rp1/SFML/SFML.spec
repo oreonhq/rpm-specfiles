@@ -1,7 +1,7 @@
 %global source0_hash 19d6dbd9c901c74441d9888c13cb1399f614fe8993d59062a72cfbceb00fed04
 
 Name:           SFML
-Version:        3.1.0
+Version:        2.6.2
 Release:        %autorelease
 Summary:        Simple and Fast Multimedia Library
 

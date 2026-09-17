@@ -5,8 +5,8 @@
 %global __brp_remove_la_files %nil
 
 Name:		libnxz
-Version:	0.65
-Release:	1%{?dist}
+Version:	0.64
+Release:	10%{?dist}
 Summary:	Zlib implementation for POWER processors
 License:    Apache-2.0 OR GPL-2.0-or-later
 Url:		https://github.com/libnxz/power-gzip

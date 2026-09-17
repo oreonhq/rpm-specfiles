@@ -1,8 +1,8 @@
 %global source0_hash 42664e0b1b98fef1e5e849118b9985ac951516c4d5eb24a7da15d058da647c90
 
 Name:           needrestart
-Version:        3.11
-Release:        1%{?dist}
+Version:        3.8
+Release:        8%{?dist}
 Summary:        Restart daemons after library updates
 
 License:        GPL-2.0-or-later

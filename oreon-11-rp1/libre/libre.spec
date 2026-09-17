@@ -2,7 +2,7 @@
 
 Summary:        Generic library for real-time communications
 Name:           libre
-Version:        4.11.0
+Version:        4.6.0
 Release:        1%{?dist}
 License:        BSD-3-Clause
 URL:            https://github.com/baresip/re

@@ -1,8 +1,8 @@
 %global source0_hash 0d1f7ca711cfc336dc8a85e672cab9cfd8223a02fe2da0a4a7aeb58c9e113634
 
 Name:              dropbear
-Version:           2026.94
-Release:           1%{?dist}
+Version:           2025.89
+Release:           3%{?dist}
 Summary:           Lightweight SSH server and client
 License:           MIT
 URL:               https://matt.ucc.asn.au/dropbear/dropbear.html

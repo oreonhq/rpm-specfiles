@@ -2,8 +2,8 @@
 
 Summary:	Decode camera RAW files
 Name:		libopenraw
-Version:	0.3.7
-Release:	1%{?dist}
+Version:	0.1.3
+Release:	21%{?dist}
 License:	LGPL-3.0-or-later
 URL:		http://libopenraw.freedesktop.org/wiki
 Source0:        http://libopenraw.freedesktop.org/download/%{name}-%{version}.tar.bz2

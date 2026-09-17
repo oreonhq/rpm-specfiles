@@ -1,7 +1,7 @@
 %global source0_hash 2ed81ecb86da44d571f950010dc174fe6d702a9942259c7c2890fdfc025e4b9c
 
 Name:           cura-fdm-materials
-Version:        5.13.0
+Version:        5.4.0
 Release:        %autorelease
 Summary:        Cura FDM Material database
 

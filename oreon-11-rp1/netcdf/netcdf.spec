@@ -3,7 +3,7 @@
 %global sover 22
 
 Name:           netcdf
-Version:        4.10.1
+Version:        4.9.3
 Release:        %autorelease
 Summary:        Libraries for the Unidata network Common Data Form
 

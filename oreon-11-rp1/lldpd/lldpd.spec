@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:     lldpd
-Version:  1.0.22
-Release:  1%{?dist}
+Version:  1.0.18
+Release:  6%{?dist}
 Summary:  ISC-licensed implementation of LLDP
 License:  ISC
 
@@ -119,8 +119,8 @@ exit 0
 %{_includedir}/lldpctl.h
 %{_libdir}/liblldpctl.so
 %{_libdir}/pkgconfig/lldpctl.pc
-%{_includedir}/linux/
-%{_includedir}/osx/
+
+
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.18-6
 - Import

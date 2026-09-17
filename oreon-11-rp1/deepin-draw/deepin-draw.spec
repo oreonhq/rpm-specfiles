@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           deepin-draw
-Version:        6.5.43
+Version:        6.5.33
 Release:        %autorelease
 Summary:        A lightweight drawing tool for Linux Deepin
 License:        GPL-3.0-or-later

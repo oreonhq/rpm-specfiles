@@ -1,7 +1,7 @@
 %global source0_hash 1baeec8c6b19d88319176722c828bb880ec641d1675c2f39269bb691bbd72be7
 
 Name:		f3
-Version:	10.0
+Version:	9.0
 Release:	%autorelease
 Summary:	Utility to test for fake flash drives and cards
 License:	GPL-3.0-only

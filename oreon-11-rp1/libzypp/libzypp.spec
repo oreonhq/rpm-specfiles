@@ -19,7 +19,7 @@ Requires:       %{_bindir}/%{1}
 # End macro
 
 Name:           libzypp
-Version:        17.38.15
+Version:        17.38.1
 Release:        1%{?dist}
 Summary:        A package management library
 

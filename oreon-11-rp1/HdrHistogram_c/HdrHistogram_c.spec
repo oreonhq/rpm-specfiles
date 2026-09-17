@@ -1,8 +1,8 @@
 %global source0_hash bb95351a6a8b242dc9be1f28562761a84d4cf0a874ffc90a9b630770a6468e94
 
 Name: HdrHistogram_c
-Version: 0.11.10
-Release: 1%{?dist}
+Version: 0.11.8
+Release: 10%{?dist}
 Summary: C port of the HdrHistogram 
 License: BSD-2-Clause
 URL: https://github.com/HdrHistogram/%{name}

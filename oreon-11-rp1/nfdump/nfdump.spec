@@ -1,8 +1,8 @@
 %global source0_hash d0b46d6e3da8d8316204fb74d20d12d782d8508f01559e34d9c31e33f016d794
 
 Name:		nfdump
-Version:	1.7.10
-Release:	1%{?dist}
+Version:	1.7.7
+Release:	2%{?dist}
 Summary:	NetFlow collecting and processing tools
 
 License:	BSD-3-Clause AND GPL-2.0-or-later

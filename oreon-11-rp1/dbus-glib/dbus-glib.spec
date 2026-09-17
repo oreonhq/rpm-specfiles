@@ -7,8 +7,8 @@
 %global dbus_version 1.8
 
 Name:    dbus-glib
-Version: 0.114
-Release: 1%{?dist}
+Version: 0.112
+Release: 13%{?dist}
 Summary: GLib bindings for D-Bus
 
 # dbus/dbus-bash-completion-helper.c is GPL-2.0-or-later

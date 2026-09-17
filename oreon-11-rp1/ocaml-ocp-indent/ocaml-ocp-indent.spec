@@ -6,8 +6,8 @@ ExcludeArch: %{ix86}
 %global giturl  https://github.com/OCamlPro/ocp-indent
 
 Name:           ocaml-ocp-indent
-Version:        1.10.0
-Release:        1%{?dist}
+Version:        1.9.0
+Release:        3%{?dist}
 Summary:        A simple tool to indent OCaml programs
 
 # The entire source code is LGPL with the OCaml linking exception except

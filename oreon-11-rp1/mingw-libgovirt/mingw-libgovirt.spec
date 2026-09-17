@@ -3,7 +3,7 @@
 %{?mingw_package_header}
 
 Name: mingw-libgovirt
-Version: 0.3.11
+Version: 0.3.9
 Release: 1%{?dist}
 Summary: MinGW support for a GObject library for interacting with oVirt REST API
 

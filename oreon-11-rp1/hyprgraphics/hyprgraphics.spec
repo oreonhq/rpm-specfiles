@@ -2,7 +2,7 @@
 
 %bcond libjxl 1
 Name:           hyprgraphics
-Version:        0.5.1
+Version:        0.1.5
 Release:        %autorelease
 Summary:        Graphics library for Hyprland
 

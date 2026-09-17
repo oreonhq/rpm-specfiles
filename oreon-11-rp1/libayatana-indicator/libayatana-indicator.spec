@@ -12,7 +12,7 @@
 %global         nsversion 0.4
 
 Name:           libayatana-indicator
-Version:        0.9.5
+Version:        0.9.4
 Release:        %autorelease
 Summary:        Ayatana Indicators Shared Library
 
@@ -52,7 +52,7 @@ to go into modern desktops indicator applets.}
 Summary:        %{summary} for GTK2
 # Force replacement of packages of copr:copr.fedorainfracloud.org:sergiomb:libayatana-appindicator repo
 Provides:       libayatana-indicator2 = %{version}-%{release}
-Obsoletes:      libayatana-indicator2 < 0.9.5
+Obsoletes:      libayatana-indicator2 < 0.9.4
 
 %description    gtk2 %_description
 
@@ -63,7 +63,7 @@ This version is built against GTK2.
 Summary:        %{summary} for GTK3
 # Force replacement of packages of copr:copr.fedorainfracloud.org:sergiomb:libayatana-appindicator repo
 Provides:       libayatana-indicator3 = %{version}-%{release}
-Obsoletes:      libayatana-indicator3 < 0.9.5
+Obsoletes:      libayatana-indicator3 < 0.9.4
 
 %description    gtk3 %_description
 
@@ -75,7 +75,7 @@ Summary:        Development files for %{name}-gtk2
 Requires:       %{name}-gtk2%{?_isa} = %{version}-%{release}
 # Force replacement of packages of copr:copr.fedorainfracloud.org:sergiomb:libayatana-appindicator repo
 Provides:       libayatana-indicator2-devel = %{version}-%{release}
-Obsoletes:      libayatana-indicator2-devel < 0.9.5
+Obsoletes:      libayatana-indicator2-devel < 0.9.4
 
 %description    gtk2-devel
 The %{name}-gtk2-devel package contains libraries and header files for
@@ -87,7 +87,7 @@ Summary:        Development files for %{name}-gtk3
 Requires:       %{name}-gtk3%{?_isa} = %{version}-%{release}
 # Force replacement of packages of copr:copr.fedorainfracloud.org:sergiomb:libayatana-appindicator repo
 Provides:       libayatana-indicator3-devel = %{version}-%{release}
-Obsoletes:      libayatana-indicator3-devel < 0.9.5
+Obsoletes:      libayatana-indicator3-devel < 0.9.4
 
 %description gtk3-devel
 The %{name}-gtk3-devel package contains libraries and header files for

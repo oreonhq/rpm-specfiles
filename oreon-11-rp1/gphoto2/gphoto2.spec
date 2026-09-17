@@ -1,8 +1,8 @@
 %global source0_hash 2a648dcdf12da19e208255df4ebed3e7d2a02f905be4165f2443c984cf887375
 
 Name:           gphoto2
-Version:        2.5.32
-Release:        1%{?dist}
+Version:        2.5.28
+Release:        5%{?dist}
 Summary:        Software for accessing digital cameras
 License:        GPL-2.0-or-later
 Url:            http://www.gphoto.org/

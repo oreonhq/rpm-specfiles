@@ -3,7 +3,7 @@
 %global giturl  https://github.com/hannesm/patch
 
 Name:           ocaml-patch
-Version:        3.1.2
+Version:        3.1.0
 Release:        %autorelease
 Summary:        Parse unified and git diff output and apply patches in memory
 

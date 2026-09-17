@@ -3,7 +3,7 @@
 %bcond_without bootstrap
 
 Name:           maven-antrun-plugin
-Version:        3.2.0
+Version:        3.1.0
 Release:        %autorelease
 Summary:        Maven AntRun Plugin
 License:        Apache-2.0
@@ -31,7 +31,7 @@ BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.2.0-23
+Obsoletes:      %{name}-javadoc < 3.1.0-23
 
 %description
 This plugin provides the ability to run Ant tasks from within Maven.

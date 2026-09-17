@@ -3,8 +3,8 @@
 %global source2_key_fpr 88A228D89B07C2C77D0C780903D5DF8CFDD3E8E7
 
 Name:           libssh
-Version:        0.12.2
-Release:        1%{?dist}
+Version:        0.12.0
+Release:        2%{?dist}
 Summary:        A library implementing the SSH protocol
 License:        LGPL-2.1-or-later
 # Run upstream ctests by default. Use rpmbuild --without check if torture tests

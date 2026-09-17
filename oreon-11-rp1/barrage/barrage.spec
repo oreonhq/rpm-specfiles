@@ -1,8 +1,8 @@
 %global source0_hash 70662b1bb03815f879d4ac91f94a5e5aeec0e347aac48f20e0b79f048b35f248
 
 Name:           barrage
-Version:        1.0.8
-Release:        1%{?dist}
+Version:        1.0.7
+Release:        9%{?dist}
 Summary:        Kill and destroy as many targets as possible within 3 minutes
 
 License:        GPL-2.0-or-later

@@ -2,8 +2,8 @@
 
 Summary:        LightDM GTK Greeter
 Name:           lightdm-gtk
-Version:        2.0.9
-Release:        1%{?dist}
+Version:        2.0.8
+Release:        16%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://github.com/Xubuntu/lightdm-gtk-greeter

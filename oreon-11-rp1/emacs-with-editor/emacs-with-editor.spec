@@ -4,7 +4,7 @@
 %global pkgname With-Editor
 
 Name:           emacs-%{pkg}
-Version:        3.5.4
+Version:        3.4.8
 Release:        %autorelease
 Summary:        Use Emacsclient as the editor of child processes
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

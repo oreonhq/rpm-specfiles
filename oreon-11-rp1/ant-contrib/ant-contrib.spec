@@ -4,8 +4,8 @@
 
 Summary:        Collection of tasks for Ant
 Name:           ant-contrib
-Version:        1.0b3
-Release:        1.51.%{beta_number}%{?dist}
+Version:        1.0
+Release:        0.51.%{beta_number}%{?dist}
 # Project site on sf lists both Apache Software License, Apache License V2.0
 # see: https://sourceforge.net/projects/ant-contrib/
 License:        Apache-2.0 AND Apache-1.1

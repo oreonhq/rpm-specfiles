@@ -2,8 +2,8 @@
 
 Summary:      Miniature XML development library
 Name:         mxml
-Version:      4.0.5
-Release:      1%{?dist}
+Version:      3.3.1
+Release:      10%{?dist}
 License:      Apache-2.0 WITH mxml-exception
 URL:          https://www.msweet.org/mxml/
 Source:       https://github.com/michaelrsweet/mxml/archive/v%{version}/mxml-%{version}.tar.gz

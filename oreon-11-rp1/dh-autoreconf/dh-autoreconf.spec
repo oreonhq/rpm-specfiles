@@ -1,8 +1,8 @@
 %global source0_hash 5cbd797955824105a16eefcafc4a92eacc556372a69de744b504877723a7ab0e
 
 Name:           dh-autoreconf
-Version:        23
-Release:        1%{?dist}
+Version:        21
+Release:        4%{?dist}
 Summary:        debhelper add-on to call autoreconf and clean up after the build
 
 BuildArch:      noarch

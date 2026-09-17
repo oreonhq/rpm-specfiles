@@ -2,8 +2,8 @@
 
 Summary:    Check operability of computer hardware and find drivers
 Name:       hw-probe
-Version:    1.6.6
-Release:    1%{?dist}
+Version:    1.6.5
+Release:    9%{?dist}
 BuildArch:  noarch
 License:    LGPL-2.1-or-later OR BSD-4-Clause
 URL:        https://github.com/linuxhw/hw-probe

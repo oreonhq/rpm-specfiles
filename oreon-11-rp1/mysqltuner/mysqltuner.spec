@@ -5,8 +5,8 @@
 #%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           mysqltuner
-Version:        2.9.2
-Release:        1%{?dist}
+Version:        2.7.0
+Release:        2%{?dist}
 Summary:        MySQL configuration assistant
 
 License:        GPL-3.0-or-later

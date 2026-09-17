@@ -7,7 +7,7 @@
 %global pkgdatadir %{_datadir}/dpkg
 
 Name:           dpkg
-Version:        1.23.11
+Version:        1.23.5
 Release:        %autorelease
 Summary:        Package maintenance system for Debian Linux
 # The entire source code is GPLv2+ with exception of the following

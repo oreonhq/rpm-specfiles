@@ -5,7 +5,7 @@
 %bcond network_tests 0
 
 Name:           fastapi-new
-Version:        0.0.7
+Version:        0.0.5
 Release:        %autorelease
 Summary:        Create a new FastAPI project in one command
 

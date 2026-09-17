@@ -4,8 +4,8 @@
 %{?rhel: %global cmake %cmake3}
 
 Name:           freedv
-Version:        2.4.0
-Release:        1%{?dist}
+Version:        1.8.4
+Release:        12%{?dist}
 Summary:        FreeDV Digital Voice
 License:        GPL-2.0-or-later
 

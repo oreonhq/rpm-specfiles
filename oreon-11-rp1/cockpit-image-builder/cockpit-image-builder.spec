@@ -1,7 +1,7 @@
 %global source0_hash ca36f6ddcf14ee4cb3ad5a850d444566a97ccb6762243f23a5f0448c9f8fc088
 
 Name:           cockpit-image-builder
-Version:        110
+Version:        94
 Release:        1%{?dist}
 Summary:        Image builder plugin for Cockpit
 

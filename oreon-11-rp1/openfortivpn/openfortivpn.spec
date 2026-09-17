@@ -1,8 +1,8 @@
 %global source0_hash ecacfc7f18d87f4ff503198177e51a83316b59b4646f31caa8140fdbfaa40389
 
 Name:           openfortivpn
-Version:        1.24.1
-Release:        1%{?dist}
+Version:        1.23.1
+Release:        3%{?dist}
 Summary:        Client for PPP+SSL VPN tunnel services
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

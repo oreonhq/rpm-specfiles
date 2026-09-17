@@ -3,7 +3,7 @@
 %global apiver 1.0
 
 Name:           gst-devtools
-Version:        1.29.2
+Version:        1.28.1
 Release:        1%{?dist}
 Summary:        Development and debugging tools for GStreamer
 

@@ -1,8 +1,8 @@
 %global source0_hash e7713409882813991d2269d125e40dad1f54a019a52b78b3962941c1d4a6f86f
 
 Name:		pciutils
-Version:	3.15.0
-Release:	1%{?dist}
+Version:	3.14.0
+Release:	3%{?dist}
 Summary:	PCI bus related utilities
 License:	GPL-2.0-or-later
 URL:		https://mj.ucw.cz/sw/pciutils/

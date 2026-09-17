@@ -7,8 +7,8 @@
 
 Summary: KDE Photo Album 
 Name:	 kphotoalbum
-Version: 6.2.0
-Release: 1%{?dist}
+Version: 6.0.1
+Release: 4%{?dist}
 
 # KDE e.V. may determine that future GPL versions are accepted
 # Automatically converted from old format: (GPLv2 or GPLv3) and GFDL - review is highly recommended.

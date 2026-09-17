@@ -1,7 +1,7 @@
 %global source0_hash 8aab7761bcb43e2d65dbf266c8623d345f7612411363a97aa66370fb9822d0b9
 
 Name:           paho-cpp
-Version:        1.6.0
+Version:        1.5.3
 Release:        %autorelease
 Summary:        Eclipse Paho MQTT C++ Client Library
 License:        EPL-2.0

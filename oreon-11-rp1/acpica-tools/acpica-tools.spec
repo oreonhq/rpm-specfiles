@@ -2,8 +2,8 @@
 %global source1_hash 25db846049e5aa047252c57b4446182bc9a8c062ba4c44d2fbb4e674f25e1a39
 
 Name:           acpica-tools
-Version:        20260408
-Release:        1%{?dist}
+Version:        20251212
+Release:        4%{?dist}
 Summary:        ACPICA tools for the development and debug of ACPI tables
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.

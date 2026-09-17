@@ -17,8 +17,8 @@
 %endif
 
 Name:           kcov
-Version:        44-pre-test2
-Release:        1%{?dist}
+Version:        43
+Release:        4%{?dist}
 Summary:        Code coverage tool without special compilation options
 
 # Licenses of kcov itself and its bundled js libraries (see below)

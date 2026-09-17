@@ -4,8 +4,8 @@
 %global pkgname Riece
 
 Name:		emacs-common-%{pkg}
-Version:	9.0.0
-Release:	1%{?dist}
+Version:	8.0.0
+Release:	31%{?dist}
 Summary:	Yet Another IRC Client for Emacs and XEmacs
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -42,7 +42,7 @@ Requires:	emacs-common-%{pkg} = %{version}-%{release}
 Provides:	emacs-%{pkg}-el = %{version}-%{release}
 Obsoletes:	emacs-%{pkg}-el < %{version}-%{release}
 %if 0%{?fedora} < 36
-Obsoletes:	xemacs-%{pkg} < 9.0.0-20
+Obsoletes:	xemacs-%{pkg} < 8.0.0-20
 %endif
 
 %description -n emacs-%{pkg}

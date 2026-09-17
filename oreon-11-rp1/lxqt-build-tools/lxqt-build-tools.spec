@@ -2,8 +2,8 @@
 
 %global         project lxqt-build-tools
 Name:           lxqt-build-tools
-Version:        2.4.0
-Release:        1%{?dist}
+Version:        2.3.0
+Release:        2%{?dist}
 Summary:        Packaging tools for LXQt
 
 License:        BSD-3-Clause

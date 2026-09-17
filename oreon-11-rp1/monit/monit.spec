@@ -1,8 +1,8 @@
 %global source0_hash 4dfef54329e63d9772a9e1c36ac99bc41173b79963dc0d8235f2c32f4b9e078f
 
 Name:           monit
-Version:        6.0.0
-Release:        1%{?dist}
+Version:        5.35.2
+Release:        2%{?dist}
 Summary:        Manages and monitors processes, files, directories and devices
 
 # Automatically converted from old format: AGPLv3

@@ -1,8 +1,8 @@
 %global source0_hash e54e2b5d8f2a492c2c7bb4552e10fa67601ae3faf96d759e869860f995fb642a
 
 Name:       js-jquery-mousewheel
-Version:    3.2.2
-Release:    1%{?dist}
+Version:    3.1.13
+Release:    20%{?dist}
 BuildArch:  noarch
 
 License:    MIT

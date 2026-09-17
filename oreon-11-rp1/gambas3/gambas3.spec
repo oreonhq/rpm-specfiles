@@ -31,7 +31,7 @@
 
 Name:		gambas3
 Summary:	IDE based on a basic interpreter with object extensions
-Version:	3.22.1
+Version:	3.21.6
 Release:	1%{?dist}
 License:	GPL-1.0-or-later
 URL:		http://gambas.sourceforge.net/

@@ -3,8 +3,8 @@
 Name:          libtorrent
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
-Version:       0.16.23
-Release:       1%{?dist}
+Version:       0.16.2
+Release:       3%{?dist}
 Summary:       BitTorrent library with a focus on high performance & good code
 URL:           https://github.com/rakshasa/libtorrent/
 Source0:       https://github.com/rakshasa/rtorrent/releases/download/v%{version}/libtorrent-%{version}.tar.gz

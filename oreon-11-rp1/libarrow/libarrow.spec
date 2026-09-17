@@ -32,8 +32,8 @@
 %bcond_without have_utf8proc
 
 Name:		libarrow
-Version:	25.0.1
-Release:	1%{?dist}
+Version:	23.0.1
+Release:	2%{?dist}
 Summary:	A toolbox for accelerated data interchange and in-memory processing
 License:	Apache-2.0
 URL:		https://arrow.apache.org/

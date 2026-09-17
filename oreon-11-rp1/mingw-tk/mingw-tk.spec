@@ -7,7 +7,7 @@
 %global fullver %{majorver}.%{minorver}
 
 Name:          mingw-tk
-Version:       9.0.4
+Version:       9.0.3
 Release:       1%{?dist}
 Summary:       MinGW Windows graphical toolkit for the Tcl scripting language
 

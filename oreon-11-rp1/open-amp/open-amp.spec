@@ -1,7 +1,7 @@
 %global source0_hash 0ff5e3d716b2d55be95539d756f721865b274f59509aeedf0d6a49086b1064e3
 
 Name:		open-amp
-Version:	2026.04.0
+Version:	2025.10.0
 Release:	%autorelease
 Summary:	Open Asymmetric Multi Processing (OpenAMP) framework project
 License:	BSD-3-Clause OR BSD-2-Clause

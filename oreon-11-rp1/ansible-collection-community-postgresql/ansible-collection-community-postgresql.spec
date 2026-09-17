@@ -3,8 +3,8 @@
 %bcond tests %{undefined rhel}
 
 Name:           ansible-collection-community-postgresql
-Version:        5.0.0
-Release:        1%{?dist}
+Version:        3.0.0
+Release:        9%{?dist}
 Summary:        Manage PostgreSQL with Ansible
 
 # See the license files in the repo root and file headers

@@ -14,8 +14,8 @@
 
 
 Name:           chromaprint
-Version:        1.6.1
-Release:        1%{?dist}
+Version:        1.6.0
+Release:        2%{?dist}
 Summary:        Library implementing the AcoustID fingerprinting
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

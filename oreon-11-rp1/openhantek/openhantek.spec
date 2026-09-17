@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           openhantek
-Version:        3.4-rc4
-Release:        1%{?dist}
+Version:        3.4~rc3
+Release:        5%{?dist}
 Summary:        Hantek and compatible USB digital signal oscilloscope
 
 License:        GPL-3.0-or-later AND GPL-2.0-or-later AND Apache-2.0

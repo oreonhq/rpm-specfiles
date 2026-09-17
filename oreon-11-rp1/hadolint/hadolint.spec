@@ -18,9 +18,9 @@
 %bcond tests 0
 
 Name:           %{pkg_name}
-Version:        2.15.1
+Version:        2.14.0
 # can only be reset when all subpkgs bumped
-Release:        1%{?dist}
+Release:        24%{?dist}
 Summary:        Dockerfile linter, validate inline bash
 
 License:        GPL-3.0-or-later

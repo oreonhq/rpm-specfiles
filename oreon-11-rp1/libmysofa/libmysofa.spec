@@ -2,7 +2,7 @@
 %global commit 4585a0ae5bc98894750baf70e7f7989360e5a376
 
 Name:           libmysofa
-Version:        1.3.5
+Version:        1.3.3
 Release:        %autorelease
 Summary:        C functions for reading HRTFs
 

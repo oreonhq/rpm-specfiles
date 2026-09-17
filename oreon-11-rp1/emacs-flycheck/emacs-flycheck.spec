@@ -3,7 +3,7 @@
 %global pkg flycheck
 
 Name:           emacs-%{pkg}
-Version:        39.0
+Version:        36.0
 Release:        1%{?dist}
 Summary:        On the fly syntax checking for GNU Emacs
 

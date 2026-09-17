@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name:           deepin-terminal
-Version:        6.5.40
+Version:        6.5.22
 Release:        %autorelease
 Summary:        Default terminal emulation application for Deepin
 License:        GPL-3.0-or-later

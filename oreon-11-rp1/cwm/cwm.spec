@@ -2,8 +2,8 @@
 
 Summary: Calm Window Manager by OpenBSD project
 Name: cwm
-Version: 7.9
-Release: 1%{?dist}
+Version: 7.4
+Release: 7%{?dist}
 # The entire source code is licensed under ISC license,
 # except queue.h which is BSD
 # Automatically converted from old format: ISC and BSD - review is highly recommended.

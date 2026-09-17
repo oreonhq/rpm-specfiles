@@ -1,7 +1,7 @@
 %global source0_hash 249635f67fb94fabd46837283c40ba8dd5e7b774df2bac03d5026a3480766372
 
 Name:       fonttosfnt
-Version:    1.2.5
+Version:    1.2.4
 Release:    %autorelease
 Summary:    Tool to wrap bdf or pcf bitmap fonts in an sfnt wrapper
 

@@ -5,7 +5,7 @@
 %endif
 
 Name:           eccodes
-Version:        2.48.0
+Version:        2.46.0
 Release:        1%{?dist}
 Summary:        WMO data format decoding and encoding
 
@@ -416,7 +416,7 @@ sed -i 's|^libs=.*$|libs=-L${libdir} -leccodes_f90 -leccodes|g' %{buildroot}/%{_
 #   (probably because the %%ctest macro starts with a blank line)
 # * disabling 6 tests with eccodes_download in their name is required
 #   since the fedora build environment does not have internet access
-#   (these 6 tests where introduced in version 2.48.0)
+#   (these 6 tests where introduced in version 2.46.0)
 
 export LD_LIBRARY_PATH=%{buildroot}/%{_libdir}
 export LIBRARY_PATH=%{buildroot}/%{_libdir}

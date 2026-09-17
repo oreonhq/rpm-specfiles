@@ -7,7 +7,7 @@
 %global ipuz_soversion 0.5
 
 Name:           crosswords
-Version:        0.3.18.1
+Version:        0.3.16.2
 Release:        %autorelease
 Summary:        Solve crossword puzzles
 

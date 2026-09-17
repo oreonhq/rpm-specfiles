@@ -1,8 +1,8 @@
 %global source0_hash 84afe6ee3c42b2165aa129f3730972634b9d3d8d774e5cf1fcccc739cec42e2f
 
 Name:           ant-antunit
-Version:        1.5.0
-Release:        1%{?dist}
+Version:        1.4.1
+Release:        17%{?dist}
 Summary:        Unit Test Framework for Ant Tasks
 License:        Apache-2.0
 URL:            https://ant.apache.org/antlibs/antunit

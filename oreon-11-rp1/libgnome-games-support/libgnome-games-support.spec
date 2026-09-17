@@ -1,8 +1,8 @@
 %global source0_hash 0186f25c4892c86c7eac43a307fc19db696df4f19aca7f54e83c221df9d9790a
 
 Name:           libgnome-games-support
-Version:        2.0.2
-Release:        1%{?dist}
+Version:        2.0.1
+Release:        3%{?dist}
 Summary:        Support library for GNOME games
 
 # Automatically converted from old format: LGPLv3+ - review is highly recommended.

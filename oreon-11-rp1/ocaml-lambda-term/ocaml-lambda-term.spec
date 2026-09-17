@@ -4,8 +4,8 @@
 ExcludeArch: %{ix86}
 
 Name:           ocaml-lambda-term
-Version:        3.4.1
-Release:        1%{?dist}
+Version:        3.3.2
+Release:        22%{?dist}
 Summary:        Terminal manipulation library for OCaml
 
 License:        BSD-3-Clause

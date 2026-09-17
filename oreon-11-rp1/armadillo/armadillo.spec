@@ -1,8 +1,8 @@
 %global source0_hash 2781dd3a6cc5f9a49c91a4519dde2b1c24335a5bfe0cc1c9881b6363142452b4
 
 Name:           armadillo
-Version:        15.4.2
-Release:        1%{?dist}
+Version:        12.8.1
+Release:        9%{?dist}
 Summary:        Fast C++ matrix library with syntax similar to MATLAB and Octave
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.

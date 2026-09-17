@@ -6,8 +6,8 @@
 %global ver_under %{major}_%{minor}_%{patch}
 
 Name:           opencascade
-Version:        8.0.1
-Release:        1%{?dist}
+Version:        7.9.3
+Release:        3%{?dist}
 Summary:        SDK intended for development of applications dealing with 3D CAD data
 
 # https://dev.opencascade.org/resources/licensing

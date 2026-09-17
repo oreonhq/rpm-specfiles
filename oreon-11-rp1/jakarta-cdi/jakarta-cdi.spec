@@ -3,7 +3,7 @@
 %bcond_with bootstrap
 
 Name:           jakarta-cdi
-Version:        5.0.0
+Version:        2.0.2
 Release:        %autorelease
 Summary:        Jakarta Contexts and Dependency Injection
 License:        Apache-2.0
@@ -22,7 +22,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
 
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.0.0-23
+Obsoletes:      %{name}-javadoc < 2.0.2-23
 
 %description
 Jakarta Contexts Dependency Injection specifies a means for obtaining

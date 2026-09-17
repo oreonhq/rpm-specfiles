@@ -1,8 +1,8 @@
 %global source0_hash 4330db63757217ea47fd8395d2292d95a6b98fbe95acc96af081028d9a4e7d36
 
 Name:           gnome-2048
-Version:        50.2
-Release:        1%{?dist}
+Version:        50.alpha
+Release:        2%{?dist}
 Summary:        A 2048 clone for GNOME
 
 License:        GPL-3.0-or-later

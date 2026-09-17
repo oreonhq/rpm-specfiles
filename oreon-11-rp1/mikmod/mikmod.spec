@@ -1,8 +1,8 @@
 %global source0_hash 214c10aa3019807a1eb26b2c709592f63dbcc00b72985aa86a4fb7ac3cd8b901
 
 Name:           mikmod
-Version:        3.2.10
-Release:        1%{?dist}
+Version:        3.2.9
+Release:        4%{?dist}
 Summary:        Console music module player
 
 # Automatically converted from old format: GPLv2 and LGPLv2+ - review is highly recommended.

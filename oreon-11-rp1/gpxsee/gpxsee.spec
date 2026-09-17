@@ -3,7 +3,7 @@
 %global appname GPXSee
 
 Name:           gpxsee
-Version:        16.15
+Version:        16.0
 Release:        1%{?dist}
 Summary:        GPS log file viewer and analyzer
 

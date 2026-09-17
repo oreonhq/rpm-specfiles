@@ -2,8 +2,8 @@
 
 Summary:	Support library for writing LV2 plugins in C++
 Name:		lv2-c++-tools
-Version:	1.0.7
-Release:	1%{?dist}
+Version:	1.0.5
+Release:	27%{?dist}
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:	GPL-3.0-or-later
 URL:		http://ll-plugins.nongnu.org/hacking.html

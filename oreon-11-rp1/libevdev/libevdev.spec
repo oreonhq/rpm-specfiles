@@ -1,8 +1,8 @@
 %global source0_hash 73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110
 
 Name:           libevdev
-Version:        1.13.7
-Release:        1%{?dist}
+Version:        1.13.6
+Release:        2%{?dist}
 Summary:        Kernel Evdev Device Wrapper Library
 
 # SPDX

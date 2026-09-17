@@ -4,7 +4,7 @@
 
 Name:           maven-file-management
 Epoch:          1
-Version:        3.2.0
+Version:        3.1.0
 Release:        %autorelease
 Summary:        Maven File Management API
 License:        Apache-2.0
@@ -27,15 +27,15 @@ BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1:3.2.0-19
+Obsoletes:      %{name}-javadoc < 1:3.1.0-19
 
 %description
 Provides a component for plugins to easily resolve project dependencies.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n file-management-3.2.0
-%autosetup -p1 -n file-management-3.2.0
+%setup -q -n file-management-3.1.0
+%autosetup -p1 -n file-management-3.1.0
 
 %build
 %mvn_build -j

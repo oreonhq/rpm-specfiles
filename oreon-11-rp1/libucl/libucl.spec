@@ -1,8 +1,8 @@
 %global source0_hash d95a0e2151cc167a0f3e51864fea4e8977a0f4c473faa805269a347f7fb4e165
 
 Name:           libucl
-Version:        0.9.3
-Release:        1%{?dist}
+Version:        0.8.2
+Release:        12%{?dist}
 Summary:        Universal configuration library parser
 
 # Automatically converted from old format: BSD and MIT - review is highly recommended.

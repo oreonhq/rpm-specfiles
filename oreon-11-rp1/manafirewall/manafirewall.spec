@@ -4,8 +4,8 @@
 %undefine __cmake_in_source_build
 
 Name:		manafirewall
-Version:	0.99.2
-Release:	1%{?dist}
+Version:	0.0.3
+Release:	18%{?dist}
 Summary:	ManaTools FirewallD configuration tool
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later
@@ -23,12 +23,12 @@ BuildRequires:	python3-devel		>= 3.4.0
 BuildRequires:	python3-setuptools
 BuildRequires:	python3-yaml
 BuildRequires:	python3-yui
-BuildRequires:	python3-manatools	>= 0.99.2
+BuildRequires:	python3-manatools	>= 0.0.3
 
 Requires:	hicolor-icon-theme
 Requires:	python3-yaml
 Requires:	python3-yui
-Requires:	python3-manatools	>= 0.99.2
+Requires:	python3-manatools	>= 0.0.3
 Requires:	python3-firewall	>= 0.9.0
 Requires:	firewalld
 # Ensure base TUI deps are installed

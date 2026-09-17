@@ -1,8 +1,8 @@
 %global source0_hash c739688dc3e8e7de6bd836886c827bddbed6ee3259831cf82f035f0d2c9c7636
 
 Name:     gsequencer
-Version:  8.0.14
-Release:  1%{?dist}
+Version:  8.0.13
+Release:  2%{?dist}
 Summary:  Audio processing engine
 # Automatically converted from old format: GPLv3+ and AGPLv3+ and GFDL - review is highly recommended.
 License:  GPL-3.0-or-later AND AGPL-3.0-or-later AND LicenseRef-Callaway-GFDL

@@ -1,7 +1,7 @@
 %global source0_hash 6dfa7f8709047c8ed944541dc093a6b5762990a9f49dce4c6a8bf1f922243bf4
 
 Name:       jalv
-Version:    1.10.0
+Version:    1.8.0
 Release:    1%{?dist}
 Summary:    A simple but fully featured LV2 host for Jack
 

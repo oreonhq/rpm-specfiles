@@ -1,8 +1,8 @@
 %global source0_hash fad44fff274fdda5ffcc0c0fff3bc3c596362722b9292fc8944db91187813600
 
 Name: cfitsio
-Version: 4.7.0
-Release: 1%{?dist}
+Version: 4.6.3
+Release: 2%{?dist}
 Summary: Library for manipulating FITS data files
 
 License: CFITSIO

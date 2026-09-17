@@ -4,7 +4,7 @@
 
 Summary: C++/Qt6 wrapper around multiple MIDI interfaces
 Name:    drumstick
-Version: 2.11.1
+Version: 2.10.0
 Release: %autorelease
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

@@ -36,14 +36,14 @@
 
 Summary: Low-level DNS(SEC) library with API
 Name: ldns
-Version: 1.9.2
-Release: 1%{?dist}
+Version: 1.9.0
+Release: 2%{?dist}
 
 License: BSD-3-Clause
 Url: https://www.nlnetlabs.nl/%{name}/
 Vcs: git:%{forgeurl}
-Source0:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.2.tar.gz
-Source1:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.2.tar.gz.asc
+Source0:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz
+Source1:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz.asc
 # Willem Toorop, https://www.nlnetlabs.nl/people/
 Source2:        wtoorop.asc
 Patch1:        ldns-1.7.0-multilib.patch

@@ -1,7 +1,7 @@
 %global source0_hash 58f1587cc9af5b17b43d06d2a34a5ff00f4f0c95959b509fb111d1945a436a43
 
 Name:           doge
-Version:        3.9.1
+Version:        3.6.0
 Release:        %autorelease
 Summary:        MOTD script based on the doge meme
 
