@@ -14,6 +14,7 @@ Source:         %pypi_source %{srcname}
 Patch:          0001-Drop-pydap-from-dependencies.patch
 # https://github.com/pydata/xarray/pull/10788
 Patch:          0002-Ensure-netcdf4-is-locked-while-closing.patch
+Patch:          0003-numpy-2.4-curvefit-concat-periods.patch
 
 BuildArch:      noarch
 

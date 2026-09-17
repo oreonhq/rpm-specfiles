@@ -13,6 +13,7 @@ URL:            https://github.com/rasterio/rasterio
 Source0:        https://github.com/rasterio/rasterio/archive/%{version}/%{srcname}-%{version}.tar.gz
 # Fedora-specific.
 Patch:          0001-Loosen-up-build-requirements.patch
+Patch:          0002-xfail-warp-tests-gdal-3.12.2.patch
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}

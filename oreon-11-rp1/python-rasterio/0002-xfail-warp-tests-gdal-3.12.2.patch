@@ -1,0 +1,77 @@
+From: Sean Gillies <sean.gillies@tiledb.com>
+Subject: [PATCH] xfail warp tests on GDAL 3.12.2+
+
+--- a/tests/test_warp.py
++++ b/tests/test_warp.py
+@@ -1355,6 +1355,11 @@
+         ),
+     ],
+ )
++@pytest.mark.xfail(
++    gdal_version_info >= (3, 12, 2),
++    reason="warper implementation has changed. See https://github.com/rasterio/rasterio/issues/3517.",
++    raises=AssertionError,
++)
+ def test_reproject_array_interface(test3d, count_nonzero, path_rgb_byte_tif):
+     class DataArray:
+         def __init__(self, data):
+@@ -1428,6 +1433,11 @@
+         ),
+     ],
+ )
++@pytest.mark.xfail(
++    gdal_version_info >= (3, 12, 2),
++    reason="warper implementation has changed. See https://github.com/rasterio/rasterio/issues/3517.",
++    raises=AssertionError,
++)
+ def test_reproject_masked(test3d, count_nonzero, path_rgb_byte_tif):
+     with rasterio.open(path_rgb_byte_tif) as src:
+         if test3d:
+@@ -1536,6 +1546,11 @@
+         ),
+     ],
+ )
++@pytest.mark.xfail(
++    gdal_version_info >= (3, 12, 2),
++    reason="warper implementation has changed. See https://github.com/rasterio/rasterio/issues/3517.",
++    raises=AssertionError,
++)
+ def test_reproject_masked_no_mask(test3d, count_nonzero, path_rgb_byte_tif):
+     with rasterio.open(path_rgb_byte_tif) as src:
+         if test3d:
+@@ -2412,6 +2427,11 @@
+             assert dst.checksum(1) == 4705
+ 
+ 
++@pytest.mark.xfail(
++    gdal_version_info >= (3, 12, 2),
++    reason="warper implementation has changed. See https://github.com/rasterio/rasterio/issues/3517.",
++    raises=AssertionError,
++)
+ def test_geoloc_warp_dataset(data, tmp_path):
+     """Warp a dataset using external geolocation arrays."""
+     filename = str(data.join("RGB.byte.tif"))
+@@ -2465,6 +2485,11 @@
+ # MEM:::DATAPOINTER=137539856,PIXELS=791,LINES=718,BANDS=3,DATATYPE=Byte.
+ # There is no affine transformation and no GCPs. Specify transformation
+ # option SRC_METHOD=NO_GEOTRANSFORM to bypass this check.
++@pytest.mark.xfail(
++    gdal_version_info >= (3, 12, 2),
++    reason="warper implementation has changed. See https://github.com/rasterio/rasterio/issues/3517.",
++    raises=AssertionError,
++)
+ def test_geoloc_warp_array(path_rgb_byte_tif):
+     """Warp an array using external geolocation arrays."""
+     with rasterio.open(path_rgb_byte_tif) as src:
+@@ -2492,6 +2517,11 @@
+     assert np.count_nonzero(output[0]) in [464910]
+ 
+ 
++@pytest.mark.xfail(
++    gdal_version_info >= (3, 12, 2),
++    reason="warper implementation has changed. See https://github.com/rasterio/rasterio/issues/3517.",
++    raises=AssertionError,
++)
+ def test_geoloc_warp_array_subsampled(path_rgb_byte_tif):
+     """Warp an array using subsampled external geolocation arrays."""
+     with rasterio.open(path_rgb_byte_tif) as src:

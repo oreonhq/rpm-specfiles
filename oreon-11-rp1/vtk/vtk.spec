@@ -741,12 +741,12 @@ do
 done
 
 %build
-%cmake_build -- --output-sync
+%cmake_build
 %cmake_build --target DoxygenDoc
 for mpi in %{mpi_list}
 do
   module load mpi/$mpi-%{_arch}
-  %cmake_build -- --output-sync
+  %cmake_build
   module purge
 done
 

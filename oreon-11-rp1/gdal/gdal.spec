@@ -386,7 +386,7 @@ MinGW Windows Python3 GDAL bindings.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%{SOURCE5} %{version} %{?pre:%pre} %{_sourcedir}
+%{SOURCE5} %{version} "%{?pre}" %{_sourcedir}
 cd %{builddir}
 tar -xf %{_sourcedir}/%{name}-%{version}%{?pre:%pre}-fedora.tar.xz
 cd %{name}-%{version}%{?pre:%pre}-fedora

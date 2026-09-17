@@ -1,8 +1,8 @@
-%global source0_hash 5ecf094ec6b12d5413dfb851d8c3590c354058aee556e32e408bdfbf8c357d57
+%global source0_hash de442298cd8860f5580b01007f67f0ecd0b8900cfa4da467fa3c823c2d1a45df
 
 %global major 7
 %global minor 9
-%global patch 1
+%global patch 3
 %global ver_under %{major}_%{minor}_%{patch}
 
 Name:           opencascade
