@@ -80,8 +80,7 @@ rm -f profiles/*.additional-profiles
 %patch -P8 -p1 -b .no-pointless-env
 %patch -P9 -p1 -b .distutils-setuptools
 
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
-# Unify /usr/bin and /usr/sbin
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 sed -e "s/'sbin'/'bin'/" -i setup.py
 %endif
 
@@ -105,7 +104,7 @@ install -D -p -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/ufw.service
 %files -f %{name}.lang
 %license COPYING
 %doc ChangeLog README TODO AUTHORS
-%{_sbindir}/ufw
+%{_bindir}/ufw
 %{_libexecdir}/ufw/
 %{python3_sitelib}/ufw-%{version}-py*.egg-info
 %{python3_sitelib}/ufw/

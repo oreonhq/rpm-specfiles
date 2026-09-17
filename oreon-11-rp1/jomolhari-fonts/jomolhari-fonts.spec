@@ -1,4 +1,4 @@
-%global source0_hash f188cfd2e1e4120e28cdf6a94da9b51be7c1adc678baa2c1aa55127bb5ac72ee
+%global source0_hash a2c1a18c480fc9f387fd96f5c6c4e2a87566d5eece6c62313abf6b7a4d89b54a
 
 Version:        0.003
 Release:        45%{?dist}

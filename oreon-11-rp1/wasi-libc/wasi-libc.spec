@@ -44,7 +44,7 @@ BuildRequires:  make
 %global __brp_strip_lto %{nil}
 
 # WASI is a specific architecture; host (build machine) arch flags should not apply by default
-%global     build_cflags --target=wasm32-wasi -fstack-protector
+%global     build_cflags --target=wasm32-wasip1 -fstack-protector
 # Define cross-compiling prefix
 %global     wasi_prefix %{_prefix}/wasm32-wasi
 %global     wasi_datadir %{wasi_prefix}/share
